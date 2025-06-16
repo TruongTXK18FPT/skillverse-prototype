@@ -1,76 +1,132 @@
-import React from 'react';
-import { GraduationCap, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, ArrowUp, Send, Heart } from 'lucide-react';
+import Logo from '../assets/Logo.jpg';
+import '../styles/Footer.css';
+import { useTheme } from '../context/ThemeContext';
 
 const Footer = () => {
+  const { theme } = useTheme();
+  const mapUrl = "https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d31355.755907056393!2d106.80691566973627!3d10.841127618407334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sfpt%20university!5e0!3m2!1sen!2s!4v1709561248044!5m2!1sen!2s";
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
-                <GraduationCap className="h-6 w-6 text-white" />
+    <footer className={`footer ${theme}`}>
+      <div className="footer-top">
+        <div className="footer-container">
+          <div className="footer-grid">
+            {/* Brand */}
+            <div className="footer-brand">
+              <div className="brand-header">
+                <div className="brand-logo-wrapper">
+                  <img src={Logo} alt="Skillverse Logo" className="brand-logo" />
+                </div>
+                <span className="brand-name">Skillverse</span>
               </div>
-              <span className="text-xl font-bold">Skillverse</span>
+              <p className="brand-description">
+                An integrated learning and working ecosystem for students and career changers in the digital age.
+              </p>
+              <div className="social-links">
+                <a href="#" className="social-link hover-float">
+                  <Facebook className="social-icon facebook" />
+                </a>
+                <a href="#" className="social-link hover-float">
+                  <Twitter className="social-icon twitter" />
+                </a>
+                <a href="#" className="social-link hover-float">
+                  <Instagram className="social-icon instagram" />
+                </a>
+                <a href="#" className="social-link hover-float">
+                  <Linkedin className="social-icon linkedin" />
+                </a>
+              </div>
             </div>
-            <p className="text-gray-400 text-sm">
-              Hệ sinh thái học tập và làm việc tích hợp dành cho sinh viên và người chuyển đổi nghề nghiệp tại Việt Nam.
-            </p>
-            <div className="flex space-x-4">
-              <Facebook className="h-5 w-5 text-gray-400 hover:text-blue-500 cursor-pointer transition-colors" />
-              <Twitter className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" />
-              <Instagram className="h-5 w-5 text-gray-400 hover:text-pink-500 cursor-pointer transition-colors" />
-              <Linkedin className="h-5 w-5 text-gray-400 hover:text-blue-600 cursor-pointer transition-colors" />
+
+            {/* Quick Links */}
+            <div className="footer-section">
+              <h3 className="footer-title">Quick Links</h3>
+              <ul className="footer-links">
+                <li><a href="/courses" className="footer-link hover-underline">Courses</a></li>
+                <li><a href="/jobs" className="footer-link hover-underline">Jobs</a></li>
+                <li><a href="/portfolio" className="footer-link hover-underline">Portfolio</a></li>
+                <li><a href="/chatbot" className="footer-link hover-underline">AI Advisor</a></li>
+              </ul>
+            </div>
+
+            {/* Support */}
+            <div className="footer-section">
+              <h3 className="footer-title">Support</h3>
+              <ul className="footer-links">
+                <li><a href="#" className="footer-link hover-underline">Help Center</a></li>
+                <li><a href="#" className="footer-link hover-underline">Terms of Service</a></li>
+                <li><a href="#" className="footer-link hover-underline">Privacy Policy</a></li>
+                <li><a href="#" className="footer-link hover-underline">FAQ</a></li>
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div className="footer-section">
+              <h3 className="footer-title">Contact</h3>
+              <div className="contact-info">
+                <a href="mailto:hello@skillverse.com" className="contact-item hover-float">
+                  <Mail className="contact-icon" />
+                  <span>hello@skillverse.com</span>
+                </a>
+                <a href="tel:+15551234567" className="contact-item hover-float">
+                  <Phone className="contact-icon" />
+                  <span>+1 (555) 123-4567</span>
+                </a>
+                <div className="contact-item hover-float">
+                  <MapPin className="contact-icon" />
+                  <span>FPT University, Hoa Lac Hi-Tech Park, Hanoi, Vietnam</span>
+                </div>
+              </div>
+
+              {/* Newsletter Subscription */}
+              <div className="newsletter">
+                <h4 className="newsletter-title">Subscribe to Newsletter</h4>
+                <div className="newsletter-form">
+                  <input type="email" placeholder="Enter your email" className="newsletter-input" />
+                  <button className="newsletter-button">
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Liên kết nhanh</h3>
-            <ul className="space-y-2">
-              <li><a href="/courses" className="text-gray-400 hover:text-white transition-colors">Khóa học</a></li>
-              <li><a href="/jobs" className="text-gray-400 hover:text-white transition-colors">Việc làm</a></li>
-              <li><a href="/portfolio" className="text-gray-400 hover:text-white transition-colors">Portfolio</a></li>
-              <li><a href="/chatbot" className="text-gray-400 hover:text-white transition-colors">Tư vấn AI</a></li>
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Hỗ trợ</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Trung tâm trợ giúp</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Điều khoản sử dụng</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Chính sách bảo mật</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Liên hệ</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-2">
-                <Mail className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-400 text-sm">hello@skillverse.vn</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-400 text-sm">+84 123 456 789</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-400 text-sm">Hà Nội, Việt Nam</span>
-              </div>
-            </div>
+          {/* Map Section */}
+          <div className="map-section">
+            <iframe
+              src={mapUrl}
+              width="100%"
+              height="300"
+              style={{ border: 0, borderRadius: '12px', marginTop: '2rem' }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="FPT University Location"
+            ></iframe>
           </div>
         </div>
+      </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-          <p className="text-gray-400 text-sm">
-            © 2025 Skillverse. Tất cả quyền được bảo lưu.
-          </p>
+      {/* Footer Bottom */}
+      <div className="footer-bottom">
+        <div className="footer-container">
+          <div className="footer-bottom-content">
+            <p className="copyright">
+              © 2025 Skillverse. Made with <Heart className="heart-icon" /> by Team InnoVibe
+            </p>
+            <button onClick={scrollToTop} className="scroll-top-button">
+              <ArrowUp className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </div>
     </footer>

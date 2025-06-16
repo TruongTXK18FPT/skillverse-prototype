@@ -1,0 +1,304 @@
+/* Base Theme Variables */
+:root {
+  --primary-color: #4f46e5;
+  --secondary-color: #818cf8;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f4f6;
+  --bg-card: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --border-color: #e5e7eb;
+}
+
+/* Dark Theme Variables */
+[data-theme='dark'] {
+  --primary-color: #818cf8;
+  --secondary-color: #4f46e5;
+  --text-primary: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --bg-card: #1f2937;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --border-color: #374151;
+}
+
+/* Theme Transition */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hero Section */
+.hero-section {
+  @apply relative min-h-[90vh] flex items-center justify-center overflow-hidden;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.hero-overlay {
+  @apply absolute inset-0 z-0;
+  background: radial-gradient(circle at center, transparent 0%, var(--bg-primary) 70%);
+}
+
+.hero-content {
+  @apply relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32;
+  animation: fadeInUp 1s ease-out;
+}
+
+.hero-title {
+  @apply text-5xl md:text-7xl font-bold mb-6;
+  color: var(--text-primary);
+  animation: slideInDown 1s ease-out;
+}
+
+.hero-description {
+  @apply text-xl md:text-2xl mb-8 max-w-3xl mx-auto;
+  color: var(--text-secondary);
+  animation: slideInUp 1s ease-out 0.3s backwards;
+}
+
+/* Buttons */
+.button-container {
+  @apply flex flex-col sm:flex-row gap-4 justify-center items-center mt-8;
+  animation: fadeIn 1s ease-out 0.6s backwards;
+}
+
+.primary-button {
+  @apply flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-semibold text-lg transition-all duration-300 transform hover:scale-105;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.secondary-button {
+  @apply flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+/* Features Section */
+.features-section {
+  @apply py-24;
+  background: var(--bg-primary);
+}
+
+.section-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.section-header {
+  @apply text-center mb-16;
+  animation: fadeInUp 1s ease-out;
+}
+
+.section-title {
+  @apply text-4xl font-bold mb-4;
+  color: var(--text-primary);
+}
+
+.section-description {
+  @apply text-xl max-w-3xl mx-auto;
+  color: var(--text-secondary);
+}
+
+.features-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8;
+}
+
+.feature-card {
+  @apply p-6 rounded-2xl transition-all duration-500 transform hover:-translate-y-2;
+  background: var(--bg-card);
+  box-shadow: 0 4px 15px var(--shadow-color);
+  animation: fadeInUp 1s ease-out;
+}
+
+.feature-icon {
+  @apply w-12 h-12 rounded-full flex items-center justify-center mb-4;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.feature-title {
+  @apply text-xl font-semibold mb-2;
+  color: var(--text-primary);
+}
+
+.feature-description {
+  color: var(--text-secondary);
+}
+
+/* Stats Section */
+.stats-section {
+  @apply py-24;
+  background: var(--bg-secondary);
+}
+
+.stats-grid {
+  @apply grid grid-cols-2 lg:grid-cols-4 gap-8;
+}
+
+.stat-item {
+  @apply text-center p-6 rounded-2xl transition-all duration-500 transform hover:-translate-y-2;
+  background: var(--bg-card);
+  box-shadow: 0 4px 15px var(--shadow-color);
+  animation: fadeInUp 1s ease-out;
+}
+
+.stat-icon-container {
+  @apply w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.stat-icon {
+  @apply w-6 h-6 text-white;
+}
+
+.stat-value {
+  @apply text-3xl font-bold mb-2;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  color: var(--text-secondary);
+}
+
+/* How it Works */
+.how-it-works {
+  @apply py-24;
+  background: var(--bg-primary);
+}
+
+.steps-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8 mt-16;
+}
+
+.step-item {
+  @apply relative p-6 rounded-2xl text-center;
+  background: var(--bg-card);
+  box-shadow: 0 4px 15px var(--shadow-color);
+  animation: fadeInUp 1s ease-out;
+}
+
+.step-number {
+  @apply w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-4;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.step-title {
+  @apply text-xl font-semibold mb-4;
+  color: var(--text-primary);
+}
+
+/* CTA Section */
+.cta-section {
+  @apply py-24;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.cta-title {
+  @apply text-4xl font-bold text-white mb-4;
+  animation: fadeInUp 1s ease-out;
+}
+
+.cta-description {
+  @apply text-xl text-white/90 mb-8;
+  animation: fadeInUp 1s ease-out 0.3s backwards;
+}
+
+/* Theme Switcher */
+.theme-switcher {
+  @apply fixed bottom-8 right-8 z-50;
+}
+
+.theme-button {
+  @apply w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110;
+  background: var(--bg-card);
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-title {
+    @apply text-4xl;
+  }
+  
+  .hero-description {
+    @apply text-lg;
+  }
+  
+  .features-grid {
+    @apply grid-cols-1;
+  }
+  
+  .stats-grid {
+    @apply grid-cols-1;
+  }
+}
+
+/* Hover Effects */
+.feature-card:hover,
+.stat-item:hover,
+.step-item:hover {
+  box-shadow: 0 8px 30px var(--shadow-color);
+}
+
+.primary-button:hover,
+.secondary-button:hover {
+  filter: brightness(1.1);
+} 

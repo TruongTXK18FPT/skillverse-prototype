@@ -1,0 +1,445 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sv-dashboard {
+  @apply min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8;
+}
+
+.sv-dashboard-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Header */
+.sv-dashboard-header {
+  @apply mb-8 animate-fade-in;
+}
+
+.sv-dashboard-header__content {
+  @apply flex justify-between items-center;
+}
+
+.sv-dashboard-header__text {
+  @apply flex-1;
+}
+
+.sv-dashboard-header__title {
+  @apply text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 mb-2;
+}
+
+.sv-dashboard-header__description {
+  @apply text-gray-600;
+}
+
+.sv-dashboard-header__actions {
+  @apply flex gap-4;
+}
+
+/* Buttons */
+.sv-button {
+  @apply flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200;
+}
+
+.sv-button--primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg;
+}
+
+.sv-button--outline {
+  @apply border-2 border-gray-200 text-gray-700 hover:border-blue-600 hover:text-blue-600;
+}
+
+.sv-button--text {
+  @apply text-blue-600 hover:text-blue-700;
+}
+
+.sv-button--block {
+  @apply w-full;
+}
+
+.sv-button--icon {
+  @apply p-2 bg-white/90 hover:bg-white rounded-full shadow-lg;
+}
+
+/* Learning Streak */
+.sv-streak-card {
+  @apply mb-8 p-6 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.sv-streak-card__header {
+  @apply flex justify-between items-start mb-6;
+}
+
+.sv-streak-card__title {
+  @apply text-xl font-semibold text-gray-900 flex items-center;
+}
+
+.sv-streak-card__subtitle {
+  @apply text-gray-600 mt-1;
+}
+
+.sv-streak-card__stats {
+  @apply flex gap-6;
+}
+
+.sv-streak-stat {
+  @apply flex flex-col items-end;
+}
+
+.sv-streak-stat__label {
+  @apply text-sm text-gray-500;
+}
+
+.sv-streak-stat__value {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.sv-streak-calendar {
+  @apply grid grid-cols-7 gap-2;
+}
+
+.sv-streak-day {
+  @apply flex flex-col items-center;
+}
+
+.sv-streak-day__indicator {
+  @apply w-8 h-8 rounded-full border-2 border-gray-200 mb-1;
+}
+
+.sv-streak-day--completed .sv-streak-day__indicator {
+  @apply border-green-500 bg-green-500;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.sv-streak-day__label {
+  @apply text-sm text-gray-600;
+}
+
+/* Stats Grid */
+.sv-stats-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8;
+}
+
+.sv-stat-card {
+  @apply bg-white p-6 rounded-xl shadow-sm transition-all duration-300;
+}
+
+.hover-lift:hover {
+  @apply transform -translate-y-1 shadow-lg;
+}
+
+.sv-stat-card__header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.sv-stat-card__icon-wrapper {
+  @apply p-3 rounded-lg;
+}
+
+.theme-blue {
+  @apply bg-blue-600;
+}
+
+.theme-green {
+  @apply bg-green-600;
+}
+
+.theme-purple {
+  @apply bg-purple-600;
+}
+
+.theme-orange {
+  @apply bg-orange-600;
+}
+
+.sv-stat-card__icon {
+  @apply h-6 w-6;
+}
+
+.sv-stat-card__value {
+  @apply text-2xl font-bold text-gray-900;
+}
+
+.sv-stat-card__change {
+  @apply text-sm;
+}
+
+.sv-stat-card__title {
+  @apply text-gray-600;
+}
+
+/* Dashboard Grid */
+.sv-dashboard-grid {
+  @apply grid grid-cols-1 lg:grid-cols-3 gap-8;
+}
+
+/* Section Headers */
+.sv-section-header {
+  @apply flex justify-between items-center mb-6;
+}
+
+.sv-section-header__title {
+  @apply flex items-center text-xl font-semibold text-gray-900;
+}
+
+/* Course Cards */
+.sv-courses-grid {
+  @apply grid gap-6;
+}
+
+.sv-course-card {
+  @apply bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.sv-course-card__media {
+  @apply relative;
+}
+
+.sv-course-card__image {
+  @apply w-full h-48 object-cover;
+}
+
+.sv-course-card__overlay {
+  @apply absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 transition-opacity duration-200;
+}
+
+.sv-course-card:hover .sv-course-card__overlay {
+  @apply opacity-100;
+}
+
+.sv-course-card__content {
+  @apply p-6;
+}
+
+.sv-course-card__title {
+  @apply text-lg font-semibold text-gray-900 mb-2;
+}
+
+.sv-course-card__instructor {
+  @apply text-sm text-gray-600 flex items-center mb-4;
+}
+
+.sv-course-card__meta {
+  @apply flex items-center gap-4 text-sm text-gray-600 mb-4;
+}
+
+.sv-course-progress {
+  @apply mb-4;
+}
+
+.sv-course-progress__header {
+  @apply flex justify-between text-sm mb-2;
+}
+
+.sv-course-progress__bar {
+  @apply h-2 bg-gray-100 rounded-full overflow-hidden;
+}
+
+.sv-course-progress__fill {
+  @apply h-full bg-blue-600 rounded-full transition-all duration-500;
+}
+
+.sv-course-card__next {
+  @apply text-sm mb-4;
+}
+
+.sv-course-card__next-label {
+  @apply text-gray-500;
+}
+
+.sv-course-card__next-title {
+  @apply text-gray-900 font-medium;
+}
+
+/* Goals */
+.sv-goals-grid {
+  @apply space-y-4;
+}
+
+.sv-goal-card {
+  @apply bg-white p-4 rounded-lg shadow-sm;
+}
+
+.sv-goal-card__header {
+  @apply flex justify-between items-start mb-4;
+}
+
+.sv-goal-card__title {
+  @apply font-medium text-gray-900;
+}
+
+.sv-goal-card__deadline {
+  @apply flex items-center text-sm text-gray-600;
+}
+
+.sv-goal-progress {
+  @apply flex items-center gap-4;
+}
+
+.sv-goal-progress__bar {
+  @apply flex-1 h-2 bg-gray-100 rounded-full overflow-hidden;
+}
+
+.sv-goal-progress__fill {
+  @apply h-full bg-blue-600 rounded-full transition-all duration-500;
+}
+
+.sv-goal-progress__value {
+  @apply text-sm font-medium text-gray-900;
+}
+
+/* Skills */
+.sv-skills-list {
+  @apply space-y-4;
+}
+
+.sv-skill-item {
+  @apply space-y-2;
+}
+
+.sv-skill-item__header {
+  @apply flex justify-between items-start;
+}
+
+.sv-skill-item__name {
+  @apply font-medium text-gray-900;
+}
+
+.sv-skill-item__category {
+  @apply text-sm text-gray-500;
+}
+
+.sv-skill-item__value {
+  @apply text-sm font-medium text-gray-900;
+}
+
+.sv-skill-progress {
+  @apply h-2 bg-gray-100 rounded-full overflow-hidden;
+}
+
+.sv-skill-progress__fill {
+  @apply h-full bg-gradient-to-r from-blue-600 to-purple-600 rounded-full transition-all duration-500;
+}
+
+/* Achievements */
+.sv-achievements-list {
+  @apply space-y-4;
+}
+
+.sv-achievement-card {
+  @apply flex items-start gap-4 p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200;
+}
+
+.sv-achievement-card__icon {
+  @apply text-2xl;
+}
+
+.sv-achievement-card__content {
+  @apply flex-1;
+}
+
+.sv-achievement-card__title {
+  @apply font-medium text-gray-900;
+}
+
+.sv-achievement-card__description {
+  @apply text-sm text-gray-600 mt-1;
+}
+
+.sv-achievement-card__meta {
+  @apply flex items-center gap-4 mt-2 text-sm;
+}
+
+.sv-achievement-card__date {
+  @apply text-gray-500;
+}
+
+.sv-achievement-card__points {
+  @apply text-green-600 font-medium;
+}
+
+/* Deadlines */
+.sv-deadlines-list {
+  @apply space-y-4;
+}
+
+.sv-deadline-card {
+  @apply flex items-center justify-between p-4 bg-white rounded-lg shadow-sm;
+}
+
+.sv-deadline-card__content {
+  @apply flex-1;
+}
+
+.sv-deadline-card__title {
+  @apply font-medium text-gray-900 mb-1;
+}
+
+.sv-deadline-card__meta {
+  @apply flex items-center gap-3 text-sm;
+}
+
+.sv-deadline-card__priority {
+  @apply px-2 py-0.5 rounded-full text-xs font-medium;
+}
+
+.sv-deadline-card__priority--high {
+  @apply bg-red-100 text-red-800;
+}
+
+.sv-deadline-card__priority--medium {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.sv-deadline-card__priority--low {
+  @apply bg-green-100 text-green-800;
+}
+
+.sv-deadline-card__time {
+  @apply flex items-center text-gray-600;
+}
+
+.sv-deadline-card__badge {
+  @apply px-2 py-0.5 rounded-full text-xs font-medium;
+}
+
+.sv-deadline-card__badge--course {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.sv-deadline-card__badge--project {
+  @apply bg-green-100 text-green-800;
+}
+
+.sv-deadline-card__badge--meeting {
+  @apply bg-purple-100 text-purple-800;
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Glass Effect */
+.glass-effect {
+  @apply bg-white/80 backdrop-blur-lg;
+} 
