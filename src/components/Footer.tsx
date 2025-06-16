@@ -73,17 +73,17 @@ const Footer = () => {
             <div className="footer-section">
               <h3 className="footer-title">Contact</h3>
               <div className="contact-info">
-                <a href="mailto:hello@skillverse.com" className="contact-item hover-float">
+                <a href="mailto:truongtranxuan41@gmail.com" className="contact-item hover-float">
                   <Mail className="contact-icon" />
-                  <span>hello@skillverse.com</span>
+                  <span>truongtranxuan41@gmail.com</span>
                 </a>
-                <a href="tel:+15551234567" className="contact-item hover-float">
+                <a href="tel:+84931430662" className="contact-item hover-float">
                   <Phone className="contact-icon" />
-                  <span>+1 (555) 123-4567</span>
+                  <span>0931430662</span>
                 </a>
                 <div className="contact-item hover-float">
                   <MapPin className="contact-icon" />
-                  <span>FPT University, Hoa Lac Hi-Tech Park, Hanoi, Vietnam</span>
+                  <span>FPT HCMC</span>
                 </div>
               </div>
 

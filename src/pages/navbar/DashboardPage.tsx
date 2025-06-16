@@ -166,7 +166,7 @@ const DashboardPage = () => {
         <div className="sv-dashboard-header">
           <div className="sv-dashboard-header__content">
             <div className="sv-dashboard-header__text">
-              <h1 className="sv-dashboard-header__title">Welcome Back, John!</h1>
+              <h1 className="sv-dashboard-header__title">Welcome Back, InnoVibe Team!</h1>
               <p className="sv-dashboard-header__description">
                 Track your learning progress and achieve your goals
               </p>
