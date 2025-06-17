@@ -8,7 +8,9 @@ import {
   Moon,
   ChevronDown,
   Search,
-  Grid
+  Grid,
+  GraduationCap,
+  MessageCircle
 } from 'lucide-react';
 import Logo from '../assets/Logo.jpg';
 import '../styles/Header.css';
@@ -124,6 +126,7 @@ const Header = () => {
             <button
               className="action-button"
               onClick={() => setIsSearchOpen(true)}
+              aria-label="Search"
             >
               <Search className="action-icon" />
             </button>
@@ -131,6 +134,7 @@ const Header = () => {
             <button
               className="action-button notification-btn"
               onClick={() => setIsNotificationsOpen(true)}
+              aria-label="Notifications"
             >
               <Bell className="action-icon" />
               <span className="notification-badge">3</span>
@@ -139,14 +143,14 @@ const Header = () => {
             <button
               className="action-button"
               onClick={toggleTheme}
+              aria-label="Toggle theme"
             >
               {theme === 'dark' ? (
                 <Sun className="action-icon sun" />
               ) : (
-                <Moon className="action-icon" />
+                <Moon className="action-icon moon" />
               )}
             </button>
-
 
             {/* Login Button */}
             <button onClick={handleLogin} className="login-btn">
@@ -205,26 +209,68 @@ const Header = () => {
 
       {/* Search Modal */}
       {isSearchOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50">
-          <div className="max-w-2xl mx-auto mt-20 p-4">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl">
-              <div className="p-4 flex items-center gap-4 border-b dark:border-gray-700">
-                <Search className="w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="flex-1 bg-transparent border-none outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400"
-                  autoFocus
-                />
-                <button
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                  onClick={() => setIsSearchOpen(false)}
-                >
-                  <X className="w-5 h-5 text-gray-500" />
-                </button>
+        <div className="search-modal">
+          <div className="search-container">
+            <div className="search-header">
+              <Search className="action-icon" />
+              <input
+                type="text"
+                placeholder="Search courses, topics, or anything..."
+                className="search-input"
+                autoFocus
+              />
+              <button
+                className="search-close"
+                onClick={() => setIsSearchOpen(false)}
+              >
+                <X className="action-icon" />
+              </button>
+            </div>
+            
+            <div className="search-content">
+              {/* Empty State */}
+              <div className="search-empty">
+                <Search className="search-empty-icon" />
+                <h3 className="search-empty-text">Start typing to search</h3>
+                <p className="search-empty-description">
+                  Search for courses, topics, discussions, or anything else
+                </p>
               </div>
-              <div className="p-4">
-                {/* Add search results here */}
+
+              {/* Search Results - Initially Hidden */}
+              <div className="search-results" style={{ display: 'none' }}>
+                {/* Example Result Items */}
+                <div className="search-result-item">
+                  <div className="search-result-icon">
+                    <GraduationCap />
+                  </div>
+                  <div className="search-result-content">
+                    <h4 className="search-result-title">React.js Advanced Course</h4>
+                    <p className="search-result-description">
+                      Master advanced React concepts and patterns
+                    </p>
+                    <div className="search-result-meta">
+                      <span>Course • 12 hours</span>
+                      <span>4.9 ★</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="search-result-item">
+                  <div className="search-result-icon">
+                    <MessageCircle />
+                  </div>
+                  <div className="search-result-content">
+                    <h4 className="search-result-title">TypeScript Best Practices</h4>
+                    <p className="search-result-description">
+                      Discussion about TypeScript patterns and practices
+                    </p>
+                    <div className="search-result-meta">
+                      <span>Discussion • 2 days ago</span>
+                      <span>24 replies</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -233,23 +279,21 @@ const Header = () => {
 
       {/* Notifications Modal */}
       {isNotificationsOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50">
-          <div className="max-w-md mx-auto mt-20 p-4">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl">
-              <div className="p-4 flex items-center justify-between border-b dark:border-gray-700">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Notifications
-                </h2>
-                <button
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                  onClick={() => setIsNotificationsOpen(false)}
-                >
-                  <X className="w-5 h-5 text-gray-500" />
-                </button>
-              </div>
-              <div className="p-4">
-                {/* Add notifications here */}
-              </div>
+        <div className="notification-modal">
+          <div className="notification-container">
+            <div className="notification-header">
+              <h2 className="notification-title">
+                Notifications
+              </h2>
+              <button
+                className="notification-close"
+                onClick={() => setIsNotificationsOpen(false)}
+              >
+                <X className="action-icon" />
+              </button>
+            </div>
+            <div className="p-4">
+              {/* Add notifications here */}
             </div>
           </div>
         </div>

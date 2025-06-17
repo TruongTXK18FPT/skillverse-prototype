@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   MessageCircle, Heart, Share2, Bookmark, ThumbsUp,
   User, Clock, Tag, Filter, Search, Edit, TrendingUp,
-  Users, Star, Award, Globe
+  Users, Star, Award, Globe, Sparkles
 } from 'lucide-react';
 import '../../styles/CommunityPage.css';
+
+const formatNumber = (num: number) => {
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1) + 'M';
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1) + 'K';
+  }
+  return num.toString();
+};
 
 const CommunityPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   const categories = [
     { id: 'all', name: 'All Posts', count: 256 },
@@ -112,35 +127,38 @@ const CommunityPage = () => {
   ];
 
   return (
-    <div className="community-container">
+    <div className={`community-container ${isVisible ? 'visible' : ''}`}>
       <div className="community-content">
         {/* Header */}
         <div className="community-header">
-          <h1 className="community-title">Community Hub</h1>
+          <h1 className="community-title">
+            <Sparkles className="title-icon" size={24} />
+            Community Hub
+          </h1>
           <p className="community-description">
-            Share knowledge, learn from others, and grow together with our vibrant tech community
+            Join our vibrant tech community to share knowledge, learn from experts, and grow together
           </p>
           <button className="create-post-button">
-            <Edit className="button-icon" />
-            <span>Create Post</span>
+            <Edit className="button-icon" size={18} />
+            <span>Share Your Knowledge</span>
           </button>
         </div>
 
         {/* Search and Filter */}
-        <div className="search-section">
-          <div className="search-container">
-            <Search className="search-icon" />
+        <div className="community-search-section">
+          <div className="community-search-wrapper">
+            <Search className="community-search-icon" size={18} />
             <input
               type="text"
-              placeholder="Search posts, topics, or users..."
+              placeholder="Discover posts, topics, or connect with others..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
+              className="community-search-input"
             />
           </div>
-          <button className="filter-button">
-            <Filter className="filter-icon" />
-            <span>Filters</span>
+          <button className="community-filter-button">
+            <Filter className="filter-icon" size={16} />
+            <span>Filter</span>
           </button>
         </div>
 
@@ -149,13 +167,14 @@ const CommunityPage = () => {
           <div className="posts-section">
             {/* Categories */}
             <div className="categories-list">
-              {categories.map((category) => (
+              {categories.map((category, index) => (
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
                   className={`category-button ${
                     selectedCategory === category.id ? 'active' : ''
                   }`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <span>{category.name}</span>
                   <span className="category-count">({category.count})</span>
@@ -165,8 +184,12 @@ const CommunityPage = () => {
 
             {/* Posts */}
             <div className="posts-grid">
-              {posts.map((post) => (
-                <article key={post.id} className="post-card">
+              {posts.map((post, index) => (
+                <article 
+                  key={post.id} 
+                  className="post-card"
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                >
                   {post.image && (
                     <div className="post-image-container">
                       <img
@@ -241,12 +264,16 @@ const CommunityPage = () => {
             {/* Top Contributors */}
             <div className="sidebar-section">
               <h3 className="sidebar-title">
-                <Star className="sidebar-icon" />
+                <Star className="sidebar-icon" size={16} />
                 Top Contributors
               </h3>
               <div className="contributors-list">
                 {topContributors.map((contributor, index) => (
-                  <div key={index} className="contributor-card">
+                  <div 
+                    key={index} 
+                    className="contributor-card"
+                    style={{ animationDelay: `${index * 0.15}s` }}
+                  >
                     <img
                       src={contributor.avatar}
                       alt={contributor.name}
@@ -258,14 +285,14 @@ const CommunityPage = () => {
                       <div className="contributor-badges">
                         {contributor.badges.map((badge, badgeIndex) => (
                           <span key={badgeIndex} className="badge">
-                            <Award className="badge-icon" />
+                            <Award className="badge-icon" size={12} />
                             {badge}
                           </span>
                         ))}
                       </div>
                     </div>
                     <div className="contribution-count">
-                      <span>{contributor.contributions}</span>
+                      <span>{formatNumber(contributor.contributions)}</span>
                       <span>posts</span>
                     </div>
                   </div>
@@ -276,12 +303,16 @@ const CommunityPage = () => {
             {/* Trending Topics */}
             <div className="sidebar-section">
               <h3 className="sidebar-title">
-                <TrendingUp className="sidebar-icon" />
+                <TrendingUp className="sidebar-icon" size={18} />
                 Trending Topics
               </h3>
               <div className="trending-topics">
                 {trendingTopics.map((topic, index) => (
-                  <div key={index} className="topic-card">
+                  <div 
+                    key={index} 
+                    className="topic-card"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
                     <span className="topic-name">{topic.name}</span>
                     <div className="topic-stats">
                       <span className="topic-posts">{topic.posts} posts</span>
@@ -299,28 +330,28 @@ const CommunityPage = () => {
             {/* Community Stats */}
             <div className="sidebar-section">
               <h3 className="sidebar-title">
-                <Globe className="sidebar-icon" />
+                <Globe className="sidebar-icon" size={16} />
                 Community Stats
               </h3>
               <div className="community-stats">
                 <div className="stat-card">
-                  <Users className="stat-icon" />
+                  <Users className="stat-icon" size={20} />
                   <div className="stat-info">
-                    <span className="stat-value">15,234</span>
+                    <span className="stat-value">{formatNumber(15234)}</span>
                     <span className="stat-label">Members</span>
                   </div>
                 </div>
                 <div className="stat-card">
-                  <MessageCircle className="stat-icon" />
+                  <MessageCircle className="stat-icon" size={20} />
                   <div className="stat-info">
-                    <span className="stat-value">45,678</span>
+                    <span className="stat-value">{formatNumber(45678)}</span>
                     <span className="stat-label">Posts</span>
                   </div>
                 </div>
                 <div className="stat-card">
-                  <Heart className="stat-icon" />
+                  <Heart className="stat-icon" size={20} />
                   <div className="stat-info">
-                    <span className="stat-value">123,456</span>
+                    <span className="stat-value">{formatNumber(123456)}</span>
                     <span className="stat-label">Reactions</span>
                   </div>
                 </div>

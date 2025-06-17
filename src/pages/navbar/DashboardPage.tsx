@@ -3,7 +3,7 @@ import {
   TrendingUp, BookOpen, Briefcase, Award, Clock, Star, Users, Target, 
   Calendar, ArrowRight, ChevronRight, BarChart2, Book, CheckCircle, 
   Clock8, DollarSign, FileText, Gift, Globe, Heart, Zap, 
-  MessageCircle, Play, Plus, User as UserIcon
+  MessageCircle, Play, Plus, User as UserIcon, Flame
 } from 'lucide-react';
 import '../../styles/DashboardPage.css';
 
@@ -171,16 +171,16 @@ const DashboardPage = () => {
                 Track your learning progress and achieve your goals
               </p>
             </div>
-            <div className="sv-dashboard-header__actions">
-              <button className="sv-button sv-button--outline">
-                <FileText className="h-4 w-4 mr-2" />
-                View Study Plan
-              </button>
-              <button className="sv-button sv-button--primary">
-                <Zap className="h-4 w-4 mr-2" />
-                Resume Learning
-              </button>
-            </div>
+                      <div className="sv-dashboard-header__actions">
+            <button className="sv-button sv-button--primary">
+              <FileText className="sv-button__icon" />
+              View Study Plan
+            </button>
+            <button className="sv-button sv-button--primary">
+              <Zap className="sv-button__icon" />
+              Resume Learning
+            </button>
+          </div>
           </div>
         </div>
 
@@ -189,8 +189,15 @@ const DashboardPage = () => {
           <div className="sv-streak-card__header">
             <div>
               <h3 className="sv-streak-card__title">
-                <Zap className="h-5 w-5 text-yellow-500 mr-2" />
+                <div className="sv-streak-fire">
+                  <div className="sv-streak-fire__glow"></div>
+                  <Flame className="sv-streak-fire__icon" />
+                </div>
                 Learning Streak
+                <div className="sv-streak-sparkle"></div>
+                <div className="sv-streak-sparkle"></div>
+                <div className="sv-streak-sparkle"></div>
+                <div className="sv-streak-sparkle"></div>
               </h3>
               <p className="sv-streak-card__subtitle">{learningStreak.current} days current streak</p>
             </div>
@@ -348,12 +355,12 @@ const DashboardPage = () => {
           </div>
 
           {/* Right Sidebar */}
-          <div className="space-y-8">
+          <div>
             {/* Skill Progress */}
-            <div className="glass-effect rounded-xl p-6">
+            <div className="sv-sidebar-section">
               <div className="sv-section-header">
                 <div className="sv-section-header__title">
-                  <BarChart2 className="h-5 w-5 mr-2" />
+                  <BarChart2 className="sv-section-header__icon" />
                   <h2>Skill Progress</h2>
                 </div>
               </div>
@@ -379,10 +386,10 @@ const DashboardPage = () => {
             </div>
 
             {/* Achievements */}
-            <div className="glass-effect rounded-xl p-6">
+            <div className="sv-sidebar-section">
               <div className="sv-section-header">
                 <div className="sv-section-header__title">
-                  <Award className="h-5 w-5 mr-2" />
+                  <Award className="sv-section-header__icon" />
                   <h2>Recent Achievements</h2>
                 </div>
               </div>
@@ -406,16 +413,16 @@ const DashboardPage = () => {
             </div>
 
             {/* Upcoming Deadlines */}
-            <div className="glass-effect rounded-xl p-6">
+            <div className="sv-sidebar-section">
               <div className="sv-section-header">
                 <div className="sv-section-header__title">
-                  <Calendar className="h-5 w-5 mr-2" />
+                  <Calendar className="sv-section-header__icon" />
                   <h2>Upcoming Deadlines</h2>
                 </div>
               </div>
               <div className="sv-deadlines-list">
                 {upcomingDeadlines.map((item, index) => (
-                  <div key={index} className="sv-deadline-card">
+                  <div key={index} className={`sv-deadline-card sv-deadline-card--${item.priority}`}>
                     <div className="sv-deadline-card__content">
                       <h4 className="sv-deadline-card__title">{item.task}</h4>
                       <div className="sv-deadline-card__meta">

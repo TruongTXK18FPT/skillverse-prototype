@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { 
   Send, Bot, User, Sparkles, Brain, Target, Briefcase, Book, Award, Star, ArrowRight,
-  BookOpen, Globe, DollarSign, ChevronRight, Clock, CheckCircle, TrendingUp, Code,
-  Lightbulb, Zap, Users, FileText, MessageCircle, Coffee
+  BookOpen, Globe, DollarSign, ChevronRight, Clock,
+  Lightbulb, Zap,
 } from 'lucide-react';
 import '../../styles/ChatbotPage.css';
 
+// Add React JSX types
+import type { ReactElement } from 'react';
+
 interface ChatMessage {
   type: 'bot' | 'user';
-  content: string | JSX.Element;
+  content: string | ReactElement;
   timestamp: string;
 }
 
@@ -413,7 +416,7 @@ const ChatbotPage = () => {
     }, 1500);
   };
 
-  const formatAIResponse = (response: AIResponse): JSX.Element => {
+  const formatAIResponse = (response: AIResponse): ReactElement => {
     return (
       <div className="sv-response-content">
         <p className="sv-response-text">{response.text}</p>
