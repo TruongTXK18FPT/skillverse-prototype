@@ -64,9 +64,9 @@ const Footer = () => {
             <div className="footer-section">
               <h3 className="footer-title">{translations.footer.support}</h3>
               <ul className="footer-links">
-                <li><a href="#" className="footer-link hover-underline">{translations.footer.links.helpCenter}</a></li>
-                <li><a href="#" className="footer-link hover-underline">{translations.footer.links.termsOfService}</a></li>
-                <li><a href="#" className="footer-link hover-underline">{translations.footer.links.privacyPolicy}</a></li>
+                <li><a href="/help-center" className="footer-link hover-underline">{translations.footer.links.helpCenter}</a></li>
+                <li><a href="/terms-of-service" className="footer-link hover-underline">{translations.footer.links.termsOfService}</a></li>
+                <li><a href="/privacy-policy" className="footer-link hover-underline">{translations.footer.links.privacyPolicy}</a></li>
                 <li><a href="#" className="footer-link hover-underline">{translations.footer.links.faq}</a></li>
               </ul>
             </div>

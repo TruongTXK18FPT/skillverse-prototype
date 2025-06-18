@@ -261,6 +261,74 @@
   animation-delay: 0.4s;
 }
 
+/* Typing Indicator Styles */
+.sv-typing-dots {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0;
+}
+
+.sv-typing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  animation: typingAnimation 1.4s infinite;
+}
+
+.sv-typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.sv-typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingAnimation {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+.sv-typing-text {
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.sv-chat-message--loading {
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 2s linear infinite;
+}
+
+/* Enhanced Message Loading State */
+.sv-chat-message--loading .sv-chat-message__content {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
 /* Chat Input */
 .sv-chat-input {
   display: flex;
@@ -744,4 +812,4 @@
   .sv-recommendations__grid {
     grid-template-columns: repeat(3, 1fr);
   }
-} 
+}

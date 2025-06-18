@@ -19,6 +19,9 @@ import PaymentPage from './pages/payment/PaymentPage';
 import ManagerPage from './pages/main/ManagerPage';
 import BlogForm from './pages/community/BlogForm';
 
+import PrivacyPolicy from './pages/footer/Privacy&Policy';
+import TermOfService from './pages/footer/TermOfService';
+import HelpCenter from './pages/footer/HelpCenter';
 import './styles/App.css';
 
 const App = () => {
@@ -44,6 +47,10 @@ const App = () => {
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/manager" element={<ManagerPage />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermOfService />} />
+                <Route path="/help-center" element={<HelpCenter />} />
+                {/* Add more routes as needed */}
               </Routes>
             </main>
             <Footer />
