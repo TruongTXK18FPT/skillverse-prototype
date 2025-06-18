@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Mail, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 import '../../styles/AuthPages.css';
 
 const ForgotPasswordPage = () => {
@@ -8,14 +9,15 @@ const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { translations } = useLanguage();
 
   const validateEmail = () => {
     if (!email.trim()) {
-      setError('Email is required');
+      setError(translations.auth.errors.emailRequired);
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(email)) {
-      setError('Please enter a valid email');
+      setError(translations.auth.errors.emailInvalid);
       return false;
     }
     return true;
@@ -42,66 +44,65 @@ const ForgotPasswordPage = () => {
           <div className="auth-header">
             <button onClick={() => navigate(-1)} className="back-button">
               <ArrowLeft size={20} />
-              <span>Back</span>
+              <span>{translations.common.back}</span>
             </button>
-            <h1>Check Your Email</h1>
-            <p>We've sent password reset instructions to your email</p>
+            <h1>{translations.auth.checkEmail}</h1>
+            <p>{translations.auth.resetInstructionsSent}</p>
           </div>
 
           <div className="success-message">
             <div className="success-icon">✉️</div>
-            <h2>Email Sent Successfully!</h2>
+            <h2>{translations.auth.emailSentSuccess}</h2>
             <p>
-              We've sent an email to <strong>{email}</strong> with instructions to reset your
-              password. The link will expire in 1 hour.
+              {translations.auth.resetEmailSentTo} <strong>{email}</strong> {translations.auth.resetLinkExpiry}
             </p>
             <div className="next-steps">
-              <h3>Next Steps:</h3>
+              <h3>{translations.auth.nextSteps}:</h3>
               <ol>
-                <li>Check your email inbox</li>
-                <li>Click the reset password link in the email</li>
-                <li>Create your new password</li>
+                <li>{translations.auth.checkInbox}</li>
+                <li>{translations.auth.clickResetLink}</li>
+                <li>{translations.auth.createNewPassword}</li>
               </ol>
             </div>
             <p className="note">
-              Didn't receive the email? Check your spam folder or{' '}
+              {translations.auth.noEmailReceived}{' '}
               <button onClick={() => setIsSubmitted(false)} className="resend-link">
-                try again
+                {translations.auth.tryAgain}
               </button>
             </p>
           </div>
 
           <div className="auth-footer">
-            <p>Remember your password?</p>
+            <p>{translations.auth.rememberPassword}</p>
             <Link to="/login" className="auth-link">
-              Sign In
+              {translations.auth.signIn}
             </Link>
           </div>
         </div>
 
         <div className="auth-background">
           <div className="auth-features">
-            <h2>Account Security Tips</h2>
+            <h2>{translations.auth.securityTips}</h2>
             <ul>
               <li>
                 <div className="feature-icon">🔒</div>
                 <div className="feature-text">
-                  <h3>Strong Password</h3>
-                  <p>Use a combination of letters, numbers, and symbols</p>
+                  <h3>{translations.auth.strongPassword}</h3>
+                  <p>{translations.auth.passwordTip}</p>
                 </div>
               </li>
               <li>
                 <div className="feature-icon">🔄</div>
                 <div className="feature-text">
-                  <h3>Regular Updates</h3>
-                  <p>Change your password periodically</p>
+                  <h3>{translations.auth.regularUpdates}</h3>
+                  <p>{translations.auth.updatesTip}</p>
                 </div>
               </li>
               <li>
                 <div className="feature-icon">📱</div>
                 <div className="feature-text">
-                  <h3>Two-Factor Authentication</h3>
-                  <p>Add an extra layer of security to your account</p>
+                  <h3>{translations.auth.twoFactor}</h3>
+                  <p>{translations.auth.twoFactorTip}</p>
                 </div>
               </li>
             </ul>
@@ -117,15 +118,15 @@ const ForgotPasswordPage = () => {
         <div className="auth-header">
           <button onClick={() => navigate(-1)} className="back-button">
             <ArrowLeft size={20} />
-            <span>Back</span>
+            <span>{translations.common.back}</span>
           </button>
-          <h1>Reset Password</h1>
-          <p>Enter your email address to receive password reset instructions</p>
+          <h1>{translations.auth.resetPassword}</h1>
+          <p>{translations.auth.resetInstructions}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">{translations.auth.emailAddress}</label>
             <div className="input-group">
               <Mail className="input-icon" size={20} />
               <input
@@ -133,7 +134,7 @@ const ForgotPasswordPage = () => {
                 id="email"
                 value={email}
                 onChange={handleChange}
-                placeholder="Enter your email"
+                placeholder={translations.auth.enterEmail}
                 className={error ? 'error' : ''}
               />
             </div>
@@ -141,42 +142,42 @@ const ForgotPasswordPage = () => {
           </div>
 
           <button type="submit" className="submit-button">
-            Send Reset Instructions
+            {translations.auth.sendResetInstructions}
             <ArrowRight size={20} />
           </button>
         </form>
 
         <div className="auth-footer">
-          <p>Remember your password?</p>
+          <p>{translations.auth.rememberPassword}</p>
           <Link to="/login" className="auth-link">
-            Sign In
+            {translations.auth.signIn}
           </Link>
         </div>
       </div>
 
       <div className="auth-background">
         <div className="auth-features">
-          <h2>Need Help?</h2>
+          <h2>{translations.auth.needHelp}</h2>
           <ul>
             <li>
               <div className="feature-icon">❓</div>
               <div className="feature-text">
-                <h3>Can't Access Email?</h3>
-                <p>Contact our support team for assistance</p>
+                <h3>{translations.auth.cantAccessEmail}</h3>
+                <p>{translations.auth.contactSupport}</p>
               </div>
             </li>
             <li>
               <div className="feature-icon">🔑</div>
               <div className="feature-text">
-                <h3>Account Recovery</h3>
-                <p>Alternative ways to recover your account</p>
+                <h3>{translations.auth.accountRecovery}</h3>
+                <p>{translations.auth.alternativeRecovery}</p>
               </div>
             </li>
             <li>
               <div className="feature-icon">🛡️</div>
               <div className="feature-text">
-                <h3>Security Check</h3>
-                <p>Verify your identity to protect your account</p>
+                <h3>{translations.auth.securityCheck}</h3>
+                <p>{translations.auth.verifyIdentity}</p>
               </div>
             </li>
           </ul>

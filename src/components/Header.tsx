@@ -15,6 +15,8 @@ import {
 import Logo from '../assets/Logo.jpg';
 import '../styles/Header.css';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface NavLinkClassProps {
   isActive: boolean;
@@ -30,21 +32,22 @@ const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
+  const { translations } = useLanguage();
 
   const mainNavLinks = [
-    { path: '/', label: 'Home' },
-    { path: '/dashboard', label: 'Dashboard' },
-    { path: '/community', label: 'Community' },
+    { path: '/', label: translations.navigation.home },
+    { path: '/dashboard', label: translations.navigation.dashboard },
+    { path: '/community', label: translations.navigation.community },
   ];
 
   const allCategories = [
-    { path: '/dashboard', label: 'Dashboard', description: 'Track your learning progress' },
-    { path: '/courses', label: 'Courses', description: 'Browse available courses' },
-    { path: '/mentorship', label: 'Mentorship', description: 'Connect with mentors' },
-    { path: '/community', label: 'Community', description: 'Join the discussion' },
-    { path: '/jobs', label: 'Jobs', description: 'Find work opportunities' },
-    { path: '/portfolio', label: 'Portfolio', description: 'Showcase your work' },
-    { path: '/chatbot', label: 'AI Advisor', description: 'Get personalized guidance' }
+    { path: '/dashboard', label: translations.navigation.dashboard, description: translations.navigation.descriptions.dashboard },
+    { path: '/courses', label: translations.navigation.courses, description: translations.navigation.descriptions.courses },
+    { path: '/mentorship', label: translations.navigation.mentorship, description: translations.navigation.descriptions.mentorship },
+    { path: '/community', label: translations.navigation.community, description: translations.navigation.descriptions.community },
+    { path: '/jobs', label: translations.navigation.jobs, description: translations.navigation.descriptions.jobs },
+    { path: '/portfolio', label: translations.navigation.portfolio, description: translations.navigation.descriptions.portfolio },
+    { path: '/chatbot', label: translations.navigation.chatbot, description: translations.navigation.descriptions.chatbot }
   ];
 
 
@@ -96,7 +99,7 @@ const Header = () => {
             >
               <span className="nav-link__text">
                 <Grid className="w-4 h-4 mr-1" />
-                Categories
+                Danh Mục
                 <ChevronDown className="w-4 h-4 ml-1" />
               </span>
             </button>
@@ -152,9 +155,11 @@ const Header = () => {
               )}
             </button>
 
+            <LanguageSwitcher />
+
             {/* Login Button */}
             <button onClick={handleLogin} className="login-btn">
-              Login
+              {translations.auth.login}
             </button>
 
             {/* Mobile Menu Button */}
@@ -201,7 +206,7 @@ const Header = () => {
               ))}
             </div>
             <button onClick={handleLogin} className="mobile-login-btn">
-              Login
+              {translations.auth.login}
             </button>
           </nav>
         )}
@@ -215,7 +220,7 @@ const Header = () => {
               <Search className="action-icon" />
               <input
                 type="text"
-                placeholder="Search courses, topics, or anything..."
+                placeholder={translations.common.search}
                 className="search-input"
                 autoFocus
               />
@@ -231,9 +236,9 @@ const Header = () => {
               {/* Empty State */}
               <div className="search-empty">
                 <Search className="search-empty-icon" />
-                <h3 className="search-empty-text">Start typing to search</h3>
+                <h3 className="search-empty-text">{translations.common.search}</h3>
                 <p className="search-empty-description">
-                  Search for courses, topics, discussions, or anything else
+                  {translations.common.searchDescription}
                 </p>
               </div>
 
@@ -283,7 +288,7 @@ const Header = () => {
           <div className="notification-container">
             <div className="notification-header">
               <h2 className="notification-title">
-                Notifications
+                {translations.notifications.title}
               </h2>
               <button
                 className="notification-close"

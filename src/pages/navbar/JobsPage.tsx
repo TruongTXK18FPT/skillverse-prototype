@@ -1,33 +1,35 @@
 import React, { useState } from 'react';
 import { Search, MapPin, Clock, DollarSign, Briefcase, Star, Filter, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 import '../../styles/JobsPage.css';
 
 const JobsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const { translations } = useLanguage();
 
   const categories = [
-    { id: 'all', name: 'All', count: 89 },
-    { id: 'data-entry', name: 'Data Entry', count: 23 },
-    { id: 'design', name: 'Design', count: 18 },
-    { id: 'writing', name: 'Writing', count: 15 },
-    { id: 'research', name: 'Research', count: 12 },
-    { id: 'translation', name: 'Translation', count: 11 },
-    { id: 'social-media', name: 'Social Media', count: 10 }
+    { id: 'all', name: 'Tất Cả', count: 89 },
+    { id: 'data-entry', name: 'Nhập Liệu', count: 23 },
+    { id: 'design', name: 'Thiết Kế', count: 18 },
+    { id: 'writing', name: 'Viết Lách', count: 15 },
+    { id: 'research', name: 'Nghiên Cứu', count: 12 },
+    { id: 'translation', name: 'Dịch Thuật', count: 11 },
+    { id: 'social-media', name: 'Mạng Xã Hội', count: 10 }
   ];
 
   const jobs = [
     {
       id: 1,
-      title: 'Logo Design for Startup',
+      title: 'Thiết Kế Logo cho Startup',
       company: 'TechViet Solutions',
       category: 'design',
-      budget: '$50 - $100',
-      duration: '3-5 days',
-      location: 'Remote',
-      postedTime: '2 hours ago',
-      description: 'Need a professional logo design for a tech startup. Looking for creative, modern design suitable for fintech industry.',
-      skills: ['Adobe Illustrator', 'Logo Design', 'Brand Identity'],
+      budget: '1.150.000đ - 2.300.000đ',
+      duration: '3-5 ngày',
+      location: 'Từ xa',
+      postedTime: '2 giờ trước',
+      description: 'Cần thiết kế logo chuyên nghiệp cho startup công nghệ. Tìm kiếm thiết kế sáng tạo, hiện đại phù hợp với ngành fintech.',
+      skills: ['Adobe Illustrator', 'Thiết Kế Logo', 'Nhận Diện Thương Hiệu'],
       urgency: 'high',
       proposals: 12,
       rating: 4.8,
@@ -35,15 +37,15 @@ const JobsPage = () => {
     },
     {
       id: 2,
-      title: 'Excel Data Entry from PDF',
+      title: 'Nhập Dữ Liệu từ PDF vào Excel',
       company: 'Green Energy Corp',
       category: 'data-entry',
-      budget: '$20 - $30',
-      duration: '1-2 days',
-      location: 'Remote',
-      postedTime: '4 hours ago',
-      description: 'Need to input data from 50 PDF files into Excel. Data includes customer information and order details.',
-      skills: ['Excel', 'Data Entry', 'Attention to Detail'],
+      budget: '460.000đ - 690.000đ',
+      duration: '1-2 ngày',
+      location: 'Từ xa',
+      postedTime: '4 giờ trước',
+      description: 'Cần nhập dữ liệu từ 50 file PDF vào Excel. Dữ liệu bao gồm thông tin khách hàng và chi tiết đơn hàng.',
+      skills: ['Excel', 'Nhập Liệu', 'Tỉ Mỉ'],
       urgency: 'medium',
       proposals: 8,
       rating: 4.6,
@@ -51,15 +53,15 @@ const JobsPage = () => {
     },
     {
       id: 3,
-      title: 'Marketing Blog Content Writing',
+      title: 'Viết Bài Blog Marketing',
       company: 'Digital Marketing Hub',
       category: 'writing',
-      budget: '$80 - $120',
-      duration: '1 week',
-      location: 'Remote',
-      postedTime: '6 hours ago',
-      description: 'Write 5 blog posts about digital marketing, each 1000-1500 words. Must be SEO-friendly and have marketing experience.',
-      skills: ['Content Writing', 'SEO', 'Digital Marketing'],
+      budget: '1.840.000đ - 2.760.000đ',
+      duration: '1 tuần',
+      location: 'Từ xa',
+      postedTime: '6 giờ trước',
+      description: 'Viết 5 bài blog về marketing số, mỗi bài 1000-1500 từ. Yêu cầu tối ưu SEO và có kinh nghiệm marketing.',
+      skills: ['Viết Content', 'SEO', 'Marketing Số'],
       urgency: 'low',
       proposals: 15,
       rating: 4.9,
@@ -67,15 +69,15 @@ const JobsPage = () => {
     },
     {
       id: 4,
-      title: 'E-commerce Market Research',
+      title: 'Nghiên Cứu Thị Trường TMĐT',
       company: 'Online Retail Pro',
       category: 'research',
-      budget: '$150 - $200',
-      duration: '2 weeks',
-      location: 'Remote',
-      postedTime: '1 day ago',
-      description: 'Analyze e-commerce market trends, competitive analysis, and consumer behavior research.',
-      skills: ['Market Research', 'Data Analysis', 'Excel'],
+      budget: '3.450.000đ - 4.600.000đ',
+      duration: '2 tuần',
+      location: 'Từ xa',
+      postedTime: '1 ngày trước',
+      description: 'Phân tích xu hướng thị trường TMĐT, phân tích cạnh tranh, và nghiên cứu hành vi người tiêu dùng.',
+      skills: ['Nghiên Cứu Thị Trường', 'Phân Tích Dữ Liệu', 'Excel'],
       urgency: 'medium',
       proposals: 6,
       rating: 4.7,
@@ -83,15 +85,15 @@ const JobsPage = () => {
     },
     {
       id: 5,
-      title: 'English-Vietnamese Translation',
+      title: 'Dịch Anh-Việt',
       company: 'Global Translate',
       category: 'translation',
-      budget: '$30 - $50',
-      duration: '3 days',
-      location: 'Remote',
-      postedTime: '1 day ago',
-      description: 'Translate technical documentation from English to Vietnamese, approximately 20 A4 pages.',
-      skills: ['English Translation', 'Technical Writing', 'Vietnamese'],
+      budget: '690.000đ - 1.150.000đ',
+      duration: '3 ngày',
+      location: 'Từ xa',
+      postedTime: '1 ngày trước',
+      description: 'Dịch tài liệu kỹ thuật từ tiếng Anh sang tiếng Việt, khoảng 20 trang A4.',
+      skills: ['Dịch Tiếng Anh', 'Viết Kỹ Thuật', 'Tiếng Việt'],
       urgency: 'high',
       proposals: 20,
       rating: 4.5,
@@ -99,15 +101,15 @@ const JobsPage = () => {
     },
     {
       id: 6,
-      title: 'Facebook Page Management',
+      title: 'Quản Lý Trang Facebook',
       company: 'Fashion Brand X',
       category: 'social-media',
-      budget: '$200 - $300',
-      duration: '1 month',
-      location: 'Remote',
-      postedTime: '2 days ago',
-      description: 'Manage Facebook page, create content, engage with customers, and run basic ads.',
-      skills: ['Facebook Marketing', 'Content Creation', 'Social Media'],
+      budget: '4.600.000đ - 6.900.000đ',
+      duration: '1 tháng',
+      location: 'Từ xa',
+      postedTime: '2 ngày trước',
+      description: 'Quản lý trang Facebook, tạo nội dung, tương tác với khách hàng và chạy quảng cáo cơ bản.',
+      skills: ['Marketing Facebook', 'Tạo Nội Dung', 'Mạng Xã Hội'],
       urgency: 'low',
       proposals: 25,
       rating: 4.4,
@@ -134,10 +136,10 @@ const JobsPage = () => {
 
   const getUrgencyText = (urgency: string) => {
     switch (urgency) {
-      case 'high': return 'Urgent';
-      case 'medium': return 'Medium';
-      case 'low': return 'Low';
-      default: return 'Normal';
+      case 'high': return 'Gấp';
+      case 'medium': return 'Trung bình';
+      case 'low': return 'Thấp';
+      default: return 'Bình thường';
     }
   };
 
@@ -146,9 +148,9 @@ const JobsPage = () => {
       <div className="sv-jobs-content">
         {/* Header */}
         <div className="sv-jobs-header">
-          <h1 className="sv-jobs-header__title">Micro Jobs</h1>
+          <h1 className="sv-jobs-header__title">Việc Làm Tự Do</h1>
           <p className="sv-jobs-header__description">
-            Find short-term projects that match your skills and start earning today
+            Tìm kiếm cơ hội việc làm phù hợp với kỹ năng của bạn
           </p>
         </div>
 
@@ -159,7 +161,7 @@ const JobsPage = () => {
               <Search className="sv-jobs-search__icon" />
               <input
                 type="text"
-                placeholder="Search jobs, companies, skills..."
+                placeholder="Tìm kiếm việc làm..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="sv-jobs-search__input"
@@ -167,7 +169,7 @@ const JobsPage = () => {
             </div>
             <button className="sv-jobs-search__filter-btn">
               <Filter />
-              <span>Advanced Filters</span>
+              <span>Bộ lọc</span>
             </button>
           </div>
         </div>
@@ -176,7 +178,7 @@ const JobsPage = () => {
           {/* Sidebar Categories */}
           <div className="sv-jobs-sidebar">
             <div className="sv-jobs-categories">
-              <h3 className="sv-jobs-categories__title">Job Categories</h3>
+              <h3 className="sv-jobs-categories__title">Danh Mục</h3>
               <div className="sv-jobs-categories__list">
                 {categories.map((category) => (
                   <button
@@ -233,7 +235,7 @@ const JobsPage = () => {
                   <div className="sv-job-card__stats">
                     <div className="sv-job-card__meta-item">
                       <Briefcase />
-                      <span>{job.proposals} proposals</span>
+                      <span>{job.proposals} đề xuất</span>
                     </div>
                     <div className="sv-job-card__meta-item">
                       <Star className="fill-current" />
@@ -245,7 +247,7 @@ const JobsPage = () => {
                     </div>
                   </div>
                   <button className="sv-job-card__apply-btn">
-                    <span>Apply Now</span>
+                    <span>Ứng Tuyển Ngay</span>
                     <ArrowRight />
                   </button>
                 </div>
@@ -255,8 +257,8 @@ const JobsPage = () => {
             {filteredJobs.length === 0 && (
               <div className="sv-jobs-empty">
                 <Briefcase className="sv-jobs-empty__icon" />
-                <h3 className="sv-jobs-empty__title">No jobs found</h3>
-                <p className="sv-jobs-empty__description">Try adjusting your search or filters</p>
+                <h3 className="sv-jobs-empty__title">Không tìm thấy việc làm</h3>
+                <p className="sv-jobs-empty__description">Vui lòng điều chỉnh tìm kiếm hoặc bộ lọc của bạn</p>
               </div>
             )}
           </div>

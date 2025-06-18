@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Edit, Share2, Eye, Star, Award, Briefcase, GraduationCap, User, Mail, Phone, MapPin, Globe, Github, Linkedin, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../../context/LanguageContext';
 import '../../styles/PortfolioPage.css';
 
 const PortfolioPage = () => {
-  const [activeTab, setActiveTab] = useState('portfolio');
+  const [activeTab, setActiveTab] = useState('overview');
   const [animationKey, setAnimationKey] = useState(0);
+  const { translations } = useLanguage();
 
   // Animation variants
   const containerVariants = {
@@ -153,6 +155,38 @@ const PortfolioPage = () => {
     }
   ];
 
+  const stats = [
+    {
+      title: translations.portfolio.stats.completedProjects,
+      value: '15',
+      icon: 'projects'
+    },
+    {
+      title: translations.portfolio.stats.skillsLearned,
+      value: '25',
+      icon: 'skills'
+    },
+    {
+      title: translations.portfolio.stats.certificatesEarned,
+      value: '8',
+      icon: 'certificates'
+    },
+    {
+      title: translations.portfolio.stats.coursesCompleted,
+      value: '12',
+      icon: 'courses'
+    }
+  ];
+
+  const tabs = [
+    { id: 'overview', label: translations.portfolio.sections.overview },
+    { id: 'projects', label: translations.portfolio.sections.projects },
+    { id: 'skills', label: translations.portfolio.sections.skills },
+    { id: 'education', label: translations.portfolio.sections.education },
+    { id: 'experience', label: translations.portfolio.sections.experience },
+    { id: 'certificates', label: translations.portfolio.sections.certificates }
+  ];
+
   return (
     <motion.div 
       className="sv-portfolio-container"
@@ -166,10 +200,8 @@ const PortfolioPage = () => {
           className="sv-portfolio-header"
           variants={itemVariants}
         >
-          <h1 className="sv-portfolio-header__title">Portfolio & CV</h1>
-          <p className="sv-portfolio-header__description">
-            Create and manage your professional profile from completed courses and projects
-          </p>
+          <h1 className="sv-portfolio-header__title">{translations.portfolio.title}</h1>
+          <p className="sv-portfolio-header__description">{translations.portfolio.description}</p>
         </motion.div>
 
         {/* Profile Preview Actions */}
@@ -189,7 +221,7 @@ const PortfolioPage = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Eye />
-                <span>Preview</span>
+                <span>{translations.portfolio.actions.editProfile}</span>
                 <ChevronRight size={16} />
               </motion.button>
               <motion.button 
@@ -198,7 +230,7 @@ const PortfolioPage = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Edit />
-                <span>Edit</span>
+                <span>{translations.portfolio.actions.editProfile}</span>
                 <ChevronRight size={16} />
               </motion.button>
               <motion.button 
@@ -207,7 +239,7 @@ const PortfolioPage = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Share2 />
-                <span>Share</span>
+                <span>{translations.portfolio.actions.shareProfile}</span>
                 <ChevronRight size={16} />
               </motion.button>
               <motion.button 
@@ -216,7 +248,7 @@ const PortfolioPage = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Download />
-                <span>Download CV</span>
+                <span>{translations.portfolio.actions.downloadCV}</span>
                 <ChevronRight size={16} />
               </motion.button>
             </div>
@@ -229,12 +261,7 @@ const PortfolioPage = () => {
           variants={itemVariants}
         >
           <nav className="sv-portfolio-tabs__nav">
-            {[
-              { id: 'portfolio', label: 'Portfolio', icon: Briefcase },
-              { id: 'courses', label: 'Courses', icon: GraduationCap },
-              { id: 'skills', label: 'Skills', icon: Award },
-              { id: 'profile', label: 'Personal Info', icon: User }
-            ].map((tab) => (
+            {tabs.map((tab) => (
               <motion.button
                 key={tab.id}
                 onClick={() => handleTabChange(tab.id)}
@@ -244,7 +271,6 @@ const PortfolioPage = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <tab.icon className="sv-portfolio-tab__icon" />
                 <span>{tab.label}</span>
               </motion.button>
             ))}
@@ -260,7 +286,7 @@ const PortfolioPage = () => {
               transition={{ duration: 0.3 }}
             >
               {/* Portfolio Tab */}
-              {activeTab === 'portfolio' && (
+              {activeTab === 'projects' && (
                 <motion.div 
                   className="sv-portfolio-grid"
                   variants={containerVariants}
@@ -364,7 +390,7 @@ const PortfolioPage = () => {
               )}
 
               {/* Profile Tab */}
-              {activeTab === 'profile' && (
+              {activeTab === 'education' && (
                 <motion.div 
                   className="sv-profile"
                   variants={containerVariants}

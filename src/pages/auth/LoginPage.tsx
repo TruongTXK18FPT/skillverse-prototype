@@ -28,8 +28,8 @@ const LoginPage = () => {
 
         {/* Welcome Text */}
         <div className="login-welcome">
-          <h1>Welcome back!</h1>
-          <p>Sign in to continue your learning journey</p>
+          <h1>Chào mừng trở lại!</h1>
+          <p>Đăng nhập để tiếp tục hành trình học tập của bạn</p>
         </div>
 
         {/* Login Form */}
@@ -43,14 +43,14 @@ const LoginPage = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder="Nhập email của bạn"
                 required
               />
             </div>
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Mật khẩu</label>
             <div className="input-wrapper">
               <Lock className="input-icon" />
               <input
@@ -58,7 +58,7 @@ const LoginPage = () => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
+                placeholder="Nhập mật khẩu của bạn"
                 required
               />
               <button
@@ -74,22 +74,22 @@ const LoginPage = () => {
           <div className="form-options">
             <label className="remember-me">
               <input type="checkbox" />
-              <span>Remember me</span>
+              <span>Ghi nhớ đăng nhập</span>
             </label>
             <Link to="/forgot-password" className="forgot-password">
-              Forgot password?
+              Quên mật khẩu?
             </Link>
           </div>
 
           <button type="submit" className="login-button">
-            Sign In
+            Đăng nhập
           </button>
         </form>
 
         {/* Social Login */}
         <div className="social-login">
           <div className="divider">
-            <span>Or sign in with</span>
+            <span>Hoặc đăng nhập với</span>
           </div>
           <div className="social-buttons">
             <button className="social-button google">
@@ -105,8 +105,8 @@ const LoginPage = () => {
 
         {/* Register Link */}
         <div className="register-link">
-          <span>Don't have an account?</span>
-          <Link to="/register">Sign up now</Link>
+          <span>Chưa có tài khoản?</span>
+          <Link to="/register">Đăng ký ngay</Link>
         </div>
       </div>
     </div>

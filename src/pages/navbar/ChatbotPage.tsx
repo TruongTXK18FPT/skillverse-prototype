@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Send, Bot, User, Sparkles, Brain, Target, Briefcase, Book, Award, Star, ArrowRight,
   BookOpen, Globe, DollarSign, ChevronRight, Clock,
   Lightbulb, Zap,
 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 import '../../styles/ChatbotPage.css';
 
 // Add React JSX types
 import type { ReactElement } from 'react';
 
-interface ChatMessage {
-  type: 'bot' | 'user';
-  content: string | ReactElement;
-  timestamp: string;
+interface Message {
+  id: string;
+  type: 'user' | 'bot';
+  content: string;
+  timestamp: Date;
 }
 
 interface CourseRecommendation {
@@ -71,23 +73,26 @@ interface AIResponseDatabase {
 }
 
 const ChatbotPage = () => {
-  const [message, setMessage] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
+  const [messages, setMessages] = useState<Message[]>([
     {
+      id: '1',
       type: 'bot',
-      content: "Hi! I'm your AI Career Advisor. I can help you with career guidance, skill recommendations, and learning paths. What would you like to know?",
-      timestamp: new Date().toISOString()
+      content: 'Xin chào! Tôi là trợ lý AI của SkillVerse. Tôi có thể giúp bạn:',
+      timestamp: new Date()
     }
   ]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { translations } = useLanguage();
 
   const promptCategories = [
     {
-      title: 'Career Planning',
+      title: translations.chatbot.features.careerPlanning,
       icon: Briefcase,
       color: 'blue',
       prompts: [
-        "What career paths are trending in technology?",
+        translations.chatbot.quickPrompts.career,
         "How do I transition from traditional IT to AI/ML?",
         "What skills are most in-demand for remote work?",
         "Should I focus on specialization or stay full-stack?",
@@ -95,11 +100,11 @@ const ChatbotPage = () => {
       ]
     },
     {
-      title: 'Skill Development',
+      title: translations.chatbot.features.skillDevelopment,
       icon: BookOpen,
       color: 'green',
       prompts: [
-        "Which programming languages should I learn first?",
+        translations.chatbot.quickPrompts.skills,
         "How to balance learning technical and soft skills?",
         "What's the best way to learn cloud computing?",
         "Recommend a learning path for UI/UX design",
@@ -107,11 +112,11 @@ const ChatbotPage = () => {
       ]
     },
     {
-      title: 'Job Search',
+      title: translations.chatbot.features.courseRecommendation,
       icon: Target,
       color: 'purple',
       prompts: [
-        "How to prepare for technical interviews?",
+        translations.chatbot.quickPrompts.resources,
         "Tips for building a strong portfolio",
         "What should I include in my developer resume?",
         "How to negotiate salary for tech positions?",
@@ -119,56 +124,32 @@ const ChatbotPage = () => {
       ]
     },
     {
-      title: 'Industry Insights',
+      title: translations.chatbot.features.jobMarketInsights,
       icon: Globe,
       color: 'orange',
       prompts: [
-        "Current trends in web development",
+        translations.chatbot.quickPrompts.jobs,
         "Future of AI and machine learning jobs",
         "Growing industries for tech professionals",
         "Impact of blockchain on job market",
         "Emerging roles in cybersecurity"
       ]
-    },
-    {
-      title: 'Personal Growth',
-      icon: User,
-      color: 'pink',
-      prompts: [
-        "How to improve problem-solving skills?",
-        "Tips for work-life balance in tech",
-        "Building professional relationships remotely",
-        "Dealing with imposter syndrome",
-        "Time management for continuous learning"
-      ]
-    },
-    {
-      title: 'Freelancing & Side Projects',
-      icon: DollarSign,
-      color: 'teal',
-      prompts: [
-        "How to start freelancing in tech?",
-        "Building a personal brand as a developer",
-        "Choosing the right side projects",
-        "Setting freelance rates for beginners",
-        "Managing multiple client projects"
-      ]
     }
   ];
 
   const quickPrompts = [
-    "Help me choose a tech career",
-    "Recommend learning resources",
-    "Review my skill gaps",
-    "Create a study plan",
-    "Find job opportunities"
+    translations.chatbot.quickPrompts.career,
+    translations.chatbot.quickPrompts.resources,
+    translations.chatbot.quickPrompts.skills,
+    translations.chatbot.quickPrompts.plan,
+    translations.chatbot.quickPrompts.jobs
   ];
 
   // AI Response Templates
   const aiResponses: AIResponseDatabase = {
     careerPlanning: {
-      "What career paths are trending in technology?": {
-        text: "Based on current market trends and industry data, here are the most promising career paths in technology for 2024 and beyond:",
+      [translations.chatbot.quickPrompts.career]: {
+        text: translations.chatbot.responses.careerPath,
         recommendations: [
           {
             title: "High-Growth Fields",
@@ -201,11 +182,6 @@ const ChatbotPage = () => {
             title: "Industry Skills Map",
             link: "/resources/skills-map",
             description: "Interactive tool to explore required skills for each career path"
-          },
-          {
-            title: "Salary Calculator",
-            link: "/resources/salary-calculator",
-            description: "Compare salaries across roles, locations, and experience levels"
           }
         ],
         nextSteps: [
@@ -214,269 +190,172 @@ const ChatbotPage = () => {
           "Join relevant tech communities and networks",
           "Book a session with a career counselor"
         ]
-      },
-      "How do I transition from traditional IT to AI/ML?": {
-        text: "Transitioning to AI/ML is an excellent career move. Here's a structured path to help you make this transition successfully:",
-        recommendations: [
-          {
-            title: "Essential Skills to Develop",
-            items: [
-              "Python Programming (Advanced) - Focus on NumPy, Pandas",
-              "Mathematics & Statistics - Linear Algebra, Calculus, Probability",
-              "Machine Learning Fundamentals - Algorithms, Models, Evaluation",
-              "Deep Learning - Neural Networks, TensorFlow/PyTorch",
-              "MLOps - Model Deployment, Monitoring, Scaling"
-            ]
-          },
-          {
-            title: "Learning Path",
-            items: [
-              "Month 1-2: Python & Data Science Fundamentals",
-              "Month 3-4: Mathematics & Statistics for ML",
-              "Month 5-6: Machine Learning Algorithms",
-              "Month 7-8: Deep Learning & Neural Networks",
-              "Month 9-10: Practical Projects & Portfolio Building"
-            ]
-          }
-        ],
-        resources: [
-          {
-            title: "AI/ML Transition Course",
-            link: "/courses/ai-ml-transition",
-            description: "Comprehensive course designed for IT professionals"
-          },
-          {
-            title: "Mathematics for ML",
-            link: "/courses/math-ml",
-            description: "Essential math concepts explained for practitioners"
-          },
-          {
-            title: "Hands-on Projects",
-            link: "/resources/ai-projects",
-            description: "Real-world projects to build your portfolio"
-          }
-        ],
-        nextSteps: [
-          "Start with our Python for Data Science course",
-          "Join AI/ML study groups and communities",
-          "Build 3 practical ML projects for your portfolio",
-          "Participate in Kaggle competitions"
-        ]
       }
     },
     skillDevelopment: {
-      "Which programming languages should I learn first?": {
-        text: "The best programming languages to learn depend on your career goals. Here's a strategic approach based on different career paths:",
+      [translations.chatbot.quickPrompts.skills]: {
+        text: translations.chatbot.responses.programming,
         recommendations: [
           {
-            title: "Web Development Path",
+            title: "Essential Programming Languages",
             items: [
-              "HTML/CSS - Foundation of web development (2-4 weeks)",
-              "JavaScript - Essential for interactive websites (2-3 months)",
-              "TypeScript - Type-safe JavaScript development (1 month)",
-              "React/Vue.js - Modern frontend frameworks (2-3 months)",
-              "Node.js - Backend JavaScript runtime (2 months)"
+              "Python - Versatile, beginner-friendly, high demand",
+              "JavaScript - Web development essential, huge ecosystem",
+              "SQL - Database fundamentals, always in demand",
+              "TypeScript - Type-safe JavaScript development",
+              "Go - Modern backend development, high performance"
             ]
           },
           {
-            title: "Data Science Path",
+            title: "Learning Resources",
             items: [
-              "Python - Primary language for data science (3 months)",
-              "SQL - Database querying and management (1 month)",
-              "R - Statistical computing and graphics (2 months)",
-              "Julia - High-performance numerical analysis (optional)",
-              "Scala - Big data processing with Spark (optional)"
+              "Interactive coding platforms (Codecademy, freeCodeCamp)",
+              "Video courses (Udemy, Coursera, PluralSight)",
+              "Documentation and tutorials (MDN, Python.org)",
+              "Practice platforms (LeetCode, HackerRank)",
+              "Community forums (Stack Overflow, Dev.to)"
             ]
           }
         ],
         resources: [
           {
-            title: "Web Development Bootcamp",
-            link: "/courses/web-dev-bootcamp",
-            description: "Complete modern web development curriculum"
+            title: "Programming Fundamentals",
+            link: "/courses/programming-basics",
+            description: "Master the basics of programming with hands-on practice"
           },
           {
-            title: "Interactive Tutorials",
-            link: "/resources/coding-tutorials",
-            description: "Hands-on coding practice with instant feedback"
-          },
-          {
-            title: "Project Ideas",
-            link: "/resources/beginner-projects",
-            description: "Portfolio-worthy projects for beginners"
+            title: "Web Development Path",
+            link: "/paths/web-development",
+            description: "Complete roadmap from beginner to professional web developer"
           }
         ],
         nextSteps: [
-          "Choose your learning path (Web/Data/Mobile)",
+          "Choose your first programming language",
           "Set up your development environment",
-          "Complete the beginner-friendly tutorials",
-          "Start building your first project"
+          "Complete the beginner tutorials",
+          "Build your first project"
         ]
       }
     },
-    jobSearch: {
-      "How to prepare for technical interviews?": {
-        text: "Technical interviews require both technical knowledge and soft skills. Here's a comprehensive preparation guide:",
+    learningPath: {
+      [translations.chatbot.quickPrompts.plan]: {
+        text: translations.chatbot.responses.learning,
         recommendations: [
           {
-            title: "Technical Preparation",
+            title: "Foundation Phase",
             items: [
-              "Data Structures & Algorithms - Focus on problem-solving",
-              "System Design - Scalability, reliability, performance",
-              "Coding Challenges - Practice on LeetCode/HackerRank",
-              "Design Patterns - Common solutions to recurring problems",
-              "Time Complexity Analysis - Optimize your solutions"
+              "Programming basics (variables, loops, functions)",
+              "Data structures and algorithms",
+              "Version control with Git",
+              "Command line and terminal usage",
+              "Basic computer science concepts"
             ]
           },
           {
-            title: "Behavioral Preparation",
+            title: "Specialization Phase",
             items: [
-              "STAR Method - Structure your experience stories",
-              "Project Deep Dives - Explain technical decisions",
-              "Collaboration Examples - Team and conflict resolution",
-              "Leadership Stories - Initiative and impact",
-              "Cultural Fit - Research company values"
+              "Choose frontend or backend focus",
+              "Learn relevant frameworks",
+              "Master development tools",
+              "Practice with real projects",
+              "Build portfolio pieces"
             ]
           }
         ],
         resources: [
           {
-            title: "Interview Prep Course",
-            link: "/courses/tech-interview",
-            description: "Comprehensive interview preparation with mock interviews"
+            title: "Learning Path Generator",
+            link: "/tools/path-generator",
+            description: "Create a personalized learning path based on your goals"
           },
           {
-            title: "Coding Problems",
-            link: "/resources/interview-questions",
-            description: "Curated list of most common interview questions"
-          },
-          {
-            title: "System Design Guide",
-            link: "/resources/system-design",
-            description: "Step-by-step approach to system design interviews"
+            title: "Project Ideas",
+            link: "/resources/project-ideas",
+            description: "Collection of projects to build your portfolio"
           }
         ],
         nextSteps: [
-          "Create a 12-week interview prep schedule",
-          "Practice coding problems daily (1-2 hours)",
-          "Join mock interview sessions weekly",
-          "Review and document your projects"
+          "Complete the skills assessment",
+          "Set your learning goals",
+          "Create a study schedule",
+          "Join study groups"
         ]
       }
     }
   };
 
-  const handlePromptClick = (prompt: string) => {
-    const userMessage: ChatMessage = {
-      type: 'user',
-      content: prompt,
-      timestamp: new Date().toISOString()
-    };
-
-    setChatHistory(prev => [...prev, userMessage]);
-    setMessage('');
-    setIsTyping(true);
-
-    // Find matching response
-    let response: AIResponse | undefined;
-    Object.values(aiResponses).forEach(category => {
-      if (category[prompt]) {
-        response = category[prompt];
-      }
-    });
-
-    // Simulate bot thinking
-    setTimeout(() => {
-      setIsTyping(false);
-      
-      const botMessage: ChatMessage = {
-        type: 'bot',
-        content: response ? formatAIResponse(response) : (
-          <div className="sv-response-content">
-            <p className="sv-response-text">
-              I understand you're interested in {prompt.toLowerCase()}. Let me help you with that.
-            </p>
-            <div className="sv-response-section">
-              <div className="sv-response-section__title">
-                <Zap className="w-5 h-5 text-yellow-500" />
-                <span>Quick Suggestions</span>
-              </div>
-              <div className="sv-tags">
-                <span className="sv-tag sv-tag--tech">Learn fundamentals</span>
-                <span className="sv-tag sv-tag--soft">Practice regularly</span>
-                <span className="sv-tag sv-tag--tool">Use modern tools</span>
-              </div>
-            </div>
-          </div>
-        ),
-        timestamp: new Date().toISOString()
-      };
-
-      setChatHistory(prev => [...prev, botMessage]);
-    }, 1500);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const formatAIResponse = (response: AIResponse): ReactElement => {
-    return (
-      <div className="sv-response-content">
-        <p className="sv-response-text">{response.text}</p>
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
-        {response.recommendations && (
-          <div className="sv-response-section">
-            {response.recommendations.map((rec, index) => (
-              <div key={index} className="mb-6">
-                <div className="sv-response-section__title">
-                  <Lightbulb className="w-5 h-5 text-yellow-500" />
-                  <span>{rec.title}</span>
-                </div>
-                <div className="sv-response-list">
-                  {rec.items.map((item, itemIndex) => (
-                    <div key={itemIndex} className="sv-response-item">
-                      <ChevronRight className="sv-response-item__bullet" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputMessage.trim()) return;
 
-        {response.resources && (
-          <div className="sv-response-section">
-            <div className="sv-response-section__title">
-              <Book className="w-5 h-5 text-blue-500" />
-              <span>Helpful Resources</span>
-            </div>
-            <div className="sv-resource-grid">
-              {response.resources.map((resource, index) => (
-                <div key={index} className="sv-resource-card">
-                  <h4 className="sv-resource-card__title">{resource.title}</h4>
-                  <p className="sv-resource-card__description">{resource.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      type: 'user',
+      content: inputMessage,
+      timestamp: new Date()
+    };
 
-        {response.nextSteps && (
-          <div className="sv-response-section">
-            <div className="sv-response-section__title">
-              <Target className="w-5 h-5 text-green-500" />
-              <span>Next Steps</span>
-            </div>
-            <div className="sv-next-steps">
-              {response.nextSteps.map((step, index) => (
-                <button key={index} className="sv-next-step">
-                  <ArrowRight className="sv-next-step__icon" />
-                  <span>{step}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    );
+    setMessages(prev => [...prev, newMessage]);
+    setInputMessage('');
+    setIsTyping(true);
+
+    // Simulate bot response
+    setTimeout(() => {
+      const botResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        type: 'bot',
+        content: getBotResponse(inputMessage),
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, botResponse]);
+      setIsTyping(false);
+    }, 1000);
+  };
+
+  const getBotResponse = (message: string): string => {
+    const lowerMessage = message.toLowerCase();
+    
+    if (lowerMessage.includes('xin chào') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+      return 'Xin chào! Tôi có thể giúp gì cho bạn?';
+    }
+    
+    if (lowerMessage.includes('lập trình web')) {
+      return 'Để bắt đầu với lập trình web, bạn nên học theo thứ tự: HTML, CSS, JavaScript cơ bản. Sau đó có thể học thêm React hoặc Vue.js. SkillVerse có các khóa học từng bước phù hợp với bạn.';
+    }
+    
+    if (lowerMessage.includes('frontend')) {
+      return 'Một Frontend Developer cần có các kỹ năng: HTML, CSS, JavaScript, React/Vue/Angular, Responsive Design, Version Control (Git), và hiểu biết về UI/UX. Bạn có thể xem lộ trình học Frontend đầy đủ trên SkillVerse.';
+    }
+    
+    if (lowerMessage.includes('react hooks')) {
+      return 'React Hooks là tính năng cho phép bạn sử dụng state và các tính năng khác của React mà không cần viết class component. Các hooks phổ biến nhất là useState và useEffect. Bạn muốn tìm hiểu thêm về hook cụ thể nào?';
+    }
+    
+    if (lowerMessage.includes('python')) {
+      return 'Khóa học "Python cho Người Mới Bắt Đầu" của chúng tôi là lựa chọn tốt nhất để bắt đầu. Khóa học bao gồm các bài tập thực hành và dự án thực tế. Bạn có muốn xem thông tin chi tiết về khóa học không?';
+    }
+    
+    if (lowerMessage.includes('khóa học')) {
+      return 'SkillVerse có nhiều khóa học đa dạng về lập trình, thiết kế, marketing số và nhiều lĩnh vực khác. Bạn quan tâm đến lĩnh vực nào? Tôi có thể giới thiệu khóa học phù hợp.';
+    }
+    
+    if (lowerMessage.includes('tư vấn')) {
+      return 'Tôi có thể tư vấn về lộ trình học tập, định hướng nghề nghiệp và các khóa học phù hợp. Bạn đang quan tâm đến lĩnh vực nào?';
+    }
+    
+    return 'Xin lỗi, tôi chưa hiểu rõ câu hỏi của bạn. Bạn có thể diễn đạt lại hoặc chọn một trong các gợi ý phía trên để tôi có thể giúp bạn tốt hơn.';
+  };
+
+  const handleSuggestionClick = (example: string) => {
+    setInputMessage(example);
   };
 
   const features = [
@@ -537,36 +416,14 @@ const ChatbotPage = () => {
     }
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!message.trim()) return;
-
-    // Add user message
-    const userMessage: ChatMessage = {
-      type: 'user',
-      content: message,
-      timestamp: new Date().toISOString()
-    };
-
-    // Add bot response
-    const botMessage: ChatMessage = {
-      type: 'bot',
-      content: "I understand you're interested in web development. Based on your profile and goals, I recommend starting with React.js. Here are some personalized recommendations for you:",
-      timestamp: new Date().toISOString()
-    };
-
-    setChatHistory([...chatHistory, userMessage, botMessage]);
-    setMessage('');
-  };
-
   return (
     <div className="sv-chatbot-container">
       <div className="sv-chatbot-content">
         {/* Header */}
         <div className="sv-chatbot-header">
-          <h1 className="sv-chatbot-header__title">AI Career Advisor</h1>
+          <h1 className="sv-chatbot-header__title">{translations.chatbot.title}</h1>
           <p className="sv-chatbot-header__description">
-            Get personalized career guidance and skill recommendations from our AI advisor
+            {translations.chatbot.description}
           </p>
         </div>
 
@@ -581,7 +438,7 @@ const ChatbotPage = () => {
           ))}
         </div>
 
-        {/* Quick Prompts with Icons */}
+        {/* Quick Prompts */}
         <div className="sv-quick-prompts">
           <div className="sv-quick-prompts__title">
             <Sparkles className="h-5 w-5 text-yellow-500" />
@@ -592,7 +449,7 @@ const ChatbotPage = () => {
               <button
                 key={index}
                 className="sv-quick-prompt-btn"
-                onClick={() => handlePromptClick(prompt)}
+                onClick={() => handleSuggestionClick(prompt)}
               >
                 {index === 0 && <Brain className="h-4 w-4" />}
                 {index === 1 && <Book className="h-4 w-4" />}
@@ -605,11 +462,11 @@ const ChatbotPage = () => {
           </div>
         </div>
 
-        {/* Chat Messages with Enhanced Styling */}
+        {/* Chat Messages */}
         <div className="sv-chat-messages">
-          {chatHistory.map((msg, index) => (
+          {messages.map((msg) => (
             <div
-              key={index}
+              key={msg.id}
               className={`sv-chat-message ${
                 msg.type === 'bot' ? 'sv-chat-message--bot' : 'sv-chat-message--user'
               }`}
@@ -619,41 +476,42 @@ const ChatbotPage = () => {
                   <Bot className="text-blue-500" />
                 ) : (
                   <User className="text-purple-500" />
-                    )}
-                  </div>
+                )}
+              </div>
               <div className="sv-chat-message__content">
                 <div className="sv-chat-message__text">
-                  {typeof msg.content === 'string' ? msg.content : msg.content}
+                  {msg.content}
                 </div>
                 <span className="sv-chat-message__time">
-                  {new Date(msg.timestamp).toLocaleTimeString()}
+                  {msg.timestamp.toLocaleTimeString()}
                 </span>
-                </div>
               </div>
-            ))}
-            {isTyping && (
+            </div>
+          ))}
+          {isTyping && (
             <div className="sv-chat-message sv-chat-message--bot sv-chat-message--loading">
               <div className="sv-chat-message__avatar">
                 <Bot className="text-blue-500" />
-                  </div>
+              </div>
               <div className="sv-chat-message__content">
                 <div className="sv-chat-message__text">
                   <span></span>
                   <span></span>
                   <span></span>
                 </div>
-                </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
 
-        {/* Enhanced Input Area */}
-        <form onSubmit={handleSubmit} className="sv-chat-input">
+        {/* Input Area */}
+        <form onSubmit={handleSendMessage} className="sv-chat-input">
           <input
             type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Ask about career paths, skills, or courses..."
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            placeholder={translations.chatbot.askPlaceholder}
             className="sv-chat-input__field"
           />
           <button type="submit" className="sv-chat-input__button">
@@ -661,7 +519,7 @@ const ChatbotPage = () => {
           </button>
         </form>
 
-        {/* Prompt Categories with Visual Enhancements */}
+        {/* Prompt Categories */}
         <div className="sv-prompt-categories">
           {promptCategories.map((category, index) => (
             <div key={index} className={`sv-prompt-category sv-prompt-category--${category.color}`}>
@@ -674,7 +532,7 @@ const ChatbotPage = () => {
                   <button
                     key={promptIndex}
                     className="sv-prompt-btn"
-                    onClick={() => handlePromptClick(prompt)}
+                    onClick={() => handleSuggestionClick(prompt)}
                   >
                     <span>{prompt}</span>
                     <ArrowRight className="h-4 w-4" />
@@ -767,11 +625,11 @@ const ChatbotPage = () => {
                             <span>Learn More</span>
                             <ArrowRight />
                           </button>
-            </div>
+                        </div>
                       </>
                     )}
-          </div>
-            </div>
+                  </div>
+                </div>
               );
             })}
           </div>

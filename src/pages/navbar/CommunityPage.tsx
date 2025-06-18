@@ -4,6 +4,7 @@ import {
   User, Clock, Tag, Filter, Search, Edit, TrendingUp,
   Users, Star, Award, Globe, Sparkles
 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 import '../../styles/CommunityPage.css';
 
 const formatNumber = (num: number) => {
@@ -20,77 +21,142 @@ const CommunityPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isVisible, setIsVisible] = useState(false);
+  const { translations } = useLanguage();
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
   const categories = [
-    { id: 'all', name: 'All Posts', count: 256 },
-    { id: 'tips', name: 'Tips & Tricks', count: 84 },
-    { id: 'discussion', name: 'Discussions', count: 67 },
-    { id: 'showcase', name: 'Project Showcase', count: 45 },
-    { id: 'questions', name: 'Questions', count: 34 },
-    { id: 'news', name: 'Tech News', count: 26 }
+    { id: 'all', name: 'Tất Cả', count: 156 },
+    { id: 'discussions', name: 'Thảo Luận', count: 45 },
+    { id: 'questions', name: 'Câu Hỏi', count: 32 },
+    { id: 'projects', name: 'Dự Án', count: 28 },
+    { id: 'events', name: 'Sự Kiện', count: 25 },
+    { id: 'resources', name: 'Tài Nguyên', count: 18 },
+    { id: 'jobs', name: 'Việc Làm', count: 8 }
   ];
 
   const posts = [
     {
       id: 1,
-      title: '10 Essential React Hooks You Should Know in 2024',
-      content: 'React Hooks have revolutionized how we write React components. Here are the most important hooks that every React developer should master...',
+      type: 'discussion',
+      title: 'Xu Hướng Công Nghệ AI 2024',
       author: {
-        name: 'Sarah Johnson',
-        avatar: 'https://images.pexels.com/photos/3796217/pexels-photo-3796217.jpeg?auto=compress&cs=tinysrgb&w=400',
-        role: 'Senior Frontend Developer'
+        name: 'Nguyễn Văn A',
+        avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100',
+        role: 'Chuyên Gia AI'
       },
-      category: 'tips',
-      tags: ['React', 'JavaScript', 'Web Development'],
-      likes: 234,
-      comments: 45,
-      shares: 12,
-      isBookmarked: false,
-      timeAgo: '2 hours ago',
-      readTime: '8 min read',
-      image: 'https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=400'
+      content: 'Cùng thảo luận về các xu hướng AI mới nhất và tác động của chúng đến ngành công nghệ trong năm 2024.',
+      category: 'discussions',
+      tags: ['AI', 'Machine Learning', 'Công Nghệ'],
+      engagement: {
+        likes: 234,
+        comments: 56,
+        shares: 12
+      },
+      timePosted: '2 giờ trước',
+      isVerified: true
     },
     {
       id: 2,
-      title: 'Building Scalable Node.js Applications: Best Practices',
-      content: "Learn how to structure your Node.js applications for scalability. We'll cover architectural patterns, performance optimization...",
+      type: 'question',
+      title: 'Giúp đỡ với React Hooks',
       author: {
-        name: 'Michael Chen',
-        avatar: 'https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&w=400',
-        role: 'Backend Engineer'
+        name: 'Trần Thị B',
+        avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=100',
+        role: 'Lập Trình Viên Frontend'
       },
-      category: 'tips',
-      tags: ['Node.js', 'Backend', 'Architecture'],
-      likes: 189,
-      comments: 32,
-      shares: 8,
-      isBookmarked: true,
-      timeAgo: '5 hours ago',
-      readTime: '12 min read',
-      image: 'https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=400'
+      content: 'Tôi đang gặp vấn đề với useEffect hook trong React. Làm thế nào để tránh re-render không cần thiết?',
+      category: 'questions',
+      tags: ['React', 'JavaScript', 'Frontend'],
+      engagement: {
+        likes: 45,
+        comments: 23,
+        shares: 5
+      },
+      timePosted: '4 giờ trước',
+      isVerified: false
     },
     {
       id: 3,
-      title: 'My Journey from Junior to Senior Developer',
-      content: 'I want to share my experience and the lessons learned during my journey from a junior developer to a senior role...',
+      type: 'project',
+      title: 'Dự Án Mã Nguồn Mở: Ứng Dụng Học Ngôn Ngữ',
       author: {
-        name: 'Emily Davis',
-        avatar: 'https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=400',
-        role: 'Senior Full Stack Developer'
+        name: 'Lê Văn C',
+        avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=100',
+        role: 'Nhà Phát Triển Full-stack'
       },
-      category: 'discussion',
-      tags: ['Career', 'Personal Growth', 'Tech Journey'],
-      likes: 423,
-      comments: 78,
-      shares: 45,
-      isBookmarked: false,
-      timeAgo: '1 day ago',
-      readTime: '15 min read',
-      image: 'https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=400'
+      content: 'Tìm kiếm cộng tác viên cho dự án ứng dụng học ngôn ngữ mã nguồn mở. Stack công nghệ: React Native, Node.js, MongoDB.',
+      category: 'projects',
+      tags: ['Open Source', 'React Native', 'Node.js'],
+      engagement: {
+        likes: 189,
+        comments: 45,
+        shares: 28
+      },
+      timePosted: '1 ngày trước',
+      isVerified: true
+    },
+    {
+      id: 4,
+      type: 'event',
+      title: 'Workshop: DevOps Cơ Bản',
+      author: {
+        name: 'Phạm Thị D',
+        avatar: 'https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=100',
+        role: 'Kỹ Sư DevOps'
+      },
+      content: 'Workshop trực tuyến miễn phí về DevOps cơ bản. Chủ đề: Docker, Kubernetes, và CI/CD. Đăng ký ngay!',
+      category: 'events',
+      tags: ['DevOps', 'Docker', 'Kubernetes'],
+      engagement: {
+        likes: 156,
+        comments: 34,
+        shares: 67
+      },
+      timePosted: '2 ngày trước',
+      isVerified: true
+    },
+    {
+      id: 5,
+      type: 'resource',
+      title: 'Tài Liệu Học Python Miễn Phí',
+      author: {
+        name: 'Hoàng Văn E',
+        avatar: 'https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=100',
+        role: 'Giảng Viên Python'
+      },
+      content: 'Tổng hợp tài liệu học Python từ cơ bản đến nâng cao, bao gồm bài tập và dự án thực hành.',
+      category: 'resources',
+      tags: ['Python', 'Lập Trình', 'Học Tập'],
+      engagement: {
+        likes: 423,
+        comments: 89,
+        shares: 145
+      },
+      timePosted: '3 ngày trước',
+      isVerified: true
+    },
+    {
+      id: 6,
+      type: 'job',
+      title: 'Tuyển Dụng Frontend Developer',
+      author: {
+        name: 'Vũ Thị F',
+        avatar: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=100',
+        role: 'HR Manager'
+      },
+      content: 'Công ty công nghệ tìm kiếm Frontend Developer có kinh nghiệm React/Vue. Mức lương hấp dẫn, môi trường năng động.',
+      category: 'jobs',
+      tags: ['Việc Làm', 'Frontend', 'React'],
+      engagement: {
+        likes: 89,
+        comments: 34,
+        shares: 56
+      },
+      timePosted: '4 ngày trước',
+      isVerified: true
     }
   ];
 
@@ -126,6 +192,14 @@ const CommunityPage = () => {
     { name: 'Web3', posts: 98, trend: 'down' }
   ];
 
+  const filteredPosts = posts.filter(post => {
+    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <div className={`community-container ${isVisible ? 'visible' : ''}`}>
       <div className="community-content">
@@ -133,14 +207,14 @@ const CommunityPage = () => {
         <div className="community-header">
           <h1 className="community-title">
             <Sparkles className="title-icon" size={24} />
-            Community Hub
+            {translations.community.communityHub}
           </h1>
           <p className="community-description">
-            Join our vibrant tech community to share knowledge, learn from experts, and grow together
+            {translations.community.description}
           </p>
           <button className="create-post-button">
             <Edit className="button-icon" size={18} />
-            <span>Share Your Knowledge</span>
+            <span>{translations.community.createPost}</span>
           </button>
         </div>
 
@@ -150,7 +224,7 @@ const CommunityPage = () => {
             <Search className="community-search-icon" size={18} />
             <input
               type="text"
-              placeholder="Discover posts, topics, or connect with others..."
+              placeholder={translations.common.search}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="community-search-input"
@@ -158,7 +232,7 @@ const CommunityPage = () => {
           </div>
           <button className="community-filter-button">
             <Filter className="filter-icon" size={16} />
-            <span>Filter</span>
+            <span>{translations.common.filter}</span>
           </button>
         </div>
 
@@ -184,16 +258,16 @@ const CommunityPage = () => {
 
             {/* Posts */}
             <div className="posts-grid">
-              {posts.map((post, index) => (
+              {filteredPosts.map((post, index) => (
                 <article 
                   key={post.id} 
                   className="post-card"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  {post.image && (
+                  {post.author.avatar && (
                     <div className="post-image-container">
                       <img
-                        src={post.image}
+                        src={post.author.avatar}
                         alt={post.title}
                         className="post-image"
                       />
@@ -214,9 +288,7 @@ const CommunityPage = () => {
                       </div>
                       <div className="post-time">
                         <Clock className="time-icon" />
-                        <span>{post.timeAgo}</span>
-                        <span className="dot">•</span>
-                        <span>{post.readTime}</span>
+                        <span>{post.timePosted}</span>
                       </div>
                     </div>
 
@@ -235,22 +307,26 @@ const CommunityPage = () => {
                     <div className="post-actions">
                       <button className="action-button">
                         <ThumbsUp className="action-icon" />
-                        <span>{post.likes}</span>
+                        <span>{post.engagement.likes}</span>
                       </button>
                       <button className="action-button">
                         <MessageCircle className="action-icon" />
-                        <span>{post.comments}</span>
+                        <span>{post.engagement.comments}</span>
                       </button>
                       <button className="action-button">
                         <Share2 className="action-icon" />
-                        <span>{post.shares}</span>
+                        <span>{post.engagement.shares}</span>
                       </button>
                       <button
                         className={`action-button bookmark ${
-                          post.isBookmarked ? 'active' : ''
+                          post.isVerified ? 'verified' : ''
                         }`}
                       >
-                        <Bookmark className="action-icon" />
+                        {post.isVerified && (
+                          <span className="verified-badge" title="Tài khoản xác thực">
+                            ✓
+                          </span>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -265,7 +341,7 @@ const CommunityPage = () => {
             <div className="sidebar-section">
               <h3 className="sidebar-title">
                 <Star className="sidebar-icon" size={16} />
-                Top Contributors
+                {translations.community.topContributors}
               </h3>
               <div className="contributors-list">
                 {topContributors.map((contributor, index) => (
@@ -304,7 +380,7 @@ const CommunityPage = () => {
             <div className="sidebar-section">
               <h3 className="sidebar-title">
                 <TrendingUp className="sidebar-icon" size={18} />
-                Trending Topics
+                {translations.community.trending}
               </h3>
               <div className="trending-topics">
                 {trendingTopics.map((topic, index) => (

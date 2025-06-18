@@ -37,54 +37,54 @@ const HomePage = () => {
   const features = [
     {
       icon: Brain,
-      title: 'AI Career Advisor',
-      description: 'Get personalized career guidance and skill recommendations powered by advanced AI',
+      title: 'Cố Vấn Nghề Nghiệp AI',
+      description: 'Nhận hướng dẫn nghề nghiệp cá nhân và đề xuất kỹ năng được hỗ trợ bởi AI tiên tiến',
       color: 'from-blue-500 to-cyan-500'
     },
     {
       icon: Code,
-      title: 'Interactive Learning',
-      description: 'Learn by doing with hands-on coding exercises and real-world projects',
+      title: 'Học Tập Tương Tác',
+      description: 'Học thông qua thực hành với các bài tập lập trình và dự án thực tế',
       color: 'from-green-500 to-emerald-500'
     },
     {
       icon: Target,
-      title: 'Smart Portfolio',
-      description: 'Showcase your skills and projects with an AI-powered dynamic portfolio',
+      title: 'Hồ Sơ Thông Minh',
+      description: 'Trình bày kỹ năng và dự án của bạn với hồ sơ năng động được hỗ trợ bởi AI',
       color: 'from-purple-500 to-pink-500'
     },
     {
       icon: Zap,
-      title: 'Instant Feedback',
-      description: 'Get real-time feedback on your code and projects from AI and experts',
+      title: 'Phản Hồi Tức Thì',
+      description: 'Nhận phản hồi thời gian thực về mã và dự án của bạn từ AI và chuyên gia',
       color: 'from-orange-500 to-red-500'
     }
   ];
 
   const stats = [
     { 
-      label: 'Active Learners', 
+      label: 'Người Học Tích Cực', 
       value: '10,000+', 
       icon: Users,
-      description: 'Growing community'
+      description: 'Cộng đồng đang phát triển'
     },
     { 
-      label: 'Expert Courses', 
+      label: 'Khóa Học Chuyên Môn', 
       value: '500+', 
       icon: BookOpen,
-      description: 'Curated content'
+      description: 'Nội dung được tuyển chọn'
     },
     { 
-      label: 'Projects Completed', 
+      label: 'Dự Án Hoàn Thành', 
       value: '2,500+', 
       icon: Briefcase,
-      description: 'Real-world experience'
+      description: 'Kinh nghiệm thực tế'
     },
     { 
-      label: 'Success Rate', 
+      label: 'Tỷ Lệ Thành Công', 
       value: '95%', 
       icon: Star,
-      description: 'Career advancement'
+      description: 'Phát triển nghề nghiệp'
     }
   ];
 
@@ -96,21 +96,21 @@ const HomePage = () => {
         <div className="hero-content">
           <h1 className="hero-title">
             <FlyingSparkles />
-            Transform Your Career with AI
+            Phát Triển Sự Nghiệp Với AI
           </h1>
           <p className="hero-description">
-            Unlock your potential with our AI-powered learning platform. Get personalized guidance,
-            master in-demand skills, and accelerate your career growth.
+            Khám phá tiềm năng của bạn với nền tảng học tập được hỗ trợ bởi AI. Nhận hướng dẫn cá nhân,
+            làm chủ các kỹ năng đang được yêu cầu và thúc đẩy sự phát triển nghề nghiệp của bạn.
           </p>
           <div className="button-container">
             <Link to="/courses" className="primary-button">
               <Sparkles size={20} />
-              <span>Start Learning</span>
+              <span>Bắt Đầu Học</span>
               <ChevronRight size={16} />
             </Link>
             <Link to="/chatbot" className="secondary-button">
               <Brain size={20} />
-              <span>AI Career Guide</span>
+              <span>Tư Vấn Nghề Nghiệp AI</span>
               <ChevronRight size={16} />
             </Link>
           </div>
@@ -122,10 +122,10 @@ const HomePage = () => {
         <div className="section-container">
           <div className="section-header">
             <h2 className="section-title">
-              Why Choose Skillverse?
+              Tại Sao Chọn Skillverse?
             </h2>
             <p className="section-description">
-              Experience the future of learning with our AI-powered platform that adapts to your needs
+              Trải nghiệm tương lai của việc học tập với nền tảng được hỗ trợ bởi AI thích ứng với nhu cầu của bạn
             </p>
           </div>
 
@@ -176,10 +176,10 @@ const HomePage = () => {
         <div className="section-container">
           <div className="section-header">
             <h2 className="section-title">
-              Your Path to Success
+              Con Đường Đến Thành Công
             </h2>
             <p className="section-description">
-              A personalized learning journey powered by AI
+              Hành trình học tập cá nhân hóa được hỗ trợ bởi AI
             </p>
           </div>
 
@@ -187,20 +187,20 @@ const HomePage = () => {
             {[
               {
                 number: 1,
-                title: "Discover Your Path",
-                description: "Get AI-powered career guidance tailored to your goals",
+                title: "Khám Phá Lộ Trình",
+                description: "Nhận hướng dẫn nghề nghiệp từ AI phù hợp với mục tiêu của bạn",
                 icon: Brain
               },
               {
                 number: 2,
-                title: "Learn & Practice",
-                description: "Master skills with interactive courses and projects",
+                title: "Học & Thực Hành",
+                description: "Làm chủ kỹ năng với các khóa học tương tác và dự án thực tế",
                 icon: Code
               },
               {
                 number: 3,
-                title: "Track Progress",
-                description: "Monitor your growth with AI-powered insights",
+                title: "Theo Dõi Tiến Độ",
+                description: "Giám sát sự phát triển của bạn với thông tin chi tiết từ AI",
                 icon: Target
               }
             ].map((step, index) => (
@@ -223,20 +223,20 @@ const HomePage = () => {
       <section className="cta-section">
         <div className="section-container text-center">
           <h2 className="cta-title">
-            Ready to Transform Your Career?
+            Sẵn Sàng Thay Đổi Sự Nghiệp?
           </h2>
           <p className="cta-description">
-            Join thousands of successful learners who have accelerated their careers with Skillverse
+            Tham gia cùng hàng nghìn học viên thành công đã thúc đẩy sự nghiệp của họ với Skillverse
           </p>
           <div className="button-container">
             <Link to="/dashboard" className="primary-button">
               <Sparkles size={20} />
-              <span>Get Started Free</span>
+              <span>Bắt Đầu Miễn Phí</span>
               <ChevronRight size={16} />
             </Link>
             <Link to="/courses" className="secondary-button">
               <BookOpen size={20} />
-              <span>Explore Courses</span>
+              <span>Khám Phá Khóa Học</span>
               <ChevronRight size={16} />
             </Link>
           </div>

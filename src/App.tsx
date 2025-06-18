@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/main/HomePage';
@@ -19,29 +20,31 @@ import './styles/App.css';
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <Router>
-        <div className="app-container">
-          <Header />
-          <main>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/courses" element={<CoursesPage />} />
-              <Route path="/mentorship" element={<MentorshipPage />} />
-              <Route path="/community" element={<CommunityPage />} />
-              <Route path="/jobs" element={<JobsPage />} />
-              <Route path="/chatbot" element={<ChatbotPage />} />
-              <Route path="/portfolio" element={<PortfolioPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </Router>
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider>
+        <Router>
+          <div className="app-container">
+            <Header />
+            <main>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/courses" element={<CoursesPage />} />
+                <Route path="/mentorship" element={<MentorshipPage />} />
+                <Route path="/community" element={<CommunityPage />} />
+                <Route path="/jobs" element={<JobsPage />} />
+                <Route path="/chatbot" element={<ChatbotPage />} />
+                <Route path="/portfolio" element={<PortfolioPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </Router>
+      </ThemeProvider>
+    </LanguageProvider>
   );
 };
 

@@ -19,25 +19,25 @@ const RegisterPage = () => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.fullName.trim()) {
-      newErrors.fullName = 'Full name is required';
+      newErrors.fullName = 'Vui lòng nhập họ tên';
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Vui lòng nhập email';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
+      newErrors.email = 'Vui lòng nhập email hợp lệ';
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'Vui lòng nhập mật khẩu';
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
+      newErrors.password = 'Mật khẩu phải có ít nhất 8 ký tự';
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
+      newErrors.confirmPassword = 'Vui lòng xác nhận mật khẩu';
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = 'Mật khẩu không khớp';
     }
 
     setErrors(newErrors);
@@ -73,15 +73,15 @@ const RegisterPage = () => {
         <div className="auth-header">
           <button onClick={() => navigate(-1)} className="back-button">
             <ArrowLeft size={20} />
-            <span>Back</span>
+            <span>Quay lại</span>
           </button>
-          <h1>Create Account</h1>
-          <p>Join our community of learners and start your journey today</p>
+          <h1>Tạo Tài Khoản</h1>
+          <p>Tham gia cộng đồng học viên và bắt đầu hành trình của bạn ngay hôm nay</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="fullName">Full Name</label>
+            <label htmlFor="fullName">Họ và Tên</label>
             <div className="input-group">
               <User className="input-icon" size={20} />
               <input
@@ -90,7 +90,7 @@ const RegisterPage = () => {
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
-                placeholder="Enter your full name"
+                placeholder="Nhập họ và tên của bạn"
                 className={errors.fullName ? 'error' : ''}
               />
             </div>
@@ -98,7 +98,7 @@ const RegisterPage = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">Địa Chỉ Email</label>
             <div className="input-group">
               <Mail className="input-icon" size={20} />
               <input
@@ -107,7 +107,7 @@ const RegisterPage = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your email"
+                placeholder="Nhập email của bạn"
                 className={errors.email ? 'error' : ''}
               />
             </div>
@@ -115,7 +115,7 @@ const RegisterPage = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Mật Khẩu</label>
             <div className="input-group">
               <Lock className="input-icon" size={20} />
               <input
@@ -124,7 +124,7 @@ const RegisterPage = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Create a password"
+                placeholder="Tạo mật khẩu"
                 className={errors.password ? 'error' : ''}
               />
               <button
@@ -139,7 +139,7 @@ const RegisterPage = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
+            <label htmlFor="confirmPassword">Xác Nhận Mật Khẩu</label>
             <div className="input-group">
               <Lock className="input-icon" size={20} />
               <input
@@ -148,7 +148,7 @@ const RegisterPage = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                placeholder="Confirm your password"
+                placeholder="Xác nhận mật khẩu của bạn"
                 className={errors.confirmPassword ? 'error' : ''}
               />
               <button
@@ -165,48 +165,48 @@ const RegisterPage = () => {
           </div>
 
           <button type="submit" className="submit-button">
-            Create Account
+            Tạo Tài Khoản
           </button>
         </form>
 
         <div className="auth-footer">
-          <p>Already have an account?</p>
+          <p>Đã có tài khoản?</p>
           <Link to="/login" className="auth-link">
-            Sign In
+            Đăng nhập
           </Link>
         </div>
       </div>
 
       <div className="auth-background">
         <div className="auth-features">
-          <h2>Why Join SkillVerse?</h2>
+          <h2>Tại Sao Chọn SkillVerse?</h2>
           <ul>
             <li>
               <div className="feature-icon">🎯</div>
               <div className="feature-text">
-                <h3>Personalized Learning Path</h3>
-                <p>Customize your learning journey based on your goals and interests</p>
+                <h3>Lộ Trình Học Tập Cá Nhân Hóa</h3>
+                <p>Tùy chỉnh hành trình học tập dựa trên mục tiêu và sở thích của bạn</p>
               </div>
             </li>
             <li>
               <div className="feature-icon">👥</div>
               <div className="feature-text">
-                <h3>Expert Community</h3>
-                <p>Connect with industry experts and fellow learners</p>
+                <h3>Cộng Đồng Chuyên Gia</h3>
+                <p>Kết nối với các chuyên gia trong ngành và đồng học viên</p>
               </div>
             </li>
             <li>
               <div className="feature-icon">🏆</div>
               <div className="feature-text">
-                <h3>Skill Certification</h3>
-                <p>Earn certificates to showcase your achievements</p>
+                <h3>Chứng Chỉ Kỹ Năng</h3>
+                <p>Nhận chứng chỉ để thể hiện thành tích của bạn</p>
               </div>
             </li>
             <li>
               <div className="feature-icon">💡</div>
               <div className="feature-text">
-                <h3>Interactive Learning</h3>
-                <p>Learn through hands-on projects and real-world applications</p>
+                <h3>Học Tập Tương Tác</h3>
+                <p>Học thông qua các dự án thực hành và ứng dụng thực tế</p>
               </div>
             </li>
           </ul>
