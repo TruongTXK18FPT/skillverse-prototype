@@ -162,7 +162,7 @@ const DashboardPage = () => {
                   <h2>{translations.dashboard.weeklyGoal}</h2>
                 </div>
                 <button className="sv-button sv-button--text">
-                  {translations.common.add}
+                  Add
                   <Plus className="h-4 w-4 ml-1" />
                 </button>
               </div>
