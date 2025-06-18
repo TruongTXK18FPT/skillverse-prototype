@@ -1,11 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   MessageCircle, Heart, Share2, Bookmark, ThumbsUp,
   User, Clock, Tag, Filter, Search, Edit, TrendingUp,
-  Users, Star, Award, Globe, Sparkles
+  Users, Star, Award, Globe, Sparkles, Plus
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import Pagination from '../../components/Pagination';
 import '../../styles/CommunityPage.css';
+
+interface CommunityPost {
+  id: string;
+  title: string;
+  content: string;
+  author: {
+    name: string;
+    avatar: string;
+    role: string;
+  };
+  category: string;
+  tags: string[];
+  engagement: {
+    likes: number;
+    comments: number;
+    shares: number;
+  };
+  timePosted: string;
+  isVerified: boolean;
+}
 
 const formatNumber = (num: number) => {
   if (num >= 1000000) {
@@ -21,26 +43,61 @@ const CommunityPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isVisible, setIsVisible] = useState(false);
+  const [posts, setPosts] = useState<CommunityPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const { translations } = useLanguage();
+  const navigate = useNavigate();
+
+  const postsPerPage = 6;
 
   useEffect(() => {
     setIsVisible(true);
+    fetchPosts();
   }, []);
 
-  const categories = [
-    { id: 'all', name: 'Tất Cả', count: 156 },
-    { id: 'discussions', name: 'Thảo Luận', count: 45 },
-    { id: 'questions', name: 'Câu Hỏi', count: 32 },
-    { id: 'projects', name: 'Dự Án', count: 28 },
-    { id: 'events', name: 'Sự Kiện', count: 25 },
-    { id: 'resources', name: 'Tài Nguyên', count: 18 },
-    { id: 'jobs', name: 'Việc Làm', count: 8 }
-  ];
+  const fetchPosts = async () => {
+    try {
+      setLoading(true);
+      // Fetch from MockAPI
+      const response = await fetch('https://685159d58612b47a2c09b031.mockapi.io/community');
+      const data = await response.json();
+      
+      // Transform API data to match our interface
+      const transformedPosts = data.map((post: any) => ({
+        id: post.id,
+        title: post.title || 'Untitled Post',
+        content: post.content || post.description || '',
+        author: {
+          name: post.author || post.name || 'Anonymous',
+          avatar: post.avatar || `https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100`,
+          role: post.role || 'Thành viên'
+        },
+        category: post.category || 'discussion',
+        tags: post.tags || ['General'],
+        engagement: {
+          likes: post.likes || Math.floor(Math.random() * 500),
+          comments: post.comments || Math.floor(Math.random() * 100),
+          shares: post.shares || Math.floor(Math.random() * 50)
+        },
+        timePosted: post.createdAt || new Date().toISOString(),
+        isVerified: post.verified || Math.random() > 0.5
+      }));
+      
+      setPosts(transformedPosts);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      // Fallback to mock data
+      setPosts(mockPosts);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const posts = [
+  // Mock data as fallback
+  const mockPosts: CommunityPost[] = [
     {
-      id: 1,
-      type: 'discussion',
+      id: '1',
       title: 'Xu Hướng Công Nghệ AI 2024',
       author: {
         name: 'Nguyễn Văn A',
@@ -59,8 +116,7 @@ const CommunityPage = () => {
       isVerified: true
     },
     {
-      id: 2,
-      type: 'question',
+      id: '2',
       title: 'Giúp đỡ với React Hooks',
       author: {
         name: 'Trần Thị B',
@@ -77,87 +133,17 @@ const CommunityPage = () => {
       },
       timePosted: '4 giờ trước',
       isVerified: false
-    },
-    {
-      id: 3,
-      type: 'project',
-      title: 'Dự Án Mã Nguồn Mở: Ứng Dụng Học Ngôn Ngữ',
-      author: {
-        name: 'Lê Văn C',
-        avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=100',
-        role: 'Nhà Phát Triển Full-stack'
-      },
-      content: 'Tìm kiếm cộng tác viên cho dự án ứng dụng học ngôn ngữ mã nguồn mở. Stack công nghệ: React Native, Node.js, MongoDB.',
-      category: 'projects',
-      tags: ['Open Source', 'React Native', 'Node.js'],
-      engagement: {
-        likes: 189,
-        comments: 45,
-        shares: 28
-      },
-      timePosted: '1 ngày trước',
-      isVerified: true
-    },
-    {
-      id: 4,
-      type: 'event',
-      title: 'Workshop: DevOps Cơ Bản',
-      author: {
-        name: 'Phạm Thị D',
-        avatar: 'https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=100',
-        role: 'Kỹ Sư DevOps'
-      },
-      content: 'Workshop trực tuyến miễn phí về DevOps cơ bản. Chủ đề: Docker, Kubernetes, và CI/CD. Đăng ký ngay!',
-      category: 'events',
-      tags: ['DevOps', 'Docker', 'Kubernetes'],
-      engagement: {
-        likes: 156,
-        comments: 34,
-        shares: 67
-      },
-      timePosted: '2 ngày trước',
-      isVerified: true
-    },
-    {
-      id: 5,
-      type: 'resource',
-      title: 'Tài Liệu Học Python Miễn Phí',
-      author: {
-        name: 'Hoàng Văn E',
-        avatar: 'https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=100',
-        role: 'Giảng Viên Python'
-      },
-      content: 'Tổng hợp tài liệu học Python từ cơ bản đến nâng cao, bao gồm bài tập và dự án thực hành.',
-      category: 'resources',
-      tags: ['Python', 'Lập Trình', 'Học Tập'],
-      engagement: {
-        likes: 423,
-        comments: 89,
-        shares: 145
-      },
-      timePosted: '3 ngày trước',
-      isVerified: true
-    },
-    {
-      id: 6,
-      type: 'job',
-      title: 'Tuyển Dụng Frontend Developer',
-      author: {
-        name: 'Vũ Thị F',
-        avatar: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=100',
-        role: 'HR Manager'
-      },
-      content: 'Công ty công nghệ tìm kiếm Frontend Developer có kinh nghiệm React/Vue. Mức lương hấp dẫn, môi trường năng động.',
-      category: 'jobs',
-      tags: ['Việc Làm', 'Frontend', 'React'],
-      engagement: {
-        likes: 89,
-        comments: 34,
-        shares: 56
-      },
-      timePosted: '4 ngày trước',
-      isVerified: true
     }
+  ];
+
+  const categories = [
+    { id: 'all', name: 'Tất Cả', count: posts.length },
+    { id: 'discussions', name: 'Thảo Luận', count: posts.filter(p => p.category === 'discussions').length },
+    { id: 'questions', name: 'Câu Hỏi', count: posts.filter(p => p.category === 'questions').length },
+    { id: 'projects', name: 'Dự Án', count: posts.filter(p => p.category === 'projects').length },
+    { id: 'events', name: 'Sự Kiện', count: posts.filter(p => p.category === 'events').length },
+    { id: 'resources', name: 'Tài Nguyên', count: posts.filter(p => p.category === 'resources').length },
+    { id: 'jobs', name: 'Việc Làm', count: posts.filter(p => p.category === 'jobs').length }
   ];
 
   const topContributors = [
@@ -200,6 +186,14 @@ const CommunityPage = () => {
     return matchesSearch && matchesCategory;
   });
 
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+  const startIndex = (currentPage - 1) * postsPerPage;
+  const currentPosts = filteredPosts.slice(startIndex, startIndex + postsPerPage);
+
+  const handleCreatePost = () => {
+    navigate('/community/create');
+  };
+
   return (
     <div className={`community-container ${isVisible ? 'visible' : ''}`}>
       <div className="community-content">
@@ -212,8 +206,8 @@ const CommunityPage = () => {
           <p className="community-description">
             {translations.community.description}
           </p>
-          <button className="create-post-button">
-            <Edit className="button-icon" size={18} />
+          <button className="create-post-button" onClick={handleCreatePost}>
+            <Plus className="button-icon" size={18} />
             <span>{translations.community.createPost}</span>
           </button>
         </div>
@@ -244,7 +238,10 @@ const CommunityPage = () => {
               {categories.map((category, index) => (
                 <button
                   key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
+                  onClick={() => {
+                    setSelectedCategory(category.id);
+                    setCurrentPage(1);
+                  }}
                   className={`category-button ${
                     selectedCategory === category.id ? 'active' : ''
                   }`}
@@ -257,82 +254,101 @@ const CommunityPage = () => {
             </div>
 
             {/* Posts */}
-            <div className="posts-grid">
-              {filteredPosts.map((post, index) => (
-                <article 
-                  key={post.id} 
-                  className="post-card"
-                  style={{ animationDelay: `${index * 0.2}s` }}
-                >
-                  {post.author.avatar && (
-                    <div className="post-image-container">
-                      <img
-                        src={post.author.avatar}
-                        alt={post.title}
-                        className="post-image"
-                      />
-                    </div>
-                  )}
-                  <div className="post-content">
-                    <div className="post-meta">
-                      <div className="post-author">
-                        <img
-                          src={post.author.avatar}
-                          alt={post.author.name}
-                          className="author-avatar"
-                        />
-                        <div>
-                          <h4 className="author-name">{post.author.name}</h4>
-                          <p className="author-role">{post.author.role}</p>
+            {loading ? (
+              <div className="loading-state">
+                <div className="spinner"></div>
+                <p>Đang tải bài viết...</p>
+              </div>
+            ) : (
+              <div className="posts-grid">
+                {currentPosts.map((post, index) => (
+                  <article 
+                    key={post.id} 
+                    className="post-card"
+                    style={{ animationDelay: `${index * 0.2}s` }}
+                  >
+                    <div className="post-content">
+                      <div className="post-meta">
+                        <div className="post-author">
+                          <img
+                            src={post.author.avatar}
+                            alt={post.author.name}
+                            className="author-avatar"
+                          />
+                          <div>
+                            <h4 className="author-name">{post.author.name}</h4>
+                            <p className="author-role">{post.author.role}</p>
+                          </div>
+                        </div>
+                        <div className="post-time">
+                          <Clock className="time-icon" />
+                          <span>{post.timePosted}</span>
                         </div>
                       </div>
-                      <div className="post-time">
-                        <Clock className="time-icon" />
-                        <span>{post.timePosted}</span>
+
+                      <h2 className="post-title">{post.title}</h2>
+                      <p className="post-excerpt">{post.content}</p>
+
+                      <div className="post-tags">
+                        {post.tags.map((tag, index) => (
+                          <span key={index} className="tag">
+                            <Tag className="tag-icon" />
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="post-actions">
+                        <button className="action-button">
+                          <ThumbsUp className="action-icon" />
+                          <span>{post.engagement.likes}</span>
+                        </button>
+                        <button className="action-button">
+                          <MessageCircle className="action-icon" />
+                          <span>{post.engagement.comments}</span>
+                        </button>
+                        <button className="action-button">
+                          <Share2 className="action-icon" />
+                          <span>{post.engagement.shares}</span>
+                        </button>
+                        <button
+                          className={`action-button bookmark ${
+                            post.isVerified ? 'verified' : ''
+                          }`}
+                        >
+                          {post.isVerified && (
+                            <span className="verified-badge" title="Tài khoản xác thực">
+                              ✓
+                            </span>
+                          )}
+                        </button>
                       </div>
                     </div>
+                  </article>
+                ))}
 
-                    <h2 className="post-title">{post.title}</h2>
-                    <p className="post-excerpt">{post.content}</p>
-
-                    <div className="post-tags">
-                      {post.tags.map((tag, index) => (
-                        <span key={index} className="tag">
-                          <Tag className="tag-icon" />
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="post-actions">
-                      <button className="action-button">
-                        <ThumbsUp className="action-icon" />
-                        <span>{post.engagement.likes}</span>
-                      </button>
-                      <button className="action-button">
-                        <MessageCircle className="action-icon" />
-                        <span>{post.engagement.comments}</span>
-                      </button>
-                      <button className="action-button">
-                        <Share2 className="action-icon" />
-                        <span>{post.engagement.shares}</span>
-                      </button>
-                      <button
-                        className={`action-button bookmark ${
-                          post.isVerified ? 'verified' : ''
-                        }`}
-                      >
-                        {post.isVerified && (
-                          <span className="verified-badge" title="Tài khoản xác thực">
-                            ✓
-                          </span>
-                        )}
-                      </button>
-                    </div>
+                {filteredPosts.length === 0 && !loading && (
+                  <div className="empty-state">
+                    <MessageCircle className="empty-icon" />
+                    <h3>Không tìm thấy bài viết</h3>
+                    <p>Thử điều chỉnh bộ lọc hoặc tạo bài viết mới</p>
+                    <button onClick={handleCreatePost} className="create-first-post">
+                      Tạo bài viết đầu tiên
+                    </button>
                   </div>
-                </article>
-              ))}
-            </div>
+                )}
+              </div>
+            )}
+
+            {/* Pagination */}
+            {filteredPosts.length > postsPerPage && (
+              <Pagination
+                totalItems={filteredPosts.length}
+                itemsPerPage={postsPerPage}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
+            )}
           </div>
 
           {/* Sidebar */}
@@ -420,7 +436,7 @@ const CommunityPage = () => {
                 <div className="stat-card">
                   <MessageCircle className="stat-icon" size={20} />
                   <div className="stat-info">
-                    <span className="stat-value">{formatNumber(45678)}</span>
+                    <span className="stat-value">{formatNumber(posts.length)}</span>
                     <span className="stat-label">Posts</span>
                   </div>
                 </div>

@@ -15,6 +15,9 @@ import PortfolioPage from './pages/navbar/PortfolioPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/login/RegisterPage';
 import ForgotPasswordPage from './pages/login/ForgotPasswordPage';
+import PaymentPage from './pages/payment/PaymentPage';
+import ManagerPage from './pages/main/ManagerPage';
+import BlogForm from './pages/community/BlogForm';
 
 import './styles/App.css';
 
@@ -32,12 +35,15 @@ const App = () => {
                 <Route path="/courses" element={<CoursesPage />} />
                 <Route path="/mentorship" element={<MentorshipPage />} />
                 <Route path="/community" element={<CommunityPage />} />
+                <Route path="/community/create" element={<BlogForm />} />
                 <Route path="/jobs" element={<JobsPage />} />
                 <Route path="/chatbot" element={<ChatbotPage />} />
                 <Route path="/portfolio" element={<PortfolioPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/payment" element={<PaymentPage />} />
+                <Route path="/manager" element={<ManagerPage />} />
               </Routes>
             </main>
             <Footer />
