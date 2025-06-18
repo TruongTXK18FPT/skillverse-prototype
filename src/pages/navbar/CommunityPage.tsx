@@ -10,23 +10,19 @@ import Pagination from '../../components/Pagination';
 import '../../styles/CommunityPage.css';
 
 interface CommunityPost {
-  id: string;
+  id: number;
   title: string;
   content: string;
-  author: {
-    name: string;
-    avatar: string;
-    role: string;
-  };
+  author: string;
   category: string;
   tags: string[];
-  engagement: {
-    likes: number;
-    comments: number;
-    shares: number;
-  };
-  timePosted: string;
-  isVerified: boolean;
+  likes: number;
+  comments: number;
+  shares: number;
+  isBookmarked: boolean;
+  timeAgo: string;
+  readTime: string;
+  image: string;
 }
 
 const formatNumber = (num: number) => {
@@ -39,6 +35,47 @@ const formatNumber = (num: number) => {
   return num.toString();
 };
 
+const categories = [
+  { id: 'all', name: 'Tất cả', count: 0 },
+  { id: 'tips', name: 'Mẹo hay', count: 0 },
+  { id: 'discussion', name: 'Thảo luận', count: 0 },
+  { id: 'tutorial', name: 'Hướng dẫn', count: 0 },
+  { id: 'news', name: 'Tin tức', count: 0 },
+  { id: 'career', name: 'Nghề nghiệp', count: 0 }
+];
+
+const topContributors = [
+  {
+    name: 'Alice Johnson',
+    role: 'Senior Developer',
+    avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=100',
+    badges: ['Expert', 'Mentor'],
+    contributions: 1250
+  },
+  {
+    name: 'Bob Smith',
+    role: 'UI/UX Designer',
+    avatar: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=100',
+    badges: ['Creative', 'Helper'],
+    contributions: 890
+  },
+  {
+    name: 'Carol Davis',
+    role: 'Product Manager',
+    avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100',
+    badges: ['Leader', 'Innovator'],
+    contributions: 675
+  }
+];
+
+const trendingTopics = [
+  { name: 'React 18', posts: 145, trend: 'up' },
+  { name: 'TypeScript', posts: 120, trend: 'up' },
+  { name: 'Web3', posts: 98, trend: 'up' },
+  { name: 'AI/ML', posts: 87, trend: 'up' },
+  { name: 'Next.js', posts: 76, trend: 'up' }
+];
+
 const CommunityPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -46,6 +83,7 @@ const CommunityPage = () => {
   const [posts, setPosts] = useState<CommunityPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState<string | null>(null);
   const { translations } = useLanguage();
   const navigate = useNavigate();
 
@@ -59,124 +97,51 @@ const CommunityPage = () => {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      // Fetch from MockAPI
+      setError(null);
+      
       const response = await fetch('https://685159d58612b47a2c09b031.mockapi.io/community');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
       
       // Transform API data to match our interface
       const transformedPosts = data.map((post: any) => ({
-        id: post.id,
+        id: parseInt(post.id),
         title: post.title || 'Untitled Post',
         content: post.content || post.description || '',
-        author: {
-          name: post.author || post.name || 'Anonymous',
-          avatar: post.avatar || `https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100`,
-          role: post.role || 'Thành viên'
-        },
+        author: typeof post.author === 'string' ? post.author : 'Anonymous',
         category: post.category || 'discussion',
-        tags: post.tags || ['General'],
-        engagement: {
-          likes: post.likes || Math.floor(Math.random() * 500),
-          comments: post.comments || Math.floor(Math.random() * 100),
-          shares: post.shares || Math.floor(Math.random() * 50)
-        },
-        timePosted: post.createdAt || new Date().toISOString(),
-        isVerified: post.verified || Math.random() > 0.5
+        tags: Array.isArray(post.tags) ? post.tags : (typeof post.tags === 'string' ? [post.tags] : ['General']),
+        likes: parseInt(post.likes) || Math.floor(Math.random() * 500),
+        comments: parseInt(post.comments) || Math.floor(Math.random() * 100),
+        shares: parseInt(post.shares) || Math.floor(Math.random() * 50),
+        isBookmarked: Boolean(post.isBookmarked) || false,
+        timeAgo: post.timeAgo || '2 hours ago',
+        readTime: post.readTime || '5 min read',
+        image: post.image || 'https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=400'
       }));
       
       setPosts(transformedPosts);
+      
+      // Update category counts
+      categories.forEach(category => {
+        if (category.id === 'all') {
+          category.count = transformedPosts.length;
+        } else {
+          category.count = transformedPosts.filter((post: CommunityPost) => post.category === category.id).length;
+        }
+      });
+      
     } catch (error) {
       console.error('Error fetching posts:', error);
-      // Fallback to mock data
-      setPosts(mockPosts);
+      setError('Failed to load posts. Please try again later.');
     } finally {
       setLoading(false);
     }
   };
-
-  // Mock data as fallback
-  const mockPosts: CommunityPost[] = [
-    {
-      id: '1',
-      title: 'Xu Hướng Công Nghệ AI 2024',
-      author: {
-        name: 'Nguyễn Văn A',
-        avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100',
-        role: 'Chuyên Gia AI'
-      },
-      content: 'Cùng thảo luận về các xu hướng AI mới nhất và tác động của chúng đến ngành công nghệ trong năm 2024.',
-      category: 'discussions',
-      tags: ['AI', 'Machine Learning', 'Công Nghệ'],
-      engagement: {
-        likes: 234,
-        comments: 56,
-        shares: 12
-      },
-      timePosted: '2 giờ trước',
-      isVerified: true
-    },
-    {
-      id: '2',
-      title: 'Giúp đỡ với React Hooks',
-      author: {
-        name: 'Trần Thị B',
-        avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=100',
-        role: 'Lập Trình Viên Frontend'
-      },
-      content: 'Tôi đang gặp vấn đề với useEffect hook trong React. Làm thế nào để tránh re-render không cần thiết?',
-      category: 'questions',
-      tags: ['React', 'JavaScript', 'Frontend'],
-      engagement: {
-        likes: 45,
-        comments: 23,
-        shares: 5
-      },
-      timePosted: '4 giờ trước',
-      isVerified: false
-    }
-  ];
-
-  const categories = [
-    { id: 'all', name: 'Tất Cả', count: posts.length },
-    { id: 'discussions', name: 'Thảo Luận', count: posts.filter(p => p.category === 'discussions').length },
-    { id: 'questions', name: 'Câu Hỏi', count: posts.filter(p => p.category === 'questions').length },
-    { id: 'projects', name: 'Dự Án', count: posts.filter(p => p.category === 'projects').length },
-    { id: 'events', name: 'Sự Kiện', count: posts.filter(p => p.category === 'events').length },
-    { id: 'resources', name: 'Tài Nguyên', count: posts.filter(p => p.category === 'resources').length },
-    { id: 'jobs', name: 'Việc Làm', count: posts.filter(p => p.category === 'jobs').length }
-  ];
-
-  const topContributors = [
-    {
-      name: 'David Wilson',
-      avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400',
-      role: 'Tech Lead',
-      contributions: 156,
-      badges: ['Top Writer', 'Expert']
-    },
-    {
-      name: 'Lisa Chen',
-      avatar: 'https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=400',
-      role: 'Senior Developer',
-      contributions: 134,
-      badges: ['Mentor', 'Top Contributor']
-    },
-    {
-      name: 'Mark Johnson',
-      avatar: 'https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&w=400',
-      role: 'DevOps Engineer',
-      contributions: 98,
-      badges: ['Problem Solver']
-    }
-  ];
-
-  const trendingTopics = [
-    { name: 'React', posts: 234, trend: 'up' },
-    { name: 'TypeScript', posts: 189, trend: 'up' },
-    { name: 'Next.js', posts: 156, trend: 'up' },
-    { name: 'AI Development', posts: 145, trend: 'up' },
-    { name: 'Web3', posts: 98, trend: 'down' }
-  ];
 
   const filteredPosts = posts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -192,6 +157,10 @@ const CommunityPage = () => {
 
   const handleCreatePost = () => {
     navigate('/community/create');
+  };
+
+  const handleRetry = () => {
+    fetchPosts();
   };
 
   return (
@@ -259,6 +228,15 @@ const CommunityPage = () => {
                 <div className="spinner"></div>
                 <p>Đang tải bài viết...</p>
               </div>
+            ) : error ? (
+              <div className="error-state">
+                <MessageCircle className="error-icon" size={48} />
+                <h3>Không thể tải bài viết</h3>
+                <p>{error}</p>
+                <button onClick={handleRetry} className="retry-button">
+                  Thử lại
+                </button>
+              </div>
             ) : (
               <div className="posts-grid">
                 {currentPosts.map((post, index) => (
@@ -271,18 +249,21 @@ const CommunityPage = () => {
                       <div className="post-meta">
                         <div className="post-author">
                           <img
-                            src={post.author.avatar}
-                            alt={post.author.name}
+                            src={post.image}
+                            alt={post.author}
                             className="author-avatar"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100';
+                            }}
                           />
                           <div>
-                            <h4 className="author-name">{post.author.name}</h4>
-                            <p className="author-role">{post.author.role}</p>
+                            <h4 className="author-name">{post.author}</h4>
+                            <p className="author-role">Member</p>
                           </div>
                         </div>
                         <div className="post-time">
                           <Clock className="time-icon" />
-                          <span>{post.timePosted}</span>
+                          <span>{post.timeAgo}</span>
                         </div>
                       </div>
 
@@ -290,8 +271,8 @@ const CommunityPage = () => {
                       <p className="post-excerpt">{post.content}</p>
 
                       <div className="post-tags">
-                        {post.tags.map((tag, index) => (
-                          <span key={index} className="tag">
+                        {post.tags.map((tag, tagIndex) => (
+                          <span key={tagIndex} className="tag">
                             <Tag className="tag-icon" />
                             {tag}
                           </span>
@@ -301,33 +282,25 @@ const CommunityPage = () => {
                       <div className="post-actions">
                         <button className="action-button">
                           <ThumbsUp className="action-icon" />
-                          <span>{post.engagement.likes}</span>
+                          <span>{formatNumber(post.likes)}</span>
                         </button>
                         <button className="action-button">
                           <MessageCircle className="action-icon" />
-                          <span>{post.engagement.comments}</span>
+                          <span>{formatNumber(post.comments)}</span>
                         </button>
                         <button className="action-button">
                           <Share2 className="action-icon" />
-                          <span>{post.engagement.shares}</span>
+                          <span>{formatNumber(post.shares)}</span>
                         </button>
-                        <button
-                          className={`action-button bookmark ${
-                            post.isVerified ? 'verified' : ''
-                          }`}
-                        >
-                          {post.isVerified && (
-                            <span className="verified-badge" title="Tài khoản xác thực">
-                              ✓
-                            </span>
-                          )}
+                        <button className="action-button">
+                          <Bookmark className={`action-icon ${post.isBookmarked ? 'bookmarked' : ''}`} />
                         </button>
                       </div>
                     </div>
                   </article>
                 ))}
 
-                {filteredPosts.length === 0 && !loading && (
+                {filteredPosts.length === 0 && !loading && !error && (
                   <div className="empty-state">
                     <MessageCircle className="empty-icon" />
                     <h3>Không tìm thấy bài viết</h3>

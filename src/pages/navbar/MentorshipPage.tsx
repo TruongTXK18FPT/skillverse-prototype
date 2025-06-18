@@ -160,8 +160,6 @@ const MentorshipPage = () => {
 
         {/* Search and Filter */}
         <div className="search-section">
-          <div className="search-container">
-            <Search className="search-icon" />
             <input
               type="text"
               placeholder={translations.mentorship.searchPlaceholder}
@@ -169,11 +167,6 @@ const MentorshipPage = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
             />
-          </div>
-          <button className="filter-button">
-            <Filter className="filter-icon" />
-            <span>{translations.common.filter}</span>
-          </button>
         </div>
 
         {/* Categories */}
@@ -274,13 +267,13 @@ const MentorshipPage = () => {
 
                   <div className="mentor-actions">
                     <button 
-                      className="book-session-btn"
+                      className="book-button"
                       onClick={() => handleBookSession(mentor)}
                     >
                       {translations.mentorship.bookSession}
                       <ChevronRight className="btn-icon" />
                     </button>
-                    <button className="message-btn">
+                    <button className="chat-button">
                       <MessageCircle className="btn-icon" />
                       {translations.common.message}
                     </button>

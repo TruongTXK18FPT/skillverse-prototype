@@ -4,23 +4,45 @@
   --gradient-hover: linear-gradient(135deg, #2563eb, #7e22ce);
   --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
   --text-gradient: linear-gradient(135deg, #2563eb, #9333ea);
+  /* Light theme variables */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f4f6;
+  --bg-card: #ffffff;
+  --bg-hover: #f9fafb;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --border-color: #e5e7eb;
+  --card-bg: rgba(255, 255, 255, 0.95);
+}
+
+/* Dark theme variables */
+[data-theme='dark'] {
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --bg-card: #1f2937;
+  --bg-hover: #374151;
+  --text-primary: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --border-color: #374151;
+  --card-bg: rgba(31, 41, 55, 0.95);
 }
 
 .community-container {
-  max-width: 1440px;
-  margin: 0 auto;
+  width: 100%;
+  min-height: 100vh;
   padding: 2rem;
-  padding-top: 80px;
-  animation: fadeIn 0.6s var(--animation-timing);
-  position: relative;
-  height: calc(100vh - 80px);
-  overflow-y: auto;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .community-container {
+  background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
 }
 
 .community-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease-out;
 }
 
 /* Header Styles */
@@ -108,6 +130,11 @@
   position: relative;
 }
 
+[data-theme='dark'] .community-search-wrapper {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
 .community-search-wrapper:focus-within {
   border-color: #3b82f6;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
@@ -155,6 +182,7 @@
   display: grid;
   grid-template-columns: 1fr 350px;
   gap: 2rem;
+  width: 100%;
 }
 
 /* Categories */
@@ -192,21 +220,27 @@
 .posts-grid {
   display: grid;
   gap: 2rem;
+  /* Change from undefined columns to responsive grid */
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  width: 100%;
+  margin-bottom: 2rem;
 }
 
 .post-card {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--card-bg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   overflow: hidden;
   transition: all 0.4s var(--animation-timing);
   animation: fadeInUp 0.8s var(--animation-timing);
+  height: auto;
+  color: var(--text-primary);
 }
 
-.post-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+[data-theme='dark'] .post-card {
+  background: rgba(31, 41, 55, 0.9);
+  border-color: rgba(55, 65, 81, 0.5);
 }
 
 .post-image-container {
@@ -352,17 +386,17 @@
 }
 
 .sidebar-section {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-card);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 1.2rem;
   transition: all 0.3s ease;
 }
 
-.sidebar-section:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
+[data-theme='dark'] .sidebar-section {
+  background: rgba(31, 41, 55, 0.8);
+  border-color: rgba(55, 65, 81, 0.5);
 }
 
 .sidebar-title {
@@ -554,70 +588,25 @@
 @media (max-width: 1024px) {
   .community-main {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
   .community-sidebar {
     order: -1;
-  }
-
-  .community-stats {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .stat-value {
-    font-size: 1.1rem;
+    position: static;
+    max-height: none;
+    overflow-y: visible;
   }
 }
 
 @media (max-width: 768px) {
   .community-container {
     padding: 1rem;
-    padding-top: 80px;
   }
 
-  .community-title {
-    font-size: 2rem;
-  }
-
-  .post-image-container {
-    height: 200px;
-  }
-
-  .community-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .community-description {
-    font-size: 0.95rem;
-  }
-
-  .post-title {
-    font-size: 1.1rem;
-  }
-
-  .post-excerpt {
-    font-size: 0.9rem;
-  }
-
-  .stat-value {
-    font-size: 1rem;
-  }
-
-  .stat-label {
-    font-size: 0.65rem;
-  }
-
-  .contributor-card {
-    padding: 0.6rem;
-  }
-  
-  .contributor-avatar {
-    width: 36px;
-    height: 36px;
-  }
-  
-  .stat-card {
-    padding: 0.6rem;
+  .posts-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
@@ -731,4 +720,4 @@
   50% {
     transform: translateY(-5px);
   }
-} 
+}
