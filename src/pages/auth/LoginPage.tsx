@@ -37,7 +37,7 @@ const LoginPage = () => {
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <div className="input-wrapper">
-              <Mail className="input-icon" />
+              <Mail className="login-input-icon" />
               <input
                 type="email"
                 id="email"
@@ -52,7 +52,7 @@ const LoginPage = () => {
           <div className="form-group">
             <label htmlFor="password">Mật khẩu</label>
             <div className="input-wrapper">
-              <Lock className="input-icon" />
+              <Lock className="login-input-icon" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"

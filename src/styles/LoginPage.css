@@ -91,12 +91,15 @@
   align-items: center;
 }
 
-.input-icon {
-  position: absolute;
-  left: 1rem;
+.login-input-icon {
+  position: fixed;
+  left: -1.5rem;
   color: #9ca3af;
   width: 1.25rem;
   height: 1.25rem;
+  border: #111827;
+  border-radius: 0.25rem;
+  display: flex;
 }
 
 .input-wrapper input {

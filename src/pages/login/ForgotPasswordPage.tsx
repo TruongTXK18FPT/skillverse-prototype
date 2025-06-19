@@ -128,7 +128,7 @@ const ForgotPasswordPage = () => {
           <div className="form-group">
             <label htmlFor="email">{translations.auth.emailAddress}</label>
             <div className="input-group">
-              <Mail className="input-icon" size={20} />
+              <Mail className="auth-input-icon" size={20} />
               <input
                 type="email"
                 id="email"

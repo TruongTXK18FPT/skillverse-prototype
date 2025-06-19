@@ -157,7 +157,7 @@ const RegisterPage = () => {
             <div className="form-group">
               <label htmlFor="gender">Giới Tính</label>
               <div className="input-group">
-                <Users className="input-icon" size={20} />
+                <Users className="auth-input-icon" size={20} />
                 <select
                   id="gender"
                   name="gender"
@@ -178,7 +178,7 @@ const RegisterPage = () => {
             <div className="form-group">
               <label htmlFor="phone">Số Điện Thoại</label>
               <div className="input-group">
-                <Phone className="input-icon" size={20} />
+                <Phone className="auht-input-icon" size={20} />
                 <input
                   type="tel"
                   id="phone"
@@ -196,7 +196,7 @@ const RegisterPage = () => {
             <div className="form-group">
               <label htmlFor="email">Địa Chỉ Email</label>
               <div className="input-group">
-                <Mail className="input-icon" size={20} />
+                <Mail className="auth-input-icon" size={20} />
                 <input
                   type="email"
                   id="email"
@@ -217,7 +217,7 @@ const RegisterPage = () => {
                 <div className="form-group">
                   <label htmlFor="provinceCode">Tỉnh/Thành Phố</label>
                   <div className="input-group">
-                    <MapPin className="input-icon" size={20} />
+                    <MapPin className="auth-input-icon" size={20} />
                     <select
                       id="provinceCode"
                       name="provinceCode"
@@ -240,7 +240,7 @@ const RegisterPage = () => {
                 <div className="form-group">
                   <label htmlFor="districtCode">Quận/Huyện</label>
                   <div className="input-group">
-                    <MapPin className="input-icon" size={20} />
+                    <MapPin className="auth-input-icon" size={20} />
                     <select
                       id="districtCode"
                       name="districtCode"
@@ -265,7 +265,7 @@ const RegisterPage = () => {
               <div className="form-group">
                 <label htmlFor="address">Địa Chỉ Chi Tiết</label>
                 <div className="input-group">
-                  <MapPin className="input-icon" size={20} />
+                  <MapPin className="auth-input-icon" size={20} />
                   <input
                     type="text"
                     id="address"
@@ -284,7 +284,7 @@ const RegisterPage = () => {
             <div className="form-group">
               <label htmlFor="password">Mật Khẩu</label>
               <div className="input-group">
-                <Lock className="input-icon" size={20} />
+                <Lock className="auth-input-icon" size={20} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
@@ -308,7 +308,7 @@ const RegisterPage = () => {
             <div className="form-group">
               <label htmlFor="confirmPassword">Xác Nhận Mật Khẩu</label>
               <div className="input-group">
-                <Lock className="input-icon" size={20} />
+                <Lock className="auth-input-icon" size={20} />
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   id="confirmPassword"

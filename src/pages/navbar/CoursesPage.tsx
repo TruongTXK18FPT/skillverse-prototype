@@ -1,125 +1,75 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, Filter, Clock, Users, Star, BookOpen, Trophy, Play } from 'lucide-react';
 import '../../styles/CoursesPage.css';
+import Pagination from '../../components/Pagination';
 
+type Course = {
+  id: string;
+  title: string;
+  instructor: string;
+  category: string;
+  image: string;
+  level?: string;
+  price?: string;
+  rating?: number;
+  students?: string | number;
+  description?: string;
+  duration?: string;
+  modules?: number;
+  certificate?: boolean;
+};
 const CoursesPage = () => {
+  const [courses, setCourses] = useState<Course[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
-  const categories = [
-    { id: 'all', name: 'Tất Cả', count: 156 },
-    { id: 'tech', name: 'Công Nghệ', count: 45 },
-    { id: 'design', name: 'Thiết Kế', count: 32 },
-    { id: 'business', name: 'Kinh Doanh', count: 28 },
-    { id: 'marketing', name: 'Marketing', count: 25 },
-    { id: 'language', name: 'Ngoại Ngữ', count: 18 },
-    { id: 'soft-skills', name: 'Kỹ Năng Mềm', count: 8 }
-  ];
 
-  const courses = [
-    {
-      id: 1,
-      title: 'React.js Cơ Bản đến Nâng Cao',
-      instructor: 'John Smith',
-      category: 'tech',
-      rating: 4.8,
-      students: 1234,
-      duration: '8 giờ',
-      price: 'Miễn phí',
-      image: 'https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=400',
-      level: 'Trung cấp',
-      description: 'Học React.js từ cơ bản đến nâng cao với các dự án thực tế',
-      modules: 12,
-      certificate: true
-    },
-    {
-      id: 2,
-      title: 'Thiết Kế UI/UX Thực Hành',
-      instructor: 'Sarah Johnson',
-      category: 'design',
-      rating: 4.9,
-      students: 892,
-      duration: '6 giờ',
-      price: '690.000đ',
-      image: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=400',
-      level: 'Sơ cấp',
-      description: 'Thiết kế UI/UX chuyên nghiệp với Figma',
-      modules: 8,
-      certificate: true
-    },
-    {
-      id: 3,
-      title: 'Marketing Số Từ A-Z',
-      instructor: 'Michael Brown',
-      category: 'marketing',
-      rating: 4.7,
-      students: 1567,
-      duration: '10 giờ',
-      price: '1.150.000đ',
-      image: 'https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=400',
-      level: 'Nâng cao',
-      description: 'Chiến lược marketing số toàn diện cho doanh nghiệp',
-      modules: 15,
-      certificate: true
-    },
-    {
-      id: 4,
-      title: 'Python cho Người Mới Bắt Đầu',
-      instructor: 'David Wilson',
-      category: 'tech',
-      rating: 4.6,
-      students: 2103,
-      duration: '12 giờ',
-      price: 'Miễn phí',
-      image: 'https://images.pexels.com/photos/1181472/pexels-photo-1181472.jpeg?auto=compress&cs=tinysrgb&w=400',
-      level: 'Sơ cấp',
-      description: 'Bắt đầu lập trình với Python từ con số 0 với các bài tập thực hành',
-      modules: 20,
-      certificate: true
-    },
-    {
-      id: 5,
-      title: 'Kỹ Năng Thuyết Trình Chuyên Nghiệp',
-      instructor: 'Emma Davis',
-      category: 'soft-skills',
-      rating: 4.8,
-      students: 756,
-      duration: '4 giờ',
-      price: '460.000đ',
-      image: 'https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=400',
-      level: 'Trung cấp',
-      description: 'Nâng cao kỹ năng thuyết trình và giao tiếp trong công việc',
-      modules: 6,
-      certificate: true
-    },
-    {
-      id: 6,
-      title: 'Quản Lý Dự Án Agile',
-      instructor: 'Robert Taylor',
-      category: 'business',
-      rating: 4.7,
-      students: 634,
-      duration: '7 giờ',
-      price: '920.000đ',
-      image: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=400',
-      level: 'Nâng cao',
-      description: 'Phương pháp quản lý dự án Agile hiệu quả',
-      modules: 10,
-      certificate: true
-    }
-  ];
+useEffect(() => {
+  fetch('https://685174ec8612b47a2c0a2925.mockapi.io/Course')
+    .then(res => res.json())
+    .then(data => {
+      // Normalize category string
+      const normalized = (str: string) => str.trim().toLowerCase();
+      const updatedCourses = data.map((course: Course) => ({
+        ...course,
+        category: normalized(course.category)
+      }));
+      setCourses(updatedCourses);
+    })
+    .catch(err => console.error('Error fetching courses:', err));
+}, []);
 
   const filteredCourses = courses.filter(course => {
-    const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         course.instructor.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || course.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    const matchSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        course.instructor.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchCategory = selectedCategory === 'all' || course.category === selectedCategory;
+    return matchSearch && matchCategory;
   });
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedCourses = filteredCourses.slice(startIndex, startIndex + itemsPerPage);
+
+  // Extract dynamic category counts
+  const categoriesMap: Record<string, number> = courses.reduce((acc, course) => {
+    acc[course.category] = (acc[course.category] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+const categories = [
+  { id: 'all', name: 'Tất Cả', count: courses.length },
+  { id: 'tech', name: 'Công Nghệ', count: categoriesMap['tech'] || 0 },
+  { id: 'design', name: 'Thiết Kế', count: categoriesMap['design'] || 0 },
+  { id: 'business', name: 'Kinh Doanh', count: categoriesMap['business'] || 0 },
+  { id: 'marketing', name: 'Marketing', count: categoriesMap['marketing'] || 0 },
+  { id: 'language', name: 'Ngoại Ngữ', count: categoriesMap['language'] || 0 },
+  { id: 'soft-skills', name: 'Kỹ Năng Mềm', count: categoriesMap['soft-skills'] || 0 }
+];
 
   return (
     <div className="courses-container">
       <div className="courses-content">
-        {/* Header */}
         <div className="courses-header">
           <h1 className="courses-title">Khóa Học Ngắn Hạn</h1>
           <p className="courses-description">
@@ -127,7 +77,6 @@ const CoursesPage = () => {
           </p>
         </div>
 
-        {/* Search and Filter */}
         <div className="search-container">
           <div className="search-form">
             <div className="search-input-container">
@@ -136,7 +85,10 @@ const CoursesPage = () => {
                 type="text"
                 placeholder="Tìm kiếm khóa học..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
                 className="search-input"
               />
             </div>
@@ -148,7 +100,6 @@ const CoursesPage = () => {
         </div>
 
         <div className="main-content">
-          {/* Sidebar Categories */}
           <div className="sidebar">
             <div className="category-container">
               <h3 className="category-title">Danh Mục</h3>
@@ -156,7 +107,10 @@ const CoursesPage = () => {
                 {categories.map((category) => (
                   <button
                     key={category.id}
-                    onClick={() => setSelectedCategory(category.id)}
+                    onClick={() => {
+                      setSelectedCategory(category.id);
+                      setCurrentPage(1);
+                    }}
                     className={`category-button ${selectedCategory === category.id ? 'active' : ''}`}
                   >
                     <span>{category.name}</span>
@@ -167,30 +121,19 @@ const CoursesPage = () => {
             </div>
           </div>
 
-          {/* Course Grid */}
           <div className="courses-grid">
-            {filteredCourses.map((course) => (
+            {paginatedCourses.map((course) => (
               <div key={course.id} className="course-card">
                 <div className="course-image-container">
-                  <img
-                    src={course.image}
-                    alt={course.title}
-                    className="course-image"
-                  />
+                  <img src={course.image} alt={course.title} className="course-image" />
                   <div className="course-preview-overlay">
                     <button className="preview-button">
                       <Play />
                       <span>Xem trước</span>
                     </button>
                   </div>
-                  <div className={`course-level-badge level-${course.level.toLowerCase()}`}>
-                    {course.level}
-                  </div>
-                  {course.price === 'Miễn phí' && (
-                    <div className="course-free-badge">
-                      Miễn phí
-                    </div>
-                  )}
+                  <div className={`course-level-badge level-${course.level?.toLowerCase()}`}>{course.level}</div>
+                  {course.price?.toLowerCase() === 'miễn phí' && <div className="course-free-badge">Miễn phí</div>}
                 </div>
 
                 <div className="course-content">
@@ -202,7 +145,7 @@ const CoursesPage = () => {
                     <span className="stats-divider">•</span>
                     <div className="course-students">
                       <Users />
-                      <span>{course.students.toLocaleString()}</span>
+                      <span>{typeof course.students === 'number' ? course.students.toLocaleString() : parseInt(course.students || '0').toLocaleString()}</span>
                     </div>
                   </div>
 
@@ -237,7 +180,7 @@ const CoursesPage = () => {
               </div>
             ))}
 
-            {filteredCourses.length === 0 && (
+            {paginatedCourses.length === 0 && (
               <div className="empty-state">
                 <BookOpen className="empty-icon" />
                 <h3 className="empty-title">Không tìm thấy khóa học</h3>
@@ -246,9 +189,17 @@ const CoursesPage = () => {
             )}
           </div>
         </div>
+
+        <Pagination
+          totalItems={filteredCourses.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   );
 };
 
 export default CoursesPage;
+
