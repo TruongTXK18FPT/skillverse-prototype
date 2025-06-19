@@ -22,6 +22,7 @@ import BlogForm from './pages/community/BlogForm';
 import PrivacyPolicy from './pages/footer/Privacy&Policy';
 import TermOfService from './pages/footer/TermOfService';
 import HelpCenter from './pages/footer/HelpCenter';
+import SeminarPage from './pages/navbar/SeminarPage';
 import './styles/App.css';
 
 const App = () => {
@@ -50,6 +51,11 @@ const App = () => {
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-of-service" element={<TermOfService />} />
                 <Route path="/help-center" element={<HelpCenter />} />
+                <Route path="/seminar" element={<SeminarPage />} />
+                <Route path="/seminar/:id" element={<SeminarPage />} />
+                <Route path="/seminar/:id/register" element={<SeminarPage />} />
+                <Route path="/seminar/:id/details" element={<SeminarPage />} />
+
                 {/* Add more routes as needed */}
               </Routes>
             </main>

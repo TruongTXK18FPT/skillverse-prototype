@@ -1,0 +1,128 @@
+/* styles/SeminarPage.css */
+.seminar-page {
+  padding: 2rem;
+  background: linear-gradient(to bottom right, #f0f4f8, #e0ecf8);
+  font-family: 'Segoe UI', sans-serif;
+  animation: fadeIn 1s ease-in;
+  min-height: 100vh;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  animation: slideDown 0.8s ease-out;
+}
+
+.seminar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  animation: fadeInUp 0.8s ease-in-out;
+}
+
+.seminar-card {
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.seminar-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.seminar-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.seminar-info {
+  padding: 1rem 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.seminar-info h2 {
+  font-size: 1.5rem;
+  color: #34495e;
+  margin: 0.5rem 0;
+  animation: slideUp 0.6s ease-in-out;
+}
+
+.seminar-info p {
+  color: #555;
+  font-size: 0.95rem;
+  margin: 0.2rem 0;
+}
+
+.seminar-buttons {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.seminar-buttons button {
+  padding: 0.5rem 1rem;
+  background: #2980b9;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.seminar-buttons button:hover {
+  background: #3498db;
+  transform: scale(1.05);
+}
+
+/* Animations */
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

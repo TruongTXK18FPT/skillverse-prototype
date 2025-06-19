@@ -47,7 +47,8 @@ const Header = () => {
     { path: '/community', label: translations.navigation.community, description: translations.navigation.descriptions.community },
     { path: '/jobs', label: translations.navigation.jobs, description: translations.navigation.descriptions.jobs },
     { path: '/portfolio', label: translations.navigation.portfolio, description: translations.navigation.descriptions.portfolio },
-    { path: '/chatbot', label: translations.navigation.chatbot, description: translations.navigation.descriptions.chatbot }
+    { path: '/chatbot', label: translations.navigation.chatbot, description: translations.navigation.descriptions.chatbot },
+    { path: '/seminar', label: translations.navigation.seminar, description: translations.navigation.descriptions.seminar },
   ];
 
 

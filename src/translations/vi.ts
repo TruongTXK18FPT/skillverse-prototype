@@ -102,6 +102,7 @@ export const vi = {
     jobs: 'Việc Làm',
     portfolio: 'Hồ Sơ',
     chatbot: 'Trợ Lý AI',
+    seminar: 'Hội Thảo',
     settings: 'Cài đặt',
     descriptions: {
       dashboard: 'Theo dõi tiến độ học tập và thành tích của bạn',
@@ -110,7 +111,8 @@ export const vi = {
       community: 'Tham gia cộng đồng học tập sôi động',
       jobs: 'Tìm kiếm cơ hội việc làm phù hợp',
       portfolio: 'Quản lý và chia sẻ thành tích của bạn',
-      chatbot: 'Nhận hỗ trợ từ trợ lý AI thông minh'
+      chatbot: 'Nhận hỗ trợ từ trợ lý AI thông minh',
+      seminar: 'Tham gia các hội thảo và sự kiện',
     }
   },
   home: {
@@ -202,7 +204,8 @@ export const vi = {
       projects: 'Dự Án',
       events: 'Sự Kiện',
       resources: 'Tài Nguyên',
-      jobs: 'Việc Làm'
+      jobs: 'Việc Làm',
+      seminars: 'Hội Thảo',
     },
     actions: {
       like: 'Thích',

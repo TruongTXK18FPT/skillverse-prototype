@@ -38,6 +38,7 @@ export const en = {
       jobs: 'Find work opportunities and freelance projects',
       portfolio: 'Showcase your skills and projects',
       chatbot: 'Get personalized AI career guidance',
+      seminar: 'Attend seminars and webinars to enhance your knowledge',
     }
   },
   auth: {
