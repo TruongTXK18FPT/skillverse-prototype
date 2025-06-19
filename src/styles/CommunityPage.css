@@ -66,10 +66,10 @@
   opacity: 0.6;
 }
 
-.community-title {
-  font-size: 2.8rem;
+.community-title {  font-size: 2.8rem;
   font-weight: 800;
   background: var(--text-gradient);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 1rem;
@@ -87,27 +87,54 @@
   opacity: 0.9;
 }
 
+.create-post-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+}
+
 .create-post-button {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 2rem;
-  background: var(--gradient-primary);
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
   border: none;
   border-radius: 12px;
-  font-weight: 600;
-  font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.3s var(--animation-timing);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-  animation: bounceIn 1s var(--animation-timing);
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+  user-select: none;
 }
 
 .create-post-button:hover {
-  transform: translateY(-3px) scale(1.02);
-  background: var(--gradient-hover);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+.create-post-button:active {
+  transform: translateY(0);
+}
+
+.create-post-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Dark mode support for create button */
+[data-theme='dark'] .create-post-button {
+  background: linear-gradient(135deg, #3b82f6, #9333ea);
+}
+
+[data-theme='dark'] .create-post-button:hover {
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
 }
 
 /* Search Section */
@@ -313,6 +340,7 @@
 
 .post-card:hover .post-title {
   background: var(--gradient-primary);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -566,10 +594,10 @@
   gap: 0.2rem;
 }
 
-.stat-value {
-  font-size: 1.2rem;
+.stat-value {  font-size: 1.2rem;
   font-weight: 700;
   background: var(--text-gradient);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1;

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, CreditCard, Smartphone, Shield, CheckCircle } from 'lucide-react';
+import { ArrowLeft, CreditCard, Shield } from 'lucide-react';
+import Toast from '../../components/Toast';
+import { usePaymentToast } from '../../utils/useToast';
 import '../../styles/PaymentPage.css';
 
 interface PaymentMethod {
@@ -16,6 +18,9 @@ const PaymentPage = () => {
   const [selectedMethod, setSelectedMethod] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
   
+  // Use the payment toast hook
+  const { toast, showSuccess, hideToast } = usePaymentToast();
+  
   // Get payment details from navigation state
   const paymentData = location.state || {
     type: 'course',
@@ -28,7 +33,7 @@ const PaymentPage = () => {
     {
       id: 'momo',
       name: 'MoMo',
-      logo: 'https://developers.momo.vn/v3/assets/images/square-logo.svg',
+      logo: 'https://pay2s.vn/blog/wp-content/uploads/2024/11/momo_icon_circle_pinkbg_RGB.png',
       description: 'Thanh toán qua ví điện tử MoMo'
     },
     {
@@ -40,27 +45,31 @@ const PaymentPage = () => {
     {
       id: 'vnpay',
       name: 'VNPay',
-      logo: 'https://vnpay.vn/s1/statics.vnpay.vn/2023/9/06ncktiwd6dc1694418196384.png',
-      description: 'Thanh toán qua VNPay'
+      logo: 'https://vnpay.vn/s1/statics.vnpay.vn/2023/9/06ncktiwd6dc1694418196384.png',      description: 'Thanh toán qua VNPay'
     }
   ];
-
   const handlePayment = async () => {
     if (!selectedMethod) return;
     
     setIsProcessing(true);
     
-    // Simulate payment processing
+    // Simulate payment processing (always successful for mock API)
     setTimeout(() => {
       setIsProcessing(false);
-      // Redirect to success page or back to course
-      navigate('/dashboard', { 
-        state: { 
-          paymentSuccess: true, 
-          item: paymentData.title 
-        } 
-      });
-    }, 3000);
+      showSuccess(
+        "Thanh toán thành công!",
+        `Cảm ơn bạn đã thanh toán cho "${paymentData.title}". Đơn hàng của bạn đã được xử lý thành công.`,
+        {
+          text: "Về trang chủ ngay",
+          onClick: () => navigate('/')
+        }
+      );
+    }, 2000);
+  };
+
+  const handleCloseToast = () => {
+    hideToast();
+    navigate('/'); // Navigate to home when toast is closed
   };
 
   const formatPrice = (price: number) => {
@@ -172,12 +181,22 @@ const PaymentPage = () => {
                 <>
                   <CreditCard size={20} />
                   <span>Thanh Toán {formatPrice(paymentData.price * 1.1)}</span>
-                </>
-              )}
+                </>              )}
             </button>
           </div>
         </div>
-      </div>
+      </div>      {/* Success Toast */}
+      <Toast
+        type={toast.type}
+        title={toast.title}
+        message={toast.message}
+        isVisible={toast.isVisible}
+        onClose={handleCloseToast}
+        autoCloseDelay={5}
+        showCountdown={true}
+        countdownText="Chuyển về trang chủ trong {countdown} giây..."
+        actionButton={toast.actionButton}
+      />
     </div>
   );
 };

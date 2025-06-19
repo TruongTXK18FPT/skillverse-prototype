@@ -93,6 +93,16 @@ const CommunityPage = () => {
     setIsVisible(true);
     fetchPosts();
   }, []);
+  // Debug logging for button behavior
+  useEffect(() => {
+    const button = document.querySelector('.create-post-button');
+    if (button) {
+      const clickHandler = () => {
+      };
+      button.addEventListener('click', clickHandler);
+      return () => button.removeEventListener('click', clickHandler);
+    }
+  }, []);
 
   const fetchPosts = async () => {
     try {
@@ -154,9 +164,22 @@ const CommunityPage = () => {
   const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
   const startIndex = (currentPage - 1) * postsPerPage;
   const currentPosts = filteredPosts.slice(startIndex, startIndex + postsPerPage);
-
-  const handleCreatePost = () => {
-    navigate('/community/create');
+  const handleCreatePost = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Create post button clicked', {
+      timestamp: Date.now(),
+      loading,
+      error
+    });
+    
+    try {
+      navigate('/community/create');
+    } catch (error) {
+      console.error('Navigation error:', error);
+      // Fallback navigation
+      window.location.href = '/community/create';
+    }
   };
 
   const handleRetry = () => {
@@ -165,8 +188,7 @@ const CommunityPage = () => {
 
   return (
     <div className={`community-container ${isVisible ? 'visible' : ''}`}>
-      <div className="community-content">
-        {/* Header */}
+      <div className="community-content">        {/* Header */}
         <div className="community-header">
           <h1 className="community-title">
             <Sparkles className="title-icon" size={24} />
@@ -175,10 +197,18 @@ const CommunityPage = () => {
           <p className="community-description">
             {translations.community.description}
           </p>
-          <button className="create-post-button" onClick={handleCreatePost}>
-            <Plus className="button-icon" size={18} />
-            <span>{translations.community.createPost}</span>
-          </button>
+          <div className="create-post-wrapper">
+            <button 
+              className="create-post-button" 
+              onClick={handleCreatePost}
+              disabled={false}
+              type="button"
+              aria-label="Create new post"
+            >
+              <Plus className="button-icon" size={18} />
+              <span>{translations.community.createPost}</span>
+            </button>
+          </div>
         </div>
 
         {/* Search and Filter */}
