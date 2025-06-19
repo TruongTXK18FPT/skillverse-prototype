@@ -1,8 +1,15 @@
 export const vi = {
   common: {
-    search: 'Tìm Kiếm',
+    previous: 'Trước',
+    next: 'Tiếp',
+    page: 'Trang',
+    of: 'trên',
+    loading: 'Đang tải...',
+    error: 'Lỗi',
+    success: 'Thành công',
+    search: 'Tìm kiếm',
     filter: 'Lọc',
-    viewAll: 'Xem Tất Cả',
+    viewAll: 'Xem tất cả',
     loadMore: 'Tải thêm',
     save: 'Lưu',
     cancel: 'Hủy',
@@ -10,17 +17,10 @@ export const vi = {
     delete: 'Xóa',
     confirm: 'Xác nhận',
     back: 'Quay lại',
-    next: 'Tiếp theo',
     submit: 'Gửi',
     close: 'Đóng',
-    success: 'Thành công',
-    error: 'Lỗi',
-    loading: 'Đang tải',
     required: 'Bắt buộc',
     optional: 'Tùy chọn',
-    previous: 'Trước',
-    page: 'Trang',
-    of: 'của',
     continue: 'Tiếp tục',
     add: 'Thêm',
     remove: 'Xóa',
@@ -39,11 +39,42 @@ export const vi = {
     }
   },
   auth: {
-    login: 'Đăng Nhập',
-    register: 'Đăng Ký',
+    login: 'Đăng nhập',
     logout: 'Đăng xuất',
-    forgotPassword: 'Quên Mật Khẩu',
-    resetPassword: 'Đặt lại mật khẩu',
+    register: 'Đăng ký',
+    forgotPassword: 'Quên mật khẩu',
+    checkEmail: 'Kiểm Tra Email',
+    resetInstructionsSent: 'Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến email của bạn.',
+    emailSentSuccess: 'Đã Gửi Email Thành Công!',
+    resetEmailSentTo: 'Chúng tôi đã gửi email đặt lại mật khẩu đến',
+    resetLinkExpiry: 'Liên kết đặt lại mật khẩu sẽ hết hạn sau 24 giờ.',
+    nextSteps: 'Các Bước Tiếp Theo',
+    checkInbox: 'Kiểm tra hộp thư để tìm email đặt lại',
+    clickResetLink: 'Nhấp vào liên kết đặt lại trong email',
+    createNewPassword: 'Tạo mật khẩu mới của bạn',
+    noEmailReceived: 'Chưa nhận được email?',
+    tryAgain: 'Thử Lại',
+    rememberPassword: 'Đã nhớ mật khẩu?',
+    signIn: 'Đăng Nhập',
+    securityTips: 'Lời Khuyên Bảo Mật',
+    strongPassword: 'Tạo Mật Khẩu Mạnh',
+    passwordTip: 'Sử dụng kết hợp chữ cái, số và ký tự đặc biệt',
+    regularUpdates: 'Cập Nhật Thường Xuyên',
+    updatesTip: 'Thay đổi mật khẩu định kỳ để tăng cường bảo mật',
+    twoFactor: 'Xác Thực Hai Yếu Tố',
+    twoFactorTip: 'Bật xác thực hai yếu tố để bảo vệ tài khoản của bạn',
+    resetPassword: 'Đặt Lại Mật Khẩu',
+    resetInstructions: 'Nhập email của bạn và chúng tôi sẽ gửi hướng dẫn đặt lại mật khẩu.',
+    emailAddress: 'Địa Chỉ Email',
+    enterEmail: 'Nhập email của bạn',
+    sendResetInstructions: 'Gửi Hướng Dẫn Đặt Lại',
+    needHelp: 'Cần Trợ Giúp?',
+    cantAccessEmail: 'Không thể truy cập email?',
+    contactSupport: 'Liên hệ với đội ngũ hỗ trợ của chúng tôi',
+    accountRecovery: 'Khôi Phục Tài Khoản',
+    alternativeRecovery: 'Sử dụng phương thức khôi phục thay thế',
+    securityCheck: 'Kiểm Tra Bảo Mật',
+    verifyIdentity: 'Xác minh danh tính của bạn',
     email: 'Email',
     password: 'Mật khẩu',
     confirmPassword: 'Xác nhận mật khẩu',
@@ -53,7 +84,14 @@ export const vi = {
     alreadyHaveAccount: 'Đã có tài khoản?',
     createAccount: 'Tạo tài khoản',
     forgotPasswordText: 'Nhập email của bạn để đặt lại mật khẩu',
-    resetPasswordSuccess: 'Mật khẩu đã được đặt lại thành công'
+    resetPasswordSuccess: 'Mật khẩu đã được đặt lại thành công',
+    errors: {
+      emailRequired: 'Vui lòng nhập email của bạn',
+      emailInvalid: 'Vui lòng nhập email hợp lệ',
+      passwordRequired: 'Vui lòng nhập mật khẩu',
+      passwordTooShort: 'Mật khẩu phải có ít nhất 8 ký tự',
+      passwordMismatch: 'Mật khẩu không khớp'
+    }
   },
   navigation: {
     home: 'Trang Chủ',
@@ -292,19 +330,26 @@ export const vi = {
     }
   },
   chatbot: {
-    header: {
-      title: 'Trợ lý AI',
-      subtitle: 'Hỗ trợ học tập thông minh 24/7'
+    title: 'Trợ Lý AI',
+    description: 'Nhận hướng dẫn nghề nghiệp và đề xuất học tập được cá nhân hóa',
+    askPlaceholder: 'Hỏi tôi bất cứ điều gì về nghề nghiệp hoặc lộ trình học tập của bạn...',
+    features: {
+      careerPlanning: 'Lập Kế Hoạch Nghề Nghiệp',
+      skillDevelopment: 'Phát Triển Kỹ Năng',
+      courseRecommendation: 'Đề Xuất Khóa Học',
+      jobMarketInsights: 'Thông Tin Thị Trường'
     },
-    placeholder: 'Nhập câu hỏi của bạn...',
-    suggestions: {
-      title: 'Gợi ý câu hỏi',
-      items: [
-        'Tôi nên bắt đầu học lập trình từ đâu?',
-        'Làm thế nào để trở thành Frontend Developer?',
-        'Các kỹ năng cần thiết cho Data Scientist?',
-        'Xu hướng công nghệ năm 2024?'
-      ]
+    quickPrompts: {
+      career: 'Xu hướng nghề nghiệp trong công nghệ?',
+      resources: 'Đề xuất tài liệu học tập',
+      skills: 'Nên học những kỹ năng gì?',
+      plan: 'Giúp tôi tạo kế hoạch học tập',
+      jobs: 'Hiển thị cơ hội việc làm'
+    },
+    responses: {
+      careerPath: 'Dưới đây là một số xu hướng nghề nghiệp trong công nghệ:',
+      programming: 'Dưới đây là một số kỹ năng lập trình cần thiết:',
+      learning: 'Đây là lộ trình học tập đề xuất cho bạn:'
     }
   },
   settings: {
@@ -375,5 +420,115 @@ export const vi = {
   },
   notifications: {
     title: 'Thông Báo'
+  },
+  termsOfService: {
+    title: 'Điều Khoản Dịch Vụ',
+    introduction: 'Chào mừng bạn đến với Skillverse! Bằng việc sử dụng dịch vụ của chúng tôi, bạn đồng ý tuân thủ các điều khoản sau đây.',
+    sections: {
+      acceptance: '1. Chấp Nhận Điều Khoản',
+      userResponsibilities: '2. Trách Nhiệm Người Dùng',
+      contentOwnership: '3. Quyền Sở Hữu Nội Dung',
+      paymentTerms: '4. Điều Khoản Thanh Toán',
+      intellectualProperty: '5. Quyền Sở Hữu Trí Tuệ',
+      termination: '6. Tạm Ngưng hoặc Chấm Dứt Dịch Vụ',
+      liability: '7. Trách Nhiệm Pháp Lý',
+      updates: '8. Cập Nhật Điều Khoản',
+      law: '9. Luật Áp Dụng và Giải Quyết Tranh Chấp',
+      contact: '10. Liên Hệ'
+    },
+    acceptanceText: 'Bằng việc sử dụng dịch vụ của chúng tôi, bạn đồng ý tuân thủ các điều khoản này. Nếu bạn không đồng ý, vui lòng không sử dụng dịch vụ.',
+    userResponsibilitiesText: 'Bạn chịu trách nhiệm bảo mật thông tin tài khoản của mình và mọi hoạt động diễn ra trên tài khoản đó. Bạn không được sử dụng dịch vụ cho mục đích bất hợp pháp hoặc vi phạm quyền lợi của người khác.',
+    contentOwnershipText: 'Bạn sở hữu nội dung do bạn tạo ra trên nền tảng của chúng tôi. Tuy nhiên, bạn cấp cho Skillverse quyền sử dụng nội dung đó để cung cấp dịch vụ.',
+    paymentTermsText: 'Một số dịch vụ của chúng tôi có thể yêu cầu thanh toán. Bạn đồng ý thanh toán đầy đủ và đúng hạn theo các phương thức được cung cấp.',
+    intellectualPropertyText: 'Tất cả nội dung, phần mềm và công nghệ của Skillverse đều thuộc quyền sở hữu trí tuệ của chúng tôi. Bạn không được sao chép, phân phối hoặc sử dụng trái phép các tài sản này.',
+    terminationText: 'Chúng tôi có quyền tạm ngưng hoặc chấm dứt dịch vụ của bạn nếu bạn vi phạm các điều khoản này hoặc có hành vi gian lận.',
+    liabilityText: 'Skillverse không chịu trách nhiệm cho bất kỳ thiệt hại nào phát sinh từ việc sử dụng dịch vụ, bao gồm nhưng không giới hạn ở mất dữ liệu, lợi nhuận hoặc danh tiếng.',
+    updatesText: 'Chúng tôi có quyền cập nhật các điều khoản này bất cứ lúc nào. Bạn sẽ được thông báo về các thay đổi qua email hoặc thông báo trong ứng dụng.',
+    lawText: 'Các điều khoản này được điều chỉnh bởi pháp luật Việt Nam. Mọi tranh chấp sẽ được giải quyết tại Tòa án Nhân dân có thẩm quyền tại TP. Hồ Chí Minh.',
+    contactText: 'Nếu bạn có bất kỳ câu hỏi nào về các điều khoản này, vui lòng liên hệ với chúng tôi qua email'
+  },
+  helpCenter: {
+    title: "Trung Tâm Trợ Giúp",
+    description: "Tìm câu trả lời cho các câu hỏi của bạn và khám phá hướng dẫn chi tiết",
+    searchPlaceholder: "Tìm kiếm câu hỏi hoặc chủ đề...",
+    readMore: "Xem thêm",
+
+    categories: {
+      all: "Tất cả",
+      gettingStarted: "Bắt đầu",
+      courses: "Khóa học",
+      mentorship: "Cố vấn",
+      account: "Tài khoản",
+      certificates: "Chứng chỉ"
+    },
+
+    popularArticles: {
+      title: "Bài Viết Phổ Biến",
+      article1: {
+        title: "Bắt đầu với SkillVerse",
+        description: "Hướng dẫn từng bước để bắt đầu hành trình học tập của bạn"
+      },
+      article2: {
+        title: "Cách chọn khóa học phù hợp",
+        description: "Tìm hiểu cách chọn khóa học tốt nhất cho mục tiêu của bạn"
+      },
+      article3: {
+        title: "Kết nối với cố vấn",
+        description: "Tận dụng tối đa các buổi tư vấn 1-1 với chuyên gia"
+      }
+    },
+
+    faqs: {
+      title: "Câu Hỏi Thường Gặp",
+      courses: {
+        pricing: {
+          question: "Học phí của các khóa học là bao nhiêu?",
+          answer: "Chúng tôi cung cấp nhiều mức giá khác nhau, từ các khóa học miễn phí đến các khóa học cao cấp. Giá cụ thể được hiển thị trên trang chi tiết của mỗi khóa học."
+        },
+        certificate: {
+          question: "Tôi có nhận được chứng chỉ sau khi hoàn thành khóa học không?",
+          answer: "Có, bạn sẽ nhận được chứng chỉ số sau khi hoàn thành tất cả các yêu cầu của khóa học."
+        }
+      },
+      account: {
+        delete: {
+          question: "Làm thế nào để xóa tài khoản của tôi?",
+          answer: "Bạn có thể xóa tài khoản trong phần Cài đặt > Tài khoản > Xóa tài khoản. Lưu ý rằng hành động này không thể hoàn tác."
+        }
+      },
+      mentorship: {
+        booking: {
+          question: "Làm sao để đặt lịch với cố vấn?",
+          answer: "Truy cập trang Cố vấn, chọn chuyên gia phù hợp, và đặt lịch theo thời gian có sẵn của họ."
+        }
+      },
+      getting_started: {
+        start: {
+          question: "Làm thế nào để bắt đầu học tập?",
+          answer: "Đầu tiên, hãy hoàn thành bài kiểm tra đánh giá để chúng tôi có thể đề xuất lộ trình học tập phù hợp với bạn."
+        }
+      }
+    },
+
+    contactSupport: {
+      title: "Vẫn Cần Trợ Giúp?",
+      description: "Đội ngũ hỗ trợ của chúng tôi luôn sẵn sàng giúp đỡ bạn",
+      
+      email: {
+        title: "Gửi Email",
+        description: "Nhận phản hồi chi tiết trong vòng 24 giờ",
+        button: "Gửi Email"
+      },
+      chat: {
+        title: "Trò Chuyện Trực Tiếp",
+        description: "Nhận trợ giúp ngay lập tức từ đội ngũ hỗ trợ",
+        button: "Bắt Đầu Trò Chuyện"
+      },
+      community: {
+        title: "Cộng Đồng Hỗ Trợ",
+        description: "Kết nối với cộng đồng học viên",
+        button: "Tham Gia Ngay"
+      }
+    }
   }
-}; 
+};
