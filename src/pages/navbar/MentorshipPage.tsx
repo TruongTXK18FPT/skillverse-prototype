@@ -81,44 +81,76 @@ const MentorshipPage = () => {
     {
       id: '1',
       name: "Dr. Sarah Johnson",
-      title: translations.mentorship.roles.seniorFrontend,
+      title: "Senior Frontend Developer", // Use direct string instead of translation
       rating: 4.9,
       reviews: 128,
       hourlyRate: 120,
       expertise: ["React", "Vue.js", "TypeScript", "UI/UX Design"],
-      languages: [translations.common.languages.english, translations.common.languages.spanish],
-      availability: translations.mentorship.availability.weekdays,
+      languages: ["English", "Spanish"], // Use direct strings
+      availability: "Weekdays", // Use direct string
       experience: "12+ years",
-      bio: translations.mentorship.bios.frontend,
+      bio: "Experienced frontend developer with expertise in modern web technologies and mentoring.",
       avatar: "https://images.pexels.com/photos/3796217/pexels-photo-3796217.jpeg?auto=compress&cs=tinysrgb&w=400",
-      badges: [translations.mentorship.badges.topRated, translations.mentorship.badges.proMentor, translations.mentorship.badges.googleExpert],
+      badges: ["Top Rated", "Pro Mentor", "Google Expert"], // Use direct strings
       isFavorite: false
     },
     {
       id: '2',
       name: "Michael Chen",
-      title: translations.mentorship.roles.leadBackend,
+      title: "Lead Backend Developer", // Use direct string
       rating: 4.8,
       reviews: 95,
       hourlyRate: 150,
       expertise: ["Node.js", "Python", "AWS", "System Design"],
-      languages: [translations.common.languages.english, translations.common.languages.mandarin],
-      availability: translations.mentorship.availability.weekends,
+      languages: ["English", "Mandarin"], // Use direct strings
+      availability: "Weekends", // Use direct string
       experience: "10+ years",
-      bio: translations.mentorship.bios.backend,
+      bio: "Backend specialist with extensive experience in scalable systems and cloud architecture.",
       avatar: "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&w=400",
-      badges: [translations.mentorship.badges.awsCertified, translations.mentorship.badges.systemDesign],
+      badges: ["AWS Certified", "System Design Expert"], // Use direct strings
       isFavorite: true
+    },
+    {
+      id: '3',
+      name: "Emily Rodriguez",
+      title: "Full Stack Developer",
+      rating: 4.7,
+      reviews: 76,
+      hourlyRate: 100,
+      expertise: ["JavaScript", "React", "Node.js", "MongoDB"],
+      languages: ["English", "Spanish"],
+      availability: "Flexible",
+      experience: "8+ years",
+      bio: "Full stack developer passionate about clean code and mentoring new developers.",
+      avatar: "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400",
+      badges: ["Verified", "Mentor"],
+      isFavorite: false
+    },
+    {
+      id: '4',
+      name: "David Kim",
+      title: "Mobile Developer",
+      rating: 4.9,
+      reviews: 112,
+      hourlyRate: 130,
+      expertise: ["React Native", "Flutter", "iOS", "Android"],
+      languages: ["English", "Korean"],
+      availability: "Weekdays",
+      experience: "10+ years",
+      bio: "Mobile development expert with experience in cross-platform solutions.",
+      avatar: "https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=400",
+      badges: ["Top Rated", "Mobile Expert"],
+      isFavorite: false
     }
   ];
 
   const categories = [
-    { id: 'all', name: translations.mentorship.categories.all, count: mentors.length },
-    { id: 'frontend', name: translations.mentorship.categories.frontend, count: Math.floor(mentors.length * 0.3) },
-    { id: 'backend', name: translations.mentorship.categories.backend, count: Math.floor(mentors.length * 0.25) },
-    { id: 'fullstack', name: translations.mentorship.categories.fullstack, count: Math.floor(mentors.length * 0.2) },
-    { id: 'mobile', name: translations.mentorship.categories.mobile, count: Math.floor(mentors.length * 0.15) },
-    { id: 'devops', name: translations.mentorship.categories.devops, count: Math.floor(mentors.length * 0.1) }
+    { id: 'all', name: 'Tất cả', count: mentors.length },
+    { id: 'frontend', name: 'Frontend', count: Math.floor(mentors.length * 0.3) },
+    { id: 'backend', name: 'Backend', count: Math.floor(mentors.length * 0.25) },
+    { id: 'fullstack', name: 'Full Stack', count: Math.floor(mentors.length * 0.2) },
+    { id: 'mobile', name: 'Mobile', count: Math.floor(mentors.length * 0.15) },
+    { id: 'devops', name: 'DevOps', count: Math.floor(mentors.length * 0.1) }
   ];
 
   const filteredMentors = mentors.filter(mentor => {
@@ -152,9 +184,9 @@ const MentorshipPage = () => {
       <div className="mentorship-content">
         {/* Header */}
         <div className="mentorship-header">
-          <h1 className="mentorship-title">{translations.mentorship.title}</h1>
+          <h1 className="mentorship-title">Tìm Mentor</h1>
           <p className="mentorship-description">
-            {translations.mentorship.description}
+            Kết nối với các chuyên gia hàng đầu để phát triển kỹ năng và sự nghiệp của bạn
           </p>
         </div>
 
@@ -162,7 +194,7 @@ const MentorshipPage = () => {
         <div className="search-section">
             <input
               type="text"
-              placeholder={translations.mentorship.searchPlaceholder}
+              placeholder="Tìm kiếm mentor theo tên hoặc kỹ năng..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
@@ -219,7 +251,7 @@ const MentorshipPage = () => {
                     <Star className="star-icon" />
                     <span>{mentor.rating}</span>
                     <span className="review-count">
-                      ({mentor.reviews} {translations.common.reviews})
+                      ({mentor.reviews} đánh giá)
                     </span>
                   </div>
 
@@ -239,7 +271,7 @@ const MentorshipPage = () => {
                     </div>
                     <div className="detail-item">
                       <DollarSign className="detail-icon" />
-                      <span>${mentor.hourlyRate}/{translations.common.hour}</span>
+                      <span>${mentor.hourlyRate}/giờ</span>
                     </div>
                     <div className="detail-item">
                       <Globe className="detail-icon" />
@@ -252,7 +284,7 @@ const MentorshipPage = () => {
                   </div>
 
                   <div className="mentor-expertise">
-                    <h4>{translations.mentorship.expertise}</h4>
+                    <h4>Chuyên môn</h4>
                     <div className="expertise-tags">
                       {mentor.expertise.map((skill, index) => (
                         <span key={index} className="expertise-tag">
@@ -270,12 +302,12 @@ const MentorshipPage = () => {
                       className="book-button"
                       onClick={() => handleBookSession(mentor)}
                     >
-                      {translations.mentorship.bookSession}
+                      Đặt lịch hướng dẫn
                       <ChevronRight className="btn-icon" />
                     </button>
                     <button className="chat-button">
                       <MessageCircle className="btn-icon" />
-                      {translations.common.message}
+                      Nhắn tin
                     </button>
                   </div>
                 </div>
