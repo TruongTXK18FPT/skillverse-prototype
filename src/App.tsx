@@ -19,8 +19,8 @@ import PaymentPage from './pages/payment/PaymentPage';
 import ManagerPage from './pages/main/ManagerPage';
 import BlogForm from './pages/community/BlogForm';
 
-import PrivacyPolicy from './pages/footer/Privacy&Policy';
 import TermOfService from './pages/footer/TermOfService';
+import PrivacyPolicy from './pages/footer/Privacy&Policy';
 import HelpCenter from './pages/footer/HelpCenter';
 import SeminarPage from './pages/navbar/SeminarPage';
 import './styles/App.css';
@@ -46,17 +46,14 @@ const App = () => {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                <Route path="/payment" element={<PaymentPage />} />
+                <Route path="/payment/:type/:id" element={<PaymentPage />} />
                 <Route path="/manager" element={<ManagerPage />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-of-service" element={<TermOfService />} />
-                <Route path="/help-center" element={<HelpCenter />} />
                 <Route path="/seminar" element={<SeminarPage />} />
-                <Route path="/seminar/:id" element={<SeminarPage />} />
-                <Route path="/seminar/:id/register" element={<SeminarPage />} />
-                <Route path="/seminar/:id/details" element={<SeminarPage />} />
-
-                {/* Add more routes as needed */}
+                
+                {/* Add these missing footer routes */}
+                <Route path="/help-center" element={<HelpCenter />} />
+                <Route path="/terms-of-service" element={<TermOfService />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               </Routes>
             </main>
             <Footer />

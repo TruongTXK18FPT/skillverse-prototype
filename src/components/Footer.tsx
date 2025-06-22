@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, ArrowUp, Send, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Logo from '../assets/Logo.jpg';
 import '../styles/Footer.css';
 import { useTheme } from '../context/ThemeContext';
@@ -64,9 +65,9 @@ const Footer = () => {
             <div className="footer-section">
               <h3 className="footer-title">{translations.footer.support}</h3>
               <ul className="footer-links">
-                <li><a href="/help-center" className="footer-link hover-underline">{translations.footer.links.helpCenter}</a></li>
-                <li><a href="/terms-of-service" className="footer-link hover-underline">{translations.footer.links.termsOfService}</a></li>
-                <li><a href="/privacy-policy" className="footer-link hover-underline">{translations.footer.links.privacyPolicy}</a></li>
+                <li><Link to="/help-center" className="footer-link hover-underline">{translations.footer.links.helpCenter}</Link></li>
+                <li><Link to="/terms-of-service" className="footer-link hover-underline">{translations.footer.links.termsOfService}</Link></li>
+                <li><Link to="/privacy-policy" className="footer-link hover-underline">{translations.footer.links.privacyPolicy}</Link></li>
                 <li><a href="#" className="footer-link hover-underline">{translations.footer.links.faq}</a></li>
               </ul>
             </div>
