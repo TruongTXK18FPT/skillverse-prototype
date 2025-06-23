@@ -18,6 +18,7 @@ import ForgotPasswordPage from './pages/login/ForgotPasswordPage';
 import PaymentPage from './pages/payment/PaymentPage';
 import ManagerPage from './pages/main/ManagerPage';
 import BlogForm from './pages/community/BlogForm';
+import NotFoundPage from './pages/notfound/NotFoundPage';
 
 import TermOfService from './pages/footer/TermOfService';
 import PrivacyPolicy from './pages/footer/Privacy&Policy';
@@ -47,13 +48,15 @@ const App = () => {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/payment/:type/:id" element={<PaymentPage />} />
-                <Route path="/manager" element={<ManagerPage />} />
-                <Route path="/seminar" element={<SeminarPage />} />
+                <Route path="/manager" element={<ManagerPage />} />                <Route path="/seminar" element={<SeminarPage />} />
                 
                 {/* Add these missing footer routes */}
                 <Route path="/help-center" element={<HelpCenter />} />
                 <Route path="/terms-of-service" element={<TermOfService />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                
+                {/* Catch-all route for 404 errors - must be last */}
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </main>
             <Footer />
