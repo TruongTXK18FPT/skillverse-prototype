@@ -10,7 +10,14 @@ import {
   Search,
   Grid,
   GraduationCap,
-  MessageCircle
+  MessageCircle,
+  Home,
+  BarChart3,
+  Users,
+  Briefcase,
+  User,
+  Bot,
+  Calendar
 } from 'lucide-react';
 import Logo from '../assets/Logo.jpg';
 import '../styles/Header.css';
@@ -35,22 +42,21 @@ const Header = () => {
   const { translations } = useLanguage();
 
   const mainNavLinks = [
-    { path: '/', label: translations.navigation.home },
-    { path: '/dashboard', label: translations.navigation.dashboard },
-    { path: '/community', label: translations.navigation.community },
+    { path: '/', label: translations.navigation.home, icon: Home },
+    { path: '/dashboard', label: translations.navigation.dashboard, icon: BarChart3 },
+    { path: '/community', label: translations.navigation.community, icon: MessageCircle },
   ];
 
   const allCategories = [
-    { path: '/dashboard', label: translations.navigation.dashboard, description: translations.navigation.descriptions.dashboard },
-    { path: '/courses', label: translations.navigation.courses, description: translations.navigation.descriptions.courses },
-    { path: '/mentorship', label: translations.navigation.mentorship, description: translations.navigation.descriptions.mentorship },
-    { path: '/community', label: translations.navigation.community, description: translations.navigation.descriptions.community },
-    { path: '/jobs', label: translations.navigation.jobs, description: translations.navigation.descriptions.jobs },
-    { path: '/portfolio', label: translations.navigation.portfolio, description: translations.navigation.descriptions.portfolio },
-    { path: '/chatbot', label: translations.navigation.chatbot, description: translations.navigation.descriptions.chatbot },
-    { path: '/seminar', label: translations.navigation.seminar, description: translations.navigation.descriptions.seminar },
+    { path: '/dashboard', label: translations.navigation.dashboard, description: translations.navigation.descriptions.dashboard, icon: BarChart3 },
+    { path: '/courses', label: translations.navigation.courses, description: translations.navigation.descriptions.courses, icon: GraduationCap },
+    { path: '/mentorship', label: translations.navigation.mentorship, description: translations.navigation.descriptions.mentorship, icon: Users },
+    { path: '/community', label: translations.navigation.community, description: translations.navigation.descriptions.community, icon: MessageCircle },
+    { path: '/jobs', label: translations.navigation.jobs, description: translations.navigation.descriptions.jobs, icon: Briefcase },
+    { path: '/portfolio', label: translations.navigation.portfolio, description: translations.navigation.descriptions.portfolio, icon: User },
+    { path: '/chatbot', label: translations.navigation.chatbot, description: translations.navigation.descriptions.chatbot, icon: Bot },
+    { path: '/seminar', label: translations.navigation.seminar, description: translations.navigation.descriptions.seminar, icon: Calendar },
   ];
-
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,8 +67,41 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsCategoryOpen(false);
+  }, [location.pathname]);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.header-content') && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('click', handleClickOutside);
+      document.body.style.overflow = 'hidden'; // Prevent background scroll
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
   const handleLogin = () => {
     navigate('/login');
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleMobileNavClick = (path: string) => {
+    navigate(path);
     setIsMobileMenuOpen(false);
   };
 
@@ -100,7 +139,7 @@ const Header = () => {
             >
               <span className="nav-link__text">
                 <Grid className="w-4 h-4 mr-1" />
-                Danh Mục
+                Danh Mục
                 <ChevronDown className="w-4 h-4 ml-1" />
               </span>
             </button>
@@ -116,8 +155,11 @@ const Header = () => {
                       className="category-item"
                       onClick={() => setIsCategoryOpen(false)}
                     >
-                      <h3 className="category-item__title">{category.label}</h3>
-                      <p className="category-item__description">{category.description}</p>
+                      <category.icon className="category-item__icon" />
+                      <div className="category-item__content">
+                        <h3 className="category-item__title">{category.label}</h3>
+                        <p className="category-item__description">{category.description}</p>
+                      </div>
                     </Link>
                   ))}
                 </div>
@@ -127,14 +169,16 @@ const Header = () => {
 
           {/* User Actions */}
           <div className="user-actions">
+            {/* Search Button - Hidden on mobile */}
             <button
-              className="action-button"
+              className="action-button search-button"
               onClick={() => setIsSearchOpen(true)}
               aria-label="Search"
             >
               <Search className="action-icon" />
             </button>
 
+            {/* Notifications */}
             <button
               className="action-button notification-btn"
               onClick={() => setIsNotificationsOpen(true)}
@@ -144,8 +188,9 @@ const Header = () => {
               <span className="notification-badge">3</span>
             </button>
 
+            {/* Theme Toggle */}
             <button
-              className="action-button"
+              className="action-button theme-toggle"
               onClick={toggleTheme}
               aria-label="Toggle theme"
             >
@@ -156,10 +201,13 @@ const Header = () => {
               )}
             </button>
 
-            <LanguageSwitcher />
+            {/* Language Switcher - Hidden on mobile */}
+            <div className="language-switcher-wrapper">
+              <LanguageSwitcher />
+            </div>
 
-            {/* Login Button */}
-            <button onClick={handleLogin} className="login-btn">
+            {/* Login Button - Hidden on mobile */}
+            <button onClick={handleLogin} className="login-btn desktop-only">
               {translations.auth.login}
             </button>
 
@@ -167,6 +215,7 @@ const Header = () => {
             <button
               className="mobile-menu-btn"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle mobile menu"
             >
               {isMobileMenuOpen ? (
                 <X className="action-icon" />
@@ -177,39 +226,83 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
-          <nav className="mobile-nav">
-            {mainNavLinks.map((link) => (
-              <NavLink
-                key={link.path}
-                to={link.path}
-                className={({ isActive }) => `mobile-nav-link ${isActive ? 'active' : ''}`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {link.label}
-                {location.pathname === link.path && (
-                  <span className="mobile-nav-link__indicator" />
-                )}
-              </NavLink>
-            ))}
-            <div className="mobile-categories">
-              <h3 className="mobile-categories__title">All Categories</h3>
-              {allCategories.map((category) => (
-                <Link
-                  key={category.path}
-                  to={category.path}
-                  className="mobile-nav-link"
+          <div className="mobile-menu-overlay">
+            <nav className="mobile-nav">
+              {/* Mobile Header */}
+              <div className="mobile-nav-header">
+                <h3 className="mobile-nav-title">Menu</h3>
+                <button
+                  className="mobile-nav-close"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {category.label}
-                </Link>
-              ))}
-            </div>
-            <button onClick={handleLogin} className="mobile-login-btn">
-              {translations.auth.login}
-            </button>
-          </nav>
+                  <X className="action-icon" />
+                </button>
+              </div>
+
+              {/* Main Navigation Links */}
+              <div className="mobile-nav-section">
+                <h4 className="mobile-nav-section-title">Điều hướng chính</h4>
+                {mainNavLinks.map((link) => (
+                  <button
+                    key={link.path}
+                    onClick={() => handleMobileNavClick(link.path)}
+                    className={`mobile-nav-link ${location.pathname === link.path ? 'active' : ''}`}
+                  >
+                    <link.icon className="mobile-nav-link__icon" />
+                    <span>{link.label}</span>
+                    {location.pathname === link.path && (
+                      <span className="mobile-nav-link__indicator" />
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {/* All Categories */}
+              <div className="mobile-nav-section">
+                <h4 className="mobile-nav-section-title">Tất cả danh mục</h4>
+                <div className="mobile-categories-grid">
+                  {allCategories.map((category) => (
+                    <button
+                      key={category.path}
+                      onClick={() => handleMobileNavClick(category.path)}
+                      className={`mobile-category-item ${location.pathname === category.path ? 'active' : ''}`}
+                    >
+                      <category.icon className="mobile-category-item__icon" />
+                      <div className="mobile-category-item__content">
+                        <span className="mobile-category-item__title">{category.label}</span>
+                        <span className="mobile-category-item__description">{category.description}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mobile Actions */}
+              <div className="mobile-nav-actions">
+                <button
+                  onClick={() => {
+                    setIsSearchOpen(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="mobile-action-btn"
+                >
+                  <Search className="mobile-action-btn__icon" />
+                  <span>Tìm kiếm</span>
+                </button>
+
+                <div className="mobile-language-switcher">
+                  <LanguageSwitcher />
+                </div>
+
+                <button onClick={handleLogin} className="mobile-login-btn">
+                  <User className="mobile-login-btn__icon" />
+                  <span>{translations.auth.login}</span>
+                </button>
+              </div>
+            </nav>
+          </div>
         )}
       </div>
 
@@ -298,8 +391,11 @@ const Header = () => {
                 <X className="action-icon" />
               </button>
             </div>
-            <div className="p-4">
-              {/* Add notifications here */}
+            <div className="notification-content">
+              <div className="notification-empty">
+                <Bell className="notification-empty-icon" />
+                <p>Không có thông báo mới</p>
+              </div>
             </div>
           </div>
         </div>
