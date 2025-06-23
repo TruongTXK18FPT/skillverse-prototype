@@ -1032,6 +1032,45 @@
   .mobile-nav-actions {
     padding: 1rem;
   }
+  
+  .user-actions {
+    gap: 0.25rem; /* Reduce from 0.75rem */
+  }
+  
+  .action-button {
+    width: 2rem; /* Reduce from 2.5rem */
+    height: 2rem;
+  }
+  
+  .logo-wrapper {
+    width: 2rem; /* Make logo smaller */
+    height: 2rem;
+  }
+  
+  .logo-title {
+    font-size: 0.9rem; /* Smaller text */
+  }
+}
+
+/* Super small screens like iPhone SE */
+@media (max-width: 375px) {
+  .header-container {
+    padding: 0 0.5rem;
+  }
+  
+  /* Show only logo, theme toggle and burger menu */
+  .notification-btn {
+    display: none !important;
+  }
+  
+  .action-button {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  
+  .logo-title {
+    font-size: 0.8rem;
+  }
 }
 
 /* Hide elements on mobile */
@@ -1046,5 +1085,16 @@
   
   .desktop-only {
     display: none;
+  }
+  
+  .mobile-menu-btn {
+    display: flex !important;
+  }
+  
+  /* Hide notification button on very small screens */
+  @media (max-width: 400px) {
+    .notification-btn {
+      display: none;
+    }
   }
 }

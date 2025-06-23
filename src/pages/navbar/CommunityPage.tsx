@@ -335,9 +335,6 @@ const CommunityPage = () => {
                     <MessageCircle className="empty-icon" />
                     <h3>Không tìm thấy bài viết</h3>
                     <p>Thử điều chỉnh bộ lọc hoặc tạo bài viết mới</p>
-                    <button onClick={handleCreatePost} className="create-first-post">
-                      Tạo bài viết đầu tiên
-                    </button>
                   </div>
                 )}
               </div>
@@ -430,24 +427,27 @@ const CommunityPage = () => {
               </h3>
               <div className="community-stats">
                 <div className="stat-card">
-                  <Users className="stat-icon" size={20} />
-                  <div className="stat-info">
-                    <span className="stat-value">{formatNumber(15234)}</span>
-                    <span className="stat-label">Members</span>
+                  <div className="stat-name-section">
+                    <span className="stat-value">Members</span>
+                  </div>
+                  <div className="topic-stats">
+                    <span>{formatNumber(15234)}</span>
                   </div>
                 </div>
                 <div className="stat-card">
-                  <MessageCircle className="stat-icon" size={20} />
-                  <div className="stat-info">
-                    <span className="stat-value">{formatNumber(posts.length)}</span>
-                    <span className="stat-label">Posts</span>
+                  <div className="stat-name-section">
+                    <span className="stat-value">Posts</span>
+                  </div>
+                  <div className="topic-stats">
+                    <span>{formatNumber(posts.length)}</span>
                   </div>
                 </div>
                 <div className="stat-card">
-                  <Heart className="stat-icon" size={20} />
-                  <div className="stat-info">
-                    <span className="stat-value">{formatNumber(123456)}</span>
-                    <span className="stat-label">Reactions</span>
+                  <div className="stat-name-section">
+                    <span className="stat-value">Reactions</span>
+                  </div>
+                  <div className="topic-stats">
+                    <span>{formatNumber(123456)}</span>
                   </div>
                 </div>
               </div>

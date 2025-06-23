@@ -30,6 +30,7 @@ export const en = {
     dashboard: 'Dashboard',
     settings: 'Settings',
     profile: 'Profile',
+    seminar: 'Seminars',
     descriptions: {
       dashboard: 'Track your learning progress and achievements',
       courses: 'Learn new skills with expert-led courses',
