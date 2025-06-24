@@ -1,3 +1,21 @@
+/* CSS Variables for Language Switcher */
+:root {
+  --lang-text-primary: #4b5563;
+  --lang-bg-primary: #ffffff;
+  --lang-bg-hover: rgba(0, 0, 0, 0.05);
+  --lang-border: #e5e7eb;
+  --lang-bg-secondary: #f3f4f6;
+}
+
+/* Dark Theme Variables */
+[data-theme='dark'] {
+  --lang-text-primary: #d1d5db;
+  --lang-bg-primary: #1f2937;
+  --lang-bg-hover: rgba(255, 255, 255, 0.1);
+  --lang-border: #374151;
+  --lang-bg-secondary: #374151;
+}
+
 .language-switcher {
   display: flex;
   align-items: center;
@@ -8,7 +26,7 @@
 
 .language-label {
   font-size: 0.9rem;
-  color: #4b5563;
+  color: var(--lang-text-primary);
   font-weight: 500;
 }
 
@@ -22,10 +40,10 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--lang-border);
   border-radius: 8px;
-  background-color: white;
-  color: #4b5563;
+  background-color: var(--lang-bg-primary);
+  color: var(--lang-text-primary);
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -33,7 +51,7 @@
 }
 
 .language-button:hover {
-  background-color: #f3f4f6;
+  background-color: var(--lang-bg-secondary);
   transform: translateY(-1px);
 }
 
@@ -54,29 +72,27 @@
   padding: 0.5rem;
   border: none;
   background: transparent;
-  color: inherit;
+  color: var(--lang-text-primary);
   cursor: pointer;
   border-radius: 0.5rem;
   transition: all 0.2s ease;
 }
 
 .language-toggle:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-[data-theme='dark'] .language-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--lang-bg-hover);
 }
 
 .language-icon {
   width: 1.25rem;
   height: 1.25rem;
+  color: var(--lang-text-primary);
 }
 
 .language-code {
   font-size: 0.875rem;
   font-weight: 500;
   text-transform: uppercase;
+  color: var(--lang-text-primary);
 }
 
 /* Responsive Design */

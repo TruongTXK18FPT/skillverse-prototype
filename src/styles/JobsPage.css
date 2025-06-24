@@ -1,7 +1,34 @@
+/* CSS Variables for Jobs Page */
+:root {
+  --jobs-bg-primary: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  --jobs-bg-secondary: #ffffff;
+  --jobs-text-primary: #1f2937;
+  --jobs-text-secondary: #4b5563;
+  --jobs-border: #e5e7eb;
+  --jobs-shadow: rgba(0, 0, 0, 0.1);
+  --jobs-card-bg: #ffffff;
+  --jobs-button-bg: #f3f4f6;
+  --jobs-button-hover: #e5e7eb;
+}
+
+/* Dark Theme Variables for Jobs Page */
+[data-theme='dark'] {
+  --jobs-bg-primary: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+  --jobs-bg-secondary: #1f2937;
+  --jobs-text-primary: #f9fafb;
+  --jobs-text-secondary: #d1d5db;
+  --jobs-border: #374151;
+  --jobs-shadow: rgba(0, 0, 0, 0.3);
+  --jobs-card-bg: #1f2937;
+  --jobs-button-bg: #374151;
+  --jobs-button-hover: #4b5563;
+}
+
 .sv-jobs-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  background: var(--jobs-bg-primary);
   padding: 2rem;
+  transition: background 0.3s ease;
 }
 
 .sv-jobs-content {
@@ -17,26 +44,31 @@
 .sv-jobs-header__title {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #1f2937;
+  color: var(--jobs-text-primary);
   margin-bottom: 0.5rem;
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+  transition: color 0.3s ease;
 }
 
 .sv-jobs-header__description {
   font-size: 1.25rem;
-  color: #4b5563;
+  color: var(--jobs-text-secondary);
   max-width: 800px;
   margin: 0 auto;
+  transition: color 0.3s ease;
 }
 
 .sv-jobs-search {
-  background: white;
+  background: var(--jobs-bg-secondary);
   padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px var(--jobs-shadow);
   margin-bottom: 2rem;
+  border: 1px solid var(--jobs-border);
+  transition: all 0.3s ease;
 }
 
 .sv-jobs-search__form {
@@ -56,16 +88,19 @@
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #6b7280;
+  color: var(--jobs-text-secondary);
   width: 1.25rem;
   height: 1.25rem;
+  transition: color 0.3s ease;
 }
 
 .sv-jobs-search__input {
   width: 100%;
   padding: 0.75rem 1rem 0.75rem 3rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--jobs-border);
   border-radius: 0.75rem;
+  background: var(--jobs-bg-secondary);
+  color: var(--jobs-text-primary);
   font-size: 0.9375rem;
   transition: all 0.2s;
 }
@@ -107,17 +142,20 @@
 }
 
 .sv-jobs-categories {
-  background: white;
+  background: var(--jobs-bg-secondary);
   padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px var(--jobs-shadow);
+  border: 1px solid var(--jobs-border);
+  transition: all 0.3s ease;
 }
 
 .sv-jobs-categories__title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--jobs-text-primary);
   margin-bottom: 1rem;
+  transition: color 0.3s ease;
 }
 
 .sv-jobs-categories__list {
@@ -135,11 +173,12 @@
   transition: all 0.2s;
   border: none;
   background: transparent;
+  color: var(--jobs-text-primary);
   cursor: pointer;
 }
 
 .sv-jobs-category-btn:hover {
-  background: #f3f4f6;
+  background: var(--jobs-button-hover);
 }
 
 .sv-jobs-category-btn--active {
@@ -163,17 +202,18 @@
 }
 
 .sv-job-card {
-  background: white;
+  background: var(--jobs-card-bg);
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px var(--jobs-shadow);
   padding: 1.5rem;
-  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid var(--jobs-border);
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
   animation: sv-job-fade-in 0.3s ease-out;
 }
 
 .sv-job-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 12px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 12px -1px var(--jobs-shadow);
 }
 
 .sv-job-card__header {
@@ -186,13 +226,15 @@
 .sv-job-card__title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--jobs-text-primary);
   margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
 }
 
 .sv-job-card__company {
-  color: #4b5563;
+  color: var(--jobs-text-secondary);
   font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .sv-job-card__meta {
@@ -344,4 +386,4 @@
   .sv-job-card__meta {
     flex-wrap: wrap;
   }
-} 
+}

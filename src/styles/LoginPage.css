@@ -1,17 +1,60 @@
+/* CSS Variables for Login Page */
+:root {
+  --login-bg-primary: linear-gradient(to bottom right, #f0f9ff, #e0f2fe);
+  --login-bg-secondary: #ffffff;
+  --login-text-primary: #111827;
+  --login-text-secondary: #6b7280;
+  --login-border: #e5e7eb;
+  --login-shadow: rgba(0, 0, 0, 0.1);
+  --login-card-bg: #ffffff;
+  --login-input-bg: #ffffff;
+  --login-input-icon: #9ca3af;
+  --login-label-color: #374151;
+  --login-button-primary: #2563eb;
+  --login-button-primary-hover: #1d4ed8;
+  --login-link-color: #2563eb;
+  --login-link-hover: #1d4ed8;
+  --login-divider-bg: #e5e7eb;
+  --login-social-bg: #f9fafb;
+  --login-social-border: #d1d5db;
+}
+
+/* Dark Theme Variables */
+[data-theme='dark'] {
+  --login-bg-primary: linear-gradient(to bottom right, #111827, #1f2937);
+  --login-bg-secondary: #1f2937;
+  --login-text-primary: #f9fafb;
+  --login-text-secondary: #d1d5db;
+  --login-border: #374151;
+  --login-shadow: rgba(0, 0, 0, 0.3);
+  --login-card-bg: #1f2937;
+  --login-input-bg: #374151;
+  --login-input-icon: #9ca3af;
+  --login-label-color: #f9fafb;
+  --login-button-primary: #3b82f6;
+  --login-button-primary-hover: #2563eb;
+  --login-link-color: #60a5fa;
+  --login-link-hover: #3b82f6;
+  --login-divider-bg: #374151;
+  --login-social-bg: #374151;
+  --login-social-border: #4b5563;
+}
+
 .login-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to bottom right, #f0f9ff, #e0f2fe);
+  background: var(--login-bg-primary);
   padding: 1.5rem;
 }
 
 .login-content {
-  background-color: white;
+  background-color: var(--login-card-bg);
   padding: 2rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px var(--login-shadow);
+  border: 1px solid var(--login-border);
   width: 100%;
   max-width: 28rem;
 }
@@ -59,12 +102,12 @@
 .login-welcome h1 {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #111827;
+  color: var(--login-text-primary);
   margin-bottom: 0.5rem;
 }
 
 .login-welcome p {
-  color: #6b7280;
+  color: var(--login-text-secondary);
 }
 
 .login-form {
@@ -82,7 +125,7 @@
 .form-group label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: var(--login-label-color);
 }
 
 .input-wrapper {
@@ -92,23 +135,32 @@
 }
 
 .login-input-icon {
-  position: fixed;
-  left: -1.5rem;
-  color: #9ca3af;
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--login-input-icon);
   width: 1.25rem;
   height: 1.25rem;
-  border: #111827;
-  border-radius: 0.25rem;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .input-wrapper input {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
-  border: 1px solid #e5e7eb;
+  padding: 0.75rem 1rem 0.75rem 3.5rem;
+  border: 1px solid var(--login-border);
   border-radius: 0.5rem;
   font-size: 0.875rem;
+  background-color: var(--login-input-bg);
+  color: var(--login-text-primary);
   transition: all 0.2s;
+}
+.input-wrapper input::placeholder {
+  padding-left: 1.75rem;
 }
 
 .input-wrapper input:focus {
@@ -120,11 +172,17 @@
 .password-toggle {
   position: absolute;
   right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
-  color: #9ca3af;
+  color: var(--login-input-icon);
   cursor: pointer;
-  padding: 0;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .form-options {
@@ -138,7 +196,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #4b5563;
+  color: var(--login-text-secondary);
   cursor: pointer;
 }
 
@@ -146,23 +204,23 @@
   width: 1rem;
   height: 1rem;
   border-radius: 0.25rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--login-border);
   cursor: pointer;
 }
 
 .forgot-password {
-  color: #2563eb;
+  color: var(--login-link-color);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
 }
 
 .forgot-password:hover {
-  color: #1d4ed8;
+  color: var(--login-link-hover);
 }
 
 .login-button {
-  background-color: #2563eb;
+  background-color: var(--login-button-primary);
   color: white;
   padding: 0.75rem;
   border: none;
@@ -173,7 +231,11 @@
 }
 
 .login-button:hover {
-  background-color: #1d4ed8;
+  background-color: var(--login-button-primary-hover);
+}
+
+.login-button:hover {
+  background-color: var(--login-button-primary-hover);
 }
 
 .social-login {
@@ -193,7 +255,7 @@
   top: 50%;
   width: calc(50% - 4rem);
   height: 1px;
-  background-color: #e5e7eb;
+  background-color: var(--login-divider-bg);
 }
 
 .divider::before {
@@ -205,9 +267,9 @@
 }
 
 .divider span {
-  background-color: white;
+  background-color: var(--login-card-bg);
   padding: 0 1rem;
-  color: #6b7280;
+  color: var(--login-text-secondary);
   font-size: 0.875rem;
 }
 
@@ -223,16 +285,16 @@
   justify-content: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--login-border);
   border-radius: 0.5rem;
-  background-color: white;
+  background-color: var(--login-social-bg);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .social-button:hover {
-  background-color: #f9fafb;
-  border-color: #d1d5db;
+  background-color: var(--login-social-border);
+  border-color: var(--login-border);
 }
 
 .social-icon {
@@ -244,7 +306,7 @@
 .social-button span {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #4b5563;
+  color: var(--login-text-secondary);
 }
 
 .register-link {
@@ -254,11 +316,11 @@
 }
 
 .register-link span {
-  color: #6b7280;
+  color: var(--login-text-secondary);
 }
 
 .register-link a {
-  color: #2563eb;
+  color: var(--login-link-color);
   text-decoration: none;
   font-weight: 500;
   margin-left: 0.5rem;
@@ -266,7 +328,7 @@
 }
 
 .register-link a:hover {
-  color: #1d4ed8;
+  color: var(--login-link-hover);
 }
 
 @media (max-width: 640px) {
@@ -277,4 +339,4 @@
   .social-buttons {
     grid-template-columns: 1fr;
   }
-} 
+}

@@ -6,11 +6,13 @@ import {
   MessageCircle, Play, Plus, User as UserIcon, Flame
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useTheme } from '../../context/ThemeContext';
 import '../../styles/DashboardPage.css';
 
 const DashboardPage = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState('week');
   const { translations } = useLanguage();
+  const { theme } = useTheme();
 
   const stats = [
     {
@@ -53,8 +55,6 @@ const DashboardPage = () => {
     thisWeek: [true, true, true, false, true, true, false],
     weeklyGoal: 5
   };
-
-  // ... rest of your component code ...
 
   return (
     <div className="sv-dashboard">
@@ -211,4 +211,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage; 
+export default DashboardPage;

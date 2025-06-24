@@ -1,5 +1,6 @@
 // pages/SeminarPage.tsx
 import React, { useEffect, useState } from 'react';
+import { useTheme } from '../../context/ThemeContext';
 import '../../styles/SeminarPage.css';
 import Pagination from '../../components/Pagination';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +23,7 @@ interface Seminar {
 }
 
 const SeminarPage: React.FC = () => {
+  const { theme } = useTheme();
   const [seminars, setSeminars] = useState<Seminar[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
@@ -45,9 +47,8 @@ const SeminarPage: React.FC = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
   return (
-    <div className="seminar-page">
+    <div className={`seminar-page ${theme}`} data-theme={theme}>
       <h1 className="page-title">Upcoming Seminars</h1>
       <div className="seminar-grid">
         {paginatedSeminars.map(seminar => (

@@ -6,13 +6,34 @@
   --shadow-md: 0 8px 16px -2px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Portfolio specific variables */
+  --portfolio-bg-primary: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  --portfolio-bg-secondary: #ffffff;
+  --portfolio-text-primary: #1f2937;
+  --portfolio-text-secondary: #4b5563;
+  --portfolio-border: #e5e7eb;
+  --portfolio-shadow: rgba(0, 0, 0, 0.1);
+  --portfolio-card-bg: #ffffff;
+}
+
+/* Dark Theme Variables for Portfolio */
+[data-theme='dark'] {
+  --portfolio-bg-primary: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+  --portfolio-bg-secondary: #1f2937;
+  --portfolio-text-primary: #f9fafb;
+  --portfolio-text-secondary: #d1d5db;
+  --portfolio-border: #374151;
+  --portfolio-shadow: rgba(0, 0, 0, 0.3);
+  --portfolio-card-bg: #1f2937;
 }
 
 .sv-portfolio-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  background: var(--portfolio-bg-primary);
   padding: 2rem;
   animation: fadeIn 0.6s var(--animation-timing);
+  transition: background 0.3s ease;
 }
 
 .sv-portfolio-content {
@@ -28,7 +49,7 @@
 .sv-portfolio-header__title {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #1f2937;
+  color: var(--portfolio-text-primary);
   margin-bottom: 0.5rem;
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
@@ -37,17 +58,18 @@
 
 .sv-portfolio-header__description {
   font-size: 1.25rem;
-  color: #4b5563;
+  color: var(--portfolio-text-secondary);
   max-width: 800px;
   margin: 0 auto;
 }
 
 .sv-portfolio-actions {
-  background: white;
+  background: var(--portfolio-card-bg);
   padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px var(--portfolio-shadow);
   margin-bottom: 2rem;
+  border: 1px solid var(--portfolio-border);
 }
 
 .sv-portfolio-actions__content {
@@ -65,12 +87,12 @@
 .sv-portfolio-actions__title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--portfolio-text-primary);
   margin-bottom: 0.25rem;
 }
 
 .sv-portfolio-actions__description {
-  color: #6b7280;
+  color: var(--portfolio-text-secondary);
 }
 
 .sv-portfolio-actions__buttons {
@@ -89,9 +111,9 @@
 }
 
 .sv-portfolio-btn--outline {
-  background: white;
-  border: 2px solid #e5e7eb;
-  color: #4b5563;
+  background: var(--portfolio-card-bg);
+  border: 2px solid var(--portfolio-border);
+  color: var(--portfolio-text-secondary);
 }
 
 .sv-portfolio-btn--outline:hover {
@@ -112,12 +134,12 @@
 
 /* Enhanced Tabs Navigation */
 .sv-portfolio-tabs {
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--portfolio-card-bg);
   backdrop-filter: blur(12px);
   border-radius: 1.5rem;
   box-shadow: var(--shadow-md);
   margin-bottom: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--portfolio-border);
   overflow: hidden;
   transition: all 0.3s var(--animation-timing);
 }
@@ -131,8 +153,8 @@
   display: flex;
   gap: 0.5rem;
   padding: 0.75rem;
-  border-bottom: 1px solid rgba(99, 102, 241, 0.1);
-  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid var(--portfolio-border);
+  background: var(--portfolio-card-bg);
 }
 
 .sv-portfolio-tab {
@@ -144,7 +166,7 @@
   padding: 1rem;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--portfolio-text-secondary);
   border-radius: 1rem;
   transition: all 0.3s var(--animation-timing);
   position: relative;
@@ -161,7 +183,7 @@
 }
 
 .sv-portfolio-tab:hover {
-  color: #4b5563;
+  color: var(--portfolio-text-primary);
   background: rgba(99, 102, 241, 0.05);
   transform: translateY(-1px);
 }
@@ -604,4 +626,4 @@
     width: 6rem;
     height: 6rem;
   }
-} 
+}

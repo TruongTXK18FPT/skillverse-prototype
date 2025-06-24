@@ -1,18 +1,46 @@
+/* CSS Variables for Seminar Page */
+:root {
+  --seminar-bg-primary: linear-gradient(to bottom right, #f0f4f8, #e0ecf8);
+  --seminar-bg-secondary: #ffffff;
+  --seminar-text-primary: #2c3e50;
+  --seminar-text-secondary: #34495e;
+  --seminar-border: #e5e7eb;
+  --seminar-shadow: rgba(0, 0, 0, 0.1);
+  --seminar-card-bg: #ffffff;
+  --seminar-button-primary: #3498db;
+  --seminar-button-secondary: #e74c3c;
+}
+
+/* Dark Theme Variables for Seminar Page */
+[data-theme='dark'] {
+  --seminar-bg-primary: linear-gradient(to bottom right, #111827, #1f2937);
+  --seminar-bg-secondary: #1f2937;
+  --seminar-text-primary: #f9fafb;
+  --seminar-text-secondary: #d1d5db;
+  --seminar-border: #374151;
+  --seminar-shadow: rgba(0, 0, 0, 0.3);
+  --seminar-card-bg: #1f2937;
+  --seminar-button-primary: #3b82f6;
+  --seminar-button-secondary: #ef4444;
+}
+
 /* styles/SeminarPage.css */
 .seminar-page {
   padding: 2rem;
-  background: linear-gradient(to bottom right, #f0f4f8, #e0ecf8);
+  background: var(--seminar-bg-primary);
   font-family: 'Segoe UI', sans-serif;
   animation: fadeIn 1s ease-in;
   min-height: 100vh;
+  transition: background 0.3s ease;
 }
 
 .page-title {
   text-align: center;
   font-size: 2.5rem;
-  color: #2c3e50;
+  color: var(--seminar-text-primary);
   margin-bottom: 2rem;
   animation: slideDown 0.8s ease-out;
+  transition: color 0.3s ease;
 }
 
 .seminar-grid {
@@ -23,18 +51,19 @@
 }
 
 .seminar-card {
-  background: #fff;
+  background: var(--seminar-card-bg);
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 10px 25px var(--seminar-shadow);
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
   display: flex;
   flex-direction: column;
+  border: 1px solid var(--seminar-border);
 }
 
 .seminar-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+  box-shadow: 0 15px 30px var(--seminar-shadow);
 }
 
 .seminar-image {
@@ -54,13 +83,15 @@
 
 .seminar-info h2 {
   font-size: 1.5rem;
-  color: #34495e;
+  color: var(--seminar-text-primary);
   margin: 0.5rem 0;
   animation: slideUp 0.6s ease-in-out;
+  transition: color 0.3s ease;
 }
 
 .seminar-info p {
-  color: #555;
+  color: var(--seminar-text-secondary);
+  transition: color 0.3s ease;
   font-size: 0.95rem;
   margin: 0.2rem 0;
 }
@@ -74,7 +105,7 @@
 
 .seminar-buttons button {
   padding: 0.5rem 1rem;
-  background: #2980b9;
+  background: var(--seminar-button-primary);
   border: none;
   color: white;
   border-radius: 8px;

@@ -1,7 +1,36 @@
+/* CSS Variables for Help Center */
+:root {
+  --primary-color: #4f46e5;
+  --secondary-color: #818cf8;
+  --help-bg-primary: #ffffff;
+  --help-bg-secondary: #f9fafb;
+  --help-text-primary: #1f2937;
+  --help-text-secondary: #4b5563;
+  --help-border: #e5e7eb;
+  --help-shadow: rgba(0, 0, 0, 0.1);
+  --help-card-bg: #ffffff;
+}
+
+/* Dark Theme Variables */
+[data-theme='dark'] {
+  --primary-color: #818cf8;
+  --secondary-color: #4f46e5;
+  --help-bg-primary: #111827;
+  --help-bg-secondary: #1f2937;
+  --help-text-primary: #f9fafb;
+  --help-text-secondary: #d1d5db;
+  --help-border: #374151;
+  --help-shadow: rgba(0, 0, 0, 0.3);
+  --help-card-bg: #1f2937;
+}
+
 .sv-help-center {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  background: var(--help-bg-primary);
+  color: var(--help-text-primary);
+  min-height: 100vh;
 }
 
 .sv-help-center__header {
@@ -57,10 +86,17 @@
 }
 
 .sv-help-center__category {
-  background: white;
+  background: var(--help-card-bg);
   border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px var(--help-shadow);
+  border: 1px solid var(--help-border);
   overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.sv-help-center__category:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--help-shadow);
 }
 
 .sv-help-center__category-header {
@@ -68,7 +104,12 @@
   align-items: center;
   padding: 1.5rem;
   cursor: pointer;
+  background: var(--help-bg-secondary);
   transition: background-color 0.3s ease;
+}
+
+.sv-help-center__category-header:hover {
+  background: var(--help-border);
 }
 
 .sv-help-center__category-icon {
@@ -82,6 +123,7 @@
   flex: 1;
   margin: 0;
   font-size: 1.2rem;
+  color: var(--help-text-primary);
 }
 
 .sv-help-center__arrow {
@@ -104,19 +146,19 @@
 
 .sv-help-center__faq-item {
   padding: 1.5rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid var(--help-border);
   animation: sv-help-center-fade-in 0.5s ease forwards;
 }
 
 .sv-help-center__question {
   margin: 0 0 0.5rem;
   font-size: 1.1rem;
-  color: var(--text-primary);
+  color: var(--help-text-primary);
 }
 
 .sv-help-center__answer {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--help-text-secondary);
   line-height: 1.6;
 }
 
@@ -128,6 +170,7 @@
 .sv-help-center__contact-title {
   margin-bottom: 1rem;
   font-size: 1.8rem;
+  color: var(--help-text-primary);
 }
 
 .sv-help-center__contact-grid {
@@ -139,14 +182,16 @@
 
 .sv-help-center__contact-card {
   padding: 2rem;
-  background: white;
+  background: var(--help-card-bg);
   border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px var(--help-shadow);
+  border: 1px solid var(--help-border);
   transition: transform 0.3s ease;
 }
 
 .sv-help-center__contact-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--help-shadow);
 }
 
 .sv-help-center__contact-icon {
@@ -158,12 +203,12 @@
 
 .sv-help-center__contact-method {
   margin: 0 0 0.5rem;
-  color: var(--text-primary);
+  color: var(--help-text-primary);
 }
 
 .sv-help-center__contact-detail {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--help-text-secondary);
 }
 
 @media (max-width: 768px) {

@@ -47,8 +47,10 @@ const App = () => {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/payment/:type/:id" element={<PaymentPage />} />
-                <Route path="/manager" element={<ManagerPage />} />                <Route path="/seminar" element={<SeminarPage />} />
+                <Route path="/manager" element={<ManagerPage />} />                
+                <Route path="/seminar" element={<SeminarPage />} />
                 
                 {/* Add these missing footer routes */}
                 <Route path="/help-center" element={<HelpCenter />} />

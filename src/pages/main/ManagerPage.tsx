@@ -4,6 +4,7 @@ import {
   Users, BookOpen, MessageSquare, Briefcase, Star,
   Calendar, DollarSign, TrendingUp, Award
 } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 import Pagination from '../../components/Pagination';
 import '../../styles/ManagerPage.css';
 

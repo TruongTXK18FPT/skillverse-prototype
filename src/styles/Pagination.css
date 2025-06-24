@@ -1,3 +1,25 @@
+/* CSS Variables for Pagination */
+:root {
+  --pagination-bg-primary: #f3f4f6;
+  --pagination-bg-hover: #e5e7eb;
+  --pagination-text-primary: #4b5563;
+  --pagination-text-secondary: #6b7280;
+  --pagination-active-bg: #3b82f6;
+  --pagination-disabled-bg: #f9fafb;
+  --pagination-disabled-text: #d1d5db;
+}
+
+/* Dark Theme Variables */
+[data-theme='dark'] {
+  --pagination-bg-primary: #374151;
+  --pagination-bg-hover: #4b5563;
+  --pagination-text-primary: #f3f4f6;
+  --pagination-text-secondary: #d1d5db;
+  --pagination-active-bg: #6366f1;
+  --pagination-disabled-bg: #1f2937;
+  --pagination-disabled-text: #6b7280;
+}
+
 .pagination-container {
   display: flex;
   align-items: center;
@@ -21,6 +43,8 @@
   min-width: 2.5rem;
   height: 2.5rem;
   user-select: none;
+  background-color: var(--pagination-bg-primary);
+  color: var(--pagination-text-primary);
 }
 
 .pagination-button:focus {
@@ -29,24 +53,24 @@
 }
 
 .pagination-button.active {
-  background-color: #3b82f6;
+  background-color: var(--pagination-active-bg);
   color: white;
   font-weight: 600;
   transform: scale(1.05);
 }
 
 .pagination-button:not(.active):not(.disabled) {
-  background-color: #f3f4f6;
-  color: #4b5563;
+  background-color: var(--pagination-bg-primary);
+  color: var(--pagination-text-primary);
 }
 
 .pagination-button:not(.active):not(.disabled):hover {
-  background-color: #e5e7eb;
+  background-color: var(--pagination-bg-hover);
   transform: translateY(-1px);
 }
 
 .pagination-button.nav-button {
-  background-color: #3b82f6;
+  background-color: var(--pagination-active-bg);
   color: white;
   padding: 0.5rem 1rem;
   font-weight: 500;
@@ -58,24 +82,24 @@
 }
 
 .pagination-button.disabled {
-  background-color: #e5e7eb;
-  color: #9ca3af;
+  background-color: var(--pagination-disabled-bg);
+  color: var(--pagination-disabled-text);
   cursor: not-allowed;
   opacity: 0.7;
 }
 
 .pagination-ellipsis {
-  color: #6b7280;
+  color: var(--pagination-text-secondary);
   padding: 0.5rem;
   font-weight: 600;
 }
 
 .pagination-info {
-  color: #6b7280;
+  color: var(--pagination-text-secondary);
   font-size: 0.875rem;
   margin-left: 1rem;
   padding: 0.5rem;
-  background-color: #f3f4f6;
+  background-color: var(--pagination-bg-primary);
   border-radius: 6px;
   font-weight: 500;
 }
@@ -103,4 +127,4 @@
     text-align: center;
     margin: 0.5rem 0 0 0;
   }
-} 
+}

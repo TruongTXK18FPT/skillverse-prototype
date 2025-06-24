@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Search, MapPin, Clock, DollarSign, Briefcase, Star, Filter, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useTheme } from '../../context/ThemeContext';
 import '../../styles/JobsPage.css';
 
 const JobsPage = () => {
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const { translations } = useLanguage();
@@ -142,9 +144,8 @@ const JobsPage = () => {
       default: return 'Bình thường';
     }
   };
-
   return (
-    <div className="sv-jobs-container">
+    <div className={`sv-jobs-container ${theme}`} data-theme={theme}>
       <div className="sv-jobs-content">
         {/* Header */}
         <div className="sv-jobs-header">

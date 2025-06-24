@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Mail, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useTheme } from '../../context/ThemeContext';
 import '../../styles/AuthPages.css';
 
 const ForgotPasswordPage = () => {
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
@@ -109,11 +111,10 @@ const ForgotPasswordPage = () => {
           </div>
         </div>
       </div>
-    );
-  }
+    );  }
 
   return (
-    <div className="auth-container">
+    <div className="auth-container" data-theme={theme}>
       <div className="auth-content">
         <div className="auth-header">
           <button onClick={() => navigate(-1)} className="back-button">
@@ -187,4 +188,4 @@ const ForgotPasswordPage = () => {
   );
 };
 
-export default ForgotPasswordPage; 
+export default ForgotPasswordPage;

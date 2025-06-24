@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Download, Edit, Share2, Eye, Star, Award, Briefcase, GraduationCap, User, Mail, Phone, MapPin, Globe, Github, Linkedin, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
+import { useTheme } from '../../context/ThemeContext';
 import '../../styles/PortfolioPage.css';
 
 const PortfolioPage = () => {
+  const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('overview');
   const [animationKey, setAnimationKey] = useState(0);
   const { translations } = useLanguage();
@@ -154,42 +156,41 @@ const PortfolioPage = () => {
       color: 'text-blue-600 bg-blue-100'
     }
   ];
-
   const stats = [
     {
-      title: translations.portfolio.stats.completedProjects,
+      title: 'Completed Projects',
       value: '15',
       icon: 'projects'
     },
     {
-      title: translations.portfolio.stats.skillsLearned,
+      title: 'Skills Learned',
       value: '25',
       icon: 'skills'
     },
     {
-      title: translations.portfolio.stats.certificatesEarned,
+      title: 'Certificates Earned',
       value: '8',
       icon: 'certificates'
     },
     {
-      title: translations.portfolio.stats.coursesCompleted,
+      title: 'Courses Completed',
       value: '12',
       icon: 'courses'
     }
   ];
 
   const tabs = [
-    { id: 'overview', label: translations.portfolio.sections.overview },
-    { id: 'projects', label: translations.portfolio.sections.projects },
-    { id: 'skills', label: translations.portfolio.sections.skills },
-    { id: 'education', label: translations.portfolio.sections.education },
-    { id: 'experience', label: translations.portfolio.sections.experience },
-    { id: 'certificates', label: translations.portfolio.sections.certificates }
+    { id: 'overview', label: 'Overview' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'education', label: 'Education' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'certificates', label: 'Certificates' }
   ];
-
   return (
     <motion.div 
-      className="sv-portfolio-container"
+      className={`sv-portfolio-container ${theme}`}
+      data-theme={theme}
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -214,14 +215,13 @@ const PortfolioPage = () => {
               <h2 className="sv-portfolio-actions__title">Your Profile</h2>
               <p className="sv-portfolio-actions__description">Automatically updated from your learning and work activities</p>
             </div>
-            <div className="sv-portfolio-actions__buttons">
-              <motion.button 
+            <div className="sv-portfolio-actions__buttons">              <motion.button 
                 className="sv-portfolio-btn sv-portfolio-btn--outline"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <Eye />
-                <span>{translations.portfolio.actions.editProfile}</span>
+                <span>View Profile</span>
                 <ChevronRight size={16} />
               </motion.button>
               <motion.button 
@@ -230,7 +230,7 @@ const PortfolioPage = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Edit />
-                <span>{translations.portfolio.actions.editProfile}</span>
+                <span>Edit Profile</span>
                 <ChevronRight size={16} />
               </motion.button>
               <motion.button 
@@ -239,7 +239,7 @@ const PortfolioPage = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Share2 />
-                <span>{translations.portfolio.actions.shareProfile}</span>
+                <span>Share Profile</span>
                 <ChevronRight size={16} />
               </motion.button>
               <motion.button 
@@ -248,7 +248,7 @@ const PortfolioPage = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Download />
-                <span>{translations.portfolio.actions.downloadCV}</span>
+                <span>Download CV</span>
                 <ChevronRight size={16} />
               </motion.button>
             </div>

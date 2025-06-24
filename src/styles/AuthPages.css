@@ -1,8 +1,34 @@
+/* CSS Variables for Auth Pages */
+:root {
+  --auth-bg-primary: #ffffff;
+  --auth-bg-secondary: #f9fafb;
+  --auth-text-primary: #1f2937;
+  --auth-text-secondary: #4b5563;
+  --auth-border: #e5e7eb;
+  --auth-shadow: rgba(0, 0, 0, 0.1);
+  --auth-card-bg: #ffffff;
+  --auth-input-bg: #ffffff;
+  --auth-bg-hover: #f3f4f6;
+}
+
+/* Dark Theme Variables */
+[data-theme='dark'] {
+  --auth-bg-primary: #111827;
+  --auth-bg-secondary: #1f2937;
+  --auth-text-primary: #f9fafb;
+  --auth-text-secondary: #d1d5db;
+  --auth-border: #374151;
+  --auth-shadow: rgba(0, 0, 0, 0.3);
+  --auth-card-bg: #1f2937;
+  --auth-input-bg: #1f2937;
+  --auth-bg-hover: #374151;
+}
+
 .auth-container {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background: var(--bg-primary);
+  background: var(--auth-bg-primary);
 }
 
 .auth-content {
@@ -28,7 +54,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem;
-  color: var(--text-secondary);
+  color: var(--auth-text-secondary);
   border: none;
   background: transparent;
   cursor: pointer;
@@ -36,7 +62,7 @@
 }
 
 .back-button:hover {
-  color: var(--text-primary);
+  color: var(--auth-text-primary);
   transform: translateX(-4px);
 }
 
@@ -45,12 +71,13 @@
   font-weight: 700;
   margin-bottom: 1rem;
   background: linear-gradient(135deg, #3b82f6, #9333ea);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .auth-header p {
-  color: var(--text-secondary);
+  color: var(--auth-text-secondary);
   line-height: 1.6;
 }
 
@@ -68,7 +95,7 @@
 
 .form-group label {
   font-weight: 500;
-  color: var(--text-primary);
+  color: var(--auth-text-primary);
 }
 
 .input-group {
@@ -79,8 +106,10 @@
 
 .auth-input-icon {
   position: absolute;
-  left: -1.5rem;
-  color: var(--text-secondary);
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--auth-text-secondary);
   width: 1.25rem;
   height: 1.25rem;
   display: flex;
@@ -88,16 +117,17 @@
   justify-content: center;
   pointer-events: none;
   transition: color 0.2s ease;
+  z-index: 1;
 }
 
 .input-group input {
   width: 100%;
   padding: 0.875rem 1rem;
   padding-left: 3rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--auth-border);
   border-radius: 8px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
+  background: var(--auth-input-bg);
+  color: var(--auth-text-primary);
   font-size: 1rem;
   transition: all 0.2s ease;
 }
@@ -121,19 +151,23 @@
 .password-toggle {
   position: absolute;
   right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
   background: transparent;
   border: none;
-  color: var(--text-secondary);
+  color: var(--auth-text-secondary);
   cursor: pointer;
   padding: 0.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .password-toggle:hover {
-  color: var(--text-primary);
+  color: var(--auth-text-primary);
 }
 
 .submit-button {
@@ -161,7 +195,7 @@
 .auth-footer {
   margin-top: 2rem;
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--auth-text-secondary);
 }
 
 .auth-link {
@@ -328,7 +362,7 @@
 /* Select Input Styling */
 .input-group select {
   width: 100%;
-  padding: 0.75rem 2.75rem;
+  padding: 0.75rem 1rem 0.75rem 20rem;
   border: 1px solid var(--border-color);
   border-radius: 0.5rem;
   background-color: var(--bg-card);
@@ -342,6 +376,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
+
 
 .input-group select:focus {
   border-color: var(--primary-color);
@@ -364,9 +399,17 @@
 
 .input-group .input-icon {
   position: absolute;
-  left: 1rem;
-  color: var(--text-secondary);
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--auth-text-secondary);
   pointer-events: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
 }
 
 .input-group input,

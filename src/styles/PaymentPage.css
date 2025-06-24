@@ -1,6 +1,42 @@
+/* CSS Variables for Payment Page */
+:root {
+  --payment-bg-primary: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  --payment-bg-secondary: #ffffff;
+  --payment-text-primary: #1f2937;
+  --payment-text-secondary: #4b5563;
+  --payment-border: #e5e7eb;
+  --payment-shadow: rgba(0, 0, 0, 0.1);
+  --payment-card-bg: #ffffff;
+  --payment-button-bg: #f3f4f6;
+  --payment-button-hover: #e5e7eb;
+  --payment-security-bg: #f0fdf4;
+  --payment-security-border: #bbf7d0;
+  --payment-security-icon: #16a34a;
+  --payment-security-title: #166534;
+  --payment-security-text: #15803d;
+}
+
+/* Dark Theme Variables */
+[data-theme='dark'] {
+  --payment-bg-primary: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+  --payment-bg-secondary: #1f2937;
+  --payment-text-primary: #f9fafb;
+  --payment-text-secondary: #d1d5db;
+  --payment-border: #374151;
+  --payment-shadow: rgba(0, 0, 0, 0.3);
+  --payment-card-bg: #1f2937;
+  --payment-button-bg: #374151;
+  --payment-button-hover: #4b5563;
+  --payment-security-bg: #064e3b;
+  --payment-security-border: #047857;
+  --payment-security-icon: #10b981;
+  --payment-security-title: #d1fae5;
+  --payment-security-text: #a7f3d0;
+}
+
 .payment-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  background: var(--payment-bg-primary);
   padding: 2rem;
 }
 
@@ -20,7 +56,7 @@
   padding: 0.5rem 1rem;
   background: transparent;
   border: none;
-  color: #4b5563;
+  color: var(--payment-text-secondary);
   cursor: pointer;
   border-radius: 8px;
   transition: all 0.2s ease;
@@ -28,14 +64,14 @@
 }
 
 .back-button:hover {
-  background: #f3f4f6;
-  color: #1f2937;
+  background: var(--payment-button-bg);
+  color: var(--payment-text-primary);
 }
 
 .payment-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--payment-text-primary);
   margin: 0;
 }
 
@@ -46,18 +82,19 @@
 }
 
 .order-summary {
-  background: white;
+  background: var(--payment-card-bg);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px var(--payment-shadow);
+  border: 1px solid var(--payment-border);
   height: fit-content;
 }
 
 .section-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 1.5rem;
+  color: var(--payment-text-primary);
+  margin-bottom: 1rem;
 }
 
 .order-item {
@@ -65,19 +102,19 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 1rem 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--payment-border);
   margin-bottom: 1rem;
 }
 
 .item-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--payment-text-primary);
   margin-bottom: 0.5rem;
 }
 
 .item-instructor {
-  color: #6b7280;
+  color: var(--payment-text-secondary);
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
 }
@@ -91,7 +128,7 @@
 .item-price {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--payment-text-primary);
 }
 
 .order-total {
@@ -105,22 +142,23 @@
   justify-content: space-between;
   align-items: center;
   font-size: 0.875rem;
-  color: #4b5563;
+  color: var(--payment-text-secondary);
 }
 
 .final-total {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--payment-text-primary);
   padding-top: 0.75rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--payment-border);
 }
 
 .payment-methods {
-  background: white;
+  background: var(--payment-card-bg);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px var(--payment-shadow);
+  border: 1px solid var(--payment-border);
 }
 
 .methods-grid {
@@ -135,20 +173,21 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--payment-border);
   border-radius: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  background: var(--payment-card-bg);
 }
 
 .payment-method:hover {
   border-color: #3b82f6;
-  background: #f8fafc;
+  background: var(--payment-button-bg);
 }
 
 .payment-method.selected {
   border-color: #3b82f6;
-  background: #eff6ff;
+  background: var(--payment-button-bg);
 }
 
 .method-logo {
@@ -157,7 +196,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f9fafb;
+  background: var(--payment-button-bg);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -175,12 +214,12 @@
 .method-name {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--payment-text-primary);
   margin-bottom: 0.25rem;
 }
 
 .method-description {
-  color: #6b7280;
+  color: var(--payment-text-secondary);
   font-size: 0.875rem;
 }
 
@@ -195,14 +234,14 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
+  background: var(--payment-security-bg);
+  border: 1px solid var(--payment-security-border);
   border-radius: 0.75rem;
   margin-bottom: 1.5rem;
 }
 
 .security-icon {
-  color: #16a34a;
+  color: var(--payment-security-icon);
   width: 1.5rem;
   height: 1.5rem;
 }
@@ -210,13 +249,13 @@
 .security-text h4 {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #166534;
+  color: var(--payment-security-title);
   margin-bottom: 0.25rem;
 }
 
 .security-text p {
   font-size: 0.75rem;
-  color: #15803d;
+  color: var(--payment-security-text);
 }
 
 .payment-button {

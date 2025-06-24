@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, CreditCard, Shield } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 import Toast from '../../components/Toast';
 import { usePaymentToast } from '../../utils/useToast';
 import '../../styles/PaymentPage.css';

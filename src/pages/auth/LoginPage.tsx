@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 import Logo from '../../assets/Logo.jpg';
 import '../../styles/LoginPage.css';
 
 const LoginPage = () => {
+  const { theme } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,7 +18,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="login-container" data-theme={theme}>
       <div className="login-content">
         {/* Logo */}
         <div className="login-logo">
@@ -113,4 +115,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage; 
+export default LoginPage;

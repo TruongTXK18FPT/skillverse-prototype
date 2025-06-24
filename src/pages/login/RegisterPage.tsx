@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, User, Lock, ArrowLeft, Phone, MapPin, Calendar, Users } from 'lucide-react';
+import { Eye, EyeOff, Mail, User, Lock, ArrowLeft, Phone, MapPin, Users } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 import '../../styles/AuthPages.css';
 import { Province, District } from '../../types/Location';
 
 const RegisterPage = () => {
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
@@ -120,9 +122,8 @@ const RegisterPage = () => {
       }));
     }
   };
-
   return (
-    <div className="auth-container">
+    <div className="auth-container" data-theme={theme}>
       <div className="auth-content">
         <div className="auth-header">
           <button onClick={() => navigate(-1)} className="back-button">
@@ -134,12 +135,10 @@ const RegisterPage = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-grid">
-            {/* Full Name */}
+          <div className="form-grid">            {/* Full Name */}
             <div className="form-group">
               <label htmlFor="fullName">Họ và Tên</label>
               <div className="input-group">
-                <User className="input-icon" size={20} />
                 <input
                   type="text"
                   id="fullName"
@@ -157,7 +156,6 @@ const RegisterPage = () => {
             <div className="form-group">
               <label htmlFor="gender">Giới Tính</label>
               <div className="input-group">
-                <Users className="auth-input-icon" size={20} />
                 <select
                   id="gender"
                   name="gender"
@@ -173,12 +171,10 @@ const RegisterPage = () => {
               </div>
               {errors.gender && <span className="error-message">{errors.gender}</span>}
             </div>
-
             {/* Phone */}
             <div className="form-group">
               <label htmlFor="phone">Số Điện Thoại</label>
               <div className="input-group">
-                <Phone className="auht-input-icon" size={20} />
                 <input
                   type="tel"
                   id="phone"
@@ -196,7 +192,6 @@ const RegisterPage = () => {
             <div className="form-group">
               <label htmlFor="email">Địa Chỉ Email</label>
               <div className="input-group">
-                <Mail className="auth-input-icon" size={20} />
                 <input
                   type="email"
                   id="email"
@@ -217,7 +212,6 @@ const RegisterPage = () => {
                 <div className="form-group">
                   <label htmlFor="provinceCode">Tỉnh/Thành Phố</label>
                   <div className="input-group">
-                    <MapPin className="auth-input-icon" size={20} />
                     <select
                       id="provinceCode"
                       name="provinceCode"
@@ -240,7 +234,6 @@ const RegisterPage = () => {
                 <div className="form-group">
                   <label htmlFor="districtCode">Quận/Huyện</label>
                   <div className="input-group">
-                    <MapPin className="auth-input-icon" size={20} />
                     <select
                       id="districtCode"
                       name="districtCode"
@@ -265,7 +258,6 @@ const RegisterPage = () => {
               <div className="form-group">
                 <label htmlFor="address">Địa Chỉ Chi Tiết</label>
                 <div className="input-group">
-                  <MapPin className="auth-input-icon" size={20} />
                   <input
                     type="text"
                     id="address"
@@ -284,7 +276,6 @@ const RegisterPage = () => {
             <div className="form-group">
               <label htmlFor="password">Mật Khẩu</label>
               <div className="input-group">
-                <Lock className="auth-input-icon" size={20} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
@@ -308,14 +299,13 @@ const RegisterPage = () => {
             <div className="form-group">
               <label htmlFor="confirmPassword">Xác Nhận Mật Khẩu</label>
               <div className="input-group">
-                <Lock className="auth-input-icon" size={20} />
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   id="confirmPassword"
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  placeholder="Xác nhận mật khẩu của bạn"
+                  placeholder="Xác nhận mật khẩu"
                   className={errors.confirmPassword ? 'error' : ''}
                 />
                 <button

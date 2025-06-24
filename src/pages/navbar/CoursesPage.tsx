@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Search, Filter, Clock, Users, Star, BookOpen, Trophy, Play } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 import '../../styles/CoursesPage.css';
 import Pagination from '../../components/Pagination';
 
@@ -19,6 +20,7 @@ type Course = {
   certificate?: boolean;
 };
 const CoursesPage = () => {
+  const { theme } = useTheme();
   const [courses, setCourses] = useState<Course[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -66,9 +68,8 @@ const categories = [
   { id: 'language', name: 'Ngoại Ngữ', count: categoriesMap['language'] || 0 },
   { id: 'soft-skills', name: 'Kỹ Năng Mềm', count: categoriesMap['soft-skills'] || 0 }
 ];
-
   return (
-    <div className="courses-container">
+    <div className={`courses-container ${theme}`} data-theme={theme}>
       <div className="courses-content">
         <div className="courses-header">
           <h1 className="courses-title">Khóa Học Ngắn Hạn</h1>

@@ -5,6 +5,7 @@ import {
   Palette, BarChart3, Users, Shield
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useTheme } from '../../context/ThemeContext';
 import '../../styles/ChatbotPage.css';
 
 // Add React JSX types
@@ -89,6 +90,7 @@ interface PromptCategory {
 }
 
 const ChatbotPage = () => {
+  const { theme } = useTheme();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -755,9 +757,8 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
   const isCourseRecommendation = (rec: Recommendation): rec is CourseRecommendation => rec.type === 'course';
   const isJobRecommendation = (rec: Recommendation): rec is JobRecommendation => rec.type === 'job';
   const isSkillRecommendation = (rec: Recommendation): rec is SkillRecommendation => rec.type === 'skill';
-
   return (
-    <div className="sv-chatbot-container">
+    <div className={`sv-chatbot-container ${theme}`} data-theme={theme}>
       <div className="sv-chatbot-content">
         {/* Header */}
         <div className="sv-chatbot-header">
@@ -945,17 +946,12 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
           <div className="sv-recommendations__header">
             <div className="sv-recommendations__title-section">
               <h2 className="sv-recommendations__title">
-                <Star className="h-6 w-6 text-yellow-500" />
                 Đề Xuất Cá Nhân Hóa
               </h2>
               <p className="sv-recommendations__description">
                 Dựa trên hồ sơ và sở thích của bạn
               </p>
             </div>
-            <button className="sv-recommendations__view-all">
-              <span>Xem tất cả</span>
-              <ArrowRight className="h-4 w-4" />
-            </button>
           </div>
 
           <div className="sv-recommendations__grid">

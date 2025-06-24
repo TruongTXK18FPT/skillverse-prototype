@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, ChevronDown, MessageCircle, BookOpen, Shield, CreditCard, Users, Mail, Phone, MapPin } from 'react-feather';
+import { useTheme } from '../../context/ThemeContext';
 import '../../styles/HelpCenter.css';
 
 interface FAQItem {
@@ -87,8 +88,6 @@ const HelpCenter = () => {
       }))
     : faqCategories;
 
-// ...existing code...
-
 return (
   <div className="sv-help-center">
     <div className="sv-help-center__header">
@@ -163,8 +162,6 @@ return (
     </div>
   </div>
 );
-
-// ...existing code...
 };
 
 export default HelpCenter;

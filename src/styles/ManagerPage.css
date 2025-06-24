@@ -1,6 +1,28 @@
+/* CSS Variables for Manager Page */
+:root {
+  --manager-bg-primary: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  --manager-bg-secondary: #ffffff;
+  --manager-text-primary: #1f2937;
+  --manager-text-secondary: #6b7280;
+  --manager-border: #e5e7eb;
+  --manager-shadow: rgba(0, 0, 0, 0.1);
+  --manager-card-bg: #ffffff;
+}
+
+/* Dark Theme Variables */
+[data-theme='dark'] {
+  --manager-bg-primary: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+  --manager-bg-secondary: #1f2937;
+  --manager-text-primary: #f9fafb;
+  --manager-text-secondary: #d1d5db;
+  --manager-border: #374151;
+  --manager-shadow: rgba(0, 0, 0, 0.3);
+  --manager-card-bg: #1f2937;
+}
+
 .manager-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  background: var(--manager-bg-primary);
   padding: 2rem;
 }
 
@@ -16,16 +38,17 @@
 .manager-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--manager-text-primary);
   margin-bottom: 0.5rem;
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .manager-description {
   font-size: 1.125rem;
-  color: #6b7280;
+  color: var(--manager-text-secondary);
 }
 
 .stats-grid {
@@ -36,10 +59,11 @@
 }
 
 .stat-card {
-  background: white;
+  background: var(--manager-card-bg);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px var(--manager-shadow);
+  border: 1px solid var(--manager-border);
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -48,6 +72,7 @@
 
 .stat-card:hover {
   transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--manager-shadow);
 }
 
 .stat-icon {
@@ -83,12 +108,12 @@
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--manager-text-primary);
   margin-bottom: 0.25rem;
 }
 
 .stat-title {
-  color: #6b7280;
+  color: var(--manager-text-secondary);
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
 }
@@ -103,10 +128,11 @@
   display: flex;
   gap: 0.5rem;
   margin-bottom: 2rem;
-  background: white;
+  background: var(--manager-card-bg);
   padding: 0.5rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px var(--manager-shadow);
+  border: 1px solid var(--manager-border);
 }
 
 .tab-button {
@@ -116,7 +142,7 @@
   padding: 0.75rem 1.5rem;
   border: none;
   background: transparent;
-  color: #6b7280;
+  color: var(--manager-text-secondary);
   border-radius: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -124,8 +150,8 @@
 }
 
 .tab-button:hover {
-  background: #f3f4f6;
-  color: #374151;
+  background: var(--manager-border);
+  color: var(--manager-text-primary);
 }
 
 .tab-button.active {
@@ -166,9 +192,11 @@
 .search-input {
   width: 100%;
   padding: 0.75rem 1rem 0.75rem 3rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--manager-border);
   border-radius: 0.75rem;
   font-size: 0.875rem;
+  background: var(--manager-card-bg);
+  color: var(--manager-text-primary);
   transition: all 0.2s ease;
 }
 
@@ -183,17 +211,17 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  border: 1px solid #d1d5db;
-  background: white;
-  color: #374151;
+  border: 1px solid var(--manager-border);
+  background: var(--manager-card-bg);
+  color: var(--manager-text-primary);
   border-radius: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .filter-button:hover {
-  background: #f9fafb;
-  border-color: #9ca3af;
+  background: var(--manager-border);
+  border-color: var(--manager-text-secondary);
 }
 
 .add-button {
@@ -216,10 +244,11 @@
 }
 
 .data-table {
-  background: white;
+  background: var(--manager-card-bg);
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px var(--manager-shadow);
+  border: 1px solid var(--manager-border);
   margin-bottom: 2rem;
 }
 
@@ -229,27 +258,27 @@
 }
 
 .table th {
-  background: #f8fafc;
+  background: var(--manager-border);
   padding: 1rem;
   text-align: left;
   font-weight: 600;
-  color: #374151;
-  border-bottom: 1px solid #e5e7eb;
+  color: var(--manager-text-primary);
+  border-bottom: 1px solid var(--manager-border);
 }
 
 .table td {
   padding: 1rem;
-  border-bottom: 1px solid #f3f4f6;
-  color: #4b5563;
+  border-bottom: 1px solid var(--manager-border);
+  color: var(--manager-text-secondary);
 }
 
 .table tr:hover {
-  background: #f9fafb;
+  background: var(--manager-border);
 }
 
 .title-cell {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--manager-text-primary);
 }
 
 .purchased-cell {
