@@ -16,6 +16,7 @@ import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/login/RegisterPage';
 import ForgotPasswordPage from './pages/login/ForgotPasswordPage';
 import PaymentPage from './pages/payment/PaymentPage';
+import PremiumPage from './pages/payment/PremiumPage';
 import ManagerPage from './pages/main/ManagerPage';
 import BlogForm from './pages/community/BlogForm';
 import NotFoundPage from './pages/notfound/NotFoundPage';
@@ -48,6 +49,7 @@ const App = () => {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/payment" element={<PaymentPage />} />
+                <Route path="/premium" element={<PremiumPage />} />
                 <Route path="/payment/:type/:id" element={<PaymentPage />} />
                 <Route path="/manager" element={<ManagerPage />} />                
                 <Route path="/seminar" element={<SeminarPage />} />

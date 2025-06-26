@@ -17,7 +17,8 @@ export const en = {
     error: 'Error',
     loading: 'Loading...',
     required: 'Required',
-    optional: 'Optional'
+    optional: 'Optional',
+    searchDescription: 'Start typing to search for courses, mentors, and more'
   },
   navigation: {
     home: 'Home',
@@ -46,6 +47,7 @@ export const en = {
     login: 'Sign In',
     logout: 'Sign Out',
     register: 'Register',
+    premium: 'Premium',
     forgotPassword: 'Forgot Password',
     checkEmail: 'Check Your Email',
     resetInstructionsSent: 'We have sent password reset instructions to your email.',

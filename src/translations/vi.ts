@@ -42,6 +42,7 @@ export const vi = {
     login: 'Đăng nhập',
     logout: 'Đăng xuất',
     register: 'Đăng ký',
+    premium: 'Nâng cấp',
     forgotPassword: 'Quên mật khẩu',
     checkEmail: 'Kiểm Tra Email',
     resetInstructionsSent: 'Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến email của bạn.',

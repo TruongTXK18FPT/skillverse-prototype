@@ -17,7 +17,8 @@ import {
   Briefcase,
   User,
   Bot,
-  Calendar
+  Calendar,
+  Crown
 } from 'lucide-react';
 import Logo from '../assets/Logo.jpg';
 import '../styles/Header.css';
@@ -25,16 +26,11 @@ import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
 
-interface NavLinkClassProps {
-  isActive: boolean;
-}
-
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
@@ -43,8 +39,6 @@ const Header = () => {
 
   const mainNavLinks = [
     { path: '/', label: translations.navigation.home, icon: Home },
-    { path: '/dashboard', label: translations.navigation.dashboard, icon: BarChart3 },
-    { path: '/community', label: translations.navigation.community, icon: MessageCircle },
   ];
 
   const allCategories = [
@@ -100,6 +94,11 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const handlePremium = () => {
+    navigate('/premium');
+    setIsMobileMenuOpen(false);
+  };
+
   const handleMobileNavClick = (path: string) => {
     navigate(path);
     setIsMobileMenuOpen(false);
@@ -142,6 +141,17 @@ const Header = () => {
                 Danh Mục
                 <ChevronDown className="w-4 h-4 ml-1" />
               </span>
+            </button>
+
+            {/* Premium Button - Next to Category */}
+            <button 
+              onClick={handlePremium} 
+              className="premium-btn"
+              aria-label="Premium - Nâng cấp"
+              title="Premium - Nâng cấp"
+            >
+              <Crown className="premium-icon" />
+              <span className="premium-text">Nâng cấp</span>
             </button>
 
             {/* Category Dropdown */}
@@ -295,6 +305,15 @@ const Header = () => {
                 <div className="mobile-language-switcher">
                   <LanguageSwitcher />
                 </div>
+
+                <button 
+                  onClick={handlePremium} 
+                  className="mobile-premium-btn"
+                  aria-label="Premium"
+                  title="Premium"
+                >
+                  <Crown className="mobile-premium-icon" />
+                </button>
 
                 <button onClick={handleLogin} className="mobile-login-btn">
                   <User className="mobile-login-btn__icon" />
