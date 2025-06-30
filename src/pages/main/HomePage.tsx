@@ -5,6 +5,7 @@ import {
   TrendingUp, Users, Star, Sun, Moon, Sparkles, Brain, Target,
   Code, Zap, Globe, ChevronRight
 } from 'lucide-react';
+import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/HomePage.css'; // Import your CSS styles
 
 const FlyingSparkles = () => (
@@ -242,6 +243,9 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* Meowl Guide */}
+      <MeowlGuide />
     </div>
   );
 };
