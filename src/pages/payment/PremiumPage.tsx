@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Crown, Check, Star, Bot, GraduationCap, Users, 
-  Calendar, Briefcase, Coins, Zap, ArrowRight,
-  X, CreditCard, Shield
+  Calendar, Briefcase, Coins, Zap, ArrowRight
 } from 'lucide-react';
 import '../../styles/PremiumPage.css';
 
 const PremiumPage = () => {
-  const [selectedPlan, setSelectedPlan] = useState('plus');
+  const navigate = useNavigate();
   const [billingCycle, setBillingCycle] = useState('monthly');
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  
+  // Mock user data - in real app, this would come from auth context
+  const [userEmail] = useState('student@university.edu.vn'); // Mock student email
+  const isStudentEligible = userEmail && (userEmail.includes('.edu') || userEmail.includes('@university') || userEmail.includes('@student'));
 
   const premiumFeatures = [
     {
@@ -50,8 +53,8 @@ const PremiumPage = () => {
       id: 'basic',
       name: 'Premium Basic',
       description: 'Bắt đầu với AI & khóa học',
-      monthlyPrice: 199000,
-      yearlyPrice: 1990000,
+      monthlyPrice: 79000,
+      yearlyPrice: 799000,
       features: [
         'AI Career Coach cơ bản',
         'Truy cập 50+ khóa học Premium',
@@ -66,8 +69,8 @@ const PremiumPage = () => {
       id: 'plus',
       name: 'Premium Plus',
       description: 'Trải nghiệm đầy đủ SkillVerse',
-      monthlyPrice: 399000,
-      yearlyPrice: 3990000,
+      monthlyPrice: 299000,
+      yearlyPrice: 2990000,
       features: [
         'Tất cả tính năng Basic',
         'AI Career Coach Pro không giới hạn',
@@ -81,24 +84,25 @@ const PremiumPage = () => {
       popular: true,
       color: 'plus'
     },
-    {
-      id: 'lifetime',
-      name: 'Lifetime Premium',
-      description: 'Một lần thanh toán, trọn đời sử dụng',
-      monthlyPrice: 0,
-      yearlyPrice: 0,
-      lifetimePrice: 9990000,
+    ...(isStudentEligible ? [{
+      id: 'student',
+      name: 'Student Pack',
+      description: 'Dành riêng cho sinh viên với email .edu',
+      monthlyPrice: 20000,
+      yearlyPrice: 200000,
       features: [
-        'Tất cả tính năng Premium Plus',
-        'Truy cập trọn đời',
-        'Ưu tiên hỗ trợ cao nhất',
-        'Tài khoản VIP',
-        'Tặng kèm 1000 coins',
-        'Huy hiệu Lifetime Member'
+        'AI Career Coach cơ bản',
+        'Truy cập 30+ khóa học Premium',
+        'Mentor 1:1 (2 lần/tháng)',
+        'Seminar/webinar cơ bản',
+        'Coin Wallet sinh viên (x2 điểm)',
+        'Huy hiệu Student Member',
+        'Hỗ trợ career guidance'
       ],
       popular: false,
-      color: 'lifetime'
-    }
+      color: 'student',
+      studentOnly: true
+    }] : [])
   ];
 
   const formatPrice = (price: number) => {
@@ -109,8 +113,26 @@ const PremiumPage = () => {
   };
 
   const handleUpgrade = (planId: string) => {
-    setSelectedPlan(planId);
-    setShowPaymentModal(true);
+    const selectedPlanData = pricingPlans.find(plan => plan.id === planId);
+    if (!selectedPlanData) return;
+
+    const price = billingCycle === 'monthly' ? selectedPlanData.monthlyPrice : selectedPlanData.yearlyPrice;
+    const originalPrice = billingCycle === 'monthly' ? selectedPlanData.monthlyPrice : selectedPlanData.yearlyPrice;
+    
+    // Navigate to payment page with plan data
+    navigate('/payment', {
+      state: {
+        type: 'premium',
+        title: selectedPlanData.name,
+        description: selectedPlanData.description,
+        price: price,
+        originalPrice: originalPrice,
+        billingCycle: billingCycle,
+        planId: planId,
+        features: selectedPlanData.features,
+        isStudent: planId === 'student'
+      }
+    });
   };
 
   const getDiscountPercent = (monthly: number, yearly: number) => {
@@ -221,6 +243,19 @@ const PremiumPage = () => {
             </button>
           </div>
 
+          {/* Student Eligibility Notice */}
+          {isStudentEligible && (
+            <div className="student-notice">
+              <div className="student-notice-content">
+                <span className="student-notice-icon">🎓</span>
+                <div className="student-notice-text">
+                  <h4>Bạn có quyền sử dụng Student Pack!</h4>
+                  <p>Với email sinh viên ({userEmail}), bạn được giảm giá đặc biệt chỉ 20,000đ/tháng</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="pricing-grid">
             {pricingPlans.map((plan) => (
               <div 
@@ -240,26 +275,24 @@ const PremiumPage = () => {
                 </div>
 
                 <div className="pricing-card__price">
-                  {plan.id === 'lifetime' ? (
-                    <div className="price-display">
-                      <span className="price-amount">{formatPrice(plan.lifetimePrice!)}</span>
-                      <span className="price-period">Một lần</span>
-                    </div>
-                  ) : (
-                    <div className="price-display">
-                      <span className="price-amount">
-                        {formatPrice(billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice)}
-                      </span>
-                      <span className="price-period">
-                        /{billingCycle === 'monthly' ? 'tháng' : 'năm'}
-                      </span>
-                      {billingCycle === 'yearly' && (
-                        <div className="price-discount">
-                          Tiết kiệm {getDiscountPercent(plan.monthlyPrice, plan.yearlyPrice)}%
-                        </div>
-                      )}
-                    </div>
-                  )}
+                  <div className="price-display">
+                    <span className="price-amount">
+                      {formatPrice(billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice)}
+                    </span>
+                    <span className="price-period">
+                      /{billingCycle === 'monthly' ? 'tháng' : 'năm'}
+                    </span>
+                    {billingCycle === 'yearly' && (
+                      <div className="price-discount">
+                        Tiết kiệm {getDiscountPercent(plan.monthlyPrice, plan.yearlyPrice)}%
+                      </div>
+                    )}
+                    {plan.id === 'student' && (
+                      <div className="student-badge">
+                        🎓 Dành cho sinh viên
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <ul className="pricing-card__features">
@@ -275,7 +308,7 @@ const PremiumPage = () => {
                   className={`pricing-card__button ${plan.popular ? 'button--primary' : 'button--outline'}`}
                   onClick={() => handleUpgrade(plan.id)}
                 >
-                  {plan.id === 'lifetime' ? 'Mua ngay' : 'Nâng cấp'}
+                  {plan.id === 'student' ? 'Đăng ký Student Pack' : 'Nâng cấp'}
                   <ArrowRight size={16} />
                 </button>
               </div>
@@ -368,78 +401,12 @@ const PremiumPage = () => {
               <p>Hoàn toàn có thể! Bạn chỉ cần thanh toán phần chênh lệch và sẽ được nâng cấp ngay lập tức.</p>
             </div>
             <div className="faq-item">
-              <h3>Gói Lifetime có cập nhật tự động không?</h3>
-              <p>Có, gói Lifetime sẽ tự động cập nhật tất cả tính năng mới mà chúng tôi phát triển trong tương lai.</p>
+              <h3>Student Pack có những điều kiện gì?</h3>
+              <p>Student Pack chỉ dành cho sinh viên có email .edu hoặc email trường đại học. Bạn cần xác thực email sinh viên để được áp dụng giá ưu đãi.</p>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Payment Modal */}
-      {showPaymentModal && (
-        <div className="payment-modal-overlay">
-          <div className="payment-modal">
-            <div className="payment-modal__header">
-              <h3>Xác nhận nâng cấp Premium</h3>
-              <button 
-                className="payment-modal__close"
-                onClick={() => setShowPaymentModal(false)}
-              >
-                <X size={20} />
-              </button>
-            </div>
-            
-            <div className="payment-modal__content">
-              <div className="selected-plan">
-                <div className="plan-info">
-                  <h4>{pricingPlans.find(p => p.id === selectedPlan)?.name}</h4>
-                  <p className="plan-price">
-                    {(() => {
-                      const plan = pricingPlans.find(p => p.id === selectedPlan);
-                      if (selectedPlan === 'lifetime') {
-                        return formatPrice(plan?.lifetimePrice!);
-                      }
-                      const price = billingCycle === 'monthly' ? plan?.monthlyPrice! : plan?.yearlyPrice!;
-                      return formatPrice(price);
-                    })()}
-                    {selectedPlan !== 'lifetime' && (
-                      <span className="plan-period">/{billingCycle === 'monthly' ? 'tháng' : 'năm'}</span>
-                    )}
-                  </p>
-                </div>
-              </div>
-
-              <div className="payment-methods">
-                <h4>Phương thức thanh toán</h4>
-                <div className="payment-options">
-                  <button className="payment-option">
-                    <CreditCard size={20} />
-                    <span>Thẻ tín dụng/ghi nợ</span>
-                  </button>
-                  <button className="payment-option">
-                    <div className="payment-icon">💳</div>
-                    <span>MoMo</span>
-                  </button>
-                  <button className="payment-option">
-                    <div className="payment-icon">🏦</div>
-                    <span>Chuyển khoản</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="payment-security">
-                <Shield size={16} />
-                <span>Thanh toán được bảo mật với mã hóa SSL 256-bit</span>
-              </div>
-
-              <button className="confirm-payment-btn">
-                Xác nhận thanh toán
-                <ArrowRight size={16} />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

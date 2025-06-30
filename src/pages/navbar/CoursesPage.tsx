@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Search, Filter, Clock, Users, Star, BookOpen, Trophy, Play } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Search, Clock, Users, Star, BookOpen, Trophy, Play, ChevronDown, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import '../../styles/CoursesPage.css';
 import Pagination from '../../components/Pagination';
@@ -19,16 +19,26 @@ type Course = {
   modules?: number;
   certificate?: boolean;
 };
+
+type SortOption = 'newest' | 'oldest' | 'price-low' | 'price-high' | 'rating' | 'popular';
+type PriceFilter = 'all' | 'free' | 'paid';
+
 const CoursesPage = () => {
   const { theme } = useTheme();
   const [courses, setCourses] = useState<Course[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [sortBy, setSortBy] = useState<SortOption>('newest');
+  const [priceFilter, setPriceFilter] = useState<PriceFilter>('all');
+  const [levelFilter, setLevelFilter] = useState('all');
+  const [showFilters, setShowFilters] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const itemsPerPage = 12;
 
 
 useEffect(() => {
+  setLoading(true);
   fetch('https://685174ec8612b47a2c0a2925.mockapi.io/Course')
     .then(res => res.json())
     .then(data => {
@@ -36,55 +46,201 @@ useEffect(() => {
       const normalized = (str: string) => str.trim().toLowerCase();
       const updatedCourses = data.map((course: Course) => ({
         ...course,
-        category: normalized(course.category)
+        category: normalized(course.category),
+        rating: course.rating ?? Math.random() * 2 + 3, // Random rating if not provided
+        students: course.students ?? Math.floor(Math.random() * 5000) + 100
       }));
+      
+      // Debug: Log price values to console
+      console.log('Course prices:', updatedCourses.map((c: Course) => ({ id: c.id, title: c.title, price: c.price })));
+      
       setCourses(updatedCourses);
+      setLoading(false);
     })
-    .catch(err => console.error('Error fetching courses:', err));
+    .catch(err => {
+      console.error('Error fetching courses:', err);
+      setLoading(false);
+    });
 }, []);
+
+  // Parse price for sorting
+  const parsePrice = (priceStr: string): number => {
+    if (!priceStr || 
+        priceStr.toLowerCase().includes('miễn phí') || 
+        priceStr.toLowerCase().includes('0 vnd') ||
+        priceStr.trim() === '0') return 0;
+    const numStr = priceStr.replace(/[^\d]/g, '');
+    return parseInt(numStr) || 0;
+  };
+
+  // Check if course is free
+  const isFreePrice = (priceStr?: string): boolean => {
+    if (!priceStr) return true;
+    const lowerPrice = priceStr.toLowerCase().trim();
+    
+    // Check for various free price formats
+    const freeFormats = [
+      'miễn phí',
+      '0 vnd',
+      '0vnd', 
+      '0 vnđ',
+      '0vnđ',
+      'free',
+      'gratis'
+    ];
+    
+    // Check if price string contains any free format
+    const containsFreeFormat = freeFormats.some(format => lowerPrice.includes(format));
+    
+    // Check if price is exactly "0"
+    const isZero = lowerPrice === '0';
+    
+    // Check if parsed price is 0
+    const parsedPrice = parsePrice(priceStr);
+    
+    console.log(`Checking price "${priceStr}": containsFreeFormat=${containsFreeFormat}, isZero=${isZero}, parsedPrice=${parsedPrice}`);
+    
+    return containsFreeFormat || isZero || parsedPrice === 0;
+  };
+
+  // Sort courses
+  const sortCourses = (coursesToSort: Course[]): Course[] => {
+    return [...coursesToSort].sort((a, b) => {
+      switch (sortBy) {
+        case 'price-low':
+          return parsePrice(a.price ?? '') - parsePrice(b.price ?? '');
+        case 'price-high':
+          return parsePrice(b.price ?? '') - parsePrice(a.price ?? '');
+        case 'rating':
+          return (b.rating ?? 0) - (a.rating ?? 0);
+        case 'popular': {
+          const aStudents = typeof a.students === 'number' ? a.students : parseInt(a.students ?? '0');
+          const bStudents = typeof b.students === 'number' ? b.students : parseInt(b.students ?? '0');
+          return bStudents - aStudents;
+        }
+        case 'oldest': {
+          const aId = parseInt(String(a.id)) || 0;
+          const bId = parseInt(String(b.id)) || 0;
+          return aId - bId;
+        }
+        case 'newest':
+        default: {
+          const aId = parseInt(String(a.id)) || 0;
+          const bId = parseInt(String(b.id)) || 0;
+          return bId - aId;
+        }
+      }
+    });
+  };
 
   const filteredCourses = courses.filter(course => {
     const matchSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        course.instructor.toLowerCase().includes(searchTerm.toLowerCase());
+                        course.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        course.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    
     const matchCategory = selectedCategory === 'all' || course.category === selectedCategory;
-    return matchSearch && matchCategory;
+    
+    const matchPrice = priceFilter === 'all' || 
+                      (priceFilter === 'free' && isFreePrice(course.price)) ||
+                      (priceFilter === 'paid' && !isFreePrice(course.price));
+    
+    const matchLevel = levelFilter === 'all' || course.level?.toLowerCase() === levelFilter;
+    
+    return matchSearch && matchCategory && matchPrice && matchLevel;
   });
 
+  const sortedCourses = sortCourses(filteredCourses);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedCourses = filteredCourses.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedCourses = sortedCourses.slice(startIndex, startIndex + itemsPerPage);
 
   // Extract dynamic category counts
   const categoriesMap: Record<string, number> = courses.reduce((acc, course) => {
-    acc[course.category] = (acc[course.category] || 0) + 1;
+    acc[course.category] = (acc[course.category] ?? 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 
 const categories = [
-  { id: 'all', name: 'Tất Cả', count: courses.length },
-  { id: 'tech', name: 'Công Nghệ', count: categoriesMap['tech'] || 0 },
-  { id: 'design', name: 'Thiết Kế', count: categoriesMap['design'] || 0 },
-  { id: 'business', name: 'Kinh Doanh', count: categoriesMap['business'] || 0 },
-  { id: 'marketing', name: 'Marketing', count: categoriesMap['marketing'] || 0 },
-  { id: 'language', name: 'Ngoại Ngữ', count: categoriesMap['language'] || 0 },
-  { id: 'soft-skills', name: 'Kỹ Năng Mềm', count: categoriesMap['soft-skills'] || 0 }
+  { id: 'all', name: 'Tất Cả', count: courses.length, icon: '📚' },
+  { id: 'tech', name: 'Công Nghệ', count: categoriesMap['tech'] ?? 0, icon: '💻' },
+  { id: 'design', name: 'Thiết Kế', count: categoriesMap['design'] ?? 0, icon: '🎨' },
+  { id: 'business', name: 'Kinh Doanh', count: categoriesMap['business'] ?? 0, icon: '💼' },
+  { id: 'marketing', name: 'Marketing', count: categoriesMap['marketing'] ?? 0, icon: '📊' },
+  { id: 'language', name: 'Ngoại Ngữ', count: categoriesMap['language'] ?? 0, icon: '🌍' },
+  { id: 'soft-skills', name: 'Kỹ Năng Mềm', count: categoriesMap['soft-skills'] ?? 0, icon: '🧠' }
 ];
+
+  const sortOptions = [
+    { value: 'newest', label: 'Mới nhất' },
+    { value: 'oldest', label: 'Cũ nhất' },
+    { value: 'price-low', label: 'Giá thấp đến cao' },
+    { value: 'price-high', label: 'Giá cao đến thấp' },
+    { value: 'rating', label: 'Đánh giá cao nhất' },
+    { value: 'popular', label: 'Phổ biến nhất' }
+  ];
+
+  const priceOptions = [
+    { value: 'all', label: 'Tất cả giá' },
+    { value: 'free', label: 'Miễn phí' },
+    { value: 'paid', label: 'Có phí' }
+  ];
+
+  const levelOptions = [
+    { value: 'all', label: 'Tất cả cấp độ' },
+    { value: 'basic', label: 'Cơ bản' },
+    { value: 'intermediate', label: 'Trung cấp' },
+    { value: 'advanced', label: 'Nâng cao' }
+  ];
+
+  if (loading) {
+    return (
+      <div className={`courses-container ${theme}`} data-theme={theme}>
+        <div className="courses-content">
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Đang tải khóa học...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={`courses-container ${theme}`} data-theme={theme}>
       <div className="courses-content">
-        <div className="courses-header">
-          <h1 className="courses-title">Khóa Học Ngắn Hạn</h1>
-          <p className="courses-description">
-            Học các kỹ năng thực tế với các khóa học ngắn gọn, tập trung mà bạn có thể áp dụng ngay lập tức
-          </p>
+        {/* Hero Section */}
+        <div className="courses-hero">
+          <div className="hero-content">
+            <h1 className="courses-title">
+              <span className="hero-icon">🎓</span>
+              {' '}Khóa Học Chuyên Nghiệp
+            </h1>
+            <p className="courses-description">
+              Nâng cao kỹ năng với các khóa học chất lượng từ các chuyên gia hàng đầu
+            </p>
+            <div className="hero-stats">
+              <div className="stat-item">
+                <span className="stat-number">{courses.length}</span>
+                <span className="stat-label">Khóa học</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">{categories.length - 1}</span>
+                <span className="stat-label">Lĩnh vực</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">1000+</span>
+                <span className="stat-label">Học viên</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="search-container">
-          <div className="search-form">
-            <div className="search-input-container">
+        {/* Enhanced Search and Filter Section */}
+        <div className="search-filter-container">
+          <div className="search-section">
+            <div className="search-input-wrapper">
               <Search className="search-icon" />
               <input
                 type="text"
-                placeholder="Tìm kiếm khóa học..."
+                placeholder="Tìm kiếm khóa học, giảng viên..."
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
@@ -93,17 +249,105 @@ const categories = [
                 className="search-input"
               />
             </div>
-            <button className="filter-button">
-              <Filter />
-              <span>Bộ lọc</span>
-            </button>
           </div>
+
+          <div className="filter-section">
+            <button
+              className={`filter-toggle-btn ${showFilters ? 'active' : ''}`}
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <SlidersHorizontal className="filter-icon" />
+              Bộ lọc
+              <ChevronDown className={`chevron ${showFilters ? 'rotated' : ''}`} />
+            </button>
+
+            <div className="sort-section">
+              <ArrowUpDown className="sort-icon" />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="sort-select"
+              >
+                {sortOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Advanced Filters */}
+          {showFilters && (
+            <div className="advanced-filters">
+              <div className="filter-group">
+                <div className="filter-label">Giá</div>
+                <div className="filter-options">
+                  {priceOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      className={`filter-option-btn ${priceFilter === option.value ? 'active' : ''}`}
+                      onClick={() => setPriceFilter(option.value as PriceFilter)}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="filter-group">
+                <div className="filter-label">Cấp độ</div>
+                <div className="filter-options">
+                  {levelOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      className={`filter-option-btn ${levelFilter === option.value ? 'active' : ''}`}
+                      onClick={() => setLevelFilter(option.value)}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Results Summary */}
+        <div className="results-summary">
+          <div className="results-count">
+            Tìm thấy <strong>{sortedCourses.length}</strong> khóa học
+            {searchTerm && (
+              <span className="search-term">
+                {' '}cho "<em>{searchTerm}</em>"
+              </span>
+            )}
+          </div>
+          
+          {(searchTerm || selectedCategory !== 'all' || priceFilter !== 'all' || levelFilter !== 'all') && (
+            <button
+              className="clear-filters-btn"
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedCategory('all');
+                setPriceFilter('all');
+                setLevelFilter('all');
+                setCurrentPage(1);
+              }}
+            >
+              Xóa bộ lọc
+            </button>
+          )}
         </div>
 
         <div className="main-content">
+          {/* Enhanced Sidebar */}
           <div className="sidebar">
             <div className="category-container">
-              <h3 className="category-title">Danh Mục</h3>
+              <h3 className="category-title">
+                <span className="category-icon">📂</span>
+                {' '}Danh Mục Khóa Học
+              </h3>
               <div className="category-list">
                 {categories.map((category) => (
                   <button
@@ -114,89 +358,161 @@ const categories = [
                     }}
                     className={`category-button ${selectedCategory === category.id ? 'active' : ''}`}
                   >
-                    <span>{category.name}</span>
+                    <div className="category-info">
+                      <span className="category-emoji">{category.icon}</span>
+                      <span className="category-name">{category.name}</span>
+                    </div>
                     <span className="category-count">({category.count})</span>
                   </button>
                 ))}
               </div>
             </div>
-          </div>
 
-          <div className="courses-grid">
-            {paginatedCourses.map((course) => (
-              <div key={course.id} className="course-card">
-                <div className="course-image-container">
-                  <img src={course.image} alt={course.title} className="course-image" />
-                  <div className="course-preview-overlay">
-                    <button className="preview-button">
-                      <Play />
-                      <span>Xem trước</span>
-                    </button>
-                  </div>
-                  <div className={`course-level-badge level-${course.level?.toLowerCase()}`}>{course.level}</div>
-                  {course.price?.toLowerCase() === 'miễn phí' && <div className="course-free-badge">Miễn phí</div>}
+            {/* Price Range Info */}
+            <div className="price-info-container">
+              <h4 className="price-info-title">Thông tin giá</h4>
+              <div className="price-stats">
+                <div className="price-stat">
+                  <span className="price-label">Miễn phí:</span>
+                  <span className="price-value">
+                    {courses.filter(c => isFreePrice(c.price)).length} khóa
+                  </span>
                 </div>
-
-                <div className="course-content">
-                  <div className="course-stats">
-                    <div className="course-rating">
-                      <Star className="rating-star" />
-                      <span>{course.rating}</span>
-                    </div>
-                    <span className="stats-divider">•</span>
-                    <div className="course-students">
-                      <Users />
-                      <span>{typeof course.students === 'number' ? course.students.toLocaleString() : parseInt(course.students || '0').toLocaleString()}</span>
-                    </div>
-                  </div>
-
-                  <h3 className="course-title">{course.title}</h3>
-                  <p className="course-description">{course.description}</p>
-                  <p className="course-instructor">Giảng viên: {course.instructor}</p>
-
-                  <div className="course-meta">
-                    <div className="meta-item">
-                      <Clock className="meta-icon" />
-                      <span>{course.duration}</span>
-                    </div>
-                    <div className="meta-item">
-                      <BookOpen className="meta-icon" />
-                      <span>{course.modules} bài học</span>
-                    </div>
-                    {course.certificate && (
-                      <div className="meta-item">
-                        <Trophy className="meta-icon" />
-                        <span>Chứng chỉ</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="course-footer">
-                    <span className="course-price">{course.price}</span>
-                    <button className="enroll-button">
-                      Đăng Ký Ngay
-                    </button>
-                  </div>
+                <div className="price-stat">
+                  <span className="price-label">Có phí:</span>
+                  <span className="price-value">
+                    {courses.filter(c => !isFreePrice(c.price)).length} khóa
+                  </span>
                 </div>
               </div>
-            ))}
+            </div>
+          </div>
 
-            {paginatedCourses.length === 0 && (
+          {/* Enhanced Courses Grid */}
+          <div className="courses-section">
+            {paginatedCourses.length === 0 ? (
               <div className="empty-state">
-                <BookOpen className="empty-icon" />
+                <div className="empty-icon">📚</div>
                 <h3 className="empty-title">Không tìm thấy khóa học</h3>
-                <p className="empty-description">Vui lòng điều chỉnh tìm kiếm hoặc bộ lọc của bạn</p>
+                <p className="empty-description">
+                  Hãy thử điều chỉnh bộ lọc hoặc từ khóa tìm kiếm của bạn
+                </p>
+                <button
+                  className="reset-search-btn"
+                  onClick={() => {
+                    setSearchTerm('');
+                    setSelectedCategory('all');
+                    setPriceFilter('all');
+                    setLevelFilter('all');
+                  }}
+                >
+                  Đặt lại tìm kiếm
+                </button>
+              </div>
+            ) : (
+              <div className="courses-grid">
+                {paginatedCourses.map((course, index) => (
+                  <div 
+                    key={course.id} 
+                    className="course-card"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className="course-image-container">
+                      <img src={course.image} alt={course.title} className="course-image" />
+                      <div className="course-preview-overlay">
+                        <button className="preview-button">
+                          <Play className="play-icon" />
+                          <span>Xem trước</span>
+                        </button>
+                      </div>
+                      
+                      {/* Enhanced Badges */}
+                      <div className="course-badges">
+                        {course.level && (
+                          <div className={`course-level-badge level-${course.level?.toLowerCase()}`}>
+                            {course.level}
+                          </div>
+                        )}
+                        {(!course.price || isFreePrice(course.price)) && (
+                          <div className="course-free-badge">Miễn phí</div>
+                        )}
+                        {course.certificate && (
+                          <div className="course-certificate-badge">
+                            <Trophy className="certificate-icon" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="course-content">
+                      <div className="course-stats">
+                        <div className="course-rating">
+                          <Star className="rating-star filled" />
+                          <span>{course.rating?.toFixed(1)}</span>
+                        </div>
+                        <span className="stats-divider">•</span>
+                        <div className="course-students">
+                          <Users className="students-icon" />
+                          <span>
+                            {typeof course.students === 'number' ? 
+                              course.students.toLocaleString() : 
+                              parseInt(course.students ?? '0').toLocaleString()
+                            }
+                          </span>
+                        </div>
+                      </div>
+
+                      <h3 className="course-title">{course.title}</h3>
+                      <p className="course-description">{course.description}</p>
+                      <p className="course-instructor">
+                        <span className="instructor-label">Giảng viên:</span>
+                        {' '}{course.instructor}
+                      </p>
+
+                      <div className="course-meta">
+                        <div className="meta-item">
+                          <Clock className="meta-icon" />
+                          <span>{course.duration ?? '4-6 tuần'}</span>
+                        </div>
+                        <div className="meta-item">
+                          <BookOpen className="meta-icon" />
+                          <span>{course.modules ?? 12} bài học</span>
+                        </div>
+                      </div>
+
+                      <div className="course-footer">
+                        <div className="price-section">
+                          <span className="course-price">
+                            {isFreePrice(course.price) ? 'Miễn phí' : (course.price ?? 'Miễn phí')}
+                          </span>
+                          {course.price && !isFreePrice(course.price) && (
+                            <span className="price-period">/khóa</span>
+                          )}
+                        </div>
+                        <button className="enroll-button">
+                          <span className="enroll-icon">⚡</span>
+                          {' '}Đăng Ký Ngay
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>
         </div>
 
-        <Pagination
-          totalItems={filteredCourses.length}
-          itemsPerPage={itemsPerPage}
-          currentPage={currentPage}
-          onPageChange={setCurrentPage}
-        />
+        {/* Enhanced Pagination */}
+        {sortedCourses.length > itemsPerPage && (
+          <div className="pagination-wrapper">
+            <Pagination
+              totalItems={sortedCourses.length}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

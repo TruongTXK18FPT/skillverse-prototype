@@ -408,9 +408,18 @@
   border-color: #8b5cf6;
 }
 
-.pricing-card.lifetime {
-  border-color: #f59e0b;
-  background: linear-gradient(135deg, #fef3c7, var(--bg-secondary));
+.pricing-card.student {
+  border-color: #10b981;
+  background: linear-gradient(135deg, #d1fae5, var(--bg-secondary));
+  position: relative;
+}
+
+.pricing-card.student::before {
+  content: '🎓';
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
 }
 
 .popular-badge {
@@ -458,6 +467,18 @@
 .plan-period {
   font-size: 1rem;
   color: var(--text-secondary);
+}
+
+.student-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 .original-price {
@@ -906,6 +927,40 @@
 .confirm-payment-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Student Notice Styles */
+.student-notice {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  border: 2px solid #10b981;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+}
+
+.student-notice-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.student-notice-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.student-notice-text h4 {
+  margin: 0 0 0.5rem 0;
+  color: #065f46;
+  font-weight: 700;
+}
+
+.student-notice-text p {
+  margin: 0;
+  color: #047857;
+  font-size: 0.9rem;
 }
 
 /* Mobile Responsive */

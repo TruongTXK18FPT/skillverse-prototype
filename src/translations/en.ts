@@ -29,6 +29,7 @@ export const en = {
     mentorship: 'Mentorship',
     chatbot: 'AI Advisor',
     dashboard: 'Dashboard',
+    gamification: 'Leaderboard',
     settings: 'Settings',
     profile: 'Profile',
     seminar: 'Seminars',
@@ -41,6 +42,7 @@ export const en = {
       portfolio: 'Showcase your skills and projects',
       chatbot: 'Get personalized AI career guidance',
       seminar: 'Attend seminars and webinars to enhance your knowledge',
+      gamification: 'Leaderboards, badges, and mini-games',
     }
   },
   auth: {

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, CreditCard, Shield } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
 import Toast from '../../components/Toast';
 import { usePaymentToast } from '../../utils/useToast';
 import '../../styles/PaymentPage.css';
@@ -23,7 +22,7 @@ const PaymentPage = () => {
   const { toast, showSuccess, hideToast } = usePaymentToast();
   
   // Get payment details from navigation state
-  const paymentData = location.state || {
+  const paymentData = location.state ?? {
     type: 'course',
     title: 'React.js Advanced Course',
     price: 690000,
@@ -57,12 +56,23 @@ const PaymentPage = () => {
     // Simulate payment processing (always successful for mock API)
     setTimeout(() => {
       setIsProcessing(false);
+      
+      const successMessage = paymentData.type === 'premium' 
+        ? `Chúc mừng! Bạn đã nâng cấp thành công lên "${paymentData.title}". Tài khoản Premium của bạn đã được kích hoạt.`
+        : `Cảm ơn bạn đã thanh toán cho "${paymentData.title}". Đơn hàng của bạn đã được xử lý thành công.`;
+        
+      const buttonText = paymentData.type === 'premium' 
+        ? "Trải nghiệm Premium ngay"
+        : "Về trang chủ ngay";
+        
+      const redirectPath = paymentData.type === 'premium' ? '/gamification' : '/';
+      
       showSuccess(
         "Thanh toán thành công!",
-        `Cảm ơn bạn đã thanh toán cho "${paymentData.title}". Đơn hàng của bạn đã được xử lý thành công.`,
+        successMessage,
         {
-          text: "Về trang chủ ngay",
-          onClick: () => navigate('/')
+          text: buttonText,
+          onClick: () => navigate(redirectPath)
         }
       );
     }, 2000);
@@ -99,15 +109,59 @@ const PaymentPage = () => {
             <div className="order-item">
               <div className="item-info">
                 <h3 className="item-title">{paymentData.title}</h3>
+                {paymentData.description && (
+                  <p className="item-description">{paymentData.description}</p>
+                )}
                 {paymentData.instructor && (
                   <p className="item-instructor">Giảng viên: {paymentData.instructor}</p>
                 )}
+                {paymentData.conversion && (
+                  <p className="item-conversion">{paymentData.conversion}</p>
+                )}
+                {paymentData.billingCycle && (
+                  <p className="item-billing">Chu kỳ: {paymentData.billingCycle === 'monthly' ? 'Hàng tháng' : 'Hàng năm'}</p>
+                )}
                 <p className="item-type">
-                  {paymentData.type === 'course' ? 'Khóa học' : 'Buổi hướng dẫn'}
+                  {(() => {
+                    if (paymentData.type === 'premium') return paymentData.isStudent ? 'Gói Student Pack' : 'Gói Premium';
+                    if (paymentData.type === 'course') return 'Khóa học';
+                    if (paymentData.type === 'coins') return 'Gói SkillCoin';
+                    return 'Buổi hướng dẫn';
+                  })()}
                 </p>
+                {paymentData.coins && (
+                  <div className="coin-details">
+                    <p>Số xu: {paymentData.coins.toLocaleString()}</p>
+                    {paymentData.bonus > 0 && (
+                      <p className="bonus-info">Thưởng: +{paymentData.bonus} xu</p>
+                    )}
+                  </div>
+                )}
+                {paymentData.features && (
+                  <div className="premium-features-summary">
+                    <h4>Tính năng bao gồm:</h4>
+                    <ul>
+                      {paymentData.features.slice(0, 3).map((feature: string, index: number) => (
+                        <li key={`feature-${index}-${feature.substring(0, 10)}`}>{feature}</li>
+                      ))}
+                      {paymentData.features.length > 3 && (
+                        <li key="more-features">+ {paymentData.features.length - 3} tính năng khác...</li>
+                      )}
+                    </ul>
+                  </div>
+                )}
               </div>
               <div className="item-price">
+                {paymentData.originalPrice && paymentData.discount > 0 && (
+                  <div className="original-price-payment">
+                    <span className="crossed-price">{formatPrice(paymentData.originalPrice)}</span>
+                    <span className="discount-badge">-{paymentData.discount}%</span>
+                  </div>
+                )}
                 {formatPrice(paymentData.price)}
+                {paymentData.billingCycle && (
+                  <span className="price-period">/{paymentData.billingCycle === 'monthly' ? 'tháng' : 'năm'}</span>
+                )}
               </div>
             </div>
             
@@ -133,8 +187,9 @@ const PaymentPage = () => {
             
             <div className="methods-grid">
               {paymentMethods.map((method) => (
-                <div
+                <button
                   key={method.id}
+                  type="button"
                   className={`payment-method ${selectedMethod === method.id ? 'selected' : ''}`}
                   onClick={() => setSelectedMethod(method.id)}
                 >
@@ -154,7 +209,7 @@ const PaymentPage = () => {
                       onChange={() => setSelectedMethod(method.id)}
                     />
                   </div>
-                </div>
+                </button>
               ))}
             </div>
 
