@@ -18,7 +18,9 @@ import {
   User,
   Bot,
   Calendar,
-  Crown
+  Crown,
+  Wallet,
+  Trophy
 } from 'lucide-react';
 import Logo from '../assets/Logo.jpg';
 import '../styles/Header.css';
@@ -49,6 +51,7 @@ const Header = () => {
     { path: '/jobs', label: translations.navigation.jobs, description: translations.navigation.descriptions.jobs, icon: Briefcase },
     { path: '/portfolio', label: translations.navigation.portfolio, description: translations.navigation.descriptions.portfolio, icon: User },
     { path: '/chatbot', label: translations.navigation.chatbot, description: translations.navigation.descriptions.chatbot, icon: Bot },
+    { path: '/gamification', label: translations.navigation.gamification, description: translations.navigation.descriptions.gamification, icon: Trophy },
     { path: '/seminar', label: translations.navigation.seminar, description: translations.navigation.descriptions.seminar, icon: Calendar },
   ];
 
@@ -96,6 +99,11 @@ const Header = () => {
 
   const handlePremium = () => {
     navigate('/premium');
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleWallet = () => {
+    navigate('/wallet');
     setIsMobileMenuOpen(false);
   };
 
@@ -152,6 +160,17 @@ const Header = () => {
             >
               <Crown className="premium-icon" />
               <span className="premium-text">Nâng cấp</span>
+            </button>
+
+            {/* Wallet Button - Next to Premium */}
+            <button 
+              onClick={handleWallet} 
+              className="wallet-btn"
+              aria-label="Ví SkillCoin"
+              title="Ví SkillCoin"
+            >
+              <Wallet className="wallet-icon" />
+              <span className="wallet-text">Ví</span>
             </button>
 
             {/* Category Dropdown */}
@@ -313,6 +332,15 @@ const Header = () => {
                   title="Premium"
                 >
                   <Crown className="mobile-premium-icon" />
+                </button>
+
+                <button 
+                  onClick={handleWallet} 
+                  className="mobile-wallet-btn"
+                  aria-label="Ví SkillCoin"
+                  title="Ví SkillCoin"
+                >
+                  <Wallet className="mobile-wallet-icon" />
                 </button>
 
                 <button onClick={handleLogin} className="mobile-login-btn">

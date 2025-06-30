@@ -774,6 +774,83 @@
   height: 1.25rem;
 }
 
+/* Wallet Button Styling */
+.wallet-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.wallet-btn:hover {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+.wallet-icon {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.5;
+}
+
+.wallet-text {
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+/* Mobile Wallet Button */
+.mobile-wallet-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.mobile-wallet-btn:hover {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+.mobile-wallet-icon {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.5;
+}
+
+/* Responsive adjustments for header buttons */
+@media (max-width: 768px) {
+  .wallet-btn {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-wallet-btn {
+    display: none;
+  }
+}
+
 /* Search Modal Styles */
 .search-modal {
   position: fixed;

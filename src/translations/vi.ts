@@ -104,6 +104,7 @@ export const vi = {
     portfolio: 'Hồ Sơ',
     chatbot: 'Trợ Lý AI',
     seminar: 'Hội Thảo',
+    gamification: 'Xếp Hạng',
     settings: 'Cài đặt',
     descriptions: {
       dashboard: 'Theo dõi tiến độ học tập và thành tích của bạn',
@@ -114,6 +115,7 @@ export const vi = {
       portfolio: 'Quản lý và chia sẻ thành tích của bạn',
       chatbot: 'Nhận hỗ trợ từ trợ lý AI thông minh',
       seminar: 'Tham gia các hội thảo và sự kiện',
+      gamification: 'Bảng xếp hạng, huy hiệu và mini-games',
     }
   },
   home: {
