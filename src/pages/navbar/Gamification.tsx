@@ -25,6 +25,7 @@ import QuizSprint from '../../components/game/QuizSprint';
 import CoinHunt from '../../components/game/CoinHunt';
 import HelpLeaderBoard from '../../components/game/HelpLeaderBoard';
 import '../../styles/Gamification.css';
+import { color } from 'framer-motion';
 
 interface User {
   id: string;
@@ -490,17 +491,17 @@ const Gamification: React.FC = () => {
               <div className="user-details">
                 <h4 className="user-name">{user.name}</h4>
                 <div className="user-stats">
-                  <span className="stat">
-                    <Coins className="stat-icon coins" />
-                    {user.coins.toLocaleString()}
+                  <span className="stat coin">
+                    <Coins/>
+                    <span style={{ color: '#ffff00' }}>{user.coins.toLocaleString()}</span>
                   </span>
-                  <span className="stat">
-                    <Medal className="stat-icon award" />
-                    {user.badges}
+                  <span className="stat medal">
+                    <Medal/>
+                    <span style={{ color: '#ff8800' }}>{user.badges}</span>
                   </span>
-                  <span className="stat">
-                    <Flame className="stat-icon flame" />
-                    {user.streak}
+                  <span className="stat flame">
+                    <Flame/>
+                    <span style={{ color: '#ff0088' }}>{user.streak}</span>
                   </span>
                 </div>
               </div>
@@ -808,7 +809,7 @@ const Gamification: React.FC = () => {
       <div className="achievements-summary">
         <div className="summary-card" data-type="completed">
           <div className="summary-icon">
-            <Trophy className="icon" />
+            <Trophy />
           </div>
           <div className="summary-value">{badges.filter(b => b.unlocked).length}</div>
           <div className="summary-label">Huy hiệu đã mở</div>
@@ -816,7 +817,7 @@ const Gamification: React.FC = () => {
 
         <div className="summary-card" data-type="points">
           <div className="summary-icon">
-            <Coins className="icon" />
+            <Coins />
           </div>
           <div className="summary-value">2,540</div>
           <div className="summary-label">Tổng xu kiếm được</div>
@@ -824,7 +825,7 @@ const Gamification: React.FC = () => {
 
         <div className="summary-card" data-type="total">
           <div className="summary-icon">
-            <Flame className="icon" />
+            <Flame />
           </div>
           <div className="summary-value">15</div>
           <div className="summary-label">Chuỗi học tập</div>
@@ -832,7 +833,7 @@ const Gamification: React.FC = () => {
 
         <div className="summary-card" data-type="rare">
           <div className="summary-icon">
-            <Crown className="icon" />
+            <Crown />
           </div>
           <div className="summary-value">#{currentUserRank}</div>
           <div className="summary-label">Xếp hạng hiện tại</div>
@@ -840,7 +841,7 @@ const Gamification: React.FC = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="quick-actions">
+      {/* <div className="quick-actions">
         <h3>Thao Tác Nhanh</h3>
         <div className="actions-grid">
           <button 
@@ -879,7 +880,7 @@ const Gamification: React.FC = () => {
             <ChevronRight className="chevron" />
           </button>
         </div>
-      </div>
+      </div> */}
 
       {/* Recent Achievements */}
       <div className="recent-achievements">
@@ -909,23 +910,23 @@ const Gamification: React.FC = () => {
         <div className="gamification-header">
           <div className="header-content">
             <div className="title-section">
-              <h1>🎮 Trung Tâm Gamification</h1>
+              <h1>🎮 Trung Tâm Trò Chơi</h1>
               <p>Học tập thông qua trò chơi, cạnh tranh lành mạnh và thu thập thành tựu</p>
             </div>
             
             <div className="header-stats">
               <div className="header-stat">
-                <Coins className="stat-icon coins" />
-                <span>2,540 xu</span>
+                <Coins style={{ color: '#ffff00' }} />
+                <span style={{ color: '#ffff00' }} >2,540 xu</span>
               </div>
               <div className="header-stat">
-                <Trophy className="stat-icon trophy" />
-                <span>#{currentUserRank}</span>
+                <Trophy style={{ color: '#ff8800' }} />
+                <span style={{ color: '#ff8800' }}>#{currentUserRank}</span>
               </div>
-              <div className="header-stat">
-                <Flame className="stat-icon flame" />
-                <span>15 ngày</span>
-              </div>
+                <div className="header-stat">
+                <Flame style={{ color: '#ff0088' }} />
+                <span style={{ color: '#ff0088' }}>15 ngày</span>
+                </div>
             </div>
           </div>
         </div>
@@ -945,7 +946,6 @@ const Gamification: React.FC = () => {
             >
               <tab.icon className="tab-icon" />
               <span className="tab-label">{tab.label}</span>
-              {activeTab === tab.key && <span className="tab-indicator" />}
             </button>
           ))}
         </div>

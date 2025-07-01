@@ -386,9 +386,9 @@
   align-items: flex-start;
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 2rem;
   position: relative;
-  padding: 0 2rem 0 2rem;
-  overflow: visible;
+  min-height: 500px;
 }
 
 /* Enhanced Sidebar - Positioned to the Left */
@@ -400,34 +400,30 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin-left: -2rem;
-  padding: 0 1rem 0 2rem;
   z-index: 10;
+  height: fit-content;
 }
 
 /* Courses Content Section */
 .courses-section {
   flex: 1;
   min-width: 0;
-  padding-right: 1rem;
+  width: 100%;
 }
 
-/* Category Container - Specific Styling */
-.course-sidebar .category-container {
+/* Category Container */
+.category-container {
   background: var(--courses-card-bg);
   padding: 1.5rem;
   border-radius: 16px;
-  box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.08),
-    0 4px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   border: 1px solid var(--courses-border);
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(10px);
-  width: 100%;
 }
 
-.course-sidebar .category-container::before {
+.category-container::before {
   content: '';
   position: absolute;
   top: 0;
@@ -438,7 +434,7 @@
   border-radius: 16px 16px 0 0;
 }
 
-.course-sidebar .category-title {
+.category-title {
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--courses-text-primary);
@@ -451,7 +447,7 @@
   border-bottom: 1px solid var(--courses-border);
 }
 
-.course-sidebar .category-title::before {
+.category-title::before {
   content: '📚';
   font-size: 1.2rem;
 }
@@ -460,6 +456,7 @@
   font-size: 1.4rem;
 }
 
+/* Category List and Buttons */
 .category-list {
   display: flex;
   flex-direction: column;
@@ -503,6 +500,46 @@
 
 .category-button:hover {
   background: var(--courses-button-hover);
+  transform: translateX(6px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.category-button.active {
+  background: var(--courses-active-bg);
+  color: var(--courses-active-text);
+  transform: translateX(6px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.category-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.category-emoji {
+  font-size: 1.1rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.category-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.category-count {
+  font-size: 0.75rem;
+  background: var(--courses-button-bg);
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  border: 1px solid var(--courses-border);
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.category-button:hover {
+  background: var(--courses-button-hover);
   transform: translateX(4px);
 }
 
@@ -540,10 +577,8 @@
 .price-info-container {
   background: var(--courses-card-bg);
   padding: 1.5rem;
-  border-radius: 20px;
-  box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.06),
-    0 4px 12px rgba(0, 0, 0, 0.04);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   border: 1px solid var(--courses-border);
   position: relative;
   overflow: hidden;
@@ -558,7 +593,7 @@
   right: 0;
   height: 3px;
   background: linear-gradient(90deg, #f59e0b, #f97316);
-  border-radius: 20px 20px 0 0;
+  border-radius: 16px 16px 0 0;
 }
 
 .price-info-title {
@@ -569,8 +604,51 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--courses-border);
+}
+
+.price-info-title::before {
+  content: '💰';
+  font-size: 1.2rem;
+}
+
+.price-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.price-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--courses-button-bg);
+  border-radius: 12px;
+  border: 1px solid var(--courses-border);
+  transition: all 0.3s ease;
+}
+
+.price-stat:hover {
+  background: var(--courses-button-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.price-label {
+  font-size: 0.9rem;
+  color: var(--courses-text-secondary);
+  font-weight: 500;
+}
+
+.price-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--courses-accent);
+  background: rgba(102, 126, 234, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
 }
 
 .price-info-title::before {
@@ -782,9 +860,11 @@
 /* Enhanced Courses Grid */
 .courses-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
   animation: fadeInUp 0.6s ease-out;
+  width: 100%;
+  margin-top: 1rem;
 }
 
 /* Enhanced Course Card */

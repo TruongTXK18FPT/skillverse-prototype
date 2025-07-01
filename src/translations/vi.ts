@@ -104,7 +104,7 @@ export const vi = {
     portfolio: 'Hồ Sơ',
     chatbot: 'Trợ Lý AI',
     seminar: 'Hội Thảo',
-    gamification: 'Xếp Hạng',
+    gamification: 'Trò Chơi',
     settings: 'Cài đặt',
     descriptions: {
       dashboard: 'Theo dõi tiến độ học tập và thành tích của bạn',

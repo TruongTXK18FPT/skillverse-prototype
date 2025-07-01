@@ -199,22 +199,21 @@ const Header = () => {
           {/* User Actions */}
           <div className="user-actions">
             {/* Search Button - Hidden on mobile */}
-            <button
+            {/* <button
               className="action-button search-button"
               onClick={() => setIsSearchOpen(true)}
               aria-label="Search"
             >
               <Search className="action-icon" />
-            </button>
+            </button> */}
 
             {/* Notifications */}
             <button
-              className="action-button notification-btn"
+              className="action-button search-button"
               onClick={() => setIsNotificationsOpen(true)}
               aria-label="Notifications"
             >
               <Bell className="action-icon" />
-              <span className="notification-badge">3</span>
             </button>
 
             {/* Theme Toggle */}

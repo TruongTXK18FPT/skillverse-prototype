@@ -1,6 +1,27 @@
-/* Persona 3 Reload Styled Meowl Guide */
 
 /* Mascot Icon */
+/* Import Orbitron font from Google Fonts */
+@font-face {
+    font-family: 'Minecraft';
+    src: url('/fonts/minecraft/minecraft.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Apply Minecraft font to MeowlGuide components only */
+.meowl-mascot,
+.meowl-dialog-overlay,
+.meowl-dialog,
+.dialog-content,
+.dialog-header,
+.character-name,
+.chat-bubble,
+.chat-title,
+.chat-text,
+.continue-hint {
+    font-family: 'Minecraft', monospace;
+}
+
 .meowl-mascot {
     position: fixed;
     bottom: 2rem;
@@ -160,7 +181,6 @@
 }
 
 .character-name {
-    font-family: 'Orbitron', sans-serif;
     font-size: 1.2rem;
     letter-spacing: 0.15em;
     color: #00e5ff;
@@ -192,10 +212,16 @@
     color: #00e5ff;
 }
 
+.chat-content {
+    position: relative;
+    transform: rotate(-1deg);
+    padding-bottom: 2rem;
+}
+
 .chat-bubble {
     background: transparent;
     margin: 0;
-    padding: 2rem 2.5rem;
+    padding: 0.5rem 2.5rem 2rem 2.5rem;
     margin-left: -1rem;
     position: relative;
     z-index: 2;
@@ -207,10 +233,10 @@
     color: #ffffff;
     margin-bottom: 0.5rem;
     transform: rotate(-0.8deg);
+    padding-bottom: 1rem;
 }
 
 .chat-text {
-    font-family: 'Segoe UI', sans-serif;
     font-size: 1rem;
     line-height: 1.6;
     color: #e0f7fa;
@@ -289,5 +315,221 @@
     }
     20%, 22%, 24%, 55% {
         opacity: 0.2;
+    }
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    /* Mascot adjustments for mobile */
+    .meowl-mascot {
+        bottom: 1rem;
+        right: 1rem;
+        width: 80px;
+        height: 80px;
+        transform: rotate(-10deg);
+    }
+
+    .mascot-image {
+        width: 120%;
+        height: 120%;
+    }
+
+    .quest-indicator {
+        top: -20px;
+        left: 30%;
+        width: 28px;
+        height: 28px;
+    }
+
+    .quest-indicator svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Dialog overlay adjustments */
+    .meowl-dialog-overlay {
+        padding: 0;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Main dialog mobile layout */
+    .meowl-dialog {
+        flex-direction: column;
+        align-items: center;
+        width: 95%;
+        max-width: 100%;
+        padding: 1rem;
+        gap: 1rem;
+        transform: none;
+        position: relative;
+    }
+
+    /* Avatar positioning for mobile */
+    .dialog-avatar {
+        position: relative;
+        bottom: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        order: -1;
+        align-self: center;
+    }
+
+    .avatar-image {
+        width: 100%;
+        height: 100%;
+        transform: none;
+        display: none;
+    }
+
+    /* Dialog content mobile adjustments */
+    .dialog-content {
+        max-width: 100%;
+        width: 100%;
+        transform: none;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .dialog-content::after {
+        display: none; /* Hide speech bubble tail on mobile */
+    }
+
+    /* Header adjustments */
+    .dialog-header {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .character-name {
+        font-size: 1rem;
+        letter-spacing: 0.1em;
+    }
+
+    .close-btn {
+        top: 0.75rem;
+        right: 0.75rem;
+        width: 32px;
+        height: 32px;
+    }
+
+    .close-btn-inner {
+        width: 32px;
+        height: 32px;
+    }
+
+    .close-btn-inner svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Chat bubble mobile layout */
+    .chat-bubble {
+        padding: 1.5rem 1.25rem;
+        margin-left: 0;
+        transform: none;
+    }
+
+    .chat-title {
+        font-size: 1.1rem;
+        transform: none;
+        text-align: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .chat-text {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        transform: none;
+        text-align: center;
+    }
+
+    .continue-hint {
+        bottom: 0.75rem;
+        right: 1rem;
+        font-size: 0.7rem;
+        text-align: center;
+        left: 1rem;
+        right: 1rem;
+    }
+
+    /* Adjust float animation for mobile */
+    @keyframes float {
+        0%, 100% { transform: rotate(-10deg) translateY(0px); }
+        50% { transform: rotate(-10deg) translateY(-8px); }
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screens */
+    .meowl-mascot {
+        width: 70px;
+        height: 70px;
+        bottom: 0.75rem;
+        right: 0.75rem;
+    }
+
+    .quest-indicator {
+        width: 24px;
+        height: 24px;
+        top: -15px;
+    }
+
+    .quest-indicator svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .dialog-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .chat-bubble {
+        padding: 1.25rem 1rem;
+    }
+
+    .chat-title {
+        font-size: 1rem;
+    }
+
+    .chat-text {
+        font-size: 0.85rem;
+    }
+
+    .character-name {
+        font-size: 0.9rem;
+    }
+
+    .continue-hint {
+        font-size: 0.65rem;
+    }
+}
+
+/* Landscape mobile adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+    .meowl-dialog-overlay {
+        align-items: flex-start;
+        padding-top: 2rem;
+    }
+
+    .dialog-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .chat-bubble {
+        padding: 1rem 1.25rem;
+    }
+
+    .chat-title {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .chat-text {
+        font-size: 0.85rem;
+        line-height: 1.4;
     }
 }
