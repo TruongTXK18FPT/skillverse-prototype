@@ -294,7 +294,7 @@ const Gamification: React.FC = () => {
     },
     {
       id: 'quiz-challenge',
-      title: 'Thử Thách Quiz',
+      title: 'Quiz Sprint',
       description: '5 câu hỏi trong 60 giây',
       icon: '⚡',
       type: 'quiz',
@@ -614,7 +614,7 @@ const Gamification: React.FC = () => {
         <p>Chơi game vui vẻ để kiếm xu và duy trì động lực học tập</p>
         
         {/* Premium Status Banner */}
-        <div className="premium-status-banner">
+        {/* <div className="premium-status-banner">
           <div className="current-plan">
             <span className={`plan-badge ${userPremium}`}>
               {userPremium === 'free' && '🆓 Miễn phí'}
@@ -631,7 +631,7 @@ const Gamification: React.FC = () => {
               </button>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Game Mode Toggle */}
         <div className="game-mode-toggle">
@@ -664,11 +664,11 @@ const Gamification: React.FC = () => {
                 <div className={`game-status ${game.available ? 'available' : 'unavailable'}`}>
                   {game.available ? 'Có sẵn' : 'Không có sẵn'}
                 </div>
-                {isPremiumMode && (
+                {/* {isPremiumMode && (
                   <div className={`premium-badge ${isLocked ? 'locked' : 'unlocked'}`}>
                     {isLocked ? '🔒 Cần Premium' : '💎 Premium'}
                   </div>
-                )}
+                )} */}
               </div>
 
               {/* Game Header */}
@@ -684,7 +684,7 @@ const Gamification: React.FC = () => {
               </div>
 
               {/* Premium Features */}
-              {isPremiumMode && game.premium && (
+              {/* {isPremiumMode && game.premium && (
                 <div className="premium-features">
                   <h4>✨ Tính năng Premium:</h4>
                   <ul>
@@ -693,7 +693,7 @@ const Gamification: React.FC = () => {
                     ))}
                   </ul>
                 </div>
-              )}
+              )} */}
 
               {/* Game Stats */}
               <div className="game-stats">
@@ -839,48 +839,6 @@ const Gamification: React.FC = () => {
           <div className="summary-label">Xếp hạng hiện tại</div>
         </div>
       </div>
-
-      {/* Quick Actions */}
-      {/* <div className="quick-actions">
-        <h3>Thao Tác Nhanh</h3>
-        <div className="actions-grid">
-          <button 
-            className="action-btn"
-            onClick={() => navigate('/wallet')}
-          >
-            <Wallet className="action-icon" />
-            <span>Xem Ví Xu</span>
-            <ChevronRight className="chevron" />
-          </button>
-
-          <button 
-            className="action-btn"
-            onClick={() => setActiveTab('games')}
-          >
-            <Gift className="action-icon" />
-            <span>Chơi Mini Game</span>
-            <ChevronRight className="chevron" />
-          </button>
-
-          <button 
-            className="action-btn"
-            onClick={() => setActiveTab('leaderboard')}
-          >
-            <TrendingUp className="action-icon" />
-            <span>Xem Bảng Xếp Hạng</span>
-            <ChevronRight className="chevron" />
-          </button>
-
-          <button 
-            className="action-btn"
-            onClick={() => navigate('/community')}
-          >
-            <Users className="action-icon" />
-            <span>Tham Gia Cộng Đồng</span>
-            <ChevronRight className="chevron" />
-          </button>
-        </div>
-      </div> */}
 
       {/* Recent Achievements */}
       <div className="recent-achievements">

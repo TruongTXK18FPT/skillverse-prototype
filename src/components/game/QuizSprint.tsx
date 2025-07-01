@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { X, Clock, Zap, Trophy, Target, CheckCircle, XCircle, RotateCcw } from 'lucide-react';
-import '../../styles/QuizSprint.css';
+import './QuizSprint.css';
 
 interface QuizSprintProps {
   isOpen: boolean;

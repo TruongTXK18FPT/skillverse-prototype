@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, RotateCcw, Coins, Gift } from 'lucide-react';
-import '../../styles/DailySpin.css';
+import { X, Coins, Gift } from 'lucide-react';
+import './DailySpin.css';
 
 interface DailySpinProps {
   isOpen: boolean;
@@ -113,84 +113,106 @@ const DailySpin: React.FC<DailySpinProps> = ({ isOpen, onClose, onWin }) => {
         )}
 
         <div className="spin-container">
-          <div className="wheel-wrapper">
-            {/* Wheel Pointer */}
-            <div className="wheel-pointer">▼</div>
-            
-            {/* Spinning Wheel */}
-            <div 
-              className={`wheel ${isSpinning ? 'spinning' : ''}`}
-              style={{ transform: `rotate(${rotation}deg)` }}
-            >
-              {prizes.map((prize, index) => (
-                <div
-                  key={index}
-                  className={`wheel-segment segment-${index}`}
-                  style={{
-                    transform: `rotate(${index * segmentAngle}deg)`,
-                    background: `conic-gradient(from ${index * segmentAngle}deg, 
-                      ${index % 2 === 0 ? '#3b82f6' : '#8b5cf6'} 0deg, 
-                      ${index % 2 === 0 ? '#1d4ed8' : '#7c3aed'} ${segmentAngle}deg)`
-                  }}
-                >
-                  <div className="segment-content">
-                    <Coins className="coin-icon" />
-                    <span className="prize-amount">{prize}</span>
+          {/* Arcade Machine */}
+          <div className={`arcade-machine ${isSpinning ? 'spinning' : ''} ${result ? 'celebrating' : ''}`}>
+            {/* Machine Top */}
+            <div className="machine-top">
+              <div className="machine-lights">
+                <div className="light light-1"></div>
+                <div className="light light-2"></div>
+                <div className="light light-3"></div>
+                <div className="light light-4"></div>
+              </div>
+              <div className="machine-title">LUCKY SPIN</div>
+            </div>
+
+            {/* Machine Body */}
+            <div className="machine-body">
+              {/* Display Screen */}
+              <div className="machine-screen">
+                <div className="screen-inner">
+                  {!result && !isSpinning && (
+                    <div className="screen-text">
+                      <div className="screen-title">🎰 PULL THE LEVER!</div>
+                      <div className="screen-subtitle">Win 5-100 coins!</div>
+                    </div>
+                  )}
+                  {isSpinning && (
+                    <div className="screen-text spinning-text">
+                      <div className="screen-title">🎲 SPINNING...</div>
+                      <div className="spinning-dots">
+                        <span>.</span><span>.</span><span>.</span>
+                      </div>
+                    </div>
+                  )}
+                  {result && (
+                    <div className="screen-text result-text">
+                      <div className="screen-title">🎉 WINNER!</div>
+                      <div className="prize-coin">
+                        <Coins className="coin-icon" />
+                        <span className="coin-value">{result.prize}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Machine Controls */}
+              <div className="machine-controls">
+                <div className="control-panel">
+                  <button
+                    className={`spin-lever ${isSpinning ? 'pulling' : ''} ${hasSpunToday ? 'disabled' : ''}`}
+                    onClick={handleSpin}
+                    disabled={isSpinning || hasSpunToday}
+                  >
+                    <div className="lever-handle"></div>
+                    <div className="lever-base"></div>
+                  </button>
+                  <div className="lever-label">
+                    {hasSpunToday ? 'USED' : 'PULL'}
                   </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Coin Slot Output */}
+              <div className="coin-slot">
+                <div className="slot-opening"></div>
+                {result && (
+                  <div className="coin-output">
+                    <div className="output-coin">
+                      <Coins className="output-coin-icon" />
+                      <span className="output-coin-value">{result.prize}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Machine Base */}
+            <div className="machine-base">
+              <div className="base-grill">
+                <div className="grill-line"></div>
+                <div className="grill-line"></div>
+                <div className="grill-line"></div>
+              </div>
             </div>
           </div>
 
-          {/* Spin Button */}
-          <div className="spin-controls">
-            <button
-              className={`spin-btn ${isSpinning ? 'spinning' : ''} ${hasSpunToday ? 'disabled' : ''}`}
-              onClick={handleSpin}
-              disabled={isSpinning || hasSpunToday}
-            >
-              {isSpinning ? (
-                <>
-                  <RotateCcw className="spin-icon rotating" />
-                  Đang quay...
-                </>
-              ) : hasSpunToday ? (
-                <>
-                  <Gift className="spin-icon" />
-                  Đã quay hôm nay
-                </>
-              ) : (
-                <>
-                  <RotateCcw className="spin-icon" />
-                  Quay ngay!
-                </>
-              )}
-            </button>
-
-            {hasSpunToday && (
+          {/* Action Buttons */}
+          <div className="action-buttons">
+            {result && (
+              <button className="claim-btn" onClick={onClose}>
+                <Coins className="action-icon" />
+                Nhận thưởng
+              </button>
+            )}
+            
+            {hasSpunToday && !result && (
               <button className="reset-btn" onClick={resetSpin}>
                 Reset (Dev)
               </button>
             )}
           </div>
-
-          {/* Result Display */}
-          {result && (
-            <div className="result-display">
-              <div className="result-content">
-                <div className="result-icon">🎉</div>
-                <h3>Chúc mừng!</h3>
-                <p>Bạn đã nhận được</p>
-                <div className="prize-display">
-                  <Coins className="prize-icon" />
-                  <span className="prize-value">{result.prize} xu</span>
-                </div>
-                <button className="claim-btn" onClick={onClose}>
-                  Nhận thưởng
-                </button>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Next Spin Timer */}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Coins, Target, Zap, Trophy } from 'lucide-react';
-import '../../styles/CoinHunt.css';
+import './CoinHunt.css';
 
 interface CoinHuntProps {
   isOpen: boolean;

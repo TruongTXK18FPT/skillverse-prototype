@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Trophy, Medal, Crown, Users, TrendingUp, Gift, Star, Zap } from 'lucide-react';
-import '../../styles/HelpLeaderBoard.css';
+import './HelpLeaderBoard.css';
 
 interface HelpLeaderBoardProps {
   isOpen: boolean;
