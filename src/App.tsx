@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
@@ -27,14 +26,13 @@ import TermOfService from './pages/footer/TermOfService';
 import PrivacyPolicy from './pages/footer/Privacy&Policy';
 import HelpCenter from './pages/footer/HelpCenter';
 import SeminarPage from './pages/navbar/SeminarPage';
-import AdminPage from './pages/main/AdminPage';
 import './styles/App.css';
 
 const App = () => {
   return (
     <LanguageProvider>
       <ThemeProvider>
-        <Router>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <div className="app-container">
             <Header />
             <main>
@@ -64,10 +62,11 @@ const App = () => {
                 <Route path="/terms-of-service" element={<TermOfService />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 
+                {/* Admin Page - ensure this is protected or only accessible to admins */}
+                <Route path="/manager" element={<ManagerPage />} />
+                
                 {/* Catch-all route for 404 errors - must be last */}
                 <Route path="*" element={<NotFoundPage />} />
-                {/* Admin Page - ensure this is protected or only accessible to admins */}
-                <Route path="/admin" element={<AdminPage />} />
               </Routes>
             </main>
             <Footer />
