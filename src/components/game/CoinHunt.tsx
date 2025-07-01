@@ -127,7 +127,7 @@ const CoinHunt: React.FC<CoinHuntProps> = ({ isOpen, onClose, onCoinsEarned }) =
             <h3>🪙 Săn Xu Thần Tốc</h3>
             <p>Thu thập xu nhanh nhất có thể!</p>
           </div>
-          <button className="close-btn" onClick={closeGame}>
+          <button className="rules-btn" onClick={closeGame}>
             <X />
           </button>
         </div>

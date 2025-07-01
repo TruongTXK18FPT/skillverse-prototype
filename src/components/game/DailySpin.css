@@ -51,9 +51,9 @@
     inset 0 0 30px rgba(0, 255, 136, 0.1),
     0 15px 50px rgba(0, 0, 0, 0.5);
   padding: 2rem;
-  max-width: 650px;
-  width: 90%;
-  max-height: 90vh;
+  max-width: 800px;
+  width: 95%;
+  max-height: 80vh;
   overflow-y: auto;
   position: relative;
   animation: modalSlideIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -366,7 +366,7 @@
   margin-bottom: 5px;
 }
 
-.light {
+.spin-light {
   width: 8px;
   height: 8px;
   border-radius: 50%;

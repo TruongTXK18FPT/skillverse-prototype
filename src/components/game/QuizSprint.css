@@ -23,8 +23,8 @@
     0 0 30px rgba(0, 255, 255, 0.5),
     inset 0 0 20px rgba(0, 255, 255, 0.1);
   width: 90%;
-  max-width: 600px;
-  max-height: 90vh;
+  max-width: 800px;
+  max-height: 80vh;
   overflow-y: auto;
   position: relative;
   animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);

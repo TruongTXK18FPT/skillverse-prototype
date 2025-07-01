@@ -204,7 +204,7 @@ const Header = () => {
               onClick={() => setIsSearchOpen(true)}
               aria-label="Search"
             >
-              <Search className="action-icon" />
+              <Search className="header-action-icon" />
             </button> */}
 
             {/* Notifications */}
@@ -213,7 +213,7 @@ const Header = () => {
               onClick={() => setIsNotificationsOpen(true)}
               aria-label="Notifications"
             >
-              <Bell className="action-icon" />
+              <Bell className="header-action-icon" />
             </button>
 
             {/* Theme Toggle */}
@@ -223,9 +223,9 @@ const Header = () => {
               aria-label="Toggle theme"
             >
               {theme === 'dark' ? (
-                <Sun className="action-icon sun" />
+                <Sun className="header-action-icon sun" />
               ) : (
-                <Moon className="action-icon moon" />
+                <Moon className="header-action-icon moon" />
               )}
             </button>
 
@@ -246,9 +246,9 @@ const Header = () => {
               aria-label="Toggle mobile menu"
             >
               {isMobileMenuOpen ? (
-                <X className="action-icon" />
+                <X className="header-action-icon" />
               ) : (
-                <Menu className="action-icon" />
+                <Menu className="header-action-icon" />
               )}
             </button>
           </div>
@@ -265,7 +265,7 @@ const Header = () => {
                   className="mobile-nav-close"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <X className="action-icon" />
+                  <X className="header-action-icon" />
                 </button>
               </div>
 
@@ -357,7 +357,7 @@ const Header = () => {
         <div className="search-modal">
           <div className="search-container">
             <div className="search-header">
-              <Search className="action-icon" />
+              <Search className="header-action-icon" />
               <input
                 type="text"
                 placeholder={translations.common.search}
@@ -368,7 +368,7 @@ const Header = () => {
                 className="search-close"
                 onClick={() => setIsSearchOpen(false)}
               >
-                <X className="action-icon" />
+                <X className="header-action-icon" />
               </button>
             </div>
             
@@ -434,7 +434,7 @@ const Header = () => {
                 className="notification-close"
                 onClick={() => setIsNotificationsOpen(false)}
               >
-                <X className="action-icon" />
+                <X className="header-action-icon" />
               </button>
             </div>
             <div className="notification-content">

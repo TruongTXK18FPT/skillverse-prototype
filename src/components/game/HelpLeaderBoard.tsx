@@ -126,7 +126,7 @@ const HelpLeaderBoard: React.FC<HelpLeaderBoardProps> = ({ isOpen, onClose, onCo
             <h3>🫶 Bảng Xếp Hạng Giúp Đỡ</h3>
             <p>Cùng nhau xây dựng cộng đồng học tập tích cực!</p>
           </div>
-          <button className="close-btn" onClick={onClose}>
+          <button className="rules-btn" onClick={onClose}>
             <X />
           </button>
         </div>
@@ -220,7 +220,7 @@ const HelpLeaderBoard: React.FC<HelpLeaderBoardProps> = ({ isOpen, onClose, onCo
               {/* Full Leaderboard */}
               <div className="full-leaderboard">
                 <h4>📋 Bảng Xếp Hạng Đầy Đủ</h4>
-                <div className="leaderboard-list">
+                <div className="leaderboard-head-list">
                   {leaderboardData.map((user) => (
                     <div 
                       key={user.id} 

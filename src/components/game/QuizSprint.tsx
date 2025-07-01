@@ -185,13 +185,13 @@ const QuizSprint: React.FC<QuizSprintProps> = ({ isOpen, onClose, onComplete }) 
             </div>
           </div>
           <div className="header-actions">
-            <button 
+            {/* <button 
               className="rules-btn"
               onClick={() => setShowRules(!showRules)}
             >
               Quy tắc
-            </button>
-            <button className="close-btn" onClick={onClose}>
+            </button> */}
+            <button className="rules-btn" onClick={onClose}>
               <X />
             </button>
           </div>

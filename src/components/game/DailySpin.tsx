@@ -87,13 +87,7 @@ const DailySpin: React.FC<DailySpinProps> = ({ isOpen, onClose, onWin }) => {
             </div>
           </div>
           <div className="header-actions">
-            <button 
-              className="rules-btn"
-              onClick={() => setShowRules(!showRules)}
-            >
-              Quy tắc
-            </button>
-            <button className="close-btn" onClick={onClose}>
+            <button className="rules-btn" onClick={onClose}>
               <X />
             </button>
           </div>
@@ -118,10 +112,10 @@ const DailySpin: React.FC<DailySpinProps> = ({ isOpen, onClose, onWin }) => {
             {/* Machine Top */}
             <div className="machine-top">
               <div className="machine-lights">
-                <div className="light light-1"></div>
-                <div className="light light-2"></div>
-                <div className="light light-3"></div>
-                <div className="light light-4"></div>
+                <div className="spin-light light-1"></div>
+                <div className="spin-light light-2"></div>
+                <div className="spin-light light-3"></div>
+                <div className="spin-light light-4"></div>
               </div>
               <div className="machine-title">LUCKY SPIN</div>
             </div>

@@ -23,9 +23,9 @@
     0 0 30px rgba(255, 170, 0, 0.6),
     inset 0 0 20px rgba(255, 170, 0, 0.1);
   width: 90%;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow: hidden;
+  max-width: 850px; /* Increased width */
+  max-height: 80vh; /* Increased height */
+  overflow-y: auto;
   position: relative;
   animation: coinDrop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
