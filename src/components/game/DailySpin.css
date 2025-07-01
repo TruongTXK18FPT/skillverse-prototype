@@ -1,0 +1,1032 @@
+/* ===============================
+   ARCADE MACHINE DAILY SPIN STYLES
+   =============================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap');
+
+/* Local Minecraft Font */
+@font-face {
+  font-family: 'Minecraft';
+  src: url('/fonts/minecraft/minecraft.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.daily-spin-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.95) 0%, 
+    rgba(10, 25, 47, 0.9) 50%,
+    rgba(0, 0, 0, 0.95) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(15px);
+  animation: overlayFadeIn 0.5s ease-out;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.daily-spin-modal {
+  font-family: 'Minecraft', 'Orbitron', monospace;
+  background: linear-gradient(135deg, 
+    #0a0a0a 0%, 
+    #1a1a2e 25%,
+    #16213e 50%,
+    #0f3460 75%,
+    #000000 100%);
+  border: 3px solid #00ff88;
+  border-radius: 20px;
+  box-shadow: 
+    0 0 40px rgba(0, 255, 136, 0.6),
+    inset 0 0 30px rgba(0, 255, 136, 0.1),
+    0 15px 50px rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  max-width: 650px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: modalSlideIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes modalSlideIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.7) translateY(-50px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1) translateY(0); 
+  }
+}
+
+/* Retro Scan Lines Effect */
+.daily-spin-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 136, 0.03) 2px,
+      rgba(0, 255, 136, 0.03) 4px
+    );
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 17px;
+  animation: scanLines 0.1s linear infinite;
+}
+
+@keyframes scanLines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(4px); }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.15) 0%,
+    rgba(255, 140, 0, 0.1) 50%,
+    rgba(0, 255, 136, 0.15) 100%);
+  border: 2px solid #ffd700;
+  border-radius: 15px;
+  box-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.4),
+    inset 0 0 20px rgba(255, 215, 0, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.modal-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 215, 0, 0.3) 50%,
+    transparent 100%
+  );
+  animation: headerPulse 3s infinite;
+}
+
+@keyframes headerPulse {
+  0%, 100% { left: -100%; }
+  50% { left: 100%; }
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 2;
+  position: relative;
+}
+
+.header-icon {
+  width: 3rem;
+  height: 3rem;
+  color: #ffd700;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+  animation: iconSpin 4s ease-in-out infinite;
+}
+
+@keyframes iconSpin {
+  0%, 100% { transform: rotateY(0deg); }
+  25% { transform: rotateY(180deg); }
+  50% { transform: rotateY(360deg); }
+  75% { transform: rotateY(540deg); }
+}
+
+.header-info h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #00ff88;
+  text-shadow: 
+    0 0 10px rgba(0, 255, 136, 0.8),
+    0 0 20px rgba(0, 255, 136, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.header-info p {
+  margin: 0.5rem 0 0 0;
+  color: #00ffaa;
+  font-size: 0.9rem;
+  text-shadow: 0 0 5px rgba(0, 255, 170, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 2;
+  position: relative;
+}
+
+.rules-btn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #00ff88, #00ccff);
+  color: #000;
+  border: 2px solid #00ff88;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: 'Minecraft', 'Orbitron', monospace;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 136, 0.5),
+    inset 0 0 15px rgba(0, 255, 136, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.rules-btn:hover {
+  background: linear-gradient(135deg, #00ccff, #0099cc);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 25px rgba(0, 255, 136, 0.7),
+    inset 0 0 25px rgba(0, 255, 136, 0.2);
+}
+
+.close-btn {
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+  color: white;
+  border: 2px solid #ff6b6b;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 15px rgba(255, 107, 107, 0.5),
+    inset 0 0 15px rgba(255, 107, 107, 0.1);
+}
+
+.close-btn:hover {
+  background: linear-gradient(135deg, #ee5a52, #dc3545);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 25px rgba(255, 107, 107, 0.7),
+    inset 0 0 25px rgba(255, 107, 107, 0.2);
+}
+
+/* Rules Section */
+.rules-section {
+  background: linear-gradient(135deg, 
+    rgba(0, 255, 136, 0.15) 0%,
+    rgba(0, 204, 255, 0.1) 50%,
+    rgba(0, 255, 136, 0.15) 100%);
+  border: 2px solid rgba(0, 255, 136, 0.3);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 136, 0.3),
+    inset 0 0 20px rgba(0, 255, 136, 0.1);
+}
+
+.rules-section h3 {
+  margin: 0 0 1rem 0;
+  color: #00ff88;
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-family: 'Minecraft', 'Orbitron', monospace;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 
+    0 0 10px rgba(0, 255, 136, 0.8),
+    0 0 20px rgba(0, 255, 136, 0.6);
+}
+
+.rules-section ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.rules-section li {
+  margin-bottom: 0.75rem;
+  color: #00ffaa;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  position: relative;
+  padding-left: 2rem;
+  font-family: 'Minecraft', 'Orbitron', monospace;
+  text-shadow: 0 0 5px rgba(0, 255, 170, 0.5);
+}
+
+.rules-section li::before {
+  content: "▶";
+  position: absolute;
+  left: 0;
+  color: #ffd700;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+  animation: rulesGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes rulesGlow {
+  from { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5)); }
+  to { filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1)); }
+}
+
+/* ===============================
+   ARCADE MACHINE STYLES
+   =============================== */
+
+.spin-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.arcade-machine {
+  position: relative;
+  width: 280px;
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+}
+
+.arcade-machine.spinning {
+  animation: machineShake 0.1s infinite;
+}
+
+.arcade-machine.celebrating {
+  animation: machineCelebrate 1s ease-in-out 3;
+}
+
+@keyframes machineShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px) rotate(-0.5deg); }
+  75% { transform: translateX(2px) rotate(0.5deg); }
+}
+
+@keyframes machineCelebrate {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05) rotateZ(1deg); }
+}
+
+/* Machine Top */
+.machine-top {
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border: 3px solid #444;
+  border-radius: 15px 15px 5px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 136, 0.3),
+    inset 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.machine-lights {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.light {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid #666;
+  animation: lightBlink 2s infinite;
+}
+
+.light-1 {
+  background: #ff0000;
+  box-shadow: 0 0 10px #ff0000;
+  animation-delay: 0s;
+}
+
+.light-2 {
+  background: #00ff00;
+  box-shadow: 0 0 10px #00ff00;
+  animation-delay: 0.5s;
+}
+
+.light-3 {
+  background: #0000ff;
+  box-shadow: 0 0 10px #0000ff;
+  animation-delay: 1s;
+}
+
+.light-4 {
+  background: #ffff00;
+  box-shadow: 0 0 10px #ffff00;
+  animation-delay: 1.5s;
+}
+
+@keyframes lightBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+.machine-title {
+  font-family: 'Minecraft', 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  color: #00ff88;
+  text-shadow: 
+    0 0 5px rgba(0, 255, 136, 0.8),
+    0 0 10px rgba(0, 255, 136, 0.6);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Machine Body */
+.machine-body {
+  width: 100%;
+  height: 280px;
+  background: linear-gradient(135deg, #333 0%, #222 50%, #111 100%);
+  border: 3px solid #555;
+  border-top: none;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 
+    0 0 30px rgba(0, 255, 136, 0.2),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Machine Screen */
+.machine-screen {
+  width: calc(100% - 20px);
+  height: 120px;
+  margin: 15px 10px;
+  background: linear-gradient(135deg, #000 0%, #111 100%);
+  border: 3px solid #00ff88;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 136, 0.6),
+    inset 0 0 10px rgba(0, 255, 136, 0.2);
+}
+
+.machine-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(0, 255, 136, 0.1) 1px,
+      rgba(0, 255, 136, 0.1) 2px
+    );
+  pointer-events: none;
+  animation: screenScanLines 0.1s linear infinite;
+}
+
+@keyframes screenScanLines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(2px); }
+}
+
+.screen-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  position: relative;
+}
+
+.screen-text {
+  text-align: center;
+  color: #00ff88;
+  font-family: 'Minecraft', 'Orbitron', monospace;
+}
+
+.screen-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-shadow: 
+    0 0 10px rgba(0, 255, 136, 0.8),
+    0 0 20px rgba(0, 255, 136, 0.6);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.screen-subtitle {
+  font-size: 0.7rem;
+  color: #00ffaa;
+  text-shadow: 0 0 5px rgba(0, 255, 170, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.spinning-text .screen-title {
+  animation: textPulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes textPulse {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+.spinning-dots {
+  display: flex;
+  gap: 0.2rem;
+  justify-content: center;
+}
+
+.spinning-dots span {
+  animation: dotBounce 1s infinite;
+}
+
+.spinning-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.spinning-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.result-text {
+  animation: resultGlow 1s ease-in-out infinite alternate;
+}
+
+@keyframes resultGlow {
+  from { 
+    filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.8)); 
+    transform: scale(1);
+  }
+  to { 
+    filter: drop-shadow(0 0 20px rgba(0, 255, 136, 1)); 
+    transform: scale(1.05);
+  }
+}
+
+.prize-coin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  border: 2px solid #ffd700;
+  border-radius: 10px;
+  color: #000;
+  box-shadow: 
+    0 0 15px rgba(255, 215, 0, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.coin-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  animation: coinSpin 2s linear infinite;
+}
+
+@keyframes coinSpin {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+.coin-value {
+  font-size: 1rem;
+  font-weight: 900;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Machine Controls */
+.machine-controls {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.spin-lever {
+  width: 60px;
+  height: 80px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.spin-lever:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.lever-handle {
+  width: 20px;
+  height: 40px;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+  border: 2px solid #ff6b6b;
+  border-radius: 10px 10px 0 0;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 
+    0 0 15px rgba(255, 107, 107, 0.5),
+    inset 0 0 10px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.lever-base {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #666, #444);
+  border: 3px solid #888;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 
+    0 0 10px rgba(0, 0, 0, 0.5),
+    inset 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.spin-lever:hover:not(:disabled) .lever-handle {
+  background: linear-gradient(135deg, #ee5a52, #dc3545);
+  transform: translateX(-50%) scale(1.1);
+  box-shadow: 
+    0 0 20px rgba(255, 107, 107, 0.7),
+    inset 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.spin-lever.pulling .lever-handle {
+  transform: translateX(-50%) rotate(15deg);
+  animation: leverPull 0.2s ease-in-out 15;
+}
+
+@keyframes leverPull {
+  0%, 100% { transform: translateX(-50%) rotate(15deg); }
+  50% { transform: translateX(-50%) rotate(-15deg); }
+}
+
+.lever-label {
+  font-family: 'Minecraft', 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  color: #00ff88;
+  text-shadow: 
+    0 0 5px rgba(0, 255, 136, 0.8),
+    0 0 10px rgba(0, 255, 136, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Coin Slot */
+.coin-slot {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.slot-opening {
+  width: 80px;
+  height: 8px;
+  background: linear-gradient(135deg, #000, #222);
+  border: 2px solid #444;
+  border-radius: 4px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.coin-output {
+  margin-top: 10px;
+  animation: coinDrop 0.8s ease-out;
+}
+
+@keyframes coinDrop {
+  from { 
+    opacity: 0; 
+    transform: translateY(-20px) scale(0.5); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+.output-coin {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  border: 2px solid #ffd700;
+  border-radius: 20px;
+  color: #000;
+  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-weight: 900;
+  box-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.2);
+  animation: coinGlow 1s ease-in-out infinite alternate;
+}
+
+@keyframes coinGlow {
+  from { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2); }
+  to { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.3); }
+}
+
+.output-coin-icon {
+  width: 1rem;
+  height: 1rem;
+  animation: outputCoinSpin 3s linear infinite;
+}
+
+@keyframes outputCoinSpin {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+.output-coin-value {
+  font-size: 0.9rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Machine Base */
+.machine-base {
+  width: 100%;
+  height: 80px;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border: 3px solid #444;
+  border-top: none;
+  border-radius: 0 0 15px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.5),
+    inset 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.base-grill {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.grill-line {
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(135deg, #555, #333);
+  border-radius: 1px;
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.claim-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #00ff88, #00cc66);
+  color: #000;
+  border: 3px solid #00ff88;
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: 800;
+  font-family: 'Minecraft', 'Orbitron', monospace;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 136, 0.5),
+    inset 0 0 15px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.claim-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.6s ease;
+}
+
+.claim-btn:hover::before {
+  left: 100%;
+}
+
+.claim-btn:hover {
+  background: linear-gradient(135deg, #00cc66, #00aa55);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 0 35px rgba(0, 255, 136, 0.7),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.action-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+}
+
+.reset-btn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+  color: white;
+  border: 2px solid #ff6b6b;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: 'Minecraft', 'Orbitron', monospace;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 
+    0 0 20px rgba(255, 107, 107, 0.4),
+    inset 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.reset-btn:hover {
+  background: linear-gradient(135deg, #ee5a52, #dc3545);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 30px rgba(255, 107, 107, 0.6),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Next Spin Info */
+.next-spin-info {
+  text-align: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, 
+    rgba(0, 255, 136, 0.15) 0%,
+    rgba(0, 204, 255, 0.1) 50%,
+    rgba(0, 255, 136, 0.15) 100%);
+  border: 2px solid rgba(0, 255, 136, 0.3);
+  border-radius: 15px;
+  color: #00ffaa;
+  font-size: 1rem;
+  font-family: 'Minecraft', 'Orbitron', monospace;
+  margin-top: 1.5rem;
+  text-shadow: 0 0 10px rgba(0, 255, 170, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 136, 0.3),
+    inset 0 0 20px rgba(0, 255, 136, 0.1);
+}
+
+/* Enhanced font family for all elements */
+.daily-spin-modal *,
+.daily-spin-modal *::before,
+.daily-spin-modal *::after {
+  font-family: 'Minecraft', 'Orbitron', monospace !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .daily-spin-modal {
+    margin: 1rem;
+    padding: 1.5rem;
+    max-width: 95%;
+  }
+
+  .modal-header {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .arcade-machine {
+    width: 240px;
+    height: 360px;
+  }
+
+  .machine-body {
+    height: 240px;
+  }
+
+  .machine-screen {
+    height: 100px;
+    margin: 10px 8px;
+  }
+
+  .screen-title {
+    font-size: 0.8rem;
+  }
+
+  .screen-subtitle {
+    font-size: 0.6rem;
+  }
+
+  .header-info h2 {
+    font-size: 1.5rem;
+  }
+
+  .header-info p {
+    font-size: 0.8rem;
+  }
+
+  .claim-btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .rules-section {
+    padding: 1rem;
+  }
+
+  .rules-section h3 {
+    font-size: 1rem;
+  }
+
+  .rules-section li {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .daily-spin-modal {
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+
+  .arcade-machine {
+    width: 200px;
+    height: 300px;
+  }
+
+  .machine-body {
+    height: 200px;
+  }
+
+  .machine-screen {
+    height: 80px;
+    margin: 8px 6px;
+  }
+
+  .screen-title {
+    font-size: 0.7rem;
+  }
+
+  .screen-subtitle {
+    font-size: 0.5rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .rules-btn, .close-btn {
+    font-size: 0.8rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .claim-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.8rem;
+  }
+
+  .spin-lever {
+    width: 50px;
+    height: 60px;
+  }
+
+  .lever-handle {
+    width: 16px;
+    height: 30px;
+  }
+
+  .lever-base {
+    width: 32px;
+    height: 32px;
+  }
+
+  .output-coin {
+    padding: 0.4rem 0.8rem;
+  }
+
+  .output-coin-value {
+    font-size: 0.8rem;
+  }
+}

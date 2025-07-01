@@ -59,7 +59,20 @@ const HomePage = () => {
       title: 'Phản Hồi Tức Thì',
       description: 'Nhận phản hồi thời gian thực về mã và dự án của bạn từ AI và chuyên gia',
       color: 'from-orange-500 to-red-500'
+    },
+    {
+      icon: Globe,
+      title: 'Cộng Đồng Toàn Cầu',
+      description: 'Kết nối với các chuyên gia và người học từ khắp nơi trên thế giới',
+      color: 'from-yellow-500 to-amber-500'
+    },
+    {
+      icon: Award,
+      title: 'Chứng Chỉ Được Công Nhận',
+      description: 'Nhận chứng chỉ có giá trị công nhận kỹ năng của bạn và nâng cao hồ sơ của bạn',
+      color: 'from-teal-500 to-cyan-500'
     }
+
   ];
 
   const stats = [
@@ -159,7 +172,7 @@ const HomePage = () => {
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
                 <div className="stat-icon-container">
-                  <stat.icon size={24} className="stat-icon" />
+                  <stat.icon size={24} className="home-stat-icon" />
                 </div>
                 <div className="stat-info">
                   <div className="stat-value floating">{stat.value}</div>
@@ -211,7 +224,7 @@ const HomePage = () => {
                 style={{ animationDelay: `${index * 0.3}s` }}
               >
                 <div className="step-number">{step.number}</div>
-                <step.icon size={24} className="step-icon" />
+                <step.icon size={24} className="home-stat-icon" />
                 <h3 className="step-title">{step.title}</h3>
                 <p className="feature-description">{step.description}</p>
               </div>
