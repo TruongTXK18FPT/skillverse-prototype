@@ -342,7 +342,7 @@ const categories = [
 
         <div className="main-content">
           {/* Enhanced Sidebar */}
-          <div className="sidebar">
+          <div className="course-sidebar">
             <div className="category-container">
               <h3 className="category-title">
                 <span className="category-icon">📂</span>

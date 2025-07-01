@@ -257,28 +257,28 @@ const MentorshipPage = () => {
 
                   <div className="mentor-badges">
                     {mentor.badges.map((badge, index) => (
-                      <span key={index} className="badge">
-                        <Award className="badge-icon" />
+                      <span key={index} className="mentor-badge">
+                        <Award className="mentor-badge-icon" />
                         {badge}
                       </span>
                     ))}
                   </div>
 
                   <div className="mentor-details">
-                    <div className="detail-item">
-                      <Briefcase className="detail-icon" />
+                    <div className="mentor-detail-item">
+                      <Briefcase className="mentor-detail-icon" />
                       <span>{mentor.experience}</span>
                     </div>
-                    <div className="detail-item">
-                      <DollarSign className="detail-icon" />
+                    <div className="mentor-detail-item">
+                      <DollarSign className="mentor-detail-icon" />
                       <span>${mentor.hourlyRate}/giờ</span>
                     </div>
-                    <div className="detail-item">
-                      <Globe className="detail-icon" />
+                    <div className="mentor-detail-item">
+                      <Globe className="mentor-detail-icon" />
                       <span>{mentor.languages.join(", ")}</span>
                     </div>
-                    <div className="detail-item">
-                      <Clock className="detail-icon" />
+                    <div className="mentor-detail-item">
+                      <Clock className="mentor-detail-icon" />
                       <span>{mentor.availability}</span>
                     </div>
                   </div>

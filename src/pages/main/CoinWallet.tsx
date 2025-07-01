@@ -571,21 +571,21 @@ const CoinWallet: React.FC = () => {
       {/* Quick Actions */}
       <div className="quick-actions">
         <h3>Thao Tác Nhanh</h3>
-        <div className="actions-grid">
-          <button className="action-btn earn" onClick={() => window.location.href = '/courses'}>
-            <Plus className="action-icon" />
+        <div className="quick-actions-grid">
+          <button className="quick-action-btn earn" onClick={() => window.location.href = '/courses'}>
+            <Plus className="quick-action-icon" />
             <span>Kiếm Thêm</span>
           </button>
-          <button className="action-btn spend" onClick={() => setActiveTab('store')}>
-            <ShoppingBag className="action-icon" />
+          <button className="quick-action-btn spend" onClick={() => setActiveTab('store')}>
+            <ShoppingBag className="quick-action-icon" />
             <span>Tiêu Xu</span>
           </button>
-          <button className="action-btn tip" onClick={() => setShowTipModal(true)}>
-            <Send className="action-icon" />
+          <button className="quick-action-btn tip" onClick={() => setShowTipModal(true)}>
+            <Send className="quick-action-icon" />
             <span>Tặng Xu</span>
           </button>
-          <button className="action-btn buy" onClick={() => setActiveTab('buy-coins')}>
-            <Coins className="action-icon" />
+          <button className="quick-action-btn buy" onClick={() => setActiveTab('buy-coins')}>
+            <Coins className="quick-action-icon" />
             <span>Mua Xu</span>
           </button>
         </div>
@@ -650,14 +650,14 @@ const CoinWallet: React.FC = () => {
 
       {/* Store Filters */}
       <div className="store-filters">
-        <div className="search-container">
-          <Search className="search-icon" />
+        <div className="coin-search-container">
+          <Search className="coin-search-icon" />
           <input
             type="text"
             placeholder="Tìm kiếm sản phẩm..."
             value={storeSearchTerm}
             onChange={(e) => setStoreSearchTerm(e.target.value)}
-            className="search-input"
+            className="coin-search-input"
           />
         </div>
 
