@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
@@ -13,6 +12,7 @@ import JobsPage from './pages/navbar/JobsPage';
 import ChatbotPage from './pages/navbar/ChatbotPage';
 import Gamification from './pages/navbar/Gamification';
 import PortfolioPage from './pages/navbar/PortfolioPage';
+import CVPage from './pages/navbar/CV';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/login/RegisterPage';
 import ForgotPasswordPage from './pages/login/ForgotPasswordPage';
@@ -22,6 +22,7 @@ import ManagerPage from './pages/main/ManagerPage';
 import CoinWallet from './pages/main/CoinWallet';
 import BlogForm from './pages/community/BlogForm';
 import NotFoundPage from './pages/notfound/NotFoundPage';
+import Certificate from './components/Certificate';
 
 import TermOfService from './pages/footer/TermOfService';
 import PrivacyPolicy from './pages/footer/Privacy&Policy';
@@ -48,6 +49,8 @@ const App = () => {
                 <Route path="/chatbot" element={<ChatbotPage />} />
                 <Route path="/gamification" element={<Gamification />} />
                 <Route path="/portfolio" element={<PortfolioPage />} />
+                <Route path="/cv" element={<CVPage />} />
+                <Route path="/certificate/:id" element={<Certificate />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
