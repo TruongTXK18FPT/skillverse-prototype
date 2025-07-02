@@ -231,19 +231,19 @@ const DashboardPage = () => {
         {/* Stats Grid */}
         <div className="sv-stats-grid">
           {stats.map((stat, index) => (
-            <div key={index} className="sv-stat-card hover-lift">
-              <div className="sv-stat-card__header">
-                <div className={`sv-stat-card__icon-wrapper ${stat.color}`}>
-                  <stat.icon className="sv-stat-card__icon text-white" />
+            <div key={index} className="dashboard-sv-stat-card hover-lift">
+              <div className="dashboard-sv-stat-card__header">
+                <div className={`dashboard-sv-stat-card__icon-wrapper ${stat.color}`}>
+                  <stat.icon className="dashboard-sv-stat-card__icon text-white" />
                 </div>
                 <div className="text-right">
-                  <div className="sv-stat-card__value">{stat.value}</div>
-                  <div className={`sv-stat-card__change ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                  <div className="dashboard-sv-stat-card__value">{stat.value}</div>
+                  <div className={`dashboard-sv-stat-card__change ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
                     {stat.change}
                   </div>
                 </div>
               </div>
-              <div className="sv-stat-card__title">{stat.title}</div>
+              <div className="dashboard-sv-stat-card__title">{stat.title}</div>
             </div>
           ))}
         </div>

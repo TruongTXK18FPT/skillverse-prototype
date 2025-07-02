@@ -168,16 +168,16 @@ const HomePage = () => {
             {stats.map((stat, index) => (
               <div 
                 key={index} 
-                className="stat-item"
+                className="home-stat-item"
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
-                <div className="stat-icon-container">
+                <div className="home-stat-icon-container">
                   <stat.icon size={24} className="home-stat-icon" />
                 </div>
-                <div className="stat-info">
-                  <div className="stat-value floating">{stat.value}</div>
-                  <div className="stat-label">{stat.label}</div>
-                  <div className="stat-description">{stat.description}</div>
+                <div className="home-stat-info">
+                  <div className="home-stat-value floating">{stat.value}</div>
+                  <div className="home-stat-label">{stat.label}</div>
+                  <div className="home-stat-description">{stat.description}</div>
                 </div>
               </div>
             ))}

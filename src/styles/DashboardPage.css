@@ -115,7 +115,7 @@
   }
 }
 
-.sv-stat-card {
+.dashboard-sv-stat-card {
   background-color: var(--bg-card);
   border-radius: 1rem;
   padding: 1.5rem;
@@ -123,24 +123,24 @@
   transition: all 0.3s ease;
 }
 
-.sv-stat-card:hover {
+.dashboard-sv-stat-card:hover {
   transform: translateY(-0.25rem);
   box-shadow: 0 10px 15px var(--shadow-color);
 }
 
-.sv-stat-card__header {
+.dashboard-sv-stat-card__header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 1rem;
 }
 
-.sv-stat-card__icon-wrapper {
+.dashboard-sv-stat-card__icon-wrapper {
   padding: 0.75rem;
   border-radius: 0.75rem;
 }
 
-.sv-stat-card__value {
+.dashboard-sv-stat-card__value {
   font-size: 2rem;
   font-weight: 700;
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -149,28 +149,29 @@
   margin-bottom: 0.25rem;
 }
 
-.sv-stat-card__change {
+.dashboard-sv-stat-card__change {
   font-size: 0.875rem;
   font-weight: 500;
+  color: var(--text-secondary)
 }
 
-.sv-stat-card__change--up {
+.dashboard-sv-stat-card__change--up {
   color: #16a34a;
 }
 
-[data-theme='dark'] .sv-stat-card__change--up {
+[data-theme='dark'] .dashboard-sv-stat-card__change--up {
   color: #4ade80;
 }
 
-.sv-stat-card__change--down {
+.dashboard-sv-stat-card__change--down {
   color: #dc2626;
 }
 
-[data-theme='dark'] .sv-stat-card__change--down {
+[data-theme='dark'] .dashboard-sv-stat-card__change--down {
   color: #f87171;
 }
 
-.sv-stat-card__title {
+.dashboard-sv-stat-card__title {
   font-size: 0.875rem;
   color: var(--text-secondary);
   margin-top: 0.5rem;
@@ -425,6 +426,14 @@
   background-color: #F3F4F6;
   border-radius: 9999px;
   overflow: hidden;
+}
+
+.sv-course-progress__text {
+  color: var(--text-secondary)
+}
+
+.sv-course-progress__value {
+  color: var(--text-secondary)
 }
 
 [data-theme='dark'] .sv-course-progress__bar {

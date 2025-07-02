@@ -92,24 +92,24 @@ const SeminarPage: React.FC = () => {
       <div className="seminar-hero">
         <div className="hero-content">
           <h1 className="hero-title">
-            <span className="hero-icon">🎓</span>
+            <span className="seminar-hero-icon">🎓</span>
             {' '}Khám Phá Các Seminar Hấp Dẫn
           </h1>
           <p className="hero-description">
             Tham gia những buổi seminar chất lượng cao, học hỏi từ các chuyên gia hàng đầu
           </p>
           <div className="hero-stats">
-            <div className="stat-item">
+            <div className="seminar-stat-item">
               <span className="stat-number">{seminars.length}</span>
-              <span className="stat-label">Seminars</span>
+              <span className="seminar-stat-label">Seminars</span>
             </div>
-            <div className="stat-item">
+            <div className="seminar-stat-item">
               <span className="stat-number">100+</span>
-              <span className="stat-label">Diễn giả</span>
+              <span className="seminar-stat-label">Diễn giả</span>
             </div>
-            <div className="stat-item">
+            <div className="seminar-stat-item">
               <span className="stat-number">5000+</span>
-              <span className="stat-label">Người tham gia</span>
+              <span className="seminar-stat-label">Người tham gia</span>
             </div>
           </div>
         </div>

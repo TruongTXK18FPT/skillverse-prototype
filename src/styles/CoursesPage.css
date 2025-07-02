@@ -142,7 +142,7 @@
   animation: fadeInUp 0.8s ease-out 0.4s both;
 }
 
-.stat-item {
+.course-stat-item {
   text-align: center;
   color: white;
 }
@@ -152,10 +152,10 @@
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: var(--text-primary);
+  color: white;
 }
 
-.stat-label {
+.course-stat-label {
   font-size: 0.9rem;
   opacity: 0.9;
   font-weight: 500;
@@ -1069,7 +1069,7 @@
   fill: #fbbf24;
 }
 
-.rating-value {
+.course-rating-value {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--courses-text-primary);
@@ -1184,12 +1184,13 @@
 }
 
 .course-price {
-  font-size: 1.6rem;
+  font-size: 1rem;
   font-weight: 800;
   color: var(--courses-accent);
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 1rem;
+  padding-right: 1rem;
 }
 
 .price-period {
@@ -1211,7 +1212,7 @@
   padding: 0.875rem 1.75rem;
   border-radius: 16px;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

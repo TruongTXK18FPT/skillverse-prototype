@@ -108,7 +108,7 @@
   flex-wrap: wrap;
 }
 
-.hero-icon {
+.seminar-hero-icon {
   font-size: 3rem;
   animation: bounce 2s ease-in-out infinite;
 }
@@ -129,7 +129,7 @@
   animation: fadeInUp 0.8s ease-out 0.4s both;
 }
 
-.stat-item {
+.seminar-stat-item {
   text-align: center;
   color: white;
 }
@@ -142,7 +142,7 @@
   color: var(--text-primary);
 }
 
-.stat-label {
+.seminar-stat-label {
   font-size: 1rem;
   opacity: 0.9;
   font-weight: 500;

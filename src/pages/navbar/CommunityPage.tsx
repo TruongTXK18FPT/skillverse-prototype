@@ -247,7 +247,7 @@ const CommunityPage = () => {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <span>{category.name}</span>
-                  <span className="category-count">({category.count})</span>
+                  <span className="community-category-count">({category.count})</span>
                 </button>
               ))}
             </div>
@@ -310,20 +310,20 @@ const CommunityPage = () => {
                       </div>
 
                       <div className="post-actions">
-                        <button className="action-button">
-                          <ThumbsUp className="action-icon" />
+                        <button className="community-action-button">
+                          <ThumbsUp className="community-action-icon" />
                           <span>{formatNumber(post.likes)}</span>
                         </button>
-                        <button className="action-button">
-                          <MessageCircle className="action-icon" />
+                        <button className="community-action-button">
+                          <MessageCircle className="community-action-icon" />
                           <span>{formatNumber(post.comments)}</span>
                         </button>
-                        <button className="action-button">
-                          <Share2 className="action-icon" />
+                        <button className="community-action-button">
+                          <Share2 className="community-action-icon" />
                           <span>{formatNumber(post.shares)}</span>
                         </button>
-                        <button className="action-button">
-                          <Bookmark className={`action-icon ${post.isBookmarked ? 'bookmarked' : ''}`} />
+                        <button className="community-action-button">
+                          <Bookmark className={`community-action-icon ${post.isBookmarked ? 'bookmarked' : ''}`} />
                         </button>
                       </div>
                     </div>
@@ -355,7 +355,7 @@ const CommunityPage = () => {
           <div className="community-sidebar">
             {/* Top Contributors */}
             <div className="sidebar-section">
-              <h3 className="sidebar-title">
+              <h3 className="community-sidebar-title">
                 <Star className="sidebar-icon" size={16} />
                 {translations.community.topContributors}
               </h3>
@@ -376,8 +376,8 @@ const CommunityPage = () => {
                       <p className="contributor-role">{contributor.role}</p>
                       <div className="contributor-badges">
                         {contributor.badges.map((badge, badgeIndex) => (
-                          <span key={badgeIndex} className="badge">
-                            <Award className="badge-icon" size={12} />
+                          <span key={badgeIndex} className="contributor-badge">
+                            <Award className="contributor-badge-icon" size={12} />
                             {badge}
                           </span>
                         ))}
@@ -394,7 +394,7 @@ const CommunityPage = () => {
 
             {/* Trending Topics */}
             <div className="sidebar-section">
-              <h3 className="sidebar-title">
+              <h3 className="community-sidebar-title">
                 <TrendingUp className="sidebar-icon" size={18} />
                 {translations.community.trending}
               </h3>
@@ -421,30 +421,30 @@ const CommunityPage = () => {
 
             {/* Community Stats */}
             <div className="sidebar-section">
-              <h3 className="sidebar-title">
+              <h3 className="community-sidebar-title">
                 <Globe className="sidebar-icon" size={16} />
                 Community Stats
               </h3>
               <div className="community-stats">
-                <div className="stat-card">
+                <div className="community-stat-card">
                   <div className="stat-name-section">
-                    <span className="stat-value">Members</span>
+                    <span className="community-stat-value">Members</span>
                   </div>
                   <div className="topic-stats">
                     <span>{formatNumber(15234)}</span>
                   </div>
                 </div>
-                <div className="stat-card">
+                <div className="community-stat-card">
                   <div className="stat-name-section">
-                    <span className="stat-value">Posts</span>
+                    <span className="community-stat-value">Posts</span>
                   </div>
                   <div className="topic-stats">
                     <span>{formatNumber(posts.length)}</span>
                   </div>
                 </div>
-                <div className="stat-card">
+                <div className="community-stat-card">
                   <div className="stat-name-section">
-                    <span className="stat-value">Reactions</span>
+                    <span className="community-stat-value">Reactions</span>
                   </div>
                   <div className="topic-stats">
                     <span>{formatNumber(123456)}</span>

@@ -217,17 +217,17 @@ const categories = [
               Nâng cao kỹ năng với các khóa học chất lượng từ các chuyên gia hàng đầu
             </p>
             <div className="hero-stats">
-              <div className="stat-item">
+              <div className="course-stat-item">
                 <span className="stat-number">{courses.length}</span>
-                <span className="stat-label">Khóa học</span>
+                <span className="course-stat-label">Khóa học</span>
               </div>
-              <div className="stat-item">
+              <div className="course-stat-item">
                 <span className="stat-number">{categories.length - 1}</span>
-                <span className="stat-label">Lĩnh vực</span>
+                <span className="course-stat-label">Lĩnh vực</span>
               </div>
-              <div className="stat-item">
+              <div className="course-stat-item">
                 <span className="stat-number">1000+</span>
-                <span className="stat-label">Học viên</span>
+                <span className="course-stat-label">Học viên</span>
               </div>
             </div>
           </div>
@@ -448,7 +448,7 @@ const categories = [
                       <div className="course-stats">
                         <div className="course-rating">
                           <Star className="rating-star filled" />
-                          <span>{course.rating?.toFixed(1)}</span>
+                          <span className="course-rating-value">{course.rating?.toFixed(1)}</span>
                         </div>
                         <span className="stats-divider">•</span>
                         <div className="course-students">

@@ -561,77 +561,129 @@ const PortfolioPage = () => {
                   <p>Completed projects and professional work experiences</p>
                 </div>
 
-                <div className="sv-projects-grid">
+                {/* Project Filters */}
+                <div className="sv-project-filters">
+                  <div className="sv-filter-tabs">
+                    {['All Projects', 'Micro-jobs', 'Freelance', 'Personal'].map((filter) => (
+                      <button key={filter} className="sv-filter-tab sv-filter-tab--active">
+                        {filter}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="sv-project-stats">
+                    <span className="sv-project-count">{projects.length} Projects</span>
+                    <span className="sv-project-rating">
+                      <Star size={14} className="sv-star-filled" />
+                      4.9 Average Rating
+                    </span>
+                  </div>
+                </div>
+
+                <div className="sv-projects-showcase">
                   {projects.map((project, index) => (
                     <motion.div
                       key={project.id}
-                      className="sv-project-card"
+                      className="sv-project-showcase-card"
                       variants={itemVariants}
                       custom={index}
-                      whileHover={{ scale: 1.02 }}
+                      whileHover={{ y: -8 }}
                     >
-                      <div className="sv-project-image">
+                      <div className="sv-project-showcase-image">
                         <img src={project.image} alt={project.title} />
-                        <div className="sv-project-type">{project.type}</div>
+                        <div className="sv-project-showcase-overlay">
+                          <div className="sv-project-showcase-actions">
+                            <button className="sv-action-btn">
+                              <Eye size={16} />
+                            </button>
+                            <button className="sv-action-btn">
+                              <Share2 size={16} />
+                            </button>
+                          </div>
+                        </div>
+                        <div className="sv-project-showcase-type">{project.type}</div>
                       </div>
 
-                      <div className="sv-project-content">
-                        <h3 className="sv-project-title">{project.title}</h3>
-                        <p className="sv-project-client">{project.client}</p>
-                        <p className="sv-project-description">{project.description}</p>
-
-                        <div className="sv-project-meta">
-                          <span>Duration: {project.duration}</span>
-                          <span>Completed: {project.completionDate}</span>
-                        </div>
-
-                        <div className="sv-project-tools">
-                          <h4>Tools Used:</h4>
-                          <div className="sv-tools-list">
-                            {project.tools.map((tool) => (
-                              <span key={tool} className="sv-tool-tag">{tool}</span>
-                            ))}
+                      <div className="sv-project-showcase-content">
+                        <div className="sv-project-showcase-header">
+                          <div className="sv-project-showcase-info">
+                            <h3 className="sv-project-showcase-title">{project.title}</h3>
+                            <p className="sv-project-showcase-client">
+                              <Briefcase size={14} />
+                              {project.client}
+                            </p>
+                          </div>
+                          <div className="sv-project-showcase-rating">
+                            <div className="sv-rating-stars">
+                              {Array.from({ length: 5 }, (_, i) => (
+                                <Star
+                                  key={`rating-${project.id}-${i}`}
+                                  className={i < project.rating ? 'sv-star-filled' : 'sv-star-empty'}
+                                  size={12}
+                                />
+                              ))}
+                            </div>
+                            <span className="sv-rating-value">{project.rating}.0</span>
                           </div>
                         </div>
 
-                        <div className="sv-project-outcomes">
-                          <h4>Key Outcomes:</h4>
-                          <ul>
-                            {project.outcomes.map((outcome) => (
-                              <li key={outcome}>{outcome}</li>
-                            ))}
-                          </ul>
-                        </div>
+                        <p className="sv-project-showcase-description">{project.description}</p>
 
-                        <div className="sv-project-rating">
-                          <div className="sv-stars">
-                            {Array.from({ length: 5 }, (_, i) => (
-                              <Star
-                                key={`rating-${project.id}-${i}`}
-                                className={i < project.rating ? 'filled' : ''}
-                                size={16}
-                              />
-                            ))}
-                          </div>
-                          <span className="sv-rating-text">Client Rating</span>
-                        </div>
-
-                        <div className="sv-project-feedback">
-                          <blockquote>"{project.feedback}"</blockquote>
-                        </div>
-
-                        <div className="sv-project-attachments">
-                          <h4>Attachments:</h4>
-                          {project.attachments.map((attachment) => (
-                            <button key={attachment} className="sv-attachment-link">
-                              <FileText size={14} />
-                              {attachment}
-                            </button>
+                        <div className="sv-project-showcase-tech">
+                          {project.tools.slice(0, 4).map((tool) => (
+                            <span key={tool} className="sv-tech-badge">{tool}</span>
                           ))}
+                          {project.tools.length > 4 && (
+                            <span className="sv-tech-more">+{project.tools.length - 4}</span>
+                          )}
+                        </div>
+
+                        <div className="sv-project-showcase-outcomes">
+                          <h4>Key Results</h4>
+                          <div className="sv-outcomes-list">
+                            {project.outcomes.slice(0, 2).map((outcome, idx) => (
+                              <div key={idx} className="sv-outcome-item">
+                                <div className="sv-outcome-icon">✓</div>
+                                <span>{outcome}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="sv-project-showcase-meta">
+                          <div className="sv-project-showcase-duration">
+                            <span>Duration: {project.duration}</span>
+                          </div>
+                          <div className="sv-project-showcase-date">
+                            <span>Completed: {project.completionDate}</span>
+                          </div>
+                        </div>
+
+                        <div className="sv-project-showcase-feedback">
+                          <blockquote>"{project.feedback.slice(0, 80)}..."</blockquote>
+                        </div>
+
+                        <div className="sv-project-showcase-footer">
+                          <div className="sv-project-attachments-count">
+                            <FileText size={14} />
+                            <span>{project.attachments.length} attachments</span>
+                          </div>
+                          <button className="sv-btn sv-btn--outline sv-btn--sm">
+                            View Details
+                          </button>
                         </div>
                       </div>
                     </motion.div>
                   ))}
+                </div>
+
+                {/* Add Project CTA */}
+                <div className="sv-add-project-cta">
+                  <h3>Want to add more projects?</h3>
+                  <p>Upload completed work to showcase your skills and attract more opportunities</p>
+                  <button className="sv-btn sv-btn--primary">
+                    <FileText size={18} />
+                    Add New Project
+                  </button>
                 </div>
               </div>
             )}
@@ -644,54 +696,182 @@ const PortfolioPage = () => {
                   <p>Your progress timeline and AI-recommended next steps</p>
                 </div>
 
-                <div className="sv-journey-timeline">
-                  {learningJourney.map((phase) => (
-                    <motion.div
-                      key={phase.phase}
-                      className={`sv-journey-phase sv-journey-phase--${phase.status}`}
-                      variants={itemVariants}
-                      custom={phase.phase}
-                    >
-                      <div className="sv-journey-marker">
-                        {phase.status === 'completed' && <Award size={20} />}
-                        {phase.status === 'current' && <Zap size={20} />}
-                        {phase.status === 'upcoming' && <Target size={20} />}
+                {/* Journey Overview Stats */}
+                <div className="sv-journey-overview">
+                  <div className="sv-journey-stats">
+                    <div className="sv-journey-stat">
+                      <div className="sv-journey-stat-icon">
+                        <Trophy size={24} />
                       </div>
-                      
-                      <div className="sv-journey-content">
-                        <h3 className="sv-journey-title">{phase.phase}</h3>
-                        <p className="sv-journey-period">{phase.period}</p>
-                        <p className="sv-journey-courses">{phase.courses} courses</p>
-                        
-                        {phase.status === 'current' && (
-                          <div className="sv-journey-progress">
-                            <div className="sv-progress-bar">
-                              <div className="sv-progress-fill" style={{ width: '65%' }}></div>
-                            </div>
-                            <span>65% Complete</span>
-                          </div>
-                        )}
-                        
-                        {phase.status === 'upcoming' && (
-                          <button className="sv-btn sv-btn--outline sv-btn--sm">
-                            View Recommendations
-                          </button>
-                        )}
+                      <div className="sv-journey-stat-content">
+                        <h3>18</h3>
+                        <p>Courses Completed</p>
                       </div>
-                    </motion.div>
-                  ))}
+                    </div>
+                    <div className="sv-journey-stat">
+                      <div className="sv-journey-stat-icon">
+                        <Zap size={24} />
+                      </div>
+                      <div className="sv-journey-stat-content">
+                        <h3>320</h3>
+                        <p>Learning Hours</p>
+                      </div>
+                    </div>
+                    <div className="sv-journey-stat">
+                      <div className="sv-journey-stat-icon">
+                        <Target size={24} />
+                      </div>
+                      <div className="sv-journey-stat-content">
+                        <h3>4</h3>
+                        <p>Active Goals</p>
+                      </div>
+                    </div>
+                    <div className="sv-journey-stat">
+                      <div className="sv-journey-stat-icon">
+                        <Award size={24} />
+                      </div>
+                      <div className="sv-journey-stat-content">
+                        <h3>12</h3>
+                        <p>Achievements</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Gamification Highlights */}
-                <div className="sv-gamification-section">
-                  <h3>Achievement Highlights</h3>
-                  <div className="sv-achievements-grid">
-                    {gamificationStats.achievements.map((achievement) => (
-                      <div key={achievement.title} className="sv-achievement-card">
-                        <div className="sv-achievement-icon">{achievement.icon}</div>
-                        <h4>{achievement.title}</h4>
-                        <p>{achievement.description}</p>
+                {/* Learning Path Timeline */}
+                <div className="sv-learning-path">
+                  <h3>Learning Path Progress</h3>
+                  <div className="sv-learning-timeline">
+                    {learningJourney.map((phase, index) => (
+                      <motion.div
+                        key={phase.phase}
+                        className={`sv-learning-phase sv-learning-phase--${phase.status}`}
+                        variants={itemVariants}
+                        custom={index}
+                      >
+                        <div className="sv-learning-phase-connector">
+                          {index < learningJourney.length - 1 && (
+                            <div className="sv-phase-line" />
+                          )}
+                        </div>
+                        
+                        <div className="sv-learning-phase-marker">
+                          <div className="sv-phase-icon">
+                            {phase.status === 'completed' && <Award size={20} />}
+                            {phase.status === 'current' && <Zap size={20} />}
+                            {phase.status === 'upcoming' && <Target size={20} />}
+                          </div>
+                          <div className="sv-phase-status-badge">
+                            {phase.status === 'completed' && 'Completed'}
+                            {phase.status === 'current' && 'In Progress'}
+                            {phase.status === 'upcoming' && 'Upcoming'}
+                          </div>
+                        </div>
+                        
+                        <div className="sv-learning-phase-content">
+                          <div className="sv-phase-header">
+                            <h4 className="sv-phase-title">{phase.phase}</h4>
+                            <span className="sv-phase-period">{phase.period}</span>
+                          </div>
+                          
+                          <div className="sv-phase-details">
+                            <div className="sv-phase-courses">
+                              <span className="sv-course-count">{phase.courses}</span>
+                              <span>courses</span>
+                            </div>
+                            
+                            {phase.status === 'current' && (
+                              <div className="sv-phase-progress">
+                                <div className="sv-progress-info">
+                                  <span>Progress</span>
+                                  <span>65%</span>
+                                </div>
+                                <div className="sv-progress-track">
+                                  <div className="sv-progress-fill" style={{ width: '65%' }}></div>
+                                </div>
+                              </div>
+                            )}
+                            
+                            {phase.status === 'completed' && (
+                              <div className="sv-phase-completion">
+                                <div className="sv-completion-badge">
+                                  <Award size={16} />
+                                  <span>Completed</span>
+                                </div>
+                              </div>
+                            )}
+                            
+                            {phase.status === 'upcoming' && (
+                              <div className="sv-phase-actions">
+                                <button className="sv-btn sv-btn--outline sv-btn--sm">
+                                  <Eye size={14} />
+                                  View Recommendations
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* AI Recommendations */}
+                <div className="sv-ai-recommendations">
+                  <div className="sv-recommendations-header">
+                    <h3>AI-Powered Recommendations</h3>
+                    <p>Based on your learning patterns and career goals</p>
+                  </div>
+                  
+                  <div className="sv-recommendations-grid">
+                    <div className="sv-recommendation-card">
+                      <div className="sv-recommendation-icon">🤖</div>
+                      <h4>Next Skill to Master</h4>
+                      <p>Advanced React Patterns</p>
+                      <div className="sv-recommendation-match">
+                        <span>95% match</span>
                       </div>
+                    </div>
+                    <div className="sv-recommendation-card">
+                      <div className="sv-recommendation-icon">🎯</div>
+                      <h4>Career Path Suggestion</h4>
+                      <p>Full-Stack Team Lead</p>
+                      <div className="sv-recommendation-match">
+                        <span>87% match</span>
+                      </div>
+                    </div>
+                    <div className="sv-recommendation-card">
+                      <div className="sv-recommendation-icon">📈</div>
+                      <h4>Trending Technology</h4>
+                      <p>Next.js & Server Components</p>
+                      <div className="sv-recommendation-match">
+                        <span>92% match</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Achievement Highlights */}
+                <div className="sv-achievement-highlights">
+                  <h3>Recent Achievements</h3>
+                  <div className="sv-achievements-showcase">
+                    {gamificationStats.achievements.map((achievement, index) => (
+                      <motion.div 
+                        key={achievement.title} 
+                        className="sv-achievement-showcase-card"
+                        variants={itemVariants}
+                        custom={index}
+                      >
+                        <div className="sv-achievement-showcase-icon">{achievement.icon}</div>
+                        <div className="sv-achievement-showcase-content">
+                          <h4>{achievement.title}</h4>
+                          <p>{achievement.description}</p>
+                          <div className="sv-achievement-date">Earned 2 days ago</div>
+                        </div>
+                        <div className="sv-achievement-showcase-badge">
+                          <Award size={16} />
+                        </div>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
@@ -706,57 +886,152 @@ const PortfolioPage = () => {
                   <p>Verified comments and endorsements from mentors and clients</p>
                 </div>
 
-                <div className="sv-feedback-grid">
-                  {mentorFeedback.map((feedback, index) => (
-                    <motion.div
-                      key={feedback.id}
-                      className="sv-feedback-card"
-                      variants={itemVariants}
-                      custom={index}
-                    >
-                      <div className="sv-feedback-header">
-                        <div className="sv-mentor-info">
-                          <h4>{feedback.mentorName}</h4>
-                          <p>{feedback.mentorTitle}</p>
-                        </div>
-                        {feedback.verified && (
-                          <div className="sv-verified-badge">
-                            <Award size={14} />
-                            Verified
-                          </div>
-                        )}
-                      </div>
-
-                      <blockquote className="sv-feedback-content">
-                        "{feedback.feedback}"
-                      </blockquote>
-
-                      <div className="sv-feedback-footer">
-                        <span className="sv-endorsed-skill">
-                          Endorsed: {feedback.skillEndorsed}
-                        </span>
-                        <span className="sv-feedback-date">{feedback.date}</span>
-                      </div>
-                    </motion.div>
-                  ))}
+                {/* Endorsements Overview */}
+                <div className="sv-endorsements-overview">
+                  <div className="sv-endorsement-stats">
+                    <div className="sv-endorsement-stat">
+                      <div className="sv-stat-number">24</div>
+                      <div className="sv-stat-label">Total Endorsements</div>
+                    </div>
+                    <div className="sv-endorsement-stat">
+                      <div className="sv-stat-number">4.9</div>
+                      <div className="sv-stat-label">Average Rating</div>
+                    </div>
+                    <div className="sv-endorsement-stat">
+                      <div className="sv-stat-number">8</div>
+                      <div className="sv-stat-label">Verified Mentors</div>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Skills with Endorsements */}
-                <div className="sv-endorsed-skills">
-                  <h3>Skills with Endorsements</h3>
-                  <div className="sv-skills-endorsement-grid">
-                    {skills.map((skill) => (
-                      <div key={skill.name} className="sv-skill-endorsement-card">
-                        <h4>{skill.name}</h4>
-                        <div className="sv-skill-bar">
-                          <div 
-                            className="sv-skill-progress" 
-                            style={{ width: `${skill.level}%` }}
-                          />
+                {/* Mentor Testimonials */}
+                <div className="sv-mentor-testimonials">
+                  <h3>Mentor Testimonials</h3>
+                  <div className="sv-testimonials-grid">
+                    {mentorFeedback.map((feedback, index) => (
+                      <motion.div
+                        key={feedback.id}
+                        className="sv-testimonial-card"
+                        variants={itemVariants}
+                        custom={index}
+                      >
+                        <div className="sv-testimonial-header">
+                          <div className="sv-mentor-avatar">
+                            <div className="sv-avatar-placeholder">
+                              {feedback.mentorName.split(' ').map(n => n[0]).join('')}
+                            </div>
+                          </div>
+                          <div className="sv-mentor-details">
+                            <h4 className="sv-mentor-name">{feedback.mentorName}</h4>
+                            <p className="sv-mentor-title">{feedback.mentorTitle}</p>
+                            <div className="sv-mentor-badges">
+                              {feedback.verified && (
+                                <div className="sv-verified-mentor-badge">
+                                  <Award size={12} />
+                                  <span>Verified Mentor</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="sv-testimonial-rating">
+                            <div className="sv-rating-stars">
+                              {Array.from({ length: 5 }, (_, i) => (
+                                <Star key={i} className="sv-star-filled" size={14} />
+                              ))}
+                            </div>
+                          </div>
                         </div>
-                        <p>{skill.endorsed} people endorsed this skill</p>
-                      </div>
+
+                        <blockquote className="sv-testimonial-content">
+                          "{feedback.feedback}"
+                        </blockquote>
+
+                        <div className="sv-testimonial-footer">
+                          <div className="sv-endorsed-skill-tag">
+                            <span>Endorsed: {feedback.skillEndorsed}</span>
+                          </div>
+                          <div className="sv-testimonial-date">{feedback.date}</div>
+                        </div>
+                      </motion.div>
                     ))}
+                  </div>
+                </div>
+
+                {/* Skills Endorsement Breakdown */}
+                <div className="sv-skills-endorsements">
+                  <h3>Skills with Endorsements</h3>
+                  <div className="sv-skills-endorsement-list">
+                    {skills.map((skill, index) => (
+                      <motion.div 
+                        key={skill.name} 
+                        className="sv-skill-endorsement-item"
+                        variants={itemVariants}
+                        custom={index}
+                      >
+                        <div className="sv-skill-endorsement-header">
+                          <div className="sv-skill-info">
+                            <h4 className="sv-skill-name">{skill.name}</h4>
+                            <div className="sv-skill-category-badge">{skill.category}</div>
+                          </div>
+                          <div className="sv-skill-endorsement-count">
+                            <span className="sv-endorsement-number">{skill.endorsed}</span>
+                            <span className="sv-endorsement-text">endorsements</span>
+                          </div>
+                        </div>
+                        
+                        <div className="sv-skill-proficiency">
+                          <div className="sv-proficiency-bar">
+                            <div 
+                              className="sv-proficiency-fill" 
+                              style={{ width: `${skill.level}%` }}
+                            />
+                          </div>
+                          <div className="sv-proficiency-details">
+                            <span className="sv-proficiency-level">{skill.level}% Proficiency</span>
+                            <span className="sv-proficiency-status">
+                              {skill.level >= 90 ? 'Expert' : skill.level >= 70 ? 'Advanced' : 'Intermediate'}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="sv-skill-endorsers">
+                          <div className="sv-endorser-avatars">
+                            {Array.from({ length: Math.min(skill.endorsed, 3) }, (_, i) => (
+                              <div key={i} className="sv-endorser-avatar">
+                                <span>{String.fromCharCode(65 + i)}</span>
+                              </div>
+                            ))}
+                            {skill.endorsed > 3 && (
+                              <div className="sv-more-endorsers">
+                                +{skill.endorsed - 3}
+                              </div>
+                            )}
+                          </div>
+                          <button className="sv-btn sv-btn--outline sv-btn--sm">
+                            View All Endorsers
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Request Endorsement */}
+                <div className="sv-endorsement-request">
+                  <div className="sv-request-header">
+                    <h3>Request an Endorsement</h3>
+                    <p>Ask mentors, colleagues, or clients to endorse your skills</p>
+                  </div>
+                  
+                  <div className="sv-request-actions">
+                    <button className="sv-btn sv-btn--primary">
+                      <Mail size={18} />
+                      Send Endorsement Request
+                    </button>
+                    <button className="sv-btn sv-btn--outline">
+                      <Share2 size={18} />
+                      Share Endorsement Link
+                    </button>
                   </div>
                 </div>
               </div>
@@ -767,57 +1042,194 @@ const PortfolioPage = () => {
               <div className="sv-section">
                 <div className="sv-section-header">
                   <h2>Smart CV Builder</h2>
-                  <p>Automatically generated CV using your SkillVerse data</p>
+                  <p>AI-powered CV generation using your SkillVerse portfolio data</p>
                 </div>
 
-                <div className="sv-cv-builder">
-                  <div className="sv-cv-templates">
-                    <h3>Choose Template</h3>
-                    <div className="sv-template-grid">
-                      {['Modern', 'Classic', 'Creative', 'ATS-Friendly'].map((template) => (
-                        <div key={template} className="sv-template-card">
-                          <div className="sv-template-preview">
-                            <div className="sv-template-placeholder"></div>
+                {/* CV Builder Layout */}
+                <div className="sv-cv-builder-layout">
+                  {/* Left Panel - CV Customization */}
+                  <div className="sv-cv-builder-panel">
+                    {/* Template Selection */}
+                    <div className="sv-cv-builder-section">
+                      <h3>Choose Template</h3>
+                      <div className="sv-cv-templates-grid">
+                        {[
+                          { name: 'Modern', preview: '📄', description: 'Clean and contemporary design' },
+                          { name: 'Classic', preview: '📋', description: 'Traditional professional layout' },
+                          { name: 'Creative', preview: '🎨', description: 'Eye-catching design for creative roles' },
+                          { name: 'ATS-Friendly', preview: '🤖', description: 'Optimized for applicant tracking systems' }
+                        ].map((template, index) => (
+                          <div key={template.name} className={`sv-cv-template-option ${index === 0 ? 'sv-template-selected' : ''}`}>
+                            <div className="sv-template-preview-icon">{template.preview}</div>
+                            <div className="sv-template-info">
+                              <h4>{template.name}</h4>
+                              <p>{template.description}</p>
+                            </div>
+                            <div className="sv-template-selector">
+                              <input type="radio" name="template" defaultChecked={index === 0} />
+                            </div>
                           </div>
-                          <h4>{template}</h4>
-                          <button className="sv-btn sv-btn--outline sv-btn--sm">
-                            Select
-                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Section Configuration */}
+                    <div className="sv-cv-builder-section">
+                      <h3>CV Sections</h3>
+                      <div className="sv-cv-sections-config">
+                        {[
+                          { name: 'Profile Summary', included: true, required: true },
+                          { name: 'Skills', included: true, required: false },
+                          { name: 'Experience', included: true, required: false },
+                          { name: 'Education', included: true, required: false },
+                          { name: 'Certifications', included: true, required: false },
+                          { name: 'Projects', included: true, required: false },
+                          { name: 'Languages', included: false, required: false },
+                          { name: 'Achievements', included: false, required: false }
+                        ].map((section) => (
+                          <div key={section.name} className="sv-cv-section-toggle">
+                            <label className="sv-section-toggle-label">
+                              <div className="sv-toggle-switch">
+                                <input 
+                                  type="checkbox" 
+                                  defaultChecked={section.included}
+                                  disabled={section.required}
+                                />
+                                <span className="sv-toggle-slider"></span>
+                              </div>
+                              <div className="sv-section-info">
+                                <span className="sv-section-name">{section.name}</span>
+                                {section.required && <span className="sv-required-badge">Required</span>}
+                              </div>
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Language & Customization */}
+                    <div className="sv-cv-builder-section">
+                      <h3>Customization</h3>
+                      
+                      <div className="sv-cv-customization">
+                        <div className="sv-customization-option">
+                          <label>Language</label>
+                          <div className="sv-language-selector">
+                            <button className="sv-language-btn sv-language-active">English</button>
+                            <button className="sv-language-btn">Vietnamese</button>
+                          </div>
                         </div>
-                      ))}
+
+                        <div className="sv-customization-option">
+                          <label>Color Scheme</label>
+                          <div className="sv-color-palette">
+                            {['#6366f1', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'].map((color) => (
+                              <div 
+                                key={color} 
+                                className="sv-color-option"
+                                style={{ backgroundColor: color }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="sv-customization-option">
+                          <label>Font Style</label>
+                          <select className="sv-font-selector">
+                            <option>Professional (Inter)</option>
+                            <option>Classic (Times New Roman)</option>
+                            <option>Modern (Roboto)</option>
+                            <option>Elegant (Playfair Display)</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* AI Optimization */}
+                    <div className="sv-cv-builder-section">
+                      <h3>AI Optimization</h3>
+                      <div className="sv-ai-optimization">
+                        <div className="sv-optimization-feature">
+                          <div className="sv-feature-icon">🤖</div>
+                          <div className="sv-feature-content">
+                            <h4>Job-Specific Optimization</h4>
+                            <p>Tailor your CV for specific job descriptions</p>
+                            <button className="sv-btn sv-btn--outline sv-btn--sm">
+                              Upload Job Description
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <div className="sv-optimization-feature">
+                          <div className="sv-feature-icon">📊</div>
+                          <div className="sv-feature-content">
+                            <h4>ATS Score Analysis</h4>
+                            <p>Get a score for applicant tracking systems</p>
+                            <button className="sv-btn sv-btn--outline sv-btn--sm">
+                              Analyze CV
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="sv-cv-sections">
-                    <h3>CV Sections</h3>
-                    <div className="sv-section-toggles">
-                      {[
-                        'Profile Summary',
-                        'Skills',
-                        'Education',
-                        'Experience',
-                        'Certifications',
-                        'Projects',
-                        'Languages'
-                      ].map((section) => (
-                        <label key={section} className="sv-toggle">
-                          <input type="checkbox" defaultChecked />
-                          <span className="sv-toggle-slider"></span>
-                          {section}
-                        </label>
-                      ))}
+                  {/* Right Panel - CV Preview */}
+                  <div className="sv-cv-preview-panel">
+                    <div className="sv-cv-preview-header">
+                      <h3>CV Preview</h3>
+                      <div className="sv-preview-actions">
+                        <button className="sv-btn sv-btn--outline sv-btn--sm">
+                          <Eye size={16} />
+                          Full Screen
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="sv-cv-preview-container">
+                      <div className="sv-cv-preview-document">
+                        {/* CV Preview Content */}
+                        <div className="sv-cv-preview-content">
+                          <div className="sv-cv-preview-header-section">
+                            <h1>Tran Xuan Truong</h1>
+                            <p>Full-stack Developer & UI/UX Designer</p>
+                            <div className="sv-cv-preview-contact">
+                              <span>truongtranxuan41@gmail.com</span>
+                              <span>Ho Chi Minh City, Vietnam</span>
+                            </div>
+                          </div>
+                          
+                          <div className="sv-cv-preview-section">
+                            <h3>Professional Summary</h3>
+                            <p>Passionate Computer Science student with strong foundation in web development...</p>
+                          </div>
+                          
+                          <div className="sv-cv-preview-section">
+                            <h3>Skills</h3>
+                            <div className="sv-cv-preview-skills">
+                              <span>React.js</span>
+                              <span>Node.js</span>
+                              <span>TypeScript</span>
+                              <span>UI/UX Design</span>
+                            </div>
+                          </div>
+                          
+                          <div className="sv-cv-preview-section">
+                            <h3>Experience</h3>
+                            <div className="sv-cv-preview-experience">
+                              <h4>E-commerce Platform Redesign</h4>
+                              <p>Fashion Store ABC • 2024</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                </div>
 
-                  <div className="sv-cv-language">
-                    <h3>Language</h3>
-                    <div className="sv-language-toggle">
-                      <button className="sv-btn sv-btn--outline">English</button>
-                      <button className="sv-btn sv-btn--primary">Vietnamese</button>
-                    </div>
-                  </div>
-
-                  <div className="sv-cv-actions">
+                {/* Action Buttons */}
+                <div className="sv-cv-builder-actions">
+                  <div className="sv-cv-main-actions">
                     <button className="sv-btn sv-btn--outline">
                       <Eye size={18} />
                       Preview CV
@@ -828,37 +1240,53 @@ const PortfolioPage = () => {
                     </button>
                     <button className="sv-btn sv-btn--outline">
                       <Share2 size={18} />
-                      Generate Link
+                      Generate Shareable Link
                     </button>
                   </div>
                 </div>
 
-                {/* Privacy Controls */}
-                <div className="sv-privacy-controls">
-                  <h3>Share & Privacy Controls</h3>
-                  <div className="sv-privacy-grid">
-                    {Object.entries(privacySettings).map(([key, value]) => (
-                      <label key={key} className="sv-privacy-toggle">
-                        <input
-                          type="checkbox"
-                          checked={value}
-                          onChange={() => togglePrivacySetting(key)}
-                        />
-                        <span className="sv-toggle-slider"></span>
-                        {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                      </label>
-                    ))}
+                {/* Privacy & Sharing Controls */}
+                <div className="sv-privacy-sharing">
+                  <div className="sv-privacy-section">
+                    <h3>Privacy & Sharing Controls</h3>
+                    <div className="sv-privacy-options">
+                      {Object.entries(privacySettings).map(([key, value]) => (
+                        <div key={key} className="sv-privacy-option">
+                          <label className="sv-privacy-toggle-label">
+                            <div className="sv-privacy-toggle-switch">
+                              <input
+                                type="checkbox"
+                                checked={value}
+                                onChange={() => togglePrivacySetting(key)}
+                              />
+                              <span className="sv-privacy-toggle-slider"></span>
+                            </div>
+                            <div className="sv-privacy-option-info">
+                              <span>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</span>
+                              <small>Control visibility of this section in your public profile</small>
+                            </div>
+                          </label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="sv-share-options">
-                    <button className="sv-btn sv-btn--outline">
-                      <QrCode size={18} />
-                      Generate QR Code
-                    </button>
-                    <button className="sv-btn sv-btn--outline">
-                      <Globe size={18} />
-                      Public Profile Link
-                    </button>
+                  <div className="sv-sharing-options">
+                    <h4>Share Your Portfolio</h4>
+                    <div className="sv-share-buttons">
+                      <button className="sv-btn sv-btn--outline">
+                        <QrCode size={18} />
+                        Generate QR Code
+                      </button>
+                      <button className="sv-btn sv-btn--outline">
+                        <Globe size={18} />
+                        Public Profile Link
+                      </button>
+                      <button className="sv-btn sv-btn--outline">
+                        <Mail size={18} />
+                        Email Portfolio
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

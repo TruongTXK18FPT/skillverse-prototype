@@ -249,7 +249,7 @@ const MentorshipPage = () => {
 
                   <div className="mentor-rating">
                     <Star className="star-icon" />
-                    <span>{mentor.rating}</span>
+                    <span className="review-count">{mentor.rating}</span>
                     <span className="review-count">
                       ({mentor.reviews} đánh giá)
                     </span>

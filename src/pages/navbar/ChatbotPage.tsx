@@ -828,7 +828,7 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
                 
                 {/* Enhanced Message Features */}
                 {msg.recommendations && (
-                  <div className="sv-message-recommendations">
+                  <div className="sv-chat-message__text">
                     <h4>📋 Đề xuất:</h4>
                     {msg.recommendations.map((rec: RecommendationSection, i: number) => (
                       <div key={i} className="sv-message-rec-section">
@@ -844,7 +844,7 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
                 )}
 
                 {msg.resources && (
-                  <div className="sv-message-resources">
+                  <div className="sv-chat-message__text">
                     <h4>📚 Tài liệu tham khảo:</h4>
                     {msg.resources.map((resource: Resource, i: number) => (
                       <div key={i} className="sv-message-resource">
@@ -858,7 +858,7 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
                 )}
 
                 {msg.nextSteps && (
-                  <div className="sv-message-next-steps">
+                  <div className="sv-chat-message__text">
                     <h4>🚀 Bước tiếp theo:</h4>
                     <ul>
                       {msg.nextSteps.map((step: string, i: number) => (
@@ -942,29 +942,29 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
         </div>
 
         {/* Enhanced Recommendations Section */}
-        <div className="sv-recommendations">
-          <div className="sv-recommendations__header">
-            <div className="sv-recommendations__title-section">
-              <h2 className="sv-recommendations__title">
+        <div className="sv-ai-recommendations">
+          <div className="sv-ai-recommendations__header">
+            <div className="sv-ai-recommendations__title-section">
+              <h2 className="sv-ai-recommendations__title">
                 Đề Xuất Cá Nhân Hóa
               </h2>
-              <p className="sv-recommendations__description">
+              <p className="sv-ai-recommendations__description">
                 Dựa trên hồ sơ và sở thích của bạn
               </p>
             </div>
           </div>
 
-          <div className="sv-recommendations__grid">
+          <div className="sv-ai-recommendations__grid">
             {recommendations.map((item, index) => {
               return (
-                <div key={index} className="sv-recommendation-card">
-                  <div className="sv-recommendation-card__image-container">
+                <div key={index} className="sv-ai-recommendation-card">
+                  <div className="sv-ai-recommendation-card__image-container">
                     <img
                       src={item.image}
                       alt={item.title}
-                      className="sv-recommendation-card__image"
+                      className="sv-ai-recommendation-card__image"
                     />
-                    <div className="sv-recommendation-card__badge">
+                    <div className="sv-ai-recommendation-card__badge">
                       {isCourseRecommendation(item) && <Book className="h-4 w-4" />}
                       {isJobRecommendation(item) && <Briefcase className="h-4 w-4" />}
                       {isSkillRecommendation(item) && <Award className="h-4 w-4" />}
@@ -976,16 +976,16 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
                     </div>
                   </div>
                   
-                  <div className="sv-recommendation-card__content">
-                    <h3 className="sv-recommendation-card__title">{item.title}</h3>
+                  <div className="sv-ai-recommendation-card__content">
+                    <h3 className="sv-ai-recommendation-card__title">{item.title}</h3>
                     
                     {isCourseRecommendation(item) && (
                       <>
-                        <p className="sv-recommendation-card__provider">
+                        <p className="sv-ai-recommendation-card__provider">
                           <Globe className="h-4 w-4" />
                           {item.provider}
                         </p>
-                        <div className="sv-recommendation-card__meta">
+                        <div className="sv-ai-recommendation-card__meta">
                           <div className="sv-meta-item">
                             <Clock className="h-4 w-4" />
                             <span>{item.duration}</span>
@@ -999,12 +999,12 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
                             <span>{item.students.toLocaleString()} học viên</span>
                           </div>
                         </div>
-                        <div className="sv-recommendation-card__footer">
-                          <span className="sv-recommendation-card__price">
+                        <div className="sv-ai-recommendation-card__footer">
+                          <span className="sv-ai-recommendation-card__price">
                             <DollarSign className="h-4 w-4" />
                             {item.price}
                           </span>
-                          <button className="sv-recommendation-card__button">
+                          <button className="sv-ai-recommendation-card__button">
                             <span>Xem khóa học</span>
                             <ArrowRight className="h-4 w-4" />
                           </button>
@@ -1014,11 +1014,11 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
                     
                     {isJobRecommendation(item) && (
                       <>
-                        <p className="sv-recommendation-card__company">
+                        <p className="sv-ai-recommendation-card__company">
                           <Briefcase className="h-4 w-4" />
                           {item.company}
                         </p>
-                        <div className="sv-recommendation-card__meta">
+                        <div className="sv-ai-recommendation-card__meta">
                           <div className="sv-meta-item">
                             <Globe className="h-4 w-4" />
                             <span>{item.location}</span>
@@ -1028,12 +1028,12 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
                             <span>{item.salary}</span>
                           </div>
                         </div>
-                        <div className="sv-recommendation-card__footer">
-                          <span className="sv-recommendation-card__posted">
+                        <div className="sv-ai-recommendation-card__footer">
+                          <span className="sv-ai-recommendation-card__posted">
                             <Clock className="h-4 w-4" />
                             {item.posted}
                           </span>
-                          <button className="sv-recommendation-card__button">
+                          <button className="sv-ai-recommendation-card__button">
                             <span>Xem việc làm</span>
                             <ArrowRight className="h-4 w-4" />
                           </button>
@@ -1043,11 +1043,11 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
                     
                     {isSkillRecommendation(item) && (
                       <>
-                        <p className="sv-recommendation-card__category">
+                        <p className="sv-ai-recommendation-card__category">
                           <BarChart3 className="h-4 w-4" />
                           {item.category}
                         </p>
-                        <div className="sv-recommendation-card__meta">
+                        <div className="sv-ai-recommendation-card__meta">
                           <div className="sv-meta-item">
                             <Target className="h-4 w-4" />
                             <span>{item.difficulty}</span>
@@ -1061,8 +1061,8 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
                             <span>Nhu cầu {item.demand.toLowerCase()}</span>
                           </div>
                         </div>
-                        <div className="sv-recommendation-card__footer">
-                          <button className="sv-recommendation-card__button">
+                        <div className="sv-ai-recommendation-card__footer">
+                          <button className="sv-ai-recommendation-card__button">
                             <span>Tìm hiểu thêm</span>
                             <ArrowRight className="h-4 w-4" />
                           </button>
