@@ -300,9 +300,9 @@ const QuizSprint: React.FC<QuizSprintProps> = ({ isOpen, onClose, onComplete }) 
                   onClick={() => handleAnswerSelect(index)}
                   disabled={selectedAnswer !== null}
                 >
-                  <span className="answer-letter">
-                    {String.fromCharCode(65 + index)}
-                  </span>
+                    <span className="answer-letter">
+                    {String.fromCharCode(65 + index)}.
+                    </span>
                   <span className="answer-text">{option}</span>
                   {selectedAnswer === index && (
                     <span className="answer-feedback">
@@ -377,7 +377,7 @@ const QuizSprint: React.FC<QuizSprintProps> = ({ isOpen, onClose, onComplete }) 
                 <RotateCcw className="action-icon" />
                 Chơi lại
               </button>
-              <button className="finish-btn" onClick={onClose}>
+              <button className="play-again-btn" onClick={onClose}>
                 <Trophy className="action-icon" />
                 Hoàn thành
               </button>

@@ -156,17 +156,17 @@ const PremiumPage = () => {
             Tối đa hóa hiệu quả học tập và phát triển nghề nghiệp với các tính năng độc quyền.
           </p>
           <div className="premium-hero__stats">
-            <div className="stat-item">
+            <div className="premium-stat-item">
               <div className="stat-number">10K+</div>
-              <div className="stat-label">Thành viên</div>
+              <div className="premium-stat-label">Thành viên</div>
             </div>
-            <div className="stat-item">
+            <div className="premium-stat-item">
               <div className="stat-number">95%</div>
-              <div className="stat-label">Hài lòng</div>
+              <div className="premium-stat-label">Hài lòng</div>
             </div>
-            <div className="stat-item">
+            <div className="premium-stat-item">
               <div className="stat-number">3x</div>
-              <div className="stat-label">Tốc độ học</div>
+              <div className="premium-stat-label">Tốc độ học</div>
             </div>
           </div>
         </div>

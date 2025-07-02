@@ -546,7 +546,7 @@ const CoinWallet: React.FC = () => {
             <TrendingUp className="stat-icon earned" />
             <div className="stat-content">
               <div className="stat-value">{totalEarned.toLocaleString()}</div>
-              <div className="stat-label">Tổng Đã Kiếm</div>
+              <div className="wallet-stat-label">Tổng Đã Kiếm</div>
             </div>
           </div>
 
@@ -554,7 +554,7 @@ const CoinWallet: React.FC = () => {
             <Flame className="stat-icon streak" />
             <div className="stat-content">
               <div className="stat-value">{dailyStreak}</div>
-              <div className="stat-label">Chuỗi Ngày</div>
+              <div className="wallet-stat-label">Chuỗi Ngày</div>
             </div>
           </div>
 
@@ -562,7 +562,7 @@ const CoinWallet: React.FC = () => {
             <Trophy className="stat-icon level" />
             <div className="stat-content">
               <div className="stat-value">Cấp {userLevel}</div>
-              <div className="stat-label">Bậc Thầy Xu</div>
+              <div className="wallet-stat-label">Bậc Thầy Xu</div>
             </div>
           </div>
         </div>
@@ -736,7 +736,7 @@ const CoinWallet: React.FC = () => {
             <span className="flash-text">⚡ GIẢM GIÁ SỐC ⚡</span>
           </div>
           <h3>Giảm giá lên đến 20% cho tất cả gói xu!</h3>
-          <p>Chỉ trong 24 giờ - Đừng bỏ lỡ cơ hội này!</p>
+          <h4 className="achievement-title">Chỉ trong 24 giờ - Đừng bỏ lỡ cơ hội này!</h4>
           <div className="countdown-timer">
             <div className="countdown-item">
               <span className="countdown-number">{timeLeft.hours.toString().padStart(2, '0')}</span>
@@ -1044,9 +1044,9 @@ const CoinWallet: React.FC = () => {
         <div className="wallet-header">
           <div className="header-left">
             <Coins className="wallet-logo" />
-            <div className="header-info">
+            <div className="coin-header-info">
               <h1>Ví SkillCoin</h1>
-              <p>Quản lý phần thưởng học tập của bạn</p>
+              <p className="nav-tab">Quản lý phần thưởng học tập của bạn</p>
             </div>
           </div>
           

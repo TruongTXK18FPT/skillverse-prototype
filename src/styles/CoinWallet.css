@@ -101,7 +101,7 @@
   100% { transform: translateY(-3px) scale(1.05); }
 }
 
-.header-info h1 {
+.coin-header-info h1 {
   margin: 0;
   font-size: 1.75rem;
   font-weight: 700;
@@ -111,10 +111,11 @@
   -webkit-text-fill-color: transparent;
 }
 
-.header-info p {
+.coin-header-info p {
   margin: 0;
   color: var(--text-secondary);
   font-size: 0.95rem;
+  font-family: monospace;
 }
 
 .header-actions {
@@ -373,7 +374,7 @@
   color: var(--text-primary);
 }
 
-.stat-label {
+.wallet-stat-label {
   font-size: 0.875rem;
   color: var(--text-secondary);
   font-weight: 500;
@@ -766,6 +767,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
+  color: var(--text-secondary);
 }
 
 .category-filter:hover {
@@ -792,6 +794,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
+  color: var(--text-primary);
 }
 
 .sort-btn:hover {

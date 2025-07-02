@@ -225,7 +225,7 @@ const SeminarPage: React.FC = () => {
                   <div className="seminar-actions">
                     <button 
                       className="btn btn-primary"
-                      onClick={() => handleRegister(seminar.registration)}
+                      // onClick={() => handleRegister(seminar.registration)}
                     >
                       <span className="btn-icon">✨</span>
                       {' '}Đăng ký ngay

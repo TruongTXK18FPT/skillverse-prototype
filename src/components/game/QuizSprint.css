@@ -222,6 +222,10 @@
   font-size: 1.1rem;
 }
 
+.score-label{
+  margin-right: 1rem;
+}
+
 /* Progress Section */
 .progress-section {
   margin-bottom: 2rem;
@@ -355,6 +359,10 @@
   cursor: not-allowed;
 }
 
+.answer-text {
+  margin-left: 1rem
+}
+
 /* Result Screen */
 .result-screen {
   padding: 2rem;
@@ -367,8 +375,6 @@
 }
 
 .result-icon {
-  width: 80px;
-  height: 80px;
   color: #ffff00;
   margin: 0 auto 1rem;
   filter: drop-shadow(0 0 20px rgba(255, 255, 0, 0.8));
@@ -415,6 +421,7 @@
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
+  padding-top: 1rem
 }
 
 .play-again-btn, .claim-btn {
