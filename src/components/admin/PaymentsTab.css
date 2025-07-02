@@ -1,0 +1,460 @@
+/* PaymentsTab.css - Enhanced Payments Management Styles */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 5px rgba(102, 126, 234, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.4); }
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes floatingAnimation {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes cashFlow {
+  0% { transform: translateX(-20px); opacity: 0; }
+  50% { transform: translateX(0px); opacity: 1; }
+  100% { transform: translateX(20px); opacity: 0; }
+}
+
+.administrator-payments {
+  padding: 30px;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  min-height: 600px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.administrator-payments-header {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: slideInFromLeft 0.6s ease-out;
+}
+
+.administrator-payments-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 15px;
+  position: relative;
+  animation: floatingAnimation 3s ease-in-out infinite;
+}
+
+.administrator-payments-header h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
+  animation: shimmer 2s infinite;
+}
+
+.administrator-payments-header h2::before {
+  content: '💳';
+  font-size: 2rem;
+  margin-right: 15px;
+  animation: cashFlow 3s ease-in-out infinite;
+}
+
+.administrator-payments-header p {
+  color: #7f8c8d;
+  font-size: 1.2rem;
+  margin: 0;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.administrator-payments-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+  animation: slideInFromLeft 0.8s ease-out 0.3s both;
+}
+
+.administrator-payments-card {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  animation: bounceIn 0.6s ease-out;
+}
+
+.administrator-payments-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border-color: #667eea;
+}
+
+.administrator-payments-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.administrator-payments-card:hover::before {
+  transform: scaleY(1);
+}
+
+.administrator-payments-card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.administrator-payments-card-icon {
+  font-size: 2.5rem;
+  padding: 15px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 12px;
+  animation: floatingAnimation 3s ease-in-out infinite;
+}
+
+.administrator-payments-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.administrator-payments-card-amount {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  animation: pulseGlow 2s infinite;
+}
+
+.administrator-payments-card-change {
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.administrator-payments-card-change.positive {
+  color: #00b894;
+}
+
+.administrator-payments-card-change.negative {
+  color: #e74c3c;
+}
+
+.administrator-payments-filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.administrator-payments-filter {
+  padding: 12px 18px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.administrator-payments-filter:hover {
+  border-color: #667eea;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+}
+
+.administrator-payments-filter.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+}
+
+.administrator-payments-table-container {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  animation: fadeInUp 0.8s ease-out 0.5s both;
+}
+
+.administrator-payments-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.administrator-payments-table th {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 20px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 2px solid #e2e8f0;
+  font-size: 0.95rem;
+}
+
+.administrator-payments-table td {
+  padding: 18px 15px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.administrator-payments-table tbody tr {
+  transition: all 0.3s ease;
+  animation: slideInFromLeft 0.6s ease-out;
+}
+
+.administrator-payments-table tbody tr:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  transform: scale(1.02);
+}
+
+.administrator-payments-transaction-id {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: #667eea;
+}
+
+.administrator-payments-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.administrator-payments-user-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.administrator-payments-amount {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.administrator-payments-amount.positive {
+  color: #00b894;
+}
+
+.administrator-payments-amount.negative {
+  color: #e74c3c;
+}
+
+.administrator-payments-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.administrator-payments-status.completed {
+  background: linear-gradient(135deg, #a8e6cf 0%, #81c784 100%);
+  color: #2e7d32;
+}
+
+.administrator-payments-status.pending {
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  color: #e17055;
+}
+
+.administrator-payments-status.failed {
+  background: linear-gradient(135deg, #ffb3ba 0%, #ff7675 100%);
+  color: #c62828;
+}
+
+.administrator-payments-status.refunded {
+  background: linear-gradient(135deg, #d1ecf1 0%, #b8daff 100%);
+  color: #0056b3;
+}
+
+.administrator-payments-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.administrator-payments-action-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.administrator-payments-action-btn.view {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.administrator-payments-action-btn.refund {
+  background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+  color: white;
+}
+
+.administrator-payments-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.administrator-payments-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+  padding: 20px;
+}
+
+.administrator-payments-pagination button {
+  padding: 10px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.administrator-payments-pagination button:hover:not(:disabled) {
+  border-color: #667eea;
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.administrator-payments-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.administrator-payments-pagination .active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .administrator-payments-overview {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .administrator-payments {
+    padding: 20px;
+  }
+  
+  .administrator-payments-header h2 {
+    font-size: 2rem;
+  }
+  
+  .administrator-payments-overview {
+    grid-template-columns: 1fr;
+  }
+  
+  .administrator-payments-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .administrator-payments-table-container {
+    overflow-x: auto;
+  }
+  
+  .administrator-payments-table th,
+  .administrator-payments-table td {
+    padding: 12px 8px;
+    font-size: 0.8rem;
+  }
+  
+  .administrator-payments-user {
+    flex-direction: column;
+    text-align: center;
+    gap: 5px;
+  }
+  
+  .administrator-payments-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .administrator-payments-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .administrator-payments-card {
+    padding: 20px;
+  }
+  
+  .administrator-payments-card-amount {
+    font-size: 1.6rem;
+  }
+}

@@ -58,6 +58,13 @@ const Footer = () => {
                 <li><a href="/jobs" className="footer-link hover-underline">{translations.navigation.jobs}</a></li>
                 <li><a href="/portfolio" className="footer-link hover-underline">{translations.navigation.portfolio}</a></li>
                 <li><a href="/chatbot" className="footer-link hover-underline">{translations.navigation.chatbot}</a></li>
+                <li><a href="/gamification" className="footer-link hover-underline">{translations.navigation.gamification}</a></li>
+                <li><a href="/mentorship" className="footer-link hover-underline">{
+translations.navigation.mentorship}</a></li>
+                <li><a href="/community" className="footer-link hover-underline">{translations.navigation.community}</a></li>
+                <li><a href="/seminar" className="footer-link hover-underline">{translations.navigation.seminar}</a></li>
+                <li><a href="/business" className="footer-link hover-underline">Trang doanh nghiệp</a></li>
+                <li><a href="/mentor" className="footer-link hover-underline">Trang mentor</a></li>
               </ul>
             </div>
 

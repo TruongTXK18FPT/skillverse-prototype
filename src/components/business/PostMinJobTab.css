@@ -1,0 +1,216 @@
+.pmjt-post-minjob-tab {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.pmjt-tab-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.pmjt-tab-header h2 {
+  color: #2c3e50;
+  margin-bottom: 8px;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.pmjt-tab-header p {
+  color: #7f8c8d;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.pmjt-minjob-form {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+}
+
+.pmjt-form-group {
+  margin-bottom: 25px;
+}
+
+.pmjt-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.pmjt-form-group input,
+.pmjt-form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.pmjt-form-group input:focus,
+.pmjt-form-group textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.pmjt-form-group input.error,
+.pmjt-form-group textarea.error {
+  border-color: #e74c3c;
+}
+
+.pmjt-form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.pmjt-skills-input-container {
+  position: relative;
+}
+
+.pmjt-skills-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e1e8ed;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pmjt-skill-option {
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.pmjt-skill-option:hover {
+  background-color: #f8f9fa;
+}
+
+.pmjt-skill-option:focus {
+  outline: none;
+  background-color: #e3f2fd;
+}
+
+.pmjt-selected-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.pmjt-skill-tag {
+  display: inline-flex;
+  align-items: center;
+  background: #3498db;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.pmjt-remove-skill {
+  background: none;
+  border: none;
+  color: white;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.pmjt-remove-skill:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.pmjt-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.pmjt-error-message {
+  display: block;
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.pmjt-form-actions {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.pmjt-create-job-btn {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+.pmjt-create-job-btn:hover {
+  background: linear-gradient(135deg, #2980b9, #21618c);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.pmjt-create-job-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pmjt-post-minjob-tab {
+    padding: 15px;
+  }
+  
+  .pmjt-minjob-form {
+    padding: 20px;
+  }
+  
+  .pmjt-form-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .pmjt-tab-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .pmjt-create-job-btn {
+    width: 100%;
+    min-width: auto;
+  }
+}

@@ -69,8 +69,8 @@ const PremiumPage = () => {
       id: 'plus',
       name: 'Premium Plus',
       description: 'Trải nghiệm đầy đủ SkillVerse',
-      monthlyPrice: 299000,
-      yearlyPrice: 2990000,
+      monthlyPrice: 249000,
+      yearlyPrice: 2490000,
       features: [
         'Tất cả tính năng Basic',
         'AI Career Coach Pro không giới hạn',

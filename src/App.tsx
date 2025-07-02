@@ -15,6 +15,8 @@ import PortfolioPage from './pages/navbar/PortfolioPage';
 import CVPage from './pages/navbar/CV';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/login/RegisterPage';
+import BusinessRegisterPage from './pages/auth/BusinessRegisterPage';
+import MentorRegisterPage from './pages/auth/MentorRegisterPage';
 import ForgotPasswordPage from './pages/login/ForgotPasswordPage';
 import PaymentPage from './pages/payment/PaymentPage';
 import PremiumPage from './pages/payment/PremiumPage';
@@ -28,6 +30,9 @@ import TermOfService from './pages/footer/TermOfService';
 import PrivacyPolicy from './pages/footer/Privacy&Policy';
 import HelpCenter from './pages/footer/HelpCenter';
 import SeminarPage from './pages/navbar/SeminarPage';
+import BusinessPage from './pages/main/BusinessPage';
+import MentorPage from './pages/main/MentorPage';
+import AdminPage from './pages/main/AdminPage';
 import './styles/App.css';
 
 const App = () => {
@@ -53,6 +58,8 @@ const App = () => {
                 <Route path="/certificate/:id" element={<Certificate />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/register/business" element={<BusinessRegisterPage />} />
+                <Route path="/register/mentor" element={<MentorRegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/premium" element={<PremiumPage />} />
@@ -65,7 +72,12 @@ const App = () => {
                 <Route path="/help-center" element={<HelpCenter />} />
                 <Route path="/terms-of-service" element={<TermOfService />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/business" element={<BusinessPage />} />
+                <Route path="/mentor" element={<MentorPage />} />
+                {/* Admin Page - ensure this is protected or only accessible to admins */}
+                <Route path="/admin" element={<AdminPage />} />
                 
+                {/* Add the admin routes */}
                 {/* Catch-all route for 404 errors - must be last */}
                 <Route path="*" element={<NotFoundPage />} />
                 {/* Admin Page - ensure this is protected or only accessible to admins */}

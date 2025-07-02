@@ -1,0 +1,405 @@
+/* MentoringHistoryTab.css - Styles for Mentoring History tab (mht- prefix) */
+
+.mht-history-tab {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Statistics Overview */
+.mht-stats-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.mht-stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.mht-stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.mht-stat-icon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mht-stat-content h3 {
+  margin: 0 0 5px 0;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.mht-stat-content p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Controls */
+.mht-controls {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.mht-search {
+  flex: 1;
+  min-width: 300px;
+}
+
+.mht-search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #f0f0f0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease;
+}
+
+.mht-search-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.mht-filters {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.mht-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mht-filter-group label {
+  color: #333;
+  font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.mht-filter-select {
+  padding: 8px 12px;
+  border: 2px solid #f0f0f0;
+  border-radius: 8px;
+  background: white;
+  color: #333;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  min-width: 120px;
+}
+
+.mht-filter-select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.mht-export-btn {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.mht-export-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Table */
+.mht-table-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.mht-no-sessions {
+  padding: 40px;
+  text-align: center;
+  color: #999;
+}
+
+.mht-sessions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mht-sessions-table th {
+  background: #f8f9fa;
+  padding: 15px 12px;
+  text-align: left;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.mht-sessions-table td {
+  padding: 15px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+.mht-sessions-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.mht-sessions-table tr:last-child td {
+  border-bottom: none;
+}
+
+.mht-student-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mht-student-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.mht-topic {
+  color: #333;
+  font-weight: 500;
+}
+
+.mht-status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mht-status-success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.mht-status-info {
+  background: #cce7ff;
+  color: #004085;
+}
+
+.mht-status-warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.mht-type-badge {
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.mht-type-paid {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.mht-type-free {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.mht-earnings {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.mht-points {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.mht-review-status {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.mht-review-status.has-review {
+  color: #2e7d32;
+}
+
+.mht-review-status.no-review {
+  color: #999;
+}
+
+/* Pagination */
+.mht-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  padding: 20px 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mht-page-btn {
+  padding: 10px 20px;
+  border: 2px solid #f0f0f0;
+  background: white;
+  color: #333;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.mht-page-btn:hover:not(:disabled) {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.mht-page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mht-page-info {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .mht-sessions-table {
+    font-size: 0.8rem;
+  }
+  
+  .mht-sessions-table th,
+  .mht-sessions-table td {
+    padding: 12px 8px;
+  }
+}
+
+@media (max-width: 968px) {
+  .mht-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mht-search {
+    min-width: auto;
+  }
+
+  .mht-filters {
+    justify-content: center;
+  }
+
+  .mht-table-container {
+    overflow-x: auto;
+  }
+
+  .mht-sessions-table {
+    min-width: 800px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mht-history-tab {
+    padding: 15px;
+  }
+
+  .mht-stats-overview {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+
+  .mht-stat-card {
+    padding: 20px;
+  }
+
+  .mht-controls {
+    padding: 20px;
+  }
+
+  .mht-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .mht-filter-group {
+    justify-content: space-between;
+  }
+
+  .mht-pagination {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .mht-stats-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .mht-stat-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 15px;
+  }
+
+  .mht-sessions-table {
+    min-width: 600px;
+  }
+
+  .mht-sessions-table th,
+  .mht-sessions-table td {
+    padding: 10px 6px;
+  }
+}

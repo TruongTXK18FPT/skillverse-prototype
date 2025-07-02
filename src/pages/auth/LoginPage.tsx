@@ -108,7 +108,17 @@ const LoginPage = () => {
         {/* Register Link */}
         <div className="register-link">
           <span>Chưa có tài khoản?</span>
-          <Link to="/register">Đăng ký ngay</Link>
+          <div className="register-options">
+            <Link to="/register" className="register-option personal">
+              Bạn muốn đăng ký là cá nhân
+            </Link>
+            <Link to="/register/business" className="register-option business">
+              Bạn muốn đăng ký là doanh nghiệp
+            </Link>
+            <Link to="/register/mentor" className="register-option mentor">
+              Bạn muốn đăng ký là mentor
+            </Link>
+          </div>
         </div>
       </div>
     </div>

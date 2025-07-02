@@ -1,0 +1,411 @@
+/* UserManagementTab.css - Enhanced User Management Styles with Animations */
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes countUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.administrator-user-management {
+  padding: 30px;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  min-height: 600px;
+  animation: slideInFromBottom 0.6s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.administrator-user-header {
+  text-align: center;
+  margin-bottom: 30px;
+  animation: slideInFromBottom 0.8s ease-out 0.2s both;
+}
+
+.administrator-user-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.administrator-user-header h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
+  animation: scaleIn 0.8s ease-out 1s both;
+}
+
+.administrator-user-header p {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.administrator-user-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.administrator-search-box {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.administrator-search-input {
+  width: 100%;
+  padding: 12px 45px 12px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: white;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.administrator-search-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 8px 25px rgba(102, 126, 234, 0.15);
+  transform: translateY(-2px);
+}
+
+.administrator-search-input::placeholder {
+  color: #a0aec0;
+  transition: all 0.3s ease;
+}
+
+.administrator-search-input:focus::placeholder {
+  color: transparent;
+}
+
+.administrator-search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: #7f8c8d;
+}
+
+.administrator-filters {
+  display: flex;
+  gap: 12px;
+}
+
+.administrator-filter-select {
+  padding: 10px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.administrator-filter-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.administrator-user-stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.administrator-stat-item {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 15px;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  min-width: 120px;
+  transition: all 0.3s ease;
+}
+
+.administrator-stat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.administrator-stat-number {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.administrator-stat-label {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.administrator-user-table-container {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.administrator-user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.administrator-user-table th {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+}
+
+.administrator-user-table td {
+  padding: 15px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.administrator-user-row:hover {
+  background-color: rgba(102, 126, 234, 0.05);
+}
+
+.administrator-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.administrator-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.administrator-user-name {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.administrator-role-badge,
+.administrator-status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.administrator-action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.administrator-action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.administrator-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.administrator-view-btn:hover {
+  background: #3b82f6;
+  color: white;
+}
+
+.administrator-ban-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.administrator-unban-btn:hover {
+  background: #10b981;
+  color: white;
+}
+
+.administrator-reset-btn:hover {
+  background: #f59e0b;
+  color: white;
+}
+
+.administrator-edit-btn:hover {
+  background: #8b5cf6;
+  color: white;
+}
+
+.administrator-no-results {
+  text-align: center;
+  padding: 60px 30px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  margin-top: 20px;
+}
+
+.administrator-no-results p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .administrator-user-management {
+    padding: 20px;
+  }
+  
+  .administrator-user-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .administrator-search-box {
+    max-width: none;
+  }
+  
+  .administrator-filters {
+    justify-content: center;
+  }
+  
+  .administrator-user-stats {
+    gap: 15px;
+  }
+  
+  .administrator-stat-item {
+    min-width: 100px;
+    padding: 15px;
+  }
+  
+  .administrator-user-table-container {
+    overflow-x: auto;
+  }
+  
+  .administrator-user-table {
+    min-width: 800px;
+  }
+  
+  .administrator-user-table th,
+  .administrator-user-table td {
+    padding: 10px 8px;
+    font-size: 0.85rem;
+  }
+  
+  .administrator-action-buttons {
+    gap: 6px;
+  }
+  
+  .administrator-action-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .administrator-user-header h2 {
+    font-size: 1.6rem;
+  }
+  
+  .administrator-user-header p {
+    font-size: 1rem;
+  }
+  
+  .administrator-user-stats {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .administrator-stat-item {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .administrator-no-results {
+    padding: 40px 20px;
+  }
+}

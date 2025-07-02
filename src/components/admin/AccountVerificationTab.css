@@ -1,0 +1,832 @@
+/* AccountVerificationTab.css - Enhanced Account Verification Styles */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 5px rgba(102, 126, 234, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.4); }
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes floatingAnimation {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes documentPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes statusBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Main Container */
+.administrator-verification {
+  padding: 30px;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  min-height: 100vh;
+  animation: fadeInUp 0.8s ease-out;
+  position: relative;
+}
+
+.administrator-verification::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 0 0 50px 50px;
+  z-index: -1;
+}
+
+/* Header Section */
+.administrator-verification-header {
+  text-align: center;
+  margin-bottom: 50px;
+  animation: slideInFromLeft 0.6s ease-out;
+  position: relative;
+}
+
+.administrator-verification-header h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  position: relative;
+  animation: floatingAnimation 4s ease-in-out infinite;
+}
+
+.administrator-verification-header h2::after {
+  content: '🔍';
+  position: absolute;
+  right: -50px;
+  top: 0;
+  font-size: 2rem;
+  animation: floatingAnimation 3s ease-in-out infinite;
+}
+
+.administrator-verification-header p {
+  color: #64748b;
+  font-size: 1.3rem;
+  margin: 0;
+  font-weight: 500;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+/* Stats Dashboard */
+.administrator-verification-controls {
+  margin-bottom: 40px;
+  animation: slideInFromLeft 0.8s ease-out 0.3s both;
+}
+
+.administrator-verification-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.administrator-verification-stat {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 2px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 30px 25px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  animation: bounceIn 0.6s ease-out;
+}
+
+.administrator-verification-stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.administrator-verification-stat:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+  border-color: #667eea;
+}
+
+.administrator-verification-stat:hover::before {
+  transform: scaleX(1);
+}
+
+.administrator-verification-stat-number {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+  animation: pulseGlow 2s infinite;
+}
+
+.administrator-verification-stat-label {
+  font-size: 1rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Filters */
+.administrator-verification-filters {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.administrator-verification-filter {
+  padding: 15px 25px;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  background: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.administrator-verification-filter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.administrator-verification-filter:hover {
+  color: white;
+  border-color: #667eea;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.administrator-verification-filter:hover::before {
+  left: 0;
+}
+
+/* Verification Items List */
+.administrator-verification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  animation: fadeInUp 0.8s ease-out 0.5s both;
+}
+
+.administrator-verification-item {
+  background: white;
+  border-radius: 24px;
+  padding: 35px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  animation: slideInFromLeft 0.6s ease-out;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.administrator-verification-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: scaleY(0);
+  transition: transform 0.4s ease;
+}
+
+.administrator-verification-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  border-color: #667eea;
+}
+
+.administrator-verification-item:hover::before {
+  transform: scaleY(1);
+}
+
+/* Item Header */
+.administrator-verification-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.administrator-verification-item-info h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 10px 0;
+  transition: color 0.3s ease;
+}
+
+.administrator-verification-item:hover h3 {
+  color: #667eea;
+}
+
+.administrator-verification-item-info p {
+  color: #64748b;
+  margin: 5px 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Status Badges */
+.administrator-verification-status {
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  animation: statusBlink 2s infinite;
+}
+
+.administrator-verification-status::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+.administrator-verification-status.pending {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #92400e;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+}
+
+.administrator-verification-status.approved {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.administrator-verification-status.rejected {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+/* Documents Section from earlier - Updated for new structure */
+.administrator-verification-documents {
+  margin: 25px 0;
+}
+
+.administrator-verification-document {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border: 2px solid #cbd5e0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.administrator-verification-document::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.administrator-verification-document:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+  border-color: #667eea;
+}
+
+.administrator-verification-document:hover::before {
+  opacity: 1;
+}
+
+.administrator-verification-document-icon {
+  font-size: 1.5rem;
+  animation: floatingAnimation 3s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+.administrator-verification-document-name {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #1e293b;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+.administrator-verification-document-view {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.administrator-verification-document-view:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Action Buttons */
+.administrator-verification-actions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-top: 25px;
+}
+
+.administrator-verification-action {
+  padding: 15px 25px;
+  border: none;
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 120px;
+}
+
+.administrator-verification-action::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.administrator-verification-action:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.administrator-verification-action.approve {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.administrator-verification-action.approve:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+}
+
+.administrator-verification-action.reject {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.administrator-verification-action.reject:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4);
+}
+
+.administrator-verification-action.view {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.administrator-verification-action.view:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+}
+
+/* Empty State */
+.administrator-verification-empty {
+  text-align: center;
+  padding: 80px 30px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 2px solid #e2e8f0;
+  animation: bounceIn 1s ease-out;
+}
+
+.administrator-verification-empty::before {
+  content: '📋';
+  display: block;
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: floatingAnimation 3s ease-in-out infinite;
+}
+
+.administrator-verification-empty p {
+  font-size: 1.3rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Verification Cards - Matching TSX Structure */
+.administrator-verification-card {
+  background: white;
+  border-radius: 24px;
+  padding: 35px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  animation: slideInFromLeft 0.6s ease-out;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.administrator-verification-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: scaleY(0);
+  transition: transform 0.4s ease;
+}
+
+.administrator-verification-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  border-color: #667eea;
+}
+
+.administrator-verification-card:hover::before {
+  transform: scaleY(1);
+}
+
+/* Card Header */
+.administrator-verification-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Applicant Info */
+.administrator-verification-applicant {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.administrator-verification-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  animation: floatingAnimation 3s ease-in-out infinite;
+}
+
+.administrator-verification-info h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+  transition: color 0.3s ease;
+}
+
+.administrator-verification-card:hover .administrator-verification-info h3 {
+  color: #667eea;
+}
+
+.administrator-verification-info p {
+  color: #64748b;
+  margin: 4px 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.administrator-verification-role {
+  display: inline-block;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #667eea;
+  margin-top: 5px;
+}
+
+/* Meta Info */
+.administrator-verification-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.administrator-verification-date {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Details Section */
+.administrator-verification-details {
+  margin-bottom: 25px;
+}
+
+.administrator-verification-mentor-info,
+.administrator-verification-business-info {
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.administrator-verification-mentor-info h4,
+.administrator-verification-business-info h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.administrator-verification-mentor-info h4::before {
+  content: '🎓';
+  font-size: 1.2rem;
+}
+
+.administrator-verification-business-info h4::before {
+  content: '🏢';
+  font-size: 1.2rem;
+}
+
+.administrator-verification-mentor-info p,
+.administrator-verification-business-info p {
+  color: #4a5568;
+  margin: 8px 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Documents Section */
+.administrator-verification-documents h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.administrator-verification-documents h4::before {
+  content: '📁';
+  font-size: 1.2rem;
+}
+
+/* Document List Structure */
+.administrator-verification-document-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Additional Button Styles for TSX Structure */
+.administrator-verification-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.administrator-verification-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.administrator-verification-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .administrator-verification {
+    padding: 25px;
+  }
+  
+  .administrator-verification-header h2 {
+    font-size: 2.5rem;
+  }
+  
+  .administrator-verification-stats {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .administrator-verification {
+    padding: 20px;
+  }
+  
+  .administrator-verification-header h2 {
+    font-size: 2rem;
+  }
+  
+  .administrator-verification-header h2::after {
+    display: none;
+  }
+  
+  .administrator-verification-stats {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+  }
+  
+  .administrator-verification-stat {
+    padding: 20px 15px;
+  }
+  
+  .administrator-verification-stat-number {
+    font-size: 2rem;
+  }
+  
+  .administrator-verification-filters {
+    justify-content: center;
+  }
+  
+  .administrator-verification-filter {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .administrator-verification-item {
+    padding: 25px;
+  }
+  
+  .administrator-verification-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .administrator-verification-documents {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+  
+  .administrator-verification-actions {
+    justify-content: center;
+    flex-direction: column;
+  }
+  
+  .administrator-verification-action {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .administrator-verification-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .administrator-verification-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .administrator-verification-filters {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .administrator-verification-documents {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+
+
