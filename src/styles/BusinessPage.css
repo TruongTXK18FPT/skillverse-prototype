@@ -141,26 +141,26 @@
   height: 200px;
 }
 
-.floating-icon {
+.business-floating-icon {
   position: absolute;
   font-size: 3rem;
   animation: float 6s ease-in-out infinite;
   opacity: 0.8;
 }
 
-.floating-icon:nth-child(1) {
+.business-floating-icon:nth-child(1) {
   top: 20%;
   left: 20%;
   animation-delay: 0s;
 }
 
-.floating-icon:nth-child(2) {
+.business-floating-icon:nth-child(2) {
   top: 60%;
   right: 20%;
   animation-delay: 2s;
 }
 
-.floating-icon:nth-child(3) {
+.business-floating-icon:nth-child(3) {
   bottom: 20%;
   left: 50%;
   animation-delay: 4s;

@@ -157,9 +157,9 @@ const BusinessPage: React.FC = () => {
           </div>
         </div>
         <div className="business-header-animation">
-          <div className="floating-icon">💼</div>
-          <div className="floating-icon">🚀</div>
-          <div className="floating-icon">⭐</div>
+          <div className="business-floating-icon">💼</div>
+          <div className="business-floating-icon">🚀</div>
+          <div className="business-floating-icon">⭐</div>
         </div>
       </div>
 

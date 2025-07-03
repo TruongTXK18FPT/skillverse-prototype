@@ -20,7 +20,8 @@ import {
   Calendar,
   Crown,
   Wallet,
-  Trophy
+  Trophy,
+  Map
 } from 'lucide-react';
 import Logo from '../assets/Logo.jpg';
 import '../styles/Header.css';
@@ -46,6 +47,7 @@ const Header = () => {
   const allCategories = [
     { path: '/dashboard', label: translations.navigation.dashboard, description: translations.navigation.descriptions.dashboard, icon: BarChart3 },
     { path: '/courses', label: translations.navigation.courses, description: translations.navigation.descriptions.courses, icon: GraduationCap },
+    { path: '/roadmap', label: translations.navigation.roadmap, description: translations.navigation.descriptions.roadmap, icon: Map },
     { path: '/mentorship', label: translations.navigation.mentorship, description: translations.navigation.descriptions.mentorship, icon: Users },
     { path: '/community', label: translations.navigation.community, description: translations.navigation.descriptions.community, icon: MessageCircle },
     { path: '/jobs', label: translations.navigation.jobs, description: translations.navigation.descriptions.jobs, icon: Briefcase },

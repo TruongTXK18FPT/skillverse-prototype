@@ -33,6 +33,7 @@ export const en = {
     settings: 'Settings',
     profile: 'Profile',
     seminar: 'Seminars',
+    roadmap: 'Roadmap',
     descriptions: {
       dashboard: 'Track your learning progress and achievements',
       courses: 'Learn new skills with expert-led courses',
@@ -43,6 +44,7 @@ export const en = {
       chatbot: 'Get personalized AI career guidance',
       seminar: 'Attend seminars and webinars to enhance your knowledge',
       gamification: 'Leaderboards, badges, and mini-games',
+      roadmap: 'Explore learning paths and skill development roadmaps',
     }
   },
   auth: {

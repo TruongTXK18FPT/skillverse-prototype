@@ -70,67 +70,67 @@ const PortfolioPage = () => {
 
   // Mock data for the portfolio
   const userProfile = {
-    name: 'Tran Xuan Truong',
-    title: 'Full-stack Developer & UI/UX Designer',
-    bio: 'Passionate Computer Science student at FPT University with a strong foundation in web development and user interface design. Experienced with modern technologies including React, Node.js, and cloud platforms. Seeking opportunities to apply my skills in innovative projects and contribute to meaningful solutions.',
-    careerGoals: 'Aspiring to become a senior full-stack developer with expertise in scalable web applications and user-centered design.',
+    name: 'Trần Xuân Trường',
+    title: 'Nhà Phát Triển Full-stack & Thiết Kế UI/UX',
+    bio: 'Sinh viên Kĩ thuật phần mềm đầy nhiệt huyết tại Đại học FPT với nền tảng vững chắc trong phát triển web và thiết kế giao diện người dùng. Có kinh nghiệm với các công nghệ hiện đại bao gồm React, Node.js và nền tảng đám mây. Mong muốn tìm kiếm cơ hội áp dụng kỹ năng của mình trong các dự án sáng tạo và đóng góp vào các giải pháp có ý nghĩa.',
+    careerGoals: 'Khát vọng trở thành một nhà phát triển full-stack cấp cao với chuyên môn về ứng dụng web có thể mở rộng và thiết kế lấy người dùng làm trung tâm.',
     email: 'truongtranxuan41@gmail.com',
     phone: '0398648063',
-    location: 'Ho Chi Minh City, Vietnam',
+    location: 'Thành phố Hồ Chí Minh, Việt Nam',
     linkedin: 'linkedin.com/in/tran-xuan-truong-ab00b7317',
     github: 'https://github.com/TruongTXK18FPT',
     avatar: 'https://media.licdn.com/dms/image/v2/D5603AQHZv1brnCXkRQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1719832250061?e=1755734400&v=beta&t=SQ9q4CPeTzzA7HbLrtjGiJEEeLRgWCYF4BpiTiU6FJw',
     videoIntro: null,
-    languages: ['Vietnamese (Native)', 'English (Professional)']
+    languages: ['Tiếng Việt (Bản ngữ)', 'Tiếng Anh (Chuyên nghiệp)']
   };
 
   const certificates = [
     {
       id: 1,
-      title: 'Advanced React Development',
-      category: 'Technical',
+      title: 'Phát Triển React Nâng Cao',
+      category: 'Kỹ thuật',
       provider: 'SkillVerse',
       completionDate: '2024-03-15',
       hours: 40,
-      level: 'Advanced',
+      level: 'Nâng cao',
       badge: '🏆',
-      skills: ['React', 'Redux', 'TypeScript', 'Testing'],
+      skills: ['React', 'Redux', 'TypeScript', 'Kiểm thử'],
       verified: true
     },
     {
       id: 2,
-      title: 'UI/UX Design Fundamentals',
-      category: 'Design',
+      title: 'Cơ Bản Thiết Kế UI/UX',
+      category: 'Thiết kế',
       provider: 'SkillVerse',
       completionDate: '2024-02-28',
       hours: 32,
-      level: 'Intermediate',
+      level: 'Trung cấp',
       badge: '🎨',
-      skills: ['Figma', 'Design Thinking', 'Prototyping', 'User Research'],
+      skills: ['Figma', 'Tư duy Thiết kế', 'Tạo Nguyên mẫu', 'Nghiên cứu Người dùng'],
       verified: true
     },
     {
       id: 3,
-      title: 'Leadership & Team Management',
-      category: 'Soft Skills',
+      title: 'Lãnh Đạo & Quản Lý Nhóm',
+      category: 'Kỹ năng mềm',
       provider: 'SkillVerse',
       completionDate: '2024-01-20',
       hours: 24,
-      level: 'Intermediate',
+      level: 'Trung cấp',
       badge: '👥',
-      skills: ['Leadership', 'Communication', 'Team Building', 'Conflict Resolution'],
+      skills: ['Lãnh đạo', 'Giao tiếp', 'Xây dựng Nhóm', 'Giải quyết Xung đột'],
       verified: true
     },
     {
       id: 4,
-      title: 'Digital Marketing Strategy',
-      category: 'Business',
+      title: 'Chiến Lược Marketing Số',
+      category: 'Kinh doanh',
       provider: 'SkillVerse',
       completionDate: '2024-01-10',
       hours: 28,
-      level: 'Beginner',
+      level: 'Cơ bản',
       badge: '📈',
-      skills: ['SEO', 'Social Media', 'Content Marketing', 'Analytics'],
+      skills: ['SEO', 'Mạng xã hội', 'Marketing Nội dung', 'Phân tích'],
       verified: true
     }
   ];
@@ -138,31 +138,31 @@ const PortfolioPage = () => {
   const projects = [
     {
       id: 1,
-      title: 'E-commerce Platform Redesign',
-      description: 'Complete UI/UX redesign of an e-commerce platform, resulting in 35% increase in conversion rate and improved user satisfaction.',
-      client: 'Fashion Store ABC',
+      title: 'Thiết Kế Lại Nền Tảng Thương Mại Điện Tử',
+      description: 'Thiết kế lại hoàn toàn UI/UX của nền tảng thương mại điện tử, đem lại mức tăng 35% tỷ lệ chuyển đổi và cải thiện sự hài lòng của người dùng.',
+      client: 'Cửa Hàng Thời Trang ABC',
       type: 'Micro-job',
-      duration: '3 weeks',
+      duration: '3 tuần',
       completionDate: '2024-03-10',
       tools: ['React', 'Tailwind CSS', 'Figma', 'Adobe XD'],
-      outcomes: ['35% increase in conversion rate', 'Reduced bounce rate by 25%', 'Improved mobile responsiveness'],
+      outcomes: ['Tăng 35% tỷ lệ chuyển đổi', 'Giảm 25% tỷ lệ thoát trang', 'Cải thiện khả năng phản hồi trên di động'],
       rating: 5,
-      feedback: 'Outstanding work! Truong delivered exceptional results and exceeded our expectations.',
+      feedback: 'Công việc xuất sắc! Trường đã mang lại kết quả vượt ngoài mong đợi và vượt xa kỳ vọng của chúng tôi.',
       attachments: ['mockup.pdf', 'user-flow.png'],
       image: 'https://images.pexels.com/photos/34577/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=400'
     },
     {
       id: 2,
-      title: 'Restaurant Management System',
-      description: 'Developed a comprehensive restaurant management system with table booking, menu management, and order tracking features.',
-      client: 'Local Restaurant Chain',
-      type: 'Freelance Project',
-      duration: '6 weeks',
+      title: 'Hệ Thống Quản Lý Nhà Hàng',
+      description: 'Phát triển hệ thống quản lý nhà hàng toàn diện với tính năng đặt bàn, quản lý thực đơn và theo dõi đơn hàng.',
+      client: 'Chuỗi Nhà Hàng Địa Phương',
+      type: 'Dự án Freelance',
+      duration: '6 tuần',
       completionDate: '2024-02-15',
       tools: ['Vue.js', 'Laravel', 'MySQL', 'Stripe API'],
-      outcomes: ['Streamlined operations', 'Reduced manual errors by 80%', 'Improved customer experience'],
+      outcomes: ['Tối ưu hóa hoạt động', 'Giảm 80% lỗi thủ công', 'Cải thiện trải nghiệm khách hàng'],
       rating: 5,
-      feedback: 'Professional, reliable, and delivered a robust solution that transformed our operations.',
+      feedback: 'Chuyên nghiệp, đáng tin cậy và đã cung cấp giải pháp mạnh mẽ biến đổi hoạt động của chúng tôi.',
       attachments: ['demo-video.mp4', 'technical-docs.pdf'],
       image: 'https://images.pexels.com/photos/2291367/pexels-photo-2291367.jpeg?auto=compress&cs=tinysrgb&w=400'
     }
@@ -171,30 +171,30 @@ const PortfolioPage = () => {
   const mentorFeedback = [
     {
       id: 1,
-      mentorName: 'Dr. Sarah Chen',
-      mentorTitle: 'Senior Software Engineer at Google',
-      feedback: 'Truong demonstrates exceptional problem-solving skills and attention to detail. His code quality and documentation are consistently excellent.',
-      skillEndorsed: 'React Development',
+      mentorName: 'TS. Sarah Chen',
+      mentorTitle: 'Kỹ sư Phần mềm Cấp cao tại Google',
+      feedback: 'Trường thể hiện kỹ năng giải quyết vấn đề xuất sắc và sự chú ý đến chi tiết. Chất lượng mã nguồn và tài liệu của anh ấy luôn xuất sắc.',
+      skillEndorsed: 'Phát triển React',
       date: '2024-03-20',
       verified: true
     },
     {
       id: 2,
       mentorName: 'Mark Johnson',
-      mentorTitle: 'UX Design Lead at Adobe',
-      feedback: 'Outstanding design thinking and user empathy. Truong has a natural talent for creating intuitive user experiences.',
-      skillEndorsed: 'UI/UX Design',
+      mentorTitle: 'Trưởng nhóm Thiết kế UX tại Adobe',
+      feedback: 'Tư duy thiết kế xuất sắc và sự đồng cảm với người dùng. Trường có tài năng tự nhiên trong việc tạo ra trải nghiệm người dùng trực quan.',
+      skillEndorsed: 'Thiết kế UI/UX',
       date: '2024-02-25',
       verified: true
     }
   ];
 
   const learningJourney = [
-    { phase: 'Foundation', period: '2023-Q1', status: 'completed', courses: 3 },
-    { phase: 'Specialization', period: '2023-Q2-Q4', status: 'completed', courses: 8 },
-    { phase: 'Advanced Skills', period: '2024-Q1-Q2', status: 'completed', courses: 5 },
-    { phase: 'Professional Practice', period: '2024-Q3', status: 'current', courses: 2 },
-    { phase: 'Industry Expertise', period: '2024-Q4', status: 'upcoming', courses: 4 }
+    { phase: 'Nền tảng', period: '2023-Q1', status: 'completed', courses: 3 },
+    { phase: 'Chuyên môn hóa', period: '2023-Q2-Q4', status: 'completed', courses: 8 },
+    { phase: 'Kỹ năng Nâng cao', period: '2024-Q1-Q2', status: 'completed', courses: 5 },
+    { phase: 'Thực hành Chuyên nghiệp', period: '2024-Q3', status: 'current', courses: 2 },
+    { phase: 'Chuyên môn Ngành', period: '2024-Q4', status: 'upcoming', courses: 4 }
   ];
 
   const gamificationStats = {
@@ -203,38 +203,38 @@ const PortfolioPage = () => {
     leaderboardRank: 8,
     totalPoints: 2850,
     achievements: [
-      { title: 'Early Bird', description: 'Completed 30 courses', icon: '🌅' },
-      { title: 'Code Master', description: 'Perfect scores in 10 coding challenges', icon: '💻' },
-      { title: 'Team Player', description: 'Top contributor in 5 group projects', icon: '🤝' }
+      { title: 'Chim Sơn Ca', description: 'Hoàn thành 30 khóa học', icon: '🌅' },
+      { title: 'Bậc Thầy Lập Trình', description: 'Điểm số hoàn hảo trong 10 thử thách lập trình', icon: '💻' },
+      { title: 'Người Đồng Hành', description: 'Người đóng góp hàng đầu trong 5 dự án nhóm', icon: '🤝' }
     ]
   };
 
   const skills = [
-    { name: 'React.js', level: 92, category: 'Technical', endorsed: 5 },
-    { name: 'Node.js', level: 87, category: 'Technical', endorsed: 3 },
-    { name: 'TypeScript', level: 85, category: 'Technical', endorsed: 4 },
-    { name: 'UI/UX Design', level: 78, category: 'Design', endorsed: 6 },
-    { name: 'Leadership', level: 75, category: 'Soft Skills', endorsed: 3 },
-    { name: 'Project Management', level: 70, category: 'Business', endorsed: 2 }
+    { name: 'React.js', level: 92, category: 'Kỹ thuật', endorsed: 5 },
+    { name: 'Node.js', level: 87, category: 'Kỹ thuật', endorsed: 3 },
+    { name: 'TypeScript', level: 85, category: 'Kỹ thuật', endorsed: 4 },
+    { name: 'Thiết kế UI/UX', level: 78, category: 'Thiết kế', endorsed: 6 },
+    { name: 'Lãnh đạo', level: 75, category: 'Kỹ năng mềm', endorsed: 3 },
+    { name: 'Quản lý Dự án', level: 70, category: 'Kinh doanh', endorsed: 2 }
   ];
 
   const handleExportCV = () => {
-    // CV export logic would go here
-    console.log('Exporting CV...');
+    // Logic xuất CV sẽ được thêm ở đây
+    console.log('Đang xuất CV...');
   };
 
   const handlePreviewCV = () => {
-    // Navigate to CV page
+    // Điều hướng đến trang CV
     navigate('/cv');
   };
 
   const handleSharePortfolio = () => {
-    // Share logic would go here
-    console.log('Sharing portfolio...');
+    // Logic chia sẻ sẽ được thêm ở đây
+    console.log('Đang chia sẻ hồ sơ...');
   };
 
   const handleViewCertificate = (certificateId: number) => {
-    // Navigate to certificate detail page
+    // Điều hướng đến trang chi tiết chứng chỉ
     navigate(`/certificate/${certificateId}`);
   };
 
@@ -256,8 +256,8 @@ const PortfolioPage = () => {
       {/* Header Section */}
       <motion.div className="sv-portfolio-header" variants={itemVariants}>
         <div className="sv-portfolio-header__content">
-          <h1 className="sv-portfolio-header__title">My Professional Portfolio</h1>
-          <p className="sv-portfolio-header__subtitle">Showcase your learning journey and professional achievements</p>
+          <h1 className="sv-portfolio-header__title">Hồ Sơ Chuyên Nghiệp Của Tôi</h1>
+          <p className="sv-portfolio-header__subtitle">Giới thiệu hành trình học tập và thành tựu chuyên nghiệp của bạn</p>
         </div>
         
         <div className="sv-portfolio-header__actions">
@@ -268,7 +268,7 @@ const PortfolioPage = () => {
             whileTap={{ scale: 0.95 }}
           >
             <Eye size={18} />
-            Preview CV
+            Xem trước CV
           </motion.button>
           <motion.button 
             className="sv-btn sv-btn--outline"
@@ -277,7 +277,7 @@ const PortfolioPage = () => {
             whileTap={{ scale: 0.95 }}
           >
             <Share2 size={18} />
-            Share Portfolio
+            Chia sẻ Hồ sơ
           </motion.button>
           <motion.button 
             className="sv-btn sv-btn--primary"
@@ -286,7 +286,7 @@ const PortfolioPage = () => {
             whileTap={{ scale: 0.95 }}
           >
             <Download size={18} />
-            Export CV
+            Xuất CV
           </motion.button>
         </div>
       </motion.div>
@@ -295,12 +295,12 @@ const PortfolioPage = () => {
       <motion.div className="sv-portfolio-nav" variants={itemVariants}>
         <nav className="sv-portfolio-nav__tabs">
           {[
-            { id: 'overview', label: 'Overview', icon: Eye },
-            { id: 'certificates', label: 'Certificates', icon: Award },
-            { id: 'projects', label: 'Projects', icon: Briefcase },
-            { id: 'journey', label: 'Learning Journey', icon: TrendingUp },
-            { id: 'feedback', label: 'Endorsements', icon: Users },
-            { id: 'cv-builder', label: 'CV Builder', icon: FileText }
+            { id: 'overview', label: 'Tổng quan', icon: Eye },
+            { id: 'certificates', label: 'Chứng chỉ', icon: Award },
+            { id: 'projects', label: 'Dự án', icon: Briefcase },
+            { id: 'journey', label: 'Hành trình Học tập', icon: TrendingUp },
+            { id: 'feedback', label: 'Đánh giá', icon: Users },
+            { id: 'cv-builder', label: 'Tạo CV', icon: FileText }
           ].map((tab) => {
             const Icon = tab.icon;
             return (
@@ -382,24 +382,24 @@ const PortfolioPage = () => {
 
                       <div className="sv-profile-actions">
                         <button className="sv-btn sv-btn--outline sv-btn--sm">
-                          {userProfile.videoIntro ? 'Update Video' : 'Add Video Intro'}
+                          {userProfile.videoIntro ? 'Cập nhật Video' : 'Thêm Video Giới thiệu'}
                         </button>
                       </div>
                     </div>
 
                     <div className="sv-profile-card__content">
                       <div className="sv-profile-section">
-                        <h3>About Me</h3>
+                        <h3>Giới thiệu</h3>
                         <p>{userProfile.bio}</p>
                       </div>
 
                       <div className="sv-profile-section">
-                        <h3>Career Goals</h3>
+                        <h3>Mục tiêu Nghề nghiệp</h3>
                         <p>{userProfile.careerGoals}</p>
                       </div>
 
                       <div className="sv-profile-section">
-                        <h3>Languages</h3>
+                        <h3>Ngôn ngữ</h3>
                         <div className="sv-tags">
                           {userProfile.languages.map((lang) => (
                             <span key={lang} className="sv-tag">{lang}</span>
@@ -417,7 +417,7 @@ const PortfolioPage = () => {
                       </div>
                       <div className="sv-stat-card__content">
                         <h3>{certificates.length}</h3>
-                        <p>Certificates Earned</p>
+                        <p>Chứng chỉ Đạt được</p>
                       </div>
                     </div>
                     <div className="sv-stat-card">
@@ -426,7 +426,7 @@ const PortfolioPage = () => {
                       </div>
                       <div className="sv-stat-card__content">
                         <h3>{projects.length}</h3>
-                        <p>Projects Completed</p>
+                        <p>Dự án Hoàn thành</p>
                       </div>
                     </div>
                     <div className="sv-stat-card">
@@ -435,7 +435,7 @@ const PortfolioPage = () => {
                       </div>
                       <div className="sv-stat-card__content">
                         <h3>{gamificationStats.streak}</h3>
-                        <p>Day Learning Streak</p>
+                        <p>Chuỗi Ngày Học tập</p>
                       </div>
                     </div>
                     <div className="sv-stat-card">
@@ -444,14 +444,14 @@ const PortfolioPage = () => {
                       </div>
                       <div className="sv-stat-card__content">
                         <h3>#{gamificationStats.leaderboardRank}</h3>
-                        <p>Leaderboard Rank</p>
+                        <p>Xếp hạng Bảng xếp hạng</p>
                       </div>
                     </div>
                   </motion.div>
 
                   {/* Skills Preview */}
                   <motion.div className="sv-skills-preview" variants={itemVariants}>
-                    <h3>Top Skills</h3>
+                    <h3>Kỹ năng Hàng đầu</h3>
                     <div className="sv-skills-list">
                       {skills.slice(0, 6).map((skill) => (
                         <div key={skill.name} className="sv-skill-item">
@@ -466,7 +466,7 @@ const PortfolioPage = () => {
                             />
                           </div>
                           <div className="sv-skill-endorsements">
-                            {skill.endorsed} endorsements
+                            {skill.endorsed} lời khuyến nghị
                           </div>
                         </div>
                       ))}
@@ -480,12 +480,12 @@ const PortfolioPage = () => {
             {activeSection === 'certificates' && (
               <div className="sv-section">
                 <div className="sv-section-header">
-                  <h2>Skill Wallet & Certificates</h2>
-                  <p>Digital certificates earned from completed courses</p>
+                  <h2>Ví Kỹ năng & Chứng chỉ</h2>
+                  <p>Chứng chỉ số kiếm được từ các khóa học đã hoàn thành</p>
                 </div>
 
                 <div className="sv-certificate-categories">
-                  {['All', 'Technical', 'Design', 'Soft Skills', 'Business'].map((category) => (
+                  {['Tất cả', 'Kỹ thuật', 'Thiết kế', 'Kỹ năng mềm', 'Kinh doanh'].map((category) => (
                     <button key={category} className="sv-filter-btn">
                       {category}
                     </button>
@@ -557,24 +557,24 @@ const PortfolioPage = () => {
             {activeSection === 'projects' && (
               <div className="sv-section">
                 <div className="sv-section-header">
-                  <h2>Project & Micro-Job Showcase</h2>
-                  <p>Completed projects and professional work experiences</p>
+                  <h2>Giới thiệu Dự án & Micro-Job</h2>
+                  <p>Các dự án đã hoàn thành và kinh nghiệm làm việc chuyên nghiệp</p>
                 </div>
 
                 {/* Project Filters */}
                 <div className="sv-project-filters">
                   <div className="sv-filter-tabs">
-                    {['All Projects', 'Micro-jobs', 'Freelance', 'Personal'].map((filter) => (
+                    {['Tất cả Dự án', 'Micro-jobs', 'Freelance', 'Cá nhân'].map((filter) => (
                       <button key={filter} className="sv-filter-tab sv-filter-tab--active">
                         {filter}
                       </button>
                     ))}
                   </div>
                   <div className="sv-project-stats">
-                    <span className="sv-project-count">{projects.length} Projects</span>
+                    <span className="sv-project-count">{projects.length} Dự án</span>
                     <span className="sv-project-rating">
                       <Star size={14} className="sv-star-filled" />
-                      4.9 Average Rating
+                      4.9 Điểm Đánh giá Trung bình
                     </span>
                   </div>
                 </div>

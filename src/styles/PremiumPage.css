@@ -108,7 +108,7 @@
   z-index: 1;
 }
 
-.floating-card {
+.premium-floating-card {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -121,23 +121,23 @@
   animation: float 3s ease-in-out infinite;
 }
 
-.floating-card--2 {
+.premium-floating-card--2 {
   animation-delay: -1s;
   margin-left: 2rem;
 }
 
-.floating-card--3 {
+.premium-floating-card--3 {
   animation-delay: -2s;
   margin-left: 1rem;
 }
 
-.floating-icon {
+.premium-floating-icon {
   width: 20px;
   height: 20px;
   color: #ffd700;
 }
 
-.floating-text {
+.premium-floating-text {
   font-size: 0.9rem;
   font-weight: 500;
   white-space: nowrap;

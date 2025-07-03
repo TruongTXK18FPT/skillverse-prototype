@@ -105,6 +105,7 @@ export const vi = {
     chatbot: 'Trợ Lý AI',
     seminar: 'Hội Thảo',
     gamification: 'Trò Chơi',
+    roadmap: 'Lộ Trình Học Tập',
     settings: 'Cài đặt',
     descriptions: {
       dashboard: 'Theo dõi tiến độ học tập và thành tích của bạn',
@@ -116,6 +117,7 @@ export const vi = {
       chatbot: 'Nhận hỗ trợ từ trợ lý AI thông minh',
       seminar: 'Tham gia các hội thảo và sự kiện',
       gamification: 'Bảng xếp hạng, huy hiệu và mini-games',
+      roadmap: 'Khám phá lộ trình học tập và phát triển kỹ năng',
     }
   },
   home: {

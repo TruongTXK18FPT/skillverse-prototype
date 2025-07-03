@@ -2,18 +2,36 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
   Send, Bot, User, Sparkles, Brain, Target, Briefcase, Book, Award, Star, ArrowRight,
   BookOpen, Globe, DollarSign, ChevronRight, Clock, Lightbulb, Zap, TrendingUp, Code, 
-  Palette, BarChart3, Users, Shield
+  BarChart3, Users
 } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
 import '../../styles/ChatbotPage.css';
-
-// Add React JSX types
-import type { ReactElement } from 'react';
 
 interface RecommendationSection {
   title: string;
   items: string[];
+}
+
+interface RoadmapStep {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  skills: string[];
+  resources: string[];
+  completed?: boolean;
+}
+
+interface LearningRoadmap {
+  id: string;
+  title: string;
+  description: string;
+  totalDuration: string;
+  difficulty: string;
+  steps: RoadmapStep[];
+  prerequisites?: string[];
+  careerOutcomes?: string[];
 }
 
 interface Message {
@@ -24,6 +42,7 @@ interface Message {
   recommendations?: RecommendationSection[];
   resources?: Resource[];
   nextSteps?: string[];
+  roadmap?: LearningRoadmap;
 }
 
 interface CourseRecommendation {
@@ -73,6 +92,7 @@ interface AIResponse {
   }[];
   resources?: Resource[];
   nextSteps?: string[];
+  roadmap?: LearningRoadmap;
 }
 
 interface Feature {
@@ -95,14 +115,13 @@ const ChatbotPage = () => {
     {
       id: '1',
       type: 'bot',
-      content: 'Xin chào! Tôi là trợ lý AI của SkillVerse. Tôi có thể giúp bạn:\n• 🎯 Lập kế hoạch nghề nghiệp\n• 📚 Tư vấn khóa học phù hợp\n• 💼 Phân tích thị trường việc làm\n• 🚀 Phát triển kỹ năng\n\nBạn muốn tôi hỗ trợ gì hôm nay?',
+      content: 'Xin chào! Tôi là trợ lý AI của SkillVerse. Tôi có thể giúp bạn:\n• 🎯 Lập kế hoạch nghề nghiệp\n• 📚 Tư vấn khóa học phù hợp\n• 💼 Phân tích thị trường việc làm\n• �️ Tạo lộ trình học tương tác cho từng ngôn ngữ lập trình\n• �🚀 Phát triển kỹ năng\n\nThử hỏi: "Tạo lộ trình học JavaScript" hoặc "Lộ trình học Python"!',
       timestamp: new Date()
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { translations } = useLanguage();
 
   const features: Feature[] = [
     {
@@ -133,15 +152,15 @@ const ChatbotPage = () => {
 
   const promptCategories: PromptCategory[] = [
     {
-      title: 'Lập Kế Hoạch Nghề Nghiệp',
+      title: 'Lộ Trình Học Tập',
       icon: Briefcase,
       color: 'blue',
       prompts: [
-        'Xu hướng nghề nghiệp công nghệ 2024?',
-        'Làm sao để chuyển từ IT sang AI/ML?',
-        'Kỹ năng nào cần thiết cho làm việc từ xa?',
-        'Nên chuyên sâu hay học đa dạng?',
-        'Xây dựng lộ trình nghề nghiệp 5 năm?'
+        'Tạo lộ trình học JavaScript',
+        'Lộ trình học Python từ cơ bản',
+        'Roadmap học React.js',
+        'Lộ trình trở thành Full-stack Developer',
+        'Kế hoạch học AI/Machine Learning'
       ]
     },
     {
@@ -157,11 +176,11 @@ const ChatbotPage = () => {
       ]
     },
     {
-      title: 'Tư Vấn Khóa Học',
+      title: 'Tư Vấn Nghề Nghiệp',
       icon: Target,
       color: 'purple',
       prompts: [
-        'Đề xuất tài liệu học tập',
+        'Xu hướng nghề nghiệp công nghệ 2024?',
         'Mẹo xây dựng portfolio mạnh',
         'CV developer nên có gì?',
         'Thương lượng lương trong công nghệ?',
@@ -184,11 +203,136 @@ const ChatbotPage = () => {
 
   const quickPrompts = [
     'Xu hướng nghề nghiệp công nghệ 2024?',
-    'Đề xuất tài liệu học tập',
-    'Nên học ngôn ngữ lập trình nào?',
-    'Giúp tôi tạo kế hoạch học tập',
+    'Tạo lộ trình học JavaScript',
+    'Lộ trình học Python từ cơ bản',
+    'Tạo roadmap học React.js',
     'Cơ hội việc làm phù hợp với tôi'
   ];
+
+  // Sample roadmap data
+  const roadmapTemplates = {
+    javascript: {
+      id: 'js-roadmap',
+      title: 'Lộ Trình Học JavaScript Toàn Diện',
+      description: 'Từ cơ bản đến nâng cao, trở thành JavaScript Developer chuyên nghiệp',
+      totalDuration: '4-6 tháng',
+      difficulty: 'Beginner to Advanced',
+      prerequisites: ['Hiểu biết cơ bản về máy tính', 'Kiên nhẫn và đam mê học hỏi'],
+      careerOutcomes: ['Frontend Developer', 'Backend Developer', 'Full-stack Developer', 'Mobile Developer'],
+      steps: [
+        {
+          id: 'step1',
+          title: 'Nền Tảng Web Development',
+          description: 'Học HTML, CSS cơ bản để hiểu cấu trúc và styling web',
+          duration: '2-3 tuần',
+          difficulty: 'Beginner' as const,
+          skills: ['HTML5 semantic', 'CSS3 và Flexbox/Grid', 'Responsive design'],
+          resources: ['freeCodeCamp HTML/CSS', 'MDN Web Docs', 'CSS Tricks']
+        },
+        {
+          id: 'step2',
+          title: 'JavaScript Cơ Bản',
+          description: 'Nắm vững cú pháp và khái niệm cơ bản của JavaScript',
+          duration: '3-4 tuần',
+          difficulty: 'Beginner' as const,
+          skills: ['Variables & Data Types', 'Functions & Scope', 'Arrays & Objects', 'Control Flow'],
+          resources: ['JavaScript.info', 'Eloquent JavaScript', 'Codecademy JS']
+        },
+        {
+          id: 'step3',
+          title: 'DOM Manipulation & Events',
+          description: 'Học cách tương tác với trang web động',
+          duration: '2-3 tuần',
+          difficulty: 'Intermediate' as const,
+          skills: ['DOM Selection', 'Event Handling', 'Dynamic Content', 'Form Validation'],
+          resources: ['Vanilla JS Projects', 'DOM Challenges', 'Event Listener Tutorials']
+        },
+        {
+          id: 'step4',
+          title: 'ES6+ & Modern JavaScript',
+          description: 'Học các tính năng hiện đại của JavaScript',
+          duration: '2-3 tuần',
+          difficulty: 'Intermediate' as const,
+          skills: ['Arrow Functions', 'Destructuring', 'Modules', 'Async/Await', 'Promises'],
+          resources: ['ES6 Features Guide', 'Async JS Course', 'Module Patterns']
+        },
+        {
+          id: 'step5',
+          title: 'API & AJAX',
+          description: 'Kết nối với backend và xử lý dữ liệu',
+          duration: '2 tuần',
+          difficulty: 'Intermediate' as const,
+          skills: ['Fetch API', 'JSON Handling', 'REST APIs', 'Error Handling'],
+          resources: ['API Tutorial', 'JSON Server', 'Public APIs List']
+        },
+        {
+          id: 'step6',
+          title: 'Framework (React/Vue)',
+          description: 'Học framework phổ biến để xây dựng ứng dụng phức tạp',
+          duration: '4-6 tuần',
+          difficulty: 'Advanced' as const,
+          skills: ['Components', 'State Management', 'Routing', 'Hooks/Composition API'],
+          resources: ['React Official Docs', 'Vue.js Guide', 'Framework Tutorials']
+        },
+        {
+          id: 'step7',
+          title: 'Tools & Deployment',
+          description: 'Học công cụ phát triển và triển khai ứng dụng',
+          duration: '2-3 tuần',
+          difficulty: 'Advanced' as const,
+          skills: ['Git/GitHub', 'npm/webpack', 'VS Code', 'Netlify/Vercel'],
+          resources: ['Git Tutorial', 'Webpack Guide', 'Deployment Platforms']
+        }
+      ]
+    },
+    python: {
+      id: 'python-roadmap',
+      title: 'Lộ Trình Học Python Toàn Diện',
+      description: 'Từ cơ bản đến ứng dụng thực tế, trở thành Python Developer',
+      totalDuration: '3-5 tháng',
+      difficulty: 'Beginner to Advanced',
+      prerequisites: ['Logic tư duy cơ bản', 'Kiên nhẫn và thực hành nhiều'],
+      careerOutcomes: ['Backend Developer', 'Data Scientist', 'AI/ML Engineer', 'DevOps Engineer'],
+      steps: [
+        {
+          id: 'step1',
+          title: 'Python Cơ Bản',
+          description: 'Học cú pháp và cấu trúc cơ bản của Python',
+          duration: '2-3 tuần',
+          difficulty: 'Beginner' as const,
+          skills: ['Variables & Data Types', 'Control Structures', 'Functions', 'Lists & Dictionaries'],
+          resources: ['Python.org Tutorial', 'Automate the Boring Stuff', 'Python Crash Course']
+        },
+        {
+          id: 'step2',
+          title: 'OOP & Modules',
+          description: 'Lập trình hướng đối tượng và sử dụng modules',
+          duration: '2-3 tuần',
+          difficulty: 'Intermediate' as const,
+          skills: ['Classes & Objects', 'Inheritance', 'Modules & Packages', 'Exception Handling'],
+          resources: ['OOP Python Guide', 'Real Python OOP', 'Python Module Tutorial']
+        },
+        {
+          id: 'step3',
+          title: 'Libraries & Frameworks',
+          description: 'Chuyên sâu theo hướng: Web, Data, hoặc AI',
+          duration: '4-6 tuần',
+          difficulty: 'Intermediate' as const,
+          skills: ['Django/Flask (Web)', 'Pandas/NumPy (Data)', 'TensorFlow (AI)'],
+          resources: ['Django Tutorial', 'Pandas Documentation', 'TensorFlow Guide']
+        },
+        {
+          id: 'step4',
+          title: 'Projects & Portfolio',
+          description: 'Xây dựng dự án thực tế và portfolio',
+          duration: '3-4 tuần',
+          difficulty: 'Advanced' as const,
+          skills: ['Project Planning', 'Code Organization', 'Testing', 'Documentation'],
+          resources: ['GitHub Projects', 'Portfolio Examples', 'Project Ideas']
+        }
+      ]
+    }
+  };
 
   // Enhanced AI Response Database
   const aiResponses = {
@@ -420,7 +564,8 @@ Các vai trò mới nổi:
         timestamp: new Date(),
         recommendations: response.recommendations,
         resources: response.resources,
-        nextSteps: response.nextSteps
+        nextSteps: response.nextSteps,
+        roadmap: response.roadmap
       };
       setMessages(prev => [...prev, botResponse]);
       setIsTyping(false);
@@ -429,6 +574,86 @@ Các vai trò mới nổi:
 
   const getBotResponse = (message: string): AIResponse => {
     const lowerMessage = message.toLowerCase();
+    
+    // Roadmap requests - check first for specific language roadmaps
+    if ((lowerMessage.includes('lộ trình') || lowerMessage.includes('roadmap') || lowerMessage.includes('tạo')) && 
+        (lowerMessage.includes('javascript') || lowerMessage.includes('js'))) {
+      return {
+        text: `🗺️ **Lộ Trình Học JavaScript Toàn Diện**
+
+Tôi đã tạo cho bạn một lộ trình học JavaScript chi tiết từ cơ bản đến nâng cao. Lộ trình này được thiết kế dành cho người mới bắt đầu và sẽ giúp bạn trở thành JavaScript Developer chuyên nghiệp trong 4-6 tháng.
+
+**Tổng quan:**
+• ⏱️ Thời gian: 4-6 tháng
+• 📚 7 giai đoạn học tập
+• 🎯 Mục tiêu: Frontend/Backend Developer
+• 💼 Mức lương: 40-80 triệu/tháng
+
+Bạn có thể theo dõi tiến độ học tập và đánh dấu hoàn thành từng bước trong lộ trình bên dưới!`,
+        roadmap: roadmapTemplates.javascript,
+        nextSteps: [
+          "Bắt đầu với Giai đoạn 1: HTML/CSS",
+          "Cài đặt VS Code và browser",
+          "Tham gia cộng đồng JavaScript Vietnam",
+          "Đặt mục tiêu học 1-2 giờ/ngày"
+        ]
+      };
+    }
+
+    if ((lowerMessage.includes('lộ trình') || lowerMessage.includes('roadmap') || lowerMessage.includes('tạo')) && 
+        lowerMessage.includes('python')) {
+      return {
+        text: `🐍 **Lộ Trình Học Python Toàn Diện**
+
+Tôi đã tạo cho bạn một lộ trình học Python chi tiết, phù hợp cho người mới bắt đầu. Python là ngôn ngữ đa năng, dễ học và có nhiều cơ hội nghề nghiệp.
+
+**Tổng quan:**
+• ⏱️ Thời gian: 3-5 tháng
+• 📚 4 giai đoạn chính
+• 🎯 Mục tiêu: Backend/Data/AI Developer
+• 💼 Mức lương: 50-90 triệu/tháng
+
+Lộ trình này bao gồm từ cú pháp cơ bản đến ứng dụng thực tế trong Web, Data Science, hoặc AI!`,
+        roadmap: roadmapTemplates.python,
+        nextSteps: [
+          "Cài đặt Python và PyCharm/VS Code",
+          "Bắt đầu với Python cơ bản",
+          "Chọn hướng chuyên sâu (Web/Data/AI)",
+          "Thực hành coding hàng ngày"
+        ]
+      };
+    }
+
+    // General roadmap request
+    if (lowerMessage.includes('lộ trình') || lowerMessage.includes('roadmap') || lowerMessage.includes('kế hoạch học')) {
+      return {
+        text: `🗺️ **Tạo Lộ Trình Học Cá Nhân Hóa**
+
+Tôi có thể tạo lộ trình học chi tiết cho các ngôn ngữ lập trình phổ biến:
+
+**Lộ trình có sẵn:**
+• 🟨 **JavaScript** - Frontend/Backend development
+• 🐍 **Python** - Backend/Data Science/AI
+• ⚛️ **React** - Frontend framework
+• 🌐 **Web Development** - Full-stack
+• 📊 **Data Science** - Python + ML
+• 🤖 **AI/Machine Learning** - Deep learning
+
+**Để tạo lộ trình phù hợp, hãy cho tôi biết:**
+• Ngôn ngữ/công nghệ bạn muốn học
+• Mục tiêu nghề nghiệp của bạn
+• Thời gian có thể dành để học
+• Kinh nghiệm hiện tại của bạn
+
+Ví dụ: "Tạo lộ trình học JavaScript" hoặc "Lộ trình học Python cho Data Science"`,
+        nextSteps: [
+          "Chọn ngôn ngữ lập trình muốn học",
+          "Xác định mục tiêu nghề nghiệp",
+          "Đánh giá thời gian có thể học",
+          "Yêu cầu tạo lộ trình cụ thể"
+        ]
+      };
+    }
     
     // Greeting responses
     if (lowerMessage.includes('xin chào') || lowerMessage.includes('hi') || lowerMessage.includes('hey') || lowerMessage.includes('hello')) {
@@ -865,6 +1090,103 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
                         <li key={i}>{step}</li>
                       ))}
                     </ul>
+                  </div>
+                )}
+
+                {/* Interactive Roadmap Component */}
+                {msg.roadmap && (
+                  <div className="sv-roadmap-container">
+                    <div className="sv-roadmap-header">
+                      <h3>🗺️ {msg.roadmap.title}</h3>
+                      <p>{msg.roadmap.description}</p>
+                      <div className="sv-roadmap-meta">
+                        <span className="sv-roadmap-duration">⏱️ {msg.roadmap.totalDuration}</span>
+                        <span className="sv-roadmap-difficulty">📊 {msg.roadmap.difficulty}</span>
+                      </div>
+                    </div>
+
+                    {msg.roadmap.prerequisites && (
+                      <div className="sv-roadmap-section">
+                        <h4>📋 Điều kiện tiên quyết:</h4>
+                        <ul>
+                          {msg.roadmap.prerequisites.map((prereq, i) => (
+                            <li key={i}>{prereq}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    <div className="sv-roadmap-steps">
+                      <h4>📚 Các bước thực hiện:</h4>
+                      {msg.roadmap.steps.map((step, index) => (
+                        <div key={step.id} className={`sv-roadmap-step ${step.completed ? 'completed' : ''}`}>
+                          <div className="sv-step-number">{index + 1}</div>
+                          <div className="sv-step-content">
+                            <div className="sv-step-header">
+                              <h5>{step.title}</h5>
+                              <div className="sv-step-meta">
+                                <span className="sv-step-duration">{step.duration}</span>
+                                <span className={`sv-step-difficulty sv-step-difficulty--${step.difficulty.toLowerCase()}`}>
+                                  {step.difficulty}
+                                </span>
+                              </div>
+                            </div>
+                            <p className="sv-step-description">{step.description}</p>
+                            
+                            <div className="sv-step-skills">
+                              <h6>🎯 Kỹ năng học được:</h6>
+                              <div className="sv-skills-tags">
+                                {step.skills.map((skill, i) => (
+                                  <span key={i} className="sv-skill-tag">{skill}</span>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="sv-step-resources">
+                              <h6>📖 Tài liệu:</h6>
+                              <div className="sv-resources-list">
+                                {step.resources.map((resource, i) => (
+                                  <span key={i} className="sv-resource-item">{resource}</span>
+                                ))}
+                              </div>
+                            </div>
+
+                            <button 
+                              className={`sv-step-toggle ${step.completed ? 'completed' : ''}`}
+                              onClick={() => {
+                                // Handle step completion toggle
+                                console.log(`Toggle step ${step.id} completion`);
+                              }}
+                            >
+                              {step.completed ? '✅ Đã hoàn thành' : '⭕ Đánh dấu hoàn thành'}
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {msg.roadmap.careerOutcomes && (
+                      <div className="sv-roadmap-section">
+                        <h4>🚀 Cơ hội nghề nghiệp:</h4>
+                        <div className="sv-career-outcomes">
+                          {msg.roadmap.careerOutcomes.map((career, i) => (
+                            <span key={i} className="sv-career-tag">{career}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="sv-roadmap-actions">
+                      <button className="sv-btn sv-btn--primary">
+                        📥 Lưu lộ trình
+                      </button>
+                      <button className="sv-btn sv-btn--outline">
+                        📤 Chia sẻ
+                      </button>
+                      <button className="sv-btn sv-btn--outline">
+                        📊 Xem tiến độ
+                      </button>
+                    </div>
                   </div>
                 )}
 

@@ -33,6 +33,7 @@ import SeminarPage from './pages/navbar/SeminarPage';
 import BusinessPage from './pages/main/BusinessPage';
 import MentorPage from './pages/main/MentorPage';
 import AdminPage from './pages/main/AdminPage';
+import RoadmapPage from './pages/roadmap/RoadmapPage';
 import './styles/App.css';
 
 const App = () => {
@@ -47,6 +48,7 @@ const App = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/courses" element={<CoursesPage />} />
+                <Route path="/roadmap" element={<RoadmapPage />} />
                 <Route path="/mentorship" element={<MentorshipPage />} />
                 <Route path="/community" element={<CommunityPage />} />
                 <Route path="/community/create" element={<BlogForm />} />

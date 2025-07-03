@@ -171,17 +171,17 @@ const PremiumPage = () => {
           </div>
         </div>
         <div className="premium-hero__visual">
-          <div className="floating-card">
-            <Crown className="floating-icon" />
-            <div className="floating-text">Premium Active</div>
+          <div className="premium-floating-card">
+            <Crown className="premium-floating-icon" />
+            <div className="premium-floating-text">Premium Active</div>
           </div>
-          <div className="floating-card floating-card--2">
-            <Star className="floating-icon" />
-            <div className="floating-text">4.9★ Rating</div>
+          <div className="premium-floating-card floating-card--2">
+            <Star className="premium-floating-icon" />
+            <div className="premium-floating-text">4.9★ Rating</div>
           </div>
-          <div className="floating-card floating-card--3">
-            <Zap className="floating-icon" />
-            <div className="floating-text">AI Powered</div>
+          <div className="premium-floating-card floating-card--3">
+            <Zap className="premium-floating-icon" />
+            <div className="premium-floating-text">AI Powered</div>
           </div>
         </div>
       </section>

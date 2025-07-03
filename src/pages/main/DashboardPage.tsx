@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
 import { 
-  TrendingUp, BookOpen, Briefcase, Award, Clock, Star, Users, Target, 
-  Calendar, ArrowRight, ChevronRight, BarChart2, Book, CheckCircle, 
-  Clock8, DollarSign, FileText, Gift, Globe, Heart, Zap, 
-  MessageCircle, Play, Plus, User as UserIcon, Flame
+  TrendingUp, BookOpen, Briefcase, Award, Target, 
+  Calendar, ChevronRight, BarChart2, Book, 
+  FileText, Zap, Plus, Flame
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
-import { useTheme } from '../../context/ThemeContext';
+import { RoadmapSection } from '../../components/roadmap';
+import { learningRoadmapsData } from '../../data/roadmapsData';
 import '../../styles/DashboardPage.css';
+import '../../styles/RoadmapStyles.css';
 
 const DashboardPage = () => {
-  const [selectedTimeframe, setSelectedTimeframe] = useState('week');
   const { translations } = useLanguage();
-  const { theme } = useTheme();
 
   const stats = [
     {
@@ -118,8 +116,8 @@ const DashboardPage = () => {
 
         {/* Stats Grid */}
         <div className="sv-stats-grid">
-          {stats.map((stat, index) => (
-            <div key={index} className="sv-stat-card hover-lift">
+          {stats.map((stat) => (
+            <div key={stat.title} className="sv-stat-card hover-lift">
               <div className="sv-stat-card__header">
                 <div className={`sv-stat-card__icon-wrapper ${stat.color}`}>
                   <stat.icon className="sv-stat-card__icon text-white" />
@@ -135,6 +133,9 @@ const DashboardPage = () => {
             </div>
           ))}
         </div>
+
+        {/* Learning Roadmap Section */}
+        <RoadmapSection roadmaps={learningRoadmapsData} />
 
         <div className="sv-dashboard-grid">
           {/* Main Content */}
