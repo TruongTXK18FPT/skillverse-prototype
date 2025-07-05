@@ -23,6 +23,7 @@ import {
   Trophy,
   Map
 } from 'lucide-react';
+import useClickOutside from '../hooks/useClickOutside';
 import Logo from '../assets/Logo.jpg';
 import '../styles/Header.css';
 import { useTheme } from '../context/ThemeContext';
@@ -39,6 +40,12 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { translations } = useLanguage();
+
+  // Custom hook for click outside functionality
+  const categoryRef = useClickOutside<HTMLDivElement>(
+    () => setIsCategoryOpen(false),
+    isCategoryOpen
+  );
 
   const mainNavLinks = [
     { path: '/', label: translations.navigation.home, icon: Home },
@@ -141,17 +148,42 @@ const Header = () => {
               </NavLink>
             ))}
             
-            {/* Category Button */}
-            <button 
-              className="nav-link category-button"
-              onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-            >
-              <span className="nav-link__text">
-                <Grid className="w-4 h-4 mr-1" />
-                Danh Mục
-                <ChevronDown className="w-4 h-4 ml-1" />
-              </span>
-            </button>
+            {/* Category Section with Click Outside */}
+            <div ref={categoryRef} className="category-dropdown-container">
+              {/* Category Button */}
+              <button 
+                className="nav-link category-button"
+                onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+              >
+                <span className="nav-link__text">
+                  <Grid className="w-4 h-4 mr-1" />
+                  Danh Mục
+                  <ChevronDown className="w-4 h-4 ml-1" />
+                </span>
+              </button>
+
+              {/* Category Dropdown */}
+              {isCategoryOpen && (
+                <div className="category-dropdown">
+                  <div className="category-grid">
+                    {allCategories.map((category) => (
+                      <Link
+                        key={category.path}
+                        to={category.path}
+                        className="category-item"
+                        onClick={() => setIsCategoryOpen(false)}
+                      >
+                        <category.icon className="category-item__icon" />
+                        <div className="category-item__content">
+                          <h3 className="category-item__title">{category.label}</h3>
+                          <p className="category-item__description">{category.description}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Premium Button - Next to Category */}
             <button 
@@ -175,27 +207,6 @@ const Header = () => {
               <span className="wallet-text">Ví</span>
             </button>
 
-            {/* Category Dropdown */}
-            {isCategoryOpen && (
-              <div className="category-dropdown">
-                <div className="category-grid">
-                  {allCategories.map((category) => (
-                    <Link
-                      key={category.path}
-                      to={category.path}
-                      className="category-item"
-                      onClick={() => setIsCategoryOpen(false)}
-                    >
-                      <category.icon className="category-item__icon" />
-                      <div className="category-item__content">
-                        <h3 className="category-item__title">{category.label}</h3>
-                        <p className="category-item__description">{category.description}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
           </nav>
 
           {/* User Actions */}

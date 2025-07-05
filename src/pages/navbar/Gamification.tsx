@@ -801,7 +801,7 @@ const Gamification: React.FC = () => {
   const renderAchievements = () => (
     <div className="achievements-section">
       <div className="achievements-header">
-        <h2>📊 Tổng Quan Thành Tựu</h2>
+        <h2>🎯 Tổng Quan Thành Tựu</h2>
         <p>Theo dõi tiến độ tổng thể và mục tiêu cá nhân</p>
       </div>
 

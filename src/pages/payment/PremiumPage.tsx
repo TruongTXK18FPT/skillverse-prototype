@@ -157,15 +157,15 @@ const PremiumPage = () => {
           </p>
           <div className="premium-hero__stats">
             <div className="premium-stat-item">
-              <div className="stat-number">10K+</div>
+              <div className="premium-stat-number">10K+</div>
               <div className="premium-stat-label">Thành viên</div>
             </div>
             <div className="premium-stat-item">
-              <div className="stat-number">95%</div>
+              <div className="premium-stat-number">95%</div>
               <div className="premium-stat-label">Hài lòng</div>
             </div>
             <div className="premium-stat-item">
-              <div className="stat-number">3x</div>
+              <div className="premium-stat-number">3x</div>
               <div className="premium-stat-label">Tốc độ học</div>
             </div>
           </div>

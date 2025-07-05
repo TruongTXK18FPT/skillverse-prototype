@@ -993,7 +993,7 @@ const CoinWallet: React.FC = () => {
 
   const renderAchievements = () => (
     <div className="achievements-content">
-      <div className="achievements-header">
+      <div className="wallet-achievements-header">
         <h2>Thành Tựu & Phần Thưởng</h2>
         <p>Hoàn thành thử thách để kiếm xu thưởng và mở khóa phần thưởng độc quyền</p>
       </div>

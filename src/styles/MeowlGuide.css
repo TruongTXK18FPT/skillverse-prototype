@@ -30,7 +30,7 @@
     height: 200px;
     cursor: pointer;
     z-index: 998;
-    animation: float 3s ease-in-out infinite;
+    animation: meowfloat 3s ease-in-out infinite;
     transform: rotate(-15deg);
 }
 
@@ -273,7 +273,7 @@
     animation: pulse 2s infinite, flicker 1.5s infinite;
 }
 
-@keyframes float {
+@keyframes meowfloat {
     0%, 100% { transform: rotate(-15deg) translateY(0px); }
     50% { transform: rotate(-15deg) translateY(-12px); }
 }
@@ -458,7 +458,7 @@
     }
 
     /* Adjust float animation for mobile */
-    @keyframes float {
+    @keyframes meowfloat {
         0%, 100% { transform: rotate(-10deg) translateY(0px); }
         50% { transform: rotate(-10deg) translateY(-8px); }
     }

@@ -147,6 +147,11 @@
   background: rgba(59, 130, 246, 0.1);
 }
 
+/* Category Dropdown Container */
+.category-dropdown-container {
+  position: relative;
+}
+
 /* Category Dropdown */
 .category-dropdown {
   position: fixed;

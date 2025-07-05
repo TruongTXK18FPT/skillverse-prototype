@@ -35,6 +35,7 @@ import MentorPage from './pages/main/MentorPage';
 import AdminPage from './pages/main/AdminPage';
 import RoadmapPage from './pages/roadmap/RoadmapPage';
 import './styles/App.css';
+import ScrollToTop from './components/scroll/ScrollToTop';
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
       <ThemeProvider>
         <Router>
           <div className="app-container">
+            <ScrollToTop />
             <Header />
             <main>
               <Routes>

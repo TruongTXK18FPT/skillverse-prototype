@@ -1019,11 +1019,11 @@
   gap: 2rem;
 }
 
-.achievements-header {
+.wallet-achievements-header {
   text-align: center;
 }
 
-.achievements-header h2 {
+.wallet-achievements-header h2 {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -1033,7 +1033,7 @@
   -webkit-text-fill-color: transparent;
 }
 
-.achievements-header p {
+.wallet-achievements-header p {
   color: var(--text-secondary);
   font-size: 1.125rem;
 }

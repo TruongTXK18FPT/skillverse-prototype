@@ -441,7 +441,7 @@
   50% { opacity: 0.8; }
 }
 
-@keyframes float {
+@keyframes homefloat {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
 }
@@ -495,8 +495,8 @@
   }
 }
 
-.floating {
-  animation: float 3s ease-in-out infinite;
+.homefloating {
+  animation: homefloat 3s ease-in-out infinite;
 }
 
 /* Flying Icon Animation */

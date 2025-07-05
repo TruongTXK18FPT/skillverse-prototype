@@ -239,6 +239,7 @@
     0 0 30px rgba(0, 255, 136, 0.4);
   letter-spacing: 2px;
   position: relative;
+  text-align: left;
 }
 
 .title-section h1::after {
@@ -266,6 +267,8 @@
   letter-spacing: 1px;
   opacity: 0.9;
   text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+  text-align: left;
+  width: 40rem
 }
 
 .header-stats {
@@ -539,14 +542,14 @@
   font-size: 1.5rem;
   font-weight: 400;
   margin: 0 0 1rem 0;
-  background: linear-gradient(135deg, #ff00ff, #00ffff, #ffff00);
+  background: linear-gradient(135deg, #00ff88, #00ffff, #ff00ff);
   background-size: 200% 200%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: retroGradient 2s ease-in-out infinite;
   text-shadow: 
-    0 0 10px rgba(255, 0, 255, 0.5),
+    0 0 10px rgba(0, 255, 136, 0.5),
     0 0 20px rgba(0, 255, 255, 0.3);
   letter-spacing: 2px;
 }
@@ -1861,16 +1864,28 @@
 }
 
 .mini-games-header h2 {
-  font-size: 2rem;
-  font-weight: 800;
-  margin: 0 0 0.5rem 0;
   
-  background: linear-gradient(135deg, #8b5cf6, #ec4899, #f59e0b);
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 0 0 1rem 0;
+  background: linear-gradient(135deg, #ffff00, #ff8800, #ff0088);
   background-size: 200% 200%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradientText 3s ease-in-out infinite;
+  animation: retroGradient 3s ease-in-out infinite;
+  text-shadow: 
+    0 0 10px rgba(255, 255, 0, 0.5),
+    0 0 20px rgba(255, 136, 0, 0.3);
+  letter-spacing: 2px;
+}
+
+.mini-games-header p {
+  color: #00ffaa;
+  
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
 }
 
 .games-grid {
