@@ -67,16 +67,9 @@
   margin-bottom: 2rem;
 }
 
-.logo-wrapper {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+.login-logo-wrapper {
+  width: 8rem;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .logo-image {

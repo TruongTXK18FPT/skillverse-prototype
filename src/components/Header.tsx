@@ -24,7 +24,7 @@ import {
   Map
 } from 'lucide-react';
 import useClickOutside from '../hooks/useClickOutside';
-import Logo from '../assets/Logo.jpg';
+import Logo from '../assets/skillverse.png';
 import '../styles/Header.css';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -130,7 +130,6 @@ const Header = () => {
             <div className="logo-wrapper">
               <img src={Logo} alt="SkillVerse Logo" className="logo-image" />
             </div>
-            <span className="logo-title">SkillVerse</span>
           </Link>
 
           {/* Desktop Navigation */}

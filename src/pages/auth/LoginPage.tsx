@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
-import Logo from '../../assets/Logo.jpg';
+import Logo from '../../assets/skillverse.png';
 import '../../styles/LoginPage.css';
 
 const LoginPage = () => {
@@ -22,10 +22,9 @@ const LoginPage = () => {
       <div className="login-content">
         {/* Logo */}
         <div className="login-logo">
-          <div className="logo-wrapper">
+          <div className="login-logo-wrapper">
             <img src={Logo} alt="Skillverse Logo" className="logo-image" />
           </div>
-          <span className="logo-title">Skillverse</span>
         </div>
 
         {/* Welcome Text */}
