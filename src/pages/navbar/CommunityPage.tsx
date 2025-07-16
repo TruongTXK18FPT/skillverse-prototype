@@ -109,7 +109,7 @@ const CommunityPage = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('https://685159d58612b47a2c09b031.mockapi.io/community');
+      const response = await fetch('https://68426af6e1347494c31cbc60.mockapi.io/api/skillverse/Community');
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

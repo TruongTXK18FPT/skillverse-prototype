@@ -45,7 +45,7 @@ const MentorshipPage = () => {
     try {
       setLoading(true);
       // Fetch from MockAPI
-      const response = await fetch('https://685159d58612b47a2c09b031.mockapi.io/mentorship');
+      const response = await fetch('https://68426af6e1347494c31cbc60.mockapi.io/api/skillverse/Mentorship');
       const data = await response.json();
       
       // Transform API data to match our interface
