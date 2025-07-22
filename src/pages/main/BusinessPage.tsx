@@ -142,17 +142,17 @@ const BusinessPage: React.FC = () => {
           <h1>🏢 Bảng Điều Khiển Doanh Nghiệp</h1>
           <p>Quản lý công việc nhỏ và tìm kiếm freelancer hoàn hảo</p>
           <div className="business-stats">
-            <div className="stat-item">
+            <div className="business-stat-item">
               <span className="stat-number">{minJobs.length}</span>
-              <span className="stat-label">Công Việc</span>
+              <span className="business-stat-label">Công Việc</span>
             </div>
-            <div className="stat-item">
+            <div className="business-stat-item">
               <span className="stat-number">{freelancers.length}</span>
-              <span className="stat-label">Freelancer</span>
+              <span className="business-stat-label">Freelancer</span>
             </div>
-            <div className="stat-item">
+            <div className="business-stat-item">
               <span className="stat-number">{minJobs.filter(job => job.status === 'Open').length}</span>
-              <span className="stat-label">Đang Mở</span>
+              <span className="business-stat-label">Đang Mở</span>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
+import { AuthProvider } from './context/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/main/HomePage';
@@ -41,11 +42,12 @@ const App = () => {
   return (
     <LanguageProvider>
       <ThemeProvider>
-        <Router>
-          <div className="app-container">
-            <ScrollToTop />
-            <Header />
-            <main>
+        <AuthProvider>
+          <Router>
+            <div className="app-container">
+              <ScrollToTop />
+              <Header />
+              <main>
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
@@ -90,6 +92,7 @@ const App = () => {
             <Footer />
           </div>
         </Router>
+        </AuthProvider>
       </ThemeProvider>
     </LanguageProvider>
   );

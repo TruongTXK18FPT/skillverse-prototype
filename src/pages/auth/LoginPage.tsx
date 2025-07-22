@@ -1,20 +1,65 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
 import Logo from '../../assets/skillverse.png';
 import '../../styles/LoginPage.css';
 
 const LoginPage = () => {
   const { theme } = useTheme();
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user starts typing
+    if (error) setError('');
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Login attempt with:', { email, password });
+    
+    if (!formData.email || !formData.password) {
+      setError('Vui lòng nhập đầy đủ thông tin');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      console.log('Attempting login with:', formData);
+      
+      // Login and get redirect URL based on role
+      const redirectUrl = await login(formData);
+      
+      console.log('Login successful, redirecting to:', redirectUrl);
+      
+      // Extract the path from the full URL for navigation
+      const urlPath = new URL(redirectUrl).pathname;
+      
+      // Navigate to role-specific page
+      navigate(urlPath, { replace: true });
+      
+    } catch (error: any) {
+      console.error('Login error:', error);
+      setError(error.message || 'Đăng nhập thất bại. Vui lòng thử lại.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,17 +80,24 @@ const LoginPage = () => {
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="login-form">
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <div className="input-wrapper">
-              <Mail className="login-input-icon" />
               <input
                 type="email"
                 id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
                 placeholder="Nhập email của bạn"
                 required
+                disabled={loading}
               />
             </div>
           </div>
@@ -53,19 +105,21 @@ const LoginPage = () => {
           <div className="form-group">
             <label htmlFor="password">Mật khẩu</label>
             <div className="input-wrapper">
-              <Lock className="login-input-icon" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
                 placeholder="Nhập mật khẩu của bạn"
                 required
+                disabled={loading}
               />
               <button
                 type="button"
                 className="password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
+                disabled={loading}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -74,7 +128,7 @@ const LoginPage = () => {
 
           <div className="form-options">
             <label className="remember-me">
-              <input type="checkbox" />
+              <input type="checkbox" disabled={loading} />
               <span>Ghi nhớ đăng nhập</span>
             </label>
             <Link to="/forgot-password" className="forgot-password">
@@ -82,8 +136,15 @@ const LoginPage = () => {
             </Link>
           </div>
 
-          <button type="submit" className="login-button">
-            Đăng nhập
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? (
+              <>
+                <Loader2 className="spinner" size={20} />
+                <span>Đang đăng nhập...</span>
+              </>
+            ) : (
+              'Đăng nhập'
+            )}
           </button>
         </form>
 
@@ -93,11 +154,11 @@ const LoginPage = () => {
             <span>Hoặc đăng nhập với</span>
           </div>
           <div className="social-buttons">
-            <button className="social-button google">
+            <button className="social-button google" disabled={loading}>
               <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="Google" className="social-icon" />
               <span>Google</span>
             </button>
-            <button className="social-button facebook">
+            <button className="social-button facebook" disabled={loading}>
               <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png" alt="Facebook" className="social-icon" />
               <span>Facebook</span>
             </button>
