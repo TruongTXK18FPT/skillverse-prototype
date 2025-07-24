@@ -4,22 +4,7 @@ import { useTheme } from '../../context/ThemeContext';
 import '../../styles/CoursesPage.css';
 import Pagination from '../../components/Pagination';
 import { useNavigate } from 'react-router-dom';
-type Course = {
-  id: string;
-  title: string;
-  instructor: string;
-  category: string;
-  image: string;
-  level?: string;
-  price?: string;
-  rating?: number;
-  students?: string | number;
-  description?: string;
-  duration?: string;
-  modules?: number;
-  certificate?: boolean;
-};
-
+import { fetchAllCourses, parsePrice, isFreePrice, Course } from '../../services/courseService';
 type SortOption = 'newest' | 'oldest' | 'price-low' | 'price-high' | 'rating' | 'popular';
 type PriceFilter = 'all' | 'free' | 'paid';
 
@@ -40,22 +25,12 @@ const CoursesPage = () => {
 
 useEffect(() => {
   setLoading(true);
-  fetch('https://685174ec8612b47a2c0a2925.mockapi.io/Course')
-    .then(res => res.json())
+  fetchAllCourses()
     .then(data => {
-      // Normalize category string
-      const normalized = (str: string) => str.trim().toLowerCase();
-      const updatedCourses = data.map((course: Course) => ({
-        ...course,
-        category: normalized(course.category),
-        rating: course.rating ?? Math.random() * 2 + 3, // Random rating if not provided
-        students: course.students ?? Math.floor(Math.random() * 5000) + 100
-      }));
-      
       // Debug: Log price values to console
-      console.log('Course prices:', updatedCourses.map((c: Course) => ({ id: c.id, title: c.title, price: c.price })));
+      console.log('Course prices:', data.map((c: Course) => ({ id: c.id, title: c.title, price: c.price })));
       
-      setCourses(updatedCourses);
+      setCourses(data);
       setLoading(false);
     })
     .catch(err => {
@@ -63,46 +38,6 @@ useEffect(() => {
       setLoading(false);
     });
 }, []);
-
-  // Parse price for sorting
-  const parsePrice = (priceStr: string): number => {
-    if (!priceStr || 
-        priceStr.toLowerCase().includes('miễn phí') || 
-        priceStr.toLowerCase().includes('0 vnd') ||
-        priceStr.trim() === '0') return 0;
-    const numStr = priceStr.replace(/[^\d]/g, '');
-    return parseInt(numStr) || 0;
-  };
-
-  // Check if course is free
-  const isFreePrice = (priceStr?: string): boolean => {
-    if (!priceStr) return true;
-    const lowerPrice = priceStr.toLowerCase().trim();
-    
-    // Check for various free price formats
-    const freeFormats = [
-      'miễn phí',
-      '0 vnd',
-      '0vnd', 
-      '0 vnđ',
-      '0vnđ',
-      'free',
-      'gratis'
-    ];
-    
-    // Check if price string contains any free format
-    const containsFreeFormat = freeFormats.some(format => lowerPrice.includes(format));
-    
-    // Check if price is exactly "0"
-    const isZero = lowerPrice === '0';
-    
-    // Check if parsed price is 0
-    const parsedPrice = parsePrice(priceStr);
-    
-    console.log(`Checking price "${priceStr}": containsFreeFormat=${containsFreeFormat}, isZero=${isZero}, parsedPrice=${parsedPrice}`);
-    
-    return containsFreeFormat || isZero || parsedPrice === 0;
-  };
 
   // Sort courses
   const sortCourses = (coursesToSort: Course[]): Course[] => {
@@ -417,6 +352,9 @@ const categories = [
                     key={course.id} 
                     className="course-card"
                     style={{ animationDelay: `${index * 0.1}s` }}
+                    onClick={() => navigate(`/courses/${course.id}`, {
+                      state: { course: course }
+                    })}
                   >
                     <div className="course-image-container">
                       <img src={course.image} alt={course.title} className="course-image" />
@@ -491,7 +429,12 @@ const categories = [
                           )}
                         </div>
                         <button className="enroll-button"
-                          onClick={() => navigate(`/courses/${course.id}`)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/courses/${course.id}`, {
+                              state: { course: course }
+                            });
+                          }}
                         >
                           <span className="enroll-icon">⚡</span>
                           {' '}Đăng Ký Ngay

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { 
   ArrowLeft, 
   Star, 
@@ -18,23 +18,8 @@ import {
   Target,
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { findCourseById, parsePrice, isFreePrice, Course } from '../../services/courseService';
 import '../../styles/CourseDetailPage.css';
-
-interface Course {
-  id: string;
-  title: string;
-  instructor: string;
-  category: string;
-  image: string;
-  level?: string;
-  price?: string;
-  rating?: number;
-  students?: string | number;
-  description?: string;
-  duration?: string;
-  modules?: number;
-  certificate?: boolean;
-}
 
 interface CourseModule {
   id: number;
@@ -48,11 +33,15 @@ const CourseDetailPage = () => {
   const { theme } = useTheme();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [expandedModule, setExpandedModule] = useState<number | null>(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
+
+  // Check if course data was passed via navigation state
+  const passedCourse = location.state?.course;
 
   // Mock course modules data
   const courseModules: CourseModule[] = [
@@ -146,42 +135,38 @@ const CourseDetailPage = () => {
   ];
 
   useEffect(() => {
-    if (!id) return;
+    // If course data was passed via navigation state, use it directly
+    if (passedCourse) {
+      setCourse({
+        ...passedCourse,
+        rating: passedCourse.rating ?? Math.random() * 2 + 3,
+        students: passedCourse.students ?? Math.floor(Math.random() * 5000) + 100
+      });
+      setLoading(false);
+      return;
+    }
+
+    // Fallback: try to fetch from API if no course data was passed and we have an ID
+    if (!id) {
+      setLoading(false);
+      return;
+    }
     
     setLoading(true);
-    fetch(`https://685174ec8612b47a2c0a2925.mockapi.io/Course/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        setCourse({
-          ...data,
-          rating: data.rating ?? Math.random() * 2 + 3,
-          students: data.students ?? Math.floor(Math.random() * 5000) + 100
-        });
+    
+    // Use the course service to find the course
+    findCourseById(id)
+      .then(foundCourse => {
+        if (foundCourse) {
+          setCourse(foundCourse);
+        }
         setLoading(false);
       })
       .catch(err => {
         console.error('Error fetching course:', err);
         setLoading(false);
       });
-  }, [id]);
-
-  const parsePrice = (priceStr?: string): number => {
-    if (!priceStr || 
-        priceStr.toLowerCase().includes('miễn phí') || 
-        priceStr.toLowerCase().includes('0 vnd') ||
-        priceStr.trim() === '0') return 0;
-    const numStr = priceStr.replace(/[^\d]/g, '');
-    return parseInt(numStr) || 0;
-  };
-
-  const isFreePrice = (priceStr?: string): boolean => {
-    if (!priceStr) return true;
-    const lowerPrice = priceStr.toLowerCase().trim();
-    const freeFormats = ['miễn phí', '0 vnd', '0vnd', '0 vnđ', '0vnđ', 'free', 'gratis'];
-    return freeFormats.some(format => lowerPrice.includes(format)) || 
-           lowerPrice === '0' || 
-           parsePrice(priceStr) === 0;
-  };
+  }, [id, passedCourse]);
 
   const handleEnroll = () => {
     if (!course) return;
