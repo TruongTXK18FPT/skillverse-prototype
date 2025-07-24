@@ -3,7 +3,7 @@ import { Search, Clock, Users, Star, BookOpen, Trophy, Play, ChevronDown, Slider
 import { useTheme } from '../../context/ThemeContext';
 import '../../styles/CoursesPage.css';
 import Pagination from '../../components/Pagination';
-
+import { useNavigate } from 'react-router-dom';
 type Course = {
   id: string;
   title: string;
@@ -25,6 +25,7 @@ type PriceFilter = 'all' | 'free' | 'paid';
 
 const CoursesPage = () => {
   const { theme } = useTheme();
+  const navigate = useNavigate();
   const [courses, setCourses] = useState<Course[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -489,7 +490,9 @@ const categories = [
                             <span className="price-period">/khóa</span>
                           )}
                         </div>
-                        <button className="enroll-button">
+                        <button className="enroll-button"
+                          onClick={() => navigate(`/courses/${course.id}`)}
+                        >
                           <span className="enroll-icon">⚡</span>
                           {' '}Đăng Ký Ngay
                         </button>

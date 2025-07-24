@@ -26,7 +26,6 @@ import CoinWallet from './pages/main/CoinWallet';
 import BlogForm from './pages/community/BlogForm';
 import NotFoundPage from './pages/notfound/NotFoundPage';
 import Certificate from './components/Certificate';
-
 import TermOfService from './pages/footer/TermOfService';
 import PrivacyPolicy from './pages/footer/Privacy&Policy';
 import HelpCenter from './pages/footer/HelpCenter';
@@ -37,7 +36,7 @@ import AdminPage from './pages/main/AdminPage';
 import RoadmapPage from './pages/roadmap/RoadmapPage';
 import './styles/App.css';
 import ScrollToTop from './components/scroll/ScrollToTop';
-
+import CourseDetailPage from './pages/navbar/CourseDetailPage';
 const App = () => {
   return (
     <LanguageProvider>
@@ -73,6 +72,8 @@ const App = () => {
                 <Route path="/manager" element={<ManagerPage />} />
                 <Route path="/wallet" element={<CoinWallet />} />
                 <Route path="/seminar" element={<SeminarPage />} />
+                <Route path="/courses/:id" element={<CourseDetailPage />} />
+                {/* Add the missing footer routes */}
                 
                 {/* Add these missing footer routes */}
                 <Route path="/help-center" element={<HelpCenter />} />
