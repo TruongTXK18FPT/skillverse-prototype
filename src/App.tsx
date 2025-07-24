@@ -37,6 +37,7 @@ import RoadmapPage from './pages/roadmap/RoadmapPage';
 import './styles/App.css';
 import ScrollToTop from './components/scroll/ScrollToTop';
 import CourseDetailPage from './pages/navbar/CourseDetailPage';
+import CourseLearningPage from './pages/navbar/CourseLearningPage';
 const App = () => {
   return (
     <LanguageProvider>
@@ -73,6 +74,7 @@ const App = () => {
                 <Route path="/wallet" element={<CoinWallet />} />
                 <Route path="/seminar" element={<SeminarPage />} />
                 <Route path="/courses/:id" element={<CourseDetailPage />} />
+                <Route path="/course-learning" element={<CourseLearningPage />} />
                 {/* Add the missing footer routes */}
                 
                 {/* Add these missing footer routes */}

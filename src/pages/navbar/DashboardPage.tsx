@@ -7,11 +7,11 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import '../../styles/DashboardPage.css';
-
+import { useNavigate } from 'react-router-dom';
 const DashboardPage = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState('week');
   const { translations } = useLanguage();
-
+   const navigate = useNavigate();
   const stats = [
     {
       title: translations?.dashboard?.stats?.coursesInProgress || 'Courses in Progress',
@@ -312,7 +312,9 @@ const DashboardPage = () => {
                         <span className="sv-course-card__next-label">Next Lesson:</span>
                         <span className="sv-course-card__next-title">{course.nextLesson}</span>
                       </div>
-                      <button className="sv-button sv-button--primary sv-button--block">
+                      <button className="sv-button sv-button--primary sv-button--block"
+                        onClick={() => navigate('/course-learning')}>
+                        <Play className="h-4 w-4 mr-2" />
                         Continue Learning
                       </button>
                     </div>
