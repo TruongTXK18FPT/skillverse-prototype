@@ -60,7 +60,6 @@
   padding: 2rem;
   color: var(--text-primary);
   transition: var(--transition-slow);
-  contain: layout style;
   will-change: auto;
 }
 
@@ -142,7 +141,6 @@
 .sv-portfolio-content {
   position: relative;
   min-height: 400px;
-  contain: layout;
 }
 
 /* Button Styles */

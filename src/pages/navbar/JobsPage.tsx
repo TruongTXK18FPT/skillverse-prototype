@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Search, MapPin, Clock, DollarSign, Briefcase, Star, Filter, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
+import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/JobsPage.css';
 
 const JobsPage = () => {
@@ -265,6 +266,9 @@ const JobsPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="jobs" />
     </div>
   );
 };

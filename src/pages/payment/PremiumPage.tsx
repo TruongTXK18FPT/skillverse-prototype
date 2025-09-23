@@ -5,6 +5,7 @@ import {
   Calendar, Briefcase, Coins, Zap, ArrowRight
 } from 'lucide-react';
 import '../../styles/PremiumPage.css';
+import MeowGuide from '../../components/MeowlGuide';
 
 const PremiumPage = () => {
   const navigate = useNavigate();
@@ -407,6 +408,7 @@ const PremiumPage = () => {
           </div>
         </div>
       </section>
+      <MeowGuide currentPage="upgrade" />
     </div>
   );
 };

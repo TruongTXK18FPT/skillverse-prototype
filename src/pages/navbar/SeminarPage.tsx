@@ -4,6 +4,7 @@ import { useTheme } from '../../context/ThemeContext';
 import '../../styles/SeminarPage.css';
 import Pagination from '../../components/Pagination';
 import { useNavigate } from 'react-router-dom';
+import MeowGuide from '../../components/MeowlGuide';
 
 interface Seminar {
   id: string;
@@ -256,6 +257,7 @@ const SeminarPage: React.FC = () => {
           />
         </div>
       )}
+      <MeowGuide currentPage="seminars" />
     </div>
   );
 };

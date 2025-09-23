@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PostMinJobTab from '../../components/business/PostMinJobTab';
 import MinJobListTab from '../../components/business/MinJobListTab';
 import SuggestedFreelancersTab from '../../components/business/SuggestedFreelancersTab';
+import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/BusinessPage.css';
 
 export interface MinJob {
@@ -207,6 +208,9 @@ const BusinessPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="business" />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import {
 import { useLanguage } from '../../context/LanguageContext';
 import { RoadmapSection } from '../../components/roadmap';
 import { learningRoadmapsData } from '../../data/roadmapsData';
+import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/DashboardPage.css';
 import '../../styles/RoadmapStyles.css';
 
@@ -208,6 +209,9 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="dashboard" />
     </div>
   );
 };

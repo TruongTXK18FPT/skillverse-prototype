@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowLeft, Filter, Search, BookOpen, Clock, Users, Star } from 'lucide-react';
 import { RoadmapCard } from '../../components/roadmap';
 import { learningRoadmapsData } from '../../data/roadmapsData';
+import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/RoadmapPage.css';
 
 const RoadmapPage = () => {
@@ -149,6 +150,9 @@ const RoadmapPage = () => {
           )}
         </div>
       </div>
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="roadmap" />
     </div>
   );
 };

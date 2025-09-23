@@ -5,6 +5,7 @@ import {
   BarChart3, Users
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/ChatbotPage.css';
 
 interface RecommendationSection {
@@ -1450,6 +1451,9 @@ Hãy hỏi cụ thể hơn để tôi có thể đưa ra lời khuyên chính x�
           </div>
         </div>
       </div>
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="chatbot" />
     </div>
   );
 };

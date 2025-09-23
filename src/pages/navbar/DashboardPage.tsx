@@ -6,6 +6,7 @@ import {
   MessageCircle, Play, Plus, User as UserIcon, Flame
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/DashboardPage.css';
 import { useNavigate } from 'react-router-dom';
 const DashboardPage = () => {
@@ -453,6 +454,9 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="dashboard" />
     </div>
   );
 };

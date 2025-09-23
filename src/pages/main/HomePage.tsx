@@ -258,7 +258,7 @@ const HomePage = () => {
       </section>
 
       {/* Meowl Guide */}
-      <MeowlGuide />
+      <MeowlGuide currentPage="home" />
     </div>
   );
 };

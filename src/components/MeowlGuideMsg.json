@@ -1,0 +1,422 @@
+{
+  "home": [
+    {
+      "id": 1,
+      "titleEn": "Welcome to SkillVerse! 🐱✨",
+      "titleVi": "Chào mừng đến SkillVerse! 🐱✨",
+      "contentEn": "Meow~ hello friend! I’m your fluffy little owl-cat guide. Here you’ll find shiny featured courses, trending skills, and the purrfect place to begin your adventure!",
+      "contentVi": "Meo~ xin chào bạn! Mình là cú mèo dễ thương của bạn đây. Ở đây có những khóa học nổi bật, kỹ năng hot và nơi tuyệt vời để bắt đầu hành trình học tập!"
+    },
+    {
+      "id": 2,
+      "titleEn": "Start Your Journey! 🚀",
+      "titleVi": "Bắt Đầu Hành Trình! 🚀",
+      "contentEn": "Click on any course card to explore inside, or use the search bar to find your favorite topic. Let’s flap our wings and get learning!",
+      "contentVi": "Nhấn vào bất kỳ thẻ khóa học nào để khám phá, hoặc dùng thanh tìm kiếm để tìm chủ đề bạn thích. Cùng tung cánh học tập thôi nào!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Check Your Progress! 📊",
+      "titleVi": "Kiểm Tra Tiến Độ! 📊",
+      "contentEn": "Don’t forget to peek at your dashboard—it shows all your paw-gress and shiny achievements!",
+      "contentVi": "Đừng quên ghé dashboard nhé—nơi hiển thị tiến độ và thành tích lung linh của bạn!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Need Help? 🐾",
+      "titleVi": "Cần Giúp Đỡ? 🐾",
+      "contentEn": "I’ll always be here to cheer you on, share tips, and keep learning fun and magical!",
+      "contentVi": "Mình sẽ luôn ở đây cổ vũ, chia sẻ bí kíp, và biến việc học thành một trải nghiệm vui vẻ và kỳ diệu!"
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "titleEn": "Explore the Course Catalog! 📚",
+      "titleVi": "Khám Phá Danh Mục Khóa Học! 📚",
+      "contentEn": "This is where the magic happens! Browse by category, filter by level, or search for something sparkly. Every course has ratings, duration, and price—so handy!",
+      "contentVi": "Đây là nơi phép màu diễn ra! Duyệt theo danh mục, lọc theo cấp độ, hoặc tìm khóa học lung linh. Mỗi khóa đều có đánh giá, thời lượng và giá cực tiện lợi!"
+    },
+    {
+      "id": 2,
+      "titleEn": "Filter Like a Pro Cat! 🔍",
+      "titleVi": "Lọc Như Mèo Chuyên Nghiệp! 🔍",
+      "contentEn": "Use the sidebar filters to find exactly what you need—by category, skill, price, or rating. Sorting by newest, cheapest, or most popular is just a click away!",
+      "contentVi": "Dùng bộ lọc bên cạnh để tìm chính xác thứ bạn cần—theo danh mục, kỹ năng, giá hoặc đánh giá. Sắp xếp theo mới nhất, rẻ nhất hay phổ biến chỉ cần một cú click!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Trending Picks! 🌟",
+      "titleVi": "Lựa Chọn Đang Hot! 🌟",
+      "contentEn": "Check out the trending courses—purrfect for keeping your skills fresh and paws busy!",
+      "contentVi": "Xem ngay các khóa học đang hot—rất hợp để bạn luôn cập nhật kỹ năng và không bị rảnh vuốt!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Your Learning Adventure Awaits! 🗺️",
+      "titleVi": "Cuộc Phiêu Lưu Học Tập Đang Chờ! 🗺️",
+      "contentEn": "Every course is a new adventure. Pick one, dive in, and let’s unlock new skills together!",
+      "contentVi": "Mỗi khóa học là một chuyến phiêu lưu mới. Hãy chọn một khóa, bắt đầu ngay, và cùng mình mở khóa kỹ năng mới!"
+    }
+  ],
+  "dashboard": [
+    {
+      "id": 1,
+      "titleEn": "Your Cozy Dashboard! 📊",
+      "titleVi": "Dashboard Ấm Cúng Của Bạn! 📊",
+      "contentEn": "Here’s your command center! Track your progress, see completed courses, and admire your shiny badges and certificates.",
+      "contentVi": "Đây chính là trung tâm điều khiển của bạn! Theo dõi tiến độ, xem khóa học đã hoàn thành và ngắm huy hiệu cùng chứng chỉ lung linh."
+    },
+    {
+      "id": 2,
+      "titleEn": "Track Your Paw-gress! 📈",
+      "titleVi": "Theo Dõi Vuốt Tiến Độ! 📈",
+      "contentEn": "The progress bars show how close you are to completing each course. Keep going—your goals are within reach!",
+      "contentVi": "Thanh tiến độ cho thấy bạn gần hoàn thành khóa học đến đâu. Cứ tiếp tục nhé—mục tiêu đang ở ngay trước mắt!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Celebrate Your Wins! 🎉",
+      "titleVi": "Ăn Mừng Thành Tích! 🎉",
+      "contentEn": "Every finished course deserves a happy dance—or at least a paw-five!",
+      "contentVi": "Mỗi khóa học hoàn thành xứng đáng có một điệu nhảy ăn mừng—hoặc ít nhất một cái vuốt-high five!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Keep the Momentum! ⚡",
+      "titleVi": "Giữ Vững Đà Tiến! ⚡",
+      "contentEn": "Log in daily to keep your learning streak alive. Tiny steps lead to giant leaps!",
+      "contentVi": "Đăng nhập mỗi ngày để giữ streak học tập. Những bước nhỏ sẽ tạo nên bước nhảy vọt!"
+    }
+  ],
+  "chatbot": [
+    {
+      "id": 1,
+      "titleEn": "Meet Your AI Study Buddy! 🤖",
+      "titleVi": "Gặp Người Bạn AI Học Tập! 🤖",
+      "contentEn": "Hoot hoot~ I’m your smart study buddy! Ask me anything about courses, skills, or learning paths—I’ve got your back!",
+      "contentVi": "Cúc cu~ Mình là bạn học thông minh của bạn đây! Hãy hỏi mình về khóa học, kỹ năng hay lộ trình học tập—mình lo hết!"
+    },
+    {
+      "id": 2,
+      "titleEn": "Smart Conversations! 💭",
+      "titleVi": "Trò Chuyện Thông Minh! 💭",
+      "contentEn": "I can recommend courses, explain tricky topics, and even quiz you to check your memory. Learning is more fun with me by your side!",
+      "contentVi": "Mình có thể gợi ý khóa học, giải thích chủ đề khó hiểu, và thậm chí kiểm tra trí nhớ bạn. Học tập sẽ vui hơn nhiều khi có mình cạnh bên!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Ask Anything! 🎤",
+      "titleVi": "Hỏi Gì Cũng Được! 🎤",
+      "contentEn": "Not sure where to start? Just ask me and I’ll point you to the best path, like a wise owl with extra sparkle!",
+      "contentVi": "Chưa biết bắt đầu từ đâu? Cứ hỏi mình, mình sẽ chỉ bạn con đường tốt nhất, như một cú mèo thông thái có thêm ánh sáng lung linh!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Study Together! 📚",
+      "titleVi": "Cùng Học Nào! 📚",
+      "contentEn": "Think of me as your learning buddy who never gets tired—I’ll keep cheering for you anytime, anywhere!",
+      "contentVi": "Hãy xem mình như người bạn học không bao giờ mệt mỏi—mình sẽ luôn cổ vũ bạn, bất cứ lúc nào, bất cứ nơi đâu!"
+    }
+  ],
+  "portfolio": [
+    {
+      "id": 1,
+      "titleEn": "Showcase Your Talents! ✨",
+      "titleVi": "Phô Diễn Tài Năng! ✨",
+      "contentEn": "This is your professional showcase! Add your projects, skills, and certifications to make recruiters go ‘wow~’.",
+      "contentVi": "Đây là nơi trưng bày chuyên nghiệp của bạn! Thêm dự án, kỹ năng và chứng chỉ để nhà tuyển dụng phải ‘wow~’!"
+    },
+    {
+      "id": 2,
+      "titleEn": "Shine Bright! 💎",
+      "titleVi": "Tỏa Sáng! 💎",
+      "contentEn": "Keep your portfolio updated with your latest wins. A sparkling profile helps you stand out from the crowd!",
+      "contentVi": "Luôn cập nhật portfolio với thành tích mới nhất. Một hồ sơ lấp lánh sẽ giúp bạn nổi bật giữa đám đông!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Add Some Personal Touch! 🎨",
+      "titleVi": "Thêm Dấu Ấn Cá Nhân! 🎨",
+      "contentEn": "Format your content nicely, add images, and organize sections. Make it look truly ‘you’!",
+      "contentVi": "Hãy định dạng nội dung gọn gàng, thêm hình ảnh và sắp xếp các phần thật hợp lý. Khiến nó thật sự mang phong cách ‘của bạn’!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Show Employers Your Best Side! 💼",
+      "titleVi": "Cho Nhà Tuyển Dụng Thấy Mặt Tốt Nhất! 💼",
+      "contentEn": "A polished portfolio is like a magic key—it opens doors to exciting opportunities!",
+      "contentVi": "Một portfolio chỉn chu giống như chiếc chìa khóa ma thuật—mở ra cánh cửa cho nhiều cơ hội thú vị!"
+    }
+  ],
+  "jobs": [
+    {
+      "id": 1,
+      "titleEn": "Job Hunt Like a Clever Cat! 🎯",
+      "titleVi": "Săn Việc Như Mèo Khôn! 🎯",
+      "contentEn": "Welcome to the job board! Filter by location, salary, or job type to find your purrfect fit.",
+      "contentVi": "Chào mừng đến bảng việc làm! Lọc theo địa điểm, mức lương hay loại công việc để tìm lựa chọn phù hợp nhất cho bạn!"
+    },
+    {
+      "id": 2,
+      "titleEn": "Apply Smartly! 📝",
+      "titleVi": "Ứng Tuyển Thông Minh! 📝",
+      "contentEn": "Click on any job card to see details and requirements. Make sure your portfolio is polished before you apply!",
+      "contentVi": "Nhấn vào thẻ việc để xem chi tiết và yêu cầu. Đảm bảo portfolio của bạn đã thật chỉnh chu trước khi ứng tuyển!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Stay Updated! 🔔",
+      "titleVi": "Luôn Cập Nhật! 🔔",
+      "contentEn": "New jobs pop up often, so check back regularly and don’t miss a golden chance!",
+      "contentVi": "Việc mới xuất hiện thường xuyên, hãy kiểm tra thường xuyên để không bỏ lỡ cơ hội vàng nhé!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Boost Your Confidence! 💪",
+      "titleVi": "Tăng Tự Tin! 💪",
+      "contentEn": "Every application is a step forward. Even if one doesn’t work out, you’re building experience and courage!",
+      "contentVi": "Mỗi lần ứng tuyển là một bước tiến. Dù chưa thành công, bạn vẫn đang tích lũy kinh nghiệm và sự tự tin!"
+    }
+  ],
+   "roadmap": [
+    {
+      "id": 1,
+      "titleEn": "Your Learning Roadmap! 🗺️",
+      "titleVi": "Lộ Trình Học Tập Của Bạn! 🗺️",
+      "contentEn": "Follow structured learning paths made by wise experts. Each roadmap shows prerequisites, estimated time, and clear steps to level up!",
+      "contentVi": "Hãy theo các lộ trình học tập được chuyên gia xây dựng. Mỗi lộ trình đều có điều kiện tiên quyết, thời gian ước tính và bước đi rõ ràng để bạn nâng cấp!"
+    },
+    {
+      "id": 2,
+      "titleEn": "Step-by-Step Success! 👣",
+      "titleVi": "Thành Công Từng Bước! 👣",
+      "contentEn": "Complete courses in order for the best experience. One paw-step at a time, and you’ll reach new heights!",
+      "contentVi": "Hoàn thành khóa học theo thứ tự để trải nghiệm tốt nhất. Mỗi bước vuốt nhỏ sẽ đưa bạn lên một tầm cao mới!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Stay on Track! 🎯",
+      "titleVi": "Đi Đúng Lộ Trình! 🎯",
+      "contentEn": "Your roadmap keeps you focused and motivated. No more getting lost—just follow the path and shine!",
+      "contentVi": "Lộ trình sẽ giúp bạn tập trung và có động lực. Không còn lạc hướng nữa—chỉ cần đi theo con đường và tỏa sáng thôi!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Unlock New Levels! 🔓",
+      "titleVi": "Mở Khóa Cấp Độ Mới! 🔓",
+      "contentEn": "As you progress, you’ll unlock advanced courses and exciting skills. Each step feels like leveling up in a game!",
+      "contentVi": "Khi tiến bộ, bạn sẽ mở khóa khóa học nâng cao và kỹ năng mới thú vị. Mỗi bước giống như lên cấp trong trò chơi vậy!"
+    }
+  ],
+  "profile": [
+    {
+      "id": 1,
+      "titleEn": "Your Personal Nest! 👤",
+      "titleVi": "Tổ Cá Nhân Của Bạn! 👤",
+      "contentEn": "Manage your account settings, update your info, and keep everything cozy and safe here.",
+      "contentVi": "Quản lý cài đặt tài khoản, cập nhật thông tin cá nhân và giữ mọi thứ gọn gàng, an toàn tại đây."
+    },
+    {
+      "id": 2,
+      "titleEn": "Customize Your Experience! ⚙️",
+      "titleVi": "Tùy Chỉnh Trải Nghiệm! ⚙️",
+      "contentEn": "Set your learning goals, tweak notifications, and adjust privacy settings—make the app truly yours!",
+      "contentVi": "Đặt mục tiêu học tập, chỉnh thông báo, và tùy chỉnh quyền riêng tư—biến ứng dụng thành không gian của riêng bạn!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Show Off Your Achievements! 🏅",
+      "titleVi": "Khoe Thành Tích Của Bạn! 🏅",
+      "contentEn": "Your profile highlights your progress and badges. Let the world see how awesome you are!",
+      "contentVi": "Hồ sơ của bạn cho thấy tiến độ và huy hiệu đạt được. Hãy để mọi người thấy bạn tuyệt thế nào!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Keep It Fresh! 🌱",
+      "titleVi": "Luôn Tươi Mới! 🌱",
+      "contentEn": "Update your profile regularly so it grows with you—like a little tree becoming stronger every day.",
+      "contentVi": "Thường xuyên cập nhật hồ sơ để nó lớn lên cùng bạn—giống như một cái cây ngày càng vững mạnh!"
+    }
+  ],
+  "business": [
+    {
+      "id": 1,
+      "titleEn": "Business Solutions Hub! 💼",
+      "titleVi": "Trung Tâm Giải Pháp Doanh Nghiệp! 💼",
+      "contentEn": "Welcome, companies! Here you can create training programs, manage teams, and boost employee growth.",
+      "contentVi": "Chào mừng doanh nghiệp! Tại đây bạn có thể tạo chương trình đào tạo, quản lý đội ngũ và thúc đẩy sự phát triển nhân viên."
+    },
+    {
+      "id": 2,
+      "titleEn": "Enterprise Features! 🏢",
+      "titleVi": "Tính Năng Doanh Nghiệp! 🏢",
+      "contentEn": "Access bulk licensing, custom courses, and analytics dashboards. Perfect for growing your team’s skills at scale!",
+      "contentVi": "Truy cập cấp phép hàng loạt, khóa học tùy chỉnh và bảng phân tích. Hoàn hảo để nâng cao kỹ năng nhóm bạn với quy mô lớn!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Track Team Success! 📈",
+      "titleVi": "Theo Dõi Thành Công Nhóm! 📈",
+      "contentEn": "Monitor progress across departments. Celebrate team wins and keep everyone motivated!",
+      "contentVi": "Giám sát tiến độ của từng bộ phận. Ăn mừng chiến thắng của nhóm và giữ lửa động lực!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Boost Company Growth! 🚀",
+      "titleVi": "Thúc Đẩy Tăng Trưởng Công Ty! 🚀",
+      "contentEn": "Well-trained employees make a strong company. SkillVerse is your partner in building future-ready teams!",
+      "contentVi": "Nhân viên được đào tạo tốt sẽ tạo nên công ty mạnh. SkillVerse là đối tác đồng hành cùng bạn xây dựng đội ngũ sẵn sàng cho tương lai!"
+    }
+  ],
+  "manager": [
+    {
+      "id": 1,
+      "titleEn": "Management Dashboard! 📋",
+      "titleVi": "Bảng Điều Khiển Quản Lý! 📋",
+      "contentEn": "Here managers can assign courses, check completion rates, and get a bird’s-eye view of the team’s growth.",
+      "contentVi": "Tại đây, quản lý có thể giao khóa học, kiểm tra tỷ lệ hoàn thành và quan sát sự phát triển của nhóm từ trên cao."
+    },
+    {
+      "id": 2,
+      "titleEn": "Team Development Tools! 👥",
+      "titleVi": "Công Cụ Phát Triển Nhóm! 👥",
+      "contentEn": "Use analytics to spot skill gaps, create learning paths, and help your team soar higher together!",
+      "contentVi": "Sử dụng phân tích để tìm khoảng cách kỹ năng, tạo lộ trình học tập và giúp nhóm bay cao hơn cùng nhau!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Celebrate Achievements! 🎉",
+      "titleVi": "Ăn Mừng Thành Tích! 🎉",
+      "contentEn": "Recognize milestones and celebrate team successes. A happy team is a productive team!",
+      "contentVi": "Ghi nhận cột mốc và ăn mừng thành công. Một đội ngũ hạnh phúc là một đội ngũ hiệu quả!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Keep Everyone Motivated! 🔥",
+      "titleVi": "Giữ Động Lực Cho Nhóm! 🔥",
+      "contentEn": "Encourage continuous learning and cheer your team on—it keeps the workplace buzzing with energy!",
+      "contentVi": "Khuyến khích học tập liên tục và cổ vũ nhóm của bạn—nó sẽ giữ cho nơi làm việc luôn tràn đầy năng lượng!"
+    }
+  ],
+    "games": [
+    {
+      "id": 1,
+      "titleEn": "Play & Learn! 🎮",
+      "titleVi": "Chơi & Học! 🎮",
+      "contentEn": "Learning doesn’t have to be boring! Try fun mini-games that help you practice skills while having a hoot!",
+      "contentVi": "Học tập không nhất thiết phải nhàm chán! Thử ngay mini-game vui nhộn để vừa luyện kỹ năng vừa giải trí nhé!"
+    },
+    {
+      "id": 2,
+      "titleEn": "Challenge Yourself! 💪",
+      "titleVi": "Thử Thách Bản Thân! 💪",
+      "contentEn": "Play quizzes, puzzles, and skill games. Each challenge makes your brain stronger and sharper!",
+      "contentVi": "Chơi quiz, trò đố và game kỹ năng. Mỗi thử thách đều giúp não bạn khỏe và sắc bén hơn!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Collect Rewards! 🏆",
+      "titleVi": "Thu Thập Phần Thưởng! 🏆",
+      "contentEn": "Win points, badges, or coins while playing. The more you play, the more shiny prizes you get!",
+      "contentVi": "Nhận điểm, huy hiệu hoặc xu khi chơi. Càng chơi nhiều, bạn càng có nhiều phần thưởng lung linh!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Compete with Friends! 👯",
+      "titleVi": "Thi Đấu Với Bạn Bè! 👯",
+      "contentEn": "Challenge your friends for a friendly match. Who’s the cleverest owl in town?",
+      "contentVi": "Thách đấu bạn bè trong những trận vui vẻ. Ai sẽ là cú mèo thông thái nhất thị trấn nào?"
+    }
+  ],
+  "wallet": [
+    {
+      "id": 1,
+      "titleEn": "Your Magic Coin Pouch! 💰",
+      "titleVi": "Túi Xu Ma Thuật Của Bạn! 💰",
+      "contentEn": "This is your wallet where all your shiny coins live. Earn them by learning and completing challenges!",
+      "contentVi": "Đây là ví nơi chứa những đồng xu lấp lánh của bạn. Hãy kiếm xu bằng cách học tập và hoàn thành thử thách!"
+    },
+    {
+      "id": 2,
+      "titleEn": "Earn & Save! 💎",
+      "titleVi": "Kiếm & Tiết Kiệm! 💎",
+      "contentEn": "Collect coins from games, lessons, or achievements. Saving them up feels super rewarding!",
+      "contentVi": "Thu thập xu từ trò chơi, bài học hoặc thành tích. Tiết kiệm xu thật là cảm giác tuyệt vời!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Spend Wisely! 🛒",
+      "titleVi": "Tiêu Dùng Thông Minh! 🛒",
+      "contentEn": "Use coins to unlock special features, buy upgrades, or join exclusive events. Spend smart, little owl!",
+      "contentVi": "Dùng xu để mở tính năng đặc biệt, mua nâng cấp hoặc tham gia sự kiện riêng. Hãy tiêu dùng thông minh nhé cú mèo nhỏ!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Keep Track of Your Treasure! 📊",
+      "titleVi": "Theo Dõi Kho Báu Của Bạn! 📊",
+      "contentEn": "Your wallet dashboard shows all your coin history—earnings, spendings, and shiny balance.",
+      "contentVi": "Dashboard ví của bạn hiển thị lịch sử xu—từ lúc kiếm, chi tiêu, đến số dư lung linh hiện tại."
+    }
+  ],
+  "upgrade": [
+    {
+      "id": 1,
+      "titleEn": "Upgrade Your Powers! ⚡",
+      "titleVi": "Nâng Cấp Sức Mạnh! ⚡",
+      "contentEn": "Want more features, extra rewards, or magical tools? Upgrade your account to unlock them!",
+      "contentVi": "Bạn muốn nhiều tính năng hơn, phần thưởng thêm hoặc công cụ ma thuật? Hãy nâng cấp tài khoản để mở khóa!"
+    },
+    {
+      "id": 2,
+      "titleEn": "Shiny Perks Await! ✨",
+      "titleVi": "Quyền Lợi Lấp Lánh Đang Đợi! ✨",
+      "contentEn": "Enjoy perks like faster progress, exclusive badges, and priority access to special courses.",
+      "contentVi": "Tận hưởng quyền lợi như tiến độ nhanh hơn, huy hiệu độc quyền và quyền truy cập ưu tiên vào khóa học đặc biệt."
+    },
+    {
+      "id": 3,
+      "titleEn": "Support the Platform! 💖",
+      "titleVi": "Ủng Hộ Nền Tảng! 💖",
+      "contentEn": "Upgrading helps keep SkillVerse growing. Your support makes this learning world even more magical!",
+      "contentVi": "Nâng cấp giúp SkillVerse phát triển. Sự ủng hộ của bạn làm thế giới học tập này thêm kỳ diệu!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Choose Your Plan! 📦",
+      "titleVi": "Chọn Gói Của Bạn! 📦",
+      "contentEn": "Pick the plan that fits you best—whether you’re a casual learner or a skill-hungry explorer.",
+      "contentVi": "Chọn gói phù hợp nhất với bạn—dù bạn là người học thoải mái hay nhà khám phá háo hức kỹ năng."
+    }
+  ],
+  "seminars": [
+    {
+      "id": 1,
+      "titleEn": "Join Exciting Seminars! 🎤",
+      "titleVi": "Tham Gia Seminar Thú Vị! 🎤",
+      "contentEn": "Here you can attend live talks, workshops, and expert sessions. It’s like learning with a spark!",
+      "contentVi": "Ở đây bạn có thể tham gia buổi nói chuyện trực tiếp, workshop và buổi chia sẻ từ chuyên gia. Học tập thật bùng nổ!"
+    },
+    {
+      "id": 2,
+      "titleEn": "Learn from Experts! 🦉",
+      "titleVi": "Học Từ Chuyên Gia! 🦉",
+      "contentEn": "Ask questions, interact with mentors, and gain insights you won’t find in books!",
+      "contentVi": "Đặt câu hỏi, tương tác với mentor và thu nhận kiến thức không có trong sách vở!"
+    },
+    {
+      "id": 3,
+      "titleEn": "Expand Your Network! 🌐",
+      "titleVi": "Mở Rộng Mạng Lưới! 🌐",
+      "contentEn": "Meet fellow learners and professionals. Who knows—you might find a study buddy or future colleague!",
+      "contentVi": "Gặp gỡ người học và chuyên gia khác. Biết đâu bạn sẽ tìm thấy bạn học hay đồng nghiệp tương lai!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Collect Seminar Rewards! 🎁",
+      "titleVi": "Nhận Quà Seminar! 🎁",
+      "contentEn": "Earn certificates, points, or even special badges for attending. Every seminar adds sparkle to your profile!",
+      "contentVi": "Nhận chứng chỉ, điểm hoặc huy hiệu đặc biệt khi tham gia. Mỗi seminar sẽ làm hồ sơ của bạn thêm lung linh!"
+    }
+  ]
+}

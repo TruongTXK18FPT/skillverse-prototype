@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, HelpCircle } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { Link } from 'react-router-dom';
 import '../styles/MeowlGuide.css';
+import guideMessages from './MeowlGuideMsg.json';
 
 interface GuideStep {
   id: number;
@@ -12,56 +12,27 @@ interface GuideStep {
   contentVi: string;
 }
 
-const guideSteps: GuideStep[] = [
-  {
-    id: 1,
-    titleEn: "Meow-hello there! 🐱✨",
-    titleVi: "Meo-ào chào bạn! 🐱✨",
-    contentEn: "Hiya! I'm Meowl — your purr-sonal guide through this whisker-tastic world. Got your paws ready? Let’s take the first step and sniff out all the cool places together!",
-    contentVi: "Xin chào! Mình là Meowl — hướng dẫn viên cú mèo siêu dễ thương của bạn. Sẵn sàng vươn vuốt khám phá chưa? Cùng mình tìm hiểu mọi ngóc ngách thú vị ở đây nhé!"
-  },
-  {
-    id: 2,
-    titleEn: "📚 Time to Learn-Meow!",
-    titleVi: "📚 Đến Giờ Học Meo Rồi!",
-    contentEn: "Wanna hear a secret? This platform's bursting with juicy lessons — from coding tricks to design magic. It’s like a treat jar that never empties! Come on, let’s crack it open!",
-    contentVi: "Muốn nghe bí mật không? Ở đây có cả kho kiến thức xịn xò — từ lập trình đến thiết kế, chẳng khác nào hộp bánh thưởng không đáy! Đi nào, khám phá ngay thôi!"
-  },
-  {
-    id: 3,
-    titleEn: "🤖 AI Coach is Purr-fect!",
-    titleVi: "🤖 Trợ Lý AI Siêu Mèo!",
-    contentEn: "Our AI coach? It’s got the brains of nine cats combined! It'll sniff out the perfect skills just for you. Trust it — this clever kitty knows the shortcut to success!",
-    contentVi: "Trợ lý AI của chúng tớ? Thông minh như chín con mèo hợp lại! Nó sẽ tìm ra kỹ năng phù hợp nhất cho bạn. Tin mình đi — chú mèo này biết rõ lối tắt đến thành công đấy!"
-  },
-  {
-    id: 4,
-    titleEn: "💼 Show Off Your Claws!",
-    titleVi: "💼 Xòe Vuốt Tài Năng Nào!",
-    contentEn: "It's your time to shine! Craft a portfolio so sharp, companies will be clawing to get you onboard. Don’t be shy — flex those creative paws!",
-    contentVi: "Đến lúc toả sáng rồi! Hãy tạo một hồ sơ sắc lẹm khiến nhà tuyển dụng phải tranh nhau kéo bạn về! Đừng ngại — giơ vuốt tài năng lên nào!"
-  },
-  {
-    id: 5,
-    titleEn: "🎯 Track Your Paw-gress!",
-    titleVi: "🎯 Theo Dõi Mỗi Bước Chân Mèo!",
-    contentEn: "Keep an eye on your path like a curious kitty on the hunt! Our dashboard tracks every new skill and shiny trophy you earn. You're leveling up like a true hero-cat!",
-    contentVi: "Dõi theo hành trình của bạn như mèo rình chuột nhé! Bảng điều khiển sẽ hiển thị từng kỹ năng mới và thành tích lung linh bạn đạt được. Bạn đang thăng cấp như một anh hùng mèo thực thụ đấy!"
-  }
-];
 
 
 interface MeowlGuideProps {
-  // Optional override for language, will use context if not provided
+  currentPage?: string;
   languageOverride?: 'en' | 'vi';
 }
 
-const MeowlGuide: React.FC<MeowlGuideProps> = ({ languageOverride }) => {
+const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageOverride }) => {
   const { language: contextLanguage } = useLanguage();
   const language = languageOverride || contextLanguage;
   
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [guideSteps, setGuideSteps] = useState<GuideStep[]>([]);
+
+  // Load messages based on current page
+  useEffect(() => {
+    const messages = guideMessages[currentPage as keyof typeof guideMessages] || guideMessages.home;
+    setGuideSteps(messages);
+    setCurrentStep(0); // Reset to first message when page changes
+  }, [currentPage]);
 
   const handleNext = () => {
     if (currentStep < guideSteps.length - 1) {
@@ -86,10 +57,15 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ languageOverride }) => {
     setCurrentStep(0);
   };
 
-  // Stop propagation when clicking on close button or links
+  // Stop propagation when clicking on close button
   const handleStopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
+
+  // Safety check for empty guideSteps
+  if (guideSteps.length === 0) {
+    return null;
+  }
 
   const currentGuide = guideSteps[currentStep];
   const title = language === 'en' ? currentGuide.titleEn : currentGuide.titleVi;
@@ -140,41 +116,7 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ languageOverride }) => {
                 <div className="chat-content">
                   <h3 className="chat-title">{title}</h3>
                   <div className="chat-text">
-                    {currentStep === 1 && (
-                      <p>
-                        {language === 'en' 
-                          ? <>Wanna hear a secret? This platform's bursting with juicy <Link to="/courses" onClick={handleStopPropagation}>lessons</Link> — from coding tricks to design magic. It's like a treat jar that never empties! Come on, let's crack it open!</> 
-                          : <>Muốn nghe bí mật không? Ở đây có cả kho <Link to="/courses" onClick={handleStopPropagation}>kiến thức</Link> xịn xò — từ lập trình đến thiết kế, chẳng khác nào hộp bánh thưởng không đáy! Đi nào, khám phá ngay thôi!</>
-                        }
-                      </p>
-                    )}
-                    {currentStep === 2 && (
-                      <p>
-                        {language === 'en' 
-                          ? <>Our <Link to="/chatbot" onClick={handleStopPropagation}>AI coach</Link>? It's got the brains of nine cats combined! It'll sniff out the perfect skills just for you. Trust it — this clever kitty knows the shortcut to success!</> 
-                          : <>Trợ lý <Link to="/chatbot" onClick={handleStopPropagation}>AI</Link> của chúng tớ? Thông minh như chín con mèo hợp lại! Nó sẽ tìm ra kỹ năng phù hợp nhất cho bạn. Tin mình đi — chú mèo này biết rõ lối tắt đến thành công đấy!</>
-                        }
-                      </p>
-                    )}
-                    {currentStep === 3 && (
-                      <p>
-                        {language === 'en' 
-                          ? <>It's your time to shine! Craft a <Link to="/portfolio" onClick={handleStopPropagation}>portfolio</Link> so sharp, companies will be clawing to get you onboard. Don't be shy — flex those creative paws!</> 
-                          : <>Đến lúc toả sáng rồi! Hãy tạo một <Link to="/portfolio" onClick={handleStopPropagation}>hồ sơ</Link> sắc lẹm khiến nhà tuyển dụng phải tranh nhau kéo bạn về! Đừng ngại — giơ vuốt tài năng lên nào!</>
-                        }
-                      </p>
-                    )}
-                    {currentStep === 4 && (
-                      <p>
-                        {language === 'en' 
-                          ? <>Keep an eye on your path like a curious kitty on the hunt! Our <Link to="/dashboard" onClick={handleStopPropagation}>dashboard</Link> tracks every new skill and shiny trophy you earn. You're leveling up like a true hero-cat!</> 
-                          : <>Dõi theo hành trình của bạn như mèo rình chuột nhé! <Link to="/dashboard" onClick={handleStopPropagation}>Bảng điều khiển</Link> sẽ hiển thị từng kỹ năng mới và thành tích lung linh bạn đạt được. Bạn đang thăng cấp như một anh hùng mèo thực thụ đấy!</>
-                        }
-                      </p>
-                    )}
-                    {(currentStep === 0 || currentStep >= 5) && (
-                      <p>{content}</p>
-                    )}
+                    <p>{content}</p>
                   </div>
                 </div>
                 <div className="continue-hint">

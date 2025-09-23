@@ -8,6 +8,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
+import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/PortfolioPage.css';
 
 const PortfolioPage = () => {
@@ -1304,6 +1305,9 @@ const PortfolioPage = () => {
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="portfolio" />
     </motion.div>
   );
 };

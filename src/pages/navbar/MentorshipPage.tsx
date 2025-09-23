@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import Pagination from '../../components/Pagination';
+import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/MentorshipPage.css';
 
 interface Mentor {
@@ -334,6 +335,9 @@ const MentorshipPage = () => {
           />
         )}
       </div>
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="profile" />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import Pagination from '../../components/Pagination';
+import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/ManagerPage.css';
 
 interface Course {
@@ -468,6 +469,9 @@ const ManagerPage = () => {
           </div>
         )}
       </div>
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="manager" />
     </div>
   );
 };

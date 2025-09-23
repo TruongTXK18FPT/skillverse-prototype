@@ -5,6 +5,7 @@ import '../../styles/CoursesPage.css';
 import Pagination from '../../components/Pagination';
 import { useNavigate } from 'react-router-dom';
 import { fetchAllCourses, parsePrice, isFreePrice, Course } from '../../services/courseService';
+import MeowlGuide from '../../components/MeowlGuide';
 type SortOption = 'newest' | 'oldest' | 'price-low' | 'price-high' | 'rating' | 'popular';
 type PriceFilter = 'all' | 'free' | 'paid';
 
@@ -460,6 +461,9 @@ const categories = [
           </div>
         )}
       </div>
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="courses" />
     </div>
   );
 };

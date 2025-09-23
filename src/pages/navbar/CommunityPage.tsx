@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import Pagination from '../../components/Pagination';
+import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/CommunityPage.css';
 
 interface CommunityPost {
@@ -455,6 +456,9 @@ const CommunityPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="home" />
     </div>
   );
 };

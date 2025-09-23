@@ -25,6 +25,7 @@ import {
 import { useTheme } from '../../context/ThemeContext';
 import Toast from '../../components/Toast';
 import '../../styles/CoinWallet.css';
+import MeowGuide from '../../components/MeowlGuide';
 
 // TipModal component moved outside of parent component
 interface TipModalProps {
@@ -1134,6 +1135,7 @@ const CoinWallet: React.FC = () => {
           actionButton={toast.actionButton}
         />
       </div>
+      <MeowGuide currentPage="wallet" />
     </div>
   );
 };

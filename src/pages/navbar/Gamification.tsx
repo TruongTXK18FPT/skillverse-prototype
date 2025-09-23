@@ -25,6 +25,7 @@ import QuizSprint from '../../components/game/QuizSprint';
 import CoinHunt from '../../components/game/CoinHunt';
 import HelpLeaderBoard from '../../components/game/HelpLeaderBoard';
 import '../../styles/Gamification.css';
+import MeowlGuide from '../../components/MeowlGuide';
 import { color } from 'framer-motion';
 
 interface User {
@@ -916,6 +917,7 @@ const Gamification: React.FC = () => {
           {activeTab === 'achievements' && renderAchievements()}
         </div>
       </div>
+      <MeowlGuide currentPage="games" />
     </div>
   );
 };
