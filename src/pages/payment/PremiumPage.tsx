@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Crown, Check, Star, Bot, GraduationCap, Users, 
@@ -10,6 +10,7 @@ import MeowGuide from '../../components/MeowlGuide';
 const PremiumPage = () => {
   const navigate = useNavigate();
   const [billingCycle, setBillingCycle] = useState('monthly');
+
   
   // Mock user data - in real app, this would come from auth context
   const [userEmail] = useState('student@university.edu.vn'); // Mock student email
@@ -139,6 +140,7 @@ const PremiumPage = () => {
   const getDiscountPercent = (monthly: number, yearly: number) => {
     return Math.round((1 - yearly / (monthly * 12)) * 100);
   };
+    
 
   return (
     <div className="premium-page">
