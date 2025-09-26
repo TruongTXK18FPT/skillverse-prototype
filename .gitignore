@@ -24,3 +24,15 @@ dist-ssr
 *.sw?
 .env
 .vercel
+
+# Serena AI Assistant
+.serena/
+serena/
+**/serena/
+.serena-*
+serena-*
+*.serena
+serena.log
+serena.config*
+.serena.yml
+.serena.yaml
