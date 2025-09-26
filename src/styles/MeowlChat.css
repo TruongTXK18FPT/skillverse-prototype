@@ -912,7 +912,7 @@
     max-width: 80%;
 }
 
-.message-avatar {
+.meowl-chat-message-avatar {
     width: 35px;
     height: 35px;
     flex-shrink: 0;
@@ -922,10 +922,10 @@
     box-shadow: 0 0 10px rgba(0, 188, 212, 0.4);
 }
 
-.message-avatar img {
+.meowl-chat-message-avatar img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-position: center bottom;
 }
 
 .message-bubble {
