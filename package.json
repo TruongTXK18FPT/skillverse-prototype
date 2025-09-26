@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "echo 'No tests specified yet' && exit 0",
+    "test:unit": "echo 'Unit tests not configured yet' && exit 0",
+    "test:e2e": "echo 'E2E tests not configured yet' && exit 0",
+    "type-check": "tsc --noEmit",
+    "build:analyze": "vite build --mode analyze"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
