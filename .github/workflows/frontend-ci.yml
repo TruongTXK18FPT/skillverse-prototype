@@ -26,16 +26,13 @@ jobs:
         cache: 'npm'
         
     - name: 📦 Install Dependencies
-      run: |
-        npm ci --silent
+      run: npm ci --silent
         
     - name: 🧹 Code Linting
-      run: |
-        npm run lint
+      run: npm run lint
         
     - name: 🏗️ Build Check
-      run: |
-        npm run build
+      run: npm run build
         
     - name: 📊 Bundle Size Analysis
       run: |
@@ -79,13 +76,11 @@ jobs:
       run: npm ci --silent
       
     - name: 🔍 Audit Dependencies
-      run: |
-        npm audit --audit-level=moderate
+      run: npm audit --audit-level=moderate
       continue-on-error: true
         
     - name: 🛡️ Check for Vulnerabilities
-      run: |
-        npx --yes audit-ci --moderate
+      run: npx --yes audit-ci --moderate
       continue-on-error: true
 
   # Job 3: Docker Build (on main branch)
@@ -104,12 +99,14 @@ jobs:
       
     - name: 🏗️ Build Docker Image
       run: |
-        docker build -t skillverse-frontend:${{ github.sha }} .
-        docker tag skillverse-frontend:${{ github.sha }} skillverse-frontend:latest
+        BUILD_TAG=$(date +%s)
+        echo "BUILD_TAG=$BUILD_TAG" >> $GITHUB_ENV
+        docker build -t skillverse-frontend:$BUILD_TAG .
+        docker tag skillverse-frontend:$BUILD_TAG skillverse-frontend:latest
         
     - name: 🧪 Test Docker Image
       run: |
-        docker run --rm -p 3000:80 -d --name test-frontend skillverse-frontend:${{ github.sha }}
+        docker run --rm -p 3000:80 -d --name test-frontend skillverse-frontend:latest
         sleep 10
         curl -f http://localhost:3000 || exit 1
         docker stop test-frontend
@@ -130,206 +127,43 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
         
-    - name: 🐞 Debug Connection Info
-      run: |
-        echo "🔍 Debug Information:"
-        echo "VPS Host: ${{ secrets.VPS_HOST }}"
-        echo "VPS User: ${{ secrets.VPS_USER }}"
-        echo "VPS Project Path: ${{ secrets.VPS_PROJECT_PATH }}"
-        echo "Current Time: $(date)"
-        echo "Commit SHA: ${{ github.sha }}"
-        
     - name: 🔧 Deploy to VPS
       run: |
-        # SSH connection details
         VPS_HOST="${{ secrets.VPS_HOST }}"
         VPS_USER="${{ secrets.VPS_USER }}"
         VPS_PROJECT_PATH="${{ secrets.VPS_PROJECT_PATH }}"
         
-        echo "🔗 Connecting to $VPS_USER@$VPS_HOST..."
-        
-        # Connect to VPS and deploy
-        ssh -o StrictHostKeyChecking=no -v $VPS_USER@$VPS_HOST << 'ENDSSH'
+        ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'ENDSSH'
           echo "🚀 Starting deployment..."
-          echo "📍 Current directory: $(pwd)"
-          echo "👤 Current user: $(whoami)"
-          
-          # Navigate to project directory
-          echo "📂 Navigating to project directory..."
           cd ${{ secrets.VPS_PROJECT_PATH }}
-          echo "📍 Now in: $(pwd)"
           
-          # Check git status BEFORE pull
-          echo "📊 Git status BEFORE pull:"
-          git status --short || echo "No git changes"
-          git log --oneline -3 || echo "No git history"
-          
-          # Force pull latest changes (handle any conflicts)
-          echo "📡 Pulling latest code..."
+          # Pull code
           git fetch origin main
           git reset --hard origin/main
           
-          # Check git status AFTER pull  
-          echo "📊 Git status AFTER pull:"
-          git log --oneline -3
-          git show --name-only HEAD | head -10
-          
-          # Verify MeowlGuideMsg.json has the changes
-          echo "🔍 Checking MeowlGuideMsg.json content:"
-          grep -A 2 -B 2 "contentVi.*Meo" src/components/MeowlGuideMsg.json || echo "Pattern not found"
-          
-          # Create .env file with OpenAI API key for production
-          echo "🔑 Creating .env file for production..."
+          # Set env
           echo "VITE_MEOWL_API_KEY=${{ secrets.VITE_MEOWL_API_KEY }}" > .env
+          echo "VITE_FRONTEND_URL=https://skillverse.vn" >> .env
           
-          echo "✅ Environment variables set for production build"
+          # Clean old containers/images
+          docker stop skillverse-frontend 2>/dev/null || true
+          docker rm -f skillverse-frontend 2>/dev/null || true
           
-          # Force clear all caches AFTER env setup
-          echo "🧹 Force clearing all build caches..."
-          rm -rf node_modules/.vite 2>/dev/null || true
-          rm -rf node_modules/.cache 2>/dev/null || true
-          rm -rf dist/ 2>/dev/null || true
-          rm -rf .vite/ 2>/dev/null || true
+          # Build new image
+          BUILD_TAG=$(date +%s)
+          docker build -t skillverse-frontend:$BUILD_TAG .
+          docker tag skillverse-frontend:$BUILD_TAG skillverse-frontend:latest
           
-          # Clean npm cache
-          npm cache clean --force 2>/dev/null || true
-          
-          # Fresh install dependencies
-          echo "📦 Fresh dependency installation..."
-          rm -rf node_modules 2>/dev/null || true
-          npm ci --silent
-          
-          # Clean build with verification
-          echo "🏗️ Clean build with verification..."
-          npm run build
-          
-          # Verify build contains updated content
-          echo "🔍 Verifying build output contains Meo~~~:"
-          if grep -r "Meo~~~" dist/ 2>/dev/null; then
-            echo "✅ Build contains updated content with 3 tildes"
-          else
-            echo "❌ Build still contains old content"
-            echo "🔍 Current content in build:"
-            grep -r "Meo" dist/ 2>/dev/null | head -3
-          fi
-          
-          # Check if Dockerfile exists
-          echo "🔍 Checking Dockerfile..."
-          ls -la Dockerfile nginx.conf || echo "⚠️ Files not found"
-          
-          # Force clean Docker build (no cache) - AFTER cleanup
-          echo "🐳 Building Docker image with NO CACHE (fresh build)..."
-          docker build --no-cache --pull -t skillverse-frontend:$(date +%s) .
-          docker tag skillverse-frontend:$(date +%s) skillverse-frontend:latest
-          
-          # Verify new image was built
-          echo "📋 New Docker image info:"
-          docker images skillverse-frontend:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.CreatedAt}}\t{{.Size}}"
-          
-          # Verify Docker build includes updated content
-          echo "🔍 Verifying Docker image contains updated content..."
-          docker run --rm skillverse-frontend:latest find /usr/share/nginx/html -name "*.js" -exec grep -l "Meo" {} \; | head -3
-          
-          # Show what's actually in the container
-          echo "📋 Content in Docker image:"
-          docker run --rm skillverse-frontend:latest grep -r "Meo" /usr/share/nginx/html/assets/ 2>/dev/null | head -2
-          
-          # Verify build completed
-          docker images | head -5
-          
-          # Stop and remove old container FIRST (more reliable)
-          echo "🛑 Stopping and removing old container..."
-          docker stop skillverse-frontend 2>/dev/null || echo "No running container to stop"
-          docker rm -f skillverse-frontend 2>/dev/null || echo "No container to remove"
-          
-          # Remove old images to force fresh build
-          echo "�️ Removing old skillverse-frontend images..."
-          docker rmi skillverse-frontend:latest 2>/dev/null || echo "No latest image to remove"
-          docker images | grep skillverse-frontend | awk '{print $3}' | head -5 | xargs -r docker rmi 2>/dev/null || echo "No old images to remove"
-          
-          # Clean up Docker system
-          echo "🧹 Cleaning up Docker system..."
-          docker system prune -f --volumes || true
-          
-          # Wait for cleanup and ensure no conflicts
-          echo "⏳ Waiting for complete cleanup..."
-          sleep 5
-          
-          # Double-check no container exists
-          if docker ps -a | grep skillverse-frontend; then
-            echo "⚠️ Container still exists, force removing..."
-            docker rm -f $(docker ps -aq --filter name=skillverse-frontend) 2>/dev/null || true
-          fi
-          
-          # Run new container with latest image
-          echo "▶️ Starting NEW container with fresh build..."
+          # Run new container
           docker run -d --name skillverse-frontend \
             --network skillverse-production_skillverse-net \
             -p 3000:80 \
             --restart unless-stopped \
             skillverse-frontend:latest
           
-          # Verify new container started successfully
-          echo "📊 New container startup verification:"
-          sleep 3
-          docker ps | grep skillverse-frontend || echo "❌ Container not running!"
-          
-          # Show container creation time to confirm it's new
-          echo "🕐 Container creation time:"
-          docker inspect skillverse-frontend --format='{{.Created}}' 2>/dev/null || echo "Cannot inspect container"
-          
-          # Wait for container to fully start
-          sleep 5
-          
-          # Check container status
-          echo "📊 Container status:"
-          docker ps | grep skillverse-frontend
-          docker logs skillverse-frontend --tail 10
-          
-          # Final verification - check container content
-          echo "🔍 Final verification - container content check:"
-          docker exec skillverse-frontend find /usr/share/nginx/html -name "*.js" -exec grep -l "Meo" {} \; | head -2
-          echo "📊 Meo content in running container:"
-          docker exec skillverse-frontend grep -r "Meo" /usr/share/nginx/html/assets/ 2>/dev/null | head -1
-          
-          # Health check
-          echo "🏥 Performing health check..."
-          sleep 15
-          echo "🔍 Testing endpoints..."
-          
-          if curl -f http://localhost:3000 > /dev/null 2>&1; then
-            echo "✅ Main endpoint OK"
-          else
-            echo "⚠️ Main endpoint failed, trying health endpoint..."
-          fi
-          
-          if curl -f http://localhost:3000/health > /dev/null 2>&1; then
-            echo "✅ Health endpoint OK"
-            echo "✅ Deployment successful!"
-          else
-            echo "⚠️ Health endpoint failed, but container may still be starting..."
-            echo "📊 Container logs:"
-            docker logs skillverse-frontend --tail 20
-            echo "📊 Container inspect:"
-            docker inspect skillverse-frontend --format='{{.State.Status}}'
-            echo "✅ Deployment completed (check logs above)"
-          fi
-          
-          # Cleanup old images
-          echo "🧹 Cleaning up old images..."
+          # Cleanup dangling images
           docker image prune -f
-          
-          echo "🎉 Deployment process completed!"
         ENDSSH
-        
-    - name: 📊 Deployment Summary
-      if: always()
-      run: |
-        echo "## 🚀 Deployment Results" >> $GITHUB_STEP_SUMMARY
-        echo "- **VPS Host**: \`${{ secrets.VPS_HOST }}\`" >> $GITHUB_STEP_SUMMARY
-        echo "- **Deploy Time**: $(date)" >> $GITHUB_STEP_SUMMARY
-        echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-        echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
 
   # Job 5: Deployment Status
   deployment-status:
@@ -346,29 +180,5 @@ jobs:
         echo "- **Security Scan**: ${{ needs.security-scan.result }}" >> $GITHUB_STEP_SUMMARY
         echo "- **Docker Build**: ${{ needs.docker-build.result }}" >> $GITHUB_STEP_SUMMARY
         echo "- **Deployment**: ${{ needs.deploy.result }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
         echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-        
-    - name: 💬 Comment on PR
-      if: github.event_name == 'pull_request' && (failure() || success())
-      uses: actions/github-script@v7
-      with:
-        script: |
-          const status = '${{ needs.quality-check.result }}' === 'success' && 
-                        '${{ needs.security-scan.result }}' === 'success' &&
-                        '${{ needs.deploy.result }}' === 'success' ? '✅' : '❌';
-          
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: `${status} **Frontend CI/CD Results**
-            
-            - Quality Check: ${{ needs.quality-check.result }}
-            - Security Scan: ${{ needs.security-scan.result }}
-            - Docker Build: ${{ needs.docker-build.result }}
-            - Deployment: ${{ needs.deploy.result }}
-            - Commit: \`${{ github.sha }}\`
-            
-            ${status === '❌' ? '⚠️ Please fix the issues before merging.' : '🎉 All checks passed and deployed successfully!'}`
-          })
