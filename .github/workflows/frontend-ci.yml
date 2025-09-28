@@ -159,22 +159,36 @@ jobs:
           cd ${{ secrets.VPS_PROJECT_PATH }}
           echo "📍 Now in: $(pwd)"
           
-          # Check git status
-          echo "📊 Git status:"
-          git status --short
-          git log --oneline -3
+          # Check git status BEFORE pull
+          echo "📊 Git status BEFORE pull:"
+          git status --short || echo "No git changes"
+          git log --oneline -3 || echo "No git history"
           
-          # Pull latest changes
+          # Force pull latest changes (handle any conflicts)
           echo "📡 Pulling latest code..."
-          git pull origin main
+          git fetch origin main
+          git reset --hard origin/main
+          
+          # Check git status AFTER pull  
+          echo "📊 Git status AFTER pull:"
+          git log --oneline -3
+          git show --name-only HEAD | head -10
+          
+          # Verify MeowlGuideMsg.json has the changes
+          echo "🔍 Checking MeowlGuideMsg.json content:"
+          grep -A 2 -B 2 "contentVi.*Meo" src/components/MeowlGuideMsg.json || echo "Pattern not found"
           
           # Check if Dockerfile exists
           echo "🔍 Checking Dockerfile..."
           ls -la Dockerfile nginx.conf || echo "⚠️ Files not found"
           
-          # Build new Docker image
-          echo "🐳 Building Docker image..."
-          docker build -t skillverse-frontend:latest .
+          # Build new Docker image with fresh code
+          echo "🐳 Building Docker image with latest code..."
+          docker build -t skillverse-frontend:$(date +%s) .
+          docker tag skillverse-frontend:$(date +%s) skillverse-frontend:latest
+          
+          # Verify build completed
+          docker images | head -5
           
           # Check current containers
           echo "📋 Current containers:"
@@ -185,12 +199,20 @@ jobs:
           docker stop skillverse-frontend || echo "Container was not running"
           docker rm skillverse-frontend || echo "Container did not exist"
           
-          # Run new container
-          echo "▶️ Starting new container..."
+          # Run new container with latest image
+          echo "▶️ Starting new container with latest code..."
           docker run -d --name skillverse-frontend \
+            --network skillverse-production_skillverse-net \
             -p 3000:80 \
             --restart unless-stopped \
             skillverse-frontend:latest
+          
+          # Verify container is running
+          echo "📊 New container status:"
+          docker ps | grep skillverse-frontend
+          
+          # Wait for container to fully start
+          sleep 5
           
           # Check container status
           echo "📊 Container status:"
