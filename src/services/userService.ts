@@ -23,10 +23,10 @@ class UserService {
       console.log('Response headers:', response.headers);
       
       // Ensure the response has the required fields
-      if (!response.data.hasOwnProperty('requiresVerification')) {
+      if (!('requiresVerification' in response.data)) {
         console.warn('Response missing requiresVerification field, defaulting to true');
         return {
-          ...response.data,
+          ...(response.data as UserRegistrationResponse),
           requiresVerification: true
         };
       }

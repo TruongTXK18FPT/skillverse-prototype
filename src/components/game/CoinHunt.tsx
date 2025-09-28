@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { X, Coins, Target, Zap, Trophy } from 'lucide-react';
 import './CoinHunt.css';
 
@@ -24,9 +24,9 @@ const CoinHunt: React.FC<CoinHuntProps> = ({ isOpen, onClose, onCoinsEarned }) =
   const [gameActive, setGameActive] = useState(false);
   const [gameResult, setGameResult] = useState<{ coins: number; performance: string } | null>(null);
 
-  const coinValues = [5, 10, 15, 20, 25];
+  const coinValues = useMemo(() => [5, 10, 15, 20, 25], []);
 
-  const generateRandomCoin = (): Coin => {
+  const generateRandomCoin = useCallback((): Coin => {
     return {
       id: Math.random().toString(36).substr(2, 9),
       x: Math.random() * 80 + 10, // 10% to 90% of container width
@@ -35,7 +35,7 @@ const CoinHunt: React.FC<CoinHuntProps> = ({ isOpen, onClose, onCoinsEarned }) =
       collected: false,
       animating: false
     };
-  };
+  }, [coinValues]);
 
   const startGame = () => {
     setGameActive(true);
@@ -72,20 +72,6 @@ const CoinHunt: React.FC<CoinHuntProps> = ({ isOpen, onClose, onCoinsEarned }) =
     }
   };
 
-  const endGame = () => {
-    setGameActive(false);
-    
-    let performance = 'Tốt lắm!';
-    if (totalCollected >= 200) performance = 'Xuất sắc!';
-    else if (totalCollected >= 150) performance = 'Rất tốt!';
-    else if (totalCollected >= 100) performance = 'Tốt!';
-    else if (totalCollected >= 50) performance = 'Ổn đấy!';
-    else performance = 'Cố gắng hơn!';
-
-    setGameResult({ coins: totalCollected, performance });
-    onCoinsEarned(totalCollected);
-  };
-
   // Game timer
   useEffect(() => {
     if (gameActive && gameTime > 0) {
@@ -94,9 +80,20 @@ const CoinHunt: React.FC<CoinHuntProps> = ({ isOpen, onClose, onCoinsEarned }) =
       }, 1000);
       return () => clearTimeout(timer);
     } else if (gameActive && gameTime === 0) {
-      endGame();
+      // Move endGame logic inside useEffect
+      setGameActive(false);
+      
+      let performance = 'Tốt lắm!';
+      if (totalCollected >= 200) performance = 'Xuất sắc!';
+      else if (totalCollected >= 150) performance = 'Rất tốt!';
+      else if (totalCollected >= 100) performance = 'Tốt!';
+      else if (totalCollected >= 50) performance = 'Ổn đấy!';
+      else performance = 'Cố gắng hơn!';
+
+      setGameResult({ coins: totalCollected, performance });
+      onCoinsEarned(totalCollected);
     }
-  }, [gameActive, gameTime, endGame]);
+  }, [gameActive, gameTime, totalCollected, onCoinsEarned]);
 
   // Spawn coins periodically
   useEffect(() => {

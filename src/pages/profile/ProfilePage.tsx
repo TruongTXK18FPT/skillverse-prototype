@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, MapPin, Calendar, Edit3, Save, X, Camera } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -26,18 +26,7 @@ const ProfilePage = () => {
     bio: ''
   });
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
-    }
-
-    if (user?.id) {
-      loadProfile();
-    }
-  }, [isAuthenticated, user, navigate]);
-
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     try {
       setLoading(true);
       const profileData = await userService.getUserProfile(user!.id);
@@ -56,7 +45,18 @@ const ProfilePage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
+    if (user?.id) {
+      loadProfile();
+    }
+  }, [isAuthenticated, user, navigate, loadProfile]);;
 
   const handleEdit = () => {
     setEditing(true);
