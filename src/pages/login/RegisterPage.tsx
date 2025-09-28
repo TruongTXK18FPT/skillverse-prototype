@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, User, Lock, ArrowLeft, Phone, MapPin, Users } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import '../../styles/AuthPages.css';
 import { Province, District } from '../../types/Location';

@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Star, MessageCircle, Calendar, Clock, DollarSign, Award,
-  Briefcase, Book, Globe, Heart, Filter, Search, ChevronRight,
-  CheckCircle, User, Send
+  Star, MessageCircle, Clock, DollarSign, Award,
+  Briefcase, Globe, Heart, ChevronRight,
+  CheckCircle, User
 } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext';
 import Pagination from '../../components/Pagination';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/MentorshipPage.css';
@@ -33,13 +32,13 @@ const MentorshipPage = () => {
   const [mentors, setMentors] = useState<Mentor[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const { translations } = useLanguage();
   const navigate = useNavigate();
 
   const mentorsPerPage = 6;
 
   useEffect(() => {
     fetchMentors();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchMentors = async () => {
@@ -50,7 +49,7 @@ const MentorshipPage = () => {
       const data = await response.json();
       
       // Transform API data to match our interface
-      const transformedMentors = data.map((mentor: any) => ({
+      const transformedMentors = data.map((mentor: Record<string, unknown>) => ({
         id: mentor.id,
         name: mentor.name || 'Anonymous Mentor',
         title: mentor.title || 'Professional Mentor',
@@ -164,7 +163,6 @@ const MentorshipPage = () => {
     return matchesSearch && matchesCategory;
   });
 
-  const totalPages = Math.ceil(filteredMentors.length / mentorsPerPage);
   const startIndex = (currentPage - 1) * mentorsPerPage;
   const currentMentors = filteredMentors.slice(startIndex, startIndex + mentorsPerPage);
 

@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
 import { 
-  TrendingUp, BookOpen, Briefcase, Award, Clock, Star, Users, Target, 
-  Calendar, ArrowRight, ChevronRight, BarChart2, Book, CheckCircle, 
-  Clock8, DollarSign, FileText, Gift, Globe, Heart, Zap, 
-  MessageCircle, Play, Plus, User as UserIcon, Flame
+  TrendingUp, BookOpen, Briefcase, Award, Clock, Target, 
+  Calendar, ChevronRight, BarChart2, Book, 
+  Clock8, FileText, Zap, 
+  Play, Plus, UserIcon, Flame
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/DashboardPage.css';
 import { useNavigate } from 'react-router-dom';
 const DashboardPage = () => {
-  const [selectedTimeframe, setSelectedTimeframe] = useState('week');
   const { translations } = useLanguage();
    const navigate = useNavigate();
   const stats = [

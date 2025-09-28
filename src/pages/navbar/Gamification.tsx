@@ -10,15 +10,12 @@ import {
   Coins,
   Calendar,
   Star,
-  Gift,
   Zap,
   TrendingUp,
   Award,
-  ChevronRight,
   Flame,
   BookOpen,
-  CheckCircle,
-  Wallet
+  CheckCircle
 } from 'lucide-react';
 import DailySpin from '../../components/game/DailySpin';
 import QuizSprint from '../../components/game/QuizSprint';
@@ -26,7 +23,6 @@ import CoinHunt from '../../components/game/CoinHunt';
 import HelpLeaderBoard from '../../components/game/HelpLeaderBoard';
 import '../../styles/Gamification.css';
 import MeowlGuide from '../../components/MeowlGuide';
-import { color } from 'framer-motion';
 
 interface User {
   id: string;
@@ -415,7 +411,7 @@ const Gamification: React.FC = () => {
             <button
               key={period.key}
               className={`filter-btn ${leaderboardPeriod === period.key ? 'active' : ''}`}
-              onClick={() => setLeaderboardPeriod(period.key as any)}
+              onClick={() => setLeaderboardPeriod(period.key as 'week' | 'month' | 'all')}
             >
               {period.label}
             </button>
@@ -431,7 +427,7 @@ const Gamification: React.FC = () => {
             <button
               key={type.key}
               className={`type-btn ${leaderboardType === type.key ? 'active' : ''}`}
-              onClick={() => setLeaderboardType(type.key as any)}
+              onClick={() => setLeaderboardType(type.key as 'learning' | 'community' | 'coins')}
             >
               <type.icon className="type-icon" />
               {type.label}
@@ -901,7 +897,7 @@ const Gamification: React.FC = () => {
             <button
               key={tab.key}
               className={`nav-tab ${activeTab === tab.key ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab.key as any)}
+              onClick={() => setActiveTab(tab.key as 'leaderboard' | 'badges' | 'games' | 'achievements')}
             >
               <tab.icon className="tab-icon" />
               <span className="tab-label">{tab.label}</span>

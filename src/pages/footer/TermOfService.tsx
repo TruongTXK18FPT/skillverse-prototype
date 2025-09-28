@@ -1,7 +1,6 @@
-import React from 'react';
 import { 
-  Book, Shield, UserCheck, Users, Brain, CreditCard, 
-  AlertTriangle, Scale, Mail, Phone, MapPin
+  Book, Shield, Users, Brain, CreditCard, 
+  Mail, Phone, MapPin
 } from 'lucide-react';
 import '../../styles/TermOfService.css';
 

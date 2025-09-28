@@ -18,7 +18,7 @@ const DailySpin: React.FC<DailySpinProps> = ({ isOpen, onClose, onWin }) => {
   const [rotation, setRotation] = useState(0);
   const [result, setResult] = useState<SpinResult | null>(null);
   const [hasSpunToday, setHasSpunToday] = useState(false);
-  const [showRules, setShowRules] = useState(false);
+  const [showRules] = useState(false);
 
   // Prize segments (clockwise from top)
   const prizes = [100, 25, 50, 10, 75, 5, 20, 15,30];

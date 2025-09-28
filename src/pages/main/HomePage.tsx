@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  ArrowRight, BookOpen, Briefcase, User, MessageSquare, Award, 
-  TrendingUp, Users, Star, Sun, Moon, Sparkles, Brain, Target,
+  BookOpen, Briefcase, Award, 
+  Users, Star, Sparkles, Brain, Target,
   Code, Zap, Globe, ChevronRight
 } from 'lucide-react';
 import MeowlGuide from '../../components/MeowlGuide';
@@ -18,7 +18,7 @@ const FlyingSparkles = () => (
 );
 
 const HomePage = () => {
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     return savedTheme || 'light';
   });
@@ -30,10 +30,6 @@ const HomePage = () => {
     localStorage.setItem('theme', theme);
     setIsVisible(true);
   }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
 
   const features = [
     {

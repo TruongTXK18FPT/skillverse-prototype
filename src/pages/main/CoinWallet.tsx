@@ -33,6 +33,22 @@ interface TipModalProps {
   setShowTipModal: (show: boolean) => void;
 }
 
+interface CoinPackage {
+  id: string;
+  coins: number;
+  price: number;
+  originalPrice: number;
+  discount: number;
+  popular: boolean;
+  bonus: number;
+  title: string;
+  description: string;
+  color: string;
+  glowColor: string;
+  special: boolean;
+  limitedTime: boolean;
+}
+
 const TipModal: React.FC<TipModalProps> = ({ showTipModal, setShowTipModal }) => (
   showTipModal ? (
     <div className="modal-overlay">
@@ -887,7 +903,7 @@ const CoinWallet: React.FC = () => {
     setToast(prev => ({ ...prev, isVisible: false }));
   };
 
-  const handleBuyCoins = (pkg: any) => {
+  const handleBuyCoins = (pkg: CoinPackage) => {
     setSelectedCoinPackage(pkg.id);
     
     // Add some visual feedback
@@ -1064,16 +1080,16 @@ const CoinWallet: React.FC = () => {
 
         {/* Navigation Tabs */}
         <div className="wallet-nav">
-          {[
+          {([
             { id: 'dashboard', label: 'Tổng Quan', icon: Target },
             { id: 'buy-coins', label: 'Mua Xu', icon: Coins },
             { id: 'store', label: 'Cửa Hàng', icon: ShoppingBag },
             { id: 'history', label: 'Lịch Sử', icon: Clock },
             { id: 'achievements', label: 'Thành Tựu', icon: Award }
-          ].map(tab => (
+          ] as const).map(tab => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id)}
               className={`nav-tab ${activeTab === tab.id ? 'active' : ''}`}
             >
               <tab.icon className="tab-icon" />

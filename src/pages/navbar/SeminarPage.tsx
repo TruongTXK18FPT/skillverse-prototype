@@ -44,10 +44,6 @@ const SeminarPage: React.FC = () => {
       .catch(() => setLoading(false));
   }, []);
 
-  const handleRegister = (url: string) => {
-    window.open(url, '_blank');
-  };
-
   const handleViewDetails = (id: string) => {
     navigate(`/seminar/${id}`);
   };

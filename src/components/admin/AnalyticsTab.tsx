@@ -74,8 +74,8 @@ const AnalyticsTab: React.FC = () => {
     return new Intl.NumberFormat('vi-VN').format(num);
   };
 
-  const getMaxValue = (data: any[], key: string) => {
-    return Math.max(...data.map(item => item[key]));
+  const getMaxValue = (data: Record<string, unknown>[], key: string) => {
+    return Math.max(...data.map(item => item[key] as number));
   };
 
   const calculatePercentage = (value: number, max: number) => {

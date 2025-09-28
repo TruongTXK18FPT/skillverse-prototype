@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import Logo from '../../assets/skillverse.png';
@@ -54,9 +54,9 @@ const LoginPage = () => {
       // Navigate to role-specific page
       navigate(urlPath, { replace: true });
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
-      setError(error.message || 'Đăng nhập thất bại. Vui lòng thử lại.');
+      setError(error instanceof Error ? error.message : 'Đăng nhập thất bại. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }

@@ -5,7 +5,6 @@ import EarningsTab from '../../components/mentor/EarningsTab';
 import SkillPointsTab from '../../components/mentor/SkillPointsTab';
 import ReviewsTab from '../../components/mentor/ReviewsTab';
 import MentoringHistoryTab from '../../components/mentor/MentoringHistoryTab';
-import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/MentorPage.css';
 
 // Types for mentor dashboard data

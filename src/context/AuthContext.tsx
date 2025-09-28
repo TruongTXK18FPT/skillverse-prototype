@@ -52,8 +52,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await authService.login(credentials);
       setUser(response.data.user);
       return response.data.redirectUrl;
-    } catch (error) {
-      throw error;
     } finally {
       setLoading(false);
     }
@@ -65,8 +63,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await authService.register(userData);
       setUser(response.data.user);
       return response.data.redirectUrl;
-    } catch (error) {
-      throw error;
     } finally {
       setLoading(false);
     }

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  MessageCircle, Heart, Share2, Bookmark, ThumbsUp,
-  User, Clock, Tag, Filter, Search, Edit, TrendingUp,
-  Users, Star, Award, Globe, Sparkles, Plus
+  MessageCircle, Share2, Bookmark, ThumbsUp,
+  Clock, Tag, Filter, Search, TrendingUp,
+  Star, Award, Globe, Sparkles, Plus
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import Pagination from '../../components/Pagination';
@@ -119,20 +119,20 @@ const CommunityPage = () => {
       const data = await response.json();
       
       // Transform API data to match our interface
-      const transformedPosts = data.map((post: any) => ({
-        id: parseInt(post.id),
-        title: post.title || 'Untitled Post',
-        content: post.content || post.description || '',
+      const transformedPosts = data.map((post: Record<string, unknown>) => ({
+        id: parseInt(String(post.id)),
+        title: String(post.title) || 'Untitled Post',
+        content: String(post.content || post.description) || '',
         author: typeof post.author === 'string' ? post.author : 'Anonymous',
-        category: post.category || 'discussion',
+        category: String(post.category) || 'discussion',
         tags: Array.isArray(post.tags) ? post.tags : (typeof post.tags === 'string' ? [post.tags] : ['General']),
-        likes: parseInt(post.likes) || Math.floor(Math.random() * 500),
-        comments: parseInt(post.comments) || Math.floor(Math.random() * 100),
-        shares: parseInt(post.shares) || Math.floor(Math.random() * 50),
+        likes: parseInt(String(post.likes)) || Math.floor(Math.random() * 500),
+        comments: parseInt(String(post.comments)) || Math.floor(Math.random() * 100),
+        shares: parseInt(String(post.shares)) || Math.floor(Math.random() * 50),
         isBookmarked: Boolean(post.isBookmarked) || false,
-        timeAgo: post.timeAgo || '2 hours ago',
-        readTime: post.readTime || '5 min read',
-        image: post.image || 'https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=400'
+        timeAgo: String(post.timeAgo) || '2 hours ago',
+        readTime: String(post.readTime) || '5 min read',
+        image: String(post.image) || 'https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=400'
       }));
       
       setPosts(transformedPosts);
@@ -162,7 +162,6 @@ const CommunityPage = () => {
     return matchesSearch && matchesCategory;
   });
 
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
   const startIndex = (currentPage - 1) * postsPerPage;
   const currentPosts = filteredPosts.slice(startIndex, startIndex + postsPerPage);
   const handleCreatePost = (e: React.MouseEvent) => {

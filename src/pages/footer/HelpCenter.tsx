@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Search, ChevronDown, MessageCircle, BookOpen, Shield, CreditCard, Users, Mail, Phone, MapPin } from 'react-feather';
-import { useTheme } from '../../context/ThemeContext';
 import '../../styles/HelpCenter.css';
 
 interface FAQItem {

@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Search, MapPin, Clock, DollarSign, Briefcase, Star, Filter, ArrowRight } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/JobsPage.css';
@@ -9,7 +8,6 @@ const JobsPage = () => {
   const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const { translations } = useLanguage();
 
   const categories = [
     { id: 'all', name: 'Tất Cả', count: 89 },
@@ -127,24 +125,7 @@ const JobsPage = () => {
     const matchesCategory = selectedCategory === 'all' || job.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
-
-  const getUrgencyColor = (urgency: string) => {
-    switch (urgency) {
-      case 'high': return 'bg-red-100 text-red-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getUrgencyText = (urgency: string) => {
-    switch (urgency) {
-      case 'high': return 'Gấp';
-      case 'medium': return 'Trung bình';
-      case 'low': return 'Thấp';
-      default: return 'Bình thường';
-    }
-  };
+  
   return (
     <div className={`sv-jobs-container ${theme}`} data-theme={theme}>
       <div className="sv-jobs-content">

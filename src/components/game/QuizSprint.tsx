@@ -16,14 +16,6 @@ interface Question {
   category: string;
 }
 
-interface QuizResult {
-  score: number;
-  totalQuestions: number;
-  timeRemaining: number;
-  streak: number;
-  coins: number;
-}
-
 const QuizSprint: React.FC<QuizSprintProps> = ({ isOpen, onClose, onComplete }) => {
   const [questions] = useState<Question[]>([
     {
@@ -71,11 +63,24 @@ const QuizSprint: React.FC<QuizSprintProps> = ({ isOpen, onClose, onComplete }) 
   const [showResult, setShowResult] = useState(false);
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
-  const [showRules, setShowRules] = useState(false);
+  const [showRules] = useState(false);
   const [answerFeedback, setAnswerFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
   const currentQuestion = questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
+
+  const finishGame = useCallback(() => {
+    setGameState('finished');
+    setShowResult(true);
+    
+    // Calculate coins based on performance
+    const baseCoins = correctAnswers * 10;
+    const timeBonus = Math.floor(timeLeft / 10) * 5;
+    const streakBonus = maxStreak >= 3 ? 20 : maxStreak >= 2 ? 10 : 0;
+    const totalCoins = baseCoins + timeBonus + streakBonus;
+    
+    onComplete(correctAnswers, totalCoins);
+  }, [correctAnswers, timeLeft, maxStreak, onComplete]);
 
   // Timer effect
   useEffect(() => {
@@ -87,7 +92,7 @@ const QuizSprint: React.FC<QuizSprintProps> = ({ isOpen, onClose, onComplete }) 
     } else if (timeLeft === 0 && gameState === 'playing') {
       finishGame();
     }
-  }, [timeLeft, gameState]);
+  }, [timeLeft, gameState, finishGame]);
 
   const startGame = () => {
     setGameState('playing');
@@ -130,19 +135,6 @@ const QuizSprint: React.FC<QuizSprintProps> = ({ isOpen, onClose, onComplete }) 
       }
     }, 1500);
   };
-
-  const finishGame = useCallback(() => {
-    setGameState('finished');
-    setShowResult(true);
-    
-    // Calculate coins based on performance
-    const baseCoins = correctAnswers * 10;
-    const timeBonus = Math.floor(timeLeft / 10) * 5;
-    const streakBonus = maxStreak >= 3 ? 20 : maxStreak >= 2 ? 10 : 0;
-    const totalCoins = baseCoins + timeBonus + streakBonus;
-    
-    onComplete(correctAnswers, totalCoins);
-  }, [correctAnswers, timeLeft, maxStreak, onComplete]);
 
   const resetGame = () => {
     setGameState('waiting');

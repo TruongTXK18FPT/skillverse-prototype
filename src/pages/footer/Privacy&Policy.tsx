@@ -1,5 +1,4 @@
-import React from 'react';
-import { Shield, Mail, Phone, MapPin, Info, Key, Database, Lock, UserCheck, Bell, Clock, AlertTriangle, FileText, MessageCircle } from 'lucide-react';
+import { Shield, Mail, Phone, MapPin, Info, Key, Database, Lock, UserCheck, Clock, AlertTriangle, FileText, MessageCircle } from 'lucide-react';
 import '../../styles/Privacy&Policy.css';
 
 const PrivacyPolicy = () => {

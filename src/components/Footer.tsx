@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, ArrowUp, Send, Heart } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, ArrowUp, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/Logo.jpg';
 import '../styles/Footer.css';

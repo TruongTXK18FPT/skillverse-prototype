@@ -96,7 +96,7 @@ const CoinHunt: React.FC<CoinHuntProps> = ({ isOpen, onClose, onCoinsEarned }) =
     } else if (gameActive && gameTime === 0) {
       endGame();
     }
-  }, [gameActive, gameTime]);
+  }, [gameActive, gameTime, endGame]);
 
   // Spawn coins periodically
   useEffect(() => {
@@ -108,7 +108,7 @@ const CoinHunt: React.FC<CoinHuntProps> = ({ isOpen, onClose, onCoinsEarned }) =
       }, 2000);
       return () => clearInterval(spawnTimer);
     }
-  }, [gameActive, gameTime, coins.length]);
+  }, [gameActive, gameTime, coins.length, generateRandomCoin]);
 
   const closeGame = () => {
     setGameActive(false);

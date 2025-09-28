@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
-  Plus, Edit, Trash2, Eye, Search, Filter, BarChart3, 
-  Users, BookOpen, MessageSquare, Briefcase, Star,
-  Calendar, DollarSign, TrendingUp, Award
+  Plus, Edit, Trash2, Eye, Search, Filter, 
+  Users, BookOpen, MessageSquare, Briefcase, Star
 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
 import Pagination from '../../components/Pagination';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/ManagerPage.css';
@@ -64,7 +62,6 @@ const ManagerPage = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [posts, setPosts] = useState<CommunityPost[]>([]);
   const [mentors, setMentors] = useState<Mentor[]>([]);
-  const [loading, setLoading] = useState(false);
 
   const itemsPerPage = 10;
 
@@ -164,15 +161,15 @@ const ManagerPage = () => {
     }
   };
 
-  const handleAddCourse = (courseData: any) => {
+  const handleAddCourse = (courseData: Omit<Course, 'id' | 'students' | 'rating' | 'status' | 'createdAt' | 'purchased'>) => {
     const newCourse: Course = {
       id: Date.now().toString(),
-      ...courseData,
       students: 0,
       rating: 0,
       status: 'draft' as const,
-      createdAt: new Date().toISOString().split('T')[0],
-      purchased: 0
+      createdAt: new Date().toISOString(),
+      purchased: 0,
+      ...courseData
     };
     setCourses([...courses, newCourse]);
     setShowAddForm(false);
@@ -188,12 +185,11 @@ const ManagerPage = () => {
     }
   };
 
-  const filteredData = getCurrentData().filter((item: any) =>
-    item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredData = getCurrentData().filter((item: Course | Job | CommunityPost | Mentor) =>
+    ('title' in item ? item.title?.toLowerCase().includes(searchTerm.toLowerCase()) : false) ||
+    ('name' in item ? item.name?.toLowerCase().includes(searchTerm.toLowerCase()) : false)
   );
 
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
@@ -361,7 +357,7 @@ const ManagerPage = () => {
               </tr>
             </thead>
             <tbody>
-              {currentData.map((item: any) => (
+              {currentData.map((item) => (
                 <tr key={item.id}>
                   {activeTab === 'courses' && (
                     <>
@@ -430,9 +426,9 @@ const ManagerPage = () => {
                 e.preventDefault();
                 const formData = new FormData(e.target as HTMLFormElement);
                 handleAddCourse({
-                  title: formData.get('title'),
-                  instructor: formData.get('instructor'),
-                  category: formData.get('category'),
+                  title: formData.get('title') as string,
+                  instructor: formData.get('instructor') as string,
+                  category: formData.get('category') as string,
                   price: Number(formData.get('price'))
                 });
               }}>
