@@ -178,26 +178,66 @@ jobs:
           echo "🔍 Checking MeowlGuideMsg.json content:"
           grep -A 2 -B 2 "contentVi.*Meo" src/components/MeowlGuideMsg.json || echo "Pattern not found"
           
+          # Force clear all caches
+          echo "🧹 Force clearing all build caches..."
+          rm -rf node_modules/.vite 2>/dev/null || true
+          rm -rf node_modules/.cache 2>/dev/null || true
+          rm -rf dist/ 2>/dev/null || true
+          rm -rf .vite/ 2>/dev/null || true
+          
+          # Clean npm cache
+          npm cache clean --force 2>/dev/null || true
+          
+          # Fresh install dependencies
+          echo "📦 Fresh dependency installation..."
+          rm -rf node_modules 2>/dev/null || true
+          npm ci --silent
+          
+          # Clean build with verification
+          echo "🏗️ Clean build with verification..."
+          npm run build
+          
+          # Verify build contains updated content
+          echo "🔍 Verifying build output contains Meo~~~:"
+          if grep -r "Meo~~~" dist/ 2>/dev/null; then
+            echo "✅ Build contains updated content with 3 tildes"
+          else
+            echo "❌ Build still contains old content"
+            echo "🔍 Current content in build:"
+            grep -r "Meo" dist/ 2>/dev/null | head -3
+          fi
+          
           # Check if Dockerfile exists
           echo "🔍 Checking Dockerfile..."
           ls -la Dockerfile nginx.conf || echo "⚠️ Files not found"
           
-          # Build new Docker image with fresh code
-          echo "🐳 Building Docker image with latest code..."
-          docker build -t skillverse-frontend:$(date +%s) .
+          # Force clean Docker build (no cache)
+          echo "🐳 Building Docker image with NO CACHE..."
+          docker build --no-cache --pull -t skillverse-frontend:$(date +%s) .
           docker tag skillverse-frontend:$(date +%s) skillverse-frontend:latest
+          
+          # Verify Docker build includes updated content
+          echo "🔍 Verifying Docker image contains updated content..."
+          docker run --rm skillverse-frontend:latest find /usr/share/nginx/html -name "*.js" -exec grep -l "Meo" {} \; | head -3
+          
+          # Show what's actually in the container
+          echo "📋 Content in Docker image:"
+          docker run --rm skillverse-frontend:latest grep -r "Meo" /usr/share/nginx/html/assets/ 2>/dev/null | head -2
           
           # Verify build completed
           docker images | head -5
           
-          # Check current containers
-          echo "📋 Current containers:"
-          docker ps -a | grep skillverse-frontend || echo "No existing containers"
+          # Clean up ALL old Docker images and containers
+          echo "🧹 Cleaning up ALL old Docker resources..."
+          docker system prune -af --volumes || true
           
-          # Stop and remove old container
-          echo "🛑 Stopping old container..."
-          docker stop skillverse-frontend || echo "Container was not running"
-          docker rm skillverse-frontend || echo "Container did not exist"
+          # Stop and remove old container completely
+          echo "🛑 Completely removing old container..."
+          docker stop skillverse-frontend 2>/dev/null || true
+          docker rm -f skillverse-frontend 2>/dev/null || true
+          
+          # Wait for cleanup
+          sleep 3
           
           # Run new container with latest image
           echo "▶️ Starting new container with latest code..."
@@ -218,6 +258,12 @@ jobs:
           echo "📊 Container status:"
           docker ps | grep skillverse-frontend
           docker logs skillverse-frontend --tail 10
+          
+          # Final verification - check container content
+          echo "🔍 Final verification - container content check:"
+          docker exec skillverse-frontend find /usr/share/nginx/html -name "*.js" -exec grep -l "Meo" {} \; | head -2
+          echo "📊 Meo content in running container:"
+          docker exec skillverse-frontend grep -r "Meo" /usr/share/nginx/html/assets/ 2>/dev/null | head -1
           
           # Health check
           echo "🏥 Performing health check..."
