@@ -140,6 +140,8 @@ jobs:
         echo "Commit SHA: ${{ github.sha }}"
         
     - name: 🔧 Deploy to VPS
+      env:
+        MEOWL_API_KEY: ${{ secrets.VITE_MEOWL_API_KEY }}
       run: |
         # SSH connection details
         VPS_HOST="${{ secrets.VPS_HOST }}"
@@ -148,7 +150,6 @@ jobs:
         
         echo "🔗 Connecting to $VPS_USER@$VPS_HOST..."
         
-        # Connect to VPS and deploy
         ssh -o StrictHostKeyChecking=no -v $VPS_USER@$VPS_HOST << 'ENDSSH'
           echo "🚀 Starting deployment..."
           echo "📍 Current directory: $(pwd)"
@@ -169,7 +170,7 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
           
-          # Check git status AFTER pull  
+          # Check git status AFTER pull
           echo "📊 Git status AFTER pull:"
           git log --oneline -3
           git show --name-only HEAD | head -10
@@ -181,11 +182,10 @@ jobs:
           # Create .env file with OpenAI API key for production
           echo "🔑 Creating .env file for production..."
           cat > .env << 'ENV_EOF'
-          VITE_MEOWL_API_KEY=${{ secrets.VITE_MEOWL_API_KEY }}
-          VITE_API_URL=${{ secrets.VITE_API_URL }}
-          VITE_FRONTEND_URL=https://skillverse.vn
-          ENV_EOF
-                    
+VITE_MEOWL_API_KEY=$MEOWL_API_KEY
+VITE_FRONTEND_URL=https://skillverse.vn
+ENV_EOF
+          
           echo "✅ Environment variables set for production build"
           
           # Force clear all caches AFTER env setup
@@ -247,7 +247,7 @@ jobs:
           docker rm -f skillverse-frontend 2>/dev/null || echo "No container to remove"
           
           # Remove old images to force fresh build
-          echo "�️ Removing old skillverse-frontend images..."
+          echo "🛑 Removing old skillverse-frontend images..."
           docker rmi skillverse-frontend:latest 2>/dev/null || echo "No latest image to remove"
           docker images | grep skillverse-frontend | awk '{print $3}' | head -5 | xargs -r docker rmi 2>/dev/null || echo "No old images to remove"
           
