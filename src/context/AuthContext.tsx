@@ -1,11 +1,16 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import authService, { User, LoginCredentials, RegisterData } from '../services/authService';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
+import authService from '../services/authService';
+import userService from '../services/userService';
+import { LoginRequest, UserDto, VerifyEmailRequest, ResendOtpRequest } from '../data/authDTOs';
+import { UserRegistrationRequest } from '../data/userDTOs';
 
 interface AuthContextType {
-  user: User | null;
+  user: UserDto | null;
   loading: boolean;
-  login: (credentials: LoginCredentials) => Promise<string>;
-  register: (userData: RegisterData) => Promise<string>;
+  login: (credentials: LoginRequest) => Promise<string>;
+  register: (userData: UserRegistrationRequest) => Promise<{ requiresVerification: boolean; email: string; message: string }>;
+  verifyEmail: (request: VerifyEmailRequest) => Promise<void>;
+  resendOtp: (request: ResendOtpRequest) => Promise<string>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
 }
@@ -25,7 +30,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserDto | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -46,23 +51,49 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     initializeAuth();
   }, []);
 
-  const login = async (credentials: LoginCredentials): Promise<string> => {
+  const login = async (credentials: LoginRequest): Promise<string> => {
     try {
       setLoading(true);
-      const response = await authService.login(credentials);
-      setUser(response.data.user);
-      return response.data.redirectUrl;
+      const redirectUrl = await authService.login(credentials);
+      
+      // Get updated user data after login
+      const updatedUser = authService.getStoredUser();
+      setUser(updatedUser);
+      
+      return redirectUrl;
     } finally {
       setLoading(false);
     }
   };
 
-  const register = async (userData: RegisterData): Promise<string> => {
+  const register = async (userData: UserRegistrationRequest): Promise<{ requiresVerification: boolean; email: string; message: string }> => {
     try {
       setLoading(true);
-      const response = await authService.register(userData);
-      setUser(response.data.user);
-      return response.data.redirectUrl;
+      const response = await userService.register(userData);
+      
+      return {
+        requiresVerification: response.requiresVerification,
+        email: response.email,
+        message: response.message
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyEmail = async (request: VerifyEmailRequest): Promise<void> => {
+    try {
+      setLoading(true);
+      await authService.verifyEmail(request);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resendOtp = async (request: ResendOtpRequest): Promise<string> => {
+    try {
+      setLoading(true);
+      return await authService.resendOtp(request);
     } finally {
       setLoading(false);
     }
@@ -80,14 +111,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const value: AuthContextType = {
+  const value: AuthContextType = useMemo(() => ({
     user,
     loading,
     login,
     register,
+    verifyEmail,
+    resendOtp,
     logout,
     isAuthenticated: !!user && authService.isAuthenticated(),
-  };
+  }), [user, loading]);
 
   return (
     <AuthContext.Provider value={value}>

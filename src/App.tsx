@@ -18,6 +18,7 @@ import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/login/RegisterPage';
 import BusinessRegisterPage from './pages/auth/BusinessRegisterPage';
 import MentorRegisterPage from './pages/auth/MentorRegisterPage';
+import VerifyPage from './pages/auth/VerifyPage';
 import ForgotPasswordPage from './pages/login/ForgotPasswordPage';
 import PaymentPage from './pages/payment/PaymentPage';
 import PremiumPage from './pages/payment/PremiumPage';
@@ -38,6 +39,7 @@ import './styles/App.css';
 import ScrollToTop from './components/scroll/ScrollToTop';
 import CourseDetailPage from './pages/navbar/CourseDetailPage';
 import CourseLearningPage from './pages/navbar/CourseLearningPage';
+import ProfilePage from './pages/profile/ProfilePage';
 const App = () => {
   return (
     <LanguageProvider>
@@ -66,7 +68,9 @@ const App = () => {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/register/business" element={<BusinessRegisterPage />} />
                 <Route path="/register/mentor" element={<MentorRegisterPage />} />
+                <Route path="/verify-otp" element={<VerifyPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/premium" element={<PremiumPage />} />
                 <Route path="/payment/:type/:id" element={<PaymentPage />} />
@@ -75,6 +79,7 @@ const App = () => {
                 <Route path="/seminar" element={<SeminarPage />} />
                 <Route path="/courses/:id" element={<CourseDetailPage />} />
                 <Route path="/course-learning" element={<CourseLearningPage />} />
+
                 {/* Add the missing footer routes */}
                 
                 {/* Add these missing footer routes */}

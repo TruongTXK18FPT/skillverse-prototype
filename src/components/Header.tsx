@@ -1,459 +1,455 @@
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import {
-  Menu,
-  X,
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { 
+  Search, 
+  ChevronDown, 
+  Grid,
+  User,
+  LogOut,
   Bell,
+  Wallet,
   Sun,
   Moon,
-  ChevronDown,
-  Search,
-  Grid,
-  GraduationCap,
-  MessageCircle,
-  Home,
-  BarChart3,
-  Users,
-  Briefcase,
-  User,
-  Bot,
-  Calendar,
+  Menu,
+  X,
   Crown,
-  Wallet,
+  BarChart3,
+  GraduationCap,
+  Users,
+  MessageSquare,
+  Briefcase,
+  Bot,
   Trophy,
+  Calendar,
   Map
 } from 'lucide-react';
-import useClickOutside from '../hooks/useClickOutside';
+import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import Logo from '../assets/skillverse.png';
 import '../styles/Header.css';
-import { useTheme } from '../context/ThemeContext';
-import { useLanguage } from '../context/LanguageContext';
-import LanguageSwitcher from './LanguageSwitcher';
 
-const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+const Header: React.FC = () => {
+  const { user, logout, isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const location = useLocation();
   const navigate = useNavigate();
-  const { translations } = useLanguage();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMegaMenu, setShowMegaMenu] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const megaMenuRef = useRef<HTMLDivElement>(null);
 
-  // Custom hook for click outside functionality
-  const categoryRef = useClickOutside<HTMLDivElement>(
-    () => setIsCategoryOpen(false),
-    isCategoryOpen
-  );
-
-  const mainNavLinks = [
-    { path: '/', label: translations.navigation.home, icon: Home },
+  // Categories for mega menu with icons and descriptions
+  const categories = [
+    { 
+      name: 'Bảng Điều Khiển',
+      description: 'Theo dõi tiến độ học tập và thành tích của bạn',
+      path: '/dashboard',
+      icon: BarChart3
+    },
+    { 
+      name: 'Khóa Học',
+      description: 'Khám phá các khóa học chất lượng cao',
+      path: '/courses',
+      icon: GraduationCap
+    },
+    { 
+      name: 'Lộ Trình Học Tập',
+      description: 'Khám phá lộ trình học tập và phát triển kỹ năng',
+      path: '/roadmap',
+      icon: Map
+    },
+    { 
+      name: 'Cố Vấn',
+      description: 'Kết nối với chuyên gia trong ngành',
+      path: '/mentorship',
+      icon: Users
+    },
+    { 
+      name: 'Cộng Đồng',
+      description: 'Tham gia cộng đồng học tập sôi động',
+      path: '/community',
+      icon: MessageSquare
+    },
+    { 
+      name: 'Việc Làm',
+      description: 'Tìm kiếm cơ hội việc làm phù hợp',
+      path: '/jobs',
+      icon: Briefcase
+    },
+    { 
+      name: 'Hồ Sơ',
+      description: 'Quản lý và chia sẻ thành tích của bạn',
+      path: '/portfolio',
+      icon: User
+    },
+    { 
+      name: 'Trợ Lý AI',
+      description: 'Nhận hỗ trợ từ trợ lý AI thông minh',
+      path: '/chatbot',
+      icon: Bot
+    },
+    { 
+      name: 'Trò Chơi',
+      description: 'Bảng xếp hạng, huy hiệu và mini-games',
+      path: '/gamification',
+      icon: Trophy
+    },
+    { 
+      name: 'Hội Thảo',
+      description: 'Tham gia các hội thảo và sự kiện',
+      path: '/seminar',
+      icon: Calendar
+    }
   ];
 
-  const allCategories = [
-    { path: '/dashboard', label: translations.navigation.dashboard, description: translations.navigation.descriptions.dashboard, icon: BarChart3 },
-    { path: '/courses', label: translations.navigation.courses, description: translations.navigation.descriptions.courses, icon: GraduationCap },
-    { path: '/roadmap', label: translations.navigation.roadmap, description: translations.navigation.descriptions.roadmap, icon: Map },
-    { path: '/mentorship', label: translations.navigation.mentorship, description: translations.navigation.descriptions.mentorship, icon: Users },
-    { path: '/community', label: translations.navigation.community, description: translations.navigation.descriptions.community, icon: MessageCircle },
-    { path: '/jobs', label: translations.navigation.jobs, description: translations.navigation.descriptions.jobs, icon: Briefcase },
-    { path: '/portfolio', label: translations.navigation.portfolio, description: translations.navigation.descriptions.portfolio, icon: User },
-    { path: '/chatbot', label: translations.navigation.chatbot, description: translations.navigation.descriptions.chatbot, icon: Bot },
-    { path: '/gamification', label: translations.navigation.gamification, description: translations.navigation.descriptions.gamification, icon: Trophy },
-    { path: '/seminar', label: translations.navigation.seminar, description: translations.navigation.descriptions.seminar, icon: Calendar },
-  ];
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-    setIsCategoryOpen(false);
-  }, [location.pathname]);
-
-  // Close mobile menu when clicking outside
+  // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.header-content') && isMobileMenuOpen) {
-        setIsMobileMenuOpen(false);
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setShowUserMenu(false);
+      }
+      if (megaMenuRef.current && !megaMenuRef.current.contains(event.target as Node)) {
+        setShowMegaMenu(false);
       }
     };
 
-    if (isMobileMenuOpen) {
-      document.addEventListener('click', handleClickOutside);
-      document.body.style.overflow = 'hidden'; // Prevent background scroll
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isMobileMenuOpen]);
+  const handleLogout = async () => {
+    await logout();
+    setShowUserMenu(false);
+    navigate('/');
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      // Smart search - check if query matches any category names or keywords
+      const query = searchQuery.toLowerCase().trim();
+      
+      // Define search keywords for each page
+      const searchMap: { [key: string]: string } = {
+        // Dashboard keywords
+        'dashboard': '/dashboard',
+        'bảng điều khiển': '/dashboard',
+        'tiến độ': '/dashboard',
+        'thống kê': '/dashboard',
+        
+        // Courses keywords  
+        'course': '/courses',
+        'courses': '/courses',
+        'khóa học': '/courses',
+        'học tập': '/courses',
+        'bài học': '/courses',
+        
+        // Roadmap keywords
+        'roadmap': '/roadmap', 
+        'lộ trình': '/roadmap',
+        'lộ trình học tập': '/roadmap',
+        'kỹ năng': '/roadmap',
+        
+        // Mentorship keywords
+        'mentor': '/mentorship',
+        'mentorship': '/mentorship', 
+        'cố vấn': '/mentorship',
+        'chuyên gia': '/mentorship',
+        
+        // Community keywords
+        'community': '/community',
+        'cộng đồng': '/community',
+        'thảo luận': '/community',
+        
+        // Jobs keywords
+        'job': '/jobs',
+        'jobs': '/jobs',
+        'việc làm': '/jobs',
+        'tuyển dụng': '/jobs',
+        'cơ hội': '/jobs',
+        
+        // Portfolio keywords
+        'portfolio': '/portfolio',
+        'hồ sơ': '/portfolio',
+        'thành tích': '/portfolio',
+        
+        // Chatbot keywords
+        'chatbot': '/chatbot',
+        'trợ lý': '/chatbot',
+        'ai': '/chatbot',
+        'trợ lý ai': '/chatbot',
+        
+        // Gamification keywords
+        'game': '/gamification',
+        'games': '/gamification',
+        'trò chơi': '/gamification',
+        'xếp hạng': '/gamification',
+        'huy hiệu': '/gamification',
+        
+        // Seminar keywords  
+        'seminar': '/seminar',
+        'hội thảo': '/seminar',
+        'sự kiện': '/seminar',
+        'event': '/seminar'
+      };
+      
+      // Check if query matches any keyword
+      const matchedPath = searchMap[query];
+      if (matchedPath) {
+        navigate(matchedPath);
+        setSearchQuery(''); // Clear search after navigation
+        setShowMegaMenu(false); // Close mega menu
+        return;
+      }
+      
+      // If no direct match, go to search page
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setShowMegaMenu(false); // Close mega menu
+    }
+  };
 
   const handleLogin = () => {
     navigate('/login');
     setIsMobileMenuOpen(false);
   };
 
-  const handlePremium = () => {
+  const handleProfile = () => {
+    navigate('/profile');
+    setShowUserMenu(false);
+  };
+
+  const handleUpgrade = () => {
     navigate('/premium');
-    setIsMobileMenuOpen(false);
   };
 
   const handleWallet = () => {
     navigate('/wallet');
-    setIsMobileMenuOpen(false);
-  };
-
-  const handleMobileNavClick = (path: string) => {
-    navigate(path);
-    setIsMobileMenuOpen(false);
   };
 
   return (
-    <header className={`header ${theme} ${isScrolled ? 'header--scrolled' : ''}`}>
+    <header className="header-minimal">
       <div className="header-container">
-        <div className="header-content">
+        {/* Left Section */}
+        <div className="main-header-left">
           {/* Logo */}
-          <Link to="/" className="logo-container">
-            <div className="logo-wrapper">
-              <img src={Logo} alt="SkillVerse Logo" className="logo-image" />
-            </div>
+          <Link to="/" className="header-logo-link">
+            <img src={Logo} alt="SkillVerse" className="header-logo-image" />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="desktop-nav">
-            {mainNavLinks.map((link) => (
-              <NavLink
-                key={link.path}
-                to={link.path}
-                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-              >
-                <span className="nav-link__text">{link.label}</span>
-                {location.pathname === link.path && (
-                  <span className="nav-link__indicator" />
-                )}
-              </NavLink>
-            ))}
-            
-            {/* Category Section with Click Outside */}
-            <div ref={categoryRef} className="category-dropdown-container">
-              {/* Category Button */}
-              <button 
-                className="nav-link category-button"
-                onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-              >
-                <span className="nav-link__text">
-                  <Grid className="w-4 h-4 mr-1" />
-                  Danh Mục
-                  <ChevronDown className="w-4 h-4 ml-1" />
-                </span>
-              </button>
-
-              {/* Category Dropdown */}
-              {isCategoryOpen && (
-                <div className="category-dropdown">
-                  <div className="category-grid">
-                    {allCategories.map((category) => (
-                      <Link
-                        key={category.path}
-                        to={category.path}
-                        className="category-item"
-                        onClick={() => setIsCategoryOpen(false)}
-                      >
-                        <category.icon className="category-item__icon" />
-                        <div className="category-item__content">
-                          <h3 className="category-item__title">{category.label}</h3>
-                          <p className="category-item__description">{category.description}</p>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Premium Button - Next to Category */}
+          {/* Categories Mega Menu */}
+          <div ref={megaMenuRef} className="categories-container desktop-only">
             <button 
-              onClick={handlePremium} 
-              className="premium-btn"
-              aria-label="Premium - Nâng cấp"
-              title="Premium - Nâng cấp"
+              className="header-categories-btn"
+              onClick={() => setShowMegaMenu(!showMegaMenu)}
             >
-              <Crown className="premium-icon" />
-              <span className="premium-text">Nâng cấp</span>
+              <Grid size={18} />
+              <span className="header-categories-text">Danh mục</span>
+              <ChevronDown size={16} />
             </button>
 
-            {/* Wallet Button - Next to Premium */}
-            <button 
-              onClick={handleWallet} 
-              className="wallet-btn"
-              aria-label="Ví SkillCoin"
-              title="Ví SkillCoin"
-            >
-              <Wallet className="wallet-icon" />
-              <span className="wallet-text">Ví</span>
-            </button>
-
-          </nav>
-
-          {/* User Actions */}
-          <div className="user-actions">
-            {/* Search Button - Hidden on mobile */}
-            {/* <button
-              className="action-button search-button"
-              onClick={() => setIsSearchOpen(true)}
-              aria-label="Search"
-            >
-              <Search className="header-action-icon" />
-            </button> */}
-
-            {/* Notifications */}
-            <button
-              className="action-button search-button"
-              onClick={() => setIsNotificationsOpen(true)}
-              aria-label="Notifications"
-            >
-              <Bell className="header-action-icon" />
-            </button>
-
-            {/* Theme Toggle */}
-            <button
-              className="action-button theme-toggle"
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? (
-                <Sun className="header-action-icon sun" />
-              ) : (
-                <Moon className="header-action-icon moon" />
-              )}
-            </button>
-
-            {/* Language Switcher - Hidden on mobile */}
-            <div className="language-switcher-wrapper">
-              <LanguageSwitcher />
-            </div>
-
-            {/* Login Button - Hidden on mobile */}
-            <button onClick={handleLogin} className="login-btn desktop-only">
-              {translations.auth.login}
-            </button>
-
-            {/* Mobile Menu Button */}
-            <button
-              className="mobile-menu-btn"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle mobile menu"
-            >
-              {isMobileMenuOpen ? (
-                <X className="header-action-icon" />
-              ) : (
-                <Menu className="header-action-icon" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <div className="mobile-menu-overlay">
-            <nav className="mobile-nav">
-              {/* Mobile Header */}
-              <div className="mobile-nav-header">
-                <h3 className="mobile-nav-title">Menu</h3>
-                <button
-                  className="mobile-nav-close"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <X className="header-action-icon" />
-                </button>
-              </div>
-
-              {/* Main Navigation Links */}
-              <div className="mobile-nav-section">
-                <h4 className="mobile-nav-section-title">Điều hướng chính</h4>
-                {mainNavLinks.map((link) => (
-                  <button
-                    key={link.path}
-                    onClick={() => handleMobileNavClick(link.path)}
-                    className={`mobile-nav-link ${location.pathname === link.path ? 'active' : ''}`}
-                  >
-                    <link.icon className="mobile-nav-link__icon" />
-                    <span>{link.label}</span>
-                    {location.pathname === link.path && (
-                      <span className="mobile-nav-link__indicator" />
-                    )}
-                  </button>
-                ))}
-              </div>
-
-              {/* All Categories */}
-              <div className="mobile-nav-section">
-                <h4 className="mobile-nav-section-title">Tất cả danh mục</h4>
-                <div className="mobile-categories-grid">
-                  {allCategories.map((category) => (
-                    <button
+            {showMegaMenu && (
+              <div className="mega-menu">
+                <div className="mega-menu-grid">
+                  {categories.map((category) => (
+                    <Link
                       key={category.path}
-                      onClick={() => handleMobileNavClick(category.path)}
-                      className={`mobile-category-item ${location.pathname === category.path ? 'active' : ''}`}
+                      to={category.path}
+                      className="category-link"
+                      onClick={() => setShowMegaMenu(false)}
                     >
-                      <category.icon className="mobile-category-item__icon" />
-                      <div className="mobile-category-item__content">
-                        <span className="mobile-category-item__title">{category.label}</span>
-                        <span className="mobile-category-item__description">{category.description}</span>
+                      <category.icon className="category-icon" />
+                      <div className="category-content">
+                        <h3 className="category-title">{category.name}</h3>
+                        <p className="category-description">{category.description}</p>
                       </div>
-                    </button>
+                    </Link>
                   ))}
                 </div>
               </div>
-
-              {/* Mobile Actions */}
-              <div className="mobile-nav-actions">
-                <button
-                  onClick={() => {
-                    setIsSearchOpen(true);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="mobile-action-btn"
-                >
-                  <Search className="mobile-action-btn__icon" />
-                  <span>Tìm kiếm</span>
-                </button>
-
-                <div className="mobile-language-switcher">
-                  <LanguageSwitcher />
-                </div>
-
-                <button 
-                  onClick={handlePremium} 
-                  className="mobile-premium-btn"
-                  aria-label="Premium"
-                  title="Premium"
-                >
-                  <Crown className="mobile-premium-icon" />
-                </button>
-
-                <button 
-                  onClick={handleWallet} 
-                  className="mobile-wallet-btn"
-                  aria-label="Ví SkillCoin"
-                  title="Ví SkillCoin"
-                >
-                  <Wallet className="mobile-wallet-icon" />
-                </button>
-
-                <button onClick={handleLogin} className="mobile-login-btn">
-                  <User className="mobile-login-btn__icon" />
-                  <span>{translations.auth.login}</span>
-                </button>
-              </div>
-            </nav>
+            )}
           </div>
-        )}
-      </div>
 
-      {/* Search Modal */}
-      {isSearchOpen && (
-        <div className="search-modal">
-          <div className="search-container">
-            <div className="search-header">
-              <Search className="header-action-icon" />
+          {/* Search Bar */}
+          <form onSubmit={handleSearch} className="search-form desktop-only">
+            <div className="header-search-input-container">
+              <Search size={18} className="search-icon" />
               <input
                 type="text"
-                placeholder={translations.common.search}
-                className="search-input"
-                autoFocus
+                placeholder="Tìm kiếm khóa học, mentor..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="header-search-input"
               />
-              <button
-                className="search-close"
-                onClick={() => setIsSearchOpen(false)}
-              >
-                <X className="header-action-icon" />
-              </button>
             </div>
-            
-            <div className="search-content">
-              {/* Empty State */}
-              <div className="search-empty">
-                <Search className="search-empty-icon" />
-                <h3 className="search-empty-text">{translations.common.search}</h3>
-                <p className="search-empty-description">
-                  {translations.common.searchDescription}
-                </p>
-              </div>
-
-              {/* Search Results - Initially Hidden */}
-              <div className="search-results" style={{ display: 'none' }}>
-                {/* Example Result Items */}
-                <div className="search-result-item">
-                  <div className="search-result-icon">
-                    <GraduationCap />
-                  </div>
-                  <div className="search-result-content">
-                    <h4 className="search-result-title">React.js Advanced Course</h4>
-                    <p className="search-result-description">
-                      Master advanced React concepts and patterns
-                    </p>
-                    <div className="search-result-meta">
-                      <span>Course • 12 hours</span>
-                      <span>4.9 ★</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="search-result-item">
-                  <div className="search-result-icon">
-                    <MessageCircle />
-                  </div>
-                  <div className="search-result-content">
-                    <h4 className="search-result-title">TypeScript Best Practices</h4>
-                    <p className="search-result-description">
-                      Discussion about TypeScript patterns and practices
-                    </p>
-                    <div className="search-result-meta">
-                      <span>Discussion • 2 days ago</span>
-                      <span>24 replies</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          </form>
         </div>
-      )}
 
-      {/* Notifications Modal */}
-      {isNotificationsOpen && (
-        <div className="notification-modal">
-          <div className="notification-container">
-            <div className="notification-header">
-              <h2 className="notification-title">
-                {translations.notifications.title}
-              </h2>
-              <button
-                className="notification-close"
-                onClick={() => setIsNotificationsOpen(false)}
+        {/* Right Section */}
+        <div className="header-right">
+          {/* Upgrade Button */}
+          <button onClick={handleUpgrade} className="header-upgrade-btn desktop-only">
+            <Crown size={18} />
+            <span className="header-upgrade-text">Nâng cấp</span>
+          </button>
+
+          {/* Wallet */}
+          <button onClick={handleWallet} className="wallet-btn desktop-only">
+            <Wallet size={18} />
+          </button>
+
+          {/* Notifications */}
+          <button className="notification-btn desktop-only">
+            <Bell size={18} />
+          </button>
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="theme-btn desktop-only"
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+
+          {/* Authentication */}
+          {isAuthenticated && user ? (
+            <div ref={userMenuRef} className="user-menu-container desktop-only">
+              <button 
+                className="user-btn"
+                onClick={() => setShowUserMenu(!showUserMenu)}
               >
-                <X className="header-action-icon" />
+                <div className="user-avatar">
+                  <User size={18} />
+                </div>
+                <ChevronDown size={16} />
               </button>
+
+              {showUserMenu && (
+                <div className="user-dropdown">
+                  <div className="user-info">
+                    <div className="user-avatar-large">
+                      <User size={24} />
+                    </div>
+                    <div className="user-details">
+                      <p className="user-name">{user.fullName}</p>
+                      <p className="user-email">{user.email}</p>
+                    </div>
+                  </div>
+                  <hr className="dropdown-divider" />
+                  <button onClick={handleProfile} className="dropdown-item">
+                    <User size={16} />
+                    <span>Hồ sơ cá nhân</span>
+                  </button>
+                  <button onClick={handleLogout} className="dropdown-item logout">
+                    <LogOut size={16} />
+                    <span>Đăng xuất</span>
+                  </button>
+                </div>
+              )}
             </div>
-            <div className="notification-content">
-              <div className="notification-empty">
-                <Bell className="notification-empty-icon" />
-                <p>Không có thông báo mới</p>
+          ) : (
+            <button onClick={handleLogin} className="header-login-btn desktop-only">
+              Đăng nhập
+            </button>
+          )}
+
+          {/* Mobile Menu Button */}
+          <button
+            className="mobile-menu-btn mobile-only"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="mobile-menu">
+          <div className="mobile-menu-content">
+            {/* Mobile Search */}
+            <form onSubmit={handleSearch} className="mobile-search">
+              <div className="header-search-input-container">
+                <Search size={18} className="search-icon" />
+                <input
+                  type="text"
+                  placeholder="Tìm kiếm..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="header-search-input"
+                />
               </div>
+            </form>
+
+            {/* Mobile User Section */}
+            {isAuthenticated && user ? (
+              <div className="mobile-user-section">
+                <div className="mobile-user-info">
+                  <div className="user-avatar-large">
+                    <User size={32} />
+                  </div>
+                  <div className="user-details">
+                    <p className="user-name">{user.fullName}</p>
+                    <p className="user-email">{user.email}</p>
+                  </div>
+                </div>
+                <div className="mobile-user-actions">
+                  <button onClick={handleProfile} className="mobile-menu-item">
+                    <User size={18} />
+                    <span>Hồ sơ cá nhân</span>
+                  </button>
+                  <button onClick={handleLogout} className="mobile-menu-item logout">
+                    <LogOut size={18} />
+                    <span>Đăng xuất</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button onClick={handleLogin} className="mobile-login-btn">
+                <User size={18} />
+                <span>Đăng nhập</span>
+              </button>
+            )}
+
+            {/* Mobile Categories */}
+            <div className="mobile-categories">
+              <h3 className="mobile-section-title">Danh mục</h3>
+              <div className="mobile-category-grid">
+                {categories.map((category) => (
+                  <Link
+                    key={category.path}
+                    to={category.path}
+                    className="mobile-category-link"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <category.icon className="mobile-category-icon" />
+                    <div className="mobile-category-content">
+                      <span className="mobile-category-title">{category.name}</span>
+                      <span className="mobile-category-description">{category.description}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile Actions */}
+            <div className="mobile-actions">
+              <button onClick={handleUpgrade} className="mobile-action-btn upgrade">
+                <Crown size={18} />
+                <span>Nâng cấp</span>
+              </button>
+              <button onClick={handleWallet} className="mobile-action-btn">
+                <Wallet size={18} />
+                <span>Ví</span>
+              </button>
+              <button className="mobile-action-btn">
+                <Bell size={18} />
+                <span>Thông báo</span>
+              </button>
+              <button onClick={toggleTheme} className="mobile-action-btn">
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                <span>Chủ đề</span>
+              </button>
             </div>
           </div>
         </div>

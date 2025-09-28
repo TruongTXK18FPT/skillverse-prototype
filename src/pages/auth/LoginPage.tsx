@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import Logo from '../../assets/skillverse.png';
+import { useToast } from '../../hooks/useToast';
+import Toast from '../../components/Toast';
 import '../../styles/LoginPage.css';
 
 const LoginPage = () => {
   const { theme } = useTheme();
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { toast, isVisible, hideToast, showSuccess, showError } = useToast();
   
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -17,7 +21,16 @@ const LoginPage = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+
+  // Handle success message from other pages (like email verification)
+  useEffect(() => {
+    const state = location.state as { message?: string } | null;
+    if (state?.message) {
+      showSuccess('Thành công!', state.message);
+      // Clear the state to prevent showing the message on refresh
+      navigate('/login', { replace: true });
+    }
+  }, [location.state, navigate, showSuccess]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -25,20 +38,19 @@ const LoginPage = () => {
       ...prev,
       [name]: value
     }));
-    // Clear error when user starts typing
-    if (error) setError('');
+    // Clear any existing toasts when user starts typing
+    // Toast will auto-close so no need to manually clear
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.email || !formData.password) {
-      setError('Vui lòng nhập đầy đủ thông tin');
+      showError('Thiếu thông tin', 'Vui lòng nhập đầy đủ thông tin đăng nhập');
       return;
     }
 
     setLoading(true);
-    setError('');
 
     try {
       console.log('Attempting login with:', formData);
@@ -48,15 +60,49 @@ const LoginPage = () => {
       
       console.log('Login successful, redirecting to:', redirectUrl);
       
+      // Show success toast
+      showSuccess(
+        'Đăng nhập thành công!',
+        'Chào mừng bạn trở lại. Đang chuyển hướng...',
+        2
+      );
+      
       // Extract the path from the full URL for navigation
       const urlPath = new URL(redirectUrl).pathname;
       
-      // Navigate to role-specific page
-      navigate(urlPath, { replace: true });
+      // Navigate to role-specific page after toast delay
+      setTimeout(() => {
+        navigate(urlPath, { replace: true });
+      }, 2000);
       
     } catch (error: unknown) {
       console.error('Login error:', error);
-      setError(error instanceof Error ? error.message : 'Đăng nhập thất bại. Vui lòng thử lại.');
+      
+      // Check if this is an unverified email error
+      const authError = error as Error & { needsVerification?: boolean; email?: string };
+      if (authError.needsVerification) {
+        console.log('Email not verified, redirecting to verify-email page');
+        
+        showError(
+          'Tài khoản chưa được xác thực',
+          `${authError.message}\n\nĐang chuyển hướng đến trang xác thực...`
+        );
+        
+        // Navigate to verify email page immediately with shorter delay
+        setTimeout(() => {
+          navigate('/verify-otp', {
+            state: {
+              email: authError.email || formData.email,
+              message: 'Vui lòng xác thực email để hoàn tất đăng ký tài khoản.',
+              fromLogin: true
+            }
+          });
+        }, 2000);
+        return;
+      }
+      
+      const errorMessage = error instanceof Error ? error.message : 'Đăng nhập thất bại. Vui lòng thử lại.';
+      showError('Đăng nhập thất bại', errorMessage);
     } finally {
       setLoading(false);
     }
@@ -80,11 +126,6 @@ const LoginPage = () => {
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="login-form">
-          {error && (
-            <div className="error-message">
-              {error}
-            </div>
-          )}
 
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -181,6 +222,21 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          isVisible={isVisible}
+          onClose={hideToast}
+          autoCloseDelay={toast.autoCloseDelay}
+          showCountdown={toast.showCountdown}
+          countdownText={toast.countdownText}
+          actionButton={toast.actionButton}
+        />
+      )}
     </div>
   );
 };

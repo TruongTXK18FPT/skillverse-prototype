@@ -489,3 +489,100 @@
     padding: 1.5rem;
   }
 }
+
+/* OTP Verification Styles */
+.verify-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.otp-input {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+.otp-input::placeholder {
+  font-size: 1rem;
+  letter-spacing: normal;
+  font-family: inherit;
+  font-weight: normal;
+}
+
+.form-hint {
+  font-size: 0.875rem;
+  color: var(--auth-text-secondary);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.resend-section {
+  margin-top: 2rem;
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--auth-border);
+}
+
+.resend-section p {
+  margin-bottom: 1rem;
+  color: var(--auth-text-secondary);
+  font-size: 0.9rem;
+}
+
+.resend-button {
+  background: none;
+  border: none;
+  color: var(--auth-primary);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.resend-button:hover:not(:disabled) {
+  background-color: var(--auth-primary-light);
+}
+
+.resend-button:disabled {
+  color: var(--auth-text-secondary);
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+/* Message Styles */
+.message {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+[data-theme="dark"] .message.success {
+  background-color: #1e4d2b;
+  color: #a3cfbb;
+  border-color: #2d5f3f;
+}
+
+[data-theme="dark"] .message.error {
+  background-color: #4d1e1e;
+  color: #cfb3a3;
+  border-color: #5f2d2d;
+}

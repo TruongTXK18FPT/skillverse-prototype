@@ -281,7 +281,7 @@ const categories = [
           {/* Enhanced Sidebar */}
           <div className="course-sidebar">
             <div className="category-container">
-              <h3 className="category-title">
+              <h3 className="course-category-title">
                 <span className="category-icon">📂</span>
                 {' '}Danh Mục Khóa Học
               </h3>

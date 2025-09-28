@@ -1,49 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
 import '../../styles/AuthPages.css';
-import { Province, District } from '../../types/Location';
+import { UserRegistrationRequest } from '../../data/userDTOs';
+import { useToast } from '../../hooks/useToast';
+import Toast from '../../components/Toast';
 
 const RegisterPage = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
+  const { toast, isVisible, hideToast, showSuccess, showError } = useToast();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    birthday: '',
-    gender: '',
     phone: '',
-    provinceCode: '',
-    districtCode: '',
-    address: ''
+    bio: '',
+    address: '',
+    region: 'Vietnam'
   });
   
-  const [provinces, setProvinces] = useState<Province[]>([]);
-  const [districts, setDistricts] = useState<District[]>([]);
+  // Removed province and district states as we're not using location features
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const { register } = useAuth();
 
-  useEffect(() => {
-    // Fetch provinces when component mounts
-    fetch('https://provinces.open-api.vn/api/p/')
-      .then(response => response.json())
-      .then(data => setProvinces(data))
-      .catch(error => console.error('Error fetching provinces:', error));
-  }, []);
+  // Removed province fetching as we're not using location features
 
-  useEffect(() => {
-    // Fetch districts when province changes
-    if (formData.provinceCode) {
-      fetch(`https://provinces.open-api.vn/api/p/${formData.provinceCode}?depth=2`)
-        .then(response => response.json())
-        .then(data => setDistricts(data.districts))
-        .catch(error => console.error('Error fetching districts:', error));
-    }
-  }, [formData.provinceCode]);
+  // Remove province/district fetching as we're not using them anymore
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -70,45 +59,91 @@ const RegisterPage = () => {
       newErrors.confirmPassword = 'Mật khẩu không khớp';
     }
 
-    if (!formData.birthday) {
-      newErrors.birthday = 'Vui lòng chọn ngày sinh';
-    }
-
-    if (!formData.gender) {
-      newErrors.gender = 'Vui lòng chọn giới tính';
-    }
-
-    if (!formData.phone) {
-      newErrors.phone = 'Vui lòng nhập số điện thoại';
-    } else if (!/^[0-9]{10}$/.test(formData.phone)) {
-      newErrors.phone = 'Số điện thoại không hợp lệ';
-    }
-
-    if (!formData.provinceCode) {
-      newErrors.provinceCode = 'Vui lòng chọn tỉnh/thành phố';
-    }
-
-    if (!formData.districtCode) {
-      newErrors.districtCode = 'Vui lòng chọn quận/huyện';
-    }
-
-    if (!formData.address.trim()) {
-      newErrors.address = 'Vui lòng nhập địa chỉ chi tiết';
+    // Optional fields validation (only phone number format if provided)
+    if (formData.phone && !/^\d{10,11}$/.test(formData.phone)) {
+      newErrors.phone = 'Số điện thoại không hợp lệ (10-11 chữ số)';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      // Handle registration logic here
-      console.log('Form submitted:', formData);
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Prepare registration data matching backend UserRegistrationRequest
+      const registrationData: UserRegistrationRequest = {
+        email: formData.email,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+        fullName: formData.fullName,
+        phone: formData.phone || undefined,
+        bio: formData.bio || undefined,
+        address: formData.address || undefined,
+        region: formData.region,
+        // socialLinks is optional and not set here
+      };
+
+      console.log('Registration data:', registrationData);
+
+      // Call register function from AuthContext
+      const result = await register(registrationData);
+      
+      console.log('Registration result:', result);
+
+      // Always show success toast first
+      showSuccess(
+        'Đăng ký thành công!',
+        'Tài khoản của bạn đã được tạo. Đang chuyển hướng...',
+        2
+      );
+
+      // Check if verification is required
+      if (result.requiresVerification) {
+        console.log('Verification required, navigating to verify-email');
+        
+        // Navigate to OTP verification page immediately
+        setTimeout(() => {
+          navigate('/verify-otp', { 
+            state: { 
+              email: result.email || formData.email,
+              message: result.message || 'Vui lòng kiểm tra email và nhập mã xác thực để hoàn tất đăng ký.',
+              requiresVerification: true
+            }
+          });
+        }, 2000);
+      } else {
+        console.log('No verification required, navigating to login');
+        
+        // Navigate to login page
+        setTimeout(() => {
+          navigate('/login', {
+            state: {
+              message: 'Đăng ký thành công! Vui lòng đăng nhập.'
+            }
+          });
+        }, 2000);
+      }
+
+    } catch (error: unknown) {
+      console.error('Registration error:', error);
+      const errorMessage = (error as Error).message || 'Đăng ký thất bại. Vui lòng thử lại.';
+      showError(
+        'Đăng ký thất bại',
+        errorMessage
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -135,6 +170,7 @@ const RegisterPage = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
+          
           <div className="form-grid">            {/* Full Name */}
             <div className="form-group">
               <label htmlFor="fullName">Họ và Tên</label>
@@ -152,24 +188,21 @@ const RegisterPage = () => {
               {errors.fullName && <span className="error-message">{errors.fullName}</span>}
             </div>
 
-            {/* Gender */}
+            {/* Bio */}
             <div className="form-group">
-              <label htmlFor="gender">Giới Tính</label>
+              <label htmlFor="bio">Giới Thiệu Bản Thân (Tùy chọn)</label>
               <div className="input-group">
-                <select
-                  id="gender"
-                  name="gender"
-                  value={formData.gender}
+                <textarea
+                  id="bio"
+                  name="bio"
+                  value={formData.bio}
                   onChange={handleChange}
-                  className={errors.gender ? 'error' : ''}
-                >
-                  <option value="">Chọn giới tính</option>
-                  <option value="male">Nam</option>
-                  <option value="female">Nữ</option>
-                  <option value="other">Khác</option>
-                </select>
+                  placeholder="Mô tả ngắn về bản thân..."
+                  rows={3}
+                  className={errors.bio ? 'error' : ''}
+                />
               </div>
-              {errors.gender && <span className="error-message">{errors.gender}</span>}
+              {errors.bio && <span className="error-message">{errors.bio}</span>}
             </div>
             {/* Phone */}
             <div className="form-group">
@@ -205,71 +238,21 @@ const RegisterPage = () => {
               {errors.email && <span className="error-message">{errors.email}</span>}
             </div>
 
-            {/* Location Fields */}
-            <div className="form-group form-full-width location-fields">
-              <div className="location-group">
-                {/* Province/City */}
-                <div className="form-group">
-                  <label htmlFor="provinceCode">Tỉnh/Thành Phố</label>
-                  <div className="input-group">
-                    <select
-                      id="provinceCode"
-                      name="provinceCode"
-                      value={formData.provinceCode}
-                      onChange={handleChange}
-                      className={errors.provinceCode ? 'error' : ''}
-                    >
-                      <option value="">Chọn tỉnh/thành phố</option>
-                      {provinces.map((province) => (
-                        <option key={province.code} value={province.code}>
-                          {province.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {errors.provinceCode && <span className="error-message">{errors.provinceCode}</span>}
-                </div>
-
-                {/* District */}
-                <div className="form-group">
-                  <label htmlFor="districtCode">Quận/Huyện</label>
-                  <div className="input-group">
-                    <select
-                      id="districtCode"
-                      name="districtCode"
-                      value={formData.districtCode}
-                      onChange={handleChange}
-                      className={errors.districtCode ? 'error' : ''}
-                      disabled={!formData.provinceCode}
-                    >
-                      <option value="">Chọn quận/huyện</option>
-                      {districts.map((district) => (
-                        <option key={district.code} value={district.code}>
-                          {district.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {errors.districtCode && <span className="error-message">{errors.districtCode}</span>}
-                </div>
+            {/* Address */}
+            <div className="form-group">
+              <label htmlFor="address">Địa Chỉ (Tùy chọn)</label>
+              <div className="input-group">
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  placeholder="Nhập địa chỉ của bạn..."
+                  className={errors.address ? 'error' : ''}
+                />
               </div>
-
-              {/* Detailed Address */}
-              <div className="form-group">
-                <label htmlFor="address">Địa Chỉ Chi Tiết</label>
-                <div className="input-group">
-                  <input
-                    type="text"
-                    id="address"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleChange}
-                    placeholder="Nhập địa chỉ chi tiết"
-                    className={errors.address ? 'error' : ''}
-                  />
-                </div>
-                {errors.address && <span className="error-message">{errors.address}</span>}
-              </div>
+              {errors.address && <span className="error-message">{errors.address}</span>}
             </div>
 
             {/* Password Fields */}
@@ -320,8 +303,8 @@ const RegisterPage = () => {
             </div>
           </div>
 
-          <button type="submit" className="submit-button">
-            Tạo Tài Khoản
+          <button type="submit" className="submit-button" disabled={loading}>
+            {loading ? 'Đang xử lý...' : 'Tạo Tài Khoản'}
           </button>
         </form>
 
@@ -368,6 +351,21 @@ const RegisterPage = () => {
           </ul>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          isVisible={isVisible}
+          onClose={hideToast}
+          autoCloseDelay={toast.autoCloseDelay}
+          showCountdown={toast.showCountdown}
+          countdownText={toast.countdownText}
+          actionButton={toast.actionButton}
+        />
+      )}
     </div>
   );
 };

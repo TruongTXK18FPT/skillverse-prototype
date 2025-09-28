@@ -385,6 +385,24 @@
   border-color: #991b1b;
 }
 
+.success-message {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #a7f3d0;
+  margin-bottom: 16px;
+  font-size: 14px;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in;
+}
+
+[data-theme='dark'] .success-message {
+  background-color: #064e3b;
+  color: #a7f3d0;
+  border-color: #065f46;
+}
+
 /* Loading States */
 .login-button:disabled {
   opacity: 0.6;

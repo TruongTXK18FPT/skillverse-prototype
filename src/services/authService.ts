@@ -1,157 +1,171 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import axiosInstance from './axiosInstance';
+import {
+  LoginRequest,
+  AuthResponse,
+  VerifyEmailRequest,
+  ResendOtpRequest,
+  RefreshTokenRequest,
+  RegistrationResponse,
+  UserDto
+} from '../data/authDTOs';
 
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface RegisterData {
-  username: string;
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  role?: 'user' | 'admin' | 'mentor' | 'business';
-}
-
-export interface User {
-  id: string;
-  username: string;
-  email: string;
-  role: string;
-  firstName: string;
-  lastName: string;
-  profilePicture: string | null;
-  isActive: boolean;
-  lastLogin: string | null;
-}
-
-export interface AuthResponse {
-  success: boolean;
-  token: string;
-  data: {
-    user: User;
-    redirectUrl: string;
-  };
-}
+// Helper type for axios error handling
+type AxiosError = { response?: { data?: { message?: string } } };
 
 class AuthService {
   private token: string | null = null;
+  private refreshToken: string | null = null;
 
   constructor() {
-    this.token = localStorage.getItem('token');
+    this.token = localStorage.getItem('accessToken');
+    this.refreshToken = localStorage.getItem('refreshToken');
   }
 
-  async login(credentials: LoginCredentials): Promise<AuthResponse> {
+  // Login endpoint
+  async login(credentials: LoginRequest): Promise<string> {
     try {
-      console.log('Attempting login to:', `${API_URL}/auth/login`);
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
+      console.log('Attempting login with credentials:', credentials.email);
+      
+      const response = await axiosInstance.post<AuthResponse>('/api/auth/login', credentials);
+      const authData = response.data;
 
-      const data = await response.json();
+      // Store tokens and user data
+      this.token = authData.accessToken;
+      this.refreshToken = authData.refreshToken;
+      
+      localStorage.setItem('accessToken', authData.accessToken);
+      localStorage.setItem('refreshToken', authData.refreshToken);
+      localStorage.setItem('user', JSON.stringify(authData.user));
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
-
-      // Store token and user data
-      this.token = data.token;
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.data.user));
-
-      return data;
-    } catch (error) {
+      console.log('Login successful for user:', authData.user.email);
+      
+      // Return redirect URL based on user roles
+      return this.getRedirectUrlByRole(authData.user.roles);
+      
+    } catch (error: unknown) {
       console.error('Login error:', error);
-      throw error;
+      const axiosError = error as AxiosError;
+      const errorMessage = axiosError.response?.data?.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
+      
+      // Check if error is related to unverified email
+      const isUnverifiedError = errorMessage.toLowerCase().includes('verify') || 
+          errorMessage.toLowerCase().includes('xác thực') ||
+          errorMessage.toLowerCase().includes('not verified') ||
+          errorMessage.toLowerCase().includes('chưa xác thực') ||
+          errorMessage.toLowerCase().includes('email not verified') ||
+          errorMessage.toLowerCase().includes('please verify') ||
+          errorMessage.toLowerCase().includes('account not verified') ||
+          errorMessage.toLowerCase().includes('verification required');
+          
+      console.log('Error message:', errorMessage);
+      console.log('Is unverified error:', isUnverifiedError);
+      
+      if (isUnverifiedError) {
+        // Create a special error type for unverified email
+        const unverifiedError = new Error(errorMessage) as Error & { needsVerification?: boolean; email?: string };
+        unverifiedError.needsVerification = true;
+        unverifiedError.email = credentials.email;
+        console.log('Throwing unverified error:', unverifiedError);
+        throw unverifiedError;
+      }
+      
+      throw new Error(errorMessage);
     }
   }
 
-  async register(userData: RegisterData): Promise<AuthResponse> {
+  // Verify email with OTP
+  async verifyEmail(request: VerifyEmailRequest): Promise<RegistrationResponse> {
     try {
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
-      }
-
-      // Store token and user data
-      this.token = data.token;
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.data.user));
-
-      return data;
-    } catch (error) {
-      console.error('Registration error:', error);
-      throw error;
+      const response = await axiosInstance.post<RegistrationResponse>('/api/auth/verify-email', request);
+      return response.data;
+    } catch (error: unknown) {
+      console.error('Email verification error:', error);
+      const errorMessage = (error as AxiosError).response?.data?.message || 'Xác thực email thất bại. Vui lòng thử lại.';
+      throw new Error(errorMessage);
     }
   }
 
-  async getCurrentUser(): Promise<User | null> {
-    if (!this.token) {
-      return null;
-    }
-
+  // Resend OTP
+  async resendOtp(request: ResendOtpRequest): Promise<string> {
     try {
-      const response = await fetch(`${API_URL}/auth/me`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axiosInstance.post<string>('/api/auth/resend-otp', request);
+      return response.data;
+    } catch (error: unknown) {
+      console.error('Resend OTP error:', error);
+      const errorMessage = (error as AxiosError).response?.data?.message || 'Gửi lại mã OTP thất bại. Vui lòng thử lại.';
+      throw new Error(errorMessage);
+    }
+  }
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to get user');
+  // Refresh access token
+  async refreshAccessToken(): Promise<AuthResponse> {
+    try {
+      if (!this.refreshToken) {
+        throw new Error('No refresh token available');
       }
 
-      return data.data.user;
-    } catch (error) {
-      console.error('Get user error:', error);
+      const request: RefreshTokenRequest = { refreshToken: this.refreshToken };
+      const response = await axiosInstance.post<AuthResponse>('/api/auth/refresh', request);
+      const authData = response.data;
+
+      // Update tokens
+      this.token = authData.accessToken;
+      this.refreshToken = authData.refreshToken;
+      
+      localStorage.setItem('accessToken', authData.accessToken);
+      localStorage.setItem('refreshToken', authData.refreshToken);
+      localStorage.setItem('user', JSON.stringify(authData.user));
+
+      return authData;
+    } catch (error: unknown) {
+      console.error('Token refresh error:', error);
       this.logout();
-      return null;
+      throw new Error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
     }
   }
 
+  // Logout user
+  // Logout user
   async logout(): Promise<void> {
     try {
-      if (this.token) {
-        await fetch(`${API_URL}/auth/logout`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${this.token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+      // Call logout API endpoint if available
+      if (this.refreshToken) {
+        try {
+          await axiosInstance.post('/api/auth/logout', { 
+            refreshToken: this.refreshToken 
+          });
+        } catch (error) {
+          // Don't throw error if logout API fails, still clear local data
+          console.warn('Logout API call failed:', error);
+        }
       }
+      
+      // Clear tokens and user data
+      this.token = null;
+      this.refreshToken = null;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      
+      console.log('User logged out successfully');
     } catch (error) {
       console.error('Logout error:', error);
-    } finally {
+      // Even if there's an error, clear local storage
       this.token = null;
-      localStorage.removeItem('token');
+      this.refreshToken = null;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
     }
   }
 
+  // Get current access token
   getToken(): string | null {
     return this.token;
   }
 
-  getStoredUser(): User | null {
+  // Get stored user data
+  getStoredUser(): UserDto | null {
     try {
       const userStr = localStorage.getItem('user');
       return userStr ? JSON.parse(userStr) : null;
@@ -161,8 +175,24 @@ class AuthService {
     }
   }
 
+  // Check if user is authenticated
   isAuthenticated(): boolean {
     return !!this.token;
+  }
+
+  // Get redirect URL based on user roles
+  private getRedirectUrlByRole(roles: string[]): string {
+    const baseUrl = window.location.origin;
+    
+    if (roles.includes('ADMIN')) {
+      return `${baseUrl}/admin`;
+    } else if (roles.includes('MENTOR')) {
+      return `${baseUrl}/mentor`;
+    } else if (roles.includes('BUSINESS')) {
+      return `${baseUrl}/business`;
+    } else {
+      return `${baseUrl}/dashboard`;
+    }
   }
 }
 
