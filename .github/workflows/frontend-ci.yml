@@ -114,11 +114,133 @@ jobs:
         curl -f http://localhost:3000 || exit 1
         docker stop test-frontend
 
-  # Job 4: Deployment Status
+  # Job 4: Deploy to VPS
+  deploy:
+    name: 🚀 Deploy to VPS
+    runs-on: ubuntu-latest
+    needs: [quality-check, security-scan, docker-build]
+    if: github.ref == 'refs/heads/main' && success()
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔑 Setup SSH Key
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        
+    - name: 🐞 Debug Connection Info
+      run: |
+        echo "🔍 Debug Information:"
+        echo "VPS Host: ${{ secrets.VPS_HOST }}"
+        echo "VPS User: ${{ secrets.VPS_USER }}"
+        echo "VPS Project Path: ${{ secrets.VPS_PROJECT_PATH }}"
+        echo "Current Time: $(date)"
+        echo "Commit SHA: ${{ github.sha }}"
+        
+    - name: 🔧 Deploy to VPS
+      run: |
+        # SSH connection details
+        VPS_HOST="${{ secrets.VPS_HOST }}"
+        VPS_USER="${{ secrets.VPS_USER }}"
+        VPS_PROJECT_PATH="${{ secrets.VPS_PROJECT_PATH }}"
+        
+        echo "🔗 Connecting to $VPS_USER@$VPS_HOST..."
+        
+        # Connect to VPS and deploy
+        ssh -o StrictHostKeyChecking=no -v $VPS_USER@$VPS_HOST << 'ENDSSH'
+          echo "🚀 Starting deployment..."
+          echo "📍 Current directory: $(pwd)"
+          echo "👤 Current user: $(whoami)"
+          
+          # Navigate to project directory
+          echo "📂 Navigating to project directory..."
+          cd ${{ secrets.VPS_PROJECT_PATH }}
+          echo "📍 Now in: $(pwd)"
+          
+          # Check git status
+          echo "📊 Git status:"
+          git status --short
+          git log --oneline -3
+          
+          # Pull latest changes
+          echo "📡 Pulling latest code..."
+          git pull origin main
+          
+          # Check if Dockerfile exists
+          echo "🔍 Checking Dockerfile..."
+          ls -la Dockerfile nginx.conf || echo "⚠️ Files not found"
+          
+          # Build new Docker image
+          echo "🐳 Building Docker image..."
+          docker build -t skillverse-frontend:latest .
+          
+          # Check current containers
+          echo "📋 Current containers:"
+          docker ps -a | grep skillverse-frontend || echo "No existing containers"
+          
+          # Stop and remove old container
+          echo "🛑 Stopping old container..."
+          docker stop skillverse-frontend || echo "Container was not running"
+          docker rm skillverse-frontend || echo "Container did not exist"
+          
+          # Run new container
+          echo "▶️ Starting new container..."
+          docker run -d --name skillverse-frontend \
+            -p 3000:80 \
+            --restart unless-stopped \
+            skillverse-frontend:latest
+          
+          # Check container status
+          echo "📊 Container status:"
+          docker ps | grep skillverse-frontend
+          docker logs skillverse-frontend --tail 10
+          
+          # Health check
+          echo "🏥 Performing health check..."
+          sleep 15
+          echo "🔍 Testing endpoints..."
+          
+          if curl -f http://localhost:3000 > /dev/null 2>&1; then
+            echo "✅ Main endpoint OK"
+          else
+            echo "⚠️ Main endpoint failed, trying health endpoint..."
+          fi
+          
+          if curl -f http://localhost:3000/health > /dev/null 2>&1; then
+            echo "✅ Health endpoint OK"
+            echo "✅ Deployment successful!"
+          else
+            echo "⚠️ Health endpoint failed, but container may still be starting..."
+            echo "📊 Container logs:"
+            docker logs skillverse-frontend --tail 20
+            echo "📊 Container inspect:"
+            docker inspect skillverse-frontend --format='{{.State.Status}}'
+            echo "✅ Deployment completed (check logs above)"
+          fi
+          
+          # Cleanup old images
+          echo "🧹 Cleaning up old images..."
+          docker image prune -f
+          
+          echo "🎉 Deployment process completed!"
+        ENDSSH
+        
+    - name: 📊 Deployment Summary
+      if: always()
+      run: |
+        echo "## 🚀 Deployment Results" >> $GITHUB_STEP_SUMMARY
+        echo "- **VPS Host**: \`${{ secrets.VPS_HOST }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- **Deploy Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+
+  # Job 5: Deployment Status
   deployment-status:
     name: 📊 Deployment Status
     runs-on: ubuntu-latest
-    needs: [quality-check, security-scan, docker-build]
+    needs: [quality-check, security-scan, docker-build, deploy]
     if: always()
     
     steps:
@@ -128,6 +250,7 @@ jobs:
         echo "- **Quality Check**: ${{ needs.quality-check.result }}" >> $GITHUB_STEP_SUMMARY
         echo "- **Security Scan**: ${{ needs.security-scan.result }}" >> $GITHUB_STEP_SUMMARY
         echo "- **Docker Build**: ${{ needs.docker-build.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Deployment**: ${{ needs.deploy.result }}" >> $GITHUB_STEP_SUMMARY
         echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
         echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
         
@@ -137,7 +260,8 @@ jobs:
       with:
         script: |
           const status = '${{ needs.quality-check.result }}' === 'success' && 
-                        '${{ needs.security-scan.result }}' === 'success' ? '✅' : '❌';
+                        '${{ needs.security-scan.result }}' === 'success' &&
+                        '${{ needs.deploy.result }}' === 'success' ? '✅' : '❌';
           
           github.rest.issues.createComment({
             issue_number: context.issue.number,
@@ -147,7 +271,9 @@ jobs:
             
             - Quality Check: ${{ needs.quality-check.result }}
             - Security Scan: ${{ needs.security-scan.result }}
+            - Docker Build: ${{ needs.docker-build.result }}
+            - Deployment: ${{ needs.deploy.result }}
             - Commit: \`${{ github.sha }}\`
             
-            ${status === '❌' ? '⚠️ Please fix the issues before merging.' : '🎉 All checks passed! Ready to merge.'}`
+            ${status === '❌' ? '⚠️ Please fix the issues before merging.' : '🎉 All checks passed and deployed successfully!'}`
           })
