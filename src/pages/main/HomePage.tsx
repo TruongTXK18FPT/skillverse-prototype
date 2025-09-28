@@ -8,14 +8,7 @@ import {
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/HomePage.css'; // Import your CSS styles
 
-const FlyingSparkles = () => (
-  <div className="flying-icon">
-    <Sparkles size={32} />
-    <div className="flying-sparkle"></div>
-    <div className="flying-sparkle"></div>
-    <div className="flying-sparkle"></div>
-  </div>
-);
+
 
 const HomePage = () => {
   const [theme] = useState(() => {
@@ -105,7 +98,6 @@ const HomePage = () => {
         <div className="hero-overlay"></div>
         <div className="hero-content">
           <h1 className="hero-title">
-            <FlyingSparkles />
             Mở Khoá Tương Lai Với AI
           </h1>
           <p className="hero-description">
