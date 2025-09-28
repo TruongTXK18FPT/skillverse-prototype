@@ -106,10 +106,10 @@ const HomePage = () => {
         <div className="hero-content">
           <h1 className="hero-title">
             <FlyingSparkles />
-            🎉 TEST DEPLOYMENT SUCCESS 🎉 Mở Khoá Tương Lai Với AI 🚀
+            Mở Khoá Tương Lai Với AI
           </h1>
           <p className="hero-description">
-            🔥 CI/CD DEPLOYMENT TEST WORKING 🔥 Không chỉ học – mà còn bứt phá! SkillVerse mang đến hành trình học tập cá nhân hoá,
+            Không chỉ học – mà còn bứt phá! SkillVerse mang đến hành trình học tập cá nhân hoá,
             giúp bạn làm chủ kỹ năng hot nhất và tạo lợi thế vượt trội trong sự nghiệp.
           </p>
           <div className="button-container">
