@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  BookOpen, Briefcase, Award, 
+import {
+  BookOpen, Briefcase, Award,
   Users, Star, Sparkles, Brain, Target,
   Code, Zap, Globe, ChevronRight
 } from 'lucide-react';
@@ -72,27 +72,27 @@ const HomePage = () => {
   ];
 
   const stats = [
-    { 
-      label: 'Người Học Tích Cực', 
-      value: '10,000+', 
+    {
+      label: 'Người Học Tích Cực',
+      value: '10,000+',
       icon: Users,
       description: 'Cộng đồng đang phát triển'
     },
-    { 
-      label: 'Khóa Học Chuyên Môn', 
-      value: '500+', 
+    {
+      label: 'Khóa Học Chuyên Môn',
+      value: '500+',
       icon: BookOpen,
       description: 'Nội dung được tuyển chọn'
     },
-    { 
-      label: 'Dự Án Hoàn Thành', 
-      value: '2,500+', 
+    {
+      label: 'Dự Án Hoàn Thành',
+      value: '2,500+',
       icon: Briefcase,
       description: 'Kinh nghiệm thực tế'
     },
-    { 
-      label: 'Tỷ Lệ Thành Công', 
-      value: '95%', 
+    {
+      label: 'Tỷ Lệ Thành Công',
+      value: '95%',
       icon: Star,
       description: 'Phát triển nghề nghiệp'
     }
@@ -106,11 +106,11 @@ const HomePage = () => {
         <div className="hero-content">
           <h1 className="hero-title">
             <FlyingSparkles />
-            Phát Triển Sự Nghiệp Với AI
+            🎉 TEST DEPLOYMENT SUCCESS 🎉 Mở Khoá Tương Lai Với AI 🚀
           </h1>
           <p className="hero-description">
-            Khám phá tiềm năng của bạn với nền tảng học tập được hỗ trợ bởi AI. Nhận hướng dẫn cá nhân,
-            làm chủ các kỹ năng đang được yêu cầu và thúc đẩy sự phát triển nghề nghiệp của bạn.
+            🔥 CI/CD DEPLOYMENT TEST WORKING 🔥 Không chỉ học – mà còn bứt phá! SkillVerse mang đến hành trình học tập cá nhân hoá,
+            giúp bạn làm chủ kỹ năng hot nhất và tạo lợi thế vượt trội trong sự nghiệp.
           </p>
           <div className="button-container">
             <Link to="/courses" className="primary-button">
@@ -141,8 +141,8 @@ const HomePage = () => {
 
           <div className="features-grid">
             {features.map((feature, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="feature-card"
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
@@ -162,8 +162,8 @@ const HomePage = () => {
         <div className="section-container">
           <div className="stats-grid">
             {stats.map((stat, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="home-stat-item"
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
@@ -214,8 +214,8 @@ const HomePage = () => {
                 icon: Target
               }
             ].map((step, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="step-item"
                 style={{ animationDelay: `${index * 0.3}s` }}
               >
