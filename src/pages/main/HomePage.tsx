@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   BookOpen, Briefcase, Award,
-  Users, Star, Sparkles, Brain, Target,
+  Users, Star, Brain, Target,
   Code, Zap, Globe, ChevronRight
 } from 'lucide-react';
 import MeowlGuide from '../../components/MeowlGuide';
@@ -106,7 +106,7 @@ const HomePage = () => {
           </p>
           <div className="button-container">
             <Link to="/courses" className="primary-button">
-              <Sparkles size={20} />
+              <BookOpen size={20} />
               <span>Bắt Đầu Học</span>
               <ChevronRight size={16} />
             </Link>
@@ -232,7 +232,7 @@ const HomePage = () => {
           </p>
           <div className="button-container">
             <Link to="/dashboard" className="primary-button">
-              <Sparkles size={20} />
+              <BookOpen size={20} />
               <span>Bắt Đầu Miễn Phí</span>
               <ChevronRight size={16} />
             </Link>
