@@ -143,6 +143,7 @@ jobs:
           
           # Set env
           echo "VITE_MEOWL_API_KEY=${{ secrets.VITE_MEOWL_API_KEY }}" > .env
+          echo "VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }}" >> .env
           echo "VITE_FRONTEND_URL=https://skillverse.vn" >> .env
           
           # Clean old containers/images
