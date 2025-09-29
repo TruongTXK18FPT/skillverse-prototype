@@ -82,3 +82,83 @@ export interface District {
   short_codename: string;
   province_code: string;
 }
+
+// Mentor Registration Request DTO
+export interface MentorRegistrationRequest {
+  fullName: string;
+  email: string;
+  linkedinProfile: string;
+  mainExpertise: string;
+  yearsOfExperience: number;
+  personalBio: string;
+  password: string;
+  confirmPassword: string;
+  // File uploads will be handled separately in FormData
+}
+
+// Mentor Registration Response DTO
+export interface MentorRegistrationResponse extends BaseRegistrationResponse {
+  mentorId: number;
+  applicationStatus: string;
+}
+
+// Business Registration Request DTO
+export interface BusinessRegistrationRequest {
+  companyName: string;
+  businessEmail: string;
+  companyWebsite: string;
+  businessAddress: string;
+  taxId: string;
+  password: string;
+  confirmPassword: string;
+  // File uploads will be handled separately in FormData
+}
+
+// Business Registration Response DTO
+export interface BusinessRegistrationResponse extends BaseRegistrationResponse {
+  businessId: number;
+  applicationStatus: string;
+}
+
+// Mentor Profile Response DTO
+export interface MentorProfileResponse {
+  id: number;
+  email: string;
+  fullName: string;
+  linkedinProfile: string;
+  mainExpertise: string;
+  yearsOfExperience: number;
+  personalBio: string;
+  applicationStatus: string;
+  isActive: boolean;
+  emailVerified: boolean;
+  cvFileUrl?: string;
+  certificationFileUrls?: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Business Profile Response DTO
+export interface BusinessProfileResponse {
+  id: number;
+  companyName: string;
+  businessEmail: string;
+  companyWebsite: string;
+  businessAddress: string;
+  taxId: string;
+  applicationStatus: string;
+  isActive: boolean;
+  emailVerified: boolean;
+  documentFileUrls?: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Application Status Response DTO
+export interface ApplicationStatusResponse {
+  applicationStatus: string;
+  statusMessage: string;
+  submittedAt: string;
+  reviewedAt?: string;
+  reviewerComments?: string;
+}

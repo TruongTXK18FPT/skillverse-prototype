@@ -114,7 +114,8 @@ const RegisterPage = () => {
             state: { 
               email: result.email || formData.email,
               message: result.message || 'Vui lòng kiểm tra email và nhập mã xác thực để hoàn tất đăng ký.',
-              requiresVerification: true
+              requiresVerification: true,
+              userType: 'user' // Add user type information for regular users
             }
           });
         }, 2000);

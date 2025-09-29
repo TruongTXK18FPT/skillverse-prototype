@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, GraduationCap, Eye, EyeOff, Upload, X } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { useToast } from '../../hooks/useToast';
+import Toast from '../Toast';
+import mentorService from '../../services/mentorService';
+import { MentorRegistrationRequest } from '../../data/userDTOs';
 import './MentorRegistrationForm.css';
 
 interface MentorFormData {
@@ -18,6 +22,8 @@ interface MentorFormData {
 const MentorRegistrationForm: React.FC = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
+  const { toast, isVisible, hideToast, showSuccess, showError } = useToast();
+  
   const [formData, setFormData] = useState<MentorFormData>({
     fullName: '',
     email: '',
@@ -33,6 +39,7 @@ const MentorRegistrationForm: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [certifications, setCertifications] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const expertiseAreas = [
     'Công nghệ thông tin',
@@ -152,17 +159,62 @@ const MentorRegistrationForm: React.FC = () => {
     setCertifications(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log('Mentor registration data:', {
-        ...formData,
-        cv: cvFile,
-        certifications: certifications
-      });
-      // Handle registration logic here
-      alert('Đăng ký mentor thành công!');
-      navigate('/login');
+    if (!validateForm()) return;
+
+    setLoading(true);
+
+    try {
+      // Create registration request
+      const registrationRequest: MentorRegistrationRequest = {
+        fullName: formData.fullName,
+        email: formData.email,
+        linkedinProfile: formData.linkedinProfile,
+        mainExpertise: formData.mainExpertise,
+        yearsOfExperience: parseInt(formData.yearsOfExperience),
+        personalBio: formData.personalBio,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword
+      };
+
+      // Prepare files
+      const files = {
+        cv: cvFile || undefined,
+        certifications: certifications.length > 0 ? certifications : undefined
+      };
+
+      console.log('Attempting mentor registration for:', registrationRequest.email);
+      
+      const response = await mentorService.register(registrationRequest, files);
+      
+      console.log('Mentor registration successful:', response);
+      
+      showSuccess(
+        'Đăng ký mentor thành công!',
+        'Vui lòng kiểm tra email để xác thực tài khoản. Đang chuyển hướng đến trang xác thực...',
+        3
+      );
+
+      // Navigate to verify email page after success
+      setTimeout(() => {
+        navigate('/verify-otp', {
+          state: {
+            email: registrationRequest.email,
+            message: 'Đơn đăng ký mentor đã được gửi. Vui lòng xác thực email để hoàn tất quá trình đăng ký.',
+            fromLogin: false,
+            requiresVerification: response.requiresVerification,
+            userType: 'mentor' // Add user type information
+          }
+        });
+      }, 3000);
+      
+    } catch (error: unknown) {
+      console.error('Mentor registration error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Đăng ký mentor thất bại. Vui lòng thử lại.';
+      showError('Đăng ký thất bại', errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -408,8 +460,8 @@ const MentorRegistrationForm: React.FC = () => {
             </div>
           </div>
 
-          <button type="submit" className="submit-button">
-            Đăng Ký Mentor
+          <button type="submit" className="submit-button" disabled={loading}>
+            {loading ? 'Đang đăng ký...' : 'Đăng Ký Mentor'}
           </button>
         </form>
 
@@ -420,6 +472,21 @@ const MentorRegistrationForm: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          isVisible={isVisible}
+          onClose={hideToast}
+          autoCloseDelay={toast.autoCloseDelay}
+          showCountdown={toast.showCountdown}
+          countdownText={toast.countdownText}
+          actionButton={toast.actionButton}
+        />
+      )}
     </div>
   );
 };

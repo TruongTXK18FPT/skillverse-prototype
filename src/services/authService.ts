@@ -128,12 +128,10 @@ class AuthService {
   // Logout user
   async logout(): Promise<void> {
     try {
-      // Call logout API endpoint if available
-      if (this.refreshToken) {
+      // Call logout API endpoint - token sent via Authorization header
+      if (this.token) {
         try {
-          await axiosInstance.post('/api/auth/logout', { 
-            refreshToken: this.refreshToken 
-          });
+          await axiosInstance.post('/api/auth/logout');
         } catch (error) {
           // Don't throw error if logout API fails, still clear local data
           console.warn('Logout API call failed:', error);

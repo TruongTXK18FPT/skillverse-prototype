@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Building2, Eye, EyeOff, Upload, X } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { useToast } from '../../hooks/useToast';
+import Toast from '../Toast';
+import businessService from '../../services/businessService';
+import { BusinessRegistrationRequest } from '../../data/userDTOs';
 import './BusinessRegistrationForm.css';
 
 interface BusinessFormData {
@@ -17,6 +21,8 @@ interface BusinessFormData {
 const BusinessRegistrationForm: React.FC = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
+  const { toast, isVisible, hideToast, showSuccess, showError } = useToast();
+  
   const [formData, setFormData] = useState<BusinessFormData>({
     companyName: '',
     businessEmail: '',
@@ -30,6 +36,7 @@ const BusinessRegistrationForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [companyDocuments, setCompanyDocuments] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -51,13 +58,13 @@ const BusinessRegistrationForm: React.FC = () => {
     if (!formData.businessEmail.trim()) {
       newErrors.businessEmail = 'Vui lòng nhập email doanh nghiệp';
     } else if (!validateEmail(formData.businessEmail)) {
-      newErrors.businessEmail = 'Vui lòng sử dụng email doanh nghiệp (không phải Gmail cá nhân)';
+      newErrors.businessEmail = 'Vui lòng nhập email doanh nghiệp hợp lệ (không phải email cá nhân)';
     }
 
     if (!formData.companyWebsite.trim()) {
       newErrors.companyWebsite = 'Vui lòng nhập website công ty';
     } else if (!/^https?:\/\/.+\..+/.test(formData.companyWebsite)) {
-      newErrors.companyWebsite = 'Vui lòng nhập URL hợp lệ (bao gồm http:// hoặc https://)';
+      newErrors.companyWebsite = 'Vui lòng nhập URL website hợp lệ';
     }
 
     if (!formData.businessAddress.trim()) {
@@ -65,7 +72,7 @@ const BusinessRegistrationForm: React.FC = () => {
     }
 
     if (!formData.taxId.trim()) {
-      newErrors.taxId = 'Vui lòng nhập mã số thuế hoặc số đăng ký kinh doanh';
+      newErrors.taxId = 'Vui lòng nhập mã số thuế';
     }
 
     if (!formData.password) {
@@ -81,7 +88,7 @@ const BusinessRegistrationForm: React.FC = () => {
     }
 
     if (companyDocuments.length === 0) {
-      newErrors.documents = 'Vui lòng tải lên tài liệu công ty';
+      newErrors.documents = 'Vui lòng tải lên ít nhất một tài liệu công ty';
     }
 
     setErrors(newErrors);
@@ -105,6 +112,7 @@ const BusinessRegistrationForm: React.FC = () => {
     });
 
     setCompanyDocuments(prev => [...prev, ...validFiles]);
+    
     if (errors.documents) {
       setErrors(prev => ({ ...prev, documents: '' }));
     }
@@ -114,16 +122,60 @@ const BusinessRegistrationForm: React.FC = () => {
     setCompanyDocuments(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log('Business registration data:', {
-        ...formData,
-        documents: companyDocuments
-      });
-      // Handle registration logic here
-      alert('Đăng ký doanh nghiệp thành công!');
-      navigate('/login');
+    if (!validateForm()) return;
+
+    setLoading(true);
+
+    try {
+      // Create registration request
+      const registrationRequest: BusinessRegistrationRequest = {
+        companyName: formData.companyName,
+        businessEmail: formData.businessEmail,
+        companyWebsite: formData.companyWebsite,
+        businessAddress: formData.businessAddress,
+        taxId: formData.taxId,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword
+      };
+
+      // Prepare files
+      const files = {
+        documents: companyDocuments.length > 0 ? companyDocuments : undefined
+      };
+
+      console.log('Attempting business registration for:', registrationRequest.businessEmail);
+      
+      const response = await businessService.register(registrationRequest, files);
+      
+      console.log('Business registration successful:', response);
+      
+      showSuccess(
+        'Đăng ký doanh nghiệp thành công!',
+        'Vui lòng kiểm tra email để xác thực tài khoản. Đang chuyển hướng đến trang xác thực...',
+        3
+      );
+
+      // Navigate to verify email page after success
+      setTimeout(() => {
+        navigate('/verify-otp', {
+          state: {
+            email: registrationRequest.businessEmail,
+            message: 'Đơn đăng ký doanh nghiệp đã được gửi. Vui lòng xác thực email để hoàn tất quá trình đăng ký.',
+            fromLogin: false,
+            requiresVerification: response.requiresVerification,
+            userType: 'business' // Add user type information
+          }
+        });
+      }, 3000);
+      
+    } catch (error: unknown) {
+      console.error('Business registration error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Đăng ký doanh nghiệp thất bại. Vui lòng thử lại.';
+      showError('Đăng ký thất bại', errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -310,8 +362,8 @@ const BusinessRegistrationForm: React.FC = () => {
             </div>
           </div>
 
-          <button type="submit" className="submit-button">
-            Đăng Ký Doanh Nghiệp
+          <button type="submit" className="submit-button" disabled={loading}>
+            {loading ? 'Đang đăng ký...' : 'Đăng Ký Doanh Nghiệp'}
           </button>
         </form>
 
@@ -322,6 +374,21 @@ const BusinessRegistrationForm: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          isVisible={isVisible}
+          onClose={hideToast}
+          autoCloseDelay={toast.autoCloseDelay}
+          showCountdown={toast.showCountdown}
+          countdownText={toast.countdownText}
+          actionButton={toast.actionButton}
+        />
+      )}
     </div>
   );
 };

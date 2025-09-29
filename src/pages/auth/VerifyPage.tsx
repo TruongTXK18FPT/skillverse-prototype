@@ -12,6 +12,7 @@ interface LocationState {
   message?: string;
   fromLogin?: boolean;
   requiresVerification?: boolean;
+  userType?: 'user' | 'mentor' | 'business'; // Add user type
 }
 
 const VerifyPage = () => {
@@ -24,6 +25,7 @@ const VerifyPage = () => {
   const state = location.state as LocationState;
   const email = state?.email || '';
   const fromLogin = state?.fromLogin || false;
+  const userType = state?.userType || 'user'; // Default to 'user' if not specified
   
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
@@ -70,22 +72,32 @@ const VerifyPage = () => {
 
   // Handle OTP input change
   const handleOtpChange = (index: number, value: string) => {
+    // Handle paste - when multiple characters are entered
     if (value.length > 1) {
-      // Handle paste
-      const pastedValue = value.slice(0, 6);
-      const newOtp = [...otp];
-      for (let i = 0; i < pastedValue.length && i < 6; i++) {
-        newOtp[i] = pastedValue[i];
-      }
-      setOtp(newOtp);
+      // Only allow digits for pasted content
+      const cleanValue = value.replace(/\D/g, '');
       
-      // Focus on the next empty input or last input
-      const nextIndex = Math.min(pastedValue.length, 5);
-      const nextInput = document.getElementById(`otp-${nextIndex}`) as HTMLInputElement;
-      nextInput?.focus();
+      if (cleanValue.length > 0) {
+        const newOtp = [...otp];
+        
+        // Fill inputs starting from current index
+        for (let i = 0; i < cleanValue.length && (index + i) < 6; i++) {
+          newOtp[index + i] = cleanValue[i];
+        }
+        
+        setOtp(newOtp);
+        
+        // Focus on the next empty input or last input
+        const focusIndex = Math.min(index + cleanValue.length, 5);
+        setTimeout(() => {
+          const nextInput = document.getElementById(`otp-${focusIndex}`) as HTMLInputElement;
+          nextInput?.focus();
+        }, 0);
+      }
       return;
     }
 
+    // Handle single character input
     if (!/^\d*$/.test(value)) return; // Only allow digits
 
     const newOtp = [...otp];
@@ -94,8 +106,35 @@ const VerifyPage = () => {
 
     // Auto-focus next input
     if (value && index < 5) {
-      const nextInput = document.getElementById(`otp-${index + 1}`) as HTMLInputElement;
-      nextInput?.focus();
+      setTimeout(() => {
+        const nextInput = document.getElementById(`otp-${index + 1}`) as HTMLInputElement;
+        nextInput?.focus();
+      }, 0);
+    }
+  };
+
+  // Handle paste event specifically
+  const handlePaste = (index: number, e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pastedText = e.clipboardData.getData('text');
+    const cleanValue = pastedText.replace(/\D/g, '').slice(0, 6); // Only digits, max 6
+    
+    if (cleanValue.length > 0) {
+      const newOtp = [...otp];
+      
+      // Fill all inputs from the beginning for better UX
+      for (let i = 0; i < 6; i++) {
+        newOtp[i] = i < cleanValue.length ? cleanValue[i] : '';
+      }
+      
+      setOtp(newOtp);
+      
+      // Focus on the next empty input or last filled input
+      const focusIndex = Math.min(cleanValue.length, 5);
+      setTimeout(() => {
+        const targetInput = document.getElementById(`otp-${focusIndex}`) as HTMLInputElement;
+        targetInput?.focus();
+      }, 0);
     }
   };
 
@@ -129,28 +168,54 @@ const VerifyPage = () => {
       
       await verifyEmail({ email, otp: otpString });
       
-      showSuccess(
-        'Xác thực thành công!',
-        'Tài khoản của bạn đã được xác thực. Đang chuyển hướng...',
-        3
-      );
+      // Different success messages based on user type
+      if (userType === 'mentor') {
+        showSuccess(
+          'Xác thực email thành công!',
+          'Đơn đăng ký mentor đã được gửi và đang chờ phê duyệt từ quản trị viên. Bạn sẽ nhận được thông báo qua email khi đơn đăng ký được xem xét.',
+          5
+        );
+      } else if (userType === 'business') {
+        showSuccess(
+          'Xác thực email thành công!',
+          'Đơn đăng ký doanh nghiệp đã được gửi và đang chờ phê duyệt từ quản trị viên. Bạn sẽ nhận được thông báo qua email khi đơn đăng ký được xem xét.',
+          5
+        );
+      } else {
+        // Regular user
+        showSuccess(
+          'Xác thực thành công!',
+          'Tài khoản của bạn đã được xác thực. Đang chuyển hướng...',
+          3
+        );
+      }
       
-      // Redirect based on context
+      // Different redirect logic based on user type
       setTimeout(() => {
-        if (fromLogin) {
+        if (userType === 'mentor' || userType === 'business') {
+          // For mentor and business, redirect to a waiting page or login with special message
+          navigate('/login', { 
+            state: { 
+              message: `Đăng ký ${userType === 'mentor' ? 'mentor' : 'doanh nghiệp'} thành công! Email đã được xác thực. Vui lòng chờ phê duyệt từ quản trị viên. Bạn sẽ nhận được email thông báo khi đơn đăng ký được duyệt.`,
+              userType: userType
+            }
+          });
+        } else if (fromLogin) {
+          // Regular user from login
           navigate('/login', { 
             state: { 
               message: 'Tài khoản đã được xác thực. Vui lòng đăng nhập lại.' 
             }
           });
         } else {
+          // Regular user from registration
           navigate('/login', { 
             state: { 
               message: 'Đăng ký thành công! Tài khoản đã được xác thực. Vui lòng đăng nhập.' 
             }
           });
         }
-      }, 3000);
+      }, userType === 'mentor' || userType === 'business' ? 5000 : 3000); // Longer delay for mentor/business to read the message
       
     } catch (error: unknown) {
       console.error('Email verification error:', error);
@@ -267,6 +332,7 @@ const VerifyPage = () => {
                 value={otp[index] || ''}
                 onChange={(e) => handleOtpChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
+                onPaste={(e) => handlePaste(index, e)}
                 className={`verify-otp-input ${isExpired ? 'expired' : ''}`}
                 maxLength={1}
                 disabled={loading || isExpired}
