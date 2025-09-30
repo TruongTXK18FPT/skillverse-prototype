@@ -1070,7 +1070,7 @@ const CoinWallet: React.FC = () => {
           <div className="header-actions">
             <button 
               onClick={() => setShowNotifications(!showNotifications)}
-              className="notification-btn"
+              className="coin-notification-btn"
             >
               <Bell />
               <span className="notification-badge">3</span>

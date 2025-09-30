@@ -34,7 +34,7 @@ const Footer = () => {
                 An integrated learning and working ecosystem for students and career changers in the digital age.
               </p>
               <div className="social-links">
-                <a href="#" className="social-link hover-float">
+                <a href="https://www.facebook.com/profile.php?id=61581184190711" className="social-link hover-float">
                   <Facebook className="social-icon facebook" />
                 </a>
                 <a href="#" className="social-link hover-float">
