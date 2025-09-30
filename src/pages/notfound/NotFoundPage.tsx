@@ -88,14 +88,14 @@ const NotFoundPage: React.FC = () => {
         </div>
 
         {/* Speech Bubble */}
-        <div className="speech-bubble">
+        <div className="speech-bubble-404">
           <p className="bubble-text">{messages[currentMessageIndex]}</p>
         </div>
 
         {/* Error Message */}
-        <div className="error-message">
-          <h1 className="error-title">Page Not Found!</h1>
-          <p className="error-description">
+        <div className="error-message-404">
+          <h1 className="error-title-404">Page Not Found!</h1>
+          <p className="error-description-404">
             Looks like this page flew away! Even our wise meowl couldn't find what you're looking for. 
             Don't worry though, we'll help you get back on track! 🦉✨
           </p>

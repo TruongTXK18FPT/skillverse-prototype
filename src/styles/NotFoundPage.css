@@ -127,7 +127,7 @@
 }
 
 /* Speech bubble */
-.speech-bubble {
+.speech-bubble-404 {
   position: relative;
   background: #ffffff;
   border-radius: 20px;
@@ -138,7 +138,7 @@
   animation: fadeInUp 0.5s ease;
 }
 
-.speech-bubble::before {
+.speech-bubble-404::before {
   content: '';
   position: absolute;
   top: -10px;
@@ -160,12 +160,12 @@
 }
 
 /* Dark mode speech bubble */
-.not-found-container.dark .speech-bubble {
+.not-found-container.dark .speech-bubble-404 {
   background: #374151;
   border: 2px solid #6b7280;
 }
 
-.not-found-container.dark .speech-bubble::before {
+.not-found-container.dark .speech-bubble-404::before {
   border-bottom-color: #374151;
 }
 
@@ -174,11 +174,14 @@
 }
 
 /* Error message */
-.error-message {
+.error-message-404 {
   margin: 2rem 0;
+  color: red;
+  animation: fadeInUp 0.5s ease;
+  animation-delay: 0.3s;
 }
 
-.error-title {
+.error-title-404 {
   font-size: 2.5rem;
   font-weight: 700;
   color: #ffffff;
@@ -186,7 +189,7 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.error-description {
+.error-description-404 {
   font-size: 1.2rem;
   color: #e5e7eb;
   line-height: 1.6;
@@ -334,7 +337,7 @@
     justify-content: center;
   }
 
-  .speech-bubble {
+  .speech-bubble-404 {
     padding: 0.8rem 1rem;
     margin: 1.5rem auto;
   }
