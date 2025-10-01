@@ -1,13 +1,12 @@
 import axios, { InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 // Determine baseURL based on environment
+
 const baseURL =
-  // Ưu tiên giá trị build-time
   import.meta.env.VITE_BACKEND_URL
-  // Dev fallback
   || (typeof window !== 'undefined' && location.hostname === 'localhost'
       ? 'http://localhost:8080/api'
-      : '/api');
+      : 'https://skillverse.vn/api'); // ép dùng https production
 
 export const axiosInstance = axios.create({
   baseURL,
@@ -15,24 +14,23 @@ export const axiosInstance = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Public endpoints that don't require authentication
+// Public endpoints (❌ bỏ tiền tố /api vì đã có trong baseURL)
 const PUBLIC_ENDPOINTS = [
-  '/api/auth/register',
-  '/api/auth/login',
-  '/api/auth/refresh',
-  '/api/auth/verify',
-  // Note: /api/auth/logout is NOT public - it requires Authorization header
-  '/api/auth/forgot-password',
-  '/api/auth/reset-password',
-  '/api/auth/verify-email',
-  '/api/auth/resend-verification',
-  '/api/auth/resend-otp',
-  '/api/auth/complete-profile',
-  '/api/users/register',
-  '/api/users/verify-email',
-  '/api/users/resend-otp',
-  '/api/mentors/register',
-  '/api/business/register',
+  '/auth/register',
+  '/auth/login',
+  '/auth/refresh',
+  '/auth/verify',
+  '/auth/forgot-password',
+  '/auth/reset-password',
+  '/auth/verify-email',
+  '/auth/resend-verification',
+  '/auth/resend-otp',
+  '/auth/complete-profile',
+  '/users/register',
+  '/users/verify-email',
+  '/users/resend-otp',
+  '/mentors/register',
+  '/business/register',
 ];
 
 // Check if the URL matches any public endpoint
