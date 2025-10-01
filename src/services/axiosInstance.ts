@@ -6,7 +6,7 @@ const baseURL =
   import.meta.env.VITE_BACKEND_URL
   || (typeof window !== 'undefined' && location.hostname === 'localhost'
       ? 'http://localhost:8080/api'
-      : 'https://skillverse.vn/api'); // ép dùng https production
+      : '/api'); // ép dùng https production
 
 export const axiosInstance = axios.create({
   baseURL,
