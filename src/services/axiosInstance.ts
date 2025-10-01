@@ -1,12 +1,18 @@
 import axios, { InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
-// Create axios instance with base configuration
-const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080',
+// Determine baseURL based on environment
+const baseURL =
+  // Ưu tiên giá trị build-time
+  import.meta.env.VITE_BACKEND_URL
+  // Dev fallback
+  || (typeof window !== 'undefined' && location.hostname === 'localhost'
+      ? 'http://localhost:8080/api'
+      : '/api');
+
+export const axiosInstance = axios.create({
+  baseURL,
   timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
 });
 
 // Public endpoints that don't require authentication
