@@ -2,16 +2,33 @@ import axios, { InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'ax
 
 // Determine baseURL based on environment
 
-const baseURL =
-  import.meta.env.VITE_BACKEND_URL
-  || (typeof window !== 'undefined' && location.hostname === 'localhost'
-      ? 'http://localhost:8080/api'
-      : '/api'); // ép dùng https production
+const isLocal = typeof window !== 'undefined' && location.hostname === 'localhost';
+const RAW_BASE =
+  import.meta.env.VITE_BACKEND_URL ??
+  (isLocal ? 'http://localhost:8080/api' : '/api');
+
+// Bỏ dấu "/" cuối để tránh "//"
+const baseURL = RAW_BASE.replace(/\/+$/, '');
 
 export const axiosInstance = axios.create({
   baseURL,
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
+});
+
+// Nếu baseURL đã kết thúc bằng "/api" mà URL lại bắt đầu bằng "/api", cắt bớt một cái
+axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const baseEndsWithApi = /\/api$/i.test(baseURL);
+  const url = config.url || '';
+
+  if (baseEndsWithApi && url.startsWith('/api/')) {
+    config.url = url.replace(/^\/api/, ''); // "/api/auth" -> "/auth"
+  }
+  // Chống "//" (trừ "http://")
+  if (config.url) {
+    config.url = config.url.replace(/([^:]\/)\/+/g, '$1');
+  }
+  return config;
 });
 
 // Public endpoints (❌ bỏ tiền tố /api vì đã có trong baseURL)
