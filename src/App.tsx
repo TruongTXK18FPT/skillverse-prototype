@@ -21,6 +21,7 @@ import MentorRegisterPage from './pages/auth/MentorRegisterPage';
 import VerifyPage from './pages/auth/VerifyPage';
 import ForgotPasswordPage from './pages/login/ForgotPasswordPage';
 import PaymentPage from './pages/payment/PaymentPage';
+import Transactional from './pages/payment/Transactional';
 import PremiumPage from './pages/payment/PremiumPage';
 import ManagerPage from './pages/main/ManagerPage';
 import CoinWallet from './pages/main/CoinWallet';
@@ -72,6 +73,7 @@ const App = () => {
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/payment" element={<PaymentPage />} />
+                <Route path="/payment/transactional" element={<Transactional />} />
                 <Route path="/premium" element={<PremiumPage />} />
                 <Route path="/payment/:type/:id" element={<PaymentPage />} />
                 <Route path="/manager" element={<ManagerPage />} />

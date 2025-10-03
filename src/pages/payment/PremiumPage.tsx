@@ -1,20 +1,52 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { 
   Crown, Check, Star, Bot, GraduationCap, Users, 
   Calendar, Briefcase, Coins, Zap, ArrowRight
 } from 'lucide-react';
 import '../../styles/PremiumPage.css';
 import MeowGuide from '../../components/MeowlGuide';
+import { premiumService } from '../../services/premiumService';
+import { paymentService } from '../../services/paymentService';
+import { PremiumPlan, CreateSubscriptionRequest, UserSubscriptionResponse } from '../../data/premiumDTOs';
+import { CreatePaymentRequest } from '../../data/paymentDTOs';
 
 const PremiumPage = () => {
-  const navigate = useNavigate();
-  const [billingCycle, setBillingCycle] = useState('monthly');
+  const [premiumPlans, setPremiumPlans] = useState<PremiumPlan[]>([]);
+  const [processing, setProcessing] = useState(false);
+  const [currentSub, setCurrentSub] = useState<UserSubscriptionResponse | null>(null);
+  const [hasActive, setHasActive] = useState<boolean>(false);
 
   
-  // Mock user data - in real app, this would come from auth context
-  const [userEmail] = useState('student@university.edu.vn'); // Mock student email
-  const isStudentEligible = userEmail && (userEmail.includes('.edu') || userEmail.includes('@university') || userEmail.includes('@student'));
+  // TODO: Get user email from auth context
+  const [userEmail] = useState('student@university.edu.vn'); // Placeholder - replace with actual auth context
+  const isStudentEligible = Boolean(userEmail && (userEmail.includes('.edu') || userEmail.includes('@university') || userEmail.includes('@student')));
+
+  useEffect(() => {
+    loadPremiumPlans();
+    premiumService.checkPremiumStatus()
+      .then((active) => {
+        setHasActive(active);
+        if (active) {
+          return premiumService.getCurrentSubscription()
+            .then(setCurrentSub)
+            .catch(() => setCurrentSub(null));
+        }
+        return Promise.resolve();
+      })
+      .catch(() => {
+        setHasActive(false);
+        setCurrentSub(null);
+      });
+  }, []);
+
+  const loadPremiumPlans = async () => {
+    try {
+      const plans = await premiumService.getPremiumPlans();
+      setPremiumPlans(plans);
+    } catch (error) {
+      console.error('Failed to load premium plans:', error);
+    }
+  };
 
   const premiumFeatures = [
     {
@@ -50,62 +82,20 @@ const PremiumPage = () => {
     }
   ];
 
-  const pricingPlans = [
-    {
-      id: 'basic',
-      name: 'Premium Basic',
-      description: 'Bắt đầu với AI & khóa học',
-      monthlyPrice: 79000,
-      yearlyPrice: 799000,
-      features: [
-        'AI Career Coach cơ bản',
-        'Truy cập 50+ khóa học Premium',
-        'Hỗ trợ chat 24/7',
-        'Coin Wallet cơ bản',
-        'Huy hiệu Premium Basic'
-      ],
-      popular: false,
-      color: 'basic'
-    },
-    {
-      id: 'plus',
-      name: 'Premium Plus',
-      description: 'Trải nghiệm đầy đủ SkillVerse',
-      monthlyPrice: 249000,
-      yearlyPrice: 2490000,
-      features: [
-        'Tất cả tính năng Basic',
-        'AI Career Coach Pro không giới hạn',
-        'Mentor 1:1 không giới hạn',
-        'Tất cả seminar/webinar miễn phí',
-        'Ưu tiên việc làm & showcase',
-        'Coin Wallet Pro (x3 điểm)',
-        'Huy hiệu Premium Plus',
-        'Portfolio nổi bật'
-      ],
-      popular: true,
-      color: 'plus'
-    },
-    ...(isStudentEligible ? [{
-      id: 'student',
-      name: 'Student Pack',
-      description: 'Dành riêng cho sinh viên với email .edu',
-      monthlyPrice: 20000,
-      yearlyPrice: 200000,
-      features: [
-        'AI Career Coach cơ bản',
-        'Truy cập 30+ khóa học Premium',
-        'Mentor 1:1 (2 lần/tháng)',
-        'Seminar/webinar cơ bản',
-        'Coin Wallet sinh viên (x2 điểm)',
-        'Huy hiệu Student Member',
-        'Hỗ trợ career guidance'
-      ],
-      popular: false,
-      color: 'student',
-      studentOnly: true
-    }] : [])
-  ];
+  // Convert backend plans to display format
+  const getDisplayPlans = () => {
+    return premiumPlans.map(plan => ({
+      id: plan.name,
+      name: plan.displayName,
+      description: plan.description,
+      price: parseFloat(plan.price),
+      features: plan.features ? JSON.parse(plan.features) as string[] : [],
+      popular: plan.planType === 'PREMIUM_PLUS',
+      color: plan.planType.toLowerCase().replace('_', '-'),
+      planType: plan.planType,
+      studentOnly: plan.planType === 'STUDENT_PACK'
+    }));
+  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', {
@@ -114,32 +104,70 @@ const PremiumPage = () => {
     }).format(price);
   };
 
-  const handleUpgrade = (planId: string) => {
-    const selectedPlanData = pricingPlans.find(plan => plan.id === planId);
-    if (!selectedPlanData) return;
-
-    const price = billingCycle === 'monthly' ? selectedPlanData.monthlyPrice : selectedPlanData.yearlyPrice;
-    const originalPrice = billingCycle === 'monthly' ? selectedPlanData.monthlyPrice : selectedPlanData.yearlyPrice;
+  const handleUpgrade = async (planId: string) => {
+    if (processing) return;
+    if (hasActive) return; // hard guard when user already has active pack
     
-    // Navigate to payment page with plan data
-    navigate('/payment', {
-      state: {
-        type: 'premium',
-        title: selectedPlanData.name,
-        description: selectedPlanData.description,
-        price: price,
-        originalPrice: originalPrice,
-        billingCycle: billingCycle,
-        planId: planId,
-        features: selectedPlanData.features,
-        isStudent: planId === 'student'
+    try {
+      setProcessing(true);
+      
+      // Find the selected plan
+      const selectedPlan = premiumPlans.find(plan => plan.name === planId);
+      if (!selectedPlan) {
+        console.error('Plan not found:', planId);
+        return;
       }
-    });
+
+      // Create subscription first
+      const successUrl = `${window.location.origin}/payment/transactional`;
+      const cancelUrl = `${window.location.origin}/payment/transactional?cancel=1`;
+      
+      const subscriptionRequest: CreateSubscriptionRequest = {
+        planId: selectedPlan.id,
+        paymentMethod: 'PAYOS',
+        applyStudentDiscount: isStudentEligible,
+        autoRenew: false,
+        successUrl,
+        cancelUrl
+      };
+
+      const subscription = await premiumService.createSubscription(subscriptionRequest);
+
+      // Create payment
+      const metadata = JSON.stringify({
+        subscriptionId: subscription.id,
+        planId: selectedPlan.id
+      });
+
+      const paymentRequest: CreatePaymentRequest = {
+        amount: selectedPlan.price,
+        currency: 'VND',
+        type: 'PREMIUM_SUBSCRIPTION',
+        paymentMethod: 'PAYOS',
+        description: selectedPlan.displayName,
+        planId: selectedPlan.id,
+        metadata,
+        successUrl,
+        cancelUrl
+      };
+
+      const payment = await paymentService.createPayment(paymentRequest);
+
+      // Redirect to PayOS checkout
+      if (payment.checkoutUrl) {
+        window.location.href = payment.checkoutUrl;
+      } else {
+        console.error('No checkout URL received from payment service');
+      }
+
+    } catch (error) {
+      console.error('Failed to create payment:', error);
+      // Handle error - show toast or error message
+    } finally {
+      setProcessing(false);
+    }
   };
 
-  const getDiscountPercent = (monthly: number, yearly: number) => {
-    return Math.round((1 - yearly / (monthly * 12)) * 100);
-  };
     
 
   return (
@@ -230,21 +258,6 @@ const PremiumPage = () => {
           </div>
 
           {/* Billing Toggle */}
-          <div className="billing-toggle">
-            <button 
-              className={`billing-option ${billingCycle === 'monthly' ? 'active' : ''}`}
-              onClick={() => setBillingCycle('monthly')}
-            >
-              Theo tháng
-            </button>
-            <button 
-              className={`billing-option ${billingCycle === 'yearly' ? 'active' : ''}`}
-              onClick={() => setBillingCycle('yearly')}
-            >
-              Theo năm{' '}
-              <span className="billing-badge">Tiết kiệm 17%</span>
-            </button>
-          </div>
 
           {/* Student Eligibility Notice */}
           {isStudentEligible && (
@@ -260,7 +273,7 @@ const PremiumPage = () => {
           )}
 
           <div className="pricing-grid">
-            {pricingPlans.map((plan) => (
+            {getDisplayPlans().map((plan) => (
               <div 
                 key={plan.id}
                 className={`pricing-card pricing-card--${plan.color} ${plan.popular ? 'pricing-card--popular' : ''}`}
@@ -280,17 +293,12 @@ const PremiumPage = () => {
                 <div className="pricing-card__price">
                   <div className="price-display">
                     <span className="price-amount">
-                      {formatPrice(billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice)}
+                      {formatPrice(plan.price)}
                     </span>
                     <span className="price-period">
-                      /{billingCycle === 'monthly' ? 'tháng' : 'năm'}
+                      /tháng
                     </span>
-                    {billingCycle === 'yearly' && (
-                      <div className="price-discount">
-                        Tiết kiệm {getDiscountPercent(plan.monthlyPrice, plan.yearlyPrice)}%
-                      </div>
-                    )}
-                    {plan.id === 'student' && (
+                    {plan.studentOnly && (
                       <div className="student-badge">
                         🎓 Dành cho sinh viên
                       </div>
@@ -299,7 +307,7 @@ const PremiumPage = () => {
                 </div>
 
                 <ul className="pricing-card__features">
-                  {plan.features.map((feature, featureIndex) => (
+                  {plan.features.map((feature: string, featureIndex: number) => (
                     <li key={`${plan.id}-feature-${featureIndex}`} className="feature-item">
                       <Check size={16} className="feature-check" />
                       <span>{feature}</span>
@@ -307,13 +315,31 @@ const PremiumPage = () => {
                   ))}
                 </ul>
 
-                <button 
-                  className={`pricing-card__button ${plan.popular ? 'button--primary' : 'button--outline'}`}
-                  onClick={() => handleUpgrade(plan.id)}
-                >
-                  {plan.id === 'student' ? 'Đăng ký Student Pack' : 'Nâng cấp'}
-                  <ArrowRight size={16} />
-                </button>
+                {hasActive ? (
+                  <button
+                    className={`pricing-card__button button--disabled`}
+                    disabled
+                    title="Bạn đã có gói đang hoạt động"
+                  >
+                    Đang hoạt động đến{' '}
+                    {currentSub ? new Date(currentSub.endDate).toLocaleDateString('vi-VN') : ''}
+                  </button>
+                ) : (
+                  <button 
+                    className={`pricing-card__button ${plan.popular ? 'button--primary' : 'button--outline'}`}
+                    onClick={() => handleUpgrade(plan.id)}
+                  >
+                    {plan.id === 'student' ? 'Đăng ký Student Pack' : 'Nâng cấp'}
+                    <ArrowRight size={16} />
+                  </button>
+                )}
+
+                {hasActive && currentSub && currentSub.status === 'ACTIVE' && (
+                  <div className="active-note">
+                    Bạn đã có gói đang hoạt động đến{' '}
+                    <strong>{new Date(currentSub.endDate).toLocaleDateString('vi-VN')}</strong>
+                  </div>
+                )}
               </div>
             ))}
           </div>

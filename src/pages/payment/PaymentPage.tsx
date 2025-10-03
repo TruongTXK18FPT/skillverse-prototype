@@ -23,29 +23,18 @@ const PaymentPage = () => {
   
   // Get payment details from navigation state
   const paymentData = location.state ?? {
-    type: 'course',
-    title: 'React.js Advanced Course',
-    price: 690000,
-    instructor: 'John Smith'
+    type: 'premium',
+    title: 'Premium Subscription',
+    price: 79000,
+    description: 'Premium Basic Plan'
   };
 
   const paymentMethods: PaymentMethod[] = [
-    {
-      id: 'momo',
-      name: 'MoMo',
-      logo: 'https://pay2s.vn/blog/wp-content/uploads/2024/11/momo_icon_circle_pinkbg_RGB.png',
-      description: 'Thanh toán qua ví điện tử MoMo'
-    },
     {
       id: 'payos',
       name: 'PayOS',
       logo: 'https://payos.vn/docs/img/logo.svg',
       description: 'Thanh toán qua PayOS'
-    },
-    {
-      id: 'vnpay',
-      name: 'VNPay',
-      logo: 'https://vnpay.vn/s1/statics.vnpay.vn/2023/9/06ncktiwd6dc1694418196384.png',      description: 'Thanh toán qua VNPay'
     }
   ];
   const handlePayment = async () => {
@@ -65,7 +54,7 @@ const PaymentPage = () => {
         ? "Trải nghiệm Premium ngay"
         : "Về trang chủ ngay";
         
-      const redirectPath = paymentData.type === 'premium' ? '/gamification' : '/';
+      const redirectPath = '/payment/transactional?ref=DEMO_REF';
       
       showSuccess(
         "Thanh toán thành công!",
