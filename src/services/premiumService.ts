@@ -1,4 +1,5 @@
 import api from './axiosInstance';
+import axios from 'axios';
 import { PremiumPlan, CreateSubscriptionRequest, UserSubscriptionResponse } from '../data/premiumDTOs';
 
 export const premiumService = {
@@ -21,8 +22,8 @@ export const premiumService = {
     try {
       const { data } = await api.get('/api/premium/subscription/current');
       return data;
-    } catch (error: any) {
-      if (error.response?.status === 404) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
         return null;
       }
       throw error;

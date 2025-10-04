@@ -1,4 +1,5 @@
 import api from './axiosInstance';
+import axios from 'axios';
 import { CreatePaymentRequest, CreatePaymentResponse, PaymentTransactionResponse } from '../data/paymentDTOs';
 
 export const paymentService = {
@@ -11,8 +12,8 @@ export const paymentService = {
     try {
       const { data } = await api.get(`/api/payments/transaction/${internalReference}`);
       return data;
-    } catch (error: any) {
-      if (error.response?.status === 404) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
         return null;
       }
       throw error;
@@ -23,8 +24,8 @@ export const paymentService = {
     try {
       const { data } = await api.get(`/api/payments/transaction/id/${paymentId}`);
       return data;
-    } catch (error: any) {
-      if (error.response?.status === 404) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
         return null;
       }
       throw error;

@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle, XCircle, Clock, ArrowLeft } from 'lucide-react';
 import { paymentService } from '../../services/paymentService';
-import { premiumService } from '../../services/premiumService';
 import { PaymentTransactionResponse } from '../../data/paymentDTOs';
 import '../../styles/Transactional.css';
 
