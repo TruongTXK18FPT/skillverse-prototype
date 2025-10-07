@@ -1,0 +1,110 @@
+import { memo } from 'react';
+import { Handle, Position, NodeProps } from 'reactflow';
+import { FlowNodeData } from '../../types/Roadmap';
+import { Clock, CheckCircle, PlayCircle, Star, ChevronRight } from 'lucide-react';
+
+/**
+ * Custom React Flow node for roadmap quests
+ */
+const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
+  const { node, progress, onComplete } = data;
+  const isCompleted = progress?.status === 'COMPLETED';
+  const isInProgress = progress?.status === 'IN_PROGRESS';
+  const isMain = node.type === 'MAIN';
+
+  const formatTime = (minutes: number): string => {
+    if (minutes < 60) return `${minutes}m`;
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+  };
+
+  const handleCheckboxClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent node selection
+    e.preventDefault(); // Prevent any default behavior
+    if (onComplete) {
+      onComplete(node.id, !isCompleted);
+    }
+  };
+
+  return (
+    <div
+      className={`sv-roadmap-node ${isMain ? 'sv-roadmap-node--main' : 'sv-roadmap-node--side'} ${
+        isCompleted ? 'sv-roadmap-node--completed' : ''
+      } ${isInProgress ? 'sv-roadmap-node--in-progress' : ''}`}
+    >
+      {/* Handles for connections */}
+      <Handle
+        type="target"
+        position={Position.Top}
+        className="sv-roadmap-node__handle sv-roadmap-node__handle--target"
+      />
+
+      {/* Node Header */}
+      <div className="sv-roadmap-node__header">
+        <div className="sv-roadmap-node__badge">
+          {isMain ? (
+            <Star className="sv-roadmap-node__badge-icon" size={14} />
+          ) : (
+            <ChevronRight className="sv-roadmap-node__badge-icon" size={14} />
+          )}
+          <span className="sv-roadmap-node__badge-text">{isMain ? 'Main Quest' : 'Side Quest'}</span>
+        </div>
+        
+        {/* Completion Checkbox */}
+        <button
+          className={`sv-roadmap-node__checkbox ${isCompleted ? 'sv-roadmap-node__checkbox--checked' : ''}`}
+          onClick={handleCheckboxClick}
+          title={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
+        >
+          {isCompleted && <CheckCircle size={20} />}
+        </button>
+        
+        {isInProgress && (
+          <PlayCircle className="sv-roadmap-node__status-icon sv-roadmap-node__status-icon--progress" size={20} />
+        )}
+      </div>
+
+      {/* Node Content */}
+      <div className="sv-roadmap-node__content">
+        <h3 className="sv-roadmap-node__title" title={node.title}>{node.title}</h3>
+        {node.description && (
+          <p 
+            className="sv-roadmap-node__description" 
+            title={node.description}
+          >
+            {node.description}
+          </p>
+        )}
+      </div>
+
+      {/* Node Footer */}
+      <div className="sv-roadmap-node__footer">
+        <div className="sv-roadmap-node__time">
+          <Clock size={14} />
+          <span>{formatTime(node.estimatedTimeMinutes)}</span>
+        </div>
+        
+        {progress && progress.progress > 0 && !isCompleted && (
+          <div className="sv-roadmap-node__progress-bar">
+            <div
+              className="sv-roadmap-node__progress-fill"
+              style={{ width: `${progress.progress}%` }}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Handles for connections */}
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        className="sv-roadmap-node__handle sv-roadmap-node__handle--source"
+      />
+    </div>
+  );
+});
+
+RoadmapQuestNode.displayName = 'RoadmapQuestNode';
+
+export default RoadmapQuestNode;

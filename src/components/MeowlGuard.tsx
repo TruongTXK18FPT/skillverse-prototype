@@ -104,7 +104,6 @@ export function guardModelOutput(raw: string): boolean {
   if (OUT_OF_SCOPE_PATTERNS.some((rx) => rx.test(a))) return false;
   return true;
 }
-
 // fallback đa ngôn ngữ
 export const FALLBACKS = {
   injection: {

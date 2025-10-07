@@ -12,6 +12,7 @@ import MentorshipPage from './pages/navbar/MentorshipPage';
 import CommunityPage from './pages/navbar/CommunityPage';
 import JobsPage from './pages/navbar/JobsPage';
 import ChatbotPage from './pages/navbar/ChatbotPage';
+import AiChatbotPage from './pages/navbar/AiChatbotPage';
 import Gamification from './pages/navbar/Gamification';
 import PortfolioPage from './pages/navbar/PortfolioPage';
 import CVPage from './pages/navbar/CV';
@@ -37,7 +38,7 @@ import SeminarPage from './pages/navbar/SeminarPage';
 import BusinessPage from './pages/main/BusinessPage';
 import MentorPage from './pages/main/MentorPage';
 import AdminPage from './pages/main/AdminPage';
-import RoadmapPage from './pages/roadmap/RoadmapPage';
+import AiRoadmapPage from './pages/roadmap/AiRoadmapPage';
 import './styles/App.css';
 import ScrollToTop from './components/scroll/ScrollToTop';
 import CourseDetailPage from './pages/navbar/CourseDetailPage';
@@ -57,12 +58,13 @@ const App = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/courses" element={<CoursesPage />} />
-                <Route path="/roadmap" element={<RoadmapPage />} />
+                <Route path="/roadmap" element={<AiRoadmapPage />} />
                 <Route path="/mentorship" element={<MentorshipPage />} />
                 <Route path="/community" element={<CommunityPage />} />
                 <Route path="/community/create" element={<BlogForm />} />
                 <Route path="/jobs" element={<JobsPage />} />
-                <Route path="/chatbot" element={<ChatbotPage />} />
+                <Route path="/chatbot" element={<AiChatbotPage />} />
+                <Route path="/chatbot-old" element={<ChatbotPage />} />
                 <Route path="/gamification" element={<Gamification />} />
                 <Route path="/portfolio" element={<PortfolioPage />} />
                 <Route path="/cv" element={<CVPage />} />

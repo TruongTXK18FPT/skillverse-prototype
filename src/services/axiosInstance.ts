@@ -17,7 +17,7 @@ const baseURL = RAW_BASE.replace(/\/+$/, '');
 
 export const axiosInstance = axios.create({
   baseURL,
-  timeout: 10000,
+  timeout: 60000, // 60 seconds for AI requests (roadmap generation, chatbot)
   headers: { 'Content-Type': 'application/json' },
 });
 
