@@ -77,7 +77,7 @@ export const updateCourse = async (
   try {
     const formData = new FormData();
     formData.append('actorId', actorId.toString());
-    formData.append('title', courseData.title);
+    if (courseData.title) formData.append('title', courseData.title);
     if (courseData.description) formData.append('description', courseData.description);
     if (courseData.level) formData.append('level', courseData.level);
     if (thumbnailFile) formData.append('thumbnailFile', thumbnailFile);

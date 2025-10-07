@@ -21,6 +21,7 @@ export interface CourseCard {
   thumbnail?: CourseCardThumb;
   lessons: any[];
   modules?: any[]; // Add modules array to display module count
+  moduleCount?: number; // Add moduleCount field
   enrollmentCount: number;
   // commercial fields
   price?: number;
@@ -136,7 +137,7 @@ const CourseManagerTab: React.FC<Props> = ({ courses, loading, error, onCreateCl
                     </div>
                     <div className="cm-stat">
                       <Layers className="w-4 h-4" />
-                      <span>{course.lessonCount || course.lessons.length} chương</span>
+                      <span>{course.moduleCount || course.lessons.length} chương</span>
                     </div>
                     {(course.price !== undefined && course.price !== null) && (
                       <div className="cm-stat">
