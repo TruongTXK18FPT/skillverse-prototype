@@ -15,6 +15,7 @@ const PremiumPage = () => {
   const [processing, setProcessing] = useState(false);
   const [currentSub, setCurrentSub] = useState<UserSubscriptionResponse | null>(null);
   const [hasActive, setHasActive] = useState<boolean>(false);
+  const [hasActivePaid, setHasActivePaid] = useState<boolean>(false);
 
   
   // TODO: Get user email from auth context
@@ -106,7 +107,11 @@ const PremiumPage = () => {
 
   const handleUpgrade = async (planId: string) => {
     if (processing) return;
-    if (hasActive) return; // hard guard when user already has active pack
+    // Allow upgrade if current is FREE_TIER; block only if current is paid
+    if (hasActive && currentSub && currentSub.status === 'ACTIVE') {
+      const isFree = premiumPlans.find(p => p.name === currentSub.planName || p.id === currentSub.planId)?.planType === 'FREE_TIER';
+      if (!isFree) return;
+    }
     
     try {
       setProcessing(true);
@@ -315,23 +320,25 @@ const PremiumPage = () => {
                   ))}
                 </ul>
 
-                {hasActive ? (
-                  <button
-                    className={`pricing-card__button button--disabled`}
-                    disabled
-                    title="Bạn đã có gói đang hoạt động"
-                  >
-                    Đang hoạt động đến{' '}
-                    {currentSub ? new Date(currentSub.endDate).toLocaleDateString('vi-VN') : ''}
-                  </button>
-                ) : (
-                  <button 
-                    className={`pricing-card__button ${plan.popular ? 'button--primary' : 'button--outline'}`}
-                    onClick={() => handleUpgrade(plan.id)}
-                  >
-                    {plan.id === 'student' ? 'Đăng ký Student Pack' : 'Nâng cấp'}
-                    <ArrowRight size={16} />
-                  </button>
+                {plan.planType !== 'FREE_TIER' && (
+                  hasActive ? (
+                    <button
+                      className={`pricing-card__button button--disabled`}
+                      disabled
+                      title="Bạn đã có gói đang hoạt động"
+                    >
+                      Đang hoạt động đến{' '}
+                      {currentSub ? new Date(currentSub.endDate).toLocaleDateString('vi-VN') : ''}
+                    </button>
+                  ) : (
+                    <button 
+                      className={`pricing-card__button ${plan.popular ? 'button--primary' : 'button--outline'}`}
+                      onClick={() => handleUpgrade(plan.id)}
+                    >
+                      {plan.id === 'student' ? 'Đăng ký Student Pack' : 'Nâng cấp'}
+                      <ArrowRight size={16} />
+                    </button>
+                  )
                 )}
 
                 {hasActive && currentSub && currentSub.status === 'ACTIVE' && (

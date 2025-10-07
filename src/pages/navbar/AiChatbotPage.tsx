@@ -42,7 +42,7 @@ Mình có thể giúp bạn:
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { showError } = useToast();
+  const { showError, showSuccess } = useToast();
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -233,6 +233,15 @@ Mình có thể giúp bạn:
     setIsLoading(true);
 
     try {
+      // Frontend quick validations to avoid wasting tokens
+      const lower = userMessage.content.toLowerCase();
+      if (/ielts\s*(?:score|band)?\s*([0-9]+(?:\.[0-9])?)/i.test(lower)) {
+        const m = /ielts\s*(?:score|band)?\s*([0-9]+(?:\.[0-9])?)/i.exec(lower);
+        const score = m ? parseFloat(m[1]) : 0;
+        if (score > 9.0) {
+          throw new Error('Điểm IELTS tối đa là 9.0. Vui lòng nhập mục tiêu hợp lệ.');
+        }
+      }
       const response = await aiChatbotService.sendMessage({
         // ép AI trả lời bằng tiếng Việt bằng cách thêm hướng dẫn ngắn
         message: `Trả lời bằng tiếng Việt rõ ràng, ngắn gọn. Câu hỏi: ${userMessage.content}`,
@@ -253,13 +262,13 @@ Mình có thể giúp bạn:
 
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
-      showError('Error', (error as Error).message);
+      showError('Lỗi', (error as Error).message);
       
       // Add error message to chat
       const errorMessage: UIMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: 'Xin lỗi, đã xảy ra lỗi. Vui lòng thử lại sau. Nếu vẫn không được, hãy tải lại trang.',
+        content: 'Xin lỗi, có lỗi xảy ra. Vui lòng nhập mục tiêu hợp lệ (ví dụ: "IELTS 7.0 trong 6 tháng", "Học React căn bản").',
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);

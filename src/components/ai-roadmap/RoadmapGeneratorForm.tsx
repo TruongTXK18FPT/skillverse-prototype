@@ -20,23 +20,56 @@ const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGenerato
 
   const [errors, setErrors] = useState<Partial<Record<keyof GenerateRoadmapRequest, string>>>({});
 
+  const PROFANITY_WORDS = [
+    'dm','ditme','dmm','fuck','fuckyou','cmm','cc','vl','cl','địt','đcm','fuck you'
+  ];
+
+  const isProfane = (text: string) => {
+    const lower = text.toLowerCase();
+    return PROFANITY_WORDS.some(w => lower.includes(w));
+  };
+
+  const containsInvalidIelts = (text: string) => {
+    const m = /ielts\s*(?:score|band)?\s*([0-9]+(?:\.[0-9])?)/i.exec(text);
+    if (!m) return false;
+    const score = parseFloat(m[1]);
+    return !Number.isNaN(score) && score > 9.0;
+  };
+
+  const looksLikeLearningGoal = (text: string) => {
+    const t = text.toLowerCase().trim();
+    const letters = t.split('').filter(c => /[a-zA-Z\p{L}]/u.test(c)).length;
+    if (letters < 5) return false;
+    const keywords = [
+      'học','hoc','trở thành','lap trinh','lập trình','tiếng anh','tieng anh','ielts','toeic','python','java','spring','frontend','backend','data','khoa học','machine','ai','react','node','docker','devops',
+      'learn','study','become','improve','practice','english','roadmap'
+    ];
+    return keywords.some(k => t.includes(k));
+  };
+
   const validate = (): boolean => {
     const newErrors: Partial<Record<keyof GenerateRoadmapRequest, string>> = {};
 
     if (!formData.goal || formData.goal.trim().length < 5) {
-      newErrors.goal = 'Goal must be at least 5 characters';
+      newErrors.goal = 'Mục tiêu phải có tối thiểu 5 ký tự';
+    } else if (isProfane(formData.goal)) {
+      newErrors.goal = 'Mục tiêu chứa từ ngữ không phù hợp';
+    } else if (containsInvalidIelts(formData.goal)) {
+      newErrors.goal = 'Điểm IELTS tối đa là 9.0. Vui lòng nhập mục tiêu hợp lệ';
+    } else if (!looksLikeLearningGoal(formData.goal)) {
+      newErrors.goal = "Mục tiêu không giống mục tiêu học tập. Ví dụ: 'Học Spring Boot', 'Trở thành Frontend Developer', 'IELTS 7.0 trong 3 tháng'";
     }
 
     if (!formData.duration) {
-      newErrors.duration = 'Duration is required';
+      newErrors.duration = 'Vui lòng chọn thời lượng';
     }
 
     if (!formData.experience) {
-      newErrors.experience = 'Experience level is required';
+      newErrors.experience = 'Vui lòng chọn cấp độ kinh nghiệm';
     }
 
     if (!formData.style) {
-      newErrors.style = 'Learning style is required';
+      newErrors.style = 'Vui lòng chọn phong cách học';
     }
 
     setErrors(newErrors);
@@ -63,9 +96,9 @@ const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGenerato
     <form onSubmit={handleSubmit} className="sv-roadmap-generator-form">
       <div className="sv-roadmap-generator-form__header">
         <Sparkles className="sv-roadmap-generator-form__icon" />
-        <h2 className="sv-roadmap-generator-form__title">Generate AI Learning Roadmap</h2>
+        <h2 className="sv-roadmap-generator-form__title">Tạo lộ trình học bằng AI</h2>
         <p className="sv-roadmap-generator-form__subtitle">
-          Create a personalized learning path powered by AI
+          Tạo lộ trình học cá nhân hóa, rõ ràng từng bước
         </p>
       </div>
 
@@ -73,13 +106,13 @@ const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGenerato
         {/* Goal */}
         <div className="sv-form-group">
           <label htmlFor="goal" className="sv-form-label">
-            Learning Goal *
+            Mục tiêu học tập *
           </label>
           <input
             id="goal"
             type="text"
             className={`sv-form-input ${errors.goal ? 'sv-form-input--error' : ''}`}
-            placeholder="e.g., Learn Spring Boot, Become a Data Scientist, Master React"
+            placeholder="Ví dụ: Học Spring Boot, Trở thành Data Scientist, Thành thạo React"
             value={formData.goal}
             onChange={(e) => handleChange('goal', e.target.value)}
             disabled={isLoading}
@@ -90,7 +123,7 @@ const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGenerato
         {/* Duration */}
         <div className="sv-form-group">
           <label htmlFor="duration" className="sv-form-label">
-            Duration *
+            Thời lượng *
           </label>
           <select
             id="duration"
@@ -99,12 +132,12 @@ const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGenerato
             onChange={(e) => handleChange('duration', e.target.value)}
             disabled={isLoading}
           >
-            <option value="2 weeks">2 weeks</option>
-            <option value="1 month">1 month</option>
-            <option value="2 months">2 months</option>
-            <option value="3 months">3 months</option>
-            <option value="6 months">6 months</option>
-            <option value="1 year">1 year</option>
+            <option value="2 weeks">2 tuần</option>
+            <option value="1 month">1 tháng</option>
+            <option value="2 months">2 tháng</option>
+            <option value="3 months">3 tháng</option>
+            <option value="6 months">6 tháng</option>
+            <option value="1 year">1 năm</option>
           </select>
           {errors.duration && <span className="sv-form-error">{errors.duration}</span>}
         </div>
@@ -112,7 +145,7 @@ const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGenerato
         {/* Experience */}
         <div className="sv-form-group">
           <label htmlFor="experience" className="sv-form-label">
-            Experience Level *
+            Cấp độ kinh nghiệm *
           </label>
           <select
             id="experience"
@@ -121,9 +154,9 @@ const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGenerato
             onChange={(e) => handleChange('experience', e.target.value)}
             disabled={isLoading}
           >
-            <option value="beginner">Beginner - Just starting out</option>
-            <option value="intermediate">Intermediate - Some experience</option>
-            <option value="advanced">Advanced - Expert level</option>
+            <option value="beginner">Mới bắt đầu</option>
+            <option value="intermediate">Trung cấp - Có một chút kinh nghiệm</option>
+            <option value="advanced">Nâng cao - Thành thạo</option>
           </select>
           {errors.experience && <span className="sv-form-error">{errors.experience}</span>}
         </div>
@@ -131,7 +164,7 @@ const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGenerato
         {/* Style */}
         <div className="sv-form-group">
           <label htmlFor="style" className="sv-form-label">
-            Learning Style *
+            Phong cách học *
           </label>
           <select
             id="style"
@@ -140,10 +173,10 @@ const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGenerato
             onChange={(e) => handleChange('style', e.target.value)}
             disabled={isLoading}
           >
-            <option value="project-based">Project-Based - Learn by building</option>
-            <option value="theoretical">Theoretical - Deep concepts</option>
-            <option value="video-based">Video-Based - Visual learning</option>
-            <option value="hands-on">Hands-On - Interactive practice</option>
+            <option value="project-based">Theo dự án - Học bằng cách làm</option>
+            <option value="theoretical">Lý thuyết - Nắm vững khái niệm</option>
+            <option value="video-based">Video - Học qua hình ảnh</option>
+            <option value="hands-on">Thực hành - Tương tác nhiều</option>
           </select>
           {errors.style && <span className="sv-form-error">{errors.style}</span>}
         </div>
@@ -157,12 +190,12 @@ const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGenerato
         {isLoading ? (
           <>
             <Loader className="sv-roadmap-generator-form__spinner" />
-            Generating...
+            Đang tạo...
           </>
         ) : (
           <>
             <Sparkles size={20} />
-            Generate Roadmap
+            Tạo lộ trình
           </>
         )}
       </button>

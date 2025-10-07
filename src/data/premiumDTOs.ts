@@ -6,7 +6,7 @@ export interface PremiumPlan {
   durationMonths: number;
   price: string;
   currency: 'VND' | 'USD';
-  planType: 'PREMIUM_BASIC' | 'PREMIUM_PLUS' | 'STUDENT_PACK';
+  planType: 'FREE_TIER' | 'PREMIUM_BASIC' | 'PREMIUM_PLUS' | 'STUDENT_PACK';
   features: string;
   studentDiscountPercent: string;
   isActive: boolean;
