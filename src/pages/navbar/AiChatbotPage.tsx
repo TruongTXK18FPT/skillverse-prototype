@@ -54,9 +54,9 @@ Mình có thể giúp bạn:
     const stripBold = (text: string) => text.replace(/\*\*(.*?)\*\*/g, '$1');
     const renderInline = (text: string) => {
       // links [text](url)
-      const withLinks = text.replace(/\[([^\]]+)\]\(([^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1<\/a>');
+      const withLinks = text.replace(/\[([^\]]+)\]\(([^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
       // inline code `code`
-      const withCode = withLinks.replace(/`([^`]+)`/g, '<code class="chatbot-code-inline">$1<\/code>');
+      const withCode = withLinks.replace(/`([^`]+)`/g, '<code class="chatbot-code-inline">$1</code>');
       return withCode;
     };
 
@@ -82,7 +82,7 @@ Mình có thể giúp bạn:
 
     const flushTable = () => {
       if (currentTable.length >= 2) {
-        const [headerLine, sepLine, ...bodyLines] = currentTable;
+        const [headerLine, ...bodyLines] = currentTable;
         const headers = headerLine.split('|').map(h => h.trim()).filter(Boolean);
         const rows = bodyLines
           .filter(r => r.includes('|'))
@@ -149,7 +149,6 @@ Mình có thể giúp bạn:
       const trimmed = line.trim();
       const isBullet = /^[-•]\s+/.test(trimmed);
       const isTableLike = trimmed.includes('|');
-      const isSeparator = /^\|?\s*[-: ]+\s*(\|\s*[-: ]+\s*)+\|?$/.test(trimmed);
 
       // Headings
       const h3 = /^###\s+/.test(trimmed);
