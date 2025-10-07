@@ -6,7 +6,7 @@ import { UIMessage } from '../../types/Chat';
 import { useToast } from '../../hooks/useToast';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/AiChatbot.css';
-import aiAvatar from '../../assets/aiChatbot.png';
+import aiAvatar from '../../assets/aiChatBot.png';
 
 /**
  * AI-powered Career Counseling Chatbot Page
