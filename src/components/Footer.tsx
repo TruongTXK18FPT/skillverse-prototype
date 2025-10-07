@@ -1,6 +1,5 @@
 import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, ArrowUp, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import Logo from '../assets/Logo.jpg';
 import '../styles/Footer.css';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -26,7 +25,7 @@ const Footer = () => {
             <div className="footer-brand">
               <div className="brand-header">
                 <div className="brand-logo-wrapper">
-                  <img src={Logo} alt="Skillverse Logo" className="brand-logo" />
+                  <img src="/images/skillverse.png" alt="Skillverse Logo" className="brand-logo" />
                 </div>
                 <span className="brand-name">Skillverse</span>
               </div>

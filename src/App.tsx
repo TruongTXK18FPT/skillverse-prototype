@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider } from './context/AuthContext';
@@ -113,7 +113,7 @@ const App = () => {
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </main>
-            <Footer />
+            <FooterVisibilityWrapper />
           </div>
         </Router>
         </AuthProvider>
@@ -123,3 +123,13 @@ const App = () => {
 };
 
 export default App;
+
+// Hide Footer on specific routes (e.g., chatbot needs full-screen)
+const FooterVisibilityWrapper = () => {
+  const location = useLocation();
+  const hideOn = new Set<string>([
+    '/chatbot',
+  ]);
+  if (hideOn.has(location.pathname)) return null;
+  return <Footer />;
+};

@@ -6,6 +6,7 @@ import { UIMessage } from '../../types/Chat';
 import { useToast } from '../../hooks/useToast';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/AiChatbot.css';
+import aiAvatar from '../../assets/aiChatbot.png';
 
 /**
  * AI-powered Career Counseling Chatbot Page
@@ -17,23 +18,23 @@ const AiChatbotPage = () => {
     {
       id: '1',
       role: 'assistant',
-      content: `👋 Hi there! I'm **Meowl**, your AI career counselor at **SkillVerse**! 🐾
+      content: `👋 Xin chào! Mình là **Meowl**, cố vấn nghề nghiệp AI của **SkillVerse**! 🐾
 
-I can help you with:
-• 🎓 **Choosing a major** — Find the best fit for your interests
-• 📈 **Career trends** — Discover what's hot in the job market
-• 🚀 **Skill development** — Learn what skills you need
-• 💼 **Career transitions** — Switch careers with confidence
-• 💰 **Salary insights** — Know your worth
-• 🎯 **Learning roadmaps** — Step-by-step career paths
+Mình có thể giúp bạn:
+• 🎓 **Chọn ngành học** — Phù hợp với sở thích và mục tiêu
+• 📈 **Xu hướng nghề nghiệp** — Ngành nào đang hot hiện nay
+• 🚀 **Phát triển kỹ năng** — Bạn cần học những gì
+• 💼 **Chuyển hướng sự nghiệp** — Tự tin đổi nghề
+• 💰 **Mức lương tham khảo** — Định vị giá trị của bạn
+• 🎯 **Lộ trình học tập** — Từng bước rõ ràng để đạt mục tiêu
 
-💬 **Try asking:**
-- "What are trending careers in tech?"
-- "Should I major in Computer Science?"
-- "How do I become a Data Scientist?"
-- "What skills do I need for UX Design?"
+💬 **Hãy thử hỏi:**
+- "Xu hướng nghề nghiệp công nghệ 2025 là gì?"
+- "Nên học Khoa học Máy tính hay Kinh doanh?"
+- "Làm sao để trở thành Data Scientist?"
+- "Kỹ năng quan trọng nhất hiện nay là gì?"
 
-✨ *What would you like to explore today?*`,
+✨ *Hôm nay bạn muốn khám phá điều gì?*`,
       timestamp: new Date()
     }
   ]);
@@ -47,6 +48,175 @@ I can help you with:
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Format message content for cleaner chat display (headings, bullets, code, tables, links)
+  const renderMessageContent = (content: string) => {
+    const stripBold = (text: string) => text.replace(/\*\*(.*?)\*\*/g, '$1');
+    const renderInline = (text: string) => {
+      // links [text](url)
+      const withLinks = text.replace(/\[([^\]]+)\]\(([^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1<\/a>');
+      // inline code `code`
+      const withCode = withLinks.replace(/`([^`]+)`/g, '<code class="chatbot-code-inline">$1<\/code>');
+      return withCode;
+    };
+
+    const lines = content.split('\n');
+    const elements: JSX.Element[] = [];
+    let currentList: string[] = [];
+    let currentTable: string[] = [];
+    let inCodeBlock = false;
+    let codeBuffer: string[] = [];
+
+    const flushList = () => {
+      if (currentList.length > 0) {
+        elements.push(
+          <ul className="chatbot-list" key={`list-${elements.length}`}>
+            {currentList.map((item, idx) => (
+              <li key={`li-${idx}`} dangerouslySetInnerHTML={{ __html: renderInline(stripBold(item)) }} />
+            ))}
+          </ul>
+        );
+        currentList = [];
+      }
+    };
+
+    const flushTable = () => {
+      if (currentTable.length >= 2) {
+        const [headerLine, sepLine, ...bodyLines] = currentTable;
+        const headers = headerLine.split('|').map(h => h.trim()).filter(Boolean);
+        const rows = bodyLines
+          .filter(r => r.includes('|'))
+          .map(r => r.split('|').map(c => c.trim()).filter(Boolean));
+        elements.push(
+          <div className="chatbot-table-wrapper" key={`tbl-${elements.length}`}>
+            <table className="chatbot-table">
+              <thead>
+                <tr>
+                  {headers.map((h, i) => (
+                    <th key={`th-${i}`} dangerouslySetInnerHTML={{ __html: renderInline(stripBold(h)) }} />
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((cols, rIdx) => (
+                  <tr key={`tr-${rIdx}`}>
+                    {cols.map((c, cIdx) => (
+                      <td key={`td-${rIdx}-${cIdx}`} dangerouslySetInnerHTML={{ __html: renderInline(stripBold(c)) }} />
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      } else if (currentTable.length === 1) {
+        // Single line with pipes -> treat as paragraph
+        elements.push(
+          <p className="chatbot-paragraph" key={`p-${elements.length}`} dangerouslySetInnerHTML={{ __html: renderInline(stripBold(currentTable[0])) }} />
+        );
+      }
+      currentTable = [];
+    };
+
+    const flushCode = () => {
+      if (codeBuffer.length > 0) {
+        elements.push(
+          <pre className="chatbot-code" key={`code-${elements.length}`}>
+            <code>{codeBuffer.join('\n')}</code>
+          </pre>
+        );
+        codeBuffer = [];
+      }
+    };
+
+    for (const raw of lines) {
+      const line = raw.replace(/\r$/, '');
+      if (/^```/.test(line.trim())) {
+        if (inCodeBlock) {
+          inCodeBlock = false;
+          flushCode();
+        } else {
+          inCodeBlock = true;
+        }
+        continue;
+      }
+
+      if (inCodeBlock) {
+        codeBuffer.push(line);
+        continue;
+      }
+
+      const trimmed = line.trim();
+      const isBullet = /^[-•]\s+/.test(trimmed);
+      const isTableLike = trimmed.includes('|');
+      const isSeparator = /^\|?\s*[-: ]+\s*(\|\s*[-: ]+\s*)+\|?$/.test(trimmed);
+
+      // Headings
+      const h3 = /^###\s+/.test(trimmed);
+      const h2 = /^##\s+/.test(trimmed);
+      const h1 = /^#\s+/.test(trimmed);
+
+      if (isBullet) {
+        flushTable();
+        currentList.push(trimmed.replace(/^[-•]\s+/, ''));
+        continue;
+      }
+
+      if (isTableLike) {
+        // accumulate possible table block
+        currentTable.push(trimmed);
+        // flush later when a non-table line appears
+        continue;
+      }
+
+      // If we reach here and there is a pending table, finish it (requires header + separator at least)
+      if (currentTable.length > 0) {
+        // Validate table by checking second line is separator
+        if (currentTable.length >= 2 && /^\|?\s*[-: ]+/.test(currentTable[1])) {
+          flushList();
+          flushTable();
+        } else {
+          // not a valid table, render each as paragraph
+          flushList();
+          currentTable.forEach(tl => {
+            elements.push(
+              <p className="chatbot-paragraph" key={`p-${elements.length}`} dangerouslySetInnerHTML={{ __html: renderInline(stripBold(tl)) }} />
+            );
+          });
+          currentTable = [];
+        }
+      }
+
+      if (trimmed === '') {
+        flushList();
+        elements.push(<div className="chatbot-paragraph-sep" key={`sep-${elements.length}`} />);
+        continue;
+      }
+
+      flushList();
+      if (h3 || h2 || h1) {
+        const text = stripBold(trimmed.replace(/^###\s+|^##\s+|^#\s+/, ''));
+        elements.push(
+          <p className={`chatbot-heading ${h1 ? 'h1' : h2 ? 'h2' : 'h3'}`} key={`h-${elements.length}`} dangerouslySetInnerHTML={{ __html: renderInline(text) }} />
+        );
+      } else {
+        elements.push(
+          <p className="chatbot-paragraph" key={`p-${elements.length}`} dangerouslySetInnerHTML={{ __html: renderInline(stripBold(trimmed)) }} />
+        );
+      }
+    }
+
+    // flush any remaining blocks
+    if (currentTable.length > 0) {
+      if (currentTable.length >= 2 && isNaN(0)) {
+        // we can't evaluate separator again here, just try to flush as table
+      }
+      flushTable();
+    }
+    flushList();
+    flushCode();
+    return <>{elements}</>;
+  };
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +235,8 @@ I can help you with:
 
     try {
       const response = await aiChatbotService.sendMessage({
-        message: userMessage.content,
+        // ép AI trả lời bằng tiếng Việt bằng cách thêm hướng dẫn ngắn
+        message: `Trả lời bằng tiếng Việt rõ ràng, ngắn gọn. Câu hỏi: ${userMessage.content}`,
         sessionId: sessionId
       });
 
@@ -89,7 +260,7 @@ I can help you with:
       const errorMessage: UIMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: 'I apologize, but I encountered an error. Please try again. If the problem persists, try refreshing the page.',
+        content: 'Xin lỗi, đã xảy ra lỗi. Vui lòng thử lại sau. Nếu vẫn không được, hãy tải lại trang.',
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -103,12 +274,12 @@ I can help you with:
   };
 
   const quickPrompts = [
-    "What are trending careers in 2025?",
-    "Should I major in Computer Science or Business?",
-    "How do I become a Software Engineer?",
-    "What skills are most valuable right now?",
-    "Is a Data Science career worth it?",
-    "How to transition to tech from another field?"
+    "Xu hướng nghề nghiệp 2025 là gì?",
+    "Nên chọn Khoa học Máy tính hay Kinh doanh?",
+    "Lộ trình trở thành Lập trình viên phần mềm?",
+    "Những kỹ năng đang có giá trị cao hiện nay?",
+    "Theo đuổi Data Science có đáng không?",
+    "Chuyển ngành sang công nghệ như thế nào?"
   ];
 
   return (
@@ -117,15 +288,15 @@ I can help you with:
         {/* Header */}
         <div className="chatbot-header">
           <div className="chatbot-header__avatar">
-            <Bot size={32} />
+            <img src={aiAvatar} alt="Meowl AI" style={{ width: 56, height: 56, borderRadius: '50%' }} />
           </div>
           <div className="chatbot-header__info">
             <h1 className="chatbot-header__title">
               <Sparkles className="inline mr-2" size={24} />
-              Meowl - AI Career Counselor
+              Meowl - Trợ Lý Nghề Nghiệp AI
             </h1>
             <p className="chatbot-header__subtitle">
-              Get personalized career guidance powered by AI
+              Nhận tư vấn nghề nghiệp cá nhân hóa bằng trí tuệ nhân tạo
             </p>
           </div>
         </div>
@@ -133,7 +304,7 @@ I can help you with:
         {/* Quick Prompts (show only when no messages sent yet) */}
         {messages.length === 1 && (
           <div className="chatbot-prompts">
-            <p className="chatbot-prompts__title">💡 Quick Start Questions:</p>
+            <p className="chatbot-prompts__title">💡 Câu hỏi gợi ý bắt đầu nhanh:</p>
             <div className="chatbot-prompts__grid">
               {quickPrompts.map((prompt, index) => (
                 <button
@@ -159,17 +330,12 @@ I can help you with:
                 {message.role === 'user' ? (
                   <User size={20} />
                 ) : (
-                  <Bot size={20} />
+                  <img src={aiAvatar} alt="AI" style={{ width: 32, height: 32, borderRadius: '50%' }} />
                 )}
               </div>
               <div className="chatbot-message__content">
                 <div className="chatbot-message__text">
-                  {message.content.split('\n').map((line, i) => (
-                    <React.Fragment key={i}>
-                      {line}
-                      {i < message.content.split('\n').length - 1 && <br />}
-                    </React.Fragment>
-                  ))}
+                  {renderMessageContent(message.content)}
                 </div>
                 <div className="chatbot-message__time">
                   {message.timestamp.toLocaleTimeString([], { 
@@ -190,7 +356,7 @@ I can help you with:
               <div className="chatbot-message__content">
                 <div className="chatbot-typing">
                   <Loader className="animate-spin" size={20} />
-                  <span>Meowl is thinking...</span>
+                  <span>Meowl đang suy nghĩ...</span>
                 </div>
               </div>
             </div>
@@ -205,7 +371,7 @@ I can help you with:
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Ask me about careers, majors, skills, or anything career-related..."
+            placeholder="Hãy hỏi về nghề nghiệp, ngành học, kỹ năng hoặc bất cứ điều gì liên quan..."
             className="chatbot-input__field"
             disabled={isLoading}
           />
