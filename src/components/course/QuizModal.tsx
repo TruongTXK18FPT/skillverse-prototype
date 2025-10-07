@@ -5,8 +5,6 @@ import {
   QuizCreateDTO,
   QuizUpdateDTO,
   QuestionType,
-  QuizQuestionCreateDTO,
-  QuizOptionCreateDTO,
 } from "../../data/quizDTOs";
 import { createQuiz, updateQuiz, addQuizQuestion, addQuizOption } from "../../services/quizService";
 import { useAuth } from "../../context/AuthContext";
@@ -246,7 +244,6 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
       onSuccess();
       onClose();
     } catch (err: any) {
-      // eslint-disable-next-line no-console
       console.error("Error saving quiz", err);
       setError(err?.response?.data?.message || "Đã xảy ra lỗi khi lưu quiz");
     } finally {

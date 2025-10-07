@@ -307,9 +307,9 @@ const MentorPage: React.FC = () => {
   const [showQuizDetail, setShowQuizDetail] = useState(false);
   const [showAddQuestion, setShowAddQuestion] = useState(false);
   const [showAddOption, setShowAddOption] = useState(false);
-  const [editingQuiz, setEditingQuiz] = useState<QuizDetailDTO | null>(null);
-  const [editingQuestion, setEditingQuestion] = useState<QuizQuestionDetailDTO | null>(null);
-  const [editingOption, setEditingOption] = useState<QuizOptionDTO | null>(null);
+  const [_editingQuiz, setEditingQuiz] = useState<QuizDetailDTO | null>(null);
+  const [_editingQuestion, setEditingQuestion] = useState<QuizQuestionDetailDTO | null>(null);
+  const [_editingOption, setEditingOption] = useState<QuizOptionDTO | null>(null);
 
   // Mock data for demonstrations
   const [bookings] = useState<Booking[]>([
@@ -766,7 +766,7 @@ const MentorPage: React.FC = () => {
     }
   };
 
-  const handleUpdateAssignment = async (assignmentId: number, assignmentData: any) => {
+  const _handleUpdateAssignment = async (assignmentId: number, assignmentData: any) => {
     try {
       if (!user) throw new Error('User not authenticated');
       await updateAssignment(assignmentId, assignmentData, user.id);
@@ -822,10 +822,10 @@ const MentorPage: React.FC = () => {
     setEditingQuiz(quiz);
   };
 
-  const handleUpdateQuiz = async (quizId: number, quizData: QuizUpdateDTO) => {
+  const _handleUpdateQuiz = async (quizId: number, quizData: QuizUpdateDTO) => {
     try {
       if (!user) throw new Error('User not authenticated');
-      const updated = await updateQuiz(quizId, quizData, user.id);
+      const _updated = await updateQuiz(quizId, quizData, user.id);
       setEditingQuiz(null);
       // Reload quizzes
       if (selectedModuleId) {
@@ -867,7 +867,7 @@ const MentorPage: React.FC = () => {
     }
   };
 
-  const handleUpdateQuestion = async (questionId: number, questionData: QuizQuestionUpdateDTO) => {
+  const _handleUpdateQuestion = async (questionId: number, questionData: QuizQuestionUpdateDTO) => {
     try {
       if (!user) throw new Error('User not authenticated');
       await updateQuizQuestion(questionId, questionData, user.id);
@@ -912,7 +912,7 @@ const MentorPage: React.FC = () => {
     }
   };
 
-  const handleUpdateOption = async (optionId: number, optionData: QuizOptionUpdateDTO) => {
+  const _handleUpdateOption = async (optionId: number, optionData: QuizOptionUpdateDTO) => {
     try {
       if (!user) throw new Error('User not authenticated');
       await updateQuizOption(optionId, optionData, user.id);

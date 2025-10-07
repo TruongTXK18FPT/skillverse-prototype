@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Save, Upload, Link, Github, Linkedin, Globe, Award, Star, Plus, X } from 'lucide-react';
+import { User, Save, Upload, Github, Linkedin, Globe, Award, Plus, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import { getMentorProfile, updateMentorProfile, uploadMentorAvatar, MentorProfile, MentorProfileUpdateDTO } from '../../services/mentorProfileService';
@@ -9,7 +9,7 @@ const MentorProfilePage: React.FC = () => {
   const { user } = useAuth();
   const { showSuccess, showError } = useToast();
   
-  const [profile, setProfile] = useState<MentorProfile | null>(null);
+  const [_profile, setProfile] = useState<MentorProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
