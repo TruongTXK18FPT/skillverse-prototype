@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import UserManagementTab from '../../components/admin/UserManagementTab';
 import AccountVerificationTab from '../../components/admin/AccountVerificationTab';
+import { CourseApprovalTab } from '../../components/admin/CourseApprovalTab';
 import AnalyticsTab from '../../components/admin/AnalyticsTab';
 import NotificationsTab from '../../components/admin/NotificationsTab';
 import ReportsTab from '../../components/admin/ReportsTab';
@@ -26,6 +27,13 @@ const AdminPage: React.FC = () => {
       icon: '✅',
       gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
       description: 'Duyệt đơn đăng ký'
+    },
+    { 
+      id: 'courses', 
+      label: 'Duyệt Khóa Học', 
+      icon: '📚',
+      gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      description: 'Phê duyệt khóa học mới'
     },
     { 
       id: 'analytics', 
@@ -77,6 +85,8 @@ const AdminPage: React.FC = () => {
         return <UserManagementTab />;
       case 'verification':
         return <AccountVerificationTab />;
+      case 'courses':
+        return <CourseApprovalTab />;
       case 'analytics':
         return <AnalyticsTab />;
       case 'notifications':

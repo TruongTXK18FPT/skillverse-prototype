@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Search, Clock, Users, Star, BookOpen, Trophy, Play, ChevronDown, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
+import { Search, Clock, Users, Star, BookOpen, Award, Play, ChevronDown, Filter, TrendingUp } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import '../../styles/CoursesPage.css';
 import Pagination from '../../components/Pagination';
 import { useNavigate } from 'react-router-dom';
-import { fetchAllCourses, parsePrice, isFreePrice, Course } from '../../services/courseService';
+import { fetchAllCourses, parsePrice, isFreePrice, listPublishedCourses, Course } from '../../services/courseService';
 import MeowlGuide from '../../components/MeowlGuide';
+import { CourseSummaryDTO } from '../../data/courseDTOs';
+
 type SortOption = 'newest' | 'oldest' | 'price-low' | 'price-high' | 'rating' | 'popular';
 type PriceFilter = 'all' | 'free' | 'paid';
 
@@ -26,17 +28,50 @@ const CoursesPage = () => {
 
 useEffect(() => {
   setLoading(true);
-  fetchAllCourses()
-    .then(data => {
-      // Debug: Log price values to console
-      console.log('Course prices:', data.map((c: Course) => ({ id: c.id, title: c.title, price: c.price })));
+  // Fetch published courses from backend
+  listPublishedCourses(0, 100)
+    .then(response => {
+      // Convert DTO to legacy Course format
+      const legacyCourses = response.content.map((dto: CourseSummaryDTO) => {
+        const authorFullName = dto.author.fullName || `${dto.author.firstName} ${dto.author.lastName}`.trim();
+        
+        return {
+          id: dto.id.toString(),
+          title: dto.title,
+          instructor: authorFullName || 'Unknown Instructor',
+          category: 'general', // Map from backend if available
+          image: dto.thumbnailUrl || '/images/default-course.jpg',
+          level: dto.level.toLowerCase(),
+          price: dto.price ? `${dto.price} ${dto.currency || 'VND'}` : '0',
+          rating: dto.averageRating || 4.5,
+          students: dto.enrollmentCount || 0,
+          description: dto.description || '',
+          duration: '0',
+          modules: dto.moduleCount || 0,
+          certificate: false
+        };
+      });
       
-      setCourses(data);
+      console.log('✅ Loaded published courses:', legacyCourses.length);
+      setCourses(legacyCourses);
       setLoading(false);
     })
     .catch(err => {
-      console.error('Error fetching courses:', err);
-      setLoading(false);
+      console.error('❌ Error fetching courses from backend:', err);
+      console.error('Error details:', err.response?.data || err.message);
+      
+      // Fallback to mock API
+      fetchAllCourses()
+        .then(data => {
+          console.log('✅ Loaded fallback courses:', data.length);
+          setCourses(data);
+          setLoading(false);
+        })
+        .catch(fallbackErr => {
+          console.error('❌ Fallback also failed:', fallbackErr);
+          setCourses([]);
+          setLoading(false);
+        });
     });
 }, []);
 
@@ -193,13 +228,13 @@ const categories = [
               className={`filter-toggle-btn ${showFilters ? 'active' : ''}`}
               onClick={() => setShowFilters(!showFilters)}
             >
-              <SlidersHorizontal className="filter-icon" />
+              <Filter className="filter-icon" />
               Bộ lọc
               <ChevronDown className={`chevron ${showFilters ? 'rotated' : ''}`} />
             </button>
 
             <div className="sort-section">
-              <ArrowUpDown className="sort-icon" />
+              <TrendingUp className="sort-icon" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
@@ -378,7 +413,7 @@ const categories = [
                         )}
                         {course.certificate && (
                           <div className="course-certificate-badge">
-                            <Trophy className="certificate-icon" />
+                            <Award className="certificate-icon" />
                           </div>
                         )}
                       </div>

@@ -23,6 +23,9 @@ import {
   PenTool,
   X
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { listCoursesByAuthor, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse, submitCourseForApproval } from '../../services/courseService';
+import { CourseStatus, CourseLevel, CourseUpdateDTO, CourseCreateDTO } from '../../data/courseDTOs';
 import BookingManagerTab from '../../components/mentor/BookingManagerTab';
 import MyScheduleTab from '../../components/mentor/MyScheduleTab';
 import EarningsTab from '../../components/mentor/EarningsTab';
@@ -30,6 +33,17 @@ import SkillPointsTab from '../../components/mentor/SkillPointsTab';
 import ReviewsTab from '../../components/mentor/ReviewsTab';
 import MentoringHistoryTab from '../../components/mentor/MentoringHistoryTab';
 import '../../styles/MentorPage.css';
+import { listModules, createModule, updateModule } from '../../services/moduleService';
+import { listLessonsByModule, createLesson, reorderLessons, getLessonById, deleteLesson } from '../../services/lessonService';
+import { LessonType as ApiLessonType, LessonCreateDTO } from '../../data/lessonDTOs';
+import { createQuiz, listQuizzesByModule, getQuizById, updateQuiz, deleteQuiz, addQuizQuestion, updateQuizQuestion, deleteQuizQuestion, addQuizOption, updateQuizOption, deleteQuizOption } from '../../services/quizService';
+import { QuizCreateDTO, QuizSummaryDTO, QuizDetailDTO, QuizUpdateDTO, QuizQuestionCreateDTO, QuizQuestionDetailDTO, QuizQuestionUpdateDTO, QuizOptionCreateDTO, QuizOptionDTO, QuizOptionUpdateDTO, QuestionType } from '../../data/quizDTOs';
+import { listAssignmentsByModule, updateAssignment, deleteAssignment, getAssignmentById } from '../../services/assignmentService';
+import { createCodingExercise } from '../../services/codelabService';
+import { SubmissionType, AssignmentSummaryDTO } from '../../data/assignmentDTOs';
+import AssignmentModal from '../../components/course/AssignmentModal';
+import { ProgrammingLanguage, CodingExerciseCreateDTO } from '../../data/codelabDTOs';
+import { uploadMedia, getSignedMediaUrl, listMediaByLesson } from '../../services/mediaService';
 
 // Types for mentor dashboard data
 export interface Booking {
@@ -105,8 +119,8 @@ export interface Course {
   id: number;
   title: string;
   description: string;
-  level: string;
-  status: 'DRAFT' | 'PENDING' | 'PUBLIC' | 'ARCHIVED';
+  level: CourseLevel;
+  status: CourseStatus;
   author: {
     id: number;
     firstName: string;
@@ -123,6 +137,9 @@ export interface Course {
   assignments: Assignment[];
   codingExercises: CodingExercise[];
   enrollmentCount: number;
+  lessonCount?: number;
+  price?: number;
+  currency?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -159,7 +176,7 @@ export interface QuizQuestion {
 export interface QuizOption {
   id: number;
   optionText: string;
-  isCorrect: boolean;
+  correct: boolean;
   orderIndex: number;
 }
 
@@ -192,11 +209,20 @@ export interface CodingTestCase {
   orderIndex: number;
 }
 
+// Module Management Types (lightweight for MentorPage)
+interface ModuleItem {
+  id: number;
+  title: string;
+  description?: string;
+  orderIndex: number;
+}
+
 export interface CourseCreateData {
   title: string;
   description: string;
   level: string;
-  thumbnailMediaId?: number;
+  price?: number;
+  currency?: string;
 }
 
 export interface LessonCreateData {
@@ -235,6 +261,7 @@ export interface CodingExerciseCreateData {
 }
 
 const MentorPage: React.FC = () => {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<string>('courses');
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -243,6 +270,46 @@ const MentorPage: React.FC = () => {
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(false);
   const [activeContentTab, setActiveContentTab] = useState<string>('lessons');
+  const [error, setError] = useState<string | null>(null);
+
+  // Modules state for selected course
+  const [modules, setModules] = useState<ModuleItem[]>([]);
+  const [modulesLoading, setModulesLoading] = useState<boolean>(false);
+  const [newModuleTitle, setNewModuleTitle] = useState<string>('');
+  const [newModuleDescription, setNewModuleDescription] = useState<string>('');
+  const [selectedModuleId, setSelectedModuleId] = useState<number | null>(null);
+  const [courseLessons, setCourseLessons] = useState<Lesson[]>([]);
+  const [lessonsLoading, setLessonsLoading] = useState<boolean>(false);
+  const [moduleQuizzes, setModuleQuizzes] = useState<QuizSummaryDTO[]>([]);
+  const [quizzesLoading, setQuizzesLoading] = useState<boolean>(false);
+  const [selectedQuiz, setSelectedQuiz] = useState<QuizDetailDTO | null>(null);
+  const [quizDetailLoading, setQuizDetailLoading] = useState<boolean>(false);
+  const [moduleAssignments, setModuleAssignments] = useState<AssignmentSummaryDTO[]>([]);
+  const [assignmentsLoading, setAssignmentsLoading] = useState<boolean>(false);
+  const [editingAssignment, setEditingAssignment] = useState<{
+    id: number;
+    title: string;
+    description: string;
+    submissionType: SubmissionType;
+    maxScore: number;
+    dueAt?: string;
+  } | null>(null);
+  const [activeModuleTab, setActiveModuleTab] = useState<'lessons' | 'quizzes' | 'assignments' | 'codelabs'>('lessons');
+
+  // Quick-add modal states
+  const [showAddLesson, setShowAddLesson] = useState(false);
+  const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
+  const [previewLesson, setPreviewLesson] = useState<Lesson | null>(null);
+  const [previewLoading, setPreviewLoading] = useState<boolean>(false);
+  const [showAddQuiz, setShowAddQuiz] = useState(false);
+  const [showAddAssignment, setShowAddAssignment] = useState(false);
+  const [showAddCodelab, setShowAddCodelab] = useState(false);
+  const [showQuizDetail, setShowQuizDetail] = useState(false);
+  const [showAddQuestion, setShowAddQuestion] = useState(false);
+  const [showAddOption, setShowAddOption] = useState(false);
+  const [editingQuiz, setEditingQuiz] = useState<QuizDetailDTO | null>(null);
+  const [editingQuestion, setEditingQuestion] = useState<QuizQuestionDetailDTO | null>(null);
+  const [editingOption, setEditingOption] = useState<QuizOptionDTO | null>(null);
 
   // Mock data for demonstrations
   const [bookings] = useState<Booking[]>([
@@ -272,70 +339,57 @@ const MentorPage: React.FC = () => {
     },
   ]);
 
-  // Mock courses data
+  // Load mentor's courses from backend
   useEffect(() => {
-    const mockCourses: Course[] = [
-      {
-        id: 1,
-        title: 'React Fundamentals',
-        description: 'Learn the basics of React development',
-        level: 'Beginner',
-        status: 'PUBLIC',
-        author: {
-          id: 1,
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john@example.com'
-        },
-        thumbnail: {
-          id: 1,
-          url: '/api/media/1',
-          fileName: 'react-course.jpg'
-        },
-        lessons: [
-          { id: 1, title: 'Introduction to React', type: 'VIDEO', orderIndex: 1, durationSec: 1200 },
-          { id: 2, title: 'Components and Props', type: 'VIDEO', orderIndex: 2, durationSec: 1800 },
-          { id: 3, title: 'State and Lifecycle', type: 'VIDEO', orderIndex: 3, durationSec: 2100 }
-        ],
-        quizzes: [
-          { id: 1, title: 'React Basics Quiz', description: 'Test your React knowledge', passScore: 70, questions: [], lessonId: 1 }
-        ],
-        assignments: [
-          { id: 1, title: 'Build a Todo App', description: 'Create a simple todo application', submissionType: 'FILE', maxScore: 100, lessonId: 2 }
-        ],
-        codingExercises: [
-          { id: 1, title: 'React Component Exercise', prompt: 'Create a reusable button component', language: 'JavaScript', starterCode: '// Your code here', maxScore: 50, testCases: [], lessonId: 3 }
-        ],
-        enrollmentCount: 45,
-        createdAt: '2025-01-01T00:00:00Z',
-        updatedAt: '2025-01-15T00:00:00Z'
-      },
-      {
-        id: 2,
-        title: 'Advanced TypeScript',
-        description: 'Master TypeScript for enterprise applications',
-        level: 'Advanced',
-        status: 'PENDING',
-        author: {
-          id: 1,
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john@example.com'
-        },
-        lessons: [
-          { id: 4, title: 'Advanced Types', type: 'VIDEO', orderIndex: 1, durationSec: 2400 },
-          { id: 5, title: 'Generics Deep Dive', type: 'VIDEO', orderIndex: 2, durationSec: 3000 }
-        ],
-        quizzes: [],
-        assignments: [],
-        codingExercises: [],
-        enrollmentCount: 0,
-        createdAt: '2025-01-10T00:00:00Z',
-        updatedAt: '2025-01-20T00:00:00Z'
+    const loadCourses = async () => {
+      if (!user) {
+        setError('User not authenticated');
+        return;
       }
-    ];
-    setCourses(mockCourses);
-  }, []);
+
+      setLoading(true);
+      setError(null);
+      
+      try {
+        // Fetch courses by author from backend
+        const response = await listCoursesByAuthor(user.id, 0, 50);
+        
+        // Convert DTO to internal Course format
+        const mentorCourses: Course[] = response.content.map(dto => ({
+          id: dto.id,
+          title: dto.title,
+          description: dto.description,
+          level: dto.level,
+          status: dto.status,
+          author: dto.author,
+          thumbnail: dto.thumbnailUrl ? {
+            id: 0, // Not available in summary
+            url: dto.thumbnailUrl,
+            fileName: '' // Not available in summary
+          } : undefined,
+          lessons: [], // Load separately when needed
+          quizzes: [],
+          assignments: [],
+          codingExercises: [],
+          enrollmentCount: dto.enrollmentCount,
+          lessonCount: dto.moduleCount, // Use moduleCount from backend as lessonCount for display
+          price: dto.price,
+          currency: dto.currency,
+          createdAt: dto.createdAt,
+          updatedAt: dto.updatedAt
+        }));
+        
+        setCourses(mentorCourses);
+      } catch (err) {
+        console.error('Error loading courses:', err);
+        setError('Failed to load courses. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCourses();
+  }, [user]);
 
   const handleApproveBooking = (bookingId: string) => {
     console.log('Approving booking:', bookingId);
@@ -349,41 +403,46 @@ const MentorPage: React.FC = () => {
     console.log('Marking booking as done:', bookingId);
   };
 
-  const handleCreateCourse = async (courseData: CourseCreateData | Partial<CourseCreateData>) => {
+  const handleCreateCourse = async (courseData: CourseCreateData | Partial<CourseCreateData>, thumbnailFile?: File) => {
     setLoading(true);
     try {
+      if (!user) throw new Error('User not authenticated');
       console.log('Creating course:', courseData);
-      await new Promise(resolve => setTimeout(resolve, 1000));
       
+      const createPayload: CourseCreateDTO = {
+        title: courseData.title || '',
+        description: courseData.description || '',
+        level: (courseData.level as CourseLevel) || CourseLevel.BEGINNER,
+        price: courseData.price,
+        currency: courseData.currency || 'VND'
+      };
+
+      console.log('Creating course with payload:', createPayload);
+      const createdDto = await apiCreateCourse(user.id, createPayload, thumbnailFile);
+      console.log('Created course response:', createdDto);
+
       // Type guard to ensure required fields are present
-      if (!courseData.title) {
+      if (!createdDto.title) {
         throw new Error('Title is required');
       }
       
       const newCourse: Course = {
-        id: Date.now(),
-        title: courseData.title,
-        description: courseData.description || '',
-        level: courseData.level || 'Beginner',
-        status: 'DRAFT',
-        author: {
-          id: 1,
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john@example.com'
-        },
-        thumbnail: courseData.thumbnailMediaId ? {
-          id: courseData.thumbnailMediaId,
-          url: '/api/media/' + courseData.thumbnailMediaId,
-          fileName: 'thumbnail.jpg'
-        } : undefined,
+        id: createdDto.id,
+        title: createdDto.title,
+        description: createdDto.description,
+        level: createdDto.level,
+        status: createdDto.status,
+        author: createdDto.author,
+        thumbnail: createdDto.thumbnail,
         lessons: [],
         quizzes: [],
         assignments: [],
         codingExercises: [],
-        enrollmentCount: 0,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        enrollmentCount: createdDto.enrollmentCount,
+        price: createdDto.price,
+        currency: createdDto.currency,
+        createdAt: createdDto.createdAt,
+        updatedAt: createdDto.updatedAt
       };
       
       setCourses(prev => [newCourse, ...prev]);
@@ -395,34 +454,66 @@ const MentorPage: React.FC = () => {
     }
   };
 
-  const handleUpdateCourse = async (courseId: number, courseData: Partial<CourseCreateData>) => {
+  const handleUpdateCourse = async (courseId: number, courseData: Partial<CourseCreateData>, thumbnailFile?: File) => {
     setLoading(true);
     try {
+      if (!user) throw new Error('User not authenticated');
       console.log('Updating course:', courseId, courseData);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setCourses(prev => prev.map(course => 
-        course.id === courseId 
-          ? { ...course, ...courseData, updatedAt: new Date().toISOString() }
-          : course
-      ));
+
+      // Find the current course to get existing values
+      const currentCourse = courses.find(c => c.id === courseId);
+      if (!currentCourse) {
+        throw new Error('Course not found');
+      }
+
+      const updatePayload: CourseUpdateDTO = {
+        title: courseData.title || currentCourse.title, // Always provide title
+        ...(courseData.description !== undefined && { description: courseData.description }),
+        ...(courseData.level && { level: courseData.level as CourseLevel }),
+        ...(courseData.price !== undefined && { price: courseData.price }),
+        ...(courseData.currency && { currency: courseData.currency })
+      };
+
+      console.log('Updating course with payload:', updatePayload);
+      const updatedDto = await apiUpdateCourse(courseId, updatePayload, user.id, thumbnailFile);
+      console.log('Updated course response:', updatedDto);
+
+      setCourses(prev => prev.map(course => {
+        if (course.id !== courseId) return course;
+        return {
+          ...course,
+          title: updatedDto.title,
+          description: updatedDto.description,
+          level: updatedDto.level,
+          status: updatedDto.status,
+          author: updatedDto.author,
+          thumbnail: updatedDto.thumbnail ?? course.thumbnail,
+          price: updatedDto.price,
+          currency: updatedDto.currency,
+          updatedAt: updatedDto.updatedAt
+        };
+      }));
       setEditingCourse(null);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating course:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to update course';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeleteCourse = async (courseId: number) => {
-    if (window.confirm('Are you sure you want to delete this course?')) {
+    if (window.confirm('Bạn có chắc chắn muốn xóa khóa học này?')) {
       setLoading(true);
       try {
         console.log('Deleting course:', courseId);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Use the actual API to delete the course
+        await deleteCourse(courseId, user?.id || 0);
         setCourses(prev => prev.filter(course => course.id !== courseId));
       } catch (error) {
         console.error('Error deleting course:', error);
+        setError('Không thể xóa khóa học. Vui lòng thử lại.');
       } finally {
         setLoading(false);
       }
@@ -430,52 +521,451 @@ const MentorPage: React.FC = () => {
   };
 
   const handleSubmitForApproval = async (courseId: number) => {
-    setLoading(true);
-    try {
-      console.log('Submitting course for approval:', courseId);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setCourses(prev => prev.map(course => 
-        course.id === courseId 
-          ? { ...course, status: 'PENDING', updatedAt: new Date().toISOString() }
-          : course
-      ));
-    } catch (error) {
-      console.error('Error submitting course:', error);
-    } finally {
-      setLoading(false);
+    if (!user) {
+      setError('Bạn cần đăng nhập để thực hiện thao tác này.');
+      return;
+    }
+    
+    if (window.confirm('Bạn có chắc chắn muốn gửi khóa học này để duyệt? Sau khi gửi, bạn sẽ không thể chỉnh sửa cho đến khi được phê duyệt hoặc từ chối.')) {
+      setLoading(true);
+      try {
+        console.log('Submitting course for approval:', courseId);
+        
+        const updatedCourse = await submitCourseForApproval(courseId, user.id);
+        
+        setCourses(prev => prev.map(course => 
+          course.id === courseId 
+            ? { 
+                ...course, 
+                status: updatedCourse.status,
+                updatedAt: updatedCourse.updatedAt
+              }
+            : course
+        ));
+        
+        setError(null);
+        // Show success message
+        alert('Khóa học đã được gửi để duyệt thành công!');
+      } catch (error: any) {
+        console.error('Error submitting course:', error);
+        const errorMessage = error.response?.data?.message || 'Không thể gửi khóa học để duyệt. Vui lòng thử lại.';
+        setError(errorMessage);
+        alert(errorMessage);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   const handleViewCourse = (course: Course) => {
     setSelectedCourse(course);
     setShowCourseDetail(true);
+    // Load modules for the course
+    void loadModules(course.id);
   };
 
-  const getStatusIcon = (status: string) => {
+  const loadModules = async (courseId: number) => {
+    try {
+      setModulesLoading(true);
+      const data = await listModules(courseId);
+      // Normalize
+      const mods: ModuleItem[] = (data || []).map((m) => ({
+        id: m.id,
+        title: m.title,
+        description: m.description,
+        orderIndex: m.orderIndex ?? 0
+      }));
+      setModules(mods);
+    } catch (e) {
+      console.error('Failed to load modules', e);
+      setModules([]);
+    } finally {
+      setModulesLoading(false);
+    }
+  };
+
+  const handleCreateModule = async () => {
+    if (!selectedCourse) return;
+    if (!newModuleTitle.trim()) return;
+    try {
+      setModulesLoading(true);
+      const created = await createModule(selectedCourse.id, user?.id ?? 0, {
+        title: newModuleTitle.trim(),
+        description: newModuleDescription.trim() || undefined
+      });
+      setNewModuleTitle('');
+      setNewModuleDescription('');
+      setModules(prev => [
+        ...prev,
+        {
+          id: created.id,
+          title: created.title,
+          description: created.description,
+          orderIndex: created.orderIndex ?? prev.length + 1
+        }
+      ].sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0)));
+      setSelectedModuleId(created.id);
+    } catch (e) {
+      console.error('Create module failed', e);
+    } finally {
+      setModulesLoading(false);
+    }
+  };
+
+  const handleSelectModule = (moduleId: number) => {
+    setSelectedModuleId(moduleId);
+    setActiveModuleTab('lessons');
+    // Load lessons, quizzes, and assignments for this specific module
+    if (selectedCourse) {
+      void loadLessons(selectedCourse.id, moduleId);
+      void loadQuizzes(moduleId);
+      void loadAssignments(moduleId);
+    }
+  };
+
+  const handleMoveModule = async (moduleId: number, direction: 'up' | 'down') => {
+    if (!user) return;
+    const sorted = [...modules].sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0));
+    const index = sorted.findIndex(m => m.id === moduleId);
+    if (index === -1) return;
+    const swapIndex = direction === 'up' ? index - 1 : index + 1;
+    if (swapIndex < 0 || swapIndex >= sorted.length) return;
+    const a = sorted[index];
+    const b = sorted[swapIndex];
+    const aOrder = a.orderIndex ?? (index + 1);
+    const bOrder = b.orderIndex ?? (swapIndex + 1);
+    
+    // Optimistic UI update first
+    const optimisticUpdate = modules.map(m => {
+      if (m.id === a.id) return { ...m, orderIndex: bOrder };
+      if (m.id === b.id) return { ...m, orderIndex: aOrder };
+      return m;
+    }).sort((x, y) => (x.orderIndex || 0) - (y.orderIndex || 0));
+    setModules(optimisticUpdate);
+    
+    try {
+      // Update backend sequentially to avoid race conditions
+      await updateModule(a.id, user.id, { orderIndex: bOrder });
+      await updateModule(b.id, user.id, { orderIndex: aOrder });
+    } catch (e) {
+      console.error('Failed to move module', e);
+      // Revert on error
+      setModules(sorted);
+      setError('Không thể di chuyển module. Vui lòng thử lại.');
+    }
+  };
+
+  const handleDeleteLesson = async (lessonId: number) => {
+    if (!user || !window.confirm('Bạn có chắc chắn muốn xóa bài học này?')) {
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      await deleteLesson(lessonId, user.id);
+      
+      // Reload lessons for the current module
+      if (selectedCourse && selectedModuleId) {
+        await loadLessons(selectedCourse.id, selectedModuleId);
+      }
+      
+      alert('Bài học đã được xóa thành công!');
+    } catch (error) {
+      console.error('Error deleting lesson:', error);
+      alert('Không thể xóa bài học. Vui lòng thử lại.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadLessons = async (courseId: number, moduleId?: number) => {
+    try {
+      setLessonsLoading(true);
+      
+      if (moduleId) {
+        // Load lessons for specific module only
+        const lessons = await listLessonsByModule(moduleId);
+        const mapped: Lesson[] = lessons.map((l: any) => ({
+          id: l.id,
+          title: l.title,
+          type: l.type,
+          orderIndex: l.orderIndex,
+          durationSec: l.durationSec ?? 0
+        }));
+        setCourseLessons(mapped);
+      } else {
+        // Load lessons from all modules (for backward compatibility)
+        const courseModules = await listModules(courseId);
+        const allLessonsPromises = courseModules.map(module => 
+          listLessonsByModule(module.id)
+        );
+        const lessonsArrays = await Promise.all(allLessonsPromises);
+        
+        // Flatten and map lessons
+        const allLessons = lessonsArrays.flat();
+        const mapped: Lesson[] = allLessons.map((l: any) => ({
+          id: l.id,
+          title: l.title,
+          type: l.type,
+          orderIndex: l.orderIndex,
+          durationSec: l.durationSec ?? 0
+        }));
+        
+        setCourseLessons(mapped);
+      }
+    } catch (e) {
+      console.error('Failed to load lessons', e);
+      setCourseLessons([]);
+    } finally {
+      setLessonsLoading(false);
+    }
+  };
+
+  const loadQuizzes = async (moduleId: number) => {
+    try {
+      setQuizzesLoading(true);
+      const quizzes = await listQuizzesByModule(moduleId);
+      setModuleQuizzes(quizzes || []);
+    } catch (e) {
+      console.error('Failed to load quizzes', e);
+      setModuleQuizzes([]);
+    } finally {
+      setQuizzesLoading(false);
+    }
+  };
+
+  const loadAssignments = async (moduleId: number) => {
+    try {
+      setAssignmentsLoading(true);
+      const assignments = await listAssignmentsByModule(moduleId);
+      setModuleAssignments(assignments || []);
+    } catch (e) {
+      console.error('Failed to load assignments', e);
+      setModuleAssignments([]);
+    } finally {
+      setAssignmentsLoading(false);
+    }
+  };
+
+  const handleEditAssignment = async (assignmentId: number) => {
+    try {
+      const assignment = await getAssignmentById(assignmentId);
+      // Convert AssignmentDetailDTO to the format expected by AssignmentModal
+      setEditingAssignment({
+        id: assignment.id,
+        title: assignment.title,
+        description: assignment.description,
+        submissionType: assignment.submissionType,
+        maxScore: assignment.maxScore,
+        dueAt: assignment.dueAt
+      });
+      setShowAddAssignment(true);
+    } catch (e) {
+      console.error('Failed to load assignment details', e);
+      setError('Failed to load assignment details');
+    }
+  };
+
+  const handleUpdateAssignment = async (assignmentId: number, assignmentData: any) => {
+    try {
+      if (!user) throw new Error('User not authenticated');
+      await updateAssignment(assignmentId, assignmentData, user.id);
+      setEditingAssignment(null);
+      // Reload assignments
+      if (selectedModuleId) {
+        await loadAssignments(selectedModuleId);
+      }
+    } catch (e) {
+      console.error('Failed to update assignment', e);
+      setError('Failed to update assignment');
+    }
+  };
+
+  const handleDeleteAssignment = async (assignmentId: number) => {
+    if (!confirm('Are you sure you want to delete this assignment? This action cannot be undone.')) return;
+    try {
+      if (!user) throw new Error('User not authenticated');
+      await deleteAssignment(assignmentId, user.id);
+      // Reload assignments
+      if (selectedModuleId) {
+        await loadAssignments(selectedModuleId);
+      }
+    } catch (e) {
+      console.error('Failed to delete assignment', e);
+      setError('Failed to delete assignment');
+    }
+  };
+
+  const handleAssignmentSuccess = () => {
+    // Reload assignments after successful create/update
+    if (selectedModuleId) {
+      void loadAssignments(selectedModuleId);
+    }
+    setEditingAssignment(null);
+  };
+
+  const handleViewQuiz = async (quizId: number) => {
+    try {
+      setQuizDetailLoading(true);
+      const quiz = await getQuizById(quizId);
+      setSelectedQuiz(quiz);
+      setShowQuizDetail(true);
+    } catch (e) {
+      console.error('Failed to load quiz details', e);
+      setError('Failed to load quiz details');
+    } finally {
+      setQuizDetailLoading(false);
+    }
+  };
+
+  const handleEditQuiz = (quiz: QuizDetailDTO) => {
+    setEditingQuiz(quiz);
+  };
+
+  const handleUpdateQuiz = async (quizId: number, quizData: QuizUpdateDTO) => {
+    try {
+      if (!user) throw new Error('User not authenticated');
+      const updated = await updateQuiz(quizId, quizData, user.id);
+      setEditingQuiz(null);
+      // Reload quizzes
+      if (selectedModuleId) {
+        await loadQuizzes(selectedModuleId);
+      }
+    } catch (e) {
+      console.error('Failed to update quiz', e);
+      setError('Failed to update quiz');
+    }
+  };
+
+  const handleDeleteQuiz = async (quizId: number) => {
+    if (!confirm('Are you sure you want to delete this quiz?')) return;
+    try {
+      if (!user) throw new Error('User not authenticated');
+      await deleteQuiz(quizId, user.id);
+      // Reload quizzes
+      if (selectedModuleId) {
+        await loadQuizzes(selectedModuleId);
+      }
+      setShowQuizDetail(false);
+      setSelectedQuiz(null);
+    } catch (e) {
+      console.error('Failed to delete quiz', e);
+      setError('Failed to delete quiz');
+    }
+  };
+
+  const handleAddQuestion = async (quizId: number, questionData: QuizQuestionCreateDTO) => {
+    try {
+      if (!user) throw new Error('User not authenticated');
+      await addQuizQuestion(quizId, questionData, user.id);
+      setShowAddQuestion(false);
+      // Reload quiz details
+      await handleViewQuiz(quizId);
+    } catch (e) {
+      console.error('Failed to add question', e);
+      setError('Failed to add question');
+    }
+  };
+
+  const handleUpdateQuestion = async (questionId: number, questionData: QuizQuestionUpdateDTO) => {
+    try {
+      if (!user) throw new Error('User not authenticated');
+      await updateQuizQuestion(questionId, questionData, user.id);
+      setEditingQuestion(null);
+      // Reload quiz details
+      if (selectedQuiz) {
+        await handleViewQuiz(selectedQuiz.id);
+      }
+    } catch (e) {
+      console.error('Failed to update question', e);
+      setError('Failed to update question');
+    }
+  };
+
+  const handleDeleteQuestion = async (questionId: number) => {
+    if (!confirm('Are you sure you want to delete this question?')) return;
+    try {
+      if (!user) throw new Error('User not authenticated');
+      await deleteQuizQuestion(questionId, user.id);
+      // Reload quiz details
+      if (selectedQuiz) {
+        await handleViewQuiz(selectedQuiz.id);
+      }
+    } catch (e) {
+      console.error('Failed to delete question', e);
+      setError('Failed to delete question');
+    }
+  };
+
+  const handleAddOption = async (questionId: number, optionData: QuizOptionCreateDTO) => {
+    try {
+      if (!user) throw new Error('User not authenticated');
+      await addQuizOption(questionId, optionData, user.id);
+      setShowAddOption(false);
+      // Reload quiz details
+      if (selectedQuiz) {
+        await handleViewQuiz(selectedQuiz.id);
+      }
+    } catch (e) {
+      console.error('Failed to add option', e);
+      setError('Failed to add option');
+    }
+  };
+
+  const handleUpdateOption = async (optionId: number, optionData: QuizOptionUpdateDTO) => {
+    try {
+      if (!user) throw new Error('User not authenticated');
+      await updateQuizOption(optionId, optionData, user.id);
+      setEditingOption(null);
+      // Reload quiz details
+      if (selectedQuiz) {
+        await handleViewQuiz(selectedQuiz.id);
+      }
+    } catch (e) {
+      console.error('Failed to update option', e);
+      setError('Failed to update option');
+    }
+  };
+
+  const handleDeleteOption = async (optionId: number) => {
+    if (!confirm('Are you sure you want to delete this option?')) return;
+    try {
+      if (!user) throw new Error('User not authenticated');
+      await deleteQuizOption(optionId, user.id);
+      // Reload quiz details
+      if (selectedQuiz) {
+        await handleViewQuiz(selectedQuiz.id);
+      }
+    } catch (e) {
+      console.error('Failed to delete option', e);
+      setError('Failed to delete option');
+    }
+  };
+
+  const getStatusIcon = (status: CourseStatus) => {
     switch (status) {
-      case 'PUBLIC':
+      case CourseStatus.PUBLIC:
         return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'PENDING':
+      case CourseStatus.PENDING:
         return <Clock className="w-4 h-4 text-yellow-500" />;
-      case 'DRAFT':
+      case CourseStatus.DRAFT:
         return <Edit3 className="w-4 h-4 text-blue-500" />;
-      case 'ARCHIVED':
+      case CourseStatus.ARCHIVED:
         return <XCircle className="w-4 h-4 text-gray-500" />;
       default:
         return <AlertCircle className="w-4 h-4 text-gray-500" />;
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: CourseStatus) => {
     switch (status) {
-      case 'PUBLIC':
+      case CourseStatus.PUBLIC:
         return 'mentor-status-public';
-      case 'PENDING':
+      case CourseStatus.PENDING:
         return 'mentor-status-pending';
-      case 'DRAFT':
+      case CourseStatus.DRAFT:
         return 'mentor-status-draft';
-      case 'ARCHIVED':
+      case CourseStatus.ARCHIVED:
         return 'mentor-status-archived';
       default:
         return 'mentor-status-archived';
@@ -576,11 +1066,51 @@ const MentorPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="mentor-courses-grid">
-        {courses.map((course) => (
+      {/* Loading State */}
+      {loading && (
+        <div className="mentor-loading-state">
+          <div className="spinner"></div>
+          <p>Đang tải khóa học...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && !loading && (
+        <div className="mentor-error-state">
+          <AlertCircle className="w-12 h-12 text-red-500" />
+          <p className="error-message">{error}</p>
+          <button 
+            className="retry-button" 
+            onClick={() => window.location.reload()}
+          >
+            Thử lại
+          </button>
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!loading && !error && courses.length === 0 && (
+        <div className="mentor-empty-state">
+          <BookOpen className="w-16 h-16 text-gray-400" />
+          <h3>Chưa có khóa học nào</h3>
+          <p>Bắt đầu tạo khóa học đầu tiên của bạn!</p>
+          <button 
+            className="mentor-create-course-button"
+            onClick={() => setShowCreateCourse(true)}
+          >
+            <Plus className="w-5 h-5" />
+            Tạo Khóa Học Mới
+          </button>
+        </div>
+      )}
+
+      {/* Courses Grid */}
+      {!loading && !error && courses.length > 0 && (
+        <div className="mentor-courses-grid">
+          {courses.map((course) => (
           <div key={course.id} className="mentor-course-card">
             <div className="mentor-course-thumbnail">
-              {course.thumbnail ? (
+              {course.thumbnail?.url ? (
                 <img src={course.thumbnail.url} alt={course.title} />
               ) : (
                 <div className="mentor-course-thumbnail-placeholder">
@@ -604,12 +1134,18 @@ const MentorPage: React.FC = () => {
                 <div className="mentor-course-stats">
                   <div className="mentor-course-stat">
                     <Users className="w-4 h-4" />
-                    <span>{course.enrollmentCount} học viên</span>
+                    <span>{course.enrollmentCount} Học viên</span>
                   </div>
                   <div className="mentor-course-stat">
                     <Play className="w-4 h-4" />
-                    <span>{course.lessons.length} bài học</span>
+                    <span>{course.lessonCount || 0} Bài học</span>
                   </div>
+                  {course.price !== undefined && course.price !== null && (
+                    <div className="mentor-course-stat">
+                      <DollarSign className="w-4 h-4" />
+                      <span>{course.price.toLocaleString('vi-VN')} {course.currency || 'VND'}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -646,7 +1182,7 @@ const MentorPage: React.FC = () => {
                   <Edit3 className="w-4 h-4" />
                   Sửa
                 </button>
-                {course.status === 'DRAFT' && (
+                {course.status === CourseStatus.DRAFT && (
                   <button 
                     className="mentor-action-button mentor-submit-button"
                     onClick={() => handleSubmitForApproval(course.id)}
@@ -669,20 +1205,6 @@ const MentorPage: React.FC = () => {
           </div>
         ))}
       </div>
-
-      {courses.length === 0 && (
-        <div className="mentor-empty-courses">
-          <BookOpen className="w-16 h-16 text-gray-400" />
-          <h3>Chưa có khóa học nào</h3>
-          <p>Bắt đầu tạo khóa học đầu tiên của bạn</p>
-          <button 
-            className="mentor-create-course-button"
-            onClick={() => setShowCreateCourse(true)}
-          >
-            <Plus className="w-5 h-5" />
-            Tạo Khóa Học Mới
-          </button>
-        </div>
       )}
     </div>
   );
@@ -703,158 +1225,403 @@ const MentorPage: React.FC = () => {
           <div className="mentor-course-detail-body">
             <div className="mentor-course-content-tabs">
               <button 
-                className={`mentor-content-tab ${activeContentTab === 'lessons' ? 'active' : ''}`}
-                onClick={() => setActiveContentTab('lessons')}
+                className={`mentor-content-tab ${activeContentTab === 'modules' ? 'active' : ''}`}
+                onClick={() => setActiveContentTab('modules')}
               >
-                <Play className="w-4 h-4" />
-                Bài Học ({selectedCourse.lessons.length})
-              </button>
-              <button 
-                className={`mentor-content-tab ${activeContentTab === 'quizzes' ? 'active' : ''}`}
-                onClick={() => setActiveContentTab('quizzes')}
-              >
-                <HelpCircle className="w-4 h-4" />
-                Quiz ({selectedCourse.quizzes.length})
-              </button>
-              <button 
-                className={`mentor-content-tab ${activeContentTab === 'assignments' ? 'active' : ''}`}
-                onClick={() => setActiveContentTab('assignments')}
-              >
-                <Edit3 className="w-4 h-4" />
-                Bài Tập ({selectedCourse.assignments.length})
-              </button>
-              <button 
-                className={`mentor-content-tab ${activeContentTab === 'codelabs' ? 'active' : ''}`}
-                onClick={() => setActiveContentTab('codelabs')}
-              >
-                <Code className="w-4 h-4" />
-                Code Lab ({selectedCourse.codingExercises.length})
+                <BookOpen className="w-4 h-4" />
+                Module
               </button>
             </div>
 
-            {activeContentTab === 'lessons' && (
+            {activeContentTab === 'modules' && modules.length === 0 && (
+              <div className="mentor-empty-state" style={{ padding: '24px' }}>
+                <div className="mentor-courses-title-section" style={{ marginBottom: 12 }}>
+                  <h3>Hãy tạo Module đầu tiên</h3>
+                  <p>Mỗi khóa học cần ít nhất một Module để chứa bài học, bài tập, quiz và codelab.</p>
+                </div>
+                <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <input
+                    type="text"
+                    className="mentor-form-input"
+                    placeholder="Tiêu đề module"
+                    value={newModuleTitle}
+                    onChange={e => setNewModuleTitle(e.target.value)}
+                    style={{ maxWidth: 320 }}
+                  />
+                  <input
+                    type="text"
+                    className="mentor-form-input"
+                    placeholder="Mô tả (tuỳ chọn)"
+                    value={newModuleDescription}
+                    onChange={e => setNewModuleDescription(e.target.value)}
+                    style={{ maxWidth: 400 }}
+                  />
+                  <button className="mentor-btn-primary" onClick={handleCreateModule} disabled={modulesLoading || !newModuleTitle.trim()}>
+                    {modulesLoading ? 'Đang tạo...' : 'Tạo Module'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {activeContentTab === 'modules' && modules.length > 0 && !selectedModuleId && (
+              <div className="mentor-empty-state" style={{ padding: '24px' }}>
+                <h3>Chọn một Module để quản lý nội dung</h3>
+                <p>Hãy chọn Module ở danh sách bên dưới để thêm bài học, bài tập, quiz hoặc codelab.</p>
+              </div>
+            )}
+
+            {activeContentTab === 'modules' && (
               <div className="mentor-lessons-section">
                 <div className="mentor-lessons-header">
-                  <h3 className="mentor-lessons-title">Bài Học</h3>
-                  <button className="mentor-add-lesson-button">
-                    <Plus className="w-4 h-4" />
-                    Thêm Bài Học
-                  </button>
+                  <h3 className="mentor-lessons-title">Danh Sách Module</h3>
+                  {modules.length > 0 && (
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                      <input
+                        type="text"
+                        className="mentor-form-input"
+                        placeholder="Tiêu đề module"
+                        value={newModuleTitle}
+                        onChange={e => setNewModuleTitle(e.target.value)}
+                        style={{ maxWidth: 280 }}
+                      />
+                      <input
+                        type="text"
+                        className="mentor-form-input"
+                        placeholder="Mô tả (tuỳ chọn)"
+                        value={newModuleDescription}
+                        onChange={e => setNewModuleDescription(e.target.value)}
+                        style={{ maxWidth: 360 }}
+                      />
+                      <button className="mentor-btn-primary" onClick={handleCreateModule} disabled={modulesLoading || !newModuleTitle.trim()}>
+                        {modulesLoading ? 'Đang tạo...' : 'Thêm Module'}
+                      </button>
+                    </div>
+                  )}
                 </div>
-                <div className="mentor-lessons-list">
-                  {selectedCourse.lessons.map((lesson) => (
-                    <div key={lesson.id} className="mentor-lesson-card">
-                      <div className="mentor-lesson-header">
-                        <h4 className="mentor-lesson-title">{lesson.title}</h4>
-                        <div className="mentor-lesson-type">
-                          {getLessonTypeIcon(lesson.type)}
-                          <span>{lesson.type}</span>
+
+                {modulesLoading ? (
+                  <div className="mentor-loading-state"><div className="spinner"></div><p>Đang tải module...</p></div>
+                ) : modules.length === 0 ? (
+                  <div className="mentor-empty-state">
+                    <BookOpen className="w-16 h-16 text-gray-400" />
+                    <h3>Chưa có module nào</h3>
+                    <p>Tạo module đầu tiên để bắt đầu thêm nội dung cho khóa học.</p>
+                  </div>
+                ) : (
+                  <div className="mentor-lessons-list">
+                    {modules.sort((a,b)=> (a.orderIndex||0)-(b.orderIndex||0)).map((m, idx, arr) => (
+                      <div key={m.id} className={`mentor-lesson-card ${selectedModuleId === m.id ? 'selected' : ''}`} onClick={() => handleSelectModule(m.id)}>
+                        <div className="mentor-lesson-header">
+                          <h4 className="mentor-lesson-title">{m.title}</h4>
+                          <div className="mentor-lesson-type" style={{ gap: 8 }}>
+                            <span>Thứ tự: {m.orderIndex}</span>
+                            <button className="mentor-lesson-action-button" disabled={idx===0 || modulesLoading} onClick={(e)=>{ e.stopPropagation(); void handleMoveModule(m.id,'up'); }}>↑</button>
+                            <button className="mentor-lesson-action-button" disabled={idx===arr.length-1 || modulesLoading} onClick={(e)=>{ e.stopPropagation(); void handleMoveModule(m.id,'down'); }}>↓</button>
+                          </div>
+                        </div>
+                        <div className="mentor-lesson-meta" style={{ gap: 8 }}>
+                          <span style={{ color: '#6b7280' }}>{m.description || 'Không có mô tả'}</span>
                         </div>
                       </div>
-                      <div className="mentor-lesson-meta">
-                        <span>Thứ tự: {lesson.orderIndex}</span>
-                        <span>Thời lượng: {formatDuration(lesson.durationSec)}</span>
-                      </div>
-                      <div className="mentor-lesson-actions">
-                        <button className="mentor-lesson-action-button primary">
-                          <Edit3 className="w-4 h-4" />
-                          Sửa
-                        </button>
-                        <button className="mentor-lesson-action-button">
-                          <Eye className="w-4 h-4" />
-                          Xem
-                        </button>
-                        <button className="mentor-lesson-action-button danger">
-                          <Trash2 className="w-4 h-4" />
-                          Xóa
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+                    ))}
+                  </div>
+                )}
 
-            {activeContentTab === 'quizzes' && (
-              <div className="mentor-quiz-section">
-                <div className="mentor-quiz-header">
-                  <h3 className="mentor-quiz-title">Quiz</h3>
-                  <button className="mentor-add-quiz-button">
-                    <Plus className="w-4 h-4" />
-                    Thêm Quiz
-                  </button>
-                </div>
-                <div className="mentor-quiz-list">
-                  {selectedCourse.quizzes.map((quiz) => (
-                    <div key={quiz.id} className="mentor-quiz-card">
-                      <div className="mentor-quiz-header">
-                        <h4 className="mentor-quiz-title">{quiz.title}</h4>
-                      </div>
-                      <div className="mentor-quiz-meta">
-                        <span>Điểm đạt: {quiz.passScore}%</span>
-                        <span>Câu hỏi: {quiz.questions.length}</span>
-                      </div>
+                {selectedModuleId && (
+                  <>
+                    <div className="mentor-course-content-tabs" style={{ marginTop: 16 }}>
+                      <button 
+                        className={`mentor-content-tab ${activeModuleTab === 'lessons' ? 'active' : ''}`}
+                        onClick={() => setActiveModuleTab('lessons')}
+                      >
+                        <Play className="w-4 h-4" />
+                        Bài Học
+                      </button>
+                      <button 
+                        className={`mentor-content-tab ${activeModuleTab === 'quizzes' ? 'active' : ''}`}
+                        onClick={() => setActiveModuleTab('quizzes')}
+                      >
+                        <HelpCircle className="w-4 h-4" />
+                        Quiz
+                      </button>
+                      <button 
+                        className={`mentor-content-tab ${activeModuleTab === 'assignments' ? 'active' : ''}`}
+                        onClick={() => setActiveModuleTab('assignments')}
+                      >
+                        <Edit3 className="w-4 h-4" />
+                        Bài Tập
+                      </button>
+                      <button 
+                        className={`mentor-content-tab ${activeModuleTab === 'codelabs' ? 'active' : ''}`}
+                        onClick={() => setActiveModuleTab('codelabs')}
+                      >
+                        <Code className="w-4 h-4" />
+                        Code Lab
+                      </button>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
 
-            {activeContentTab === 'assignments' && (
-              <div className="mentor-assignment-section">
-                <div className="mentor-assignment-header">
-                  <h3 className="mentor-assignment-title">Bài Tập</h3>
-                  <button className="mentor-add-assignment-button">
-                    <Plus className="w-4 h-4" />
-                    Thêm Bài Tập
-                  </button>
-                </div>
-                <div className="mentor-lessons-list">
-                  {selectedCourse.assignments.map((assignment) => (
-                    <div key={assignment.id} className="mentor-lesson-card">
-                      <div className="mentor-lesson-header">
-                        <h4 className="mentor-lesson-title">{assignment.title}</h4>
-                        <div className="mentor-lesson-type">
-                          <PenTool className="w-4 h-4" />
-                          <span>{assignment.submissionType}</span>
+                    {activeModuleTab === 'lessons' && (
+                      <div className="mentor-lessons-section">
+                        <div className="mentor-lessons-header">
+                          <h3 className="mentor-lessons-title">Bài Học</h3>
+                          {selectedModuleId && (
+                            <button className="mentor-add-lesson-button" onClick={() => setShowAddLesson(true)}>
+                              <Plus className="w-4 h-4" />
+                              Thêm Bài Học
+                            </button>
+                          )}
+                        </div>
+                        <div className="mentor-lessons-list" onDragOver={(e)=>e.preventDefault()}>
+                          {lessonsLoading && <div className="mentor-loading-state"><div className="spinner"></div><p>Đang tải bài học...</p></div>}
+                          {courseLessons.map((lesson, idx) => (
+                            <div key={lesson.id} className="mentor-lesson-card" draggable onDragStart={(e)=>{ e.dataTransfer.setData('text/plain', String(idx)); }} onDrop={async (e)=>{
+                              const from = Number(e.dataTransfer.getData('text/plain'));
+                              const to = idx;
+                              if (isNaN(from) || from===to || !selectedCourse || !user) return;
+                              const arr = [...courseLessons];
+                              const [moved] = arr.splice(from,1);
+                              arr.splice(to,0,moved);
+                              // recompute orderIndex locally for immediate feedback
+                              const reindexed = arr.map((l, i) => ({ ...l, orderIndex: i + 1 }));
+                              setCourseLessons(reindexed);
+                              const newOrder = arr.map(l=>l.id);
+                              try { await reorderLessons(selectedCourse.id, newOrder, user.id); } catch(err){ console.error('Reorder failed', err); }
+                            }}>
+                              <div className="mentor-lesson-header">
+                                <h4 className="mentor-lesson-title">{lesson.title}</h4>
+                                <div className="mentor-lesson-type">
+                                  {getLessonTypeIcon(lesson.type)}
+                                  <span>{lesson.type}</span>
+                                </div>
+                              </div>
+                              <div className="mentor-lesson-meta">
+                                <span>Thứ tự: {lesson.orderIndex}</span>
+                                <span>Thời lượng: {formatDuration(lesson.durationSec)}</span>
+                              </div>
+                              <div className="mentor-lesson-actions">
+                                <button 
+                                  className="mentor-lesson-action-button primary"
+                                  onClick={() => setEditingLesson(lesson)}
+                                >
+                                  <Edit3 className="w-4 h-4" />
+                                  Sửa
+                                </button>
+                                <button className="mentor-lesson-action-button" onClick={async ()=> {
+                                  if (!user) return;
+                                  try {
+                                    setPreviewLoading(true);
+                                    try {
+                                      const detail = await getLessonById(lesson.id);
+                                      let resolvedVideoUrl = detail.videoUrl as string | undefined;
+                                      if (!resolvedVideoUrl && detail.videoMediaId) {
+                                        try { 
+                                          resolvedVideoUrl = await getSignedMediaUrl(detail.videoMediaId, user.id); 
+                                        } catch {
+                                          // Ignore error
+                                        }
+                                      }
+                                      const merged: Lesson = {
+                                        id: detail.id,
+                                        title: detail.title,
+                                        type: detail.type,
+                                        orderIndex: detail.orderIndex ?? lesson.orderIndex,
+                                        durationSec: detail.durationSec ?? lesson.durationSec ?? 0,
+                                        contentText: detail.contentText,
+                                        videoUrl: resolvedVideoUrl,
+                                        videoMediaId: detail.videoMediaId
+                                      };
+                                      setPreviewLesson(merged);
+                                    } catch {
+                                      // fallback to media list (prefer signed URL if possible)
+                                      try {
+                                        const media = await listMediaByLesson(lesson.id);
+                                        const video = media.find(m => m.type?.startsWith('video/'));
+                                        let fallbackUrl = video?.url;
+                                        if (video && user?.id) {
+                                          try { 
+                                            fallbackUrl = await getSignedMediaUrl(video.id, user.id); 
+                                          } catch {
+                                            // Ignore error
+                                          }
+                                        }
+                                        setPreviewLesson({ ...lesson, videoUrl: fallbackUrl } as Lesson);
+                                      } catch { 
+                                        setPreviewLesson(lesson); 
+                                      }
+                                    }
+                                  } finally {
+                                    setPreviewLoading(false);
+                                  }
+                                }}>
+                                  <Eye className="w-4 h-4" />
+                                  Xem
+                                </button>
+                                <button 
+                                  className="mentor-lesson-action-button danger"
+                                  onClick={() => handleDeleteLesson(lesson.id)}
+                                  disabled={loading}
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                  Xóa
+                                </button>
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
-                      <div className="mentor-lesson-meta">
-                        <span>Điểm tối đa: {assignment.maxScore}</span>
-                        <span>Hạn nộp: {assignment.dueAt ? new Date(assignment.dueAt).toLocaleDateString() : 'Không có'}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+                    )}
 
-            {activeContentTab === 'codelabs' && (
-              <div className="mentor-codelab-section">
-                <div className="mentor-codelab-header">
-                  <h3 className="mentor-codelab-title">Code Lab</h3>
-                  <button className="mentor-add-codelab-button">
-                    <Plus className="w-4 h-4" />
-                    Thêm Code Lab
-                  </button>
-                </div>
-                <div className="mentor-lessons-list">
-                  {selectedCourse.codingExercises.map((exercise) => (
-                    <div key={exercise.id} className="mentor-lesson-card">
-                      <div className="mentor-lesson-header">
-                        <h4 className="mentor-lesson-title">{exercise.title}</h4>
-                        <div className="mentor-lesson-type">
-                          <Code className="w-4 h-4" />
-                          <span>{exercise.language}</span>
+                    {activeModuleTab === 'quizzes' && (
+                      <div className="mentor-quiz-section">
+                        <div className="mentor-quiz-header">
+                          <h3 className="mentor-quiz-title">Quiz</h3>
+                          <button className="mentor-add-quiz-button" onClick={() => setShowAddQuiz(true)}>
+                            <Plus className="w-4 h-4" />
+                            Thêm Quiz
+                          </button>
+                        </div>
+                        <div className="mentor-quiz-list">
+                          {quizzesLoading ? (
+                            <div className="mentor-loading">Đang tải quiz...</div>
+                          ) : moduleQuizzes.length === 0 ? (
+                            <div className="mentor-empty-state">
+                              <p>Chưa có quiz nào cho module này</p>
+                            </div>
+                          ) : (
+                            moduleQuizzes.map((quiz) => (
+                              <div key={quiz.id} className="mentor-quiz-card">
+                                <div className="mentor-quiz-header">
+                                  <h4 className="mentor-quiz-title">{quiz.title}</h4>
+                                  <div className="mentor-quiz-actions">
+                                    <button 
+                                      className="mentor-action-btn mentor-view-btn"
+                                      onClick={() => handleViewQuiz(quiz.id)}
+                                      title="View Quiz Details"
+                                    >
+                                      <Eye className="w-4 h-4" />
+                                    </button>
+                                    <button 
+                                      className="mentor-action-btn mentor-edit-btn"
+                                      onClick={() => handleEditQuiz(quiz as any)}
+                                      title="Edit Quiz"
+                                    >
+                                      <Edit3 className="w-4 h-4" />
+                                    </button>
+                                    <button 
+                                      className="mentor-action-btn mentor-delete-btn"
+                                      onClick={() => handleDeleteQuiz(quiz.id)}
+                                      title="Delete Quiz"
+                                    >
+                                      <Trash2 className="w-4 h-4" />
+                                    </button>
+                                  </div>
+                                </div>
+                                <div className="mentor-quiz-meta">
+                                  <span>Điểm đạt: {quiz.passScore}%</span>
+                                  <span>Câu hỏi: {quiz.questionCount}</span>
+                                </div>
+                              </div>
+                            ))
+                          )}
                         </div>
                       </div>
-                      <div className="mentor-lesson-meta">
-                        <span>Điểm tối đa: {exercise.maxScore}</span>
-                        <span>Test cases: {exercise.testCases.length}</span>
+                    )}
+
+                    {activeModuleTab === 'assignments' && (
+                      <div className="mentor-assignment-section">
+                        <div className="mentor-assignment-header">
+                          <h3 className="mentor-assignment-title">Bài Tập</h3>
+                          <button className="mentor-add-assignment-button" onClick={() => setShowAddAssignment(true)}>
+                            <Plus className="w-4 h-4" />
+                            Thêm Bài Tập
+                          </button>
+                        </div>
+                        <div className="mentor-lessons-list">
+                          {assignmentsLoading ? (
+                            <div className="mentor-loading">
+                              <div className="spinner"></div>
+                              <p>Đang tải bài tập...</p>
+                            </div>
+                          ) : moduleAssignments.length === 0 ? (
+                            <div className="mentor-empty-state">
+                              <PenTool className="w-12 h-12 text-gray-400" />
+                              <p>Chưa có bài tập nào</p>
+                              <p className="text-sm text-gray-500">Tạo bài tập đầu tiên cho module này</p>
+                            </div>
+                          ) : (
+                            moduleAssignments.map((assignment) => (
+                              <div key={assignment.id} className="mentor-lesson-card">
+                                <div className="mentor-lesson-header">
+                                  <h4 className="mentor-lesson-title">{assignment.title}</h4>
+                                  <div className="mentor-lesson-actions">
+                                    <div className="mentor-lesson-type">
+                                      <PenTool className="w-4 h-4" />
+                                      <span>{assignment.submissionType}</span>
+                                    </div>
+                                    <div className="mentor-lesson-buttons">
+                                      <button
+                                        className="mentor-btn-icon"
+                                        onClick={() => handleEditAssignment(assignment.id)}
+                                        title="Edit assignment"
+                                      >
+                                        <Edit3 className="w-4 h-4" />
+                                      </button>
+                                      <button
+                                        className="mentor-btn-icon mentor-btn-danger"
+                                        onClick={() => handleDeleteAssignment(assignment.id)}
+                                        title="Delete assignment"
+                                      >
+                                        <Trash2 className="w-4 h-4" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="mentor-lesson-meta">
+                                  <span>Điểm tối đa: {assignment.maxScore}</span>
+                                  <span>Hạn nộp: {assignment.dueAt ? new Date(assignment.dueAt).toLocaleDateString() : 'Không có'}</span>
+                                </div>
+                                {assignment.description && (
+                                  <div className="mentor-lesson-description">
+                                    <p>{assignment.description}</p>
+                                  </div>
+                                )}
+                              </div>
+                            ))
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    )}
+
+                    {activeModuleTab === 'codelabs' && (
+                      <div className="mentor-codelab-section">
+                        <div className="mentor-codelab-header">
+                          <h3 className="mentor-codelab-title">Code Lab</h3>
+                          <button className="mentor-add-codelab-button" onClick={() => setShowAddCodelab(true)}>
+                            <Plus className="w-4 h-4" />
+                            Thêm Code Lab
+                          </button>
+                        </div>
+                        <div className="mentor-lessons-list">
+                          {selectedCourse.codingExercises.map((exercise) => (
+                            <div key={exercise.id} className="mentor-lesson-card">
+                              <div className="mentor-lesson-header">
+                                <h4 className="mentor-lesson-title">{exercise.title}</h4>
+                                <div className="mentor-lesson-type">
+                                  <Code className="w-4 h-4" />
+                                  <span>{exercise.language}</span>
+                                </div>
+                              </div>
+                              <div className="mentor-lesson-meta">
+                                <span>Điểm tối đa: {exercise.maxScore}</span>
+                                <span>Test cases: {exercise.testCases.length}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -952,6 +1719,695 @@ const MentorPage: React.FC = () => {
 
       {/* Course Detail Modal */}
       {showCourseDetail && renderCourseDetailModal()}
+
+      {/* Add Lesson Modal */}
+      {showAddLesson && selectedCourse && selectedModuleId && (
+        <div className="mentor-modal-overlay">
+          <div className="mentor-modal-content">
+            <div className="mentor-modal-header">
+              <h2 className="mentor-modal-title">Thêm Bài Học</h2>
+              <button className="mentor-modal-close" onClick={()=>setShowAddLesson(false)}><X className="w-6 h-6"/></button>
+            </div>
+            <form className="mentor-form" onSubmit={async (e)=>{
+              e.preventDefault();
+              const form = e.target as HTMLFormElement;
+              const title = (form.elements.namedItem('title') as HTMLInputElement).value.trim();
+              const type = (form.elements.namedItem('type') as HTMLSelectElement).value as ApiLessonType;
+              const duration = Number((form.elements.namedItem('duration') as HTMLInputElement).value || '0');
+              const videoUrl = (form.elements.namedItem('videoUrl') as HTMLInputElement | null)?.value?.trim();
+              const videoFile = (form.elements.namedItem('videoFile') as HTMLInputElement | null)?.files?.[0] || null;
+              const contentText = (form.elements.namedItem('contentText') as HTMLTextAreaElement | null)?.value?.trim();
+              if (!title || !user) return;
+              try {
+                let videoMediaId: number | undefined;
+                
+                // Upload video file first if provided
+                if (type === 'VIDEO' && videoFile) {
+                  console.log('Uploading video file:', videoFile.name);
+                  const media = await uploadMedia(videoFile, user.id);
+                  videoMediaId = media.id;
+                  console.log('Video uploaded successfully:', media.id);
+                }
+                
+                const lessonPayload: LessonCreateDTO = { 
+                  title, 
+                  type, 
+                  orderIndex: courseLessons.length+1, 
+                  durationSec: duration,
+                  ...(type === 'VIDEO' && videoUrl ? { videoUrl } : {}),
+                  ...(type === 'VIDEO' && videoMediaId ? { videoMediaId } : {}),
+                  ...(type === 'READING' && contentText ? { contentText } : {})
+                };
+                
+                if (!selectedModuleId) {
+                  console.error('No module selected for lesson creation');
+                  return;
+                }
+                
+                console.log('Creating lesson with payload:', lessonPayload);
+                const created = await createLesson(selectedModuleId, lessonPayload, user.id);
+                console.log('Lesson created successfully:', created.id);
+                
+                setShowAddLesson(false);
+                await loadLessons(selectedCourse.id, selectedModuleId || undefined);
+              } catch (err) { 
+                console.error('Create lesson failed', err);
+                setError('Failed to create lesson: ' + (err as any).message);
+              }
+            }}>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label" htmlFor="lessonTitle">Tiêu đề</label>
+                <input id="lessonTitle" name="title" className="mentor-form-input" placeholder="Bài học..." />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label" htmlFor="lessonType">Loại</label>
+                <select id="lessonType" name="type" className="mentor-form-select">
+                  <option value="VIDEO">Video</option>
+                  <option value="READING">Reading</option>
+                </select>
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label" htmlFor="readingContent">Nội dung (chỉ Reading)</label>
+                <textarea id="readingContent" name="contentText" className="mentor-form-textarea" rows={4} placeholder="Nhập nội dung bài đọc..."></textarea>
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label" htmlFor="videoUrl">Link video (chỉ Video)</label>
+                <input id="videoUrl" name="videoUrl" className="mentor-form-input" placeholder="https://..." />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label" htmlFor="videoFile">Tải video từ máy (tùy chọn)</label>
+                <input id="videoFile" name="videoFile" type="file" accept="video/*" className="mentor-form-input" />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label" htmlFor="duration">Thời lượng (giây)</label>
+                <input id="duration" name="duration" type="number" min={0} className="mentor-form-input" />
+              </div>
+              <div className="mentor-modal-actions">
+                <button type="button" className="mentor-btn-secondary" onClick={()=>setShowAddLesson(false)}>Hủy</button>
+                <button type="submit" className="mentor-btn-primary">Tạo</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Lesson Modal */}
+      {editingLesson && selectedCourse && (
+        <div className="mentor-modal-overlay">
+          <div className="mentor-modal-content">
+            <div className="mentor-modal-header">
+              <h2 className="mentor-modal-title">Chỉnh Sửa Bài Học</h2>
+              <button className="mentor-modal-close" onClick={()=>setEditingLesson(null)}><X className="w-6 h-6"/></button>
+            </div>
+            <form className="mentor-form" onSubmit={async (e)=>{
+              e.preventDefault();
+              const form = e.target as HTMLFormElement;
+              const title = (form.elements.namedItem('title') as HTMLInputElement).value.trim();
+              const duration = Number((form.elements.namedItem('duration') as HTMLInputElement).value || '0');
+              const videoUrl = (form.elements.namedItem('videoUrl') as HTMLInputElement | null)?.value?.trim();
+              const contentText = (form.elements.namedItem('contentText') as HTMLTextAreaElement | null)?.value?.trim();
+              const videoFile = (form.elements.namedItem('editVideoFile') as HTMLInputElement | null)?.files?.[0] || null;
+              if (!title || !user) return;
+              try {
+                const { updateLesson } = await import('../../services/lessonService');
+                const updatePayload = {
+                  title,
+                  orderIndex: editingLesson.orderIndex,
+                  durationSec: duration,
+                  ...(editingLesson.type === 'VIDEO' && videoUrl ? { videoUrl } : {}),
+                  ...(editingLesson.type === 'READING' && contentText ? { contentText } : {})
+                };
+                await updateLesson(editingLesson.id, updatePayload, user.id);
+                // If a new video file is provided, upload and attach to this lesson
+                if (editingLesson.type === 'VIDEO' && videoFile) {
+                  try {
+                    const { uploadMedia, attachMediaToLesson } = await import('../../services/mediaService');
+                    const media = await uploadMedia(videoFile, user.id);
+                    await attachMediaToLesson(media.id, editingLesson.id, user.id);
+                  } catch(err) {
+                    console.error('Video upload/attach failed', err);
+                  }
+                }
+                setEditingLesson(null);
+                await loadLessons(selectedCourse.id, selectedModuleId || undefined);
+                alert('Bài học đã được cập nhật thành công!');
+              } catch (err) { 
+                console.error('Update lesson failed', err); 
+                alert('Không thể cập nhật bài học');
+              }
+            }}>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label" htmlFor="editLessonTitle">Tiêu đề</label>
+                <input 
+                  id="editLessonTitle" 
+                  name="title" 
+                  className="mentor-form-input" 
+                  placeholder="Bài học..." 
+                  defaultValue={editingLesson.title}
+                />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Loại</label>
+                <input 
+                  className="mentor-form-input" 
+                  value={editingLesson.type} 
+                  disabled 
+                  style={{ opacity: 0.6 }}
+                />
+                <p style={{ fontSize: '0.875rem', color: '#6b7280', marginTop: '0.5rem' }}>
+                  Không thể thay đổi loại bài học khi chỉnh sửa
+                </p>
+              </div>
+              {editingLesson.type === 'READING' && (
+                <div className="mentor-form-group">
+                  <label className="mentor-form-label" htmlFor="editReadingContent">Nội dung</label>
+                  <textarea 
+                    id="editReadingContent" 
+                    name="contentText" 
+                    className="mentor-form-textarea" 
+                    rows={6} 
+                    placeholder="Nhập nội dung bài đọc..."
+                    defaultValue={editingLesson.contentText || ''}
+                  ></textarea>
+                </div>
+              )}
+              {editingLesson.type === 'VIDEO' && (
+                <div className="mentor-form-group">
+                  <label className="mentor-form-label" htmlFor="editVideoUrl">Link video</label>
+                  <input 
+                    id="editVideoUrl" 
+                    name="videoUrl" 
+                    className="mentor-form-input" 
+                    placeholder="https://..." 
+                    defaultValue={editingLesson.videoUrl || ''}
+                  />
+                  <p className="mentor-form-hint">Link chỉ là tham chiếu. Bạn có thể tải video lên để lưu trữ an toàn.</p>
+                </div>
+              )}
+              {editingLesson.type === 'VIDEO' && (
+                <div className="mentor-form-group">
+                  <label className="mentor-form-label" htmlFor="editVideoFile">Tải video từ máy (tùy chọn)</label>
+                  <input id="editVideoFile" name="editVideoFile" type="file" accept="video/*" className="mentor-form-input" />
+                  {/* Simple preview using current data if available */}
+                  {(editingLesson.videoUrl) && (
+                    <div style={{ marginTop: 8 }}>
+                      <video controls style={{ width: '100%', maxHeight: 240, borderRadius: 8 }} src={editingLesson.videoUrl} />
+                    </div>
+                  )}
+                </div>
+              )}
+              <div className="mentor-form-group">
+                <label className="mentor-form-label" htmlFor="editDuration">Thời lượng (giây)</label>
+                <input 
+                  id="editDuration" 
+                  name="duration" 
+                  type="number" 
+                  min={0} 
+                  className="mentor-form-input" 
+                  defaultValue={editingLesson.durationSec}
+                />
+              </div>
+              <div className="mentor-modal-actions">
+                <button type="button" className="mentor-btn-secondary" onClick={()=>setEditingLesson(null)}>Hủy</button>
+                <button type="submit" className="mentor-btn-primary">Cập Nhật</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add Quiz Modal */}
+      {showAddQuiz && selectedCourse && selectedModuleId && (
+        <div className="mentor-modal-overlay">
+          <div className="mentor-modal-content">
+            <div className="mentor-modal-header">
+              <h2 className="mentor-modal-title">Thêm Quiz</h2>
+              <button className="mentor-modal-close" onClick={()=>setShowAddQuiz(false)}><X className="w-6 h-6"/></button>
+            </div>
+            <form className="mentor-form" onSubmit={async (e)=>{
+              e.preventDefault();
+              if (!user || !selectedModuleId) return;
+              const form = e.target as HTMLFormElement;
+              const title = (form.elements.namedItem('title') as HTMLInputElement).value.trim();
+              const passScore = Number((form.elements.namedItem('pass') as HTMLInputElement).value || '50');
+              if (!title) return;
+              try {
+                // Create quiz for the selected module
+                const quizPayload: QuizCreateDTO = { 
+                  title, 
+                  description: '', 
+                  passScore
+                };
+                console.log('Creating quiz for module:', selectedModuleId, 'with payload:', quizPayload);
+                const createdQuiz = await createQuiz(selectedModuleId, quizPayload, user.id);
+                console.log('Quiz created successfully:', createdQuiz.id);
+                setShowAddQuiz(false);
+                await loadLessons(selectedCourse.id, selectedModuleId || undefined);
+                await loadQuizzes(selectedModuleId);
+              } catch(err){ 
+                console.error('Create quiz failed', err);
+                setError('Failed to create quiz: ' + (err as any).message);
+              }
+            }}>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Tiêu đề</label>
+                <input name="title" className="mentor-form-input" />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Điểm đạt (%)</label>
+                <input name="pass" type="number" min={0} max={100} className="mentor-form-input" defaultValue={60} />
+              </div>
+              <div className="mentor-modal-actions">
+                <button type="button" className="mentor-btn-secondary" onClick={()=>setShowAddQuiz(false)}>Hủy</button>
+                <button type="submit" className="mentor-btn-primary">Tạo</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Quiz Detail Modal */}
+      {showQuizDetail && selectedQuiz && (
+        <div className="mentor-modal-overlay">
+          <div className="mentor-modal-content mentor-quiz-detail-modal">
+            <div className="mentor-modal-header">
+              <h2 className="mentor-modal-title">Quiz Details: {selectedQuiz.title}</h2>
+              <button className="mentor-modal-close" onClick={() => {
+                setShowQuizDetail(false);
+                setSelectedQuiz(null);
+              }}>
+                <X className="w-6 h-6"/>
+              </button>
+            </div>
+            
+            {quizDetailLoading ? (
+              <div className="mentor-loading">Loading quiz details...</div>
+            ) : (
+              <div className="mentor-quiz-detail-content">
+                <div className="mentor-quiz-info">
+                  <p><strong>Description:</strong> {selectedQuiz.description || 'No description'}</p>
+                  <p><strong>Pass Score:</strong> {selectedQuiz.passScore}%</p>
+                  <p><strong>Questions:</strong> {selectedQuiz.questions.length}</p>
+                </div>
+                
+                <div className="mentor-quiz-questions">
+                  <div className="mentor-quiz-questions-header">
+                    <h3>Questions</h3>
+                    <button 
+                      className="mentor-btn-primary"
+                      onClick={() => setShowAddQuestion(true)}
+                    >
+                      <Plus className="w-4 h-4" />
+                      Add Question
+                    </button>
+                  </div>
+                  
+                  {selectedQuiz.questions.length === 0 ? (
+                    <div className="mentor-empty-state">
+                      <p>No questions added yet</p>
+                    </div>
+                  ) : (
+                    <div className="mentor-questions-list">
+                      {selectedQuiz.questions.map((question, index) => (
+                        <div key={question.id} className="mentor-question-card">
+                          <div className="mentor-question-header">
+                            <h4>Question {index + 1}</h4>
+                            <div className="mentor-question-actions">
+                              <button 
+                                className="mentor-action-btn mentor-edit-btn"
+                                onClick={() => setEditingQuestion(question)}
+                                title="Edit Question"
+                              >
+                                <Edit3 className="w-4 h-4" />
+                              </button>
+                              <button 
+                                className="mentor-action-btn mentor-delete-btn"
+                                onClick={() => handleDeleteQuestion(question.id)}
+                                title="Delete Question"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                          <div className="mentor-question-content">
+                            <p><strong>Text:</strong> {question.questionText}</p>
+                            <p><strong>Type:</strong> {question.questionType}</p>
+                            <p><strong>Score:</strong> {question.score}</p>
+                          </div>
+                          
+                          <div className="mentor-question-options">
+                            <div className="mentor-options-header">
+                              <h5>Options</h5>
+                              <button 
+                                className="mentor-btn-secondary"
+                                onClick={() => setShowAddOption(true)}
+                              >
+                                <Plus className="w-4 h-4" />
+                                Add Option
+                              </button>
+                            </div>
+                            
+                            {question.options.length === 0 ? (
+                              <div className="mentor-empty-state">
+                                <p>No options added yet</p>
+                              </div>
+                            ) : (
+                              <div className="mentor-options-list">
+                                {question.options.map((option, optIndex) => (
+                                  <div key={option.id} className={`mentor-option-item ${option.correct ? 'correct' : ''}`}>
+                                    <span>{optIndex + 1}. {option.optionText}</span>
+                                    {option.correct && <span className="correct-badge">✓ Correct</span>}
+                                    <div className="mentor-option-actions">
+                                      <button 
+                                        className="mentor-action-btn mentor-edit-btn"
+                                        onClick={() => setEditingOption(option)}
+                                        title="Edit Option"
+                                      >
+                                        <Edit3 className="w-3 h-3" />
+                                      </button>
+                                      <button 
+                                        className="mentor-action-btn mentor-delete-btn"
+                                        onClick={() => handleDeleteOption(option.id)}
+                                        title="Delete Option"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Add Question Modal */}
+      {showAddQuestion && selectedQuiz && (
+        <div className="mentor-modal-overlay">
+          <div className="mentor-modal-content">
+            <div className="mentor-modal-header">
+              <h2 className="mentor-modal-title">Add Question</h2>
+              <button className="mentor-modal-close" onClick={() => setShowAddQuestion(false)}>
+                <X className="w-6 h-6"/>
+              </button>
+            </div>
+            <form className="mentor-form" onSubmit={async (e) => {
+              e.preventDefault();
+              if (!user || !selectedQuiz) return;
+              const form = e.target as HTMLFormElement;
+              const questionText = (form.elements.namedItem('questionText') as HTMLInputElement).value.trim();
+              const questionType = (form.elements.namedItem('questionType') as HTMLSelectElement).value as QuestionType;
+              const score = Number((form.elements.namedItem('score') as HTMLInputElement).value || '1');
+              
+              if (!questionText) return;
+              
+              try {
+                const questionData: QuizQuestionCreateDTO = {
+                  questionText,
+                  questionType,
+                  score,
+                  orderIndex: selectedQuiz.questions.length + 1,
+                  options: []
+                };
+                
+                await handleAddQuestion(selectedQuiz.id, questionData);
+              } catch (err) {
+                console.error('Add question failed', err);
+                setError('Failed to add question: ' + (err as any).message);
+              }
+            }}>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Question Text</label>
+                <textarea name="questionText" className="mentor-form-input" rows={3} required />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Question Type</label>
+                <select name="questionType" className="mentor-form-input" defaultValue={QuestionType.MULTIPLE_CHOICE}>
+                  <option value={QuestionType.MULTIPLE_CHOICE}>Multiple Choice</option>
+                  <option value={QuestionType.TRUE_FALSE}>True/False</option>
+                  <option value={QuestionType.FILL_BLANK}>Fill in the Blank</option>
+                </select>
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Score</label>
+                <input name="score" type="number" min="1" className="mentor-form-input" defaultValue={1} />
+              </div>
+              <div className="mentor-modal-actions">
+                <button type="button" className="mentor-btn-secondary" onClick={() => setShowAddQuestion(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="mentor-btn-primary">Add Question</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add Option Modal */}
+      {showAddOption && selectedQuiz && (
+        <div className="mentor-modal-overlay">
+          <div className="mentor-modal-content">
+            <div className="mentor-modal-header">
+              <h2 className="mentor-modal-title">Add Option</h2>
+              <button className="mentor-modal-close" onClick={() => setShowAddOption(false)}>
+                <X className="w-6 h-6"/>
+              </button>
+            </div>
+            <form className="mentor-form" onSubmit={async (e) => {
+              e.preventDefault();
+              if (!user || !selectedQuiz) return;
+              const form = e.target as HTMLFormElement;
+              const optionText = (form.elements.namedItem('optionText') as HTMLInputElement).value.trim();
+              const correct = (form.elements.namedItem('correct') as HTMLInputElement).checked;
+              const questionId = Number((form.elements.namedItem('questionId') as HTMLSelectElement).value);
+              
+              if (!optionText || !questionId) return;
+              
+              try {
+                const optionData: QuizOptionCreateDTO = {
+                  optionText,
+                  correct
+                };
+                
+                await handleAddOption(questionId, optionData);
+              } catch (err) {
+                console.error('Add option failed', err);
+                setError('Failed to add option: ' + (err as any).message);
+              }
+            }}>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Question</label>
+                <select name="questionId" className="mentor-form-input" required>
+                  <option value="">Select a question</option>
+                  {selectedQuiz.questions.map(question => (
+                    <option key={question.id} value={question.id}>
+                      {question.questionText.substring(0, 50)}...
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Option Text</label>
+                <input name="optionText" className="mentor-form-input" required />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-checkbox">
+                  <input name="correct" type="checkbox" />
+                  <span>This is the correct answer</span>
+                </label>
+              </div>
+              <div className="mentor-modal-actions">
+                <button type="button" className="mentor-btn-secondary" onClick={() => setShowAddOption(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="mentor-btn-primary">Add Option</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Assignment Modal */}
+      <AssignmentModal
+        isOpen={showAddAssignment}
+        onClose={() => {
+          setShowAddAssignment(false);
+          setEditingAssignment(null);
+        }}
+        moduleId={selectedModuleId || 0}
+        assignmentToEdit={editingAssignment || undefined}
+        onSuccess={handleAssignmentSuccess}
+      />
+
+      {/* Add Codelab Modal */}
+      {showAddCodelab && selectedCourse && (
+        <div className="mentor-modal-overlay">
+          <div className="mentor-modal-content">
+            <div className="mentor-modal-header">
+              <h2 className="mentor-modal-title">Thêm CodeLab</h2>
+              <button className="mentor-modal-close" onClick={()=>setShowAddCodelab(false)}><X className="w-6 h-6"/></button>
+            </div>
+            <form className="mentor-form" onSubmit={async (e)=>{
+              e.preventDefault(); if (!user) return;
+              const form = e.target as HTMLFormElement;
+              const title = (form.elements.namedItem('title') as HTMLInputElement).value.trim();
+              const langInput = (form.elements.namedItem('lang') as HTMLInputElement).value.trim().toUpperCase();
+              const language = (Object.values(ProgrammingLanguage) as string[]).includes(langInput) 
+                ? (langInput as ProgrammingLanguage) 
+                : ProgrammingLanguage.JAVASCRIPT;
+              const description = (form.elements.namedItem('prompt') as HTMLTextAreaElement).value.trim();
+              const moduleId = Number((form.elements.namedItem('moduleId') as HTMLSelectElement).value);
+              if (!title || !description || !moduleId) return;
+              try {
+                const exerciseData: CodingExerciseCreateDTO = { 
+                  title, 
+                  description, 
+                  difficulty: 'EASY', 
+                  language, 
+                  starterCode: '', 
+                  moduleId, 
+                  testCases: [] 
+                };
+                await createCodingExercise(moduleId, exerciseData, user.id);
+                setShowAddCodelab(false);
+              } catch(err){ console.error('Create codelab failed', err); }
+            }}>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Tiêu đề</label>
+                <input name="title" className="mentor-form-input" />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Ngôn ngữ</label>
+                <input name="lang" className="mentor-form-input" defaultValue="JavaScript" />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Điểm tối đa</label>
+                <input name="max" type="number" min={1} className="mentor-form-input" defaultValue={100} />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Mô tả bài</label>
+                <textarea name="prompt" className="mentor-form-textarea" rows={4}></textarea>
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Module</label>
+                <select name="moduleId" className="mentor-form-select">
+                  {modules.map(m=> (<option key={m.id} value={m.id}>{m.title}</option>))}
+                </select>
+              </div>
+              <div className="mentor-modal-actions">
+                <button type="button" className="mentor-btn-secondary" onClick={()=>setShowAddCodelab(false)}>Hủy</button>
+                <button type="submit" className="mentor-btn-primary">Tạo</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {previewLesson && (
+        <div className="mentor-modal-overlay">
+          <div className="mentor-modal-content" style={{ maxWidth: '800px', width: '90vw' }}>
+            <div className="mentor-modal-header">
+              <h2 className="mentor-modal-title">Chi tiết bài học</h2>
+              <button className="mentor-modal-close" onClick={()=>setPreviewLesson(null)}><X className="w-6 h-6"/></button>
+            </div>
+            <div className="mentor-form" style={{ paddingTop: 12 }}>
+              <div style={{ marginBottom: 16 }}>
+                <h3 className="mentor-lesson-title" style={{ marginBottom: 8, fontSize: '1.5rem', fontWeight: '600' }}>{previewLesson.title}</h3>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    {getLessonTypeIcon(previewLesson.type)}
+                    <span style={{ color: '#6b7280', fontSize: '0.9rem' }}>{previewLesson.type}</span>
+                  </div>
+                  <div style={{ color: '#6b7280', fontSize: '0.9rem' }}>
+                    Thứ tự: {previewLesson.orderIndex}
+                  </div>
+                  <div style={{ color: '#6b7280', fontSize: '0.9rem' }}>
+                    Thời lượng: {formatDuration(previewLesson.durationSec)}
+                  </div>
+                </div>
+              </div>
+              {previewLoading ? (
+                <div className="mentor-loading-state"><div className="spinner"></div><p>Đang tải nội dung...</p></div>
+              ) : (
+                <>
+                  {previewLesson.type === 'READING' && (
+                    <div style={{ 
+                      backgroundColor: '#f9fafb', 
+                      border: '1px solid #e5e7eb', 
+                      borderRadius: '8px', 
+                      padding: '16px', 
+                      minHeight: '200px' 
+                    }}>
+                      <h4 style={{ marginBottom: '12px', color: '#374151', fontSize: '1.1rem' }}>Nội dung bài đọc:</h4>
+                      <p style={{ 
+                        whiteSpace: 'pre-wrap', 
+                        color: '#374151', 
+                        lineHeight: '1.6',
+                        fontSize: '0.95rem'
+                      }}>
+                        {previewLesson.contentText || 'Không có nội dung'}
+                      </p>
+                    </div>
+                  )}
+                  {previewLesson.type === 'VIDEO' && (
+                    <div style={{
+                      backgroundColor: '#000',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      position: 'relative',
+                      minHeight: '300px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      {previewLesson.videoUrl ? (
+                        <video 
+                          style={{ 
+                            width: '100%', 
+                            height: 'auto',
+                            maxHeight: '500px',
+                            borderRadius: '12px'
+                          }} 
+                          controls 
+                          src={previewLesson.videoUrl}
+                          onError={(e) => {
+                            console.error('Video failed to load:', e);
+                            const video = e.target as HTMLVideoElement;
+                            video.style.display = 'none';
+                            const errorDiv = document.createElement('div');
+                            errorDiv.innerHTML = '<p style="color: white; text-align: center;">Không thể tải video. Vui lòng kiểm tra lại đường dẫn.</p>';
+                            video.parentNode?.appendChild(errorDiv);
+                          }}
+                        />
+                      ) : (
+                        <div style={{ 
+                          textAlign: 'center', 
+                          color: '#9ca3af',
+                          padding: '40px'
+                        }}>
+                          <Play className="w-16 h-16" style={{ margin: '0 auto 16px', opacity: 0.5 }} />
+                          <p style={{ fontSize: '1.1rem', marginBottom: '8px' }}>Không có video để hiển thị</p>
+                          <p style={{ fontSize: '0.9rem', opacity: 0.7 }}>
+                            Video có thể chưa được tải lên hoặc đường dẫn không hợp lệ
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -960,25 +2416,38 @@ const MentorPage: React.FC = () => {
 const CourseModal: React.FC<{
   course?: Course | null;
   onClose: () => void;
-  onSubmit: (data: CourseCreateData | Partial<CourseCreateData>) => void | Promise<void>;
+  onSubmit: (data: CourseCreateData | Partial<CourseCreateData>, thumbnailFile?: File) => void | Promise<void>;
   loading: boolean;
 }> = ({ course, onClose, onSubmit, loading }) => {
   const [formData, setFormData] = useState<CourseCreateData>({
     title: course?.title || '',
     description: course?.description || '',
-    level: course?.level || 'Beginner',
-    thumbnailMediaId: course?.thumbnail?.id
+    level: course?.level || 'Beginner'
   });
+  const [price, setPrice] = useState<number | ''>(course?.price ?? '');
+  const [currency, setCurrency] = useState<string>(course?.currency || 'VND');
 
-  const handleFileUpload = (file: File) => {
-    console.log('File selected:', file);
-    return file;
+  const [thumbPreview, setThumbPreview] = useState<string | undefined>(course?.thumbnail?.url);
+  const [selectedThumbnailFile, setSelectedThumbnailFile] = useState<File | null>(null);
+
+  const handleFileUpload = async (file: File) => {
+    try {
+      console.log('Selecting thumbnail file:', file.name);
+      setThumbPreview(URL.createObjectURL(file));
+      setSelectedThumbnailFile(file);
+      return file;
+    } catch (e) {
+      console.error('Thumbnail selection failed', e);
+      return file;
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.title.trim()) {
-      onSubmit(formData);
+      const submitData = { ...formData, ...(price !== '' ? { price: Number(price), currency: currency || 'VND' } : { currency }) };
+      console.log('Submitting course data:', submitData);
+      onSubmit(submitData, selectedThumbnailFile || undefined);
     }
   };
 
@@ -1002,6 +2471,17 @@ const CourseModal: React.FC<{
         </div>
         
         <form onSubmit={handleSubmit} className="mentor-form">
+          <div className="mentor-form-group">
+            <label className="mentor-form-label" htmlFor="price">Giá (VND mặc định)</label>
+            <input id="price" className="mentor-form-input" type="number" min={0} value={price} onChange={(e)=> setPrice(e.target.value === '' ? '' : Number(e.target.value))} placeholder="vd. 199000" />
+          </div>
+          <div className="mentor-form-group">
+            <label className="mentor-form-label" htmlFor="currency">Tiền tệ</label>
+            <select id="currency" className="mentor-form-select" value={currency} onChange={(e)=> setCurrency(e.target.value)}>
+              <option value="VND">VND</option>
+              <option value="USD">USD</option>
+            </select>
+          </div>
           <div className="mentor-form-group">
             <label htmlFor="title" className="mentor-form-label">Tiêu đề khóa học *</label>
             <input
@@ -1055,6 +2535,11 @@ const CourseModal: React.FC<{
                 }
               }}
             />
+            {thumbPreview && (
+              <div style={{ marginTop: 8 }}>
+                <img src={thumbPreview} alt="thumbnail" style={{ width: '100%', maxHeight: 180, objectFit: 'cover', borderRadius: 8 }} />
+              </div>
+            )}
           </div>
 
           <div className="mentor-modal-actions">

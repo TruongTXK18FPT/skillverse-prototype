@@ -232,6 +232,30 @@
   text-decoration: none;
 }
 
+/* Header Nav Links (Mentor, Admin) */
+.header-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-color);
+  text-decoration: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  border: 1px solid transparent;
+}
+
+.header-nav-link:hover {
+  background: var(--hover-color);
+  transform: translateY(-1px);
+  border-color: var(--border-color);
+}
+
 /* Header Upgrade Button - Gold */
 .header-upgrade-btn {
   display: flex;

@@ -21,7 +21,9 @@ import {
   Bot,
   Trophy,
   Calendar,
-  Map
+  Map,
+  BookOpen,
+  Shield
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -227,6 +229,12 @@ const Header: React.FC = () => {
     navigate('/wallet');
   };
 
+  const handleMentor = () => {
+    navigate('/mentor');
+    setShowUserMenu(false);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <header className="header-minimal">
       <div className="header-container">
@@ -287,6 +295,14 @@ const Header: React.FC = () => {
 
         {/* Right Section */}
         <div className="header-right">
+          {/* Admin Link - Only for ADMIN role */}
+          {isAuthenticated && user && user.roles.includes('ADMIN') && (
+            <Link to="/admin" className="header-nav-link desktop-only">
+              <Shield size={18} />
+              <span>Quản Trị</span>
+            </Link>
+          )}
+
           {/* Upgrade Button */}
           <button onClick={handleUpgrade} className="header-upgrade-btn desktop-only">
             <Crown size={18} />
@@ -336,6 +352,12 @@ const Header: React.FC = () => {
                     </div>
                   </div>
                   <hr className="dropdown-divider" />
+                  {(user.roles.includes('MENTOR') || user.roles.includes('ADMIN')) && (
+                    <button onClick={handleMentor} className="dropdown-item">
+                      <BookOpen size={16} />
+                      <span>Giảng Viên</span>
+                    </button>
+                  )}
                   <button onClick={handleProfile} className="dropdown-item">
                     <User size={16} />
                     <span>Hồ sơ cá nhân</span>
@@ -394,6 +416,12 @@ const Header: React.FC = () => {
                   </div>
                 </div>
                 <div className="mobile-user-actions">
+                  {(user.roles.includes('MENTOR') || user.roles.includes('ADMIN')) && (
+                    <button onClick={handleMentor} className="mobile-menu-item">
+                      <BookOpen size={18} />
+                      <span>Giảng Viên</span>
+                    </button>
+                  )}
                   <button onClick={handleProfile} className="mobile-menu-item">
                     <User size={18} />
                     <span>Hồ sơ cá nhân</span>

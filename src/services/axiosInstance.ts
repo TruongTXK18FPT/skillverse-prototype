@@ -3,9 +3,14 @@ import axios, { InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'ax
 // Determine baseURL based on environment
 
 const isLocal = typeof window !== 'undefined' && location.hostname === 'localhost';
-const RAW_BASE =
+let RAW_BASE =
   import.meta.env.VITE_BACKEND_URL ??
   (isLocal ? 'http://localhost:8080/api' : '/api');
+
+// Ensure base ends with /api (backend is under /api)
+if (!/\/api\/?$/i.test(RAW_BASE)) {
+  RAW_BASE = `${RAW_BASE.replace(/\/+$/, '')}/api`;
+}
 
 // Bỏ dấu "/" cuối để tránh "//"
 const baseURL = RAW_BASE.replace(/\/+$/, '');

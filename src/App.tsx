@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider } from './context/AuthContext';
+import { MentorRoute, AdminRoute } from './components/ProtectedRoute';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/main/HomePage';
@@ -27,6 +28,7 @@ import ManagerPage from './pages/main/ManagerPage';
 import CoinWallet from './pages/main/CoinWallet';
 import BlogForm from './pages/community/BlogForm';
 import NotFoundPage from './pages/notfound/NotFoundPage';
+import UnauthorizedPage from './pages/UnauthorizedPage';
 import Certificate from './components/Certificate';
 import TermOfService from './pages/footer/TermOfService';
 import PrivacyPolicy from './pages/footer/Privacy&Policy';
@@ -89,14 +91,24 @@ const App = () => {
                 <Route path="/terms-of-service" element={<TermOfService />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/business" element={<BusinessPage />} />
-                <Route path="/mentor" element={<MentorPage />} />
-                {/* Admin Page - ensure this is protected or only accessible to admins */}
-                <Route path="/admin" element={<AdminPage />} />
                 
-                {/* Add the admin routes */}
+                {/* Protected Routes */}
+                <Route path="/mentor" element={
+                  <MentorRoute>
+                    <MentorPage />
+                  </MentorRoute>
+                } />
+                <Route path="/admin" element={
+                  <AdminRoute>
+                    <AdminPage />
+                  </AdminRoute>
+                } />
+                
+                {/* Unauthorized Access */}
+                <Route path="/unauthorized" element={<UnauthorizedPage />} />
+                
                 {/* Catch-all route for 404 errors - must be last */}
                 <Route path="*" element={<NotFoundPage />} />
-                {/* Admin Page - ensure this is protected or only accessible to admins */}
               </Routes>
             </main>
             <Footer />
