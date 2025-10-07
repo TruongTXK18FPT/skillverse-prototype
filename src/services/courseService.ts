@@ -15,15 +15,16 @@ import {
 
 // ==================== NORMALIZERS ====================
 
-function normalizePageResponse<T>(data: any): PageResponse<T> {
-  const content: T[] = (data?.content ?? data?.items) ?? [];
-  const size: number = data?.size ?? 0;
-  const page: number = data?.page ?? 0;
-  const totalElements: number = data?.totalElements ?? data?.total ?? content.length;
-  const totalPages: number = data?.totalPages ?? (size ? Math.ceil(totalElements / size) : 1);
-  const first: boolean = data?.first ?? page === 0;
-  const last: boolean = data?.last ?? (page + 1 >= totalPages);
-  const empty: boolean = data?.empty ?? content.length === 0;
+function normalizePageResponse<T>(data: unknown): PageResponse<T> {
+  const dataObj = data as Record<string, unknown>;
+  const content: T[] = (dataObj?.content as T[] ?? dataObj?.items as T[]) ?? [];
+  const size: number = (dataObj?.size as number) ?? 0;
+  const page: number = (dataObj?.page as number) ?? 0;
+  const totalElements: number = (dataObj?.totalElements as number) ?? (dataObj?.total as number) ?? content.length;
+  const totalPages: number = (dataObj?.totalPages as number) ?? (size ? Math.ceil(totalElements / size) : 1);
+  const first: boolean = (dataObj?.first as boolean) ?? page === 0;
+  const last: boolean = (dataObj?.last as boolean) ?? (page + 1 >= totalPages);
+  const empty: boolean = (dataObj?.empty as boolean) ?? content.length === 0;
   return { content, page, size, totalElements, totalPages, first, last, empty };
 }
 
@@ -81,8 +82,12 @@ export const updateCourse = async (
     if (courseData.description) formData.append('description', courseData.description);
     if (courseData.level) formData.append('level', courseData.level);
     if (thumbnailFile) formData.append('thumbnailFile', thumbnailFile);
-    if (courseData.price) formData.append('price', courseData.price.toString());
-    if (courseData.currency) formData.append('currency', courseData.currency);
+    if (courseData.price !== undefined && courseData.price !== null) {
+      formData.append('price', courseData.price.toString());
+    }
+    if (courseData.currency) {
+      formData.append('currency', courseData.currency);
+    }
 
     const response = await axiosInstance.put<CourseDetailDTO>(
       `/courses/${courseId}`,
@@ -154,7 +159,7 @@ export const listCourses = async (
   sortOrder: 'asc' | 'desc' = 'desc'
 ): Promise<PageResponse<CourseSummaryDTO>> => {
   try {
-    const params: any = {
+    const params: Record<string, string | number> = {
       page,
       size,
       sortBy,
@@ -165,7 +170,7 @@ export const listCourses = async (
     if (status) params.status = status;
     if (search) params.search = search;
 
-    const response = await axiosInstance.get<any>(
+    const response = await axiosInstance.get<PageResponse<CourseSummaryDTO>>(
       '/courses',
       { params }
     );
@@ -186,7 +191,7 @@ export const listCoursesByAuthor = async (
   size: number = 10
 ): Promise<PageResponse<CourseSummaryDTO>> => {
   try {
-    const response = await axiosInstance.get<any>(
+    const response = await axiosInstance.get<PageResponse<CourseSummaryDTO>>(
       `/courses/by-author/${authorId}`,
       {
         params: { page, size }
@@ -210,7 +215,7 @@ export const listPendingCourses = async (
   sortOrder: 'asc' | 'desc' = 'desc'
 ): Promise<PageResponse<CourseSummaryDTO>> => {
   try {
-    const response = await axiosInstance.get<any>(
+    const response = await axiosInstance.get<PageResponse<CourseSummaryDTO>>(
       '/courses/pending',
       {
         params: {
@@ -237,7 +242,7 @@ export const listPublishedCourses = async (
   size: number = 10
 ): Promise<PageResponse<CourseSummaryDTO>> => {
   try {
-    const response = await axiosInstance.get<any>(
+    const response = await axiosInstance.get<PageResponse<CourseSummaryDTO>>(
       '/courses',
       {
         params: { 
@@ -264,7 +269,7 @@ export const searchCourses = async (
   size: number = 10
 ): Promise<PageResponse<CourseSummaryDTO>> => {
   try {
-    const response = await axiosInstance.get<any>(
+    const response = await axiosInstance.get<PageResponse<CourseSummaryDTO>>(
       '/courses/search',
       {
         params: {

@@ -1,4 +1,4 @@
-import { axiosInstance } from './api';
+import { axiosInstance } from './axiosInstance';
 
 export interface MentorProfile {
   id: number;

@@ -19,8 +19,8 @@ export interface CourseCard {
   status: 'DRAFT' | 'PENDING' | 'PUBLIC' | 'REJECTED' | 'ARCHIVED';
   author: CourseCardAuthor;
   thumbnail?: CourseCardThumb;
-  lessons: any[];
-  modules?: any[]; // Add modules array to display module count
+  lessons: unknown[];
+  modules?: unknown[]; // Add modules array to display module count
   moduleCount?: number; // Add moduleCount field
   enrollmentCount: number;
   // commercial fields
@@ -107,7 +107,7 @@ const CourseManagerTab: React.FC<Props> = ({ courses, loading, error, onCreateCl
             <div key={course.id} className="cm-card">
               <div className="cm-thumb">
                 {(() => {
-                  const src = course.thumbnail?.url || (course as any).thumbnailUrl || '/images/default-course.jpg';
+                  const src = course.thumbnail?.url || (course as unknown as Record<string, unknown>).thumbnailUrl as string || '/images/default-course.jpg';
                   return src ? (
                     <img src={src} alt={course.title} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
                   ) : (

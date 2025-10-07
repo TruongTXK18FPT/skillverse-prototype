@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
   Play, 
@@ -7,30 +7,26 @@ import {
   Users, 
   Star, 
   BookOpen, 
-  Award, 
   CheckCircle,
   User,
-  Mail,
   Linkedin,
-  Github,
+  Github as GitHubIcon,
   Globe,
-  Calendar,
   DollarSign
 } from 'lucide-react';
 import { getCourse } from '../../services/courseService';
 import { CourseDetailDTO } from '../../data/courseDTOs';
-import { getMentorProfile } from '../../services/mentorProfileService';
+import { getMentorProfile, MentorProfile } from '../../services/mentorProfileService';
 import { useToast } from '../../hooks/useToast';
 import '../../styles/CourseDetailPage.css';
 
 const CourseDetailPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
-  const location = useLocation();
   const navigate = useNavigate();
   const { showError } = useToast();
   
   const [course, setCourse] = useState<CourseDetailDTO | null>(null);
-  const [mentorProfile, setMentorProfile] = useState<any>(null);
+  const [mentorProfile, setMentorProfile] = useState<MentorProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'curriculum' | 'instructor'>('overview');
 
@@ -53,7 +49,7 @@ const CourseDetailPage: React.FC = () => {
         try {
           const profile = await getMentorProfile(courseData.author.id);
           setMentorProfile(profile);
-        } catch (error) {
+        } catch {
           console.log('Mentor profile not found');
         }
       }
@@ -318,8 +314,8 @@ const CourseDetailPage: React.FC = () => {
                   <div className="instructor-skills">
                     <h4>Skills</h4>
                     <div className="skills-list">
-                      {mentorProfile.skills.map((skill: string, index: number) => (
-                        <span key={index} className="skill-tag">{skill}</span>
+                      {mentorProfile.skills.map((skill: string) => (
+                        <span key={skill} className="skill-tag">{skill}</span>
                       ))}
                     </div>
                   </div>
@@ -336,7 +332,7 @@ const CourseDetailPage: React.FC = () => {
                       )}
                       {mentorProfile.socialLinks.github && (
                         <a href={mentorProfile.socialLinks.github} target="_blank" rel="noopener noreferrer">
-                          <Github size={20} />
+                          <GitHubIcon size={20} />
                         </a>
                       )}
                       {mentorProfile.socialLinks.website && (
