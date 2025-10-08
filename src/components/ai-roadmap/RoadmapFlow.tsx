@@ -164,13 +164,19 @@ const RoadmapFlow = ({ roadmap, progressMap, onQuestComplete }: RoadmapFlowProps
         maxZoom={1.5}
         defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
       >
-        <Background color="#e2e8f0" gap={16} />
+        <Background color="#272a3a" gap={18} />
         <Controls className="sv-roadmap-flow__controls" />
         <MiniMap
           className="sv-roadmap-flow__minimap"
+          maskColor="rgba(2,6,23,0.75)"
+          nodeStrokeColor={(n) => {
+            const data = (n.data as { node?: { type?: string } })?.node?.type;
+            return data === 'MAIN' ? '#a78bfa' : '#38bdf8';
+          }}
+          nodeBorderRadius={3}
           nodeColor={(node) => {
             const data = node.data as { node?: { type?: string } };
-            return data?.node?.type === 'MAIN' ? '#6366f1' : '#94a3b8';
+            return data?.node?.type === 'MAIN' ? '#8b5cf6' : '#38bdf8';
           }}
         />
       </ReactFlow>

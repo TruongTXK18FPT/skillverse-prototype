@@ -48,14 +48,14 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
           ) : (
             <ChevronRight className="sv-roadmap-node__badge-icon" size={14} />
           )}
-          <span className="sv-roadmap-node__badge-text">{isMain ? 'Main Quest' : 'Side Quest'}</span>
+          <span className="sv-roadmap-node__badge-text">{isMain ? 'Nhiệm vụ chính' : 'Nhiệm vụ phụ'}</span>
         </div>
         
         {/* Completion Checkbox */}
         <button
           className={`sv-roadmap-node__checkbox ${isCompleted ? 'sv-roadmap-node__checkbox--checked' : ''}`}
           onClick={handleCheckboxClick}
-          title={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
+          title={isCompleted ? 'Đánh dấu là chưa hoàn thành' : 'Đánh dấu là hoàn thành'}
         >
           {isCompleted && <CheckCircle size={20} />}
         </button>

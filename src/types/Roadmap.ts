@@ -88,6 +88,6 @@ export interface FlowNodeData {
   node: RoadmapNode;
   progress?: QuestProgress;
   onExpand?: (nodeId: string) => void;
-  onComplete?: (nodeId: string) => void;
+  onComplete?: (nodeId: string, completed: boolean) => void;
   isExpanded?: boolean;
 }

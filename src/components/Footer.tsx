@@ -61,8 +61,6 @@ const Footer = () => {
 translations.navigation.mentorship}</a></li>
                 <li><a href="/community" className="footer-link hover-underline">{translations.navigation.community}</a></li>
                 <li><a href="/seminar" className="footer-link hover-underline">{translations.navigation.seminar}</a></li>
-                <li><a href="/business" className="footer-link hover-underline">Trang doanh nghiệp</a></li>
-                <li><a href="/mentor" className="footer-link hover-underline">Trang mentor</a></li>
               </ul>
             </div>
 

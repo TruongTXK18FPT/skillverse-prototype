@@ -129,6 +129,7 @@ const FooterVisibilityWrapper = () => {
   const location = useLocation();
   const hideOn = new Set<string>([
     '/chatbot',
+    '/roadmap',
   ]);
   if (hideOn.has(location.pathname)) return null;
   return <Footer />;

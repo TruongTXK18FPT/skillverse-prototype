@@ -172,25 +172,25 @@ const RoadmapPage = () => {
   };
 
   return (
-    <div className="roadmap-page">
+    <div className="roadmap-page galaxy-bg">
       <div className="roadmap-page__container">
         {/* Header */}
         <div className="roadmap-page__header">
           <button onClick={handleGoBack} className="roadmap-page__back-btn">
             <ArrowLeft className="h-5 w-5" />
-            {viewMode === 'list' ? 'Back to Dashboard' : 'Back to Roadmaps'}
+            {viewMode === 'list' ? 'Quay lại Bảng điều khiển' : 'Quay lại Lộ trình'}
           </button>
           
           <div className="roadmap-page__header-content">
             <h1 className="roadmap-page__title">
-              {viewMode === 'list' && <><Sparkles className="inline mr-2" /> AI Learning Roadmaps</>}
-              {viewMode === 'generate' && 'Create New Roadmap'}
+              {viewMode === 'list' && <><Sparkles className="inline mr-2" /> Lộ trình học bằng AI</>}
+              {viewMode === 'generate' && 'Tạo lộ trình mới'}
               {viewMode === 'view' && selectedRoadmap?.title}
             </h1>
             <p className="roadmap-page__subtitle">
-              {viewMode === 'list' && 'Personalized learning paths powered by AI'}
-              {viewMode === 'generate' && 'Let AI create your personalized learning journey'}
-              {viewMode === 'view' && `${selectedRoadmap?.duration} • ${selectedRoadmap?.experience} level`}
+              {viewMode === 'list' && 'Lộ trình học cá nhân hóa, được tạo bởi AI'}
+              {viewMode === 'generate' && 'Hãy để AI tạo hành trình học tập phù hợp với bạn'}
+              {viewMode === 'view' && `${selectedRoadmap?.duration} • Cấp độ ${selectedRoadmap?.experience}`}
             </p>
           </div>
 
@@ -201,7 +201,7 @@ const RoadmapPage = () => {
               className="roadmap-page__create-btn"
             >
               <Plus size={20} />
-              Generate New Roadmap
+              Tạo lộ trình mới
             </button>
           )}
         </div>
@@ -218,7 +218,7 @@ const RoadmapPage = () => {
                     <Search size={20} />
                     <input
                       type="text"
-                      placeholder="Search roadmaps..."
+                      placeholder="Tìm kiếm lộ trình..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="sv-roadmap-controls__input"
@@ -233,31 +233,31 @@ const RoadmapPage = () => {
                         onChange={(e) => setFilterExperience(e.target.value)}
                         className="sv-roadmap-controls__select"
                       >
-                        <option value="all">All Levels</option>
-                        <option value="beginner">Beginner</option>
-                        <option value="intermediate">Intermediate</option>
-                        <option value="advanced">Advanced</option>
+                        <option value="all">Tất cả cấp độ</option>
+                        <option value="beginner">Mới bắt đầu</option>
+                        <option value="intermediate">Trung cấp</option>
+                        <option value="advanced">Nâng cao</option>
                       </select>
                     </div>
 
                     <div className="sv-roadmap-controls__group">
-                      <span className="sv-roadmap-controls__label">Sort:</span>
+                      <span className="sv-roadmap-controls__label">Sắp xếp:</span>
                       <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value as SortOption)}
                         className="sv-roadmap-controls__select"
                       >
-                        <option value="newest">Newest First</option>
-                        <option value="oldest">Oldest First</option>
-                        <option value="progress">Progress</option>
-                        <option value="title">Title (A-Z)</option>
+                        <option value="newest">Mới nhất</option>
+                        <option value="oldest">Cũ nhất</option>
+                        <option value="progress">Tiến độ</option>
+                        <option value="title">Tiêu đề (A-Z)</option>
                       </select>
                     </div>
 
                     <button
                       onClick={() => setDisplayMode(displayMode === 'grid' ? 'list' : 'grid')}
                       className="sv-roadmap-controls__view-toggle"
-                      title={displayMode === 'grid' ? 'List View' : 'Grid View'}
+                      title={displayMode === 'grid' ? 'Chế độ danh sách' : 'Chế độ lưới'}
                     >
                       {displayMode === 'grid' ? <List size={20} /> : <Grid3x3 size={20} />}
                     </button>
@@ -268,30 +268,32 @@ const RoadmapPage = () => {
               {isLoadingList ? (
                 <div className="roadmap-page__loading">
                   <Loader className="animate-spin" size={48} />
-                  <p>Loading your roadmaps...</p>
+                  <p>Đang tải lộ trình của bạn...</p>
                 </div>
               ) : roadmaps.length === 0 ? (
                 <div className="roadmap-page__empty">
                   <div className="roadmap-empty__icon">
                     <BookOpen className="h-12 w-12" />
                   </div>
-                  <h3>No roadmaps yet</h3>
-                  <p>Create your first AI-powered learning roadmap to get started!</p>
+                  <h3>Chưa có lộ trình nào</h3>
+                  <p>Tạo lộ trình học đầu tiên bằng AI để bắt đầu nhé!</p>
                   <button 
                     onClick={() => setViewMode('generate')}
                     className="roadmap-empty__create-btn"
                   >
                     <Sparkles size={20} />
-                    Generate Your First Roadmap
+                    Tạo lộ trình đầu tiên
                   </button>
                 </div>
               ) : (
                 <div className={`roadmap-page__grid ${displayMode === 'list' ? 'roadmap-page__grid--list' : ''}`}>
                   {filteredAndSortedRoadmaps().map((roadmap) => (
-                    <div
+                    <button
                       key={roadmap.sessionId}
                       className="sv-roadmap-card"
+                      type="button"
                       onClick={() => handleSelectRoadmap(roadmap.sessionId)}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelectRoadmap(roadmap.sessionId); } }}
                     >
                       <div className="sv-roadmap-card__header">
                         <h3 className="sv-roadmap-card__title">{roadmap.title}</h3>
@@ -303,7 +305,7 @@ const RoadmapPage = () => {
                       <div className="sv-roadmap-card__stats">
                         <div className="sv-roadmap-card__stat">
                           <BookOpen size={16} />
-                          <span>{roadmap.totalQuests} Quests</span>
+                          <span>{roadmap.totalQuests} Nhiệm vụ</span>
                         </div>
                         <div className="sv-roadmap-card__stat">
                           <span>{roadmap.duration}</span>
@@ -318,14 +320,14 @@ const RoadmapPage = () => {
                           />
                         </div>
                         <span className="sv-roadmap-card__progress-text">
-                          {roadmap.completedQuests} / {roadmap.totalQuests} completed ({roadmap.progressPercentage}%)
+                          {roadmap.completedQuests} / {roadmap.totalQuests} đã xong ({roadmap.progressPercentage}%)
                         </span>
                       </div>
 
                       <div className="sv-roadmap-card__date">
-                        Created {new Date(roadmap.createdAt).toLocaleDateString()}
+                        Tạo ngày {new Date(roadmap.createdAt).toLocaleDateString('vi-VN')}
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}
