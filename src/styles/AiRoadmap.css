@@ -687,6 +687,27 @@
   color: #c7d2fe;
 }
 
+/* Empty state — galaxy theme */
+.galaxy-bg .roadmap-page__empty {
+  background: rgba(2, 6, 23, 0.6);
+  border: 1px solid rgba(99, 102, 241, 0.22);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(99, 102, 241, 0.18) inset;
+  backdrop-filter: blur(8px);
+}
+
+.galaxy-bg .roadmap-empty__icon {
+  color: #a5b4fc;
+  text-shadow: 0 0 12px rgba(99, 102, 241, 0.45);
+}
+
+.galaxy-bg .roadmap-page__empty h3 {
+  color: #e5e7eb;
+}
+
+.galaxy-bg .roadmap-page__empty p {
+  color: #94a3b8;
+}
+
 /* ============================================================================
    Phase 4: Search, Filter, and Delete Controls
    ========================================================================== */
