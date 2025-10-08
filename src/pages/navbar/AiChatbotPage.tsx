@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Sparkles, Loader } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Loader, MessageSquare, Plus } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import aiChatbotService from '../../services/aiChatbotService';
 import { UIMessage } from '../../types/Chat';
@@ -41,13 +41,98 @@ Mình có thể giúp bạn:
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<number | null>(null);
+  const [sessions, setSessions] = useState<number[]>([]);
+  const [loadingSessions, setLoadingSessions] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { showError, showSuccess } = useToast();
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Use requestAnimationFrame to avoid jump
+    requestAnimationFrame(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    });
   }, [messages]);
+
+  // Load user sessions on mount
+  useEffect(() => {
+    loadSessions();
+  }, []);
+
+  const loadSessions = async () => {
+    try {
+      setLoadingSessions(true);
+      const userSessions = await aiChatbotService.getSessions();
+      setSessions(userSessions);
+    } catch (error) {
+      console.error('Failed to load sessions:', error);
+    } finally {
+      setLoadingSessions(false);
+    }
+  };
+
+  const handleNewChat = () => {
+    setSessionId(null);
+    setMessages([
+      {
+        id: '1',
+        role: 'assistant',
+        content: `👋 Xin chào! Mình là **Meowl**, cố vấn nghề nghiệp AI của **SkillVerse**! 🐾
+
+Mình có thể giúp bạn:
+• 🎓 **Chọn ngành học** — Phù hợp với sở thích và mục tiêu
+• 📈 **Xu hướng nghề nghiệp** — Ngành nào đang hot hiện nay
+• 🚀 **Phát triển kỹ năng** — Bạn cần học những gì
+• 💼 **Chuyển hướng sự nghiệp** — Tự tin đổi nghề
+• 💰 **Mức lương tham khảo** — Định vị giá trị của bạn
+• 🎯 **Lộ trình học tập** — Từng bước rõ ràng để đạt mục tiêu
+
+💬 **Hãy thử hỏi:**
+- "Xu hướng nghề nghiệp công nghệ 2025 là gì?"
+- "Nên học Khoa học Máy tính hay Kinh doanh?"
+- "Làm sao để trở thành Data Scientist?"
+- "Kỹ năng quan trọng nhất hiện nay là gì?"
+
+✨ *Hôm nay bạn muốn khám phá điều gì?*`,
+        timestamp: new Date()
+      }
+    ]);
+    showSuccess('Thành công', 'Đã tạo cuộc trò chuyện mới!');
+  };
+
+  const handleLoadSession = async (selectedSessionId: number) => {
+    try {
+      setIsLoading(true);
+      const history = await aiChatbotService.getHistory(selectedSessionId);
+      
+      // Convert ChatMessage[] to UIMessage[]
+      const uiMessages: UIMessage[] = [];
+      history.forEach((msg, index) => {
+        // Add user message
+        uiMessages.push({
+          id: `${selectedSessionId}-${index}-user`,
+          role: 'user',
+          content: msg.userMessage,
+          timestamp: new Date(msg.createdAt)
+        });
+        // Add AI response
+        uiMessages.push({
+          id: `${selectedSessionId}-${index}-ai`,
+          role: 'assistant',
+          content: msg.aiResponse,
+          timestamp: new Date(msg.createdAt)
+        });
+      });
+
+      setMessages(uiMessages);
+      setSessionId(selectedSessionId);
+      showSuccess('Đã tải', `Đã tải lịch sử phiên ${selectedSessionId}`);
+    } catch (error) {
+      showError('Lỗi', 'Không thể tải lịch sử cuộc trò chuyện');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Format message content for cleaner chat display (headings, bullets, code, tables, links)
   const renderMessageContent = (content: string) => {
@@ -251,6 +336,8 @@ Mình có thể giúp bạn:
       // Update session ID if this is first message
       if (!sessionId) {
         setSessionId(response.sessionId);
+        // Reload sessions to show the new one
+        loadSessions();
       }
 
       const botMessage: UIMessage = {
@@ -292,6 +379,79 @@ Mình có thể giúp bạn:
 
   return (
     <div className={`chatbot-page ${theme}`}>
+      {/* Shooting stars effect */}
+      <div className="shooting-stars">
+        <div className="shooting-star" style={{ top: '10%', left: '80%', animationDelay: '0s' }}></div>
+        <div className="shooting-star" style={{ top: '30%', left: '20%', animationDelay: '3s' }}></div>
+        <div className="shooting-star" style={{ top: '50%', left: '70%', animationDelay: '6s' }}></div>
+        <div className="shooting-star" style={{ top: '70%', left: '40%', animationDelay: '9s' }}></div>
+        <div className="shooting-star" style={{ top: '20%', left: '50%', animationDelay: '12s' }}></div>
+      </div>
+
+      {/* Cosmic dust particles */}
+      <div className="cosmic-dust">
+        {[...Array(30)].map((_, i) => (
+          <div 
+            key={i} 
+            className="dust-particle"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 10}s`,
+              animationDuration: `${15 + Math.random() * 10}s`
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Sidebar for Chat Sessions - Always Visible */}
+      <div className="chatbot-sidebar">
+        <div className="chatbot-sidebar__header">
+          <h2 className="chatbot-sidebar__title">
+            <MessageSquare size={20} />
+            Chat Sessions
+          </h2>
+          <button 
+            className="chatbot-sidebar__new-chat"
+            onClick={handleNewChat}
+          >
+            <Plus size={18} />
+            New Chat
+          </button>
+        </div>
+        
+        <div className="chatbot-sidebar__sessions">
+          {loadingSessions ? (
+            <div className="chatbot-sidebar__loading">
+              <div className="animate-spin" style={{ display: 'inline-block' }}>
+                <Loader size={24} />
+              </div>
+              <p style={{ marginTop: '8px' }}>Đang tải...</p>
+            </div>
+          ) : sessions.length === 0 ? (
+            <div className="chatbot-sidebar__empty">
+              <p>Chưa có cuộc trò chuyện nào.</p>
+              <p>Bắt đầu chat với Meowl ngay!</p>
+            </div>
+          ) : (
+            sessions.map((session) => (
+              <div 
+                key={session}
+                className={`chatbot-session-item ${sessionId === session ? 'active' : ''}`}
+                onClick={() => handleLoadSession(session)}
+              >
+                <div className="chatbot-session-item__title">
+                  Session #{session}
+                </div>
+                <div className="chatbot-session-item__time">
+                  Click to load history
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
       <div className="chatbot-container">
         {/* Header */}
         <div className="chatbot-header">
@@ -358,10 +518,7 @@ Mình có thể giúp bạn:
           {/* Typing indicator */}
           {isLoading && (
             <div className="chatbot-message chatbot-message--assistant">
-              <div className="chatbot-message__avatar">
-                <Bot size={20} />
-              </div>
-              <div className="chatbot-message__content">
+              <div className="chatbot-message__content" style={{ marginLeft: 42 }}>
                 <div className="chatbot-typing">
                   <Loader className="animate-spin" size={20} />
                   <span>Meowl đang suy nghĩ...</span>
@@ -375,21 +532,23 @@ Mình có thể giúp bạn:
 
         {/* Input */}
         <form className="chatbot-input" onSubmit={handleSendMessage}>
-          <input
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Hãy hỏi về nghề nghiệp, ngành học, kỹ năng hoặc bất cứ điều gì liên quan..."
-            className="chatbot-input__field"
-            disabled={isLoading}
-          />
-          <button
-            type="submit"
-            className="chatbot-input__btn"
-            disabled={!inputMessage.trim() || isLoading}
-          >
-            <Send size={20} />
-          </button>
+          <div className="chatbot-input__wrapper">
+            <input
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              placeholder="Hãy hỏi về nghề nghiệp, ngành học, kỹ năng hoặc bất cứ điều gì liên quan..."
+              className="chatbot-input__field"
+              disabled={isLoading}
+            />
+            <button
+              type="submit"
+              className="chatbot-input__btn"
+              disabled={!inputMessage.trim() || isLoading}
+            >
+              <Send size={20} />
+            </button>
+          </div>
         </form>
       </div>
 
