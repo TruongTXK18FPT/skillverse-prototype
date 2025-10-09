@@ -97,13 +97,6 @@ export function guardUserInput(raw: string): GuardResult {
   return { allow: true };
 }
 
-// 🛡️ Post-filter output: không cho AI trả lời lệch chủ đề
-export function guardModelOutput(raw: string): boolean {
-  const a = normalize(raw);
-  if (INJECTION_PATTERNS.some((rx) => rx.test(a))) return false;
-  if (OUT_OF_SCOPE_PATTERNS.some((rx) => rx.test(a))) return false;
-  return true;
-}
 // fallback đa ngôn ngữ
 export const FALLBACKS = {
   injection: {

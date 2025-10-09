@@ -53,6 +53,10 @@ const PUBLIC_ENDPOINTS = [
   '/users/resend-otp',
   '/mentors/register',
   '/business/register',
+  '/v1/meowl/chat',           // Meowl chat endpoint
+  '/v1/meowl/reminders',       // Meowl reminders
+  '/v1/meowl/notifications',   // Meowl notifications
+  '/v1/meowl/health',          // Meowl health check
 ];
 
 // Check if the URL matches any public endpoint
