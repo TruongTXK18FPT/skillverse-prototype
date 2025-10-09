@@ -46,6 +46,12 @@
   justify-content: center;
 }
 
+.home-page-container {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
 [data-theme='light'] .theme-switcher {
   background-color: rgba(255, 255, 255, 0.9);
 }

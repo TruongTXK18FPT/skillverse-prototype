@@ -92,7 +92,7 @@ const HomePage = () => {
   ];
 
   return (
-    <div className={`homepage-container ${isVisible ? 'visible' : ''}`}>
+    <div className="homepage-container">
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-overlay"></div>
