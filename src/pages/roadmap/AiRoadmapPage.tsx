@@ -170,20 +170,35 @@ const RoadmapPage = () => {
       window.history.back();
     }
   };
-
   return (
-    <div className="roadmap-page galaxy-bg">
+    <div className="roadmap-page__galaxy-bg">
+
+      {/* Cosmic dust particles */}
+      <div className="cosmic-dust">
+        {[...Array(30)].map((_, i) => (
+          <div 
+            key={i} 
+            className="dust-particle"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 10}s`,
+              animationDuration: `${15 + Math.random() * 10}s`
+            }}
+          />
+        ))}
+      </div>
       <div className="roadmap-page__container">
         {/* Header */}
         <div className="roadmap-page__header">
           <button onClick={handleGoBack} className="roadmap-page__back-btn">
             <ArrowLeft className="h-5 w-5" />
-            {viewMode === 'list' ? 'Quay lại Bảng điều khiển' : 'Quay lại Lộ trình'}
+            {viewMode === 'list' ? 'Quay lại' : 'Quay lại Lộ trình'}
           </button>
           
           <div className="roadmap-page__header-content">
             <h1 className="roadmap-page__title">
-              {viewMode === 'list' && <><Sparkles className="inline mr-2" /> Lộ trình học bằng AI</>}
+              {viewMode === 'list' && 'Lộ trình học bằng AI'}
               {viewMode === 'generate' && 'Tạo lộ trình mới'}
               {viewMode === 'view' && selectedRoadmap?.title}
             </h1>

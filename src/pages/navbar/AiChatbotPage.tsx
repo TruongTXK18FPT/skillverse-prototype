@@ -63,7 +63,15 @@ Mình có thể giúp bạn:
     try {
       setLoadingSessions(true);
       const userSessions = await aiChatbotService.getSessions();
-      setSessions(userSessions);
+      // Defensive: ensure we always store an array. Some backends may return null/object when empty.
+      if (Array.isArray(userSessions)) {
+        setSessions(userSessions);
+      } else if (userSessions && Array.isArray((userSessions as any).sessions)) {
+        // support shape { sessions: [] }
+        setSessions((userSessions as any).sessions);
+      } else {
+        setSessions([]);
+      }
     } catch (error) {
       console.error('Failed to load sessions:', error);
     } finally {
@@ -427,6 +435,10 @@ Mình có thể giúp bạn:
                 <Loader size={24} />
               </div>
               <p style={{ marginTop: '8px' }}>Đang tải...</p>
+            </div>
+          ) : !Array.isArray(sessions) ? (
+            <div className="chatbot-sidebar__empty">
+              <p>Không có dữ liệu phiên hợp lệ.</p>
             </div>
           ) : sessions.length === 0 ? (
             <div className="chatbot-sidebar__empty">
