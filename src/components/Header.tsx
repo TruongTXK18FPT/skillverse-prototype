@@ -334,7 +334,7 @@ const Header: React.FC = () => {
                 className="user-btn"
                 onClick={() => setShowUserMenu(!showUserMenu)}
               >
-                <div className="user-avatar">
+                <div className="header-user-avatar">
                   <User size={18} />
                 </div>
                 <ChevronDown size={16} />
@@ -343,7 +343,7 @@ const Header: React.FC = () => {
               {showUserMenu && (
                 <div className="user-dropdown">
                   <div className="user-info">
-                    <div className="user-avatar-large">
+                    <div className="header-user-avatar-large">
                       <User size={24} />
                     </div>
                     <div className="user-details">

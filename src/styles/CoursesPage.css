@@ -189,22 +189,16 @@
   margin-bottom: 2rem;
 }
 
-.search-input-wrapper {
+.course-search-input-wrapper {
   position: relative;
-  max-width: 700px;
   margin: 0 auto;
+  width: 70%;
 }
 
-.search-icon {
-  position: absolute;
-  left: 1.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--courses-accent);
-  z-index: 1;
-  transition: all 0.3s ease;
+.course-search-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  transition: transform 0.3s ease;
 }
 
 .search-input {
@@ -227,7 +221,7 @@
   transform: translateY(-2px);
 }
 
-.search-input:focus + .search-icon {
+.search-input:focus + .course-search-icon {
   color: var(--courses-accent);
   transform: translateY(-50%) scale(1.1);
 }

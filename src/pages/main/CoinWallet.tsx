@@ -741,7 +741,7 @@ const CoinWallet: React.FC = () => {
         <h2>Mua SkillCoin</h2>
         <p>Nạp xu để mở khóa các tính năng premium và gia tăng trải nghiệm học tập</p>
         <div className="conversion-rate">
-          <Coins className="rate-icon" />
+          <Coins className="conversion-rate-icon" />
           <span>1 SkillCoin = 100 VNĐ</span>
         </div>
       </div>
@@ -753,7 +753,7 @@ const CoinWallet: React.FC = () => {
             <span className="flash-text">⚡ GIẢM GIÁ SỐC ⚡</span>
           </div>
           <h3>Giảm giá lên đến 20% cho tất cả gói xu!</h3>
-          <h4 className="achievement-title">Chỉ trong 24 giờ - Đừng bỏ lỡ cơ hội này!</h4>
+          <h4 className="coin-achievement-title">Chỉ trong 24 giờ - Đừng bỏ lỡ cơ hội này!</h4>
           <div className="countdown-timer">
             <div className="countdown-item">
               <span className="countdown-number">{timeLeft.hours.toString().padStart(2, '0')}</span>
@@ -971,7 +971,7 @@ const CoinWallet: React.FC = () => {
             <button
               key={filter.id}
               onClick={() => setTransactionFilter(filter.id)}
-              className={`filter-btn ${transactionFilter === filter.id ? 'active' : ''}`}
+              className={`category-filter ${transactionFilter === filter.id ? 'active' : ''}`}
             >
               {filter.name}
             </button>
@@ -1009,17 +1009,17 @@ const CoinWallet: React.FC = () => {
   );
 
   const renderAchievements = () => (
-    <div className="achievements-content">
+    <div className="coin-achievements-content">
       <div className="wallet-achievements-header">
         <h2>Thành Tựu & Phần Thưởng</h2>
         <p>Hoàn thành thử thách để kiếm xu thưởng và mở khóa phần thưởng độc quyền</p>
       </div>
 
-      <div className="achievements-grid">
+      <div className="coin-achievements-grid">
         {achievements.map(achievement => (
           <div key={achievement.id} className={`achievement-card ${achievement.completed ? 'completed' : ''}`}>
-            <div className="achievement-header">
-              <div className="achievement-icon">{achievement.icon}</div>
+            <div className="coin-achievement-header">
+              <div className="coin-achievement-icon">{achievement.icon}</div>
               {achievement.completed && (
                 <div className="completion-badge">
                   <Check />
@@ -1027,9 +1027,9 @@ const CoinWallet: React.FC = () => {
               )}
             </div>
             
-            <div className="achievement-content">
-              <h4 className="achievement-title">{achievement.title}</h4>
-              <p className="achievement-description">{achievement.description}</p>
+            <div className="coin-achievement-content">
+              <h4 className="coin-achievement-title">{achievement.title}</h4>
+              <p className="coin-achievement-description">{achievement.description}</p>
               
               <div className="progress-container">
                 <div className="progress-bar">
@@ -1043,7 +1043,7 @@ const CoinWallet: React.FC = () => {
                 </div>
               </div>
               
-              <div className="achievement-reward">
+              <div className="coin-achievement-reward">
                 <Coins className="reward-icon" />
                 <span>+{achievement.reward} xu</span>
               </div>
@@ -1063,23 +1063,23 @@ const CoinWallet: React.FC = () => {
             <Coins className="wallet-logo" />
             <div className="coin-header-info">
               <h1>Ví SkillCoin</h1>
-              <p className="nav-tab">Quản lý phần thưởng học tập của bạn</p>
+              <p className="coin-nav-tab">Quản lý phần thưởng học tập của bạn</p>
             </div>
           </div>
           
-          <div className="header-actions">
+          <div className="coin-header-actions">
             <button 
               onClick={() => setShowNotifications(!showNotifications)}
               className="coin-notification-btn"
             >
-              <Bell />
+              <Bell className="coin-notification-icon" />
               <span className="notification-badge">3</span>
             </button>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="wallet-nav">
+        <div className="coin-wallet-nav">
           {([
             { id: 'dashboard', label: 'Tổng Quan', icon: Target },
             { id: 'buy-coins', label: 'Mua Xu', icon: Coins },
@@ -1090,7 +1090,7 @@ const CoinWallet: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`nav-tab ${activeTab === tab.id ? 'active' : ''}`}
+              className={`coin-nav-tab ${activeTab === tab.id ? 'active' : ''}`}
             >
               <tab.icon className="tab-icon" />
               {tab.label}
@@ -1115,7 +1115,7 @@ const CoinWallet: React.FC = () => {
           <div className="notifications-panel">
             <div className="panel-header">
               <h4>Thông Báo</h4>
-              <button onClick={() => setShowNotifications(false)}>
+              <button className="coin-close-btn" onClick={() => setShowNotifications(false)}>
                 <X />
               </button>
             </div>

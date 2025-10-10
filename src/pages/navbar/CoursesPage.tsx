@@ -208,8 +208,7 @@ const categories = [
         {/* Enhanced Search and Filter Section */}
         <div className="search-filter-container">
           <div className="search-section">
-            <div className="search-input-wrapper">
-              <Search className="search-icon" />
+            <div className="course-search-input-wrapper">
               <input
                 type="text"
                 placeholder="Tìm kiếm khóa học, giảng viên..."

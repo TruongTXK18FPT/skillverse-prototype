@@ -53,69 +53,85 @@ const App = () => {
             <div className="app-container">
               <ScrollToTop />
               <Header />
-              <main>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/courses" element={<CoursesPage />} />
-                <Route path="/roadmap" element={<AiRoadmapPage />} />
-                <Route path="/mentorship" element={<MentorshipPage />} />
-                <Route path="/community" element={<CommunityPage />} />
-                <Route path="/community/create" element={<BlogForm />} />
-                <Route path="/jobs" element={<JobsPage />} />
-                <Route path="/chatbot" element={<AiChatbotPage />} />
-                <Route path="/chatbot-old" element={<ChatbotPage />} />
-                <Route path="/gamification" element={<Gamification />} />
-                <Route path="/portfolio" element={<PortfolioPage />} />
-                <Route path="/cv" element={<CVPage />} />
-                <Route path="/certificate/:id" element={<Certificate />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/register/business" element={<BusinessRegisterPage />} />
-                <Route path="/register/mentor" element={<MentorRegisterPage />} />
-                <Route path="/verify-otp" element={<VerifyPage />} />
-                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/payment" element={<PaymentPage />} />
-                <Route path="/payment/transactional" element={<Transactional />} />
-                <Route path="/premium" element={<PremiumPage />} />
-                <Route path="/payment/:type/:id" element={<PaymentPage />} />
-                <Route path="/manager" element={<ManagerPage />} />
-                <Route path="/wallet" element={<CoinWallet />} />
-                <Route path="/seminar" element={<SeminarPage />} />
-                <Route path="/courses/:id" element={<CourseDetailPage />} />
-                <Route path="/course-learning" element={<CourseLearningPage />} />
+              <div className="app__galaxy-bg">
+                <div className="cosmic-dust">
+                  {[...Array(30)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="dust-particle"
+                      style={{
+                        left: `${Math.random() * 95}%`,
+                        top: `${Math.random() * 95}%`,
+                        animationDelay: `${Math.random() * 10}s`,
+                        animationDuration: `${15 + Math.random() * 10}s`
+                      }}
+                    />
+                  ))}
+                </div>
+                <main>
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/dashboard" element={<DashboardPage />} />
+                    <Route path="/courses" element={<CoursesPage />} />
+                    <Route path="/roadmap" element={<AiRoadmapPage />} />
+                    <Route path="/mentorship" element={<MentorshipPage />} />
+                    <Route path="/community" element={<CommunityPage />} />
+                    <Route path="/community/create" element={<BlogForm />} />
+                    <Route path="/jobs" element={<JobsPage />} />
+                    <Route path="/chatbot" element={<AiChatbotPage />} />
+                    <Route path="/chatbot-old" element={<ChatbotPage />} />
+                    <Route path="/gamification" element={<Gamification />} />
+                    <Route path="/portfolio" element={<PortfolioPage />} />
+                    <Route path="/cv" element={<CVPage />} />
+                    <Route path="/certificate/:id" element={<Certificate />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/register/business" element={<BusinessRegisterPage />} />
+                    <Route path="/register/mentor" element={<MentorRegisterPage />} />
+                    <Route path="/verify-otp" element={<VerifyPage />} />
+                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/payment" element={<PaymentPage />} />
+                    <Route path="/payment/transactional" element={<Transactional />} />
+                    <Route path="/premium" element={<PremiumPage />} />
+                    <Route path="/payment/:type/:id" element={<PaymentPage />} />
+                    <Route path="/manager" element={<ManagerPage />} />
+                    <Route path="/wallet" element={<CoinWallet />} />
+                    <Route path="/seminar" element={<SeminarPage />} />
+                    <Route path="/courses/:id" element={<CourseDetailPage />} />
+                    <Route path="/course-learning" element={<CourseLearningPage />} />
 
-                {/* Add the missing footer routes */}
-                
-                {/* Add these missing footer routes */}
-                <Route path="/help-center" element={<HelpCenter />} />
-                <Route path="/terms-of-service" element={<TermOfService />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/business" element={<BusinessPage />} />
-                
-                {/* Protected Routes */}
-                <Route path="/mentor" element={
-                  <MentorRoute>
-                    <MentorPage />
-                  </MentorRoute>
-                } />
-                <Route path="/admin" element={
-                  <AdminRoute>
-                    <AdminPage />
-                  </AdminRoute>
-                } />
-                
-                {/* Unauthorized Access */}
-                <Route path="/unauthorized" element={<UnauthorizedPage />} />
-                
-                {/* Catch-all route for 404 errors - must be last */}
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </main>
-            <FooterVisibilityWrapper />
-          </div>
-        </Router>
+                    {/* Add the missing footer routes */}
+
+                    {/* Add these missing footer routes */}
+                    <Route path="/help-center" element={<HelpCenter />} />
+                    <Route path="/terms-of-service" element={<TermOfService />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/business" element={<BusinessPage />} />
+
+                    {/* Protected Routes */}
+                    <Route path="/mentor" element={
+                      <MentorRoute>
+                        <MentorPage />
+                      </MentorRoute>
+                    } />
+                    <Route path="/admin" element={
+                      <AdminRoute>
+                        <AdminPage />
+                      </AdminRoute>
+                    } />
+
+                    {/* Unauthorized Access */}
+                    <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+                    {/* Catch-all route for 404 errors - must be last */}
+                    <Route path="*" element={<NotFoundPage />} />
+                  </Routes>
+                </main>
+                <FooterVisibilityWrapper />
+              </div>
+            </div>
+          </Router>
         </AuthProvider>
       </ThemeProvider>
     </LanguageProvider>

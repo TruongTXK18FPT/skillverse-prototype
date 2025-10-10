@@ -94,8 +94,8 @@ const HomePage = () => {
   return (
     <div className="homepage-container">
       {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-overlay"></div>
+      <section className="hero__galaxy-bg hero-section">
+        <div className="cosmic-dust"></div>
         <div className="hero-content">
           <h1 className="hero-title">
             Mở Khoá Tương Lai Với AI

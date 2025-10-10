@@ -20,6 +20,74 @@
   --hover-color: rgba(59, 130, 246, 0.2);
 }
 
+.app__galaxy-bg {
+  position: relative;
+  background: radial-gradient(1200px 800px at 20% 20%, rgba(20, 20, 35, 0.9) 0%, rgba(10, 10, 20, 0.95) 40%, #050510 100%);
+  isolation: isolate;
+  /* allow the galaxy background to fill at least the viewport and grow as content expands */
+  min-height: 100vh;
+  height: auto;
+  /* add a little extra bottom padding so tall content doesn't touch the edge of the effect */
+  overflow: hidden !important;
+}
+
+.app__galaxy-bg::before,
+.app__galaxy-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  animation: none
+}
+
+/* Starfield layer */
+.app__galaxy-bg::before {
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.9) 50%, transparent 51%),
+    radial-gradient(1px 1px at 60% 70%, rgba(255, 255, 255, 0.7) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 80% 20%, rgba(255, 255, 255, 0.8) 50%, transparent 51%),
+    radial-gradient(1px 1px at 35% 80%, rgba(255, 255, 255, 0.6) 50%, transparent 51%),
+    radial-gradient(2px 2px at 75% 50%, rgba(255, 255, 255, 0.85) 50%, transparent 51%);
+  background-repeat: repeat;
+  animation: sv-star-twinkle 5s infinite ease-in-out;
+  opacity: 0.75;
+}
+
+/* Nebula glow layer */
+.app__galaxy-bg::after {
+  background: radial-gradient(600px 400px at 70% 30%, rgba(76, 29, 149, 0.35), transparent 60%),
+    radial-gradient(500px 500px at 30% 70%, rgba(6, 182, 212, 0.2), transparent 60%),
+    radial-gradient(700px 400px at 50% 50%, rgba(99, 102, 241, 0.25), transparent 60%),
+    /* shooting stars layer (thin diagonal streaks) */
+    repeating-linear-gradient(120deg,
+      transparent 0 120px,
+      rgba(255, 255, 255, 0.0) 120px 121px,
+      rgba(255, 255, 255, 0.35) 121px 123px,
+      rgba(255, 255, 255, 0.0) 123px 260px);
+  filter: blur(20px);
+  opacity: 0.85;
+  background-size: auto, auto, auto, 1600px 1600px;
+  animation: sv-meteor-vertical 12s linear infinite;
+}
+
+@keyframes sv-meteor-vertical {
+  0%   { background-position: 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 0 0, 0 0, 0 0, 0 1600px; } /* only vertical movement on last layer */
+}
+
+@keyframes sv-star-twinkle {
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
 .app {
   min-height: 100vh;
   display: flex;
@@ -78,19 +146,39 @@
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 
 /* Responsive Design */
@@ -98,4 +186,4 @@
   .main-content {
     padding: 1rem;
   }
-} 
+}
