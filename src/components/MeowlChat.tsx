@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import '../styles/MeowlChat.css';
 import { guardUserInput, pickFallback } from "./MeowlGuard";
+import axiosInstance from '../services/axiosInstance';
 
 interface Message {
   id: string;
@@ -25,9 +26,6 @@ const MeowlChat: React.FC<MeowlChatProps> = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // Backend API URL
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
 
   const welcomeMessage = useMemo(() => ({
     en: "Hi! I'm Meowl, your learning assistant. How can I help you with your SkillVerse journey today?",
@@ -95,37 +93,19 @@ const MeowlChat: React.FC<MeowlChatProps> = ({ isOpen, onClose }) => {
     setIsLoading(true);
 
     try {
-      // Call backend Meowl Chat API
-      const token = localStorage.getItem('accessToken');
-      const headers: HeadersInit = {
-        'Content-Type': 'application/json'
-      };
-      
-      // Add authorization header only if user is logged in
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-      }
-
-      const response = await fetch(`${BACKEND_URL}/v1/meowl/chat`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          message: userMessage.content,
-          language: language === 'vi' ? 'vi' : 'en',
-          userId: user?.id || null,
-          includeReminders: true,
-          chatHistory: messages.slice(-10).map(msg => ({
-            role: msg.role,
-            content: msg.content
-          }))
-        })
+      // Call backend Meowl Chat API using axiosInstance
+      const response = await axiosInstance.post('/v1/meowl/chat', {
+        message: userMessage.content,
+        language: language === 'vi' ? 'vi' : 'en',
+        userId: user?.id || null,
+        includeReminders: true,
+        chatHistory: messages.slice(-10).map(msg => ({
+          role: msg.role,
+          content: msg.content
+        }))
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to get response from Meowl service');
-      }
-
-      const data = await response.json();
+      const data = response.data;
       
       // Use the cute response from backend
       const aiResponse: Message = {
