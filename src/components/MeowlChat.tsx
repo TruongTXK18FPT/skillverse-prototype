@@ -106,7 +106,7 @@ const MeowlChat: React.FC<MeowlChatProps> = ({ isOpen, onClose }) => {
         headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const response = await fetch(`${BACKEND_URL}/api/v1/meowl/chat`, {
+      const response = await fetch(`${BACKEND_URL}/v1/meowl/chat`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
