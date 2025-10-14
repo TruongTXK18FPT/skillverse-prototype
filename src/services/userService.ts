@@ -40,10 +40,10 @@ class UserService {
     }
   }
 
-  // Get user profile
+  // Get user profile by userId
   async getUserProfile(userId: number): Promise<UserProfileResponse> {
     try {
-      const response = await axiosInstance.get<UserProfileResponse>(`/api/users/${userId}/profile`);
+      const response = await axiosInstance.get<UserProfileResponse>(`/api/user/profile/${userId}`);
       return response.data;
     } catch (error: unknown) {
       console.error('Get user profile error:', error);
@@ -52,10 +52,22 @@ class UserService {
     }
   }
 
-  // Update user profile
+  // Get current logged-in user's profile
+  async getMyProfile(): Promise<UserProfileResponse> {
+    try {
+      const response = await axiosInstance.get<UserProfileResponse>('/api/user/profile');
+      return response.data;
+    } catch (error: unknown) {
+      console.error('Get my profile error:', error);
+      const errorMessage = (error as AxiosError).response?.data?.message || 'Không thể tải thông tin người dùng.';
+      throw new Error(errorMessage);
+    }
+  }
+
+  // Update user profile (uses current logged-in user)
   async updateUserProfile(userId: number, profileData: Partial<UserProfileResponse>): Promise<UserProfileResponse> {
     try {
-      const response = await axiosInstance.put<UserProfileResponse>(`/api/users/${userId}/profile`, profileData);
+      const response = await axiosInstance.put<UserProfileResponse>('/api/user/profile', profileData);
       return response.data;
     } catch (error: unknown) {
       console.error('Update user profile error:', error);
@@ -67,7 +79,7 @@ class UserService {
   // Get user skills
   async getUserSkills(userId: number): Promise<UserSkillResponse[]> {
     try {
-      const response = await axiosInstance.get<UserSkillResponse[]>(`/api/users/${userId}/skills`);
+      const response = await axiosInstance.get<UserSkillResponse[]>(`/api/user/profile/${userId}/skills`);
       return response.data;
     } catch (error: unknown) {
       console.error('Get user skills error:', error);
@@ -76,10 +88,22 @@ class UserService {
     }
   }
 
+  // Get current user's skills
+  async getMySkills(): Promise<UserSkillResponse[]> {
+    try {
+      const response = await axiosInstance.get<UserSkillResponse[]>('/api/user/profile/skills');
+      return response.data;
+    } catch (error: unknown) {
+      console.error('Get my skills error:', error);
+      const errorMessage = (error as AxiosError).response?.data?.message || 'Không thể tải danh sách kỹ năng.';
+      throw new Error(errorMessage);
+    }
+  }
+
   // Add user skill
   async addUserSkill(userId: number, skillData: Omit<UserSkillResponse, 'id'>): Promise<UserSkillResponse> {
     try {
-      const response = await axiosInstance.post<UserSkillResponse>(`/api/users/${userId}/skills`, skillData);
+      const response = await axiosInstance.post<UserSkillResponse>('/api/user/profile/skills', skillData);
       return response.data;
     } catch (error: unknown) {
       console.error('Add user skill error:', error);
@@ -91,7 +115,7 @@ class UserService {
   // Update user skill
   async updateUserSkill(userId: number, skillId: number, skillData: Partial<UserSkillResponse>): Promise<UserSkillResponse> {
     try {
-      const response = await axiosInstance.put<UserSkillResponse>(`/api/users/${userId}/skills/${skillId}`, skillData);
+      const response = await axiosInstance.put<UserSkillResponse>(`/api/user/profile/skills/${skillId}`, skillData);
       return response.data;
     } catch (error: unknown) {
       console.error('Update user skill error:', error);
@@ -101,9 +125,9 @@ class UserService {
   }
 
   // Delete user skill
-  async deleteUserSkill(userId: number, skillId: number): Promise<void> {
+  async deleteUserSkill(skillId: number): Promise<void> {
     try {
-      await axiosInstance.delete(`/api/users/${userId}/skills/${skillId}`);
+      await axiosInstance.delete(`/api/user/profile/skills/${skillId}`);
     } catch (error: unknown) {
       console.error('Delete user skill error:', error);
       const errorMessage = (error as AxiosError).response?.data?.message || 'Xóa kỹ năng thất bại.';

@@ -29,7 +29,8 @@ const ProfilePage = () => {
   const loadProfile = useCallback(async () => {
     try {
       setLoading(true);
-      const profileData = await userService.getUserProfile(user!.id);
+      // Use getMyProfile() for current logged-in user
+      const profileData = await userService.getMyProfile();
       setProfile(profileData);
       
       // Initialize edit data
@@ -45,7 +46,7 @@ const ProfilePage = () => {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated) {

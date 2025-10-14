@@ -37,12 +37,26 @@ export interface MentorProfileUpdateDTO {
 }
 
 /**
+ * Get current logged-in mentor profile
+ * GET /api/mentors/profile
+ */
+export const getMyMentorProfile = async (): Promise<MentorProfile> => {
+  try {
+    const response = await axiosInstance.get<MentorProfile>('/api/mentors/profile');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching my mentor profile:', error);
+    throw error;
+  }
+};
+
+/**
  * Get mentor profile by ID
  * GET /api/mentors/{mentorId}/profile
  */
 export const getMentorProfile = async (mentorId: number): Promise<MentorProfile> => {
   try {
-    const response = await axiosInstance.get<MentorProfile>(`/mentors/${mentorId}/profile`);
+    const response = await axiosInstance.get<MentorProfile>(`/api/mentors/${mentorId}/profile`);
     return response.data;
   } catch (error) {
     console.error('Error fetching mentor profile:', error);
@@ -51,7 +65,26 @@ export const getMentorProfile = async (mentorId: number): Promise<MentorProfile>
 };
 
 /**
- * Update mentor profile
+ * Update current logged-in mentor profile
+ * PUT /api/mentors/profile
+ */
+export const updateMyMentorProfile = async (
+  profileData: MentorProfileUpdateDTO
+): Promise<MentorProfile> => {
+  try {
+    const response = await axiosInstance.put<MentorProfile>(
+      '/api/mentors/profile',
+      profileData
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error updating my mentor profile:', error);
+    throw error;
+  }
+};
+
+/**
+ * Update mentor profile by ID (Admin)
  * PUT /api/mentors/{mentorId}/profile
  */
 export const updateMentorProfile = async (
@@ -60,7 +93,7 @@ export const updateMentorProfile = async (
 ): Promise<MentorProfile> => {
   try {
     const response = await axiosInstance.put<MentorProfile>(
-      `/mentors/${mentorId}/profile`,
+      `/api/mentors/${mentorId}/profile`,
       profileData
     );
     return response.data;
@@ -71,7 +104,34 @@ export const updateMentorProfile = async (
 };
 
 /**
- * Upload mentor avatar
+ * Upload current logged-in mentor avatar
+ * POST /api/mentors/avatar
+ */
+export const uploadMyMentorAvatar = async (
+  file: File
+): Promise<{ avatarUrl: string }> => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await axiosInstance.post<{ avatarUrl: string }>(
+      '/api/mentors/avatar',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading my mentor avatar:', error);
+    throw error;
+  }
+};
+
+/**
+ * Upload mentor avatar by ID (Admin)
  * POST /api/mentors/{mentorId}/avatar
  */
 export const uploadMentorAvatar = async (
@@ -83,7 +143,7 @@ export const uploadMentorAvatar = async (
     formData.append('file', file);
     
     const response = await axiosInstance.post<{ avatarUrl: string }>(
-      `/mentors/${mentorId}/avatar`,
+      `/api/mentors/${mentorId}/avatar`,
       formData,
       {
         headers: {

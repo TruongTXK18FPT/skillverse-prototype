@@ -1,100 +1,170 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AccountVerificationTab.css';
-
-interface Application {
-  id: string;
-  applicantName: string;
-  email: string;
-  role: 'mentor' | 'business';
-  status: 'pending' | 'approved' | 'rejected';
-  applicationDate: string;
-  documents: {
-    id: string;
-    name: string;
-    type: 'pdf' | 'image';
-    url: string;
-  }[];
-  businessInfo?: {
-    companyName: string;
-    industry: string;
-    size: string;
-  };
-  mentorInfo?: {
-    expertise: string[];
-    experience: string;
-    education: string;
-  };
-}
+import adminService from '../../services/adminService';
+import {
+  MentorApplicationDto,
+  RecruiterApplicationDto,
+  ApplicationStatusFilter,
+  ApplicationsResponse,
+  ApplicationStatus
+} from '../../data/adminDTOs';
 
 const AccountVerificationTab: React.FC = () => {
-  const [applications] = useState<Application[]>([
-    {
-      id: '1',
-      applicantName: 'Nguyễn Văn An',
-      email: 'an.nguyen@email.com',
-      role: 'mentor',
-      status: 'pending',
-      applicationDate: '2025-07-01',
-      documents: [
-        { id: '1', name: 'CV_NguyenVanAn.pdf', type: 'pdf', url: '#' },
-        { id: '2', name: 'Certificate_React.jpg', type: 'image', url: '#' },
-      ],
-      mentorInfo: {
-        expertise: ['React', 'TypeScript', 'Node.js'],
-        experience: '5 năm kinh nghiệm phát triển Frontend',
-        education: 'Cử nhân Công nghệ Thông tin - ĐH Bách Khoa'
-      }
-    },
-    {
-      id: '2',
-      applicantName: 'Công ty TNHH TechViet',
-      email: 'hr@techviet.com',
-      role: 'business',
-      status: 'pending',
-      applicationDate: '2025-06-30',
-      documents: [
-        { id: '3', name: 'BusinessLicense.pdf', type: 'pdf', url: '#' },
-        { id: '4', name: 'CompanyProfile.pdf', type: 'pdf', url: '#' },
-      ],
-      businessInfo: {
-        companyName: 'Công ty TNHH TechViet',
-        industry: 'Công nghệ thông tin',
-        size: '50-100 nhân viên'
-      }
-    },
-  ]);
-
+  // Real data from API
+  const [mentorApplications, setMentorApplications] = useState<MentorApplicationDto[]>([]);
+  const [recruiterApplications, setRecruiterApplications] = useState<RecruiterApplicationDto[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Filters
   const [roleFilter, setRoleFilter] = useState<string>('all');
-  const [statusFilter, setStatusFilter] = useState<string>('pending');
+  const [statusFilter, setStatusFilter] = useState<ApplicationStatusFilter>('PENDING');
+  
+  // Reject modal
+  const [rejectReason, setRejectReason] = useState<string>('');
+  const [showRejectModal, setShowRejectModal] = useState<boolean>(false);
+  const [selectedApplication, setSelectedApplication] = useState<{
+    userId: number;
+    type: 'MENTOR' | 'RECRUITER';
+    name: string;
+  } | null>(null);
 
-  const filteredApplications = applications.filter(app => {
-    const matchesRole = roleFilter === 'all' || app.role === roleFilter;
-    const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
-    return matchesRole && matchesStatus;
-  });
+  // Fetch applications when component mounts or status filter changes
+  useEffect(() => {
+    fetchApplications();
+  }, [statusFilter]);
 
-  const handleApplicationAction = (appId: string, action: string) => {
-    console.log(`Performing ${action} on application ${appId}`);
-    // In real app, make API call to perform action
+  const fetchApplications = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response: ApplicationsResponse = await adminService.getApplications(statusFilter);
+      
+      setMentorApplications(response.mentorApplications || []);
+      setRecruiterApplications(response.recruiterApplications || []);
+      
+      console.log('✅ Applications loaded:', {
+        mentors: response.mentorApplications?.length || 0,
+        recruiters: response.recruiterApplications?.length || 0,
+        total: response.totalApplications
+      });
+    } catch (err) {
+      console.error('❌ Error fetching applications:', err);
+      setError('Không thể tải danh sách đơn đăng ký. Vui lòng thử lại.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const getStatusColor = (status: string) => {
+  // Filter applications based on role
+  const filteredMentors = roleFilter === 'all' || roleFilter === 'mentor' 
+    ? mentorApplications 
+    : [];
+  const filteredRecruiters = roleFilter === 'all' || roleFilter === 'business' 
+    ? recruiterApplications 
+    : [];
+
+  // Handle approve
+  const handleApprove = async (userId: number, type: 'MENTOR' | 'RECRUITER') => {
+    try {
+      const response = type === 'MENTOR' 
+        ? await adminService.approveMentorApplication(userId)
+        : await adminService.approveRecruiterApplication(userId);
+      
+      if (response.success) {
+        alert(`✅ Đã duyệt đơn ${type === 'MENTOR' ? 'Mentor' : 'Recruiter'} thành công!`);
+        fetchApplications(); // Reload data
+      }
+    } catch (err) {
+      console.error('❌ Error approving:', err);
+      alert('Có lỗi xảy ra khi duyệt đơn. Vui lòng thử lại.');
+    }
+  };
+
+  // Handle reject click (open modal)
+  const handleRejectClick = (userId: number, type: 'MENTOR' | 'RECRUITER', name: string) => {
+    setSelectedApplication({ userId, type, name });
+    setShowRejectModal(true);
+  };
+
+  // Handle reject confirm (submit)
+  const handleRejectConfirm = async () => {
+    if (!selectedApplication || !rejectReason.trim()) {
+      alert('Vui lòng nhập lý do từ chối!');
+      return;
+    }
+
+    try {
+      const response = selectedApplication.type === 'MENTOR'
+        ? await adminService.rejectMentorApplication(selectedApplication.userId, rejectReason)
+        : await adminService.rejectRecruiterApplication(selectedApplication.userId, rejectReason);
+      
+      if (response.success) {
+        alert(`✅ Đã từ chối đơn ${selectedApplication.type === 'MENTOR' ? 'Mentor' : 'Recruiter'}!`);
+        setShowRejectModal(false);
+        setRejectReason('');
+        setSelectedApplication(null);
+        fetchApplications(); // Reload data
+      }
+    } catch (err) {
+      console.error('❌ Error rejecting:', err);
+      alert('Có lỗi xảy ra khi từ chối đơn. Vui lòng thử lại.');
+    }
+  };
+
+  // Utility functions
+  const getStatusColor = (status: ApplicationStatus) => {
     switch (status) {
-      case 'pending': return '#ffa726';
-      case 'approved': return '#43e97b';
-      case 'rejected': return '#ff6b6b';
+      case ApplicationStatus.PENDING: return '#ffa726';
+      case ApplicationStatus.APPROVED: return '#43e97b';
+      case ApplicationStatus.REJECTED: return '#ff6b6b';
       default: return '#7f8c8d';
     }
   };
 
-  const getStatusLabel = (status: string) => {
+  const getStatusLabel = (status: ApplicationStatus) => {
     switch (status) {
-      case 'pending': return 'Chờ duyệt';
-      case 'approved': return 'Đã duyệt';
-      case 'rejected': return 'Từ chối';
+      case ApplicationStatus.PENDING: return 'Chờ duyệt';
+      case ApplicationStatus.APPROVED: return 'Đã duyệt';
+      case ApplicationStatus.REJECTED: return 'Từ chối';
       default: return status;
     }
   };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('vi-VN');
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="administrator-verification">
+        <div className="administrator-verification-loading">
+          <p>⏳ Đang tải danh sách đơn đăng ký...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="administrator-verification">
+        <div className="administrator-verification-error">
+          <p>❌ {error}</p>
+          <button onClick={fetchApplications} className="administrator-verification-btn">
+            Thử lại
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Calculate stats from real data
+  const totalPending = mentorApplications.filter(m => m.applicationStatus === ApplicationStatus.PENDING).length +
+                       recruiterApplications.filter(r => r.applicationStatus === ApplicationStatus.PENDING).length;
+  const mentorPending = mentorApplications.filter(m => m.applicationStatus === ApplicationStatus.PENDING).length;
+  const recruiterPending = recruiterApplications.filter(r => r.applicationStatus === ApplicationStatus.PENDING).length;
 
   return (
     <div className="administrator-verification">
@@ -106,21 +176,15 @@ const AccountVerificationTab: React.FC = () => {
       <div className="administrator-verification-controls">
         <div className="administrator-verification-stats">
           <div className="administrator-verification-stat">
-            <span className="administrator-verification-stat-number">
-              {applications.filter(a => a.status === 'pending').length}
-            </span>
+            <span className="administrator-verification-stat-number">{totalPending}</span>
             <span className="administrator-verification-stat-label">Chờ duyệt</span>
           </div>
           <div className="administrator-verification-stat">
-            <span className="administrator-verification-stat-number">
-              {applications.filter(a => a.role === 'mentor' && a.status === 'pending').length}
-            </span>
+            <span className="administrator-verification-stat-number">{mentorPending}</span>
             <span className="administrator-verification-stat-label">Mentor mới</span>
           </div>
           <div className="administrator-verification-stat">
-            <span className="administrator-verification-stat-number">
-              {applications.filter(a => a.role === 'business' && a.status === 'pending').length}
-            </span>
+            <span className="administrator-verification-stat-number">{recruiterPending}</span>
             <span className="administrator-verification-stat-label">Doanh nghiệp mới</span>
           </div>
         </div>
@@ -138,116 +202,252 @@ const AccountVerificationTab: React.FC = () => {
 
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => setStatusFilter(e.target.value as ApplicationStatusFilter)}
             className="administrator-verification-filter"
           >
-            <option value="all">Tất cả trạng thái</option>
-            <option value="pending">Chờ duyệt</option>
-            <option value="approved">Đã duyệt</option>
-            <option value="rejected">Từ chối</option>
+            <option value="ALL">Tất cả trạng thái</option>
+            <option value="PENDING">Chờ duyệt</option>
+            <option value="APPROVED">Đã duyệt</option>
+            <option value="REJECTED">Từ chối</option>
           </select>
         </div>
       </div>
 
       <div className="administrator-verification-list">
-        {filteredApplications.map((app) => (
-          <div key={app.id} className="administrator-verification-card">
+        {/* Mentor Applications */}
+        {filteredMentors.map((mentor) => (
+          <div key={`mentor-${mentor.userId}`} className="administrator-verification-card">
             <div className="administrator-verification-card-header">
               <div className="administrator-verification-applicant">
                 <div className="administrator-verification-avatar">
-                  {app.applicantName.charAt(0)}
+                  {mentor.fullName.charAt(0)}
                 </div>
                 <div className="administrator-verification-info">
-                  <h3>{app.applicantName}</h3>
-                  <p>{app.email}</p>
-                  <span className="administrator-verification-role">
-                    {app.role === 'mentor' ? '🎓 Mentor' : '🏢 Doanh nghiệp'}
-                  </span>
+                  <h3>{mentor.fullName}</h3>
+                  <p>{mentor.email}</p>
+                  <span className="administrator-verification-role">🎓 Mentor</span>
                 </div>
               </div>
               
               <div className="administrator-verification-meta">
                 <span 
                   className="administrator-verification-status"
-                  style={{ backgroundColor: getStatusColor(app.status) }}
+                  style={{ backgroundColor: getStatusColor(mentor.applicationStatus) }}
                 >
-                  {getStatusLabel(app.status)}
+                  {getStatusLabel(mentor.applicationStatus)}
                 </span>
                 <span className="administrator-verification-date">
-                  {new Date(app.applicationDate).toLocaleDateString('vi-VN')}
+                  {formatDate(mentor.applicationDate)}
                 </span>
               </div>
             </div>
 
             <div className="administrator-verification-details">
-              {app.mentorInfo && (
-                <div className="administrator-verification-mentor-info">
-                  <h4>Thông tin Mentor</h4>
-                  <p><strong>Chuyên môn:</strong> {app.mentorInfo.expertise.join(', ')}</p>
-                  <p><strong>Kinh nghiệm:</strong> {app.mentorInfo.experience}</p>
-                  <p><strong>Học vấn:</strong> {app.mentorInfo.education}</p>
-                </div>
-              )}
-
-              {app.businessInfo && (
-                <div className="administrator-verification-business-info">
-                  <h4>Thông tin Doanh nghiệp</h4>
-                  <p><strong>Tên công ty:</strong> {app.businessInfo.companyName}</p>
-                  <p><strong>Ngành nghề:</strong> {app.businessInfo.industry}</p>
-                  <p><strong>Quy mô:</strong> {app.businessInfo.size}</p>
-                </div>
-              )}
-
-              <div className="administrator-verification-documents">
-                <h4>Tài liệu đính kèm</h4>
-                <div className="administrator-verification-document-list">
-                  {app.documents.map((doc) => (
-                    <div key={doc.id} className="administrator-verification-document">
-                      <span className="administrator-verification-document-icon">
-                        {doc.type === 'pdf' ? '📄' : '🖼️'}
-                      </span>
-                      <span className="administrator-verification-document-name">{doc.name}</span>
-                      <button 
-                        className="administrator-verification-document-view"
-                        onClick={() => window.open(doc.url, '_blank')}
-                      >
-                        Xem
-                      </button>
-                    </div>
-                  ))}
-                </div>
+              <div className="administrator-verification-mentor-info">
+                <h4>Thông tin Mentor</h4>
+                <p><strong>Chuyên môn:</strong> {mentor.mainExpertiseArea}</p>
+                <p><strong>Kinh nghiệm:</strong> {mentor.yearsOfExperience} năm</p>
+                <p><strong>Mô tả:</strong> {mentor.personalProfile || 'Chưa có'}</p>
+                {mentor.linkedinProfile && (
+                  <p><strong>LinkedIn:</strong> <a href={mentor.linkedinProfile} target="_blank" rel="noopener noreferrer">{mentor.linkedinProfile}</a></p>
+                )}
               </div>
+
+              {(mentor.cvPortfolioUrl || mentor.certificatesUrl) && (
+                <div className="administrator-verification-documents">
+                  <h4>Tài liệu đính kèm</h4>
+                  <div className="administrator-verification-document-list">
+                    {mentor.cvPortfolioUrl && (
+                      <div className="administrator-verification-document">
+                        <span className="administrator-verification-document-icon">📄</span>
+                        <span className="administrator-verification-document-name">CV/Portfolio</span>
+                        <button 
+                          className="administrator-verification-document-view"
+                          onClick={() => window.open(mentor.cvPortfolioUrl, '_blank')}
+                        >
+                          Xem
+                        </button>
+                      </div>
+                    )}
+                    {mentor.certificatesUrl && (
+                      <div className="administrator-verification-document">
+                        <span className="administrator-verification-document-icon">🏆</span>
+                        <span className="administrator-verification-document-name">Chứng chỉ</span>
+                        <button 
+                          className="administrator-verification-document-view"
+                          onClick={() => window.open(mentor.certificatesUrl, '_blank')}
+                        >
+                          Xem
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {app.status === 'pending' && (
+            {mentor.applicationStatus === ApplicationStatus.PENDING && (
               <div className="administrator-verification-actions">
                 <button 
                   className="administrator-verification-btn administrator-verification-approve"
-                  onClick={() => handleApplicationAction(app.id, 'approve')}
+                  onClick={() => handleApprove(mentor.userId, 'MENTOR')}
                 >
                   ✅ Duyệt
                 </button>
                 <button 
                   className="administrator-verification-btn administrator-verification-reject"
-                  onClick={() => handleApplicationAction(app.id, 'reject')}
+                  onClick={() => handleRejectClick(mentor.userId, 'MENTOR', mentor.fullName)}
                 >
                   ❌ Từ chối
                 </button>
-                <button 
-                  className="administrator-verification-btn administrator-verification-info"
-                  onClick={() => handleApplicationAction(app.id, 'request-info')}
+              </div>
+            )}
+
+            {mentor.applicationStatus === ApplicationStatus.REJECTED && mentor.rejectionReason && (
+              <div className="administrator-verification-rejection-reason">
+                <strong>Lý do từ chối:</strong> {mentor.rejectionReason}
+              </div>
+            )}
+          </div>
+        ))}
+
+        {/* Recruiter Applications */}
+        {filteredRecruiters.map((recruiter) => (
+          <div key={`recruiter-${recruiter.userId}`} className="administrator-verification-card">
+            <div className="administrator-verification-card-header">
+              <div className="administrator-verification-applicant">
+                <div className="administrator-verification-avatar">
+                  {recruiter.companyName.charAt(0)}
+                </div>
+                <div className="administrator-verification-info">
+                  <h3>{recruiter.companyName}</h3>
+                  <p>{recruiter.email}</p>
+                  <span className="administrator-verification-role">🏢 Doanh nghiệp</span>
+                </div>
+              </div>
+              
+              <div className="administrator-verification-meta">
+                <span 
+                  className="administrator-verification-status"
+                  style={{ backgroundColor: getStatusColor(recruiter.applicationStatus) }}
                 >
-                  📝 Yêu cầu bổ sung
+                  {getStatusLabel(recruiter.applicationStatus)}
+                </span>
+                <span className="administrator-verification-date">
+                  {formatDate(recruiter.applicationDate)}
+                </span>
+              </div>
+            </div>
+
+            <div className="administrator-verification-details">
+              <div className="administrator-verification-business-info">
+                <h4>Thông tin Doanh nghiệp</h4>
+                <p><strong>Người liên hệ:</strong> {recruiter.fullName}</p>
+                {recruiter.companyWebsite && (
+                  <p><strong>Website:</strong> <a href={recruiter.companyWebsite} target="_blank" rel="noopener noreferrer">{recruiter.companyWebsite}</a></p>
+                )}
+                {recruiter.companyAddress && (
+                  <p><strong>Địa chỉ:</strong> {recruiter.companyAddress}</p>
+                )}
+                {recruiter.taxCodeOrBusinessRegistrationNumber && (
+                  <p><strong>Mã số thuế:</strong> {recruiter.taxCodeOrBusinessRegistrationNumber}</p>
+                )}
+              </div>
+
+              {recruiter.companyDocumentsUrl && (
+                <div className="administrator-verification-documents">
+                  <h4>Tài liệu đính kèm</h4>
+                  <div className="administrator-verification-document-list">
+                    <div className="administrator-verification-document">
+                      <span className="administrator-verification-document-icon">📄</span>
+                      <span className="administrator-verification-document-name">Giấy tờ công ty</span>
+                      <button 
+                        className="administrator-verification-document-view"
+                        onClick={() => window.open(recruiter.companyDocumentsUrl, '_blank')}
+                      >
+                        Xem
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {recruiter.applicationStatus === ApplicationStatus.PENDING && (
+              <div className="administrator-verification-actions">
+                <button 
+                  className="administrator-verification-btn administrator-verification-approve"
+                  onClick={() => handleApprove(recruiter.userId, 'RECRUITER')}
+                >
+                  ✅ Duyệt
                 </button>
+                <button 
+                  className="administrator-verification-btn administrator-verification-reject"
+                  onClick={() => handleRejectClick(recruiter.userId, 'RECRUITER', recruiter.companyName)}
+                >
+                  ❌ Từ chối
+                </button>
+              </div>
+            )}
+
+            {recruiter.applicationStatus === ApplicationStatus.REJECTED && recruiter.rejectionReason && (
+              <div className="administrator-verification-rejection-reason">
+                <strong>Lý do từ chối:</strong> {recruiter.rejectionReason}
               </div>
             )}
           </div>
         ))}
       </div>
 
-      {filteredApplications.length === 0 && (
+      {filteredMentors.length === 0 && filteredRecruiters.length === 0 && (
         <div className="administrator-verification-empty">
           <p>Không có đơn đăng ký nào phù hợp với bộ lọc.</p>
+        </div>
+      )}
+
+      {/* Reject Modal */}
+      {showRejectModal && selectedApplication && (
+        <div className="administrator-verification-modal-overlay" onClick={() => setShowRejectModal(false)}>
+          <div className="administrator-verification-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="administrator-verification-modal-header">
+              <h3>Từ chối đơn đăng ký</h3>
+              <button 
+                className="administrator-verification-modal-close"
+                onClick={() => setShowRejectModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="administrator-verification-modal-body">
+              <p><strong>Ứng viên:</strong> {selectedApplication.name}</p>
+              <p><strong>Vai trò:</strong> {selectedApplication.type === 'MENTOR' ? 'Mentor' : 'Recruiter'}</p>
+              <label>
+                <strong>Lý do từ chối: <span style={{color: 'red'}}>*</span></strong>
+                <textarea
+                  value={rejectReason}
+                  onChange={(e) => setRejectReason(e.target.value)}
+                  placeholder="Nhập lý do từ chối đơn đăng ký..."
+                  rows={5}
+                  className="administrator-verification-textarea"
+                />
+              </label>
+            </div>
+            <div className="administrator-verification-modal-footer">
+              <button 
+                className="administrator-verification-btn administrator-verification-cancel"
+                onClick={() => setShowRejectModal(false)}
+              >
+                Hủy
+              </button>
+              <button 
+                className="administrator-verification-btn administrator-verification-reject"
+                onClick={handleRejectConfirm}
+                disabled={!rejectReason.trim()}
+              >
+                Xác nhận từ chối
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

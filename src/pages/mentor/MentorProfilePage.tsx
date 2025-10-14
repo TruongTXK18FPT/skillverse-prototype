@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { User, Save, Upload, Github, Linkedin, Globe, Award, Plus, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
-import { getMentorProfile, updateMentorProfile, uploadMentorAvatar, MentorProfile, MentorProfileUpdateDTO } from '../../services/mentorProfileService';
+import { getMyMentorProfile, updateMyMentorProfile, uploadMyMentorAvatar, MentorProfile, MentorProfileUpdateDTO } from '../../services/mentorProfileService';
 import '../../styles/MentorProfilePage.css';
 
 const MentorProfilePage: React.FC = () => {
@@ -32,18 +32,13 @@ const MentorProfilePage: React.FC = () => {
   const [newSkill, setNewSkill] = useState('');
   const [newAchievement, setNewAchievement] = useState('');
 
-  useEffect(() => {
-    if (user?.id) {
-      loadProfile();
-    }
-  }, [user?.id]);
-
-  const loadProfile = async () => {
+  const loadProfile = React.useCallback(async () => {
     if (!user?.id) return;
     
     setLoading(true);
     try {
-      const profileData = await getMentorProfile(user.id);
+      // Use getMyMentorProfile() for current logged-in mentor
+      const profileData = await getMyMentorProfile();
       setProfile(profileData);
       setFormData({
         firstName: profileData.firstName || '',
@@ -65,7 +60,13 @@ const MentorProfilePage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id, showError]);
+
+  useEffect(() => {
+    if (user?.id) {
+      loadProfile();
+    }
+  }, [user?.id, loadProfile]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -126,7 +127,7 @@ const MentorProfilePage: React.FC = () => {
 
     setUploading(true);
     try {
-      const result = await uploadMentorAvatar(user.id, file);
+      const result = await uploadMyMentorAvatar(file);
       setFormData(prev => ({
         ...prev,
         avatar: result.avatarUrl
@@ -146,7 +147,7 @@ const MentorProfilePage: React.FC = () => {
 
     setSaving(true);
     try {
-      const updatedProfile = await updateMentorProfile(user.id, formData);
+      const updatedProfile = await updateMyMentorProfile(formData);
       setProfile(updatedProfile);
       showSuccess('Success', 'Profile updated successfully');
     } catch (error) {
