@@ -21,7 +21,36 @@ export enum ProgressStatus {
 }
 
 /**
- * Individual node/quest in the roadmap tree
+ * Difficulty level for nodes and roadmaps
+ */
+export enum DifficultyLevel {
+  BEGINNER = 'beginner',
+  INTERMEDIATE = 'intermediate',
+  ADVANCED = 'advanced'
+}
+
+/**
+ * Detected intention/pattern from user goal
+ */
+export enum DetectedIntention {
+  TEST_PREPARATION = 'TEST_PREPARATION',
+  CERTIFICATE = 'CERTIFICATE',
+  CAREER_PREPARATION = 'CAREER_PREPARATION',
+  SKILL_ACQUISITION = 'SKILL_ACQUISITION',
+  KNOWLEDGE_EXPLORATION = 'KNOWLEDGE_EXPLORATION'
+}
+
+/**
+ * Validation severity levels
+ */
+export enum ValidationSeverity {
+  INFO = 'INFO',
+  WARNING = 'WARNING',
+  ERROR = 'ERROR'
+}
+
+/**
+ * Individual node/quest in the roadmap tree (V2 Enhanced)
  */
 export interface RoadmapNode {
   id: string;
@@ -30,6 +59,16 @@ export interface RoadmapNode {
   estimatedTimeMinutes: number;
   type: NodeType;
   children: string[];
+  
+  // V2 Enhanced fields
+  difficulty?: DifficultyLevel;
+  learningObjectives?: string[];
+  keyConcepts?: string[];
+  practicalExercises?: string[];
+  suggestedResources?: string[];
+  successCriteria?: string[];
+  prerequisites?: string[];
+  estimatedCompletionRate?: number;
 }
 
 /**
@@ -43,31 +82,77 @@ export interface GenerateRoadmapRequest {
 }
 
 /**
- * Full roadmap response with nodes
+ * Roadmap metadata (V2)
+ */
+export interface RoadmapMetadata {
+  title: string;
+  originalGoal: string;
+  validatedGoal?: string;
+  duration: string;
+  experienceLevel: string;
+  learningStyle: string;
+  detectedIntention?: DetectedIntention;
+  validationNotes?: string | string[]; // Backend returns string, may contain array in future
+  difficultyLevel?: DifficultyLevel;
+  prerequisites?: string[];
+  careerRelevance?: string;
+}
+
+/**
+ * Roadmap statistics (V2)
+ */
+export interface RoadmapStatistics {
+  totalNodes: number;
+  mainNodes: number;
+  sideNodes: number;
+  totalEstimatedHours: number;
+  difficultyDistribution?: Record<string, number>;
+}
+
+/**
+ * Validation result (for pre-validation)
+ */
+export interface ValidationResult {
+  severity: ValidationSeverity;
+  message: string;
+  code?: string;
+}
+
+/**
+ * Full roadmap response with nested structure (V2 Breaking Change)
  */
 export interface RoadmapResponse {
   sessionId: number;
-  title: string;
-  goal: string;
-  duration: string;
-  experience: string;
-  style: string;
+  metadata: RoadmapMetadata;
   roadmap: RoadmapNode[];
+  statistics: RoadmapStatistics;
+  learningTips: string | string[]; // Backend returns List<String>, but may vary
   createdAt: string;
 }
 
 /**
- * Summary of a roadmap session (for list view)
+ * Summary of a roadmap session (for list view) - V2 Fields
  */
 export interface RoadmapSessionSummary {
   sessionId: number;
   title: string;
-  goal: string;
+  
+  // V2 field names
+  originalGoal: string;
+  validatedGoal?: string;
   duration: string;
-  experience: string;
+  experienceLevel: string;
+  learningStyle: string;
+  
+  // Progress tracking
   totalQuests: number;
   completedQuests: number;
   progressPercentage: number;
+  
+  // Metadata
+  difficultyLevel?: string;
+  schemaVersion?: number;
+  
   createdAt: string;
 }
 

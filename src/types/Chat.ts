@@ -8,6 +8,8 @@ export interface ChatMessage {
   userMessage: string;
   aiResponse: string;
   createdAt: string;
+  userId: number;
+  userEmail: string;
 }
 
 export interface ChatRequest {
@@ -22,9 +24,13 @@ export interface ChatResponse {
   timestamp: string;
 }
 
+/**
+ * Session summary with title preview (from first message)
+ */
 export interface ChatSession {
   sessionId: number;
-  lastMessageTime: string;
+  title: string; // Title preview from first message
+  lastMessageAt: string;
   messageCount: number;
 }
 

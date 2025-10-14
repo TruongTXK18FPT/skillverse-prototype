@@ -2,7 +2,8 @@ import axiosInstance from './axiosInstance';
 import {
   GenerateRoadmapRequest,
   RoadmapResponse,
-  RoadmapSessionSummary
+  RoadmapSessionSummary,
+  ValidationResult
 } from '../types/Roadmap';
 
 // Request deduplication: Prevent duplicate API calls for the same request
@@ -25,6 +26,24 @@ const createRequestKey = (request: GenerateRoadmapRequest): string => {
  * Service for AI Roadmap API calls
  */
 const aiRoadmapService = {
+  /**
+   * Pre-validate roadmap generation request (V2)
+   * Returns validation warnings/errors before actual generation
+   */
+  preValidate: async (request: GenerateRoadmapRequest): Promise<ValidationResult[]> => {
+    try {
+      const response = await axiosInstance.post<ValidationResult[]>(
+        '/api/v1/ai/roadmap/validate',
+        request
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Failed to validate request:', error);
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
+      throw new Error(message || 'Failed to validate request.');
+    }
+  },
+
   /**
    * Generate a new AI-powered roadmap with request deduplication
    * Prevents duplicate API calls if the same request is made while another is in progress

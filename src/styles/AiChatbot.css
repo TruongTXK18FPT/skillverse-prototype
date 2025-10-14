@@ -4,7 +4,9 @@
 
 .chatbot-page {
   height: 100vh; /* lock viewport height to keep sidebar following */
+  width: 100%;
   display: flex;
+  flex-direction: row; /* EXPLICIT: sidebar on left, chat on right */
   justify-content: flex-start;
   align-items: stretch;
   background: 
@@ -12,7 +14,7 @@
     radial-gradient(ellipse at 80% 80%, rgba(59, 130, 246, 0.25) 0%, transparent 50%),
     radial-gradient(ellipse at 50% 50%, rgba(138, 43, 226, 0.15) 0%, transparent 70%),
     linear-gradient(to bottom, #000000 0%, #0a0015 20%, #1a0033 40%, #0f001a 60%, #000000 100%);
-  overflow: hidden;
+  overflow: hidden; /* Prevent horizontal scroll */
   position: relative;
   color: #e5e7eb;
 }
@@ -25,7 +27,7 @@
   inset: 0;
   background: transparent;
   pointer-events: none;
-  z-index: 0;
+  z-index: 0; /* Keep below sidebar (z-index: 10) and chat (z-index: 5) */
 }
 
 /* Dense star field with twinkling animation */
@@ -130,17 +132,19 @@
 .chatbot-sidebar {
   width: 280px;
   min-width: 280px;
-  background: rgba(10, 0, 25, 0.8);
+  background: rgba(10, 0, 25, 0.95); /* Increased opacity for better visibility */
   backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(139, 92, 246, 0.3);
+  border-right: 2px solid rgba(139, 92, 246, 0.6); /* STRONGER border for debugging */
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  position: sticky; /* follow chat page */
+  overflow-y: auto; /* Allow scroll if content too long */
+  overflow-x: hidden;
+  position: relative; /* Changed from sticky - may cause issue */
   top: 0;
   height: 100vh; /* full viewport height */
-  z-index: 2;
-  box-shadow: 4px 0 30px rgba(139, 92, 246, 0.2);
+  z-index: 10; /* HIGHER than effects (0) and chat container (5) */
+  box-shadow: 4px 0 30px rgba(139, 92, 246, 0.6); /* Stronger shadow */
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .chatbot-sidebar__header {
@@ -202,7 +206,11 @@
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to show dropdown menu */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .chatbot-session-item::before {
@@ -232,6 +240,12 @@
   box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
 }
 
+.chatbot-session-item__content {
+  flex: 1;
+  min-width: 0; /* Enable text truncation */
+  cursor: pointer;
+}
+
 .chatbot-session-item__title {
   font-size: 14px;
   font-weight: 600;
@@ -246,6 +260,135 @@
   font-size: 11px;
   color: #a78bfa;
   opacity: 0.7;
+}
+
+.chatbot-session-item__actions {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Session Menu Button (3 dots) */
+.chatbot-session-menu-btn {
+  padding: 6px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+}
+
+.chatbot-session-menu-btn:hover {
+  background: rgba(139, 92, 246, 0.1);
+  opacity: 1;
+}
+
+/* Dropdown Menu */
+.chatbot-session-menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 4px;
+  background: rgba(42, 42, 62, 0.98); /* Dark purple background for galaxy theme */
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3), 0 0 20px rgba(139, 92, 246, 0.1);
+  z-index: 9999; /* Increased z-index */
+  min-width: 150px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  pointer-events: auto; /* Ensure menu is clickable */
+}
+
+.chatbot-session-menu-item {
+  width: 100%;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e5e7eb; /* Light gray text for visibility */
+  font-size: 14px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.chatbot-session-menu-item:hover {
+  background: rgba(139, 92, 246, 0.2);
+  color: #e9d5ff; /* Lighter purple on hover */
+}
+
+.chatbot-session-menu-item--delete {
+  color: #ff6b6b; /* Softer red */
+}
+
+.chatbot-session-menu-item--delete:hover {
+  background: rgba(255, 59, 48, 0.15);
+  color: #ff8787; /* Lighter red on hover */
+}
+
+/* Rename Mode */
+.chatbot-session-rename-container {
+  flex: 1;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.chatbot-session-rename-input {
+  flex: 1;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #8b5cf6;
+  background: rgba(139, 92, 246, 0.05);
+  color: #e5e7eb; /* Ensure text is visible */
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.chatbot-session-rename-input:focus {
+  outline: none;
+  border-color: #a78bfa;
+  background: rgba(139, 92, 246, 0.15);
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+}
+
+.chatbot-session-rename-input::placeholder {
+  color: rgba(229, 231, 235, 0.5);
+}
+
+.chatbot-session-rename-btn {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: opacity 0.2s;
+}
+
+.chatbot-session-rename-btn--save {
+  background: #8b5cf6;
+  color: white;
+}
+
+.chatbot-session-rename-btn--save:hover {
+  opacity: 0.9;
+}
+
+.chatbot-session-rename-btn--cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+}
+
+.chatbot-session-rename-btn--cancel:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .chatbot-sidebar__sessions::-webkit-scrollbar {
@@ -282,7 +425,7 @@
   position: relative;
   background: transparent;
   overflow: hidden;
-  z-index: 1;
+  z-index: 5; /* Below sidebar (10) but above effects (1) */
 }
 
 /* ============================================================================
@@ -686,7 +829,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1; /* Below sidebar (10) but above background (0) */
 }
 
 .shooting-star {
@@ -733,7 +876,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1; /* Below sidebar (10) but above background (0) */
 }
 
 .dust-particle {

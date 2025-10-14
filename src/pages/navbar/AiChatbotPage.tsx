@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Sparkles, Loader, MessageSquare, Plus } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Loader, MessageSquare, Plus, Trash2, Lock, LogIn, MoreVertical, Edit2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
 import aiChatbotService from '../../services/aiChatbotService';
-import { UIMessage } from '../../types/Chat';
+import { UIMessage, ChatSession } from '../../types/Chat';
 import { useToast } from '../../hooks/useToast';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/AiChatbot.css';
@@ -14,6 +16,8 @@ import aiAvatar from '../../assets/aiChatBot.png';
  */
 const AiChatbotPage = () => {
   const { theme } = useTheme();
+  const { isAuthenticated, user } = useAuth();
+  const navigate = useNavigate();
   const [messages, setMessages] = useState<UIMessage[]>([
     {
       id: '1',
@@ -41,8 +45,11 @@ Mình có thể giúp bạn:
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<number | null>(null);
-  const [sessions, setSessions] = useState<number[]>([]);
+  const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [loadingSessions, setLoadingSessions] = useState(true);
+  const [openMenuSessionId, setOpenMenuSessionId] = useState<number | null>(null);
+  const [renamingSessionId, setRenamingSessionId] = useState<number | null>(null);
+  const [newTitle, setNewTitle] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { showError, showSuccess } = useToast();
 
@@ -54,12 +61,52 @@ Mình có thể giúp bạn:
     });
   }, [messages]);
 
-  // Load user sessions on mount
+  // Close menu when clicking outside
   useEffect(() => {
-    loadSessions();
-  }, []);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (openMenuSessionId !== null) {
+        // Check if click is inside dropdown menu
+        const target = event.target as HTMLElement;
+        const isInsideMenu = target.closest('.chatbot-session-menu-dropdown');
+        const isMenuButton = target.closest('.chatbot-session-menu-btn');
+        
+        // Only close if clicking outside both menu and button
+        if (!isInsideMenu && !isMenuButton) {
+          console.log('🚪 Clicking outside menu, closing...');
+          setOpenMenuSessionId(null);
+        } else {
+          console.log('📍 Clicking inside menu or button, keeping open');
+        }
+      }
+    };
+    
+    if (openMenuSessionId !== null) {
+      // Use setTimeout to ensure this runs AFTER the menu opens
+      setTimeout(() => {
+        document.addEventListener('click', handleClickOutside);
+      }, 0);
+      
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [openMenuSessionId]);
+
+  // Load user sessions on mount - WITH AUTH CHECK
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadSessions();
+    } else {
+      setSessions([]);
+      setLoadingSessions(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
 
   const loadSessions = async () => {
+    if (!isAuthenticated) {
+      showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để xem lịch sử trò chuyện');
+      return;
+    }
+
     try {
       setLoadingSessions(true);
       const userSessions = await aiChatbotService.getSessions();
@@ -74,6 +121,13 @@ Mình có thể giúp bạn:
       }
     } catch (error) {
       console.error('Failed to load sessions:', error);
+      const message = (error as Error).message;
+      if (message.includes('401') || message.includes('Unauthorized')) {
+        showError('Chưa đăng nhập', 'Vui lòng đăng nhập để sử dụng tính năng này');
+        setTimeout(() => navigate('/login'), 1500);
+      } else {
+        showError('Lỗi', 'Không thể tải danh sách phiên trò chuyện');
+      }
     } finally {
       setLoadingSessions(false);
     }
@@ -109,6 +163,12 @@ Mình có thể giúp bạn:
   };
 
   const handleLoadSession = async (selectedSessionId: number) => {
+    if (!isAuthenticated) {
+      showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để xem lịch sử');
+      setTimeout(() => navigate('/login'), 1500);
+      return;
+    }
+
     try {
       setIsLoading(true);
       const history = await aiChatbotService.getHistory(selectedSessionId);
@@ -136,10 +196,109 @@ Mình có thể giúp bạn:
       setSessionId(selectedSessionId);
       showSuccess('Đã tải', `Đã tải lịch sử phiên ${selectedSessionId}`);
     } catch (error) {
-      showError('Lỗi', 'Không thể tải lịch sử cuộc trò chuyện');
+      const message = (error as Error).message;
+      if (message.includes('401') || message.includes('Unauthorized')) {
+        showError('Chưa đăng nhập', 'Phiên đăng nhập đã hết hạn');
+        setTimeout(() => navigate('/login'), 1500);
+      } else {
+        showError('Lỗi', 'Không thể tải lịch sử cuộc trò chuyện');
+      }
     } finally {
       setIsLoading(false);
     }
+  };
+
+  /**
+   * Delete a chat session
+   */
+  const handleDeleteSession = async (sessionIdToDelete: number) => {
+    if (!isAuthenticated) {
+      showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để xóa phiên');
+      return;
+    }
+
+    if (!window.confirm(`Bạn có chắc chắn muốn xóa phiên ${sessionIdToDelete}?\nLịch sử trò chuyện sẽ bị xóa vĩnh viễn.`)) {
+      return;
+    }
+
+    try {
+      await aiChatbotService.deleteSession(sessionIdToDelete);
+      await loadSessions(); // Reload session list
+      
+      // If deleted current session, start new chat
+      if (sessionId === sessionIdToDelete) {
+        handleNewChat();
+      }
+      
+      showSuccess('Đã xóa', `Đã xóa phiên ${sessionIdToDelete}`);
+    } catch (error) {
+      const message = (error as Error).message;
+      if (message.includes('401') || message.includes('Unauthorized')) {
+        showError('Chưa đăng nhập', 'Vui lòng đăng nhập để xóa phiên');
+        setTimeout(() => navigate('/login'), 1500);
+      } else if (message.includes('403') || message.includes('Forbidden')) {
+        showError('Không có quyền', 'Bạn không có quyền xóa phiên này');
+      } else {
+        showError('Lỗi', 'Không thể xóa phiên trò chuyện');
+      }
+    }
+  };
+
+  /**
+   * Rename a chat session
+   */
+  const handleRenameSession = async (sessionIdToRename: number) => {
+    console.log('🔄 handleRenameSession called with sessionId:', sessionIdToRename);
+    console.log('👤 Current user:', user);
+    
+    if (!user?.id) {
+      console.error('❌ No user found, showing error toast');
+      showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để đổi tên phiên');
+      return;
+    }
+
+    // Start rename mode
+    console.log('✅ Starting rename mode for session:', sessionIdToRename);
+    setRenamingSessionId(sessionIdToRename);
+    const currentSession = sessions.find(s => s.sessionId === sessionIdToRename);
+    console.log('📝 Current session title:', currentSession?.title);
+    setNewTitle(currentSession?.title || '');
+    setOpenMenuSessionId(null);
+  };
+
+  /**
+   * Save renamed session title
+   */
+  const handleSaveRename = async (sessionIdToRename: number) => {
+    if (!newTitle.trim()) {
+      showError('Lỗi', 'Tiêu đề không được để trống');
+      return;
+    }
+
+    try {
+      // Call backend API to update title
+      const updatedSession = await aiChatbotService.renameSession(sessionIdToRename, newTitle.trim());
+      
+      // Update local state with response
+      setSessions(prev => prev.map(s => 
+        s.sessionId === sessionIdToRename ? { ...s, title: updatedSession.title } : s
+      ));
+      
+      showSuccess('Đã đổi tên', `Đã đổi tên phiên thành "${updatedSession.title}"`);
+      setRenamingSessionId(null);
+      setNewTitle('');
+    } catch (error: any) {
+      const message = error.message || 'Không thể đổi tên phiên trò chuyện';
+      showError('Lỗi', message);
+    }
+  };
+
+  /**
+   * Cancel rename operation
+   */
+  const handleCancelRename = () => {
+    setRenamingSessionId(null);
+    setNewTitle('');
   };
 
   // Format message content for cleaner chat display (headings, bullets, code, tables, links)
@@ -312,6 +471,14 @@ Mình có thể giúp bạn:
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // AUTH CHECK: Must be logged in to send message
+    if (!isAuthenticated) {
+      showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để gửi tin nhắn');
+      setTimeout(() => navigate('/login'), 1500);
+      return;
+    }
+
     if (!inputMessage.trim() || isLoading) return;
 
     const userMessage: UIMessage = {
@@ -357,13 +524,21 @@ Mình có thể giúp bạn:
 
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
-      showError('Lỗi', (error as Error).message);
+      const message = (error as Error).message;
+      
+      // Check for 401 errors (authentication)
+      if (message.includes('401') || message.includes('Unauthorized')) {
+        showError('Chưa đăng nhập', 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+        setTimeout(() => navigate('/login'), 1500);
+      } else {
+        showError('Lỗi', message || 'Không thể gửi tin nhắn');
+      }
       
       // Add error message to chat
       const errorMessage: UIMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: 'Xin lỗi, có lỗi xảy ra. Vui lòng nhập mục tiêu hợp lệ (ví dụ: "IELTS 7.0 trong 6 tháng", "Học React căn bản").',
+        content: 'Xin lỗi, có lỗi xảy ra. Vui lòng thử lại sau.',
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -385,6 +560,103 @@ Mình có thể giúp bạn:
     "Chuyển ngành sang công nghệ như thế nào?"
   ];
 
+  // LOGIN OVERLAY - Show when not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className={`chatbot-page ${theme}`} style={{ position: 'relative', minHeight: '80vh' }}>
+        {/* Shooting stars effect (blurred) */}
+        <div className="shooting-stars" style={{ filter: 'blur(4px)', opacity: 0.3 }}>
+          <div className="shooting-star" style={{ top: '10%', left: '80%', animationDelay: '0s' }}></div>
+          <div className="shooting-star" style={{ top: '30%', left: '20%', animationDelay: '3s' }}></div>
+          <div className="shooting-star" style={{ top: '50%', left: '70%', animationDelay: '6s' }}></div>
+        </div>
+
+        {/* Blurred preview */}
+        <div style={{ filter: 'blur(4px)', pointerEvents: 'none', opacity: 0.5 }}>
+          <div className="chatbot-sidebar">
+            <div className="chatbot-sidebar__header">
+              <h2 className="chatbot-sidebar__title">
+                <MessageSquare size={20} />
+                Chat Sessions
+              </h2>
+            </div>
+          </div>
+          
+          <div className="chatbot-container">
+            <div className="chatbot-header">
+              <div className="chatbot-header__avatar">
+                <img src={aiAvatar} alt="Meowl AI" style={{ width: 56, height: 56, borderRadius: '50%' }} />
+              </div>
+              <div className="chatbot-header__info">
+                <h1 className="chatbot-header__title">
+                  <Sparkles className="inline mr-2" size={24} />
+                  Meowl - Trợ Lý Nghề Nghiệp AI
+                </h1>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Login Overlay */}
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          padding: '48px',
+          borderRadius: '24px',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+          textAlign: 'center',
+          maxWidth: '400px',
+          zIndex: 1000
+        }}>
+          <Lock size={64} style={{ color: '#fff', marginBottom: '24px' }} />
+          <h2 style={{ color: '#fff', fontSize: '28px', marginBottom: '16px', fontWeight: 600 }}>
+            Yêu cầu đăng nhập
+          </h2>
+          <p style={{ 
+            color: 'rgba(255,255,255,0.9)', 
+            marginBottom: '32px', 
+            fontSize: '16px',
+            lineHeight: '1.6'
+          }}>
+            Vui lòng đăng nhập để trò chuyện với Meowl và nhận tư vấn nghề nghiệp cá nhân hóa
+          </p>
+          <button
+            onClick={() => navigate('/login')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: '#10b981',
+              color: '#fff',
+              border: 'none',
+              padding: '14px 32px',
+              borderRadius: '12px',
+              fontSize: '16px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'transform 0.2s, box-shadow 0.2s'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 8px 20px rgba(16, 185, 129, 0.4)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            <LogIn size={20} />
+            Đăng nhập ngay
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // MAIN CHAT UI - Only rendered when authenticated
   return (
     <div className={`chatbot-page ${theme}`}>
       {/* Shooting stars effect */}
@@ -448,16 +720,93 @@ Mình có thể giúp bạn:
           ) : (
             sessions.map((session) => (
               <div 
-                key={session}
-                className={`chatbot-session-item ${sessionId === session ? 'active' : ''}`}
-                onClick={() => handleLoadSession(session)}
+                key={session.sessionId}
+                className={`chatbot-session-item ${sessionId === session.sessionId ? 'active' : ''}`}
               >
-                <div className="chatbot-session-item__title">
-                  Session #{session}
-                </div>
-                <div className="chatbot-session-item__time">
-                  Click to load history
-                </div>
+                {renamingSessionId === session.sessionId ? (
+                  // Rename mode
+                  <div className="chatbot-session-rename-container">
+                    <input
+                      type="text"
+                      value={newTitle}
+                      onChange={(e) => setNewTitle(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleSaveRename(session.sessionId);
+                        if (e.key === 'Escape') handleCancelRename();
+                      }}
+                      autoFocus
+                      className="chatbot-session-rename-input"
+                    />
+                    <button
+                      onClick={() => handleSaveRename(session.sessionId)}
+                      className="chatbot-session-rename-btn chatbot-session-rename-btn--save"
+                    >
+                      ✓
+                    </button>
+                    <button
+                      onClick={handleCancelRename}
+                      className="chatbot-session-rename-btn chatbot-session-rename-btn--cancel"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div 
+                      className="chatbot-session-item__content"
+                      onClick={() => handleLoadSession(session.sessionId)}
+                    >
+                      <div className="chatbot-session-item__title">
+                        {session.title}
+                      </div>
+                      <div className="chatbot-session-item__time">
+                        {session.messageCount} tin nhắn · {new Date(session.lastMessageAt).toLocaleDateString('vi-VN')}
+                      </div>
+                    </div>
+                    
+                    {/* Three-dot menu button */}
+                    <div className="chatbot-session-item__actions">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenMenuSessionId(openMenuSessionId === session.sessionId ? null : session.sessionId);
+                        }}
+                        className="chatbot-session-menu-btn"
+                        title="Tùy chọn"
+                      >
+                        <MoreVertical size={16} />
+                      </button>
+
+                      {/* Dropdown menu */}
+                      {openMenuSessionId === session.sessionId && (
+                        <div className="chatbot-session-menu-dropdown">
+                          <button
+                            onClick={(e) => {
+                              console.log('🖱️ Rename button clicked for session:', session.sessionId);
+                              e.stopPropagation();
+                              handleRenameSession(session.sessionId);
+                            }}
+                            className="chatbot-session-menu-item"
+                          >
+                            <Edit2 size={16} />
+                            Đổi tên
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteSession(session.sessionId);
+                              setOpenMenuSessionId(null);
+                            }}
+                            className="chatbot-session-menu-item chatbot-session-menu-item--delete"
+                          >
+                            <Trash2 size={16} />
+                            Xóa
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             ))
           )}

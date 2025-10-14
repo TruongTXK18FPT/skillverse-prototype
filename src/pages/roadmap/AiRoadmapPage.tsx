@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Plus, Sparkles, Loader, BookOpen, Search, Grid3x3, List, Filter } from 'lucide-react';
+import { ArrowLeft, Plus, Sparkles, Loader, BookOpen, Search, Grid3x3, List, Filter, LogIn } from 'lucide-react';
 import { RoadmapGeneratorForm, RoadmapFlow } from '../../components/ai-roadmap';
 import aiRoadmapService from '../../services/aiRoadmapService';
 import { 
@@ -10,7 +10,10 @@ import {
   ProgressStatus
 } from '../../types/Roadmap';
 import MeowlGuide from '../../components/MeowlGuide';
+import Toast from '../../components/Toast';
 import { useToast } from '../../hooks/useToast';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/RoadmapPage.css';
 import '../../styles/AiRoadmap.css';
 
@@ -25,7 +28,9 @@ const RoadmapPage = () => {
   const [progressMap, setProgressMap] = useState<Map<string, QuestProgress>>(new Map());
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingList, setIsLoadingList] = useState(true);
-  const { showError, showSuccess } = useToast();
+  const { toast, isVisible, showError, showSuccess, hideToast } = useToast();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   // Phase 4: List view enhancements
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,6 +39,12 @@ const RoadmapPage = () => {
   const [filterExperience, setFilterExperience] = useState<string>('all');
 
   const loadUserRoadmaps = useCallback(async () => {
+    // Only load if authenticated to prevent 401 errors
+    if (!isAuthenticated) {
+      setIsLoadingList(false);
+      return;
+    }
+
     try {
       setIsLoadingList(true);
       const data = await aiRoadmapService.getUserRoadmaps();
@@ -43,14 +54,25 @@ const RoadmapPage = () => {
     } finally {
       setIsLoadingList(false);
     }
-  }, [showError]);
+  }, [isAuthenticated, showError]);
 
-  // Load user's roadmaps on mount
+  // Load user's roadmaps on mount (only if authenticated)
   useEffect(() => {
     loadUserRoadmaps();
   }, [loadUserRoadmaps]);
 
+  const handleCreateRoadmap = () => {
+    // Always allow viewing the form, but show login prompt if not authenticated
+    setViewMode('generate');
+  };
+
   const handleGenerate = async (request: GenerateRoadmapRequest) => {
+    if (!isAuthenticated) {
+      showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để tạo lộ trình học tập.');
+      setTimeout(() => navigate('/login'), 1500);
+      return;
+    }
+
     try {
       setIsLoading(true);
       const roadmap = await aiRoadmapService.generateRoadmap(request);
@@ -59,14 +81,49 @@ const RoadmapPage = () => {
       setViewMode('view');
       // Reload list to include new roadmap
       await loadUserRoadmaps();
-    } catch (error) {
-      showError('Error', (error as Error).message);
+    } catch (error: any) {
+      // Extract error message from Axios error response
+      const errorMessage = error?.response?.data?.message || error?.message || 'Đã xảy ra lỗi không xác định.';
+      
+      // Debug logging
+      console.log('🐛 Error caught:', error);
+      console.log('🐛 Error response:', error?.response);
+      console.log('🐛 Error message extracted:', errorMessage);
+      
+      // Check for specific error types and show user-friendly messages
+      if (errorMessage.includes('Mục tiêu không hợp lệ') || 
+          errorMessage.includes('không liên quan đến học tập') ||
+          errorMessage.includes('không hợp lý')) {
+        // Show detailed validation error with examples
+        console.log('🚨 Showing invalid goal error toast');
+        showError(
+          '❌ Mục tiêu không hợp lệ', 
+          'Mục tiêu của bạn không liên quan đến học tập hoặc phát triển kỹ năng. Vui lòng nhập một mục tiêu học tập cụ thể như "Học Python", "Trở thành Data Scientist", "Học tiếng Anh IELTS 7.0", v.v.',
+          12 // 12 seconds for longer message
+        );
+      } else if (errorMessage.includes('quá dài') || errorMessage.includes('quá ngắn')) {
+        console.log('🚨 Showing length error toast');
+        showError('⚠️ Độ dài không hợp lệ', errorMessage, 8);
+      } else if (errorMessage.includes('chứa từ ngữ không phù hợp')) {
+        console.log('🚨 Showing inappropriate content error toast');
+        showError('🚫 Nội dung không phù hợp', 'Mục tiêu chứa từ ngữ không phù hợp. Vui lòng nhập lại với nội dung tích cực.', 8);
+      } else {
+        // Generic error - show backend message directly
+        console.log('🚨 Showing generic error toast');
+        showError('❌ Lỗi tạo lộ trình', errorMessage, 8);
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleSelectRoadmap = async (sessionId: number) => {
+    if (!isAuthenticated) {
+      showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để xem lộ trình.');
+      setTimeout(() => navigate('/login'), 1500);
+      return;
+    }
+
     try {
       setIsLoading(true);
       const roadmap = await aiRoadmapService.getRoadmapById(sessionId);
@@ -125,22 +182,22 @@ const RoadmapPage = () => {
     }
   };
 
-  // Filter and sort roadmaps
+  // Filter and sort roadmaps (V2 API field names)
   const filteredAndSortedRoadmaps = useCallback(() => {
     let filtered = [...roadmaps];
 
-    // Search filter
+    // Search filter (use V2 field names: originalGoal)
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(r =>
         r.title.toLowerCase().includes(query) ||
-        r.goal.toLowerCase().includes(query)
+        r.originalGoal.toLowerCase().includes(query)
       );
     }
 
-    // Experience filter
+    // Experience filter (use V2 field name: experienceLevel)
     if (filterExperience !== 'all') {
-      filtered = filtered.filter(r => r.experience.toLowerCase() === filterExperience.toLowerCase());
+      filtered = filtered.filter(r => r.experienceLevel.toLowerCase() === filterExperience.toLowerCase());
     }
 
     // Sort
@@ -200,19 +257,19 @@ const RoadmapPage = () => {
             <h1 className="roadmap-page__title">
               {viewMode === 'list' && 'Lộ trình học bằng AI'}
               {viewMode === 'generate' && 'Tạo lộ trình mới'}
-              {viewMode === 'view' && selectedRoadmap?.title}
+              {viewMode === 'view' && selectedRoadmap?.metadata?.title}
             </h1>
             <p className="roadmap-page__subtitle">
               {viewMode === 'list' && 'Lộ trình học cá nhân hóa, được tạo bởi AI'}
               {viewMode === 'generate' && 'Hãy để AI tạo hành trình học tập phù hợp với bạn'}
-              {viewMode === 'view' && `${selectedRoadmap?.duration} • Cấp độ ${selectedRoadmap?.experience}`}
+              {viewMode === 'view' && selectedRoadmap?.metadata && `${selectedRoadmap.metadata.duration} • Cấp độ ${selectedRoadmap.metadata.experienceLevel}`}
             </p>
           </div>
 
           {/* Create Button - Only show in list view */}
           {viewMode === 'list' && (
             <button
-              onClick={() => setViewMode('generate')}
+              onClick={handleCreateRoadmap}
               className="roadmap-page__create-btn"
             >
               <Plus size={20} />
@@ -290,15 +347,35 @@ const RoadmapPage = () => {
                   <div className="roadmap-empty__icon">
                     <BookOpen className="h-12 w-12" />
                   </div>
-                  <h3>Chưa có lộ trình nào</h3>
-                  <p>Tạo lộ trình học đầu tiên bằng AI để bắt đầu nhé!</p>
-                  <button 
-                    onClick={() => setViewMode('generate')}
-                    className="roadmap-empty__create-btn"
-                  >
-                    <Sparkles size={20} />
-                    Tạo lộ trình đầu tiên
-                  </button>
+                  {!isAuthenticated ? (
+                    <>
+                      <h3>Vui lòng đăng nhập</h3>
+                      <p>Đăng nhập để tạo và quản lý lộ trình học của bạn!</p>
+                      <button 
+                        onClick={() => navigate('/login')}
+                        className="roadmap-empty__create-btn"
+                        style={{ 
+                          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                          boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
+                        }}
+                      >
+                        <LogIn size={20} />
+                        Đăng nhập ngay
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <h3>Chưa có lộ trình nào</h3>
+                      <p>Tạo lộ trình học đầu tiên bằng AI để bắt đầu nhé!</p>
+                      <button 
+                        onClick={handleCreateRoadmap}
+                        className="roadmap-empty__create-btn"
+                      >
+                        <Sparkles size={20} />
+                        Tạo lộ trình đầu tiên
+                      </button>
+                    </>
+                  )}
                 </div>
               ) : (
                 <div className={`roadmap-page__grid ${displayMode === 'list' ? 'roadmap-page__grid--list' : ''}`}>
@@ -312,10 +389,10 @@ const RoadmapPage = () => {
                     >
                       <div className="sv-roadmap-card__header">
                         <h3 className="sv-roadmap-card__title">{roadmap.title}</h3>
-                        <span className="sv-roadmap-card__badge">{roadmap.experience}</span>
+                        <span className="sv-roadmap-card__badge">{roadmap.experienceLevel}</span>
                       </div>
                       
-                      <p className="sv-roadmap-card__goal">{roadmap.goal}</p>
+                      <p className="sv-roadmap-card__goal">{roadmap.originalGoal}</p>
                       
                       <div className="sv-roadmap-card__stats">
                         <div className="sv-roadmap-card__stat">
@@ -354,19 +431,107 @@ const RoadmapPage = () => {
             <RoadmapGeneratorForm
               onGenerate={handleGenerate}
               isLoading={isLoading}
+              isAuthenticated={isAuthenticated}
+              onLoginRedirect={() => navigate('/login')}
             />
           )}
 
-          {/* VIEW ROADMAP - Show React Flow */}
+          {/* VIEW ROADMAP - Show React Flow (V2 API) */}
           {viewMode === 'view' && selectedRoadmap && (
             <div className="roadmap-page__viewer">
               <div className="roadmap-page__viewer-info">
-                <p>
-                  <strong>Goal:</strong> {selectedRoadmap.goal}
-                </p>
-                <p>
-                  <strong>Learning Style:</strong> {selectedRoadmap.style}
-                </p>
+                <div className="roadmap-viewer__header">
+                  <h2 className="roadmap-viewer__title">{selectedRoadmap.metadata.title}</h2>
+                  {selectedRoadmap.metadata.difficultyLevel && (
+                    <span className={`roadmap-viewer__badge roadmap-viewer__badge--${selectedRoadmap.metadata.difficultyLevel}`}>
+                      {selectedRoadmap.metadata.difficultyLevel}
+                    </span>
+                  )}
+                </div>
+                
+                <div className="roadmap-viewer__meta">
+                  <div className="roadmap-viewer__meta-grid">
+                    <div className="roadmap-viewer__meta-item">
+                      <span className="roadmap-viewer__meta-label">🎯 Mục tiêu học tập:</span>
+                      <span className="roadmap-viewer__meta-value">{selectedRoadmap.metadata.originalGoal}</span>
+                    </div>
+                    
+                    {selectedRoadmap.metadata.validatedGoal && (
+                      <div className="roadmap-viewer__meta-item">
+                        <span className="roadmap-viewer__meta-label">✅ Mục tiêu đã xác nhận:</span>
+                        <span className="roadmap-viewer__meta-value">{selectedRoadmap.metadata.validatedGoal}</span>
+                      </div>
+                    )}
+                    
+                    <div className="roadmap-viewer__meta-item">
+                      <span className="roadmap-viewer__meta-label">⏱️ Thời lượng:</span>
+                      <span className="roadmap-viewer__meta-value">{selectedRoadmap.metadata.duration}</span>
+                    </div>
+                    
+                    <div className="roadmap-viewer__meta-item">
+                      <span className="roadmap-viewer__meta-label">📊 Cấp độ kinh nghiệm:</span>
+                      <span className="roadmap-viewer__meta-value">{selectedRoadmap.metadata.experienceLevel}</span>
+                    </div>
+                    
+                    <div className="roadmap-viewer__meta-item">
+                      <span className="roadmap-viewer__meta-label">📚 Phong cách học:</span>
+                      <span className="roadmap-viewer__meta-value">{selectedRoadmap.metadata.learningStyle}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {selectedRoadmap.metadata.validationNotes && 
+                 selectedRoadmap.metadata.validationNotes !== 'null' && 
+                 selectedRoadmap.metadata.validationNotes !== 'undefined' && (
+                  <div className="roadmap-viewer__warnings">
+                    <h4>📋 Ghi chú xác thực:</h4>
+                    <ul>
+                      {Array.isArray(selectedRoadmap.metadata.validationNotes) 
+                        ? selectedRoadmap.metadata.validationNotes.map((note, idx) => (
+                            <li key={idx}>{note}</li>
+                          ))
+                        : <li>{selectedRoadmap.metadata.validationNotes}</li>
+                      }
+                    </ul>
+                  </div>
+                )}
+
+                {selectedRoadmap.statistics && (
+                  <div className="roadmap-viewer__stats">
+                    <div className="stat-item">
+                      <span className="stat-label">Tổng số bước:</span>
+                      <span className="stat-value">{selectedRoadmap.statistics.totalNodes}</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-label">Thời gian ước tính:</span>
+                      <span className="stat-value">{selectedRoadmap.statistics.totalEstimatedHours.toFixed(1)}h</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-label">Nhiệm vụ chính:</span>
+                      <span className="stat-value">{selectedRoadmap.statistics.mainNodes}</span>
+                    </div>
+                    {selectedRoadmap.statistics.sideNodes > 0 && (
+                      <div className="stat-item">
+                        <span className="stat-label">Nhiệm vụ phụ:</span>
+                        <span className="stat-value">{selectedRoadmap.statistics.sideNodes}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {selectedRoadmap.learningTips && (
+                  <div className="roadmap-viewer__tips">
+                    <h4>💡 Gợi ý học tập:</h4>
+                    <ul>
+                      {Array.isArray(selectedRoadmap.learningTips) 
+                        ? selectedRoadmap.learningTips.map((tip, idx) => (
+                            <li key={idx}>{tip}</li>
+                          ))
+                        : <li>{selectedRoadmap.learningTips}</li>
+                      }
+                    </ul>
+                  </div>
+                )}
               </div>
 
               <RoadmapFlow
@@ -381,6 +546,21 @@ const RoadmapPage = () => {
 
       {/* Meowl Guide */}
       <MeowlGuide currentPage="roadmap" />
+
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          isVisible={isVisible}
+          onClose={hideToast}
+          autoCloseDelay={toast.autoCloseDelay}
+          showCountdown={toast.showCountdown}
+          countdownText={toast.countdownText}
+          actionButton={toast.actionButton}
+        />
+      )}
     </div>
   );
 };

@@ -1,16 +1,23 @@
 import { useState } from 'react';
-import { Sparkles, Loader } from 'lucide-react';
+import { Sparkles, Loader, LogIn, Lock } from 'lucide-react';
 import { GenerateRoadmapRequest } from '../../types/Roadmap';
 
 interface RoadmapGeneratorFormProps {
   onGenerate: (request: GenerateRoadmapRequest) => Promise<void>;
   isLoading?: boolean;
+  isAuthenticated?: boolean;
+  onLoginRedirect?: () => void;
 }
 
 /**
  * Form for generating AI roadmaps
  */
-const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGeneratorFormProps) => {
+const RoadmapGeneratorForm = ({ 
+  onGenerate, 
+  isLoading = false,
+  isAuthenticated = true,
+  onLoginRedirect
+}: RoadmapGeneratorFormProps) => {
   const [formData, setFormData] = useState<GenerateRoadmapRequest>({
     goal: '',
     duration: '3 months',
@@ -93,14 +100,15 @@ const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGenerato
   };
 
   return (
-    <form onSubmit={handleSubmit} className="sv-roadmap-generator-form">
-      <div className="sv-roadmap-generator-form__header">
-        <Sparkles className="sv-roadmap-generator-form__icon" />
-        <h2 className="sv-roadmap-generator-form__title">Tạo lộ trình học bằng AI</h2>
-        <p className="sv-roadmap-generator-form__subtitle">
-          Tạo lộ trình học cá nhân hóa, rõ ràng từng bước
-        </p>
-      </div>
+    <div style={{ position: 'relative' }}>
+      <form onSubmit={handleSubmit} className="sv-roadmap-generator-form" style={{ filter: !isAuthenticated ? 'blur(2px)' : 'none', pointerEvents: !isAuthenticated ? 'none' : 'auto' }}>
+        <div className="sv-roadmap-generator-form__header">
+          <Sparkles className="sv-roadmap-generator-form__icon" />
+          <h2 className="sv-roadmap-generator-form__title">Tạo lộ trình học bằng AI</h2>
+          <p className="sv-roadmap-generator-form__subtitle">
+            Tạo lộ trình học cá nhân hóa, rõ ràng từng bước
+          </p>
+        </div>
 
       <div className="sv-roadmap-generator-form__fields">
         {/* Goal */}
@@ -200,6 +208,25 @@ const RoadmapGeneratorForm = ({ onGenerate, isLoading = false }: RoadmapGenerato
         )}
       </button>
     </form>
+
+    {/* Login Overlay - Show when not authenticated */}
+    {!isAuthenticated && (
+      <div className="sv-roadmap-generator-form__login-overlay">
+        <div className="sv-roadmap-generator-form__login-card">
+          <Lock size={48} className="sv-roadmap-generator-form__lock-icon" />
+          <h3>Đăng nhập để tạo lộ trình</h3>
+          <p>Bạn cần đăng nhập để sử dụng tính năng tạo lộ trình học bằng AI</p>
+          <button 
+            onClick={onLoginRedirect}
+            className="sv-roadmap-generator-form__login-btn"
+          >
+            <LogIn size={20} />
+            Đăng nhập ngay
+          </button>
+        </div>
+      </div>
+    )}
+  </div>
   );
 };
 
