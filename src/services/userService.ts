@@ -55,7 +55,24 @@ class UserService {
   // Get current logged-in user's profile
   async getMyProfile(): Promise<UserProfileResponse> {
     try {
-      const response = await axiosInstance.get<UserProfileResponse>('/api/user/profile');
+      // Check user role to determine correct endpoint
+      const userStr = localStorage.getItem('user');
+      const user = userStr ? JSON.parse(userStr) : null;
+      
+      let endpoint = '/api/user/profile'; // Default for USER
+      
+      if (user?.roles) {
+        if (user.roles.includes('MENTOR')) {
+          endpoint = '/api/mentors/profile';
+        } else if (user.roles.includes('RECRUITER')) {
+          endpoint = '/api/business/profile';
+        } else if (user.roles.includes('ADMIN')) {
+          // ADMIN không có profile, throw error hoặc return mock data
+          throw new Error('Admin không có profile. Vui lòng sử dụng trang quản trị.');
+        }
+      }
+      
+      const response = await axiosInstance.get<UserProfileResponse>(endpoint);
       return response.data;
     } catch (error: unknown) {
       console.error('Get my profile error:', error);
@@ -67,7 +84,23 @@ class UserService {
   // Update user profile (uses current logged-in user)
   async updateUserProfile(userId: number, profileData: Partial<UserProfileResponse>): Promise<UserProfileResponse> {
     try {
-      const response = await axiosInstance.put<UserProfileResponse>('/api/user/profile', profileData);
+      // Check user role to determine correct endpoint
+      const userStr = localStorage.getItem('user');
+      const user = userStr ? JSON.parse(userStr) : null;
+      
+      let endpoint = '/api/user/profile'; // Default for USER
+      
+      if (user?.roles) {
+        if (user.roles.includes('MENTOR')) {
+          endpoint = '/api/mentors/profile';
+        } else if (user.roles.includes('RECRUITER')) {
+          endpoint = '/api/business/profile';
+        } else if (user.roles.includes('ADMIN')) {
+          throw new Error('Admin không có profile để cập nhật.');
+        }
+      }
+      
+      const response = await axiosInstance.put<UserProfileResponse>(endpoint, profileData);
       return response.data;
     } catch (error: unknown) {
       console.error('Update user profile error:', error);

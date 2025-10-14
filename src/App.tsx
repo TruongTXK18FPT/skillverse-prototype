@@ -44,6 +44,10 @@ import ScrollToTop from './components/scroll/ScrollToTop';
 import CourseDetailPage from './pages/navbar/CourseDetailPage';
 import CourseLearningPage from './pages/navbar/CourseLearningPage';
 import ProfilePage from './pages/profile/ProfilePage';
+import MentorProfilePage from './pages/mentor/MentorProfilePage';
+import RecruiterProfilePage from './pages/business/RecruiterProfilePage';
+import ProfileRouter from './components/ProfileRouter';
+
 const App = () => {
   return (
     <LanguageProvider>
@@ -90,7 +94,13 @@ const App = () => {
                     <Route path="/register/mentor" element={<MentorRegisterPage />} />
                     <Route path="/verify-otp" element={<VerifyPage />} />
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
+                    
+                    {/* Profile Routes by Role */}
+                    <Route path="/profile" element={<ProfileRouter />} />
+                    <Route path="/profile/user" element={<ProfilePage />} />
+                    <Route path="/profile/mentor" element={<MentorProfilePage />} />
+                    <Route path="/profile/business" element={<RecruiterProfilePage />} />
+                    
                     <Route path="/payment" element={<PaymentPage />} />
                     <Route path="/payment/transactional" element={<Transactional />} />
                     <Route path="/premium" element={<PremiumPage />} />
