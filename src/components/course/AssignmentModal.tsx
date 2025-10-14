@@ -3,7 +3,7 @@ import { X, FileText, Link as LinkIcon, Type, CheckCircle, Calendar } from 'luci
 import { AssignmentCreateDTO, AssignmentUpdateDTO, SubmissionType } from '../../data/assignmentDTOs';
 import { createAssignment, updateAssignment } from '../../services/assignmentService';
 import { useAuth } from '../../context/AuthContext';
-import '../../styles/AssignmentModal.css';
+import '../../styles/ModalsEnhanced.css';
 
 interface AssignmentModalProps {
   isOpen: boolean;
@@ -168,51 +168,51 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="assignment-modal-overlay" onClick={onClose}>
-      <div className="assignment-modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="assignment-modal-header">
-          <h2 className="assignment-modal-title">
+    <div className="module-modal-overlay" onClick={onClose}>
+      <div className="module-modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="module-modal-header">
+          <h2 className="module-modal-title">
             {assignmentToEdit ? 'Chỉnh sửa bài tập' : 'Tạo bài tập mới'}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="assignment-modal-close-btn"
+            className="module-modal-close-btn"
             disabled={loading}
           >
             <X size={24} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="assignment-modal-form">
+        <form onSubmit={handleSubmit} className="module-modal-form">
           {/* Submission Type Selection */}
-          <div className="assignment-form-section">
-            <label className="assignment-form-label">
+          <div className="module-form-section">
+            <label className="module-form-label">
               Loại nộp bài <span className="required">*</span>
             </label>
-            <div className="assignment-types-grid">
+            <div className="lesson-type-selector">
               {submissionTypes.map((type) => (
                 <button
                   key={type.value}
                   type="button"
-                  className={`assignment-type-card ${
+                  className={`type-option ${
                     formData.submissionType === type.value ? 'selected' : ''
                   }`}
                   style={
                     {
-                      '--assignment-type-color': type.color,
+                      '--lesson-type-color': type.color,
                     } as React.CSSProperties
                   }
                   onClick={() => handleTypeSelect(type.value)}
                   disabled={loading}
                 >
-                  <div className="assignment-type-icon">{type.icon}</div>
-                  <div className="assignment-type-content">
-                    <h3 className="assignment-type-label">{type.label}</h3>
-                    <p className="assignment-type-description">{type.description}</p>
+                  <div className="type-option-icon">{type.icon}</div>
+                  <div className="type-option-content">
+                    <h3 className="type-option-label">{type.label}</h3>
+                    <p className="type-option-description">{type.description}</p>
                   </div>
                   {formData.submissionType === type.value && (
-                    <CheckCircle className="assignment-type-selected" size={20} />
+                    <CheckCircle className="lesson-type-selected" size={20} />
                   )}
                 </button>
               ))}
@@ -220,8 +220,8 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
           </div>
 
           {/* Title */}
-          <div className="assignment-form-section">
-            <label htmlFor="title" className="assignment-form-label">
+          <div className="module-form-section">
+            <label htmlFor="title" className="module-form-label">
               Tiêu đề bài tập <span className="required">*</span>
             </label>
             <input
@@ -230,7 +230,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              className="assignment-form-input"
+              className="module-form-input"
               placeholder="VD: Bài tập về React Components"
               disabled={loading}
               maxLength={200}
@@ -238,8 +238,8 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
           </div>
 
           {/* Description */}
-          <div className="assignment-form-section">
-            <label htmlFor="description" className="assignment-form-label">
+          <div className="module-form-section">
+            <label htmlFor="description" className="module-form-label">
               Mô tả và yêu cầu <span className="required">*</span>
             </label>
             <textarea
@@ -247,13 +247,13 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              className="assignment-form-textarea"
+              className="module-form-textarea"
               placeholder="Mô tả chi tiết yêu cầu của bài tập..."
               rows={6}
               disabled={loading}
               maxLength={5000}
             />
-            <p className="assignment-form-hint">
+            <p className="form-hint">
               Mô tả chi tiết về yêu cầu, tiêu chí chấm điểm và hướng dẫn nộp bài
             </p>
           </div>
@@ -261,8 +261,8 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
           {/* Max Score and Due Date Row */}
           <div className="assignment-form-row">
             {/* Max Score */}
-            <div className="assignment-form-section">
-              <label htmlFor="maxScore" className="assignment-form-label">
+            <div className="module-form-section">
+              <label htmlFor="maxScore" className="module-form-label">
                 Điểm tối đa <span className="required">*</span>
               </label>
               <input
@@ -271,7 +271,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
                 name="maxScore"
                 value={formData.maxScore}
                 onChange={handleInputChange}
-                className="assignment-form-input"
+                className="module-form-input"
                 placeholder="100"
                 min="1"
                 max="1000"
@@ -280,8 +280,8 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
             </div>
 
             {/* Due Date */}
-            <div className="assignment-form-section">
-              <label htmlFor="dueAt" className="assignment-form-label">
+            <div className="module-form-section">
+              <label htmlFor="dueAt" className="module-form-label">
                 <Calendar size={16} />
                 Hạn nộp bài
               </label>
@@ -291,10 +291,10 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
                 name="dueAt"
                 value={formData.dueAt}
                 onChange={handleInputChange}
-                className="assignment-form-input"
+                className="module-form-input"
                 disabled={loading}
               />
-              <p className="assignment-form-hint">
+              <p className="form-hint">
                 Không bắt buộc - để trống nếu không có hạn
               </p>
             </div>
@@ -302,24 +302,24 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
 
           {/* Error Message */}
           {error && (
-            <div className="assignment-form-error">
+            <div className="module-error-message">
               <span>{error}</span>
             </div>
           )}
 
           {/* Form Actions */}
-          <div className="assignment-modal-actions">
+          <div className="module-form-actions">
             <button
               type="button"
               onClick={onClose}
-              className="assignment-modal-cancel-btn"
+              className="lesson-form-btn lesson-form-btn-secondary"
               disabled={loading}
             >
               Hủy
             </button>
             <button
               type="submit"
-              className="assignment-modal-submit-btn"
+              className="lesson-form-btn lesson-form-btn-primary"
               disabled={loading}
             >
               {loading ? 'Đang lưu...' : assignmentToEdit ? 'Cập nhật' : 'Tạo bài tập'}

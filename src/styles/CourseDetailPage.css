@@ -40,7 +40,9 @@
 }
 
 .course-info {
-  space-y: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .course-badges {
@@ -116,7 +118,9 @@
 }
 
 .course-preview {
-  space-y: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .preview-card {
@@ -297,7 +301,9 @@
 }
 
 .modules-preview {
-  space-y: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .module-preview {
@@ -345,7 +351,9 @@
 
 /* Curriculum Tab */
 .modules-list {
-  space-y: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .module-item {
@@ -380,7 +388,9 @@
 
 /* Instructor Tab */
 .instructor-profile {
-  space-y: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .instructor-header {

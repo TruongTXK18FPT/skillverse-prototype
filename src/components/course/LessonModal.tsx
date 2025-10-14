@@ -3,7 +3,7 @@ import { X, FileText, Video, FileCode, CheckCircle } from 'lucide-react';
 import { LessonCreateDTO, LessonUpdateDTO, LessonType } from '../../data/lessonDTOs';
 import { createLesson, updateLesson } from '../../services/lessonService';
 import { useAuth } from '../../context/AuthContext';
-import '../../styles/LessonModal.css';
+import '../../styles/ModalsEnhanced.css';
 
 interface LessonModalProps {
   isOpen: boolean;

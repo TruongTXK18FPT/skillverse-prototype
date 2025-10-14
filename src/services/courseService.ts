@@ -516,9 +516,9 @@ const convertToLegacyCourse = (dto: CourseSummaryDTO): Course => {
   return {
     id: dto.id.toString(),
     title: dto.title,
-    instructor: dto.author?.fullName || `${dto.author?.firstName} ${dto.author?.lastName}`,
+    instructor: dto.authorName || dto.author?.fullName || `${dto.author?.firstName} ${dto.author?.lastName}`,
     category: 'general', // No category field in DTO
-    image: dto.thumbnail?.url || '/images/default-course.jpg',
+    image: dto.thumbnailUrl || dto.thumbnail?.url || '/images/default-course.jpg',
     level: dto.level,
     price: '0', // Pricing not in current DTO
     rating: 0, // Rating not in summary DTO

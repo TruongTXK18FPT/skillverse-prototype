@@ -33,15 +33,15 @@ useEffect(() => {
     .then(response => {
       // Convert DTO to legacy Course format
       const legacyCourses = response.content.map((dto: CourseSummaryDTO) => {
-        const authorFullName = dto.author.fullName || `${dto.author.firstName} ${dto.author.lastName}`.trim();
+        const authorFullName = dto.authorName || dto.author.fullName || `${dto.author.firstName} ${dto.author.lastName}`.trim();
         
         return {
           id: dto.id.toString(),
           title: dto.title,
           instructor: authorFullName || 'Unknown Instructor',
           category: 'general', // Map from backend if available
-          image: dto.thumbnailUrl || '/images/default-course.jpg',
-          level: dto.level.toLowerCase(),
+          image: dto.thumbnailUrl || (dto.thumbnail?.url ?? '/images/default-course.jpg'),
+          level: (dto.level || 'BEGINNER').toLowerCase(),
           price: dto.price ? `${dto.price} ${dto.currency || 'VND'}` : '0',
           rating: dto.averageRating || 4.5,
           students: dto.enrollmentCount || 0,

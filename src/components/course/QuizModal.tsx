@@ -8,7 +8,7 @@ import {
 } from "../../data/quizDTOs";
 import { createQuiz, updateQuiz, addQuizQuestion, addQuizOption } from "../../services/quizService";
 import { useAuth } from "../../context/AuthContext";
-import "../../styles/QuizModal.css";
+import "../../styles/ModalsEnhanced.css";
 
 // ---------- Types ----------
 interface QuizModalProps {

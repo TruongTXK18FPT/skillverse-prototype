@@ -146,8 +146,8 @@ const CourseDetailPage: React.FC = () => {
           
           <div className="course-preview">
             <div className="preview-card">
-              {course.thumbnail?.url ? (
-                <img src={course.thumbnail.url} alt={course.title} className="preview-image" />
+              {course.thumbnailUrl || course.thumbnail?.url ? (
+                <img src={course.thumbnailUrl || (course.thumbnail?.url ?? '')} alt={course.title} className="preview-image" />
               ) : (
                 <div className="preview-placeholder">
                   <BookOpen size={48} />

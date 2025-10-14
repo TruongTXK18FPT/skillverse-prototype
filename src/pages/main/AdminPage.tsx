@@ -8,10 +8,13 @@ import ReportsTab from '../../components/admin/ReportsTab';
 import PaymentsTab from '../../components/admin/PaymentsTab';
 import SkillPointManagementTab from '../../components/admin/SkillPointManagementTab';
 import SystemSettingsTab from '../../components/admin/SystemSettingsTab';
+import { useTheme } from '../../context/ThemeContext';
+import { Sun, Moon } from 'lucide-react';
 import '../../styles/AdminPage.css';
 
 const AdminPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('users');
+  const { theme, toggleTheme } = useTheme();
 
   const tabs = [
     { 
@@ -112,29 +115,39 @@ const AdminPage: React.FC = () => {
   return (
     <div className="administrator-page">
       <div className="administrator-header">
-        <h1>Bảng Điều Khiển Quản Trị</h1>
-        <p>Quản lý toàn bộ nền tảng SkillVerse và theo dõi hoạt động người dùng</p>
-        <div className="administrator-stats-quick">
-          <div className="administrator-stat-card">
-            <span className="administrator-stat-icon">👥</span>
-            <div>
-              <div className="administrator-stat-number">12,847</div>
-              <div className="administrator-stat-label">Tổng Người Dùng</div>
-            </div>
+        <div>
+          <h1>Bảng Điều Khiển Quản Trị</h1>
+          <p>Quản lý toàn bộ nền tảng SkillVerse và theo dõi hoạt động người dùng</p>
+        </div>
+        <button 
+          onClick={toggleTheme} 
+          className="theme-toggle-btn"
+          title={theme === 'light' ? 'Chuyển sang chế độ tối' : 'Chuyển sang chế độ sáng'}
+        >
+          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          <span>{theme === 'light' ? 'Chế độ tối' : 'Chế độ sáng'}</span>
+        </button>
+      </div>
+      <div className="administrator-stats-quick">
+        <div className="administrator-stat-card">
+          <span className="administrator-stat-icon">👥</span>
+          <div>
+            <div className="administrator-stat-number">12,847</div>
+            <div className="administrator-stat-label">Tổng Người Dùng</div>
           </div>
-          <div className="administrator-stat-card">
-            <span className="administrator-stat-icon">✅</span>
-            <div>
-              <div className="administrator-stat-number">23</div>
-              <div className="administrator-stat-label">Chờ Duyệt</div>
-            </div>
+        </div>
+        <div className="administrator-stat-card">
+          <span className="administrator-stat-icon">✅</span>
+          <div>
+            <div className="administrator-stat-number">23</div>
+            <div className="administrator-stat-label">Chờ Duyệt</div>
           </div>
-          <div className="administrator-stat-card">
-            <span className="administrator-stat-icon">⚠️</span>
-            <div>
-              <div className="administrator-stat-number">7</div>
-              <div className="administrator-stat-label">Báo Cáo Mới</div>
-            </div>
+        </div>
+        <div className="administrator-stat-card">
+          <span className="administrator-stat-icon">⚠️</span>
+          <div>
+            <div className="administrator-stat-number">7</div>
+            <div className="administrator-stat-label">Báo Cáo Mới</div>
           </div>
         </div>
       </div>
