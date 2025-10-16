@@ -42,6 +42,13 @@ export interface UserDto {
   email: string;
   fullName: string;
   roles: string[];
+  authProvider: string; // 'LOCAL' or 'GOOGLE'
+  googleLinked: boolean; // Whether user has linked Google account
+}
+
+// Google Auth Request DTO
+export interface GoogleAuthRequest {
+  idToken: string;
 }
 
 // Auth Response DTO
@@ -51,6 +58,7 @@ export interface AuthResponse {
   tokenType: string;
   expiresIn: number;
   user: UserDto;
+  needsProfileCompletion?: boolean;
 }
 
 // Registration Response DTO

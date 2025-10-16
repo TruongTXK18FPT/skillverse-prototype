@@ -9,10 +9,17 @@ import { useAuth } from '../context/AuthContext';
  * Usage: Replace <ProfilePage /> with <ProfileRouter /> in App.tsx
  */
 const ProfileRouter = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
+    // ✅ CRITICAL FIX: Wait for AuthContext to finish loading
+    // This prevents race condition where ProfileRouter checks user
+    // before AuthContext has loaded from localStorage
+    if (loading) {
+      return; // Still loading, wait
+    }
+    
     if (!user) {
       navigate('/login');
       return;
@@ -41,7 +48,24 @@ const ProfileRouter = () => {
       // No roles, default to user profile
       navigate('/profile/user', { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
+
+  // Show loading state while AuthContext is initializing
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        flexDirection: 'column',
+        gap: '1rem'
+      }}>
+        <div className="spinner"></div>
+        <p>Đang tải thông tin...</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ 

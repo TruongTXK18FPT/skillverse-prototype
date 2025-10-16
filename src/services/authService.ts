@@ -6,7 +6,8 @@ import {
   ResendOtpRequest,
   RefreshTokenRequest,
   RegistrationResponse,
-  UserDto
+  UserDto,
+  GoogleAuthRequest
 } from '../data/authDTOs';
 
 // Helper type for axios error handling
@@ -69,6 +70,45 @@ class AuthService {
         throw unverifiedError;
       }
       
+      throw new Error(errorMessage);
+    }
+  }
+
+  // Google OAuth login
+  async loginWithGoogle(googleAccessToken: string): Promise<{
+    redirectUrl: string;
+    needsProfileCompletion: boolean;
+    authData: AuthResponse;
+  }> {
+    try {
+      console.log('Attempting Google login with access token');
+      
+      // Send access token as idToken (backend will use it to fetch user info)
+      const request: GoogleAuthRequest = { idToken: googleAccessToken };
+      const response = await axiosInstance.post<AuthResponse>('/api/auth/google', request);
+      const authData = response.data;
+
+      // Store tokens and user data
+      this.token = authData.accessToken;
+      this.refreshToken = authData.refreshToken;
+      
+      localStorage.setItem('accessToken', authData.accessToken);
+      localStorage.setItem('refreshToken', authData.refreshToken);
+      localStorage.setItem('user', JSON.stringify(authData.user));
+
+      console.log('Google login successful for user:', authData.user.email);
+      
+      // Return redirect URL and profile completion status
+      return {
+        redirectUrl: this.getRedirectUrlByRole(authData.user.roles),
+        needsProfileCompletion: authData.needsProfileCompletion || false,
+        authData
+      };
+      
+    } catch (error: unknown) {
+      console.error('Google login error:', error);
+      const axiosError = error as AxiosError;
+      const errorMessage = axiosError.response?.data?.message || 'Google login failed. Please try again.';
       throw new Error(errorMessage);
     }
   }
