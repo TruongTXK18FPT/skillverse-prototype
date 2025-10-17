@@ -2,9 +2,9 @@ name: 🌐 Frontend CI/CD
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 env:
   NODE_VERSION: "20"
@@ -14,74 +14,74 @@ jobs:
   quality-check:
     name: 🔍 Code Quality & Testing
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: 📥 Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: 🔧 Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-        
-    - name: 📦 Install Dependencies
-      run: npm ci --silent
-        
-    - name: 🧹 Code Linting
-      run: npm run lint
-        
-    - name: 🏗️ Build Check
-      run: npm run build
-        
-    - name: 📊 Bundle Size Analysis
-      run: |
-        npm run build
-        du -sh dist/
-        find dist/ -name "*.js" -exec du -h {} \; | sort -hr | head -10
-        
-    - name: 🧪 Run Tests (if available)
-      run: |
-        if npm run test --if-present; then
-          echo "Tests passed!"
-        else
-          echo "No tests found or tests skipped"
-        fi
-        
-    - name: 📈 Upload Build Artifacts
-      uses: actions/upload-artifact@v4
-      if: success()
-      with:
-        name: frontend-build-${{ github.sha }}
-        path: ./dist/
-        retention-days: 7
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm ci --silent
+
+      - name: 🧹 Code Linting
+        run: npm run lint
+
+      - name: 🏗️ Build Check
+        run: npm run build
+
+      - name: 📊 Bundle Size Analysis
+        run: |
+          npm run build
+          du -sh dist/
+          find dist/ -name "*.js" -exec du -h {} \; | sort -hr | head -10
+
+      - name: 🧪 Run Tests (if available)
+        run: |
+          if npm run test --if-present; then
+            echo "Tests passed!"
+          else
+            echo "No tests found or tests skipped"
+          fi
+
+      - name: 📈 Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: frontend-build-${{ github.sha }}
+          path: ./dist/
+          retention-days: 7
 
   # Job 2: Security Scan
   security-scan:
     name: 🔒 Security Scan
     runs-on: ubuntu-latest
     needs: quality-check
-    
+
     steps:
-    - name: 📥 Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: 🔧 Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-        
-    - name: 📦 Install Dependencies
-      run: npm ci --silent
-      
-    - name: 🔍 Audit Dependencies
-      run: npm audit --audit-level=moderate
-      continue-on-error: true
-        
-    - name: 🛡️ Check for Vulnerabilities
-      run: npx --yes audit-ci --moderate
-      continue-on-error: true
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm ci --silent
+
+      - name: 🔍 Audit Dependencies
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: 🛡️ Check for Vulnerabilities
+        run: npx --yes audit-ci --moderate
+        continue-on-error: true
 
   # Job 3: Docker Build (on main branch)
   docker-build:
@@ -89,27 +89,27 @@ jobs:
     runs-on: ubuntu-latest
     needs: [quality-check, security-scan]
     if: github.ref == 'refs/heads/main'
-    
+
     steps:
-    - name: 📥 Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: 🐳 Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-      
-    - name: 🏗️ Build Docker Image
-      run: |
-        BUILD_TAG=$(date +%s)
-        echo "BUILD_TAG=$BUILD_TAG" >> $GITHUB_ENV
-        docker build -t skillverse-frontend:$BUILD_TAG .
-        docker tag skillverse-frontend:$BUILD_TAG skillverse-frontend:latest
-        
-    - name: 🧪 Test Docker Image
-      run: |
-        docker run --rm -p 3000:80 -d --name test-frontend skillverse-frontend:latest
-        sleep 10
-        curl -f http://localhost:3000 || exit 1
-        docker stop test-frontend
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🏗️ Build Docker Image
+        run: |
+          BUILD_TAG=$(date +%s)
+          echo "BUILD_TAG=$BUILD_TAG" >> $GITHUB_ENV
+          docker build -t skillverse-frontend:$BUILD_TAG .
+          docker tag skillverse-frontend:$BUILD_TAG skillverse-frontend:latest
+
+      - name: 🧪 Test Docker Image
+        run: |
+          docker run --rm -p 3000:80 -d --name test-frontend skillverse-frontend:latest
+          sleep 10
+          curl -f http://localhost:3000 || exit 1
+          docker stop test-frontend
 
   # Job 4: Deploy to VPS
   deploy:
@@ -117,54 +117,55 @@ jobs:
     runs-on: ubuntu-latest
     needs: [quality-check, security-scan, docker-build]
     if: github.ref == 'refs/heads/main' && success()
-    
+
     steps:
-    - name: 📥 Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: 🔑 Setup SSH Key
-      uses: webfactory/ssh-agent@v0.8.0
-      with:
-        ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-        
-    - name: 🔧 Deploy to VPS
-      run: |
-        VPS_HOST="${{ secrets.VPS_HOST }}"
-        VPS_USER="${{ secrets.VPS_USER }}"
-        VPS_PROJECT_PATH="${{ secrets.VPS_PROJECT_PATH }}"
-        
-        ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'ENDSSH'
-          echo "🚀 Starting deployment..."
-          cd ${{ secrets.VPS_PROJECT_PATH }}
-          
-          # Pull code
-          git fetch origin main
-          git reset --hard origin/main
-          
-          # Set env
-          echo "VITE_MEOWL_API_KEY=${{ secrets.VITE_MEOWL_API_KEY }}" > .env
-          echo "VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }}" >> .env
-          echo "VITE_FRONTEND_URL=https://skillverse.vn" >> .env
-          
-          # Clean old containers/images
-          docker stop skillverse-frontend 2>/dev/null || true
-          docker rm -f skillverse-frontend 2>/dev/null || true
-          
-          # Build new image
-          BUILD_TAG=$(date +%s)
-          docker build -t skillverse-frontend:$BUILD_TAG .
-          docker tag skillverse-frontend:$BUILD_TAG skillverse-frontend:latest
-          
-          # Run new container
-          docker run -d --name skillverse-frontend \
-            --network skillverse-production_skillverse-net \
-            -p 3000:80 \
-            --restart unless-stopped \
-            skillverse-frontend:latest
-          
-          # Cleanup dangling images
-          docker image prune -f
-        ENDSSH
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🔑 Setup SSH Key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+
+      - name: 🔧 Deploy to VPS
+        run: |
+          VPS_HOST="${{ secrets.VPS_HOST }}"
+          VPS_USER="${{ secrets.VPS_USER }}"
+          VPS_PROJECT_PATH="${{ secrets.VPS_PROJECT_PATH }}"
+
+          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'ENDSSH'
+            echo "🚀 Starting deployment..."
+            cd ${{ secrets.VPS_PROJECT_PATH }}
+            
+            # Pull code
+            git fetch origin main
+            git reset --hard origin/main
+            
+            # Set env
+            echo "VITE_MEOWL_API_KEY=${{ secrets.VITE_MEOWL_API_KEY }}" > .env
+            echo "VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }}" >> .env
+            echo "VITE_FRONTEND_URL=https://skillverse.vn" >> .env
+            echo "VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}" >> .env
+            
+            # Clean old containers/images
+            docker stop skillverse-frontend 2>/dev/null || true
+            docker rm -f skillverse-frontend 2>/dev/null || true
+            
+            # Build new image
+            BUILD_TAG=$(date +%s)
+            docker build -t skillverse-frontend:$BUILD_TAG .
+            docker tag skillverse-frontend:$BUILD_TAG skillverse-frontend:latest
+            
+            # Run new container
+            docker run -d --name skillverse-frontend \
+              --network skillverse-production_skillverse-net \
+              -p 3000:80 \
+              --restart unless-stopped \
+              skillverse-frontend:latest
+            
+            # Cleanup dangling images
+            docker image prune -f
+          ENDSSH
 
   # Job 5: Deployment Status
   deployment-status:
@@ -172,14 +173,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: [quality-check, security-scan, docker-build, deploy]
     if: always()
-    
+
     steps:
-    - name: 📊 Report Status
-      run: |
-        echo "## 🌐 Frontend CI/CD Results" >> $GITHUB_STEP_SUMMARY
-        echo "- **Quality Check**: ${{ needs.quality-check.result }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Security Scan**: ${{ needs.security-scan.result }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Docker Build**: ${{ needs.docker-build.result }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Deployment**: ${{ needs.deploy.result }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-        echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+      - name: 📊 Report Status
+        run: |
+          echo "## 🌐 Frontend CI/CD Results" >> $GITHUB_STEP_SUMMARY
+          echo "- **Quality Check**: ${{ needs.quality-check.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Security Scan**: ${{ needs.security-scan.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Docker Build**: ${{ needs.docker-build.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deployment**: ${{ needs.deploy.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
