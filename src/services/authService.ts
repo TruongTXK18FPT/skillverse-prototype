@@ -140,7 +140,10 @@ class AuthService {
   // Refresh access token
   async refreshAccessToken(): Promise<AuthResponse> {
     try {
+      console.log('🔄 Attempting to refresh access token...');
+      
       if (!this.refreshToken) {
+        console.error('❌ No refresh token available');
         throw new Error('No refresh token available');
       }
 
@@ -148,17 +151,32 @@ class AuthService {
       const response = await axiosInstance.post<AuthResponse>('/api/auth/refresh', request);
       const authData = response.data;
 
+      console.log('✅ Token refresh successful');
+
       // Update tokens
       this.token = authData.accessToken;
       this.refreshToken = authData.refreshToken;
       
       localStorage.setItem('accessToken', authData.accessToken);
       localStorage.setItem('refreshToken', authData.refreshToken);
-      localStorage.setItem('user', JSON.stringify(authData.user));
+      
+      // ✅ FIX: Only update user data if it exists in response
+      if (authData.user) {
+        localStorage.setItem('user', JSON.stringify(authData.user));
+        console.log('✅ User data updated from refresh response');
+      } else {
+        console.warn('⚠️ No user data in refresh response, keeping existing user data');
+        // Keep existing user data in localStorage
+      }
 
       return authData;
     } catch (error: unknown) {
-      console.error('Token refresh error:', error);
+      console.error('❌ Token refresh failed:', error);
+      const axiosError = error as AxiosError;
+      const errorMessage = axiosError.response?.data?.message || 'Token refresh failed';
+      console.error('Error details:', errorMessage);
+      
+      // Clear tokens on refresh failure
       this.logout();
       throw new Error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
     }

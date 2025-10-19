@@ -128,6 +128,7 @@ export interface RoadmapResponse {
   statistics: RoadmapStatistics;
   learningTips: string | string[]; // Backend returns List<String>, but may vary
   createdAt: string;
+  progress?: Record<string, QuestProgress>; // Quest progress from backend
 }
 
 /**

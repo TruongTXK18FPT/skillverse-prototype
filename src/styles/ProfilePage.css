@@ -1,13 +1,49 @@
-/* Profile Page Styles */
+/* Profile Page Styles - Scoped to avoid conflicts */
 .profile-container {
   min-height: 100vh;
   padding: 2rem 0;
   background: #f8fafc;
   margin-top: 70px;
+  /* Scope all styles to profile container */
+  isolation: isolate;
 }
 
 .profile-container[data-theme="dark"] {
   background: #0f172a;
+}
+
+/* Reset any inherited styles that might cause conflicts */
+.profile-container * {
+  box-sizing: border-box;
+}
+
+.profile-container h1,
+.profile-container h2,
+.profile-container h3,
+.profile-container h4,
+.profile-container h5,
+.profile-container h6 {
+  margin: 0;
+  padding: 0;
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.profile-container .profile-section-title {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: #1f2937 !important;
+  margin: 0 0 1.5rem 0 !important;
+  padding-bottom: 0.75rem !important;
+  border-bottom: 2px solid #3b82f6 !important;
+  position: relative !important;
+  display: inline-block !important;
+}
+
+.profile-container[data-theme="dark"] .profile-section-title {
+  color: #f9fafb !important;
+  border-bottom-color: #3b82f6 !important;
 }
 
 .profile-content {
@@ -138,6 +174,8 @@
   align-items: center;
   justify-content: center;
   color: white;
+  flex-direction: column;
+  padding: 0.5rem;
 }
 
 .avatar-icon {
@@ -164,6 +202,19 @@
 
 .avatar-upload-btn:hover {
   background: #2563eb;
+}
+
+/* Role badge container nằm trong avatar */
+.profile-role-badge-container {
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 4rem;
 }
 
 .profile-basic-info {
@@ -198,39 +249,39 @@
   color: #94a3b8;
 }
 
-.profile-badges {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
+/* Profile badges moved to avatar - this class no longer needed */
 
-.role-badge {
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
+.profile-role-badge {
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.025em;
   border-radius: 9999px;
   background: #e5e7eb;
   color: #374151;
+  display: inline-block;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.role-badge.admin {
+.profile-role-badge--admin {
   background: #fecaca;
   color: #dc2626;
 }
 
-.role-badge.mentor {
+.profile-role-badge--mentor {
   background: #ddd6fe;
   color: #7c3aed;
 }
 
-.role-badge.business {
+.profile-role-badge--business {
   background: #d1fae5;
   color: #059669;
 }
 
-.role-badge.user {
+.profile-role-badge--user {
   background: #dbeafe;
   color: #2563eb;
 }
@@ -342,18 +393,35 @@
   padding: 2rem;
 }
 
-.section-title {
+.profile-section-title {
   font-size: 1.25rem;
   font-weight: 700;
   color: #1f2937;
   margin: 0 0 1.5rem 0;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 2px solid #3b82f6;
+  position: relative;
+  display: inline-block;
 }
 
-.profile-container[data-theme="dark"] .section-title {
+.profile-section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 1px;
+}
+
+.profile-container[data-theme="dark"] .profile-section-title {
   color: #f9fafb;
-  border-bottom-color: #374151;
+  border-bottom-color: #3b82f6;
+}
+
+.profile-container[data-theme="dark"] .profile-section-title::after {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
 }
 
 /* Profile Fields */
@@ -627,6 +695,16 @@
   .avatar-upload-btn {
     width: 1.25rem;
     height: 1.25rem;
+  }
+
+  .profile-role-badge-container {
+    max-width: 3rem;
+    bottom: -0.25rem;
+  }
+
+  .profile-role-badge {
+    font-size: 0.5rem;
+    padding: 0.1rem 0.375rem;
   }
 
   .profile-name {

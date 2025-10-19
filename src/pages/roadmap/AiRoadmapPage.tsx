@@ -128,6 +128,24 @@ const RoadmapPage = () => {
       setIsLoading(true);
       const roadmap = await aiRoadmapService.getRoadmapById(sessionId);
       setSelectedRoadmap(roadmap);
+      
+      // Load progress data from backend response
+      if (roadmap.progress) {
+        const progressMap = new Map<string, QuestProgress>();
+        Object.entries(roadmap.progress).forEach(([questId, progress]) => {
+          progressMap.set(questId, {
+            questId: progress.questId,
+            status: progress.status as ProgressStatus,
+            progress: progress.progress,
+            completedAt: progress.completedAt
+          });
+        });
+        setProgressMap(progressMap);
+      } else {
+        // Clear progress if no data from backend
+        setProgressMap(new Map());
+      }
+      
       setViewMode('view');
     } catch (error) {
       showError('Error', (error as Error).message);

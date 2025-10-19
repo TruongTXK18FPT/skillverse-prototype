@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Sparkles, Loader, MessageSquare, Plus, Trash2, Lock, LogIn, MoreVertical, Edit2 } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { Send, User, Sparkles, Loader, MessageSquare, Plus, Trash2, Lock, LogIn, MoreVertical, Edit2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -53,42 +53,43 @@ Mình có thể giúp bạn:
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { showError, showSuccess } = useToast();
 
-  // Auto-scroll to bottom when new messages arrive
+  // Optimized auto-scroll with throttling to prevent lag
   useEffect(() => {
-    // Use requestAnimationFrame to avoid jump
-    requestAnimationFrame(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    });
-  }, [messages]);
-
-  // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (openMenuSessionId !== null) {
-        // Check if click is inside dropdown menu
-        const target = event.target as HTMLElement;
-        const isInsideMenu = target.closest('.chatbot-session-menu-dropdown');
-        const isMenuButton = target.closest('.chatbot-session-menu-btn');
-        
-        // Only close if clicking outside both menu and button
-        if (!isInsideMenu && !isMenuButton) {
-          console.log('🚪 Clicking outside menu, closing...');
-          setOpenMenuSessionId(null);
-        } else {
-          console.log('📍 Clicking inside menu or button, keeping open');
-        }
+    // Throttle scroll to prevent excessive calls during rapid message updates
+    const timeoutId = setTimeout(() => {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'end',
+          inline: 'nearest'
+        });
       }
-    };
+    }, 150); // Increased delay to reduce scroll frequency
     
+    return () => clearTimeout(timeoutId);
+  }, [messages.length]); // Only depend on message count, not entire messages array
+
+  // Optimized click outside handler with useCallback
+  const handleClickOutside = useCallback((event: MouseEvent) => {
     if (openMenuSessionId !== null) {
-      // Use setTimeout to ensure this runs AFTER the menu opens
-      setTimeout(() => {
-        document.addEventListener('click', handleClickOutside);
-      }, 0);
+      const target = event.target as HTMLElement;
+      const isInsideMenu = target.closest('.chatbot-session-menu-dropdown');
+      const isMenuButton = target.closest('.chatbot-session-menu-btn');
       
-      return () => document.removeEventListener('click', handleClickOutside);
+      if (!isInsideMenu && !isMenuButton) {
+        setOpenMenuSessionId(null);
+      }
     }
   }, [openMenuSessionId]);
+
+  // Close menu when clicking outside - optimized
+  useEffect(() => {
+    if (openMenuSessionId !== null) {
+      // Use passive listener for better performance
+      document.addEventListener('click', handleClickOutside, { passive: true });
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [openMenuSessionId, handleClickOutside]);
 
   // Load user sessions on mount - WITH AUTH CHECK
   useEffect(() => {
@@ -163,8 +164,16 @@ Mình có thể giúp bạn:
   };
 
   const handleLoadSession = async (selectedSessionId: number) => {
-    if (!isAuthenticated) {
+    // STRICT AUTH CHECK
+    if (!isAuthenticated || !user?.id) {
       showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để xem lịch sử');
+      setTimeout(() => navigate('/login'), 1500);
+      return;
+    }
+
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      showError('Phiên đăng nhập hết hạn', 'Vui lòng đăng nhập lại');
       setTimeout(() => navigate('/login'), 1500);
       return;
     }
@@ -301,8 +310,8 @@ Mình có thể giúp bạn:
     setNewTitle('');
   };
 
-  // Format message content for cleaner chat display (headings, bullets, code, tables, links)
-  const renderMessageContent = (content: string) => {
+  // Memoized message content renderer for better performance
+  const renderMessageContent = useCallback((content: string) => {
     const stripBold = (text: string) => text.replace(/\*\*(.*?)\*\*/g, '$1');
     const renderInline = (text: string) => {
       // links [text](url)
@@ -467,14 +476,22 @@ Mình có thể giúp bạn:
     flushList();
     flushCode();
     return <>{elements}</>;
-  };
+  }, []);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // AUTH CHECK: Must be logged in to send message
-    if (!isAuthenticated) {
+    // STRICT AUTH CHECK: Multiple layers of validation
+    if (!isAuthenticated || !user?.id) {
       showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để gửi tin nhắn');
+      setTimeout(() => navigate('/login'), 1500);
+      return;
+    }
+
+    // Additional security: Check if user data is valid
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      showError('Phiên đăng nhập hết hạn', 'Vui lòng đăng nhập lại');
       setTimeout(() => navigate('/login'), 1500);
       return;
     }
@@ -493,15 +510,8 @@ Mình có thể giúp bạn:
     setIsLoading(true);
 
     try {
-      // Frontend quick validations to avoid wasting tokens
-      const lower = userMessage.content.toLowerCase();
-      if (/ielts\s*(?:score|band)?\s*([0-9]+(?:\.[0-9])?)/i.test(lower)) {
-        const m = /ielts\s*(?:score|band)?\s*([0-9]+(?:\.[0-9])?)/i.exec(lower);
-        const score = m ? parseFloat(m[1]) : 0;
-        if (score > 9.0) {
-          throw new Error('Điểm IELTS tối đa là 9.0. Vui lòng nhập mục tiêu hợp lệ.');
-        }
-      }
+      // Let AI handle auto-correction for IELTS scores (no frontend validation)
+      // Frontend validation removed to allow AI to auto-correct IELTS 10.0 → 9.0
       const response = await aiChatbotService.sendMessage({
         // ép AI trả lời bằng tiếng Việt bằng cách thêm hướng dẫn ngắn
         message: `Trả lời bằng tiếng Việt rõ ràng, ngắn gọn. Câu hỏi: ${userMessage.content}`,
@@ -551,107 +561,132 @@ Mình có thể giúp bạn:
     setInputMessage(prompt);
   };
 
-  const quickPrompts = [
+  // Memoized quick prompts to prevent re-creation on every render
+  const quickPrompts = useMemo(() => [
     "Xu hướng nghề nghiệp 2025 là gì?",
     "Nên chọn Khoa học Máy tính hay Kinh doanh?",
     "Lộ trình trở thành Lập trình viên phần mềm?",
     "Những kỹ năng đang có giá trị cao hiện nay?",
     "Theo đuổi Data Science có đáng không?",
     "Chuyển ngành sang công nghệ như thế nào?"
-  ];
+  ], []);
 
   // LOGIN OVERLAY - Show when not authenticated
   if (!isAuthenticated) {
     return (
       <div className={`chatbot-page ${theme}`} style={{ position: 'relative', minHeight: '80vh' }}>
-        {/* Shooting stars effect (blurred) */}
-        <div className="shooting-stars" style={{ filter: 'blur(4px)', opacity: 0.3 }}>
-          <div className="shooting-star" style={{ top: '10%', left: '80%', animationDelay: '0s' }}></div>
-          <div className="shooting-star" style={{ top: '30%', left: '20%', animationDelay: '3s' }}></div>
-          <div className="shooting-star" style={{ top: '50%', left: '70%', animationDelay: '6s' }}></div>
+        {/* Simplified cosmic dust particles - reduced for better performance */}
+        <div className="cosmic-dust">
+          {[...Array(5)].map((_, i) => (
+            <div 
+              key={i} 
+              className="dust-particle"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 10}s`,
+                animationDuration: `${25 + Math.random() * 10}s`
+              }}
+            />
+          ))}
         </div>
 
-        {/* Blurred preview */}
-        <div style={{ filter: 'blur(4px)', pointerEvents: 'none', opacity: 0.5 }}>
-          <div className="chatbot-sidebar">
-            <div className="chatbot-sidebar__header">
-              <h2 className="chatbot-sidebar__title">
-                <MessageSquare size={20} />
-                Chat Sessions
-              </h2>
-            </div>
+        {/* Sidebar for Chat Sessions - Always Visible */}
+        <div className="chatbot-sidebar">
+          <div className="chatbot-sidebar__header">
+            <h2 className="chatbot-sidebar__title">
+              <MessageSquare size={20} />
+              Chat Sessions
+            </h2>
           </div>
           
-          <div className="chatbot-container">
-            <div className="chatbot-header">
-              <div className="chatbot-header__avatar">
-                <img src={aiAvatar} alt="Meowl AI" style={{ width: 56, height: 56, borderRadius: '50%' }} />
-              </div>
-              <div className="chatbot-header__info">
-                <h1 className="chatbot-header__title">
-                  <Sparkles className="inline mr-2" size={24} />
-                  Meowl - Trợ Lý Nghề Nghiệp AI
-                </h1>
-              </div>
+          <div className="chatbot-sidebar__sessions">
+            <div className="chatbot-sidebar__empty">
+              <p>Vui lòng đăng nhập để xem lịch sử trò chuyện</p>
             </div>
           </div>
         </div>
 
-        {/* Login Overlay */}
-        <div style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          padding: '48px',
-          borderRadius: '24px',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
-          textAlign: 'center',
-          maxWidth: '400px',
-          zIndex: 1000
-        }}>
-          <Lock size={64} style={{ color: '#fff', marginBottom: '24px' }} />
-          <h2 style={{ color: '#fff', fontSize: '28px', marginBottom: '16px', fontWeight: 600 }}>
-            Yêu cầu đăng nhập
-          </h2>
-          <p style={{ 
-            color: 'rgba(255,255,255,0.9)', 
-            marginBottom: '32px', 
-            fontSize: '16px',
-            lineHeight: '1.6'
+        <div className="chatbot-container">
+          {/* Header */}
+          <div className="chatbot-header">
+            <div className="chatbot-header__avatar">
+              <img src={aiAvatar} alt="Meowl AI" style={{ width: 56, height: 56, borderRadius: '50%' }} />
+            </div>
+            <div className="chatbot-header__info">
+              <h1 className="chatbot-header__title">
+                <Sparkles className="inline mr-2" size={24} />
+                Meowl - Trợ Lý Nghề Nghiệp AI
+              </h1>
+              <p className="chatbot-header__subtitle">
+                Nhận tư vấn nghề nghiệp cá nhân hóa bằng trí tuệ nhân tạo
+              </p>
+            </div>
+          </div>
+
+          {/* Login Modal - Positioned below header, not overlaying */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '60vh',
+            padding: '40px 20px'
           }}>
-            Vui lòng đăng nhập để trò chuyện với Meowl và nhận tư vấn nghề nghiệp cá nhân hóa
-          </p>
-          <button
-            onClick={() => navigate('/login')}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: '#10b981',
-              color: '#fff',
-              border: 'none',
-              padding: '14px 32px',
-              borderRadius: '12px',
-              fontSize: '16px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'transform 0.2s, box-shadow 0.2s'
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 8px 20px rgba(16, 185, 129, 0.4)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            <LogIn size={20} />
-            Đăng nhập ngay
-          </button>
+            <div style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              padding: '48px',
+              borderRadius: '24px',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+              textAlign: 'center',
+              maxWidth: '400px',
+              width: '100%'
+            }}>
+              <Lock size={64} style={{ color: '#fff', marginBottom: '24px' }} />
+              <h2 style={{ color: '#fff', fontSize: '28px', marginBottom: '16px', fontWeight: 600 }}>
+                Yêu cầu đăng nhập
+              </h2>
+              <p style={{ 
+                color: 'rgba(255,255,255,0.9)', 
+                marginBottom: '32px', 
+                fontSize: '16px',
+                lineHeight: '1.6'
+              }}>
+                Vui lòng đăng nhập để trò chuyện với Meowl và nhận tư vấn nghề nghiệp cá nhân hóa
+              </p>
+              <button
+                onClick={() => navigate('/login')}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  background: '#10b981',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '14px 32px',
+                  borderRadius: '12px',
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s, box-shadow 0.2s'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 8px 20px rgba(16, 185, 129, 0.4)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <LogIn size={20} />
+                Đăng nhập ngay
+              </button>
+            </div>
+          </div>
         </div>
+
+        {/* Meowl Guide */}
+        <MeowlGuide currentPage="chatbot" />
       </div>
     );
   }
@@ -659,18 +694,9 @@ Mình có thể giúp bạn:
   // MAIN CHAT UI - Only rendered when authenticated
   return (
     <div className={`chatbot-page ${theme}`}>
-      {/* Shooting stars effect */}
-      <div className="shooting-stars">
-        <div className="shooting-star" style={{ top: '10%', left: '80%', animationDelay: '0s' }}></div>
-        <div className="shooting-star" style={{ top: '30%', left: '20%', animationDelay: '3s' }}></div>
-        <div className="shooting-star" style={{ top: '50%', left: '70%', animationDelay: '6s' }}></div>
-        <div className="shooting-star" style={{ top: '70%', left: '40%', animationDelay: '9s' }}></div>
-        <div className="shooting-star" style={{ top: '20%', left: '50%', animationDelay: '12s' }}></div>
-      </div>
-
-      {/* Cosmic dust particles */}
+      {/* Simplified cosmic dust particles - reduced for better performance */}
       <div className="cosmic-dust">
-        {[...Array(30)].map((_, i) => (
+        {[...Array(8)].map((_, i) => (
           <div 
             key={i} 
             className="dust-particle"
@@ -678,7 +704,7 @@ Mình có thể giúp bạn:
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animationDelay: `${Math.random() * 10}s`,
-              animationDuration: `${15 + Math.random() * 10}s`
+              animationDuration: `${20 + Math.random() * 10}s`
             }}
           />
         ))}

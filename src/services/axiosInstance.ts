@@ -183,7 +183,13 @@ axiosInstance.interceptors.response.use(
       const refreshToken = localStorage.getItem('refreshToken');
       
       if (!refreshToken) {
-        console.warn('No refresh token available, clearing tokens');
+        console.warn('❌ No refresh token available, clearing tokens');
+        console.log('🔍 Debug info:', {
+          hasAccessToken: !!localStorage.getItem('accessToken'),
+          hasRefreshToken: !!localStorage.getItem('refreshToken'),
+          hasUser: !!localStorage.getItem('user'),
+          currentPath: window.location.pathname
+        });
         isRefreshing = false;
         processQueue(new Error('No refresh token'), null);
         localStorage.removeItem('accessToken');
@@ -195,30 +201,38 @@ axiosInstance.interceptors.response.use(
       
       try {
         // ✅ CALL REFRESH ENDPOINT: Get new tokens
-        console.log('Access token expired, refreshing...');
+        console.log('🔄 Access token expired, refreshing...');
         const response = await axios.post(`${baseURL}/auth/refresh`, {
           refreshToken
         });
         
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken, user: newUser } = response.data;
         
         // ✅ UPDATE STORAGE: Save new tokens
         localStorage.setItem('accessToken', newAccessToken);
         localStorage.setItem('refreshToken', newRefreshToken);
+        
+        // ✅ FIX: Only update user data if it exists in response
+        if (newUser) {
+          localStorage.setItem('user', JSON.stringify(newUser));
+          console.log('✅ User data updated from refresh response');
+        } else {
+          console.warn('⚠️ No user data in refresh response, keeping existing user data');
+        }
         
         // ✅ UPDATE REQUEST: Retry original request with new token
         if (originalRequest.headers) {
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         }
         
-        console.log('Token refreshed successfully, retrying request');
+        console.log('✅ Token refreshed successfully, retrying request');
         isRefreshing = false;
         processQueue(null, newAccessToken);
         
         return axiosInstance(originalRequest);
         
       } catch (refreshError) {
-        console.error('Token refresh failed, logging out', refreshError);
+        console.error('❌ Token refresh failed, logging out', refreshError);
         isRefreshing = false;
         processQueue(refreshError as Error, null);
         

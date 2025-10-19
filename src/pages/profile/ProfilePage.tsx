@@ -146,17 +146,18 @@ const ProfilePage = () => {
               <button className="avatar-upload-btn" title="Thay đổi ảnh đại diện">
                 <Camera size={16} />
               </button>
-            </div>
-            <div className="profile-basic-info">
-              <h1 className="profile-name">{profile.fullName}</h1>
-              <p className="profile-email">{profile.email}</p>
-              <div className="profile-badges">
+              {/* Role badge nằm trong avatar */}
+              <div className="profile-role-badge-container">
                 {user?.roles.map((role) => (
-                  <span key={role} className={`role-badge ${role.toLowerCase()}`}>
+                  <span key={role} className={`profile-role-badge profile-role-badge--${role.toLowerCase()}`}>
                     {role}
                   </span>
                 ))}
               </div>
+            </div>
+            <div className="profile-basic-info">
+              <h1 className="profile-name">{profile.fullName}</h1>
+              <p className="profile-email">{profile.email}</p>
             </div>
           </div>
 
@@ -205,7 +206,7 @@ const ProfilePage = () => {
         {/* Profile Details */}
         <div className="profile-details">
           <div className="profile-section">
-            <h2 className="section-title">Thông tin cá nhân</h2>
+            <h2 className="profile-section-title">Thông tin cá nhân</h2>
             
             <div className="profile-fields">
               {/* Full Name */}
