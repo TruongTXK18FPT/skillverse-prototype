@@ -15,6 +15,7 @@ import ChatbotPage from './pages/navbar/ChatbotPage';
 import AiChatbotPage from './pages/navbar/AiChatbotPage';
 import Gamification from './pages/navbar/Gamification';
 import PortfolioPage from './pages/navbar/PortfolioPage';
+import PortfolioDebug from './pages/navbar/PortfolioDebug';
 import CVPage from './pages/navbar/CV';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/login/RegisterPage';
@@ -86,6 +87,7 @@ const App = () => {
                     <Route path="/chatbot-old" element={<ChatbotPage />} />
                     <Route path="/gamification" element={<Gamification />} />
                     <Route path="/portfolio" element={<PortfolioPage />} />
+                    <Route path="/portfolio-debug" element={<PortfolioDebug />} />
                     <Route path="/cv" element={<CVPage />} />
                     <Route path="/certificate/:id" element={<Certificate />} />
                     <Route path="/login" element={<LoginPage />} />

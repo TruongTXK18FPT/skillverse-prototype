@@ -3,11 +3,18 @@ import { Link } from 'react-router-dom';
 import {
   BookOpen, Briefcase, Award,
   Users, Star, Brain, Target,
-  Code, Zap, Globe, ChevronRight
+  Code, Zap, Globe, ChevronRight,
+  Map, Briefcase as Portfolio, Building
 } from 'lucide-react';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/HomePage.css'; // Import your CSS styles
 
+// Slider images
+import slide1 from '../../assets/slider-1.webp';
+import slide2 from '../../assets/slider-2.webp';
+import slide3 from '../../assets/slider-3.webp';
+import slide4 from '../../assets/slider-4.webp';
+import slide5 from '../../assets/slider-5.webp';
 
 
 const HomePage = () => {
@@ -17,12 +24,70 @@ const HomePage = () => {
   });
 
   const [isVisible, setIsVisible] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      image: slide1,
+      title: 'Bắt Đầu Hành Trình Của Bạn',
+      description: 'Khám phá tiềm năng vô hạn với hướng dẫn AI cá nhân hóa',
+      cta: 'Bắt đầu hành trình của bạn',
+      route: '/chatbot',
+      icon: Brain
+    },
+    {
+      image: slide2,
+      title: 'Lộ Trình Học Thông Minh',
+      description: 'Tạo lộ trình học tập phù hợp với mục tiêu nghề nghiệp của bạn',
+      cta: 'Tạo lộ trình học thông minh',
+      route: '/roadmap',
+      icon: Map
+    },
+    {
+      image: slide3,
+      title: 'Học Tập Không Giới Hạn',
+      description: 'Truy cập hàng trăm khóa học chất lượng cao từ chuyên gia',
+      cta: 'Bắt đầu học ngay',
+      route: '/courses',
+      icon: BookOpen
+    },
+    {
+      image: slide4,
+      title: 'Xây Dựng Portfolio Ấn Tượng',
+      description: 'Tạo portfolio chuyên nghiệp để thu hút nhà tuyển dụng',
+      cta: 'Tạo Portfolio của bạn',
+      route: '/portfolio',
+      icon: Portfolio
+    },
+    {
+      image: slide5,
+      title: 'Cơ Hội Việc Làm Đang Chờ Bạn',
+      description: 'Kết nối với các nhà tuyển dụng hàng đầu và tìm công việc mơ ước',
+      cta: 'Kết nối cơ hội việc làm',
+      route: '/jobs',
+      icon: Building
+    }
+  ];
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
     setIsVisible(true);
   }, [theme]);
+
+  // Stop auto-rolling animation by removing the interval
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  const goToPrevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const goToNextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
 
   const features = [
     {
@@ -93,28 +158,66 @@ const HomePage = () => {
 
   return (
     <div className="homepage-container">
-      {/* Hero Section */}
-      <section className="hero__galaxy-bg hero-section">
-        <div className="cosmic-dust"></div>
-        <div className="hero-content">
-          <h1 className="hero-title">
-            Mở Khoá Tương Lai Với AI
-          </h1>
-          <p className="hero-description">
-            Không chỉ học – mà còn bứt phá! SkillVerse mang đến hành trình học tập cá nhân hoá,
-            giúp bạn làm chủ kỹ năng hot nhất và tạo lợi thế vượt trội trong sự nghiệp.
-          </p>
-          <div className="button-container">
-            <Link to="/courses" className="primary-button">
-              <BookOpen size={20} />
-              <span>Bắt Đầu Học</span>
-              <ChevronRight size={16} />
-            </Link>
-            <Link to="/chatbot" className="secondary-button">
-              <Brain size={20} />
-              <span>Tư Vấn Nghề Nghiệp AI</span>
-              <ChevronRight size={16} />
-            </Link>
+      {/* Hero Slider Section */}
+      <section className="slider-hero-section">
+        <div className="slider-container">
+          {/* Slides */}
+          {slides.map((slide, index) => (
+            <div
+              key={index}
+              className={`slider-slide ${index === currentSlide ? 'slider-slide-active' : ''}`}
+            >
+              <div className="slider-image-wrapper">
+                <img 
+                  src={slide.image} 
+                  alt={slide.title}
+                  className="slider-image"
+                />
+                <div className="slider-overlay"></div>
+              </div>
+              
+              <div className="slider-content">
+                <div className="slider-cosmic-dust"></div>
+                <slide.icon className="slider-icon" size={48} />
+                <h1 className="slider-title">{slide.title}</h1>
+                <p className="slider-description">{slide.description}</p>
+                <Link to={slide.route} className="slider-cta-button">
+                  <span className="slider-button-text">{slide.cta}</span>
+                  <ChevronRight className="slider-button-icon" size={20} />
+                  <span className="slider-button-glow"></span>
+                </Link>
+              </div>
+            </div>
+          ))}
+
+          {/* Navigation Arrows */}
+          <button 
+            className="slider-nav-button slider-nav-prev"
+            onClick={goToPrevSlide}
+            aria-label="Previous slide"
+          >
+            <ChevronRight size={32} />
+          </button>
+          <button 
+            className="slider-nav-button slider-nav-next"
+            onClick={goToNextSlide}
+            aria-label="Next slide"
+          >
+            <ChevronRight size={32} />
+          </button>
+
+          {/* Dots Navigation */}
+          <div className="slider-dots">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                className={`slider-dot ${index === currentSlide ? 'slider-dot-active' : ''}`}
+                onClick={() => goToSlide(index)}
+                aria-label={`Go to slide ${index + 1}`}
+              >
+                <span className="slider-dot-inner"></span>
+              </button>
+            ))}
           </div>
         </div>
       </section>
