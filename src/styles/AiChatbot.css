@@ -225,13 +225,14 @@
 }
 
 .chatbot-session-item:hover::before {
-  left: 100%;
+  left: 0; /* prevent shimmer sweep to avoid layout jank */
 }
 
 .chatbot-session-item:hover {
   background: rgba(139, 92, 246, 0.15);
   border-color: #8b5cf6;
-  transform: translateX(4px);
+  /* remove translate to prevent vertical shift on hover */
+  transform: none;
 }
 
 .chatbot-session-item.active {

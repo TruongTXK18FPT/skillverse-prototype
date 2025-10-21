@@ -513,8 +513,8 @@ Mình có thể giúp bạn:
       // Let AI handle auto-correction for IELTS scores (no frontend validation)
       // Frontend validation removed to allow AI to auto-correct IELTS 10.0 → 9.0
       const response = await aiChatbotService.sendMessage({
-        // ép AI trả lời bằng tiếng Việt bằng cách thêm hướng dẫn ngắn
-        message: `Trả lời bằng tiếng Việt rõ ràng, ngắn gọn. Câu hỏi: ${userMessage.content}`,
+        // Send user message directly without any prefix - system prompt handles language
+        message: userMessage.content,
         sessionId: sessionId
       });
 
