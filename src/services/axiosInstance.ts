@@ -49,6 +49,53 @@ let failedQueue: Array<{
   reject: (reason?: unknown) => void;
 }> = [];
 
+// Decode JWT payload safely without external deps
+const decodeJwtPayload = (token: string): Record<string, unknown> | null => {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const payload = parts[1]
+      .replace(/-/g, '+')
+      .replace(/_/g, '/');
+    const json = decodeURIComponent(
+      atob(payload)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+};
+
+const getTokenExpiry = (token: string): number | null => {
+  const payload = decodeJwtPayload(token);
+  const exp = payload && typeof (payload as any).exp === 'number' ? (payload as any).exp : null;
+  return exp;
+};
+
+const isTokenExpiringSoon = (token: string, leewaySeconds = 120): boolean => {
+  const exp = getTokenExpiry(token);
+  if (!exp) return false;
+  const nowSec = Math.floor(Date.now() / 1000);
+  return exp - nowSec <= leewaySeconds;
+};
+
+// Centralized refresh call reused by both request- and response-interceptors
+const performRefresh = async (): Promise<string> => {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (!refreshToken) throw new Error('No refresh token');
+  const response = await axios.post(`${baseURL}/auth/refresh`, { refreshToken });
+  const { accessToken: newAccessToken, refreshToken: newRefreshToken, user: newUser } = response.data;
+  localStorage.setItem('accessToken', newAccessToken);
+  localStorage.setItem('refreshToken', newRefreshToken);
+  if (newUser) {
+    localStorage.setItem('user', JSON.stringify(newUser));
+  }
+  return newAccessToken as string;
+};
+
 export const axiosInstance = axios.create({
   baseURL,
   timeout: 60000, // 60 seconds for AI requests (roadmap generation, chatbot)
@@ -107,6 +154,33 @@ axiosInstance.interceptors.request.use(
     // Only add token for protected endpoints
     if (!isPublicEndpoint(config.url || '')) {
       const token = localStorage.getItem('accessToken');
+      // Pre-emptive refresh if token is about to expire (leeway window)
+      if (token && isTokenExpiringSoon(token) && !isRefreshing) {
+        isRefreshing = true;
+        return new Promise<InternalAxiosRequestConfig>((resolve, reject) => {
+          performRefresh()
+            .then((newToken) => {
+              processQueue(null, newToken);
+              isRefreshing = false;
+              config.headers = config.headers || {};
+              config.headers.Authorization = `Bearer ${newToken}`;
+              resolve(config);
+            })
+            .catch((err) => {
+              isRefreshing = false;
+              processQueue(err as Error, null);
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('refreshToken');
+              localStorage.removeItem('user');
+              if (typeof window !== 'undefined') {
+                const p = window.location.pathname;
+                const pub = p.includes('/login') || p.includes('/register') || p.includes('/verify') || p === '/';
+                if (!pub) window.location.href = '/login';
+              }
+              reject(err);
+            });
+        });
+      }
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }

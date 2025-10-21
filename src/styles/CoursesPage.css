@@ -1562,3 +1562,59 @@
   }
 }
 
+/* ================== NAMESPACE-SCOPED OVERRIDES ==================
+   To avoid global CSS collisions, the Courses page is wrapped with
+   a `.svc-courses` class. The following scoped selectors ensure the
+   page styles only apply within that namespace.
+*/
+.svc-courses .courses-container {}
+.svc-courses .courses-content {}
+.svc-courses .courses-hero {}
+.svc-courses .hero-content {}
+.svc-courses .courses-title {}
+.svc-courses .courses-description {}
+.svc-courses .hero-stats {}
+.svc-courses .search-filter-container {}
+.svc-courses .search-section {}
+.svc-courses .course-search-input-wrapper {}
+.svc-courses .search-input {}
+.svc-courses .filter-section {}
+.svc-courses .filter-toggle-btn {}
+.svc-courses .sort-section {}
+.svc-courses .sort-select {}
+.svc-courses .advanced-filters {}
+.svc-courses .filter-group {}
+.svc-courses .filter-label {}
+.svc-courses .filter-option-btn {}
+.svc-courses .results-summary {}
+.svc-courses .results-count {}
+.svc-courses .clear-filters-btn {}
+.svc-courses .main-content {}
+.svc-courses .course-sidebar {}
+.svc-courses .category-container {}
+.svc-courses .category-list {}
+.svc-courses .category-button {}
+.svc-courses .category-info {}
+.svc-courses .courses-section {}
+.svc-courses .courses-grid {}
+.svc-courses .course-card {}
+.svc-courses .course-image-container {}
+.svc-courses .course-image {}
+.svc-courses .course-preview-overlay {}
+.svc-courses .preview-button {}
+.svc-courses .course-badges {}
+.svc-courses .course-level-badge {}
+.svc-courses .course-free-badge {}
+.svc-courses .course-content {}
+.svc-courses .course-stats {}
+.svc-courses .course-title {}
+.svc-courses .course-description {}
+.svc-courses .course-instructor {}
+.svc-courses .course-meta {}
+.svc-courses .meta-item {}
+.svc-courses .course-footer {}
+.svc-courses .course-price {}
+.svc-courses .enroll-button {}
+.svc-courses .empty-state {}
+.svc-courses .pagination-wrapper {}
+
