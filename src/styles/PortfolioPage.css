@@ -2593,16 +2593,25 @@ input:checked + .sv-privacy-toggle-slider:before {
 .sv-contact-link {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   color: var(--primary-color);
   text-decoration: none;
   font-size: 0.875rem;
   transition: var(--transition);
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  min-width: 40px;
+  min-height: 40px;
 }
 
 .sv-contact-link:hover {
   color: var(--secondary-color);
-  transform: translateX(2px);
+  transform: translateY(-2px);
+  background: var(--primary-color);
+  color: white;
+  box-shadow: var(--shadow-md);
 }
 
 /* Profile Section */

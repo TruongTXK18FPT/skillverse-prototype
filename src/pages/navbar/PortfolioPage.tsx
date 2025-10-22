@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   Download, Edit, Share2, Eye, Award, Briefcase,
-  MapPin, Linkedin, Github, Loader, AlertCircle, Plus,
+  MapPin, Linkedin, Github as GithubIcon, Loader, AlertCircle, Plus,
   Trash2, ExternalLink, Calendar, Settings
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -160,20 +160,56 @@ const PortfolioPage = () => {
     await loadPortfolioData();
   };
 
+  const handleSetActiveCV = async (cvId: number) => {
+    try {
+      // Call API to set CV as active
+      await portfolioService.setActiveCV(cvId);
+      await loadPortfolioData();
+      alert('Đã đặt CV làm active thành công!');
+    } catch (error: any) {
+      alert('Không thể đặt CV làm active: ' + (error?.message || 'Lỗi không xác định'));
+    }
+  };
+
+  const handleDeleteCV = async (cvId: number) => {
+    if (confirm('Bạn có chắc muốn xóa CV này?')) {
+      try {
+        await portfolioService.deleteCV(cvId);
+        await loadPortfolioData();
+        alert('Đã xóa CV thành công!');
+      } catch (error: any) {
+        alert('Không thể xóa CV: ' + (error?.message || 'Lỗi không xác định'));
+      }
+    }
+  };
+
+  const handleEditCV = (cvId: number) => {
+    // Navigate to CV page with edit mode
+    navigate(`/cv?edit=${cvId}`);
+  };
+
   const handleExportCV = async () => {
     try {
       const activeCV = await portfolioService.getActiveCV();
-      // Export CV logic here (download PDF, copy to clipboard, etc.)
-      console.log('Active CV:', activeCV);
-      alert('CV đã được xuất thành công!');
-    } catch (err) {
-      alert('Chưa có CV active. Vui lòng tạo CV trước.');
+      const printWindow = window.open('', '_blank');
+      if (printWindow) {
+        printWindow.document.write(`
+          <html>
+            <head><title>CV - ${activeCV.templateName}</title></head>
+            <body>${activeCV.cvContent}</body>
+          </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+      }
+    } catch {
+      alert('Chưa có CV active. Vui lòng tạo hoặc đặt CV active trước.');
     }
   };
 
   const handleSharePortfolio = () => {
     if (profile?.customUrlSlug) {
-      const url = `${window.location.origin}/portfolio/${profile.customUrlSlug}`;
+      const url = `${globalThis.location.origin}/portfolio/${profile.customUrlSlug}`;
       navigator.clipboard.writeText(url);
       alert('Đã copy link portfolio vào clipboard!');
     } else {
@@ -442,13 +478,11 @@ const PortfolioPage = () => {
                     {profile?.linkedinUrl && (
                       <a href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" className="sv-contact-link">
                         <Linkedin size={16} />
-                        LinkedIn
                       </a>
                     )}
                     {profile?.githubUrl && (
                       <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="sv-contact-link">
-                        <Github size={16} />
-                        GitHub
+                        <GithubIcon size={16} />
                       </a>
                     )}
                   </div>
@@ -793,11 +827,49 @@ const PortfolioPage = () => {
                           Xem
                         </button>
                         <button
-                          onClick={handleExportCV}
+                          onClick={() => handleEditCV(cv.id!)}
+                          className="sv-btn sv-btn--outline sv-btn--sm"
+                        >
+                          <Edit size={14} />
+                          Sửa
+                        </button>
+                        {!cv.isActive && (
+                          <button
+                            onClick={() => handleSetActiveCV(cv.id!)}
+                            className="sv-btn sv-btn--primary sv-btn--sm"
+                            style={{ background: '#f59e0b' }}
+                          >
+                            <Settings size={14} />
+                            Set Active
+                          </button>
+                        )}
+                        <button
+                          onClick={() => {
+                            // Download PDF logic here
+                            const printWindow = window.open('', '_blank');
+                            if (printWindow) {
+                              printWindow.document.write(`
+                                <html>
+                                  <head><title>CV - ${cv.templateName}</title></head>
+                                  <body>${cv.cvContent}</body>
+                                </html>
+                              `);
+                              printWindow.document.close();
+                              printWindow.print();
+                            }
+                          }}
                           className="sv-btn sv-btn--primary sv-btn--sm"
                         >
                           <Download size={14} />
-                          Tải
+                          PDF
+                        </button>
+                        <button
+                          onClick={() => handleDeleteCV(cv.id!)}
+                          className="sv-btn sv-btn--outline sv-btn--sm"
+                          style={{ color: '#ef4444' }}
+                        >
+                          <Trash2 size={14} />
+                          Xóa
                         </button>
                       </div>
                     </div>

@@ -23,7 +23,6 @@ const HomePage = () => {
     return savedTheme || 'light';
   });
 
-  const [isVisible, setIsVisible] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
@@ -72,7 +71,6 @@ const HomePage = () => {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
-    setIsVisible(true);
   }, [theme]);
 
   // Stop auto-rolling animation by removing the interval

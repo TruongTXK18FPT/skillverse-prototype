@@ -383,6 +383,20 @@ export const getAllCVs = async (): Promise<GeneratedCVDTO[]> => {
   return response.data.data;
 };
 
+export const setActiveCV = async (cvId: number): Promise<void> => {
+  const response = await api.put<ApiResponse<void>>(`/cv/${cvId}/set-active`);
+  if (!response.data.success) {
+    throw new Error(response.data.message || 'Failed to set active CV');
+  }
+};
+
+export const deleteCV = async (cvId: number): Promise<void> => {
+  const response = await api.delete<ApiResponse<void>>(`/cv/${cvId}`);
+  if (!response.data.success) {
+    throw new Error(response.data.message || 'Failed to delete CV');
+  }
+};
+
 // Export all services
 export const portfolioService = {
   // Profile
@@ -413,6 +427,8 @@ export const portfolioService = {
   updateCV,
   getActiveCV,
   getAllCVs,
+  setActiveCV,
+  deleteCV, // Added this
 };
 
 export default portfolioService;

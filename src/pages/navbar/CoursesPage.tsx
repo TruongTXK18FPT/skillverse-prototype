@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Search, Clock, Users, Star, BookOpen, Award, Play, ChevronDown, Filter, TrendingUp } from 'lucide-react';
+import { Clock, Users, Star, BookOpen, Award, Play, ChevronDown, Filter, TrendingUp } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import '../../styles/CoursesPage.css';
 import Pagination from '../../components/Pagination';

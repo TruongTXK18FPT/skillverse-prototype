@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Building2, Mail, Phone, Globe, MapPin, FileText, Edit3, Save, X, Link as LinkIcon } from 'lucide-react';
+import { Building2, Mail, Globe, MapPin, FileText, Edit3, Save, X, Link as LinkIcon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import userService from '../../services/userService';
