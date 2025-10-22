@@ -1,5 +1,5 @@
 // Portfolio Service - API calls to backend portfolio service
-import axios from 'axios';
+import { axiosInstance } from './axiosInstance';
 import {
   UserProfileDTO,
   PortfolioProjectDTO,
@@ -10,43 +10,9 @@ import {
   ApiResponse,
   CheckExtendedProfileResponse
 } from '../data/portfolioDTOs';
-import { isJWTError, forceLogout } from '../utils/tokenUtils';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
-const PORTFOLIO_API = `${API_BASE_URL}/api/portfolio`;
-
-// Axios instance with authentication
-const api = axios.create({
-  baseURL: PORTFOLIO_API,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Add auth token interceptor
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-// Add response interceptor to handle JWT errors
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    // Check if error is JWT related using utility function
-    if (isJWTError(error)) {
-      console.error('🔴 JWT Token Invalid - Logging out...');
-      
-      // Force logout with message
-      forceLogout('Phiên đăng nhập đã hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại!');
-    }
-    
-    return Promise.reject(error);
-  }
-);
+// Use shared axios instance with automatic environment detection
+const api = axiosInstance;
 
 // ==================== PROFILE ENDPOINTS ====================
 
@@ -55,7 +21,7 @@ api.interceptors.response.use(
  */
 export const checkExtendedProfile = async (): Promise<CheckExtendedProfileResponse> => {
   try {
-    const response = await api.get<CheckExtendedProfileResponse>('/profile/check');
+    const response = await api.get<CheckExtendedProfileResponse>('/portfolio/profile/check');
     return response.data;
   } catch (error: any) {
     console.error('Error checking extended profile:', error.response?.data || error.message);
@@ -68,7 +34,7 @@ export const checkExtendedProfile = async (): Promise<CheckExtendedProfileRespon
  * Get combined profile (basic + extended) of authenticated user
  */
 export const getProfile = async (): Promise<UserProfileDTO> => {
-  const response = await api.get<ApiResponse<UserProfileDTO>>('/profile');
+  const response = await api.get<ApiResponse<UserProfileDTO>>('/portfolio/profile');
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'Failed to fetch profile');
   }
@@ -79,7 +45,7 @@ export const getProfile = async (): Promise<UserProfileDTO> => {
  * Get public profile by custom URL slug
  */
 export const getProfileBySlug = async (slug: string): Promise<UserProfileDTO> => {
-  const response = await api.get<ApiResponse<UserProfileDTO>>(`/profile/slug/${slug}`);
+  const response = await api.get<ApiResponse<UserProfileDTO>>(`/portfolio/profile/slug/${slug}`);
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'Profile not found');
   }
@@ -90,7 +56,7 @@ export const getProfileBySlug = async (slug: string): Promise<UserProfileDTO> =>
  * Get public profile by user ID
  */
 export const getPublicProfile = async (userId: number): Promise<UserProfileDTO> => {
-  const response = await api.get<ApiResponse<UserProfileDTO>>(`/profile/${userId}`);
+  const response = await api.get<ApiResponse<UserProfileDTO>>(`/portfolio/profile/${userId}`);
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'Profile not found');
   }
@@ -113,15 +79,37 @@ export const createExtendedProfile = async (
   formData.append('profile', profileBlob);
   
   // Add files if provided
-  if (avatar) formData.append('avatar', avatar);
-  if (video) formData.append('video', video);
-  if (coverImage) formData.append('coverImage', coverImage);
+  if (avatar) {
+    console.log(`📸 Adding avatar: ${avatar.name} (${(avatar.size / 1024 / 1024).toFixed(2)}MB)`);
+    formData.append('avatar', avatar);
+  }
+  if (video) {
+    console.log(`🎥 Adding video: ${video.name} (${(video.size / 1024 / 1024).toFixed(2)}MB)`);
+    formData.append('video', video);
+  }
+  if (coverImage) {
+    console.log(`🖼️ Adding cover image: ${coverImage.name} (${(coverImage.size / 1024 / 1024).toFixed(2)}MB)`);
+    formData.append('coverImage', coverImage);
+  }
   
-  const response = await api.post<ApiResponse<UserProfileDTO>>('/profile', formData, {
+  console.log('⏳ Sending create profile request...');
+  const startTime = Date.now();
+  
+  const response = await api.post<ApiResponse<UserProfileDTO>>('/portfolio/profile', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
+    timeout: 360000, // 2 minutes for large file uploads
+    onUploadProgress: (progressEvent) => {
+      if (progressEvent.total) {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        console.log(`📊 Upload progress: ${percentCompleted}% (${(progressEvent.loaded / 1024 / 1024).toFixed(2)}MB / ${(progressEvent.total / 1024 / 1024).toFixed(2)}MB)`);
+      }
+    }
   });
+  
+  const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+  console.log(`✅ Profile created successfully in ${duration}s`);
   
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'Failed to create extended profile');
@@ -146,15 +134,37 @@ export const updateExtendedProfile = async (
   formData.append('profile', profileBlob);
   
   // Add files if provided
-  if (avatar) formData.append('avatar', avatar);
-  if (video) formData.append('video', video);
-  if (coverImage) formData.append('coverImage', coverImage);
+  if (avatar) {
+    console.log(`📸 Adding avatar: ${avatar.name} (${(avatar.size / 1024 / 1024).toFixed(2)}MB)`);
+    formData.append('avatar', avatar);
+  }
+  if (video) {
+    console.log(`🎥 Adding video: ${video.name} (${(video.size / 1024 / 1024).toFixed(2)}MB)`);
+    formData.append('video', video);
+  }
+  if (coverImage) {
+    console.log(`🖼️ Adding cover image: ${coverImage.name} (${(coverImage.size / 1024 / 1024).toFixed(2)}MB)`);
+    formData.append('coverImage', coverImage);
+  }
   
-  const response = await api.put<ApiResponse<UserProfileDTO>>('/profile', formData, {
+  console.log('⏳ Sending update profile request...');
+  const startTime = Date.now();
+  
+  const response = await api.put<ApiResponse<UserProfileDTO>>('/portfolio/profile', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
+    timeout: 360000, // 2 minutes for large file uploads
+    onUploadProgress: (progressEvent) => {
+      if (progressEvent.total) {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        console.log(`📊 Upload progress: ${percentCompleted}% (${(progressEvent.loaded / 1024 / 1024).toFixed(2)}MB / ${(progressEvent.total / 1024 / 1024).toFixed(2)}MB)`);
+      }
+    }
   });
+  
+  const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+  console.log(`✅ Profile updated successfully in ${duration}s`);
   
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'Failed to update extended profile');
@@ -167,7 +177,7 @@ export const updateExtendedProfile = async (
  * Delete extended portfolio profile
  */
 export const deleteExtendedProfile = async (): Promise<void> => {
-  const response = await api.delete<ApiResponse<void>>('/profile');
+  const response = await api.delete<ApiResponse<void>>('/portfolio/profile');
   if (!response.data.success) {
     throw new Error(response.data.message || 'Failed to delete extended profile');
   }
@@ -179,7 +189,7 @@ export const deleteExtendedProfile = async (): Promise<void> => {
  * Get all projects of authenticated user
  */
 export const getUserProjects = async (): Promise<PortfolioProjectDTO[]> => {
-  const response = await api.get<ApiResponse<PortfolioProjectDTO[]>>('/projects');
+  const response = await api.get<ApiResponse<PortfolioProjectDTO[]>>('/portfolio/projects');
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'Failed to fetch projects');
   }
@@ -200,12 +210,16 @@ export const createProject = async (
   formData.append('project', projectBlob);
   
   // Add thumbnail if provided
-  if (thumbnail) formData.append('thumbnail', thumbnail);
+  if (thumbnail) {
+    console.log(`🖼️ Adding project thumbnail: ${thumbnail.name} (${(thumbnail.size / 1024 / 1024).toFixed(2)}MB)`);
+    formData.append('thumbnail', thumbnail);
+  }
   
-  const response = await api.post<ApiResponse<PortfolioProjectDTO>>('/projects', formData, {
+  const response = await api.post<ApiResponse<PortfolioProjectDTO>>('/portfolio/projects', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
+    timeout: 60000, // 1 minute
   });
   
   if (!response.data.success || !response.data.data) {
@@ -230,15 +244,19 @@ export const updateProject = async (
   formData.append('project', projectBlob);
   
   // Add thumbnail if provided
-  if (thumbnail) formData.append('thumbnail', thumbnail);
+  if (thumbnail) {
+    console.log(`🖼️ Adding project thumbnail: ${thumbnail.name} (${(thumbnail.size / 1024 / 1024).toFixed(2)}MB)`);
+    formData.append('thumbnail', thumbnail);
+  }
   
   const response = await api.put<ApiResponse<PortfolioProjectDTO>>(
-    `/projects/${projectId}`,
+    `/portfolio/projects/${projectId}`,
     formData,
     {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
+      timeout: 60000, // 1 minute
     }
   );
   
@@ -253,7 +271,7 @@ export const updateProject = async (
  * Delete a project
  */
 export const deleteProject = async (projectId: number): Promise<void> => {
-  const response = await api.delete<ApiResponse<void>>(`/projects/${projectId}`);
+  const response = await api.delete<ApiResponse<void>>(`/portfolio/projects/${projectId}`);
   if (!response.data.success) {
     throw new Error(response.data.message || 'Failed to delete project');
   }
@@ -265,7 +283,7 @@ export const deleteProject = async (projectId: number): Promise<void> => {
  * Get all certificates of authenticated user
  */
 export const getUserCertificates = async (): Promise<ExternalCertificateDTO[]> => {
-  const response = await api.get<ApiResponse<ExternalCertificateDTO[]>>('/certificates');
+  const response = await api.get<ApiResponse<ExternalCertificateDTO[]>>('/portfolio/certificates');
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'Failed to fetch certificates');
   }
@@ -286,15 +304,19 @@ export const createCertificate = async (
   formData.append('certificate', certBlob);
   
   // Add image if provided
-  if (image) formData.append('image', image);
+  if (image) {
+    console.log(`🖼️ Adding certificate image: ${image.name} (${(image.size / 1024 / 1024).toFixed(2)}MB)`);
+    formData.append('image', image);
+  }
   
   const response = await api.post<ApiResponse<ExternalCertificateDTO>>(
-    '/certificates',
+    '/portfolio/certificates',
     formData,
     {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
+      timeout: 60000, // 1 minute
     }
   );
   
@@ -309,7 +331,7 @@ export const createCertificate = async (
  * Delete a certificate
  */
 export const deleteCertificate = async (certificateId: number): Promise<void> => {
-  const response = await api.delete<ApiResponse<void>>(`/certificates/${certificateId}`);
+  const response = await api.delete<ApiResponse<void>>(`/portfolio/certificates/${certificateId}`);
   if (!response.data.success) {
     throw new Error(response.data.message || 'Failed to delete certificate');
   }
@@ -321,7 +343,7 @@ export const deleteCertificate = async (certificateId: number): Promise<void> =>
  * Get all mentor reviews for authenticated user
  */
 export const getUserReviews = async (): Promise<MentorReviewDTO[]> => {
-  const response = await api.get<ApiResponse<MentorReviewDTO[]>>('/reviews');
+  const response = await api.get<ApiResponse<MentorReviewDTO[]>>('/portfolio/reviews');
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'Failed to fetch reviews');
   }
@@ -336,7 +358,7 @@ export const getUserReviews = async (): Promise<MentorReviewDTO[]> => {
 export const generateCV = async (
   request: CVGenerationRequest
 ): Promise<GeneratedCVDTO> => {
-  const response = await api.post<ApiResponse<GeneratedCVDTO>>('/cv/generate', request);
+  const response = await api.post<ApiResponse<GeneratedCVDTO>>('/portfolio/cv/generate', request);
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'Failed to generate CV');
   }
@@ -351,7 +373,7 @@ export const updateCV = async (
   cvContent: string,
   cvJson?: string
 ): Promise<GeneratedCVDTO> => {
-  const response = await api.put<ApiResponse<GeneratedCVDTO>>(`/cv/${cvId}`, {
+  const response = await api.put<ApiResponse<GeneratedCVDTO>>(`/portfolio/cv/${cvId}`, {
     cvContent,
     cvJson,
   });
@@ -365,7 +387,7 @@ export const updateCV = async (
  * Get active CV
  */
 export const getActiveCV = async (): Promise<GeneratedCVDTO> => {
-  const response = await api.get<ApiResponse<GeneratedCVDTO>>('/cv/active');
+  const response = await api.get<ApiResponse<GeneratedCVDTO>>('/portfolio/cv/active');
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'No active CV found');
   }
@@ -376,7 +398,7 @@ export const getActiveCV = async (): Promise<GeneratedCVDTO> => {
  * Get all CV versions
  */
 export const getAllCVs = async (): Promise<GeneratedCVDTO[]> => {
-  const response = await api.get<ApiResponse<GeneratedCVDTO[]>>('/cv/all');
+  const response = await api.get<ApiResponse<GeneratedCVDTO[]>>('/portfolio/cv/all');
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'Failed to fetch CVs');
   }
@@ -384,14 +406,14 @@ export const getAllCVs = async (): Promise<GeneratedCVDTO[]> => {
 };
 
 export const setActiveCV = async (cvId: number): Promise<void> => {
-  const response = await api.put<ApiResponse<void>>(`/cv/${cvId}/set-active`);
+  const response = await api.put<ApiResponse<void>>(`/portfolio/cv/${cvId}/set-active`);
   if (!response.data.success) {
     throw new Error(response.data.message || 'Failed to set active CV');
   }
 };
 
 export const deleteCV = async (cvId: number): Promise<void> => {
-  const response = await api.delete<ApiResponse<void>>(`/cv/${cvId}`);
+  const response = await api.delete<ApiResponse<void>>(`/portfolio/cv/${cvId}`);
   if (!response.data.success) {
     throw new Error(response.data.message || 'Failed to delete CV');
   }

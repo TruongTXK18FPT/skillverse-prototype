@@ -134,6 +134,37 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
     setLoading(true);
 
     try {
+      // Validate file sizes before upload
+      const maxFileSize = 10 * 1024 * 1024; // 10MB
+      const maxVideoSize = 50 * 1024 * 1024; // 50MB
+      
+      if (avatar && avatar.size > maxFileSize) {
+        alert(`Ảnh đại diện quá lớn (${(avatar.size / 1024 / 1024).toFixed(2)}MB). Tối đa 10MB.`);
+        setLoading(false);
+        return;
+      }
+      
+      if (video && video.size > maxVideoSize) {
+        alert(`Video quá lớn (${(video.size / 1024 / 1024).toFixed(2)}MB). Tối đa 50MB.`);
+        setLoading(false);
+        return;
+      }
+      
+      if (coverImage && coverImage.size > maxFileSize) {
+        alert(`Ảnh bìa quá lớn (${(coverImage.size / 1024 / 1024).toFixed(2)}MB). Tối đa 10MB.`);
+        setLoading(false);
+        return;
+      }
+
+      console.log('📤 Submitting profile with files:', {
+        hasAvatar: !!avatar,
+        avatarSize: avatar ? `${(avatar.size / 1024 / 1024).toFixed(2)}MB` : 'N/A',
+        hasVideo: !!video,
+        videoSize: video ? `${(video.size / 1024 / 1024).toFixed(2)}MB` : 'N/A',
+        hasCoverImage: !!coverImage,
+        coverImageSize: coverImage ? `${(coverImage.size / 1024 / 1024).toFixed(2)}MB` : 'N/A',
+      });
+
       // Convert skills and languages to JSON strings
       const profileData = {
         ...formData,
@@ -141,11 +172,27 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
         languagesSpoken: JSON.stringify(languages),
       };
 
+      console.log('📋 Profile data:', profileData);
+
       await onSubmit(profileData, avatar, video, coverImage);
+      
+      console.log('✅ Profile submitted successfully');
       onClose();
     } catch (error) {
-      console.error('Error submitting profile:', error);
-      alert('Có lỗi xảy ra khi lưu hồ sơ. Vui lòng thử lại.');
+      console.error('❌ Error submitting profile:', error);
+      
+      // More detailed error message
+      if (error instanceof Error) {
+        if (error.message.includes('timeout')) {
+          alert('⏱️ Yêu cầu mất quá lâu. Vui lòng:\n\n1. Kiểm tra kích thước file (ảnh < 10MB, video < 50MB)\n2. Kiểm tra kết nối mạng\n3. Thử lại sau ít phút');
+        } else if (error.message.includes('Network Error')) {
+          alert('🌐 Lỗi kết nối mạng. Vui lòng kiểm tra internet và thử lại.');
+        } else {
+          alert(`Có lỗi xảy ra: ${error.message}`);
+        }
+      } else {
+        alert('Có lỗi xảy ra khi lưu hồ sơ. Vui lòng thử lại.');
+      }
     } finally {
       setLoading(false);
     }

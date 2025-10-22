@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { axiosInstance } from '../../services/axiosInstance';
 
 const PortfolioDebug = () => {
   const [result, setResult] = useState<any>(null);
@@ -8,20 +8,15 @@ const PortfolioDebug = () => {
   const testEndpoint = async (endpoint: string, method: 'GET' | 'POST' = 'GET') => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('accessToken');
       console.log('Token:', token ? `${token.substring(0, 20)}...` : 'MISSING');
       
-      const config = {
+      console.log('Testing endpoint:', `/portfolio${endpoint}`);
+      const response = await axiosInstance({
         method,
-        url: `http://localhost:8080/api/portfolio${endpoint}`,
-        headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
-          'Content-Type': 'application/json'
-        }
-      };
+        url: `/portfolio${endpoint}`,
+      });
       
-      console.log('Request config:', config);
-      const response = await axios(config);
       console.log('Response:', response);
       
       setResult({
@@ -49,8 +44,9 @@ const PortfolioDebug = () => {
       
       <div style={{ marginBottom: '2rem' }}>
         <h3>Authentication</h3>
-        <p>Token: {localStorage.getItem('token') ? '✅ Present' : '❌ Missing'}</p>
-        <p>User ID: {localStorage.getItem('userId') || 'N/A'}</p>
+        <p>Access Token: {localStorage.getItem('accessToken') ? '✅ Present' : '❌ Missing'}</p>
+        <p>Refresh Token: {localStorage.getItem('refreshToken') ? '✅ Present' : '❌ Missing'}</p>
+        <p>User: {localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!).email : 'N/A'}</p>
       </div>
 
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
