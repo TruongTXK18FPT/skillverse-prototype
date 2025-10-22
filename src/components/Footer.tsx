@@ -62,10 +62,10 @@ const Footer = () => {
               {/* Facebook Page Embed */}
               <div className="facebook-embed">
                 <iframe
-                  src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D61581184190711&tabs=timeline&width=500&height=250&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
-                  width="500"
-                  height="250"
-                  style={{ border: 'none', overflow: 'hidden', borderRadius: '12px', marginTop: '1.5rem' }}
+                  src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D61581184190711&tabs=timeline&width=1000&height=300&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
+                  width="100%"
+                  height="300"
+                  style={{ border: 'none', overflow: 'hidden', borderRadius: '12px' }}
                   scrolling="no"
                   frameBorder="0"
                   allowFullScreen={true}

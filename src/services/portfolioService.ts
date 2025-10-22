@@ -10,6 +10,7 @@ import {
   ApiResponse,
   CheckExtendedProfileResponse
 } from '../data/portfolioDTOs';
+import { isJWTError, forceLogout } from '../utils/tokenUtils';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 const PORTFOLIO_API = `${API_BASE_URL}/api/portfolio`;
@@ -30,6 +31,22 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// Add response interceptor to handle JWT errors
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Check if error is JWT related using utility function
+    if (isJWTError(error)) {
+      console.error('🔴 JWT Token Invalid - Logging out...');
+      
+      // Force logout with message
+      forceLogout('Phiên đăng nhập đã hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại!');
+    }
+    
+    return Promise.reject(error);
+  }
+);
 
 // ==================== PROFILE ENDPOINTS ====================
 
