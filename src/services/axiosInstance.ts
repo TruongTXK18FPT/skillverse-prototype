@@ -98,7 +98,7 @@ const performRefresh = async (): Promise<string> => {
 
 export const axiosInstance = axios.create({
   baseURL,
-  timeout: 60000, // 60 seconds for AI requests (roadmap generation, chatbot)
+  timeout: 360000, // 60 seconds for AI requests (roadmap generation, chatbot)
   headers: { 'Content-Type': 'application/json' },
 });
 
