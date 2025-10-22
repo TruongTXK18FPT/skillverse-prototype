@@ -37,9 +37,12 @@ const Header: React.FC = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // Guard against rapid toggles that can cause layout thrashing on mobile
+  const [isMobileMenuToggleLocked, setIsMobileMenuToggleLocked] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const userMenuRef = useRef<HTMLDivElement>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
+  const mobileSearchInputRef = useRef<HTMLInputElement>(null);
 
   // Categories for mega menu with icons and descriptions
   const categories = [
@@ -235,6 +238,23 @@ const Header: React.FC = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const openMobileSearch = () => {
+    setIsMobileMenuOpen(true);
+    // Defer focus until menu renders
+    setTimeout(() => {
+      mobileSearchInputRef.current?.focus();
+    }, 0);
+  };
+
+  // Debounced/locked toggle to prevent rapid reflows when tapping repeatedly
+  const toggleMobileMenu = () => {
+    if (isMobileMenuToggleLocked) return;
+    setIsMobileMenuToggleLocked(true);
+    setIsMobileMenuOpen(prev => !prev);
+    // small lock window is enough to avoid burst taps causing flicker
+    setTimeout(() => setIsMobileMenuToggleLocked(false), 250);
+  };
+
   return (
     <header className="header-minimal">
       <div className="header-container">
@@ -375,10 +395,28 @@ const Header: React.FC = () => {
             </button>
           )}
 
+          {/* Mobile quick actions */}
+          <button
+            className="mobile-icon-btn mobile-only"
+            aria-label="Search"
+            onClick={openMobileSearch}
+          >
+            <Search size={18} />
+          </button>
+          <button
+            className="mobile-icon-btn mobile-only"
+            aria-label="Upgrade"
+            onClick={handleUpgrade}
+          >
+            <Crown size={18} />
+          </button>
+
           {/* Mobile Menu Button */}
           <button
             className="mobile-menu-btn mobile-only"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={toggleMobileMenu}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="sv-mobile-menu"
           >
             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -387,7 +425,7 @@ const Header: React.FC = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="mobile-menu">
+        <div className="mobile-menu" id="sv-mobile-menu">
           <div className="mobile-menu-content">
             {/* Mobile Search */}
             <form onSubmit={handleSearch} className="mobile-search">
@@ -399,6 +437,7 @@ const Header: React.FC = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="header-search-input"
+                  ref={mobileSearchInputRef}
                 />
               </div>
             </form>

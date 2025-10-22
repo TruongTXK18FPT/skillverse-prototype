@@ -1,0 +1,313 @@
+/* RoadmapList Styles - Optimized for performance */
+
+.roadmap-list {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.roadmap-list--grid {
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+.roadmap-list--list {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+/* Loading state */
+.roadmap-list__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+  color: #f1f5f9;
+}
+
+.roadmap-list__spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(99, 102, 241, 0.3);
+  border-top: 3px solid #6366f1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.roadmap-list__loading p {
+  font-size: 1.125rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* Empty state */
+.roadmap-list__empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #f1f5f9;
+}
+
+.roadmap-empty__icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  color: #94a3b8;
+}
+
+.roadmap-list__empty h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0 0 0.5rem 0;
+}
+
+.roadmap-list__empty p {
+  font-size: 1rem;
+  color: #94a3b8;
+  margin: 0 0 2rem 0;
+  line-height: 1.6;
+}
+
+.roadmap-empty__create-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.roadmap-empty__create-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* Roadmap Card Styles - Optimized */
+.sv-roadmap-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  /* Performance optimizations */
+  will-change: transform;
+  contain: layout style paint;
+}
+
+.sv-roadmap-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.sv-roadmap-card:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.sv-roadmap-card--list {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem;
+}
+
+.sv-roadmap-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.sv-roadmap-card--list .sv-roadmap-card__header {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.sv-roadmap-card__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
+}
+
+.sv-roadmap-card__badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+}
+
+.sv-roadmap-card__goal {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sv-roadmap-card--list .sv-roadmap-card__goal {
+  flex: 1;
+  margin: 0 0 0 1rem;
+  -webkit-line-clamp: 1;
+}
+
+.sv-roadmap-card__stats {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.sv-roadmap-card--list .sv-roadmap-card__stats {
+  margin-bottom: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 120px;
+}
+
+.sv-roadmap-card__stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+.sv-roadmap-card__progress {
+  margin-bottom: 1rem;
+}
+
+.sv-roadmap-card--list .sv-roadmap-card__progress {
+  margin-bottom: 0;
+  min-width: 150px;
+}
+
+.sv-roadmap-card__progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.sv-roadmap-card__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #059669);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.sv-roadmap-card__progress-text {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.sv-roadmap-card__date {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-align: right;
+}
+
+.sv-roadmap-card--list .sv-roadmap-card__date {
+  text-align: left;
+  margin-top: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .roadmap-list--grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .sv-roadmap-card--list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .sv-roadmap-card--list .sv-roadmap-card__goal {
+    margin: 0 0 1rem 0;
+    -webkit-line-clamp: 2;
+  }
+  
+  .sv-roadmap-card--list .sv-roadmap-card__stats {
+    flex-direction: row;
+    min-width: auto;
+  }
+  
+  .sv-roadmap-card--list .sv-roadmap-card__progress {
+    min-width: auto;
+  }
+}
+
+/* Performance optimizations */
+.sv-roadmap-card * {
+  will-change: auto;
+}
+
+.sv-roadmap-card {
+  contain: layout style paint;
+}
+
+/* Dark theme support */
+[data-theme='dark'] .sv-roadmap-card {
+  background: rgba(30, 41, 59, 0.1);
+  border-color: rgba(51, 65, 85, 0.3);
+}
+
+[data-theme='dark'] .sv-roadmap-card:hover {
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+[data-theme='dark'] .sv-roadmap-card__title {
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .sv-roadmap-card__goal {
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .sv-roadmap-card__stat {
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .sv-roadmap-card__progress-text {
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .sv-roadmap-card__date {
+  color: #94a3b8;
+}

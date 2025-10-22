@@ -108,7 +108,10 @@ class AuthService {
     } catch (error: unknown) {
       console.error('Google login error:', error);
       const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Google login failed. Please try again.';
+      const data: unknown = (axiosError as any)?.response?.data;
+      const errorMessage = typeof data === 'string'
+        ? data
+        : (axiosError.response?.data as any)?.message || 'Google login failed. Please try again.';
       throw new Error(errorMessage);
     }
   }

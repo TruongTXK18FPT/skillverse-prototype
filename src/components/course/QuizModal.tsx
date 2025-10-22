@@ -6,7 +6,7 @@ import {
   QuizUpdateDTO,
   QuestionType,
 } from "../../data/quizDTOs";
-import { createQuiz, updateQuiz, addQuizQuestion, addQuizOption } from "../../services/quizService";
+import { createQuiz, updateQuiz, addQuizQuestion, addQuizOption, updateQuizQuestion, updateQuizOption, deleteQuizOption, getQuizById } from "../../services/quizService";
 import { useAuth } from "../../context/AuthContext";
 import "../../styles/ModalsEnhanced.css";
 
@@ -25,12 +25,14 @@ interface QuizModalProps {
 }
 
 interface OptionForm {
+  id?: number;
   optionText: string;
   correct: boolean;
   orderIndex: number;
 }
 
 interface QuestionForm {
+  id?: number;
   questionText: string;
   questionType: QuestionType;
   score: number;
@@ -70,7 +72,26 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
         description: quizToEdit.description,
         passScore: quizToEdit.passScore,
       });
-      setQuestions([]); // editing basic info only here
+      // Load existing questions + options for editing
+      getQuizById(quizToEdit.id).then(detail => {
+        const qs: QuestionForm[] = (detail.questions || []).sort((a,b)=> (a.orderIndex??0)-(b.orderIndex??0)).map(q => ({
+          id: q.id,
+          questionText: q.questionText,
+          questionType: q.questionType,
+          score: q.score,
+          orderIndex: q.orderIndex ?? 0,
+          options: (q.options || []).sort((a,b)=> (a.orderIndex??0)-(b.orderIndex??0)).map(o => ({
+            id: o.id,
+            optionText: o.optionText,
+            correct: !!o.correct,
+            orderIndex: o.orderIndex ?? 0
+          }))
+        }));
+        setQuestions(qs);
+        setStep("questions");
+      }).catch(()=>{
+        setQuestions([]);
+      });
     } else {
       setFormData({ title: "", description: "", passScore: 70 });
       setQuestions([]);
@@ -114,6 +135,20 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
     setQuestions(prev => {
       const next = [...prev];
       const q = next[qIndex];
+      
+      // Kiểm tra giới hạn options dựa trên loại câu hỏi
+      if (q.questionType === QuestionType.SHORT_ANSWER) {
+        // Short Answer chỉ có 1 option
+        if (q.options.length >= 1) {
+          return next; // Không add thêm
+        }
+      } else if (q.questionType === QuestionType.TRUE_FALSE) {
+        // True/False chỉ có 2 options
+        if (q.options.length >= 2) {
+          return next; // Không add thêm
+        }
+      }
+      
       const newOpt: OptionForm = { optionText: "", correct: false, orderIndex: q.options.length };
       q.options = [...q.options, newOpt];
       next[qIndex] = { ...q };
@@ -125,6 +160,25 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
     setQuestions(prev => {
       const next = [...prev];
       const q = next[qIndex];
+      
+      // Kiểm tra giới hạn tối thiểu dựa trên loại câu hỏi
+      if (q.questionType === QuestionType.SHORT_ANSWER) {
+        // Short Answer phải có ít nhất 1 option
+        if (q.options.length <= 1) {
+          return next; // Không xóa
+        }
+      } else if (q.questionType === QuestionType.TRUE_FALSE) {
+        // True/False phải có ít nhất 2 options
+        if (q.options.length <= 2) {
+          return next; // Không xóa
+        }
+      } else if (q.questionType === QuestionType.MULTIPLE_CHOICE) {
+        // Multiple Choice phải có ít nhất 2 options
+        if (q.options.length <= 2) {
+          return next; // Không xóa
+        }
+      }
+      
       q.options = q.options.filter((_, i) => i !== oIndex).map((opt, i) => ({ ...opt, orderIndex: i }));
       next[qIndex] = { ...q };
       return next;
@@ -177,6 +231,24 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
       const q = questions[i];
       if (!q.questionText.trim()) return setError(`Câu hỏi ${i + 1} không được để trống`), false;
       if (q.score <= 0) return setError(`Điểm số câu ${i + 1} phải lớn hơn 0`), false;
+
+      if (q.questionType === QuestionType.SHORT_ANSWER) {
+        // Yêu cầu một đáp án ngắn (≤ 2 từ)
+        if (q.options.length !== 1) return setError(`Câu hỏi ${i + 1} (Short Answer) cần đúng 1 đáp án`), false;
+        const ans = (q.options[0].optionText || '').trim();
+        if (!ans) return setError(`Câu hỏi ${i + 1} (Short Answer) chưa nhập đáp án`), false;
+        const words = ans.split(/\s+/).filter(Boolean);
+        if (words.length > 2) return setError(`Đáp án câu ${i + 1} quá dài (tối đa 2 từ)`), false;
+        continue;
+      }
+
+      if (q.questionType === QuestionType.TRUE_FALSE) {
+        if (q.options.length !== 2) return setError(`Câu hỏi ${i + 1} (True/False) phải có đúng 2 lựa chọn`), false;
+        if (q.options.some(o => !o.optionText.trim())) return setError(`True/False: lựa chọn không được trống (câu ${i + 1})`), false;
+        continue;
+      }
+
+      // MULTIPLE_CHOICE
       if (q.options.length < 2) return setError(`Câu hỏi ${i + 1} phải có ít nhất 2 lựa chọn`), false;
       const hasCorrect = q.options.some(o => o.correct);
       if (!hasCorrect) return setError(`Câu hỏi ${i + 1} phải có ít nhất 1 đáp án đúng`), false;
@@ -206,13 +278,44 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
 
     try {
       if (quizToEdit) {
-        // Update basic info only
+        // Update basic info
         const updateData: QuizUpdateDTO = {
           title: formData.title,
           description: formData.description,
           passScore: formData.passScore,
         };
         await updateQuiz(quizToEdit.id, updateData, user.id);
+
+        // Sync questions and options
+        // Strategy: update existing, create new; removal handled by remove buttons invoking delete APIs below
+        for (const q of questions) {
+          let questionId = q.id;
+          if (questionId) {
+            await updateQuizQuestion(questionId, {
+              questionText: q.questionText,
+              questionType: q.questionType,
+              score: q.score,
+              orderIndex: q.orderIndex
+            }, user.id);
+          } else {
+            const createdQ = await addQuizQuestion(quizToEdit.id, {
+              questionText: q.questionText,
+              questionType: q.questionType,
+              score: q.score,
+              orderIndex: q.orderIndex,
+              options: []
+            }, user.id);
+            questionId = createdQ.id;
+          }
+          // options
+          for (const opt of q.options) {
+            if (opt.id) {
+              await updateQuizOption(opt.id, { optionText: opt.optionText, correct: opt.correct }, user.id);
+            } else if (questionId) {
+              await addQuizOption(questionId, { optionText: opt.optionText, correct: opt.correct }, user.id);
+            }
+          }
+        }
       } else {
         // Create base quiz first (no nested questions to avoid backend 500)
         const baseData: QuizCreateDTO = {
@@ -352,8 +455,8 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
                   </button>
                 )}
                 {quizToEdit && (
-                  <button type="submit" className="quiz-modal-submit-btn" disabled={loading}>
-                    {loading ? "Đang lưu..." : "Cập nhật"}
+                  <button type="button" onClick={() => setStep("questions")} className="quiz-modal-submit-btn" disabled={loading}>
+                    Tiếp tục chỉnh sửa câu hỏi
                   </button>
                 )}
               </div>
@@ -361,7 +464,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
           )}
 
           {/* Step 2: Questions (create only) */}
-          {!quizToEdit && step === "questions" && (
+          {step === "questions" && (
             <>
               <div className="quiz-questions-section">
                 <div className="quiz-questions-header">
@@ -412,12 +515,38 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
                         <label className="quiz-form-label">Loại câu hỏi</label>
                         <select
                           value={q.questionType}
-                          onChange={(e) => updateQuestion(qIndex, "questionType", e.target.value as QuestionType)}
+                          onChange={(e) => {
+                            const newType = e.target.value as QuestionType;
+                            
+                            // Reset options based on question type
+                            let newOptions: OptionForm[] = [];
+                            
+                            if (newType === QuestionType.SHORT_ANSWER) {
+                              // Short answer: only one option for correct answer
+                              newOptions = [{ optionText: "", correct: true, orderIndex: 0 }];
+                            } else if (newType === QuestionType.TRUE_FALSE) {
+                              // True/False: exactly 2 options
+                              newOptions = [
+                                { optionText: "True", correct: true, orderIndex: 0 },
+                                { optionText: "False", correct: false, orderIndex: 1 }
+                              ];
+                            } else if (newType === QuestionType.MULTIPLE_CHOICE) {
+                              // Multiple choice: at least 2 options
+                              newOptions = [
+                                { optionText: "", correct: true, orderIndex: 0 },
+                                { optionText: "", correct: false, orderIndex: 1 }
+                              ];
+                            }
+                            
+                            updateQuestion(qIndex, "questionType", newType);
+                            updateQuestion(qIndex, "options", newOptions);
+                          }}
                           className="quiz-form-select"
                           disabled={loading}
                         >
                           <option value={QuestionType.MULTIPLE_CHOICE}>Trắc nghiệm</option>
                           <option value={QuestionType.TRUE_FALSE}>Đúng/Sai</option>
+                          <option value={QuestionType.SHORT_ANSWER}>Điền ngắn</option>
                         </select>
                       </div>
 
@@ -435,9 +564,11 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
                       </div>
                     </div>
 
+                    {/* Multiple Choice and True/False Options */}
+                    {(q.questionType === QuestionType.MULTIPLE_CHOICE || q.questionType === QuestionType.TRUE_FALSE) && (
                     <div className="quiz-options-section">
                       <label className="quiz-form-label" style={{ marginBottom: "0.75rem" }}>
-                        Lựa chọn <span className="required">*</span>
+                        {q.questionType === QuestionType.TRUE_FALSE ? "Lựa chọn Đúng/Sai" : "Lựa chọn"} <span className="required">*</span>
                       </label>
 
                       {q.options.map((opt, oIndex) => (
@@ -457,15 +588,31 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
                             value={opt.optionText}
                             onChange={(e) => updateOption(qIndex, oIndex, "optionText", e.target.value)}
                             className="quiz-option-input"
-                            placeholder={`Lựa chọn ${oIndex + 1}`}
+                            placeholder={q.questionType === QuestionType.TRUE_FALSE ? 
+                              (oIndex === 0 ? "True" : "False") : 
+                              `Lựa chọn ${oIndex + 1}`
+                            }
                             disabled={loading}
                             maxLength={200}
                           />
 
-                          {q.options.length > 2 && (
+                          {/* Show remove button based on question type and option count */}
+                          {((q.questionType === QuestionType.MULTIPLE_CHOICE && q.options.length > 2) ||
+                            (q.questionType === QuestionType.TRUE_FALSE && q.options.length > 2) ||
+                            (q.questionType === QuestionType.SHORT_ANSWER && q.options.length > 1)) && (
                             <button
                               type="button"
-                              onClick={() => removeOption(qIndex, oIndex)}
+                              onClick={async () => {
+                                // If option has id and editing existing quiz, call API delete
+                                if (quizToEdit && q.options[oIndex]?.id) {
+                                  try { 
+                                    await deleteQuizOption(q.options[oIndex].id!, user?.id || 0); 
+                                  } catch (error) {
+                                    console.error('Error deleting option:', error);
+                                  }
+                                }
+                                removeOption(qIndex, oIndex);
+                              }}
                               className="quiz-remove-option-btn"
                               disabled={loading}
                             >
@@ -475,10 +622,64 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
                         </div>
                       ))}
 
-                      <button type="button" onClick={() => addOption(qIndex)} className="quiz-add-option-btn" disabled={loading}>
-                        <Plus size={16} /> Thêm lựa chọn
-                      </button>
+                      {/* Show add option button based on question type and current count */}
+                      {q.questionType === QuestionType.MULTIPLE_CHOICE && (
+                        <button 
+                          type="button" 
+                          onClick={() => addOption(qIndex)} 
+                          className="quiz-add-option-btn" 
+                          disabled={loading}
+                        >
+                          <Plus size={16} /> Thêm lựa chọn
+                        </button>
+                      )}
+                      
+                      {q.questionType === QuestionType.TRUE_FALSE && q.options.length < 2 && (
+                        <button 
+                          type="button" 
+                          onClick={() => addOption(qIndex)} 
+                          className="quiz-add-option-btn" 
+                          disabled={loading}
+                        >
+                          <Plus size={16} /> Thêm lựa chọn
+                        </button>
+                      )}
+                      
+                      {(q.questionType as QuestionType) === QuestionType.SHORT_ANSWER && q.options.length < 1 && (
+                        <button 
+                          type="button" 
+                          onClick={() => addOption(qIndex)} 
+                          className="quiz-add-option-btn" 
+                          disabled={loading}
+                        >
+                          <Plus size={16} /> Thêm đáp án
+                        </button>
+                      )}
                     </div>
+                    )}
+                    {/* Short Answer - Correct Answer Input */}
+                    {q.questionType === QuestionType.SHORT_ANSWER && (
+                      <div className="quiz-form-section">
+                        <label className="quiz-form-label">
+                          Đáp án đúng <span className="required">*</span>
+                          <span className="quiz-form-hint">(Tối đa 2 từ, ví dụ: "động vật", "máy tính")</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="quiz-option-input"
+                          placeholder="Nhập đáp án đúng (ví dụ: động vật)"
+                          value={q.options[0]?.optionText || ''}
+                          onChange={(e) => updateOption(qIndex, 0, 'optionText', e.target.value)}
+                          disabled={loading}
+                          maxLength={50}
+                        />
+                        {!q.options[0] && (
+                          <button type="button" className="quiz-add-option-btn" onClick={() => addOption(qIndex)}>
+                            <Plus size={16}/> Thêm đáp án
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -495,7 +696,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
                   Quay lại
                 </button>
                 <button type="submit" className="quiz-modal-submit-btn" disabled={loading}>
-                  {loading ? "Đang lưu..." : "Tạo quiz"}
+                  {loading ? "Đang lưu..." : (quizToEdit ? "Lưu thay đổi" : "Tạo quiz")}
                 </button>
               </div>
             </>

@@ -1,5 +1,7 @@
 export { default as RoadmapCard } from './RoadmapCard';
 export { default as RoadmapSection } from './RoadmapSection';
+export { default as RoadmapDetailViewer } from './RoadmapDetailViewer';
+export { default as RoadmapList } from './RoadmapList';
 
 // Export types
 export interface RoadmapStep {

@@ -49,22 +49,11 @@
   background: radial-gradient(600px 400px at 70% 30%, rgba(76, 29, 149, 0.35), transparent 60%),
               radial-gradient(500px 500px at 30% 70%, rgba(6, 182, 212, 0.2), transparent 60%),
               radial-gradient(700px 400px at 50% 50%, rgba(99,102,241,0.25), transparent 60%),
-              /* shooting stars layer (thin diagonal streaks) */
-              repeating-linear-gradient(120deg,
-                transparent 0 120px,
-                rgba(255,255,255,0.0) 120px 121px,
-                rgba(255,255,255,0.35) 121px 123px,
-                rgba(255,255,255,0.0) 123px 260px
+              /* shooting stars layer removed for performance */
               );
   filter: blur(20px);
   opacity: 0.85;
-  background-size: auto, auto, auto, 1600px 1600px;
-  animation: sv-meteor 12s linear infinite;
-}
-
-@keyframes sv-meteor {
-  0% { background-position: 0 0, 0 0, 0 0, 0 0; }
-  100% { background-position: 0 0, 0 0, 0 0, -1600px 1600px; }
+  background-size: auto, auto, auto;
 }
 
 @keyframes sv-star-twinkle {

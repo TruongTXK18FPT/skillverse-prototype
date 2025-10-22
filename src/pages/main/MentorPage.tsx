@@ -2153,7 +2153,7 @@ const MentorPage: React.FC = () => {
                 <select name="questionType" className="mentor-form-input" defaultValue={QuestionType.MULTIPLE_CHOICE}>
                   <option value={QuestionType.MULTIPLE_CHOICE}>Multiple Choice</option>
                   <option value={QuestionType.TRUE_FALSE}>True/False</option>
-                  <option value={QuestionType.FILL_BLANK}>Fill in the Blank</option>
+                  <option value={QuestionType.SHORT_ANSWER}>Short Answer</option>
                 </select>
               </div>
               <div className="mentor-form-group">
@@ -2229,6 +2229,142 @@ const MentorPage: React.FC = () => {
                   Cancel
                 </button>
                 <button type="submit" className="mentor-btn-primary">Add Option</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Question Modal */}
+      {_editingQuestion && selectedQuiz && (
+        <div className="mentor-modal-overlay">
+          <div className="mentor-modal-content">
+            <div className="mentor-modal-header">
+              <h2 className="mentor-modal-title">Edit Question</h2>
+              <button className="mentor-modal-close" onClick={() => setEditingQuestion(null)}>
+                <X className="w-6 h-6"/>
+              </button>
+            </div>
+            <form className="mentor-form" onSubmit={async (e) => {
+              e.preventDefault();
+              if (!user || !_editingQuestion) return;
+              const form = e.target as HTMLFormElement;
+              const questionText = (form.elements.namedItem('questionText') as HTMLTextAreaElement).value.trim();
+              const questionType = (form.elements.namedItem('questionType') as HTMLSelectElement).value as QuestionType;
+              const score = Number((form.elements.namedItem('score') as HTMLInputElement).value || '1');
+              if (!questionText) return;
+              try {
+                await updateQuizQuestion(_editingQuestion.id, {
+                  questionText,
+                  questionType,
+                  score,
+                  orderIndex: _editingQuestion.orderIndex
+                }, user.id);
+                // Update UI
+                setSelectedQuiz(prev => {
+                  if (!prev) return prev;
+                  const clone: any = { ...prev, questions: prev.questions.map(q => ({ ...q })) };
+                  const idx = clone.questions.findIndex((q: any) => q.id === _editingQuestion.id);
+                  if (idx >= 0) {
+                    clone.questions[idx].questionText = questionText;
+                    clone.questions[idx].questionType = questionType as any;
+                    clone.questions[idx].score = score;
+                  }
+                  return clone;
+                });
+                setEditingQuestion(null);
+              } catch (err) {
+                console.error('Update question failed', err);
+                setError('Failed to update question: ' + (err as any).message);
+              }
+            }}>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Question Text</label>
+                <textarea name="questionText" className="mentor-form-input" rows={3} defaultValue={_editingQuestion.questionText} required />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Question Type</label>
+                <select name="questionType" className="mentor-form-input" defaultValue={_editingQuestion.questionType}
+                  onChange={(e)=>{
+                    // Nếu câu hỏi đã có option, chặn đổi kiểu (để tránh 500 BE)
+                    const hasOptions = (_editingQuestion.options||[]).length>0;
+                    if (hasOptions) {
+                      e.preventDefault();
+                      (e.target as HTMLSelectElement).value = _editingQuestion.questionType as any;
+                      alert('Không thể đổi loại câu hỏi khi đã có lựa chọn. Hãy xóa lựa chọn trước.');
+                    }
+                  }}
+                >
+                  <option value={QuestionType.MULTIPLE_CHOICE}>Multiple Choice</option>
+                  <option value={QuestionType.TRUE_FALSE}>True/False</option>
+                  <option value={QuestionType.SHORT_ANSWER}>Short Answer</option>
+                </select>
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Score</label>
+                <input name="score" type="number" min={1} className="mentor-form-input" defaultValue={_editingQuestion.score} />
+              </div>
+              <div className="mentor-modal-actions">
+                <button type="button" className="mentor-btn-secondary" onClick={() => setEditingQuestion(null)}>Cancel</button>
+                <button type="submit" className="mentor-btn-primary">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Option Modal */}
+      {_editingOption && selectedQuiz && (
+        <div className="mentor-modal-overlay">
+          <div className="mentor-modal-content">
+            <div className="mentor-modal-header">
+              <h2 className="mentor-modal-title">Edit Option</h2>
+              <button className="mentor-modal-close" onClick={() => setEditingOption(null)}>
+                <X className="w-6 h-6"/>
+              </button>
+            </div>
+            <form className="mentor-form" onSubmit={async (e) => {
+              e.preventDefault();
+              if (!user || !selectedQuiz || !_editingOption) return;
+              const form = e.target as HTMLFormElement;
+              const optionText = (form.elements.namedItem('optionText') as HTMLInputElement).value.trim();
+              const correct = (form.elements.namedItem('correct') as HTMLInputElement).checked;
+              if (!optionText) return;
+              try {
+                await updateQuizOption(_editingOption.id, { optionText, correct }, user.id);
+                // Update UI state locally
+                setSelectedQuiz(prev => {
+                  if (!prev) return prev;
+                  const clone: any = { ...prev, questions: prev.questions.map(q => ({ ...q, options: q.options.map(o => ({ ...o })) })) };
+                  for (const q of clone.questions) {
+                    const idx = q.options.findIndex((o: any) => o.id === _editingOption.id);
+                    if (idx >= 0) {
+                      q.options[idx].optionText = optionText;
+                      q.options[idx].correct = correct;
+                      break;
+                    }
+                  }
+                  return clone;
+                });
+                setEditingOption(null);
+              } catch (err) {
+                console.error('Update option failed', err);
+                setError('Failed to update option: ' + (err as any).message);
+              }
+            }}>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Option Text</label>
+                <input name="optionText" className="mentor-form-input" defaultValue={_editingOption.optionText} />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-checkbox">
+                  <input name="correct" type="checkbox" defaultChecked={_editingOption.correct} />
+                  <span>This is the correct answer</span>
+                </label>
+              </div>
+              <div className="mentor-modal-actions">
+                <button type="button" className="mentor-btn-secondary" onClick={() => setEditingOption(null)}>Cancel</button>
+                <button type="submit" className="mentor-btn-primary">Save</button>
               </div>
             </form>
           </div>

@@ -90,6 +90,61 @@ export const listLessonsByModule = async (
 };
 
 /**
+ * Get next lesson in a module given current lesson
+ */
+export const getNextLesson = async (
+  moduleId: number,
+  currentLessonId: number
+): Promise<LessonSummaryDTO | null> => {
+  const response = await axiosInstance.get<LessonSummaryDTO | null>(
+    `/lessons/modules/${moduleId}/lessons/${currentLessonId}/next`
+  );
+  return response.data ?? null;
+};
+
+/**
+ * Get previous lesson in a module
+ */
+export const getPrevLesson = async (
+  moduleId: number,
+  currentLessonId: number
+): Promise<LessonSummaryDTO | null> => {
+  const response = await axiosInstance.get<LessonSummaryDTO | null>(
+    `/lessons/modules/${moduleId}/lessons/${currentLessonId}/prev`
+  );
+  return response.data ?? null;
+};
+
+/**
+ * Mark lesson completed for a user
+ */
+export const completeLesson = async (
+  moduleId: number,
+  lessonId: number,
+  userId: number
+): Promise<void> => {
+  await axiosInstance.put(
+    `/lessons/modules/${moduleId}/lessons/${lessonId}/complete`,
+    null,
+    { params: { userId } }
+  );
+};
+
+/**
+ * Get module progress for a user
+ */
+export const getModuleProgress = async (
+  moduleId: number,
+  userId: number
+): Promise<{ completedLessons: number; totalLessons: number; percent: number }> => {
+  const response = await axiosInstance.get<{ completedLessons: number; totalLessons: number; percent: number }>(
+    `/modules/${moduleId}/progress`,
+    { params: { userId } }
+  );
+  return response.data;
+};
+
+/**
  * Reorder lessons in a course
  * @param courseId - The ID of the course
  * @param lessonOrders - Array of lesson IDs in the desired order

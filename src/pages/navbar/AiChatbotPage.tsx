@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { Send, User, Sparkles, Loader, MessageSquare, Plus, Trash2, Lock, LogIn, MoreVertical, Edit2 } from 'lucide-react';
+import { Send, User, Sparkles, Loader, MessageSquare, Plus, Trash2, Lock, LogIn, MoreVertical, Edit2, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -50,6 +50,7 @@ Mình có thể giúp bạn:
   const [openMenuSessionId, setOpenMenuSessionId] = useState<number | null>(null);
   const [renamingSessionId, setRenamingSessionId] = useState<number | null>(null);
   const [newTitle, setNewTitle] = useState('');
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { showError, showSuccess } = useToast();
 
@@ -711,7 +712,7 @@ Mình có thể giúp bạn:
       </div>
 
       {/* Sidebar for Chat Sessions - Always Visible */}
-      <div className="chatbot-sidebar">
+      <div className={`chatbot-sidebar ${isMobileSidebarOpen ? 'open' : ''}`}>
         <div className="chatbot-sidebar__header">
           <h2 className="chatbot-sidebar__title">
             <MessageSquare size={20} />
@@ -842,6 +843,12 @@ Mình có thể giúp bạn:
       <div className="chatbot-container">
         {/* Header */}
         <div className="chatbot-header">
+          <button 
+            className="chatbot-mobile-sidebar-toggle"
+            onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+          >
+            <Menu size={20} />
+          </button>
           <div className="chatbot-header__avatar">
             <img src={aiAvatar} alt="Meowl AI" style={{ width: 56, height: 56, borderRadius: '50%' }} />
           </div>

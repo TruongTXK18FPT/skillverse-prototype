@@ -1440,3 +1440,201 @@
     flex-direction: column;
   }
 }
+
+/* ====== ENHANCED MOBILE RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .sv-chatbot-container {
+    padding: 0.5rem;
+  }
+  
+  .sv-chatbot-content {
+    gap: 1rem;
+  }
+  
+  .sv-chatbot-header {
+    margin-bottom: 2rem;
+  }
+  
+  .sv-chatbot-title {
+    font-size: 2rem;
+  }
+  
+  .sv-chatbot-subtitle {
+    font-size: 1rem;
+  }
+  
+  .sv-chatbot-features {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .sv-chatbot-feature {
+    padding: 1rem;
+  }
+  
+  .sv-chatbot-feature-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .sv-chatbot-feature-title {
+    font-size: 1.1rem;
+  }
+  
+  .sv-chatbot-feature-description {
+    font-size: 0.9rem;
+  }
+  
+  .sv-chatbot-cta {
+    padding: 2rem 1rem;
+  }
+  
+  .sv-chatbot-cta-title {
+    font-size: 1.5rem;
+  }
+  
+  .sv-chatbot-cta-description {
+    font-size: 1rem;
+  }
+  
+  .sv-chatbot-cta-button {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+  
+  .sv-chatbot-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .sv-chatbot-stat {
+    padding: 1rem;
+  }
+  
+  .sv-chatbot-stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .sv-chatbot-stat-label {
+    font-size: 0.8rem;
+  }
+  
+  .sv-chatbot-testimonials {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .sv-chatbot-testimonial {
+    padding: 1rem;
+  }
+  
+  .sv-chatbot-testimonial-text {
+    font-size: 0.9rem;
+  }
+  
+  .sv-chatbot-testimonial-author {
+    font-size: 0.8rem;
+  }
+  
+  .sv-chatbot-faq {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .sv-chatbot-faq-item {
+    padding: 1rem;
+  }
+  
+  .sv-chatbot-faq-question {
+    font-size: 1rem;
+  }
+  
+  .sv-chatbot-faq-answer {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sv-chatbot-container {
+    padding: 0.25rem;
+  }
+  
+  .sv-chatbot-title {
+    font-size: 1.75rem;
+  }
+  
+  .sv-chatbot-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .sv-chatbot-feature {
+    padding: 0.75rem;
+  }
+  
+  .sv-chatbot-feature-icon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .sv-chatbot-feature-title {
+    font-size: 1rem;
+  }
+  
+  .sv-chatbot-feature-description {
+    font-size: 0.85rem;
+  }
+  
+  .sv-chatbot-cta {
+    padding: 1.5rem 0.75rem;
+  }
+  
+  .sv-chatbot-cta-title {
+    font-size: 1.25rem;
+  }
+  
+  .sv-chatbot-cta-description {
+    font-size: 0.9rem;
+  }
+  
+  .sv-chatbot-stats {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .sv-chatbot-stat {
+    padding: 0.75rem;
+  }
+  
+  .sv-chatbot-stat-number {
+    font-size: 1.25rem;
+  }
+  
+  .sv-chatbot-stat-label {
+    font-size: 0.75rem;
+  }
+  
+  .sv-chatbot-testimonial {
+    padding: 0.75rem;
+  }
+  
+  .sv-chatbot-testimonial-text {
+    font-size: 0.85rem;
+  }
+  
+  .sv-chatbot-testimonial-author {
+    font-size: 0.75rem;
+  }
+  
+  .sv-chatbot-faq-item {
+    padding: 0.75rem;
+  }
+  
+  .sv-chatbot-faq-question {
+    font-size: 0.9rem;
+  }
+  
+  .sv-chatbot-faq-answer {
+    font-size: 0.85rem;
+  }
+}

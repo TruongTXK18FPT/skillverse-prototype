@@ -14,9 +14,11 @@ import {
   ChevronLeft,
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
 import { getCourse } from '../../services/courseService';
 import { listModulesWithContent } from '../../services/moduleService';
 import { getEnrollment } from '../../services/enrollmentService';
+import { getLessonById, listLessonsByModule, getNextLesson, getPrevLesson, completeLesson, getModuleProgress } from '../../services/lessonService';
 import { CourseDetailDTO } from '../../data/courseDTOs';
 import '../../styles/CourseLearningPage.css';
 
@@ -48,6 +50,7 @@ const LessonIcon = ({ type }: { type: string }) => {
 // --- MAIN COMPONENT --- //
 const CourseLearningPage = () => {
   const { theme } = useTheme();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const courseId: number | undefined = location.state?.courseId;
@@ -60,9 +63,8 @@ const CourseLearningPage = () => {
   const [expandedModules, setExpandedModules] = useState<number[]>([]);
   const [activeLesson, setActiveLesson] = useState<{ moduleId: number | null; lessonId: number | null }>({ moduleId: null, lessonId: null });
   const [activeLessonTitle, setActiveLessonTitle] = useState<string>('');
-  const [lessonStatuses, setLessonStatuses] = useState<{ [key: string]: 'completed' | 'in-progress' }>({
-    
-  });
+  const [lessonStatuses, setLessonStatuses] = useState<{ [key: string]: 'completed' | 'in-progress' }>({});
+  const [progress, setProgress] = useState<{ completedLessons: number; totalLessons: number; percent: number }>({ completedLessons: 0, totalLessons: 0, percent: 0 });
 
   useEffect(() => {
     if (!courseId) { setLoading(false); return; }
@@ -90,14 +92,22 @@ const CourseLearningPage = () => {
       .catch(() => setModulesWithContent([]));
   }, [courseId]);
 
+  // Load module progress when active module/lesson changes
+  useEffect(() => {
+    if (!activeLesson.moduleId) return;
+    const userId = user?.id || 0;
+    if (!userId) return;
+    getModuleProgress(activeLesson.moduleId, userId)
+      .then(setProgress)
+      .catch(() => setProgress({ completedLessons: 0, totalLessons: 0, percent: 0 }));
+  }, [activeLesson.moduleId, user?.id]);
+
   const sortedModules = useMemo(() => {
     const list = course?.modules ? [...course.modules] : [];
     return list.sort((a: any, b: any) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0));
   }, [course]);
 
-  const totalLessons = useMemo(() => 0, []);
-  const completedLessons = useMemo(() => Object.values(lessonStatuses).filter(s => s === 'completed').length, [lessonStatuses]);
-  const progressPercentage = useMemo(() => (completedLessons / totalLessons) * 100, [completedLessons, totalLessons]);
+  const progressPercentage = useMemo(() => progress.percent || 0, [progress]);
 
   const currentLesson = undefined as unknown as { id: number; type: string; title: string; duration?: string } | undefined;
 
@@ -124,21 +134,46 @@ const CourseLearningPage = () => {
     if (foundLesson) setActiveLessonTitle(foundLesson.title);
   };
   
-  const handleMarkAsComplete = () => {
-    const statusKey = `${activeLesson.moduleId}-${activeLesson.lessonId}`;
-    setLessonStatuses(prev => ({ ...prev, [statusKey]: 'completed' }));
-    // Optionally, move to the next lesson automatically
-    handleNextLesson();
+  const handleMarkAsComplete = async () => {
+    if (!activeLesson.moduleId || !activeLesson.lessonId) return;
+    const userId = user?.id || 0;
+    if (!userId) return;
+    try {
+      await completeLesson(activeLesson.moduleId, activeLesson.lessonId, userId);
+      const statusKey = `${activeLesson.moduleId}-${activeLesson.lessonId}`;
+      setLessonStatuses(prev => ({ ...prev, [statusKey]: 'completed' }));
+      const p = await getModuleProgress(activeLesson.moduleId, userId);
+      setProgress(p);
+      // Không tự động chuyển bài: để nút "Tiếp" đảm nhiệm việc điều hướng
+    } catch (error) {
+      console.error('Error completing lesson:', error);
+    }
   };
 
-  const findNextLesson = () => null;
+  const findNextLesson = async (): Promise<{ moduleId: number; lessonId: number } | null> => {
+    if (!activeLesson.moduleId || !activeLesson.lessonId) return null;
+    const next = await getNextLesson(activeLesson.moduleId, activeLesson.lessonId);
+    if (next && typeof next.id === 'number') {
+      return { moduleId: activeLesson.moduleId, lessonId: next.id };
+    }
+    return null;
+  };
 
-  const handleNextLesson = () => {
-    const nextLesson = findNextLesson();
+  const findPrevLesson = async (): Promise<{ moduleId: number; lessonId: number } | null> => {
+    if (!activeLesson.moduleId || !activeLesson.lessonId) return null;
+    const prev = await getPrevLesson(activeLesson.moduleId, activeLesson.lessonId);
+    if (prev && typeof prev.id === 'number') {
+      return { moduleId: activeLesson.moduleId, lessonId: prev.id };
+    }
+    return null;
+  };
+
+  const handleNextLesson = async () => {
+    const nextLesson = await findNextLesson();
     if (nextLesson) {
       handleSelectLesson(nextLesson.moduleId, nextLesson.lessonId);
     } else {
-      alert("Congratulations! You've completed the course!");
+      alert("Chúc mừng! Bạn đã hoàn thành module này.");
     }
   };
 
@@ -254,7 +289,10 @@ const CourseLearningPage = () => {
           </div>
 
           <footer className="course-learning-content-footer">
-            <button className="course-learning-nav-btn prev" disabled>
+            <button className="course-learning-nav-btn prev" onClick={async () => {
+              const prev = await findPrevLesson();
+              if (prev) handleSelectLesson(prev.moduleId, prev.lessonId);
+            }} disabled={!activeLesson.lessonId}>
               <ChevronLeft size={18} />
               <span>Trước</span>
             </button>
@@ -268,7 +306,7 @@ const CourseLearningPage = () => {
                 Đánh dấu hoàn thành
               </span>
             </button>
-            <button className="course-learning-nav-btn next" onClick={handleNextLesson} disabled>
+            <button className="course-learning-nav-btn next" onClick={handleNextLesson} disabled={!activeLesson.lessonId}>
               <span>Tiếp</span>
               <ChevronRight size={18} />
             </button>

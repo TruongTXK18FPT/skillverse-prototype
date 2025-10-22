@@ -248,3 +248,21 @@ export const getUserQuizAttempts = async (
   );
   return response.data;
 };
+
+/**
+ * Submit quiz directly (simplified version)
+ * @param submitData - Quiz submission data
+ * @param userId - The ID of the user submitting
+ * @returns Promise with the result containing score and passed status
+ */
+export const submitQuiz = async (
+  submitData: SubmitQuizDTO,
+  userId: number
+): Promise<{ score: number; passed: boolean; attempt: QuizAttemptDTO }> => {
+  const response = await axiosInstance.post<{ score: number; passed: boolean; attempt: QuizAttemptDTO }>(
+    `/quizzes/${submitData.quizId}/submit`,
+    submitData,
+    { params: { userId } }
+  );
+  return response.data;
+};

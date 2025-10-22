@@ -40,6 +40,7 @@ import BusinessPage from './pages/main/BusinessPage';
 import MentorPage from './pages/main/MentorPage';
 import AdminPage from './pages/main/AdminPage';
 import AiRoadmapPage from './pages/roadmap/AiRoadmapPage';
+import RoadmapDetailPage from './pages/roadmap/RoadmapDetailPage';
 import './styles/App.css';
 import ScrollToTop from './components/scroll/ScrollToTop';
 import CourseDetailPage from './pages/navbar/CourseDetailPage';
@@ -60,7 +61,7 @@ const App = () => {
               <Header />
               <div className="app__galaxy-bg">
                 <div className="cosmic-dust">
-                  {[...Array(30)].map((_, i) => (
+                  {[...Array(40)].map((_, i) => (
                     <div
                       key={i}
                       className="dust-particle"
@@ -68,7 +69,7 @@ const App = () => {
                         left: `${Math.random() * 95}%`,
                         top: `${Math.random() * 95}%`,
                         animationDelay: `${Math.random() * 10}s`,
-                        animationDuration: `${15 + Math.random() * 10}s`
+                        animationDuration: `${20 + Math.random() * 15}s`
                       }}
                     />
                   ))}
@@ -79,6 +80,7 @@ const App = () => {
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/courses" element={<CoursesPage />} />
                     <Route path="/roadmap" element={<AiRoadmapPage />} />
+                    <Route path="/roadmap/:id" element={<RoadmapDetailPage />} />
                     <Route path="/mentorship" element={<MentorshipPage />} />
                     <Route path="/community" element={<CommunityPage />} />
                     <Route path="/community/create" element={<BlogForm />} />

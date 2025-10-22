@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Plus, Sparkles, Loader, BookOpen, Search, Grid3x3, List, Filter, LogIn } from 'lucide-react';
-import { RoadmapGeneratorForm, RoadmapFlow } from '../../components/ai-roadmap';
+import { ArrowLeft, Plus, Search, Grid3x3, List, Filter } from 'lucide-react';
+import { RoadmapGeneratorForm } from '../../components/ai-roadmap';
+import { RoadmapList } from '../../components/roadmap';
 import aiRoadmapService from '../../services/aiRoadmapService';
 import { 
   RoadmapSessionSummary, 
-  RoadmapResponse, 
-  GenerateRoadmapRequest,
-  QuestProgress,
-  ProgressStatus
+  GenerateRoadmapRequest
 } from '../../types/Roadmap';
 import MeowlGuide from '../../components/MeowlGuide';
 import Toast from '../../components/Toast';
@@ -17,15 +15,13 @@ import { useNavigate } from 'react-router-dom';
 import '../../styles/RoadmapPage.css';
 import '../../styles/AiRoadmap.css';
 
-type ViewMode = 'list' | 'generate' | 'view';
+type ViewMode = 'list' | 'generate';
 type DisplayMode = 'grid' | 'list';
 type SortOption = 'newest' | 'oldest' | 'progress' | 'title';
 
-const RoadmapPage = () => {
+const AiRoadmapPage = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [roadmaps, setRoadmaps] = useState<RoadmapSessionSummary[]>([]);
-  const [selectedRoadmap, setSelectedRoadmap] = useState<RoadmapResponse | null>(null);
-  const [progressMap, setProgressMap] = useState<Map<string, QuestProgress>>(new Map());
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingList, setIsLoadingList] = useState(true);
   const { toast, isVisible, showError, showSuccess, hideToast } = useToast();
@@ -77,8 +73,8 @@ const RoadmapPage = () => {
       setIsLoading(true);
       const roadmap = await aiRoadmapService.generateRoadmap(request);
       showSuccess('Success', 'Roadmap generated successfully!');
-      setSelectedRoadmap(roadmap);
-      setViewMode('view');
+      // Navigate to the new roadmap detail page
+      navigate(`/roadmap/${roadmap.sessionId}`);
       // Reload list to include new roadmap
       await loadUserRoadmaps();
     } catch (error: any) {
@@ -117,88 +113,17 @@ const RoadmapPage = () => {
     }
   };
 
-  const handleSelectRoadmap = async (sessionId: number) => {
+  const handleSelectRoadmap = (sessionId: number) => {
     if (!isAuthenticated) {
       showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để xem lộ trình.');
       setTimeout(() => navigate('/login'), 1500);
       return;
     }
 
-    try {
-      setIsLoading(true);
-      const roadmap = await aiRoadmapService.getRoadmapById(sessionId);
-      setSelectedRoadmap(roadmap);
-      
-      // Load progress data from backend response
-      if (roadmap.progress) {
-        const progressMap = new Map<string, QuestProgress>();
-        Object.entries(roadmap.progress).forEach(([questId, progress]) => {
-          progressMap.set(questId, {
-            questId: progress.questId,
-            status: progress.status as ProgressStatus,
-            progress: progress.progress,
-            completedAt: progress.completedAt
-          });
-        });
-        setProgressMap(progressMap);
-      } else {
-        // Clear progress if no data from backend
-        setProgressMap(new Map());
-      }
-      
-      setViewMode('view');
-    } catch (error) {
-      showError('Error', (error as Error).message);
-    } finally {
-      setIsLoading(false);
-    }
+    // Navigate to dedicated roadmap detail page
+    navigate(`/roadmap/${sessionId}`);
   };
 
-  const handleQuestComplete = async (questId: string, completed: boolean) => {
-    if (!selectedRoadmap) return;
-    
-    try {
-      // Update backend first
-      const response = await aiRoadmapService.updateQuestProgress(
-        selectedRoadmap.sessionId, 
-        questId, 
-        completed
-      );
-
-      // Update local state with new progress
-      const newProgress = new Map(progressMap);
-      if (completed) {
-        newProgress.set(questId, {
-          questId,
-          status: ProgressStatus.COMPLETED,
-          progress: 100,
-          completedAt: new Date().toISOString()
-        });
-      } else {
-        newProgress.delete(questId);
-      }
-      setProgressMap(newProgress);
-
-      // Show progress stats
-      const { completedQuests, totalQuests, completionPercentage } = response.stats;
-      if (completed) {
-        showSuccess(
-          'Quest Completed! 🎉', 
-          `${completedQuests}/${totalQuests} quests done (${completionPercentage.toFixed(1)}%)`
-        );
-      } else {
-        showSuccess(
-          'Quest Unchecked', 
-          `${completedQuests}/${totalQuests} quests done (${completionPercentage.toFixed(1)}%)`
-        );
-      }
-
-      // Reload roadmap list to update progress display
-      await loadUserRoadmaps();
-    } catch (error) {
-      showError('Error', (error as Error).message);
-    }
-  };
 
   // Filter and sort roadmaps (V2 API field names)
   const filteredAndSortedRoadmaps = useCallback(() => {
@@ -238,9 +163,8 @@ const RoadmapPage = () => {
   }, [roadmaps, searchQuery, filterExperience, sortBy]);
 
   const handleGoBack = () => {
-    if (viewMode === 'view' || viewMode === 'generate') {
+    if (viewMode === 'generate') {
       setViewMode('list');
-      setSelectedRoadmap(null);
     } else {
       window.history.back();
     }
@@ -248,9 +172,9 @@ const RoadmapPage = () => {
   return (
     <div className="roadmap-page__galaxy-bg">
 
-      {/* Cosmic dust particles */}
+      {/* Cosmic dust particles - Optimized for performance */}
       <div className="cosmic-dust">
-        {[...Array(30)].map((_, i) => (
+        {[...Array(40)].map((_, i) => (
           <div 
             key={i} 
             className="dust-particle"
@@ -258,7 +182,7 @@ const RoadmapPage = () => {
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animationDelay: `${Math.random() * 10}s`,
-              animationDuration: `${15 + Math.random() * 10}s`
+              animationDuration: `${20 + Math.random() * 15}s`
             }}
           />
         ))}
@@ -275,12 +199,10 @@ const RoadmapPage = () => {
             <h1 className="roadmap-page__title">
               {viewMode === 'list' && 'Lộ trình học bằng AI'}
               {viewMode === 'generate' && 'Tạo lộ trình mới'}
-              {viewMode === 'view' && selectedRoadmap?.metadata?.title}
             </h1>
             <p className="roadmap-page__subtitle">
               {viewMode === 'list' && 'Lộ trình học cá nhân hóa, được tạo bởi AI'}
               {viewMode === 'generate' && 'Hãy để AI tạo hành trình học tập phù hợp với bạn'}
-              {viewMode === 'view' && selectedRoadmap?.metadata && `${selectedRoadmap.metadata.duration} • Cấp độ ${selectedRoadmap.metadata.experienceLevel}`}
             </p>
           </div>
 
@@ -355,92 +277,15 @@ const RoadmapPage = () => {
                 </div>
               )}
 
-              {isLoadingList ? (
-                <div className="roadmap-page__loading">
-                  <Loader className="animate-spin" size={48} />
-                  <p>Đang tải lộ trình của bạn...</p>
-                </div>
-              ) : roadmaps.length === 0 ? (
-                <div className="roadmap-page__empty">
-                  <div className="roadmap-empty__icon">
-                    <BookOpen className="h-12 w-12" />
-                  </div>
-                  {!isAuthenticated ? (
-                    <>
-                      <h3>Vui lòng đăng nhập</h3>
-                      <p>Đăng nhập để tạo và quản lý lộ trình học của bạn!</p>
-                      <button 
-                        onClick={() => navigate('/login')}
-                        className="roadmap-empty__create-btn"
-                        style={{ 
-                          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                          boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
-                        }}
-                      >
-                        <LogIn size={20} />
-                        Đăng nhập ngay
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <h3>Chưa có lộ trình nào</h3>
-                      <p>Tạo lộ trình học đầu tiên bằng AI để bắt đầu nhé!</p>
-                      <button 
-                        onClick={handleCreateRoadmap}
-                        className="roadmap-empty__create-btn"
-                      >
-                        <Sparkles size={20} />
-                        Tạo lộ trình đầu tiên
-                      </button>
-                    </>
-                  )}
-                </div>
-              ) : (
-                <div className={`roadmap-page__grid ${displayMode === 'list' ? 'roadmap-page__grid--list' : ''}`}>
-                  {filteredAndSortedRoadmaps().map((roadmap) => (
-                    <button
-                      key={roadmap.sessionId}
-                      className="sv-roadmap-card"
-                      type="button"
-                      onClick={() => handleSelectRoadmap(roadmap.sessionId)}
-                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelectRoadmap(roadmap.sessionId); } }}
-                    >
-                      <div className="sv-roadmap-card__header">
-                        <h3 className="sv-roadmap-card__title">{roadmap.title}</h3>
-                        <span className="sv-roadmap-card__badge">{roadmap.experienceLevel}</span>
-                      </div>
-                      
-                      <p className="sv-roadmap-card__goal">{roadmap.originalGoal}</p>
-                      
-                      <div className="sv-roadmap-card__stats">
-                        <div className="sv-roadmap-card__stat">
-                          <BookOpen size={16} />
-                          <span>{roadmap.totalQuests} Nhiệm vụ</span>
-                        </div>
-                        <div className="sv-roadmap-card__stat">
-                          <span>{roadmap.duration}</span>
-                        </div>
-                      </div>
-
-                      <div className="sv-roadmap-card__progress">
-                        <div className="sv-roadmap-card__progress-bar">
-                          <div
-                            className="sv-roadmap-card__progress-fill"
-                            style={{ width: `${roadmap.progressPercentage}%` }}
-                          />
-                        </div>
-                        <span className="sv-roadmap-card__progress-text">
-                          {roadmap.completedQuests} / {roadmap.totalQuests} đã xong ({roadmap.progressPercentage}%)
-                        </span>
-                      </div>
-
-                      <div className="sv-roadmap-card__date">
-                        Tạo ngày {new Date(roadmap.createdAt).toLocaleDateString('vi-VN')}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
+              <RoadmapList
+                roadmaps={filteredAndSortedRoadmaps()}
+                displayMode={displayMode}
+                onSelectRoadmap={handleSelectRoadmap}
+                isLoading={isLoadingList}
+                isAuthenticated={isAuthenticated}
+                onLoginRedirect={() => navigate('/login')}
+                onCreateRoadmap={handleCreateRoadmap}
+              />
             </div>
           )}
 
@@ -454,111 +299,6 @@ const RoadmapPage = () => {
             />
           )}
 
-          {/* VIEW ROADMAP - Show React Flow (V2 API) */}
-          {viewMode === 'view' && selectedRoadmap && (
-            <div className="roadmap-page__viewer">
-              <div className="roadmap-page__viewer-info">
-                <div className="roadmap-viewer__header">
-                  <h2 className="roadmap-viewer__title">{selectedRoadmap.metadata.title}</h2>
-                  {selectedRoadmap.metadata.difficultyLevel && (
-                    <span className={`roadmap-viewer__badge roadmap-viewer__badge--${selectedRoadmap.metadata.difficultyLevel}`}>
-                      {selectedRoadmap.metadata.difficultyLevel}
-                    </span>
-                  )}
-                </div>
-                
-                <div className="roadmap-viewer__meta">
-                  <div className="roadmap-viewer__meta-grid">
-                    <div className="roadmap-viewer__meta-item">
-                      <span className="roadmap-viewer__meta-label">🎯 Mục tiêu học tập:</span>
-                      <span className="roadmap-viewer__meta-value">{selectedRoadmap.metadata.originalGoal}</span>
-                    </div>
-                    
-                    {selectedRoadmap.metadata.validatedGoal && (
-                      <div className="roadmap-viewer__meta-item">
-                        <span className="roadmap-viewer__meta-label">✅ Mục tiêu đã xác nhận:</span>
-                        <span className="roadmap-viewer__meta-value">{selectedRoadmap.metadata.validatedGoal}</span>
-                      </div>
-                    )}
-                    
-                    <div className="roadmap-viewer__meta-item">
-                      <span className="roadmap-viewer__meta-label">⏱️ Thời lượng:</span>
-                      <span className="roadmap-viewer__meta-value">{selectedRoadmap.metadata.duration}</span>
-                    </div>
-                    
-                    <div className="roadmap-viewer__meta-item">
-                      <span className="roadmap-viewer__meta-label">📊 Cấp độ kinh nghiệm:</span>
-                      <span className="roadmap-viewer__meta-value">{selectedRoadmap.metadata.experienceLevel}</span>
-                    </div>
-                    
-                    <div className="roadmap-viewer__meta-item">
-                      <span className="roadmap-viewer__meta-label">📚 Phong cách học:</span>
-                      <span className="roadmap-viewer__meta-value">{selectedRoadmap.metadata.learningStyle}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {selectedRoadmap.metadata.validationNotes && 
-                 selectedRoadmap.metadata.validationNotes !== 'null' && 
-                 selectedRoadmap.metadata.validationNotes !== 'undefined' && (
-                  <div className="roadmap-viewer__warnings">
-                    <h4>📋 Ghi chú xác thực:</h4>
-                    <ul>
-                      {Array.isArray(selectedRoadmap.metadata.validationNotes) 
-                        ? selectedRoadmap.metadata.validationNotes.map((note, idx) => (
-                            <li key={idx}>{note}</li>
-                          ))
-                        : <li>{selectedRoadmap.metadata.validationNotes}</li>
-                      }
-                    </ul>
-                  </div>
-                )}
-
-                {selectedRoadmap.statistics && (
-                  <div className="roadmap-viewer__stats">
-                    <div className="stat-item">
-                      <span className="stat-label">Tổng số bước:</span>
-                      <span className="stat-value">{selectedRoadmap.statistics.totalNodes}</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">Thời gian ước tính:</span>
-                      <span className="stat-value">{selectedRoadmap.statistics.totalEstimatedHours.toFixed(1)}h</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">Nhiệm vụ chính:</span>
-                      <span className="stat-value">{selectedRoadmap.statistics.mainNodes}</span>
-                    </div>
-                    {selectedRoadmap.statistics.sideNodes > 0 && (
-                      <div className="stat-item">
-                        <span className="stat-label">Nhiệm vụ phụ:</span>
-                        <span className="stat-value">{selectedRoadmap.statistics.sideNodes}</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {selectedRoadmap.learningTips && (
-                  <div className="roadmap-viewer__tips">
-                    <h4>💡 Gợi ý học tập:</h4>
-                    <ul>
-                      {Array.isArray(selectedRoadmap.learningTips) 
-                        ? selectedRoadmap.learningTips.map((tip, idx) => (
-                            <li key={idx}>{tip}</li>
-                          ))
-                        : <li>{selectedRoadmap.learningTips}</li>
-                      }
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              <RoadmapFlow
-                roadmap={selectedRoadmap.roadmap}
-                progressMap={progressMap}
-                onQuestComplete={handleQuestComplete}
-              />
-            </div>
-          )}
         </div>
       </div>
 
@@ -583,4 +323,4 @@ const RoadmapPage = () => {
   );
 };
 
-export default RoadmapPage;
+export default AiRoadmapPage;

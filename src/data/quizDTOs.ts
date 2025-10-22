@@ -3,7 +3,7 @@
 export enum QuestionType {
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
   TRUE_FALSE = 'TRUE_FALSE',
-  FILL_BLANK = 'FILL_BLANK'
+  SHORT_ANSWER = 'SHORT_ANSWER'
 }
 
 // Quiz Detail DTO
@@ -106,6 +106,7 @@ export interface QuizAttemptDTO {
 export interface QuizAnswerDTO {
   questionId: number;
   selectedOptionIds: number[];
+  textAnswer?: string; // For SHORT_ANSWER questions
   isCorrect: boolean;
   scoreEarned: number;
 }
@@ -115,6 +116,7 @@ export interface SubmitQuizDTO {
   quizId: number;
   answers: {
     questionId: number;
-    selectedOptionIds: number[];
+    selectedOptionIds?: number[]; // For MULTIPLE_CHOICE and TRUE_FALSE
+    textAnswer?: string; // For SHORT_ANSWER
   }[];
 }

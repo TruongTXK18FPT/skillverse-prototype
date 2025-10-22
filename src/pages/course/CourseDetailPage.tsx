@@ -17,6 +17,9 @@ import {
 import { getCourse } from '../../services/courseService';
 import { CourseDetailDTO } from '../../data/courseDTOs';
 import { getMentorProfile, MentorProfile } from '../../services/mentorProfileService';
+import { listQuizzesByModule, getQuizById } from '../../services/quizService';
+import { QuizSummaryDTO, QuizDetailDTO } from '../../data/quizDTOs';
+import QuizDisplay from '../../components/course/QuizDisplay';
 import { useToast } from '../../hooks/useToast';
 import '../../styles/CourseDetailPage.css';
 
@@ -27,6 +30,8 @@ const CourseDetailPage: React.FC = () => {
   
   const [course, setCourse] = useState<CourseDetailDTO | null>(null);
   const [mentorProfile, setMentorProfile] = useState<MentorProfile | null>(null);
+  const [quizzes, setQuizzes] = useState<QuizSummaryDTO[]>([]);
+  const [selectedQuiz, setSelectedQuiz] = useState<QuizDetailDTO | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'curriculum' | 'instructor'>('overview');
 
@@ -53,6 +58,20 @@ const CourseDetailPage: React.FC = () => {
           console.log('Mentor profile not found');
         }
       }
+
+      // Load quizzes for all modules
+      if (courseData.modules && courseData.modules.length > 0) {
+        const allQuizzes: QuizSummaryDTO[] = [];
+        for (const module of courseData.modules) {
+          try {
+            const moduleQuizzes = await listQuizzesByModule(module.id);
+            allQuizzes.push(...moduleQuizzes);
+          } catch (error) {
+            console.log(`No quizzes found for module ${module.id}`);
+          }
+        }
+        setQuizzes(allQuizzes);
+      }
     } catch (error) {
       console.error('Error loading course details:', error);
       showError('Error', 'Failed to load course details');
@@ -73,6 +92,29 @@ const CourseDetailPage: React.FC = () => {
       case 'advanced': return 'level-advanced';
       default: return 'level-beginner';
     }
+  };
+
+  const handleStartQuiz = async (quizId: number) => {
+    try {
+      const quizDetail = await getQuizById(quizId);
+      setSelectedQuiz(quizDetail);
+    } catch (error) {
+      console.error('Error loading quiz:', error);
+      showError('Error', 'Failed to load quiz');
+    }
+  };
+
+  const handleQuizComplete = (score: number, passed: boolean) => {
+    setSelectedQuiz(null);
+    if (passed) {
+      showError('Success', `Congratulations! You scored ${score}% and passed the quiz!`);
+    } else {
+      showError('Info', `You scored ${score}%. Try again to improve your score!`);
+    }
+  };
+
+  const handleCloseQuiz = () => {
+    setSelectedQuiz(null);
   };
 
   if (loading) {
@@ -268,6 +310,34 @@ const CourseDetailPage: React.FC = () => {
             ) : (
               <p>No modules available yet.</p>
             )}
+
+            {/* Quizzes Section */}
+            {quizzes.length > 0 && (
+              <div className="quizzes-section">
+                <h3>Course Quizzes</h3>
+                <div className="quizzes-list">
+                  {quizzes.map((quiz) => (
+                    <div key={quiz.id} className="quiz-item">
+                      <div className="quiz-info">
+                        <h4>{quiz.title}</h4>
+                        <p>{quiz.description}</p>
+                        <div className="quiz-meta">
+                          <span className="quiz-questions">{quiz.questionCount} questions</span>
+                          <span className="quiz-pass-score">Pass: {quiz.passScore}%</span>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => handleStartQuiz(quiz.id)}
+                        className="start-quiz-btn"
+                      >
+                        <Play size={16} />
+                        Start Quiz
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -348,6 +418,15 @@ const CourseDetailPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Quiz Display Modal */}
+      {selectedQuiz && (
+        <QuizDisplay
+          quiz={selectedQuiz}
+          onComplete={handleQuizComplete}
+          onClose={handleCloseQuiz}
+        />
+      )}
     </div>
   );
 };
