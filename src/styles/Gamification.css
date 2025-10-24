@@ -123,7 +123,7 @@
 .gamification .btn,
 .gamification .filter-btn,
 .gamification .type-btn,
-.gamification .nav-tab,
+.gamification .gamification-nav-tab,
 .gamification .game-btn,
 .gamification .action-btn {
   font-family: 'Minecraft', 'MinecraftFont',  monospace !important;
@@ -402,6 +402,8 @@
     0 0 20px rgba(0, 255, 136, 0.4),
     inset 0 0 20px rgba(0, 255, 136, 0.1);
   position: relative;
+  width: 100%;
+  justify-content: space-around;
 }
 
 .gamification-nav::before {
@@ -426,7 +428,7 @@
   display: none;
 }
 
-.nav-tab {
+.gamification-nav-tab {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -449,7 +451,7 @@
   letter-spacing: 1px;
 }
 
-.nav-tab::before {
+.gamification-nav-tab::before {
   content: '';
   position: absolute;
   top: 0;
@@ -461,11 +463,11 @@
   transition: left 0.5s ease;
 }
 
-.nav-tab:hover::before {
+.gamification-nav-tab:hover::before {
   left: 100%;
 }
 
-.nav-tab:hover {
+.gamification-nav-tab:hover {
   color: #ffffff;
   transform: translateY(-2px) scale(1.05);
   border-color: #00ff88;
@@ -477,7 +479,7 @@
     rgba(0, 255, 255, 0.2) 100%);
 }
 
-.nav-tab.active {
+.gamification-nav-tab.active {
   background: linear-gradient(135deg, #00ff88, #00ffaa);
   color: #000000;
   border-color: #00ff88;
@@ -488,7 +490,7 @@
   font-weight: 700;
 }
 
-.nav-tab.active::after {
+.gamification-nav-tab.active::after {
   content: '';
   position: absolute;
   bottom: -8px;
@@ -509,7 +511,7 @@
   filter: drop-shadow(0 0 3px currentColor);
 }
 
-.nav-tab.active .tab-icon {
+.gamification-nav-tab.active .tab-icon {
   transform: scale(1.2) rotate(10deg);
   animation: iconPulse 2s ease-in-out infinite;
 }

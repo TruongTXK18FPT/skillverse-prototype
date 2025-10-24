@@ -21,6 +21,7 @@ import DailySpin from '../../components/game/DailySpin';
 import QuizSprint from '../../components/game/QuizSprint';
 import CoinHunt from '../../components/game/CoinHunt';
 import HelpLeaderBoard from '../../components/game/HelpLeaderBoard';
+import MeowlAdventure from '../../components/game/MeowlAdventure';
 import '../../styles/Gamification.css';
 import MeowlGuide from '../../components/MeowlGuide';
 
@@ -94,6 +95,7 @@ const Gamification: React.FC = () => {
   const [showQuizGame, setShowQuizGame] = useState(false);
   const [showCoinHunt, setShowCoinHunt] = useState(false);
   const [showHelpLeaderBoard, setShowHelpLeaderBoard] = useState(false);
+  const [showMeowlAdventure, setShowMeowlAdventure] = useState(false);
   const [selectedGameMode, setSelectedGameMode] = useState<'free' | 'premium'>('free');
   
   // Mock Data - Leaderboard
@@ -347,6 +349,26 @@ const Gamification: React.FC = () => {
         cooldown: 4320, // 3 days
         features: ['Sự kiện VIP riêng', 'Thưởng 2x điểm', 'Ưu tiên support', 'Exclusive badges'],
         requiredPlan: 'pro'
+      }
+    },
+    {
+      id: 'meowl-adventure',
+      title: 'Meowl Adventure',
+      description: 'Chiến đấu với quái vật sử dụng QTE',
+      icon: '🐾',
+      type: 'hunt',
+      difficulty: 'hard',
+      coins: 500,
+      cooldown: 360, // 6 hours
+      available: true,
+      premium: {
+        enabled: true,
+        title: 'Meowl Adventure Pro',
+        description: 'Chế độ nâng cao với phần thưởng lớn hơn',
+        coins: 1500,
+        cooldown: 180, // 3 hours
+        features: ['Xu thưởng 3x cao hơn', 'Quay vòng 2 lần/ngày', 'Kẻ thù nâng cao', 'Bảng xếp hạng exclusive'],
+        requiredPlan: 'premium'
       }
     }
   ]);
@@ -737,7 +759,8 @@ const Gamification: React.FC = () => {
                         if (game.available) {
                           if (game.type === 'spin') setShowSpinWheel(true);
                           if (game.type === 'quiz') setShowQuizGame(true);
-                          if (game.type === 'hunt') setShowCoinHunt(true);
+                          if (game.type === 'hunt' && game.id === 'coin-hunt') setShowCoinHunt(true);
+                          if (game.type === 'hunt' && game.id === 'meowl-adventure') setShowMeowlAdventure(true);
                           if (game.type === 'help') setShowHelpLeaderBoard(true);
                         }
                       }}
@@ -790,6 +813,15 @@ const Gamification: React.FC = () => {
         onCoinsEarned={(coins) => {
           // Handle coins earned from Help Leaderboard
           console.log(`Earned ${coins} coins from Help Leaderboard!`);
+        }}
+      />
+
+      <MeowlAdventure 
+        isOpen={showMeowlAdventure}
+        onClose={() => setShowMeowlAdventure(false)}
+        onCoinsEarned={(coins) => {
+          // Handle coins earned from Meowl Adventure
+          console.log(`Earned ${coins} coins from Meowl Adventure!`);
         }}
       />
     </div>
@@ -896,7 +928,7 @@ const Gamification: React.FC = () => {
           ].map(tab => (
             <button
               key={tab.key}
-              className={`nav-tab ${activeTab === tab.key ? 'active' : ''}`}
+              className={`gamification-nav-tab ${activeTab === tab.key ? 'active' : ''}`}
               onClick={() => setActiveTab(tab.key as 'leaderboard' | 'badges' | 'games' | 'achievements')}
             >
               <tab.icon className="tab-icon" />

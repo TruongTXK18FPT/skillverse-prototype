@@ -1,0 +1,1093 @@
+/* ====== MEOWL ADVENTURE GAME STYLES ====== */
+
+/* Overlay container - covers entire screen */
+.meowl-adventure-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+/* Modal container - positioned at center of overlay */
+.meowl-adventure-modal {
+  position: relative;
+  width: 90vw;
+  max-width: 100%;
+  height: 80vh;
+  /* Position: 80vh height with 10vh offset from top */
+  margin-top: 10vh;
+  background-image: url('/game_asset/meowl_adventure/background_battlefield.png');
+  /* Battlefield background with dirt texture and craters */
+  background-size: cover, 100% 100%;
+  background-position: center;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(139, 69, 19, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ====== HEADER SECTION ====== */
+.meowl-adventure-header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.meowl-adventure-header .header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.meowl-adventure-header h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+
+.meowl-adventure-header p {
+  font-size: 13px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* Close button - positioned at top right of header */
+.meowl-adventure-header .close-btn {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.meowl-adventure-header .close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* ====== GAME START SCREEN ====== */
+.game-start-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Position: fills entire modal */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(17, 24, 39, 0.95) 100%);
+  background-image: url('public/game_asset/meow_adventure/background_battlefield.png');
+  /* Animation backdrop */
+  animation: fadeIn 0.3s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.start-content {
+  text-align: center;
+  padding: 2rem;
+  max-width: 500px;
+  /* Content positioning - centered */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.start-content .game-icon {
+  font-size: 64px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.start-content h4 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rules-list li {
+  font-size: 14px;
+  color: #d1d5db;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  border-left: 2px solid #3b82f6;
+}
+
+.meowladv-start-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.4);
+}
+
+.meowladv-start-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.6);
+}
+
+.meowladv-start-btn:active {
+  transform: translateY(0);
+}
+
+.meowladv-start-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* ====== GAME SCREEN ====== */
+.game-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Position: fills entire modal below header */
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(17, 24, 39, 0.95) 100%);
+  background-image: url('public/game_asset/meow_adventure/background_battlefield.png');
+  animation: fadeIn 0.3s ease;
+}
+
+/* ====== GAME HUD (Heads-Up Display) ====== */
+.game-hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Position: fixed at top of game screen */
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+}
+
+.hud-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.hud-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+
+.hud-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: #3b82f6;
+  font-family: 'Courier New', monospace;
+}
+
+.lives-indicator {
+  color: #ef4444;
+  letter-spacing: 2px;
+  font-size: 18px;
+}
+
+/* ====== GAME CANVAS (Main Play Area) ====== */
+.game-canvas {
+  position: relative;
+  flex: 1;
+  /* Position: fills remaining space after HUD */
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+  border-top: 2px solid rgba(59, 130, 246, 0.3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  /* Ensures flex child respects max-height */
+}
+
+/* ====== ACTION RANGE ZONE ====== */
+.action-range-zone {
+  position: absolute;
+  left: 250px;
+  /* Position: start of action range */
+  top: 0;
+  bottom: 0;
+  width: 150px;
+  /* Position: width of action range (100-250px) */
+  background: linear-gradient(90deg, 
+    rgba(34, 197, 94, 0.05) 0%,
+    rgba(34, 197, 94, 0.15) 50%,
+    rgba(34, 197, 94, 0.05) 100%
+  );
+  border-left: 2px dashed rgba(34, 197, 94, 0.3);
+  border-right: 2px dashed rgba(34, 197, 94, 0.3);
+  z-index: 1;
+  animation: rangePulse 2s ease-in-out infinite;
+  /* Hidden - range indicator disabled */
+}
+
+@keyframes rangePulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* ====== PLAYER CHARACTER ====== */
+.player-character {
+  position: absolute;
+  left: 20px;
+  /* Position: left side of canvas - player spawn area */
+  top: 80%;
+  transform: translateY(-50%) scaleX(-1);
+  /* Position: vertically centered and flipped to face right */
+  width: 400px;
+  height: 400px;
+  animation: playerGlow 2s ease-in-out infinite;
+  animation: playerIdle 1.5s ease-in-out infinite;
+  /* Position: dimensions of player sprite */
+}
+
+.player-sprite {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  z-index: 2;
+}
+
+.player-sword {
+  position: absolute;
+  right: 120px;
+  /* Position: sword held to the right of player */
+  top: 40%;
+  transform: translateY(-50%) rotate(-45deg) scaleX(-1);
+  /* Position: angled sword position, flipped to face right */
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  z-index: 3;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  animation: swordIdle 1.5s ease-in-out infinite;
+  transition: transform 0.2s ease;
+}
+
+/* Sword animation states */
+.player-sword.slash {
+  animation: swordSlash 0.3s ease-out;
+}
+
+.player-sword.parry {
+  animation: swordParry 0.3s ease-out;
+}
+
+.player-character.dodge {
+  animation: playerDodge 0.4s ease-out;
+}
+
+
+@keyframes swordIdle {
+  0%, 100% {
+    transform: translateY(-50%) rotate(-45deg) scaleX(-1);
+  }
+  50% {
+    transform: translateY(-50%) rotate(-35deg) scaleX(-1);
+  }
+}
+
+@keyframes playerIdle {
+  0%, 100% {
+    /* Vị trí bình thường */
+    transform: translateY(-50%) scaleX(-1);
+  }
+  50% {
+    /* Nhấp nhô lên một chút (ví dụ: -53%) */
+    transform: translateY(-53%) scaleX(-1);
+  }
+}
+
+@keyframes swordSlash {
+  0% {
+    transform: translateY(-50%) rotate(-45deg) scaleX(-1);
+  }
+  50% {
+    transform: translateY(-20%) rotate(-80deg) scaleX(-1);
+  }
+  100% {
+    transform: translateY(-50%) rotate(-45deg) scaleX(-1);
+  }
+}
+
+@keyframes swordParry {
+  0% {
+    transform: translateY(-50%) rotate(-45deg) scaleX(-1);
+  }
+  50% {
+    transform: translateY(-80%) rotate(-10deg) scaleX(-1);
+  }
+  100% {
+    transform: translateY(-50%) rotate(-45deg) scaleX(-1);
+  }
+}
+
+@keyframes playerDodge {
+  0% {
+    transform: translateY(-50%) scaleX(-1) translateX(0);
+  }
+  40% {
+    transform: translateY(-50%) scaleX(-1) translateX(-30px);
+  }
+  100% {
+    transform: translateY(-50%) scaleX(-1) translateX(0);
+  }
+}
+
+/* ====== ENEMIES CONTAINER ====== */
+.enemies-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Position: covers entire game canvas for enemy placement */
+}
+
+/* ====== EFFECTS CONTAINER ====== */
+.effects-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Position: covers entire game canvas for effect placement */
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ====== ACTION EFFECTS ====== */
+.action-effect {
+  position: absolute;
+  /* Position: absolute positioning for effect location */
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: effectFadeOut 0.5s ease-out forwards;
+  z-index: 10;
+}
+
+.action-effect img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Red tint for red notes effects */
+.effect-red-tint {
+  filter: hue-rotate(-20deg) saturate(1.5) brightness(1.1);
+}
+
+.effect-slash-blue,
+.effect-slash-red {
+  animation: slashEffect 0.5s ease-out forwards;
+}
+
+.effect-parry-blue,
+.effect-parry-red {
+  animation: parryEffect 0.5s ease-out forwards;
+}
+
+@keyframes effectFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes slashEffect {
+  0% {
+    /* Start invisible, small, and skewed */
+    opacity: 0;
+    transform: scale(0.8) skewX(-15deg);
+  }
+  20% {
+    /* Flash of impact: bright, oversized, and straightened */
+    opacity: 1;
+    transform: scale(1.2) skewX(0deg);
+  }
+  50% {
+    /* Settle at normal size */
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    /* Fade out */
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes parryEffect {
+  0% {
+    opacity: 1;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes dodgeEffect {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-30px) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-60px) scale(1.5);
+  }
+}
+
+/* Air effect particles for dodge */
+.action-effect.dodge-effect::before,
+.action-effect.dodge-effect::after {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  animation: airParticle 0.5s ease-out forwards;
+}
+
+.action-effect.dodge-effect::before {
+  top: -200px;
+  left: -20px;
+  animation-delay: 0s;
+}
+
+.action-effect.dodge-effect::after {
+  top: -200px;
+  left: -40px;
+  animation-delay: 0.1s;
+}
+
+@keyframes airParticle {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50px, -10px) scale(0.3);
+  }
+}
+
+/* ====== NOTE STYLES (Beat Saber Style) ====== */
+.note {
+  position: absolute;
+  /* Position: absolute positioning for x, y coordinates */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  /* Position: rounded square for notes */
+  border: 3px solid;
+  transition: all 0.1s linear;
+  z-index: 4;
+  overflow: visible;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  animation: noteFloat 1s ease-in-out infinite;
+}
+
+.note-icon {
+  font-size: 40px;
+  animation: noteIconPulse 0.8s ease-in-out infinite;
+}
+
+/* Blue notes (D, F keys) */
+.note-blue {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(37, 99, 235, 0.9));
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+}
+
+/* Red notes (J, K keys) */
+.note-red {
+  border-color: #ef4444;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(220, 38, 38, 0.9));
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+
+/* Note in range - highlight */
+.note.in-range {
+  border-width: 4px;
+  box-shadow: 0 0 30px currentColor, inset 0 0 20px rgba(255, 255, 255, 0.3);
+  animation: noteGlow 0.3s ease-in-out infinite;
+  transform: scale(1.1);
+}
+
+@keyframes noteFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(2deg);
+  }
+}
+
+.note.in-range {
+  animation: noteFloat 1s ease-in-out infinite, noteGlow 0.3s ease-in-out infinite;
+}
+
+@keyframes noteIconPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes noteGlow {
+  0%, 100% {
+    box-shadow: 0 0 30px currentColor, inset 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 50px currentColor, inset 0 0 30px rgba(255, 255, 255, 0.5);
+  }
+}
+
+@keyframes rangeGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 30px currentColor, 0 0 40px currentColor;
+  }
+}
+
+/* ====== ACTION INDICATOR ====== */
+.action-indicator {
+  position: absolute;
+  top: -8px;
+  /* Position: above enemy for action display */
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  /* Position: dimensions for indicator */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 50%;
+  /* Position: circular indicator */
+  border: 1px solid #fff;
+  animation: indicatorBounce 0.6s ease-in-out infinite;
+}
+
+.action-parry {
+  background: rgba(59, 130, 246, 0.9);
+  border-color: #3b82f6;
+}
+
+.action-slash {
+  background: rgba(239, 68, 68, 0.9);
+  border-color: #ef4444;
+}
+
+.action-dodge {
+  background: rgba(34, 197, 94, 0.9);
+  border-color: #22c55e;
+}
+
+/* ====== QTE BUTTONS (Quick Time Events) ====== */
+.qte-buttons {
+  position: absolute;
+  bottom: 3%;
+  /* Position: buttons at bottom of canvas - responsive */
+  left: 50%;
+  transform: translateX(-50%);
+  /* Position: horizontally centered */
+  display: flex;
+  gap: 1.5rem;
+  z-index: 20;
+}
+
+.qte-btn {
+  position: relative;
+  /* Position: for overlay effect */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  /* Position: size for button area - responsive */
+  border: 2px solid currentColor;
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.3);
+}
+
+.qte-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+}
+
+.qte-btn:active {
+  transform: scale(0.95);
+}
+
+.qte-key {
+  font-size: 20px;
+  font-weight: 800;
+  color: currentColor;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.qte-action {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 0.25rem;
+}
+
+.qte-score {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.25rem;
+  font-weight: 600;
+}
+
+/* QTE Button color variations - 4 Finger Mode */
+.qte-slash-blue {
+  color: #3b82f6;
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.qte-slash-blue:hover {
+  background: rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 15px 0 rgba(59, 130, 246, 0.4);
+}
+
+.qte-parry-blue {
+  color: #60a5fa;
+  border-color: #60a5fa;
+  background: rgba(96, 165, 250, 0.1);
+}
+
+.qte-parry-blue:hover {
+  background: rgba(96, 165, 250, 0.2);
+  box-shadow: 0 4px 15px 0 rgba(96, 165, 250, 0.4);
+}
+
+.qte-parry-red {
+  color: #f87171;
+  border-color: #f87171;
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.qte-parry-red:hover {
+  background: rgba(248, 113, 113, 0.2);
+  box-shadow: 0 4px 15px 0 rgba(248, 113, 113, 0.4);
+}
+
+.qte-slash-red {
+  color: #ef4444;
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.qte-slash-red:hover {
+  background: rgba(239, 68, 68, 0.2);
+  box-shadow: 0 4px 15px 0 rgba(239, 68, 68, 0.3);
+}
+
+/* 4-finger button layout */
+.qte-4finger {
+  gap: 1rem;
+}
+
+/* ====== GAME END SCREEN ====== */
+.game-end-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Position: fills entire modal */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(31, 41, 55, 0.98) 0%, rgba(17, 24, 39, 0.98) 100%);
+  background-image: url('public/game_asset/meow_adventure/background_battlefield.png');
+  /* Animation backdrop */
+  animation: fadeIn 0.3s ease;
+  z-index: 100;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.end-content {
+  text-align: center;
+  padding: 2rem;
+  max-width: 500px;
+  /* Position: centered content area */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.end-content .end-icon {
+  font-size: 40px;
+  animation: celebrateJump 0.6s ease-in-out 0.3s both;
+}
+
+.end-content h4 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.result-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 0.5rem;
+  border-left: 3px solid #3b82f6;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #d1d5db;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #3b82f6;
+  font-family: 'Courier New', monospace;
+}
+
+.coins-earned {
+  color: #f59e0b;
+  font-size: 20px;
+}
+
+.performance-badge {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+  border-left-color: #a78bfa;
+  justify-content: center;
+  padding: 1rem !important;
+}
+
+.performance {
+  font-size: 18px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.remeowladv-start-btn,
+.exit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.remeowladv-start-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.4);
+}
+
+.remeowladv-start-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.6);
+}
+
+.exit-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #d1d5db;
+}
+
+.exit-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.remeowladv-start-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ====== ANIMATIONS ====== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes playerGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+  }
+}
+
+@keyframes fastPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes enemyFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes indicatorBounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes celebrateJump {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(20px);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ====== RESPONSIVE DESIGN ====== */
+@media (max-width: 768px) {
+  .meowl-adventure-modal {
+    height: 500px;
+    max-width: 95%;
+  }
+
+  .qte-buttons {
+    gap: 0.5rem;
+    bottom: 10px;
+  }
+
+  .qte-btn {
+    width: 75px;
+    height: 75px;
+  }
+
+  .qte-key {
+    font-size: 16px;
+  }
+
+  .qte-action {
+    font-size: 10px;
+  }
+
+  .qte-score {
+    font-size: 9px;
+  }
+
+  .game-hud {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  .hud-item {
+    flex: 0 1 48%;
+    font-size: 12px;
+  }
+
+  .hud-value {
+    font-size: 14px;
+  }
+
+  .start-content,
+  .end-content {
+    padding: 1rem;
+    max-width: 90%;
+  }
+
+  .start-content h4,
+  .end-content h4 {
+    font-size: 18px;
+  }
+
+  .rules-list li {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .meowl-adventure-modal {
+    height: 400px;
+    border-radius: 0.5rem;
+  }
+
+  .meowl-adventure-header {
+    padding: 1rem;
+  }
+
+  .meowl-adventure-header h3 {
+    font-size: 18px;
+  }
+
+  .game-hud {
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem;
+  }
+
+  .hud-item {
+    flex: 1;
+    justify-content: space-between;
+  }
+
+  .qte-buttons {
+    gap: 0.25rem;
+    bottom: 5px;
+  }
+
+  .qte-btn {
+    width: 60px;
+    height: 60px;
+  }
+
+  .player-character {
+    width: 40px;
+    height: 40px;
+    font-size: 32px;
+  }
+}
