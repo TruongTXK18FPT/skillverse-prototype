@@ -513,6 +513,15 @@ Mình có thể giúp bạn:
     try {
       // Let AI handle auto-correction for IELTS scores (no frontend validation)
       // Frontend validation removed to allow AI to auto-correct IELTS 10.0 → 9.0
+      // Frontend quick validations to avoid wasting tokens
+      const lower = userMessage.content.toLowerCase();
+      if (/ielts\s*(?:score|band)?\s*([0-9]+(?:\.[0-9])?)/i.test(lower)) {
+        const m = /ielts\s*(?:score|band)?\s*([0-9]+(?:\.[0-9])?)/i.exec(lower);
+        const score = m ? parseFloat(m[1]) : 0;
+        if (score > 9.0) {
+          throw new Error('Điểm IELTS tối đa là 9.0. Vui lòng nhập mục tiêu hợp lệ.');
+        }
+      }
       const response = await aiChatbotService.sendMessage({
         // Send user message directly without any prefix - system prompt handles language
         message: userMessage.content,

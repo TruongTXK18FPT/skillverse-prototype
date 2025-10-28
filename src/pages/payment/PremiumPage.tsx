@@ -15,6 +15,7 @@ const PremiumPage = () => {
   const [processing, setProcessing] = useState(false);
   const [currentSub, setCurrentSub] = useState<UserSubscriptionResponse | null>(null);
   const [hasActive, setHasActive] = useState<boolean>(false);
+  const [hasActivePaid, setHasActivePaid] = useState<boolean>(false);
 
   
   // TODO: Get user email from auth context
