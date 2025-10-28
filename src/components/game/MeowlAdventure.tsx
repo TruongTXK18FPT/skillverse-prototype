@@ -150,6 +150,18 @@ const MeowlAdventure: React.FC<MeowlAdventureProps> = ({ isOpen, onClose, onCoin
         enemiesKilled: prev.enemiesKilled + 1
       }));
 
+      // Add sword/player animation
+      const swordElement = document.querySelector('.player-sword');
+      if (swordElement) {
+        if (action.includes('slash')) {
+          swordElement.classList.add('slash');
+          setTimeout(() => swordElement.classList.remove('slash'), 300);
+        } else if (action.includes('parry')) {
+          swordElement.classList.add('parry');
+          setTimeout(() => swordElement.classList.remove('parry'), 300);
+        }
+      }
+
       // Add action effect at note position
       setActionEffects(prev => [...prev, {
         id: `effect-${Date.now()}`,

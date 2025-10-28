@@ -548,48 +548,58 @@
   }
 }
 
-/* ====== NOTE STYLES (Beat Saber Style) ====== */
+/* ====== NOTE STYLES (Glowing Neon Squares) ====== */
 .note {
   position: absolute;
   /* Position: absolute positioning for x, y coordinates */
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 8px;
   /* Position: rounded square for notes */
   border: 3px solid;
   transition: all 0.1s linear;
   z-index: 4;
   overflow: visible;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
   animation: noteFloat 1s ease-in-out infinite;
 }
 
 .note-icon {
   font-size: 40px;
   animation: noteIconPulse 0.8s ease-in-out infinite;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
-/* Blue notes (D, F keys) */
+/* Blue neon notes (D, F keys) */
 .note-blue {
-  border-color: #3b82f6;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(37, 99, 235, 0.9));
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+  border-color: #00ff88;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.3), rgba(0, 255, 136, 0.2));
+  box-shadow: 
+    0 0 10px rgba(0, 255, 136, 0.6),
+    0 0 20px rgba(0, 255, 136, 0.4),
+    inset 0 0 10px rgba(0, 255, 136, 0.2);
 }
 
-/* Red notes (J, K keys) */
+/* Red neon notes (J, K keys) */
 .note-red {
-  border-color: #ef4444;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(220, 38, 38, 0.9));
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+  border-color: #ff0080;
+  background: linear-gradient(135deg, rgba(255, 0, 128, 0.3), rgba(255, 0, 128, 0.2));
+  box-shadow: 
+    0 0 10px rgba(255, 0, 128, 0.6),
+    0 0 20px rgba(255, 0, 128, 0.4),
+    inset 0 0 10px rgba(255, 0, 128, 0.2);
 }
 
-/* Note in range - highlight */
+/* Note in range - highlight with stronger glow */
 .note.in-range {
   border-width: 4px;
-  box-shadow: 0 0 30px currentColor, inset 0 0 20px rgba(255, 255, 255, 0.3);
-  animation: noteGlow 0.3s ease-in-out infinite;
-  transform: scale(1.1);
+  filter: brightness(1.3);
+  box-shadow: 
+    0 0 20px currentColor,
+    0 0 40px currentColor,
+    inset 0 0 15px rgba(255, 255, 255, 0.4);
+  animation: noteGlowIntense 0.2s ease-in-out infinite;
+  transform: scale(1.15);
 }
 
 @keyframes noteFloat {
@@ -597,29 +607,33 @@
     transform: translateY(0) rotate(0deg);
   }
   50% {
-    transform: translateY(-5px) rotate(2deg);
+    transform: translateY(-8px) rotate(1deg);
   }
-}
-
-.note.in-range {
-  animation: noteFloat 1s ease-in-out infinite, noteGlow 0.3s ease-in-out infinite;
 }
 
 @keyframes noteIconPulse {
   0%, 100% {
     transform: scale(1);
+    opacity: 0.9;
   }
   50% {
-    transform: scale(1.1);
+    transform: scale(1.15);
+    opacity: 1;
   }
 }
 
-@keyframes noteGlow {
+@keyframes noteGlowIntense {
   0%, 100% {
-    box-shadow: 0 0 30px currentColor, inset 0 0 20px rgba(255, 255, 255, 0.3);
+    box-shadow: 
+      0 0 20px currentColor,
+      0 0 40px currentColor,
+      inset 0 0 15px rgba(255, 255, 255, 0.4);
   }
   50% {
-    box-shadow: 0 0 50px currentColor, inset 0 0 30px rgba(255, 255, 255, 0.5);
+    box-shadow: 
+      0 0 30px currentColor,
+      0 0 60px currentColor,
+      inset 0 0 25px rgba(255, 255, 255, 0.6);
   }
 }
 
