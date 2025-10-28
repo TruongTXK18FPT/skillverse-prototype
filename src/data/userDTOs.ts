@@ -111,6 +111,13 @@ export interface BusinessRegistrationRequest {
   taxId: string;
   password: string;
   confirmPassword: string;
+  // Contact Person Information
+  contactPersonName: string; // Full name of contact person
+  contactPersonPhone?: string; // Optional phone number
+  contactPersonPosition: string; // Position/Title (CEO, HR Manager, etc.)
+  // Company Extended Information
+  companySize: string; // Company size range (1-10, 11-50, 51-200, 200+)
+  industry: string; // Industry/Sector (IT, Education, Healthcare, etc.)
   // File uploads will be handled separately in FormData
 }
 

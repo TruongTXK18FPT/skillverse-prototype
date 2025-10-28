@@ -247,7 +247,7 @@ class AuthService {
       return `${baseUrl}/admin`;
     } else if (roles.includes('MENTOR')) {
       return `${baseUrl}/mentor`;
-    } else if (roles.includes('BUSINESS')) {
+    } else if (roles.includes('RECRUITER')) {
       return `${baseUrl}/business`;
     } else {
       return `${baseUrl}/dashboard`;

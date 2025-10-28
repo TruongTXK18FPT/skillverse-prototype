@@ -23,11 +23,21 @@ class BusinessService {
       formData.append('email', businessData.businessEmail);
       formData.append('password', businessData.password);
       formData.append('confirmPassword', businessData.confirmPassword);
-      formData.append('fullName', businessData.companyName); // Using companyName as fullName
+      formData.append('fullName', businessData.contactPersonName); // Contact person name (NOT company name!)
       formData.append('companyName', businessData.companyName);
       formData.append('companyWebsite', businessData.companyWebsite);
       formData.append('companyAddress', businessData.businessAddress);
       formData.append('taxCodeOrBusinessRegistrationNumber', businessData.taxId);
+      
+      // Contact Person Information
+      if (businessData.contactPersonPhone) {
+        formData.append('phone', businessData.contactPersonPhone);
+      }
+      formData.append('contactPersonPosition', businessData.contactPersonPosition);
+      
+      // Company Extended Information
+      formData.append('companySize', businessData.companySize);
+      formData.append('industry', businessData.industry);
       
       // Add files if provided
       if (files?.documents && files.documents.length > 0) {

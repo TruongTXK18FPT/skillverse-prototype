@@ -16,6 +16,13 @@ interface BusinessFormData {
   taxId: string;
   password: string;
   confirmPassword: string;
+  // Contact Person Information
+  contactPersonName: string;
+  contactPersonPhone: string;
+  contactPersonPosition: string;
+  // Company Extended Information
+  companySize: string;
+  industry: string;
 }
 
 const BusinessRegistrationForm: React.FC = () => {
@@ -30,7 +37,12 @@ const BusinessRegistrationForm: React.FC = () => {
     businessAddress: '',
     taxId: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    contactPersonName: '',
+    contactPersonPhone: '',
+    contactPersonPosition: '',
+    companySize: '',
+    industry: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
@@ -40,12 +52,12 @@ const BusinessRegistrationForm: React.FC = () => {
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) return false;
+    return emailRegex.test(email);
     
-    // Check if it's not a common personal email domain
-    const personalDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com'];
-    const domain = email.split('@')[1]?.toLowerCase();
-    return !personalDomains.includes(domain);
+    // TEMPORARILY DISABLED for testing - allow personal emails
+    // const personalDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com'];
+    // const domain = email.split('@')[1]?.toLowerCase();
+    // return !personalDomains.includes(domain);
   };
 
   const validateForm = () => {
@@ -73,6 +85,30 @@ const BusinessRegistrationForm: React.FC = () => {
 
     if (!formData.taxId.trim()) {
       newErrors.taxId = 'Vui lòng nhập mã số thuế';
+    } else if (!/^[0-9]{10}$|^[0-9]{13}$/.test(formData.taxId)) {
+      newErrors.taxId = 'Mã số thuế phải là 10 chữ số (trụ sở chính) hoặc 13 chữ số (chi nhánh)';
+    }
+
+    // Contact Person Information
+    if (!formData.contactPersonName.trim()) {
+      newErrors.contactPersonName = 'Vui lòng nhập tên người liên hệ';
+    }
+
+    if (formData.contactPersonPhone && !/^[+]?[0-9]{10,15}$/.test(formData.contactPersonPhone)) {
+      newErrors.contactPersonPhone = 'Số điện thoại không hợp lệ (10-15 chữ số)';
+    }
+
+    if (!formData.contactPersonPosition.trim()) {
+      newErrors.contactPersonPosition = 'Vui lòng nhập chức vụ người liên hệ';
+    }
+
+    // Company Extended Information
+    if (!formData.companySize) {
+      newErrors.companySize = 'Vui lòng chọn quy mô công ty';
+    }
+
+    if (!formData.industry.trim()) {
+      newErrors.industry = 'Vui lòng nhập ngành nghề';
     }
 
     if (!formData.password) {
@@ -95,7 +131,7 @@ const BusinessRegistrationForm: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     if (errors[name]) {
@@ -137,7 +173,14 @@ const BusinessRegistrationForm: React.FC = () => {
         businessAddress: formData.businessAddress,
         taxId: formData.taxId,
         password: formData.password,
-        confirmPassword: formData.confirmPassword
+        confirmPassword: formData.confirmPassword,
+        // Contact Person Information
+        contactPersonName: formData.contactPersonName,
+        contactPersonPhone: formData.contactPersonPhone || undefined,
+        contactPersonPosition: formData.contactPersonPosition,
+        // Company Extended Information
+        companySize: formData.companySize,
+        industry: formData.industry
       };
 
       // Prepare files
@@ -264,10 +307,89 @@ const BusinessRegistrationForm: React.FC = () => {
                 name="taxId"
                 value={formData.taxId}
                 onChange={handleInputChange}
-                placeholder="Nhập mã số thuế"
+                placeholder="Nhập mã số thuế (10 hoặc 13 chữ số)"
                 className={errors.taxId ? 'error' : ''}
               />
               {errors.taxId && <span className="error-message">{errors.taxId}</span>}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="companySize">Quy Mô Công Ty *</label>
+              <select
+                id="companySize"
+                name="companySize"
+                value={formData.companySize}
+                onChange={handleInputChange}
+                className={errors.companySize ? 'error' : ''}
+              >
+                <option value="">-- Chọn quy mô --</option>
+                <option value="1-10">1-10 nhân viên</option>
+                <option value="11-50">11-50 nhân viên</option>
+                <option value="51-200">51-200 nhân viên</option>
+                <option value="201-500">201-500 nhân viên</option>
+                <option value="500+">Trên 500 nhân viên</option>
+              </select>
+              {errors.companySize && <span className="error-message">{errors.companySize}</span>}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="industry">Ngành Nghề *</label>
+              <input
+                type="text"
+                id="industry"
+                name="industry"
+                value={formData.industry}
+                onChange={handleInputChange}
+                placeholder="Ví dụ: Công nghệ thông tin, Giáo dục, Y tế..."
+                className={errors.industry ? 'error' : ''}
+              />
+              {errors.industry && <span className="error-message">{errors.industry}</span>}
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h3>Thông Tin Người Liên Hệ</h3>
+            
+            <div className="form-group">
+              <label htmlFor="contactPersonName">Tên Người Liên Hệ *</label>
+              <input
+                type="text"
+                id="contactPersonName"
+                name="contactPersonName"
+                value={formData.contactPersonName}
+                onChange={handleInputChange}
+                placeholder="Nhập tên người liên hệ"
+                className={errors.contactPersonName ? 'error' : ''}
+              />
+              {errors.contactPersonName && <span className="error-message">{errors.contactPersonName}</span>}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="contactPersonPhone">Số Điện Thoại (Tùy chọn)</label>
+              <input
+                type="tel"
+                id="contactPersonPhone"
+                name="contactPersonPhone"
+                value={formData.contactPersonPhone}
+                onChange={handleInputChange}
+                placeholder="+84912345678 hoặc 0912345678"
+                className={errors.contactPersonPhone ? 'error' : ''}
+              />
+              {errors.contactPersonPhone && <span className="error-message">{errors.contactPersonPhone}</span>}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="contactPersonPosition">Chức Vụ *</label>
+              <input
+                type="text"
+                id="contactPersonPosition"
+                name="contactPersonPosition"
+                value={formData.contactPersonPosition}
+                onChange={handleInputChange}
+                placeholder="Ví dụ: CEO, HR Manager, Giám đốc nhân sự..."
+                className={errors.contactPersonPosition ? 'error' : ''}
+              />
+              {errors.contactPersonPosition && <span className="error-message">{errors.contactPersonPosition}</span>}
             </div>
           </div>
 
