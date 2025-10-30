@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider } from './context/AuthContext';
-import { MentorRoute, AdminRoute } from './components/ProtectedRoute';
+import { MentorRoute, AdminRoute, RecruiterRoute } from './components/ProtectedRoute';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/main/HomePage';
@@ -49,6 +49,7 @@ import ProfilePage from './pages/profile/ProfilePage';
 import MentorProfilePage from './pages/mentor/MentorProfilePage';
 import RecruiterProfilePage from './pages/business/RecruiterProfilePage';
 import ProfileRouter from './components/ProfileRouter';
+import MyApplicationsPage from './pages/user/MyApplicationsPage';
 
 const App = () => {
   return (
@@ -121,9 +122,16 @@ const App = () => {
                     <Route path="/help-center" element={<HelpCenter />} />
                     <Route path="/terms-of-service" element={<TermOfService />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                    <Route path="/business" element={<BusinessPage />} />
+                    
+                    {/* User My Applications */}
+                    <Route path="/my-applications" element={<MyApplicationsPage />} />
 
                     {/* Protected Routes */}
+                    <Route path="/business" element={
+                      <RecruiterRoute>
+                        <BusinessPage />
+                      </RecruiterRoute>
+                    } />
                     <Route path="/mentor" element={
                       <MentorRoute>
                         <MentorPage />

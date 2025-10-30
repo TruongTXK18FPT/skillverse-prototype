@@ -23,7 +23,8 @@ import {
   Calendar,
   Map,
   BookOpen,
-  Shield
+  Shield,
+  Building2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -376,6 +377,18 @@ const Header: React.FC = () => {
                     <button onClick={handleMentor} className="dropdown-item">
                       <BookOpen size={16} />
                       <span>Giảng Viên</span>
+                    </button>
+                  )}
+                  {user.roles.includes('RECRUITER') && (
+                    <button onClick={() => navigate('/business')} className="dropdown-item">
+                      <Building2 size={16} />
+                      <span>Doanh Nghiệp</span>
+                    </button>
+                  )}
+                  {user.roles.includes('USER') && (
+                    <button onClick={() => navigate('/my-applications')} className="dropdown-item">
+                      <Briefcase size={16} />
+                      <span>Đơn Ứng Tuyển</span>
                     </button>
                   )}
                   <button onClick={handleProfile} className="dropdown-item">

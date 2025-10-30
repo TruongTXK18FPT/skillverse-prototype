@@ -67,6 +67,15 @@ export const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }
   );
 };
 
+// Convenience wrapper for RECRUITER-only routes (Business page)
+export const RecruiterRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <ProtectedRoute allowedRoles={['RECRUITER']}>
+      {children}
+    </ProtectedRoute>
+  );
+};
+
 // Convenience wrapper for authenticated routes (no specific role required)
 export const AuthenticatedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (

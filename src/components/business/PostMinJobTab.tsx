@@ -1,33 +1,69 @@
 import React, { useState } from 'react';
-import { MinJob } from '../../pages/main/BusinessPage';
+import jobService from '../../services/jobService';
+import { CreateJobRequest } from '../../data/jobDTOs';
+import { useToast } from '../../hooks/useToast';
 import './PostMinJobTab.css';
 
+// Popular skills across multiple industries
+const POPULAR_SKILLS = [
+  // IT & Programming
+  'Java', 'Python', 'JavaScript', 'TypeScript', 'React', 'Node.js', 'Angular', 'Vue.js',
+  'Spring Boot', 'Django', 'Laravel', 'PHP', 'C#', '.NET', 'Go', 'Rust', 'Swift', 'Kotlin',
+  'React Native', 'Flutter', 'iOS', 'Android', 'HTML', 'CSS', 'Sass', 'Tailwind CSS',
+  'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'Oracle', 'SQL Server', 'Firebase',
+  'AWS', 'Azure', 'Google Cloud', 'Docker', 'Kubernetes', 'CI/CD', 'Git', 'DevOps',
+  'REST API', 'GraphQL', 'Microservices', 'Agile', 'Scrum', 'Testing', 'Security',
+  
+  // Design & Creative
+  'UI/UX Design', 'Graphic Design', 'Photoshop', 'Illustrator', 'Figma', 'Sketch',
+  'Adobe XD', 'InDesign', 'After Effects', 'Premiere Pro', 'Video Editing', '3D Modeling',
+  'Animation', 'Blender', 'Maya', 'Unity', 'Unreal Engine', 'Game Design',
+  
+  // Marketing & Business
+  'Digital Marketing', 'SEO', 'SEM', 'Content Marketing', 'Social Media Marketing',
+  'Email Marketing', 'Google Ads', 'Facebook Ads', 'Analytics', 'Copywriting',
+  'Brand Strategy', 'Market Research', 'Product Management', 'Business Analysis',
+  'Sales', 'Customer Service', 'CRM', 'Project Management', 'Leadership',
+  
+  // Finance & HR
+  'Accounting', 'Finance', 'Excel', 'Financial Analysis', 'Bookkeeping', 'Tax',
+  'HR Management', 'Recruitment', 'Training', 'Payroll', 'Legal', 'Compliance',
+  
+  // Other
+  'Data Analysis', 'Data Science', 'Machine Learning', 'AI', 'Statistics',
+  'Translation', 'Writing', 'Teaching', 'Consulting', 'Architecture', 'Engineering'
+];
+
 interface PostMinJobTabProps {
-  onCreateJob: (job: Omit<MinJob, 'id' | 'status' | 'applicants' | 'createdAt'>) => void;
+  onJobCreated?: () => void; // Callback after successful creation
 }
 
-const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onCreateJob }) => {
+const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onJobCreated }) => {
+  const { showSuccess, showError } = useToast();
+  
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     skills: [] as string[],
-    budget: '',
-    deadline: ''
+    minBudget: '',
+    maxBudget: '',
+    deadline: '',
+    isRemote: true,
+    location: ''
   });
   const [skillInput, setSkillInput] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const availableSkills = [
-    'React', 'TypeScript', 'JavaScript', 'Node.js', 'Python', 'Java',
-    'CSS', 'HTML', 'Vue.js', 'Angular', 'React Native', 'Flutter',
-    'Django', 'Laravel', 'PHP', 'MySQL', 'PostgreSQL', 'MongoDB',
-    'AWS', 'Docker', 'Kubernetes', 'Git', 'Firebase', 'GraphQL',
-    'UI/UX Design', 'Photoshop', 'Figma', 'Unity', 'C#', 'Swift'
-  ];
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: type === 'checkbox' ? checked : value 
+    }));
+    
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
@@ -35,12 +71,17 @@ const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onCreateJob }) => {
   };
 
   const handleSkillAdd = (skill: string) => {
-    if (skill.trim() && !formData.skills.includes(skill.trim())) {
+    const normalizedSkill = skill.trim().toLowerCase();
+    if (normalizedSkill && !formData.skills.map(s => s.toLowerCase()).includes(normalizedSkill)) {
       setFormData(prev => ({
         ...prev,
-        skills: [...prev.skills, skill.trim()]
+        skills: [...prev.skills, skill.trim()] // Keep original casing for display
       }));
       setSkillInput('');
+      // Clear skills error
+      if (errors.skills) {
+        setErrors(prev => ({ ...prev, skills: '' }));
+      }
     }
   };
 
@@ -70,47 +111,94 @@ const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onCreateJob }) => {
     if (formData.skills.length === 0) {
       newErrors.skills = 'Cần ít nhất một kỹ năng';
     }
-    if (!formData.budget || parseFloat(formData.budget) <= 0) {
-      newErrors.budget = 'Ngân sách hợp lệ là bắt buộc';
+    
+    const minBudget = parseFloat(formData.minBudget);
+    const maxBudget = parseFloat(formData.maxBudget);
+    
+    if (!formData.minBudget || minBudget <= 0) {
+      newErrors.minBudget = 'Ngân sách tối thiểu hợp lệ là bắt buộc';
     }
+    if (!formData.maxBudget || maxBudget <= 0) {
+      newErrors.maxBudget = 'Ngân sách tối đa hợp lệ là bắt buộc';
+    }
+    if (formData.minBudget && formData.maxBudget && maxBudget < minBudget) {
+      newErrors.maxBudget = 'Ngân sách tối đa phải lớn hơn hoặc bằng ngân sách tối thiểu';
+    }
+    
     if (!formData.deadline) {
       newErrors.deadline = 'Hạn chót là bắt buộc';
     } else {
-      const today = new Date().toISOString().split('T')[0];
-      if (formData.deadline <= today) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const deadlineDate = new Date(formData.deadline);
+      if (deadlineDate <= today) {
         newErrors.deadline = 'Hạn chót phải ở tương lai';
       }
+    }
+    
+    if (!formData.isRemote && !formData.location.trim()) {
+      newErrors.location = 'Địa điểm làm việc là bắt buộc khi không làm từ xa';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      onCreateJob({
+    
+    if (!validateForm()) {
+      showError('Lỗi Xác Thực', 'Vui lòng điền đầy đủ thông tin hợp lệ');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const jobData: CreateJobRequest = {
         title: formData.title.trim(),
         description: formData.description.trim(),
-        skills: formData.skills,
-        budget: parseFloat(formData.budget),
-        deadline: formData.deadline
-      });
+        requiredSkills: formData.skills, // Will be normalized in backend
+        minBudget: parseFloat(formData.minBudget),
+        maxBudget: parseFloat(formData.maxBudget),
+        deadline: formData.deadline,
+        isRemote: formData.isRemote,
+        location: formData.isRemote ? null : formData.location.trim()
+      };
+
+      await jobService.createJob(jobData);
+      
+      showSuccess('Thành Công', '🎉 Công việc đã được tạo thành công!');
+      
       // Reset form
       setFormData({
         title: '',
         description: '',
         skills: [],
-        budget: '',
-        deadline: ''
+        minBudget: '',
+        maxBudget: '',
+        deadline: '',
+        isRemote: true,
+        location: ''
       });
       setSkillInput('');
+      
+      // Call callback if provided
+      if (onJobCreated) {
+        onJobCreated();
+      }
+    } catch (error) {
+      console.error('Error creating job:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Không thể tạo công việc. Vui lòng thử lại.';
+      showError('Lỗi Tạo Công Việc', errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const filteredSkills = availableSkills.filter(skill =>
+  const filteredSkills = POPULAR_SKILLS.filter(skill =>
     skill.toLowerCase().includes(skillInput.toLowerCase()) &&
-    !formData.skills.includes(skill)
+    !formData.skills.map(s => s.toLowerCase()).includes(skill.toLowerCase())
   );
 
   return (
@@ -195,38 +283,80 @@ const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onCreateJob }) => {
 
         <div className="pmjt-form-row">
           <div className="pmjt-form-group">
-            <label htmlFor="budget">Ngân Sách (VND) *</label>
+            <label htmlFor="minBudget">Ngân Sách Tối Thiểu (VND) *</label>
             <input
               type="number"
-              id="budget"
-              name="budget"
-              value={formData.budget}
+              id="minBudget"
+              name="minBudget"
+              value={formData.minBudget}
               onChange={handleInputChange}
-              placeholder="10000000"
+              placeholder="5000000"
               min="1"
-              step="1000"
-              className={errors.budget ? 'error' : ''}
+              className={errors.minBudget ? 'error' : ''}
             />
-            {errors.budget && <span className="pmjt-error-message">{errors.budget}</span>}
+            {errors.minBudget && <span className="pmjt-error-message">{errors.minBudget}</span>}
           </div>
 
           <div className="pmjt-form-group">
-            <label htmlFor="deadline">Hạn Chót *</label>
+            <label htmlFor="maxBudget">Ngân Sách Tối Đa (VND) *</label>
             <input
-              type="date"
-              id="deadline"
-              name="deadline"
-              value={formData.deadline}
+              type="number"
+              id="maxBudget"
+              name="maxBudget"
+              value={formData.maxBudget}
               onChange={handleInputChange}
-              className={errors.deadline ? 'error' : ''}
+              placeholder="15000000"
+              min="1"
+              className={errors.maxBudget ? 'error' : ''}
             />
-            {errors.deadline && <span className="pmjt-error-message">{errors.deadline}</span>}
+            {errors.maxBudget && <span className="pmjt-error-message">{errors.maxBudget}</span>}
           </div>
         </div>
 
+        <div className="pmjt-form-group">
+          <label htmlFor="deadline">Hạn Chót *</label>
+          <input
+            type="date"
+            id="deadline"
+            name="deadline"
+            value={formData.deadline}
+            onChange={handleInputChange}
+            className={errors.deadline ? 'error' : ''}
+          />
+          {errors.deadline && <span className="pmjt-error-message">{errors.deadline}</span>}
+        </div>
+
+        <div className="pmjt-form-group">
+          <label className="pmjt-checkbox-label">
+            <input
+              type="checkbox"
+              name="isRemote"
+              checked={formData.isRemote}
+              onChange={handleInputChange}
+            />
+            <span>🌐 Làm Việc Từ Xa</span>
+          </label>
+        </div>
+
+        {!formData.isRemote && (
+          <div className="pmjt-form-group">
+            <label htmlFor="location">Địa Điểm Làm Việc *</label>
+            <input
+              type="text"
+              id="location"
+              name="location"
+              value={formData.location}
+              onChange={handleInputChange}
+              placeholder="ví dụ: Hà Nội, Việt Nam"
+              className={errors.location ? 'error' : ''}
+            />
+            {errors.location && <span className="pmjt-error-message">{errors.location}</span>}
+          </div>
+        )}
+
         <div className="pmjt-form-actions">
-          <button type="submit" className="pmjt-create-job-btn">
-            🚀 Tạo Công Việc
+          <button type="submit" className="pmjt-create-job-btn" disabled={isSubmitting}>
+            {isSubmitting ? '⏳ Đang Tạo...' : '🚀 Tạo Công Việc'}
           </button>
         </div>
       </form>

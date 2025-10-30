@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import PostMinJobTab from '../../components/business/PostMinJobTab';
 import MinJobListTab from '../../components/business/MinJobListTab';
 import SuggestedFreelancersTab from '../../components/business/SuggestedFreelancersTab';
+import ApplicantsModal from '../../components/business/ApplicantsModal';
+import AcceptModal from '../../components/business/AcceptModal';
+import RejectModal from '../../components/business/RejectModal';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/BusinessPage.css';
 
@@ -29,41 +32,19 @@ export interface Freelancer {
 
 const BusinessPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'post' | 'list' | 'freelancers'>('post');
-  const [minJobs, setMinJobs] = useState<MinJob[]>([
-    {
-      id: '1',
-      title: 'Thiết Kế Lại Website',
-      description: 'Cần thiết kế lại website công ty theo phong cách hiện đại',
-      skills: ['React', 'TypeScript', 'CSS'],
-      budget: 1500,
-      deadline: '2025-08-15',
-      status: 'Open',
-      applicants: 5,
-      createdAt: '2025-07-01'
-    },
-    {
-      id: '2',
-      title: 'Phát Triển Ứng Dụng Di Động',
-      description: 'Phát triển ứng dụng di động đa nền tảng',
-      skills: ['React Native', 'JavaScript', 'Tích Hợp API'],
-      budget: 3000,
-      deadline: '2025-09-30',
-      status: 'In Progress',
-      applicants: 12,
-      createdAt: '2025-06-20'
-    },
-    {
-      id: '3',
-      title: 'Hệ Thống Thương Mại Điện Tử',
-      description: 'Xây dựng hệ thống bán hàng trực tuyến hoàn chỉnh',
-      skills: ['Vue.js', 'Node.js', 'MongoDB', 'Thanh Toán'],
-      budget: 5000,
-      deadline: '2025-10-30',
-      status: 'Open',
-      applicants: 8,
-      createdAt: '2025-06-25'
-    }
-  ]);
+  const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
+  const [showApplicantsModal, setShowApplicantsModal] = useState(false);
+  
+  // Accept/Reject modal state
+  const [showAcceptModal, setShowAcceptModal] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [selectedApplicationId, setSelectedApplicationId] = useState<number | null>(null);
+  const [selectedApplicantName, setSelectedApplicantName] = useState<string>('');
+  const [refreshApplicantsTrigger, setRefreshApplicantsTrigger] = useState(0);
+  
+  // Mock data for stats display only
+  const mockJobsCount = 3;
+  const mockOpenJobsCount = 2;
 
   const freelancers: Freelancer[] = [
     {
@@ -116,24 +97,48 @@ const BusinessPage: React.FC = () => {
     }
   ];
 
-  const handleCreateMinJob = (newJob: Omit<MinJob, 'id' | 'status' | 'applicants' | 'createdAt'>) => {
-    const job: MinJob = {
-      ...newJob,
-      id: Date.now().toString(),
-      status: 'Open',
-      applicants: 0,
-      createdAt: new Date().toISOString().split('T')[0]
-    };
-    setMinJobs(prev => [job, ...prev]);
-    setActiveTab('list');
+  const handleViewApplicants = (jobId: number) => {
+    setSelectedJobId(jobId);
+    setShowApplicantsModal(true);
   };
 
-  const handleCloseJob = (jobId: string) => {
-    setMinJobs(prev =>
-      prev.map(job =>
-        job.id === jobId ? { ...job, status: 'Closed' as const } : job
-      )
-    );
+  const handleCloseApplicantsModal = () => {
+    setShowApplicantsModal(false);
+    setSelectedJobId(null);
+  };
+
+  const handleAcceptApplicant = (applicationId: number, applicantName: string) => {
+    setSelectedApplicationId(applicationId);
+    setSelectedApplicantName(applicantName);
+    setShowAcceptModal(true);
+  };
+
+  const handleRejectApplicant = (applicationId: number, applicantName: string) => {
+    setSelectedApplicationId(applicationId);
+    setSelectedApplicantName(applicantName);
+    setShowRejectModal(true);
+  };
+
+  const handleCloseAcceptModal = () => {
+    setShowAcceptModal(false);
+    setSelectedApplicationId(null);
+    setSelectedApplicantName('');
+  };
+
+  const handleCloseRejectModal = () => {
+    setShowRejectModal(false);
+    setSelectedApplicationId(null);
+    setSelectedApplicantName('');
+  };
+
+  const handleAcceptSuccess = () => {
+    handleCloseAcceptModal();
+    setRefreshApplicantsTrigger(prev => prev + 1); // Trigger ApplicantsModal refresh
+  };
+
+  const handleRejectSuccess = () => {
+    handleCloseRejectModal();
+    setRefreshApplicantsTrigger(prev => prev + 1); // Trigger ApplicantsModal refresh
   };
 
   return (
@@ -144,7 +149,7 @@ const BusinessPage: React.FC = () => {
           <p>Quản lý công việc nhỏ và tìm kiếm freelancer hoàn hảo</p>
           <div className="business-stats">
             <div className="business-stat-item">
-              <span className="stat-number">{minJobs.length}</span>
+              <span className="stat-number">{mockJobsCount}</span>
               <span className="business-stat-label">Công Việc</span>
             </div>
             <div className="business-stat-item">
@@ -152,7 +157,7 @@ const BusinessPage: React.FC = () => {
               <span className="business-stat-label">Freelancer</span>
             </div>
             <div className="business-stat-item">
-              <span className="stat-number">{minJobs.filter(job => job.status === 'Open').length}</span>
+              <span className="stat-number">{mockOpenJobsCount}</span>
               <span className="business-stat-label">Đang Mở</span>
             </div>
           </div>
@@ -194,12 +199,12 @@ const BusinessPage: React.FC = () => {
       <div className="bsn-tab-content">
         {activeTab === 'post' && (
           <div className="bsn-tab-panel fade-in">
-            <PostMinJobTab onCreateJob={handleCreateMinJob} />
+            <PostMinJobTab />
           </div>
         )}
         {activeTab === 'list' && (
           <div className="bsn-tab-panel fade-in">
-            <MinJobListTab jobs={minJobs} onCloseJob={handleCloseJob} />
+            <MinJobListTab onViewApplicants={handleViewApplicants} />
           </div>
         )}
         {activeTab === 'freelancers' && (
@@ -208,6 +213,38 @@ const BusinessPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Applicants Modal */}
+      {showApplicantsModal && selectedJobId && (
+        <ApplicantsModal
+          jobId={selectedJobId}
+          jobTitle="Công Việc" 
+          onClose={handleCloseApplicantsModal}
+          onAccept={handleAcceptApplicant}
+          onReject={handleRejectApplicant}
+          refreshTrigger={refreshApplicantsTrigger}
+        />
+      )}
+
+      {/* Accept Modal */}
+      {showAcceptModal && selectedApplicationId && (
+        <AcceptModal
+          applicationId={selectedApplicationId}
+          applicantName={selectedApplicantName}
+          onClose={handleCloseAcceptModal}
+          onSuccess={handleAcceptSuccess}
+        />
+      )}
+
+      {/* Reject Modal */}
+      {showRejectModal && selectedApplicationId && (
+        <RejectModal
+          applicationId={selectedApplicationId}
+          applicantName={selectedApplicantName}
+          onClose={handleCloseRejectModal}
+          onSuccess={handleRejectSuccess}
+        />
+      )}
 
       {/* Meowl Guide */}
       <MeowlGuide currentPage="business" />

@@ -1,0 +1,223 @@
+/* RejectModal.css */
+.rjm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.rjm-modal-content {
+  background: white;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+}
+
+.rjm-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.rjm-modal-header h3 {
+  margin: 0;
+  font-size: 22px;
+  color: #1a1a1a;
+}
+
+.rjm-close-modal {
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.rjm-close-modal:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.rjm-modal-body {
+  padding: 24px;
+}
+
+.rjm-applicant-info {
+  background-color: #fff3cd;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  border-left: 4px solid #ffc107;
+}
+
+.rjm-applicant-info p {
+  margin: 0;
+  color: #333;
+  font-size: 15px;
+}
+
+.rjm-applicant-info strong {
+  color: #856404;
+}
+
+.rjm-form-group {
+  margin-bottom: 24px;
+}
+
+.rjm-form-group label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.rjm-char-count {
+  font-size: 13px;
+  color: #666;
+  font-weight: 400;
+}
+
+.rjm-form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.rjm-form-group textarea:focus {
+  outline: none;
+  border-color: #dc3545;
+}
+
+.rjm-form-group textarea.error {
+  border-color: #dc3545;
+}
+
+.rjm-error-message {
+  display: block;
+  color: #dc3545;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.rjm-helper-text {
+  display: block;
+  color: #666;
+  font-size: 13px;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.rjm-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.rjm-btn-secondary,
+.rjm-btn-danger {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rjm-btn-secondary {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.rjm-btn-secondary:hover:not(:disabled) {
+  background-color: #dee2e6;
+}
+
+.rjm-btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.rjm-btn-danger:hover:not(:disabled) {
+  background-color: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.rjm-btn-danger:disabled,
+.rjm-btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .rjm-modal-content {
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .rjm-modal-header,
+  .rjm-modal-body {
+    padding: 16px;
+  }
+
+  .rjm-modal-actions {
+    flex-direction: column;
+  }
+
+  .rjm-btn-secondary,
+  .rjm-btn-danger {
+    width: 100%;
+  }
+}

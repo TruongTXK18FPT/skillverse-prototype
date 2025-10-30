@@ -1,130 +1,80 @@
-import { useState } from 'react';
-import { Search, MapPin, Clock, DollarSign, Briefcase, Star, Filter, ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, MapPin, Clock, DollarSign, Briefcase, ArrowRight } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import MeowlGuide from '../../components/MeowlGuide';
+import JobDetailsModal from '../../components/job/JobDetailsModal';
+import jobService from '../../services/jobService';
+import { JobPostingResponse } from '../../data/jobDTOs';
+import { useToast } from '../../hooks/useToast';
 import '../../styles/JobsPage.css';
 
 const JobsPage = () => {
   const { theme } = useTheme();
+  const { showError } = useToast();
+  
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [jobs, setJobs] = useState<JobPostingResponse[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedJob, setSelectedJob] = useState<JobPostingResponse | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
-  const categories = [
-    { id: 'all', name: 'Tất Cả', count: 89 },
-    { id: 'data-entry', name: 'Nhập Liệu', count: 23 },
-    { id: 'design', name: 'Thiết Kế', count: 18 },
-    { id: 'writing', name: 'Viết Lách', count: 15 },
-    { id: 'research', name: 'Nghiên Cứu', count: 12 },
-    { id: 'translation', name: 'Dịch Thuật', count: 11 },
-    { id: 'social-media', name: 'Mạng Xã Hội', count: 10 }
-  ];
+  // Fetch jobs on mount and when search changes
+  useEffect(() => {
+    fetchJobs();
+  }, [searchTerm]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const jobs = [
-    {
-      id: 1,
-      title: 'Thiết Kế Logo cho Startup',
-      company: 'TechViet Solutions',
-      category: 'design',
-      budget: '1.150.000đ - 2.300.000đ',
-      duration: '3-5 ngày',
-      location: 'Từ xa',
-      postedTime: '2 giờ trước',
-      description: 'Cần thiết kế logo chuyên nghiệp cho startup công nghệ. Tìm kiếm thiết kế sáng tạo, hiện đại phù hợp với ngành fintech.',
-      skills: ['Adobe Illustrator', 'Thiết Kế Logo', 'Nhận Diện Thương Hiệu'],
-      urgency: 'high',
-      proposals: 12,
-      rating: 4.8,
-      verified: true
-    },
-    {
-      id: 2,
-      title: 'Nhập Dữ Liệu từ PDF vào Excel',
-      company: 'Green Energy Corp',
-      category: 'data-entry',
-      budget: '460.000đ - 690.000đ',
-      duration: '1-2 ngày',
-      location: 'Từ xa',
-      postedTime: '4 giờ trước',
-      description: 'Cần nhập dữ liệu từ 50 file PDF vào Excel. Dữ liệu bao gồm thông tin khách hàng và chi tiết đơn hàng.',
-      skills: ['Excel', 'Nhập Liệu', 'Tỉ Mỉ'],
-      urgency: 'medium',
-      proposals: 8,
-      rating: 4.6,
-      verified: true
-    },
-    {
-      id: 3,
-      title: 'Viết Bài Blog Marketing',
-      company: 'Digital Marketing Hub',
-      category: 'writing',
-      budget: '1.840.000đ - 2.760.000đ',
-      duration: '1 tuần',
-      location: 'Từ xa',
-      postedTime: '6 giờ trước',
-      description: 'Viết 5 bài blog về marketing số, mỗi bài 1000-1500 từ. Yêu cầu tối ưu SEO và có kinh nghiệm marketing.',
-      skills: ['Viết Content', 'SEO', 'Marketing Số'],
-      urgency: 'low',
-      proposals: 15,
-      rating: 4.9,
-      verified: true
-    },
-    {
-      id: 4,
-      title: 'Nghiên Cứu Thị Trường TMĐT',
-      company: 'Online Retail Pro',
-      category: 'research',
-      budget: '3.450.000đ - 4.600.000đ',
-      duration: '2 tuần',
-      location: 'Từ xa',
-      postedTime: '1 ngày trước',
-      description: 'Phân tích xu hướng thị trường TMĐT, phân tích cạnh tranh, và nghiên cứu hành vi người tiêu dùng.',
-      skills: ['Nghiên Cứu Thị Trường', 'Phân Tích Dữ Liệu', 'Excel'],
-      urgency: 'medium',
-      proposals: 6,
-      rating: 4.7,
-      verified: false
-    },
-    {
-      id: 5,
-      title: 'Dịch Anh-Việt',
-      company: 'Global Translate',
-      category: 'translation',
-      budget: '690.000đ - 1.150.000đ',
-      duration: '3 ngày',
-      location: 'Từ xa',
-      postedTime: '1 ngày trước',
-      description: 'Dịch tài liệu kỹ thuật từ tiếng Anh sang tiếng Việt, khoảng 20 trang A4.',
-      skills: ['Dịch Tiếng Anh', 'Viết Kỹ Thuật', 'Tiếng Việt'],
-      urgency: 'high',
-      proposals: 20,
-      rating: 4.5,
-      verified: true
-    },
-    {
-      id: 6,
-      title: 'Quản Lý Trang Facebook',
-      company: 'Fashion Brand X',
-      category: 'social-media',
-      budget: '4.600.000đ - 6.900.000đ',
-      duration: '1 tháng',
-      location: 'Từ xa',
-      postedTime: '2 ngày trước',
-      description: 'Quản lý trang Facebook, tạo nội dung, tương tác với khách hàng và chạy quảng cáo cơ bản.',
-      skills: ['Marketing Facebook', 'Tạo Nội Dung', 'Mạng Xã Hội'],
-      urgency: 'low',
-      proposals: 25,
-      rating: 4.4,
-      verified: true
+  const fetchJobs = async () => {
+    setIsLoading(true);
+    try {
+      const data = await jobService.getPublicJobs({
+        search: searchTerm || undefined,
+        status: 'OPEN'
+      });
+      setJobs(data);
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+      showError('Lỗi Tải Dữ Liệu', 'Không thể tải danh sách công việc. Vui lòng thử lại.');
+    } finally {
+      setIsLoading(false);
     }
-  ];
+  };
 
-  const filteredJobs = jobs.filter(job => {
-    const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory === 'all' || job.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const handleJobClick = (job: JobPostingResponse) => {
+    setSelectedJob(job);
+    setIsDetailsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsDetailsModalOpen(false);
+    setSelectedJob(null);
+  };
+
+  const handleApplySuccess = () => {
+    fetchJobs(); // Refresh job list to update applicant count
+    handleCloseModal();
+  };
+
+  const formatBudget = (min: number, max: number) => {
+    const formatter = new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+      maximumFractionDigits: 0
+    });
+    return `${formatter.format(min)} - ${formatter.format(max)}`;
+  };
+
+  const formatRelativeTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffHours < 1) return 'Vừa xong';
+    if (diffHours < 24) return `${diffHours} giờ trước`;
+    if (diffDays < 7) return `${diffDays} ngày trước`;
+    return date.toLocaleDateString('vi-VN');
+  };
   
   return (
     <div className={`sv-jobs-container ${theme}`} data-theme={theme}>
@@ -150,103 +100,111 @@ const JobsPage = () => {
                 className="sv-jobs-search__input"
               />
             </div>
-            <button className="sv-jobs-search__filter-btn">
-              <Filter />
-              <span>Bộ lọc</span>
-            </button>
           </div>
         </div>
 
         <div className="sv-jobs-main">
-          {/* Sidebar Categories */}
-          <div className="sv-jobs-sidebar">
-            <div className="sv-jobs-categories">
-              <h3 className="sv-jobs-categories__title">Danh Mục</h3>
-              <div className="sv-jobs-categories__list">
-                {categories.map((category) => (
-                  <button
-                    key={category.id}
-                    onClick={() => setSelectedCategory(category.id)}
-                    className={`sv-jobs-category-btn ${
-                      selectedCategory === category.id ? 'sv-jobs-category-btn--active' : ''
-                    }`}
-                  >
-                    <span>{category.name}</span>
-                    <span className="sv-jobs-category-btn__count">({category.count})</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
           {/* Jobs List */}
-          <div className="sv-jobs-list">
-            {filteredJobs.map((job) => (
-              <div key={job.id} className="sv-job-card">
-                <div className="sv-job-card__header">
-                  <div>
-                    <h3 className="sv-job-card__title">{job.title}</h3>
-                    <p className="sv-job-card__company">{job.company}</p>
+          <div className="sv-jobs-list sv-jobs-list--full-width">
+            {isLoading ? (
+              <div className="sv-jobs-loading">
+                <div className="sv-jobs-spinner"></div>
+                <p>Đang tải công việc...</p>
+              </div>
+            ) : jobs.length === 0 ? (
+              <div className="sv-jobs-empty-state">
+                <div className="sv-jobs-empty-state__icon">💼</div>
+                <h3 className="sv-jobs-empty-state__title">Không Tìm Thấy Công Việc</h3>
+                <p className="sv-jobs-empty-state__description">
+                  {searchTerm
+                    ? `Không tìm thấy công việc phù hợp với từ khóa "${searchTerm}". Hãy thử tìm kiếm với từ khóa khác.`
+                    : 'Hiện tại chưa có công việc nào đang mở. Vui lòng quay lại sau hoặc thử tìm kiếm với từ khóa khác.'}
+                </p>
+                <div className="sv-jobs-empty-state__suggestions">
+                  <div className="sv-jobs-empty-state__suggestion-item">
+                    Thử tìm kiếm với từ khóa đơn giản hơn
                   </div>
-                  <div className="sv-job-card__meta">
-                    <div className="sv-job-card__meta-item">
-                      <MapPin />
-                      <span>{job.location}</span>
-                    </div>
-                    <div className="sv-job-card__meta-item">
-                      <Clock />
-                      <span>{job.duration}</span>
-                    </div>
-                    <div className="sv-job-card__meta-item">
-                      <DollarSign />
-                      <span>{job.budget}</span>
-                    </div>
+                  <div className="sv-jobs-empty-state__suggestion-item">
+                    Kiểm tra lại chính tả của từ khóa
                   </div>
-                </div>
-
-                <p className="sv-job-card__description">{job.description}</p>
-
-                <div className="sv-job-card__tags">
-                  {job.skills.map((skill, index) => (
-                    <span key={index} className="sv-job-card__tag">
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="sv-job-card__footer">
-                  <div className="sv-job-card__stats">
-                    <div className="sv-job-card__meta-item">
-                      <Briefcase />
-                      <span>{job.proposals} đề xuất</span>
-                    </div>
-                    <div className="sv-job-card__meta-item">
-                      <Star className="fill-current" />
-                      <span>{job.rating}</span>
-                    </div>
-                    <div className="sv-job-card__meta-item">
-                      <Clock />
-                      <span>{job.postedTime}</span>
-                    </div>
+                  <div className="sv-jobs-empty-state__suggestion-item">
+                    Xóa bộ lọc để xem tất cả công việc
                   </div>
-                  <button className="sv-job-card__apply-btn">
-                    <span>Ứng Tuyển Ngay</span>
-                    <ArrowRight />
-                  </button>
                 </div>
               </div>
-            ))}
+            ) : (
+              jobs.map((job) => (
+                <div key={job.id} className="sv-job-card">
+                  <div className="sv-job-card__header">
+                    <div>
+                      <h3 className="sv-job-card__title">{job.title}</h3>
+                      <p className="sv-job-card__company">{job.recruiterCompanyName}</p>
+                    </div>
+                    <div className="sv-job-card__meta">
+                      <div className="sv-job-card__meta-item">
+                        <MapPin />
+                        <span>{job.isRemote ? '🌐 Từ xa' : `📍 ${job.location}`}</span>
+                      </div>
+                      <div className="sv-job-card__meta-item">
+                        <DollarSign />
+                        <span>{formatBudget(job.minBudget, job.maxBudget)}</span>
+                      </div>
+                    </div>
+                  </div>
 
-            {filteredJobs.length === 0 && (
-              <div className="sv-jobs-empty">
-                <Briefcase className="sv-jobs-empty__icon" />
-                <h3 className="sv-jobs-empty__title">Không tìm thấy việc làm</h3>
-                <p className="sv-jobs-empty__description">Vui lòng điều chỉnh tìm kiếm hoặc bộ lọc của bạn</p>
-              </div>
+                  <p className="sv-job-card__description">
+                    {job.description.length > 150
+                      ? `${job.description.substring(0, 150)}...`
+                      : job.description}
+                  </p>
+
+                  <div className="sv-job-card__tags">
+                    {job.requiredSkills.slice(0, 5).map((skill, index) => (
+                      <span key={index} className="sv-job-card__tag">
+                        {skill}
+                      </span>
+                    ))}
+                    {job.requiredSkills.length > 5 && (
+                      <span className="sv-job-card__tag sv-job-card__tag--more">
+                        +{job.requiredSkills.length - 5} thêm
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="sv-job-card__footer">
+                    <div className="sv-job-card__stats">
+                      <div className="sv-job-card__meta-item">
+                        <Briefcase />
+                        <span>{job.applicantCount} ứng viên</span>
+                      </div>
+                      <div className="sv-job-card__meta-item">
+                        <Clock />
+                        <span>{formatRelativeTime(job.createdAt)}</span>
+                      </div>
+                    </div>
+                    <button
+                      className="sv-job-card__apply-btn"
+                      onClick={() => handleJobClick(job)}
+                    >
+                      <span>Xem Chi Tiết</span>
+                      <ArrowRight />
+                    </button>
+                  </div>
+                </div>
+              ))
             )}
           </div>
         </div>
       </div>
+
+      {/* Job Details Modal */}
+      {isDetailsModalOpen && selectedJob && (
+        <JobDetailsModal
+          job={selectedJob}
+          onClose={handleCloseModal}
+          onApplySuccess={handleApplySuccess}
+        />
+      )}
 
       {/* Meowl Guide */}
       <MeowlGuide currentPage="jobs" />
