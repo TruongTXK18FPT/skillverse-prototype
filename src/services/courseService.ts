@@ -590,9 +590,15 @@ export const parsePrice = (priceStr?: string): number => {
 export const isFreePrice = (priceStr?: string): boolean => {
   if (!priceStr) return true;
   const lowerPrice = priceStr.toLowerCase().trim();
-  const freeFormats = ['miễn phí', '0 vnd', '0vnd', '0 vnđ', '0vnđ', 'free', 'gratis'];
-  return freeFormats.some(format => lowerPrice.includes(format)) || 
-         lowerPrice === '0' || 
-         parsePrice(priceStr) === 0;
+  // Check exact patterns only, not substring matches
+  if (lowerPrice === '0' || lowerPrice === 'miễn phí' || lowerPrice === 'free' || lowerPrice === 'gratis') {
+    return true;
+  }
+  // Check for patterns like "0 vnd", "0vnd", "0 vnđ", "0vnđ" 
+  if (lowerPrice === '0 vnd' || lowerPrice === '0vnd' || lowerPrice === '0 vnđ' || lowerPrice === '0vnđ') {
+    return true;
+  }
+  // Parse the numeric price and check if it's 0
+  return parsePrice(priceStr) === 0;
 };
 

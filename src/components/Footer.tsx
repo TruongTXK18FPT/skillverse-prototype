@@ -39,40 +39,10 @@ const Footer = () => {
             <div className="footer-brand">
               <Link to="/" className="brand-header">
                 <img src={Logo} alt="Skillverse Logo" className="brand-logo" />
-
               </Link>
               <p className="brand-description">
                 Hệ sinh thái học tập và làm việc tích hợp cho sinh viên và người chuyển đổi nghề nghiệp trong kỷ nguyên số.
               </p>
-              <div className="social-links">
-                <a href="https://www.facebook.com/profile.php?id=61581184190711" target="_blank" rel="noopener noreferrer" className="social-link hover-float">
-                  <Facebook className="social-icon facebook" />
-                </a>
-                <a href="#" className="social-link hover-float" aria-label="TikTok">
-                  <TikTokIcon className="social-icon tiktok" />
-                </a>
-                <a href="#" className="social-link hover-float">
-                  <Instagram className="social-icon instagram" />
-                </a>
-                <a href="#" className="social-link hover-float">
-                  <Linkedin className="social-icon linkedin" />
-                </a>
-              </div>
-              
-              {/* Facebook Page Embed */}
-              <div className="facebook-embed">
-                <iframe
-                  src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D61581184190711&tabs=timeline&width=1000&height=300&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
-                  width="100%"
-                  height="300"
-                  style={{ border: 'none', overflow: 'hidden', borderRadius: '12px' }}
-                  scrolling="no"
-                  frameBorder="0"
-                  allowFullScreen={true}
-                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                  title="Facebook Page"
-                ></iframe>
-              </div>
             </div>
 
             {/* Quick Links */}
@@ -97,54 +67,62 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Contact */}
-            <div className="footer-section">
-              <h3 className="footer-title">{translations.footer.contact}</h3>
-              <div className="contact-info">
-                <a href="mailto:truongtranxuan41@gmail.com" className="contact-item hover-float">
-                  <Mail className="contact-icon" />
-                  <span>truongtranxuan41@gmail.com</span>
-                </a>
-                <a href="tel:+84931430662" className="contact-item hover-float">
-                  <Phone className="contact-icon" />
-                  <span>0931430662</span>
-                </a>
-                <div className="contact-item hover-float">
-                  <MapPin className="contact-icon" />
-                  <span>{translations.footer.location}</span>
-                </div>
-              </div>
+          </div>
+        </div>
+      </div>
 
-              {/* Newsletter Subscription */}
-              <div className="newsletter">
-                <h4 className="newsletter-title">{translations.footer.subscribe}</h4>
-                <div className="newsletter-form">
-                  <input 
-                    type="email" 
-                    placeholder={translations.footer.emailPlaceholder}
-                    className="newsletter-input" 
-                  />
-                  <button className="newsletter-button">
-                    <Send className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
+      {/* Facebook and Contact Side by Side */}
+      <div className="footer-container">
+        <div className="footer-bottom-grid">
+          {/* Facebook Page Embed - Centered */}
+          <div className="facebook-embed-wrapper">
+            <div className="facebook-embed">
+              <iframe
+                src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D61581184190711&tabs=timeline&width=500&height=300&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
+                width="100%"
+                height="300"
+                style={{ border: 'none', overflow: 'hidden', borderRadius: '16px' }}
+                scrolling="no"
+                frameBorder="0"
+                allowFullScreen={true}
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                title="Facebook Page"
+              ></iframe>
             </div>
           </div>
 
-          {/* Map Section */}
-          <div className="map-section">
-            <iframe
-              src={mapUrl}
-              width="100%"
-              height="300"
-              style={{ border: 0, borderRadius: '12px', marginTop: '2rem' }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="FPT University Location"
-            ></iframe>
+          {/* Contact Section */}
+          <div className="contact-section-bottom">
+            <h3 className="footer-title">{translations.footer.contact}</h3>
+            <div className="contact-info-grid">
+              <a href="mailto:truongtranxuan41@gmail.com" className="contact-item hover-float">
+                <Mail className="contact-icon" />
+                <span>truongtranxuan41@gmail.com</span>
+              </a>
+              <a href="tel:+84931430662" className="contact-item hover-float">
+                <Phone className="contact-icon" />
+                <span>0931430662</span>
+              </a>
+              <div className="contact-item hover-float contact-address">
+                <MapPin className="contact-icon" />
+                <span>{translations.footer.location}</span>
+              </div>
+            </div>
           </div>
+        </div>
+
+        {/* Map Section */}
+        <div className="map-section">
+          <iframe
+            src={mapUrl}
+            width="100%"
+            height="300"
+            style={{ border: 0, borderRadius: '16px' }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="FPT University Location"
+          ></iframe>
         </div>
       </div>
 

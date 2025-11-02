@@ -3,30 +3,73 @@
   width: 100%;
   padding-top: 4rem;
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 
-/* Theme Support */
+/* Theme Support - Galaxy Style */
 .footer.light {
   background: linear-gradient(to bottom, #f8fafc, #e2e8f0);
   color: #1e293b;
 }
 
 .footer.dark {
-  background: linear-gradient(to bottom, #1e293b, #0f172a);
+  background: rgba(15, 23, 42, 0.95);
   color: #f8fafc;
+  position: relative;
+}
+
+.footer.dark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(99, 102, 241, 0.5) 50%,
+    transparent 100%
+  );
+}
+
+.footer.dark::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -10%;
+  width: 120%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 80% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .footer-container {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: 1.5fr 1fr 1fr;
   gap: 3rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Brand Section */
@@ -34,7 +77,6 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1.5rem;
   text-decoration: none;
   transition: transform 0.3s ease;
 }
@@ -44,25 +86,7 @@
 }
 
 .brand-logo {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
   filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.3));
-  transition: transform 0.3s ease;
-}
-
-.brand-header:hover .brand-logo {
-  transform: rotate(5deg) scale(1.1);
-}
-
-.brand-name {
-  font-size: 1.75rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.02em;
 }
 
 .brand-description {
@@ -71,12 +95,11 @@
   opacity: 0.8;
 }
 
-/* Social Links */
+/* Social Links - Galaxy Theme */
 .social-links {
-  display: grid;
-  grid-template-columns: repeat(2, 44px);
-  gap: 0.75rem 1rem; /* row gap, column gap */
-  justify-content: start;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .social-link {
@@ -85,19 +108,29 @@
   justify-content: center;
   width: 44px;
   height: 44px;
-  border-radius: 8px; /* square with slight rounding */
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.2);
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.footer.dark .social-link:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
 }
 
 .social-icon {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
+  color: #f8fafc;
+  fill: currentColor;
 }
 
-.facebook { color: #1877f2; }
-.tiktok { color: #000000; }
-.instagram { color: #e4405f; }
-.linkedin { color: #0077b5; }
+.footer.light .social-icon {
+  color: #1e293b;
+}
 
 /* Footer Sections */
 .footer-title {
@@ -105,17 +138,19 @@
   font-weight: 600;
   margin-bottom: 1.5rem;
   position: relative;
+  padding-bottom: 0.75rem;
 }
 
 .footer-title::after {
   content: '';
   position: absolute;
-  bottom: -0.5rem;
+  bottom: 0;
   left: 0;
   width: 40px;
   height: 2px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
   border-radius: 2px;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
 }
 
 .footer-links {
@@ -150,7 +185,16 @@
 .contact-icon {
   width: 20px;
   height: 20px;
-  opacity: 0.8;
+  color: #f8fafc;
+  opacity: 0.9;
+}
+
+.footer.light .contact-icon {
+  color: #1e293b;
+}
+
+.footer.dark .contact-item:hover .contact-icon {
+  color: #6366f1;
 }
 
 /* Newsletter */
@@ -174,9 +218,16 @@
   padding: 0.75rem 1rem;
   border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(10px);
   color: inherit;
   transition: all 0.3s ease;
+}
+
+.footer.dark .newsletter-input:focus {
+  outline: none;
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 .newsletter-button {
@@ -186,24 +237,37 @@
   padding: 0.75rem;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-/* Map Section */
+/* Map Section - Galaxy Style */
 .map-section {
   width: 100%;
   overflow: hidden;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  margin-top: 2rem;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.footer.dark .map-section {
+  background: rgba(30, 41, 59, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 /* Footer Bottom */
 .footer-bottom {
   padding: 2rem 0;
-  border-top: 1px solid rgba(148, 163, 184, 0.2);
+  margin-top: 3rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.footer.dark .footer-bottom {
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(10px);
 }
 
 .footer-bottom-content {
@@ -232,12 +296,13 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  border: none;
+  border: 1px solid rgba(99, 102, 241, 0.3);
   border-radius: 50%;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }
 
 /* Animations */
@@ -275,20 +340,75 @@
   width: 100%;
 }
 
-/* Facebook Embed */
+/* Footer Bottom Grid - Facebook centered, Contact on right */
+.footer-bottom-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .footer-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Facebook Embed Wrapper - Centered */
+.facebook-embed-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* Facebook Embed - Galaxy Style */
 .facebook-embed {
   width: 100%;
-  margin-top: 1.5rem;
-  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  justify-content: center;
+  align-items: center;
+  padding-left: 4.75rem;
+
+}
+
+.footer.dark .facebook-embed {
+  background: rgba(30, 41, 59, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .facebook-embed iframe {
   display: block;
   width: 100% !important;
   height: 300px;
-  border-radius: 12px;
+  border-radius: 16px;
+}
+
+/* Contact Section Bottom */
+.contact-section-bottom {
+  padding: 1.5rem;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.footer.dark .contact-section-bottom {
+  background: rgba(30, 41, 59, 0.4);
+}
+
+/* Contact Info Grid - 2 columns on top, full width below */
+.contact-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.contact-address {
+  grid-column: 1 / -1;
 }
 
 .social-link:hover {
@@ -297,12 +417,12 @@
 
 .newsletter-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
 }
 
 .scroll-top-button:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.5);
 }
 
 /* Responsive Design */
@@ -324,8 +444,8 @@
   }
 
   .brand-logo {
-    width: 56px;
-    height: 56px;
+    width: 70px !important;
+    height: 70px !important;
   }
 
   .brand-name {

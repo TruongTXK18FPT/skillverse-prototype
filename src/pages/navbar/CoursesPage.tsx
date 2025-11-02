@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Clock, Users, Star, BookOpen, Award, Play, ChevronDown, Filter, TrendingUp } from 'lucide-react';
+import { Clock, Users, Star, BookOpen, Award, Play, ChevronDown, Filter, TrendingUp, GraduationCap, Folder } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import '../../styles/CoursesPage.css';
 import Pagination from '../../components/Pagination';
@@ -31,20 +31,23 @@ useEffect(() => {
   listPublishedCourses(0, 100)
     .then(response => {
       const legacyCourses = response.content.map((dto: CourseSummaryDTO) => {
-        const authorFullName = dto.authorName || dto.author.fullName || `${dto.author.firstName} ${dto.author.lastName}`.trim();
+        const authorFullName = dto.authorName ||
+                              (dto.author?.fullName) ||
+                              `${dto.author?.firstName || ''} ${dto.author?.lastName || ''}`.trim() ||
+                              'Unknown Instructor';
         return {
           id: dto.id.toString(),
           title: dto.title,
-          instructor: authorFullName || 'Unknown Instructor',
+          instructor: authorFullName,
           category: 'general',
-          image: dto.thumbnailUrl || (dto.thumbnail?.url ?? '/images/default-course.jpg'),
+          image: dto.thumbnailUrl || '/images/default-course.jpg',
           level: (dto.level || 'BEGINNER').toLowerCase(),
-          price: dto.price ? `${dto.price} ${dto.currency || 'VND'}` : '0',
-          rating: dto.averageRating || 0,
+          price: (dto.price !== null && dto.price !== undefined) ? `${dto.price} ${dto.currency || 'VND'}` : '0',
+          rating: 0, // Backend doesn't provide averageRating in CourseSummaryDTO
           students: dto.enrollmentCount || 0,
-          description: dto.description || '',
+          description: dto.title || '', // Backend doesn't provide shortDescription in CourseSummaryDTO
           duration: '0',
-          modules: dto.moduleCount || 0,
+          modules: (dto.moduleCount !== null && dto.moduleCount !== undefined) ? dto.moduleCount : 0,
           certificate: false
         };
       });
@@ -91,15 +94,15 @@ useEffect(() => {
     const matchSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         course.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         course.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchCategory = selectedCategory === 'all' || course.category === selectedCategory;
-    
-    const matchPrice = priceFilter === 'all' || 
+
+    const matchPrice = priceFilter === 'all' ||
                       (priceFilter === 'free' && isFreePrice(course.price)) ||
                       (priceFilter === 'paid' && !isFreePrice(course.price));
-    
+
     const matchLevel = levelFilter === 'all' || course.level?.toLowerCase() === levelFilter;
-    
+
     return matchSearch && matchCategory && matchPrice && matchLevel;
   });
 
@@ -114,13 +117,13 @@ useEffect(() => {
   }, {} as Record<string, number>);
 
 const categories = [
-  { id: 'all', name: 'Tất Cả', count: courses.length, icon: '📚' },
-  { id: 'tech', name: 'Công Nghệ', count: categoriesMap['tech'] ?? 0, icon: '💻' },
-  { id: 'design', name: 'Thiết Kế', count: categoriesMap['design'] ?? 0, icon: '🎨' },
-  { id: 'business', name: 'Kinh Doanh', count: categoriesMap['business'] ?? 0, icon: '💼' },
-  { id: 'marketing', name: 'Marketing', count: categoriesMap['marketing'] ?? 0, icon: '📊' },
-  { id: 'language', name: 'Ngoại Ngữ', count: categoriesMap['language'] ?? 0, icon: '🌍' },
-  { id: 'soft-skills', name: 'Kỹ Năng Mềm', count: categoriesMap['soft-skills'] ?? 0, icon: '🧠' }
+  { id: 'all', name: 'Tất Cả', count: courses.length },
+  { id: 'tech', name: 'Công Nghệ', count: categoriesMap['tech'] ?? 0 },
+  { id: 'design', name: 'Thiết Kế', count: categoriesMap['design'] ?? 0 },
+  { id: 'business', name: 'Kinh Doanh', count: categoriesMap['business'] ?? 0 },
+  { id: 'marketing', name: 'Marketing', count: categoriesMap['marketing'] ?? 0 },
+  { id: 'language', name: 'Ngoại Ngữ', count: categoriesMap['language'] ?? 0 },
+  { id: 'soft-skills', name: 'Kỹ Năng Mềm', count: categoriesMap['soft-skills'] ?? 0 }
 ];
 
   const sortOptions = [
@@ -164,7 +167,7 @@ const categories = [
         <div className="courses-hero">
           <div className="hero-content">
             <h1 className="courses-title">
-              <span className="hero-icon">🎓</span>
+              <span className="hero-icon"><GraduationCap className="icon" /></span>
               {' '}Khóa Học Chuyên Nghiệp
             </h1>
             <p className="courses-description">
@@ -276,7 +279,7 @@ const categories = [
               </span>
             )}
           </div>
-          
+
           {(searchTerm || selectedCategory !== 'all' || priceFilter !== 'all' || levelFilter !== 'all') && (
             <button
               className="clear-filters-btn"
@@ -298,7 +301,7 @@ const categories = [
           <div className="course-sidebar">
             <div className="category-container">
               <h3 className="course-category-title">
-                <span className="category-icon">📂</span>
+                <span className="category-icon"><Folder className="icon" /></span>
                 {' '}Danh Mục Khóa Học
               </h3>
               <div className="category-list">
@@ -312,7 +315,6 @@ const categories = [
                     className={`category-button ${selectedCategory === category.id ? 'active' : ''}`}
                   >
                     <div className="category-info">
-                      <span className="category-emoji">{category.icon}</span>
                       <span className="category-name">{category.name}</span>
                     </div>
                     <span className="category-count">({category.count})</span>
@@ -365,8 +367,8 @@ const categories = [
             ) : (
               <div className="courses-grid">
                 {paginatedCourses.map((course, index) => (
-                  <div 
-                    key={course.id} 
+                  <div
+                    key={course.id}
                     className="course-card"
                     style={{ animationDelay: `${index * 0.1}s` }}
                     onClick={() => navigate(`/courses/${course.id}`, {
@@ -381,7 +383,7 @@ const categories = [
                           <span>Xem trước</span>
                         </button>
                       </div>
-                      
+
                       {/* Enhanced Badges */}
                       <div className="course-badges">
                         {course.level && (
@@ -389,9 +391,12 @@ const categories = [
                             {course.level}
                           </div>
                         )}
-                        {(!course.price || isFreePrice(course.price)) && (
-                          <div className="course-free-badge">Miễn phí</div>
-                        )}
+                        {(() => {
+                          const numPrice = parseInt(course.price?.replace(/[^\d]/g, '') || '0');
+                          return numPrice === 0 && (
+                            <div className="course-free-badge">Miễn phí</div>
+                          );
+                        })()}
                         {course.certificate && (
                           <div className="course-certificate-badge">
                             <Award className="certificate-icon" />
@@ -401,22 +406,6 @@ const categories = [
                     </div>
 
                     <div className="course-content">
-                      <div className="course-stats">
-                        <div className="course-rating">
-                          <Star className="rating-star filled" />
-                          <span className="course-rating-value">{course.rating?.toFixed(1)}</span>
-                        </div>
-                        <span className="stats-divider">•</span>
-                        <div className="course-students">
-                          <Users className="students-icon" />
-                          <span>
-                            {typeof course.students === 'number' ? 
-                              course.students.toLocaleString() : 
-                              parseInt(course.students ?? '0').toLocaleString()
-                            }
-                          </span>
-                        </div>
-                      </div>
 
                       <h3 className="course-title">{course.title}</h3>
                       <p className="course-description">{course.description}</p>
@@ -439,11 +428,18 @@ const categories = [
                       <div className="course-footer">
                         <div className="price-section">
                           <span className="course-price">
-                            {isFreePrice(course.price) ? 'Miễn phí' : (course.price ?? 'Miễn phí')}
+                            {(() => {
+                              // Extract numeric price from string like "299000 VND"
+                              const numPrice = parseInt(course.price?.replace(/[^\d]/g, '') || '0');
+                              return numPrice === 0 ? 'Miễn phí' : course.price;
+                            })()}
                           </span>
-                          {course.price && !isFreePrice(course.price) && (
-                            <span className="price-period">/khóa</span>
-                          )}
+                          {(() => {
+                            const numPrice = parseInt(course.price?.replace(/[^\d]/g, '') || '0');
+                            return numPrice !== 0 && (
+                              <span className="price-period">/khóa</span>
+                            );
+                          })()}
                         </div>
                         <button className="enroll-button"
                           onClick={(e) => {
@@ -453,8 +449,7 @@ const categories = [
                             });
                           }}
                         >
-                          <span className="enroll-icon">⚡</span>
-                          {' '}Đăng Ký Ngay
+                          Đăng Ký Ngay
                         </button>
                       </div>
                     </div>
@@ -485,4 +480,3 @@ const categories = [
 };
 
 export default CoursesPage;
-

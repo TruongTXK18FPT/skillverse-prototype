@@ -344,6 +344,7 @@ const Header: React.FC = () => {
           <button
             onClick={toggleTheme}
             className="theme-btn desktop-only"
+            style={{ display: 'none' }}
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -526,7 +527,7 @@ const Header: React.FC = () => {
                 <Bell size={18} />
                 <span>Thông báo</span>
               </button>
-              <button onClick={toggleTheme} className="mobile-action-btn">
+              <button onClick={toggleTheme} className="mobile-action-btn" style={{ display: 'none' }}>
                 {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                 <span>Chủ đề</span>
               </button>
