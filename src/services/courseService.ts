@@ -576,10 +576,22 @@ export const findCourseById = async (id: string): Promise<Course | null> => {
  * Parse price (legacy)
  */
 export const parsePrice = (priceStr?: string): number => {
-  if (!priceStr || 
-      priceStr.toLowerCase().includes('miễn phí') || 
-      priceStr.toLowerCase().includes('0 vnd') ||
-      priceStr.trim() === '0') return 0;
+  if (!priceStr) return 0;
+
+  const normalized = priceStr.toLowerCase().trim();
+
+  // Check for exact free price patterns
+  if (normalized === 'miễn phí' ||
+      normalized === 'free' ||
+      normalized === '0' ||
+      normalized === '0 vnd' ||
+      normalized === '0vnd' ||
+      normalized === '0 vnđ' ||
+      normalized === '0vnđ') {
+    return 0;
+  }
+
+  // Extract numeric value
   const numStr = priceStr.replace(/[^\d]/g, '');
   return parseInt(numStr) || 0;
 };

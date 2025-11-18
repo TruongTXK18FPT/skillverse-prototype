@@ -1,0 +1,1403 @@
+/* ===========================================
+   COURSE DETAIL COCKPIT - SPACE MODULE UI
+   Futuristic Detail Page Design
+   =========================================== */
+
+/* Font Import */
+@font-face {
+  font-family: 'Space Habitat';
+  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* CSS Variables */
+:root {
+  --cockpit-detail-bg-space: #0a0e1a;
+  --cockpit-detail-bg-dark: #0f1419;
+  --cockpit-detail-bg-panel: rgba(15, 25, 40, 0.85);
+  --cockpit-detail-glass: rgba(20, 30, 50, 0.6);
+
+  --cockpit-detail-neon-cyan: #00f6ff;
+  --cockpit-detail-neon-blue: #0066ff;
+  --cockpit-detail-neon-purple: #a855f7;
+  --cockpit-detail-neon-pink: #ff00ff;
+  --cockpit-detail-neon-green: #00ff9d;
+  --cockpit-detail-neon-orange: #ff8800;
+  --cockpit-detail-neon-yellow: #ffcc00;
+
+  --cockpit-detail-text-primary: #e0e8f5;
+  --cockpit-detail-text-secondary: #8b9bb8;
+  --cockpit-detail-text-accent: #00f6ff;
+
+  --cockpit-detail-border-primary: rgba(0, 246, 255, 0.4);
+  --cockpit-detail-border-secondary: rgba(0, 102, 255, 0.3);
+}
+
+/* ===========================================
+   CONTAINER & BACKGROUND
+   =========================================== */
+
+.cockpit-detail-container {
+  min-height: 100vh;
+  background: var(--cockpit-detail-bg-space);
+  position: relative;
+  overflow-x: hidden;
+  padding: 1.5rem;
+}
+
+/* Starfield Background */
+.cockpit-detail-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 33% 50%, white, transparent),
+    radial-gradient(1px 1px at 70% 40%, white, transparent);
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+  animation: starMove 200s linear infinite;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* HUD Corners */
+.cockpit-detail-hud-corners {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.cockpit-detail-corner {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border: 2px solid var(--cockpit-detail-neon-cyan);
+  opacity: 0.6;
+}
+
+.cockpit-detail-corner-tl {
+  top: 10px;
+  left: 10px;
+  border-right: none;
+  border-bottom: none;
+  clip-path: polygon(0 0, 0 100%, 2px 100%, 2px 2px, 100% 2px, 100% 0);
+}
+
+.cockpit-detail-corner-tr {
+  top: 10px;
+  right: 10px;
+  border-left: none;
+  border-bottom: none;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, calc(100% - 2px) 100%, calc(100% - 2px) 2px, 0 2px);
+}
+
+.cockpit-detail-corner-bl {
+  bottom: 10px;
+  left: 10px;
+  border-right: none;
+  border-top: none;
+  clip-path: polygon(0 0, 2px 0, 2px calc(100% - 2px), 100% calc(100% - 2px), 100% 100%, 0 100%);
+}
+
+.cockpit-detail-corner-br {
+  bottom: 10px;
+  right: 10px;
+  border-left: none;
+  border-top: none;
+  clip-path: polygon(0 calc(100% - 2px), 0 100%, 100% 100%, 100% 0, calc(100% - 2px) 0, calc(100% - 2px) calc(100% - 2px));
+}
+
+/* ===========================================
+   MAIN HUD FRAME
+   =========================================== */
+
+.cockpit-detail-hud-frame {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: var(--cockpit-detail-glass);
+  border: 2px solid var(--cockpit-detail-border-primary);
+  border-radius: 4px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 0 60px rgba(0, 246, 255, 0.05),
+    0 0 40px rgba(0, 246, 255, 0.2);
+  clip-path: polygon(
+    0 20px, 20px 0,
+    calc(100% - 20px) 0, 100% 20px,
+    100% calc(100% - 20px), calc(100% - 20px) 100%,
+    20px 100%, 0 calc(100% - 20px)
+  );
+}
+
+/* ===========================================
+   LOADING STATE
+   =========================================== */
+
+.cockpit-detail-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 2rem;
+}
+
+.cockpit-detail-radar-spinner {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border: 3px solid var(--cockpit-detail-border-secondary);
+  border-radius: 50%;
+}
+
+.cockpit-detail-radar-sweep {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 3px;
+  background: linear-gradient(to right, transparent, var(--cockpit-detail-neon-cyan));
+  transform-origin: left center;
+  animation: radarSweep 2s linear infinite;
+}
+
+.cockpit-detail-radar-blip {
+  position: absolute;
+  top: 20%;
+  right: 30%;
+  width: 8px;
+  height: 8px;
+  background: var(--cockpit-detail-neon-green);
+  border-radius: 50%;
+  animation: blipPulse 2s ease-in-out infinite;
+}
+
+.cockpit-detail-loading-text {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.2rem;
+  color: var(--cockpit-detail-neon-cyan);
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px var(--cockpit-detail-neon-cyan);
+}
+
+.cockpit-detail-loading-bar {
+  width: 300px;
+  height: 4px;
+  background: var(--cockpit-detail-bg-panel);
+  border: 1px solid var(--cockpit-detail-border-primary);
+  overflow: hidden;
+}
+
+.cockpit-detail-loading-progress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cockpit-detail-neon-cyan), var(--cockpit-detail-neon-blue));
+  animation: loadingProgress 2s ease-in-out infinite;
+  box-shadow: 0 0 10px var(--cockpit-detail-neon-cyan);
+}
+
+/* ===========================================
+   ERROR STATE
+   =========================================== */
+
+.cockpit-detail-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.cockpit-detail-error-icon {
+  width: 80px;
+  height: 80px;
+  color: var(--cockpit-detail-neon-orange);
+  filter: drop-shadow(0 0 20px var(--cockpit-detail-neon-orange));
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.cockpit-detail-error-title {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.8rem;
+  color: var(--cockpit-detail-neon-orange);
+  letter-spacing: 3px;
+  text-shadow: 0 0 15px var(--cockpit-detail-neon-orange);
+}
+
+.cockpit-detail-error-text {
+  color: var(--cockpit-detail-text-secondary);
+  font-size: 1rem;
+}
+
+.cockpit-detail-back-btn,
+.cockpit-detail-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--cockpit-detail-bg-panel);
+  border: 2px solid var(--cockpit-detail-border-primary);
+  color: var(--cockpit-detail-text-primary);
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.cockpit-detail-back-btn:hover,
+.cockpit-detail-nav-back:hover {
+  border-color: var(--cockpit-detail-neon-cyan);
+  background: rgba(0, 246, 255, 0.1);
+  box-shadow: 0 0 15px rgba(0, 246, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.cockpit-detail-btn-icon,
+.cockpit-detail-nav-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===========================================
+   NAVIGATION BAR
+   =========================================== */
+
+.cockpit-detail-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem 1.5rem;
+  background: var(--cockpit-detail-bg-panel);
+  border: 1px solid var(--cockpit-detail-border-primary);
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
+
+.cockpit-detail-nav-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cockpit-detail-status-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--cockpit-detail-neon-green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.cockpit-detail-status-text {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.9rem;
+  color: var(--cockpit-detail-neon-green);
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px var(--cockpit-detail-neon-green);
+}
+
+/* ===========================================
+   HERO SECTION
+   =========================================== */
+
+.cockpit-detail-hero {
+  margin-bottom: 2rem;
+}
+
+.cockpit-detail-hero-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+}
+
+/* Info Panel (Left) */
+.cockpit-detail-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cockpit-detail-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  width: fit-content;
+  border: 2px solid;
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.cockpit-detail-level-beginner {
+  border-color: var(--cockpit-detail-neon-green);
+  color: var(--cockpit-detail-neon-green);
+  background: rgba(0, 255, 157, 0.1);
+  box-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+}
+
+.cockpit-detail-level-intermediate {
+  border-color: var(--cockpit-detail-neon-yellow);
+  color: var(--cockpit-detail-neon-yellow);
+  background: rgba(255, 204, 0, 0.1);
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+}
+
+.cockpit-detail-level-advanced {
+  border-color: var(--cockpit-detail-neon-orange);
+  color: var(--cockpit-detail-neon-orange);
+  background: rgba(255, 136, 0, 0.1);
+  box-shadow: 0 0 15px rgba(255, 136, 0, 0.3);
+}
+
+.cockpit-detail-badge-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.cockpit-detail-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--cockpit-detail-text-primary);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.cockpit-detail-description {
+  font-size: 1.1rem;
+  color: var(--cockpit-detail-text-secondary);
+  line-height: 1.6;
+}
+
+/* Stats Grid */
+.cockpit-detail-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.cockpit-detail-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--cockpit-detail-bg-panel);
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  transition: all 0.3s ease;
+}
+
+.cockpit-detail-stat-card:hover {
+  border-color: var(--cockpit-detail-neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 246, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.cockpit-detail-stat-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--cockpit-detail-neon-cyan);
+  flex-shrink: 0;
+}
+
+.cockpit-detail-stat-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.cockpit-detail-stat-value {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--cockpit-detail-neon-cyan);
+  text-shadow: 0 0 10px var(--cockpit-detail-neon-cyan);
+  line-height: 1;
+}
+
+.cockpit-detail-stat-label {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.7rem;
+  color: var(--cockpit-detail-text-secondary);
+  letter-spacing: 1px;
+  margin-top: 0.25rem;
+}
+
+/* Instructor Card */
+.cockpit-detail-instructor-card {
+  padding: 1.25rem;
+  background: var(--cockpit-detail-bg-panel);
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.cockpit-detail-instructor-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--cockpit-detail-border-secondary);
+}
+
+.cockpit-detail-instructor-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--cockpit-detail-neon-cyan);
+}
+
+.cockpit-detail-instructor-label {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.8rem;
+  color: var(--cockpit-detail-neon-cyan);
+  letter-spacing: 2px;
+}
+
+.cockpit-detail-instructor-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cockpit-detail-instructor-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid var(--cockpit-detail-neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 246, 255, 0.4);
+  object-fit: cover;
+}
+
+.cockpit-detail-instructor-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cockpit-detail-text-primary);
+  margin: 0 0 0.25rem 0;
+}
+
+.cockpit-detail-instructor-spec {
+  font-size: 0.9rem;
+  color: var(--cockpit-detail-text-secondary);
+  margin: 0;
+}
+
+/* ===========================================
+   ENROLLMENT PANEL (Right)
+   =========================================== */
+
+.cockpit-detail-enrollment-panel {
+  position: sticky;
+  top: 2rem;
+  height: fit-content;
+}
+
+.cockpit-detail-preview-card {
+  background: var(--cockpit-detail-bg-panel);
+  border: 2px solid var(--cockpit-detail-border-primary);
+  padding: 1.5rem;
+  clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+  box-shadow: inset 0 0 30px rgba(0, 246, 255, 0.05);
+}
+
+.cockpit-detail-preview-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  border: 2px solid var(--cockpit-detail-border-secondary);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.cockpit-detail-preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.8);
+  transition: all 0.3s ease;
+}
+
+.cockpit-detail-preview-card:hover .cockpit-detail-preview-image {
+  filter: brightness(1);
+  transform: scale(1.05);
+}
+
+.cockpit-detail-preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cockpit-detail-preview-card:hover .cockpit-detail-preview-overlay {
+  opacity: 1;
+}
+
+.cockpit-detail-play-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 246, 255, 0.9);
+  border: 2px solid var(--cockpit-detail-neon-cyan);
+  color: var(--cockpit-detail-bg-dark);
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+}
+
+.cockpit-detail-play-btn:hover {
+  background: var(--cockpit-detail-neon-cyan);
+  box-shadow: 0 0 25px var(--cockpit-detail-neon-cyan);
+  transform: scale(1.05);
+}
+
+.cockpit-detail-play-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Energy Indicator */
+.cockpit-detail-energy-indicator {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 30px;
+  height: 30px;
+  background: var(--cockpit-detail-neon-cyan);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.cockpit-detail-energy-pulse {
+  position: absolute;
+  inset: -5px;
+  background: var(--cockpit-detail-neon-cyan);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  filter: blur(10px);
+  opacity: 0.5;
+  animation: energyPulse 3s ease-in-out infinite;
+}
+
+/* Price Section */
+.cockpit-detail-price-section {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.cockpit-detail-price-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.cockpit-detail-price-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--cockpit-detail-neon-yellow);
+}
+
+.cockpit-detail-price-label {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.75rem;
+  color: var(--cockpit-detail-text-secondary);
+  letter-spacing: 1px;
+}
+
+.cockpit-detail-price-value {
+  font-family: 'Space Habitat', monospace;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--cockpit-detail-neon-green);
+  text-shadow: 0 0 15px var(--cockpit-detail-neon-green);
+  letter-spacing: 2px;
+}
+
+/* Enroll Button */
+.cockpit-detail-enroll-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, var(--cockpit-detail-neon-cyan), var(--cockpit-detail-neon-blue));
+  border: 2px solid var(--cockpit-detail-neon-cyan);
+  color: var(--cockpit-detail-bg-dark);
+  font-family: 'Space Habitat', monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  box-shadow: 0 0 20px rgba(0, 246, 255, 0.4);
+  margin-bottom: 1rem;
+}
+
+.cockpit-detail-enroll-btn:hover {
+  background: linear-gradient(135deg, var(--cockpit-detail-neon-blue), var(--cockpit-detail-neon-purple));
+  transform: translateY(-3px);
+  box-shadow: 0 5px 30px rgba(0, 246, 255, 0.6);
+}
+
+.cockpit-detail-enroll-btn.enrolled {
+  background: linear-gradient(135deg, var(--cockpit-detail-neon-green), #00cc7a);
+  border-color: var(--cockpit-detail-neon-green);
+  box-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
+}
+
+.cockpit-detail-enroll-btn.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.cockpit-detail-enroll-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Action Buttons */
+.cockpit-detail-action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.cockpit-detail-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--cockpit-detail-bg-panel);
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  color: var(--cockpit-detail-text-primary);
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+}
+
+.cockpit-detail-action-btn:hover {
+  border-color: var(--cockpit-detail-neon-cyan);
+  background: rgba(0, 246, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.cockpit-detail-action-btn.active {
+  border-color: var(--cockpit-detail-neon-pink);
+  background: rgba(255, 0, 255, 0.2);
+  color: var(--cockpit-detail-neon-pink);
+}
+
+.cockpit-detail-action-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Progress Section */
+.cockpit-detail-progress-section {
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.cockpit-detail-progress-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.cockpit-detail-progress-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--cockpit-detail-neon-green);
+}
+
+.cockpit-detail-progress-label {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.75rem;
+  color: var(--cockpit-detail-text-secondary);
+  letter-spacing: 1px;
+}
+
+.cockpit-detail-progress-bar {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.cockpit-detail-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cockpit-detail-neon-green), var(--cockpit-detail-neon-cyan));
+  box-shadow: 0 0 10px var(--cockpit-detail-neon-green);
+  transition: width 0.5s ease;
+}
+
+.cockpit-detail-progress-text {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.9rem;
+  color: var(--cockpit-detail-neon-green);
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px var(--cockpit-detail-neon-green);
+}
+
+/* ===========================================
+   CONTENT SECTION
+   =========================================== */
+
+.cockpit-detail-content {
+  margin-top: 2rem;
+}
+
+/* Tabs */
+.cockpit-detail-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--cockpit-detail-bg-panel);
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  overflow-x: auto;
+}
+
+.cockpit-detail-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  color: var(--cockpit-detail-text-secondary);
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  white-space: nowrap;
+}
+
+.cockpit-detail-tab:hover {
+  border-color: var(--cockpit-detail-neon-cyan);
+  color: var(--cockpit-detail-text-primary);
+  background: rgba(0, 246, 255, 0.05);
+}
+
+.cockpit-detail-tab.active {
+  border-color: var(--cockpit-detail-neon-cyan);
+  color: var(--cockpit-detail-neon-cyan);
+  background: rgba(0, 246, 255, 0.15);
+  box-shadow: 0 0 15px rgba(0, 246, 255, 0.3);
+}
+
+.cockpit-detail-tab-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Tab Content */
+.cockpit-detail-tab-content {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Section Panel */
+.cockpit-detail-section-panel {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: var(--cockpit-detail-bg-panel);
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
+
+.cockpit-detail-section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--cockpit-detail-border-primary);
+}
+
+.cockpit-detail-section-marker {
+  width: 4px;
+  height: 30px;
+  background: linear-gradient(180deg, var(--cockpit-detail-neon-cyan), var(--cockpit-detail-neon-blue));
+  box-shadow: 0 0 10px var(--cockpit-detail-neon-cyan);
+}
+
+.cockpit-detail-section-title {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.3rem;
+  color: var(--cockpit-detail-neon-cyan);
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px var(--cockpit-detail-neon-cyan);
+  margin: 0;
+}
+
+.cockpit-detail-section-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cockpit-detail-text {
+  color: var(--cockpit-detail-text-secondary);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+/* Outcomes Grid */
+.cockpit-detail-outcomes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.cockpit-detail-outcome-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  transition: all 0.3s ease;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.cockpit-detail-outcome-card:hover {
+  border-color: var(--cockpit-detail-neon-cyan);
+  background: rgba(0, 246, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+.cockpit-detail-outcome-icon {
+  width: 28px;
+  height: 28px;
+  color: var(--cockpit-detail-neon-cyan);
+  flex-shrink: 0;
+}
+
+.cockpit-detail-outcome-card span {
+  color: var(--cockpit-detail-text-primary);
+  font-size: 0.95rem;
+}
+
+/* Requirements */
+.cockpit-detail-requirements {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cockpit-detail-requirements li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 3px solid var(--cockpit-detail-neon-green);
+}
+
+.cockpit-detail-check-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--cockpit-detail-neon-green);
+  flex-shrink: 0;
+}
+
+.cockpit-detail-requirements li span {
+  color: var(--cockpit-detail-text-primary);
+}
+
+/* Modules List */
+.cockpit-detail-modules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cockpit-detail-module-card {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  transition: all 0.3s ease;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.cockpit-detail-module-card:hover {
+  border-color: var(--cockpit-detail-neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 246, 255, 0.2);
+}
+
+.cockpit-detail-module-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem;
+}
+
+.cockpit-detail-module-number {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cockpit-detail-bg-panel);
+  border: 2px solid var(--cockpit-detail-neon-cyan);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  flex-shrink: 0;
+}
+
+.cockpit-detail-module-index {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--cockpit-detail-neon-cyan);
+  text-shadow: 0 0 10px var(--cockpit-detail-neon-cyan);
+}
+
+.cockpit-detail-module-info {
+  flex: 1;
+}
+
+.cockpit-detail-module-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cockpit-detail-text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.cockpit-detail-module-desc {
+  font-size: 0.9rem;
+  color: var(--cockpit-detail-text-secondary);
+  margin: 0;
+}
+
+.cockpit-detail-module-toggle {
+  padding: 0.5rem;
+  background: transparent;
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  color: var(--cockpit-detail-text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
+}
+
+.cockpit-detail-module-toggle:hover {
+  border-color: var(--cockpit-detail-neon-cyan);
+  color: var(--cockpit-detail-neon-cyan);
+}
+
+.cockpit-detail-toggle-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.cockpit-detail-module-content {
+  padding: 1.25rem;
+  border-top: 1px solid var(--cockpit-detail-border-secondary);
+  animation: slideDown 0.3s ease-out;
+}
+
+.cockpit-detail-module-detail {
+  color: var(--cockpit-detail-text-secondary);
+  font-style: italic;
+}
+
+/* Empty State */
+.cockpit-detail-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+}
+
+.cockpit-detail-empty-icon {
+  width: 60px;
+  height: 60px;
+  color: var(--cockpit-detail-text-secondary);
+  opacity: 0.3;
+}
+
+.cockpit-detail-empty-text {
+  color: var(--cockpit-detail-text-secondary);
+  font-style: italic;
+}
+
+/* Instructor Full Card */
+.cockpit-detail-instructor-full-card {
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--cockpit-detail-border-secondary);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.cockpit-detail-instructor-profile {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.cockpit-detail-instructor-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid var(--cockpit-detail-neon-cyan);
+  box-shadow: 0 0 20px rgba(0, 246, 255, 0.5);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cockpit-detail-instructor-bio-section {
+  flex: 1;
+}
+
+.cockpit-detail-instructor-full-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--cockpit-detail-text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.cockpit-detail-instructor-role {
+  font-size: 1rem;
+  color: var(--cockpit-detail-neon-cyan);
+  margin: 0 0 1rem 0;
+}
+
+.cockpit-detail-instructor-bio {
+  color: var(--cockpit-detail-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Reviews */
+.cockpit-detail-reviews-summary {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.cockpit-detail-rating-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--cockpit-detail-neon-yellow);
+  clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+}
+
+.cockpit-detail-rating-number {
+  font-family: 'Space Habitat', monospace;
+  font-size: 4rem;
+  font-weight: bold;
+  color: var(--cockpit-detail-neon-yellow);
+  text-shadow: 0 0 20px var(--cockpit-detail-neon-yellow);
+  line-height: 1;
+}
+
+.cockpit-detail-rating-stars {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cockpit-detail-star {
+  width: 28px;
+  height: 28px;
+  color: var(--cockpit-detail-border-secondary);
+  fill: transparent;
+}
+
+.cockpit-detail-star.filled {
+  color: var(--cockpit-detail-neon-yellow);
+  fill: var(--cockpit-detail-neon-yellow);
+  filter: drop-shadow(0 0 5px var(--cockpit-detail-neon-yellow));
+}
+
+.cockpit-detail-rating-count {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.9rem;
+  color: var(--cockpit-detail-text-secondary);
+  letter-spacing: 1px;
+}
+
+/* ===========================================
+   MODAL
+   =========================================== */
+
+.cockpit-detail-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(10px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.cockpit-detail-modal-content {
+  position: relative;
+  max-width: 900px;
+  width: 90%;
+  background: var(--cockpit-detail-bg-panel);
+  border: 2px solid var(--cockpit-detail-neon-cyan);
+  padding: 2rem;
+  clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+  box-shadow: 0 0 50px rgba(0, 246, 255, 0.5);
+  animation: scaleIn 0.3s ease-out;
+}
+
+.cockpit-detail-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  background: var(--cockpit-detail-bg-dark);
+  border: 2px solid var(--cockpit-detail-neon-cyan);
+  color: var(--cockpit-detail-neon-cyan);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  z-index: 10;
+}
+
+.cockpit-detail-modal-close:hover {
+  background: var(--cockpit-detail-neon-cyan);
+  color: var(--cockpit-detail-bg-dark);
+  box-shadow: 0 0 20px var(--cockpit-detail-neon-cyan);
+}
+
+.cockpit-detail-modal-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.cockpit-detail-modal-video img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cockpit-detail-modal-play-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.cockpit-detail-modal-play-icon {
+  width: 80px;
+  height: 80px;
+  color: var(--cockpit-detail-neon-cyan);
+  filter: drop-shadow(0 0 20px var(--cockpit-detail-neon-cyan));
+}
+
+.cockpit-detail-modal-play-overlay span {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.2rem;
+  color: var(--cockpit-detail-neon-cyan);
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px var(--cockpit-detail-neon-cyan);
+}
+
+/* ===========================================
+   ANIMATIONS
+   =========================================== */
+
+@keyframes starMove {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+@keyframes radarSweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes blipPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.8); }
+}
+
+@keyframes loadingProgress {
+  0% { width: 0%; }
+  50% { width: 70%; }
+  100% { width: 100%; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+@keyframes energyPulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.2); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ===========================================
+   RESPONSIVE DESIGN
+   =========================================== */
+
+@media (max-width: 1200px) {
+  .cockpit-detail-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cockpit-detail-enrollment-panel {
+    position: relative;
+    top: 0;
+  }
+
+  .cockpit-detail-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 968px) {
+  .cockpit-detail-hud-frame {
+    padding: 1.5rem;
+  }
+
+  .cockpit-detail-title {
+    font-size: 2rem;
+  }
+
+  .cockpit-detail-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cockpit-detail-tabs {
+    overflow-x: scroll;
+  }
+
+  .cockpit-detail-instructor-profile {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .cockpit-detail-container {
+    padding: 1rem;
+  }
+
+  .cockpit-detail-hud-frame {
+    padding: 1rem;
+    clip-path: polygon(
+      0 15px, 15px 0,
+      calc(100% - 15px) 0, 100% 15px,
+      100% calc(100% - 15px), calc(100% - 15px) 100%,
+      15px 100%, 0 calc(100% - 15px)
+    );
+  }
+
+  .cockpit-detail-title {
+    font-size: 1.5rem;
+  }
+
+  .cockpit-detail-outcomes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cockpit-detail-corner {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cockpit-detail-hud-frame {
+    padding: 0.75rem;
+  }
+
+  .cockpit-detail-title {
+    font-size: 1.3rem;
+  }
+
+  .cockpit-detail-section-title {
+    font-size: 1.1rem;
+  }
+
+  .cockpit-detail-stat-value {
+    font-size: 1.2rem;
+  }
+
+  .cockpit-detail-modal-content {
+    width: 95%;
+    padding: 1rem;
+  }
+}

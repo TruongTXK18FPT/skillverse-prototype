@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Clock, Users, Star, BookOpen, Award, Play, ChevronDown, Filter, TrendingUp, GraduationCap, Folder } from 'lucide-react';
+import { Clock, Users, Star, BookOpen, Award, Play, ChevronDown, Filter, TrendingUp, GraduationCap, Folder, Radar, Zap, Target, Shield } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
-import '../../styles/CoursesPage.css';
+import '../../styles/CoursesPageCockpit.css';
 import Pagination from '../../components/Pagination';
 import { useNavigate } from 'react-router-dom';
 import { parsePrice, isFreePrice, listPublishedCourses, Course } from '../../services/courseService';
@@ -35,6 +35,11 @@ useEffect(() => {
                               (dto.author?.fullName) ||
                               `${dto.author?.firstName || ''} ${dto.author?.lastName || ''}`.trim() ||
                               'Unknown Instructor';
+
+        // Get price from purchaseOption first, fallback to dto.price
+        const actualPrice = dto.purchaseOption?.price ?? dto.price ?? 0;
+        const actualCurrency = dto.purchaseOption?.currency ?? dto.currency ?? 'VND';
+
         return {
           id: dto.id.toString(),
           title: dto.title,
@@ -42,15 +47,18 @@ useEffect(() => {
           category: 'general',
           image: dto.thumbnailUrl || '/images/default-course.jpg',
           level: (dto.level || 'BEGINNER').toLowerCase(),
-          price: (dto.price !== null && dto.price !== undefined) ? `${dto.price} ${dto.currency || 'VND'}` : '0',
-          rating: 0, // Backend doesn't provide averageRating in CourseSummaryDTO
+          price: (actualPrice !== null && actualPrice !== undefined && actualPrice !== 0)
+            ? `${actualPrice} ${actualCurrency}`
+            : '0',
+          rating: 0,
           students: dto.enrollmentCount || 0,
-          description: dto.title || '', // Backend doesn't provide shortDescription in CourseSummaryDTO
+          description: dto.title || '',
           duration: '0',
           modules: (dto.moduleCount !== null && dto.moduleCount !== undefined) ? dto.moduleCount : 0,
           certificate: false
         };
       });
+
       setCourses(legacyCourses);
       setLoading(false);
     })
@@ -117,13 +125,13 @@ useEffect(() => {
   }, {} as Record<string, number>);
 
 const categories = [
-  { id: 'all', name: 'Tất Cả', count: courses.length },
-  { id: 'tech', name: 'Công Nghệ', count: categoriesMap['tech'] ?? 0 },
-  { id: 'design', name: 'Thiết Kế', count: categoriesMap['design'] ?? 0 },
-  { id: 'business', name: 'Kinh Doanh', count: categoriesMap['business'] ?? 0 },
-  { id: 'marketing', name: 'Marketing', count: categoriesMap['marketing'] ?? 0 },
-  { id: 'language', name: 'Ngoại Ngữ', count: categoriesMap['language'] ?? 0 },
-  { id: 'soft-skills', name: 'Kỹ Năng Mềm', count: categoriesMap['soft-skills'] ?? 0 }
+  { id: 'all', name: 'Tất Cả', count: courses.length, icon: Shield },
+  { id: 'tech', name: 'Công Nghệ', count: categoriesMap['tech'] ?? 0, icon: Zap },
+  { id: 'design', name: 'Thiết Kế', count: categoriesMap['design'] ?? 0, icon: Target },
+  { id: 'business', name: 'Kinh Doanh', count: categoriesMap['business'] ?? 0, icon: TrendingUp },
+  { id: 'marketing', name: 'Marketing', count: categoriesMap['marketing'] ?? 0, icon: Star },
+  { id: 'language', name: 'Ngoại Ngữ', count: categoriesMap['language'] ?? 0, icon: BookOpen },
+  { id: 'soft-skills', name: 'Kỹ Năng Mềm', count: categoriesMap['soft-skills'] ?? 0, icon: Users }
 ];
 
   const sortOptions = [
@@ -150,79 +158,137 @@ const categories = [
 
   if (loading) {
     return (
-      <div className={`courses-container ${theme}`} data-theme={theme}>
-        <div className="courses-content">
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p>Đang tải khóa học...</p>
+      <div className={`cockpit-courses-container ${theme}`} data-theme={theme}>
+        <div className="cockpit-hud-frame">
+          <div className="cockpit-loading-container">
+            <div className="cockpit-radar-spinner">
+              <div className="cockpit-radar-sweep"></div>
+              <div className="cockpit-radar-blip"></div>
+            </div>
+            <p className="cockpit-loading-text">KHỞI ĐỘNG HỆ THỐNG...</p>
+            <div className="cockpit-loading-bar">
+              <div className="cockpit-loading-progress"></div>
+            </div>
           </div>
         </div>
       </div>
     );
   }
+
   return (
-    <div className={`svc-courses courses-container ${theme}`} data-theme={theme}>
-      <div className="courses-content">
-        {/* Hero Section */}
-        <div className="courses-hero">
-          <div className="hero-content">
-            <h1 className="courses-title">
-              <span className="hero-icon"><GraduationCap className="icon" /></span>
-              {' '}Khóa Học Chuyên Nghiệp
-            </h1>
-            <p className="courses-description">
-              Nâng cao kỹ năng với các khóa học chất lượng từ các chuyên gia hàng đầu
-            </p>
-            <div className="hero-stats">
-              <div className="course-stat-item">
-                <span className="stat-number">{courses.length}</span>
-                <span className="course-stat-label">Khóa học</span>
-              </div>
-              <div className="course-stat-item">
-                <span className="stat-number">{categories.length - 1}</span>
-                <span className="course-stat-label">Lĩnh vực</span>
-              </div>
-              <div className="course-stat-item">
-                <span className="stat-number">1000+</span>
-                <span className="course-stat-label">Học viên</span>
+    <div className={`cockpit-courses-container ${theme}`} data-theme={theme}>
+      {/* HUD Corner Decorations */}
+      <div className="cockpit-hud-corners">
+        <div className="cockpit-corner cockpit-corner-tl"></div>
+        <div className="cockpit-corner cockpit-corner-tr"></div>
+        <div className="cockpit-corner cockpit-corner-bl"></div>
+        <div className="cockpit-corner cockpit-corner-br"></div>
+      </div>
+
+      {/* Main HUD Frame */}
+      <div className="cockpit-hud-frame">
+        {/* Header HUD */}
+        <div className="cockpit-header-hud">
+          <div className="cockpit-header-left">
+            <div className="cockpit-system-indicator">
+              <div className="cockpit-pulse-dot"></div>
+              <span className="cockpit-system-text">SYS ONLINE</span>
+            </div>
+          </div>
+
+          <div className="cockpit-header-center">
+            <h1 className="cockpit-main-title">KHÁM PHÁ <br />THIÊN HÀ TRI THỨC</h1>
+            <div className="cockpit-subtitle">Data Upgrade Modules</div>
+          </div>
+
+          <div className="cockpit-header-right">
+            <div className="cockpit-stats-mini">
+              <div className="cockpit-stat-mini-item">
+                <span className="cockpit-stat-label">MODULES</span>
+                <span className="cockpit-stat-value">{courses.length}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Enhanced Search and Filter Section */}
-        <div className="search-filter-container">
-          <div className="search-section">
-            <div className="course-search-input-wrapper">
-              <input
-                type="text"
-                placeholder="Tìm kiếm khóa học, giảng viên..."
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="search-input"
-              />
-            </div>
+        {/* Radar Search Section */}
+        <div className="cockpit-radar-search-section">
+          <div className="cockpit-radar-icon-wrapper">
+            <Radar className="cockpit-radar-icon" />
+            <div className="cockpit-radar-pulse"></div>
           </div>
 
-          <div className="filter-section">
-            <button
-              className={`filter-toggle-btn ${showFilters ? 'active' : ''}`}
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <Filter className="filter-icon" />
-              Bộ lọc
-              <ChevronDown className={`chevron ${showFilters ? 'rotated' : ''}`} />
-            </button>
+          <div className="cockpit-search-input-container">
+            <input
+              type="text"
+              placeholder="BẮT ĐẦU QUÉT DỮ LIỆU..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="cockpit-search-input"
+            />
+            <div className="cockpit-search-scan-line"></div>
+          </div>
 
-            <div className="sort-section">
-              <TrendingUp className="sort-icon" />
+          <button
+            className={`cockpit-filter-toggle ${showFilters ? 'active' : ''}`}
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <Filter className="cockpit-icon" />
+            <span>BỘ LỌC</span>
+          </button>
+        </div>
+
+        {/* Advanced Filters Panel */}
+        {showFilters && (
+          <div className="cockpit-filters-panel">
+            <div className="cockpit-filter-group">
+              <div className="cockpit-filter-label">
+                <Zap className="cockpit-filter-icon" />
+                GIÁ
+              </div>
+              <div className="cockpit-filter-options">
+                {priceOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    className={`cockpit-filter-btn ${priceFilter === option.value ? 'active' : ''}`}
+                    onClick={() => setPriceFilter(option.value as PriceFilter)}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="cockpit-filter-group">
+              <div className="cockpit-filter-label">
+                <Target className="cockpit-filter-icon" />
+                CẤP ĐỘ
+              </div>
+              <div className="cockpit-filter-options">
+                {levelOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    className={`cockpit-filter-btn ${levelFilter === option.value ? 'active' : ''}`}
+                    onClick={() => setLevelFilter(option.value)}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="cockpit-filter-group">
+              <div className="cockpit-filter-label">
+                <TrendingUp className="cockpit-filter-icon" />
+                SẮP XẾP
+              </div>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className="sort-select"
+                className="cockpit-sort-select"
               >
                 {sortOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -232,57 +298,18 @@ const categories = [
               </select>
             </div>
           </div>
+        )}
 
-          {/* Advanced Filters */}
-          {showFilters && (
-            <div className="advanced-filters">
-              <div className="filter-group">
-                <div className="filter-label">Giá</div>
-                <div className="filter-options">
-                  {priceOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      className={`filter-option-btn ${priceFilter === option.value ? 'active' : ''}`}
-                      onClick={() => setPriceFilter(option.value as PriceFilter)}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="filter-group">
-                <div className="filter-label">Cấp độ</div>
-                <div className="filter-options">
-                  {levelOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      className={`filter-option-btn ${levelFilter === option.value ? 'active' : ''}`}
-                      onClick={() => setLevelFilter(option.value)}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Results Summary */}
-        <div className="results-summary">
-          <div className="results-count">
-            Tìm thấy <strong>{sortedCourses.length}</strong> khóa học
-            {searchTerm && (
-              <span className="search-term">
-                {' '}cho "<em>{searchTerm}</em>"
-              </span>
-            )}
+        {/* Results Info */}
+        <div className="cockpit-results-info">
+          <div className="cockpit-scan-result">
+            <span className="cockpit-scan-label">SCAN RESULT:</span>
+            <span className="cockpit-scan-count">{sortedCourses.length}</span>
+            <span className="cockpit-scan-unit">MODULES DETECTED</span>
           </div>
-
           {(searchTerm || selectedCategory !== 'all' || priceFilter !== 'all' || levelFilter !== 'all') && (
             <button
-              className="clear-filters-btn"
+              className="cockpit-clear-btn"
               onClick={() => {
                 setSearchTerm('');
                 setSelectedCategory('all');
@@ -291,69 +318,77 @@ const categories = [
                 setCurrentPage(1);
               }}
             >
-              Xóa bộ lọc
+              RESET FILTERS
             </button>
           )}
         </div>
 
-        <div className="main-content">
-          {/* Enhanced Sidebar */}
-          <div className="course-sidebar">
-            <div className="category-container">
-              <h3 className="course-category-title">
-                <span className="category-icon"><Folder className="icon" /></span>
-                {' '}Danh Mục Khóa Học
-              </h3>
-              <div className="category-list">
-                {categories.map((category) => (
+        {/* Main Content Grid */}
+        <div className="cockpit-main-grid">
+          {/* Control Panel Sidebar */}
+          <div className="cockpit-control-panel">
+            <div className="cockpit-panel-header">
+              <Folder className="cockpit-panel-icon" />
+              <span className="cockpit-panel-title">BẢNG ĐIỀU KHIỂN</span>
+            </div>
+
+            <div className="cockpit-categories-list">
+              {categories.map((category) => {
+                const IconComponent = category.icon;
+                return (
                   <button
                     key={category.id}
                     onClick={() => {
                       setSelectedCategory(category.id);
                       setCurrentPage(1);
                     }}
-                    className={`category-button ${selectedCategory === category.id ? 'active' : ''}`}
+                    className={`cockpit-category-btn ${selectedCategory === category.id ? 'active' : ''}`}
                   >
-                    <div className="category-info">
-                      <span className="category-name">{category.name}</span>
+                    <div className="cockpit-category-content">
+                      <IconComponent className="cockpit-category-icon" />
+                      <span className="cockpit-category-name">{category.name}</span>
                     </div>
-                    <span className="category-count">({category.count})</span>
+                    <div className="cockpit-category-badge">{category.count}</div>
                   </button>
-                ))}
-              </div>
+                );
+              })}
             </div>
 
-            {/* Price Range Info */}
-            <div className="price-info-container">
-              <h4 className="price-info-title">Thông tin giá</h4>
-              <div className="price-stats">
-                <div className="price-stat">
-                  <span className="price-label">Miễn phí:</span>
-                  <span className="price-value">
-                    {courses.filter(c => isFreePrice(c.price)).length} khóa
-                  </span>
+            {/* System Status */}
+            <div className="cockpit-system-status">
+              <div className="cockpit-status-header">TRẠNG THÁI HỆ THỐNG</div>
+              <div className="cockpit-status-item">
+                <div className="cockpit-status-bar">
+                  <div className="cockpit-status-fill" style={{
+                    width: `${courses.length > 0 ? (courses.filter(c => isFreePrice(c.price)).length / courses.length * 100) : 0}%`
+                  }}></div>
                 </div>
-                <div className="price-stat">
-                  <span className="price-label">Có phí:</span>
-                  <span className="price-value">
-                    {courses.filter(c => !isFreePrice(c.price)).length} khóa
-                  </span>
+                <span className="cockpit-status-label">Miễn phí: {courses.filter(c => isFreePrice(c.price)).length} khóa</span>
+              </div>
+              <div className="cockpit-status-item">
+                <div className="cockpit-status-bar">
+                  <div className="cockpit-status-fill cockpit-status-fill-alt" style={{
+                    width: `${courses.length > 0 ? (courses.filter(c => !isFreePrice(c.price)).length / courses.length * 100) : 0}%`
+                  }}></div>
                 </div>
+                <span className="cockpit-status-label">Có phí: {courses.filter(c => !isFreePrice(c.price)).length} khóa</span>
               </div>
             </div>
           </div>
 
-          {/* Enhanced Courses Grid */}
-          <div className="courses-section">
+          {/* Modules Grid */}
+          <div className="cockpit-modules-section">
             {paginatedCourses.length === 0 ? (
-              <div className="empty-state">
-                <div className="empty-icon">📚</div>
-                <h3 className="empty-title">Không tìm thấy khóa học</h3>
-                <p className="empty-description">
-                  Hãy thử điều chỉnh bộ lọc hoặc từ khóa tìm kiếm của bạn
+              <div className="cockpit-empty-state">
+                <div className="cockpit-empty-icon">
+                  <Radar className="cockpit-radar-empty" />
+                </div>
+                <h3 className="cockpit-empty-title">KHÔNG PHÁT HIỆN MODULE</h3>
+                <p className="cockpit-empty-text">
+                  Điều chỉnh thông số quét hoặc đặt lại bộ lọc
                 </p>
                 <button
-                  className="reset-search-btn"
+                  className="cockpit-reset-btn"
                   onClick={() => {
                     setSearchTerm('');
                     setSelectedCategory('all');
@@ -361,87 +396,75 @@ const categories = [
                     setLevelFilter('all');
                   }}
                 >
-                  Đặt lại tìm kiếm
+                  ĐẶT LẠI HỆ THỐNG
                 </button>
               </div>
             ) : (
-              <div className="courses-grid">
+              <div className="cockpit-modules-grid">
                 {paginatedCourses.map((course, index) => (
                   <div
                     key={course.id}
-                    className="course-card"
-                    style={{ animationDelay: `${index * 0.1}s` }}
+                    className="cockpit-module-card"
+                    style={{ animationDelay: `${index * 0.05}s` }}
                     onClick={() => navigate(`/courses/${course.id}`, {
                       state: { course: course }
                     })}
                   >
-                    <div className="course-image-container">
-                      <img src={course.image} alt={course.title} className="course-image" />
-                      <div className="course-preview-overlay">
-                        <button className="preview-button">
-                          <Play className="play-icon" />
-                          <span>Xem trước</span>
+                    {/* Module Header */}
+                    <div className="cockpit-module-header">
+                      <div className="cockpit-module-level-indicator">
+                        <div className="cockpit-level-dot"></div>
+                        <span className="cockpit-level-text">LEVEL</span>
+                      </div>
+                      <div className="cockpit-module-id">#{course.id}</div>
+                    </div>
+
+                    {/* Module Image */}
+                    <div className="cockpit-module-image-container">
+                      <img src={course.image} alt={course.title} className="cockpit-module-image" />
+                      <div className="cockpit-module-overlay">
+                        <button className="cockpit-preview-btn">
+                          <Play className="cockpit-play-icon" />
+                          <span>XEM TRƯỚC</span>
                         </button>
                       </div>
 
-                      {/* Enhanced Badges */}
-                      <div className="course-badges">
-                        {course.level && (
-                          <div className={`course-level-badge level-${course.level?.toLowerCase()}`}>
-                            {course.level}
-                          </div>
-                        )}
-                        {(() => {
-                          const numPrice = parseInt(course.price?.replace(/[^\d]/g, '') || '0');
-                          return numPrice === 0 && (
-                            <div className="course-free-badge">Miễn phí</div>
-                          );
-                        })()}
-                        {course.certificate && (
-                          <div className="course-certificate-badge">
-                            <Award className="certificate-icon" />
-                          </div>
-                        )}
+                      {/* Energy Crystal Icon */}
+                      <div className="cockpit-energy-crystal">
+                        <div className="cockpit-crystal-glow"></div>
                       </div>
                     </div>
 
-                    <div className="course-content">
-
-                      <h3 className="course-title">{course.title}</h3>
-                      <p className="course-description">{course.description}</p>
-                      <p className="course-instructor">
-                        <span className="instructor-label">Giảng viên:</span>
-                        {' '}{course.instructor}
+                    {/* Module Info */}
+                    <div className="cockpit-module-info">
+                      <h3 className="cockpit-module-title">{course.title}</h3>
+                      <p className="cockpit-module-instructor">
+                        <span className="cockpit-label">INSTRUCTOR:</span> {course.instructor}
                       </p>
 
-                      <div className="course-meta">
-                        <div className="meta-item">
-                          <Clock className="meta-icon" />
-                          <span>{course.duration ?? '4-6 tuần'}</span>
+                      <div className="cockpit-module-stats">
+                        <div className="cockpit-stat-item">
+                          <BookOpen className="cockpit-stat-icon" />
+                          <span>{course.modules ?? 12} LESSONS</span>
                         </div>
-                        <div className="meta-item">
-                          <BookOpen className="meta-icon" />
-                          <span>{course.modules ?? 12} bài học</span>
+                        <div className="cockpit-stat-item">
+                          <Users className="cockpit-stat-icon" />
+                          <span>{course.students} ENROLLED</span>
                         </div>
                       </div>
 
-                      <div className="course-footer">
-                        <div className="price-section">
-                          <span className="course-price">
+                      {/* Module Footer */}
+                      <div className="cockpit-module-footer">
+                        <div className="cockpit-price-display">
+                          <span className="cockpit-price">
                             {(() => {
-                              // Extract numeric price from string like "299000 VND"
                               const numPrice = parseInt(course.price?.replace(/[^\d]/g, '') || '0');
-                              return numPrice === 0 ? 'Miễn phí' : course.price;
+                              return numPrice === 0 ? 'FREE' : course.price;
                             })()}
                           </span>
-                          {(() => {
-                            const numPrice = parseInt(course.price?.replace(/[^\d]/g, '') || '0');
-                            return numPrice !== 0 && (
-                              <span className="price-period">/khóa</span>
-                            );
-                          })()}
                         </div>
-                        <button className="enroll-button"
+                        <button
+                          className="cockpit-engage-btn"
                           onClick={(e) => {
                             e.stopPropagation();
                             navigate(`/courses/${course.id}`, {
@@ -449,9 +472,18 @@ const categories = [
                             });
                           }}
                         >
-                          Đăng Ký Ngay
+                          <Zap className="cockpit-btn-icon" />
+                          KHỞI ĐỘNG
                         </button>
                       </div>
+                    </div>
+
+                    {/* Card Corner Accents */}
+                    <div className="cockpit-card-corners">
+                      <div className="cockpit-card-corner cockpit-card-corner-tl"></div>
+                      <div className="cockpit-card-corner cockpit-card-corner-tr"></div>
+                      <div className="cockpit-card-corner cockpit-card-corner-bl"></div>
+                      <div className="cockpit-card-corner cockpit-card-corner-br"></div>
                     </div>
                   </div>
                 ))}
@@ -460,9 +492,9 @@ const categories = [
           </div>
         </div>
 
-        {/* Enhanced Pagination */}
+        {/* Pagination */}
         {sortedCourses.length > itemsPerPage && (
-          <div className="pagination-wrapper">
+          <div className="cockpit-pagination-wrapper">
             <Pagination
               totalItems={sortedCourses.length}
               itemsPerPage={itemsPerPage}
