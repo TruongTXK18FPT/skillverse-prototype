@@ -6,11 +6,12 @@ import AnalyticsTab from '../../components/admin/AnalyticsTab';
 import NotificationsTab from '../../components/admin/NotificationsTab';
 import ReportsTab from '../../components/admin/ReportsTab';
 import PaymentsTab from '../../components/admin/PaymentsTab';
+import WithdrawalApprovalTab from '../../components/admin/WithdrawalApprovalTab';
 import SkillPointManagementTab from '../../components/admin/SkillPointManagementTab';
 import SystemSettingsTab from '../../components/admin/SystemSettingsTab';
 import { useTheme } from '../../context/ThemeContext';
 import { Sun, Moon } from 'lucide-react';
-import '../../styles/AdminPage.css';
+import '../../styles/AdminPageCosmic.css';
 
 const AdminPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('users');
@@ -67,6 +68,13 @@ const AdminPage: React.FC = () => {
       description: 'Quản lý giao dịch'
     },
     { 
+      id: 'withdrawals', 
+      label: 'Duyệt Rút Tiền', 
+      icon: '💸',
+      gradient: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
+      description: 'Xử lý yêu cầu rút tiền'
+    },
+    { 
       id: 'skillpoints', 
       label: 'Điểm Kỹ Năng', 
       icon: '⚡',
@@ -98,6 +106,8 @@ const AdminPage: React.FC = () => {
         return <ReportsTab />;
       case 'payments':
         return <PaymentsTab />;
+      case 'withdrawals':
+        return <WithdrawalApprovalTab />;
       case 'skillpoints':
         return <SkillPointManagementTab />;
       case 'settings':

@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  BookOpen, Briefcase, Award,
-  Users, Star, Brain, Target,
+  BookOpen, Award,
+  Brain, Target,
   Code, Zap, Globe, ChevronRight,
-  Map, Briefcase as Portfolio, Building, Power
+  Map, Briefcase as Portfolio, Building, Power,
+  Facebook, Video, Trophy, Medal, Star, Sparkles, ExternalLink
 } from 'lucide-react';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/HomePage.css';
@@ -15,6 +16,17 @@ import slide2 from '../../assets/slider-2.webp';
 import slide3 from '../../assets/slider-3.webp';
 import slide4 from '../../assets/slider-4.webp';
 import slide5 from '../../assets/slider-5.webp';
+
+// Award images
+import gold1 from '../../assets/award/gold1.png';
+import silver1 from '../../assets/award/silver1.png';
+import bronze1 from '../../assets/award/bronze1.png';
+import cup from '../../assets/award/cup.png';
+import earth from '../../assets/award/earth.png';
+
+// Social media images
+import tiktokIcon from '../../assets/social/tiktok.png';
+import facebookIcon from '../../assets/social/facebook.png';
 
 // Infinity Stones
 import spaceStone from '../../assets/infinity-stones/space_stone.png';
@@ -696,6 +708,268 @@ const HomePage = () => {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Media Section */}
+      <section className="social-media-section">
+        <div className="social-media-stars"></div>
+        <div className="section-container">
+          <div className="section-header">
+            <div className="cosmic-title-wrapper">
+              <div className="globe-icon-wrapper">
+                <Globe className="cosmic-orbit-icon globe-icon" size={40} />
+                <img src={earth} alt="Earth" className="earth-icon" />
+              </div>
+              <h2 className="section-title cosmic-title">
+                Các Kênh Mạng Xã Hội Của Chúng Tôi
+              </h2>
+            </div>
+            <p className="section-description">
+              Theo dõi chúng tôi để cập nhật những nội dung mới nhất về công nghệ và học tập
+            </p>
+          </div>
+
+          {/* First Row: TikTok and Facebook Video */}
+          <div className="social-media-grid-row">
+            {/* TikTok Embed */}
+            <div className="social-media-card tiktok-card">
+              <div className="card-glow tiktok-glow"></div>
+              <div className="social-media-header">
+                <div className="icon-wrapper tiktok-icon">
+                  <img src={tiktokIcon} alt="TikTok" className="social-icon-img" />
+                </div>
+                <h3 className="social-media-title">TikTok</h3>
+              </div>
+              <div className="social-media-content">
+                <iframe
+                  src="https://www.tiktok.com/embed/7573943741975678215"
+                  style={{ 
+                    width: '100%', 
+                    height: '600px', 
+                    border: 'none',
+                    maxWidth: '605px',
+                    margin: '0 auto',
+                    display: 'block'
+                  }}
+                  allowFullScreen
+                  scrolling="no"
+                  allow="encrypted-media;"
+                  title="TikTok Video"
+                ></iframe>
+              </div>
+            </div>
+
+            {/* Facebook Video Embed */}
+            <div className="social-media-card facebook-card">
+              <div className="card-glow facebook-glow"></div>
+              <div className="social-media-header">
+                <div className="icon-wrapper facebook-icon">
+                  <img src={facebookIcon} alt="Facebook" className="social-icon-img" />
+                </div>
+                <h3 className="social-media-title">Facebook Video</h3>
+              </div>
+              <div className="social-media-content">
+                <iframe 
+                  src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1201192888739159%2F&show_text=true&width=267&t=0" 
+                  width="267" 
+                  height="591" 
+                  style={{ border: 'none', overflow: 'hidden', maxWidth: '100%' }} 
+                  scrolling="no" 
+                  frameBorder="0" 
+                  allowFullScreen={true}
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                  title="Facebook Video"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+
+          {/* Second Row: Facebook Posts */}
+          <div className="social-media-grid-row full-width">
+            <div className="social-media-card facebook-posts-card fb-posts-container">
+              <div className="card-glow facebook-glow"></div>
+              <div className="social-media-header fb-posts-header">
+                <div className="icon-wrapper facebook-icon">
+                  <img src={facebookIcon} alt="Facebook" className="social-icon-img" />
+                </div>
+                <h3 className="social-media-title">Facebook Posts</h3>
+              </div>
+              <div className="facebook-posts-grid">
+                <div className="facebook-post-item fb-post-wrapper">
+                  <iframe 
+                    src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0G4FqF2Hx8hT7E4GrTxFP7JLTk2zLHtqQHcAyLe9P2fxHVwj4zrZFWvzzMN5s1VdTl%26id%3D61581184190711&show_text=true&width=500" 
+                    width="500" 
+                    height="698" 
+                    style={{ border: 'none', overflow: 'hidden', maxWidth: '100%' }} 
+                    scrolling="no" 
+                    frameBorder="0" 
+                    allowFullScreen={true}
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                    title="Facebook Post 1"
+                  ></iframe>
+                </div>
+                <div className="facebook-post-item fb-post-wrapper">
+                  <iframe 
+                    src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02a1gaCSYddsXU8RcpXUvxrPiWf5mAbXQzrz4EYXpsFBVHjd9f1qo8VzJZRY47QC9Fl%26id%3D61581184190711&show_text=true&width=500" 
+                    width="500" 
+                    height="641" 
+                    style={{ border: 'none', overflow: 'hidden', maxWidth: '100%' }} 
+                    scrolling="no" 
+                    frameBorder="0" 
+                    allowFullScreen={true}
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                    title="Facebook Post 2"
+                  ></iframe>
+                </div>
+                <div className="facebook-post-item fb-post-wrapper">
+                  <iframe 
+                    src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02ij7AP9pWHqquS7q8W5YE4focGDU3kcZHJgNaSdSCZr8b7vPHmWEcx4qLEvxrFKn4l%26id%3D61581184190711&show_text=true&width=500" 
+                    width="500" 
+                    height="712" 
+                    style={{ border: 'none', overflow: 'hidden', maxWidth: '100%' }} 
+                    scrolling="no" 
+                    frameBorder="0" 
+                    allowFullScreen={true}
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                    title="Facebook Post 3"
+                  ></iframe>
+                </div>
+                <div className="facebook-post-item fb-post-wrapper">
+                  <iframe 
+                    src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0BTnRCWjrv1THzEBH1R9K9iFR2LfzNAFcfAqLHaEM1KWLMPB4cd6MhtnEHDEdTtPxl%26id%3D61581184190711&show_text=true&width=500" 
+                    width="500" 
+                    height="674" 
+                    style={{ border: 'none', overflow: 'hidden', maxWidth: '100%' }} 
+                    scrolling="no" 
+                    frameBorder="0" 
+                    allowFullScreen={true}
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                    title="Facebook Post 4"
+                  ></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Awards & Achievements Section */}
+      <section className="awards-section">
+        <div className="awards-stars-bg"></div>
+        <div className="section-container">
+          <div className="section-header">
+            <div className="cosmic-title-wrapper">
+              <img src={cup} alt="Trophy" className="cosmic-orbit-icon awards-icon" />
+              <h2 className="section-title cosmic-title">
+                Giải Thưởng & Thành Tựu Của Skillverse
+              </h2>
+            </div>
+            <p className="section-description">
+              Những cột mốc quan trọng khẳng định vị thế của Skillverse trong hệ sinh thái AI & EdTech
+            </p>
+          </div>
+
+          <div className="awards-grid">
+            {/* Award 1 - Top 11 TechYouth */}
+            <div className="award-card award-gold">
+              <div className="award-glow gold-glow"></div>
+              <div className="award-medal-wrapper">
+                <div className="award-medal gold-medal">
+                  <img src={gold1} alt="Gold Medal" className="award-medal-img" />
+                  <div className="medal-shine"></div>
+                </div>
+              </div>
+              <div className="award-content">
+                <div className="award-rank"> Top 11</div>
+                <h3 className="award-title">TechYouth Builder Challenge 2025</h3>
+                <p className="award-description">
+                  Vượt qua hơn 600 dự án trên toàn quốc, Skillverse được chọn vào Top 11 của TechYouth Builder Challenge – chương trình tìm kiếm giải pháp AI & EdTech đột phá dành cho người trẻ.
+                </p>
+                <div className="award-impact">
+                  <Sparkles size={16} className="impact-icon" />
+                  <span className="impact-text">
+                    Khẳng định Skillverse là nền tảng AI có tính đổi mới cao, giải quyết thực tế nhu cầu định hướng nghề nghiệp, kỹ năng và portfolio cho sinh viên.
+                  </span>
+                </div>
+                <a href="https://www.facebook.com/share/p/17mWCBwJvz/" target="_blank" rel="noopener noreferrer" className="award-detail-link">
+                  <span>Xem chi tiết thành tích</span>
+                  <ExternalLink size={18} />
+                </a>
+              </div>
+            </div>
+
+            {/* Award 2 - Top 7 Innovation Quest */}
+            <div className="award-card award-silver">
+              <div className="award-glow silver-glow"></div>
+              <div className="award-medal-wrapper">
+                <div className="award-medal silver-medal">
+                  <img src={silver1} alt="Silver Medal" className="award-medal-img" />
+                  <div className="medal-shine"></div>
+                </div>
+              </div>
+              <div className="award-content">
+                <div className="award-rank">Top 7</div>
+                <h3 className="award-title">Innovation Quest 2025</h3>
+                <p className="award-subtitle">SIHUB & Sở KH&CN TP.HCM</p>
+                <p className="award-description">
+                  Innovation Quest 2025 là chương trình ươm tạo startup công nghệ mang tính cạnh tranh cao. Skillverse xuất sắc lọt vào Top 7 dự án được chọn để ươm tạo chính thức.
+                </p>
+                <div className="award-impact">
+                  <Sparkles size={16} className="impact-icon" />
+                  <span className="impact-text">
+                    Công nhận Skillverse là giải pháp có tiềm năng thương mại hóa, ứng dụng AI hiệu quả và mang lại tác động xã hội cho giáo dục & nguồn nhân lực trẻ.
+                  </span>
+                </div>
+                <a href="https://www.facebook.com/share/p/16SzK8iyqJ/" target="_blank" rel="noopener noreferrer" className="award-detail-link">
+                  <span>Xem chi tiết thành tích</span>
+                  <ExternalLink size={18} />
+                </a>
+              </div>
+            </div>
+
+            {/* Award 3 - Top 25 FIP */}
+            <div className="award-card award-bronze">
+              <div className="award-glow bronze-glow"></div>
+              <div className="award-medal-wrapper">
+                <div className="award-medal bronze-medal">
+                  <img src={bronze1} alt="Bronze Medal" className="award-medal-img" />
+                  <div className="medal-shine"></div>
+                </div>
+              </div>
+              <div className="award-content">
+                <div className="award-rank"> Top 25</div>
+                <h3 className="award-title">FIP Innovation Path 2025</h3>
+                <p className="award-subtitle">FPT University</p>
+                <p className="award-description">
+                  Vượt qua 65 dự án startup từ các campus FPT trên toàn quốc, Skillverse được chọn vào Top 25 FIP Innovation Path – cuộc thi sáng tạo & khởi nghiệp tiêu biểu của sinh viên FPT.
+                </p>
+                <div className="award-impact">
+                  <Sparkles size={16} className="impact-icon" />
+                  <span className="impact-text">
+                    Xác nhận Skillverse phù hợp với hệ sinh thái sinh viên, có tính thực tế cao và khả năng mở rộng mạnh trong cộng đồng đại học.
+                  </span>
+                </div>
+                <a href="https://www.facebook.com/share/p/1DswZ39HUj/" target="_blank" rel="noopener noreferrer" className="award-detail-link">
+                  <span>Xem chi tiết thành tích</span>
+                  <ExternalLink size={18} />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Overall Impact Summary */}
+          <div className="awards-summary">
+            <div className="summary-card">
+              <Star className="summary-icon" size={32} />
+              <h3 className="summary-title">Tổng Quan Tác Động</h3>
+              <ul className="summary-list">
+                <li>Được hội đồng chuyên môn đánh giá cao về AI Career Agent, Skill Wallet, và mô hình "Learn – Practice – Earn"</li>
+                <li>Minh chứng được tính khả thi thông qua MVP, mentor network và mô hình Freemium – Subscription</li>
+                <li>Được hỗ trợ bởi các chuyên gia từ SIHUB, doanh nghiệp, và giảng viên FPT University</li>
+              </ul>
             </div>
           </div>
         </div>

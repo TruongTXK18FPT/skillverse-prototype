@@ -1,7 +1,7 @@
 export interface CreatePaymentRequest {
   amount: string;
   currency?: 'VND' | 'USD';
-  type: 'PREMIUM_SUBSCRIPTION';
+  type: 'PREMIUM_SUBSCRIPTION' | 'COURSE_PURCHASE' | 'WALLET_TOPUP' | 'REFUND';
   paymentMethod: 'PAYOS';
   description?: string;
   planId?: number;

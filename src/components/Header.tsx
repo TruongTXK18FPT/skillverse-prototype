@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import walletService from '../services/walletService';
 import Logo from '../assets/skillverse.png';
 import '../styles/Header.css';
 
@@ -41,6 +42,8 @@ const Header: React.FC = () => {
   // Guard against rapid toggles that can cause layout thrashing on mobile
   const [isMobileMenuToggleLocked, setIsMobileMenuToggleLocked] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [walletBalance, setWalletBalance] = useState<number | null>(null);
+  const [loadingBalance, setLoadingBalance] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
   const mobileSearchInputRef = useRef<HTMLInputElement>(null);
@@ -108,6 +111,26 @@ const Header: React.FC = () => {
       icon: Calendar
     }
   ];
+
+  // Fetch wallet balance when user is authenticated
+  useEffect(() => {
+    const fetchWalletBalance = async () => {
+      if (isAuthenticated && user) {
+        setLoadingBalance(true);
+        try {
+          const walletData = await walletService.getMyWallet();
+          setWalletBalance(walletData.cashBalance);
+        } catch (error) {
+          console.error('Failed to fetch wallet balance:', error);
+          setWalletBalance(null);
+        } finally {
+          setLoadingBalance(false);
+        }
+      }
+    };
+
+    fetchWalletBalance();
+  }, [isAuthenticated, user]);
 
   // Close menus when clicking outside
   useEffect(() => {
@@ -230,7 +253,7 @@ const Header: React.FC = () => {
   };
 
   const handleWallet = () => {
-    navigate('/wallet');
+    navigate('/my-wallet');
   };
 
   const handleMentor = () => {
@@ -330,16 +353,6 @@ const Header: React.FC = () => {
             <span className="header-upgrade-text">Nâng cấp</span>
           </button>
 
-          {/* Wallet */}
-          <button onClick={handleWallet} className="wallet-btn desktop-only">
-            <Wallet size={18} />
-          </button>
-
-          {/* Notifications */}
-          <button className="notification-btn desktop-only">
-            <Bell size={18} />
-          </button>
-
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
@@ -351,15 +364,23 @@ const Header: React.FC = () => {
 
           {/* Authentication */}
           {isAuthenticated && user ? (
-            <div ref={userMenuRef} className="user-menu-container desktop-only">
+            <div ref={userMenuRef} className="user-profile-group desktop-only">
               <button 
-                className="user-btn"
+                className="user-profile-btn"
                 onClick={() => setShowUserMenu(!showUserMenu)}
               >
-                <div className="header-user-avatar">
-                  <User size={18} />
+                <div className="profile-group-content">
+                  <div className="header-user-avatar">
+                    <User size={18} />
+                  </div>
+                  <div className="user-info-inline">
+                    <span className="user-greeting">Xin chào, <strong>{user.fullName}</strong></span>
+                    <span className="user-balance">
+                      💰 Số dư: {loadingBalance ? '...' : walletBalance !== null ? walletBalance.toLocaleString('vi-VN') + ' đ' : 'N/A'}
+                    </span>
+                  </div>
+                  <ChevronDown size={16} className="dropdown-icon" />
                 </div>
-                <ChevronDown size={16} />
               </button>
 
               {showUserMenu && (
@@ -374,6 +395,19 @@ const Header: React.FC = () => {
                     </div>
                   </div>
                   <hr className="dropdown-divider" />
+                  
+                  {/* Wallet & Notifications in dropdown */}
+                  <button onClick={() => { handleWallet(); setShowUserMenu(false); }} className="dropdown-item">
+                    <Wallet size={16} />
+                    <span>Ví</span>
+                  </button>
+                  <button className="dropdown-item">
+                    <Bell size={16} />
+                    <span>Thông báo</span>
+                  </button>
+                  
+                  <hr className="dropdown-divider" />
+                  
                   {(user.roles.includes('MENTOR') || user.roles.includes('ADMIN')) && (
                     <button onClick={handleMentor} className="dropdown-item">
                       <BookOpen size={16} />

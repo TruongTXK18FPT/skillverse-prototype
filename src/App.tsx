@@ -27,7 +27,8 @@ import PaymentPage from './pages/payment/PaymentPage';
 import Transactional from './pages/payment/Transactional';
 import PremiumPage from './pages/payment/PremiumPage';
 import ManagerPage from './pages/main/ManagerPage';
-import CoinWallet from './pages/main/CoinWallet';
+// import CoinWallet from './pages/main/CoinWallet'; // Replaced by MyWalletCosmic
+import MyWalletCosmic from './pages/my-wallet/MyWalletCosmic';
 import BlogForm from './pages/community/BlogForm';
 import NotFoundPage from './pages/notfound/NotFoundPage';
 import UnauthorizedPage from './pages/UnauthorizedPage';
@@ -111,7 +112,8 @@ const App = () => {
                     <Route path="/premium" element={<PremiumPage />} />
                     <Route path="/payment/:type/:id" element={<PaymentPage />} />
                     <Route path="/manager" element={<ManagerPage />} />
-                    <Route path="/wallet" element={<CoinWallet />} />
+                    <Route path="/wallet" element={<MyWalletCosmic />} />
+                    <Route path="/my-wallet" element={<MyWalletCosmic />} />
                     <Route path="/seminar" element={<SeminarPage />} />
                     <Route path="/courses/:id" element={<CourseDetailPage />} />
                     <Route path="/course-learning" element={<CourseLearningPage />} />

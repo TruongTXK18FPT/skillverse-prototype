@@ -95,9 +95,9 @@ const Footer = () => {
           <div className="contact-section-bottom">
             <h3 className="footer-title">{translations.footer.contact}</h3>
             <div className="contact-info-grid">
-              <a href="mailto:truongtranxuan41@gmail.com" className="contact-item hover-float">
+              <a href="mailto:skillverse.contact@gmail.com" className="contact-item hover-float">
                 <Mail className="contact-icon" />
-                <span>truongtranxuan41@gmail.com</span>
+                <span>skillverse.contact@gmail.com</span>
               </a>
               <a href="tel:+84931430662" className="contact-item hover-float">
                 <Phone className="contact-icon" />
