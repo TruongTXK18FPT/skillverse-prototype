@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import MeowlGuide from '../../components/MeowlGuide';
 import portfolioService from '../../services/portfolioService';
@@ -26,6 +27,7 @@ import '../../styles/PortfolioModals.css';
 
 const PortfolioPage = () => {
   const { theme } = useTheme();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   
   // Loading & Error States
@@ -57,10 +59,16 @@ const PortfolioPage = () => {
   // Load data on mount
   useEffect(() => {
     loadPortfolioData();
-  }, []);
+  }, [isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load Portfolio Data
   const loadPortfolioData = async () => {
+    // Don't load data if not authenticated
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+    
     try {
       setLoading(true);
       setError(null);
@@ -275,6 +283,35 @@ const PortfolioPage = () => {
       setActiveSection(section);
     }
   };
+
+  // Not Authenticated State
+  if (!isAuthenticated) {
+    return (
+      <div className="sv-portfolio-container" data-theme={theme}>
+        <div className="pf-no-profile-container">
+          <div className="pf-no-profile-card">
+            <h2>🔒 Đăng nhập để xem Portfolio</h2>
+            <p>Bạn cần đăng nhập để tạo và quản lý portfolio của mình. Portfolio giúp bạn showcase kỹ năng, dự án và chứng chỉ với nhà tuyển dụng.</p>
+            <button
+              onClick={() => navigate('/login')}
+              className="pf-btn pf-btn-primary"
+              style={{ marginTop: '1rem' }}
+            >
+              Đăng nhập ngay
+            </button>
+            <button
+              onClick={() => navigate('/register')}
+              className="pf-btn pf-btn-secondary"
+              style={{ marginTop: '0.5rem' }}
+            >
+              Tạo tài khoản mới
+            </button>
+          </div>
+        </div>
+        <MeowlGuide currentPage="portfolio" />
+      </div>
+    );
+  }
 
   // Loading State
   if (loading) {

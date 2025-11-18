@@ -3,6 +3,8 @@ import {
   Crown, Check, Star, Bot, GraduationCap, Users, 
   Calendar, Briefcase, Coins, Zap, ArrowRight
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import '../../styles/PremiumPage.css';
 import MeowGuide from '../../components/MeowlGuide';
 import { premiumService } from '../../services/premiumService';
@@ -11,34 +13,38 @@ import { PremiumPlan, CreateSubscriptionRequest, UserSubscriptionResponse } from
 import { CreatePaymentRequest } from '../../data/paymentDTOs';
 
 const PremiumPage = () => {
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
   const [premiumPlans, setPremiumPlans] = useState<PremiumPlan[]>([]);
   const [processing, setProcessing] = useState(false);
   const [currentSub, setCurrentSub] = useState<UserSubscriptionResponse | null>(null);
   const [hasActive, setHasActive] = useState<boolean>(false);
-  const [hasActivePaid, setHasActivePaid] = useState<boolean>(false);
 
-  
-  // TODO: Get user email from auth context
-  const [userEmail] = useState('student@university.edu.vn'); // Placeholder - replace with actual auth context
+  // Get user email from auth context
+  const userEmail = user?.email || '';
   const isStudentEligible = Boolean(userEmail && (userEmail.includes('.edu') || userEmail.includes('@university') || userEmail.includes('@student')));
 
   useEffect(() => {
     loadPremiumPlans();
-    premiumService.checkPremiumStatus()
-      .then((active) => {
-        setHasActive(active);
-        if (active) {
-          return premiumService.getCurrentSubscription()
-            .then(setCurrentSub)
-            .catch(() => setCurrentSub(null));
-        }
-        return Promise.resolve();
-      })
-      .catch(() => {
-        setHasActive(false);
-        setCurrentSub(null);
-      });
-  }, []);
+    
+    // Only check premium status if authenticated
+    if (isAuthenticated) {
+      premiumService.checkPremiumStatus()
+        .then((active) => {
+          setHasActive(active);
+          if (active) {
+            return premiumService.getCurrentSubscription()
+              .then(setCurrentSub)
+              .catch(() => setCurrentSub(null));
+          }
+          return Promise.resolve();
+        })
+        .catch(() => {
+          setHasActive(false);
+          setCurrentSub(null);
+        });
+    }
+  }, [isAuthenticated]);
 
   const loadPremiumPlans = async () => {
     try {
@@ -106,6 +112,12 @@ const PremiumPage = () => {
   };
 
   const handleUpgrade = async (planId: string) => {
+    // Redirect to login if not authenticated
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    
     if (processing) return;
     // Allow upgrade if current is FREE_TIER; block only if current is paid
     if (hasActive && currentSub && currentSub.status === 'ACTIVE') {
@@ -335,7 +347,7 @@ const PremiumPage = () => {
                       className={`pricing-card__button ${plan.popular ? 'button--primary' : 'button--outline'}`}
                       onClick={() => handleUpgrade(plan.id)}
                     >
-                      {plan.id === 'student' ? 'Đăng ký Student Pack' : 'Nâng cấp'}
+                      {!isAuthenticated ? 'Đăng nhập để nâng cấp' : (plan.id === 'student' ? 'Đăng ký Student Pack' : 'Nâng cấp')}
                       <ArrowRight size={16} />
                     </button>
                   )

@@ -139,13 +139,20 @@ const PUBLIC_ENDPOINTS = [
   '/v1/meowl/reminders',       // Meowl reminders
   '/v1/meowl/notifications',   // Meowl notifications
   '/v1/meowl/health',          // Meowl health check
+  '/premium/plans',            // Public premium plans listing
+  '/jobs/public',              // Public jobs listing
 ];
 
 // Check if the URL matches any public endpoint
 const isPublicEndpoint = (url: string): boolean => {
-  return PUBLIC_ENDPOINTS.some(endpoint => 
-    url.includes(endpoint) || url.startsWith(endpoint)
-  );
+  // Normalize URL by removing /api prefix if present
+  const normalizedUrl = url.replace(/^\/api/, '');
+  
+  return PUBLIC_ENDPOINTS.some(endpoint => {
+    // Check both normalized and original URL
+    // Use includes for flexibility (handles query params, etc.)
+    return normalizedUrl.includes(endpoint) || url.includes(endpoint);
+  });
 };
 
 // Request interceptor to add auth token (only for protected endpoints)
@@ -269,7 +276,20 @@ axiosInstance.interceptors.response.use(
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
-        window.location.href = '/login';
+        
+        // Don't redirect if on public pages
+        const currentPath = window.location.pathname;
+        const isPublicPage = currentPath.includes('/login') || 
+                            currentPath.includes('/register') || 
+                            currentPath.includes('/verify') ||
+                            currentPath === '/' ||
+                            currentPath === '/jobs' ||
+                            currentPath === '/premium' ||
+                            currentPath === '/portfolio';
+        
+        if (!isPublicPage) {
+          window.location.href = '/login';
+        }
         return Promise.reject(error);
       }
       

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { X, MapPin, Clock, DollarSign, Briefcase, Calendar, Building2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import jobService from '../../services/jobService';
 import { JobPostingResponse } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';
@@ -12,6 +14,8 @@ interface JobDetailsModalProps {
 }
 
 const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApplySuccess }) => {
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
   const { showSuccess, showError } = useToast();
   const [hasApplied, setHasApplied] = useState(false);
   const [isCheckingApplied, setIsCheckingApplied] = useState(true);
@@ -20,15 +24,21 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
   const [showApplyForm, setShowApplyForm] = useState(false);
 
   // Check if current user is the recruiter who owns this job
-  const currentUserId = parseInt(localStorage.getItem('userId') || '0');
-  const userRole = localStorage.getItem('userRole');
+  const currentUserId = user?.id || 0;
+  const userRole = user?.roles?.[0];
   const isOwnJob = userRole === 'RECRUITER' && job.recruiterUserId === currentUserId;
 
   React.useEffect(() => {
     checkIfApplied();
-  }, [job.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [job.id, isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const checkIfApplied = async () => {
+    // Don't check if not authenticated
+    if (!isAuthenticated) {
+      setIsCheckingApplied(false);
+      return;
+    }
+    
     setIsCheckingApplied(true);
     try {
       const applied = await jobService.hasAppliedToJob(job.id);
@@ -167,7 +177,14 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
           {/* Apply Form */}
           {!showApplyForm && (
             <div className="jdm-apply-section">
-              {isOwnJob ? (
+              {!isAuthenticated ? (
+                <button
+                  className="jdm-apply-btn"
+                  onClick={() => navigate('/login')}
+                >
+                  🔒 Đăng nhập để ứng tuyển
+                </button>
+              ) : isOwnJob ? (
                 <div className="jdm-applied-badge" style={{ background: 'rgba(251, 146, 60, 0.1)', color: '#f97316', border: '2px solid rgba(251, 146, 60, 0.3)' }}>
                   📝 Đây là công việc bạn đã đăng
                 </div>

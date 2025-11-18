@@ -15,7 +15,7 @@
 }
 
 .premium-hero::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -92,7 +92,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: white
+  color: white;
 }
 
 .premium-stat-label {
@@ -144,7 +144,8 @@
 }
 
 @keyframes premiumfloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -208,13 +209,21 @@
 
 .feature-card--highlight {
   border: 2px solid var(--primary-color);
-  background: linear-gradient(135deg, var(--primary-color)10, var(--bg-secondary));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 10,
+    var(--bg-secondary)
+  );
 }
 
 .feature-card__icon {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -375,6 +384,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
   margin-top: 3rem;
+  align-items: stretch; /* Đảm bảo tất cả card có chiều cao bằng nhau */
 }
 
 @media (max-width: 1200px) {
@@ -399,6 +409,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 550px; /* Đảm bảo chiều cao tối thiểu đồng đều */
 }
 
 .pricing-card:hover {
@@ -408,11 +419,13 @@
 
 .pricing-card.popular {
   border-color: var(--primary-color);
-  transform: scale(1.05);
+  /* Bỏ scale để tất cả card có kích thước đồng đều */
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2), 0 10px 30px rgba(139, 92, 246, 0.15);
 }
 
 .pricing-card.popular:hover {
-  transform: scale(1.05) translateY(-8px);
+  transform: translateY(-8px);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3), 0 25px 50px rgba(139, 92, 246, 0.2);
 }
 
 .pricing-card.basic {
@@ -430,7 +443,7 @@
 }
 
 .pricing-card.student::before {
-  content: '🎓';
+  content: "🎓";
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -486,7 +499,7 @@
 }
 
 /* Dark theme support for price-amount */
-[data-theme='dark'] .price-amount {
+[data-theme="dark"] .price-amount {
   color: white;
 }
 
@@ -748,7 +761,11 @@
 /* CTA Section */
 .premium-cta {
   padding: 80px 0;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
   color: white;
   text-align: center;
 }
@@ -936,7 +953,11 @@
 
 .confirm-payment-btn {
   width: 100%;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -995,45 +1016,45 @@
   .premium-hero {
     padding: 80px 0 60px;
   }
-  
+
   .premium-hero__visual {
     display: none;
   }
-  
+
   .premium-hero__stats {
     flex-direction: column;
     gap: 1.5rem;
   }
-  
+
   .section-header h2 {
     font-size: 2rem;
   }
-  
+
   .features-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .pricing-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .pricing-card.popular {
     transform: none;
   }
-  
+
   .pricing-card.popular:hover {
     transform: translateY(-8px);
   }
-  
+
   .testimonials-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .cta-actions {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .cta-primary,
   .cta-secondary {
     width: 100%;
@@ -1045,21 +1066,21 @@
   .container {
     padding: 0 1rem;
   }
-  
+
   .premium-hero__content {
     padding: 0 1rem;
   }
-  
+
   .feature-card,
   .pricing-card,
   .testimonial-card {
     padding: 1.5rem;
   }
-  
+
   .payment-modal {
     margin: 1rem;
   }
-  
+
   .payment-content {
     padding: 1.5rem;
   }
