@@ -97,7 +97,7 @@ const PremiumPage = () => {
       description: plan.description,
       price: parseFloat(plan.price),
       features: plan.features ? JSON.parse(plan.features) as string[] : [],
-      popular: plan.planType === 'PREMIUM_PLUS',
+      popular: false, // Tắt badge "Phổ biến nhất" cho tất cả gói
       color: plan.planType.toLowerCase().replace('_', '-'),
       planType: plan.planType,
       studentOnly: plan.planType === 'STUDENT_PACK'

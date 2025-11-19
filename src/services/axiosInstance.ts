@@ -141,6 +141,7 @@ const PUBLIC_ENDPOINTS = [
   '/v1/meowl/health',          // Meowl health check
   '/premium/plans',            // Public premium plans listing
   '/jobs/public',              // Public jobs listing
+  '/courses',                  // Public course listing and details
 ];
 
 // Check if the URL matches any public endpoint
@@ -149,9 +150,11 @@ const isPublicEndpoint = (url: string): boolean => {
   const normalizedUrl = url.replace(/^\/api/, '');
   
   return PUBLIC_ENDPOINTS.some(endpoint => {
-    // Check both normalized and original URL
-    // Use includes for flexibility (handles query params, etc.)
-    return normalizedUrl.includes(endpoint) || url.includes(endpoint);
+    // Use startsWith for exact path matching (more secure)
+    // Also check if URL contains endpoint with query params (e.g., /courses?page=1)
+    return normalizedUrl.startsWith(endpoint) || 
+           normalizedUrl.startsWith(endpoint + '/') ||
+           normalizedUrl.startsWith(endpoint + '?');
   });
 };
 
@@ -285,7 +288,8 @@ axiosInstance.interceptors.response.use(
                             currentPath === '/' ||
                             currentPath === '/jobs' ||
                             currentPath === '/premium' ||
-                            currentPath === '/portfolio';
+                            currentPath === '/portfolio' ||
+                            currentPath.includes('/courses');
         
         if (!isPublicPage) {
           window.location.href = '/login';

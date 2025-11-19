@@ -99,8 +99,8 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
       return 'Thời hạn phải từ 1-12 tháng';
     }
 
-    if (formData.price <= 0) {
-      return 'Giá phải lớn hơn 0';
+    if (formData.price < 1000) {
+      return 'Giá phải từ 1,000 VND trở lên';
     }
 
     if (formData.studentDiscountPercent < 0 || formData.studentDiscountPercent > 100) {
@@ -293,7 +293,7 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                 name="price"
                 value={formData.price}
                 onChange={handleInputChange}
-                min="1"
+                min="1000"
                 step="1000"
                 required
               />
