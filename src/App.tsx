@@ -51,6 +51,7 @@ import MentorProfilePage from './pages/mentor/MentorProfilePage';
 import RecruiterProfilePage from './pages/business/RecruiterProfilePage';
 import ProfileRouter from './components/ProfileRouter';
 import MyApplicationsPage from './pages/user/MyApplicationsPage';
+import ExploreMapPage from './pages/ExploreMapPage';
 
 const App = () => {
   return (
@@ -79,6 +80,7 @@ const App = () => {
                 <main>
                   <Routes>
                     <Route path="/" element={<HomePage />} />
+                    <Route path="/explore" element={<ExploreMapPage />} />
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/courses" element={<CoursesPage />} />
                     <Route path="/roadmap" element={<AiRoadmapPage />} />
