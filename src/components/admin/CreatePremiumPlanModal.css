@@ -1,6 +1,6 @@
 /* Create Premium Plan Modal Styles */
 
-.modal-overlay {
+.premium-plan-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -14,14 +14,14 @@
   padding: 2rem;
 }
 
-.modal-overlay *,
-.modal-overlay *:focus,
-.modal-overlay *:active {
+.premium-plan-modal-overlay *,
+.premium-plan-modal-overlay *:focus,
+.premium-plan-modal-overlay *:active {
   outline: none !important;
   box-shadow: none !important;
 }
 
-.modal-content {
+.premium-plan-modal-content {
   background: var(--bg-primary);
   border-radius: 16px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -32,13 +32,13 @@
   border: none;
 }
 
-.create-plan-modal {
+.premium-plan-modal {
   width: 100%;
   max-width: 800px;
 }
 
 /* Modal Header */
-.modal-header {
+.premium-plan-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -47,14 +47,14 @@
   background: var(--bg-secondary);
 }
 
-.modal-header h2 {
+.premium-plan-modal-header h2 {
   margin: 0;
   font-size: 1.5rem;
   color: var(--text-primary);
   font-weight: 600;
 }
 
-.btn-close {
+.premium-plan-modal-btn-close {
   padding: 0.5rem;
   background: transparent;
   border: none;
@@ -63,20 +63,20 @@
   border-radius: 8px;
 }
 
-.btn-close:hover {
+.premium-plan-modal-btn-close:hover {
   background: var(--bg-tertiary);
   color: var(--text-primary);
 }
 
 /* Modal Body */
-.modal-body {
+.premium-plan-modal-body {
   padding: 2rem;
   overflow-y: auto;
   flex: 1;
 }
 
 /* Error Banner */
-.error-banner {
+.premium-plan-modal-error {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -89,23 +89,23 @@
 }
 
 /* Form Grid */
-.form-grid {
+.premium-plan-modal-form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
 }
 
-.form-group {
+.premium-plan-modal-form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.form-group.full-width {
+.premium-plan-modal-form-group.full-width {
   grid-column: 1 / -1;
 }
 
-.form-group label {
+.premium-plan-modal-form-group label {
   font-weight: 600;
   color: var(--text-primary);
   font-size: 0.875rem;
@@ -115,9 +115,9 @@
   color: #ef4444;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.premium-plan-modal-form-group input,
+.premium-plan-modal-form-group select,
+.premium-plan-modal-form-group textarea {
   padding: 0.75rem;
   border: 1px solid var(--border-primary);
   border-radius: 8px;
@@ -126,41 +126,41 @@
   font-size: 0.9375rem;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.premium-plan-modal-form-group input:focus,
+.premium-plan-modal-form-group select:focus,
+.premium-plan-modal-form-group textarea:focus {
   outline: none;
   border-color: #667eea;
 }
 
-.form-group textarea {
+.premium-plan-modal-form-group textarea {
   resize: vertical;
   font-family: inherit;
 }
 
-.form-group small {
+.premium-plan-modal-form-group small {
   font-size: 0.75rem;
   color: var(--text-secondary);
 }
 
 /* Features List */
-.features-list {
+.premium-plan-modal-features-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.feature-item {
+.premium-plan-modal-feature-item {
   display: flex;
   gap: 0.5rem;
   align-items: center;
 }
 
-.feature-item input {
+.premium-plan-modal-feature-item input {
   flex: 1;
 }
 
-.btn-remove-feature {
+.premium-plan-modal-btn-remove-feature {
   padding: 0.75rem;
   background: rgba(239, 68, 68, 0.1);
   border: none;
@@ -172,11 +172,11 @@
   justify-content: center;
 }
 
-.btn-remove-feature:hover {
+.premium-plan-modal-btn-remove-feature:hover {
   background: rgba(239, 68, 68, 0.2);
 }
 
-.btn-add-feature {
+.premium-plan-modal-btn-add {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -189,13 +189,13 @@
   font-weight: 500;
 }
 
-.btn-add-feature:hover {
+.premium-plan-modal-btn-add:hover {
   background: var(--bg-secondary);
   border-color: #667eea;
 }
 
 /* Checkbox */
-.checkbox-label {
+.premium-plan-modal-checkbox {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -204,24 +204,24 @@
   border-radius: 8px;
 }
 
-.checkbox-label:hover {
+.premium-plan-modal-checkbox:hover {
   background: var(--bg-tertiary);
 }
 
-.checkbox-label input[type="checkbox"] {
+.premium-plan-modal-checkbox input[type="checkbox"] {
   width: 20px;
   height: 20px;
   cursor: pointer;
   accent-color: #667eea;
 }
 
-.checkbox-label span {
+.premium-plan-modal-checkbox span {
   color: var(--text-primary);
   font-weight: 500;
 }
 
 /* Modal Footer */
-.modal-footer {
+.premium-plan-modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
@@ -229,8 +229,8 @@
   border-top: 1px solid var(--border-primary);
 }
 
-.btn-primary,
-.btn-secondary {
+.premium-plan-modal-btn-primary,
+.premium-plan-modal-btn-secondary {
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 8px;
@@ -239,47 +239,153 @@
   font-size: 0.9375rem;
 }
 
-.btn-primary {
+.premium-plan-modal-btn-primary {
   background: #667eea;
   color: white;
 }
 
-.btn-primary:hover:not(:disabled) {
+.premium-plan-modal-btn-primary:hover:not(:disabled) {
   background: #5568d3;
 }
 
-.btn-primary:disabled {
+.premium-plan-modal-btn-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.btn-secondary {
+.premium-plan-modal-btn-secondary {
   background: var(--bg-tertiary);
   color: var(--text-primary);
   border: 1px solid var(--border-primary);
 }
 
-.btn-secondary:hover:not(:disabled) {
+.premium-plan-modal-btn-secondary:hover:not(:disabled) {
   background: var(--bg-secondary);
+}
+
+/* Feature Limits Section */
+.premium-modal-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.premium-modal-section-header label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.premium-modal-feature-limits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.premium-modal-limit-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+}
+
+.premium-modal-limit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.premium-modal-limit-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.premium-modal-limit-field.checkbox-field {
+  align-self: flex-end;
+}
+
+.premium-modal-limit-field label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.premium-modal-limit-field input,
+.premium-modal-limit-field select {
+  padding: 0.625rem;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.premium-modal-limit-field input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--bg-tertiary);
+}
+
+.premium-modal-btn-remove-limit {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: none;
+  border-radius: 6px;
+  color: #ef4444;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.premium-modal-btn-remove-limit:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.premium-modal-no-limits {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  border: 1px dashed var(--border-primary);
+  border-radius: 8px;
+  font-size: 0.875rem;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .modal-overlay {
+  .premium-plan-modal-overlay {
     padding: 1rem;
   }
 
-  .create-plan-modal {
+  .premium-plan-modal {
     max-width: 100%;
   }
 
-  .modal-header,
-  .modal-body,
-  .modal-footer {
+  .premium-plan-modal-header,
+  .premium-plan-modal-body,
+  .premium-plan-modal-footer {
     padding: 1.5rem;
   }
 
-  .form-grid {
+  .premium-plan-modal-form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .premium-modal-limit-item {
+    grid-template-columns: 1fr;
+  }
+
+  .premium-modal-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 }

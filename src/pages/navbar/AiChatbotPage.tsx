@@ -48,6 +48,10 @@ Mình có thể giúp bạn:
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [loadingSessions, setLoadingSessions] = useState(true);
   const [openMenuSessionId, setOpenMenuSessionId] = useState<number | null>(null);
+  
+  // Client-side rate limiting to prevent spam
+  const [lastMessageTime, setLastMessageTime] = useState<number>(0);
+  const MESSAGE_COOLDOWN_MS = 2000; // 2 seconds between messages
   const [renamingSessionId, setRenamingSessionId] = useState<number | null>(null);
   const [newTitle, setNewTitle] = useState('');
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -499,6 +503,15 @@ Mình có thể giúp bạn:
 
     if (!inputMessage.trim() || isLoading) return;
 
+    // Client-side rate limiting to prevent spam
+    const now = Date.now();
+    const timeSinceLastMessage = now - lastMessageTime;
+    if (timeSinceLastMessage < MESSAGE_COOLDOWN_MS) {
+      const remainingSeconds = Math.ceil((MESSAGE_COOLDOWN_MS - timeSinceLastMessage) / 1000);
+      showError('⏱️ Vui lòng chờ', `Vui lòng đợi ${remainingSeconds} giây trước khi gửi tin nhắn tiếp theo.`);
+      return;
+    }
+
     const userMessage: UIMessage = {
       id: Date.now().toString(),
       role: 'user',
@@ -509,6 +522,7 @@ Mình có thể giúp bạn:
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
     setIsLoading(true);
+    setLastMessageTime(now);
 
     try {
       // Let AI handle auto-correction for IELTS scores (no frontend validation)
@@ -544,24 +558,53 @@ Mình có thể giúp bạn:
 
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
-      const message = (error as Error).message;
+      const axiosError = error as any;
+      const message = axiosError.message || 'Không thể gửi tin nhắn';
+      const responseData = axiosError.response?.data;
       
       // Check for 401 errors (authentication)
       if (message.includes('401') || message.includes('Unauthorized')) {
         showError('Chưa đăng nhập', 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
         setTimeout(() => navigate('/login'), 1500);
-      } else {
-        showError('Lỗi', message || 'Không thể gửi tin nhắn');
+      } 
+      // Check for 429 errors (rate limit exceeded)
+      else if (axiosError.response?.status === 429 && responseData?.code === 'USAGE_LIMIT_EXCEEDED') {
+        const details = responseData.details;
+        const timeUntilReset = details?.timeUntilReset || 'một thời gian';
+        const currentUsage = details?.currentUsage || 0;
+        const limit = details?.limit || 0;
+        
+        const errorTitle = '⏰ Đã đạt giới hạn sử dụng';
+        const errorMsg = `Bạn đã sử dụng hết ${currentUsage}/${limit} tin nhắn AI.\n\n` +
+                        `Vui lòng quay lại sau ${timeUntilReset}.\n\n` +
+                        `💎 Nâng cấp lên Premium để có giới hạn cao hơn!`;
+        
+        showError(errorTitle, errorMsg);
+        
+        // Add error message to chat
+        const errorMessage: UIMessage = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: `⏰ **Đã đạt giới hạn sử dụng**\n\n` +
+                  `Bạn đã sử dụng hết **${currentUsage}/${limit}** tin nhắn AI trong chu kỳ này.\n\n` +
+                  `Vui lòng quay lại sau **${timeUntilReset}**.\n\n` +
+                  `💎 Nâng cấp lên Premium để có giới hạn cao hơn và nhiều tính năng khác!`,
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      } 
+      else {
+        showError('Lỗi', responseData?.message || message);
+        
+        // Add error message to chat
+        const errorMessage: UIMessage = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: 'Xin lỗi, có lỗi xảy ra. Vui lòng thử lại sau.',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, errorMessage]);
       }
-      
-      // Add error message to chat
-      const errorMessage: UIMessage = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: 'Xin lỗi, có lỗi xảy ra. Vui lòng thử lại sau.',
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }

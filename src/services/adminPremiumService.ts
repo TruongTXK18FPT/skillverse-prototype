@@ -7,6 +7,40 @@ import axiosInstance from './axiosInstance';
 
 // ==================== Types ====================
 
+export type FeatureType =
+  | 'AI_CHATBOT_REQUESTS'
+  | 'AI_ROADMAP_GENERATION'
+  | 'MENTOR_BOOKING_MONTHLY'
+  | 'COIN_EARNING_MULTIPLIER'
+  | 'PRIORITY_SUPPORT';
+
+export type ResetPeriod = 'HOURLY' | 'DAILY' | 'MONTHLY' | 'CUSTOM_8_HOURS' | 'NEVER';
+
+export interface FeatureLimitConfig {
+  featureType: FeatureType;
+  limitValue: number | null;
+  resetPeriod: ResetPeriod;
+  isUnlimited: boolean;
+  bonusMultiplier?: number;
+  description?: string;
+  isActive: boolean;
+}
+
+export interface FeatureLimitResponse {
+  id: number;
+  featureType: FeatureType;
+  featureName: string;
+  featureNameVi: string;
+  limitValue: number | null;
+  resetPeriod: ResetPeriod;
+  isUnlimited: boolean;
+  bonusMultiplier: number;
+  description: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AdminPremiumPlan {
   id: number;
   name: string;
@@ -27,6 +61,7 @@ export interface AdminPremiumPlan {
   isFreeTier: boolean;
   createdAt: string;
   updatedAt: string;
+  featureLimits: FeatureLimitResponse[];
 }
 
 export interface CreatePremiumPlanRequest {
@@ -40,6 +75,7 @@ export interface CreatePremiumPlanRequest {
   features: string; // JSON string array
   maxSubscribers?: number | null;
   isActive?: boolean;
+  featureLimits?: FeatureLimitConfig[];
 }
 
 export interface UpdatePremiumPlanRequest {
@@ -51,6 +87,7 @@ export interface UpdatePremiumPlanRequest {
   features: string; // JSON string array
   maxSubscribers?: number | null;
   isActive?: boolean;
+  featureLimits?: FeatureLimitConfig[];
 }
 
 // ==================== API Service ====================
@@ -175,6 +212,62 @@ export const getPlanTypeDisplayName = (
   return displayNames[planType];
 };
 
+/**
+ * Get feature type display name (English)
+ */
+export const getFeatureTypeDisplayName = (featureType: FeatureType): string => {
+  const names: Record<FeatureType, string> = {
+    AI_CHATBOT_REQUESTS: 'AI Chatbot Requests',
+    AI_ROADMAP_GENERATION: 'AI Roadmap Generation',
+    MENTOR_BOOKING_MONTHLY: 'Mentor Booking (Monthly)',
+    COIN_EARNING_MULTIPLIER: 'Coin Earning Multiplier',
+    PRIORITY_SUPPORT: 'Priority Support',
+  };
+  return names[featureType];
+};
+
+/**
+ * Get feature type display name (Vietnamese)
+ */
+export const getFeatureTypeDisplayNameVi = (featureType: FeatureType): string => {
+  const names: Record<FeatureType, string> = {
+    AI_CHATBOT_REQUESTS: 'Số lượng request chat AI',
+    AI_ROADMAP_GENERATION: 'Số lần tạo roadmap',
+    MENTOR_BOOKING_MONTHLY: 'Số lần đặt mentor/tháng',
+    COIN_EARNING_MULTIPLIER: 'Hệ số nhân xu',
+    PRIORITY_SUPPORT: 'Hỗ trợ ưu tiên',
+  };
+  return names[featureType];
+};
+
+/**
+ * Get reset period display name
+ */
+export const getResetPeriodDisplayName = (period: ResetPeriod): string => {
+  const names: Record<ResetPeriod, string> = {
+    HOURLY: 'Mỗi giờ',
+    DAILY: 'Mỗi ngày',
+    MONTHLY: 'Mỗi tháng',
+    CUSTOM_8_HOURS: 'Mỗi 8 giờ',
+    NEVER: 'Không reset',
+  };
+  return names[period];
+};
+
+/**
+ * Check if feature is multiplier type
+ */
+export const isMultiplierFeature = (featureType: FeatureType): boolean => {
+  return featureType === 'COIN_EARNING_MULTIPLIER';
+};
+
+/**
+ * Check if feature is boolean type
+ */
+export const isBooleanFeature = (featureType: FeatureType): boolean => {
+  return featureType === 'PRIORITY_SUPPORT';
+};
+
 export default {
   getAllPlans,
   getPlanById,
@@ -187,4 +280,9 @@ export default {
   stringifyFeatures,
   validatePlanName,
   getPlanTypeDisplayName,
+  getFeatureTypeDisplayName,
+  getFeatureTypeDisplayNameVi,
+  getResetPeriodDisplayName,
+  isMultiplierFeature,
+  isBooleanFeature,
 };

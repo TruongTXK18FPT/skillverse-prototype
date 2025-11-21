@@ -42,10 +42,8 @@ const PremiumPlansManagementTab: React.FC = () => {
   };
 
   const handleEditPlan = (plan: AdminPremiumPlan) => {
-    if (plan.isFreeTier) {
-      alert('⚠️ Không thể chỉnh sửa gói FREE_TIER. Đây là gói hệ thống.');
-      return;
-    }
+    // Allow editing FREE_TIER but only for feature limits
+    // The modal will handle the restriction on core properties
     setEditingPlan(plan);
     setShowCreateModal(true);
   };
@@ -264,8 +262,7 @@ const PremiumPlansManagementTab: React.FC = () => {
                     <button
                       onClick={() => handleEditPlan(plan)}
                       className="btn-action btn-edit"
-                      title="Chỉnh sửa"
-                      disabled={plan.isFreeTier}
+                      title={plan.isFreeTier ? "Chỉnh sửa giới hạn tính năng" : "Chỉnh sửa"}
                     >
                       <Edit size={16} />
                     </button>
@@ -300,7 +297,7 @@ const PremiumPlansManagementTab: React.FC = () => {
           <strong>Lưu ý:</strong>
           <ul>
             <li>Tối đa 4 gói premium (không tính FREE_TIER)</li>
-            <li>Gói FREE_TIER không thể chỉnh sửa, xóa hoặc tắt</li>
+            <li>Gói FREE_TIER: Chỉ có thể chỉnh sửa giới hạn tính năng, không thể xóa hoặc tắt</li>
             <li>Không thể xóa gói đang có người dùng đăng ký</li>
             <li>Giá và thời hạn có thể thay đổi cho các đăng ký mới</li>
           </ul>
