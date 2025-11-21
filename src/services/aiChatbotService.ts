@@ -27,8 +27,9 @@ const aiChatbotService = {
       return response.data;
     } catch (error) {
       console.error('Failed to send message:', error);
-      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
-      throw new Error(message || 'Failed to send message. Please try again.');
+      // Re-throw original error to preserve response data (status, code, details)
+      // This allows caller to handle specific error cases (429, 401, etc.)
+      throw error;
     }
   },
 

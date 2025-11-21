@@ -562,6 +562,14 @@ Mình có thể giúp bạn:
       const message = axiosError.message || 'Không thể gửi tin nhắn';
       const responseData = axiosError.response?.data;
       
+      // Debug logging
+      console.log('🐛 Error caught:', {
+        status: axiosError.response?.status,
+        code: responseData?.code,
+        message: responseData?.message,
+        details: responseData?.details
+      });
+      
       // Check for 401 errors (authentication)
       if (message.includes('401') || message.includes('Unauthorized')) {
         showError('Chưa đăng nhập', 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
