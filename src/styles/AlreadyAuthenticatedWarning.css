@@ -101,25 +101,46 @@
 
 .auth-warning-shield {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 200px;
+  height: 200px;
   margin: 0 auto 2rem;
   animation: shieldBounce 3s ease-in-out infinite;
 }
 
-.shield-icon {
-  color: #ff0000;
-  filter: drop-shadow(0 0 20px #ff0000);
-  animation: shieldGlow 2s ease-in-out infinite;
+.meowl-acwy-icon {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 4px solid #ff0000;
+  box-shadow:
+    0 0 30px rgba(255, 0, 0, 0.6),
+    0 0 60px rgba(255, 0, 0, 0.3),
+    inset 0 0 20px rgba(255, 0, 0, 0.2);
+  object-fit: cover;
+  object-position: center -7%;
+  animation: meowlGlow 2s ease-in-out infinite;
+  cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
-.lock-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #ffffff;
-  filter: drop-shadow(0 0 10px #ffffff);
+.meowl-acwy-icon:hover {
+  transform: scale(1.1);
+}
+
+@keyframes meowlGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 30px rgba(255, 0, 0, 0.6),
+      0 0 60px rgba(255, 0, 0, 0.3),
+      inset 0 0 20px rgba(255, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 50px rgba(255, 0, 0, 0.8),
+      0 0 80px rgba(255, 0, 0, 0.5),
+      0 0 100px rgba(255, 100, 0, 0.3),
+      inset 0 0 30px rgba(255, 0, 0, 0.3);
+  }
 }
 
 @keyframes shieldBounce {

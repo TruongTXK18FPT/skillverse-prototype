@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HelpCircle } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useMeowlSkin } from '../context/MeowlSkinContext';
 import '../styles/MeowlGuide.css';
 import guideMessages from './MeowlGuideMsg.json';
 import MeowlChat from './MeowlChat';
@@ -22,6 +23,7 @@ interface MeowlGuideProps {
 
 const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageOverride }) => {
   const { language: contextLanguage } = useLanguage();
+  const { currentSkin, currentSkinImage } = useMeowlSkin();
   const language = languageOverride || contextLanguage;
   
   const [isOpen, setIsOpen] = useState(false);
@@ -155,12 +157,14 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageO
 
       {/* Mascot Button */}
       <div className={`meowl-mascot ${isOpen ? 'mascot-active' : ''}`} onClick={handleMascotClick}>
-        <div className="quest-indicator">
-          <HelpCircle size={22} />
-        </div>
-        <img 
-          src="/images/meowl_bg_clear.png" 
-          alt="Meowl Guide" 
+        {currentSkin === 'default' && (
+          <div className="quest-indicator">
+            <HelpCircle size={22} />
+          </div>
+        )}
+        <img
+          src={currentSkinImage}
+          alt="Meowl Guide"
           className="mascot-image"
         />
         <div className="mascot-pulse"></div>
@@ -172,9 +176,9 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageO
           <div className="meowl-dialog">
             {/* Avatar Section */}
             <div className="dialog-avatar">
-              <img 
-                src="/images/meowl_bg_clear.png" 
-                alt="Meowl" 
+              <img
+                src={currentSkinImage}
+                alt="Meowl"
                 className="avatar-image"
               />
             </div>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { AlertTriangle, Shield, Lock, ArrowLeft } from 'lucide-react';
 import '../../styles/AlreadyAuthenticatedWarning.css';
+import meowlAcwy from '../../assets/meowl-skin/meowl-acwy.png';
 
 const AlreadyAuthenticatedWarning = () => {
   const { isAuthenticated, user } = useAuth();
@@ -37,8 +38,11 @@ const AlreadyAuthenticatedWarning = () => {
 
       <div className="auth-warning-container">
         <div className="auth-warning-shield">
-          <Shield className="shield-icon" size={120} />
-          <Lock className="lock-icon" size={40} />
+          <img
+            src={meowlAcwy}
+            alt="Meowl đang phán xét bạn"
+            className="meowl-acwy-icon"
+          />
         </div>
 
         <div className="auth-warning-content">

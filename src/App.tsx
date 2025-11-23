@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider } from './context/AuthContext';
+import { MeowlSkinProvider } from './context/MeowlSkinContext';
 import { MentorRoute, AdminRoute, RecruiterRoute } from './components/ProtectedRoute';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -59,7 +60,8 @@ const App = () => {
     <LanguageProvider>
       <ThemeProvider>
         <AuthProvider>
-          <Router>
+          <MeowlSkinProvider>
+            <Router>
             <div className="app-container">
               <ScrollToTop />
               <Header />
@@ -160,6 +162,7 @@ const App = () => {
               </div>
             </div>
           </Router>
+          </MeowlSkinProvider>
         </AuthProvider>
       </ThemeProvider>
     </LanguageProvider>

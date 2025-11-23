@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, MapPin, Edit3, Save, X, Camera, Calendar, FileText, Move } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Edit3, Save, X, Camera, Calendar, FileText, Move, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import userService from '../../services/userService';
 import { premiumService } from '../../services/premiumService';
+import { useMeowlSkin } from '../../context/MeowlSkinContext';
 import { UserProfileResponse } from '../../data/userDTOs';
 import { UserSubscriptionResponse } from '../../data/premiumDTOs';
 import silverFrame from '../../assets/premium/silver_avatar.png';
@@ -14,6 +15,7 @@ import '../../styles/ProfilePageCosmic.css';
 const ProfilePageCosmic = () => {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const { currentSkin, setSkin, skins } = useMeowlSkin();
   
   const [profile, setProfile] = useState<UserProfileResponse | null>(null);
   const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
@@ -608,7 +610,7 @@ const ProfilePageCosmic = () => {
               <FileText size={24} />
               <h2>Giới thiệu bản thân</h2>
             </div>
-            
+
             <div className="cosmic-card-body">
               {editing ? (
                 <textarea
@@ -624,6 +626,46 @@ const ProfilePageCosmic = () => {
                   {profile.bio || 'Chưa có thông tin giới thiệu'}
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* Meowl Skin Card */}
+          <div className="cosmic-profile-card cosmic-profile-card--meowl" style={{
+            border: getPremiumColor() ? `2px solid ${getPremiumColor()}` : undefined,
+            boxShadow: getPremiumColor() ? `0 0 30px rgba(${hexToRgb(getPremiumColor()!)}, 0.3)` : undefined
+          }}>
+            <div className="cosmic-card-header">
+              <Sparkles size={24} />
+              <h2>Trang phục Meowl</h2>
+            </div>
+
+            <div className="cosmic-card-body">
+              <p className="cosmic-meowl-description">
+                Chọn trang phục cho Meowl - người bạn đồng hành của bạn!
+              </p>
+              <div className="cosmic-meowl-skins-grid">
+                {skins.map((skin) => (
+                  <div
+                    key={skin.id}
+                    className={`cosmic-meowl-skin-item ${currentSkin === skin.id ? 'cosmic-meowl-skin-item--active' : ''}`}
+                    onClick={() => setSkin(skin.id)}
+                  >
+                    <div className="cosmic-meowl-skin-image-wrapper">
+                      <img
+                        src={skin.image}
+                        alt={skin.nameVi}
+                        className="cosmic-meowl-skin-image"
+                      />
+                    </div>
+                    <span className="cosmic-meowl-skin-name">{skin.nameVi}</span>
+                    {currentSkin === skin.id && (
+                      <div className="cosmic-meowl-skin-selected">
+                        <span>✓</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
