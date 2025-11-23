@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   Crown, Check, Star, Wallet, ArrowRight, Zap, Bot, 
-  Users, Shield, Sparkles, Rocket, Award, GraduationCap, Gem
+  Users, Shield, Sparkles, Rocket, Award, GraduationCap, Gem, XCircle, RefreshCw
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -16,6 +16,8 @@ import { CreatePaymentRequest } from '../../data/paymentDTOs';
 import { WalletResponse } from '../../data/walletDTOs';
 import { UserProfileResponse } from '../../data/userDTOs';
 import WalletPaymentModal from '../../components/premium/WalletPaymentModal';
+import CancelSubscriptionModal from '../../components/premium/CancelSubscriptionModal';
+import CancelAutoRenewalModal from '../../components/premium/CancelAutoRenewalModal';
 
 // Import avatar frames
 import silverAvatar from '../../assets/premium/silver_avatar.png';
@@ -33,6 +35,8 @@ const PremiumPageCosmic = () => {
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   const [showWalletConfirm, setShowWalletConfirm] = useState(false);
   const [selectedPlanForWallet, setSelectedPlanForWallet] = useState<PremiumPlan | null>(null);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showCancelAutoRenewalModal, setShowCancelAutoRenewalModal] = useState(false);
 
   const userEmail = user?.email || '';
   const isStudentEligible = Boolean(userEmail && (userEmail.includes('.edu') || userEmail.includes('@university') || userEmail.includes('@student')));
@@ -420,8 +424,47 @@ const PremiumPageCosmic = () => {
 
               {hasActive && currentSub && currentSub.status === 'ACTIVE' && (
                 <div className="cosmic-active-note">
-                  Gói của bạn đang hoạt động đến{' '}
-                  <strong>{new Date(currentSub.endDate).toLocaleDateString('vi-VN')}</strong>
+                  <div className="cosmic-subscription-info">
+                    <div>
+                      Gói của bạn đang hoạt động đến{' '}
+                      <strong>{new Date(currentSub.endDate).toLocaleDateString('vi-VN')}</strong>
+                    </div>
+                    {currentSub.plan.planType !== 'FREE_TIER' && (
+                      <div className="cosmic-auto-renewal-status">
+                        {currentSub.autoRenew ? (
+                          <span className="auto-renewal-badge auto-renewal-enabled">
+                            <RefreshCw size={14} />
+                            Gia hạn tự động: Bật
+                          </span>
+                        ) : (
+                          <span className="auto-renewal-badge auto-renewal-disabled">
+                            <XCircle size={14} />
+                            Gia hạn tự động: Tắt
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  {currentSub.plan.planType !== 'FREE_TIER' && (
+                    <div className="cosmic-subscription-actions">
+                      {currentSub.autoRenew && (
+                        <button
+                          className="cosmic-cancel-auto-renewal-btn"
+                          onClick={() => setShowCancelAutoRenewalModal(true)}
+                        >
+                          <RefreshCw size={18} />
+                          Hủy thanh toán tự động
+                        </button>
+                      )}
+                      <button
+                        className="cosmic-cancel-subscription-btn"
+                        onClick={() => setShowCancelModal(true)}
+                      >
+                        <XCircle size={18} />
+                        Hủy gói & hoàn tiền
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -505,6 +548,27 @@ const PremiumPageCosmic = () => {
       <div className="cosmic-meowl-container">
         <MeowGuide currentPage="upgrade" />
       </div>
+
+      {/* Cancel Auto-Renewal Modal */}
+      <CancelAutoRenewalModal
+        isOpen={showCancelAutoRenewalModal}
+        onClose={() => setShowCancelAutoRenewalModal(false)}
+        subscription={currentSub}
+        onSuccess={async () => {
+          await loadCurrentSubscription();
+        }}
+      />
+
+      {/* Cancel Subscription Modal */}
+      <CancelSubscriptionModal
+        isOpen={showCancelModal}
+        onClose={() => setShowCancelModal(false)}
+        subscription={currentSub}
+        onSuccess={async () => {
+          await loadCurrentSubscription();
+          await loadWalletData();
+        }}
+      />
 
       {/* Wallet Payment Modal */}
       {selectedPlanForWallet && walletData && (

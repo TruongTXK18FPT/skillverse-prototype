@@ -3,8 +3,9 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 // Import meowl skins
 import meowlDefault from '../assets/meowl-skin/meowl_default.png';
 import meowlSanta from '../assets/meowl-skin/meowl-santa.png';
-
-export type MeowlSkinType = 'default' | 'santa';
+import meowlSatan from '../assets/meowl-skin/meowl-acwy.png';
+import meowlGold from '../assets/meowl-skin/meowl-thantai.png';
+export type MeowlSkinType = 'default' | 'santa' | 'satan' | 'gold';
 
 interface MeowlSkin {
   id: MeowlSkinType;
@@ -25,7 +26,20 @@ export const MEOWL_SKINS: MeowlSkin[] = [
     name: 'Santa Meowl',
     nameVi: 'Meowl Santa',
     image: meowlSanta
+  },
+  {
+    id: 'satan',
+    name: 'Satan Meowl',
+    nameVi: 'Meowl Satan',
+    image: meowlSatan
+  },
+  {
+    id: 'gold',
+    name: 'Gold Meowl',
+    nameVi: 'Meowl Gold',
+    image: meowlGold
   }
+
 ];
 
 interface MeowlSkinContextType {

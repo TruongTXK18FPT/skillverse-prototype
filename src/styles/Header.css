@@ -98,8 +98,38 @@
   clip-path: polygon(10% 0, 100% 0, 100% 85%, 90% 100%, 0 100%, 0 15%);
 }
 
-.header-nav-btn:hover,
+/* Khám Phá Button - Purple Theme */
+.header-nav-btn.explore-btn {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.3);
+  color: #c084fc;
+}
+
+.header-nav-btn.explore-btn:hover {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: #a855f7;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  color: #e9d5ff;
+  transform: translateY(-1px);
+}
+
+/* Dịch Chuyển Button - Cyan/Green Theme */
+.quick-nav-btn {
+  background: rgba(6, 182, 212, 0.1);
+  border-color: rgba(6, 182, 212, 0.3);
+  color: #22d3ee;
+}
+
 .quick-nav-btn:hover {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: #06b6d4;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+  color: #a5f3fc;
+  transform: translateY(-1px);
+}
+
+/* Default hover for other nav buttons */
+.header-nav-btn:hover {
   background: rgba(59, 130, 246, 0.15);
   border-color: var(--sv-primary);
   box-shadow: var(--neon-shadow);

@@ -51,5 +51,33 @@ export const premiumService = {
       params: { planId, applyStudentDiscount }
     });
     return data;
+  },
+
+  async enableAutoRenewal(): Promise<{ success: boolean; message: string }> {
+    const { data } = await api.post('/api/premium/subscription/enable-auto-renewal');
+    return data;
+  },
+
+  async cancelAutoRenewal(): Promise<{ success: boolean; message: string }> {
+    const { data } = await api.post('/api/premium/subscription/cancel-auto-renewal');
+    return data;
+  },
+
+  async cancelSubscriptionWithRefund(reason?: string): Promise<{ success: boolean; message: string; refundAmount: number }> {
+    const { data } = await api.post('/api/premium/subscription/cancel-with-refund', null, {
+      params: { reason }
+    });
+    return data;
+  },
+
+  async checkRefundEligibility(): Promise<{ 
+    eligible: boolean; 
+    refundPercentage: number; 
+    refundAmount: number; 
+    daysUsed: number; 
+    message: string 
+  }> {
+    const { data } = await api.get('/api/premium/subscription/refund-eligibility');
+    return data;
   }
 };

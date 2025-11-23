@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
-  Wallet, Clock, CheckCircle, XCircle,
-  Zap, Sparkles, Rocket, Gift,
-  ArrowUpRight, ArrowDownLeft, RefreshCw, Eye, EyeOff,
-  Coins, DollarSign, Activity, Target,
-  ChevronRight, Plus, Minus, History,
-  ShoppingBag, Search, Filter, Settings, Lock, Building2, AlertCircle, Shield,
-  CreditCard, User, Crown, Calendar
+  Wallet, DollarSign, Coins, TrendingDown, TrendingUp,
+  Eye, EyeOff, Plus, ArrowUpRight, ArrowDownLeft, Activity,
+  Gift, Zap, RefreshCw, CheckCircle, XCircle, Clock, Settings,
+  Calendar, Crown, ChevronRight, Rocket, ShoppingBag, Search, Filter, Lock, Building2, AlertCircle, Shield,
+  CreditCard, User, Sparkles, Minus, Target, History
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import walletService from '../../services/walletService';
@@ -19,6 +17,9 @@ import WithdrawModal from '../../components/wallet/WithdrawModal';
 import SetupBankAccountModal from '../../components/wallet/SetupBankAccountModal';
 import StatisticsPanel from '../../components/wallet/StatisticsPanel';
 import PaymentCallbackHelper from '../../components/wallet/PaymentCallbackHelper';
+import CancelSubscriptionModal from '../../components/premium/CancelSubscriptionModal';
+import CancelAutoRenewalModal from '../../components/premium/CancelAutoRenewalModal';
+import EnableAutoRenewalModal from '../../components/premium/EnableAutoRenewalModal';
 import Toast from '../../components/Toast';
 import './MyWalletCosmic.css';
 
@@ -92,6 +93,9 @@ const MyWalletCosmic: React.FC = () => {
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [showBuyCoinModal, setShowBuyCoinModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showCancelAutoRenewalModal, setShowCancelAutoRenewalModal] = useState(false);
+  const [showEnableAutoRenewalModal, setShowEnableAutoRenewalModal] = useState(false);
   const [showBankSetupModal, setShowBankSetupModal] = useState(false);
   const [showPinSetupModal, setShowPinSetupModal] = useState(false);
   const [showCallbackHelper, setShowCallbackHelper] = useState(false);
@@ -287,6 +291,33 @@ const MyWalletCosmic: React.FC = () => {
     return new Date(dateString).toLocaleString('vi-VN');
   };
 
+  // Tỷ giá: 1 xu = 76 VND
+  const COIN_TO_VND_RATE = 76;
+
+  const calculateTotalAssets = () => {
+    const cashBalance = walletData?.cashBalance || 0;
+    const coinBalance = walletData?.coinBalance || 0;
+    const coinValueInVND = coinBalance * COIN_TO_VND_RATE;
+    return cashBalance + coinValueInVND;
+  };
+
+  const calculateAssetAllocation = () => {
+    const totalAssets = calculateTotalAssets();
+    if (totalAssets === 0) return { cashPercent: 0, coinPercent: 0 };
+
+    const cashBalance = walletData?.cashBalance || 0;
+    const coinBalance = walletData?.coinBalance || 0;
+    const coinValueInVND = coinBalance * COIN_TO_VND_RATE;
+
+    return {
+      cashPercent: (cashBalance / totalAssets) * 100,
+      coinPercent: (coinValueInVND / totalAssets) * 100,
+      cashValue: cashBalance,
+      coinValue: coinValueInVND,
+      totalValue: totalAssets
+    };
+  };
+
   const getTransactionIcon = (type?: string) => {
     switch (type) {
       case 'DEPOSIT': return <ArrowDownLeft className="tx-icon deposit" />;
@@ -297,6 +328,18 @@ const MyWalletCosmic: React.FC = () => {
       case 'REFUND': return <RefreshCw className="tx-icon refund" />;
       default: return <Activity className="tx-icon" />;
     }
+  };
+
+  const isTransactionCredit = (type?: string) => {
+    // Credit transactions (money IN): +
+    const creditTypes = ['DEPOSIT_CASH', 'DEPOSIT', 'REFUND_CASH', 'REFUND', 'EARN_COINS', 'RECEIVE_TIP', 'BONUS_COINS', 'REWARD_ACHIEVEMENT', 'DAILY_LOGIN_BONUS'];
+    return type ? creditTypes.some(t => type.toUpperCase().includes(t)) : false;
+  };
+
+  const isTransactionDebit = (type?: string) => {
+    // Debit transactions (money OUT): -
+    const debitTypes = ['WITHDRAWAL', 'PURCHASE', 'SPEND', 'TIP_MENTOR'];
+    return type ? debitTypes.some(t => type.toUpperCase().includes(t)) : false;
   };
 
   const getStatusBadge = (status: string) => {
@@ -368,6 +411,11 @@ const MyWalletCosmic: React.FC = () => {
               <div className="balance-value">
                 {showBalance ? formatCurrency(walletData?.cashBalance || 0) : '••••••'}
               </div>
+              {showBalance && (
+                <div className="balance-percent">
+                  {calculateAssetAllocation().cashPercent.toFixed(1)}% tổng tài sản
+                </div>
+              )}
             </div>
             
             <div className="balance-divider"></div>
@@ -381,8 +429,24 @@ const MyWalletCosmic: React.FC = () => {
                 {showBalance ? (walletData?.coinBalance || 0).toLocaleString() : '••••••'}
                 <span className="coin-label">xu</span>
               </div>
+              {showBalance && (
+                <div className="balance-percent">
+                  {calculateAssetAllocation().coinPercent.toFixed(1)}% tổng tài sản
+                  <span className="coin-vnd-value">
+                    ≈ {formatCurrency(calculateAssetAllocation().coinValue || 0)}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
+          
+          {showBalance && (
+            <div className="total-assets">
+              <TrendingUp size={18} />
+              <span>Tổng tài sản:</span>
+              <strong>{formatCurrency(calculateTotalAssets())}</strong>
+            </div>
+          )}
           
           <div className="card-actions">
             <button className="action-btn primary" onClick={() => setShowDepositModal(true)}>
@@ -477,6 +541,34 @@ const MyWalletCosmic: React.FC = () => {
                     </div>
                   </div>
                   <div className="premium-actions">
+                    {subscription.plan.planType !== 'FREE_TIER' && (
+                      <>
+                        {subscription.autoRenew ? (
+                          <button 
+                            className="cancel-auto-renewal-btn"
+                            onClick={() => setShowCancelAutoRenewalModal(true)}
+                          >
+                            <RefreshCw size={16} />
+                            Hủy thanh toán tự động
+                          </button>
+                        ) : (
+                          <button 
+                            className="enable-auto-renewal-btn"
+                            onClick={() => setShowEnableAutoRenewalModal(true)}
+                          >
+                            <RefreshCw size={16} />
+                            Bật thanh toán tự động
+                          </button>
+                        )}
+                        <button 
+                          className="cancel-subscription-btn"
+                          onClick={() => setShowCancelModal(true)}
+                        >
+                          <XCircle size={16} />
+                          Hủy gói & hoàn tiền
+                        </button>
+                      </>
+                    )}
                     <button 
                       className="upgrade-btn"
                       onClick={() => window.location.href = '/premium'}
@@ -509,12 +601,12 @@ const MyWalletCosmic: React.FC = () => {
                     </div>
                     <div className="tx-amount">
                       {tx.amount !== undefined && tx.amount !== null ? (
-                        <p className={(tx.amount || 0) >= 0 ? 'positive' : 'negative'}>
-                          {(tx.amount || 0) >= 0 ? '+' : ''}{formatCurrency(tx.amount || 0)}
+                        <p className={isTransactionCredit(tx.transactionType) ? 'positive' : 'negative'}>
+                          {isTransactionCredit(tx.transactionType) ? '+' : '-'}{formatCurrency(Math.abs(tx.amount || 0))}
                         </p>
                       ) : null}
                       {tx.coinAmount && (
-                        <p className="tx-coins">{tx.coinAmount > 0 ? '+' : ''}{tx.coinAmount} xu</p>
+                        <p className="tx-coins">{tx.coinAmount > 0 ? '+' : '-'}{Math.abs(tx.coinAmount)} xu</p>
                       )}
                     </div>
                     {getStatusBadge(tx.status)}
@@ -546,12 +638,12 @@ const MyWalletCosmic: React.FC = () => {
                   </div>
                   <div className="tx-amount">
                     {tx.amount !== undefined && tx.amount !== null ? (
-                      <p className={(tx.amount || 0) >= 0 ? 'positive' : 'negative'}>
-                        {(tx.amount || 0) >= 0 ? '+' : ''}{formatCurrency(tx.amount || 0)}
+                      <p className={isTransactionCredit(tx.transactionType) ? 'positive' : 'negative'}>
+                        {isTransactionCredit(tx.transactionType) ? '+' : '-'}{formatCurrency(Math.abs(tx.amount || 0))}
                       </p>
                     ) : null}
                     {tx.coinAmount && (
-                      <p className="tx-coins">{tx.coinAmount > 0 ? '+' : ''}{tx.coinAmount} xu</p>
+                      <p className="tx-coins">{tx.coinAmount > 0 ? '+' : '-'}{Math.abs(tx.coinAmount)} xu</p>
                     )}
                   </div>
                   {getStatusBadge(tx.status)}
@@ -958,6 +1050,41 @@ const MyWalletCosmic: React.FC = () => {
           fetchWalletData();
           fetchTransactions();
           showToast('success', '✅ Nạp tiền thành công!', 'Số dư đã được cập nhật');
+        }}
+      />
+
+      {/* Enable Auto-Renewal Modal */}
+      <EnableAutoRenewalModal
+        isOpen={showEnableAutoRenewalModal}
+        onClose={() => setShowEnableAutoRenewalModal(false)}
+        subscription={subscription}
+        onSuccess={async () => {
+          await fetchSubscription();
+          showToast('success', '✅ Thành công', 'Đã bật thanh toán tự động');
+        }}
+      />
+
+      {/* Cancel Auto-Renewal Modal */}
+      <CancelAutoRenewalModal
+        isOpen={showCancelAutoRenewalModal}
+        onClose={() => setShowCancelAutoRenewalModal(false)}
+        subscription={subscription}
+        onSuccess={async () => {
+          await fetchSubscription();
+          showToast('success', '✅ Thành công', 'Đã hủy thanh toán tự động');
+        }}
+      />
+
+      {/* Cancel Subscription Modal */}
+      <CancelSubscriptionModal
+        isOpen={showCancelModal}
+        onClose={() => setShowCancelModal(false)}
+        subscription={subscription}
+        onSuccess={async () => {
+          await fetchSubscription();
+          await fetchWalletData();
+          await fetchTransactions();
+          showToast('success', '✅ Thành công', 'Đã hủy gói đăng ký');
         }}
       />
 

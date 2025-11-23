@@ -49,9 +49,11 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
   const netFlow = totalIncome - totalExpense;
 
   // Balance distribution data for Pie Chart
+  // Tỷ giá: 1 xu = 76 VND
+  const COIN_TO_VND_RATE = 76;
   const balanceData = [
     { name: 'Tiền Mặt', value: walletData?.cashBalance || 0, color: '#22c55e' },
-    { name: 'Xu (VND)', value: (walletData?.coinBalance || 0) * 100, color: '#fbbf24' }
+    { name: 'Xu (VND)', value: (walletData?.coinBalance || 0) * COIN_TO_VND_RATE, color: '#fbbf24' }
   ];
 
   // Transaction flow data for Bar Chart (last 7 days)
