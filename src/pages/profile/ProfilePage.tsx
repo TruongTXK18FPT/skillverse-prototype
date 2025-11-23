@@ -16,6 +16,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -57,7 +58,7 @@ const ProfilePage = () => {
     if (user?.id) {
       loadProfile();
     }
-  }, [isAuthenticated, user, navigate, loadProfile]);;
+  }, [isAuthenticated, user, navigate, loadProfile]);
 
   const handleEdit = () => {
     setEditing(true);
@@ -109,6 +110,41 @@ const ProfilePage = () => {
     }));
   };
 
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Vui lòng chọn file ảnh');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Kích thước ảnh không được vượt quá 5MB');
+      return;
+    }
+
+    setUploading(true);
+    setError('');
+    
+    try {
+      const result = await userService.uploadUserAvatar(file);
+      
+      // Reload profile to get updated avatar
+      await loadProfile();
+      
+      setSuccess('Cập nhật ảnh đại diện thành công!');
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+      setError((error as Error).message || 'Upload ảnh thất bại');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="profile-container" data-theme={theme}>
@@ -142,10 +178,30 @@ const ProfilePage = () => {
         <div className="profile-header">
           <div className="profile-avatar-section">
             <div className="profile-avatar">
-              <User className="avatar-icon" />
-              <button className="avatar-upload-btn" title="Thay đổi ảnh đại diện">
+              {profile.avatarMediaUrl ? (
+                <img 
+                  src={profile.avatarMediaUrl} 
+                  alt="Avatar" 
+                  className="profile-avatar-image"
+                />
+              ) : (
+                <User className="avatar-icon" />
+              )}
+              <input
+                type="file"
+                id="avatar-upload"
+                accept="image/*"
+                onChange={handleAvatarUpload}
+                style={{ display: 'none' }}
+                disabled={uploading}
+              />
+              <label 
+                htmlFor="avatar-upload" 
+                className="avatar-upload-btn" 
+                title={uploading ? 'Đang tải...' : 'Thay đổi ảnh đại diện'}
+              >
                 <Camera size={16} />
-              </button>
+              </label>
               {/* Role badge nằm trong avatar */}
               <div className="profile-role-badge-container">
                 {user?.roles.map((role) => (

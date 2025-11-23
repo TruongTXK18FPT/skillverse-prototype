@@ -29,7 +29,14 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import walletService from '../services/walletService';
+import userService from '../services/userService';
+import { premiumService } from '../services/premiumService';
+import { UserProfileResponse } from '../data/userDTOs';
+import { UserSubscriptionResponse } from '../data/premiumDTOs';
 import Logo from '../assets/skillverse.png';
+import silverFrame from '../assets/premium/silver_avatar.png';
+import goldenFrame from '../assets/premium/golden_avatar.png';
+import diamondFrame from '../assets/premium/diamond_avatar.png';
 import '../styles/Header.css';
 
 const Header: React.FC = () => {
@@ -42,6 +49,8 @@ const Header: React.FC = () => {
   const [isMobileMenuToggleLocked, setIsMobileMenuToggleLocked] = useState(false);
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
   const [loadingBalance, setLoadingBalance] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
+  const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const quickNavRef = useRef<HTMLDivElement>(null);
 
@@ -109,24 +118,85 @@ const Header: React.FC = () => {
     }
   ];
 
-  // Fetch wallet balance when user is authenticated
-  useEffect(() => {
-    const fetchWalletBalance = async () => {
-      if (isAuthenticated && user) {
-        setLoadingBalance(true);
-        try {
-          const walletData = await walletService.getMyWallet();
-          setWalletBalance(walletData.cashBalance);
-        } catch (error) {
-          console.error('Failed to fetch wallet balance:', error);
-          setWalletBalance(null);
-        } finally {
-          setLoadingBalance(false);
-        }
-      }
-    };
+  const loadUserProfile = async () => {
+    try {
+      const profile = await userService.getMyProfile();
+      setUserProfile(profile);
+    } catch (error) {
+      console.error('Failed to load user profile:', error);
+    }
+  };
 
-    fetchWalletBalance();
+  const loadWalletBalance = async () => {
+    if (!user) return;
+    
+    setLoadingBalance(true);
+    try {
+      const wallet = await walletService.getMyWallet();
+      setWalletBalance(wallet.cashBalance);
+    } catch (error) {
+      console.error('Failed to fetch wallet balance:', error);
+      setWalletBalance(null);
+    } finally {
+      setLoadingBalance(false);
+    }
+  };
+
+  const loadSubscription = async () => {
+    try {
+      const sub = await premiumService.getCurrentSubscription();
+      setSubscription(sub);
+    } catch (error) {
+      console.error('Failed to load subscription:', error);
+    }
+  };
+
+  const getAvatarFrame = () => {
+    if (!subscription || !subscription.isActive) return null;
+    
+    const planType = subscription.plan.planType;
+    switch (planType) {
+      case 'STUDENT_PACK':
+        return silverFrame;
+      case 'PREMIUM_BASIC':
+        return goldenFrame;
+      case 'PREMIUM_PLUS':
+        return diamondFrame;
+      default:
+        return null;
+    }
+  };
+
+  const getPremiumColor = () => {
+    if (!subscription || !subscription.isActive) return null;
+    
+    const planType = subscription.plan.planType;
+    switch (planType) {
+      case 'STUDENT_PACK':
+        return '#c0c0c0'; // Silver
+      case 'PREMIUM_BASIC':
+        return '#ffd700'; // Gold
+      case 'PREMIUM_PLUS':
+        return '#b9f2ff'; // Diamond
+      default:
+        return null;
+    }
+  };
+
+  const hexToRgb = (hex: string): string => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result 
+      ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
+      : '255, 255, 255';
+  };
+
+  // Fetch wallet balance, profile and subscription when user is authenticated
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      loadWalletBalance();
+      loadUserProfile();
+      loadSubscription();
+    }
   }, [isAuthenticated, user]);
 
   // Close menus when clicking outside
@@ -263,19 +333,32 @@ const Header: React.FC = () => {
 
           {/* Authentication */}
           {isAuthenticated && user ? (
-            <div ref={userMenuRef} className="user-profile-group desktop-only">
+            <div ref={userMenuRef} className="user-profile-group desktop-only" style={{
+              background: getPremiumColor() ? `linear-gradient(135deg, rgba(${hexToRgb(getPremiumColor()!)}, 0.1), rgba(${hexToRgb(getPremiumColor()!)}, 0.05))` : undefined,
+              border: getPremiumColor() ? `1px solid ${getPremiumColor()}` : undefined,
+              boxShadow: getPremiumColor() ? `0 0 20px rgba(${hexToRgb(getPremiumColor()!)}, 0.3)` : undefined
+            }}>
               <button
                 className="user-profile-btn"
                 onClick={() => setShowUserMenu(!showUserMenu)}
               >
                 <div className="profile-group-content">
-                  <div className="header-user-avatar">
-                    <User size={18} />
+                  <div className="header-user-avatar" style={{
+                    border: getPremiumColor() ? `3px solid ${getPremiumColor()}` : '2px solid rgba(255,255,255,0.2)',
+                    boxShadow: getPremiumColor() ? `0 0 15px ${getPremiumColor()}` : undefined
+                  }}>
+                    {userProfile?.avatarMediaUrl ? (
+                      <img src={userProfile.avatarMediaUrl} alt="Avatar" className="header-avatar-img" />
+                    ) : (
+                      <User size={18} />
+                    )}
                   </div>
                   <div className="user-info-inline">
-                    <span className="user-greeting">Xin chào, <strong>{user.fullName}</strong></span>
-                    <span className="user-balance">
-                      💰 Số dư: {loadingBalance ? '...' : walletBalance !== null ? walletBalance.toLocaleString('vi-VN') + ' đ' : 'N/A'}
+                    <span className="user-greeting">
+                      Xin chào, <strong style={{ color: getPremiumColor() || undefined }}>{user.fullName}</strong>
+                    </span>
+                    <span className="user-balance" style={{ color: getPremiumColor() || undefined }}>
+                      💰 Số dư: {loadingBalance ? '...' : (walletBalance !== null && walletBalance !== undefined) ? walletBalance.toLocaleString('vi-VN') + ' đ' : 'N/A'}
                     </span>
                   </div>
                   <ChevronDown size={16} className="dropdown-icon" />
@@ -285,8 +368,15 @@ const Header: React.FC = () => {
               {showUserMenu && (
                 <div className="user-dropdown">
                   <div className="user-info">
-                    <div className="header-user-avatar-large">
-                      <User size={24} />
+                    <div className="header-user-avatar-large" style={{
+                      border: getPremiumColor() ? `3px solid ${getPremiumColor()}` : '2px solid rgba(255,255,255,0.2)',
+                      boxShadow: getPremiumColor() ? `0 0 20px ${getPremiumColor()}` : undefined
+                    }}>
+                      {userProfile?.avatarMediaUrl ? (
+                        <img src={userProfile.avatarMediaUrl} alt="Avatar" className="header-avatar-img-large" />
+                      ) : (
+                        <User size={24} />
+                      )}
                     </div>
                     <div className="user-details">
                       <p className="user-name">{user.fullName}</p>

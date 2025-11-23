@@ -1,0 +1,853 @@
+/* ========================================
+   PREMIUM PAGE - COSMIC GALAXY THEME
+   Space theme with tier-based frames
+   ======================================== */
+
+@keyframes cosmicFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+@keyframes galaxyGlow {
+  0%, 100% {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.4),
+                0 0 60px rgba(139, 92, 246, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 50px rgba(139, 92, 246, 0.6),
+                0 0 100px rgba(139, 92, 246, 0.3);
+  }
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes diamondPulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 40px rgba(147, 197, 253, 0.6),
+      0 0 80px rgba(147, 197, 253, 0.4),
+      inset 0 0 40px rgba(147, 197, 253, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 0 60px rgba(147, 197, 253, 0.8),
+      0 0 120px rgba(147, 197, 253, 0.6),
+      inset 0 0 60px rgba(147, 197, 253, 0.3);
+  }
+}
+
+@keyframes goldShine {
+  0%, 100% {
+    box-shadow: 
+      0 0 30px rgba(251, 191, 36, 0.5),
+      0 0 60px rgba(251, 191, 36, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 50px rgba(251, 191, 36, 0.7),
+      0 0 100px rgba(251, 191, 36, 0.5);
+  }
+}
+
+/* ========================================
+   MAIN CONTAINER
+   ======================================== */
+
+.cosmic-premium-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
+  position: relative;
+  overflow-x: hidden;
+  color: #e2e8f0;
+}
+
+.cosmic-premium-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Animated stars background */
+.cosmic-premium-page::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 33% 80%, white, transparent),
+    radial-gradient(1px 1px at 15% 90%, white, transparent);
+  background-size: 200% 200%;
+  animation: starTwinkle 3s ease-in-out infinite;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cosmic-premium-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================
+   HERO SECTION
+   ======================================== */
+
+.cosmic-premium-hero {
+  padding: 100px 0 60px;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.15) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.cosmic-premium-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(139, 92, 246, 0.1);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  animation: galaxyGlow 3s ease-in-out infinite;
+}
+
+.cosmic-premium-hero__badge svg {
+  color: #fbbf24;
+  filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.6));
+}
+
+.cosmic-premium-hero__title {
+  font-size: 4.5rem;
+  font-weight: 900;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #a78bfa 0%, #ec4899 50%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+  text-shadow: 0 0 40px rgba(139, 92, 246, 0.3);
+  letter-spacing: -0.02em;
+}
+
+.cosmic-premium-hero__subtitle {
+  font-size: 1.75rem;
+  color: #cbd5e1;
+  margin-bottom: 3rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+.cosmic-premium-hero__stats {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 3rem;
+}
+
+.cosmic-stat-item {
+  text-align: center;
+}
+
+.cosmic-stat-number {
+  font-size: 3rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #a78bfa, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.cosmic-stat-label {
+  font-size: 1rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ========================================
+   PRICING SECTION
+   ======================================== */
+
+.cosmic-pricing-section {
+  padding: 60px 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.cosmic-section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.cosmic-section-title {
+  font-size: 3rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #a78bfa, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+.cosmic-section-subtitle {
+  font-size: 1.25rem;
+  color: #94a3b8;
+}
+
+.cosmic-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 2.5rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ========================================
+   TIER CARDS - BASE STYLES
+   ======================================== */
+
+.cosmic-tier-card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  border: 2px solid transparent;
+}
+
+.cosmic-tier-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(139, 92, 246, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.cosmic-tier-card:hover::before {
+  opacity: 1;
+}
+
+.cosmic-tier-card:hover {
+  transform: translateY(-10px);
+}
+
+/* ========================================
+   TIER ICONS
+   ======================================== */
+
+.cosmic-tier-icon-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1.5rem;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cosmic-tier-icon {
+  width: 64px;
+  height: 64px;
+  stroke-width: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+.cosmic-tier-user-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.cosmic-tier-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ========================================
+   BRONZE TIER (FREE)
+   ======================================== */
+
+.cosmic-tier-card--bronze {
+  border: 2px solid #cd7f32;
+  background: linear-gradient(135deg, rgba(205, 127, 50, 0.15) 0%, rgba(30, 41, 59, 0.9) 100%);
+  box-shadow: 
+    0 0 30px rgba(205, 127, 50, 0.3),
+    inset 0 0 30px rgba(205, 127, 50, 0.1);
+}
+
+.cosmic-tier-card--bronze:hover {
+  box-shadow: 
+    0 0 50px rgba(205, 127, 50, 0.5),
+    inset 0 0 50px rgba(205, 127, 50, 0.15);
+}
+
+.cosmic-tier-card--bronze .cosmic-tier-badge {
+  background: linear-gradient(135deg, #cd7f32, #b8732d);
+  color: #fff;
+}
+
+.cosmic-tier-card--bronze .cosmic-tier-icon {
+  color: #cd7f32;
+  filter: drop-shadow(0 4px 12px rgba(205, 127, 50, 0.6));
+}
+
+/* ========================================
+   SILVER TIER (STUDENT)
+   ======================================== */
+
+.cosmic-tier-card--silver {
+  border: 2px solid #c0c0c0;
+  background: linear-gradient(135deg, rgba(192, 192, 192, 0.15) 0%, rgba(30, 41, 59, 0.9) 100%);
+  box-shadow: 
+    0 0 30px rgba(192, 192, 192, 0.4),
+    inset 0 0 30px rgba(192, 192, 192, 0.1);
+}
+
+.cosmic-tier-card--silver:hover {
+  box-shadow: 
+    0 0 50px rgba(192, 192, 192, 0.6),
+    inset 0 0 50px rgba(192, 192, 192, 0.2);
+}
+
+.cosmic-tier-card--silver .cosmic-tier-badge {
+  background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+  color: #1e293b;
+}
+
+.cosmic-tier-card--silver .cosmic-tier-icon {
+  color: #c0c0c0;
+  filter: drop-shadow(0 4px 16px rgba(192, 192, 192, 0.8));
+}
+
+/* ========================================
+   GOLD TIER (PREMIUM BASIC)
+   ======================================== */
+
+.cosmic-tier-card--gold {
+  border: 2px solid #fbbf24;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(30, 41, 59, 0.9) 100%);
+  box-shadow: 
+    0 0 40px rgba(251, 191, 36, 0.5),
+    inset 0 0 40px rgba(251, 191, 36, 0.15);
+  animation: goldShine 3s ease-in-out infinite;
+}
+
+.cosmic-tier-card--gold:hover {
+  box-shadow: 
+    0 0 60px rgba(251, 191, 36, 0.7),
+    inset 0 0 60px rgba(251, 191, 36, 0.25);
+  transform: translateY(-15px) scale(1.02);
+}
+
+.cosmic-tier-card--gold .cosmic-tier-badge {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.cosmic-tier-card--gold .cosmic-tier-icon-wrapper {
+  animation: cosmicFloat 5s ease-in-out infinite;
+}
+
+.cosmic-tier-card--gold .cosmic-tier-icon {
+  color: #fbbf24;
+  filter: drop-shadow(0 4px 20px rgba(251, 191, 36, 1)) drop-shadow(0 0 10px rgba(251, 191, 36, 0.6));
+}
+
+/* ========================================
+   DIAMOND TIER (PREMIUM PLUS)
+   ======================================== */
+
+.cosmic-tier-card--diamond {
+  border: 3px solid #93c5fd;
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.25) 0%, rgba(30, 41, 59, 0.95) 100%);
+  box-shadow: 
+    0 0 50px rgba(147, 197, 253, 0.6),
+    0 0 100px rgba(147, 197, 253, 0.4),
+    inset 0 0 50px rgba(147, 197, 253, 0.2);
+  animation: diamondPulse 2s ease-in-out infinite;
+  transform: scale(1.03);
+}
+
+.cosmic-tier-card--diamond:hover {
+  box-shadow: 
+    0 0 70px rgba(147, 197, 253, 0.8),
+    0 0 140px rgba(147, 197, 253, 0.6),
+    inset 0 0 70px rgba(147, 197, 253, 0.3);
+  transform: translateY(-20px) scale(1.08);
+}
+
+.cosmic-tier-card--diamond::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(147, 197, 253, 0.3),
+    transparent
+  );
+  animation: shimmer 3s infinite;
+}
+
+.cosmic-tier-card--diamond .cosmic-tier-badge {
+  background: linear-gradient(135deg, #93c5fd, #60a5fa);
+  color: #0f172a;
+  font-weight: 800;
+  box-shadow: 0 0 20px rgba(147, 197, 253, 0.5);
+}
+
+.cosmic-tier-card--diamond .cosmic-tier-icon-wrapper {
+  animation: cosmicFloat 3s ease-in-out infinite;
+}
+
+.cosmic-tier-card--diamond .cosmic-tier-icon {
+  color: #93c5fd;
+  filter: drop-shadow(0 4px 24px rgba(147, 197, 253, 1)) drop-shadow(0 0 16px rgba(147, 197, 253, 0.8));
+}
+
+.cosmic-tier-popular {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(236, 72, 153, 0.6);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  animation: galaxyGlow 3s ease-in-out infinite;
+}
+
+/* ========================================
+   TIER CARD CONTENT
+   ======================================== */
+
+.cosmic-tier-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.cosmic-tier-badge {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.cosmic-tier-name {
+  font-size: 1.75rem;
+  font-weight: 900;
+  margin-bottom: 0;
+  color: #f1f5f9;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.cosmic-tier-description {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  text-align: center;
+  padding: 0 0.5rem;
+}
+
+.cosmic-tier-price {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  padding: 1.25rem;
+  background: rgba(139, 92, 246, 0.08);
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+.cosmic-price-amount {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #f1f5f9;
+  line-height: 1;
+  text-shadow: 0 2px 20px rgba(139, 92, 246, 0.5);
+}
+
+.cosmic-price-currency {
+  font-size: 1.5rem;
+  color: #a78bfa;
+  margin-left: 0.5rem;
+  font-weight: 700;
+}
+
+.cosmic-price-period {
+  font-size: 1rem;
+  color: #94a3b8;
+  margin-top: 0.5rem;
+  display: block;
+  font-weight: 500;
+}
+
+.cosmic-student-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  color: #fbbf24;
+  margin-top: 1rem;
+}
+
+/* ========================================
+   FEATURES LIST
+   ======================================== */
+
+.cosmic-tier-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  flex-grow: 1;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 10px;
+  padding: 1.25rem;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+.cosmic-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.75rem 0;
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.05);
+  transition: all 0.2s ease;
+}
+
+.cosmic-feature-item:last-child {
+  border-bottom: none;
+}
+
+.cosmic-feature-item:hover {
+  color: #e2e8f0;
+  padding-left: 0.5rem;
+}
+
+.cosmic-feature-check {
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 2px;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.6));
+}
+
+/* ========================================
+   ACTION BUTTONS
+   ======================================== */
+
+.cosmic-tier-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.cosmic-tier-button {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cosmic-tier-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cosmic-tier-button--wallet {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+}
+
+.cosmic-tier-button--wallet:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(139, 92, 246, 0.6);
+}
+
+.cosmic-tier-button--payos {
+  background: rgba(139, 92, 246, 0.1);
+  color: #a78bfa;
+  border: 2px solid rgba(139, 92, 246, 0.3);
+}
+
+.cosmic-tier-button--payos:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+  transform: translateY(-2px);
+}
+
+.cosmic-tier-button--primary {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  color: white;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+}
+
+.cosmic-tier-button--primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(139, 92, 246, 0.6);
+}
+
+.cosmic-tier-button--disabled {
+  background: rgba(71, 85, 105, 0.3);
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.cosmic-active-note {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 12px;
+  color: #10b981;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
+/* ========================================
+   FEATURES SHOWCASE
+   ======================================== */
+
+.cosmic-features-showcase {
+  padding: 80px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.cosmic-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.cosmic-feature-card {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.cosmic-feature-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 10px 40px rgba(139, 92, 246, 0.2);
+}
+
+.cosmic-feature-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.cosmic-feature-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 0.75rem;
+}
+
+.cosmic-feature-text {
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+/* ========================================
+   MEOWGUIDE CONTAINER
+   ======================================== */
+
+.cosmic-meowl-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .cosmic-premium-hero__title {
+    font-size: 3rem;
+  }
+
+  .cosmic-pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cosmic-tier-card--diamond {
+    transform: scale(1);
+  }
+
+  .cosmic-meowl-container {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .cosmic-premium-hero {
+    padding: 80px 0 60px;
+  }
+
+  .cosmic-premium-hero__title {
+    font-size: 2.5rem;
+  }
+
+  .cosmic-premium-hero__subtitle {
+    font-size: 1.25rem;
+  }
+
+  .cosmic-premium-hero__stats {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .cosmic-pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .cosmic-tier-card--diamond {
+    transform: scale(1);
+  }
+
+  .cosmic-section-title {
+    font-size: 2rem;
+  }
+
+  .cosmic-tier-avatar {
+    width: 100px;
+    height: 100px;
+    margin: -50px auto 1rem;
+  }
+
+  .cosmic-meowl-container {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  .cosmic-tier-price {
+    padding: 1rem;
+  }
+
+  .cosmic-price-amount {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cosmic-premium-hero__title {
+    font-size: 2rem;
+  }
+
+  .cosmic-tier-name {
+    font-size: 1.5rem;
+  }
+
+  .cosmic-price-amount {
+    font-size: 2.5rem;
+  }
+}

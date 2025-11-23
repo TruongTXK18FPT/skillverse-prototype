@@ -109,6 +109,29 @@ class UserService {
     }
   }
 
+  // Upload user avatar
+  async uploadUserAvatar(file: File): Promise<{ avatarUrl: string }> {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await axiosInstance.post<{ avatarUrl: string}>(
+        '/api/user/avatar',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      return response.data;
+    } catch (error: unknown) {
+      console.error('Upload avatar error:', error);
+      const errorMessage = (error as AxiosError).response?.data?.message || 'Upload avatar thất bại.';
+      throw new Error(errorMessage);
+    }
+  }
+
   // Get user skills
   async getUserSkills(userId: number): Promise<UserSkillResponse[]> {
     try {

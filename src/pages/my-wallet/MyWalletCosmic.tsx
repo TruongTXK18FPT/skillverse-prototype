@@ -7,10 +7,12 @@ import {
   Coins, DollarSign, Activity, Target,
   ChevronRight, Plus, Minus, History,
   ShoppingBag, Search, Filter, Settings, Lock, Building2, AlertCircle, Shield,
-  CreditCard, User
+  CreditCard, User, Crown, Calendar
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import walletService from '../../services/walletService';
+import { premiumService } from '../../services/premiumService';
+import { UserSubscriptionResponse } from '../../data/premiumDTOs';
 import DepositCashModal from '../../components/wallet/DepositCashModal';
 import BuyCoinModal from '../../components/wallet/BuyCoinModal';
 import WithdrawModal from '../../components/wallet/WithdrawModal';
@@ -84,6 +86,7 @@ const MyWalletCosmic: React.FC = () => {
   const [walletData, setWalletData] = useState<WalletData | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [withdrawalRequests, setWithdrawalRequests] = useState<WithdrawalRequestData[]>([]);
+  const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [showBalance, setShowBalance] = useState(true);
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -214,6 +217,16 @@ const MyWalletCosmic: React.FC = () => {
     }
   };
 
+  // Fetch premium subscription
+  const fetchSubscription = async () => {
+    try {
+      const sub = await premiumService.getCurrentSubscription();
+      setSubscription(sub);
+    } catch (error) {
+      console.error('Failed to fetch subscription:', error);
+    }
+  };
+
   // Check for payment success callback
   useEffect(() => {
     const paymentStatus = searchParams.get('status');
@@ -235,6 +248,7 @@ const MyWalletCosmic: React.FC = () => {
       fetchWalletData();
       fetchTransactions();
       fetchWithdrawalRequests();
+      fetchSubscription();
     }
   }, [user]);
 
@@ -433,6 +447,48 @@ const MyWalletCosmic: React.FC = () => {
       <div className="cosmic-content">
         {activeTab === 'overview' && (
           <div className="overview-section">
+            {/* Premium Subscription Section */}
+            {subscription && (
+              <div className="premium-subscription-card">
+                <div className="premium-header">
+                  <Crown className="premium-icon" />
+                  <h3>Gói Premium</h3>
+                </div>
+                <div className="premium-content">
+                  <div className="premium-info">
+                    <div className="premium-plan">
+                      <span className="plan-label">Gói hiện tại:</span>
+                      <span className="plan-name">{subscription.plan.displayName}</span>
+                    </div>
+                    <div className="premium-dates">
+                      <div className="date-item">
+                        <Calendar size={16} />
+                        <span>Bắt đầu: {new Date(subscription.startDate).toLocaleDateString('vi-VN')}</span>
+                      </div>
+                      <div className="date-item">
+                        <Calendar size={16} />
+                        <span>Hết hạn: {new Date(subscription.endDate).toLocaleDateString('vi-VN')}</span>
+                      </div>
+                    </div>
+                    <div className="premium-status">
+                      <span className={`status-badge status-${subscription.status.toLowerCase()}`}>
+                        {subscription.status === 'ACTIVE' ? '✓ Đang hoạt động' : subscription.status}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="premium-actions">
+                    <button 
+                      className="upgrade-btn"
+                      onClick={() => window.location.href = '/premium'}
+                    >
+                      <Zap size={16} />
+                      Nâng cấp
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <h2 className="section-title">
               <Zap className="title-icon" />
               Giao dịch gần đây

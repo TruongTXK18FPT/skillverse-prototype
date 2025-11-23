@@ -24,14 +24,19 @@ export interface CreateSubscriptionRequest {
 
 export interface UserSubscriptionResponse {
   id: number;
-  planId: number;
-  planName: string;
+  userId: number;
+  plan: PremiumPlan;
   startDate: string;
   endDate: string;
   isActive: boolean;
   status: 'PENDING' | 'ACTIVE' | 'EXPIRED' | 'CANCELLED' | 'SUSPENDED';
   isStudentSubscription: boolean;
   autoRenew: boolean;
+  paymentTransactionId?: number;
+  daysRemaining?: number;
+  currentlyActive?: boolean;
+  cancellationReason?: string;
+  cancelledAt?: string;
   createdAt: string;
   updatedAt: string;
 }

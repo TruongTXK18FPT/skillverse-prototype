@@ -12,7 +12,7 @@ import '../../styles/LoginPage.css';
 
 const LoginPage = () => {
   const { theme } = useTheme();
-  const { login } = useAuth();
+  const { login, isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { toast, isVisible, hideToast, showSuccess, showError } = useToast();
@@ -24,6 +24,13 @@ const LoginPage = () => {
   });
   const [loading, setLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+  // Check if already authenticated - redirect to warning page
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      navigate('/auth-warning', { replace: true });
+    }
+  }, [authLoading, isAuthenticated, navigate]);
 
   // Handle success message from other pages (like email verification)
   useEffect(() => {

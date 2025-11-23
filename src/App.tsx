@@ -22,10 +22,11 @@ import RegisterPage from './pages/login/RegisterPage';
 import BusinessRegisterPage from './pages/auth/BusinessRegisterPage';
 import MentorRegisterPage from './pages/auth/MentorRegisterPage';
 import VerifyPage from './pages/auth/VerifyPage';
+import AlreadyAuthenticatedWarning from './pages/auth/AlreadyAuthenticatedWarning';
 import ForgotPasswordPage from './pages/login/ForgotPasswordPage';
 import PaymentPage from './pages/payment/PaymentPage';
 import Transactional from './pages/payment/Transactional';
-import PremiumPage from './pages/payment/PremiumPage';
+import PremiumPageCosmic from './pages/payment/PremiumPageCosmic';
 import ManagerPage from './pages/main/ManagerPage';
 // import CoinWallet from './pages/main/CoinWallet'; // Replaced by MyWalletCosmic
 import MyWalletCosmic from './pages/my-wallet/MyWalletCosmic';
@@ -46,7 +47,7 @@ import './styles/App.css';
 import ScrollToTop from './components/scroll/ScrollToTop';
 import CourseDetailPage from './pages/navbar/CourseDetailPage';
 import CourseLearningPage from './pages/navbar/CourseLearningPage';
-import ProfilePage from './pages/profile/ProfilePage';
+import ProfilePageCosmic from './pages/profile/ProfilePageCosmic';
 import MentorProfilePage from './pages/mentor/MentorProfilePage';
 import RecruiterProfilePage from './pages/business/RecruiterProfilePage';
 import ProfileRouter from './components/ProfileRouter';
@@ -97,6 +98,7 @@ const App = () => {
                     <Route path="/cv" element={<CVPage />} />
                     <Route path="/certificate/:id" element={<Certificate />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/auth-warning" element={<AlreadyAuthenticatedWarning />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/register/business" element={<BusinessRegisterPage />} />
                     <Route path="/register/mentor" element={<MentorRegisterPage />} />
@@ -105,13 +107,13 @@ const App = () => {
                     
                     {/* Profile Routes by Role */}
                     <Route path="/profile" element={<ProfileRouter />} />
-                    <Route path="/profile/user" element={<ProfilePage />} />
+                    <Route path="/profile/user" element={<ProfilePageCosmic />} />
                     <Route path="/profile/mentor" element={<MentorProfilePage />} />
                     <Route path="/profile/business" element={<RecruiterProfilePage />} />
                     
                     <Route path="/payment" element={<PaymentPage />} />
                     <Route path="/payment/transactional" element={<Transactional />} />
-                    <Route path="/premium" element={<PremiumPage />} />
+                    <Route path="/premium" element={<PremiumPageCosmic />} />
                     <Route path="/payment/:type/:id" element={<PaymentPage />} />
                     <Route path="/manager" element={<ManagerPage />} />
                     <Route path="/wallet" element={<MyWalletCosmic />} />

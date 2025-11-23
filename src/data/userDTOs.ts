@@ -40,6 +40,9 @@ export interface UserProfileResponse {
   id: number;
   email: string;
   fullName: string;
+  avatarMediaId?: number;
+  avatarMediaUrl?: string;
+  avatarPosition?: string;
   phone?: string;
   bio?: string;
   address?: string;

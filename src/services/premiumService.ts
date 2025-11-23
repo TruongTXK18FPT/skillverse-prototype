@@ -44,5 +44,12 @@ export const premiumService = {
   async checkPremiumStatus(): Promise<boolean> {
     const { data } = await api.get('/api/premium/status');
     return data;
+  },
+
+  async purchaseWithWallet(planId: number, applyStudentDiscount: boolean = false): Promise<UserSubscriptionResponse> {
+    const { data } = await api.post('/api/premium/purchase-with-wallet', null, {
+      params: { planId, applyStudentDiscount }
+    });
+    return data;
   }
 };

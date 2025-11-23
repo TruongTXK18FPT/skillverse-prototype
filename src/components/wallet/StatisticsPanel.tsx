@@ -182,16 +182,39 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
       name: 'Mua xu', 
       value: transactions.filter(t => {
         const txType = t.transactionType?.toUpperCase() || '';
-        return txType.includes('PURCHASE') || txType.includes('COIN');
+        return txType.includes('PURCHASE_COIN') || (txType.includes('PURCHASE') && txType.includes('COIN'));
       }).length, 
       color: '#fbbf24' 
     },
     { 
-      name: 'Chi tiêu', 
+      name: 'Mua Premium', 
+      value: transactions.filter(t => {
+        const txType = t.transactionType?.toUpperCase() || '';
+        const desc = t.description?.toUpperCase() || '';
+        return txType.includes('PREMIUM') || txType.includes('SUBSCRIPTION') || desc.includes('PREMIUM') || desc.includes('GÓI');
+      }).length, 
+      color: '#a855f7' 
+    },
+    { 
+      name: 'Mua khóa học', 
+      value: transactions.filter(t => {
+        const txType = t.transactionType?.toUpperCase() || '';
+        const desc = t.description?.toUpperCase() || '';
+        return txType.includes('COURSE') || desc.includes('KHÓA HỌC') || desc.includes('COURSE');
+      }).length, 
+      color: '#3b82f6' 
+    },
+    { 
+      name: 'Chi tiêu khác', 
       value: transactions.filter(t => {
         const txType = t.transactionType?.toUpperCase() || '';
         const currencyType = t.currencyType?.toUpperCase() || '';
-        return currencyType === 'COIN' && t.isDebit;
+        const desc = t.description?.toUpperCase() || '';
+        // Exclude premium and course purchases
+        const isPremium = txType.includes('PREMIUM') || txType.includes('SUBSCRIPTION') || desc.includes('PREMIUM') || desc.includes('GÓI');
+        const isCourse = txType.includes('COURSE') || desc.includes('KHÓA HỌC') || desc.includes('COURSE');
+        const isCoinPurchase = txType.includes('PURCHASE_COIN') || (txType.includes('PURCHASE') && txType.includes('COIN'));
+        return currencyType === 'COIN' && t.isDebit && !isPremium && !isCourse && !isCoinPurchase;
       }).length, 
       color: '#8b5cf6' 
     },
