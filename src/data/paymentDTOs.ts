@@ -23,6 +23,9 @@ export interface CreatePaymentResponse {
 export interface PaymentTransactionResponse {
   id: number;
   userId: number;
+  userName?: string;
+  userEmail?: string;
+  userAvatarUrl?: string;
   internalReference: string;
   referenceId?: string;
   amount: string;

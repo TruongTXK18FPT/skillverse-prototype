@@ -25,6 +25,9 @@ export interface CreateSubscriptionRequest {
 export interface UserSubscriptionResponse {
   id: number;
   userId: number;
+  userName?: string;
+  userEmail?: string;
+  userAvatarUrl?: string;
   plan: PremiumPlan;
   startDate: string;
   endDate: string;

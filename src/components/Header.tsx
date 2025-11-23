@@ -347,8 +347,8 @@ const Header: React.FC = () => {
                     border: getPremiumColor() ? `3px solid ${getPremiumColor()}` : '2px solid rgba(255,255,255,0.2)',
                     boxShadow: getPremiumColor() ? `0 0 15px ${getPremiumColor()}` : undefined
                   }}>
-                    {userProfile?.avatarMediaUrl ? (
-                      <img src={userProfile.avatarMediaUrl} alt="Avatar" className="header-avatar-img" />
+                    {(userProfile?.avatarMediaUrl || user.avatarUrl) ? (
+                      <img src={userProfile?.avatarMediaUrl || user.avatarUrl} alt="Avatar" className="header-avatar-img" />
                     ) : (
                       <User size={18} />
                     )}
@@ -372,8 +372,8 @@ const Header: React.FC = () => {
                       border: getPremiumColor() ? `3px solid ${getPremiumColor()}` : '2px solid rgba(255,255,255,0.2)',
                       boxShadow: getPremiumColor() ? `0 0 20px ${getPremiumColor()}` : undefined
                     }}>
-                      {userProfile?.avatarMediaUrl ? (
-                        <img src={userProfile.avatarMediaUrl} alt="Avatar" className="header-avatar-img-large" />
+                      {(userProfile?.avatarMediaUrl || user.avatarUrl) ? (
+                        <img src={userProfile?.avatarMediaUrl || user.avatarUrl} alt="Avatar" className="header-avatar-img-large" />
                       ) : (
                         <User size={24} />
                       )}

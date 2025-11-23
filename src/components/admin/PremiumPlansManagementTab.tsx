@@ -145,8 +145,8 @@ const PremiumPlansManagementTab: React.FC = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="stats-grid">
-        <div className="stat-card">
+      <div className="premium-plans-stats-grid">
+        <div className="premium-plans-stat-card">
           <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
             <Crown size={24} />
           </div>
@@ -155,7 +155,7 @@ const PremiumPlansManagementTab: React.FC = () => {
             <div className="stat-label">Tổng Gói</div>
           </div>
         </div>
-        <div className="stat-card">
+        <div className="premium-plans-stat-card">
           <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
             <Users size={24} />
           </div>
@@ -166,7 +166,7 @@ const PremiumPlansManagementTab: React.FC = () => {
             <div className="stat-label">Tổng Người Dùng</div>
           </div>
         </div>
-        <div className="stat-card">
+        <div className="premium-plans-stat-card">
           <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
             <DollarSign size={24} />
           </div>
@@ -179,7 +179,7 @@ const PremiumPlansManagementTab: React.FC = () => {
             <div className="stat-label">Tổng Doanh Thu</div>
           </div>
         </div>
-        <div className="stat-card">
+        <div className="premium-plans-stat-card">
           <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
             <Power size={24} />
           </div>

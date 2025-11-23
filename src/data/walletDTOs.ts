@@ -72,6 +72,7 @@ export interface WithdrawalRequestResponse {
   userId: number;
   userFullName?: string;
   userEmail: string;
+  userAvatarUrl?: string;
   amount: number;
   fee: number;
   netAmount: number;

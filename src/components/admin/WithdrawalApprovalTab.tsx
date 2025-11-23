@@ -138,7 +138,7 @@ const WithdrawalApprovalTab: React.FC = () => {
     <div className="admin-withdrawal-approval-tab">
       <div className="admin-withdrawal-header">
         <div>
-          <h2>💸 Duyệt Yêu Cầu Rút Tiền</h2>
+          <h2>Duyệt Yêu Cầu Rút Tiền</h2>
           <p>Quản lý và xử lý các yêu cầu rút tiền từ người dùng</p>
         </div>
         <button className="admin-refresh-btn" onClick={fetchWithdrawalRequests} disabled={loading}>

@@ -305,9 +305,9 @@ const ProfilePageCosmic = () => {
               onMouseLeave={handleMouseUp}
               style={{ cursor: showPositionControls ? 'move' : 'default' }}
             >
-              {profile.avatarMediaUrl ? (
+              {(profile.avatarMediaUrl || user?.avatarUrl) ? (
                 <img 
-                  src={profile.avatarMediaUrl} 
+                  src={profile.avatarMediaUrl || user?.avatarUrl} 
                   alt="Avatar" 
                   className="cosmic-profile-avatar-image"
                   style={{ 

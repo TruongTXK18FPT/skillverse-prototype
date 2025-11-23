@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import UserManagementTab from '../../components/admin/UserManagementTab';
+import UserManagementTabCosmic from '../../components/admin/UserManagementTabCosmic';
 import AccountVerificationTab from '../../components/admin/AccountVerificationTab';
-import { CourseApprovalTab } from '../../components/admin/CourseApprovalTab';
+import { CourseApprovalTabCosmic } from '../../components/admin/CourseApprovalTabCosmic';
 import AnalyticsTab from '../../components/admin/AnalyticsTab';
 import NotificationsTab from '../../components/admin/NotificationsTab';
 import ReportsTab from '../../components/admin/ReportsTab';
-import PaymentsTab from '../../components/admin/PaymentsTab';
+import TransactionManagementTabCosmic from '../../components/admin/TransactionManagementTabCosmic';
 import WithdrawalApprovalTab from '../../components/admin/WithdrawalApprovalTab';
 import SkillPointManagementTab from '../../components/admin/SkillPointManagementTab';
 import SystemSettingsTab from '../../components/admin/SystemSettingsTab';
@@ -101,11 +101,11 @@ const AdminPage: React.FC = () => {
   const renderActiveTab = () => {
     switch (activeTab) {
       case 'users':
-        return <UserManagementTab />;
+        return <UserManagementTabCosmic />;
       case 'verification':
         return <AccountVerificationTab />;
       case 'courses':
-        return <CourseApprovalTab />;
+        return <CourseApprovalTabCosmic />;
       case 'analytics':
         return <AnalyticsTab />;
       case 'notifications':
@@ -113,7 +113,7 @@ const AdminPage: React.FC = () => {
       case 'reports':
         return <ReportsTab />;
       case 'payments':
-        return <PaymentsTab />;
+        return <TransactionManagementTabCosmic />;
       case 'withdrawals':
         return <WithdrawalApprovalTab />;
       case 'skillpoints':

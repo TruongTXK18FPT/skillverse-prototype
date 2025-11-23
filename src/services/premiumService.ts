@@ -79,5 +79,43 @@ export const premiumService = {
   }> {
     const { data } = await api.get('/api/premium/subscription/refund-eligibility');
     return data;
+  },
+
+  // ==================== ADMIN METHODS ====================
+
+  async adminGetAllSubscriptions(
+    page: number = 0,
+    size: number = 50,
+    filters?: {
+      status?: string;
+      userId?: number;
+      planId?: number;
+    }
+  ): Promise<{
+    content: UserSubscriptionResponse[];
+    totalElements: number;
+    totalPages: number;
+    number: number;
+    size: number;
+  }> {
+    const params: any = { page, size, ...filters };
+    const { data } = await api.get('/api/admin/premium/subscriptions', { params });
+    return data;
+  },
+
+  async adminGetSubscriptionDetail(id: number): Promise<UserSubscriptionResponse> {
+    const { data } = await api.get(`/api/admin/premium/subscriptions/${id}`);
+    return data;
+  },
+
+  async adminGetPremiumStatistics(): Promise<{
+    totalSubscriptions: number;
+    activeSubscriptions: number;
+    expiredSubscriptions: number;
+    cancelledSubscriptions: number;
+    totalRevenue: number;
+  }> {
+    const { data } = await api.get('/api/admin/premium/statistics');
+    return data;
   }
 };
