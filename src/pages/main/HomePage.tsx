@@ -24,6 +24,7 @@ import silver1 from '../../assets/award/silver1.png';
 import bronze1 from '../../assets/award/bronze1.png';
 import cup from '../../assets/award/cup.png';
 import earth from '../../assets/award/earth.png';
+import roisao from '../../assets/social/roisao.jpg';
 
 // Social media images
 import tiktokIcon from '../../assets/social/tiktok.png';
@@ -49,8 +50,10 @@ const HomePage = () => {
   const [activatedStars, setActivatedStars] = useState<number[]>([]);
   const [isFabricating, setIsFabricating] = useState(false);
   const [hasFabricated, setHasFabricated] = useState(false);
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
 
   const constellationContainerRef = useRef<HTMLDivElement>(null);
+  const globeHoverTimerRef = useRef<number | null>(null);
 
   const slides = [
     {
@@ -287,6 +290,32 @@ const HomePage = () => {
       }, 7000);
     }
   };
+
+  const handleGlobeMouseEnter = () => {
+    globeHoverTimerRef.current = setTimeout(() => {
+      setShowEasterEgg(true);
+    }, 10000); // 10 seconds
+  };
+
+  const handleGlobeMouseLeave = () => {
+    if (globeHoverTimerRef.current) {
+      clearTimeout(globeHoverTimerRef.current);
+      globeHoverTimerRef.current = null;
+    }
+  };
+
+  const handleEasterEggClick = () => {
+    setShowEasterEgg(false);
+  };
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (globeHoverTimerRef.current) {
+        clearTimeout(globeHoverTimerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="homepage-container">
@@ -738,9 +767,21 @@ const HomePage = () => {
         <div className="section-container">
           <div className="section-header">
             <div className="cosmic-title-wrapper">
-              <div className="globe-icon-wrapper">
-                <Globe className="cosmic-orbit-icon globe-icon" size={40} />
-                <img src={earth} alt="Earth" className="earth-icon" />
+              <div 
+                className={`globe-icon-wrapper ${showEasterEgg ? 'easter-egg-active' : ''}`}
+                onMouseEnter={handleGlobeMouseEnter}
+                onMouseLeave={handleGlobeMouseLeave}
+                onClick={showEasterEgg ? handleEasterEggClick : undefined}
+                style={{ cursor: showEasterEgg ? 'pointer' : 'default' }}
+              >
+                {showEasterEgg ? (
+                  <img src={roisao} alt="Rồi Sao" className="easter-egg-image" />
+                ) : (
+                  <>
+                    <Globe className="cosmic-orbit-icon globe-icon" size={40} />
+                    <img src={earth} alt="Earth" className="earth-icon" />
+                  </>
+                )}
               </div>
               <h2 className="section-title cosmic-title">
                 Các Kênh Mạng Xã Hội Của Chúng Tôi
