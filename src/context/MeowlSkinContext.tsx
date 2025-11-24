@@ -5,7 +5,11 @@ import meowlDefault from '../assets/meowl-skin/meowl_default.png';
 import meowlSanta from '../assets/meowl-skin/meowl-santa.png';
 import meowlSatan from '../assets/meowl-skin/meowl-acwy.png';
 import meowlGold from '../assets/meowl-skin/meowl-thantai.png';
-export type MeowlSkinType = 'default' | 'santa' | 'satan' | 'gold';
+import meowlBusiness from '../assets/space-role/meowl-business.png';
+import meowlUser from '../assets/space-role/meowl-user.png';
+import meowlMentor from '../assets/space-role/meowl-mentor.png';
+import meowlT1 from '../assets/meowl-skin/meowl-t1.png';
+export type MeowlSkinType = 'default' | 'santa' | 'satan' | 'gold'|'business'|'user'|'mentor'|'t1';
 
 interface MeowlSkin {
   id: MeowlSkinType;
@@ -38,6 +42,30 @@ export const MEOWL_SKINS: MeowlSkin[] = [
     name: 'Gold Meowl',
     nameVi: 'Meowl Gold',
     image: meowlGold
+  },
+  {
+    id: 'business',
+    name: 'Business Meowl',
+    nameVi: 'Meowl Business',
+    image: meowlBusiness
+  },
+  {
+    id: 'user',
+    name: 'Student Meowl',
+    nameVi: 'Meowl Student',
+    image: meowlUser
+  },
+  {
+    id: 'mentor',
+    name: 'Mentor Meowl',
+    nameVi: 'Meowl Mentor',
+    image: meowlMentor
+  },
+  {
+    id: 't1',
+    name: 'T1 Meowl',
+    nameVi: 'Meowl T1',
+    image: meowlT1
   }
 
 ];

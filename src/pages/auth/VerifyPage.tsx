@@ -1,11 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Mail, Shield, Clock, CheckCircle, AlertCircle } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import Toast from '../../components/Toast';
-import '../../styles/VerifyPage.css';
+import { ElevatorAuthLayout } from '../../components/elevator';
+import HologramVerifyForm from '../../components/elevator/HologramVerifyForm';
 
 interface LocationState {
   email: string;
@@ -16,7 +15,6 @@ interface LocationState {
 }
 
 const VerifyPage = () => {
-  const { theme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const { verifyEmail, resendOtp } = useAuth();
@@ -33,7 +31,7 @@ const VerifyPage = () => {
   const [timeLeft, setTimeLeft] = useState(600); // 10 minutes = 600 seconds
   const [resendCooldown, setResendCooldown] = useState(0);
   const [isExpired, setIsExpired] = useState(false);
-
+  
   // Redirect if no email in state
   useEffect(() => {
     if (!email) {
@@ -62,13 +60,6 @@ const VerifyPage = () => {
       return () => clearTimeout(timer);
     }
   }, [resendCooldown]);
-
-  // Format time display
-  const formatTime = useCallback((seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-  }, []);
 
   // Handle OTP input change
   const handleOtpChange = (index: number, value: string) => {
@@ -114,7 +105,7 @@ const VerifyPage = () => {
   };
 
   // Handle paste event specifically
-  const handlePaste = (index: number, e: React.ClipboardEvent) => {
+  const handlePaste = (_index: number, e: React.ClipboardEvent) => {
     e.preventDefault();
     const pastedText = e.clipboardData.getData('text');
     const cleanValue = pastedText.replace(/\D/g, '').slice(0, 6); // Only digits, max 6
@@ -267,155 +258,26 @@ const VerifyPage = () => {
     }
   };
 
-  // Compute classes and text
-  let timerClass = '';
-  if (isExpired) {
-    timerClass = 'expired';
-  } else if (timeLeft <= 60) {
-    timerClass = 'warning';
-  }
-  
-  const timerText = isExpired ? 'Đã hết hạn' : `${formatTime(timeLeft)} còn lại`;
-  const subtitleText = fromLogin 
-    ? 'Xác thực tài khoản để tiếp tục đăng nhập'
-    : 'Hoàn tất đăng ký tài khoản của bạn';
-
   return (
-    <div className="verify-otp-container" data-theme={theme}>
-      {/* Background Elements */}
-      <div className="verify-otp-background">
-        <div className="verify-otp-circle verify-otp-circle-1"></div>
-        <div className="verify-otp-circle verify-otp-circle-2"></div>
-        <div className="verify-otp-circle verify-otp-circle-3"></div>
-      </div>
-
-      <div className="verify-otp-content">
-        {/* Header */}
-        <div className="verify-otp-header">
-          <button 
-            onClick={() => navigate(fromLogin ? '/login' : '/register')} 
-            className="verify-otp-back-button"
-          >
-            <ArrowLeft size={20} />
-            Quay lại
-          </button>
-          
-          <div className="verify-otp-icon-wrapper">
-            <div className="verify-otp-icon">
-              <Mail size={32} />
-            </div>
-            <div className="verify-otp-icon-ring"></div>
-          </div>
-          
-          <h1 className="verify-otp-title">Xác Thực Email</h1>
-          <p className="verify-otp-subtitle">{subtitleText}</p>
-          
-          <div className="verify-otp-email-display">
-            <span className="verify-otp-email">{email}</span>
-          </div>
-        </div>
-
-        {/* Timer Display */}
-        <div className={`verify-otp-timer ${timerClass}`}>
-          <Clock size={16} />
-          <span>{timerText}</span>
-        </div>
-
-        {/* OTP Form */}
-        <form onSubmit={handleSubmit} className="verify-otp-form">
-          <div className="verify-otp-inputs">
-            {Array.from({ length: 6 }, (_, index) => (
-              <input
-                key={`otp-${index}`}
-                id={`otp-${index}`}
-                type="text"
-                value={otp[index] || ''}
-                onChange={(e) => handleOtpChange(index, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(index, e)}
-                onPaste={(e) => handlePaste(index, e)}
-                className={`verify-otp-input ${isExpired ? 'expired' : ''}`}
-                maxLength={1}
-                disabled={loading || isExpired}
-                autoComplete="one-time-code"
-                autoFocus={index === 0}
-              />
-            ))}
-          </div>
-
-          <button 
-            type="submit" 
-            className={`verify-otp-submit ${loading ? 'loading' : ''} ${isExpired ? 'expired' : ''}`}
-            disabled={loading || isExpired || otp.join('').length !== 6}
-          >
-            {(() => {
-              if (loading) {
-                return (
-                  <>
-                    <div className="verify-otp-spinner"></div>
-                    Đang xác thực...
-                  </>
-                );
-              }
-              if (isExpired) {
-                return (
-                  <>
-                    <AlertCircle size={20} />
-                    Mã đã hết hạn
-                  </>
-                );
-              }
-              return (
-                <>
-                  <CheckCircle size={20} />
-                  Xác Thực
-                </>
-              );
-            })()}
-          </button>
-        </form>
-
-        {/* Resend Section */}
-        <div className="verify-otp-resend-section">
-          <p className="verify-otp-resend-text">Không nhận được mã?</p>
-          <button
-            type="button"
-            className={`verify-otp-resend-button ${resendCooldown > 0 ? 'disabled' : ''}`}
-            onClick={handleResendOtp}
-            disabled={resendLoading || resendCooldown > 0}
-          >
-            {(() => {
-              if (resendLoading) {
-                return (
-                  <>
-                    <div className="verify-otp-spinner-small"></div>
-                    Đang gửi...
-                  </>
-                );
-              }
-              if (resendCooldown > 0) {
-                return `Gửi lại sau ${resendCooldown}s`;
-              }
-              return 'Gửi lại mã';
-            })()}
-          </button>
-        </div>
-
-        {/* Security Features */}
-        <div className="verify-otp-security">
-          <div className="verify-otp-security-item">
-            <Shield size={16} />
-            <span>Bảo mật cao</span>
-          </div>
-          <div className="verify-otp-security-item">
-            <Clock size={16} />
-            <span>Hiệu lực 10 phút</span>
-          </div>
-          <div className="verify-otp-security-item">
-            <Mail size={16} />
-            <span>Mã hóa an toàn</span>
-          </div>
-        </div>
-      </div>
+    <>
+      <ElevatorAuthLayout>
+        <HologramVerifyForm
+          email={email}
+          otp={otp}
+          isLoading={loading}
+          isResendLoading={resendLoading}
+          timeLeft={timeLeft}
+          isExpired={isExpired}
+          resendCooldown={resendCooldown}
+          userType={userType}
+          onOtpChange={handleOtpChange}
+          onPaste={handlePaste}
+          onKeyDown={handleKeyDown}
+          onSubmit={handleSubmit}
+          onResend={handleResendOtp}
+          onBack={() => navigate(fromLogin ? '/login' : '/register')}
+        />
+      </ElevatorAuthLayout>
 
       {/* Toast Notification */}
       {toast && (
@@ -431,7 +293,7 @@ const VerifyPage = () => {
           actionButton={toast.actionButton}
         />
       )}
-    </div>
+    </>
   );
 };
 

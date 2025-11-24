@@ -8,45 +8,46 @@ import './HologramBusinessRegisterForm.css';
 
 interface BusinessRegisterData {
   companyName: string;
-  email: string;
+  businessEmail: string;
+  companyWebsite: string;
+  businessAddress: string;
+  taxId: string;
   password: string;
   confirmPassword: string;
-  phone: string;
-  address: string;
-  taxCode: string;
-  website: string;
-  description: string;
-  region: string;
   contactPersonName: string;
-  contactPersonPhone: string;
+  contactPersonPhone: string; // Changed from optional to required for controlled input
   contactPersonPosition: string;
   companySize: string;
   industry: string;
+  companyDocuments?: File[];
 }
 
 interface HologramBusinessRegisterFormProps {
   onSubmit: (data: BusinessRegisterData) => Promise<{ success: boolean; companyName?: string; error?: string }>;
+  onGoogleRegister?: () => void;
   isLoading?: boolean;
+  isGoogleLoading?: boolean;
+  googleRegisterSuccess?: { userName: string } | null;
 }
 
 const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> = ({
   onSubmit,
+  onGoogleRegister,
   isLoading = false,
+  isGoogleLoading = false,
+  googleRegisterSuccess,
 }) => {
   const { triggerLoginSuccess } = useElevator();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState<BusinessRegisterData>({
     companyName: '',
-    email: '',
+    businessEmail: '',
+    companyWebsite: '',
+    businessAddress: '',
+    taxId: '',
     password: '',
     confirmPassword: '',
-    phone: '',
-    address: '',
-    taxCode: '',
-    website: '',
-    description: '',
-    region: 'Vietnam',
     contactPersonName: '',
     contactPersonPhone: '',
     contactPersonPosition: '',
@@ -78,30 +79,60 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
 
   const validateForm = (): string | null => {
     if (!formData.companyName.trim()) return 'Vui lòng nhập tên công ty';
-    if (!formData.email.trim()) return 'Vui lòng nhập email';
-    if (!/\S+@\S+\.\S+/.test(formData.email)) return 'Email không hợp lệ';
+    if (!formData.businessEmail.trim()) return 'Vui lòng nhập email';
+    if (!/\S+@\S+\.\S+/.test(formData.businessEmail)) return 'Email không hợp lệ';
     if (!formData.password) return 'Vui lòng nhập mật khẩu';
     if (formData.password.length < 6) return 'Mật khẩu phải có ít nhất 6 ký tự';
     if (formData.password !== formData.confirmPassword) return 'Mật khẩu xác nhận không khớp';
-    if (!formData.phone.trim()) return 'Vui lòng nhập số điện thoại';
-    if (!formData.taxCode.trim()) return 'Vui lòng nhập mã số thuế';
+    if (!formData.contactPersonName.trim()) return 'Vui lòng nhập tên người liên hệ';
+    if (!formData.contactPersonPosition.trim()) return 'Vui lòng nhập chức vụ';
+    if (!formData.companySize) return 'Vui lòng chọn quy mô công ty';
+    if (!formData.industry.trim()) return 'Vui lòng nhập ngành nghề';
+    if (!formData.taxId.trim()) return 'Vui lòng nhập mã số thuế';
+    if (!formData.companyWebsite.trim()) return 'Vui lòng nhập website công ty';
+    if (!formData.businessAddress.trim()) return 'Vui lòng nhập địa chỉ doanh nghiệp';
+    // Documents are optional - removed validation
     return null;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('[BusinessForm] Submit started');
 
     const validationError = validateForm();
     if (validationError) {
+      console.log('[BusinessForm] Validation error:', validationError);
       setError(validationError);
       return;
     }
 
-    const result = await onSubmit(formData);
+    // Chuyển đổi từ local formData sang format mà Page component mong đợi
+    const submitData: BusinessRegisterData = {
+      companyName: formData.companyName,
+      businessEmail: formData.businessEmail,
+      companyWebsite: formData.companyWebsite,
+      businessAddress: formData.businessAddress,
+      taxId: formData.taxId,
+      password: formData.password,
+      confirmPassword: formData.confirmPassword,
+      contactPersonName: formData.contactPersonName,
+      contactPersonPhone: formData.contactPersonPhone || '',
+      contactPersonPosition: formData.contactPersonPosition,
+      companySize: formData.companySize,
+      industry: formData.industry,
+      companyDocuments: companyDocuments.length > 0 ? companyDocuments : undefined
+    };
+
+    console.log('[BusinessForm] Calling onSubmit with data:', submitData);
+    const result = await onSubmit(submitData);
+    console.log('[BusinessForm] onSubmit result:', result);
 
     if (result.success) {
+      console.log('[BusinessForm] Success! Triggering login animation');
       await triggerLoginSuccess(result.companyName || formData.companyName);
+      console.log('[BusinessForm] Animation complete');
     } else if (result.error) {
+      console.log('[BusinessForm] Error:', result.error);
       setError(result.error);
     }
   };
@@ -220,8 +251,8 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
             <div className="reg-business-input-wrapper">
               <input
                 type="email"
-                name="email"
-                value={formData.email}
+                name="businessEmail"
+                value={formData.businessEmail}
                 onChange={handleInputChange}
                 placeholder="contact@company.com"
                 disabled={isLoading}
@@ -295,8 +326,8 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
             <div className="reg-business-input-wrapper">
               <input
                 type="tel"
-                name="phone"
-                value={formData.phone}
+                name="contactPersonPhone"
+                value={formData.contactPersonPhone}
                 onChange={handleInputChange}
                 placeholder="+84 xxx xxx xxx"
                 disabled={isLoading}
@@ -314,8 +345,8 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
             <div className="reg-business-input-wrapper">
               <input
                 type="text"
-                name="taxCode"
-                value={formData.taxCode}
+                name="taxId"
+                value={formData.taxId}
                 onChange={handleInputChange}
                 placeholder="0123456789"
                 disabled={isLoading}
@@ -333,8 +364,8 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
             <div className="reg-business-input-wrapper">
               <input
                 type="url"
-                name="website"
-                value={formData.website}
+                name="companyWebsite"
+                value={formData.companyWebsite}
                 onChange={handleInputChange}
                 placeholder="https://www.company.com"
                 disabled={isLoading}
@@ -343,26 +374,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
             </div>
           </div>
 
-          <div className="reg-business-field">
-            <label className="reg-business-label">
-              <MapPin size={14} />
-              <span>REGION</span>
-            </label>
-            <div className="reg-business-input-wrapper">
-              <select
-                name="region"
-                value={formData.region}
-                onChange={handleInputChange}
-                disabled={isLoading}
-                className="reg-business-input reg-business-select"
-              >
-                <option value="Vietnam">Vietnam</option>
-                <option value="Asia">Asia</option>
-                <option value="Europe">Europe</option>
-                <option value="America">America</option>
-              </select>
-            </div>
-          </div>
+          {/* Region field removed - not in interface */}
 
           {/* Contact Person Section */}
           <div className="reg-business-section">
@@ -493,8 +505,8 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
             <div className="reg-business-input-wrapper">
               <input
                 type="text"
-                name="address"
-                value={formData.address}
+                name="businessAddress"
+                value={formData.businessAddress}
                 onChange={handleInputChange}
                 placeholder="123 Business Street, District, City"
                 disabled={isLoading}
@@ -504,24 +516,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
             </div>
           </div>
 
-          {/* Row 6: Description (Full Width) */}
-          <div className="reg-business-field reg-business-field-full">
-            <label className="reg-business-label">
-              <FileText size={14} />
-              <span>COMPANY DESCRIPTION (OPTIONAL)</span>
-            </label>
-            <div className="reg-business-input-wrapper">
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Tell us about your company..."
-                disabled={isLoading}
-                className="reg-business-input reg-business-textarea"
-                rows={2}
-              />
-            </div>
-          </div>
+          {/* Description field removed - not in interface */}
 
           {/* Company Documents Section */}
           <div className="reg-business-section">

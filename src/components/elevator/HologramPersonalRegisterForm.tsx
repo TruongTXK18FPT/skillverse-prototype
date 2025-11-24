@@ -19,12 +19,18 @@ interface PersonalRegisterData {
 
 interface HologramPersonalRegisterFormProps {
   onSubmit: (data: PersonalRegisterData) => Promise<{ success: boolean; userName?: string; error?: string }>;
+  onGoogleRegister?: () => void;
   isLoading?: boolean;
+  isGoogleLoading?: boolean;
+  googleRegisterSuccess?: { userName: string } | null;
 }
 
 const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> = ({
   onSubmit,
+  onGoogleRegister,
   isLoading = false,
+  isGoogleLoading = false,
+  googleRegisterSuccess,
 }) => {
   const { triggerLoginSuccess } = useElevator();
   const [showPassword, setShowPassword] = useState(false);

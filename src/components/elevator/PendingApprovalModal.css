@@ -1,0 +1,367 @@
+/* Pending Approval Modal Styles */
+
+.pending-approval-modal-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000; /* Higher than anything else */
+  pointer-events: none; /* Allow clicks to pass through when not active */
+}
+
+.pending-approval-modal-root > * {
+  pointer-events: auto; /* Re-enable pointer events for modal content */
+}
+
+.pending-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: -1; /* Behind wrapper content */
+}
+
+.pending-modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10001;
+}
+
+.pending-modal-container {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 
+    0 0 40px rgba(0, 255, 255, 0.15),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+  padding: 32px;
+  /* Custom scrollbar for the modal if content is too long */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 255, 0.3) rgba(0, 0, 0, 0.2);
+}
+
+.pending-modal-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pending-modal-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.pending-modal-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.pending-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.pending-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.pending-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Icon */
+.pending-modal-icon {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.1), rgba(255, 140, 0, 0.05));
+  border: 2px solid rgba(255, 165, 0, 0.3);
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+
+.pending-icon {
+  color: #ffa500;
+  animation: pulse-icon 2s ease-in-out infinite;
+}
+
+.pending-icon-pulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(255, 165, 0, 0.4);
+  border-radius: 50%;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+@keyframes pulse-icon {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Title */
+.pending-modal-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Description */
+.pending-modal-description {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+/* Info Box */
+.pending-modal-info {
+  width: 100%;
+  background: rgba(0, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.pending-modal-info svg {
+  color: #00ffff;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pending-info-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #00ffff;
+  margin: 0 0 8px 0;
+}
+
+.pending-info-text {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 8px 0;
+  line-height: 1.5;
+}
+
+.pending-info-email {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: 500;
+  margin: 0;
+  padding: 8px 12px;
+  background: rgba(0, 255, 255, 0.1);
+  border-radius: 6px;
+  word-break: break-all; /* Prevent long emails from breaking layout */
+}
+
+.pending-info-email svg {
+  color: #00ffff;
+}
+
+/* Steps */
+.pending-modal-steps {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.pending-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.pending-step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.pending-step-active .pending-step-number {
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  border-color: #00ff88;
+  color: #000;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+}
+
+.pending-step-current .pending-step-number {
+  background: linear-gradient(135deg, #ffa500, #ff8c00);
+  border-color: #ffa500;
+  color: #000;
+  box-shadow: 0 0 20px rgba(255, 165, 0, 0.4);
+  animation: pulse-step 2s ease-in-out infinite;
+}
+
+@keyframes pulse-step {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.pending-step-content {
+  text-align: center;
+}
+
+.pending-step-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 4px 0;
+}
+
+.pending-step-text {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.pending-step-active .pending-step-text {
+  color: #00ff88;
+}
+
+.pending-step-current .pending-step-text {
+  color: #ffa500;
+}
+
+.pending-step-line {
+  flex: 0 0 40px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 8px;
+  margin-bottom: 48px; /* Align with circles */
+}
+
+/* Button */
+.pending-modal-button {
+  width: 100%;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #00ffff, #00cccc);
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3);
+}
+
+.pending-modal-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(0, 255, 255, 0.4);
+}
+
+.pending-modal-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .pending-modal-container {
+    padding: 24px;
+    width: 95%;
+  }
+
+  .pending-modal-title {
+    font-size: 20px;
+  }
+
+  .pending-modal-description {
+    font-size: 14px;
+  }
+
+  .pending-step-title {
+    font-size: 11px;
+  }
+
+  .pending-step-text {
+    font-size: 10px;
+  }
+
+  .pending-step-number {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .pending-step-line {
+    flex: 0 0 20px;
+  }
+}

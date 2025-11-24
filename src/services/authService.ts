@@ -140,6 +140,17 @@ class AuthService {
     }
   }
 
+  // Forgot password
+  async forgotPassword(email: string): Promise<void> {
+    try {
+      await axiosInstance.post('/api/auth/forgot-password', { email });
+    } catch (error: unknown) {
+      console.error('Forgot password error:', error);
+      const errorMessage = (error as AxiosError).response?.data?.message || 'Gửi yêu cầu thất bại. Vui lòng thử lại.';
+      throw new Error(errorMessage);
+    }
+  }
+
   // Refresh access token
   async refreshAccessToken(): Promise<AuthResponse> {
     try {

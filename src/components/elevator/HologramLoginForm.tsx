@@ -114,17 +114,9 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
           <div className="register-section">
             <p className="holo-register-prompt">NEW OPERATOR?</p>
             <div className="register-buttons">
-              <Link to="/register" className="register-btn personal">
-                <span className="btn-icon">👤</span>
-                <span>PERSONAL</span>
-              </Link>
-              <Link to="/register/business" className="register-btn business">
-                <span className="btn-icon">🏢</span>
-                <span>ENTERPRISE</span>
-              </Link>
-              <Link to="/register/mentor" className="register-btn mentor">
-                <span className="btn-icon">🎓</span>
-                <span>MENTOR</span>
+              <Link to="/choose-role" className="register-btn personal" style={{ width: '100%' }}>
+                <span className="btn-icon">🚀</span>
+                <span>Đăng ký vai trò của bạn</span>
               </Link>
             </div>
           </div>

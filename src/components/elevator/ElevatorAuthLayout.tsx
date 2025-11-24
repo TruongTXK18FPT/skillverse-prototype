@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useElevatorState, ElevatorState } from '../../hooks/useElevatorState';
 import backgroundImage from '../../assets/elevator-deck/background.jpeg';
@@ -183,10 +183,20 @@ const ElevatorAuthLayout: React.FC<ElevatorAuthLayoutProps> = ({
 }) => {
   const { state, userName, setUserName, triggerLoginSuccess } = useElevatorState();
 
+  // Use a ref to store the latest onTransitionComplete callback
+  // This ensures that if the parent component re-renders during the async animation sequence
+  // (e.g. updating redirect URL state), we execute the MOST RECENT callback version
+  // which will have the correct closure variables.
+  const onTransitionCompleteRef = useRef(onTransitionComplete);
+
+  useEffect(() => {
+    onTransitionCompleteRef.current = onTransitionComplete;
+  }, [onTransitionComplete]);
+
   const handleLoginSuccess = async (name?: string) => {
     await triggerLoginSuccess(name);
-    if (onTransitionComplete) {
-      onTransitionComplete();
+    if (onTransitionCompleteRef.current) {
+      onTransitionCompleteRef.current();
     }
   };
 

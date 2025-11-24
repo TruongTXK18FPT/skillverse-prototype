@@ -1,0 +1,368 @@
+/* =====================================================
+   HOLOGRAM VERIFY FORM
+   Sci-fi Control Panel Style with Meowl Mascot
+   ===================================================== */
+
+/* Variables - inherited from global or defined here */
+:root {
+  --holo-primary: #00d4ff;
+  --holo-secondary: #6366f1;
+  --holo-accent: #f59e0b;
+  --holo-success: #10b981;
+  --holo-error: #ef4444;
+  --holo-bg: rgba(10, 10, 15, 0.85);
+  --holo-bg-light: rgba(20, 20, 30, 0.9);
+  --holo-border: rgba(0, 212, 255, 0.3);
+  --holo-glow: rgba(0, 212, 255, 0.5);
+  --holo-text: #e0f7ff;
+  --holo-text-dim: rgba(224, 247, 255, 0.6);
+}
+
+/* Main Wrapper for Form + Mascot */
+.v-hologram-verify-wrapper {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 15px;
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+}
+
+/* Container - similar to HologramLoginForm */
+.v-hologram-form-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  padding: 2px;
+  font-family: 'SpaceHabitat', 'Segoe UI', sans-serif;
+}
+
+/* Hologram Border */
+.v-hologram-border {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.border-corner {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--holo-primary);
+}
+
+.border-corner.top-left { top: 0; left: 0; border-right: none; border-bottom: none; }
+.border-corner.top-right { top: 0; right: 0; border-left: none; border-bottom: none; }
+.border-corner.bottom-left { bottom: 0; left: 0; border-right: none; border-top: none; }
+.border-corner.bottom-right { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+.border-line {
+  position: absolute;
+  background: linear-gradient(90deg, transparent, var(--holo-primary), transparent);
+}
+
+.border-line.top { top: 0; left: 15px; right: 15px; height: 1px; }
+.border-line.bottom { bottom: 0; left: 15px; right: 15px; height: 1px; }
+.border-line.left { top: 15px; bottom: 15px; left: 0; width: 1px; background: linear-gradient(180deg, transparent, var(--holo-primary), transparent); }
+.border-line.right { top: 15px; bottom: 15px; right: 0; width: 1px; background: linear-gradient(180deg, transparent, var(--holo-primary), transparent); }
+
+/* Content */
+.v-hologram-content {
+  background: var(--holo-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1.5rem;
+  border: 1px solid var(--holo-border);
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.1), inset 0 0 30px rgba(0, 212, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Header */
+.v-hologram-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.verify-icon-container {
+  position: relative;
+  margin-bottom: 0.75rem;
+  color: var(--holo-primary);
+  animation: pulse-icon 3s infinite;
+}
+
+.verify-icon-container svg {
+  width: 40px;
+  height: 40px;
+}
+
+@keyframes pulse-icon {
+  0%, 100% { text-shadow: 0 0 10px var(--holo-glow); transform: scale(1); }
+  50% { text-shadow: 0 0 20px var(--holo-primary); transform: scale(1.05); }
+}
+
+.v-hologram-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--holo-primary);
+  text-shadow: 0 0 20px var(--holo-glow);
+  margin: 0 0 0.25rem 0;
+  text-transform: uppercase;
+}
+
+.v-hologram-subtitle {
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  color: var(--holo-text-dim);
+  margin: 0 0 0.75rem 0;
+  max-width: 90%;
+  text-align: center;
+}
+
+.v-hologram-email-display {
+  background: rgba(0, 212, 255, 0.1);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  color: var(--holo-text);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Timer */
+.verify-timer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.9rem;
+  color: var(--holo-primary);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  border: 1px solid var(--holo-border);
+}
+
+.verify-timer.warning { color: var(--holo-accent); border-color: var(--holo-accent); }
+.verify-timer.expired { color: var(--holo-error); border-color: var(--holo-error); }
+
+/* Form */
+.v-hologram-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* OTP Inputs */
+.otp-inputs-container {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 0.5rem 0;
+}
+
+.v-hologram-otp-input {
+  width: 45px;
+  height: 55px;
+  background: rgba(0, 30, 50, 0.9);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  color: var(--holo-primary);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+/* Action Buttons */
+.v-form-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.v-submit-button {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+  border: 2px solid var(--holo-primary);
+  color: var(--holo-primary);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.v-submit-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.3) 0%, rgba(99, 102, 241, 0.3) 100%);
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+  text-shadow: 0 0 10px var(--holo-primary);
+}
+
+.v-submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  border-color: var(--holo-text-dim);
+  color: var(--holo-text-dim);
+}
+
+.v-submit-button.expired {
+  border-color: var(--holo-error);
+  color: var(--holo-error);
+}
+
+.resend-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--holo-text-dim);
+}
+
+.resend-button {
+  background: none;
+  border: none;
+  color: var(--holo-accent);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  text-decoration: underline;
+  padding: 0;
+  transition: all 0.3s;
+}
+
+.resend-button:hover:not(:disabled) {
+  color: var(--holo-primary);
+  text-shadow: 0 0 5px var(--holo-glow);
+}
+
+.resend-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+/* Back Button */
+.back-button {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--holo-text-dim);
+  cursor: pointer;
+  font-size: 0.7rem;
+  padding: 0.25rem;
+  margin-bottom: 0.25rem;
+  transition: all 0.3s;
+}
+
+.back-button:hover {
+  color: var(--holo-primary);
+  transform: translateX(-3px);
+}
+
+/* Meowl Mascot & Speech Bubble */
+.meowl-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.3));
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.v-meowl-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Spinner */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+.spinner-small {
+  width: 14px;
+  height: 14px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-right-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Hologram Flicker Effect */
+.v-hologram-flicker {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: transparent;
+  animation: flicker 4s linear infinite;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .v-hologram-verify-wrapper {
+    flex-direction: column-reverse; /* Meowl on top */
+    align-items: center;
+    gap: 60px;
+    padding-top: 40px;
+  }
+
+  .meowl-container {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 0;
+  }
+  
+  .v-hologram-form-container {
+    width: 90%;
+  }
+  
+  .otp-inputs-container {
+    gap: 5px;
+  }
+  
+  .v-hologram-otp-input {
+    width: 40px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+}

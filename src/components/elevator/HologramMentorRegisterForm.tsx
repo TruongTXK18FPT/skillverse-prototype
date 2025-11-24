@@ -11,25 +11,28 @@ interface MentorRegisterData {
   email: string;
   password: string;
   confirmPassword: string;
-  phone: string;
-  bio: string;
-  expertise: string;
-  yearsOfExperience: string;
-  education: string;
-  address: string;
-  region: string;
-  linkedinProfile: string;
+  linkedinProfile?: string;
   mainExpertise: string;
+  yearsOfExperience: string;
+  personalBio: string;
+  cvFile?: File;
+  certifications?: File[];
 }
 
 interface HologramMentorRegisterFormProps {
   onSubmit: (data: MentorRegisterData) => Promise<{ success: boolean; userName?: string; error?: string }>;
+  onGoogleRegister?: () => void;
   isLoading?: boolean;
+  isGoogleLoading?: boolean;
+  googleRegisterSuccess?: { userName: string } | null;
 }
 
 const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
   onSubmit,
+  onGoogleRegister,
   isLoading = false,
+  isGoogleLoading = false,
+  googleRegisterSuccess,
 }) => {
   const { triggerLoginSuccess } = useElevator();
   const [showPassword, setShowPassword] = useState(false);
@@ -39,15 +42,10 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
     email: '',
     password: '',
     confirmPassword: '',
-    phone: '',
-    bio: '',
-    expertise: '',
-    yearsOfExperience: '',
-    education: '',
-    address: '',
-    region: '',
     linkedinProfile: '',
-    mainExpertise: ''
+    mainExpertise: '',
+    yearsOfExperience: '',
+    personalBio: ''
   });
   const [error, setError] = useState<string | null>(null);
   const [cvFile, setCvFile] = useState<File | null>(null);
@@ -96,9 +94,10 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
     if (!formData.password) return 'Vui lòng nhập mật khẩu';
     if (formData.password.length < 6) return 'Mật khẩu phải có ít nhất 6 ký tự';
     if (formData.password !== formData.confirmPassword) return 'Mật khẩu xác nhận không khớp';
-    if (!formData.phone.trim()) return 'Vui lòng nhập số điện thoại';
-    if (!formData.expertise.trim()) return 'Vui lòng nhập lĩnh vực chuyên môn';
+    if (!formData.mainExpertise.trim()) return 'Vui lòng nhập lĩnh vực chuyên môn';
     if (!formData.yearsOfExperience) return 'Vui lòng nhập số năm kinh nghiệm';
+    if (!formData.personalBio.trim()) return 'Vui lòng nhập giới thiệu bản thân';
+    if (!cvFile) return 'Vui lòng tải lên CV';
     return null;
   };
 
@@ -111,7 +110,21 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
       return;
     }
 
-    const result = await onSubmit(formData);
+    // Chuyển đổi từ local formData sang format mà Page component mong đợi
+    const submitData: MentorRegisterData = {
+      fullName: formData.fullName,
+      email: formData.email,
+      password: formData.password,
+      confirmPassword: formData.confirmPassword,
+      linkedinProfile: formData.linkedinProfile || undefined,
+      mainExpertise: formData.mainExpertise,
+      yearsOfExperience: formData.yearsOfExperience,
+      personalBio: formData.personalBio,
+      cvFile: cvFile || undefined,
+      certifications: certifications.length > 0 ? certifications : undefined
+    };
+
+    const result = await onSubmit(submitData);
 
     if (result.success) {
       await triggerLoginSuccess(result.userName || formData.fullName.split(' ')[0]);
@@ -309,25 +322,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
             </h3>
           </div>
 
-          {/* Row 3: Phone, LinkedIn Profile, Main Expertise */}
-          <div className="reg-mentor-field">
-            <label className="reg-mentor-label">
-              <Phone size={14} />
-              <span>PHONE</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="+84 xxx xxx xxx"
-                disabled={isLoading}
-                className="reg-mentor-input"
-                autoComplete="tel"
-              />
-            </div>
-          </div>
+          {/* Row 3: LinkedIn Profile - Phone field removed */}
 
           <div className="reg-mentor-field">
             <label className="reg-mentor-label">
@@ -365,28 +360,6 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
             </div>
           </div>
 
-          {/* Row 4: Region */}
-          <div className="reg-mentor-field">
-            <label className="reg-mentor-label">
-              <MapPin size={14} />
-              <span>REGION</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <select
-                name="region"
-                value={formData.region}
-                onChange={handleInputChange}
-                disabled={isLoading}
-                className="reg-mentor-input reg-mentor-select"
-              >
-                <option value="Vietnam">Vietnam</option>
-                <option value="Asia">Asia</option>
-                <option value="Europe">Europe</option>
-                <option value="America">America</option>
-              </select>
-            </div>
-          </div>
-
           {/* Row 4: Expertise & Years of Experience */}
           <div className="reg-mentor-field">
             <label className="reg-mentor-label">
@@ -396,8 +369,8 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
             <div className="reg-mentor-input-wrapper">
               <input
                 type="text"
-                name="expertise"
-                value={formData.expertise}
+                name="mainExpertise"
+                value={formData.mainExpertise}
                 onChange={handleInputChange}
                 placeholder="e.g., Web Development, Data Science"
                 disabled={isLoading}
@@ -425,45 +398,6 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
             </div>
           </div>
 
-          {/* Row 5: Education (2 Columns) */}
-          <div className="reg-mentor-field reg-mentor-field-2col">
-            <label className="reg-mentor-label">
-              <GraduationCap size={14} />
-              <span>EDUCATION (OPTIONAL)</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <input
-                type="text"
-                name="education"
-                value={formData.education}
-                onChange={handleInputChange}
-                placeholder="Ph.D. in Computer Science, MIT"
-                disabled={isLoading}
-                className="reg-mentor-input"
-              />
-            </div>
-          </div>
-
-          {/* Row 6: Address (2 Columns) */}
-          <div className="reg-mentor-field reg-mentor-field-2col">
-            <label className="reg-mentor-label">
-              <MapPin size={14} />
-              <span>ADDRESS (OPTIONAL)</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                placeholder="123 Main Street, District, City"
-                disabled={isLoading}
-                className="reg-mentor-input"
-                autoComplete="street-address"
-              />
-            </div>
-          </div>
-
           {/* Row 7: Bio (Full Width) */}
           <div className="reg-mentor-field reg-mentor-field-full">
             <label className="reg-mentor-label">
@@ -472,8 +406,8 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
             </label>
             <div className="reg-mentor-input-wrapper">
               <textarea
-                name="bio"
-                value={formData.bio}
+                name="personalBio"
+                value={formData.personalBio}
                 onChange={handleInputChange}
                 placeholder="Tell us about your experience and what you can teach..."
                 disabled={isLoading}

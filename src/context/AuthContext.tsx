@@ -11,6 +11,7 @@ interface AuthContextType {
   register: (userData: UserRegistrationRequest) => Promise<{ requiresVerification: boolean; email: string; message: string }>;
   verifyEmail: (request: VerifyEmailRequest) => Promise<void>;
   resendOtp: (request: ResendOtpRequest) => Promise<string>;
+  forgotPassword: (email: string) => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
 }
@@ -99,6 +100,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const forgotPassword = async (email: string): Promise<void> => {
+    try {
+      setLoading(true);
+      await authService.forgotPassword(email);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = async (): Promise<void> => {
     try {
       setLoading(true);
@@ -118,6 +128,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     verifyEmail,
     resendOtp,
+    forgotPassword,
     logout,
     isAuthenticated: !!user && authService.isAuthenticated(),
   }), [user, loading]);

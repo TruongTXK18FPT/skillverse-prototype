@@ -18,17 +18,14 @@ import Gamification from './pages/navbar/Gamification';
 import PortfolioPage from './pages/navbar/PortfolioPage';
 import PortfolioDebug from './pages/navbar/PortfolioDebug';
 import CVPage from './pages/navbar/CV';
-import LoginPage from './pages/auth/LoginPage';
 import ElevatorLoginPage from './pages/auth/ElevatorLoginPage';
-import RegisterPage from './pages/login/RegisterPage';
 import ElevatorPersonalRegisterPage from './pages/auth/ElevatorPersonalRegisterPage';
 import ElevatorBusinessRegisterPage from './pages/auth/ElevatorBusinessRegisterPage';
 import ElevatorMentorRegisterPage from './pages/auth/ElevatorMentorRegisterPage';
-import BusinessRegisterPage from './pages/auth/BusinessRegisterPage';
-import MentorRegisterPage from './pages/auth/MentorRegisterPage';
+import ChooseRolePage from './pages/auth/ChooseRolePage';
 import VerifyPage from './pages/auth/VerifyPage';
 import AlreadyAuthenticatedWarning from './pages/auth/AlreadyAuthenticatedWarning';
-import ForgotPasswordPage from './pages/login/ForgotPasswordPage';
+import ElevatorForgotPasswordPage from './pages/auth/ElevatorForgotPasswordPage';
 import PaymentPage from './pages/payment/PaymentPage';
 import Transactional from './pages/payment/Transactional';
 import PremiumPageCosmic from './pages/payment/PremiumPageCosmic';
@@ -104,16 +101,13 @@ const App = () => {
                     <Route path="/cv" element={<CVPage />} />
                     <Route path="/certificate/:id" element={<Certificate />} />
                     <Route path="/login" element={<ElevatorLoginPage />} />
-                    <Route path="/login-classic" element={<LoginPage />} />
                     <Route path="/auth-warning" element={<AlreadyAuthenticatedWarning />} />
+                    <Route path="/choose-role" element={<ChooseRolePage />} />
                     <Route path="/register" element={<ElevatorPersonalRegisterPage />} />
-                    <Route path="/register-classic" element={<RegisterPage />} />
                     <Route path="/register/business" element={<ElevatorBusinessRegisterPage />} />
-                    <Route path="/register/business-classic" element={<BusinessRegisterPage />} />
                     <Route path="/register/mentor" element={<ElevatorMentorRegisterPage />} />
-                    <Route path="/register/mentor-classic" element={<MentorRegisterPage />} />
                     <Route path="/verify-otp" element={<VerifyPage />} />
-                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                    <Route path="/forgot-password" element={<ElevatorForgotPasswordPage />} />
                     
                     {/* Profile Routes by Role */}
                     <Route path="/profile" element={<ProfileRouter />} />
@@ -185,6 +179,16 @@ const fullScreenRoutes = new Set<string>([
   '/register',
   '/register/business',
   '/register/mentor',
+  '/verify-otp',
+  '/forgot-password',
+]);
+
+// Routes that only hide footer (keep header visible)
+const hideFooterOnlyRoutes = new Set<string>([
+  '/choose-role',
+  '/chatbot',
+  '/roadmap',
+  '/cv',
 ]);
 
 // Hide Header on specific routes
@@ -194,9 +198,11 @@ const HeaderVisibilityWrapper = () => {
   return <Header />;
 };
 
-// Hide Footer on specific routes (e.g., chatbot needs full-screen)
+// Hide Footer on specific routes
 const FooterVisibilityWrapper = () => {
   const location = useLocation();
-  if (fullScreenRoutes.has(location.pathname)) return null;
+  if (fullScreenRoutes.has(location.pathname) || hideFooterOnlyRoutes.has(location.pathname)) {
+    return null;
+  }
   return <Footer />;
 };

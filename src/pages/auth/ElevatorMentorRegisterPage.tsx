@@ -3,12 +3,15 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../../context/AuthContext';
 import authService from '../../services/authService';
+import mentorService from '../../services/mentorService';
 import { ElevatorAuthLayout, HologramMentorRegisterForm } from '../../components/elevator';
+import PendingApprovalModal from '../../components/elevator/PendingApprovalModal';
 import { useToast } from '../../hooks/useToast';
 import Toast from '../../components/Toast';
+import { MentorRegistrationRequest } from '../../data/userDTOs';
 
 const ElevatorMentorRegisterPage: React.FC = () => {
-  const { registerMentor, isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { toast, isVisible, hideToast, showSuccess, showError } = useToast();
@@ -16,7 +19,10 @@ const ElevatorMentorRegisterPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [pendingRedirect, setPendingRedirect] = useState<string | null>(null);
+  const [registeredEmail, setRegisteredEmail] = useState<string>('');
   const [googleRegisterSuccess, setGoogleRegisterSuccess] = useState<{ userName: string } | null>(null);
+  const [showPendingModal, setShowPendingModal] = useState(false);
+  const [pendingApprovalEmail, setPendingApprovalEmail] = useState<string>('');
 
   // Check if already authenticated
   useEffect(() => {
@@ -84,66 +90,68 @@ const ElevatorMentorRegisterPage: React.FC = () => {
       email: string;
       password: string;
       confirmPassword: string;
-      phone: string;
-      bio: string;
-      expertise: string;
+      linkedinProfile?: string;
+      mainExpertise: string;
       yearsOfExperience: string;
-      education: string;
-      address: string;
-      region: string;
+      personalBio: string;
+      cvFile?: File;
+      certifications?: File[];
     }
   ): Promise<{ success: boolean; userName?: string; error?: string }> => {
     setIsLoading(true);
 
     try {
-      // Prepare mentor registration data
-      const mentorData = {
+      // Create registration request matching backend MentorRegistrationRequest
+      const registrationRequest: MentorRegistrationRequest = {
         fullName: data.fullName,
         email: data.email,
+        linkedinProfile: data.linkedinProfile,
+        mainExpertise: data.mainExpertise,
+        yearsOfExperience: parseInt(data.yearsOfExperience),
+        personalBio: data.personalBio,
         password: data.password,
-        confirmPassword: data.confirmPassword,
-        phone: data.phone || undefined,
-        bio: data.bio || undefined,
-        expertise: data.expertise || undefined,
-        yearsOfExperience: data.yearsOfExperience ? parseInt(data.yearsOfExperience) : undefined,
-        education: data.education || undefined,
-        address: data.address || undefined,
-        region: data.region,
+        confirmPassword: data.confirmPassword
       };
 
-      console.log('Mentor registration data:', mentorData);
+      // Prepare files
+      const files = {
+        cv: data.cvFile || undefined,
+        certifications: data.certifications && data.certifications.length > 0 ? data.certifications : undefined
+      };
 
-      // Call registerMentor function from AuthContext
-      const result = await registerMentor(mentorData);
+      console.log('Attempting mentor registration for:', registrationRequest.email);
       
-      console.log('Mentor registration result:', result);
-
-      // Check if verification is required
-      if (result.requiresVerification) {
-        console.log('Verification required, will redirect to verify-otp after animation');
-        
-        // Store redirect for after animation
+      const response = await mentorService.register(registrationRequest, files);
+      
+      console.log('Mentor registration successful:', response);
+      
+      // Check if requires verification (email verification) or pending approval
+      if (response.requiresVerification) {
+        // Email verification needed - navigate to OTP page
+        setRegisteredEmail(data.email);
         setPendingRedirect('/verify-otp');
-        
-        // Return success with user name for animation
-        return {
-          success: true,
-          userName: data.fullName.split(' ')[0]
-        };
       } else {
-        console.log('No verification required, will redirect to login after animation');
-        
-        // Store redirect for after animation
-        setPendingRedirect('/login');
-        
-        return {
-          success: true,
-          userName: data.fullName.split(' ')[0]
-        };
+        // Account is pending admin approval - show modal
+        setPendingApprovalEmail(data.email);
+        setShowPendingModal(true);
       }
+      
+      // Return success with user name for animation
+      return {
+        success: true,
+        userName: data.fullName.split(' ')[0]
+      };
     } catch (error: unknown) {
       console.error('Mentor registration error:', error);
-      const errorMessage = (error as Error).message || 'Đăng ký mentor thất bại. Vui lòng thử lại.';
+      const errorMessage = error instanceof Error ? error.message : 'Đăng ký mentor thất bại. Vui lòng thử lại.';
+
+      // Check if error is about pending approval
+      if (errorMessage.toLowerCase().includes('pending') && errorMessage.toLowerCase().includes('approval')) {
+        // Show pending approval modal instead of error
+        setPendingApprovalEmail(data.email);
+        setShowPendingModal(true);
+        return { success: true, userName: data.fullName.split(' ')[0] };
+      }
 
       return { success: false, error: errorMessage };
     } finally {
@@ -158,8 +166,9 @@ const ElevatorMentorRegisterPage: React.FC = () => {
         // Navigate to OTP verification
         navigate('/verify-otp', { 
           state: { 
-            email: '', // Will be filled from form
-            message: 'Vui lòng kiểm tra email và nhập mã xác thực để hoàn tất đăng ký mentor.',
+            email: registeredEmail,
+            message: 'Đơn đăng ký mentor đã được gửi. Vui lòng xác thực email để hoàn tất quá trình đăng ký.',
+            fromLogin: false,
             requiresVerification: true,
             userType: 'mentor'
           }
@@ -182,6 +191,17 @@ const ElevatorMentorRegisterPage: React.FC = () => {
           googleRegisterSuccess={googleRegisterSuccess}
         />
       </ElevatorAuthLayout>
+
+      {/* Pending Approval Modal */}
+      <PendingApprovalModal
+        isOpen={showPendingModal}
+        onClose={() => {
+          setShowPendingModal(false);
+          navigate('/login');
+        }}
+        userType="mentor"
+        email={pendingApprovalEmail}
+      />
 
       {/* Toast Notification */}
       {toast && (

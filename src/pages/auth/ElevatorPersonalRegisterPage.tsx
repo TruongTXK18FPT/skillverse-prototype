@@ -17,6 +17,7 @@ const ElevatorPersonalRegisterPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [pendingRedirect, setPendingRedirect] = useState<string | null>(null);
+  const [registeredEmail, setRegisteredEmail] = useState<string>('');
   const [googleRegisterSuccess, setGoogleRegisterSuccess] = useState<{ userName: string } | null>(null);
 
   // Check if already authenticated
@@ -113,6 +114,9 @@ const ElevatorPersonalRegisterPage: React.FC = () => {
       
       console.log('Registration result:', result);
 
+      // Store email for verify-otp navigation
+      setRegisteredEmail(data.email);
+
       // Check if verification is required
       if (result.requiresVerification) {
         console.log('Verification required, will redirect to verify-otp after animation');
@@ -153,8 +157,9 @@ const ElevatorPersonalRegisterPage: React.FC = () => {
         // Navigate to OTP verification
         navigate('/verify-otp', { 
           state: { 
-            email: '', // Will be filled from form
+            email: registeredEmail,
             message: 'Vui lòng kiểm tra email và nhập mã xác thực để hoàn tất đăng ký.',
+            fromLogin: false,
             requiresVerification: true,
             userType: 'user'
           }

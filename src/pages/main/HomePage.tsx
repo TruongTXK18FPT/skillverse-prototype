@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import {
   BookOpen, Award,
   Brain, Target,
@@ -38,6 +39,7 @@ import soulStone from '../../assets/infinity-stones/soul_stone.png';
 
 
 const HomePage = () => {
+  const { isAuthenticated } = useAuth();
   const [theme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     return savedTheme || 'light';
@@ -55,8 +57,8 @@ const HomePage = () => {
       image: slide1,
       title: 'Bắt Đầu Hành Trình Của Bạn',
       description: 'Khám phá tiềm năng vô hạn với hướng dẫn AI cá nhân hóa',
-      cta: 'Bắt đầu hành trình của bạn',
-      route: '/chatbot',
+      cta: 'Gia nhập SkillVerse',
+      route: '/choose-role',
       icon: Brain
     },
     {
@@ -311,11 +313,28 @@ const HomePage = () => {
                 <slide.icon className="slider-icon" size={48} />
                 <h1 className="slider-title">{slide.title}</h1>
                 <p className="slider-description">{slide.description}</p>
-                <Link to={slide.route} className="slider-cta-button">
-                  <span className="slider-button-text">{slide.cta}</span>
-                  <ChevronRight className="slider-button-icon" size={20} />
-                  <span className="slider-button-glow"></span>
-                </Link>
+                {index === 0 ? (
+                  <div className="slider-buttons-group">
+                    <Link to="/chatbot" className="slider-cta-button slider-primary-button">
+                      <span className="slider-button-text">Bắt đầu hành trình của bạn</span>
+                      <ChevronRight className="slider-button-icon" size={20} />
+                      <span className="slider-button-glow"></span>
+                    </Link>
+                    {!isAuthenticated && (
+                      <Link to="/choose-role" className="slider-cta-button slider-gold-button">
+                        <span className="slider-button-text">Gia nhập SkillVerse</span>
+                        <ChevronRight className="slider-button-icon" size={20} />
+                        <span className="slider-button-glow"></span>
+                      </Link>
+                    )}
+                  </div>
+                ) : (
+                  <Link to={slide.route} className="slider-cta-button">
+                    <span className="slider-button-text">{slide.cta}</span>
+                    <ChevronRight className="slider-button-icon" size={20} />
+                    <span className="slider-button-glow"></span>
+                  </Link>
+                )}
               </div>
             </div>
           ))}

@@ -90,7 +90,7 @@ export interface District {
 export interface MentorRegistrationRequest {
   fullName: string;
   email: string;
-  linkedinProfile: string;
+  linkedinProfile?: string;
   mainExpertise: string;
   yearsOfExperience: number;
   personalBio: string;

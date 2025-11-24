@@ -4,6 +4,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../../context/AuthContext';
 import authService from '../../services/authService';
 import { ElevatorAuthLayout, HologramLoginForm } from '../../components/elevator';
+import PendingApprovalModal from '../../components/elevator/PendingApprovalModal';
 import { useToast } from '../../hooks/useToast';
 import Toast from '../../components/Toast';
 
@@ -17,6 +18,8 @@ const ElevatorLoginPage: React.FC = () => {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [pendingRedirect, setPendingRedirect] = useState<string | null>(null);
   const [googleLoginSuccess, setGoogleLoginSuccess] = useState<{ userName: string } | null>(null);
+  const [showPendingModal, setShowPendingModal] = useState(false);
+  const [pendingApprovalEmail, setPendingApprovalEmail] = useState<string>('');
 
   // Check if already authenticated
   useEffect(() => {
@@ -127,6 +130,15 @@ const ElevatorLoginPage: React.FC = () => {
         ? error.message
         : 'Đăng nhập thất bại. Vui lòng thử lại.';
 
+      // Check if error is about pending approval
+      if (errorMessage.toLowerCase().includes('pending') && errorMessage.toLowerCase().includes('approval')) {
+        // Show pending approval modal instead of error
+        setPendingApprovalEmail(email);
+        setShowPendingModal(true);
+        // Return success: false without error to prevent form from showing the error message
+        return { success: false };
+      }
+
       return { success: false, error: errorMessage };
     } finally {
       setIsLoading(false);
@@ -152,6 +164,17 @@ const ElevatorLoginPage: React.FC = () => {
           googleLoginSuccess={googleLoginSuccess}
         />
       </ElevatorAuthLayout>
+
+      {/* Pending Approval Modal */}
+      <PendingApprovalModal
+        isOpen={showPendingModal}
+        onClose={() => {
+          setShowPendingModal(false);
+          // Stay on login page or refresh? Just close modal is fine
+        }}
+        userType="mentor"
+        email={pendingApprovalEmail}
+      />
 
       {/* Toast Notification */}
       {toast && (
