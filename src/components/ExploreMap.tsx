@@ -134,7 +134,7 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
           <div className="hud-border"></div>
           
           {/* Top-Left Corner: SYS Status */}
-          <div className="hud-corner top-left">
+          <div className="hud-corner-map top-left">
             <div className="hud-status-box">
               <span className="hud-text-small">● SYS.READY</span>
               <div className="hud-loading-bar"></div>
@@ -142,7 +142,7 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
           </div>
 
           {/* Top-Left-Controls: Action Buttons */}
-          <div className="hud-corner top-left-controls">
+          <div className="hud-corner-map top-left-controls">
             <div className="hud-controls">
               {viewState === 'zone-preview' && (
                 <button
@@ -165,7 +165,7 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
           </div>
 
           {/* Top-Right Corner: Data & UTC */}
-          <div className="hud-corner top-right">
+          <div className="hud-corner-map top-right">
             <div className="hud-status-right">
               <div className="hud-time">[UTC: <span className="hud-timestamp">{currentTime}</span>]</div>
               <div className="hud-status-text">DATA FLOW: OPTIMAL</div>
@@ -173,7 +173,7 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
           </div>
 
           {/* Bottom-Left Corner: System Log */}
-          <div className="hud-corner bottom-left">
+          <div className="hud-corner-map bottom-left">
             <div className="hud-ruler"></div>
             <div className="hud-system-log">[SYSTEM LOG: A7F2E9] <br/>
               [SONTUNGMTP]
@@ -181,7 +181,7 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
           </div>
 
           {/* Bottom-Right Corner: Target Priority */}
-          <div className="hud-corner bottom-right">
+          <div className="hud-corner-map bottom-right">
             <div className="hud-status-bottom">
               <div className="hud-scan-text">
                 {hoveredZone ? `SCANNING: ${hoveredZone.nameEnglish}` : 'SCANNING...'}

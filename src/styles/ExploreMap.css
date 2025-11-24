@@ -165,7 +165,7 @@ body:has(.explore-map-overlay) {
 }
 
 /* Corner Decorations */
-.hud-corner {
+.hud-corner-map {
   position: absolute;
   color: #06b6d4;
   font-family: 'Space Habitat', monospace;
@@ -176,7 +176,7 @@ body:has(.explore-map-overlay) {
   font-weight: 600;
 }
 
-.hud-corner.top-left {
+.hud-corner-map.top-left {
   top: 0;
   left: 0;
   padding: 12px 20px;
@@ -192,7 +192,7 @@ body:has(.explore-map-overlay) {
   gap: 6px;
 }
 
-.hud-corner.top-left-controls {
+.hud-corner-map.top-left-controls {
   top: 65px;
   left: 0;
   padding: 10px 12px;
@@ -204,7 +204,7 @@ body:has(.explore-map-overlay) {
   z-index: 110;
 }
 
-.hud-corner.top-right {
+.hud-corner-map.top-right {
   top: 0;
   right: 0;
   padding: 12px 20px;
@@ -252,7 +252,7 @@ body:has(.explore-map-overlay) {
   25%, 75% { opacity: 0.6; }
 }
 
-.hud-corner.bottom-left {
+.hud-corner-map.bottom-left {
   bottom: 0;
   left: 0;
   padding: 10px 15px;
@@ -280,7 +280,7 @@ body:has(.explore-map-overlay) {
   white-space: nowrap;
 }
 
-.hud-corner.bottom-right {
+.hud-corner-map.bottom-right {
   bottom: 0;
   right: 0;
   padding: 10px 15px;
