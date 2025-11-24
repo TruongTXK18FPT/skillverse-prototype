@@ -1,0 +1,755 @@
+/* =====================================================
+   HOLOGRAM LOGIN FORM
+   Sci-fi Control Panel Style
+   ===================================================== */
+
+/* Space Habitat Font */
+@font-face {
+  font-family: 'SpaceHabitat';
+  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Variables */
+:root {
+  --holo-primary: #00d4ff;
+  --holo-secondary: #6366f1;
+  --holo-accent: #f59e0b;
+  --holo-success: #10b981;
+  --holo-error: #ef4444;
+  --holo-bg: rgba(10, 10, 15, 0.85);
+  --holo-bg-light: rgba(20, 20, 30, 0.9);
+  --holo-border: rgba(0, 212, 255, 0.3);
+  --holo-glow: rgba(0, 212, 255, 0.5);
+  --holo-text: #e0f7ff;
+  --holo-text-dim: rgba(224, 247, 255, 0.6);
+}
+
+/* Container - Horizontal Layout */
+.hologram-form-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  padding: 2px;
+  font-family: 'SpaceHabitat', 'Segoe UI', sans-serif;
+}
+
+/* Hologram Border */
+.hologram-border {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.border-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--holo-primary);
+}
+
+.border-corner.top-left {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.border-corner.top-right {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.border-corner.bottom-left {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.border-corner.bottom-right {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+.border-line {
+  position: absolute;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--holo-primary),
+    transparent
+  );
+}
+
+.border-line.top,
+.border-line.bottom {
+  left: 20px;
+  right: 20px;
+  height: 1px;
+}
+
+.border-line.top {
+  top: 0;
+}
+
+.border-line.bottom {
+  bottom: 0;
+}
+
+.border-line.left,
+.border-line.right {
+  top: 20px;
+  bottom: 20px;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--holo-primary),
+    transparent
+  );
+}
+
+.border-line.left {
+  left: 0;
+}
+
+.border-line.right {
+  right: 0;
+}
+
+/* Content - Horizontal Layout */
+.hologram-content {
+  background: var(--holo-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1.5rem 2rem;
+  border: 1px solid var(--holo-border);
+  box-shadow:
+    0 0 30px rgba(0, 212, 255, 0.1),
+    inset 0 0 30px rgba(0, 212, 255, 0.05);
+  display: flex;
+  gap: 2rem;
+}
+
+/* Left Column */
+.hologram-left-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 2rem;
+  border-right: 1px solid var(--holo-border);
+  min-width: 200px;
+  gap: 1.5rem;
+}
+
+/* Right Column */
+.hologram-right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Header - Compact on left side */
+.hologram-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.logo-link {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.logo-link:hover {
+  transform: scale(1.05);
+}
+
+.logo-link:hover .logo-glow {
+  opacity: 0.8;
+}
+
+.hologram-logo {
+  width: 80px;
+  height: auto;
+  filter: drop-shadow(0 0 10px var(--holo-glow));
+}
+
+.logo-glow {
+  position: absolute;
+  inset: -10px;
+  background: radial-gradient(
+    circle,
+    var(--holo-glow) 0%,
+    transparent 70%
+  );
+  opacity: 0.5;
+  animation: logoGlow 2s ease-in-out infinite;
+}
+
+@keyframes logoGlow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+.header-text {
+  margin-bottom: 1rem;
+}
+
+.hologram-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--holo-primary);
+  text-shadow: 0 0 20px var(--holo-glow);
+  margin: 0 0 0.5rem 0;
+}
+
+.hologram-subtitle {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: var(--holo-text-dim);
+  margin: 0;
+}
+
+.header-decoration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.deco-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--holo-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--holo-glow);
+}
+
+.deco-line {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--holo-primary),
+    transparent
+  );
+}
+
+/* Error Message - Minimal inline warning */
+.hologram-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  background: transparent;
+  justify-content: center;
+  margin-bottom: 0.4rem;
+}
+
+.hologram-error-icon {
+  color: var(--holo-error);
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+}
+
+.hologram-error-text {
+  font-size: 0.6rem;
+  color: var(--holo-error);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+/* Form */
+.hologram-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--holo-primary);
+  text-transform: uppercase;
+}
+
+.field-label svg {
+  opacity: 0.7;
+}
+
+.field-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.hologram-field-input {
+  width: 100%;
+  padding: 0.65rem 0.875rem;
+  background: rgba(0, 30, 50, 0.9);
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  color: #ffffff;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: border-color 0.3s ease;
+  text-transform: none;
+}
+
+.hologram-field-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.65rem;
+  font-family: 'Segoe UI', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.hologram-field-input:focus {
+  outline: none;
+  border-color: var(--holo-primary);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+}
+
+.hologram-field-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-glow {
+  display: none;
+}
+
+.hologram-password-toggle-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--holo-text-dim);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.3s;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hologram-password-toggle-btn:hover {
+  color: var(--holo-primary);
+}
+
+.hologram-password-toggle-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Form Options - Span full width */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.65rem;
+  grid-column: 1 / -1;
+}
+
+.remember-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--holo-text-dim);
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.remember-option input {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--holo-border);
+  background: var(--holo-bg-light);
+  position: relative;
+  transition: all 0.3s;
+}
+
+.remember-option input:checked + .checkbox-custom {
+  border-color: var(--holo-primary);
+  background: rgba(0, 212, 255, 0.2);
+}
+
+.remember-option input:checked + .checkbox-custom::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background: var(--holo-primary);
+  box-shadow: 0 0 5px var(--holo-glow);
+}
+
+.forgot-link {
+  color: var(--holo-accent);
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+}
+
+.forgot-link:hover {
+  color: var(--holo-primary);
+  text-shadow: 0 0 10px var(--holo-glow);
+}
+
+/* Submit Button - Span full width */
+.submit-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0.875rem;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 212, 255, 0.2) 0%,
+    rgba(99, 102, 241, 0.2) 100%
+  );
+  border: 2px solid var(--holo-primary);
+  color: var(--holo-primary);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  grid-column: 1 / -1;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 212, 255, 0.3) 0%,
+    rgba(99, 102, 241, 0.3) 100%
+  );
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 212, 255, 0.3),
+    transparent
+  );
+  transform: translateX(-100%);
+}
+
+.submit-button:hover:not(:disabled) .button-glow {
+  animation: buttonScan 1s ease-in-out infinite;
+}
+
+@keyframes buttonScan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Divider */
+.hologram-divider {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 0.5rem 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--holo-border),
+    transparent
+  );
+}
+
+.divider-text {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: var(--holo-text-dim);
+}
+
+/* Social Buttons */
+.social-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.75rem;
+  background: var(--holo-bg-light);
+  border: 1px solid var(--holo-border);
+  color: var(--holo-text-dim);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.social-btn:hover:not(:disabled) {
+  border-color: var(--holo-primary);
+  color: var(--holo-text);
+}
+
+.social-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.social-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+/* Register Section - In left column */
+.register-section {
+  display: block;
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--holo-border);
+  width: 100%;
+}
+
+.holo-register-prompt {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: var(--holo-text-dim);
+  margin-bottom: 0.5rem;
+}
+
+.register-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.register-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.5rem 0.75rem;
+  background: var(--holo-bg-light);
+  border: 1px solid var(--holo-border);
+  text-decoration: none;
+  font-size: 0.55rem;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+}
+
+.btn-icon {
+  font-size: 1.25rem;
+}
+
+.register-btn.personal {
+  color: var(--holo-accent);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.register-btn.personal:hover {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: var(--holo-accent);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+}
+
+.register-btn.business {
+  color: var(--holo-secondary);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.register-btn.business:hover {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: var(--holo-secondary);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.register-btn.mentor {
+  color: var(--holo-success);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.register-btn.mentor:hover {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--holo-success);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+}
+
+/* Footer - Hidden in horizontal layout */
+.form-footer {
+  display: none;
+  align-items: center;
+  gap: 15px;
+  margin-top: 1rem;
+}
+
+.footer-line {
+  flex: 1;
+  height: 1px;
+  background: var(--holo-border);
+}
+
+.footer-text {
+  font-size: 0.5rem;
+  letter-spacing: 2px;
+  color: var(--holo-text-dim);
+  opacity: 0.5;
+}
+
+/* Hologram Flicker Effect */
+.hologram-flicker {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: transparent;
+  animation: flicker 4s linear infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 0; }
+  92% { opacity: 0; }
+  93% { opacity: 0.1; background: rgba(0, 212, 255, 0.05); }
+  94% { opacity: 0; }
+  96% { opacity: 0.05; background: rgba(0, 212, 255, 0.03); }
+  97% { opacity: 0; }
+}
+
+/* Responsive - Switch to vertical layout on smaller screens */
+@media (max-width: 900px) {
+  .hologram-form-container {
+    max-width: 450px;
+  }
+
+  .hologram-content {
+    flex-direction: column;
+    padding: 1.5rem;
+  }
+
+  .hologram-left-column {
+    border-right: none;
+    border-bottom: 1px solid var(--holo-border);
+    padding-right: 0;
+    padding-bottom: 1rem;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .hologram-right-column {
+    width: 100%;
+  }
+
+  .hologram-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-options,
+  .submit-button {
+    grid-column: auto;
+  }
+
+  .register-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .register-btn {
+    flex: 1;
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hologram-content {
+    padding: 1.25rem;
+  }
+
+  .hologram-title {
+    font-size: 1.25rem;
+    letter-spacing: 2px;
+  }
+
+  .hologram-subtitle {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+  }
+
+  .register-buttons {
+    flex-direction: column;
+  }
+
+  .register-btn {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .social-buttons {
+    flex-direction: column;
+  }
+}
