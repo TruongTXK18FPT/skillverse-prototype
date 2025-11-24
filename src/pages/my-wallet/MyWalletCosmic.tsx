@@ -449,15 +449,15 @@ const MyWalletCosmic: React.FC = () => {
           )}
           
           <div className="card-actions">
-            <button className="action-btn primary" onClick={() => setShowDepositModal(true)}>
+            <button className="w-action-btn primary" onClick={() => setShowDepositModal(true)}>
               <Plus size={16} />
               Nạp tiền
             </button>
-            <button className="action-btn primary" onClick={() => setShowBuyCoinModal(true)}>
+            <button className="w-action-btn primary" onClick={() => setShowBuyCoinModal(true)}>
               <Rocket size={16} />
               Mua xu
             </button>
-            <button className="action-btn secondary" onClick={() => setShowWithdrawModal(true)}>
+            <button className="w-action-btn secondary" onClick={() => setShowWithdrawModal(true)}>
               <Minus size={16} />
               Rút tiền
             </button>
