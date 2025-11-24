@@ -1,6 +1,6 @@
 /* NotificationsTab.css - Enhanced Notifications Management Styles */
 
-@keyframes fadeInUp {
+@keyframes notif-fadeInUp {
   from {
     opacity: 0;
     transform: translateY(30px);
@@ -11,7 +11,7 @@
   }
 }
 
-@keyframes slideInFromLeft {
+@keyframes notif-slideInFromLeft {
   from {
     opacity: 0;
     transform: translateX(-50px);
@@ -22,45 +22,126 @@
   }
 }
 
-@keyframes shimmer {
+@keyframes notif-shimmer {
   0% { background-position: -200px 0; }
   100% { background-position: calc(200px + 100%) 0; }
 }
 
-@keyframes pulseGlow {
+@keyframes notif-pulseGlow {
   0%, 100% { box-shadow: 0 0 5px rgba(102, 126, 234, 0.3); }
   50% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.4); }
 }
 
-@keyframes bounceIn {
+@keyframes notif-bounceIn {
   0% { transform: scale(0.3); opacity: 0; }
   50% { transform: scale(1.05); }
   70% { transform: scale(0.9); }
   100% { transform: scale(1); opacity: 1; }
 }
 
-@keyframes floatingAnimation {
+@keyframes notif-floatingAnimation {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
 }
 
-@keyframes bellRing {
+@keyframes notif-bellRing {
   0%, 50%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(10deg); }
   75% { transform: rotate(-10deg); }
+}
+
+/* Modal Styles */
+.administrator-notifications-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: notif-fadeIn 0.3s ease;
+}
+
+@keyframes notif-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.administrator-notifications-modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: notif-slideUp 0.3s ease;
+}
+
+@keyframes notif-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.administrator-notifications-modal-content h3 {
+  margin-top: 0;
+  color: #1e293b;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.administrator-notifications-modal-content button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.administrator-notifications-modal-content button:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.administrator-notifications-modal-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.administrator-notifications-modal-content li {
+  padding: 8px 12px;
+  background: #f8fafc;
+  margin: 5px 0;
+  border-radius: 4px;
+  border-left: 3px solid #667eea;
 }
 
 .administrator-notifications {
   padding: 30px;
   background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
   min-height: 600px;
-  animation: fadeInUp 0.8s ease-out;
+  animation: notif-fadeInUp 0.8s ease-out;
 }
 
 .administrator-notifications-header {
   text-align: center;
   margin-bottom: 40px;
-  animation: slideInFromLeft 0.6s ease-out;
+  animation: notif-slideInFromLeft 0.6s ease-out;
 }
 
 .administrator-notifications-header h2 {
@@ -72,7 +153,7 @@
   background-clip: text;
   margin-bottom: 15px;
   position: relative;
-  animation: floatingAnimation 3s ease-in-out infinite;
+  animation: notif-floatingAnimation 3s ease-in-out infinite;
 }
 
 .administrator-notifications-header h2::after {
@@ -85,14 +166,14 @@
   height: 4px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 2px;
-  animation: shimmer 2s infinite;
+  animation: notif-shimmer 2s infinite;
 }
 
 .administrator-notifications-header p {
   color: #7f8c8d;
   font-size: 1.2rem;
   margin: 0;
-  animation: fadeInUp 0.8s ease-out 0.2s both;
+  animation: notif-fadeInUp 0.8s ease-out 0.2s both;
 }
 
 .administrator-notifications-form {
@@ -104,7 +185,7 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
-  animation: bounceIn 0.6s ease-out;
+  animation: notif-bounceIn 0.6s ease-out;
 }
 
 .administrator-notifications-form:hover {
@@ -142,12 +223,12 @@
 .administrator-notifications-form h3::before {
   content: '🔔';
   font-size: 1.8rem;
-  animation: bellRing 2s ease-in-out infinite;
+  animation: notif-bellRing 2s ease-in-out infinite;
 }
 
 .administrator-notifications-form-group {
   margin-bottom: 20px;
-  animation: fadeInUp 0.6s ease-out;
+  animation: notif-fadeInUp 0.6s ease-out;
 }
 
 .administrator-notifications-form-group label {
@@ -295,7 +376,7 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
-  animation: slideInFromLeft 0.8s ease-out 0.3s both;
+  animation: notif-slideInFromLeft 0.8s ease-out 0.3s both;
 }
 
 .administrator-notifications-history:hover {
@@ -331,7 +412,7 @@
   border-radius: 10px;
   border: 1px solid #cbd5e0;
   transition: all 0.3s ease;
-  animation: fadeInUp 0.6s ease-out;
+  animation: notif-fadeInUp 0.6s ease-out;
 }
 
 .administrator-notifications-item:hover {
