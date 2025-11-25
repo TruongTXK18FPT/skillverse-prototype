@@ -10,7 +10,8 @@ import HomePage from './pages/main/HomePage';
 import DashboardPage from './pages/navbar/DashboardPage';
 import CoursesPage from './pages/navbar/CoursesPage';
 import MentorshipPage from './pages/navbar/MentorshipPage';
-import CommunityPage from './pages/navbar/CommunityPage';
+import CommunityHUD from './components/community-hud/CommunityHUD';
+import BroadcastForm from './components/community-hud/BroadcastForm';
 import JobsPage from './pages/navbar/JobsPage';
 import ChatbotPage from './pages/navbar/ChatbotPage';
 import AiChatbotPage from './pages/navbar/AiChatbotPage';
@@ -35,7 +36,6 @@ import PremiumPageCosmic from './pages/payment/PremiumPageCosmic';
 import ManagerPage from './pages/main/ManagerPage';
 // import CoinWallet from './pages/main/CoinWallet'; // Replaced by MyWalletCosmic
 import MyWalletCosmic from './pages/my-wallet/MyWalletCosmic';
-import BlogForm from './pages/community/BlogForm';
 import NotFoundPage from './pages/notfound/NotFoundPage';
 import UnauthorizedPage from './pages/UnauthorizedPage';
 import Certificate from './components/Certificate';
@@ -93,8 +93,8 @@ const App = () => {
                     <Route path="/roadmap" element={<AiRoadmapPage />} />
                     <Route path="/roadmap/:id" element={<RoadmapDetailPage />} />
                     <Route path="/mentorship" element={<MentorshipPage />} />
-                    <Route path="/community" element={<CommunityPage />} />
-                    <Route path="/community/create" element={<BlogForm />} />
+                    <Route path="/community" element={<CommunityHUD />} />
+                    <Route path="/community/create" element={<BroadcastForm />} />
                     <Route path="/jobs" element={<JobsPage />} />
                     <Route path="/chatbot" element={<AiChatbotPage />} />
                     <Route path="/chatbot-old" element={<ChatbotPage />} />

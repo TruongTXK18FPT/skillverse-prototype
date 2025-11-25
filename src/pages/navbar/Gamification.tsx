@@ -891,35 +891,35 @@ const Gamification: React.FC = () => {
   );
 
   return (
-    <div className={`gamification ${theme}`}>
-      <div className="gamification-container">
+    <div className="gami-wrapper">
+      <div className="gami-container">
         {/* Header */}
-        <div className="gamification-header">
-          <div className="header-content">
-            <div className="title-section">
+        <div className="gami-header">
+          <div className="gami-header-content">
+            <div className="gami-title-section">
               <h1>🎮 Trung Tâm Trò Chơi</h1>
               <p>Học tập thông qua trò chơi, cạnh tranh lành mạnh và thu thập thành tựu</p>
             </div>
-            
-            <div className="header-stats">
-              <div className="header-stat">
+
+            <div className="gami-stats-row">
+              <div className="gami-stat-box">
                 <Coins style={{ color: '#ffff00' }} />
-                <span style={{ color: '#ffff00' }} >2,540 xu</span>
+                <span style={{ color: '#ffff00' }}>2,540 xu</span>
               </div>
-              <div className="header-stat">
+              <div className="gami-stat-box">
                 <Trophy style={{ color: '#ff8800' }} />
                 <span style={{ color: '#ff8800' }}>#{currentUserRank}</span>
               </div>
-                <div className="header-stat">
+              <div className="gami-stat-box">
                 <Flame style={{ color: '#ff0088' }} />
                 <span style={{ color: '#ff0088' }}>15 ngày</span>
-                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="gamification-nav">
+        <div className="gami-nav">
           {[
             { key: 'leaderboard', label: 'Bảng Xếp Hạng', icon: Trophy },
             { key: 'badges', label: 'Huy Hiệu', icon: Award },
@@ -928,21 +928,25 @@ const Gamification: React.FC = () => {
           ].map(tab => (
             <button
               key={tab.key}
-              className={`gamification-nav-tab ${activeTab === tab.key ? 'active' : ''}`}
+              className={`gami-nav-tab ${activeTab === tab.key ? 'active' : ''}`}
               onClick={() => setActiveTab(tab.key as 'leaderboard' | 'badges' | 'games' | 'achievements')}
             >
-              <tab.icon className="tab-icon" />
-              <span className="tab-label">{tab.label}</span>
+              <tab.icon />
+              <span>{tab.label}</span>
             </button>
           ))}
         </div>
 
         {/* Content */}
-        <div className="gamification-content">
-          {activeTab === 'leaderboard' && renderLeaderboard()}
-          {activeTab === 'badges' && renderBadges()}
-          {activeTab === 'games' && renderMiniGames()}
-          {activeTab === 'achievements' && renderAchievements()}
+        <div className="gami-content">
+          <div className="gamification">
+            <div className="gamification-content">
+              {activeTab === 'leaderboard' && renderLeaderboard()}
+              {activeTab === 'badges' && renderBadges()}
+              {activeTab === 'games' && renderMiniGames()}
+              {activeTab === 'achievements' && renderAchievements()}
+            </div>
+          </div>
         </div>
       </div>
       <MeowlGuide currentPage="games" />

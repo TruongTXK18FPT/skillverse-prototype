@@ -25,6 +25,413 @@
   font-display: swap;
 }
 
+/* ===============================
+   NEW ISOLATED CLASSES (gami-)
+   =============================== */
+
+.gami-wrapper {
+  min-height: 100vh;
+  font-family: 'Minecraft', 'MinecraftFont', monospace;
+  background: linear-gradient(135deg,
+    #0a0a0a 0%,
+    #1a1a2e 25%,
+    #16213e 50%,
+    #0f3460 75%,
+    #000000 100%);
+  color: #00ff88;
+  position: relative;
+  overflow-x: hidden;
+  padding: 0;
+  margin: 0;
+}
+
+.gami-wrapper::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 136, 0.03) 2px,
+      rgba(0, 255, 136, 0.03) 4px
+    );
+  pointer-events: none;
+  z-index: 0;
+  animation: gami-scanLines 0.1s linear infinite;
+}
+
+@keyframes gami-scanLines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(4px); }
+}
+
+.gami-container {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.gami-wrapper,
+.gami-wrapper * {
+  font-family: 'Minecraft', 'MinecraftFont', monospace !important;
+}
+
+.gami-header {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg,
+    rgba(0, 255, 136, 0.15) 0%,
+    rgba(0, 255, 255, 0.1) 50%,
+    rgba(255, 0, 255, 0.15) 100%);
+  border: 3px solid #00ff88;
+  border-radius: 20px;
+  box-shadow:
+    0 0 30px rgba(0, 255, 136, 0.5),
+    inset 0 0 30px rgba(0, 255, 136, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.gami-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 255, 136, 0.3) 50%,
+    transparent 100%
+  );
+  animation: gami-headerPulse 4s infinite;
+}
+
+@keyframes gami-headerPulse {
+  0%, 100% { left: -100%; opacity: 0.5; }
+  50% { left: 100%; opacity: 1; }
+}
+
+.gami-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 2rem;
+  z-index: 2;
+  position: relative;
+}
+
+.gami-title-section {
+  flex: 1;
+}
+
+.gami-title-section h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 400;
+  background: linear-gradient(135deg, #00ff88, #00ffff, #ff00ff, #ffff00);
+  background-size: 400% 400%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gami-titleGradient 3s ease-in-out infinite;
+  text-shadow:
+    0 0 10px rgba(0, 255, 136, 0.8),
+    0 0 20px rgba(0, 255, 136, 0.6);
+  letter-spacing: 2px;
+  position: relative;
+  text-align: left;
+}
+
+@keyframes gami-titleGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.gami-title-section h1::after {
+  content: '_';
+  animation: gami-blink 1s infinite;
+  color: #00ff88;
+}
+
+@keyframes gami-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.gami-title-section p {
+  margin: 1rem 0 0 0;
+  color: #00ffaa;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.9;
+  text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+  text-align: left;
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+.gami-stats-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.gami-stat-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  background: linear-gradient(135deg,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 255, 136, 0.1) 50%,
+    rgba(0, 0, 0, 0.7) 100%);
+  border: 2px solid #00ff88;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 15px rgba(0, 255, 136, 0.3),
+    inset 0 0 15px rgba(0, 255, 136, 0.1);
+  min-width: 120px;
+  white-space: nowrap;
+}
+
+.gami-stat-box:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow:
+    0 0 25px rgba(0, 255, 136, 0.6),
+    inset 0 0 25px rgba(0, 255, 136, 0.2);
+}
+
+.gami-stat-box svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.gami-stat-box span {
+  font-weight: 700;
+  font-size: 1rem;
+  text-shadow: 0 0 10px currentColor;
+}
+
+.gami-nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: linear-gradient(135deg,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 255, 136, 0.1) 50%,
+    rgba(0, 0, 0, 0.8) 100%);
+  border: 2px solid #00ff88;
+  border-radius: 25px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-wrap: wrap;
+}
+
+.gami-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.gami-nav-tab {
+  flex: 1;
+  min-width: 150px;
+  padding: 1rem 1.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #00ff88;
+  border-radius: 15px;
+  color: #00ff88;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.875rem;
+}
+
+.gami-nav-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(0, 255, 136, 0.2) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gami-nav-tab:hover::before {
+  opacity: 1;
+}
+
+.gami-nav-tab:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+  border-color: #00ffff;
+}
+
+.gami-nav-tab.active {
+  background: linear-gradient(135deg, #00ff88 0%, #00ffff 100%);
+  color: #000;
+  border-color: #00ffff;
+  box-shadow:
+    0 0 30px rgba(0, 255, 136, 0.8),
+    inset 0 0 20px rgba(0, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.gami-nav-tab svg {
+  width: 20px;
+  height: 20px;
+}
+
+.gami-content {
+  min-height: 400px;
+  position: relative;
+}
+
+/* Responsive for gami- classes */
+@media (max-width: 1200px) {
+  .gami-header {
+    padding: 2rem;
+  }
+
+  .gami-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .gami-stats-row {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .gami-stat-box {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .gami-title-section h1 {
+    font-size: 1.75rem;
+  }
+
+  .gami-title-section p {
+    font-size: 0.75rem;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .gami-container {
+    padding: 1rem;
+  }
+
+  .gami-header {
+    padding: 1.5rem;
+  }
+
+  .gami-stats-row {
+    gap: 0.75rem;
+  }
+
+  .gami-stat-box {
+    min-width: calc(50% - 0.375rem);
+    font-size: 0.875rem;
+  }
+
+  .gami-title-section h1 {
+    font-size: 1.5rem;
+  }
+
+  .gami-title-section p {
+    font-size: 0.7rem;
+  }
+
+  .gami-nav {
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .gami-nav-tab {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    min-width: calc(50% - 0.25rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .gami-header {
+    padding: 1rem;
+  }
+
+  .gami-stats-row {
+    gap: 0.5rem;
+  }
+
+  .gami-stat-box {
+    min-width: 100%;
+    justify-content: flex-start;
+    padding: 0.75rem 1rem;
+  }
+
+  .gami-title-section h1 {
+    font-size: 1.25rem;
+    letter-spacing: 1px;
+  }
+
+  .gami-title-section p {
+    font-size: 0.65rem;
+    letter-spacing: 0.5px;
+  }
+
+  .gami-nav {
+    gap: 0.375rem;
+    padding: 0.5rem;
+  }
+
+  .gami-nav-tab {
+    padding: 0.625rem 0.5rem;
+    font-size: 0.65rem;
+    min-width: calc(50% - 0.1875rem);
+  }
+
+  .gami-nav-tab span {
+    font-size: 0.6rem;
+  }
+}
+
+/* ===============================
+   ORIGINAL CLASSES (kept as-is)
+   =============================== */
+
 .gamification {
   min-height: 100vh;
   font-family: 'Minecraft', 'MinecraftFont',   monospace;
