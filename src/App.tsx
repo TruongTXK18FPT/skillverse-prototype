@@ -196,6 +196,7 @@ const hideFooterOnlyRoutes = new Set<string>([
   '/chatbot',
   '/roadmap',
   '/cv',
+  '/admin',
 ]);
 
 // Hide Header on specific routes

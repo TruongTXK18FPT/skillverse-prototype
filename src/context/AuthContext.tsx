@@ -8,7 +8,7 @@ interface AuthContextType {
   user: UserDto | null;
   loading: boolean;
   login: (credentials: LoginRequest) => Promise<string>;
-  register: (userData: UserRegistrationRequest) => Promise<{ requiresVerification: boolean; email: string; message: string }>;
+  register: (userData: UserRegistrationRequest) => Promise<{ requiresVerification: boolean; email: string; message: string; otpExpiryTime?: string }>;
   verifyEmail: (request: VerifyEmailRequest) => Promise<void>;
   resendOtp: (request: ResendOtpRequest) => Promise<string>;
   forgotPassword: (email: string) => Promise<ForgotPasswordResponse>;
@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const register = async (userData: UserRegistrationRequest): Promise<{ requiresVerification: boolean; email: string; message: string }> => {
+  const register = async (userData: UserRegistrationRequest): Promise<{ requiresVerification: boolean; email: string; message: string; otpExpiryTime?: string }> => {
     try {
       setLoading(true);
       const response = await userService.register(userData);
@@ -78,7 +78,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return {
         requiresVerification: response.requiresVerification,
         email: response.email,
-        message: response.message
+        message: response.message,
+        otpExpiryTime: response.otpExpiryTime
       };
     } finally {
       setLoading(false);

@@ -24,7 +24,14 @@ const HologramForgotPasswordForm: React.FC = () => {
     setError(null);
 
     try {
-      await forgotPassword(email);
+      const response = await forgotPassword(email);
+      
+      // Save OTP expiry time to localStorage
+      if (response.otpExpiryTime) {
+        const storageKey = `otp_expiry_${email}`;
+        localStorage.setItem(storageKey, response.otpExpiryTime);
+      }
+      
       // Navigate to verify OTP page with forgot-password mode
       navigate('/verify-otp', { 
         state: { 
@@ -85,7 +92,6 @@ const HologramForgotPasswordForm: React.FC = () => {
                             <input 
                                 type="email" 
                                 className="fgp-input"
-                                placeholder="operator@skillverse.io"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 disabled={isLoading}
