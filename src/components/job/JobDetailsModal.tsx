@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import jobService from '../../services/jobService';
 import { JobPostingResponse } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';
-import './JobDetailsModal.css';
+import './JobDetailsModal-odyssey.css';
 
 interface JobDetailsModalProps {
   job: JobPostingResponse;
@@ -18,6 +18,17 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
   const { user, isAuthenticated } = useAuth();
   const { showSuccess, showError } = useToast();
   const [hasApplied, setHasApplied] = useState(false);
+
+  // Determine modal theme based on salary (same logic as FateCard)
+  const getModalTheme = (): 'gold' | 'crimson' | 'blue' => {
+    const avgSalary = (job.minBudget + job.maxBudget) / 2;
+    
+    if (avgSalary > 5000000) return 'crimson'; // Above 5M VND - Red
+    if (avgSalary >= 1000000) return 'gold';   // 1M-5M VND - Gold
+    return 'blue';                            // Below 1M VND - Blue
+  };
+
+  const modalTheme = getModalTheme();
   const [isCheckingApplied, setIsCheckingApplied] = useState(true);
   const [coverLetter, setCoverLetter] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,6 +42,14 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
   React.useEffect(() => {
     checkIfApplied();
   }, [job.id, isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Disable body scroll when modal opens
+  React.useEffect(() => {
+    document.body.classList.add('modal-open');
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, []);
 
   const checkIfApplied = async () => {
     // Don't check if not authenticated
@@ -108,46 +127,46 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
   };
 
   return (
-    <div className="jdm-modal-overlay" onClick={onClose}>
-      <div className="jdm-modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="jdm-modal-header">
+    <div className="jdm-odyssey-modal-overlay" onClick={onClose}>
+      <div className={`jdm-odyssey-modal-content jdm-odyssey-modal-content--${modalTheme}`} onClick={(e) => e.stopPropagation()}>
+        <div className="jdm-odyssey-modal-header">
           <div>
-            <h2 className="jdm-job-title">{job.title}</h2>
-            <div className="jdm-company-info">
+            <h2 className="jdm-odyssey-job-title">{job.title}</h2>
+            <div className="jdm-odyssey-company-info">
               <Building2 size={16} />
               <span>{job.recruiterCompanyName}</span>
             </div>
           </div>
-          <button className="jdm-close-btn" onClick={onClose}>
+          <button className="jdm-odyssey-close-btn" onClick={onClose}>
             <X size={24} />
           </button>
         </div>
 
-        <div className="jdm-modal-body">
+        <div className="jdm-odyssey-modal-body">
           {/* Job Meta Info */}
-          <div className="jdm-job-meta">
-            <div className="jdm-meta-item">
+          <div className="jdm-odyssey-job-meta">
+            <div className="jdm-odyssey-meta-item">
               <DollarSign size={18} />
               <div>
                 <strong>Ngân Sách</strong>
                 <span>{formatBudget(job.minBudget, job.maxBudget)}</span>
               </div>
             </div>
-            <div className="jdm-meta-item">
+            <div className="jdm-odyssey-meta-item">
               <Calendar size={18} />
               <div>
                 <strong>Hạn Chót</strong>
                 <span>{formatDate(job.deadline)}</span>
               </div>
             </div>
-            <div className="jdm-meta-item">
+            <div className="jdm-odyssey-meta-item">
               <MapPin size={18} />
               <div>
                 <strong>Làm Việc</strong>
                 <span>{job.isRemote ? '🌐 Từ Xa' : `📍 ${job.location}`}</span>
               </div>
             </div>
-            <div className="jdm-meta-item">
+            <div className="jdm-odyssey-meta-item">
               <Briefcase size={18} />
               <div>
                 <strong>Ứng Viên</strong>
@@ -157,17 +176,17 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
           </div>
 
           {/* Description */}
-          <div className="jdm-section">
-            <h3 className="jdm-section-title">Mô Tả Công Việc</h3>
-            <p className="jdm-description">{job.description}</p>
+          <div className="jdm-odyssey-section">
+            <h3 className="jdm-odyssey-section-title">Mô Tả Công Việc</h3>
+            <p className="jdm-odyssey-description">{job.description}</p>
           </div>
 
           {/* Skills */}
-          <div className="jdm-section">
-            <h3 className="jdm-section-title">Kỹ Năng Yêu Cầu</h3>
-            <div className="jdm-skills">
+          <div className="jdm-odyssey-section">
+            <h3 className="jdm-odyssey-section-title">Kỹ Năng Yêu Cầu</h3>
+            <div className="jdm-odyssey-skills">
               {job.requiredSkills.map((skill, idx) => (
-                <span key={idx} className="jdm-skill-tag">
+                <span key={idx} className="jdm-odyssey-skill-tag">
                   {skill}
                 </span>
               ))}
@@ -176,30 +195,30 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
 
           {/* Apply Form */}
           {!showApplyForm && (
-            <div className="jdm-apply-section">
+            <div className="jdm-odyssey-apply-section">
               {!isAuthenticated ? (
                 <button
-                  className="jdm-apply-btn"
+                  className="jdm-odyssey-apply-btn"
                   onClick={() => navigate('/login')}
                 >
                   🔒 Đăng nhập để ứng tuyển
                 </button>
               ) : isOwnJob ? (
-                <div className="jdm-applied-badge" style={{ background: 'rgba(251, 146, 60, 0.1)', color: '#f97316', border: '2px solid rgba(251, 146, 60, 0.3)' }}>
+                <div className="jdm-odyssey-applied-badge" style={{ background: 'rgba(251, 146, 60, 0.1)', color: '#f97316', border: '2px solid rgba(251, 146, 60, 0.3)' }}>
                   📝 Đây là công việc bạn đã đăng
                 </div>
               ) : isCheckingApplied ? (
-                <button className="jdm-apply-btn" disabled>
+                <button className="jdm-odyssey-apply-btn" disabled>
                   <Clock size={18} />
                   Đang kiểm tra...
                 </button>
               ) : hasApplied ? (
-                <div className="jdm-applied-badge">
+                <div className="jdm-odyssey-applied-badge">
                   ✅ Bạn đã ứng tuyển cho công việc này
                 </div>
               ) : (
                 <button
-                  className="jdm-apply-btn"
+                  className="jdm-odyssey-apply-btn"
                   onClick={() => setShowApplyForm(true)}
                 >
                   🚀 Ứng Tuyển Ngay
@@ -209,12 +228,12 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
           )}
 
           {showApplyForm && !hasApplied && (
-            <form onSubmit={handleApply} className="jdm-apply-form">
-              <div className="jdm-form-group">
+            <form onSubmit={handleApply} className="jdm-odyssey-apply-form">
+              <div className="jdm-odyssey-form-group">
                 <label htmlFor="coverLetter">
                   Cover Letter (Tùy chọn)
                   {coverLetter && (
-                    <span className="jdm-char-count">
+                    <span className="jdm-odyssey-char-count">
                       {coverLetter.length} ký tự
                     </span>
                   )}
@@ -227,15 +246,15 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
                   rows={6}
                   maxLength={1000}
                 />
-                <small className="jdm-helper-text">
+                <small className="jdm-odyssey-helper-text">
                   Viết một lời giới thiệu ngắn gọn để tăng cơ hội được chọn.
                 </small>
               </div>
 
-              <div className="jdm-form-actions">
+              <div className="jdm-odyssey-form-actions">
                 <button
                   type="button"
-                  className="jdm-btn-secondary"
+                  className="jdm-odyssey-btn-secondary"
                   onClick={() => {
                     setShowApplyForm(false);
                     setCoverLetter('');
@@ -246,7 +265,7 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
                 </button>
                 <button
                   type="submit"
-                  className="jdm-btn-primary"
+                  className="jdm-odyssey-btn-primary"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? '⏳ Đang Gửi...' : '✅ Xác Nhận Ứng Tuyển'}

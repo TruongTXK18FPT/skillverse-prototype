@@ -1,0 +1,1631 @@
+/* ==================== ODYSSEY JOB BOARD STYLES - TECH TERMINAL ==================== */
+/* All classes prefixed with "odyssey-" for CSS isolation */
+
+/* ==================== FONT FACE ==================== */
+@font-face {
+  font-family: 'Space Habitat';
+  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ==================== CSS VARIABLES ==================== */
+:root {
+  /* Primary Colors - Blue/Cyan Dominant (Twisted Fate Odyssey Theme) */
+  --odyssey-primary-blue: #0ea5e9;
+  --odyssey-cyan: #06b6d4;
+  --odyssey-cyan-light: #22d3ee;
+  --odyssey-cyan-dark: #0891b2;
+  --odyssey-electric-blue: #3b82f6;
+  --odyssey-deep-blue: #1e3a8a;
+  --odyssey-navy: #0f172a;
+  --odyssey-teal: #14b8a6;
+
+  /* Accent Colors (Reduced Role) */
+  --odyssey-gold: #fbbf24;              /* Accent only - for bounty amounts */
+  --odyssey-gold-muted: #ca8a04;
+  --odyssey-crimson: #be123c;           /* Urgent states only */
+  --odyssey-purple: #6b21a8;
+
+  /* Base Colors */
+  --odyssey-bg: #0f0720;
+  --odyssey-void-black: #0a0412;
+  --odyssey-space-black: #020617;
+
+  /* Neon Glow Colors */
+  --odyssey-neon-cyan: rgba(6, 182, 212, 0.8);
+  --odyssey-neon-blue: rgba(59, 130, 246, 0.8);
+  --odyssey-neon-teal: rgba(20, 184, 166, 0.7);
+}
+
+/* ==================== LAYOUT - COCKPIT VIEW ==================== */
+.odyssey-container {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 50% 50%, #1a0b2e 0%, #0a0412 50%, #000000 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ==================== WORMHOLE BACKGROUND ==================== */
+.odyssey-wormhole {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 800px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.odyssey-wormhole__core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle,
+    rgba(6, 182, 212, 0.8) 0%,
+    rgba(59, 130, 246, 0.6) 30%,
+    rgba(20, 184, 166, 0.4) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: odyssey-wormhole-pulse 4s ease-in-out infinite;
+  filter: blur(3px);
+}
+
+.odyssey-wormhole__ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid transparent;
+  animation: odyssey-wormhole-spin 20s linear infinite;
+}
+
+.odyssey-wormhole__ring--1 {
+  width: 300px;
+  height: 300px;
+  border-color: rgba(6, 182, 212, 0.3);
+  animation-duration: 15s;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4), inset 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+.odyssey-wormhole__ring--2 {
+  width: 500px;
+  height: 500px;
+  border-color: rgba(59, 130, 246, 0.2);
+  animation-duration: 25s;
+  animation-direction: reverse;
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.3), inset 0 0 30px rgba(59, 130, 246, 0.15);
+}
+
+.odyssey-wormhole__ring--3 {
+  width: 700px;
+  height: 700px;
+  border-color: rgba(20, 184, 166, 0.15);
+  animation-duration: 35s;
+  box-shadow: 0 0 40px rgba(20, 184, 166, 0.2), inset 0 0 40px rgba(20, 184, 166, 0.1);
+}
+
+@keyframes odyssey-wormhole-pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes odyssey-wormhole-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* ==================== HYPERSPACE PARTICLES ==================== */
+.odyssey-hyperspace {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.odyssey-hyperspace__particle {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+  animation: odyssey-hyperspace-drift 5s ease-in-out infinite;
+}
+
+@keyframes odyssey-hyperspace-drift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-200px, -100px) scale(0.5);
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(-400px, -200px) scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* ==================== FLOATING CARDS - SPACE PIRATE AESTHETIC ==================== */
+.odyssey-floating-cards {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.odyssey-floating-cards__card {
+  position: absolute;
+  width: 40px;
+  height: 60px;
+  background: linear-gradient(135deg,
+    rgba(6, 182, 212, 0.15) 0%,
+    rgba(59, 130, 246, 0.1) 100%
+  );
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+  box-shadow:
+    0 0 15px rgba(6, 182, 212, 0.3),
+    inset 0 0 10px rgba(6, 182, 212, 0.1);
+  animation: odyssey-card-float 15s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.odyssey-floating-cards__card::before {
+  content: attr(data-symbol);
+  font-size: 1.5rem;
+  color: rgba(6, 182, 212, 0.4);
+  font-family: 'Space Habitat', monospace;
+}
+
+/* Varying animation delays and durations for natural effect */
+.odyssey-floating-cards__card:nth-child(odd) {
+  animation-duration: 18s;
+}
+
+.odyssey-floating-cards__card:nth-child(3n) {
+  animation-duration: 22s;
+  animation-direction: reverse;
+}
+
+@keyframes odyssey-card-float {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-100px, -300px) rotate(15deg);
+    opacity: 0.4;
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate(-200px, -600px) rotate(30deg);
+    opacity: 0;
+  }
+}
+
+/* ==================== CYBERPUNK GRID OVERLAY ==================== */
+.odyssey-grid-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+}
+
+.odyssey-grid-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    transparent 0%,
+    rgba(6, 182, 212, 0.02) 40%,
+    transparent 100%
+  );
+  animation: odyssey-grid-pulse 8s ease-in-out infinite;
+}
+
+@keyframes odyssey-grid-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+/* ==================== NEON SCAN LINES ==================== */
+.odyssey-scan-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(6, 182, 212, 0.03) 2px,
+    rgba(6, 182, 212, 0.03) 4px
+  );
+  animation: odyssey-scan 6s linear infinite;
+}
+
+@keyframes odyssey-scan {
+  from { transform: translateY(0); }
+  to { transform: translateY(100px); }
+}
+
+/* ==================== VIEWPORT FRAME - COCKPIT WINDOW ==================== */
+.odyssey-viewport {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.odyssey-viewport__frame-top,
+.odyssey-viewport__frame-bottom,
+.odyssey-viewport__frame-left,
+.odyssey-viewport__frame-right {
+  position: absolute;
+  background: linear-gradient(135deg,
+    rgba(30, 27, 75, 0.95) 0%,
+    rgba(15, 7, 32, 0.98) 50%,
+    rgba(10, 4, 18, 1) 100%
+  );
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+.odyssey-viewport__frame-top {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  border-bottom: 3px solid rgba(251, 191, 36, 0.4);
+  box-shadow:
+    inset 0 -10px 30px rgba(0, 0, 0, 0.8),
+    0 3px 15px rgba(251, 191, 36, 0.3);
+}
+
+.odyssey-viewport__frame-bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  border-top: 3px solid rgba(251, 191, 36, 0.4);
+  box-shadow:
+    inset 0 10px 30px rgba(0, 0, 0, 0.8),
+    0 -3px 15px rgba(251, 191, 36, 0.3);
+}
+
+.odyssey-viewport__frame-left {
+  top: 60px;
+  bottom: 50px;
+  left: 0;
+  width: 40px;
+  border-right: 2px solid rgba(251, 191, 36, 0.3);
+  box-shadow:
+    inset -10px 0 30px rgba(0, 0, 0, 0.8),
+    2px 0 10px rgba(251, 191, 36, 0.2);
+}
+
+.odyssey-viewport__frame-right {
+  top: 60px;
+  bottom: 50px;
+  right: 0;
+  width: 40px;
+  border-left: 2px solid rgba(251, 191, 36, 0.3);
+  box-shadow:
+    inset 10px 0 30px rgba(0, 0, 0, 0.8),
+    -2px 0 10px rgba(251, 191, 36, 0.2);
+}
+
+/* Corner Bolts */
+.odyssey-viewport__bolt {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.8) 0%, rgba(150, 100, 20, 0.6) 100%);
+  border: 2px solid rgba(100, 60, 10, 0.8);
+  border-radius: 50%;
+  box-shadow:
+    0 0 10px rgba(251, 191, 36, 0.6),
+    inset 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.odyssey-viewport__bolt--tl {
+  top: 54px;
+  left: 34px;
+}
+
+.odyssey-viewport__bolt--tr {
+  top: 54px;
+  right: 34px;
+}
+
+.odyssey-viewport__bolt--bl {
+  bottom: 44px;
+  left: 34px;
+}
+
+.odyssey-viewport__bolt--br {
+  bottom: 44px;
+  right: 34px;
+}
+
+/* ==================== HUD PANELS ==================== */
+.odyssey-hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;
+  font-family: 'Space Habitat', 'Rajdhani', monospace;
+}
+
+.odyssey-hud__top {
+  position: absolute;
+  top: 15px;
+  left: 60px;
+  right: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.odyssey-hud__bottom {
+  position: absolute;
+  bottom: 15px;
+  left: 60px;
+  right: 60px;
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.odyssey-hud__status,
+.odyssey-hud__coords,
+.odyssey-hud__warning {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(10, 4, 18, 0.8);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  backdrop-filter: blur(5px);
+}
+
+.odyssey-hud__indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.odyssey-hud__indicator--active {
+  background: #22d3ee;
+  box-shadow: 0 0 15px #22d3ee;
+}
+
+.odyssey-hud__indicator--pulse {
+  background: var(--odyssey-gold);
+  animation: odyssey-pulse 2s infinite;
+}
+
+.odyssey-hud__text {
+  font-size: 0.75rem;
+  color: rgba(251, 191, 36, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
+}
+
+.odyssey-hud__label {
+  font-size: 0.7rem;
+  color: rgba(251, 191, 36, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.odyssey-hud__value {
+  font-size: 0.75rem;
+  color: #22d3ee;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 5px rgba(34, 211, 238, 0.5);
+}
+
+/* ==================== CONTENT AREA ==================== */
+.odyssey-content {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  padding: 2rem 1rem 8rem 1rem;
+}
+
+/* ==================== HEADER - VIEWPORT PROJECTION ==================== */
+.odyssey-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+  padding: 2rem 1rem;
+  background:
+    linear-gradient(180deg, rgba(15, 7, 32, 0.0) 0%, rgba(15, 7, 32, 0.5) 100%);
+}
+
+/* Holographic Scanlines Effect */
+.odyssey-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(251, 191, 36, 0.02) 3px,
+    rgba(251, 191, 36, 0.02) 4px
+  );
+  pointer-events: none;
+  animation: odyssey-scanline 8s linear infinite;
+}
+
+@keyframes odyssey-scanline {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(20px);
+  }
+}
+
+.odyssey-header__title {
+  font-family: 'Space Habitat', monospace;
+  font-size: 4rem;
+  font-weight: bold;
+  color: var(--odyssey-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  text-shadow:
+    0 0 20px var(--odyssey-neon-cyan),
+    0 0 40px rgba(6, 182, 212, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.8);
+  margin: 0;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--odyssey-cyan);
+  display: inline-block;
+  position: relative;
+  /* Viewport Glass Effect */
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
+}
+
+.odyssey-header__title::before,
+.odyssey-header__title::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 3px;
+  background: var(--odyssey-cyan);
+  bottom: -3px;
+  box-shadow: 0 0 10px var(--odyssey-neon-cyan);
+}
+
+.odyssey-header__title::before {
+  left: -40px;
+}
+
+.odyssey-header__title::after {
+  right: -40px;
+}
+
+.odyssey-header__subtitle {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1rem;
+  color: var(--odyssey-cyan-light);
+  margin-top: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  opacity: 0.7;
+  text-shadow: 0 0 10px var(--odyssey-neon-cyan);
+}
+
+
+/* ==================== CARDS GRID ==================== */
+.odyssey-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  padding: 0 1rem;
+  justify-content: center;
+}
+
+/* ==================== TECH-SLATE CARD - ANGULAR & HOLOGRAPHIC ==================== */
+.odyssey-card-wrapper {
+  perspective: 1500px;
+  cursor: pointer;
+}
+
+.odyssey-card {
+  position: relative;
+  min-height: 500px;
+  width: 100%;
+  aspect-ratio: 2/3;
+  background:
+    /* Tech Grid Pattern */
+    linear-gradient(rgba(8, 3, 20, 0.98), rgba(8, 3, 20, 0.98)),
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(6, 182, 212, 0.02) 10px, rgba(6, 182, 212, 0.02) 11px),
+    linear-gradient(180deg, #0f1729 0%, #020617 100%);
+  /* ANGULAR - NO BORDER RADIUS */
+  border-radius: 0;
+  /* Chamfered Corners */
+  clip-path: polygon(
+    20px 0, 100% 0,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    0 100%,
+    0 20px
+  );
+  /* Double Border Effect */
+  border: 2px solid var(--odyssey-cyan);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.9),
+    0 0 30px var(--odyssey-neon-cyan),
+    0 0 60px rgba(6, 182, 212, 0.2),
+    inset 0 0 40px rgba(6, 182, 212, 0.08);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
+
+/* Inner Hologram Border with Data Stream Effect */
+.odyssey-card::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  clip-path: polygon(
+    15px 0, 100% 0,
+    100% calc(100% - 15px),
+    calc(100% - 15px) 100%,
+    0 100%,
+    0 15px
+  );
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(6, 182, 212, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: odyssey-data-stream 4s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes odyssey-data-stream {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+/* Geometric Watermark - "Eye Symbol" with Particle Trail */
+.odyssey-card::after {
+  content: '◈';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 15rem;
+  color: rgba(6, 182, 212, 0.04);
+  pointer-events: none;
+  z-index: 0;
+  font-family: 'Space Habitat', monospace;
+  transition: all 0.3s ease;
+}
+
+/* Particle Trail Effect on Hover */
+.odyssey-card-wrapper:hover .odyssey-card::after {
+  animation: odyssey-particle-trail 1s ease-out;
+}
+
+@keyframes odyssey-particle-trail {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(6, 182, 212, 0.4),
+      0 0 0 0 rgba(6, 182, 212, 0.3),
+      0 0 0 0 rgba(6, 182, 212, 0.2);
+  }
+  100% {
+    box-shadow:
+      0 -20px 40px -20px rgba(6, 182, 212, 0),
+      0 -40px 80px -40px rgba(6, 182, 212, 0),
+      0 -60px 120px -60px rgba(6, 182, 212, 0);
+  }
+}
+
+.odyssey-card-wrapper:hover .odyssey-card {
+  transform: translateY(-12px) perspective(1000px) rotateY(2deg);
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.95),
+    0 0 50px var(--odyssey-neon-cyan),
+    0 0 100px rgba(6, 182, 212, 0.4),
+    inset 0 0 60px rgba(6, 182, 212, 0.12);
+}
+
+/* Rarity Variants */
+/* Blue/Cyan (Common) - Primary theme, most prominent */
+.odyssey-card--blue {
+  border-color: var(--odyssey-cyan);
+  background:
+    linear-gradient(rgba(8, 3, 20, 0.98), rgba(8, 3, 20, 0.98)),
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(6, 182, 212, 0.02) 10px, rgba(6, 182, 212, 0.02) 11px),
+    linear-gradient(180deg, rgba(6, 182, 212, 0.06) 0%, rgba(15, 23, 42, 0.95) 100%);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.9),
+    0 0 30px var(--odyssey-neon-cyan),
+    0 0 60px rgba(6, 182, 212, 0.2),
+    inset 0 0 40px rgba(6, 182, 212, 0.08);
+}
+
+.odyssey-card--blue::after {
+  color: rgba(6, 182, 212, 0.08);
+}
+
+.odyssey-card--blue::before {
+  border-color: rgba(6, 182, 212, 0.5);
+}
+
+.odyssey-card--blue:hover {
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.95),
+    0 0 50px var(--odyssey-neon-cyan),
+    0 0 100px rgba(6, 182, 212, 0.4),
+    inset 0 0 60px rgba(6, 182, 212, 0.12);
+}
+
+/* Gold (High Salary) - Subtle accent, reduced prominence */
+.odyssey-card--gold {
+  border-color: var(--odyssey-gold-muted);
+  background:
+    linear-gradient(rgba(8, 3, 20, 0.98), rgba(8, 3, 20, 0.98)),
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(251, 191, 36, 0.02) 10px, rgba(251, 191, 36, 0.02) 11px),
+    linear-gradient(180deg, rgba(251, 191, 36, 0.06) 0%, rgba(15, 23, 42, 0.95) 100%);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.9),
+    0 0 20px rgba(202, 138, 4, 0.3),
+    0 0 40px rgba(6, 182, 212, 0.15),
+    inset 0 0 30px rgba(251, 191, 36, 0.06);
+}
+
+.odyssey-card--gold::after {
+  color: rgba(251, 191, 36, 0.08);
+}
+
+.odyssey-card--gold::before {
+  border-color: rgba(251, 191, 36, 0.6);
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(251, 191, 36, 0.15) 50%,
+    transparent 70%
+  );
+}
+
+.odyssey-card--gold:hover {
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.95),
+    0 0 35px rgba(251, 191, 36, 0.5),
+    0 0 70px rgba(6, 182, 212, 0.3),
+    inset 0 0 50px rgba(251, 191, 36, 0.1);
+}
+
+/* Crimson (Urgent) - Keep for urgency with cyan undertones */
+.odyssey-card--crimson {
+  border-color: var(--odyssey-crimson);
+  background:
+    linear-gradient(rgba(8, 3, 20, 0.98), rgba(8, 3, 20, 0.98)),
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(190, 18, 60, 0.02) 10px, rgba(190, 18, 60, 0.02) 11px),
+    linear-gradient(180deg, rgba(190, 18, 60, 0.06) 0%, rgba(15, 23, 42, 0.95) 100%);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.9),
+    0 0 25px rgba(190, 18, 60, 0.4),
+    0 0 50px rgba(6, 182, 212, 0.2),
+    inset 0 0 30px rgba(190, 18, 60, 0.08);
+  animation: odyssey-pulse 2s infinite;
+}
+
+.odyssey-card--crimson::after {
+  color: rgba(190, 18, 60, 0.08);
+}
+
+.odyssey-card--crimson::before {
+  border-color: rgba(190, 18, 60, 0.7);
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(190, 18, 60, 0.2) 50%,
+    transparent 70%
+  );
+}
+
+.odyssey-card--crimson:hover {
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.95),
+    0 0 50px rgba(190, 18, 60, 0.7),
+    0 0 80px rgba(6, 182, 212, 0.3),
+    inset 0 0 50px rgba(190, 18, 60, 0.12);
+}
+
+@keyframes odyssey-pulse {
+  0%, 100% {
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.9),
+      0 0 25px rgba(190, 18, 60, 0.4),
+      0 0 50px rgba(6, 182, 212, 0.2),
+      inset 0 0 30px rgba(190, 18, 60, 0.08);
+  }
+  50% {
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.9),
+      0 0 40px rgba(190, 18, 60, 0.6),
+      0 0 70px rgba(6, 182, 212, 0.3),
+      inset 0 0 40px rgba(190, 18, 60, 0.12);
+  }
+}
+
+/* ==================== CARD CONTENT CONTAINER ==================== */
+.odyssey-card__content-wrapper {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Holographic Shimmer Effect */
+.odyssey-card__content-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(6, 182, 212, 0.1) 50%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+/* ==================== CARD HEADER - FACTION ==================== */
+.odyssey-card__faction {
+  text-align: center;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.odyssey-card__faction-ring {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto;
+  /* Angular - Octagon shape */
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  border: 3px solid var(--odyssey-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 182, 212, 0.15);
+  box-shadow: 0 0 25px var(--odyssey-neon-cyan), inset 0 0 15px rgba(6, 182, 212, 0.2);
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--odyssey-cyan-light);
+  font-family: 'Space Habitat', monospace;
+  letter-spacing: 0.05em;
+  position: relative;
+}
+
+/* Pulsing Outer Ring Effect */
+.odyssey-card__faction-ring::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  animation: odyssey-ring-pulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes odyssey-ring-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+.odyssey-card__company {
+  font-size: 0.8rem;
+  color: var(--odyssey-cyan-light);
+  margin-top: 0.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  opacity: 0.85;
+}
+
+/* ==================== CORNER HOLOGRAM INDICATORS ==================== */
+.odyssey-card__corner-indicator {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--odyssey-cyan);
+  opacity: 0.6;
+  z-index: 3;
+}
+
+.odyssey-card__corner-indicator--tl {
+  top: 0;
+  left: 0;
+  border-bottom: none;
+  border-right: none;
+  box-shadow: -2px -2px 10px var(--odyssey-neon-cyan);
+}
+
+.odyssey-card__corner-indicator--br {
+  bottom: 0;
+  right: 0;
+  border-top: none;
+  border-left: none;
+  box-shadow: 2px 2px 10px var(--odyssey-neon-cyan);
+}
+
+/* ==================== CARD CONTENT ==================== */
+.odyssey-card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.odyssey-card__title {
+  font-family: 'Inter', 'Roboto', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.4;
+  text-align: left;
+  min-height: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  padding-left: 0.5rem;
+  border-left: 3px solid var(--odyssey-cyan);
+  padding-left: 0.75rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Glitch Effect on Card Hover */
+.odyssey-card-wrapper:hover .odyssey-card__title {
+  animation: odyssey-glitch 0.3s ease-in-out;
+}
+
+@keyframes odyssey-glitch {
+  0%, 100% {
+    transform: translate(0);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  }
+  20% {
+    transform: translate(-2px, 1px);
+    text-shadow: 2px 0 var(--odyssey-cyan), -2px 0 var(--odyssey-electric-blue);
+  }
+  40% {
+    transform: translate(-2px, -1px);
+    text-shadow: -1px 0 var(--odyssey-cyan), 1px 0 var(--odyssey-electric-blue);
+  }
+  60% {
+    transform: translate(2px, 1px);
+    text-shadow: 1px 0 var(--odyssey-cyan), -1px 0 var(--odyssey-electric-blue);
+  }
+  80% {
+    transform: translate(1px, -1px);
+    text-shadow: -2px 0 var(--odyssey-cyan), 2px 0 var(--odyssey-electric-blue);
+  }
+}
+
+.odyssey-card__description {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  margin: 0;
+  max-height: 4.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* ==================== TAGS ==================== */
+.odyssey-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.odyssey-card__tag {
+  padding: 0.3rem 0.7rem;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.5);
+  clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+  font-size: 0.68rem;
+  color: var(--odyssey-gold);
+  white-space: nowrap;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ==================== BOUNTY - HOLOGRAM PROJECTION ==================== */
+.odyssey-card__bounty {
+  margin: auto 0 1rem;
+  text-align: center;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(251, 191, 36, 0.3);
+  border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+  position: relative;
+  z-index: 2;
+}
+
+.odyssey-card__bounty-label {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.7rem;
+  color: rgba(6, 182, 212, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.5rem;
+}
+
+.odyssey-card__bounty-amount {
+  font-family: 'Orbitron', 'Rajdhani', 'Exo 2', 'Share Tech Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--odyssey-gold);
+  /* Gold with Cyan Underglow */
+  text-shadow:
+    0 0 15px rgba(251, 191, 36, 0.9),
+    0 0 30px rgba(251, 191, 36, 0.5),
+    0 0 45px rgba(6, 182, 212, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.9);
+  margin: 0;
+  letter-spacing: 1px;
+  filter: brightness(1.1);
+  position: relative;
+}
+
+/* ==================== CARD FOOTER ==================== */
+.odyssey-card__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(6, 182, 212, 0.2);
+  position: relative;
+  z-index: 2;
+}
+
+.odyssey-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.odyssey-card__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.odyssey-card__meta-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.8;
+  color: var(--odyssey-cyan);
+}
+
+/* ==================== PICK CARD BUTTON - ANGULAR WITH NEON GLOW ==================== */
+.odyssey-card__btn {
+  padding: 0.8rem 1.5rem;
+  background: linear-gradient(135deg,
+    var(--odyssey-cyan-dark) 0%,
+    var(--odyssey-cyan) 50%,
+    var(--odyssey-cyan-light) 100%
+  );
+  border: 2px solid var(--odyssey-cyan-light);
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  color: var(--odyssey-space-black);
+  font-weight: bold;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  box-shadow:
+    0 4px 15px var(--odyssey-neon-cyan),
+    0 0 30px rgba(6, 182, 212, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  white-space: nowrap;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shine Sweep Effect */
+.odyssey-card__btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.odyssey-card__btn:hover::before {
+  transform: translateX(100%);
+}
+
+.odyssey-card__btn:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 6px 25px var(--odyssey-neon-cyan),
+    0 0 50px rgba(6, 182, 212, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg,
+    var(--odyssey-cyan) 0%,
+    var(--odyssey-cyan-light) 50%,
+    #22d3ee 100%
+  );
+}
+
+.odyssey-card__btn:active {
+  transform: scale(0.98);
+}
+
+.odyssey-card__btn-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ==================== LOADING STATE ==================== */
+.odyssey-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1.5rem;
+  color: var(--odyssey-cyan);
+}
+
+.odyssey-loading__spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(6, 182, 212, 0.2);
+  border-top-color: var(--odyssey-cyan);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  animation: odyssey-spin 1s linear infinite;
+  box-shadow: 0 0 30px var(--odyssey-neon-cyan);
+}
+
+@keyframes odyssey-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.odyssey-loading__text {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--odyssey-cyan);
+  text-shadow: 0 0 15px var(--odyssey-neon-cyan);
+}
+
+/* ==================== EMPTY STATE ==================== */
+.odyssey-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 3rem;
+  text-align: center;
+}
+
+.odyssey-empty__icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  opacity: 0.6;
+  filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.3));
+}
+
+.odyssey-empty__title {
+  font-family: 'Space Habitat', monospace;
+  font-size: 2rem;
+  color: var(--odyssey-gold);
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+  text-shadow: 0 0 15px rgba(251, 191, 36, 0.8);
+}
+
+.odyssey-empty__text {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+/* ==================== FILTER CONSOLE - CONTROL PANEL ==================== */
+.odyssey-filter-console {
+  max-width: 100%;
+  margin: 0 0 2rem 0;
+  background:
+    linear-gradient(rgba(15, 7, 32, 0.95), rgba(15, 7, 32, 0.95)),
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(6, 182, 212, 0.03) 10px, rgba(6, 182, 212, 0.03) 11px);
+  border: 2px solid rgba(6, 182, 212, 0.4);
+  border-radius: 12px;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.8),
+    0 0 20px var(--odyssey-neon-cyan),
+    inset 0 0 30px rgba(6, 182, 212, 0.05);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.odyssey-filter-console::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.odyssey-filter-console__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid rgba(6, 182, 212, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.05), transparent);
+}
+
+.odyssey-filter-console__header:hover {
+  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent);
+}
+
+.odyssey-filter-console__content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.odyssey-filter-console__content--expanded {
+  max-height: 1000px;
+  opacity: 1;
+  padding: 2rem;
+}
+
+.odyssey-filter-console__toggle {
+  background: transparent;
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  color: var(--odyssey-cyan);
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.odyssey-filter-console__toggle:hover {
+  border-color: var(--odyssey-cyan);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+}
+
+.odyssey-filter-console__indicator {
+  width: 8px;
+  height: 8px;
+  background: var(--odyssey-cyan);
+  box-shadow: 0 0 10px var(--odyssey-neon-cyan);
+  animation: odyssey-pulse 2s infinite;
+}
+
+.odyssey-filter-console__title {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.2rem;
+  color: var(--odyssey-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin: 0;
+  text-shadow: 0 0 10px var(--odyssey-neon-cyan);
+}
+
+.odyssey-filter-console__section {
+  margin-bottom: 1.5rem;
+}
+
+.odyssey-filter-console__label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: rgba(6, 182, 212, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+}
+
+.odyssey-filter-console__label-icon {
+  color: var(--odyssey-cyan);
+  font-size: 0.7rem;
+}
+
+/* Search Input in Console */
+.odyssey-filter-console__search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.odyssey-filter-console__search-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--odyssey-cyan);
+  z-index: 2;
+}
+
+.odyssey-filter-console__search-input {
+  width: 100%;
+  padding: 0.9rem 1rem 0.9rem 3rem;
+  background: rgba(10, 4, 18, 0.8);
+  border: 2px solid rgba(6, 182, 212, 0.4);
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  color: #fff;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.odyssey-filter-console__search-input:focus {
+  outline: none;
+  border-color: var(--odyssey-cyan);
+  box-shadow: 0 0 20px var(--odyssey-neon-cyan), inset 0 0 10px rgba(6, 182, 212, 0.1);
+}
+
+.odyssey-filter-console__search-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Toggle Switches - LED Style */
+.odyssey-filter-console__toggle-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.odyssey-filter-console__toggle {
+  position: relative;
+  padding: 0.8rem 1.5rem;
+  background: rgba(15, 7, 32, 0.6);
+  border: 2px solid rgba(6, 182, 212, 0.3);
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  backdrop-filter: blur(5px);
+}
+
+.odyssey-filter-console__toggle-led {
+  width: 6px;
+  height: 6px;
+  background: rgba(6, 182, 212, 0.3);
+  box-shadow: 0 0 5px rgba(6, 182, 212, 0.3);
+  transition: all 0.3s ease;
+}
+
+.odyssey-filter-console__toggle:hover {
+  border-color: rgba(6, 182, 212, 0.6);
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 15px var(--odyssey-neon-cyan);
+}
+
+.odyssey-filter-console__toggle--active {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: var(--odyssey-cyan);
+  color: var(--odyssey-cyan-light);
+  box-shadow: 0 0 20px var(--odyssey-neon-cyan), inset 0 0 10px rgba(6, 182, 212, 0.1);
+}
+
+.odyssey-filter-console__toggle--active .odyssey-filter-console__toggle-led {
+  background: var(--odyssey-cyan);
+  box-shadow: 0 0 10px var(--odyssey-neon-cyan);
+}
+
+/* Range Inputs - Digital Display Style */
+.odyssey-filter-console__range-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.odyssey-filter-console__range-input {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.odyssey-filter-console__range-label {
+  font-size: 0.7rem;
+  color: rgba(6, 182, 212, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.odyssey-filter-console__input {
+  padding: 0.8rem 1rem;
+  background: rgba(10, 4, 18, 0.8);
+  border: 2px solid rgba(6, 182, 212, 0.4);
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  color: var(--odyssey-cyan-light);
+  font-family: 'Courier New', 'Courier Prime', 'Consolas', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px var(--odyssey-neon-cyan);
+}
+
+.odyssey-filter-console__input:focus {
+  outline: none;
+  border-color: var(--odyssey-cyan);
+  box-shadow: 0 0 15px var(--odyssey-neon-cyan), inset 0 0 10px rgba(6, 182, 212, 0.1);
+}
+
+.odyssey-filter-console__input::placeholder {
+  color: rgba(6, 182, 212, 0.3);
+}
+
+.odyssey-filter-console__range-separator {
+  color: var(--odyssey-cyan);
+  font-size: 1.2rem;
+  padding-top: 1.5rem;
+}
+
+/* Reset Button */
+.odyssey-filter-console__reset {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, rgba(190, 18, 60, 0.2) 0%, rgba(190, 18, 60, 0.3) 100%);
+  border: 2px solid rgba(190, 18, 60, 0.5);
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  color: var(--odyssey-crimson);
+  font-weight: bold;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 0 15px rgba(190, 18, 60, 0.3);
+}
+
+.odyssey-filter-console__reset:hover {
+  background: linear-gradient(135deg, rgba(190, 18, 60, 0.3) 0%, rgba(190, 18, 60, 0.4) 100%);
+  border-color: var(--odyssey-crimson);
+  box-shadow: 0 0 25px rgba(190, 18, 60, 0.5);
+  transform: translateY(-2px);
+}
+
+.odyssey-filter-console__reset:active {
+  transform: translateY(0);
+}
+
+.odyssey-filter-console__reset-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  /* Content Area */
+  .odyssey-content {
+    padding: 2rem 1rem;
+  }
+
+  /* Header */
+  .odyssey-header__title {
+    font-size: 2.5rem;
+    letter-spacing: 0.15em;
+  }
+
+  .odyssey-header__subtitle {
+    font-size: 0.85rem;
+  }
+
+  /* Grid */
+  .odyssey-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 340px;
+  }
+
+  .odyssey-card {
+    min-height: 480px;
+  }
+
+  .odyssey-card__title {
+    font-size: 1.1rem;
+  }
+
+  .odyssey-card__bounty-amount {
+    font-size: 1.4rem;
+  }
+
+  /* Filter Console Mobile */
+  .odyssey-filter-console {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .odyssey-filter-console__title {
+    font-size: 1rem;
+  }
+
+  .odyssey-filter-console__toggle-group {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .odyssey-filter-console__toggle {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .odyssey-filter-console__range-group {
+    flex-direction: column;
+  }
+
+  .odyssey-filter-console__range-separator {
+    padding-top: 0;
+    transform: rotate(90deg);
+  }
+
+  /* Wormhole */
+  .odyssey-wormhole {
+    width: 600px;
+    height: 600px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .odyssey-grid {
+    grid-template-columns: repeat(2, minmax(280px, 320px));
+  }
+}
+
+@media (min-width: 1025px) {
+  .odyssey-grid {
+    grid-template-columns: repeat(3, minmax(280px, 320px));
+  }
+}
+
+/* ==================== BADGE INDICATORS ==================== */
+.odyssey-card__badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.4rem 0.8rem;
+  clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  z-index: 10;
+}
+
+.odyssey-card__badge--urgent {
+  background: var(--odyssey-crimson);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 15px rgba(190, 18, 60, 0.8);
+}
+
+.odyssey-card__badge--remote {
+  background: rgba(251, 191, 36, 0.2);
+  border: 1px solid var(--odyssey-gold);
+  color: var(--odyssey-gold);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+}
