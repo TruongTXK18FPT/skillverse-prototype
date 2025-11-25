@@ -13,8 +13,9 @@ import MentorshipPage from './pages/navbar/MentorshipPage';
 import CommunityHUD from './components/community-hud/CommunityHUD';
 import BroadcastForm from './components/community-hud/BroadcastForm';
 import JobsPage from './pages/navbar/JobsPage';
-import ChatbotPage from './pages/navbar/ChatbotPage';
-import AiChatbotPage from './pages/navbar/AiChatbotPage';
+import CareerChatPage from './pages/navbar/CareerChatPage';
+import CareerChatLanding from './pages/navbar/CareerChatLanding';
+import ExpertChatPage from './pages/navbar/ExpertChatPage';
 import Gamification from './pages/navbar/Gamification';
 import PortfolioPage from './pages/navbar/PortfolioPage';
 import PortfolioDebug from './pages/navbar/PortfolioDebug';
@@ -96,8 +97,9 @@ const App = () => {
                     <Route path="/community" element={<CommunityHUD />} />
                     <Route path="/community/create" element={<BroadcastForm />} />
                     <Route path="/jobs" element={<JobsPage />} />
-                    <Route path="/chatbot" element={<AiChatbotPage />} />
-                    <Route path="/chatbot-old" element={<ChatbotPage />} />
+                    <Route path="/chatbot" element={<CareerChatLanding />} />
+                    <Route path="/chatbot/general" element={<CareerChatPage />} />
+                    <Route path="/chatbot/expert" element={<ExpertChatPage />} />
                     <Route path="/gamification" element={<Gamification />} />
                     <Route path="/portfolio" element={<PortfolioPage />} />
                     <Route path="/portfolio-debug" element={<PortfolioDebug />} />
@@ -194,6 +196,8 @@ const fullScreenRoutes = new Set<string>([
 const hideFooterOnlyRoutes = new Set<string>([
   '/choose-role',
   '/chatbot',
+  '/chatbot/general',
+  '/chatbot/expert',
   '/roadmap',
   '/cv',
   '/admin',

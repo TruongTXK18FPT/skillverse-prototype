@@ -15,7 +15,8 @@ import meowlVietNam from '../assets/meowl-skin/meowl-vietnam.png';
 import meowlRain from '../assets/meowl-skin/meowl-rain.png';
 import meowlNonLa from '../assets/meowl-skin/meowl-nonla.png';
 import meowlYasuo from '../assets/meowl-skin/meowl-yasuo.png';
-export type MeowlSkinType = 'default' | 'santa' | 'satan' | 'gold'|'business'|'user'|'mentor'|'t1'|'angel'|'mu'|'vietnam'|'rain'|'nonla'|'yasuo';
+import meowlRobot from '../assets/meowl-skin/meowl-robotic.png';
+export type MeowlSkinType = 'default' | 'santa' | 'satan' | 'gold'|'business'|'user'|'mentor'|'t1'|'angel'|'mu'|'vietnam'|'rain'|'nonla'|'yasuo'|'robotic';
 
 interface MeowlSkin {
   id: MeowlSkinType;
@@ -108,6 +109,12 @@ export const MEOWL_SKINS: MeowlSkin[] = [
     name: 'Yasuo Meowl',
     nameVi: 'Meowl Yasuo',
     image: meowlYasuo
+  },
+  {
+    id: 'robotic',
+    name: 'Robot Meowl',
+    nameVi: 'Meowl Robot',
+    image: meowlRobot
   }
 ];
 

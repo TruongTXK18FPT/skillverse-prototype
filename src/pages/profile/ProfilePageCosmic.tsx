@@ -10,6 +10,7 @@ import { UserSubscriptionResponse } from '../../data/premiumDTOs';
 import silverFrame from '../../assets/premium/silver_avatar.png';
 import goldenFrame from '../../assets/premium/golden_avatar.png';
 import diamondFrame from '../../assets/premium/diamond_avatar.png';
+import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/ProfilePageCosmic.css';
 import '../../styles/ProfileSecurityCosmic.css';
 
@@ -30,6 +31,7 @@ const ProfilePageCosmic = () => {
   const [showPositionControls, setShowPositionControls] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [showSecurityInfo, setShowSecurityInfo] = useState(false);
 
   const [editData, setEditData] = useState({
     fullName: '',
@@ -497,7 +499,13 @@ const ProfilePageCosmic = () => {
         <div className="cosmic-security-compact">
           {/* Set Password - For Google users WITHOUT password */}
           {user?.authProvider === 'GOOGLE' && !user?.googleLinked && (
-            <div className="cosmic-security-card cosmic-security-card--highlight">
+            <div 
+              className="cosmic-security-card cosmic-security-card--highlight"
+              style={{
+                border: getPremiumColor() ? `2px solid ${getPremiumColor()}` : undefined,
+                boxShadow: getPremiumColor() ? `0 0 20px rgba(${hexToRgb(getPremiumColor()!)}, 0.2)` : undefined
+              }}
+            >
               <div className="cosmic-security-card-header">
                 <div className="cosmic-security-card-icon">
                   <Shield size={20} />
@@ -524,7 +532,33 @@ const ProfilePageCosmic = () => {
 
           {/* Change Password - For LOCAL users OR Google users WITH password */}
           {(user?.authProvider === 'LOCAL' || (user?.authProvider === 'GOOGLE' && user?.googleLinked)) && (
-            <div className="cosmic-security-card">
+            <div 
+              className="cosmic-security-card"
+              style={{
+                border: getPremiumColor() ? `2px solid ${getPremiumColor()}` : undefined,
+                boxShadow: getPremiumColor() ? `0 0 20px rgba(${hexToRgb(getPremiumColor()!)}, 0.2)` : undefined,
+                position: 'relative'
+              }}
+            >
+              {/* Security Info Button inside the card */}
+              {user?.authProvider === 'GOOGLE' && user?.googleLinked && (
+                <button 
+                  className="cosmic-security-info-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowSecurityInfo(true);
+                  }}
+                  title="Thông tin bảo mật"
+                  style={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px'
+                  }}
+                >
+                  !
+                </button>
+              )}
+
               <div className="cosmic-security-card-header">
                 <div className="cosmic-security-card-icon">
                   <Lock size={20} />
@@ -547,12 +581,43 @@ const ProfilePageCosmic = () => {
           )}
         </div>
 
-        {/* Dual Auth Success Info */}
-        {user?.authProvider === 'GOOGLE' && user?.googleLinked && (
-          <div className="cosmic-security-info">
-            <div className="cosmic-security-info-icon">✅</div>
-            <div className="cosmic-security-info-text">
-              <strong>Xác thực kép đã kích hoạt:</strong> Bạn có thể đăng nhập bằng cả Google và email+password.
+        {/* Security Info Modal */}
+        {showSecurityInfo && (
+          <div className="cosmic-modal-overlay" onClick={() => setShowSecurityInfo(false)}>
+            <div className="cosmic-modal" onClick={e => e.stopPropagation()}>
+              <div className="cosmic-modal-header">
+                <h3>Trạng thái bảo mật</h3>
+                <button className="cosmic-modal-close" onClick={() => setShowSecurityInfo(false)}>
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="cosmic-modal-content">
+                <div className="cosmic-security-status-icon">
+                  <Shield size={48} color="#10b981" />
+                </div>
+                <h4 className="cosmic-security-status-title">Xác thực kép đã kích hoạt</h4>
+                <p className="cosmic-security-status-desc">
+                  Tài khoản của bạn hiện được bảo vệ bởi hai lớp xác thực. Bạn có thể đăng nhập bằng cả:
+                </p>
+                <ul className="cosmic-security-methods">
+                  <li>
+                    <span className="method-icon">G</span>
+                    <span>Google OAuth (Gmail)</span>
+                  </li>
+                  <li>
+                    <span className="method-icon">✉️</span>
+                    <span>Email & Mật khẩu</span>
+                  </li>
+                </ul>
+                <div className="cosmic-security-note">
+                  Điều này giúp bạn không bao giờ bị mất quyền truy cập vào tài khoản của mình.
+                </div>
+              </div>
+              <div className="cosmic-modal-footer">
+                <button className="cosmic-modal-btn" onClick={() => setShowSecurityInfo(false)}>
+                  Đã hiểu
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -736,6 +801,9 @@ const ProfilePageCosmic = () => {
 
         </div>
       </div>
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="profile" />
     </div>
   );
 };

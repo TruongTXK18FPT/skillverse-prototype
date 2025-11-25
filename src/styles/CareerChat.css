@@ -1,0 +1,587 @@
+/* ============================================================================
+   Career Chat Page - Hologram Galaxy Design with Expert Mode
+   ========================================================================== */
+
+.career-chat-page {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(59, 130, 246, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(138, 43, 226, 0.15) 0%, transparent 70%),
+    linear-gradient(to bottom, #000000 0%, #0a0015 20%, #1a0033 40%, #0f001a 60%, #000000 100%);
+  overflow: hidden;
+  position: relative;
+  color: #e5e7eb;
+}
+
+/* Cosmic dust particles */
+.cosmic-dust {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.dust-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  animation: float-dust 30s linear infinite;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes float-dust {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(100vw, 100vh) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* Sidebar */
+.career-chat-sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: rgba(10, 0, 25, 0.95);
+  backdrop-filter: blur(20px);
+  border-right: 2px solid rgba(139, 92, 246, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  top: 0;
+  height: 100vh;
+  z-index: 10;
+  box-shadow: 4px 0 30px rgba(139, 92, 246, 0.6);
+  flex-shrink: 0;
+}
+
+.career-chat-sidebar__header {
+  padding: 24px 20px;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.25);
+  background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(59,130,246,0.1));
+}
+
+.career-chat-sidebar__title {
+  font-size: 18px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff, #c4b5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.career-chat-sidebar__new-chat {
+  width: 100%;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+}
+
+.career-chat-sidebar__new-chat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(139, 92, 246, 0.6);
+}
+
+.career-chat-sidebar__sessions {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.career-chat-session-item {
+  padding: 12px 16px;
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.career-chat-session-item:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+.career-chat-session-item__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.career-chat-session-item__time {
+  font-size: 12px;
+  color: rgba(196, 181, 253, 0.6);
+  margin-top: 4px;
+}
+
+.career-chat-session-delete {
+  padding: 8px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 8px;
+  color: #ef4444;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.career-chat-session-delete:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.6);
+  transform: scale(1.1);
+}
+
+/* Main chat container */
+.career-chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 5;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Expert Mode - Different color scheme */
+.career-chat-page.expert-mode {
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(16, 185, 129, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(5, 150, 105, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(6, 95, 70, 0.15) 0%, transparent 70%),
+    linear-gradient(to bottom, #000000 0%, #001a0a 20%, #00331a 40%, #001a0f 60%, #000000 100%);
+}
+
+.career-chat-page.expert-mode .career-chat-sidebar {
+  border-right-color: rgba(16, 185, 129, 0.6);
+  box-shadow: 4px 0 30px rgba(16, 185, 129, 0.6);
+}
+
+.career-chat-page.expert-mode .career-chat-sidebar__header {
+  background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(5,150,105,0.1));
+  border-bottom-color: rgba(16, 185, 129, 0.25);
+}
+
+.career-chat-page.expert-mode .career-chat-sidebar__title {
+  background: linear-gradient(135deg, #fff, #6ee7b7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.career-chat-page.expert-mode .career-chat-sidebar__new-chat {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+}
+
+.career-chat-page.expert-mode .career-chat-sidebar__new-chat:hover {
+  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.6);
+}
+
+/* Header */
+.career-chat-header {
+  padding: 24px 32px;
+  background: rgba(10, 0, 25, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.career-chat-header__avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.6);
+  flex-shrink: 0;
+}
+
+.career-chat-header__info {
+  flex: 1;
+}
+
+.career-chat-header__title {
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff, #c4b5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.career-chat-header__subtitle {
+  font-size: 14px;
+  color: rgba(229, 231, 235, 0.7);
+  margin: 0;
+}
+
+/* Expert Mode Toggle */
+.expert-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.expert-mode-toggle:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+.expert-mode-toggle.active {
+  background: linear-gradient(135deg, rgba(139,92,246,0.3), rgba(59,130,246,0.2));
+  border-color: rgba(139, 92, 246, 0.8);
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+}
+
+.expert-mode-toggle__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+/* Messages area */
+.career-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.career-chat-message {
+  display: flex;
+  gap: 16px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.career-chat-message.user {
+  flex-direction: row-reverse;
+}
+
+.career-chat-message__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.career-chat-message.assistant .career-chat-message__avatar {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.6);
+}
+
+.career-chat-message.expert-mode.assistant .career-chat-message__avatar {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.6);
+  position: relative;
+}
+
+/* Hologram corner decorations for expert avatar */
+.career-chat-message.expert-mode.assistant .career-chat-message__avatar::before,
+.career-chat-message.expert-mode.assistant .career-chat-message__avatar::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 2px solid rgba(16, 185, 129, 0.8);
+}
+
+.career-chat-message.expert-mode.assistant .career-chat-message__avatar::before {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.career-chat-message.expert-mode.assistant .career-chat-message__avatar::after {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
+}
+
+.career-chat-message.user .career-chat-message__avatar {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.6);
+}
+
+.career-chat-message__content {
+  flex: 1;
+  max-width: 70%;
+}
+
+.career-chat-message__bubble {
+  padding: 16px 20px;
+  border-radius: 16px;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.career-chat-message.assistant .career-chat-message__bubble {
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.career-chat-message.expert-mode.assistant .career-chat-message__bubble {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  position: relative;
+}
+
+/* Hologram corners for expert bubble */
+.career-chat-message.expert-mode.assistant .career-chat-message__bubble::before,
+.career-chat-message.expert-mode.assistant .career-chat-message__bubble::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(16, 185, 129, 0.6);
+}
+
+.career-chat-message.expert-mode.assistant .career-chat-message__bubble::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.career-chat-message.expert-mode.assistant .career-chat-message__bubble::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+.career-chat-message.user .career-chat-message__bubble {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.career-chat-message__expert-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6ee7b7;
+  margin-bottom: 8px;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Input area */
+.career-chat-input-area {
+  padding: 24px 32px;
+  background: rgba(10, 0, 25, 0.8);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(139, 92, 246, 0.3);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.career-chat-page.expert-mode .career-chat-input-area {
+  background: rgba(0, 10, 5, 0.9);
+  border-top: 2px solid rgba(16, 185, 129, 0.5);
+  box-shadow: 0 -4px 20px rgba(16, 185, 129, 0.2);
+}
+
+.career-chat-input-wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.career-chat-input {
+  flex: 1;
+  padding: 14px 20px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  color: #e5e7eb;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.career-chat-input:focus {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: rgba(139, 92, 246, 0.6);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.career-chat-page.expert-mode .career-chat-input {
+  background: rgba(16, 185, 129, 0.1);
+  border: 2px solid rgba(16, 185, 129, 0.4);
+  box-shadow: inset 0 0 15px rgba(16, 185, 129, 0.05);
+}
+
+.career-chat-page.expert-mode .career-chat-input:focus {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.8);
+  box-shadow: 
+    0 0 0 3px rgba(16, 185, 129, 0.2),
+    inset 0 0 20px rgba(16, 185, 129, 0.1),
+    0 0 30px rgba(16, 185, 129, 0.3);
+}
+
+.career-chat-input::placeholder {
+  color: rgba(229, 231, 235, 0.5);
+}
+
+.career-chat-send-btn {
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+}
+
+.career-chat-send-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(139, 92, 246, 0.6);
+}
+
+.career-chat-page.expert-mode .career-chat-send-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+}
+
+.career-chat-page.expert-mode .career-chat-send-btn:hover:not(:disabled) {
+  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.6);
+}
+
+.career-chat-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Loading indicator */
+.career-chat-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(229, 231, 235, 0.7);
+  font-size: 14px;
+}
+
+.career-chat-loading svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .career-chat-sidebar {
+    position: fixed;
+    left: -280px;
+    transition: left 0.3s ease;
+  }
+  
+  .career-chat-sidebar.open {
+    left: 0;
+  }
+  
+  .career-chat-message__content {
+    max-width: 85%;
+  }
+}
