@@ -25,6 +25,7 @@ export const useElevator = () => {
 interface ElevatorAuthLayoutProps {
   children: ReactNode;
   onTransitionComplete?: () => void;
+  hideHudCorners?: boolean;
 }
 
 // Layer 1: Space Background (visible through glass)
@@ -118,28 +119,13 @@ const ElevatorFrame: React.FC = () => {
   );
 };
 
-// Layer 3: Glass Doors - No longer animate, just decorative
+// Layer 3: Glass Panel - Single transparent glass panel
 const GlassDoors: React.FC = () => {
   return (
     <div className="glass-doors-container">
-      {/* Left Glass Door */}
-      <div className="glass-door left-door">
-        <div className="glass-surface">
-          <div className="glass-reflection"></div>
-          <div className="glass-edge-highlight"></div>
-        </div>
+      <div className="glass-panel">
+        <div className="glass-reflection"></div>
       </div>
-
-      {/* Right Glass Door */}
-      <div className="glass-door right-door">
-        <div className="glass-surface">
-          <div className="glass-reflection"></div>
-          <div className="glass-edge-highlight"></div>
-        </div>
-      </div>
-
-      {/* Center Line */}
-      <div className="door-center-line" />
     </div>
   );
 };
@@ -179,7 +165,8 @@ const AccessGrantedMessage: React.FC<{ show: boolean }> = ({ show }) => {
 // Main Layout Component
 const ElevatorAuthLayout: React.FC<ElevatorAuthLayoutProps> = ({
   children,
-  onTransitionComplete
+  onTransitionComplete,
+  hideHudCorners = false
 }) => {
   const { state, userName, setUserName, triggerLoginSuccess } = useElevatorState();
 
@@ -254,26 +241,28 @@ const ElevatorAuthLayout: React.FC<ElevatorAuthLayoutProps> = ({
         <AccessGrantedMessage show={showAccessGranted} />
 
         {/* HUD Overlay */}
-        <div className="hud-overlay">
-          <div className="hud-corner top-left">
-            <span>SYS:ONLINE</span>
-            <span className="hud-value">v2.4.1</span>
+        {!hideHudCorners && (
+          <div className="hud-overlay">
+            <div className="hud-corner top-left">
+              <span>SYS:ONLINE</span>
+              <span className="hud-value">v2.4.1</span>
+            </div>
+            <div className="hud-corner top-right">
+              <span>DECK:AUTH</span>
+              <span className="hud-value">LV.00</span>
+            </div>
+            <div className="hud-corner bottom-left">
+              <span>STATUS</span>
+              <span className={`hud-value ${showAccessGranted || isExiting ? 'status-arrived' : ''}`}>
+                {(showAccessGranted || isExiting) ? 'ARRIVED' : 'STANDBY'}
+              </span>
+            </div>
+            <div className="hud-corner bottom-right">
+              <span>SKILLVERSE</span>
+              <span className="hud-value">HYPERION</span>
+            </div>
           </div>
-          <div className="hud-corner top-right">
-            <span>DECK:AUTH</span>
-            <span className="hud-value">LV.00</span>
-          </div>
-          <div className="hud-corner bottom-left">
-            <span>STATUS</span>
-            <span className={`hud-value ${showAccessGranted || isExiting ? 'status-arrived' : ''}`}>
-              {(showAccessGranted || isExiting) ? 'ARRIVED' : 'STANDBY'}
-            </span>
-          </div>
-          <div className="hud-corner bottom-right">
-            <span>SKILLVERSE</span>
-            <span className="hud-value">HYPERION</span>
-          </div>
-        </div>
+        )}
 
         {/* Scanlines Effect */}
         <div className="scanlines"></div>

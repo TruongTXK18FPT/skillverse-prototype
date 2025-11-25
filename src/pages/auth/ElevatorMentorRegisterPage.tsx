@@ -182,7 +182,7 @@ const ElevatorMentorRegisterPage: React.FC = () => {
 
   return (
     <>
-      <ElevatorAuthLayout onTransitionComplete={handleTransitionComplete}>
+      <ElevatorAuthLayout onTransitionComplete={handleTransitionComplete} hideHudCorners={true}>
         <HologramMentorRegisterForm
           onSubmit={handleFormSubmit}
           onGoogleRegister={() => handleGoogleRegister()}

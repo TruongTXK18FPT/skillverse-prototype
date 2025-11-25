@@ -322,8 +322,8 @@ body:has(.explore-map-overlay) {
 }
 
 /* Highlight TARGET text when zone is hovered - via parent update */
-.hud-corner.bottom-right:has(~ .explore-map-content .zone-marker:hover) .hud-target-text,
-.explore-map-content:has(.zone-marker:hover) ~ .hud-frame .hud-corner.bottom-right .hud-target-text {
+.hud-corner-map.bottom-right:has(~ .explore-map-content .zone-marker:hover) .hud-target-text,
+.explore-map-content:has(.zone-marker:hover) ~ .hud-frame .hud-corner-map.bottom-right .hud-target-text {
   color: #f97316;
   animation: targetPulse 0.6s ease-out;
 }

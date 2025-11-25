@@ -1,0 +1,280 @@
+/* ============================================
+   MOTHERSHIP COMMAND CENTER - HUD STYLES
+   Sci-Fi Dashboard Theme System
+   ============================================ */
+
+/* ========== FONT FACE ========== */
+@font-face {
+  font-family: 'Space Habitat';
+  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ========== CSS VARIABLES ========== */
+:root {
+  /* Color Palette */
+  --hud-bg-deep-space: #050b14;
+  --hud-bg-surface: rgba(13, 22, 35, 0.7);
+  --hud-accent-cyan: #06b6d4;
+  --hud-accent-purple: #a855f7;
+  --hud-accent-orange: #f97316;
+  --hud-accent-green: #10b981;
+  --hud-accent-red: #ef4444;
+  --hud-accent-yellow: #eab308;
+
+  /* Text Colors */
+  --hud-text-primary: #e2e8f0;
+  --hud-text-secondary: #94a3b8;
+  --hud-text-dim: #64748b;
+
+  /* Effects */
+  --hud-glow-cyan: 0 0 15px rgba(6, 182, 212, 0.3);
+  --hud-glow-cyan-strong: 0 0 25px rgba(6, 182, 212, 0.5);
+  --hud-glow-purple: 0 0 15px rgba(168, 85, 247, 0.3);
+  --hud-glow-orange: 0 0 15px rgba(249, 115, 22, 0.3);
+
+  /* Border */
+  --hud-border: 1px solid rgba(6, 182, 212, 0.3);
+  --hud-border-bright: 1px solid rgba(6, 182, 212, 0.6);
+
+  /* Spacing */
+  --hud-spacing-xs: 0.5rem;
+  --hud-spacing-sm: 1rem;
+  --hud-spacing-md: 1.5rem;
+  --hud-spacing-lg: 2rem;
+  --hud-spacing-xl: 3rem;
+
+  /* Typography */
+  --hud-font-display: 'Space Habitat', monospace;
+  --hud-font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ========== BASE CONTAINER ========== */
+.hud-container {
+  font-family: var(--hud-font-body);
+  color: var(--hud-text-primary);
+  background: var(--hud-bg-deep-space);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Background effects */
+.hud-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at top, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Vignette effect */
+.hud-container::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(5, 11, 20, 0.8) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========== TYPOGRAPHY ========== */
+.hud-font-display {
+  font-family: var(--hud-font-display);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  line-height: 1.2;
+}
+
+.hud-font-body {
+  font-family: var(--hud-font-body);
+}
+
+/* ========== GLASSMORPHISM PANEL ========== */
+.hud-panel {
+  background: var(--hud-bg-surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--hud-border);
+  box-shadow: var(--hud-glow-cyan);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hud-panel:hover {
+  border-color: rgba(6, 182, 212, 0.6);
+  box-shadow: var(--hud-glow-cyan-strong);
+}
+
+/* Chamfered corner (bottom-right) */
+.hud-panel--chamfer {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    0 100%
+  );
+}
+
+/* Chamfered corner (top-right) */
+.hud-panel--chamfer-top {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 20px) 0,
+    100% 20px,
+    100% 100%,
+    0 100%
+  );
+}
+
+/* Scanline overlay effect (optional) */
+.hud-panel--scanline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(6, 182, 212, 0.03) 2px,
+    rgba(6, 182, 212, 0.03) 4px
+  );
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Corner accent decorations */
+.hud-panel--decorated::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid var(--hud-accent-cyan);
+  border-bottom: 2px solid var(--hud-accent-cyan);
+  opacity: 0.5;
+}
+
+/* ========== UTILITY CLASSES ========== */
+
+/* Colors */
+.hud-text-cyan { color: var(--hud-accent-cyan); }
+.hud-text-purple { color: var(--hud-accent-purple); }
+.hud-text-orange { color: var(--hud-accent-orange); }
+.hud-text-green { color: var(--hud-accent-green); }
+.hud-text-red { color: var(--hud-accent-red); }
+.hud-text-yellow { color: var(--hud-accent-yellow); }
+
+.hud-bg-cyan { background-color: var(--hud-accent-cyan); }
+.hud-bg-purple { background-color: var(--hud-accent-purple); }
+.hud-bg-orange { background-color: var(--hud-accent-orange); }
+.hud-bg-green { background-color: var(--hud-accent-green); }
+.hud-bg-red { background-color: var(--hud-accent-red); }
+
+/* Glow effects */
+.hud-glow-cyan { box-shadow: var(--hud-glow-cyan); }
+.hud-glow-purple { box-shadow: var(--hud-glow-purple); }
+.hud-glow-orange { box-shadow: var(--hud-glow-orange); }
+
+/* Animations */
+@keyframes hud-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes hud-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(6, 182, 212, 0.6);
+  }
+}
+
+@keyframes hud-slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hud-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes hud-scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.hud-pulse { animation: hud-pulse 2s ease-in-out infinite; }
+.hud-glow-pulse { animation: hud-glow-pulse 2s ease-in-out infinite; }
+
+/* ========== GRID LAYOUT ========== */
+.hud-grid {
+  display: grid;
+  gap: var(--hud-spacing-md);
+}
+
+.hud-grid--2col {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.hud-grid--3col {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.hud-grid--4col {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1200px) {
+  .hud-grid--4col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .hud-grid--2col,
+  .hud-grid--3col,
+  .hud-grid--4col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  :root {
+    --hud-spacing-sm: 0.75rem;
+    --hud-spacing-md: 1rem;
+    --hud-spacing-lg: 1.5rem;
+  }
+}

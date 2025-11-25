@@ -188,7 +188,7 @@ const ElevatorBusinessRegisterPage: React.FC = () => {
 
   return (
     <>
-      <ElevatorAuthLayout onTransitionComplete={handleTransitionComplete}>
+      <ElevatorAuthLayout onTransitionComplete={handleTransitionComplete} hideHudCorners={true}>
         <HologramBusinessRegisterForm
           onSubmit={handleFormSubmit}
           onGoogleRegister={() => handleGoogleRegister()}

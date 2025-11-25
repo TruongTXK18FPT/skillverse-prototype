@@ -1,0 +1,99 @@
+/* ============================================
+   MOTHERSHIP DASHBOARD - MAIN LAYOUT
+   Sci-Fi Command Center
+   ============================================ */
+
+.mothership-dashboard {
+  min-height: 100vh;
+  background: #050b14;
+  position: relative;
+  overflow-x: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #e2e8f0;
+}
+
+/* Background effects */
+.mothership-dashboard::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at top, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Vignette effect */
+.mothership-dashboard::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(5, 11, 20, 0.8) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========== CONTAINER ========== */
+
+.mothership-dashboard__container {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ========== STATS GRID ========== */
+
+.mothership-dashboard__stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1200px) {
+  .mothership-dashboard__stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .mothership-dashboard__container {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+
+  .mothership-dashboard__stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* ========== SCROLLBAR STYLING (Optional) ========== */
+
+.mothership-dashboard::-webkit-scrollbar {
+  width: 8px;
+}
+
+.mothership-dashboard::-webkit-scrollbar-track {
+  background: rgba(13, 22, 35, 0.5);
+}
+
+.mothership-dashboard::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.3);
+  border-radius: 4px;
+}
+
+.mothership-dashboard::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.5);
+}

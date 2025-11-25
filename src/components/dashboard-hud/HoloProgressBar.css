@@ -1,0 +1,278 @@
+/* ============================================
+   HOLOGRAPHIC PROGRESS BAR
+   Animated Energy Bar with Glowing Effect
+   ============================================ */
+
+.holo-progress-wrapper {
+  width: 100%;
+}
+
+.holo-progress__label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.holo-progress__label {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.holo-progress__percentage {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* ========== TRACK ========== */
+
+.holo-progress {
+  position: relative;
+  width: 100%;
+  border-radius: 2px;
+  overflow: visible;
+}
+
+.holo-progress__track {
+  width: 100%;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+/* ========== BAR ========== */
+
+.holo-progress__bar {
+  height: 100%;
+  position: relative;
+  border-radius: 2px;
+  overflow: visible;
+}
+
+/* Glowing background layer */
+.holo-progress__glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.5;
+  filter: blur(4px);
+}
+
+/* Leading edge glow */
+.holo-progress__leading-edge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  bottom: -2px;
+  width: 4px;
+  border-radius: 2px;
+  filter: blur(2px);
+  animation: holo-pulse-edge 1.5s ease-in-out infinite;
+}
+
+/* ========== HEIGHT VARIANTS ========== */
+
+.holo-progress--sm .holo-progress__track {
+  height: 6px;
+}
+
+.holo-progress--md .holo-progress__track {
+  height: 10px;
+}
+
+.holo-progress--lg .holo-progress__track {
+  height: 14px;
+}
+
+/* ========== COLOR VARIANTS ========== */
+
+/* Cyan */
+.holo-progress--cyan .holo-progress__track {
+  background: rgba(6, 182, 212, 0.1);
+  border-color: rgba(6, 182, 212, 0.2);
+}
+
+.holo-progress--cyan .holo-progress__bar {
+  background: linear-gradient(90deg, rgba(6, 182, 212, 0.8) 0%, #06b6d4 100%);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+}
+
+.holo-progress--cyan .holo-progress__glow {
+  background: #06b6d4;
+}
+
+.holo-progress--cyan .holo-progress__leading-edge {
+  background: #06b6d4;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.8);
+}
+
+.holo-progress__percentage--cyan {
+  color: #06b6d4;
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+}
+
+/* Purple */
+.holo-progress--purple .holo-progress__track {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.2);
+}
+
+.holo-progress--purple .holo-progress__bar {
+  background: linear-gradient(90deg, rgba(168, 85, 247, 0.8) 0%, #a855f7 100%);
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
+.holo-progress--purple .holo-progress__glow {
+  background: #a855f7;
+}
+
+.holo-progress--purple .holo-progress__leading-edge {
+  background: #a855f7;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
+}
+
+.holo-progress__percentage--purple {
+  color: #a855f7;
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
+/* Orange */
+.holo-progress--orange .holo-progress__track {
+  background: rgba(249, 115, 22, 0.1);
+  border-color: rgba(249, 115, 22, 0.2);
+}
+
+.holo-progress--orange .holo-progress__bar {
+  background: linear-gradient(90deg, rgba(249, 115, 22, 0.8) 0%, #f97316 100%);
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+}
+
+.holo-progress--orange .holo-progress__glow {
+  background: #f97316;
+}
+
+.holo-progress--orange .holo-progress__leading-edge {
+  background: #f97316;
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.8);
+}
+
+.holo-progress__percentage--orange {
+  color: #f97316;
+  text-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+}
+
+/* Green */
+.holo-progress--green .holo-progress__track {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.holo-progress--green .holo-progress__bar {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.8) 0%, #10b981 100%);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.holo-progress--green .holo-progress__glow {
+  background: #10b981;
+}
+
+.holo-progress--green .holo-progress__leading-edge {
+  background: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+}
+
+.holo-progress__percentage--green {
+  color: #10b981;
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+/* Red */
+.holo-progress--red .holo-progress__track {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.holo-progress--red .holo-progress__bar {
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.8) 0%, #ef4444 100%);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.holo-progress--red .holo-progress__glow {
+  background: #ef4444;
+}
+
+.holo-progress--red .holo-progress__leading-edge {
+  background: #ef4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+}
+
+.holo-progress__percentage--red {
+  color: #ef4444;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+/* Yellow */
+.holo-progress--yellow .holo-progress__track {
+  background: rgba(234, 179, 8, 0.1);
+  border-color: rgba(234, 179, 8, 0.2);
+}
+
+.holo-progress--yellow .holo-progress__bar {
+  background: linear-gradient(90deg, rgba(234, 179, 8, 0.8) 0%, #eab308 100%);
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+}
+
+.holo-progress--yellow .holo-progress__glow {
+  background: #eab308;
+}
+
+.holo-progress--yellow .holo-progress__leading-edge {
+  background: #eab308;
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.8);
+}
+
+.holo-progress__percentage--yellow {
+  color: #eab308;
+  text-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+}
+
+/* ========== ANIMATIONS ========== */
+
+@keyframes holo-pulse-edge {
+  0%, 100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scaleX(1.5);
+  }
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 768px) {
+  .holo-progress__label,
+  .holo-progress__percentage {
+    font-size: 0.75rem;
+  }
+
+  .holo-progress--sm .holo-progress__track {
+    height: 4px;
+  }
+
+  .holo-progress--md .holo-progress__track {
+    height: 8px;
+  }
+
+  .holo-progress--lg .holo-progress__track {
+    height: 12px;
+  }
+}

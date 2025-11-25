@@ -91,7 +91,7 @@
 }
 
 /* =====================================================
-   LAYER 2: GLASS DOORS (Open when arrived)
+   LAYER 2: GLASS PANEL (Single transparent panel)
    ===================================================== */
 .glass-doors-container {
   position: absolute;
@@ -103,29 +103,12 @@
   overflow: hidden;
 }
 
-.glass-door {
+.glass-panel {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
+  inset: 0;
   background: var(--elevator-glass);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
-}
-
-.glass-door.left-door {
-  left: 0;
-}
-
-.glass-door.right-door {
-  right: 0;
-}
-
-.glass-surface {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border: 1px solid var(--elevator-glass-border);
 }
 
 .glass-reflection {
@@ -139,39 +122,6 @@
     rgba(255, 255, 255, 0.05) 100%
   );
   pointer-events: none;
-}
-
-.glass-edge-highlight {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(
-    180deg,
-    var(--elevator-primary),
-    transparent 20%,
-    transparent 80%,
-    var(--elevator-primary)
-  );
-}
-
-.left-door .glass-edge-highlight {
-  right: 0;
-}
-
-.right-door .glass-edge-highlight {
-  left: 0;
-}
-
-.door-center-line {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--elevator-primary);
-  transform: translateX(-50%);
-  box-shadow: 0 0 10px var(--elevator-glow);
 }
 
 /* =====================================================
@@ -493,26 +443,24 @@
 
 .hud-corner.top-left {
   top: 80px;
-  left: 120px;
+  left: 160px;
 }
 
 .hud-corner.top-right {
   top: 80px;
-  right: 120px;
+  right: 160px;
   text-align: right;
 }
 
 .hud-corner.bottom-left {
   bottom: 60px;
   left: 160px;
-  margin-bottom: 3rem;
 }
 
 .hud-corner.bottom-right {
   bottom: 60px;
   right: 160px;
   text-align: right;
-  margin-bottom: 3rem;
 }
 
 .hud-value {
