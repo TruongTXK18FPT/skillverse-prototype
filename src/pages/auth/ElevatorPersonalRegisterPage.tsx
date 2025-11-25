@@ -107,19 +107,25 @@ const ElevatorPersonalRegisterPage: React.FC = () => {
         region: data.region,
       };
 
-      console.log('Registration data:', registrationData);
+      // console.log('Registration data:', registrationData);
 
       // Call register function from AuthContext
       const result = await register(registrationData);
       
-      console.log('Registration result:', result);
+      // console.log('Registration result:', result);
 
       // Store email for verify-otp navigation
       setRegisteredEmail(data.email);
 
+      // Save OTP expiry time to localStorage if provided
+      if (result.otpExpiryTime) {
+        const storageKey = `otp_expiry_${data.email}`;
+        localStorage.setItem(storageKey, result.otpExpiryTime);
+      }
+
       // Check if verification is required
       if (result.requiresVerification) {
-        console.log('Verification required, will redirect to verify-otp after animation');
+        // console.log('Verification required, will redirect to verify-otp after animation');
         
         // Store redirect for after animation
         setPendingRedirect('/verify-otp');
@@ -130,7 +136,7 @@ const ElevatorPersonalRegisterPage: React.FC = () => {
           userName: data.fullName.split(' ')[0]
         };
       } else {
-        console.log('No verification required, will redirect to login after animation');
+        // console.log('No verification required, will redirect to login after animation');
         
         // Store redirect for after animation
         setPendingRedirect('/login');

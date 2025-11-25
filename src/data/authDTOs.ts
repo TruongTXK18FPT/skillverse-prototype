@@ -68,6 +68,7 @@ export interface RegistrationResponse {
   email: string;
   requiresVerification: boolean;
   otpExpiryMinutes: number;
+  otpExpiryTime?: string; // ISO timestamp
   nextStep: string;
 }
 
@@ -89,6 +90,7 @@ export interface ForgotPasswordResponse {
   message: string;
   email: string;
   otpExpiryMinutes: number;
+  otpExpiryTime?: string; // ISO timestamp
   nextStep: string;
 }
 

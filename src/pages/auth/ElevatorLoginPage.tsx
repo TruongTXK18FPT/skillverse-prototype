@@ -23,10 +23,12 @@ const ElevatorLoginPage: React.FC = () => {
 
   // Check if already authenticated
   useEffect(() => {
-    if (!authLoading && isAuthenticated) {
+    // Only redirect if NOT loading (local or google) and NOT waiting for redirect
+    // This prevents redirecting to warning page immediately after successful login
+    if (!authLoading && isAuthenticated && !isLoading && !isGoogleLoading && !pendingRedirect && !googleLoginSuccess) {
       navigate('/auth-warning', { replace: true });
     }
-  }, [authLoading, isAuthenticated, navigate]);
+  }, [authLoading, isAuthenticated, navigate, isLoading, isGoogleLoading, pendingRedirect, googleLoginSuccess]);
 
   // Handle success message from other pages
   useEffect(() => {

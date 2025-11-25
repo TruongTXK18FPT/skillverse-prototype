@@ -30,7 +30,7 @@ const VerifyPage = () => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes = 600 seconds
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes = 300 seconds
   const [resendCooldown, setResendCooldown] = useState(0);
   const [isExpired, setIsExpired] = useState(false);
   
@@ -40,6 +40,23 @@ const VerifyPage = () => {
       navigate(fromLogin ? '/login' : '/register', { replace: true });
     }
   }, [email, navigate, fromLogin]);
+
+  // Initialize timer from localStorage or state
+  useEffect(() => {
+    const storageKey = `otp_expiry_${email}`;
+    const storedExpiry = localStorage.getItem(storageKey);
+    
+    if (storedExpiry) {
+      const expiryTime = new Date(storedExpiry).getTime();
+      const now = new Date().getTime();
+      const remainingSeconds = Math.max(0, Math.floor((expiryTime - now) / 1000));
+      
+      setTimeLeft(remainingSeconds);
+      if (remainingSeconds === 0) {
+        setIsExpired(true);
+      }
+    }
+  }, [email]);
 
   // Main countdown timer (10 minutes)
   useEffect(() => {
@@ -157,7 +174,7 @@ const VerifyPage = () => {
     setLoading(true);
 
     try {
-      console.log('Verifying OTP:', { email, otp: otpString, mode });
+      // console.log('Verifying OTP:', { email, otp: otpString, mode });
       
       // For forgot-password mode, skip API verification here
       // OTP will be verified when resetting password
@@ -251,7 +268,7 @@ const VerifyPage = () => {
     setResendLoading(true);
 
     try {
-      console.log('Resending OTP to:', email);
+      // console.log('Resending OTP to:', email);
       
       const response = await resendOtp({ email });
       
@@ -260,8 +277,13 @@ const VerifyPage = () => {
         response || 'Mã OTP mới đã được gửi đến email của bạn.'
       );
       
+      // Calculate and save new OTP expiry time
+      const newExpiryTime = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
+      const storageKey = `otp_expiry_${email}`;
+      localStorage.setItem(storageKey, newExpiryTime.toISOString());
+      
       // Reset timers
-      setTimeLeft(600); // Reset to 10 minutes
+      setTimeLeft(300); // Reset to 5 minutes
       setResendCooldown(60); // 60 seconds cooldown
       setIsExpired(false);
       
