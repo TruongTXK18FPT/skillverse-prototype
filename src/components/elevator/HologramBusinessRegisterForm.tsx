@@ -236,7 +236,6 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="companyName"
                 value={formData.companyName}
                 onChange={handleInputChange}
-                placeholder="Tech Corp Inc."
                 disabled={isLoading}
                 className="reg-business-input"
               />
@@ -254,7 +253,6 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="businessEmail"
                 value={formData.businessEmail}
                 onChange={handleInputChange}
-                placeholder="contact@company.com"
                 disabled={isLoading}
                 className="reg-business-input"
                 autoComplete="email"
@@ -274,7 +272,6 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                placeholder="••••••••"
                 disabled={isLoading}
                 className="reg-business-input"
                 autoComplete="new-password"
@@ -301,7 +298,6 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
-                placeholder="••••••••"
                 disabled={isLoading}
                 className="reg-business-input"
                 autoComplete="new-password"
@@ -329,7 +325,6 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="contactPersonPhone"
                 value={formData.contactPersonPhone}
                 onChange={handleInputChange}
-                placeholder="+84 xxx xxx xxx"
                 disabled={isLoading}
                 className="reg-business-input"
                 autoComplete="tel"
@@ -348,7 +343,6 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="taxId"
                 value={formData.taxId}
                 onChange={handleInputChange}
-                placeholder="0123456789"
                 disabled={isLoading}
                 className="reg-business-input"
               />
@@ -367,7 +361,6 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="companyWebsite"
                 value={formData.companyWebsite}
                 onChange={handleInputChange}
-                placeholder="https://www.company.com"
                 disabled={isLoading}
                 className="reg-business-input"
               />
@@ -396,7 +389,6 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="contactPersonName"
                 value={formData.contactPersonName}
                 onChange={handleInputChange}
-                placeholder="John Doe"
                 disabled={isLoading}
                 className="reg-business-input"
               />
@@ -414,7 +406,6 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="contactPersonPhone"
                 value={formData.contactPersonPhone}
                 onChange={handleInputChange}
-                placeholder="+84 xxx xxx xxx"
                 disabled={isLoading}
                 className="reg-business-input"
               />
@@ -432,7 +423,6 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="contactPersonPosition"
                 value={formData.contactPersonPosition}
                 onChange={handleInputChange}
-                placeholder="HR Manager"
                 disabled={isLoading}
                 className="reg-business-input"
               />
@@ -508,7 +498,6 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="businessAddress"
                 value={formData.businessAddress}
                 onChange={handleInputChange}
-                placeholder="123 Business Street, District, City"
                 disabled={isLoading}
                 className="reg-business-input"
                 autoComplete="street-address"

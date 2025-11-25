@@ -173,7 +173,6 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleInputChange}
-                placeholder="John Doe"
                 disabled={isLoading}
                 className="reg-personal-input"
                 autoComplete="name"
@@ -192,7 +191,6 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="john.doe@example.com"
                 disabled={isLoading}
                 className="reg-personal-input"
                 autoComplete="email"
@@ -212,7 +210,6 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                placeholder="••••••••"
                 disabled={isLoading}
                 className="reg-personal-input"
                 autoComplete="new-password"
@@ -239,7 +236,6 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
-                placeholder="••••••••"
                 disabled={isLoading}
                 className="reg-personal-input"
                 autoComplete="new-password"
@@ -267,7 +263,6 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                placeholder="+84 xxx xxx xxx"
                 disabled={isLoading}
                 className="reg-personal-input"
                 autoComplete="tel"
@@ -308,7 +303,6 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
                 name="address"
                 value={formData.address}
                 onChange={handleInputChange}
-                placeholder="123 Main Street, District, City"
                 disabled={isLoading}
                 className="reg-personal-input"
                 autoComplete="street-address"
@@ -327,7 +321,6 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
                 name="bio"
                 value={formData.bio}
                 onChange={handleInputChange}
-                placeholder="Tell us about yourself (optional)..."
                 disabled={isLoading}
                 className="reg-personal-input reg-personal-textarea"
                 rows={2}

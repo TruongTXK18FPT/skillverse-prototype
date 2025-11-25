@@ -92,7 +92,6 @@ const HologramForgotPasswordForm: React.FC = () => {
                             <input 
                                 type="email" 
                                 className="fgp-input"
-                                placeholder="operator@skillverse.io"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 disabled={isLoading}
