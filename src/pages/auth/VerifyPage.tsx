@@ -12,6 +12,7 @@ interface LocationState {
   fromLogin?: boolean;
   requiresVerification?: boolean;
   userType?: 'user' | 'mentor' | 'business'; // Add user type
+  mode?: 'register' | 'forgot-password'; // Add mode for different flows
 }
 
 const VerifyPage = () => {
@@ -24,6 +25,7 @@ const VerifyPage = () => {
   const email = state?.email || '';
   const fromLogin = state?.fromLogin || false;
   const userType = state?.userType || 'user'; // Default to 'user' if not specified
+  const mode = state?.mode || 'register'; // Default to 'register' if not specified
   
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
@@ -155,35 +157,54 @@ const VerifyPage = () => {
     setLoading(true);
 
     try {
-      console.log('Verifying OTP:', { email, otp: otpString });
+      console.log('Verifying OTP:', { email, otp: otpString, mode });
       
-      await verifyEmail({ email, otp: otpString });
-      
-      // Different success messages based on user type
-      if (userType === 'mentor') {
+      // For forgot-password mode, skip API verification here
+      // OTP will be verified when resetting password
+      if (mode === 'forgot-password') {
         showSuccess(
-          'Xác thực email thành công!',
-          'Đơn đăng ký mentor đã được gửi và đang chờ phê duyệt từ quản trị viên. Bạn sẽ nhận được thông báo qua email khi đơn đăng ký được xem xét.',
-          5
-        );
-      } else if (userType === 'business') {
-        showSuccess(
-          'Xác thực email thành công!',
-          'Đơn đăng ký doanh nghiệp đã được gửi và đang chờ phê duyệt từ quản trị viên. Bạn sẽ nhận được thông báo qua email khi đơn đăng ký được xem xét.',
-          5
+          'Mã OTP hợp lệ!',
+          'Đang chuyển đến trang đặt lại mật khẩu...',
+          1.5
         );
       } else {
-        // Regular user
-        showSuccess(
-          'Xác thực thành công!',
-          'Tài khoản của bạn đã được xác thực. Đang chuyển hướng...',
-          3
-        );
+        // For registration flow, verify email with OTP
+        await verifyEmail({ email, otp: otpString });
+        
+        // Different success messages based on user type
+        if (userType === 'mentor') {
+          showSuccess(
+            'Xác thực email thành công!',
+            'Đơn đăng ký mentor đã được gửi và đang chờ phê duyệt từ quản trị viên. Bạn sẽ nhận được thông báo qua email khi đơn đăng ký được xem xét.',
+            5
+          );
+        } else if (userType === 'business') {
+          showSuccess(
+            'Xác thực email thành công!',
+            'Đơn đăng ký doanh nghiệp đã được gửi và đang chờ phê duyệt từ quản trị viên. Bạn sẽ nhận được thông báo qua email khi đơn đăng ký được xem xét.',
+            5
+          );
+        } else {
+          // Regular user
+          showSuccess(
+            'Xác thực thành công!',
+            'Tài khoản của bạn đã được xác thực. Đang chuyển hướng...',
+            3
+          );
+        }
       }
       
-      // Different redirect logic based on user type
+      // Different redirect logic based on mode and user type
       setTimeout(() => {
-        if (userType === 'mentor' || userType === 'business') {
+        if (mode === 'forgot-password') {
+          // Forgot password flow - navigate to reset password page
+          navigate('/reset-password', { 
+            state: { 
+              email,
+              otp: otpString // Pass OTP for backend verification
+            }
+          });
+        } else if (userType === 'mentor' || userType === 'business') {
           // For mentor and business, redirect to a waiting page or login with special message
           navigate('/login', { 
             state: { 
@@ -206,7 +227,7 @@ const VerifyPage = () => {
             }
           });
         }
-      }, userType === 'mentor' || userType === 'business' ? 5000 : 3000); // Longer delay for mentor/business to read the message
+      }, mode === 'forgot-password' ? 1500 : (userType === 'mentor' || userType === 'business' ? 5000 : 3000));
       
     } catch (error: unknown) {
       console.error('Email verification error:', error);

@@ -1,0 +1,247 @@
+/* ========================================
+   PROFILE SECURITY SECTION - COSMIC THEME
+   ======================================== */
+
+/* Security Actions Container */
+.cosmic-security-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* Security Card - Cosmic Style */
+.cosmic-security-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cosmic-security-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cosmic-security-card:hover {
+  border-color: rgba(102, 126, 234, 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+}
+
+.cosmic-security-card:hover::before {
+  opacity: 1;
+}
+
+/* Highlight variant */
+.cosmic-security-card--highlight {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+  border-color: rgba(102, 126, 234, 0.4);
+}
+
+.cosmic-security-card--highlight::before {
+  opacity: 1;
+}
+
+/* Security Card Content */
+.cosmic-security-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.cosmic-security-card-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.cosmic-security-card-content {
+  flex: 1;
+}
+
+.cosmic-security-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cosmic-security-card-description {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+/* Security Badge */
+.cosmic-security-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cosmic-security-badge--optional {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* Security Button */
+.cosmic-security-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.cosmic-security-button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.cosmic-security-button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.cosmic-security-button--secondary {
+  background: rgba(51, 65, 85, 0.6);
+  color: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.cosmic-security-button--secondary:hover {
+  background: rgba(51, 65, 85, 0.8);
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
+/* Security Info Banner */
+.cosmic-security-info {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 12px;
+  margin-top: 8px;
+}
+
+.cosmic-security-info-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.cosmic-security-info-text {
+  font-size: 13px;
+  color: #6ee7b7;
+  line-height: 1.5;
+}
+
+.cosmic-security-info-text strong {
+  font-weight: 600;
+  color: #10b981;
+}
+
+/* Compact Layout for Header */
+.cosmic-security-compact {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.cosmic-security-compact .cosmic-security-card {
+  flex: 1;
+  padding: 16px;
+}
+
+.cosmic-security-compact .cosmic-security-card-header {
+  margin-bottom: 12px;
+}
+
+.cosmic-security-compact .cosmic-security-card-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.cosmic-security-compact .cosmic-security-card-title {
+  font-size: 14px;
+}
+
+.cosmic-security-compact .cosmic-security-card-description {
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.cosmic-security-compact .cosmic-security-button {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cosmic-security-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .cosmic-security-compact {
+    flex-direction: column;
+  }
+
+  .cosmic-security-card-header {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Animation */
+@keyframes cosmicGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+  }
+}
+
+.cosmic-security-card--highlight:hover {
+  animation: cosmicGlow 2s ease-in-out infinite;
+}

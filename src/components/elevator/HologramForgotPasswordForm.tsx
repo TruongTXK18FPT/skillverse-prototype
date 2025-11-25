@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, ArrowLeft, Loader2, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Mail, ArrowLeft, Loader2, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import Logo from '../../assets/skillverse.png';
 import './HologramForgotPasswordForm.css';
 
 const HologramForgotPasswordForm: React.FC = () => {
   const { forgotPassword } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +25,13 @@ const HologramForgotPasswordForm: React.FC = () => {
 
     try {
       await forgotPassword(email);
-      setIsSubmitted(true);
+      // Navigate to verify OTP page with forgot-password mode
+      navigate('/verify-otp', { 
+        state: { 
+          email, 
+          mode: 'forgot-password' 
+        } 
+      });
     } catch (err: any) {
       setError(err.message || 'Đã có lỗi xảy ra. Vui lòng thử lại.');
     } finally {
@@ -62,31 +68,14 @@ const HologramForgotPasswordForm: React.FC = () => {
             <p className="fgp-subtitle">RESTORE ACCESS TO YOUR ACCOUNT</p>
         </div>
 
-        {isSubmitted ? (
-            <div className="fgp-success-message">
-                <CheckCircle className="fgp-success-icon" />
-                <h3 className="fgp-success-text">RECOVERY LINK TRANSMITTED</h3>
-                <p style={{ fontSize: '0.8rem', color: 'var(--holo-text-dim)', marginBottom: '1rem' }}>
-                    We have sent password reset instructions to <strong>{email}</strong>. 
-                    Please check your inbox.
-                </p>
-                <div className="fgp-footer">
-                    <Link to="/login" className="fgp-back-link" style={{ color: 'var(--holo-success)', justifyContent: 'center' }}>
-                        <ArrowLeft size={16} />
-                        <span>RETURN TO LOGIN</span>
-                    </Link>
-                </div>
+        {error && (
+            <div className="fgp-error-message">
+                <AlertTriangle size={16} />
+                <span>{error}</span>
             </div>
-        ) : (
-            <>
-                {error && (
-                    <div className="fgp-error-message">
-                        <AlertTriangle size={16} />
-                        <span>{error}</span>
-                    </div>
-                )}
+        )}
 
-                <form onSubmit={handleSubmit} className="fgp-form">
+        <form onSubmit={handleSubmit} className="fgp-form">
                     <div className="fgp-field">
                         <label className="fgp-label">
                             <Mail size={14} />
@@ -118,16 +107,14 @@ const HologramForgotPasswordForm: React.FC = () => {
                         )}
                         <div className="fgp-btn-glow"></div>
                     </button>
-                </form>
+        </form>
 
-                <div className="fgp-footer">
-                    <Link to="/login" className="fgp-back-link">
-                        <ArrowLeft size={16} />
-                        <span>ABORT & RETURN TO LOGIN</span>
-                    </Link>
-                </div>
-            </>
-        )}
+        <div className="fgp-footer">
+            <Link to="/login" className="fgp-back-link">
+                <ArrowLeft size={16} />
+                <span>ABORT & RETURN TO LOGIN</span>
+            </Link>
+        </div>
       </div>
       
       <div className="fgp-flicker"></div>

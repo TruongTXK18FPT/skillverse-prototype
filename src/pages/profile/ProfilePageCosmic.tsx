@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, MapPin, Edit3, Save, X, Camera, Calendar, FileText, Move, Sparkles } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Edit3, Save, X, Camera, Calendar, FileText, Move, Sparkles, Lock, Shield } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import userService from '../../services/userService';
 import { premiumService } from '../../services/premiumService';
@@ -11,6 +11,7 @@ import silverFrame from '../../assets/premium/silver_avatar.png';
 import goldenFrame from '../../assets/premium/golden_avatar.png';
 import diamondFrame from '../../assets/premium/diamond_avatar.png';
 import '../../styles/ProfilePageCosmic.css';
+import '../../styles/ProfileSecurityCosmic.css';
 
 const ProfilePageCosmic = () => {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
@@ -491,6 +492,70 @@ const ProfilePageCosmic = () => {
             )}
           </div>
         </div>
+
+        {/* Security Section - Compact (Near Header) */}
+        <div className="cosmic-security-compact">
+          {/* Set Password - For Google users WITHOUT password */}
+          {user?.authProvider === 'GOOGLE' && !user?.googleLinked && (
+            <div className="cosmic-security-card cosmic-security-card--highlight">
+              <div className="cosmic-security-card-header">
+                <div className="cosmic-security-card-icon">
+                  <Shield size={20} />
+                </div>
+                <div className="cosmic-security-card-content">
+                  <h3 className="cosmic-security-card-title">
+                    Đặt Mật Khẩu Dự Phòng
+                    <span className="cosmic-security-badge cosmic-security-badge--optional">Tùy chọn</span>
+                  </h3>
+                  <p className="cosmic-security-card-description">
+                    Tạo mật khẩu để đăng nhập khi Google lỗi
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={() => navigate('/set-password')}
+                className="cosmic-security-button cosmic-security-button--primary"
+              >
+                <Shield size={16} />
+                <span>Thiết lập ngay</span>
+              </button>
+            </div>
+          )}
+
+          {/* Change Password - For LOCAL users OR Google users WITH password */}
+          {(user?.authProvider === 'LOCAL' || (user?.authProvider === 'GOOGLE' && user?.googleLinked)) && (
+            <div className="cosmic-security-card">
+              <div className="cosmic-security-card-header">
+                <div className="cosmic-security-card-icon">
+                  <Lock size={20} />
+                </div>
+                <div className="cosmic-security-card-content">
+                  <h3 className="cosmic-security-card-title">Đổi Mật Khẩu</h3>
+                  <p className="cosmic-security-card-description">
+                    Cập nhật mật khẩu để bảo mật tài khoản
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={() => navigate('/change-password')}
+                className="cosmic-security-button cosmic-security-button--secondary"
+              >
+                <Lock size={16} />
+                <span>Đổi mật khẩu</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Dual Auth Success Info */}
+        {user?.authProvider === 'GOOGLE' && user?.googleLinked && (
+          <div className="cosmic-security-info">
+            <div className="cosmic-security-info-icon">✅</div>
+            <div className="cosmic-security-info-text">
+              <strong>Xác thực kép đã kích hoạt:</strong> Bạn có thể đăng nhập bằng cả Google và email+password.
+            </div>
+          </div>
+        )}
 
         {/* Messages */}
         {error && (

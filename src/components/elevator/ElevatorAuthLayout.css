@@ -751,3 +751,14 @@
     letter-spacing: 3px;
   }
 }
+
+/* =====================================================
+   GLOBAL FIX: Password/Email Input Font Override
+   Fix case sensitivity issue with SpaceHabitat font
+   ===================================================== */
+.elevator-container input[type="password"],
+.elevator-container input[type="email"],
+.elevator-container input[type="text"] {
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif !important;
+  text-transform: none !important;
+}

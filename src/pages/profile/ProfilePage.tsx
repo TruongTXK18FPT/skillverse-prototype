@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, MapPin, Calendar, Edit3, Save, X, Camera } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Calendar, Edit3, Save, X, Camera, Lock, Shield } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import userService from '../../services/userService';
 import { UserProfileResponse } from '../../data/userDTOs';
 import '../../styles/ProfilePage.css';
+import '../../styles/ProfileSecuritySection.css';
 
 const ProfilePage = () => {
   const { user, isAuthenticated } = useAuth();
@@ -366,6 +367,83 @@ const ProfilePage = () => {
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+
+          {/* Security Section - ALWAYS SHOW */}
+          <div className="profile-section" style={{ border: '2px solid red', padding: '20px' }}>
+            <h2 className="profile-section-title">🔒 BẢO MẬT (TEST)</h2>
+            
+            {/* Debug info */}
+            <div style={{ background: 'yellow', padding: '10px', marginBottom: '10px' }}>
+              <strong>Debug:</strong><br/>
+              authProvider: {user?.authProvider}<br/>
+              googleLinked: {user?.googleLinked ? 'true' : 'false'}<br/>
+              Show Set Password: {(user?.authProvider === 'GOOGLE' && !user?.googleLinked) ? 'YES' : 'NO'}<br/>
+              Show Change Password: {(user?.authProvider === 'LOCAL' || user?.googleLinked) ? 'YES' : 'NO'}
+            </div>
+            
+            <div className="security-actions">
+              {/* Set Password - Chỉ cho Google users chưa có password */}
+              {user?.authProvider === 'GOOGLE' && !user?.googleLinked && (
+                <div className="security-card security-card--highlight">
+                  <div className="security-card-icon">
+                    <Shield size={24} />
+                  </div>
+                  <div className="security-card-content">
+                    <h3 className="security-card-title">
+                      Đặt Mật Khẩu Dự Phòng
+                      <span className="security-badge security-badge--optional">Không bắt buộc</span>
+                    </h3>
+                    <p className="security-card-description">
+                      Tạo mật khẩu để đăng nhập khi Google OAuth không khả dụng. 
+                      Bạn sẽ có thể sử dụng cả Google và email+password.
+                    </p>
+                    <button 
+                      onClick={() => navigate('/set-password')}
+                      className="security-button security-button--primary"
+                    >
+                      <Shield size={18} />
+                      <span>Thiết lập ngay</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Change Password - Cho users đã có password */}
+              {(user?.authProvider === 'LOCAL' || user?.googleLinked) && (
+                <div className="security-card">
+                  <div className="security-card-icon">
+                    <Lock size={24} />
+                  </div>
+                  <div className="security-card-content">
+                    <h3 className="security-card-title">Đổi Mật Khẩu</h3>
+                    <p className="security-card-description">
+                      Cập nhật mật khẩu của bạn để bảo mật tài khoản. 
+                      Khuyến nghị đổi mật khẩu định kỳ 3-6 tháng.
+                    </p>
+                    <button 
+                      onClick={() => navigate('/change-password')}
+                      className="security-button security-button--secondary"
+                    >
+                      <Lock size={18} />
+                      <span>Đổi mật khẩu</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Info for users with both auth methods */}
+              {user?.googleLinked && (
+                <div className="security-info">
+                  <div className="security-info-icon">
+                    ✅
+                  </div>
+                  <div className="security-info-text">
+                    <strong>Xác thực kép đã kích hoạt:</strong> Bạn có thể đăng nhập bằng cả Google và email+password.
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

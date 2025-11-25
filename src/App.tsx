@@ -26,6 +26,9 @@ import ChooseRolePage from './pages/auth/ChooseRolePage';
 import VerifyPage from './pages/auth/VerifyPage';
 import AlreadyAuthenticatedWarning from './pages/auth/AlreadyAuthenticatedWarning';
 import ElevatorForgotPasswordPage from './pages/auth/ElevatorForgotPasswordPage';
+import ResetPasswordPage from './pages/auth/ResetPasswordPage';
+import SetPasswordPage from './pages/settings/SetPasswordPage';
+import ChangePasswordPage from './pages/settings/ChangePasswordPage';
 import PaymentPage from './pages/payment/PaymentPage';
 import Transactional from './pages/payment/Transactional';
 import PremiumPageCosmic from './pages/payment/PremiumPageCosmic';
@@ -108,6 +111,9 @@ const App = () => {
                     <Route path="/register/mentor" element={<ElevatorMentorRegisterPage />} />
                     <Route path="/verify-otp" element={<VerifyPage />} />
                     <Route path="/forgot-password" element={<ElevatorForgotPasswordPage />} />
+                    <Route path="/reset-password" element={<ResetPasswordPage />} />
+                    <Route path="/set-password" element={<SetPasswordPage />} />
+                    <Route path="/change-password" element={<ChangePasswordPage />} />
                     
                     {/* Profile Routes by Role */}
                     <Route path="/profile" element={<ProfileRouter />} />
@@ -181,6 +187,7 @@ const fullScreenRoutes = new Set<string>([
   '/register/mentor',
   '/verify-otp',
   '/forgot-password',
+  '/reset-password',
 ]);
 
 // Routes that only hide footer (keep header visible)

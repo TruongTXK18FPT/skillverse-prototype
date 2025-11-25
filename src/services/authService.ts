@@ -7,7 +7,15 @@ import {
   RefreshTokenRequest,
   RegistrationResponse,
   UserDto,
-  GoogleAuthRequest
+  GoogleAuthRequest,
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
+  SetPasswordRequest,
+  SetPasswordResponse,
+  ChangePasswordRequest,
+  ChangePasswordResponse
 } from '../data/authDTOs';
 
 // Helper type for axios error handling
@@ -140,13 +148,87 @@ class AuthService {
     }
   }
 
-  // Forgot password
-  async forgotPassword(email: string): Promise<void> {
+  // Forgot password - Request OTP
+  async forgotPassword(email: string): Promise<ForgotPasswordResponse> {
     try {
-      await axiosInstance.post('/api/auth/forgot-password', { email });
+      console.log('Requesting password reset for:', email);
+      
+      const request: ForgotPasswordRequest = { email };
+      const response = await axiosInstance.post<ForgotPasswordResponse>(
+        '/api/auth/forgot-password', 
+        request
+      );
+      
+      console.log('Forgot password OTP sent successfully');
+      return response.data;
+      
     } catch (error: unknown) {
       console.error('Forgot password error:', error);
-      const errorMessage = (error as AxiosError).response?.data?.message || 'Gửi yêu cầu thất bại. Vui lòng thử lại.';
+      const errorMessage = (error as AxiosError).response?.data?.message || 
+        'Gửi mã OTP thất bại. Vui lòng thử lại.';
+      throw new Error(errorMessage);
+    }
+  }
+
+  // Reset password with OTP
+  async resetPassword(request: ResetPasswordRequest): Promise<ResetPasswordResponse> {
+    try {
+      console.log('Resetting password for:', request.email);
+      
+      const response = await axiosInstance.post<ResetPasswordResponse>(
+        '/api/auth/reset-password', 
+        request
+      );
+      
+      console.log('Password reset successful');
+      return response.data;
+      
+    } catch (error: unknown) {
+      console.error('Reset password error:', error);
+      const errorMessage = (error as AxiosError).response?.data?.message || 
+        'Đặt lại mật khẩu thất bại. Vui lòng thử lại.';
+      throw new Error(errorMessage);
+    }
+  }
+
+  // Set password for Google OAuth users (requires authentication)
+  async setPassword(request: SetPasswordRequest): Promise<SetPasswordResponse> {
+    try {
+      console.log('Setting password for Google user');
+      
+      const response = await axiosInstance.post<SetPasswordResponse>(
+        '/api/auth/set-password', 
+        request
+      );
+      
+      console.log('Password set successfully for Google user');
+      return response.data;
+      
+    } catch (error: unknown) {
+      console.error('Set password error:', error);
+      const errorMessage = (error as AxiosError).response?.data?.message || 
+        'Đặt mật khẩu thất bại. Vui lòng thử lại.';
+      throw new Error(errorMessage);
+    }
+  }
+
+  // Change password for authenticated users (requires authentication)
+  async changePassword(request: ChangePasswordRequest): Promise<ChangePasswordResponse> {
+    try {
+      console.log('Changing password for user');
+      
+      const response = await axiosInstance.post<ChangePasswordResponse>(
+        '/api/auth/change-password', 
+        request
+      );
+      
+      console.log('Password changed successfully');
+      return response.data;
+      
+    } catch (error: unknown) {
+      console.error('Change password error:', error);
+      const errorMessage = (error as AxiosError).response?.data?.message || 
+        'Đổi mật khẩu thất bại. Vui lòng thử lại.';
       throw new Error(errorMessage);
     }
   }

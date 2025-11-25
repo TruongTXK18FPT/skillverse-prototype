@@ -1,0 +1,235 @@
+/* ========================================
+   PROFILE SECURITY SECTION STYLES
+   ======================================== */
+
+.security-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Security Card */
+.security-card {
+  display: flex;
+  gap: 20px;
+  padding: 24px;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.security-card:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.security-card--highlight {
+  background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+  border-color: #3b82f6;
+}
+
+.security-card--highlight:hover {
+  border-color: #2563eb;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+}
+
+/* Security Card Icon */
+.security-card-icon {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 12px;
+  color: #667eea;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.security-card--highlight .security-card-icon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+/* Security Card Content */
+.security-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.security-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.security-card-description {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Security Badge */
+.security-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.security-badge--optional {
+  background: #10b981;
+  color: white;
+}
+
+/* Security Button */
+.security-button {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.security-button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.security-button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.security-button--secondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.security-button--secondary:hover {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+/* Security Info */
+.security-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+}
+
+.security-info-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.security-info-text {
+  font-size: 14px;
+  color: #166534;
+  line-height: 1.6;
+}
+
+.security-info-text strong {
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .security-card {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .security-card-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .security-card-title {
+    font-size: 16px;
+  }
+
+  .security-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Dark Mode */
+[data-theme="dark"] .security-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .security-card:hover {
+  border-color: #475569;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .security-card--highlight {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2d1b3d 100%);
+  border-color: #3b82f6;
+}
+
+[data-theme="dark"] .security-card-icon {
+  background: #0f172a;
+  color: #667eea;
+}
+
+[data-theme="dark"] .security-card--highlight .security-card-icon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+[data-theme="dark"] .security-card-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .security-card-description {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .security-button--secondary {
+  background: #0f172a;
+  color: #e5e7eb;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .security-button--secondary:hover {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+[data-theme="dark"] .security-info {
+  background: #064e3b;
+  border-color: #059669;
+}
+
+[data-theme="dark"] .security-info-text {
+  color: #6ee7b7;
+}

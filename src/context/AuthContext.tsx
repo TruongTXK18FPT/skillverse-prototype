@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 import authService from '../services/authService';
 import userService from '../services/userService';
-import { LoginRequest, UserDto, VerifyEmailRequest, ResendOtpRequest } from '../data/authDTOs';
+import { LoginRequest, UserDto, VerifyEmailRequest, ResendOtpRequest, ForgotPasswordResponse, ResetPasswordRequest, ResetPasswordResponse, SetPasswordRequest, SetPasswordResponse, ChangePasswordRequest, ChangePasswordResponse } from '../data/authDTOs';
 import { UserRegistrationRequest } from '../data/userDTOs';
 
 interface AuthContextType {
@@ -11,7 +11,10 @@ interface AuthContextType {
   register: (userData: UserRegistrationRequest) => Promise<{ requiresVerification: boolean; email: string; message: string }>;
   verifyEmail: (request: VerifyEmailRequest) => Promise<void>;
   resendOtp: (request: ResendOtpRequest) => Promise<string>;
-  forgotPassword: (email: string) => Promise<void>;
+  forgotPassword: (email: string) => Promise<ForgotPasswordResponse>;
+  resetPassword: (request: ResetPasswordRequest) => Promise<ResetPasswordResponse>;
+  setPassword: (request: SetPasswordRequest) => Promise<SetPasswordResponse>;
+  changePassword: (request: ChangePasswordRequest) => Promise<ChangePasswordResponse>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
 }
@@ -100,10 +103,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const forgotPassword = async (email: string): Promise<void> => {
+  const forgotPassword = async (email: string): Promise<ForgotPasswordResponse> => {
     try {
       setLoading(true);
-      await authService.forgotPassword(email);
+      return await authService.forgotPassword(email);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetPassword = async (request: ResetPasswordRequest): Promise<ResetPasswordResponse> => {
+    try {
+      setLoading(true);
+      return await authService.resetPassword(request);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const setPassword = async (request: SetPasswordRequest): Promise<SetPasswordResponse> => {
+    try {
+      setLoading(true);
+      return await authService.setPassword(request);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const changePassword = async (request: ChangePasswordRequest): Promise<ChangePasswordResponse> => {
+    try {
+      setLoading(true);
+      return await authService.changePassword(request);
     } finally {
       setLoading(false);
     }
@@ -129,6 +159,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     verifyEmail,
     resendOtp,
     forgotPassword,
+    resetPassword,
+    setPassword,
+    changePassword,
     logout,
     isAuthenticated: !!user && authService.isAuthenticated(),
   }), [user, loading]);

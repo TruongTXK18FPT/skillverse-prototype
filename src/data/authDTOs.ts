@@ -78,6 +78,65 @@ export interface EmailVerifiedResponse {
   isVerified: boolean;
 }
 
+// Forgot Password Request DTO
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+// Forgot Password Response DTO
+export interface ForgotPasswordResponse {
+  success: boolean;
+  message: string;
+  email: string;
+  otpExpiryMinutes: number;
+  nextStep: string;
+}
+
+// Reset Password Request DTO
+export interface ResetPasswordRequest {
+  email: string;
+  otp: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+// Reset Password Response DTO
+export interface ResetPasswordResponse {
+  message: string;
+  email: string;
+  requiresVerification: boolean;
+  nextStep: string;
+}
+
+// Set Password Request DTO (for Google users)
+export interface SetPasswordRequest {
+  newPassword: string;
+  confirmPassword: string;
+}
+
+// Set Password Response DTO
+export interface SetPasswordResponse {
+  message: string;
+  email: string;
+  requiresVerification: boolean;
+  nextStep: string;
+}
+
+// Change Password Request DTO
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+// Change Password Response DTO
+export interface ChangePasswordResponse {
+  message: string;
+  email: string;
+  requiresVerification: boolean;
+  nextStep: string;
+}
+
 // API Error Response
 export interface ApiErrorResponse {
   error: string;
