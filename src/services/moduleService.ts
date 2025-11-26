@@ -22,8 +22,9 @@ export interface ModuleSummaryDTO {
 export interface ModuleDetailDTO extends ModuleSummaryDTO {
   createdAt: string;
   updatedAt: string;
-  lessons: Array<{ id: number; title: string; type: string; orderIndex: number; }>;
-  quizzes?: Array<{ id: number; title: string; passScore?: number; questionCount?: number; }>; 
+  lessons: Array<{ id: number; title: string; type: string; orderIndex: number; durationSec?: number; }>;
+  quizzes?: Array<{ id: number; title: string; passScore?: number; questionCount?: number; }>;
+  assignments?: Array<{ id: number; title: string; submissionType?: string; maxScore?: number; }>;
 }
 
 export const listModules = async (courseId: number): Promise<ModuleSummaryDTO[]> => {

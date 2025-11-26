@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   BookOpen, Search, Filter, Eye, CheckCircle, XCircle, 
-  Clock, User, Calendar, Star, ChevronLeft, ChevronRight, Award, Layers
+  Clock, User, Calendar, Star, ChevronLeft, ChevronRight, Award, Layers, Play, FileText, X
 } from 'lucide-react';
 import {
   listPendingCourses,
@@ -9,6 +9,7 @@ import {
   rejectCourse,
   getCourse
 } from '../../services/courseService';
+import { getLessonById } from '../../services/lessonService';
 import {
   CourseDetailDTO,
   CourseSummaryDTO
@@ -31,6 +32,8 @@ export const CourseApprovalTabCosmic: React.FC = () => {
   const [showActionModal, setShowActionModal] = useState(false);
   const [actionType, setActionType] = useState<'approve' | 'reject'>('approve');
   const [actionReason, setActionReason] = useState('');
+  const [selectedLesson, setSelectedLesson] = useState<any>(null);
+  const [showLessonModal, setShowLessonModal] = useState(false);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -382,10 +385,141 @@ export const CourseApprovalTabCosmic: React.FC = () => {
                 {courseModules.length > 0 && (
                   <div className="modules-section">
                     <h4>Nội dung khóa học ({courseModules.length} modules)</h4>
-                    {courseModules.map((module) => (
-                      <div key={module.id} className="module-item">
-                        <Layers size={16} />
-                        <span>{module.title}</span>
+                    {courseModules.map((module, idx) => (
+                      <div key={module.id} className="module-detail-card" style={{
+                        border: '1px solid rgba(139, 92, 246, 0.3)',
+                        borderRadius: '12px',
+                        padding: '16px',
+                        marginBottom: '16px',
+                        background: 'rgba(139, 92, 246, 0.05)'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                          <Layers size={20} style={{ color: '#8b5cf6' }} />
+                          <div>
+                            <h5 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '600' }}>Module {idx + 1}: {module.title}</h5>
+                            {module.description && (
+                              <p style={{ margin: '4px 0 0 0', fontSize: '0.9rem', color: '#9ca3af' }}>{module.description}</p>
+                            )}
+                          </div>
+                        </div>
+                        
+                        {/* Lessons */}
+                        {module.lessons && module.lessons.length > 0 && (
+                          <div style={{ marginTop: '12px', paddingLeft: '32px' }}>
+                            <h6 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '8px', color: '#6366f1' }}>
+                              📚 Bài học ({module.lessons.length})
+                            </h6>
+                            {module.lessons.map((lesson: any) => (
+                              <div 
+                                key={lesson.id} 
+                                onClick={async () => {
+                                  try {
+                                    setLoading(true);
+                                    const lessonDetail = await getLessonById(lesson.id);
+                                    setSelectedLesson(lessonDetail);
+                                    setShowLessonModal(true);
+                                  } catch (error) {
+                                    console.error('Error loading lesson detail:', error);
+                                    showError('Lỗi', 'Không thể tải chi tiết bài học');
+                                  } finally {
+                                    setLoading(false);
+                                  }
+                                }}
+                                style={{
+                                  padding: '8px 12px',
+                                  background: 'rgba(99, 102, 241, 0.1)',
+                                  borderRadius: '8px',
+                                  marginBottom: '6px',
+                                  fontSize: '0.9rem',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.2s',
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.background = 'rgba(99, 102, 241, 0.2)';
+                                  e.currentTarget.style.transform = 'translateX(4px)';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.background = 'rgba(99, 102, 241, 0.1)';
+                                  e.currentTarget.style.transform = 'translateX(0)';
+                                }}
+                              >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <span>• {lesson.title}</span>
+                                  <div style={{ display: 'flex', gap: '12px', fontSize: '0.85rem', color: '#6b7280', alignItems: 'center' }}>
+                                    <span>{lesson.type}</span>
+                                    <span>{lesson.durationSec ? `${Math.floor(lesson.durationSec / 60)}m` : ''}</span>
+                                    <Eye size={14} style={{ color: '#6366f1' }} />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {/* Quizzes */}
+                        {module.quizzes && module.quizzes.length > 0 && (
+                          <div style={{ marginTop: '12px', paddingLeft: '32px' }}>
+                            <h6 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '8px', color: '#10b981' }}>
+                              ❓ Quiz ({module.quizzes.length})
+                            </h6>
+                            {module.quizzes.map((quiz: any) => (
+                              <div key={quiz.id} style={{
+                                padding: '8px 12px',
+                                background: 'rgba(16, 185, 129, 0.1)',
+                                borderRadius: '8px',
+                                marginBottom: '6px',
+                                fontSize: '0.9rem'
+                              }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <span>• {quiz.title}</span>
+                                  <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>
+                                    {quiz.questionCount || 0} câu hỏi • Điểm đạt: {quiz.passScore}%
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {/* Assignments */}
+                        {module.assignments && module.assignments.length > 0 && (
+                          <div style={{ marginTop: '12px', paddingLeft: '32px' }}>
+                            <h6 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '8px', color: '#f59e0b' }}>
+                              📝 Bài tập ({module.assignments.length})
+                            </h6>
+                            {module.assignments.map((assignment: any) => (
+                              <div key={assignment.id} style={{
+                                padding: '8px 12px',
+                                background: 'rgba(245, 158, 11, 0.1)',
+                                borderRadius: '8px',
+                                marginBottom: '6px',
+                                fontSize: '0.9rem'
+                              }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <span>• {assignment.title}</span>
+                                  <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>
+                                    {assignment.submissionType} • Max: {assignment.maxScore} điểm
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {/* Empty state */}
+                        {(!module.lessons || module.lessons.length === 0) && 
+                         (!module.quizzes || module.quizzes.length === 0) && 
+                         (!module.assignments || module.assignments.length === 0) && (
+                          <div style={{ 
+                            padding: '16px', 
+                            textAlign: 'center', 
+                            color: '#9ca3af',
+                            fontSize: '0.9rem',
+                            fontStyle: 'italic'
+                          }}>
+                            Module này chưa có nội dung
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -453,6 +587,113 @@ export const CourseApprovalTabCosmic: React.FC = () => {
                 disabled={loading}
               >
                 {loading ? 'Đang xử lý...' : (actionType === 'approve' ? 'Xác nhận duyệt' : 'Xác nhận từ chối')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Lesson Detail Modal */}
+      {showLessonModal && selectedLesson && (
+        <div className="cosmic-modal-overlay" onClick={() => setShowLessonModal(false)}>
+          <div className="cosmic-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '900px' }}>
+            <div className="modal-header">
+              <h2>Chi Tiết Bài Học</h2>
+              <button className="close-btn" onClick={() => setShowLessonModal(false)}>×</button>
+            </div>
+            
+            <div className="modal-body" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+              <div style={{ marginBottom: '20px' }}>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '12px' }}>
+                  {selectedLesson.title}
+                </h3>
+                <div style={{ display: 'flex', gap: '16px', fontSize: '0.9rem', color: '#6b7280' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    {selectedLesson.type === 'VIDEO' ? <Play size={16} /> : <FileText size={16} />}
+                    {selectedLesson.type}
+                  </span>
+                  {selectedLesson.durationSec && (
+                    <span>⏱️ {Math.floor(selectedLesson.durationSec / 60)} phút</span>
+                  )}
+                  <span>📍 Thứ tự: {selectedLesson.orderIndex}</span>
+                </div>
+              </div>
+
+              {/* Video Content */}
+              {selectedLesson.type === 'VIDEO' && selectedLesson.videoUrl && (
+                <div style={{ marginBottom: '20px' }}>
+                  <h4 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '12px' }}>Video</h4>
+                  <div style={{ 
+                    background: '#000', 
+                    borderRadius: '12px', 
+                    overflow: 'hidden',
+                    aspectRatio: '16/9'
+                  }}>
+                    <video 
+                      controls 
+                      style={{ width: '100%', height: '100%' }}
+                      src={selectedLesson.videoUrl}
+                    >
+                      Trình duyệt không hỗ trợ video.
+                    </video>
+                  </div>
+                  {selectedLesson.videoUrl && (
+                    <p style={{ fontSize: '0.85rem', color: '#6b7280', marginTop: '8px' }}>
+                      🔗 URL: {selectedLesson.videoUrl}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Reading Content */}
+              {selectedLesson.type === 'READING' && selectedLesson.contentText && (
+                <div style={{ marginBottom: '20px' }}>
+                  <h4 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '12px' }}>Nội dung bài đọc</h4>
+                  <div style={{
+                    background: 'rgba(99, 102, 241, 0.05)',
+                    border: '1px solid rgba(99, 102, 241, 0.2)',
+                    borderRadius: '12px',
+                    padding: '20px',
+                    lineHeight: '1.8',
+                    fontSize: '1rem',
+                    whiteSpace: 'pre-wrap'
+                  }}>
+                    {selectedLesson.contentText}
+                  </div>
+                </div>
+              )}
+
+              {/* Empty state */}
+              {selectedLesson.type === 'VIDEO' && !selectedLesson.videoUrl && (
+                <div style={{ 
+                  padding: '40px', 
+                  textAlign: 'center', 
+                  color: '#9ca3af',
+                  background: 'rgba(0,0,0,0.05)',
+                  borderRadius: '12px'
+                }}>
+                  <Play size={48} style={{ margin: '0 auto 16px', opacity: 0.5 }} />
+                  <p>Bài học này chưa có video</p>
+                </div>
+              )}
+
+              {selectedLesson.type === 'READING' && !selectedLesson.contentText && (
+                <div style={{ 
+                  padding: '40px', 
+                  textAlign: 'center', 
+                  color: '#9ca3af',
+                  background: 'rgba(0,0,0,0.05)',
+                  borderRadius: '12px'
+                }}>
+                  <FileText size={48} style={{ margin: '0 auto 16px', opacity: 0.5 }} />
+                  <p>Bài học này chưa có nội dung</p>
+                </div>
+              )}
+            </div>
+
+            <div className="modal-footer">
+              <button className="btn-secondary" onClick={() => setShowLessonModal(false)}>
+                Đóng
               </button>
             </div>
           </div>

@@ -145,13 +145,37 @@ const PUBLIC_ENDPOINTS = [
 ];
 
 // Check if the URL matches any public endpoint
-const isPublicEndpoint = (url: string): boolean => {
+const isPublicEndpoint = (url: string, method?: string): boolean => {
   // Normalize URL by removing /api prefix if present
   const normalizedUrl = url.replace(/^\/api/, '');
   
+  // ✅ Admin course endpoints - ALWAYS require authentication
+  const adminCourseEndpoints = [
+    '/courses/pending',
+    '/courses/approve',
+    '/courses/reject'
+  ];
+  
+  if (adminCourseEndpoints.some(adminPath => normalizedUrl.includes(adminPath))) {
+    return false; // Require authentication
+  }
+  
   return PUBLIC_ENDPOINTS.some(endpoint => {
+    // Special handling for /courses: Only GET requests to list/detail are public
+    if (endpoint === '/courses') {
+      // POST/PUT/DELETE always require auth
+      if (method && method.toUpperCase() !== 'GET') {
+        return false;
+      }
+      // GET /courses or GET /courses/{id} or GET /courses?params are public
+      // But GET /courses/pending is NOT public (handled above)
+      return normalizedUrl === '/courses' || 
+             normalizedUrl.startsWith('/courses?') ||
+             /^\/courses\/\d+/.test(normalizedUrl); // Match /courses/123 but not /courses/pending
+    }
+    
     // Use startsWith for exact path matching (more secure)
-    // Also check if URL contains endpoint with query params (e.g., /courses?page=1)
+    // Also check if URL contains endpoint with query params
     return normalizedUrl.startsWith(endpoint) || 
            normalizedUrl.startsWith(endpoint + '/') ||
            normalizedUrl.startsWith(endpoint + '?');
@@ -162,7 +186,7 @@ const isPublicEndpoint = (url: string): boolean => {
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // Only add token for protected endpoints
-    if (!isPublicEndpoint(config.url || '')) {
+    if (!isPublicEndpoint(config.url || '', config.method)) {
       const token = localStorage.getItem('accessToken');
       // Pre-emptive refresh if token is about to expire (leeway window)
       if (token && isTokenExpiringSoon(token) && !isRefreshing) {

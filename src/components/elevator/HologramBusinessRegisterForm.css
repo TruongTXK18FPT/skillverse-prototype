@@ -499,6 +499,21 @@
   cursor: not-allowed;
 }
 
+/* Autofill detection - Chrome triggers animation when autofilling */
+@keyframes onAutoFillStart {
+  from { opacity: 0.99; }
+  to { opacity: 1; }
+}
+
+.reg-business-input:-webkit-autofill {
+  animation-name: onAutoFillStart;
+  animation-duration: 0.001s;
+  /* Override Chrome's yellow background */
+  -webkit-box-shadow: 0 0 0 1000px rgba(20, 30, 50, 0.9) inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .reg-business-select {
   cursor: pointer;
   appearance: none;

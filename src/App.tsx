@@ -53,6 +53,7 @@ import './styles/App.css';
 import ScrollToTop from './components/scroll/ScrollToTop';
 import CourseDetailPage from './pages/navbar/CourseDetailPage';
 import CourseLearningPage from './pages/navbar/CourseLearningPage';
+import QuizAttemptPage from './pages/quiz/QuizAttemptPage';
 import ProfilePageCosmic from './pages/profile/ProfilePageCosmic';
 import MentorProfilePage from './pages/mentor/MentorProfilePage';
 import RecruiterProfilePage from './pages/business/RecruiterProfilePage';
@@ -133,6 +134,7 @@ const App = () => {
                     <Route path="/seminar" element={<SeminarPage />} />
                     <Route path="/courses/:id" element={<CourseDetailPage />} />
                     <Route path="/course-learning" element={<CourseLearningPage />} />
+                    <Route path="/quiz/:quizId/attempt" element={<QuizAttemptPage />} />
 
                     {/* Add the missing footer routes */}
 
@@ -201,7 +203,13 @@ const hideFooterOnlyRoutes = new Set<string>([
   '/roadmap',
   '/cv',
   '/admin',
+  '/course-learning',
 ]);
+
+// Check if path matches quiz attempt pattern
+const isQuizAttemptRoute = (pathname: string) => {
+  return /^\/quiz\/\d+\/attempt$/.test(pathname);
+};
 
 // Hide Header on specific routes
 const HeaderVisibilityWrapper = () => {
@@ -213,7 +221,7 @@ const HeaderVisibilityWrapper = () => {
 // Hide Footer on specific routes
 const FooterVisibilityWrapper = () => {
   const location = useLocation();
-  if (fullScreenRoutes.has(location.pathname) || hideFooterOnlyRoutes.has(location.pathname)) {
+  if (fullScreenRoutes.has(location.pathname) || hideFooterOnlyRoutes.has(location.pathname) || isQuizAttemptRoute(location.pathname)) {
     return null;
   }
   return <Footer />;

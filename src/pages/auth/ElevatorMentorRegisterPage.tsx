@@ -130,6 +130,11 @@ const ElevatorMentorRegisterPage: React.FC = () => {
         // Email verification needed - navigate to OTP page
         setRegisteredEmail(data.email);
         setPendingRedirect('/verify-otp');
+        
+        // Save OTP expiry time to localStorage (5 minutes from now)
+        const otpExpiryTime = new Date(Date.now() + 5 * 60 * 1000);
+        const storageKey = `otp_expiry_${data.email}`;
+        localStorage.setItem(storageKey, otpExpiryTime.toISOString());
       } else {
         // Account is pending admin approval - show modal
         setPendingApprovalEmail(data.email);

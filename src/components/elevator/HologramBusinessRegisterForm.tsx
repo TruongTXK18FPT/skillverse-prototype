@@ -63,6 +63,15 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
     setError(null);
   };
 
+  // Handle autofill detection for Chrome
+  const handleAutofill = (e: React.AnimationEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    const { name, value } = target;
+    if (value) {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
+  };
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const validFiles = files.filter(file => {
@@ -236,6 +245,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="companyName"
                 value={formData.companyName}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-business-input"
               />
@@ -253,6 +263,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="businessEmail"
                 value={formData.businessEmail}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-business-input"
                 autoComplete="email"
@@ -272,6 +283,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-business-input"
                 autoComplete="new-password"
@@ -298,6 +310,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-business-input"
                 autoComplete="new-password"

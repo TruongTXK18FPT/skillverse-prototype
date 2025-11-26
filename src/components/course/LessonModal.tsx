@@ -3,6 +3,7 @@ import { X, FileText, Video, FileCode, CheckCircle } from 'lucide-react';
 import { LessonCreateDTO, LessonUpdateDTO, LessonType } from '../../data/lessonDTOs';
 import { createLesson, updateLesson } from '../../services/lessonService';
 import { useAuth } from '../../context/AuthContext';
+import AttachmentManager from './AttachmentManager'; // ✅ NEW: For Reading lessons
 import '../../styles/ModalsEnhanced.css';
 
 interface LessonModalProps {
@@ -333,6 +334,14 @@ const LessonModal: React.FC<LessonModalProps> = ({
               Thứ tự hiển thị của bài học trong khóa học
             </p>
           </div>
+
+          {/* ✅ NEW: Attachments for READING lessons */}
+          {lessonToEdit && formData.type === LessonType.READING && (
+            <AttachmentManager
+              lessonId={lessonToEdit.id}
+              editable={true}
+            />
+          )}
 
           {/* Error Message */}
           {error && (

@@ -53,6 +53,15 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
     setError(null);
   };
 
+  // Handle autofill detection for Chrome
+  const handleAutofill = (e: React.AnimationEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    const { name, value } = target;
+    if (value) {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
+  };
+
   const validateForm = (): string | null => {
     if (!formData.fullName.trim()) return 'Vui lòng nhập họ tên';
     if (!formData.email.trim()) return 'Vui lòng nhập email';
@@ -173,6 +182,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-personal-input"
                 autoComplete="name"
@@ -191,6 +201,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-personal-input"
                 autoComplete="email"
@@ -210,6 +221,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-personal-input"
                 autoComplete="new-password"
@@ -236,6 +248,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-personal-input"
                 autoComplete="new-password"

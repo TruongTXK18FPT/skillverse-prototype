@@ -117,14 +117,14 @@ const ElevatorPersonalRegisterPage: React.FC = () => {
       // Store email for verify-otp navigation
       setRegisteredEmail(data.email);
 
-      // Save OTP expiry time to localStorage if provided
-      if (result.otpExpiryTime) {
-        const storageKey = `otp_expiry_${data.email}`;
-        localStorage.setItem(storageKey, result.otpExpiryTime);
-      }
-
       // Check if verification is required
       if (result.requiresVerification) {
+        // Save OTP expiry time to localStorage (5 minutes from now)
+        const otpExpiryTime = result.otpExpiryTime 
+          ? new Date(result.otpExpiryTime)
+          : new Date(Date.now() + 5 * 60 * 1000);
+        const storageKey = `otp_expiry_${data.email}`;
+        localStorage.setItem(storageKey, otpExpiryTime.toISOString());
         // console.log('Verification required, will redirect to verify-otp after animation');
         
         // Store redirect for after animation

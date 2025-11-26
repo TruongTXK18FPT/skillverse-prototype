@@ -44,6 +44,9 @@ import { SubmissionType, AssignmentSummaryDTO } from '../../data/assignmentDTOs'
 import AssignmentModal from '../../components/course/AssignmentModal';
 import { ProgrammingLanguage, CodingExerciseCreateDTO } from '../../data/codelabDTOs';
 import { uploadMedia, getSignedMediaUrl, listMediaByLesson } from '../../services/mediaService';
+import HoloProgressBar from '../../components/dashboard-hud/HoloProgressBar';
+import AttachmentManager from '../../components/course/AttachmentManager';
+import { uploadVideo } from '../../services/fileUploadService';
 
 // Types for mentor dashboard data
 export interface Booking {
@@ -137,6 +140,7 @@ export interface Course {
   assignments: Assignment[];
   codingExercises: CodingExercise[];
   enrollmentCount: number;
+  moduleCount?: number;
   lessonCount?: number;
   price?: number;
   currency?: string;
@@ -301,6 +305,14 @@ const MentorPage: React.FC = () => {
   const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
   const [previewLesson, setPreviewLesson] = useState<Lesson | null>(null);
   const [previewLoading, setPreviewLoading] = useState<boolean>(false);
+
+  // ✅ NEW: Video upload progress tracking
+  const [videoUploadProgress, setVideoUploadProgress] = useState<number>(0);
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false);
+
+  // ✅ NEW: Selected lesson type for Add Lesson modal
+  const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>('VIDEO');
+
   const [showAddQuiz, setShowAddQuiz] = useState(false);
   const [showAddAssignment, setShowAddAssignment] = useState(false);
   const [showAddCodelab, setShowAddCodelab] = useState(false);
@@ -340,55 +352,59 @@ const MentorPage: React.FC = () => {
   ]);
 
   // Load mentor's courses from backend
-  useEffect(() => {
-    const loadCourses = async () => {
-      if (!user) {
-        setError('User not authenticated');
-        return;
-      }
+  const loadCourses = async () => {
+    if (!user) {
+      setError('User not authenticated');
+      return;
+    }
 
-      setLoading(true);
-      setError(null);
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Fetch courses by author from backend
+      const response = await listCoursesByAuthor(user.id, 0, 50);
       
-      try {
-        // Fetch courses by author from backend
-        const response = await listCoursesByAuthor(user.id, 0, 50);
-        
-        // Convert DTO to internal Course format
-        const mentorCourses: Course[] = response.content.map(dto => ({
-          id: dto.id,
-          title: dto.title,
-          description: dto.description,
-          level: dto.level,
-          status: dto.status,
-          author: dto.author,
-          thumbnail: dto.thumbnailUrl ? {
-            id: 0, // Not available in summary
-            url: dto.thumbnailUrl,
-            fileName: '' // Not available in summary
-          } : undefined,
-          lessons: [], // Load separately when needed
-          quizzes: [],
-          assignments: [],
-          codingExercises: [],
-          enrollmentCount: dto.enrollmentCount,
-          lessonCount: dto.moduleCount, // Use moduleCount from backend as lessonCount for display
-          price: dto.price,
-          currency: dto.currency,
-          createdAt: dto.createdAt,
-          updatedAt: dto.updatedAt
-        }));
-        
-        setCourses(mentorCourses);
-      } catch (err) {
-        console.error('Error loading courses:', err);
-        setError('Failed to load courses. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
+      // Convert DTO to internal Course format
+      const mentorCourses: Course[] = response.content.map(dto => ({
+        id: dto.id,
+        title: dto.title,
+        description: dto.description,
+        level: dto.level,
+        status: dto.status,
+        author: dto.author,
+        thumbnail: dto.thumbnailUrl ? {
+          id: 0, // Not available in summary
+          url: dto.thumbnailUrl,
+          fileName: '' // Not available in summary
+        } : undefined,
+        lessons: [], // Load separately when needed
+        quizzes: [],
+        assignments: [],
+        codingExercises: [],
+        enrollmentCount: dto.enrollmentCount,
+        moduleCount: dto.moduleCount, // ✅ Use actual moduleCount from backend
+        lessonCount: dto.lessonCount || 0, // ✅ Use actual lessonCount from backend
+        price: dto.price,
+        currency: dto.currency,
+        createdAt: dto.createdAt,
+        updatedAt: dto.updatedAt
+      }));
+      
+      setCourses(mentorCourses);
+    } catch (err) {
+      console.error('Error loading courses:', err);
+      setError('Failed to load courses. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    loadCourses();
+  useEffect(() => {
+    if (user) {
+      loadCourses();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const handleApproveBooking = (bookingId: string) => {
@@ -439,6 +455,8 @@ const MentorPage: React.FC = () => {
         assignments: [],
         codingExercises: [],
         enrollmentCount: createdDto.enrollmentCount,
+        moduleCount: createdDto.moduleCount, // ✅ Use actual moduleCount from backend
+        lessonCount: createdDto.lessonCount || 0, // ✅ Use actual lessonCount from backend
         price: createdDto.price,
         currency: createdDto.currency,
         createdAt: createdDto.createdAt,
@@ -685,13 +703,18 @@ const MentorPage: React.FC = () => {
       if (moduleId) {
         // Load lessons for specific module only
         const lessons = await listLessonsByModule(moduleId);
+        console.log('[LOAD_LESSONS] Loaded', lessons.length, 'lessons for module', moduleId);
         const mapped: Lesson[] = lessons.map((l: any) => ({
           id: l.id,
           title: l.title,
           type: l.type,
           orderIndex: l.orderIndex,
-          durationSec: l.durationSec ?? 0
+          durationSec: l.durationSec ?? 0,
+          contentText: l.contentText,
+          videoUrl: l.videoUrl,
+          videoMediaId: l.videoMediaId
         }));
+        console.log('[LOAD_LESSONS] Mapped lessons:', mapped);
         setCourseLessons(mapped);
       } else {
         // Load lessons from all modules (for backward compatibility)
@@ -708,7 +731,10 @@ const MentorPage: React.FC = () => {
           title: l.title,
           type: l.type,
           orderIndex: l.orderIndex,
-          durationSec: l.durationSec ?? 0
+          durationSec: l.durationSec ?? 0,
+          contentText: l.contentText,
+          videoUrl: l.videoUrl,
+          videoMediaId: l.videoMediaId
         }));
         
         setCourseLessons(mapped);
@@ -1137,8 +1163,12 @@ const MentorPage: React.FC = () => {
                     <span>{course.enrollmentCount} Học viên</span>
                   </div>
                   <div className="mentor-course-stat">
+                    <BookOpen className="w-4 h-4" />
+                    <span>{course.moduleCount} Module</span>
+                  </div>
+                  <div className="mentor-course-stat">
                     <Play className="w-4 h-4" />
-                    <span>{course.lessonCount || 0} Bài học</span>
+                    <span>{course.lessonCount} Bài học</span>
                   </div>
                   {course.price !== undefined && course.price !== null && (
                     <div className="mentor-course-stat">
@@ -1401,7 +1431,12 @@ const MentorPage: React.FC = () => {
                               <div className="mentor-lesson-actions">
                                 <button 
                                   className="mentor-lesson-action-button primary"
-                                  onClick={() => setEditingLesson(lesson)}
+                                  onClick={() => {
+                                    console.log('[EDIT_LESSON] Clicked edit for lesson:', lesson);
+                                    console.log('[EDIT_LESSON] contentText:', lesson.contentText);
+                                    console.log('[EDIT_LESSON] videoUrl:', lesson.videoUrl);
+                                    setEditingLesson(lesson);
+                                  }}
                                 >
                                   <Edit3 className="w-4 h-4" />
                                   Sửa
@@ -1739,22 +1774,46 @@ const MentorPage: React.FC = () => {
               const contentText = (form.elements.namedItem('contentText') as HTMLTextAreaElement | null)?.value?.trim();
               if (!title || !user) return;
               try {
-                let videoMediaId: number | undefined;
-                
-                // Upload video file first if provided
-                if (type === 'VIDEO' && videoFile) {
-                  console.log('Uploading video file:', videoFile.name);
-                  const media = await uploadMedia(videoFile, user.id);
-                  videoMediaId = media.id;
-                  console.log('Video uploaded successfully:', media.id);
+                let videoMediaId: number | undefined = undefined;
+                let uploadedVideoUrl: string | undefined = undefined;
+                if (videoFile && user) {
+                  console.log('[LESSON_CREATE] ========== STARTING VIDEO UPLOAD ==========');
+                  console.log('[LESSON_CREATE] File:', videoFile.name, 'Size:', videoFile.size, 'bytes');
+                  console.log('[LESSON_CREATE] User ID:', user.id);
+                  
+                  setIsUploadingVideo(true);
+                  setVideoUploadProgress(0);
+                  console.log('[LESSON_CREATE] State set: isUploadingVideo=true, progress=0');
+                  
+                  const result = await uploadVideo(
+                    videoFile,
+                    user.id,
+                    (progress) => {
+                      console.log('[LESSON_CREATE] ✅ Progress callback called:', progress.percentage, '%');
+                      console.log('[LESSON_CREATE] Loaded:', progress.loaded, 'Total:', progress.total);
+                      setVideoUploadProgress(progress.percentage);
+                      console.log('[LESSON_CREATE] State updated: videoUploadProgress=', progress.percentage);
+                    }
+                  );
+                  
+                  videoMediaId = result.mediaId;
+                  uploadedVideoUrl = result.url; // ✅ Save Cloudinary URL
+                  setIsUploadingVideo(false);
+                  console.log('[LESSON_CREATE] ========== UPLOAD COMPLETE ==========');
+                  console.log('[LESSON_CREATE] Result:', result);
+                  console.log('[LESSON_CREATE] Media ID:', result.mediaId);
+                  console.log('[LESSON_CREATE] URL:', result.url);
                 }
+                
+                // ✅ Use uploadedVideoUrl if available, otherwise use manual videoUrl input
+                const finalVideoUrl = uploadedVideoUrl || videoUrl;
                 
                 const lessonPayload: LessonCreateDTO = { 
                   title, 
                   type, 
                   orderIndex: courseLessons.length+1, 
                   durationSec: duration,
-                  ...(type === 'VIDEO' && videoUrl ? { videoUrl } : {}),
+                  ...(type === 'VIDEO' && finalVideoUrl ? { videoUrl: finalVideoUrl } : {}),
                   ...(type === 'VIDEO' && videoMediaId ? { videoMediaId } : {}),
                   ...(type === 'READING' && contentText ? { contentText } : {})
                 };
@@ -1770,6 +1829,7 @@ const MentorPage: React.FC = () => {
                 
                 setShowAddLesson(false);
                 await loadLessons(selectedCourse.id, selectedModuleId || undefined);
+                await loadCourses(); // ✅ Reload courses to update lesson count
               } catch (err) { 
                 console.error('Create lesson failed', err);
                 setError('Failed to create lesson: ' + (err as any).message);
@@ -1781,30 +1841,71 @@ const MentorPage: React.FC = () => {
               </div>
               <div className="mentor-form-group">
                 <label className="mentor-form-label" htmlFor="lessonType">Loại</label>
-                <select id="lessonType" name="type" className="mentor-form-select">
+                <select 
+                  id="lessonType" 
+                  name="type" 
+                  className="mentor-form-select"
+                  value={selectedLessonType}
+                  onChange={(e) => {
+                    const newType = e.target.value as ApiLessonType;
+                    setSelectedLessonType(newType);
+                    console.log('[LESSON_MODAL] Type changed to:', newType);
+                  }}
+                >
                   <option value="VIDEO">Video</option>
                   <option value="READING">Reading</option>
                 </select>
               </div>
-              <div className="mentor-form-group">
-                <label className="mentor-form-label" htmlFor="readingContent">Nội dung (chỉ Reading)</label>
-                <textarea id="readingContent" name="contentText" className="mentor-form-textarea" rows={4} placeholder="Nhập nội dung bài đọc..."></textarea>
-              </div>
-              <div className="mentor-form-group">
-                <label className="mentor-form-label" htmlFor="videoUrl">Link video (chỉ Video)</label>
-                <input id="videoUrl" name="videoUrl" className="mentor-form-input" placeholder="https://..." />
-              </div>
-              <div className="mentor-form-group">
-                <label className="mentor-form-label" htmlFor="videoFile">Tải video từ máy (tùy chọn)</label>
-                <input id="videoFile" name="videoFile" type="file" accept="video/*" className="mentor-form-input" />
-              </div>
+              
+              {/* ✅ CONDITIONAL: Chỉ hiển thị khi chọn READING */}
+              {selectedLessonType === 'READING' && (
+                <div className="mentor-form-group">
+                  <label className="mentor-form-label" htmlFor="readingContent">Nội dung <span style={{color: '#ef4444'}}>*</span></label>
+                  <textarea id="readingContent" name="contentText" className="mentor-form-textarea" rows={4} placeholder="Nhập nội dung bài đọc..."></textarea>
+                </div>
+              )}
+              
+              {/* ✅ CONDITIONAL: Chỉ hiển thị khi chọn VIDEO */}
+              {selectedLessonType === 'VIDEO' && (
+                <>
+                  <div className="mentor-form-group">
+                    <label className="mentor-form-label" htmlFor="videoUrl">Link video (YouTube, Vimeo, etc.)</label>
+                    <input id="videoUrl" name="videoUrl" className="mentor-form-input" placeholder="https://youtube.com/watch?v=..." />
+                    <p className="mentor-form-hint">Hoặc upload file video bên dưới</p>
+                  </div>
+                  <div className="mentor-form-group">
+                    <label className="mentor-form-label" htmlFor="videoFile">Tải video từ máy (tùy chọn)</label>
+                    <input id="videoFile" name="videoFile" type="file" accept="video/*" className="mentor-form-input" />
+                    <p className="mentor-form-hint">
+                      📹 Tối đa 300MB • MP4, WebM, MOV, AVI • Progress bar sẽ hiển thị khi upload
+                    </p>
+                  </div>
+                </>
+              )}
+              {isUploadingVideo && (
+                <div className="mentor-form-group">
+                  <HoloProgressBar
+                    value={videoUploadProgress}
+                    label="Đang upload video..."
+                    color="cyan"
+                    height="md"
+                    showPercentage={true}
+                    animated={false}
+                  />
+                  <p style={{textAlign: 'center', color: '#64748b', fontSize: '0.875rem', marginTop: '0.5rem'}}>
+                    ⏳ Vui lòng không đóng cửa sổ này
+                  </p>
+                </div>
+              )}
               <div className="mentor-form-group">
                 <label className="mentor-form-label" htmlFor="duration">Thời lượng (giây)</label>
                 <input id="duration" name="duration" type="number" min={0} className="mentor-form-input" />
               </div>
               <div className="mentor-modal-actions">
                 <button type="button" className="mentor-btn-secondary" onClick={()=>setShowAddLesson(false)}>Hủy</button>
-                <button type="submit" className="mentor-btn-primary">Tạo</button>
+                <button type="submit" className="mentor-btn-primary" disabled={isUploadingVideo}>
+                  {isUploadingVideo ? 'Đang upload...' : 'Tạo'}
+                </button>
               </div>
             </form>
           </div>
@@ -1879,17 +1980,25 @@ const MentorPage: React.FC = () => {
                 </p>
               </div>
               {editingLesson.type === 'READING' && (
-                <div className="mentor-form-group">
-                  <label className="mentor-form-label" htmlFor="editReadingContent">Nội dung</label>
-                  <textarea 
-                    id="editReadingContent" 
-                    name="contentText" 
-                    className="mentor-form-textarea" 
-                    rows={6} 
-                    placeholder="Nhập nội dung bài đọc..."
-                    defaultValue={editingLesson.contentText || ''}
-                  ></textarea>
-                </div>
+                <>
+                  <div className="mentor-form-group">
+                    <label className="mentor-form-label" htmlFor="editReadingContent">Nội dung</label>
+                    <textarea 
+                      id="editReadingContent" 
+                      name="contentText" 
+                      className="mentor-form-textarea" 
+                      rows={6} 
+                      placeholder="Nhập nội dung bài đọc..."
+                      defaultValue={editingLesson.contentText || ''}
+                    ></textarea>
+                  </div>
+                  
+                  {/* ✅ NEW: Attachments for READING lessons */}
+                  <AttachmentManager
+                    lessonId={editingLesson.id}
+                    editable={true}
+                  />
+                </>
               )}
               {editingLesson.type === 'VIDEO' && (
                 <div className="mentor-form-group">

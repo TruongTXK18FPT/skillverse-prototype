@@ -211,6 +211,10 @@ const VerifyPage = () => {
         }
       }
       
+      // Clear OTP expiry time from localStorage after successful verification
+      const storageKey = `otp_expiry_${email}`;
+      localStorage.removeItem(storageKey);
+      
       // Different redirect logic based on mode and user type
       setTimeout(() => {
         if (mode === 'forgot-password') {

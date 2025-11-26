@@ -445,7 +445,7 @@ const categories = [
                       <div className="cockpit-module-stats">
                         <div className="cockpit-stat-item">
                           <BookOpen className="cockpit-stat-icon" />
-                          <span>{course.modules ?? 12} LESSONS</span>
+                          <span>{course.modules ?? 0} MODULES</span>
                         </div>
                         <div className="cockpit-stat-item">
                           <Users className="cockpit-stat-icon" />

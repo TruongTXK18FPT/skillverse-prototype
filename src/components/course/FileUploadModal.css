@@ -1,0 +1,240 @@
+/* ==================== FILE UPLOAD MODAL STYLES ====================
+ * Specific styles for FileUploadModal component
+ * Uses ModalsEnhanced.css as base, adds upload-specific styles
+ * NO CONFLICTS: All classes prefixed with specific names
+ */
+
+/* ==================== MODAL CONTENT ==================== */
+
+.file-upload-modal-content {
+  max-width: 600px !important; /* Narrower than lesson modal */
+}
+
+/* ==================== FILE INPUT ZONE ==================== */
+
+.file-input-zone {
+  padding: 3rem 2rem;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.file-input-zone:hover {
+  border-color: #06b6d4;
+  background: #ecfeff;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.file-input-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.file-input-label svg {
+  color: #06b6d4;
+  transition: transform 0.3s ease;
+}
+
+.file-input-zone:hover .file-input-label svg {
+  transform: scale(1.1);
+}
+
+.file-input-text {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.file-input-hint {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* ==================== SELECTED FILE INFO ==================== */
+
+.selected-file-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f1f5f9;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.selected-file-info svg {
+  flex-shrink: 0;
+}
+
+.file-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-name {
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.25rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-size {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.remove-file-btn {
+  flex-shrink: 0;
+  padding: 0.5rem;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-file-btn:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+}
+
+/* ==================== UPLOAD PROGRESS ==================== */
+
+.upload-progress-section {
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.upload-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.upload-info svg {
+  flex-shrink: 0;
+  color: #06b6d4;
+}
+
+.upload-filename {
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.25rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload-stats {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.upload-tip {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* ==================== SUCCESS STATE ==================== */
+
+.upload-success {
+  padding: 3rem 2rem;
+  text-align: center;
+  animation: successFadeIn 0.5s ease;
+}
+
+@keyframes successFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.success-icon {
+  color: #10b981;
+  margin-bottom: 1rem;
+  animation: successPulse 0.6s ease;
+}
+
+@keyframes successPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.success-message {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #10b981;
+  margin: 0;
+}
+
+/* ==================== ERROR MESSAGE ==================== */
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
+.error-message svg {
+  flex-shrink: 0;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 640px) {
+  .file-upload-modal-content {
+    max-width: 100%;
+    margin: 1rem;
+  }
+  
+  .file-input-zone {
+    padding: 2rem 1rem;
+  }
+  
+  .selected-file-info {
+    padding: 1rem;
+  }
+  
+  .upload-progress-section {
+    padding: 1rem;
+  }
+}

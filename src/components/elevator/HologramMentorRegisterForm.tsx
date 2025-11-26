@@ -57,6 +57,15 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
     setError(null);
   };
 
+  // Handle autofill detection for Chrome
+  const handleAutofill = (e: React.AnimationEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    const { name, value } = target;
+    if (value) {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
+  };
+
   const handleCvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -232,6 +241,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-mentor-input"
                 autoComplete="name"
@@ -250,6 +260,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-mentor-input"
                 autoComplete="email"
@@ -269,6 +280,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-mentor-input"
                 autoComplete="new-password"
@@ -295,6 +307,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-mentor-input"
                 autoComplete="new-password"
@@ -331,6 +344,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 name="linkedinProfile"
                 value={formData.linkedinProfile}
                 onChange={handleInputChange}
+                onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-mentor-input"
               />
@@ -341,24 +355,6 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
             <label className="reg-mentor-label">
               <Target size={14} />
               <span>MAIN EXPERTISE</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <input
-                type="text"
-                name="mainExpertise"
-                value={formData.mainExpertise}
-                onChange={handleInputChange}
-                disabled={isLoading}
-                className="reg-mentor-input"
-              />
-            </div>
-          </div>
-
-          {/* Row 4: Expertise & Years of Experience */}
-          <div className="reg-mentor-field">
-            <label className="reg-mentor-label">
-              <Award size={14} />
-              <span>EXPERTISE FIELD</span>
             </label>
             <div className="reg-mentor-input-wrapper">
               <input
