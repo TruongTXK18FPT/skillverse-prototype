@@ -1,26 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  LayoutDashboard,
-  ArrowLeft,
-  ChevronDown,
-  ChevronRight,
-  PlayCircle,
-  FileText,
-  HelpCircle,
-  CheckCircle,
-  Circle,
-  Lock,
-  ChevronLeft,
-} from "lucide-react";
-import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import { getCourse } from "../../services/courseService";
 import { listModulesWithContent } from "../../services/moduleService";
 import { getEnrollment } from "../../services/enrollmentService";
 import {
   getLessonById,
-  listLessonsByModule,
   getNextLesson,
   getPrevLesson,
   completeLesson,
@@ -29,39 +14,17 @@ import {
 import { getQuizById, getUserQuizAttempts } from "../../services/quizService";
 import { CourseDetailDTO } from "../../data/courseDTOs";
 import AttachmentManager from "../../components/course/AttachmentManager";
-import "../../styles/CourseLearningPage.css";
 
-// Không dùng mock; dữ liệu lấy từ BE
-
-type LessonContent = {
-  videoUrl?: string;
-  content?: string;
-  questions?: {
-    question: string;
-    options: string[];
-    answer: string;
-  }[];
-};
-
-const lessonContentData: { [key: string]: LessonContent } = {};
-
-// --- HELPER COMPONENTS --- //
-const LessonIcon = ({ type }: { type: string }) => {
-  switch (type) {
-    case "video":
-      return <PlayCircle className="course-learning-lesson-icon" />;
-    case "reading":
-      return <FileText className="course-learning-lesson-icon" />;
-    case "quiz":
-      return <HelpCircle className="course-learning-lesson-icon" />;
-    default:
-      return <Circle className="course-learning-lesson-icon" />;
-  }
-};
+// Import Neural HUD Components
+import {
+  NeuralInterfaceLayout,
+  ModuleSidebar,
+  VideoHudWrapper,
+  ControlDeck,
+} from "../../components/learning-hud";
 
 // --- MAIN COMPONENT --- //
 const CourseLearningPage = () => {
-  const { theme } = useTheme();
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -147,19 +110,19 @@ const CourseLearningPage = () => {
       setActiveItemType(null);
       return;
     }
-    
+
     // Determine if current item is quiz or lesson
     const currentModule = modulesWithContent.find(m => m.id === activeLesson.moduleId);
     const isQuiz = currentModule?.quizzes?.some(q => q.id === activeLesson.lessonId);
-    
+
     setLoadingLessonDetail(true);
-    
+
     if (isQuiz) {
       // LAZY LOAD QUIZ + CHECK ATTEMPTS
       console.log('[QUIZ] Loading quiz:', activeLesson.lessonId);
       setActiveItemType('quiz');
       setActiveLessonDetail(null);
-      
+
       Promise.all([
         getQuizById(activeLesson.lessonId),
         getUserQuizAttempts(activeLesson.lessonId, user?.id || 0).catch(() => [])
@@ -167,10 +130,10 @@ const CourseLearningPage = () => {
         .then(([quiz, attempts]) => {
           console.log('[QUIZ] Loaded:', quiz);
           console.log('[QUIZ] Attempts:', attempts);
-          
+
           // Check if already passed
           const passedAttempt = attempts.find((a: any) => a.passed === true);
-          
+
           setActiveQuizDetail({
             ...quiz,
             hasAttempts: attempts.length > 0,
@@ -189,7 +152,7 @@ const CourseLearningPage = () => {
       console.log('[LESSON] Loading lesson:', activeLesson.lessonId);
       setActiveItemType('lesson');
       setActiveQuizDetail(null);
-      
+
       getLessonById(activeLesson.lessonId)
         .then((detail) => {
           console.log('[LESSON] Loaded:', detail);
@@ -201,7 +164,7 @@ const CourseLearningPage = () => {
         })
         .finally(() => setLoadingLessonDetail(false));
     }
-  }, [activeLesson.lessonId, activeLesson.moduleId, modulesWithContent]);
+  }, [activeLesson.lessonId, activeLesson.moduleId, modulesWithContent, user?.id]);
 
   const sortedModules = useMemo(() => {
     const list = course?.modules ? [...course.modules] : [];
@@ -211,14 +174,6 @@ const CourseLearningPage = () => {
   }, [course]);
 
   const progressPercentage = useMemo(() => progress.percent || 0, [progress]);
-
-  const currentLesson = undefined as unknown as
-    | { id: number; type: string; title: string; duration?: string }
-    | undefined;
-
-  const currentContent =
-    lessonContentData[`${activeLesson.moduleId}-${activeLesson.lessonId}`] ||
-    {};
 
   const handleToggleModule = (moduleId: number) => {
     setExpandedModules((prev) =>
@@ -246,7 +201,11 @@ const CourseLearningPage = () => {
     const foundLesson = foundModule?.lessons?.find(
       (l: any) => l.id === lessonId
     );
+    const foundQuiz = foundModule?.quizzes?.find(
+      (q: any) => q.id === lessonId
+    );
     if (foundLesson) setActiveLessonTitle(foundLesson.title);
+    if (foundQuiz) setActiveLessonTitle(foundQuiz.title);
   };
 
   const handleMarkAsComplete = async () => {
@@ -263,7 +222,6 @@ const CourseLearningPage = () => {
       setLessonStatuses((prev) => ({ ...prev, [statusKey]: "completed" }));
       const p = await getModuleProgress(activeLesson.moduleId, userId);
       setProgress(p);
-      // Không tự động chuyển bài: để nút "Tiếp" đảm nhiệm việc điều hướng
     } catch (error) {
       console.error("Error completing lesson:", error);
     }
@@ -308,331 +266,390 @@ const CourseLearningPage = () => {
     }
   };
 
+  const handlePrevLesson = async () => {
+    const prevLesson = await findPrevLesson();
+    if (prevLesson) {
+      handleSelectLesson(prevLesson.moduleId, prevLesson.lessonId);
+    }
+  };
+
   if (loading) {
     return (
-      <div className={`course-learning-container ${theme}`} data-theme={theme}>
-        <div className="course-learning-header">
-          <span>Đang tải...</span>
-        </div>
-      </div>
+      <NeuralInterfaceLayout
+        courseTitle="LOADING..."
+        progress={{ percent: 0 }}
+        isSidebarOpen={false}
+        onToggleSidebar={() => {}}
+        onBack={() => navigate("/courses")}
+      >
+        <main className="learning-hud-main-content">
+          <div className="learning-hud-content-viewer">
+            <div className="learning-hud-loading">INITIALIZING NEURAL LINK</div>
+          </div>
+        </main>
+      </NeuralInterfaceLayout>
     );
   }
 
   if (!course) {
     return (
-      <div className={`course-learning-container ${theme}`} data-theme={theme}>
-        <div className="course-learning-header">
-          <button
-            onClick={() => navigate(-1)}
-            className="course-learning-back-btn"
-          >
-            <ArrowLeft size={20} />
-          </button>
-          <span>Không tìm thấy khóa học</span>
-        </div>
-      </div>
+      <NeuralInterfaceLayout
+        courseTitle="ERROR"
+        progress={{ percent: 0 }}
+        isSidebarOpen={false}
+        onToggleSidebar={() => {}}
+        onBack={() => navigate("/courses")}
+      >
+        <main className="learning-hud-main-content">
+          <div className="learning-hud-content-viewer">
+            <h1 className="learning-hud-viewer-title">COURSE NOT FOUND</h1>
+            <p style={{ color: 'var(--lhud-text-secondary)' }}>
+              Unable to establish connection to course data.
+            </p>
+          </div>
+        </main>
+      </NeuralInterfaceLayout>
     );
   }
 
   return (
-    <div className={`course-learning-container ${theme}`} data-theme={theme}>
-      <header className="course-learning-header">
-        <div className="course-learning-header-left">
-          <button
-            onClick={() => navigate("/courses")}
-            className="course-learning-back-btn"
-          >
-            <ArrowLeft size={20} />
-          </button>
-          <div className="course-learning-course-title">
-            <h3>{course.title}</h3>
-            <span>{course.description}</span>
-          </div>
-        </div>
-        <div className="course-learning-header-center">
-          <div className="course-learning-progress-bar-container">
-            <div
-              className="course-learning-progress-bar"
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
-          </div>
-          <span className="course-learning-progress-text">
-            Hoàn thành {Math.round(progressPercentage)}%
-          </span>
-        </div>
-        <div className="course-learning-header-right">
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="course-learning-sidebar-toggle"
-          >
-            <LayoutDashboard size={20} />
-            <span>Nội dung khóa học</span>
-          </button>
-        </div>
-      </header>
+    <NeuralInterfaceLayout
+      courseTitle={course.title}
+      courseDescription={course.description}
+      progress={{ percent: progressPercentage }}
+      isSidebarOpen={isSidebarOpen}
+      onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+      onBack={() => navigate("/courses")}
+    >
+      {/* Sidebar */}
+      <ModuleSidebar
+        modules={modulesWithContent.length ? modulesWithContent : sortedModules}
+        expandedModules={expandedModules}
+        activeLesson={activeLesson}
+        lessonStatuses={lessonStatuses}
+        progress={progress}
+        onToggleModule={handleToggleModule}
+        onSelectLesson={handleSelectLesson}
+        isOpen={isSidebarOpen}
+      />
 
-      <div className="course-learning-body">
-        <aside
-          className={`course-learning-sidebar ${isSidebarOpen ? "open" : ""}`}
-        >
-          <div className="course-learning-sidebar-content">
-            {(modulesWithContent.length
-              ? modulesWithContent
-              : sortedModules
-            )?.map((module: any, idx: number) => {
-              const isExpanded = expandedModules.includes(module.id);
-              return (
-                <div key={module.id} className="course-learning-module">
-                  <button
-                    className="course-learning-module-header"
-                    onClick={() => handleToggleModule(module.id)}
-                  >
-                    <span className="course-learning-module-title">
-                      Module {module.orderIndex ?? idx + 1}: {module.title}
-                    </span>
-                    <ChevronDown
-                      className={`course-learning-expand-icon ${
-                        isExpanded ? "expanded" : ""
-                      }`}
-                    />
-                  </button>
-                  {isExpanded && (
-                    <ul className="course-learning-lessons-list">
-                      {module.lessons && module.lessons.length > 0 ? (
-                        module.lessons
-                          .slice()
-                          .sort(
-                            (a: any, b: any) =>
-                              (a.orderIndex ?? 0) - (b.orderIndex ?? 0)
-                          )
-                          .map((lesson: any) => (
-                            <li key={lesson.id}>
-                              <button
-                                type="button"
-                                className="course-learning-lesson-item"
-                                onClick={() =>
-                                  handleSelectLesson(module.id, lesson.id)
-                                }
-                              >
-                                <div className="course-learning-lesson-info">
-                                  <LessonIcon
-                                    type={(lesson.type || "").toLowerCase()}
-                                  />
-                                  <div className="course-learning-lesson-details">
-                                    <span className="course-learning-lesson-title">
-                                      {lesson.title}
-                                    </span>
-                                  </div>
-                                </div>
-                              </button>
-                            </li>
-                          ))
-                      ) : null}
-                      
-                      {/* RENDER QUIZZES */}
-                      {module.quizzes && module.quizzes.length > 0 && (
-                        module.quizzes
-                          .slice()
-                          .sort((a: any, b: any) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0))
-                          .map((quiz: any) => (
-                            <li key={`quiz-${quiz.id}`}>
-                              <button
-                                type="button"
-                                className="course-learning-lesson-item"
-                                onClick={() => handleSelectLesson(module.id, quiz.id)}
-                              >
-                                <div className="course-learning-lesson-info">
-                                  <HelpCircle className="course-learning-lesson-icon" />
-                                  <div className="course-learning-lesson-details">
-                                    <span className="course-learning-lesson-title">
-                                      {quiz.title} (Quiz)
-                                    </span>
-                                  </div>
-                                </div>
-                              </button>
-                            </li>
-                          ))
-                      )}
-                      
-                      {/* EMPTY STATE */}
-                      {(!module.lessons || module.lessons.length === 0) && (!module.quizzes || module.quizzes.length === 0) && (
-                        <li>
-                          <div className="course-learning-lesson-item">
-                            <div className="course-learning-lesson-info">
-                              <FileText className="course-learning-lesson-icon" />
-                              <div className="course-learning-lesson-details">
-                                <span className="course-learning-lesson-title">
-                                  Nội dung module đang cập nhật
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </li>
-                      )}
-                    </ul>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </aside>
+      {/* Main Content */}
+      <main className="learning-hud-main-content">
+        <div className="learning-hud-content-viewer">
+          <h1 className="learning-hud-viewer-title">
+            {activeLessonTitle || course.title}
+          </h1>
 
-        <main className="course-learning-main-content">
-          <div className="course-learning-content-viewer">
-            <h1 className="course-learning-viewer-title">
-              {activeLessonTitle || course.title}
-            </h1>
-            <div className="course-learning-reading-content">
-              {loadingLessonDetail ? (
-                <p>Đang tải nội dung...</p>
-              ) : activeItemType === 'quiz' && activeQuizDetail ? (
-                <>
-                  {activeQuizDetail.hasPassed ? (
-                    /* SHOW RESULT IF ALREADY PASSED */
-                    <div style={{ padding: '40px', backgroundColor: '#d4edda', borderRadius: '12px', textAlign: 'center', border: '2px solid #28a745' }}>
-                      <div style={{ fontSize: '3rem', marginBottom: '16px' }}>✅</div>
-                      <h3 style={{ marginBottom: '16px', fontSize: '1.8rem', color: '#155724' }}>Bạn đã hoàn thành quiz này!</h3>
-                      <div style={{ display: 'inline-block', marginBottom: '24px', padding: '20px', backgroundColor: '#fff', borderRadius: '8px' }}>
-                        <p style={{ marginBottom: '8px', fontSize: '1.2rem' }}><strong>Điểm số:</strong> {activeQuizDetail.bestAttempt?.score}%</p>
-                        <p style={{ fontSize: '1rem', color: '#666' }}>Yêu cầu: {activeQuizDetail.passScore}%</p>
-                      </div>
-                      <p style={{ color: '#155724', marginBottom: '16px' }}>Bạn không cần làm lại quiz này.</p>
-                      <button
-                        onClick={() => navigate(`/quiz/${activeQuizDetail.id}/attempt`)}
-                        style={{
-                          padding: '12px 32px',
-                          fontSize: '1rem',
-                          background: '#28a745',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '8px',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Xem chi tiết
-                      </button>
-                    </div>
-                  ) : (
-                    /* QUIZ PREVIEW - Navigate to quiz page */
-                    <div style={{ padding: '40px', backgroundColor: '#f8f9fa', borderRadius: '12px', textAlign: 'center' }}>
-                      <h3 style={{ marginBottom: '16px', fontSize: '1.8rem' }}>📝 {activeQuizDetail.title}</h3>
-                      <p style={{ marginBottom: '24px', color: '#666', fontSize: '1.1rem' }}>
-                        {activeQuizDetail.description || 'Kiểm tra kiến thức của bạn'}
+          <div className="learning-hud-reading-content">
+            {loadingLessonDetail ? (
+              <div className="learning-hud-loading">LOADING DATA STREAM</div>
+            ) : activeItemType === 'quiz' && activeQuizDetail ? (
+              <>
+                {activeQuizDetail.hasPassed ? (
+                  /* SHOW RESULT IF ALREADY PASSED */
+                  <div style={{
+                    padding: '40px',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderRadius: '12px',
+                    textAlign: 'center',
+                    border: '2px solid var(--lhud-green)'
+                  }}>
+                    <div style={{ fontSize: '3rem', marginBottom: '16px' }}>✅</div>
+                    <h3 style={{
+                      marginBottom: '16px',
+                      fontSize: '1.8rem',
+                      color: 'var(--lhud-green)'
+                    }}>
+                      QUIZ COMPLETED - DATA VERIFIED
+                    </h3>
+                    <div style={{
+                      display: 'inline-block',
+                      marginBottom: '24px',
+                      padding: '20px',
+                      backgroundColor: 'var(--lhud-space-light)',
+                      borderRadius: '8px',
+                      border: '1px solid var(--lhud-border)'
+                    }}>
+                      <p style={{ marginBottom: '8px', fontSize: '1.2rem', color: 'var(--lhud-text-primary)' }}>
+                        <strong>SCORE:</strong> {activeQuizDetail.bestAttempt?.score}%
                       </p>
-                      <div style={{ display: 'inline-block', marginBottom: '24px', padding: '20px', backgroundColor: '#fff', borderRadius: '8px', textAlign: 'left' }}>
-                        <p style={{ marginBottom: '8px' }}><strong>Số câu hỏi:</strong> {activeQuizDetail.questions?.length || 0}</p>
-                        <p style={{ marginBottom: '8px' }}><strong>Điểm đạt:</strong> {activeQuizDetail.passScore}%</p>
-                        {activeQuizDetail.hasAttempts && (
-                          <p style={{ color: '#666', marginTop: '12px' }}>
-                            <strong>Số lần làm:</strong> {activeQuizDetail.attemptsCount}/3
-                          </p>
-                        )}
+                      <p style={{ fontSize: '1rem', color: 'var(--lhud-text-secondary)' }}>
+                        REQUIRED: {activeQuizDetail.passScore}%
+                      </p>
+                    </div>
+                    <p style={{ color: 'var(--lhud-text-secondary)', marginBottom: '16px' }}>
+                      Neural sync verified. No re-attempt necessary.
+                    </p>
+                    <button
+                      onClick={() => navigate(`/quiz/${activeQuizDetail.id}/attempt`)}
+                      className="learning-hud-nav-btn"
+                      style={{ marginTop: '1rem' }}
+                    >
+                      VIEW DETAILS
+                    </button>
+                  </div>
+                ) : (
+                  /* QUIZ PREVIEW - Navigate to quiz page */
+                  <div style={{
+                    maxWidth: '800px',
+                    margin: '0 auto',
+                    padding: '32px',
+                    backgroundColor: 'var(--lhud-space-light)',
+                    borderRadius: '16px',
+                    border: '2px solid var(--lhud-cyan)',
+                    boxShadow: '0 8px 32px rgba(0, 255, 255, 0.1)'
+                  }}>
+                    {/* Quiz Header */}
+                    <div style={{
+                      textAlign: 'center',
+                      marginBottom: '32px',
+                      paddingBottom: '24px',
+                      borderBottom: '1px solid var(--lhud-border)'
+                    }}>
+                      <div style={{
+                        fontSize: '4rem',
+                        marginBottom: '16px',
+                        filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.3))'
+                      }}>📝</div>
+                      <h2 style={{
+                        margin: '0 0 16px 0',
+                        fontSize: '2.2rem',
+                        color: 'var(--lhud-text-primary)',
+                        fontFamily: '"Space Habitat", monospace',
+                        letterSpacing: '1px',
+                        textTransform: 'uppercase'
+                      }}>
+                        {activeQuizDetail.title}
+                      </h2>
+                      <p style={{
+                        margin: '0',
+                        color: 'var(--lhud-text-secondary)',
+                        fontSize: '1.1rem',
+                        lineHeight: '1.6'
+                      }}>
+                        {activeQuizDetail.description || 'Knowledge verification checkpoint'}
+                      </p>
+                    </div>
+
+                    {/* Quiz Stats Grid */}
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                      gap: '20px',
+                      marginBottom: '32px'
+                    }}>
+                      <div style={{
+                        padding: '20px',
+                        backgroundColor: 'var(--lhud-deep-space)',
+                        borderRadius: '12px',
+                        border: '1px solid var(--lhud-border)',
+                        textAlign: 'center'
+                      }}>
+                        <div style={{
+                          fontSize: '2rem',
+                          color: 'var(--lhud-cyan)',
+                          marginBottom: '8px',
+                          fontFamily: '"Space Habitat", monospace'
+                        }}>
+                          {activeQuizDetail.questions?.length || 0}
+                        </div>
+                        <p style={{
+                          margin: '0',
+                          color: 'var(--lhud-text-secondary)',
+                          fontSize: '0.9rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '1px'
+                        }}>
+                          Questions
+                        </p>
                       </div>
+
+                      <div style={{
+                        padding: '20px',
+                        backgroundColor: 'var(--lhud-deep-space)',
+                        borderRadius: '12px',
+                        border: '1px solid var(--lhud-border)',
+                        textAlign: 'center'
+                      }}>
+                        <div style={{
+                          fontSize: '2rem',
+                          color: 'var(--lhud-cyan)',
+                          marginBottom: '8px',
+                          fontFamily: '"Space Habitat", monospace'
+                        }}>
+                          {activeQuizDetail.passScore}%
+                        </div>
+                        <p style={{
+                          margin: '0',
+                          color: 'var(--lhud-text-secondary)',
+                          fontSize: '0.9rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '1px'
+                        }}>
+                          Pass Score
+                        </p>
+                      </div>
+
+                      {activeQuizDetail.hasAttempts && (
+                        <div style={{
+                          padding: '20px',
+                          backgroundColor: 'var(--lhud-deep-space)',
+                          borderRadius: '12px',
+                          border: '1px solid var(--lhud-border)',
+                          textAlign: 'center'
+                        }}>
+                          <div style={{
+                            fontSize: '2rem',
+                            color: activeQuizDetail.attemptsCount >= 3 ? 'var(--lhud-red)' : 'var(--lhud-cyan)',
+                            marginBottom: '8px',
+                            fontFamily: '"Space Habitat", monospace'
+                          }}>
+                            {activeQuizDetail.attemptsCount}/3
+                          </div>
+                          <p style={{
+                            margin: '0',
+                            color: 'var(--lhud-text-secondary)',
+                            fontSize: '0.9rem',
+                            textTransform: 'uppercase',
+                            letterSpacing: '1px'
+                          }}>
+                            Attempts
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Action Button */}
+                    <div style={{ textAlign: 'center' }}>
                       <button
                         onClick={() => navigate(`/quiz/${activeQuizDetail.id}/attempt`)}
                         style={{
                           padding: '16px 48px',
                           fontSize: '1.1rem',
-                          fontWeight: '600',
-                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                          fontFamily: '"Space Habitat", monospace',
+                          fontWeight: 'bold',
+                          letterSpacing: '1px',
+                          textTransform: 'uppercase',
+                          background: activeQuizDetail.hasAttempts 
+                            ? 'linear-gradient(135deg, var(--lhud-orange) 0%, var(--lhud-red) 100%)'
+                            : 'linear-gradient(135deg, var(--lhud-cyan) 0%, var(--lhud-blue) 100%)',
                           color: 'white',
                           border: 'none',
-                          borderRadius: '8px',
+                          borderRadius: '12px',
                           cursor: 'pointer',
-                          transition: 'all 0.2s'
+                          transition: 'all 0.3s ease',
+                          boxShadow: activeQuizDetail.hasAttempts
+                            ? '0 4px 20px rgba(255, 165, 0, 0.3)'
+                            : '0 4px 20px rgba(0, 255, 255, 0.3)',
+                          transform: 'translateY(0)',
                         }}
-                        onMouseOver={(e) => {
-                          e.currentTarget.style.transform = 'translateY(-2px)';
-                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.4)';
+                        onMouseEnter={(e) => {
+                          const target = e.target as HTMLButtonElement;
+                          target.style.transform = 'translateY(-2px)';
+                          target.style.boxShadow = activeQuizDetail.hasAttempts
+                            ? '0 8px 32px rgba(255, 165, 0, 0.4)'
+                            : '0 8px 32px rgba(0, 255, 255, 0.4)';
                         }}
-                        onMouseOut={(e) => {
-                          e.currentTarget.style.transform = 'translateY(0)';
-                          e.currentTarget.style.boxShadow = 'none';
+                        onMouseLeave={(e) => {
+                          const target = e.target as HTMLButtonElement;
+                          target.style.transform = 'translateY(0)';
+                          target.style.boxShadow = activeQuizDetail.hasAttempts
+                            ? '0 4px 20px rgba(255, 165, 0, 0.3)'
+                            : '0 4px 20px rgba(0, 255, 255, 0.3)';
                         }}
+                        disabled={activeQuizDetail.attemptsCount >= 3}
                       >
-                        {activeQuizDetail.hasAttempts ? `Làm lại (${activeQuizDetail.attemptsCount}/3)` : 'Bắt đầu Quiz'}
+                        {activeQuizDetail.attemptsCount >= 3
+                          ? 'MAX ATTEMPTS REACHED'
+                          : activeQuizDetail.hasAttempts
+                          ? `RETRY VERIFICATION (${activeQuizDetail.attemptsCount}/3)`
+                          : 'BEGIN VERIFICATION'}
                       </button>
                     </div>
-                  )}
-                </>
-              ) : activeLessonDetail ? (
-                <>
-                  {/* VIDEO LESSON */}
-                  {activeLessonDetail.type === 'VIDEO' && (
-                    <div className="course-learning-video-player">
-                      {activeLessonDetail.videoUrl ? (
-                        <iframe
-                          src={activeLessonDetail.videoUrl}
-                          title={activeLessonDetail.title}
-                          allowFullScreen
-                        />
-                      ) : (
-                        <p>Video chưa được upload.</p>
-                      )}
+                  </div>
+                )}
+              </>
+            ) : activeLessonDetail ? (
+              <>
+                {/* VIDEO LESSON */}
+                {activeLessonDetail.type === 'VIDEO' && (
+                  <>
+                    {activeLessonDetail.videoUrl ? (
+                      <VideoHudWrapper
+                        videoUrl={activeLessonDetail.videoUrl}
+                        title={activeLessonDetail.title}
+                      />
+                    ) : (
+                      <div className="learning-hud-empty-state">
+                        VIDEO DATA UNAVAILABLE
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* READING LESSON */}
+                {activeLessonDetail.type === 'READING' && (
+                  <>
+                    <div style={{
+                      whiteSpace: 'pre-wrap',
+                      lineHeight: '1.8',
+                      marginBottom: '24px',
+                      color: 'var(--lhud-text-secondary)'
+                    }}>
+                      {activeLessonDetail.contentText || 'Content data not available.'}
                     </div>
-                  )}
-                  
-                  {/* READING LESSON */}
-                  {activeLessonDetail.type === 'READING' && (
-                    <>
-                      <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.8', marginBottom: '24px' }}>
-                        {activeLessonDetail.contentText || 'Nội dung bài đọc chưa có.'}
-                      </div>
-                      
-                      {/* ATTACHMENTS */}
-                      <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid #e0e0e0' }}>
-                        <h3 style={{ marginBottom: '16px', fontSize: '1.2rem' }}>📎 Tài liệu đính kèm</h3>
-                        <AttachmentManager
-                          lessonId={activeLessonDetail.id}
-                          editable={false}
-                        />
-                      </div>
-                    </>
-                  )}
-                </>
-              ) : activeLessonTitle ? (
-                <p>Không thể tải nội dung.</p>
-              ) : (
-                <>
-                  <p>{course.description}</p>
-                  <p>Chọn một bài học để bắt đầu.</p>
-                </>
-              )}
-            </div>
+
+                    {/* ATTACHMENTS */}
+                    <div style={{
+                      marginTop: '32px',
+                      paddingTop: '24px',
+                      borderTop: '1px solid var(--lhud-border)'
+                    }}>
+                      <h3 style={{
+                        marginBottom: '16px',
+                        fontSize: '1.2rem',
+                        color: 'var(--lhud-cyan)',
+                        fontFamily: '"Space Habitat", monospace',
+                        letterSpacing: '1px'
+                      }}>
+                        📎 ATTACHED FILES
+                      </h3>
+                      <AttachmentManager
+                        lessonId={activeLessonDetail.id}
+                        editable={false}
+                      />
+                    </div>
+                  </>
+                )}
+              </>
+            ) : activeLessonTitle ? (
+              <div className="learning-hud-empty-state">
+                UNABLE TO LOAD CONTENT
+              </div>
+            ) : (
+              <>
+                <p style={{ color: 'var(--lhud-text-secondary)' }}>
+                  {course.description}
+                </p>
+                <p style={{ color: 'var(--lhud-text-dim)', marginTop: '1rem' }}>
+                  Select a lesson from System Log to begin neural sync.
+                </p>
+              </>
+            )}
           </div>
 
-          <footer className="course-learning-content-footer">
-            <button
-              className="course-learning-nav-btn prev"
-              onClick={async () => {
-                const prev = await findPrevLesson();
-                if (prev) handleSelectLesson(prev.moduleId, prev.lessonId);
-              }}
-              disabled={!activeLesson.lessonId}
-            >
-              <ChevronLeft size={18} />
-              <span>Trước</span>
-            </button>
-            <button
-              className="course-learning-complete-btn"
-              onClick={handleMarkAsComplete}
-              disabled={!activeLesson.moduleId}
-            >
-              <CheckCircle size={20} />
-              <span>Đánh dấu hoàn thành</span>
-            </button>
-            <button
-              className="course-learning-nav-btn next"
-              onClick={handleNextLesson}
-              disabled={!activeLesson.lessonId}
-            >
-              <span>Tiếp</span>
-              <ChevronRight size={18} />
-            </button>
-          </footer>
-        </main>
-      </div>
-    </div>
+          {/* Control Deck */}
+          <ControlDeck
+            onPrevious={handlePrevLesson}
+            onNext={handleNextLesson}
+            onComplete={handleMarkAsComplete}
+            canNavigatePrev={!!activeLesson.lessonId}
+            canNavigateNext={!!activeLesson.lessonId}
+            canComplete={!!activeLesson.moduleId}
+          />
+        </div>
+      </main>
+    </NeuralInterfaceLayout>
   );
 };
 

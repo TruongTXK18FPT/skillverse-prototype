@@ -3,7 +3,8 @@ import { X, FileText, Link as LinkIcon, Type, CheckCircle, Calendar } from 'luci
 import { AssignmentCreateDTO, AssignmentUpdateDTO, SubmissionType } from '../../data/assignmentDTOs';
 import { createAssignment, updateAssignment } from '../../services/assignmentService';
 import { useAuth } from '../../context/AuthContext';
-import '../../styles/ModalsEnhanced.css';
+import { NeuralCard, NeuralButton } from '../learning-hud';
+import '../../components/learning-hud/learning-hud.css';
 
 interface AssignmentModalProps {
   isOpen: boolean;
@@ -135,7 +136,6 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
 
     try {
       if (assignmentToEdit) {
-        // Update existing assignment
         const updateData: AssignmentUpdateDTO = {
           title: formData.title,
           description: formData.description,
@@ -145,7 +145,6 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
         };
         await updateAssignment(assignmentToEdit.id, updateData, user.id);
       } else {
-        // Create new assignment
         const createData: AssignmentCreateDTO = {
           title: formData.title,
           description: formData.description,
@@ -168,165 +167,385 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="module-modal-overlay" onClick={onClose}>
-      <div className="module-modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="module-modal-header">
-          <h2 className="module-modal-title">
-            {assignmentToEdit ? 'Chỉnh sửa bài tập' : 'Tạo bài tập mới'}
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(10, 14, 23, 0.85)',
+        backdropFilter: 'blur(8px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 9999,
+        padding: '1rem'
+      }}
+      onClick={onClose}
+    >
+      <NeuralCard
+        style={{
+          maxWidth: '700px',
+          width: '100%',
+          maxHeight: '90vh',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          animation: 'learning-hud-fade-in 0.3s ease-out'
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1.5rem',
+          borderBottom: '1px solid var(--lhud-border)'
+        }}>
+          <h2 style={{
+            fontSize: '1.5rem',
+            fontWeight: 600,
+            color: 'var(--lhud-text-primary)',
+            margin: 0
+          }}>
+            {assignmentToEdit ? 'CHỈNH SỬA BÀI TẬP' : 'TẠO BÀI TẬP MỚI'}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="module-modal-close-btn"
             disabled={loading}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--lhud-text-dim)',
+              cursor: 'pointer',
+              padding: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              transition: 'color 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--lhud-cyan)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--lhud-text-dim)'}
           >
             <X size={24} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="module-modal-form">
-          {/* Submission Type Selection */}
-          <div className="module-form-section">
-            <label className="module-form-label">
-              Loại nộp bài <span className="required">*</span>
-            </label>
-            <div className="lesson-type-selector">
-              {submissionTypes.map((type) => (
-                <button
-                  key={type.value}
-                  type="button"
-                  className={`type-option ${
-                    formData.submissionType === type.value ? 'selected' : ''
-                  }`}
-                  style={
-                    {
-                      '--lesson-type-color': type.color,
-                    } as React.CSSProperties
-                  }
-                  onClick={() => handleTypeSelect(type.value)}
-                  disabled={loading}
-                >
-                  <div className="type-option-icon">{type.icon}</div>
-                  <div className="type-option-content">
-                    <h3 className="type-option-label">{type.label}</h3>
-                    <p className="type-option-description">{type.description}</p>
-                  </div>
-                  {formData.submissionType === type.value && (
-                    <CheckCircle className="lesson-type-selected" size={20} />
-                  )}
-                </button>
-              ))}
+        {/* Form Content */}
+        <div style={{ overflowY: 'auto', flex: 1 }}>
+          <form onSubmit={handleSubmit} style={{ padding: '1.5rem' }}>
+            {/* Submission Type Selection */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontFamily: 'Space Habitat, monospace',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'var(--lhud-cyan)',
+                marginBottom: '0.75rem'
+              }}>
+                Loại nộp bài <span style={{ color: 'var(--lhud-red)' }}>*</span>
+              </label>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                gap: '0.75rem'
+              }}>
+                {submissionTypes.map((type) => (
+                  <button
+                    key={type.value}
+                    type="button"
+                    onClick={() => handleTypeSelect(type.value)}
+                    disabled={loading}
+                    style={{
+                      background: formData.submissionType === type.value
+                        ? `${type.color}15`
+                        : 'var(--lhud-surface)',
+                      border: formData.submissionType === type.value
+                        ? `1px solid ${type.color}`
+                        : '1px solid var(--lhud-border)',
+                      padding: '1rem',
+                      borderRadius: '8px',
+                      cursor: loading ? 'not-allowed' : 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      transition: 'all 0.2s',
+                      opacity: loading ? 0.5 : 1,
+                      position: 'relative'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!loading) {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.borderColor = type.color;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!loading) {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        if (formData.submissionType !== type.value) {
+                          e.currentTarget.style.borderColor = 'var(--lhud-border)';
+                        }
+                      }
+                    }}
+                  >
+                    <div style={{ color: type.color }}>
+                      {type.icon}
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <h3 style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 600,
+                        color: 'var(--lhud-text-primary)',
+                        margin: '0 0 0.25rem 0'
+                      }}>
+                        {type.label}
+                      </h3>
+                      <p style={{
+                        fontSize: '0.75rem',
+                        color: 'var(--lhud-text-dim)',
+                        margin: 0
+                      }}>
+                        {type.description}
+                      </p>
+                    </div>
+                    {formData.submissionType === type.value && (
+                      <CheckCircle
+                        size={20}
+                        style={{
+                          position: 'absolute',
+                          top: '0.5rem',
+                          right: '0.5rem',
+                          color: type.color
+                        }}
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Title */}
-          <div className="module-form-section">
-            <label htmlFor="title" className="module-form-label">
-              Tiêu đề bài tập <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              className="module-form-input"
-              placeholder="VD: Bài tập về React Components"
-              disabled={loading}
-              maxLength={200}
-            />
-          </div>
-
-          {/* Description */}
-          <div className="module-form-section">
-            <label htmlFor="description" className="module-form-label">
-              Mô tả và yêu cầu <span className="required">*</span>
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              className="module-form-textarea"
-              placeholder="Mô tả chi tiết yêu cầu của bài tập..."
-              rows={6}
-              disabled={loading}
-              maxLength={5000}
-            />
-            <p className="form-hint">
-              Mô tả chi tiết về yêu cầu, tiêu chí chấm điểm và hướng dẫn nộp bài
-            </p>
-          </div>
-
-          {/* Max Score and Due Date Row */}
-          <div className="assignment-form-row">
-            {/* Max Score */}
-            <div className="module-form-section">
-              <label htmlFor="maxScore" className="module-form-label">
-                Điểm tối đa <span className="required">*</span>
+            {/* Title */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label htmlFor="title" style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontFamily: 'Space Habitat, monospace',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'var(--lhud-cyan)',
+                marginBottom: '0.5rem'
+              }}>
+                Tiêu đề bài tập <span style={{ color: 'var(--lhud-red)' }}>*</span>
               </label>
               <input
-                type="number"
-                id="maxScore"
-                name="maxScore"
-                value={formData.maxScore}
+                type="text"
+                id="title"
+                name="title"
+                value={formData.title}
                 onChange={handleInputChange}
-                className="module-form-input"
-                placeholder="100"
-                min="1"
-                max="1000"
+                placeholder="VD: Bài tập về React Components"
                 disabled={loading}
+                maxLength={200}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  background: 'var(--lhud-surface)',
+                  border: '1px solid var(--lhud-border)',
+                  borderRadius: '6px',
+                  color: 'var(--lhud-text-primary)',
+                  fontSize: '0.875rem',
+                  fontFamily: 'Inter, sans-serif',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
               />
             </div>
 
-            {/* Due Date */}
-            <div className="module-form-section">
-              <label htmlFor="dueAt" className="module-form-label">
-                <Calendar size={16} />
-                Hạn nộp bài
+            {/* Description */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label htmlFor="description" style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontFamily: 'Space Habitat, monospace',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'var(--lhud-cyan)',
+                marginBottom: '0.5rem'
+              }}>
+                Mô tả và yêu cầu <span style={{ color: 'var(--lhud-red)' }}>*</span>
               </label>
-              <input
-                type="datetime-local"
-                id="dueAt"
-                name="dueAt"
-                value={formData.dueAt}
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
                 onChange={handleInputChange}
-                className="module-form-input"
+                placeholder="Mô tả chi tiết yêu cầu của bài tập..."
+                rows={6}
                 disabled={loading}
+                maxLength={5000}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  background: 'var(--lhud-surface)',
+                  border: '1px solid var(--lhud-border)',
+                  borderRadius: '6px',
+                  color: 'var(--lhud-text-primary)',
+                  fontSize: '0.875rem',
+                  fontFamily: 'Inter, sans-serif',
+                  outline: 'none',
+                  resize: 'vertical',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
               />
-              <p className="form-hint">
-                Không bắt buộc - để trống nếu không có hạn
+              <p style={{
+                fontSize: '0.75rem',
+                color: 'var(--lhud-text-dim)',
+                marginTop: '0.5rem',
+                marginBottom: 0
+              }}>
+                Mô tả chi tiết về yêu cầu, tiêu chí chấm điểm và hướng dẫn nộp bài
               </p>
             </div>
-          </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="module-error-message">
-              <span>{error}</span>
+            {/* Max Score and Due Date Row */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+              {/* Max Score */}
+              <div>
+                <label htmlFor="maxScore" style={{
+                  display: 'block',
+                  fontSize: '0.875rem',
+                  fontFamily: 'Space Habitat, monospace',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  color: 'var(--lhud-cyan)',
+                  marginBottom: '0.5rem'
+                }}>
+                  Điểm tối đa <span style={{ color: 'var(--lhud-red)' }}>*</span>
+                </label>
+                <input
+                  type="number"
+                  id="maxScore"
+                  name="maxScore"
+                  value={formData.maxScore}
+                  onChange={handleInputChange}
+                  placeholder="100"
+                  min="1"
+                  max="1000"
+                  disabled={loading}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    background: 'var(--lhud-surface)',
+                    border: '1px solid var(--lhud-border)',
+                    borderRadius: '6px',
+                    color: 'var(--lhud-text-primary)',
+                    fontSize: '0.875rem',
+                    fontFamily: 'Inter, sans-serif',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                  onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+                />
+              </div>
+
+              {/* Due Date */}
+              <div>
+                <label htmlFor="dueAt" style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.875rem',
+                  fontFamily: 'Space Habitat, monospace',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  color: 'var(--lhud-cyan)',
+                  marginBottom: '0.5rem'
+                }}>
+                  <Calendar size={16} />
+                  Hạn nộp bài
+                </label>
+                <input
+                  type="datetime-local"
+                  id="dueAt"
+                  name="dueAt"
+                  value={formData.dueAt}
+                  onChange={handleInputChange}
+                  disabled={loading}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    background: 'var(--lhud-surface)',
+                    border: '1px solid var(--lhud-border)',
+                    borderRadius: '6px',
+                    color: 'var(--lhud-text-primary)',
+                    fontSize: '0.875rem',
+                    fontFamily: 'Inter, sans-serif',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                  onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+                />
+                <p style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--lhud-text-dim)',
+                  marginTop: '0.5rem',
+                  marginBottom: 0
+                }}>
+                  Không bắt buộc - để trống nếu không có hạn
+                </p>
+              </div>
             </div>
-          )}
 
-          {/* Form Actions */}
-          <div className="module-form-actions">
-            <button
-              type="button"
-              onClick={onClose}
-              className="lesson-form-btn lesson-form-btn-secondary"
-              disabled={loading}
-            >
-              Hủy
-            </button>
-            <button
-              type="submit"
-              className="lesson-form-btn lesson-form-btn-primary"
-              disabled={loading}
-            >
-              {loading ? 'Đang lưu...' : assignmentToEdit ? 'Cập nhật' : 'Tạo bài tập'}
-            </button>
-          </div>
-        </form>
-      </div>
+            {/* Error Message */}
+            {error && (
+              <div style={{
+                padding: '0.75rem 1rem',
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid var(--lhud-red)',
+                borderRadius: '6px',
+                color: 'var(--lhud-red)',
+                fontSize: '0.875rem',
+                marginBottom: '1.5rem'
+              }}>
+                <span>{error}</span>
+              </div>
+            )}
+
+            {/* Form Actions */}
+            <div style={{
+              display: 'flex',
+              gap: '0.75rem',
+              justifyContent: 'flex-end',
+              paddingTop: '1rem',
+              borderTop: '1px solid var(--lhud-border)'
+            }}>
+              <NeuralButton
+                type="button"
+                onClick={onClose}
+                variant="secondary"
+                disabled={loading}
+              >
+                Hủy
+              </NeuralButton>
+              <NeuralButton
+                type="submit"
+                variant="primary"
+                disabled={loading}
+              >
+                {loading ? 'Đang lưu...' : assignmentToEdit ? 'Cập nhật' : 'Tạo bài tập'}
+              </NeuralButton>
+            </div>
+          </form>
+        </div>
+      </NeuralCard>
     </div>
   );
 };

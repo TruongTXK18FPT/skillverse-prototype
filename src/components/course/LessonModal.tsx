@@ -3,8 +3,9 @@ import { X, FileText, Video, FileCode, CheckCircle } from 'lucide-react';
 import { LessonCreateDTO, LessonUpdateDTO, LessonType } from '../../data/lessonDTOs';
 import { createLesson, updateLesson } from '../../services/lessonService';
 import { useAuth } from '../../context/AuthContext';
-import AttachmentManager from './AttachmentManager'; // ✅ NEW: For Reading lessons
-import '../../styles/ModalsEnhanced.css';
+import AttachmentManager from './AttachmentManager';
+import { NeuralCard, NeuralButton } from '../learning-hud';
+import '../../components/learning-hud/learning-hud.css';
 
 interface LessonModalProps {
   isOpen: boolean;
@@ -31,7 +32,7 @@ const LessonModal: React.FC<LessonModalProps> = ({
   onSuccess,
 }) => {
   const { user } = useAuth();
-  
+
   const [formData, setFormData] = useState<{
     title: string;
     type: LessonType;
@@ -56,9 +57,9 @@ const LessonModal: React.FC<LessonModalProps> = ({
       setFormData({
         title: lessonToEdit.title,
         type: lessonToEdit.type,
-        contentText: lessonToEdit.contentUrl, // Map old prop name
+        contentText: lessonToEdit.contentUrl,
         videoUrl: lessonToEdit.videoUrl || '',
-        durationSec: (lessonToEdit.duration || 0) * 60, // Convert minutes to seconds
+        durationSec: (lessonToEdit.duration || 0) * 60,
         orderIndex: lessonToEdit.orderIndex,
       });
     } else {
@@ -140,7 +141,6 @@ const LessonModal: React.FC<LessonModalProps> = ({
 
     try {
       if (lessonToEdit) {
-        // Update existing lesson
         const updateData: LessonUpdateDTO = {
           title: formData.title,
           contentText: formData.contentText,
@@ -150,7 +150,6 @@ const LessonModal: React.FC<LessonModalProps> = ({
         };
         await updateLesson(lessonToEdit.id, updateData, user.id);
       } else {
-        // Create new lesson
         const createData: LessonCreateDTO = {
           title: formData.title,
           type: formData.type,
@@ -174,202 +173,456 @@ const LessonModal: React.FC<LessonModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="lesson-modal-overlay" onClick={onClose}>
-      <div className="lesson-modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="lesson-modal-header">
-          <h2 className="lesson-modal-title">
-            {lessonToEdit ? 'Chỉnh sửa bài học' : 'Tạo bài học mới'}
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(10, 14, 23, 0.85)',
+        backdropFilter: 'blur(8px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 9999,
+        padding: '1rem'
+      }}
+      onClick={onClose}
+    >
+      <NeuralCard
+        style={{
+          maxWidth: '700px',
+          width: '100%',
+          maxHeight: '90vh',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          animation: 'learning-hud-fade-in 0.3s ease-out'
+        }}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1.5rem',
+          borderBottom: '1px solid var(--lhud-border)'
+        }}>
+          <h2 style={{
+            fontSize: '1.5rem',
+            fontWeight: 600,
+            color: 'var(--lhud-text-primary)',
+            margin: 0
+          }}>
+            {lessonToEdit ? 'CHỈNH SỬA BÀI HỌC' : 'TẠO BÀI HỌC MỚI'}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="lesson-modal-close-btn"
             disabled={loading}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--lhud-text-dim)',
+              cursor: 'pointer',
+              padding: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              transition: 'color 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--lhud-cyan)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--lhud-text-dim)'}
           >
             <X size={24} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="lesson-modal-form">
-          {/* Lesson Type Selection */}
-          <div className="lesson-form-section">
-            <label className="lesson-form-label">
-              Loại bài học <span className="required">*</span>
-            </label>
-            <div className="lesson-types-grid">
-              {lessonTypes.map((type) => (
-                <button
-                  key={type.value}
-                  type="button"
-                  className={`lesson-type-card ${
-                    formData.type === type.value ? 'selected' : ''
-                  }`}
-                  style={
-                    {
-                      '--lesson-type-color': type.color,
-                    } as React.CSSProperties
-                  }
-                  onClick={() => handleTypeSelect(type.value)}
-                  disabled={loading || !!lessonToEdit}
-                >
-                  <div className="lesson-type-icon">{type.icon}</div>
-                  <div className="lesson-type-content">
-                    <h3 className="lesson-type-label">{type.label}</h3>
-                    <p className="lesson-type-description">{type.description}</p>
-                  </div>
-                  {formData.type === type.value && (
-                    <CheckCircle className="lesson-type-selected" size={20} />
-                  )}
-                </button>
-              ))}
+        {/* Form Content */}
+        <div style={{ overflowY: 'auto', flex: 1 }}>
+          <form onSubmit={handleSubmit} style={{ padding: '1.5rem' }}>
+            {/* Lesson Type Selection */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontFamily: 'Space Habitat, monospace',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'var(--lhud-cyan)',
+                marginBottom: '0.75rem'
+              }}>
+                Loại bài học <span style={{ color: 'var(--lhud-red)' }}>*</span>
+              </label>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '0.75rem'
+              }}>
+                {lessonTypes.map((type) => (
+                  <button
+                    key={type.value}
+                    type="button"
+                    onClick={() => handleTypeSelect(type.value)}
+                    disabled={loading || !!lessonToEdit}
+                    style={{
+                      background: formData.type === type.value
+                        ? `${type.color}15`
+                        : 'var(--lhud-surface)',
+                      border: formData.type === type.value
+                        ? `1px solid ${type.color}`
+                        : '1px solid var(--lhud-border)',
+                      padding: '1rem',
+                      borderRadius: '8px',
+                      cursor: loading || !!lessonToEdit ? 'not-allowed' : 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      transition: 'all 0.2s',
+                      opacity: loading || !!lessonToEdit ? 0.5 : 1,
+                      position: 'relative'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!loading && !lessonToEdit) {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.borderColor = type.color;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!loading && !lessonToEdit) {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        if (formData.type !== type.value) {
+                          e.currentTarget.style.borderColor = 'var(--lhud-border)';
+                        }
+                      }
+                    }}
+                  >
+                    <div style={{ color: type.color }}>
+                      {type.icon}
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <h3 style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 600,
+                        color: 'var(--lhud-text-primary)',
+                        margin: '0 0 0.25rem 0'
+                      }}>
+                        {type.label}
+                      </h3>
+                      <p style={{
+                        fontSize: '0.75rem',
+                        color: 'var(--lhud-text-dim)',
+                        margin: 0
+                      }}>
+                        {type.description}
+                      </p>
+                    </div>
+                    {formData.type === type.value && (
+                      <CheckCircle
+                        size={20}
+                        style={{
+                          position: 'absolute',
+                          top: '0.5rem',
+                          right: '0.5rem',
+                          color: type.color
+                        }}
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
+              {lessonToEdit && (
+                <p style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--lhud-text-dim)',
+                  marginTop: '0.5rem',
+                  marginBottom: 0
+                }}>
+                  Không thể thay đổi loại bài học khi chỉnh sửa
+                </p>
+              )}
             </div>
-            {lessonToEdit && (
-              <p className="lesson-type-hint">
-                Không thể thay đổi loại bài học khi chỉnh sửa
-              </p>
-            )}
-          </div>
 
-          {/* Title */}
-          <div className="lesson-form-section">
-            <label htmlFor="title" className="lesson-form-label">
-              Tiêu đề bài học <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              className="lesson-form-input"
-              placeholder="VD: Giới thiệu về React Hooks"
-              disabled={loading}
-              maxLength={200}
-            />
-          </div>
-
-          {/* Content Text */}
-          <div className="lesson-form-section">
-            <label htmlFor="contentText" className="lesson-form-label">
-              Nội dung <span className="required">*</span>
-            </label>
-            <textarea
-              id="contentText"
-              name="contentText"
-              value={formData.contentText}
-              onChange={handleInputChange}
-              className="lesson-form-textarea"
-              placeholder="Nội dung chi tiết của bài học..."
-              rows={4}
-              disabled={loading}
-              maxLength={5000}
-            />
-            <p className="lesson-form-hint">
-              Nội dung văn bản hoặc mô tả chi tiết của bài học
-            </p>
-          </div>
-
-          {/* Video URL (for VIDEO type) */}
-          {formData.type === 'VIDEO' && (
-            <div className="lesson-form-section">
-              <label htmlFor="videoUrl" className="lesson-form-label">
-                URL Video <span className="required">*</span>
+            {/* Title */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label htmlFor="title" style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontFamily: 'Space Habitat, monospace',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'var(--lhud-cyan)',
+                marginBottom: '0.5rem'
+              }}>
+                Tiêu đề bài học <span style={{ color: 'var(--lhud-red)' }}>*</span>
               </label>
               <input
-                type="url"
-                id="videoUrl"
-                name="videoUrl"
-                value={formData.videoUrl}
+                type="text"
+                id="title"
+                name="title"
+                value={formData.title}
                 onChange={handleInputChange}
-                className="lesson-form-input"
-                placeholder="https://youtube.com/watch?v=..."
+                placeholder="VD: Giới thiệu về React Hooks"
                 disabled={loading}
+                maxLength={200}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  background: 'var(--lhud-surface)',
+                  border: '1px solid var(--lhud-border)',
+                  borderRadius: '6px',
+                  color: 'var(--lhud-text-primary)',
+                  fontSize: '0.875rem',
+                  fontFamily: 'Inter, sans-serif',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
               />
-              <p className="lesson-form-hint">
-                Hỗ trợ YouTube, Vimeo và các nền tảng video khác
+            </div>
+
+            {/* Content Text */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label htmlFor="contentText" style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontFamily: 'Space Habitat, monospace',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'var(--lhud-cyan)',
+                marginBottom: '0.5rem'
+              }}>
+                Nội dung <span style={{ color: 'var(--lhud-red)' }}>*</span>
+              </label>
+              <textarea
+                id="contentText"
+                name="contentText"
+                value={formData.contentText}
+                onChange={handleInputChange}
+                placeholder="Nội dung chi tiết của bài học..."
+                rows={4}
+                disabled={loading}
+                maxLength={5000}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  background: 'var(--lhud-surface)',
+                  border: '1px solid var(--lhud-border)',
+                  borderRadius: '6px',
+                  color: 'var(--lhud-text-primary)',
+                  fontSize: '0.875rem',
+                  fontFamily: 'Inter, sans-serif',
+                  outline: 'none',
+                  resize: 'vertical',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+              />
+              <p style={{
+                fontSize: '0.75rem',
+                color: 'var(--lhud-text-dim)',
+                marginTop: '0.5rem',
+                marginBottom: 0
+              }}>
+                Nội dung văn bản hoặc mô tả chi tiết của bài học
               </p>
             </div>
-          )}
 
-          {/* Duration (for VIDEO type) */}
-          {formData.type === LessonType.VIDEO && (
-            <div className="lesson-form-section">
-              <label htmlFor="durationSec" className="lesson-form-label">
-                Thời lượng (giây)
+            {/* Video URL (for VIDEO type) */}
+            {formData.type === 'VIDEO' && (
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label htmlFor="videoUrl" style={{
+                  display: 'block',
+                  fontSize: '0.875rem',
+                  fontFamily: 'Space Habitat, monospace',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  color: 'var(--lhud-cyan)',
+                  marginBottom: '0.5rem'
+                }}>
+                  URL Video <span style={{ color: 'var(--lhud-red)' }}>*</span>
+                </label>
+                <input
+                  type="url"
+                  id="videoUrl"
+                  name="videoUrl"
+                  value={formData.videoUrl}
+                  onChange={handleInputChange}
+                  placeholder="https://youtube.com/watch?v=..."
+                  disabled={loading}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    background: 'var(--lhud-surface)',
+                    border: '1px solid var(--lhud-border)',
+                    borderRadius: '6px',
+                    color: 'var(--lhud-text-primary)',
+                    fontSize: '0.875rem',
+                    fontFamily: 'Inter, sans-serif',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                  onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+                />
+                <p style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--lhud-text-dim)',
+                  marginTop: '0.5rem',
+                  marginBottom: 0
+                }}>
+                  Hỗ trợ YouTube, Vimeo và các nền tảng video khác
+                </p>
+              </div>
+            )}
+
+            {/* Duration (for VIDEO type) */}
+            {formData.type === LessonType.VIDEO && (
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label htmlFor="durationSec" style={{
+                  display: 'block',
+                  fontSize: '0.875rem',
+                  fontFamily: 'Space Habitat, monospace',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  color: 'var(--lhud-cyan)',
+                  marginBottom: '0.5rem'
+                }}>
+                  Thời lượng (giây)
+                </label>
+                <input
+                  type="number"
+                  id="durationSec"
+                  name="durationSec"
+                  value={formData.durationSec}
+                  onChange={handleInputChange}
+                  placeholder="0"
+                  min="0"
+                  disabled={loading}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    background: 'var(--lhud-surface)',
+                    border: '1px solid var(--lhud-border)',
+                    borderRadius: '6px',
+                    color: 'var(--lhud-text-primary)',
+                    fontSize: '0.875rem',
+                    fontFamily: 'Inter, sans-serif',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                  onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+                />
+                <p style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--lhud-text-dim)',
+                  marginTop: '0.5rem',
+                  marginBottom: 0
+                }}>
+                  Thời lượng video tính bằng giây
+                </p>
+              </div>
+            )}
+
+            {/* Order Index */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label htmlFor="orderIndex" style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontFamily: 'Space Habitat, monospace',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'var(--lhud-cyan)',
+                marginBottom: '0.5rem'
+              }}>
+                Thứ tự
               </label>
               <input
                 type="number"
-                id="durationSec"
-                name="durationSec"
-                value={formData.durationSec}
+                id="orderIndex"
+                name="orderIndex"
+                value={formData.orderIndex}
                 onChange={handleInputChange}
-                className="lesson-form-input"
                 placeholder="0"
                 min="0"
                 disabled={loading}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  background: 'var(--lhud-surface)',
+                  border: '1px solid var(--lhud-border)',
+                  borderRadius: '6px',
+                  color: 'var(--lhud-text-primary)',
+                  fontSize: '0.875rem',
+                  fontFamily: 'Inter, sans-serif',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
               />
-              <p className="lesson-form-hint">
-                Thời lượng video tính bằng giây
+              <p style={{
+                fontSize: '0.75rem',
+                color: 'var(--lhud-text-dim)',
+                marginTop: '0.5rem',
+                marginBottom: 0
+              }}>
+                Thứ tự hiển thị của bài học trong khóa học
               </p>
             </div>
-          )}
 
-          {/* Order Index */}
-          <div className="lesson-form-section">
-            <label htmlFor="orderIndex" className="lesson-form-label">
-              Thứ tự
-            </label>
-            <input
-              type="number"
-              id="orderIndex"
-              name="orderIndex"
-              value={formData.orderIndex}
-              onChange={handleInputChange}
-              className="lesson-form-input"
-              placeholder="0"
-              min="0"
-              disabled={loading}
-            />
-            <p className="lesson-form-hint">
-              Thứ tự hiển thị của bài học trong khóa học
-            </p>
-          </div>
+            {/* Attachments for READING lessons */}
+            {lessonToEdit && formData.type === LessonType.READING && (
+              <AttachmentManager
+                lessonId={lessonToEdit.id}
+                editable={true}
+              />
+            )}
 
-          {/* ✅ NEW: Attachments for READING lessons */}
-          {lessonToEdit && formData.type === LessonType.READING && (
-            <AttachmentManager
-              lessonId={lessonToEdit.id}
-              editable={true}
-            />
-          )}
+            {/* Error Message */}
+            {error && (
+              <div style={{
+                padding: '0.75rem 1rem',
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid var(--lhud-red)',
+                borderRadius: '6px',
+                color: 'var(--lhud-red)',
+                fontSize: '0.875rem',
+                marginBottom: '1.5rem'
+              }}>
+                <span>{error}</span>
+              </div>
+            )}
 
-          {/* Error Message */}
-          {error && (
-            <div className="lesson-form-error">
-              <span>{error}</span>
+            {/* Form Actions */}
+            <div style={{
+              display: 'flex',
+              gap: '0.75rem',
+              justifyContent: 'flex-end',
+              paddingTop: '1rem',
+              borderTop: '1px solid var(--lhud-border)'
+            }}>
+              <NeuralButton
+                type="button"
+                onClick={onClose}
+                variant="secondary"
+                disabled={loading}
+              >
+                Hủy
+              </NeuralButton>
+              <NeuralButton
+                type="submit"
+                variant="primary"
+                disabled={loading}
+              >
+                {loading ? 'Đang lưu...' : lessonToEdit ? 'Cập nhật' : 'Tạo bài học'}
+              </NeuralButton>
             </div>
-          )}
-
-          {/* Form Actions */}
-          <div className="lesson-modal-actions">
-            <button
-              type="button"
-              onClick={onClose}
-              className="lesson-modal-cancel-btn"
-              disabled={loading}
-            >
-              Hủy
-            </button>
-            <button
-              type="submit"
-              className="lesson-modal-submit-btn"
-              disabled={loading}
-            >
-              {loading ? 'Đang lưu...' : lessonToEdit ? 'Cập nhật' : 'Tạo bài học'}
-            </button>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      </NeuralCard>
     </div>
   );
 };

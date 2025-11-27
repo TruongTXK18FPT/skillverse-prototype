@@ -21,7 +21,8 @@ import {
   History,
   Code,
   PenTool,
-  X
+  X,
+  AlertTriangle
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { listCoursesByAuthor, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse, submitCourseForApproval } from '../../services/courseService';
@@ -32,7 +33,7 @@ import EarningsTab from '../../components/mentor/EarningsTab';
 import SkillPointsTab from '../../components/mentor/SkillPointsTab';
 import ReviewsTab from '../../components/mentor/ReviewsTab';
 import MentoringHistoryTab from '../../components/mentor/MentoringHistoryTab';
-import '../../styles/MentorPage.css';
+import '../../styles/MentorPage-HUD.css';
 import { listModules, createModule, updateModule } from '../../services/moduleService';
 import { listLessonsByModule, createLesson, reorderLessons, getLessonById, deleteLesson } from '../../services/lessonService';
 import { LessonType as ApiLessonType, LessonCreateDTO } from '../../data/lessonDTOs';
@@ -323,6 +324,16 @@ const MentorPage: React.FC = () => {
   const [_editingQuestion, setEditingQuestion] = useState<QuizQuestionDetailDTO | null>(null);
   const [_editingOption, setEditingOption] = useState<QuizOptionDTO | null>(null);
 
+  // Delete confirmation modal state
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    type: 'course' | 'lesson' | 'quiz' | 'question' | 'option' | 'assignment';
+    id: number;
+    name: string;
+    onConfirm: () => Promise<void>;
+  } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   // Mock data for demonstrations
   const [bookings] = useState<Booking[]>([
     {
@@ -522,20 +533,30 @@ const MentorPage: React.FC = () => {
   };
 
   const handleDeleteCourse = async (courseId: number) => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa khóa học này?')) {
-      setLoading(true);
-      try {
-        console.log('Deleting course:', courseId);
-        // Use the actual API to delete the course
-        await deleteCourse(courseId, user?.id || 0);
-        setCourses(prev => prev.filter(course => course.id !== courseId));
-      } catch (error) {
-        console.error('Error deleting course:', error);
-        setError('Không thể xóa khóa học. Vui lòng thử lại.');
-      } finally {
-        setLoading(false);
+    const course = courses.find(c => c.id === courseId);
+    if (!course) return;
+
+    setDeleteTarget({
+      type: 'course',
+      id: courseId,
+      name: course.title,
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          console.log('Deleting course:', courseId);
+          await deleteCourse(courseId, user?.id || 0);
+          setCourses(prev => prev.filter(course => course.id !== courseId));
+          setShowDeleteConfirm(false);
+          setDeleteTarget(null);
+        } catch (error) {
+          console.error('Error deleting course:', error);
+          setError('Không thể xóa khóa học. Vui lòng thử lại.');
+        } finally {
+          setIsDeleting(false);
+        }
       }
-    }
+    });
+    setShowDeleteConfirm(true);
   };
 
   const handleSubmitForApproval = async (courseId: number) => {
@@ -674,26 +695,32 @@ const MentorPage: React.FC = () => {
   };
 
   const handleDeleteLesson = async (lessonId: number) => {
-    if (!user || !window.confirm('Bạn có chắc chắn muốn xóa bài học này?')) {
-      return;
-    }
-    
-    try {
-      setLoading(true);
-      await deleteLesson(lessonId, user.id);
-      
-      // Reload lessons for the current module
-      if (selectedCourse && selectedModuleId) {
-        await loadLessons(selectedCourse.id, selectedModuleId);
+    if (!user) return;
+    const lesson = courseLessons.find(l => l.id === lessonId);
+    if (!lesson) return;
+
+    setDeleteTarget({
+      type: 'lesson',
+      id: lessonId,
+      name: lesson.title,
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          await deleteLesson(lessonId, user.id);
+          if (selectedCourse && selectedModuleId) {
+            await loadLessons(selectedCourse.id, selectedModuleId);
+          }
+          setShowDeleteConfirm(false);
+          setDeleteTarget(null);
+        } catch (error) {
+          console.error('Error deleting lesson:', error);
+          setError('Không thể xóa bài học. Vui lòng thử lại.');
+        } finally {
+          setIsDeleting(false);
+        }
       }
-      
-      alert('Bài học đã được xóa thành công!');
-    } catch (error) {
-      console.error('Error deleting lesson:', error);
-      alert('Không thể xóa bài học. Vui lòng thử lại.');
-    } finally {
-      setLoading(false);
-    }
+    });
+    setShowDeleteConfirm(true);
   };
 
   const loadLessons = async (courseId: number, moduleId?: number) => {
@@ -808,18 +835,32 @@ const MentorPage: React.FC = () => {
   };
 
   const handleDeleteAssignment = async (assignmentId: number) => {
-    if (!confirm('Are you sure you want to delete this assignment? This action cannot be undone.')) return;
-    try {
-      if (!user) throw new Error('User not authenticated');
-      await deleteAssignment(assignmentId, user.id);
-      // Reload assignments
-      if (selectedModuleId) {
-        await loadAssignments(selectedModuleId);
+    if (!user) return;
+    const assignment = moduleAssignments.find(a => a.id === assignmentId);
+    if (!assignment) return;
+
+    setDeleteTarget({
+      type: 'assignment',
+      id: assignmentId,
+      name: assignment.title,
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          await deleteAssignment(assignmentId, user.id);
+          if (selectedModuleId) {
+            await loadAssignments(selectedModuleId);
+          }
+          setShowDeleteConfirm(false);
+          setDeleteTarget(null);
+        } catch (e) {
+          console.error('Failed to delete assignment', e);
+          setError('Không thể xóa bài tập. Vui lòng thử lại.');
+        } finally {
+          setIsDeleting(false);
+        }
       }
-    } catch (e) {
-      console.error('Failed to delete assignment', e);
-      setError('Failed to delete assignment');
-    }
+    });
+    setShowDeleteConfirm(true);
   };
 
   const handleAssignmentSuccess = () => {
@@ -864,20 +905,34 @@ const MentorPage: React.FC = () => {
   };
 
   const handleDeleteQuiz = async (quizId: number) => {
-    if (!confirm('Are you sure you want to delete this quiz?')) return;
-    try {
-      if (!user) throw new Error('User not authenticated');
-      await deleteQuiz(quizId, user.id);
-      // Reload quizzes
-      if (selectedModuleId) {
-        await loadQuizzes(selectedModuleId);
+    if (!user) return;
+    const quiz = moduleQuizzes.find(q => q.id === quizId) || selectedQuiz;
+    if (!quiz) return;
+
+    setDeleteTarget({
+      type: 'quiz',
+      id: quizId,
+      name: quiz.title,
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          await deleteQuiz(quizId, user.id);
+          if (selectedModuleId) {
+            await loadQuizzes(selectedModuleId);
+          }
+          setShowQuizDetail(false);
+          setSelectedQuiz(null);
+          setShowDeleteConfirm(false);
+          setDeleteTarget(null);
+        } catch (e) {
+          console.error('Failed to delete quiz', e);
+          setError('Không thể xóa quiz. Vui lòng thử lại.');
+        } finally {
+          setIsDeleting(false);
+        }
       }
-      setShowQuizDetail(false);
-      setSelectedQuiz(null);
-    } catch (e) {
-      console.error('Failed to delete quiz', e);
-      setError('Failed to delete quiz');
-    }
+    });
+    setShowDeleteConfirm(true);
   };
 
   const handleAddQuestion = async (quizId: number, questionData: QuizQuestionCreateDTO) => {
@@ -909,18 +964,32 @@ const MentorPage: React.FC = () => {
   };
 
   const handleDeleteQuestion = async (questionId: number) => {
-    if (!confirm('Are you sure you want to delete this question?')) return;
-    try {
-      if (!user) throw new Error('User not authenticated');
-      await deleteQuizQuestion(questionId, user.id);
-      // Reload quiz details
-      if (selectedQuiz) {
-        await handleViewQuiz(selectedQuiz.id);
+    if (!user || !selectedQuiz) return;
+    const question = selectedQuiz.questions.find(q => q.id === questionId);
+    if (!question) return;
+
+    setDeleteTarget({
+      type: 'question',
+      id: questionId,
+      name: `Câu hỏi: ${question.questionText.substring(0, 50)}...`,
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          await deleteQuizQuestion(questionId, user.id);
+          if (selectedQuiz) {
+            await handleViewQuiz(selectedQuiz.id);
+          }
+          setShowDeleteConfirm(false);
+          setDeleteTarget(null);
+        } catch (e) {
+          console.error('Failed to delete question', e);
+          setError('Không thể xóa câu hỏi. Vui lòng thử lại.');
+        } finally {
+          setIsDeleting(false);
+        }
       }
-    } catch (e) {
-      console.error('Failed to delete question', e);
-      setError('Failed to delete question');
-    }
+    });
+    setShowDeleteConfirm(true);
   };
 
   const handleAddOption = async (questionId: number, optionData: QuizOptionCreateDTO) => {
@@ -954,18 +1023,40 @@ const MentorPage: React.FC = () => {
   };
 
   const handleDeleteOption = async (optionId: number) => {
-    if (!confirm('Are you sure you want to delete this option?')) return;
-    try {
-      if (!user) throw new Error('User not authenticated');
-      await deleteQuizOption(optionId, user.id);
-      // Reload quiz details
-      if (selectedQuiz) {
-        await handleViewQuiz(selectedQuiz.id);
+    if (!user || !selectedQuiz) return;
+
+    // Find the option across all questions
+    let optionText = 'Option';
+    for (const question of selectedQuiz.questions) {
+      const option = question.options.find(o => o.id === optionId);
+      if (option) {
+        optionText = option.optionText;
+        break;
       }
-    } catch (e) {
-      console.error('Failed to delete option', e);
-      setError('Failed to delete option');
     }
+
+    setDeleteTarget({
+      type: 'option',
+      id: optionId,
+      name: `Lựa chọn: ${optionText.substring(0, 50)}${optionText.length > 50 ? '...' : ''}`,
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          await deleteQuizOption(optionId, user.id);
+          if (selectedQuiz) {
+            await handleViewQuiz(selectedQuiz.id);
+          }
+          setShowDeleteConfirm(false);
+          setDeleteTarget(null);
+        } catch (e) {
+          console.error('Failed to delete option', e);
+          setError('Không thể xóa lựa chọn. Vui lòng thử lại.');
+        } finally {
+          setIsDeleting(false);
+        }
+      }
+    });
+    setShowDeleteConfirm(true);
   };
 
   const getStatusIcon = (status: CourseStatus) => {
@@ -995,6 +1086,21 @@ const MentorPage: React.FC = () => {
         return 'mentor-status-archived';
       default:
         return 'mentor-status-archived';
+    }
+  };
+
+  const getHUDStatusColor = (status: CourseStatus) => {
+    switch (status) {
+      case CourseStatus.PUBLIC:
+        return 'mentor-hud-status-public';
+      case CourseStatus.PENDING:
+        return 'mentor-hud-status-pending';
+      case CourseStatus.DRAFT:
+        return 'mentor-hud-status-draft';
+      case CourseStatus.ARCHIVED:
+        return 'mentor-hud-status-archived';
+      default:
+        return 'mentor-hud-status-draft';
     }
   };
 
@@ -1077,14 +1183,14 @@ const MentorPage: React.FC = () => {
   ];
 
   const renderCoursesTab = () => (
-    <div className="mentor-courses-section">
-      <div className="mentor-courses-header">
-        <div className="mentor-courses-title-section">
-          <h2>Khóa Học Của Tôi</h2>
+    <div className="mentor-hud-courses">
+      <div className="mentor-hud-courses__header">
+        <div className="mentor-hud-courses__title-section">
+          <h2>MISSION MODULES</h2>
           <p>Quản lý và tạo mới các khóa học</p>
         </div>
-        <button 
-          className="mentor-create-course-button"
+        <button
+          className="mentor-hud-create-button"
           onClick={() => setShowCreateCourse(true)}
         >
           <Plus className="w-5 h-5" />
@@ -1116,12 +1222,12 @@ const MentorPage: React.FC = () => {
 
       {/* Empty State */}
       {!loading && !error && courses.length === 0 && (
-        <div className="mentor-empty-state">
-          <BookOpen className="w-16 h-16 text-gray-400" />
+        <div className="mentor-hud-empty">
+          <BookOpen className="w-16 h-16" style={{color: 'var(--mentor-hud-accent-cyan)'}} />
           <h3>Chưa có khóa học nào</h3>
           <p>Bắt đầu tạo khóa học đầu tiên của bạn!</p>
-          <button 
-            className="mentor-create-course-button"
+          <button
+            className="mentor-hud-create-button"
             onClick={() => setShowCreateCourse(true)}
           >
             <Plus className="w-5 h-5" />
@@ -1132,46 +1238,46 @@ const MentorPage: React.FC = () => {
 
       {/* Courses Grid */}
       {!loading && !error && courses.length > 0 && (
-        <div className="mentor-courses-grid">
+        <div className="mentor-hud-courses__grid">
           {courses.map((course) => (
-          <div key={course.id} className="mentor-course-card">
-            <div className="mentor-course-thumbnail">
+          <div key={course.id} className="mentor-hud-course-card">
+            <div className="mentor-hud-course-thumbnail">
               {course.thumbnail?.url ? (
                 <img src={course.thumbnail.url} alt={course.title} />
               ) : (
-                <div className="mentor-course-thumbnail-placeholder">
-                  <BookOpen className="w-12 h-12 text-gray-400" />
+                <div className="mentor-hud-course-thumbnail-placeholder">
+                  <BookOpen className="w-12 h-12" />
                 </div>
               )}
-              <div className={`mentor-course-status ${getStatusColor(course.status)}`}>
+              <div className={`mentor-hud-course-status ${getHUDStatusColor(course.status)}`}>
                 {getStatusIcon(course.status)}
                 <span>{course.status}</span>
               </div>
             </div>
 
-            <div className="mentor-course-content">
-              <h3 className="mentor-course-title">{course.title}</h3>
-              <p className="mentor-course-description">{course.description}</p>
-              
-              <div className="mentor-course-meta">
-                <div className="mentor-course-level">
-                  <span className="mentor-level-badge">{course.level}</span>
+            <div className="mentor-hud-course-content">
+              <h3 className="mentor-hud-course-title">{course.title}</h3>
+              <p className="mentor-hud-course-description">{course.description}</p>
+
+              <div className="mentor-hud-course-meta">
+                <div className="mentor-hud-course-level">
+                  <span className="mentor-hud-level-badge">{course.level}</span>
                 </div>
-                <div className="mentor-course-stats">
-                  <div className="mentor-course-stat">
+                <div className="mentor-hud-course-stats">
+                  <div className="mentor-hud-course-stat">
                     <Users className="w-4 h-4" />
                     <span>{course.enrollmentCount} Học viên</span>
                   </div>
-                  <div className="mentor-course-stat">
+                  <div className="mentor-hud-course-stat">
                     <BookOpen className="w-4 h-4" />
                     <span>{course.moduleCount} Module</span>
                   </div>
-                  <div className="mentor-course-stat">
+                  <div className="mentor-hud-course-stat">
                     <Play className="w-4 h-4" />
                     <span>{course.lessonCount} Bài học</span>
                   </div>
                   {course.price !== undefined && course.price !== null && (
-                    <div className="mentor-course-stat">
+                    <div className="mentor-hud-course-stat">
                       <DollarSign className="w-4 h-4" />
                       <span>{course.price.toLocaleString('vi-VN')} {course.currency || 'VND'}</span>
                     </div>
@@ -1197,24 +1303,24 @@ const MentorPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mentor-course-actions">
-                <button 
-                  className="mentor-action-button mentor-view-button"
+              <div className="mentor-hud-course-actions">
+                <button
+                  className="mentor-hud-action-button mentor-hud-view-button"
                   onClick={() => handleViewCourse(course)}
                 >
                   <Eye className="w-4 h-4" />
                   Xem
                 </button>
-                <button 
-                  className="mentor-action-button mentor-edit-button"
+                <button
+                  className="mentor-hud-action-button mentor-hud-edit-button"
                   onClick={() => setEditingCourse(course)}
                 >
                   <Edit3 className="w-4 h-4" />
                   Sửa
                 </button>
                 {course.status === CourseStatus.DRAFT && (
-                  <button 
-                    className="mentor-action-button mentor-submit-button"
+                  <button
+                    className="mentor-hud-action-button mentor-hud-submit-button"
                     onClick={() => handleSubmitForApproval(course.id)}
                     disabled={loading}
                   >
@@ -1222,8 +1328,8 @@ const MentorPage: React.FC = () => {
                     Gửi Duyệt
                   </button>
                 )}
-                <button 
-                  className="mentor-action-button mentor-delete-button"
+                <button
+                  className="mentor-hud-action-button mentor-hud-delete-button"
                   onClick={() => handleDeleteCourse(course.id)}
                   disabled={loading}
                 >
@@ -1690,47 +1796,53 @@ const MentorPage: React.FC = () => {
         return <MentoringHistoryTab />;
       default:
         return (
-          <div className="mentor-default-tab">
-            <h2 className="mentor-default-title">Chào mừng đến với Bảng Điều Khiển Mentor</h2>
-            <p className="mentor-default-description">Chọn một tab để xem các hoạt động hướng dẫn của bạn.</p>
+          <div className="mentor-hud-default-tab">
+            <h2 className="mentor-hud-default-title">SYSTEM STANDBY</h2>
+            <p className="mentor-hud-default-description">Chọn một tab để xem các hoạt động hướng dẫn của bạn.</p>
           </div>
         );
     }
   };
 
   return (
-    <div className="mentor-dashboard">
-      <div className="mentor-dashboard-header">
-        <h1 className="mentor-dashboard-title">Bảng Điều Khiển Mentor</h1>
-        <p className="mentor-dashboard-subtitle">Quản lý hoạt động hướng dẫn và theo dõi tác động của bạn</p>
-      </div>
+    <div className="mentor-hud-dashboard">
+      <div className="mentor-hud-dashboard__container">
+        <div className="mentor-hud-header">
+          <div className="mentor-hud-header__content">
+            <div className="mentor-hud-header__status">
+              <div className="mentor-hud-header__status-dot"></div>
+              <span className="mentor-hud-header__status-text">SYSTEM ONLINE</span>
+            </div>
+            <h1 className="mentor-hud-header__title">
+              MENTOR <span className="mentor-hud-header__title-accent">COMMAND CENTER</span>
+            </h1>
+            <p className="mentor-hud-header__subtitle">Quản lý hoạt động hướng dẫn và theo dõi tác động của bạn</p>
+          </div>
+          <div className="mentor-hud-header__corner mentor-hud-header__corner--tl"></div>
+          <div className="mentor-hud-header__corner mentor-hud-header__corner--tr"></div>
+          <div className="mentor-hud-header__corner mentor-hud-header__corner--bl"></div>
+          <div className="mentor-hud-header__corner mentor-hud-header__corner--br"></div>
+        </div>
 
-      <div className="mentor-navigation-tabs">
-        {tabs.map((tab) => {
-          const IconComponent = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              className={`mentor-tab-button ${activeTab === tab.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-              style={{
-                '--tab-gradient': tab.gradient
-              } as React.CSSProperties & { '--tab-gradient': string }}
-            >
-              <div className="mentor-tab-icon-wrapper">
-                <IconComponent className="mentor-tab-icon" />
-              </div>
-              <div className="mentor-tab-content">
-                <span className="mentor-tab-label">{tab.label}</span>
-                <span className="mentor-tab-description">{tab.description}</span>
-              </div>
-            </button>
-          );
-        })}
-      </div>
+        <div className="mentor-hud-navigation">
+          {tabs.map((tab) => {
+            const IconComponent = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                className={`mentor-hud-tab ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                <IconComponent className="mentor-hud-tab__icon" />
+                <span className="mentor-hud-tab__label">{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
 
-      <div className="mentor-main-content">
-        {renderActiveTab()}
+        <div className="mentor-hud-content">
+          {renderActiveTab()}
+        </div>
       </div>
 
       {/* Course Creation Modal */}
@@ -2649,6 +2761,70 @@ const MentorPage: React.FC = () => {
                   )}
                 </>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal - Isolated */}
+      {showDeleteConfirm && deleteTarget && (
+        <div className="hud-confirm-delete-overlay">
+          <div className="hud-confirm-delete-content">
+            <div className="hud-confirm-delete-header">
+              <div className="hud-confirm-delete-icon">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <div className="hud-confirm-delete-title-section">
+                <h2 className="hud-confirm-delete-title">Xác Nhận Xóa</h2>
+                <p className="hud-confirm-delete-subtitle">
+                  Thao tác này không thể hoàn tác
+                </p>
+              </div>
+            </div>
+
+            <div className="hud-confirm-delete-body">
+              <p className="hud-confirm-delete-message">
+                Bạn có chắc chắn muốn xóa{' '}
+                {deleteTarget.type === 'course' && 'khóa học'}
+                {deleteTarget.type === 'lesson' && 'bài học'}
+                {deleteTarget.type === 'quiz' && 'quiz'}
+                {deleteTarget.type === 'question' && 'câu hỏi'}
+                {deleteTarget.type === 'option' && 'lựa chọn'}
+                {deleteTarget.type === 'assignment' && 'bài tập'}
+                {' '}này không?
+              </p>
+
+              <div className="hud-confirm-delete-item">
+                <p className="hud-confirm-delete-item-name">{deleteTarget.name}</p>
+              </div>
+
+              <div className="hud-confirm-delete-warning">
+                <AlertTriangle className="w-5 h-5 hud-confirm-delete-warning-icon" />
+                <p className="hud-confirm-delete-warning-text">
+                  Cảnh báo: Dữ liệu sau khi xóa sẽ không thể khôi phục. Hãy chắc chắn bạn muốn thực hiện thao tác này.
+                </p>
+              </div>
+
+              <div className="hud-confirm-delete-actions">
+                <button
+                  className="hud-confirm-delete-btn hud-confirm-delete-btn-cancel"
+                  onClick={() => {
+                    setShowDeleteConfirm(false);
+                    setDeleteTarget(null);
+                  }}
+                  disabled={isDeleting}
+                >
+                  Hủy
+                </button>
+                <button
+                  className="hud-confirm-delete-btn hud-confirm-delete-btn-confirm"
+                  onClick={() => deleteTarget.onConfirm()}
+                  disabled={isDeleting}
+                >
+                  <Trash2 className="w-4 h-4" />
+                  {isDeleting ? 'Đang xóa...' : 'Xóa'}
+                </button>
+              </div>
             </div>
           </div>
         </div>

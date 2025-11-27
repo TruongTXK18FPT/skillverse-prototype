@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, CheckCircle, RefreshCw, Award, AlertCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle, RefreshCw, Award, AlertCircle, Lock, Zap } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { getQuizById, submitQuiz, getUserQuizAttempts } from '../../services/quizService';
-import '../../styles/QuizAttemptPage.css';
+import '../../styles/QuizAttemptPage-HUD.css';
 
 const MAX_ATTEMPTS = 3;
 const RESET_HOURS = 24;
@@ -128,17 +128,27 @@ const QuizAttemptPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="quiz-attempt-container">
-        <div className="quiz-loading">Đang tải quiz...</div>
+      <div className="hud-quiz-attempt-container">
+        <div className="hud-quiz-attempt-loading">
+          <div className="hud-quiz-attempt-spinner"></div>
+          <p>INITIALIZING NEURAL VERIFICATION</p>
+        </div>
       </div>
     );
   }
 
   if (!quiz) {
     return (
-      <div className="quiz-attempt-container">
-        <div className="quiz-error">Không tìm thấy quiz</div>
-        <button onClick={() => navigate(-1)}>Quay lại</button>
+      <div className="hud-quiz-attempt-container">
+        <div className="hud-quiz-attempt-error">
+          <AlertCircle size={48} />
+          <h2>QUIZ DATA NOT FOUND</h2>
+          <p>Unable to establish connection to quiz database</p>
+          <button onClick={() => navigate(-1)} className="hud-quiz-attempt-btn-back">
+            <ArrowLeft size={18} />
+            RETURN TO COURSE
+          </button>
+        </div>
       </div>
     );
   }
@@ -146,58 +156,77 @@ const QuizAttemptPage: React.FC = () => {
   // START SCREEN
   if (viewMode === 'start') {
     return (
-      <div className="quiz-attempt-container">
-        <div className="quiz-header">
-          <button onClick={() => navigate(-1)} className="quiz-back-btn">
+      <div className="hud-quiz-attempt-container">
+        <div className="hud-quiz-attempt-header">
+          <button onClick={() => navigate(-1)} className="hud-quiz-attempt-back-btn">
             <ArrowLeft size={20} />
-            Quay lại
+            <span>RETURN</span>
           </button>
         </div>
 
-        <div className="quiz-start-screen">
-          <h1 className="quiz-start-title">{quiz.title}</h1>
-          <p className="quiz-start-description">{quiz.description || 'Kiểm tra kiến thức của bạn'}</p>
-          
-          <div className="quiz-start-info">
-            <div className="quiz-info-item">
-              <strong>Số câu hỏi:</strong> {totalQuestions}
+        <div className="hud-quiz-attempt-start-screen">
+          <div className="hud-quiz-attempt-start-icon">
+            <Zap size={64} />
+          </div>
+          <h1 className="hud-quiz-attempt-start-title">{quiz.title}</h1>
+          <p className="hud-quiz-attempt-start-description">
+            {quiz.description || 'Knowledge verification checkpoint'}
+          </p>
+
+          <div className="hud-quiz-attempt-start-info">
+            <div className="hud-quiz-attempt-info-item">
+              <span className="hud-quiz-attempt-info-label">QUESTIONS:</span>
+              <span className="hud-quiz-attempt-info-value">{totalQuestions}</span>
             </div>
-            <div className="quiz-info-item">
-              <strong>Điểm đạt:</strong> {quiz.passScore}%
+            <div className="hud-quiz-attempt-info-item">
+              <span className="hud-quiz-attempt-info-label">PASS SCORE:</span>
+              <span className="hud-quiz-attempt-info-value">{quiz.passScore}%</span>
             </div>
-            <div className="quiz-info-item">
-              <strong>Số lần làm:</strong> {attemptsUsed}/{MAX_ATTEMPTS}
+            <div className="hud-quiz-attempt-info-item">
+              <span className="hud-quiz-attempt-info-label">ATTEMPTS:</span>
+              <span className="hud-quiz-attempt-info-value">{attemptsUsed}/{MAX_ATTEMPTS}</span>
             </div>
             {bestScore !== null && (
-              <div className="quiz-info-item">
-                <strong>Điểm cao nhất:</strong> {bestScore}%
+              <div className="hud-quiz-attempt-info-item">
+                <span className="hud-quiz-attempt-info-label">BEST SCORE:</span>
+                <span className="hud-quiz-attempt-info-value">{bestScore}%</span>
               </div>
             )}
           </div>
 
           {hasPassed ? (
-            <div className="quiz-passed-notice">
-              <Award size={48} style={{ color: '#28a745', marginBottom: '16px' }} />
-              <h3>✅ Bạn đã hoàn thành quiz này!</h3>
-              <p>Điểm số: {bestScore}% (Đạt yêu cầu: {quiz.passScore}%)</p>
-              <button onClick={() => navigate(-1)} className="quiz-start-btn">
-                Quay lại khóa học
+            <div className="hud-quiz-attempt-passed-notice">
+              <div className="hud-quiz-attempt-passed-icon">
+                <Award size={48} />
+              </div>
+              <h3>VERIFICATION COMPLETE</h3>
+              <p className="hud-quiz-attempt-passed-score">
+                SCORE: {bestScore}% | REQUIRED: {quiz.passScore}%
+              </p>
+              <p className="hud-quiz-attempt-passed-message">Neural sync verified. No re-attempt necessary.</p>
+              <button onClick={() => navigate(-1)} className="hud-quiz-attempt-btn-primary">
+                <ArrowLeft size={18} />
+                RETURN TO COURSE
               </button>
             </div>
           ) : !canRetry ? (
-            <div className="quiz-no-attempts">
-              <AlertCircle size={48} style={{ color: '#dc3545', marginBottom: '16px' }} />
-              <h3>Đã hết lượt làm bài</h3>
-              <p>Bạn đã sử dụng hết {MAX_ATTEMPTS} lần làm bài.</p>
-              <p>Vui lòng quay lại sau {RESET_HOURS} giờ để làm lại.</p>
-              <button onClick={() => navigate(-1)} className="quiz-start-btn secondary">
-                Quay lại
+            <div className="hud-quiz-attempt-no-attempts">
+              <div className="hud-quiz-attempt-locked-icon">
+                <Lock size={48} />
+              </div>
+              <h3>ATTEMPTS DEPLETED</h3>
+              <p>You have used all {MAX_ATTEMPTS} verification attempts.</p>
+              <p className="hud-quiz-attempt-cooldown">Cooldown period: {RESET_HOURS} hours remaining</p>
+              <button onClick={() => navigate(-1)} className="hud-quiz-attempt-btn-secondary">
+                <ArrowLeft size={18} />
+                RETURN
               </button>
             </div>
           ) : (
-            <div className="quiz-start-actions">
-              <button onClick={handleStartQuiz} className="quiz-start-btn">
-                {attemptsUsed > 0 ? `Làm lại (${attemptsUsed}/${MAX_ATTEMPTS})` : 'Bắt đầu Quiz'}
+            <div className="hud-quiz-attempt-start-actions">
+              <button onClick={handleStartQuiz} className="hud-quiz-attempt-btn-start">
+                <Zap size={20} />
+                {attemptsUsed > 0 ? `RETRY VERIFICATION (${attemptsUsed}/${MAX_ATTEMPTS})` : 'BEGIN VERIFICATION'}
               </button>
             </div>
           )}
@@ -209,33 +238,51 @@ const QuizAttemptPage: React.FC = () => {
   // RESULT SCREEN
   if (viewMode === 'result' && result) {
     const passed = result.passed || (result.score >= quiz.passScore);
-    
+
     return (
-      <div className="quiz-attempt-container">
-        <div className="quiz-result">
-          <h2>🎉 Kết quả Quiz</h2>
-          <div className="quiz-attempt-result-score">
-            <div className="quiz-attempt-score-circle">
-              <span className="quiz-attempt-score-value">{result.score || 0}%</span>
+      <div className="hud-quiz-attempt-container">
+        <div className="hud-quiz-attempt-result">
+          <div className={`hud-quiz-attempt-result-header ${passed ? 'passed' : 'failed'}`}>
+            <div className="hud-quiz-attempt-result-icon">
+              {passed ? <CheckCircle size={48} /> : <AlertCircle size={48} />}
             </div>
-            <p className={passed ? 'passed' : 'failed'}>
-              {passed ? '✅ Đạt' : '❌ Chưa đạt'} (Yêu cầu: {quiz.passScore}%)
+            <h2>{passed ? 'VERIFICATION SUCCESSFUL' : 'VERIFICATION FAILED'}</h2>
+            <p className="hud-quiz-attempt-result-subtitle">
+              {passed ? 'Neural sync complete - Data verified' : 'Neural sync incomplete - Retry required'}
             </p>
           </div>
-          
-          <div className="quiz-result-details">
-            <p>Số câu đúng: {result.correctCount || 0}/{totalQuestions}</p>
-            <p>Lần làm: {attemptsUsed}/{MAX_ATTEMPTS}</p>
+
+          <div className="hud-quiz-attempt-result-score">
+            <div className={`hud-quiz-attempt-score-circle ${passed ? 'passed' : 'failed'}`}>
+              <span className="hud-quiz-attempt-score-value">{result.score || 0}%</span>
+              <span className="hud-quiz-attempt-score-label">SCORE</span>
+            </div>
           </div>
-          
-          <div className="quiz-attempt-result-actions">
-            <button onClick={() => navigate(-1)} className="quiz-attempt-btn-back">
-              Quay lại khóa học
+
+          <div className="hud-quiz-attempt-result-details">
+            <div className="hud-quiz-attempt-detail-item">
+              <span className="hud-quiz-attempt-detail-label">CORRECT ANSWERS:</span>
+              <span className="hud-quiz-attempt-detail-value">{result.correctCount || 0}/{totalQuestions}</span>
+            </div>
+            <div className="hud-quiz-attempt-detail-item">
+              <span className="hud-quiz-attempt-detail-label">REQUIRED SCORE:</span>
+              <span className="hud-quiz-attempt-detail-value">{quiz.passScore}%</span>
+            </div>
+            <div className="hud-quiz-attempt-detail-item">
+              <span className="hud-quiz-attempt-detail-label">ATTEMPTS USED:</span>
+              <span className="hud-quiz-attempt-detail-value">{attemptsUsed}/{MAX_ATTEMPTS}</span>
+            </div>
+          </div>
+
+          <div className="hud-quiz-attempt-result-actions">
+            <button onClick={() => navigate(-1)} className="hud-quiz-attempt-btn-back">
+              <ArrowLeft size={18} />
+              RETURN TO COURSE
             </button>
             {!passed && canRetry && attemptsUsed < MAX_ATTEMPTS && (
-              <button onClick={() => window.location.reload()} className="quiz-attempt-btn-retry">
+              <button onClick={() => window.location.reload()} className="hud-quiz-attempt-btn-retry">
                 <RefreshCw size={18} />
-                Làm lại ({attemptsUsed}/{MAX_ATTEMPTS})
+                RETRY ({attemptsUsed}/{MAX_ATTEMPTS})
               </button>
             )}
           </div>
@@ -246,31 +293,41 @@ const QuizAttemptPage: React.FC = () => {
 
   // TAKING QUIZ SCREEN
   return (
-    <div className="quiz-attempt-container">
+    <div className="hud-quiz-attempt-container hud-quiz-attempt-taking">
       {/* Header */}
-      <div className="quiz-header">
-        <button onClick={() => navigate(-1)} className="quiz-back-btn">
+      <div className="hud-quiz-attempt-header">
+        <button onClick={() => navigate(-1)} className="hud-quiz-attempt-back-btn">
           <ArrowLeft size={20} />
-          Quay lại
+          <span>ABORT</span>
         </button>
-        <h1 className="quiz-title">{quiz.title}</h1>
+        <h1 className="hud-quiz-attempt-title">{quiz.title}</h1>
+        <div className="hud-quiz-attempt-progress-indicator">
+          <span>{answeredCount}/{totalQuestions}</span>
+        </div>
       </div>
 
-      {/* ALL QUESTIONS - Show all at once like Coursera */}
-      <div className="quiz-all-questions">
+      {/* ALL QUESTIONS - Show all at once */}
+      <div className="hud-quiz-attempt-all-questions">
         {quiz.questions?.map((question: any, idx: number) => (
-          <div key={question.id} className="quiz-question-container">
-            <h2 className="quiz-attempt-question-title">
-              Câu hỏi {idx + 1}
-            </h2>
-            <p className="quiz-attempt-question-text">{question.questionText}</p>
+          <div key={question.id} className="hud-quiz-attempt-question-card">
+            <div className="hud-quiz-attempt-question-header">
+              <span className="hud-quiz-attempt-question-number">QUESTION {idx + 1}</span>
+              {answers[question.id] && (
+                <span className="hud-quiz-attempt-question-answered">
+                  <CheckCircle size={16} />
+                  ANSWERED
+                </span>
+              )}
+            </div>
+
+            <p className="hud-quiz-attempt-question-text">{question.questionText}</p>
 
             {/* Options */}
-            <div className="quiz-options">
+            <div className="hud-quiz-attempt-options">
               {question.options?.map((option: any) => (
                 <label
                   key={option.id}
-                  className={`quiz-option ${answers[question.id] === option.id ? 'selected' : ''}`}
+                  className={`hud-quiz-attempt-option ${answers[question.id] === option.id ? 'selected' : ''}`}
                 >
                   <input
                     type="radio"
@@ -278,8 +335,12 @@ const QuizAttemptPage: React.FC = () => {
                     value={option.id}
                     checked={answers[question.id] === option.id}
                     onChange={() => handleSelectAnswer(question.id, option.id)}
+                    style={{ display: 'none' }}
                   />
-                  <span className="quiz-attempt-option-text">{option.optionText}</span>
+                  <div className="hud-quiz-attempt-option-indicator">
+                    {answers[question.id] === option.id && <div className="hud-quiz-attempt-option-selected"></div>}
+                  </div>
+                  <span className="hud-quiz-attempt-option-text">{option.optionText}</span>
                 </label>
               ))}
             </div>
@@ -288,18 +349,19 @@ const QuizAttemptPage: React.FC = () => {
       </div>
 
       {/* Submit Button */}
-      <div className="quiz-attempt-navigation">
-        <div className="quiz-answer-status">
-          {answeredCount}/{totalQuestions} câu đã trả lời
+      <div className="hud-quiz-attempt-navigation">
+        <div className="hud-quiz-attempt-answer-status">
+          <span className="hud-quiz-attempt-status-label">PROGRESS:</span>
+          <span className="hud-quiz-attempt-status-value">{answeredCount}/{totalQuestions} ANSWERED</span>
         </div>
 
-        <button 
-          onClick={handleSubmit} 
-          className="quiz-attempt-nav-btn quiz-attempt-submit-btn"
+        <button
+          onClick={handleSubmit}
+          className="hud-quiz-attempt-submit-btn"
           disabled={answeredCount === 0}
         >
           <CheckCircle size={20} />
-          Nộp bài ({answeredCount}/{totalQuestions})
+          SUBMIT VERIFICATION
         </button>
       </div>
     </div>

@@ -8,7 +8,8 @@ import {
 } from '../../data/codelabDTOs';
 import { createCodingExercise, updateCodingExercise } from '../../services/codelabService';
 import { useAuth } from '../../context/AuthContext';
-import '../../styles/CodelabModal.css';
+import { NeuralCard, NeuralButton } from '../learning-hud';
+import '../../components/learning-hud/learning-hud.css';
 
 interface CodelabModalProps {
   isOpen: boolean;
@@ -114,7 +115,6 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
     }));
   };
 
-  // Test Case Management
   const addTestCase = () => {
     const newTestCase: TestCaseForm = {
       input: '',
@@ -127,7 +127,6 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
 
   const removeTestCase = (index: number) => {
     const updatedTestCases = testCases.filter((_, i) => i !== index);
-    // Reorder remaining test cases
     updatedTestCases.forEach((tc, i) => {
       tc.orderIndex = i;
     });
@@ -163,7 +162,6 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
       return false;
     }
 
-    // Validate test cases
     for (let i = 0; i < testCases.length; i++) {
       const tc = testCases[i];
       if (!tc.input.trim()) {
@@ -191,7 +189,6 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
 
     try {
       if (codelabToEdit) {
-        // Update existing coding exercise
         const updateData: CodingExerciseUpdateDTO = {
           title: formData.title,
           description: formData.description,
@@ -202,15 +199,14 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
         };
         await updateCodingExercise(codelabToEdit.id, updateData, user.id);
       } else {
-        // Create new coding exercise with test cases
         const createData: CodingExerciseCreateDTO = {
-          lessonId,
           title: formData.title,
           description: formData.description,
           difficulty: formData.difficulty,
           language: formData.language,
           starterCode: formData.starterCode || undefined,
           solutionCode: formData.solutionCode || undefined,
+          moduleId: lessonId,
           testCases: testCases.map((tc): CodingTestCaseCreateDTO => ({
             input: tc.input,
             expectedOutput: tc.expectedOutput,
@@ -232,268 +228,532 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
 
   if (!isOpen) return null;
 
+  const inputStyle = {
+    width: '100%',
+    padding: '0.75rem',
+    background: 'var(--lhud-surface)',
+    border: '1px solid var(--lhud-border)',
+    borderRadius: '6px',
+    color: 'var(--lhud-text-primary)',
+    fontSize: '0.875rem',
+    fontFamily: 'Inter, sans-serif',
+    outline: 'none',
+    transition: 'border-color 0.2s'
+  } as const;
+
+  const codeStyle = {
+    ...inputStyle,
+    fontFamily: 'monospace',
+    fontSize: '0.8rem',
+    resize: 'vertical' as const
+  };
+
   return (
-    <div className="codelab-modal-overlay" onClick={onClose}>
-      <div className="codelab-modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="codelab-modal-header">
-          <div className="codelab-modal-title-wrapper">
-            <Code size={24} />
-            <h2 className="codelab-modal-title">
-              {codelabToEdit ? 'Chỉnh sửa bài tập Coding' : 'Tạo bài tập Coding mới'}
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(10, 14, 23, 0.85)',
+        backdropFilter: 'blur(8px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 9999,
+        padding: '1rem'
+      }}
+      onClick={onClose}
+    >
+      <NeuralCard
+        style={{
+          maxWidth: '800px',
+          width: '100%',
+          maxHeight: '90vh',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          animation: 'learning-hud-fade-in 0.3s ease-out'
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1.5rem',
+          borderBottom: '1px solid var(--lhud-border)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <Code size={24} style={{ color: 'var(--lhud-cyan)' }} />
+            <h2 style={{
+              fontSize: '1.5rem',
+              fontWeight: 600,
+              color: 'var(--lhud-text-primary)',
+              margin: 0
+            }}>
+              {codelabToEdit ? 'CHỈNH SỬA BÀI TẬP CODING' : 'TẠO BÀI TẬP CODING MỚI'}
             </h2>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="codelab-modal-close-btn"
             disabled={loading}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--lhud-text-dim)',
+              cursor: 'pointer',
+              padding: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              transition: 'color 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--lhud-cyan)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--lhud-text-dim)'}
           >
             <X size={24} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="codelab-modal-form">
-          {/* Basic Info */}
-          <div className="codelab-form-section">
-            <label htmlFor="title" className="codelab-form-label">
-              Tiêu đề bài tập <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              className="codelab-form-input"
-              placeholder="VD: Tính tổng hai số"
-              disabled={loading}
-              maxLength={200}
-            />
-          </div>
-
-          <div className="codelab-form-section">
-            <label htmlFor="description" className="codelab-form-label">
-              Mô tả và yêu cầu <span className="required">*</span>
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              className="codelab-form-textarea"
-              placeholder="Mô tả chi tiết yêu cầu của bài tập..."
-              rows={5}
-              disabled={loading}
-              maxLength={5000}
-            />
-          </div>
-
-          {/* Difficulty & Language Row */}
-          <div className="codelab-form-row">
-            <div className="codelab-form-section">
-              <label htmlFor="difficulty" className="codelab-form-label">
-                Độ khó <span className="required">*</span>
+        {/* Form Content */}
+        <div style={{ overflowY: 'auto', flex: 1 }}>
+          <form onSubmit={handleSubmit} style={{ padding: '1.5rem' }}>
+            {/* Title */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label htmlFor="title" style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontFamily: 'Space Habitat, monospace',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'var(--lhud-cyan)',
+                marginBottom: '0.5rem'
+              }}>
+                Tiêu đề bài tập <span style={{ color: 'var(--lhud-red)' }}>*</span>
               </label>
-              <select
-                id="difficulty"
-                name="difficulty"
-                value={formData.difficulty}
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value={formData.title}
                 onChange={handleInputChange}
-                className="codelab-form-select"
+                placeholder="VD: Tính tổng hai số"
                 disabled={loading}
-              >
-                {difficulties.map((diff) => (
-                  <option key={diff.value} value={diff.value}>
-                    {diff.label}
-                  </option>
-                ))}
-              </select>
+                maxLength={200}
+                style={inputStyle}
+                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+              />
             </div>
 
-            <div className="codelab-form-section">
-              <label htmlFor="language" className="codelab-form-label">
-                Ngôn ngữ <span className="required">*</span>
+            {/* Description */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label htmlFor="description" style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontFamily: 'Space Habitat, monospace',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'var(--lhud-cyan)',
+                marginBottom: '0.5rem'
+              }}>
+                Mô tả và yêu cầu <span style={{ color: 'var(--lhud-red)' }}>*</span>
               </label>
-              <select
-                id="language"
-                name="language"
-                value={formData.language}
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
                 onChange={handleInputChange}
-                className="codelab-form-select"
+                placeholder="Mô tả chi tiết yêu cầu của bài tập..."
+                rows={5}
                 disabled={loading}
-              >
-                {languages.map((lang) => (
-                  <option key={lang.value} value={lang.value}>
-                    {lang.label}
-                  </option>
-                ))}
-              </select>
+                maxLength={5000}
+                style={{ ...inputStyle, resize: 'vertical' as const }}
+                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+              />
             </div>
-          </div>
 
-          {/* Starter Code */}
-          <div className="codelab-form-section">
-            <label htmlFor="starterCode" className="codelab-form-label">
-              Starter Code (Mã khởi tạo)
-            </label>
-            <textarea
-              id="starterCode"
-              name="starterCode"
-              value={formData.starterCode}
-              onChange={handleInputChange}
-              className="codelab-form-code"
-              placeholder="// Mã khởi tạo cho sinh viên..."
-              rows={6}
-              disabled={loading}
-              spellCheck={false}
-            />
-            <p className="codelab-form-hint">
-              Mã khởi đầu mà sinh viên sẽ thấy khi bắt đầu làm bài
-            </p>
-          </div>
-
-          {/* Solution Code */}
-          <div className="codelab-form-section">
-            <label htmlFor="solutionCode" className="codelab-form-label">
-              Solution Code (Lời giải mẫu)
-            </label>
-            <textarea
-              id="solutionCode"
-              name="solutionCode"
-              value={formData.solutionCode}
-              onChange={handleInputChange}
-              className="codelab-form-code"
-              placeholder="// Lời giải mẫu..."
-              rows={8}
-              disabled={loading}
-              spellCheck={false}
-            />
-            <p className="codelab-form-hint">
-              Lời giải mẫu chỉ thấy bởi giảng viên và mentor
-            </p>
-          </div>
-
-          {/* Test Cases Section */}
-          {!codelabToEdit && (
-            <>
-              <div className="codelab-testcases-header">
-                <h3>Test Cases</h3>
-                <button
-                  type="button"
-                  onClick={addTestCase}
-                  className="codelab-add-testcase-btn"
+            {/* Difficulty & Language Row */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+              <div>
+                <label htmlFor="difficulty" style={{
+                  display: 'block',
+                  fontSize: '0.875rem',
+                  fontFamily: 'Space Habitat, monospace',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  color: 'var(--lhud-cyan)',
+                  marginBottom: '0.5rem'
+                }}>
+                  Độ khó <span style={{ color: 'var(--lhud-red)' }}>*</span>
+                </label>
+                <select
+                  id="difficulty"
+                  name="difficulty"
+                  value={formData.difficulty}
+                  onChange={handleInputChange}
                   disabled={loading}
+                  style={inputStyle}
+                  onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                  onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
                 >
-                  <Plus size={20} />
-                  Thêm Test Case
-                </button>
+                  {difficulties.map((diff) => (
+                    <option key={diff.value} value={diff.value}>
+                      {diff.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              {testCases.map((testCase, index) => (
-                <div key={index} className="codelab-testcase-card">
-                  <div className="codelab-testcase-header">
-                    <div className="codelab-testcase-drag">
-                      <GripVertical size={20} />
-                      <span className="codelab-testcase-number">Test Case {index + 1}</span>
-                      <button
-                        type="button"
-                        onClick={() => toggleTestCaseVisibility(index)}
-                        className="codelab-visibility-btn"
-                        title={testCase.isHidden ? 'Hidden' : 'Visible'}
-                        disabled={loading}
-                      >
-                        {testCase.isHidden ? (
-                          <EyeOff size={18} />
-                        ) : (
-                          <Eye size={18} />
-                        )}
-                      </button>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => removeTestCase(index)}
-                      className="codelab-remove-testcase-btn"
-                      disabled={loading}
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
+              <div>
+                <label htmlFor="language" style={{
+                  display: 'block',
+                  fontSize: '0.875rem',
+                  fontFamily: 'Space Habitat, monospace',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  color: 'var(--lhud-cyan)',
+                  marginBottom: '0.5rem'
+                }}>
+                  Ngôn ngữ <span style={{ color: 'var(--lhud-red)' }}>*</span>
+                </label>
+                <select
+                  id="language"
+                  name="language"
+                  value={formData.language}
+                  onChange={handleInputChange}
+                  disabled={loading}
+                  style={inputStyle}
+                  onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                  onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+                >
+                  {languages.map((lang) => (
+                    <option key={lang.value} value={lang.value}>
+                      {lang.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
-                  <div className="codelab-testcase-content">
-                    <div className="codelab-form-section">
-                      <label className="codelab-form-label-small">Input</label>
-                      <textarea
-                        value={testCase.input}
-                        onChange={(e) => updateTestCase(index, 'input', e.target.value)}
-                        className="codelab-testcase-input"
-                        placeholder="Input của test case..."
-                        rows={3}
-                        disabled={loading}
-                        spellCheck={false}
-                      />
-                    </div>
-
-                    <div className="codelab-form-section">
-                      <label className="codelab-form-label-small">Expected Output</label>
-                      <textarea
-                        value={testCase.expectedOutput}
-                        onChange={(e) => updateTestCase(index, 'expectedOutput', e.target.value)}
-                        className="codelab-testcase-input"
-                        placeholder="Kết quả mong đợi..."
-                        rows={3}
-                        disabled={loading}
-                        spellCheck={false}
-                      />
-                    </div>
-                  </div>
-
-                  {testCase.isHidden && (
-                    <div className="codelab-testcase-hidden-badge">
-                      🔒 Hidden test case - Sinh viên không nhìn thấy
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              {testCases.length === 0 && (
-                <div className="codelab-no-testcases">
-                  <p>Chưa có test case nào. Nhấn "Thêm Test Case" để bắt đầu.</p>
-                </div>
-              )}
-            </>
-          )}
-
-          {codelabToEdit && (
-            <div className="codelab-edit-note">
-              <p>
-                💡 Để thêm/sửa test cases, vui lòng vào trang chi tiết bài tập sau khi cập nhật.
+            {/* Starter Code */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label htmlFor="starterCode" style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontFamily: 'Space Habitat, monospace',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'var(--lhud-cyan)',
+                marginBottom: '0.5rem'
+              }}>
+                Starter Code (Mã khởi tạo)
+              </label>
+              <textarea
+                id="starterCode"
+                name="starterCode"
+                value={formData.starterCode}
+                onChange={handleInputChange}
+                placeholder="// Mã khởi tạo cho sinh viên..."
+                rows={6}
+                disabled={loading}
+                spellCheck={false}
+                style={codeStyle}
+                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+              />
+              <p style={{
+                fontSize: '0.75rem',
+                color: 'var(--lhud-text-dim)',
+                marginTop: '0.5rem',
+                marginBottom: 0
+              }}>
+                Mã khởi đầu mà sinh viên sẽ thấy khi bắt đầu làm bài
               </p>
             </div>
-          )}
 
-          {/* Error Message */}
-          {error && (
-            <div className="codelab-form-error">
-              <span>{error}</span>
+            {/* Solution Code */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label htmlFor="solutionCode" style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontFamily: 'Space Habitat, monospace',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'var(--lhud-cyan)',
+                marginBottom: '0.5rem'
+              }}>
+                Solution Code (Lời giải mẫu)
+              </label>
+              <textarea
+                id="solutionCode"
+                name="solutionCode"
+                value={formData.solutionCode}
+                onChange={handleInputChange}
+                placeholder="// Lời giải mẫu..."
+                rows={8}
+                disabled={loading}
+                spellCheck={false}
+                style={codeStyle}
+                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+              />
+              <p style={{
+                fontSize: '0.75rem',
+                color: 'var(--lhud-text-dim)',
+                marginTop: '0.5rem',
+                marginBottom: 0
+              }}>
+                Lời giải mẫu chỉ thấy bởi giảng viên và mentor
+              </p>
             </div>
-          )}
 
-          {/* Form Actions */}
-          <div className="codelab-modal-actions">
-            <button
-              type="button"
-              onClick={onClose}
-              className="codelab-modal-cancel-btn"
-              disabled={loading}
-            >
-              Hủy
-            </button>
-            <button type="submit" className="codelab-modal-submit-btn" disabled={loading}>
-              {loading ? 'Đang lưu...' : codelabToEdit ? 'Cập nhật' : 'Tạo bài tập'}
-            </button>
-          </div>
-        </form>
-      </div>
+            {/* Test Cases Section */}
+            {!codelabToEdit && (
+              <>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '1rem',
+                  paddingBottom: '0.75rem',
+                  borderBottom: '1px solid var(--lhud-border)'
+                }}>
+                  <h3 style={{
+                    fontSize: '1.125rem',
+                    fontWeight: 600,
+                    color: 'var(--lhud-text-primary)',
+                    margin: 0
+                  }}>
+                    Test Cases
+                  </h3>
+                  <NeuralButton
+                    type="button"
+                    onClick={addTestCase}
+                    variant="primary"
+                    disabled={loading}
+                    style={{ padding: '0.5rem 1rem', fontSize: '0.875rem' }}
+                  >
+                    <Plus size={18} />
+                    Thêm Test Case
+                  </NeuralButton>
+                </div>
+
+                {testCases.map((testCase, index) => (
+                  <div key={index} style={{
+                    background: 'rgba(6, 182, 212, 0.05)',
+                    border: '1px solid var(--lhud-border)',
+                    borderRadius: '8px',
+                    padding: '1rem',
+                    marginBottom: '1rem'
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: '0.75rem'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <GripVertical size={20} style={{ color: 'var(--lhud-text-dim)' }} />
+                        <span style={{
+                          fontFamily: 'Space Habitat, monospace',
+                          fontSize: '0.875rem',
+                          color: 'var(--lhud-cyan)',
+                          textTransform: 'uppercase'
+                        }}>
+                          Test Case {index + 1}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => toggleTestCaseVisibility(index)}
+                          title={testCase.isHidden ? 'Hidden' : 'Visible'}
+                          disabled={loading}
+                          style={{
+                            background: 'transparent',
+                            border: '1px solid var(--lhud-border)',
+                            borderRadius: '4px',
+                            padding: '0.25rem 0.5rem',
+                            color: testCase.isHidden ? 'var(--lhud-text-dim)' : 'var(--lhud-cyan)',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            transition: 'all 0.2s'
+                          }}
+                        >
+                          {testCase.isHidden ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeTestCase(index)}
+                        disabled={loading}
+                        style={{
+                          background: 'rgba(239, 68, 68, 0.1)',
+                          border: '1px solid var(--lhud-red)',
+                          borderRadius: '4px',
+                          padding: '0.5rem',
+                          color: 'var(--lhud-red)',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = 'var(--lhud-red)';
+                          e.currentTarget.style.color = 'var(--lhud-deep-space)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
+                          e.currentTarget.style.color = 'var(--lhud-red)';
+                        }}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                      <div>
+                        <label style={{
+                          display: 'block',
+                          fontSize: '0.75rem',
+                          fontFamily: 'Space Habitat, monospace',
+                          textTransform: 'uppercase',
+                          color: 'var(--lhud-text-secondary)',
+                          marginBottom: '0.5rem'
+                        }}>
+                          Input
+                        </label>
+                        <textarea
+                          value={testCase.input}
+                          onChange={(e) => updateTestCase(index, 'input', e.target.value)}
+                          placeholder="Input của test case..."
+                          rows={3}
+                          disabled={loading}
+                          spellCheck={false}
+                          style={codeStyle}
+                          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                          onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{
+                          display: 'block',
+                          fontSize: '0.75rem',
+                          fontFamily: 'Space Habitat, monospace',
+                          textTransform: 'uppercase',
+                          color: 'var(--lhud-text-secondary)',
+                          marginBottom: '0.5rem'
+                        }}>
+                          Expected Output
+                        </label>
+                        <textarea
+                          value={testCase.expectedOutput}
+                          onChange={(e) => updateTestCase(index, 'expectedOutput', e.target.value)}
+                          placeholder="Kết quả mong đợi..."
+                          rows={3}
+                          disabled={loading}
+                          spellCheck={false}
+                          style={codeStyle}
+                          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                          onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+                        />
+                      </div>
+                    </div>
+
+                    {testCase.isHidden && (
+                      <div style={{
+                        marginTop: '0.75rem',
+                        padding: '0.5rem 0.75rem',
+                        background: 'rgba(239, 68, 68, 0.1)',
+                        border: '1px solid var(--lhud-border)',
+                        borderRadius: '4px',
+                        fontSize: '0.75rem',
+                        color: 'var(--lhud-text-dim)'
+                      }}>
+                        🔒 Hidden test case - Sinh viên không nhìn thấy
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {testCases.length === 0 && (
+                  <div style={{
+                    padding: '2rem',
+                    textAlign: 'center',
+                    background: 'var(--lhud-surface)',
+                    border: '1px dashed var(--lhud-border)',
+                    borderRadius: '8px',
+                    color: 'var(--lhud-text-dim)',
+                    marginBottom: '1.5rem'
+                  }}>
+                    <p style={{ margin: 0 }}>
+                      Chưa có test case nào. Nhấn "Thêm Test Case" để bắt đầu.
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+
+            {codelabToEdit && (
+              <div style={{
+                padding: '1rem',
+                background: 'rgba(6, 182, 212, 0.05)',
+                border: '1px solid var(--lhud-border)',
+                borderRadius: '8px',
+                fontSize: '0.875rem',
+                color: 'var(--lhud-text-secondary)',
+                marginBottom: '1.5rem'
+              }}>
+                <p style={{ margin: 0 }}>
+                  💡 Để thêm/sửa test cases, vui lòng vào trang chi tiết bài tập sau khi cập nhật.
+                </p>
+              </div>
+            )}
+
+            {/* Error Message */}
+            {error && (
+              <div style={{
+                padding: '0.75rem 1rem',
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid var(--lhud-red)',
+                borderRadius: '6px',
+                color: 'var(--lhud-red)',
+                fontSize: '0.875rem',
+                marginBottom: '1.5rem'
+              }}>
+                <span>{error}</span>
+              </div>
+            )}
+
+            {/* Form Actions */}
+            <div style={{
+              display: 'flex',
+              gap: '0.75rem',
+              justifyContent: 'flex-end',
+              paddingTop: '1rem',
+              borderTop: '1px solid var(--lhud-border)'
+            }}>
+              <NeuralButton
+                type="button"
+                onClick={onClose}
+                variant="secondary"
+                disabled={loading}
+              >
+                Hủy
+              </NeuralButton>
+              <NeuralButton
+                type="submit"
+                variant="primary"
+                disabled={loading}
+              >
+                {loading ? 'Đang lưu...' : codelabToEdit ? 'Cập nhật' : 'Tạo bài tập'}
+              </NeuralButton>
+            </div>
+          </form>
+        </div>
+      </NeuralCard>
     </div>
   );
 };

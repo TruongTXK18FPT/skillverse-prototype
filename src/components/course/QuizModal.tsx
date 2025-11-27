@@ -8,7 +8,8 @@ import {
 } from "../../data/quizDTOs";
 import { createQuiz, updateQuiz, addQuizQuestion, addQuizOption, updateQuizQuestion, updateQuizOption, deleteQuizOption, getQuizById } from "../../services/quizService";
 import { useAuth } from "../../context/AuthContext";
-import "../../styles/ModalsEnhanced.css";
+import { NeuralCard, NeuralButton } from '../learning-hud';
+import '../../components/learning-hud/learning-hud.css';
 
 // ---------- Types ----------
 interface QuizModalProps {
@@ -135,7 +136,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
     setQuestions(prev => {
       const next = [...prev];
       const q = next[qIndex];
-      
+
       // Kiểm tra giới hạn options dựa trên loại câu hỏi
       if (q.questionType === QuestionType.SHORT_ANSWER) {
         // Short Answer chỉ có 1 option
@@ -148,7 +149,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
           return next; // Không add thêm
         }
       }
-      
+
       const newOpt: OptionForm = { optionText: "", correct: false, orderIndex: q.options.length };
       q.options = [...q.options, newOpt];
       next[qIndex] = { ...q };
@@ -160,7 +161,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
     setQuestions(prev => {
       const next = [...prev];
       const q = next[qIndex];
-      
+
       // Kiểm tra giới hạn tối thiểu dựa trên loại câu hỏi
       if (q.questionType === QuestionType.SHORT_ANSWER) {
         // Short Answer phải có ít nhất 1 option
@@ -178,7 +179,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
           return next; // Không xóa
         }
       }
-      
+
       q.options = q.options.filter((_, i) => i !== oIndex).map((opt, i) => ({ ...opt, orderIndex: i }));
       next[qIndex] = { ...q };
       return next;
@@ -356,38 +357,180 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
 
   if (!isOpen) return null;
 
+  const inputStyle = {
+    width: '100%',
+    padding: '0.75rem',
+    background: 'var(--lhud-surface)',
+    border: '1px solid var(--lhud-border)',
+    borderRadius: '6px',
+    color: 'var(--lhud-text-primary)',
+    fontSize: '0.875rem',
+    fontFamily: 'Inter, sans-serif',
+    outline: 'none',
+    transition: 'border-color 0.2s'
+  } as const;
+
+  const labelStyle = {
+    display: 'block',
+    fontSize: '0.875rem',
+    fontFamily: 'Space Habitat, monospace',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    color: 'var(--lhud-cyan)',
+    marginBottom: '0.5rem'
+  } as const;
+
   return (
-    <div className="quiz-modal-overlay" onClick={onClose}>
-      <div className="quiz-modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="quiz-modal-header">
-          <h2 className="quiz-modal-title">{quizToEdit ? "Chỉnh sửa quiz" : "Tạo quiz mới"}</h2>
-          <button type="button" onClick={onClose} className="quiz-modal-close-btn" disabled={loading}>
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(10, 14, 23, 0.85)',
+        backdropFilter: 'blur(8px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 9999,
+        padding: '1rem',
+        animation: 'learning-hud-fade-in 0.3s ease-out'
+      }}
+      onClick={onClose}
+    >
+      <NeuralCard
+        style={{
+          maxWidth: '900px',
+          width: '100%',
+          maxHeight: '90vh',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          animation: 'learning-hud-modal-slide-up 0.3s ease-out'
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1.5rem',
+          borderBottom: '1px solid var(--lhud-border)',
+          background: 'rgba(6, 182, 212, 0.03)'
+        }}>
+          <h2 style={{
+            fontSize: '1.5rem',
+            fontWeight: 600,
+            color: 'var(--lhud-text-primary)',
+            margin: 0,
+            letterSpacing: '0.5px'
+          }}>
+            {quizToEdit ? "Chỉnh sửa quiz" : "Tạo quiz mới"}
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={loading}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--lhud-text-dim)',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              padding: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              transition: 'all 0.2s',
+              borderRadius: '4px',
+              opacity: loading ? 0.3 : 1
+            }}
+            onMouseEnter={(e) => {
+              if (!loading) {
+                e.currentTarget.style.color = 'var(--lhud-cyan)';
+                e.currentTarget.style.background = 'rgba(6, 182, 212, 0.1)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--lhud-text-dim)';
+              e.currentTarget.style.background = 'transparent';
+            }}
+          >
             <X size={24} />
           </button>
         </div>
 
-        {/* Progress only for new quiz */}
+        {/* Progress Stepper - only for new quiz */}
         {!quizToEdit && (
-          <div className="quiz-progress">
-            <div className={`quiz-progress-step ${step === "basic" ? "active" : "completed"}`}>
-              <span className="step-number">1</span>
-              <span className="step-label">Thông tin cơ bản</span>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '1rem',
+            padding: '1.5rem',
+            borderBottom: '1px solid var(--lhud-border)'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              color: step === "basic" ? 'var(--lhud-cyan)' : 'var(--lhud-green)',
+              fontSize: '0.875rem',
+              fontFamily: 'Space Habitat, monospace'
+            }}>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                border: '2px solid currentColor',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 600
+              }}>
+                {step === "basic" ? "1" : "✓"}
+              </div>
+              <span>Thông tin cơ bản</span>
             </div>
-            <div className="quiz-progress-line" />
-            <div className={`quiz-progress-step ${step === "questions" ? "active" : ""}`}>
-              <span className="step-number">2</span>
-              <span className="step-label">Câu hỏi</span>
+            <div style={{
+              width: '60px',
+              height: '2px',
+              background: 'var(--lhud-border)'
+            }} />
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              color: step === "questions" ? 'var(--lhud-cyan)' : 'var(--lhud-text-dim)',
+              fontSize: '0.875rem',
+              fontFamily: 'Space Habitat, monospace'
+            }}>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                border: '2px solid currentColor',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 600
+              }}>
+                2
+              </div>
+              <span>Câu hỏi</span>
             </div>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="quiz-modal-form">
+        {/* Body */}
+        <form onSubmit={handleSubmit} style={{
+          overflowY: 'auto',
+          flex: 1,
+          padding: '1.5rem'
+        }}>
           {/* Step 1: Basic */}
           {step === "basic" && (
             <>
-              <div className="quiz-form-section">
-                <label htmlFor="title" className="quiz-form-label">
-                  Tiêu đề quiz <span className="required">*</span>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label htmlFor="title" style={labelStyle}>
+                  Tiêu đề quiz <span style={{ color: '#ef4444' }}>*</span>
                 </label>
                 <input
                   id="title"
@@ -395,33 +538,41 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
                   type="text"
                   value={formData.title}
                   onChange={handleInputChange}
-                  className="quiz-form-input"
+                  style={inputStyle}
                   placeholder="VD: Kiểm tra kiến thức về React"
                   disabled={loading}
                   maxLength={200}
+                  onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                  onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
                 />
               </div>
 
-              <div className="quiz-form-section">
-                <label htmlFor="description" className="quiz-form-label">
-                  Mô tả <span className="required">*</span>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label htmlFor="description" style={labelStyle}>
+                  Mô tả <span style={{ color: '#ef4444' }}>*</span>
                 </label>
                 <textarea
                   id="description"
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
-                  className="quiz-form-textarea"
+                  style={{
+                    ...inputStyle,
+                    resize: 'vertical' as const,
+                    minHeight: '100px'
+                  }}
                   placeholder="Mô tả nội dung quiz..."
                   rows={3}
                   disabled={loading}
                   maxLength={1000}
+                  onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                  onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
                 />
               </div>
 
-              <div className="quiz-form-section">
-                <label htmlFor="passScore" className="quiz-form-label">
-                  Điểm đạt (%) <span className="required">*</span>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label htmlFor="passScore" style={labelStyle}>
+                  Điểm đạt (%) <span style={{ color: '#ef4444' }}>*</span>
                 </label>
                 <input
                   id="passScore"
@@ -429,98 +580,205 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
                   type="number"
                   value={formData.passScore}
                   onChange={handleInputChange}
-                  className="quiz-form-input"
+                  style={inputStyle}
                   placeholder="70"
                   min={0}
                   max={100}
                   disabled={loading}
+                  onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                  onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
                 />
-                <p className="quiz-form-hint">Phần trăm điểm tối thiểu để đạt quiz</p>
+                <p style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--lhud-text-dim)',
+                  marginTop: '0.5rem',
+                  marginBottom: 0
+                }}>
+                  Phần trăm điểm tối thiểu để đạt quiz
+                </p>
               </div>
 
               {error && (
-                <div className="quiz-form-error">
+                <div style={{
+                  padding: '0.75rem 1rem',
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid #ef4444',
+                  borderRadius: '6px',
+                  color: '#ef4444',
+                  fontSize: '0.875rem',
+                  marginBottom: '1.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
                   <AlertCircle size={16} />
                   <span>{error}</span>
                 </div>
               )}
 
-              <div className="quiz-modal-actions">
-                <button type="button" onClick={onClose} className="quiz-modal-cancel-btn" disabled={loading}>
+              <div style={{
+                display: 'flex',
+                gap: '0.75rem',
+                justifyContent: 'flex-end',
+                paddingTop: '1rem',
+                borderTop: '1px solid var(--lhud-border)'
+              }}>
+                <NeuralButton variant="secondary" onClick={onClose} disabled={loading}>
                   Hủy
-                </button>
+                </NeuralButton>
                 {!quizToEdit && (
-                  <button type="button" onClick={handleNext} className="quiz-modal-submit-btn" disabled={loading}>
+                  <NeuralButton variant="primary" onClick={handleNext} disabled={loading}>
                     Tiếp theo
-                  </button>
+                  </NeuralButton>
                 )}
                 {quizToEdit && (
-                  <button type="button" onClick={() => setStep("questions")} className="quiz-modal-submit-btn" disabled={loading}>
+                  <NeuralButton variant="primary" onClick={() => setStep("questions")} disabled={loading}>
                     Tiếp tục chỉnh sửa câu hỏi
-                  </button>
+                  </NeuralButton>
                 )}
               </div>
             </>
           )}
 
-          {/* Step 2: Questions (create only) */}
+          {/* Step 2: Questions */}
           {step === "questions" && (
             <>
-              <div className="quiz-questions-section">
-                <div className="quiz-questions-header">
-                  <h3>Câu hỏi ({questions.length})</h3>
-                  <button type="button" onClick={addQuestion} className="quiz-add-question-btn" disabled={loading}>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: '1rem'
+                }}>
+                  <h3 style={{
+                    fontSize: '1.25rem',
+                    fontWeight: 600,
+                    color: 'var(--lhud-text-primary)',
+                    margin: 0
+                  }}>
+                    Câu hỏi ({questions.length})
+                  </h3>
+                  <NeuralButton
+                    variant="primary"
+                    onClick={addQuestion}
+                    disabled={loading}
+                  >
                     <Plus size={16} /> Thêm câu hỏi
-                  </button>
+                  </NeuralButton>
                 </div>
 
                 {questions.length === 0 && (
-                  <div className="quiz-no-questions">
+                  <div style={{
+                    padding: '3rem 1rem',
+                    textAlign: 'center',
+                    color: 'var(--lhud-text-dim)',
+                    fontStyle: 'italic'
+                  }}>
                     <p>Chưa có câu hỏi nào. Nhấn "Thêm câu hỏi" để bắt đầu.</p>
                   </div>
                 )}
 
                 {questions.map((q, qIndex) => (
-                  <div key={qIndex} className="quiz-question-card">
-                    <div className="quiz-question-header">
-                      <div className="quiz-question-drag">
+                  <NeuralCard
+                    key={qIndex}
+                    style={{
+                      marginBottom: '1rem',
+                      padding: '1.5rem'
+                    }}
+                  >
+                    {/* Question Header */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginBottom: '1rem',
+                      paddingBottom: '1rem',
+                      borderBottom: '1px solid var(--lhud-border)'
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        color: 'var(--lhud-text-secondary)'
+                      }}>
                         <GripVertical size={20} />
-                        <span className="quiz-question-number">Câu {qIndex + 1}</span>
+                        <span style={{
+                          fontFamily: 'Space Habitat, monospace',
+                          fontSize: '0.875rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                          color: 'var(--lhud-cyan)'
+                        }}>
+                          Câu {qIndex + 1}
+                        </span>
                       </div>
                       <button
                         type="button"
                         onClick={() => removeQuestion(qIndex)}
-                        className="quiz-remove-question-btn"
                         disabled={loading}
+                        style={{
+                          background: 'rgba(239, 68, 68, 0.1)',
+                          border: '1px solid #ef4444',
+                          color: '#ef4444',
+                          padding: '0.5rem',
+                          borderRadius: '4px',
+                          cursor: loading ? 'not-allowed' : 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!loading) {
+                            e.currentTarget.style.background = '#ef4444';
+                            e.currentTarget.style.color = 'var(--lhud-deep-space)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
+                          e.currentTarget.style.color = '#ef4444';
+                        }}
                       >
                         <Trash2 size={18} />
                       </button>
                     </div>
 
-                    <div className="quiz-form-section">
-                      <label className="quiz-form-label">Nội dung câu hỏi</label>
+                    {/* Question Text */}
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label style={labelStyle}>Nội dung câu hỏi</label>
                       <textarea
                         value={q.questionText}
                         onChange={(e) => updateQuestion(qIndex, "questionText", e.target.value)}
-                        className="quiz-form-textarea"
+                        style={{
+                          ...inputStyle,
+                          resize: 'vertical' as const,
+                          minHeight: '80px'
+                        }}
                         placeholder="Nhập nội dung câu hỏi..."
                         rows={2}
                         disabled={loading}
                         maxLength={500}
+                        onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                        onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
                       />
                     </div>
 
-                    <div className="quiz-question-meta">
-                      <div className="quiz-form-section">
-                        <label className="quiz-form-label">Loại câu hỏi</label>
+                    {/* Question Meta (Type and Score) */}
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: '2fr 1fr',
+                      gap: '1rem',
+                      marginBottom: '1rem'
+                    }}>
+                      <div>
+                        <label style={labelStyle}>Loại câu hỏi</label>
                         <select
                           value={q.questionType}
                           onChange={(e) => {
                             const newType = e.target.value as QuestionType;
-                            
+
                             // Reset options based on question type
                             let newOptions: OptionForm[] = [];
-                            
+
                             if (newType === QuestionType.SHORT_ANSWER) {
                               // Short answer: only one option for correct answer
                               newOptions = [{ optionText: "", correct: true, orderIndex: 0 }];
@@ -537,12 +795,14 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
                                 { optionText: "", correct: false, orderIndex: 1 }
                               ];
                             }
-                            
+
                             updateQuestion(qIndex, "questionType", newType);
                             updateQuestion(qIndex, "options", newOptions);
                           }}
-                          className="quiz-form-select"
+                          style={inputStyle}
                           disabled={loading}
+                          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                          onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
                         >
                           <option value={QuestionType.MULTIPLE_CHOICE}>Trắc nghiệm</option>
                           <option value={QuestionType.TRUE_FALSE}>Đúng/Sai</option>
@@ -550,162 +810,239 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
                         </select>
                       </div>
 
-                      <div className="quiz-form-section">
-                        <label className="quiz-form-label">Điểm</label>
+                      <div>
+                        <label style={labelStyle}>Điểm</label>
                         <input
                           type="number"
                           value={q.score}
                           onChange={(e) => updateQuestion(qIndex, "score", Number(e.target.value))}
-                          className="quiz-score-input"
+                          style={inputStyle}
                           placeholder="Điểm"
                           min={1}
                           disabled={loading}
+                          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                          onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
                         />
                       </div>
                     </div>
 
                     {/* Multiple Choice and True/False Options */}
                     {(q.questionType === QuestionType.MULTIPLE_CHOICE || q.questionType === QuestionType.TRUE_FALSE) && (
-                    <div className="quiz-options-section">
-                      <label className="quiz-form-label" style={{ marginBottom: "0.75rem" }}>
-                        {q.questionType === QuestionType.TRUE_FALSE ? "Lựa chọn Đúng/Sai" : "Lựa chọn"} <span className="required">*</span>
-                      </label>
+                      <div style={{ marginBottom: '1rem' }}>
+                        <label style={{ ...labelStyle, marginBottom: '0.75rem' }}>
+                          {q.questionType === QuestionType.TRUE_FALSE ? "Lựa chọn Đúng/Sai" : "Lựa chọn"}{" "}
+                          <span style={{ color: '#ef4444' }}>*</span>
+                        </label>
 
-                      {q.options.map((opt, oIndex) => (
-                        <div key={oIndex} className="quiz-option-row">
-                          <button
-                            type="button"
-                            onClick={() => toggleCorrectAnswer(qIndex, oIndex)}
-                            className={`quiz-option-check ${opt.correct ? "checked" : ""}`}
-                            disabled={loading}
-                            title={opt.correct ? "Đáp án đúng" : "Đáp án sai"}
+                        {q.options.map((opt, oIndex) => (
+                          <div
+                            key={oIndex}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.75rem',
+                              marginBottom: '0.75rem'
+                            }}
                           >
-                            {opt.correct ? <CheckCircle size={20} /> : <Circle size={20} />}
-                          </button>
-
-                          <input
-                            type="text"
-                            value={opt.optionText}
-                            onChange={(e) => updateOption(qIndex, oIndex, "optionText", e.target.value)}
-                            className="quiz-option-input"
-                            placeholder={q.questionType === QuestionType.TRUE_FALSE ? 
-                              (oIndex === 0 ? "True" : "False") : 
-                              `Lựa chọn ${oIndex + 1}`
-                            }
-                            disabled={loading}
-                            maxLength={200}
-                          />
-
-                          {/* Show remove button based on question type and option count */}
-                          {((q.questionType === QuestionType.MULTIPLE_CHOICE && q.options.length > 2) ||
-                            (q.questionType === QuestionType.TRUE_FALSE && q.options.length > 2) ||
-                            (q.questionType === QuestionType.SHORT_ANSWER && q.options.length > 1)) && (
                             <button
                               type="button"
-                              onClick={async () => {
-                                // If option has id and editing existing quiz, call API delete
-                                if (quizToEdit && q.options[oIndex]?.id) {
-                                  try { 
-                                    await deleteQuizOption(q.options[oIndex].id!, user?.id || 0); 
-                                  } catch (error) {
-                                    console.error('Error deleting option:', error);
-                                  }
-                                }
-                                removeOption(qIndex, oIndex);
-                              }}
-                              className="quiz-remove-option-btn"
+                              onClick={() => toggleCorrectAnswer(qIndex, oIndex)}
                               disabled={loading}
+                              title={opt.correct ? "Đáp án đúng" : "Đáp án sai"}
+                              style={{
+                                background: opt.correct ? 'rgba(16, 185, 129, 0.1)' : 'transparent',
+                                border: opt.correct ? '2px solid var(--lhud-green)' : '2px solid var(--lhud-border)',
+                                color: opt.correct ? 'var(--lhud-green)' : 'var(--lhud-text-dim)',
+                                padding: '0.5rem',
+                                borderRadius: '50%',
+                                cursor: loading ? 'not-allowed' : 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                                transition: 'all 0.2s'
+                              }}
                             >
-                              <Trash2 size={16} />
+                              {opt.correct ? <CheckCircle size={20} /> : <Circle size={20} />}
                             </button>
-                          )}
-                        </div>
-                      ))}
 
-                      {/* Show add option button based on question type and current count */}
-                      {q.questionType === QuestionType.MULTIPLE_CHOICE && (
-                        <button 
-                          type="button" 
-                          onClick={() => addOption(qIndex)} 
-                          className="quiz-add-option-btn" 
-                          disabled={loading}
-                        >
-                          <Plus size={16} /> Thêm lựa chọn
-                        </button>
-                      )}
-                      
-                      {q.questionType === QuestionType.TRUE_FALSE && q.options.length < 2 && (
-                        <button 
-                          type="button" 
-                          onClick={() => addOption(qIndex)} 
-                          className="quiz-add-option-btn" 
-                          disabled={loading}
-                        >
-                          <Plus size={16} /> Thêm lựa chọn
-                        </button>
-                      )}
-                      
-                      {(q.questionType as QuestionType) === QuestionType.SHORT_ANSWER && q.options.length < 1 && (
-                        <button 
-                          type="button" 
-                          onClick={() => addOption(qIndex)} 
-                          className="quiz-add-option-btn" 
-                          disabled={loading}
-                        >
-                          <Plus size={16} /> Thêm đáp án
-                        </button>
-                      )}
-                    </div>
+                            <input
+                              type="text"
+                              value={opt.optionText}
+                              onChange={(e) => updateOption(qIndex, oIndex, "optionText", e.target.value)}
+                              style={{ ...inputStyle, flex: 1 }}
+                              placeholder={q.questionType === QuestionType.TRUE_FALSE ?
+                                (oIndex === 0 ? "True" : "False") :
+                                `Lựa chọn ${oIndex + 1}`
+                              }
+                              disabled={loading}
+                              maxLength={200}
+                              onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                              onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
+                            />
+
+                            {/* Show remove button based on question type and option count */}
+                            {((q.questionType === QuestionType.MULTIPLE_CHOICE && q.options.length > 2) ||
+                              (q.questionType === QuestionType.TRUE_FALSE && q.options.length > 2) ||
+                              (q.questionType === QuestionType.SHORT_ANSWER && q.options.length > 1)) && (
+                              <button
+                                type="button"
+                                onClick={async () => {
+                                  // If option has id and editing existing quiz, call API delete
+                                  if (quizToEdit && q.options[oIndex]?.id) {
+                                    try {
+                                      await deleteQuizOption(q.options[oIndex].id!, user?.id || 0);
+                                    } catch (error) {
+                                      console.error('Error deleting option:', error);
+                                    }
+                                  }
+                                  removeOption(qIndex, oIndex);
+                                }}
+                                disabled={loading}
+                                style={{
+                                  background: 'rgba(239, 68, 68, 0.1)',
+                                  border: '1px solid #ef4444',
+                                  color: '#ef4444',
+                                  padding: '0.5rem',
+                                  borderRadius: '4px',
+                                  cursor: loading ? 'not-allowed' : 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  flexShrink: 0,
+                                  transition: 'all 0.2s'
+                                }}
+                                onMouseEnter={(e) => {
+                                  if (!loading) {
+                                    e.currentTarget.style.background = '#ef4444';
+                                    e.currentTarget.style.color = 'var(--lhud-deep-space)';
+                                  }
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
+                                  e.currentTarget.style.color = '#ef4444';
+                                }}
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            )}
+                          </div>
+                        ))}
+
+                        {/* Show add option button based on question type and current count */}
+                        {q.questionType === QuestionType.MULTIPLE_CHOICE && (
+                          <NeuralButton
+                            variant="secondary"
+                            onClick={() => addOption(qIndex)}
+                            disabled={loading}
+                            style={{ marginTop: '0.5rem' }}
+                          >
+                            <Plus size={16} /> Thêm lựa chọn
+                          </NeuralButton>
+                        )}
+
+                        {q.questionType === QuestionType.TRUE_FALSE && q.options.length < 2 && (
+                          <NeuralButton
+                            variant="secondary"
+                            onClick={() => addOption(qIndex)}
+                            disabled={loading}
+                            style={{ marginTop: '0.5rem' }}
+                          >
+                            <Plus size={16} /> Thêm lựa chọn
+                          </NeuralButton>
+                        )}
+
+                        {(q.questionType as QuestionType) === QuestionType.SHORT_ANSWER && q.options.length < 1 && (
+                          <NeuralButton
+                            variant="secondary"
+                            onClick={() => addOption(qIndex)}
+                            disabled={loading}
+                            style={{ marginTop: '0.5rem' }}
+                          >
+                            <Plus size={16} /> Thêm đáp án
+                          </NeuralButton>
+                        )}
+                      </div>
                     )}
+
                     {/* Short Answer - Correct Answer Input */}
                     {q.questionType === QuestionType.SHORT_ANSWER && (
-                      <div className="quiz-form-section">
-                        <label className="quiz-form-label">
-                          Đáp án đúng <span className="required">*</span>
-                          <span className="quiz-form-hint">(Tối đa 2 từ, ví dụ: "động vật", "máy tính")</span>
+                      <div>
+                        <label style={labelStyle}>
+                          Đáp án đúng <span style={{ color: '#ef4444' }}>*</span>
+                          <span style={{
+                            fontSize: '0.75rem',
+                            color: 'var(--lhud-text-dim)',
+                            marginLeft: '0.5rem',
+                            textTransform: 'none',
+                            letterSpacing: 'normal'
+                          }}>
+                            (Tối đa 2 từ, ví dụ: "động vật", "máy tính")
+                          </span>
                         </label>
                         <input
                           type="text"
-                          className="quiz-option-input"
+                          style={inputStyle}
                           placeholder="Nhập đáp án đúng (ví dụ: động vật)"
                           value={q.options[0]?.optionText || ''}
                           onChange={(e) => updateOption(qIndex, 0, 'optionText', e.target.value)}
                           disabled={loading}
                           maxLength={50}
+                          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--lhud-cyan)'}
+                          onBlur={(e) => e.currentTarget.style.borderColor = 'var(--lhud-border)'}
                         />
                         {!q.options[0] && (
-                          <button type="button" className="quiz-add-option-btn" onClick={() => addOption(qIndex)}>
-                            <Plus size={16}/> Thêm đáp án
-                          </button>
+                          <NeuralButton
+                            variant="secondary"
+                            onClick={() => addOption(qIndex)}
+                            style={{ marginTop: '0.5rem' }}
+                          >
+                            <Plus size={16} /> Thêm đáp án
+                          </NeuralButton>
                         )}
                       </div>
                     )}
-                  </div>
+                  </NeuralCard>
                 ))}
               </div>
 
               {error && (
-                <div className="quiz-form-error">
+                <div style={{
+                  padding: '0.75rem 1rem',
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid #ef4444',
+                  borderRadius: '6px',
+                  color: '#ef4444',
+                  fontSize: '0.875rem',
+                  marginBottom: '1.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
                   <AlertCircle size={16} />
                   <span>{error}</span>
                 </div>
               )}
 
-              <div className="quiz-modal-actions">
-                <button type="button" onClick={() => setStep("basic")} className="quiz-modal-cancel-btn" disabled={loading}>
+              <div style={{
+                display: 'flex',
+                gap: '0.75rem',
+                justifyContent: 'flex-end',
+                paddingTop: '1rem',
+                borderTop: '1px solid var(--lhud-border)'
+              }}>
+                <NeuralButton variant="secondary" onClick={() => setStep("basic")} disabled={loading}>
                   Quay lại
-                </button>
-                <button type="submit" className="quiz-modal-submit-btn" disabled={loading}>
+                </NeuralButton>
+                <NeuralButton variant="success" type="submit" disabled={loading}>
                   {loading ? "Đang lưu..." : (quizToEdit ? "Lưu thay đổi" : "Tạo quiz")}
-                </button>
+                </NeuralButton>
               </div>
             </>
           )}
         </form>
-      </div>
+      </NeuralCard>
     </div>
   );
 };
 
 export default QuizModal;
-
