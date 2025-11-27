@@ -389,6 +389,36 @@
       "contentVi": "Chọn gói phù hợp nhất với bạn—dù bạn là người học thoải mái hay nhà khám phá háo hức kỹ năng."
     }
   ],
+  "about": [
+    {
+      "id": 1,
+      "titleEn": "Welcome to SkillVerse! 🚀",
+      "titleVi": "Chào Mừng Đến SkillVerse! 🚀",
+      "contentEn": "Meow~ This is where you discover everything about us! Learn our mission, meet the team, and see what makes SkillVerse special!",
+      "contentVi": "Meo~ Đây là nơi bạn khám phá mọi thứ về chúng mình! Tìm hiểu sứ mệnh, gặp gỡ đội ngũ và xem điều gì làm SkillVerse đặc biệt!"
+    },
+    {
+      "id": 2,
+      "titleEn": "Our Mission! 🎯",
+      "titleVi": "Sứ Mệnh Của Chúng Mình! 🎯",
+      "contentEn": "We help students and young professionals learn fast, practice real, and get real jobs! A complete ecosystem for your career growth~",
+      "contentVi": "Chúng mình giúp sinh viên và người trẻ học nhanh, luyện thật, và có việc thật! Một hệ sinh thái hoàn chỉnh cho sự nghiệp của bạn~"
+    },
+    {
+      "id": 3,
+      "titleEn": "Meet Our Amazing Team! 👥",
+      "titleVi": "Gặp Gỡ Đội Ngũ Tuyệt Vời! 👥",
+      "contentEn": "Scroll down to meet the talented developers who built this platform with love and creativity!",
+      "contentVi": "Cuộn xuống để gặp gỡ những nhà phát triển tài năng đã xây dựng nền tảng này với tình yêu và sáng tạo!"
+    },
+    {
+      "id": 4,
+      "titleEn": "Join Our Journey! 🌟",
+      "titleVi": "Cùng Tham Gia Hành Trình! 🌟",
+      "contentEn": "Ready to start your learning adventure? Sign up and let's grow together. Meowl believes in you!",
+      "contentVi": "Sẵn sàng bắt đầu hành trình học tập? Đăng ký ngay và cùng phát triển nhé. Meowl tin tưởng bạn!"
+    }
+  ],
   "seminars": [
     {
       "id": 1,

@@ -60,6 +60,8 @@ import RecruiterProfilePage from './pages/business/RecruiterProfilePage';
 import ProfileRouter from './components/ProfileRouter';
 import MyApplicationsPage from './pages/user/MyApplicationsPage';
 import ExploreMapPage from './pages/ExploreMapPage';
+import AboutPage from './pages/about/AboutPage';
+import MeowlBubbleNotification from './components/MeowlBubbleNotification';
 
 const App = () => {
   return (
@@ -89,6 +91,7 @@ const App = () => {
                 <main>
                   <Routes>
                     <Route path="/" element={<HomePage />} />
+                    <Route path="/about" element={<AboutPage />} />
                     <Route path="/explore" element={<ExploreMapPage />} />
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/courses" element={<CoursesPage />} />
@@ -171,6 +174,7 @@ const App = () => {
                   </Routes>
                 </main>
                 <FooterVisibilityWrapper />
+                <MeowlBubbleWrapper />
               </div>
             </div>
           </Router>
@@ -225,4 +229,25 @@ const FooterVisibilityWrapper = () => {
     return null;
   }
   return <Footer />;
+};
+
+// Routes where Meowl Bubble should NOT appear
+const hideMeowlBubbleRoutes = new Set<string>([
+  '/login',
+  '/register',
+  '/register/business',
+  '/register/mentor',
+  '/verify-otp',
+  '/forgot-password',
+  '/reset-password',
+  '/chatbot/general',
+  '/chatbot/expert',
+  '/admin',
+]);
+
+// Meowl Bubble Notification Wrapper
+const MeowlBubbleWrapper = () => {
+  const location = useLocation();
+  const shouldHide = hideMeowlBubbleRoutes.has(location.pathname) || isQuizAttemptRoute(location.pathname);
+  return <MeowlBubbleNotification disabled={shouldHide} />;
 };

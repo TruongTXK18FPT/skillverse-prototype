@@ -24,7 +24,8 @@ import {
   Shield,
   Building2,
   Compass,
-  Zap
+  Zap,
+  HelpCircle
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -393,6 +394,10 @@ const Header: React.FC = () => {
                   <button className="dropdown-item">
                     <Bell size={16} />
                     <span>Thông báo</span>
+                  </button>
+                  <button onClick={() => { navigate('/help-center'); setShowUserMenu(false); }} className="dropdown-item">
+                    <HelpCircle size={16} />
+                    <span>Hỗ trợ</span>
                   </button>
 
                   <hr className="dropdown-divider" />

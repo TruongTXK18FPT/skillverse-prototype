@@ -63,7 +63,7 @@ const Footer = () => {
                 <li><Link to="/help-center" className="footer-link hover-underline">{translations.footer.links.helpCenter}</Link></li>
                 <li><Link to="/terms-of-service" className="footer-link hover-underline">{translations.footer.links.termsOfService}</Link></li>
                 <li><Link to="/privacy-policy" className="footer-link hover-underline">{translations.footer.links.privacyPolicy}</Link></li>
-                <li><a href="#" className="footer-link hover-underline">{translations.footer.links.faq}</a></li>
+                <li><Link to="/about" className="footer-link hover-underline">{translations.footer.links.aboutUs}</Link></li>
               </ul>
             </div>
 

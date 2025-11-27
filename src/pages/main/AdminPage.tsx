@@ -10,6 +10,7 @@ import WithdrawalApprovalTab from '../../components/admin/WithdrawalApprovalTab'
 import SkillPointManagementTab from '../../components/admin/SkillPointManagementTab';
 import SystemSettingsTab from '../../components/admin/SystemSettingsTab';
 import PremiumPlansManagementTab from '../../components/admin/PremiumPlansManagementTab';
+import SupportTicketsTab from '../../components/admin/SupportTicketsTab';
 import { useTheme } from '../../context/ThemeContext';
 import { Sun, Moon } from 'lucide-react';
 import '../../styles/AdminPageCosmic.css';
@@ -90,6 +91,13 @@ const AdminPage: React.FC = () => {
       description: 'Quản lý gói premium'
     },
     { 
+      id: 'support', 
+      label: 'Hỗ Trợ Tickets', 
+      icon: '🎫',
+      gradient: 'linear-gradient(135deg, #00d4ff 0%, #6366f1 100%)',
+      description: 'Quản lý yêu cầu hỗ trợ'
+    },
+    { 
       id: 'settings', 
       label: 'Cài Đặt Hệ Thống', 
       icon: '⚙️',
@@ -120,6 +128,8 @@ const AdminPage: React.FC = () => {
         return <SkillPointManagementTab />;
       case 'premium':
         return <PremiumPlansManagementTab />;
+      case 'support':
+        return <SupportTicketsTab />;
       case 'settings':
         return <SystemSettingsTab />;
       default:

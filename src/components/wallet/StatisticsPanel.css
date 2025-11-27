@@ -138,23 +138,28 @@
   flex: 1;
 }
 
-.stat-label {
+/* Wallet-specific stat styles - prefixed to avoid conflicts */
+.statistics-panel .stat-label,
+.stat-summary-card .stat-label {
   color: #a5b4fc;
   font-size: 0.9rem;
   font-weight: 600;
 }
 
-.stat-value {
+.statistics-panel .stat-value,
+.stat-summary-card .stat-value {
   color: #e0e7ff;
   font-size: 1.5rem;
   font-weight: 800;
 }
 
-.stat-value.positive {
+.statistics-panel .stat-value.positive,
+.stat-summary-card .stat-value.positive {
   color: #22c55e;
 }
 
-.stat-value.negative {
+.statistics-panel .stat-value.negative,
+.stat-summary-card .stat-value.negative {
   color: #ef4444;
 }
 

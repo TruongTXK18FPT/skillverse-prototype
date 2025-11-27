@@ -1,0 +1,879 @@
+/* ========================================
+   MEOWL BUBBLE NOTIFICATION STYLES
+   Cute, animated floating bubble notifications
+   ======================================== */
+
+/* Container - positioned above Meowl Guide mascot, bubble points towards cat */
+.meowl-bubble-container {
+  position: fixed;
+  bottom: 140px;
+  right: 100px;
+  display: flex;
+  flex-direction: row-reverse; /* Bubble on left, avatar on right */
+  align-items: flex-end;
+  gap: 8px;
+  z-index: 9998;
+  animation: meowlBubbleSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: auto;
+  max-width: calc(100vw - 140px);
+}
+
+.meowl-bubble-container.meowl-bubble--closing {
+  animation: meowlBubbleSlideOut 0.3s ease-in forwards;
+}
+
+/* Avatar - now on the right side */
+.meowl-bubble-avatar {
+  position: relative;
+  width: 55px;
+  height: 55px;
+  flex-shrink: 0;
+}
+
+.meowl-bubble-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 20px rgba(139, 92, 246, 0.5));
+  animation: meowlBounce 2s ease-in-out infinite;
+}
+
+.meowl-bubble-avatar-glow {
+  position: absolute;
+  inset: -12px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(59, 130, 246, 0.2) 50%, transparent 70%);
+  border-radius: 50%;
+  animation: meowlGlow 2s ease-in-out infinite;
+  z-index: -1;
+}
+
+/* Speech Bubble - Holographic Tech Style */
+.meowl-bubble-speech {
+  position: relative;
+  max-width: 300px;
+  background: 
+    linear-gradient(135deg, 
+      rgba(0, 20, 40, 0.97) 0%, 
+      rgba(0, 40, 60, 0.95) 30%,
+      rgba(0, 60, 80, 0.93) 60%,
+      rgba(0, 30, 50, 0.97) 100%);
+  border-radius: 16px;
+  padding: 18px 22px;
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid transparent;
+  border-image: linear-gradient(135deg, 
+    rgba(0, 212, 255, 0.6), 
+    rgba(139, 92, 246, 0.4), 
+    rgba(0, 255, 200, 0.5)) 1;
+  box-shadow: 
+    0 0 1px rgba(0, 212, 255, 0.8),
+    0 0 4px rgba(0, 212, 255, 0.4),
+    0 0 15px rgba(0, 212, 255, 0.2),
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(0, 212, 255, 0.05),
+    inset 0 1px 0 rgba(0, 212, 255, 0.2);
+  animation: meowlBubblePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both, 
+             hologramFlicker 4s ease-in-out infinite,
+             holoBorderPulse 3s ease-in-out infinite;
+  overflow: hidden;
+}
+
+/* Hologram scan line effect - tech grid */
+.meowl-bubble-speech::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 212, 255, 0.02) 2px,
+      rgba(0, 212, 255, 0.02) 4px
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(0, 255, 200, 0.08) 50%,
+      transparent 100%
+    );
+  background-size: 100% 100%, 100% 200%;
+  animation: hologramScan 2.5s linear infinite;
+  pointer-events: none;
+}
+
+/* Bubble tail - pointing RIGHT towards the cat - holographic */
+.meowl-bubble-speech::before {
+  content: '';
+  position: absolute;
+  right: -12px;
+  bottom: 18px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 0 10px 14px;
+  border-color: transparent transparent transparent rgba(0, 40, 60, 0.95);
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5))
+          drop-shadow(2px 0 3px rgba(0, 212, 255, 0.3));
+}
+
+/* Type-specific styling - All with hologram effects */
+.meowl-bubble-speech--welcome {
+  background: linear-gradient(135deg, 
+    rgba(30, 58, 95, 0.95) 0%, 
+    rgba(13, 148, 136, 0.9) 100%);
+  border-color: rgba(20, 184, 166, 0.4);
+  box-shadow: 
+    0 8px 32px rgba(20, 184, 166, 0.4),
+    0 0 0 1px rgba(20, 184, 166, 0.3),
+    0 0 40px rgba(20, 184, 166, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.meowl-bubble-speech--welcome::before {
+  border-color: transparent transparent transparent rgba(13, 148, 136, 0.9);
+}
+
+.meowl-bubble-speech--premium {
+  background: linear-gradient(135deg, 
+    rgba(76, 29, 149, 0.95) 0%, 
+    rgba(124, 58, 237, 0.9) 100%);
+  border-color: rgba(250, 204, 21, 0.4);
+  box-shadow: 
+    0 8px 32px rgba(124, 58, 237, 0.5),
+    0 0 0 1px rgba(250, 204, 21, 0.4),
+    0 0 50px rgba(250, 204, 21, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.meowl-bubble-speech--premium::before {
+  border-color: transparent transparent transparent rgba(124, 58, 237, 0.9);
+}
+
+.meowl-bubble-speech--skin {
+  background: linear-gradient(135deg, 
+    rgba(131, 24, 67, 0.95) 0%, 
+    rgba(236, 72, 153, 0.9) 100%);
+  border-color: rgba(236, 72, 153, 0.4);
+  box-shadow: 
+    0 8px 32px rgba(236, 72, 153, 0.4),
+    0 0 0 1px rgba(236, 72, 153, 0.3),
+    0 0 40px rgba(236, 72, 153, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.meowl-bubble-speech--skin::before {
+  border-color: transparent transparent transparent rgba(236, 72, 153, 0.9);
+}
+
+.meowl-bubble-speech--roadmap {
+  background: linear-gradient(135deg, 
+    rgba(30, 64, 175, 0.95) 0%, 
+    rgba(59, 130, 246, 0.9) 100%);
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 
+    0 8px 32px rgba(59, 130, 246, 0.4),
+    0 0 0 1px rgba(59, 130, 246, 0.3),
+    0 0 40px rgba(59, 130, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.meowl-bubble-speech--roadmap::before {
+  border-color: transparent transparent transparent rgba(59, 130, 246, 0.9);
+}
+
+.meowl-bubble-speech--course {
+  background: linear-gradient(135deg, 
+    rgba(6, 95, 70, 0.95) 0%, 
+    rgba(16, 185, 129, 0.9) 100%);
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 
+    0 8px 32px rgba(16, 185, 129, 0.4),
+    0 0 0 1px rgba(16, 185, 129, 0.3),
+    0 0 40px rgba(16, 185, 129, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.meowl-bubble-speech--course::before {
+  border-color: transparent transparent transparent rgba(16, 185, 129, 0.9);
+}
+
+.meowl-bubble-speech--direction {
+  background: linear-gradient(135deg, 
+    rgba(146, 64, 14, 0.95) 0%, 
+    rgba(245, 158, 11, 0.9) 100%);
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 
+    0 8px 32px rgba(245, 158, 11, 0.4),
+    0 0 0 1px rgba(245, 158, 11, 0.3),
+    0 0 40px rgba(245, 158, 11, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.meowl-bubble-speech--direction::before {
+  border-color: transparent transparent transparent rgba(245, 158, 11, 0.9);
+}
+
+.meowl-bubble-speech--motivation,
+.meowl-bubble-speech--tip {
+  background: linear-gradient(135deg, 
+    rgba(67, 56, 202, 0.95) 0%, 
+    rgba(129, 140, 248, 0.9) 100%);
+  border-color: rgba(129, 140, 248, 0.4);
+  box-shadow: 
+    0 8px 32px rgba(129, 140, 248, 0.4),
+    0 0 0 1px rgba(129, 140, 248, 0.3),
+    0 0 40px rgba(129, 140, 248, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.meowl-bubble-speech--motivation::before,
+.meowl-bubble-speech--tip::before {
+  border-color: transparent transparent transparent rgba(129, 140, 248, 0.9);
+}
+
+/* Page Introduction - Special hologram gradient for page intros */
+.meowl-bubble-speech--page-intro {
+  background: linear-gradient(135deg, 
+    rgba(15, 23, 42, 0.95) 0%, 
+    rgba(30, 58, 95, 0.9) 50%, 
+    rgba(13, 148, 136, 0.9) 100%);
+  border-color: rgba(13, 148, 136, 0.5);
+  box-shadow: 
+    0 8px 32px rgba(13, 148, 136, 0.5),
+    0 0 0 1px rgba(13, 148, 136, 0.4),
+    0 0 60px rgba(13, 148, 136, 0.25),
+    0 0 100px rgba(13, 148, 136, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.meowl-bubble-speech--page-intro::before {
+  border-color: transparent transparent transparent rgba(13, 148, 136, 0.9);
+}
+
+/* Close button */
+.meowl-bubble-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.meowl-bubble-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+/* Disable button - to turn off notifications */
+.meowl-bubble-disable {
+  position: absolute;
+  top: 8px;
+  right: 34px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 100, 100, 0.15);
+  border: none;
+  border-radius: 50%;
+  color: rgba(255, 200, 200, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.meowl-bubble-disable:hover {
+  background: rgba(255, 100, 100, 0.3);
+  color: #ff6b6b;
+  transform: scale(1.1);
+}
+
+/* Toggle container - when disabled */
+.meowl-bubble-toggle-container {
+  position: fixed;
+  bottom: 140px;
+  right: 30px;
+  z-index: 9998;
+}
+
+.meowl-bubble-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(30, 27, 75, 0.9);
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  border-radius: 50%;
+  color: rgba(139, 92, 246, 0.6);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.meowl-bubble-toggle-btn:hover {
+  background: rgba(49, 46, 129, 0.95);
+  border-color: rgba(139, 92, 246, 0.6);
+  color: #a78bfa;
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(139, 92, 246, 0.3);
+}
+
+.meowl-bubble-toggle--disabled {
+  color: rgba(255, 100, 100, 0.6);
+  border-color: rgba(255, 100, 100, 0.3);
+}
+
+.meowl-bubble-toggle--disabled:hover {
+  color: #f87171;
+  border-color: rgba(255, 100, 100, 0.5);
+}
+
+.toggle-tooltip {
+  position: absolute;
+  right: 55px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(15, 23, 42, 0.95);
+  color: #e0e7ff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.meowl-bubble-toggle-btn:hover .toggle-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Icon */
+.meowl-bubble-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  animation: meowlIconPulse 2s ease-in-out infinite;
+}
+
+.meowl-bubble-icon svg {
+  color: #fff;
+}
+
+.bubble-icon-heart {
+  color: #f472b6 !important;
+  animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+.bubble-icon-sparkle {
+  color: #fcd34d !important;
+  animation: sparkleRotate 3s linear infinite;
+}
+
+.bubble-icon-crown {
+  color: #fcd34d !important;
+  animation: crownFloat 2s ease-in-out infinite;
+}
+
+.bubble-icon-shirt {
+  color: #f472b6 !important;
+}
+
+.bubble-icon-map {
+  color: #60a5fa !important;
+}
+
+.bubble-icon-book {
+  color: #34d399 !important;
+}
+
+.bubble-icon-target {
+  color: #fb923c !important;
+}
+
+.bubble-icon-home {
+  color: #60a5fa !important;
+}
+
+.bubble-icon-user {
+  color: #a78bfa !important;
+}
+
+.bubble-icon-job {
+  color: #f472b6 !important;
+}
+
+.bubble-icon-community {
+  color: #34d399 !important;
+}
+
+.bubble-icon-trophy {
+  color: #fcd34d !important;
+  animation: crownFloat 2s ease-in-out infinite;
+}
+
+.bubble-icon-wallet {
+  color: #fcd34d !important;
+}
+
+.bubble-icon-mentor {
+  color: #818cf8 !important;
+}
+
+.bubble-icon-chat {
+  color: #60a5fa !important;
+}
+
+.bubble-icon-compass {
+  color: #c084fc !important;
+  animation: sparkleRotate 8s linear infinite;
+}
+
+.bubble-icon-info {
+  color: #38bdf8 !important;
+}
+
+.bubble-icon-zap {
+  color: #fcd34d !important;
+  animation: zapPulse 1.5s ease-in-out infinite;
+}
+
+.bubble-icon-payment {
+  color: #a78bfa !important;
+}
+
+.bubble-icon-gift {
+  color: #f472b6 !important;
+  animation: heartBeat 2s ease-in-out infinite;
+}
+
+.bubble-icon-star {
+  color: #fcd34d !important;
+  animation: starTwinkle 2s ease-in-out infinite;
+}
+
+/* Message */
+.meowl-bubble-message {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #fff;
+  font-weight: 500;
+  padding-right: 20px;
+}
+
+/* Action button */
+.meowl-bubble-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.meowl-bubble-action:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.meowl-bubble-action:active {
+  transform: translateY(0);
+}
+
+/* Decorative sparkles */
+.meowl-bubble-sparkle {
+  position: absolute;
+  font-size: 12px;
+  opacity: 0;
+  animation: sparkleAppear 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.meowl-bubble-sparkle--1 {
+  top: -8px;
+  right: 20px;
+  animation-delay: 0s;
+}
+
+.meowl-bubble-sparkle--2 {
+  top: 10px;
+  right: -5px;
+  animation-delay: 1s;
+}
+
+.meowl-bubble-sparkle--3 {
+  bottom: -5px;
+  right: 40px;
+  animation-delay: 2s;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+@keyframes meowlBubbleSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(100px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes meowlBubbleSlideOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(50px) scale(0.8);
+  }
+}
+
+@keyframes meowlBubblePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes meowlBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes meowlGlow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes meowlIconPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes heartBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes sparkleRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes crownFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(5deg);
+  }
+}
+
+@keyframes sparkleAppear {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5) translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) translateY(-10px);
+  }
+}
+
+@keyframes holoBorderPulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 1px rgba(0, 212, 255, 0.8),
+      0 0 4px rgba(0, 212, 255, 0.4),
+      0 0 15px rgba(0, 212, 255, 0.2),
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      inset 0 0 20px rgba(0, 212, 255, 0.05);
+  }
+  50% {
+    box-shadow: 
+      0 0 2px rgba(0, 255, 200, 1),
+      0 0 8px rgba(0, 255, 200, 0.6),
+      0 0 25px rgba(0, 255, 200, 0.3),
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      inset 0 0 30px rgba(0, 255, 200, 0.08);
+  }
+}
+
+@keyframes holoDataStream {
+  0% {
+    background-position: 0% 0%, 0% 0%;
+  }
+  100% {
+    background-position: 0% 0%, 0% 200%;
+  }
+}
+
+/* Hologram Effects */
+@keyframes hologramFlicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.8;
+  }
+  94% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0.9;
+  }
+  97% {
+    opacity: 1;
+  }
+}
+
+@keyframes hologramScan {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 200%;
+  }
+}
+
+@keyframes zapPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.1);
+    filter: brightness(1.3);
+  }
+}
+
+@keyframes starTwinkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 0.8;
+  }
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  .meowl-bubble-container {
+    right: 80px;
+    bottom: 130px;
+    max-width: calc(100vw - 100px);
+  }
+
+  .meowl-bubble-speech {
+    max-width: 280px;
+  }
+
+  .meowl-bubble-avatar {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .meowl-bubble-container {
+    right: 15px;
+    bottom: 120px;
+    left: 15px;
+    flex-direction: column;
+    align-items: flex-end;
+    max-width: calc(100vw - 30px);
+  }
+
+  .meowl-bubble-avatar {
+    width: 45px;
+    height: 45px;
+    align-self: flex-end;
+    margin-top: -5px;
+  }
+
+  .meowl-bubble-speech {
+    max-width: 100%;
+  }
+
+  /* Hide right tail on mobile */
+  .meowl-bubble-speech::before {
+    display: none;
+  }
+
+  /* Show bottom tail pointing to avatar */
+  .meowl-bubble-speech .meowl-bubble-tail-mobile {
+    content: '';
+    position: absolute;
+    right: 20px;
+    bottom: -10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 8px 0 8px;
+    border-color: rgba(30, 27, 75, 0.95) transparent transparent transparent;
+  }
+
+  .meowl-bubble-message {
+    font-size: 13px;
+  }
+
+  .meowl-bubble-action {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+
+/* ========================================
+   DARK/LIGHT MODE SUPPORT
+   ======================================== */
+
+[data-theme="light"] .meowl-bubble-speech {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="light"] .meowl-bubble-speech::before {
+  border-color: transparent #f8fafc transparent transparent;
+}
+
+[data-theme="light"] .meowl-bubble-message {
+  color: #1e293b;
+}
+
+[data-theme="light"] .meowl-bubble-close {
+  color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .meowl-bubble-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #1e293b;
+}
+
+[data-theme="light"] .meowl-bubble-icon {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .meowl-bubble-action {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: transparent;
+  color: #fff;
+}
+
+[data-theme="light"] .meowl-bubble-action:hover {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+/* Keep colored bubbles in light mode */
+[data-theme="light"] .meowl-bubble-speech--welcome,
+[data-theme="light"] .meowl-bubble-speech--premium,
+[data-theme="light"] .meowl-bubble-speech--skin,
+[data-theme="light"] .meowl-bubble-speech--roadmap,
+[data-theme="light"] .meowl-bubble-speech--course,
+[data-theme="light"] .meowl-bubble-speech--direction,
+[data-theme="light"] .meowl-bubble-speech--motivation,
+[data-theme="light"] .meowl-bubble-speech--tip,
+[data-theme="light"] .meowl-bubble-speech--page-intro {
+  color: #fff;
+}
+
+[data-theme="light"] .meowl-bubble-speech--welcome .meowl-bubble-message,
+[data-theme="light"] .meowl-bubble-speech--premium .meowl-bubble-message,
+[data-theme="light"] .meowl-bubble-speech--skin .meowl-bubble-message,
+[data-theme="light"] .meowl-bubble-speech--roadmap .meowl-bubble-message,
+[data-theme="light"] .meowl-bubble-speech--course .meowl-bubble-message,
+[data-theme="light"] .meowl-bubble-speech--direction .meowl-bubble-message,
+[data-theme="light"] .meowl-bubble-speech--motivation .meowl-bubble-message,
+[data-theme="light"] .meowl-bubble-speech--tip .meowl-bubble-message,
+[data-theme="light"] .meowl-bubble-speech--page-intro .meowl-bubble-message {
+  color: #fff;
+}

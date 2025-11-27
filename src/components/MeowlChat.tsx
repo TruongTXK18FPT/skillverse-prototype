@@ -1,16 +1,22 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { X, Send, Loader2 } from 'lucide-react';
+import { X, Send, Loader2, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import '../styles/MeowlChat.css';
 import { guardUserInput, pickFallback } from "./MeowlGuard";
 import axiosInstance from '../services/axiosInstance';
+import { useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  actionType?: string;
+  actionUrl?: string;
+  actionLabel?: string;
 }
 
 interface MeowlChatProps {
@@ -21,6 +27,7 @@ interface MeowlChatProps {
 const MeowlChat: React.FC<MeowlChatProps> = ({ isOpen, onClose }) => {
   const { language } = useLanguage();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -28,8 +35,62 @@ const MeowlChat: React.FC<MeowlChatProps> = ({ isOpen, onClose }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const welcomeMessage = useMemo(() => ({
-    en: "Hi! I'm Meowl, your learning assistant. How can I help you with your SkillVerse journey today?",
-    vi: "Xin chào! Tôi là Meowl, trợ lý học tập của bạn. Tôi có thể giúp gì cho hành trình SkillVerse của bạn hôm nay?"
+    en: `Hello! 💫 *Meow meow!* 🐱✨
+I have **many cool things** to help you on SkillVerse!
+
+1. **Learning & Skills**:
+- Explain difficult concepts 📚
+- Suggest suitable learning paths 🗺️
+- Memorization/Time management tips ⏳
+
+2. **Career Advice** (with **[Career Chat](/chatbot/general)** 💼):
+- CV/Cover letter analysis
+- Job market trends
+- Virtual interview practice
+
+3. **Premium Features**:
+- **Student Pack**: Basic
+- **Premium Plus**: *Unlimited Career Chat* + personalized roadmap + priority support 🌟
+
+4. **Psychological Companion**:
+- Listen when you are stressed 😔
+- Encourage when you are down 💪
+
+*What do you want to explore first?* 😊
+- Try **[Career Chat](/chatbot/general)**? (For Premium Plus!)
+- Or need me to explain a concept?
+- Or just want to chat for fun? 🐾
+
+*Meowl is right here!* 💕🦋
+You got this! 💪✨ 🎓`,
+    vi: `Hế lô! 💫 *Meow meow!* 🐱✨
+Mình có **nhiều thứ hay ho** để giúp bạn trên SkillVerse đây!
+
+1. **Học tập & Kỹ năng**:
+- Giải thích khái niệm khó hiểu 📚
+- Gợi ý lộ trình học tập phù hợp 🗺️
+- Mẹo ghi nhớ/quản lý thời gian ⏳
+
+2. **Tư vấn nghề nghiệp** (với **[Career Chat](/chatbot/general)** 💼):
+- Phân tích CV/cover letter
+- Xu hướng thị trường việc làm
+- Luyện phỏng vấn ảo
+
+3. **Tính năng Premium**:
+- **Gói Sinh viên**: Cơ bản
+- **Premium Plus**: *Career Chat không giới hạn* + lộ trình riêng + ưu tiên hỗ trợ 🌟
+
+4. **Đồng hành tâm lý**:
+- Lắng nghe khi bạn căng thẳng 😔
+- Khích lệ khi bạn chán nản 💪
+
+*Bạn muốn khám phá cái gì trước?* 😊
+- Thử **[Career Chat](/chatbot/general)**? (Dành cho Premium Plus nha!)
+- Hay cần mình giải thích một khái niệm nào?
+- Hay chỉ muốn chat vui thôi? 🐾
+
+*Meowl đang ngồi sẵn đây!* 💕🦋
+Cố lên nha! 💪✨ 🎓`
   }), []);
 
   const placeholderText = {
@@ -63,6 +124,11 @@ const MeowlChat: React.FC<MeowlChatProps> = ({ isOpen, onClose }) => {
       }, 100);
     }
   }, [isOpen]);
+
+  const handleActionClick = (url: string) => {
+    onClose(); // Close chat
+    navigate(url); // Navigate to target
+  };
 
   const sendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
@@ -112,7 +178,10 @@ const MeowlChat: React.FC<MeowlChatProps> = ({ isOpen, onClose }) => {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: data.message || data.originalMessage || '...',
-        timestamp: new Date()
+        timestamp: new Date(),
+        actionType: data.actionType,
+        actionUrl: data.actionUrl,
+        actionLabel: data.actionLabel
       };
 
       setMessages(prev => [...prev, aiResponse]);
@@ -176,8 +245,38 @@ const MeowlChat: React.FC<MeowlChatProps> = ({ isOpen, onClose }) => {
                     <img src="/images/meowl_bg_clear.png" alt="Meowl" />
                   </div>
                 )}
-                <div className="message-bubble">
-                  <div className="message-text">{message.content}</div>
+                <div className="message-bubble-wrapper">
+                  <div className="message-bubble">
+                    <div className="message-text">
+                      <ReactMarkdown 
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          a: ({ node, ...props }) => (
+                            <a
+                              {...props}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                if (props.href) handleActionClick(props.href);
+                              }}
+                              style={{ cursor: 'pointer', color: '#8d75ff', textDecoration: 'underline' }}
+                            />
+                          )
+                        }}
+                      >
+                        {message.content}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
+                  {/* Render Action Button if available */}
+                  {message.actionType === 'NAVIGATE' && message.actionUrl && (
+                    <button 
+                      className="meowl-action-btn"
+                      onClick={() => handleActionClick(message.actionUrl!)}
+                    >
+                      <span>{message.actionLabel || 'Click here'}</span>
+                      <ExternalLink size={14} />
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -185,7 +284,7 @@ const MeowlChat: React.FC<MeowlChatProps> = ({ isOpen, onClose }) => {
           {isLoading && (
             <div className="chat-message assistant">
               <div className="message-content">
-                <div className="message-avatar">
+                <div className="meowl-chat-message-avatar">
                   <img src="/images/meowl_bg_clear.png" alt="Meowl" />
                 </div>
                 <div className="message-bubble loading">

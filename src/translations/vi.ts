@@ -381,12 +381,13 @@ export const vi = {
     subscribe: 'Đăng Ký Nhận Tin',
     emailPlaceholder: 'Nhập email của bạn',
     location: 'Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh',
-    copyright: '© 2024 SkillVerse. Đã đăng ký bản quyền.',
+    copyright: ' 2024 SkillVerse. Đã đăng ký bản quyền.',
     links: {
       helpCenter: 'Trung Tâm Trợ Giúp',
       termsOfService: 'Điều Khoản Dịch Vụ',
       privacyPolicy: 'Chính Sách Bảo Mật',
-      faq: 'Câu Hỏi Thường Gặp'
+      faq: 'Câu Hỏi Thường Gặp',
+      aboutUs: 'Về Chúng Tôi'
     }
   },
   dashboard: {

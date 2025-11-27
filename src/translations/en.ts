@@ -272,12 +272,13 @@ export const en = {
     subscribe: 'Subscribe to Newsletter',
     emailPlaceholder: 'Enter your email',
     location: 'FPT University, District 9, Ho Chi Minh City',
-    copyright: '© 2024 Skillverse. All rights reserved.',
+    copyright: ' 2024 Skillverse. All rights reserved.',
     links: {
       helpCenter: 'Help Center',
       termsOfService: 'Terms of Service',
       privacyPolicy: 'Privacy Policy',
-      faq: 'FAQ'
+      faq: 'FAQ',
+      aboutUs: 'About Us'
     }
   },
   notifications: {

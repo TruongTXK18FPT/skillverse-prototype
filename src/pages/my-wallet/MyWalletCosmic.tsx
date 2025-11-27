@@ -21,6 +21,7 @@ import CancelSubscriptionModal from '../../components/premium/CancelSubscription
 import CancelAutoRenewalModal from '../../components/premium/CancelAutoRenewalModal';
 import EnableAutoRenewalModal from '../../components/premium/EnableAutoRenewalModal';
 import Toast from '../../components/Toast';
+import MeowlGuide from '../../components/MeowlGuide';
 import './MyWalletCosmic.css';
 
 interface WalletData {
@@ -1096,6 +1097,9 @@ const MyWalletCosmic: React.FC = () => {
         isVisible={toast.isVisible}
         onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
       />
+
+      {/* Meowl Guide */}
+      <MeowlGuide currentPage="wallet" />
     </div>
   );
 };
