@@ -21,7 +21,8 @@ import {
   History,
   Code,
   PenTool,
-  X
+  X,
+  AlertTriangle
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { listCoursesByAuthor, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse, submitCourseForApproval } from '../../services/courseService';
@@ -32,7 +33,7 @@ import EarningsTab from '../../components/mentor/EarningsTab';
 import SkillPointsTab from '../../components/mentor/SkillPointsTab';
 import ReviewsTab from '../../components/mentor/ReviewsTab';
 import MentoringHistoryTab from '../../components/mentor/MentoringHistoryTab';
-import '../../styles/MentorPage.css';
+import '../../styles/MentorPage-HUD.css';
 import { listModules, createModule, updateModule } from '../../services/moduleService';
 import { listLessonsByModule, createLesson, reorderLessons, getLessonById, deleteLesson } from '../../services/lessonService';
 import { LessonType as ApiLessonType, LessonCreateDTO } from '../../data/lessonDTOs';
@@ -323,6 +324,16 @@ const MentorPage: React.FC = () => {
   const [_editingQuestion, setEditingQuestion] = useState<QuizQuestionDetailDTO | null>(null);
   const [_editingOption, setEditingOption] = useState<QuizOptionDTO | null>(null);
 
+  // Delete confirmation modal state
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    type: 'course' | 'lesson' | 'quiz' | 'question' | 'option' | 'assignment';
+    id: number;
+    name: string;
+    onConfirm: () => Promise<void>;
+  } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   // Mock data for demonstrations
   const [bookings] = useState<Booking[]>([
     {
@@ -522,20 +533,30 @@ const MentorPage: React.FC = () => {
   };
 
   const handleDeleteCourse = async (courseId: number) => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa khóa học này?')) {
-      setLoading(true);
-      try {
-        console.log('Deleting course:', courseId);
-        // Use the actual API to delete the course
-        await deleteCourse(courseId, user?.id || 0);
-        setCourses(prev => prev.filter(course => course.id !== courseId));
-      } catch (error) {
-        console.error('Error deleting course:', error);
-        setError('Không thể xóa khóa học. Vui lòng thử lại.');
-      } finally {
-        setLoading(false);
+    const course = courses.find(c => c.id === courseId);
+    if (!course) return;
+
+    setDeleteTarget({
+      type: 'course',
+      id: courseId,
+      name: course.title,
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          console.log('Deleting course:', courseId);
+          await deleteCourse(courseId, user?.id || 0);
+          setCourses(prev => prev.filter(course => course.id !== courseId));
+          setShowDeleteConfirm(false);
+          setDeleteTarget(null);
+        } catch (error) {
+          console.error('Error deleting course:', error);
+          setError('Không thể xóa khóa học. Vui lòng thử lại.');
+        } finally {
+          setIsDeleting(false);
+        }
       }
-    }
+    });
+    setShowDeleteConfirm(true);
   };
 
   const handleSubmitForApproval = async (courseId: number) => {
@@ -674,26 +695,32 @@ const MentorPage: React.FC = () => {
   };
 
   const handleDeleteLesson = async (lessonId: number) => {
-    if (!user || !window.confirm('Bạn có chắc chắn muốn xóa bài học này?')) {
-      return;
-    }
-    
-    try {
-      setLoading(true);
-      await deleteLesson(lessonId, user.id);
-      
-      // Reload lessons for the current module
-      if (selectedCourse && selectedModuleId) {
-        await loadLessons(selectedCourse.id, selectedModuleId);
+    if (!user) return;
+    const lesson = courseLessons.find(l => l.id === lessonId);
+    if (!lesson) return;
+
+    setDeleteTarget({
+      type: 'lesson',
+      id: lessonId,
+      name: lesson.title,
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          await deleteLesson(lessonId, user.id);
+          if (selectedCourse && selectedModuleId) {
+            await loadLessons(selectedCourse.id, selectedModuleId);
+          }
+          setShowDeleteConfirm(false);
+          setDeleteTarget(null);
+        } catch (error) {
+          console.error('Error deleting lesson:', error);
+          setError('Không thể xóa bài học. Vui lòng thử lại.');
+        } finally {
+          setIsDeleting(false);
+        }
       }
-      
-      alert('Bài học đã được xóa thành công!');
-    } catch (error) {
-      console.error('Error deleting lesson:', error);
-      alert('Không thể xóa bài học. Vui lòng thử lại.');
-    } finally {
-      setLoading(false);
-    }
+    });
+    setShowDeleteConfirm(true);
   };
 
   const loadLessons = async (courseId: number, moduleId?: number) => {
@@ -808,18 +835,32 @@ const MentorPage: React.FC = () => {
   };
 
   const handleDeleteAssignment = async (assignmentId: number) => {
-    if (!confirm('Are you sure you want to delete this assignment? This action cannot be undone.')) return;
-    try {
-      if (!user) throw new Error('User not authenticated');
-      await deleteAssignment(assignmentId, user.id);
-      // Reload assignments
-      if (selectedModuleId) {
-        await loadAssignments(selectedModuleId);
+    if (!user) return;
+    const assignment = moduleAssignments.find(a => a.id === assignmentId);
+    if (!assignment) return;
+
+    setDeleteTarget({
+      type: 'assignment',
+      id: assignmentId,
+      name: assignment.title,
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          await deleteAssignment(assignmentId, user.id);
+          if (selectedModuleId) {
+            await loadAssignments(selectedModuleId);
+          }
+          setShowDeleteConfirm(false);
+          setDeleteTarget(null);
+        } catch (e) {
+          console.error('Failed to delete assignment', e);
+          setError('Không thể xóa bài tập. Vui lòng thử lại.');
+        } finally {
+          setIsDeleting(false);
+        }
       }
-    } catch (e) {
-      console.error('Failed to delete assignment', e);
-      setError('Failed to delete assignment');
-    }
+    });
+    setShowDeleteConfirm(true);
   };
 
   const handleAssignmentSuccess = () => {
@@ -864,20 +905,34 @@ const MentorPage: React.FC = () => {
   };
 
   const handleDeleteQuiz = async (quizId: number) => {
-    if (!confirm('Are you sure you want to delete this quiz?')) return;
-    try {
-      if (!user) throw new Error('User not authenticated');
-      await deleteQuiz(quizId, user.id);
-      // Reload quizzes
-      if (selectedModuleId) {
-        await loadQuizzes(selectedModuleId);
+    if (!user) return;
+    const quiz = moduleQuizzes.find(q => q.id === quizId) || selectedQuiz;
+    if (!quiz) return;
+
+    setDeleteTarget({
+      type: 'quiz',
+      id: quizId,
+      name: quiz.title,
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          await deleteQuiz(quizId, user.id);
+          if (selectedModuleId) {
+            await loadQuizzes(selectedModuleId);
+          }
+          setShowQuizDetail(false);
+          setSelectedQuiz(null);
+          setShowDeleteConfirm(false);
+          setDeleteTarget(null);
+        } catch (e) {
+          console.error('Failed to delete quiz', e);
+          setError('Không thể xóa quiz. Vui lòng thử lại.');
+        } finally {
+          setIsDeleting(false);
+        }
       }
-      setShowQuizDetail(false);
-      setSelectedQuiz(null);
-    } catch (e) {
-      console.error('Failed to delete quiz', e);
-      setError('Failed to delete quiz');
-    }
+    });
+    setShowDeleteConfirm(true);
   };
 
   const handleAddQuestion = async (quizId: number, questionData: QuizQuestionCreateDTO) => {
@@ -909,18 +964,32 @@ const MentorPage: React.FC = () => {
   };
 
   const handleDeleteQuestion = async (questionId: number) => {
-    if (!confirm('Are you sure you want to delete this question?')) return;
-    try {
-      if (!user) throw new Error('User not authenticated');
-      await deleteQuizQuestion(questionId, user.id);
-      // Reload quiz details
-      if (selectedQuiz) {
-        await handleViewQuiz(selectedQuiz.id);
+    if (!user || !selectedQuiz) return;
+    const question = selectedQuiz.questions.find(q => q.id === questionId);
+    if (!question) return;
+
+    setDeleteTarget({
+      type: 'question',
+      id: questionId,
+      name: `Câu hỏi: ${question.questionText.substring(0, 50)}...`,
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          await deleteQuizQuestion(questionId, user.id);
+          if (selectedQuiz) {
+            await handleViewQuiz(selectedQuiz.id);
+          }
+          setShowDeleteConfirm(false);
+          setDeleteTarget(null);
+        } catch (e) {
+          console.error('Failed to delete question', e);
+          setError('Không thể xóa câu hỏi. Vui lòng thử lại.');
+        } finally {
+          setIsDeleting(false);
+        }
       }
-    } catch (e) {
-      console.error('Failed to delete question', e);
-      setError('Failed to delete question');
-    }
+    });
+    setShowDeleteConfirm(true);
   };
 
   const handleAddOption = async (questionId: number, optionData: QuizOptionCreateDTO) => {
@@ -954,18 +1023,40 @@ const MentorPage: React.FC = () => {
   };
 
   const handleDeleteOption = async (optionId: number) => {
-    if (!confirm('Are you sure you want to delete this option?')) return;
-    try {
-      if (!user) throw new Error('User not authenticated');
-      await deleteQuizOption(optionId, user.id);
-      // Reload quiz details
-      if (selectedQuiz) {
-        await handleViewQuiz(selectedQuiz.id);
+    if (!user || !selectedQuiz) return;
+
+    // Find the option across all questions
+    let optionText = 'Option';
+    for (const question of selectedQuiz.questions) {
+      const option = question.options.find(o => o.id === optionId);
+      if (option) {
+        optionText = option.optionText;
+        break;
       }
-    } catch (e) {
-      console.error('Failed to delete option', e);
-      setError('Failed to delete option');
     }
+
+    setDeleteTarget({
+      type: 'option',
+      id: optionId,
+      name: `Lựa chọn: ${optionText.substring(0, 50)}${optionText.length > 50 ? '...' : ''}`,
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          await deleteQuizOption(optionId, user.id);
+          if (selectedQuiz) {
+            await handleViewQuiz(selectedQuiz.id);
+          }
+          setShowDeleteConfirm(false);
+          setDeleteTarget(null);
+        } catch (e) {
+          console.error('Failed to delete option', e);
+          setError('Không thể xóa lựa chọn. Vui lòng thử lại.');
+        } finally {
+          setIsDeleting(false);
+        }
+      }
+    });
+    setShowDeleteConfirm(true);
   };
 
   const getStatusIcon = (status: CourseStatus) => {
@@ -2670,6 +2761,70 @@ const MentorPage: React.FC = () => {
                   )}
                 </>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal - Isolated */}
+      {showDeleteConfirm && deleteTarget && (
+        <div className="hud-confirm-delete-overlay">
+          <div className="hud-confirm-delete-content">
+            <div className="hud-confirm-delete-header">
+              <div className="hud-confirm-delete-icon">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <div className="hud-confirm-delete-title-section">
+                <h2 className="hud-confirm-delete-title">Xác Nhận Xóa</h2>
+                <p className="hud-confirm-delete-subtitle">
+                  Thao tác này không thể hoàn tác
+                </p>
+              </div>
+            </div>
+
+            <div className="hud-confirm-delete-body">
+              <p className="hud-confirm-delete-message">
+                Bạn có chắc chắn muốn xóa{' '}
+                {deleteTarget.type === 'course' && 'khóa học'}
+                {deleteTarget.type === 'lesson' && 'bài học'}
+                {deleteTarget.type === 'quiz' && 'quiz'}
+                {deleteTarget.type === 'question' && 'câu hỏi'}
+                {deleteTarget.type === 'option' && 'lựa chọn'}
+                {deleteTarget.type === 'assignment' && 'bài tập'}
+                {' '}này không?
+              </p>
+
+              <div className="hud-confirm-delete-item">
+                <p className="hud-confirm-delete-item-name">{deleteTarget.name}</p>
+              </div>
+
+              <div className="hud-confirm-delete-warning">
+                <AlertTriangle className="w-5 h-5 hud-confirm-delete-warning-icon" />
+                <p className="hud-confirm-delete-warning-text">
+                  Cảnh báo: Dữ liệu sau khi xóa sẽ không thể khôi phục. Hãy chắc chắn bạn muốn thực hiện thao tác này.
+                </p>
+              </div>
+
+              <div className="hud-confirm-delete-actions">
+                <button
+                  className="hud-confirm-delete-btn hud-confirm-delete-btn-cancel"
+                  onClick={() => {
+                    setShowDeleteConfirm(false);
+                    setDeleteTarget(null);
+                  }}
+                  disabled={isDeleting}
+                >
+                  Hủy
+                </button>
+                <button
+                  className="hud-confirm-delete-btn hud-confirm-delete-btn-confirm"
+                  onClick={() => deleteTarget.onConfirm()}
+                  disabled={isDeleting}
+                >
+                  <Trash2 className="w-4 h-4" />
+                  {isDeleting ? 'Đang xóa...' : 'Xóa'}
+                </button>
+              </div>
             </div>
           </div>
         </div>

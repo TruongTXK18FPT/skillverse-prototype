@@ -1084,3 +1084,34 @@
     padding: 1rem;
   }
 }
+
+/* ========================================
+   BODY SCROLL LOCK
+   Lock body scroll when modals are open
+   ======================================== */
+body:has(.learning-hud-modal-overlay),
+body:has(.learning-hud-quiz-overlay) {
+  overflow: hidden;
+}
+
+/* ========================================
+   QUIZ DISPLAY OVERLAY STYLES
+   ======================================== */
+.learning-hud-quiz-overlay {
+  padding-top: 80px;
+}
+
+/* Hide scrollbar in quiz content while keeping functionality */
+.learning-hud-quiz-overlay .learning-hud-card {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.learning-hud-quiz-overlay .learning-hud-card::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Hide scrollbar in quiz scrollable content areas */
+.learning-hud-quiz-overlay div[style*="overflowY"]::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

@@ -391,55 +391,181 @@ const CourseLearningPage = () => {
                 ) : (
                   /* QUIZ PREVIEW - Navigate to quiz page */
                   <div style={{
-                    padding: '40px',
+                    maxWidth: '800px',
+                    margin: '0 auto',
+                    padding: '32px',
                     backgroundColor: 'var(--lhud-space-light)',
-                    borderRadius: '12px',
-                    textAlign: 'center',
-                    border: '1px solid var(--lhud-cyan)'
+                    borderRadius: '16px',
+                    border: '2px solid var(--lhud-cyan)',
+                    boxShadow: '0 8px 32px rgba(0, 255, 255, 0.1)'
                   }}>
-                    <h3 style={{
-                      marginBottom: '16px',
-                      fontSize: '1.8rem',
-                      color: 'var(--lhud-text-primary)'
-                    }}>
-                      📝 {activeQuizDetail.title}
-                    </h3>
-                    <p style={{
-                      marginBottom: '24px',
-                      color: 'var(--lhud-text-secondary)',
-                      fontSize: '1.1rem'
-                    }}>
-                      {activeQuizDetail.description || 'Knowledge verification checkpoint'}
-                    </p>
+                    {/* Quiz Header */}
                     <div style={{
-                      display: 'inline-block',
-                      marginBottom: '24px',
-                      padding: '20px',
-                      backgroundColor: 'var(--lhud-deep-space)',
-                      borderRadius: '8px',
-                      textAlign: 'left',
-                      border: '1px solid var(--lhud-border)'
+                      textAlign: 'center',
+                      marginBottom: '32px',
+                      paddingBottom: '24px',
+                      borderBottom: '1px solid var(--lhud-border)'
                     }}>
-                      <p style={{ marginBottom: '8px', color: 'var(--lhud-text-primary)' }}>
-                        <strong>QUESTIONS:</strong> {activeQuizDetail.questions?.length || 0}
+                      <div style={{
+                        fontSize: '4rem',
+                        marginBottom: '16px',
+                        filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.3))'
+                      }}>📝</div>
+                      <h2 style={{
+                        margin: '0 0 16px 0',
+                        fontSize: '2.2rem',
+                        color: 'var(--lhud-text-primary)',
+                        fontFamily: '"Space Habitat", monospace',
+                        letterSpacing: '1px',
+                        textTransform: 'uppercase'
+                      }}>
+                        {activeQuizDetail.title}
+                      </h2>
+                      <p style={{
+                        margin: '0',
+                        color: 'var(--lhud-text-secondary)',
+                        fontSize: '1.1rem',
+                        lineHeight: '1.6'
+                      }}>
+                        {activeQuizDetail.description || 'Knowledge verification checkpoint'}
                       </p>
-                      <p style={{ marginBottom: '8px', color: 'var(--lhud-text-primary)' }}>
-                        <strong>PASS SCORE:</strong> {activeQuizDetail.passScore}%
-                      </p>
-                      {activeQuizDetail.hasAttempts && (
-                        <p style={{ color: 'var(--lhud-cyan)', marginTop: '12px' }}>
-                          <strong>ATTEMPTS:</strong> {activeQuizDetail.attemptsCount}/3
+                    </div>
+
+                    {/* Quiz Stats Grid */}
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                      gap: '20px',
+                      marginBottom: '32px'
+                    }}>
+                      <div style={{
+                        padding: '20px',
+                        backgroundColor: 'var(--lhud-deep-space)',
+                        borderRadius: '12px',
+                        border: '1px solid var(--lhud-border)',
+                        textAlign: 'center'
+                      }}>
+                        <div style={{
+                          fontSize: '2rem',
+                          color: 'var(--lhud-cyan)',
+                          marginBottom: '8px',
+                          fontFamily: '"Space Habitat", monospace'
+                        }}>
+                          {activeQuizDetail.questions?.length || 0}
+                        </div>
+                        <p style={{
+                          margin: '0',
+                          color: 'var(--lhud-text-secondary)',
+                          fontSize: '0.9rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '1px'
+                        }}>
+                          Questions
                         </p>
+                      </div>
+
+                      <div style={{
+                        padding: '20px',
+                        backgroundColor: 'var(--lhud-deep-space)',
+                        borderRadius: '12px',
+                        border: '1px solid var(--lhud-border)',
+                        textAlign: 'center'
+                      }}>
+                        <div style={{
+                          fontSize: '2rem',
+                          color: 'var(--lhud-cyan)',
+                          marginBottom: '8px',
+                          fontFamily: '"Space Habitat", monospace'
+                        }}>
+                          {activeQuizDetail.passScore}%
+                        </div>
+                        <p style={{
+                          margin: '0',
+                          color: 'var(--lhud-text-secondary)',
+                          fontSize: '0.9rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '1px'
+                        }}>
+                          Pass Score
+                        </p>
+                      </div>
+
+                      {activeQuizDetail.hasAttempts && (
+                        <div style={{
+                          padding: '20px',
+                          backgroundColor: 'var(--lhud-deep-space)',
+                          borderRadius: '12px',
+                          border: '1px solid var(--lhud-border)',
+                          textAlign: 'center'
+                        }}>
+                          <div style={{
+                            fontSize: '2rem',
+                            color: activeQuizDetail.attemptsCount >= 3 ? 'var(--lhud-red)' : 'var(--lhud-cyan)',
+                            marginBottom: '8px',
+                            fontFamily: '"Space Habitat", monospace'
+                          }}>
+                            {activeQuizDetail.attemptsCount}/3
+                          </div>
+                          <p style={{
+                            margin: '0',
+                            color: 'var(--lhud-text-secondary)',
+                            fontSize: '0.9rem',
+                            textTransform: 'uppercase',
+                            letterSpacing: '1px'
+                          }}>
+                            Attempts
+                          </p>
+                        </div>
                       )}
                     </div>
-                    <button
-                      onClick={() => navigate(`/quiz/${activeQuizDetail.id}/attempt`)}
-                      className="learning-hud-complete-btn"
-                    >
-                      {activeQuizDetail.hasAttempts
-                        ? `RETRY VERIFICATION (${activeQuizDetail.attemptsCount}/3)`
-                        : 'BEGIN VERIFICATION'}
-                    </button>
+
+                    {/* Action Button */}
+                    <div style={{ textAlign: 'center' }}>
+                      <button
+                        onClick={() => navigate(`/quiz/${activeQuizDetail.id}/attempt`)}
+                        style={{
+                          padding: '16px 48px',
+                          fontSize: '1.1rem',
+                          fontFamily: '"Space Habitat", monospace',
+                          fontWeight: 'bold',
+                          letterSpacing: '1px',
+                          textTransform: 'uppercase',
+                          background: activeQuizDetail.hasAttempts 
+                            ? 'linear-gradient(135deg, var(--lhud-orange) 0%, var(--lhud-red) 100%)'
+                            : 'linear-gradient(135deg, var(--lhud-cyan) 0%, var(--lhud-blue) 100%)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '12px',
+                          cursor: 'pointer',
+                          transition: 'all 0.3s ease',
+                          boxShadow: activeQuizDetail.hasAttempts
+                            ? '0 4px 20px rgba(255, 165, 0, 0.3)'
+                            : '0 4px 20px rgba(0, 255, 255, 0.3)',
+                          transform: 'translateY(0)',
+                        }}
+                        onMouseEnter={(e) => {
+                          const target = e.target as HTMLButtonElement;
+                          target.style.transform = 'translateY(-2px)';
+                          target.style.boxShadow = activeQuizDetail.hasAttempts
+                            ? '0 8px 32px rgba(255, 165, 0, 0.4)'
+                            : '0 8px 32px rgba(0, 255, 255, 0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                          const target = e.target as HTMLButtonElement;
+                          target.style.transform = 'translateY(0)';
+                          target.style.boxShadow = activeQuizDetail.hasAttempts
+                            ? '0 4px 20px rgba(255, 165, 0, 0.3)'
+                            : '0 4px 20px rgba(0, 255, 255, 0.3)';
+                        }}
+                        disabled={activeQuizDetail.attemptsCount >= 3}
+                      >
+                        {activeQuizDetail.attemptsCount >= 3
+                          ? 'MAX ATTEMPTS REACHED'
+                          : activeQuizDetail.hasAttempts
+                          ? `RETRY VERIFICATION (${activeQuizDetail.attemptsCount}/3)`
+                          : 'BEGIN VERIFICATION'}
+                      </button>
+                    </div>
                   </div>
                 )}
               </>

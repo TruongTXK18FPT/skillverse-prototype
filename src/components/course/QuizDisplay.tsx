@@ -379,7 +379,7 @@ const QuizDisplay: React.FC<QuizDisplayProps> = ({ quiz, onComplete, onClose }) 
   const isFirstQuestion = currentQuestionIndex === 0;
 
   return (
-    <div style={{
+    <div className="learning-hud-quiz-overlay" style={{
       position: 'fixed',
       inset: 0,
       background: 'rgba(10, 14, 23, 0.95)',
@@ -394,7 +394,7 @@ const QuizDisplay: React.FC<QuizDisplayProps> = ({ quiz, onComplete, onClose }) 
       <NeuralCard style={{
         maxWidth: '900px',
         width: '100%',
-        maxHeight: '90vh',
+        maxHeight: 'calc(90vh - 80px)',
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
@@ -494,7 +494,9 @@ const QuizDisplay: React.FC<QuizDisplayProps> = ({ quiz, onComplete, onClose }) 
         <div style={{
           flex: 1,
           overflowY: 'auto',
-          padding: '2rem'
+          padding: '2rem',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
         }}>
           {renderQuestion()}
         </div>
