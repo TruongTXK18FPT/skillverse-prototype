@@ -16,7 +16,22 @@ import meowlRain from '../assets/meowl-skin/meowl-rain.png';
 import meowlNonLa from '../assets/meowl-skin/meowl-nonla.png';
 import meowlYasuo from '../assets/meowl-skin/meowl-yasuo.png';
 import meowlRobot from '../assets/meowl-skin/meowl-robotic.png';
-export type MeowlSkinType = 'default' | 'santa' | 'satan' | 'gold'|'business'|'user'|'mentor'|'t1'|'angel'|'mu'|'vietnam'|'rain'|'nonla'|'yasuo'|'robotic';
+import meowlLeesin from '../assets/meowl-skin/meowl-leesin.png';
+import meowlIronMan from '../assets/meowl-skin/meowl-ironman.png';
+import meowlShark from '../assets/meowl-skin/meowl-shark.png';
+import meowlDino from '../assets/meowl-skin/meowl-dino.png';
+import meowlGoku from '../assets/meowl-skin/meowl-goku.png';
+import meowlLuffy from '../assets/meowl-skin/meowl-luffy.png';
+import meowlChainSawMan from '../assets/meowl-skin/meowl-chainsawman.png';
+import meowlNoel from '../assets/meowl-skin/meowl-noel.png';
+import meowlDriver from '../assets/meowl-skin/meowl-driver.png';
+import meowl500IQ from '../assets/meowl-skin/meowl-500iq.png';
+import meowl6Pek from '../assets/meowl-skin/meowl-6pek.png';
+import meowlXanhSM from '../assets/meowl-skin/meowl-xanhsm.png';
+import meowlBe from '../assets/meowl-skin/meowl-be.png';
+import meowlGrab from '../assets/meowl-skin/meowl-grab.png';
+export type MeowlSkinType = 'default' | 'santa' | 'satan' | 'gold'|'business'|'user'|'mentor'|'t1'|'angel'|'mu'|'vietnam'|'rain'|'nonla'|'yasuo'|'robotic'
+|'leesin'|'ironman'|'shark'|'dino'|'goku'|'luffy'|'chainsawman'|'noel'|'driver'|'500iq'|'6pek'|'xanhsm'|'be'|'grab';
 
 interface MeowlSkin {
   id: MeowlSkinType;
@@ -115,6 +130,90 @@ export const MEOWL_SKINS: MeowlSkin[] = [
     name: 'Robot Meowl',
     nameVi: 'Meowl Robot',
     image: meowlRobot
+  },
+  {
+    id: 'leesin',
+    name: 'Leesin Meowl',
+    nameVi: 'Meowl Leesin',
+    image: meowlLeesin
+  },
+  {
+    id: 'ironman',
+    name: 'Ironman Meowl',
+    nameVi: 'Meowl Ironman',
+    image: meowlIronMan
+  },
+  {
+    id: 'shark',
+    name: 'Shark Meowl',
+    nameVi: 'Meowl Shark',
+    image: meowlShark
+  },
+  {
+    id: 'dino',
+    name: 'Dino Meowl',
+    nameVi: 'Meowl Dino',
+    image: meowlDino
+  },
+  {
+    id: 'goku',
+    name: 'Goku Meowl',
+    nameVi: 'Meowl Goku',
+    image: meowlGoku
+  },
+  {
+    id: 'luffy',
+    name: 'Luffy Meowl',
+    nameVi: 'Meowl Luffy',
+    image: meowlLuffy
+  },
+  {
+    id: 'chainsawman',
+    name: 'Chainsawman Meowl',
+    nameVi: 'Meowl Chainsawman',
+    image: meowlChainSawMan
+  },
+  {
+    id: 'noel',
+    name: 'Noel Meowl',
+    nameVi: 'Meowl Noel',
+    image: meowlNoel
+  },
+  {
+    id: 'driver',
+    name: 'Driver Meowl',
+    nameVi: 'Meowl Driver',
+    image: meowlDriver
+  },
+  {
+    id: '500iq',
+    name: '500iq Meowl',
+    nameVi: 'Meowl 500iq',
+    image: meowl500IQ
+  },
+  {
+    id: '6pek',
+    name: '6pek Meowl',
+    nameVi: 'Meowl 6pek',
+    image: meowl6Pek
+  },
+  {
+    id: 'xanhsm',
+    name: 'Xanhsm Meowl',
+    nameVi: 'Meowl Xanhsm',
+    image: meowlXanhSM
+  },
+  {
+    id: 'be',
+    name: 'Be Meowl',
+    nameVi: 'Meowl Be',
+    image: meowlBe
+  },
+  {
+    id: 'grab',
+    name: 'Grab Meowl',
+    nameVi: 'Meowl Grab',
+    image: meowlGrab
   }
 ];
 

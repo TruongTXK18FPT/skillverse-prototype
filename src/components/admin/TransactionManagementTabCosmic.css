@@ -1,6 +1,7 @@
 /* Transaction Management Tab - Cosmic Galaxy Theme */
 .admin-transaction-management-cosmic {
   padding: 0;
+  position: relative;
 }
 
 /* Header */
@@ -71,42 +72,134 @@
 }
 
 .admin-stat-card {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
-  background: rgba(15, 23, 42, 0.6);
-  border: 2px solid rgba(139, 92, 246, 0.3);
-  border-radius: 16px;
-  transition: all 0.3s ease;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
+  border-radius: 20px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.admin-stat-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.3;
+  transition: opacity 0.4s ease;
 }
 
 .admin-stat-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(139, 92, 246, 0.6);
-  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+  transform: translateY(-8px) scale(1.02);
+}
+
+.admin-stat-card:hover::before {
+  opacity: 0.5;
 }
 
 .admin-stat-card svg {
   flex-shrink: 0;
+  filter: drop-shadow(0 0 8px currentColor);
 }
 
-.admin-stat-card.revenue svg { color: #22c55e; }
-.admin-stat-card.withdrawals svg { color: #ef4444; }
+/* Revenue - Green */
+.admin-stat-card.revenue {
+  border: 2px solid rgba(34, 197, 94, 0.5);
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
+}
+.admin-stat-card.revenue::before { background: radial-gradient(circle, #22c55e 0%, transparent 70%); }
+.admin-stat-card.revenue:hover {
+  border-color: rgba(34, 197, 94, 0.8);
+  box-shadow: 0 8px 40px rgba(34, 197, 94, 0.4), 0 0 60px rgba(34, 197, 94, 0.2);
+}
+.admin-stat-card.revenue svg { color: #4ade80; }
+.admin-stat-card.revenue .admin-stat-number { color: #86efac; text-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
+
+/* Withdrawals - Red */
+.admin-stat-card.withdrawals {
+  border: 2px solid rgba(239, 68, 68, 0.5);
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.2);
+}
+.admin-stat-card.withdrawals::before { background: radial-gradient(circle, #ef4444 0%, transparent 70%); }
+.admin-stat-card.withdrawals:hover {
+  border-color: rgba(239, 68, 68, 0.8);
+  box-shadow: 0 8px 40px rgba(239, 68, 68, 0.4), 0 0 60px rgba(239, 68, 68, 0.2);
+}
+.admin-stat-card.withdrawals svg { color: #f87171; }
+.admin-stat-card.withdrawals .admin-stat-number { color: #fca5a5; text-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+
+/* Transactions - Blue */
+.admin-stat-card.transactions {
+  border: 2px solid rgba(59, 130, 246, 0.5);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+}
+.admin-stat-card.transactions::before { background: radial-gradient(circle, #3b82f6 0%, transparent 70%); }
+.admin-stat-card.transactions:hover {
+  border-color: rgba(59, 130, 246, 0.8);
+  box-shadow: 0 8px 40px rgba(59, 130, 246, 0.4), 0 0 60px rgba(59, 130, 246, 0.2);
+}
 .admin-stat-card.transactions svg { color: #60a5fa; }
-.admin-stat-card.pending svg { color: #fbbf24; }
-.admin-stat-card.today svg { color: #a78bfa; }
-.admin-stat-card.coins svg { color: #f59e0b; }
+.admin-stat-card.transactions .admin-stat-number { color: #93c5fd; text-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+
+/* Pending - Yellow */
+.admin-stat-card.pending {
+  border: 2px solid rgba(234, 179, 8, 0.5);
+  box-shadow: 0 4px 20px rgba(234, 179, 8, 0.2);
+}
+.admin-stat-card.pending::before { background: radial-gradient(circle, #eab308 0%, transparent 70%); }
+.admin-stat-card.pending:hover {
+  border-color: rgba(234, 179, 8, 0.8);
+  box-shadow: 0 8px 40px rgba(234, 179, 8, 0.4), 0 0 60px rgba(234, 179, 8, 0.2);
+}
+.admin-stat-card.pending svg { color: #facc15; }
+.admin-stat-card.pending .admin-stat-number { color: #fde047; text-shadow: 0 0 20px rgba(234, 179, 8, 0.5); }
+
+/* Today - Purple */
+.admin-stat-card.today {
+  border: 2px solid rgba(168, 85, 247, 0.5);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
+}
+.admin-stat-card.today::before { background: radial-gradient(circle, #a855f7 0%, transparent 70%); }
+.admin-stat-card.today:hover {
+  border-color: rgba(168, 85, 247, 0.8);
+  box-shadow: 0 8px 40px rgba(168, 85, 247, 0.4), 0 0 60px rgba(168, 85, 247, 0.2);
+}
+.admin-stat-card.today svg { color: #c084fc; }
+.admin-stat-card.today .admin-stat-number { color: #d8b4fe; text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
+
+/* Coins - Orange */
+.admin-stat-card.coins {
+  border: 2px solid rgba(249, 115, 22, 0.5);
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.2);
+}
+.admin-stat-card.coins::before { background: radial-gradient(circle, #f97316 0%, transparent 70%); }
+.admin-stat-card.coins:hover {
+  border-color: rgba(249, 115, 22, 0.8);
+  box-shadow: 0 8px 40px rgba(249, 115, 22, 0.4), 0 0 60px rgba(249, 115, 22, 0.2);
+}
+.admin-stat-card.coins svg { color: #fb923c; }
+.admin-stat-card.coins .admin-stat-number { color: #fdba74; text-shadow: 0 0 20px rgba(249, 115, 22, 0.5); }
 
 .admin-stat-number {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.75rem;
+  font-weight: 800;
   color: #e0e7ff;
+  line-height: 1;
 }
 
 .admin-stat-label {
-  font-size: 0.875rem;
-  color: #a5b4fc;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Filters */
@@ -419,34 +512,31 @@
 
 /* Modal */
 .admin-modal-overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  min-height: 100%;
+  background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(8px);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   z-index: 1000;
-  padding: 2rem;
-  overflow-y: auto;
+  padding: 2rem 1rem;
 }
 
 .admin-detail-modal {
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
   border: 2px solid rgba(139, 92, 246, 0.3);
   border-radius: 24px;
-  padding: 2rem;
+  padding: 0;
   max-width: 800px;
   width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
   box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.25);
-  position: relative;
-  margin: auto;
   animation: slideUp 0.3s ease-out;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 @keyframes slideUp {

@@ -1,391 +1,289 @@
-/* Create Premium Plan Modal Styles */
+/* Create Premium Plan Modal - Cosmic Theme */
 
-.premium-plan-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 2rem;
-}
-
-.premium-plan-modal-overlay *,
-.premium-plan-modal-overlay *:focus,
-.premium-plan-modal-overlay *:active {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.premium-plan-modal-content {
-  background: var(--bg-primary);
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  max-height: 90vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  border: none;
-}
-
-.premium-plan-modal {
-  width: 100%;
-  max-width: 800px;
-}
-
-/* Modal Header */
-.premium-plan-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid var(--border-primary);
-  background: var(--bg-secondary);
-}
-
-.premium-plan-modal-header h2 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-.premium-plan-modal-btn-close {
-  padding: 0.5rem;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  border-radius: 8px;
-}
-
-.premium-plan-modal-btn-close:hover {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-}
-
-/* Modal Body */
-.premium-plan-modal-body {
-  padding: 2rem;
-  overflow-y: auto;
-  flex: 1;
-}
-
-/* Error Banner */
-.premium-plan-modal-error {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  border-radius: 8px;
-  color: #ef4444;
-  margin-bottom: 1.5rem;
-}
+/* Modal uses shared styles from PremiumPlansManagementTab.css:
+   - admin-modal-overlay
+   - admin-detail-modal
+   - admin-modal-header
+   - admin-close-btn
+   - admin-modal-body
+   - admin-modal-footer
+*/
 
 /* Form Grid */
-.premium-plan-modal-form-grid {
+.admin-form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
 }
 
-.premium-plan-modal-form-group {
+.admin-form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.premium-plan-modal-form-group.full-width {
+.admin-form-group.full-width {
   grid-column: 1 / -1;
 }
 
-.premium-plan-modal-form-group label {
+.admin-form-group label {
+  color: #a5b4fc;
   font-weight: 600;
-  color: var(--text-primary);
   font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.required {
+.admin-form-group label .required {
   color: #ef4444;
 }
 
-.premium-plan-modal-form-group input,
-.premium-plan-modal-form-group select,
-.premium-plan-modal-form-group textarea {
+.admin-form-group input,
+.admin-form-group select,
+.admin-form-group textarea {
   padding: 0.75rem;
-  border: 1px solid var(--border-primary);
-  border-radius: 8px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  font-size: 0.9375rem;
-}
-
-.premium-plan-modal-form-group input:focus,
-.premium-plan-modal-form-group select:focus,
-.premium-plan-modal-form-group textarea:focus {
-  outline: none;
-  border-color: #667eea;
-}
-
-.premium-plan-modal-form-group textarea {
-  resize: vertical;
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.6);
+  color: #e0e7ff;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
   font-family: inherit;
 }
 
-.premium-plan-modal-form-group small {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+.admin-form-group input:focus,
+.admin-form-group select:focus,
+.admin-form-group textarea:focus {
+  outline: none;
+  border-color: rgba(139, 92, 246, 0.6);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.admin-form-group input:disabled,
+.admin-form-group select:disabled,
+.admin-form-group textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-form-group input::placeholder,
+.admin-form-group textarea::placeholder {
+  color: #64748b;
+}
+
+.admin-form-group small {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+/* Error & Info Banners */
+.admin-form-error,
+.admin-form-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.admin-form-error {
+  background: rgba(239, 68, 68, 0.2);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.admin-form-error svg {
+  color: #ef4444;
+  flex-shrink: 0;
+}
+
+.admin-form-info {
+  background: rgba(59, 130, 246, 0.2);
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  color: #93c5fd;
+}
+
+.admin-form-info svg {
+  color: #3b82f6;
+  flex-shrink: 0;
 }
 
 /* Features List */
-.premium-plan-modal-features-list {
+.admin-features-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.premium-plan-modal-feature-item {
+.admin-feature-input {
   display: flex;
   gap: 0.5rem;
-  align-items: center;
 }
 
-.premium-plan-modal-feature-item input {
+.admin-feature-input input {
   flex: 1;
 }
 
-.premium-plan-modal-btn-remove-feature {
-  padding: 0.75rem;
-  background: rgba(239, 68, 68, 0.1);
-  border: none;
-  border-radius: 8px;
-  color: #ef4444;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.admin-feature-input .admin-action-btn {
+  flex-shrink: 0;
 }
 
-.premium-plan-modal-btn-remove-feature:hover {
-  background: rgba(239, 68, 68, 0.2);
-}
-
-.premium-plan-modal-btn-add {
+.admin-btn-add-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem;
-  background: var(--bg-tertiary);
-  border: 1px dashed var(--border-primary);
+  padding: 0.75rem 1rem;
+  background: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+  border: 2px solid rgba(139, 92, 246, 0.3);
   border-radius: 8px;
-  color: #667eea;
   cursor: pointer;
-  font-weight: 500;
-}
-
-.premium-plan-modal-btn-add:hover {
-  background: var(--bg-secondary);
-  border-color: #667eea;
-}
-
-/* Checkbox */
-.premium-plan-modal-checkbox {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  cursor: pointer;
-  padding: 0.75rem;
-  border-radius: 8px;
-}
-
-.premium-plan-modal-checkbox:hover {
-  background: var(--bg-tertiary);
-}
-
-.premium-plan-modal-checkbox input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  accent-color: #667eea;
-}
-
-.premium-plan-modal-checkbox span {
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-/* Modal Footer */
-.premium-plan-modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  padding: 1.5rem 2rem;
-  border-top: 1px solid var(--border-primary);
-}
-
-.premium-plan-modal-btn-primary,
-.premium-plan-modal-btn-secondary {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
   font-weight: 600;
-  cursor: pointer;
-  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
 }
 
-.premium-plan-modal-btn-primary {
-  background: #667eea;
-  color: white;
+.admin-btn-add-item:hover {
+  background: rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.5);
+  transform: translateY(-2px);
 }
 
-.premium-plan-modal-btn-primary:hover:not(:disabled) {
-  background: #5568d3;
-}
-
-.premium-plan-modal-btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.premium-plan-modal-btn-secondary {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-primary);
-}
-
-.premium-plan-modal-btn-secondary:hover:not(:disabled) {
-  background: var(--bg-secondary);
-}
-
-/* Feature Limits Section */
-.premium-modal-section-header {
+/* Section Header */
+.admin-section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
 }
 
-.premium-modal-section-header label {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary);
+.admin-section-header label {
+  margin: 0;
 }
 
-.premium-modal-feature-limits-list {
+/* Feature Limits */
+.admin-feature-limits-list {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.premium-modal-limit-item {
-  position: relative;
+.admin-limit-item {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
-  padding: 1.5rem;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
+  padding: 1rem;
+  background: rgba(139, 92, 246, 0.05);
+  border: 2px solid rgba(139, 92, 246, 0.2);
   border-radius: 12px;
+  position: relative;
 }
 
-.premium-modal-limit-field {
+.admin-limit-field {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.premium-modal-limit-field.full-width {
+.admin-limit-field.full-width {
   grid-column: 1 / -1;
 }
 
-.premium-modal-limit-field.checkbox-field {
-  align-self: flex-end;
+.admin-limit-field.checkbox-field {
+  flex-direction: row;
+  align-items: center;
 }
 
-.premium-modal-limit-field label {
-  font-size: 0.8125rem;
+.admin-limit-field label {
+  color: #a5b4fc;
   font-weight: 600;
-  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
 }
 
-.premium-modal-limit-field input,
-.premium-modal-limit-field select {
-  padding: 0.625rem;
-  border: 1px solid var(--border-primary);
-  border-radius: 6px;
-  background: var(--bg-primary);
-  color: var(--text-primary);
+.admin-limit-field input,
+.admin-limit-field select {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  color: #e0e7ff;
   font-size: 0.875rem;
+  transition: all 0.2s ease;
 }
 
-.premium-modal-limit-field input:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  background: var(--bg-tertiary);
+.admin-limit-field input:focus,
+.admin-limit-field select:focus {
+  outline: none;
+  border-color: rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.15);
 }
 
-.premium-modal-btn-remove-limit {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  padding: 0.5rem;
-  background: rgba(239, 68, 68, 0.1);
-  border: none;
-  border-radius: 6px;
-  color: #ef4444;
-  cursor: pointer;
+.admin-limit-field input:disabled {
+  opacity: 0.4;
+}
+
+/* Checkbox in limit field */
+.admin-limit-field label {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  user-select: none;
 }
 
-.premium-modal-btn-remove-limit:hover {
-  background: rgba(239, 68, 68, 0.2);
+.admin-limit-field input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #a855f7;
 }
 
-.premium-modal-no-limits {
-  padding: 2rem;
-  text-align: center;
-  color: var(--text-secondary);
-  background: var(--bg-secondary);
-  border: 1px dashed var(--border-primary);
+.admin-limit-field input[type="checkbox"] + span {
+  color: #e0e7ff;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Delete limit button */
+.admin-limit-item > .admin-action-btn.delete {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+/* Empty hint */
+.admin-empty-hint {
+  color: #94a3b8;
+  font-style: italic;
+  margin: 1rem 0 0 0;
+  padding: 1rem;
+  background: rgba(139, 92, 246, 0.05);
   border-radius: 8px;
-  font-size: 0.875rem;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .premium-plan-modal-overlay {
-    padding: 1rem;
-  }
-
-  .premium-plan-modal {
-    max-width: 100%;
-  }
-
-  .premium-plan-modal-header,
-  .premium-plan-modal-body,
-  .premium-plan-modal-footer {
-    padding: 1.5rem;
-  }
-
-  .premium-plan-modal-form-grid {
+  .admin-form-grid {
     grid-template-columns: 1fr;
   }
 
-  .premium-modal-limit-item {
+  .admin-limit-item {
     grid-template-columns: 1fr;
   }
 
-  .premium-modal-section-header {
+  .admin-modal-footer {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
+  }
+
+  .admin-action-btn {
+    width: 100%;
+    justify-content: center;
   }
 }

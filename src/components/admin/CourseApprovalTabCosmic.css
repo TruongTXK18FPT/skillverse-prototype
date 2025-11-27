@@ -4,6 +4,7 @@
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   min-height: 100vh;
   color: #e0e7ff;
+  position: relative;
 }
 
 /* Stats Grid */
@@ -15,69 +16,135 @@
 }
 
 .course-approval-stat-card {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.8) 100%);
-  border: 2px solid rgba(139, 92, 246, 0.3);
-  border-radius: 16px;
+  position: relative;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
+  border-radius: 20px;
   padding: 1.5rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.course-approval-stat-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.3;
+  transition: opacity 0.4s ease;
 }
 
 .course-approval-stat-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(139, 92, 246, 0.6);
-  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+  transform: translateY(-8px) scale(1.02);
 }
 
-.course-approval-stat-card .stat-icon {
+.course-approval-stat-card:hover::before {
+  opacity: 0.5;
+}
+
+.course-approval-stat-card .cosmic-stat-icon {
   width: 56px;
   height: 56px;
-  border-radius: 12px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
+  flex-shrink: 0;
 }
 
-.course-approval-stat-card.pending .stat-icon {
-  background: rgba(251, 191, 36, 0.2);
-  color: #fbbf24;
+/* Pending - Amber/Yellow */
+.course-approval-stat-card.pending {
+  border: 2px solid rgba(251, 191, 36, 0.5);
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.2);
 }
-
-.course-approval-stat-card.approved .stat-icon {
-  background: rgba(34, 197, 94, 0.2);
-  color: #22c55e;
+.course-approval-stat-card.pending::before { background: radial-gradient(circle, #fbbf24 0%, transparent 70%); }
+.course-approval-stat-card.pending:hover {
+  border-color: rgba(251, 191, 36, 0.8);
+  box-shadow: 0 8px 40px rgba(251, 191, 36, 0.4), 0 0 60px rgba(251, 191, 36, 0.2);
 }
-
-.course-approval-stat-card.rejected .stat-icon {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
+.course-approval-stat-card.pending .cosmic-stat-icon {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.5);
 }
+.course-approval-stat-card.pending .cosmic-stat-value { color: #fde047; text-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
 
-.course-approval-stat-card.rating .stat-icon {
-  background: rgba(168, 85, 247, 0.2);
-  color: #a855f7;
+/* Approved - Green */
+.course-approval-stat-card.approved {
+  border: 2px solid rgba(34, 197, 94, 0.5);
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
 }
+.course-approval-stat-card.approved::before { background: radial-gradient(circle, #22c55e 0%, transparent 70%); }
+.course-approval-stat-card.approved:hover {
+  border-color: rgba(34, 197, 94, 0.8);
+  box-shadow: 0 8px 40px rgba(34, 197, 94, 0.4), 0 0 60px rgba(34, 197, 94, 0.2);
+}
+.course-approval-stat-card.approved .cosmic-stat-icon {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.5);
+}
+.course-approval-stat-card.approved .cosmic-stat-value { color: #86efac; text-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
 
-.course-approval-stat-card .stat-content {
+/* Rejected - Red */
+.course-approval-stat-card.rejected {
+  border: 2px solid rgba(239, 68, 68, 0.5);
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.2);
+}
+.course-approval-stat-card.rejected::before { background: radial-gradient(circle, #ef4444 0%, transparent 70%); }
+.course-approval-stat-card.rejected:hover {
+  border-color: rgba(239, 68, 68, 0.8);
+  box-shadow: 0 8px 40px rgba(239, 68, 68, 0.4), 0 0 60px rgba(239, 68, 68, 0.2);
+}
+.course-approval-stat-card.rejected .cosmic-stat-icon {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.5);
+}
+.course-approval-stat-card.rejected .cosmic-stat-value { color: #fca5a5; text-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+
+/* Rating - Purple */
+.course-approval-stat-card.rating {
+  border: 2px solid rgba(168, 85, 247, 0.5);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
+}
+.course-approval-stat-card.rating::before { background: radial-gradient(circle, #a855f7 0%, transparent 70%); }
+.course-approval-stat-card.rating:hover {
+  border-color: rgba(168, 85, 247, 0.8);
+  box-shadow: 0 8px 40px rgba(168, 85, 247, 0.4), 0 0 60px rgba(168, 85, 247, 0.2);
+}
+.course-approval-stat-card.rating .cosmic-stat-icon {
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.5);
+}
+.course-approval-stat-card.rating .cosmic-stat-value { color: #d8b4fe; text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
+
+.course-approval-stat-card .cosmic-stat-content {
   flex: 1;
 }
 
-.course-approval-stat-card .stat-value {
+.course-approval-stat-card .cosmic-stat-value {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 800;
   color: #e0e7ff;
   line-height: 1;
   margin-bottom: 0.5rem;
 }
 
-.course-approval-stat-card .stat-label {
-  font-size: 0.875rem;
-  color: #a5b4fc;
+.course-approval-stat-card .cosmic-stat-label {
+  font-size: 0.85rem;
+  color: #94a3b8;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  font-weight: 600;
 }
 
 /* Filters */
@@ -188,13 +255,13 @@
 }
 
 /* Course Info */
-.course-info {
+.cosmic-course-info {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.course-thumbnail {
+.cosmic-course-thumbnail {
   width: 60px;
   height: 60px;
   border-radius: 8px;
@@ -206,25 +273,25 @@
   color: white;
 }
 
-.course-thumbnail img {
+.cosmic-course-thumbnail img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.course-title {
+.cosmic-course-title {
   font-weight: 600;
   color: #e0e7ff;
   margin-bottom: 0.25rem;
 }
 
-.course-subtitle {
+.cosmic-course-subtitle {
   font-size: 0.875rem;
   color: #a5b4fc;
 }
 
-.instructor-info,
-.date-info {
+.cosmic-instructor-info,
+.cosmic-date-info {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -232,7 +299,7 @@
   font-size: 0.875rem;
 }
 
-.category-badge {
+.cosmic-category-badge {
   display: inline-block;
   padding: 0.375rem 0.75rem;
   background: rgba(96, 165, 250, 0.2);
@@ -243,7 +310,7 @@
   font-weight: 600;
 }
 
-.status-badge {
+.cosmic-status-badge {
   display: inline-block;
   padding: 0.375rem 0.75rem;
   border-radius: 8px;
@@ -251,31 +318,31 @@
   font-weight: 600;
 }
 
-.status-badge.pending {
+.cosmic-status-badge.pending {
   background: rgba(251, 191, 36, 0.2);
   color: #fbbf24;
   border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
-.status-badge.approved {
+.cosmic-status-badge.approved {
   background: rgba(34, 197, 94, 0.2);
   color: #22c55e;
   border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
-.status-badge.rejected {
+.cosmic-status-badge.rejected {
   background: rgba(239, 68, 68, 0.2);
   color: #ef4444;
   border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 /* Action Buttons */
-.action-buttons {
+.cosmic-action-buttons {
   display: flex;
   gap: 0.5rem;
 }
 
-.action-btn {
+.cosmic-action-btn {
   width: 36px;
   height: 36px;
   border-radius: 8px;
@@ -287,35 +354,35 @@
   transition: all 0.2s ease;
 }
 
-.action-btn.view {
+.cosmic-action-btn.view {
   background: rgba(59, 130, 246, 0.2);
   color: #60a5fa;
   border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
-.action-btn.view:hover {
+.cosmic-action-btn.view:hover {
   background: rgba(59, 130, 246, 0.3);
   transform: translateY(-2px);
 }
 
-.action-btn.approve {
+.cosmic-action-btn.approve {
   background: rgba(34, 197, 94, 0.2);
   color: #22c55e;
   border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
-.action-btn.approve:hover {
+.cosmic-action-btn.approve:hover {
   background: rgba(34, 197, 94, 0.3);
   transform: translateY(-2px);
 }
 
-.action-btn.reject {
+.cosmic-action-btn.reject {
   background: rgba(239, 68, 68, 0.2);
   color: #ef4444;
   border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-.action-btn.reject:hover {
+.cosmic-action-btn.reject:hover {
   background: rgba(239, 68, 68, 0.3);
   transform: translateY(-2px);
 }
@@ -331,7 +398,7 @@
   text-align: center;
 }
 
-.loading-spinner {
+.cosmic-loading-spinner {
   width: 48px;
   height: 48px;
   border: 4px solid rgba(139, 92, 246, 0.2);
@@ -374,7 +441,7 @@
   border-radius: 16px;
 }
 
-.pagination-btn {
+.cosmic-pagination-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -388,18 +455,18 @@
   transition: all 0.2s ease;
 }
 
-.pagination-btn:hover:not(:disabled) {
+.cosmic-pagination-btn:hover:not(:disabled) {
   background: rgba(139, 92, 246, 0.3);
   border-color: rgba(139, 92, 246, 0.5);
   transform: translateY(-2px);
 }
 
-.pagination-btn:disabled {
+.cosmic-pagination-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
-.pagination-info {
+.cosmic-pagination-info {
   color: #e0e7ff;
   font-weight: 600;
   font-size: 1rem;
@@ -407,19 +474,18 @@
 
 /* Modal */
 .cosmic-modal-overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  min-height: 100%;
+  background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(8px);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   z-index: 1000;
-  padding: 2rem;
-  overflow-y: auto;
+  padding: 2rem 1rem;
 }
 
 .cosmic-modal {
@@ -428,18 +494,16 @@
   border-radius: 24px;
   max-width: 800px;
   width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
   box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.25);
-  position: relative;
-  margin: auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .cosmic-modal.small {
   max-width: 500px;
 }
 
-.modal-header {
+.cosmic-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -447,14 +511,14 @@
   border-bottom: 2px solid rgba(139, 92, 246, 0.2);
 }
 
-.modal-header h2 {
+.cosmic-modal-header h2 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
   color: #e0e7ff;
 }
 
-.close-btn {
+.cosmic-close-btn {
   background: none;
   border: none;
   font-size: 2rem;
@@ -467,34 +531,34 @@
   transition: all 0.2s ease;
 }
 
-.close-btn:hover {
+.cosmic-close-btn:hover {
   color: #e0e7ff;
   transform: rotate(90deg);
 }
 
-.modal-body {
+.cosmic-modal-body {
   padding: 2rem;
 }
 
-.course-detail-section h3 {
+.cosmic-course-detail-section h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.75rem;
   color: #e0e7ff;
 }
 
-.course-detail-section .subtitle {
+.cosmic-course-detail-section .subtitle {
   color: #a5b4fc;
   margin-bottom: 2rem;
 }
 
-.detail-grid {
+.cosmic-detail-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
 }
 
-.detail-item {
+.cosmic-detail-item {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
@@ -503,25 +567,25 @@
   border-radius: 12px;
 }
 
-.detail-item svg {
+.cosmic-detail-item svg {
   color: #8b5cf6;
   flex-shrink: 0;
   margin-top: 0.25rem;
 }
 
-.detail-item .label {
+.cosmic-detail-item .label {
   color: #a5b4fc;
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
 }
 
-.detail-item .value {
+.cosmic-detail-item .value {
   color: #e0e7ff;
   font-weight: 600;
 }
 
-.description h4,
-.modules-section h4 {
+.cosmic-description h4,
+.cosmic-modules-section h4 {
   margin: 2rem 0 1rem 0;
   color: #a5b4fc;
   font-size: 1rem;
@@ -529,12 +593,12 @@
   letter-spacing: 0.5px;
 }
 
-.description p {
+.cosmic-description p {
   color: #e0e7ff;
   line-height: 1.6;
 }
 
-.module-item {
+.cosmic-module-item {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -545,11 +609,11 @@
   color: #e0e7ff;
 }
 
-.module-item svg {
+.cosmic-module-item svg {
   color: #8b5cf6;
 }
 
-.modal-footer {
+.cosmic-modal-footer {
   display: flex;
   gap: 1rem;
   padding: 1.5rem 2rem;
@@ -557,7 +621,7 @@
   justify-content: flex-end;
 }
 
-.modal-footer button {
+.cosmic-modal-footer button {
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
   font-weight: 600;

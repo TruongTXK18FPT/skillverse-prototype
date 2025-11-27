@@ -84,5 +84,30 @@ export const paymentService = {
       params: { startDate, endDate }
     });
     return data;
+  },
+
+  /**
+   * Get revenue breakdown by time period
+   * @param period - "daily", "weekly", "monthly", "yearly"
+   * @param days - lookback period
+   */
+  async adminGetRevenueBreakdown(period: string = 'daily', days: number = 30): Promise<{
+    period: string;
+    data: Array<{
+      date?: string;
+      week?: string;
+      month?: string;
+      year?: number;
+      revenue: number;
+      transactions: number;
+    }>;
+    totalRevenue: number;
+    totalTransactions: number;
+    dataPoints: number;
+  }> {
+    const { data } = await api.get('/api/admin/payments/revenue-breakdown', {
+      params: { period, days }
+    });
+    return data;
   }
 };

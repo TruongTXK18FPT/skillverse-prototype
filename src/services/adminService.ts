@@ -46,6 +46,8 @@ class AdminService {
         throw new Error('Rejection reason is required when rejecting an application');
       }
 
+      console.log('📤 Sending application process request:', JSON.stringify(request, null, 2));
+      
       const response = await axiosInstance.post<AdminApprovalResponse>(
         `${this.BASE_URL}/applications/process`,
         request
@@ -53,8 +55,11 @@ class AdminService {
       
       console.log(`✅ Successfully ${request.action.toLowerCase()}ed ${request.applicationType} application for user ${request.userId}`);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Error processing application:', error);
+      console.error('📋 Request was:', JSON.stringify(request, null, 2));
+      console.error('📋 Error response:', error.response?.data);
+      console.error('📋 Error status:', error.response?.status);
       throw error;
     }
   }

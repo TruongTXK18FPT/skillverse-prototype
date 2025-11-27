@@ -162,6 +162,19 @@ class CareerChatService {
     const response = await axiosInstance.get<string[]>(`${this.EXPERT_FIELDS_URL}/roles`);
     return response.data;
   }
+
+  // ==================== ADMIN ENDPOINTS ====================
+
+  /**
+   * Get chat statistics for admin dashboard
+   * Returns total sessions and messages count
+   */
+  async getAdminStats(): Promise<{ totalSessions: number; totalMessages: number }> {
+    const response = await axiosInstance.get<{ totalSessions: number; totalMessages: number }>(
+      `${this.BASE_URL}/admin/stats`
+    );
+    return response.data;
+  }
 }
 
 export default new CareerChatService();

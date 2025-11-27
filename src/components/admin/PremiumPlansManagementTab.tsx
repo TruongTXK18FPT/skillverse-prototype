@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Crown, Plus, Edit, Trash2, Power, Users, DollarSign, Calendar, AlertCircle } from 'lucide-react';
+import {
+  Crown, Plus, Edit, Trash2, Power, Users, DollarSign, Calendar,
+  AlertCircle, RefreshCw, Eye, X, ChevronLeft, ChevronRight,
+  Zap, Gift, TrendingUp
+} from 'lucide-react';
 import * as adminPremiumService from '../../services/adminPremiumService';
 import { AdminPremiumPlan } from '../../services/adminPremiumService';
 import CreatePremiumPlanModal from './CreatePremiumPlanModal';
@@ -11,6 +15,10 @@ const PremiumPlansManagementTab: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingPlan, setEditingPlan] = useState<AdminPremiumPlan | null>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<AdminPremiumPlan | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
 
   useEffect(() => {
     loadPlans();
@@ -95,12 +103,26 @@ const PremiumPlansManagementTab: React.FC = () => {
     }
   };
 
+  const handleViewDetail = (plan: AdminPremiumPlan) => {
+    setSelectedPlan(plan);
+    setShowDetailModal(true);
+  };
+
+  const totalPages = Math.ceil(plans.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPlans = plans.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [plans]);
+
   if (loading) {
     return (
-      <div className="premium-plans-tab">
-        <div className="loading-state">
-          <div className="spinner"></div>
-          <p>Đang tải danh sách premium plans...</p>
+      <div className="admin-premium-management-cosmic">
+        <div className="admin-loading-state">
+          <RefreshCw size={48} className="spinning" />
+          <p>Đang tải dữ liệu...</p>
         </div>
       </div>
     );
@@ -108,12 +130,12 @@ const PremiumPlansManagementTab: React.FC = () => {
 
   if (error) {
     return (
-      <div className="premium-plans-tab">
-        <div className="error-state">
-          <AlertCircle size={48} />
+      <div className="admin-premium-management-cosmic">
+        <div className="admin-empty-state">
+          <AlertCircle size={64} />
           <h3>Lỗi tải dữ liệu</h3>
           <p>{error}</p>
-          <button onClick={loadPlans} className="btn-retry">Thử lại</button>
+          <button onClick={loadPlans} className="admin-action-btn save">Thử lại</button>
         </div>
       </div>
     );
@@ -123,83 +145,74 @@ const PremiumPlansManagementTab: React.FC = () => {
   const canCreateMore = nonFreePlans.length < 4;
 
   return (
-    <div className="premium-plans-tab">
+    <div className="admin-premium-management-cosmic">
       {/* Header */}
-      <div className="tab-header">
-        <div className="header-left">
-          <Crown size={32} className="header-icon" />
-          <div>
-            <h2>Quản Lý Gói Premium</h2>
-            <p>Quản lý các gói đăng ký premium của hệ thống ({nonFreePlans.length}/4 gói)</p>
-          </div>
+      <div className="admin-premium-header">
+        <div>
+          <h2>Quản Lý Gói Premium</h2>
+          <p>Quản lý các gói đăng ký premium của hệ thống</p>
         </div>
-        <button
-          onClick={handleCreatePlan}
-          className={`btn-create ${!canCreateMore ? 'disabled' : ''}`}
-          disabled={!canCreateMore}
-          title={!canCreateMore ? 'Đã đạt giới hạn 4 gói premium' : 'Tạo gói premium mới'}
-        >
-          <Plus size={20} />
-          Tạo Gói Mới
-        </button>
+        <div className="admin-header-actions">
+          <button className="admin-refresh-btn" onClick={loadPlans} disabled={loading}>
+            <RefreshCw size={18} className={loading ? 'spinning' : ''} />
+            Làm mới
+          </button>
+          <button
+            onClick={handleCreatePlan}
+            className={`admin-create-btn ${!canCreateMore ? 'disabled' : ''}`}
+            disabled={!canCreateMore}
+            title={!canCreateMore ? 'Đã đạt giới hạn 4 gói premium' : 'Tạo gói premium mới'}
+          >
+            <Plus size={18} />
+            Tạo Gói Mới
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="premium-plans-stats-grid">
-        <div className="premium-plans-stat-card">
-          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
-            <Crown size={24} />
-          </div>
-          <div className="stat-content">
-            <div className="stat-value">{plans.length}</div>
-            <div className="stat-label">Tổng Gói</div>
+      <div className="admin-premium-stats">
+        <div className="admin-stat-card total">
+          <Crown size={32} />
+          <div>
+            <div className="admin-stat-number">{plans.length}</div>
+            <div className="admin-stat-label">Tổng Gói</div>
           </div>
         </div>
-        <div className="premium-plans-stat-card">
-          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
-            <Users size={24} />
-          </div>
-          <div className="stat-content">
-            <div className="stat-value">
-              {plans.reduce((sum, p) => sum + p.currentSubscribers, 0)}
-            </div>
-            <div className="stat-label">Tổng Người Dùng</div>
+        <div className="admin-stat-card subscribers">
+          <Users size={32} />
+          <div>
+            <div className="admin-stat-number">{plans.reduce((sum, p) => sum + p.currentSubscribers, 0)}</div>
+            <div className="admin-stat-label">Tổng Người Dùng</div>
           </div>
         </div>
-        <div className="premium-plans-stat-card">
-          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
-            <DollarSign size={24} />
-          </div>
-          <div className="stat-content">
-            <div className="stat-value">
+        <div className="admin-stat-card revenue">
+          <TrendingUp size={32} />
+          <div>
+            <div className="admin-stat-number">
               {adminPremiumService.formatPrice(
                 plans.reduce((sum, p) => sum + p.totalRevenue, 0)
               )}
             </div>
-            <div className="stat-label">Tổng Doanh Thu</div>
+            <div className="admin-stat-label">Doanh Thu</div>
           </div>
         </div>
-        <div className="premium-plans-stat-card">
-          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
-            <Power size={24} />
-          </div>
-          <div className="stat-content">
-            <div className="stat-value">
-              {plans.filter(p => p.isActive).length}/{plans.length}
-            </div>
-            <div className="stat-label">Gói Đang Hoạt Động</div>
+        <div className="admin-stat-card active">
+          <Zap size={32} />
+          <div>
+            <div className="admin-stat-number">{plans.filter(p => p.isActive).length}/{plans.length}</div>
+            <div className="admin-stat-label">Đang Hoạt Động</div>
           </div>
         </div>
       </div>
 
       {/* Plans Table */}
-      <div className="plans-table-container">
-        <table className="plans-table">
+      <div className="admin-plans-table">
+        <table>
           <thead>
             <tr>
               <th>Gói</th>
               <th>Loại</th>
-              <th>Giá</th>
+              <th>Giá / Sinh Viên</th>
               <th>Thời Hạn</th>
               <th>Người Dùng</th>
               <th>Doanh Thu</th>
@@ -208,75 +221,79 @@ const PremiumPlansManagementTab: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {plans.map((plan) => (
-              <tr key={plan.id} className={plan.isFreeTier ? 'free-tier-row' : ''}>
+            {currentPlans.map((plan) => (
+              <tr key={plan.id} className={plan.isFreeTier ? 'free-tier' : ''}>
                 <td>
-                  <div className="plan-name-cell">
-                    {plan.isFreeTier && <Crown size={16} className="free-tier-icon" />}
+                  <div className="admin-plan-name">
+                    {plan.isFreeTier && <Crown size={16} />}
                     <div>
-                      <div className="plan-display-name">{plan.displayName}</div>
-                      <div className="plan-name-code">{plan.name}</div>
+                      <div className="name">{plan.displayName}</div>
+                      <div className="code">{plan.name}</div>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <span className={`plan-type-badge ${plan.planType.toLowerCase()}`}>
+                  <span className={`admin-plan-type-badge ${plan.planType.toLowerCase()}`}>
                     {adminPremiumService.getPlanTypeDisplayName(plan.planType)}
                   </span>
                 </td>
                 <td>
-                  <div className="price-cell">
-                    <div className="price-main">{adminPremiumService.formatPrice(plan.price)}</div>
+                  <div className="admin-price-info">
+                    <span className="main">{adminPremiumService.formatPrice(plan.price)}</span>
                     {plan.studentDiscountPercent > 0 && (
-                      <div className="price-student">
-                        SV: {adminPremiumService.formatPrice(plan.studentPrice)}
-                      </div>
+                      <span className="student">{adminPremiumService.formatPrice(plan.studentPrice)}</span>
                     )}
                   </div>
                 </td>
                 <td>
-                  <div className="duration-cell">
+                  <div className="admin-duration">
                     <Calendar size={14} />
                     {plan.durationMonths === 2147483647 ? 'Vĩnh viễn' : `${plan.durationMonths} tháng`}
                   </div>
                 </td>
                 <td>
-                  <div className="subscribers-cell">
+                  <div className="admin-subscribers">
                     <Users size={14} />
-                    {plan.currentSubscribers}
-                    {plan.maxSubscribers && ` / ${plan.maxSubscribers}`}
+                    {plan.currentSubscribers}{plan.maxSubscribers && ` / ${plan.maxSubscribers}`}
                   </div>
                 </td>
                 <td>
-                  <div className="revenue-cell">
+                  <span className="admin-revenue">
                     {adminPremiumService.formatPrice(plan.totalRevenue)}
-                  </div>
+                  </span>
                 </td>
                 <td>
-                  <span className={`status-badge ${plan.isActive ? 'active' : 'inactive'}`}>
+                  <span className={`admin-status-badge ${plan.isActive ? 'active' : 'inactive'}`}>
                     {plan.isActive ? 'Hoạt động' : 'Tạm dừng'}
                   </span>
                 </td>
                 <td>
-                  <div className="action-buttons">
+                  <div className="admin-action-buttons">
                     <button
+                      className="admin-action-btn view"
+                      onClick={() => handleViewDetail(plan)}
+                      title="Xem chi tiết"
+                    >
+                      <Eye size={16} />
+                    </button>
+                    <button
+                      className="admin-action-btn edit"
                       onClick={() => handleEditPlan(plan)}
-                      className="btn-action btn-edit"
                       title={plan.isFreeTier ? "Chỉnh sửa giới hạn tính năng" : "Chỉnh sửa"}
                     >
                       <Edit size={16} />
                     </button>
                     <button
+                      className={`admin-action-btn toggle ${plan.isActive ? 'active' : 'inactive'}`}
                       onClick={() => handleToggleActive(plan)}
-                      className={`btn-action btn-toggle ${plan.isActive ? 'active' : 'inactive'}`}
                       title={plan.isActive ? 'Tắt' : 'Bật'}
                       disabled={plan.isFreeTier && plan.isActive}
                     >
                       <Power size={16} />
                     </button>
                     <button
+                      className="admin-action-btn delete"
                       onClick={() => handleDeletePlan(plan)}
-                      className="btn-action btn-delete"
                       title="Xóa"
                       disabled={plan.isFreeTier || plan.currentSubscribers > 0}
                     >
@@ -290,19 +307,156 @@ const PremiumPlansManagementTab: React.FC = () => {
         </table>
       </div>
 
-      {/* Info Box */}
-      <div className="info-box">
-        <AlertCircle size={20} />
-        <div>
-          <strong>Lưu ý:</strong>
-          <ul>
-            <li>Tối đa 4 gói premium (không tính FREE_TIER)</li>
-            <li>Gói FREE_TIER: Chỉ có thể chỉnh sửa giới hạn tính năng, không thể xóa hoặc tắt</li>
-            <li>Không thể xóa gói đang có người dùng đăng ký</li>
-            <li>Giá và thời hạn có thể thay đổi cho các đăng ký mới</li>
-          </ul>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="admin-pagination">
+          <button
+            className="admin-pagination-btn"
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft size={18} />
+            Trước
+          </button>
+
+          <div className="admin-pagination-info">
+            <span>Trang {currentPage} / {totalPages}</span>
+            <span className="admin-pagination-total">({plans.length} gói)</span>
+          </div>
+
+          <button
+            className="admin-pagination-btn"
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+          >
+            Sau
+            <ChevronRight size={18} />
+          </button>
         </div>
-      </div>
+      )}
+
+      {plans.length === 0 && !loading && (
+        <div className="admin-empty-state">
+          <Gift size={64} />
+          <h3>Chưa có gói premium</h3>
+          <p>Tạo gói premium đầu tiên của bạn</p>
+        </div>
+      )}
+
+      {/* Detail Modal */}
+      {showDetailModal && selectedPlan && (
+        <div className="admin-modal-overlay" onClick={() => setShowDetailModal(false)}>
+          <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3>Chi Tiết Gói Premium</h3>
+              <button className="admin-close-btn" onClick={() => setShowDetailModal(false)}>
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="admin-modal-body">
+              {/* Basic Info */}
+              <div className="admin-detail-section">
+                <h4>Thông Tin Cơ Bản</h4>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item">
+                    <Crown size={18} />
+                    <div>
+                      <div className="label">Tên Gói</div>
+                      <div className="value">{selectedPlan.displayName}</div>
+                    </div>
+                  </div>
+                  <div className="admin-detail-item">
+                    <Gift size={18} />
+                    <div>
+                      <div className="label">Loại</div>
+                      <div className="value">{adminPremiumService.getPlanTypeDisplayName(selectedPlan.planType)}</div>
+                    </div>
+                  </div>
+                  <div className="admin-detail-item">
+                    <DollarSign size={18} />
+                    <div>
+                      <div className="label">Giá</div>
+                      <div className="value">{adminPremiumService.formatPrice(selectedPlan.price)}</div>
+                    </div>
+                  </div>
+                  <div className="admin-detail-item">
+                    <Calendar size={18} />
+                    <div>
+                      <div className="label">Thời Hạn</div>
+                      <div className="value">{selectedPlan.durationMonths === 2147483647 ? 'Vĩnh viễn' : `${selectedPlan.durationMonths} tháng`}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Statistics */}
+              <div className="admin-detail-section">
+                <h4>Thống Kê</h4>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item">
+                    <Users size={18} />
+                    <div>
+                      <div className="label">Người Dùng</div>
+                      <div className="value">{selectedPlan.currentSubscribers}{selectedPlan.maxSubscribers && ` / ${selectedPlan.maxSubscribers}`}</div>
+                    </div>
+                  </div>
+                  <div className="admin-detail-item">
+                    <TrendingUp size={18} />
+                    <div>
+                      <div className="label">Doanh Thu</div>
+                      <div className="value">{adminPremiumService.formatPrice(selectedPlan.totalRevenue)}</div>
+                    </div>
+                  </div>
+                  <div className="admin-detail-item">
+                    <Zap size={18} />
+                    <div>
+                      <div className="label">Trạng Thái</div>
+                      <div className="value">{selectedPlan.isActive ? 'Hoạt động' : 'Tạm dừng'}</div>
+                    </div>
+                  </div>
+                  <div className="admin-detail-item">
+                    <Calendar size={18} />
+                    <div>
+                      <div className="label">Ngày Tạo</div>
+                      <div className="value">{new Date(selectedPlan.createdAt).toLocaleDateString('vi-VN')}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Description */}
+              {selectedPlan.description && (
+                <div className="admin-detail-section">
+                  <h4>Mô Tả</h4>
+                  <p className="admin-detail-description">{selectedPlan.description}</p>
+                </div>
+              )}
+
+              {/* Features */}
+              {selectedPlan.features && selectedPlan.features.length > 0 && (
+                <div className="admin-detail-section">
+                  <h4>Tính Năng</h4>
+                  <div className="admin-features-list">
+                    {selectedPlan.features.map((feature, idx) => (
+                      <div key={idx} className="admin-feature-item">
+                        <Zap size={14} />
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="admin-modal-footer">
+              <button className="admin-action-btn close" onClick={() => setShowDetailModal(false)}>
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Create/Edit Modal */}
       {showCreateModal && (

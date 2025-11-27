@@ -3,59 +3,23 @@
    Space theme with tier-based frames
    ======================================== */
 
-@keyframes cosmicFloat {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
-}
+/* Removed cosmicFloat for performance */
 
-@keyframes galaxyGlow {
-  0%, 100% {
-    box-shadow: 0 0 30px rgba(139, 92, 246, 0.4),
-                0 0 60px rgba(139, 92, 246, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 50px rgba(139, 92, 246, 0.6),
-                0 0 100px rgba(139, 92, 246, 0.3);
-  }
-}
-
+/* Simplified star animation */
 @keyframes starTwinkle {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.2); }
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 }
 
-@keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
+/* Removed shimmer for performance */
+
+/* Hologram glow - optimized for performance */
+@keyframes hologramGlow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
 }
 
-@keyframes diamondPulse {
-  0%, 100% {
-    box-shadow: 
-      0 0 40px rgba(147, 197, 253, 0.6),
-      0 0 80px rgba(147, 197, 253, 0.4),
-      inset 0 0 40px rgba(147, 197, 253, 0.2);
-  }
-  50% {
-    box-shadow: 
-      0 0 60px rgba(147, 197, 253, 0.8),
-      0 0 120px rgba(147, 197, 253, 0.6),
-      inset 0 0 60px rgba(147, 197, 253, 0.3);
-  }
-}
-
-@keyframes goldShine {
-  0%, 100% {
-    box-shadow: 
-      0 0 30px rgba(251, 191, 36, 0.5),
-      0 0 60px rgba(251, 191, 36, 0.3);
-  }
-  50% {
-    box-shadow: 
-      0 0 50px rgba(251, 191, 36, 0.7),
-      0 0 100px rgba(251, 191, 36, 0.5);
-  }
-}
+/* Removed goldShine for performance */
 
 /* ========================================
    MAIN CONTAINER
@@ -100,9 +64,9 @@
     radial-gradient(2px 2px at 90% 60%, white, transparent),
     radial-gradient(1px 1px at 33% 80%, white, transparent),
     radial-gradient(1px 1px at 15% 90%, white, transparent);
-  background-size: 200% 200%;
-  animation: starTwinkle 3s ease-in-out infinite;
-  opacity: 0.5;
+  background-size: 100% 100%;
+  animation: starTwinkle 6s ease-in-out infinite;
+  opacity: 0.4;
   pointer-events: none;
   z-index: 0;
 }
@@ -142,8 +106,8 @@
     radial-gradient(2px 2px at 160px 120px, #ffffff, rgba(0,0,0,0));
   background-repeat: repeat;
   background-size: 200px 200px;
-  animation: starsAnimation 4s linear infinite;
-  opacity: 0.3;
+  animation: starsAnimation 20s linear infinite;
+  opacity: 0.2;
   z-index: 0;
 }
 
@@ -160,8 +124,8 @@
     radial-gradient(1.5px 1.5px at 80px 100px, #ffffff, rgba(0,0,0,0));
   background-repeat: repeat;
   background-size: 300px 300px;
-  animation: starsAnimation 8s linear infinite;
-  opacity: 0.5;
+  animation: starsAnimation 30s linear infinite;
+  opacity: 0.3;
   z-index: 0;
 }
 
@@ -441,11 +405,11 @@
 
 .cosmic-tier-card--gold {
   border: 2px solid #fbbf24;
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(30, 41, 59, 0.9) 100%);
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(30, 41, 59, 0.9) 100%);
   box-shadow: 
-    0 0 40px rgba(251, 191, 36, 0.5),
-    inset 0 0 40px rgba(251, 191, 36, 0.15);
-  animation: goldShine 3s ease-in-out infinite;
+    0 0 35px rgba(251, 191, 36, 0.4),
+    inset 0 0 30px rgba(251, 191, 36, 0.1);
+  /* No animation for better performance */
 }
 
 .cosmic-tier-card--gold:hover {
@@ -461,9 +425,7 @@
   font-weight: 700;
 }
 
-.cosmic-tier-card--gold .cosmic-tier-icon-wrapper {
-  animation: cosmicFloat 5s ease-in-out infinite;
-}
+/* Gold icon wrapper - static for performance */
 
 .cosmic-tier-card--gold .cosmic-tier-icon {
   color: #fbbf24;
@@ -471,76 +433,155 @@
 }
 
 /* ========================================
-   DIAMOND TIER (PREMIUM PLUS)
+   DIAMOND TIER (PREMIUM PLUS) - HOLOGRAM COSMIC
    ======================================== */
 
 .cosmic-tier-card--diamond {
-  border: 3px solid #93c5fd;
-  background: linear-gradient(135deg, rgba(147, 197, 253, 0.25) 0%, rgba(30, 41, 59, 0.95) 100%);
+  position: relative;
+  border: 2px solid transparent;
+  background: 
+    linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%) padding-box,
+    linear-gradient(135deg, 
+      rgba(147, 197, 253, 0.9) 0%, 
+      rgba(168, 85, 247, 0.7) 25%,
+      rgba(236, 72, 153, 0.7) 50%,
+      rgba(59, 130, 246, 0.9) 75%,
+      rgba(147, 197, 253, 0.9) 100%
+    ) border-box;
   box-shadow: 
-    0 0 50px rgba(147, 197, 253, 0.6),
-    0 0 100px rgba(147, 197, 253, 0.4),
-    inset 0 0 50px rgba(147, 197, 253, 0.2);
-  animation: diamondPulse 2s ease-in-out infinite;
-  transform: scale(1.03);
+    0 0 60px rgba(147, 197, 253, 0.4),
+    0 0 120px rgba(168, 85, 247, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: scale(1.02);
+  z-index: 10;
 }
 
-.cosmic-tier-card--diamond:hover {
-  box-shadow: 
-    0 0 70px rgba(147, 197, 253, 0.8),
-    0 0 140px rgba(147, 197, 253, 0.6),
-    inset 0 0 70px rgba(147, 197, 253, 0.3);
-  transform: translateY(-20px) scale(1.08);
+/* Holographic overlay */
+.cosmic-tier-card--diamond::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: 
+    linear-gradient(135deg, 
+      transparent 0%,
+      rgba(147, 197, 253, 0.08) 25%,
+      rgba(168, 85, 247, 0.08) 50%,
+      rgba(236, 72, 153, 0.05) 75%,
+      transparent 100%
+    );
+  pointer-events: none;
+  animation: hologramGlow 4s ease-in-out infinite;
 }
 
+/* Iridescent top highlight */
 .cosmic-tier-card--diamond::after {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(147, 197, 253, 0.3),
-    transparent
+  left: 0;
+  right: 0;
+  height: 50%;
+  border-radius: 18px 18px 0 0;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.08) 0%,
+    transparent 100%
   );
-  animation: shimmer 3s infinite;
+  pointer-events: none;
+}
+
+.cosmic-tier-card--diamond:hover {
+  box-shadow: 
+    0 0 80px rgba(147, 197, 253, 0.5),
+    0 0 160px rgba(168, 85, 247, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: translateY(-8px) scale(1.03);
 }
 
 .cosmic-tier-card--diamond .cosmic-tier-badge {
-  background: linear-gradient(135deg, #93c5fd, #60a5fa);
+  background: linear-gradient(135deg, 
+    #93c5fd 0%, 
+    #a78bfa 50%, 
+    #f472b6 100%
+  );
   color: #0f172a;
   font-weight: 800;
-  box-shadow: 0 0 20px rgba(147, 197, 253, 0.5);
+  box-shadow: 
+    0 4px 20px rgba(147, 197, 253, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .cosmic-tier-card--diamond .cosmic-tier-icon-wrapper {
-  animation: cosmicFloat 3s ease-in-out infinite;
+  position: relative;
+}
+
+/* Holographic ring around icon */
+.cosmic-tier-card--diamond .cosmic-tier-icon-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, 
+    rgba(147, 197, 253, 0.4) 0%,
+    rgba(168, 85, 247, 0.3) 33%,
+    rgba(236, 72, 153, 0.3) 66%,
+    rgba(147, 197, 253, 0.4) 100%
+  );
+  filter: blur(8px);
+  opacity: 0.8;
 }
 
 .cosmic-tier-card--diamond .cosmic-tier-icon {
-  color: #93c5fd;
-  filter: drop-shadow(0 4px 24px rgba(147, 197, 253, 1)) drop-shadow(0 0 16px rgba(147, 197, 253, 0.8));
+  color: #e0e7ff;
+  filter: drop-shadow(0 0 20px rgba(147, 197, 253, 0.8));
+}
+
+/* Diamond price box special */
+.cosmic-tier-card--diamond .cosmic-tier-price {
+  background: linear-gradient(135deg, 
+    rgba(147, 197, 253, 0.1) 0%,
+    rgba(168, 85, 247, 0.08) 50%,
+    rgba(236, 72, 153, 0.05) 100%
+  );
+  border: 1px solid rgba(147, 197, 253, 0.3);
+}
+
+.cosmic-tier-card--diamond .cosmic-price-amount {
+  background: linear-gradient(135deg, #93c5fd, #a78bfa, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cosmic-tier-card--diamond .cosmic-tier-features {
+  background: rgba(147, 197, 253, 0.05);
+  border: 1px solid rgba(147, 197, 253, 0.15);
 }
 
 .cosmic-tier-popular {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: linear-gradient(135deg, #ec4899, #8b5cf6);
-  color: white;
+  background: linear-gradient(135deg, 
+    #93c5fd 0%,
+    #a78bfa 50%,
+    #f472b6 100%
+  );
+  color: #0f172a;
   padding: 0.5rem 1rem;
   border-radius: 50px;
   font-size: 0.875rem;
-  font-weight: 700;
-  box-shadow: 0 4px 20px rgba(236, 72, 153, 0.6);
+  font-weight: 800;
+  box-shadow: 
+    0 4px 20px rgba(147, 197, 253, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   z-index: 3;
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  animation: galaxyGlow 3s ease-in-out infinite;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* No animation for better performance */
 }
 
 /* ========================================

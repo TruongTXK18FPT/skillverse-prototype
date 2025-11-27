@@ -1,0 +1,794 @@
+/* =====================================================
+   SKILL POINT MANAGEMENT TAB - Cosmic Theme (Prefix: sp-)
+   Each section has unique vibrant colors
+   ===================================================== */
+
+.sp-cosmic {
+  padding: 0;
+  position: relative;
+}
+
+/* Loading Animation */
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+/* =====================================================
+   SECTION STYLES - Each section has unique color
+   ===================================================== */
+
+.sp-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-radius: 20px;
+}
+
+/* Header Section - Electric Yellow/Gold Theme */
+.sp-section-header {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.12) 0%, rgba(245, 158, 11, 0.08) 100%);
+  border: 2px solid rgba(234, 179, 8, 0.3);
+  border-left: 4px solid #eab308;
+}
+
+/* Stats Section - Dark with Multi-color Cards */
+.sp-section-stats {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.6) 100%);
+  border: 2px solid rgba(100, 116, 139, 0.2);
+}
+
+/* Tabs Section - Purple Theme */
+.sp-section-tabs {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%);
+  border: 2px solid rgba(139, 92, 246, 0.25);
+  padding: 1rem;
+}
+
+/* Content Section - Cyan Theme */
+.sp-section-content {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.08) 0%, rgba(20, 184, 166, 0.05) 100%);
+  border: 2px solid rgba(6, 182, 212, 0.25);
+  border-left: 4px solid #06b6d4;
+}
+
+/* =====================================================
+   HEADER STYLES
+   ===================================================== */
+
+.sp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sp-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sp-header-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #eab308 0%, #f59e0b 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 8px 25px rgba(234, 179, 8, 0.4);
+  animation: float 3s ease-in-out infinite;
+}
+
+.sp-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fde047 0%, #facc15 50%, #eab308 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(234, 179, 8, 0.3);
+}
+
+.sp-header p {
+  margin: 0.25rem 0 0 0;
+  color: #a5b4fc;
+  font-size: 0.95rem;
+}
+
+.sp-refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.3) 0%, rgba(245, 158, 11, 0.2) 100%);
+  color: #fde047;
+  border: 2px solid rgba(234, 179, 8, 0.4);
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sp-refresh-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.5) 0%, rgba(245, 158, 11, 0.4) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3);
+}
+
+.sp-refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   VIBRANT STAT CARDS
+   ===================================================== */
+
+.sp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
+}
+
+.sp-stat-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
+  border-radius: 18px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sp-stat-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+.sp-stat-glow {
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  filter: blur(50px);
+  opacity: 0.35;
+  transition: opacity 0.4s ease;
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.sp-stat-card:hover .sp-stat-glow {
+  opacity: 0.6;
+}
+
+.sp-stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sp-stat-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.sp-stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.sp-stat-label {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* Vibrant Yellow - Total Distributed */
+.sp-stat-card.vibrant-yellow {
+  border: 2px solid rgba(234, 179, 8, 0.5);
+  box-shadow: 0 4px 20px rgba(234, 179, 8, 0.2);
+}
+.sp-stat-card.vibrant-yellow .sp-stat-glow { background: radial-gradient(circle, #eab308 0%, transparent 70%); }
+.sp-stat-card.vibrant-yellow:hover {
+  border-color: rgba(234, 179, 8, 0.8);
+  box-shadow: 0 8px 40px rgba(234, 179, 8, 0.4), 0 0 60px rgba(234, 179, 8, 0.2);
+}
+.sp-stat-card.vibrant-yellow .sp-stat-icon {
+  background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(234, 179, 8, 0.5);
+}
+.sp-stat-card.vibrant-yellow .sp-stat-value {
+  color: #fde047;
+  text-shadow: 0 0 20px rgba(234, 179, 8, 0.5);
+}
+
+/* Vibrant Purple - Total Used */
+.sp-stat-card.vibrant-purple {
+  border: 2px solid rgba(168, 85, 247, 0.5);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
+}
+.sp-stat-card.vibrant-purple .sp-stat-glow { background: radial-gradient(circle, #a855f7 0%, transparent 70%); }
+.sp-stat-card.vibrant-purple:hover {
+  border-color: rgba(168, 85, 247, 0.8);
+  box-shadow: 0 8px 40px rgba(168, 85, 247, 0.4), 0 0 60px rgba(168, 85, 247, 0.2);
+}
+.sp-stat-card.vibrant-purple .sp-stat-icon {
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.5);
+}
+.sp-stat-card.vibrant-purple .sp-stat-value {
+  color: #d8b4fe;
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+
+/* Vibrant Pink - Active Rewards */
+.sp-stat-card.vibrant-pink {
+  border: 2px solid rgba(236, 72, 153, 0.5);
+  box-shadow: 0 4px 20px rgba(236, 72, 153, 0.2);
+}
+.sp-stat-card.vibrant-pink .sp-stat-glow { background: radial-gradient(circle, #ec4899 0%, transparent 70%); }
+.sp-stat-card.vibrant-pink:hover {
+  border-color: rgba(236, 72, 153, 0.8);
+  box-shadow: 0 8px 40px rgba(236, 72, 153, 0.4), 0 0 60px rgba(236, 72, 153, 0.2);
+}
+.sp-stat-card.vibrant-pink .sp-stat-icon {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.5);
+}
+.sp-stat-card.vibrant-pink .sp-stat-value {
+  color: #f9a8d4;
+  text-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+}
+
+/* Vibrant Green - Monthly Growth */
+.sp-stat-card.vibrant-green {
+  border: 2px solid rgba(34, 197, 94, 0.5);
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
+}
+.sp-stat-card.vibrant-green .sp-stat-glow { background: radial-gradient(circle, #22c55e 0%, transparent 70%); }
+.sp-stat-card.vibrant-green:hover {
+  border-color: rgba(34, 197, 94, 0.8);
+  box-shadow: 0 8px 40px rgba(34, 197, 94, 0.4), 0 0 60px rgba(34, 197, 94, 0.2);
+}
+.sp-stat-card.vibrant-green .sp-stat-icon {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.5);
+}
+.sp-stat-card.vibrant-green .sp-stat-value {
+  color: #86efac;
+  text-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+}
+
+/* Vibrant Cyan - Top Earner */
+.sp-stat-card.vibrant-cyan {
+  border: 2px solid rgba(6, 182, 212, 0.5);
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.2);
+}
+.sp-stat-card.vibrant-cyan .sp-stat-glow { background: radial-gradient(circle, #06b6d4 0%, transparent 70%); }
+.sp-stat-card.vibrant-cyan:hover {
+  border-color: rgba(6, 182, 212, 0.8);
+  box-shadow: 0 8px 40px rgba(6, 182, 212, 0.4), 0 0 60px rgba(6, 182, 212, 0.2);
+}
+.sp-stat-card.vibrant-cyan .sp-stat-icon {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.5);
+}
+.sp-stat-card.vibrant-cyan .sp-stat-value {
+  color: #67e8f9;
+  text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+}
+
+/* Vibrant Orange - Avg Points */
+.sp-stat-card.vibrant-orange {
+  border: 2px solid rgba(249, 115, 22, 0.5);
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.2);
+}
+.sp-stat-card.vibrant-orange .sp-stat-glow { background: radial-gradient(circle, #f97316 0%, transparent 70%); }
+.sp-stat-card.vibrant-orange:hover {
+  border-color: rgba(249, 115, 22, 0.8);
+  box-shadow: 0 8px 40px rgba(249, 115, 22, 0.4), 0 0 60px rgba(249, 115, 22, 0.2);
+}
+.sp-stat-card.vibrant-orange .sp-stat-icon {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.5);
+}
+.sp-stat-card.vibrant-orange .sp-stat-value {
+  color: #fdba74;
+  text-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+}
+
+/* =====================================================
+   TAB NAVIGATION
+   ===================================================== */
+
+.sp-tab-nav {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sp-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background: rgba(15, 23, 42, 0.6);
+  color: #a5b4fc;
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sp-tab-btn:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+  color: #c4b5fd;
+  transform: translateY(-2px);
+}
+
+.sp-tab-btn.active {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+}
+
+/* =====================================================
+   CONTENT CARDS
+   ===================================================== */
+
+.sp-content-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.8) 100%);
+  border: 2px solid rgba(6, 182, 212, 0.3);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.sp-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(20, 184, 166, 0.1) 100%);
+  border-bottom: 2px solid rgba(6, 182, 212, 0.2);
+}
+
+.sp-card-header svg {
+  color: #22d3ee;
+  filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.5));
+}
+
+.sp-card-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #e0e7ff;
+}
+
+.sp-form-body {
+  padding: 1.5rem;
+}
+
+/* =====================================================
+   FORM STYLES
+   ===================================================== */
+
+.sp-form-group {
+  margin-bottom: 1.25rem;
+}
+
+.sp-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #67e8f9;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.sp-search-wrapper,
+.sp-select-wrapper,
+.sp-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(15, 23, 42, 0.9);
+  border: 2px solid rgba(6, 182, 212, 0.3);
+  border-radius: 12px;
+  padding: 0 1rem;
+  transition: all 0.2s ease;
+}
+
+.sp-search-wrapper:focus-within,
+.sp-select-wrapper:focus-within,
+.sp-input-wrapper:focus-within {
+  border-color: rgba(6, 182, 212, 0.6);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+}
+
+.sp-search-wrapper svg,
+.sp-select-wrapper svg,
+.sp-input-wrapper svg {
+  color: #22d3ee;
+  flex-shrink: 0;
+}
+
+.sp-search-wrapper input,
+.sp-select-wrapper select,
+.sp-input-wrapper input {
+  flex: 1;
+  padding: 0.875rem 0;
+  background: transparent;
+  border: none;
+  color: #e0e7ff;
+  font-size: 1rem;
+  outline: none;
+}
+
+.sp-select-wrapper select {
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.sp-select-wrapper select option {
+  background: #1e293b;
+  color: #e0e7ff;
+  padding: 0.75rem;
+}
+
+.sp-form-group textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: rgba(15, 23, 42, 0.9);
+  border: 2px solid rgba(6, 182, 212, 0.3);
+  border-radius: 12px;
+  color: #e0e7ff;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.2s ease;
+}
+
+.sp-form-group textarea:focus {
+  outline: none;
+  border-color: rgba(6, 182, 212, 0.6);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+}
+
+.sp-form-group textarea::placeholder,
+.sp-search-wrapper input::placeholder,
+.sp-input-wrapper input::placeholder {
+  color: #64748b;
+}
+
+/* Amount Input */
+.sp-amount-input {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.sp-amount-input .sp-input-wrapper {
+  flex: 1;
+}
+
+.sp-amount-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(234, 179, 8, 0.1);
+  border: 2px solid rgba(234, 179, 8, 0.3);
+  border-radius: 10px;
+  color: #fde047;
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.sp-amount-preview svg {
+  color: #eab308;
+}
+
+/* =====================================================
+   ACTION BUTTONS
+   ===================================================== */
+
+.sp-action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid rgba(6, 182, 212, 0.2);
+}
+
+.sp-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+.sp-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sp-btn-add {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+}
+
+.sp-btn-add:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.5);
+}
+
+.sp-btn-deduct {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+.sp-btn-deduct:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
+}
+
+.sp-btn-create {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.sp-btn-create:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+}
+
+/* =====================================================
+   HISTORY LIST
+   ===================================================== */
+
+.sp-history-list {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sp-history-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 14px;
+  transition: all 0.3s ease;
+}
+
+.sp-history-item:hover {
+  transform: translateX(8px);
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.sp-history-item.add {
+  border: 2px solid rgba(34, 197, 94, 0.3);
+}
+
+.sp-history-item.add:hover {
+  border-color: rgba(34, 197, 94, 0.5);
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
+}
+
+.sp-history-item.deduct {
+  border: 2px solid rgba(239, 68, 68, 0.3);
+}
+
+.sp-history-item.deduct:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.2);
+}
+
+.sp-history-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sp-history-item.add .sp-history-icon {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.1) 100%);
+  color: #4ade80;
+}
+
+.sp-history-item.deduct .sp-history-icon {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.1) 100%);
+  color: #f87171;
+}
+
+.sp-history-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sp-history-user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #e0e7ff;
+  margin-bottom: 0.25rem;
+}
+
+.sp-history-user svg {
+  color: #a5b4fc;
+}
+
+.sp-history-userid {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 400;
+}
+
+.sp-history-reason {
+  font-size: 0.9rem;
+  color: #a5b4fc;
+  margin-bottom: 0.5rem;
+}
+
+.sp-history-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.sp-history-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.sp-history-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-weight: 800;
+  font-size: 1.25rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  min-width: 100px;
+  text-align: right;
+}
+
+.sp-history-amount span {
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.sp-history-amount.add {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.1) 100%);
+  color: #4ade80;
+}
+
+.sp-history-amount.deduct {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.1) 100%);
+  color: #f87171;
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 1024px) {
+  .sp-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sp-section {
+    padding: 1rem;
+  }
+
+  .sp-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .sp-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sp-tab-nav {
+    flex-direction: column;
+  }
+
+  .sp-tab-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sp-action-buttons {
+    flex-direction: column;
+  }
+
+  .sp-amount-input {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sp-history-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .sp-history-amount {
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .sp-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sp-stat-card {
+    padding: 1rem;
+  }
+
+  .sp-stat-value {
+    font-size: 1.5rem;
+  }
+}

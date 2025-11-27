@@ -3,7 +3,7 @@ import {
   Users, UserCheck, Shield, Search, Filter,
   Eye, Edit, Ban, CheckCircle, XCircle, Key,
   Mail, Phone, Calendar, Activity, Award, BookOpen,
-  RefreshCw, X, Save
+  RefreshCw, X, Save, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import adminUserService from '../../services/adminUserService';
 import { AdminUserResponse, AdminUserDetailResponse, PrimaryRole, UserStatus } from '../../types/adminUser';
@@ -21,6 +21,10 @@ const UserManagementTabCosmic: React.FC = () => {
     totalRegularUsers: 0,
     totalActiveUsers: 0
   });
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   // Modal states
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -250,6 +254,17 @@ const UserManagementTabCosmic: React.FC = () => {
     return new Date(dateString).toLocaleDateString('vi-VN');
   };
 
+  // Pagination logic
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentUsers = users.slice(startIndex, endIndex);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, roleFilter, statusFilter]);
+
   if (loading && users.length === 0) {
     return (
       <div className="admin-user-management-cosmic">
@@ -384,7 +399,7 @@ const UserManagementTabCosmic: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {currentUsers.map((user) => (
               <tr key={user.id}>
                 <td>
                   <div className="admin-user-info">
@@ -470,6 +485,34 @@ const UserManagementTabCosmic: React.FC = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="admin-pagination">
+          <button
+            className="admin-pagination-btn"
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft size={18} />
+            Trước
+          </button>
+
+          <div className="admin-pagination-info">
+            <span>Trang {currentPage} / {totalPages}</span>
+            <span className="admin-pagination-total">({users.length} người dùng)</span>
+          </div>
+
+          <button
+            className="admin-pagination-btn"
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+          >
+            Sau
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      )}
 
       {users.length === 0 && !loading && (
         <div className="admin-empty-state">

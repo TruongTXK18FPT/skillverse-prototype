@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, AlertCircle } from 'lucide-react';
+import { X, Plus, Trash2, AlertCircle, Save } from 'lucide-react';
 import * as adminPremiumService from '../../services/adminPremiumService';
-import { 
-  AdminPremiumPlan, 
-  CreatePremiumPlanRequest, 
+import {
+  AdminPremiumPlan,
+  CreatePremiumPlanRequest,
   UpdatePremiumPlanRequest,
   FeatureLimitConfig,
   FeatureType,
@@ -267,41 +267,39 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
   };
 
   return (
-    <div className="premium-plan-modal-overlay" onClick={() => onClose()}>
-      <div className="premium-plan-modal-content premium-plan-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="admin-modal-overlay" onClick={() => onClose()}>
+      <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
-        <div className="premium-plan-modal-header">
-          <h2>
+        <div className="admin-modal-header">
+          <h3>
             {isEditMode ? (isFreeTier ? 'Chỉnh Sửa Giới Hạn FREE_TIER' : 'Chỉnh Sửa Gói Premium') : 'Tạo Gói Premium Mới'}
-          </h2>
-          <button className="premium-plan-modal-btn-close" onClick={() => onClose()}>
+          </h3>
+          <button className="admin-close-btn" onClick={() => onClose()}>
             <X size={24} />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="premium-plan-modal-body">
+        <form onSubmit={handleSubmit} className="admin-modal-body">
           {error && (
-            <div className="premium-plan-modal-error">
-              <AlertCircle size={20} />
+            <div className="admin-form-error">
+              <AlertCircle size={18} />
               <span>{error}</span>
             </div>
           )}
 
           {isFreeTier && (
-            <div className="premium-plan-modal-error" style={{background: 'rgba(59, 130, 246, 0.1)', borderColor: 'rgba(59, 130, 246, 0.3)', color: '#3b82f6'}}>
-              <AlertCircle size={20} />
-              <span>⚠️ Gói FREE_TIER: Chỉ có thể chỉnh sửa giới hạn tính năng. Các thuộc tính khác không thể thay đổi.</span>
+            <div className="admin-form-info">
+              <AlertCircle size={18} />
+              <span>Gói FREE_TIER: Chỉ có thể chỉnh sửa giới hạn tính năng. Các thuộc tính khác không thể thay đổi.</span>
             </div>
           )}
 
-          <div className="premium-plan-modal-form-grid">
+          <div className="admin-form-grid">
             {/* Plan Name (only for create) */}
             {!isEditMode && (
-              <div className="premium-plan-modal-form-group full-width">
-                <label htmlFor="name">
-                  Tên Gói <span className="required">*</span>
-                </label>
+              <div className="admin-form-group full-width">
+                <label htmlFor="name">Tên Gói <span className="required">*</span></label>
                 <input
                   type="text"
                   id="name"
@@ -318,10 +316,8 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
             )}
 
             {/* Display Name */}
-            <div className="premium-plan-modal-form-group full-width">
-              <label htmlFor="displayName">
-                Tên Hiển Thị <span className="required">*</span>
-              </label>
+            <div className="admin-form-group full-width">
+              <label htmlFor="displayName">Tên Hiển Thị <span className="required">*</span></label>
               <input
                 type="text"
                 id="displayName"
@@ -335,10 +331,8 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
             </div>
 
             {/* Description */}
-            <div className="premium-plan-modal-form-group full-width">
-              <label htmlFor="description">
-                Mô Tả <span className="required">*</span>
-              </label>
+            <div className="admin-form-group full-width">
+              <label htmlFor="description">Mô Tả <span className="required">*</span></label>
               <textarea
                 id="description"
                 name="description"
@@ -353,10 +347,8 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
 
             {/* Plan Type (only for create) */}
             {!isEditMode && (
-              <div className="premium-plan-modal-form-group">
-                <label htmlFor="planType">
-                  Loại Gói <span className="required">*</span>
-                </label>
+              <div className="admin-form-group">
+                <label htmlFor="planType">Loại Gói <span className="required">*</span></label>
                 <select
                   id="planType"
                   name="planType"
@@ -372,10 +364,8 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
             )}
 
             {/* Duration */}
-            <div className="premium-plan-modal-form-group">
-              <label htmlFor="durationMonths">
-                Thời Hạn (tháng) <span className="required">*</span>
-              </label>
+            <div className="admin-form-group">
+              <label htmlFor="durationMonths">Thời Hạn (tháng) <span className="required">*</span></label>
               <input
                 type="number"
                 id="durationMonths"
@@ -390,10 +380,8 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
             </div>
 
             {/* Price */}
-            <div className="premium-plan-modal-form-group">
-              <label htmlFor="price">
-                Giá (VND) <span className="required">*</span>
-              </label>
+            <div className="admin-form-group">
+              <label htmlFor="price">Giá (VND) <span className="required">*</span></label>
               <input
                 type="number"
                 id="price"
@@ -408,10 +396,8 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
             </div>
 
             {/* Student Discount */}
-            <div className="premium-plan-modal-form-group">
-              <label htmlFor="studentDiscountPercent">
-                Giảm Giá SV (%) <span className="required">*</span>
-              </label>
+            <div className="admin-form-group">
+              <label htmlFor="studentDiscountPercent">Giảm Giá SV (%) <span className="required">*</span></label>
               <input
                 type="number"
                 id="studentDiscountPercent"
@@ -426,10 +412,8 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
             </div>
 
             {/* Max Subscribers */}
-            <div className="premium-plan-modal-form-group">
-              <label htmlFor="maxSubscribers">
-                Số Người Tối Đa
-              </label>
+            <div className="admin-form-group">
+              <label htmlFor="maxSubscribers">Số Người Tối Đa</label>
               <input
                 type="number"
                 id="maxSubscribers"
@@ -445,82 +429,77 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
               <small>Để trống nếu không giới hạn</small>
             </div>
 
-            {/* Features - Hide for FREE_TIER */}
+            {/* Features */}
             {!isFreeTier && (
-            <div className="premium-plan-modal-form-group full-width">
-              <label>
-                Tính Năng <span className="required">*</span>
-              </label>
-              <div className="premium-plan-modal-features-list">
-                {features.map((feature, index) => (
-                  <div key={index} className="premium-plan-modal-feature-item">
-                    <input
-                      type="text"
-                      value={feature}
-                      onChange={(e) => handleFeatureChange(index, e.target.value)}
-                      placeholder={`Tính năng ${index + 1}`}
-                    />
-                    {features.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeFeature(index)}
-                        className="premium-plan-modal-btn-remove-feature"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    )}
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={addFeature}
-                  className="premium-plan-modal-btn-add"
-                >
-                  <Plus size={16} />
-                  Thêm Tính Năng
-                </button>
+              <div className="admin-form-group full-width">
+                <label>Tính Năng <span className="required">*</span></label>
+                <div className="admin-features-list">
+                  {features.map((feature, index) => (
+                    <div key={index} className="admin-feature-input">
+                      <input
+                        type="text"
+                        value={feature}
+                        onChange={(e) => handleFeatureChange(index, e.target.value)}
+                        placeholder={`Tính năng ${index + 1}`}
+                      />
+                      {features.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeFeature(index)}
+                          className="admin-action-btn delete"
+                          title="Xóa tính năng"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addFeature}
+                    className="admin-btn-add-item"
+                  >
+                    <Plus size={16} />
+                    Thêm Tính Năng
+                  </button>
+                </div>
               </div>
-            </div>
             )}
 
             {/* Feature Limits */}
-            <div className="premium-plan-modal-form-group full-width">
-              <div className="premium-modal-section-header">
-                <label>Giới Hạn Tính Năng (Feature Limits)</label>
+            <div className="admin-form-group full-width">
+              <div className="admin-section-header">
+                <label>Giới Hạn Tính Năng</label>
                 <button
                   type="button"
                   onClick={addFeatureLimit}
-                  className="premium-plan-modal-btn-add"
+                  className="admin-btn-add-item"
                 >
-                  <Plus size={16} />
-                  Thêm Giới Hạn
+                  <Plus size={14} />
+                  Thêm
                 </button>
               </div>
-              
+
               {featureLimits.length > 0 ? (
-                <div className="premium-modal-feature-limits-list">
+                <div className="admin-feature-limits-list">
                   {featureLimits.map((limit, index) => (
-                    <div key={index} className="premium-modal-limit-item">
-                      {/* Feature Type */}
-                      <div className="premium-modal-limit-field">
+                    <div key={index} className="admin-limit-item">
+                      <div className="admin-limit-field">
                         <label>Loại Tính Năng</label>
                         <select
                           value={limit.featureType}
-                          onChange={(e) => updateFeatureLimit(index, { 
-                            featureType: e.target.value as FeatureType 
-                          })}
+                          onChange={(e) => updateFeatureLimit(index, { featureType: e.target.value as FeatureType })}
                         >
                           <option value="AI_CHATBOT_REQUESTS">AI Chatbot Requests</option>
                           <option value="AI_ROADMAP_GENERATION">AI Roadmap Generation</option>
-                          <option value="MENTOR_BOOKING_MONTHLY">Mentor Booking (Monthly)</option>
-                          <option value="COIN_EARNING_MULTIPLIER">Coin Earning Multiplier</option>
+                          <option value="MENTOR_BOOKING_MONTHLY">Mentor Booking</option>
+                          <option value="COIN_EARNING_MULTIPLIER">Coin Multiplier</option>
                           <option value="PRIORITY_SUPPORT">Priority Support</option>
                         </select>
                       </div>
 
-                      {/* Limit Value or Multiplier */}
                       {adminPremiumService.isMultiplierFeature(limit.featureType) ? (
-                        <div className="premium-modal-limit-field">
+                        <div className="admin-limit-field">
                           <label>Hệ Số Nhân</label>
                           <input
                             type="number"
@@ -528,79 +507,65 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                             min="0"
                             max="10"
                             value={limit.bonusMultiplier || 1.0}
-                            onChange={(e) => updateFeatureLimit(index, { 
-                              bonusMultiplier: parseFloat(e.target.value) || 1.0
-                            })}
+                            onChange={(e) => updateFeatureLimit(index, { bonusMultiplier: parseFloat(e.target.value) || 1.0 })}
                             placeholder="1.0"
                           />
                         </div>
                       ) : (
-                        <div className="premium-modal-limit-field">
+                        <div className="admin-limit-field">
                           <label>Giới Hạn</label>
                           <input
                             type="number"
                             min="0"
                             value={limit.limitValue || 0}
-                            onChange={(e) => updateFeatureLimit(index, { 
-                              limitValue: parseInt(e.target.value) || 0
-                            })}
+                            onChange={(e) => updateFeatureLimit(index, { limitValue: parseInt(e.target.value) || 0 })}
                             placeholder="Số lượng"
                             disabled={limit.isUnlimited}
                           />
                         </div>
                       )}
 
-                      {/* Reset Period */}
-                      <div className="premium-modal-limit-field">
-                        <label>Chu Kỳ Reset</label>
+                      <div className="admin-limit-field">
+                        <label>Reset</label>
                         <select
                           value={limit.resetPeriod}
-                          onChange={(e) => updateFeatureLimit(index, { 
-                            resetPeriod: e.target.value as ResetPeriod
-                          })}
+                          onChange={(e) => updateFeatureLimit(index, { resetPeriod: e.target.value as ResetPeriod })}
                         >
                           <option value="HOURLY">Mỗi giờ</option>
                           <option value="DAILY">Mỗi ngày</option>
                           <option value="MONTHLY">Mỗi tháng</option>
-                          <option value="CUSTOM_8_HOURS">Mỗi 8 giờ</option>
+                          <option value="CUSTOM_8_HOURS">8 giờ</option>
                           <option value="NEVER">Không reset</option>
                         </select>
                       </div>
 
-                      {/* Unlimited Checkbox */}
                       {!adminPremiumService.isMultiplierFeature(limit.featureType) && (
-                        <div className="premium-modal-limit-field checkbox-field">
-                          <label className="premium-plan-modal-checkbox">
+                        <div className="admin-limit-field checkbox-field">
+                          <label>
                             <input
                               type="checkbox"
                               checked={limit.isUnlimited}
-                              onChange={(e) => updateFeatureLimit(index, { 
-                                isUnlimited: e.target.checked
-                              })}
+                              onChange={(e) => updateFeatureLimit(index, { isUnlimited: e.target.checked })}
                             />
                             <span>Không giới hạn</span>
                           </label>
                         </div>
                       )}
 
-                      {/* Description */}
-                      <div className="premium-modal-limit-field full-width">
+                      <div className="admin-limit-field full-width">
                         <label>Mô Tả</label>
                         <input
                           type="text"
                           value={limit.description || ''}
-                          onChange={(e) => updateFeatureLimit(index, { 
-                            description: e.target.value
-                          })}
+                          onChange={(e) => updateFeatureLimit(index, { description: e.target.value })}
                           placeholder="Mô tả giới hạn..."
                         />
                       </div>
 
-                      {/* Remove Button */}
                       <button
                         type="button"
                         onClick={() => removeFeatureLimit(index)}
-                        className="premium-modal-btn-remove-limit"
+                        className="admin-action-btn delete"
                         title="Xóa giới hạn"
                       >
                         <Trash2 size={16} />
@@ -609,41 +574,39 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                   ))}
                 </div>
               ) : (
-                <p className="premium-modal-no-limits">
-                  Chưa có giới hạn tính năng. Nhấn "Thêm Giới Hạn" để thêm.
-                </p>
+                <p className="admin-empty-hint">Chưa có giới hạn tính năng. Nhấn "Thêm" để thêm.</p>
               )}
             </div>
 
-            {/* Is Active - Hide for FREE_TIER */}
+            {/* Is Active */}
             {!isFreeTier && (
-            <div className="premium-plan-modal-form-group full-width">
-              <label className="premium-plan-modal-checkbox">
-                <input
-                  type="checkbox"
-                  name="isActive"
-                  checked={formData.isActive}
-                  onChange={handleCheckboxChange}
-                />
-                <span>Kích hoạt gói ngay sau khi tạo</span>
-              </label>
-            </div>
+              <div className="admin-form-group full-width">
+                <label>
+                  <input
+                    type="checkbox"
+                    name="isActive"
+                    checked={formData.isActive}
+                    onChange={handleCheckboxChange}
+                  />
+                  <span>Kích hoạt gói ngay sau khi tạo</span>
+                </label>
+              </div>
             )}
           </div>
 
           {/* Footer */}
-          <div className="premium-plan-modal-footer">
+          <div className="admin-modal-footer">
             <button
               type="button"
               onClick={() => onClose()}
-              className="premium-plan-modal-btn-secondary"
+              className="admin-action-btn close"
               disabled={loading}
             >
               Hủy
             </button>
             <button
               type="submit"
-              className="premium-plan-modal-btn-primary"
+              className="admin-action-btn save"
               disabled={loading}
             >
               {loading ? 'Đang xử lý...' : (isEditMode ? 'Cập Nhật' : 'Tạo Gói')}

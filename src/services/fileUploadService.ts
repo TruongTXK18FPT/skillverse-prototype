@@ -179,3 +179,90 @@ export const validateDocument = (file: File): { valid: boolean; error?: string }
   console.log('[VALIDATE_DOCUMENT] Valid');
   return { valid: true };
 };
+
+/**
+ * Upload image response from backend (matches MediaDTO)
+ */
+export interface ImageUploadResponse {
+  id: number;
+  url: string;
+  fileName: string;
+  type: string;
+  fileSize?: number;
+}
+
+/**
+ * Upload image to Cloudinary via backend
+ * Max size: 10MB
+ * Uses same endpoint as mediaService: /media/upload
+ */
+export const uploadImage = async (
+  file: File,
+  actorId?: number,
+  onProgress?: (progress: UploadProgress) => void
+): Promise<ImageUploadResponse> => {
+  console.log('[UPLOAD_IMAGE] Starting:', file.name, formatFileSize(file.size));
+  
+  const formData = new FormData();
+  formData.append('file', file);
+  if (actorId) {
+    formData.append('actorId', String(actorId));
+  }
+  
+  try {
+    const response = await axiosInstance.post<ImageUploadResponse>(
+      '/media/upload',
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (progressEvent) => {
+          if (onProgress && progressEvent.total) {
+            const percentage = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            onProgress({
+              loaded: progressEvent.loaded,
+              total: progressEvent.total,
+              percentage
+            });
+            console.log(`[UPLOAD_IMAGE] Progress: ${percentage}%`);
+          }
+        },
+        timeout: 60000 // 1 minute
+      }
+    );
+    
+    console.log('[UPLOAD_IMAGE] Success:', response.data.url);
+    return response.data;
+  } catch (error: any) {
+    console.error('[UPLOAD_IMAGE] Error:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+/**
+ * Validate image file
+ */
+export const validateImage = (file: File): { valid: boolean; error?: string } => {
+  const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+  const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+  
+  console.log('[VALIDATE_IMAGE]', file.name, file.type, formatFileSize(file.size));
+  
+  if (file.size > MAX_SIZE) {
+    return {
+      valid: false,
+      error: `Ảnh quá lớn. Tối đa 10MB. Hiện tại: ${formatFileSize(file.size)}`
+    };
+  }
+  
+  if (!ALLOWED_TYPES.includes(file.type)) {
+    return {
+      valid: false,
+      error: 'Định dạng không hợp lệ. Chỉ chấp nhận: JPG, PNG, GIF, WebP'
+    };
+  }
+  
+  console.log('[VALIDATE_IMAGE] Valid');
+  return { valid: true };
+};
