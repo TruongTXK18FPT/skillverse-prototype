@@ -1,0 +1,1086 @@
+/* ========================================
+   NEURAL DATA LINK - Learning HUD Styles
+   Isolated namespace: learning-hud-*
+   ======================================== */
+
+@font-face {
+  font-family: 'Space Habitat';
+  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* --- CSS Variables --- */
+:root {
+  --lhud-deep-space: #0a0e17;
+  --lhud-space-alt: #12171f;
+  --lhud-space-light: #1a1f2e;
+  --lhud-surface: rgba(10, 14, 23, 0.5);
+  --lhud-cyan: #06b6d4;
+  --lhud-cyan-glow: rgba(6, 182, 212, 0.3);
+  --lhud-cyan-dim: rgba(6, 182, 212, 0.1);
+  --lhud-green: #10b981;
+  --lhud-green-glow: rgba(16, 185, 129, 0.3);
+  --lhud-red: #ef4444;
+  --lhud-text-primary: #e2e8f0;
+  --lhud-text-secondary: #94a3b8;
+  --lhud-text-dim: #64748b;
+  --lhud-border: rgba(255, 255, 255, 0.1);
+  --lhud-border-bright: rgba(255, 255, 255, 0.2);
+  --lhud-glass-bg: rgba(255, 255, 255, 0.03);
+  --lhud-glass-border: rgba(255, 255, 255, 0.08);
+}
+
+/* --- Deep Space Animated Background --- */
+.learning-hud-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--lhud-deep-space);
+  color: var(--lhud-text-primary);
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Animated Grid Lines */
+.learning-hud-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: learning-hud-grid-move 20s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes learning-hud-grid-move {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
+}
+
+/* Subtle Space Particles */
+.learning-hud-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 100px 100px;
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* --- Layout --- */
+.learning-hud-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.learning-hud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  height: 70px;
+  background: rgba(10, 14, 23, 0.7);
+  border-bottom: 1px solid var(--lhud-cyan);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  flex-shrink: 0;
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.1);
+}
+
+.learning-hud-body {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+/* --- Header Elements --- */
+.learning-hud-header-left,
+.learning-hud-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.learning-hud-header-right {
+  justify-content: flex-end;
+}
+
+.learning-hud-back-btn,
+.learning-hud-sidebar-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--lhud-glass-bg);
+  border: 1px solid var(--lhud-border);
+  border-radius: 6px;
+  color: var(--lhud-text-secondary);
+  font-weight: 500;
+  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.learning-hud-back-btn:hover,
+.learning-hud-sidebar-toggle:hover {
+  background: var(--lhud-cyan-dim);
+  border-color: var(--lhud-cyan);
+  color: var(--lhud-cyan);
+  box-shadow: 0 0 10px var(--lhud-cyan-glow);
+}
+
+.learning-hud-course-title h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--lhud-text-primary);
+}
+
+.learning-hud-course-title span {
+  font-size: 0.85rem;
+  color: var(--lhud-text-dim);
+}
+
+.learning-hud-header-center {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1.5;
+  justify-content: center;
+}
+
+/* --- HoloProgressBar (Neural Sync Rate) --- */
+.learning-hud-progress-container {
+  width: 100%;
+  max-width: 300px;
+}
+
+.learning-hud-progress-label {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  color: var(--lhud-cyan);
+  margin-bottom: 0.5rem;
+  display: block;
+  text-transform: uppercase;
+}
+
+.learning-hud-progress-bar-wrapper {
+  width: 100%;
+  height: 10px;
+  background: var(--lhud-space-light);
+  border: 1px solid var(--lhud-border);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.learning-hud-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--lhud-cyan), #0ea5e9);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+  position: relative;
+  box-shadow: 0 0 10px var(--lhud-cyan-glow);
+}
+
+/* Animated scan line */
+.learning-hud-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: learning-hud-scan 2s linear infinite;
+}
+
+@keyframes learning-hud-scan {
+  0% {
+    left: -30px;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.learning-hud-progress-text {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--lhud-text-secondary);
+  min-width: 80px;
+  text-align: right;
+  letter-spacing: 0.5px;
+}
+
+/* --- Sidebar (System Log) --- */
+.learning-hud-sidebar {
+  width: 350px;
+  background: rgba(10, 14, 23, 0.85);
+  border-right: 2px solid var(--lhud-cyan);
+  flex-shrink: 0;
+  transition: margin-left 0.3s ease;
+  overflow-y: auto;
+  backdrop-filter: blur(8px);
+  box-shadow: 4px 0 20px rgba(6, 182, 212, 0.15);
+}
+
+.learning-hud-sidebar.open {
+  margin-left: 0;
+}
+
+.learning-hud-sidebar:not(.open) {
+  margin-left: -350px;
+}
+
+/* Custom Scrollbar */
+.learning-hud-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.learning-hud-sidebar::-webkit-scrollbar-track {
+  background: var(--lhud-space-alt);
+}
+
+.learning-hud-sidebar::-webkit-scrollbar-thumb {
+  background: var(--lhud-cyan);
+  border-radius: 3px;
+}
+
+.learning-hud-sidebar-content {
+  padding: 1.5rem 1rem;
+}
+
+/* --- Module Header --- */
+.learning-hud-module {
+  margin-bottom: 1.5rem;
+}
+
+.learning-hud-module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  background: var(--lhud-glass-bg);
+  border: 1px solid var(--lhud-glass-border);
+  border-left: 3px solid var(--lhud-cyan);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.learning-hud-module-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--lhud-cyan);
+  box-shadow: 0 0 10px var(--lhud-cyan-glow);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.learning-hud-module-header:hover::before {
+  opacity: 1;
+}
+
+.learning-hud-module-header:hover {
+  background: rgba(6, 182, 212, 0.05);
+  border-color: var(--lhud-cyan);
+}
+
+.learning-hud-module-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--lhud-text-primary);
+  letter-spacing: 0.3px;
+}
+
+.learning-hud-expand-icon {
+  color: var(--lhud-cyan);
+  transition: transform 0.2s ease;
+}
+
+.learning-hud-expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* --- Lesson List (Data Blocks) --- */
+.learning-hud-lessons-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0 0;
+}
+
+.learning-hud-lesson-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  background: var(--lhud-glass-bg);
+  border-left: 2px solid transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.learning-hud-lesson-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--lhud-cyan);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.learning-hud-lesson-item:hover {
+  background: rgba(6, 182, 212, 0.08);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.learning-hud-lesson-item:hover::before {
+  opacity: 0.5;
+}
+
+/* Active Lesson State - "Neural Link Active" */
+.learning-hud-lesson-item.active {
+  background: linear-gradient(90deg, rgba(6, 182, 212, 0.15), rgba(6, 182, 212, 0.03));
+  border-left-color: var(--lhud-cyan);
+  border-color: var(--lhud-cyan);
+  box-shadow: inset 0 0 15px rgba(6, 182, 212, 0.1), 0 0 10px rgba(6, 182, 212, 0.2);
+}
+
+.learning-hud-lesson-item.active::before {
+  opacity: 1;
+  box-shadow: 0 0 8px var(--lhud-cyan-glow);
+}
+
+.learning-hud-lesson-item.active .learning-hud-lesson-title {
+  color: var(--lhud-cyan);
+  font-weight: 600;
+}
+
+/* Completed State - "Sync OK" */
+.learning-hud-lesson-item.completed {
+  opacity: 0.7;
+}
+
+.learning-hud-lesson-item.completed .learning-hud-status-icon {
+  color: var(--lhud-green);
+}
+
+/* Locked State */
+.learning-hud-lesson-item.locked {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.learning-hud-lesson-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.learning-hud-lesson-icon {
+  color: var(--lhud-text-secondary);
+  flex-shrink: 0;
+}
+
+.learning-hud-lesson-item.active .learning-hud-lesson-icon {
+  color: var(--lhud-cyan);
+}
+
+.learning-hud-status-icon {
+  color: var(--lhud-text-dim);
+  flex-shrink: 0;
+}
+
+.learning-hud-status-icon.completed {
+  color: var(--lhud-green);
+}
+
+.learning-hud-lesson-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.learning-hud-lesson-title {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--lhud-text-primary);
+  line-height: 1.3;
+}
+
+.learning-hud-lesson-duration {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.7rem;
+  color: var(--lhud-text-dim);
+  letter-spacing: 0.5px;
+}
+
+/* --- Main Content Area --- */
+.learning-hud-main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 2rem;
+  position: relative;
+}
+
+.learning-hud-content-viewer {
+  background: rgba(18, 23, 31, 0.7);
+  border: 1px solid var(--lhud-border-bright);
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  flex-grow: 1;
+  position: relative;
+}
+
+.learning-hud-viewer-title {
+  margin: 0 0 2rem 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--lhud-text-primary);
+  font-family: 'Inter', sans-serif;
+}
+
+/* --- Video HUD Frame (Cockpit Style) --- */
+.learning-hud-video-frame {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  overflow: hidden;
+  border: 1px solid var(--lhud-border-bright);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(6, 182, 212, 0.05);
+  clip-path: polygon(
+    12px 0,
+    100% 0,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    0 100%,
+    0 12px
+  );
+  background: #000;
+}
+
+.learning-hud-video-frame iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* HUD Corner Labels */
+.learning-hud-video-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.learning-hud-corner-label {
+  position: absolute;
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  color: var(--lhud-cyan);
+  opacity: 0.6;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+}
+
+.learning-hud-corner-label.top-left {
+  top: 12px;
+  left: 12px;
+}
+
+.learning-hud-corner-label.top-right {
+  top: 12px;
+  right: 12px;
+}
+
+.learning-hud-corner-label.bottom-left {
+  bottom: 12px;
+  left: 12px;
+}
+
+.learning-hud-corner-label.bottom-right {
+  bottom: 12px;
+  right: 12px;
+}
+
+/* --- Reading Content --- */
+.learning-hud-reading-content {
+  line-height: 1.8;
+  color: var(--lhud-text-secondary);
+}
+
+.learning-hud-reading-content h2,
+.learning-hud-reading-content h3 {
+  color: var(--lhud-text-primary);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.learning-hud-reading-content code {
+  background: var(--lhud-space-alt);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9em;
+  color: var(--lhud-cyan);
+  border: 1px solid var(--lhud-border);
+}
+
+.learning-hud-reading-content a {
+  color: var(--lhud-cyan);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.learning-hud-reading-content a:hover {
+  border-bottom-color: var(--lhud-cyan);
+}
+
+/* --- Control Deck (Bottom Navigation) --- */
+.learning-hud-control-deck {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--lhud-border-bright);
+}
+
+.learning-hud-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--lhud-glass-bg);
+  border: 1px solid var(--lhud-border);
+  padding: 0.7rem 1.5rem;
+  border-radius: 4px;
+  color: var(--lhud-text-secondary);
+  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+.learning-hud-nav-btn:hover:not(:disabled) {
+  color: var(--lhud-cyan);
+  border-color: var(--lhud-cyan);
+  background: rgba(6, 182, 212, 0.1);
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+}
+
+.learning-hud-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.learning-hud-complete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 2rem;
+  border-radius: 4px;
+  border: 1px solid var(--lhud-green);
+  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--lhud-green);
+  transition: all 0.2s ease;
+}
+
+.learning-hud-complete-btn:hover:not(:disabled) {
+  background: var(--lhud-green);
+  color: var(--lhud-deep-space);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+.learning-hud-complete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .learning-hud-sidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    bottom: 0;
+    z-index: 20;
+    margin-left: -350px;
+  }
+
+  .learning-hud-sidebar.open {
+    margin-left: 0;
+  }
+
+  .learning-hud-header-center {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .learning-hud-header {
+    padding: 0 1rem;
+  }
+
+  .learning-hud-course-title {
+    display: none;
+  }
+
+  .learning-hud-main-content {
+    padding: 1rem;
+  }
+
+  .learning-hud-content-viewer {
+    padding: 1.5rem;
+  }
+
+  .learning-hud-control-deck {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .learning-hud-complete-btn {
+    order: -1;
+    width: 100%;
+  }
+
+  .learning-hud-nav-btn {
+    flex: 1;
+  }
+}
+
+/* --- Utility Classes --- */
+.learning-hud-empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--lhud-text-dim);
+  font-style: italic;
+}
+
+.learning-hud-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--lhud-cyan);
+  font-family: 'Space Habitat', monospace;
+  letter-spacing: 1px;
+}
+
+.learning-hud-loading::after {
+  content: '...';
+  animation: learning-hud-dots 1.5s steps(4) infinite;
+}
+
+@keyframes learning-hud-dots {
+  0%, 20% {
+    content: '';
+  }
+  40% {
+    content: '.';
+  }
+  60% {
+    content: '..';
+  }
+  80%, 100% {
+    content: '...';
+  }
+}
+
+/* --- Shared Reusable Components --- */
+
+/* Neural Card */
+.learning-hud-card {
+  background: rgba(18, 23, 31, 0.7);
+  border: 1px solid var(--lhud-border-bright);
+  backdrop-filter: blur(8px);
+  padding: 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.learning-hud-card-glow:hover {
+  border-color: var(--lhud-cyan);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+/* Neural Buttons */
+.learning-hud-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid;
+}
+
+.learning-hud-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Button Variants */
+.learning-hud-button-primary {
+  background: rgba(6, 182, 212, 0.1);
+  border-color: var(--lhud-cyan);
+  color: var(--lhud-cyan);
+}
+
+.learning-hud-button-primary:hover:not(:disabled) {
+  background: var(--lhud-cyan);
+  color: var(--lhud-deep-space);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+}
+
+.learning-hud-button-secondary {
+  background: var(--lhud-glass-bg);
+  border-color: var(--lhud-border);
+  color: var(--lhud-text-secondary);
+}
+
+.learning-hud-button-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--lhud-text-primary);
+  color: var(--lhud-text-primary);
+}
+
+.learning-hud-button-success {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--lhud-green);
+  color: var(--lhud-green);
+}
+
+.learning-hud-button-success:hover:not(:disabled) {
+  background: var(--lhud-green);
+  color: var(--lhud-deep-space);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+.learning-hud-button-danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.learning-hud-button-danger:hover:not(:disabled) {
+  background: #ef4444;
+  color: var(--lhud-deep-space);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+}
+
+/* Neural Grid (for card layouts) */
+.learning-hud-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+@media (max-width: 768px) {
+  .learning-hud-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================
+   MODAL STYLES - Neural Theme
+   ======================================== */
+
+/* Modal Overlay */
+.learning-hud-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 23, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  animation: learning-hud-fade-in 0.3s ease-out;
+}
+
+@keyframes learning-hud-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modal Content Wrapper */
+.learning-hud-modal-content {
+  background: rgba(18, 23, 31, 0.95);
+  border: 1px solid var(--lhud-border-bright);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(6, 182, 212, 0.1);
+  animation: learning-hud-modal-slide-up 0.3s ease-out;
+}
+
+@keyframes learning-hud-modal-slide-up {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Modal Header */
+.learning-hud-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--lhud-border);
+  background: rgba(6, 182, 212, 0.03);
+}
+
+.learning-hud-modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--lhud-text-primary);
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.learning-hud-modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--lhud-text-dim);
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+  border-radius: 4px;
+}
+
+.learning-hud-modal-close-btn:hover:not(:disabled) {
+  color: var(--lhud-cyan);
+  background: rgba(6, 182, 212, 0.1);
+}
+
+.learning-hud-modal-close-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Modal Body */
+.learning-hud-modal-body {
+  overflow-y: auto;
+  flex: 1;
+  padding: 1.5rem;
+}
+
+/* Form Elements */
+.learning-hud-form-section {
+  margin-bottom: 1.5rem;
+}
+
+.learning-hud-form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-family: 'Space Habitat', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--lhud-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.learning-hud-form-label .required {
+  color: #ef4444;
+}
+
+.learning-hud-form-input,
+.learning-hud-form-textarea,
+.learning-hud-form-select {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--lhud-surface, rgba(10, 14, 23, 0.5));
+  border: 1px solid var(--lhud-border);
+  border-radius: 6px;
+  color: var(--lhud-text-primary);
+  font-size: 0.875rem;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.learning-hud-form-input:focus,
+.learning-hud-form-textarea:focus,
+.learning-hud-form-select:focus {
+  border-color: var(--lhud-cyan);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+}
+
+.learning-hud-form-input:disabled,
+.learning-hud-form-textarea:disabled,
+.learning-hud-form-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.learning-hud-form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.learning-hud-form-hint {
+  font-size: 0.75rem;
+  color: var(--lhud-text-dim);
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+/* Form Error */
+.learning-hud-form-error {
+  padding: 0.75rem 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid #ef4444;
+  border-radius: 6px;
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Modal Actions */
+.learning-hud-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  border-top: 1px solid var(--lhud-border);
+  background: rgba(6, 182, 212, 0.02);
+}
+
+/* Progress Stepper */
+.learning-hud-progress-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--lhud-border);
+}
+
+.learning-hud-progress-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--lhud-text-dim);
+  font-size: 0.875rem;
+  font-family: 'Space Habitat', monospace;
+}
+
+.learning-hud-progress-step.active {
+  color: var(--lhud-cyan);
+}
+
+.learning-hud-progress-step.completed {
+  color: var(--lhud-green);
+}
+
+.learning-hud-progress-step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.learning-hud-progress-line {
+  width: 60px;
+  height: 2px;
+  background: var(--lhud-border);
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+  .learning-hud-modal-content {
+    max-width: 100%;
+    margin: 0.5rem;
+  }
+
+  .learning-hud-modal-header,
+  .learning-hud-modal-body,
+  .learning-hud-modal-actions {
+    padding: 1rem;
+  }
+}

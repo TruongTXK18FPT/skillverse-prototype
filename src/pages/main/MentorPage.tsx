@@ -998,6 +998,21 @@ const MentorPage: React.FC = () => {
     }
   };
 
+  const getHUDStatusColor = (status: CourseStatus) => {
+    switch (status) {
+      case CourseStatus.PUBLIC:
+        return 'mentor-hud-status-public';
+      case CourseStatus.PENDING:
+        return 'mentor-hud-status-pending';
+      case CourseStatus.DRAFT:
+        return 'mentor-hud-status-draft';
+      case CourseStatus.ARCHIVED:
+        return 'mentor-hud-status-archived';
+      default:
+        return 'mentor-hud-status-draft';
+    }
+  };
+
   const getLessonTypeIcon = (type: string) => {
     switch (type) {
       case 'VIDEO':
@@ -1077,14 +1092,14 @@ const MentorPage: React.FC = () => {
   ];
 
   const renderCoursesTab = () => (
-    <div className="mentor-courses-section">
-      <div className="mentor-courses-header">
-        <div className="mentor-courses-title-section">
-          <h2>Khóa Học Của Tôi</h2>
+    <div className="mentor-hud-courses">
+      <div className="mentor-hud-courses__header">
+        <div className="mentor-hud-courses__title-section">
+          <h2>MISSION MODULES</h2>
           <p>Quản lý và tạo mới các khóa học</p>
         </div>
-        <button 
-          className="mentor-create-course-button"
+        <button
+          className="mentor-hud-create-button"
           onClick={() => setShowCreateCourse(true)}
         >
           <Plus className="w-5 h-5" />
@@ -1116,12 +1131,12 @@ const MentorPage: React.FC = () => {
 
       {/* Empty State */}
       {!loading && !error && courses.length === 0 && (
-        <div className="mentor-empty-state">
-          <BookOpen className="w-16 h-16 text-gray-400" />
+        <div className="mentor-hud-empty">
+          <BookOpen className="w-16 h-16" style={{color: 'var(--mentor-hud-accent-cyan)'}} />
           <h3>Chưa có khóa học nào</h3>
           <p>Bắt đầu tạo khóa học đầu tiên của bạn!</p>
-          <button 
-            className="mentor-create-course-button"
+          <button
+            className="mentor-hud-create-button"
             onClick={() => setShowCreateCourse(true)}
           >
             <Plus className="w-5 h-5" />
@@ -1132,46 +1147,46 @@ const MentorPage: React.FC = () => {
 
       {/* Courses Grid */}
       {!loading && !error && courses.length > 0 && (
-        <div className="mentor-courses-grid">
+        <div className="mentor-hud-courses__grid">
           {courses.map((course) => (
-          <div key={course.id} className="mentor-course-card">
-            <div className="mentor-course-thumbnail">
+          <div key={course.id} className="mentor-hud-course-card">
+            <div className="mentor-hud-course-thumbnail">
               {course.thumbnail?.url ? (
                 <img src={course.thumbnail.url} alt={course.title} />
               ) : (
-                <div className="mentor-course-thumbnail-placeholder">
-                  <BookOpen className="w-12 h-12 text-gray-400" />
+                <div className="mentor-hud-course-thumbnail-placeholder">
+                  <BookOpen className="w-12 h-12" />
                 </div>
               )}
-              <div className={`mentor-course-status ${getStatusColor(course.status)}`}>
+              <div className={`mentor-hud-course-status ${getHUDStatusColor(course.status)}`}>
                 {getStatusIcon(course.status)}
                 <span>{course.status}</span>
               </div>
             </div>
 
-            <div className="mentor-course-content">
-              <h3 className="mentor-course-title">{course.title}</h3>
-              <p className="mentor-course-description">{course.description}</p>
-              
-              <div className="mentor-course-meta">
-                <div className="mentor-course-level">
-                  <span className="mentor-level-badge">{course.level}</span>
+            <div className="mentor-hud-course-content">
+              <h3 className="mentor-hud-course-title">{course.title}</h3>
+              <p className="mentor-hud-course-description">{course.description}</p>
+
+              <div className="mentor-hud-course-meta">
+                <div className="mentor-hud-course-level">
+                  <span className="mentor-hud-level-badge">{course.level}</span>
                 </div>
-                <div className="mentor-course-stats">
-                  <div className="mentor-course-stat">
+                <div className="mentor-hud-course-stats">
+                  <div className="mentor-hud-course-stat">
                     <Users className="w-4 h-4" />
                     <span>{course.enrollmentCount} Học viên</span>
                   </div>
-                  <div className="mentor-course-stat">
+                  <div className="mentor-hud-course-stat">
                     <BookOpen className="w-4 h-4" />
                     <span>{course.moduleCount} Module</span>
                   </div>
-                  <div className="mentor-course-stat">
+                  <div className="mentor-hud-course-stat">
                     <Play className="w-4 h-4" />
                     <span>{course.lessonCount} Bài học</span>
                   </div>
                   {course.price !== undefined && course.price !== null && (
-                    <div className="mentor-course-stat">
+                    <div className="mentor-hud-course-stat">
                       <DollarSign className="w-4 h-4" />
                       <span>{course.price.toLocaleString('vi-VN')} {course.currency || 'VND'}</span>
                     </div>
@@ -1197,24 +1212,24 @@ const MentorPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mentor-course-actions">
-                <button 
-                  className="mentor-action-button mentor-view-button"
+              <div className="mentor-hud-course-actions">
+                <button
+                  className="mentor-hud-action-button mentor-hud-view-button"
                   onClick={() => handleViewCourse(course)}
                 >
                   <Eye className="w-4 h-4" />
                   Xem
                 </button>
-                <button 
-                  className="mentor-action-button mentor-edit-button"
+                <button
+                  className="mentor-hud-action-button mentor-hud-edit-button"
                   onClick={() => setEditingCourse(course)}
                 >
                   <Edit3 className="w-4 h-4" />
                   Sửa
                 </button>
                 {course.status === CourseStatus.DRAFT && (
-                  <button 
-                    className="mentor-action-button mentor-submit-button"
+                  <button
+                    className="mentor-hud-action-button mentor-hud-submit-button"
                     onClick={() => handleSubmitForApproval(course.id)}
                     disabled={loading}
                   >
@@ -1222,8 +1237,8 @@ const MentorPage: React.FC = () => {
                     Gửi Duyệt
                   </button>
                 )}
-                <button 
-                  className="mentor-action-button mentor-delete-button"
+                <button
+                  className="mentor-hud-action-button mentor-hud-delete-button"
                   onClick={() => handleDeleteCourse(course.id)}
                   disabled={loading}
                 >
@@ -1690,47 +1705,53 @@ const MentorPage: React.FC = () => {
         return <MentoringHistoryTab />;
       default:
         return (
-          <div className="mentor-default-tab">
-            <h2 className="mentor-default-title">Chào mừng đến với Bảng Điều Khiển Mentor</h2>
-            <p className="mentor-default-description">Chọn một tab để xem các hoạt động hướng dẫn của bạn.</p>
+          <div className="mentor-hud-default-tab">
+            <h2 className="mentor-hud-default-title">SYSTEM STANDBY</h2>
+            <p className="mentor-hud-default-description">Chọn một tab để xem các hoạt động hướng dẫn của bạn.</p>
           </div>
         );
     }
   };
 
   return (
-    <div className="mentor-dashboard">
-      <div className="mentor-dashboard-header">
-        <h1 className="mentor-dashboard-title">Bảng Điều Khiển Mentor</h1>
-        <p className="mentor-dashboard-subtitle">Quản lý hoạt động hướng dẫn và theo dõi tác động của bạn</p>
-      </div>
+    <div className="mentor-hud-dashboard">
+      <div className="mentor-hud-dashboard__container">
+        <div className="mentor-hud-header">
+          <div className="mentor-hud-header__content">
+            <div className="mentor-hud-header__status">
+              <div className="mentor-hud-header__status-dot"></div>
+              <span className="mentor-hud-header__status-text">SYSTEM ONLINE</span>
+            </div>
+            <h1 className="mentor-hud-header__title">
+              MENTOR <span className="mentor-hud-header__title-accent">COMMAND CENTER</span>
+            </h1>
+            <p className="mentor-hud-header__subtitle">Quản lý hoạt động hướng dẫn và theo dõi tác động của bạn</p>
+          </div>
+          <div className="mentor-hud-header__corner mentor-hud-header__corner--tl"></div>
+          <div className="mentor-hud-header__corner mentor-hud-header__corner--tr"></div>
+          <div className="mentor-hud-header__corner mentor-hud-header__corner--bl"></div>
+          <div className="mentor-hud-header__corner mentor-hud-header__corner--br"></div>
+        </div>
 
-      <div className="mentor-navigation-tabs">
-        {tabs.map((tab) => {
-          const IconComponent = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              className={`mentor-tab-button ${activeTab === tab.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-              style={{
-                '--tab-gradient': tab.gradient
-              } as React.CSSProperties & { '--tab-gradient': string }}
-            >
-              <div className="mentor-tab-icon-wrapper">
-                <IconComponent className="mentor-tab-icon" />
-              </div>
-              <div className="mentor-tab-content">
-                <span className="mentor-tab-label">{tab.label}</span>
-                <span className="mentor-tab-description">{tab.description}</span>
-              </div>
-            </button>
-          );
-        })}
-      </div>
+        <div className="mentor-hud-navigation">
+          {tabs.map((tab) => {
+            const IconComponent = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                className={`mentor-hud-tab ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                <IconComponent className="mentor-hud-tab__icon" />
+                <span className="mentor-hud-tab__label">{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
 
-      <div className="mentor-main-content">
-        {renderActiveTab()}
+        <div className="mentor-hud-content">
+          {renderActiveTab()}
+        </div>
       </div>
 
       {/* Course Creation Modal */}

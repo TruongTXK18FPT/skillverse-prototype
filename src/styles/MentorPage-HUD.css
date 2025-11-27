@@ -1,0 +1,886 @@
+/* ============================================
+   MENTOR COMMAND CENTER - HUD STYLES
+   Sci-Fi Spaceship Dashboard Theme
+   Unique CSS classes to avoid conflicts
+   ============================================ */
+
+/* ========== FONT FACE ========== */
+@font-face {
+  font-family: 'Space Habitat';
+  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ========== CSS VARIABLES ========== */
+:root {
+  /* Mentor HUD Color Palette */
+  --mentor-hud-bg-deep-space: #050b14;
+  --mentor-hud-bg-surface: rgba(13, 22, 35, 0.7);
+  --mentor-hud-accent-cyan: #06b6d4;
+  --mentor-hud-accent-purple: #a855f7;
+  --mentor-hud-accent-orange: #f97316;
+  --mentor-hud-accent-green: #10b981;
+  --mentor-hud-accent-red: #ef4444;
+  --mentor-hud-accent-yellow: #eab308;
+
+  /* Text Colors */
+  --mentor-hud-text-primary: #e2e8f0;
+  --mentor-hud-text-secondary: #94a3b8;
+  --mentor-hud-text-dim: #64748b;
+
+  /* Effects */
+  --mentor-hud-glow-cyan: 0 0 15px rgba(6, 182, 212, 0.3);
+  --mentor-hud-glow-cyan-strong: 0 0 25px rgba(6, 182, 212, 0.5);
+  --mentor-hud-glow-purple: 0 0 15px rgba(168, 85, 247, 0.3);
+  --mentor-hud-glow-orange: 0 0 15px rgba(249, 115, 22, 0.3);
+
+  /* Border */
+  --mentor-hud-border: 1px solid rgba(6, 182, 212, 0.3);
+  --mentor-hud-border-bright: 1px solid rgba(6, 182, 212, 0.6);
+
+  /* Typography */
+  --mentor-hud-font-display: 'Space Habitat', monospace;
+  --mentor-hud-font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ============================================
+   MAIN CONTAINER - SPACESHIP THEME
+   ============================================ */
+
+.mentor-hud-dashboard {
+  min-height: 100vh;
+  background: var(--mentor-hud-bg-deep-space);
+  position: relative;
+  overflow-x: hidden;
+  font-family: var(--mentor-hud-font-body);
+  color: var(--mentor-hud-text-primary);
+}
+
+/* Background effects - Radial gradients */
+.mentor-hud-dashboard::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at top, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Vignette effect */
+.mentor-hud-dashboard::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(5, 11, 20, 0.8) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.mentor-hud-dashboard__container {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ============================================
+   HEADER - COMMAND CENTER
+   ============================================ */
+
+.mentor-hud-header {
+  background: var(--mentor-hud-bg-surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--mentor-hud-border);
+  box-shadow: var(--mentor-hud-glow-cyan);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 30px) 0,
+    100% 30px,
+    100% 100%,
+    0 100%
+  );
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mentor-hud-header:hover {
+  border-color: rgba(6, 182, 212, 0.6);
+  box-shadow: var(--mentor-hud-glow-cyan-strong);
+}
+
+/* Scanline overlay */
+.mentor-hud-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(6, 182, 212, 0.03) 2px,
+    rgba(6, 182, 212, 0.03) 4px
+  );
+  pointer-events: none;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.mentor-hud-header__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.mentor-hud-header__status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mentor-hud-header__status-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--mentor-hud-accent-green);
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.8);
+  animation: mentor-hud-pulse 2s ease-in-out infinite;
+}
+
+.mentor-hud-header__status-text {
+  font-family: var(--mentor-hud-font-display);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--mentor-hud-accent-green);
+}
+
+.mentor-hud-header__title {
+  font-family: var(--mentor-hud-font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--mentor-hud-text-primary);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.mentor-hud-header__title-accent {
+  color: var(--mentor-hud-accent-cyan);
+  text-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+}
+
+.mentor-hud-header__subtitle {
+  font-size: 1rem;
+  color: var(--mentor-hud-text-secondary);
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
+/* Corner decorations */
+.mentor-hud-header__corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: var(--mentor-hud-accent-cyan);
+  opacity: 0.5;
+}
+
+.mentor-hud-header__corner--tl {
+  top: 10px;
+  left: 10px;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+
+.mentor-hud-header__corner--tr {
+  top: 10px;
+  right: 10px;
+  border-top: 2px solid;
+  border-right: 2px solid;
+}
+
+.mentor-hud-header__corner--bl {
+  bottom: 10px;
+  left: 10px;
+  border-bottom: 2px solid;
+  border-left: 2px solid;
+}
+
+.mentor-hud-header__corner--br {
+  bottom: 10px;
+  right: 10px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
+/* ============================================
+   NAVIGATION TABS - CONTROL PANEL
+   ============================================ */
+
+.mentor-hud-navigation {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: var(--mentor-hud-bg-surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--mentor-hud-border);
+  padding: 1rem;
+  border-radius: 0;
+  box-shadow: var(--mentor-hud-glow-cyan);
+}
+
+.mentor-hud-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--mentor-hud-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 140px;
+  justify-content: center;
+  position: relative;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 10px) 0,
+    100% 10px,
+    100% 100%,
+    0 100%
+  );
+}
+
+.mentor-hud-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(6, 182, 212, 0.05);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mentor-hud-tab:hover {
+  border-color: rgba(6, 182, 212, 0.3);
+  color: var(--mentor-hud-accent-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+.mentor-hud-tab:hover::before {
+  opacity: 1;
+}
+
+.mentor-hud-tab.active {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+  border-color: var(--mentor-hud-accent-cyan);
+  color: var(--mentor-hud-text-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--mentor-hud-glow-cyan-strong);
+}
+
+.mentor-hud-tab__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.mentor-hud-tab__label {
+  font-family: var(--mentor-hud-font-display);
+  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+}
+
+/* ============================================
+   MAIN CONTENT PANEL
+   ============================================ */
+
+.mentor-hud-content {
+  background: var(--mentor-hud-bg-surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--mentor-hud-border);
+  box-shadow: var(--mentor-hud-glow-cyan);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ============================================
+   COURSES SECTION - MISSION CONTROL
+   ============================================ */
+
+.mentor-hud-courses {
+  padding: 2rem;
+}
+
+.mentor-hud-courses__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.mentor-hud-courses__title-section h2 {
+  font-family: var(--mentor-hud-font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--mentor-hud-text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.mentor-hud-courses__title-section p {
+  color: var(--mentor-hud-text-secondary);
+  margin: 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.mentor-hud-create-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, var(--mentor-hud-accent-cyan) 0%, var(--mentor-hud-accent-purple) 100%);
+  color: white;
+  border: none;
+  font-family: var(--mentor-hud-font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--mentor-hud-glow-cyan);
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 12px) 0,
+    100% 12px,
+    100% 100%,
+    0 100%
+  );
+}
+
+.mentor-hud-create-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.mentor-hud-create-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--mentor-hud-glow-cyan-strong);
+}
+
+.mentor-hud-create-button:hover::before {
+  left: 100%;
+}
+
+/* ============================================
+   COURSE GRID - MISSION MODULES
+   ============================================ */
+
+.mentor-hud-courses__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Course Card */
+.mentor-hud-course-card {
+  background: rgba(13, 22, 35, 0.5);
+  border: var(--mentor-hud-border);
+  box-shadow: var(--mentor-hud-glow-cyan);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    0 100%
+  );
+}
+
+.mentor-hud-course-card:hover {
+  border-color: rgba(6, 182, 212, 0.6);
+  box-shadow: var(--mentor-hud-glow-cyan-strong);
+  transform: translateY(-4px);
+}
+
+/* Scanline effect on card */
+.mentor-hud-course-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(6, 182, 212, 0.02) 2px,
+    rgba(6, 182, 212, 0.02) 4px
+  );
+  pointer-events: none;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.mentor-hud-course-thumbnail {
+  position: relative;
+  height: 200px;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: var(--mentor-hud-border);
+}
+
+.mentor-hud-course-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+}
+
+.mentor-hud-course-thumbnail-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  color: var(--mentor-hud-accent-cyan);
+}
+
+.mentor-hud-course-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  backdrop-filter: blur(10px);
+  z-index: 2;
+}
+
+.mentor-hud-course-content {
+  padding: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.mentor-hud-course-title {
+  font-family: var(--mentor-hud-font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--mentor-hud-text-primary);
+  margin: 0 0 0.75rem 0;
+  line-height: 1.3;
+}
+
+.mentor-hud-course-description {
+  color: var(--mentor-hud-text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mentor-hud-course-meta {
+  margin-bottom: 1rem;
+}
+
+.mentor-hud-level-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, var(--mentor-hud-accent-purple) 0%, var(--mentor-hud-accent-orange) 100%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+}
+
+.mentor-hud-course-stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.mentor-hud-course-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mentor-hud-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.mentor-hud-course-stat svg {
+  color: var(--mentor-hud-accent-cyan);
+}
+
+/* Course Actions */
+.mentor-hud-course-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mentor-hud-action-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.5rem 1rem;
+  border: 1px solid;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  justify-content: center;
+  min-width: 80px;
+  background: transparent;
+  position: relative;
+}
+
+.mentor-hud-view-button {
+  border-color: rgba(6, 182, 212, 0.3);
+  color: var(--mentor-hud-accent-cyan);
+}
+
+.mentor-hud-view-button:hover {
+  background: rgba(6, 182, 212, 0.1);
+  border-color: var(--mentor-hud-accent-cyan);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+}
+
+.mentor-hud-edit-button {
+  border-color: rgba(168, 85, 247, 0.3);
+  color: var(--mentor-hud-accent-purple);
+}
+
+.mentor-hud-edit-button:hover {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: var(--mentor-hud-accent-purple);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+}
+
+.mentor-hud-submit-button {
+  border-color: rgba(234, 179, 8, 0.3);
+  color: var(--mentor-hud-accent-yellow);
+}
+
+.mentor-hud-submit-button:hover {
+  background: rgba(234, 179, 8, 0.1);
+  border-color: var(--mentor-hud-accent-yellow);
+  box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+}
+
+.mentor-hud-submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mentor-hud-delete-button {
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--mentor-hud-accent-red);
+}
+
+.mentor-hud-delete-button:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--mentor-hud-accent-red);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+}
+
+.mentor-hud-delete-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Empty State */
+.mentor-hud-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--mentor-hud-text-secondary);
+}
+
+.mentor-hud-empty h3 {
+  font-family: var(--mentor-hud-font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 1rem 0 0.5rem 0;
+  color: var(--mentor-hud-text-primary);
+}
+
+.mentor-hud-empty p {
+  margin: 0 0 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+/* ============================================
+   STATUS BADGE COLORS
+   ============================================ */
+
+.mentor-hud-status-draft {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  color: #60a5fa;
+}
+
+.mentor-hud-status-pending {
+  background: rgba(234, 179, 8, 0.2);
+  border: 1px solid rgba(234, 179, 8, 0.5);
+  color: #fbbf24;
+}
+
+.mentor-hud-status-public {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  color: #34d399;
+}
+
+.mentor-hud-status-archived {
+  background: rgba(100, 116, 139, 0.2);
+  border: 1px solid rgba(100, 116, 139, 0.5);
+  color: #94a3b8;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes mentor-hud-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes mentor-hud-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(6, 182, 212, 0.6);
+  }
+}
+
+@keyframes mentor-hud-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+.mentor-hud-dashboard::-webkit-scrollbar {
+  width: 8px;
+}
+
+.mentor-hud-dashboard::-webkit-scrollbar-track {
+  background: rgba(13, 22, 35, 0.5);
+}
+
+.mentor-hud-dashboard::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.3);
+  border-radius: 4px;
+}
+
+.mentor-hud-dashboard::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.5);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 1200px) {
+  .mentor-hud-courses__grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .mentor-hud-dashboard__container {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+
+  .mentor-hud-header {
+    padding: 1.5rem;
+  }
+
+  .mentor-hud-header__title {
+    font-size: 1.75rem;
+  }
+
+  .mentor-hud-header__subtitle {
+    font-size: 0.875rem;
+  }
+
+  .mentor-hud-navigation {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mentor-hud-tab {
+    width: 100%;
+    min-width: auto;
+    padding: 0.875rem 1.25rem;
+    justify-content: flex-start;
+  }
+
+  .mentor-hud-courses {
+    padding: 1.5rem;
+  }
+
+  .mentor-hud-courses__header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .mentor-hud-courses__grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .mentor-hud-course-actions {
+    flex-direction: column;
+  }
+
+  .mentor-hud-action-button {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .mentor-hud-header__title {
+    font-size: 1.5rem;
+  }
+
+  .mentor-hud-courses__title-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .mentor-hud-course-card {
+    margin: 0;
+  }
+
+  .mentor-hud-course-content {
+    padding: 1.25rem;
+  }
+
+  .mentor-hud-course-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* ============================================
+   DEFAULT TAB - SYSTEM STANDBY
+   ============================================ */
+
+.mentor-hud-default-tab {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+}
+
+.mentor-hud-default-title {
+  font-family: var(--mentor-hud-font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, var(--mentor-hud-accent-cyan) 0%, var(--mentor-hud-accent-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+.mentor-hud-default-description {
+  font-size: 1rem;
+  color: var(--mentor-hud-text-secondary);
+  margin: 0;
+  letter-spacing: 0.5px;
+}
