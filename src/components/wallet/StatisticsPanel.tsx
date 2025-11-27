@@ -242,45 +242,45 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
     <div className="statistics-panel">
       {/* Summary Cards */}
       <div className="stats-summary-grid">
-        <div className="stat-summary-card income">
-          <div className="stat-icon">
+        <div className="sp-stat-card income">
+          <div className="sp-stat-icon">
             <TrendingUp size={24} />
           </div>
-          <div className="stat-content">
-            <span className="stat-label">Tổng Thu Nhập</span>
-            <span className="stat-value">{formatCurrency(totalIncome)}</span>
+          <div className="sp-stat-content">
+            <span className="sp-stat-label">Tổng Thu Nhập</span>
+            <span className="sp-stat-value">{formatCurrency(totalIncome)}</span>
           </div>
         </div>
 
-        <div className="stat-summary-card expense">
-          <div className="stat-icon">
+        <div className="sp-stat-card expense">
+          <div className="sp-stat-icon">
             <TrendingDown size={24} />
           </div>
-          <div className="stat-content">
-            <span className="stat-label">Tổng Chi Tiêu</span>
-            <span className="stat-value">{formatCurrency(totalExpense)}</span>
+          <div className="sp-stat-content">
+            <span className="sp-stat-label">Tổng Chi Tiêu</span>
+            <span className="sp-stat-value">{formatCurrency(totalExpense)}</span>
           </div>
         </div>
 
-        <div className="stat-summary-card net">
-          <div className="stat-icon">
+        <div className="sp-stat-card net">
+          <div className="sp-stat-icon">
             <Activity size={24} />
           </div>
-          <div className="stat-content">
-            <span className="stat-label">Dòng Tiền Ròng</span>
-            <span className={`stat-value ${netFlow >= 0 ? 'positive' : 'negative'}`}>
+          <div className="sp-stat-content">
+            <span className="sp-stat-label">Dòng Tiền Ròng</span>
+            <span className={`sp-stat-value ${netFlow >= 0 ? 'positive' : 'negative'}`}>
               {formatCurrency(netFlow)}
             </span>
           </div>
         </div>
 
-        <div className="stat-summary-card coins">
-          <div className="stat-icon">
+        <div className="sp-stat-card coins">
+          <div className="sp-stat-icon">
             <Coins size={24} />
           </div>
-          <div className="stat-content">
-            <span className="stat-label">Tổng Xu Kiếm Được</span>
-            <span className="stat-value">{(walletData?.totalCoinsEarned || 0).toLocaleString()} xu</span>
+          <div className="sp-stat-content">
+            <span className="sp-stat-label">Tổng Xu Kiếm Được</span>
+            <span className="sp-stat-value">{(walletData?.totalCoinsEarned || 0).toLocaleString()} xu</span>
           </div>
         </div>
       </div>

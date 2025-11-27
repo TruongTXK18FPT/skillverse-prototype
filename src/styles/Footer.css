@@ -6,6 +6,59 @@
   overflow: hidden;
 }
 
+/* Tech Footer Theme */
+.tech-footer {
+  background: radial-gradient(ellipse at bottom, #0d1224 0%, #070b14 100%);
+}
+
+/* Footer Background Effects */
+.footer-bg-effects {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.footer-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.5;
+}
+
+.footer-glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+}
+
+.footer-orb-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.4), transparent 70%);
+  top: -100px;
+  left: 10%;
+  animation: footer-orb-float 8s ease-in-out infinite;
+}
+
+.footer-orb-2 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent 70%);
+  bottom: -50px;
+  right: 15%;
+  animation: footer-orb-float 10s ease-in-out infinite reverse;
+}
+
+@keyframes footer-orb-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+
 /* Theme Support - Galaxy Style */
 .footer.light {
   background: linear-gradient(to bottom, #f8fafc, #e2e8f0);
@@ -86,13 +139,65 @@
 }
 
 .brand-logo {
-  filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.3));
+  width: auto;
+  height: auto;
+  max-width: 180px;
+  filter: drop-shadow(0 4px 15px rgba(99, 102, 241, 0.4));
+  transition: all 0.3s ease;
+}
+
+.brand-header:hover .brand-logo {
+  filter: drop-shadow(0 4px 20px rgba(99, 102, 241, 0.6));
+  transform: scale(1.05);
+}
+
+.brand-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff, #a78bfa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.05em;
 }
 
 .brand-description {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   line-height: 1.6;
   opacity: 0.8;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Tech Badges */
+.brand-badges {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tech-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.tech-badge:hover {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+.tech-badge svg {
+  color: #a78bfa;
 }
 
 /* Social Links - Galaxy Theme */
@@ -340,13 +445,13 @@
   width: 100%;
 }
 
-/* Footer Bottom Grid - Facebook centered, Contact on right */
+/* Footer Bottom Grid - Facebook and Contact equal */
 .footer-bottom-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 2rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
   margin-top: 1.5rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 @media (max-width: 768px) {
@@ -355,7 +460,45 @@
   }
 }
 
-/* Facebook Embed Wrapper - Centered */
+/* Facebook Section - Tech Style (Matches Contact Section) */
+.facebook-section-bottom {
+  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 16px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+}
+
+.tech-footer .facebook-section-bottom {
+  background: rgba(15, 23, 42, 0.7);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.facebook-embed-tech {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: rgba(30, 41, 59, 0.4);
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.facebook-embed-tech:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.facebook-embed-tech iframe {
+  display: block;
+  width: 100% !important;
+  border-radius: 12px;
+}
+
+/* Legacy support */
 .facebook-embed-wrapper {
   display: flex;
   justify-content: center;
@@ -363,21 +506,11 @@
   width: 100%;
 }
 
-/* Facebook Embed - Galaxy Style */
 .facebook-embed {
   width: 100%;
   overflow: hidden;
   border: 1px solid rgba(148, 163, 184, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  justify-content: center;
-  align-items: center;
-  padding-left: 4.75rem;
-
-}
-
-.footer.dark .facebook-embed {
-  background: rgba(30, 41, 59, 0.3);
-  backdrop-filter: blur(10px);
 }
 
 .facebook-embed iframe {
@@ -387,20 +520,83 @@
   border-radius: 16px;
 }
 
-/* Contact Section Bottom */
+/* Contact Section Bottom - Tech Redesign */
 .contact-section-bottom {
   padding: 1.5rem;
-  background: rgba(30, 41, 59, 0.3);
+  background: rgba(15, 23, 42, 0.6);
   border-radius: 16px;
-  border: 1px solid rgba(148, 163, 184, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
   backdrop-filter: blur(10px);
 }
 
-.footer.dark .contact-section-bottom {
-  background: rgba(30, 41, 59, 0.4);
+.tech-footer .contact-section-bottom {
+  background: rgba(15, 23, 42, 0.7);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Contact Info Grid - 2 columns on top, full width below */
+/* Contact Info List - Vertical Stack */
+.contact-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(30, 41, 59, 0.4);
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.contact-row:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+  transform: translateX(5px);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.contact-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+  border-radius: 10px;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.contact-icon-box svg {
+  color: #a78bfa;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.contact-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.contact-value {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+/* Legacy support */
 .contact-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -409,6 +605,27 @@
 
 .contact-address {
   grid-column: 1 / -1;
+}
+
+/* Footer Bottom Links */
+.footer-bottom-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.contact-address-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.contact-icon-small {
+  width: 16px;
+  height: 16px;
+  color: #a78bfa;
 }
 
 .social-link:hover {

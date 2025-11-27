@@ -5,7 +5,7 @@ import {
   Eye, EyeOff, Plus, ArrowUpRight, ArrowDownLeft, Activity,
   Gift, Zap, RefreshCw, CheckCircle, XCircle, Clock, Settings,
   Calendar, Crown, ChevronRight, Rocket, ShoppingBag, Search, Filter, Lock, Building2, AlertCircle, Shield,
-  CreditCard, User, Sparkles, Minus, Target, History
+  CreditCard, User, Sparkles, Minus, Target, History, FileText
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import walletService from '../../services/walletService';
@@ -20,6 +20,7 @@ import PaymentCallbackHelper from '../../components/wallet/PaymentCallbackHelper
 import CancelSubscriptionModal from '../../components/premium/CancelSubscriptionModal';
 import CancelAutoRenewalModal from '../../components/premium/CancelAutoRenewalModal';
 import EnableAutoRenewalModal from '../../components/premium/EnableAutoRenewalModal';
+import { PremiumInvoice, useInvoice } from '../../components/invoice';
 import Toast from '../../components/Toast';
 import MeowlGuide from '../../components/MeowlGuide';
 import './MyWalletCosmic.css';
@@ -111,6 +112,9 @@ const MyWalletCosmic: React.FC = () => {
     title: '',
     message: ''
   });
+  
+  // Invoice hook
+  const { showInvoice, invoiceData, openInvoice, closeInvoice } = useInvoice();
 
 
   // Store items data
@@ -544,6 +548,18 @@ const MyWalletCosmic: React.FC = () => {
                   <div className="premium-actions">
                     {subscription.plan.planType !== 'FREE_TIER' && (
                       <>
+                        <button 
+                          className="view-invoice-btn"
+                          onClick={() => openInvoice(
+                            subscription,
+                            user?.fullName || 'Khách hàng',
+                            user?.email || '',
+                            user?.id
+                          )}
+                        >
+                          <FileText size={16} />
+                          Xem hóa đơn
+                        </button>
                         {subscription.autoRenew ? (
                           <button 
                             className="cancel-auto-renewal-btn"
@@ -1088,6 +1104,11 @@ const MyWalletCosmic: React.FC = () => {
           showToast('success', '✅ Thành công', 'Đã hủy gói đăng ký');
         }}
       />
+
+      {/* Invoice Modal */}
+      {showInvoice && invoiceData && (
+        <PremiumInvoice data={invoiceData} onClose={closeInvoice} />
+      )}
 
       {/* Toast */}
       <Toast

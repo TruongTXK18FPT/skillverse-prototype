@@ -1896,6 +1896,30 @@
   background: linear-gradient(135deg, #7c3aed, #6d28d9);
 }
 
+.view-invoice-btn {
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(99, 102, 241, 0.2));
+  color: #a78bfa;
+  border: 2px solid rgba(139, 92, 246, 0.4);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.view-invoice-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(99, 102, 241, 0.3));
+  border-color: rgba(139, 92, 246, 0.6);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+  color: #c4b5fd;
+}
+
 .cancel-subscription-btn {
   padding: 0.875rem 1.5rem;
   background: linear-gradient(135deg, #ef4444, #dc2626);

@@ -6,7 +6,7 @@ import {
   Brain, Target,
   Code, Zap, Globe, ChevronRight,
   Map, Briefcase as Portfolio, Building, Power,
-  Facebook, Video, Trophy, Medal, Star, Sparkles, ExternalLink
+  Facebook, Video, Trophy, Medal, Star, Sparkles, ExternalLink, Rocket
 } from 'lucide-react';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/HomePage.css';
@@ -404,10 +404,13 @@ const HomePage = () => {
       <section className="constellation-section__galaxy-bg">
         <div className="constellation__galaxy-bg">
           <div className="section-container">
-            <div className="section-header">
-            <h2 className="section-title">
-              Tại Sao Chọn Skillverse?
-            </h2>
+        <div className="section-header">
+            <div className="section-title-wrapper">
+              <Sparkles className="section-header-icon" size={32} />
+              <h2 className="section-title">
+                Tại Sao Chọn Skillverse?
+              </h2>
+            </div>
             <p className="section-description">
               Trải nghiệm tương lai của việc học tập với nền tảng được hỗ trợ bởi AI thích ứng với nhu cầu của bạn
             </p>
@@ -622,9 +625,12 @@ const HomePage = () => {
       <section className="fabricator-section">
         <div className="section-container">
           <div className="section-header">
-            <h2 className="section-title">
-              Con Đường Đến Thành Công
-            </h2>
+            <div className="section-title-wrapper">
+              <Rocket className="section-header-icon" size={32} />
+              <h2 className="section-title">
+                Con Đường Đến Thành Công
+              </h2>
+            </div>
             <p className="section-description">
               Hành trình học tập cá nhân hóa được hỗ trợ bởi AI
             </p>

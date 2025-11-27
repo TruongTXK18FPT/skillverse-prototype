@@ -12,7 +12,8 @@
   gap: 1.5rem;
 }
 
-.stat-summary-card {
+/* SP = Statistics Panel - unique prefix to avoid CSS conflicts */
+.sp-stat-card {
   position: relative;
   display: flex;
   align-items: center;
@@ -25,7 +26,7 @@
   transition: all 0.3s ease;
 }
 
-.stat-summary-card::before {
+.sp-stat-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -37,69 +38,69 @@
   transition: opacity 0.3s ease;
 }
 
-.stat-summary-card:hover {
+.sp-stat-card:hover {
   transform: translateY(-4px);
   border-color: rgba(139, 92, 246, 0.6);
   box-shadow: 0 15px 30px rgba(139, 92, 246, 0.3);
 }
 
-.stat-summary-card:hover::before {
+.sp-stat-card:hover::before {
   opacity: 1;
 }
 
-.stat-summary-card.income {
+.sp-stat-card.income {
   border-color: rgba(34, 197, 94, 0.3);
 }
 
-.stat-summary-card.income::before {
+.sp-stat-card.income::before {
   background: linear-gradient(90deg, #22c55e, #10b981);
 }
 
-.stat-summary-card.income:hover {
+.sp-stat-card.income:hover {
   border-color: rgba(34, 197, 94, 0.6);
   box-shadow: 0 15px 30px rgba(34, 197, 94, 0.3);
 }
 
-.stat-summary-card.expense {
+.sp-stat-card.expense {
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-.stat-summary-card.expense::before {
+.sp-stat-card.expense::before {
   background: linear-gradient(90deg, #ef4444, #dc2626);
 }
 
-.stat-summary-card.expense:hover {
+.sp-stat-card.expense:hover {
   border-color: rgba(239, 68, 68, 0.6);
   box-shadow: 0 15px 30px rgba(239, 68, 68, 0.3);
 }
 
-.stat-summary-card.net {
+.sp-stat-card.net {
   border-color: rgba(59, 130, 246, 0.3);
 }
 
-.stat-summary-card.net::before {
+.sp-stat-card.net::before {
   background: linear-gradient(90deg, #3b82f6, #2563eb);
 }
 
-.stat-summary-card.net:hover {
+.sp-stat-card.net:hover {
   border-color: rgba(59, 130, 246, 0.6);
   box-shadow: 0 15px 30px rgba(59, 130, 246, 0.3);
 }
 
-.stat-summary-card.coins {
+.sp-stat-card.coins {
   border-color: rgba(251, 191, 36, 0.3);
 }
 
-.stat-summary-card.coins::before {
+.sp-stat-card.coins::before {
   background: linear-gradient(90deg, #fbbf24, #f59e0b);
 }
 
-.stat-summary-card.coins:hover {
+.sp-stat-card.coins:hover {
   border-color: rgba(251, 191, 36, 0.6);
   box-shadow: 0 15px 30px rgba(251, 191, 36, 0.3);
 }
 
-.stat-icon {
+.sp-stat-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,55 +112,55 @@
   flex-shrink: 0;
 }
 
-.stat-summary-card.income .stat-icon {
+.sp-stat-card.income .sp-stat-icon {
   background: rgba(34, 197, 94, 0.1);
   color: #22c55e;
 }
 
-.stat-summary-card.expense .stat-icon {
+.sp-stat-card.expense .sp-stat-icon {
   background: rgba(239, 68, 68, 0.1);
   color: #ef4444;
 }
 
-.stat-summary-card.net .stat-icon {
+.sp-stat-card.net .sp-stat-icon {
   background: rgba(59, 130, 246, 0.1);
   color: #3b82f6;
 }
 
-.stat-summary-card.coins .stat-icon {
+.sp-stat-card.coins .sp-stat-icon {
   background: rgba(251, 191, 36, 0.1);
   color: #fbbf24;
 }
 
-.stat-content {
+.sp-stat-content {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   flex: 1;
+  min-width: 0;
 }
 
-/* Wallet-specific stat styles - prefixed to avoid conflicts */
-.statistics-panel .stat-label,
-.stat-summary-card .stat-label {
+.sp-stat-label {
   color: #a5b4fc;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.statistics-panel .stat-value,
-.stat-summary-card .stat-value {
+.sp-stat-value {
   color: #e0e7ff;
   font-size: 1.5rem;
   font-weight: 800;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
-.statistics-panel .stat-value.positive,
-.stat-summary-card .stat-value.positive {
+.sp-stat-value.positive {
   color: #22c55e;
 }
 
-.statistics-panel .stat-value.negative,
-.stat-summary-card .stat-value.negative {
+.sp-stat-value.negative {
   color: #ef4444;
 }
 
@@ -367,16 +368,16 @@
     grid-template-columns: 1fr;
   }
 
-  .stat-summary-card {
+  .sp-stat-card {
     padding: 1.25rem;
   }
 
-  .stat-icon {
+  .sp-stat-icon {
     width: 50px;
     height: 50px;
   }
 
-  .stat-value {
+  .sp-stat-value {
     font-size: 1.25rem;
   }
 }

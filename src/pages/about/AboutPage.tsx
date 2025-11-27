@@ -133,9 +133,9 @@ const AboutPage: React.FC = () => {
       {/* Animated Background */}
       <div className="about-bg-effects">
         <div className="about-grid-overlay"></div>
-        <div className="about-glow-orb orb-1"></div>
-        <div className="about-glow-orb orb-2"></div>
-        <div className="about-glow-orb orb-3"></div>
+        <div className="about-glow-orb about-orb-1"></div>
+        <div className="about-glow-orb about-orb-2"></div>
+        <div className="about-glow-orb about-orb-3"></div>
         {[...Array(30)].map((_, i) => (
           <div
             key={i}
@@ -153,27 +153,27 @@ const AboutPage: React.FC = () => {
       {/* Hero Section */}
       <section className="about-hero">
         <motion.div
-          className="hero-content"
+          className="about-hero-content"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="hero-logo-container">
-            <img src={Logo} alt="SkillVerse" className="hero-logo" />
-            <div className="logo-glow-ring"></div>
+          <div className="about-hero-logo-container">
+            <img src={Logo} alt="SkillVerse" className="about-hero-logo" />
+            <div className="about-logo-glow-ring"></div>
           </div>
           
           <motion.h1 
-            className="hero-title"
+            className="about-hero-title"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
           >
-            <span className="title-gradient">SKILLVERSE</span>
+            <span className="about-title-gradient">SKILLVERSE</span>
           </motion.h1>
           
           <motion.p 
-            className="hero-tagline"
+            className="about-hero-tagline"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.6 }}
@@ -182,7 +182,7 @@ const AboutPage: React.FC = () => {
           </motion.p>
           
           <motion.p 
-            className="hero-tagline-vi"
+            className="about-hero-tagline-vi"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.6 }}
@@ -191,7 +191,7 @@ const AboutPage: React.FC = () => {
           </motion.p>
 
           <motion.div 
-            className="hero-description"
+            className="about-hero-description"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
@@ -203,16 +203,16 @@ const AboutPage: React.FC = () => {
           </motion.div>
 
           <motion.div 
-            className="hero-cta"
+            className="about-hero-cta"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8, duration: 0.5 }}
           >
-            <Link to={isAuthenticated ? "/chatbot" : "/register"} className="cta-button primary">
+            <Link to={isAuthenticated ? "/chatbot" : "/register"} className="about-cta-button primary">
               <Rocket size={20} />
               <span>{isAuthenticated ? "Trò chuyện với AI" : "Bắt đầu ngay"}</span>
             </Link>
-            <Link to="/courses" className="cta-button secondary">
+            <Link to="/courses" className="about-cta-button secondary">
               <BookOpen size={20} />
               <span>Khám phá khóa học</span>
             </Link>
@@ -220,28 +220,28 @@ const AboutPage: React.FC = () => {
         </motion.div>
 
         {/* Hologram Border */}
-        <div className="hero-holo-border">
-          <div className="holo-corner top-left"></div>
-          <div className="holo-corner top-right"></div>
-          <div className="holo-corner bottom-left"></div>
-          <div className="holo-corner bottom-right"></div>
+        <div className="about-hero-holo-border">
+          <div className="about-holo-corner top-left"></div>
+          <div className="about-holo-corner top-right"></div>
+          <div className="about-holo-corner bottom-left"></div>
+          <div className="about-holo-corner bottom-right"></div>
         </div>
       </section>
 
       {/* Stats Section */}
       <section className="about-stats">
-        <div className="stats-container">
+        <div className="about-stats-container">
           {stats.map((stat, index) => (
             <motion.div
               key={index}
-              className="stat-card"
+              className="about-stat-card"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <span className="stat-value">{stat.value}</span>
-              <span className="stat-label">{stat.labelVi}</span>
+              <span className="about-stat-value">{stat.value}</span>
+              <span className="about-stat-label">{stat.labelVi}</span>
             </motion.div>
           ))}
         </div>
@@ -250,67 +250,67 @@ const AboutPage: React.FC = () => {
       {/* Core Solutions Section */}
       <section className="about-solutions">
         <motion.div
-          className="section-header"
+          className="about-section-header"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="section-title">
+          <h2 className="about-section-title">
             <Sparkles className="about-section-icon" />
             Giải pháp cốt lõi
           </h2>
-          <p className="section-subtitle">3 vấn đề lớn - 3 giải pháp đột phá</p>
+          <p className="about-section-subtitle">3 vấn đề lớn - 3 giải pháp đột phá</p>
         </motion.div>
 
-        <div className="solutions-grid">
+        <div className="about-solutions-grid">
           <motion.div
-            className="solution-card"
+            className="about-solution-card"
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <div className="solution-icon" style={{ background: 'linear-gradient(135deg, #00d4ff, #6366f1)' }}>
+            <div className="about-solution-icon" style={{ background: 'linear-gradient(135deg, #00d4ff, #6366f1)' }}>
               <Brain size={32} />
             </div>
-            <div className="solution-content">
+            <div className="about-solution-content">
               <h3>Thiếu định hướng nghề nghiệp</h3>
-              <p className="solution-arrow">→</p>
-              <p className="solution-answer">AI Roadmap cá nhân hóa</p>
+              <p className="about-solution-arrow">→</p>
+              <p className="about-solution-answer">AI Roadmap cá nhân hóa</p>
             </div>
           </motion.div>
 
           <motion.div
-            className="solution-card"
+            className="about-solution-card"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <div className="solution-icon" style={{ background: 'linear-gradient(135deg, #10b981, #14b8a6)' }}>
+            <div className="about-solution-icon" style={{ background: 'linear-gradient(135deg, #10b981, #14b8a6)' }}>
               <Zap size={32} />
             </div>
-            <div className="solution-content">
+            <div className="about-solution-content">
               <h3>Thiếu kỹ năng thực hành</h3>
-              <p className="solution-arrow">→</p>
-              <p className="solution-answer">Micro/Nano-course + Dự án thật</p>
+              <p className="about-solution-arrow">→</p>
+              <p className="about-solution-answer">Micro/Nano-course + Dự án thật</p>
             </div>
           </motion.div>
 
           <motion.div
-            className="solution-card"
+            className="about-solution-card"
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className="solution-icon" style={{ background: 'linear-gradient(135deg, #f59e0b, #ef4444)' }}>
+            <div className="about-solution-icon" style={{ background: 'linear-gradient(135deg, #f59e0b, #ef4444)' }}>
               <Briefcase size={32} />
             </div>
-            <div className="solution-content">
+            <div className="about-solution-content">
               <h3>Thiếu portfolio & cơ hội</h3>
-              <p className="solution-arrow">→</p>
-              <p className="solution-answer">Skill Wallet + Micro-job Marketplace</p>
+              <p className="about-solution-arrow">→</p>
+              <p className="about-solution-answer">Skill Wallet + Micro-job Marketplace</p>
             </div>
           </motion.div>
         </div>
@@ -319,23 +319,23 @@ const AboutPage: React.FC = () => {
       {/* Features Section */}
       <section className="about-features">
         <motion.div
-          className="section-header"
+          className="about-section-header"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="section-title">
+          <h2 className="about-section-title">
             <Award className="about-section-icon" />
             Tính năng chính
           </h2>
-          <p className="section-subtitle">Hệ sinh thái học tập toàn diện</p>
+          <p className="about-section-subtitle">Hệ sinh thái học tập toàn diện</p>
         </motion.div>
 
-        <div className="features-grid">
+        <div className="about-features-grid">
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              className="feature-card"
+              className="about-feature-card"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -343,14 +343,14 @@ const AboutPage: React.FC = () => {
               whileHover={{ scale: 1.02, y: -5 }}
             >
               <div 
-                className="feature-icon" 
+                className="about-feature-icon" 
                 style={{ color: feature.color, borderColor: feature.color }}
               >
                 {feature.icon}
               </div>
-              <h3 className="feature-title">{feature.titleVi}</h3>
-              <p className="feature-description">{feature.descriptionVi}</p>
-              <div className="feature-glow" style={{ background: feature.color }}></div>
+              <h3 className="about-feature-title">{feature.titleVi}</h3>
+              <p className="about-feature-description">{feature.descriptionVi}</p>
+              <div className="about-feature-glow" style={{ background: feature.color }}></div>
             </motion.div>
           ))}
         </div>
@@ -359,68 +359,68 @@ const AboutPage: React.FC = () => {
       {/* Target Users Section */}
       <section className="about-users">
         <motion.div
-          className="section-header"
+          className="about-section-header"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="section-title">
+          <h2 className="about-section-title">
             <Users className="about-section-icon" />
             Đối tượng người dùng
           </h2>
-          <p className="section-subtitle">4 nhóm chính trong hệ sinh thái</p>
+          <p className="about-section-subtitle">4 nhóm chính trong hệ sinh thái</p>
         </motion.div>
 
-        <div className="users-grid">
+        <div className="about-users-grid">
           <motion.div 
-            className="user-card learner"
+            className="about-user-card learner"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
           >
-            <img src={MeowlUser} alt="Learner" className="user-meowl-img" />
+            <img src={MeowlUser} alt="Learner" className="about-user-meowl-img" />
             <h3>Learners</h3>
             <p>Sinh viên / Người chuyển ngành</p>
-            <span className="user-need">Cần: Định hướng + Kỹ năng + Portfolio + Việc làm</span>
+            <span className="about-user-need">Cần: Định hướng + Kỹ năng + Portfolio + Việc làm</span>
           </motion.div>
 
           <motion.div 
-            className="user-card mentor"
+            className="about-user-card mentor"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            <img src={MeowlMentor} alt="Mentor" className="user-meowl-img" />
+            <img src={MeowlMentor} alt="Mentor" className="about-user-meowl-img" />
             <h3>Mentors</h3>
             <p>Chuyên gia ngành</p>
-            <span className="user-need">Muốn: Chia sẻ kiến thức, tạo thu nhập</span>
+            <span className="about-user-need">Muốn: Chia sẻ kiến thức, tạo thu nhập</span>
           </motion.div>
 
           <motion.div 
-            className="user-card business"
+            className="about-user-card business"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <img src={MeowlBusiness} alt="Business" className="user-meowl-img" />
+            <img src={MeowlBusiness} alt="Business" className="about-user-meowl-img" />
             <h3>SMEs / Startups</h3>
             <p>Doanh nghiệp vừa và nhỏ</p>
-            <span className="user-need">Cần: Nhân sự trẻ, freelancer, thực tập sinh</span>
+            <span className="about-user-need">Cần: Nhân sự trẻ, freelancer, thực tập sinh</span>
           </motion.div>
 
           <motion.div 
-            className="user-card professional"
+            className="about-user-card professional"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            <img src={MeowlUser} alt="Professional" className="user-meowl-img" />
+            <img src={MeowlUser} alt="Professional" className="about-user-meowl-img" />
             <h3>Early Professionals</h3>
             <p>Junior 1-3 năm kinh nghiệm</p>
-            <span className="user-need">Muốn: Reskill/Upskill nhanh</span>
+            <span className="about-user-need">Muốn: Reskill/Upskill nhanh</span>
           </motion.div>
         </div>
       </section>
@@ -428,14 +428,14 @@ const AboutPage: React.FC = () => {
       {/* Vision Section */}
       <section className="about-vision">
         <motion.div
-          className="vision-container"
+          className="about-vision-container"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <div className="vision-content">
-            <h2 className="vision-title">🚀 Tầm nhìn dài hạn</h2>
-            <ul className="vision-list">
+          <div className="about-vision-content">
+            <h2 className="about-vision-title">🚀 Tầm nhìn dài hạn</h2>
+            <ul className="about-vision-list">
               <li>
                 <ChevronRight size={20} />
                 <span>Trở thành nền tảng AI học tập & nghề nghiệp cho thế hệ trẻ Việt Nam</span>
@@ -455,14 +455,14 @@ const AboutPage: React.FC = () => {
             </ul>
           </div>
           <div 
-            className="vision-decoration"
+            className="about-vision-decoration"
             onMouseEnter={() => setIsGlobeHovered(true)}
             onMouseLeave={() => setIsGlobeHovered(false)}
           >
             {isGlobeHovered ? (
-              <img src={EarthImage} alt="Earth" className="vision-earth-img" />
+              <img src={EarthImage} alt="Earth" className="about-vision-earth-img" />
             ) : (
-              <Globe size={120} className="vision-globe" />
+              <Globe size={120} className="about-vision-globe" />
             )}
           </div>
         </motion.div>
@@ -471,41 +471,41 @@ const AboutPage: React.FC = () => {
       {/* Team Section */}
       <section className="about-team">
         <motion.div
-          className="section-header"
+          className="about-section-header"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="section-title">
+          <h2 className="about-section-title">
             <Users className="about-section-icon" />
             Đội ngũ phát triển
           </h2>
-          <p className="section-subtitle">Capstone Project - Supervisor: Lại Đức Hùng</p>
+          <p className="about-section-subtitle">Capstone Project - Supervisor: Lại Đức Hùng</p>
         </motion.div>
 
-        <div className="team-grid">
+        <div className="about-team-grid">
           {team.map((member, index) => (
             <motion.div
               key={index}
-              className="team-card"
+              className="about-team-card"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
               whileHover={{ y: -10 }}
             >
-              <div className="team-avatar">
-                <img src={member.avatar} alt={member.name} className="team-avatar-img" />
+              <div className="about-team-avatar">
+                <img src={member.avatar} alt={member.name} className="about-team-avatar-img" />
               </div>
-              <h3 className="team-name">{member.name}</h3>
-              <p className="team-role">{member.role}</p>
-              <p className="team-description">{member.description}</p>
-              <div className="team-links">
+              <h3 className="about-team-name">{member.name}</h3>
+              <p className="about-team-role">{member.role}</p>
+              <p className="about-team-description">{member.description}</p>
+              <div className="about-team-links">
                 {member.github && (
-                  <a href={member.github} target="_blank" rel="noopener noreferrer" className="team-link"><Github size={18} /></a>
+                  <a href={member.github} target="_blank" rel="noopener noreferrer" className="about-team-link"><Github size={18} /></a>
                 )}
                 {member.linkedin && (
-                  <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="team-link"><Linkedin size={18} /></a>
+                  <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="about-team-link"><Linkedin size={18} /></a>
                 )}
               </div>
             </motion.div>
@@ -516,19 +516,19 @@ const AboutPage: React.FC = () => {
       {/* CTA Section */}
       <section className="about-cta">
         <motion.div
-          className="cta-container"
+          className="about-cta-container"
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
         >
           <h2>Sẵn sàng bắt đầu hành trình?</h2>
           <p>Tham gia cùng hàng nghìn người học đang phát triển kỹ năng mỗi ngày</p>
-          <div className="cta-buttons">
-            <Link to={isAuthenticated ? "/chatbot" : "/register"} className="cta-button primary large">
+          <div className="about-cta-buttons">
+            <Link to={isAuthenticated ? "/chatbot" : "/register"} className="about-cta-button primary large">
               <Rocket size={24} />
               <span>{isAuthenticated ? "Trò chuyện với AI" : "Đăng ký miễn phí"}</span>
             </Link>
-            <Link to="/premium" className="cta-button secondary large">
+            <Link to="/premium" className="about-cta-button secondary large">
               <Sparkles size={24} />
               <span>Xem gói Premium</span>
             </Link>
@@ -538,9 +538,9 @@ const AboutPage: React.FC = () => {
 
       {/* Footer decoration */}
       <div className="about-footer-decoration">
-        <div className="footer-line"></div>
-        <span className="footer-text">SKILLVERSE © 2024 - Learn Smart. Practice Real. Work Confidently.</span>
-        <div className="footer-line"></div>
+        <div className="about-footer-line"></div>
+        <span className="about-footer-text">SKILLVERSE © 2024 - Learn Smart. Practice Real. Work Confidently.</span>
+        <div className="about-footer-line"></div>
       </div>
 
       {/* Meowl Guide */}

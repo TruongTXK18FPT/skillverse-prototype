@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   Crown, Check, Star, Wallet, ArrowRight, Zap, Bot, 
-  Users, Shield, Sparkles, Rocket, Award, GraduationCap, Gem, XCircle, RefreshCw
+  Users, Shield, Sparkles, Rocket, Award, GraduationCap, Gem, XCircle, RefreshCw, FileText
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -18,6 +18,7 @@ import { UserProfileResponse } from '../../data/userDTOs';
 import WalletPaymentModal from '../../components/premium/WalletPaymentModal';
 import CancelSubscriptionModal from '../../components/premium/CancelSubscriptionModal';
 import CancelAutoRenewalModal from '../../components/premium/CancelAutoRenewalModal';
+import { PremiumInvoice, useInvoice } from '../../components/invoice';
 
 // Import avatar frames
 import silverAvatar from '../../assets/premium/silver_avatar.png';
@@ -37,6 +38,9 @@ const PremiumPageCosmic = () => {
   const [selectedPlanForWallet, setSelectedPlanForWallet] = useState<PremiumPlan | null>(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showCancelAutoRenewalModal, setShowCancelAutoRenewalModal] = useState(false);
+  
+  // Invoice hook
+  const { showInvoice, invoiceData, openInvoice, closeInvoice } = useInvoice();
 
   const userEmail = user?.email || '';
   const isStudentEligible = Boolean(userEmail && (userEmail.includes('.edu') || userEmail.includes('@university') || userEmail.includes('@student')));
@@ -447,6 +451,18 @@ const PremiumPageCosmic = () => {
                   </div>
                   {currentSub.plan.planType !== 'FREE_TIER' && (
                     <div className="cosmic-subscription-actions">
+                      <button
+                        className="cosmic-view-invoice-btn"
+                        onClick={() => openInvoice(
+                          currentSub,
+                          userProfile?.fullName || user?.fullName || 'Khách hàng',
+                          userProfile?.email || user?.email || '',
+                          userProfile?.id
+                        )}
+                      >
+                        <FileText size={18} />
+                        Xem hóa đơn
+                      </button>
                       {currentSub.autoRenew && (
                         <button
                           className="cosmic-cancel-auto-renewal-btn"
@@ -591,6 +607,11 @@ const PremiumPageCosmic = () => {
           isStudentPrice={isStudentEligible}
           onConfirm={confirmWalletPayment}
         />
+      )}
+
+      {/* Invoice Modal */}
+      {showInvoice && invoiceData && (
+        <PremiumInvoice data={invoiceData} onClose={closeInvoice} />
       )}
     </div>
   );

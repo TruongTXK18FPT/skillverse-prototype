@@ -1,22 +1,9 @@
-import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin, ArrowUp, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, ArrowUp, Users, Sparkles, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import '../styles/Footer.css';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import Logo from '../assets/skillverse.png';
-
-// Minimal TikTok icon as inline SVG
-const TikTokIcon = ({ className = '' }: { className?: string }) => (
-  <svg
-    viewBox="0 0 256 256"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    aria-hidden="true"
-    focusable="false"
-  >
-    <path d="M170 32c6 28 25 50 54 56v32c-19-1-36-8-54-20v68c0 35-28 64-63 64s-63-29-63-64 28-64 63-64c5 0 10 1 15 2v32c-5-3-10-4-15-4-18 0-31 14-31 34s13 34 31 34 31-14 31-34V32h32z"/>
-  </svg>
-);
 
 const Footer = () => {
   const { theme } = useTheme();
@@ -31,7 +18,14 @@ const Footer = () => {
   };
 
   return (
-    <footer className={`footer ${theme}`}>
+    <footer className={`footer ${theme} tech-footer`}>
+      {/* Tech Background Effects */}
+      <div className="footer-bg-effects">
+        <div className="footer-grid-overlay"></div>
+        <div className="footer-glow-orb footer-orb-1"></div>
+        <div className="footer-glow-orb footer-orb-2"></div>
+      </div>
+
       <div className="footer-top">
         <div className="footer-container">
           <div className="footer-grid">
@@ -43,16 +37,20 @@ const Footer = () => {
               <p className="brand-description">
                 Hệ sinh thái học tập và làm việc tích hợp cho sinh viên và người chuyển đổi nghề nghiệp trong kỷ nguyên số.
               </p>
+              <div className="brand-badges">
+                <span className="tech-badge"><Shield size={14} /> Secure</span>
+                <span className="tech-badge"><Sparkles size={14} /> AI Powered</span>
+              </div>
             </div>
 
             {/* Quick Links */}
             <div className="footer-section">
               <h3 className="footer-title">{translations.footer.quickLinks}</h3>
               <ul className="footer-links">
-                <li><a href="/courses" className="footer-link hover-underline">{translations.navigation.courses}</a></li>
-                <li><a href="/jobs" className="footer-link hover-underline">{translations.navigation.jobs}</a></li>
-                <li><a href="/portfolio" className="footer-link hover-underline">{translations.navigation.portfolio}</a></li>
-                <li><a href="/chatbot" className="footer-link hover-underline">{translations.navigation.chatbot}</a></li>
+                <li><Link to="/courses" className="footer-link hover-underline">{translations.navigation.courses}</Link></li>
+                <li><Link to="/jobs" className="footer-link hover-underline">{translations.navigation.jobs}</Link></li>
+                <li><Link to="/portfolio" className="footer-link hover-underline">{translations.navigation.portfolio}</Link></li>
+                <li><Link to="/chatbot" className="footer-link hover-underline">{translations.navigation.chatbot}</Link></li>
               </ul>
             </div>
 
@@ -74,14 +72,15 @@ const Footer = () => {
       {/* Facebook and Contact Side by Side */}
       <div className="footer-container">
         <div className="footer-bottom-grid">
-          {/* Facebook Page Embed - Centered */}
-          <div className="facebook-embed-wrapper">
-            <div className="facebook-embed">
+          {/* Facebook Page Embed - Tech Style */}
+          <div className="facebook-section-bottom">
+            <h3 className="footer-title">Facebook</h3>
+            <div className="facebook-embed-tech">
               <iframe
-                src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D61581184190711&tabs=timeline&width=500&height=300&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
+                src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D61581184190711&tabs=timeline&width=500&height=280&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
                 width="100%"
-                height="300"
-                style={{ border: 'none', overflow: 'hidden', borderRadius: '16px' }}
+                height="280"
+                style={{ border: 'none', overflow: 'hidden', borderRadius: '12px' }}
                 scrolling="no"
                 frameBorder="0"
                 allowFullScreen={true}
@@ -91,22 +90,53 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Contact Section */}
+          {/* Contact Section - Tech Redesigned */}
           <div className="contact-section-bottom">
             <h3 className="footer-title">{translations.footer.contact}</h3>
-            <div className="contact-info-grid">
-              <a href="mailto:skillverse.contact@gmail.com" className="contact-item hover-float">
-                <Mail className="contact-icon" />
-                <span>skillverse.contact@gmail.com</span>
+            <div className="contact-info-list">
+              {/* Support Email */}
+              <a href="mailto:support@skillverse.vn" className="contact-row hover-float">
+                <div className="contact-icon-box">
+                  <Mail size={20} />
+                </div>
+                <div className="contact-details">
+                  <span className="contact-label">Support</span>
+                  <span className="contact-value">support@skillverse.vn</span>
+                </div>
               </a>
-              <a href="tel:+84931430662" className="contact-item hover-float">
-                <Phone className="contact-icon" />
-                <span>0931430662</span>
+
+              {/* Contact Email */}
+              <a href="mailto:contact@skillverse.vn" className="contact-row hover-float">
+                <div className="contact-icon-box">
+                  <Mail size={20} />
+                </div>
+                <div className="contact-details">
+                  <span className="contact-label">Contact</span>
+                  <span className="contact-value">contact@skillverse.vn</span>
+                </div>
               </a>
-              <div className="contact-item hover-float contact-address">
-                <MapPin className="contact-icon" />
-                <span>{translations.footer.location}</span>
-              </div>
+
+              {/* Community Email */}
+              <a href="mailto:skillverse.contact@gmail.com" className="contact-row hover-float">
+                <div className="contact-icon-box">
+                  <Users size={20} />
+                </div>
+                <div className="contact-details">
+                  <span className="contact-label">Community</span>
+                  <span className="contact-value">skillverse.contact@gmail.com</span>
+                </div>
+              </a>
+
+              {/* Hotline */}
+              <a href="tel:+84931430662" className="contact-row hover-float">
+                <div className="contact-icon-box">
+                  <Phone size={20} />
+                </div>
+                <div className="contact-details">
+                  <span className="contact-label">Hotline</span>
+                  <span className="contact-value">0931 430 662</span>
+                </div>
+              </a>
             </div>
           </div>
         </div>
@@ -131,8 +161,14 @@ const Footer = () => {
         <div className="footer-container">
           <div className="footer-bottom-content">
             <p className="copyright">
-              © 2025 Skillverse. Đã đăng ký bản quyền.
+              © 2025 Skillverse. All rights reserved.
             </p>
+            <div className="footer-bottom-links">
+              <div className="contact-item hover-float contact-address-inline">
+                <MapPin size={16} className="contact-icon-small" />
+                <span>{translations.footer.location}</span>
+              </div>
+            </div>
             <button onClick={scrollToTop} className="scroll-top-button">
               <ArrowUp className="w-5 h-5" />
             </button>
