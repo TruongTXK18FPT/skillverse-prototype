@@ -76,7 +76,7 @@ const AIExpertManagementTab: React.FC = () => {
         const domains = new Set(data.map((c: ExpertPromptConfig) => c.domain).filter(Boolean));
         setExpandedDomains(domains as Set<string>);
       }
-    } catch (error) {
+    } catch {
       showError('Lỗi', 'Không thể tải danh sách');
     } finally {
       setLoading(false);
@@ -133,7 +133,11 @@ const AIExpertManagementTab: React.FC = () => {
   const toggleDomain = (domain: string) => {
     setExpandedDomains(prev => {
       const next = new Set(prev);
-      next.has(domain) ? next.delete(domain) : next.add(domain);
+      if (next.has(domain)) {
+        next.delete(domain);
+      } else {
+        next.add(domain);
+      }
       return next;
     });
   };
@@ -141,7 +145,11 @@ const AIExpertManagementTab: React.FC = () => {
   const toggleIndustry = (key: string) => {
     setExpandedIndustries(prev => {
       const next = new Set(prev);
-      next.has(key) ? next.delete(key) : next.add(key);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
       return next;
     });
   };
@@ -252,7 +260,7 @@ const AIExpertManagementTab: React.FC = () => {
       showSuccess('Thành công', 'Đã xóa');
       closeModal();
       loadConfigs();
-    } catch (error: any) {
+    } catch {
       showError('Lỗi', 'Không thể xóa');
     } finally {
       setFormLoading(false);
@@ -267,7 +275,7 @@ const AIExpertManagementTab: React.FC = () => {
       setJobRoleForm(p => ({ ...p, mediaUrl: result.mediaUrl }));
       showSuccess('Thành công', 'Đã upload hình');
       loadConfigs();
-    } catch (error: any) {
+    } catch {
       showError('Lỗi', 'Không thể upload');
     } finally {
       setFormLoading(false);
