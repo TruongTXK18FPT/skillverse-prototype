@@ -25,6 +25,7 @@ import { MissionLogModal } from './MissionLogModal';
 import { CommendationModal } from './CommendationModal';
 import { DataCompilerModal } from './DataCompilerModal';
 import SystemAlertModal from './SystemAlertModal';
+import DossierInitScreen from './DossierInitScreen';
 import './dossier-portfolio-styles.css';
 
 const TacticalDossierPortfolio = () => {
@@ -329,35 +330,23 @@ const TacticalDossierPortfolio = () => {
     );
   }
 
-  // No Extended Profile State
+  // No Extended Profile State - System Initialization Screen
   if (!hasExtendedProfile) {
     return (
       <div className="dossier-portfolio-container" data-theme={theme}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', padding: '2rem' }}>
-          <div className="dossier-panel-frame" style={{ maxWidth: '600px', padding: '3rem 2rem', textAlign: 'center' }}>
-            <h2 className="dossier-modal-title" style={{ marginBottom: '1rem' }}>WELCOME TO TACTICAL DOSSIER</h2>
-            <p style={{ color: 'var(--dossier-silver)', marginBottom: '2rem' }}>
-              Create your pilot portfolio to showcase skills, mission logs, and commendations to recruiters and clients.
-            </p>
-            <button
-              onClick={() => {
-                setProfileModalMode('create');
-                setProfileModalOpen(true);
-              }}
-              className="dossier-btn-primary"
-            >
-              <Plus size={18} />
-              CREATE PILOT ID NOW
-            </button>
-          </div>
+        <DossierInitScreen
+          onInitiate={() => {
+            setProfileModalMode('create');
+            setProfileModalOpen(true);
+          }}
+        />
 
-          <PilotIDModal
-            isOpen={profileModalOpen}
-            onClose={() => setProfileModalOpen(false)}
-            onSubmit={handleCreateProfile}
-            mode="create"
-          />
-        </div>
+        <PilotIDModal
+          isOpen={profileModalOpen}
+          onClose={() => setProfileModalOpen(false)}
+          onSubmit={handleCreateProfile}
+          mode="create"
+        />
       </div>
     );
   }

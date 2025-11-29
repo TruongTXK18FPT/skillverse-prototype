@@ -38,7 +38,7 @@
 
 /* ========== MAIN CONTAINER ========== */
 .dossier-portfolio-container {
-  min-height: 100vh;
+  min-height: 90vh;
   background: var(--dossier-bg);
   padding: 2rem;
   color: var(--dossier-silver);

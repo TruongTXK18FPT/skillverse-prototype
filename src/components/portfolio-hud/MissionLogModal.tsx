@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Upload, Loader } from 'lucide-react';
 import { PortfolioProjectDTO, ProjectType } from '../../data/portfolioDTOs';
 import { useScrollLock } from './useScrollLock';
+import SystemAlertModal from './SystemAlertModal';
 import './dossier-portfolio-styles.css';
 
 interface MissionLogModalProps {

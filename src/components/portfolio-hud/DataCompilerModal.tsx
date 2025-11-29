@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { X, Loader, Sparkles, FileText } from 'lucide-react';
 import { CVGenerationRequest } from '../../data/portfolioDTOs';
 import { useScrollLock } from './useScrollLock';
+import SystemAlertModal from './SystemAlertModal';
 import './dossier-portfolio-styles.css';
 
 interface DataCompilerModalProps {
