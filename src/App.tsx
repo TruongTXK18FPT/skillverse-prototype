@@ -17,9 +17,11 @@ import CareerChatPage from './pages/navbar/CareerChatPage';
 import CareerChatLanding from './pages/navbar/CareerChatLanding';
 import ExpertChatPage from './pages/navbar/ExpertChatPage';
 import Gamification from './pages/navbar/Gamification';
-import PortfolioPage from './pages/navbar/PortfolioPage';
+// import PortfolioPage from './pages/navbar/PortfolioPage';  // OLD - Backup
+import TacticalDossierPortfolio from './components/portfolio-hud/TacticalDossierPortfolio'; // NEW - Mothership Theme
 import PortfolioDebug from './pages/navbar/PortfolioDebug';
-import CVPage from './pages/navbar/CV';
+// import CVPage from './pages/navbar/CV';  // OLD - Backup
+import DataCompilerPreview from './components/portfolio-hud/DataCompilerPreview'; // NEW - Mothership Theme
 import ElevatorLoginPage from './pages/auth/ElevatorLoginPage';
 import ElevatorPersonalRegisterPage from './pages/auth/ElevatorPersonalRegisterPage';
 import ElevatorBusinessRegisterPage from './pages/auth/ElevatorBusinessRegisterPage';
@@ -105,9 +107,11 @@ const App = () => {
                     <Route path="/chatbot/general" element={<CareerChatPage />} />
                     <Route path="/chatbot/expert" element={<ExpertChatPage />} />
                     <Route path="/gamification" element={<Gamification />} />
-                    <Route path="/portfolio" element={<PortfolioPage />} />
+                    {/* <Route path="/portfolio" element={<PortfolioPage />} /> */}  {/* BACKUP - Old Portfolio */}
+                    <Route path="/portfolio" element={<TacticalDossierPortfolio />} />  {/* ACTIVE - Mothership Theme */}
                     <Route path="/portfolio-debug" element={<PortfolioDebug />} />
-                    <Route path="/cv" element={<CVPage />} />
+                    {/* <Route path="/cv" element={<CVPage />} /> */}  {/* BACKUP - Old CV Page */}
+                    <Route path="/cv" element={<DataCompilerPreview />} />  {/* ACTIVE - Mothership Theme */}
                     <Route path="/certificate/:id" element={<Certificate />} />
                     <Route path="/login" element={<ElevatorLoginPage />} />
                     <Route path="/auth-warning" element={<AlreadyAuthenticatedWarning />} />
