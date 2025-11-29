@@ -34,8 +34,8 @@ const HoloPagination: React.FC<HoloPaginationProps> = ({
       // Show first, last, current, and adjacent pages
       pages.push(1);
 
-      let start = Math.max(2, currentPage - 1);
-      let end = Math.min(totalPages - 1, currentPage + 1);
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
 
       if (start > 2) pages.push(-1); // -1 represents ellipsis
 
