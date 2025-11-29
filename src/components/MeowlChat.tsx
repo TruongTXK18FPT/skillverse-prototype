@@ -140,6 +140,19 @@ Cố lên nha! 💪✨ 🎓`
       timestamp: new Date()
     };
 
+    const normalized = userMessage.content.toLowerCase();
+    if (normalized.includes('con jv')) {
+      const eggResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: 'con mẹ mày',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, userMessage, eggResponse]);
+      setInputValue('');
+      return;
+    }
+
     // 🛡️ Guard check before sending
     const guard = guardUserInput(userMessage.content);
     if (!guard.allow) {
