@@ -55,7 +55,8 @@ const SeminarPage: React.FC = () => {
   const filteredSeminars = seminars.filter(seminar => {
     const matchesSearch = seminar.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          seminar.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || seminar.tags?.toLowerCase().includes(filterCategory.toLowerCase());
+    const matchesCategory = filterCategory === 'all' ||
+                           (typeof seminar.tags === 'string' && seminar.tags.toLowerCase().includes(filterCategory.toLowerCase()));
     return matchesSearch && matchesCategory;
   });
 
