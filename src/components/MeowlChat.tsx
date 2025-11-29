@@ -140,8 +140,8 @@ Cố lên nha! 💪✨ 🎓`
       timestamp: new Date()
     };
 
-    const normalized = userMessage.content.toLowerCase();
-    if (normalized.includes('con jv')) {
+    const normalized = userMessage.content.toLowerCase().replace(/\s+/g, ' ').trim();
+    if (/^con jv[!?.,]*$/.test(normalized)) {
       const eggResponse: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
