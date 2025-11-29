@@ -134,8 +134,8 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <h1 className="reg-personal-title">PERSONAL</h1>
-              <p className="reg-personal-subtitle">REGISTRATION</p>
+              <h1 className="reg-personal-title">Cá nhân</h1>
+              <p className="reg-personal-subtitle">Đăng ký</p>
             </motion.div>
 
             <div className="reg-personal-decoration">
@@ -147,9 +147,9 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
 
           {/* Login Link - In Left Column */}
           <div className="reg-personal-login-section">
-            <p className="reg-personal-login-prompt">HAVE ACCOUNT?</p>
+            <p className="reg-personal-login-prompt">Đã có tài khoản?</p>
             <Link to="/login" className="reg-personal-login-link-btn">
-              LOGIN
+              Đăng nhập
             </Link>
           </div>
         </div>
@@ -174,7 +174,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
           <div className="reg-personal-field">
             <label className="reg-personal-label">
               <User size={14} />
-              <span>FULL NAME</span>
+              <span>Họ và tên</span>
             </label>
             <div className="reg-personal-input-wrapper">
               <input
@@ -193,7 +193,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
           <div className="reg-personal-field">
             <label className="reg-personal-label">
               <Mail size={14} />
-              <span>EMAIL ADDRESS</span>
+              <span>Địa chỉ email</span>
             </label>
             <div className="reg-personal-input-wrapper">
               <input
@@ -213,7 +213,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
           <div className="reg-personal-field">
             <label className="reg-personal-label">
               <Lock size={14} />
-              <span>PASSWORD</span>
+              <span>Mật khẩu</span>
             </label>
             <div className="reg-personal-input-wrapper">
               <input
@@ -240,7 +240,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
           <div className="reg-personal-field">
             <label className="reg-personal-label">
               <Lock size={14} />
-              <span>CONFIRM</span>
+              <span>Xác nhận mật khẩu</span>
             </label>
             <div className="reg-personal-input-wrapper">
               <input
@@ -268,7 +268,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
           <div className="reg-personal-field">
             <label className="reg-personal-label">
               <Phone size={14} />
-              <span>PHONE</span>
+              <span>Số điện thoại</span>
             </label>
             <div className="reg-personal-input-wrapper">
               <input
@@ -286,7 +286,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
           <div className="reg-personal-field">
             <label className="reg-personal-label">
               <MapPin size={14} />
-              <span>REGION</span>
+              <span>Khu vực</span>
             </label>
             <div className="reg-personal-input-wrapper">
               <select
@@ -296,10 +296,10 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
                 disabled={isLoading}
                 className="reg-personal-input reg-personal-select"
               >
-                <option value="Vietnam">Vietnam</option>
-                <option value="Asia">Asia</option>
-                <option value="Europe">Europe</option>
-                <option value="America">America</option>
+                <option value="Vietnam">Việt Nam</option>
+                <option value="Asia">Châu Á</option>
+                <option value="Europe">Châu Âu</option>
+                <option value="America">Châu Mỹ</option>
               </select>
             </div>
           </div>
@@ -308,7 +308,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
           <div className="reg-personal-field reg-personal-field-full">
             <label className="reg-personal-label">
               <MapPin size={14} />
-              <span>ADDRESS</span>
+              <span>Địa chỉ</span>
             </label>
             <div className="reg-personal-input-wrapper">
               <input
@@ -327,7 +327,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
           <div className="reg-personal-field reg-personal-field-full">
             <label className="reg-personal-label">
               <FileText size={14} />
-              <span>BIO (OPTIONAL)</span>
+              <span>Giới thiệu (không bắt buộc)</span>
             </label>
             <div className="reg-personal-input-wrapper">
               <textarea
@@ -352,12 +352,12 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
             {isLoading ? (
               <>
                 <Loader2 className="reg-personal-spinner" size={18} />
-                <span>REGISTERING...</span>
+                <span>Đang đăng ký...</span>
               </>
             ) : (
               <>
                 <User size={18} />
-                <span>REGISTER ACCOUNT</span>
+                <span>Đăng ký tài khoản</span>
               </>
             )}
             <div className="reg-personal-btn-glow"></div>

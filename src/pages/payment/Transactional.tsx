@@ -21,28 +21,6 @@ const Transactional = () => {
   const cancelCode = searchParams.get('code') || undefined;
   const cancelOrderCode = searchParams.get('orderCode') || undefined;
 
-  useEffect(() => {
-    if (isCancel) {
-      // Mark payment as CANCELLED on backend once
-      if (internalRef && !cancelledMarkedRef.current) {
-        cancelledMarkedRef.current = true;
-        paymentService
-          .cancelPayment(internalRef, 'User cancelled at gateway')
-          .catch(() => {/* ignore errors for UX */});
-      }
-      setLoading(false);
-      setPolling(false);
-      return;
-    }
-
-    if (internalRef) {
-      pollPaymentStatus();
-    } else {
-      setError('No payment reference found');
-      setLoading(false);
-    }
-  }, [internalRef, isCancel, pollPaymentStatus]);
-
   const pollPaymentStatus = useCallback(async () => {
     if (!internalRef) return;
 
@@ -68,6 +46,29 @@ const Transactional = () => {
       setLoading(false);
     }
   }, [internalRef]);
+
+  useEffect(() => {
+    if (isCancel) {
+      // Mark payment as CANCELLED on backend once
+      if (internalRef && !cancelledMarkedRef.current) {
+        cancelledMarkedRef.current = true;
+        paymentService
+          .cancelPayment(internalRef, 'User cancelled at gateway')
+          .catch(() => {/* ignore errors for UX */});
+      }
+      setLoading(false);
+      setPolling(false);
+      return;
+    }
+
+    if (internalRef) {
+      // Safe to call after pollPaymentStatus is defined
+      pollPaymentStatus();
+    } else {
+      setError('No payment reference found');
+      setLoading(false);
+    }
+  }, [internalRef, isCancel, pollPaymentStatus]);
 
   useEffect(() => {
     if (polling && internalRef && !isCancel) {

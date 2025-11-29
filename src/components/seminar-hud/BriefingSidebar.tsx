@@ -11,10 +11,7 @@ const BriefingSidebar: React.FC<BriefingSidebarProps> = ({ totalSeminars, active
     <aside className="briefing-sidebar">
       {/* System Radar Widget */}
       <div className="sidebar-widget sidebar-radar">
-        <div className="widget-header">
-          <span className="widget-title">RADAR SCAN</span>
-          <span className="widget-status">ACTIVE</span>
-        </div>
+        <div className="widget-header"><span className="widget-title">QUÉT RADAR</span><span className="widget-status">HOẠT ĐỘNG</span></div>
         <div className="radar-display">
           <div className="radar-circle radar-outer"></div>
           <div className="radar-circle radar-mid"></div>
@@ -28,34 +25,18 @@ const BriefingSidebar: React.FC<BriefingSidebarProps> = ({ totalSeminars, active
 
       {/* System Status Widget */}
       <div className="sidebar-widget sidebar-status">
-        <div className="widget-header">
-          <span className="widget-title">SYSTEM STATUS</span>
-        </div>
+        <div className="widget-header"><span className="widget-title">TRẠNG THÁI HỆ THỐNG</span></div>
         <div className="status-list">
-          <div className="status-item">
-            <span className="status-label">SIGNAL:</span>
-            <span className="status-value status-green">100%</span>
-          </div>
-          <div className="status-item">
-            <span className="status-label">CHANNELS:</span>
-            <span className="status-value status-cyan">{totalSeminars}</span>
-          </div>
-          <div className="status-item">
-            <span className="status-label">ACTIVE:</span>
-            <span className="status-value status-cyan">{activeSeminars}</span>
-          </div>
-          <div className="status-item">
-            <span className="status-label">UPTIME:</span>
-            <span className="status-value status-green">99.9%</span>
-          </div>
+          <div className="status-item"><span className="status-label">TÍN HIỆU:</span><span className="status-value status-green">100%</span></div>
+          <div className="status-item"><span className="status-label">KÊNH:</span><span className="status-value status-cyan">{totalSeminars}</span></div>
+          <div className="status-item"><span className="status-label">HOẠT ĐỘNG:</span><span className="status-value status-cyan">{activeSeminars}</span></div>
+          <div className="status-item"><span className="status-label">THỜI GIAN HOẠT ĐỘNG:</span><span className="status-value status-green">99.9%</span></div>
         </div>
       </div>
 
       {/* Top Speakers Widget */}
       <div className="sidebar-widget sidebar-speakers">
-        <div className="widget-header">
-          <span className="widget-title">TOP INTEL OFFICERS</span>
-        </div>
+        <div className="widget-header"><span className="widget-title">DIỄN GIẢ NỔI BẬT</span></div>
         <div className="speakers-list">
           <div className="speaker-item">
             <span className="speaker-rank">#1</span>
@@ -78,18 +59,10 @@ const BriefingSidebar: React.FC<BriefingSidebarProps> = ({ totalSeminars, active
 
       {/* Mission Stats */}
       <div className="sidebar-widget sidebar-mission">
-        <div className="widget-header">
-          <span className="widget-title">MISSION STATS</span>
-        </div>
+        <div className="widget-header"><span className="widget-title">THỐNG KÊ NHIỆM VỤ</span></div>
         <div className="mission-stats">
-          <div className="mission-stat">
-            <div className="mission-stat-label">COMPLETED</div>
-            <div className="mission-stat-value">847</div>
-          </div>
-          <div className="mission-stat">
-            <div className="mission-stat-label">IN PROGRESS</div>
-            <div className="mission-stat-value">{activeSeminars}</div>
-          </div>
+          <div className="mission-stat"><div className="mission-stat-label">HOÀN THÀNH</div><div className="mission-stat-value">847</div></div>
+          <div className="mission-stat"><div className="mission-stat-label">ĐANG DIỄN RA</div><div className="mission-stat-value">{activeSeminars}</div></div>
         </div>
       </div>
     </aside>

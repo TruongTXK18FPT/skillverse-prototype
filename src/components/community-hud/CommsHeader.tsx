@@ -9,8 +9,8 @@ interface CommsHeaderProps {
 }
 
 const CommsHeader: React.FC<CommsHeaderProps> = ({
-  title = 'INTERSTELLAR COMMS',
-  subtitle = 'ENCRYPTION: OFF // CHANNEL: OPEN // STATUS: ACTIVE',
+  title = 'Kênh Cộng Đồng',
+  subtitle = 'Mã hóa: Tắt // Kênh: Mở // Trạng thái: Hoạt động',
   onBroadcast,
 }) => {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const CommsHeader: React.FC<CommsHeaderProps> = ({
         <p className="transmission-subtitle">{subtitle}</p>
         <button className="broadcast-button" onClick={handleBroadcast}>
           <Plus size={20} />
-          <span>BROADCAST SIGNAL</span>
+          <span>Đăng bài viết</span>
         </button>
       </div>
     </div>

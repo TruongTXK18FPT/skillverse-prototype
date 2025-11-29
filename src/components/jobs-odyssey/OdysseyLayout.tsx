@@ -80,8 +80,8 @@ const OdysseyLayout = ({ children }: OdysseyLayoutProps) => {
       <div className="odyssey-content">
         {/* Header */}
         <header className="odyssey-header">
-          <h1 className="odyssey-header__title">Bounty Board</h1>
-          <p className="odyssey-header__subtitle">Pick Your Fate</p>
+          <h1 className="odyssey-header__title">Bảng Công Việc</h1>
+          <p className="odyssey-header__subtitle">Chọn cơ hội</p>
         </header>
 
         {/* Content */}

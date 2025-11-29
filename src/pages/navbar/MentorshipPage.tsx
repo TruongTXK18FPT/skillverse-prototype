@@ -44,18 +44,18 @@ const MentorshipPage = () => {
       // Transform API data to match our interface
       const transformedMentors = data.map((mentor: Record<string, unknown>) => ({
         id: mentor.id,
-        name: mentor.name || 'Anonymous Mentor',
-        title: mentor.title || 'Professional Mentor',
+        name: mentor.name || 'Ẩn danh',
+        title: mentor.title || 'Mentor chuyên nghiệp',
         rating: mentor.rating || (Math.random() * 2 + 3).toFixed(1),
         reviews: mentor.reviews || Math.floor(Math.random() * 200 + 50),
         hourlyRate: mentor.hourlyRate || Math.floor(Math.random() * 100 + 50),
-        expertise: mentor.expertise || ['General'],
-        languages: mentor.languages || ['English'],
-        availability: mentor.availability || 'Flexible',
-        experience: mentor.experience || '5+ years',
-        bio: mentor.bio || 'Experienced professional ready to help you grow.',
+        expertise: mentor.expertise || ['Chung'],
+        languages: mentor.languages || ['Tiếng Anh'],
+        availability: mentor.availability || 'Linh hoạt',
+        experience: mentor.experience || '5+ năm',
+        bio: mentor.bio || 'Mentor giàu kinh nghiệm, sẵn sàng hỗ trợ bạn phát triển.',
         avatar: mentor.avatar || `https://images.pexels.com/photos/${Math.floor(Math.random() * 1000000)}/pexels-photo-${Math.floor(Math.random() * 1000000)}.jpeg?auto=compress&cs=tinysrgb&w=400`,
-        badges: mentor.badges || ['Verified'],
+        badges: mentor.badges || ['Đã xác minh'],
         isFavorite: false
       }));
       

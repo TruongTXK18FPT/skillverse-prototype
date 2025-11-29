@@ -38,7 +38,7 @@ const JobsOdysseyPage = () => {
       setJobs(data);
     } catch (error) {
       console.error('Error fetching jobs:', error);
-      showError('Data Loading Error', 'Could not load job listings. Please try again.');
+      showError('Lỗi tải dữ liệu', 'Không thể tải danh sách công việc. Vui lòng thử lại.');
     } finally {
       setIsLoading(false);
     }
@@ -85,18 +85,18 @@ const JobsOdysseyPage = () => {
       {isLoading ? (
         <div className="odyssey-loading">
           <div className="odyssey-loading__spinner"></div>
-          <p className="odyssey-loading__text">Loading Bounties...</p>
+          <p className="odyssey-loading__text">Đang tải công việc...</p>
         </div>
       ) : filteredJobs.length === 0 ? (
         <div className="odyssey-empty">
           <div className="odyssey-empty__icon">🃏</div>
-          <h3 className="odyssey-empty__title">No Bounties Available</h3>
+          <h3 className="odyssey-empty__title">Không có công việc</h3>
           <p className="odyssey-empty__text">
             {searchTerm
-              ? `No bounties match "${searchTerm}". Try different keywords or clear your search.`
+              ? `Không có công việc phù hợp với "${searchTerm}". Hãy thử từ khóa khác hoặc xóa tìm kiếm.`
               : jobs.length === 0
-              ? 'The dealer has no cards on the table right now. Check back soon for new opportunities.'
-              : 'No bounties match your current filters. Adjust your parameters and try again.'}
+              ? 'Hiện chưa có công việc nào được đăng. Vui lòng quay lại sau để xem cơ hội mới.'
+              : 'Không có công việc phù hợp với bộ lọc hiện tại. Hãy điều chỉnh và thử lại.'}
           </p>
         </div>
       ) : (

@@ -36,6 +36,13 @@ const SeminarPage: React.FC = () => {
   const [filterCategory, setFilterCategory] = useState('all');
   const itemsPerPage = 6;
   const navigate = useNavigate();
+  const categoryLabels = ['TẤT CẢ', 'CÔNG NGHỆ', 'KINH DOANH', 'THIẾT KẾ'];
+  const labelToValue: Record<string, string> = {
+    'TẤT CẢ': 'all',
+    'CÔNG NGHỆ': 'technology',
+    'KINH DOANH': 'business',
+    'THIẾT KẾ': 'design'
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -65,17 +72,7 @@ const SeminarPage: React.FC = () => {
     currentPage * itemsPerPage
   );
 
-  const formatDate = (timestamp: string) => {
-    return new Date(Number(timestamp) * 1000).toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const formatTime = (time: string) => {
-    return time ? `${time}:00` : '';
-  };
+  
 
   if (loading) {
     return (
@@ -102,7 +99,7 @@ const SeminarPage: React.FC = () => {
             <span className="briefing-search-icon">🔍</span>
             <input
               type="text"
-              placeholder="Search Intel Briefings..."
+              placeholder="Tìm kiếm hội thảo..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="briefing-search-input"
@@ -111,17 +108,17 @@ const SeminarPage: React.FC = () => {
 
           {/* Frequency Tuner - Category Filter */}
           <FrequencyTuner
-            categories={['ALL', 'TECHNOLOGY', 'BUSINESS', 'DESIGN']}
-            activeCategory={filterCategory.toUpperCase()}
-            onCategoryChange={(category) => setFilterCategory(category.toLowerCase())}
+            categories={categoryLabels}
+            activeCategory={categoryLabels.find((l) => labelToValue[l] === filterCategory) || 'TẤT CẢ'}
+            onCategoryChange={(label) => setFilterCategory(labelToValue[label])}
           />
 
           {/* Briefing Rows (List) */}
           {filteredSeminars.length === 0 ? (
             <div className="no-results">
               <div className="no-results-icon">📅</div>
-              <h3>No Intel Briefings Found</h3>
-              <p>Try adjusting your search parameters or frequency selection</p>
+              <h3>Không tìm thấy hội thảo</h3>
+              <p>Hãy thử thay đổi từ khóa hoặc chuyên mục</p>
             </div>
           ) : (
             <div className="briefing-list">

@@ -6,9 +6,7 @@ const BriefingHero: React.FC = () => {
     <div className="briefing-hero">
       {/* Scrolling Marquee at Top Border */}
       <div className="hero-marquee-top">
-        <div className="hero-marquee-content">
-          INCOMING INTEL... ENCRYPTED DATA STREAM... SECTOR 7 CLEAR... TRANSMISSION SECURE... STANDBY FOR BRIEFING...
-        </div>
+        <div className="hero-marquee-content">DỮ LIỆU ĐẾN... DÒNG TRUYỀN MÃ HÓA... KHU VỰC 7 AN TOÀN... KÊNH TRUYỀN BẢO MẬT HOẠT ĐỘNG... CHUẨN BỊ HỌP...</div>
       </div>
 
       {/* Radar Pulse Animation Background */}
@@ -17,13 +15,10 @@ const BriefingHero: React.FC = () => {
       {/* Main Content */}
       <div className="hero-content">
         {/* Title */}
-        <h1 className="hero-title">TACTICAL BRIEFINGS</h1>
+        <h1 className="hero-title">BẢN TIN HỘI THẢO</h1>
 
         {/* Subtitle */}
-        <p className="hero-subtitle">
-          LIVE INTELLIGENCE OPERATIONS <br />
-          SECURE TRANSMISSION CHANNEL ACTIVE
-        </p>
+        <p className="hero-subtitle">VẬN HÀNH THÔNG TIN TRỰC TUYẾN <br />KÊNH TRUYỀN BẢO MẬT ĐANG HOẠT ĐỘNG</p>
       </div>
     </div>
   );

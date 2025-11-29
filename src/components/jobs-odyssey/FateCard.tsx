@@ -65,12 +65,12 @@ const FateCard = ({ job, onClick }: FateCardProps) => {
         {/* Badge for high salary or remote */}
         {isHighSalary && (
           <div className="odyssey-card__badge odyssey-card__badge--urgent">
-            HIGH PAY
+            Lương cao
           </div>
         )}
         {job.isRemote && !isHighSalary && (
           <div className="odyssey-card__badge odyssey-card__badge--remote">
-            Remote
+            Làm việc từ xa
           </div>
         )}
 
@@ -113,7 +113,7 @@ const FateCard = ({ job, onClick }: FateCardProps) => {
 
           {/* Bounty (Salary) */}
           <div className="odyssey-card__bounty">
-            <div className="odyssey-card__bounty-label">Bounty</div>
+            <div className="odyssey-card__bounty-label">Ngân sách</div>
             <div className="odyssey-card__bounty-amount">
               {formatBudget()}
             </div>
@@ -122,7 +122,7 @@ const FateCard = ({ job, onClick }: FateCardProps) => {
           {/* Footer */}
           <div className="odyssey-card__footer">
             <button className="odyssey-card__btn" onClick={onClick}>
-              <span>Pick</span>
+              <span>Xem chi tiết</span>
               <ArrowRight className="odyssey-card__btn-icon" />
             </button>
           </div>

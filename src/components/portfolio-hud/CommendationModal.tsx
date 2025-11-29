@@ -92,7 +92,7 @@ export const CommendationModal: React.FC<CommendationModalProps> = ({
       console.error('Error submitting certificate:', error);
       setAlertModal({
         show: true,
-        message: 'Error adding commendation. Please try again.',
+        message: 'Lỗi khi thêm chứng chỉ. Vui lòng thử lại.',
         type: 'error'
       });
     } finally {
@@ -107,8 +107,8 @@ export const CommendationModal: React.FC<CommendationModalProps> = ({
       <div className="dossier-modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="dossier-modal-header">
           <div>
-            <h2 className="dossier-modal-title">ADD COMMENDATION</h2>
-            <p className="dossier-modal-subtitle">Register external certification</p>
+            <h2 className="dossier-modal-title">Thêm chứng chỉ</h2>
+            <p className="dossier-modal-subtitle">Đăng ký chứng chỉ bên ngoài</p>
           </div>
           <button className="dossier-modal-close" onClick={onClose} type="button">
             <X size={20} />
@@ -117,51 +117,51 @@ export const CommendationModal: React.FC<CommendationModalProps> = ({
 
         <form onSubmit={handleSubmit} className="dossier-modal-body">
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">CERTIFICATE DETAILS</h3>
+            <h3 className="dossier-form-section-title">Chi tiết chứng chỉ</h3>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Certificate Name *</label>
+              <label className="dossier-form-label">Tên chứng chỉ *</label>
               <input
                 type="text"
                 className="dossier-input"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="e.g., AWS Certified Solutions Architect"
+                placeholder="Ví dụ: AWS Certified Solutions Architect"
                 required
               />
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Issuing Organization *</label>
+              <label className="dossier-form-label">Tổ chức cấp *</label>
               <input
                 type="text"
                 className="dossier-input"
                 value={formData.issuingOrganization}
                 onChange={(e) => setFormData({ ...formData, issuingOrganization: e.target.value })}
-                placeholder="e.g., Amazon Web Services"
+                placeholder="Ví dụ: Amazon Web Services"
                 required
               />
             </div>
 
             <div className="dossier-form-row">
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Category</label>
+                <label className="dossier-form-label">Danh mục</label>
                 <select
                   className="dossier-select"
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value as CertificateCategory })}
                 >
-                  <option value={CertificateCategory.TECHNICAL}>Technical</option>
-                  <option value={CertificateCategory.DESIGN}>Design</option>
-                  <option value={CertificateCategory.BUSINESS}>Business</option>
-                  <option value={CertificateCategory.SOFT_SKILLS}>Soft Skills</option>
-                  <option value={CertificateCategory.LANGUAGE}>Language</option>
-                  <option value={CertificateCategory.OTHER}>Other</option>
+                  <option value={CertificateCategory.TECHNICAL}>Kỹ thuật</option>
+                  <option value={CertificateCategory.DESIGN}>Thiết kế</option>
+                  <option value={CertificateCategory.BUSINESS}>Kinh doanh</option>
+                  <option value={CertificateCategory.SOFT_SKILLS}>Kỹ năng mềm</option>
+                  <option value={CertificateCategory.LANGUAGE}>Ngôn ngữ</option>
+                  <option value={CertificateCategory.OTHER}>Khác</option>
                 </select>
               </div>
 
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Issue Date</label>
+                <label className="dossier-form-label">Ngày cấp</label>
                 <input
                   type="date"
                   className="dossier-input"
@@ -171,7 +171,7 @@ export const CommendationModal: React.FC<CommendationModalProps> = ({
               </div>
 
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Expiry Date</label>
+                <label className="dossier-form-label">Ngày hết hạn</label>
                 <input
                   type="date"
                   className="dossier-input"
@@ -182,22 +182,22 @@ export const CommendationModal: React.FC<CommendationModalProps> = ({
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Description</label>
+              <label className="dossier-form-label">Mô tả</label>
               <textarea
                 className="dossier-textarea"
                 value={formData.description || ''}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Description of certificate..."
+                placeholder="Mô tả chứng chỉ..."
                 rows={3}
               />
             </div>
           </div>
 
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">VERIFICATION</h3>
+            <h3 className="dossier-form-section-title">Xác thực</h3>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Credential ID</label>
+              <label className="dossier-form-label">Mã chứng chỉ</label>
               <input
                 type="text"
                 className="dossier-input"
@@ -208,7 +208,7 @@ export const CommendationModal: React.FC<CommendationModalProps> = ({
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Verification URL</label>
+              <label className="dossier-form-label">URL xác minh</label>
               <input
                 type="url"
                 className="dossier-input"
@@ -220,7 +220,7 @@ export const CommendationModal: React.FC<CommendationModalProps> = ({
           </div>
 
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">CERTIFICATE IMAGE</h3>
+            <h3 className="dossier-form-section-title">Ảnh chứng chỉ</h3>
 
             <div className="dossier-form-group">
               <div style={{ border: '1px solid var(--dossier-border-silver)', padding: '1rem', textAlign: 'center' }}>
@@ -236,14 +236,14 @@ export const CommendationModal: React.FC<CommendationModalProps> = ({
                 />
                 <label htmlFor="cert-image-upload" className="dossier-btn-primary" style={{ cursor: 'pointer' }}>
                   <Upload size={18} />
-                  Upload Image
+                  Tải ảnh
                 </label>
               </div>
             </div>
           </div>
 
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">RELATED SKILLS</h3>
+            <h3 className="dossier-form-section-title">Kỹ năng liên quan</h3>
 
             <div className="dossier-form-group">
               <div style={{ border: '1px solid var(--dossier-border-silver)', padding: '0.75rem' }}>
@@ -262,7 +262,7 @@ export const CommendationModal: React.FC<CommendationModalProps> = ({
                     value={skillInput}
                     onChange={(e) => setSkillInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddSkill())}
-                    placeholder="Add skill and press Enter"
+                    placeholder="Thêm kỹ năng và nhấn Enter"
                     style={{ flex: 1 }}
                   />
                   <button type="button" onClick={handleAddSkill} className="dossier-btn-primary">+</button>
@@ -273,16 +273,16 @@ export const CommendationModal: React.FC<CommendationModalProps> = ({
 
           <div className="dossier-modal-footer" style={{ borderTop: 'none', paddingTop: 0 }}>
             <button type="button" onClick={onClose} className="dossier-btn-secondary" disabled={loading}>
-              CANCEL
+              Hủy
             </button>
             <button type="submit" className="dossier-btn-primary" disabled={loading}>
               {loading ? (
                 <>
-                  <Loader className="dossier-spinner" size={18} />
-                  SAVING...
+                <Loader className="dossier-spinner" size={18} />
+                Đang lưu...
                 </>
               ) : (
-                'ADD COMMENDATION'
+                'Thêm chứng chỉ'
               )}
             </button>
           </div>

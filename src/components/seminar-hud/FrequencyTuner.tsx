@@ -14,9 +14,7 @@ const FrequencyTuner: React.FC<FrequencyTunerProps> = ({
 }) => {
   return (
     <div className="briefing-frequency-tuner">
-      <label className="briefing-tuner-label">
-        📡 Channel Frequency Selector
-      </label>
+      <label className="briefing-tuner-label">📡 Bộ lọc chuyên mục</label>
       <div className="briefing-tuner-track">
         {categories.map((category) => (
           <button

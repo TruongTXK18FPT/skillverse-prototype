@@ -14,6 +14,11 @@
   border-bottom: 2px solid rgba(139, 92, 246, 0.2);
 }
 
+.admin-header-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
 .admin-transaction-header h2 {
   margin: 0 0 0.5rem 0;
   font-size: 1.75rem;
@@ -43,6 +48,31 @@
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.admin-download-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.admin-download-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+}
+
+.admin-download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .admin-refresh-btn:hover:not(:disabled) {
@@ -832,4 +862,33 @@
     padding-top: 1rem;
     margin-top: 0.5rem;
   }
+}
+.admin-date-range {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+}
+
+.admin-date-range label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #a5b4fc;
+  font-weight: 600;
+}
+
+.admin-date-range input[type="date"] {
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  color: #e0e7ff;
+}
+
+.admin-date-range input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
 }

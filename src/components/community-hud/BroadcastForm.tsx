@@ -38,12 +38,12 @@ const BroadcastForm: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const channels = [
-    { id: 'discussion', name: 'Discussion' },
-    { id: 'tutorial', name: 'Training Protocol' },
-    { id: 'tips', name: 'Optimization Tips' },
-    { id: 'news', name: 'Intel Report' },
-    { id: 'career', name: 'Recruitment' },
-    { id: 'showcase', name: 'Mission Showcase' },
+    { id: 'discussion', name: 'Thảo luận' },
+    { id: 'tutorial', name: 'Hướng dẫn' },
+    { id: 'tips', name: 'Mẹo hay' },
+    { id: 'news', name: 'Tin tức' },
+    { id: 'career', name: 'Tuyển dụng' },
+    { id: 'showcase', name: 'Trưng bày' },
   ];
 
   const handleAddTag = (e: React.KeyboardEvent) => {
@@ -82,19 +82,19 @@ const BroadcastForm: React.FC = () => {
     try {
       // Here you would make an API call to save the post
       // For now, we'll just log it and redirect
-      console.log('Transmission broadcasted:', postData);
+      console.log('Đã đăng bài viết:', postData);
 
       // Redirect to community page
       navigate('/community', {
         state: {
           message:
             status === 'published'
-              ? 'Signal transmitted successfully!'
-              : 'Transmission saved to logs!',
+              ? 'Đăng bài viết thành công!'
+              : 'Đã lưu bản nháp!',
         },
       });
     } catch (error) {
-      console.error('Error broadcasting signal:', error);
+      console.error('Lỗi đăng bài:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -115,15 +115,15 @@ const BroadcastForm: React.FC = () => {
         <div className="broadcast-form-header">
           <button onClick={() => navigate(-1)} className="broadcast-back-btn">
             <ArrowLeft size={20} />
-            <span>ABORT</span>
+            <span>Quay lại</span>
           </button>
-          <h1 className="broadcast-form-title">NEW TRANSMISSION</h1>
+          <h1 className="broadcast-form-title">Tạo bài viết</h1>
           <button
             onClick={() => setIsPreview(!isPreview)}
             className="broadcast-preview-btn"
           >
             <Eye size={20} />
-            <span>{isPreview ? 'EDIT' : 'PREVIEW'}</span>
+            <span>{isPreview ? 'Chỉnh sửa' : 'Xem trước'}</span>
           </button>
         </div>
 
@@ -135,7 +135,7 @@ const BroadcastForm: React.FC = () => {
               <div className="broadcast-form-group">
                 <input
                   type="text"
-                  placeholder="Transmission Title..."
+                  placeholder="Tiêu đề bài viết..."
                   value={formData.title}
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
@@ -146,7 +146,7 @@ const BroadcastForm: React.FC = () => {
 
               {/* Category */}
               <div className="broadcast-form-group">
-                <label className="broadcast-form-label">Frequency Channel</label>
+                <label className="broadcast-form-label">Chuyên mục</label>
                 <select
                   value={formData.category}
                   onChange={(e) =>
@@ -154,7 +154,7 @@ const BroadcastForm: React.FC = () => {
                   }
                   className="broadcast-category-select"
                 >
-                  <option value="">Select Channel</option>
+                  <option value="">Chọn chuyên mục</option>
                   {channels.map((channel) => (
                     <option key={channel.id} value={channel.id}>
                       {channel.name}
@@ -165,35 +165,35 @@ const BroadcastForm: React.FC = () => {
 
               {/* Content Editor */}
               <div className="broadcast-form-group">
-                <label className="broadcast-form-label">Message Content</label>
+                <label className="broadcast-form-label">Nội dung</label>
                 <div className="broadcast-toolbar">
-                  <button type="button" className="broadcast-toolbar-btn" title="Bold">
+                  <button type="button" className="broadcast-toolbar-btn" title="In đậm">
                     <Bold size={16} />
                   </button>
                   <button
                     type="button"
                     className="broadcast-toolbar-btn"
-                    title="Italic"
+                    title="In nghiêng"
                   >
                     <Italic size={16} />
                   </button>
-                  <button type="button" className="broadcast-toolbar-btn" title="List">
+                  <button type="button" className="broadcast-toolbar-btn" title="Danh sách">
                     <List size={16} />
                   </button>
-                  <button type="button" className="broadcast-toolbar-btn" title="Link">
+                  <button type="button" className="broadcast-toolbar-btn" title="Liên kết">
                     <Link size={16} />
                   </button>
-                  <button type="button" className="broadcast-toolbar-btn" title="Image">
+                  <button type="button" className="broadcast-toolbar-btn" title="Ảnh">
                     <Image size={16} />
                   </button>
                 </div>
                 <textarea
-                  placeholder="Compose your transmission...
+                  placeholder="Soạn nội dung bài viết...
 
-You can use:
-- **text** for bold
-- *text* for italic
-- New lines for paragraphs"
+Bạn có thể dùng:
+- **text** để in đậm
+- *text* để in nghiêng
+- Xuống dòng để tạo đoạn"
                   value={formData.content}
                   onChange={(e) =>
                     setFormData({ ...formData, content: e.target.value })
@@ -205,7 +205,7 @@ You can use:
 
               {/* Tags */}
               <div className="broadcast-form-group">
-                <label className="broadcast-form-label">Signal Tags</label>
+                <label className="broadcast-form-label">Thẻ</label>
                 <div className="broadcast-tags-wrapper">
                   {formData.tags.length > 0 && (
                     <div className="broadcast-tags-list">
@@ -226,7 +226,7 @@ You can use:
                   )}
                   <input
                     type="text"
-                    placeholder="Add tags and press Enter..."
+                    placeholder="Thêm thẻ và nhấn Enter..."
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyDown={handleAddTag}
@@ -241,15 +241,15 @@ You can use:
               <div className="broadcast-preview-post">
                 <div className="broadcast-preview-header">
                   <h1 className="broadcast-preview-title">
-                    {formData.title || 'Untitled Transmission'}
+                    {formData.title || 'Bài viết chưa có tiêu đề'}
                   </h1>
                   <div className="broadcast-preview-meta">
                     <span className="broadcast-preview-category">
                       {channels.find((c) => c.id === formData.category)?.name ||
-                        'No Channel Selected'}
+                        'Chưa chọn chuyên mục'}
                     </span>
                     <span className="broadcast-preview-date">
-                      {new Date().toLocaleDateString('en-US', {
+                      {new Date().toLocaleDateString('vi-VN', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
@@ -267,7 +267,7 @@ You can use:
                     />
                   ) : (
                     <p className="broadcast-preview-placeholder">
-                      Message content will appear here...
+                      Nội dung sẽ hiển thị tại đây...
                     </p>
                   )}
                 </div>
@@ -289,7 +289,7 @@ You can use:
           {/* Sidebar */}
           <div className="broadcast-sidebar">
             <div className="broadcast-sidebar-card">
-              <h3 className="broadcast-sidebar-title">Actions</h3>
+              <h3 className="broadcast-sidebar-title">Thao tác</h3>
               <div className="broadcast-action-buttons">
                 <button
                   onClick={() => handleSubmit('draft')}
@@ -297,7 +297,7 @@ You can use:
                   className="broadcast-action-btn save-draft"
                 >
                   <Save size={20} />
-                  <span>Save to Log</span>
+                  <span>Lưu bản nháp</span>
                 </button>
                 <button
                   onClick={() => handleSubmit('published')}
@@ -310,36 +310,36 @@ You can use:
                   className="broadcast-action-btn transmit"
                 >
                   <Send size={20} />
-                  <span>Transmit Signal</span>
+                  <span>Đăng bài viết</span>
                 </button>
               </div>
             </div>
 
             <div className="broadcast-sidebar-card">
-              <h3 className="broadcast-sidebar-title">Transmission Protocol</h3>
+              <h3 className="broadcast-sidebar-title">Hướng dẫn đăng bài</h3>
               <ul className="broadcast-guidelines">
-                <li>Use clear and concise signal headers</li>
-                <li>Select appropriate frequency channel</li>
-                <li>Add tags for better signal routing</li>
-                <li>Ensure message provides valuable intel</li>
-                <li>Review transmission before broadcasting</li>
+                <li>Đặt tiêu đề rõ ràng và ngắn gọn</li>
+                <li>Chọn đúng chuyên mục phù hợp</li>
+                <li>Thêm thẻ để dễ tìm kiếm</li>
+                <li>Nội dung hữu ích và có giá trị</li>
+                <li>Kiểm tra bài trước khi đăng</li>
               </ul>
             </div>
 
             <div className="broadcast-sidebar-card">
-              <h3 className="broadcast-sidebar-title">Format Codes</h3>
+              <h3 className="broadcast-sidebar-title">Định dạng văn bản</h3>
               <div className="broadcast-format-help">
                 <div className="broadcast-format-item">
                   <code>**text**</code>
-                  <span>Bold</span>
+                  <span>In đậm</span>
                 </div>
                 <div className="broadcast-format-item">
                   <code>*text*</code>
-                  <span>Italic</span>
+                  <span>In nghiêng</span>
                 </div>
                 <div className="broadcast-format-item">
                   <code>Enter</code>
-                  <span>New Line</span>
+                  <span>Xuống dòng</span>
                 </div>
               </div>
             </div>

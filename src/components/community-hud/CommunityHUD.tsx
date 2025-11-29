@@ -19,12 +19,12 @@ const CommunityHUD: React.FC = () => {
 
   // Frequency Channels (Categories)
   const [channels, setChannels] = useState<FrequencyChannel[]>([
-    { id: 'all', name: 'ALL FREQUENCIES', count: 0 },
-    { id: 'tips', name: 'OPTIMIZATION', count: 0 },
-    { id: 'discussion', name: 'DISCUSSION', count: 0 },
-    { id: 'tutorial', name: 'TRAINING', count: 0 },
-    { id: 'news', name: 'INTEL', count: 0 },
-    { id: 'career', name: 'RECRUITMENT', count: 0 },
+    { id: 'all', name: 'Tất cả', count: 0 },
+    { id: 'tips', name: 'Mẹo hay', count: 0 },
+    { id: 'discussion', name: 'Thảo luận', count: 0 },
+    { id: 'tutorial', name: 'Hướng dẫn', count: 0 },
+    { id: 'news', name: 'Tin tức', count: 0 },
+    { id: 'career', name: 'Tuyển dụng', count: 0 },
   ]);
 
   // Trending Topics
@@ -38,9 +38,9 @@ const CommunityHUD: React.FC = () => {
 
   // Community Stats
   const [communityStats, setCommunityStats] = useState([
-    { label: 'PILOTS', value: 15234 },
-    { label: 'TRANSMISSIONS', value: 0 },
-    { label: 'SIGNALS', value: 123456 },
+    { label: 'Thành viên', value: 15234 },
+    { label: 'Bài viết', value: 0 },
+    { label: 'Tín hiệu', value: 123456 },
   ]);
 
   useEffect(() => {
@@ -65,21 +65,21 @@ const CommunityHUD: React.FC = () => {
       // Transform API data
       const transformedPosts: CommunityPost[] = data.map((post: Record<string, unknown>) => ({
         id: parseInt(String(post.id)),
-        title: String(post.title) || 'Untitled Transmission',
+        title: String(post.title) || 'Bài viết chưa có tiêu đề',
         content: String(post.content || post.description) || '',
-        author: typeof post.author === 'string' ? post.author : 'Anonymous Pilot',
+        author: typeof post.author === 'string' ? post.author : 'Ẩn danh',
         category: String(post.category) || 'discussion',
         tags: Array.isArray(post.tags)
           ? post.tags
           : typeof post.tags === 'string'
           ? [post.tags]
-          : ['General'],
+          : ['Chung'],
         likes: parseInt(String(post.likes)) || Math.floor(Math.random() * 500),
         comments: parseInt(String(post.comments)) || Math.floor(Math.random() * 100),
         shares: parseInt(String(post.shares)) || Math.floor(Math.random() * 50),
         isBookmarked: Boolean(post.isBookmarked) || false,
-        timeAgo: String(post.timeAgo) || '2 hours ago',
-        readTime: String(post.readTime) || '5 min read',
+        timeAgo: String(post.timeAgo) || '2 giờ trước',
+        readTime: String(post.readTime) || 'Đọc 5 phút',
         image:
           String(post.image) ||
           'https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=400',
@@ -102,13 +102,13 @@ const CommunityHUD: React.FC = () => {
 
       // Update stats
       setCommunityStats([
-        { label: 'PILOTS', value: 15234 },
-        { label: 'TRANSMISSIONS', value: transformedPosts.length },
-        { label: 'SIGNALS', value: 123456 },
+        { label: 'Thành viên', value: 15234 },
+        { label: 'Bài viết', value: transformedPosts.length },
+        { label: 'Tín hiệu', value: 123456 },
       ]);
     } catch (error) {
-      console.error('Error fetching posts:', error);
-      setError('Failed to load transmissions. Signal lost.');
+      console.error('Lỗi tải bài viết:', error);
+      setError('Không thể tải bài viết. Mất kết nối.');
     } finally {
       setLoading(false);
     }
@@ -147,23 +147,23 @@ const CommunityHUD: React.FC = () => {
             {loading ? (
               <div className="transmission-loading">
                 <div className="loading-spinner"></div>
-                <p>Receiving transmissions...</p>
+                <p>Đang tải bài viết...</p>
               </div>
             ) : error ? (
               <div className="transmission-error">
                 <Radio className="transmission-error-icon" size={48} />
-                <h3 className="transmission-error-title">Signal Lost</h3>
+                <h3 className="transmission-error-title">Mất kết nối</h3>
                 <p className="transmission-error-text">{error}</p>
                 <button className="retry-button" onClick={fetchPosts}>
-                  RECONNECT
+                  Kết nối lại
                 </button>
               </div>
             ) : currentPosts.length === 0 ? (
               <div className="transmission-empty">
                 <Radio className="transmission-empty-icon" size={48} />
-                <h3 className="transmission-empty-title">No Transmissions</h3>
+                <h3 className="transmission-empty-title">Chưa có bài viết</h3>
                 <p className="transmission-empty-text">
-                  This frequency is quiet. Try another channel.
+                  Tần số này đang im ắng. Hãy thử chuyên mục khác.
                 </p>
               </div>
             ) : (
@@ -192,13 +192,13 @@ const CommunityHUD: React.FC = () => {
           {/* Right: Telemetry Sidebar */}
           <div className="telemetry-sidebar">
             <TelemetryWidget
-              title="TRENDING SIGNALS"
+              title="Xu hướng"
               icon={TrendingUp}
               type="trending"
               data={trendingTopics}
             />
             <TelemetryWidget
-              title="SYSTEM TELEMETRY"
+              title="Thống kê hệ thống"
               icon={Zap}
               type="stats"
               data={communityStats}

@@ -21,8 +21,8 @@ export const SystemAlertModal: React.FC<SystemAlertModalProps> = ({
   title,
   message,
   type = 'info',
-  confirmText = 'OK',
-  cancelText = 'CANCEL',
+  confirmText = 'Đồng ý',
+  cancelText = 'Hủy',
   onConfirm,
   showCancel = false
 }) => {
@@ -70,7 +70,7 @@ export const SystemAlertModal: React.FC<SystemAlertModalProps> = ({
           <div className="system-alert-title-row">
             {getIcon()}
             <h2 className="system-alert-title">
-              {title || (type === 'success' ? 'MISSION SUCCESS' : type === 'error' ? 'SYSTEM ERROR' : type === 'warning' ? 'WARNING ALERT' : 'SYSTEM NOTIFICATION')}
+              {title || (type === 'success' ? 'Thành công' : type === 'error' ? 'Lỗi hệ thống' : type === 'warning' ? 'Cảnh báo' : 'Thông báo hệ thống')}
             </h2>
           </div>
           <button className="system-alert-close" onClick={onClose} type="button">

@@ -26,10 +26,9 @@ const UplinkHeader: React.FC<UplinkHeaderProps> = ({
   return (
     <div className="uplink-header">
       <div className="uplink-header-content">
-        {/* Title */}
-        <h1 className="uplink-title">Neural Uplink Directory</h1>
+        <h1 className="uplink-title">Danh sách Mentor</h1>
         <p className="uplink-subtitle">
-          // ACCESS MASTER ARCHIVES :: ESTABLISH NEURAL CONNECTION
+          Truy cập hồ sơ mentor và kết nối hướng dẫn
         </p>
 
         {/* Signal Scanner - Search Input */}
@@ -37,7 +36,7 @@ const UplinkHeader: React.FC<UplinkHeaderProps> = ({
           <input
             type="text"
             className="uplink-search-input"
-            placeholder="▸ Signal Scanner :: Search by name or expertise..."
+            placeholder="Tìm kiếm theo tên hoặc chuyên môn..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
           />

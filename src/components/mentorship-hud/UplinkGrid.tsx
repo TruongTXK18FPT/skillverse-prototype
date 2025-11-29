@@ -13,9 +13,7 @@ const UplinkGrid: React.FC<UplinkGridProps> = ({ loading, isEmpty, children }) =
     return (
       <div className="uplink-loading">
         <div className="uplink-spinner"></div>
-        <p className="uplink-loading-text">
-          // DOWNLOADING MASTER ARCHIVES...
-        </p>
+        <p className="uplink-loading-text">Đang tải danh sách mentor...</p>
       </div>
     );
   }
@@ -24,10 +22,8 @@ const UplinkGrid: React.FC<UplinkGridProps> = ({ loading, isEmpty, children }) =
     return (
       <div className="uplink-empty">
         <User className="uplink-empty-icon" size={64} />
-        <h3 className="uplink-empty-title">NO SIGNAL DETECTED</h3>
-        <p className="uplink-empty-text">
-          No masters found matching your search parameters. Try adjusting your frequency caps or signal scanner input.
-        </p>
+        <h3 className="uplink-empty-title">Không tìm thấy mentor</h3>
+        <p className="uplink-empty-text">Hãy thử thay đổi bộ lọc hoặc từ khóa tìm kiếm.</p>
       </div>
     );
   }

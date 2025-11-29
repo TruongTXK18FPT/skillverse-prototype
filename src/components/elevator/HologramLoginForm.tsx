@@ -99,8 +99,8 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <h1 className="hologram-title">AUTHENTICATION</h1>
-              <p className="hologram-subtitle">IDENTIFY YOURSELF, OPERATOR</p>
+              <h1 className="hologram-title">Đăng nhập</h1>
+              <p className="hologram-subtitle">Xác thực danh tính của bạn</p>
             </motion.div>
 
             <div className="header-decoration">
@@ -112,7 +112,7 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
 
           {/* Register Links - In Left Column */}
           <div className="register-section">
-            <p className="holo-register-prompt">NEW OPERATOR?</p>
+            <p className="holo-register-prompt">Người dùng mới?</p>
             <div className="register-buttons">
               <Link to="/choose-role" className="register-btn personal" style={{ width: '100%' }}>
                 <span className="btn-icon">🚀</span>
@@ -141,7 +141,7 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
           <div className="form-field">
             <label className="field-label">
               <Mail size={16} />
-              <span className='hologram-subtitle'>EMAIL ADDRESS</span>
+              <span className='hologram-subtitle'>Địa chỉ email</span>
             </label>
             <div className="field-input-wrapper">
               <input
@@ -160,7 +160,7 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
           <div className="form-field">
             <label className="field-label">
               <Lock size={16} />
-              <span className='hologram-subtitle'>ACCESS CODE</span>
+              <span className='hologram-subtitle'>Mật khẩu</span>
             </label>
             <div className="field-input-wrapper">
               <input
@@ -188,10 +188,10 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
             <label className="remember-option">
               <input type="checkbox" disabled={isLoading} />
               <span className="checkbox-custom"></span>
-              <span>REMEMBER ACCESS</span>
+              <span>Ghi nhớ đăng nhập</span>
             </label>
             <Link to="/forgot-password" className="forgot-link">
-              FORGOT CODE?
+              Quên mật khẩu?
             </Link>
           </div>
 
@@ -205,12 +205,12 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
             {isLoading ? (
               <>
                 <Loader2 className="spinner" size={20} />
-                <span>AUTHENTICATING...</span>
+                <span>Đang xác thực...</span>
               </>
             ) : (
               <>
                 <User size={20} />
-                <span>INITIATE ACCESS</span>
+                <span>Đăng nhập</span>
               </>
             )}
             <div className="button-glow"></div>
@@ -220,7 +220,7 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
         {/* Divider */}
         <div className="hologram-divider">
           <span className="divider-line"></span>
-          <span className="divider-text">ALTERNATE ACCESS</span>
+          <span className="divider-text">Phương thức khác</span>
           <span className="divider-line"></span>
         </div>
 
@@ -243,7 +243,7 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
                 className="social-icon"
               />
             )}
-            <span>GOOGLE PROTOCOL</span>
+            <span>Đăng nhập bằng Google</span>
           </motion.button>
 
           </div>

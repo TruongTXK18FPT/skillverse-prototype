@@ -231,7 +231,7 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
             <form onSubmit={handleApply} className="jdm-odyssey-apply-form">
               <div className="jdm-odyssey-form-group">
                 <label htmlFor="coverLetter">
-                  Cover Letter (Tùy chọn)
+                  Thư ứng tuyển (Tùy chọn)
                   {coverLetter && (
                     <span className="jdm-odyssey-char-count">
                       {coverLetter.length} ký tự

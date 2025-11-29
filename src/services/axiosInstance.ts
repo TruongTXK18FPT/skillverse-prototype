@@ -101,7 +101,10 @@ export const API_BASE_URL = baseURL;
 export const axiosInstance = axios.create({
   baseURL,
   timeout: 360000, // 60 seconds for AI requests (roadmap generation, chatbot)
-  headers: { 'Content-Type': 'application/json' },
+  // Do NOT set a global Content-Type: axios will set correct headers per body
+  // For JSON requests, axios uses application/json automatically
+  // For FormData (multipart), axios sets boundary headers automatically
+  headers: {},
 });
 
 // Nếu baseURL đã kết thúc bằng "/api" mà URL lại bắt đầu bằng "/api", cắt bớt một cái
@@ -115,6 +118,14 @@ axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   // Chống "//" (trừ "http://")
   if (config.url) {
     config.url = config.url.replace(/([^:]\/)\/+/g, '$1');
+  }
+
+  // Ensure correct Content-Type for FormData uploads (e.g., STT)
+  // If the request body is FormData, let axios set multipart boundary automatically
+  if (typeof FormData !== 'undefined' && config.data instanceof FormData) {
+    if (config.headers) {
+      delete (config.headers as any)['Content-Type'];
+    }
   }
   return config;
 });

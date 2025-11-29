@@ -211,8 +211,8 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <h1 className="reg-business-title">ENTERPRISE</h1>
-              <p className="reg-business-subtitle">REGISTRATION</p>
+              <h1 className="reg-business-title">Doanh nghiệp</h1>
+              <p className="reg-business-subtitle">Đăng ký</p>
             </motion.div>
 
             <div className="reg-business-decoration">
@@ -224,9 +224,9 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
 
           {/* Login Link - In Left Column */}
           <div className="reg-business-login-section">
-            <p className="reg-business-login-prompt">HAVE ACCOUNT?</p>
+            <p className="reg-business-login-prompt">Đã có tài khoản?</p>
             <Link to="/login" className="reg-business-login-link-btn">
-              LOGIN
+              Đăng nhập
             </Link>
           </div>
         </div>
@@ -259,7 +259,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <Building2 size={14} />
-              <span>COMPANY NAME</span>
+              <span>Tên công ty</span>
             </label>
             <div className="reg-business-input-wrapper">
               <input
@@ -277,7 +277,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <Mail size={14} />
-              <span>CORPORATE EMAIL</span>
+              <span>Email doanh nghiệp</span>
             </label>
             <div className="reg-business-input-wrapper">
               <input
@@ -300,7 +300,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <Lock size={14} />
-              <span>PASSWORD</span>
+              <span>Mật khẩu</span>
             </label>
             <div className="reg-business-input-wrapper">
               <input
@@ -327,7 +327,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <Lock size={14} />
-              <span>CONFIRM</span>
+              <span>Xác nhận mật khẩu</span>
             </label>
             <div className="reg-business-input-wrapper">
               <input
@@ -355,7 +355,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <Phone size={14} />
-              <span>PHONE</span>
+              <span>Số điện thoại</span>
             </label>
             <div className="reg-business-input-wrapper">
               <input
@@ -373,7 +373,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <FileText size={14} />
-              <span>TAX CODE</span>
+              <span>Mã số thuế</span>
             </label>
             <div className="reg-business-input-wrapper">
               <input
@@ -391,7 +391,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <Globe size={14} />
-              <span>WEBSITE</span>
+              <span>Website</span>
             </label>
             <div className="reg-business-input-wrapper">
               <input
@@ -419,7 +419,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <User size={14} />
-              <span>CONTACT PERSON</span>
+              <span>Người liên hệ</span>
             </label>
             <div className="reg-business-input-wrapper">
               <input
@@ -436,7 +436,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <Phone size={14} />
-              <span>CONTACT PHONE</span>
+              <span>Số điện thoại liên hệ</span>
             </label>
             <div className="reg-business-input-wrapper">
               <input
@@ -453,7 +453,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <Briefcase size={14} />
-              <span>POSITION</span>
+              <span>Chức vụ</span>
             </label>
             <div className="reg-business-input-wrapper">
               <input
@@ -479,7 +479,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <Users size={14} />
-              <span>COMPANY SIZE</span>
+              <span>Quy mô công ty</span>
             </label>
             <div className="reg-business-input-wrapper">
               <select
@@ -489,12 +489,12 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 disabled={isLoading}
                 className="reg-business-input reg-business-select"
               >
-                <option value="">Select size</option>
-                <option value="1-10">1-10 employees</option>
-                <option value="11-50">11-50 employees</option>
-                <option value="51-200">51-200 employees</option>
-                <option value="201-500">201-500 employees</option>
-                <option value="500+">500+ employees</option>
+                <option value="">Chọn quy mô</option>
+                <option value="1-10">1-10 nhân viên</option>
+                <option value="11-50">11-50 nhân viên</option>
+                <option value="51-200">51-200 nhân viên</option>
+                <option value="201-500">201-500 nhân viên</option>
+                <option value="500+">500+ nhân viên</option>
               </select>
             </div>
           </div>
@@ -502,7 +502,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <Building2 size={14} />
-              <span>INDUSTRY</span>
+              <span>Ngành nghề</span>
             </label>
             <div className="reg-business-input-wrapper">
               <select
@@ -512,14 +512,14 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 disabled={isLoading}
                 className="reg-business-input reg-business-select"
               >
-                <option value="">Select industry</option>
-                <option value="Technology">Technology</option>
-                <option value="Finance">Finance</option>
-                <option value="Healthcare">Healthcare</option>
-                <option value="Education">Education</option>
-                <option value="Manufacturing">Manufacturing</option>
-                <option value="Retail">Retail</option>
-                <option value="Other">Other</option>
+                <option value="">Chọn ngành</option>
+                <option value="Technology">Công nghệ</option>
+                <option value="Finance">Tài chính</option>
+                <option value="Healthcare">Y tế</option>
+                <option value="Education">Giáo dục</option>
+                <option value="Manufacturing">Sản xuất</option>
+                <option value="Retail">Bán lẻ</option>
+                <option value="Other">Khác</option>
               </select>
             </div>
           </div>
@@ -528,7 +528,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field reg-business-field-2col">
             <label className="reg-business-label">
               <MapPin size={14} />
-              <span>COMPANY ADDRESS</span>
+              <span>Địa chỉ công ty</span>
             </label>
             <div className="reg-business-input-wrapper">
               <input
@@ -612,12 +612,12 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
             {isLoading ? (
               <>
                 <Loader2 className="reg-business-spinner" size={18} />
-                <span>REGISTERING...</span>
+                <span>Đang đăng ký...</span>
               </>
             ) : (
               <>
                 <Building2 size={18} />
-                <span>REGISTER ENTERPRISE</span>
+                <span>Đăng ký doanh nghiệp</span>
               </>
             )}
             <div className="reg-business-btn-glow"></div>

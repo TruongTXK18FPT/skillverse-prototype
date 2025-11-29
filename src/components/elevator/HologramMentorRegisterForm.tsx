@@ -185,8 +185,8 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <h1 className="reg-mentor-title">MENTOR</h1>
-              <p className="reg-mentor-subtitle">REGISTRATION</p>
+              <h1 className="reg-mentor-title">Cố vấn</h1>
+              <p className="reg-mentor-subtitle">Đăng ký</p>
             </motion.div>
 
             <div className="reg-mentor-decoration">
@@ -198,9 +198,9 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
 
           {/* Login Link - In Left Column */}
           <div className="reg-mentor-login-section">
-            <p className="reg-mentor-login-prompt">HAVE ACCOUNT?</p>
+            <p className="reg-mentor-login-prompt">Đã có tài khoản?</p>
             <Link to="/login" className="reg-mentor-login-link-btn">
-              LOGIN
+              Đăng nhập
             </Link>
           </div>
         </div>
@@ -233,7 +233,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
           <div className="reg-mentor-field">
             <label className="reg-mentor-label">
               <GraduationCap size={14} />
-              <span>FULL NAME</span>
+              <span>Họ và tên</span>
             </label>
             <div className="reg-mentor-input-wrapper">
               <input
@@ -252,7 +252,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
           <div className="reg-mentor-field">
             <label className="reg-mentor-label">
               <Mail size={14} />
-              <span>EMAIL ADDRESS</span>
+              <span>Địa chỉ email</span>
             </label>
             <div className="reg-mentor-input-wrapper">
               <input
@@ -272,7 +272,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
           <div className="reg-mentor-field">
             <label className="reg-mentor-label">
               <Lock size={14} />
-              <span>PASSWORD</span>
+              <span>Mật khẩu</span>
             </label>
             <div className="reg-mentor-input-wrapper">
               <input
@@ -299,7 +299,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
           <div className="reg-mentor-field">
             <label className="reg-mentor-label">
               <Lock size={14} />
-              <span>CONFIRM</span>
+              <span>Xác nhận mật khẩu</span>
             </label>
             <div className="reg-mentor-input-wrapper">
               <input
@@ -336,7 +336,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
           <div className="reg-mentor-field">
             <label className="reg-mentor-label">
               <Linkedin size={14} />
-              <span>LINKEDIN PROFILE</span>
+              <span>Hồ sơ LinkedIn</span>
             </label>
             <div className="reg-mentor-input-wrapper">
               <input
@@ -354,7 +354,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
           <div className="reg-mentor-field">
             <label className="reg-mentor-label">
               <Target size={14} />
-              <span>MAIN EXPERTISE</span>
+              <span>Chuyên môn chính</span>
             </label>
             <div className="reg-mentor-input-wrapper">
               <input
@@ -371,7 +371,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
           <div className="reg-mentor-field">
             <label className="reg-mentor-label">
               <Briefcase size={14} />
-              <span>YEARS EXP.</span>
+              <span>Số năm kinh nghiệm</span>
             </label>
             <div className="reg-mentor-input-wrapper">
               <input
@@ -390,7 +390,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
           <div className="reg-mentor-field reg-mentor-field-full">
             <label className="reg-mentor-label">
               <FileText size={14} />
-              <span>PROFESSIONAL BIO (OPTIONAL)</span>
+              <span>Giới thiệu chuyên môn (không bắt buộc)</span>
             </label>
             <div className="reg-mentor-input-wrapper">
               <textarea
@@ -518,12 +518,12 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
             {isLoading ? (
               <>
                 <Loader2 className="reg-mentor-spinner" size={18} />
-                <span>REGISTERING...</span>
+                <span>Đang đăng ký...</span>
               </>
             ) : (
               <>
                 <GraduationCap size={18} />
-                <span>REGISTER AS MENTOR</span>
+                <span>Đăng ký làm Cố vấn</span>
               </>
             )}
             <div className="reg-mentor-btn-glow"></div>

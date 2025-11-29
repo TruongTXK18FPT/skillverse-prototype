@@ -6,7 +6,8 @@ import {
 } from 'lucide-react';
 import walletService from '../../services/walletService';
 import { paymentService } from '../../services/paymentService';
-import { premiumService } from '../../services/premiumService';
+// import { premiumService } from '../../services/premiumService';
+import adminService from '../../services/adminService';
 import './TransactionManagementTabCosmic.css';
 
 type TransactionType = 'ALL' | 'WALLET' | 'PAYMENT' | 'WITHDRAWAL' | 'COIN_PURCHASE';
@@ -36,6 +37,8 @@ const TransactionManagementTabCosmic: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
   const [selectedTransaction, setSelectedTransaction] = useState<CombinedTransaction | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
   
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,21 +76,19 @@ const TransactionManagementTabCosmic: React.FC = () => {
       
       // Fetch all transaction types (we'll combine them)
       // Using size=1000 to get all transactions
-      const [walletTxs, paymentTxs, withdrawals, premiumSubs] = await Promise.all([
+      const [walletTxs, paymentTxs, withdrawals] = await Promise.all([
         fetchWalletTransactions(),
         fetchPaymentTransactions(),
-        fetchWithdrawals(),
-        fetchPremiumSubscriptions()
+        fetchWithdrawals()
       ]);
 
       console.log('✅ Fetched:', {
         wallet: walletTxs.length,
         payment: paymentTxs.length,
-        withdrawal: withdrawals.length,
-        premium: premiumSubs.length
+        withdrawal: withdrawals.length
       });
 
-      const combined = [...walletTxs, ...paymentTxs, ...withdrawals, ...premiumSubs];
+      const combined = [...walletTxs, ...paymentTxs, ...withdrawals];
       combined.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       
       console.log('📊 Total transactions:', combined.length);
@@ -110,21 +111,28 @@ const TransactionManagementTabCosmic: React.FC = () => {
       console.log('📡 Fetching wallet transactions...');
       const response = await walletService.adminGetAllWalletTransactions(0, 1000);
       console.log('✅ Wallet transactions response:', response);
-      return response.content.map(tx => ({
-        id: `WAL-${tx.transactionId}`,
-        type: tx.transactionType?.includes('PURCHASE') ? 'COIN_PURCHASE' as TransactionType : 'WALLET' as TransactionType,
-        userId: tx.userId,
-        userName: tx.userName || `User ${tx.userId}`,
-        userEmail: tx.userEmail || '-',
-        userAvatarUrl: tx.userAvatarUrl,
-        amount: tx.cashAmount || tx.coinAmount || 0,
-        status: tx.status,
-        description: tx.description || tx.transactionTypeName || 'Wallet transaction',
-        createdAt: tx.createdAt,
-        method: tx.currencyType === 'COIN' ? 'Coin' : 'Cash',
-        reference: tx.referenceId,
-        originalData: tx
-      }));
+      return response.content.map(tx => {
+        const t = (tx.transactionType || '').toUpperCase();
+        const mappedType: TransactionType =
+          (t.includes('PURCHASE_COINS') || t === 'COIN_PURCHASE') ? 'COIN_PURCHASE' :
+          (t.includes('PURCHASE_PREMIUM') || t.includes('PREMIUM_SUBSCRIPTION')) ? 'PAYMENT' :
+          'WALLET';
+        return {
+          id: `WAL-${tx.transactionId}`,
+          type: mappedType as TransactionType,
+          userId: tx.userId,
+          userName: tx.userName || `User ${tx.userId}`,
+          userEmail: tx.userEmail || '-',
+          userAvatarUrl: tx.userAvatarUrl,
+          amount: tx.cashAmount || tx.coinAmount || 0,
+          status: tx.status,
+          description: tx.description || tx.transactionTypeName || 'Wallet transaction',
+          createdAt: tx.createdAt,
+          method: tx.currencyType === 'COIN' ? 'Coin' : 'Cash',
+          reference: tx.referenceId,
+          originalData: tx
+        };
+      });
     } catch (error) {
       console.error('Error fetching wallet transactions:', error);
       return [];
@@ -185,32 +193,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
     }
   };
 
-  const fetchPremiumSubscriptions = async (): Promise<CombinedTransaction[]> => {
-    try {
-      console.log('📡 Fetching premium subscriptions...');
-      const response = await premiumService.adminGetAllSubscriptions(0, 1000);
-      console.log('✅ Premium subscriptions response:', response);
-      return response.content.map(subscription => ({
-        id: `PREMIUM-${subscription.id}`,
-        type: 'PAYMENT' as TransactionType, // Treat as payment type
-        userId: subscription.userId,
-        userName: subscription.userName || `User ${subscription.userId}`,
-        userEmail: subscription.userEmail || '-',
-        userAvatarUrl: subscription.userAvatarUrl,
-        amount: subscription.plan?.price ? parseFloat(subscription.plan.price.toString()) : 0,
-        status: subscription.status === 'ACTIVE' ? 'COMPLETED' : subscription.status,
-        description: `Premium: ${subscription.plan?.name || 'Unknown Plan'}`,
-        createdAt: subscription.startDate,
-        method: 'Premium Subscription',
-        reference: `SUB-${subscription.id}`,
-        originalData: subscription
-      }));
-    } catch (error: any) {
-      console.error('❌ Error fetching premium subscriptions:', error);
-      console.error('Premium error details:', error.response?.data || error.message);
-      return [];
-    }
-  };
+  // Premium subscriptions are excluded from this Transactions tab to avoid duplication
 
   const calculateStats = (txs: CombinedTransaction[]) => {
     // Only count revenue from PURCHASES (not deposits/topups)
@@ -342,9 +325,28 @@ const TransactionManagementTabCosmic: React.FC = () => {
         const paymentId = parseInt(transaction.id.replace('PAY-', ''));
         blob = await paymentService.adminDownloadPaymentInvoice(paymentId);
         filename = `invoice-${paymentId}.pdf`;
+      } else if (transaction.id.startsWith('PREMIUM-')) {
+        const paymentId = transaction.originalData?.paymentTransactionId;
+        if (typeof paymentId === 'number') {
+          blob = await paymentService.adminDownloadPaymentInvoice(paymentId);
+          filename = `invoice-${paymentId}.pdf`;
+        } else {
+          console.error('Premium subscription missing paymentTransactionId');
+          return;
+        }
       } else {
         console.error('Unknown transaction type for invoice download');
         return;
+      }
+
+      if (!blob || (blob.type && blob.type !== 'application/pdf')) {
+        try {
+          const text = await blob.text();
+          console.error('Invoice response is not PDF:', text);
+        } catch (_e) {
+          void 0;
+        }
+        throw new Error('Invalid invoice response');
       }
       
       // Create download link
@@ -435,10 +437,45 @@ const TransactionManagementTabCosmic: React.FC = () => {
           <h2>Quản Lý Giao Dịch</h2>
           <p>Theo dõi tất cả giao dịch: Thanh toán, Rút tiền, Mua xu, Premium</p>
         </div>
-        <button className="admin-refresh-btn" onClick={fetchAllTransactions} disabled={loading}>
-          <RefreshCw size={18} className={loading ? 'spinning' : ''} />
-          Làm mới
-        </button>
+        <div className="admin-header-actions">
+          <button className="admin-refresh-btn" onClick={fetchAllTransactions} disabled={loading}>
+            <RefreshCw size={18} className={loading ? 'spinning' : ''} />
+            Làm mới
+          </button>
+          <button
+            className="admin-download-btn"
+            onClick={() => {
+              const params: any = {};
+              if (statusFilter !== 'ALL') params.status = statusFilter;
+              // No user filter UI here; export all currently filtered by status/type
+              if (typeFilter === 'COIN_PURCHASE') params.walletType = 'PURCHASE_COINS';
+              if (startDate) params.startDate = `${startDate}T00:00:00`;
+              if (endDate) params.endDate = `${endDate}T23:59:59`;
+              adminService.downloadTransactionsReport(params);
+            }}
+            disabled={loading}
+            title="Tải báo cáo giao dịch (CSV)"
+          >
+            <Download size={18} />
+            Xuất báo cáo
+          </button>
+          <button
+            className="admin-download-btn"
+            onClick={() => {
+              const params: any = {};
+              if (statusFilter !== 'ALL') params.status = statusFilter;
+              if (typeFilter === 'COIN_PURCHASE') params.walletType = 'PURCHASE_COINS';
+              if (startDate) params.startDate = `${startDate}T00:00:00`;
+              if (endDate) params.endDate = `${endDate}T23:59:59`;
+              adminService.downloadTransactionsReportPdf(params);
+            }}
+            disabled={loading}
+            title="Tải báo cáo giao dịch (PDF)"
+          >
+            <Download size={18} />
+            Xuất PDF
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
@@ -497,6 +534,25 @@ const TransactionManagementTabCosmic: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+        </div>
+
+        <div className="admin-date-range">
+          <label>
+            Từ ngày
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </label>
+          <label>
+            Đến ngày
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </label>
         </div>
 
         <div className="admin-status-filters">
@@ -609,8 +665,11 @@ const TransactionManagementTabCosmic: React.FC = () => {
                   >
                     <Eye size={16} />
                   </button>
-                  {(tx.type === 'PAYMENT' || tx.type === 'COIN_PURCHASE' || tx.id.startsWith('WAL-')) && 
-                   tx.status === 'COMPLETED' && (
+                  {(() => {
+                    const isWalletCash = tx.id.startsWith('WAL-') && tx.originalData?.currencyType === 'CASH';
+                    const isPayment = tx.type === 'PAYMENT' && tx.id.startsWith('PAY-');
+                    return (isPayment || isWalletCash) && tx.status === 'COMPLETED';
+                  })() && (
                     <button
                       className="admin-action-btn download"
                       onClick={() => handleDownloadInvoice(tx)}

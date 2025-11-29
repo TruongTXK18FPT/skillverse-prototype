@@ -828,24 +828,24 @@
 /* MeowlChat Component Styles */
 .meowl-chat-container {
     position: relative;
-    width: 420px;
-    max-width: 90vw;
-    height: 75vh;
-    max-height: 650px;
-    min-height: 400px;
+    width: 520px;
+    max-width: 92vw;
+    height: 78vh;
+    max-height: 700px;
+    min-height: 420px;
     display: flex;
     flex-direction: column;
     background: linear-gradient(135deg, rgba(25, 30, 80, 0.95), rgba(15, 20, 40, 0.95));
     border: 2px solid #00bcd4;
-    border-radius: 8px;
-    box-shadow: 0 0 40px rgba(0, 188, 212, 0.7), 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 0 50px rgba(0, 188, 212, 0.8), 0 10px 36px rgba(0, 0, 0, 0.35);
     transform: skew(-1deg);
     animation: slideInFromRightChat 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(16px);
     font-family: 'Minecraft', monospace;
     margin-right: 0;
-    right: 100px;
-    bottom: -50px;
+    right: 90px;
+    bottom: -40px;
 }
 
 /* Close button for chat */
@@ -1032,8 +1032,8 @@
 }
 
 .message-text {
-    line-height: 1.6;
-    font-size: 0.85rem;
+    line-height: 1.7;
+    font-size: 0.95rem;
     word-break: break-word;
 }
 
@@ -1109,12 +1109,12 @@
 
 .chat-input {
     flex: 1;
-    padding: 0.75rem 1rem;
-    background: linear-gradient(135deg, rgba(25, 30, 80, 0.8), rgba(15, 20, 40, 0.8));
+    padding: 0.9rem 1.1rem;
+    background: linear-gradient(135deg, rgba(25, 30, 80, 0.85), rgba(15, 20, 40, 0.85));
     border: 2px solid #00bcd4;
     color: #e0f7fa;
     font-family: 'Minecraft', monospace;
-    font-size: 0.9rem;
+    font-size: 1rem;
     outline: none;
     transform: skew(-1deg);
     transition: all 0.3s ease;

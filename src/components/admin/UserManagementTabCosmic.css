@@ -14,6 +14,11 @@
   border-bottom: 2px solid rgba(139, 92, 246, 0.2);
 }
 
+.admin-header-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
 .admin-user-header h2 {
   margin: 0 0 0.5rem 0;
   font-size: 1.75rem;
@@ -43,6 +48,31 @@
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.admin-download-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.admin-download-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+}
+
+.admin-download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .admin-refresh-btn:hover:not(:disabled) {

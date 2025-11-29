@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import jobService from '../../services/jobService';
 import { JobApplicationResponse } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';
-import { Clock, MapPin, DollarSign, Calendar, Briefcase, CheckCircle, XCircle, Eye } from 'lucide-react';
-import './MyApplicationsPage.css';
+import { Clock, MapPin, DollarSign, Calendar, CheckCircle, XCircle, Eye } from 'lucide-react';
+import OdysseyLayout from '../../components/jobs-odyssey/OdysseyLayout';
+import '../../components/jobs-odyssey/odyssey-styles.css';
 
 const MyApplicationsPage: React.FC = () => {
   const { showError } = useToast();
@@ -20,7 +21,7 @@ const MyApplicationsPage: React.FC = () => {
       setApplications(data);
     } catch (error) {
       console.error('Error fetching applications:', error);
-      showError('Lỗi', 'Không thể tải danh sách ứng tuyển');
+      showError('Lỗi tải dữ liệu', 'Không thể tải danh sách ứng tuyển. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }
@@ -105,181 +106,137 @@ const MyApplicationsPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="my-applications-page">
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Đang tải danh sách ứng tuyển...</p>
+      <OdysseyLayout>
+        <div className="odyssey-loading">
+          <div className="odyssey-loading__spinner"></div>
+          <p className="odyssey-loading__text">Đang tải danh sách ứng tuyển...</p>
         </div>
-      </div>
+      </OdysseyLayout>
     );
   }
 
   return (
-    <div className="my-applications-page">
-      <div className="map-header">
-        <div className="map-header-content">
-          <h1>📋 Đơn Ứng Tuyển Của Tôi</h1>
-          <p>Theo dõi trạng thái các công việc bạn đã ứng tuyển</p>
-        </div>
-      </div>
+    <OdysseyLayout>
+      <header className="odyssey-header">
+        <h1 className="odyssey-header__title">Đơn Ứng Tuyển</h1>
+        <p className="odyssey-header__subtitle">Theo dõi trạng thái công việc đã ứng tuyển</p>
+      </header>
 
-      {/* Stats Cards */}
-      <div className="map-stats-grid">
-        <div className="map-stat-card" onClick={() => setFilter('ALL')} style={{ cursor: 'pointer', borderColor: filter === 'ALL' ? '#3498db' : 'transparent' }}>
-          <div className="map-stat-icon" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
-            <Briefcase size={24} />
-          </div>
-          <div className="map-stat-info">
-            <h3>{stats.total}</h3>
-            <p>Tổng Đơn</p>
-          </div>
-        </div>
-
-        <div className="map-stat-card" onClick={() => setFilter('PENDING')} style={{ cursor: 'pointer', borderColor: filter === 'PENDING' ? '#f59e0b' : 'transparent' }}>
-          <div className="map-stat-icon" style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}>
-            <Clock size={24} />
-          </div>
-          <div className="map-stat-info">
-            <h3>{stats.pending}</h3>
-            <p>Đang Chờ</p>
-          </div>
-        </div>
-
-        <div className="map-stat-card" onClick={() => setFilter('REVIEWED')} style={{ cursor: 'pointer', borderColor: filter === 'REVIEWED' ? '#3b82f6' : 'transparent' }}>
-          <div className="map-stat-icon" style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' }}>
-            <Eye size={24} />
-          </div>
-          <div className="map-stat-info">
-            <h3>{stats.reviewed}</h3>
-            <p>Đã Xem</p>
-          </div>
-        </div>
-
-        <div className="map-stat-card" onClick={() => setFilter('ACCEPTED')} style={{ cursor: 'pointer', borderColor: filter === 'ACCEPTED' ? '#10b981' : 'transparent' }}>
-          <div className="map-stat-icon" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
-            <CheckCircle size={24} />
-          </div>
-          <div className="map-stat-info">
-            <h3>{stats.accepted}</h3>
-            <p>Chấp Nhận</p>
-          </div>
-        </div>
-
-        <div className="map-stat-card" onClick={() => setFilter('REJECTED')} style={{ cursor: 'pointer', borderColor: filter === 'REJECTED' ? '#ef4444' : 'transparent' }}>
-          <div className="map-stat-icon" style={{ background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' }}>
-            <XCircle size={24} />
-          </div>
-          <div className="map-stat-info">
-            <h3>{stats.rejected}</h3>
-            <p>Từ Chối</p>
+      {/* Status Filter Console */}
+      <div className="odyssey-filter-console">
+        <div className="odyssey-filter-console__content odyssey-filter-console__content--expanded">
+          <div className="odyssey-filter-console__section">
+            <label className="odyssey-filter-console__label">
+              <span className="odyssey-filter-console__label-icon">◆</span>
+              Trạng thái
+            </label>
+            <div className="odyssey-filter-console__toggle-group">
+              {[
+                { key: 'ALL', label: `Tất cả (${stats.total})` },
+                { key: 'PENDING', label: `Đang chờ (${stats.pending})` },
+                { key: 'REVIEWED', label: `Đã xem (${stats.reviewed})` },
+                { key: 'ACCEPTED', label: `Chấp nhận (${stats.accepted})` },
+                { key: 'REJECTED', label: `Từ chối (${stats.rejected})` }
+              ].map((s) => (
+                <button
+                  key={s.key}
+                  className={`odyssey-filter-console__toggle ${filter === s.key ? 'odyssey-filter-console__toggle--active' : ''}`}
+                  onClick={() => setFilter(s.key)}
+                >
+                  <span className="odyssey-filter-console__toggle-led"></span>
+                  {s.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Applications List */}
-      <div className="map-content">
+      <div className="odyssey-content">
         {filteredApplications.length === 0 ? (
-          <div className="map-empty-state">
-            <div className="map-empty-icon">📭</div>
-            <h3>Chưa Có Đơn Ứng Tuyển</h3>
-            <p>
+          <div className="odyssey-empty">
+            <div className="odyssey-empty__icon">📭</div>
+            <h3 className="odyssey-empty__title">Chưa có đơn ứng tuyển</h3>
+            <p className="odyssey-empty__text">
               {filter === 'ALL' 
-                ? 'Bạn chưa ứng tuyển công việc nào. Hãy khám phá các công việc mới!'
+                ? 'Bạn chưa ứng tuyển công việc nào. Khám phá công việc mới ngay!'
                 : `Không có đơn ứng tuyển với trạng thái "${getStatusInfo(filter).text}"`
               }
             </p>
-            <button 
-              className="map-cta-button"
-              onClick={() => window.location.href = '/jobs'}
-            >
-              🔍 Tìm Công Việc
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+              <button className="odyssey-card__btn" onClick={() => window.location.href = '/jobs'}>
+                <span>Tìm công việc</span>
+              </button>
+            </div>
           </div>
         ) : (
-          <div className="map-applications-grid">
-            {filteredApplications.map((app) => {
-              const statusInfo = getStatusInfo(app.status);
-              return (
-                <div key={app.id} className="map-application-card">
-                  {/* Card Header */}
-                  <div className="map-card-header">
-                    <h3>{app.jobTitle}</h3>
-                    <div 
-                      className="map-status-badge"
-                      style={{ 
-                        background: statusInfo.bg,
-                        color: statusInfo.color,
-                        border: `2px solid ${statusInfo.color}40`
-                      }}
-                    >
-                      {statusInfo.icon}
-                      <span>{statusInfo.text}</span>
-                    </div>
-                  </div>
+          <div className="odyssey-grid">
+            {filteredApplications.map((app) => (
+              <div key={app.id} className="odyssey-card-wrapper">
+                <div className={`odyssey-card odyssey-card--${((app.minBudget + app.maxBudget) / 2) > 5000000 ? 'crimson' : ((app.minBudget + app.maxBudget) / 2) >= 1000000 ? 'gold' : 'blue'}`}>
+                  <div className="odyssey-card__corner-indicator odyssey-card__corner-indicator--tl"></div>
+                  <div className="odyssey-card__corner-indicator odyssey-card__corner-indicator--br"></div>
 
-                  {/* Job Meta */}
-                  <div className="map-card-meta">
-                    <div className="map-meta-item">
-                      <Briefcase size={16} />
-                      <span>{app.recruiterCompanyName}</span>
+                  <div className="odyssey-card__content-wrapper">
+                    <div className="odyssey-card__faction">
+                      <div className="odyssey-card__faction-ring">
+                        {app.recruiterCompanyName.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2)}
+                      </div>
+                      <div className="odyssey-card__company">{app.recruiterCompanyName}</div>
                     </div>
-                    <div className="map-meta-item">
-                      <DollarSign size={16} />
-                      <span>{formatBudget(app.minBudget, app.maxBudget)}</span>
-                    </div>
-                    <div className="map-meta-item">
-                      <MapPin size={16} />
-                      <span>{app.isRemote ? '🌐 Từ Xa' : `📍 ${app.location}`}</span>
-                    </div>
-                    <div className="map-meta-item">
-                      <Calendar size={16} />
-                      <span>Ứng tuyển: {formatDate(app.appliedAt)}</span>
-                    </div>
-                  </div>
 
-                  {/* Cover Letter */}
-                  {app.coverLetter && (
-                    <div className="map-cover-letter">
-                      <strong>📝 Cover Letter:</strong>
-                      <p>{app.coverLetter}</p>
+                    <div className="odyssey-card__content">
+                      <h3 className="odyssey-card__title">{app.jobTitle}</h3>
                     </div>
-                  )}
 
-                  {/* Response Messages */}
-                  {app.acceptanceMessage && (
-                    <div className="map-response-message map-acceptance">
-                      <CheckCircle size={18} />
-                      <div>
-                        <strong>✅ Tin Nhắn Chấp Nhận:</strong>
-                        <p>{app.acceptanceMessage}</p>
+                    <div className="odyssey-card__meta">
+                      <div className="odyssey-card__meta-item">
+                        <DollarSign className="odyssey-card__meta-icon" size={16} />
+                        <span>{formatBudget(app.minBudget, app.maxBudget)}</span>
+                      </div>
+                      <div className="odyssey-card__meta-item">
+                        <MapPin className="odyssey-card__meta-icon" size={16} />
+                        <span>{app.isRemote ? '🌐 Từ xa' : `📍 ${app.location}`}</span>
+                      </div>
+                      <div className="odyssey-card__meta-item">
+                        <Calendar className="odyssey-card__meta-icon" size={16} />
+                        <span>Ứng tuyển: {formatDate(app.appliedAt)}</span>
                       </div>
                     </div>
-                  )}
 
-                  {app.rejectionReason && (
-                    <div className="map-response-message map-rejection">
-                      <XCircle size={18} />
-                      <div>
-                        <strong>❌ Lý Do Từ Chối:</strong>
-                        <p>{app.rejectionReason}</p>
+                    {app.coverLetter && (
+                      <p className="odyssey-card__description">📝 {app.coverLetter}</p>
+                    )}
+
+                    <div className="odyssey-card__badge" style={{ background: getStatusInfo(app.status).bg, color: getStatusInfo(app.status).color }}>
+                      {getStatusInfo(app.status).icon}
+                      <span style={{ marginLeft: '0.5rem' }}>{getStatusInfo(app.status).text}</span>
+                    </div>
+
+                    {app.acceptanceMessage && (
+                      <p className="odyssey-card__description" style={{ color: '#10b981' }}>✅ {app.acceptanceMessage}</p>
+                    )}
+                    {app.rejectionReason && (
+                      <p className="odyssey-card__description" style={{ color: '#ef4444' }}>❌ {app.rejectionReason}</p>
+                    )}
+
+                    {app.processedAt && (
+                      <div className="odyssey-card__meta" style={{ marginTop: '0.5rem' }}>
+                        <div className="odyssey-card__meta-item">
+                          <Clock className="odyssey-card__meta-icon" size={14} />
+                          <span>Xử lý: {formatDate(app.processedAt)}</span>
+                        </div>
                       </div>
-                    </div>
-                  )}
-
-                  {/* Processed Date */}
-                  {app.processedAt && (
-                    <div className="map-processed-date">
-                      <Clock size={14} />
-                      <span>Xử lý: {formatDate(app.processedAt)}</span>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         )}
       </div>
-    </div>
+    </OdysseyLayout>
   );
 };
 

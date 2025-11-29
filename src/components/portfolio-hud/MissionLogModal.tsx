@@ -116,7 +116,7 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
       console.error('Error submitting project:', error);
       setAlertModal({
         show: true,
-        message: 'Error saving mission log. Please try again.',
+        message: 'Lỗi khi lưu dự án. Vui lòng thử lại.',
         type: 'error'
       });
     } finally {
@@ -132,9 +132,9 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
         <div className="dossier-modal-header">
           <div>
             <h2 className="dossier-modal-title">
-              {mode === 'create' ? 'LOG NEW MISSION' : 'UPDATE MISSION LOG'}
+              {mode === 'create' ? 'Thêm dự án' : 'Cập nhật dự án'}
             </h2>
-            <p className="dossier-modal-subtitle">Record tactical project operations</p>
+            <p className="dossier-modal-subtitle">Ghi lại hoạt động dự án</p>
           </div>
           <button className="dossier-modal-close" onClick={onClose} type="button">
             <X size={20} />
@@ -143,27 +143,27 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
 
         <form onSubmit={handleSubmit} className="dossier-modal-body">
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">MISSION DETAILS</h3>
+            <h3 className="dossier-form-section-title">Chi tiết dự án</h3>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Mission Name *</label>
+              <label className="dossier-form-label">Tên dự án *</label>
               <input
                 type="text"
                 className="dossier-input"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="e.g., E-Commerce Platform Redesign"
+                placeholder="Ví dụ: Thiết kế lại nền tảng E-Commerce"
                 required
               />
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Description *</label>
+              <label className="dossier-form-label">Mô tả *</label>
               <textarea
                 className="dossier-textarea"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Detailed mission description..."
+                placeholder="Mô tả chi tiết dự án..."
                 rows={4}
                 required
               />
@@ -171,47 +171,47 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
 
             <div className="dossier-form-row">
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Mission Type *</label>
+                <label className="dossier-form-label">Loại dự án *</label>
                 <select
                   className="dossier-select"
                   value={formData.projectType}
                   onChange={(e) => setFormData({ ...formData, projectType: e.target.value as ProjectType })}
                   required
                 >
-                  <option value={ProjectType.MICROJOB}>Micro-Job</option>
-                  <option value={ProjectType.FREELANCE}>Freelance</option>
-                  <option value={ProjectType.PERSONAL}>Personal</option>
-                  <option value={ProjectType.ACADEMIC}>Academic</option>
-                  <option value={ProjectType.OPEN_SOURCE}>Open Source</option>
+                  <option value={ProjectType.MICROJOB}>Việc nhỏ</option>
+                  <option value={ProjectType.FREELANCE}>Tự do</option>
+                  <option value={ProjectType.PERSONAL}>Cá nhân</option>
+                  <option value={ProjectType.ACADEMIC}>Học thuật</option>
+                  <option value={ProjectType.OPEN_SOURCE}>Mã nguồn mở</option>
                 </select>
               </div>
 
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Client</label>
+                <label className="dossier-form-label">Khách hàng</label>
                 <input
                   type="text"
                   className="dossier-input"
                   value={formData.clientName || ''}
                   onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
-                  placeholder="e.g., ABC Company"
+                placeholder="Ví dụ: Công ty ABC"
                 />
               </div>
             </div>
 
             <div className="dossier-form-row">
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Duration</label>
+                <label className="dossier-form-label">Thời gian</label>
                 <input
                   type="text"
                   className="dossier-input"
                   value={formData.duration || ''}
                   onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                  placeholder="e.g., 3 weeks"
+                placeholder="Ví dụ: 3 tuần"
                 />
               </div>
 
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Completion Date</label>
+                <label className="dossier-form-label">Ngày hoàn thành</label>
                 <input
                   type="date"
                   className="dossier-input"
@@ -223,7 +223,7 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
           </div>
 
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">MISSION THUMBNAIL</h3>
+            <h3 className="dossier-form-section-title">Ảnh dự án</h3>
 
             <div className="dossier-form-group">
               <div style={{ border: '1px solid var(--dossier-border-silver)', padding: '1rem', textAlign: 'center' }}>
@@ -239,17 +239,17 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
                 />
                 <label htmlFor="thumbnail-upload" className="dossier-btn-primary" style={{ cursor: 'pointer' }}>
                   <Upload size={18} />
-                  Upload Thumbnail
+                  Tải ảnh
                 </label>
               </div>
             </div>
           </div>
 
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">SYSTEM MODULES (Tech Stack)</h3>
+            <h3 className="dossier-form-section-title">Công nghệ sử dụng</h3>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Technologies Used</label>
+              <label className="dossier-form-label">Công nghệ sử dụng</label>
               <div style={{ border: '1px solid var(--dossier-border-silver)', padding: '0.75rem' }}>
                 <div className="dossier-module-tags" style={{ marginBottom: '0.75rem' }}>
                   {formData.tools?.map((tool, idx) => (
@@ -266,7 +266,7 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
                     value={toolInput}
                     onChange={(e) => setToolInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTool())}
-                    placeholder="e.g., React, Node.js, MongoDB"
+                    placeholder="Ví dụ: React, Node.js, MongoDB"
                     style={{ flex: 1 }}
                   />
                   <button type="button" onClick={handleAddTool} className="dossier-btn-primary">+</button>
@@ -276,10 +276,10 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
           </div>
 
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">MISSION OUTCOMES</h3>
+            <h3 className="dossier-form-section-title">Kết quả</h3>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Achievements</label>
+              <label className="dossier-form-label">Thành tựu</label>
               <div style={{ border: '1px solid var(--dossier-border-silver)', padding: '0.75rem' }}>
                 <div className="dossier-module-tags" style={{ marginBottom: '0.75rem' }}>
                   {formData.outcomes?.map((outcome, idx) => (
@@ -296,7 +296,7 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
                     value={outcomeInput}
                     onChange={(e) => setOutcomeInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddOutcome())}
-                    placeholder="e.g., Increased conversion rate by 35%"
+                    placeholder="Ví dụ: Tăng tỷ lệ chuyển đổi 35%"
                     style={{ flex: 1 }}
                   />
                   <button type="button" onClick={handleAddOutcome} className="dossier-btn-primary">+</button>
@@ -306,10 +306,10 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
           </div>
 
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">LINKS & RATING</h3>
+            <h3 className="dossier-form-section-title">Liên kết & đánh giá</h3>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Project URL</label>
+              <label className="dossier-form-label">URL dự án</label>
               <input
                 type="url"
                 className="dossier-input"
@@ -320,7 +320,7 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">GitHub Repository</label>
+              <label className="dossier-form-label">Kho GitHub</label>
               <input
                 type="url"
                 className="dossier-input"
@@ -332,7 +332,7 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
 
             <div className="dossier-form-row">
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Rating (1-5)</label>
+              <label className="dossier-form-label">Đánh giá (1-5)</label>
                 <input
                   type="number"
                   className="dossier-input"
@@ -351,18 +351,18 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
                     onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
                     style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                   />
-                  <span style={{ color: 'var(--dossier-silver)' }}>Featured Mission</span>
+                  <span style={{ color: 'var(--dossier-silver)' }}>Dự án nổi bật</span>
                 </label>
               </div>
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Client Feedback</label>
+              <label className="dossier-form-label">Phản hồi khách hàng</label>
               <textarea
                 className="dossier-textarea"
                 value={formData.clientFeedback || ''}
                 onChange={(e) => setFormData({ ...formData, clientFeedback: e.target.value })}
-                placeholder="Client feedback about this mission..."
+                placeholder="Phản hồi của khách hàng về dự án..."
                 rows={3}
               />
             </div>
@@ -370,16 +370,16 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
 
           <div className="dossier-modal-footer" style={{ borderTop: 'none', paddingTop: 0 }}>
             <button type="button" onClick={onClose} className="dossier-btn-secondary" disabled={loading}>
-              CANCEL
+              Hủy
             </button>
             <button type="submit" className="dossier-btn-primary" disabled={loading}>
               {loading ? (
                 <>
-                  <Loader className="dossier-spinner" size={18} />
-                  LOGGING...
+                <Loader className="dossier-spinner" size={18} />
+                Đang lưu...
                 </>
               ) : (
-                mode === 'create' ? 'LOG MISSION' : 'UPDATE LOG'
+                mode === 'create' ? 'Thêm dự án' : 'Cập nhật'
               )}
             </button>
           </div>

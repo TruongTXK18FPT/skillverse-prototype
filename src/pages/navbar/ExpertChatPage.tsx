@@ -7,9 +7,14 @@ import careerChatService from '../../services/careerChatService';
 import { UIMessage, ChatSession, ChatMode, ExpertContext } from '../../types/CareerChat';
 import { useToast } from '../../hooks/useToast';
 import MessageRenderer from '../../components/MessageRenderer';
+const ENABLE_TTS = false;
+import { WavRecorder } from '../../shared/wavRecorder';
+import { transcribeAudioViaBackend } from '../../shared/speechToText';
+import { Mic, Square } from 'lucide-react';
 import ExpertModeSelector from '../../components/ExpertModeSelector';
 import avaChat from '../../assets/ava-chat.png';
 import '../../styles/ExpertChatTech.css';
+import '../../styles/VoiceSelector.css';
 
 /**
  * Expert Chat Page - Hologram Galaxy Universe Theme
@@ -35,6 +40,17 @@ const ExpertChatPage = () => {
   const [showExpertSelector, setShowExpertSelector] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [selectedVoice, setSelectedVoice] = useState<string>('banmai');
+  const [previewLoadingVoice, setPreviewLoadingVoice] = useState<string | null>(null);
+  const [speaking, setSpeaking] = useState<boolean>(false);
+  const [ttsPreparing, setTtsPreparing] = useState<boolean>(false);
+  const [voiceMode, setVoiceMode] = useState<boolean>(false);
+  const [showVoiceModal, setShowVoiceModal] = useState<boolean>(false);
+  const [recorder] = useState(() => new WavRecorder());
+  const [isRecording, setIsRecording] = useState(false);
+  const [previewText, setPreviewText] = useState<string>('');
+  const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
+  const recognitionRef = useRef<any>(null);
 
   const loadSessions = async () => {
     try {
@@ -48,6 +64,86 @@ const ExpertChatPage = () => {
     }
   };
 
+  // STT toggle via audio mode button
+  const startRecording = async () => {
+    try {
+      await recorder.start();
+      setIsRecording(true);
+
+      const SR: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SR) {
+        try {
+          const recog = new SR();
+          recognitionRef.current = recog;
+          recog.lang = 'vi-VN';
+          recog.continuous = true;
+          recog.interimResults = true;
+          setPreviewText('');
+          recog.onresult = (event: any) => {
+            let interim = '';
+            let final = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              const transcript = event.results[i][0]?.transcript || '';
+              if (event.results[i].isFinal) final += transcript + ' ';
+              else interim += transcript + ' ';
+            }
+            setPreviewText(final || interim);
+          };
+          recog.onerror = () => {};
+          recog.onend = () => { setIsPreviewing(false); };
+          recog.start();
+          setIsPreviewing(true);
+        } catch {
+          setIsPreviewing(false);
+        }
+      } else {
+        setIsPreviewing(false);
+      }
+    } catch (err) {
+      console.error('Unable to start recording:', err);
+    }
+  };
+
+  const stopRecording = async () => {
+    try {
+      try {
+        if (recognitionRef.current) {
+          recognitionRef.current.onresult = null;
+          recognitionRef.current.onend = null;
+          recognitionRef.current.stop();
+          recognitionRef.current = null;
+        }
+      } catch (err) { void 0; }
+      setIsPreviewing(false);
+
+      const result = await recorder.stop();
+      setIsRecording(false);
+
+      if (result.audioBlob) {
+        try {
+          const stt = await transcribeAudioViaBackend(result.audioBlob);
+          const text = stt?.text?.trim() || '';
+          const finalText = text || previewText.trim();
+          if (finalText) {
+            setInputMessage(finalText);
+            // submit
+            const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
+            await handleSendMessage(fakeEvent);
+          }
+        } catch (e) {
+          const fallbackText = previewText.trim();
+          if (fallbackText) {
+            setInputMessage(fallbackText);
+            const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
+            await handleSendMessage(fakeEvent);
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Unable to stop recording or transcribe:', err);
+      setIsRecording(false);
+    }
+  };
   const handleLoadSession = async (selectedSessionId: number) => {
     try {
       setIsLoading(true);
@@ -234,6 +330,16 @@ const ExpertChatPage = () => {
     navigate('/chatbot');
   };
 
+  const previewVoice = async (_voiceId: string) => { return; };
+
+  const speakText = async (_text: string) => { return; };
+
+  const quickSend = async () => {
+    if (!inputMessage.trim() || isLoading) return;
+    const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
+    await handleSendMessage(fakeEvent);
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputMessage.trim() || isLoading || !expertContext) return;
@@ -270,13 +376,18 @@ const ExpertChatPage = () => {
         loadSessions();
       }
 
-      setMessages(prev => [...prev, {
+      const assistantMsg = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: response.aiResponse,
         timestamp: new Date(response.timestamp),
         expertContext: response.expertContext
-      }]);
+      } as UIMessage;
+      setMessages(prev => [...prev, assistantMsg]);
+
+      if (voiceMode && ENABLE_TTS) {
+        speakText(assistantMsg.content);
+      }
     } catch (error: any) {
       showError('Lỗi', error.message || 'Không thể gửi tin nhắn');
       setMessages(prev => [...prev, {
@@ -410,6 +521,36 @@ const ExpertChatPage = () => {
           </div>
         </div>
 
+        {/* Mode toggle moved to input area; mic shown only in voice mode */}
+
+        {(isRecording || isPreviewing) && (
+          <div className="sv-audio-controls">
+            <button
+              type="button"
+              className="sv-audio-control__mic-btn"
+              onClick={isRecording ? stopRecording : startRecording}
+            >
+              {isRecording ? <Square size={16} /> : <Mic size={16} />} {isRecording ? 'Dừng ghi' : 'Bắt đầu ghi'}
+            </button>
+            <div className="sv-audio-control__voice">Giọng đang chọn: {selectedVoice}</div>
+            <button
+              type="button"
+              className="sv-audio-control__send-btn"
+              disabled={!inputMessage.trim() || isLoading}
+              onClick={quickSend}
+            >
+              <Send size={16} /> Gửi tin nhắn
+            </button>
+            <div className="sv-audio-control__status">
+              {isPreviewing ? 'Đang nhận diện...' : (isRecording ? 'Đang ghi âm...' : '')}
+            </div>
+          </div>
+        )}
+
+        {ENABLE_TTS && (
+          <></>
+        )}
+
         {/* Messages */}
         <div className="expert-chat-messages">
           {messages.map(msg => (
@@ -442,6 +583,26 @@ const ExpertChatPage = () => {
                     <div className="corner br"></div>
                   </div>
                   <MessageRenderer content={msg.content} isExpertMode={true} />
+                  {msg.role === 'assistant' && voiceMode && ENABLE_TTS && (
+                    <div className="sv-tts-play-below">
+                      {ttsPreparing && !speaking ? (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                          <span className="sv-preview-loading" /> Đang chuẩn bị audio...
+                        </span>
+                      ) : (
+                        <button
+                          className="sv-tts-play-btn"
+                          type="button"
+                          onClick={() => speakText(msg.content)}
+                          disabled={speaking}
+                          title="Đọc to tin nhắn này"
+                        >
+                          {speaking ? 'Đang phát...' : 'Đọc to'}
+                        </button>
+                      )}
+                      <span>Giọng: {selectedVoice}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -483,7 +644,25 @@ const ExpertChatPage = () => {
               <Send size={18} />
               <span>GỬI</span>
             </button>
+            <button
+              type="button"
+              className="expert-chat-send-btn"
+              onClick={isRecording ? stopRecording : startRecording}
+              aria-label={isRecording ? 'Dừng ghi âm' : 'Bắt đầu ghi âm'}
+              aria-pressed={isRecording}
+              style={{ marginLeft: 8 }}
+            >
+              {isRecording ? <Square size={16} /> : <Mic size={16} />} {isRecording ? 'Dừng ghi' : 'Ghi âm'}
+            </button>
           </form>
+          {(isRecording || isPreviewing) && previewText && (
+            <div className="expert-preview-text" aria-live="polite" style={{ marginTop: 8, opacity: 0.9 }}>
+              {previewText}
+            </div>
+          )}
+          <div className="sv-audio-control__status" aria-live="polite" style={{ marginTop: 6 }}>
+            {isPreviewing ? 'Đang nhận diện...' : (isRecording ? 'Đang ghi âm...' : '')}
+          </div>
         </div>
       </div>
 

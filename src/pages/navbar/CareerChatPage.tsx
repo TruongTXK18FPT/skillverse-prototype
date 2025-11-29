@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, User, Sparkles, Loader, MessageSquare, Plus, Trash2, Edit2, Bot } from 'lucide-react';
+import { Send, User, Sparkles, Loader, MessageSquare, Plus, Trash2, Bot, Mic, Square } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -7,8 +7,12 @@ import careerChatService from '../../services/careerChatService';
 import { UIMessage, ChatSession, ChatMode, ExpertContext } from '../../types/CareerChat';
 import { useToast } from '../../hooks/useToast';
 import MessageRenderer from '../../components/MessageRenderer';
+import { WavRecorder } from '../../shared/wavRecorder';
+import { transcribeAudioViaBackend } from '../../shared/speechToText';
 import '../../styles/CareerChatDark.css';
+import '../../styles/VoiceSelector.css';
 import aiAvatar from '../../assets/aiChatBot.png';
+const ENABLE_TTS = false;
 
 const CareerChatPage = () => {
   const { theme } = useTheme();
@@ -63,6 +67,17 @@ const CareerChatPage = () => {
   const [chatMode, setChatMode] = useState<ChatMode>(ChatMode.GENERAL_CAREER_ADVISOR);
   const [expertContext, setExpertContext] = useState<ExpertContext | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [selectedVoice, setSelectedVoice] = useState<string>('banmai');
+  const [previewLoadingVoice, setPreviewLoadingVoice] = useState<string | null>(null);
+  const [speaking, setSpeaking] = useState<boolean>(false);
+  const [ttsPreparing, setTtsPreparing] = useState<boolean>(false);
+  const [voiceMode, setVoiceMode] = useState<boolean>(false);
+  const [showVoiceModal, setShowVoiceModal] = useState<boolean>(false);
+  const [recorder] = useState(() => new WavRecorder());
+  const [isRecording, setIsRecording] = useState(false);
+  const [previewText, setPreviewText] = useState<string>('');
+  const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
+  const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -153,6 +168,94 @@ const CareerChatPage = () => {
     }
   };
 
+  const previewVoice = async (_voiceId: string) => { return; };
+
+  // STT: chỉ mở khi bấm nút chế độ âm thanh
+  const startRecording = async () => {
+    try {
+      await recorder.start();
+      setIsRecording(true);
+
+      const SR: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SR) {
+        try {
+          const recog = new SR();
+          recognitionRef.current = recog;
+          recog.lang = 'vi-VN';
+          recog.continuous = true;
+          recog.interimResults = true;
+          setPreviewText('');
+          recog.onresult = (event: any) => {
+            let interim = '';
+            let final = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              const transcript = event.results[i][0]?.transcript || '';
+              if (event.results[i].isFinal) final += transcript + ' ';
+              else interim += transcript + ' ';
+            }
+            setPreviewText(final || interim);
+          };
+          recog.onerror = () => {};
+          recog.onend = () => { setIsPreviewing(false); };
+          recog.start();
+          setIsPreviewing(true);
+        } catch {
+          setIsPreviewing(false);
+        }
+      } else {
+        setIsPreviewing(false);
+      }
+    } catch (err) {
+      console.error('Unable to start recording:', err);
+    }
+  };
+
+  const stopRecording = async () => {
+    try {
+      try {
+        if (recognitionRef.current) {
+          recognitionRef.current.onresult = null;
+          recognitionRef.current.onend = null;
+          recognitionRef.current.stop();
+          recognitionRef.current = null;
+        }
+      } catch (err) { void 0; }
+      setIsPreviewing(false);
+
+      const result = await recorder.stop();
+      setIsRecording(false);
+
+      if (result.audioBlob) {
+        try {
+          const stt = await transcribeAudioViaBackend(result.audioBlob);
+          const text = stt?.text?.trim() || '';
+          const finalText = text || previewText.trim();
+          if (finalText) {
+            setInputMessage(finalText);
+            await handleSendMessage(new Event('submit') as any);
+          }
+        } catch (e) {
+          const fallbackText = previewText.trim();
+          if (fallbackText) {
+            setInputMessage(fallbackText);
+            await handleSendMessage(new Event('submit') as any);
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Unable to stop recording or transcribe:', err);
+      setIsRecording(false);
+    }
+  };
+
+  const speakText = async (_text: string) => { return; };
+
+  const quickSend = async () => {
+    if (!inputMessage.trim() || isLoading) return;
+    const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
+    await handleSendMessage(fakeEvent);
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isAuthenticated || !inputMessage.trim() || isLoading) return;
@@ -183,13 +286,18 @@ const CareerChatPage = () => {
         loadSessions();
       }
 
-      setMessages(prev => [...prev, {
+      const assistantMsg = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: response.aiResponse,
         timestamp: new Date(response.timestamp),
         expertContext: response.expertContext
-      }]);
+      } as UIMessage;
+      setMessages(prev => [...prev, assistantMsg]);
+
+      if (voiceMode && ENABLE_TTS) {
+        speakText(assistantMsg.content);
+      }
     } catch (error: any) {
       showError('Lỗi', error.message || 'Không thể gửi tin nhắn');
     } finally {
@@ -314,6 +422,13 @@ const CareerChatPage = () => {
             <p className="career-chat-header__subtitle">Nhận tư vấn nghề nghiệp cá nhân hóa</p>
           </div>
         </div>
+        {/* Mode toggle moved to input area; mic shown only in voice mode */}
+
+        {(isRecording || isPreviewing) && (
+          <></>
+        )}
+
+        {ENABLE_TTS && (<></>)}
 
         <div className="career-chat-messages">
           {messages.map(msg => (
@@ -331,6 +446,27 @@ const CareerChatPage = () => {
                     content={msg.content} 
                     isExpertMode={false}
                   />
+                  {msg.role === 'assistant' && voiceMode && ENABLE_TTS && (
+                    <div className="sv-tts-play-below">
+                      {ttsPreparing && !speaking ? (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                          <span className="sv-preview-loading" /> Đang chuẩn bị audio...
+                        </span>
+                      ) : (
+                        <button
+                          className="sv-tts-play-btn"
+                          type="button"
+                          onClick={() => speakText(msg.content)}
+                          disabled={speaking}
+                          title="Đọc to tin nhắn này"
+                        >
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                            {speaking ? 'Đang phát...' : 'Đọc to'}
+                          </span>
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -363,7 +499,25 @@ const CareerChatPage = () => {
             <button type="submit" className="career-chat-send-btn" disabled={!inputMessage.trim() || isLoading}>
               <Send size={18} />Gửi
             </button>
+            <button
+              type="button"
+              className="career-chat-send-btn"
+              onClick={isRecording ? stopRecording : startRecording}
+              aria-label={isRecording ? 'Dừng ghi âm' : 'Bắt đầu ghi âm'}
+              aria-pressed={isRecording}
+              style={{ marginLeft: 8 }}
+            >
+              {isRecording ? <Square size={16} /> : <Mic size={16} />} {isRecording ? 'Dừng ghi' : 'Ghi âm'}
+            </button>
           </form>
+          {(isRecording || isPreviewing) && previewText && (
+            <div className="career-preview-text" aria-live="polite" style={{ marginTop: 8, opacity: 0.9 }}>
+              {previewText}
+            </div>
+          )}
+          <div className="sv-audio-control__status" aria-live="polite" style={{ marginTop: 6 }}>
+            {isPreviewing ? 'Đang nhận diện...' : (isRecording ? 'Đang ghi âm...' : '')}
+          </div>
         </div>
       </div>
     </div>

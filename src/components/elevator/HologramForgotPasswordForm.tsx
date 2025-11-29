@@ -71,8 +71,8 @@ const HologramForgotPasswordForm: React.FC = () => {
             <div className="fgp-icon-container">
                 <img src={Logo} alt="SkillVerse" style={{ width: '60px', height: 'auto' }} />
             </div>
-            <h1 className="fgp-title">RECOVERY PROTOCOL</h1>
-            <p className="fgp-subtitle">RESTORE ACCESS TO YOUR ACCOUNT</p>
+            <h1 className="fgp-title">Khôi phục mật khẩu</h1>
+            <p className="fgp-subtitle">Khôi phục quyền truy cập tài khoản</p>
         </div>
 
         {error && (
@@ -86,7 +86,7 @@ const HologramForgotPasswordForm: React.FC = () => {
                     <div className="fgp-field">
                         <label className="fgp-label">
                             <Mail size={14} />
-                            <span>EMAIL ADDRESS</span>
+                            <span>Địa chỉ email</span>
                         </label>
                         <div className="fgp-input-wrapper">
                             <input 
@@ -104,11 +104,11 @@ const HologramForgotPasswordForm: React.FC = () => {
                         {isLoading ? (
                             <>
                                 <Loader2 className="fgp-spinner" size={18} />
-                                <span>TRANSMITTING...</span>
+                                <span>Đang gửi...</span>
                             </>
                         ) : (
                             <>
-                                <span>INITIATE RECOVERY</span>
+                                <span>Gửi yêu cầu khôi phục</span>
                             </>
                         )}
                         <div className="fgp-btn-glow"></div>
@@ -118,7 +118,7 @@ const HologramForgotPasswordForm: React.FC = () => {
         <div className="fgp-footer">
             <Link to="/login" className="fgp-back-link">
                 <ArrowLeft size={16} />
-                <span>ABORT & RETURN TO LOGIN</span>
+                <span>Huỷ và quay lại đăng nhập</span>
             </Link>
         </div>
       </div>

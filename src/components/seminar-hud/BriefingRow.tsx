@@ -38,7 +38,7 @@ const BriefingRow: React.FC<BriefingRowProps> = ({ seminar, onAction }) => {
         const now = new Date();
         const diff = seminarDate.getTime() - now.getTime();
 
-        if (diff <= 0) return 'ACTIVE';
+        if (diff <= 0) return 'ĐANG DIỄN RA';
 
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -49,10 +49,10 @@ const BriefingRow: React.FC<BriefingRowProps> = ({ seminar, onAction }) => {
         } else if (hrs > 0) {
           return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
         } else {
-          return `${mins}M`;
+          return `${mins}P`;
         }
-      } catch (error) {
-        return 'STANDBY';
+      } catch (_error) {
+        return 'CHỜ';
       }
     };
 
@@ -63,8 +63,8 @@ const BriefingRow: React.FC<BriefingRowProps> = ({ seminar, onAction }) => {
 
   // Extract category and sector
   const category = typeof seminar.tags === 'string'
-    ? seminar.tags.split(',')[0]?.trim().toUpperCase() || 'INTEL'
-    : 'INTEL';
+    ? seminar.tags.split(',')[0]?.trim().toUpperCase() || 'THÔNG TIN'
+    : 'THÔNG TIN';
 
   const sector = Math.floor(Math.random() * 9) + 1;
 
@@ -86,13 +86,9 @@ const BriefingRow: React.FC<BriefingRowProps> = ({ seminar, onAction }) => {
 
         {/* Metadata Row */}
         <div className="briefing-row-meta">
-          <span className="briefing-meta-badge briefing-meta-sector">
-            [SECTOR {sector}]
-          </span>
+          <span className="briefing-meta-badge briefing-meta-sector">[KHU VỰC {sector}]</span>
           <span className="briefing-meta-divider">|</span>
-          <span className="briefing-meta-badge briefing-meta-countdown">
-            T-{countdown}
-          </span>
+          <span className="briefing-meta-badge briefing-meta-countdown">T-{countdown}</span>
           <span className="briefing-meta-divider">|</span>
           <span className="briefing-meta-badge briefing-meta-speaker">
             {seminar.speakers || seminar.organizer}
@@ -106,12 +102,7 @@ const BriefingRow: React.FC<BriefingRowProps> = ({ seminar, onAction }) => {
 
       {/* Right: Compact Action Button */}
       <div className="briefing-row-action">
-        <button
-          className="briefing-row-btn"
-          onClick={() => onAction(seminar.id)}
-        >
-          UPLINK →
-        </button>
+        <button className="briefing-row-btn" onClick={() => onAction(seminar.id)}>XEM CHI TIẾT →</button>
       </div>
     </div>
   );

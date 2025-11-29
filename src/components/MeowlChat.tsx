@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { X, Send, Loader2, ExternalLink } from 'lucide-react';
+import { X, Send, Loader2, ExternalLink, Mic, Square } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import '../styles/MeowlChat.css';
@@ -8,6 +8,8 @@ import axiosInstance from '../services/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { WavRecorder } from '../shared/wavRecorder';
+import { transcribeAudioViaBackend } from '../shared/speechToText';
 
 interface Message {
   id: string;
@@ -33,6 +35,13 @@ const MeowlChat: React.FC<MeowlChatProps> = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [recorder] = useState(() => new WavRecorder());
+  const [isRecording, setIsRecording] = useState(false);
+  // Preview speech-to-text while recording (browser Web Speech API)
+  const [previewText, setPreviewText] = useState<string>('');
+  const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
+  // No TTS in MeowlChat per requirements
+  const recognitionRef = useRef<any>(null);
 
   const welcomeMessage = useMemo(() => ({
     en: `Hello! 💫 *Meow meow!* 🐱✨
@@ -125,18 +134,21 @@ Cố lên nha! 💪✨ 🎓`
     }
   }, [isOpen]);
 
+  // Removed premium check: MeowlChat does not use TTS
+
   const handleActionClick = (url: string) => {
     onClose(); // Close chat
     navigate(url); // Navigate to target
   };
 
-  const sendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return;
+  const sendMessage = async (overrideText?: string) => {
+    const content = (overrideText ?? inputValue).trim();
+    if (!content || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: inputValue.trim(),
+      content,
       timestamp: new Date()
     };
 
@@ -168,7 +180,7 @@ Cố lên nha! 💪✨ 🎓`
     }
 
     setMessages(prev => [...prev, userMessage]);
-    setInputValue('');
+    if (!overrideText) setInputValue('');
     setIsLoading(true);
 
     try {
@@ -199,6 +211,8 @@ Cố lên nha! 💪✨ 🎓`
 
       setMessages(prev => [...prev, aiResponse]);
 
+      // TTS intentionally disabled in MeowlChat (UI-only chat)
+
       // Log reminders and notifications if available (for future use)
       if (data.reminders && data.reminders.length > 0) {
         console.log('Reminders:', data.reminders);
@@ -222,6 +236,105 @@ Cố lên nha! 💪✨ 🎓`
       setIsLoading(false);
     }
   };
+
+  const startRecording = async () => {
+    try {
+      await recorder.start();
+      setIsRecording(true);
+
+      // Start live preview using Web Speech API if available
+      const SR: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SR) {
+        try {
+          const recog = new SR();
+          recognitionRef.current = recog;
+          recog.lang = language === 'vi' ? 'vi-VN' : 'en-US';
+          recog.continuous = true;
+          recog.interimResults = true;
+          setPreviewText('');
+          recog.onresult = (event: any) => {
+            let interim = '';
+            let final = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              const transcript = event.results[i][0]?.transcript || '';
+              if (event.results[i].isFinal) final += transcript + ' ';
+              else interim += transcript + ' ';
+            }
+            setPreviewText(final || interim);
+          };
+          recog.onerror = (err: any) => {
+            console.warn('SpeechRecognition error:', err);
+          };
+          recog.onend = () => {
+            setIsPreviewing(false);
+          };
+          recog.start();
+          setIsPreviewing(true);
+        } catch (err) {
+          console.warn('Unable to start SpeechRecognition:', err);
+          setIsPreviewing(false);
+        }
+      } else {
+        setIsPreviewing(false);
+      }
+    } catch (err) {
+      console.error('Unable to start recording:', err);
+    }
+  };
+
+  const stopRecording = async () => {
+    try {
+      // Stop live preview first
+      try {
+        if (recognitionRef.current) {
+          recognitionRef.current.onresult = null;
+          recognitionRef.current.onend = null;
+          recognitionRef.current.stop();
+          recognitionRef.current = null;
+        }
+      } catch (err) {
+        console.warn('Unable to stop SpeechRecognition:', err);
+      }
+      setIsPreviewing(false);
+
+      const result = await recorder.stop();
+      setIsRecording(false);
+
+      if (result.audioBlob) {
+        // Transcribe via backend (proxy to FPT AI)
+        try {
+          const stt = await transcribeAudioViaBackend(result.audioBlob);
+          const text = stt?.text?.trim() || '';
+          if (text) {
+            // Điền transcript và tự động gửi
+            setInputValue(text);
+            await sendMessage(text);
+          } else {
+            console.warn('No transcript from STT backend', stt);
+            // Fallback to preview text if available
+            if (previewText.trim()) {
+              const fallbackText = previewText.trim();
+              setInputValue(fallbackText);
+              await sendMessage(fallbackText);
+            }
+          }
+        } catch (e) {
+          console.error('STT backend error:', e);
+          // Fallback to preview text on error
+          if (previewText.trim()) {
+            const fallbackText = previewText.trim();
+            setInputValue(fallbackText);
+            await sendMessage(fallbackText);
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Unable to stop recording or transcribe:', err);
+      setIsRecording(false);
+    }
+  };
+
+  // No speak/stop-speaking in MeowlChat
 
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -313,6 +426,16 @@ Cố lên nha! 💪✨ 🎓`
         {/* Input Container */}
         <div className="chat-input-container">
           <div className="chat-input-wrapper">
+            {/* Mic control */}
+          <button
+            className="send-button"
+            onClick={isRecording ? stopRecording : startRecording}
+            title={isRecording ? (language === 'en' ? 'Stop Recording' : 'Dừng ghi âm') : (language === 'en' ? 'Start Recording' : 'Bắt đầu ghi âm')}
+            disabled={isLoading}
+          >
+            {isRecording ? <Square size={18} /> : <Mic size={18} />}
+          </button>
+            {/* No TTS in MeowlChat */}
             <input
               ref={inputRef}
               type="text"
@@ -325,12 +448,18 @@ Cố lên nha! 💪✨ 🎓`
             />
             <button
               className="send-button"
-              onClick={sendMessage}
+              onClick={() => sendMessage()}
               disabled={!inputValue.trim() || isLoading}
             >
               <Send size={18} />
             </button>
           </div>
+          {isPreviewing && (
+            <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#b3e5fc' }}>
+              {language === 'en' ? 'Preview:' : 'Xem trước:'} {previewText || (language === 'en' ? 'Listening...' : 'Đang nghe...')}
+            </div>
+          )}
+          {/* Audio playback removed: only transcribe to text as requested */}
         </div>
       </div>
     </div>

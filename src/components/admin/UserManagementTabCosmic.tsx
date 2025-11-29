@@ -3,7 +3,7 @@ import {
   Users, UserCheck, Shield, Search, Filter,
   Eye, Edit, Ban, CheckCircle, XCircle, Key,
   Mail, Phone, Calendar, Activity, Award, BookOpen,
-  RefreshCw, X, Save, ChevronLeft, ChevronRight, Trash2
+  RefreshCw, X, Save, ChevronLeft, ChevronRight, Trash2, Download
 } from 'lucide-react';
 import adminUserService from '../../services/adminUserService';
 import { AdminUserResponse, AdminUserDetailResponse, PrimaryRole, UserStatus } from '../../types/adminUser';
@@ -315,10 +315,46 @@ const UserManagementTabCosmic: React.FC = () => {
           <h2>Quản Lý Người Dùng</h2>
           <p>Quản lý tất cả tài khoản người dùng trên hệ thống</p>
         </div>
-        <button className="admin-refresh-btn" onClick={fetchUsers} disabled={loading}>
-          <RefreshCw size={18} className={loading ? 'spinning' : ''} />
-          Làm mới
-        </button>
+        <div className="admin-header-actions">
+          <button className="admin-refresh-btn" onClick={fetchUsers} disabled={loading}>
+            <RefreshCw size={18} className={loading ? 'spinning' : ''} />
+            Làm mới
+          </button>
+          <button
+            className="admin-download-btn"
+            onClick={() => {
+              const params: any = {};
+              if (roleFilter !== 'all') params.role = roleFilter.toUpperCase();
+              if (statusFilter !== 'all') params.status = statusFilter.toUpperCase();
+              if (searchTerm.trim()) params.search = searchTerm.trim();
+              import('../../services/adminService').then(({ default: adminService }) => {
+                adminService.downloadUsersReport(params);
+              });
+            }}
+            disabled={loading}
+            title="Tải báo cáo người dùng (CSV)"
+          >
+            <Download size={18} />
+            Tải báo cáo
+          </button>
+          <button
+            className="admin-download-btn"
+            onClick={() => {
+              const params: any = {};
+              if (roleFilter !== 'all') params.role = roleFilter.toUpperCase();
+              if (statusFilter !== 'all') params.status = statusFilter.toUpperCase();
+              if (searchTerm.trim()) params.search = searchTerm.trim();
+              import('../../services/adminService').then(({ default: adminService }) => {
+                adminService.downloadUsersReportPdf(params);
+              });
+            }}
+            disabled={loading}
+            title="Tải báo cáo người dùng (PDF)"
+          >
+            <Download size={18} />
+            Tải PDF
+          </button>
+        </div>
       </div>
 
       {/* Stats */}

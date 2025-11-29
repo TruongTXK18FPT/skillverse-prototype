@@ -76,16 +76,16 @@ const DossierInitScreen = ({ onInitiate }: DossierInitScreenProps) => {
         </motion.div>
 
         {/* Status Text */}
-        <h1 className="init-glitch-text">UNIDENTIFIED USER DETECTED</h1>
+        <h1 className="init-glitch-text">Phát hiện người dùng chưa xác định</h1>
         <div className="init-status-bar">
           <div className="init-status-fill"></div>
         </div>
 
         {/* Description */}
         <p className="init-description">
-          Tactical Dossier system is in <span className="init-highlight">STANDBY MODE</span>.
+          Hệ thống Hồ sơ Chiến thuật đang ở <span className="init-highlight">CHẾ ĐỘ CHỜ</span>.
           <br />
-          Initialize Pilot ID creation sequence to access Mothership controls.
+          Khởi tạo quy trình tạo ID Phi công để truy cập điều khiển Mothership.
         </p>
 
         {/* Action Button */}
@@ -96,21 +96,21 @@ const DossierInitScreen = ({ onInitiate }: DossierInitScreenProps) => {
           whileTap={{ scale: 0.98 }}
         >
           <Plus size={20} />
-          [ INITIATE REGISTRATION PROTOCOL ]
+          [ BẮT ĐẦU ĐĂNG KÝ ]
         </motion.button>
 
         {/* System Info */}
         <div className="init-system-info">
           <div className="init-info-item">
-            <span className="init-info-label">SYSTEM</span>
+            <span className="init-info-label">HỆ THỐNG</span>
             <span className="init-info-value">TACTICAL DOSSIER v2.5</span>
           </div>
           <div className="init-info-item">
-            <span className="init-info-label">STATUS</span>
-            <span className="init-info-value init-blink">AWAITING PILOT</span>
+            <span className="init-info-label">TRẠNG THÁI</span>
+            <span className="init-info-value init-blink">Đang chờ phi công</span>
           </div>
           <div className="init-info-item">
-            <span className="init-info-label">SECURITY</span>
+            <span className="init-info-label">BẢO MẬT</span>
             <span className="init-info-value">LEVEL 0</span>
           </div>
         </div>

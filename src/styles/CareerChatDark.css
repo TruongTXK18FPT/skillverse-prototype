@@ -405,6 +405,28 @@
   cursor: not-allowed;
 }
 
+/* Voice/Normal mode toggle */
+.sv-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.sv-mode-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.08);
+  color: #e5e7eb;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.sv-mode-btn.active {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.6);
+}
+
 /* Animations */
 .animate-spin {
   animation: spin 1s linear infinite;

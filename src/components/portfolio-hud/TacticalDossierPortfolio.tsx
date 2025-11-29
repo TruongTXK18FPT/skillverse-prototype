@@ -140,7 +140,7 @@ const TacticalDossierPortfolio = () => {
   };
 
   const handleDeleteProject = async (projectId: number) => {
-    if (confirm('Are you sure you want to delete this mission?')) {
+    if (confirm('Bạn có chắc muốn xóa dự án này?')) {
       await portfolioService.deleteProject(projectId);
       await loadPortfolioData();
     }
@@ -152,7 +152,7 @@ const TacticalDossierPortfolio = () => {
   };
 
   const handleDeleteCertificate = async (certId: number) => {
-    if (confirm('Are you sure you want to delete this commendation?')) {
+    if (confirm('Bạn có chắc muốn xóa chứng chỉ này?')) {
       await portfolioService.deleteCertificate(certId);
       await loadPortfolioData();
     }
@@ -167,20 +167,20 @@ const TacticalDossierPortfolio = () => {
     try {
       await portfolioService.setActiveCV(cvId);
       await loadPortfolioData();
-      setAlertModal({ show: true, message: 'CV set as active successfully!', type: 'success' });
+      setAlertModal({ show: true, message: 'Đặt CV làm hoạt động thành công!', type: 'success' });
     } catch (error: any) {
-      setAlertModal({ show: true, message: 'Cannot set CV as active: ' + (error?.message || 'Unknown error'), type: 'error' });
+      setAlertModal({ show: true, message: 'Không thể đặt CV làm hoạt động: ' + (error?.message || 'Lỗi không xác định'), type: 'error' });
     }
   };
 
   const handleDeleteCV = async (cvId: number) => {
-    if (confirm('Are you sure you want to delete this CV?')) {
+    if (confirm('Bạn có chắc muốn xóa CV này?')) {
       try {
         await portfolioService.deleteCV(cvId);
         await loadPortfolioData();
-        setAlertModal({ show: true, message: 'CV deleted successfully!', type: 'success' });
+        setAlertModal({ show: true, message: 'Xóa CV thành công!', type: 'success' });
       } catch (error: any) {
-        setAlertModal({ show: true, message: 'Cannot delete CV: ' + (error?.message || 'Unknown error'), type: 'error' });
+        setAlertModal({ show: true, message: 'Không thể xóa CV: ' + (error?.message || 'Lỗi không xác định'), type: 'error' });
       }
     }
   };
@@ -204,7 +204,7 @@ const TacticalDossierPortfolio = () => {
         printWindow.print();
       }
     } catch {
-      setAlertModal({ show: true, message: 'No active CV. Please create or set an active CV first.', type: 'warning' });
+      setAlertModal({ show: true, message: 'Chưa có CV đang dùng. Vui lòng tạo hoặc đặt CV đang dùng trước.', type: 'warning' });
     }
   };
 
@@ -212,9 +212,9 @@ const TacticalDossierPortfolio = () => {
     if (profile?.customUrlSlug) {
       const url = `${globalThis.location.origin}/portfolio/${profile.customUrlSlug}`;
       navigator.clipboard.writeText(url);
-      setAlertModal({ show: true, message: 'Portfolio link copied to clipboard!', type: 'success' });
+      setAlertModal({ show: true, message: 'Đã sao chép liên kết hồ sơ!', type: 'success' });
     } else {
-      setAlertModal({ show: true, message: 'Please update custom URL slug in profile.', type: 'warning' });
+      setAlertModal({ show: true, message: 'Vui lòng cập nhật URL tùy chỉnh trong hồ sơ.', type: 'warning' });
     }
   };
 
@@ -283,16 +283,16 @@ const TacticalDossierPortfolio = () => {
       <div className="dossier-portfolio-container" data-theme={theme}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', textAlign: 'center', padding: '2rem' }}>
           <div className="dossier-panel-frame" style={{ maxWidth: '600px', padding: '3rem 2rem' }}>
-            <h2 className="dossier-modal-title" style={{ marginBottom: '1rem' }}>🔒 AUTHENTICATION REQUIRED</h2>
+            <h2 className="dossier-modal-title" style={{ marginBottom: '1rem' }}>🔒 Cần đăng nhập</h2>
             <p style={{ color: 'var(--dossier-silver)', marginBottom: '2rem' }}>
-              You need to authenticate to access the Tactical Dossier. Create and manage your pilot portfolio with mission logs and commendations.
+              Bạn cần đăng nhập để truy cập Tài liệu Chiến thuật. Tạo và quản lý hồ sơ cá nhân với nhật ký dự án và chứng chỉ.
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <button onClick={() => navigate('/login')} className="dossier-btn-primary">
-                LOGIN
+                Đăng nhập
               </button>
               <button onClick={() => navigate('/register')} className="dossier-btn-secondary">
-                CREATE ACCOUNT
+                Tạo tài khoản
               </button>
             </div>
           </div>
@@ -308,7 +308,7 @@ const TacticalDossierPortfolio = () => {
       <div className="dossier-portfolio-container" data-theme={theme}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: '1rem' }}>
           <Loader size={48} className="dossier-spinner" style={{ color: 'var(--dossier-cyan)' }} />
-          <p style={{ color: 'var(--dossier-silver)' }}>LOADING TACTICAL DOSSIER...</p>
+          <p style={{ color: 'var(--dossier-silver)' }}>Đang tải Tài liệu Chiến thuật...</p>
         </div>
       </div>
     );
@@ -320,10 +320,10 @@ const TacticalDossierPortfolio = () => {
       <div className="dossier-portfolio-container" data-theme={theme}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: '1rem', textAlign: 'center', padding: '2rem' }}>
           <AlertCircle size={48} color="#ef4444" />
-          <h2 style={{ color: 'var(--dossier-cyan)', fontFamily: "'Space Habitat', monospace" }}>CANNOT LOAD DOSSIER</h2>
+          <h2 style={{ color: 'var(--dossier-cyan)', fontFamily: "'Space Habitat', monospace" }}>Không thể tải hồ sơ</h2>
           <p style={{ color: 'var(--dossier-silver)' }}>{error}</p>
           <button onClick={loadPortfolioData} className="dossier-btn-primary">
-            RETRY
+            Thử lại
           </button>
         </div>
       </div>
@@ -365,13 +365,13 @@ const TacticalDossierPortfolio = () => {
         <div className="dossier-header-content">
           <div>
             <h1 className="dossier-header-title">
-              TACTICAL DOSSIER
+              TÀI LIỆU CHIẾN THUẬT
             </h1>
             <p className="dossier-header-rank">
-              RANK: COMMANDER • {profile?.professionalTitle || 'Title'}
+              CẤP BẬC: CHỈ HUY • {profile?.professionalTitle || 'Chức danh'}
             </p>
             <p className="dossier-header-subtitle">
-              {profile?.fullName || 'Your Name'}
+              {profile?.fullName || 'Tên của bạn'}
             </p>
           </div>
 
@@ -383,7 +383,7 @@ const TacticalDossierPortfolio = () => {
               whileTap={{ scale: 0.95 }}
             >
               <Eye size={18} />
-              VIEW CV
+              Xem CV
             </motion.button>
             <motion.button
               className="dossier-btn-primary"
@@ -392,7 +392,7 @@ const TacticalDossierPortfolio = () => {
               whileTap={{ scale: 0.95 }}
             >
               <Share2 size={18} />
-              SHARE
+              Chia sẻ
             </motion.button>
             <motion.button
               className="dossier-btn-primary"
@@ -401,7 +401,7 @@ const TacticalDossierPortfolio = () => {
               whileTap={{ scale: 0.95 }}
             >
               <Download size={18} />
-              EXPORT CV
+              Xuất CV
             </motion.button>
           </div>
         </div>
@@ -411,10 +411,10 @@ const TacticalDossierPortfolio = () => {
       <motion.div className="dossier-nav-bar" variants={itemVariants}>
         <nav className="dossier-tabs">
           {[
-            { id: 'overview', label: 'STATUS DASHBOARD', icon: Eye },
-            { id: 'projects', label: 'MISSION LOGS', icon: Briefcase },
-            { id: 'certificates', label: 'COMMENDATIONS', icon: Award },
-            { id: 'cv-builder', label: 'DATA COMPILER', icon: Settings }
+            { id: 'overview', label: 'Bảng trạng thái', icon: Eye },
+            { id: 'projects', label: 'Nhật ký dự án', icon: Briefcase },
+            { id: 'certificates', label: 'Chứng chỉ', icon: Award },
+            { id: 'cv-builder', label: 'Trình tạo dữ liệu', icon: Settings }
           ].map((tab) => {
             const Icon = tab.icon;
             return (
@@ -464,8 +464,8 @@ const TacticalDossierPortfolio = () => {
                   </div>
 
                   <div className="dossier-pilot-info">
-                    <h2 className="dossier-pilot-name">{profile?.fullName || 'Your Name'}</h2>
-                    <p className="dossier-pilot-title">{profile?.professionalTitle || 'Professional Title'}</p>
+                    <h2 className="dossier-pilot-name">{profile?.fullName || 'Tên của bạn'}</h2>
+                    <p className="dossier-pilot-title">{profile?.professionalTitle || 'Chức danh'}</p>
                     {profile?.location && (
                       <p className="dossier-pilot-location">
                         <MapPin size={16} />
@@ -483,7 +483,7 @@ const TacticalDossierPortfolio = () => {
                       className="dossier-btn-primary"
                     >
                       <Edit size={16} />
-                      EDIT ID
+                      Sửa ID
                     </button>
                   </div>
                 </div>
@@ -513,7 +513,7 @@ const TacticalDossierPortfolio = () => {
                   {/* Bio */}
                   {profile?.basicBio && (
                     <div style={{ marginBottom: '1.5rem' }}>
-                      <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>INTRODUCTION</h3>
+                      <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>GIỚI THIỆU</h3>
                       <p style={{ color: 'var(--dossier-silver)' }}>{profile.basicBio}</p>
                     </div>
                   )}
@@ -521,7 +521,7 @@ const TacticalDossierPortfolio = () => {
                   {/* Career Goals */}
                   {profile?.careerGoals && (
                     <div style={{ marginBottom: '1.5rem' }}>
-                      <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>CAREER OBJECTIVES</h3>
+                      <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>MỤC TIÊU NGHỀ NGHIỆP</h3>
                       <p style={{ color: 'var(--dossier-silver)' }}>{profile.careerGoals}</p>
                     </div>
                   )}
@@ -529,7 +529,7 @@ const TacticalDossierPortfolio = () => {
                   {/* Skills */}
                   {getSkills().length > 0 && (
                     <div style={{ marginBottom: '1.5rem' }}>
-                      <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>CORE SKILLS</h3>
+                      <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>KỸ NĂNG CỐT LÕI</h3>
                       <div className="dossier-module-tags">
                         {getSkills().map((skill: string, idx: number) => (
                           <span key={idx} className="dossier-module-tag">{skill}</span>
@@ -541,7 +541,7 @@ const TacticalDossierPortfolio = () => {
                   {/* Languages */}
                   {getLanguages().length > 0 && (
                     <div>
-                      <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>LANGUAGES</h3>
+                      <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>NGÔN NGỮ</h3>
                       <div className="dossier-module-tags">
                         {getLanguages().map((lang: string, idx: number) => (
                           <span key={idx} className="dossier-module-tag">{lang}</span>
@@ -556,19 +556,19 @@ const TacticalDossierPortfolio = () => {
               <div className="dossier-stats-grid">
                 <div className="dossier-stat-module">
                   <div className="dossier-stat-value">{profile?.portfolioViews || 0}</div>
-                  <div className="dossier-stat-label">Views</div>
+                  <div className="dossier-stat-label">Lượt xem</div>
                 </div>
                 <div className="dossier-stat-module">
                   <div className="dossier-stat-value">{profile?.totalProjects || 0}</div>
-                  <div className="dossier-stat-label">Missions</div>
+                  <div className="dossier-stat-label">Dự án</div>
                 </div>
                 <div className="dossier-stat-module">
                   <div className="dossier-stat-value">{profile?.totalCertificates || 0}</div>
-                  <div className="dossier-stat-label">Commendations</div>
+                  <div className="dossier-stat-label">Chứng chỉ</div>
                 </div>
                 <div className="dossier-stat-module">
                   <div className="dossier-stat-value">{reviews.length}</div>
-                  <div className="dossier-stat-label">Assessments</div>
+                  <div className="dossier-stat-label">Đánh giá</div>
                 </div>
               </div>
             </motion.div>
@@ -584,8 +584,8 @@ const TacticalDossierPortfolio = () => {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', gap: '1rem' }}>
                 <div>
-                  <h2 className="dossier-modal-title">MISSION LOGS</h2>
-                  <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Completed and ongoing tactical operations</p>
+                  <h2 className="dossier-modal-title">Nhật ký dự án</h2>
+                  <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Các dự án đã và đang thực hiện</p>
                 </div>
                 <button
                   onClick={() => {
@@ -596,7 +596,7 @@ const TacticalDossierPortfolio = () => {
                   className="dossier-btn-primary"
                 >
                   <Plus size={18} />
-                  LOG NEW MISSION
+                  Thêm dự án
                 </button>
               </div>
 
@@ -609,7 +609,7 @@ const TacticalDossierPortfolio = () => {
                     className={selectedProjectType === type ? 'dossier-btn-primary' : 'dossier-btn-secondary'}
                     style={{ fontSize: '0.75rem', padding: '0.5rem 1rem' }}
                   >
-                    {type === 'Tất cả' ? 'ALL' : type}
+                    {type === 'Tất cả' ? 'Tất cả' : type}
                   </button>
                 ))}
               </div>
@@ -618,7 +618,7 @@ const TacticalDossierPortfolio = () => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '1.5rem' }}>
                 {filteredProjects.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '3rem', gridColumn: '1 / -1' }}>
-                    <p style={{ color: 'var(--dossier-silver-dark)' }}>No mission logs found. Log your first mission!</p>
+                    <p style={{ color: 'var(--dossier-silver-dark)' }}>Chưa có dự án nào. Hãy thêm dự án đầu tiên!</p>
                   </div>
                 ) : (
                   filteredProjects.map((project) => (
@@ -627,7 +627,7 @@ const TacticalDossierPortfolio = () => {
                         <span>{project.title}</span>
                         <span className={`dossier-mission-status ${project.completionDate ? 'dossier-mission-status--complete' : 'dossier-mission-status--progress'}`}>
                           <span className={`dossier-led-dot ${project.completionDate ? 'dossier-led-dot--green' : 'dossier-led-dot--yellow'}`}></span>
-                          {project.completionDate ? 'COMPLETE' : 'IN PROGRESS'}
+                          {project.completionDate ? 'HOÀN THÀNH' : 'ĐANG THỰC HIỆN'}
                         </span>
                       </div>
                       {project.thumbnailUrl && (
@@ -657,7 +657,7 @@ const TacticalDossierPortfolio = () => {
                             style={{ fontSize: '0.75rem', padding: '0.5rem 1rem' }}
                           >
                             <ExternalLink size={14} />
-                            VIEW
+                            Xem
                           </a>
                         )}
                         <button
@@ -670,7 +670,7 @@ const TacticalDossierPortfolio = () => {
                           style={{ fontSize: '0.75rem', padding: '0.5rem 1rem' }}
                         >
                           <Edit size={14} />
-                          EDIT
+                          Sửa
                         </button>
                         <button
                           onClick={() => handleDeleteProject(project.id!)}
@@ -678,7 +678,7 @@ const TacticalDossierPortfolio = () => {
                           style={{ fontSize: '0.75rem', padding: '0.5rem 1rem', borderColor: 'var(--dossier-red)', color: 'var(--dossier-red)' }}
                         >
                           <Trash2 size={14} />
-                          DELETE
+                          Xóa
                         </button>
                       </div>
                     </div>
@@ -698,15 +698,15 @@ const TacticalDossierPortfolio = () => {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', gap: '1rem' }}>
                 <div>
-                  <h2 className="dossier-modal-title">COMMENDATIONS</h2>
-                  <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Certifications from external organizations</p>
+                  <h2 className="dossier-modal-title">Chứng chỉ</h2>
+                  <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Chứng chỉ từ các tổ chức bên ngoài</p>
                 </div>
                 <button
                   onClick={() => setCertificateModalOpen(true)}
                   className="dossier-btn-primary"
                 >
                   <Plus size={18} />
-                  ADD COMMENDATION
+                  Thêm chứng chỉ
                 </button>
               </div>
 
@@ -719,7 +719,7 @@ const TacticalDossierPortfolio = () => {
                     className={selectedCategory === cat ? 'dossier-btn-primary' : 'dossier-btn-secondary'}
                     style={{ fontSize: '0.75rem', padding: '0.5rem 1rem' }}
                   >
-                    {cat === 'Tất cả' ? 'ALL' : cat}
+                    {cat === 'Tất cả' ? 'Tất cả' : cat}
                   </button>
                 ))}
               </div>
@@ -728,7 +728,7 @@ const TacticalDossierPortfolio = () => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '1.5rem' }}>
                 {filteredCertificates.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '3rem', gridColumn: '1 / -1' }}>
-                    <p style={{ color: 'var(--dossier-silver-dark)' }}>No commendations found. Add your first certificate!</p>
+                    <p style={{ color: 'var(--dossier-silver-dark)' }}>Chưa có chứng chỉ nào. Hãy thêm chứng chỉ đầu tiên!</p>
                   </div>
                 ) : (
                   filteredCertificates.map((cert) => (
@@ -747,7 +747,7 @@ const TacticalDossierPortfolio = () => {
                       {cert.issueDate && (
                         <p style={{ fontSize: '0.75rem', color: 'var(--dossier-silver-dark)', marginBottom: '1rem' }}>
                           <Calendar size={12} style={{ display: 'inline', marginRight: '0.25rem' }} />
-                          {new Date(cert.issueDate).toLocaleDateString('en-US')}
+                          {new Date(cert.issueDate).toLocaleDateString('vi-VN')}
                         </p>
                       )}
                       {cert.skills && cert.skills.length > 0 && (
@@ -767,7 +767,7 @@ const TacticalDossierPortfolio = () => {
                             style={{ fontSize: '0.75rem', padding: '0.5rem 1rem' }}
                           >
                             <ExternalLink size={14} />
-                            VERIFY
+                            Xác minh
                           </a>
                         )}
                         <button
@@ -776,7 +776,7 @@ const TacticalDossierPortfolio = () => {
                           style={{ fontSize: '0.75rem', padding: '0.5rem 1rem', borderColor: 'var(--dossier-red)', color: 'var(--dossier-red)' }}
                         >
                           <Trash2 size={14} />
-                          DELETE
+                          Xóa
                         </button>
                       </div>
                     </div>
@@ -796,15 +796,15 @@ const TacticalDossierPortfolio = () => {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', gap: '1rem' }}>
                 <div>
-                  <h2 className="dossier-modal-title">DATA COMPILER</h2>
-                  <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Use AI to generate tactical CV from pilot records</p>
+                  <h2 className="dossier-modal-title">Trình tạo dữ liệu</h2>
+                  <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Sử dụng AI để tạo CV chiến thuật từ hồ sơ người dùng</p>
                 </div>
                 <button
                   onClick={() => setCvModalOpen(true)}
                   className="dossier-btn-primary"
                 >
                   <Plus size={18} />
-                  COMPILE NEW CV
+                  Tạo CV mới
                 </button>
               </div>
 
@@ -812,7 +812,7 @@ const TacticalDossierPortfolio = () => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '1.5rem' }}>
                 {cvs.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '3rem', gridColumn: '1 / -1' }}>
-                    <p style={{ color: 'var(--dossier-silver-dark)' }}>No CV found. Compile your first CV with AI!</p>
+                    <p style={{ color: 'var(--dossier-silver-dark)' }}>Chưa có CV nào. Hãy tạo CV đầu tiên bằng AI!</p>
                   </div>
                 ) : (
                   cvs.map((cv) => (
@@ -828,15 +828,15 @@ const TacticalDossierPortfolio = () => {
                             fontFamily: "'Space Habitat', monospace",
                             letterSpacing: '1px'
                           }}>
-                            ACTIVE
+                            ĐANG DÙNG
                           </span>
                         )}
                       </div>
                       <p style={{ fontSize: '0.875rem', color: 'var(--dossier-silver)', marginBottom: '0.5rem' }}>
-                        Version {cv.version}
+                        Phiên bản {cv.version}
                       </p>
                       <p style={{ fontSize: '0.75rem', color: 'var(--dossier-silver-dark)', marginBottom: '1rem' }}>
-                        {new Date(cv.createdAt || '').toLocaleDateString('en-US')}
+                        {new Date(cv.createdAt || '').toLocaleDateString('vi-VN')}
                       </p>
                       <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                         <button
@@ -845,7 +845,7 @@ const TacticalDossierPortfolio = () => {
                           style={{ fontSize: '0.75rem', padding: '0.5rem 1rem' }}
                         >
                           <Eye size={14} />
-                          VIEW
+                          Xem
                         </button>
                         <button
                           onClick={() => handleEditCV(cv.id!)}
@@ -853,7 +853,7 @@ const TacticalDossierPortfolio = () => {
                           style={{ fontSize: '0.75rem', padding: '0.5rem 1rem' }}
                         >
                           <Edit size={14} />
-                          EDIT
+                          Sửa
                         </button>
                         {!cv.isActive && (
                           <button
@@ -861,9 +861,9 @@ const TacticalDossierPortfolio = () => {
                             className="dossier-btn-primary"
                             style={{ fontSize: '0.75rem', padding: '0.5rem 1rem' }}
                           >
-                            <Settings size={14} />
-                            SET ACTIVE
-                          </button>
+                          <Settings size={14} />
+                          Đặt làm CV chính
+                        </button>
                         )}
                         <button
                           onClick={() => {
@@ -891,7 +891,7 @@ const TacticalDossierPortfolio = () => {
                           style={{ fontSize: '0.75rem', padding: '0.5rem 1rem', borderColor: 'var(--dossier-red)', color: 'var(--dossier-red)' }}
                         >
                           <Trash2 size={14} />
-                          DELETE
+                          Xóa
                         </button>
                       </div>
                     </div>

@@ -143,7 +143,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
       if (avatar && avatar.size > maxFileSize) {
         setAlertModal({
           show: true,
-          message: `Avatar too large (${(avatar.size / 1024 / 1024).toFixed(2)}MB). Max 10MB.`,
+          message: `Ảnh đại diện quá lớn (${(avatar.size / 1024 / 1024).toFixed(2)}MB). Tối đa 10MB.`,
           type: 'warning'
         });
         setLoading(false);
@@ -153,7 +153,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
       if (video && video.size > maxVideoSize) {
         setAlertModal({
           show: true,
-          message: `Video too large (${(video.size / 1024 / 1024).toFixed(2)}MB). Max 50MB.`,
+          message: `Video quá lớn (${(video.size / 1024 / 1024).toFixed(2)}MB). Tối đa 50MB.`,
           type: 'warning'
         });
         setLoading(false);
@@ -163,7 +163,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
       if (coverImage && coverImage.size > maxFileSize) {
         setAlertModal({
           show: true,
-          message: `Cover image too large (${(coverImage.size / 1024 / 1024).toFixed(2)}MB). Max 10MB.`,
+          message: `Ảnh bìa quá lớn (${(coverImage.size / 1024 / 1024).toFixed(2)}MB). Tối đa 10MB.`,
           type: 'warning'
         });
         setLoading(false);
@@ -183,13 +183,13 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
       if (error instanceof Error) {
         setAlertModal({
           show: true,
-          message: `Error: ${error.message}`,
+          message: `Lỗi: ${error.message}`,
           type: 'error'
         });
       } else {
         setAlertModal({
           show: true,
-          message: 'An error occurred. Please try again.',
+          message: 'Đã xảy ra lỗi. Vui lòng thử lại.',
           type: 'error'
         });
       }
@@ -206,9 +206,9 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
         <div className="dossier-modal-header">
           <div>
             <h2 className="dossier-modal-title">
-              {mode === 'create' ? 'CREATE PILOT ID' : 'UPDATE PILOT ID'}
+              {mode === 'create' ? 'Tạo ID phi công' : 'Cập nhật ID phi công'}
             </h2>
-            <p className="dossier-modal-subtitle">Configure tactical dossier parameters</p>
+            <p className="dossier-modal-subtitle">Cấu hình thông số hồ sơ chiến thuật</p>
           </div>
           <button className="dossier-modal-close" onClick={onClose} type="button">
             <X size={20} />
@@ -218,35 +218,35 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
         <form onSubmit={handleSubmit} className="dossier-modal-body">
           {/* Professional Info */}
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">PILOT CREDENTIALS</h3>
+            <h3 className="dossier-form-section-title">Thông tin phi công</h3>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Professional Title *</label>
+              <label className="dossier-form-label">Chức danh *</label>
               <input
                 type="text"
                 className="dossier-input"
                 value={formData.professionalTitle || ''}
                 onChange={(e) => setFormData({ ...formData, professionalTitle: e.target.value })}
-                placeholder="e.g., Full Stack Developer"
+                placeholder="Ví dụ: Lập trình viên Full Stack"
                 required
               />
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Tagline</label>
+              <label className="dossier-form-label">Khẩu hiệu</label>
               <input
                 type="text"
                 className="dossier-input"
                 value={formData.tagline || ''}
                 onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
-                placeholder="e.g., Building amazing web experiences"
+                placeholder="Ví dụ: Xây dựng trải nghiệm web tuyệt vời"
                 maxLength={100}
               />
             </div>
 
             <div className="dossier-form-row">
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Experience (Years)</label>
+                <label className="dossier-form-label">Kinh nghiệm (năm)</label>
                 <input
                   type="number"
                   className="dossier-input"
@@ -257,24 +257,24 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
               </div>
 
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Location</label>
+                <label className="dossier-form-label">Địa điểm</label>
                 <input
                   type="text"
                   className="dossier-input"
                   value={formData.location || ''}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  placeholder="e.g., HCMC, Vietnam"
+                placeholder="Ví dụ: TP.HCM, Việt Nam"
                 />
               </div>
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Career Objectives</label>
+              <label className="dossier-form-label">Mục tiêu nghề nghiệp</label>
               <textarea
                 className="dossier-textarea"
                 value={formData.careerGoals || ''}
                 onChange={(e) => setFormData({ ...formData, careerGoals: e.target.value })}
-                placeholder="Describe career goals..."
+                placeholder="Mô tả mục tiêu nghề nghiệp..."
                 rows={4}
               />
             </div>
@@ -282,7 +282,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
 
           {/* Media Uploads */}
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">MEDIA ASSETS</h3>
+            <h3 className="dossier-form-section-title">Tài nguyên media</h3>
 
             <div className="dossier-form-row">
               <div className="dossier-form-group">
@@ -300,7 +300,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
                   />
                   <label htmlFor="avatar-upload" className="dossier-btn-primary" style={{ cursor: 'pointer' }}>
                     <Upload size={18} />
-                    Upload Avatar
+                    Tải ảnh đại diện
                   </label>
                 </div>
               </div>
@@ -320,14 +320,14 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
                   />
                   <label htmlFor="cover-upload" className="dossier-btn-primary" style={{ cursor: 'pointer' }}>
                     <Upload size={18} />
-                    Upload Cover
+                    Tải ảnh bìa
                   </label>
                 </div>
               </div>
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Video Intro</label>
+              <label className="dossier-form-label">Video giới thiệu</label>
               <div style={{ border: '1px solid var(--dossier-border-silver)', padding: '1rem', textAlign: 'center' }}>
                 {videoPreview && (
                   <video src={videoPreview} controls style={{ width: '100%', maxHeight: '200px', marginBottom: '1rem' }} />
@@ -341,7 +341,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
                 />
                 <label htmlFor="video-upload" className="dossier-btn-primary" style={{ cursor: 'pointer' }}>
                   <Upload size={18} />
-                  Upload Video
+                  Tải video
                 </label>
               </div>
             </div>
@@ -349,7 +349,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
 
           {/* Links */}
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">EXTERNAL LINKS</h3>
+            <h3 className="dossier-form-section-title">Liên kết ngoài</h3>
 
             <div className="dossier-form-group">
               <label className="dossier-form-label">LinkedIn</label>
@@ -375,7 +375,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
 
             <div className="dossier-form-row">
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Portfolio Site</label>
+              <label className="dossier-form-label">Trang Portfolio</label>
                 <input
                   type="url"
                   className="dossier-input"
@@ -400,10 +400,10 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
 
           {/* Skills & Languages */}
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">SKILLS & LANGUAGES</h3>
+            <h3 className="dossier-form-section-title">Kỹ năng & Ngôn ngữ</h3>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Core Skills</label>
+              <label className="dossier-form-label">Kỹ năng cốt lõi</label>
               <div style={{ border: '1px solid var(--dossier-border-silver)', padding: '0.75rem' }}>
                 <div className="dossier-module-tags" style={{ marginBottom: '0.75rem' }}>
                   {skills.map((skill, idx) => (
@@ -420,7 +420,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
                     value={skillInput}
                     onChange={(e) => setSkillInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddSkill())}
-                    placeholder="Add skill and press Enter"
+                    placeholder="Thêm kỹ năng và nhấn Enter"
                     style={{ flex: 1 }}
                   />
                   <button type="button" onClick={handleAddSkill} className="dossier-btn-primary">+</button>
@@ -429,7 +429,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Languages</label>
+              <label className="dossier-form-label">Ngôn ngữ</label>
               <div style={{ border: '1px solid var(--dossier-border-silver)', padding: '0.75rem' }}>
                 <div className="dossier-module-tags" style={{ marginBottom: '0.75rem' }}>
                   {languages.map((lang, idx) => (
@@ -446,7 +446,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
                     value={languageInput}
                     onChange={(e) => setLanguageInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddLanguage())}
-                    placeholder="Add language and press Enter"
+                    placeholder="Thêm ngôn ngữ và nhấn Enter"
                     style={{ flex: 1 }}
                   />
                   <button type="button" onClick={handleAddLanguage} className="dossier-btn-primary">+</button>
@@ -457,24 +457,24 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
 
           {/* Rate & Availability */}
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">AVAILABILITY & RATE</h3>
+            <h3 className="dossier-form-section-title">Khả dụng & giá</h3>
 
             <div className="dossier-form-row">
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Status</label>
+                <label className="dossier-form-label">Trạng thái</label>
                 <select
                   className="dossier-select"
                   value={formData.availabilityStatus || 'AVAILABLE'}
                   onChange={(e) => setFormData({ ...formData, availabilityStatus: e.target.value })}
                 >
-                  <option value="AVAILABLE">Available</option>
-                  <option value="BUSY">Busy</option>
-                  <option value="NOT_AVAILABLE">Not Available</option>
+                  <option value="AVAILABLE">Sẵn sàng</option>
+                  <option value="BUSY">Bận</option>
+                  <option value="NOT_AVAILABLE">Không sẵn sàng</option>
                 </select>
               </div>
 
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Hourly Rate</label>
+              <label className="dossier-form-label">Giá theo giờ</label>
                 <input
                   type="number"
                   className="dossier-input"
@@ -486,7 +486,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
               </div>
 
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Currency</label>
+              <label className="dossier-form-label">Đơn vị tiền tệ</label>
                 <select
                   className="dossier-select"
                   value={formData.preferredCurrency || 'USD'}
@@ -502,7 +502,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
 
           {/* Privacy */}
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">PRIVACY SETTINGS</h3>
+            <h3 className="dossier-form-section-title">Cài đặt quyền riêng tư</h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}>
@@ -512,7 +512,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
                   onChange={(e) => setFormData({ ...formData, isPublic: e.target.checked })}
                   style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                 />
-                <span style={{ color: 'var(--dossier-silver)' }}>Public Portfolio</span>
+                <span style={{ color: 'var(--dossier-silver)' }}>Hiển thị công khai</span>
               </label>
 
               <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}>
@@ -522,7 +522,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
                   onChange={(e) => setFormData({ ...formData, showContactInfo: e.target.checked })}
                   style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                 />
-                <span style={{ color: 'var(--dossier-silver)' }}>Show Contact Info</span>
+                <span style={{ color: 'var(--dossier-silver)' }}>Hiển thị thông tin liên hệ</span>
               </label>
 
               <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}>
@@ -532,18 +532,18 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
                   onChange={(e) => setFormData({ ...formData, allowJobOffers: e.target.checked })}
                   style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                 />
-                <span style={{ color: 'var(--dossier-silver)' }}>Accept Job Offers</span>
+                <span style={{ color: 'var(--dossier-silver)' }}>Nhận đề nghị việc làm</span>
               </label>
             </div>
 
             <div className="dossier-form-group" style={{ marginTop: '1rem' }}>
-              <label className="dossier-form-label">Custom URL Slug</label>
+              <label className="dossier-form-label">Đường dẫn tùy chỉnh</label>
               <input
                 type="text"
                 className="dossier-input"
                 value={formData.customUrlSlug || ''}
                 onChange={(e) => setFormData({ ...formData, customUrlSlug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') })}
-                placeholder="e.g., john-doe-developer"
+                placeholder="Ví dụ: john-doe-developer"
               />
               <small style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.75rem', marginTop: '0.25rem', display: 'block' }}>
                 URL: /portfolio/{formData.customUrlSlug || 'your-slug'}
@@ -552,19 +552,19 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
           </div>
 
           <div className="dossier-modal-footer" style={{ borderTop: 'none', paddingTop: 0 }}>
-            <button type="button" onClick={onClose} className="dossier-btn-secondary" disabled={loading}>
-              CANCEL
-            </button>
-            <button type="submit" className="dossier-btn-primary" disabled={loading}>
-              {loading ? (
-                <>
+              <button type="button" onClick={onClose} className="dossier-btn-secondary" disabled={loading}>
+              Hủy
+              </button>
+              <button type="submit" className="dossier-btn-primary" disabled={loading}>
+                {loading ? (
+                  <>
                   <Loader className="dossier-spinner" size={18} />
-                  SAVING...
-                </>
-              ) : (
-                mode === 'create' ? 'CREATE ID' : 'UPDATE ID'
+                  Đang lưu...
+                  </>
+                ) : (
+                mode === 'create' ? 'Tạo ID' : 'Cập nhật ID'
               )}
-            </button>
+              </button>
           </div>
         </form>
       </div>

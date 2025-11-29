@@ -52,10 +52,28 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
 
   // Format timestamp as "T-Minus" or "Log Date"
   const formatTimestamp = (timeAgo: string) => {
-    if (timeAgo.includes('hour') || timeAgo.includes('min')) {
-      return `T-MINUS ${timeAgo.toUpperCase()}`;
+    const lower = timeAgo.toLowerCase();
+    if (lower.includes('hour') || lower.includes('min')) {
+      const vi = lower
+        .replace('hours', 'giờ')
+        .replace('hour', 'giờ')
+        .replace('minutes', 'phút')
+        .replace('minute', 'phút')
+        .replace('min', 'phút')
+        .replace('ago', 'trước');
+      return `Cách đây ${vi}`;
     }
-    return `LOG DATE: ${timeAgo.toUpperCase()}`;
+    return `Ngày ghi: ${timeAgo}`;
+  };
+
+  const categoryViMap: Record<string, string> = {
+    tips: 'Mẹo hay',
+    discussion: 'Thảo luận',
+    tutorial: 'Hướng dẫn',
+    news: 'Tin tức',
+    career: 'Tuyển dụng',
+    showcase: 'Trưng bày',
+    all: 'Tất cả',
   };
 
   return (
@@ -76,7 +94,7 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
         />
         <div className="transmission-author-info">
           <h4 className="transmission-author-name">{post.author}</h4>
-          <p className="transmission-author-role">PILOT // {post.category.toUpperCase()}</p>
+          <p className="transmission-author-role">Người đăng // {categoryViMap[post.category] || 'Chủ đề'}</p>
         </div>
         <div className="transmission-timestamp">
           <Clock size={14} />
@@ -109,21 +127,21 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
         <button
           className={`transmission-action-btn ${isLiked ? 'active' : ''}`}
           onClick={handleLike}
-          title="Signal Boost"
+          title="Thích"
         >
           <ThumbsUp size={18} />
           <span>{formatNumber(likeCount)}</span>
         </button>
         <button
           className="transmission-action-btn"
-          title="Responses"
+          title="Bình luận"
         >
           <MessageCircle size={18} />
           <span>{formatNumber(post.comments)}</span>
         </button>
         <button
           className="transmission-action-btn"
-          title="Relay Signal"
+          title="Chia sẻ"
         >
           <Share2 size={18} />
           <span>{formatNumber(post.shares)}</span>
@@ -131,7 +149,7 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
         <button
           className={`transmission-action-btn ${isBookmarked ? 'active' : ''}`}
           onClick={handleBookmark}
-          title="Archive"
+          title="Lưu"
         >
           <Bookmark size={18} fill={isBookmarked ? 'currentColor' : 'none'} />
         </button>

@@ -143,6 +143,64 @@ class AdminService {
   async getRejectedApplications(): Promise<ApplicationsResponse> {
     return this.getApplications('REJECTED');
   }
+
+  /**
+   * Download users report (CSV, Vietnamese)
+   */
+  async downloadUsersReport(params?: { role?: string; status?: string; search?: string }): Promise<void> {
+    const url = `${this.BASE_URL}/reports/users`;
+    const response = await axiosInstance.get(url, { params, responseType: 'blob' });
+    const blob = new Blob([response.data], { type: 'text/csv;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `bao-cao-nguoi-dung.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+  }
+
+  /**
+   * Download transactions report (CSV, Vietnamese)
+   */
+  async downloadTransactionsReport(params?: { status?: string; userId?: number; startDate?: string; endDate?: string; walletType?: string }): Promise<void> {
+    const url = `${this.BASE_URL}/reports/transactions`;
+    const response = await axiosInstance.get(url, { params, responseType: 'blob' });
+    const blob = new Blob([response.data], { type: 'text/csv;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `bao-cao-giao-dich.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+  }
+
+  async downloadUsersReportPdf(params?: { role?: string; status?: string; search?: string }): Promise<void> {
+    const url = `${this.BASE_URL}/reports/users/pdf`;
+    const response = await axiosInstance.get(url, { params, responseType: 'blob' });
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `bao-cao-nguoi-dung.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+  }
+
+  async downloadTransactionsReportPdf(params?: { status?: string; userId?: number; startDate?: string; endDate?: string; walletType?: string }): Promise<void> {
+    const url = `${this.BASE_URL}/reports/transactions/pdf`;
+    const response = await axiosInstance.get(url, { params, responseType: 'blob' });
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `bao-cao-giao-dich.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+  }
 }
 
 // Export singleton instance

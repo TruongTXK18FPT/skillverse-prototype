@@ -43,7 +43,7 @@ const FilterConsole = ({ onFilterChange, onSearchChange, searchTerm }: FilterCon
       {/* Console Header - Always visible */}
       <div className="odyssey-filter-console__header" onClick={() => setIsExpanded(!isExpanded)}>
         <div className="odyssey-filter-console__indicator"></div>
-        <h3 className="odyssey-filter-console__title">Filter Parameters</h3>
+        <h3 className="odyssey-filter-console__title">Bộ lọc</h3>
         <button className="odyssey-filter-console__toggle">
           {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
         </button>
@@ -55,13 +55,13 @@ const FilterConsole = ({ onFilterChange, onSearchChange, searchTerm }: FilterCon
         <div className="odyssey-filter-console__section">
         <label className="odyssey-filter-console__label">
           <span className="odyssey-filter-console__label-icon">◆</span>
-          Search Query
+          Từ khóa tìm kiếm
         </label>
         <div className="odyssey-filter-console__search-wrapper">
           <Search className="odyssey-filter-console__search-icon" size={18} />
           <input
             type="text"
-            placeholder="Search for bounties..."
+            placeholder="Tìm công việc..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             className="odyssey-filter-console__search-input"
@@ -73,7 +73,7 @@ const FilterConsole = ({ onFilterChange, onSearchChange, searchTerm }: FilterCon
       <div className="odyssey-filter-console__section">
         <label className="odyssey-filter-console__label">
           <span className="odyssey-filter-console__label-icon">◆</span>
-          Deployment Zone
+          Khu vực làm việc
         </label>
         <div className="odyssey-filter-console__toggle-group">
           <button
@@ -81,21 +81,21 @@ const FilterConsole = ({ onFilterChange, onSearchChange, searchTerm }: FilterCon
             onClick={() => handleDeploymentChange('all')}
           >
             <span className="odyssey-filter-console__toggle-led"></span>
-            All Zones
+            Tất cả
           </button>
           <button
             className={`odyssey-filter-console__toggle ${deploymentZone === 'remote' ? 'odyssey-filter-console__toggle--active' : ''}`}
             onClick={() => handleDeploymentChange('remote')}
           >
             <span className="odyssey-filter-console__toggle-led"></span>
-            Remote Ops
+            Làm việc từ xa
           </button>
           <button
             className={`odyssey-filter-console__toggle ${deploymentZone === 'onsite' ? 'odyssey-filter-console__toggle--active' : ''}`}
             onClick={() => handleDeploymentChange('onsite')}
           >
             <span className="odyssey-filter-console__toggle-led"></span>
-            On-Site
+            Làm việc tại chỗ
           </button>
         </div>
       </div>
@@ -104,11 +104,11 @@ const FilterConsole = ({ onFilterChange, onSearchChange, searchTerm }: FilterCon
       <div className="odyssey-filter-console__section">
         <label className="odyssey-filter-console__label">
           <span className="odyssey-filter-console__label-icon">◆</span>
-          Bounty Range (CR)
+          Khoảng ngân sách (VND)
         </label>
         <div className="odyssey-filter-console__range-group">
           <div className="odyssey-filter-console__range-input">
-            <label className="odyssey-filter-console__range-label">Min</label>
+            <label className="odyssey-filter-console__range-label">Tối thiểu</label>
             <input
               type="number"
               className="odyssey-filter-console__input"
@@ -121,7 +121,7 @@ const FilterConsole = ({ onFilterChange, onSearchChange, searchTerm }: FilterCon
           </div>
           <div className="odyssey-filter-console__range-separator">—</div>
           <div className="odyssey-filter-console__range-input">
-            <label className="odyssey-filter-console__range-label">Max</label>
+            <label className="odyssey-filter-console__range-label">Tối đa</label>
             <input
               type="number"
               className="odyssey-filter-console__input"
@@ -138,7 +138,7 @@ const FilterConsole = ({ onFilterChange, onSearchChange, searchTerm }: FilterCon
         {/* Reset Button */}
         <button className="odyssey-filter-console__reset" onClick={handleReset}>
           <RotateCcw className="odyssey-filter-console__reset-icon" />
-          Reset Parameters
+          Đặt lại bộ lọc
         </button>
       </div>
     </div>

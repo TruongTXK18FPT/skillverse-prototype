@@ -106,9 +106,9 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
           <div>
             <h2 className="dossier-modal-title">
               <Sparkles size={24} style={{ display: 'inline', marginRight: '0.5rem' }} />
-              COMPILE DEPLOYMENT DATA
+              Biên soạn dữ liệu triển khai
             </h2>
-            <p className="dossier-modal-subtitle">AI will generate tactical CV from pilot records</p>
+            <p className="dossier-modal-subtitle">AI sẽ tạo CV chiến thuật từ hồ sơ người dùng</p>
           </div>
           <button className="dossier-modal-close" onClick={onClose} type="button">
             <X size={20} />
@@ -119,7 +119,7 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
         <form onSubmit={handleSubmit} className="dossier-modal-body">
           {/* Template Selection */}
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">SELECT OUTPUT PROTOCOL</h3>
+            <h3 className="dossier-form-section-title">Chọn mẫu CV</h3>
 
             <div className="dossier-template-grid">
               {templates.map((template) => (
@@ -142,42 +142,42 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
 
           {/* Target Configuration */}
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">MISSION PARAMETERS (OPTIONAL)</h3>
+            <h3 className="dossier-form-section-title">Tham số mục tiêu (tùy chọn)</h3>
 
             <div className="dossier-form-row">
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Target Position</label>
+                <label className="dossier-form-label">Vị trí mục tiêu</label>
                 <input
                   type="text"
                   className="dossier-input"
                   value={formData.targetRole || ''}
                   onChange={(e) => setFormData({ ...formData, targetRole: e.target.value })}
-                  placeholder="e.g., Senior Full Stack Developer"
+                placeholder="Ví dụ: Senior Full Stack Developer"
                 />
                 <small style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.75rem', marginTop: '0.25rem', display: 'block' }}>
-                  AI will optimize for this role
+                AI sẽ tối ưu cho vị trí này
                 </small>
               </div>
 
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Industry Sector</label>
+                <label className="dossier-form-label">Ngành</label>
                 <input
                   type="text"
                   className="dossier-input"
                   value={formData.targetIndustry || ''}
                   onChange={(e) => setFormData({ ...formData, targetIndustry: e.target.value })}
-                  placeholder="e.g., Fintech, E-commerce"
+                placeholder="Ví dụ: Fintech, E-commerce"
                 />
               </div>
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Special Instructions</label>
+              <label className="dossier-form-label">Hướng dẫn bổ sung</label>
               <textarea
                 className="dossier-textarea"
                 value={formData.additionalInstructions || ''}
                 onChange={(e) => setFormData({ ...formData, additionalInstructions: e.target.value })}
-                placeholder="e.g., Emphasize React and Node.js experience..."
+                placeholder="Ví dụ: Nhấn mạnh kinh nghiệm React và Node.js..."
                 rows={3}
               />
             </div>
@@ -185,7 +185,7 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
 
           {/* Content Selection */}
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">DATA MODULES</h3>
+            <h3 className="dossier-form-section-title">Mô-đun dữ liệu</h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}>
@@ -197,9 +197,9 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
                 />
                 <div>
                   <FileText size={18} style={{ display: 'inline', marginRight: '0.5rem', color: 'var(--dossier-cyan)' }} />
-                  <strong style={{ color: 'var(--dossier-silver)' }}>Include Mission Logs</strong>
+                  <strong style={{ color: 'var(--dossier-silver)' }}>Bao gồm dự án</strong>
                   <small style={{ display: 'block', color: 'var(--dossier-silver-dark)', marginTop: '0.25rem' }}>
-                    Add portfolio projects to CV
+                    Thêm dự án vào CV
                   </small>
                 </div>
               </label>
@@ -213,9 +213,9 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
                 />
                 <div>
                   <FileText size={18} style={{ display: 'inline', marginRight: '0.5rem', color: 'var(--dossier-cyan)' }} />
-                  <strong style={{ color: 'var(--dossier-silver)' }}>Include Commendations</strong>
+                  <strong style={{ color: 'var(--dossier-silver)' }}>Bao gồm chứng chỉ</strong>
                   <small style={{ display: 'block', color: 'var(--dossier-silver-dark)', marginTop: '0.25rem' }}>
-                    Add earned certificates
+                    Thêm chứng chỉ đã đạt được
                   </small>
                 </div>
               </label>
@@ -229,9 +229,9 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
                 />
                 <div>
                   <FileText size={18} style={{ display: 'inline', marginRight: '0.5rem', color: 'var(--dossier-cyan)' }} />
-                  <strong style={{ color: 'var(--dossier-silver)' }}>Include Assessments</strong>
+                  <strong style={{ color: 'var(--dossier-silver)' }}>Bao gồm đánh giá</strong>
                   <small style={{ display: 'block', color: 'var(--dossier-silver-dark)', marginTop: '0.25rem' }}>
-                    Add mentor reviews
+                    Thêm đánh giá từ mentor
                   </small>
                 </div>
               </label>
@@ -242,12 +242,12 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
           <div className="dossier-ai-banner">
             <Sparkles size={20} />
             <div>
-              <strong>AUTOMATED OPTIMIZATION FEATURES:</strong>
+              <strong>Tính năng tối ưu tự động:</strong>
               <ul style={{ marginTop: '0.5rem', lineHeight: '1.8' }}>
-                <li>Professional summary generation from pilot records</li>
-                <li>Optimized data structure for maximum impact</li>
-                <li>Strategic skill highlighting for target sector</li>
-                <li>ATS (Applicant Tracking System) keyword optimization</li>
+                <li>Tạo tóm tắt chuyên môn từ hồ sơ người dùng</li>
+                <li>Tối ưu cấu trúc dữ liệu để tạo ấn tượng mạnh</li>
+                <li>Nhấn mạnh kỹ năng chiến lược theo ngành mục tiêu</li>
+                <li>Tối ưu từ khóa cho hệ thống ATS</li>
               </ul>
             </div>
           </div>
@@ -260,7 +260,7 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
               className="dossier-btn-secondary"
               disabled={loading}
             >
-              ABORT
+              Hủy
             </button>
             <button
               type="submit"
@@ -269,13 +269,13 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
             >
               {loading ? (
                 <>
-                  <Loader className="dossier-spinner" size={18} />
-                  COMPILING DATA...
+                <Loader className="dossier-spinner" size={18} />
+                Đang biên soạn dữ liệu...
                 </>
               ) : (
                 <>
-                  <Sparkles size={18} />
-                  COMPILE CV
+                <Sparkles size={18} />
+                Tạo CV
                 </>
               )}
             </button>

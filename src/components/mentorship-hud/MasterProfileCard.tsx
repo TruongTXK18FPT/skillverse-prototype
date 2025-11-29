@@ -123,7 +123,7 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
 
         {/* Expertise Modules */}
         <div className="uplink-expertise-modules">
-          <div className="uplink-expertise-label">Expertise Modules</div>
+          <div className="uplink-expertise-label">Chuyên môn</div>
           <div className="uplink-expertise-tags">
             {expertise.slice(0, 4).map((skill, index) => (
               <span key={index} className="uplink-expertise-tag">
@@ -131,9 +131,7 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
               </span>
             ))}
             {expertise.length > 4 && (
-              <span className="uplink-expertise-tag">
-                +{expertise.length - 4} more
-              </span>
+              <span className="uplink-expertise-tag">+{expertise.length - 4} nữa</span>
             )}
           </div>
         </div>
@@ -153,7 +151,7 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
           </div>
           <div className="uplink-metric">
             <DollarSign className="uplink-metric-icon" size={16} />
-            <span className="uplink-metric-value price">${hourlyRate} CR/HR</span>
+            <span className="uplink-metric-value price">{(hourlyRate * 23000).toLocaleString('vi-VN')} VND/giờ</span>
           </div>
           <div className="uplink-metric">
             <Globe className="uplink-metric-icon" size={16} />
@@ -170,11 +168,8 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
 
       {/* Action Buttons */}
       <div className="uplink-actions">
-        <button
-          className="uplink-establish-btn"
-          onClick={onEstablishLink}
-        >
-          Establish Link
+        <button className="uplink-establish-btn" onClick={onEstablishLink}>
+          Đặt lịch
           <ChevronRight size={18} />
         </button>
         <button
