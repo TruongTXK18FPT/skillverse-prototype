@@ -90,11 +90,7 @@ const SeminarPage: React.FC = () => {
   return (
     <div className={`seminar-page ${theme}`} data-theme={theme}>
       {/* Mission Control Hero Header */}
-      <BriefingHero
-        totalSeminars={seminars.length}
-        activeSeminars={filteredSeminars.length}
-        totalParticipants={5000}
-      />
+      <BriefingHero />
 
       {/* 2-Column Layout: Feed (75%) + Sidebar (25%) */}
       <div className="briefing-layout-grid">

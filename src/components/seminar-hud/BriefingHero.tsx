@@ -1,14 +1,7 @@
 import React from 'react';
 import './briefing-styles.css';
 
-interface BriefingHeroProps {
-  totalSeminars: number;
-  activeSeminars: number;
-  totalParticipants?: number;
-}
-
-const BriefingHero: React.FC<BriefingHeroProps> = ({
-}) => {
+const BriefingHero: React.FC = () => {
   return (
     <div className="briefing-hero">
       {/* Scrolling Marquee at Top Border */}
