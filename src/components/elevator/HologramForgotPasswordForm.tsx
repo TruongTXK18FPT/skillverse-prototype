@@ -26,11 +26,11 @@ const HologramForgotPasswordForm: React.FC = () => {
     try {
       const response = await forgotPassword(email);
       
-      // Save OTP expiry time to localStorage
-      if (response.otpExpiryTime) {
-        const storageKey = `otp_expiry_${email}`;
-        localStorage.setItem(storageKey, response.otpExpiryTime);
-      }
+      // Save OTP expiry time to localStorage using client clock to avoid timezone issues
+      const minutes = (response as any)?.otpExpiryMinutes ?? 5;
+      const storageKey = `otp_expiry_${email}`;
+      const expiryIso = new Date(Date.now() + minutes * 60 * 1000).toISOString();
+      localStorage.setItem(storageKey, expiryIso);
       
       // Navigate to verify OTP page with forgot-password mode
       navigate('/verify-otp', { 

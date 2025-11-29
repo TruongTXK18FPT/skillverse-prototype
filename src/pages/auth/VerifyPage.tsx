@@ -41,20 +41,24 @@ const VerifyPage = () => {
     }
   }, [email, navigate, fromLogin]);
 
-  // Initialize timer from localStorage or state
+  // Initialize timer from localStorage or state (robust parsing to avoid timezone issues)
   useEffect(() => {
     const storageKey = `otp_expiry_${email}`;
     const storedExpiry = localStorage.getItem(storageKey);
     
     if (storedExpiry) {
-      const expiryTime = new Date(storedExpiry).getTime();
-      const now = new Date().getTime();
-      const remainingSeconds = Math.max(0, Math.floor((expiryTime - now) / 1000));
-      
+      const parsedMs = Date.parse(storedExpiry);
+      const expiryMs = Number.isFinite(parsedMs) ? parsedMs : 0;
+      const now = Date.now();
+      const remainingSeconds = expiryMs > now
+        ? Math.floor((expiryMs - now) / 1000)
+        : 0;
       setTimeLeft(remainingSeconds);
-      if (remainingSeconds === 0) {
-        setIsExpired(true);
-      }
+      setIsExpired(remainingSeconds === 0);
+    } else {
+      // Default window if not stored
+      setTimeLeft(300);
+      setIsExpired(false);
     }
   }, [email]);
 
@@ -167,8 +171,8 @@ const VerifyPage = () => {
     }
 
     if (isExpired) {
-      showWarning('Mã OTP đã hết hạn', 'Vui lòng yêu cầu gửi lại mã mới');
-      return;
+      // Luôn để server là nguồn chân lý; hiển thị cảnh báo nhưng vẫn tiếp tục
+      showWarning('Mã OTP có thể đã hết hạn', 'Tiếp tục để máy chủ kiểm tra tính hợp lệ');
     }
 
     setLoading(true);
