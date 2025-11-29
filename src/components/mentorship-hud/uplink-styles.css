@@ -1,0 +1,1040 @@
+/* ============================================
+   NEURAL UPLINK DIRECTORY - WARRIOR ACADEMY
+   Isolated Styles (Prefix: uplink-)
+   ============================================ */
+
+/* Font Import - Space Habitat for Metrics */
+@font-face {
+  font-family: 'Space Habitat';
+  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ============================================
+   CSS VARIABLES - ACADEMY PALETTE
+   ============================================ */
+:root {
+  /* Primary Colors - Academy Blue */
+  --uplink-primary: #3b82f6;
+  --uplink-primary-dark: #2563eb;
+  --uplink-primary-light: #60a5fa;
+  --uplink-glow: rgba(59, 130, 246, 0.6);
+  --uplink-glow-strong: rgba(59, 130, 246, 0.8);
+
+  /* Backgrounds */
+  --uplink-bg: #0f172a;
+  --uplink-bg-secondary: #1e293b;
+  --uplink-glass: rgba(30, 41, 59, 0.7);
+  --uplink-glass-dark: rgba(15, 23, 42, 0.8);
+
+  /* Text Colors */
+  --uplink-text-white: #ffffff;
+  --uplink-text-grey: #94a3b8;
+  --uplink-text-blue-grey: #64748b;
+
+  /* Borders */
+  --uplink-border: rgba(59, 130, 246, 0.3);
+  --uplink-border-glow: rgba(59, 130, 246, 0.5);
+
+  /* Status Colors */
+  --uplink-status-online: #10b981;
+  --uplink-status-offline: #ef4444;
+
+  /* Signal Bars */
+  --uplink-signal-active: #22d3ee;
+  --uplink-signal-inactive: #334155;
+}
+
+/* Dark Mode Compatibility */
+[data-theme='dark'] {
+  --uplink-bg: #0f172a;
+  --uplink-glass: rgba(30, 41, 59, 0.8);
+}
+
+[data-theme='light'] {
+  --uplink-bg: #f1f5f9;
+  --uplink-glass: rgba(255, 255, 255, 0.7);
+  --uplink-text-white: #0f172a;
+  --uplink-text-grey: #475569;
+}
+
+/* ============================================
+   UPLINK CONTAINER & LAYOUT
+   ============================================ */
+.uplink-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--uplink-bg) 0%, var(--uplink-bg-secondary) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Radial Gradient Spotlight Effect */
+.uplink-container::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 35%),
+    radial-gradient(circle at 80% 70%, rgba(34, 211, 238, 0.08) 0%, transparent 35%);
+  pointer-events: none;
+  z-index: 0;
+  animation: uplink-spotlight-pulse 8s ease-in-out infinite;
+}
+
+@keyframes uplink-spotlight-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.uplink-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  animation: uplink-fadeIn 0.5s ease-out;
+}
+
+/* ============================================
+   UPLINK HEADER - ACADEMY MAINFRAME
+   ============================================ */
+.uplink-header {
+  position: relative;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+  border-radius: 1rem;
+  border: 1px solid var(--uplink-border);
+  overflow: hidden;
+  animation: uplink-slideUp 0.5s ease-out;
+}
+
+/* Cyber Grid Pattern Background */
+.uplink-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* System Status Text - Top Right */
+.uplink-header::after {
+  content: 'SYS_ONLINE // V.4.2';
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.65rem;
+  color: #22d3ee;
+  opacity: 0.5;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.uplink-header-content {
+  position: relative;
+  z-index: 1;
+}
+
+.uplink-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: 'Space Habitat', monospace;
+  animation: uplink-glow 3s ease-in-out infinite;
+}
+
+.uplink-subtitle {
+  text-align: center;
+  color: var(--uplink-text-grey);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   SIGNAL SCANNER - SEARCH INPUT
+   ============================================ */
+.uplink-scanner {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.uplink-search-input {
+  width: 100%;
+  padding: 1rem 3.5rem 1rem 1.5rem;
+  background: var(--uplink-glass);
+  border: 1px solid var(--uplink-border);
+  border-radius: 0;
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  color: var(--uplink-text-white);
+  font-size: 1rem;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+}
+
+.uplink-search-input::placeholder {
+  color: var(--uplink-text-grey);
+}
+
+.uplink-search-input:focus {
+  outline: none;
+  border-color: var(--uplink-primary);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), inset 0 0 10px rgba(59, 130, 246, 0.1);
+  animation: uplink-scan 2s linear infinite;
+}
+
+/* Search Icon */
+.uplink-search-icon {
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--uplink-primary);
+  pointer-events: none;
+  animation: uplink-icon-glow 2s ease-in-out infinite;
+}
+
+@keyframes uplink-icon-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.4));
+    opacity: 0.7;
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8));
+    opacity: 1;
+  }
+}
+
+/* Scanning Cursor Animation */
+@keyframes uplink-scan {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), inset 0 0 10px rgba(59, 130, 246, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), inset 0 0 15px rgba(59, 130, 246, 0.2);
+  }
+}
+
+/* ============================================
+   FREQUENCY CAPS - FILTER CHIPS
+   ============================================ */
+.uplink-frequency-caps {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.uplink-frequency-caps::-webkit-scrollbar {
+  height: 4px;
+}
+
+.uplink-frequency-caps::-webkit-scrollbar-track {
+  background: var(--uplink-glass);
+  border-radius: 2px;
+}
+
+.uplink-frequency-caps::-webkit-scrollbar-thumb {
+  background: var(--uplink-primary);
+  border-radius: 2px;
+}
+
+.uplink-freq-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: transparent;
+  border: 1px solid var(--uplink-border);
+  border-radius: 0;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  color: var(--uplink-text-grey);
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+}
+
+.uplink-freq-chip:hover {
+  border-color: var(--uplink-primary);
+  transform: translateY(-1px);
+}
+
+.uplink-freq-chip.uplink-active {
+  background: #22d3ee;
+  border-color: #22d3ee;
+  color: #0f172a;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.6);
+  font-weight: 700;
+}
+
+.uplink-freq-count {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  font-family: 'Space Habitat', monospace;
+}
+
+/* ============================================
+   UPLINK GRID LAYOUT
+   ============================================ */
+.uplink-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  animation: uplink-fadeIn 0.5s ease-out 0.3s backwards;
+}
+
+/* ============================================
+   MASTER PROFILE CARD - TACTICAL DATA SLATE
+   ============================================ */
+.uplink-card {
+  position: relative;
+  background: var(--uplink-glass-dark);
+  border: 1px solid var(--uplink-border-glow);
+  border-radius: 0;
+  /* Aggressive clip-path - 20px cuts on top-right and bottom-left */
+  clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+  padding: 1.5rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(16px);
+  overflow: visible;
+}
+
+.uplink-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--uplink-primary);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(59, 130, 246, 0.3),
+    inset 0 0 20px rgba(59, 130, 246, 0.05);
+}
+
+/* Tech Brackets - L-shapes at 4 corners */
+.uplink-card::before,
+.uplink-card::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(59, 130, 246, 0.4);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Top-Left Bracket */
+.uplink-card::before {
+  top: -4px;
+  left: -4px;
+  border-right: none;
+  border-bottom: none;
+}
+
+/* Bottom-Right Bracket */
+.uplink-card::after {
+  bottom: -4px;
+  right: -4px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Top-Right and Bottom-Left Brackets (via dedicated elements) */
+.uplink-tech-bracket {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(59, 130, 246, 0.4);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.uplink-tech-bracket.top-right {
+  top: -4px;
+  right: -4px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.uplink-tech-bracket.bottom-left {
+  bottom: -4px;
+  left: -4px;
+  border-right: none;
+  border-top: none;
+}
+
+/* Price Capsule - Glowing Badge at Bottom Right */
+.uplink-price-capsule {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(59, 130, 246, 0.2));
+  border: 2px solid #22d3ee;
+  border-radius: 2rem;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+  z-index: 5;
+  animation: uplink-capsule-glow 3s ease-in-out infinite;
+}
+
+.uplink-price-capsule-value {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #22d3ee;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+@keyframes uplink-capsule-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.8);
+  }
+}
+
+/* ============================================
+   AVATAR - THE PROJECTION
+   ============================================ */
+.uplink-avatar-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.uplink-avatar-wrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The Rotating Ring */
+.uplink-avatar-ring {
+  position: absolute;
+  inset: -5px;
+  border: 1.5px dashed var(--uplink-primary);
+  border-radius: 50%;
+  animation: uplink-spin 10s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes uplink-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.uplink-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--uplink-text-white);
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+/* Status LED Indicator */
+.uplink-status-led {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--uplink-bg);
+  z-index: 2;
+  animation: uplink-pulse 2s ease-in-out infinite;
+}
+
+.uplink-status-led.online {
+  background: var(--uplink-status-online);
+  box-shadow: 0 0 10px var(--uplink-status-online);
+}
+
+.uplink-status-led.offline {
+  background: var(--uplink-status-offline);
+  box-shadow: 0 0 10px var(--uplink-status-offline);
+}
+
+@keyframes uplink-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Favorite Button */
+.uplink-favorite-btn {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid var(--uplink-border);
+  border-radius: 50%;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--uplink-text-grey);
+}
+
+.uplink-favorite-btn:hover {
+  background: rgba(59, 130, 246, 0.2);
+  transform: scale(1.1);
+}
+
+.uplink-favorite-btn.active {
+  color: #ef4444;
+}
+
+.uplink-favorite-btn.active svg {
+  fill: #ef4444;
+}
+
+/* ============================================
+   CARD INFO SECTION
+   ============================================ */
+.uplink-card-info {
+  margin-bottom: 1rem;
+}
+
+.uplink-master-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--uplink-text-white);
+  margin-bottom: 0.25rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+}
+
+.uplink-master-title {
+  font-size: 0.875rem;
+  color: var(--uplink-text-blue-grey);
+  margin-bottom: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+}
+
+/* ============================================
+   SIGNAL STRENGTH - RATING BARS
+   ============================================ */
+.uplink-signal-strength {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.uplink-signal-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 20px;
+}
+
+.uplink-signal-bar {
+  width: 4px;
+  background: var(--uplink-signal-inactive);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.uplink-signal-bar.active {
+  background: var(--uplink-signal-active);
+  box-shadow: 0 0 8px var(--uplink-signal-active);
+}
+
+/* Heights for bars (1 to 5) */
+.uplink-signal-bar:nth-child(1) { height: 6px; }
+.uplink-signal-bar:nth-child(2) { height: 9px; }
+.uplink-signal-bar:nth-child(3) { height: 12px; }
+.uplink-signal-bar:nth-child(4) { height: 15px; }
+.uplink-signal-bar:nth-child(5) { height: 18px; }
+
+.uplink-signal-value {
+  font-size: 0.8rem;
+  color: var(--uplink-text-grey);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  font-weight: 400;
+}
+
+/* ============================================
+   BADGES & EXPERTISE
+   ============================================ */
+.uplink-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.uplink-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--uplink-primary-light);
+  border: 1px solid var(--uplink-border);
+  border-radius: 0.375rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+}
+
+.uplink-expertise-modules {
+  margin-bottom: 1rem;
+}
+
+.uplink-expertise-label {
+  font-size: 0.75rem;
+  color: var(--uplink-text-grey);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.uplink-expertise-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.uplink-expertise-tag {
+  padding: 0.35rem 0.75rem;
+  background: rgba(34, 211, 238, 0.1);
+  color: var(--uplink-signal-active);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+}
+
+/* ============================================
+   METRICS ROW - BOTTOM SECTION
+   ============================================ */
+.uplink-metrics-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--uplink-border);
+}
+
+.uplink-metric {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--uplink-text-grey);
+  font-size: 0.875rem;
+}
+
+.uplink-metric-icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--uplink-primary-light);
+}
+
+.uplink-metric-value {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  color: var(--uplink-text-grey);
+  font-weight: 500;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Special styling for PRICE metric only */
+.uplink-metric-value.price {
+  font-family: 'Space Habitat', monospace;
+  color: #22d3ee;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+  letter-spacing: 0.05em;
+  text-transform: none;
+}
+
+/* ============================================
+   ESTABLISH LINK BUTTON
+   ============================================ */
+.uplink-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+}
+
+.uplink-establish-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, var(--uplink-primary), var(--uplink-primary-dark));
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+}
+
+.uplink-establish-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+  background: linear-gradient(135deg, var(--uplink-primary-light), var(--uplink-primary));
+}
+
+.uplink-establish-btn:active {
+  transform: translateY(0);
+}
+
+.uplink-message-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem;
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--uplink-primary-light);
+  border: 1px solid var(--uplink-border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.uplink-message-btn:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: var(--uplink-primary);
+}
+
+/* ============================================
+   LOADING STATE - DOWNLOADING DATA
+   ============================================ */
+.uplink-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1.5rem;
+}
+
+.uplink-spinner {
+  width: 60px;
+  height: 60px;
+  border: 3px solid var(--uplink-border);
+  border-top-color: var(--uplink-primary);
+  border-radius: 50%;
+  animation: uplink-spin 1s linear infinite;
+}
+
+.uplink-loading-text {
+  color: var(--uplink-text-grey);
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  animation: uplink-pulse-text 2s ease-in-out infinite;
+}
+
+@keyframes uplink-pulse-text {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Empty State */
+.uplink-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+  color: var(--uplink-text-grey);
+}
+
+.uplink-empty-icon {
+  width: 64px;
+  height: 64px;
+  opacity: 0.3;
+}
+
+.uplink-empty-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--uplink-text-white);
+}
+
+.uplink-empty-text {
+  font-size: 0.875rem;
+  text-align: center;
+  max-width: 400px;
+}
+
+/* ============================================
+   GLOBAL ANIMATIONS
+   ============================================ */
+@keyframes uplink-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes uplink-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes uplink-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));
+  }
+}
+
+/* ============================================
+   HOLO PAGINATION - DATA STREAM NODES
+   ============================================ */
+.holo-pagination {
+  position: relative;
+  margin: 3rem 0 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Background Node Line */
+.holo-node-line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.3) 20%, rgba(59, 130, 246, 0.3) 80%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.holo-pagination-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Page Nodes Container */
+.holo-page-nodes {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Hexagon Page Nodes */
+.holo-page-node {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid var(--uplink-border);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.holo-page-node:hover {
+  border-color: var(--uplink-primary);
+  transform: scale(1.15);
+}
+
+/* Active Hexagon - Filled and Glowing */
+.holo-page-node.active {
+  background: linear-gradient(135deg, #22d3ee, #3b82f6);
+  border-color: #22d3ee;
+  box-shadow:
+    0 0 20px rgba(34, 211, 238, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.2);
+  transform: scale(1.2);
+}
+
+.holo-page-node.active .holo-page-number {
+  color: #0f172a;
+  font-weight: 700;
+  text-shadow: none;
+}
+
+/* Page Numbers */
+.holo-page-number {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.95rem;
+  color: var(--uplink-text-grey);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+/* Inactive nodes - smaller */
+.holo-page-node:not(.active) {
+  width: 32px;
+  height: 32px;
+  opacity: 0.7;
+}
+
+.holo-page-node:not(.active) .holo-page-number {
+  font-size: 0.8rem;
+}
+
+/* Ellipsis */
+.holo-ellipsis {
+  color: var(--uplink-text-grey);
+  font-size: 0.75rem;
+  opacity: 0.5;
+  letter-spacing: 2px;
+}
+
+/* Navigation Arrows (Prev/Next) */
+.holo-nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--uplink-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.4));
+}
+
+.holo-nav-btn:hover:not(:disabled) {
+  color: #22d3ee;
+  filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.8));
+  transform: scale(1.2);
+}
+
+.holo-nav-btn:disabled {
+  color: var(--uplink-text-grey);
+  opacity: 0.3;
+  cursor: not-allowed;
+  filter: none;
+}
+
+/* Animation for active node */
+@keyframes holo-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.9), inset 0 0 15px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.holo-page-node.active {
+  animation: holo-pulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .uplink-container {
+    padding: 1rem;
+  }
+
+  .uplink-title {
+    font-size: 1.75rem;
+  }
+
+  .uplink-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .uplink-frequency-caps {
+    flex-wrap: wrap;
+  }
+
+  .uplink-metrics-row {
+    grid-template-columns: 1fr;
+  }
+
+  .uplink-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   BIO SECTION
+   ============================================ */
+.uplink-bio {
+  margin-bottom: 1rem;
+  padding-top: 0.5rem;
+}
+
+.uplink-bio-text {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--uplink-text-grey);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+}

@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Star, MessageCircle, Clock, DollarSign, Award,
-  Briefcase, Globe, Heart, ChevronRight,
-  CheckCircle, User
-} from 'lucide-react';
-import Pagination from '../../components/Pagination';
 import MeowlGuide from '../../components/MeowlGuide';
-import '../../styles/MentorshipPage.css';
+import UplinkHeader from '../../components/mentorship-hud/UplinkHeader';
+import UplinkGrid from '../../components/mentorship-hud/UplinkGrid';
+import MasterProfileCard from '../../components/mentorship-hud/MasterProfileCard';
+import HoloPagination from '../../components/mentorship-hud/HoloPagination';
+import '../../components/mentorship-hud/uplink-styles.css';
 
 interface Mentor {
   id: string;
@@ -178,153 +176,58 @@ const MentorshipPage = () => {
   };
 
   return (
-    <div className="mentorship-container">
-      <div className="mentorship-content">
-        {/* Header */}
-        <div className="mentorship-header">
-          <h1 className="mentorship-title">Tìm Mentor</h1>
-          <p className="mentorship-description">
-            Kết nối với các chuyên gia hàng đầu để phát triển kỹ năng và sự nghiệp của bạn
-          </p>
-        </div>
+    <div className="uplink-container">
+      <div className="uplink-content">
+        {/* Neural Uplink Header */}
+        <UplinkHeader
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={(categoryId) => {
+            setSelectedCategory(categoryId);
+            setCurrentPage(1);
+          }}
+        />
 
-        {/* Search and Filter */}
-        <div className="search-section">
-            <input
-              type="text"
-              placeholder="Tìm kiếm mentor theo tên hoặc kỹ năng..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
-        </div>
-
-        {/* Categories */}
-        <div className="categories-list">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => {
-                setSelectedCategory(category.id);
-                setCurrentPage(1);
+        {/* Master Archives Grid */}
+        <UplinkGrid
+          loading={loading}
+          isEmpty={filteredMentors.length === 0 && !loading}
+        >
+          {currentMentors.map((mentor) => (
+            <MasterProfileCard
+              key={mentor.id}
+              id={mentor.id}
+              name={mentor.name}
+              title={mentor.title}
+              rating={mentor.rating}
+              reviews={mentor.reviews}
+              hourlyRate={mentor.hourlyRate}
+              expertise={mentor.expertise}
+              languages={mentor.languages}
+              availability={mentor.availability}
+              experience={mentor.experience}
+              bio={mentor.bio}
+              avatar={mentor.avatar}
+              badges={mentor.badges}
+              isFavorite={mentor.isFavorite}
+              onEstablishLink={() => handleBookSession(mentor)}
+              onMessage={() => {
+                // Handle message action
+                console.log('Message mentor:', mentor.name);
               }}
-              className={`category-button ${
-                selectedCategory === category.id ? 'active' : ''
-              }`}
-            >
-              <span>{category.name}</span>
-              <span className="category-count">({category.count})</span>
-            </button>
+              onToggleFavorite={() => {
+                // Handle favorite toggle
+                console.log('Toggle favorite:', mentor.name);
+              }}
+            />
           ))}
-        </div>
+        </UplinkGrid>
 
-        {/* Mentors Grid */}
-        {loading ? (
-          <div className="loading-state">
-            <div className="spinner"></div>
-            <p>Đang tải danh sách mentor...</p>
-          </div>
-        ) : (
-          <div className="mentors-grid">
-            {currentMentors.map((mentor) => (
-              <div key={mentor.id} className="mentor-card">
-                <div className="mentor-header">
-                  <img
-                    src={mentor.avatar}
-                    alt={mentor.name}
-                    className="mentor-avatar"
-                  />
-                  <button
-                    className={`favorite-button ${mentor.isFavorite ? 'active' : ''}`}
-                  >
-                    <Heart className="heart-icon" />
-                  </button>
-                </div>
-
-                <div className="mentor-info">
-                  <h3 className="mentor-name">{mentor.name}</h3>
-                  <p className="mentor-title">{mentor.title}</p>
-
-                  <div className="mentor-rating">
-                    <Star className="star-icon" />
-                    <span className="review-count">{mentor.rating}</span>
-                    <span className="review-count">
-                      ({mentor.reviews} đánh giá)
-                    </span>
-                  </div>
-
-                  <div className="mentor-badges">
-                    {mentor.badges.map((badge, index) => (
-                      <span key={index} className="mentor-badge">
-                        <Award className="mentor-badge-icon" />
-                        {badge}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="mentor-details">
-                    <div className="mentor-detail-item">
-                      <Briefcase className="mentor-detail-icon" />
-                      <span>{mentor.experience}</span>
-                    </div>
-                    <div className="mentor-detail-item">
-                      <DollarSign className="mentor-detail-icon" />
-                      <span>${mentor.hourlyRate}/giờ</span>
-                    </div>
-                    <div className="mentor-detail-item">
-                      <Globe className="mentor-detail-icon" />
-                      <span>{mentor.languages.join(", ")}</span>
-                    </div>
-                    <div className="mentor-detail-item">
-                      <Clock className="mentor-detail-icon" />
-                      <span>{mentor.availability}</span>
-                    </div>
-                  </div>
-
-                  <div className="mentor-expertise">
-                    <h4>Chuyên môn</h4>
-                    <div className="expertise-tags">
-                      {mentor.expertise.map((skill, index) => (
-                        <span key={index} className="expertise-tag">
-                          <CheckCircle className="tag-icon" />
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <p className="mentor-bio">{mentor.bio}</p>
-
-                  <div className="mentor-actions">
-                    <button 
-                      className="book-button"
-                      onClick={() => handleBookSession(mentor)}
-                    >
-                      Đặt lịch hướng dẫn
-                      <ChevronRight className="btn-icon" />
-                    </button>
-                    <button className="chat-button">
-                      <MessageCircle className="btn-icon" />
-                      Nhắn tin
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            {filteredMentors.length === 0 && !loading && (
-              <div className="empty-state">
-                <User className="empty-icon" />
-                <h3>Không tìm thấy mentor</h3>
-                <p>Thử điều chỉnh bộ lọc hoặc từ khóa tìm kiếm</p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Pagination */}
+        {/* Holo Pagination - Data Stream Nodes */}
         {filteredMentors.length > mentorsPerPage && (
-          <Pagination
+          <HoloPagination
             totalItems={filteredMentors.length}
             itemsPerPage={mentorsPerPage}
             currentPage={currentPage}
