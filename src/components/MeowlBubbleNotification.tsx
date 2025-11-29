@@ -642,7 +642,6 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
     }, 3000 + Math.random() * 2000);
 
     return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disabled, isAuthenticated, showBubble, getPageIntroduction, selectRandomBubble, location.pathname]);
 
   // Random bubble every 15 seconds (when not showing any bubble)
@@ -663,7 +662,6 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
     }, 15000); // Every 15 seconds
 
     return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disabled, isAuthenticated, isVisible]);
 
   const handleAction = () => {

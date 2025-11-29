@@ -49,6 +49,7 @@ export interface CourseSummaryDTO {
   thumbnailUrl?: string; // Computed field
   enrollmentCount: number;
   moduleCount?: number; // Total module count
+  lessonCount?: number; // Total lesson count across modules
   price?: number;
   currency?: string;
   averageRating?: number; // Average rating

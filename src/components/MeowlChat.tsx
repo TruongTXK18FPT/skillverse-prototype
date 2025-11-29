@@ -3,7 +3,7 @@ import { X, Send, Loader2, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import '../styles/MeowlChat.css';
-import { guardUserInput, pickFallback } from "./MeowlGuard";
+import { guardUserInput, pickFallback } from "./MeowlGuard.ts";
 import axiosInstance from '../services/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -251,7 +251,7 @@ Cố lên nha! 💪✨ 🎓`
                       <ReactMarkdown 
                         remarkPlugins={[remarkGfm]}
                         components={{
-                          a: ({ node, ...props }) => (
+                          a: (props) => (
                             <a
                               {...props}
                               onClick={(e) => {

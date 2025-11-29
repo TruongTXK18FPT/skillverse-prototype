@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Ticket, Search, Filter, Clock, AlertCircle, CheckCircle, 
@@ -61,16 +61,7 @@ const SupportTicketsTab: React.FC = () => {
     { value: 'LOW', label: 'Thấp', color: '#10b981' }
   ];
 
-  useEffect(() => {
-    fetchTickets();
-    fetchStats();
-  }, [statusFilter, categoryFilter, priorityFilter, currentPage]);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  const fetchTickets = async () => {
+  const fetchTickets = useCallback(async () => {
     setLoading(true);
     try {
       const response = await supportService.getAllTickets({
@@ -87,16 +78,27 @@ const SupportTicketsTab: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter, categoryFilter, priorityFilter, currentPage]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const data = await supportService.getTicketStats();
       setStats(data);
     } catch (error) {
       console.error('Error fetching stats:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchTickets();
+    fetchStats();
+  }, [fetchTickets, fetchStats]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  // fetchTickets and fetchStats moved into useCallback above
 
   const fetchMessages = async (ticketCode: string) => {
     try {

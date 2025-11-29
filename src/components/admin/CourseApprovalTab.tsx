@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   listPendingCourses,
   approveCourse,
@@ -47,7 +47,7 @@ export const CourseApprovalTab: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   // Load pending courses
-  const loadPendingCourses = async () => {
+  const loadPendingCourses = useCallback(async () => {
     if (!user) return;
 
     setLoading(true);
@@ -68,7 +68,7 @@ export const CourseApprovalTab: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, page, size, sortBy, sortOrder, showError]);
 
   // Load course details with modules
   const loadCourseDetails = async (courseId: number) => {
@@ -148,7 +148,7 @@ export const CourseApprovalTab: React.FC = () => {
   // Initial load
   useEffect(() => {
     loadPendingCourses();
-  }, [page, size, sortBy, sortOrder]);
+  }, [loadPendingCourses]);
 
   // Format date
   const formatDate = (dateString?: string) => {

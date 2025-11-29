@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle, XCircle, Clock, ArrowLeft } from 'lucide-react';
 import { paymentService } from '../../services/paymentService';
@@ -41,9 +41,9 @@ const Transactional = () => {
       setError('No payment reference found');
       setLoading(false);
     }
-  }, [internalRef, isCancel]);
+  }, [internalRef, isCancel, pollPaymentStatus]);
 
-  const pollPaymentStatus = async () => {
+  const pollPaymentStatus = useCallback(async () => {
     if (!internalRef) return;
 
     try {
@@ -67,14 +67,14 @@ const Transactional = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [internalRef]);
 
   useEffect(() => {
     if (polling && internalRef && !isCancel) {
       const interval = setInterval(pollPaymentStatus, 3000); // Poll every 3 seconds
       return () => clearInterval(interval);
     }
-  }, [polling, internalRef, isCancel]);
+  }, [polling, internalRef, isCancel, pollPaymentStatus]);
 
   const getStatusIcon = () => {
     if (isCancel) return <XCircle className="w-16 h-16 text-red-500" />;
@@ -114,7 +114,7 @@ const Transactional = () => {
     }
 
     switch (payment.status) {
-      case 'COMPLETED':
+      case 'COMPLETED': {
         // Show appropriate message based on payment type
         let successDesc = 'Giao dịch của bạn đã được xử lý thành công.';
         if (payment.type === 'PREMIUM_SUBSCRIPTION') {
@@ -128,21 +128,25 @@ const Transactional = () => {
           title: 'Thanh toán thành công!',
           description: successDesc
         };
-      case 'FAILED':
+      }
+      case 'FAILED': {
         return {
           title: 'Thanh toán thất bại',
           description: payment.failureReason || 'Có lỗi xảy ra trong quá trình thanh toán. Vui lòng thử lại.'
         };
-      case 'CANCELLED':
+      }
+      case 'CANCELLED': {
         return {
           title: 'Thanh toán đã bị hủy',
           description: 'Giao dịch đã bị hủy. Vui lòng thử lại nếu muốn tiếp tục.'
         };
-      default:
+      }
+      default: {
         return {
           title: 'Đang xử lý thanh toán...',
           description: 'Vui lòng chờ trong giây lát. Chúng tôi đang xử lý giao dịch của bạn.'
         };
+      }
     }
   };
 

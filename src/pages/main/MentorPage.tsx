@@ -312,7 +312,7 @@ const MentorPage: React.FC = () => {
   const [isUploadingVideo, setIsUploadingVideo] = useState(false);
 
   // ✅ NEW: Selected lesson type for Add Lesson modal
-  const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>('VIDEO');
+const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiLessonType.VIDEO);
 
   const [showAddQuiz, setShowAddQuiz] = useState(false);
   const [showAddAssignment, setShowAddAssignment] = useState(false);
@@ -466,8 +466,8 @@ const MentorPage: React.FC = () => {
         assignments: [],
         codingExercises: [],
         enrollmentCount: createdDto.enrollmentCount,
-        moduleCount: createdDto.moduleCount, // ✅ Use actual moduleCount from backend
-        lessonCount: createdDto.lessonCount || 0, // ✅ Use actual lessonCount from backend
+        moduleCount: Array.isArray(createdDto.modules) ? createdDto.modules.length : 0,
+        lessonCount: 0,
         price: createdDto.price,
         currency: createdDto.currency,
         createdAt: createdDto.createdAt,

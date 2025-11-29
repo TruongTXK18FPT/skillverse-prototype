@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
@@ -35,9 +35,6 @@ import { premiumService } from '../services/premiumService';
 import { UserProfileResponse } from '../data/userDTOs';
 import { UserSubscriptionResponse } from '../data/premiumDTOs';
 import Logo from '../assets/skillverse.png';
-import silverFrame from '../assets/premium/silver_avatar.png';
-import goldenFrame from '../assets/premium/golden_avatar.png';
-import diamondFrame from '../assets/premium/diamond_avatar.png';
 import '../styles/Header.css';
 
 const Header: React.FC = () => {
@@ -119,16 +116,16 @@ const Header: React.FC = () => {
     }
   ];
 
-  const loadUserProfile = async () => {
+  const loadUserProfile = useCallback(async () => {
     try {
       const profile = await userService.getMyProfile();
       setUserProfile(profile);
     } catch (error) {
       console.error('Failed to load user profile:', error);
     }
-  };
+  }, []);
 
-  const loadWalletBalance = async () => {
+  const loadWalletBalance = useCallback(async () => {
     if (!user) return;
     
     setLoadingBalance(true);
@@ -141,32 +138,16 @@ const Header: React.FC = () => {
     } finally {
       setLoadingBalance(false);
     }
-  };
+  }, [user]);
 
-  const loadSubscription = async () => {
+  const loadSubscription = useCallback(async () => {
     try {
       const sub = await premiumService.getCurrentSubscription();
       setSubscription(sub);
     } catch (error) {
       console.error('Failed to load subscription:', error);
     }
-  };
-
-  const getAvatarFrame = () => {
-    if (!subscription || !subscription.isActive) return null;
-    
-    const planType = subscription.plan.planType;
-    switch (planType) {
-      case 'STUDENT_PACK':
-        return silverFrame;
-      case 'PREMIUM_BASIC':
-        return goldenFrame;
-      case 'PREMIUM_PLUS':
-        return diamondFrame;
-      default:
-        return null;
-    }
-  };
+  }, []);
 
   const getPremiumColor = () => {
     if (!subscription || !subscription.isActive) return null;
@@ -198,7 +179,7 @@ const Header: React.FC = () => {
       loadUserProfile();
       loadSubscription();
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, loadWalletBalance, loadUserProfile, loadSubscription]);
 
   // Close menus when clicking outside
   useEffect(() => {

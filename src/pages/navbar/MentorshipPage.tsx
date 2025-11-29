@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Star, MessageCircle, Clock, DollarSign, Award,
@@ -36,12 +36,7 @@ const MentorshipPage = () => {
 
   const mentorsPerPage = 6;
 
-  useEffect(() => {
-    fetchMentors();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const fetchMentors = async () => {
+  const fetchMentors = useCallback(async () => {
     try {
       setLoading(true);
       // Fetch from MockAPI
@@ -74,7 +69,11 @@ const MentorshipPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchMentors();
+  }, [fetchMentors]);
 
   // Mock data as fallback
   const mockMentors: Mentor[] = [

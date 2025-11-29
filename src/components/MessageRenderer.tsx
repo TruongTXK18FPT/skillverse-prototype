@@ -35,7 +35,7 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({ content, isExpertMode
 
     const flushTable = () => {
       if (currentTable.length >= 2) {
-        const [headerLine, separatorLine, ...bodyLines] = currentTable;
+        const [headerLine, _separatorLine, ...bodyLines] = currentTable;
         const headers = headerLine.split('|').map(h => h.trim()).filter(Boolean);
         const rows = bodyLines
           .filter(r => r.includes('|'))

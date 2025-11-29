@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   UserCheck, Building2, Clock, CheckCircle, XCircle,
   Search, Filter, Eye, RefreshCw, X, Calendar, Mail,
@@ -39,15 +39,7 @@ const AccountVerificationTabCosmic: React.FC = () => {
   const [rejectReason, setRejectReason] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
 
-  useEffect(() => {
-    fetchApplications();
-  }, [statusFilter]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [roleFilter, searchTerm, statusFilter]);
-
-  const fetchApplications = async () => {
+  const fetchApplications = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -60,7 +52,17 @@ const AccountVerificationTabCosmic: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter]);
+
+  useEffect(() => {
+    fetchApplications();
+  }, [fetchApplications]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [roleFilter, searchTerm, statusFilter]);
+
+  // fetchApplications moved into useCallback above
 
   // Combined and filtered list
   const getCombinedApplications = () => {
