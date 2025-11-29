@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Loader2, Building2, Lock, Mail, Phone, MapPin, FileText, Globe, AlertTriangle, User, Users, Briefcase, Upload, X } from 'lucide-react';
@@ -56,6 +56,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
   });
   const [error, setError] = useState<string | null>(null);
   const [companyDocuments, setCompanyDocuments] = useState<File[]>([]);
+  const [domainHint, setDomainHint] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -86,6 +87,25 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
     setCompanyDocuments(prev => prev.filter((_, i) => i !== index));
   };
 
+  useEffect(() => {
+    const email = formData.businessEmail.trim().toLowerCase();
+    const website = formData.companyWebsite.trim().toLowerCase();
+    const emailDomain = email.includes('@') ? email.split('@').pop() || '' : '';
+    let host = '';
+    try {
+      if (website) {
+        const u = new URL(website.startsWith('http') ? website : `https://${website}`);
+        host = u.hostname.replace(/^www\./, '');
+      }
+    } catch { host = ''; }
+    const freeDomains = new Set(['gmail.com','yahoo.com','outlook.com','hotmail.com']);
+    if (host && emailDomain && emailDomain !== host && freeDomains.has(emailDomain)) {
+      setDomainHint('Khuyến nghị sử dụng email theo tên miền website công ty.');
+    } else {
+      setDomainHint(null);
+    }
+  }, [formData.businessEmail, formData.companyWebsite]);
+
   const validateForm = (): string | null => {
     if (!formData.companyName.trim()) return 'Vui lòng nhập tên công ty';
     if (!formData.businessEmail.trim()) return 'Vui lòng nhập email';
@@ -98,9 +118,11 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
     if (!formData.companySize) return 'Vui lòng chọn quy mô công ty';
     if (!formData.industry.trim()) return 'Vui lòng nhập ngành nghề';
     if (!formData.taxId.trim()) return 'Vui lòng nhập mã số thuế';
+    if (!/^\d{10}(?:\d{3})?$/.test(formData.taxId)) return 'Mã số thuế phải gồm 10 hoặc 13 chữ số';
     if (!formData.companyWebsite.trim()) return 'Vui lòng nhập website công ty';
     if (!formData.businessAddress.trim()) return 'Vui lòng nhập địa chỉ doanh nghiệp';
-    // Documents are optional - removed validation
+    if (companyDocuments.length === 0) return 'Vui lòng tải lên tài liệu doanh nghiệp (PDF)';
+    if (!companyDocuments.some(f => f.type === 'application/pdf')) return 'Cần ít nhất một tệp PDF giấy phép kinh doanh';
     return null;
   };
 
@@ -269,6 +291,9 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                 autoComplete="email"
               />
             </div>
+            {domainHint && (
+              <div className="reg-business-upload-hint">{domainHint}</div>
+            )}
           </div>
 
           {/* Row 2: Password & Confirm Password */}
@@ -366,7 +391,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-field">
             <label className="reg-business-label">
               <Globe size={14} />
-              <span>WEBSITE (OPTIONAL)</span>
+              <span>WEBSITE</span>
             </label>
             <div className="reg-business-input-wrapper">
               <input
@@ -560,6 +585,16 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
                     >
                       <X size={16} />
                     </button>
+                  </div>
+                ))}
+                {companyDocuments.map((file, index) => (
+                  <div key={`prev-${index}`} className="reg-business-file-preview">
+                    {file.type.startsWith('image/') && (
+                      <img src={URL.createObjectURL(file)} alt="Preview" style={{ maxWidth: '100%', maxHeight: 120 }} />
+                    )}
+                    {file.type === 'application/pdf' && (
+                      <embed src={URL.createObjectURL(file)} type="application/pdf" width="100%" height="120" />
+                    )}
                   </div>
                 ))}
               </div>

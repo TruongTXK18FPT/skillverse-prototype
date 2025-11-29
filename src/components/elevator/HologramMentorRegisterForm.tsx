@@ -444,6 +444,16 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                     <X size={16} />
                   </button>
                 </div>
+                {cvFile.type.startsWith('image/') && (
+                  <div className="reg-mentor-file-preview">
+                    <img src={URL.createObjectURL(cvFile)} alt="Preview" style={{ maxWidth: '100%', maxHeight: 180 }} />
+                  </div>
+                )}
+                {cvFile.type === 'application/pdf' && (
+                  <div className="reg-mentor-file-preview">
+                    <embed src={URL.createObjectURL(cvFile)} type="application/pdf" width="100%" height="180" />
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -481,6 +491,16 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                     >
                       <X size={16} />
                     </button>
+                  </div>
+                ))}
+                {certifications.map((file, index) => (
+                  <div key={`prev-${index}`} className="reg-mentor-file-preview">
+                    {file.type.startsWith('image/') && (
+                      <img src={URL.createObjectURL(file)} alt="Preview" style={{ maxWidth: '100%', maxHeight: 120 }} />
+                    )}
+                    {file.type === 'application/pdf' && (
+                      <embed src={URL.createObjectURL(file)} type="application/pdf" width="100%" height="120" />
+                    )}
                   </div>
                 ))}
               </div>

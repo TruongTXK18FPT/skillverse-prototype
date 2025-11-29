@@ -41,9 +41,10 @@ class BusinessService {
       
       // Add files if provided
       if (files?.documents && files.documents.length > 0) {
-        // Send the first document for now
-        // TODO: Handle multiple document files properly
         formData.append('companyDocumentsFile', files.documents[0]);
+        files.documents.forEach((file) => {
+          formData.append('companyDocumentsFiles', file);
+        });
       }
       
       const response = await axiosInstance.post<BusinessRegistrationResponse>(

@@ -33,6 +33,7 @@ export interface MentorApplicationDto {
   linkedinProfile?: string;
   cvPortfolioUrl?: string;
   certificatesUrl?: string;
+  certificateUrls?: string[];
   applicationStatus: ApplicationStatus;
   isEmailVerified: boolean;
   userStatus: string;

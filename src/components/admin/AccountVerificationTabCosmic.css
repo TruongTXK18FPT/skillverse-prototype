@@ -900,6 +900,133 @@
   transform: translateY(-2px);
 }
 
+/* Document Preview */
+.verification-document-preview {
+  flex: 1 1 100%;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.verification-document-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.verification-document-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #a5b4fc;
+  font-weight: 600;
+}
+
+.verification-document-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.verification-doc-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.verification-doc-btn:hover {
+  background: rgba(139, 92, 246, 0.25);
+}
+
+.verification-iframe {
+  width: 100%;
+  height: 360px;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 10px;
+  background: #0b1220;
+}
+
+.verification-docx-frame {
+  width: 100%;
+  height: 360px;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 10px;
+  background: #0b1220;
+}
+
+.verification-image {
+  max-width: 100%;
+  max-height: 360px;
+  display: block;
+  border-radius: 10px;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+/* Fullscreen PDF Viewer */
+.verification-pdf-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1.5rem;
+}
+
+.verification-pdf-container {
+  width: 92vw;
+  max-width: 1200px;
+  height: 86vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+}
+
+.verification-pdf-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid rgba(139, 92, 246, 0.2);
+}
+
+.verification-pdf-title {
+  color: #e0e7ff;
+  font-weight: 700;
+}
+
+.verification-pdf-actions {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.verification-pdf-iframe {
+  width: 100%;
+  height: calc(86vh - 56px);
+  border: none;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
 .verification-detail-section.rejection {
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);

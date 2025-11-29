@@ -2,9 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   UserCheck, Building2, Clock, CheckCircle, XCircle,
   Search, Filter, Eye, RefreshCw, X, Calendar, Mail,
-  FileText, Award, Briefcase, Globe, MapPin, ChevronLeft, ChevronRight
+  FileText, Award, Briefcase, Globe, MapPin, ChevronLeft, ChevronRight,
+  ExternalLink, Download, Maximize2, Phone
 } from 'lucide-react';
 import adminService from '../../services/adminService';
+import axiosInstance, { API_BASE_URL } from '../../services/axiosInstance';
 import {
   MentorApplicationDto,
   RecruiterApplicationDto,
@@ -572,7 +574,133 @@ const AccountVerificationTabCosmic: React.FC = () => {
 };
 
 // Mentor Detail Component
-const MentorDetail: React.FC<{ mentor: MentorApplicationDto }> = ({ mentor }) => (
+const MentorDetail: React.FC<{ mentor: MentorApplicationDto }> = ({ mentor }) => {
+  const [cvPreviewUrl, setCvPreviewUrl] = useState<string | null>(null);
+  const [certPreviewUrl, setCertPreviewUrl] = useState<string | null>(null);
+  const [pdfOverlay, setPdfOverlay] = useState<{ url: string; title: string } | null>(null);
+  const [cvDocxUrl, setCvDocxUrl] = useState<string | null>(null);
+  const [certDocxUrl, setCertDocxUrl] = useState<string | null>(null);
+  const [cvImageUrl, setCvImageUrl] = useState<string | null>(null);
+  const [certImageUrl, setCertImageUrl] = useState<string | null>(null);
+  const [certImagePreviewMap, setCertImagePreviewMap] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const preparePreview = async (srcUrl: string | undefined, setUrl: (u: string | null) => void) => {
+      if (!srcUrl) { setUrl(null); return; }
+      const isPdf = /\.pdf($|\?)/i.test(srcUrl);
+      const isRaw = /\/raw\/upload\//.test(srcUrl) && !isPdf;
+      if (isPdf && !isRaw) { setUrl(srcUrl); return; }
+      if (isRaw) {
+        try {
+          const m = srcUrl.match(/https:\/\/res\.cloudinary\.com\/([^/]+)\/(raw)\/upload\/(v\d+\/)?(.+)/);
+          if (!m) { setUrl(null); return; }
+          const publicId = m[4];
+          const endpoint = `${API_BASE_URL}/admin/media/stream-pdf?publicId=${encodeURIComponent(publicId)}&resourceType=raw`;
+          const res = await axiosInstance.get(endpoint, { responseType: 'blob' });
+          const blobUrl = URL.createObjectURL(res.data);
+          setUrl(blobUrl);
+          return;
+        } catch (e) {
+          console.error('Preview fetch failed', e);
+          setUrl(null);
+        }
+      } else {
+        setUrl(null);
+      }
+    };
+
+    preparePreview(mentor.cvPortfolioUrl, setCvPreviewUrl);
+    preparePreview(mentor.certificatesUrl, setCertPreviewUrl);
+  }, [mentor.cvPortfolioUrl, mentor.certificatesUrl]);
+
+
+
+  useEffect(() => {
+    const urls = Array.isArray(mentor.certificateUrls) ? mentor.certificateUrls : [];
+    setCertImagePreviewMap({});
+
+    const isImgUrl = (u: string) => {
+      const extImg = /\.(jpe?g|png|gif|svg|webp)($|\?)/i.test(u);
+      const isCloudImg = /\/image\/upload\//.test(u);
+      const isRawImg = /\/raw\/upload\//.test(u) && extImg;
+      return extImg || isCloudImg || isRawImg;
+    };
+
+    const prepareImage = async (u: string) => {
+      if (!u || !isImgUrl(u)) return;
+      if (/\/raw\/upload\//.test(u)) {
+        try {
+          const m = u.match(/https:\/\/res\.cloudinary\.com\/([^/]+)\/raw\/upload\/(v\d+\/)?(.+)/);
+          if (!m) return;
+          const publicId = m[3];
+          const res = await axiosInstance.get(`${API_BASE_URL}/admin/media/signed-url`, {
+            params: { publicId, resourceType: 'raw' }
+          });
+          const signedUrl = res.data as string;
+          setCertImagePreviewMap(prev => ({ ...prev, [u]: signedUrl }));
+        } catch (e) {
+          console.error('Image signed URL fetch failed', e);
+        }
+      } else {
+        setCertImagePreviewMap(prev => ({ ...prev, [u]: u }));
+      }
+    };
+
+    urls.forEach(prepareImage);
+  }, [mentor.certificateUrls]);
+
+  useEffect(() => {
+    const setupDocOrImage = (srcUrl: string | undefined, setDocx: (u: string | null) => void, setImg: (u: string | null) => void) => {
+      if (!srcUrl) { setDocx(null); setImg(null); return; }
+      const isDocx = /\.docx($|\?)/i.test(srcUrl);
+      const isImage = /\.(jpe?g|png|gif|svg|webp)($|\?)/i.test(srcUrl) || /\/image\/upload\//.test(srcUrl);
+      if (isDocx) {
+        const viewer = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(srcUrl)}`;
+        setDocx(viewer);
+        setImg(null);
+        return;
+      }
+      if (isImage) {
+        setImg(srcUrl);
+        setDocx(null);
+        return;
+      }
+      setDocx(null);
+      setImg(null);
+    };
+    setupDocOrImage(mentor.cvPortfolioUrl, setCvDocxUrl, setCvImageUrl);
+    setupDocOrImage(mentor.certificatesUrl, setCertDocxUrl, setCertImageUrl);
+  }, [mentor.cvPortfolioUrl, mentor.certificatesUrl]);
+
+  const downloadUrl = (url: string, filename: string) => {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  const toAscii = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+  const yyyymmdd = (d?: string) => {
+    const dt = d ? new Date(d) : new Date();
+    const y = dt.getFullYear();
+    const m = String(dt.getMonth() + 1).padStart(2, '0');
+    const dd = String(dt.getDate()).padStart(2, '0');
+    return `${y}${m}${dd}`;
+  };
+
+  const individualImageUrls = Array.isArray(mentor.certificateUrls)
+    ? mentor.certificateUrls.filter(u =>
+        /\.(jpe?g|png|gif|svg|webp)(?:$|\?)/i.test(u) ||
+        /\/image\/upload\//.test(u) ||
+        ( /\/raw\/upload\//.test(u) && /\.(jpe?g|png|gif|svg|webp)(?:$|\?)/i.test(u) )
+      )
+    : [];
+
+  return (
+  <>
   <div className="verification-detail-content">
     <div className="verification-detail-header">
       <div className="verification-detail-avatar">
@@ -617,9 +745,14 @@ const MentorDetail: React.FC<{ mentor: MentorApplicationDto }> = ({ mentor }) =>
     {mentor.linkedinProfile && (
       <div className="verification-detail-section">
         <h5>Liên Kết</h5>
-        <a href={mentor.linkedinProfile} target="_blank" rel="noopener noreferrer" className="verification-link">
-          <Globe size={16} /> LinkedIn Profile
-        </a>
+        <div className="verification-links">
+          <a href={mentor.linkedinProfile} target="_blank" rel="noopener noreferrer" className="verification-link">
+            <Globe size={16} /> {mentor.linkedinProfile}
+          </a>
+          {/^https?:\/\/(www\.)?linkedin\.com\//.test(mentor.linkedinProfile) && (
+            <span className="verification-badge valid">Hợp lệ</span>
+          )}
+        </div>
       </div>
     )}
 
@@ -628,16 +761,92 @@ const MentorDetail: React.FC<{ mentor: MentorApplicationDto }> = ({ mentor }) =>
         <h5>Tài Liệu Đính Kèm</h5>
         <div className="verification-documents">
           {mentor.cvPortfolioUrl && (
-            <a href={mentor.cvPortfolioUrl} target="_blank" rel="noopener noreferrer" className="verification-document">
-              <FileText size={20} />
-              <span>CV / Portfolio</span>
-            </a>
+            <div className="verification-document-preview">
+              <div className="verification-document-header">
+                <div className="verification-document-title"><FileText size={20} /> CV / Portfolio</div>
+                {cvPreviewUrl && (
+                  <div className="verification-document-actions">
+                    <button className="verification-doc-btn" title="Phóng to" onClick={() => setPdfOverlay({ url: cvPreviewUrl, title: 'CV / Portfolio' })}>
+                      <Maximize2 size={16} />
+                    </button>
+                    <button className="verification-doc-btn" title="Mở tab mới" onClick={() => window.open(cvPreviewUrl, '_blank')}>
+                      <ExternalLink size={16} />
+                    </button>
+                    <button className="verification-doc-btn" title="Tải về" onClick={() => downloadUrl(cvPreviewUrl, `CV_Portfolio_${toAscii(mentor.fullName)}_${yyyymmdd(mentor.applicationDate)}.pdf`)}>
+                      <Download size={16} />
+                    </button>
+                  </div>
+                )}
+              </div>
+              {cvPreviewUrl ? (
+                <embed src={cvPreviewUrl} type="application/pdf" className="verification-iframe" />
+              ) : cvDocxUrl ? (
+                <iframe src={cvDocxUrl} className="verification-docx-frame" title="DOCX Preview" />
+              ) : cvImageUrl ? (
+                <img src={cvImageUrl} alt="Portfolio" className="verification-image" />
+              ) : (
+                <a href={mentor.cvPortfolioUrl} target="_blank" rel="noopener noreferrer" className="verification-link">Mở tài liệu</a>
+              )}
+            </div>
           )}
           {mentor.certificatesUrl && (
-            <a href={mentor.certificatesUrl} target="_blank" rel="noopener noreferrer" className="verification-document">
-              <Award size={20} />
-              <span>Chứng chỉ</span>
-            </a>
+            <div className="verification-document-preview">
+              <div className="verification-document-header">
+                <div className="verification-document-title"><Award size={20} /> Chứng chỉ</div>
+                {certPreviewUrl && (
+                  <div className="verification-document-actions">
+                    <button className="verification-doc-btn" title="Phóng to" onClick={() => setPdfOverlay({ url: certPreviewUrl, title: 'Chứng chỉ' })}>
+                      <Maximize2 size={16} />
+                    </button>
+                    <button className="verification-doc-btn" title="Mở tab mới" onClick={() => window.open(certPreviewUrl, '_blank')}>
+                      <ExternalLink size={16} />
+                    </button>
+                    <button className="verification-doc-btn" title="Tải về" onClick={() => downloadUrl(certPreviewUrl, `ChungChi_${toAscii(mentor.fullName)}_${yyyymmdd(mentor.applicationDate)}.pdf`)}>
+                      <Download size={16} />
+                    </button>
+                  </div>
+                )}
+              </div>
+              {certPreviewUrl ? (
+                <embed src={certPreviewUrl} type="application/pdf" className="verification-iframe" />
+              ) : certDocxUrl ? (
+                <iframe src={certDocxUrl} className="verification-docx-frame" title="DOCX Preview" />
+              ) : certImageUrl ? (
+                <img src={certImageUrl} alt="Certificate" className="verification-image" />
+              ) : (
+                <a href={mentor.certificatesUrl} target="_blank" rel="noopener noreferrer" className="verification-link">Mở tài liệu</a>
+              )}
+            </div>
+          )}
+
+          {individualImageUrls.length > 0 && (
+            <div className="verification-detail-section">
+              <h5>Chứng chỉ riêng lẻ</h5>
+              <div className="verification-documents">
+                {individualImageUrls.map((url, idx) => {
+                  const isImage = /\.(jpe?g|png|gif|svg|webp)($|\?)/i.test(url) || /\/image\/upload\//.test(url) || (/\/raw\/upload\//.test(url) && /\.(jpe?g|png|gif|svg|webp)($|\?)/i.test(url));
+                  const title = `Chứng chỉ #${idx + 1}`;
+                  if (!isImage) return null;
+                  const previewUrl = certImagePreviewMap[url] || url;
+                  return (
+                    <div key={idx} className="verification-document-preview">
+                      <div className="verification-document-header">
+                        <div className="verification-document-title"><Award size={18} /> {title}</div>
+                        <div className="verification-document-actions">
+                          <button className="verification-doc-btn" title="Mở tab mới" onClick={() => window.open(previewUrl, '_blank')}>
+                            <ExternalLink size={16} />
+                          </button>
+                          <button className="verification-doc-btn" title="Tải về" onClick={() => downloadUrl(previewUrl, `ChungChi_${toAscii(mentor.fullName)}_${yyyymmdd(mentor.applicationDate)}_${idx + 1}.jpg`)}>
+                            <Download size={16} />
+                          </button>
+                        </div>
+                      </div>
+                      <img src={previewUrl} alt={title} className="verification-image" />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           )}
         </div>
       </div>
@@ -650,7 +859,30 @@ const MentorDetail: React.FC<{ mentor: MentorApplicationDto }> = ({ mentor }) =>
       </div>
     )}
   </div>
-);
+  {pdfOverlay && (
+    <div className="verification-pdf-overlay" onClick={() => setPdfOverlay(null)}>
+      <div className="verification-pdf-container" onClick={(e) => e.stopPropagation()}>
+        <div className="verification-pdf-toolbar">
+          <div className="verification-pdf-title">{pdfOverlay.title}</div>
+          <div className="verification-pdf-actions">
+            <button className="verification-doc-btn" title="Mở tab mới" onClick={() => window.open(pdfOverlay.url, '_blank')}>
+              <ExternalLink size={16} />
+            </button>
+            <button className="verification-doc-btn" title="Tải về" onClick={() => downloadUrl(pdfOverlay.url, 'document.pdf')}>
+              <Download size={16} />
+            </button>
+            <button className="verification-doc-btn" title="Đóng" onClick={() => setPdfOverlay(null)}>
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+        <embed src={pdfOverlay.url} type="application/pdf" className="verification-pdf-iframe" />
+      </div>
+    </div>
+  )}
+  </>
+  );
+};
 
 // Recruiter Detail Component
 const RecruiterDetail: React.FC<{ recruiter: RecruiterApplicationDto }> = ({ recruiter }) => (
@@ -707,6 +939,42 @@ const RecruiterDetail: React.FC<{ recruiter: RecruiterApplicationDto }> = ({ rec
             </div>
           </div>
         )}
+        {recruiter.contactPersonPhone && recruiter.contactPersonPhone !== 'N/A' && (
+          <div className="verification-detail-item">
+            <Phone size={18} />
+            <div>
+              <label>Số điện thoại liên hệ</label>
+              <span>{recruiter.contactPersonPhone}</span>
+            </div>
+          </div>
+        )}
+        {recruiter.contactPersonPosition && recruiter.contactPersonPosition !== 'N/A' && (
+          <div className="verification-detail-item">
+            <Briefcase size={18} />
+            <div>
+              <label>Chức vụ</label>
+              <span>{recruiter.contactPersonPosition}</span>
+            </div>
+          </div>
+        )}
+        {recruiter.companySize && recruiter.companySize !== 'N/A' && (
+          <div className="verification-detail-item">
+            <Building2 size={18} />
+            <div>
+              <label>Quy mô công ty</label>
+              <span>{recruiter.companySize}</span>
+            </div>
+          </div>
+        )}
+        {recruiter.industry && recruiter.industry !== 'N/A' && (
+          <div className="verification-detail-item">
+            <Award size={18} />
+            <div>
+              <label>Ngành nghề</label>
+              <span>{recruiter.industry}</span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
 
@@ -714,10 +982,7 @@ const RecruiterDetail: React.FC<{ recruiter: RecruiterApplicationDto }> = ({ rec
       <div className="verification-detail-section">
         <h5>Tài Liệu Công Ty</h5>
         <div className="verification-documents">
-          <a href={recruiter.companyDocumentsUrl} target="_blank" rel="noopener noreferrer" className="verification-document">
-            <FileText size={20} />
-            <span>Giấy tờ đăng ký kinh doanh</span>
-          </a>
+          <RecruiterDoc url={recruiter.companyDocumentsUrl} />
         </div>
       </div>
     )}
@@ -730,5 +995,92 @@ const RecruiterDetail: React.FC<{ recruiter: RecruiterApplicationDto }> = ({ rec
     )}
   </div>
 );
+
+const RecruiterDoc: React.FC<{ url: string }> = ({ url }) => {
+  const isImage = /\.(jpe?g|png|gif|svg|webp)($|\?)/i.test(url) || /\/image\/upload\//.test(url) || (/\/raw\/upload\//.test(url) && /\.(jpe?g|png|gif|svg|webp)($|\?)/i.test(url));
+  const extMatch = url.match(/\.([a-z0-9]+)(?:$|\?)/i);
+  const ext = extMatch ? extMatch[1].toLowerCase() : (isImage ? 'jpg' : 'pdf');
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [overlay, setOverlay] = useState<string | null>(null);
+
+  useEffect(() => {
+    const isRaw = /\/raw\/upload\//.test(url);
+    const hasPdfExt = /\.pdf($|\?)/i.test(url);
+    if (hasPdfExt && !isRaw) { setPreviewUrl(url); return; }
+    if (isRaw) {
+      const m = url.match(/https:\/\/res\.cloudinary\.com\/([^/]+)\/raw\/upload\/(v\d+\/)?(.+)/);
+      if (!m) { setPreviewUrl(null); return; }
+      const publicId = m[3];
+      axiosInstance.get(`${API_BASE_URL}/admin/media/stream-pdf`, { params: { publicId, resourceType: 'raw' }, responseType: 'blob' })
+        .then(res => { setPreviewUrl(URL.createObjectURL(res.data)); })
+        .catch(() => { setPreviewUrl(null); });
+      return;
+    }
+    setPreviewUrl(null);
+  }, [url]);
+
+  const downloadUrl = (u: string, filename: string) => {
+    const a = document.createElement('a');
+    a.href = u;
+    a.download = filename;
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  const actionUrl = previewUrl || url;
+
+  return (
+    <div className="verification-document-preview">
+      <div className="verification-document-header">
+        <div className="verification-document-title"><FileText size={20} /> Giấy tờ đăng ký kinh doanh</div>
+        <div className="verification-document-actions">
+          <button className="verification-doc-btn" title="Phóng to" onClick={() => setOverlay(actionUrl)}>
+            <Maximize2 size={16} />
+          </button>
+          <button className="verification-doc-btn" title="Mở tab mới" onClick={() => window.open(actionUrl, '_blank')}>
+            <ExternalLink size={16} />
+          </button>
+          <button className="verification-doc-btn" title="Tải về" onClick={() => downloadUrl(actionUrl, `company-document.${previewUrl ? 'pdf' : ext}`)}>
+            <Download size={16} />
+          </button>
+        </div>
+      </div>
+      {previewUrl ? (
+        <embed src={previewUrl} type="application/pdf" className="verification-iframe" />
+      ) : isImage ? (
+      	<img src={url} alt="Company Document" className="verification-image" />
+      ) : (
+        <a href={url} target="_blank" rel="noopener noreferrer" className="verification-link">Mở tài liệu</a>
+      )}
+      {overlay && (
+        <div className="verification-pdf-overlay" onClick={() => setOverlay(null)}>
+          <div className="verification-pdf-container" onClick={(e) => e.stopPropagation()}>
+            <div className="verification-pdf-toolbar">
+              <div className="verification-pdf-title">Giấy tờ đăng ký kinh doanh</div>
+              <div className="verification-pdf-actions">
+                <button className="verification-doc-btn" title="Mở tab mới" onClick={() => window.open(overlay, '_blank')}>
+                  <ExternalLink size={16} />
+                </button>
+                <button className="verification-doc-btn" title="Tải về" onClick={() => downloadUrl(overlay, `company-document.${previewUrl ? 'pdf' : ext}`)}>
+                  <Download size={16} />
+                </button>
+                <button className="verification-doc-btn" title="Đóng" onClick={() => setOverlay(null)}>
+                  <X size={16} />
+                </button>
+              </div>
+            </div>
+            {previewUrl ? (
+              <embed src={overlay} type="application/pdf" className="verification-pdf-iframe" />
+            ) : (
+              <img src={overlay} alt="Company Document" className="verification-image" />
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default AccountVerificationTabCosmic;

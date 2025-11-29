@@ -39,9 +39,10 @@ class MentorService {
       }
       
       if (files?.certifications && files.certifications.length > 0) {
-        // For multiple certificates, we'll send the first one for now
-        // TODO: Handle multiple certificate files properly
         formData.append('certificatesFile', files.certifications[0]);
+        files.certifications.forEach((file) => {
+          formData.append('certificatesFiles', file);
+        });
       }
       
       const response = await axiosInstance.post<MentorRegistrationResponse>(

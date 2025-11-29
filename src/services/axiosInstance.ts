@@ -96,6 +96,8 @@ const performRefresh = async (): Promise<string> => {
   return newAccessToken as string;
 };
 
+export const API_BASE_URL = baseURL;
+
 export const axiosInstance = axios.create({
   baseURL,
   timeout: 360000, // 60 seconds for AI requests (roadmap generation, chatbot)
