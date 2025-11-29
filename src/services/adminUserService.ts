@@ -238,6 +238,21 @@ class AdminUserService {
   }
 
   /**
+   * Permanently delete a user (only for INACTIVE users)
+   * @param userId - User ID
+   * @returns Promise<void>
+   */
+  async permanentlyDeleteUser(userId: number): Promise<void> {
+    try {
+      await axiosInstance.delete(`${this.BASE_URL}/${userId}/permanent`);
+      console.log(`✅ Permanently deleted user ${userId}`);
+    } catch (error) {
+      console.error(`❌ Error permanently deleting user ${userId}:`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Get users by role
    * @param role - Primary role to filter by
    * @returns Promise<AdminUserListResponse>

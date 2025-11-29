@@ -276,7 +276,59 @@ class WalletService {
     }
   }
 
+  // ==================== INVOICE DOWNLOAD ====================
+
+  /**
+   * Download invoice PDF for a wallet transaction
+   * GET /api/wallet/transactions/{id}/invoice
+   */
+  async downloadTransactionInvoice(transactionId: number): Promise<Blob> {
+    try {
+      console.log('📄 Downloading invoice for transaction:', transactionId);
+      const response = await axiosInstance.get(`/wallet/transactions/${transactionId}/invoice`, {
+        responseType: 'blob'
+      });
+      console.log('✅ Invoice downloaded successfully');
+      return response.data;
+    } catch (error: unknown) {
+      console.error('❌ Download invoice error:', error);
+      const errorMessage = (error as AxiosError).response?.data?.message || 'Không thể tải hóa đơn.';
+      throw new Error(errorMessage);
+    }
+  }
+
   // ==================== ADMIN - WITHDRAWAL MANAGEMENT ====================
+
+  /**
+   * Admin: Get all wallet transactions (system-wide)
+   * GET /api/admin/wallet/transactions?page=0&size=50&type=PURCHASE_PREMIUM
+   */
+  async adminGetAllWalletTransactions(
+    page: number = 0, 
+    size: number = 50, 
+    type?: string
+  ): Promise<{
+    content: WalletTransactionResponse[];
+    totalElements: number;
+    totalPages: number;
+    number: number;
+    size: number;
+  }> {
+    try {
+      const params: any = { page, size };
+      if (type && type !== 'ALL') {
+        params.type = type;
+      }
+      console.log('🔍 [Admin] Fetching wallet transactions with params:', params);
+      const response = await axiosInstance.get('/admin/wallet/transactions', { params });
+      console.log('✅ [Admin] Wallet transactions loaded:', response.data.content?.length || 0, 'items');
+      return response.data;
+    } catch (error: unknown) {
+      console.error('❌ [Admin] Get wallet transactions error:', error);
+      const errorMessage = (error as AxiosError).response?.data?.message || 'Không thể tải danh sách giao dịch ví.';
+      throw new Error(errorMessage);
+    }
+  }
 
   /**
    * Admin: Get all withdrawal requests with filtering

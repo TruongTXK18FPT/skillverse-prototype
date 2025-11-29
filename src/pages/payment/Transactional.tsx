@@ -115,9 +115,18 @@ const Transactional = () => {
 
     switch (payment.status) {
       case 'COMPLETED':
+        // Show appropriate message based on payment type
+        let successDesc = 'Giao dịch của bạn đã được xử lý thành công.';
+        if (payment.type === 'PREMIUM_SUBSCRIPTION') {
+          successDesc = 'Giao dịch của bạn đã được xử lý thành công. Tài khoản premium đã được kích hoạt.';
+        } else if (payment.type === 'COIN_PURCHASE') {
+          successDesc = 'Giao dịch của bạn đã được xử lý thành công. SkillCoin đã được cộng vào ví.';
+        } else if (payment.type === 'WALLET_TOPUP') {
+          successDesc = 'Giao dịch của bạn đã được xử lý thành công. Số dư đã được cộng vào ví.';
+        }
         return {
           title: 'Thanh toán thành công!',
-          description: 'Giao dịch của bạn đã được xử lý thành công. Tài khoản premium đã được kích hoạt.'
+          description: successDesc
         };
       case 'FAILED':
         return {

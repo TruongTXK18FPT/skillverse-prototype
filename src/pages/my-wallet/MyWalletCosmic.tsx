@@ -5,7 +5,7 @@ import {
   Eye, EyeOff, Plus, ArrowUpRight, ArrowDownLeft, Activity,
   Gift, Zap, RefreshCw, CheckCircle, XCircle, Clock, Settings,
   Calendar, Crown, ChevronRight, Rocket, ShoppingBag, Search, Filter, Lock, Building2, AlertCircle, Shield,
-  CreditCard, User, Sparkles, Minus, Target, History, FileText
+  CreditCard, User, Sparkles, Minus, Target, History, FileText, Download
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import walletService from '../../services/walletService';
@@ -357,6 +357,36 @@ const MyWalletCosmic: React.FC = () => {
     return badges[status] || <span className="status-badge">{status}</span>;
   };
 
+  // Check if transaction type supports invoice download
+  const canDownloadInvoice = (tx: Transaction) => {
+    const purchaseTypes = ['PURCHASE_PREMIUM', 'PURCHASE_COINS', 'PURCHASE_COURSE'];
+    return tx.status === 'COMPLETED' && 
+           tx.transactionType && 
+           purchaseTypes.some(t => tx.transactionType!.toUpperCase().includes(t));
+  };
+
+  // Handle invoice download
+  const handleDownloadInvoice = async (transactionId: number) => {
+    try {
+      const blob = await walletService.downloadTransactionInvoice(transactionId);
+      
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `invoice-${transactionId}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      showToast('success', '📄 Thành công', 'Đã tải hóa đơn thành công!');
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+      showToast('error', 'Lỗi', 'Không thể tải hóa đơn. Vui lòng thử lại sau.');
+    }
+  };
+
   if (loading) {
     return (
       <div className="cosmic-wallet-container">
@@ -663,7 +693,18 @@ const MyWalletCosmic: React.FC = () => {
                       <p className="tx-coins">{tx.coinAmount > 0 ? '+' : '-'}{Math.abs(tx.coinAmount)} xu</p>
                     )}
                   </div>
-                  {getStatusBadge(tx.status)}
+                  <div className="tx-actions">
+                    {getStatusBadge(tx.status)}
+                    {canDownloadInvoice(tx) && (
+                      <button 
+                        className="tx-download-btn"
+                        onClick={() => handleDownloadInvoice(tx.transactionId)}
+                        title="Tải hóa đơn PDF"
+                      >
+                        <Download size={16} />
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

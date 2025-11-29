@@ -1,10 +1,8 @@
 import React, { useRef } from 'react';
 import { 
-  Download, Crown, Calendar, CreditCard, User, Mail, 
+  Crown, Calendar, CreditCard, User, Mail, 
   CheckCircle, Sparkles, FileText, Building2, Phone
 } from 'lucide-react';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import Logo from '../../assets/skillverse.png';
 import './PremiumInvoice.css';
 
@@ -66,55 +64,6 @@ const PremiumInvoice: React.FC<PremiumInvoiceProps> = ({ data, onClose }) => {
       month: '2-digit', 
       year: 'numeric'
     });
-  };
-
-  const handleDownloadPDF = async () => {
-    if (!invoiceRef.current) return;
-
-    try {
-      // Temporarily hide download button for capture
-      const downloadBtn = invoiceRef.current.querySelector('.invoice-download-btn') as HTMLElement;
-      if (downloadBtn) downloadBtn.style.display = 'none';
-
-      const canvas = await html2canvas(invoiceRef.current, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#0a0e27',
-        logging: false,
-        windowWidth: invoiceRef.current.scrollWidth,
-        windowHeight: invoiceRef.current.scrollHeight
-      });
-
-      // Restore download button
-      if (downloadBtn) downloadBtn.style.display = 'flex';
-
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
-      });
-
-      // Fill background with dark color first
-      pdf.setFillColor(10, 14, 39); // #0a0e27
-      pdf.rect(0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight(), 'F');
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      
-      // Calculate to fit the image properly
-      const ratio = Math.min((pdfWidth - 10) / imgWidth, (pdfHeight - 20) / imgHeight);
-      const imgX = (pdfWidth - imgWidth * ratio) / 2;
-      const imgY = 5;
-
-      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-      pdf.save(`SkillVerse_Invoice_${data.invoiceNumber}.pdf`);
-    } catch (error) {
-      console.error('Failed to generate PDF:', error);
-    }
   };
 
   const getPlanIcon = () => {
@@ -341,11 +290,6 @@ const PremiumInvoice: React.FC<PremiumInvoiceProps> = ({ data, onClose }) => {
           </div>
         </div>
 
-        {/* Download Button */}
-        <button className="invoice-download-btn" onClick={handleDownloadPDF}>
-          <Download size={24} />
-          <span>Tải xuống PDF</span>
-        </button>
       </div>
 
       {/* Close Button - Outside container for fixed positioning */}

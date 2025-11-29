@@ -3,7 +3,7 @@ import {
   Users, CreditCard, Briefcase, BookOpen, TrendingUp,
   Crown, RefreshCw, Calendar, DollarSign, Activity, PieChart,
   BarChart3, LineChart, Zap, Award, Target, Loader2, MessageSquare,
-  HelpCircle, GraduationCap, ShieldCheck, Clock, Ticket
+  HelpCircle, GraduationCap, ShieldCheck, Clock, Ticket, Wallet
 } from 'lucide-react';
 import {
   AreaChart, Area, BarChart, Bar,
@@ -34,6 +34,7 @@ interface AnalyticsState {
     pendingCount: number;
     failedCount: number;
     totalRevenue: string;
+    totalWalletDeposits?: string;
   } | null;
   transactions: PaymentTransactionResponse[];
   totalJobs: number;
@@ -41,6 +42,12 @@ interface AnalyticsState {
   // New stats
   ticketStats: TicketStatsResponse | null;
   totalChatSessions: number;
+  // Wallet stats
+  walletStats: {
+    totalCashBalance: string;
+    totalCoinBalance: number;
+    activeWalletCount: number;
+  } | null;
   // Revenue breakdown - separate for each period
   dailyRevenue: RevenueData | null;
   weeklyRevenue: RevenueData | null;
@@ -82,6 +89,7 @@ const AnalyticsTab: React.FC = () => {
     totalCourses: 0,
     ticketStats: null,
     totalChatSessions: 0,
+    walletStats: null,
     dailyRevenue: null,
     weeklyRevenue: null,
     monthlyRevenue: null,
@@ -110,6 +118,7 @@ const AnalyticsTab: React.FC = () => {
       const [
         usersData, plansData, paymentStatsData, transactionsData, 
         jobsData, coursesData, ticketStatsData, chatStatsData,
+        walletStatsData,
         dailyData, weeklyData, monthlyData, yearlyData
       ] = await Promise.allSettled([
         adminUserService.getAllUsers(),
@@ -120,6 +129,7 @@ const AnalyticsTab: React.FC = () => {
         listCourses(0, 1000),
         supportService.getTicketStats(),
         careerChatService.getAdminStats(),
+        paymentService.adminGetWalletStatistics(),
         paymentService.adminGetRevenueBreakdown('daily', 30),
         paymentService.adminGetRevenueBreakdown('weekly', 12),
         paymentService.adminGetRevenueBreakdown('monthly', 12),
@@ -137,6 +147,7 @@ const AnalyticsTab: React.FC = () => {
         totalCourses: coursesData.status === 'fulfilled' ? coursesData.value.totalElements : 0,
         ticketStats: ticketStatsData.status === 'fulfilled' ? ticketStatsData.value : null,
         totalChatSessions: chatStatsData.status === 'fulfilled' ? chatStatsData.value.totalSessions : 0,
+        walletStats: walletStatsData.status === 'fulfilled' ? walletStatsData.value : null,
         dailyRevenue: dailyData.status === 'fulfilled' ? dailyData.value : null,
         weeklyRevenue: weeklyData.status === 'fulfilled' ? weeklyData.value : null,
         monthlyRevenue: monthlyData.status === 'fulfilled' ? monthlyData.value : null,
@@ -546,6 +557,22 @@ const AnalyticsTab: React.FC = () => {
             <span className="holo-metric-value">{formatCurrency(totalRevenue)}</span>
             <div className="holo-metric-detail">
               <span><CreditCard size={14} /> {formatNumber(totalTransactions)} giao dịch</span>
+            </div>
+          </div>
+          <div className="holo-metric-glow" />
+        </div>
+
+        <div className="holo-metric-card holo-metric--wallet">
+          <div className="holo-metric-icon">
+            <Wallet size={28} />
+          </div>
+          <div className="holo-metric-content">
+            <span className="holo-metric-label">Số Dư Trong Ví</span>
+            <span className="holo-metric-value">
+              {state.walletStats ? formatCurrency(state.walletStats.totalCashBalance) : '0 ₫'}
+            </span>
+            <div className="holo-metric-detail">
+              <span><Users size={14} /> {state.walletStats?.activeWalletCount || 0} ví hoạt động</span>
             </div>
           </div>
           <div className="holo-metric-glow" />

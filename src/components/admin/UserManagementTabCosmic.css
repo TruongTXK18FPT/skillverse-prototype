@@ -484,6 +484,18 @@
   box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
 }
 
+.admin-action-btn.delete {
+  background: rgba(220, 38, 38, 0.2);
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.admin-action-btn.delete:hover {
+  background: rgba(220, 38, 38, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+}
+
 /* Modal */
 .admin-modal-overlay {
   position: absolute;

@@ -33,18 +33,29 @@ export enum WalletStatus {
 export interface WalletTransactionResponse {
   transactionId: number;
   walletId: number;
-  type: TransactionType;
-  amount: number; // Cash amount
-  coinAmount?: number; // Coin amount (if applicable)
+  // User info for admin view
+  userId?: number;
+  userName?: string;
+  userEmail?: string;
+  userAvatarUrl?: string;
+  // Transaction info
+  transactionType: string;
+  transactionTypeName?: string;
+  currencyType: string;
+  cashAmount?: number;
+  coinAmount?: number;
+  cashBalanceAfter?: number;
+  coinBalanceAfter?: number;
   description: string;
-  status: TransactionStatus;
+  notes?: string;
+  referenceType?: string;
+  referenceId?: string;
+  status: string;
+  fee?: number;
   createdAt: string;
-  metadata?: {
-    packageId?: string;
-    paymentCode?: string;
-    orderId?: string;
-    [key: string]: any;
-  };
+  processedAt?: string;
+  isCredit?: boolean;
+  isDebit?: boolean;
 }
 
 export enum TransactionType {

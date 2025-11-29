@@ -77,12 +77,22 @@ export const paymentService = {
     pendingCount: number;
     failedCount: number;
     totalRevenue: string;
+    totalWalletDeposits: string;
     startDate: string;
     endDate: string;
   }> {
     const { data } = await api.get('/api/admin/payments/statistics', {
       params: { startDate, endDate }
     });
+    return data;
+  },
+
+  async adminGetWalletStatistics(): Promise<{
+    totalCashBalance: string;
+    totalCoinBalance: number;
+    activeWalletCount: number;
+  }> {
+    const { data } = await api.get('/api/admin/payments/wallet-stats');
     return data;
   },
 
@@ -109,5 +119,25 @@ export const paymentService = {
       params: { period, days }
     });
     return data;
+  },
+
+  /**
+   * Download PDF invoice for a payment transaction
+   */
+  async adminDownloadPaymentInvoice(paymentId: number): Promise<Blob> {
+    const response = await api.get(`/api/admin/payments/transactions/${paymentId}/invoice`, {
+      responseType: 'blob'
+    });
+    return response.data;
+  },
+
+  /**
+   * Download PDF invoice for a wallet transaction
+   */
+  async adminDownloadWalletInvoice(transactionId: number): Promise<Blob> {
+    const response = await api.get(`/api/admin/payments/wallet-transactions/${transactionId}/invoice`, {
+      responseType: 'blob'
+    });
+    return response.data;
   }
 };

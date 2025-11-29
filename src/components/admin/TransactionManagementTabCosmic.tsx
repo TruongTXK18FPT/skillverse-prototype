@@ -107,9 +107,24 @@ const TransactionManagementTabCosmic: React.FC = () => {
 
   const fetchWalletTransactions = async (): Promise<CombinedTransaction[]> => {
     try {
-      // Note: This would need an admin endpoint to get all wallet transactions
-      // For now, we'll return empty array
-      return [];
+      console.log('📡 Fetching wallet transactions...');
+      const response = await walletService.adminGetAllWalletTransactions(0, 1000);
+      console.log('✅ Wallet transactions response:', response);
+      return response.content.map(tx => ({
+        id: `WAL-${tx.transactionId}`,
+        type: tx.transactionType?.includes('PURCHASE') ? 'COIN_PURCHASE' as TransactionType : 'WALLET' as TransactionType,
+        userId: tx.userId,
+        userName: tx.userName || `User ${tx.userId}`,
+        userEmail: tx.userEmail || '-',
+        userAvatarUrl: tx.userAvatarUrl,
+        amount: tx.cashAmount || tx.coinAmount || 0,
+        status: tx.status,
+        description: tx.description || tx.transactionTypeName || 'Wallet transaction',
+        createdAt: tx.createdAt,
+        method: tx.currencyType === 'COIN' ? 'Coin' : 'Cash',
+        reference: tx.referenceId,
+        originalData: tx
+      }));
     } catch (error) {
       console.error('Error fetching wallet transactions:', error);
       return [];
@@ -198,8 +213,32 @@ const TransactionManagementTabCosmic: React.FC = () => {
   };
 
   const calculateStats = (txs: CombinedTransaction[]) => {
+    // Only count revenue from PURCHASES (not deposits/topups)
+    const isPurchaseTransaction = (tx: CombinedTransaction) => {
+      const desc = tx.description?.toLowerCase() || '';
+      const type = tx.type;
+      // Exclude wallet deposits/topups
+      if (desc.includes('nạp tiền') || desc.includes('deposit') || desc.includes('topup')) {
+        return false;
+      }
+      // Include: Premium, Coin purchases, Course purchases
+      return (
+        type === 'PAYMENT' || 
+        type === 'COIN_PURCHASE' ||
+        desc.includes('premium') || 
+        desc.includes('xu') || 
+        desc.includes('coin') ||
+        desc.includes('khóa học') ||
+        desc.includes('course')
+      );
+    };
+
     const revenue = txs
-      .filter(tx => tx.amount > 0 && (tx.status === 'COMPLETED' || tx.status === 'PAID'))
+      .filter(tx => 
+        tx.amount > 0 && 
+        (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
+        isPurchaseTransaction(tx)
+      )
       .reduce((sum, tx) => sum + tx.amount, 0);
 
     const withdrawals = txs
@@ -210,17 +249,21 @@ const TransactionManagementTabCosmic: React.FC = () => {
       tx.status === 'PENDING' || tx.status === 'APPROVED'
     ).length;
 
-    const today = new Date().toDateString();
+    // Today's revenue - only from purchases
+    const today = new Date();
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const todayRevenue = txs
-      .filter(tx => 
-        new Date(tx.createdAt).toDateString() === today && 
-        tx.amount > 0 &&
-        (tx.status === 'COMPLETED' || tx.status === 'PAID')
-      )
+      .filter(tx => {
+        const txDate = new Date(tx.createdAt);
+        return txDate >= todayStart && 
+          tx.amount > 0 &&
+          (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
+          isPurchaseTransaction(tx);
+      })
       .reduce((sum, tx) => sum + tx.amount, 0);
 
     const coinPurchases = txs.filter(tx => 
-      tx.type === 'COIN_PURCHASE' || tx.description.includes('xu')
+      tx.type === 'COIN_PURCHASE' || tx.description?.includes('xu') || tx.description?.includes('PURCHASE_COINS')
     ).length;
 
     setStats({
@@ -282,6 +325,43 @@ const TransactionManagementTabCosmic: React.FC = () => {
   const handleViewDetail = (transaction: CombinedTransaction) => {
     setSelectedTransaction(transaction);
     setShowDetailModal(true);
+  };
+
+  const handleDownloadInvoice = async (transaction: CombinedTransaction) => {
+    try {
+      let blob: Blob;
+      let filename: string;
+      
+      if (transaction.id.startsWith('WAL-')) {
+        // Wallet transaction
+        const txId = parseInt(transaction.id.replace('WAL-', ''));
+        blob = await paymentService.adminDownloadWalletInvoice(txId);
+        filename = `wallet-invoice-${txId}.pdf`;
+      } else if (transaction.id.startsWith('PAY-')) {
+        // Payment transaction
+        const paymentId = parseInt(transaction.id.replace('PAY-', ''));
+        blob = await paymentService.adminDownloadPaymentInvoice(paymentId);
+        filename = `invoice-${paymentId}.pdf`;
+      } else {
+        console.error('Unknown transaction type for invoice download');
+        return;
+      }
+      
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      console.log('✅ Invoice downloaded:', filename);
+    } catch (error) {
+      console.error('❌ Error downloading invoice:', error);
+      alert('Không thể tải hóa đơn. Vui lòng thử lại sau.');
+    }
   };
 
   const formatCurrency = (amount: number) => {
@@ -529,6 +609,16 @@ const TransactionManagementTabCosmic: React.FC = () => {
                   >
                     <Eye size={16} />
                   </button>
+                  {(tx.type === 'PAYMENT' || tx.type === 'COIN_PURCHASE' || tx.id.startsWith('WAL-')) && 
+                   tx.status === 'COMPLETED' && (
+                    <button
+                      className="admin-action-btn download"
+                      onClick={() => handleDownloadInvoice(tx)}
+                      title="Tải hóa đơn PDF"
+                    >
+                      <Download size={16} />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

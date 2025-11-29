@@ -31,9 +31,9 @@ const PaymentCallbackHelper: React.FC<PaymentCallbackHelperProps> = ({
   const fetchPendingPayments = async () => {
     try {
       const { data } = await axiosInstance.get('/api/payments/history');
-      // Filter PENDING wallet topup payments
+      // Filter PENDING wallet topup or coin purchase payments
       const pending = data.filter((p: any) => 
-        p.status === 'PENDING' && p.type === 'WALLET_TOPUP'
+        p.status === 'PENDING' && (p.type === 'WALLET_TOPUP' || p.type === 'COIN_PURCHASE')
       );
       setPendingPayments(pending);
     } catch (err) {

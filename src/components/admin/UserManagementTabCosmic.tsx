@@ -3,10 +3,11 @@ import {
   Users, UserCheck, Shield, Search, Filter,
   Eye, Edit, Ban, CheckCircle, XCircle, Key,
   Mail, Phone, Calendar, Activity, Award, BookOpen,
-  RefreshCw, X, Save, ChevronLeft, ChevronRight
+  RefreshCw, X, Save, ChevronLeft, ChevronRight, Trash2
 } from 'lucide-react';
 import adminUserService from '../../services/adminUserService';
 import { AdminUserResponse, AdminUserDetailResponse, PrimaryRole, UserStatus } from '../../types/adminUser';
+import DeleteAccountModal from './DeleteAccountModal';
 import './UserManagementTabCosmic.css';
 
 const UserManagementTabCosmic: React.FC = () => {
@@ -29,7 +30,9 @@ const UserManagementTabCosmic: React.FC = () => {
   // Modal states
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<AdminUserDetailResponse | null>(null);
+  const [userToDelete, setUserToDelete] = useState<{ id: number; name: string } | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
 
   // Edit form state
@@ -212,6 +215,34 @@ const UserManagementTabCosmic: React.FC = () => {
     } finally {
       setActionLoading(false);
     }
+  };
+
+  const handleOpenDeleteModal = (userId: number, userName: string) => {
+    setUserToDelete({ id: userId, name: userName });
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!userToDelete) return;
+
+    try {
+      setActionLoading(true);
+      await adminUserService.permanentlyDeleteUser(userToDelete.id);
+      await fetchUsers();
+      setShowDeleteModal(false);
+      setUserToDelete(null);
+      alert('✅ Đã xóa vĩnh viễn tài khoản');
+    } catch (error: any) {
+      console.error('❌ Error permanently deleting user:', error);
+      alert(error.response?.data?.message || 'Lỗi khi xóa tài khoản');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setUserToDelete(null);
   };
 
   const getRoleIcon = (role: PrimaryRole) => {
@@ -478,6 +509,15 @@ const UserManagementTabCosmic: React.FC = () => {
                     >
                       <Key size={16} />
                     </button>
+                    {user.status === 'INACTIVE' && (
+                      <button
+                        className="admin-action-btn delete"
+                        onClick={() => handleOpenDeleteModal(user.id, user.fullName)}
+                        title="Xóa vĩnh viễn"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -734,6 +774,15 @@ const UserManagementTabCosmic: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Delete Account Modal */}
+      <DeleteAccountModal
+        isOpen={showDeleteModal}
+        userName={userToDelete?.name || ''}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+        isLoading={actionLoading}
+      />
     </div>
   );
 };
