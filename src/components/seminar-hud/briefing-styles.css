@@ -1,0 +1,1162 @@
+/* ============================================
+   TACTICAL BRIEFING ROOM - ISOLATED STYLES
+   Prefix: briefing-*
+   Theme: Sky Blue (#0ea5e9) Academy
+   ============================================ */
+
+/* Import Space Habitat Font */
+@font-face {
+  font-family: 'Space Habitat';
+  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ============================================
+   COLOR PALETTE (Zone 1 - Academy Blue/Cyan)
+   ============================================ */
+:root {
+  --briefing-bg: #0b1120;
+  --briefing-card-bg: #1e293b;
+  --briefing-accent: #0ea5e9; /* Sky Blue */
+  --briefing-accent-dim: rgba(14, 165, 233, 0.3);
+  --briefing-text-primary: #f1f5f9;
+  --briefing-text-dim: #94a3b8;
+  --briefing-text-muted: #64748b;
+  --briefing-border: rgba(14, 165, 233, 0.2);
+  --briefing-glow: rgba(14, 165, 233, 0.5);
+}
+
+/* Base Styles */
+.seminar-page {
+  min-height: 100vh;
+  transition: all 0.3s ease;
+  animation: pageLoad 0.8s ease-out;
+  padding: 2rem 2rem;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1.5rem;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid var(--seminar-border);
+  border-top: 4px solid var(--seminar-accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-container p {
+  color: var(--seminar-text-secondary);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* ============================================
+   BRIEFING HEADER - The Broadcast Center
+   ============================================ */
+.briefing-header-container {
+  position: relative;
+  background: linear-gradient(135deg, #0b1120 0%, #1e293b 100%);
+  border: 1px solid var(--briefing-border);
+  border-radius: 0; /* Remove rounded corners */
+  padding: 3rem 2rem;
+  margin-bottom: 3rem;
+  overflow: hidden;
+
+  /* CYBER GRID PATTERN */
+  background-image:
+    linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px),
+    linear-gradient(135deg, #0b1120 0%, #1e293b 100%);
+  background-size: 30px 30px, 30px 30px, 100% 100%;
+}
+
+/* Radar/Sonar Scan Animation Background */
+.briefing-header-radar {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 0%,
+      transparent 30%,
+      var(--briefing-accent-dim) 31%,
+      transparent 32%
+    );
+  animation: briefing-radar-pulse 4s ease-in-out infinite;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+@keyframes briefing-radar-pulse {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.3;
+  }
+}
+
+.briefing-header-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.briefing-header-title {
+  font-family: 'Space Habitat', monospace;
+  font-size: 2.5rem;
+  color: var(--briefing-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px var(--briefing-glow);
+  animation: briefing-title-flicker 3s ease-in-out infinite;
+}
+
+@keyframes briefing-title-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+}
+
+.briefing-header-subtitle {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1rem;
+  color: var(--briefing-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 2rem;
+}
+
+/* System Status Bar */
+.briefing-stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.briefing-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(14, 165, 233, 0.3);
+  background: rgba(14, 165, 233, 0.05);
+  position: relative;
+
+  /* Angular corners */
+  clip-path: polygon(
+    8px 0, 100% 0,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0 100%,
+    0 8px
+  );
+}
+
+.briefing-stat-label {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.75rem;
+  color: var(--briefing-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.briefing-stat-value {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.5rem;
+  color: #10b981; /* Green for active status */
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  font-weight: bold;
+}
+
+/* ============================================
+   BRIEFING CARD - The Intel Slate
+   ============================================ */
+.briefing-card {
+  position: relative;
+  background: var(--briefing-card-bg);
+  border: 1px solid var(--briefing-border);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  /* Cut corners (chamfered) */
+  clip-path: polygon(
+    20px 0, 100% 0,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    0 100%,
+    0 20px
+  );
+}
+
+.briefing-card:hover {
+  border-color: var(--briefing-accent);
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+  transform: translateY(-5px);
+}
+
+/* THE HOLOGRAM IMAGE FILTER */
+.briefing-holo-wrapper {
+  position: relative;
+  height: 180px;
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 2px solid var(--briefing-accent);
+}
+
+.briefing-holo-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* TURN IMAGE INTO BLUE HOLOGRAM */
+  filter: grayscale(100%) sepia(100%) hue-rotate(170deg) saturate(300%) contrast(0.9);
+  opacity: 0.8;
+  transition: all 0.5s ease;
+}
+
+/* Scanline Overlay (TV Static Effect) */
+.briefing-holo-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.4) 3px,
+    rgba(14, 165, 233, 0.15) 4px
+  );
+  pointer-events: none;
+  animation: briefing-scanline-drift 8s linear infinite;
+}
+
+@keyframes briefing-scanline-drift {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(4px); }
+}
+
+/* Hover State: Restore Color */
+.briefing-card:hover .briefing-holo-wrapper img {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* Category Badge */
+.briefing-category-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(14, 165, 233, 0.9);
+  color: #0b1120;
+  padding: 0.25rem 0.75rem;
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  z-index: 2;
+}
+
+/* Card Content */
+.briefing-card-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.briefing-card-title {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--briefing-text-primary);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.briefing-card-description {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: var(--briefing-text-dim);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Countdown Clock - DANGER BOX */
+.briefing-countdown {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.1rem;
+  color: #ef4444; /* Red danger color */
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid #ef4444;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+  letter-spacing: 0.05em;
+  text-align: center;
+  animation: briefing-countdown-pulse 2s ease-in-out infinite;
+
+  /* Angular corners */
+  clip-path: polygon(
+    10px 0, 100% 0,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%,
+    0 10px
+  );
+}
+
+@keyframes briefing-countdown-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+  }
+}
+
+/* Info Grid */
+.briefing-info-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  border-top: 1px solid var(--briefing-border);
+  padding-top: 1rem;
+}
+
+.briefing-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--briefing-text-dim);
+}
+
+.briefing-info-icon {
+  color: var(--briefing-accent);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.briefing-info-label {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.7rem;
+  color: var(--briefing-text-muted);
+  text-transform: uppercase;
+  min-width: 80px;
+}
+
+.briefing-info-value {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--briefing-text-primary);
+}
+
+/* Action Button */
+.briefing-uplink-btn {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--briefing-accent) 0%, #0284c7 100%);
+  color: #ffffff;
+  border: none;
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  /* Angular corner cut */
+  clip-path: polygon(
+    12px 0, 100% 0,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    0 100%,
+    0 12px
+  );
+}
+
+.briefing-uplink-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.2) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.briefing-uplink-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px var(--briefing-glow);
+}
+
+.briefing-uplink-btn:hover::before {
+  opacity: 1;
+}
+
+/* ============================================
+   FREQUENCY TUNER - Radio Slider Filter
+   ============================================ */
+.briefing-frequency-tuner {
+  position: relative;
+  background: var(--briefing-card-bg);
+  border: 1px solid var(--briefing-border);
+  border-radius: 0; /* Remove rounded corners */
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+
+  /* Angular corners */
+  clip-path: polygon(
+    12px 0, 100% 0,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    0 100%,
+    0 12px
+  );
+}
+
+.briefing-tuner-label {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.85rem;
+  color: var(--briefing-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.briefing-tuner-track {
+  position: relative;
+  display: flex;
+  justify-content: stretch;
+  align-items: stretch;
+  background: rgba(14, 165, 233, 0.05);
+  border: 1px solid var(--briefing-border);
+  border-radius: 0; /* Remove rounded corners */
+  padding: 0;
+  gap: 0; /* No gap - connected segments */
+  overflow: hidden;
+}
+
+.briefing-tuner-option {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  color: var(--briefing-text-dim);
+  border: none;
+  border-right: 1px solid var(--briefing-border); /* Divider between segments */
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 0; /* Remove rounded corners */
+  position: relative;
+  z-index: 1;
+}
+
+.briefing-tuner-option:last-child {
+  border-right: none; /* Remove border from last item */
+}
+
+.briefing-tuner-option:hover {
+  color: var(--briefing-text-primary);
+  background: rgba(14, 165, 233, 0.1);
+}
+
+.briefing-tuner-option.active {
+  background: var(--briefing-accent);
+  color: #0b1120;
+  font-weight: 700;
+  box-shadow: inset 0 0 20px rgba(14, 165, 233, 0.3);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   GRID LAYOUT
+   ============================================ */
+.briefing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* ============================================
+   SEARCH BAR
+   ============================================ */
+.briefing-search-container {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.briefing-search-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  background: var(--briefing-card-bg);
+  border: 1px solid var(--briefing-border);
+  border-radius: 0; /* Remove rounded corners */
+  color: var(--briefing-text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+
+  /* Angular cut corner */
+  clip-path: polygon(
+    15px 0, 100% 0,
+    100% 100%,
+    0 100%,
+    0 15px
+  );
+}
+
+.briefing-search-input:focus {
+  outline: none;
+  border-color: var(--briefing-accent);
+  box-shadow: 0 0 15px rgba(14, 165, 233, 0.15);
+  animation: briefing-cursor-blink 1s step-end infinite;
+}
+
+@keyframes briefing-cursor-blink {
+  0%, 50% { border-right: 2px solid var(--briefing-accent); }
+  51%, 100% { border-right: 2px solid transparent; }
+}
+
+.briefing-search-input::placeholder {
+  color: var(--briefing-text-muted);
+}
+
+.briefing-search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--briefing-accent);
+  font-size: 1.25rem;
+  pointer-events: none;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .briefing-header-title {
+    font-size: 1.75rem;
+  }
+
+  .briefing-stats-bar {
+    gap: 1.5rem;
+  }
+
+  .briefing-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .briefing-tuner-option {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .briefing-header-container {
+    padding: 2rem 1rem;
+  }
+
+  .briefing-header-title {
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .briefing-tuner-track {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .briefing-tuner-option {
+    width: 100%;
+  }
+}
+
+/* ============================================
+   V2 REDESIGN - MISSION LOG LAYOUT
+   ============================================ */
+
+/* ============================================
+   HEADER V2 - Thin Status Bar with Marquee
+   ============================================ */
+.briefing-header-v2 {
+  background: linear-gradient(90deg, #0b1120 0%, #1e293b 50%, #0b1120 100%);
+  border-top: 1px solid var(--briefing-accent);
+  border-bottom: 1px solid var(--briefing-accent);
+  padding: 0.75rem 0;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.briefing-marquee {
+  width: 100%;
+  overflow: hidden;
+}
+
+.briefing-marquee-content {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.9rem;
+  color: var(--briefing-accent);
+  white-space: nowrap;
+  animation: briefing-scroll 30s linear infinite;
+  letter-spacing: 0.1em;
+}
+
+@keyframes briefing-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ============================================
+   2-COLUMN GRID LAYOUT
+   ============================================ */
+.briefing-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.briefing-feed {
+  min-height: 500px;
+}
+
+/* ============================================
+   BRIEFING ROW - Horizontal Data Strip
+   ============================================ */
+.briefing-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.briefing-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border-bottom: 1px dashed rgba(14, 165, 233, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.briefing-row:hover {
+  background: rgba(14, 165, 233, 0.05);
+  border-bottom: 1px solid var(--briefing-accent);
+  box-shadow: 0 0 15px rgba(14, 165, 233, 0.1);
+}
+
+/* Hologram Thumbnail (120x120px) */
+.briefing-row-thumb {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1px solid var(--briefing-accent);
+
+  /* Angular corner */
+  clip-path: polygon(
+    15px 0, 100% 0,
+    100% calc(100% - 15px),
+    calc(100% - 15px) 100%,
+    0 100%,
+    0 15px
+  );
+}
+
+.briefing-row-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%) sepia(100%) hue-rotate(170deg) saturate(300%) contrast(0.9);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.briefing-row:hover .briefing-row-img {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.briefing-row-overlay {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(14, 165, 233, 0.1) 3px
+  );
+  pointer-events: none;
+}
+
+/* Content Area */
+.briefing-row-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.briefing-row-title {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--briefing-text-primary);
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Metadata Row */
+.briefing-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.briefing-meta-badge {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: var(--briefing-text-dim);
+}
+
+.briefing-meta-sector {
+  font-family: 'Space Habitat', monospace;
+  color: var(--briefing-accent);
+  font-weight: bold;
+}
+
+.briefing-meta-countdown {
+  font-family: 'Space Habitat', monospace;
+  color: #fbbf24;
+  font-weight: bold;
+}
+
+.briefing-meta-speaker {
+  color: var(--briefing-text-primary);
+}
+
+.briefing-meta-category {
+  background: rgba(14, 165, 233, 0.15);
+  color: var(--briefing-accent);
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.briefing-meta-divider {
+  color: var(--briefing-text-muted);
+  font-size: 0.7rem;
+}
+
+/* Action Button */
+.briefing-row-action {
+  flex-shrink: 0;
+}
+
+.briefing-row-btn {
+  padding: 0.5rem 1.5rem;
+  background: transparent;
+  border: 1px solid var(--briefing-accent);
+  color: var(--briefing-accent);
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+
+  /* Angular corner */
+  clip-path: polygon(
+    8px 0, 100% 0,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0 100%,
+    0 8px
+  );
+}
+
+.briefing-row-btn:hover {
+  background: var(--briefing-accent);
+  color: #0b1120;
+  box-shadow: 0 0 15px var(--briefing-glow);
+}
+
+/* ============================================
+   SIDEBAR - System Status Panel
+   ============================================ */
+.briefing-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sidebar-widget {
+  background: var(--briefing-card-bg);
+  border: 1px solid var(--briefing-border);
+  padding: 1.5rem;
+
+  /* Angular corners */
+  clip-path: polygon(
+    15px 0, 100% 0,
+    100% calc(100% - 15px),
+    calc(100% - 15px) 100%,
+    0 100%,
+    0 15px
+  );
+}
+
+.widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--briefing-border);
+}
+
+.widget-title {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.8rem;
+  color: var(--briefing-accent);
+  letter-spacing: 0.1em;
+  font-weight: bold;
+}
+
+.widget-status {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.7rem;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+}
+
+/* Radar Widget */
+.radar-display {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radar-circle {
+  position: absolute;
+  border: 1px solid rgba(14, 165, 233, 0.3);
+  border-radius: 50%;
+}
+
+.radar-outer {
+  width: 90%;
+  height: 90%;
+}
+
+.radar-mid {
+  width: 60%;
+  height: 60%;
+}
+
+.radar-inner {
+  width: 30%;
+  height: 30%;
+  background: rgba(14, 165, 233, 0.1);
+}
+
+.radar-sweep {
+  position: absolute;
+  width: 40%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--briefing-accent));
+  transform-origin: right center;
+  right: 50%;
+  top: 50%;
+  animation: radar-sweep 4s linear infinite;
+}
+
+@keyframes radar-sweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.radar-blip {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--briefing-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--briefing-glow);
+  animation: radar-blip-pulse 2s ease-in-out infinite;
+}
+
+@keyframes radar-blip-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Status List Widget */
+.status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed rgba(14, 165, 233, 0.2);
+}
+
+.status-item:last-child {
+  border-bottom: none;
+}
+
+.status-label {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.75rem;
+  color: var(--briefing-text-muted);
+  text-transform: uppercase;
+}
+
+.status-value {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.status-green {
+  color: #10b981;
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+}
+
+.status-cyan {
+  color: var(--briefing-accent);
+  text-shadow: 0 0 8px var(--briefing-glow);
+}
+
+/* Speakers List Widget */
+.speakers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.speaker-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: rgba(14, 165, 233, 0.05);
+  border-left: 2px solid var(--briefing-accent);
+  transition: all 0.3s ease;
+}
+
+.speaker-item:hover {
+  background: rgba(14, 165, 233, 0.1);
+}
+
+.speaker-rank {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.85rem;
+  color: var(--briefing-accent);
+  font-weight: bold;
+  min-width: 30px;
+}
+
+.speaker-name {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: var(--briefing-text-primary);
+  font-weight: 500;
+}
+
+/* Mission Stats Widget */
+.mission-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.mission-stat {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(14, 165, 233, 0.05);
+  border: 1px solid var(--briefing-border);
+}
+
+.mission-stat-label {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.65rem;
+  color: var(--briefing-text-muted);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.mission-stat-value {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.5rem;
+  color: var(--briefing-accent);
+  font-weight: bold;
+}
+
+/* ============================================
+   PAGINATION COLOR OVERRIDE
+   ============================================ */
+/* Override HoloPagination colors to match briefing theme */
+.seminar-page .holo-pagination-container .holo-pagination-button {
+  color: var(--briefing-accent);
+  border-color: var(--briefing-accent);
+}
+
+.seminar-page .holo-pagination-container .holo-pagination-button:hover:not(:disabled) {
+  background: rgba(14, 165, 233, 0.1);
+  border-color: var(--briefing-accent);
+}
+
+.seminar-page .holo-pagination-container .holo-pagination-button.active {
+  background: var(--briefing-accent);
+  color: #0b1120;
+  box-shadow: 0 0 15px var(--briefing-glow);
+}
+
+.seminar-page .holo-pagination-container .holo-node {
+  color: var(--briefing-accent);
+}
+
+.seminar-page .holo-pagination-container .holo-node.active {
+  color: var(--briefing-accent);
+  text-shadow: 0 0 10px var(--briefing-glow);
+}
+
+/* ============================================
+   RESPONSIVE V2
+   ============================================ */
+@media (max-width: 1024px) {
+  .briefing-layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .briefing-sidebar {
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .briefing-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .briefing-row-thumb {
+    width: 100%;
+    height: 200px;
+  }
+
+  .briefing-row-action {
+    width: 100%;
+  }
+
+  .briefing-row-btn {
+    width: 100%;
+  }
+
+  .briefing-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .briefing-marquee-content {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .briefing-row-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .briefing-meta-divider {
+    display: none;
+  }
+}
+
+/* ============================================
+   BRIEFING HERO - Mission Control Header
+   ============================================ */
+.briefing-hero {
+  position: relative;
+  background: linear-gradient(135deg, #0b1120 0%, #1e293b 50%, #0b1120 100%);
+  border: 1px solid var(--briefing-accent);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  clip-path: polygon(40px 0, 100% 0, 100% calc(100% - 40px), calc(100% - 40px) 100%, 0 100%, 0 40px);
+  background-image: linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px), linear-gradient(135deg, #0b1120 0%, #1e293b 50%, #0b1120 100%);
+  background-size: 40px 40px, 40px 40px, 100% 100%;
+}
+.hero-marquee-top { position: absolute; top: 0; left: 0; right: 0; background: rgba(14, 165, 233, 0.15); border-bottom: 1px solid var(--briefing-accent); padding: 0.5rem 0; overflow: hidden; }
+.hero-marquee-content { font-family: 'Space Habitat', monospace; font-size: 0.75rem; color: var(--briefing-accent); white-space: nowrap; animation: briefing-scroll 25s linear infinite; letter-spacing: 0.15em; }
+.hero-radar-pulse { position: absolute; top: 50%; left: 50%; width: 600px; height: 600px; transform: translate(-50%, -50%); background: radial-gradient(circle at center, transparent 0%, transparent 30%, rgba(14, 165, 233, 0.1) 31%, transparent 32%); animation: hero-radar-pulse 6s ease-in-out infinite; opacity: 0.4; pointer-events: none; }
+@keyframes hero-radar-pulse { 0%, 100% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; } 50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.4; } }
+.hero-content { position: relative; z-index: 2; text-align: center; padding-top: 2rem; }
+.hero-title { font-family: 'Space Habitat', monospace; font-size: 3.5rem; color: var(--briefing-accent); text-transform: uppercase; letter-spacing: 0.3em; margin-bottom: 1rem; text-shadow: 0 0 30px var(--briefing-glow), 0 0 60px rgba(14, 165, 233, 0.4); animation: hero-title-glow 3s ease-in-out infinite; }
+@keyframes hero-title-glow { 0%, 100% { text-shadow: 0 0 20px var(--briefing-glow), 0 0 40px rgba(14, 165, 233, 0.3); } 50% { text-shadow: 0 0 40px var(--briefing-glow), 0 0 80px rgba(14, 165, 233, 0.5); } }
+.hero-subtitle { font-family: 'Inter', system-ui, sans-serif; font-size: 1rem; color: var(--briefing-text-dim); text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 1rem; }
+@media (max-width: 768px) { .briefing-hero { padding: 3rem 1.5rem; } .hero-title { font-size: 2rem; letter-spacing: 0.2em; } .hero-subtitle { font-size: 0.85rem; } .hero-stats-dashboard { gap: 1rem; } .hero-stat-box { min-width: 140px; padding: 1rem 1.5rem; } }
+

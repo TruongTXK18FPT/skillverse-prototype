@@ -1,8 +1,12 @@
 // pages/SeminarPage.tsx
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
-import '../../styles/SeminarPage.css';
-import Pagination from '../../components/Pagination';
+import '../../components/seminar-hud/briefing-styles.css';
+import HoloPagination from '../../components/mentorship-hud/HoloPagination';
+import BriefingHero from '../../components/seminar-hud/BriefingHero';
+import BriefingRow from '../../components/seminar-hud/BriefingRow';
+import BriefingSidebar from '../../components/seminar-hud/BriefingSidebar';
+import FrequencyTuner from '../../components/seminar-hud/FrequencyTuner';
 import { useNavigate } from 'react-router-dom';
 import MeowGuide from '../../components/MeowlGuide';
 
@@ -85,174 +89,75 @@ const SeminarPage: React.FC = () => {
 
   return (
     <div className={`seminar-page ${theme}`} data-theme={theme}>
-      {/* Hero Section */}
-      <div className="seminar-hero">
-        <div className="hero-content">
-          <h1 className="hero-title">
-            <span className="seminar-hero-icon">🎓</span>
-            {' '}Khám Phá Các Seminar Hấp Dẫn
-          </h1>
-          <p className="hero-description">
-            Tham gia những buổi seminar chất lượng cao, học hỏi từ các chuyên gia hàng đầu
-          </p>
-          <div className="hero-stats">
-            <div className="seminar-stat-item">
-              <span className="stat-number">{seminars.length}</span>
-              <span className="seminar-stat-label">Seminars</span>
-            </div>
-            <div className="seminar-stat-item">
-              <span className="stat-number">100+</span>
-              <span className="seminar-stat-label">Diễn giả</span>
-            </div>
-            <div className="seminar-stat-item">
-              <span className="stat-number">5000+</span>
-              <span className="seminar-stat-label">Người tham gia</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Mission Control Hero Header */}
+      <BriefingHero
+        totalSeminars={seminars.length}
+        activeSeminars={filteredSeminars.length}
+        totalParticipants={5000}
+      />
 
-      {/* Search and Filter Section */}
-      <div className="search-filter-section">
-        <div className="search-bar">
-          <div className="search-input-wrapper">
-            <span className="search-icon">🔍</span>
+      {/* 2-Column Layout: Feed (75%) + Sidebar (25%) */}
+      <div className="briefing-layout-grid">
+        {/* Left Column: Main Feed */}
+        <div className="briefing-feed">
+          {/* Search Section */}
+          <div className="briefing-search-container">
+            <span className="briefing-search-icon">🔍</span>
             <input
               type="text"
-              placeholder="Tìm kiếm seminar..."
+              placeholder="Search Intel Briefings..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
+              className="briefing-search-input"
             />
           </div>
-        </div>
-        <div className="filter-buttons">
-          <button 
-            className={`filter-btn ${filterCategory === 'all' ? 'active' : ''}`}
-            onClick={() => setFilterCategory('all')}
-          >
-            Tất cả
-          </button>
-          <button 
-            className={`filter-btn ${filterCategory === 'technology' ? 'active' : ''}`}
-            onClick={() => setFilterCategory('technology')}
-          >
-            Công nghệ
-          </button>
-          <button 
-            className={`filter-btn ${filterCategory === 'business' ? 'active' : ''}`}
-            onClick={() => setFilterCategory('business')}
-          >
-            Kinh doanh
-          </button>
-          <button 
-            className={`filter-btn ${filterCategory === 'design' ? 'active' : ''}`}
-            onClick={() => setFilterCategory('design')}
-          >
-            Thiết kế
-          </button>
-        </div>
-      </div>
 
-      {/* Seminars Grid */}
-      <div className="seminars-section">
-        <div className="section-header">
-          <h2 className="section-title">
-            Seminars Sắp Diễn Ra
-            {' '}<span className="results-count">({filteredSeminars.length} kết quả)</span>
-          </h2>
-        </div>
-
-        {filteredSeminars.length === 0 ? (
-          <div className="no-results">
-            <div className="no-results-icon">📅</div>
-            <h3>Không tìm thấy seminar phù hợp</h3>
-            <p>Hãy thử điều chỉnh từ khóa tìm kiếm hoặc bộ lọc của bạn</p>
-          </div>
-        ) : (
-          <div className="seminar-grid">
-            {paginatedSeminars.map((seminar, index) => (
-              <div 
-                key={seminar.id} 
-                className="seminar-card"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="card-image-wrapper">
-                  <img 
-                    src={seminar.backgroundImageUrl} 
-                    alt={seminar.title} 
-                    className="seminar-image" 
-                  />
-                  <div className="image-overlay">
-                    <span className="seminar-category">
-                      {seminar.tags || 'Chung'}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="seminar-info">
-                  <div className="seminar-header">
-                    <h3 className="seminar-title">{seminar.title}</h3>
-                    <p className="seminar-description">{seminar.description}</p>
-                  </div>
-                  
-                  <div className="seminar-details">
-                    <div className="detail-item">
-                      <span className="detail-icon">📅</span>
-                      <span className="detail-text">{formatDate(seminar.date)}</span>
-                    </div>
-                    <div className="detail-item">
-                      <span className="detail-icon">⏰</span>
-                      <span className="detail-text">
-                        {formatTime(seminar.startTime)} - {formatTime(seminar.endTime)}
-                      </span>
-                    </div>
-                    <div className="detail-item">
-                      <span className="detail-icon">📍</span>
-                      <span className="detail-text">{seminar.location}</span>
-                    </div>
-                    {seminar.organizer && (
-                      <div className="detail-item">
-                        <span className="detail-icon">🎯</span>
-                        <span className="detail-text">{seminar.organizer}</span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="seminar-actions">
-                    <button 
-                      className="btn btn-primary"
-                      // onClick={() => handleRegister(seminar.registration)}
-                    >
-                      <span className="btn-icon">✨</span>
-                      {' '}Đăng ký ngay
-                    </button>
-                    <button 
-                      className="btn btn-secondary"
-                      onClick={() => handleViewDetails(seminar.id)}
-                    >
-                      <span className="btn-icon">👁️</span>
-                      {' '}Xem chi tiết
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Pagination */}
-      {filteredSeminars.length > itemsPerPage && (
-        <div className="pagination-wrapper">
-          <Pagination
-            totalItems={filteredSeminars.length}
-            itemsPerPage={itemsPerPage}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
+          {/* Frequency Tuner - Category Filter */}
+          <FrequencyTuner
+            categories={['ALL', 'TECHNOLOGY', 'BUSINESS', 'DESIGN']}
+            activeCategory={filterCategory.toUpperCase()}
+            onCategoryChange={(category) => setFilterCategory(category.toLowerCase())}
           />
+
+          {/* Briefing Rows (List) */}
+          {filteredSeminars.length === 0 ? (
+            <div className="no-results">
+              <div className="no-results-icon">📅</div>
+              <h3>No Intel Briefings Found</h3>
+              <p>Try adjusting your search parameters or frequency selection</p>
+            </div>
+          ) : (
+            <div className="briefing-list">
+              {paginatedSeminars.map((seminar) => (
+                <BriefingRow
+                  key={seminar.id}
+                  seminar={seminar}
+                  onAction={handleViewDetails}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* HoloPagination */}
+          {filteredSeminars.length > itemsPerPage && (
+            <div className="pagination-wrapper">
+              <HoloPagination
+                totalItems={filteredSeminars.length}
+                itemsPerPage={itemsPerPage}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+          )}
         </div>
-      )}
+
+        {/* Right Column: Sidebar */}
+        <BriefingSidebar
+          totalSeminars={seminars.length}
+          activeSeminars={filteredSeminars.length}
+        />
+      </div>
+
       <MeowGuide currentPage="seminars" />
     </div>
   );

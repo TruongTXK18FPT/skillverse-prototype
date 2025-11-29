@@ -105,7 +105,7 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
             ))}
           </div>
           <span className="uplink-signal-value">
-            {rating.toFixed(1)} ({reviews} reviews)
+            {(Number(rating) || 0).toFixed(1)} ({reviews} reviews)
           </span>
         </div>
 

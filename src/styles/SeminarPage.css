@@ -41,6 +41,7 @@
   font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
   transition: all 0.3s ease;
   animation: pageLoad 0.8s ease-out;
+  padding: 2rem 2rem;
 }
 
 /* Loading State */
@@ -503,7 +504,6 @@
 
 /* Pagination Wrapper */
 .pagination-wrapper {
-  background: var(--seminar-bg-secondary);
   padding: 2rem;
   display: flex;
   justify-content: center;
