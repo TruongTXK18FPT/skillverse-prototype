@@ -13,11 +13,12 @@ import diamondFrame from '../../assets/premium/diamond_avatar.png';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/ProfilePageCosmic.css';
 import '../../styles/ProfileSecurityCosmic.css';
+import '../../styles/CosmicToggle.css';
 
 const ProfilePageCosmic = () => {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const { currentSkin, setSkin, skins } = useMeowlSkin();
+  const { currentSkin, setSkin, skins, togglePet, isPetActive } = useMeowlSkin();
   
   const [profile, setProfile] = useState<UserProfileResponse | null>(null);
   const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
@@ -32,6 +33,16 @@ const ProfilePageCosmic = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [showSecurityInfo, setShowSecurityInfo] = useState(false);
+
+  // Easter Egg State
+  const [skinHistory, setSkinHistory] = useState<string[]>([]);
+  const [isEasterEggUnlocked, setIsEasterEggUnlocked] = useState(() => {
+    return localStorage.getItem('meowl_egg_unlocked') === 'true' || isPetActive;
+  });
+
+  useEffect(() => {
+    if (isPetActive) setIsEasterEggUnlocked(true);
+  }, [isPetActive]);
 
   const [editData, setEditData] = useState({
     fullName: '',
@@ -764,9 +775,25 @@ const ProfilePageCosmic = () => {
             border: getPremiumColor() ? `2px solid ${getPremiumColor()}` : undefined,
             boxShadow: getPremiumColor() ? `0 0 30px rgba(${hexToRgb(getPremiumColor()!)}, 0.3)` : undefined
           }}>
-            <div className="cosmic-card-header">
-              <Sparkles size={24} />
-              <h2>Trang phục Meowl</h2>
+            <div className="cosmic-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <Sparkles size={24} />
+                <h2>Trang phục Meowl</h2>
+              </div>
+
+              {isEasterEggUnlocked && (
+                <div className="cosmic-toggle-wrapper">
+                  <span className="cosmic-toggle-label">Cái gì đây mọi người ??? ඞ</span>
+                  <label className="cosmic-toggle-switch">
+                    <input 
+                      type="checkbox" 
+                      checked={isPetActive} 
+                      onChange={togglePet}
+                    />
+                    <span className="cosmic-toggle-slider"></span>
+                  </label>
+                </div>
+              )}
             </div>
 
             <div className="cosmic-card-body">
@@ -778,7 +805,29 @@ const ProfilePageCosmic = () => {
                   <div
                     key={skin.id}
                     className={`cosmic-meowl-skin-item ${currentSkin === skin.id ? 'cosmic-meowl-skin-item--active' : ''}`}
-                    onClick={() => setSkin(skin.id)}
+                    onClick={() => {
+                      setSkin(skin.id);
+                      
+                      // Easter Egg Logic
+                      setSkinHistory(prev => {
+                        const newHistory = [...prev, skin.id].slice(-5);
+                        
+                        // Check if we have 5 items and they are all unique
+                        if (newHistory.length === 5) {
+                          const uniqueSkins = new Set(newHistory);
+                          if (uniqueSkins.size === 5) {
+                            if (!isEasterEggUnlocked) {
+                              setIsEasterEggUnlocked(true);
+                              localStorage.setItem('meowl_egg_unlocked', 'true');
+                              setSuccess('Bạn đã tìm thấy thiết bị lạ!');
+                              setTimeout(() => setSuccess(''), 3000);
+                            }
+                            return []; // Reset history after trigger
+                          }
+                        }
+                        return newHistory;
+                      });
+                    }}
                   >
                     <div className="cosmic-meowl-skin-image-wrapper">
                       <img

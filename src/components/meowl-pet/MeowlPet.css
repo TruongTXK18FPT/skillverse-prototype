@@ -1,0 +1,79 @@
+/* MeowlPet.css */
+
+/* Base styling for the pet container - now using SpriteAnimator component */
+.meowl-pet {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999; /* Always on top */
+  pointer-events: auto;
+  user-select: none; /* Prevent text selection when dragging */
+  will-change: transform; /* Optimize for transform animations */
+}
+
+/* Utility classes for smooth animations */
+.meowl-pet-smooth-transition {
+  transition: transform 0.1s ease-out;
+}
+
+/* Hover effects for better interaction feedback */
+.meowl-pet:hover {
+  filter: brightness(1.1);
+}
+
+.meowl-pet:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease-out;
+}
+
+/* Status indicator animations */
+@keyframes tooltip-fade-in {
+  from { 
+    opacity: 0; 
+    transform: translate(-50%, 8px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translate(-50%, 0); 
+  }
+}
+
+@keyframes tooltip-fade-out {
+  from { 
+    opacity: 1; 
+    transform: translate(-50%, 0); 
+  }
+  to { 
+    opacity: 0; 
+    transform: translate(-50%, 8px); 
+  }
+}
+
+/* Interaction bounce effect */
+@keyframes interaction-bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.meowl-pet-interacting {
+  animation: interaction-bounce 0.3s ease-out;
+}
+
+/* Walking bob effect is now handled in JavaScript for smoother performance */
+
+/* Dragging state */
+.meowl-pet-dragging {
+  cursor: grabbing !important;
+  z-index: 10000;
+}
+
+/* Following state visual indicator */
+.meowl-pet-following {
+  /* Could add subtle glow or other visual feedback */
+}
+
+.meowl-pet-locked {
+  opacity: 0.7;
+  filter: grayscale(0.3);
+}

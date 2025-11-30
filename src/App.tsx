@@ -64,6 +64,7 @@ import MyApplicationsPage from './pages/user/MyApplicationsPage';
 import ExploreMapPage from './pages/ExploreMapPage';
 import AboutPage from './pages/about/AboutPage';
 import MeowlBubbleNotification from './components/MeowlBubbleNotification';
+import MeowlPetWrapper from './components/meowl-pet/MeowlPetWrapper';
 
 const App = () => {
   return (
@@ -179,6 +180,7 @@ const App = () => {
                 </main>
                 <FooterVisibilityWrapper />
                 <MeowlBubbleWrapper />
+                <MeowlPetWrapper />
               </div>
             </div>
           </Router>

@@ -222,16 +222,24 @@ interface MeowlSkinContextType {
   currentSkinImage: string;
   setSkin: (skin: MeowlSkinType) => void;
   skins: MeowlSkin[];
+  isPetActive: boolean;
+  togglePet: () => void;
 }
 
 const MeowlSkinContext = createContext<MeowlSkinContextType | undefined>(undefined);
 
 const STORAGE_KEY = 'meowl-skin';
+const PET_ACTIVE_KEY = 'meowl-pet-active';
 
 export const MeowlSkinProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentSkin, setCurrentSkin] = useState<MeowlSkinType>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     return (saved as MeowlSkinType) || 'default';
+  });
+
+  const [isPetActive, setIsPetActive] = useState<boolean>(() => {
+    const saved = localStorage.getItem(PET_ACTIVE_KEY);
+    return saved === 'true';
   });
 
   const currentSkinImage = MEOWL_SKINS.find(s => s.id === currentSkin)?.image || meowlDefault;
@@ -240,12 +248,27 @@ export const MeowlSkinProvider: React.FC<{ children: ReactNode }> = ({ children 
     localStorage.setItem(STORAGE_KEY, currentSkin);
   }, [currentSkin]);
 
+  useEffect(() => {
+    localStorage.setItem(PET_ACTIVE_KEY, String(isPetActive));
+  }, [isPetActive]);
+
   const setSkin = (skin: MeowlSkinType) => {
     setCurrentSkin(skin);
   };
 
+  const togglePet = () => {
+    setIsPetActive(prev => !prev);
+  };
+
   return (
-    <MeowlSkinContext.Provider value={{ currentSkin, currentSkinImage, setSkin, skins: MEOWL_SKINS }}>
+    <MeowlSkinContext.Provider value={{ 
+      currentSkin, 
+      currentSkinImage, 
+      setSkin, 
+      skins: MEOWL_SKINS,
+      isPetActive,
+      togglePet
+    }}>
       {children}
     </MeowlSkinContext.Provider>
   );
