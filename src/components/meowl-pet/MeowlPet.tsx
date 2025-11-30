@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import './MeowlPet.css';
 import { SpriteAnimator } from './SpriteAnimator';
 import { PetState, Position } from './types';
-import { PET_CONFIG, MOVEMENT_SPEED, STOP_DISTANCE, INTERACTION_DURATION, SOUNDS, WALK_BOB_AMPLITUDE, WALK_BOB_SPEED } from './constants';
+import { PET_CONFIG, MOVEMENT_SPEED, STOP_DISTANCE, INTERACTION_DURATION, SLEEP_TIMEOUT, SOUNDS, WALK_BOB_AMPLITUDE, WALK_BOB_SPEED } from './constants';
 
 interface MeowlPetProps {
   targetPosition?: Position;
+  isExiting?: boolean;
+  onExitComplete?: () => void;
 }
 
-const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition }) => {
+const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitComplete }) => {
   // Position State
   const [position, setPosition] = useState<Position>({ 
     x: window.innerWidth / 2 - PET_CONFIG.width / 2, 
@@ -16,7 +18,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition }) => {
   });
   
   // Logic State
-  const [petState, setPetState] = useState<PetState>(PetState.IDLE);
+  const [petState, setPetState] = useState<PetState>(PetState.INTRO); // Start with INTRO
   const [isFollowing, setIsFollowing] = useState<boolean>(true);
   const [facingRight, setFacingRight] = useState<boolean>(true);
   const [bobOffset, setBobOffset] = useState<number>(0);
@@ -25,12 +27,71 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition }) => {
   const isDragging = useRef<boolean>(false);
   const dragOffset = useRef<Position>({ x: 0, y: 0 });
   
+  // Interaction Refs
+  const lastInteractionTime = useRef<number>(Date.now());
+  
   // Audio ref for sound effects
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Mouse tracking for auto-follow
   const [mousePos, setMousePos] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+
+  // Handle Intro Animation
+  useEffect(() => {
+    if (petState === PetState.INTRO) {
+      // Play intro sound
+      if (SOUNDS.intro) {
+        const introAudio = new Audio(SOUNDS.intro);
+        introAudio.volume = 0.5;
+        introAudio.play().catch(console.error);
+      }
+
+      const timer = setTimeout(() => {
+        setPetState(PetState.IDLE);
+      }, PET_CONFIG.animationSpeed * (PET_CONFIG.rows * PET_CONFIG.cols));
+      return () => clearTimeout(timer);
+    }
+  }, [petState]);
+
+  // Handle Outro Animation
+  useEffect(() => {
+    if (isExiting) {
+      setPetState(PetState.OUTRO);
+
+      // Play outro sound
+      if (SOUNDS.outro) {
+        const outroAudio = new Audio(SOUNDS.outro);
+        outroAudio.volume = 0.5;
+        outroAudio.play().catch(console.error);
+      }
+
+      const timer = setTimeout(() => {
+        if (onExitComplete) onExitComplete();
+      }, PET_CONFIG.animationSpeed * (PET_CONFIG.rows * PET_CONFIG.cols));
+      return () => clearTimeout(timer);
+    }
+  }, [isExiting, onExitComplete]);
+
+  // Handle Sleep Logic
+  useEffect(() => {
+    const checkSleep = setInterval(() => {
+      if (petState === PetState.WALKING) {
+        // If walking, keep the pet awake by updating the interaction time
+        updateInteraction();
+      } else if (petState === PetState.IDLE) {
+        if (Date.now() - lastInteractionTime.current > SLEEP_TIMEOUT) {
+          setPetState(PetState.SLEEP);
+        }
+      }
+    }, 1000);
+    return () => clearInterval(checkSleep);
+  }, [petState]);
+
+  // Update interaction time on any activity
+  const updateInteraction = () => {
+    lastInteractionTime.current = Date.now();
+  };
 
   // Initialize audio
   useEffect(() => {
@@ -70,15 +131,15 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition }) => {
     const currentTarget = targetPosition || mousePos;
 
     const loop = () => {
-      // If dragging, position is handled by mouse move events
-      if (petState === PetState.DRAGGING) {
-        setBobOffset(0);
-        animationFrameId = requestAnimationFrame(loop);
-        return;
-      }
-
-      // If interacting (Happy), don't move
-      if (petState === PetState.HAPPY) {
+      // States where movement is disabled
+      if (
+        petState === PetState.DRAGGING || 
+        petState === PetState.HAPPY || 
+        petState === PetState.INTRO || 
+        petState === PetState.OUTRO || 
+        petState === PetState.SLEEP || 
+        petState === PetState.WAKEUP
+      ) {
         setBobOffset(0);
         animationFrameId = requestAnimationFrame(loop);
         return;
@@ -136,7 +197,20 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition }) => {
   const handleMouseDown = (e: React.MouseEvent) => {
     if (e.button !== 0) return; // Only left click for drag
     e.preventDefault();
+    updateInteraction();
+
+    // Wake up if sleeping
+    if (petState === PetState.SLEEP) {
+      setPetState(PetState.WAKEUP);
+      setTimeout(() => {
+        setPetState(PetState.IDLE);
+      }, PET_CONFIG.animationSpeed * (PET_CONFIG.rows * PET_CONFIG.cols));
+      return;
+    }
     
+    // Don't drag if animating special states
+    if (petState === PetState.INTRO || petState === PetState.OUTRO || petState === PetState.WAKEUP) return;
+
     isDragging.current = true;
     setPetState(PetState.DRAGGING);
     
@@ -151,6 +225,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition }) => {
 
   const handleGlobalMouseMove = (e: MouseEvent) => {
     if (!isDragging.current) return;
+    updateInteraction();
     setPosition({
       x: e.clientX - dragOffset.current.x,
       y: e.clientY - dragOffset.current.y
@@ -166,12 +241,13 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition }) => {
 
   const handleMouseEnter = () => {
     if (isDragging.current) return;
+    updateInteraction();
     
     // Start 3s timer
     hoverTimerRef.current = setTimeout(() => {
       setPetState(PetState.HAPPY);
       playInteractSound();
-    }, 2000);
+    }, 3000);
   };
 
   const handleMouseLeave = () => {

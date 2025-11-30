@@ -2,7 +2,11 @@ export enum PetState {
   IDLE = 'IDLE',
   WALKING = 'WALKING',
   DRAGGING = 'DRAGGING',
-  HAPPY = 'HAPPY'
+  HAPPY = 'HAPPY',
+  INTRO = 'INTRO',
+  OUTRO = 'OUTRO',
+  SLEEP = 'SLEEP',
+  WAKEUP = 'WAKEUP'
 }
 
 export interface Position {
@@ -21,5 +25,7 @@ export interface SpriteConfig {
 
 export interface SoundConfig {
   interact: string;
+  intro?: string;
+  outro?: string;
   // Có thể thêm các sound khác sau
 }

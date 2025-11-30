@@ -17,12 +17,21 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ state, facingRig
   const getSpriteForState = (s: PetState): string => {
     switch (s) {
       case PetState.IDLE: 
-      case PetState.DRAGGING:
         return SPRITE_SHEETS.idle;
+      case PetState.DRAGGING:
+        return SPRITE_SHEETS.drag;
       case PetState.WALKING: 
         return SPRITE_SHEETS.walking;
       case PetState.HAPPY: 
         return SPRITE_SHEETS.interact;
+      case PetState.INTRO:
+        return SPRITE_SHEETS.intro;
+      case PetState.OUTRO:
+        return SPRITE_SHEETS.outro;
+      case PetState.SLEEP:
+        return SPRITE_SHEETS.sleep;
+      case PetState.WAKEUP:
+        return SPRITE_SHEETS.wakeup;
       default: 
         return SPRITE_SHEETS.idle;
     }
