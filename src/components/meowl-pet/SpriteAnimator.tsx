@@ -9,9 +9,18 @@ interface SpriteAnimatorProps {
   startFrame?: number;
   endFrame?: number;
   speedMultiplier?: number;
+  loop?: boolean;
 }
 
-export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ state, facingRight, config, startFrame, endFrame, speedMultiplier = 1 }) => {
+export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ 
+  state, 
+  facingRight, 
+  config, 
+  startFrame, 
+  endFrame, 
+  speedMultiplier = 1,
+  loop = true 
+}) => {
   const [frameIndex, setFrameIndex] = useState(startFrame || 0);
   const [hasError, setHasError] = useState(false);
   const [currentSprite, setCurrentSprite] = useState(config.src);
@@ -83,13 +92,16 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ state, facingRig
     const interval = setInterval(() => {
       setFrameIndex((prev) => {
         const next = prev + 1;
-        if (next > end) return start;
+        if (next > end) {
+          if (!loop) return end; // Stay at last frame if not looping
+          return start;
+        }
         return next;
       });
     }, config.animationSpeed * (1 / speedMultiplier));
 
     return () => clearInterval(interval);
-  }, [config.animationSpeed, config.cols, config.rows, startFrame, endFrame, speedMultiplier]);
+  }, [config.animationSpeed, config.cols, config.rows, startFrame, endFrame, speedMultiplier, loop]);
 
   // Handle Image Error
   if (hasError) {

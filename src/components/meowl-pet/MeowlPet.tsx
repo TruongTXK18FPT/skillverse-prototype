@@ -335,9 +335,12 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   };
 
   // Track mouse position globally
+  const hasMouseMoved = useRef<boolean>(false);
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
+      hasMouseMoved.current = true;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -357,6 +360,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
         petState === PetState.ANGRY ||
         petState === PetState.HAPPY || 
         petState === PetState.EATING ||
+        petState === PetState.INTRO ||
         petState === PetState.OUTRO || 
         petState === PetState.SLEEP || 
         petState === PetState.WAKEUP ||
@@ -510,8 +514,13 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
           // Arrived / Idle
           if (petState !== PetState.IDLE) setPetState(PetState.IDLE);
           setBobOffset(0); // Reset bob
-          isReturningFromToiletRef.current = false;
-          isRecoveringFromPanicRef.current = false;
+          
+          // Only clear slow flags if we have actually moved the mouse (meaning we know where to go and we arrived there)
+          // OR if we are following a fixed target position
+          if (hasMouseMoved.current || targetPosition) {
+            isReturningFromToiletRef.current = false;
+            isRecoveringFromPanicRef.current = false;
+          }
           return prev;
         }
       });
@@ -682,6 +691,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
         startFrame={startFrame}
         endFrame={endFrame}
         speedMultiplier={petState === PetState.OK_FOR_NOW || petState === PetState.REALIZE ? 0.5 : 1}
+        loop={petState !== PetState.INTRO && petState !== PetState.OUTRO}
       />
     </div>
   );
