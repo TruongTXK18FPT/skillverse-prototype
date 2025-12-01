@@ -177,7 +177,7 @@ const MentoringHistoryTab: React.FC = () => {
     };
     
     return (
-      <span className={`mht-status-badge mht-status-${statusClasses[status as keyof typeof statusClasses]}`}>
+      <span className={`mentor-history-status-badge mentor-history-status-${statusClasses[status as keyof typeof statusClasses]}`}>
         {statusLabels[status as keyof typeof statusLabels]}
       </span>
     );
@@ -190,7 +190,7 @@ const MentoringHistoryTab: React.FC = () => {
     };
     
     return (
-      <span className={`mht-type-badge mht-type-${type.toLowerCase()}`}>
+      <span className={`mentor-history-type-badge mentor-history-type-${type.toLowerCase()}`}>
         {typeLabels[type as keyof typeof typeLabels]}
       </span>
     );
@@ -225,66 +225,66 @@ const MentoringHistoryTab: React.FC = () => {
   };
 
   return (
-    <div className="mht-history-tab">
-      <div className="mht-tab-header">
+    <div className="mentor-history-tab">
+      <div className="mentor-history-tab-header">
         <h2>📚 Lịch Sử Hướng Dẫn</h2>
         <p>Theo dõi các buổi hướng dẫn, thu nhập và đánh giá của bạn</p>
       </div>
       {/* Statistics Overview */}
-      <div className="mht-stats-overview">
-        <div className="mht-stat-card">
-          <span className="mht-stat-icon">📚</span>
-          <div className="mht-stat-content">
+      <div className="mentor-history-stats-overview">
+        <div className="mentor-history-stat-card">
+          <span className="mentor-history-stat-icon">📚</span>
+          <div className="mentor-history-stat-content">
             <h3>{totalSessions}</h3>
             <p>Tổng Buổi Học</p>
           </div>
         </div>
         
-        <div className="mht-stat-card">
-          <span className="mht-stat-icon">💰</span>
-          <div className="mht-stat-content">
+        <div className="mentor-history-stat-card">
+          <span className="mentor-history-stat-icon">💰</span>
+          <div className="mentor-history-stat-content">
             <h3>{formatCurrency(totalEarnings)}</h3>
             <p>Tổng Thu Nhập</p>
           </div>
         </div>
         
-        <div className="mht-stat-card">
-          <span className="mht-stat-icon">🪙</span>
-          <div className="mht-stat-content">
+        <div className="mentor-history-stat-card">
+          <span className="mentor-history-stat-icon">🪙</span>
+          <div className="mentor-history-stat-content">
             <h3>{totalSkillPoints}</h3>
-            <p>Điểm Kỹ Năng Kiếm Được</p>
+            <p>Điểm Kỹ Năng</p>
           </div>
         </div>
         
-        <div className="mht-stat-card">
-          <span className="mht-stat-icon">⭐</span>
-          <div className="mht-stat-content">
+        <div className="mentor-history-stat-card">
+          <span className="mentor-history-stat-icon">⭐</span>
+          <div className="mentor-history-stat-content">
             <h3>{averageRating}</h3>
-            <p>Đánh Giá Nhận Được</p>
+            <p>Đánh Giá</p>
           </div>
         </div>
       </div>
 
       {/* Filters and Search */}
-      <div className="mht-controls">
-        <div className="mht-search">
+      <div className="mentor-history-controls">
+        <div className="mentor-history-search">
           <input
             type="text"
             placeholder="Tìm kiếm theo tên học viên hoặc chủ đề..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="mht-search-input"
+            className="mentor-history-search-input"
           />
         </div>
 
-        <div className="mht-filters">
-          <div className="mht-filter-group">
+        <div className="mentor-history-filters">
+          <div className="mentor-history-filter-group">
             <label htmlFor="status-filter">Trạng Thái:</label>
             <select
               id="status-filter"
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="mht-filter-select"
+              className="mentor-history-filter-select"
             >
               <option value="all">Tất Cả Trạng Thái</option>
               <option value="Completed">Hoàn Thành</option>
@@ -293,13 +293,13 @@ const MentoringHistoryTab: React.FC = () => {
             </select>
           </div>
 
-          <div className="mht-filter-group">
+          <div className="mentor-history-filter-group">
             <label htmlFor="type-filter">Loại:</label>
             <select
               id="type-filter"
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="mht-filter-select"
+              className="mentor-history-filter-select"
             >
               <option value="all">Tất Cả Loại</option>
               <option value="Paid">Trả Phí</option>
@@ -307,20 +307,20 @@ const MentoringHistoryTab: React.FC = () => {
             </select>
           </div>
 
-          <button onClick={handleExportData} className="mht-export-btn">
+          <button onClick={handleExportData} className="mentor-history-export-btn">
             📤 Xuất Dữ Liệu
           </button>
         </div>
       </div>
 
       {/* Sessions Table */}
-      <div className="mht-table-container">
+      <div className="mentor-history-table-container">
         {paginatedSessions.length === 0 ? (
-          <div className="mht-no-sessions">
+          <div className="mentor-history-no-sessions">
             <p>Không tìm thấy buổi học nào phù hợp với tiêu chí của bạn.</p>
           </div>
         ) : (
-          <table className="mht-sessions-table">
+          <table className="mentor-history-sessions-table">
             <thead>
               <tr>
                 <th>Học Viên</th>
@@ -337,8 +337,8 @@ const MentoringHistoryTab: React.FC = () => {
               {paginatedSessions.map((session) => (
                 <tr key={session.id}>
                   <td>
-                    <div className="mht-student-info">
-                      <div className="mht-student-avatar">
+                    <div className="mentor-history-student-info">
+                      <div className="mentor-history-student-avatar">
                         {session.studentName.charAt(0).toUpperCase()}
                       </div>
                       <span>{session.studentName}</span>
@@ -346,20 +346,20 @@ const MentoringHistoryTab: React.FC = () => {
                   </td>
                   <td>{formatDate(session.date)}</td>
                   <td>
-                    <span className="mht-topic">{session.topic}</span>
+                    <span className="mentor-history-topic">{session.topic}</span>
                   </td>
                   <td>{getTypeBadge(session.type)}</td>
                   <td>{getStatusBadge(session.status)}</td>
                   <td>
-                    <span className="mht-earnings">
+                    <span className="mentor-history-earnings">
                       {session.earnings ? formatCurrency(session.earnings) : '-'}
                     </span>
                   </td>
                   <td>
-                    <span className="mht-points">+{session.skillPoints}</span>
+                    <span className="mentor-history-points">+{session.skillPoints}</span>
                   </td>
                   <td>
-                    <span className={`mht-review-status ${session.hasReview ? 'has-review' : 'no-review'}`}>
+                    <span className={`mentor-history-review-status ${session.hasReview ? 'has-review' : 'no-review'}`}>
                       {session.hasReview ? '✓' : '○'}
                     </span>
                   </td>
@@ -372,16 +372,16 @@ const MentoringHistoryTab: React.FC = () => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="mht-pagination">
+        <div className="mentor-history-pagination">
           <button
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className="mht-page-btn"
+            className="mentor-history-page-btn"
           >
             ← Trước
           </button>
           
-          <div className="mht-page-info">
+          <div className="mentor-history-page-info">
             <span>
               Trang {currentPage} / {totalPages} 
               ({filteredSessions.length} tổng số buổi học)
@@ -391,7 +391,7 @@ const MentoringHistoryTab: React.FC = () => {
           <button
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
-            className="mht-page-btn"
+            className="mentor-history-page-btn"
           >
             Tiếp →
           </button>

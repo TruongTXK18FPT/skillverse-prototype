@@ -73,11 +73,11 @@ const EarningsTab: React.FC = () => {
 
   const getStatusBadge = (status: Transaction['status']) => {
     const statusClasses = {
-      'In Progress': 'et-status-progress',
-      'Completed': 'et-status-completed',
-      'Failed': 'et-status-failed'
+      'In Progress': 'mentor-earnings-status-progress',
+      'Completed': 'mentor-earnings-status-completed',
+      'Failed': 'mentor-earnings-status-failed'
     };
-    return statusClasses[status] || 'et-status-progress';
+    return statusClasses[status] || 'mentor-earnings-status-progress';
   };
 
   const handleWithdrawFunds = () => {
@@ -93,75 +93,75 @@ const EarningsTab: React.FC = () => {
   const failedTransactions = transactions.filter(t => t.status === 'Failed');
 
   return (
-    <div className="et-earnings-tab">
-      <div className="et-tab-header">
+    <div className="mentor-earnings-tab">
+      <div className="mentor-earnings-tab-header">
         <h2>💰 Thu Nhập</h2>
         <p>Theo dõi thu nhập và quản lý rút tiền</p>
       </div>
 
-      <div className="et-earnings-overview">
-        <div className="et-main-stats">
-          <div className="et-total-earnings">
-            <div className="et-earnings-icon">💰</div>
-            <div className="et-earnings-info">
-              <div className="et-earnings-label">Tổng Thu Nhập</div>
-              <div className="et-earnings-amount">{formatCurrency(earnings.totalEarnings)}</div>
-              <div className="et-earnings-subtitle">Từ {earnings.paidSessions} buổi học có phí</div>
+      <div className="mentor-earnings-overview">
+        <div className="mentor-earnings-main-stats">
+          <div className="mentor-earnings-total-earnings">
+            <div className="mentor-earnings-icon">💰</div>
+            <div className="mentor-earnings-info">
+              <div className="mentor-earnings-label">Tổng Thu Nhập</div>
+              <div className="mentor-earnings-amount">{formatCurrency(earnings.totalEarnings)}</div>
+              <div className="mentor-earnings-subtitle">Từ {earnings.paidSessions} buổi học có phí</div>
             </div>
           </div>
           
-          <div className="et-pending-earnings">
-            <div className="et-pending-icon">⏳</div>
-            <div className="et-pending-info">
-              <div className="et-pending-label">Đang Chờ Thanh Toán</div>
-              <div className="et-pending-amount">{formatCurrency(earnings.pendingAmount)}</div>
-              <div className="et-pending-subtitle">
+          <div className="mentor-earnings-pending-earnings">
+            <div className="mentor-earnings-pending-icon">⏳</div>
+            <div className="mentor-earnings-pending-info">
+              <div className="mentor-earnings-pending-label">Đang Chờ Thanh Toán</div>
+              <div className="mentor-earnings-pending-amount">{formatCurrency(earnings.pendingAmount)}</div>
+              <div className="mentor-earnings-pending-subtitle">
                 {pendingTransactions.length} giao dịch đang xử lý
               </div>
             </div>
           </div>
         </div>
 
-        <div className="et-stats-grid">
-          <div className="et-stat-card completed">
-            <div className="et-stat-value">{completedTransactions.length}</div>
-            <div className="et-stat-label">Hoàn Thành</div>
+        <div className="mentor-earnings-stats-grid">
+          <div className="mentor-earnings-stat-card completed">
+            <div className="mentor-earnings-stat-value">{completedTransactions.length}</div>
+            <div className="mentor-earnings-stat-label">Hoàn Thành</div>
           </div>
-          <div className="et-stat-card pending">
-            <div className="et-stat-value">{pendingTransactions.length}</div>
-            <div className="et-stat-label">Đang Xử Lý</div>
+          <div className="mentor-earnings-stat-card pending">
+            <div className="mentor-earnings-stat-value">{pendingTransactions.length}</div>
+            <div className="mentor-earnings-stat-label">Đang Xử Lý</div>
           </div>
-          <div className="et-stat-card failed">
-            <div className="et-stat-value">{failedTransactions.length}</div>
-            <div className="et-stat-label">Thất Bại</div>
+          <div className="mentor-earnings-stat-card failed">
+            <div className="mentor-earnings-stat-value">{failedTransactions.length}</div>
+            <div className="mentor-earnings-stat-label">Thất Bại</div>
           </div>
         </div>
       </div>
 
-      <div className="et-action-section">
-        <button className="et-action-btn et-withdraw-btn" onClick={handleWithdrawFunds}>
+      <div className="mentor-earnings-action-section">
+        <button className="mentor-earnings-action-btn mentor-earnings-withdraw-btn" onClick={handleWithdrawFunds}>
           Rút Tiền
         </button>
-        <button className="et-action-btn et-history-btn" onClick={handleViewPaymentHistory}>
+        <button className="mentor-earnings-action-btn mentor-earnings-history-btn" onClick={handleViewPaymentHistory}>
           Xem Lịch Sử Thanh Toán
         </button>
       </div>
 
-      <div className="et-transactions-section">
-        <div className="et-section-header">
+      <div className="mentor-earnings-transactions-section">
+        <div className="mentor-earnings-section-header">
           <h3>Giao Dịch Gần Đây</h3>
           <p>Hoạt động thanh toán và thu nhập từ buổi học gần đây</p>
         </div>
 
         {transactions.length === 0 ? (
-          <div className="et-empty-state">
-            <div className="et-empty-icon">💸</div>
+          <div className="mentor-earnings-empty-state">
+            <div className="mentor-earnings-empty-icon">💸</div>
             <h4>No transactions yet</h4>
             <p>Your transaction history will appear here once you start earning from sessions.</p>
           </div>
         ) : (
-          <div className="et-transactions-table-container">
-            <table className="et-transactions-table">
+          <div className="mentor-earnings-transactions-table-container">
+            <table className="mentor-earnings-transactions-table">
               <thead>
                 <tr>
                   <th>Date</th>
@@ -175,19 +175,19 @@ const EarningsTab: React.FC = () => {
                 {transactions.map(transaction => (
                   <tr key={transaction.id}>
                     <td>
-                      <div className="et-date">{formatDate(transaction.date)}</div>
+                      <div className="mentor-earnings-date">{formatDate(transaction.date)}</div>
                     </td>
                     <td>
-                      <div className="et-student-name">{transaction.studentName}</div>
+                      <div className="mentor-earnings-student-name">{transaction.studentName}</div>
                     </td>
                     <td>
-                      <div className="et-description">{transaction.description}</div>
+                      <div className="mentor-earnings-description">{transaction.description}</div>
                     </td>
                     <td>
-                      <div className="et-amount">{formatCurrency(transaction.amount)}</div>
+                      <div className="mentor-earnings-amount">{formatCurrency(transaction.amount)}</div>
                     </td>
                     <td>
-                      <span className={`et-status-badge ${getStatusBadge(transaction.status)}`}>
+                      <span className={`mentor-earnings-status-badge ${getStatusBadge(transaction.status)}`}>
                         {transaction.status}
                       </span>
                     </td>
@@ -201,51 +201,51 @@ const EarningsTab: React.FC = () => {
 
       {/* Withdraw Funds Modal */}
       {showWithdrawModal && (
-        <div className="et-modal-overlay">
-          <div className="et-modal-content">
-            <div className="et-modal-header">
+        <div className="mentor-earnings-modal-overlay">
+          <div className="mentor-earnings-modal-content">
+            <div className="mentor-earnings-modal-header">
               <h3>Withdraw Funds</h3>
-              <button className="et-close-modal" onClick={() => setShowWithdrawModal(false)}>
+              <button className="mentor-earnings-close-modal" onClick={() => setShowWithdrawModal(false)}>
                 ×
               </button>
             </div>
-            <div className="et-modal-body">
-              <div className="et-available-balance">
-                <div className="et-balance-label">Available Balance</div>
-                <div className="et-balance-amount">{formatCurrency(earnings.totalEarnings - earnings.pendingAmount)}</div>
+            <div className="mentor-earnings-modal-body">
+              <div className="mentor-earnings-available-balance">
+                <div className="mentor-earnings-balance-label">Available Balance</div>
+                <div className="mentor-earnings-balance-amount">{formatCurrency(earnings.totalEarnings - earnings.pendingAmount)}</div>
               </div>
               
-              <div className="et-form-group">
+              <div className="mentor-earnings-form-group">
                 <label htmlFor="withdraw-amount">Withdrawal Amount</label>
                 <input 
                   type="number" 
                   id="withdraw-amount"
-                  className="et-form-input" 
+                  className="mentor-earnings-form-input" 
                   placeholder="Enter amount..."
                   max={earnings.totalEarnings - earnings.pendingAmount}
                 />
               </div>
               
-              <div className="et-form-group">
+              <div className="mentor-earnings-form-group">
                 <label htmlFor="bank-account">Bank Account</label>
-                <select id="bank-account" className="et-form-select">
+                <select id="bank-account" className="mentor-earnings-form-select">
                   <option value="">Select bank account...</option>
                   <option value="vietcombank">Vietcombank - ****1234</option>
                   <option value="techcombank">Techcombank - ****5678</option>
                 </select>
               </div>
               
-              <div className="et-withdrawal-note">
+              <div className="mentor-earnings-withdrawal-note">
                 <p>• Withdrawals are processed within 1-3 business days</p>
                 <p>• Minimum withdrawal amount: ₫100,000</p>
                 <p>• Processing fee: ₫10,000</p>
               </div>
               
-              <div className="et-form-actions">
-                <button className="et-action-btn et-cancel-btn" onClick={() => setShowWithdrawModal(false)}>
+              <div className="mentor-earnings-form-actions">
+                <button className="mentor-earnings-action-btn mentor-earnings-cancel-btn" onClick={() => setShowWithdrawModal(false)}>
                   Cancel
                 </button>
-                <button className="et-action-btn et-confirm-btn">
+                <button className="mentor-earnings-action-btn mentor-earnings-confirm-btn">
                   Confirm Withdrawal
                 </button>
               </div>

@@ -94,11 +94,11 @@ const BookingManagerTab: React.FC<BookingManagerTabProps> = ({
 
   const getStatusBadge = (status: Booking['status']) => {
     const statusClasses = {
-      'Pending': 'bmt-status-pending',
-      'Confirmed': 'bmt-status-confirmed',
-      'Completed': 'bmt-status-completed'
+      'Pending': 'mentor-booking-status-pending',
+      'Confirmed': 'mentor-booking-status-confirmed',
+      'Completed': 'mentor-booking-status-completed'
     };
-    return statusClasses[status] || 'bmt-status-pending';
+    return statusClasses[status] || 'mentor-booking-status-pending';
   };
 
   const getStatusCounts = () => {
@@ -130,30 +130,30 @@ const BookingManagerTab: React.FC<BookingManagerTabProps> = ({
   };
 
   return (
-    <div className="bmt-booking-manager-tab">
-      <div className="bmt-tab-header">
-        <div className="bmt-header-content">
+    <div className="mentor-booking-manager-tab">
+      <div className="mentor-booking-tab-header">
+        <div className="mentor-booking-header-content">
           <h2>📋 Quản Lý Đặt Lịch</h2>
           <p>Quản lý lịch đặt của học viên và yêu cầu buổi học với các công cụ mạnh mẽ</p>
         </div>
-        <div className="bmt-header-actions">
+        <div className="mentor-booking-header-actions">
           <button 
-            className="bmt-export-btn"
+            className="mentor-booking-export-btn"
             onClick={exportBookings}
             title="Xuất danh sách đặt lịch ra CSV"
           >
             📊 Xuất File
           </button>
-          <div className="bmt-view-toggle">
+          <div className="mentor-booking-view-toggle">
             <button
-              className={`bmt-view-btn ${viewMode === 'list' ? 'active' : ''}`}
+              className={`mentor-booking-view-btn ${viewMode === 'list' ? 'active' : ''}`}
               onClick={() => setViewMode('list')}
               title="Xem dạng danh sách"
             >
               ☰
             </button>
             <button
-              className={`bmt-view-btn ${viewMode === 'cards' ? 'active' : ''}`}
+              className={`mentor-booking-view-btn ${viewMode === 'cards' ? 'active' : ''}`}
               onClick={() => setViewMode('cards')}
               title="Xem dạng thẻ"
             >
@@ -163,46 +163,45 @@ const BookingManagerTab: React.FC<BookingManagerTabProps> = ({
         </div>
       </div>
 
-      <div className="bmt-stats-cards">
-        <div className="bmt-stat-card total">
-          <div className="bmt-stat-icon">📋</div>
-          <div className="bmt-stat-content">
-            <div className="bmt-stat-value">{counts.total}</div>
-            <div className="bmt-stat-label">Tổng Đặt Lịch</div>
+      <div className="mentor-booking-stats-cards">
+        <div className="mentor-booking-stat-card total">
+          <div className="mentor-booking-stat-icon">📋</div>
+          <div className="mentor-booking-stat-content">
+            <div className="mentor-booking-stat-value">{counts.total}</div>
+            <div className="mentor-booking-stat-label">Tổng Đặt Lịch</div>
           </div>
         </div>
-        <div className="bmt-stat-card pending">
-          <div className="bmt-stat-icon">⏳</div>
-          <div className="bmt-stat-content">
-            <div className="bmt-stat-value">{counts.pending}</div>
-            <div className="bmt-stat-label">Chờ Duyệt</div>
+        <div className="mentor-booking-stat-card pending">
+          <div className="mentor-booking-stat-icon">⏳</div>
+          <div className="mentor-booking-stat-content">
+            <div className="mentor-booking-stat-value">{counts.pending}</div>
+            <div className="mentor-booking-stat-label">Chờ Duyệt</div>
           </div>
         </div>
-        <div className="bmt-stat-card confirmed">
-          <div className="bmt-stat-icon">✅</div>
-          <div className="bmt-stat-content">
-            <div className="bmt-stat-value">{counts.confirmed}</div>
-            <div className="bmt-stat-label">Đã Xác Nhận</div>
+        <div className="mentor-booking-stat-card confirmed">
+          <div className="mentor-booking-stat-icon">✅</div>
+          <div className="mentor-booking-stat-content">
+            <div className="mentor-booking-stat-value">{counts.confirmed}</div>
+            <div className="mentor-booking-stat-label">Đã Xác Nhận</div>
           </div>
         </div>
-        <div className="bmt-stat-card completed">
-          <div className="bmt-stat-icon">🎉</div>
-          <div className="bmt-stat-content">
-            <div className="bmt-stat-value">{counts.completed}</div>
-            <div className="bmt-stat-label">Đã Hoàn Thành</div>
+        <div className="mentor-booking-stat-card completed">
+          <div className="mentor-booking-stat-icon">🎉</div>
+          <div className="mentor-booking-stat-content">
+            <div className="mentor-booking-stat-value">{counts.completed}</div>
+            <div className="mentor-booking-stat-label">Đã Hoàn Thành</div>
           </div>
         </div>
       </div>
 
-      <div className="bmt-controls">
-        <div className="bmt-filter-section">
-          <div className="bmt-filter-group">
-            <label htmlFor="status-filter">Lọc:</label>
+      <div className="mentor-booking-controls">
+        <div className="mentor-booking-filter-section">
+          <div className="mentor-booking-filter-group">
             <select
               id="status-filter"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bmt-filter-select"
+              className="mentor-booking-filter-select"
             >
               <option value="all">Tất Cả Trạng Thái</option>
               <option value="pending">Chờ Duyệt</option>
@@ -211,13 +210,12 @@ const BookingManagerTab: React.FC<BookingManagerTabProps> = ({
             </select>
           </div>
           
-          <div className="bmt-filter-group">
-            <label htmlFor="sort-select">Sắp Xếp:</label>
+          <div className="mentor-booking-filter-group">
             <select
               id="sort-select"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-              className="bmt-filter-select"
+              className="mentor-booking-filter-select"
             >
               <option value="date">Ngày (Cũ nhất trước)</option>
               <option value="date-desc">Ngày (Mới nhất trước)</option>
@@ -229,29 +227,29 @@ const BookingManagerTab: React.FC<BookingManagerTabProps> = ({
           </div>
         </div>
 
-        <div className="bmt-search-section">
-          <div className="bmt-search-box">
+        <div className="mentor-booking-search-section">
+          <div className="mentor-booking-search-box">
             <input
               type="text"
               placeholder="Tìm kiếm theo tên học viên hoặc chủ đề..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bmt-search-input"
+              className="mentor-booking-search-input"
             />
-            <span className="bmt-search-icon">🔍</span>
+            <span className="mentor-booking-search-icon">🔍</span>
           </div>
         </div>
 
-        <div className="bmt-results-info">
-          <span className="bmt-results-count">
+        <div className="mentor-booking-results-info">
+          <span className="mentor-booking-results-count">
             {filteredBookings.length} kết quả
           </span>
         </div>
       </div>
 
       {filteredBookings.length === 0 ? (
-        <div className="bmt-empty-state">
-          <div className="bmt-empty-icon">📋</div>
+        <div className="mentor-booking-empty-state">
+          <div className="mentor-booking-empty-icon">📋</div>
           <h3>Không tìm thấy đặt lịch nào</h3>
           <p>
             {statusFilter === 'all' 
@@ -262,7 +260,7 @@ const BookingManagerTab: React.FC<BookingManagerTabProps> = ({
           </p>
           {(statusFilter !== 'all' || searchTerm) && (
             <button 
-              className="bmt-clear-filters-btn"
+              className="mentor-booking-clear-filters-btn"
               onClick={() => {
                 setStatusFilter('all');
                 setSearchTerm('');
@@ -273,7 +271,7 @@ const BookingManagerTab: React.FC<BookingManagerTabProps> = ({
           )}
         </div>
       ) : viewMode === 'cards' ? (
-        <div className="bmt-bookings-cards">
+        <div className="mentor-booking-bookings-cards">
           {filteredBookings.map((booking, index) => {
             const { date, time } = formatDateTime(booking.bookingTime);
             const isProcessing = processingBookings.includes(booking.id);
@@ -281,79 +279,79 @@ const BookingManagerTab: React.FC<BookingManagerTabProps> = ({
             return (
               <div 
                 key={booking.id} 
-                className={`bmt-booking-card ${isProcessing ? 'processing' : ''}`}
+                className={`mentor-booking-card ${isProcessing ? 'processing' : ''}`}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="bmt-card-header">
-                  <div className="bmt-student-info">
-                    <div className="bmt-student-avatar">
+                <div className="mentor-booking-card-header">
+                  <div className="mentor-booking-student-info">
+                    <div className="mentor-booking-student-avatar">
                       {booking.studentAvatar ? (
                         <img src={booking.studentAvatar} alt={booking.studentName} />
                       ) : (
-                        <div className="bmt-avatar-placeholder">
+                        <div className="mentor-booking-avatar-placeholder">
                           {booking.studentName.split(' ').map(n => n[0]).join('').toUpperCase()}
                         </div>
                       )}
                     </div>
-                    <div className="bmt-student-details">
-                      <h4 className="bmt-student-name">{booking.studentName}</h4>
-                      <span className={`bmt-status-badge ${getStatusBadge(booking.status)}`}>
+                    <div className="mentor-booking-student-details">
+                      <h4 className="mentor-booking-student-name">{booking.studentName}</h4>
+                      <span className={`mentor-booking-status-badge ${getStatusBadge(booking.status)}`}>
                         {booking.status}
                       </span>
                     </div>
                   </div>
-                  <div className="bmt-price">{formatPrice(booking.price)}</div>
+                  <div className="mentor-booking-price">{formatPrice(booking.price)}</div>
                 </div>
 
-                <div className="bmt-card-content">
-                  <div className="bmt-booking-details">
-                    <div className="bmt-detail-item">
-                      <span className="bmt-detail-icon">📅</span>
-                      <span className="bmt-detail-text">{date}</span>
+                <div className="mentor-booking-card-content">
+                  <div className="mentor-booking-details">
+                    <div className="mentor-booking-detail-item">
+                      <span className="mentor-booking-detail-icon">📅</span>
+                      <span className="mentor-booking-detail-text">{date}</span>
                     </div>
-                    <div className="bmt-detail-item">
-                      <span className="bmt-detail-icon">🕒</span>
-                      <span className="bmt-detail-text">{time}</span>
+                    <div className="mentor-booking-detail-item">
+                      <span className="mentor-booking-detail-icon">🕒</span>
+                      <span className="mentor-booking-detail-text">{time}</span>
                     </div>
-                    <div className="bmt-detail-item">
-                      <span className="bmt-detail-icon">📚</span>
-                      <span className="bmt-detail-text">
-                        {booking.topic ?? <span className="bmt-no-topic">Chưa có chủ đề</span>}
+                    <div className="mentor-booking-detail-item">
+                      <span className="mentor-booking-detail-icon">📚</span>
+                      <span className="mentor-booking-detail-text">
+                        {booking.topic ?? <span className="mentor-booking-no-topic">Chưa có chủ đề</span>}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="bmt-card-actions">
+                <div className="mentor-booking-card-actions">
                   {booking.status === 'Pending' && (
                     <>
                       <button
-                        className="bmt-action-btn bmt-approve-btn"
+                        className="mentor-booking-action-btn mentor-booking-approve-btn"
                         onClick={() => handleBookingAction(booking.id, 'approve')}
                         disabled={isProcessing}
                       >
-                        {isProcessing ? <span className="bmt-loading">⟳</span> : '✅'} Duyệt
+                        {isProcessing ? <span className="mentor-booking-loading">⟳</span> : '✅'} Duyệt
                       </button>
                       <button
-                        className="bmt-action-btn bmt-reject-btn"
+                        className="mentor-booking-action-btn mentor-booking-reject-btn"
                         onClick={() => handleBookingAction(booking.id, 'reject')}
                         disabled={isProcessing}
                       >
-                        {isProcessing ? <span className="bmt-loading">⟳</span> : '❌'} Từ Chối
+                        {isProcessing ? <span className="mentor-booking-loading">⟳</span> : '❌'} Từ Chối
                       </button>
                     </>
                   )}
                   {booking.status === 'Confirmed' && (
                     <button
-                      className="bmt-action-btn bmt-complete-btn"
+                      className="mentor-booking-action-btn mentor-booking-complete-btn"
                       onClick={() => handleBookingAction(booking.id, 'done')}
                       disabled={isProcessing}
                     >
-                      {isProcessing ? <span className="bmt-loading">⟳</span> : '🎉'} Hoàn Thành
+                      {isProcessing ? <span className="mentor-booking-loading">⟳</span> : '🎉'} Hoàn Thành
                     </button>
                   )}
                   {booking.status === 'Completed' && (
-                    <span className="bmt-completed-text">✨ Buổi Học Hoàn Thành</span>
+                    <span className="mentor-booking-completed-text">✨ Buổi Học Hoàn Thành</span>
                   )}
                 </div>
               </div>
@@ -361,8 +359,8 @@ const BookingManagerTab: React.FC<BookingManagerTabProps> = ({
           })}
         </div>
       ) : (
-        <div className="bmt-bookings-table-container">
-          <table className="bmt-bookings-table">
+        <div className="mentor-booking-bookings-table-container">
+          <table className="mentor-booking-bookings-table">
             <thead>
               <tr>
                 <th>Học Viên</th>
@@ -381,78 +379,78 @@ const BookingManagerTab: React.FC<BookingManagerTabProps> = ({
                 return (
                   <tr 
                     key={booking.id}
-                    className={`bmt-table-row ${isProcessing ? 'processing' : ''}`}
+                    className={`mentor-booking-table-row ${isProcessing ? 'processing' : ''}`}
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
                     <td>
-                      <div className="bmt-student-info">
-                        <div className="bmt-student-avatar">
+                      <div className="mentor-booking-student-info">
+                        <div className="mentor-booking-student-avatar">
                           {booking.studentAvatar ? (
                             <img src={booking.studentAvatar} alt={booking.studentName} />
                           ) : (
-                            <div className="bmt-avatar-placeholder">
+                            <div className="mentor-booking-avatar-placeholder">
                               {booking.studentName.split(' ').map(n => n[0]).join('').toUpperCase()}
                             </div>
                           )}
                         </div>
-                        <div className="bmt-student-details">
-                          <div className="bmt-student-name">{booking.studentName}</div>
+                        <div className="mentor-booking-student-details">
+                          <div className="mentor-booking-student-name">{booking.studentName}</div>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <div className="bmt-datetime">
-                        <div className="bmt-date">{date}</div>
-                        <div className="bmt-time">{time}</div>
+                      <div className="mentor-booking-datetime">
+                        <div className="mentor-booking-date">{date}</div>
+                        <div className="mentor-booking-time">{time}</div>
                       </div>
                     </td>
                     <td>
-                      <div className="bmt-topic">
-                        {booking.topic ?? <span className="bmt-no-topic">Chưa có chủ đề</span>}
+                      <div className="mentor-booking-topic">
+                        {booking.topic ?? <span className="mentor-booking-no-topic">Chưa có chủ đề</span>}
                       </div>
                     </td>
                     <td>
-                      <span className={`bmt-status-badge ${getStatusBadge(booking.status)}`}>
+                      <span className={`mentor-booking-status-badge ${getStatusBadge(booking.status)}`}>
                         {booking.status}
                       </span>
                     </td>
                     <td>
-                      <div className="bmt-price">{formatPrice(booking.price)}</div>
+                      <div className="mentor-booking-price">{formatPrice(booking.price)}</div>
                     </td>
                     <td>
-                      <div className="bmt-action-buttons">
+                      <div className="mentor-booking-action-buttons">
                         {booking.status === 'Pending' && (
                           <>
                             <button
-                              className="bmt-action-btn bmt-approve-btn"
+                              className="mentor-booking-action-btn mentor-booking-approve-btn"
                               onClick={() => handleBookingAction(booking.id, 'approve')}
                               disabled={isProcessing}
                               title="Duyệt Đặt Lịch"
                             >
-                              {isProcessing ? <span className="bmt-loading">⟳</span> : 'Duyệt'}
+                              {isProcessing ? <span className="mentor-booking-loading">⟳</span> : 'Duyệt'}
                             </button>
                             <button
-                              className="bmt-action-btn bmt-reject-btn"
+                              className="mentor-booking-action-btn mentor-booking-reject-btn"
                               onClick={() => handleBookingAction(booking.id, 'reject')}
                               disabled={isProcessing}
                               title="Từ Chối Đặt Lịch"
                             >
-                              {isProcessing ? <span className="bmt-loading">⟳</span> : 'Từ Chối'}
+                              {isProcessing ? <span className="mentor-booking-loading">⟳</span> : 'Từ Chối'}
                             </button>
                           </>
                         )}
                         {booking.status === 'Confirmed' && (
                           <button
-                            className="bmt-action-btn bmt-complete-btn"
+                            className="mentor-booking-action-btn mentor-booking-complete-btn"
                             onClick={() => handleBookingAction(booking.id, 'done')}
                             disabled={isProcessing}
                             title="Đánh Dấu Hoàn Thành"
                           >
-                            {isProcessing ? <span className="bmt-loading">⟳</span> : 'Hoàn Thành'}
+                            {isProcessing ? <span className="mentor-booking-loading">⟳</span> : 'Hoàn Thành'}
                           </button>
                         )}
                         {booking.status === 'Completed' && (
-                          <span className="bmt-completed-text">Buổi Học Hoàn Thành</span>
+                          <span className="mentor-booking-completed-text">Buổi Học Hoàn Thành</span>
                         )}
                       </div>
                     </td>

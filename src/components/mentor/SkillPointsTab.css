@@ -1,398 +1,472 @@
-/* SkillPointsTab.css - Styles for SkillPoints tab (spt- prefix) */
+/* SkillPointsTab.css - Sci-Fi HUD Style */
 
-.spt-skillpoints-tab {
+.mentor-skillpoints-tab {
   padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  color: var(--hud-text-primary);
+  font-family: var(--mentor-hud-font-body);
+  animation: hudFadeIn 0.5s ease-out;
 }
 
 /* Overview Section */
-.spt-overview {
+.mentor-skillpoints-overview {
   margin-bottom: 30px;
 }
 
-.spt-points-summary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 16px;
-  padding: 30px;
-  color: white;
-  margin-bottom: 30px;
+.mentor-skillpoints-points-summary {
+  background: rgba(10, 15, 30, 0.6);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 25px;
+  backdrop-filter: blur(5px);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
-}
-
-.spt-total-points {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.spt-points-icon {
-  font-size: 2.5rem;
-  opacity: 0.9;
-}
-
-.spt-total-points h2 {
-  font-size: 2.5rem;
-  margin: 0;
-  font-weight: 700;
-}
-
-.spt-total-points p {
-  margin: 5px 0 0 0;
-  font-size: 1.1rem;
-  opacity: 0.9;
-}
-
-.spt-level-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
-}
-
-.spt-level {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-align: right;
-}
-
-.spt-level-icon {
-  font-size: 1.8rem;
-}
-
-.spt-level h3 {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-.spt-level p {
-  margin: 5px 0 0 0;
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
-.spt-progress-bar {
-  width: 200px;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.spt-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #ffd700, #ffed4e, #ffd700);
-  border-radius: 6px;
-  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
 
-.spt-progress-fill::after {
+.mentor-skillpoints-points-summary::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
+  left: 0;
   width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-  animation: progressShimmer 2s ease-in-out infinite;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--hud-primary), transparent);
 }
 
-.spt-progress-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.75rem;
+.mentor-skillpoints-total-points {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.mentor-skillpoints-points-icon {
+  font-size: 3rem;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+.mentor-skillpoints-total-points h2 {
+  font-size: 2.5rem;
+  margin: 0;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: var(--hud-primary);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  font-family: 'Courier New', monospace;
+  line-height: 1;
 }
 
-/* Badges Section */
-.spt-badges-section {
-  margin-bottom: 30px;
-}
-
-.spt-badges-section h3 {
-  margin-bottom: 20px;
-  color: #333;
-  font-size: 1.3rem;
-  font-weight: 600;
-}
-
-.spt-badges-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.spt-badge {
-  background: white;
-  border: 2px solid #f0f0f0;
-  border-radius: 12px;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.spt-badge:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  border-color: #667eea;
-}
-
-.spt-badge-icon {
-  font-size: 2rem;
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.spt-badge-info h4 {
-  margin: 0 0 5px 0;
-  color: #333;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.spt-badge-info p {
-  margin: 0 0 8px 0;
-  color: #666;
+.mentor-skillpoints-total-points p {
+  margin: 5px 0 0 0;
   font-size: 0.9rem;
-  line-height: 1.4;
+  color: var(--hud-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.spt-badge-date {
+.mentor-skillpoints-level-up-badge {
+  margin-top: 5px;
   font-size: 0.8rem;
-  color: #999;
-  font-style: italic;
-}
-
-/* Activities Section */
-.spt-activities-section {
-  margin-bottom: 30px;
-}
-
-.spt-activities-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.spt-activities-header h3 {
-  margin: 0;
-  color: #333;
-  font-size: 1.3rem;
+  color: var(--hud-success);
   font-weight: 600;
+  animation: pulse 2s infinite;
 }
 
-.spt-period-filter {
-  display: flex;
-  gap: 8px;
-  background: #f5f5f5;
-  border-radius: 8px;
-  padding: 4px;
-}
-
-.spt-period-btn {
-  padding: 8px 16px;
-  border: none;
-  background: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #666;
-  transition: all 0.2s ease;
-}
-
-.spt-period-btn:hover {
-  background: #e0e0e0;
-  color: #333;
-}
-
-.spt-period-btn.active {
-  background: #667eea;
-  color: white;
-}
-
-.spt-activities-list {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #f0f0f0;
-  overflow: hidden;
-}
-
-.spt-no-activities {
-  padding: 40px;
-  text-align: center;
-  color: #999;
-}
-
-.spt-activity-item {
-  border-bottom: 1px solid #f0f0f0;
-  transition: background-color 0.2s ease;
-}
-
-.spt-activity-item:last-child {
-  border-bottom: none;
-}
-
-.spt-activity-item:hover {
-  background-color: #f9f9f9;
-}
-
-.spt-activity-content {
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-}
-
-.spt-activity-main h4 {
-  margin: 0 0 5px 0;
-  color: #333;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.spt-activity-main p {
-  margin: 0;
-  color: #666;
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-.spt-activity-meta {
+.mentor-skillpoints-level-info {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 5px;
-  flex-shrink: 0;
+  gap: 15px;
 }
 
-.spt-activity-points {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.spt-activity-date {
-  color: #999;
-  font-size: 0.8rem;
-}
-
-/* Guide Section */
-.spt-guide-section {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 30px;
-}
-
-.spt-guide-section h3 {
-  margin: 0 0 25px 0;
-  color: #333;
-  font-size: 1.3rem;
-  font-weight: 600;
-  text-align: center;
-}
-
-.spt-guide-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-.spt-guide-item {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
+.mentor-skillpoints-level {
   display: flex;
   align-items: center;
   gap: 15px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  text-align: right;
 }
 
-.spt-guide-item:hover {
-  transform: translateY(-2px);
+.mentor-skillpoints-level-icon {
+  font-size: 2rem;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
-.spt-guide-icon {
-  font-size: 1.8rem;
-  width: 50px;
-  height: 50px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.spt-guide-item h4 {
-  margin: 0 0 5px 0;
-  color: #333;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.spt-guide-item p {
+.mentor-skillpoints-level h3 {
   margin: 0;
-  color: #666;
-  font-size: 0.9rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: var(--mentor-hud-font-display);
+  color: var(--hud-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-/* Coin reward display */
-.spt-coin-reward {
+.mentor-skillpoints-level p {
+  margin: 5px 0 0 0;
+  font-size: 0.85rem;
+  color: var(--hud-text-secondary);
+}
+
+.mentor-skillpoints-coin-reward {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-  padding: 8px 12px;
-  background: rgba(255, 215, 0, 0.1);
-  border-radius: 8px;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-top: 5px;
+  font-size: 0.8rem;
+  color: var(--hud-warning);
+}
+
+.mentor-skillpoints-progress-bar {
+  width: 250px;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.mentor-skillpoints-progress-fill {
+  height: 100%;
+  background: var(--hud-primary);
+  box-shadow: 0 0 10px var(--hud-primary);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.mentor-skillpoints-progress-text {
+  position: absolute;
+  top: -20px;
+  right: 0;
+  font-size: 0.75rem;
+  color: var(--hud-primary);
+  font-family: 'Courier New', monospace;
+}
+
+/* Rewards Card */
+.mentor-skillpoints-rewards-card {
+  background: rgba(0, 20, 40, 0.5);
   border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 8px;
+  padding: 20px;
+  position: relative;
 }
 
-.spt-coin-icon {
+.mentor-skillpoints-rewards-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  padding-bottom: 10px;
+}
+
+.mentor-skillpoints-rewards-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-family: var(--mentor-hud-font-display);
+  color: var(--hud-warning);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mentor-skillpoints-rewards-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mentor-skillpoints-current-reward, .mentor-skillpoints-next-reward {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.mentor-skillpoints-current-reward {
+  border-left: 3px solid var(--hud-success);
+}
+
+.mentor-skillpoints-next-reward {
+  border-left: 3px solid var(--hud-text-secondary);
+  opacity: 0.7;
+}
+
+.mentor-skillpoints-reward-label {
+  font-size: 0.9rem;
+  color: var(--hud-text-secondary);
+}
+
+.mentor-skillpoints-reward-value {
+  font-weight: 700;
+  color: var(--hud-warning);
+  font-family: 'Courier New', monospace;
+}
+
+.mentor-skillpoints-reward-note {
+  font-size: 0.8rem;
+  color: var(--hud-text-secondary);
+  font-style: italic;
+  margin: 5px 0 0 0;
+  text-align: center;
+}
+
+/* Content Grid */
+.mentor-skillpoints-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+/* Badges Section */
+.mentor-skillpoints-badges-section {
+  background: rgba(10, 15, 30, 0.4);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.mentor-skillpoints-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+  padding-bottom: 10px;
+}
+
+.mentor-skillpoints-section-header h3 {
+  margin: 0;
   font-size: 1.2rem;
-  animation: coinSpin 2s ease-in-out infinite;
+  font-family: var(--mentor-hud-font-display);
+  color: var(--hud-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.spt-coin-text {
+.mentor-skillpoints-view-all-btn {
+  background: transparent;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: var(--hud-text-secondary);
+  padding: 5px 15px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.mentor-skillpoints-view-all-btn:hover {
+  border-color: var(--hud-primary);
+  color: var(--hud-primary);
+  background: rgba(0, 240, 255, 0.1);
+}
+
+.mentor-skillpoints-badges-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.mentor-skillpoints-badge-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(0, 20, 40, 0.5);
+  border: 1px solid rgba(0, 240, 255, 0.1);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.mentor-skillpoints-badge-card:hover {
+  transform: translateX(5px);
+  border-color: var(--hud-primary);
+  background: rgba(0, 240, 255, 0.05);
+}
+
+.mentor-skillpoints-badge-card.locked {
+  opacity: 0.7;
+  border-style: dashed;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.mentor-skillpoints-badge-icon {
+  font-size: 2rem;
+  min-width: 50px;
+  text-align: center;
+}
+
+.mentor-skillpoints-badge-info h4 {
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+  font-family: var(--mentor-hud-font-display);
+  color: var(--hud-text-primary);
+}
+
+.mentor-skillpoints-badge-info p {
+  margin: 0 0 5px 0;
   font-size: 0.85rem;
-  color: #b45309;
-  font-weight: 600;
+  color: var(--hud-text-secondary);
 }
 
-/* Level up modal */
-.spt-modal-overlay {
+.mentor-skillpoints-badge-date {
+  font-size: 0.75rem;
+  color: var(--hud-primary);
+  opacity: 0.8;
+}
+
+.mentor-skillpoints-badge-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.mentor-skillpoints-badge-progress span {
+  font-size: 0.75rem;
+  color: var(--hud-text-secondary);
+}
+
+.mentor-skillpoints-progress-bar.small {
+  width: 100px;
+  height: 4px;
+}
+
+/* Activity Section */
+.mentor-skillpoints-activity-section {
+  background: rgba(10, 15, 30, 0.4);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.mentor-skillpoints-filter-tabs {
+  display: flex;
+  gap: 5px;
+}
+
+.mentor-skillpoints-filter-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--hud-text-secondary);
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.mentor-skillpoints-filter-tab:hover {
+  color: var(--hud-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mentor-skillpoints-filter-tab.active {
+  color: var(--hud-primary);
+  border-color: var(--hud-primary);
+  background: rgba(0, 240, 255, 0.1);
+}
+
+.mentor-skillpoints-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.mentor-skillpoints-activity-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.mentor-skillpoints-activity-list::-webkit-scrollbar-thumb {
+  background: var(--hud-primary);
+  border-radius: 2px;
+}
+
+.mentor-skillpoints-activity-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.mentor-skillpoints-activity-item:hover {
+  background: rgba(0, 240, 255, 0.05);
+}
+
+.mentor-skillpoints-activity-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.mentor-skillpoints-activity-icon {
+  font-size: 1.5rem;
+}
+
+.mentor-skillpoints-activity-details h4 {
+  margin: 0 0 3px 0;
+  font-size: 0.95rem;
+  font-family: var(--mentor-hud-font-display);
+  color: var(--hud-text-primary);
+}
+
+.mentor-skillpoints-activity-details p {
+  margin: 0 0 3px 0;
+  font-size: 0.8rem;
+  color: var(--hud-text-secondary);
+}
+
+.mentor-skillpoints-activity-date {
+  font-size: 0.75rem;
+  color: var(--hud-text-secondary);
+  opacity: 0.7;
+}
+
+.mentor-skillpoints-activity-points {
+  font-weight: 700;
+  color: var(--hud-success);
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 5px rgba(0, 255, 157, 0.3);
+}
+
+.mentor-skillpoints-demo-btn {
+  background: transparent;
+  border: 1px dashed var(--hud-text-secondary);
+  color: var(--hud-text-secondary);
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mentor-skillpoints-demo-btn:hover {
+  border-color: var(--hud-primary);
+  color: var(--hud-primary);
+}
+
+.mentor-skillpoints-no-activities {
+  text-align: center;
+  padding: 30px;
+  color: var(--hud-text-secondary);
+  font-style: italic;
+}
+
+/* Modal */
+.mentor-skillpoints-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -403,309 +477,137 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(8px);
-  animation: modalFadeIn 0.3s ease-out;
+  backdrop-filter: blur(5px);
 }
 
-.spt-levelup-modal {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 20px;
-  padding: 0;
+.mentor-skillpoints-levelup-modal {
+  background: rgba(10, 15, 30, 0.95);
+  border: 2px solid var(--hud-primary);
+  border-radius: 12px;
+  padding: 30px;
   width: 90%;
-  max-width: 400px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-  animation: levelUpBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  overflow: hidden;
+  max-width: 450px;
+  text-align: center;
+  box-shadow: 0 0 50px rgba(0, 240, 255, 0.3);
   position: relative;
+  animation: zoomIn 0.3s ease-out;
 }
 
-.spt-levelup-modal::before {
+.mentor-skillpoints-levelup-modal::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-  animation: levelUpShine 2s ease-in-out infinite;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 12px;
+  background: linear-gradient(45deg, var(--hud-primary), transparent, var(--hud-primary));
+  z-index: -1;
+  animation: borderRotate 4s linear infinite;
 }
 
-.spt-levelup-animation {
-  padding: 40px 30px;
-  text-align: center;
-  color: white;
-  position: relative;
-  z-index: 1;
-}
-
-.spt-levelup-icon {
+.mentor-skillpoints-levelup-icon {
   font-size: 4rem;
-  margin-bottom: 20px;
-  animation: celebrationBounce 1s ease-in-out infinite;
-  display: block;
+  margin-bottom: 15px;
+  animation: bounce 2s infinite;
 }
 
-.spt-levelup-modal h2 {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin: 0 0 20px 0;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+.mentor-skillpoints-levelup-modal h2 {
+  font-size: 2rem;
+  color: var(--hud-primary);
+  margin: 0 0 10px 0;
+  font-family: var(--mentor-hud-font-display);
+  text-transform: uppercase;
   letter-spacing: 2px;
-  animation: textGlow 2s ease-in-out infinite;
+  text-shadow: 0 0 15px var(--hud-primary);
 }
 
-.spt-new-level {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+.mentor-skillpoints-levelup-modal h3 {
+  font-size: 1.2rem;
+  color: var(--hud-text-primary);
+  font-family: var(--mentor-hud-font-display);
+  margin: 0 0 20px 0;
 }
 
-.spt-coin-reward-display {
+.mentor-skillpoints-levelup-rewards {
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 25px;
+}
+
+.mentor-skillpoints-levelup-rewards p {
+  margin: 0 0 10px 0;
+  color: var(--hud-text-secondary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.mentor-skillpoints-reward-badge {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  margin: 20px 0;
-  padding: 20px;
-  background: rgba(255, 215, 0, 0.2);
-  border-radius: 15px;
-  border: 2px solid rgba(255, 215, 0, 0.4);
-}
-
-.spt-coin-icon-large {
-  font-size: 3rem;
-  animation: coinSpin 1.5s ease-in-out infinite;
-}
-
-.spt-coin-amount {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #ffd700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.spt-levelup-modal p {
+  gap: 10px;
+  font-weight: 700;
+  color: var(--hud-warning);
   font-size: 1.1rem;
-  margin: 20px 0;
-  opacity: 0.9;
-  line-height: 1.6;
 }
 
-.spt-levelup-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  margin-top: 30px;
-  flex-wrap: wrap;
-}
-
-.spt-levelup-btn, .spt-test-levelup-btn {
-  padding: 15px 30px;
+.mentor-skillpoints-levelup-close-btn {
+  background: var(--hud-primary);
+  color: #000;
   border: none;
-  border-radius: 12px;
-  font-size: 1.1rem;
+  padding: 12px 30px;
+  border-radius: 4px;
   font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
 }
 
-.spt-levelup-btn {
-  background: rgba(255, 255, 255, 0.9);
-  color: #667eea;
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+.mentor-skillpoints-levelup-close-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
 }
 
-.spt-levelup-btn:hover {
-  background: white;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+  40% {transform: translateY(-20px);}
+  60% {transform: translateY(-10px);}
 }
 
-.spt-test-levelup-btn {
-  background: rgba(255, 215, 0, 0.9);
-  color: #b45309;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+@keyframes borderRotate {
+  0% {opacity: 0.5;}
+  50% {opacity: 1;}
+  100% {opacity: 0.5;}
 }
 
-.spt-test-levelup-btn:hover {
-  background: #ffd700;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
-}
-
-/* Level up badge */
-.spt-level-up-badge {
-  background: linear-gradient(135deg, #ffd700, #ff6b6b);
-  color: white;
-  padding: 4px 12px;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  margin-top: 8px;
-  display: inline-block;
-  animation: levelUpPulse 2s ease-in-out infinite;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
-}
-
-@keyframes levelUpPulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 0.9;
-  }
-}
-
-/* Animations */
-@keyframes coinSpin {
-  0%, 100% {
-    transform: rotateY(0deg);
-  }
-  50% {
-    transform: rotateY(180deg);
-  }
-}
-
-@keyframes progressShimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes levelUpBounce {
-  0% {
-    opacity: 0;
-    transform: scale(0.3) rotate(-10deg);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.1) rotate(5deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
-}
-
-@keyframes levelUpShine {
-  0% {
-    transform: translateX(-100%) skewX(-15deg);
-  }
-  100% {
-    transform: translateX(200%) skewX(-15deg);
-  }
-}
-
-@keyframes celebrationBounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0) scale(1);
-  }
-  40% {
-    transform: translateY(-20px) scale(1.1);
-  }
-  60% {
-    transform: translateY(-10px) scale(1.05);
-  }
-}
-
-@keyframes textGlow {
-  0%, 100% {
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  }
-  50% {
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.5);
-  }
-}
-
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
-  .spt-skillpoints-tab {
-    padding: 15px;
+  .mentor-skillpoints-content-grid {
+    grid-template-columns: 1fr;
   }
-
-  .spt-points-summary {
+  
+  .mentor-skillpoints-points-summary {
     flex-direction: column;
-    text-align: center;
-    padding: 25px;
+    align-items: flex-start;
   }
-
-  .spt-level-info {
-    align-items: center;
+  
+  .mentor-skillpoints-level-info {
+    align-items: flex-start;
     width: 100%;
   }
-
-  .spt-level {
-    text-align: center;
+  
+  .mentor-skillpoints-level {
+    text-align: left;
   }
-
-  .spt-activities-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .spt-period-filter {
-    justify-content: center;
-  }
-
-  .spt-activity-content {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 15px;
-  }
-
-  .spt-activity-meta {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .spt-badges-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .spt-guide-grid {
-    grid-template-columns: 1fr;
+  
+  .mentor-skillpoints-progress-bar {
+    width: 100%;
   }
 }
-
-@media (max-width: 480px) {
-  .spt-period-filter {
-    flex-direction: column;
-  }
-
-  .spt-period-btn {
-    text-align: center;
-  }
-
-  .spt-badge {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .spt-guide-item {
-    flex-direction: column;
-    text-align: center;
-  }
-}
+  position: absolute;

@@ -90,7 +90,7 @@ const ReviewsTab: React.FC = () => {
       stars.push(
         <span
           key={i}
-          className={`rt-star rt-star-${size} ${i <= rating ? 'filled' : 'empty'}`}
+          className={`mentor-reviews-star mentor-reviews-star-${size} ${i <= rating ? 'filled' : 'empty'}`}
         >
           ★
         </span>
@@ -129,142 +129,113 @@ const ReviewsTab: React.FC = () => {
   const filteredReviews = getFilteredAndSortedReviews();
 
   return (
-    <div className="rt-reviews-tab">
+    <div className="mentor-reviews-tab">
       {/* Reviews Summary */}
-      <div className="rt-summary">
-        <div className="rt-overall-rating">
-          <div className="rt-rating-score">
-            <span className="rt-average">{averageRating.toFixed(1)}</span>
-            <div className="rt-stars-large">
+      <div className="mentor-reviews-summary">
+        <div className="mentor-reviews-overall-rating">
+          <div className="mentor-reviews-rating-score">
+            <div className="mentor-reviews-average">{averageRating.toFixed(1)}</div>
+            <div className="mentor-reviews-stars-large">
               {renderStars(Math.round(averageRating), 'large')}
             </div>
             <p>Dựa trên {reviews.length} đánh giá</p>
           </div>
         </div>
 
-        <div className="rt-rating-distribution">
+        <div className="mentor-reviews-rating-distribution">
           <h3>Phân Bố Đánh Giá</h3>
           {ratingDistribution.map(({ rating, count, percentage }) => (
-            <div key={rating} className="rt-rating-row">
-              <span className="rt-rating-label">{rating} sao</span>
-              <div className="rt-rating-bar">
+            <div key={rating} className="mentor-reviews-rating-row">
+              <div className="mentor-reviews-rating-label">{rating} sao</div>
+              <div className="mentor-reviews-rating-bar">
                 <div 
-                  className="rt-rating-fill" 
+                  className="mentor-reviews-rating-fill"
                   style={{ width: `${percentage}%` }}
                 ></div>
               </div>
-              <span className="rt-rating-count">({count})</span>
+              <div className="mentor-reviews-rating-count">{count}</div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Filters and Sorting */}
-      <div className="rt-controls">
-        <div className="rt-filters">
-          <h4>Lọc theo Đánh Giá:</h4>
-          <div className="rt-rating-filters">
-            <button
-              className={`rt-filter-btn ${selectedRating === null ? 'active' : ''}`}
+      {/* Controls */}
+      <div className="mentor-reviews-controls">
+        <div className="mentor-reviews-filters">
+          <h4>Lọc Theo Đánh Giá:</h4>
+          <div className="mentor-reviews-rating-filters">
+            <button 
+              className={`mentor-reviews-filter-btn ${selectedRating === null ? 'active' : ''}`}
               onClick={() => setSelectedRating(null)}
             >
-              Tất Cả Đánh Giá
+              Tất Cả
             </button>
             {[5, 4, 3, 2, 1].map(rating => (
               <button
                 key={rating}
-                className={`rt-filter-btn ${selectedRating === rating ? 'active' : ''}`}
+                className={`mentor-reviews-filter-btn ${selectedRating === rating ? 'active' : ''}`}
                 onClick={() => setSelectedRating(rating)}
               >
-                {rating} {renderStars(rating, 'small')}
+                {rating} Sao
               </button>
             ))}
           </div>
         </div>
 
-        <div className="rt-sorting">
-          <label htmlFor="sort-select">Sắp xếp theo:</label>
-          <select
-            id="sort-select"
+        <div className="mentor-reviews-sorting">
+          <label htmlFor="sort-reviews">Sắp Xếp Theo:</label>
+          <select 
+            id="sort-reviews"
+            className="mentor-reviews-sort-select"
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-            className="rt-sort-select"
+            onChange={(e) => setSortBy(e.target.value as any)}
           >
-            <option value="newest">Mới nhất trước</option>
-            <option value="oldest">Cũ nhất trước</option>
-            <option value="highest">Đánh giá cao nhất</option>
-            <option value="lowest">Đánh giá thấp nhất</option>
+            <option value="newest">Mới Nhất</option>
+            <option value="oldest">Cũ Nhất</option>
+            <option value="highest">Đánh Giá Cao Nhất</option>
+            <option value="lowest">Đánh Giá Thấp Nhất</option>
           </select>
         </div>
       </div>
 
       {/* Reviews List */}
-      <div className="rt-reviews-list">
-        {filteredReviews.length === 0 ? (
-          <div className="rt-no-reviews">
-            <p>Không tìm thấy đánh giá nào phù hợp với tiêu chí đã chọn.</p>
-          </div>
-        ) : (
-          filteredReviews.map((review) => (
-            <div key={review.id} className="rt-review-card">
-              <div className="rt-review-header">
-                <div className="rt-student-info">
-                  <div className="rt-student-avatar">
+      <div className="mentor-reviews-list">
+        {filteredReviews.length > 0 ? (
+          filteredReviews.map(review => (
+            <div key={review.id} className="mentor-reviews-card">
+              <div className="mentor-reviews-header">
+                <div className="mentor-reviews-student-info">
+                  <div className="mentor-reviews-student-avatar">
                     {review.studentAvatar ? (
                       <img src={review.studentAvatar} alt={review.studentName} />
                     ) : (
-                      <span className="rt-avatar-placeholder">
-                        {review.studentName.charAt(0).toUpperCase()}
-                      </span>
+                      <div className="mentor-reviews-avatar-placeholder">
+                        {review.studentName.charAt(0)}
+                      </div>
                     )}
                   </div>
-                  <div className="rt-student-details">
+                  <div className="mentor-reviews-student-details">
                     <h4>{review.studentName}</h4>
-                    <p className="rt-session-topic">{review.sessionTopic}</p>
+                    <p className="mentor-reviews-session-topic">{review.sessionTopic}</p>
                   </div>
                 </div>
-                
-                <div className="rt-review-meta">
-                  <div className="rt-rating">
-                    {renderStars(review.rating, 'medium')}
+                <div className="mentor-reviews-meta">
+                  <div className="mentor-reviews-rating">
+                    {renderStars(review.rating, 'small')}
                   </div>
-                  <span className="rt-review-date">{formatDate(review.date)}</span>
+                  <span className="mentor-reviews-date">{formatDate(review.date)}</span>
                 </div>
               </div>
-
-              <div className="rt-review-content">
+              <div className="mentor-reviews-content">
                 <p>{review.feedback}</p>
               </div>
             </div>
           ))
+        ) : (
+          <div className="mentor-reviews-no-reviews">
+            <p>Không tìm thấy đánh giá nào phù hợp với bộ lọc của bạn.</p>
+          </div>
         )}
-      </div>
-
-      {/* Reviews Stats */}
-      <div className="rt-stats">
-        <div className="rt-stat-item">
-          <span className="rt-stat-icon">📈</span>
-          <div>
-            <h4>Đánh Giá Trung Bình</h4>
-            <p>{averageRating.toFixed(1)} trên 5.0</p>
-          </div>
-        </div>
-        
-        <div className="rt-stat-item">
-          <span className="rt-stat-icon">⭐</span>
-          <div>
-            <h4>Đánh Giá 5 Sao</h4>
-            <p>{ratingDistribution[0].count} ({ratingDistribution[0].percentage.toFixed(1)}%)</p>
-          </div>
-        </div>
-        
-        <div className="rt-stat-item">
-          <span className="rt-stat-icon">💬</span>
-          <div>
-            <h4>Tổng Đánh Giá</h4>
-            <p>{reviews.length} đánh giá đã nhận</p>
-          </div>
-        </div>
       </div>
     </div>
   );

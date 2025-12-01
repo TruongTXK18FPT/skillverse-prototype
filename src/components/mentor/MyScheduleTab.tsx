@@ -94,170 +94,159 @@ const MyScheduleTab: React.FC = () => {
 
   const getEventTypeClass = (type: ScheduleEvent['type']) => {
     const typeClasses = {
-      'available': 'mst-event-available',
-      'booked': 'mst-event-booked',
-      'blocked': 'mst-event-blocked'
+      'available': 'mentor-schedule-event-available',
+      'booked': 'mentor-schedule-event-booked',
+      'blocked': 'mentor-schedule-event-blocked'
     };
-    return typeClasses[type] || 'mst-event-available';
+    return typeClasses[type] || 'mentor-schedule-event-available';
   };
 
   const weekDays = getWeekDays(currentDate);
 
   return (
-    <div className="mst-schedule-tab">
-      <div className="mst-tab-header">
-        <h2>📆 Lịch Trình Của Tôi</h2>
+    <div className="mentor-schedule-tab">
+      <div className="mentor-schedule-tab-header">
+        <h2>📅 Lịch Của Tôi</h2>
         <p>Quản lý thời gian rảnh và xem các buổi học sắp tới</p>
       </div>
 
-      <div className="mst-schedule-controls">
-        <div className="mst-view-controls">
-          <button
-            className={`mst-view-btn ${view === 'week' ? 'active' : ''}`}
+      <div className="mentor-schedule-controls">
+        <div className="mentor-schedule-view-controls">
+          <button 
+            className={`mentor-schedule-view-btn ${view === 'week' ? 'active' : ''}`}
             onClick={() => setView('week')}
           >
-            Xem Tuần
+            Tuần
           </button>
-          <button
-            className={`mst-view-btn ${view === 'month' ? 'active' : ''}`}
+          <button 
+            className={`mentor-schedule-view-btn ${view === 'month' ? 'active' : ''}`}
             onClick={() => setView('month')}
           >
-            Xem Tháng
+            Tháng
           </button>
         </div>
 
-        <div className="mst-navigation">
-          <button
-            className="mst-nav-btn"
+        <div className="mentor-schedule-navigation">
+          <button 
+            className="mentor-schedule-nav-btn" 
             onClick={() => view === 'week' ? navigateWeek('prev') : navigateMonth('prev')}
           >
-            ‹
+            &lt;
           </button>
-          <span className="mst-current-period">
+          <span className="mentor-schedule-current-period">
             {view === 'week' 
-              ? `${weekDays[0].toLocaleDateString('vi-VN', { day: 'numeric', month: 'short' })} - ${weekDays[6].toLocaleDateString('vi-VN', { day: 'numeric', month: 'short', year: 'numeric' })}`
+              ? `${weekDays[0].getDate()}/${weekDays[0].getMonth() + 1} - ${weekDays[6].getDate()}/${weekDays[6].getMonth() + 1}, ${weekDays[6].getFullYear()}`
               : currentDate.toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' })
             }
           </span>
-          <button
-            className="mst-nav-btn"
+          <button 
+            className="mentor-schedule-nav-btn" 
             onClick={() => view === 'week' ? navigateWeek('next') : navigateMonth('next')}
           >
-            ›
+            &gt;
           </button>
         </div>
 
-        <div className="mst-action-buttons">
-          <button className="mst-action-btn mst-add-btn" onClick={handleAddAvailability}>
-            Thêm Thời Gian Rảnh
+        <div className="mentor-schedule-action-buttons">
+          <button className="mentor-schedule-action-btn mentor-schedule-add-btn" onClick={handleAddAvailability}>
+            + Thêm Lịch Rảnh
           </button>
-          <button className="mst-action-btn mst-export-btn" onClick={handleExportCalendar}>
-            Xuất Lịch
+          <button className="mentor-schedule-action-btn mentor-schedule-export-btn" onClick={handleExportCalendar}>
+            📥 Xuất Lịch
           </button>
         </div>
       </div>
 
-      {view === 'week' && (
-        <div className="mst-week-view">
-          <div className="mst-week-header">
-            {weekDays.map((day) => (
-              <div key={day.toISOString()} className="mst-day-header">
-                <div className="mst-day-name">
+      {view === 'week' ? (
+        <div className="mentor-schedule-week-view">
+          <div className="mentor-schedule-week-header">
+            {weekDays.map((day, index) => (
+              <div key={index} className="mentor-schedule-day-header">
+                <div className="mentor-schedule-day-name">
                   {day.toLocaleDateString('vi-VN', { weekday: 'short' })}
                 </div>
-                <div className="mst-day-number">
+                <div className="mentor-schedule-day-number">
                   {day.getDate()}
                 </div>
               </div>
             ))}
           </div>
-          
-          <div className="mst-week-grid">
-            {weekDays.map((day) => {
+          <div className="mentor-schedule-week-grid">
+            {weekDays.map((day, index) => {
               const dayEvents = getEventsForDate(day);
               return (
-                <div key={day.toISOString()} className="mst-day-column">
-                  {dayEvents.length === 0 ? (
-                    <div className="mst-empty-day">
-                      <span>Không có sự kiện</span>
-                    </div>
-                  ) : (
+                <div key={index} className="mentor-schedule-day-column">
+                  {dayEvents.length > 0 ? (
                     dayEvents.map(event => (
-                      <div
-                        key={event.id}
-                        className={`mst-event ${getEventTypeClass(event.type)}`}
-                        title={event.type === 'booked' ? `${event.studentName} - ${event.topic}` : event.title}
-                      >
-                        <div className="mst-event-time">
+                      <div key={event.id} className={`mentor-schedule-event ${getEventTypeClass(event.type)}`}>
+                        <div className="mentor-schedule-event-time">
                           {formatTime(event.startTime)} - {formatTime(event.endTime)}
                         </div>
-                        <div className="mst-event-title">
-                          {event.type === 'booked' ? event.studentName : 'Rảnh'}
-                        </div>
-                        {event.topic && (
-                          <div className="mst-event-topic">{event.topic}</div>
-                        )}
+                        <div className="mentor-schedule-event-title">{event.title}</div>
+                        {event.topic && <div className="mentor-schedule-event-topic">{event.topic}</div>}
                       </div>
                     ))
+                  ) : (
+                    <div className="mentor-schedule-empty-day">Trống</div>
                   )}
                 </div>
               );
             })}
           </div>
         </div>
-      )}
-
-      {view === 'month' && (
-        <div className="mst-month-view">
-          <div className="mst-month-calendar">
-            <div className="mst-month-header">
-              {['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map(day => (
-                <div key={day} className="mst-month-day-header">{day}</div>
+      ) : (
+        <div className="mentor-schedule-month-view">
+          <div className="mentor-schedule-month-calendar">
+            <div className="mentor-schedule-month-header">
+              {['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'].map(day => (
+                <div key={day} className="mentor-schedule-month-day-header">{day}</div>
               ))}
             </div>
-            <div className="mst-month-grid">
-              {/* Simplified month view - would need more complex logic for full calendar */}
-              <div className="mst-month-coming-soon">
-                <h3>Xem Tháng</h3>
-                <p>Chế độ xem lịch tháng đầy đủ sẽ được triển khai ở đây với tính toán ngày phù hợp</p>
-              </div>
+            {/* Month grid implementation would go here - simplified for prototype */}
+            <div className="mentor-schedule-month-coming-soon">
+              <h3>Lịch Tháng</h3>
+              <p>Chế độ xem lịch tháng đầy đủ sẽ sớm ra mắt.</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Add Availability Modal */}
       {showAddModal && (
-        <div className="mst-modal-overlay">
-          <div className="mst-modal-content">
-            <div className="mst-modal-header">
-              <h3>Thêm Thời Gian Rảnh</h3>
-              <button className="mst-close-modal" onClick={() => setShowAddModal(false)}>
-                ×
-              </button>
+        <div className="mentor-schedule-modal-overlay">
+          <div className="mentor-schedule-modal-content">
+            <div className="mentor-schedule-modal-header">
+              <h3>Thêm Lịch Rảnh</h3>
+              <button className="mentor-schedule-close-modal" onClick={() => setShowAddModal(false)}>×</button>
             </div>
-            <div className="mst-modal-body">
-              <div className="mst-form-group">
-                <label htmlFor="availability-date">Ngày</label>
-                <input type="date" id="availability-date" className="mst-form-input" />
+            <div className="mentor-schedule-modal-body">
+              <div className="mentor-schedule-form-group">
+                <label>Ngày</label>
+                <input type="date" className="mentor-schedule-form-input" defaultValue={new Date().toISOString().split('T')[0]} />
               </div>
-              <div className="mst-form-row">
-                <div className="mst-form-group">
-                  <label htmlFor="start-time">Giờ Bắt Đầu</label>
-                  <input type="time" id="start-time" className="mst-form-input" />
+              <div className="mentor-schedule-form-row">
+                <div className="mentor-schedule-form-group">
+                  <label>Từ Giờ</label>
+                  <input type="time" className="mentor-schedule-form-input" defaultValue="09:00" />
                 </div>
-                <div className="mst-form-group">
-                  <label htmlFor="end-time">Giờ Kết Thúc</label>
-                  <input type="time" id="end-time" className="mst-form-input" />
+                <div className="mentor-schedule-form-group">
+                  <label>Đến Giờ</label>
+                  <input type="time" className="mentor-schedule-form-input" defaultValue="10:00" />
                 </div>
               </div>
-              <div className="mst-form-actions">
-                <button className="mst-action-btn mst-cancel-btn" onClick={() => setShowAddModal(false)}>
-                  Hủy
-                </button>
-                <button className="mst-action-btn mst-save-btn">
-                  Thêm Thời Gian Rảnh
-                </button>
+              <div className="mentor-schedule-form-group">
+                <label>Lặp Lại</label>
+                <select className="mentor-schedule-form-input">
+                  <option value="none">Không lặp lại</option>
+                  <option value="daily">Hàng ngày</option>
+                  <option value="weekly">Hàng tuần</option>
+                </select>
+              </div>
+              <div className="mentor-schedule-form-actions">
+                <button className="mentor-schedule-cancel-btn" onClick={() => setShowAddModal(false)}>Hủy</button>
+                <button className="mentor-schedule-save-btn" onClick={() => {
+                  alert('Đã thêm lịch rảnh!');
+                  setShowAddModal(false);
+                }}>Lưu</button>
               </div>
             </div>
           </div>
