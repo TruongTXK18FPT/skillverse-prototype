@@ -30,7 +30,6 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   const [toiletPhase, setToiletPhase] = useState<number>(0); // 0: running, 1: hidden
   const toiletTargetRef = useRef<Position>({ x: 0, y: 0 });
   const toiletTimerRef = useRef<number>(0);
-  const isTestModeRef = useRef<boolean>(false);
   const isReturningFromToiletRef = useRef<boolean>(false);
 
   // Dragging Refs
@@ -64,7 +63,8 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
       }
 
       const timer = setTimeout(() => {
-        setPetState(PetState.IDLE);
+        setPetState(PetState.WALKING);
+        isReturningFromToiletRef.current = true;
       }, PET_CONFIG.animationSpeed * (PET_CONFIG.rows * PET_CONFIG.cols));
       return () => clearTimeout(timer);
     }
@@ -165,10 +165,9 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
     } else if (petState === PetState.FINISH_PIZZA) {
       // After finishing pizza, check for stomach ache (rare)
       const timer = setTimeout(() => {
-        // 20% chance of stomach ache, or force if testing
-        if (Math.random() < 0.2 || isTestModeRef.current) {
+        // 20% chance of stomach ache
+        if (Math.random() < 0.2) {
           startStomachAcheSequence();
-          isTestModeRef.current = false; // Reset test mode
         } else {
           setPetState(PetState.IDLE);
         }
@@ -454,13 +453,6 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
     setIsFollowing(!isFollowing);
   };
 
-  const handleDoubleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    // Test full sequence
-    isTestModeRef.current = true;
-    startEatingSequence();
-  };
-
   if (petState === PetState.TOILET_BREAK) return null; // Hide pet during toilet break
 
   return (
@@ -477,7 +469,6 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onContextMenu={handleContextMenu}
-      onDoubleClick={handleDoubleClick}
     >
 
       <SpriteAnimator 
