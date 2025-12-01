@@ -23,6 +23,16 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   const [facingRight, setFacingRight] = useState<boolean>(true);
   const [bobOffset, setBobOffset] = useState<number>(0);
   
+  // Animation Control
+  const [startFrame, setStartFrame] = useState<number | undefined>(undefined);
+  const [endFrame, setEndFrame] = useState<number | undefined>(undefined);
+  const [eatingPhase, setEatingPhase] = useState<number>(0); // 0: none, 1: chewing, 2: swallowing
+  const [toiletPhase, setToiletPhase] = useState<number>(0); // 0: running, 1: hidden
+  const toiletTargetRef = useRef<Position>({ x: 0, y: 0 });
+  const toiletTimerRef = useRef<number>(0);
+  const isTestModeRef = useRef<boolean>(false);
+  const isReturningFromToiletRef = useRef<boolean>(false);
+
   // Dragging Refs
   const isDragging = useRef<boolean>(false);
   const dragOffset = useRef<Position>({ x: 0, y: 0 });
@@ -36,6 +46,12 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   
   // Mouse tracking for auto-follow
   const [mousePos, setMousePos] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+
+  // Reset animation frames when state changes
+  useEffect(() => {
+    setStartFrame(undefined);
+    setEndFrame(undefined);
+  }, [petState]);
 
   // Handle Intro Animation
   useEffect(() => {
@@ -88,6 +104,111 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
     return () => clearInterval(checkSleep);
   }, [petState]);
 
+  // Random Idle Behavior (Every 15s)
+  useEffect(() => {
+    if (petState !== PetState.IDLE) return;
+
+    const randomBehavior = setInterval(() => {
+      if (petState !== PetState.IDLE) return;
+      
+      const rand = Math.random();
+      if (rand < 0.33) {
+        // Stay IDLE
+      } else if (rand < 0.66) {
+        // Grooming
+        setPetState(PetState.GROOMING);
+        setTimeout(() => setPetState(PetState.IDLE), 4000); // Groom for 4s
+      } else {
+        // Eat Pizza Sequence
+        startEatingSequence();
+      }
+    }, 15000);
+
+    return () => clearInterval(randomBehavior);
+  }, [petState]);
+
+  const startEatingSequence = () => {
+    setPetState(PetState.TAKE_PIZZA);
+    // Take pizza animation (16 frames * 100ms = 1.6s)
+    setTimeout(() => {
+      setPetState(PetState.EATING);
+      setEatingPhase(1); // Start chewing
+    }, 1600);
+  };
+
+  // Handle Eating Logic
+  useEffect(() => {
+    if (petState === PetState.EATING) {
+      if (eatingPhase === 1) {
+        // Chewing: Loop rows 0-2 (Frames 0-11)
+        setStartFrame(0);
+        setEndFrame(11);
+        
+        // Chew for random time (2-4s)
+        const chewTime = 2000 + Math.random() * 2000;
+        const timer = setTimeout(() => {
+          setEatingPhase(2);
+        }, chewTime);
+        return () => clearTimeout(timer);
+      } else if (eatingPhase === 2) {
+        // Swallowing/Finishing bite: Loop row 3 (Frames 12-15)
+        setStartFrame(12);
+        setEndFrame(15);
+        
+        // Play once or short loop then finish
+        const timer = setTimeout(() => {
+          setPetState(PetState.FINISH_PIZZA);
+          setEatingPhase(0);
+        }, 1600);
+        return () => clearTimeout(timer);
+      }
+    } else if (petState === PetState.FINISH_PIZZA) {
+      // After finishing pizza, check for stomach ache (rare)
+      const timer = setTimeout(() => {
+        // 20% chance of stomach ache, or force if testing
+        if (Math.random() < 0.2 || isTestModeRef.current) {
+          startStomachAcheSequence();
+          isTestModeRef.current = false; // Reset test mode
+        } else {
+          setPetState(PetState.IDLE);
+        }
+      }, 1600);
+      return () => clearTimeout(timer);
+    }
+  }, [petState, eatingPhase]);
+
+  const startStomachAcheSequence = () => {
+    setPetState(PetState.STOMACH_ACHE);
+    // Stomach ache for 3s
+    setTimeout(() => {
+      setPetState(PetState.FIND_TOILET);
+      setToiletPhase(0);
+      toiletTimerRef.current = Date.now();
+    }, 3000);
+  };
+
+  // Handle Toilet Logic
+  useEffect(() => {
+    if (petState === PetState.TOILET_BREAK) {
+      // Play flush sound
+      if (SOUNDS.flush) {
+        const flushAudio = new Audio(SOUNDS.flush);
+        flushAudio.volume = 0.5;
+        flushAudio.play().catch(console.error);
+      }
+
+      const timer = setTimeout(() => {
+        // Return to user from the edge it disappeared
+        setPetState(PetState.WALKING); 
+        isReturningFromToiletRef.current = true;
+        
+        // Set position to just off-screen left (where it ran to)
+        setPosition({ x: -100, y: position.y });
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [petState]);
+
   // Update interaction time on any activity
   const updateInteraction = () => {
     lastInteractionTime.current = Date.now();
@@ -138,9 +259,70 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
         petState === PetState.INTRO || 
         petState === PetState.OUTRO || 
         petState === PetState.SLEEP || 
-        petState === PetState.WAKEUP
+        petState === PetState.WAKEUP ||
+        petState === PetState.GROOMING ||
+        petState === PetState.TAKE_PIZZA ||
+        petState === PetState.EATING ||
+        petState === PetState.FINISH_PIZZA ||
+        petState === PetState.STOMACH_ACHE ||
+        petState === PetState.TOILET_BREAK
       ) {
         setBobOffset(0);
+        animationFrameId = requestAnimationFrame(loop);
+        return;
+      }
+
+      // Handle Find Toilet Chaos Movement
+      if (petState === PetState.FIND_TOILET) {
+        const now = Date.now();
+        const runDuration = now - toiletTimerRef.current;
+
+        if (runDuration < 4000) {
+          // Run chaotically for 4s
+          // Pick random target every 500ms or if close
+          const dx = toiletTargetRef.current.x - position.x;
+          const dy = toiletTargetRef.current.y - position.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 20 || Math.random() < 0.05) {
+            toiletTargetRef.current = {
+              x: Math.random() * (window.innerWidth - 100),
+              y: Math.random() * (window.innerHeight - 100)
+            };
+          }
+        } else {
+          // Run to edge
+          if (toiletPhase === 0) {
+            setToiletPhase(1);
+            // Pick nearest edge
+            toiletTargetRef.current = {
+              x: -200, // Just run left off screen for simplicity
+              y: position.y
+            };
+          }
+        }
+
+        // Move towards toilet target
+        setPosition((prev) => {
+          const tDx = toiletTargetRef.current.x - prev.x;
+          const tDy = toiletTargetRef.current.y - prev.y;
+          
+          // Move fast!
+          const speed = MOVEMENT_SPEED * 3; 
+          const nextX = prev.x + tDx * speed;
+          const nextY = prev.y + tDy * speed;
+
+          if (tDx > 0 && !facingRight) setFacingRight(true);
+          if (tDx < 0 && facingRight) setFacingRight(false);
+
+          // Check if off screen
+          if (toiletPhase === 1 && prev.x < -100) {
+            setPetState(PetState.TOILET_BREAK);
+          }
+
+          return { x: nextX, y: nextY };
+        });
+
         animationFrameId = requestAnimationFrame(loop);
         return;
       }
@@ -164,8 +346,9 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
 
         if (distance > STOP_DISTANCE) {
           // Lerp movement: Move a fraction of the distance for that "chase" effect
-          const nextX = prev.x + dx * MOVEMENT_SPEED;
-          const nextY = prev.y + dy * MOVEMENT_SPEED;
+          const speed = isReturningFromToiletRef.current ? MOVEMENT_SPEED * 0.2 : MOVEMENT_SPEED;
+          const nextX = prev.x + dx * speed;
+          const nextY = prev.y + dy * speed;
 
           // Hysteresis for facing direction to prevent jitter
           if (dx > 20 && !facingRight) setFacingRight(true);
@@ -182,6 +365,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
           // Arrived / Idle
           if (petState !== PetState.IDLE) setPetState(PetState.IDLE);
           setBobOffset(0); // Reset bob
+          isReturningFromToiletRef.current = false;
           return prev;
         }
       });
@@ -191,7 +375,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
 
     animationFrameId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [targetPosition, mousePos, isFollowing, petState, facingRight]);
+  }, [targetPosition, mousePos, isFollowing, petState, facingRight, toiletPhase]);
 
   // Interaction Handlers
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -241,6 +425,9 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
 
   const handleMouseEnter = () => {
     if (isDragging.current) return;
+    // Prevent interaction if busy with special animations
+    if (petState !== PetState.IDLE && petState !== PetState.WALKING) return;
+
     updateInteraction();
     
     // Start 3s timer
@@ -267,6 +454,15 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
     setIsFollowing(!isFollowing);
   };
 
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Test full sequence
+    isTestModeRef.current = true;
+    startEatingSequence();
+  };
+
+  if (petState === PetState.TOILET_BREAK) return null; // Hide pet during toilet break
+
   return (
     <div
       className="meowl-pet fixed select-none cursor-grab active:cursor-grabbing will-change-transform"
@@ -281,15 +477,15 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onContextMenu={handleContextMenu}
+      onDoubleClick={handleDoubleClick}
     >
-      {/* Tooltip / Status Indicator */}
-      <div className={`absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1 rounded-full bg-black/70 backdrop-blur-sm text-white text-xs font-medium pointer-events-none transition-all duration-300 ${!isFollowing ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-      </div>
 
       <SpriteAnimator 
         state={petState} 
         facingRight={facingRight} 
-        config={PET_CONFIG} 
+        config={PET_CONFIG}
+        startFrame={startFrame}
+        endFrame={endFrame}
       />
     </div>
   );

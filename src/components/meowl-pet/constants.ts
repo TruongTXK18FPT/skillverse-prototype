@@ -12,6 +12,14 @@ import dragSprite from '../../assets/meowl-pet/spritesheet/drag.png';
 import interactSound from '../../assets/meowl-pet/sound/hao-xiang-ni.mp3';
 import huhSound from '../../assets/meowl-pet/sound/huh-sound.mp3';
 import getSnappedSound from '../../assets/meowl-pet/sound/get-snapped.mp3';
+import flushSound from '../../assets/meowl-pet/sound/flush.mp3';
+
+import groomingSprite from '../../assets/meowl-pet/spritesheet/grooming.png';
+import takePizzaSprite from '../../assets/meowl-pet/spritesheet/takepizzaout.png';
+import eatPizzaSprite from '../../assets/meowl-pet/spritesheet/eatpizza.png';
+import finishPizzaSprite from '../../assets/meowl-pet/spritesheet/finishpizza.png';
+import stomachAcheSprite from '../../assets/meowl-pet/spritesheet/stomachache.png';
+import findToiletSprite from '../../assets/meowl-pet/spritesheet/findtoilet.png';
 
 // Sprite sheets configurations - 4x4 frames each
 export const SPRITE_SHEETS = {
@@ -23,6 +31,12 @@ export const SPRITE_SHEETS = {
   sleep: sleepSprite,
   wakeup: wakeupSprite,
   drag: dragSprite,
+  grooming: groomingSprite,
+  takePizza: takePizzaSprite,
+  eatPizza: eatPizzaSprite,
+  finishPizza: finishPizzaSprite,
+  stomachAche: stomachAcheSprite,
+  findToilet: findToiletSprite,
 } as const;
 
 // Sound configurations
@@ -30,6 +44,7 @@ export const SOUNDS: SoundConfig = {
   interact: interactSound,
   intro: huhSound,
   outro: getSnappedSound,
+  flush: flushSound,
 };
 
 export const PET_CONFIG: SpriteConfig = {
@@ -45,7 +60,7 @@ export const PET_CONFIG: SpriteConfig = {
 export const MOVEMENT_SPEED = 0.02; // Lower speed for lazy follow
 export const STOP_DISTANCE = 70; 
 export const INTERACTION_DURATION = 3000;
-export const SLEEP_TIMEOUT = 15000; // 15 seconds
+export const SLEEP_TIMEOUT = 300000; // 5 minutes
 
 // Animation settings
 export const WALK_BOB_AMPLITUDE = 4; // pixels for walking bob effect

@@ -6,10 +6,12 @@ interface SpriteAnimatorProps {
   state: PetState;
   facingRight: boolean;
   config: SpriteConfig;
+  startFrame?: number;
+  endFrame?: number;
 }
 
-export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ state, facingRight, config }) => {
-  const [frameIndex, setFrameIndex] = useState(0);
+export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ state, facingRight, config, startFrame, endFrame }) => {
+  const [frameIndex, setFrameIndex] = useState(startFrame || 0);
   const [hasError, setHasError] = useState(false);
   const [currentSprite, setCurrentSprite] = useState(config.src);
 
@@ -32,6 +34,18 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ state, facingRig
         return SPRITE_SHEETS.sleep;
       case PetState.WAKEUP:
         return SPRITE_SHEETS.wakeup;
+      case PetState.GROOMING:
+        return SPRITE_SHEETS.grooming;
+      case PetState.TAKE_PIZZA:
+        return SPRITE_SHEETS.takePizza;
+      case PetState.EATING:
+        return SPRITE_SHEETS.eatPizza;
+      case PetState.FINISH_PIZZA:
+        return SPRITE_SHEETS.finishPizza;
+      case PetState.STOMACH_ACHE:
+        return SPRITE_SHEETS.stomachAche;
+      case PetState.FIND_TOILET:
+        return SPRITE_SHEETS.findToilet;
       default: 
         return SPRITE_SHEETS.idle;
     }
@@ -42,20 +56,27 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ state, facingRig
     const newSprite = getSpriteForState(state);
     if (newSprite !== currentSprite) {
       setCurrentSprite(newSprite);
-      setFrameIndex(0); // Reset frame when changing sprite
+      setFrameIndex(startFrame || 0); // Reset frame when changing sprite
       setHasError(false); // Reset error state
     }
-  }, [state, currentSprite]);
+  }, [state, currentSprite, startFrame]);
 
   // Frame animation
   useEffect(() => {
     const totalFrames = config.cols * config.rows;
+    const start = startFrame !== undefined ? startFrame : 0;
+    const end = endFrame !== undefined ? endFrame : totalFrames - 1;
+    
     const interval = setInterval(() => {
-      setFrameIndex((prev) => (prev + 1) % totalFrames);
+      setFrameIndex((prev) => {
+        const next = prev + 1;
+        if (next > end) return start;
+        return next;
+      });
     }, config.animationSpeed);
 
     return () => clearInterval(interval);
-  }, [config.animationSpeed, config.cols, config.rows]);
+  }, [config.animationSpeed, config.cols, config.rows, startFrame, endFrame]);
 
   // Handle Image Error
   if (hasError) {

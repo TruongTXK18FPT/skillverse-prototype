@@ -6,7 +6,14 @@ export enum PetState {
   INTRO = 'INTRO',
   OUTRO = 'OUTRO',
   SLEEP = 'SLEEP',
-  WAKEUP = 'WAKEUP'
+  WAKEUP = 'WAKEUP',
+  GROOMING = 'GROOMING',
+  TAKE_PIZZA = 'TAKE_PIZZA',
+  EATING = 'EATING',
+  FINISH_PIZZA = 'FINISH_PIZZA',
+  STOMACH_ACHE = 'STOMACH_ACHE',
+  FIND_TOILET = 'FIND_TOILET',
+  TOILET_BREAK = 'TOILET_BREAK'
 }
 
 export interface Position {
@@ -27,5 +34,6 @@ export interface SoundConfig {
   interact: string;
   intro?: string;
   outro?: string;
+  flush?: string;
   // Có thể thêm các sound khác sau
 }
