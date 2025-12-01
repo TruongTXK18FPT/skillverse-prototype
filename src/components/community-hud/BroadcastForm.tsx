@@ -17,7 +17,7 @@ import {
 import './broadcast-form-styles.css';
 import communityService from '../../services/communityService';
 import { useAuth } from '../../context/AuthContext';
-import { uploadImage as uploadImageFile } from '../../services/fileUploadService';
+import { uploadImage as uploadImageFile, validateImage } from '../../services/fileUploadService';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
@@ -47,6 +47,8 @@ const BroadcastForm: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploadingThumbnail, setIsUploadingThumbnail] = useState(false);
   const [isUploadingContent, setIsUploadingContent] = useState(false);
+  const [thumbnailProgress, setThumbnailProgress] = useState(0);
+  const [contentUploadProgress, setContentUploadProgress] = useState(0);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | undefined>(undefined);
   const inlineImageInputRef = React.useRef<HTMLInputElement>(null);
   const thumbnailInputRef = React.useRef<HTMLInputElement>(null);
@@ -144,9 +146,20 @@ const BroadcastForm: React.FC = () => {
       return;
     }
 
+    const validation = validateImage(file);
+    if (!validation.valid) {
+      alert(validation.error || 'Ảnh không hợp lệ');
+      return;
+    }
+
     try {
       setIsUploadingContent(true);
-      const res = await uploadImageFile(file, user.id);
+      setContentUploadProgress(0);
+      const res = await uploadImageFile(
+        file,
+        user.id,
+        (progress) => setContentUploadProgress(progress.percentage)
+      );
       const url = res.url;
       // Insert Markdown image
       setFormData({ ...formData, content: `${formData.content}\n![image](${url})\n` });
@@ -154,6 +167,7 @@ const BroadcastForm: React.FC = () => {
       console.error('Upload ảnh nội dung thất bại', err);
     } finally {
       setIsUploadingContent(false);
+      setContentUploadProgress(0);
       e.target.value = '';
     }
   };
@@ -167,14 +181,26 @@ const BroadcastForm: React.FC = () => {
       return;
     }
 
+    const validation = validateImage(file);
+    if (!validation.valid) {
+      alert(validation.error || 'Ảnh không hợp lệ');
+      return;
+    }
+
     try {
       setIsUploadingThumbnail(true);
-      const res = await uploadImageFile(file, user.id);
+      setThumbnailProgress(0);
+      const res = await uploadImageFile(
+        file,
+        user.id,
+        (progress) => setThumbnailProgress(progress.percentage)
+      );
       setThumbnailUrl(res.url);
     } catch (err) {
       console.error('Upload thumbnail thất bại', err);
     } finally {
       setIsUploadingThumbnail(false);
+      setThumbnailProgress(0);
       e.target.value = '';
     }
   };
@@ -283,7 +309,7 @@ Bạn có thể dùng:
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                   <button type="button" className="broadcast-toolbar-btn" title="Chọn thumbnail" onClick={triggerThumbnail} disabled={isUploadingThumbnail}>
                     {isUploadingThumbnail ? <Loader size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <Image size={16} />}
-                    <span style={{ marginLeft: 6 }}>{isUploadingThumbnail ? 'Đang tải...' : 'Chọn ảnh'}</span>
+                    <span style={{ marginLeft: 6 }}>{isUploadingThumbnail ? `Đang tải... ${thumbnailProgress}%` : 'Chọn ảnh'}</span>
                   </button>
                   <input ref={thumbnailInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={onThumbnailSelected} />
                   {thumbnailUrl && (

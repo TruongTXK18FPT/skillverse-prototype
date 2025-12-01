@@ -4,7 +4,7 @@ import { Edit, Trash2, MessageSquare, TrendingUp, Zap, Users, Activity, Search, 
 import { useNavigate } from 'react-router-dom';
 import CommsHeader from '../../components/community-hud/CommsHeader';
 import TelemetryWidget from '../../components/community-hud/TelemetryWidget';
-import { uploadImage as uploadImageFile } from '../../services/fileUploadService';
+import { uploadImage as uploadImageFile, validateImage } from '../../services/fileUploadService';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
@@ -42,6 +42,8 @@ const CommunityDashboardPage: React.FC = () => {
   const [tagInput, setTagInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const thumbnailInputRef = useRef<HTMLInputElement>(null);
 
   const channels = [
@@ -241,14 +243,28 @@ const CommunityDashboardPage: React.FC = () => {
     }
 
     try {
+      const validation = validateImage(file);
+      if (!validation.valid) {
+        alert(validation.error || 'Ảnh không hợp lệ');
+        return;
+      }
+      setUploadError(null);
       setIsUploading(true);
-      const res = await uploadImageFile(file, userId);
+      setUploadProgress(0);
+      const res = await uploadImageFile(
+        file,
+        userId,
+        (progress) => setUploadProgress(progress.percentage)
+      );
       setEditThumbnail(res.url);
     } catch (err) {
       console.error('Upload ảnh thất bại', err);
-      alert('Upload ảnh thất bại');
+      const msg = (err as any)?.response?.data?.message || 'Upload ảnh thất bại';
+      setUploadError(msg);
+      alert(msg);
     } finally {
       setIsUploading(false);
+      setUploadProgress(0);
       e.target.value = '';
     }
   };
@@ -796,13 +812,19 @@ const CommunityDashboardPage: React.FC = () => {
                         onClick={() => thumbnailInputRef.current?.click()}
                         className="broadcast-action-btn"
                         style={{ padding: '0.75rem', minWidth: 'auto' }}
-                        title="Upload ảnh"
-                        disabled={isUploading}
+                      title="Upload ảnh"
+                      disabled={isUploading}
                       >
                         {isUploading ? <Loader size={20} style={{ animation: 'spin 1s linear infinite' }} /> : <Image size={20} />}
                       </button>
                       <input ref={thumbnailInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleThumbnailUpload} />
+                      {isUploading && (
+                        <span style={{ marginLeft: '0.5rem', color: 'var(--text-secondary)' }}>Đang upload... {uploadProgress}%</span>
+                      )}
                     </div>
+                    {uploadError && (
+                      <div style={{ marginTop: '0.5rem', color: '#ef4444', fontSize: '0.9rem' }}>{uploadError}</div>
+                    )}
                     {editThumbnail && (
                       <div style={{ marginTop: '0.5rem', height: 150, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border-default)' }}>
                         <img src={editThumbnail} alt="Thumbnail preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />

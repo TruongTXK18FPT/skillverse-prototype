@@ -4,7 +4,7 @@ import adminUserService from '../../services/adminUserService';
 import { AdminUserResponse } from '../../types/adminUser';
 import { Edit, Trash2, MessageSquare, TrendingUp, Zap, Users, Activity, Search, X, Save, Image, Eye, EyeOff, AlertTriangle, Hash, RefreshCw, Download, PieChart as PieChartIcon, BarChart as BarChartIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { uploadImage as uploadImageFile } from '../../services/fileUploadService';
+import { uploadImage as uploadImageFile, validateImage } from '../../services/fileUploadService';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
@@ -45,6 +45,9 @@ const CommunityManagementTab: React.FC = () => {
   const [tagInput, setTagInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const thumbnailInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   // Comment State
   const [comments, setComments] = useState<CommentResponse[]>([]);
@@ -266,11 +269,27 @@ const CommunityManagementTab: React.FC = () => {
     }
 
     try {
-      const res = await uploadImageFile(file, userId);
+      const validation = validateImage(file);
+      if (!validation.valid) {
+        alert(validation.error || 'Ảnh không hợp lệ');
+        return;
+      }
+      setUploadError(null);
+      setIsUploading(true);
+      setUploadProgress(0);
+      const res = await uploadImageFile(
+        file,
+        userId,
+        (progress) => setUploadProgress(progress.percentage)
+      );
       setEditThumbnail(res.url);
     } catch (err) {
-      alert('Upload ảnh thất bại');
+      const msg = (err as any)?.response?.data?.message || 'Upload ảnh thất bại';
+      setUploadError(msg);
+      alert(msg);
     } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
       e.target.value = '';
     }
   };
@@ -683,10 +702,16 @@ const CommunityManagementTab: React.FC = () => {
                       style={{ width: 'auto', padding: '0.75rem' }}
                       title="Upload ảnh"
                     >
-                      <Image size={20} />
+                      {isUploading ? <Loader size={20} style={{ animation: 'spin 1s linear infinite' }} /> : <Image size={20} />}
                     </button>
                     <input ref={thumbnailInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleThumbnailUpload} />
+                    {isUploading && (
+                      <span style={{ marginLeft: '0.5rem', color: '#e0e7ff' }}>Đang upload... {uploadProgress}%</span>
+                    )}
                   </div>
+                  {uploadError && (
+                    <div style={{ marginTop: '0.5rem', color: '#ef4444', fontSize: '0.9rem' }}>{uploadError}</div>
+                  )}
                   {editThumbnail && (
                     <div style={{ marginTop: '0.5rem', height: 150, borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(6, 182, 212, 0.3)' }}>
                       <img src={editThumbnail} alt="Thumbnail preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
