@@ -8,9 +8,10 @@ interface SpriteAnimatorProps {
   config: SpriteConfig;
   startFrame?: number;
   endFrame?: number;
+  speedMultiplier?: number;
 }
 
-export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ state, facingRight, config, startFrame, endFrame }) => {
+export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ state, facingRight, config, startFrame, endFrame, speedMultiplier = 1 }) => {
   const [frameIndex, setFrameIndex] = useState(startFrame || 0);
   const [hasError, setHasError] = useState(false);
   const [currentSprite, setCurrentSprite] = useState(config.src);
@@ -46,6 +47,18 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ state, facingRig
         return SPRITE_SHEETS.stomachAche;
       case PetState.FIND_TOILET:
         return SPRITE_SHEETS.findToilet;
+      case PetState.REALIZE:
+        return SPRITE_SHEETS.realize;
+      case PetState.FLEE_CRY:
+        return SPRITE_SHEETS.fleeCry;
+      case PetState.HIDING_CRY:
+        return SPRITE_SHEETS.hidingCry;
+      case PetState.DRAG_CRY:
+        return SPRITE_SHEETS.dragCry;
+      case PetState.OK_FOR_NOW:
+        return SPRITE_SHEETS.okForNow;
+      case PetState.ANGRY:
+        return SPRITE_SHEETS.angry;
       default: 
         return SPRITE_SHEETS.idle;
     }
@@ -73,10 +86,10 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ state, facingRig
         if (next > end) return start;
         return next;
       });
-    }, config.animationSpeed);
+    }, config.animationSpeed * (1 / speedMultiplier));
 
     return () => clearInterval(interval);
-  }, [config.animationSpeed, config.cols, config.rows, startFrame, endFrame]);
+  }, [config.animationSpeed, config.cols, config.rows, startFrame, endFrame, speedMultiplier]);
 
   // Handle Image Error
   if (hasError) {

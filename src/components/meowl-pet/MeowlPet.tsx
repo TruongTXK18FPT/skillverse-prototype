@@ -31,10 +31,13 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   const toiletTargetRef = useRef<Position>({ x: 0, y: 0 });
   const toiletTimerRef = useRef<number>(0);
   const isReturningFromToiletRef = useRef<boolean>(false);
+  const isJobPanicRef = useRef<boolean>(false);
+  const isRecoveringFromPanicRef = useRef<boolean>(false);
 
   // Dragging Refs
   const isDragging = useRef<boolean>(false);
   const dragOffset = useRef<Position>({ x: 0, y: 0 });
+  const dragStartTimeRef = useRef<number>(0);
   
   // Interaction Refs
   const lastInteractionTime = useRef<number>(Date.now());
@@ -51,6 +54,73 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
     setStartFrame(undefined);
     setEndFrame(undefined);
   }, [petState]);
+
+  // Job Page Panic Logic
+  useEffect(() => {
+    const checkJobPage = () => {
+      const isJobPage = window.location.pathname.includes('/jobs');
+      
+      if (isJobPage && !isJobPanicRef.current) {
+        // Enter Panic Mode
+        isJobPanicRef.current = true;
+        setPetState(PetState.REALIZE);
+        setIsFollowing(false); // Stop following mouse
+        
+        // Realize for 3.2s (slower) then flee
+        setTimeout(() => {
+          setPetState(PetState.FLEE_CRY);
+          // Play cry sound
+          if (SOUNDS.cry) {
+            const cryAudio = new Audio(SOUNDS.cry);
+            cryAudio.volume = 0.5;
+            cryAudio.play().catch(console.error);
+          }
+        }, 2000);
+      } else if (!isJobPage && isJobPanicRef.current) {
+        // Exit Panic Mode
+        isJobPanicRef.current = false;
+        setPetState(PetState.OK_FOR_NOW);
+        
+        // Relief for 3.2s (slower) then back to normal
+        setTimeout(() => {
+          setPetState(PetState.WALKING);
+          setIsFollowing(true);
+          isRecoveringFromPanicRef.current = true;
+          
+          // Reset speed after a while
+          setTimeout(() => {
+            isRecoveringFromPanicRef.current = false;
+            setPetState(PetState.IDLE);
+          }, 3000);
+        }, 3200);
+      }
+    };
+
+    // Check on mount and URL changes
+    checkJobPage();
+    
+    // Listen for popstate (browser back/forward)
+    window.addEventListener('popstate', checkJobPage);
+    
+    // Hacky way to detect pushState changes (SPA navigation)
+    const originalPushState = history.pushState;
+    history.pushState = function(...args) {
+      originalPushState.apply(this, args);
+      checkJobPage();
+    };
+    
+    const originalReplaceState = history.replaceState;
+    history.replaceState = function(...args) {
+      originalReplaceState.apply(this, args);
+      checkJobPage();
+    };
+
+    return () => {
+      window.removeEventListener('popstate', checkJobPage);
+      history.pushState = originalPushState;
+      history.replaceState = originalReplaceState;
+    };
+  }, []);
 
   // Handle Intro Animation
   useEffect(() => {
@@ -88,6 +158,35 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
       return () => clearTimeout(timer);
     }
   }, [isExiting, onExitComplete]);
+
+  // Handle Hiding Cry Logic (Stay in corner)
+  useEffect(() => {
+    if (petState === PetState.HIDING_CRY) {
+      // Default loop: First 2 rows (Frames 0-7)
+      if (startFrame === undefined) {
+        setStartFrame(0);
+        setEndFrame(7);
+      }
+    }
+  }, [petState, startFrame]);
+
+  // Handle Angry Sound
+  useEffect(() => {
+    let angryAudio: HTMLAudioElement | null = null;
+
+    if (petState === PetState.ANGRY && SOUNDS.angry) {
+      angryAudio = new Audio(SOUNDS.angry);
+      angryAudio.volume = 0.5;
+      angryAudio.play().catch(console.error);
+    }
+
+    return () => {
+      if (angryAudio) {
+        angryAudio.pause();
+        angryAudio.currentTime = 0;
+      }
+    };
+  }, [petState]);
 
   // Handle Sleep Logic
   useEffect(() => {
@@ -254,19 +353,65 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
       // States where movement is disabled
       if (
         petState === PetState.DRAGGING || 
+        petState === PetState.DRAG_CRY ||
+        petState === PetState.ANGRY ||
         petState === PetState.HAPPY || 
-        petState === PetState.INTRO || 
+        petState === PetState.EATING ||
         petState === PetState.OUTRO || 
         petState === PetState.SLEEP || 
         petState === PetState.WAKEUP ||
         petState === PetState.GROOMING ||
         petState === PetState.TAKE_PIZZA ||
-        petState === PetState.EATING ||
         petState === PetState.FINISH_PIZZA ||
         petState === PetState.STOMACH_ACHE ||
-        petState === PetState.TOILET_BREAK
+        petState === PetState.TOILET_BREAK ||
+        petState === PetState.REALIZE ||
+        petState === PetState.OK_FOR_NOW
       ) {
         setBobOffset(0);
+        animationFrameId = requestAnimationFrame(loop);
+        return;
+      }
+
+      // Handle Flee Cry Logic (Run to bottom left)
+      if (petState === PetState.FLEE_CRY) {
+        const targetX = 20;
+        const targetY = window.innerHeight - PET_CONFIG.height - 20;
+        
+        setPosition((prev) => {
+          const dx = targetX - prev.x;
+          const dy = targetY - prev.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 10) {
+            // Arrived at corner
+            setPetState(PetState.HIDING_CRY);
+            setFacingRight(true); // Face right to look at screen
+            return prev;
+          }
+
+          // Run fast
+          const speed = MOVEMENT_SPEED * 3;
+          const nextX = prev.x + dx * speed;
+          const nextY = prev.y + dy * speed;
+
+          if (dx > 0 && !facingRight) setFacingRight(true);
+          if (dx < 0 && facingRight) setFacingRight(false);
+
+          return { x: nextX, y: nextY };
+        });
+        
+        animationFrameId = requestAnimationFrame(loop);
+        return;
+      }
+
+      // Handle Hiding Cry Logic (Stay in corner)
+      if (petState === PetState.HIDING_CRY) {
+        // Ensure it stays in corner even if window resizes
+        setPosition({
+          x: 20,
+          y: window.innerHeight - PET_CONFIG.height - 20
+        });
         animationFrameId = requestAnimationFrame(loop);
         return;
       }
@@ -345,7 +490,8 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
 
         if (distance > STOP_DISTANCE) {
           // Lerp movement: Move a fraction of the distance for that "chase" effect
-          const speed = isReturningFromToiletRef.current ? MOVEMENT_SPEED * 0.2 : MOVEMENT_SPEED;
+          const isSlow = isReturningFromToiletRef.current || isRecoveringFromPanicRef.current;
+          const speed = isSlow ? MOVEMENT_SPEED * 0.2 : MOVEMENT_SPEED;
           const nextX = prev.x + dx * speed;
           const nextY = prev.y + dy * speed;
 
@@ -365,6 +511,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
           if (petState !== PetState.IDLE) setPetState(PetState.IDLE);
           setBobOffset(0); // Reset bob
           isReturningFromToiletRef.current = false;
+          isRecoveringFromPanicRef.current = false;
           return prev;
         }
       });
@@ -382,6 +529,12 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
     e.preventDefault();
     updateInteraction();
 
+    // Clear hover timer to prevent Happy state triggering while dragging
+    if (hoverTimerRef.current) {
+      clearTimeout(hoverTimerRef.current);
+      hoverTimerRef.current = null;
+    }
+
     // Wake up if sleeping
     if (petState === PetState.SLEEP) {
       setPetState(PetState.WAKEUP);
@@ -395,7 +548,14 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
     if (petState === PetState.INTRO || petState === PetState.OUTRO || petState === PetState.WAKEUP) return;
 
     isDragging.current = true;
-    setPetState(PetState.DRAGGING);
+    dragStartTimeRef.current = Date.now();
+    
+    // Use special drag sprite if in panic mode
+    if (isJobPanicRef.current) {
+      setPetState(PetState.DRAG_CRY);
+    } else {
+      setPetState(PetState.DRAGGING);
+    }
     
     dragOffset.current = {
       x: e.clientX - position.x,
@@ -409,6 +569,14 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   const handleGlobalMouseMove = (e: MouseEvent) => {
     if (!isDragging.current) return;
     updateInteraction();
+    
+    // Check for long drag (Angry) - Only if not in panic mode
+    if (!isJobPanicRef.current && petState !== PetState.ANGRY) {
+      if (Date.now() - dragStartTimeRef.current > 3000) { // 3 seconds threshold
+        setPetState(PetState.ANGRY);
+      }
+    }
+
     setPosition({
       x: e.clientX - dragOffset.current.x,
       y: e.clientY - dragOffset.current.y
@@ -417,29 +585,65 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
 
   const handleGlobalMouseUp = () => {
     isDragging.current = false;
-    setPetState(PetState.IDLE);
+    
+    if (isJobPanicRef.current) {
+      // If dropped in panic mode, flee back to corner
+      setPetState(PetState.FLEE_CRY);
+      // Play cry sound again
+      if (SOUNDS.cry) {
+        const cryAudio = new Audio(SOUNDS.cry);
+        cryAudio.volume = 0.5;
+        cryAudio.play().catch(console.error);
+      }
+    } else {
+      // If was angry, stay angry for a bit
+      if (petState === PetState.ANGRY) {
+        setTimeout(() => setPetState(PetState.IDLE), 2000);
+      } else {
+        setPetState(PetState.IDLE);
+      }
+    }
+    
     document.removeEventListener('mousemove', handleGlobalMouseMove);
     document.removeEventListener('mouseup', handleGlobalMouseUp);
   };
 
   const handleMouseEnter = () => {
     if (isDragging.current) return;
+    
+    // Special hover for Hiding Cry
+    if (petState === PetState.HIDING_CRY) {
+      // Loop last 2 rows (Frames 8-15)
+      setStartFrame(8);
+      setEndFrame(15);
+      return;
+    }
+
     // Prevent interaction if busy with special animations
-    if (petState !== PetState.IDLE && petState !== PetState.WALKING) return;
+    if (petState !== PetState.IDLE && petState !== PetState.WALKING && petState !== PetState.ANGRY) return;
 
     updateInteraction();
     
-    // Start 3s timer
-    hoverTimerRef.current = setTimeout(() => {
-      setPetState(PetState.HAPPY);
-      playInteractSound();
-    }, 3000);
+    // Start 3s timer for Happy state (only if not angry)
+    if (petState !== PetState.ANGRY) {
+      hoverTimerRef.current = setTimeout(() => {
+        setPetState(PetState.HAPPY);
+        playInteractSound();
+      }, 3000);
+    }
   };
 
   const handleMouseLeave = () => {
     if (hoverTimerRef.current) {
       clearTimeout(hoverTimerRef.current);
       hoverTimerRef.current = null;
+    }
+    
+    if (petState === PetState.HIDING_CRY) {
+      // Reset to first 2 rows (Frames 0-7)
+      setStartFrame(0);
+      setEndFrame(7);
+      return;
     }
     
     if (petState === PetState.HAPPY) {
@@ -477,6 +681,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
         config={PET_CONFIG}
         startFrame={startFrame}
         endFrame={endFrame}
+        speedMultiplier={petState === PetState.OK_FOR_NOW || petState === PetState.REALIZE ? 0.5 : 1}
       />
     </div>
   );

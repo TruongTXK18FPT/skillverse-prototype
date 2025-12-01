@@ -13,7 +13,13 @@ export enum PetState {
   FINISH_PIZZA = 'FINISH_PIZZA',
   STOMACH_ACHE = 'STOMACH_ACHE',
   FIND_TOILET = 'FIND_TOILET',
-  TOILET_BREAK = 'TOILET_BREAK'
+  TOILET_BREAK = 'TOILET_BREAK',
+  REALIZE = 'REALIZE',
+  FLEE_CRY = 'FLEE_CRY',
+  HIDING_CRY = 'HIDING_CRY',
+  DRAG_CRY = 'DRAG_CRY',
+  OK_FOR_NOW = 'OK_FOR_NOW',
+  ANGRY = 'ANGRY'
 }
 
 export interface Position {
@@ -35,5 +41,7 @@ export interface SoundConfig {
   intro?: string;
   outro?: string;
   flush?: string;
+  cry?: string;
+  angry?: string;
   // Có thể thêm các sound khác sau
 }

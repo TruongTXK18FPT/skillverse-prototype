@@ -20,6 +20,15 @@ import eatPizzaSprite from '../../assets/meowl-pet/spritesheet/eatpizza.png';
 import finishPizzaSprite from '../../assets/meowl-pet/spritesheet/finishpizza.png';
 import stomachAcheSprite from '../../assets/meowl-pet/spritesheet/stomachache.png';
 import findToiletSprite from '../../assets/meowl-pet/spritesheet/findtoilet.png';
+import realizeSprite from '../../assets/meowl-pet/spritesheet/realize.png';
+import fleeCrySprite from '../../assets/meowl-pet/spritesheet/flee-cry.png';
+import hidingCrySprite from '../../assets/meowl-pet/spritesheet/hiding-cry.png';
+import dragCrySprite from '../../assets/meowl-pet/spritesheet/drag-cry.png';
+import okForNowSprite from '../../assets/meowl-pet/spritesheet/ok-for-now.png';
+import angrySprite from '../../assets/meowl-pet/spritesheet/angry.png';
+
+import bananaCatCrySound from '../../assets/meowl-pet/sound/banana-cat-cry.mp3';
+import angrySound from '../../assets/meowl-pet/sound/angry.mp3';
 
 // Sprite sheets configurations - 4x4 frames each
 export const SPRITE_SHEETS = {
@@ -37,6 +46,12 @@ export const SPRITE_SHEETS = {
   finishPizza: finishPizzaSprite,
   stomachAche: stomachAcheSprite,
   findToilet: findToiletSprite,
+  realize: realizeSprite,
+  fleeCry: fleeCrySprite,
+  hidingCry: hidingCrySprite,
+  dragCry: dragCrySprite,
+  okForNow: okForNowSprite,
+  angry: angrySprite,
 } as const;
 
 // Sound configurations
@@ -45,6 +60,8 @@ export const SOUNDS: SoundConfig = {
   intro: huhSound,
   outro: getSnappedSound,
   flush: flushSound,
+  cry: bananaCatCrySound,
+  angry: angrySound,
 };
 
 export const PET_CONFIG: SpriteConfig = {
