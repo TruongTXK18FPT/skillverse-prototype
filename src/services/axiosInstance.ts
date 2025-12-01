@@ -173,6 +173,14 @@ const isPublicEndpoint = (url: string, method?: string): boolean => {
     return false; // Require authentication
   }
   
+  // Community posts: Public GET only
+  if (normalizedUrl.startsWith('/posts')) {
+    if (method && method.toUpperCase() !== 'GET') {
+      return false;
+    }
+    return true;
+  }
+
   return PUBLIC_ENDPOINTS.some(endpoint => {
     // Special handling for /courses: Only GET requests to list/detail are public
     if (endpoint === '/courses') {

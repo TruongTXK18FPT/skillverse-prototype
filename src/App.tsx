@@ -11,6 +11,8 @@ import DashboardPage from './pages/navbar/DashboardPage';
 import CoursesPage from './pages/navbar/CoursesPage';
 import MentorshipPage from './pages/navbar/MentorshipPage';
 import CommunityHUD from './components/community-hud/CommunityHUD';
+import PostDetailPage from './pages/community/PostDetailPage';
+import CommunityDashboardPage from './pages/community/CommunityDashboardPage';
 import BroadcastForm from './components/community-hud/BroadcastForm';
 import JobsPage from './pages/navbar/JobsPage';
 import CareerChatPage from './pages/navbar/CareerChatPage';
@@ -102,7 +104,9 @@ const App = () => {
                     <Route path="/roadmap/:id" element={<RoadmapDetailPage />} />
                     <Route path="/mentorship" element={<MentorshipPage />} />
                     <Route path="/community" element={<CommunityHUD />} />
+                    <Route path="/community/:id" element={<PostDetailPage />} />
                     <Route path="/community/create" element={<BroadcastForm />} />
+                    <Route path="/community/manage" element={<CommunityDashboardPage />} />
                     <Route path="/jobs" element={<JobsPage />} />
                     <Route path="/chatbot" element={<CareerChatLanding />} />
                     <Route path="/chatbot/general" element={<CareerChatPage />} />

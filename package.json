@@ -35,6 +35,7 @@
     "react-router-dom": "^6.26.1",
     "reactflow": "^11.11.4",
     "recharts": "^3.4.1",
+    "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.1",
     "three": "^0.179.1",
     "vanta": "^0.5.24"

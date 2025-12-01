@@ -337,7 +337,7 @@ const Header: React.FC = () => {
                   </div>
                   <div className="user-info-inline">
                     <span className="user-greeting">
-                      Xin chào, <strong style={{ color: getPremiumColor() || undefined }}>{user.fullName}</strong>
+                      Xin chào, <strong style={{ color: getPremiumColor() || undefined }}>{userProfile?.fullName || user.fullName}</strong>
                     </span>
                     <span className="user-balance" style={{ color: getPremiumColor() || undefined }}>
                       💰 Số dư: {loadingBalance ? '...' : (walletBalance !== null && walletBalance !== undefined) ? walletBalance.toLocaleString('vi-VN') + ' đ' : 'N/A'}
@@ -361,7 +361,7 @@ const Header: React.FC = () => {
                       )}
                     </div>
                     <div className="user-details">
-                      <p className="user-name">{user.fullName}</p>
+                      <p className="user-name">{userProfile?.fullName || user.fullName}</p>
                       <p className="user-email">{user.email}</p>
                     </div>
                   </div>

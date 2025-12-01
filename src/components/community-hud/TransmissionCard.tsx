@@ -1,20 +1,26 @@
 import React from 'react';
-import { Clock, ThumbsUp, MessageCircle, Share2, Bookmark, Tag } from 'lucide-react';
+import { Clock, ThumbsUp, ThumbsDown, MessageCircle, Share2, Bookmark, Tag } from 'lucide-react';
+import communityService from '../../services/communityService';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { decodeHtml } from '../../utils/htmlDecoder';
 
 export interface CommunityPost {
   id: number;
   title: string;
   content: string;
   author: string;
+  authorAvatar?: string;
   category: string;
   tags: string[];
   likes: number;
+  dislikes?: number;
   comments: number;
   shares: number;
   isBookmarked: boolean;
   timeAgo: string;
   readTime: string;
-  image: string;
+  image?: string;
 }
 
 interface TransmissionCardProps {
@@ -34,20 +40,66 @@ const formatNumber = (num: number): string => {
 
 const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) => {
   const [isLiked, setIsLiked] = React.useState(false);
+  const [isDisliked, setIsDisliked] = React.useState(false);
   const [isBookmarked, setIsBookmarked] = React.useState(post.isBookmarked);
   const [likeCount, setLikeCount] = React.useState(post.likes);
+  const [dislikeCount, setDislikeCount] = React.useState(post.dislikes || 0);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLike = () => {
-    if (isLiked) {
-      setLikeCount(likeCount - 1);
-    } else {
-      setLikeCount(likeCount + 1);
+  const ensureAuth = () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return false;
     }
-    setIsLiked(!isLiked);
+    return true;
   };
 
-  const handleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
+  const handleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!ensureAuth()) return;
+    try {
+      await communityService.likePost(post.id);
+      if (isLiked) {
+        setIsLiked(false);
+        setLikeCount((c) => Math.max(0, c - 1));
+      } else {
+        setIsLiked(true);
+        setLikeCount((c) => c + 1);
+        if (isDisliked) {
+          setIsDisliked(false);
+          setDislikeCount((c) => Math.max(0, c - 1));
+        }
+      }
+    } catch (e) { console.debug('like failed', e); }
+  };
+
+  const handleDislike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!ensureAuth()) return;
+    try {
+      await communityService.dislikePost(post.id);
+      if (isDisliked) {
+        setIsDisliked(false);
+        setDislikeCount((c) => Math.max(0, c - 1));
+      } else {
+        setIsDisliked(true);
+        setDislikeCount((c) => c + 1);
+        if (isLiked) {
+          setIsLiked(false);
+          setLikeCount((c) => Math.max(0, c - 1));
+        }
+      }
+    } catch (e) { console.debug('dislike failed', e); }
+  };
+
+  const handleBookmark = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!ensureAuth()) return;
+    try {
+      await communityService.savePost(post.id);
+      setIsBookmarked(true);
+    } catch (e) { console.debug('bookmark failed', e); }
   };
 
   // Format timestamp as "T-Minus" or "Log Date"
@@ -76,6 +128,11 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
     all: 'Tất cả',
   };
 
+  const decodedTitle = decodeHtml(post.title);
+  const decodedContent = decodeHtml(post.content);
+  // Remove markdown images from preview text
+  const plainContent = decodedContent.replace(/!\[[^\]]*\]\([^)]+\)/g, '').replace(/<img[^>]*>/g, '');
+
   return (
     <article
       className="transmission-card"
@@ -84,7 +141,7 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
       {/* Header with Hexagon Avatar */}
       <div className="transmission-card-header">
         <img
-          src={post.image}
+          src={post.authorAvatar || 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100'}
           alt={post.author}
           className="transmission-avatar"
           onError={(e) => {
@@ -103,12 +160,19 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
       </div>
 
       {/* Content */}
-      <h2 className="transmission-title">{post.title}</h2>
+      <h2 className="transmission-title">{decodedTitle}</h2>
       <p className="transmission-content">
-        {post.content.length > 200
-          ? `${post.content.substring(0, 200)}...`
-          : post.content}
+        {plainContent.length > 200
+          ? `${plainContent.substring(0, 200)}...`
+          : plainContent}
       </p>
+
+      {/* Post Thumbnail if available */}
+      {post.image && (
+        <div className="transmission-thumbnail" style={{ marginTop: '1rem', borderRadius: '8px', overflow: 'hidden' }}>
+          <img src={post.image} alt="thumbnail" style={{ width: '100%', height: 'auto', maxHeight: '300px', objectFit: 'cover' }} />
+        </div>
+      )}
 
       {/* Frequency Channels (Tags) */}
       {post.tags.length > 0 && (
@@ -131,6 +195,14 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
         >
           <ThumbsUp size={18} />
           <span>{formatNumber(likeCount)}</span>
+        </button>
+        <button
+          className={`transmission-action-btn ${isDisliked ? 'active' : ''}`}
+          onClick={handleDislike}
+          title="Không thích"
+        >
+          <ThumbsDown size={18} />
+          <span>{formatNumber(dislikeCount)}</span>
         </button>
         <button
           className="transmission-action-btn"

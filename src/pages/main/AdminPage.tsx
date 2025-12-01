@@ -12,9 +12,10 @@ import SystemSettingsTabCosmic from '../../components/admin/SystemSettingsTabCos
 import PremiumPlansManagementTab from '../../components/admin/PremiumPlansManagementTab';
 import SupportTicketsTab from '../../components/admin/SupportTicketsTab';
 import AIExpertManagementTab from '../../components/admin/AIExpertManagementTab';
+import CommunityManagementTab from '../../components/admin/CommunityManagementTab';
 import {
   Users, UserCheck, BookOpen, BarChart3, Bell, AlertTriangle,
-  CreditCard, Banknote, Zap, Crown, Ticket, Settings, Brain
+  CreditCard, Banknote, Zap, Crown, Ticket, Settings, Brain, MessageSquare
 } from 'lucide-react';
 import adminUserService from '../../services/adminUserService';
 import adminService from '../../services/adminService';
@@ -110,6 +111,13 @@ const AdminPage: React.FC = () => {
       description: 'Xử lý báo cáo từ người dùng'
     },
     { 
+      id: 'community', 
+      label: 'Quản Lý Cộng Đồng', 
+      icon: MessageSquare,
+      gradient: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
+      description: 'Quản lý bài viết và bình luận'
+    },
+    { 
       id: 'payments', 
       label: 'Thanh Toán', 
       icon: CreditCard,
@@ -174,6 +182,8 @@ const AdminPage: React.FC = () => {
         return <NotificationsTabCosmic />;
       case 'reports':
         return <ReportsTabCosmic />;
+      case 'community':
+        return <CommunityManagementTab />;
       case 'payments':
         return <TransactionManagementTabCosmic />;
       case 'withdrawals':

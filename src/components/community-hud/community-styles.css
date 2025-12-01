@@ -404,6 +404,10 @@
   color: var(--signal-cyan);
 }
 
+.transmission-action-btn:nth-child(2).active {
+  color: var(--alert-red);
+}
+
 /* ========================================
    TELEMETRY SIDEBAR
    ======================================== */

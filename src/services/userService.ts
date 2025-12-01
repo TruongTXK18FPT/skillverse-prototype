@@ -43,7 +43,7 @@ class UserService {
   // Get user profile by userId
   async getUserProfile(userId: number): Promise<UserProfileResponse> {
     try {
-      const response = await axiosInstance.get<UserProfileResponse>(`/api/user/profile/${userId}`);
+      const response = await axiosInstance.get<UserProfileResponse>(`/api/user/profile/public/${userId}`);
       return response.data;
     } catch (error: unknown) {
       console.error('Get user profile error:', error);
