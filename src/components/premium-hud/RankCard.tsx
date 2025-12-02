@@ -178,8 +178,8 @@ const RankCard: React.FC<RankCardProps> = ({
                 {onViewInvoice && (
                   <button 
                     onClick={onViewInvoice} 
-                    className="hall-link-btn"
-                    style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '0.8rem', textDecoration: 'underline' }}
+                    className="hall-btn"
+                    style={{ fontSize: '0.8rem', padding: '8px', opacity: 0.9 }}
                   >
                     View Invoice
                   </button>
@@ -188,8 +188,8 @@ const RankCard: React.FC<RankCardProps> = ({
                 {currentSub?.autoRenew && onCancelAutoRenew && (
                   <button 
                     onClick={onCancelAutoRenew} 
-                    className="hall-link-btn"
-                    style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '0.8rem', textDecoration: 'underline' }}
+                    className="hall-btn"
+                    style={{ fontSize: '0.8rem', padding: '8px', opacity: 0.9 }}
                   >
                     Cancel Auto-Renew
                   </button>
@@ -198,8 +198,8 @@ const RankCard: React.FC<RankCardProps> = ({
                 {onCancelSubscription && (
                   <button 
                     onClick={onCancelSubscription} 
-                    className="hall-link-btn hall-danger-btn"
-                    style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer', fontSize: '0.8rem', textDecoration: 'underline' }}
+                    className="hall-btn"
+                    style={{ fontSize: '0.8rem', padding: '8px', borderColor: '#ef4444', color: '#ef4444' }}
                   >
                     Cancel Subscription
                   </button>

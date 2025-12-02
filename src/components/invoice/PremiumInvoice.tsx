@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import { 
   Crown, Calendar, CreditCard, User, Mail, 
-  CheckCircle, Sparkles, FileText, Building2, Phone
+  CheckCircle, Sparkles, FileText, Building2, Phone, ArrowLeft
 } from 'lucide-react';
 import Logo from '../../assets/skillverse.png';
+import { useScrollLock } from '../portfolio-hud/useScrollLock';
 import './PremiumInvoice.css';
 
 interface InvoiceData {
@@ -49,6 +50,7 @@ interface PremiumInvoiceProps {
 }
 
 const PremiumInvoice: React.FC<PremiumInvoiceProps> = ({ data, onClose }) => {
+  useScrollLock(true);
   const invoiceRef = useRef<HTMLDivElement>(null);
 
   const formatCurrency = (amount: number) => {
@@ -87,6 +89,11 @@ const PremiumInvoice: React.FC<PremiumInvoiceProps> = ({ data, onClose }) => {
   return (
     <div className="invoice-overlay">
       <div className="invoice-container" ref={invoiceRef}>
+        <button className="invoice-back-btn" onClick={onClose}>
+          <ArrowLeft size={20} />
+          <span>Quay lại</span>
+        </button>
+
         {/* Background Effects */}
         <div className="invoice-bg-effects">
           <div className="invoice-grid-overlay"></div>

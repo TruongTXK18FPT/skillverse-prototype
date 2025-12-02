@@ -8,12 +8,14 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #0a0e27;
+  background: rgba(10, 14, 39, 0.95);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  z-index: 9999;
-  padding: 1rem;
+  z-index: 10000;
+  padding: 20px;
+  padding-top: 100px; /* Clear navbar */
   overflow-y: auto;
 }
 
@@ -21,14 +23,43 @@
   position: relative;
   width: 100%;
   max-width: 900px;
-  min-height: calc(100vh - 2rem);
+  min-height: auto;
+  margin-bottom: 50px;
   background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
   border: 2px solid rgba(139, 92, 246, 0.3);
   border-radius: 20px;
   padding: 2.5rem;
   color: #e0e7ff;
   overflow: hidden;
-  margin: 0 auto;
+  margin: 0 auto 50px auto;
+}
+
+.invoice-back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.invoice-back-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: #22d3ee;
+  transform: translateX(-4px);
 }
 
 /* Background Effects */
@@ -80,6 +111,7 @@
   justify-content: space-between;
   align-items: flex-start;
   padding-bottom: 2rem;
+  padding-top: 4rem;
   border-bottom: 2px solid rgba(139, 92, 246, 0.2);
   margin-bottom: 1.5rem;
 }

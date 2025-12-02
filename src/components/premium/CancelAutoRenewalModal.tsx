@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, AlertCircle, RefreshCw, CheckCircle, Calendar, Shield } from 'lucide-react';
 import { premiumService } from '../../services/premiumService';
 import { UserSubscriptionResponse } from '../../data/premiumDTOs';
+import { useScrollLock } from '../portfolio-hud/useScrollLock';
 import './CancelAutoRenewalModal.css';
 
 interface CancelAutoRenewalModalProps {
@@ -17,6 +18,7 @@ const CancelAutoRenewalModal: React.FC<CancelAutoRenewalModalProps> = ({
   subscription,
   onSuccess
 }) => {
+  useScrollLock(isOpen);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
 

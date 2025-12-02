@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Wallet, AlertCircle, CheckCircle } from 'lucide-react';
+import { useScrollLock } from '../portfolio-hud/useScrollLock';
 import './WalletPaymentModal.css';
 
 interface WalletPaymentModalProps {
@@ -21,6 +22,7 @@ const WalletPaymentModal: React.FC<WalletPaymentModalProps> = ({
   isStudentPrice,
   onConfirm
 }) => {
+  useScrollLock(isOpen);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);

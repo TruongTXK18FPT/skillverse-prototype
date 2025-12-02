@@ -3,6 +3,7 @@ import { X, AlertTriangle, RefreshCw, CheckCircle, Clock, Wallet, XCircle } from
 import { premiumService } from '../../services/premiumService';
 import { UserSubscriptionResponse } from '../../data/premiumDTOs';
 import CancellationLimitModal from './CancellationLimitModal';
+import { useScrollLock } from '../portfolio-hud/useScrollLock';
 import './CancelSubscriptionModal.css';
 
 interface CancelSubscriptionModalProps {
@@ -18,6 +19,7 @@ const CancelSubscriptionModal: React.FC<CancelSubscriptionModalProps> = ({
   subscription,
   onSuccess
 }) => {
+  useScrollLock(isOpen);
   const [reason, setReason] = useState('');
   const [isEligible, setIsEligible] = useState(false);
   const [checking, setChecking] = useState(true);
