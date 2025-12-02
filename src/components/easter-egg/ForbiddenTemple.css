@@ -1,0 +1,318 @@
+/* ========================================
+   FORBIDDEN TEMPLE - Easter Egg Styles
+   ======================================== */
+
+.ee-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end; /* Align content to bottom for perspective */
+  overflow: hidden;
+  font-family: 'Rajdhani', sans-serif;
+  z-index: 99999; /* Topmost */
+  background-size: cover;
+  background-position: center bottom;
+  transition: background-image 0.5s ease, filter 0.2s ease;
+}
+
+/* Lights Out Effect */
+.ee-container.lights-out {
+  filter: brightness(0);
+  pointer-events: none;
+}
+
+/* Phase 2: The Nightmare Overlay */
+.ee-blood-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, transparent 20%, rgba(139, 0, 0, 0.6) 90%);
+  pointer-events: none;
+  z-index: 50;
+  animation: ee-pulse-blood 2s infinite;
+  mix-blend-mode: multiply;
+}
+
+/* UI Layer (Input & Buttons) */
+.ee-ui-layer {
+  position: relative;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 5vh;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* ========================================
+   SCENE PROPS (The 3D Stage)
+   ======================================== */
+
+/* 1. Portraits (Back Layer) */
+.ee-portraits-row {
+  position: absolute;
+  z-index: 10;
+  bottom: 48%; /* Adjust based on table height in BG */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2vw;
+  width: 70vw;
+  max-width: 800px;
+  justify-content: center;
+  align-items: flex-end;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+
+.ee-portraits-row.visible {
+  opacity: 1;
+}
+
+.ee-frame-container {
+  position: relative;
+  width: 18%; /* Smaller size */
+  aspect-ratio: 3/4;
+}
+
+.ee-frame-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+}
+
+.ee-god-img {
+  position: absolute;
+  top: 14%;
+  left: 14%;
+  width: 72%;
+  height: 72%;
+  object-fit: cover;
+  z-index: -1; /* Behind frame */
+  filter: sepia(0.8) contrast(1.5) brightness(0.6) blur(5px);
+}
+
+/* Phase 2: Horror Portraits */
+.ee-container.phase-2 .ee-frame-container {
+  /* Animation handled by nth-child selectors below */
+}
+
+.ee-container.phase-2 .ee-god-img {
+filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
+}
+
+/* 2. Incense Stick (Middle Layer) */
+.ee-incense-stick-container {
+  position: absolute;
+  z-index: 20;
+  bottom: 28%; /* Stick base inside bowl */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.ee-stick-img {
+  width: 100%;
+  height: 0%; /* Grows on click */
+  object-fit: cover;
+  object-position: bottom;
+  transition: height 1s ease;
+}
+
+.ee-stick-img.lit {
+  height: 100%;
+}
+
+/* Smoke Effect */
+.ee-smoke {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 100px;
+  background: linear-gradient(to top, rgba(255,255,255,0.8), transparent);
+  filter: blur(5px);
+  opacity: 0;
+  transition: opacity 1s ease;
+  animation: smoke-rise 3s infinite linear;
+}
+
+.ee-stick-img.lit + .ee-smoke {
+  opacity: 0.6;
+}
+
+/* 3. Incense Bowl (Front Layer) */
+.ee-incense-bowl {
+  position: absolute;
+  z-index: 30;
+  bottom: 18%; /* Front of table */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 25vw;
+  max-width: 300px;
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6));
+}
+
+/* ========================================
+   UI ELEMENTS
+   ======================================== */
+
+/* Input Field */
+.ee-input {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem;
+  width: 100%;
+  color: #fff;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.2rem;
+  text-align: center;
+  outline: none;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.ee-input:focus {
+  border-color: #38bdf8;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.ee-input.corrupted {
+  border-color: #ef4444;
+  color: #ef4444;
+  font-family: 'Courier New', monospace;
+  background: rgba(20, 0, 0, 0.8);
+}
+
+/* Action Button */
+.ee-btn-action {
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+  
+  /* Horror Theme Base */
+  font-family: 'Courier New', serif;
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid #5c5c5c;
+  color: #d4d4d4;
+  text-shadow: 0 0 2px #000;
+  box-shadow: inset 0 0 20px #000;
+}
+
+.ee-btn-action.normal {
+  /* Removed tech styles */
+}
+
+.ee-btn-action.normal:hover {
+  background: #2a2a2a;
+  border-color: #8a8a8a;
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 30px #000;
+}
+
+.ee-btn-action.warning {
+  background: #1a0000;
+  color: #a00000;
+  border: 1px solid #800000;
+  box-shadow: inset 0 0 20px #300000;
+  animation: danger-flicker 4s infinite;
+}
+
+.ee-btn-action.warning:hover {
+  background: #300000;
+  color: #ff0000;
+  box-shadow: inset 0 0 40px #500000;
+}
+
+/* Escape Button (The Troll) */
+.ee-btn-escape {
+  position: fixed;
+  padding: 0.8rem 1.5rem;
+  background: rgba(10, 10, 10, 0.9);
+  border: 1px solid #444;
+  color: #888;
+  cursor: pointer;
+  z-index: 200;
+  transition: background 0.2s;
+  font-family: 'Courier New', serif;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px #000;
+}
+
+.ee-btn-escape:hover {
+  background: #222;
+  color: #fff;
+  border-color: #666;
+}
+
+/* Animations */
+@keyframes ee-pulse-blood {
+  0% { opacity: 0.1; background-color: rgba(255, 0, 0, 0); }
+  5% { opacity: 0.8; background-color: rgba(255, 0, 0, 0.4); }
+  10% { opacity: 0.1; background-color: rgba(255, 0, 0, 0); }
+  15% { opacity: 0.6; background-color: rgba(255, 0, 0, 0.3); }
+  100% { opacity: 0.1; background-color: rgba(255, 0, 0, 0); }
+}
+
+/* Desync Shake Animations */
+.ee-container.phase-2 .ee-frame-container:nth-child(1) {
+  animation: ee-shake-1 0.3s infinite;
+}
+.ee-container.phase-2 .ee-frame-container:nth-child(2) {
+  animation: ee-shake-2 0.4s infinite;
+}
+.ee-container.phase-2 .ee-frame-container:nth-child(3) {
+  animation: ee-shake-3 0.25s infinite;
+}
+
+@keyframes ee-shake-1 {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  25% { transform: translate(-1px, -2px) rotate(-1deg); }
+  50% { transform: translate(-3px, 0px) rotate(1deg); }
+  75% { transform: translate(3px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -1px) rotate(-1deg); }
+}
+
+@keyframes ee-shake-2 {
+  0% { transform: translate(-1px, -1px) rotate(0deg); }
+  30% { transform: translate(2px, 1px) rotate(1deg); }
+  60% { transform: translate(-2px, 2px) rotate(-1deg); }
+  90% { transform: translate(1px, -2px) rotate(0deg); }
+  100% { transform: translate(-1px, 1px) rotate(1deg); }
+}
+
+@keyframes ee-shake-3 {
+  0% { transform: translate(2px, 0px) rotate(0deg); }
+  20% { transform: translate(-2px, 2px) rotate(1deg); }
+  40% { transform: translate(1px, -1px) rotate(-1deg); }
+  60% { transform: translate(-1px, 1px) rotate(0deg); }
+  80% { transform: translate(2px, -2px) rotate(1deg); }
+  100% { transform: translate(-2px, 0px) rotate(-1deg); }
+}
+
+@keyframes smoke-rise {
+  0% { transform: translateX(-50%) translateY(0) scale(1); opacity: 0.6; }
+  50% { transform: translateX(-60%) translateY(-40px) scale(1.5); opacity: 0.3; }
+  100% { transform: translateX(-40%) translateY(-80px) scale(2); opacity: 0; }
+}

@@ -67,6 +67,7 @@ import ExploreMapPage from './pages/ExploreMapPage';
 import AboutPage from './pages/about/AboutPage';
 import MeowlBubbleNotification from './components/MeowlBubbleNotification';
 import MeowlPetWrapper from './components/meowl-pet/MeowlPetWrapper';
+import ForbiddenTemple from './components/easter-egg/ForbiddenTemple';
 
 const App = () => {
   return (
@@ -177,6 +178,9 @@ const App = () => {
 
                     {/* Unauthorized Access */}
                     <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+                    {/* Easter Egg Route */}
+                    <Route path="/pray" element={<ForbiddenTemple />} />
 
                     {/* Catch-all route for 404 errors - must be last */}
                     <Route path="*" element={<NotFoundPage />} />

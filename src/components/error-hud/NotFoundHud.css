@@ -1,0 +1,203 @@
+/* ========================================
+   ERROR 404 HUD - Wormhole Collapse
+   ======================================== */
+
+.error-404-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+/* CRT Scanline Overlay */
+.error-404-container::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+.error-404-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 2rem;
+  max-width: 800px;
+}
+
+/* Glitch Title */
+.error-404-glitch {
+  position: relative;
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 2px 2px #ff0000, -2px -2px #00ffff;
+  animation: error-glitch-skew 1s infinite linear alternate-reverse;
+  font-family: 'Space Habitat', monospace;
+  margin-bottom: 1rem;
+  letter-spacing: 4px;
+  line-height: 1.2;
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
+.error-404-glitch::before,
+.error-404-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.error-404-glitch::before {
+  left: 2px;
+  text-shadow: -1px 0 #ff0000;
+  clip: rect(44px, 9999px, 56px, 0);
+  animation: error-glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.error-404-glitch::after {
+  left: -2px;
+  text-shadow: -1px 0 #00ffff;
+  clip: rect(44px, 9999px, 56px, 0);
+  animation: error-glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+.error-404-description {
+  font-size: 1.2rem;
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.8rem 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Navigation Buttons */
+.error-404-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+}
+
+/* Safe Path Button */
+.error-btn-safe {
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid #06b6d4;
+  color: #06b6d4;
+  padding: 0.8rem 1.5rem;
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 280px;
+  position: relative;
+  overflow: hidden;
+  animation: safe-pulse 2s infinite;
+}
+
+.error-btn-safe:hover {
+  background: #06b6d4;
+  color: #000;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+}
+
+/* Dangerous Path Button */
+.error-btn-danger {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+  padding: 0.8rem 1.5rem;
+  font-family: 'Space Habitat', monospace;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 280px;
+  animation: danger-flicker 4s infinite;
+}
+
+.error-btn-danger:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  text-shadow: 0 0 10px #ef4444;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+}
+
+/* Animations */
+@keyframes error-glitch-skew {
+  0% { transform: skew(0deg); }
+  20% { transform: skew(-2deg); }
+  40% { transform: skew(2deg); }
+  60% { transform: skew(-1deg); }
+  80% { transform: skew(3deg); }
+  100% { transform: skew(0deg); }
+}
+
+@keyframes error-glitch-anim {
+  0% { clip: rect(14px, 9999px, 127px, 0); }
+  20% { clip: rect(84px, 9999px, 12px, 0); }
+  40% { clip: rect(24px, 9999px, 102px, 0); }
+  60% { clip: rect(64px, 9999px, 14px, 0); }
+  80% { clip: rect(104px, 9999px, 32px, 0); }
+  100% { clip: rect(4px, 9999px, 82px, 0); }
+}
+
+@keyframes error-glitch-anim2 {
+  0% { clip: rect(64px, 9999px, 14px, 0); }
+  20% { clip: rect(104px, 9999px, 32px, 0); }
+  40% { clip: rect(4px, 9999px, 82px, 0); }
+  60% { clip: rect(14px, 9999px, 127px, 0); }
+  80% { clip: rect(84px, 9999px, 12px, 0); }
+  100% { clip: rect(24px, 9999px, 102px, 0); }
+}
+
+@keyframes safe-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(6, 182, 212, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); }
+}
+
+@keyframes danger-flicker {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.3; }
+  52% { opacity: 0.6; }
+  54% { opacity: 0.3; }
+  56% { opacity: 0.5; }
+}
+
+@media (max-width: 768px) {
+  .error-404-glitch {
+    font-size: 3rem;
+  }
+  
+  .error-404-description {
+    font-size: 1rem;
+  }
+}
