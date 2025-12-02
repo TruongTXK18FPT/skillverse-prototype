@@ -32,12 +32,7 @@ class WalletService {
    */
   async getMyWallet(): Promise<WalletResponse> {
     try {
-      console.log('🔍 Fetching wallet data...');
-      console.log('📍 Token present:', !!localStorage.getItem('accessToken'));
-      console.log('📍 User data:', localStorage.getItem('user'));
-      
       const response = await axiosInstance.get<WalletResponse>('/wallet/my-wallet');
-      console.log('✅ Wallet data loaded:', response.data);
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Get wallet error:', error);

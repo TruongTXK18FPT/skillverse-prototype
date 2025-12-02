@@ -124,19 +124,20 @@ export const getUserEnrollments = async (
   size: number = 20
 ): Promise<{ content: EnrollmentDetailDTO[]; totalElements: number; totalPages: number }> => {
   try {
+    // Backend returns PageResponse which has { items, page, size, total }
     const response = await axiosInstance.get<{
-      content: EnrollmentDetailDTO[];
-      totalElements: number;
-      totalPages: number;
+      items: EnrollmentDetailDTO[];
+      total: number;
       page: number;
       size: number;
     }>(`/enrollments/user/${userId}`, {
       params: { page, size }
     });
+    
     return {
-      content: response.data.content,
-      totalElements: response.data.totalElements,
-      totalPages: response.data.totalPages
+      content: response.data.items || [],
+      totalElements: response.data.total,
+      totalPages: Math.ceil(response.data.total / (size || 20))
     };
   } catch (error) {
     console.error('Error fetching user enrollments:', error);

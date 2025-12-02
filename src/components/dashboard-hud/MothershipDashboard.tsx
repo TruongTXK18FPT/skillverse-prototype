@@ -12,44 +12,77 @@ import './hud-styles.module.css';
 interface MothershipDashboardProps {
   userName?: string;
   translations?: any;
+  enrolledCourses?: any[];
+  userStats?: {
+    totalCourses: number;
+    totalHours: number;
+    completedProjects: number;
+    certificates: number;
+  };
+  cycleStats?: {
+    enrolledCoursesCount: number;
+    completedCoursesCount: number;
+    completedProjectsCount?: number;
+    certificatesCount?: number;
+    totalHoursStudied: number;
+    currentStreak?: number;
+    longestStreak?: number;
+    weeklyActivity?: boolean[];
+  };
+  usageLimits?: {
+    CHATBOT_REQUESTS: number;
+    ROADM_MAPS_LIMIT: number;
+    COIN_MULTIPLIER: number;
+  };
+  featureUsage?: any[];
 }
 
 const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   userName = 'InnoVibe Team',
-  translations = {}
+  translations = {},
+  enrolledCourses = [],
+  userStats = {
+    totalCourses: 0,
+    totalHours: 0,
+    completedProjects: 0,
+    certificates: 0
+  },
+  cycleStats,
+  usageLimits,
+  featureUsage
 }) => {
   const navigate = useNavigate();
 
   // Data mapping from old structure to new Sci-Fi theme
   const stats = [
     {
-      value: 12,
+      value: userStats.totalCourses,
       label: translations?.dashboard?.stats?.coursesInProgress || 'Modules Synced',
-      change: '+3 this cycle',
+      change: cycleStats ? `+${cycleStats.enrolledCoursesCount} this cycle` : '+3 this cycle',
       trend: 'up' as const,
       icon: BookOpen,
       color: 'cyan' as const
     },
     {
-      value: 8,
+      value: userStats.completedProjects,
       label: translations?.dashboard?.stats?.projectsCompleted || 'Missions Complete',
-      change: '+2 this cycle',
+      change: cycleStats?.completedProjectsCount ? `+${cycleStats.completedProjectsCount} this cycle` : '+0 this cycle',
       trend: 'up' as const,
       icon: Briefcase,
       color: 'green' as const
     },
     {
-      value: 15,
+      value: userStats.certificates,
       label: translations?.dashboard?.stats?.certificatesEarned || 'Badges Unlocked',
-      change: '+5 this cycle',
+      change: cycleStats?.certificatesCount ? `+${cycleStats.certificatesCount} this cycle` : '+0 this cycle',
       trend: 'up' as const,
       icon: Award,
       color: 'purple' as const
     },
     {
-      value: 1250,
+      value: userStats.totalHours,
       label: translations?.dashboard?.stats?.totalHours || 'Energy Units',
-      change: '+230 this cycle',
+      change: cycleStats ? `+${cycleStats.totalHoursStudied} this cycle` : '+230 this cycle',
       trend: 'up' as const,
       icon: TrendingUp,
       color: 'orange' as const
@@ -57,50 +90,14 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   ];
 
   const learningStreak = {
-    current: 15,
-    longest: 30,
-    thisWeek: [true, true, true, false, true, true, false],
+    current: cycleStats?.currentStreak || 0,
+    longest: cycleStats?.longestStreak || 0,
+    thisWeek: cycleStats?.weeklyActivity || [false, false, false, false, false, false, false],
     weeklyGoal: 5
   };
 
-  const recentCourses = [
-    {
-      id: 1,
-      title: 'Advanced React Patterns',
-      progress: 75,
-      totalLessons: 20,
-      completedLessons: 15,
-      instructor: 'John Smith',
-      thumbnail: 'https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=200',
-      lastAccessed: '2 hours ago',
-      nextLesson: 'Custom Hooks Implementation',
-      estimatedTime: '45 min'
-    },
-    {
-      id: 2,
-      title: 'UI/UX Design Principles',
-      progress: 60,
-      totalLessons: 16,
-      completedLessons: 10,
-      instructor: 'Sarah Johnson',
-      thumbnail: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=200',
-      lastAccessed: '1 day ago',
-      nextLesson: 'User Research Methods',
-      estimatedTime: '30 min'
-    },
-    {
-      id: 3,
-      title: 'Digital Marketing Strategy',
-      progress: 90,
-      totalLessons: 12,
-      completedLessons: 11,
-      instructor: 'Michael Brown',
-      thumbnail: 'https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=200',
-      lastAccessed: '3 days ago',
-      nextLesson: 'Campaign Analytics',
-      estimatedTime: '60 min'
-    }
-  ];
+  // Use passed enrolledCourses if available, otherwise use fallback (or empty)
+  const recentCourses = enrolledCourses.length > 0 ? enrolledCourses : [];
 
   const achievements = [
     {
@@ -213,6 +210,38 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
             />
           ))}
         </div>
+
+        {/* Usage Limits */}
+        {(featureUsage || usageLimits) && (
+          <div className="mothership-dashboard__usage-limits" style={{ marginTop: '20px', padding: '15px', background: 'rgba(0, 20, 40, 0.6)', border: '1px solid rgba(0, 255, 255, 0.2)', borderRadius: '8px' }}>
+            <h3 style={{ color: '#00ffff', marginBottom: '10px', fontFamily: 'Orbitron, sans-serif', fontSize: '14px' }}>SYSTEM LIMITS</h3>
+            <div style={{ display: 'flex', gap: '20px', color: '#a0c0ff', fontSize: '12px', flexWrap: 'wrap' }}>
+               {featureUsage ? (
+                 featureUsage.map((feature: any, idx: number) => (
+                   <div key={idx}>
+                     <span style={{ color: '#fff' }}>{feature.featureName}:</span>{' '}
+                     {feature.isUnlimited ? 'Unlimited' : 
+                      feature.bonusMultiplier ? `x${feature.bonusMultiplier}` :
+                      feature.limit === null ? (feature.isEnabled ? 'Enabled' : 'Disabled') :
+                      `${feature.currentUsage}/${feature.limit}`}
+                   </div>
+                 ))
+               ) : (
+                 <>
+                   <div>
+                     <span style={{ color: '#fff' }}>Chatbot Requests:</span> {usageLimits?.CHATBOT_REQUESTS}
+                   </div>
+                   <div>
+                     <span style={{ color: '#fff' }}>Roadmaps:</span> {usageLimits?.ROADM_MAPS_LIMIT}
+                   </div>
+                   <div>
+                     <span style={{ color: '#fff' }}>Coin Multiplier:</span> x{usageLimits?.COIN_MULTIPLIER}
+                   </div>
+                 </>
+               )}
+            </div>
+          </div>
+        )}
 
         {/* Active Simulations (Current Courses) */}
         <ActiveModules
