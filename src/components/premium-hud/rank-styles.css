@@ -1,0 +1,510 @@
+/* Hall of Ranks Styles */
+@font-face {
+  font-family: 'Space Habitat';
+  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --rank-bronze: #cd7f32;
+  --rank-silver: #e2e8f0;
+  --rank-gold: #fbbf24;
+  --rank-diamond: #22d3ee; /* Cyan for Diamond/Cosmic */
+  --rank-bg: #050b14;
+  --rank-card-bg: rgba(15, 23, 42, 0.6);
+  --rank-text: #e2e8f0;
+  --rank-text-muted: #94a3b8;
+  --rank-border: rgba(255, 255, 255, 0.1);
+}
+
+.hall-container {
+  background-color: var(--rank-bg);
+  min-height: 100vh;
+  color: var(--rank-text);
+  font-family: 'Rajdhani', sans-serif;
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: 50px;
+  
+  /* Floor Grid Background */
+  background-image: 
+    linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center bottom;
+  perspective: 1000px;
+}
+
+.hall-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 300px;
+  background: linear-gradient(to top, var(--rank-bg), transparent);
+  pointer-events: none;
+}
+
+/* God Ray Effect */
+.hall-god-ray {
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 80vh;
+  background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating Particles */
+.hall-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hall-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+.hall-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header - Clearance Header (Updated to match Portfolio) */
+/* Header - Clearance Header (Revamped to Hall of Ascension Style) */
+.clearance-header {
+  /* Xóa background gradient và border cũ đi để nó hòa vào nền vũ trụ */
+  background: transparent;
+  border: none;
+  clip-path: none;
+  
+  padding: 2rem 0 2rem 0; /* Tăng padding top để tách biệt */
+  margin-bottom: 2rem;
+  position: relative;
+  text-align: center; /* Canh giữa toàn bộ */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.clearance-header-content {
+  display: flex;
+  flex-direction: column; /* Xếp dọc */
+  align-items: center;
+  gap: 1rem;
+  z-index: 2;
+}
+
+.clearance-title {
+  font-family: 'Space Habitat', monospace;
+  font-size: 3.5rem; /* Tăng kích thước font */
+  /* Gradient kim loại bạc sang trắng */
+  background: linear-gradient(to bottom, #ffffff 0%, #94a3b8 100%); 
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  margin: 0;
+  text-shadow: 0 0 30px rgba(34, 211, 238, 0.3); /* Glow nhẹ */
+  letter-spacing: 6px; /* Giãn chữ rộng ra cho sang */
+  text-transform: uppercase;
+}
+
+.clearance-subtitle {
+  font-family: 'Inter', sans-serif; /* Dùng font thường cho dễ đọc */
+  color: var(--rank-text-muted);
+  font-size: 1rem;
+  letter-spacing: 3px; /* Tracking rộng */
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  
+  /* Thêm đường kẻ 2 bên cho subtitle */
+  position: relative;
+}
+
+.clearance-subtitle::before,
+.clearance-subtitle::after {
+  content: '';
+  width: 40px;
+  height: 5px;
+  background: var(--rank-text-muted);
+  opacity: 0.3;
+}
+
+/* Description in Card */
+.hall-description {
+  font-size: 0.9rem;
+  color: var(--rank-text-muted);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  min-height: 150px; /* Fixed height for alignment */
+  /* Ensure text alignment */
+  text-align: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* Tags */
+.hall-tag {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  z-index: 20;
+  letter-spacing: 1px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%);
+}
+
+.hall-tag-student {
+  background: var(--rank-silver);
+  color: #000;
+}
+
+.hall-tag-popular {
+  background: var(--rank-gold);
+  color: #000;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+}
+
+/* Grid Layout */
+.hall-rank-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  align-items: stretch;
+  perspective: 1000px; /* For 3D effect */
+}
+
+/* Rank Card (Holo-Pedestal) */
+.hall-rank-card {
+  background: rgba(15, 23, 42, 0.4); /* More transparent */
+  border: 1px solid var(--rank-border);
+  border-radius: 12px;
+  width: 100%;
+  position: relative;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Light Beam Effect */
+.hall-light-beam {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(to top, var(--beam-color, rgba(255,255,255,0.05)), transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.hall-rank-card:hover .hall-light-beam {
+  opacity: 0.8;
+}
+
+.hall-rank-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  z-index: 10;
+}
+
+/* Tier Specific Styles - Updated for Glow */
+.hall-rank-bronze {
+  --beam-color: rgba(205, 127, 50, 0.15);
+  border-color: rgba(205, 127, 50, 0.3);
+  box-shadow: 0 0 20px rgba(205, 127, 50, 0.1);
+}
+.hall-rank-bronze:hover { box-shadow: 0 0 30px rgba(205, 127, 50, 0.3); border-color: var(--rank-bronze); }
+
+.hall-rank-silver {
+  --beam-color: rgba(226, 232, 240, 0.15);
+  border-color: rgba(226, 232, 240, 0.5);
+  box-shadow: 0 0 20px rgba(226, 232, 240, 0.2);
+}
+.hall-rank-silver:hover { box-shadow: 0 0 40px rgba(226, 232, 240, 0.4); border-color: var(--rank-silver); }
+
+.hall-rank-gold {
+  --beam-color: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.5);
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+}
+.hall-rank-gold:hover { box-shadow: 0 0 50px rgba(251, 191, 36, 0.5); border-color: var(--rank-gold); }
+
+.hall-rank-diamond {
+  --beam-color: rgba(34, 211, 238, 0.15);
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 40px rgba(34, 211, 238, 0.4);
+}
+.hall-rank-diamond:hover { box-shadow: 0 0 60px rgba(34, 211, 238, 0.6); border-color: var(--rank-diamond); }
+
+
+/* Card Content */
+.hall-card-top {
+  height: 140px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  z-index: 1;
+}
+
+.hall-avatar-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hall-avatar-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.1);
+  z-index: 1;
+}
+
+.hall-frame-img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 2;
+  object-fit: contain;
+}
+
+.hall-aura {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  filter: blur(20px);
+  opacity: 0.6;
+  z-index: 0;
+}
+.hall-rank-gold .hall-aura { background: var(--rank-gold); }
+.hall-rank-silver .hall-aura { background: var(--rank-silver); }
+.hall-rank-diamond .hall-aura { background: var(--rank-diamond); }
+.hall-rank-bronze .hall-aura { background: var(--rank-bronze); }
+
+.hall-card-body {
+  padding: 20px;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+.hall-rank-badge {
+  display: inline-block;
+  padding: 5px 15px;
+  border: 1px solid;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  background: rgba(0,0,0,0.3);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.hall-rank-name-original {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1rem;
+  color: var(--rank-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.hall-price {
+  font-family: 'Space Habitat', sans-serif;
+  font-size: 2.5rem; /* Huge */
+  margin-bottom: 5px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.hall-currency {
+  font-size: 1rem;
+  margin-top: 5px;
+  opacity: 0.8;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 2px;
+}
+
+.hall-period {
+  font-size: 0.8rem;
+  color: var(--rank-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hall-features {
+  margin-top: 20px;
+  background: rgba(0,0,0,0.2);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: left;
+  flex: 1;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.hall-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: var(--rank-text);
+  line-height: 1.4;
+}
+
+.hall-feature-icon-wrapper {
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.1);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.hall-feature-icon {
+  color: var(--success-green, #10b981);
+  width: 12px;
+  height: 12px;
+}
+
+.hall-btn {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid;
+  padding: 12px;
+  width: 100%;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  position: relative;
+  overflow: hidden;
+  color: #fff; /* Default text color */
+}
+
+/* Specific Button Colors per Tier */
+.hall-rank-bronze .hall-btn { border-color: var(--rank-bronze); color: var(--rank-bronze); }
+.hall-rank-bronze .hall-btn:hover:not(:disabled) { background: var(--rank-bronze); color: #fff; }
+
+.hall-rank-silver .hall-btn { border-color: var(--rank-silver); color: var(--rank-silver); }
+.hall-rank-silver .hall-btn:hover:not(:disabled) { background: var(--rank-silver); color: #000; }
+
+.hall-rank-gold .hall-btn { border-color: var(--rank-gold); color: var(--rank-gold); }
+.hall-rank-gold .hall-btn:hover:not(:disabled) { background: var(--rank-gold); color: #000; }
+
+.hall-rank-diamond .hall-btn { border-color: var(--rank-diamond); color: var(--rank-diamond); }
+.hall-rank-diamond .hall-btn:hover:not(:disabled) { background: var(--rank-diamond); color: #000; }
+
+.hall-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.hall-btn:hover::before {
+  left: 100%;
+}
+
+.hall-btn:hover:not(:disabled) {
+  box-shadow: 0 0 15px currentColor;
+  text-shadow: 0 0 5px currentColor;
+}
+
+.hall-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: var(--rank-text-muted) !important;
+  color: var(--rank-text-muted) !important;
+  background: transparent !important;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .hall-rank-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .hall-rank-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hall-rank-silver, .hall-rank-gold, .hall-rank-diamond {
+    transform: none !important;
+  }
+  
+  .clearance-title {
+    font-size: 2rem;
+  }
+}

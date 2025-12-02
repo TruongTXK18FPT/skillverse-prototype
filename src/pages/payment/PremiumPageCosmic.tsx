@@ -1,8 +1,4 @@
 import { useState, useEffect } from 'react';
-import { 
-  Crown, Check, Star, Wallet, ArrowRight, Zap, Bot, 
-  Users, Shield, Sparkles, Rocket, Award, GraduationCap, Gem, XCircle, RefreshCw, FileText
-} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import '../../styles/PremiumPageCosmic.css';
@@ -19,11 +15,7 @@ import WalletPaymentModal from '../../components/premium/WalletPaymentModal';
 import CancelSubscriptionModal from '../../components/premium/CancelSubscriptionModal';
 import CancelAutoRenewalModal from '../../components/premium/CancelAutoRenewalModal';
 import { PremiumInvoice, useInvoice } from '../../components/invoice';
-
-// Import avatar frames
-import silverAvatar from '../../assets/premium/silver_avatar.png';
-import goldenAvatar from '../../assets/premium/golden_avatar.png';
-import diamondAvatar from '../../assets/premium/diamond_avatar.png';
+import ClearanceLevelPage from '../../components/premium-hud/ClearanceLevelPage';
 
 const PremiumPageCosmic = () => {
   const navigate = useNavigate();
@@ -199,366 +191,31 @@ const PremiumPageCosmic = () => {
     }
   };
 
-  const getTierClass = (planType: string) => {
-    switch (planType) {
-      case 'FREE_TIER':
-        return 'cosmic-tier-card--bronze';
-      case 'STUDENT_PACK':
-        return 'cosmic-tier-card--silver';
-      case 'PREMIUM_BASIC':
-        return 'cosmic-tier-card--gold';
-      case 'PREMIUM_PLUS':
-        return 'cosmic-tier-card--diamond';
-      default:
-        return '';
-    }
-  };
-
-  const getTierIcon = (planType: string) => {
-    switch (planType) {
-      case 'FREE_TIER':
-        return Award;
-      case 'STUDENT_PACK':
-        return GraduationCap;
-      case 'PREMIUM_BASIC':
-        return Crown;
-      case 'PREMIUM_PLUS':
-        return Gem;
-      default:
-        return Award;
-    }
-  };
-
-  const getTierFrame = (planType: string) => {
-    switch (planType) {
-      case 'STUDENT_PACK':
-        return silverAvatar;
-      case 'PREMIUM_BASIC':
-        return goldenAvatar;
-      case 'PREMIUM_PLUS':
-        return diamondAvatar;
-      default:
-        return null;
-    }
-  };
-
-  const getTierBadge = (planType: string) => {
-    switch (planType) {
-      case 'FREE_TIER':
-        return '🥉 Bronze Tier';
-      case 'STUDENT_PACK':
-        return '🥈 Silver Tier';
-      case 'PREMIUM_BASIC':
-        return '🥇 Gold Tier';
-      case 'PREMIUM_PLUS':
-        return '💎 Diamond Tier';
-      default:
-        return '';
-    }
-  };
-
-  const formatPrice = (price: string) => {
-    const num = parseFloat(price);
-    return num.toLocaleString('vi-VN');
-  };
-
-  const parseFeatures = (featuresString: string): string[] => {
-    try {
-      return JSON.parse(featuresString);
-    } catch {
-      return featuresString.split(',').map(f => f.trim());
-    }
+  const handleViewInvoice = (sub: UserSubscriptionResponse) => {
+    openInvoice(
+      sub,
+      userProfile?.fullName || user?.fullName || 'Khách hàng',
+      userProfile?.email || user?.email || '',
+      userProfile?.id
+    );
   };
 
   return (
     <div className="cosmic-premium-page">
-      {/* Hero Section */}
-      <section className="cosmic-premium-hero">
-        <div className="cosmic-premium-hero__badge">
-          <Crown size={24} />
-          <span>SkillVerse Premium Galaxy</span>
-        </div>
-        <h1 className="cosmic-premium-hero__title">
-          Nâng tầm sự nghiệp<br />với Premium
-        </h1>
-        <p className="cosmic-premium-hero__subtitle">
-          Khám phá vũ trụ tri thức với các gói Premium được thiết kế riêng cho từng hành trình phát triển của bạn
-        </p>
-        <div className="cosmic-premium-hero__stats">
-          <div className="cosmic-stat-item">
-            <div className="cosmic-stat-number">10K+</div>
-            <div className="cosmic-stat-label">Thành viên</div>
-          </div>
-          <div className="cosmic-stat-item">
-            <div className="cosmic-stat-number">95%</div>
-            <div className="cosmic-stat-label">Hài lòng</div>
-          </div>
-          <div className="cosmic-stat-item">
-            <div className="cosmic-stat-number">3x</div>
-            <div className="cosmic-stat-label">Tốc độ học</div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section className="cosmic-pricing-section">
-        <div className="cosmic-section-header">
-          <h2 className="cosmic-section-title">Chọn gói phù hợp với bạn</h2>
-          <p className="cosmic-section-subtitle">
-            Mỗi tier mang đến trải nghiệm độc đáo trong hành trình chinh phục tri thức
-          </p>
-        </div>
-
-        <div className="cosmic-pricing-grid">
-          {premiumPlans.map((plan) => (
-            <div
-              key={plan.id}
-              className={`cosmic-tier-card ${getTierClass(plan.planType)}`}
-            >
-              {plan.planType === 'PREMIUM_BASIC' && (
-                <div className="cosmic-tier-popular">
-                  <Star size={16} fill="currentColor" />
-                  <span>Phổ biến nhất</span>
-                </div>
-              )}
-
-              <div className="cosmic-tier-icon-wrapper">
-                {(() => {
-                  const IconComponent = getTierIcon(plan.planType);
-                  const frameImage = getTierFrame(plan.planType);
-                  
-                  return (
-                    <>
-                      {userProfile?.avatarMediaUrl ? (
-                        <img 
-                          src={userProfile.avatarMediaUrl} 
-                          alt="User Avatar" 
-                          className="cosmic-tier-user-avatar"
-                        />
-                      ) : (
-                        <IconComponent size={64} className="cosmic-tier-icon" />
-                      )}
-                      {frameImage && (
-                        <img 
-                          src={frameImage} 
-                          alt="Frame" 
-                          className="cosmic-tier-frame"
-                        />
-                      )}
-                    </>
-                  );
-                })()}
-              </div>
-
-              <div className="cosmic-tier-header">
-                <div className="cosmic-tier-badge">
-                  {getTierBadge(plan.planType)}
-                </div>
-                <h3 className="cosmic-tier-name">{plan.displayName}</h3>
-              </div>
-
-              <p className="cosmic-tier-description">{plan.description}</p>
-
-              <div className="cosmic-tier-price">
-                <span className="cosmic-price-amount">
-                  {formatPrice(plan.price)}
-                </span>
-                <span className="cosmic-price-currency">₫</span>
-                <span className="cosmic-price-period">
-                  /{plan.durationMonths} tháng
-                </span>
-                {plan.planType === 'STUDENT_PACK' && (
-                  <div className="cosmic-student-badge">
-                    🎓 Dành cho sinh viên
-                  </div>
-                )}
-              </div>
-
-              <ul className="cosmic-tier-features">
-                {parseFeatures(plan.features).map((feature, idx) => (
-                  <li key={idx} className="cosmic-feature-item">
-                    <Check size={20} className="cosmic-feature-check" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {plan.planType !== 'FREE_TIER' && (
-                hasActive ? (
-                  <button
-                    className="cosmic-tier-button cosmic-tier-button--disabled"
-                    disabled
-                  >
-                    Đang hoạt động đến{' '}
-                    {currentSub ? new Date(currentSub.endDate).toLocaleDateString('vi-VN') : ''}
-                  </button>
-                ) : (
-                  <div className="cosmic-tier-actions">
-                    {isAuthenticated && walletData ? (
-                      <>
-                        <button
-                          className="cosmic-tier-button cosmic-tier-button--wallet"
-                          onClick={() => handleWalletPayment(plan.name)}
-                          disabled={processing}
-                        >
-                          <Wallet size={20} />
-                          Thanh toán bằng ví
-                        </button>
-                        <button
-                          className="cosmic-tier-button cosmic-tier-button--payos"
-                          onClick={() => handleUpgrade(plan.name)}
-                          disabled={processing}
-                        >
-                          Thanh toán qua PayOS
-                        </button>
-                      </>
-                    ) : (
-                      <button 
-                        className="cosmic-tier-button cosmic-tier-button--primary"
-                        onClick={() => handleUpgrade(plan.name)}
-                        disabled={processing}
-                      >
-                        {!isAuthenticated ? 'Đăng nhập để nâng cấp' : 'Nâng cấp ngay'}
-                        <ArrowRight size={20} />
-                      </button>
-                    )}
-                  </div>
-                )
-              )}
-
-              {hasActive && currentSub && currentSub.status === 'ACTIVE' && (
-                <div className="cosmic-active-note">
-                  <div className="cosmic-subscription-info">
-                    <div>
-                      Gói của bạn đang hoạt động đến{' '}
-                      <strong>{new Date(currentSub.endDate).toLocaleDateString('vi-VN')}</strong>
-                    </div>
-                    {currentSub.plan.planType !== 'FREE_TIER' && (
-                      <div className="cosmic-auto-renewal-status">
-                        {currentSub.autoRenew ? (
-                          <span className="auto-renewal-badge auto-renewal-enabled">
-                            <RefreshCw size={14} />
-                            Gia hạn tự động: Bật
-                          </span>
-                        ) : (
-                          <span className="auto-renewal-badge auto-renewal-disabled">
-                            <XCircle size={14} />
-                            Gia hạn tự động: Tắt
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                  {currentSub.plan.planType !== 'FREE_TIER' && (
-                    <div className="cosmic-subscription-actions">
-                      <button
-                        className="cosmic-view-invoice-btn"
-                        onClick={() => openInvoice(
-                          currentSub,
-                          userProfile?.fullName || user?.fullName || 'Khách hàng',
-                          userProfile?.email || user?.email || '',
-                          userProfile?.id
-                        )}
-                      >
-                        <FileText size={18} />
-                        Xem hóa đơn
-                      </button>
-                      {currentSub.autoRenew && (
-                        <button
-                          className="cosmic-cancel-auto-renewal-btn"
-                          onClick={() => setShowCancelAutoRenewalModal(true)}
-                        >
-                          <RefreshCw size={18} />
-                          Hủy thanh toán tự động
-                        </button>
-                      )}
-                      <button
-                        className="cosmic-cancel-subscription-btn"
-                        onClick={() => setShowCancelModal(true)}
-                      >
-                        <XCircle size={18} />
-                        Hủy gói & hoàn tiền
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Features Showcase */}
-      <section className="cosmic-features-showcase">
-        <div className="cosmic-section-header">
-          <h2 className="cosmic-section-title">Tính năng nổi bật</h2>
-          <p className="cosmic-section-subtitle">
-            Trải nghiệm học tập đỉnh cao với công nghệ AI tiên tiến
-          </p>
-        </div>
-
-        <div className="cosmic-features-grid">
-          <div className="cosmic-feature-card">
-            <div className="cosmic-feature-icon">
-              <Bot size={32} />
-            </div>
-            <h3 className="cosmic-feature-title">AI Coach cá nhân</h3>
-            <p className="cosmic-feature-text">
-              Trợ lý AI thông minh phân tích điểm mạnh, điểm yếu và đề xuất lộ trình học tập phù hợp
-            </p>
-          </div>
-
-          <div className="cosmic-feature-card">
-            <div className="cosmic-feature-icon">
-              <Users size={32} />
-            </div>
-            <h3 className="cosmic-feature-title">Mentor 1:1</h3>
-            <p className="cosmic-feature-text">
-              Kết nối với các chuyên gia hàng đầu để được hướng dẫn trực tiếp và giải đáp thắc mắc
-            </p>
-          </div>
-
-          <div className="cosmic-feature-card">
-            <div className="cosmic-feature-icon">
-              <Shield size={32} />
-            </div>
-            <h3 className="cosmic-feature-title">Chứng chỉ uy tín</h3>
-            <p className="cosmic-feature-text">
-              Nhận chứng chỉ được công nhận bởi các doanh nghiệp hàng đầu trong ngành
-            </p>
-          </div>
-
-          <div className="cosmic-feature-card">
-            <div className="cosmic-feature-icon">
-              <Sparkles size={32} />
-            </div>
-            <h3 className="cosmic-feature-title">Nội dung độc quyền</h3>
-            <p className="cosmic-feature-text">
-              Truy cập không giới hạn vào thư viện khóa học premium và tài liệu chuyên sâu
-            </p>
-          </div>
-
-          <div className="cosmic-feature-card">
-            <div className="cosmic-feature-icon">
-              <Zap size={32} />
-            </div>
-            <h3 className="cosmic-feature-title">Học tập tối ưu</h3>
-            <p className="cosmic-feature-text">
-              Công nghệ học thích ứng giúp bạn tiếp thu kiến thức nhanh hơn 3 lần
-            </p>
-          </div>
-
-          <div className="cosmic-feature-card">
-            <div className="cosmic-feature-icon">
-              <Rocket size={32} />
-            </div>
-            <h3 className="cosmic-feature-title">Career Boost</h3>
-            <p className="cosmic-feature-text">
-              Hỗ trợ tìm việc với portfolio showcase và kết nối với nhà tuyển dụng
-            </p>
-          </div>
-        </div>
-      </section>
+      <ClearanceLevelPage 
+        premiumPlans={premiumPlans}
+        currentSub={currentSub}
+        hasActive={hasActive}
+        processing={processing}
+        isAuthenticated={isAuthenticated}
+        walletData={walletData}
+        userProfile={userProfile}
+        onUpgrade={handleUpgrade}
+        onWalletPayment={handleWalletPayment}
+        onViewInvoice={handleViewInvoice}
+        onCancelAutoRenew={() => setShowCancelAutoRenewalModal(true)}
+        onCancelSubscription={() => setShowCancelModal(true)}
+      />
 
       {/* MeowGuide positioned at bottom right */}
       <div className="cosmic-meowl-container">
@@ -618,3 +275,18 @@ const PremiumPageCosmic = () => {
 };
 
 export default PremiumPageCosmic;
+
+/* Old implementation preserved in git history */
+/*
+import { 
+  Crown, Check, Star, Wallet, ArrowRight, Zap, Bot, 
+  Users, Shield, Sparkles, Rocket, Award, GraduationCap, Gem, XCircle, RefreshCw, FileText
+} from 'lucide-react';
+// ... (rest of imports)
+// Import avatar frames
+import silverAvatar from '../../assets/premium/silver_avatar.png';
+import goldenAvatar from '../../assets/premium/golden_avatar.png';
+import diamondAvatar from '../../assets/premium/diamond_avatar.png';
+
+// ... (rest of old code)
+*/
