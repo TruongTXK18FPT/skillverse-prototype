@@ -18,7 +18,7 @@ const CommunityHUD: React.FC = () => {
   const [activeChannel, setActiveChannel] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const postsPerPage = 6;
+  const postsPerPage = 9;
 
   // Frequency Channels (Categories)
   const [channels, setChannels] = useState<FrequencyChannel[]>([

@@ -128,10 +128,17 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
     all: 'Tất cả',
   };
 
+  // Helper to strip HTML tags
+  const stripHtml = (html: string) => {
+    const tmp = document.createElement('DIV');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  };
+
   const decodedTitle = decodeHtml(post.title);
   const decodedContent = decodeHtml(post.content);
-  // Remove markdown images from preview text
-  const plainContent = decodedContent.replace(/!\[[^\]]*\]\([^)]+\)/g, '').replace(/<img[^>]*>/g, '');
+  // Strip all HTML tags for preview
+  const plainContent = stripHtml(decodedContent);
 
   return (
     <article
@@ -162,15 +169,15 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
       {/* Content */}
       <h2 className="transmission-title">{decodedTitle}</h2>
       <p className="transmission-content">
-        {plainContent.length > 200
-          ? `${plainContent.substring(0, 200)}...`
+        {plainContent.length > 150
+          ? `${plainContent.substring(0, 150)}...`
           : plainContent}
       </p>
 
       {/* Post Thumbnail if available */}
       {post.image && (
-        <div className="transmission-thumbnail" style={{ marginTop: '1rem', borderRadius: '8px', overflow: 'hidden' }}>
-          <img src={post.image} alt="thumbnail" style={{ width: '100%', height: 'auto', maxHeight: '300px', objectFit: 'cover' }} />
+        <div className="transmission-thumbnail" style={{ marginTop: '0.75rem', borderRadius: '8px', overflow: 'hidden' }}>
+          <img src={post.image} alt="thumbnail" style={{ width: '100%', height: 'auto', maxHeight: '200px', objectFit: 'cover' }} />
         </div>
       )}
 
@@ -193,7 +200,7 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
           onClick={handleLike}
           title="Thích"
         >
-          <ThumbsUp size={18} />
+          <ThumbsUp size={16} />
           <span>{formatNumber(likeCount)}</span>
         </button>
         <button
@@ -201,21 +208,21 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
           onClick={handleDislike}
           title="Không thích"
         >
-          <ThumbsDown size={18} />
+          <ThumbsDown size={16} />
           <span>{formatNumber(dislikeCount)}</span>
         </button>
         <button
           className="transmission-action-btn"
           title="Bình luận"
         >
-          <MessageCircle size={18} />
+          <MessageCircle size={16} />
           <span>{formatNumber(post.comments)}</span>
         </button>
         <button
           className="transmission-action-btn"
           title="Chia sẻ"
         >
-          <Share2 size={18} />
+          <Share2 size={16} />
           <span>{formatNumber(post.shares)}</span>
         </button>
         <button
@@ -223,7 +230,7 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
           onClick={handleBookmark}
           title="Lưu"
         >
-          <Bookmark size={18} fill={isBookmarked ? 'currentColor' : 'none'} />
+          <Bookmark size={16} fill={isBookmarked ? 'currentColor' : 'none'} />
         </button>
       </div>
     </article>

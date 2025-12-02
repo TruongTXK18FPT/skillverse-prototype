@@ -9,6 +9,14 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import { decodeHtml } from '../../utils/htmlDecoder';
+
+// Helper to strip HTML tags for preview
+const stripHtml = (html: string) => {
+  const tmp = document.createElement('DIV');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+};
+
 import {
   ResponsiveContainer,
   AreaChart,
@@ -580,6 +588,9 @@ const CommunityDashboardPage: React.FC = () => {
                                   <span>{p.userFullName || `User #${p.userId}`}</span>
                                   <span>•</span>
                                   <span>ID: {p.id}</span>
+                                </div>
+                                <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: '0.25rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                  {stripHtml(decodeHtml(p.content || ''))}
                                 </div>
                                 {p.tags && p.tags.length > 0 && (
                                   <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>

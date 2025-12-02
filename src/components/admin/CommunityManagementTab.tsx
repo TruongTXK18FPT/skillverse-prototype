@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState, useRef } from 'react';
 import communityService, { PostSummary, CommentResponse } from '../../services/communityService';
 import adminUserService from '../../services/adminUserService';
 import { AdminUserResponse } from '../../types/adminUser';
-import { Edit, Trash2, MessageSquare, TrendingUp, Zap, Users, Activity, Search, X, Save, Image, Eye, EyeOff, AlertTriangle, Hash, RefreshCw, Download, PieChart as PieChartIcon, BarChart as BarChartIcon } from 'lucide-react';
+import { Edit, Trash2, MessageSquare, TrendingUp, Zap, Users, Activity, Search, X, Save, Image, Eye, EyeOff, AlertTriangle, Hash, RefreshCw, Download, PieChart as PieChartIcon, BarChart as BarChartIcon, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { uploadImage as uploadImageFile, validateImage } from '../../services/fileUploadService';
 import ReactMarkdown from 'react-markdown';

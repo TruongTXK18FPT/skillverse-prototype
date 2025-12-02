@@ -3,10 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
   Image,
-  Link,
-  Bold,
-  Italic,
-  List,
   Hash,
   Eye,
   Send,
@@ -18,9 +14,7 @@ import './broadcast-form-styles.css';
 import communityService from '../../services/communityService';
 import { useAuth } from '../../context/AuthContext';
 import { uploadImage as uploadImageFile, validateImage } from '../../services/fileUploadService';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkBreaks from 'remark-breaks';
+import RichTextEditor from '../shared/RichTextEditor';
 
 interface BroadcastFormData {
   title: string;
@@ -46,13 +40,9 @@ const BroadcastForm: React.FC = () => {
   const [isPreview, setIsPreview] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploadingThumbnail, setIsUploadingThumbnail] = useState(false);
-  const [isUploadingContent, setIsUploadingContent] = useState(false);
   const [thumbnailProgress, setThumbnailProgress] = useState(0);
-  const [contentUploadProgress, setContentUploadProgress] = useState(0);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | undefined>(undefined);
-  const inlineImageInputRef = React.useRef<HTMLInputElement>(null);
   const thumbnailInputRef = React.useRef<HTMLInputElement>(null);
-  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const channels = [
     { id: 'discussion', name: 'Thảo luận' },
@@ -93,8 +83,6 @@ const BroadcastForm: React.FC = () => {
 
     try {
       const content = formData.content.trim();
-      // We now send thumbnailUrl as a separate field, but we can still keep it in markdown if desired.
-      // For now, let's just send it as a field to the backend.
       
       const created = await communityService.createPost({
         title: formData.title.trim(),
@@ -112,65 +100,7 @@ const BroadcastForm: React.FC = () => {
     }
   };
 
-  const applyWrap = (prefix: string, suffix: string) => {
-    const ta = textareaRef.current;
-    if (!ta) return;
-    const start = ta.selectionStart;
-    const end = ta.selectionEnd;
-    const before = formData.content.substring(0, start);
-    const selected = formData.content.substring(start, end) || '';
-    const after = formData.content.substring(end);
-    const next = `${before}${prefix}${selected}${suffix}${after}`;
-    setFormData({ ...formData, content: next });
-    setTimeout(() => {
-      ta.focus();
-      ta.selectionStart = start + prefix.length;
-      ta.selectionEnd = start + prefix.length + selected.length;
-    }, 0);
-  };
-
-  const handleBold = () => applyWrap('**', '**');
-  const handleItalic = () => applyWrap('*', '*');
-  const handleList = () => applyWrap('\n- ', '');
-  const handleLink = () => applyWrap('[text](', ')');
-
-  const triggerInlineImage = () => inlineImageInputRef.current?.click();
   const triggerThumbnail = () => thumbnailInputRef.current?.click();
-
-  const onInlineImageSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    
-    if (!user?.id) {
-      alert('Vui lòng đăng nhập để upload ảnh');
-      return;
-    }
-
-    const validation = validateImage(file);
-    if (!validation.valid) {
-      alert(validation.error || 'Ảnh không hợp lệ');
-      return;
-    }
-
-    try {
-      setIsUploadingContent(true);
-      setContentUploadProgress(0);
-      const res = await uploadImageFile(
-        file,
-        user.id,
-        (progress) => setContentUploadProgress(progress.percentage)
-      );
-      const url = res.url;
-      // Insert Markdown image
-      setFormData({ ...formData, content: `${formData.content}\n![image](${url})\n` });
-    } catch (err) {
-      console.error('Upload ảnh nội dung thất bại', err);
-    } finally {
-      setIsUploadingContent(false);
-      setContentUploadProgress(0);
-      e.target.value = '';
-    }
-  };
 
   const onThumbnailSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -263,43 +193,11 @@ const BroadcastForm: React.FC = () => {
               {/* Content Editor */}
               <div className="broadcast-form-group">
                 <label className="broadcast-form-label">Nội dung</label>
-                <div className="broadcast-toolbar">
-                  <button type="button" className="broadcast-toolbar-btn" title="In đậm" onClick={handleBold}>
-                    <Bold size={16} />
-                  </button>
-                  <button
-                    type="button"
-                    className="broadcast-toolbar-btn"
-                    title="In nghiêng"
-                    onClick={handleItalic}
-                  >
-                    <Italic size={16} />
-                  </button>
-                  <button type="button" className="broadcast-toolbar-btn" title="Danh sách" onClick={handleList}>
-                    <List size={16} />
-                  </button>
-                  <button type="button" className="broadcast-toolbar-btn" title="Liên kết" onClick={handleLink}>
-                    <Link size={16} />
-                  </button>
-                  <button type="button" className="broadcast-toolbar-btn" title="Ảnh" onClick={triggerInlineImage} disabled={isUploadingContent}>
-                    {isUploadingContent ? <Loader size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <Image size={16} />}
-                  </button>
-                  <input ref={inlineImageInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={onInlineImageSelected} />
-                </div>
-                <textarea
-                  placeholder="Soạn nội dung bài viết...
-
-Bạn có thể dùng:
-- **text** để in đậm
-- *text* để in nghiêng
-- Xuống dòng để tạo đoạn"
-                  value={formData.content}
-                  onChange={(e) =>
-                    setFormData({ ...formData, content: e.target.value })
-                  }
-                  className="broadcast-content-textarea"
-                  ref={textareaRef}
-                  rows={15}
+                <RichTextEditor
+                  initialContent={formData.content}
+                  onChange={(content) => setFormData({ ...formData, content })}
+                  placeholder="Soạn nội dung bài viết..."
+                  userId={user?.id}
                 />
               </div>
 
@@ -373,26 +271,10 @@ Bạn có thể dùng:
                   </div>
                 </div>
 
-                <div className="broadcast-preview-content markdown-content">
-                  {formData.content ? (
-                    <ReactMarkdown
-                      children={formData.content}
-                      remarkPlugins={[remarkGfm, remarkBreaks]}
-                      components={{
-                        img: ({ node, ...props }) => (
-                          <img
-                            style={{ maxWidth: '100%', borderRadius: 8, margin: '1rem 0' }}
-                            {...props}
-                          />
-                        ),
-                      }}
-                    />
-                  ) : (
-                    <p className="broadcast-preview-placeholder">
-                      Nội dung sẽ hiển thị tại đây...
-                    </p>
-                  )}
-                </div>
+                <div 
+                  className="broadcast-preview-content markdown-content"
+                  dangerouslySetInnerHTML={{ __html: formData.content || '<p class="broadcast-preview-placeholder">Nội dung sẽ hiển thị tại đây...</p>' }}
+                />
 
                 {formData.tags.length > 0 && (
                   <div className="broadcast-preview-tags">
@@ -446,24 +328,6 @@ Bạn có thể dùng:
                 <li>Nội dung hữu ích và có giá trị</li>
                 <li>Kiểm tra bài trước khi đăng</li>
               </ul>
-            </div>
-
-            <div className="broadcast-sidebar-card">
-              <h3 className="broadcast-sidebar-title">Định dạng văn bản</h3>
-              <div className="broadcast-format-help">
-                <div className="broadcast-format-item">
-                  <code>**text**</code>
-                  <span>In đậm</span>
-                </div>
-                <div className="broadcast-format-item">
-                  <code>*text*</code>
-                  <span>In nghiêng</span>
-                </div>
-                <div className="broadcast-format-item">
-                  <code>Enter</code>
-                  <span>Xuống dòng</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>

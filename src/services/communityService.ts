@@ -24,6 +24,7 @@ export interface PostSummary {
   id: number;
   title: string;
   content: string;
+  status?: PostStatus;
   thumbnailUrl?: string;
   category?: string;
   tags?: string[];
