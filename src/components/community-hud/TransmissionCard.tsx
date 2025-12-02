@@ -158,7 +158,6 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
         />
         <div className="transmission-author-info">
           <h4 className="transmission-author-name">{post.author}</h4>
-          <p className="transmission-author-role">Người đăng // {categoryViMap[post.category] || 'Chủ đề'}</p>
         </div>
         <div className="transmission-timestamp">
           <Clock size={14} />
