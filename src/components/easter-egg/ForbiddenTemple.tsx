@@ -117,13 +117,18 @@ const ForbiddenTemple: React.FC = () => {
   }, [phase]);
 
   const handleActionClick = () => {
-    // First Click: Light Incense & Play Serenity
+    // First Click: Light Incense & Play Serenity (Always allowed)
     if (clicks === 0) {
       setIsStickLit(true);
       audioSerenity.current.play().catch(e => console.log("Audio blocked", e));
+      setClicks(prev => prev + 1);
+      return;
     }
 
-    setClicks(prev => prev + 1);
+    // Subsequent clicks: Only count if password is correct
+    if (prayer === 'mktnhulol') {
+      setClicks(prev => prev + 1);
+    }
   };
 
   const handleEscape = () => {
