@@ -36,3 +36,8 @@ serena.log
 serena.config*
 .serena.yml
 .serena.yaml
+
+# Trae UI/UX Pro Max
+.github/prompts/
+.shared/
+
