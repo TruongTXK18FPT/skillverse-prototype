@@ -140,7 +140,8 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
 /* Smoke Effect */
 .ee-smoke {
   position: absolute;
-  top: -50px;
+  z-index: 40; /* Higher than bowl (30) */
+  bottom: 48%; /* Adjusted position */
   left: 50%;
   transform: translateX(-50%);
   width: 10px;
@@ -150,9 +151,10 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
   opacity: 0;
   transition: opacity 1s ease;
   animation: smoke-rise 3s infinite linear;
+  pointer-events: none;
 }
 
-.ee-stick-img.lit + .ee-smoke {
+.ee-smoke.lit {
   opacity: 0.6;
 }
 

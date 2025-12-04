@@ -74,6 +74,7 @@ const ForbiddenTemple: React.FC = () => {
     
     // Setup Audio Loops
     audioHorror.current.loop = true;
+    audioSerenity.current.loop = true;
     
     return () => {
       document.body.style.overflow = 'auto'; // Unlock Scroll
@@ -220,11 +221,13 @@ const ForbiddenTemple: React.FC = () => {
           className={`ee-stick-img ${isStickLit ? 'lit' : ''}`} 
           alt="Incense Stick" 
         />
-        <div className="ee-smoke"></div>
       </div>
 
       {/* Layer 3: Incense Bowl */}
       <img src={bowlImg} className="ee-incense-bowl" alt="Incense Bowl" />
+
+      {/* Layer 3.1: Smoke (Moved here for Z-Index) */}
+      <div className={`ee-smoke ${isStickLit ? 'lit' : ''}`}></div>
 
       {/* Layer 3.5: Peter Ong Dia - Visible only in Phase 0 */}
       <img 
