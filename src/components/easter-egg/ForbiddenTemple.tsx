@@ -16,11 +16,17 @@ import quagmireImg from '../../assets/pray/assets/ong-than-tai-quagmire.png';
 import frameImg from '../../assets/pray/assets/picture-frame.png';
 import bowlImg from '../../assets/pray/assets/incense-bowl.png';
 import stickImg from '../../assets/pray/assets/incense-stick.png';
+import moImg from '../../assets/pray/assets/percussion.png';
+import bellImg from '../../assets/pray/assets/bell.png';
 
 // Sounds
 import soundSerenity from '../../assets/pray/sound/serenity.mp3';
 import soundLightOut from '../../assets/pray/sound/light-out.mp3';
 import soundHorror from '../../assets/pray/sound/horror.mp3';
+import soundMo from '../../assets/pray/sound/percussion.mp3';
+import soundBell from '../../assets/pray/sound/bell.mp3';
+import soundVineBoom from '../../assets/pray/sound/vine-boom.mp3';
+import soundMetalPipe from '../../assets/pray/sound/metal-pipe.mp3';
 
 const ForbiddenTemple: React.FC = () => {
   const navigate = useNavigate();
@@ -31,6 +37,8 @@ const ForbiddenTemple: React.FC = () => {
   const [escapeBtnPos, setEscapeBtnPos] = useState({ top: '20px', left: '20px' });
   const [isLightsOut, setIsLightsOut] = useState(false);
   const [isStickLit, setIsStickLit] = useState(false);
+  const [moShaking, setMoShaking] = useState(false);
+  const [bellShaking, setBellShaking] = useState(false);
   
   // Intro State
   const [introStep, setIntroStep] = useState<'none' | 'text1' | 'text2' | 'blink'>('none');
@@ -67,7 +75,7 @@ const ForbiddenTemple: React.FC = () => {
     // Lock Scroll
     document.body.style.overflow = 'hidden';
 
-    const images = [bgNormal, bgBlood, god1Normal, god1Blood, god2Normal, god2Blood, god3Normal, god3Blood, frameImg, bowlImg, stickImg, peterImg, quagmireImg];
+    const images = [bgNormal, bgBlood, god1Normal, god1Blood, god2Normal, god2Blood, god3Normal, god3Blood, frameImg, bowlImg, stickImg, peterImg, quagmireImg, moImg, bellImg];
     images.forEach(src => {
       const img = new Image();
       img.src = src;
@@ -165,6 +173,28 @@ const ForbiddenTemple: React.FC = () => {
     }
   };
 
+  const playInstrument = (type: 'MO' | 'BELL') => {
+    const isMeme = Math.random() > 0.9; // 10% Meme Chance
+    let audioSrc = '';
+    let volume = 0.6;
+
+    if (type === 'MO') {
+      audioSrc = isMeme ? soundVineBoom : soundMo;
+      volume = isMeme ? 1.0 : 0.8; // Vine boom is loud
+      setMoShaking(true);
+      setTimeout(() => setMoShaking(false), 200);
+    } else {
+      audioSrc = isMeme ? soundMetalPipe : soundBell;
+      volume = isMeme ? 1.0 : 0.6; 
+      setBellShaking(true);
+      setTimeout(() => setBellShaking(false), 200);
+    }
+
+    const audio = new Audio(audioSrc);
+    audio.volume = volume;
+    audio.play().catch(e => console.log("Audio play failed", e));
+  };
+
   if (introStep === 'text1' || introStep === 'text2') {
     return (
       <div className="ee-intro-screen">
@@ -229,6 +259,20 @@ const ForbiddenTemple: React.FC = () => {
 
       {/* Layer 3.1: Smoke (Moved here for Z-Index) */}
       <div className={`ee-smoke ${isStickLit ? 'lit' : ''}`}></div>
+
+      {/* Layer 3.2: Instruments */}
+      <img 
+        src={moImg} 
+        className={`ee-instrument-mo ${moShaking ? 'shaking' : ''}`} 
+        alt="Wooden Fish" 
+        onClick={() => playInstrument('MO')}
+      />
+      <img 
+        src={bellImg} 
+        className={`ee-instrument-bell ${bellShaking ? 'shaking' : ''}`} 
+        alt="Bronze Bell" 
+        onClick={() => playInstrument('BELL')}
+      />
 
       {/* Layer 3.5: Peter Ong Dia & Quagmire Than Tai - Visible only in Phase 0 */}
       <img 
