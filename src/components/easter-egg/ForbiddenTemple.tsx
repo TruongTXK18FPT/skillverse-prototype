@@ -12,6 +12,7 @@ import god2Blood from '../../assets/pray/assets/god2-blood.jpg';
 import god3Normal from '../../assets/pray/assets/god3.jpg';
 import god3Blood from '../../assets/pray/assets/god3-blood.jpg';
 import peterImg from '../../assets/pray/assets/ong-dia-peter.png'; 
+import quagmireImg from '../../assets/pray/assets/ong-than-tai-quagmire.png';
 import frameImg from '../../assets/pray/assets/picture-frame.png';
 import bowlImg from '../../assets/pray/assets/incense-bowl.png';
 import stickImg from '../../assets/pray/assets/incense-stick.png';
@@ -66,7 +67,7 @@ const ForbiddenTemple: React.FC = () => {
     // Lock Scroll
     document.body.style.overflow = 'hidden';
 
-    const images = [bgNormal, bgBlood, god1Normal, god1Blood, god2Normal, god2Blood, god3Normal, god3Blood, frameImg, bowlImg, stickImg, peterImg];
+    const images = [bgNormal, bgBlood, god1Normal, god1Blood, god2Normal, god2Blood, god3Normal, god3Blood, frameImg, bowlImg, stickImg, peterImg, quagmireImg];
     images.forEach(src => {
       const img = new Image();
       img.src = src;
@@ -229,11 +230,16 @@ const ForbiddenTemple: React.FC = () => {
       {/* Layer 3.1: Smoke (Moved here for Z-Index) */}
       <div className={`ee-smoke ${isStickLit ? 'lit' : ''}`}></div>
 
-      {/* Layer 3.5: Peter Ong Dia - Visible only in Phase 0 */}
+      {/* Layer 3.5: Peter Ong Dia & Quagmire Than Tai - Visible only in Phase 0 */}
       <img 
         src={peterImg} 
         className={`ee-peter-statue ${phase === 0 ? '' : 'hidden'}`} 
         alt="Ong Dia Peter" 
+      />
+      <img 
+        src={quagmireImg} 
+        className={`ee-quagmire-statue ${phase === 0 ? '' : 'hidden'}`} 
+        alt="Than Tai Quagmire" 
       />
 
 

@@ -365,16 +365,33 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
   position: absolute;
   z-index: 25; 
   bottom: 48%;
-  left: 41%;
+  left: 31%; /* Moved left to make room */
   height: 18vw;
   width: 18vw;
   filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
   opacity: 1;
   transition: opacity 1s ease;
-
 }
 
 .ee-peter-statue.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Quagmire Statue */
+.ee-quagmire-statue {
+  position: absolute;
+  z-index: 25; 
+  bottom: 47%;
+  left: 51%; /* Placed to the right */
+  height: 18vw;
+  width: 18vw;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+
+.ee-quagmire-statue.hidden {
   opacity: 0;
   pointer-events: none;
 }
