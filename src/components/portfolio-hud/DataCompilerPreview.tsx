@@ -128,7 +128,7 @@ const DataCompilerPreview = () => {
   // Generate HTML from form data
   const generateHtmlFromForm = (formData: typeof editFormData) => {
     return `
-      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: white; color: #333;">
+      <div style="font-family: 'Inter', 'Roboto', 'Arial', sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: white; color: #333;">
         <header style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #3b82f6;">
           <h1 style="color: #1e40af; margin: 0 0 10px 0; font-size: 2.5rem;">${formData.fullName}</h1>
           <h2 style="color: #3b82f6; margin: 0 0 15px 0; font-size: 1.5rem; font-weight: 400;">${formData.professionalTitle}</h2>
@@ -299,7 +299,7 @@ const DataCompilerPreview = () => {
           <title>CV - ${profile?.fullName || 'CV'}</title>
           <style>
             body {
-              font-family: 'Segoe UI', Arial, sans-serif;
+              font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
               margin: 0;
               padding: 20px;
               background: white;

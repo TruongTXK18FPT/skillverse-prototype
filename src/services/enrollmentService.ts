@@ -96,6 +96,42 @@ export const getEnrollment = async (
 };
 
 /**
+ * Get all enrollments for a course (Mentor/Admin view)
+ * GET /api/enrollments/course/{courseId}
+ */
+export const getCourseEnrollments = async (
+  courseId: number,
+  actorId: number,
+  page: number = 0,
+  size: number = 20
+): Promise<{ content: EnrollmentDetailDTO[]; totalElements: number; totalPages: number }> => {
+  try {
+    const response = await axiosInstance.get<{
+      content: EnrollmentDetailDTO[];
+      totalElements: number;
+      totalPages: number;
+    }>(`/enrollments/course/${courseId}`, {
+      params: { 
+        actorId,
+        page, 
+        size 
+      }
+    });
+    
+    // Handle both PageResponse formats if needed, similar to getUserEnrollments
+    const data: any = response.data;
+    return {
+      content: data.content || data.items || [],
+      totalElements: data.totalElements || data.total || 0,
+      totalPages: data.totalPages || 0
+    };
+  } catch (error) {
+    console.error('Error fetching course enrollments:', error);
+    throw error;
+  }
+};
+
+/**
  * Check if user is enrolled in course
  * GET /api/enrollments/course/{courseId}/user/{userId}/status
  */

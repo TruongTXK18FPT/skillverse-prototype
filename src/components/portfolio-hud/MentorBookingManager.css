@@ -1,0 +1,258 @@
+/* Mentor Booking Manager Styles - Mothership Theme Compatible */
+
+.mbm-container {
+  padding: 1rem;
+  color: var(--dossier-text-main, #e2e8f0);
+  font-family: 'Inter', sans-serif;
+}
+
+.mbm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.mbm-title {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.5rem;
+  color: var(--dossier-cyan, #06b6d4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.mbm-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--dossier-border-silver, #334155);
+}
+
+.mbm-tab {
+  background: transparent;
+  border: none;
+  color: var(--dossier-silver, #94a3b8);
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mbm-tab:hover {
+  color: var(--dossier-cyan, #06b6d4);
+  background: rgba(6, 182, 212, 0.1);
+}
+
+.mbm-tab.active {
+  background: var(--dossier-cyan, #06b6d4);
+  color: #000;
+  font-weight: 600;
+}
+
+.mbm-badge {
+  background: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+}
+
+.mbm-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.mbm-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(6, 182, 212, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--dossier-cyan, #06b6d4);
+  animation: mbm-spin 1s ease-in-out infinite;
+}
+
+@keyframes mbm-spin {
+  to { transform: rotate(360deg); }
+}
+
+.mbm-error {
+  color: #ef4444;
+  text-align: center;
+  padding: 2rem;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 0.5rem;
+  border: 1px solid #ef4444;
+}
+
+.mbm-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: var(--dossier-silver-dark, #64748b);
+  gap: 1rem;
+}
+
+.mbm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.mbm-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--dossier-border-cyan, #0e7490);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.mbm-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.2);
+}
+
+.mbm-card-header {
+  padding: 1rem;
+  background: rgba(6, 182, 212, 0.05);
+  border-bottom: 1px solid var(--dossier-border-silver, #334155);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.mbm-user-info {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.mbm-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--dossier-border-silver, #334155);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px solid var(--dossier-cyan, #06b6d4);
+}
+
+.mbm-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mbm-learner-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--dossier-text-main, #e2e8f0);
+}
+
+.mbm-status {
+  font-size: 0.75rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 0.25rem;
+}
+
+.mbm-status.pending { background: #f59e0b; color: #000; }
+.mbm-status.approved { background: #10b981; color: #000; }
+.mbm-status.rejected { background: #ef4444; color: white; }
+.mbm-status.completed { background: #3b82f6; color: white; }
+.mbm-status.cancelled { background: #64748b; color: white; }
+
+.mbm-price {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: var(--dossier-green, #10b981);
+  font-size: 0.9rem;
+}
+
+.mbm-card-body {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mbm-info-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--dossier-silver, #94a3b8);
+  font-size: 0.875rem;
+}
+
+.mbm-card-actions {
+  padding: 1rem;
+  border-top: 1px solid var(--dossier-border-silver, #334155);
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mbm-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.mbm-btn-approve {
+  background: var(--dossier-green, #10b981);
+  color: #000;
+}
+.mbm-btn-approve:hover { background: #059669; }
+
+.mbm-btn-reject {
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+}
+.mbm-btn-reject:hover { background: rgba(239, 68, 68, 0.1); }
+
+.mbm-btn-start {
+  background: var(--dossier-cyan, #06b6d4);
+  color: #000;
+  width: 100%;
+}
+.mbm-btn-start:hover { background: #0891b2; }
+
+.mbm-btn-complete {
+  background: transparent;
+  border: 1px solid var(--dossier-green, #10b981);
+  color: var(--dossier-green, #10b981);
+}
+.mbm-btn-complete:hover { background: rgba(16, 185, 129, 0.1); }
+

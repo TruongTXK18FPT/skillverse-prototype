@@ -210,6 +210,7 @@ const PremiumPageCosmic = () => {
         isAuthenticated={isAuthenticated}
         walletData={walletData}
         userProfile={userProfile}
+        fallbackAvatarUrl={user?.avatarUrl}
         onUpgrade={handleUpgrade}
         onWalletPayment={handleWalletPayment}
         onViewInvoice={handleViewInvoice}

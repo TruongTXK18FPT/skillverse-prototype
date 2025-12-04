@@ -390,7 +390,7 @@
   inset: 0;
   pointer-events: none;
   z-index: 99;
-  font-family: 'Space Habitat', 'Rajdhani', monospace;
+  font-family: 'Space Habitat', 'Inter', monospace;
 }
 
 .odyssey-hud__top {
@@ -1037,7 +1037,7 @@
 }
 
 .odyssey-card__bounty-amount {
-  font-family: 'Orbitron', 'Rajdhani', 'Exo 2', 'Share Tech Mono', monospace;
+  font-family: 'Orbitron', 'Inter', 'Exo 2', 'Share Tech Mono', monospace;
   font-size: 1.2rem;
   font-weight: 800;
   color: var(--odyssey-gold);

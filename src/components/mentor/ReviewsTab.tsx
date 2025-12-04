@@ -1,68 +1,63 @@
-import React, { useState } from 'react';
-import { Review } from '../../pages/main/MentorPage';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { getReviewsByMentor, replyToReview, ReviewResponse } from '../../services/reviewService';
 import './ReviewsTab.css';
 
 const ReviewsTab: React.FC = () => {
+  const { user } = useAuth();
+  const [reviews, setReviews] = useState<ReviewResponse[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'highest' | 'lowest'>('newest');
+  
+  // Reply state
+  const [replyingTo, setReplyingTo] = useState<number | null>(null);
+  const [replyText, setReplyText] = useState('');
+  const [submittingReply, setSubmittingReply] = useState(false);
 
-  // Mock data for reviews
-  const [reviews] = useState<Review[]>([
-    {
-      id: '1',
-      studentName: 'Nguyễn Văn An',
-      rating: 5,
-      feedback: 'Mentor xuất sắc! Rất am hiểu về React và cung cấp các ví dụ thực tế. Buổi học được tổ chức tốt và tôi đã học được rất nhiều về các thực hành tốt nhất.',
-      date: '2025-01-15T14:30:00',
-      sessionTopic: 'Thực Hành Tốt Nhất React',
-      studentAvatar: undefined
-    },
-    {
-      id: '2',
-      studentName: 'Trần Thị Bình',
-      rating: 5,
-      feedback: 'Buổi tư vấn nghề nghiệp tuyệt vời. Giúp tôi hiểu rõ hơn về ngành và đưa ra lời khuyên có thể thực hiện được cho việc tìm kiếm công việc.',
-      date: '2025-01-14T16:00:00',
-      sessionTopic: 'Hướng Dẫn Nghề Nghiệp',
-      studentAvatar: undefined
-    },
-    {
-      id: '3',
-      studentName: 'Lê Văn Cường',
-      rating: 4,
-      feedback: 'Buổi học cơ bản TypeScript tốt. Có thể cần thêm ví dụ thực tế, nhưng tổng thể rất hữu ích.',
-      date: '2025-01-13T10:15:00',
-      sessionTopic: 'Cơ Bản TypeScript',
-      studentAvatar: undefined
-    },
-    {
-      id: '4',
-      studentName: 'Phạm Thị Dung',
-      rating: 5,
-      feedback: 'Mentor xuất sắc! Rất kiên nhẫn và giải thích các khái niệm phức tạp một cách đơn giản. Rất khuyến khích!',
-      date: '2025-01-12T09:30:00',
-      sessionTopic: 'Chủ Đề Nâng Cao JavaScript',
-      studentAvatar: undefined
-    },
-    {
-      id: '5',
-      studentName: 'Hoàng Văn Em',
-      rating: 4,
-      feedback: 'Buổi học phát triển web tuyệt vời. Học được về các framework hiện đại và thực hành tốt nhất. Sẽ đặt lịch lại.',
-      date: '2025-01-11T15:45:00',
-      sessionTopic: 'Tổng Quan Phát Triển Web',
-      studentAvatar: undefined
-    },
-    {
-      id: '6',
-      studentName: 'Võ Thị Phương',
-      rating: 5,
-      feedback: 'Buổi học hoàn hảo! Giúp tôi giải quyết các vấn đề phức tạp trong dự án và tạo động lực để tiếp tục học tập.',
-      date: '2025-01-10T11:20:00',
-      sessionTopic: 'Debug Dự Án',
-      studentAvatar: undefined
+  useEffect(() => {
+    if (user) {
+      fetchReviews();
     }
-  ]);
+  }, [user]);
+
+  const fetchReviews = async () => {
+    if (!user) return;
+    try {
+      setLoading(true);
+      const data = await getReviewsByMentor(user.id, 0, 100); // Fetch all for now
+      // Backend returns a List, not a Page, so use data directly
+      if (Array.isArray(data)) {
+        setReviews(data);
+      } else if (data.content) {
+        setReviews(data.content);
+      } else {
+        setReviews([]);
+      }
+    } catch (error) {
+      console.error('Failed to fetch reviews', error);
+      setReviews([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReplySubmit = async (reviewId: number) => {
+    if (!replyText.trim()) return;
+    try {
+      setSubmittingReply(true);
+      await replyToReview(reviewId, { reply: replyText });
+      // Refresh reviews
+      await fetchReviews();
+      setReplyingTo(null);
+      setReplyText('');
+    } catch (error) {
+      console.error('Failed to reply', error);
+      alert('Không thể gửi phản hồi. Vui lòng thử lại.');
+    } finally {
+      setSubmittingReply(false);
+    }
+  };
 
   const averageRating = reviews.length > 0 
     ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
@@ -111,9 +106,9 @@ const ReviewsTab: React.FC = () => {
     const sorted = [...filtered].sort((a, b) => {
       switch (sortBy) {
         case 'newest':
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         case 'oldest':
-          return new Date(a.date).getTime() - new Date(b.date).getTime();
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
         case 'highest':
           return b.rating - a.rating;
         case 'lowest':
@@ -127,6 +122,10 @@ const ReviewsTab: React.FC = () => {
   };
 
   const filteredReviews = getFilteredAndSortedReviews();
+
+  if (loading) {
+    return <div className="mentor-reviews-loading">Đang tải đánh giá...</div>;
+  }
 
   return (
     <div className="mentor-reviews-tab">
@@ -206,29 +205,75 @@ const ReviewsTab: React.FC = () => {
               <div className="mentor-reviews-header">
                 <div className="mentor-reviews-student-info">
                   <div className="mentor-reviews-student-avatar">
-                    {review.studentAvatar ? (
-                      <img src={review.studentAvatar} alt={review.studentName} />
+                    {review.learnerAvatar ? (
+                      <img src={review.learnerAvatar} alt={review.learnerName} />
                     ) : (
                       <div className="mentor-reviews-avatar-placeholder">
-                        {review.studentName.charAt(0)}
+                        {review.learnerName ? review.learnerName.charAt(0) : 'U'}
                       </div>
                     )}
                   </div>
                   <div className="mentor-reviews-student-details">
-                    <h4>{review.studentName}</h4>
-                    <p className="mentor-reviews-session-topic">{review.sessionTopic}</p>
+                    <h4>{review.learnerName || 'Học viên ẩn danh'}</h4>
+                    <p className="mentor-reviews-session-topic">Booking #{review.bookingId}</p>
                   </div>
                 </div>
                 <div className="mentor-reviews-meta">
                   <div className="mentor-reviews-rating">
                     {renderStars(review.rating, 'small')}
                   </div>
-                  <span className="mentor-reviews-date">{formatDate(review.date)}</span>
+                  <span className="mentor-reviews-date">{formatDate(review.createdAt)}</span>
                 </div>
               </div>
               <div className="mentor-reviews-content">
-                <p>{review.feedback}</p>
+                <p>{review.comment}</p>
               </div>
+
+              {/* Reply Section */}
+              {review.reply ? (
+                <div className="mentor-reviews-reply">
+                  <div className="mentor-reviews-reply-header">
+                    <strong>Phản hồi của bạn:</strong>
+                    <span className="mentor-reviews-reply-date">{formatDate(review.updatedAt)}</span>
+                  </div>
+                  <p>{review.reply}</p>
+                </div>
+              ) : (
+                <div className="mentor-reviews-actions">
+                  {replyingTo === review.id ? (
+                    <div className="mentor-reviews-reply-form">
+                      <textarea
+                        value={replyText}
+                        onChange={(e) => setReplyText(e.target.value)}
+                        placeholder="Nhập phản hồi của bạn..."
+                        rows={3}
+                      />
+                      <div className="mentor-reviews-reply-buttons">
+                        <button 
+                          className="mentor-btn-secondary" 
+                          onClick={() => { setReplyingTo(null); setReplyText(''); }}
+                        >
+                          Hủy
+                        </button>
+                        <button 
+                          className="mentor-btn-primary" 
+                          onClick={() => handleReplySubmit(review.id)}
+                          disabled={submittingReply}
+                        >
+                          {submittingReply ? 'Đang gửi...' : 'Gửi phản hồi'}
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <button 
+                      className="mentor-btn-secondary"
+                      onClick={() => setReplyingTo(review.id)}
+                    >
+                      Trả lời
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           ))
         ) : (

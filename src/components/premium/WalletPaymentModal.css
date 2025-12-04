@@ -34,7 +34,7 @@
     0 20px
   );
   color: var(--rank-text, #e2e8f0);
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
 }
 
 .wallet-payment-modal::before {
@@ -155,7 +155,7 @@
   font-size: 24px;
   color: var(--rank-gold, #fbbf24);
   /* font-family: 'Space Habitat', monospace; Removed for readability */
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
 }
 
@@ -208,7 +208,7 @@
   flex: 1;
   padding: 14px;
   border: 1px solid;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   text-transform: uppercase;
   letter-spacing: 1px;
   cursor: pointer;
@@ -286,7 +286,7 @@
   cursor: pointer;
   transition: all 0.2s;
   border: 1px solid;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   text-transform: uppercase;
   letter-spacing: 1px;
 }

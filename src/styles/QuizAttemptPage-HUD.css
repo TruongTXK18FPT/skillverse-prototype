@@ -39,7 +39,7 @@
   min-height: 100vh;
   background: var(--hqa-deep-space);
   color: var(--hqa-text-primary);
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   padding: 2rem;
   position: relative;
 }

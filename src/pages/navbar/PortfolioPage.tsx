@@ -74,7 +74,7 @@ const PortfolioPage = () => {
       setError(null);
       
       console.log('🔍 Starting portfolio data load...');
-      console.log('Token:', localStorage.getItem('token') ? 'Present' : 'Missing');
+      console.log('Token:', localStorage.getItem('accessToken') ? 'Present' : 'Missing');
       
       // Check if has extended profile
       const checkResult = await portfolioService.checkExtendedProfile();

@@ -46,29 +46,29 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
     <div className="fleet-panel">
       <div className="fleet-title">
         <i className="fas fa-list-alt"></i>
-        Operation Log
+        Nhật Ký Hoạt Động
       </div>
       
       {isLoading ? (
         <div style={{ color: 'var(--fleet-cyan)', padding: '20px', textAlign: 'center' }}>
-          Scanning database...
+          Đang quét cơ sở dữ liệu...
         </div>
       ) : (
         <table className="fleet-table">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Mission Objective</th>
-              <th>Deadline</th>
-              <th>Budget</th>
-              <th>Status</th>
+              <th>Mục Tiêu Nhiệm Vụ</th>
+              <th>Hạn Chót</th>
+              <th>Ngân Sách</th>
+              <th>Trạng Thái</th>
             </tr>
           </thead>
           <tbody>
             {jobs.length === 0 ? (
               <tr>
                 <td colSpan={5} style={{ textAlign: 'center', color: 'var(--fleet-text-muted)' }}>
-                  No active operations found. Initialize a new mission.
+                  Không tìm thấy hoạt động nào. Hãy khởi tạo nhiệm vụ mới.
                 </td>
               </tr>
             ) : (
@@ -80,7 +80,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                   <td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(job.maxBudget)}</td>
                   <td>
                     <span className={`fleet-status-badge ${getStatusBadgeClass(job.status)}`}>
-                      [{job.status}]
+                      [{job.status === 'OPEN' ? 'MỞ' : 'ĐÓNG'}]
                     </span>
                   </td>
                 </tr>

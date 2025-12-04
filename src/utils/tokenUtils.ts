@@ -6,7 +6,7 @@
  * Clear all authentication tokens from localStorage
  */
 export const clearAuthTokens = (): void => {
-  localStorage.removeItem('token');
+  localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
   localStorage.removeItem('user');
   console.log('🔴 All auth tokens cleared');
@@ -16,14 +16,14 @@ export const clearAuthTokens = (): void => {
  * Check if token exists
  */
 export const hasToken = (): boolean => {
-  return !!localStorage.getItem('token');
+  return !!localStorage.getItem('accessToken');
 };
 
 /**
  * Get current token
  */
 export const getToken = (): string | null => {
-  return localStorage.getItem('token');
+  return localStorage.getItem('accessToken');
 };
 
 /**

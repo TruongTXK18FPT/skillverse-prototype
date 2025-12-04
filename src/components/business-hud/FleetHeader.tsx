@@ -13,10 +13,10 @@ const FleetHeader: React.FC<FleetHeaderProps> = ({ activeTab, onTabChange }) => 
       <div className="fleet-header-content">
         <h1 className="fleet-header-title">
           <LayoutDashboard size={32} style={{ marginRight: '15px' }} />
-          FLEET COMMAND DECK
+          TRUNG TÂM ĐIỀU HÀNH DOANH NGHIỆP
         </h1>
         <p className="fleet-header-subtitle">
-          SYSTEM: ONLINE // SECTOR: BUSINESS // CLEARANCE: COMMANDER
+          HỆ THỐNG: TRỰC TUYẾN // KHU VỰC: DOANH NGHIỆP // CẤP ĐỘ: CHỈ HUY
         </p>
         
         <div className="fleet-nav-tabs">
@@ -25,21 +25,21 @@ const FleetHeader: React.FC<FleetHeaderProps> = ({ activeTab, onTabChange }) => 
             onClick={() => onTabChange('dashboard')}
           >
             <LayoutDashboard size={18} />
-            <span>OVERVIEW</span>
+            <span>TỔNG QUAN</span>
           </button>
           <button 
             className={`fleet-nav-btn ${activeTab === 'mission' ? 'active' : ''}`}
             onClick={() => onTabChange('mission')}
           >
             <PlusCircle size={18} />
-            <span>NEW MISSION</span>
+            <span>ĐĂNG TUYỂN DỤNG</span>
           </button>
           <button 
             className={`fleet-nav-btn ${activeTab === 'radar' ? 'active' : ''}`}
             onClick={() => onTabChange('radar')}
           >
             <Users size={18} />
-            <span>TALENT RADAR</span>
+            <span>TÌM KIẾM ỨNG VIÊN</span>
           </button>
         </div>
       </div>

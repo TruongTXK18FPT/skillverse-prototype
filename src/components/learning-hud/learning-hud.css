@@ -38,7 +38,7 @@
   height: 100vh;
   background: var(--lhud-deep-space);
   color: var(--lhud-text-primary);
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   overflow: hidden;
   position: relative;
 }

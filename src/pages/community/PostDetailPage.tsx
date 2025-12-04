@@ -38,14 +38,15 @@ const PostDetailPage: React.FC = () => {
         setDislikeCount(typeof p.dislikeCount === 'number' ? p.dislikeCount : 0);
         const cs = await communityService.listComments(postId, 0, 50);
         setComments(cs.items);
-        if (p.userId) {
-          try {
-            const profile = await userService.getUserProfile(p.userId);
-            setAuthorName(profile.fullName || `User #${p.userId}`);
-            setAuthorAvatar(profile.avatarMediaUrl || '');
-          } catch {
-            setAuthorName(`User #${p.userId}`);
-          }
+        
+        if (p.userFullName) {
+          setAuthorName(p.userFullName);
+        } else if (p.userId) {
+          setAuthorName(`User #${p.userId}`);
+        }
+        
+        if (p.userAvatar) {
+          setAuthorAvatar(p.userAvatar);
         }
       } catch (e) {
         setError('Không thể tải bài viết');
@@ -262,11 +263,28 @@ const PostDetailPage: React.FC = () => {
             ) : (
               comments.map((c) => (
                 <div key={c.id} className="transmission-card" style={{ padding: '1.25rem', animation: 'none' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                    <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>User #{c.userId}</div>
-                    <div style={{ fontSize: 12, opacity: 0.6 }}>{new Date(c.createdAt).toLocaleString('vi-VN')}</div>
+                  <div style={{ display: 'flex', gap: '1rem' }}>
+                    <div className="header-user-avatar" style={{ width: 40, height: 40, flexShrink: 0 }}>
+                      {c.userAvatar ? (
+                        <img 
+                          src={c.userAvatar} 
+                          alt={c.userFullName || `User #${c.userId}`} 
+                          style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} 
+                        />
+                      ) : (
+                        <div style={{ width: '100%', height: '100%', background: 'var(--sv-neutral-700)', borderRadius: '50%' }} />
+                      )}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem', alignItems: 'center' }}>
+                        <div style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--text-primary)' }}>
+                          {c.userFullName || `User #${c.userId}`}
+                        </div>
+                        <div style={{ fontSize: 12, opacity: 0.6 }}>{new Date(c.createdAt).toLocaleString('vi-VN')}</div>
+                      </div>
+                      <div style={{ lineHeight: 1.6, color: 'var(--text-secondary)' }}>{decodeHtml(c.content)}</div>
+                    </div>
                   </div>
-                  <div style={{ lineHeight: 1.6, color: 'var(--text-secondary)' }}>{c.content}</div>
                 </div>
               ))
             )}

@@ -20,6 +20,7 @@ import { getMentorProfile, MentorProfile } from '../../services/mentorProfileSer
 import { listQuizzesByModule, getQuizById } from '../../services/quizService';
 import { QuizSummaryDTO, QuizDetailDTO } from '../../data/quizDTOs';
 import QuizDisplay from '../../components/course/QuizDisplay';
+import PurchaseCourseModal from '../../components/course/PurchaseCourseModal';
 import { useToast } from '../../hooks/useToast';
 import '../../styles/CourseDetailPage.css';
 
@@ -32,6 +33,7 @@ const CourseDetailPage: React.FC = () => {
   const [mentorProfile, setMentorProfile] = useState<MentorProfile | null>(null);
   const [quizzes, setQuizzes] = useState<QuizSummaryDTO[]>([]);
   const [selectedQuiz, setSelectedQuiz] = useState<QuizDetailDTO | null>(null);
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'curriculum' | 'instructor'>('overview');
 
@@ -212,7 +214,10 @@ const CourseDetailPage: React.FC = () => {
                 )}
               </div>
               
-              <button className="enroll-btn">
+              <button 
+                className="enroll-btn"
+                onClick={() => setShowPurchaseModal(true)}
+              >
                 <DollarSign size={16} />
                 Enroll Now
               </button>
@@ -425,6 +430,17 @@ const CourseDetailPage: React.FC = () => {
           quiz={selectedQuiz}
           onComplete={handleQuizComplete}
           onClose={handleCloseQuiz}
+        />
+      )}
+
+      {/* Purchase Modal */}
+      {showPurchaseModal && course && (
+        <PurchaseCourseModal
+          course={course}
+          onClose={() => setShowPurchaseModal(false)}
+          onSuccess={() => {
+            loadCourseDetails();
+          }}
         />
       )}
     </div>

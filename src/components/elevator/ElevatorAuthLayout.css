@@ -39,7 +39,7 @@
   height: 100vh;
   overflow: hidden;
   background: var(--elevator-bg-dark);
-  font-family: 'SpaceHabitat', 'Segoe UI', sans-serif;
+  font-family: 'SpaceHabitat', 'Inter', 'Roboto', 'Arial', sans-serif;
 }
 
 /* =====================================================
@@ -707,6 +707,6 @@
 .elevator-container input[type="password"],
 .elevator-container input[type="email"],
 .elevator-container input[type="text"] {
-  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif !important;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif !important;
   text-transform: none !important;
 }

@@ -336,8 +336,19 @@ const MyWalletCosmic: React.FC = () => {
   };
 
   const isTransactionCredit = (type?: string) => {
-    // Credit transactions (money IN): +
-    const creditTypes = ['DEPOSIT_CASH', 'DEPOSIT', 'REFUND_CASH', 'REFUND', 'EARN_COINS', 'RECEIVE_TIP', 'BONUS_COINS', 'REWARD_ACHIEVEMENT', 'DAILY_LOGIN_BONUS'];
+    const creditTypes = [
+      'DEPOSIT_CASH',
+      'DEPOSIT',
+      'REFUND_CASH',
+      'REFUND',
+      'EARN_COINS',
+      'RECEIVE_TIP',
+      'BONUS_COINS',
+      'REWARD_ACHIEVEMENT',
+      'DAILY_LOGIN_BONUS',
+      'MENTOR_BOOKING',
+      'COURSE_PAYOUT'
+    ];
     return type ? creditTypes.some(t => type.toUpperCase().includes(t)) : false;
   };
 
@@ -685,8 +696,8 @@ const MyWalletCosmic: React.FC = () => {
                   </div>
                   <div className="tx-amount">
                     {tx.amount !== undefined && tx.amount !== null ? (
-                      <p className={isTransactionCredit(tx.transactionType) ? 'positive' : 'negative'}>
-                        {isTransactionCredit(tx.transactionType) ? '+' : '-'}{formatCurrency(Math.abs(tx.amount || 0))}
+                      <p className={(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? 'positive' : 'negative'}>
+                        {(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? '+' : '-'}{formatCurrency(Math.abs(tx.amount || 0))}
                       </p>
                     ) : null}
                     {tx.coinAmount && (

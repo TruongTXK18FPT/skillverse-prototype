@@ -34,7 +34,7 @@
   --coursera-space-3xl: 4rem;
   
   /* Typography */
-  --coursera-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --coursera-font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   --coursera-font-size-xs: 0.75rem;
   --coursera-font-size-sm: 0.875rem;
   --coursera-font-size-base: 1rem;

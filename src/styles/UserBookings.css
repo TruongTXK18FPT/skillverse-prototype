@@ -1,0 +1,340 @@
+/* ====== USER BOOKINGS PAGE (USBK) ====== */
+.usbk-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 80vh;
+  color: var(--space-text);
+}
+
+.usbk-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.usbk-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #22d3ee, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.usbk-subtitle {
+  color: var(--space-text-muted);
+  font-size: 1.1rem;
+}
+
+.usbk-content {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 1rem;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+.usbk-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: var(--space-text-muted);
+}
+
+.usbk-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(59, 130, 246, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--sv-primary);
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.usbk-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: var(--space-text-muted);
+  gap: 1rem;
+}
+
+.usbk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.usbk-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.usbk-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--sv-primary);
+  box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+}
+
+.usbk-card-header {
+  padding: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.usbk-mentor-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.usbk-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--sv-primary);
+}
+
+.usbk-mentor-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 0.25rem 0;
+}
+
+.usbk-price {
+  font-size: 0.9rem;
+  color: #22d3ee;
+  font-family: monospace;
+}
+
+.usbk-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.usbk-card-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.usbk-info-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--space-text-muted);
+  font-size: 0.95rem;
+}
+
+.usbk-meeting-link {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px dashed rgba(34, 211, 238, 0.3);
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.usbk-meeting-link a {
+  color: #22d3ee;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.usbk-meeting-link a:hover {
+  text-decoration: underline;
+}
+
+.usbk-card-footer {
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  gap: 0.75rem;
+}
+
+.usbk-btn-primary,
+.usbk-btn-secondary,
+.usbk-btn-danger {
+  flex: 1;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+}
+
+.usbk-btn-primary {
+  background: var(--sv-primary);
+  color: white;
+}
+
+.usbk-btn-primary:hover {
+  background: var(--sv-secondary);
+}
+
+.usbk-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.usbk-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.usbk-btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.usbk-btn-danger:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+}
+
+/* Modal Styles */
+.usbk-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.usbk-modal {
+  background: #1e293b;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.usbk-modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.usbk-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.usbk-close-btn {
+  background: none;
+  border: none;
+  color: var(--space-text-muted);
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.usbk-close-btn:hover {
+  color: white;
+}
+
+.usbk-modal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.usbk-rating-select {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.usbk-rating-select label {
+  color: var(--space-text-muted);
+  font-size: 0.9rem;
+}
+
+.usbk-stars {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.usbk-comment-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.usbk-comment-input label {
+  color: var(--space-text-muted);
+  font-size: 0.9rem;
+}
+
+.usbk-comment-input textarea {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: white;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.usbk-comment-input textarea:focus {
+  outline: none;
+  border-color: var(--sv-primary);
+}
+
+.usbk-modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+

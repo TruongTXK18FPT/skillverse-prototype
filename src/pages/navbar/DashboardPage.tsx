@@ -6,11 +6,13 @@ import MeowlGuide from '../../components/MeowlGuide';
 import { getUserEnrollments } from '../../services/enrollmentService';
 import { getCourse } from '../../services/courseService';
 import { getMyUsage, getCycleStats } from '../../services/usageLimitService';
+import { getMyFavoriteMentors } from '../../services/mentorProfileService';
 
 const DashboardPage = () => {
   const { translations } = useLanguage();
   const { user } = useAuth();
   const [enrolledCourses, setEnrolledCourses] = useState<any[]>([]);
+  const [favoriteMentors, setFavoriteMentors] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [featureUsage, setFeatureUsage] = useState<any[]>([]);
   const [cycleStats, setCycleStats] = useState<any>(null);
@@ -26,14 +28,16 @@ const DashboardPage = () => {
       if (user?.id) {
         try {
           // Fetch limits and stats in parallel with enrollments
-          const [enrollments, limits, cStats] = await Promise.all([
+          const [enrollments, limits, cStats, favorites] = await Promise.all([
             getUserEnrollments(user.id),
             getMyUsage().catch(e => []),
-            getCycleStats().catch(e => null)
+            getCycleStats().catch(e => null),
+            getMyFavoriteMentors().catch(e => [])
           ]);
 
           setFeatureUsage(limits);
           setCycleStats(cStats);
+          setFavoriteMentors(favorites);
           
           // Fetch details for each course to get title, thumbnail, etc.
           const coursesPromises = enrollments.content.map(async (enrollment) => {
@@ -100,6 +104,7 @@ const DashboardPage = () => {
         userName={user?.fullName || 'Explorer'}
         translations={translations}
         enrolledCourses={enrolledCourses}
+        favoriteMentors={favoriteMentors}
         userStats={stats}
         featureUsage={featureUsage}
         cycleStats={cycleStats}

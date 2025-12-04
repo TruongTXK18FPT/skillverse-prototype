@@ -8,6 +8,9 @@ import walletService from '../../services/walletService';
 import { paymentService } from '../../services/paymentService';
 // import { premiumService } from '../../services/premiumService';
 import adminService from '../../services/adminService';
+import userService from '../../services/userService';
+import { getMentorProfile } from '../../services/mentorProfileService';
+import { API_BASE_URL } from '../../services/axiosInstance';
 import './TransactionManagementTabCosmic.css';
 
 type TransactionType = 'ALL' | 'WALLET' | 'PAYMENT' | 'WITHDRAWAL' | 'COIN_PURCHASE';
@@ -20,6 +23,7 @@ interface CombinedTransaction {
   userEmail?: string;
   userAvatarUrl?: string;
   amount: number;
+  originalAmount?: number;
   status: string;
   description: string;
   createdAt: string;
@@ -58,6 +62,15 @@ const TransactionManagementTabCosmic: React.FC = () => {
   useEffect(() => {
     fetchAllTransactions();
   }, []);
+
+  const resolveAvatarUrl = (raw?: string): string | undefined => {
+    if (!raw) return undefined;
+    const trimmed = raw.trim();
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+    const apiRoot = API_BASE_URL.replace(/\/api$/i, '');
+    if (trimmed.startsWith('/')) return `${apiRoot}${trimmed}`;
+    return `${apiRoot}/${trimmed}`;
+  };
 
   // Apply filters when search/filter changes
   useEffect(() => {
@@ -111,28 +124,69 @@ const TransactionManagementTabCosmic: React.FC = () => {
       console.log('📡 Fetching wallet transactions...');
       const response = await walletService.adminGetAllWalletTransactions(0, 1000);
       console.log('✅ Wallet transactions response:', response);
-      return response.content.map(tx => {
+      const mapped = await Promise.all(response.content.map(async (tx) => {
         const t = (tx.transactionType || '').toUpperCase();
+        const refType = (tx.referenceType || '').toUpperCase();
+        const descLower = (tx.description || '').toLowerCase();
         const mappedType: TransactionType =
           (t.includes('PURCHASE_COINS') || t === 'COIN_PURCHASE') ? 'COIN_PURCHASE' :
           (t.includes('PURCHASE_PREMIUM') || t.includes('PREMIUM_SUBSCRIPTION')) ? 'PAYMENT' :
           'WALLET';
+        const isFreeze = t.includes('FREEZE') || descLower.includes('đóng băng');
+        const isMentorPayout = !isFreeze &&
+          (t.includes('WITHDRAWAL_CASH') || t.includes('PAYOUT')) &&
+          (refType === 'BOOKING' || refType === 'COURSE');
+
+        const rawAmount = typeof tx.cashAmount === 'number'
+          ? tx.cashAmount
+          : (typeof tx.coinAmount === 'number' ? tx.coinAmount : 0);
+
+        const originalAmount = isMentorPayout
+          ? Math.abs(rawAmount) / 0.80
+          : Math.abs(rawAmount);
+
+        const amount = isMentorPayout
+          ? (Math.abs(rawAmount) / 0.80) * 0.20
+          : (isFreeze ? Math.abs(rawAmount) : rawAmount);
+
+        const rawDesc = (tx.description || tx.transactionTypeName || 'Wallet transaction');
+        const description = isMentorPayout ? rawDesc.replace('(80%)', '(20%)') : rawDesc;
+
+        let userName = tx.userName || `User ${tx.userId}`;
+        let userAvatarUrl = resolveAvatarUrl(tx.userAvatarUrl);
+        try {
+          if (isMentorPayout && typeof tx.userId === 'number') {
+            const prof = await getMentorProfile(tx.userId);
+            const first = prof.firstName || '';
+            const last = prof.lastName || '';
+            const full = `${first} ${last}`.trim();
+            userName = full || prof.email || userName;
+            userAvatarUrl = resolveAvatarUrl(prof.avatar) || userAvatarUrl;
+          } else if (typeof tx.userId === 'number') {
+            const prof = await userService.getUserProfile(tx.userId);
+            userName = prof.fullName || userName;
+            userAvatarUrl = resolveAvatarUrl(prof.avatarMediaUrl) || userAvatarUrl;
+          }
+        } catch (_e) { void 0; }
+
         return {
           id: `WAL-${tx.transactionId}`,
           type: mappedType as TransactionType,
           userId: tx.userId,
-          userName: tx.userName || `User ${tx.userId}`,
+          userName,
           userEmail: tx.userEmail || '-',
-          userAvatarUrl: tx.userAvatarUrl,
-          amount: tx.cashAmount || tx.coinAmount || 0,
+          userAvatarUrl,
+          amount,
+          originalAmount,
           status: tx.status,
-          description: tx.description || tx.transactionTypeName || 'Wallet transaction',
+          description,
           createdAt: tx.createdAt,
           method: tx.currencyType === 'COIN' ? 'Coin' : 'Cash',
           reference: tx.referenceId,
           originalData: tx
         };
-      });
+      }));
+      return mapped;
     } catch (error) {
       console.error('Error fetching wallet transactions:', error);
       return [];
@@ -144,21 +198,41 @@ const TransactionManagementTabCosmic: React.FC = () => {
       console.log('📡 Fetching payment transactions...');
       const response = await paymentService.adminGetAllTransactions(0, 1000);
       console.log('✅ Payment transactions response:', response);
-      return response.content.map(payment => ({
-        id: `PAY-${payment.id}`,
-        type: 'PAYMENT' as TransactionType,
-        userId: payment.userId,
-        userName: payment.userName || `User ${payment.userId}`,
-        userEmail: payment.userEmail || '-',
-        userAvatarUrl: payment.userAvatarUrl,
-        amount: typeof payment.amount === 'string' ? parseFloat(payment.amount) : payment.amount,
-        status: payment.status,
-        description: payment.description || 'Payment transaction',
-        createdAt: payment.createdAt,
-        method: 'PayOS',
-        reference: payment.internalReference,
-        originalData: payment
+      const mapped = await Promise.all(response.content.map(async (payment) => {
+        const rawAmount = typeof payment.amount === 'string' ? parseFloat(payment.amount) : payment.amount;
+        const isCoursePurchase = payment.type === 'COURSE_PURCHASE';
+        const isBookingPurchase = payment.type === 'MENTOR_BOOKING';
+        const amount = (isCoursePurchase || isBookingPurchase) ? Math.abs(rawAmount) * 0.20 : rawAmount;
+        const description = (payment.description || 'Payment transaction');
+
+        let userName = payment.userName || `User ${payment.userId}`;
+        let userAvatarUrl = resolveAvatarUrl(payment.userAvatarUrl);
+        try {
+          if (typeof payment.userId === 'number') {
+            const prof = await userService.getUserProfile(payment.userId);
+            userName = prof.fullName || userName;
+            userAvatarUrl = resolveAvatarUrl(prof.avatarMediaUrl) || userAvatarUrl;
+          }
+        } catch (_e) { void 0; }
+
+        return {
+          id: `PAY-${payment.id}`,
+          type: 'PAYMENT' as TransactionType,
+          userId: payment.userId,
+          userName,
+          userEmail: payment.userEmail || '-',
+          userAvatarUrl,
+          amount,
+          originalAmount: Math.abs(rawAmount),
+          status: payment.status,
+          description,
+          createdAt: payment.createdAt,
+          method: 'PayOS',
+          reference: payment.internalReference,
+          originalData: payment
+        };
       }));
+      return mapped;
     } catch (error: any) {
       console.error('❌ Error fetching payment transactions:', error);
       console.error('Payment error details:', error.response?.data || error.message);
@@ -196,33 +270,31 @@ const TransactionManagementTabCosmic: React.FC = () => {
   // Premium subscriptions are excluded from this Transactions tab to avoid duplication
 
   const calculateStats = (txs: CombinedTransaction[]) => {
-    // Only count revenue from PURCHASES (not deposits/topups)
-    const isPurchaseTransaction = (tx: CombinedTransaction) => {
-      const desc = tx.description?.toLowerCase() || '';
-      const type = tx.type;
-      // Exclude wallet deposits/topups
-      if (desc.includes('nạp tiền') || desc.includes('deposit') || desc.includes('topup')) {
-        return false;
-      }
-      // Include: Premium, Coin purchases, Course purchases
-      return (
-        type === 'PAYMENT' || 
-        type === 'COIN_PURCHASE' ||
-        desc.includes('premium') || 
-        desc.includes('xu') || 
-        desc.includes('coin') ||
-        desc.includes('khóa học') ||
-        desc.includes('course')
-      );
-    };
+    const bookingCommission = txs
+      .filter(tx => {
+        const od: any = tx.originalData;
+        const refType = od?.referenceType || '';
+        const txType = (od?.transactionType || '').toUpperCase();
+        return tx.amount > 0 &&
+          (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
+          tx.type === 'WALLET' &&
+          refType === 'BOOKING' &&
+          txType.includes('WITHDRAWAL_CASH');
+      })
+      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
 
-    const revenue = txs
-      .filter(tx => 
-        tx.amount > 0 && 
-        (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
-        isPurchaseTransaction(tx)
-      )
-      .reduce((sum, tx) => sum + tx.amount, 0);
+    const courseCommission = txs
+      .filter(tx => {
+        const od: any = tx.originalData;
+        const pType = od?.type || '';
+        return tx.amount > 0 &&
+          (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
+          tx.type === 'PAYMENT' &&
+          pType === 'COURSE_PURCHASE';
+      })
+      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+
+    const revenue = bookingCommission + courseCommission;
 
     const withdrawals = txs
       .filter(tx => tx.amount < 0)
@@ -235,15 +307,37 @@ const TransactionManagementTabCosmic: React.FC = () => {
     // Today's revenue - only from purchases
     const today = new Date();
     const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const todayRevenue = txs
-      .filter(tx => {
-        const txDate = new Date(tx.createdAt);
-        return txDate >= todayStart && 
-          tx.amount > 0 &&
-          (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
-          isPurchaseTransaction(tx);
-      })
-      .reduce((sum, tx) => sum + tx.amount, 0);
+    const todayRevenue = (() => {
+      const bookings = txs
+        .filter(tx => {
+          const od: any = tx.originalData;
+          const refType = od?.referenceType || '';
+          const txType = (od?.transactionType || '').toUpperCase();
+          const txDate = new Date(tx.createdAt);
+          return txDate >= todayStart &&
+            tx.amount > 0 &&
+            (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
+            tx.type === 'WALLET' &&
+            refType === 'BOOKING' &&
+            txType.includes('WITHDRAWAL_CASH');
+        })
+        .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+
+      const courses = txs
+        .filter(tx => {
+          const od: any = tx.originalData;
+          const pType = od?.type || '';
+          const txDate = new Date(tx.createdAt);
+          return txDate >= todayStart &&
+            tx.amount > 0 &&
+            (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
+            tx.type === 'PAYMENT' &&
+            pType === 'COURSE_PURCHASE';
+        })
+        .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+
+      return bookings + courses;
+    })();
 
     const coinPurchases = txs.filter(tx => 
       tx.type === 'COIN_PURCHASE' || tx.description?.includes('xu') || tx.description?.includes('PURCHASE_COINS')
@@ -650,9 +744,14 @@ const TransactionManagementTabCosmic: React.FC = () => {
                 </td>
                 <td className="admin-description">{tx.description}</td>
                 <td>
-                  <span className={`admin-amount ${tx.amount >= 0 ? 'positive' : 'negative'}`}>
-                    {tx.amount >= 0 ? '+' : ''}{formatCurrency(tx.amount)}
-                  </span>
+                  <div className="admin-amount-wrapper">
+                    <span className={`admin-amount ${tx.amount >= 0 ? 'positive' : 'negative'}`}>
+                      {tx.amount >= 0 ? '+' : ''}{formatCurrency(tx.amount)}
+                    </span>
+                    {typeof tx.originalAmount === 'number' && (
+                      <div className="admin-original-amount">Giá gốc: {formatCurrency(tx.originalAmount)}</div>
+                    )}
+                  </div>
                 </td>
                 <td>{getStatusBadge(tx.status)}</td>
                 <td>{tx.method || '-'}</td>
@@ -781,6 +880,15 @@ const TransactionManagementTabCosmic: React.FC = () => {
                       </div>
                     </div>
                   </div>
+                  {typeof selectedTransaction.originalAmount === 'number' && (
+                    <div className="admin-detail-item">
+                      <TrendingUp size={18} />
+                      <div>
+                        <div className="label">Giá gốc</div>
+                        <div className="value">{formatCurrency(selectedTransaction.originalAmount)}</div>
+                      </div>
+                    </div>
+                  )}
                   <div className="admin-detail-item">
                     <Calendar size={18} />
                     <div>

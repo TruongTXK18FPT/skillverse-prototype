@@ -7,6 +7,7 @@ import {
   CourseStatus,
   PageResponse
 } from '../data/courseDTOs';
+import { CreatePaymentResponse as GatewayPaymentResponse } from '../data/paymentDTOs';
 
 /**
  * Course Service - Complete API Integration
@@ -282,6 +283,89 @@ export const searchCourses = async (
     return normalizePageResponse<CourseSummaryDTO>(response.data);
   } catch (error) {
     console.error('Error searching courses:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get course purchases for mentor's courses
+ * GET /api/course-purchases/mentor
+ */
+export interface CoursePurchaseDTO {
+  id: number;
+  courseId: number;
+  userId: number;
+  status: string;
+  price: number;
+  currency: string;
+  purchasedAt: string;
+  couponCode?: string;
+  buyerName?: string;
+  buyerAvatarUrl?: string;
+  courseTitle?: string;
+}
+
+export const getMentorCoursePurchases = async (
+  page: number = 0,
+  size: number = 10
+): Promise<PageResponse<CoursePurchaseDTO>> => {
+  try {
+    const response = await axiosInstance.get<PageResponse<CoursePurchaseDTO>>(
+      '/course-purchases/mentor',
+      {
+        params: { page, size }
+      }
+    );
+    return normalizePageResponse<CoursePurchaseDTO>(response.data);
+  } catch (error) {
+    console.error('Error fetching mentor course purchases:', error);
+    throw error;
+  }
+};
+
+// ==================== COURSE PURCHASE PAYMENT ====================
+
+export interface CoursePurchaseRequest {
+  courseId: number;
+  couponCode?: string;
+  returnUrl?: string;
+  cancelUrl?: string;
+}
+
+/**
+ * Create PayOS payment intent for course purchase
+ * POST /api/course-purchases/intent
+ */
+export const createCoursePurchaseIntent = async (
+  request: CoursePurchaseRequest
+): Promise<GatewayPaymentResponse> => {
+  try {
+    const response = await axiosInstance.post<GatewayPaymentResponse>(
+      '/course-purchases/intent',
+      request
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating course purchase intent:', error);
+    throw error;
+  }
+};
+
+/**
+ * Purchase course with My-Wallet balance
+ * POST /api/course-purchases/wallet
+ */
+export const purchaseCourseWithWallet = async (
+  request: CoursePurchaseRequest
+): Promise<CoursePurchaseDTO> => {
+  try {
+    const response = await axiosInstance.post<CoursePurchaseDTO>(
+      '/course-purchases/wallet',
+      request
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error purchasing course with wallet:', error);
     throw error;
   }
 };
@@ -613,4 +697,3 @@ export const isFreePrice = (priceStr?: string): boolean => {
   // Parse the numeric price and check if it's 0
   return parsePrice(priceStr) === 0;
 };
-

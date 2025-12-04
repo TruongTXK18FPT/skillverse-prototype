@@ -6,6 +6,7 @@ import SystemStatus from './SystemStatus';
 import StatUnit from './StatUnit';
 import ActiveModules from './ActiveModules';
 import MissionLog from './MissionLog';
+import FavoriteMentors from './FavoriteMentors';
 import './MothershipDashboard.css';
 import './hud-styles.module.css';
 
@@ -13,6 +14,7 @@ interface MothershipDashboardProps {
   userName?: string;
   translations?: any;
   enrolledCourses?: any[];
+  favoriteMentors?: any[];
   userStats?: {
     totalCourses: number;
     totalHours: number;
@@ -41,6 +43,7 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   userName = 'InnoVibe Team',
   translations = {},
   enrolledCourses = [],
+  favoriteMentors = [],
   userStats = {
     totalCourses: 0,
     totalHours: 0,
@@ -165,8 +168,8 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   };
 
   const handleCourseClick = (courseId: number) => {
-    // Navigate to course detail
-    console.log('Course clicked:', courseId);
+    // Navigate to course learning
+    navigate('/course-learning', { state: { courseId } });
   };
 
   return (
@@ -248,8 +251,13 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
           courses={recentCourses}
           title="Active Simulations"
           onCourseClick={handleCourseClick}
-          continueLabel={translations?.dashboard?.continue || 'Continue'}
+          continueLabel={translations?.dashboard?.continue || 'Tiếp tục học'}
         />
+
+        {/* Favorite Mentors */}
+        {favoriteMentors && favoriteMentors.length > 0 && (
+          <FavoriteMentors mentors={favoriteMentors} />
+        )}
 
         {/* Mission Log (Achievements + Deadlines) */}
         <MissionLog

@@ -24,7 +24,7 @@
   width: 100%;
   max-width: 1200px;
   padding: 2px;
-  font-family: 'SpaceHabitat', 'Segoe UI', sans-serif;
+  font-family: 'SpaceHabitat', 'Inter', 'Roboto', 'Arial', sans-serif;
 }
 
 /* Hologram Border */
@@ -363,7 +363,7 @@
   background: rgba(40, 30, 20, 0.9) !important;
   border: 1px solid var(--reg-personal-border);
   color: #ffffff !important;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.3px;
@@ -414,7 +414,7 @@
 .reg-personal-textarea {
   resize: vertical;
   min-height: 50px;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
 }
 
 .reg-personal-toggle-btn {

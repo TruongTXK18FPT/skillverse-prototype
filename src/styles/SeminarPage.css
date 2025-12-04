@@ -38,7 +38,7 @@
 .seminar-page {
   min-height: 100vh;
   background: var(--seminar-bg-primary);
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   transition: all 0.3s ease;
   animation: pageLoad 0.8s ease-out;
   padding: 2rem 2rem;

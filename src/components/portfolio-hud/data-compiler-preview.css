@@ -939,7 +939,7 @@ body:has(.compiler-preview--fullscreen) {
 /* ===== PRESERVE ORIGINAL CV CONTENT STYLES ===== */
 /* Import all .cv-generated styles from CV.css */
 .cv-generated {
-  font-family: 'Segoe UI', Arial, Helvetica, sans-serif !important;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif !important;
   background: #ffffff !important;
   padding: 3rem !important;
   border-radius: 18px;

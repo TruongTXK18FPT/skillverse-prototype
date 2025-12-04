@@ -1,0 +1,271 @@
+/* Purchase Course Modal Styles - Cockpit Theme */
+
+.purchase-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000; /* Higher than cockpit HUD */
+  animation: fadeIn 0.3s ease-out;
+}
+
+.purchase-modal-content {
+  background: var(--cockpit-detail-bg-panel, #0f1928);
+  width: 100%;
+  max-width: 500px;
+  border: 2px solid var(--cockpit-detail-neon-cyan, #00f6ff);
+  clip-path: polygon(
+    15px 0, 100% 0, 
+    100% calc(100% - 15px), calc(100% - 15px) 100%, 
+    0 100%, 0 15px
+  );
+  box-shadow: 0 0 50px rgba(0, 246, 255, 0.2);
+  overflow: hidden;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+/* Add corner accents */
+.purchase-modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(135deg, transparent 0%, rgba(0, 246, 255, 0.05) 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.purchase-modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--cockpit-detail-border-primary, rgba(0, 246, 255, 0.4));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 246, 255, 0.05);
+}
+
+.purchase-modal-header h2 {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--cockpit-detail-neon-cyan, #00f6ff);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 246, 255, 0.5);
+}
+
+.purchase-modal-close {
+  background: transparent;
+  border: 1px solid var(--cockpit-detail-border-secondary, rgba(0, 102, 255, 0.3));
+  color: var(--cockpit-detail-text-secondary, #8b9bb8);
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
+}
+
+.purchase-modal-close:hover {
+  background: var(--cockpit-detail-neon-cyan, #00f6ff);
+  color: var(--cockpit-detail-bg-space, #0a0e1a);
+  box-shadow: 0 0 15px var(--cockpit-detail-neon-cyan, #00f6ff);
+  border-color: var(--cockpit-detail-neon-cyan, #00f6ff);
+}
+
+.purchase-modal-body {
+  padding: 1.5rem;
+}
+
+.purchase-course-info {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--cockpit-detail-border-secondary, rgba(0, 102, 255, 0.3));
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.purchase-course-thumb {
+  width: 80px;
+  height: 60px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid var(--cockpit-detail-neon-cyan, #00f6ff);
+  box-shadow: 0 0 10px rgba(0, 246, 255, 0.2);
+}
+
+.purchase-course-details h3 {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cockpit-detail-text-primary, #e0e8f5);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+
+.purchase-course-price {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1rem;
+  color: var(--cockpit-detail-neon-green, #00ff9d);
+  font-weight: 500;
+  text-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+}
+
+.purchase-wallet-section {
+  border: 1px solid var(--cockpit-detail-border-primary, rgba(0, 246, 255, 0.4));
+  background: rgba(0, 246, 255, 0.02);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.purchase-wallet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.purchase-wallet-title {
+  font-family: 'Space Habitat', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--cockpit-detail-text-secondary, #8b9bb8);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.purchase-wallet-balance {
+  font-family: 'Space Habitat', monospace;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--cockpit-detail-text-primary, #e0e8f5);
+  text-shadow: 0 0 10px rgba(224, 232, 245, 0.3);
+}
+
+.purchase-wallet-balance.insufficient {
+  color: var(--cockpit-detail-neon-orange, #ff8800);
+  text-shadow: 0 0 10px rgba(255, 136, 0, 0.5);
+}
+
+.purchase-summary {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--cockpit-detail-border-secondary, rgba(0, 102, 255, 0.3));
+}
+
+.purchase-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--cockpit-detail-text-secondary, #8b9bb8);
+  font-family: 'Space Habitat', monospace;
+  letter-spacing: 1px;
+}
+
+.purchase-row.total {
+  margin-top: 0.75rem;
+  font-weight: 700;
+  color: var(--cockpit-detail-neon-cyan, #00f6ff);
+  font-size: 1.1rem;
+  text-shadow: 0 0 5px rgba(0, 246, 255, 0.5);
+}
+
+.purchase-modal-footer {
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid var(--cockpit-detail-border-primary, rgba(0, 246, 255, 0.4));
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.purchase-btn {
+  width: 100%;
+  padding: 1rem;
+  font-family: 'Space Habitat', monospace;
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  letter-spacing: 2px;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  text-transform: uppercase;
+}
+
+.purchase-btn-primary {
+  background: linear-gradient(135deg, var(--cockpit-detail-neon-cyan, #00f6ff), var(--cockpit-detail-neon-blue, #0066ff));
+  color: var(--cockpit-detail-bg-space, #0a0e1a);
+  border: 1px solid var(--cockpit-detail-neon-cyan, #00f6ff);
+  box-shadow: 0 0 20px rgba(0, 246, 255, 0.3);
+}
+
+.purchase-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--cockpit-detail-neon-blue, #0066ff), var(--cockpit-detail-neon-purple, #a855f7));
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(0, 246, 255, 0.5);
+}
+
+.purchase-btn-primary:disabled {
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--cockpit-detail-text-secondary, #8b9bb8);
+  border: 1px solid var(--cockpit-detail-text-secondary, #8b9bb8);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.purchase-error {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--cockpit-detail-neon-orange, #ff8800);
+  font-size: 0.9rem;
+  background: rgba(255, 136, 0, 0.1);
+  padding: 1rem;
+  border: 1px solid var(--cockpit-detail-neon-orange, #ff8800);
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  font-family: 'Space Habitat', monospace;
+  letter-spacing: 1px;
+}
+
+.purchase-deposit-hint {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--cockpit-detail-text-secondary, #8b9bb8);
+  font-family: 'Space Habitat', monospace;
+  letter-spacing: 1px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

@@ -42,7 +42,7 @@
   background: var(--dossier-bg);
   padding: 2rem;
   color: var(--dossier-silver);
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
 }
 
 /* ========== HEADER - PILOT ID BANNER ========== */

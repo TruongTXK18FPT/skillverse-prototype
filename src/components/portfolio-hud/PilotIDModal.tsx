@@ -30,6 +30,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
 
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<Partial<UserProfileDTO>>({
+    fullName: '',
     professionalTitle: '',
     careerGoals: '',
     yearsOfExperience: 0,
@@ -219,6 +220,18 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
           {/* Professional Info */}
           <div className="dossier-form-section">
             <h3 className="dossier-form-section-title">Thông tin phi công</h3>
+
+            <div className="dossier-form-group">
+              <label className="dossier-form-label">Họ và tên *</label>
+              <input
+                type="text"
+                className="dossier-input"
+                value={formData.fullName || ''}
+                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                placeholder="Ví dụ: Nguyễn Văn A"
+                required
+              />
+            </div>
 
             <div className="dossier-form-group">
               <label className="dossier-form-label">Chức danh *</label>

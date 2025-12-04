@@ -43,7 +43,7 @@
 .courses-container {
   min-height: 100vh;
   background: transparent;
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   transition: all 0.3s ease;
   animation: pageLoad 0.8s ease-out;
   padding: 1rem;

@@ -35,7 +35,6 @@ import ElevatorForgotPasswordPage from './pages/auth/ElevatorForgotPasswordPage'
 import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 import SetPasswordPage from './pages/settings/SetPasswordPage';
 import ChangePasswordPage from './pages/settings/ChangePasswordPage';
-import PaymentPage from './pages/payment/PaymentPage';
 import Transactional from './pages/payment/Transactional';
 import PremiumPageCosmic from './pages/payment/PremiumPageCosmic';
 import ManagerPage from './pages/main/ManagerPage';
@@ -50,6 +49,7 @@ import HelpCenter from './pages/footer/HelpCenter';
 import SeminarPage from './pages/navbar/SeminarPage';
 import BusinessPage from './pages/main/BusinessPage';
 import MentorPage from './pages/main/MentorPage';
+import AllBadgesPage from './pages/mentor/AllBadgesPage';
 import AdminPage from './pages/main/AdminPage';
 import AiRoadmapPage from './pages/roadmap/AiRoadmapPage';
 import RoadmapDetailPage from './pages/roadmap/RoadmapDetailPage';
@@ -65,6 +65,9 @@ import ProfileRouter from './components/ProfileRouter';
 import MyApplicationsPage from './pages/user/MyApplicationsPage';
 import ExploreMapPage from './pages/ExploreMapPage';
 import AboutPage from './pages/about/AboutPage';
+import NotificationPage from './pages/NotificationPage';
+import MessengerPage from './pages/navbar/MessengerPage';
+import UserBookingsPage from './pages/user/UserBookingsPage';
 import MeowlBubbleNotification from './components/MeowlBubbleNotification';
 import MeowlPetWrapper from './components/meowl-pet/MeowlPetWrapper';
 import ForbiddenTemple from './components/easter-egg/ForbiddenTemple';
@@ -98,6 +101,9 @@ const App = () => {
                   <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/about" element={<AboutPage />} />
+                    <Route path="/notifications" element={<NotificationPage />} />
+                    <Route path="/messages" element={<MessengerPage />} />
+                    <Route path="/my-bookings" element={<UserBookingsPage />} />
                     <Route path="/explore" element={<ExploreMapPage />} />
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/courses" element={<CoursesPage />} />
@@ -115,6 +121,7 @@ const App = () => {
                     <Route path="/gamification" element={<Gamification />} />
                     {/* <Route path="/portfolio" element={<PortfolioPage />} /> */}  {/* BACKUP - Old Portfolio */}
                     <Route path="/portfolio" element={<TacticalDossierPortfolio />} />  {/* ACTIVE - Mothership Theme */}
+                    <Route path="/portfolio/:slug" element={<TacticalDossierPortfolio />} />
                     <Route path="/portfolio-debug" element={<PortfolioDebug />} />
                     {/* <Route path="/cv" element={<CVPage />} /> */}  {/* BACKUP - Old CV Page */}
                     <Route path="/cv" element={<DataCompilerPreview />} />  {/* ACTIVE - Mothership Theme */}
@@ -137,10 +144,9 @@ const App = () => {
                     <Route path="/profile/mentor" element={<MentorProfilePage />} />
                     <Route path="/profile/business" element={<RecruiterProfilePage />} />
                     
-                    <Route path="/payment" element={<PaymentPage />} />
+  
                     <Route path="/payment/transactional" element={<Transactional />} />
                     <Route path="/premium" element={<PremiumPageCosmic />} />
-                    <Route path="/payment/:type/:id" element={<PaymentPage />} />
                     <Route path="/manager" element={<ManagerPage />} />
                     <Route path="/wallet" element={<MyWalletCosmic />} />
                     <Route path="/my-wallet" element={<MyWalletCosmic />} />
@@ -168,6 +174,11 @@ const App = () => {
                     <Route path="/mentor" element={
                       <MentorRoute>
                         <MentorPage />
+                      </MentorRoute>
+                    } />
+                    <Route path="/mentor/badges" element={
+                      <MentorRoute>
+                        <AllBadgesPage />
                       </MentorRoute>
                     } />
                     <Route path="/admin" element={
@@ -222,6 +233,8 @@ const hideFooterOnlyRoutes = new Set<string>([
   '/cv',
   '/admin',
   '/course-learning',
+  '/notifications',
+  '/messages',
 ]);
 
 // Check if path matches quiz attempt pattern

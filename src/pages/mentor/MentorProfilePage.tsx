@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { User, Save, Upload, Github, Linkedin, Globe, Award, Plus, X } from 'lucide-react';
+import { User, Save, Upload, Github, Linkedin, Globe, Award, Plus, X, Power } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
-import { getMyMentorProfile, updateMyMentorProfile, uploadMyMentorAvatar, MentorProfile, MentorProfileUpdateDTO } from '../../services/mentorProfileService';
+import { getMyMentorProfile, updateMyMentorProfile, uploadMyMentorAvatar, setPreChatEnabled, MentorProfile, MentorProfileUpdateDTO } from '../../services/mentorProfileService';
 import '../../styles/MentorProfilePage.css';
 
 const MentorProfilePage: React.FC = () => {
@@ -13,6 +13,7 @@ const MentorProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [preChatEnabled, setPreChatEnabledState] = useState(true);
   
   const [formData, setFormData] = useState<MentorProfileUpdateDTO>({
     firstName: '',
@@ -20,6 +21,7 @@ const MentorProfilePage: React.FC = () => {
     bio: '',
     specialization: '',
     experience: 0,
+    hourlyRate: undefined,
     socialLinks: {
       linkedin: '',
       github: '',
@@ -31,6 +33,7 @@ const MentorProfilePage: React.FC = () => {
   
   const [newSkill, setNewSkill] = useState('');
   const [newAchievement, setNewAchievement] = useState('');
+  const [fileName, setFileName] = useState<string>('');
 
   const loadProfile = React.useCallback(async () => {
     if (!user?.id) return;
@@ -40,12 +43,14 @@ const MentorProfilePage: React.FC = () => {
       // Use getMyMentorProfile() for current logged-in mentor
       const profileData = await getMyMentorProfile();
       setProfile(profileData);
+      setPreChatEnabledState(profileData.preChatEnabled ?? true);
       setFormData({
         firstName: profileData.firstName || '',
         lastName: profileData.lastName || '',
         bio: profileData.bio || '',
         specialization: profileData.specialization || '',
         experience: profileData.experience || 0,
+        hourlyRate: profileData.hourlyRate || undefined,
         socialLinks: {
           linkedin: profileData.socialLinks?.linkedin || '',
           github: profileData.socialLinks?.github || '',
@@ -54,6 +59,11 @@ const MentorProfilePage: React.FC = () => {
         skills: profileData.skills || [],
         achievements: profileData.achievements || []
       });
+      
+      // Set avatar preview if exists
+      if (profileData.avatar) {
+        setFormData(prev => ({ ...prev, avatar: profileData.avatar }));
+      }
     } catch (error) {
       console.error('Error loading profile:', error);
       showError('Error', 'Failed to load profile');
@@ -80,9 +90,10 @@ const MentorProfilePage: React.FC = () => {
         }
       }));
     } else {
+      const parsedValue = name === 'experience' ? Number(value) : name === 'hourlyRate' ? Number(value) : value;
       setFormData(prev => ({
         ...prev,
-        [name]: value
+        [name]: parsedValue as any
       }));
     }
   };
@@ -121,11 +132,24 @@ const MentorProfilePage: React.FC = () => {
     }));
   };
 
+  const handleTogglePreChat = async () => {
+    try {
+      const newState = !preChatEnabled;
+      await setPreChatEnabled(newState);
+      setPreChatEnabledState(newState);
+      showSuccess('Success', `Booking system ${newState ? 'enabled' : 'disabled'}`);
+    } catch (error) {
+      console.error('Error toggling pre-chat:', error);
+      showError('Error', 'Failed to update booking status');
+    }
+  };
+
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !user?.id) return;
 
     setUploading(true);
+    setFileName(file.name);
     try {
       const result = await uploadMyMentorAvatar(file);
       setFormData(prev => ({
@@ -163,7 +187,7 @@ const MentorProfilePage: React.FC = () => {
       <div className="mentor-profile-container">
         <div className="loading-container">
           <div className="loading-spinner"></div>
-          <p>Loading profile...</p>
+          <p>Initializing Neural Link...</p>
         </div>
       </div>
     );
@@ -171,19 +195,41 @@ const MentorProfilePage: React.FC = () => {
 
   return (
     <div className="mentor-profile-container">
-      <div className="profile-header">
-        <h1 className="profile-title">
-          <User className="profile-icon" />
-          Mentor Profile
-        </h1>
-        <p className="profile-subtitle">Manage your mentor profile and showcase your expertise</p>
+      {/* Background Effects */}
+      <div className="profile-bg-effects">
+        <div className="profile-grid-overlay"></div>
+        <div className="profile-glow-orb orb-1"></div>
+        <div className="profile-glow-orb orb-2"></div>
       </div>
 
-      <form onSubmit={handleSubmit} className="profile-form">
-        <div className="profile-sections">
+      <div className="mentor-profile-header">
+        <div className="mentor-header-content">
+          <h1 className="mentor-profile-title">
+            <User className="profile-icon" />
+            <span className="title-text">MENTOR <span className="highlight">PROFILE</span></span>
+          </h1>
+          <p className="mentor-profile-subtitle">Manage your digital identity and expertise matrix</p>
+        </div>
+        <div className="mentor-header-actions">
+          <button 
+            type="button" 
+            className={`mentor-status-toggle ${preChatEnabled ? 'active' : 'inactive'}`}
+            onClick={handleTogglePreChat}
+          >
+            <Power size={18} />
+            <span>{preChatEnabled ? 'BOOKING ACTIVE' : 'BOOKING PAUSED'}</span>
+          </button>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="mentor-profile-form">
+        <div className="mentor-profile-sections">
           {/* Basic Information */}
-          <div className="profile-section">
-            <h2 className="section-title">Basic Information</h2>
+          <div className="mentor-profile-section">
+            <h2 className="mentor-section-title">
+              <div className="mentor-section-icon-wrapper"><User size={20} /></div>
+              Identity Module
+            </h2>
             <div className="form-grid">
               <div className="form-group">
                 <label htmlFor="firstName" className="form-label">First Name</label>
@@ -212,7 +258,7 @@ const MentorProfilePage: React.FC = () => {
             </div>
             
             <div className="form-group">
-              <label htmlFor="bio" className="form-label">Bio</label>
+              <label htmlFor="bio" className="form-label">Bio Data</label>
               <textarea
                 id="bio"
                 name="bio"
@@ -220,13 +266,13 @@ const MentorProfilePage: React.FC = () => {
                 onChange={handleInputChange}
                 className="form-textarea"
                 rows={4}
-                placeholder="Tell us about yourself and your teaching philosophy..."
+                placeholder="Initialize bio sequence..."
               />
             </div>
 
             <div className="form-grid">
               <div className="form-group">
-                <label htmlFor="specialization" className="form-label">Specialization</label>
+                <label htmlFor="specialization" className="form-label">Core Specialization</label>
                 <input
                   type="text"
                   id="specialization"
@@ -234,11 +280,11 @@ const MentorProfilePage: React.FC = () => {
                   value={formData.specialization}
                   onChange={handleInputChange}
                   className="form-input"
-                  placeholder="e.g., Web Development, Data Science"
+                  placeholder="e.g., Cybernetics, Quantum Computing"
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="experience" className="form-label">Years of Experience</label>
+                <label htmlFor="experience" className="form-label">Experience Cycles (Years)</label>
                 <input
                   type="number"
                   id="experience"
@@ -250,47 +296,72 @@ const MentorProfilePage: React.FC = () => {
                   max="50"
                 />
               </div>
+              <div className="form-group">
+                <label htmlFor="hourlyRate" className="form-label">Giá theo giờ (VND)</label>
+                <input
+                  type="number"
+                  id="hourlyRate"
+                  name="hourlyRate"
+                  value={formData.hourlyRate ?? ''}
+                  onChange={handleInputChange}
+                  className="form-input"
+                  min="0"
+                  step="0.01"
+                  placeholder="Enter your rate per hour"
+                />
+              </div>
             </div>
           </div>
 
           {/* Avatar Upload */}
-          <div className="profile-section">
-            <h2 className="section-title">Profile Picture</h2>
-            <div className="avatar-upload">
-              <div className="avatar-preview">
-                {formData.avatar ? (
-                  <img src={formData.avatar} alt="Profile" className="avatar-image" />
-                ) : (
-                  <div className="avatar-placeholder">
-                    <User size={48} />
-                  </div>
-                )}
+          <div className="mentor-profile-section">
+            <h2 className="mentor-section-title">
+              <div className="mentor-section-icon-wrapper"><Upload size={20} /></div>
+              Holographic Avatar
+            </h2>
+            <div className="mentor-avatar-upload">
+              <div className="mentor-avatar-preview-wrapper">
+                <div className="mentor-avatar-preview">
+                  {formData.avatar ? (
+                    <img src={formData.avatar} alt="Profile" className="mentor-avatar-image" />
+                  ) : (
+                    <div className="avatar-placeholder">
+                      <User size={48} />
+                    </div>
+                  )}
+                </div>
+                <div className="mentor-avatar-ring"></div>
               </div>
-              <div className="avatar-upload-controls">
+              <div className="mentor-avatar-controls">
                 <input
                   type="file"
                   id="avatar"
                   accept="image/*"
                   onChange={handleAvatarUpload}
-                  className="avatar-input"
+                  className="mentor-avatar-input"
                   disabled={uploading}
                 />
-                <label htmlFor="avatar" className="avatar-upload-btn">
+                <label htmlFor="avatar" className="mentor-avatar-upload-btn-special">
                   <Upload size={16} />
-                  {uploading ? 'Uploading...' : 'Upload Avatar'}
+                  {uploading ? 'Uploading...' : 'UPLOAD AVATAR'}
                 </label>
+                {fileName && <p className="mentor-file-name-display">Selected: {fileName}</p>}
+                <p className="mentor-upload-hint">Supported formats: PNG, JPG (Max 5MB)</p>
               </div>
             </div>
           </div>
 
           {/* Social Links */}
-          <div className="profile-section">
-            <h2 className="section-title">Social Links</h2>
+          <div className="mentor-profile-section">
+            <h2 className="mentor-section-title">
+              <div className="mentor-section-icon-wrapper"><Globe size={20} /></div>
+              Network Uplinks
+            </h2>
             <div className="social-links">
               <div className="form-group">
                 <label htmlFor="socialLinks.linkedin" className="form-label">
                   <Linkedin size={16} />
-                  LinkedIn
+                  LinkedIn Frequency
                 </label>
                 <input
                   type="url"
@@ -305,7 +376,7 @@ const MentorProfilePage: React.FC = () => {
               <div className="form-group">
                 <label htmlFor="socialLinks.github" className="form-label">
                   <Github size={16} />
-                  GitHub
+                  GitHub Repository
                 </label>
                 <input
                   type="url"
@@ -320,7 +391,7 @@ const MentorProfilePage: React.FC = () => {
               <div className="form-group">
                 <label htmlFor="socialLinks.website" className="form-label">
                   <Globe size={16} />
-                  Website
+                  Personal Domain
                 </label>
                 <input
                   type="url"
@@ -336,8 +407,11 @@ const MentorProfilePage: React.FC = () => {
           </div>
 
           {/* Skills */}
-          <div className="profile-section">
-            <h2 className="section-title">Skills</h2>
+          <div className="mentor-profile-section">
+            <h2 className="mentor-section-title">
+              <div className="mentor-section-icon-wrapper"><Award size={20} /></div>
+              Skill Matrix
+            </h2>
             <div className="skills-container">
               <div className="skills-input">
                 <input
@@ -345,7 +419,7 @@ const MentorProfilePage: React.FC = () => {
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
                   className="form-input"
-                  placeholder="Add a skill..."
+                  placeholder="Initialize new skill protocol..."
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddSkill())}
                 />
                 <button
@@ -375,8 +449,11 @@ const MentorProfilePage: React.FC = () => {
           </div>
 
           {/* Achievements */}
-          <div className="profile-section">
-            <h2 className="section-title">Achievements</h2>
+          <div className="mentor-profile-section">
+            <h2 className="mentor-section-title">
+              <div className="mentor-section-icon-wrapper"><Award size={20} /></div>
+              Achievement Logs
+            </h2>
             <div className="achievements-container">
               <div className="achievements-input">
                 <input
@@ -384,7 +461,7 @@ const MentorProfilePage: React.FC = () => {
                   value={newAchievement}
                   onChange={(e) => setNewAchievement(e.target.value)}
                   className="form-input"
-                  placeholder="Add an achievement..."
+                  placeholder="Log new achievement..."
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddAchievement())}
                 />
                 <button
@@ -422,7 +499,7 @@ const MentorProfilePage: React.FC = () => {
             disabled={saving}
           >
             <Save size={16} />
-            {saving ? 'Saving...' : 'Save Profile'}
+            {saving ? 'Saving Data...' : 'Save Profile Data'}
           </button>
         </div>
       </form>
@@ -431,4 +508,3 @@ const MentorProfilePage: React.FC = () => {
 };
 
 export default MentorProfilePage;
-

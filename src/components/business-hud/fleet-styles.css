@@ -16,7 +16,7 @@
   background-color: var(--fleet-bg);
   color: var(--fleet-text);
   min-height: 100vh;
-  font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   padding: 20px;
   background-image: 
     linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)),
@@ -49,7 +49,7 @@
 }
 
 .fleet-header-title {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   font-size: 2.5rem;
   letter-spacing: 2px;
   margin: 0 0 0.5rem 0;
@@ -85,7 +85,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   font-weight: 600;
   letter-spacing: 1px;
   transition: all 0.3s ease;
@@ -505,7 +505,7 @@
   font-weight: 700;
   color: #fff;
   margin: 0 0 5px 0;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   letter-spacing: 0.5px;
 }
 
@@ -610,7 +610,7 @@
   border: 1px solid var(--fleet-border);
   color: #fff;
   padding: 12px 15px 12px 45px;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -631,7 +631,7 @@
   border: 1px solid var(--fleet-border);
   color: #fff;
   padding: 12px 40px 12px 45px;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -681,7 +681,7 @@
   color: var(--fleet-text);
   cursor: pointer;
   transition: all 0.2s;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -733,7 +733,7 @@
   padding: 8px;
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   font-weight: 600;
   text-transform: uppercase;
   transition: all 0.2s;
@@ -752,7 +752,7 @@
   padding: 8px;
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   font-weight: 600;
   text-transform: uppercase;
   display: flex;

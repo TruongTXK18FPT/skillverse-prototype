@@ -124,8 +124,9 @@ export const paymentService = {
   /**
    * Download PDF invoice for a payment transaction
    */
-  async adminDownloadPaymentInvoice(paymentId: number): Promise<Blob> {
+  async adminDownloadPaymentInvoice(paymentId: number, role: 'ADMIN' | 'USER' | 'MENTOR' = 'ADMIN'): Promise<Blob> {
     const response = await api.get(`/api/admin/payments/transactions/${paymentId}/invoice`, {
+      params: { role },
       responseType: 'blob'
     });
     return response.data;
@@ -134,8 +135,9 @@ export const paymentService = {
   /**
    * Download PDF invoice for a wallet transaction
    */
-  async adminDownloadWalletInvoice(transactionId: number): Promise<Blob> {
+  async adminDownloadWalletInvoice(transactionId: number, role: 'ADMIN' | 'USER' | 'MENTOR' = 'ADMIN'): Promise<Blob> {
     const response = await api.get(`/api/admin/payments/wallet-transactions/${transactionId}/invoice`, {
+      params: { role },
       responseType: 'blob'
     });
     return response.data;

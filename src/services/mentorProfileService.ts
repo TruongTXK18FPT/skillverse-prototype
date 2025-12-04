@@ -16,8 +16,13 @@ export interface MentorProfile {
   };
   skills?: string[];
   achievements?: string[];
+  ratingAverage?: number;
+  ratingCount?: number;
+  hourlyRate?: number;
   createdAt: string;
   updatedAt: string;
+  preChatEnabled?: boolean;
+  slug?: string;
 }
 
 export interface MentorProfileUpdateDTO {
@@ -26,6 +31,7 @@ export interface MentorProfileUpdateDTO {
   bio?: string;
   specialization?: string;
   experience?: number;
+  hourlyRate?: number;
   avatar?: string;
   socialLinks?: {
     linkedin?: string;
@@ -35,6 +41,41 @@ export interface MentorProfileUpdateDTO {
   skills?: string[];
   achievements?: string[];
 }
+
+export interface SkillTabBadgeInfo {
+  code: string;
+  name: string;
+  description: string;
+  progressCurrent: number;
+  progressTarget: number;
+  earned: boolean;
+}
+
+export interface SkillTabResponseDTO {
+  skillPoints: number;
+  currentLevel: number;
+  levelTitle?: string;
+  nextLevelPoints: number;
+  sessionsCompleted: number;
+  fiveStarCount: number;
+  courseSales: number;
+  revenueVnd: number;
+  badges: SkillTabBadgeInfo[];
+}
+
+/**
+ * Get all approved mentors
+ * GET /api/mentors
+ */
+export const getAllMentors = async (): Promise<MentorProfile[]> => {
+  try {
+    const response = await axiosInstance.get<MentorProfile[]>('/api/mentors');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching all mentors:', error);
+    throw error;
+  }
+};
 
 /**
  * Get current logged-in mentor profile
@@ -60,6 +101,26 @@ export const getMentorProfile = async (mentorId: number): Promise<MentorProfile>
     return response.data;
   } catch (error) {
     console.error('Error fetching mentor profile:', error);
+    throw error;
+  }
+};
+
+export const getMySkillTab = async (): Promise<SkillTabResponseDTO> => {
+  try {
+    const response = await axiosInstance.get<SkillTabResponseDTO>('/api/mentors/skilltab');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching my mentor skilltab:', error);
+    throw error;
+  }
+};
+
+export const getMentorSkillTab = async (mentorId: number): Promise<SkillTabResponseDTO> => {
+  try {
+    const response = await axiosInstance.get<SkillTabResponseDTO>(`/api/mentors/${mentorId}/skilltab`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching mentor skilltab:', error);
     throw error;
   }
 };
@@ -116,12 +177,7 @@ export const uploadMyMentorAvatar = async (
     
     const response = await axiosInstance.post<{ avatarUrl: string }>(
       '/api/mentors/avatar',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
+      formData
     );
     return response.data;
   } catch (error) {
@@ -144,12 +200,7 @@ export const uploadMentorAvatar = async (
     
     const response = await axiosInstance.post<{ avatarUrl: string }>(
       `/api/mentors/${mentorId}/avatar`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
+      formData
     );
     return response.data;
   } catch (error) {
@@ -158,3 +209,43 @@ export const uploadMentorAvatar = async (
   }
 };
 
+/**
+ * Set pre-chat enabled status for current mentor
+ * PUT /api/mentors/prechat-enabled
+ */
+export const setPreChatEnabled = async (enabled: boolean): Promise<void> => {
+  try {
+    await axiosInstance.put(`/api/mentors/prechat-enabled?enabled=${enabled}`);
+  } catch (error) {
+    console.error('Error setting pre-chat enabled:', error);
+    throw error;
+  }
+};
+
+/**
+ * Toggle favorite status for a mentor
+ * POST /api/favorites/toggle/{mentorId}
+ */
+export const toggleFavoriteMentor = async (mentorId: number): Promise<boolean> => {
+  try {
+    const response = await axiosInstance.post<{ isFavorite: boolean }>(`/api/favorites/toggle/${mentorId}`);
+    return response.data.isFavorite;
+  } catch (error) {
+    console.error('Error toggling favorite mentor:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get my favorite mentors
+ * GET /api/favorites/me
+ */
+export const getMyFavoriteMentors = async (): Promise<MentorProfile[]> => {
+  try {
+    const response = await axiosInstance.get<MentorProfile[]>('/api/favorites/me');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching favorite mentors:', error);
+    throw error;
+  }
+};

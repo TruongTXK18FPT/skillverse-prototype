@@ -36,7 +36,7 @@
     0 20px
   );
   color: var(--rank-text, #e2e8f0);
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
 }
 
 .auto-renewal-modal-container::before {
@@ -204,7 +204,7 @@
   font-size: 1.1rem;
   margin: 0 0 1rem 0;
   font-weight: 700;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   letter-spacing: 0.5px;
 }
 
@@ -237,7 +237,7 @@
   font-size: 1.1rem;
   display: block;
   margin-bottom: 0.75rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   letter-spacing: 0.5px;
 }
 
@@ -283,7 +283,7 @@
   flex: 1;
   padding: 14px;
   border: 1px solid;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   text-transform: uppercase;
   letter-spacing: 1px;
   cursor: pointer;

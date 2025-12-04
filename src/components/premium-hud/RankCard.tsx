@@ -20,6 +20,7 @@ interface RankCardProps {
   walletData: WalletResponse | null;
   userProfile: UserProfileResponse | null;
   frameImage: string | null;
+  fallbackAvatarUrl?: string;
   onViewInvoice?: () => void;
   onCancelAutoRenew?: () => void;
   onCancelSubscription?: () => void;
@@ -36,6 +37,7 @@ const RankCard: React.FC<RankCardProps> = ({
   walletData,
   userProfile,
   frameImage,
+  fallbackAvatarUrl,
   onViewInvoice,
   onCancelAutoRenew,
   onCancelSubscription
@@ -63,20 +65,20 @@ const RankCard: React.FC<RankCardProps> = ({
 
   const getTierBadge = (planType: string) => {
     switch (planType) {
-      case 'FREE_TIER': return 'CADET CLASS';
-      case 'STUDENT_PACK': return 'SCHOLAR CLASS';
-      case 'PREMIUM_BASIC': return 'OFFICER CLASS';
-      case 'PREMIUM_PLUS': return 'COMMANDER CLASS';
-      default: return 'UNKNOWN CLASS';
+      case 'FREE_TIER': return 'HỌC VIÊN';
+      case 'STUDENT_PACK': return 'HỌC GIẢ';
+      case 'PREMIUM_BASIC': return 'SĨ QUAN';
+      case 'PREMIUM_PLUS': return 'CHỈ HUY';
+      default: return 'KHÔNG XÁC ĐỊNH';
     }
   };
 
   const getOriginalName = (planType: string) => {
     switch (planType) {
-      case 'FREE_TIER': return 'Free Tier';
-      case 'STUDENT_PACK': return 'Student Package';
-      case 'PREMIUM_BASIC': return 'Skill+';
-      case 'PREMIUM_PLUS': return 'Mentor Pro';
+      case 'FREE_TIER': return 'Miễn phí';
+      case 'STUDENT_PACK': return 'Gói Sinh Viên';
+      case 'PREMIUM_BASIC': return 'Kỹ Năng+';
+      case 'PREMIUM_PLUS': return 'Cố Vấn Pro';
       default: return plan.displayName;
     }
   };
@@ -114,17 +116,23 @@ const RankCard: React.FC<RankCardProps> = ({
       <div className="hall-card-top">
         <div className="hall-aura"></div>
         <div className="hall-avatar-container">
-          {userProfile?.avatarMediaUrl ? (
-            <img 
-              src={userProfile.avatarMediaUrl} 
-              alt="User Avatar" 
-              className="hall-avatar-img"
-            />
-          ) : (
-            <div className="hall-avatar-img" style={{ background: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconComponent size={40} color="#fff" />
-            </div>
-          )}
+          {(() => {
+            const avatarSrc = userProfile?.avatarMediaUrl || fallbackAvatarUrl;
+            if (avatarSrc) {
+              return (
+                <img
+                  src={avatarSrc}
+                  alt="User Avatar"
+                  className="hall-avatar-img"
+                />
+              );
+            }
+            return (
+              <div className="hall-avatar-img" style={{ background: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <IconComponent size={40} color="#fff" />
+              </div>
+            );
+          })()}
           {frameImage && (
             <img 
               src={frameImage} 
@@ -151,7 +159,7 @@ const RankCard: React.FC<RankCardProps> = ({
           <div className="hall-currency">VND</div>
         </div>
         <div className="hall-period">
-          PER {plan.durationMonths > 120 ? '1' : plan.durationMonths} CYCLE{plan.durationMonths > 1 && plan.durationMonths <= 120 ? 'S' : ''}
+          MỖI {plan.durationMonths > 120 ? '1' : plan.durationMonths} CHU KỲ{plan.durationMonths > 1 && plan.durationMonths <= 120 ? '' : ''}
         </div>
 
         {/* Features */}
@@ -171,7 +179,7 @@ const RankCard: React.FC<RankCardProps> = ({
           isActive ? (
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <button className="hall-btn" disabled>
-                CURRENT CLEARANCE
+                CẤP ĐỘ HIỆN TẠI
               </button>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
@@ -181,7 +189,7 @@ const RankCard: React.FC<RankCardProps> = ({
                     className="hall-btn"
                     style={{ fontSize: '0.8rem', padding: '8px', opacity: 0.9 }}
                   >
-                    View Invoice
+                    Xem Hóa Đơn
                   </button>
                 )}
                 
@@ -191,7 +199,7 @@ const RankCard: React.FC<RankCardProps> = ({
                     className="hall-btn"
                     style={{ fontSize: '0.8rem', padding: '8px', opacity: 0.9 }}
                   >
-                    Cancel Auto-Renew
+                    Hủy Tự Động Gia Hạn
                   </button>
                 )}
                 
@@ -201,7 +209,7 @@ const RankCard: React.FC<RankCardProps> = ({
                     className="hall-btn"
                     style={{ fontSize: '0.8rem', padding: '8px', borderColor: '#ef4444', color: '#ef4444' }}
                   >
-                    Cancel Subscription
+                    Hủy Đăng Ký
                   </button>
                 )}
               </div>
@@ -216,7 +224,7 @@ const RankCard: React.FC<RankCardProps> = ({
                     disabled={processing}
                   >
                     <Wallet size={16} style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} />
-                    PAY WITH CREDITS
+                    THANH TOÁN VÍ
                   </button>
                   <button 
                     className="hall-btn"
@@ -224,7 +232,7 @@ const RankCard: React.FC<RankCardProps> = ({
                     disabled={processing}
                     style={{ opacity: 0.8, fontSize: '0.8rem' }}
                   >
-                    EXTERNAL GATEWAY
+                    CỔNG THANH TOÁN NGOÀI
                   </button>
                 </>
               ) : (
@@ -233,7 +241,7 @@ const RankCard: React.FC<RankCardProps> = ({
                   onClick={() => onUpgrade(plan.name)}
                   disabled={processing}
                 >
-                  {!isAuthenticated ? 'LOGIN TO ACCESS' : 'AUTHORIZE UPGRADE'}
+                  {!isAuthenticated ? 'ĐĂNG NHẬP ĐỂ TRUY CẬP' : 'XÁC NHẬN NÂNG CẤP'}
                 </button>
               )}
             </div>
@@ -242,7 +250,7 @@ const RankCard: React.FC<RankCardProps> = ({
         
         {isFreeTier && (
            <button className="hall-btn" disabled style={{ opacity: 0.5 }}>
-             STANDARD ISSUE
+             TIÊU CHUẨN
            </button>
         )}
       </div>

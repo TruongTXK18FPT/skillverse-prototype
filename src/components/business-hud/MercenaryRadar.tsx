@@ -32,14 +32,14 @@ const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers }) => {
   const allSkills = useMemo(() => {
     const skills = new Set<string>();
     freelancers.forEach(f => f.skills.forEach(s => skills.add(s)));
-    return ['All', ...Array.from(skills).sort()];
+    return ['Tất cả', ...Array.from(skills).sort()];
   }, [freelancers]);
 
   // Filter freelancers
   const filteredFreelancers = useMemo(() => {
     return freelancers.filter(merc => {
       const matchesSearch = merc.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesSkill = selectedSkill === 'All' || merc.skills.includes(selectedSkill);
+      const matchesSkill = selectedSkill === 'Tất cả' || merc.skills.includes(selectedSkill);
       return matchesSearch && matchesSkill;
     });
   }, [freelancers, searchTerm, selectedSkill]);
@@ -49,7 +49,7 @@ const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers }) => {
       <div className="fleet-header-row">
         <div className="fleet-title">
           <Radar size={24} />
-          Talent Radar
+          Radar Nhân Tài
         </div>
         
         <div className="fleet-filter-bar">
@@ -57,7 +57,7 @@ const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers }) => {
             <Search size={16} className="search-icon" />
             <input 
               type="text" 
-              placeholder="Search talent..." 
+              placeholder="Tìm kiếm nhân tài..." 
               className="fleet-search-input"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -118,11 +118,11 @@ const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers }) => {
               <div className="merc-card-stats">
                 <div className="merc-stat-simple">
                   <DollarSign size={16} className="stat-icon-simple" />
-                  <span>${merc.hourlyRate}/hr</span>
+                  <span>${merc.hourlyRate}/giờ</span>
                 </div>
                 <div className="merc-stat-simple">
                   <Briefcase size={16} className="stat-icon-simple" />
-                  <span>{merc.completedProjects} Projects</span>
+                  <span>{merc.completedProjects} Dự án</span>
                 </div>
               </div>
 
@@ -135,16 +135,16 @@ const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers }) => {
               </div>
 
               <div className="merc-card-actions">
-                <button className="fleet-btn-secondary">View Profile</button>
+                <button className="fleet-btn-secondary">Xem Hồ Sơ</button>
                 <button className="fleet-btn-primary-small">
-                  <Crosshair size={16} /> Recruit
+                  <Crosshair size={16} /> Chiêu Mộ
                 </button>
               </div>
             </div>
           ))
         ) : (
           <div className="fleet-no-results">
-            <p>No talent found matching your criteria.</p>
+            <p>Không tìm thấy nhân tài phù hợp.</p>
           </div>
         )}
       </div>

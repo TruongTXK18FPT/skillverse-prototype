@@ -5,6 +5,8 @@ import '../../styles/CoursesPageCockpit.css';
 import Pagination from '../../components/Pagination';
 import { useNavigate } from 'react-router-dom';
 import { parsePrice, isFreePrice, listPublishedCourses, Course } from '../../services/courseService';
+import { useAuth } from '../../context/AuthContext';
+import { getUserEnrollments } from '../../services/enrollmentService';
 import MeowlGuide from '../../components/MeowlGuide';
 import { CourseSummaryDTO } from '../../data/courseDTOs';
 
@@ -24,13 +26,23 @@ const CoursesPage = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 12;
+  const { user } = useAuth();
 
 
 useEffect(() => {
   setLoading(true);
-  listPublishedCourses(0, 100)
-    .then(response => {
-      const legacyCourses = response.content.map((dto: CourseSummaryDTO) => {
+  const fetchData = async () => {
+    try {
+      const [published, enrollments] = await Promise.all([
+        listPublishedCourses(0, 100),
+        user?.id ? getUserEnrollments(user.id).catch(() => ({ content: [] })) : Promise.resolve({ content: [] })
+      ]);
+
+      const purchasedIds = new Set<string>((enrollments.content || []).map((enr: any) => String(enr.courseId)));
+
+      const legacyCourses = published.content
+        .filter((dto: CourseSummaryDTO) => !purchasedIds.has(String(dto.id)))
+        .map((dto: CourseSummaryDTO) => {
         const authorFullName = dto.authorName ||
                               (dto.author?.fullName) ||
                               `${dto.author?.firstName || ''} ${dto.author?.lastName || ''}`.trim() ||
@@ -60,13 +72,14 @@ useEffect(() => {
       });
 
       setCourses(legacyCourses);
-      setLoading(false);
-    })
-    .catch(() => {
+    } catch (e) {
       setCourses([]);
+    } finally {
       setLoading(false);
-    });
-}, []);
+    }
+  };
+  fetchData();
+}, [user?.id]);
 
   // Sort courses
   const sortCourses = (coursesToSort: Course[]): Course[] => {

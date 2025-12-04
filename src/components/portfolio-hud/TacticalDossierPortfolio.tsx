@@ -9,7 +9,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import MeowlGuide from '../MeowlGuide';
 import portfolioService from '../../services/portfolioService';
 import {
@@ -24,6 +24,7 @@ import { PilotIDModal } from './PilotIDModal';
 import { MissionLogModal } from './MissionLogModal';
 import { CommendationModal } from './CommendationModal';
 import { DataCompilerModal } from './DataCompilerModal';
+import MentorBookingManager from './MentorBookingManager';
 import SystemAlertModal from './SystemAlertModal';
 import DossierInitScreen from './DossierInitScreen';
 import './dossier-portfolio-styles.css';
@@ -32,6 +33,7 @@ const TacticalDossierPortfolio = () => {
   const { theme } = useTheme();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { slug } = useParams<{ slug: string }>();
 
   // Loading & Error States
   const [loading, setLoading] = useState(true);
@@ -44,6 +46,7 @@ const TacticalDossierPortfolio = () => {
   const [certificates, setCertificates] = useState<ExternalCertificateDTO[]>([]);
   const [reviews, setReviews] = useState<MentorReviewDTO[]>([]);
   const [cvs, setCvs] = useState<GeneratedCVDTO[]>([]);
+  const [isOwner, setIsOwner] = useState(false);
 
   // Modal States
   const [profileModalOpen, setProfileModalOpen] = useState(false);
@@ -67,36 +70,59 @@ const TacticalDossierPortfolio = () => {
   // Load data on mount
   useEffect(() => {
     loadPortfolioData();
-  }, [isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, slug]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load Portfolio Data
   const loadPortfolioData = async () => {
-    if (!isAuthenticated) {
-      setLoading(false);
-      return;
-    }
-
     try {
       setLoading(true);
       setError(null);
 
-      const checkResult = await portfolioService.checkExtendedProfile();
-      setHasExtendedProfile(checkResult.hasExtendedProfile);
-
-      if (checkResult.hasExtendedProfile) {
-        const [profileData, projectsData, certsData, reviewsData, cvsData] = await Promise.all([
-          portfolioService.getProfile(),
-          portfolioService.getUserProjects(),
-          portfolioService.getUserCertificates(),
-          portfolioService.getUserReviews(),
-          portfolioService.getAllCVs(),
-        ]);
-
+      if (slug) {
+        // Public View
+        console.log('🔍 Loading public portfolio for slug:', slug);
+        const profileData = await portfolioService.getProfileBySlug(slug);
         setProfile(profileData);
-        setProjects(projectsData);
-        setCertificates(certsData);
-        setReviews(reviewsData);
-        setCvs(cvsData);
+        setHasExtendedProfile(true);
+        setIsOwner(false); // Viewing someone else's profile
+
+        // Load public data
+        if (profileData.userId) {
+          const [projectsData, certsData, reviewsData] = await Promise.all([
+            portfolioService.getPublicUserProjects(profileData.userId),
+            portfolioService.getPublicUserCertificates(profileData.userId),
+            portfolioService.getPublicUserReviews(profileData.userId),
+          ]);
+          setProjects(projectsData);
+          setCertificates(certsData);
+          setReviews(reviewsData);
+        }
+      } else {
+        // Private View (Owner)
+        if (!isAuthenticated) {
+          setLoading(false);
+          return;
+        }
+
+        const checkResult = await portfolioService.checkExtendedProfile();
+        setHasExtendedProfile(checkResult.hasExtendedProfile);
+        setIsOwner(true);
+
+        if (checkResult.hasExtendedProfile) {
+          const [profileData, projectsData, certsData, reviewsData, cvsData] = await Promise.all([
+            portfolioService.getProfile(),
+            portfolioService.getUserProjects(),
+            portfolioService.getUserCertificates(),
+            portfolioService.getUserReviews(),
+            portfolioService.getAllCVs(),
+          ]);
+
+          setProfile(profileData);
+          setProjects(projectsData);
+          setCertificates(certsData);
+          setReviews(reviewsData);
+          setCvs(cvsData);
+        }
       }
     } catch (err: any) {
       console.error('Error loading portfolio data:', err);
@@ -277,8 +303,8 @@ const TacticalDossierPortfolio = () => {
     }
   };
 
-  // Not Authenticated State
-  if (!isAuthenticated) {
+  // Not Authenticated State (Only if not viewing public profile)
+  if (!isAuthenticated && !slug) {
     return (
       <div className="dossier-portfolio-container" data-theme={theme}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', textAlign: 'center', padding: '2rem' }}>
@@ -361,7 +387,15 @@ const TacticalDossierPortfolio = () => {
       variants={containerVariants}
     >
       {/* Header Section - Pilot ID Banner */}
-      <motion.div className="dossier-header-panel" variants={itemVariants}>
+      <motion.div 
+        className="dossier-header-panel" 
+        variants={itemVariants}
+        style={{
+          backgroundImage: profile?.coverImageUrl ? `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${profile.coverImageUrl})` : undefined,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
         <div className="dossier-header-content">
           <div>
             <h1 className="dossier-header-title">
@@ -376,15 +410,28 @@ const TacticalDossierPortfolio = () => {
           </div>
 
           <div className="dossier-header-actions">
-            <motion.button
-              className="dossier-btn-primary"
-              onClick={() => navigate('/cv')}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Eye size={18} />
-              Xem CV
-            </motion.button>
+            {isOwner && (
+              <>
+                <motion.button
+                  className="dossier-btn-primary"
+                  onClick={() => navigate('/cv')}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Eye size={18} />
+                  Xem CV
+                </motion.button>
+                <motion.button
+                  className="dossier-btn-primary"
+                  onClick={handleExportCV}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Download size={18} />
+                  Xuất CV
+                </motion.button>
+              </>
+            )}
             <motion.button
               className="dossier-btn-primary"
               onClick={handleSharePortfolio}
@@ -393,15 +440,6 @@ const TacticalDossierPortfolio = () => {
             >
               <Share2 size={18} />
               Chia sẻ
-            </motion.button>
-            <motion.button
-              className="dossier-btn-primary"
-              onClick={handleExportCV}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Download size={18} />
-              Xuất CV
             </motion.button>
           </div>
         </div>
@@ -414,7 +452,10 @@ const TacticalDossierPortfolio = () => {
             { id: 'overview', label: 'Bảng trạng thái', icon: Eye },
             { id: 'projects', label: 'Nhật ký dự án', icon: Briefcase },
             { id: 'certificates', label: 'Chứng chỉ', icon: Award },
-            { id: 'cv-builder', label: 'Trình tạo dữ liệu', icon: Settings }
+            ...(isOwner ? [
+              { id: 'bookings', label: 'Quản lý Booking', icon: Calendar },
+              { id: 'cv-builder', label: 'Trình tạo dữ liệu', icon: Settings }
+            ] : [])
           ].map((tab) => {
             const Icon = tab.icon;
             return (
@@ -472,19 +513,29 @@ const TacticalDossierPortfolio = () => {
                         {profile.location}
                       </p>
                     )}
+                    {profile?.hourlyRate !== undefined && profile.hourlyRate > 0 && (
+                      <p className="dossier-pilot-location" style={{ marginTop: '0.25rem', color: 'var(--dossier-green)' }}>
+                        <span style={{ fontWeight: 'bold', fontSize: '1.1em' }}>
+                          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: profile.preferredCurrency || 'USD' }).format(profile.hourlyRate)}
+                        </span>
+                        <span style={{ fontSize: '0.85em', opacity: 0.8 }}> / giờ</span>
+                      </p>
+                    )}
                   </div>
 
                   <div style={{ marginLeft: 'auto' }}>
-                    <button
-                      onClick={() => {
-                        setProfileModalMode('edit');
-                        setProfileModalOpen(true);
-                      }}
-                      className="dossier-btn-primary"
-                    >
-                      <Edit size={16} />
-                      Sửa ID
-                    </button>
+                    {isOwner && (
+                      <button
+                        onClick={() => {
+                          setProfileModalMode('edit');
+                          setProfileModalOpen(true);
+                        }}
+                        className="dossier-btn-primary"
+                      >
+                        <Edit size={16} />
+                        Sửa ID
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -523,6 +574,20 @@ const TacticalDossierPortfolio = () => {
                     <div style={{ marginBottom: '1.5rem' }}>
                       <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>MỤC TIÊU NGHỀ NGHIỆP</h3>
                       <p style={{ color: 'var(--dossier-silver)' }}>{profile.careerGoals}</p>
+                    </div>
+                  )}
+
+                  {/* Video Intro */}
+                  {profile?.videoIntroUrl && (
+                    <div style={{ marginBottom: '1.5rem' }}>
+                      <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>VIDEO GIỚI THIỆU</h3>
+                      <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '0.5rem', border: '1px solid var(--dossier-border-cyan)' }}>
+                        <video 
+                          src={profile.videoIntroUrl} 
+                          controls 
+                          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                        />
+                      </div>
                     </div>
                   )}
 
@@ -587,17 +652,19 @@ const TacticalDossierPortfolio = () => {
                   <h2 className="dossier-modal-title">Nhật ký dự án</h2>
                   <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Các dự án đã và đang thực hiện</p>
                 </div>
-                <button
-                  onClick={() => {
-                    setProjectModalMode('create');
-                    setSelectedProject(undefined);
-                    setProjectModalOpen(true);
-                  }}
-                  className="dossier-btn-primary"
-                >
-                  <Plus size={18} />
-                  Thêm dự án
-                </button>
+                {isOwner && (
+                  <button
+                    onClick={() => {
+                      setProjectModalMode('create');
+                      setSelectedProject(undefined);
+                      setProjectModalOpen(true);
+                    }}
+                    className="dossier-btn-primary"
+                  >
+                    <Plus size={18} />
+                    Thêm dự án
+                  </button>
+                )}
               </div>
 
               {/* Project Filters */}
@@ -660,26 +727,30 @@ const TacticalDossierPortfolio = () => {
                             Xem
                           </a>
                         )}
-                        <button
-                          onClick={() => {
-                            setProjectModalMode('edit');
-                            setSelectedProject(project);
-                            setProjectModalOpen(true);
-                          }}
-                          className="dossier-btn-secondary"
-                          style={{ fontSize: '0.75rem', padding: '0.5rem 1rem' }}
-                        >
-                          <Edit size={14} />
-                          Sửa
-                        </button>
-                        <button
-                          onClick={() => handleDeleteProject(project.id!)}
-                          className="dossier-btn-secondary"
-                          style={{ fontSize: '0.75rem', padding: '0.5rem 1rem', borderColor: 'var(--dossier-red)', color: 'var(--dossier-red)' }}
-                        >
-                          <Trash2 size={14} />
-                          Xóa
-                        </button>
+                        {isOwner && (
+                          <>
+                            <button
+                              onClick={() => {
+                                setProjectModalMode('edit');
+                                setSelectedProject(project);
+                                setProjectModalOpen(true);
+                              }}
+                              className="dossier-btn-secondary"
+                              style={{ fontSize: '0.75rem', padding: '0.5rem 1rem' }}
+                            >
+                              <Edit size={14} />
+                              Sửa
+                            </button>
+                            <button
+                              onClick={() => handleDeleteProject(project.id!)}
+                              className="dossier-btn-secondary"
+                              style={{ fontSize: '0.75rem', padding: '0.5rem 1rem', borderColor: 'var(--dossier-red)', color: 'var(--dossier-red)' }}
+                            >
+                              <Trash2 size={14} />
+                              Xóa
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                   ))
@@ -701,13 +772,15 @@ const TacticalDossierPortfolio = () => {
                   <h2 className="dossier-modal-title">Chứng chỉ</h2>
                   <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Chứng chỉ từ các tổ chức bên ngoài</p>
                 </div>
-                <button
-                  onClick={() => setCertificateModalOpen(true)}
-                  className="dossier-btn-primary"
-                >
-                  <Plus size={18} />
-                  Thêm chứng chỉ
-                </button>
+                {isOwner && (
+                  <button
+                    onClick={() => setCertificateModalOpen(true)}
+                    className="dossier-btn-primary"
+                  >
+                    <Plus size={18} />
+                    Thêm chứng chỉ
+                  </button>
+                )}
               </div>
 
               {/* Category Filters */}
@@ -750,13 +823,6 @@ const TacticalDossierPortfolio = () => {
                           {new Date(cert.issueDate).toLocaleDateString('vi-VN')}
                         </p>
                       )}
-                      {cert.skills && cert.skills.length > 0 && (
-                        <div className="dossier-module-tags" style={{ marginBottom: '1rem' }}>
-                          {cert.skills.slice(0, 3).map((skill, idx) => (
-                            <span key={idx} className="dossier-module-tag">{skill}</span>
-                          ))}
-                        </div>
-                      )}
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
                         {cert.credentialUrl && (
                           <a
@@ -770,19 +836,33 @@ const TacticalDossierPortfolio = () => {
                             Xác minh
                           </a>
                         )}
-                        <button
-                          onClick={() => handleDeleteCertificate(cert.id!)}
-                          className="dossier-btn-secondary"
-                          style={{ fontSize: '0.75rem', padding: '0.5rem 1rem', borderColor: 'var(--dossier-red)', color: 'var(--dossier-red)' }}
-                        >
-                          <Trash2 size={14} />
-                          Xóa
-                        </button>
+                        {isOwner && (
+                          <button
+                            onClick={() => handleDeleteCertificate(cert.id!)}
+                            className="dossier-btn-secondary"
+                            style={{ fontSize: '0.75rem', padding: '0.5rem 1rem', borderColor: 'var(--dossier-red)', color: 'var(--dossier-red)' }}
+                          >
+                            <Trash2 size={14} />
+                            Xóa
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))
                 )}
               </div>
+            </motion.div>
+          )}
+
+          {/* Booking Management Section */}
+          {activeSection === 'bookings' && (
+            <motion.div
+              key="bookings"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <MentorBookingManager />
             </motion.div>
           )}
 

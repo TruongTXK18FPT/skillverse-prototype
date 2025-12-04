@@ -32,8 +32,11 @@ import { useTheme } from '../context/ThemeContext';
 import walletService from '../services/walletService';
 import userService from '../services/userService';
 import { premiumService } from '../services/premiumService';
+import { notificationService } from '../services/notificationService';
+import { getMyMentorProfile, MentorProfile } from '../services/mentorProfileService';
 import { UserProfileResponse } from '../data/userDTOs';
 import { UserSubscriptionResponse } from '../data/premiumDTOs';
+import NotificationDropdown from './NotificationDropdown';
 import Logo from '../assets/skillverse.png';
 import '../styles/Header.css';
 
@@ -48,7 +51,9 @@ const Header: React.FC = () => {
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
+  const [mentorProfile, setMentorProfile] = useState<MentorProfile | null>(null);
   const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
+  const [unreadCount, setUnreadCount] = useState(0);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const quickNavRef = useRef<HTMLDivElement>(null);
 
@@ -120,10 +125,19 @@ const Header: React.FC = () => {
     try {
       const profile = await userService.getMyProfile();
       setUserProfile(profile);
+
+      if (user?.roles.includes('MENTOR')) {
+        try {
+          const mProfile = await getMyMentorProfile();
+          setMentorProfile(mProfile);
+        } catch (e) {
+          console.error("Failed to load mentor profile", e);
+        }
+      }
     } catch (error) {
       console.error('Failed to load user profile:', error);
     }
-  }, []);
+  }, [user]);
 
   const loadWalletBalance = useCallback(async () => {
     if (!user) return;
@@ -146,6 +160,15 @@ const Header: React.FC = () => {
       setSubscription(sub);
     } catch (error) {
       console.error('Failed to load subscription:', error);
+    }
+  }, []);
+
+  const loadUnreadCount = useCallback(async () => {
+    try {
+      const count = await notificationService.getUnreadCount();
+      setUnreadCount(count);
+    } catch (error) {
+      console.error('Failed to load unread count:', error);
     }
   }, []);
 
@@ -178,8 +201,12 @@ const Header: React.FC = () => {
       loadWalletBalance();
       loadUserProfile();
       loadSubscription();
+      loadUnreadCount();
+
+      const interval = setInterval(loadUnreadCount, 60000);
+      return () => clearInterval(interval);
     }
-  }, [isAuthenticated, user, loadWalletBalance, loadUserProfile, loadSubscription]);
+  }, [isAuthenticated, user, loadWalletBalance, loadUserProfile, loadSubscription, loadUnreadCount]);
 
   // Close menus when clicking outside
   useEffect(() => {
@@ -315,11 +342,19 @@ const Header: React.FC = () => {
 
           {/* Authentication */}
           {isAuthenticated && user ? (
-            <div ref={userMenuRef} className="user-profile-group desktop-only" style={{
+            <>
+              
+
+              <div ref={userMenuRef} className="user-profile-group desktop-only" style={{
               background: getPremiumColor() ? `linear-gradient(135deg, rgba(${hexToRgb(getPremiumColor()!)}, 0.1), rgba(${hexToRgb(getPremiumColor()!)}, 0.05))` : undefined,
               border: getPremiumColor() ? `1px solid ${getPremiumColor()}` : undefined,
               boxShadow: getPremiumColor() ? `0 0 20px rgba(${hexToRgb(getPremiumColor()!)}, 0.3)` : undefined
             }}>
+              {unreadCount > 0 && (
+                <span className="header-notification-badge">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
               <button
                 className="user-profile-btn"
                 onClick={() => setShowUserMenu(!showUserMenu)}
@@ -329,8 +364,8 @@ const Header: React.FC = () => {
                     border: getPremiumColor() ? `3px solid ${getPremiumColor()}` : '2px solid rgba(255,255,255,0.2)',
                     boxShadow: getPremiumColor() ? `0 0 15px ${getPremiumColor()}` : undefined
                   }}>
-                    {(userProfile?.avatarMediaUrl || user.avatarUrl) ? (
-                      <img src={userProfile?.avatarMediaUrl || user.avatarUrl} alt="Avatar" className="header-avatar-img" />
+                    {(mentorProfile?.avatar || userProfile?.avatarMediaUrl || user.avatarUrl) ? (
+                      <img src={mentorProfile?.avatar || userProfile?.avatarMediaUrl || user.avatarUrl} alt="Avatar" className="header-avatar-img" />
                     ) : (
                       <User size={18} />
                     )}
@@ -354,8 +389,8 @@ const Header: React.FC = () => {
                       border: getPremiumColor() ? `3px solid ${getPremiumColor()}` : '2px solid rgba(255,255,255,0.2)',
                       boxShadow: getPremiumColor() ? `0 0 20px ${getPremiumColor()}` : undefined
                     }}>
-                      {(userProfile?.avatarMediaUrl || user.avatarUrl) ? (
-                        <img src={userProfile?.avatarMediaUrl || user.avatarUrl} alt="Avatar" className="header-avatar-img-large" />
+                      {(mentorProfile?.avatar || userProfile?.avatarMediaUrl || user.avatarUrl) ? (
+                        <img src={mentorProfile?.avatar || userProfile?.avatarMediaUrl || user.avatarUrl} alt="Avatar" className="header-avatar-img-large" />
                       ) : (
                         <User size={24} />
                       )}
@@ -367,14 +402,22 @@ const Header: React.FC = () => {
                   </div>
                   <hr className="dropdown-divider" />
 
+                  <div style={{ marginBottom: '12px' }}>
+                    <NotificationDropdown inline collapsible />
+                  </div>
+
                   {/* Wallet & Notifications in dropdown */}
                   <button onClick={() => { handleWallet(); setShowUserMenu(false); }} className="dropdown-item">
                     <Wallet size={16} />
                     <span>Ví</span>
                   </button>
-                  <button className="dropdown-item">
-                    <Bell size={16} />
-                    <span>Thông báo</span>
+                  <button onClick={() => { navigate('/messages'); setShowUserMenu(false); }} className="dropdown-item">
+                    <MessageSquare size={16} />
+                    <span>Tin nhắn</span>
+                  </button>
+                  <button onClick={() => { navigate('/my-bookings'); setShowUserMenu(false); }} className="dropdown-item">
+                    <Calendar size={16} />
+                    <span>Quản lý lịch hẹn</span>
                   </button>
                   <button onClick={() => { navigate('/help-center'); setShowUserMenu(false); }} className="dropdown-item">
                     <HelpCircle size={16} />
@@ -412,6 +455,7 @@ const Header: React.FC = () => {
                 </div>
               )}
             </div>
+            </>
           ) : (
             <button onClick={handleLogin} className="header-login-btn desktop-only">
               Đăng nhập
@@ -448,7 +492,11 @@ const Header: React.FC = () => {
               <div className="mobile-user-section">
                 <div className="mobile-user-info">
                   <div className="user-avatar-large">
-                    <User size={32} />
+                    {(mentorProfile?.avatar || userProfile?.avatarMediaUrl || user.avatarUrl) ? (
+                      <img src={mentorProfile?.avatar || userProfile?.avatarMediaUrl || user.avatarUrl} alt="Avatar" className="header-avatar-img-large" />
+                    ) : (
+                      <User size={32} />
+                    )}
                   </div>
                   <div className="user-details">
                     <p className="user-name">{user.fullName}</p>

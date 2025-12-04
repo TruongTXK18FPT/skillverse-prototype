@@ -7,8 +7,8 @@ interface ClearanceHeaderProps {
 }
 
 const ClearanceHeader: React.FC<ClearanceHeaderProps> = ({
-  title = 'ACCESS LEVEL',
-  subtitle = 'UPGRADE YOUR PILOT LICENSE TO ACCESS RESTRICTED SECTORS'
+  title = 'CẤP ĐỘ TRUY CẬP',
+  subtitle = 'NÂNG CẤP GIẤY PHÉP ĐỂ TRUY CẬP CÁC KHU VỰC HẠN CHẾ'
 }) => {
   return (
     <div className="clearance-header">

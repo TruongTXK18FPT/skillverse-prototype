@@ -13,7 +13,7 @@
   align-items: center;
   justify-content: flex-end; /* Align content to bottom for perspective */
   overflow: hidden;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   z-index: 99999; /* Topmost */
   background-size: cover;
   background-position: center bottom;
@@ -223,7 +223,7 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
   padding: 1rem;
   width: 100%;
   color: #fff;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   font-size: 1.2rem;
   text-align: center;
   outline: none;

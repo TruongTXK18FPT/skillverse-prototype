@@ -36,7 +36,7 @@
   height: 100vh;
   background-color: var(--cl-bg);
   color: var(--cl-text-primary);
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   overflow: hidden;
 }
 

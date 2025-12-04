@@ -419,6 +419,52 @@ export const deleteCV = async (cvId: number): Promise<void> => {
   }
 };
 
+// ==================== PUBLIC DATA ENDPOINTS ====================
+
+/**
+ * Get public projects by user ID
+ */
+export const getPublicUserProjects = async (userId: number): Promise<PortfolioProjectDTO[]> => {
+  const response = await api.get<ApiResponse<PortfolioProjectDTO[]>>(`/portfolio/public/${userId}/projects`);
+  if (!response.data.success || !response.data.data) {
+    throw new Error(response.data.message || 'Failed to fetch public projects');
+  }
+  return response.data.data;
+};
+
+/**
+ * Get public certificates by user ID
+ */
+export const getPublicUserCertificates = async (userId: number): Promise<ExternalCertificateDTO[]> => {
+  const response = await api.get<ApiResponse<ExternalCertificateDTO[]>>(`/portfolio/public/${userId}/certificates`);
+  if (!response.data.success || !response.data.data) {
+    throw new Error(response.data.message || 'Failed to fetch public certificates');
+  }
+  return response.data.data;
+};
+
+/**
+ * Get public reviews by user ID
+ */
+export const getPublicUserReviews = async (userId: number): Promise<MentorReviewDTO[]> => {
+  const response = await api.get<ApiResponse<MentorReviewDTO[]>>(`/portfolio/public/${userId}/reviews`);
+  if (!response.data.success || !response.data.data) {
+    throw new Error(response.data.message || 'Failed to fetch public reviews');
+  }
+  return response.data.data;
+};
+
+/**
+ * Get all public portfolios
+ */
+export const getAllPublicPortfolios = async (): Promise<UserProfileDTO[]> => {
+  const response = await api.get<ApiResponse<UserProfileDTO[]>>('/portfolio/public');
+  if (!response.data.success || !response.data.data) {
+    throw new Error(response.data.message || 'Failed to fetch public portfolios');
+  }
+  return response.data.data;
+};
+
 // Export all services
 export const portfolioService = {
   // Profile
@@ -426,23 +472,27 @@ export const portfolioService = {
   getProfile,
   getProfileBySlug,
   getPublicProfile,
+  getAllPublicPortfolios,
   createExtendedProfile,
   updateExtendedProfile,
   deleteExtendedProfile,
   
   // Projects
   getUserProjects,
+  getPublicUserProjects,
   createProject,
   updateProject,
   deleteProject,
   
   // Certificates
   getUserCertificates,
+  getPublicUserCertificates,
   createCertificate,
   deleteCertificate,
   
   // Reviews
   getUserReviews,
+  getPublicUserReviews,
   
   // CV Generation
   generateCV,

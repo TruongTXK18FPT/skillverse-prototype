@@ -1,80 +1,90 @@
-import React, { useState } from 'react';
-import { SkillPointActivity, Badge } from '../../pages/main/MentorPage';
+import React, { useEffect, useMemo, useState } from 'react';
+import { SkillPointActivity } from '../../pages/main/MentorPage';
+import { getMySkillTab, SkillTabResponseDTO, SkillTabBadgeInfo } from '../../services/mentorProfileService';
+import { getMyBookings } from '../../services/bookingService';
+import { getUserReviews } from '../../services/portfolioService';
+import { getMentorCoursePurchases, CoursePurchaseDTO } from '../../services/courseService';
 import './SkillPointsTab.css';
+import QuickStatsCard from './QuickStatsCard';
 
 const SkillPointsTab: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'all'>('month');
   const [showLevelUpModal, setShowLevelUpModal] = useState(false);
   const [justLeveledUp, setJustLeveledUp] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [skillTab, setSkillTab] = useState<SkillTabResponseDTO | null>(null);
 
-  // Mock data for skill points activities
-  const [activities] = useState<SkillPointActivity[]>([
-    {
-      id: '1',
-      activity: 'Hoàn Thành Buổi Học',
-      points: 50,
-      date: '2025-01-15T10:00:00',
-      description: 'Buổi học Thực Hành Tốt Nhất React với Nguyễn Văn An'
-    },
-    {
-      id: '2',
-      activity: 'Nhận Đánh Giá 5 Sao',
-      points: 25,
-      date: '2025-01-14T16:30:00',
-      description: 'Phản hồi xuất sắc từ Trần Thị Bình'
-    },
-    {
-      id: '3',
-      activity: 'Thưởng Buổi Học Đầu Tiên',
-      points: 100,
-      date: '2025-01-13T14:15:00',
-      description: 'Thưởng chào mừng cho buổi hướng dẫn mới'
-    },
-    {
-      id: '4',
-      activity: 'Đạt Mục Tiêu Tuần',
-      points: 75,
-      date: '2025-01-12T09:00:00',
-      description: 'Hoàn thành 5 buổi học trong tuần này'
-    },
-    {
-      id: '5',
-      activity: 'Chứng Chỉ Học Viên',
-      points: 150,
-      date: '2025-01-11T11:20:00',
-      description: 'Học viên đã vượt qua chứng chỉ sau khi được hướng dẫn'
-    }
-  ]);
+  const [activities, setActivities] = useState<SkillPointActivity[]>([]);
 
-  // Mock data for badges
-  const [badges] = useState<Badge[]>([
-    {
-      id: '1',
-      name: 'Mentor Đầu Tiên',
-      icon: '🎯',
-      description: 'Hoàn thành buổi hướng dẫn đầu tiên của bạn',
-      earnedDate: '2025-01-13T14:15:00'
-    },
-    {
-      id: '2',
-      name: 'Mentor Ngôi Sao',
-      icon: '⭐',
-      description: 'Duy trì đánh giá trung bình 4.5+ sao',
-      earnedDate: '2025-01-14T16:30:00'
-    },
-    {
-      id: '3',
-      name: 'Mentor Nhất Quán',
-      icon: '📅',
-      description: 'Hoàn thành buổi học trong 7 ngày liên tiếp',
-      earnedDate: '2025-01-15T10:00:00'
-    }
-  ]);
+  const [badges, setBadges] = useState<SkillTabBadgeInfo[]>([]);
 
-  const totalPoints = activities.reduce((sum, activity) => sum + activity.points, 0);
-  const currentLevel = Math.floor(totalPoints / 100) + 1;
-  const pointsToNextLevel = (currentLevel * 100) - totalPoints;
-  const progressPercentage = ((totalPoints % 100) / 100) * 100;
+  useEffect(() => {
+    let mounted = true;
+    const loadAll = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const [skill, bookingsPage, reviews, purchasesPage] = await Promise.all([
+          getMySkillTab(),
+          getMyBookings(true, 0, 50),
+          getUserReviews().catch(() => []),
+          getMentorCoursePurchases(0, 50).catch(() => ({ content: [] as CoursePurchaseDTO[] }))
+        ]);
+        if (!mounted) return;
+        setSkillTab(skill);
+        setBadges(skill.badges || []);
+        const bookingActs: SkillPointActivity[] = (bookingsPage.content || [])
+          .filter(b => b.status === 'COMPLETED')
+          .map(b => ({
+            id: `booking-${b.id}`,
+            activity: 'Hoàn Thành Buổi Học',
+            points: 20,
+            date: b.endTime || b.startTime,
+            description: b.learnerName ? `Buổi học với ${b.learnerName}` : 'Buổi học đã hoàn thành'
+          }));
+        const reviewActs: SkillPointActivity[] = (reviews || [])
+          .filter(r => (r.rating || 0) >= 5)
+          .map(r => ({
+            id: `review-${r.id}`,
+            activity: 'Nhận Đánh Giá 5 Sao',
+            points: 0,
+            date: r.createdAt || new Date().toISOString(),
+            description: r.feedback || 'Đánh giá 5 sao'
+          }));
+        const purchaseActs: SkillPointActivity[] = (purchasesPage.content || [])
+          .filter(p => p.status === 'PAID' || p.status === 'CAPTURED' || p.status === 'SUCCESS')
+          .map(p => ({
+            id: `purchase-${p.id}`,
+            activity: 'Bán Khóa Học Thành Công',
+            points: 0,
+            date: p.purchasedAt,
+            description: `Khóa học #${p.courseId}`
+          }));
+        const merged = [...bookingActs, ...reviewActs, ...purchaseActs]
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        setActivities(merged);
+      } catch {
+        if (!mounted) return;
+        setError('Không thể tải SkillTab.');
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
+    loadAll();
+    const interval = setInterval(loadAll, 30000);
+    return () => { mounted = false; clearInterval(interval); };
+  }, []);
+
+  const totalPoints = skillTab?.skillPoints ?? 0;
+  const currentLevel = skillTab?.currentLevel ?? Math.floor(totalPoints / 100);
+  const pointsToNextLevel = skillTab?.nextLevelPoints ?? Math.max(0, (Math.floor(totalPoints / 100) + 1) * 100 - totalPoints);
+  const progressPercentage = useMemo(() => {
+    const remainder = totalPoints % 100;
+    return (remainder / 100) * 100;
+  }, [totalPoints]);
   
   // Calculate coin reward based on level (level * 10 coins)
   const getCoinsForLevel = (level: number) => level * 10;
@@ -83,12 +93,8 @@ const SkillPointsTab: React.FC = () => {
 
   // Check for level up (this would normally be triggered by backend)
   const checkLevelUp = () => {
-    const newTotalPoints = totalPoints + 50; // Example: adding 50 points
-    const newLevel = Math.floor(newTotalPoints / 100) + 1;
-    if (newLevel > currentLevel) {
-      setJustLeveledUp(true);
-      setShowLevelUpModal(true);
-    }
+    setJustLeveledUp(true);
+    setShowLevelUpModal(true);
   };
 
   const formatDate = (dateString: string) => {
@@ -122,6 +128,12 @@ const SkillPointsTab: React.FC = () => {
 
   return (
     <div className="mentor-skillpoints-tab">
+      {loading && (
+        <div className="mentor-skillpoints-loading">Đang tải SkillTab...</div>
+      )}
+      {!!error && (
+        <div className="mentor-skillpoints-error">{error}</div>
+      )}
       {/* Overview Section */}
       <div className="mentor-skillpoints-overview">
         <div className="mentor-skillpoints-points-summary">
@@ -191,17 +203,24 @@ const SkillPointsTab: React.FC = () => {
         <div className="mentor-skillpoints-badges-section">
           <div className="mentor-skillpoints-section-header">
             <h3>Huy Hiệu Của Tôi</h3>
-            <button className="mentor-skillpoints-view-all-btn">Xem Tất Cả</button>
+            <a className="mentor-skillpoints-view-all-btn" href="/mentor/badges">Xem Tất Cả</a>
           </div>
           
           <div className="mentor-skillpoints-badges-grid">
             {badges.map(badge => (
-              <div key={badge.id} className="mentor-skillpoints-badge-card">
-                <div className="mentor-skillpoints-badge-icon">{badge.icon}</div>
+              <div key={badge.code} className={`mentor-skillpoints-badge-card ${badge.earned ? 'earned' : 'locked'}`}>
+                <div className="mentor-skillpoints-badge-icon">{mapBadgeIcon(badge.code)}</div>
                 <div className="mentor-skillpoints-badge-info">
                   <h4>{badge.name}</h4>
                   <p>{badge.description}</p>
-                  <span className="mentor-skillpoints-badge-date">Đạt được: {formatDate(badge.earnedDate)}</span>
+                  {!badge.earned && (
+                    <div className="mentor-skillpoints-badge-progress">
+                      <div className="mentor-skillpoints-progress-bar small">
+                        <div className="mentor-skillpoints-progress-fill" style={{ width: `${Math.min(100, Math.round((badge.progressCurrent / badge.progressTarget) * 100))}%` }}></div>
+                      </div>
+                      <span>{badge.progressCurrent}/{badge.progressTarget}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -225,6 +244,12 @@ const SkillPointsTab: React.FC = () => {
 
         {/* Activity History Section */}
         <div className="mentor-skillpoints-activity-section">
+          <QuickStatsCard
+            sessionsCompleted={skillTab?.sessionsCompleted ?? 0}
+            fiveStarCount={skillTab?.fiveStarCount ?? 0}
+            courseSales={skillTab?.courseSales ?? 0}
+            revenueVnd={skillTab?.revenueVnd ?? 0}
+          />
           <div className="mentor-skillpoints-section-header">
             <h3>Lịch Sử Hoạt Động</h3>
             <div className="mentor-skillpoints-filter-tabs">
@@ -324,3 +349,15 @@ const SkillPointsTab: React.FC = () => {
 };
 
 export default SkillPointsTab;
+const mapBadgeIcon = (code: string): string => {
+  if (code === 'FIRST_SESSION') return '🎯';
+  if (code === 'TEN_SESSIONS') return '📅';
+  if (code === 'HUNDRED_SESSIONS') return '🏅';
+  if (code === 'FIRST_FIVE_STAR') return '⭐';
+  if (code === 'TEN_FIVE_STAR') return '🌟';
+  if (code === 'HUNDRED_FIVE_STAR') return '💫';
+  if (code === 'FIRST_COURSE_SALE') return '🛒';
+  if (code === 'TEN_COURSE_SALES') return '💼';
+  if (code === 'HUNDRED_COURSE_SALES') return '🏆';
+  return '🔖';
+};

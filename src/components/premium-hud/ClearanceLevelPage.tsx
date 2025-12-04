@@ -19,6 +19,7 @@ interface ClearanceLevelPageProps {
   isAuthenticated: boolean;
   walletData: WalletResponse | null;
   userProfile: UserProfileResponse | null;
+  fallbackAvatarUrl?: string;
   onUpgrade: (planName: string) => void;
   onWalletPayment: (planName: string) => void;
   onViewInvoice?: (sub: UserSubscriptionResponse) => void;
@@ -34,6 +35,7 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
   isAuthenticated,
   walletData,
   userProfile,
+  fallbackAvatarUrl,
   onUpgrade,
   onWalletPayment,
   onViewInvoice,
@@ -92,22 +94,23 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
 
         <div className="hall-rank-grid">
           {premiumPlans.map((plan) => (
-            <RankCard
-              key={plan.id}
-              plan={plan}
-              isActive={hasActive}
-              currentSub={currentSub}
-              onUpgrade={onUpgrade}
-              onWalletPayment={onWalletPayment}
-              processing={processing}
-              isAuthenticated={isAuthenticated}
-              walletData={walletData}
-              userProfile={userProfile}
-              frameImage={getTierFrame(plan.planType)}
-              onViewInvoice={onViewInvoice ? () => currentSub && onViewInvoice(currentSub) : undefined}
-              onCancelAutoRenew={onCancelAutoRenew}
-              onCancelSubscription={onCancelSubscription}
-            />
+          <RankCard
+            key={plan.id}
+            plan={plan}
+            isActive={hasActive}
+            currentSub={currentSub}
+            onUpgrade={onUpgrade}
+            onWalletPayment={onWalletPayment}
+            processing={processing}
+            isAuthenticated={isAuthenticated}
+            walletData={walletData}
+            userProfile={userProfile}
+            frameImage={getTierFrame(plan.planType)}
+            fallbackAvatarUrl={fallbackAvatarUrl}
+            onViewInvoice={onViewInvoice ? () => currentSub && onViewInvoice(currentSub) : undefined}
+            onCancelAutoRenew={onCancelAutoRenew}
+            onCancelSubscription={onCancelSubscription}
+          />
           ))}
         </div>
       </div>

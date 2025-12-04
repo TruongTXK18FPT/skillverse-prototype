@@ -52,7 +52,7 @@
   box-sizing: border-box;
   background: var(--background-secondary);
   color: var(--text-primary);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
 }
 
 .pmjt-form-group input::placeholder,

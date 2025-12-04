@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import userService from '../../services/userService';
 import { UserProfileResponse } from '../../data/userDTOs';
+import StudentReviews from '../../components/student/StudentReviews';
 import '../../styles/ProfilePage.css';
 import '../../styles/ProfileSecuritySection.css';
 
@@ -369,6 +370,9 @@ const ProfilePage = () => {
               </div>
             </div>
           </div>
+
+          {/* Student Reviews Section */}
+          <StudentReviews />
 
           {/* Security Section - ALWAYS SHOW */}
           <div className="profile-section" style={{ border: '2px solid red', padding: '20px' }}>

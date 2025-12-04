@@ -7,7 +7,8 @@ import {
   DollarSign,
   ChevronRight,
   Globe,
-  Clock
+  Clock,
+  Eye
 } from 'lucide-react';
 import './uplink-styles.css';
 
@@ -26,9 +27,11 @@ interface MasterProfileCardProps {
   avatar: string;
   badges: string[];
   isFavorite: boolean;
+  preChatEnabled?: boolean;
   onEstablishLink: () => void;
   onMessage?: () => void;
   onToggleFavorite?: () => void;
+  onViewProfile?: () => void;
 }
 
 const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
@@ -45,16 +48,17 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
   avatar,
   badges,
   isFavorite,
+  preChatEnabled = true,
   onEstablishLink,
   onMessage,
-  onToggleFavorite
+  onToggleFavorite,
+  onViewProfile
 }) => {
   // Convert rating (0-5) to signal bars (0-5)
   const signalStrength = Math.round(rating);
 
-  // Determine online status (mock logic - you can replace with real availability check)
-  const isOnline = availability.toLowerCase().includes('flexible') ||
-                   availability.toLowerCase().includes('weekdays');
+  // Determine online status based on preChatEnabled
+  const isOnline = preChatEnabled;
 
   return (
     <div className="uplink-card">
@@ -63,7 +67,7 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
       <div className="uplink-tech-bracket bottom-left"></div>
 
       {/* Avatar Section with Tech Ring */}
-      <div className="uplink-avatar-section">
+      <div className="uplink-avatar-section" onClick={onViewProfile} style={{ cursor: 'pointer' }}>
         <div className="uplink-avatar-wrapper">
           {/* Rotating Dashed Ring */}
           <div className="uplink-avatar-ring"></div>
@@ -91,7 +95,7 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
 
       {/* Master Info */}
       <div className="uplink-card-info">
-        <h3 className="uplink-master-name">{name}</h3>
+        <h3 className="uplink-master-name" onClick={onViewProfile} style={{ cursor: 'pointer' }}>{name}</h3>
         <p className="uplink-master-title">{title}</p>
 
         {/* Signal Strength (Rating) */}
@@ -151,7 +155,7 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
           </div>
           <div className="uplink-metric">
             <DollarSign className="uplink-metric-icon" size={16} />
-            <span className="uplink-metric-value price">{(hourlyRate * 23000).toLocaleString('vi-VN')} VND/giờ</span>
+            <span className="uplink-metric-value price">{hourlyRate.toLocaleString('vi-VN')} VND/giờ</span>
           </div>
           <div className="uplink-metric">
             <Globe className="uplink-metric-icon" size={16} />
@@ -168,10 +172,25 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
 
       {/* Action Buttons */}
       <div className="uplink-actions">
-        <button className="uplink-establish-btn" onClick={onEstablishLink}>
-          Đặt lịch
+        <button 
+          className="uplink-establish-btn" 
+          onClick={onEstablishLink}
+          disabled={!preChatEnabled}
+          style={{ opacity: preChatEnabled ? 1 : 0.5, cursor: preChatEnabled ? 'pointer' : 'not-allowed' }}
+        >
+          {preChatEnabled ? 'Đặt lịch' : 'Tạm dừng'}
           <ChevronRight size={18} />
         </button>
+        
+        <button
+          className="uplink-message-btn"
+          onClick={onViewProfile}
+          aria-label="View Profile"
+          title="Xem chi tiết hồ sơ"
+        >
+          <Eye size={18} />
+        </button>
+
         <button
           className="uplink-message-btn"
           onClick={onMessage}

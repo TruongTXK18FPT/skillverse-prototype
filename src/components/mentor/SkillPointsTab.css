@@ -297,6 +297,13 @@
   background: rgba(0, 0, 0, 0.3);
 }
 
+.mentor-skillpoints-badge-card.earned {
+  border-color: rgba(34,197,94,.45);
+  box-shadow: 0 0 0 2px rgba(34,197,94,.35), 0 10px 24px rgba(34,197,94,.25);
+  background: linear-gradient(180deg, rgba(10, 15, 30, 0.6) 0%, rgba(20, 30, 25, 0.7) 100%);
+  filter: brightness(1.1) saturate(1.08);
+}
+
 .mentor-skillpoints-badge-icon {
   font-size: 2rem;
   min-width: 50px;
@@ -610,4 +617,3 @@
     width: 100%;
   }
 }
-  position: absolute;

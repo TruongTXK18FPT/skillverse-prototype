@@ -27,9 +27,8 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { listCoursesByAuthor, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse, submitCourseForApproval } from '../../services/courseService';
 import { CourseStatus, CourseLevel, CourseUpdateDTO, CourseCreateDTO } from '../../data/courseDTOs';
-import BookingManagerTab from '../../components/mentor/BookingManagerTab';
-import MyScheduleTab from '../../components/mentor/MyScheduleTab';
-import EarningsTab from '../../components/mentor/EarningsTab';
+import MentorBookingManager from '../../components/portfolio-hud/MentorBookingManager';
+import MentorScheduleManager from '../../components/portfolio-hud/MentorScheduleManager';
 import SkillPointsTab from '../../components/mentor/SkillPointsTab';
 import ReviewsTab from '../../components/mentor/ReviewsTab';
 import MentoringHistoryTab from '../../components/mentor/MentoringHistoryTab';
@@ -48,6 +47,7 @@ import { uploadMedia, getSignedMediaUrl, listMediaByLesson } from '../../service
 import HoloProgressBar from '../../components/dashboard-hud/HoloProgressBar';
 import AttachmentManager from '../../components/course/AttachmentManager';
 import { uploadVideo } from '../../services/fileUploadService';
+import StudentManagementTab from '../../components/course/StudentManagementTab';
 
 // Types for mentor dashboard data
 export interface Booking {
@@ -307,6 +307,10 @@ const MentorPage: React.FC = () => {
   const [previewLesson, setPreviewLesson] = useState<Lesson | null>(null);
   const [previewLoading, setPreviewLoading] = useState<boolean>(false);
 
+  // Student Management State
+  const [allCourseQuizzes, setAllCourseQuizzes] = useState<QuizSummaryDTO[]>([]);
+  const [loadingAllQuizzes, setLoadingAllQuizzes] = useState(false);
+
   // ✅ NEW: Video upload progress tracking
   const [videoUploadProgress, setVideoUploadProgress] = useState<number>(0);
   const [isUploadingVideo, setIsUploadingVideo] = useState(false);
@@ -334,33 +338,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
   } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Mock data for demonstrations
-  const [bookings] = useState<Booking[]>([
-    {
-      id: '1',
-      studentName: 'Nguyễn Văn An',
-      bookingTime: '2025-07-03T14:00:00',
-      topic: 'Thực Hành Tốt Nhất React',
-      status: 'Pending',
-      price: 500000,
-    },
-    {
-      id: '2',
-      studentName: 'Trần Thị Bình',
-      bookingTime: '2025-07-04T10:00:00',
-      topic: 'Hướng Dẫn Nghề Nghiệp',
-      status: 'Confirmed',
-      price: 0,
-    },
-    {
-      id: '3',
-      studentName: 'Lê Văn Cường',
-      bookingTime: '2025-07-02T16:00:00',
-      topic: 'Cơ Bản TypeScript',
-      status: 'Completed',
-      price: 300000,
-    },
-  ]);
+
 
   // Load mentor's courses from backend
   const loadCourses = async () => {
@@ -418,17 +396,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  const handleApproveBooking = (bookingId: string) => {
-    console.log('Approving booking:', bookingId);
-  };
 
-  const handleRejectBooking = (bookingId: string) => {
-    console.log('Rejecting booking:', bookingId);
-  };
-
-  const handleMarkAsDone = (bookingId: string) => {
-    console.log('Marking booking as done:', bookingId);
-  };
 
   const handleCreateCourse = async (courseData: CourseCreateData | Partial<CourseCreateData>, thumbnailFile?: File) => {
     setLoading(true);
@@ -620,6 +588,38 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
       setModules([]);
     } finally {
       setModulesLoading(false);
+    }
+  };
+
+  const loadAllCourseQuizzes = async (courseId: number) => {
+    setLoadingAllQuizzes(true);
+    try {
+      // First ensure we have modules
+      let courseModules = modules;
+      if (courseModules.length === 0) {
+        const data = await listModules(courseId);
+        courseModules = (data || []).map((m) => ({
+          id: m.id,
+          title: m.title,
+          description: m.description,
+          orderIndex: m.orderIndex ?? 0
+        }));
+      }
+
+      const allQuizzes: QuizSummaryDTO[] = [];
+      for (const module of courseModules) {
+        try {
+          const moduleQuizzes = await listQuizzesByModule(module.id);
+          allQuizzes.push(...moduleQuizzes);
+        } catch (error) {
+          console.log(`No quizzes found for module ${module.id}`);
+        }
+      }
+      setAllCourseQuizzes(allQuizzes);
+    } catch (error) {
+      console.error('Error loading all course quizzes:', error);
+    } finally {
+      setLoadingAllQuizzes(false);
     }
   };
 
@@ -1153,13 +1153,6 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
       description: 'Xem lịch trình của bạn'
     },
     { 
-      id: 'earnings', 
-      label: 'Thu Nhập', 
-      icon: DollarSign,
-      gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-      description: 'Theo dõi thu nhập'
-    },
-    { 
       id: 'skillpoints', 
       label: 'Điểm Kỹ Năng', 
       icon: Award,
@@ -1366,6 +1359,18 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
               >
                 <BookOpen className="w-4 h-4" />
                 Module
+              </button>
+              <button 
+                className={`mentor-content-tab ${activeContentTab === 'students' ? 'active' : ''}`}
+                onClick={() => {
+                  setActiveContentTab('students');
+                  if (selectedCourse) {
+                    loadAllCourseQuizzes(selectedCourse.id);
+                  }
+                }}
+              >
+                <Users className="w-4 h-4" />
+                Học Viên
               </button>
             </div>
 
@@ -1765,6 +1770,23 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                 )}
               </div>
             )}
+
+            {activeContentTab === 'students' && selectedCourse && (
+              <div className="mentor-students-section" style={{ padding: '20px' }}>
+                {loadingAllQuizzes ? (
+                  <div className="mentor-loading-state">
+                    <div className="spinner"></div>
+                    <p>Đang tải dữ liệu học viên...</p>
+                  </div>
+                ) : (
+                  <StudentManagementTab 
+                    courseId={selectedCourse.id} 
+                    quizzes={allCourseQuizzes}
+                    currentUserId={user?.id || 0}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -1776,18 +1798,9 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
       case 'courses':
         return renderCoursesTab();
       case 'bookings':
-        return (
-          <BookingManagerTab
-            bookings={bookings}
-            onApprove={handleApproveBooking}
-            onReject={handleRejectBooking}
-            onMarkAsDone={handleMarkAsDone}
-          />
-        );
+        return <MentorBookingManager />;
       case 'schedule':
-        return <MyScheduleTab />;
-      case 'earnings':
-        return <EarningsTab />;
+        return <MentorScheduleManager />;
       case 'skillpoints':
         return <SkillPointsTab />;
       case 'reviews':

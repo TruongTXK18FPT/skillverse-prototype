@@ -28,6 +28,7 @@ import { getCourse } from '../../services/courseService';
 import { enrollUser, checkEnrollmentStatus, getEnrollmentProgress } from '../../services/enrollmentService';
 import { CourseDetailDTO } from '../../data/courseDTOs';
 import { getMentorProfile, MentorProfile } from '../../services/mentorProfileService';
+import PurchaseCourseModal from '../../components/course/PurchaseCourseModal';
 import '../../styles/CourseDetailCockpit.css';
 
 // Local helpers
@@ -58,8 +59,15 @@ const CourseDetailPage = () => {
   const [enrollmentProgress, setEnrollmentProgress] = useState(0);
   const [loadingEnrollment, setLoadingEnrollment] = useState(false);
   const [mentorProfile, setMentorProfile] = useState<MentorProfile | null>(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const passedCourse = location.state?.course;
+
+  useEffect(() => {
+    if (isEnrolled) {
+      setShowPaymentModal(false);
+    }
+  }, [isEnrolled]);
 
   useEffect(() => {
     if (!id) {
@@ -104,21 +112,12 @@ const CourseDetailPage = () => {
 
     try {
       if (!course.price || course.price === 0) {
-        await enrollUser(course.id, 1, 'FREE');
+        await enrollUser(course.id, 1);
         setIsEnrolled(true);
         setEnrollmentProgress(0);
         alert('Bạn đã đăng ký thành công khóa học miễn phí!');
       } else {
-        navigate('/payment', {
-          state: {
-            type: 'course',
-            title: course.title,
-            price: course.price,
-            instructor: course.author?.fullName || `${course.author?.firstName} ${course.author?.lastName}`,
-            description: course.description,
-            image: course.thumbnailUrl || course.thumbnail?.url
-          }
-        });
+        setShowPaymentModal(true);
       }
     } catch (error) {
       console.error('Error enrolling in course:', error);
@@ -328,7 +327,7 @@ const CourseDetailPage = () => {
                     onClick={() => navigate('/course-learning', { state: { courseId: course.id } })}
                   >
                     <BookOpen className="cockpit-detail-btn-icon" />
-                    <span>TIẾP TỤC HỌC TẬP</span>
+                    <span>TIẾP TỤC HỌC</span>
                   </button>
                 ) : (
                   <button
@@ -605,6 +604,20 @@ const CourseDetailPage = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Payment Modal */}
+      {showPaymentModal && course && (
+        <PurchaseCourseModal
+          course={course}
+          onClose={() => setShowPaymentModal(false)}
+          onSuccess={() => {
+            setIsEnrolled(true);
+            setEnrollmentProgress(0);
+            setShowPaymentModal(false);
+            alert('Thanh toán thành công! Bạn đã kích hoạt khóa học.');
+          }}
+        />
       )}
     </div>
   );
