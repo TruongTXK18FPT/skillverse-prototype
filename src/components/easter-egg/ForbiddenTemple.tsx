@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './ForbiddenTemple.css';
 
 // Assets
@@ -11,6 +11,7 @@ import god2Normal from '../../assets/pray/assets/god2.jpg';
 import god2Blood from '../../assets/pray/assets/god2-blood.jpg';
 import god3Normal from '../../assets/pray/assets/god3.jpg';
 import god3Blood from '../../assets/pray/assets/god3-blood.jpg';
+import peterImg from '../../assets/pray/assets/ong-dia-peter.png'; 
 import frameImg from '../../assets/pray/assets/picture-frame.png';
 import bowlImg from '../../assets/pray/assets/incense-bowl.png';
 import stickImg from '../../assets/pray/assets/incense-stick.png';
@@ -22,12 +23,16 @@ import soundHorror from '../../assets/pray/sound/horror.mp3';
 
 const ForbiddenTemple: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [clicks, setClicks] = useState(0);
   const [phase, setPhase] = useState<0 | 1 | 2>(0);
   const [prayer, setPrayer] = useState('');
   const [escapeBtnPos, setEscapeBtnPos] = useState({ top: '20px', left: '20px' });
   const [isLightsOut, setIsLightsOut] = useState(false);
   const [isStickLit, setIsStickLit] = useState(false);
+  
+  // Intro State
+  const [introStep, setIntroStep] = useState<'none' | 'text1' | 'text2' | 'blink'>('none');
 
   // Audio Refs
   const audioSerenity = useRef<HTMLAudioElement>(new Audio(soundSerenity));
@@ -38,12 +43,30 @@ const ForbiddenTemple: React.FC = () => {
   const PHASE_1_THRESHOLD = 49;
   const PHASE_2_THRESHOLD = 53;
 
+  // Intro Sequence Logic
+  useEffect(() => {
+    if (location.state?.fromHorror) {
+      setIntroStep('text1');
+      
+      // Sequence
+      const t1 = setTimeout(() => setIntroStep('text2'), 3000);
+      const t2 = setTimeout(() => setIntroStep('blink'), 6000);
+      const t3 = setTimeout(() => setIntroStep('none'), 9000); // Blink lasts 3s
+
+      return () => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+        clearTimeout(t3);
+      };
+    }
+  }, [location.state]);
+
   // Preload Images
   useEffect(() => {
     // Lock Scroll
     document.body.style.overflow = 'hidden';
 
-    const images = [bgNormal, bgBlood, god1Normal, god1Blood, god2Normal, god2Blood, god3Normal, god3Blood, frameImg, bowlImg, stickImg];
+    const images = [bgNormal, bgBlood, god1Normal, god1Blood, god2Normal, god2Blood, god3Normal, god3Blood, frameImg, bowlImg, stickImg, peterImg];
     images.forEach(src => {
       const img = new Image();
       img.src = src;
@@ -140,11 +163,22 @@ const ForbiddenTemple: React.FC = () => {
     }
   };
 
+  if (introStep === 'text1' || introStep === 'text2') {
+    return (
+      <div className="ee-intro-screen">
+        <p className="ee-intro-text">
+          {introStep === 'text1' ? "Chóng mặt quá..." : "Mình đang ở đâu đây..."}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div 
       className={`ee-container phase-${phase} ${isLightsOut ? 'lights-out' : ''}`}
       style={{ backgroundImage: `url(${phase === 2 ? bgBlood : bgNormal})` }}
     >
+      {introStep === 'blink' && <div className="ee-blink-overlay" />}
       {phase === 2 && <div className="ee-blood-overlay" />}
       
       {/* Escape Button (Moves in Phase 2) */}
@@ -191,6 +225,13 @@ const ForbiddenTemple: React.FC = () => {
 
       {/* Layer 3: Incense Bowl */}
       <img src={bowlImg} className="ee-incense-bowl" alt="Incense Bowl" />
+
+      {/* Layer 3.5: Peter Ong Dia - Visible only in Phase 0 */}
+      <img 
+        src={peterImg} 
+        className={`ee-peter-statue ${phase === 0 ? '' : 'hidden'}`} 
+        alt="Ong Dia Peter" 
+      />
 
 
       {/* ================= UI LAYER ================= */}

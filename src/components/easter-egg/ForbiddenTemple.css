@@ -316,3 +316,77 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
   50% { transform: translateX(-60%) translateY(-40px) scale(1.5); opacity: 0.3; }
   100% { transform: translateX(-40%) translateY(-80px) scale(2); opacity: 0; }
 }
+
+/* ========================================
+   INTRO & EXTRAS
+   ======================================== */
+
+/* Intro Screen */
+.ee-intro-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+}
+
+.ee-intro-text {
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  font-size: 1.5rem;
+  animation: type-writer 2s steps(40, end);
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid transparent;
+}
+
+/* Blink Overlay */
+.ee-blink-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  z-index: 99999;
+  animation: blink-eyes 3s ease-in-out forwards;
+  pointer-events: none;
+}
+
+/* Peter Statue */
+.ee-peter-statue {
+  position: absolute;
+  z-index: 25; 
+  bottom: 48%;
+  left: 41%;
+  height: 18vw;
+  width: 18vw;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+  opacity: 1;
+  transition: opacity 1s ease;
+
+}
+
+.ee-peter-statue.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes type-writer {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes blink-eyes {
+  0% { opacity: 1; }
+  20% { opacity: 0.2; }
+  40% { opacity: 1; }
+  60% { opacity: 0; }
+  80% { opacity: 0.5; }
+  100% { opacity: 0; }
+}

@@ -15,7 +15,7 @@ const NotFoundHud: React.FC = () => {
   };
 
   const confirmDangerousPath = () => {
-    navigate('/pray');
+    navigate('/pray', { state: { fromHorror: true } });
   };
 
   const cancelDangerousPath = () => {
