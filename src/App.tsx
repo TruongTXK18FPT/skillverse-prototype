@@ -43,6 +43,7 @@ import MyWalletCosmic from './pages/my-wallet/MyWalletCosmic';
 import NotFoundPage from './pages/notfound/NotFoundPage';
 import UnauthorizedPage from './pages/UnauthorizedPage';
 import Certificate from './components/Certificate';
+import CertificateDemoPage from './pages/CertificateDemoPage';
 import TermOfService from './pages/footer/TermOfService';
 import PrivacyPolicy from './pages/footer/Privacy&Policy';
 import HelpCenter from './pages/footer/HelpCenter';
@@ -192,6 +193,9 @@ const App = () => {
 
                     {/* Easter Egg Route */}
                     <Route path="/pray" element={<ForbiddenTemple />} />
+
+                    {/* Certificate Demo Route */}
+                    <Route path="/certificate-demo" element={<CertificateDemoPage />} />
 
                     {/* Catch-all route for 404 errors - must be last */}
                     <Route path="*" element={<NotFoundPage />} />

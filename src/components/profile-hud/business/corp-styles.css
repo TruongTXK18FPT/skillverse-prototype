@@ -1,0 +1,222 @@
+/* ========================================
+   CORPORATE REGISTRY - Business Profile UI
+   ======================================== */
+
+:root {
+  --corp-bg-dark: #0f172a;
+  --corp-bg-panel: #1e293b;
+  --corp-accent-gold: #fbbf24;
+  --corp-accent-silver: #94a3b8;
+  --corp-border: #475569;
+  --corp-text-white: #f8fafc;
+  --corp-text-dim: #cbd5e1;
+  --corp-font-header: 'Space Habitat', 'Rajdhani', sans-serif;
+  --corp-font-body: 'Inter', system-ui, sans-serif;
+  --corp-font-mono: 'JetBrains Mono', monospace;
+}
+
+.corp-container {
+  background-color: var(--corp-bg-dark);
+  color: var(--corp-text-white);
+  min-height: 100vh;
+  font-family: var(--corp-font-body);
+  padding-bottom: 2rem;
+}
+
+/* ========================================
+   CORPORATE HEADER
+   ======================================== */
+.corp-header {
+  background: 
+    linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)),
+    repeating-linear-gradient(45deg, #1e293b 0, #1e293b 10px, #0f172a 10px, #0f172a 20px);
+  border-bottom: 4px solid var(--corp-accent-gold);
+  padding: 3rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.corp-logo-frame {
+  width: 150px;
+  height: 150px;
+  background: var(--corp-bg-panel);
+  border: 2px solid var(--corp-accent-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+.corp-logo-frame::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border: 1px solid var(--corp-accent-silver);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  pointer-events: none;
+}
+
+.corp-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.corp-info {
+  flex: 1;
+}
+
+.corp-name {
+  font-family: var(--corp-font-header);
+  font-size: 3rem;
+  color: var(--corp-text-white);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0px #000;
+}
+
+.corp-meta {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  font-family: var(--corp-font-mono);
+  color: var(--corp-accent-silver);
+  font-size: 0.9rem;
+}
+
+.corp-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4ade80;
+  border: 1px solid #4ade80;
+  padding: 0.2rem 0.8rem;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  background: rgba(74, 222, 128, 0.1);
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
+}
+
+/* ========================================
+   CORP DATA GRID
+   ======================================== */
+.corp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.corp-panel {
+  background: var(--corp-bg-panel);
+  border: 1px solid var(--corp-border);
+  padding: 1.5rem;
+  position: relative;
+}
+
+.corp-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(45deg, transparent 50%, var(--corp-accent-gold) 50%);
+}
+
+.corp-panel-header {
+  font-family: var(--corp-font-header);
+  color: var(--corp-accent-gold);
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--corp-border);
+  padding-bottom: 0.5rem;
+}
+
+.corp-field {
+  margin-bottom: 1.5rem;
+}
+
+.corp-label {
+  display: block;
+  font-family: var(--corp-font-mono);
+  font-size: 0.75rem;
+  color: var(--corp-accent-silver);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.corp-input {
+  width: 100%;
+  background: var(--corp-bg-dark);
+  border: 1px solid var(--corp-border);
+  color: var(--corp-text-white);
+  padding: 0.8rem;
+  font-family: var(--corp-font-body);
+  font-size: 1rem;
+  border-radius: 0; /* Sharp corners */
+}
+
+.corp-input:focus {
+  outline: none;
+  border-color: var(--corp-accent-gold);
+}
+
+.corp-btn {
+  background: var(--corp-accent-gold);
+  color: #000;
+  border: none;
+  padding: 1rem 2rem;
+  font-family: var(--corp-font-header);
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.corp-btn:hover {
+  background: #fcd34d;
+  transform: translateY(-2px);
+}
+
+.corp-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--corp-accent-gold);
+  text-decoration: none;
+  font-family: var(--corp-font-mono);
+  font-size: 0.9rem;
+  border: 1px solid var(--corp-accent-gold);
+  padding: 0.5rem 1rem;
+  transition: all 0.2s;
+}
+
+.corp-link-btn:hover {
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.corp-doc-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--corp-bg-dark);
+  border: 1px solid var(--corp-border);
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.corp-doc-icon {
+  color: var(--corp-accent-gold);
+}

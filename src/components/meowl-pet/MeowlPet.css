@@ -5,7 +5,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9999; /* Always on top */
+  z-index: 100000; /* Always on top */
   pointer-events: auto;
   user-select: none; /* Prevent text selection when dragging */
   will-change: transform; /* Optimize for transform animations */

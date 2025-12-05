@@ -132,7 +132,12 @@ const ProfilePage = () => {
     setError('');
     
     try {
-      const result = await userService.uploadUserAvatar(file);
+      if (!user?.id) {
+        setError('User ID not found');
+        setUploading(false);
+        return;
+      }
+      const result = await userService.uploadUserAvatar(file, user.id);
       
       // Reload profile to get updated avatar
       await loadProfile();

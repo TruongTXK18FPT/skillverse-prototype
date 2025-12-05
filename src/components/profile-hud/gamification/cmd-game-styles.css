@@ -1,0 +1,528 @@
+/* ========================================
+   COMMANDER GAME - Gamification UI
+   ======================================== */
+
+.skill-points-tab {
+  padding: 0 2rem 2rem 2rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+:root {
+  --cmd-game-bg-dark: #0a0f1c;
+  --cmd-game-bg-panel: rgba(16, 24, 45, 0.8);
+  --cmd-game-accent-cyan: #00f0ff;
+  --cmd-game-accent-blue: #0077ff;
+  --cmd-game-accent-gold: #ffd700;
+  --cmd-game-accent-purple: #bc13fe;
+  --cmd-game-accent-grey: #8b9bb4;
+  --cmd-game-text-white: #ffffff;
+  --cmd-game-text-dim: #8b9bb4;
+  --cmd-game-border: rgba(0, 240, 255, 0.3);
+  --cmd-game-font-header: 'Space Habitat', 'Rajdhani', sans-serif;
+  --cmd-game-font-body: 'Inter', system-ui, sans-serif;
+  --cmd-game-font-mono: 'JetBrains Mono', monospace;
+}
+
+/* ========================================
+   UNIVERSAL BADGE (HOLO-CHIP)
+   ======================================== */
+.cmd-game-badge-chip {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.2;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--cmd-game-border);
+  clip-path: polygon(
+    20px 0, 100% 0, 
+    100% calc(100% - 20px), calc(100% - 20px) 100%, 
+    0 100%, 0 20px
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.cmd-game-badge-chip:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+  background: rgba(0, 240, 255, 0.05);
+}
+
+.cmd-game-badge-chip.locked {
+  filter: grayscale(1) brightness(0.5);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cmd-game-badge-chip.locked::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.5) 10px,
+    rgba(0, 0, 0, 0.2) 10px,
+    rgba(0, 0, 0, 0.2) 20px
+  );
+  pointer-events: none;
+}
+
+/* Rarity Borders */
+.cmd-game-badge-chip.common { border-color: var(--cmd-game-accent-grey); }
+.cmd-game-badge-chip.uncommon { border-color: var(--cmd-game-accent-blue); }
+.cmd-game-badge-chip.rare { border-color: var(--cmd-game-accent-cyan); box-shadow: 0 0 10px rgba(0, 240, 255, 0.1); }
+.cmd-game-badge-chip.epic { border-color: var(--cmd-game-accent-purple); box-shadow: 0 0 15px rgba(188, 19, 254, 0.2); }
+.cmd-game-badge-chip.legendary { border-color: var(--cmd-game-accent-gold); box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+
+.cmd-game-badge-icon {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+.cmd-game-badge-name {
+  font-family: var(--cmd-game-font-header);
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--cmd-game-text-white);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: auto;
+}
+
+.cmd-game-badge-rarity {
+  font-family: var(--cmd-game-font-mono);
+  font-size: 0.6rem;
+  color: var(--cmd-game-text-dim);
+  text-transform: uppercase;
+  margin-top: 0.2rem;
+}
+
+/* ========================================
+   POWER CORE CONSOLE (SKILL POINTS)
+   ======================================== */
+.cmd-game-console {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+  background: var(--cmd-game-bg-panel);
+  border: 1px solid var(--cmd-game-border);
+  padding: 2rem;
+  clip-path: polygon(
+    20px 0, 100% 0, 
+    100% calc(100% - 20px), calc(100% - 20px) 100%, 
+    0 100%, 0 20px
+  );
+}
+
+/* Reactor (Left) */
+.cmd-game-reactor-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.cmd-game-reactor-ring {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 2px solid var(--cmd-game-accent-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+}
+
+.cmd-game-reactor-ring::before {
+  content: '';
+  position: absolute;
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  border: 1px solid var(--cmd-game-accent-blue);
+  opacity: 0.5;
+}
+
+.cmd-game-reactor-core {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.cmd-game-reactor-value {
+  font-family: var(--cmd-game-font-header);
+  font-size: 3rem;
+  color: var(--cmd-game-text-white);
+  text-shadow: 0 0 20px var(--cmd-game-accent-cyan);
+  line-height: 1;
+}
+
+.cmd-game-reactor-label {
+  font-family: var(--cmd-game-font-mono);
+  font-size: 0.8rem;
+  color: var(--cmd-game-accent-cyan);
+  letter-spacing: 2px;
+  margin-top: 0.5rem;
+}
+
+/* Rank Conduit (Right) */
+.cmd-game-conduit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cmd-game-rank-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+.cmd-game-rank-current {
+  font-family: var(--cmd-game-font-header);
+  font-size: 1.5rem;
+  color: var(--cmd-game-text-white);
+}
+
+.cmd-game-rank-next {
+  font-family: var(--cmd-game-font-mono);
+  font-size: 0.8rem;
+  color: var(--cmd-game-text-dim);
+}
+
+/* ========================================
+   LAYOUT & SECTIONS
+   ======================================== */
+.cmd-game-section {
+  margin-top: 2rem;
+}
+
+.cmd-game-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--cmd-game-border);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.cmd-game-section-title {
+  font-family: var(--cmd-game-font-header);
+  color: var(--cmd-game-accent-cyan);
+  font-size: 1.5rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.cmd-game-link-btn {
+  color: var(--cmd-game-accent-gold);
+  font-family: var(--cmd-game-font-mono);
+  font-size: 0.9rem;
+  text-decoration: none;
+  border: 1px solid var(--cmd-game-accent-gold);
+  padding: 0.3rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.cmd-game-link-btn:hover {
+  background: rgba(255, 215, 0, 0.1);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+/* ========================================
+   REWARDS PANEL
+   ======================================== */
+.cmd-game-rewards-panel {
+  background: rgba(16, 24, 45, 0.4);
+  border: 1px solid var(--cmd-game-border);
+  padding: 1.5rem;
+  margin-top: 2rem;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.cmd-game-reward-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.cmd-game-reward-row:last-child {
+  border-bottom: none;
+}
+
+.cmd-game-reward-label {
+  color: var(--cmd-game-text-dim);
+  font-family: var(--cmd-game-font-body);
+}
+
+.cmd-game-reward-value {
+  color: var(--cmd-game-text-white);
+  font-family: var(--cmd-game-font-mono);
+  font-weight: bold;
+}
+
+/* ========================================
+   BADGES PREVIEW GRID
+   ======================================== */
+.cmd-game-badges-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+/* ========================================
+   ACTIVITY LOG
+   ======================================== */
+.cmd-game-filter-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cmd-game-filter-btn {
+  background: transparent;
+  border: 1px solid var(--cmd-game-border);
+  color: var(--cmd-game-text-dim);
+  padding: 0.3rem 0.8rem;
+  font-family: var(--cmd-game-font-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.cmd-game-filter-btn.active {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: var(--cmd-game-accent-cyan);
+  color: var(--cmd-game-text-white);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+}
+
+.cmd-game-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.cmd-game-activity-item {
+  background: rgba(16, 24, 45, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  transition: all 0.2s ease;
+}
+
+.cmd-game-activity-item:hover {
+  background: rgba(16, 24, 45, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cmd-game-activity-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cmd-game-activity-icon {
+  font-size: 1.2rem;
+}
+
+.cmd-game-activity-title {
+  color: var(--cmd-game-text-white);
+  font-family: var(--cmd-game-font-header);
+  font-size: 1.1rem;
+}
+
+.cmd-game-activity-desc {
+  color: var(--cmd-game-text-dim);
+  font-size: 0.85rem;
+}
+
+.cmd-game-activity-right {
+  text-align: right;
+}
+
+.cmd-game-activity-points {
+  color: var(--cmd-game-accent-cyan);
+  font-family: var(--cmd-game-font-mono);
+  font-weight: bold;
+}
+
+.cmd-game-activity-date {
+  color: var(--cmd-game-text-dim);
+  font-size: 0.75rem;
+}
+
+.cmd-game-empty-state {
+  color: var(--cmd-game-text-dim);
+  font-style: italic;
+  padding: 1rem;
+  text-align: center;
+  border: 1px dashed var(--cmd-game-border);
+}
+
+
+
+.cmd-game-plasma-bar-bg {
+  width: 100%;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--cmd-game-border);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.cmd-game-plasma-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cmd-game-accent-blue), var(--cmd-game-accent-cyan));
+  box-shadow: 0 0 20px var(--cmd-game-accent-cyan);
+  position: relative;
+  transition: width 1s ease-out;
+}
+
+.cmd-game-plasma-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.2) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.2) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 20px 20px;
+  animation: cmd-game-plasma-flow 2s linear infinite;
+}
+
+.cmd-game-mini-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.cmd-game-stat-box {
+  background: rgba(0, 240, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cmd-game-stat-val {
+  font-family: var(--cmd-game-font-header);
+  font-size: 1.2rem;
+  color: var(--cmd-game-text-white);
+}
+
+.cmd-game-stat-lbl {
+  font-family: var(--cmd-game-font-mono);
+  font-size: 0.7rem;
+  color: var(--cmd-game-text-dim);
+  margin-top: 0.2rem;
+}
+
+/* ========================================
+   ALL BADGES PAGE (INVENTORY MATRIX)
+   ======================================== */
+.cmd-game-inventory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--cmd-game-border);
+  padding-bottom: 1rem;
+}
+
+.cmd-game-page-title {
+  font-family: var(--cmd-game-font-header);
+  font-size: 2rem;
+  color: var(--cmd-game-accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cmd-game-filter-bar {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cmd-game-filter-btn {
+  background: transparent;
+  border: 1px solid var(--cmd-game-border);
+  color: var(--cmd-game-text-dim);
+  padding: 0.5rem 1rem;
+  font-family: var(--cmd-game-font-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.cmd-game-filter-btn:hover,
+.cmd-game-filter-btn.active {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: var(--cmd-game-accent-cyan);
+  color: var(--cmd-game-text-white);
+}
+
+.cmd-game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  background-image: 
+    radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Animations */
+@keyframes cmd-game-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cmd-game-spin-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes cmd-game-plasma-flow {
+  0% { background-position: 0 0; }
+  100% { background-position: 20px 0; }
+}

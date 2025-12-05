@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { User, Save, Upload, Github, Linkedin, Globe, Award, Plus, X, Power } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import { getMyMentorProfile, updateMyMentorProfile, uploadMyMentorAvatar, setPreChatEnabled, MentorProfile, MentorProfileUpdateDTO } from '../../services/mentorProfileService';
-import '../../styles/MentorProfilePage.css';
+import CommanderHeader from '../../components/profile-hud/mentor/CommanderHeader';
+import IdentityModule from '../../components/profile-hud/mentor/IdentityModule';
+import SpecializationMatrix from '../../components/profile-hud/mentor/SpecializationMatrix';
+import ExperienceTimeline from '../../components/profile-hud/mentor/ExperienceTimeline';
+import '../../components/profile-hud/mentor/CommanderStyles.css';
 
 const MentorProfilePage: React.FC = () => {
   const { user } = useAuth();
   const { showSuccess, showError } = useToast();
-  
-  const [_profile, setProfile] = useState<MentorProfile | null>(null);
+
+  const [profile, setProfile] = useState<MentorProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [preChatEnabled, setPreChatEnabledState] = useState(true);
-  
+
   const [formData, setFormData] = useState<MentorProfileUpdateDTO>({
     firstName: '',
     lastName: '',
@@ -30,81 +33,70 @@ const MentorProfilePage: React.FC = () => {
     skills: [],
     achievements: []
   });
-  
-  const [newSkill, setNewSkill] = useState('');
-  const [newAchievement, setNewAchievement] = useState('');
-  const [fileName, setFileName] = useState<string>('');
 
-  const loadProfile = React.useCallback(async () => {
-    if (!user?.id) return;
-    
-    setLoading(true);
-    try {
-      // Use getMyMentorProfile() for current logged-in mentor
-      const profileData = await getMyMentorProfile();
-      setProfile(profileData);
-      setPreChatEnabledState(profileData.preChatEnabled ?? true);
-      setFormData({
-        firstName: profileData.firstName || '',
-        lastName: profileData.lastName || '',
-        bio: profileData.bio || '',
-        specialization: profileData.specialization || '',
-        experience: profileData.experience || 0,
-        hourlyRate: profileData.hourlyRate || undefined,
-        socialLinks: {
-          linkedin: profileData.socialLinks?.linkedin || '',
-          github: profileData.socialLinks?.github || '',
-          website: profileData.socialLinks?.website || ''
-        },
-        skills: profileData.skills || [],
-        achievements: profileData.achievements || []
-      });
-      
-      // Set avatar preview if exists
-      if (profileData.avatar) {
-        setFormData(prev => ({ ...prev, avatar: profileData.avatar }));
-      }
-    } catch (error) {
-      console.error('Error loading profile:', error);
-      showError('Error', 'Failed to load profile');
-    } finally {
-      setLoading(false);
-    }
-  }, [user?.id, showError]);
+  // Removed unused state: newSkill, newAchievement, fileName
 
   useEffect(() => {
-    if (user?.id) {
-      loadProfile();
-    }
-  }, [user?.id, loadProfile]);
+    const loadProfile = async () => {
+      if (!user?.id) return;
+
+      setLoading(true);
+      try {
+        const profileData = await getMyMentorProfile();
+        setProfile(profileData);
+        setPreChatEnabledState(profileData.preChatEnabled ?? true);
+        setFormData({
+          firstName: profileData.firstName || '',
+          lastName: profileData.lastName || '',
+          bio: profileData.bio || '',
+          specialization: profileData.specialization || '',
+          experience: profileData.experience || 0,
+          hourlyRate: profileData.hourlyRate || undefined,
+          socialLinks: {
+            linkedin: profileData.socialLinks?.linkedin || '',
+            github: profileData.socialLinks?.github || '',
+            website: profileData.socialLinks?.website || ''
+          },
+          skills: profileData.skills || [],
+          achievements: profileData.achievements || []
+        });
+      } catch (error) {
+        console.error('Failed to load profile:', error);
+        showError('Error', 'Failed to load profile data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, [user?.id, showError]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    if (name.startsWith('socialLinks.')) {
-      const socialKey = name.split('.')[1] as keyof typeof formData.socialLinks;
+
+    if (name.includes('.')) {
+      const [parent, child] = name.split('.');
       setFormData(prev => ({
         ...prev,
-        socialLinks: {
-          ...prev.socialLinks,
-          [socialKey]: value
+        [parent]: {
+          ...prev[parent as keyof MentorProfileUpdateDTO] as any,
+          [child]: value
         }
       }));
     } else {
-      const parsedValue = name === 'experience' ? Number(value) : name === 'hourlyRate' ? Number(value) : value;
       setFormData(prev => ({
         ...prev,
-        [name]: parsedValue as any
+        [name]: value
       }));
     }
   };
 
-  const handleAddSkill = () => {
-    if (newSkill.trim() && !formData.skills?.includes(newSkill.trim())) {
+  const handleAddSkill = (skill: string) => {
+    if (!formData.skills?.includes(skill)) {
       setFormData(prev => ({
         ...prev,
-        skills: [...(prev.skills || []), newSkill.trim()]
+        skills: [...(prev.skills || []), skill]
       }));
-      setNewSkill('');
     }
   };
 
@@ -115,50 +107,32 @@ const MentorProfilePage: React.FC = () => {
     }));
   };
 
-  const handleAddAchievement = () => {
-    if (newAchievement.trim() && !formData.achievements?.includes(newAchievement.trim())) {
-      setFormData(prev => ({
-        ...prev,
-        achievements: [...(prev.achievements || []), newAchievement.trim()]
-      }));
-      setNewAchievement('');
-    }
+  const handleAddAchievement = (achievement: string) => {
+    setFormData(prev => ({
+      ...prev,
+      achievements: [...(prev.achievements || []), achievement]
+    }));
   };
 
   const handleRemoveAchievement = (achievementToRemove: string) => {
     setFormData(prev => ({
       ...prev,
-      achievements: prev.achievements?.filter(achievement => achievement !== achievementToRemove) || []
+      achievements: prev.achievements?.filter(a => a !== achievementToRemove) || []
     }));
   };
 
-  const handleTogglePreChat = async () => {
-    try {
-      const newState = !preChatEnabled;
-      await setPreChatEnabled(newState);
-      setPreChatEnabledState(newState);
-      showSuccess('Success', `Booking system ${newState ? 'enabled' : 'disabled'}`);
-    } catch (error) {
-      console.error('Error toggling pre-chat:', error);
-      showError('Error', 'Failed to update booking status');
-    }
-  };
-
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !user?.id) return;
+  const handleAvatarUpload = async (file: File) => {
+    if (!file) return;
 
     setUploading(true);
-    setFileName(file.name);
     try {
       const result = await uploadMyMentorAvatar(file);
-      setFormData(prev => ({
-        ...prev,
-        avatar: result.avatarUrl
-      }));
-      showSuccess('Success', 'Avatar uploaded successfully');
+      if (profile) {
+        setProfile({ ...profile, avatar: result.avatarUrl });
+      }
+      showSuccess('Success', 'Commander avatar updated successfully');
     } catch (error) {
-      console.error('Error uploading avatar:', error);
+      console.error('Failed to upload avatar:', error);
       showError('Error', 'Failed to upload avatar');
     } finally {
       setUploading(false);
@@ -167,342 +141,96 @@ const MentorProfilePage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user?.id) return;
-
     setSaving(true);
     try {
       const updatedProfile = await updateMyMentorProfile(formData);
       setProfile(updatedProfile);
-      showSuccess('Success', 'Profile updated successfully');
+      showSuccess('Success', 'Commander dossier updated successfully');
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error('Failed to update profile:', error);
       showError('Error', 'Failed to update profile');
     } finally {
       setSaving(false);
     }
   };
 
+  const handlePreChatToggle = async () => {
+    try {
+      const newState = !preChatEnabled;
+      setPreChatEnabledState(newState);
+      await setPreChatEnabled(newState);
+      showSuccess('Success', `Comms channel ${newState ? 'opened' : 'closed'}`);
+    } catch (error) {
+      setPreChatEnabledState(!preChatEnabled); // Revert on error
+      showError('Error', 'Failed to update comms status');
+    }
+  };
+
   if (loading) {
     return (
-      <div className="mentor-profile-container">
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p>Initializing Neural Link...</p>
+      <div className="cmdr-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div className="cmdr-panel">
+          <div className="cmdr-panel-title">SYSTEM LOADING...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="mentor-profile-container">
-      {/* Background Effects */}
-      <div className="profile-bg-effects">
-        <div className="profile-grid-overlay"></div>
-        <div className="profile-glow-orb orb-1"></div>
-        <div className="profile-glow-orb orb-2"></div>
+    <div className="cmdr-container">
+      <div className="cmdr-scanline"></div>
+
+      <div className="cmdr-layout">
+        {/* Left Column: Identity & Status */}
+        <div className="cmdr-col-left">
+          <CommanderHeader
+            profile={profile}
+            onAvatarUpload={handleAvatarUpload}
+            preChatEnabled={preChatEnabled}
+            onTogglePreChat={handlePreChatToggle}
+          />
+
+          <IdentityModule
+            formData={formData}
+            onChange={handleInputChange}
+          />
+
+
+        </div>
+
+        {/* Right Column: Specialization & Experience */}
+        <div className="cmdr-col-right">
+          <SpecializationMatrix
+            formData={formData}
+            onChange={handleInputChange}
+            onAddSkill={handleAddSkill}
+            onRemoveSkill={handleRemoveSkill}
+          />
+
+          <ExperienceTimeline
+            formData={formData}
+            onChange={handleInputChange}
+            onAddAchievement={handleAddAchievement}
+            onRemoveAchievement={handleRemoveAchievement}
+          />
+        </div>
       </div>
+      <div className="cmdr-panel">
+        <div className="cmdr-panel-title">
+          DATA TRANSMISSION
+          <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>TX-MOD-09</span>
+        </div>
 
-      <div className="mentor-profile-header">
-        <div className="mentor-header-content">
-          <h1 className="mentor-profile-title">
-            <User className="profile-icon" />
-            <span className="title-text">MENTOR <span className="highlight">PROFILE</span></span>
-          </h1>
-          <p className="mentor-profile-subtitle">Manage your digital identity and expertise matrix</p>
-        </div>
-        <div className="mentor-header-actions">
-          <button 
-            type="button" 
-            className={`mentor-status-toggle ${preChatEnabled ? 'active' : 'inactive'}`}
-            onClick={handleTogglePreChat}
-          >
-            <Power size={18} />
-            <span>{preChatEnabled ? 'BOOKING ACTIVE' : 'BOOKING PAUSED'}</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          className="cmdr-btn cmdr-btn-primary"
+          style={{ width: '100%', justifyContent: 'center' }}
+          onClick={handleSubmit}
+          disabled={saving}
+        >
+          {saving ? 'TRANSMITTING...' : 'UPDATE DOSSIER'}
+        </button>
       </div>
-
-      <form onSubmit={handleSubmit} className="mentor-profile-form">
-        <div className="mentor-profile-sections">
-          {/* Basic Information */}
-          <div className="mentor-profile-section">
-            <h2 className="mentor-section-title">
-              <div className="mentor-section-icon-wrapper"><User size={20} /></div>
-              Identity Module
-            </h2>
-            <div className="form-grid">
-              <div className="form-group">
-                <label htmlFor="firstName" className="form-label">First Name</label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="lastName" className="form-label">Last Name</label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                />
-              </div>
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="bio" className="form-label">Bio Data</label>
-              <textarea
-                id="bio"
-                name="bio"
-                value={formData.bio}
-                onChange={handleInputChange}
-                className="form-textarea"
-                rows={4}
-                placeholder="Initialize bio sequence..."
-              />
-            </div>
-
-            <div className="form-grid">
-              <div className="form-group">
-                <label htmlFor="specialization" className="form-label">Core Specialization</label>
-                <input
-                  type="text"
-                  id="specialization"
-                  name="specialization"
-                  value={formData.specialization}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  placeholder="e.g., Cybernetics, Quantum Computing"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="experience" className="form-label">Experience Cycles (Years)</label>
-                <input
-                  type="number"
-                  id="experience"
-                  name="experience"
-                  value={formData.experience}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  min="0"
-                  max="50"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="hourlyRate" className="form-label">Giá theo giờ (VND)</label>
-                <input
-                  type="number"
-                  id="hourlyRate"
-                  name="hourlyRate"
-                  value={formData.hourlyRate ?? ''}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  min="0"
-                  step="0.01"
-                  placeholder="Enter your rate per hour"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Avatar Upload */}
-          <div className="mentor-profile-section">
-            <h2 className="mentor-section-title">
-              <div className="mentor-section-icon-wrapper"><Upload size={20} /></div>
-              Holographic Avatar
-            </h2>
-            <div className="mentor-avatar-upload">
-              <div className="mentor-avatar-preview-wrapper">
-                <div className="mentor-avatar-preview">
-                  {formData.avatar ? (
-                    <img src={formData.avatar} alt="Profile" className="mentor-avatar-image" />
-                  ) : (
-                    <div className="avatar-placeholder">
-                      <User size={48} />
-                    </div>
-                  )}
-                </div>
-                <div className="mentor-avatar-ring"></div>
-              </div>
-              <div className="mentor-avatar-controls">
-                <input
-                  type="file"
-                  id="avatar"
-                  accept="image/*"
-                  onChange={handleAvatarUpload}
-                  className="mentor-avatar-input"
-                  disabled={uploading}
-                />
-                <label htmlFor="avatar" className="mentor-avatar-upload-btn-special">
-                  <Upload size={16} />
-                  {uploading ? 'Uploading...' : 'UPLOAD AVATAR'}
-                </label>
-                {fileName && <p className="mentor-file-name-display">Selected: {fileName}</p>}
-                <p className="mentor-upload-hint">Supported formats: PNG, JPG (Max 5MB)</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Social Links */}
-          <div className="mentor-profile-section">
-            <h2 className="mentor-section-title">
-              <div className="mentor-section-icon-wrapper"><Globe size={20} /></div>
-              Network Uplinks
-            </h2>
-            <div className="social-links">
-              <div className="form-group">
-                <label htmlFor="socialLinks.linkedin" className="form-label">
-                  <Linkedin size={16} />
-                  LinkedIn Frequency
-                </label>
-                <input
-                  type="url"
-                  id="socialLinks.linkedin"
-                  name="socialLinks.linkedin"
-                  value={formData.socialLinks?.linkedin || ''}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  placeholder="https://linkedin.com/in/yourprofile"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="socialLinks.github" className="form-label">
-                  <Github size={16} />
-                  GitHub Repository
-                </label>
-                <input
-                  type="url"
-                  id="socialLinks.github"
-                  name="socialLinks.github"
-                  value={formData.socialLinks?.github || ''}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  placeholder="https://github.com/yourusername"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="socialLinks.website" className="form-label">
-                  <Globe size={16} />
-                  Personal Domain
-                </label>
-                <input
-                  type="url"
-                  id="socialLinks.website"
-                  name="socialLinks.website"
-                  value={formData.socialLinks?.website || ''}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  placeholder="https://yourwebsite.com"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Skills */}
-          <div className="mentor-profile-section">
-            <h2 className="mentor-section-title">
-              <div className="mentor-section-icon-wrapper"><Award size={20} /></div>
-              Skill Matrix
-            </h2>
-            <div className="skills-container">
-              <div className="skills-input">
-                <input
-                  type="text"
-                  value={newSkill}
-                  onChange={(e) => setNewSkill(e.target.value)}
-                  className="form-input"
-                  placeholder="Initialize new skill protocol..."
-                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddSkill())}
-                />
-                <button
-                  type="button"
-                  onClick={handleAddSkill}
-                  className="add-btn"
-                  disabled={!newSkill.trim()}
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-              <div className="skills-list">
-                {formData.skills?.map((skill, index) => (
-                  <div key={index} className="skill-tag">
-                    <span>{skill}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveSkill(skill)}
-                      className="remove-btn"
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Achievements */}
-          <div className="mentor-profile-section">
-            <h2 className="mentor-section-title">
-              <div className="mentor-section-icon-wrapper"><Award size={20} /></div>
-              Achievement Logs
-            </h2>
-            <div className="achievements-container">
-              <div className="achievements-input">
-                <input
-                  type="text"
-                  value={newAchievement}
-                  onChange={(e) => setNewAchievement(e.target.value)}
-                  className="form-input"
-                  placeholder="Log new achievement..."
-                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddAchievement())}
-                />
-                <button
-                  type="button"
-                  onClick={handleAddAchievement}
-                  className="add-btn"
-                  disabled={!newAchievement.trim()}
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-              <div className="achievements-list">
-                {formData.achievements?.map((achievement, index) => (
-                  <div key={index} className="achievement-item">
-                    <Award size={16} />
-                    <span>{achievement}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveAchievement(achievement)}
-                      className="remove-btn"
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="form-actions">
-          <button
-            type="submit"
-            className="save-btn"
-            disabled={saving}
-          >
-            <Save size={16} />
-            {saving ? 'Saving Data...' : 'Save Profile Data'}
-          </button>
-        </div>
-      </form>
     </div>
   );
 };

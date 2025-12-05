@@ -488,13 +488,22 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
         const currentCenterX = prev.x + PET_CONFIG.width / 2;
         const currentCenterY = prev.y + PET_CONFIG.height / 2;
 
-        const dx = currentTarget.x - currentCenterX;
-        const dy = currentTarget.y - currentCenterY;
+        // Override target if returning from toilet
+        let activeTarget = currentTarget;
+        if (isReturningFromToiletRef.current) {
+          activeTarget = { 
+            x: window.innerWidth / 2, 
+            y: window.innerHeight / 2 
+          };
+        }
+
+        const dx = activeTarget.x - currentCenterX;
+        const dy = activeTarget.y - currentCenterY;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance > STOP_DISTANCE) {
           // Lerp movement: Move a fraction of the distance for that "chase" effect
-          const isSlow = isReturningFromToiletRef.current || isRecoveringFromPanicRef.current;
+          const isSlow = isRecoveringFromPanicRef.current; // Removed isReturningFromToiletRef
           const speed = isSlow ? MOVEMENT_SPEED * 0.2 : MOVEMENT_SPEED;
           const nextX = prev.x + dx * speed;
           const nextY = prev.y + dy * speed;
@@ -515,10 +524,14 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
           if (petState !== PetState.IDLE) setPetState(PetState.IDLE);
           setBobOffset(0); // Reset bob
           
+          // Clear toilet return flag immediately upon arrival
+          if (isReturningFromToiletRef.current) {
+            isReturningFromToiletRef.current = false;
+          }
+
           // Only clear slow flags if we have actually moved the mouse (meaning we know where to go and we arrived there)
           // OR if we are following a fixed target position
           if (hasMouseMoved.current || targetPosition) {
-            isReturningFromToiletRef.current = false;
             isRecoveringFromPanicRef.current = false;
           }
           return prev;

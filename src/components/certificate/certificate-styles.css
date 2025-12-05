@@ -1,0 +1,277 @@
+/* ========================================
+   CERTIFICATE STYLES - CLEAN COURSERA STYLE
+   With "Floating Big Logo" Fix
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Open+Sans:wght@400;600;700&family=Great+Vibes&display=swap');
+
+:root {
+  --c-paper: #ffffff;
+  --c-ribbon: #F5F7F8; /* Màu xám đặc trưng của Coursera */
+  --c-border: #E1E1E1;
+  --c-text-main: #383838;
+  --c-text-muted: #787878;
+  --c-blue: #0056D2;
+  
+  --font-serif: 'Libre Baskerville', serif;
+  --font-sans: 'Open Sans', sans-serif;
+  --font-sig: 'Great Vibes', cursive;
+}
+
+.cert-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  background: #2d2d2d;
+  min-height: 100vh;
+}
+
+.cert-paper {
+  width: 1100px;
+  height: 800px;
+  background: var(--c-paper);
+  display: flex;
+  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+  border: 10px solid #fff;
+  outline: 1px solid var(--c-border);
+}
+
+/* ================= LEFT COLUMN (75%) ================= */
+.cert-left-content {
+  flex: 7.5;
+  padding: 60px 80px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- LOGO FIX: TO MÀ KHÔNG ĐẨY --- */
+.cert-header-container {
+  /* Tạo một khoảng trống ảo nhỏ để giữ vị trí đầu trang */
+  position: relative;
+  height: 80px; 
+  margin-bottom: 20px;
+  /* border: 1px dashed red; Remove this: chỉ để debug */
+}
+
+.cert-big-logo {
+  position: absolute; /* Nhấc logo ra khỏi dòng chảy layout */
+  
+  /* Điều chỉnh vị trí tùy thích */
+  top: -30px;  /* Kéo lên trên một chút để sát lề */
+  left: -10px; /* Kéo sang trái một chút */
+  
+  /* SIZE TO KHỔNG LỒ Ở ĐÂY */
+  height: 180px; /* Tăng lên 200px, 250px thoải mái */
+  width: auto;
+  object-fit: contain;
+  
+  /* Đảm bảo nó nằm dưới chữ nếu lỡ to quá đè vào chữ */
+  z-index: 0; 
+  /* Tùy chọn: giảm opacity nếu muốn nó chìm chìm */
+  /* opacity: 0.9; */ 
+}
+
+/* Phần nội dung chính */
+.cert-body {
+  flex: 1;
+  position: relative;
+  z-index: 2; /* Nội dung luôn nổi trên logo */
+}
+
+.cert-date {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--c-text-muted);
+  display: block;
+  margin-bottom: 15px;
+}
+
+.cert-recipient {
+  font-family: var(--font-serif);
+  font-size: 48px;
+  font-weight: 700;
+  color: #000;
+  margin: 10px 0 20px 0;
+  line-height: 1.1;
+}
+
+.cert-statement {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  color: var(--c-text-main);
+  margin-bottom: 20px;
+}
+
+.cert-course-name {
+  font-family: var(--font-sans);
+  font-size: 28px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+.cert-description {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--c-text-main);
+  max-width: 90%;
+  line-height: 1.5;
+}
+
+/* FOOTER */
+.cert-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.cert-signature-script {
+  font-family: var(--font-sig);
+  font-size: 36px;
+  color: #000;
+  margin-bottom: -5px;
+}
+
+.cert-signature-line {
+  width: 250px;
+  height: 1px;
+  background: #ccc;
+  margin-bottom: 8px;
+}
+
+.cert-instructor-info {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--c-text-muted);
+  line-height: 1.4;
+}
+
+.cert-verify-block {
+  text-align: right;
+  max-width: 250px;
+}
+
+.cert-verify-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--c-text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.cert-verify-sub {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  color: #aaa;
+  display: block;
+  line-height: 1.3;
+}
+
+/* ================= RIGHT COLUMN (25%) ================= */
+.cert-right-ribbon {
+  flex: 2.5;
+  background-color: var(--c-ribbon);
+  border-left: 1px solid var(--c-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 100px;
+  position: relative;
+}
+
+.cert-ribbon-title {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--c-blue);
+  text-align: center;
+  letter-spacing: 1px;
+  margin-bottom: 40px;
+  line-height: 1.4;
+}
+
+/* THE SEAL */
+.cert-seal-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cert-seal-border {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px double #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  z-index: 2;
+}
+
+.cert-seal-inner {
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  border: 1px dashed #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cert-seal-img {
+  width: 50%;
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
+.cert-seal-text-path {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+}
+
+.cert-seal-svg-text {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 10px;
+  fill: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+@media print {
+  @page {
+    size: landscape;
+    margin: 0;
+  }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .cert-wrapper {
+    padding: 0;
+    background: white;
+    display: block;
+  }
+  .cert-paper {
+    box-shadow: none;
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100vh;
+  }
+}

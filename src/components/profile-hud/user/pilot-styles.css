@@ -1,0 +1,329 @@
+/* ========================================
+   PILOT DOSSIER - User Profile UI
+   ======================================== */
+
+:root {
+  --pilot-bg-dark: #0f172a;
+  --pilot-bg-panel: rgba(15, 23, 42, 0.8);
+  --pilot-accent-cyan: #0ea5e9;
+  --pilot-accent-blue: #3b82f6;
+  --pilot-text-white: #f8fafc;
+  --pilot-text-dim: #94a3b8;
+  --pilot-border: rgba(14, 165, 233, 0.3);
+  --pilot-font-header: 'Space Habitat', 'Rajdhani', sans-serif;
+  --pilot-font-body: 'Inter', system-ui, sans-serif;
+  --pilot-font-mono: 'JetBrains Mono', monospace;
+}
+
+.pilot-container {
+  background-color: var(--pilot-bg-dark);
+  color: var(--pilot-text-white);
+  min-height: 100vh;
+  font-family: var(--pilot-font-body);
+  padding-bottom: 2rem;
+}
+
+/* ========================================
+   PILOT HEADER
+   ======================================== */
+.pilot-header {
+  background: linear-gradient(180deg, rgba(14, 165, 233, 0.1) 0%, rgba(15, 23, 42, 0) 100%);
+  border-bottom: 1px solid var(--pilot-border);
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- PILOT-STYLES.CSS --- */
+
+.pilot-avatar-container {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  /* Dùng Flexbox để ép mọi thứ vào giữa tâm */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0; /* Không cho bị bóp méo */
+}
+
+.pilot-avatar {
+  /* Avatar nhỏ hơn container để vừa với khung (tỉ lệ ~66-70%) */
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
+  z-index: 1;
+}
+
+.pilot-avatar-frame-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.pilot-avatar-upload-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  border: 2px solid rgba(15, 23, 42, 0.9);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  z-index: 20;
+}
+
+.pilot-avatar-upload-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.pilot-info {
+  flex: 1;
+}
+
+.pilot-name {
+  font-family: var(--pilot-font-header);
+  font-size: 2.5rem;
+  color: var(--pilot-text-white);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pilot-rank {
+  font-family: var(--pilot-font-mono);
+  color: var(--pilot-accent-cyan);
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pilot-stats-bar {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.pilot-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.pilot-stat-label {
+  font-size: 0.7rem;
+  color: var(--pilot-text-dim);
+  text-transform: uppercase;
+}
+
+.pilot-stat-value {
+  font-family: var(--pilot-font-mono);
+  font-size: 1.2rem;
+  color: var(--pilot-text-white);
+}
+
+/* ========================================
+   PILOT IDENTITY FORM
+   ======================================== */
+.pilot-section {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+.pilot-section-title {
+  font-family: var(--pilot-font-header);
+  font-size: 1.5rem;
+  color: var(--pilot-accent-cyan);
+  margin-bottom: 1.5rem;
+  border-left: 4px solid var(--pilot-accent-cyan);
+  padding-left: 1rem;
+  text-transform: uppercase;
+}
+
+.pilot-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.pilot-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pilot-label {
+  font-size: 0.8rem;
+  color: var(--pilot-text-dim);
+  text-transform: uppercase;
+}
+
+.pilot-input {
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  border-bottom: 1px solid var(--pilot-border);
+  color: var(--pilot-text-white);
+  font-family: var(--pilot-font-mono);
+  padding: 0.8rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.pilot-input:focus {
+  outline: none;
+  border-bottom-color: var(--pilot-accent-cyan);
+  background: rgba(14, 165, 233, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.pilot-textarea {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--pilot-border);
+  color: var(--pilot-text-white);
+  font-family: var(--pilot-font-body);
+  padding: 0.8rem;
+  min-height: 100px;
+  resize: vertical;
+}
+
+.pilot-btn {
+  background: var(--pilot-accent-cyan);
+  color: #000;
+  border: none;
+  padding: 0.8rem 2rem;
+  font-family: var(--pilot-font-header);
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pilot-btn:hover {
+  background: var(--pilot-accent-blue);
+  transform: translateY(-2px);
+}
+
+.pilot-btn-secondary {
+  background: transparent;
+  border: 1px solid var(--pilot-border);
+  color: var(--pilot-accent-cyan);
+}
+
+.pilot-btn-secondary:hover {
+  background: rgba(14, 165, 233, 0.1);
+}
+
+/* ========================================
+   COMPANION POD (MEOWL)
+   ======================================== */
+.pilot-pod-container {
+  background: var(--pilot-bg-panel);
+  border: 1px solid var(--pilot-border);
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.pilot-pod-stage {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, rgba(0,0,0,0) 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.pilot-pod-stage::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 20px;
+  background: radial-gradient(ellipse at center, var(--pilot-accent-cyan) 0%, transparent 70%);
+  opacity: 0.5;
+  filter: blur(5px);
+}
+
+.pilot-meowl-avatar {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.pilot-meowl-avatar:hover {
+  transform: scale(1.1);
+}
+
+.pilot-outfit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.pilot-outfit-module {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--pilot-border);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.pilot-outfit-module:hover,
+.pilot-outfit-module.active {
+  border-color: var(--pilot-accent-cyan);
+  background: rgba(14, 165, 233, 0.1);
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.2);
+}
+
+.pilot-outfit-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0.5rem;
+}
+
+.pilot-outfit-name {
+  font-size: 0.7rem;
+  color: var(--pilot-text-dim);
+}
+
+@keyframes pilot-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

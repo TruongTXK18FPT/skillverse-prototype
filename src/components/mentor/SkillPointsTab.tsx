@@ -5,7 +5,9 @@ import { getMyBookings } from '../../services/bookingService';
 import { getUserReviews } from '../../services/portfolioService';
 import { getMentorCoursePurchases, CoursePurchaseDTO } from '../../services/courseService';
 import './SkillPointsTab.css';
-import QuickStatsCard from './QuickStatsCard';
+import PowerCoreConsole from '../profile-hud/gamification/PowerCoreConsole';
+import UniversalBadge from '../profile-hud/gamification/UniversalBadge';
+import '../profile-hud/gamification/cmd-game-styles.css';
 
 const SkillPointsTab: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'all'>('month');
@@ -21,8 +23,8 @@ const SkillPointsTab: React.FC = () => {
 
   useEffect(() => {
     let mounted = true;
-    const loadAll = async () => {
-      setLoading(true);
+    const loadAll = async (isFirstLoad = false) => {
+      if (isFirstLoad) setLoading(true);
       setError(null);
       try {
         const [skill, bookingsPage, reviews, purchasesPage] = await Promise.all([
@@ -68,13 +70,13 @@ const SkillPointsTab: React.FC = () => {
         if (!mounted) return;
         setError('Không thể tải SkillTab.');
       } finally {
-        if (mounted) {
+        if (mounted && isFirstLoad) {
           setLoading(false);
         }
       }
     };
-    loadAll();
-    const interval = setInterval(loadAll, 30000);
+    loadAll(true);
+    const interval = setInterval(() => loadAll(false), 30000);
     return () => { mounted = false; clearInterval(interval); };
   }, []);
 
@@ -126,221 +128,164 @@ const SkillPointsTab: React.FC = () => {
 
   const filteredActivities = getFilteredActivities();
 
+  if (loading) return <div className="p-4 text-white" style={{ fontFamily: 'var(--cmd-game-font-mono)' }}>INITIALIZING POWER CORE...</div>;
+  if (error) return <div className="p-4 text-red-500">{error}</div>;
+
   return (
-    <div className="mentor-skillpoints-tab">
-      {loading && (
-        <div className="mentor-skillpoints-loading">Đang tải SkillTab...</div>
-      )}
-      {!!error && (
-        <div className="mentor-skillpoints-error">{error}</div>
-      )}
-      {/* Overview Section */}
-      <div className="mentor-skillpoints-overview">
-        <div className="mentor-skillpoints-points-summary">
-          <div className="mentor-skillpoints-total-points">
-            <div className="mentor-skillpoints-points-icon">✨</div>
-            <div>
-              <h2>{totalPoints}</h2>
-              <p>Tổng Điểm Kỹ Năng</p>
-              {justLeveledUp && (
-                <div className="mentor-skillpoints-level-up-badge">
-                  🎉 Vừa lên cấp!
-                </div>
-              )}
-            </div>
-          </div>
-          
-          <div className="mentor-skillpoints-level-info">
-            <div className="mentor-skillpoints-level">
-              <div className="mentor-skillpoints-level-icon">🏆</div>
-              <div>
-                <h3>Cấp Độ {currentLevel}</h3>
-                <p>{pointsToNextLevel} điểm đến cấp tiếp theo</p>
-                <div className="mentor-skillpoints-coin-reward">
-                  <span className="mentor-skillpoints-coin-icon">🪙</span>
-                  <span className="mentor-skillpoints-coin-text">
-                    Hiện tại: {currentLevelCoins} xu | Tiếp theo: {nextLevelCoins} xu
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="mentor-skillpoints-progress-bar">
-              <div 
-                className="mentor-skillpoints-progress-fill" 
-                style={{ width: `${progressPercentage}%` }}
-              ></div>
-              <div className="mentor-skillpoints-progress-text">
-                {Math.round(progressPercentage)}%
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="skill-points-tab">
+      <PowerCoreConsole
+        totalPoints={totalPoints}
+        currentLevel={currentLevel}
+        nextLevelPoints={pointsToNextLevel}
+        progressPercentage={progressPercentage}
+        stats={[
+          { label: 'SESSIONS', value: skillTab?.sessionsCompleted || 0 },
+          { label: '5-STAR REVIEWS', value: skillTab?.fiveStarCount || 0 },
+          { label: 'COURSE SALES', value: skillTab?.courseSales || 0 },
+          { label: 'REVENUE (VND)', value: (skillTab?.revenueVnd || 0).toLocaleString() }
+        ]}
+      />
 
-        {/* Level Rewards Card */}
-        <div className="mentor-skillpoints-rewards-card">
-          <div className="mentor-skillpoints-rewards-header">
-            <h3>Phần Thưởng Cấp Độ</h3>
-            <span className="mentor-skillpoints-coin-icon">🪙</span>
-          </div>
-          <div className="mentor-skillpoints-rewards-content">
-            <div className="mentor-skillpoints-current-reward">
-              <span className="mentor-skillpoints-reward-label">Hiện Tại (Cấp {currentLevel}):</span>
-              <span className="mentor-skillpoints-reward-value">+{currentLevelCoins} Coins/Buổi</span>
-            </div>
-            <div className="mentor-skillpoints-next-reward">
-              <span className="mentor-skillpoints-reward-label">Tiếp Theo (Cấp {currentLevel + 1}):</span>
-              <span className="mentor-skillpoints-reward-value">+{nextLevelCoins} Coins/Buổi</span>
-            </div>
-            <p className="mentor-skillpoints-reward-note">
-              Tăng cấp để kiếm thêm Coins cho mỗi buổi hướng dẫn hoàn thành!
-            </p>
-          </div>
+      {/* Level Rewards Section */}
+      <div className="cmd-game-rewards-panel">
+        <div className="cmd-game-section-header" style={{ marginBottom: '1rem', borderBottom: 'none' }}>
+          <h3 className="cmd-game-section-title" style={{ fontSize: '1.2rem' }}>LEVEL REWARDS</h3>
+          <span style={{ fontSize: '1.5rem' }}>🪙</span>
+        </div>
+        <div className="cmd-game-reward-row">
+          <span className="cmd-game-reward-label">Current (Level {currentLevel}):</span>
+          <span className="cmd-game-reward-value">+{currentLevelCoins} Coins/Session</span>
+        </div>
+        <div className="cmd-game-reward-row">
+          <span className="cmd-game-reward-label">Next (Level {currentLevel + 1}):</span>
+          <span className="cmd-game-reward-value" style={{ color: 'var(--cmd-game-accent-cyan)' }}>+{nextLevelCoins} Coins/Session</span>
+        </div>
+        <div style={{ marginTop: '1rem', fontSize: '0.8rem', color: 'var(--cmd-game-text-dim)', fontStyle: 'italic' }}>
+          * Increase your rank to earn more coins per completed session.
         </div>
       </div>
 
-      <div className="mentor-skillpoints-content-grid">
-        {/* Badges Section */}
-        <div className="mentor-skillpoints-badges-section">
-          <div className="mentor-skillpoints-section-header">
-            <h3>Huy Hiệu Của Tôi</h3>
-            <a className="mentor-skillpoints-view-all-btn" href="/mentor/badges">Xem Tất Cả</a>
-          </div>
+      {/* Badges Preview Section */}
+      <div className="cmd-game-section">
+        <div className="cmd-game-section-header">
+          <h3 className="cmd-game-section-title">MY BADGES</h3>
+          <a href="/mentor/badges" className="cmd-game-link-btn">VIEW ALL</a>
+        </div>
+        
+        <div className="cmd-game-badges-preview">
+          {badges.slice(0, 4).map(badge => (
+            <UniversalBadge
+              key={badge.code}
+              size="sm"
+              data={{
+                id: badge.code,
+                name: badge.name,
+                description: badge.description,
+                iconUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(badge.name)}&background=0a0f1c&color=00f0ff&length=1`,
+                rarity: 'COMMON',
+                isUnlocked: badge.earned,
+                progressCurrent: badge.progressCurrent,
+                progressTarget: badge.progressTarget
+              }}
+            />
+          ))}
+          {badges.length === 0 && (
+            <div className="cmd-game-empty-state">No badges acquired yet.</div>
+          )}
+        </div>
+      </div>
+
+      {/* Activity Log */}
+      <div className="cmd-game-section">
+        <div className="cmd-game-section-header">
+          <h3 className="cmd-game-section-title">ACTIVITY LOG</h3>
           
-          <div className="mentor-skillpoints-badges-grid">
-            {badges.map(badge => (
-              <div key={badge.code} className={`mentor-skillpoints-badge-card ${badge.earned ? 'earned' : 'locked'}`}>
-                <div className="mentor-skillpoints-badge-icon">{mapBadgeIcon(badge.code)}</div>
-                <div className="mentor-skillpoints-badge-info">
-                  <h4>{badge.name}</h4>
-                  <p>{badge.description}</p>
-                  {!badge.earned && (
-                    <div className="mentor-skillpoints-badge-progress">
-                      <div className="mentor-skillpoints-progress-bar small">
-                        <div className="mentor-skillpoints-progress-fill" style={{ width: `${Math.min(100, Math.round((badge.progressCurrent / badge.progressTarget) * 100))}%` }}></div>
-                      </div>
-                      <span>{badge.progressCurrent}/{badge.progressTarget}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+          <div className="cmd-game-filter-tabs">
+            {(['week', 'month', 'all'] as const).map(period => (
+              <button 
+                key={period}
+                onClick={() => setSelectedPeriod(period)}
+                className={`cmd-game-filter-btn ${selectedPeriod === period ? 'active' : ''}`}
+              >
+                {period}
+              </button>
             ))}
-            
-            {/* Locked Badge Example */}
-            <div className="mentor-skillpoints-badge-card locked">
-              <div className="mentor-skillpoints-badge-icon">🔒</div>
-              <div className="mentor-skillpoints-badge-info">
-                <h4>Siêu Mentor</h4>
-                <p>Hoàn thành 100 buổi hướng dẫn</p>
-                <div className="mentor-skillpoints-badge-progress">
-                  <div className="mentor-skillpoints-progress-bar small">
-                    <div className="mentor-skillpoints-progress-fill" style={{ width: '15%' }}></div>
-                  </div>
-                  <span>15/100</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
-        {/* Activity History Section */}
-        <div className="mentor-skillpoints-activity-section">
-          <QuickStatsCard
-            sessionsCompleted={skillTab?.sessionsCompleted ?? 0}
-            fiveStarCount={skillTab?.fiveStarCount ?? 0}
-            courseSales={skillTab?.courseSales ?? 0}
-            revenueVnd={skillTab?.revenueVnd ?? 0}
-          />
-          <div className="mentor-skillpoints-section-header">
-            <h3>Lịch Sử Hoạt Động</h3>
-            <div className="mentor-skillpoints-filter-tabs">
-              <button 
-                className={`mentor-skillpoints-filter-tab ${selectedPeriod === 'week' ? 'active' : ''}`}
-                onClick={() => setSelectedPeriod('week')}
-              >
-                Tuần
-              </button>
-              <button 
-                className={`mentor-skillpoints-filter-tab ${selectedPeriod === 'month' ? 'active' : ''}`}
-                onClick={() => setSelectedPeriod('month')}
-              >
-                Tháng
-              </button>
-              <button 
-                className={`mentor-skillpoints-filter-tab ${selectedPeriod === 'all' ? 'active' : ''}`}
-                onClick={() => setSelectedPeriod('all')}
-              >
-                Tất Cả
-              </button>
-            </div>
-          </div>
-
-          <div className="mentor-skillpoints-activity-list">
-            {filteredActivities.length === 0 ? (
-              <div className="mentor-skillpoints-no-activities">
-                <p>Không tìm thấy hoạt động nào cho khoảng thời gian đã chọn.</p>
-              </div>
-            ) : (
-              filteredActivities.map(activity => (
-                <div key={activity.id} className="mentor-skillpoints-activity-item">
-                  <div className="mentor-skillpoints-activity-left">
-                    <div className="mentor-skillpoints-activity-icon">
-                      {activity.points > 50 ? '🌟' : '✨'}
-                    </div>
-                    <div className="mentor-skillpoints-activity-details">
-                      <h4>{activity.activity}</h4>
-                      <p>{activity.description}</p>
-                      <span className="mentor-skillpoints-activity-date">{formatDate(activity.date)}</span>
-                    </div>
-                  </div>
-                  <div className="mentor-skillpoints-activity-points">
-                    +{activity.points} SP
-                  </div>
+        <div className="cmd-game-activity-list">
+          {filteredActivities.slice(0, 10).map(act => (
+            <div key={act.id} className="cmd-game-activity-item">
+              <div className="cmd-game-activity-left">
+                <div className="cmd-game-activity-icon">{act.points > 0 ? '⚡' : '💠'}</div>
+                <div>
+                  <div className="cmd-game-activity-title">{act.activity}</div>
+                  <div className="cmd-game-activity-desc">{act.description}</div>
                 </div>
-              ))
-            )}
-          </div>
-          
-          {/* Demo button to trigger level up modal */}
-          <div style={{ marginTop: '20px', textAlign: 'center' }}>
-            <button className="mentor-skillpoints-demo-btn" onClick={checkLevelUp}>
-              Demo: Tăng Điểm & Cấp Độ
-            </button>
-          </div>
+              </div>
+              <div className="cmd-game-activity-right">
+                <div className="cmd-game-activity-points">+{act.points} PTS</div>
+                <div className="cmd-game-activity-date">{formatDate(act.date)}</div>
+              </div>
+            </div>
+          ))}
+          {filteredActivities.length === 0 && (
+            <div className="cmd-game-empty-state">No recent activity detected in this sector.</div>
+          )}
         </div>
       </div>
-
-      {/* Points Guide - Optional, maybe remove or restyle if needed, but I'll keep it out for now to match the new design or add it back if space permits. 
-          Actually, the new design has "Rewards Card" in the overview, so maybe we don't need the full guide grid.
-          I'll omit the guide grid for now as it wasn't in my generated newString in the previous attempt.
-      */}
 
       {/* Level Up Modal */}
       {showLevelUpModal && (
-        <div className="mentor-skillpoints-modal-overlay">
-          <div className="mentor-skillpoints-levelup-modal">
-            <div className="mentor-skillpoints-levelup-content">
-              <div className="mentor-skillpoints-levelup-icon">🎉</div>
-              <h2>Chúc Mừng!</h2>
-              <h3>Bạn Đã Đạt Cấp Độ {currentLevel + (justLeveledUp ? 1 : 0)}</h3>
-              
-              <div className="mentor-skillpoints-levelup-rewards">
-                <p>Phần Thưởng Mới Đã Mở Khóa:</p>
-                <div className="mentor-skillpoints-reward-badge">
-                  <span className="mentor-skillpoints-coin-icon">🪙</span>
-                  <span>+{getCoinsForLevel(currentLevel + (justLeveledUp ? 1 : 0))} Coins mỗi buổi học</span>
-                </div>
+        <div className="mentor-skillpoints-modal-overlay" style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0, 0, 0, 0.8)', backdropFilter: 'blur(5px)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
+        }}>
+          <div style={{
+            background: 'var(--cmd-game-bg-dark)',
+            border: '2px solid var(--cmd-game-accent-gold)',
+            padding: '2rem',
+            maxWidth: '400px',
+            width: '90%',
+            textAlign: 'center',
+            boxShadow: '0 0 50px rgba(255, 215, 0, 0.2)',
+            position: 'relative'
+          }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎉</div>
+            <h2 style={{ fontFamily: 'var(--cmd-game-font-header)', color: 'var(--cmd-game-accent-gold)', fontSize: '2rem', marginBottom: '0.5rem' }}>
+              RANK PROMOTION!
+            </h2>
+            <h3 style={{ color: 'var(--cmd-game-text-white)', marginBottom: '1.5rem' }}>
+              LEVEL {currentLevel + (justLeveledUp ? 1 : 0)} ACHIEVED
+            </h3>
+            
+            <div style={{ background: 'rgba(255, 215, 0, 0.1)', padding: '1rem', border: '1px dashed var(--cmd-game-accent-gold)', marginBottom: '1.5rem' }}>
+              <p style={{ color: 'var(--cmd-game-accent-gold)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>New Clearance Level Unlocked</p>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '0.5rem', color: 'var(--cmd-game-text-white)' }}>
+                <span>🪙</span>
+                <span>+{getCoinsForLevel(currentLevel + (justLeveledUp ? 1 : 0))} Coins / Session</span>
               </div>
-              
-              <button 
-                className="mentor-skillpoints-levelup-close-btn"
-                onClick={() => {
-                  setShowLevelUpModal(false);
-                  setJustLeveledUp(false);
-                }}
-              >
-                Tuyệt Vời!
-              </button>
             </div>
+            
+            <button 
+              onClick={() => {
+                setShowLevelUpModal(false);
+                setJustLeveledUp(false);
+              }}
+              style={{
+                background: 'var(--cmd-game-accent-gold)',
+                color: '#000',
+                border: 'none',
+                padding: '0.8rem 2rem',
+                fontFamily: 'var(--cmd-game-font-header)',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)'
+              }}
+            >
+              ACKNOWLEDGE
+            </button>
           </div>
         </div>
       )}
@@ -349,6 +294,7 @@ const SkillPointsTab: React.FC = () => {
 };
 
 export default SkillPointsTab;
+
 const mapBadgeIcon = (code: string): string => {
   if (code === 'FIRST_SESSION') return '🎯';
   if (code === 'TEN_SESSIONS') return '📅';

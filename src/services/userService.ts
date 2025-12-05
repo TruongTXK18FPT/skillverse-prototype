@@ -1,4 +1,5 @@
 import axiosInstance from './axiosInstance';
+import { uploadMedia } from './mediaService';
 import {
   UserRegistrationRequest,
   UserRegistrationResponse,
@@ -110,21 +111,17 @@ class UserService {
   }
 
   // Upload user avatar
-  async uploadUserAvatar(file: File): Promise<{ avatarUrl: string }> {
+  async uploadUserAvatar(file: File, userId: number): Promise<{ avatarUrl: string }> {
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const response = await axiosInstance.post<{ avatarUrl: string}>(
-        '/api/user/avatar',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-      return response.data;
+      // Step 1: Upload to Media Service
+      const media = await uploadMedia(file, userId);
+
+      // Step 2: Update User Profile with new Media
+      await this.updateUserProfile(userId, {
+        avatarMediaId: media.id
+      });
+
+      return { avatarUrl: media.url };
     } catch (error: unknown) {
       console.error('Upload avatar error:', error);
       const errorMessage = (error as AxiosError).response?.data?.message || 'Upload avatar thất bại.';
