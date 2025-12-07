@@ -3,314 +3,137 @@
    Cute, animated floating bubble notifications
    ======================================== */
 
-/* Container - positioned above Meowl Guide mascot, bubble points towards cat */
+/* Container - positioned near Meowl Guide mascot */
 .meowl-bubble-container {
   position: fixed;
-  bottom: 140px;
-  right: 100px;
+  bottom: 120px; /* Raised slightly */
+  right: 160px; /* Moved further left to avoid overlapping mascot/mute button */
   display: flex;
-  flex-direction: row-reverse; /* Bubble on left, avatar on right */
+  flex-direction: row-reverse;
   align-items: flex-end;
-  gap: 8px;
+  gap: 12px;
   z-index: 9998;
   animation: meowlBubbleSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   pointer-events: auto;
-  max-width: calc(100vw - 140px);
+  max-width: 320px;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
 }
 
 .meowl-bubble-container.meowl-bubble--closing {
   animation: meowlBubbleSlideOut 0.3s ease-in forwards;
 }
 
-/* Avatar - now on the right side */
+/* Avatar - Hidden in bubble mode as we use the main mascot, 
+   but kept if we want a standalone bubble */
 .meowl-bubble-avatar {
-  position: relative;
-  width: 55px;
-  height: 55px;
-  flex-shrink: 0;
+  display: none; /* We use the main mascot on screen */
 }
 
-.meowl-bubble-avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 20px rgba(139, 92, 246, 0.5));
-  animation: meowlBounce 2s ease-in-out infinite;
-}
-
-.meowl-bubble-avatar-glow {
-  position: absolute;
-  inset: -12px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(59, 130, 246, 0.2) 50%, transparent 70%);
-  border-radius: 50%;
-  animation: meowlGlow 2s ease-in-out infinite;
-  z-index: -1;
-}
-
-/* Speech Bubble - Holographic Tech Style */
+/* Speech Bubble - Clean Chat Style */
 .meowl-bubble-speech {
   position: relative;
-  max-width: 300px;
-  background: 
-    linear-gradient(135deg, 
-      rgba(0, 20, 40, 0.97) 0%, 
-      rgba(0, 40, 60, 0.95) 30%,
-      rgba(0, 60, 80, 0.93) 60%,
-      rgba(0, 30, 50, 0.97) 100%);
-  border-radius: 16px;
-  padding: 18px 22px;
-  backdrop-filter: blur(25px) saturate(180%);
-  -webkit-backdrop-filter: blur(25px) saturate(180%);
-  border: 1px solid transparent;
-  border-image: linear-gradient(135deg, 
-    rgba(0, 212, 255, 0.6), 
-    rgba(139, 92, 246, 0.4), 
-    rgba(0, 255, 200, 0.5)) 1;
+  background: rgba(20, 25, 40, 0.95); /* Dark glass */
+  border-radius: 24px;
+  border-bottom-right-radius: 4px; /* Tail corner */
+  padding: 16px 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 
-    0 0 1px rgba(0, 212, 255, 0.8),
-    0 0 4px rgba(0, 212, 255, 0.4),
-    0 0 15px rgba(0, 212, 255, 0.2),
-    0 8px 32px rgba(0, 0, 0, 0.5),
-    inset 0 0 20px rgba(0, 212, 255, 0.05),
-    inset 0 1px 0 rgba(0, 212, 255, 0.2);
-  animation: meowlBubblePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both, 
-             hologramFlicker 4s ease-in-out infinite,
-             holoBorderPulse 3s ease-in-out infinite;
-  overflow: hidden;
+    0 4px 20px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: meowlBubblePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+  color: #e2e8f0;
+  font-family: 'Inter', sans-serif;
+  min-width: 260px;
 }
 
-/* Hologram scan line effect - tech grid */
+/* Bubble tail - pointing RIGHT towards the cat */
 .meowl-bubble-speech::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  right: -8px;
   bottom: 0;
-  border-radius: 16px;
-  background: 
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 212, 255, 0.02) 2px,
-      rgba(0, 212, 255, 0.02) 4px
-    ),
-    linear-gradient(
-      180deg,
-      transparent 0%,
-      rgba(0, 255, 200, 0.08) 50%,
-      transparent 100%
-    );
-  background-size: 100% 100%, 100% 200%;
-  animation: hologramScan 2.5s linear infinite;
-  pointer-events: none;
+  width: 20px;
+  height: 20px;
+  background: inherit;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom-right-radius: 4px; /* Slight curve */
+  clip-path: polygon(0 0, 100% 100%, 0 100%); /* Triangle shape */
+  transform: rotate(-45deg) skewX(-10deg); /* Adjust angle */
+  z-index: -1;
+  display: none; /* Using border method instead for better compatibility */
 }
 
-/* Bubble tail - pointing RIGHT towards the cat - holographic */
+/* Better Tail using border */
 .meowl-bubble-speech::before {
   content: '';
   position: absolute;
-  right: -12px;
-  bottom: 18px;
+  right: -10px;
+  bottom: 12px;
   width: 0;
   height: 0;
   border-style: solid;
-  border-width: 10px 0 10px 14px;
-  border-color: transparent transparent transparent rgba(0, 40, 60, 0.95);
-  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5))
-          drop-shadow(2px 0 3px rgba(0, 212, 255, 0.3));
+  border-width: 10px 0 10px 12px;
+  border-color: transparent transparent transparent rgba(20, 25, 40, 0.95);
+  filter: drop-shadow(2px 0 0 rgba(255,255,255,0.05));
 }
 
-/* Type-specific styling - All with hologram effects */
-.meowl-bubble-speech--welcome {
-  background: linear-gradient(135deg, 
-    rgba(30, 58, 95, 0.95) 0%, 
-    rgba(13, 148, 136, 0.9) 100%);
-  border-color: rgba(20, 184, 166, 0.4);
-  box-shadow: 
-    0 8px 32px rgba(20, 184, 166, 0.4),
-    0 0 0 1px rgba(20, 184, 166, 0.3),
-    0 0 40px rgba(20, 184, 166, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
+/* Type-specific styling - Subtle accents */
+.meowl-bubble-speech--welcome { border-left: 3px solid #14b8a6; }
+.meowl-bubble-speech--premium { border-left: 3px solid #8b5cf6; }
+.meowl-bubble-speech--skin { border-left: 3px solid #ec4899; }
+.meowl-bubble-speech--roadmap { border-left: 3px solid #3b82f6; }
+.meowl-bubble-speech--course { border-left: 3px solid #10b981; }
+.meowl-bubble-speech--page-intro { border-left: 3px solid #06b6d4; }
+.meowl-bubble-speech--direction { border-left: 3px solid #f59e0b; }
+.meowl-bubble-speech--motivation { border-left: 3px solid #818cf8; }
+.meowl-bubble-speech--tip { border-left: 3px solid #818cf8; }
 
-.meowl-bubble-speech--welcome::before {
-  border-color: transparent transparent transparent rgba(13, 148, 136, 0.9);
-}
-
-.meowl-bubble-speech--premium {
-  background: linear-gradient(135deg, 
-    rgba(76, 29, 149, 0.95) 0%, 
-    rgba(124, 58, 237, 0.9) 100%);
-  border-color: rgba(250, 204, 21, 0.4);
-  box-shadow: 
-    0 8px 32px rgba(124, 58, 237, 0.5),
-    0 0 0 1px rgba(250, 204, 21, 0.4),
-    0 0 50px rgba(250, 204, 21, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.meowl-bubble-speech--premium::before {
-  border-color: transparent transparent transparent rgba(124, 58, 237, 0.9);
-}
-
-.meowl-bubble-speech--skin {
-  background: linear-gradient(135deg, 
-    rgba(131, 24, 67, 0.95) 0%, 
-    rgba(236, 72, 153, 0.9) 100%);
-  border-color: rgba(236, 72, 153, 0.4);
-  box-shadow: 
-    0 8px 32px rgba(236, 72, 153, 0.4),
-    0 0 0 1px rgba(236, 72, 153, 0.3),
-    0 0 40px rgba(236, 72, 153, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.meowl-bubble-speech--skin::before {
-  border-color: transparent transparent transparent rgba(236, 72, 153, 0.9);
-}
-
-.meowl-bubble-speech--roadmap {
-  background: linear-gradient(135deg, 
-    rgba(30, 64, 175, 0.95) 0%, 
-    rgba(59, 130, 246, 0.9) 100%);
-  border-color: rgba(59, 130, 246, 0.4);
-  box-shadow: 
-    0 8px 32px rgba(59, 130, 246, 0.4),
-    0 0 0 1px rgba(59, 130, 246, 0.3),
-    0 0 40px rgba(59, 130, 246, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.meowl-bubble-speech--roadmap::before {
-  border-color: transparent transparent transparent rgba(59, 130, 246, 0.9);
-}
-
-.meowl-bubble-speech--course {
-  background: linear-gradient(135deg, 
-    rgba(6, 95, 70, 0.95) 0%, 
-    rgba(16, 185, 129, 0.9) 100%);
-  border-color: rgba(16, 185, 129, 0.4);
-  box-shadow: 
-    0 8px 32px rgba(16, 185, 129, 0.4),
-    0 0 0 1px rgba(16, 185, 129, 0.3),
-    0 0 40px rgba(16, 185, 129, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.meowl-bubble-speech--course::before {
-  border-color: transparent transparent transparent rgba(16, 185, 129, 0.9);
-}
-
-.meowl-bubble-speech--direction {
-  background: linear-gradient(135deg, 
-    rgba(146, 64, 14, 0.95) 0%, 
-    rgba(245, 158, 11, 0.9) 100%);
-  border-color: rgba(245, 158, 11, 0.4);
-  box-shadow: 
-    0 8px 32px rgba(245, 158, 11, 0.4),
-    0 0 0 1px rgba(245, 158, 11, 0.3),
-    0 0 40px rgba(245, 158, 11, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.meowl-bubble-speech--direction::before {
-  border-color: transparent transparent transparent rgba(245, 158, 11, 0.9);
-}
-
-.meowl-bubble-speech--motivation,
-.meowl-bubble-speech--tip {
-  background: linear-gradient(135deg, 
-    rgba(67, 56, 202, 0.95) 0%, 
-    rgba(129, 140, 248, 0.9) 100%);
-  border-color: rgba(129, 140, 248, 0.4);
-  box-shadow: 
-    0 8px 32px rgba(129, 140, 248, 0.4),
-    0 0 0 1px rgba(129, 140, 248, 0.3),
-    0 0 40px rgba(129, 140, 248, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.meowl-bubble-speech--motivation::before,
-.meowl-bubble-speech--tip::before {
-  border-color: transparent transparent transparent rgba(129, 140, 248, 0.9);
-}
-
-/* Page Introduction - Special hologram gradient for page intros */
-.meowl-bubble-speech--page-intro {
-  background: linear-gradient(135deg, 
-    rgba(15, 23, 42, 0.95) 0%, 
-    rgba(30, 58, 95, 0.9) 50%, 
-    rgba(13, 148, 136, 0.9) 100%);
-  border-color: rgba(13, 148, 136, 0.5);
-  box-shadow: 
-    0 8px 32px rgba(13, 148, 136, 0.5),
-    0 0 0 1px rgba(13, 148, 136, 0.4),
-    0 0 60px rgba(13, 148, 136, 0.25),
-    0 0 100px rgba(13, 148, 136, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.meowl-bubble-speech--page-intro::before {
-  border-color: transparent transparent transparent rgba(13, 148, 136, 0.9);
-}
-
-/* Close button */
-.meowl-bubble-close {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 50%;
-  color: rgba(255, 255, 255, 0.7);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  padding: 0;
-}
-
-.meowl-bubble-close:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  transform: rotate(90deg);
-}
-
-/* Disable button - to turn off notifications */
+/* Close & Mute Buttons - Aesthetic & Minimal */
+.meowl-bubble-close,
 .meowl-bubble-disable {
   position: absolute;
-  top: 8px;
-  right: 34px;
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 100, 100, 0.15);
+  background: transparent;
   border: none;
   border-radius: 50%;
-  color: rgba(255, 200, 200, 0.7);
+  color: rgba(255, 255, 255, 0.4);
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 0;
+}
+
+.meowl-bubble-close {
+  top: 8px;
+  right: 8px;
+}
+
+.meowl-bubble-disable {
+  top: 8px;
+  right: 36px;
 }
 
 .meowl-bubble-disable:hover {
-  background: rgba(255, 100, 100, 0.3);
-  color: #ff6b6b;
-  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.1);
+  color: #f87171; /* Red tint for mute */
+}
+
+.meowl-bubble-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 /* Toggle container - when disabled */
 .meowl-bubble-toggle-container {
   position: fixed;
-  bottom: 140px;
-  right: 30px;
+  bottom: 100px;
+  right: 20px;
   z-index: 9998;
 }
 
@@ -318,204 +141,78 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  background: rgba(30, 27, 75, 0.9);
-  border: 2px solid rgba(139, 92, 246, 0.3);
+  width: 40px;
+  height: 40px;
+  background: rgba(20, 25, 40, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  color: rgba(139, 92, 246, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .meowl-bubble-toggle-btn:hover {
-  background: rgba(49, 46, 129, 0.95);
-  border-color: rgba(139, 92, 246, 0.6);
-  color: #a78bfa;
+  background: rgba(30, 35, 50, 0.95);
+  color: #fff;
   transform: scale(1.1);
-  box-shadow: 0 6px 25px rgba(139, 92, 246, 0.3);
 }
 
 .meowl-bubble-toggle--disabled {
-  color: rgba(255, 100, 100, 0.6);
-  border-color: rgba(255, 100, 100, 0.3);
-}
-
-.meowl-bubble-toggle--disabled:hover {
-  color: #f87171;
-  border-color: rgba(255, 100, 100, 0.5);
-}
-
-.toggle-tooltip {
-  position: absolute;
-  right: 55px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(15, 23, 42, 0.95);
-  color: #e0e7ff;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.2s ease;
-  pointer-events: none;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-.meowl-bubble-toggle-btn:hover .toggle-tooltip {
-  opacity: 1;
-  visibility: visible;
+  color: rgba(248, 113, 113, 0.8);
+  border-color: rgba(248, 113, 113, 0.3);
 }
 
 /* Icon */
 .meowl-bubble-icon {
+  float: left;
+  margin-right: 12px;
+  margin-bottom: 4px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
-  margin-bottom: 10px;
-  animation: meowlIconPulse 2s ease-in-out infinite;
 }
 
 .meowl-bubble-icon svg {
+  width: 18px;
+  height: 18px;
   color: #fff;
 }
 
-.bubble-icon-heart {
-  color: #f472b6 !important;
-  animation: heartBeat 1.5s ease-in-out infinite;
-}
-
-.bubble-icon-sparkle {
-  color: #fcd34d !important;
-  animation: sparkleRotate 3s linear infinite;
-}
-
-.bubble-icon-crown {
-  color: #fcd34d !important;
-  animation: crownFloat 2s ease-in-out infinite;
-}
-
-.bubble-icon-shirt {
-  color: #f472b6 !important;
-}
-
-.bubble-icon-map {
-  color: #60a5fa !important;
-}
-
-.bubble-icon-book {
-  color: #34d399 !important;
-}
-
-.bubble-icon-target {
-  color: #fb923c !important;
-}
-
-.bubble-icon-home {
-  color: #60a5fa !important;
-}
-
-.bubble-icon-user {
-  color: #a78bfa !important;
-}
-
-.bubble-icon-job {
-  color: #f472b6 !important;
-}
-
-.bubble-icon-community {
-  color: #34d399 !important;
-}
-
-.bubble-icon-trophy {
-  color: #fcd34d !important;
-  animation: crownFloat 2s ease-in-out infinite;
-}
-
-.bubble-icon-wallet {
-  color: #fcd34d !important;
-}
-
-.bubble-icon-mentor {
-  color: #818cf8 !important;
-}
-
-.bubble-icon-chat {
-  color: #60a5fa !important;
-}
-
-.bubble-icon-compass {
-  color: #c084fc !important;
-  animation: sparkleRotate 8s linear infinite;
-}
-
-.bubble-icon-info {
-  color: #38bdf8 !important;
-}
-
-.bubble-icon-zap {
-  color: #fcd34d !important;
-  animation: zapPulse 1.5s ease-in-out infinite;
-}
-
-.bubble-icon-payment {
-  color: #a78bfa !important;
-}
-
-.bubble-icon-gift {
-  color: #f472b6 !important;
-  animation: heartBeat 2s ease-in-out infinite;
-}
-
-.bubble-icon-star {
-  color: #fcd34d !important;
-  animation: starTwinkle 2s ease-in-out infinite;
-}
-
-/* Message */
+/* Message Text */
 .meowl-bubble-message {
-  margin: 0 0 12px 0;
-  font-size: 14px;
+  font-size: 0.9rem;
   line-height: 1.5;
-  color: #fff;
-  font-weight: 500;
-  padding-right: 20px;
+  margin: 0 0 12px 0;
+  color: #f1f5f9;
+  font-weight: 400;
+  padding-right: 40px; /* Space for controls */
 }
 
-/* Action button */
+/* Action Button */
 .meowl-bubble-action {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: block;
+  width: 100%;
+  margin-top: 8px;
   padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   color: #fff;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  text-align: center;
 }
 
 .meowl-bubble-action:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.meowl-bubble-action:active {
-  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 /* Decorative sparkles */
@@ -745,66 +442,44 @@
 
 @media (max-width: 768px) {
   .meowl-bubble-container {
-    right: 80px;
-    bottom: 130px;
-    max-width: calc(100vw - 100px);
+    bottom: 220px; /* Raised higher to clear mobile mascot and mute button */
+    right: 20px;
+    left: 20px;
+    max-width: none;
+    flex-direction: column;
+    align-items: flex-end;
   }
 
   .meowl-bubble-speech {
-    max-width: 280px;
+    width: 100%;
+    min-width: 0;
+    border-bottom-right-radius: 24px; /* Round it back */
+    border-bottom-left-radius: 4px; /* Tail on left? No, keep right */
+    /* Actually, on mobile, mascot is on right. So bubble should point down-right */
+    border-bottom-right-radius: 0;
   }
-
-  .meowl-bubble-avatar {
-    width: 50px;
-    height: 50px;
+  
+  .meowl-bubble-speech::before {
+    right: 0;
+    bottom: -10px;
+    border-width: 10px 10px 0 0; /* Point down */
+    border-color: rgba(20, 25, 40, 0.95) transparent transparent transparent;
   }
 }
 
 @media (max-width: 480px) {
   .meowl-bubble-container {
-    right: 15px;
-    bottom: 120px;
-    left: 15px;
-    flex-direction: column;
-    align-items: flex-end;
-    max-width: calc(100vw - 30px);
-  }
-
-  .meowl-bubble-avatar {
-    width: 45px;
-    height: 45px;
-    align-self: flex-end;
-    margin-top: -5px;
-  }
-
-  .meowl-bubble-speech {
-    max-width: 100%;
-  }
-
-  /* Hide right tail on mobile */
-  .meowl-bubble-speech::before {
-    display: none;
-  }
-
-  /* Show bottom tail pointing to avatar */
-  .meowl-bubble-speech .meowl-bubble-tail-mobile {
-    content: '';
-    position: absolute;
-    right: 20px;
-    bottom: -10px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 10px 8px 0 8px;
-    border-color: rgba(30, 27, 75, 0.95) transparent transparent transparent;
+    bottom: 160px;
+    right: 10px;
+    left: 10px;
   }
 
   .meowl-bubble-message {
-    font-size: 13px;
+    font-size: 0.85rem;
   }
 
   .meowl-bubble-action {
-    font-size: 12px;
+    font-size: 0.8rem;
     padding: 6px 12px;
   }
 }
@@ -814,66 +489,57 @@
    ======================================== */
 
 [data-theme="light"] .meowl-bubble-speech {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    0 0 0 1px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 0, 0, 0.05);
+  color: #1e293b;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="light"] .meowl-bubble-speech::before {
-  border-color: transparent #f8fafc transparent transparent;
+  border-color: transparent transparent transparent rgba(255, 255, 255, 0.95);
 }
 
 [data-theme="light"] .meowl-bubble-message {
-  color: #1e293b;
+  color: #334155;
 }
 
-[data-theme="light"] .meowl-bubble-close {
-  color: rgba(0, 0, 0, 0.5);
-  background: rgba(0, 0, 0, 0.05);
+[data-theme="light"] .meowl-bubble-close,
+[data-theme="light"] .meowl-bubble-disable {
+  color: #94a3b8;
 }
 
 [data-theme="light"] .meowl-bubble-close:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
   color: #1e293b;
+}
+
+[data-theme="light"] .meowl-bubble-disable:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #ef4444;
 }
 
 [data-theme="light"] .meowl-bubble-icon {
   background: rgba(0, 0, 0, 0.05);
 }
 
+[data-theme="light"] .meowl-bubble-icon svg {
+  color: #334155;
+}
+
 [data-theme="light"] .meowl-bubble-action {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  border-color: transparent;
-  color: #fff;
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #334155;
 }
 
 [data-theme="light"] .meowl-bubble-action:hover {
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  background: rgba(0, 0, 0, 0.1);
 }
 
-/* Keep colored bubbles in light mode */
-[data-theme="light"] .meowl-bubble-speech--welcome,
-[data-theme="light"] .meowl-bubble-speech--premium,
-[data-theme="light"] .meowl-bubble-speech--skin,
-[data-theme="light"] .meowl-bubble-speech--roadmap,
-[data-theme="light"] .meowl-bubble-speech--course,
-[data-theme="light"] .meowl-bubble-speech--direction,
-[data-theme="light"] .meowl-bubble-speech--motivation,
-[data-theme="light"] .meowl-bubble-speech--tip,
-[data-theme="light"] .meowl-bubble-speech--page-intro {
-  color: #fff;
-}
-
-[data-theme="light"] .meowl-bubble-speech--welcome .meowl-bubble-message,
-[data-theme="light"] .meowl-bubble-speech--premium .meowl-bubble-message,
-[data-theme="light"] .meowl-bubble-speech--skin .meowl-bubble-message,
-[data-theme="light"] .meowl-bubble-speech--roadmap .meowl-bubble-message,
-[data-theme="light"] .meowl-bubble-speech--course .meowl-bubble-message,
-[data-theme="light"] .meowl-bubble-speech--direction .meowl-bubble-message,
-[data-theme="light"] .meowl-bubble-speech--motivation .meowl-bubble-message,
-[data-theme="light"] .meowl-bubble-speech--tip .meowl-bubble-message,
-[data-theme="light"] .meowl-bubble-speech--page-intro .meowl-bubble-message {
-  color: #fff;
-}
+/* Keep colored accents in light mode */
+[data-theme="light"] .meowl-bubble-speech--welcome { border-left-color: #14b8a6; }
+[data-theme="light"] .meowl-bubble-speech--premium { border-left-color: #8b5cf6; }
+[data-theme="light"] .meowl-bubble-speech--skin { border-left-color: #ec4899; }
+[data-theme="light"] .meowl-bubble-speech--roadmap { border-left-color: #3b82f6; }
+[data-theme="light"] .meowl-bubble-speech--course { border-left-color: #10b981; }
+[data-theme="light"] .meowl-bubble-speech--page-intro { border-left-color: #06b6d4; }

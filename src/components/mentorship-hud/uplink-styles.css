@@ -1002,8 +1002,16 @@
     padding: 1rem;
   }
 
+  .uplink-header {
+    padding: 1.5rem 1rem;
+  }
+
   .uplink-title {
     font-size: 1.75rem;
+  }
+
+  .uplink-subtitle {
+    font-size: 0.85rem;
   }
 
   .uplink-grid {
@@ -1012,7 +1020,9 @@
   }
 
   .uplink-frequency-caps {
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Keep scrolling horizontally */
+    overflow-x: auto;
+    padding-bottom: 1rem;
   }
 
   .uplink-metrics-row {
@@ -1021,6 +1031,12 @@
 
   .uplink-actions {
     grid-template-columns: 1fr;
+  }
+
+  .uplink-chat-window {
+    width: 95%;
+    height: 80vh;
+    max-height: 600px;
   }
 }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HelpCircle } from 'lucide-react';
+import { HelpCircle, Bell, BellOff } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useMeowlSkin } from '../context/MeowlSkinContext';
 import '../styles/MeowlGuide.css';
@@ -21,6 +21,10 @@ interface MeowlGuideProps {
   languageOverride?: 'en' | 'vi';
 }
 
+const STORAGE_KEYS = {
+  BUBBLE_DISABLED: 'meowl-bubble-disabled',
+};
+
 const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageOverride }) => {
   const { language: contextLanguage } = useLanguage();
   const { currentSkin, currentSkinImage } = useMeowlSkin();
@@ -31,6 +35,11 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageO
   const [guideSteps, setGuideSteps] = useState<GuideStep[]>([]);
   const [isChatOpen, setIsChatOpen] = useState(false);
   
+  // Bubble mute state
+  const [isBubbleDisabled, setIsBubbleDisabled] = useState(() => {
+    return localStorage.getItem(STORAGE_KEYS.BUBBLE_DISABLED) === 'true';
+  });
+
   // Animation control states
   const [showOptions, setShowOptions] = useState(false);
   const [visibleOptions, setVisibleOptions] = useState<boolean[]>([false, false, false]);
@@ -41,6 +50,27 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageO
     setGuideSteps(messages);
     setCurrentStep(0); // Reset to first message when page changes
   }, [currentPage]);
+
+  // Listen for external toggle events (sync with other components)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsBubbleDisabled(localStorage.getItem(STORAGE_KEYS.BUBBLE_DISABLED) === 'true');
+    };
+
+    window.addEventListener('meowl-bubble-toggle', handleStorageChange);
+    return () => {
+      window.removeEventListener('meowl-bubble-toggle', handleStorageChange);
+    };
+  }, []);
+
+  const toggleBubbleMute = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent opening guide
+    const newState = !isBubbleDisabled;
+    setIsBubbleDisabled(newState);
+    localStorage.setItem(STORAGE_KEYS.BUBBLE_DISABLED, newState.toString());
+    // Dispatch event for MeowlBubbleNotification to pick up
+    window.dispatchEvent(new Event('meowl-bubble-toggle'));
+  };
 
   // Staggered animation for dialogue options
   useEffect(() => {
@@ -106,8 +136,6 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageO
     setCurrentStep(0);
   };
 
-
-
   // Safety check for empty guideSteps
   if (guideSteps.length === 0) {
     return null;
@@ -122,9 +150,9 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageO
       {/* MeowlChat Component */}
       <MeowlChat isOpen={isChatOpen} onClose={handleChatClose} />
 
-      {/* Dialogue Options - Above Mascot with staggered animation */}
+      {/* Dialogue Options - Above Mascot with staggered animation (Desktop Only) */}
       {isOpen && showOptions && (
-        <div className="dialogue-options-floating">
+        <div className="dialogue-options-floating desktop-only-options">
           <button 
             className={`dialogue-option-floating dialogue-option--chat ${visibleOptions[0] ? 'slide-in' : 'hidden'}`}
             onClick={(e) => {
@@ -157,11 +185,18 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageO
 
       {/* Mascot Button */}
       <div className={`meowl-mascot ${isOpen ? 'mascot-active' : ''}`} onClick={handleMascotClick}>
-        {currentSkin === 'default' && (
-          <div className="quest-indicator">
-            <HelpCircle size={22} />
-          </div>
-        )}
+        {/* Mute/Unmute Button (Replaces Quest Indicator) */}
+        <div 
+          className="meowl-mute-btn" 
+          onClick={toggleBubbleMute}
+          title={isBubbleDisabled 
+            ? (language === 'en' ? 'Enable Notifications' : 'Bật thông báo') 
+            : (language === 'en' ? 'Mute Notifications' : 'Tắt thông báo')
+          }
+        >
+          {isBubbleDisabled ? <BellOff size={18} /> : <Bell size={18} />}
+        </div>
+
         <img
           src={currentSkinImage}
           alt="Meowl Guide"
@@ -199,6 +234,39 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageO
                   </div>
                 </div>
               </div>
+
+              {/* Mobile Options Container - Moved inside dialog content for mobile */}
+              {showOptions && (
+                <div className="dialogue-options-mobile">
+                  <button 
+                    className={`dialogue-option-floating dialogue-option--chat ${visibleOptions[0] ? 'slide-in' : 'hidden'}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleChatWithMeowl();
+                    }}
+                  >
+                    {language === 'en' ? 'Chat with Meowl' : 'Trò chuyện với Meowl'}
+                  </button>
+                  <button 
+                    className={`dialogue-option-floating dialogue-option--continue ${visibleOptions[1] ? 'slide-in' : 'hidden'}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleNext();
+                    }}
+                  >
+                    {language === 'en' ? 'Continue' : 'Tiếp tục'}
+                  </button>
+                  <button 
+                    className={`dialogue-option-floating dialogue-option--exit ${visibleOptions[2] ? 'slide-in' : 'hidden'}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleExit();
+                    }}
+                  >
+                    {language === 'en' ? 'Exit' : 'Thoát'}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

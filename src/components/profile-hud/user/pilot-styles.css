@@ -327,3 +327,81 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* ====== NEW CLASSES FOR GRID ====== */
+.pilot-main-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.pilot-identity-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* ====== MOBILE RESPONSIVENESS ====== */
+@media (max-width: 768px) {
+  .pilot-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem 1rem;
+  }
+
+  .pilot-avatar-container {
+    margin: 0 auto;
+  }
+
+  .pilot-info {
+    width: 100%;
+  }
+
+  .pilot-name {
+    font-size: 1.8rem;
+  }
+
+  .pilot-rank {
+    justify-content: center;
+  }
+
+  .pilot-stats-bar {
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .pilot-section {
+    padding: 0 1rem;
+    margin: 1rem auto;
+  }
+
+  .pilot-main-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .pilot-identity-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .pilot-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Companion Pod */
+  .pilot-pod-container {
+    overflow-x: hidden; /* Prevent horizontal scroll */
+  }
+
+  .pilot-outfit-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .pilot-outfit-module {
+    min-height: 80px;
+  }
+}

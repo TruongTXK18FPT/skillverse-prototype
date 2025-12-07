@@ -1344,3 +1344,28 @@
   }
 }
 
+/* ====== MOBILE RESPONSIVENESS ====== */
+@media (max-width: 768px) {
+  .roadmap-page__container {
+    padding: 1rem;
+  }
+
+  .sv-roadmap-flow {
+    height: 400px; /* Reduce height on mobile */
+  }
+
+  .sv-roadmap-node {
+    min-width: 280px;
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  .sv-roadmap-node__title {
+    font-size: 16px;
+  }
+
+  .sv-roadmap-node__description {
+    font-size: 13px;
+  }
+}
+

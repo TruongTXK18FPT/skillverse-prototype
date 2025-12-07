@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
@@ -253,11 +254,6 @@ const Header: React.FC = () => {
     setIsMobileMenuOpen(false);
   };
 
-  const handleExplore = () => {
-    navigate('/explore');
-    setIsMobileMenuOpen(false);
-  };
-
   const toggleMobileMenu = () => {
     if (isMobileMenuToggleLocked) return;
     setIsMobileMenuToggleLocked(true);
@@ -484,7 +480,7 @@ const Header: React.FC = () => {
       </div>
 
       {/* Mobile Menu */}
-      {isMobileMenuOpen && (
+      {isMobileMenuOpen && createPortal(
         <div className="mobile-menu" id="sv-mobile-menu">
           <div className="mobile-menu-content">
             {/* Mobile User Section */}
@@ -503,18 +499,35 @@ const Header: React.FC = () => {
                     <p className="user-email">{user.email}</p>
                   </div>
                 </div>
-                <div className="mobile-user-actions">
+                
+                {/* Mobile User Actions - Integrated */}
+                <div className="mobile-user-actions-grid">
+                   <button onClick={() => { handleWallet(); setIsMobileMenuOpen(false); }} className="mobile-action-icon-btn" title="Ví">
+                    <Wallet size={20} />
+                    <span>Ví</span>
+                  </button>
+                  <button className="mobile-action-icon-btn" title="Thông báo">
+                    <Bell size={20} />
+                    <span>Thông báo</span>
+                  </button>
+                  <button onClick={() => { handleUpgrade(); setIsMobileMenuOpen(false); }} className="mobile-action-icon-btn upgrade" title="Nâng cấp">
+                    <Crown size={20} />
+                    <span>Nâng cấp</span>
+                  </button>
+                </div>
+
+                <div className="mobile-user-menu-list">
                   {(user.roles.includes('MENTOR') || user.roles.includes('ADMIN')) && (
                     <button onClick={handleMentor} className="mobile-menu-item">
                       <BookOpen size={18} />
                       <span>Giảng Viên</span>
                     </button>
                   )}
-                  <button onClick={handleProfile} className="mobile-menu-item">
+                  <button onClick={() => { handleProfile(); setIsMobileMenuOpen(false); }} className="mobile-menu-item">
                     <User size={18} />
                     <span>Hồ sơ cá nhân</span>
                   </button>
-                  <button onClick={handleLogout} className="mobile-menu-item logout">
+                  <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className="mobile-menu-item logout">
                     <LogOut size={18} />
                     <span>Đăng xuất</span>
                   </button>
@@ -526,14 +539,6 @@ const Header: React.FC = () => {
                 <span>Đăng nhập</span>
               </button>
             )}
-
-            {/* Mobile Explore Button */}
-            <div className="mobile-explore-section">
-              <button className="mobile-explore-btn" onClick={handleExplore}>
-                <Compass size={24} />
-                <span>Khám Phá Bản Đồ Vũ Trụ</span>
-              </button>
-            </div>
 
             {/* Mobile Quick Navigation */}
             <div className="mobile-categories">
@@ -555,28 +560,9 @@ const Header: React.FC = () => {
                 ))}
               </div>
             </div>
-
-            {/* Mobile Actions */}
-            <div className="mobile-actions">
-              <button onClick={handleUpgrade} className="mobile-action-btn upgrade">
-                <Crown size={18} />
-                <span>Nâng cấp</span>
-              </button>
-              <button onClick={handleWallet} className="mobile-action-btn">
-                <Wallet size={18} />
-                <span>Ví</span>
-              </button>
-              <button className="mobile-action-btn">
-                <Bell size={18} />
-                <span>Thông báo</span>
-              </button>
-              <button onClick={toggleTheme} className="mobile-action-btn" style={{ display: 'none' }}>
-                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-                <span>Chủ đề</span>
-              </button>
-            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
   );

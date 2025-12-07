@@ -174,11 +174,11 @@ const ProfilePageCosmic = () => {
       ) : (
         <>
           <div className="pilot-section">
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem' }}>
+            <div className="pilot-main-grid">
               {/* Read-only View of Identity */}
               <div>
                 <h2 className="pilot-section-title">IDENTITY DATA</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div className="pilot-identity-grid">
                   <div>
                     <div className="pilot-label">FULL NAME</div>
                     <div className="pilot-stat-value" style={{ fontSize: '1rem' }}>{profile.fullName || 'N/A'}</div>

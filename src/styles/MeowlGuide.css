@@ -43,21 +43,36 @@
     transform: rotate(-25deg);
 }
 
-.quest-indicator {
+.meowl-mute-btn {
     position: absolute;
     top: 30px;
-    left: 5%;
+    left: 8%;
     width: 35px;
     height: 35px;
-    background: linear-gradient(135deg, #f59e0b, #f97316);
+    background: rgba(20, 20, 30, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    box-shadow: 0 3px 12px rgba(245, 158, 11, 0.4);
-    animation: pulse 2s infinite;
-    border: 2px solid white;
+    color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+}
+
+.meowl-mute-btn:hover {
+    transform: scale(1.1);
+    background: rgba(30, 30, 45, 0.8);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.meowl-mute-btn:active {
+    transform: scale(0.95);
 }
 
 .mascot-pulse {
@@ -194,10 +209,108 @@
     color: #00e5ff;
 }
 
-.meowlchat-close-btn {
-    position: absolute;       
-    top: 0.5rem;
-    right: 0.5rem;
+/* Mobile Responsive Fixes for Meowl Guide */
+@media (max-width: 768px) {
+    .desktop-only-options {
+        display: none !important;
+    }
+
+    .dialogue-options-mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        width: 100%;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(0, 188, 212, 0.3);
+    }
+
+    .dialogue-options-mobile .dialogue-option-floating {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        width: 100%;
+        transform: none !important;
+        opacity: 1;
+        animation: none;
+        margin: 0;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .meowl-mascot {
+        width: 100px;
+        height: 100px;
+        right: -20px; /* Peek effect: partially hidden on the right */
+        bottom: 80px; /* Raised to avoid bottom navs or footer overlap */
+        z-index: 9999; /* Ensure visibility above other elements */
+        transform: rotate(-10deg);
+        display: block !important; /* Force visibility */
+    }
+
+    .mascot-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        /* Keep the rotation for peeking effect */
+        transform: rotate(-15deg); 
+    }
+
+    .meowl-mute-btn {
+        width: 28px;
+        height: 28px;
+        top: -30px;
+        left: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .meowl-mute-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .meowl-dialog {
+        flex-direction: column-reverse;
+        align-items: center;
+        padding: 1rem;
+        gap: 0.5rem;
+    }
+
+    .dialog-avatar {
+        position: absolute;
+        bottom: -10px;
+        right: -10px;
+        width: 100px;
+        height: 100px;
+        z-index: 3;
+    }
+
+    .avatar-image {
+        width: 100%;
+        height: 100%;
+        transform: scaleX(-1);
+    }
+
+    .dialog-content {
+        max-width: 100%;
+        width: 100%;
+        margin-bottom: 60px; /* Space for avatar */
+    }
+    
+    .dialog-header {
+        padding: 0.25rem 0.75rem;
+    }
+    
+    .character-name {
+        font-size: 1rem;
+    }
+    
+    .chat-text p {
+        font-size: 0.9rem;
+    }
+}
+
+.close-btn {
     width: 36px;
     height: 36px;
     background: #001b54;
@@ -278,6 +391,10 @@
     z-index: 1001;
     animation: slideUpOptions 0.4s ease;
     pointer-events: auto;
+}
+
+.dialogue-options-mobile {
+    display: none;
 }
 
 /* Dialogue Options (Legacy - keeping for reference) */
@@ -520,18 +637,21 @@
 @media (max-width: 768px) {
     /* Mascot adjustments for mobile */
     .meowl-mascot {
-        bottom: 1rem;
-        right: -20px; /* Changed from 1rem to negative value for peeking effect */
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
+        right: -20px; /* Peek effect: partially hidden on the right */
+        bottom: 80px; /* Raised to avoid bottom navs or footer overlap */
+        z-index: 9999; /* Ensure visibility above other elements */
         transform: rotate(-10deg);
+        display: block !important; /* Force visibility */
     }
 
     .mascot-image {
-        width: 120%;
-        height: 120%;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
         /* Keep the rotation for peeking effect */
-        transform: rotate(-15deg); /* Add rotation back */
+        transform: rotate(-15deg); 
     }
 
     .quest-indicator {
@@ -647,20 +767,26 @@
 
     /* Floating dialogue options mobile adjustments */
     .dialogue-options-floating {
-        bottom: 120px; /* Adjust for mobile mascot size */
-        right: 1rem; /* Closer to edge on mobile */
-        gap: 0.4rem;
+        position: relative; /* Change from fixed/absolute to relative */
+        bottom: auto;
+        right: auto;
+        width: 100%;
+        margin-top: 1rem;
+        gap: 0.5rem;
+        align-items: center;
     }
 
     .dialogue-option-floating {
-        padding: 0.6rem 1rem;
-        font-size: 0.75rem;
-        min-width: 140px; /* Smaller width for mobile */
-        transform: skew(-1deg);
+        padding: 0.8rem 1rem;
+        font-size: 0.85rem;
+        width: 100%; /* Full width buttons */
+        min-width: unset;
+        transform: none; /* Remove skew for cleaner mobile look */
+        text-align: center;
     }
 
     .dialogue-option-floating:hover {
-        transform: skew(-1deg) translateY(-1px) scale(1.02);
+        transform: translateY(-2px);
     }
 
     /* Legacy dialogue options mobile adjustments */
@@ -734,15 +860,16 @@
 
     /* Floating dialogue options for extra small screens */
     .dialogue-options-floating {
-        bottom: 100px; /* Closer to mascot on very small screens */
-        right: 0.5rem;
-        gap: 0.3rem;
+        margin-top: 0.5rem;
+        gap: 0.4rem;
+        bottom: auto;
+        right: auto;
     }
 
     .dialogue-option-floating {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.7rem;
-        min-width: 120px; /* Even smaller width */
+        padding: 0.7rem 0.5rem;
+        font-size: 0.8rem;
+        width: 100%;
     }
 
     /* Legacy dialogue options for extra small screens */

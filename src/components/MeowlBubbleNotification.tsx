@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { X, Sparkles, Crown, MapPin, BookOpen, Target, Heart, Shirt, Home, User, Briefcase, Users, Trophy, Wallet, GraduationCap, MessageCircle, Compass, Info, CreditCard, Zap, Gift, Star, BellOff } from 'lucide-react';
+import { X, Sparkles, Crown, MapPin, BookOpen, Target, Heart, Shirt, Home, User, Briefcase, Users, Trophy, Wallet, GraduationCap, MessageCircle, Compass, Info, CreditCard, Zap, Gift, Star } from 'lucide-react';
 import { useMeowlSkin } from '../context/MeowlSkinContext';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -459,17 +459,24 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
     return localStorage.getItem(STORAGE_KEYS.BUBBLE_DISABLED) === 'true';
   });
 
-  // Toggle bubble notifications on/off
-  const toggleBubbleNotifications = useCallback(() => {
-    const newState = !isBubbleDisabled;
-    setIsBubbleDisabled(newState);
-    localStorage.setItem(STORAGE_KEYS.BUBBLE_DISABLED, newState.toString());
-    if (newState) {
-      // If disabling, hide current bubble
-      setIsVisible(false);
-      setCurrentBubble(null);
-    }
-  }, [isBubbleDisabled]);
+
+
+  // Listen for external toggle events
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const isDisabled = localStorage.getItem(STORAGE_KEYS.BUBBLE_DISABLED) === 'true';
+      setIsBubbleDisabled(isDisabled);
+      if (isDisabled) {
+        setIsVisible(false);
+        setCurrentBubble(null);
+      }
+    };
+
+    window.addEventListener('meowl-bubble-toggle', handleStorageChange);
+    return () => {
+      window.removeEventListener('meowl-bubble-toggle', handleStorageChange);
+    };
+  }, []);
 
   // Check premium status
   useEffect(() => {
@@ -671,23 +678,8 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
     handleClose();
   };
 
-  // If disabled, show re-enable button only
-  if (isBubbleDisabled && isAuthenticated) {
-    return (
-      <div className="meowl-bubble-toggle-container">
-        <button 
-          className="meowl-bubble-toggle-btn meowl-bubble-toggle--disabled" 
-          onClick={toggleBubbleNotifications}
-          title={language === 'en' ? 'Enable Meowl notifications' : 'Bật thông báo Meowl'}
-        >
-          <BellOff size={18} />
-          <span className="toggle-tooltip">
-            {language === 'en' ? 'Click to enable Meowl' : 'Bấm để bật Meowl'}
-          </span>
-        </button>
-      </div>
-    );
-  }
+  // If disabled, do nothing (button is now in MeowlGuide)
+  if (isBubbleDisabled) return null;
 
   if (!isVisible || !currentBubble || !isAuthenticated) return null;
 
@@ -696,11 +688,6 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
 
   return (
     <div className={`meowl-bubble-container ${isClosing ? 'meowl-bubble--closing' : ''}`}>
-      {/* Meowl Avatar */}
-      <div className="meowl-bubble-avatar">
-        <img src={currentSkinImage} alt="Meowl" className="meowl-bubble-avatar-img" />
-        <div className="meowl-bubble-avatar-glow"></div>
-      </div>
 
       {/* Speech Bubble */}
       <div className={`meowl-bubble-speech meowl-bubble-speech--${currentBubble.type}`}>
@@ -709,14 +696,7 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
           <X size={14} />
         </button>
 
-        {/* Disable button - to turn off notifications */}
-        <button 
-          className="meowl-bubble-disable" 
-          onClick={toggleBubbleNotifications}
-          title={language === 'en' ? 'Disable Meowl notifications' : 'Tắt thông báo Meowl'}
-        >
-          <BellOff size={12} />
-        </button>
+
 
         {/* Icon */}
         <div className="meowl-bubble-icon">

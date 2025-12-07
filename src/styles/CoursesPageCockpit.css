@@ -1348,3 +1348,70 @@
     );
   }
 }
+
+/* ====== MOBILE RESPONSIVENESS ====== */
+@media (max-width: 768px) {
+  .cockpit-courses-container {
+    padding: 1rem;
+  }
+
+  .cockpit-hud-frame {
+    padding: 1rem;
+    clip-path: none;
+    border-radius: 8px;
+  }
+
+  /* Header HUD */
+  .cockpit-header-hud {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    clip-path: none;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .cockpit-header-left,
+  .cockpit-header-right {
+    justify-content: center;
+  }
+
+  .cockpit-main-title {
+    font-size: 1.5rem;
+  }
+
+  /* Main Grid */
+  .cockpit-main-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Sidebar (Control Panel) */
+  .cockpit-control-panel {
+    /* Keep it visible but stacked on top */
+    margin-bottom: 1.5rem;
+    clip-path: none;
+    border-radius: 8px;
+  }
+
+  /* Modules Grid */
+  .cockpit-modules-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .cockpit-module-card {
+    clip-path: none;
+    border-radius: 8px;
+  }
+
+  /* Filters Panel */
+  .cockpit-filters-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .cockpit-results-info {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}

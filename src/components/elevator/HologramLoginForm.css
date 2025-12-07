@@ -696,10 +696,27 @@
     padding-bottom: 1rem;
     min-width: auto;
     width: 100%;
+    /* Reduce size on mobile */
+    flex: 0 0 auto;
+  }
+
+  .hologram-logo {
+    height: 40px; /* Smaller logo */
+    width: auto;
+  }
+
+  .header-text {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hologram-title {
+    font-size: 1.5rem;
   }
 
   .hologram-right-column {
     width: 100%;
+    padding-top: 1rem;
   }
 
   .hologram-form {
@@ -751,5 +768,21 @@
 
   .social-buttons {
     flex-direction: column;
+  }
+}
+
+/* ====== MOBILE RESPONSIVENESS REFINEMENTS ====== */
+@media (max-width: 768px) {
+  .hologram-form-container {
+    width: 90%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .hologram-field-input,
+  .submit-button,
+  .google-login-btn {
+    height: 48px; /* Touch target */
+    font-size: 16px; /* Prevent zoom */
   }
 }

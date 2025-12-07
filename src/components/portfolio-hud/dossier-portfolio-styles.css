@@ -43,6 +43,10 @@
   padding: 2rem;
   color: var(--dossier-silver);
   font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 /* ========== HEADER - PILOT ID BANNER ========== */
@@ -253,6 +257,19 @@
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--dossier-border-silver);
   margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .dossier-pilot-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .dossier-pilot-location {
+    justify-content: center;
+  }
 }
 
 .dossier-pilot-avatar {

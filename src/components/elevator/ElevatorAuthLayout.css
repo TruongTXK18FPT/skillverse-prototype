@@ -676,27 +676,20 @@
   }
 
   .elevator-content {
-    top: 45px;
-    bottom: 30px;
+    left: 10px;
+    right: 10px;
+    top: 60px;
+    bottom: 10px;
+    padding: 1rem;
+    align-items: flex-start; /* Allow scrolling from top */
+    overflow-y: auto; /* Enable scrolling */
+    -webkit-overflow-scrolling: touch;
   }
 
-  .hud-overlay {
-    display: none;
-  }
-
-  .welcome-title {
-    font-size: 22px;
-    letter-spacing: 3px;
-  }
-
-  .welcome-label {
-    font-size: 10px;
-    letter-spacing: 4px;
-  }
-
-  .indicator-label {
-    font-size: 10px;
-    letter-spacing: 3px;
+  /* Ensure form container doesn't get cut off */
+  .hologram-form-container {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
   }
 }
 
@@ -709,4 +702,35 @@
 .elevator-container input[type="text"] {
   font-family: 'Inter', 'Roboto', 'Arial', sans-serif !important;
   text-transform: none !important;
+}
+
+/* ====== MOBILE RESPONSIVENESS ====== */
+@media (max-width: 768px) {
+  /* Hide side frames on mobile */
+  .elevator-side-frame {
+    display: none;
+  }
+
+  /* Adjust glass panel to be full width with small margin */
+  .glass-doors-container {
+    left: 10px;
+    right: 10px;
+    top: 60px; /* Keep top space for header */
+    bottom: 20px;
+  }
+
+  /* Adjust top frame */
+  .elevator-top-frame {
+    height: 50px;
+  }
+
+  .indicator-label {
+    font-size: 12px;
+    letter-spacing: 3px;
+  }
+
+  /* Adjust bottom frame */
+  .elevator-bottom-frame {
+    height: 20px;
+  }
 }

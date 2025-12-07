@@ -59,6 +59,14 @@
   50% { transform: translateY(-20px) scale(1.05); }
 }
 
+/* Brand Logo Fix */
+.brand-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  max-width: 100%;
+}
+
 /* Theme Support - Galaxy Style */
 .footer.light {
   background: linear-gradient(to bottom, #f8fafc, #e2e8f0);

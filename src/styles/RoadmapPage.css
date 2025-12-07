@@ -113,6 +113,19 @@
   justify-content: center;
   gap: 3rem;
   margin-top: 2rem;
+  flex-wrap: wrap; /* Allow wrapping on mobile */
+}
+
+@media (max-width: 768px) {
+  .roadmap-page__stats {
+    gap: 1rem;
+  }
+  
+  .roadmap-stat {
+    min-width: 100px;
+    padding: 1rem;
+    flex: 1;
+  }
 }
 
 .roadmap-stat {
