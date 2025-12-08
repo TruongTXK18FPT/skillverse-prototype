@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 import {
   DollarSign, TrendingUp, TrendingDown, Wallet, CreditCard,
   Search, Filter, Eye, Download, RefreshCw, X, Calendar,
@@ -401,68 +402,91 @@ const TransactionManagementTabCosmic: React.FC = () => {
     });
   };
 
-  const generatePremiumSummaryPdf = (premiums: CombinedTransaction[]) => {
-    const doc = new jsPDF();
-    const marginLeft = 14;
-    const lineHeight = 8;
-    let y = 18;
+  const generatePremiumSummaryPdf = async (premiums: CombinedTransaction[]) => {
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.left = '-9999px';
+    container.style.top = '0';
+    container.style.width = '900px';
+    container.style.padding = '16px';
+    container.style.background = '#ffffff';
+    container.style.color = '#111827';
+    container.style.fontFamily = 'Arial, Helvetica, sans-serif';
 
-    const title = 'BÁO CÁO TỔNG HỢP GIAO DỊCH PREMIUM';
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(16);
-    doc.text(title, marginLeft, y);
-    y += lineHeight + 2;
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(11);
     const createdDates = premiums.map(p => new Date(p.createdAt).getTime());
     const start = createdDates.length ? new Date(Math.min(...createdDates)) : new Date();
     const end = createdDates.length ? new Date(Math.max(...createdDates)) : new Date();
     const formatDate = (d: Date) => `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
-    const totalAmount = premiums.reduce((sum, p) => sum + Math.abs(p.originalAmount || p.amount || 0), 0);
-    const summaryLines = [
-      `Khoảng thời gian: ${formatDate(start)} - ${formatDate(end)}`,
-      `Số giao dịch: ${premiums.length}`,
-      `Tổng doanh thu Premium: ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalAmount)}`
-    ];
-    summaryLines.forEach(line => { doc.text(line, marginLeft, y); y += lineHeight; });
-    y += 4;
-
-    doc.setFont('helvetica', 'bold');
-    doc.text('Danh sách giao dịch', marginLeft, y);
-    y += lineHeight;
-    doc.setFont('helvetica', 'normal');
-
-    const header = ['Mã', 'Ngày', 'Khách hàng', 'Email', 'Số tiền'];
-    const colX = [marginLeft, marginLeft + 30, marginLeft + 70, marginLeft + 120, marginLeft + 170];
-    doc.setFontSize(10);
-    header.forEach((h, i) => doc.text(h, colX[i], y));
-    y += lineHeight;
-    doc.setDrawColor(200);
-    doc.line(marginLeft, y - 6, marginLeft + 190, y - 6);
-
     const formatCurrency = (v: number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(v);
-    premiums.forEach(p => {
+    const totalAmount = premiums.reduce((sum, p) => sum + Math.abs(p.originalAmount || p.amount || 0), 0);
+
+    const headerHtml = `
+      <div style="margin-bottom:12px">
+        <h2 style="margin:0 0 4px 0; font-size:20px;">BÁO CÁO TỔNG HỢP GIAO DỊCH PREMIUM</h2>
+        <div style="font-size:13px;">
+          <div>Khoảng thời gian: ${formatDate(start)} - ${formatDate(end)}</div>
+          <div>Số giao dịch: ${premiums.length}</div>
+          <div>Tổng doanh thu Premium: ${formatCurrency(totalAmount)}</div>
+        </div>
+      </div>
+    `;
+
+    const rowsHtml = premiums.map(p => {
       const id = p.id;
       const dateStr = formatDate(new Date(p.createdAt));
-      const name = (p.userName || '').slice(0, 22);
-      const email = (p.userEmail || '').slice(0, 24);
+      const name = p.userName || '-';
+      const email = p.userEmail || '-';
       const amount = formatCurrency(Math.abs(p.originalAmount || p.amount || 0));
-      const row = [id, dateStr, name || '-', email || '-', amount];
-      row.forEach((cell, i) => doc.text(String(cell), colX[i], y));
-      y += lineHeight;
-      if (y > 280) { doc.addPage(); y = 18; }
-    });
+      return `<tr>
+        <td style="padding:8px; border:1px solid #e5e7eb;">${id}</td>
+        <td style="padding:8px; border:1px solid #e5e7eb;">${dateStr}</td>
+        <td style="padding:8px; border:1px solid #e5e7eb;">${name}</td>
+        <td style="padding:8px; border:1px solid #e5e7eb;">${email}</td>
+        <td style="padding:8px; border:1px solid #e5e7eb; text-align:right;">${amount}</td>
+      </tr>`;
+    }).join('');
 
-    const blob = doc.output('blob');
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `premium-summary-${Date.now()}.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+    const tableHtml = `
+      <table style="width:100%; border-collapse:collapse; font-size:12px;">
+        <thead>
+          <tr style="background:#f3f4f6;">
+            <th style="padding:8px; border:1px solid #e5e7eb; text-align:left;">Mã</th>
+            <th style="padding:8px; border:1px solid #e5e7eb; text-align:left;">Ngày</th>
+            <th style="padding:8px; border:1px solid #e5e7eb; text-align:left;">Khách hàng</th>
+            <th style="padding:8px; border:1px solid #e5e7eb; text-align:left;">Email</th>
+            <th style="padding:8px; border:1px solid #e5e7eb; text-align:right;">Số tiền</th>
+          </tr>
+        </thead>
+        <tbody>${rowsHtml}</tbody>
+      </table>
+    `;
+
+    container.innerHTML = headerHtml + tableHtml;
+    document.body.appendChild(container);
+
+    const canvas = await html2canvas(container, { scale: 2, useCORS: true });
+    document.body.removeChild(container);
+
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 10;
+    const imgWidth = pageWidth - margin * 2;
+    const imgHeight = (imgWidth / canvas.width) * canvas.height;
+
+    let heightLeft = imgHeight;
+    let position = margin;
+    pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight - margin * 2;
+    while (heightLeft > 0) {
+      pdf.addPage();
+      position = margin - heightLeft;
+      pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight - margin * 2;
+    }
+
+    pdf.save(`premium-summary-${Date.now()}.pdf`);
   };
 
   const applyFilters = () => {
@@ -710,11 +734,21 @@ const TransactionManagementTabCosmic: React.FC = () => {
             onClick={async () => {
               try {
                 setPremiumDownloading(true);
-                const premiums = transactions.filter(tx =>
-                  tx.type === 'PAYMENT' && tx.id.startsWith('PAY-') && tx.status === 'COMPLETED' &&
-                  (tx.originalData?.type === 'PREMIUM_SUBSCRIPTION')
-                );
-                generatePremiumSummaryPdf(premiums);
+                const premiums = transactions.filter(tx => {
+                  if (tx.type !== 'PAYMENT') return false;
+                  const statusOk = tx.status === 'COMPLETED' || tx.status === 'PAID';
+                  if (!statusOk) return false;
+                  const od: any = tx.originalData;
+                  const isPaymentPremium = tx.id.startsWith('PAY-') && (od?.type === 'PREMIUM_SUBSCRIPTION');
+                  const walletType = String(od?.transactionType || '').toUpperCase();
+                  const isWalletPremium = tx.id.startsWith('WAL-') && (walletType.includes('PURCHASE_PREMIUM') || walletType.includes('PREMIUM_SUBSCRIPTION'));
+                  return isPaymentPremium || isWalletPremium;
+                });
+                if (premiums.length === 0) {
+                  alert('Không có giao dịch Premium để tạo báo cáo.');
+                } else {
+                  await generatePremiumSummaryPdf(premiums);
+                }
               } catch (_e) {
                 alert('Không thể tạo PDF tổng hợp Premium. Vui lòng thử lại sau.');
               } finally {
