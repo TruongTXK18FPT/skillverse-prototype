@@ -46,7 +46,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to={redirectTo} replace />;
   }
 
-  if (allowedRoles.includes('ADMIN')) {
+  const requiresAdmin = allowedRoles.includes('ADMIN');
+  const isAdminUser = user.roles.some(role => role.toUpperCase() === 'ADMIN');
+  if (requiresAdmin && isAdminUser && allowedRoles.length === 1) {
     const verified = sessionStorage.getItem('adminKeyVerified') === 'true';
     const expiryStr = sessionStorage.getItem('adminKeyVerifiedExpiry');
     const notExpired = expiryStr ? parseInt(expiryStr, 10) > Date.now() : false;
