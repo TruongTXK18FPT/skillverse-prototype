@@ -31,16 +31,6 @@ const ProfilePageCosmic = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Easter Egg State
-  const [skinHistory, setSkinHistory] = useState<string[]>([]);
-  const [isEasterEggUnlocked, setIsEasterEggUnlocked] = useState(() => {
-    return localStorage.getItem('meowl_egg_unlocked') === 'true' || isPetActive;
-  });
-
-  useEffect(() => {
-    if (isPetActive) setIsEasterEggUnlocked(true);
-  }, [isPetActive]);
-
   const [editData, setEditData] = useState({
     fullName: '',
     phone: '',
@@ -130,26 +120,6 @@ const ProfilePageCosmic = () => {
 
   const handleSkinSelect = (skinId: string) => {
     setSkin(skinId as MeowlSkinType);
-    
-    // Easter Egg Logic
-    setSkinHistory(prev => {
-      const newHistory = [...prev, skinId].slice(-5);
-      
-      // Check if we have 5 items and they are all unique
-      if (newHistory.length === 5) {
-        const uniqueSkins = new Set(newHistory);
-        if (uniqueSkins.size === 5) {
-          if (!isEasterEggUnlocked) {
-            setIsEasterEggUnlocked(true);
-            localStorage.setItem('meowl_egg_unlocked', 'true');
-            setSuccess('Kích hoạt giao thức bí mật: Meowl đã bật');
-            setTimeout(() => setSuccess(''), 3000);
-          }
-          return []; // Reset history after trigger
-        }
-      }
-      return newHistory;
-    });
   };
 
   if (loading) return <div className="pilot-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Đang tải hồ sơ...</div>;
@@ -209,7 +179,7 @@ const ProfilePageCosmic = () => {
               {/* Companion Pod */}
               <CompanionPod 
                 isPetActive={isPetActive}
-                onTogglePet={isEasterEggUnlocked ? togglePet : undefined}
+                onTogglePet={togglePet}
               />
             </div>
           </div>
