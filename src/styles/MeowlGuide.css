@@ -393,8 +393,10 @@
     pointer-events: auto;
 }
 
-.dialogue-options-mobile {
-    display: none;
+@media (min-width: 769px) {
+    .dialogue-options-mobile {
+        display: none;
+    }
 }
 
 /* Dialogue Options (Legacy - keeping for reference) */

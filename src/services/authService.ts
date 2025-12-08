@@ -28,6 +28,34 @@ class AuthService {
   constructor() {
     this.token = localStorage.getItem('accessToken');
     this.refreshToken = localStorage.getItem('refreshToken');
+
+    // Check if token is expired on initialization
+    if (this.token && this.isTokenExpired(this.token)) {
+      console.log('Token expired on init, clearing session');
+      this.token = null;
+      this.refreshToken = null;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+    }
+  }
+
+  // Helper to check if token is expired
+  private isTokenExpired(token: string): boolean {
+    try {
+      const payloadBase64 = token.split('.')[1];
+      if (!payloadBase64) return true;
+      
+      const decodedJson = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
+      const decoded = JSON.parse(decodedJson);
+      const exp = decoded.exp;
+      
+      if (!exp) return false; // No expiry set
+      
+      return Date.now() >= exp * 1000;
+    } catch (e) {
+      return true; // Invalid token
+    }
   }
 
   // Login endpoint
@@ -329,7 +357,19 @@ class AuthService {
 
   // Check if user is authenticated
   isAuthenticated(): boolean {
-    return !!this.token;
+    if (!this.token) return false;
+    
+    if (this.isTokenExpired(this.token)) {
+      // Token expired, clear session
+      this.token = null;
+      this.refreshToken = null;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      return false;
+    }
+    
+    return true;
   }
 
   // Get redirect URL based on user roles

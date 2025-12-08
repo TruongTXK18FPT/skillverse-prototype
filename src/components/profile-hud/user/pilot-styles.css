@@ -393,7 +393,7 @@
 
   /* Companion Pod */
   .pilot-pod-container {
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    display: none;
   }
 
   .pilot-outfit-grid {
