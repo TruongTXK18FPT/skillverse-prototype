@@ -146,6 +146,10 @@ jobs:
             echo "VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }}" >> .env
             echo "VITE_FRONTEND_URL=https://skillverse.vn" >> .env
             echo "VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}" >> .env
+            echo "VITE_ADMIN_SECURITY_KEY=${{ secrets.VITE_ADMIN_SECURITY_KEY }}" >> .env
+            echo "VITE_ADMIN_Q1=${{ secrets.VITE_ADMIN_Q1 }}" >> .env
+            echo "VITE_ADMIN_Q2=${{ secrets.VITE_ADMIN_Q2 }}" >> .env
+            echo "VITE_ADMIN_Q3=${{ secrets.VITE_ADMIN_Q3 }}" >> .env
             
             # Clean old containers/images
             docker stop skillverse-frontend 2>/dev/null || true
