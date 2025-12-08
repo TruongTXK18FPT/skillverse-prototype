@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import { getMyMentorProfile, updateMyMentorProfile, uploadMyMentorAvatar, setPreChatEnabled, MentorProfile, MentorProfileUpdateDTO } from '../../services/mentorProfileService';
@@ -9,7 +10,8 @@ import ExperienceTimeline from '../../components/profile-hud/mentor/ExperienceTi
 import '../../components/profile-hud/mentor/CommanderStyles.css';
 
 const MentorProfilePage: React.FC = () => {
-  const { user } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
 
   const [profile, setProfile] = useState<MentorProfile | null>(null);
@@ -37,6 +39,14 @@ const MentorProfilePage: React.FC = () => {
   // Removed unused state: newSkill, newAchievement, fileName
 
   useEffect(() => {
+    if (authLoading) {
+      return;
+    }
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
     const loadProfile = async () => {
       if (!user?.id) return;
 
@@ -62,14 +72,14 @@ const MentorProfilePage: React.FC = () => {
         });
       } catch (error) {
         console.error('Failed to load profile:', error);
-        showError('Error', 'Failed to load profile data');
+        showError('Lỗi', 'Không thể tải dữ liệu hồ sơ');
       } finally {
         setLoading(false);
       }
     };
 
     loadProfile();
-  }, [user?.id, showError]);
+  }, [authLoading, isAuthenticated, user?.id, showError, navigate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -130,10 +140,10 @@ const MentorProfilePage: React.FC = () => {
       if (profile) {
         setProfile({ ...profile, avatar: result.avatarUrl });
       }
-      showSuccess('Success', 'Commander avatar updated successfully');
+      showSuccess('Thành công', 'Cập nhật ảnh đại diện thành công');
     } catch (error) {
       console.error('Failed to upload avatar:', error);
-      showError('Error', 'Failed to upload avatar');
+      showError('Lỗi', 'Tải ảnh đại diện thất bại');
     } finally {
       setUploading(false);
     }
@@ -145,10 +155,10 @@ const MentorProfilePage: React.FC = () => {
     try {
       const updatedProfile = await updateMyMentorProfile(formData);
       setProfile(updatedProfile);
-      showSuccess('Success', 'Commander dossier updated successfully');
+      showSuccess('Thành công', 'Cập nhật hồ sơ thành công');
     } catch (error) {
       console.error('Failed to update profile:', error);
-      showError('Error', 'Failed to update profile');
+      showError('Lỗi', 'Cập nhật hồ sơ thất bại');
     } finally {
       setSaving(false);
     }
@@ -159,10 +169,10 @@ const MentorProfilePage: React.FC = () => {
       const newState = !preChatEnabled;
       setPreChatEnabledState(newState);
       await setPreChatEnabled(newState);
-      showSuccess('Success', `Comms channel ${newState ? 'opened' : 'closed'}`);
+      showSuccess('Thành công', `Kênh liên lạc ${newState ? 'đã mở' : 'đã đóng'}`);
     } catch (error) {
       setPreChatEnabledState(!preChatEnabled); // Revert on error
-      showError('Error', 'Failed to update comms status');
+      showError('Lỗi', 'Không thể cập nhật trạng thái liên lạc');
     }
   };
 
@@ -170,7 +180,7 @@ const MentorProfilePage: React.FC = () => {
     return (
       <div className="cmdr-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <div className="cmdr-panel">
-          <div className="cmdr-panel-title">SYSTEM LOADING...</div>
+          <div className="cmdr-panel-title">Đang tải hệ thống...</div>
         </div>
       </div>
     );
@@ -217,7 +227,7 @@ const MentorProfilePage: React.FC = () => {
       </div>
       <div className="cmdr-panel">
         <div className="cmdr-panel-title">
-          DATA TRANSMISSION
+          Truyền dữ liệu
           <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>TX-MOD-09</span>
         </div>
 
@@ -228,7 +238,7 @@ const MentorProfilePage: React.FC = () => {
           onClick={handleSubmit}
           disabled={saving}
         >
-          {saving ? 'TRANSMITTING...' : 'UPDATE DOSSIER'}
+          {saving ? 'Đang truyền...' : 'Cập nhật hồ sơ'}
         </button>
       </div>
     </div>

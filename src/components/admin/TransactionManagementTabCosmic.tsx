@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { jsPDF } from 'jspdf';
 import {
   DollarSign, TrendingUp, TrendingDown, Wallet, CreditCard,
   Search, Filter, Eye, Download, RefreshCw, X, Calendar,
@@ -400,6 +401,70 @@ const TransactionManagementTabCosmic: React.FC = () => {
     });
   };
 
+  const generatePremiumSummaryPdf = (premiums: CombinedTransaction[]) => {
+    const doc = new jsPDF();
+    const marginLeft = 14;
+    const lineHeight = 8;
+    let y = 18;
+
+    const title = 'BÁO CÁO TỔNG HỢP GIAO DỊCH PREMIUM';
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.text(title, marginLeft, y);
+    y += lineHeight + 2;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    const createdDates = premiums.map(p => new Date(p.createdAt).getTime());
+    const start = createdDates.length ? new Date(Math.min(...createdDates)) : new Date();
+    const end = createdDates.length ? new Date(Math.max(...createdDates)) : new Date();
+    const formatDate = (d: Date) => `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
+    const totalAmount = premiums.reduce((sum, p) => sum + Math.abs(p.originalAmount || p.amount || 0), 0);
+    const summaryLines = [
+      `Khoảng thời gian: ${formatDate(start)} - ${formatDate(end)}`,
+      `Số giao dịch: ${premiums.length}`,
+      `Tổng doanh thu Premium: ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalAmount)}`
+    ];
+    summaryLines.forEach(line => { doc.text(line, marginLeft, y); y += lineHeight; });
+    y += 4;
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Danh sách giao dịch', marginLeft, y);
+    y += lineHeight;
+    doc.setFont('helvetica', 'normal');
+
+    const header = ['Mã', 'Ngày', 'Khách hàng', 'Email', 'Số tiền'];
+    const colX = [marginLeft, marginLeft + 30, marginLeft + 70, marginLeft + 120, marginLeft + 170];
+    doc.setFontSize(10);
+    header.forEach((h, i) => doc.text(h, colX[i], y));
+    y += lineHeight;
+    doc.setDrawColor(200);
+    doc.line(marginLeft, y - 6, marginLeft + 190, y - 6);
+
+    const formatCurrency = (v: number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(v);
+    premiums.forEach(p => {
+      const id = p.id;
+      const dateStr = formatDate(new Date(p.createdAt));
+      const name = (p.userName || '').slice(0, 22);
+      const email = (p.userEmail || '').slice(0, 24);
+      const amount = formatCurrency(Math.abs(p.originalAmount || p.amount || 0));
+      const row = [id, dateStr, name || '-', email || '-', amount];
+      row.forEach((cell, i) => doc.text(String(cell), colX[i], y));
+      y += lineHeight;
+      if (y > 280) { doc.addPage(); y = 18; }
+    });
+
+    const blob = doc.output('blob');
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `premium-summary-${Date.now()}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
   const applyFilters = () => {
     console.log('🔍 Applying filters...', { 
       totalTransactions: transactions.length, 
@@ -649,27 +714,15 @@ const TransactionManagementTabCosmic: React.FC = () => {
                   tx.type === 'PAYMENT' && tx.id.startsWith('PAY-') && tx.status === 'COMPLETED' &&
                   (tx.originalData?.type === 'PREMIUM_SUBSCRIPTION')
                 );
-                for (const tx of premiums) {
-                  const paymentId = parseInt(tx.id.replace('PAY-', ''));
-                  const blob = await paymentService.adminDownloadPaymentInvoice(paymentId);
-                  const filename = `premium-invoice-${paymentId}.pdf`;
-                  const url = window.URL.createObjectURL(blob);
-                  const link = document.createElement('a');
-                  link.href = url;
-                  link.download = filename;
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                  window.URL.revokeObjectURL(url);
-                }
+                generatePremiumSummaryPdf(premiums);
               } catch (_e) {
-                alert('Không thể tải tất cả hóa đơn Premium. Vui lòng thử lại sau.');
+                alert('Không thể tạo PDF tổng hợp Premium. Vui lòng thử lại sau.');
               } finally {
                 setPremiumDownloading(false);
               }
             }}
             disabled={loading || premiumDownloading}
-            title="Tải tất cả hóa đơn Premium"
+            title="Tải PDF tổng hợp Premium"
           >
             <Download size={18} />
             Tải HĐ Premium

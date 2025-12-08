@@ -10,7 +10,7 @@ import '../../styles/ProfilePage.css';
 import '../../styles/ProfileSecuritySection.css';
 
 const ProfilePage = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
   
@@ -52,6 +52,10 @@ const ProfilePage = () => {
   }, []);
 
   useEffect(() => {
+    // Đợi AuthContext tải xong để tránh điều hướng sớm sang /login khi reload
+    if (authLoading) {
+      return;
+    }
     if (!isAuthenticated) {
       navigate('/login');
       return;
@@ -60,7 +64,7 @@ const ProfilePage = () => {
     if (user?.id) {
       loadProfile();
     }
-  }, [isAuthenticated, user, navigate, loadProfile]);
+  }, [authLoading, isAuthenticated, user, navigate, loadProfile]);
 
   const handleEdit = () => {
     setEditing(true);

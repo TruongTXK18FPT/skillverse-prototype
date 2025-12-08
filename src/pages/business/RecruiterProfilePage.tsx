@@ -4,7 +4,8 @@ import { Building2, Globe, MapPin, FileText, AlertTriangle, CheckCircle, Clock }
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import userService from '../../services/userService';
-import { UserProfileResponse } from '../../data/userDTOs';
+import businessService from '../../services/businessService';
+import { UserProfileResponse, BusinessProfileResponse } from '../../data/userDTOs';
 import CorporateHeader from '../../components/profile-hud/business/CorporateHeader';
 import CorpDataGrid from '../../components/profile-hud/business/CorpDataGrid';
 import '../../components/profile-hud/business/corp-styles.css';
@@ -13,8 +14,10 @@ interface RecruiterProfileData extends UserProfileResponse {
   companyName?: string;
   companyWebsite?: string;
   companyAddress?: string;
+  businessAddress?: string;
   taxCodeOrBusinessRegistrationNumber?: string;
   companyDocumentsUrl?: string;
+  documentFileUrls?: string[];
   applicationStatus?: string;
   applicationDate?: string;
   approvalDate?: string;
@@ -22,7 +25,7 @@ interface RecruiterProfileData extends UserProfileResponse {
 }
 
 const RecruiterProfilePage = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
   
@@ -33,12 +36,12 @@ const RecruiterProfilePage = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const [editData, setEditData] = useState({
+  const [editData, setEditData] = useState<Partial<BusinessProfileResponse>>({
     companyName: '',
     companyWebsite: '',
-    companyAddress: '',
-    taxCodeOrBusinessRegistrationNumber: '',
-    companyDocumentsUrl: ''
+    businessAddress: '',
+    taxId: '',
+    documentFileUrls: []
   });
 
   const loadProfile = useCallback(async () => {
@@ -50,19 +53,22 @@ const RecruiterProfilePage = () => {
       setEditData({
         companyName: profileData.companyName || '',
         companyWebsite: profileData.companyWebsite || '',
-        companyAddress: profileData.companyAddress || '',
-        taxCodeOrBusinessRegistrationNumber: profileData.taxCodeOrBusinessRegistrationNumber || '',
-        companyDocumentsUrl: profileData.companyDocumentsUrl || ''
+        businessAddress: profileData.companyAddress || profileData.businessAddress || '',
+        taxId: (profileData as any).taxId || profileData.taxCodeOrBusinessRegistrationNumber || '',
+        documentFileUrls: profileData.companyDocumentsUrl ? [profileData.companyDocumentsUrl] : (profileData.documentFileUrls || [])
       });
     } catch (error) {
       console.error('Error loading recruiter profile:', error);
-      setError('Unable to access corporate registry.');
+      setError('Không thể truy cập hồ sơ doanh nghiệp.');
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
+    if (authLoading) {
+      return;
+    }
     if (!isAuthenticated) {
       navigate('/login');
       return;
@@ -70,29 +76,47 @@ const RecruiterProfilePage = () => {
     if (user?.id) {
       loadProfile();
     }
-  }, [isAuthenticated, user, navigate, loadProfile]);
+  }, [authLoading, isAuthenticated, user, navigate, loadProfile]);
 
   const handleSave = async () => {
     try {
       setSaving(true);
       setError('');
-      if (!user?.id) return;
+      if (!profile?.id) return;
 
-      await userService.updateUserProfile(user.id, editData);
-      setSuccess('Corporate registry updated.');
+      await businessService.updateBusinessProfile(profile.id, editData);
+      setSuccess('Cập nhật hồ sơ doanh nghiệp thành công.');
       setEditing(false);
       await loadProfile();
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
       console.error('Error updating profile:', error);
-      setError('Registry update failed.');
+      setError('Cập nhật hồ sơ doanh nghiệp thất bại.');
     } finally {
       setSaving(false);
     }
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setEditData(prev => ({ ...prev, [field]: value }));
+    switch (field) {
+      case 'companyName':
+        setEditData(prev => ({ ...prev, companyName: value }));
+        break;
+      case 'companyWebsite':
+        setEditData(prev => ({ ...prev, companyWebsite: value }));
+        break;
+      case 'companyAddress':
+        setEditData(prev => ({ ...prev, businessAddress: value }));
+        break;
+      case 'taxCodeOrBusinessRegistrationNumber':
+        setEditData(prev => ({ ...prev, taxId: value }));
+        break;
+      case 'companyDocumentsUrl':
+        setEditData(prev => ({ ...prev, documentFileUrls: value ? [value] : [] }));
+        break;
+      default:
+        break;
+    }
   };
 
   const getStatusColor = (status?: string) => {
@@ -111,8 +135,8 @@ const RecruiterProfilePage = () => {
     }
   };
 
-  if (loading) return <div className="corp-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>INITIALIZING CORP LINK...</div>;
-  if (!profile) return <div className="corp-container">REGISTRY ACCESS DENIED</div>;
+  if (loading) return <div className="corp-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Đang khởi tạo hồ sơ doanh nghiệp...</div>;
+  if (!profile) return <div className="corp-container">Không thể truy cập hồ sơ doanh nghiệp</div>;
 
   return (
     <div className="corp-container">
@@ -126,7 +150,13 @@ const RecruiterProfilePage = () => {
 
       {editing ? (
         <CorpDataGrid 
-          data={editData}
+          data={{
+            companyName: editData.companyName || '',
+            companyWebsite: editData.companyWebsite || '',
+            companyAddress: editData.businessAddress || '',
+            taxCodeOrBusinessRegistrationNumber: editData.taxId || '',
+            companyDocumentsUrl: editData.documentFileUrls && editData.documentFileUrls.length > 0 ? editData.documentFileUrls[0] : ''
+          }}
           onChange={handleInputChange}
           onSave={handleSave}
           loading={saving}
@@ -136,7 +166,7 @@ const RecruiterProfilePage = () => {
           {/* Status Panel */}
           <div className="corp-panel" style={{ borderColor: getStatusColor(profile.applicationStatus) }}>
             <div className="corp-panel-header" style={{ color: getStatusColor(profile.applicationStatus) }}>
-              REGISTRY STATUS
+              Trạng thái hồ sơ
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 0' }}>
               {getStatusIcon(profile.applicationStatus)}
@@ -146,61 +176,61 @@ const RecruiterProfilePage = () => {
             </div>
             {profile.applicationStatus === 'REJECTED' && profile.rejectionReason && (
               <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(239, 68, 68, 0.1)', borderLeft: '3px solid #ef4444' }}>
-                <div className="corp-label" style={{ color: '#ef4444' }}>REJECTION REASON</div>
+                <div className="corp-label" style={{ color: '#ef4444' }}>Lý do từ chối</div>
                 <p>{profile.rejectionReason}</p>
               </div>
             )}
           </div>
 
           {/* Entity Details */}
-          <div className="corp-panel">
-            <div className="corp-panel-header">ENTITY DETAILS</div>
-            <div className="corp-field">
-              <div className="corp-label">CORPORATE NAME</div>
-              <div style={{ fontSize: '1.1rem', color: '#f8fafc' }}>{profile.companyName || 'N/A'}</div>
-            </div>
-            <div className="corp-field">
-              <div className="corp-label">TAX ID / REG NO.</div>
-              <div style={{ fontFamily: 'monospace', color: '#94a3b8' }}>{profile.taxCodeOrBusinessRegistrationNumber || 'N/A'}</div>
-            </div>
-            <div className="corp-field">
-              <div className="corp-label">WEBSITE</div>
-              {profile.companyWebsite ? (
-                <a href={profile.companyWebsite} target="_blank" rel="noreferrer" style={{ color: '#fbbf24', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div className="corp-panel">
+              <div className="corp-panel-header">Thông tin doanh nghiệp</div>
+              <div className="corp-field">
+              <div className="corp-label">Tên doanh nghiệp</div>
+                <div style={{ fontSize: '1.1rem', color: '#f8fafc' }}>{profile.companyName || 'N/A'}</div>
+              </div>
+              <div className="corp-field">
+              <div className="corp-label">Mã số thuế / Số đăng ký</div>
+                <div style={{ fontFamily: 'monospace', color: '#94a3b8' }}>{profile.taxCodeOrBusinessRegistrationNumber || 'N/A'}</div>
+              </div>
+              <div className="corp-field">
+              <div className="corp-label">Website</div>
+                {profile.companyWebsite ? (
+                  <a href={profile.companyWebsite} target="_blank" rel="noreferrer" style={{ color: '#fbbf24', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <Globe size={14} /> {profile.companyWebsite}
-                </a>
-              ) : (
-                <span style={{ color: '#64748b' }}>N/A</span>
-              )}
-            </div>
-          </div>
-
-          {/* Location */}
-          <div className="corp-panel">
-            <div className="corp-panel-header">OPERATIONAL BASE</div>
-            <div className="corp-field">
-              <div className="corp-label">ADDRESS</div>
-              <div style={{ display: 'flex', gap: '0.5rem', color: '#cbd5e1' }}>
-                <MapPin size={16} style={{ marginTop: '3px', flexShrink: 0 }} />
-                {profile.companyAddress || 'N/A'}
+                  </a>
+                ) : (
+                  <span style={{ color: '#64748b' }}>N/A</span>
+                )}
               </div>
             </div>
-          </div>
+
+          {/* Location */}
+            <div className="corp-panel">
+              <div className="corp-panel-header">Văn phòng hoạt động</div>
+              <div className="corp-field">
+              <div className="corp-label">Địa chỉ</div>
+                <div style={{ display: 'flex', gap: '0.5rem', color: '#cbd5e1' }}>
+                  <MapPin size={16} style={{ marginTop: '3px', flexShrink: 0 }} />
+                  {profile.companyAddress || 'N/A'}
+                </div>
+              </div>
+            </div>
 
           {/* Documents */}
-          <div className="corp-panel">
-            <div className="corp-panel-header">LEGAL DOCUMENTS</div>
-            <div className="corp-field">
-              <div className="corp-label">DOCUMENT LINK</div>
-              {profile.companyDocumentsUrl ? (
-                <a href={profile.companyDocumentsUrl} target="_blank" rel="noreferrer" style={{ color: '#fbbf24', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <FileText size={14} /> VIEW DOCUMENTS
-                </a>
-              ) : (
-                <span style={{ color: '#64748b' }}>NO DOCUMENTS UPLOADED</span>
-              )}
+            <div className="corp-panel">
+              <div className="corp-panel-header">Tài liệu pháp lý</div>
+              <div className="corp-field">
+              <div className="corp-label">Liên kết tài liệu</div>
+                {profile.companyDocumentsUrl ? (
+                  <a href={profile.companyDocumentsUrl} target="_blank" rel="noreferrer" style={{ color: '#fbbf24', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <FileText size={14} /> Xem tài liệu
+                  </a>
+                ) : (
+                  <span style={{ color: '#64748b' }}>Chưa tải tài liệu</span>
+                )}
+              </div>
             </div>
-          </div>
         </div>
       )}
     </div>

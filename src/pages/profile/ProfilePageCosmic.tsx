@@ -18,7 +18,7 @@ import '../../components/profile-hud/user/pilot-styles.css';
 import '../../styles/ProfileSecuritySection.css';
 
 const ProfilePageCosmic = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
   const { currentSkin, setSkin, skins, togglePet, isPetActive } = useMeowlSkin();
@@ -66,13 +66,17 @@ const ProfilePageCosmic = () => {
       });
     } catch (error) {
       console.error('Error loading profile:', error);
-      setError('Unable to load pilot dossier.');
+      setError('Không thể tải hồ sơ');
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
+    // Đợi AuthContext tải xong để tránh redirect sớm sang /login
+    if (authLoading) {
+      return;
+    }
     if (!isAuthenticated) {
       navigate('/login');
       return;
@@ -80,7 +84,7 @@ const ProfilePageCosmic = () => {
     if (user?.id) {
       loadProfile();
     }
-  }, [isAuthenticated, user, navigate, loadProfile]);
+  }, [authLoading, isAuthenticated, user, navigate, loadProfile]);
 
   const handleSave = async () => {
     try {
@@ -89,11 +93,11 @@ const ProfilePageCosmic = () => {
       const updatedProfile = await userService.updateUserProfile(user!.id, editData);
       setProfile(updatedProfile);
       setEditing(false);
-      setSuccess('Dossier updated successfully.');
+      setSuccess('Cập nhật hồ sơ thành công.');
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
       console.error('Error updating profile:', error);
-      setError((error as Error).message || 'Update failed.');
+      setError((error as Error).message || 'Cập nhật thất bại.');
     } finally {
       setSaving(false);
     }
@@ -112,11 +116,11 @@ const ProfilePageCosmic = () => {
           avatarMediaUrl: response.avatarUrl
         });
       }
-      setSuccess('Avatar updated successfully.');
+      setSuccess('Cập nhật ảnh đại diện thành công.');
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
       console.error('Error uploading avatar:', error);
-      setError('Failed to upload avatar.');
+      setError('Tải ảnh đại diện thất bại.');
     }
   };
 
@@ -138,7 +142,7 @@ const ProfilePageCosmic = () => {
           if (!isEasterEggUnlocked) {
             setIsEasterEggUnlocked(true);
             localStorage.setItem('meowl_egg_unlocked', 'true');
-            setSuccess('SECRET PROTOCOL UNLOCKED: MEOWL ACTIVATED');
+            setSuccess('Kích hoạt giao thức bí mật: Meowl đã bật');
             setTimeout(() => setSuccess(''), 3000);
           }
           return []; // Reset history after trigger
@@ -148,8 +152,8 @@ const ProfilePageCosmic = () => {
     });
   };
 
-  if (loading) return <div className="pilot-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>LOADING DOSSIER...</div>;
-  if (!profile) return <div className="pilot-container">ERROR LOADING PROFILE</div>;
+  if (loading) return <div className="pilot-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Đang tải hồ sơ...</div>;
+  if (!profile) return <div className="pilot-container">Lỗi tải hồ sơ</div>;
 
   return (
     <div className="pilot-container">
@@ -177,18 +181,18 @@ const ProfilePageCosmic = () => {
             <div className="pilot-main-grid">
               {/* Read-only View of Identity */}
               <div>
-                <h2 className="pilot-section-title">IDENTITY DATA</h2>
+                <h2 className="pilot-section-title">Thông tin cá nhân</h2>
                 <div className="pilot-identity-grid">
                   <div>
-                    <div className="pilot-label">FULL NAME</div>
+                    <div className="pilot-label">Họ và tên</div>
                     <div className="pilot-stat-value" style={{ fontSize: '1rem' }}>{profile.fullName || 'N/A'}</div>
                   </div>
                   <div>
-                    <div className="pilot-label">COMM LINK</div>
+                    <div className="pilot-label">Liên lạc</div>
                     <div className="pilot-stat-value" style={{ fontSize: '1rem' }}>{profile.phone || 'N/A'}</div>
                   </div>
                   <div>
-                    <div className="pilot-label">BASE LOCATION</div>
+                    <div className="pilot-label">Địa chỉ</div>
                     <div className="pilot-stat-value" style={{ fontSize: '1rem' }}>{profile.address || 'N/A'}</div>
                   </div>
                   <div>
@@ -196,16 +200,14 @@ const ProfilePageCosmic = () => {
                     <div className="pilot-stat-value" style={{ fontSize: '1rem' }}>{profile.email}</div>
                   </div>
                   <div style={{ gridColumn: '1 / -1' }}>
-                    <div className="pilot-label">BIO / LOGS</div>
-                    <div style={{ color: 'var(--pilot-text-dim)', marginTop: '0.5rem' }}>{profile.bio || 'No logs recorded.'}</div>
+                    <div className="pilot-label">Giới thiệu / Nhật ký</div>
+                    <div style={{ color: 'var(--pilot-text-dim)', marginTop: '0.5rem' }}>{profile.bio || 'Chưa có nội dung.'}</div>
                   </div>
                 </div>
               </div>
 
               {/* Companion Pod */}
               <CompanionPod 
-                currentSkin={currentSkin}
-                skins={skins}
                 isPetActive={isPetActive}
                 onTogglePet={isEasterEggUnlocked ? togglePet : undefined}
               />
@@ -221,30 +223,30 @@ const ProfilePageCosmic = () => {
 
           {/* Student Reviews */}
           <div className="pilot-section">
-            <h2 className="pilot-section-title">PERFORMANCE REVIEWS</h2>
+            <h2 className="pilot-section-title">Đánh giá học viên</h2>
             <StudentReviews />
           </div>
 
           {/* Security Section */}
           <div className="pilot-section">
-            <h2 className="pilot-section-title" style={{ color: '#ef4444', borderColor: '#ef4444' }}>SECURITY PROTOCOLS</h2>
+            <h2 className="pilot-section-title" style={{ color: '#ef4444', borderColor: '#ef4444' }}>Bảo mật</h2>
             <div className="security-actions" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
               {user?.authProvider === 'GOOGLE' && !user?.googleLinked && (
                 <div style={{ border: '1px solid #ef4444', padding: '1rem', background: 'rgba(239, 68, 68, 0.05)' }}>
-                  <h3 style={{ color: '#ef4444', margin: '0 0 0.5rem 0' }}>BACKUP PASSWORD</h3>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--pilot-text-dim)' }}>Set a password for alternative login access.</p>
+                  <h3 style={{ color: '#ef4444', margin: '0 0 0.5rem 0' }}>Mật khẩu dự phòng</h3>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--pilot-text-dim)' }}>Đặt mật khẩu để đăng nhập dự phòng.</p>
                   <button onClick={() => navigate('/set-password')} className="pilot-btn" style={{ marginTop: '1rem', background: '#ef4444', color: 'white' }}>
-                    <Shield size={16} /> SET PASSWORD
+                    <Shield size={16} /> Đặt mật khẩu
                   </button>
                 </div>
               )}
 
               {(user?.authProvider === 'LOCAL' || user?.googleLinked) && (
                 <div style={{ border: '1px solid var(--pilot-border)', padding: '1rem' }}>
-                  <h3 style={{ color: 'var(--pilot-text-white)', margin: '0 0 0.5rem 0' }}>CHANGE PASSWORD</h3>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--pilot-text-dim)' }}>Update your access codes periodically.</p>
+                  <h3 style={{ color: 'var(--pilot-text-white)', margin: '0 0 0.5rem 0' }}>Đổi mật khẩu</h3>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--pilot-text-dim)' }}>Cập nhật mật khẩu định kỳ.</p>
                   <button onClick={() => navigate('/change-password')} className="pilot-btn pilot-btn-secondary" style={{ marginTop: '1rem' }}>
-                    <Lock size={16} /> UPDATE CODES
+                    <Lock size={16} /> Cập nhật
                   </button>
                 </div>
               )}
