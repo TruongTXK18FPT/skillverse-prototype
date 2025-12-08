@@ -70,6 +70,30 @@ const ForbiddenTemple: React.FC = () => {
     }
   }, [location.state]);
 
+  // Block DevTools shortcuts (F12, Ctrl+Shift+I/C/J, Ctrl+U) and context menu
+  useEffect(() => {
+    const keyHandler = (e: KeyboardEvent) => {
+      const k = e.key.toUpperCase();
+      const blockCombos =
+        k === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (k === 'I' || k === 'C' || k === 'J')) ||
+        (e.ctrlKey && !e.shiftKey && k === 'U');
+      if (blockCombos) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    const contextHandler = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+    document.addEventListener('keydown', keyHandler, { capture: true });
+    document.addEventListener('contextmenu', contextHandler);
+    return () => {
+      document.removeEventListener('keydown', keyHandler, { capture: true } as any);
+      document.removeEventListener('contextmenu', contextHandler);
+    };
+  }, []);
+
   // Preload Images
   useEffect(() => {
     // Lock Scroll

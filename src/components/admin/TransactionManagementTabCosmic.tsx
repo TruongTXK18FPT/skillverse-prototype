@@ -48,6 +48,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
+  const [premiumDownloading, setPremiumDownloading] = useState(false);
 
   // Statistics
   const [stats, setStats] = useState({
@@ -294,7 +295,28 @@ const TransactionManagementTabCosmic: React.FC = () => {
       })
       .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
 
-    const revenue = bookingCommission + courseCommission;
+    const premiumRevenue = txs
+      .filter(tx => {
+        const od: any = tx.originalData;
+        const pType = od?.type || '';
+        return tx.amount > 0 &&
+          (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
+          tx.type === 'PAYMENT' &&
+          pType === 'PREMIUM_SUBSCRIPTION';
+      })
+      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+
+    const coinRevenue = txs
+      .filter(tx => {
+        const od: any = tx.originalData;
+        return tx.amount > 0 &&
+          (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
+          tx.type === 'COIN_PURCHASE' &&
+          (od?.currencyType === 'CASH');
+      })
+      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+
+    const revenue = bookingCommission + courseCommission + premiumRevenue + coinRevenue;
 
     const withdrawals = txs
       .filter(tx => tx.amount < 0)
@@ -336,7 +358,32 @@ const TransactionManagementTabCosmic: React.FC = () => {
         })
         .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
 
-      return bookings + courses;
+      const premiums = txs
+        .filter(tx => {
+          const od: any = tx.originalData;
+          const pType = od?.type || '';
+          const txDate = new Date(tx.createdAt);
+          return txDate >= todayStart &&
+            tx.amount > 0 &&
+            (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
+            tx.type === 'PAYMENT' &&
+            pType === 'PREMIUM_SUBSCRIPTION';
+        })
+        .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+
+      const coins = txs
+        .filter(tx => {
+          const od: any = tx.originalData;
+          const txDate = new Date(tx.createdAt);
+          return txDate >= todayStart &&
+            tx.amount > 0 &&
+            (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
+            tx.type === 'COIN_PURCHASE' &&
+            (od?.currencyType === 'CASH');
+        })
+        .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+
+      return bookings + courses + premiums + coins;
     })();
 
     const coinPurchases = txs.filter(tx => 
@@ -410,12 +457,10 @@ const TransactionManagementTabCosmic: React.FC = () => {
       let filename: string;
       
       if (transaction.id.startsWith('WAL-')) {
-        // Wallet transaction
         const txId = parseInt(transaction.id.replace('WAL-', ''));
         blob = await paymentService.adminDownloadWalletInvoice(txId);
         filename = `wallet-invoice-${txId}.pdf`;
       } else if (transaction.id.startsWith('PAY-')) {
-        // Payment transaction
         const paymentId = parseInt(transaction.id.replace('PAY-', ''));
         blob = await paymentService.adminDownloadPaymentInvoice(paymentId);
         filename = `invoice-${paymentId}.pdf`;
@@ -425,11 +470,9 @@ const TransactionManagementTabCosmic: React.FC = () => {
           blob = await paymentService.adminDownloadPaymentInvoice(paymentId);
           filename = `invoice-${paymentId}.pdf`;
         } else {
-          console.error('Premium subscription missing paymentTransactionId');
           return;
         }
       } else {
-        console.error('Unknown transaction type for invoice download');
         return;
       }
 
@@ -457,6 +500,34 @@ const TransactionManagementTabCosmic: React.FC = () => {
     } catch (error) {
       console.error('❌ Error downloading invoice:', error);
       alert('Không thể tải hóa đơn. Vui lòng thử lại sau.');
+    }
+  };
+
+  const handleDownloadPremiumInvoice = async (transaction: CombinedTransaction) => {
+    try {
+      const isPremiumPayment = transaction.type === 'PAYMENT' && transaction.id.startsWith('PAY-') && (transaction.originalData?.type === 'PREMIUM_SUBSCRIPTION');
+      if (!isPremiumPayment) return;
+
+      const paymentId = parseInt(transaction.id.replace('PAY-', ''));
+      const blob = await paymentService.adminDownloadPaymentInvoice(paymentId);
+      const filename = `invoice-${paymentId}.pdf`;
+
+      if (!blob || (blob.type && blob.type !== 'application/pdf')) {
+        try { const text = await blob.text(); console.error('Invoice response is not PDF:', text); } catch (_e) { void 0; }
+        throw new Error('Invalid invoice response');
+      }
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('❌ Error downloading premium invoice:', error);
+      alert('Không thể tải hóa đơn Premium. Vui lòng thử lại sau.');
     }
   };
 
@@ -568,6 +639,40 @@ const TransactionManagementTabCosmic: React.FC = () => {
           >
             <Download size={18} />
             Xuất PDF
+          </button>
+          <button
+            className="admin-download-btn"
+            onClick={async () => {
+              try {
+                setPremiumDownloading(true);
+                const premiums = transactions.filter(tx =>
+                  tx.type === 'PAYMENT' && tx.id.startsWith('PAY-') && tx.status === 'COMPLETED' &&
+                  (tx.originalData?.type === 'PREMIUM_SUBSCRIPTION')
+                );
+                for (const tx of premiums) {
+                  const paymentId = parseInt(tx.id.replace('PAY-', ''));
+                  const blob = await paymentService.adminDownloadPaymentInvoice(paymentId);
+                  const filename = `premium-invoice-${paymentId}.pdf`;
+                  const url = window.URL.createObjectURL(blob);
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.download = filename;
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  window.URL.revokeObjectURL(url);
+                }
+              } catch (_e) {
+                alert('Không thể tải tất cả hóa đơn Premium. Vui lòng thử lại sau.');
+              } finally {
+                setPremiumDownloading(false);
+              }
+            }}
+            disabled={loading || premiumDownloading}
+            title="Tải tất cả hóa đơn Premium"
+          >
+            <Download size={18} />
+            Tải HĐ Premium
           </button>
         </div>
       </div>
@@ -773,6 +878,15 @@ const TransactionManagementTabCosmic: React.FC = () => {
                       className="admin-action-btn download"
                       onClick={() => handleDownloadInvoice(tx)}
                       title="Tải hóa đơn PDF"
+                    >
+                      <Download size={16} />
+                    </button>
+                  )}
+                  {tx.type === 'PAYMENT' && tx.id.startsWith('PAY-') && tx.originalData?.type === 'PREMIUM_SUBSCRIPTION' && tx.status === 'COMPLETED' && (
+                    <button
+                      className="admin-action-btn download"
+                      onClick={() => handleDownloadPremiumInvoice(tx)}
+                      title="Tải hóa đơn Premium"
                     >
                       <Download size={16} />
                     </button>

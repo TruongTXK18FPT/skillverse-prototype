@@ -52,6 +52,7 @@ import BusinessPage from './pages/main/BusinessPage';
 import MentorPage from './pages/main/MentorPage';
 import AllBadgesPage from './pages/mentor/AllBadgesPage';
 import AdminPage from './pages/main/AdminPage';
+import AdminSecurityPage from './pages/admin/AdminSecurityPage';
 import AiRoadmapPage from './pages/roadmap/AiRoadmapPage';
 import RoadmapDetailPage from './pages/roadmap/RoadmapDetailPage';
 import './styles/App.css';
@@ -187,6 +188,7 @@ const App = () => {
                         <AdminPage />
                       </AdminRoute>
                     } />
+                    <Route path="/admin-security" element={<AdminSecurityPage />} />
 
                     {/* Unauthorized Access */}
                     <Route path="/unauthorized" element={<UnauthorizedPage />} />
@@ -236,6 +238,7 @@ const hideFooterOnlyRoutes = new Set<string>([
   '/roadmap',
   '/cv',
   '/admin',
+  '/admin-security',
   '/course-learning',
   '/notifications',
   '/messages',
@@ -274,6 +277,7 @@ const hideMeowlBubbleRoutes = new Set<string>([
   '/chatbot/general',
   '/chatbot/expert',
   '/admin',
+  '/admin-security',
 ]);
 
 // Meowl Bubble Notification Wrapper

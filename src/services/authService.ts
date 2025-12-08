@@ -326,6 +326,7 @@ class AuthService {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
+      try { sessionStorage.removeItem('adminKeyVerified'); } catch (e) { void e; }
       
       console.log('User logged out successfully');
     } catch (error) {
@@ -336,6 +337,7 @@ class AuthService {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
+      try { sessionStorage.removeItem('adminKeyVerified'); } catch (e) { void e; }
     }
   }
 

@@ -46,6 +46,15 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to={redirectTo} replace />;
   }
 
+  if (allowedRoles.includes('ADMIN')) {
+    const verified = sessionStorage.getItem('adminKeyVerified') === 'true';
+    const expiryStr = sessionStorage.getItem('adminKeyVerifiedExpiry');
+    const notExpired = expiryStr ? parseInt(expiryStr, 10) > Date.now() : false;
+    if (!verified || !notExpired) {
+      return <Navigate to="/admin-security" replace />;
+    }
+  }
+
   return <>{children}</>;
 };
 
