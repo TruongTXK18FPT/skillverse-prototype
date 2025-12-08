@@ -648,8 +648,12 @@
     border-right: none;
     border-bottom: 1px solid var(--reg-business-border);
     padding-right: 0;
-    padding-bottom: 1.5rem;
+    padding-bottom: 0.25rem;
     min-width: unset;
+  }
+
+  .reg-business-login-section{
+    padding: 0;
   }
 
   .reg-business-form {

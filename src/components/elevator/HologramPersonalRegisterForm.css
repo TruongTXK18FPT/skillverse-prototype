@@ -617,35 +617,25 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .reg-personal-form-container {
-    width: 95%;
-    margin: 0 auto;
-  }
-
   .reg-personal-content {
     flex-direction: column;
-    padding: 1.5rem 1rem;
-    max-height: calc(100vh - 100px);
+    padding: 1.5rem;
   }
 
   .reg-personal-left-column {
     border-right: none;
     border-bottom: 1px solid var(--reg-personal-border);
     padding-right: 0;
-    padding-bottom: 1.5rem;
+    padding-bottom: 0.25rem;
     min-width: unset;
-    width: 100%;
   }
 
-  .reg-personal-right-column {
-    width: 100%;
+  .reg-personal-login-section{
+    padding: 0;
   }
 
   .reg-personal-form {
     grid-template-columns: 1fr;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
   }
 
   .reg-personal-field {
@@ -654,23 +644,5 @@
 
   .reg-personal-title {
     font-size: 1.2rem;
-  }
-
-  /* Ensure inputs are touch-friendly */
-  .reg-personal-input,
-  .reg-personal-textarea,
-  .reg-personal-select {
-    height: 48px; /* Minimum 44px */
-    font-size: 16px; /* Prevent zoom */
-  }
-  
-  .reg-personal-textarea {
-    height: auto;
-    min-height: 80px;
-  }
-
-  .reg-personal-submit-btn,
-  .reg-personal-google-btn {
-    height: 48px;
   }
 }

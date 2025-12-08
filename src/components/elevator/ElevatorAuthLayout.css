@@ -711,6 +711,10 @@
     display: none;
   }
 
+  .hud-corner {
+    display: none;
+  }
+
   /* Adjust glass panel to be full width with small margin */
   .glass-doors-container {
     left: 10px;

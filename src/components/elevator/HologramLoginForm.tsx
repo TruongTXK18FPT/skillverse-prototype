@@ -100,7 +100,7 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
               transition={{ delay: 0.3, duration: 0.5 }}
             >
               <h1 className="hologram-title">Đăng nhập</h1>
-              <p className="hologram-subtitle">Xác thực danh tính của bạn</p>
+              <p className="hologram-login-description">Xác thực danh tính của bạn</p>
             </motion.div>
 
             <div className="header-decoration">
