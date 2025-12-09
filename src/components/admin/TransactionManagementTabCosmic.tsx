@@ -405,6 +405,17 @@ const TransactionManagementTabCosmic: React.FC = () => {
   };
 
   const generatePremiumSummaryPdf = async (premiums: CombinedTransaction[]) => {
+    const parseDate = (dateStr: string) => {
+      let input = String(dateStr);
+      if (input.includes(' ') && !input.includes('T')) {
+        input = input.replace(' ', 'T');
+      }
+      if (!input.endsWith('Z') && !/[+-]\d{2}:?\d{2}/.test(input)) {
+        input += 'Z';
+      }
+      return new Date(input);
+    };
+
     const container = document.createElement('div');
     container.style.position = 'fixed';
     container.style.left = '-9999px';
@@ -415,7 +426,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
     container.style.color = '#111827';
     container.style.fontFamily = 'Arial, Helvetica, sans-serif';
 
-    const createdDates = premiums.map(p => new Date(p.createdAt).getTime());
+    const createdDates = premiums.map(p => parseDate(p.createdAt).getTime());
     const start = createdDates.length ? new Date(Math.min(...createdDates)) : new Date();
     const end = createdDates.length ? new Date(Math.max(...createdDates)) : new Date();
     const formatDate = (d: Date) => `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
@@ -444,7 +455,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
 
     const rowsHtml = premiums.map(p => {
       const id = p.id;
-      const dateStr = formatDate(new Date(p.createdAt));
+      const dateStr = formatDate(parseDate(p.createdAt));
       const name = p.userName || '-';
       const email = p.userEmail || '-';
       const amount = formatCurrency(Math.abs(p.originalAmount || p.amount || 0));
@@ -642,7 +653,15 @@ const TransactionManagementTabCosmic: React.FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+    if (!dateString) return '';
+    let input = String(dateString);
+    if (input.includes(' ') && !input.includes('T')) {
+      input = input.replace(' ', 'T');
+    }
+    if (!input.endsWith('Z') && !/[+-]\d{2}:?\d{2}/.test(input)) {
+      input += 'Z';
+    }
+    return new Date(input).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
   };
 
   const getTypeIcon = (type: TransactionType) => {
