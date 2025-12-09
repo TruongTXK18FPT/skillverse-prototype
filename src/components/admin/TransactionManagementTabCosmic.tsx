@@ -301,10 +301,11 @@ const TransactionManagementTabCosmic: React.FC = () => {
       .filter(tx => {
         const od: any = tx.originalData;
         const pType = od?.type || '';
+        const wType = (od?.transactionType || '').toUpperCase();
         return tx.amount > 0 &&
           (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
           tx.type === 'PAYMENT' &&
-          pType === 'PREMIUM_SUBSCRIPTION';
+          (pType === 'PREMIUM_SUBSCRIPTION' || wType.includes('PURCHASE_PREMIUM') || wType.includes('PREMIUM_SUBSCRIPTION'));
       })
       .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
 
@@ -364,12 +365,13 @@ const TransactionManagementTabCosmic: React.FC = () => {
         .filter(tx => {
           const od: any = tx.originalData;
           const pType = od?.type || '';
+          const wType = (od?.transactionType || '').toUpperCase();
           const txDate = new Date(tx.createdAt);
           return txDate >= todayStart &&
             tx.amount > 0 &&
             (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
             tx.type === 'PAYMENT' &&
-            pType === 'PREMIUM_SUBSCRIPTION';
+            (pType === 'PREMIUM_SUBSCRIPTION' || wType.includes('PURCHASE_PREMIUM') || wType.includes('PREMIUM_SUBSCRIPTION'));
         })
         .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
 
@@ -421,12 +423,21 @@ const TransactionManagementTabCosmic: React.FC = () => {
     const totalAmount = premiums.reduce((sum, p) => sum + Math.abs(p.originalAmount || p.amount || 0), 0);
 
     const headerHtml = `
-      <div style="margin-bottom:12px">
-        <h2 style="margin:0 0 4px 0; font-size:20px;">BÁO CÁO TỔNG HỢP GIAO DỊCH PREMIUM</h2>
-        <div style="font-size:13px;">
-          <div>Khoảng thời gian: ${formatDate(start)} - ${formatDate(end)}</div>
-          <div>Số giao dịch: ${premiums.length}</div>
-          <div>Tổng doanh thu Premium: ${formatCurrency(totalAmount)}</div>
+      <div style="margin-bottom:20px; border-bottom: 2px solid #e5e7eb; padding-bottom: 16px;">
+        <h2 style="margin:0 0 12px 0; font-size:22px; color: #111827; text-transform: uppercase; letter-spacing: 0.5px;">Báo Cáo Tổng Hợp Giao Dịch Premium</h2>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; font-size:13px; color: #374151;">
+          <div>
+            <div style="color: #6b7280; margin-bottom: 4px;">Khoảng thời gian</div>
+            <div style="font-weight: 600;">${formatDate(start)} - ${formatDate(end)}</div>
+          </div>
+          <div>
+            <div style="color: #6b7280; margin-bottom: 4px;">Số giao dịch</div>
+            <div style="font-weight: 600;">${premiums.length}</div>
+          </div>
+          <div>
+            <div style="color: #6b7280; margin-bottom: 4px;">Tổng doanh thu</div>
+            <div style="font-weight: 700; color: #059669; font-size: 15px;">${formatCurrency(totalAmount)}</div>
+          </div>
         </div>
       </div>
     `;
@@ -477,13 +488,16 @@ const TransactionManagementTabCosmic: React.FC = () => {
 
     let heightLeft = imgHeight;
     let position = margin;
+    const pageContentHeight = pageHeight - margin * 2;
+
     pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight - margin * 2;
+    heightLeft -= pageContentHeight;
+
     while (heightLeft > 0) {
+      position -= pageContentHeight;
       pdf.addPage();
-      position = margin - heightLeft;
       pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight - margin * 2;
+      heightLeft -= pageContentHeight;
     }
 
     pdf.save(`premium-summary-${Date.now()}.pdf`);
@@ -628,7 +642,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('vi-VN');
+    return new Date(dateString).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
   };
 
   const getTypeIcon = (type: TransactionType) => {
@@ -965,15 +979,6 @@ const TransactionManagementTabCosmic: React.FC = () => {
                       className="admin-action-btn download"
                       onClick={() => handleDownloadInvoice(tx)}
                       title="Tải hóa đơn PDF"
-                    >
-                      <Download size={16} />
-                    </button>
-                  )}
-                  {tx.type === 'PAYMENT' && tx.id.startsWith('PAY-') && tx.originalData?.type === 'PREMIUM_SUBSCRIPTION' && tx.status === 'COMPLETED' && (
-                    <button
-                      className="admin-action-btn download"
-                      onClick={() => handleDownloadPremiumInvoice(tx)}
-                      title="Tải hóa đơn Premium"
                     >
                       <Download size={16} />
                     </button>
