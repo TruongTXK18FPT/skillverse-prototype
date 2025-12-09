@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './ForbiddenTemple.css';
+import TempleMusicPlayer from './TempleMusicPlayer';
 
 // Assets
 import bgNormal from '../../assets/pray/assets/background.png';
@@ -20,7 +21,6 @@ import moImg from '../../assets/pray/assets/percussion.png';
 import bellImg from '../../assets/pray/assets/bell.png';
 
 // Sounds
-import soundSerenity from '../../assets/pray/sound/serenity.mp3';
 import soundLightOut from '../../assets/pray/sound/light-out.mp3';
 import soundHorror from '../../assets/pray/sound/horror.mp3';
 import soundMo from '../../assets/pray/sound/percussion.mp3';
@@ -39,12 +39,12 @@ const ForbiddenTemple: React.FC = () => {
   const [isStickLit, setIsStickLit] = useState(false);
   const [moShaking, setMoShaking] = useState(false);
   const [bellShaking, setBellShaking] = useState(false);
+  const [isZenMode, setIsZenMode] = useState(false);
   
   // Intro State
   const [introStep, setIntroStep] = useState<'none' | 'text1' | 'text2' | 'blink'>('none');
 
   // Audio Refs
-  const audioSerenity = useRef<HTMLAudioElement>(new Audio(soundSerenity));
   const audioLightOut = useRef<HTMLAudioElement>(new Audio(soundLightOut));
   const audioHorror = useRef<HTMLAudioElement>(new Audio(soundHorror));
 
@@ -107,11 +107,9 @@ const ForbiddenTemple: React.FC = () => {
     
     // Setup Audio Loops
     audioHorror.current.loop = true;
-    audioSerenity.current.loop = true;
     
     return () => {
       document.body.style.overflow = 'auto'; // Unlock Scroll
-      audioSerenity.current.pause();
       audioLightOut.current.pause();
       audioHorror.current.pause();
     };
@@ -127,9 +125,6 @@ const ForbiddenTemple: React.FC = () => {
   }, [clicks]);
 
   const triggerPhase1Transition = () => {
-    // Stop Serenity
-    audioSerenity.current.pause();
-
     // 1. Lights Out
     setIsLightsOut(true);
     audioLightOut.current.play().catch(e => console.log("Audio blocked", e));
@@ -144,7 +139,6 @@ const ForbiddenTemple: React.FC = () => {
   const triggerPhase2Transition = () => {
     // 1. Lights Out Brief
     setIsLightsOut(true);
-    audioSerenity.current.pause(); // Ensure stopped
     audioHorror.current.play().catch(e => console.log("Audio blocked", e));
 
     // 2. Wait 5s for horror intro
@@ -174,10 +168,9 @@ const ForbiddenTemple: React.FC = () => {
   }, [phase]);
 
   const handleActionClick = () => {
-    // First Click: Light Incense & Play Serenity (Always allowed)
+    // First Click: Light Incense (Always allowed)
     if (clicks === 0) {
       setIsStickLit(true);
-      audioSerenity.current.play().catch(e => console.log("Audio blocked", e));
       setClicks(prev => prev + 1);
       return;
     }
@@ -198,7 +191,9 @@ const ForbiddenTemple: React.FC = () => {
   };
 
   const playInstrument = (type: 'MO' | 'BELL') => {
-    const isMeme = Math.random() > 0.9; // 10% Meme Chance
+    // Zen Mode: Force meme chance to 0
+    const memeChance = isZenMode ? 0 : 0.1;
+    const isMeme = Math.random() < memeChance; 
     let audioSrc = '';
     let volume = 0.6;
 
@@ -338,6 +333,15 @@ const ForbiddenTemple: React.FC = () => {
           Clicks: {clicks} | Phase: {phase}
         </div> */}
       </div>
+
+      {/* Jade Console Music Player - Only appears after lighting incense */}
+      {isStickLit && (
+        <TempleMusicPlayer 
+          isZenMode={isZenMode} 
+          onToggleZen={() => setIsZenMode(!isZenMode)} 
+          autoPlay={true}
+        />
+      )}
     </div>
   );
 };
