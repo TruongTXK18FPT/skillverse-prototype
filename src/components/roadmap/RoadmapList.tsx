@@ -1,8 +1,8 @@
 import { memo, useMemo, useCallback } from 'react';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Clock, Target, ChevronRight } from 'lucide-react';
 import { RoadmapSessionSummary } from '../../types/Roadmap';
-import RoadmapCard from './RoadmapCard';
 import './RoadmapList.css';
+import '../../styles/RoadmapHUD.css';
 
 interface RoadmapListProps {
   roadmaps: RoadmapSessionSummary[];
@@ -31,7 +31,7 @@ const RoadmapList = memo(({
   // Memoized roadmap card component
   const RoadmapCard = memo(({ roadmap }: { roadmap: RoadmapSessionSummary }) => (
     <button
-      className={`sv-roadmap-card ${displayMode === 'list' ? 'sv-roadmap-card--list' : ''}`}
+      className={`roadmap-hud-card ${displayMode === 'list' ? 'list-view' : ''}`}
       type="button"
       onClick={() => onSelectRoadmap(roadmap.sessionId)}
       onKeyDown={(e) => { 
@@ -41,37 +41,53 @@ const RoadmapList = memo(({
         } 
       }}
     >
-      <div className="sv-roadmap-card__header">
-        <h3 className="sv-roadmap-card__title">{roadmap.title}</h3>
-        <span className="sv-roadmap-card__badge">{roadmap.experienceLevel}</span>
+      <div className="roadmap-hud-card-glow" />
+      
+      <div className="roadmap-hud-card-header">
+        <div className="roadmap-hud-card-title-group">
+          <h3 className="roadmap-hud-card-title">{roadmap.title}</h3>
+          <span className={`roadmap-hud-badge ${roadmap.experienceLevel.toLowerCase()}`}>
+            {roadmap.experienceLevel}
+          </span>
+        </div>
+        <ChevronRight className="roadmap-hud-card-arrow" size={20} />
       </div>
       
-      <p className="sv-roadmap-card__goal">{roadmap.originalGoal}</p>
-      
-      <div className="sv-roadmap-card__stats">
-        <div className="sv-roadmap-card__stat">
-          <BookOpen size={16} />
-          <span>{roadmap.totalQuests} Nhiệm vụ</span>
+      <div className="roadmap-hud-card-body">
+        <div className="roadmap-hud-card-goal">
+          <Target size={14} className="text-cyan-400" />
+          <span className="truncate">{roadmap.originalGoal}</span>
         </div>
-        <div className="sv-roadmap-card__stat">
-          <span>{roadmap.duration}</span>
+        
+        <div className="roadmap-hud-card-stats">
+          <div className="roadmap-hud-stat">
+            <BookOpen size={14} />
+            <span>{roadmap.totalQuests} Nhiệm vụ</span>
+          </div>
+          <div className="roadmap-hud-stat">
+            <Clock size={14} />
+            <span>{roadmap.duration}</span>
+          </div>
+        </div>
+
+        <div className="roadmap-hud-progress-container">
+          <div className="roadmap-hud-progress-bar">
+            <div
+              className="roadmap-hud-progress-fill"
+              style={{ width: `${roadmap.progressPercentage}%` }}
+            />
+          </div>
+          <div className="roadmap-hud-progress-text">
+            <span>TIẾN ĐỘ SỨ MỆNH</span>
+            <span>{roadmap.progressPercentage}%</span>
+          </div>
         </div>
       </div>
 
-      <div className="sv-roadmap-card__progress">
-        <div className="sv-roadmap-card__progress-bar">
-          <div
-            className="sv-roadmap-card__progress-fill"
-            style={{ width: `${roadmap.progressPercentage}%` }}
-          />
-        </div>
-        <span className="sv-roadmap-card__progress-text">
-          {roadmap.completedQuests} / {roadmap.totalQuests} đã xong ({roadmap.progressPercentage}%)
+      <div className="roadmap-hud-card-footer">
+        <span className="roadmap-hud-date">
+          KHỞI TẠO: {new Date(roadmap.createdAt).toLocaleDateString('vi-VN')}
         </span>
-      </div>
-
-      <div className="sv-roadmap-card__date">
-        Tạo ngày {new Date(roadmap.createdAt).toLocaleDateString('vi-VN')}
       </div>
     </button>
   ));
@@ -83,7 +99,7 @@ const RoadmapList = memo(({
     return (
       <div className="roadmap-list__loading">
         <div className="roadmap-list__spinner" />
-        <p>Đang tải lộ trình của bạn...</p>
+        <p>ĐANG TẢI DỮ LIỆU...</p>
       </div>
     );
   }

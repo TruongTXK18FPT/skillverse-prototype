@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import ReactFlow, {
   Node,
   Edge,
@@ -8,8 +8,10 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   ConnectionMode,
-  MarkerType
+  MarkerType,
+  Position
 } from 'reactflow';
+import ELK from 'elkjs/lib/elk.bundled.js'; // Import ELK
 import 'reactflow/dist/style.css';
 import { RoadmapNode as RoadmapNodeType, QuestProgress } from '../../types/Roadmap';
 import RoadmapQuestNode from './RoadmapQuestNode';
@@ -20,134 +22,141 @@ interface RoadmapFlowProps {
   onQuestComplete?: (questId: string, completed: boolean) => void;
 }
 
-/**
- * React Flow component for interactive roadmap visualization
- */
+// Cấu hình ELK Layout
+const elk = new ELK();
+const elkOptions = {
+  'elk.algorithm': 'layered',
+  'elk.direction': 'DOWN', // Sắp xếp từ trên xuống
+  'elk.spacing.nodeNode': '80', // Khoảng cách ngang giữa các node
+  'elk.layered.spacing.nodeNodeBetweenLayers': '150', // Khoảng cách dọc giữa các tầng
+  'elk.layered.noCollision.handling': 'true', // Tự động tránh đè lên nhau
+};
+
 const RoadmapFlow = ({ roadmap, progressMap, onQuestComplete }: RoadmapFlowProps) => {
-  // Custom node types
+  // Giữ nguyên Node cũ của bạn
   const nodeTypes = useMemo(() => ({
     questNode: RoadmapQuestNode
   }), []);
 
-  // Convert roadmap to React Flow nodes
-  const convertToFlowNodes = useCallback((): Node[] => {
-    const flowNodes: Node[] = [];
-    const levelMap = new Map<string, number>();
-    const processedNodes = new Set<string>();
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-    // Find root nodes (nodes that aren't children of any other node)
-    const childrenSet = new Set<string>();
-    roadmap.forEach(node => {
-      node.children.forEach(childId => childrenSet.add(childId));
-    });
-
-    const rootNodes = roadmap.filter(node => !childrenSet.has(node.id));
-
-    // BFS to assign levels with better spacing
-    const queue: { node: RoadmapNodeType; level: number; xOffset: number }[] = [];
-    rootNodes.forEach((node, index) => {
-      queue.push({ node, level: 0, xOffset: index * 450 }); // Increased from 350 to 450
-    });
-
-    while (queue.length > 0) {
-      const { node, level, xOffset } = queue.shift()!;
-      
-      if (processedNodes.has(node.id)) continue;
-      processedNodes.add(node.id);
-
-      levelMap.set(node.id, level);
-
-      // Calculate position with better spacing
-      const x = xOffset;
-      const y = level * 350; // Increased from 250 to 350 for better vertical spacing
-
-      // Create React Flow node
-      flowNodes.push({
+  // 1. Hàm tính toán Layout bằng ELK (Thay thế cho thuật toán BFS cũ)
+  const getLayoutedElements = useCallback(async (rawNodes: Node[], rawEdges: Edge[]) => {
+    const graph = {
+      id: 'root',
+      layoutOptions: {
+        'elk.algorithm': 'layered',
+        'elk.direction': 'DOWN',
+        'elk.spacing.nodeNode': '300', // <--- Đẩy chiều ngang ra thật xa (300px)
+        'elk.layered.spacing.nodeNodeBetweenLayers': '250', // <--- Đẩy chiều dọc ra xa (250px)
+        'elk.layered.noCollision.handling': 'true',
+      },
+      children: rawNodes.map((node) => ({
         id: node.id,
-        type: 'questNode',
-        position: { x, y },
-        data: {
-          node,
-          progress: progressMap?.get(node.id),
-          onComplete: onQuestComplete
-        }
+        // <--- Khai báo kích thước vùng chiếm dụng lớn hơn để tạo khoảng thở
+        width: 400,
+        height: 250,
+      })),
+      edges: rawEdges.map((edge) => ({
+        id: edge.id,
+        sources: [edge.source],
+        targets: [edge.target],
+      })),
+    };
+
+    try {
+      const layoutedGraph = await elk.layout(graph);
+
+      const layoutedNodes = rawNodes.map((node) => {
+        const elkNode = layoutedGraph.children?.find((n) => n.id === node.id);
+        return {
+          ...node,
+          position: {
+            // Thêm offset nhẹ nếu cần căn chỉnh tâm
+            x: elkNode?.x || 0,
+            y: elkNode?.y || 0
+          },
+          targetPosition: Position.Top,
+          sourcePosition: Position.Bottom,
+        };
       });
 
-      // Add children to queue with better horizontal spacing
-      node.children.forEach((childId, childIndex) => {
-        const childNode = roadmap.find(n => n.id === childId);
-        if (childNode && !processedNodes.has(childId)) {
-          const childXOffset = xOffset + (childIndex - node.children.length / 2) * 320; // Increased from 200 to 320
-          queue.push({
-            node: childNode,
-            level: level + 1,
-            xOffset: childXOffset
-          });
-        }
-      });
+      return { nodes: layoutedNodes, edges: rawEdges };
+    } catch (e) {
+      console.error("ELK Layout Error:", e);
+      return { nodes: rawNodes, edges: rawEdges };
     }
+  }, []);
 
-    return flowNodes;
-  }, [roadmap, onQuestComplete]); // Removed progressMap from dependencies!
+  // 2. Effect: Xây dựng cấu trúc Graph và chạy Layout
+  useEffect(() => {
+    // A. Tạo Nodes thô (chưa có vị trí chuẩn)
+    const initialNodes: Node[] = roadmap.map((node) => ({
+      id: node.id,
+      type: 'questNode',
+      position: { x: 0, y: 0 }, // Vị trí tạm
+      data: {
+        node,
+        progress: progressMap?.get(node.id),
+        onComplete: onQuestComplete
+      }
+    }));
 
-  // Convert roadmap to React Flow edges
-  const convertToFlowEdges = useCallback((): Edge[] => {
-    const edges: Edge[] = [];
-
-    roadmap.forEach(node => {
-      node.children.forEach(childId => {
-        const childNode = roadmap.find(n => n.id === childId);
+    // B. Tạo Edges (Dây nối)
+    const initialEdges: Edge[] = [];
+    roadmap.forEach((node) => {
+      node.children.forEach((childId) => {
+        const childNode = roadmap.find((n) => n.id === childId);
         if (childNode) {
           const isMainPath = node.type === 'MAIN' && childNode.type === 'MAIN';
-          
-          edges.push({
+          initialEdges.push({
             id: `${node.id}-${childId}`,
             source: node.id,
             target: childId,
-            type: 'smoothstep',
+            type: 'smoothstep', // Dây cong vuông góc cho gọn
             animated: isMainPath,
             style: {
-              stroke: isMainPath ? '#6366f1' : '#94a3b8',
-              strokeWidth: isMainPath ? 3 : 2
+              stroke: isMainPath ? '#6366f1' : '#475569', // Màu dây: Tím (Main) hoặc Xám (Side)
+              strokeWidth: isMainPath ? 3 : 1.5,
+              opacity: 0.8
             },
             markerEnd: {
               type: MarkerType.ArrowClosed,
-              color: isMainPath ? '#6366f1' : '#94a3b8'
+              color: isMainPath ? '#6366f1' : '#475569'
             }
           });
         }
       });
     });
 
-    return edges;
-  }, [roadmap]);
+    // C. Gọi hàm Layout
+    getLayoutedElements(initialNodes, initialEdges).then(({ nodes: layoutedNodes, edges: layoutedEdges }) => {
+      setNodes(layoutedNodes);
+      setEdges(layoutedEdges);
+    });
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(convertToFlowNodes());
-  const [edges, setEdges, onEdgesChange] = useEdgesState(convertToFlowEdges());
+  }, [roadmap, getLayoutedElements]); // Chỉ chạy lại khi cấu trúc roadmap thay đổi
 
-  // Update nodes when roadmap changes (but NOT when progress changes)
-  useMemo(() => {
-    setNodes(convertToFlowNodes());
-    setEdges(convertToFlowEdges());
-  }, [roadmap, convertToFlowNodes, convertToFlowEdges, setNodes, setEdges]); // Only depend on roadmap, not progressMap
-
-  // Update node data when progress changes WITHOUT recalculating layout
-  useMemo(() => {
+  // 3. Effect: Cập nhật tiến độ (Không chạy lại Layout -> Fix Lag)
+  useEffect(() => {
     if (progressMap) {
       setNodes((nds) =>
         nds.map((node) => ({
           ...node,
           data: {
             ...node.data,
-            progress: progressMap.get(node.id)
+            progress: progressMap.get(node.id),
+            // Quan trọng: Update lại callback để tránh stale closure
+            onComplete: onQuestComplete
           }
         }))
       );
     }
-  }, [progressMap, setNodes]);
+  }, [progressMap, onQuestComplete, setNodes]);
 
   return (
-    <div className="sv-roadmap-flow">
+    <div className="sv-roadmap-flow" style={{ width: '100%', height: '100%' }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -156,27 +165,20 @@ const RoadmapFlow = ({ roadmap, progressMap, onQuestComplete }: RoadmapFlowProps
         nodeTypes={nodeTypes}
         connectionMode={ConnectionMode.Loose}
         fitView
-        fitViewOptions={{
-          padding: 0.2,
-          includeHiddenNodes: false
-        }}
         minZoom={0.1}
         maxZoom={1.5}
+        // Thêm các props này để tối ưu performance khi drag
+        onlyRenderVisibleElements={true}
         defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
       >
-        <Background color="#272a3a" gap={18} />
+        <Background color="#1e293b" gap={20} size={1} />
         <Controls className="sv-roadmap-flow__controls" />
         <MiniMap
           className="sv-roadmap-flow__minimap"
-          maskColor="rgba(2,6,23,0.75)"
-          nodeStrokeColor={(n) => {
-            const data = (n.data as { node?: { type?: string } })?.node?.type;
-            return data === 'MAIN' ? '#a78bfa' : '#38bdf8';
-          }}
-          nodeBorderRadius={3}
+          maskColor="rgba(2, 6, 23, 0.7)"
           nodeColor={(node) => {
-            const data = node.data as { node?: { type?: string } };
-            return data?.node?.type === 'MAIN' ? '#8b5cf6' : '#38bdf8';
+            const type = (node.data as { node?: { type?: string } })?.node?.type;
+            return type === 'MAIN' ? '#8b5cf6' : '#38bdf8';
           }}
         />
       </ReactFlow>

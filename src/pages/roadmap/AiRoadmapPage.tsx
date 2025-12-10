@@ -14,6 +14,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/RoadmapPage.css';
 import '../../styles/AiRoadmap.css';
+import '../../styles/RoadmapHUD.css';
 
 type ViewMode = 'list' | 'generate';
 type DisplayMode = 'grid' | 'list';
@@ -170,7 +171,7 @@ const AiRoadmapPage = () => {
     }
   };
   return (
-    <div className="roadmap-page__galaxy-bg">
+    <div className="roadmap-hud-container">
 
       {/* Cosmic dust particles - Optimized for performance */}
       <div className="cosmic-dust">
@@ -187,22 +188,22 @@ const AiRoadmapPage = () => {
           />
         ))}
       </div>
-      <div className="roadmap-page__container">
+      <div className="roadmap-page__container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
         {/* Header */}
-        <div className="roadmap-page__header">
-          <button onClick={handleGoBack} className="roadmap-page__back-btn">
+        <div className="roadmap-page__header" style={{ marginBottom: '30px' }}>
+          <button onClick={handleGoBack} className="roadmap-page__back-btn" style={{ color: 'var(--hud-accent)', borderColor: 'var(--hud-border)' }}>
             <ArrowLeft className="h-5 w-5" />
             {viewMode === 'list' ? 'Quay lại' : 'Quay lại Lộ trình'}
           </button>
           
           <div className="roadmap-page__header-content">
-            <h1 className="roadmap-page__title">
-              {viewMode === 'list' && 'Lộ trình học bằng AI'}
-              {viewMode === 'generate' && 'Tạo lộ trình mới'}
+            <h1 className="roadmap-page__title" style={{ fontFamily: 'var(--hud-font-mono)', color: 'var(--hud-accent)', textShadow: '0 0 10px var(--hud-accent-glow)' }}>
+              {viewMode === 'list' && 'NAVIGATION CONTROL DECK'}
+              {viewMode === 'generate' && ''}
             </h1>
-            <p className="roadmap-page__subtitle">
-              {viewMode === 'list' && 'Lộ trình học cá nhân hóa, được tạo bởi AI'}
-              {viewMode === 'generate' && 'Hãy để AI tạo hành trình học tập phù hợp với bạn'}
+            <p className="roadmap-page__subtitle" style={{ color: 'var(--hud-text-dim)' }}>
+              {viewMode === 'list' && 'Hệ thống định vị lộ trình học tập AI'}
+              {viewMode === 'generate' && ''}
             </p>
           </div>
 
@@ -210,7 +211,8 @@ const AiRoadmapPage = () => {
           {viewMode === 'list' && (
             <button
               onClick={handleCreateRoadmap}
-              className="roadmap-page__create-btn"
+              className="roadmap-hud-btn"
+              style={{ width: 'auto', padding: '10px 20px', display: 'flex', alignItems: 'center', gap: '10px' }}
             >
               <Plus size={20} />
               Tạo lộ trình mới
@@ -225,25 +227,27 @@ const AiRoadmapPage = () => {
             <div className="roadmap-page__list">
               {/* Search and Filter Controls */}
               {roadmaps.length > 0 && (
-                <div className="sv-roadmap-controls">
+                <div className="sv-roadmap-controls" style={{ background: 'var(--hud-panel-bg)', borderColor: 'var(--hud-border)' }}>
                   <div className="sv-roadmap-controls__search">
-                    <Search size={20} />
+                    <Search size={20} style={{ color: 'var(--hud-accent)' }} />
                     <input
                       type="text"
                       placeholder="Tìm kiếm lộ trình..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="sv-roadmap-controls__input"
+                      style={{ color: 'var(--hud-text)', background: 'transparent' }}
                     />
                   </div>
 
                   <div className="sv-roadmap-controls__filters">
                     <div className="sv-roadmap-controls__group">
-                      <Filter size={18} />
+                      <Filter size={18} style={{ color: 'var(--hud-accent)' }} />
                       <select
                         value={filterExperience}
                         onChange={(e) => setFilterExperience(e.target.value)}
                         className="sv-roadmap-controls__select"
+                        style={{ color: 'var(--hud-text)', background: 'var(--hud-bg)' }}
                       >
                         <option value="all">Tất cả cấp độ</option>
                         <option value="beginner">Mới bắt đầu</option>
@@ -253,11 +257,12 @@ const AiRoadmapPage = () => {
                     </div>
 
                     <div className="sv-roadmap-controls__group">
-                      <span className="sv-roadmap-controls__label">Sắp xếp:</span>
+                      <span className="sv-roadmap-controls__label" style={{ color: 'var(--hud-text-dim)' }}>Sắp xếp:</span>
                       <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value as SortOption)}
                         className="sv-roadmap-controls__select"
+                        style={{ color: 'var(--hud-text)', background: 'var(--hud-bg)' }}
                       >
                         <option value="newest">Mới nhất</option>
                         <option value="oldest">Cũ nhất</option>
@@ -270,6 +275,7 @@ const AiRoadmapPage = () => {
                       onClick={() => setDisplayMode(displayMode === 'grid' ? 'list' : 'grid')}
                       className="sv-roadmap-controls__view-toggle"
                       title={displayMode === 'grid' ? 'Chế độ danh sách' : 'Chế độ lưới'}
+                      style={{ color: 'var(--hud-accent)' }}
                     >
                       {displayMode === 'grid' ? <List size={20} /> : <Grid3x3 size={20} />}
                     </button>
@@ -291,12 +297,14 @@ const AiRoadmapPage = () => {
 
           {/* GENERATE VIEW - Show form */}
           {viewMode === 'generate' && (
-            <RoadmapGeneratorForm
-              onGenerate={handleGenerate}
-              isLoading={isLoading}
-              isAuthenticated={isAuthenticated}
-              onLoginRedirect={() => navigate('/login')}
-            />
+            <div className="roadmap-hud-console">
+                <RoadmapGeneratorForm
+                  onGenerate={handleGenerate}
+                  isLoading={isLoading}
+                  isAuthenticated={isAuthenticated}
+                  onLoginRedirect={() => navigate('/login')}
+                />
+            </div>
           )}
 
         </div>

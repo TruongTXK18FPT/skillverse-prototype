@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, User, Sparkles, Loader, MessageSquare, Plus, Trash2, Zap, Code, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { Send, User, Sparkles, Loader, Plus, Trash2, Zap, Code, ArrowLeft, Menu, X } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useTheme } from '../../context/ThemeContext';
+// import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import careerChatService from '../../services/careerChatService';
 import { UIMessage, ChatSession, ChatMode, ExpertContext } from '../../types/CareerChat';
@@ -13,7 +13,7 @@ import { transcribeAudioViaBackend } from '../../shared/speechToText';
 import { Mic, Square } from 'lucide-react';
 import ExpertModeSelector from '../../components/ExpertModeSelector';
 import avaChat from '../../assets/ava-chat.png';
-import '../../styles/ExpertChatTech.css';
+import '../../styles/ChatHUD.css';
 import '../../styles/VoiceSelector.css';
 
 /**
@@ -21,7 +21,7 @@ import '../../styles/VoiceSelector.css';
  * Specialized AI expert consultation with futuristic design
  */
 const ExpertChatPage = () => {
-  const { theme } = useTheme();
+  // const { theme } = useTheme();
   const { isAuthenticated, user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -40,12 +40,9 @@ const ExpertChatPage = () => {
   const [showExpertSelector, setShowExpertSelector] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [selectedVoice, setSelectedVoice] = useState<string>('banmai');
-  const [previewLoadingVoice, setPreviewLoadingVoice] = useState<string | null>(null);
-  const [speaking, setSpeaking] = useState<boolean>(false);
-  const [ttsPreparing, setTtsPreparing] = useState<boolean>(false);
-  const [voiceMode, setVoiceMode] = useState<boolean>(false);
-  const [showVoiceModal, setShowVoiceModal] = useState<boolean>(false);
+  const [speaking] = useState<boolean>(false);
+  const [ttsPreparing] = useState<boolean>(false);
+  const [voiceMode] = useState<boolean>(false);
   const [recorder] = useState(() => new WavRecorder());
   const [isRecording, setIsRecording] = useState(false);
   const [previewText, setPreviewText] = useState<string>('');
@@ -270,19 +267,11 @@ const ExpertChatPage = () => {
   // Show loading screen while initializing
   if (isInitializing) {
     return (
-      <div className="expert-chat-page">
-        <div className="expert-holo-bg">
-          <div className="holo-scanlines"></div>
-          <div className="holo-grid"></div>
-        </div>
-        <div className="expert-loading-screen">
-          <div className="loading-spinner"></div>
-          <div className="loading-text">
-            <Zap size={24} className="pulse" />
-            <span>ĐANG KHỞI TẠO HỆ THỐNG CHUYÊN GIA...</span>
-          </div>
-          <div className="loading-bar">
-            <div className="loading-bar-fill"></div>
+      <div className="chat-hud-viewport">
+        <div className="chat-hud-main-area" style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', color: 'var(--chat-hud-accent)' }}>
+            <Loader size={48} className="animate-spin" />
+            <div style={{ fontSize: '1.2rem', letterSpacing: '2px' }}>ĐANG KHỞI TẠO HỆ THỐNG CHUYÊN GIA...</div>
           </div>
         </div>
       </div>
@@ -330,15 +319,7 @@ const ExpertChatPage = () => {
     navigate('/chatbot');
   };
 
-  const previewVoice = async (_voiceId: string) => { return; };
-
   const speakText = async (_text: string) => { return; };
-
-  const quickSend = async () => {
-    if (!inputMessage.trim() || isLoading) return;
-    const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
-    await handleSendMessage(fakeEvent);
-  };
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -402,76 +383,33 @@ const ExpertChatPage = () => {
   };
 
   return (
-    <div className={`expert-chat-page ${theme}`}>
-      {/* Hologram background effects */}
-      <div className="expert-holo-bg">
-        <div className="holo-scanlines"></div>
-        <div className="holo-grid"></div>
-        <div className="holo-particles">
-          {[...Array(15)].map((_, i) => (
-            <div
-              key={i}
-              className="holo-particle"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${15 + Math.random() * 10}s`
-              }}
-            />
-          ))}
-        </div>
-      </div>
-
+    <div className="chat-hud-viewport">
       {/* Sidebar */}
-      <div className={`expert-chat-sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
-        <div className="expert-sidebar-corners">
-          <div className="corner tl"></div>
-          <div className="corner tr"></div>
-          <div className="corner bl"></div>
-          <div className="corner br"></div>
+      <div className={`chat-hud-sidebar ${isSidebarOpen ? 'open' : ''}`}>
+        <div className="chat-hud-sidebar-header">
+          HỆ THỐNG CHUYÊN GIA
         </div>
-        
-        <div className="expert-chat-sidebar__header">
-          <div className="expert-status">
-            <Zap size={16} />
-            <span>HỆ THỐNG CHUYÊN GIA</span>
-          </div>
-          <h2 className="expert-chat-sidebar__title">
-            <MessageSquare size={20} />
-            Phiên làm việc
-          </h2>
-          <button className="expert-chat-sidebar__new-chat" onClick={handleNewChat}>
-            <Plus size={18} />
-            Tạo trò chuyện mới
-          </button>
-          <button className="expert-chat-sidebar__exit" onClick={handleBackToLanding}>
-            Thoát chế độ chuyên gia
-          </button>
-        </div>
-
-        <div className="expert-chat-sidebar__sessions">
+        <button className="chat-hud-new-chat-btn" onClick={handleNewChat}>
+          <Plus size={18} /> Tạo trò chuyện mới
+        </button>
+        <div className="chat-hud-session-list">
           {loadingSessions ? (
-            <div className="expert-loading">
-              <Loader size={24} className="spin" />
-              <p>Đang tải...</p>
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              <Loader size={24} className="animate-spin" style={{ color: 'var(--chat-hud-accent)' }} />
             </div>
           ) : sessions.length === 0 ? (
-            <div className="expert-empty">
-              <p>Chưa có phiên làm việc nào</p>
-            </div>
+            <p style={{ textAlign: 'center', color: 'rgba(229, 231, 235, 0.6)', padding: '20px' }}>
+              Chưa có phiên làm việc nào
+            </p>
           ) : (
             sessions.map(s => (
-              <div key={s.sessionId} className={`expert-session-item ${sessionId === s.sessionId ? 'active' : ''}`}>
-                <div onClick={() => handleLoadSession(s.sessionId)} style={{ flex: 1, cursor: 'pointer' }}>
-                  <div className="expert-session-title">{s.title}</div>
-                  <div className="expert-session-meta">
-                    {s.messageCount} tin nhắn · {new Date(s.lastMessageAt).toLocaleDateString('vi-VN')}
-                  </div>
+              <div key={s.sessionId} className={`chat-hud-session-item ${sessionId === s.sessionId ? 'active' : ''}`}>
+                <div onClick={() => handleLoadSession(s.sessionId)} style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {s.title}
                 </div>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleDeleteSession(s.sessionId); }}
-                  className="expert-session-delete"
+                  style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', opacity: 0.7 }}
                 >
                   <Trash2 size={14} />
                 </button>
@@ -479,83 +417,47 @@ const ExpertChatPage = () => {
             ))
           )}
         </div>
+        <div style={{ padding: '10px', borderTop: '1px solid var(--chat-hud-border)' }}>
+           <button className="chat-hud-new-chat-btn" onClick={handleBackToLanding} style={{ width: 'calc(100% - 20px)', margin: '0 10px' }}>
+            Thoát chế độ chuyên gia
+          </button>
+        </div>
       </div>
 
-      {/* Main chat */}
-      <div className={`expert-chat-container ${!isSidebarOpen ? 'expanded' : ''}`}>
+      {/* Main Area */}
+      <div className="chat-hud-main-area">
         {/* Header */}
-        <div className="expert-chat-header">
-          <div className="expert-header-line"></div>
+        <div className="chat-hud-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <button className="chat-hud-mobile-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+              {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+            <button className="chat-hud-back-btn" onClick={() => navigate('/chatbot')}>
+              <ArrowLeft size={18} /> Quay lại
+            </button>
+          </div>
           
-          <button 
-            className="expert-sidebar-toggle"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            title={isSidebarOpen ? "Đóng Sidebar" : "Mở Sidebar"}
-          >
-            {isSidebarOpen ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
-          </button>
-
-          <div className="expert-chat-header__avatar">
-            {expertContext?.mediaUrl ? (
-              <img src={expertContext.mediaUrl} alt="Expert" />
-            ) : (
-              <Code size={32} />
-            )}
-            <div className="avatar-corners">
-              <div className="corner tl"></div>
-              <div className="corner tr"></div>
-              <div className="corner bl"></div>
-              <div className="corner br"></div>
+          <div className="chat-hud-title" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: '1.2' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Sparkles size={16} style={{ color: 'var(--chat-hud-accent)' }} />
+              {expertContext?.jobRole || 'Expert'}
             </div>
+            <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 'normal' }}>
+              {expertContext?.domain}
+            </span>
           </div>
 
-          <div className="expert-chat-header__info">
-            <div className="expert-badge-main">
-              <Sparkles size={14} />
-              <span>{expertContext?.expertName || 'Expert'}</span>
-            </div>
-            <h1 className="expert-chat-header__title">{expertContext?.jobRole || 'Expert'}</h1>
-            <p className="expert-chat-header__subtitle">
-              {expertContext?.domain} → {expertContext?.industry}
-            </p>
+          <div className="chat-hud-status">
+            <div className="chat-hud-status-dot"></div>
+            ONLINE
           </div>
         </div>
 
-        {/* Mode toggle moved to input area; mic shown only in voice mode */}
-
-        {(isRecording || isPreviewing) && (
-          <div className="sv-audio-controls">
-            <button
-              type="button"
-              className="sv-audio-control__mic-btn"
-              onClick={isRecording ? stopRecording : startRecording}
-            >
-              {isRecording ? <Square size={16} /> : <Mic size={16} />} {isRecording ? 'Dừng ghi' : 'Bắt đầu ghi'}
-            </button>
-            <div className="sv-audio-control__voice">Giọng đang chọn: {selectedVoice}</div>
-            <button
-              type="button"
-              className="sv-audio-control__send-btn"
-              disabled={!inputMessage.trim() || isLoading}
-              onClick={quickSend}
-            >
-              <Send size={16} /> Gửi tin nhắn
-            </button>
-            <div className="sv-audio-control__status">
-              {isPreviewing ? 'Đang nhận diện...' : (isRecording ? 'Đang ghi âm...' : '')}
-            </div>
-          </div>
-        )}
-
-        {ENABLE_TTS && (
-          <></>
-        )}
-
-        {/* Messages */}
-        <div className="expert-chat-messages">
+        {/* Message List */}
+        <div className="chat-hud-message-list">
           {messages.map(msg => (
-            <div key={msg.id} className={`expert-chat-message ${msg.role}`}>
-              <div className="expert-message-avatar">
+            <div key={msg.id} className={`chat-hud-message-row ${msg.role}`}>
+              <div className="chat-hud-avatar">
                 {msg.role === 'assistant' ? (
                   expertContext?.mediaUrl ? (
                     <img src={expertContext.mediaUrl} alt="Expert" />
@@ -564,105 +466,87 @@ const ExpertChatPage = () => {
                   )
                 ) : (
                   user?.avatarUrl ? (
-                    <img src={user.avatarUrl} alt="User" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                    <img src={user.avatarUrl} alt="User" style={{ width: '100%', height: '100%', borderRadius: '4px', objectFit: 'cover' }} />
                   ) : (
-                    <User size={24} />
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#334155', color: '#fff' }}>
+                      <User size={20} />
+                    </div>
                   )
                 )}
-                {msg.role === 'assistant' && (
-                  <div className="avatar-glow"></div>
-                )}
               </div>
-
-              <div className="expert-message-content">
-                <div className="expert-message-bubble">
-                  <div className="bubble-corners">
-                    <div className="corner tl"></div>
-                    <div className="corner tr"></div>
-                    <div className="corner bl"></div>
-                    <div className="corner br"></div>
+              <div className="chat-hud-bubble">
+                <MessageRenderer content={msg.content} isExpertMode={true} />
+                {msg.role === 'assistant' && voiceMode && ENABLE_TTS && (
+                  <div className="sv-tts-play-below" style={{ marginTop: '8px' }}>
+                    {ttsPreparing && !speaking ? (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', color: '#94a3b8' }}>
+                        <span className="sv-preview-loading" /> Đang chuẩn bị audio...
+                      </span>
+                    ) : (
+                      <button
+                        className="sv-tts-play-btn"
+                        type="button"
+                        onClick={() => speakText(msg.content)}
+                        disabled={speaking}
+                        title="Đọc to tin nhắn này"
+                        style={{ background: 'none', border: 'none', color: 'var(--chat-hud-accent)', cursor: 'pointer', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                      >
+                        {speaking ? 'Đang phát...' : '🔊 Đọc to'}
+                      </button>
+                    )}
                   </div>
-                  <MessageRenderer content={msg.content} isExpertMode={true} />
-                  {msg.role === 'assistant' && voiceMode && ENABLE_TTS && (
-                    <div className="sv-tts-play-below">
-                      {ttsPreparing && !speaking ? (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                          <span className="sv-preview-loading" /> Đang chuẩn bị audio...
-                        </span>
-                      ) : (
-                        <button
-                          className="sv-tts-play-btn"
-                          type="button"
-                          onClick={() => speakText(msg.content)}
-                          disabled={speaking}
-                          title="Đọc to tin nhắn này"
-                        >
-                          {speaking ? 'Đang phát...' : 'Đọc to'}
-                        </button>
-                      )}
-                      <span>Giọng: {selectedVoice}</span>
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
             </div>
           ))}
-
           {isLoading && (
-            <div className="expert-chat-message assistant">
-              <div className="expert-message-avatar">
-                <Loader size={24} className="spin" />
-                <div className="avatar-glow"></div>
+            <div className="chat-hud-message-row assistant">
+              <div className="chat-hud-avatar">
+                <Loader size={24} className="animate-spin" />
               </div>
-              <div className="expert-message-content">
-                <div className="expert-message-bubble">
-                  <div className="expert-loading-text">
-                    <Zap size={16} className="pulse" />
-                    Chuyên gia đang phân tích...
-                  </div>
+              <div className="chat-hud-bubble">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#94a3b8' }}>
+                  <Zap size={16} className="animate-pulse" /> Chuyên gia đang phân tích...
                 </div>
               </div>
             </div>
           )}
-
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
-        <div className="expert-chat-input-area">
-          <div className="input-line"></div>
-          <form onSubmit={handleSendMessage} className="expert-chat-input-wrapper">
-            <input
-              type="text"
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              placeholder="Hỏi chuyên gia..."
-              className="expert-chat-input"
-              disabled={isLoading}
-            />
-            <button type="submit" className="expert-chat-send-btn" disabled={!inputMessage.trim() || isLoading}>
-              <Send size={18} />
-              <span>GỬI</span>
-            </button>
-            <button
-              type="button"
-              className="expert-chat-send-btn"
-              onClick={isRecording ? stopRecording : startRecording}
-              aria-label={isRecording ? 'Dừng ghi âm' : 'Bắt đầu ghi âm'}
-              aria-pressed={isRecording}
-              style={{ marginLeft: 8 }}
-            >
-              {isRecording ? <Square size={16} /> : <Mic size={16} />} {isRecording ? 'Dừng ghi' : 'Ghi âm'}
+        {/* Input Area */}
+        <div className="chat-hud-input-area">
+          <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '12px', width: '100%', alignItems: 'flex-end' }}>
+            <div className="chat-hud-input-wrapper">
+              <input
+                type="text"
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                placeholder="Hỏi chuyên gia..."
+                className="chat-hud-input"
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                className={`chat-hud-mic-btn ${isRecording ? 'active' : ''}`}
+                onClick={isRecording ? stopRecording : startRecording}
+                title={isRecording ? 'Dừng ghi âm' : 'Bắt đầu ghi âm'}
+              >
+                {isRecording ? <Square size={18} /> : <Mic size={18} />}
+              </button>
+            </div>
+            <button type="submit" className="chat-hud-send-btn" disabled={!inputMessage.trim() || isLoading}>
+              <Send size={20} />
             </button>
           </form>
           {(isRecording || isPreviewing) && previewText && (
-            <div className="expert-preview-text" aria-live="polite" style={{ marginTop: 8, opacity: 0.9 }}>
+            <div style={{ position: 'absolute', bottom: '80px', left: '20px', right: '20px', background: 'rgba(0,0,0,0.8)', padding: '10px', borderRadius: '4px', color: '#fff', zIndex: 100 }}>
               {previewText}
+              <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px' }}>
+                {isPreviewing ? 'Đang nhận diện...' : (isRecording ? 'Đang ghi âm...' : '')}
+              </div>
             </div>
           )}
-          <div className="sv-audio-control__status" aria-live="polite" style={{ marginTop: 6 }}>
-            {isPreviewing ? 'Đang nhận diện...' : (isRecording ? 'Đang ghi âm...' : '')}
-          </div>
         </div>
       </div>
 

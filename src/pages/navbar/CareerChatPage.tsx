@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, User, Sparkles, Loader, MessageSquare, Plus, Trash2, Bot, Mic, Square } from 'lucide-react';
+import { Send, User, Sparkles, Loader, Plus, Trash2, Mic, Square, ArrowLeft, Menu, X, Bot } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import careerChatService from '../../services/careerChatService';
 import { UIMessage, ChatSession, ChatMode, ExpertContext } from '../../types/CareerChat';
@@ -9,13 +8,12 @@ import { useToast } from '../../hooks/useToast';
 import MessageRenderer from '../../components/MessageRenderer';
 import { WavRecorder } from '../../shared/wavRecorder';
 import { transcribeAudioViaBackend } from '../../shared/speechToText';
-import '../../styles/CareerChatDark.css';
+import '../../styles/ChatHUD.css';
 import '../../styles/VoiceSelector.css';
 import aiAvatar from '../../assets/aiChatBot.png';
 const ENABLE_TTS = false;
 
 const CareerChatPage = () => {
-  const { theme } = useTheme();
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,17 +65,18 @@ const CareerChatPage = () => {
   const [chatMode, setChatMode] = useState<ChatMode>(ChatMode.GENERAL_CAREER_ADVISOR);
   const [expertContext, setExpertContext] = useState<ExpertContext | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [selectedVoice, setSelectedVoice] = useState<string>('banmai');
-  const [previewLoadingVoice, setPreviewLoadingVoice] = useState<string | null>(null);
-  const [speaking, setSpeaking] = useState<boolean>(false);
-  const [ttsPreparing, setTtsPreparing] = useState<boolean>(false);
-  const [voiceMode, setVoiceMode] = useState<boolean>(false);
-  const [showVoiceModal, setShowVoiceModal] = useState<boolean>(false);
+  
+  // Voice related state (kept for future use or if re-enabled)
+  const [speaking] = useState<boolean>(false);
+  const [ttsPreparing] = useState<boolean>(false);
+  const [voiceMode] = useState<boolean>(false); // Default false for now
+
   const [recorder] = useState(() => new WavRecorder());
   const [isRecording, setIsRecording] = useState(false);
   const [previewText, setPreviewText] = useState<string>('');
   const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
   const recognitionRef = useRef<any>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -153,6 +152,7 @@ const CareerChatPage = () => {
       timestamp: new Date()
     }]);
     showSuccess('Thành công', 'Đã tạo cuộc trò chuyện mới!');
+    if (window.innerWidth < 768) setIsSidebarOpen(false);
   };
 
   const handleDeleteSession = async (sessionIdToDelete: number) => {
@@ -167,8 +167,6 @@ const CareerChatPage = () => {
       showError('Lỗi', 'Không thể xóa phiên trò chuyện');
     }
   };
-
-  const previewVoice = async (_voiceId: string) => { return; };
 
   // STT: chỉ mở khi bấm nút chế độ âm thanh
   const startRecording = async () => {
@@ -250,12 +248,6 @@ const CareerChatPage = () => {
 
   const speakText = async (_text: string) => { return; };
 
-  const quickSend = async () => {
-    if (!inputMessage.trim() || isLoading) return;
-    const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
-    await handleSendMessage(fakeEvent);
-  };
-
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isAuthenticated || !inputMessage.trim() || isLoading) return;
@@ -307,48 +299,22 @@ const CareerChatPage = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className={`career-chat-page ${theme}`}>
-        <div className="cosmic-dust">
-          {[...Array(5)].map((_, i) => <div key={i} className="dust-particle" style={{
-            left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 10}s`
-          }} />)}
-        </div>
-        <div className="career-chat-sidebar">
-          <div className="career-chat-sidebar__header">
-            <h2 className="career-chat-sidebar__title"><MessageSquare size={20} />Chat Sessions</h2>
-          </div>
-          <div className="career-chat-sidebar__sessions">
-            <p style={{ textAlign: 'center', color: 'rgba(229, 231, 235, 0.6)', padding: '20px' }}>
-              Vui lòng đăng nhập
+      <div className="chat-hud-viewport">
+        <div className="chat-hud-main-area" style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{
+            background: 'rgba(15, 23, 42, 0.8)', padding: '48px',
+            borderRadius: '24px', textAlign: 'center', maxWidth: '400px',
+            border: '1px solid var(--chat-hud-accent)'
+          }}>
+            <Bot size={64} style={{ color: 'var(--chat-hud-accent)', marginBottom: '24px' }} />
+            <h2 style={{ color: '#fff', fontSize: '28px', marginBottom: '16px' }}>Yêu cầu đăng nhập</h2>
+            <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '32px' }}>
+              Vui lòng đăng nhập để trò chuyện với Meowl
             </p>
-          </div>
-        </div>
-        <div className="career-chat-container">
-          <div className="career-chat-header">
-            <div className="career-chat-header__avatar">
-              <img src={aiAvatar} alt="Meowl" style={{ width: 56, height: 56, borderRadius: '50%' }} />
-            </div>
-            <div className="career-chat-header__info">
-              <h1 className="career-chat-header__title"><Sparkles size={24} />Meowl - Trợ Lý Nghề Nghiệp AI</h1>
-              <p className="career-chat-header__subtitle">Nhận tư vấn nghề nghiệp cá nhân hóa</p>
-            </div>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-            <div style={{
-              background: 'linear-gradient(135deg, #667eea, #764ba2)', padding: '48px',
-              borderRadius: '24px', textAlign: 'center', maxWidth: '400px'
-            }}>
-              <Bot size={64} style={{ color: '#fff', marginBottom: '24px' }} />
-              <h2 style={{ color: '#fff', fontSize: '28px', marginBottom: '16px' }}>Yêu cầu đăng nhập</h2>
-              <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '32px' }}>
-                Vui lòng đăng nhập để trò chuyện với Meowl
-              </p>
-              <button onClick={() => navigate('/login')} style={{
-                background: '#10b981', color: '#fff', border: 'none', padding: '14px 32px',
-                borderRadius: '12px', fontSize: '16px', fontWeight: 600, cursor: 'pointer'
-              }}>Đăng nhập ngay</button>
-            </div>
+            <button onClick={() => navigate('/login')} style={{
+              background: 'var(--chat-hud-accent)', color: '#000', border: 'none', padding: '14px 32px',
+              borderRadius: '4px', fontSize: '16px', fontWeight: 600, cursor: 'pointer'
+            }}>Đăng nhập ngay</button>
           </div>
         </div>
       </div>
@@ -356,25 +322,19 @@ const CareerChatPage = () => {
   }
 
   return (
-    <div className={`career-chat-page ${theme} ${chatMode === ChatMode.EXPERT_MODE ? 'expert-mode' : 'general-mode'}`}>
-      <div className="cosmic-dust">
-        {[...Array(8)].map((_, i) => <div key={i} className="dust-particle" style={{
-          left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`,
-          animationDelay: `${Math.random() * 10}s`
-        }} />)}
-      </div>
-
-      <div className="career-chat-sidebar">
-        <div className="career-chat-sidebar__header">
-          <h2 className="career-chat-sidebar__title"><MessageSquare size={20} />Chat Sessions</h2>
-          <button className="career-chat-sidebar__new-chat" onClick={handleNewChat}>
-            <Plus size={18} />New Chat
-          </button>
+    <div className="chat-hud-viewport">
+      {/* Sidebar */}
+      <div className={`chat-hud-sidebar ${isSidebarOpen ? 'open' : ''}`}>
+        <div className="chat-hud-sidebar-header">
+          Lịch sử Chat
         </div>
-        <div className="career-chat-sidebar__sessions">
+        <button className="chat-hud-new-chat-btn" onClick={handleNewChat}>
+          <Plus size={18} /> Cuộc trò chuyện mới
+        </button>
+        <div className="chat-hud-session-list">
           {loadingSessions ? (
             <div style={{ textAlign: 'center', padding: '20px' }}>
-              <Loader size={24} className="animate-spin" />
+              <Loader size={24} className="animate-spin" style={{ color: 'var(--chat-hud-accent)' }} />
             </div>
           ) : sessions.length === 0 ? (
             <p style={{ textAlign: 'center', color: 'rgba(229, 231, 235, 0.6)', padding: '20px' }}>
@@ -382,27 +342,27 @@ const CareerChatPage = () => {
             </p>
           ) : (
             sessions.map(s => (
-              <div key={s.sessionId} className={`career-chat-session-item ${sessionId === s.sessionId ? 'active' : ''}`}>
+              <div key={s.sessionId} className={`chat-hud-session-item ${sessionId === s.sessionId ? 'active' : ''}`}>
                 <div 
-                  onClick={() => careerChatService.getHistory(s.sessionId).then(h => {
-                    const msgs: UIMessage[] = [];
-                    h.forEach((m, i) => {
-                      msgs.push({ id: `${s.sessionId}-${i}-u`, role: 'user', content: m.userMessage, timestamp: new Date(m.createdAt) });
-                      msgs.push({ id: `${s.sessionId}-${i}-a`, role: 'assistant', content: m.aiResponse, timestamp: new Date(m.createdAt) });
+                  onClick={() => {
+                    careerChatService.getHistory(s.sessionId).then(h => {
+                      const msgs: UIMessage[] = [];
+                      h.forEach((m, i) => {
+                        msgs.push({ id: `${s.sessionId}-${i}-u`, role: 'user', content: m.userMessage, timestamp: new Date(m.createdAt) });
+                        msgs.push({ id: `${s.sessionId}-${i}-a`, role: 'assistant', content: m.aiResponse, timestamp: new Date(m.createdAt) });
+                      });
+                      setMessages(msgs);
+                      setSessionId(s.sessionId);
+                      if (window.innerWidth < 768) setIsSidebarOpen(false);
                     });
-                    setMessages(msgs);
-                    setSessionId(s.sessionId);
-                  })}
-                  style={{ flex: 1, cursor: 'pointer' }}
+                  }}
+                  style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                 >
-                  <div className="career-chat-session-item__title">{s.title}</div>
-                  <div className="career-chat-session-item__time">
-                    {s.messageCount} tin nhắn · {new Date(s.lastMessageAt).toLocaleDateString('vi-VN')}
-                  </div>
+                  {s.title}
                 </div>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleDeleteSession(s.sessionId); }}
-                  className="career-chat-session-delete"
+                  style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', opacity: 0.7 }}
                 >
                   <Trash2 size={14} />
                 </button>
@@ -412,73 +372,83 @@ const CareerChatPage = () => {
         </div>
       </div>
 
-      <div className="career-chat-container">
-        <div className="career-chat-header">
-          <div className="career-chat-header__avatar">
-            <img src={aiAvatar} alt="Meowl" style={{ width: 56, height: 56, borderRadius: '50%' }} />
+      {/* Main Area */}
+      <div className="chat-hud-main-area">
+        {/* Header */}
+        <div className="chat-hud-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <button className="chat-hud-mobile-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+              {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+            <button className="chat-hud-back-btn" onClick={() => navigate('/chatbot')}>
+              <ArrowLeft size={18} /> Quay lại
+            </button>
           </div>
-          <div className="career-chat-header__info">
-            <h1 className="career-chat-header__title"><Sparkles size={24} />Meowl - Trợ Lý Nghề Nghiệp AI</h1>
-            <p className="career-chat-header__subtitle">Nhận tư vấn nghề nghiệp cá nhân hóa</p>
+          
+          <div className="chat-hud-title">
+            <Sparkles size={18} style={{ marginRight: '8px', color: 'var(--chat-hud-accent)' }} />
+            Meowl Assistant
+          </div>
+
+          <div className="chat-hud-status">
+            <div className="chat-hud-status-dot"></div>
+            ONLINE
           </div>
         </div>
-        {/* Mode toggle moved to input area; mic shown only in voice mode */}
 
-        {(isRecording || isPreviewing) && (
-          <></>
-        )}
-
-        {ENABLE_TTS && (<></>)}
-
-        <div className="career-chat-messages">
+        {/* Message List */}
+        <div className="chat-hud-message-list">
           {messages.map(msg => (
-            <div key={msg.id} className={`career-chat-message ${msg.role}`}>
-              <div className="career-chat-message__avatar">
+            <div key={msg.id} className={`chat-hud-message-row ${msg.role}`}>
+              <div className="chat-hud-avatar">
                 {msg.role === 'assistant' ? (
-                  <img src={aiAvatar} alt="AI" style={{ width: 40, height: 40, borderRadius: '50%' }} />
+                  <img src={aiAvatar} alt="AI" />
                 ) : (
-                  <User size={24} />
+                  user?.avatarUrl ? (
+                    <img src={user.avatarUrl} alt="User" style={{ width: '100%', height: '100%', borderRadius: '4px', objectFit: 'cover' }} />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#334155', color: '#fff' }}>
+                      <User size={20} />
+                    </div>
+                  )
                 )}
               </div>
-              <div className="career-chat-message__content">
-                <div className="career-chat-message__bubble">
-                  <MessageRenderer 
-                    content={msg.content} 
-                    isExpertMode={false}
-                  />
-                  {msg.role === 'assistant' && voiceMode && ENABLE_TTS && (
-                    <div className="sv-tts-play-below">
-                      {ttsPreparing && !speaking ? (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                          <span className="sv-preview-loading" /> Đang chuẩn bị audio...
-                        </span>
-                      ) : (
-                        <button
-                          className="sv-tts-play-btn"
-                          type="button"
-                          onClick={() => speakText(msg.content)}
-                          disabled={speaking}
-                          title="Đọc to tin nhắn này"
-                        >
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                            {speaking ? 'Đang phát...' : 'Đọc to'}
-                          </span>
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </div>
+              <div className="chat-hud-bubble">
+                <MessageRenderer 
+                  content={msg.content} 
+                  isExpertMode={false}
+                />
+                {msg.role === 'assistant' && voiceMode && ENABLE_TTS && (
+                  <div className="sv-tts-play-below" style={{ marginTop: '8px' }}>
+                    {ttsPreparing && !speaking ? (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', color: '#94a3b8' }}>
+                        <span className="sv-preview-loading" /> Đang chuẩn bị audio...
+                      </span>
+                    ) : (
+                      <button
+                        className="sv-tts-play-btn"
+                        type="button"
+                        onClick={() => speakText(msg.content)}
+                        disabled={speaking}
+                        title="Đọc to tin nhắn này"
+                        style={{ background: 'none', border: 'none', color: 'var(--chat-hud-accent)', cursor: 'pointer', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                      >
+                        {speaking ? 'Đang phát...' : '🔊 Đọc to'}
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           ))}
           {isLoading && (
-            <div className="career-chat-message assistant">
-              <div className="career-chat-message__avatar">
-                <img src={aiAvatar} alt="AI" style={{ width: 40, height: 40, borderRadius: '50%' }} />
+            <div className="chat-hud-message-row assistant">
+              <div className="chat-hud-avatar">
+                <img src={aiAvatar} alt="AI" />
               </div>
-              <div className="career-chat-message__content">
-                <div className="career-chat-message__bubble">
-                  <div className="career-chat-loading"><Loader size={16} className="animate-spin" />Meowl đang suy nghĩ...</div>
+              <div className="chat-hud-bubble">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#94a3b8' }}>
+                  <Loader size={16} className="animate-spin" /> Meowl đang suy nghĩ...
                 </div>
               </div>
             </div>
@@ -486,39 +456,40 @@ const CareerChatPage = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="career-chat-input-area">
-          <form onSubmit={handleSendMessage} className="career-chat-input-wrapper">
-            <input
-              type="text"
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              placeholder="Nhập câu hỏi của bạn..."
-              className="career-chat-input"
-              disabled={isLoading}
-            />
-            <button type="submit" className="career-chat-send-btn" disabled={!inputMessage.trim() || isLoading}>
-              <Send size={18} />Gửi
-            </button>
-            <button
-              type="button"
-              className="career-chat-send-btn"
-              onClick={isRecording ? stopRecording : startRecording}
-              aria-label={isRecording ? 'Dừng ghi âm' : 'Bắt đầu ghi âm'}
-              aria-pressed={isRecording}
-              style={{ marginLeft: 8 }}
-            >
-              {isRecording ? <Square size={16} /> : <Mic size={16} />} {isRecording ? 'Dừng ghi' : 'Ghi âm'}
+        {/* Input Area */}
+        <div className="chat-hud-input-area">
+          <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '12px', width: '100%', alignItems: 'flex-end' }}>
+            <div className="chat-hud-input-wrapper">
+              <input
+                type="text"
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                placeholder="Nhập câu hỏi của bạn..."
+                className="chat-hud-input"
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                className={`chat-hud-mic-btn ${isRecording ? 'active' : ''}`}
+                onClick={isRecording ? stopRecording : startRecording}
+                title={isRecording ? 'Dừng ghi âm' : 'Bắt đầu ghi âm'}
+              >
+                {isRecording ? <Square size={18} /> : <Mic size={18} />}
+              </button>
+            </div>
+            <button type="submit" className="chat-hud-send-btn" disabled={!inputMessage.trim() || isLoading}>
+              <Send size={20} />
             </button>
           </form>
-          {(isRecording || isPreviewing) && previewText && (
-            <div className="career-preview-text" aria-live="polite" style={{ marginTop: 8, opacity: 0.9 }}>
+        </div>
+        {(isRecording || isPreviewing) && previewText && (
+            <div style={{ position: 'absolute', bottom: '80px', left: '20px', right: '20px', background: 'rgba(0,0,0,0.8)', padding: '10px', borderRadius: '4px', color: '#fff', zIndex: 100 }}>
               {previewText}
+              <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px' }}>
+                {isPreviewing ? 'Đang nhận diện...' : (isRecording ? 'Đang ghi âm...' : '')}
+              </div>
             </div>
           )}
-          <div className="sv-audio-control__status" aria-live="polite" style={{ marginTop: 6 }}>
-            {isPreviewing ? 'Đang nhận diện...' : (isRecording ? 'Đang ghi âm...' : '')}
-          </div>
-        </div>
       </div>
     </div>
   );

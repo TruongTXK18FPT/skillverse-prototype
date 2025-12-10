@@ -13,6 +13,7 @@ import { useAuth } from '../../context/AuthContext';
 import MeowlGuide from '../../components/MeowlGuide';
 import Toast from '../../components/Toast';
 import './RoadmapDetailPage.css';
+import '../../styles/RoadmapHUD.css';
 
 /**
  * Dedicated page for viewing roadmap details
@@ -176,7 +177,7 @@ const RoadmapDetailPage = () => {
 
   // Main content
   return (
-    <div className="roadmap-page__galaxy-bg">
+    <div className="roadmap-hud-container">
       {/* Cosmic dust particles - Same as main roadmap page */}
       <div className="cosmic-dust">
         {[...Array(40)].map((_, i) => (
@@ -193,7 +194,7 @@ const RoadmapDetailPage = () => {
         ))}
       </div>
       
-      <div className="roadmap-page__container">
+      <div className="roadmap-hud-starmap">
         <RoadmapDetailViewer
           roadmap={roadmap}
           progressMap={progressMap}
