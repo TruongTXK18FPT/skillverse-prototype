@@ -6,6 +6,8 @@ import careerChatService from '../../services/careerChatService';
 import { UIMessage, ChatSession, ChatMode, ExpertContext } from '../../types/CareerChat';
 import { useToast } from '../../hooks/useToast';
 import MessageRenderer from '../../components/MessageRenderer';
+import { ThinkingIndicator } from '../../components/chat/ThinkingIndicator';
+import { StreamingMessage } from '../../components/chat/StreamingMessage';
 import { WavRecorder } from '../../shared/wavRecorder';
 import { transcribeAudioViaBackend } from '../../shared/speechToText';
 import '../../styles/ChatHUD.css';
@@ -283,7 +285,8 @@ const CareerChatPage = () => {
         role: 'assistant',
         content: response.aiResponse,
         timestamp: new Date(response.timestamp),
-        expertContext: response.expertContext
+        expertContext: response.expertContext,
+        isStreaming: true
       } as UIMessage;
       setMessages(prev => [...prev, assistantMsg]);
 
@@ -414,10 +417,21 @@ const CareerChatPage = () => {
                 )}
               </div>
               <div className="chat-hud-bubble">
-                <MessageRenderer 
-                  content={msg.content} 
-                  isExpertMode={false}
-                />
+                {msg.role === 'assistant' && msg.isStreaming ? (
+                  <StreamingMessage 
+                    content={msg.content} 
+                    isExpertMode={false}
+                    scrollToBottom={() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })}
+                    onComplete={() => {
+                      setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, isStreaming: false } : m));
+                    }}
+                  />
+                ) : (
+                  <MessageRenderer 
+                    content={msg.content} 
+                    isExpertMode={false}
+                  />
+                )}
                 {msg.role === 'assistant' && voiceMode && ENABLE_TTS && (
                   <div className="sv-tts-play-below" style={{ marginTop: '8px' }}>
                     {ttsPreparing && !speaking ? (
@@ -446,10 +460,8 @@ const CareerChatPage = () => {
               <div className="chat-hud-avatar">
                 <img src={aiAvatar} alt="AI" />
               </div>
-              <div className="chat-hud-bubble">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#94a3b8' }}>
-                  <Loader size={16} className="animate-spin" /> Meowl đang suy nghĩ...
-                </div>
+              <div className="chat-hud-bubble" style={{ padding: 0, background: 'transparent', border: 'none' }}>
+                <ThinkingIndicator />
               </div>
             </div>
           )}

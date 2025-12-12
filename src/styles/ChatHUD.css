@@ -383,3 +383,34 @@
 .chat-hud-session-list::-webkit-scrollbar-thumb:hover {
   background: rgba(6, 182, 212, 0.6);
 }
+
+/* Thinking Indicator Styles */
+.chat-hud-thinking {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: var(--chat-hud-accent);
+  font-family: var(--chat-hud-font-tech);
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.thinking-text {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+

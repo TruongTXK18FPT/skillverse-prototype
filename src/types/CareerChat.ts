@@ -75,4 +75,5 @@ export interface UIMessage {
   content: string;
   timestamp: Date;
   expertContext?: ExpertContext;
+  isStreaming?: boolean;
 }

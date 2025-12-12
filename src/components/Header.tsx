@@ -121,12 +121,12 @@ const Header: React.FC = () => {
       path: '/seminar',
       icon: Calendar
     },
-    {
-      name: 'Cầu Nguyện',
-      description: 'Đôi khi chỉ cần có niềm tin là đủ',
-      path: '/pray',
-      icon: BadgeQuestionMark  
-    }
+    // {
+    //   name: 'Cầu Nguyện',
+    //   description: 'Đôi khi chỉ cần có niềm tin là đủ',
+    //   path: '/pray',
+    //   icon: BadgeQuestionMark  
+    // }
   ];
 
   const loadUserProfile = useCallback(async () => {

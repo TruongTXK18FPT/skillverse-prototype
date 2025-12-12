@@ -27,7 +27,17 @@ const LOCAL_TRACKS = [
 const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ isZenMode, onToggleZen, autoPlay = false }) => {
   // Default always expanded (even on mobile) when first mounted
   const [isExpanded, setIsExpanded] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(autoPlay);
+  
+  // Fix Autoplay: Start false, then toggle true to trigger play
+  const [isPlaying, setIsPlaying] = useState(false);
+  
+  useEffect(() => {
+    if (autoPlay) {
+      const timer = setTimeout(() => setIsPlaying(true), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [autoPlay]);
+
   const [volume, setVolume] = useState(0.5);
   const [sourceMode, setSourceMode] = useState<'LOCAL' | 'YOUTUBE'>('LOCAL');
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
@@ -60,9 +70,18 @@ const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ isZenMode, onTogg
 
   const currentTrack = LOCAL_TRACKS[currentTrackIndex];
 
+  // Ref to track first render
+  const isFirstRender = useRef(true);
+
   // --- CLEANUP FUNCTION (CRITICAL FIX) ---
   // Reset refs và state khi chuyển chế độ để tránh crash
   useEffect(() => {
+    // Skip cleanup on first render to allow autoPlay
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     // Stop playing when switching
     setIsPlaying(false);
     setProgress(0);
@@ -218,7 +237,7 @@ const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ isZenMode, onTogg
                  }
               }}
               onLoad={handleLocalLoad}
-              html5={false}
+              html5={true}
             />
           )}
 
