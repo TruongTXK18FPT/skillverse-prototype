@@ -149,7 +149,11 @@ const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ isZenMode, onTogg
   // --- Sync Play/Pause ---
   useEffect(() => {
     if (sourceMode === 'YOUTUBE' && youtubePlayerRef.current && typeof youtubePlayerRef.current.playVideo === 'function') {
-      isPlaying ? youtubePlayerRef.current.playVideo() : youtubePlayerRef.current.pauseVideo();
+      if (isPlaying) {
+        youtubePlayerRef.current.playVideo();
+      } else {
+        youtubePlayerRef.current.pauseVideo();
+      }
     }
   }, [isPlaying, sourceMode]);
 
