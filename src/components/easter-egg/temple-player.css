@@ -1,250 +1,123 @@
-/* Temple Music Player - The Jade Console */
-.temple-player-container {
+/* Temple Music Player - Fixed Styles */
+
+/* Wrapper không style, chỉ dùng để giữ DOM */
+.temple-player-wrapper {
     position: fixed;
+    z-index: 300; /* Cao hơn ee-ui-layer (200) để không bị che */
     bottom: 20px;
     right: 20px;
+}
+
+/* Main Container (Expanded) */
+.temple-player-container {
     width: 320px;
-    background: rgba(10, 30, 20, 0.9);
+    background: rgba(10, 30, 20, 0.95);
     border: 1px solid #4ade80;
     border-radius: 12px;
-    padding: 15px;
-    z-index: 100;
-    font-family: 'Courier New', Courier, monospace;
+    padding: 16px;
+    font-family: 'Courier New', monospace;
     color: #4ade80;
     box-shadow: 0 0 20px rgba(74, 222, 128, 0.2);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     transition: all 0.3s ease;
 }
 
 .temple-player-container.zen-active {
-    border-color: #fbbf24; /* Gold */
+    border-color: #fbbf24;
     box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
-    background: rgba(20, 20, 10, 0.9);
 }
 
-.temple-player-container.playing {
-    animation: jade-pulse 4s infinite ease-in-out;
-}
+.hidden-youtube { position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none; }
 
-@keyframes jade-pulse {
-    0% { box-shadow: 0 0 20px rgba(74, 222, 128, 0.2); }
-    50% { box-shadow: 0 0 30px rgba(74, 222, 128, 0.5); }
-    100% { box-shadow: 0 0 20px rgba(74, 222, 128, 0.2); }
+/* FAB (Minimized) */
+.tp-mobile-fab {
+    width: 50px; height: 50px;
+    background: rgba(10, 30, 20, 0.9);
+    border: 2px solid #4ade80;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #4ade80;
+    box-shadow: 0 0 15px rgba(74, 222, 128, 0.4);
+    cursor: pointer;
+    animation: pulse-fab 3s infinite;
 }
+.tp-mobile-fab.playing { border-color: #fbbf24; color: #fbbf24; }
+@keyframes pulse-fab { 50% { box-shadow: 0 0 25px rgba(74, 222, 128, 0.6); } }
+.spin-slow { animation: spin 4s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
 
-/* Header */
-.tp-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgba(74, 222, 128, 0.3);
-    padding-bottom: 10px;
-}
-
-.tp-title {
-    font-size: 0.9rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
+/* Header & Controls (Giữ nguyên các style cũ) */
+.tp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(74, 222, 128, 0.3); padding-bottom: 8px; }
+.tp-header-left { display: flex; align-items: center; gap: 8px; }
+.tp-collapse-btn { background: none; border: none; color: #4ade80; cursor: pointer; padding: 4px; }
+.tp-collapse-btn:hover { background: rgba(74,222,128,0.1); border-radius: 4px; }
+.tp-title { font-size: 0.9rem; font-weight: bold; letter-spacing: 1px; }
 
 /* Zen Toggle */
-.tp-zen-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s;
-}
+.tp-zen-toggle { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); }
+.tp-zen-toggle.active { border-color: #fbbf24; color: #fbbf24; }
+.tp-zen-indicator { width: 6px; height: 6px; border-radius: 50%; background: #555; }
+.tp-zen-toggle.active .tp-zen-indicator { background: #fbbf24; box-shadow: 0 0 5px #fbbf24; }
+.tp-zen-text { font-size: 0.65rem; font-weight: bold; }
 
-.tp-zen-toggle:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
+/* Tabs & Content */
+.tp-tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+.tp-tab { flex: 1; background: rgba(0,0,0,0.2); border: 1px solid rgba(74, 222, 128, 0.3); color: rgba(74, 222, 128, 0.6); padding: 6px; font-size: 0.7rem; cursor: pointer; }
+.tp-tab.active { background: rgba(74, 222, 128, 0.2); color: #4ade80; border-color: #4ade80; }
+.tp-content { margin-bottom: 10px; text-align: center; min-height: 35px; }
+.tp-song-title { color: #fff; font-weight: bold; margin-bottom: 4px; font-size: 0.85rem; }
+.tp-song-artist { font-size: 0.7rem; opacity: 0.7; }
+.tp-input-group { display: flex; gap: 4px; }
+.tp-input { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid #4ade80; color: #fff; padding: 4px; font-size: 0.7rem; }
+.tp-btn-load { background: #4ade80; color: #000; border: none; font-weight: bold; cursor: pointer; padding: 0 8px; font-size: 0.7rem;}
 
-.tp-zen-toggle.active {
-    border-color: #fbbf24;
-    background: rgba(251, 191, 36, 0.1);
-}
-
-.tp-zen-indicator {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #555;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-}
-
-.tp-zen-toggle.active .tp-zen-indicator {
-    background: #fbbf24;
-    box-shadow: 0 0 10px #fbbf24;
-}
-
-.tp-zen-text {
-    font-size: 0.7rem;
-    color: #888;
-}
-
-.tp-zen-toggle.active .tp-zen-text {
-    color: #fbbf24;
-    text-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
-}
-
-/* Tabs */
-.tp-tabs {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 15px;
-}
-
-.tp-tab {
-    flex: 1;
-    background: transparent;
-    border: 1px solid rgba(74, 222, 128, 0.3);
-    color: rgba(74, 222, 128, 0.6);
-    padding: 5px;
-    font-size: 0.7rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.tp-tab:hover {
-    background: rgba(74, 222, 128, 0.1);
-    color: #4ade80;
-}
-
-.tp-tab.active {
-    background: rgba(74, 222, 128, 0.2);
-    color: #4ade80;
-    border-color: #4ade80;
-    box-shadow: 0 0 10px rgba(74, 222, 128, 0.1);
-}
-
-/* Content Area */
-.tp-content {
-    margin-bottom: 15px;
-    min-height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.tp-song-info {
-    text-align: center;
-    width: 100%;
-}
-
-.tp-song-title {
-    font-size: 0.8rem;
-    color: #fff;
-    margin-bottom: 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.tp-song-artist {
-    font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.tp-input-group {
-    display: flex;
-    gap: 5px;
-    width: 100%;
-}
-
-.tp-input {
-    flex: 1;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(74, 222, 128, 0.3);
-    color: #fff;
-    padding: 5px 8px;
-    font-size: 0.7rem;
-    font-family: inherit;
-}
-
-.tp-input:focus {
-    outline: none;
-    border-color: #4ade80;
-}
-
-.tp-btn-load {
-    background: rgba(74, 222, 128, 0.2);
-    border: 1px solid rgba(74, 222, 128, 0.3);
-    color: #4ade80;
-    padding: 0 10px;
-    cursor: pointer;
-    font-size: 0.7rem;
-}
-
-.tp-btn-load:hover {
-    background: rgba(74, 222, 128, 0.3);
-}
+/* Progress Bar */
+.tp-progress-container { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.tp-time { font-size: 0.6rem; color: #888; min-width: 30px; text-align: center; }
+.tp-seek-slider { flex: 1; height: 4px; -webkit-appearance: none; background: rgba(74, 222, 128, 0.2); border-radius: 2px; outline: none; }
+.tp-seek-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; border-radius: 50%; background: #4ade80; cursor: pointer; box-shadow: 0 0 5px rgba(74, 222, 128, 0.5); }
 
 /* Controls */
-.tp-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-}
+.tp-controls-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 0; }
+.tp-btn-control { width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.2); border: 1px solid rgba(74, 222, 128, 0.4); color: #4ade80; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+.tp-btn-control:hover { background: rgba(74, 222, 128, 0.2); transform: scale(1.1); }
+.tp-btn-control.small { width: 26px; height: 26px; }
+.tp-btn-control.play-pause { width: 40px; height: 40px; border-color: #4ade80; background: rgba(74, 222, 128, 0.1); }
+.tp-btn-control.active-loop { color: #fbbf24; border-color: #fbbf24; box-shadow: 0 0 10px rgba(251, 191, 36, 0.2); }
+.tp-volume-container { display: flex; align-items: center; gap: 5px; flex: 1; justify-content: flex-end;}
+.tp-volume-slider { width: 60px; height: 4px; -webkit-appearance: none; background: rgba(74, 222, 128, 0.3); border-radius: 2px; }
+.tp-volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 8px; height: 8px; border-radius: 50%; background: #4ade80; cursor: pointer; }
+/* ... CSS cũ ... */
 
-.tp-btn-control {
+.tp-change-link-btn {
     background: transparent;
     border: 1px solid rgba(74, 222, 128, 0.3);
-    color: #4ade80;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: rgba(74, 222, 128, 0.7);
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    margin-top: 4px;
     cursor: pointer;
-    transition: all 0.2s;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
 }
 
-.tp-btn-control:hover {
-    background: rgba(74, 222, 128, 0.2);
-    border-color: #4ade80;
-    transform: scale(1.1);
-}
-
-.tp-btn-control.play-pause {
-    width: 40px;
-    height: 40px;
+.tp-change-link-btn:hover {
+    color: #4ade80;
     border-color: #4ade80;
     background: rgba(74, 222, 128, 0.1);
 }
 
-.tp-volume-slider {
-    flex: 1;
-    height: 4px;
-    -webkit-appearance: none;
-    background: rgba(74, 222, 128, 0.2);
-    border-radius: 2px;
-    outline: none;
+.tp-song-info.youtube-mode .tp-song-title {
+    color: #fbbf24; /* Vàng cho YouTube để phân biệt */
 }
-
-.tp-volume-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #4ade80;
-    cursor: pointer;
-    box-shadow: 0 0 5px rgba(74, 222, 128, 0.5);
-}
-
-/* Mobile Responsive */
+/* Responsive */
 @media (max-width: 768px) {
-    .temple-player-container {
-        width: calc(100% - 40px);
-        bottom: 10px;
-        right: 20px;
-        left: auto;
+    /* Khi mở rộng trên mobile */
+    .temple-player-wrapper.expanded .temple-player-container {
+        position: fixed;
+        left: 5%; right: 5%; bottom: 20px;
+        width: 90%; max-width: none;
+        background: rgba(10, 30, 20, 0.98); /* Nền đậm hơn để che UI bên dưới */
     }
 }

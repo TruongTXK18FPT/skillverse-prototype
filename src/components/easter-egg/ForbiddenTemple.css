@@ -11,10 +11,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end; /* Align content to bottom for perspective */
+  justify-content: flex-end;
+  /* Align content to bottom for perspective */
   overflow: hidden;
   font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
-  z-index: 99999; /* Topmost */
+  z-index: 99999;
+  /* Topmost */
   background-size: cover;
   background-position: center bottom;
   transition: background-image 0.5s ease, filter 0.2s ease;
@@ -61,7 +63,8 @@
 .ee-portraits-row {
   position: absolute;
   z-index: 10;
-  bottom: 48%; /* Adjust based on table height in BG */
+  bottom: 48%;
+  /* Adjust based on table height in BG */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -80,7 +83,8 @@
 
 .ee-frame-container {
   position: relative;
-  width: 18%; /* Smaller size */
+  width: 18%;
+  /* Smaller size */
   aspect-ratio: 3/4;
 }
 
@@ -88,7 +92,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
 }
 
 .ee-god-img {
@@ -98,7 +102,8 @@
   width: 72%;
   height: 72%;
   object-fit: cover;
-  z-index: -1; /* Behind frame */
+  z-index: -1;
+  /* Behind frame */
   filter: sepia(0.8) contrast(1.5) brightness(0.6) blur(5px);
 }
 
@@ -108,14 +113,15 @@
 }
 
 .ee-container.phase-2 .ee-god-img {
-filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
+  filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
 }
 
 /* 2. Incense Stick (Middle Layer) */
 .ee-incense-stick-container {
   position: absolute;
   z-index: 20;
-  bottom: 28%; /* Stick base inside bowl */
+  bottom: 28%;
+  /* Stick base inside bowl */
   left: 50%;
   transform: translateX(-50%);
   width: 20px;
@@ -127,7 +133,8 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
 
 .ee-stick-img {
   width: 100%;
-  height: 0%; /* Grows on click */
+  height: 0%;
+  /* Grows on click */
   object-fit: cover;
   object-position: bottom;
   transition: height 1s ease;
@@ -140,13 +147,15 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
 /* Smoke Effect */
 .ee-smoke {
   position: absolute;
-  z-index: 40; /* Higher than bowl (30) */
-  bottom: 48%; /* Adjusted position */
+  z-index: 40;
+  /* Higher than bowl (30) */
+  bottom: 48%;
+  /* Adjusted position */
   left: 50%;
   transform: translateX(-50%);
   width: 10px;
   height: 100px;
-  background: linear-gradient(to top, rgba(255,255,255,0.8), transparent);
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.8), transparent);
   filter: blur(5px);
   opacity: 0;
   transition: opacity 1s ease;
@@ -162,34 +171,38 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
 .ee-incense-bowl {
   position: absolute;
   z-index: 30;
-  bottom: 18%; /* Front of table */
+  bottom: 18%;
+  /* Front of table */
   left: 50%;
   transform: translateX(-50%);
   width: 25vw;
   max-width: 300px;
-  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6));
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.6));
 }
 
 /* 4. Instruments (Mo & Bell) */
 .ee-instrument-mo,
 .ee-instrument-bell {
   position: absolute;
-  z-index: 35; /* Higher than bowl (30) but lower than smoke (40) */
+  z-index: 35;
+  /* Higher than bowl (30) but lower than smoke (40) */
   bottom: 20%;
   width: 12vw;
   max-width: 150px;
   cursor: pointer;
   transition: transform 0.1s;
-  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.5));
 }
 
 .ee-instrument-mo {
-  left: 30%; /* Left of bowl */
+  left: 30%;
+  /* Left of bowl */
   transform: translateX(-50%);
 }
 
 .ee-instrument-bell {
-  left: 70%; /* Right of bowl */
+  left: 70%;
+  /* Right of bowl */
   transform: translateX(-50%);
 }
 
@@ -205,11 +218,25 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
 }
 
 @keyframes instrument-shake {
-  0% { transform: translateX(-50%) rotate(0deg); }
-  25% { transform: translateX(-50%) rotate(-5deg); }
-  50% { transform: translateX(-50%) rotate(5deg); }
-  75% { transform: translateX(-50%) rotate(-5deg); }
-  100% { transform: translateX(-50%) rotate(0deg); }
+  0% {
+    transform: translateX(-50%) rotate(0deg);
+  }
+
+  25% {
+    transform: translateX(-50%) rotate(-5deg);
+  }
+
+  50% {
+    transform: translateX(-50%) rotate(5deg);
+  }
+
+  75% {
+    transform: translateX(-50%) rotate(-5deg);
+  }
+
+  100% {
+    transform: translateX(-50%) rotate(0deg);
+  }
 }
 
 /* ========================================
@@ -254,7 +281,7 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
   text-transform: uppercase;
   letter-spacing: 2px;
   clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
-  
+
   /* Horror Theme Base */
   font-family: 'Courier New', serif;
   background: rgba(20, 20, 20, 0.9);
@@ -312,53 +339,130 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
 
 /* Animations */
 @keyframes ee-pulse-blood {
-  0% { opacity: 0.1; background-color: rgba(255, 0, 0, 0); }
-  5% { opacity: 0.8; background-color: rgba(255, 0, 0, 0.4); }
-  10% { opacity: 0.1; background-color: rgba(255, 0, 0, 0); }
-  15% { opacity: 0.6; background-color: rgba(255, 0, 0, 0.3); }
-  100% { opacity: 0.1; background-color: rgba(255, 0, 0, 0); }
+  0% {
+    opacity: 0.1;
+    background-color: rgba(255, 0, 0, 0);
+  }
+
+  5% {
+    opacity: 0.8;
+    background-color: rgba(255, 0, 0, 0.4);
+  }
+
+  10% {
+    opacity: 0.1;
+    background-color: rgba(255, 0, 0, 0);
+  }
+
+  15% {
+    opacity: 0.6;
+    background-color: rgba(255, 0, 0, 0.3);
+  }
+
+  100% {
+    opacity: 0.1;
+    background-color: rgba(255, 0, 0, 0);
+  }
 }
 
 /* Desync Shake Animations */
 .ee-container.phase-2 .ee-frame-container:nth-child(1) {
   animation: ee-shake-1 0.3s infinite;
 }
+
 .ee-container.phase-2 .ee-frame-container:nth-child(2) {
   animation: ee-shake-2 0.4s infinite;
 }
+
 .ee-container.phase-2 .ee-frame-container:nth-child(3) {
   animation: ee-shake-3 0.25s infinite;
 }
 
 @keyframes ee-shake-1 {
-  0% { transform: translate(1px, 1px) rotate(0deg); }
-  25% { transform: translate(-1px, -2px) rotate(-1deg); }
-  50% { transform: translate(-3px, 0px) rotate(1deg); }
-  75% { transform: translate(3px, 2px) rotate(0deg); }
-  100% { transform: translate(1px, -1px) rotate(-1deg); }
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+
+  50% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+
+  75% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(1px, -1px) rotate(-1deg);
+  }
 }
 
 @keyframes ee-shake-2 {
-  0% { transform: translate(-1px, -1px) rotate(0deg); }
-  30% { transform: translate(2px, 1px) rotate(1deg); }
-  60% { transform: translate(-2px, 2px) rotate(-1deg); }
-  90% { transform: translate(1px, -2px) rotate(0deg); }
-  100% { transform: translate(-1px, 1px) rotate(1deg); }
+  0% {
+    transform: translate(-1px, -1px) rotate(0deg);
+  }
+
+  30% {
+    transform: translate(2px, 1px) rotate(1deg);
+  }
+
+  60% {
+    transform: translate(-2px, 2px) rotate(-1deg);
+  }
+
+  90% {
+    transform: translate(1px, -2px) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-1px, 1px) rotate(1deg);
+  }
 }
 
 @keyframes ee-shake-3 {
-  0% { transform: translate(2px, 0px) rotate(0deg); }
-  20% { transform: translate(-2px, 2px) rotate(1deg); }
-  40% { transform: translate(1px, -1px) rotate(-1deg); }
-  60% { transform: translate(-1px, 1px) rotate(0deg); }
-  80% { transform: translate(2px, -2px) rotate(1deg); }
-  100% { transform: translate(-2px, 0px) rotate(-1deg); }
+  0% {
+    transform: translate(2px, 0px) rotate(0deg);
+  }
+
+  20% {
+    transform: translate(-2px, 2px) rotate(1deg);
+  }
+
+  40% {
+    transform: translate(1px, -1px) rotate(-1deg);
+  }
+
+  60% {
+    transform: translate(-1px, 1px) rotate(0deg);
+  }
+
+  80% {
+    transform: translate(2px, -2px) rotate(1deg);
+  }
+
+  100% {
+    transform: translate(-2px, 0px) rotate(-1deg);
+  }
 }
 
 @keyframes smoke-rise {
-  0% { transform: translateX(-50%) translateY(0) scale(1); opacity: 0.6; }
-  50% { transform: translateX(-60%) translateY(-40px) scale(1.5); opacity: 0.3; }
-  100% { transform: translateX(-40%) translateY(-80px) scale(2); opacity: 0; }
+  0% {
+    transform: translateX(-50%) translateY(0) scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translateX(-60%) translateY(-40px) scale(1.5);
+    opacity: 0.3;
+  }
+
+  100% {
+    transform: translateX(-40%) translateY(-80px) scale(2);
+    opacity: 0;
+  }
 }
 
 /* ========================================
@@ -405,12 +509,14 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
 /* Peter Statue */
 .ee-peter-statue {
   position: absolute;
-  z-index: 25; 
+  z-index: 25;
   bottom: 48%;
-  left: 31%; /* Moved left to make room */
-  height: 18vw;
-  width: 18vw;
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+  /* Hạ thấp xuống mặt bàn */
+  left: 30%;
+  width: 16vw;
+  height: auto;
+  /* Auto height để giữ tỷ lệ */
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
   opacity: 1;
   transition: opacity 1s ease;
 }
@@ -423,12 +529,12 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
 /* Quagmire Statue */
 .ee-quagmire-statue {
   position: absolute;
-  z-index: 25; 
+  z-index: 25;
   bottom: 47%;
-  left: 51%; /* Placed to the right */
-  height: 18vw;
-  width: 18vw;
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+  left: 54%;
+  width: 16vw;
+  height: auto;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
   opacity: 1;
   transition: opacity 1s ease;
 }
@@ -439,15 +545,163 @@ filter: contrast(1.5) saturate(1.5) brightness(0.8) blur(5px);
 }
 
 @keyframes type-writer {
-  from { clip-path: inset(0 100% 0 0); }
-  to { clip-path: inset(0 0 0 0); }
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
 }
 
 @keyframes blink-eyes {
-  0% { opacity: 1; }
-  20% { opacity: 0.2; }
-  40% { opacity: 1; }
-  60% { opacity: 0; }
-  80% { opacity: 0.5; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 1;
+  }
+
+  20% {
+    opacity: 0.2;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ========================================
+   MOBILE RESPONSIVENESS
+   ======================================== */
+/* ========================================
+   MOBILE RESPONSIVENESS FIXES
+   ======================================== */
+@media (max-width: 768px) {
+  .ee-container {
+    background-position: center bottom;
+    justify-content: flex-end;
+  }
+
+  .ee-ui-layer.hidden-on-mobile {
+    display: none !important; /* Ẩn hoàn toàn */
+  }
+
+  /* 1. Portraits (Tượng): Neo vào vị trí hợp lý trên Mobile */
+  .ee-portraits-row {
+    bottom: 42%; /* Mobile: Hạ thấp vừa phải */
+    width: 95vw;
+    gap: 2vw;
+    align-items: flex-end;
+  }
+
+  /* Tượng Peter & Quagmire: Fix lơ lửng */
+  .ee-peter-statue {
+    bottom: 42% !important; /* Force vị trí */
+    left: 15%;
+    width: 32vw;
+    height: auto;
+    z-index: 25;
+  }
+
+  .ee-quagmire-statue {
+    bottom: 42% !important;
+    left: auto;
+    right: 15%;
+    width: 32vw;
+    height: auto;
+    z-index: 25;
+  }
+
+  .ee-frame-container {
+    width: 28%;
+  }
+
+  /* 2. Incense Stick */
+  .ee-incense-stick-container {
+    bottom: 45%; /* Đẩy lên cao hơn Input */
+    height: 150px;
+  }
+
+  .ee-smoke {
+    bottom: 62%;
+  }
+
+  /* 3. Incense Bowl */
+  .ee-incense-bowl {
+    bottom: 40%; /* Đẩy lên cao hơn Input */
+    width: 45vw;
+  }
+
+  /* 4. Instruments (Mõ & Chuông): Đẩy lên CAO HƠN Input */
+  .ee-instrument-mo {
+    left: 15%;
+    bottom: 40%; /* Cao ngang bát hương để không bị Input che */
+    width: 22vw;
+    max-width: 100px;
+    z-index: 45; /* Nổi lên trên */
+  }
+
+  .ee-instrument-bell {
+    left: 85%;
+    bottom: 40%; /* Cao ngang bát hương */
+    width: 22vw;
+    max-width: 100px;
+    z-index: 45;
+  }
+
+  /* 5. UI Layer (Input & Button): Nằm gọn ở dưới */
+  .ee-ui-layer {
+    position: absolute;
+    bottom: 90px; /* Nằm ngay trên nút Player thu nhỏ */
+    margin-bottom: 0;
+    width: 85%;
+    gap: 0.8rem;
+    z-index: 200; /* Cao nhất để bấm được */
+  }
+
+  .ee-input {
+    font-size: 1rem;
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.85); /* Đậm hơn để dễ đọc */
+    border-color: rgba(255,255,255,0.4);
+  }
+
+  .ee-btn-action {
+    padding: 0.8rem 0;
+    font-size: 1rem;
+    width: 100%;
+  }
+  
+  /* Escape Button */
+  .ee-btn-escape {
+    top: 10px !important;
+    left: 10px !important;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* DESKTOP SPECIFIC FIXES (Để không ảnh hưởng Web View) */
+@media (min-width: 769px) {
+  .ee-peter-statue {
+    bottom: 48%; /* Web: Cao hơn để ngồi lên bàn */
+    left: 30%;
+    width: 16vw;
+  }
+
+  .ee-quagmire-statue {
+    bottom: 47%;
+    left: 54%;
+    width: 16vw;
+  }
 }

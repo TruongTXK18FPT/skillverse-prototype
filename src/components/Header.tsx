@@ -26,7 +26,8 @@ import {
   Building2,
   Compass,
   Zap,
-  HelpCircle
+  HelpCircle,
+  BadgeQuestionMark
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -119,6 +120,12 @@ const Header: React.FC = () => {
       description: 'Tham gia các hội thảo và sự kiện',
       path: '/seminar',
       icon: Calendar
+    },
+    {
+      name: 'Cầu Nguyện',
+      description: 'Đôi khi chỉ cần có niềm tin là đủ',
+      path: '/pray',
+      icon: BadgeQuestionMark  
     }
   ];
 

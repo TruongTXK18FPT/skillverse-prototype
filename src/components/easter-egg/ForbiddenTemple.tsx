@@ -307,7 +307,7 @@ const ForbiddenTemple: React.FC = () => {
 
 
       {/* ================= UI LAYER ================= */}
-      <div className="ee-ui-layer">
+      <div className={`ee-ui-layer ${isStickLit ? 'hidden-on-mobile' : ''}`}>
         {/* Input Section */}
         <input 
           type="text" 

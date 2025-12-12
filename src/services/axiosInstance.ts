@@ -100,7 +100,7 @@ export const API_BASE_URL = baseURL;
 
 export const axiosInstance = axios.create({
   baseURL,
-  timeout: 360000, // 60 seconds for AI requests (roadmap generation, chatbot)
+  timeout: 720000, // 120 seconds for AI requests (roadmap generation, chatbot)
   // Do NOT set a global Content-Type: axios will set correct headers per body
   // For JSON requests, axios uses application/json automatically
   // For FormData (multipart), axios sets boundary headers automatically

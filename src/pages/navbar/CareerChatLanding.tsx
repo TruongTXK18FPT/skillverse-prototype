@@ -303,38 +303,38 @@ const CareerChatLanding = () => {
                   <p className="summary-subtitle">Luôn cập nhật - Phục vụ 24/7 - Chuyên môn đa dạng</p>
                 </div>
 
-                <div className="summary-stats">
-                  <div className="stat-card">
-                    <div className="stat-icon">
+                <div className="ai-chat-summary-stats">
+                  <div className="ai-chat-stat-card">
+                    <div className="ai-chat-stat-icon">
                       <Users size={28} strokeWidth={2} aria-hidden="true" />
                     </div>
-                    <div className="stat-content">
-                      <div className="stat-number" id="expertCount">{statistics.totalExperts}+</div>
-                      <div className="stat-label">CHUYÊN GIA</div>
+                    <div className="ai-chat-stat-content">
+                      <div className="ai-chat-stat-number" id="expertCount">{statistics.totalExperts}+</div>
+                      <div className="ai-chat-stat-label">CHUYÊN GIA</div>
                     </div>
-                    <div className="stat-glow" aria-hidden="true"></div>
+                    <div className="ai-chat-stat-glow" aria-hidden="true"></div>
                   </div>
 
-                  <div className="stat-card">
-                    <div className="stat-icon">
+                  <div className="ai-chat-stat-card">
+                    <div className="ai-chat-stat-icon">
                       <Sparkles size={28} strokeWidth={2} aria-hidden="true" />
                     </div>
-                    <div className="stat-content">
-                      <div className="stat-number" id="domainCount">{statistics.totalDomains}</div>
-                      <div className="stat-label">LĨNH VỰC</div>
+                    <div className="ai-chat-stat-content">
+                      <div className="ai-chat-stat-number" id="domainCount">{statistics.totalDomains}</div>
+                      <div className="ai-chat-stat-label">LĨNH VỰC</div>
                     </div>
-                    <div className="stat-glow" aria-hidden="true"></div>
+                    <div className="ai-chat-stat-glow" aria-hidden="true"></div>
                   </div>
 
-                  <div className="stat-card">
-                    <div className="stat-icon">
+                  <div className="ai-chat-stat-card">
+                    <div className="ai-chat-stat-icon">
                       <ChevronRight size={28} strokeWidth={2} aria-hidden="true" />
                     </div>
-                    <div className="stat-content">
-                      <div className="stat-number" id="industryCount">{statistics.totalIndustries}+</div>
-                      <div className="stat-label">NGÀNH NGHỀ</div>
+                    <div className="ai-chat-stat-content">
+                      <div className="ai-chat-stat-number" id="industryCount">{statistics.totalIndustries}+</div>
+                      <div className="ai-chat-stat-label">NGÀNH NGHỀ</div>
                     </div>
-                    <div className="stat-glow" aria-hidden="true"></div>
+                    <div className="ai-chat-stat-glow" aria-hidden="true"></div>
                   </div>
                 </div>
 
