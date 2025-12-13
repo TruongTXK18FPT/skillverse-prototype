@@ -1,45 +1,42 @@
 import { useState, useEffect } from 'react';
-import { Sparkles, Cpu, Zap, Search, Brain } from 'lucide-react';
+import { Brain, ChevronDown } from 'lucide-react';
+import '../../styles/MessageRenderer.css'; // Reuse styles
 
 const PHRASES = [
-  "Đang khởi tạo liên kết thần kinh...",      // Initializing neural link
-  "Đang phân tích mẫu yêu cầu...",            // Analyzing request patterns
-  "Đang 'nấu' dữ liệu...",                    // Cooking (Giữ chất meme)
-  "Đang giả lập tư duy...",                   // Pontificating
-  "Đang tổng hợp tri thức...",                // Synthesizing data
-  "Đang tối ưu hóa véc-tơ giải pháp...",      // Optimizing solution vectors
-  "Đang truy cập tàng thư chuyên gia...",     // Accessing expert archives
-
-  // --- Thêm mới (Đậm chất Sci-Fi / Vũ trụ) ---
-  "Đang kết nối vệ tinh Skillverse...",
-  "Đang giải mã tín hiệu vũ trụ...",
-  "Đang kích hoạt lõi xử lý lượng tử...",
-  "Đang quét không gian dữ liệu...",
-  "Đang đồng bộ hóa tần số não bộ...",
-  "Đang hiệu chỉnh cảm biến AI...",
-  "Đang trích xuất thông tin...",
-  "Đang tải xuống tài nguyên...",
-  "Đang nạp năng lượng...",
+  "Đang phân tích ngữ cảnh và ý định của bạn...",
+  "Đang truy xuất dữ liệu thị trường lao động & xu hướng 2025...",
+  "Đang kích hoạt mạng nơ-ron chuyên gia...",
+  "Đang tra cứu yêu cầu kỹ năng và lộ trình thăng tiến...",
+  "Đang so sánh mức lương và cơ hội việc làm thực tế...",
+  "Đang tổng hợp các tài nguyên học tập uy tín nhất...",
+  "Đang xây dựng chiến lược phát triển cá nhân hóa...",
+  "Đang kiểm chứng thông tin và đánh giá rủi ro...",
+  "Đang soạn thảo câu trả lời chi tiết...",
 ];
 
-const ICONS = [Sparkles, Cpu, Zap, Search, Brain];
-
 export const ThinkingIndicator = () => {
-  const [index, setIndex] = useState(0);
+  const [phraseIndex, setPhraseIndex] = useState(0);
   
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % PHRASES.length);
-    }, 2000);
+      setPhraseIndex((prev) => (prev + 1) % PHRASES.length);
+    }, 1200); // Slightly faster updates
     return () => clearInterval(interval);
   }, []);
 
-  const Icon = ICONS[index % ICONS.length];
-
   return (
-    <div className="chat-hud-thinking">
-      <Icon className="animate-spin-slow" size={18} />
-      <span className="thinking-text" key={index}>{PHRASES[index]}</span>
+    <div className="msg-thinking-block" style={{ margin: 0, width: '100%', maxWidth: '100%' }}>
+      <div className="msg-thinking-header">
+        <Brain size={16} className="thinking-icon" />
+        <span>Thinking Process</span>
+        <ChevronDown size={16} />
+      </div>
+      <div className="msg-thinking-content">
+        <p style={{ display: 'flex', alignItems: 'center' }}>
+          {PHRASES[phraseIndex]}
+          <span className="thinking-cursor">...</span>
+        </p>
+      </div>
     </div>
   );
 };

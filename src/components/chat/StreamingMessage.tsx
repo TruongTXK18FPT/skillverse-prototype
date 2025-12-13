@@ -11,29 +11,34 @@ interface StreamingMessageProps {
 export const StreamingMessage = ({ content, scrollToBottom, onComplete, isExpertMode }: StreamingMessageProps) => {
   const [displayedContent, setDisplayedContent] = useState("");
   const indexRef = useRef(0);
+  const contentRef = useRef(content);
 
   useEffect(() => {
-    // Reset if content changes completely (rare case)
-    indexRef.current = 0;
-    setDisplayedContent("");
+    contentRef.current = content;
+  }, [content]);
 
+  useEffect(() => {
     const interval = setInterval(() => {
-      // Chunk size: Increase to make it faster (e.g., 3 chars per tick)
-      const chunkSize = 3; 
+      const currentTarget = contentRef.current;
       
-      if (indexRef.current < content.length) {
-        const nextChunk = content.slice(indexRef.current, indexRef.current + chunkSize);
+      if (indexRef.current < currentTarget.length) {
+        const chunkSize = 5; // Increased chunk size for better responsiveness
+        const nextChunk = currentTarget.slice(indexRef.current, indexRef.current + chunkSize);
         setDisplayedContent((prev) => prev + nextChunk);
         indexRef.current += chunkSize;
-        scrollToBottom(); // Keep view at bottom
+        scrollToBottom();
       } else {
-        clearInterval(interval);
-        if (onComplete) onComplete();
+        // Check if we are done (parent controls unmounting, but we can callback)
+        if (onComplete && indexRef.current >= currentTarget.length) {
+           // We don't call onComplete here immediately because content might still be growing
+           // But if the parent stops updating content, we might want to signal.
+           // For now, we just wait.
+        }
       }
-    }, 20); // Speed in ms
+    }, 20);
 
     return () => clearInterval(interval);
-  }, [content, scrollToBottom, onComplete]);
+  }, [scrollToBottom, onComplete]);
 
   return <MessageRenderer content={displayedContent} isExpertMode={isExpertMode} />;
 };

@@ -249,6 +249,11 @@ const isQuizAttemptRoute = (pathname: string) => {
   return /^\/quiz\/\d+\/attempt$/.test(pathname);
 };
 
+// Check if path matches roadmap detail pattern
+const isRoadmapDetailRoute = (pathname: string) => {
+  return /^\/roadmap\/[^/]+$/.test(pathname);
+};
+
 // Hide Header on specific routes
 const HeaderVisibilityWrapper = () => {
   const location = useLocation();
@@ -259,7 +264,10 @@ const HeaderVisibilityWrapper = () => {
 // Hide Footer on specific routes
 const FooterVisibilityWrapper = () => {
   const location = useLocation();
-  if (fullScreenRoutes.has(location.pathname) || hideFooterOnlyRoutes.has(location.pathname) || isQuizAttemptRoute(location.pathname)) {
+  if (fullScreenRoutes.has(location.pathname) || 
+      hideFooterOnlyRoutes.has(location.pathname) || 
+      isQuizAttemptRoute(location.pathname) ||
+      isRoadmapDetailRoute(location.pathname)) {
     return null;
   }
   return <Footer />;

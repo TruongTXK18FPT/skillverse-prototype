@@ -7,12 +7,15 @@ import { getUserEnrollments } from '../../services/enrollmentService';
 import { getCourse } from '../../services/courseService';
 import { getMyUsage, getCycleStats } from '../../services/usageLimitService';
 import { getMyFavoriteMentors } from '../../services/mentorProfileService';
+import aiRoadmapService from '../../services/aiRoadmapService';
+import { RoadmapSessionSummary } from '../../types/Roadmap';
 
 const DashboardPage = () => {
   const { translations } = useLanguage();
   const { user } = useAuth();
   const [enrolledCourses, setEnrolledCourses] = useState<any[]>([]);
   const [favoriteMentors, setFavoriteMentors] = useState<any[]>([]);
+  const [roadmaps, setRoadmaps] = useState<RoadmapSessionSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [featureUsage, setFeatureUsage] = useState<any[]>([]);
   const [cycleStats, setCycleStats] = useState<any>(null);
@@ -28,16 +31,18 @@ const DashboardPage = () => {
       if (user?.id) {
         try {
           // Fetch limits and stats in parallel with enrollments
-          const [enrollments, limits, cStats, favorites] = await Promise.all([
+          const [enrollments, limits, cStats, favorites, userRoadmaps] = await Promise.all([
             getUserEnrollments(user.id),
             getMyUsage().catch(e => []),
             getCycleStats().catch(e => null),
-            getMyFavoriteMentors().catch(e => [])
+            getMyFavoriteMentors().catch(e => []),
+            aiRoadmapService.getUserRoadmaps().catch(e => [])
           ]);
 
           setFeatureUsage(limits);
           setCycleStats(cStats);
           setFavoriteMentors(favorites);
+          setRoadmaps(userRoadmaps);
           
           // Fetch details for each course to get title, thumbnail, etc.
           const coursesPromises = enrollments.content.map(async (enrollment) => {
@@ -105,6 +110,7 @@ const DashboardPage = () => {
         translations={translations}
         enrolledCourses={enrolledCourses}
         favoriteMentors={favoriteMentors}
+        roadmaps={roadmaps}
         userStats={stats}
         featureUsage={featureUsage}
         cycleStats={cycleStats}

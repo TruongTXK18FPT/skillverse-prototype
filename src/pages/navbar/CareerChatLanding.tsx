@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Users, ArrowRight, ChevronRight, X, Search, SlidersHorizontal, Filter } from 'lucide-react';
+import { Sparkles, Users, ArrowRight, ChevronRight, X, Search, SlidersHorizontal, Filter, Lock } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import careerChatService from '../../services/careerChatService';
+import { premiumService } from '../../services/premiumService';
+import { UserSubscriptionResponse } from '../../data/premiumDTOs';
 import { ExpertFieldResponse, RoleInfo } from '../../types/CareerChat';
+import { useToast } from '../../hooks/useToast';
 import '../../styles/CareerChatLandingTech.css';
 
 /**
@@ -14,9 +17,25 @@ import '../../styles/CareerChatLandingTech.css';
 const CareerChatLanding = () => {
   const navigate = useNavigate();
   const { isAuthenticated, loading: authLoading } = useAuth();
+  const { showError } = useToast();
   const [showExpertFlow, setShowExpertFlow] = useState(false);
   const [expertFields, setExpertFields] = useState<ExpertFieldResponse[]>([]);
   const [loading, setLoading] = useState(false);
+  const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
+
+  useEffect(() => {
+    const fetchSubscription = async () => {
+      try {
+        const sub = await premiumService.getCurrentSubscription();
+        setSubscription(sub);
+      } catch (error) {
+        console.error('Failed to fetch subscription:', error);
+      }
+    };
+    if (isAuthenticated) {
+      fetchSubscription();
+    }
+  }, [isAuthenticated]);
   
   // Selection state
   const [selectedDomain, setSelectedDomain] = useState<string>('');
@@ -162,6 +181,14 @@ const CareerChatLanding = () => {
   };
 
   const handleExpertChat = () => {
+    const hasActiveSubscription = subscription && subscription.isActive;
+    const isFreeTier = subscription?.plan?.planType === 'FREE_TIER';
+
+    if (!hasActiveSubscription || isFreeTier) {
+      showError('Truy cập bị từ chối', 'Chế độ Expert Chat chỉ dành cho thành viên Premium!');
+      return;
+    }
+
     setShowExpertFlow(true);
     setStep('choice');
     loadExpertFields();
@@ -453,8 +480,17 @@ const CareerChatLanding = () => {
                   </div>
                   
                   <div className="card-action">
-                    <span>CHỌN CHUYÊN GIA</span>
-                    <ArrowRight size={20} />
+                    {(!subscription?.isActive || subscription?.plan?.planType === 'FREE_TIER') ? (
+                      <>
+                        <span>PREMIUM ONLY</span>
+                        <Lock size={20} />
+                      </>
+                    ) : (
+                      <>
+                        <span>CHỌN CHUYÊN GIA</span>
+                        <ArrowRight size={20} />
+                      </>
+                    )}
                   </div>
                 </motion.div>
               </div>

@@ -229,6 +229,8 @@
 .holo-metric--chat .holo-metric-icon { color: #06b6d4; background: rgba(6, 182, 212, 0.15); }
 .holo-metric--support .holo-metric-icon { color: #8b5cf6; background: rgba(139, 92, 246, 0.15); }
 .holo-metric--learning .holo-metric-icon { color: #22c55e; background: rgba(34, 197, 94, 0.15); }
+.holo-metric--roadmap .holo-metric-icon { color: #d946ef; background: rgba(217, 70, 239, 0.15); }
+.holo-metric--roadmap .holo-metric-glow { background: #d946ef; }
 
 .holo-metric-icon {
   width: 52px;

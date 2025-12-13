@@ -7,6 +7,9 @@ import StatUnit from './StatUnit';
 import ActiveModules from './ActiveModules';
 import MissionLog from './MissionLog';
 import FavoriteMentors from './FavoriteMentors';
+import AnalystTrack from './AnalystTrack';
+import SystemLimits from './SystemLimits';
+import { RoadmapSessionSummary } from '../../types/Roadmap';
 import './MothershipDashboard.css';
 import './hud-styles.module.css';
 
@@ -15,6 +18,7 @@ interface MothershipDashboardProps {
   translations?: any;
   enrolledCourses?: any[];
   favoriteMentors?: any[];
+  roadmaps?: RoadmapSessionSummary[];
   userStats?: {
     totalCourses: number;
     totalHours: number;
@@ -44,6 +48,7 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   translations = {},
   enrolledCourses = [],
   favoriteMentors = [],
+  roadmaps = [],
   userStats = {
     totalCourses: 0,
     totalHours: 0,
@@ -214,36 +219,12 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
           ))}
         </div>
 
+        {/* Analyst Track (Strategic Overview) */}
+        <AnalystTrack roadmaps={roadmaps} />
+
         {/* Usage Limits */}
         {(featureUsage || usageLimits) && (
-          <div className="mothership-dashboard__usage-limits" style={{ marginTop: '20px', padding: '15px', background: 'rgba(0, 20, 40, 0.6)', border: '1px solid rgba(0, 255, 255, 0.2)', borderRadius: '8px' }}>
-            <h3 style={{ color: '#00ffff', marginBottom: '10px', fontFamily: 'Orbitron, sans-serif', fontSize: '14px' }}>SYSTEM LIMITS</h3>
-            <div style={{ display: 'flex', gap: '20px', color: '#a0c0ff', fontSize: '12px', flexWrap: 'wrap' }}>
-               {featureUsage ? (
-                 featureUsage.map((feature: any, idx: number) => (
-                   <div key={idx}>
-                     <span style={{ color: '#fff' }}>{feature.featureName}:</span>{' '}
-                     {feature.isUnlimited ? 'Unlimited' : 
-                      feature.bonusMultiplier ? `x${feature.bonusMultiplier}` :
-                      feature.limit === null ? (feature.isEnabled ? 'Enabled' : 'Disabled') :
-                      `${feature.currentUsage}/${feature.limit}`}
-                   </div>
-                 ))
-               ) : (
-                 <>
-                   <div>
-                     <span style={{ color: '#fff' }}>Chatbot Requests:</span> {usageLimits?.CHATBOT_REQUESTS}
-                   </div>
-                   <div>
-                     <span style={{ color: '#fff' }}>Roadmaps:</span> {usageLimits?.ROADM_MAPS_LIMIT}
-                   </div>
-                   <div>
-                     <span style={{ color: '#fff' }}>Coin Multiplier:</span> x{usageLimits?.COIN_MULTIPLIER}
-                   </div>
-                 </>
-               )}
-            </div>
-          </div>
+          <SystemLimits usageLimits={usageLimits} featureUsage={featureUsage} />
         )}
 
         {/* Active Simulations (Current Courses) */}

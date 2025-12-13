@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, User, Sparkles, Loader, Plus, Trash2, Mic, Square, ArrowLeft, Menu, X, Bot } from 'lucide-react';
+import { Send, Sparkles, Loader, Plus, Trash2, Mic, Square, ArrowLeft, Menu, X, Bot, ChevronDown, Lock } from 'lucide-react';
+import meowlDefault from '../../assets/meowl-skin/meowl_default.png';
+import userService from '../../services/userService';
+import { premiumService } from '../../services/premiumService';
+import { UserSubscriptionResponse } from '../../data/premiumDTOs';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import careerChatService from '../../services/careerChatService';
@@ -65,7 +69,33 @@ const CareerChatPage = () => {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [loadingSessions, setLoadingSessions] = useState(true);
   const [chatMode, setChatMode] = useState<ChatMode>(ChatMode.GENERAL_CAREER_ADVISOR);
+  const [aiAgentMode, setAiAgentMode] = useState<'NORMAL' | 'DEEP_RESEARCH'>('NORMAL');
+  const [showModelDropdown, setShowModelDropdown] = useState(false);
   const [expertContext, setExpertContext] = useState<ExpertContext | null>(null);
+  const [userAvatar, setUserAvatar] = useState<string | null>(user?.avatarUrl || null);
+  const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
+
+  useEffect(() => {
+    const fetchSubscription = async () => {
+      try {
+        const sub = await premiumService.getCurrentSubscription();
+        setSubscription(sub);
+      } catch (error) {
+        console.error('Failed to fetch subscription:', error);
+      }
+    };
+    fetchSubscription();
+  }, []);
+
+  useEffect(() => {
+    if (user?.id) {
+      userService.getMyProfile().then(profile => {
+        if (profile.avatarMediaUrl) {
+          setUserAvatar(profile.avatarMediaUrl);
+        }
+      }).catch(err => console.error('Failed to load user avatar', err));
+    }
+  }, [user]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // Voice related state (kept for future use or if re-enabled)
@@ -250,14 +280,16 @@ const CareerChatPage = () => {
 
   const speakText = async (_text: string) => { return; };
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isAuthenticated || !inputMessage.trim() || isLoading) return;
+  const handleSendMessage = async (e?: React.FormEvent, overrideText?: string) => {
+    if (e) e.preventDefault();
+    const textToSend = overrideText || inputMessage.trim();
+
+    if (!isAuthenticated || !textToSend || isLoading) return;
 
     const userMessage: UIMessage = {
       id: Date.now().toString(),
       role: 'user',
-      content: inputMessage.trim(),
+      content: textToSend,
       timestamp: new Date()
     };
 
@@ -270,6 +302,7 @@ const CareerChatPage = () => {
         message: userMessage.content,
         sessionId: sessionId || undefined,
         chatMode,
+        aiAgentMode: aiAgentMode === 'DEEP_RESEARCH' ? 'deep-research-pro-preview-12-2025' : undefined,
         domain: expertContext?.domain,
         industry: expertContext?.industry,
         jobRole: expertContext?.jobRole
@@ -294,6 +327,46 @@ const CareerChatPage = () => {
         speakText(assistantMsg.content);
       }
     } catch (error: any) {
+      // Handle Premium Restriction (403) for Deep Research
+      if (error?.response?.status === 403 && aiAgentMode === 'DEEP_RESEARCH') {
+        showError(
+          'Premium Required', 
+          'Chế độ Deep Research chỉ dành cho tài khoản Premium. Hệ thống sẽ tự động chuyển về Normal Agent.',
+          6
+        );
+        
+        // Retry with Normal Agent
+        try {
+          const retryResponse = await careerChatService.sendMessage({
+            message: userMessage.content,
+            sessionId: sessionId || undefined,
+            chatMode,
+            aiAgentMode: 'NORMAL',
+            domain: expertContext?.domain,
+            industry: expertContext?.industry,
+            jobRole: expertContext?.jobRole
+          });
+
+          if (!sessionId) {
+            setSessionId(retryResponse.sessionId);
+            loadSessions();
+          }
+
+          const assistantMsg = {
+            id: (Date.now() + 1).toString(),
+            role: 'assistant',
+            content: retryResponse.aiResponse,
+            timestamp: new Date(retryResponse.timestamp),
+            expertContext: retryResponse.expertContext,
+            isStreaming: true
+          } as UIMessage;
+          setMessages(prev => [...prev, assistantMsg]);
+          return;
+        } catch (retryError) {
+          console.error('Retry failed:', retryError);
+        }
+      }
+
       showError('Lỗi', error.message || 'Không thể gửi tin nhắn');
     } finally {
       setIsLoading(false);
@@ -383,14 +456,79 @@ const CareerChatPage = () => {
             <button className="chat-hud-mobile-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
               {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
-            <button className="chat-hud-back-btn" onClick={() => navigate('/chatbot')}>
-              <ArrowLeft size={18} /> Quay lại
-            </button>
           </div>
           
           <div className="chat-hud-title">
             <Sparkles size={18} style={{ marginRight: '8px', color: 'var(--chat-hud-accent)' }} />
             Meowl Assistant
+          </div>
+
+          {/* Model Selector */}
+          <div className="chat-model-selector">
+            <button 
+              className={`chat-model-btn ${aiAgentMode === 'DEEP_RESEARCH' ? 'premium' : ''}`}
+              onClick={() => setShowModelDropdown(!showModelDropdown)}
+            >
+              {aiAgentMode === 'NORMAL' ? (
+                <>
+                  <Bot size={16} />
+                  <span>Normal Agent</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={16} />
+                  <span>Deep Research</span>
+                </>
+              )}
+              <ChevronDown size={14} />
+            </button>
+
+            {showModelDropdown && (
+              <div className="chat-model-dropdown">
+                <div 
+                  className={`chat-model-option ${aiAgentMode === 'NORMAL' ? 'active' : ''}`}
+                  onClick={() => {
+                    setAiAgentMode('NORMAL');
+                    setShowModelDropdown(false);
+                  }}
+                >
+                  <div className="model-icon">
+                    <Bot size={18} />
+                  </div>
+                  <div className="model-info">
+                    <span className="model-name">Normal Agent</span>
+                    <span className="model-desc">Tốc độ tiêu chuẩn, phản hồi nhanh</span>
+                  </div>
+                </div>
+
+                <div 
+                  className={`chat-model-option premium-opt ${aiAgentMode === 'DEEP_RESEARCH' ? 'active' : ''}`}
+                  style={{ 
+                    opacity: subscription?.plan?.planType === 'PREMIUM_PLUS' ? 1 : 0.7,
+                    cursor: subscription?.plan?.planType === 'PREMIUM_PLUS' ? 'pointer' : 'not-allowed'
+                  }}
+                  onClick={() => {
+                    if (subscription?.plan?.planType === 'PREMIUM_PLUS') {
+                      setAiAgentMode('DEEP_RESEARCH');
+                      setShowModelDropdown(false);
+                    } else {
+                      showError('Premium Required', 'Tính năng Deep Research chỉ dành cho gói Mentor Pro (Premium Plus)!');
+                    }
+                  }}
+                >
+                  <div className="model-icon">
+                    {subscription?.plan?.planType === 'PREMIUM_PLUS' ? <Sparkles size={18} /> : <Lock size={18} />}
+                  </div>
+                  <div className="model-info">
+                    <span className="model-name">
+                      Deep Research
+                      <span className="premium-badge-mini">PLUS</span>
+                    </span>
+                    <span className="model-desc">Phân tích sâu, dữ liệu chi tiết</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="chat-hud-status">
@@ -407,13 +545,11 @@ const CareerChatPage = () => {
                 {msg.role === 'assistant' ? (
                   <img src={aiAvatar} alt="AI" />
                 ) : (
-                  user?.avatarUrl ? (
-                    <img src={user.avatarUrl} alt="User" style={{ width: '100%', height: '100%', borderRadius: '4px', objectFit: 'cover' }} />
-                  ) : (
-                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#334155', color: '#fff' }}>
-                      <User size={20} />
-                    </div>
-                  )
+                  <img 
+                    src={userAvatar || meowlDefault} 
+                    alt="User" 
+                    style={{ width: '100%', height: '100%', borderRadius: '4px', objectFit: 'cover' }} 
+                  />
                 )}
               </div>
               <div className="chat-hud-bubble">
@@ -430,6 +566,7 @@ const CareerChatPage = () => {
                   <MessageRenderer 
                     content={msg.content} 
                     isExpertMode={false}
+                    onSuggestionClick={(text) => handleSendMessage(undefined, text)}
                   />
                 )}
                 {msg.role === 'assistant' && voiceMode && ENABLE_TTS && (

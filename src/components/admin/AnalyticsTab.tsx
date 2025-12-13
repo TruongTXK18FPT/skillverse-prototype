@@ -3,7 +3,7 @@ import {
   Users, CreditCard, Briefcase, BookOpen, TrendingUp,
   Crown, RefreshCw, Calendar, DollarSign, Activity, PieChart,
   BarChart3, LineChart, Zap, Award, Target, Loader2, MessageSquare,
-  HelpCircle, GraduationCap, ShieldCheck, Clock, Ticket, Wallet
+  HelpCircle, GraduationCap, ShieldCheck, Clock, Ticket, Wallet, Map, CheckCircle
 } from 'lucide-react';
 import {
   AreaChart, Area, BarChart, Bar,
@@ -18,6 +18,7 @@ import jobService from '../../services/jobService';
 import { listCourses } from '../../services/courseService';
 import supportService, { TicketStatsResponse } from '../../services/supportService';
 import careerChatService from '../../services/careerChatService';
+import aiRoadmapService from '../../services/aiRoadmapService';
 import { AdminUserListResponse } from '../../types/adminUser';
 import { AdminPremiumPlan } from '../../services/adminPremiumService';
 import { PaymentTransactionResponse } from '../../data/paymentDTOs';
@@ -47,6 +48,11 @@ interface AnalyticsState {
     totalCashBalance: string;
     totalCoinBalance: number;
     activeWalletCount: number;
+  } | null;
+  // Roadmap stats
+  roadmapStats: {
+    totalRoadmaps: number;
+    completionRate: number;
   } | null;
   // Revenue breakdown - separate for each period
   dailyRevenue: RevenueData | null;
@@ -90,6 +96,7 @@ const AnalyticsTab: React.FC = () => {
     ticketStats: null,
     totalChatSessions: 0,
     walletStats: null,
+    roadmapStats: null,
     dailyRevenue: null,
     weeklyRevenue: null,
     monthlyRevenue: null,
@@ -118,7 +125,7 @@ const AnalyticsTab: React.FC = () => {
       const [
         usersData, plansData, paymentStatsData, transactionsData, 
         jobsData, coursesData, ticketStatsData, chatStatsData,
-        walletStatsData,
+        walletStatsData, roadmapData,
         dailyData, weeklyData, monthlyData, yearlyData
       ] = await Promise.allSettled([
         adminUserService.getAllUsers(),
@@ -130,11 +137,24 @@ const AnalyticsTab: React.FC = () => {
         supportService.getTicketStats(),
         careerChatService.getAdminStats(),
         paymentService.adminGetWalletStatistics(),
+        aiRoadmapService.getAllRoadmaps(),
         paymentService.adminGetRevenueBreakdown('daily', 30),
         paymentService.adminGetRevenueBreakdown('weekly', 12),
         paymentService.adminGetRevenueBreakdown('monthly', 12),
         paymentService.adminGetRevenueBreakdown('yearly', 10),
       ]);
+
+      // Calculate roadmap stats
+      let roadmapStats = null;
+      if (roadmapData.status === 'fulfilled') {
+        const roadmaps = roadmapData.value;
+        const total = roadmaps.length;
+        const completed = roadmaps.filter(r => (r.progressPercentage || 0) >= 100).length;
+        roadmapStats = {
+          totalRoadmaps: total,
+          completionRate: total > 0 ? Math.round((completed / total) * 100) : 0
+        };
+      }
 
       setState(prev => ({
         ...prev,
@@ -148,16 +168,19 @@ const AnalyticsTab: React.FC = () => {
         ticketStats: ticketStatsData.status === 'fulfilled' ? ticketStatsData.value : null,
         totalChatSessions: chatStatsData.status === 'fulfilled' ? chatStatsData.value.totalSessions : 0,
         walletStats: walletStatsData.status === 'fulfilled' ? walletStatsData.value : null,
+        roadmapStats: roadmapStats,
         dailyRevenue: dailyData.status === 'fulfilled' ? dailyData.value : null,
         weeklyRevenue: weeklyData.status === 'fulfilled' ? weeklyData.value : null,
         monthlyRevenue: monthlyData.status === 'fulfilled' ? monthlyData.value : null,
         yearlyRevenue: yearlyData.status === 'fulfilled' ? yearlyData.value : null,
       }));
-    } catch (error) {
-      console.error('Error fetching analytics:', error);
-      setState(prev => ({ ...prev, loading: false, error: 'Không thể tải dữ liệu phân tích' }));
+    } catch (err) {
+      console.error('Error fetching analytics:', err);
+      setState(prev => ({ ...prev, loading: false, error: 'Failed to load analytics data' }));
     }
   }, []);
+
+
 
   useEffect(() => {
     fetchAnalytics();
@@ -646,6 +669,21 @@ const AnalyticsTab: React.FC = () => {
             <span className="holo-metric-value">{formatNumber(state.totalChatSessions)}</span>
             <div className="holo-metric-detail">
               <span><Activity size={14} /> Cuộc hội thoại AI</span>
+            </div>
+          </div>
+          <div className="holo-metric-glow" />
+        </div>
+
+        {/* Roadmap Analytics */}
+        <div className="holo-metric-card holo-metric--roadmap">
+          <div className="holo-metric-icon">
+            <Map size={28} />
+          </div>
+          <div className="holo-metric-content">
+            <span className="holo-metric-label">Tổng Roadmap</span>
+            <span className="holo-metric-value">{formatNumber(state.roadmapStats?.totalRoadmaps || 0)}</span>
+            <div className="holo-metric-detail">
+              <span><CheckCircle size={14} /> {state.roadmapStats?.completionRate || 0}% hoàn thành</span>
             </div>
           </div>
           <div className="holo-metric-glow" />

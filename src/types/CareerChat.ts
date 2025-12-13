@@ -20,6 +20,7 @@ export interface ChatRequest {
   message: string;
   sessionId?: number;
   chatMode?: ChatMode;
+  aiAgentMode?: 'NORMAL' | 'DEEP_RESEARCH' | 'deep-research-pro-preview-12-2025';
   domain?: string;
   industry?: string;
   jobRole?: string;

@@ -301,3 +301,113 @@
 .message-renderer.expert-mode em {
   color: rgba(103, 232, 249, 0.9);
 }
+
+/* Thinking Block Styling */
+.msg-thinking-block {
+  margin-bottom: 16px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 8px;
+  background: rgba(139, 92, 246, 0.05);
+  overflow: hidden;
+}
+
+.msg-thinking-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(139, 92, 246, 0.1);
+  cursor: pointer;
+  font-size: 0.9em;
+  color: #c4b5fd;
+  font-weight: 500;
+  transition: background 0.2s ease;
+  user-select: none;
+}
+
+.msg-thinking-header:hover {
+  background: rgba(139, 92, 246, 0.15);
+}
+
+.thinking-icon {
+  color: #8b5cf6;
+}
+
+.msg-thinking-content {
+  padding: 12px;
+  font-size: 0.9em;
+  color: #9ca3af;
+  border-top: 1px solid rgba(139, 92, 246, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  font-family: 'Consolas', 'Monaco', monospace;
+  white-space: pre-wrap;
+}
+
+.msg-thinking-content p {
+  margin: 0 0 4px 0;
+}
+
+.msg-thinking-content p:last-child {
+  margin-bottom: 0;
+}
+
+
+.thinking-cursor {
+  display: inline-block;
+  margin-left: 4px;
+  animation: pulse 1.5s infinite;
+  color: #8b5cf6;
+  font-weight: bold;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+
+/* Suggestions Styling */
+.msg-suggestions-container {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(139, 92, 246, 0.3);
+}
+
+.msg-suggestions-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #c4b5fd;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.msg-suggestions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.msg-suggestion-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 20px;
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.msg-suggestion-chip:hover {
+  background: rgba(139, 92, 246, 0.25);
+  border-color: rgba(139, 92, 246, 0.5);
+  transform: translateY(-1px);
+}
+

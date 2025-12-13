@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, User, Sparkles, Loader, Plus, Trash2, Zap, Code, ArrowLeft, Menu, X } from 'lucide-react';
+import { Send, User, Sparkles, Loader, Plus, Trash2, Zap, Code, ArrowLeft, Menu, X, ChevronDown, Bot, Lock } from 'lucide-react';
+import meowlDefault from '../../assets/meowl-skin/meowl_default.png';
+import userService from '../../services/userService';
+import { premiumService } from '../../services/premiumService';
+import { UserSubscriptionResponse } from '../../data/premiumDTOs';
 import { useNavigate, useLocation } from 'react-router-dom';
 // import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -38,7 +42,39 @@ const ExpertChatPage = () => {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [loadingSessions, setLoadingSessions] = useState(true);
   const [expertContext, setExpertContext] = useState<ExpertContext | null>(null);
+  const [aiAgentMode, setAiAgentMode] = useState<'NORMAL' | 'DEEP_RESEARCH'>('NORMAL');
+  const [showModelDropdown, setShowModelDropdown] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [userAvatar, setUserAvatar] = useState<string | null>(user?.avatarUrl || null);
+  const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
+  const [checkingAccess, setCheckingAccess] = useState(true);
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (user?.id) {
+        try {
+          // Load avatar
+          userService.getMyProfile().then(profile => {
+            if (profile.avatarMediaUrl) {
+              setUserAvatar(profile.avatarMediaUrl);
+            }
+          }).catch(err => console.error('Failed to load user avatar', err));
+
+          // Check subscription
+          const sub = await premiumService.getCurrentSubscription();
+          setSubscription(sub);
+        } catch (error) {
+          console.error('Failed to check subscription:', error);
+        } finally {
+          setCheckingAccess(false);
+        }
+      } else if (!loading) {
+        setCheckingAccess(false);
+      }
+    };
+    
+    checkAccess();
+  }, [user, loading]);
   const [showExpertSelector, setShowExpertSelector] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -267,13 +303,57 @@ const ExpertChatPage = () => {
   }, [isAuthenticated]);
 
   // Show loading screen while initializing
-  if (isInitializing) {
+  if (isInitializing || checkingAccess) {
     return (
       <div className="chat-hud-viewport">
         <div className="chat-hud-main-area" style={{ alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', color: 'var(--chat-hud-accent)' }}>
             <Loader size={48} className="animate-spin" />
             <div style={{ fontSize: '1.2rem', letterSpacing: '2px' }}>ĐANG KHỞI TẠO HỆ THỐNG CHUYÊN GIA...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Access Control Check
+  const hasActiveSubscription = subscription && subscription.isActive;
+  const isFreeTier = subscription?.plan?.planType === 'FREE_TIER';
+  const isPremiumPlus = subscription?.plan?.planType === 'PREMIUM_PLUS';
+
+  if (!hasActiveSubscription || isFreeTier) {
+    return (
+      <div className="chat-hud-viewport">
+        <div className="chat-hud-main-area" style={{ alignItems: 'center', justifyContent: 'center', background: 'var(--chat-hud-bg)' }}>
+          <div style={{
+            background: 'rgba(15, 23, 42, 0.8)', padding: '48px',
+            borderRadius: '24px', textAlign: 'center', maxWidth: '500px',
+            border: '1px solid var(--chat-hud-accent)',
+            boxShadow: '0 0 40px rgba(6, 182, 212, 0.1)'
+          }}>
+            <Lock size={64} style={{ color: 'var(--chat-hud-accent)', marginBottom: '24px' }} />
+            <h2 style={{ color: '#fff', fontSize: '28px', marginBottom: '16px', fontFamily: 'Space Grotesk' }}>
+              ACCESS DENIED
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '32px', lineHeight: '1.6' }}>
+              Chế độ <strong>Expert Chat</strong> chỉ dành cho thành viên Premium.<br/>
+              Vui lòng nâng cấp tài khoản để truy cập hệ thống chuyên gia AI.
+            </p>
+            <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
+              <button onClick={() => navigate('/chatbot')} style={{
+                background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', 
+                padding: '12px 24px', borderRadius: '8px', fontSize: '16px', cursor: 'pointer'
+              }}>
+                Quay lại
+              </button>
+              <button onClick={() => navigate('/premium')} style={{
+                background: 'linear-gradient(135deg, #06b6d4, #2563eb)', color: '#fff', border: 'none', 
+                padding: '12px 32px', borderRadius: '8px', fontSize: '16px', fontWeight: 600, cursor: 'pointer',
+                boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)'
+              }}>
+                Nâng cấp ngay
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -323,14 +403,16 @@ const ExpertChatPage = () => {
 
   const speakText = async (_text: string) => { return; };
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputMessage.trim() || isLoading || !expertContext) return;
+  const handleSendMessage = async (e?: React.FormEvent, overrideText?: string) => {
+    if (e) e.preventDefault();
+    const textToSend = overrideText || inputMessage.trim();
+
+    if (!textToSend || isLoading || !expertContext) return;
 
     const userMessage: UIMessage = {
       id: Date.now().toString(),
       role: 'user',
-      content: inputMessage.trim(),
+      content: textToSend,
       timestamp: new Date()
     };
 
@@ -343,6 +425,7 @@ const ExpertChatPage = () => {
         message: userMessage.content,
         sessionId: sessionId || undefined,
         chatMode: ChatMode.EXPERT_MODE,
+        aiAgentMode: aiAgentMode === 'DEEP_RESEARCH' ? 'deep-research-pro-preview-12-2025' : undefined,
         domain: expertContext.domain,
         industry: expertContext.industry,
         jobRole: expertContext.jobRole
@@ -373,6 +456,46 @@ const ExpertChatPage = () => {
         speakText(assistantMsg.content);
       }
     } catch (error: any) {
+      // Handle Premium Restriction (403) for Deep Research
+      if (error?.response?.status === 403 && aiAgentMode === 'DEEP_RESEARCH') {
+        showError(
+          'Premium Required', 
+          'Chế độ Deep Research chỉ dành cho tài khoản Premium. Hệ thống sẽ tự động chuyển về Normal Agent.',
+          6
+        );
+        
+        // Retry with Normal Agent
+        try {
+          const retryResponse = await careerChatService.sendMessage({
+            message: userMessage.content,
+            sessionId: sessionId || undefined,
+            chatMode: ChatMode.EXPERT_MODE,
+            aiAgentMode: 'NORMAL',
+            domain: expertContext.domain,
+            industry: expertContext.industry,
+            jobRole: expertContext.jobRole
+          });
+
+          if (!sessionId) {
+            setSessionId(retryResponse.sessionId);
+            loadSessions();
+          }
+
+          const assistantMsg = {
+            id: (Date.now() + 1).toString(),
+            role: 'assistant',
+            content: retryResponse.aiResponse,
+            timestamp: new Date(retryResponse.timestamp),
+            expertContext: retryResponse.expertContext,
+            isStreaming: true
+          } as UIMessage;
+          setMessages(prev => [...prev, assistantMsg]);
+          return;
+        } catch (retryError) {
+          console.error('Retry failed:', retryError);
+        }
+      }
+
       showError('Lỗi', error.message || 'Không thể gửi tin nhắn');
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
@@ -435,9 +558,6 @@ const ExpertChatPage = () => {
             <button className="chat-hud-mobile-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
               {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
-            <button className="chat-hud-back-btn" onClick={() => navigate('/chatbot')}>
-              <ArrowLeft size={18} /> Quay lại
-            </button>
           </div>
           
           <div className="chat-hud-title" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: '1.2' }}>
@@ -448,6 +568,73 @@ const ExpertChatPage = () => {
             <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 'normal' }}>
               {expertContext?.domain}
             </span>
+          </div>
+
+          {/* Model Selector */}
+          <div className="chat-model-selector">
+            <button 
+              className={`chat-model-btn ${aiAgentMode === 'DEEP_RESEARCH' ? 'premium' : ''}`}
+              onClick={() => setShowModelDropdown(!showModelDropdown)}
+            >
+              {aiAgentMode === 'NORMAL' ? (
+                <>
+                  <Bot size={16} />
+                  <span>Normal Agent</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={16} />
+                  <span>Deep Research</span>
+                </>
+              )}
+              <ChevronDown size={14} />
+            </button>
+
+            {showModelDropdown && (
+              <div className="chat-model-dropdown">
+                <div 
+                  className={`chat-model-option ${aiAgentMode === 'NORMAL' ? 'active' : ''}`}
+                  onClick={() => {
+                    setAiAgentMode('NORMAL');
+                    setShowModelDropdown(false);
+                  }}
+                >
+                  <div className="model-icon">
+                    <Bot size={18} />
+                  </div>
+                  <div className="model-info">
+                    <span className="model-name">Normal Agent</span>
+                    <span className="model-desc">Tốc độ tiêu chuẩn, phản hồi nhanh</span>
+                  </div>
+                </div>
+
+                <div 
+                  className={`chat-model-option premium-opt ${aiAgentMode === 'DEEP_RESEARCH' ? 'active' : ''} ${!isPremiumPlus ? 'disabled' : ''}`}
+                  onClick={() => {
+                    if (isPremiumPlus) {
+                      setAiAgentMode('DEEP_RESEARCH');
+                      setShowModelDropdown(false);
+                    } else {
+                      showError('Premium Plus Required', 'Chế độ Deep Research chỉ dành cho gói Premium Plus (Mentor Pro).');
+                    }
+                  }}
+                  style={{ opacity: isPremiumPlus ? 1 : 0.6, cursor: isPremiumPlus ? 'pointer' : 'not-allowed' }}
+                >
+                  <div className="model-icon">
+                    {isPremiumPlus ? <Sparkles size={18} /> : <Lock size={18} />}
+                  </div>
+                  <div className="model-info">
+                    <span className="model-name">
+                      Deep Research
+                      <span className="premium-badge-mini">PLUS</span>
+                    </span>
+                    <span className="model-desc">
+                      {isPremiumPlus ? 'Phân tích sâu, dữ liệu chi tiết' : 'Yêu cầu gói Premium Plus'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="chat-hud-status">
@@ -468,13 +655,11 @@ const ExpertChatPage = () => {
                     <Code size={24} />
                   )
                 ) : (
-                  user?.avatarUrl ? (
-                    <img src={user.avatarUrl} alt="User" style={{ width: '100%', height: '100%', borderRadius: '4px', objectFit: 'cover' }} />
-                  ) : (
-                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#334155', color: '#fff' }}>
-                      <User size={20} />
-                    </div>
-                  )
+                  <img 
+                    src={userAvatar || meowlDefault} 
+                    alt="User" 
+                    style={{ width: '100%', height: '100%', borderRadius: '4px', objectFit: 'cover' }} 
+                  />
                 )}
               </div>
               <div className="chat-hud-bubble">
@@ -488,7 +673,11 @@ const ExpertChatPage = () => {
                     }}
                   />
                 ) : (
-                  <MessageRenderer content={msg.content} isExpertMode={true} />
+                  <MessageRenderer 
+                    content={msg.content} 
+                    isExpertMode={true} 
+                    onSuggestionClick={(text) => handleSendMessage(undefined, text)}
+                  />
                 )}
                 {msg.role === 'assistant' && voiceMode && ENABLE_TTS && (
                   <div className="sv-tts-play-below" style={{ marginTop: '8px' }}>

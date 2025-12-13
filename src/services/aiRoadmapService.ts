@@ -15,10 +15,16 @@ let lastRequestKey: string | null = null;
  */
 const createRequestKey = (request: GenerateRoadmapRequest): string => {
   return JSON.stringify({
-    goal: request.goal.toLowerCase().trim(),
+    goal: request.goal?.toLowerCase().trim(),
     duration: request.duration,
     experience: request.experience,
-    style: request.style
+    style: request.style,
+    roadmapType: request.roadmapType,
+    target: request.target?.toLowerCase().trim(),
+    desiredDuration: request.desiredDuration,
+    dailyTime: request.dailyTime,
+    priority: request.priority,
+    industry: request.industry
   });
 };
 
@@ -90,6 +96,24 @@ const aiRoadmapService = {
       console.error('Failed to fetch roadmaps:', error);
       const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
       throw new Error(message || 'Failed to load roadmaps.');
+    }
+  },
+
+  /**
+   * Get ALL roadmaps for Admin Analytics
+   */
+  getAllRoadmaps: async (): Promise<RoadmapSessionSummary[]> => {
+    try {
+      // Assuming there's an admin endpoint or using the same one with admin privileges
+      // For now, let's try a hypothetical admin endpoint or the main one if it returns all for admin
+      const response = await axiosInstance.get<RoadmapSessionSummary[]>(
+        '/api/v1/admin/roadmaps' 
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch all roadmaps:', error);
+      // Fallback to empty array or throw
+      return [];
     }
   },
 

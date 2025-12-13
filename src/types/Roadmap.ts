@@ -79,6 +79,48 @@ export interface GenerateRoadmapRequest {
   duration: string;
   experience: string;
   style: string;
+  industry?: string;
+  roadmapType?: string;
+  target?: string;
+  finalObjective?: string;
+  currentLevel?: string;
+  desiredDuration?: string;
+  background?: string;
+  dailyTime?: string;
+  learningStyle?: string;
+  targetEnvironment?: string;
+  location?: string;
+  priority?: string;
+  toolPreferences?: string[];
+  difficultyConcern?: string;
+  incomeGoal?: boolean;
+
+  // Skill-based specific fields
+  roadmapMode?: 'SKILL_BASED' | 'CAREER_BASED';
+  aiAgentMode?: 'NORMAL' | 'DEEP_RESEARCH' | 'deep-research-pro-preview-12-2025';
+  skillName?: string;
+  skillCategory?: string;
+  desiredDepth?: string;
+  learnerType?: string;
+  currentSkillLevel?: string;
+  learningGoal?: string;
+  dailyLearningTime?: string;
+  assessmentPreference?: string;
+  difficultyTolerance?: string;
+  toolPreference?: string[]; // Note: singular in backend DTO for skill mode list? Backend has toolPreference (singular name, list type)
+
+  // Career-based specific fields
+  targetRole?: string;
+  careerTrack?: string;
+  targetSeniority?: string;
+  workMode?: string;
+  targetMarket?: string;
+  companyType?: string;
+  timelineToWork?: string;
+  incomeExpectation?: boolean;
+  workExperience?: string;
+  transferableSkills?: boolean;
+  confidenceLevel?: string;
 }
 
 /**
@@ -96,6 +138,47 @@ export interface RoadmapMetadata {
   difficultyLevel?: DifficultyLevel;
   prerequisites?: string[];
   careerRelevance?: string;
+  roadmapType?: string;
+  target?: string;
+  finalObjective?: string;
+  currentLevel?: string;
+  desiredDuration?: string;
+  background?: string;
+  dailyTime?: string;
+  targetEnvironment?: string;
+  location?: string;
+  priority?: string;
+  toolPreferences?: string[];
+  difficultyConcern?: string;
+  incomeGoal?: boolean;
+  
+  // New V2 Metadata Fields
+  roadmapMode?: 'SKILL_BASED' | 'CAREER_BASED';
+  skillMode?: {
+    skillName?: string;
+    skillCategory?: string;
+    desiredDepth?: string;
+    learnerType?: string;
+    currentSkillLevel?: string;
+    learningGoal?: string;
+    dailyLearningTime?: string;
+    assessmentPreference?: string;
+    difficultyTolerance?: string;
+    toolPreference?: string[];
+  };
+  careerMode?: {
+    targetRole?: string;
+    careerTrack?: string;
+    targetSeniority?: string;
+    workMode?: string;
+    targetMarket?: string;
+    companyType?: string;
+    timelineToWork?: string;
+    incomeExpectation?: boolean;
+    workExperience?: string;
+    transferableSkills?: boolean;
+    confidenceLevel?: string;
+  };
 }
 
 /**
@@ -127,8 +210,37 @@ export interface RoadmapResponse {
   roadmap: RoadmapNode[];
   statistics: RoadmapStatistics;
   learningTips: string | string[]; // Backend returns List<String>, but may vary
+  warnings?: string[];
   createdAt: string;
   progress?: Record<string, QuestProgress>; // Quest progress from backend
+  overview?: {
+    purpose?: string;
+    audience?: string;
+    postRoadmapState?: string;
+  };
+  structure?: {
+    phaseId?: string;
+    title?: string;
+    timeframe?: string;
+    goal?: string;
+    skillFocus?: string[];
+    mindsetGoal?: string;
+    expectedOutput?: string;
+  }[];
+  thinkingProgression?: string[];
+  projectsEvidence?: {
+    phaseId?: string;
+    project?: string;
+    objective?: string;
+    skillsProven?: string[];
+    kpi?: string[];
+  }[];
+  nextSteps?: {
+    jobs?: string[];
+    nextSkills?: string[];
+    mentorsMicroJobs?: string[];
+  };
+  skillDependencies?: { from: string; to: string; }[];
 }
 
 /**

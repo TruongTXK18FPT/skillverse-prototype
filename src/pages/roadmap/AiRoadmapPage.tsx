@@ -72,7 +72,15 @@ const AiRoadmapPage = () => {
 
     try {
       setIsLoading(true);
-      const roadmap = await aiRoadmapService.generateRoadmap(request);
+      
+      const apiRequest: GenerateRoadmapRequest = {
+        ...request,
+        aiAgentMode: request.aiAgentMode === 'DEEP_RESEARCH'
+          ? 'deep-research-pro-preview-12-2025'
+          : request.aiAgentMode
+      };
+
+      const roadmap = await aiRoadmapService.generateRoadmap(apiRequest);
       showSuccess('Success', 'Roadmap generated successfully!');
       // Navigate to the new roadmap detail page
       navigate(`/roadmap/${roadmap.sessionId}`);
@@ -81,6 +89,33 @@ const AiRoadmapPage = () => {
     } catch (error: any) {
       // Extract error message from Axios error response
       const errorMessage = error?.response?.data?.message || error?.message || 'Đã xảy ra lỗi không xác định.';
+      const status = error?.response?.status;
+
+      // Handle Premium Restriction (403) for Deep Research
+      if (status === 403 && request.aiAgentMode === 'DEEP_RESEARCH') {
+        console.log('🔒 Premium feature restricted. Switching to Normal Agent...');
+        
+        // Show banner/toast
+        showError(
+          'Premium Plus Required', 
+          'Chế độ Deep Research chỉ dành cho gói Mentor Pro. Hệ thống sẽ tự động chuyển về Normal Agent.',
+          6
+        );
+
+        // Retry with Normal Agent
+        try {
+          const retryRequest = { ...request, aiAgentMode: 'NORMAL' as const };
+          const roadmap = await aiRoadmapService.generateRoadmap(retryRequest);
+          
+          showSuccess('Success', 'Roadmap generated successfully (Normal Mode)!');
+          navigate(`/roadmap/${roadmap.sessionId}`);
+          await loadUserRoadmaps();
+          return; // Exit after successful retry
+        } catch (retryError: any) {
+           console.error('Retry failed:', retryError);
+           // Fall through to standard error handling if retry also fails
+        }
+      }
       
       // Debug logging
       console.log('🐛 Error caught:', error);

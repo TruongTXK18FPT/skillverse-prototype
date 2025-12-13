@@ -1,19 +1,82 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ChevronDown, ChevronRight, Brain, ArrowRight, Sparkles } from 'lucide-react';
 import '../styles/MessageRenderer.css';
 
 interface MessageRendererProps {
   content: string;
   isExpertMode?: boolean;
+  onSuggestionClick?: (suggestion: string) => void;
 }
 
 /**
  * Advanced Markdown Renderer for Chat Messages
- * Supports: headings, bold, tables, lists, code blocks, links
+ * Supports: headings, bold, tables, lists, code blocks, links, thinking blocks, and suggestions
  */
-const MessageRenderer: React.FC<MessageRendererProps> = ({ content, isExpertMode = false }) => {
+const MessageRenderer: React.FC<MessageRendererProps> = ({ content, isExpertMode = false, onSuggestionClick }) => {
+  const [isThinkingOpen, setIsThinkingOpen] = useState(true);
+
   const renderContent = () => {
-    const lines = content.split('\n');
+    // Extract thinking block if present
+    let thinkingContent = '';
+    let suggestionsContent = '';
+    let mainContent = content;
+
+    // 1. Extract Thinking
+    const thinkingStart = content.indexOf('<thinking>');
+    const thinkingEnd = content.indexOf('</thinking>');
+
+    if (thinkingStart !== -1) {
+      if (thinkingEnd !== -1) {
+        thinkingContent = content.substring(thinkingStart + 10, thinkingEnd).trim();
+        mainContent = content.substring(0, thinkingStart) + content.substring(thinkingEnd + 11);
+      } else {
+        thinkingContent = content.substring(thinkingStart + 10).trim();
+        mainContent = content.substring(0, thinkingStart);
+      }
+    }
+
+    // 2. Extract Suggestions
+    const suggestionsStart = mainContent.indexOf('<suggestions>');
+    const suggestionsEnd = mainContent.indexOf('</suggestions>');
+
+    if (suggestionsStart !== -1 && suggestionsEnd !== -1) {
+      suggestionsContent = mainContent.substring(suggestionsStart + 13, suggestionsEnd).trim();
+      mainContent = mainContent.substring(0, suggestionsStart) + mainContent.substring(suggestionsEnd + 14);
+    }
+    
+    mainContent = mainContent.trim();
+
+    const lines = mainContent.split('\n');
     const elements: JSX.Element[] = [];
+    
+    // Add thinking block if exists
+    if (thinkingContent || thinkingStart !== -1) {
+      elements.push(
+        <div className="msg-thinking-block" key="thinking-block">
+          <div 
+            className="msg-thinking-header" 
+            onClick={() => setIsThinkingOpen(!isThinkingOpen)}
+          >
+            <Brain size={16} className="thinking-icon" />
+            <span>Thinking Process</span>
+            {isThinkingOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+          </div>
+          {isThinkingOpen && (
+            <div className="msg-thinking-content">
+              {thinkingContent.split('\n').map((line, i) => (
+                <p key={i}>{line}</p>
+              ))}
+              {thinkingEnd === -1 && (
+                <span className="thinking-cursor">...</span>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    } else if (content.trim() === '' || content.trim() === '<') {
+       // Placeholder logic
+    }
+
     let currentList: string[] = [];
     let currentTable: string[] = [];
     let inCodeBlock = false;
@@ -187,6 +250,33 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({ content, isExpertMode
     flushList();
     flushTable();
     flushCode();
+
+    // Add Suggestions Block
+    if (suggestionsContent && onSuggestionClick) {
+      const suggestions = suggestionsContent.split('\n').filter(s => s.trim().length > 0);
+      if (suggestions.length > 0) {
+        elements.push(
+          <div className="msg-suggestions-container" key="suggestions">
+            <div className="msg-suggestions-label">
+              <Sparkles size={14} />
+              <span>Gợi ý câu hỏi tiếp theo:</span>
+            </div>
+            <div className="msg-suggestions-list">
+              {suggestions.map((s, idx) => (
+                <button 
+                  key={idx} 
+                  className="msg-suggestion-chip"
+                  onClick={() => onSuggestionClick(s.replace(/^[-\d.]+\s*/, '').trim())}
+                >
+                  {s.replace(/^[-\d.]+\s*/, '').trim()}
+                  <ArrowRight size={12} />
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      }
+    }
 
     return elements;
   };
