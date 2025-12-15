@@ -73,6 +73,8 @@ import UserBookingsPage from './pages/user/UserBookingsPage';
 import MeowlBubbleNotification from './components/MeowlBubbleNotification';
 import MeowlPetWrapper from './components/meowl-pet/MeowlPetWrapper';
 import ForbiddenTemple from './components/easter-egg/ForbiddenTemple';
+import TicTacToeGame from './components/game/tic-tac-toe/TicTacToeGame';
+import MeowlAdventure from './components/game/meowl-adventure/MeowlAdventure';
 
 const App = () => {
   return (
@@ -121,6 +123,8 @@ const App = () => {
                     <Route path="/chatbot/general" element={<CareerChatPage />} />
                     <Route path="/chatbot/expert" element={<ExpertChatPage />} />
                     <Route path="/gamification" element={<Gamification />} />
+                    <Route path="/gamification/tic-tac-toe" element={<TicTacToeGame />} />
+                    <Route path="/gamification/meowl-adventure" element={<MeowlAdventure />} />
                     {/* <Route path="/portfolio" element={<PortfolioPage />} /> */}  {/* BACKUP - Old Portfolio */}
                     <Route path="/portfolio" element={<TacticalDossierPortfolio />} />  {/* ACTIVE - Mothership Theme */}
                     <Route path="/portfolio/:slug" element={<TacticalDossierPortfolio />} />

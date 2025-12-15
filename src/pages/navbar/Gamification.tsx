@@ -17,12 +17,6 @@ import {
   BookOpen,
   CheckCircle
 } from 'lucide-react';
-import DailySpin from '../../components/game/DailySpin';
-import QuizSprint from '../../components/game/QuizSprint';
-import CoinHunt from '../../components/game/CoinHunt';
-import HelpLeaderBoard from '../../components/game/HelpLeaderBoard';
-import MeowlAdventure from '../../components/game/MeowlAdventure';
-import TicTacToeGame from '../../components/game/tic-tac-toe/TicTacToeGame';
 import '../../styles/Gamification.css';
 import MeowlGuide from '../../components/MeowlGuide';
 
@@ -92,12 +86,6 @@ const Gamification: React.FC = () => {
   const [userPremium] = useState<'free' | 'basic' | 'premium' | 'pro'>('free'); // Mock user status
   
   // Mini Games State
-  const [showSpinWheel, setShowSpinWheel] = useState(false);
-  const [showQuizGame, setShowQuizGame] = useState(false);
-  const [showCoinHunt, setShowCoinHunt] = useState(false);
-  const [showHelpLeaderBoard, setShowHelpLeaderBoard] = useState(false);
-  const [showMeowlAdventure, setShowMeowlAdventure] = useState(false);
-  const [showTicTacToe, setShowTicTacToe] = useState(false);
   const [selectedGameMode, setSelectedGameMode] = useState<'free' | 'premium'>('free');
   
   // Mock Data - Leaderboard
@@ -273,86 +261,6 @@ const Gamification: React.FC = () => {
 
   // Mock Data - Mini Games
   const [miniGames] = useState<MiniGame[]>([
-    {
-      id: 'spin-wheel',
-      title: 'Vòng Quay May Mắn',
-      description: 'Quay để nhận xu ngẫu nhiên mỗi ngày',
-      icon: '🎰',
-      type: 'spin',
-      difficulty: 'easy',
-      coins: 100,
-      cooldown: 1440, // 24 hours
-      available: true,
-      premium: {
-        enabled: true,
-        title: 'Vòng Quay Premium',
-        description: 'Phần thưởng cao hơn + quay thêm lần',
-        coins: 300,
-        cooldown: 720, // 12 hours
-        features: ['Phần thưởng 3x cao hơn', 'Quay 2 lần/ngày', 'Ưu tiên phần thưởng rare'],
-        requiredPlan: 'premium'
-      }
-    },
-    {
-      id: 'quiz-challenge',
-      title: 'Quiz Sprint',
-      description: '5 câu hỏi trong 60 giây',
-      icon: '⚡',
-      type: 'quiz',
-      difficulty: 'medium',
-      coins: 150,
-      cooldown: 1440, // 24 hours
-      available: true,
-      premium: {
-        enabled: true,
-        title: 'Quiz Sprint Pro',
-        description: '10 câu hỏi khó + thời gian bonus',
-        coins: 500,
-        cooldown: 480, // 8 hours
-        features: ['10 câu hỏi thay vì 5', '+30 giây thời gian', 'Câu hỏi nâng cao', 'Streak bonus'],
-        requiredPlan: 'premium'
-      }
-    },
-    {
-      id: 'coin-hunt',
-      title: 'Săn Xu Ẩn',
-      description: 'Tìm xu ẩn trong các bài học',
-      icon: '🔍',
-      type: 'hunt',
-      difficulty: 'easy',
-      coins: '1000+',
-      cooldown: 10080, // 1 week
-      available: true,
-      premium: {
-        enabled: true,
-        title: 'Săn Kho Báu Premium',
-        description: 'Nhiều xu hơn + gợi ý vị trí + daily hunt',
-        coins: '5000+',
-        cooldown: 1440, // Daily for premium
-        features: ['Chơi hàng ngày', 'Gợi ý vị trí xu', 'Xu ẩn 5x nhiều hơn', 'Combo multiplier', 'Special treasure maps'],
-        requiredPlan: 'premium'
-      }
-    },
-    {
-      id: 'help-win',
-      title: 'Giúp Đỡ & Thắng',
-      description: 'Sự kiện hàng tuần - giúp đỡ để thắng',
-      icon: '🤝',
-      type: 'help',
-      difficulty: 'hard',
-      coins: 'Không giới hạn',
-      cooldown: 10080, // 1 week
-      available: true,
-      premium: {
-        enabled: true,
-        title: 'VIP Community Champion',
-        description: 'Thưởng cao hơn + exclusive events',
-        coins: 'Không giới hạn + Bonus',
-        cooldown: 4320, // 3 days
-        features: ['Sự kiện VIP riêng', 'Thưởng 2x điểm', 'Ưu tiên support', 'Exclusive badges'],
-        requiredPlan: 'pro'
-      }
-    },
     {
       id: 'meowl-adventure',
       title: 'Meowl Adventure',
@@ -779,12 +687,8 @@ const Gamification: React.FC = () => {
                       className={`game-btn primary ${!game.available ? 'disabled' : ''}`}
                       onClick={() => {
                         if (game.available) {
-                          if (game.type === 'spin') setShowSpinWheel(true);
-                          if (game.type === 'quiz') setShowQuizGame(true);
-                          if (game.type === 'hunt' && game.id === 'coin-hunt') setShowCoinHunt(true);
-                          if (game.type === 'hunt' && game.id === 'meowl-adventure') setShowMeowlAdventure(true);
-                          if (game.type === 'game' && game.id === 'tic-tac-toe') setShowTicTacToe(true);
-                          if (game.type === 'help') setShowHelpLeaderBoard(true);
+                          if (game.id === 'meowl-adventure') navigate('/gamification/meowl-adventure');
+                          if (game.id === 'tic-tac-toe') navigate('/gamification/tic-tac-toe');
                         }
                       }}
                       disabled={!game.available}
@@ -802,56 +706,7 @@ const Gamification: React.FC = () => {
         })}
       </div>
 
-      {/* Game Components */}
-      <DailySpin 
-        isOpen={showSpinWheel}
-        onClose={() => setShowSpinWheel(false)}
-        onWin={(coins) => {
-          // Handle coins earned from Daily Spin
-          console.log(`Earned ${coins} coins from Daily Spin!`);
-        }}
-      />
-
-      <QuizSprint 
-        isOpen={showQuizGame}
-        onClose={() => setShowQuizGame(false)}
-        onComplete={(score, coins) => {
-          // Handle quiz completion
-          console.log(`Quiz completed! Score: ${score}, Coins: ${coins}`);
-        }}
-      />
-
-      <CoinHunt 
-        isOpen={showCoinHunt}
-        onClose={() => setShowCoinHunt(false)}
-        onCoinsEarned={(coins) => {
-          // Handle coins earned from Coin Hunt
-          console.log(`Earned ${coins} coins from Coin Hunt!`);
-        }}
-      />
-
-      <HelpLeaderBoard 
-        isOpen={showHelpLeaderBoard}
-        onClose={() => setShowHelpLeaderBoard(false)}
-        onCoinsEarned={(coins) => {
-          // Handle coins earned from Help Leaderboard
-          console.log(`Earned ${coins} coins from Help Leaderboard!`);
-        }}
-      />
-
-      <MeowlAdventure 
-        isOpen={showMeowlAdventure}
-        onClose={() => setShowMeowlAdventure(false)}
-        onCoinsEarned={(coins) => {
-          // Handle coins earned from Meowl Adventure
-          console.log(`Earned ${coins} coins from Meowl Adventure!`);
-        }}
-      />
-
-      <TicTacToeGame 
-        isOpen={showTicTacToe}
-        onClose={() => setShowTicTacToe(false)}
-      />
+      {/* Game Components Removed - Navigating to separate pages now */}
     </div>
   );
 

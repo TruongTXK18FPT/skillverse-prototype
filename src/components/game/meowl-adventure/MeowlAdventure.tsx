@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X, Play } from 'lucide-react';
-import '../../../src/styles/game/MeowlAdventure.css';
+import './MeowlAdventure.css';
 
 // Types for game entities
 interface Enemy {
@@ -36,12 +37,13 @@ interface GameState {
 }
 
 interface MeowlAdventureProps {
-  isOpen: boolean;
-  onClose: () => void;
   onCoinsEarned?: (coins: number) => void;
 }
 
-const MeowlAdventure: React.FC<MeowlAdventureProps> = ({ isOpen, onClose, onCoinsEarned }) => {
+const MeowlAdventure: React.FC<MeowlAdventureProps> = ({ onCoinsEarned }) => {
+  const navigate = useNavigate();
+  const onClose = () => navigate('/gamification');
+
   // Game state
   const [gameState, setGameState] = useState<GameState>({
     isRunning: false,
@@ -358,8 +360,6 @@ const MeowlAdventure: React.FC<MeowlAdventureProps> = ({ isOpen, onClose, onCoin
     if (timerRef.current) clearInterval(timerRef.current);
     onClose();
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className="meowl-adventure-overlay">

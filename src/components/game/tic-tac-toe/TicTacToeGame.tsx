@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
 import MeowlActor, { MeowlAction } from './MeowlActor';
 import './TicTacToeGame.css';
@@ -7,18 +7,16 @@ import './TicTacToeGame.css';
 type Player = 'X' | 'O';
 type BoardState = (Player | null)[];
 
-interface TicTacToeGameProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
-
 const WIN_COMBINATIONS = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
     [0, 3, 6], [1, 4, 7], [2, 5, 8],
     [0, 4, 8], [2, 4, 6]
 ];
 
-const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ isOpen, onClose }) => {
+const TicTacToeGame: React.FC = () => {
+    const navigate = useNavigate();
+    const onClose = () => navigate('/gamification');
+
     const [userMoves, setUserMoves] = useState<number[]>([]);
     const [aiMoves, setAiMoves] = useState<number[]>([]);
     const [isUserTurn, setIsUserTurn] = useState(true);
@@ -35,15 +33,11 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ isOpen, onClose }) => {
 
     // --- SCROLL LOCK ---
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
+        document.body.style.overflow = 'hidden';
         return () => {
             document.body.style.overflow = '';
         };
-    }, [isOpen]);
+    }, []);
 
     // --- LOGIC GAME ---
     const getBoard = (uMoves: number[], aMoves: number[]): BoardState => {
@@ -162,7 +156,11 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ isOpen, onClose }) => {
 
                     setTimeout(() => {
                         // Reset vị trí về nhà (trong tàng hình)
-                        setMeowlAction('think');
+                        // Random return action: think, smug, or panic
+                        const returnActions: MeowlAction[] = ['think', 'smug', 'panic'];
+                        const randomAction = returnActions[Math.floor(Math.random() * returnActions.length)];
+                        setMeowlAction(randomAction);
+                        
                         setMeowlStyle({
                             opacity: 0,
                             transform: 'translate(0,0) scale(0)',
@@ -281,9 +279,7 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ isOpen, onClose }) => {
         setIsThinking(false);
     };
 
-    if (!isOpen) return null;
-
-    return createPortal(
+    return (
         <div className="ttt-modal-overlay">
             <div className="ttt-modal-content">
                 <button className="ttt-close-btn" onClick={onClose}><X size={24} /></button>
@@ -322,8 +318,7 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ isOpen, onClose }) => {
                     </div>
                 </div>
             </div>
-        </div>,
-        document.body
+        </div>
     );
 };
 
