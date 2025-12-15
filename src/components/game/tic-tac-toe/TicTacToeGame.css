@@ -1,0 +1,315 @@
+/* ==========================================================================
+   TIC TAC TOE - INFINITY WAR (SPACESHIP HUD THEME)
+   ========================================================================== */
+
+/* --- MAIN CONTAINER --- */
+.ttt-game-container {
+  display: flex;
+  flex-direction: row; /* Side by side layout */
+  width: 900px;
+  max-width: 95vw;
+  height: 600px;
+  max-height: 80vh;
+  position: relative;
+  
+  /* Theme Background */
+  background: rgba(5, 11, 20, 0.95);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  
+  padding: 20px;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  
+  /* CRITICAL FIX: Allow Meowl animation to fly outside bounds */
+  overflow: visible !important;
+  z-index: 1;
+  font-family: 'Courier New', monospace; /* Tech font */
+}
+
+/* --- SECTIONS --- */
+.ttt-meowl-section {
+  width: 200px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  
+  /* CRITICAL FIX: Ensure Meowl is on top of board */
+  z-index: 999; 
+  overflow: visible !important;
+}
+
+.ttt-board-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10; /* Lower than Meowl */
+}
+
+/* --- HEADER & STATUS --- */
+.ttt-status {
+  font-family: 'Courier New', monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  
+  color: #06b6d4; /* Cyan */
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+  
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.3);
+  padding-bottom: 10px;
+  width: 100%;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.ttt-status.win {
+  color: #22d3ee; /* Cyan Neon */
+  font-size: 1.5rem;
+  text-shadow: 0 0 20px rgba(34, 211, 238, 0.8), 0 0 40px rgba(34, 211, 238, 0.4);
+  border-bottom-color: #22d3ee;
+  animation: pulse-cyan 1.5s infinite;
+}
+
+.ttt-status.lose {
+  color: #fbbf24; /* Amber Neon */
+  font-size: 1.5rem;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.8), 0 0 40px rgba(251, 191, 36, 0.4);
+  border-bottom-color: #fbbf24;
+  animation: pulse-amber 1.5s infinite;
+}
+
+@keyframes pulse-cyan {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse-amber {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.ttt-rules {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  text-align: center;
+  margin-top: 15px;
+  font-style: italic;
+}
+
+/* --- THE BOARD --- */
+.ttt-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px; /* Tech-gap */
+  
+  background: rgba(10, 22, 40, 0.6);
+  padding: 8px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 12px;
+  box-shadow: inset 0 0 20px rgba(6, 182, 212, 0.05);
+}
+
+/* --- CELLS --- */
+.ttt-cell {
+  width: 90px;
+  height: 90px;
+  background: rgba(6, 182, 212, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.1);
+  border-radius: 6px;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.ttt-cell:hover:not(.disabled) {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+  transform: scale(1.02);
+}
+
+.ttt-cell.disabled {
+  cursor: default;
+  opacity: 0.9;
+}
+
+/* --- PLAYERS COLORS (UPDATED) --- */
+
+/* User (X) - Cyan Neon */
+.ttt-cell.x {
+  color: #22d3ee; /* Cyan-400 */
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.8), 0 0 20px rgba(34, 211, 238, 0.4);
+}
+
+/* Meowl (O) - Amber/Orange Neon (Matches Sprite Sheet) */
+.ttt-cell.o {
+  color: #fbbf24; /* Amber-400 */
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.8), 0 0 20px rgba(251, 191, 36, 0.4);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+/* --- INFINITY MECHANIC: DYING CELL --- */
+.ttt-cell.dying {
+  opacity: 0.5;
+  border-color: #ef4444; /* Red Warning */
+  animation: pulse-red 1.5s infinite;
+}
+
+.ttt-cell.dying::after {
+  content: '!';
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  font-size: 0.8rem;
+  color: #ef4444;
+}
+
+@keyframes pulse-red {
+  0% { box-shadow: inset 0 0 0 rgba(239, 68, 68, 0); }
+  50% { box-shadow: inset 0 0 15px rgba(239, 68, 68, 0.4); }
+  100% { box-shadow: inset 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* --- BUTTONS --- */
+.ttt-btn {
+  margin-top: 20px;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.8), rgba(59, 130, 246, 0.8));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: white;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ttt-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+.ttt-btn:active {
+  transform: translateY(0);
+}
+
+/* --- MODAL WRAPPER --- */
+.ttt-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align top to avoid navbar overlap */
+  padding-top: 80px;
+  z-index: 9999 !important;
+  backdrop-filter: blur(5px);
+}
+
+.ttt-modal-content {
+  position: relative;
+  background: transparent;
+  padding: 0;
+  border: none;
+  border-radius: 16px;
+  max-width: 95vw;
+  overflow: visible !important; /* Critical for Meowl */
+}
+
+.ttt-close-btn {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(6, 182, 212, 0.5);
+  color: #06b6d4;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 1000;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.ttt-close-btn:hover {
+  background: rgba(6, 182, 212, 0.2);
+  transform: rotate(90deg);
+  color: white;
+}
+
+/* --- ACTOR ANIMATIONS & TELEPORT --- */
+.meowl-actor {
+  will-change: transform, opacity;
+  /* Transition is handled inline by React for complex movements */
+}
+
+/* Teleport Effects */
+@keyframes teleport-out {
+  0% { transform: scale(1); opacity: 1; filter: brightness(1); }
+  50% { transform: scale(0.1) rotate(360deg); opacity: 0.5; filter: brightness(2); }
+  100% { transform: scale(0); opacity: 0; filter: brightness(3); }
+}
+
+@keyframes teleport-in {
+  0% { transform: scale(0); opacity: 0; filter: brightness(3); }
+  50% { transform: scale(0.5); opacity: 0.5; filter: brightness(2); }
+  100% { transform: scale(1); opacity: 1; filter: brightness(1); }
+}
+
+/* Helper classes if needed */
+.meowl-teleport-out { animation: teleport-out 0.5s forwards ease-in; }
+.meowl-teleport-in { animation: teleport-in 0.5s forwards ease-out; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .ttt-game-container {
+    flex-direction: column; /* Stack on mobile */
+    height: auto;
+    width: 95vw;
+    gap: 20px;
+  }
+  
+  .ttt-meowl-section {
+    height: 150px; /* Limit height on mobile */
+    width: 100%;
+  }
+
+  .ttt-board {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .ttt-cell {
+    height: 70px; /* Smaller cells */
+    font-size: 2rem;
+  }
+}

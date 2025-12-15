@@ -22,6 +22,7 @@ import QuizSprint from '../../components/game/QuizSprint';
 import CoinHunt from '../../components/game/CoinHunt';
 import HelpLeaderBoard from '../../components/game/HelpLeaderBoard';
 import MeowlAdventure from '../../components/game/MeowlAdventure';
+import TicTacToeGame from '../../components/game/tic-tac-toe/TicTacToeGame';
 import '../../styles/Gamification.css';
 import MeowlGuide from '../../components/MeowlGuide';
 
@@ -53,7 +54,7 @@ interface Badge {
 
 // Type definitions
 type Difficulty = 'easy' | 'medium' | 'hard';
-type GameType = 'spin' | 'quiz' | 'hunt' | 'help';
+type GameType = 'spin' | 'quiz' | 'hunt' | 'help' | 'game';
 
 interface MiniGame {
   id: string;
@@ -96,6 +97,7 @@ const Gamification: React.FC = () => {
   const [showCoinHunt, setShowCoinHunt] = useState(false);
   const [showHelpLeaderBoard, setShowHelpLeaderBoard] = useState(false);
   const [showMeowlAdventure, setShowMeowlAdventure] = useState(false);
+  const [showTicTacToe, setShowTicTacToe] = useState(false);
   const [selectedGameMode, setSelectedGameMode] = useState<'free' | 'premium'>('free');
   
   // Mock Data - Leaderboard
@@ -368,6 +370,26 @@ const Gamification: React.FC = () => {
         coins: 1500,
         cooldown: 180, // 3 hours
         features: ['Xu thưởng 3x cao hơn', 'Quay vòng 2 lần/ngày', 'Kẻ thù nâng cao', 'Bảng xếp hạng exclusive'],
+        requiredPlan: 'premium'
+      }
+    },
+    {
+      id: 'tic-tac-toe',
+      title: 'Infinity Tic-Tac-Toe',
+      description: 'Cờ caro vô tận với Meowl',
+      icon: '⭕',
+      type: 'game',
+      difficulty: 'medium',
+      coins: 200,
+      cooldown: 60, // 1 hour
+      available: true,
+      premium: {
+        enabled: true,
+        title: 'Tic-Tac-Toe Pro',
+        description: 'Thách đấu Meowl khó hơn',
+        coins: 500,
+        cooldown: 30,
+        features: ['Thưởng 2x xu', 'Chế độ khó', 'Skin bàn cờ độc quyền'],
         requiredPlan: 'premium'
       }
     }
@@ -761,6 +783,7 @@ const Gamification: React.FC = () => {
                           if (game.type === 'quiz') setShowQuizGame(true);
                           if (game.type === 'hunt' && game.id === 'coin-hunt') setShowCoinHunt(true);
                           if (game.type === 'hunt' && game.id === 'meowl-adventure') setShowMeowlAdventure(true);
+                          if (game.type === 'game' && game.id === 'tic-tac-toe') setShowTicTacToe(true);
                           if (game.type === 'help') setShowHelpLeaderBoard(true);
                         }
                       }}
@@ -823,6 +846,11 @@ const Gamification: React.FC = () => {
           // Handle coins earned from Meowl Adventure
           console.log(`Earned ${coins} coins from Meowl Adventure!`);
         }}
+      />
+
+      <TicTacToeGame 
+        isOpen={showTicTacToe}
+        onClose={() => setShowTicTacToe(false)}
       />
     </div>
   );

@@ -1,0 +1,39 @@
+.meowl-actor {
+  /* Base styles for the actor container */
+  position: relative;
+  display: block;
+  /* CHỈ GIỮ LẠI CÁI NÀY - Xóa transition transform đi để JS handle */
+  transition: top 1s ease-in-out, left 1s ease-in-out; 
+  z-index: 9999; /* Tăng z-index */
+}
+
+/* Remove old img styles */
+.meowl-sprite {
+  display: none;
+}
+
+/* Specific action overrides */
+.meowl-actor.panic {
+  animation: shake 0.3s infinite;
+}
+
+.meowl-actor.win {
+  animation: jump 0.6s infinite;
+}
+
+.meowl-actor.lose {
+  filter: grayscale(0.8) drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+  transform: scale(0.9);
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px) rotate(-3deg); }
+  75% { transform: translateX(3px) rotate(3deg); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes jump {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
