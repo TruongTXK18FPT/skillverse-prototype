@@ -43,6 +43,9 @@ const baseURL = RAW_BASE.replace(/\/+$/, '');
  * - If refresh fails → Force logout and redirect to /login
  * - Each refresh generates new tokens (rotation)
  */
+
+export const AUTH_LOGOUT_EVENT = 'auth:logout';
+
 let isRefreshing = false;
 let failedQueue: Array<{
   resolve: (value?: unknown) => void;
@@ -224,9 +227,7 @@ axiosInstance.interceptors.request.use(
             .catch((err) => {
               isRefreshing = false;
               processQueue(err as Error, null);
-              localStorage.removeItem('accessToken');
-              localStorage.removeItem('refreshToken');
-              localStorage.removeItem('user');
+              clearAuthTokens();
               if (typeof window !== 'undefined') {
                 const p = window.location.pathname;
                 const pub = p.includes('/login') || p.includes('/register') || p.includes('/verify') || p === '/';
@@ -321,9 +322,7 @@ axiosInstance.interceptors.response.use(
         });
         isRefreshing = false;
         processQueue(new Error('No refresh token'), null);
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
+        clearAuthTokens();
         
         // Don't redirect if on public pages
         const currentPath = window.location.pathname;
@@ -380,9 +379,7 @@ axiosInstance.interceptors.response.use(
         processQueue(refreshError as Error, null);
         
         // ✅ REFRESH FAILED: Clear tokens and redirect to login
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
+        clearAuthTokens();
         
         const currentPath = window.location.pathname;
         const isPublicPage = currentPath.includes('/login') || 
@@ -408,7 +405,8 @@ export const clearAuthTokens = (): void => {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
   localStorage.removeItem('user');
-  console.log('Authentication tokens cleared');
+  window.dispatchEvent(new Event(AUTH_LOGOUT_EVENT));
+  console.log('Authentication tokens cleared and logout event dispatched');
 };
 
 export default axiosInstance;

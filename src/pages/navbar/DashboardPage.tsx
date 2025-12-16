@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
 import MothershipDashboard from '../../components/dashboard-hud/MothershipDashboard';
@@ -12,7 +13,8 @@ import { RoadmapSessionSummary } from '../../types/Roadmap';
 
 const DashboardPage = () => {
   const { translations } = useLanguage();
-  const { user } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [enrolledCourses, setEnrolledCourses] = useState<any[]>([]);
   const [favoriteMentors, setFavoriteMentors] = useState<any[]>([]);
   const [roadmaps, setRoadmaps] = useState<RoadmapSessionSummary[]>([]);
@@ -25,6 +27,13 @@ const DashboardPage = () => {
       completedProjects: 0,
       certificates: 0
   });
+
+  // Protect route
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      navigate('/login');
+    }
+  }, [authLoading, isAuthenticated, navigate]);
 
   useEffect(() => {
     const fetchData = async () => {

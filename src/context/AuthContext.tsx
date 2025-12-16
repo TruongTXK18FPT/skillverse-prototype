@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 import authService from '../services/authService';
 import userService from '../services/userService';
+import { AUTH_LOGOUT_EVENT } from '../services/axiosInstance';
 import { LoginRequest, UserDto, VerifyEmailRequest, ResendOtpRequest, ForgotPasswordResponse, ResetPasswordRequest, ResetPasswordResponse, SetPasswordRequest, SetPasswordResponse, ChangePasswordRequest, ChangePasswordResponse } from '../data/authDTOs';
 import { UserRegistrationRequest } from '../data/userDTOs';
 
@@ -36,6 +37,17 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDto | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Listen for global logout events (from axios interceptors)
+  useEffect(() => {
+    const handleLogoutEvent = () => {
+      console.log('🔴 AuthContext received logout event, clearing user state');
+      setUser(null);
+    };
+
+    window.addEventListener(AUTH_LOGOUT_EVENT, handleLogoutEvent);
+    return () => window.removeEventListener(AUTH_LOGOUT_EVENT, handleLogoutEvent);
+  }, []);
 
   useEffect(() => {
     const initializeAuth = async () => {
