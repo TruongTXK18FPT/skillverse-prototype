@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, Clock, Repeat } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { addAvailability, getAvailability, deleteAvailability, Availability } from '../../services/availabilityService';
@@ -34,6 +35,17 @@ const MentorScheduleManager: React.FC = () => {
       fetchData();
     }
   }, [user, currentDate]);
+
+  useEffect(() => {
+    if (showAddModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showAddModal]);
 
   const fetchData = async () => {
     if (!user) return;
@@ -267,7 +279,7 @@ const MentorScheduleManager: React.FC = () => {
         </div>
       </div>
 
-      {showAddModal && (
+      {showAddModal && ReactDOM.createPortal(
         <div className="msm-modal-overlay">
           <div className="msm-modal">
             <div className="msm-modal-header">
@@ -353,7 +365,8 @@ const MentorScheduleManager: React.FC = () => {
               <button className="msm-btn msm-btn-primary" onClick={handleAdd}>Lưu Lịch</button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

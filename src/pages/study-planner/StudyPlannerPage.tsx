@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Trello, Bot, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, Trello, Bot, ChevronLeft, ChevronRight, ArrowLeft, Radio } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { studyPlanService } from '../../services/studyPlanService';
 import { taskBoardService } from '../../services/taskBoardService';
 import { StudySessionResponse, StudySessionStatus } from '../../types/StudyPlan';
@@ -11,6 +12,7 @@ import TaskDetailModal from './components/TaskDetailModal';
 import './styles/StudyPlanner.css';
 
 const StudyPlannerPage: React.FC = () => {
+  const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'calendar' | 'board'>('calendar');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [loading, setLoading] = useState(true);
@@ -126,54 +128,75 @@ const StudyPlannerPage: React.FC = () => {
 
   return (
     <div className="study-plan-container">
-      <div className="study-plan-header">
-        <div className="study-plan-title">
-          <Calendar size={32} />
-          Lập Kế Hoạch Học Tập
-        </div>
+      <div className="study-plan-header-hero">
+        <button className="study-plan-back-btn" onClick={() => navigate('/dashboard')}>
+          <ArrowLeft size={16} /> BACK TO DASHBOARD
+        </button>
         
-        <div className="study-plan-controls">
-          <button 
-            className="study-plan-btn study-plan-ai-btn"
-            onClick={() => setIsAIModalOpen(true)}
-          >
-            <Bot size={18} /> Trợ Lý AI
-          </button>
-          <div className="study-plan-view-toggle">
+        <div className="study-plan-hero-content">
+          <h1 className="study-plan-hero-title">
+            <Radio size={40} />
+            MISSION CONTROL
+          </h1>
+          <div className="study-plan-hero-subtitle">
+            SYSTEM: ONLINE // MODULE: STUDY_PLANNER // USER: ACTIVE
+          </div>
+          
+          <div className="study-plan-controls">
             <button 
-              className={`study-plan-btn ${viewMode === 'calendar' ? 'active' : ''}`}
-              onClick={() => setViewMode('calendar')}
+              className="study-plan-btn"
+              onClick={() => setIsAIModalOpen(true)}
+              style={{ borderColor: 'var(--sv-accent)', color: 'var(--sv-accent)' }}
             >
-              <Calendar size={18} /> Lịch
+              <Bot size={18} /> AI STRATEGIST
             </button>
-            <button 
-              className={`study-plan-btn ${viewMode === 'board' ? 'active' : ''}`}
-              onClick={() => setViewMode('board')}
-            >
-              <Trello size={18} /> Bảng
-            </button>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button 
+                className={`study-plan-btn ${viewMode === 'calendar' ? 'active' : ''}`}
+                onClick={() => setViewMode('calendar')}
+              >
+                <Calendar size={18} /> TIMELINE
+              </button>
+              <button 
+                className={`study-plan-btn ${viewMode === 'board' ? 'active' : ''}`}
+                onClick={() => setViewMode('board')}
+              >
+                <Trello size={18} /> KANBAN
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       {overdueCount > 0 && (
         <div className="study-plan-alert">
-          ⚠️ Cảnh báo: Có {overdueCount} nhiệm vụ quá hạn hoặc chưa hoàn thành. Cần hành động ngay.
+          <span style={{ fontSize: '1.2rem' }}>⚠️</span> 
+          ALERT: {overdueCount} CRITICAL TASKS DETECTED. IMMEDIATE ACTION REQUIRED.
         </div>
       )}
 
       {viewMode === 'calendar' && (
-        <div className="study-plan-month-nav" style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-          <button className="study-plan-btn" onClick={() => navigateWeek('prev')}><ChevronLeft size={20} /></button>
-          <h2 style={{ minWidth: '200px', textAlign: 'center' }}>
-            {currentDate.toLocaleString('vi-VN', { month: 'long', year: 'numeric' })}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem', marginBottom: '1.5rem' }}>
+          <button className="study-plan-btn" onClick={() => navigateWeek('prev')} style={{ padding: '0.5rem' }}><ChevronLeft size={24} /></button>
+          <h2 style={{ 
+            minWidth: '300px', 
+            textAlign: 'center', 
+            fontFamily: 'var(--sv-font-tech)', 
+            color: 'var(--sv-primary)',
+            textShadow: '0 0 10px var(--sv-primary-glow)',
+            fontSize: '1.5rem',
+            margin: 0
+          }}>
+            {currentDate.toLocaleString('en-US', { month: 'long', year: 'numeric' }).toUpperCase()}
           </h2>
-          <button className="study-plan-btn" onClick={() => navigateWeek('next')}><ChevronRight size={20} /></button>
+          <button className="study-plan-btn" onClick={() => navigateWeek('next')} style={{ padding: '0.5rem' }}><ChevronRight size={24} /></button>
         </div>
       )}
 
       {loading && viewMode === 'calendar' ? (
-        <div className="study-plan-loading">Đang tải dữ liệu...</div>
+        <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--sv-primary)', fontFamily: 'var(--sv-font-tech)' }}>
+          INITIALIZING DATA STREAM...
+        </div>
       ) : (
         <>
           {viewMode === 'calendar' ? (
@@ -189,6 +212,7 @@ const StudyPlannerPage: React.FC = () => {
               onTaskClick={handleTaskClick}
               onAddTask={handleAddTask}
               onColumnsChange={setColumns}
+              onRefresh={fetchData}
             />
           )}
         </>

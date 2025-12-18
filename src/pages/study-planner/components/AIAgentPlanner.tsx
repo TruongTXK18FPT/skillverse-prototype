@@ -57,6 +57,14 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
   const [healthReport, setHealthReport] = useState<ScheduleHealthReport | null>(null);
   const [showLateNightConfirm, setShowLateNightConfirm] = useState(false);
 
+  useEffect(() => {
+    // Lock body scroll
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   if (!isOpen) return null;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -205,19 +213,19 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
   };
 
   return (
-    <div className="study-plan-ai-overlay">
-      <div className="study-plan-ai-modal">
-        <div className="study-plan-ai-header">
-          <div className="study-plan-ai-title">
+    <div className="study-plan-modal-overlay" onClick={onClose}>
+      <div className="study-plan-modal theme-gold" onClick={e => e.stopPropagation()}>
+        <div className="study-plan-modal-header">
+          <div className="study-plan-modal-title">
             <FaRobot className="study-plan-ai-icon" />
             <span>AI Study Planner</span>
           </div>
-          <button className="study-plan-ai-close-btn" onClick={onClose}>
+          <button className="study-plan-modal-close" onClick={onClose}>
             <FaTimes />
           </button>
         </div>
 
-        <div className="study-plan-ai-content">
+        <div className="study-plan-modal-content">
           {step === 'form' ? (
             <div className="study-plan-ai-form">
               {/* Basic Info */}
@@ -233,6 +241,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
                     value={formData.subjectName}
                     onChange={handleInputChange}
                     placeholder="VD: Lập trình Java, IELTS Reading..."
+                    className="study-plan-input"
                   />
                 </div>
                 <div className="study-plan-ai-form-group">
@@ -243,6 +252,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
                     onChange={(e) => setTopicInput(e.target.value)}
                     onKeyDown={handleTopicAdd}
                     placeholder="VD: OOP, Collections, Streams..."
+                    className="study-plan-input"
                   />
                   <div className="study-plan-ai-chips-container">
                     {(formData.topics || []).map((topic, idx) => (
@@ -260,6 +270,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
                     value={formData.desiredOutcome}
                     onChange={handleInputChange}
                     placeholder="VD: Nắm vững kiến thức cơ bản và làm được bài tập..."
+                    className="study-plan-input"
                   />
                 </div>
               </div>
@@ -277,6 +288,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
                       name="startDate"
                       value={formData.startDate}
                       onChange={handleInputChange}
+                      className="study-plan-input"
                     />
                   </div>
                   <div className="study-plan-ai-form-group">
@@ -286,6 +298,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
                       name="deadline"
                       value={formData.deadline}
                       onChange={handleInputChange}
+                      className="study-plan-input"
                     />
                   </div>
                 </div>
@@ -297,6 +310,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
                       name="durationMinutes"
                       value={formData.durationMinutes}
                       onChange={handleInputChange}
+                      className="study-plan-input"
                     />
                   </div>
                   <div className="study-plan-ai-form-group">
@@ -306,6 +320,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
                       name="breakMinutesBetweenSessions"
                       value={formData.breakMinutesBetweenSessions}
                       onChange={handleInputChange}
+                      className="study-plan-input"
                     />
                   </div>
                 </div>
@@ -328,13 +343,13 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
                 <div className="study-plan-ai-form-group">
                   <label>Khung Giờ Rảnh</label>
                   {(formData.preferredTimeWindows || []).map((window, idx) => (
-                    <div key={idx} className="study-plan-ai-form-row" style={{ marginBottom: '0.5rem' }}>
+                    <div key={idx} className="study-plan-time-window-row">
                       <input
                         type="time"
                         value={window.startTime}
                         onChange={(e) => handleTimeWindowChange(idx, 'startTime', e.target.value)}
                       />
-                      <span>-</span>
+                      <span className="study-plan-time-separator">-</span>
                       <input
                         type="time"
                         value={window.endTime}
@@ -347,7 +362,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
                       )}
                     </div>
                   ))}
-                  <button className="study-plan-ai-text-btn" onClick={addTimeWindow}>
+                  <button className="study-plan-ai-add-time-btn" onClick={addTimeWindow}>
                     <FaPlus /> Thêm khung giờ
                   </button>
                 </div>
@@ -361,7 +376,12 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
                 <div className="study-plan-ai-form-row">
                   <div className="study-plan-ai-form-group">
                     <label>Phương Pháp Học</label>
-                    <select name="studyMethod" value={formData.studyMethod} onChange={handleInputChange}>
+                    <select 
+                      name="studyMethod" 
+                      value={formData.studyMethod} 
+                      onChange={handleInputChange}
+                      className="study-plan-select"
+                    >
                       <option value="POMODORO">Pomodoro (25/5)</option>
                       <option value="DEEP_WORK">Deep Work (90/20)</option>
                       <option value="52_17">52/17 Rule</option>
@@ -370,7 +390,12 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
                   </div>
                   <div className="study-plan-ai-form-group">
                     <label>Chronotype (Nhịp sinh học)</label>
-                    <select name="chronotype" value={formData.chronotype} onChange={handleInputChange}>
+                    <select 
+                      name="chronotype" 
+                      value={formData.chronotype} 
+                      onChange={handleInputChange}
+                      className="study-plan-select"
+                    >
                       <option value="BEAR">Gấu (Ngày)</option>
                       <option value="WOLF">Sói (Đêm)</option>
                       <option value="LION">Sư Tử (Sáng sớm)</option>

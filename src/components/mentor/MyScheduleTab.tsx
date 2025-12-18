@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { ScheduleEvent } from '../../pages/main/MentorPage';
 import './MyScheduleTab.css';
 
@@ -211,7 +212,7 @@ const MyScheduleTab: React.FC = () => {
         </div>
       )}
 
-      {showAddModal && (
+      {showAddModal && ReactDOM.createPortal(
         <div className="mentor-schedule-modal-overlay">
           <div className="mentor-schedule-modal-content">
             <div className="mentor-schedule-modal-header">
@@ -250,7 +251,8 @@ const MyScheduleTab: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

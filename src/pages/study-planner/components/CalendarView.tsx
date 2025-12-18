@@ -98,78 +98,64 @@ const CalendarView: React.FC<CalendarViewProps> = ({ sessions, currentDate, onSe
   };
 
   return (
-    <div className="study-plan-calendar-weekly">
-      <div className="study-plan-calendar-time-column">
-        <div className="study-plan-calendar-header-cell"></div>
-        {hours.map(hour => (
-          <div key={hour} className="study-plan-calendar-time-slot">
-            {hour}:00
-          </div>
-        ))}
+    <div className="study-plan-calendar-wrapper">
+      <div className="study-plan-calendar-header-row">
+        <div className="study-plan-calendar-col-header">TIME</div>
+        {weekDays.map(day => {
+          const isToday = new Date().toDateString() === day.toDateString();
+          return (
+            <div key={day.toISOString()} className={`study-plan-calendar-col-header ${isToday ? 'today' : ''}`}>
+              <div style={{ fontWeight: 'bold' }}>{day.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()}</div>
+              <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>{day.getDate()}/{day.getMonth() + 1}</div>
+            </div>
+          );
+        })}
       </div>
-      
-      <div className="study-plan-calendar-days-grid">
-        <div className="study-plan-calendar-header-row">
+
+      <div className="study-plan-calendar-body">
+        <div className="study-plan-time-grid">
+          <div className="study-plan-time-labels-col">
+            {hours.map(hour => (
+              <div key={hour} className="study-plan-time-label">
+                {hour.toString().padStart(2, '0')}:00
+              </div>
+            ))}
+          </div>
+          
           {weekDays.map(day => {
-            const isToday = new Date().toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) === 
-                           day.toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+            const isToday = new Date().toDateString() === day.toDateString();
             return (
-              <div key={day.toISOString()} className="study-plan-calendar-header-cell">
-                <div className="study-plan-day-name">
-                  {day.toLocaleDateString('vi-VN', { weekday: 'short', timeZone: 'Asia/Ho_Chi_Minh' })}
-                </div>
-                <div className={`study-plan-day-number ${isToday ? 'today' : ''}`}>
-                  {day.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' })}
-                </div>
+              <div 
+                key={day.toISOString()} 
+                className={`study-plan-day-col ${isToday ? 'today' : ''}`}
+                onClick={() => onDateClick && onDateClick(day)}
+              >
+                {hours.map(hour => (
+                  <div key={hour} className="study-plan-time-slot" />
+                ))}
+                
+                {getTasksForDay(day).map(task => (
+                  <div
+                    key={task.id}
+                    className="study-plan-event-item"
+                    style={getTaskStyle(task)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSessionClick(task);
+                    }}
+                    title={`${task.title}`}
+                  >
+                    <div style={{ fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {task.title}
+                    </div>
+                    <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>
+                      {task.startDate ? new Date(task.startDate).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : ''}
+                    </div>
+                  </div>
+                ))}
               </div>
             );
           })}
-        </div>
-
-        <div className="study-plan-calendar-body">
-          {weekDays.map(day => (
-            <div 
-              key={day.toISOString()} 
-              className="study-plan-calendar-day-column"
-              onClick={() => onDateClick && onDateClick(day)}
-            >
-              {hours.map(hour => (
-                <div key={hour} className="study-plan-calendar-hour-cell" />
-              ))}
-              
-              {getTasksForDay(day).map(task => (
-                <div
-                  key={task.id}
-                  className="study-plan-calendar-event"
-                  style={getTaskStyle(task)}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onSessionClick(task);
-                  }}
-                  title={`${task.title} (${new Date(task.startDate!).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })} - ${new Date(task.endDate!).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })})`}
-                >
-                  <div className="study-plan-event-title">{task.title}</div>
-                  <div className="study-plan-event-time">
-                    {new Date(task.startDate!).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' })}
-                  </div>
-                  
-                  {task.userProgress !== undefined && (
-                    <div className="study-plan-calendar-progress">
-                      <div 
-                        className="study-plan-calendar-progress-fill" 
-                        style={{ width: `${task.userProgress}%` }} 
-                      />
-                    </div>
-                  )}
-                  
-                  <div className="study-plan-calendar-icons">
-                     {task.description && (task.description.includes('http') || task.description.includes('www.')) && <LinkIcon size={10} />}
-                     {task.userNotes && <span title="Has notes">📝</span>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ))}
         </div>
       </div>
     </div>

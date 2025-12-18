@@ -33,6 +33,14 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
   });
 
   useEffect(() => {
+    // Lock body scroll
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
+  useEffect(() => {
     if (task) {
       setFormData({
         title: task.title,
@@ -68,17 +76,17 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
   return (
     <div className="study-plan-modal-overlay" onClick={onClose}>
       <div className="study-plan-modal study-plan-task-detail-modal" onClick={e => e.stopPropagation()}>
-        <div className="study-plan-task-modal-header">
-          <h3 className="study-plan-task-modal-title">
+        <div className="study-plan-modal-header">
+          <h3 className="study-plan-modal-title">
             {task ? 'Chi Tiết Nhiệm Vụ' : 'Nhiệm Vụ Mới'}
           </h3>
-          <button className="study-plan-task-modal-close" onClick={onClose}>
+          <button className="study-plan-modal-close" onClick={onClose}>
             <X size={20} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="study-plan-task-modal-content study-plan-task-modal-grid-layout">
+          <div className="study-plan-modal-content study-plan-task-modal-grid-layout">
             <div className="study-plan-task-modal-left">
               <div className="study-plan-form-group">
                 <input 
@@ -194,6 +202,15 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
                   rows={3}
                 />
               </div>
+
+              <div className="study-plan-modal-actions-right" style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <button type="submit" className="study-plan-btn active" style={{ width: '100%', justifyContent: 'center', padding: '12px', fontSize: '1rem' }}>
+                  <Save size={16} /> {task ? 'Lưu Thay Đổi' : 'Tạo Nhiệm Vụ'}
+                </button>
+                <button type="button" className="study-plan-btn" onClick={onClose} style={{ width: '100%', justifyContent: 'center', padding: '12px', fontSize: '1rem' }}>
+                  Hủy
+                </button>
+              </div>
             </div>
           </div>
 
@@ -203,12 +220,6 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
                 <Trash2 size={16} /> Xóa
               </button>
             )}
-            <div className="study-plan-modal-actions-right">
-              <button type="button" className="study-plan-btn" onClick={onClose}>Hủy</button>
-              <button type="submit" className="study-plan-btn active">
-                <Save size={16} /> {task ? 'Lưu Thay Đổi' : 'Tạo Nhiệm Vụ'}
-              </button>
-            </div>
           </div>
         </form>
       </div>
