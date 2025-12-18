@@ -107,9 +107,28 @@ jobs:
       - name: 🧪 Test Docker Image
         run: |
           docker run --rm -p 3000:80 -d --name test-frontend skillverse-frontend:latest
-          sleep 10
-          curl -f http://localhost:3000 || exit 1
-          docker stop test-frontend
+          
+          echo "Waiting for container to be ready..."
+          SUCCESS=false
+          for i in {1..30}; do
+            if curl -s -f http://localhost:3000/health > /dev/null; then
+              echo "Container is ready!"
+              SUCCESS=true
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 1
+          done
+
+          if [ "$SUCCESS" = "true" ]; then
+            docker stop test-frontend
+            exit 0
+          else
+            echo "Container failed to start within 30 seconds"
+            docker logs test-frontend
+            docker stop test-frontend
+            exit 1
+          fi
 
   # Job 4: Deploy to VPS
   deploy:
