@@ -34,8 +34,8 @@ const QuizAttemptPage: React.FC = () => {
       getUserQuizAttempts(Number(quizId), user.id).catch(() => [])
     ])
       .then(([quizData, attemptsData]) => {
-        console.log('[QUIZ] Loaded:', quizData);
-        console.log('[QUIZ] Attempts:', attemptsData);
+        
+        
         
         setQuiz(quizData);
         setAttempts(attemptsData);
@@ -98,7 +98,7 @@ const QuizAttemptPage: React.FC = () => {
     }
 
     try {
-      console.log('[QUIZ_SUBMIT] Submitting answers:', answers);
+      
       const submitData = {
         quizId: quiz.id,
         answers: Object.entries(answers).map(([questionId, optionId]) => ({
@@ -108,7 +108,7 @@ const QuizAttemptPage: React.FC = () => {
       };
       
       const res = await submitQuiz(submitData, user.id);
-      console.log('[QUIZ_SUBMIT] Result:', res);
+      
       
       setResult(res);
       setViewMode('result');

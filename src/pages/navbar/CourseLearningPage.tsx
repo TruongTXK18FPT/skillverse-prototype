@@ -119,7 +119,7 @@ const CourseLearningPage = () => {
 
     if (isQuiz) {
       // LAZY LOAD QUIZ + CHECK ATTEMPTS
-      console.log('[QUIZ] Loading quiz:', activeLesson.lessonId);
+      
       setActiveItemType('quiz');
       setActiveLessonDetail(null);
 
@@ -128,8 +128,8 @@ const CourseLearningPage = () => {
         getUserQuizAttempts(activeLesson.lessonId, user?.id || 0).catch(() => [])
       ])
         .then(([quiz, attempts]) => {
-          console.log('[QUIZ] Loaded:', quiz);
-          console.log('[QUIZ] Attempts:', attempts);
+          
+          
 
           // Check if already passed
           const passedAttempt = attempts.find((a: any) => a.passed === true);
@@ -149,13 +149,13 @@ const CourseLearningPage = () => {
         .finally(() => setLoadingLessonDetail(false));
     } else {
       // LAZY LOAD LESSON
-      console.log('[LESSON] Loading lesson:', activeLesson.lessonId);
+      
       setActiveItemType('lesson');
       setActiveQuizDetail(null);
 
       getLessonById(activeLesson.lessonId)
         .then((detail) => {
-          console.log('[LESSON] Loaded:', detail);
+          
           setActiveLessonDetail(detail);
         })
         .catch((err) => {

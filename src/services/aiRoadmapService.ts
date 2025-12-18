@@ -59,7 +59,7 @@ const aiRoadmapService = {
     
     // If same request is already in progress, return the ongoing promise
     if (ongoingGenerateRequest && lastRequestKey === requestKey) {
-      console.log('[Roadmap Service] Duplicate request detected, using ongoing request');
+      
       return ongoingGenerateRequest;
     }
 

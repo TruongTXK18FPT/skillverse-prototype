@@ -42,7 +42,7 @@ class AdminUserService {
         { params }
       );
       
-      console.log(`✅ Fetched ${response.data.totalUsers} users`);
+      
       return response.data;
     } catch (error) {
       console.error('❌ Error fetching users:', error);
@@ -61,7 +61,7 @@ class AdminUserService {
         `${this.BASE_URL}/${userId}`
       );
       
-      console.log(`✅ Fetched user details for userId: ${userId}`);
+      
       return response.data;
     } catch (error) {
       console.error(`❌ Error fetching user ${userId}:`, error);
@@ -80,7 +80,7 @@ class AdminUserService {
         `${this.BASE_URL}/${userId}/detail`
       );
       
-      console.log(`✅ Fetched detailed user info for userId: ${userId}`);
+      
       return response.data;
     } catch (error) {
       console.error(`❌ Error fetching user detail ${userId}:`, error);
@@ -100,7 +100,7 @@ class AdminUserService {
         request
       );
       
-      console.log(`✅ Updated user status for userId: ${request.userId}`);
+      
       return response.data;
     } catch (error) {
       console.error('❌ Error updating user status:', error);
@@ -120,7 +120,7 @@ class AdminUserService {
         request
       );
       
-      console.log(`✅ Updated user role for userId: ${request.userId}`);
+      
       return response.data;
     } catch (error) {
       console.error('❌ Error updating user role:', error);
@@ -147,7 +147,7 @@ class AdminUserService {
         { params }
       );
       
-      console.log(`✅ Banned user ${userId}`);
+      
       return response.data;
     } catch (error) {
       console.error(`❌ Error banning user ${userId}:`, error);
@@ -174,7 +174,7 @@ class AdminUserService {
         { params }
       );
       
-      console.log(`✅ Unbanned user ${userId}`);
+      
       return response.data;
     } catch (error) {
       console.error(`❌ Error unbanning user ${userId}:`, error);
@@ -194,7 +194,7 @@ class AdminUserService {
         request
       );
       
-      console.log(`✅ Updated user profile for userId: ${request.userId}`);
+      
       return response.data;
     } catch (error) {
       console.error('❌ Error updating user profile:', error);
@@ -214,7 +214,7 @@ class AdminUserService {
         request
       );
       
-      console.log(`✅ Reset password for userId: ${request.userId}`);
+      
       return response.data;
     } catch (error) {
       console.error('❌ Error resetting password:', error);
@@ -230,7 +230,7 @@ class AdminUserService {
   async deleteUser(userId: number): Promise<void> {
     try {
       await axiosInstance.delete(`${this.BASE_URL}/${userId}`);
-      console.log(`✅ Deleted user ${userId}`);
+      
     } catch (error) {
       console.error(`❌ Error deleting user ${userId}:`, error);
       throw error;
@@ -245,7 +245,7 @@ class AdminUserService {
   async permanentlyDeleteUser(userId: number): Promise<void> {
     try {
       await axiosInstance.delete(`${this.BASE_URL}/${userId}/permanent`);
-      console.log(`✅ Permanently deleted user ${userId}`);
+      
     } catch (error) {
       console.error(`❌ Error permanently deleting user ${userId}:`, error);
       throw error;

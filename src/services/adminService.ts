@@ -26,7 +26,7 @@ class AdminService {
         }
       );
       
-      console.log(`✅ Fetched ${response.data.totalApplications} applications with filter: ${status}`);
+      
       return response.data;
     } catch (error) {
       console.error('❌ Error fetching applications:', error);
@@ -46,14 +46,14 @@ class AdminService {
         throw new Error('Rejection reason is required when rejecting an application');
       }
 
-      console.log('📤 Sending application process request:', JSON.stringify(request, null, 2));
+      );
       
       const response = await axiosInstance.post<AdminApprovalResponse>(
         `${this.BASE_URL}/applications/process`,
         request
       );
       
-      console.log(`✅ Successfully ${request.action.toLowerCase()}ed ${request.applicationType} application for user ${request.userId}`);
+      }ed ${request.applicationType} application for user ${request.userId}`);
       return response.data;
     } catch (error: any) {
       console.error('❌ Error processing application:', error);

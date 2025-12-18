@@ -93,7 +93,7 @@ const AiRoadmapPage = () => {
 
       // Handle Premium Restriction (403) for Deep Research
       if (status === 403 && request.aiAgentMode === 'DEEP_RESEARCH') {
-        console.log('🔒 Premium feature restricted. Switching to Normal Agent...');
+        
         
         // Show banner/toast
         showError(
@@ -118,30 +118,30 @@ const AiRoadmapPage = () => {
       }
       
       // Debug logging
-      console.log('🐛 Error caught:', error);
-      console.log('🐛 Error response:', error?.response);
-      console.log('🐛 Error message extracted:', errorMessage);
+      
+      
+      
       
       // Check for specific error types and show user-friendly messages
       if (errorMessage.includes('Mục tiêu không hợp lệ') || 
           errorMessage.includes('không liên quan đến học tập') ||
           errorMessage.includes('không hợp lý')) {
         // Show detailed validation error with examples
-        console.log('🚨 Showing invalid goal error toast');
+        
         showError(
           '❌ Mục tiêu không hợp lệ', 
           'Mục tiêu của bạn không liên quan đến học tập hoặc phát triển kỹ năng. Vui lòng nhập một mục tiêu học tập cụ thể như "Học Python", "Trở thành Data Scientist", "Học tiếng Anh IELTS 7.0", v.v.',
           12 // 12 seconds for longer message
         );
       } else if (errorMessage.includes('quá dài') || errorMessage.includes('quá ngắn')) {
-        console.log('🚨 Showing length error toast');
+        
         showError('⚠️ Độ dài không hợp lệ', errorMessage, 8);
       } else if (errorMessage.includes('chứa từ ngữ không phù hợp')) {
-        console.log('🚨 Showing inappropriate content error toast');
+        
         showError('🚫 Nội dung không phù hợp', 'Mục tiêu chứa từ ngữ không phù hợp. Vui lòng nhập lại với nội dung tích cực.', 8);
       } else {
         // Generic error - show backend message directly
-        console.log('🚨 Showing generic error toast');
+        
         showError('❌ Lỗi tạo lộ trình', errorMessage, 8);
       }
     } finally {

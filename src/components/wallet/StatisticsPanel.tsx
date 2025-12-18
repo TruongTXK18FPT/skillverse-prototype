@@ -76,7 +76,7 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
   
   // Debug: Log first transaction to see structure
   if (transactions.length > 0) {
-    console.log('📊 Sample transaction:', transactions[0]);
+    
   }
   
   transactions.forEach(tx => {
@@ -110,7 +110,7 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
   });
   
   // Debug: Log processed data
-  console.log('📊 7-day flow data:', transactionFlowData);
+  
 
   // Monthly trend data for Area Chart - Calculate from real transactions
   const getMonthlyTrendData = () => {
@@ -158,7 +158,7 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
   const monthlyTrendData = getMonthlyTrendData();
   
   // Debug: Log monthly data
-  console.log('📊 Monthly trend data:', monthlyTrendData);
+  
 
   // Transaction type distribution
   const transactionTypeData = [

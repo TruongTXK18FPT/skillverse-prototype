@@ -159,7 +159,7 @@ const ReportsTabCosmic: React.FC = () => {
   };
 
   const handleAction = (reportId: number, action: string) => {
-    console.log(`${action} report ${reportId}`);
+    
     // Implement action logic here
   };
 

@@ -105,7 +105,6 @@ const Certificate = () => {
       navigator.share(shareData);
     } else {
       navigator.clipboard.writeText(certificateData.credentialUrl);
-      console.log('Certificate URL copied to clipboard');
     }
   };
 

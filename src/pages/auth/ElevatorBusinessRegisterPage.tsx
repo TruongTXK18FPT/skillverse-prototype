@@ -125,11 +125,11 @@ const ElevatorBusinessRegisterPage: React.FC = () => {
         documents: data.companyDocuments && data.companyDocuments.length > 0 ? data.companyDocuments : undefined
       };
 
-      console.log('Attempting business registration for:', registrationRequest.businessEmail);
+      
       
       const response = await businessService.register(registrationRequest, files);
       
-      console.log('Business registration successful:', response);
+      
       
       // Check if requires verification (email verification) or pending approval
       if (response.requiresVerification) {

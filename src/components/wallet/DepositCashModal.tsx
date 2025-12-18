@@ -20,7 +20,7 @@ const DepositCashModal: React.FC<DepositCashModalProps> = ({ isOpen, onClose }) 
   // Debug: Log when modal opens
   React.useEffect(() => {
     if (isOpen) {
-      console.log('💳 DepositCashModal opened!');
+      
     }
   }, [isOpen]);
 
@@ -38,13 +38,13 @@ const DepositCashModal: React.FC<DepositCashModalProps> = ({ isOpen, onClose }) 
   };
 
   const handleDeposit = async () => {
-    console.log('🚀 handleDeposit called!');
+    
     try {
       setLoading(true);
       setError(null);
 
       const amount = parseInt(customAmount);
-      console.log('💰 Amount:', amount);
+      
       
       if (!amount || amount < 5000) {
         setError('Số tiền tối thiểu là 5.000 VND');
@@ -70,16 +70,16 @@ const DepositCashModal: React.FC<DepositCashModalProps> = ({ isOpen, onClose }) 
         cancelUrl: `${window.location.origin}/my-wallet?status=cancel`,
       };
 
-      console.log('📤 Sending payment request:', paymentRequest);
+      
 
       // Gọi payment service để tạo payment URL
       const paymentResponse = await paymentService.createPayment(paymentRequest);
 
-      console.log('📥 Payment response:', paymentResponse);
+      
 
       // Nếu có checkout URL, redirect đến trang thanh toán
       if (paymentResponse.checkoutUrl) {
-        console.log('✅ Redirecting to:', paymentResponse.checkoutUrl);
+        
         window.location.href = paymentResponse.checkoutUrl;
       } else {
         throw new Error('Không nhận được URL thanh toán');
@@ -159,7 +159,7 @@ const DepositCashModal: React.FC<DepositCashModalProps> = ({ isOpen, onClose }) 
           <button
             className="deposit-btn-submit"
             onClick={() => {
-              console.log('🔘 Button clicked! Amount:', customAmount, 'Loading:', loading);
+              
               handleDeposit();
             }}
             disabled={loading || !customAmount}

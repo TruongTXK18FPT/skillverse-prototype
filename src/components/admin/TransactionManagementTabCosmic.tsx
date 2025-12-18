@@ -88,7 +88,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
   const fetchAllTransactions = async () => {
     try {
       setLoading(true);
-      console.log('🔄 Fetching all transactions...');
+      
       
       // Fetch all transaction types (we'll combine them)
       // Using size=1000 to get all transactions
@@ -98,16 +98,11 @@ const TransactionManagementTabCosmic: React.FC = () => {
         fetchWithdrawals()
       ]);
 
-      console.log('✅ Fetched:', {
-        wallet: walletTxs.length,
-        payment: paymentTxs.length,
-        withdrawal: withdrawals.length
-      });
 
       const combined = [...walletTxs, ...paymentTxs, ...withdrawals];
       combined.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       
-      console.log('📊 Total transactions:', combined.length);
+      
       setTransactions(combined);
       calculateStats(combined);
       
@@ -124,9 +119,9 @@ const TransactionManagementTabCosmic: React.FC = () => {
 
   const fetchWalletTransactions = async (): Promise<CombinedTransaction[]> => {
     try {
-      console.log('📡 Fetching wallet transactions...');
+      
       const response = await walletService.adminGetAllWalletTransactions(0, 1000);
-      console.log('✅ Wallet transactions response:', response);
+      
       const mapped = await Promise.all(response.content.map(async (tx) => {
         const t = (tx.transactionType || '').toUpperCase();
         const refType = (tx.referenceType || '').toUpperCase();
@@ -198,9 +193,9 @@ const TransactionManagementTabCosmic: React.FC = () => {
 
   const fetchPaymentTransactions = async (): Promise<CombinedTransaction[]> => {
     try {
-      console.log('📡 Fetching payment transactions...');
+      
       const response = await paymentService.adminGetAllTransactions(0, 1000);
-      console.log('✅ Payment transactions response:', response);
+      
       const mapped = await Promise.all(response.content.map(async (payment) => {
         const rawAmount = typeof payment.amount === 'string' ? parseFloat(payment.amount) : payment.amount;
         const isCoursePurchase = payment.type === 'COURSE_PURCHASE';
@@ -245,9 +240,9 @@ const TransactionManagementTabCosmic: React.FC = () => {
 
   const fetchWithdrawals = async (): Promise<CombinedTransaction[]> => {
     try {
-      console.log('📡 Fetching withdrawals...');
+      
       const response = await walletService.adminGetWithdrawalRequests(0, 1000);
-      console.log('✅ Withdrawals response:', response);
+      
       return response.content.map(withdrawal => ({
         id: `WD-${withdrawal.requestCode}`,
         type: 'WITHDRAWAL' as TransactionType,
@@ -515,12 +510,6 @@ const TransactionManagementTabCosmic: React.FC = () => {
   };
 
   const applyFilters = () => {
-    console.log('🔍 Applying filters...', { 
-      totalTransactions: transactions.length, 
-      typeFilter, 
-      statusFilter, 
-      searchTerm 
-    });
     
     let filtered = transactions;
 
@@ -542,7 +531,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
       );
     }
 
-    console.log('✅ Filtered result:', filtered.length, 'transactions');
+    
     setFilteredTransactions(filtered);
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
     setCurrentPage(1); // Reset to first page when filters change
@@ -610,7 +599,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
       
-      console.log('✅ Invoice downloaded:', filename);
+      
     } catch (error) {
       console.error('❌ Error downloading invoice:', error);
       alert('Không thể tải hóa đơn. Vui lòng thử lại sau.');

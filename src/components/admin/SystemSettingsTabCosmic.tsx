@@ -128,13 +128,13 @@ const SystemSettingsTabCosmic: React.FC = () => {
     setTimeout(() => {
       setLoading(false);
       setUnsavedChanges(false);
-      console.log('Settings saved:', settings);
+      
     }, 1500);
   };
 
   const handleReset = () => {
     if (window.confirm('Bạn có chắc chắn muốn khôi phục cài đặt mặc định?')) {
-      console.log('Reset settings');
+      
     }
   };
 

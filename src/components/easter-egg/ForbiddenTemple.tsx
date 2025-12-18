@@ -127,7 +127,7 @@ const ForbiddenTemple: React.FC = () => {
   const triggerPhase1Transition = () => {
     // 1. Lights Out
     setIsLightsOut(true);
-    audioLightOut.current.play().catch(e => console.log("Audio blocked", e));
+    audioLightOut.current.play().catch(e => );
     
     // 2. Wait and Reveal
     setTimeout(() => {
@@ -139,7 +139,7 @@ const ForbiddenTemple: React.FC = () => {
   const triggerPhase2Transition = () => {
     // 1. Lights Out Brief
     setIsLightsOut(true);
-    audioHorror.current.play().catch(e => console.log("Audio blocked", e));
+    audioHorror.current.play().catch(e => );
 
     // 2. Wait 5s for horror intro
     setTimeout(() => {
@@ -211,7 +211,7 @@ const ForbiddenTemple: React.FC = () => {
 
     const audio = new Audio(audioSrc);
     audio.volume = volume;
-    audio.play().catch(e => console.log("Audio play failed", e));
+    audio.play().catch(e => );
   };
 
   if (introStep === 'text1' || introStep === 'text2') {

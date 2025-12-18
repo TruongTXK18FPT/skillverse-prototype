@@ -927,7 +927,7 @@ const CoinWallet: React.FC = () => {
       }
     );
     
-    console.log('Selected package:', pkg);
+    
   };
 
   const handleProceedPayment = () => {

@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Listen for global logout events (from axios interceptors)
   useEffect(() => {
     const handleLogoutEvent = () => {
-      console.log('🔴 AuthContext received logout event, clearing user state');
+      
       setUser(null);
     };
 

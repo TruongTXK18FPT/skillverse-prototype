@@ -80,19 +80,19 @@ export const createExtendedProfile = async (
   
   // Add files if provided
   if (avatar) {
-    console.log(`📸 Adding avatar: ${avatar.name} (${(avatar.size / 1024 / 1024).toFixed(2)}MB)`);
+    .toFixed(2)}MB)`);
     formData.append('avatar', avatar);
   }
   if (video) {
-    console.log(`🎥 Adding video: ${video.name} (${(video.size / 1024 / 1024).toFixed(2)}MB)`);
+    .toFixed(2)}MB)`);
     formData.append('video', video);
   }
   if (coverImage) {
-    console.log(`🖼️ Adding cover image: ${coverImage.name} (${(coverImage.size / 1024 / 1024).toFixed(2)}MB)`);
+    .toFixed(2)}MB)`);
     formData.append('coverImage', coverImage);
   }
   
-  console.log('⏳ Sending create profile request...');
+  
   const startTime = Date.now();
   
   const response = await api.post<ApiResponse<UserProfileDTO>>('/portfolio/profile', formData, {
@@ -103,13 +103,13 @@ export const createExtendedProfile = async (
     onUploadProgress: (progressEvent) => {
       if (progressEvent.total) {
         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        console.log(`📊 Upload progress: ${percentCompleted}% (${(progressEvent.loaded / 1024 / 1024).toFixed(2)}MB / ${(progressEvent.total / 1024 / 1024).toFixed(2)}MB)`);
+        .toFixed(2)}MB / ${(progressEvent.total / 1024 / 1024).toFixed(2)}MB)`);
       }
     }
   });
   
   const duration = ((Date.now() - startTime) / 1000).toFixed(2);
-  console.log(`✅ Profile created successfully in ${duration}s`);
+  
   
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'Failed to create extended profile');
@@ -135,19 +135,19 @@ export const updateExtendedProfile = async (
   
   // Add files if provided
   if (avatar) {
-    console.log(`📸 Adding avatar: ${avatar.name} (${(avatar.size / 1024 / 1024).toFixed(2)}MB)`);
+    .toFixed(2)}MB)`);
     formData.append('avatar', avatar);
   }
   if (video) {
-    console.log(`🎥 Adding video: ${video.name} (${(video.size / 1024 / 1024).toFixed(2)}MB)`);
+    .toFixed(2)}MB)`);
     formData.append('video', video);
   }
   if (coverImage) {
-    console.log(`🖼️ Adding cover image: ${coverImage.name} (${(coverImage.size / 1024 / 1024).toFixed(2)}MB)`);
+    .toFixed(2)}MB)`);
     formData.append('coverImage', coverImage);
   }
   
-  console.log('⏳ Sending update profile request...');
+  
   const startTime = Date.now();
   
   const response = await api.put<ApiResponse<UserProfileDTO>>('/portfolio/profile', formData, {
@@ -158,13 +158,13 @@ export const updateExtendedProfile = async (
     onUploadProgress: (progressEvent) => {
       if (progressEvent.total) {
         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        console.log(`📊 Upload progress: ${percentCompleted}% (${(progressEvent.loaded / 1024 / 1024).toFixed(2)}MB / ${(progressEvent.total / 1024 / 1024).toFixed(2)}MB)`);
+        .toFixed(2)}MB / ${(progressEvent.total / 1024 / 1024).toFixed(2)}MB)`);
       }
     }
   });
   
   const duration = ((Date.now() - startTime) / 1000).toFixed(2);
-  console.log(`✅ Profile updated successfully in ${duration}s`);
+  
   
   if (!response.data.success || !response.data.data) {
     throw new Error(response.data.message || 'Failed to update extended profile');
@@ -211,7 +211,7 @@ export const createProject = async (
   
   // Add thumbnail if provided
   if (thumbnail) {
-    console.log(`🖼️ Adding project thumbnail: ${thumbnail.name} (${(thumbnail.size / 1024 / 1024).toFixed(2)}MB)`);
+    .toFixed(2)}MB)`);
     formData.append('thumbnail', thumbnail);
   }
   
@@ -245,7 +245,7 @@ export const updateProject = async (
   
   // Add thumbnail if provided
   if (thumbnail) {
-    console.log(`🖼️ Adding project thumbnail: ${thumbnail.name} (${(thumbnail.size / 1024 / 1024).toFixed(2)}MB)`);
+    .toFixed(2)}MB)`);
     formData.append('thumbnail', thumbnail);
   }
   
@@ -305,7 +305,7 @@ export const createCertificate = async (
   
   // Add image if provided
   if (image) {
-    console.log(`🖼️ Adding certificate image: ${image.name} (${(image.size / 1024 / 1024).toFixed(2)}MB)`);
+    .toFixed(2)}MB)`);
     formData.append('image', image);
   }
   

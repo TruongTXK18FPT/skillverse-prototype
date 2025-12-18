@@ -57,7 +57,7 @@ const CourseDetailPage: React.FC = () => {
           const profile = await getMentorProfile(courseData.author.id);
           setMentorProfile(profile);
         } catch {
-          console.log('Mentor profile not found');
+          
         }
       }
 
@@ -69,7 +69,7 @@ const CourseDetailPage: React.FC = () => {
             const moduleQuizzes = await listQuizzesByModule(module.id);
             allQuizzes.push(...moduleQuizzes);
           } catch (error) {
-            console.log(`No quizzes found for module ${module.id}`);
+            
           }
         }
         setQuizzes(allQuizzes);

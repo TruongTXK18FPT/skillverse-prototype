@@ -119,11 +119,11 @@ const ElevatorMentorRegisterPage: React.FC = () => {
         certifications: data.certifications && data.certifications.length > 0 ? data.certifications : undefined
       };
 
-      console.log('Attempting mentor registration for:', registrationRequest.email);
+      
       
       const response = await mentorService.register(registrationRequest, files);
       
-      console.log('Mentor registration successful:', response);
+      
       
       // Check if requires verification (email verification) or pending approval
       if (response.requiresVerification) {

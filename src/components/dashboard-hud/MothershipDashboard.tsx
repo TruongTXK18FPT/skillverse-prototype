@@ -164,12 +164,12 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
 
   const handleViewPlan = () => {
     // Navigate to study plan or show modal
-    console.log('View Study Plan clicked');
+    
   };
 
   const handleResumeLearning = () => {
     // Navigate to last accessed course
-    console.log('Resume Learning clicked');
+    
   };
 
   const handleCourseClick = (courseId: number) => {

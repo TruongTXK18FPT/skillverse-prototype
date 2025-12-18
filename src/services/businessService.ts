@@ -14,7 +14,7 @@ class BusinessService {
   // Register a new business
   async register(businessData: BusinessRegistrationRequest, files?: { documents?: File[] }): Promise<BusinessRegistrationResponse> {
     try {
-      console.log('Attempting business registration for:', businessData.businessEmail);
+      
       
       // Create FormData for multipart request
       const formData = new FormData();
@@ -57,7 +57,7 @@ class BusinessService {
         }
       );
       
-      console.log('Business registration successful:', response.data);
+      
       
       // Ensure the response has the required fields
       if (!('requiresVerification' in response.data)) {

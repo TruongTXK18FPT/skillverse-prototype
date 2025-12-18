@@ -31,7 +31,7 @@ class AuthService {
 
     // Check if token is expired on initialization
     if (this.token && this.isTokenExpired(this.token)) {
-      console.log('Token expired on init, clearing session');
+      
       this.token = null;
       this.refreshToken = null;
       localStorage.removeItem('accessToken');
@@ -61,7 +61,7 @@ class AuthService {
   // Login endpoint
   async login(credentials: LoginRequest): Promise<string> {
     try {
-      console.log('Attempting login with credentials:', credentials.email);
+      
       
       const response = await axiosInstance.post<AuthResponse>('/api/auth/login', credentials);
       const authData = response.data;
@@ -74,7 +74,7 @@ class AuthService {
       localStorage.setItem('refreshToken', authData.refreshToken);
       localStorage.setItem('user', JSON.stringify(authData.user));
 
-      console.log('Login successful for user:', authData.user.email);
+      
       
       // Return redirect URL based on user roles
       return this.getRedirectUrlByRole(authData.user.roles);
@@ -94,15 +94,15 @@ class AuthService {
           errorMessage.toLowerCase().includes('account not verified') ||
           errorMessage.toLowerCase().includes('verification required');
           
-      console.log('Error message:', errorMessage);
-      console.log('Is unverified error:', isUnverifiedError);
+      
+      
       
       if (isUnverifiedError) {
         // Create a special error type for unverified email
         const unverifiedError = new Error(errorMessage) as Error & { needsVerification?: boolean; email?: string };
         unverifiedError.needsVerification = true;
         unverifiedError.email = credentials.email;
-        console.log('Throwing unverified error:', unverifiedError);
+        
         throw unverifiedError;
       }
       
@@ -117,7 +117,7 @@ class AuthService {
     authData: AuthResponse;
   }> {
     try {
-      console.log('Attempting Google login with access token');
+      
       
       // Send access token as idToken (backend will use it to fetch user info)
       const request: GoogleAuthRequest = { idToken: googleAccessToken };
@@ -132,7 +132,7 @@ class AuthService {
       localStorage.setItem('refreshToken', authData.refreshToken);
       localStorage.setItem('user', JSON.stringify(authData.user));
 
-      console.log('Google login successful for user:', authData.user.email);
+      
       
       // Return redirect URL and profile completion status
       return {
@@ -179,7 +179,7 @@ class AuthService {
   // Forgot password - Request OTP
   async forgotPassword(email: string): Promise<ForgotPasswordResponse> {
     try {
-      console.log('Requesting password reset for:', email);
+      
       
       const request: ForgotPasswordRequest = { email };
       const response = await axiosInstance.post<ForgotPasswordResponse>(
@@ -187,7 +187,7 @@ class AuthService {
         request
       );
       
-      console.log('Forgot password OTP sent successfully');
+      
       return response.data;
       
     } catch (error: unknown) {
@@ -201,14 +201,14 @@ class AuthService {
   // Reset password with OTP
   async resetPassword(request: ResetPasswordRequest): Promise<ResetPasswordResponse> {
     try {
-      console.log('Resetting password for:', request.email);
+      
       
       const response = await axiosInstance.post<ResetPasswordResponse>(
         '/api/auth/reset-password', 
         request
       );
       
-      console.log('Password reset successful');
+      
       return response.data;
       
     } catch (error: unknown) {
@@ -222,14 +222,14 @@ class AuthService {
   // Set password for Google OAuth users (requires authentication)
   async setPassword(request: SetPasswordRequest): Promise<SetPasswordResponse> {
     try {
-      console.log('Setting password for Google user');
+      
       
       const response = await axiosInstance.post<SetPasswordResponse>(
         '/api/auth/set-password', 
         request
       );
       
-      console.log('Password set successfully for Google user');
+      
       return response.data;
       
     } catch (error: unknown) {
@@ -243,14 +243,14 @@ class AuthService {
   // Change password for authenticated users (requires authentication)
   async changePassword(request: ChangePasswordRequest): Promise<ChangePasswordResponse> {
     try {
-      console.log('Changing password for user');
+      
       
       const response = await axiosInstance.post<ChangePasswordResponse>(
         '/api/auth/change-password', 
         request
       );
       
-      console.log('Password changed successfully');
+      
       return response.data;
       
     } catch (error: unknown) {
@@ -264,7 +264,7 @@ class AuthService {
   // Refresh access token
   async refreshAccessToken(): Promise<AuthResponse> {
     try {
-      console.log('🔄 Attempting to refresh access token...');
+      
       
       if (!this.refreshToken) {
         console.error('❌ No refresh token available');
@@ -275,7 +275,7 @@ class AuthService {
       const response = await axiosInstance.post<AuthResponse>('/api/auth/refresh', request);
       const authData = response.data;
 
-      console.log('✅ Token refresh successful');
+      
 
       // Update tokens
       this.token = authData.accessToken;
@@ -287,7 +287,7 @@ class AuthService {
       // ✅ FIX: Only update user data if it exists in response
       if (authData.user) {
         localStorage.setItem('user', JSON.stringify(authData.user));
-        console.log('✅ User data updated from refresh response');
+        
       } else {
         console.warn('⚠️ No user data in refresh response, keeping existing user data');
         // Keep existing user data in localStorage
@@ -328,7 +328,7 @@ class AuthService {
       localStorage.removeItem('user');
       try { sessionStorage.removeItem('adminKeyVerified'); } catch (e) { void e; }
       
-      console.log('User logged out successfully');
+      
     } catch (error) {
       console.error('Logout error:', error);
       // Even if there's an error, clear local storage

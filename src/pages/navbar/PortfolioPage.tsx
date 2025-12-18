@@ -73,16 +73,16 @@ const PortfolioPage = () => {
       setLoading(true);
       setError(null);
       
-      console.log('🔍 Starting portfolio data load...');
-      console.log('Token:', localStorage.getItem('accessToken') ? 'Present' : 'Missing');
+      
+       ? 'Present' : 'Missing');
       
       // Check if has extended profile
       const checkResult = await portfolioService.checkExtendedProfile();
-      console.log('✅ Check result:', checkResult);
+      
       setHasExtendedProfile(checkResult.hasExtendedProfile);
       
       if (checkResult.hasExtendedProfile) {
-        console.log('📊 Loading portfolio data...');
+        
         // Load all data in parallel
         const [profileData, projectsData, certsData, reviewsData, cvsData] = await Promise.all([
           portfolioService.getProfile(),
@@ -92,14 +92,14 @@ const PortfolioPage = () => {
           portfolioService.getAllCVs(),
         ]);
         
-        console.log('✅ Profile loaded:', profileData);
+        
         setProfile(profileData);
         setProjects(projectsData);
         setCertificates(certsData);
         setReviews(reviewsData);
         setCvs(cvsData);
       } else {
-        console.log('ℹ️ No extended profile found');
+        
       }
     } catch (err: any) {
       console.error('❌ Error loading portfolio data:', err);

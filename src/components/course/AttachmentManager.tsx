@@ -32,13 +32,13 @@ const AttachmentManager: React.FC<AttachmentManagerProps> = ({
   // Load attachments
   useEffect(() => {
     const loadData = async () => {
-      console.log('[ATTACHMENT_MANAGER] Loading attachments for lessonId:', lessonId);
+      
       setLoading(true);
       
       try {
         const data = await listAttachments(lessonId);
         setAttachments(data);
-        console.log('[ATTACHMENT_MANAGER] Loaded:', data.length, 'attachments');
+        
       } catch (err: any) {
         console.error('[ATTACHMENT_MANAGER] Load error:', err);
         setError('Không thể tải attachments');
@@ -52,7 +52,7 @@ const AttachmentManager: React.FC<AttachmentManagerProps> = ({
   
   
   const handleUploadSuccess = async (result: UploadResponse) => {
-    console.log('[ATTACHMENT_MANAGER] Upload success:', result.mediaId);
+    
     
     if (!user) return;
     
@@ -66,7 +66,7 @@ const AttachmentManager: React.FC<AttachmentManagerProps> = ({
       
       const newAttachment = await addAttachment(lessonId, request, user.id);
       setAttachments([...attachments, newAttachment]);
-      console.log('[ATTACHMENT_MANAGER] Attachment added:', newAttachment.id);
+      
     } catch (err: any) {
       console.error('[ATTACHMENT_MANAGER] Add error:', err);
       setError('Không thể thêm attachment');
@@ -76,12 +76,12 @@ const AttachmentManager: React.FC<AttachmentManagerProps> = ({
   const handleDelete = async (attachmentId: number) => {
     if (!user || !confirm('Xóa attachment này?')) return;
     
-    console.log('[ATTACHMENT_MANAGER] Deleting:', attachmentId);
+    
     
     try {
       await deleteAttachment(lessonId, attachmentId, user.id);
       setAttachments(attachments.filter(a => a.id !== attachmentId));
-      console.log('[ATTACHMENT_MANAGER] Deleted successfully');
+      
     } catch (err: any) {
       console.error('[ATTACHMENT_MANAGER] Delete error:', err);
       setError('Không thể xóa attachment');

@@ -43,7 +43,7 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
     
-    console.log('[FILE_UPLOAD_MODAL] File selected:', file.name);
+    
     
     // Validate
     const validation = type === 'video' 
@@ -59,7 +59,7 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
     
     setSelectedFile(file);
     setError(null);
-    console.log('[FILE_UPLOAD_MODAL] File validated successfully');
+    
   };
   
   const handleUpload = async () => {
@@ -68,7 +68,7 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
       return;
     }
     
-    console.log('[FILE_UPLOAD_MODAL] Starting upload...');
+    
     
     try {
       setUploading(true);
@@ -81,11 +81,11 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
         user.id,
         (progress) => {
           setUploadProgress(progress);
-          console.log(`[FILE_UPLOAD_MODAL] Progress: ${progress.percentage}%`);
+          
         }
       );
       
-      console.log('[FILE_UPLOAD_MODAL] Upload successful:', result.mediaId);
+      
       setSuccess(true);
       
       setTimeout(() => {

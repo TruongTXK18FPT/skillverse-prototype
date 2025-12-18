@@ -15,13 +15,13 @@ class UserService {
   // Register a new user
   async register(userData: UserRegistrationRequest): Promise<UserRegistrationResponse> {
     try {
-      console.log('Attempting user registration for:', userData.email);
+      
       
       const response = await axiosInstance.post<UserRegistrationResponse>('/api/users/register', userData);
       
-      console.log('User registration successful:', response.data);
-      console.log('Response status:', response.status);
-      console.log('Response headers:', response.headers);
+      
+      
+      
       
       // Ensure the response has the required fields
       if (!('requiresVerification' in response.data)) {

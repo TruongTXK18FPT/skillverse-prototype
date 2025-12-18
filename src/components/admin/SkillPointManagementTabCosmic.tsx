@@ -129,7 +129,7 @@ const SkillPointManagementTabCosmic: React.FC = () => {
     setLoading(true);
     setTimeout(() => {
       const amount = parseInt(adjustmentAmount);
-      console.log('Adjusting points:', { selectedUser, amount, adjustmentReason, type });
+      
       
       // Reset form
       setSelectedUser('');
@@ -148,7 +148,7 @@ const SkillPointManagementTabCosmic: React.FC = () => {
     
     setLoading(true);
     setTimeout(() => {
-      console.log('Creating reward:', { rewardTitle, rewardAmount, rewardDescription });
+      
       
       // Reset form
       setRewardTitle('');

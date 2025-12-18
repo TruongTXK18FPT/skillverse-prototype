@@ -117,7 +117,6 @@ const AccountVerificationTabCosmic: React.FC = () => {
   const handleApprove = async (userId: number, type: 'MENTOR' | 'RECRUITER') => {
     try {
       setActionLoading(true);
-      console.log(`📤 Approving ${type} application for userId: ${userId}`);
       
       const response = type === 'MENTOR' 
         ? await adminService.approveMentorApplication(userId)

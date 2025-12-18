@@ -402,7 +402,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
     setLoading(true);
     try {
       if (!user) throw new Error('User not authenticated');
-      console.log('Creating course:', courseData);
+      
       
       const createPayload: CourseCreateDTO = {
         title: courseData.title || '',
@@ -412,9 +412,9 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
         currency: courseData.currency || 'VND'
       };
 
-      console.log('Creating course with payload:', createPayload);
+      
       const createdDto = await apiCreateCourse(user.id, createPayload, thumbnailFile);
-      console.log('Created course response:', createdDto);
+      
 
       // Type guard to ensure required fields are present
       if (!createdDto.title) {
@@ -455,7 +455,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
     setLoading(true);
     try {
       if (!user) throw new Error('User not authenticated');
-      console.log('Updating course:', courseId, courseData);
+      
 
       // Find the current course to get existing values
       const currentCourse = courses.find(c => c.id === courseId);
@@ -471,9 +471,9 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
         ...(courseData.currency && { currency: courseData.currency })
       };
 
-      console.log('Updating course with payload:', updatePayload);
+      
       const updatedDto = await apiUpdateCourse(courseId, updatePayload, user.id, thumbnailFile);
-      console.log('Updated course response:', updatedDto);
+      
 
       setCourses(prev => prev.map(course => {
         if (course.id !== courseId) return course;
@@ -511,7 +511,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
       onConfirm: async () => {
         setIsDeleting(true);
         try {
-          console.log('Deleting course:', courseId);
+          
           await deleteCourse(courseId, user?.id || 0);
           setCourses(prev => prev.filter(course => course.id !== courseId));
           setShowDeleteConfirm(false);
@@ -536,7 +536,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
     if (window.confirm('Bạn có chắc chắn muốn gửi khóa học này để duyệt? Sau khi gửi, bạn sẽ không thể chỉnh sửa cho đến khi được phê duyệt hoặc từ chối.')) {
       setLoading(true);
       try {
-        console.log('Submitting course for approval:', courseId);
+        
         
         const updatedCourse = await submitCourseForApproval(courseId, user.id);
         
@@ -612,7 +612,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
           const moduleQuizzes = await listQuizzesByModule(module.id);
           allQuizzes.push(...moduleQuizzes);
         } catch (error) {
-          console.log(`No quizzes found for module ${module.id}`);
+          
         }
       }
       setAllCourseQuizzes(allQuizzes);
@@ -730,7 +730,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
       if (moduleId) {
         // Load lessons for specific module only
         const lessons = await listLessonsByModule(moduleId);
-        console.log('[LOAD_LESSONS] Loaded', lessons.length, 'lessons for module', moduleId);
+        
         const mapped: Lesson[] = lessons.map((l: any) => ({
           id: l.id,
           title: l.title,
@@ -741,7 +741,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
           videoUrl: l.videoUrl,
           videoMediaId: l.videoMediaId
         }));
-        console.log('[LOAD_LESSONS] Mapped lessons:', mapped);
+        
         setCourseLessons(mapped);
       } else {
         // Load lessons from all modules (for backward compatibility)
@@ -1543,9 +1543,9 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                                 <button 
                                   className="mentor-lesson-action-button primary"
                                   onClick={() => {
-                                    console.log('[EDIT_LESSON] Clicked edit for lesson:', lesson);
-                                    console.log('[EDIT_LESSON] contentText:', lesson.contentText);
-                                    console.log('[EDIT_LESSON] videoUrl:', lesson.videoUrl);
+                                    
+                                    
+                                    
                                     setEditingLesson(lesson);
                                   }}
                                 >
@@ -1902,32 +1902,32 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                 let videoMediaId: number | undefined = undefined;
                 let uploadedVideoUrl: string | undefined = undefined;
                 if (videoFile && user) {
-                  console.log('[LESSON_CREATE] ========== STARTING VIDEO UPLOAD ==========');
-                  console.log('[LESSON_CREATE] File:', videoFile.name, 'Size:', videoFile.size, 'bytes');
-                  console.log('[LESSON_CREATE] User ID:', user.id);
+                  
+                  
+                  
                   
                   setIsUploadingVideo(true);
                   setVideoUploadProgress(0);
-                  console.log('[LESSON_CREATE] State set: isUploadingVideo=true, progress=0');
+                  
                   
                   const result = await uploadVideo(
                     videoFile,
                     user.id,
                     (progress) => {
-                      console.log('[LESSON_CREATE] ✅ Progress callback called:', progress.percentage, '%');
-                      console.log('[LESSON_CREATE] Loaded:', progress.loaded, 'Total:', progress.total);
+                      
+                      
                       setVideoUploadProgress(progress.percentage);
-                      console.log('[LESSON_CREATE] State updated: videoUploadProgress=', progress.percentage);
+                      
                     }
                   );
                   
                   videoMediaId = result.mediaId;
                   uploadedVideoUrl = result.url; // ✅ Save Cloudinary URL
                   setIsUploadingVideo(false);
-                  console.log('[LESSON_CREATE] ========== UPLOAD COMPLETE ==========');
-                  console.log('[LESSON_CREATE] Result:', result);
-                  console.log('[LESSON_CREATE] Media ID:', result.mediaId);
-                  console.log('[LESSON_CREATE] URL:', result.url);
+                  
+                  
+                  
+                  
                 }
                 
                 // ✅ Use uploadedVideoUrl if available, otherwise use manual videoUrl input
@@ -1948,9 +1948,9 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                   return;
                 }
                 
-                console.log('Creating lesson with payload:', lessonPayload);
+                
                 const created = await createLesson(selectedModuleId, lessonPayload, user.id);
-                console.log('Lesson created successfully:', created.id);
+                
                 
                 setShowAddLesson(false);
                 await loadLessons(selectedCourse.id, selectedModuleId || undefined);
@@ -1974,7 +1974,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                   onChange={(e) => {
                     const newType = e.target.value as ApiLessonType;
                     setSelectedLessonType(newType);
-                    console.log('[LESSON_MODAL] Type changed to:', newType);
+                    
                   }}
                 >
                   <option value="VIDEO">Video</option>
@@ -2192,9 +2192,9 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                   description: '', 
                   passScore
                 };
-                console.log('Creating quiz for module:', selectedModuleId, 'with payload:', quizPayload);
+                
                 const createdQuiz = await createQuiz(selectedModuleId, quizPayload, user.id);
-                console.log('Quiz created successfully:', createdQuiz.id);
+                
                 setShowAddQuiz(false);
                 await loadLessons(selectedCourse.id, selectedModuleId || undefined);
                 await loadQuizzes(selectedModuleId);
@@ -2866,7 +2866,7 @@ const CourseModal: React.FC<{
 
   const handleFileUpload = async (file: File) => {
     try {
-      console.log('Selecting thumbnail file:', file.name);
+      
       setThumbPreview(URL.createObjectURL(file));
       setSelectedThumbnailFile(file);
       return file;
@@ -2880,7 +2880,7 @@ const CourseModal: React.FC<{
     e.preventDefault();
     if (formData.title.trim()) {
       const submitData = { ...formData, ...(price !== '' ? { price: Number(price), currency: currency || 'VND' } : { currency }) };
-      console.log('Submitting course data:', submitData);
+      
       onSubmit(submitData, selectedThumbnailFile || undefined);
     }
   };

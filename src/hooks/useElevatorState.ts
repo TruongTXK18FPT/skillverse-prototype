@@ -29,23 +29,23 @@ export const useElevatorState = (): UseElevatorStateReturn => {
   // 2. Show ACCESS GRANTED flashing 2 times
   // 3. Swipe up entire layout
   const triggerLoginSuccess = useCallback(async (name?: string): Promise<void> => {
-    console.log('[Elevator] triggerLoginSuccess called with name:', name);
+    
 
     if (name) {
       setUserName(name);
     }
 
     // Phase 1: Show ACCESS GRANTED with flash effect (1.5s)
-    console.log('[Elevator] Setting state to accessGranted');
+    
     setState('accessGranted');
     await new Promise(resolve => setTimeout(resolve, 1500));
 
     // Phase 2: Trigger exit animation (swipe up)
-    console.log('[Elevator] Setting state to exiting');
+    
     setState('exiting');
     await new Promise(resolve => setTimeout(resolve, 800));
 
-    console.log('[Elevator] Animation complete');
+    
   }, []);
 
   return {

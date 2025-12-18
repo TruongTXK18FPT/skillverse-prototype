@@ -22,9 +22,9 @@ class JobService {
    */
   async createJob(data: CreateJobRequest): Promise<JobPostingResponse> {
     try {
-      console.log('Creating job:', data.title);
+      
       const response = await axiosInstance.post<JobPostingResponse>('/api/jobs', data);
-      console.log('Job created successfully:', response.data.id);
+      
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -40,9 +40,9 @@ class JobService {
    */
   async updateJob(jobId: number, data: UpdateJobRequest): Promise<JobPostingResponse> {
     try {
-      console.log('Updating job:', jobId);
+      
       const response = await axiosInstance.put<JobPostingResponse>(`/api/jobs/${jobId}`, data);
-      console.log('Job updated successfully');
+      
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -58,13 +58,13 @@ class JobService {
    */
   async changeJobStatus(jobId: number, status: JobStatus): Promise<JobPostingResponse> {
     try {
-      console.log(`Changing job ${jobId} status to ${status}`);
+      
       const response = await axiosInstance.patch<JobPostingResponse>(
         `/api/jobs/${jobId}/status`,
         null,
         { params: { status } }
       );
-      console.log('Job status changed successfully');
+      
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -80,9 +80,9 @@ class JobService {
    */
   async deleteJob(jobId: number): Promise<void> {
     try {
-      console.log('Deleting job:', jobId);
+      
       await axiosInstance.delete(`/api/jobs/${jobId}`);
-      console.log('Job deleted successfully');
+      
     } catch (error) {
       const axiosError = error as AxiosError;
       const errorMessage = axiosError.response?.data?.message || 'Failed to delete job';
@@ -97,9 +97,9 @@ class JobService {
    */
   async reopenJob(jobId: number): Promise<JobPostingResponse> {
     try {
-      console.log('Reopening job:', jobId);
+      
       const response = await axiosInstance.post<JobPostingResponse>(`/api/jobs/${jobId}/reopen`);
-      console.log('Job reopened successfully, all applications deleted');
+      
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -115,9 +115,9 @@ class JobService {
    */
   async getMyJobs(): Promise<JobPostingResponse[]> {
     try {
-      console.log('Fetching my jobs');
+      
       const response = await axiosInstance.get<JobPostingResponse[]>('/api/jobs/my-jobs');
-      console.log(`Fetched ${response.data.length} jobs`);
+      
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -142,7 +142,7 @@ class JobService {
     status?: string;
   }): Promise<JobPostingResponse[]> {
     try {
-      console.log('Fetching public jobs with filters:', filters);
+      
       
       // Build query params from filters
       const params = new URLSearchParams();
@@ -157,7 +157,7 @@ class JobService {
       const url = `/api/jobs/public${queryString ? `?${queryString}` : ''}`;
       
       const response = await axiosInstance.get<JobPostingResponse[]>(url);
-      console.log(`Fetched ${response.data.length} public jobs`);
+      
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -173,7 +173,7 @@ class JobService {
    */
   async getJobDetails(jobId: number): Promise<JobPostingResponse> {
     try {
-      console.log('Fetching job details:', jobId);
+      
       const response = await axiosInstance.get<JobPostingResponse>(`/api/jobs/${jobId}`);
       return response.data;
     } catch (error) {
@@ -192,12 +192,12 @@ class JobService {
    */
   async applyToJob(jobId: number, data: ApplyJobRequest): Promise<JobApplicationResponse> {
     try {
-      console.log('Applying to job:', jobId);
+      
       const response = await axiosInstance.post<JobApplicationResponse>(
         `/api/jobs/${jobId}/apply`,
         data
       );
-      console.log('Application submitted successfully');
+      
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -213,9 +213,9 @@ class JobService {
    */
   async getMyApplications(): Promise<JobApplicationResponse[]> {
     try {
-      console.log('Fetching my applications');
+      
       const response = await axiosInstance.get<JobApplicationResponse[]>('/api/jobs/my-applications');
-      console.log(`Fetched ${response.data.length} applications`);
+      
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -233,11 +233,11 @@ class JobService {
    */
   async getJobApplicants(jobId: number): Promise<JobApplicationResponse[]> {
     try {
-      console.log('Fetching applicants for job:', jobId);
+      
       const response = await axiosInstance.get<JobApplicationResponse[]>(
         `/api/jobs/${jobId}/applicants`
       );
-      console.log(`Fetched ${response.data.length} applicants`);
+      
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -257,12 +257,12 @@ class JobService {
     data: UpdateApplicationStatusRequest
   ): Promise<JobApplicationResponse> {
     try {
-      console.log(`Updating application ${applicationId} status to ${data.status}`);
+      
       const response = await axiosInstance.patch<JobApplicationResponse>(
         `/api/jobs/applications/${applicationId}/status`,
         data
       );
-      console.log('Application status updated, email notification sent');
+      
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;

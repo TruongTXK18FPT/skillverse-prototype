@@ -31,7 +31,7 @@ export const uploadVideo = async (
   userId: number,
   onProgress?: (progress: UploadProgress) => void
 ): Promise<UploadResponse> => {
-  console.log('[UPLOAD_VIDEO] Starting:', file.name, formatFileSize(file.size));
+  );
   
   const formData = new FormData();
   formData.append('file', file);
@@ -53,14 +53,14 @@ export const uploadVideo = async (
               total: progressEvent.total,
               percentage
             });
-            console.log(`[UPLOAD_VIDEO] Progress: ${percentage}%`);
+            
           }
         },
         timeout: 300000 // 5 minutes for large videos
       }
     );
     
-    console.log('[UPLOAD_VIDEO] Success:', response.data.mediaId);
+    
     return response.data;
   } catch (error: any) {
     console.error('[UPLOAD_VIDEO] Error:', error.response?.data || error.message);
@@ -77,7 +77,7 @@ export const uploadDocument = async (
   userId: number,
   onProgress?: (progress: UploadProgress) => void
 ): Promise<UploadResponse> => {
-  console.log('[UPLOAD_DOCUMENT] Starting:', file.name, formatFileSize(file.size));
+  );
   
   const formData = new FormData();
   formData.append('file', file);
@@ -99,13 +99,13 @@ export const uploadDocument = async (
               total: progressEvent.total,
               percentage
             });
-            console.log(`[UPLOAD_DOCUMENT] Progress: ${percentage}%`);
+            
           }
         }
       }
     );
     
-    console.log('[UPLOAD_DOCUMENT] Success:', response.data.mediaId);
+    
     return response.data;
   } catch (error: any) {
     console.error('[UPLOAD_DOCUMENT] Error:', error.response?.data || error.message);
@@ -129,7 +129,7 @@ export const validateVideo = (file: File): { valid: boolean; error?: string } =>
   const MAX_SIZE = 300 * 1024 * 1024; // 300MB (Cloudinary Plus)
   const ALLOWED_TYPES = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo'];
   
-  console.log('[VALIDATE_VIDEO]', file.name, file.type, formatFileSize(file.size));
+  );
   
   if (file.size > MAX_SIZE) {
     return {
@@ -145,7 +145,7 @@ export const validateVideo = (file: File): { valid: boolean; error?: string } =>
     };
   }
   
-  console.log('[VALIDATE_VIDEO] Valid');
+  
   return { valid: true };
 };
 
@@ -160,7 +160,7 @@ export const validateDocument = (file: File): { valid: boolean; error?: string }
     'application/vnd.openxmlformats-officedocument.presentationml.presentation'
   ];
   
-  console.log('[VALIDATE_DOCUMENT]', file.name, file.type, formatFileSize(file.size));
+  );
   
   if (file.size > MAX_SIZE) {
     return {
@@ -176,7 +176,7 @@ export const validateDocument = (file: File): { valid: boolean; error?: string }
     };
   }
   
-  console.log('[VALIDATE_DOCUMENT] Valid');
+  
   return { valid: true };
 };
 
@@ -201,7 +201,7 @@ export const uploadImage = async (
   actorId?: number,
   onProgress?: (progress: UploadProgress) => void
 ): Promise<ImageUploadResponse> => {
-  console.log('[UPLOAD_IMAGE] Starting:', file.name, formatFileSize(file.size));
+  );
   
   const formData = new FormData();
   formData.append('file', file);
@@ -225,14 +225,14 @@ export const uploadImage = async (
               total: progressEvent.total,
               percentage
             });
-            console.log(`[UPLOAD_IMAGE] Progress: ${percentage}%`);
+            
           }
         },
         timeout: 60000 // 1 minute
       }
     );
     
-    console.log('[UPLOAD_IMAGE] Success:', response.data.url);
+    
     return response.data;
   } catch (error: any) {
     console.error('[UPLOAD_IMAGE] Error:', error.response?.data || error.message);
@@ -247,7 +247,7 @@ export const validateImage = (file: File): { valid: boolean; error?: string } =>
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
   const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
   
-  console.log('[VALIDATE_IMAGE]', file.name, file.type, formatFileSize(file.size));
+  );
   
   if (file.size > MAX_SIZE) {
     return {
@@ -263,6 +263,6 @@ export const validateImage = (file: File): { valid: boolean; error?: string } =>
     };
   }
   
-  console.log('[VALIDATE_IMAGE] Valid');
+  
   return { valid: true };
 };

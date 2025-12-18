@@ -41,3 +41,6 @@ serena.config*
 .github/prompts/
 .shared/
 
+# Diagrams
+diagram/
+

@@ -77,7 +77,7 @@ const PaymentsTab: React.FC = () => {
   };
 
   const handleAction = (transactionId: string, action: string) => {
-    console.log(`${action} transaction ${transactionId}`);
+    
   };
 
   return (

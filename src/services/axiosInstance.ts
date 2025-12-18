@@ -314,12 +314,6 @@ axiosInstance.interceptors.response.use(
       
       if (!refreshToken) {
         console.warn('❌ No refresh token available, clearing tokens');
-        console.log('🔍 Debug info:', {
-          hasAccessToken: !!localStorage.getItem('accessToken'),
-          hasRefreshToken: !!localStorage.getItem('refreshToken'),
-          hasUser: !!localStorage.getItem('user'),
-          currentPath: window.location.pathname
-        });
         isRefreshing = false;
         processQueue(new Error('No refresh token'), null);
         clearAuthTokens();
@@ -343,7 +337,7 @@ axiosInstance.interceptors.response.use(
       
       try {
         // ✅ CALL REFRESH ENDPOINT: Get new tokens
-        console.log('🔄 Access token expired, refreshing...');
+        
         const response = await axios.post(`${baseURL}/auth/refresh`, {
           refreshToken
         });
@@ -357,7 +351,7 @@ axiosInstance.interceptors.response.use(
         // ✅ FIX: Only update user data if it exists in response
         if (newUser) {
           localStorage.setItem('user', JSON.stringify(newUser));
-          console.log('✅ User data updated from refresh response');
+          
         } else {
           console.warn('⚠️ No user data in refresh response, keeping existing user data');
         }
@@ -367,7 +361,7 @@ axiosInstance.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         }
         
-        console.log('✅ Token refreshed successfully, retrying request');
+        
         isRefreshing = false;
         processQueue(null, newAccessToken);
         
@@ -406,7 +400,7 @@ export const clearAuthTokens = (): void => {
   localStorage.removeItem('refreshToken');
   localStorage.removeItem('user');
   window.dispatchEvent(new Event(AUTH_LOGOUT_EVENT));
-  console.log('Authentication tokens cleared and logout event dispatched');
+  
 };
 
 export default axiosInstance;

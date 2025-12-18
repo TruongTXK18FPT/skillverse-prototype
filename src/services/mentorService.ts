@@ -14,7 +14,7 @@ class MentorService {
   // Register a new mentor
   async register(mentorData: MentorRegistrationRequest, files?: { cv?: File; certifications?: File[] }): Promise<MentorRegistrationResponse> {
     try {
-      console.log('Attempting mentor registration for:', mentorData.email);
+      
       
       // Create FormData for multipart request
       const formData = new FormData();
@@ -55,7 +55,7 @@ class MentorService {
         }
       );
       
-      console.log('Mentor registration successful:', response.data);
+      
       
       // Ensure the response has the required fields
       if (!('requiresVerification' in response.data)) {

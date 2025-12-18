@@ -80,7 +80,7 @@ const TacticalDossierPortfolio = () => {
 
       if (slug) {
         // Public View
-        console.log('🔍 Loading public portfolio for slug:', slug);
+        
         const profileData = await portfolioService.getProfileBySlug(slug);
         setProfile(profileData);
         setHasExtendedProfile(true);

@@ -128,11 +128,11 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('[BusinessForm] Submit started');
+    
 
     const validationError = validateForm();
     if (validationError) {
-      console.log('[BusinessForm] Validation error:', validationError);
+      
       setError(validationError);
       return;
     }
@@ -154,16 +154,16 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
       companyDocuments: companyDocuments.length > 0 ? companyDocuments : undefined
     };
 
-    console.log('[BusinessForm] Calling onSubmit with data:', submitData);
+    
     const result = await onSubmit(submitData);
-    console.log('[BusinessForm] onSubmit result:', result);
+    
 
     if (result.success) {
-      console.log('[BusinessForm] Success! Triggering login animation');
+      
       await triggerLoginSuccess(result.companyName || formData.companyName);
-      console.log('[BusinessForm] Animation complete');
+      
     } else if (result.error) {
-      console.log('[BusinessForm] Error:', result.error);
+      
       setError(result.error);
     }
   };

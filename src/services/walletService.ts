@@ -50,9 +50,9 @@ class WalletService {
    */
   async createDeposit(request: DepositRequest): Promise<CreatePaymentResponse> {
     try {
-      console.log('💰 Creating deposit request:', request);
+      
       const response = await axiosInstance.post<CreatePaymentResponse>('/wallet/deposit', request);
-      console.log('✅ Deposit request created:', response.data);
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Create deposit error:', error);
@@ -75,14 +75,14 @@ class WalletService {
     newCashBalance: number;
   }> {
     try {
-      console.log('🪙 Purchasing coins with cash:', request);
+      
       // Ensure paymentMethod is set to WALLET_CASH
       const payload = {
         ...request,
         paymentMethod: 'WALLET_CASH'
       };
       const response = await axiosInstance.post('/wallet/coins/purchase-with-cash', payload);
-      console.log('✅ Coins purchased successfully:', response.data);
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Purchase coins error:', error);
@@ -97,14 +97,14 @@ class WalletService {
    */
   async purchaseCoinsWithPayOS(request: PurchaseCoinsRequest): Promise<CreatePaymentResponse> {
     try {
-      console.log('🪙 Creating PayOS coin purchase:', request);
+      
       // Ensure paymentMethod is set to PAYOS
       const payload = {
         ...request,
         paymentMethod: 'PAYOS'
       };
       const response = await axiosInstance.post<CreatePaymentResponse>('/wallet/coins/purchase-with-payos', payload);
-      console.log('✅ PayOS payment created:', response.data);
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Purchase coins with PayOS error:', error);
@@ -119,9 +119,9 @@ class WalletService {
    */
   async getCoinPackages(): Promise<CoinPackage[]> {
     try {
-      console.log('📦 Fetching coin packages...');
+      
       const response = await axiosInstance.get<CoinPackage[]>('/wallet/coins/packages');
-      console.log('✅ Coin packages loaded:', response.data.length, 'packages');
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Get coin packages error:', error);
@@ -165,11 +165,11 @@ class WalletService {
     size: number;
   }> {
     try {
-      console.log(`📜 Fetching transactions (page ${page}, size ${size})...`);
+      ...`);
       const response = await axiosInstance.get('/wallet/transactions', {
         params: { page, size }
       });
-      console.log('✅ Transactions loaded:', response.data.content.length, 'items');
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Get transactions error:', error);
@@ -201,9 +201,9 @@ class WalletService {
    */
   async createWithdrawalRequest(request: WithdrawalRequest): Promise<WithdrawalRequestResponse> {
     try {
-      console.log('💸 Creating withdrawal request:', { ...request, transactionPin: '***' });
+      
       const response = await axiosInstance.post<WithdrawalRequestResponse>('/wallet/withdraw/request', request);
-      console.log('✅ Withdrawal request created:', response.data);
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Create withdrawal error:', error);
@@ -224,11 +224,11 @@ class WalletService {
     size: number;
   }> {
     try {
-      console.log(`💸 Fetching withdrawal requests (page ${page}, size ${size})...`);
+      ...`);
       const response = await axiosInstance.get('/wallet/withdraw/my-requests', {
         params: { page, size }
       });
-      console.log('✅ Withdrawal requests loaded:', response.data.content.length, 'items');
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Get withdrawal requests error:', error);
@@ -258,11 +258,11 @@ class WalletService {
    */
   async cancelWithdrawalRequest(id: number, reason?: string): Promise<WithdrawalRequestResponse> {
     try {
-      console.log(`🚫 Cancelling withdrawal request ${id}:`, reason);
+      
       const response = await axiosInstance.put<WithdrawalRequestResponse>(`/wallet/withdraw/${id}/cancel`, {
         reason
       });
-      console.log('✅ Withdrawal request cancelled:', response.data);
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Cancel withdrawal error:', error);
@@ -279,11 +279,11 @@ class WalletService {
    */
   async downloadTransactionInvoice(transactionId: number): Promise<Blob> {
     try {
-      console.log('📄 Downloading invoice for transaction:', transactionId);
+      
       const response = await axiosInstance.get(`/wallet/transactions/${transactionId}/invoice`, {
         responseType: 'blob'
       });
-      console.log('✅ Invoice downloaded successfully');
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Download invoice error:', error);
@@ -314,9 +314,9 @@ class WalletService {
       if (type && type !== 'ALL') {
         params.type = type;
       }
-      console.log('🔍 [Admin] Fetching wallet transactions with params:', params);
+      
       const response = await axiosInstance.get('/admin/wallet/transactions', { params });
-      console.log('✅ [Admin] Wallet transactions loaded:', response.data.content?.length || 0, 'items');
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ [Admin] Get wallet transactions error:', error);
@@ -345,9 +345,9 @@ class WalletService {
       if (status && status !== 'ALL') {
         params.status = status;
       }
-      console.log('🔍 [Admin] Fetching withdrawal requests with params:', params);
+      
       const response = await axiosInstance.get('/admin/wallet/withdrawals', { params });
-      console.log('✅ [Admin] Withdrawal requests loaded:', response.data.content?.length || 0, 'items');
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ [Admin] Get withdrawal requests error:', error);
@@ -362,9 +362,9 @@ class WalletService {
    */
   async adminGetWithdrawalDetail(id: number): Promise<WithdrawalRequestResponse> {
     try {
-      console.log(`🔍 [Admin] Fetching withdrawal detail: ${id}`);
+      
       const response = await axiosInstance.get<WithdrawalRequestResponse>(`/admin/wallet/withdrawals/${id}`);
-      console.log('✅ [Admin] Withdrawal detail loaded:', response.data.requestCode);
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ [Admin] Get withdrawal detail error:', error);
@@ -379,12 +379,12 @@ class WalletService {
    */
   async adminApproveWithdrawal(id: number, adminNotes?: string): Promise<WithdrawalRequestResponse> {
     try {
-      console.log(`✅ [Admin] Approving withdrawal: ${id}`);
+      
       const response = await axiosInstance.put<WithdrawalRequestResponse>(
         `/admin/wallet/withdrawals/${id}/approve`,
         { adminNotes }
       );
-      console.log('✅ [Admin] Withdrawal approved:', response.data.requestCode);
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ [Admin] Approve withdrawal error:', error);
@@ -399,12 +399,12 @@ class WalletService {
    */
   async adminRejectWithdrawal(id: number, adminNotes: string): Promise<WithdrawalRequestResponse> {
     try {
-      console.log(`❌ [Admin] Rejecting withdrawal: ${id}`);
+      
       const response = await axiosInstance.put<WithdrawalRequestResponse>(
         `/admin/wallet/withdrawals/${id}/reject`,
         { adminNotes }
       );
-      console.log('✅ [Admin] Withdrawal rejected:', response.data.requestCode);
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ [Admin] Reject withdrawal error:', error);
@@ -419,12 +419,12 @@ class WalletService {
    */
   async adminCompleteWithdrawal(id: number, adminNotes?: string): Promise<WithdrawalRequestResponse> {
     try {
-      console.log(`✅ [Admin] Completing withdrawal: ${id}`);
+      
       const response = await axiosInstance.put<WithdrawalRequestResponse>(
         `/admin/wallet/withdrawals/${id}/complete`,
         { adminNotes }
       );
-      console.log('✅ [Admin] Withdrawal completed:', response.data.requestCode);
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ [Admin] Complete withdrawal error:', error);
@@ -441,9 +441,9 @@ class WalletService {
    */
   async setTransactionPin(request: SetTransactionPinRequest): Promise<{ message: string }> {
     try {
-      console.log('🔒 Setting transaction PIN...');
+      
       const response = await axiosInstance.put('/wallet/pin', request);
-      console.log('✅ Transaction PIN set successfully');
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Set PIN error:', error);
@@ -458,9 +458,9 @@ class WalletService {
    */
   async updateBankAccount(request: UpdateBankAccountRequest): Promise<{ message: string }> {
     try {
-      console.log('🏦 Updating bank account...');
+      
       const response = await axiosInstance.put('/wallet/bank-account', request);
-      console.log('✅ Bank account updated successfully');
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Update bank account error:', error);
@@ -475,9 +475,9 @@ class WalletService {
    */
   async toggle2FA(enabled: boolean): Promise<{ message: string; enabled: boolean }> {
     try {
-      console.log(`🔐 ${enabled ? 'Enabling' : 'Disabling'} 2FA...`);
+      
       const response = await axiosInstance.put('/wallet/2fa', { enabled });
-      console.log(`✅ 2FA ${enabled ? 'enabled' : 'disabled'} successfully`);
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Toggle 2FA error:', error);
@@ -494,9 +494,9 @@ class WalletService {
    */
   async getStatistics(): Promise<WalletStatistics> {
     try {
-      console.log('📊 Fetching wallet statistics...');
+      
       const response = await axiosInstance.get<WalletStatistics>('/wallet/statistics');
-      console.log('✅ Statistics loaded:', response.data);
+      
       return response.data;
     } catch (error: unknown) {
       console.error('❌ Get statistics error:', error);

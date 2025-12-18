@@ -156,15 +156,6 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
         return;
       }
 
-      console.log('📤 Submitting profile with files:', {
-        hasAvatar: !!avatar,
-        avatarSize: avatar ? `${(avatar.size / 1024 / 1024).toFixed(2)}MB` : 'N/A',
-        hasVideo: !!video,
-        videoSize: video ? `${(video.size / 1024 / 1024).toFixed(2)}MB` : 'N/A',
-        hasCoverImage: !!coverImage,
-        coverImageSize: coverImage ? `${(coverImage.size / 1024 / 1024).toFixed(2)}MB` : 'N/A',
-      });
-
       // Convert skills and languages to JSON strings
       const profileData = {
         ...formData,
@@ -172,11 +163,11 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
         languagesSpoken: JSON.stringify(languages),
       };
 
-      console.log('📋 Profile data:', profileData);
+      
 
       await onSubmit(profileData, avatar, video, coverImage);
       
-      console.log('✅ Profile submitted successfully');
+      
       onClose();
     } catch (error) {
       console.error('❌ Error submitting profile:', error);

@@ -30,7 +30,7 @@ interface RoadmapSectionProps {
 
 const RoadmapSection = ({ roadmaps }: RoadmapSectionProps) => {
   const navigate = useNavigate();
-  console.log('RoadmapSection rendering with roadmaps:', roadmaps);
+  
   
   const handleViewAllRoadmaps = () => {
     navigate('/roadmap');

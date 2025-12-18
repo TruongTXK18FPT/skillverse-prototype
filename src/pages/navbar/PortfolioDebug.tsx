@@ -9,15 +9,15 @@ const PortfolioDebug = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('accessToken');
-      console.log('Token:', token ? `${token.substring(0, 20)}...` : 'MISSING');
+      }...` : 'MISSING');
       
-      console.log('Testing endpoint:', `/portfolio${endpoint}`);
+      
       const response = await axiosInstance({
         method,
         url: `/portfolio${endpoint}`,
       });
       
-      console.log('Response:', response);
+      
       
       setResult({
         success: true,

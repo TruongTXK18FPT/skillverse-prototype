@@ -9,7 +9,7 @@ export const clearAuthTokens = (): void => {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
   localStorage.removeItem('user');
-  console.log('🔴 All auth tokens cleared');
+  
 };
 
 /**

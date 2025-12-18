@@ -215,10 +215,8 @@ Cố lên nha! 💪✨ 🎓`
 
       // Log reminders and notifications if available (for future use)
       if (data.reminders && data.reminders.length > 0) {
-        console.log('Reminders:', data.reminders);
       }
       if (data.notifications && data.notifications.length > 0) {
-        console.log('Notifications:', data.notifications);
       }
 
     } catch (error) {

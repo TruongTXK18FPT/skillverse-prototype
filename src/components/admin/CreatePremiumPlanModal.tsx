@@ -41,8 +41,6 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
   // Load editing plan data
   useEffect(() => {
     if (editingPlan) {
-      console.log('📝 Loading editing plan:', editingPlan);
-      console.log('📊 Feature Limits from API:', editingPlan.featureLimits);
       
       setFormData({
         name: editingPlan.name,
@@ -68,7 +66,6 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
           description: fl.description || '',
           isActive: fl.isActive,
         }));
-        console.log('✅ Mapped feature limits:', mappedLimits);
         setFeatureLimits(mappedLimits);
       } else {
         console.warn('⚠️ No feature limits found in editingPlan');
@@ -151,7 +148,6 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
   const validateForm = (): string | null => {
     // For FREE_TIER editing, skip core field validation (only limits can be edited)
     if (isFreeTier && isEditMode) {
-      console.log('✅ Skipping core field validation for FREE_TIER edit');
       return null;
     }
 
@@ -233,9 +229,9 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
           featureLimits: featureLimits.length > 0 ? featureLimits : undefined,
         };
         
-        console.log('🚀 Submitting update for plan:', editingPlan.id, isFreeTier ? '(FREE_TIER)' : '');
-        console.log('📊 Feature Limits being sent:', updateData.featureLimits);
-        console.log('📦 Full update data:', updateData);
+        ' : '');
+        
+        
         
         await adminPremiumService.updatePlan(editingPlan.id, updateData);
         alert('✅ Cập nhật gói premium thành công!');

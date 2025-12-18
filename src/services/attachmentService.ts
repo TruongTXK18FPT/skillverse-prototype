@@ -46,7 +46,7 @@ export const addAttachment = async (
   request: AddAttachmentRequest,
   actorId: number
 ): Promise<LessonAttachmentDTO> => {
-  console.log('[ATTACHMENT_ADD] Starting:', lessonId, request.title);
+  
   
   try {
     const response = await axiosInstance.post<LessonAttachmentDTO>(
@@ -57,7 +57,7 @@ export const addAttachment = async (
       }
     );
     
-    console.log('[ATTACHMENT_ADD] Success:', response.data.id);
+    
     return response.data;
   } catch (error: any) {
     console.error('[ATTACHMENT_ADD] Error:', error.response?.data || error.message);
@@ -71,14 +71,14 @@ export const addAttachment = async (
 export const listAttachments = async (
   lessonId: number
 ): Promise<LessonAttachmentDTO[]> => {
-  console.log('[ATTACHMENT_LIST] Fetching for lessonId:', lessonId);
+  
   
   try {
     const response = await axiosInstance.get<LessonAttachmentDTO[]>(
       `/lessons/${lessonId}/attachments`
     );
     
-    console.log('[ATTACHMENT_LIST] Found:', response.data.length, 'attachments');
+    
     return response.data;
   } catch (error: any) {
     console.error('[ATTACHMENT_LIST] Error:', error.response?.data || error.message);
@@ -94,7 +94,7 @@ export const deleteAttachment = async (
   attachmentId: number,
   actorId: number
 ): Promise<void> => {
-  console.log('[ATTACHMENT_DELETE] Starting:', attachmentId);
+  
   
   try {
     await axiosInstance.delete(
@@ -104,7 +104,7 @@ export const deleteAttachment = async (
       }
     );
     
-    console.log('[ATTACHMENT_DELETE] Success');
+    
   } catch (error: any) {
     console.error('[ATTACHMENT_DELETE] Error:', error.response?.data || error.message);
     throw error;
@@ -119,7 +119,7 @@ export const reorderAttachments = async (
   attachmentIds: number[],
   actorId: number
 ): Promise<void> => {
-  console.log('[ATTACHMENT_REORDER] Starting:', attachmentIds);
+  
   
   try {
     await axiosInstance.put(
@@ -130,7 +130,7 @@ export const reorderAttachments = async (
       }
     );
     
-    console.log('[ATTACHMENT_REORDER] Success');
+    
   } catch (error: any) {
     console.error('[ATTACHMENT_REORDER] Error:', error.response?.data || error.message);
     throw error;

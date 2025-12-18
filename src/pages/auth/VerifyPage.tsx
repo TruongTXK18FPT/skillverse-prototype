@@ -178,7 +178,7 @@ const VerifyPage = () => {
     setLoading(true);
 
     try {
-      // console.log('Verifying OTP:', { email, otp: otpString, mode });
+      // 
       
       // For forgot-password mode, skip API verification here
       // OTP will be verified when resetting password
@@ -276,7 +276,7 @@ const VerifyPage = () => {
     setResendLoading(true);
 
     try {
-      // console.log('Resending OTP to:', email);
+      // 
       
       const response = await resendOtp({ email });
       

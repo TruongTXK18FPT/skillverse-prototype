@@ -86,7 +86,7 @@ const MeowlActor: React.FC<MeowlActorProps> = ({ action, style }) => {
       audioRef.current.currentTime = 0;
     }
     audioRef.current = new Audio(src);
-    audioRef.current.play().catch(e => console.log("Audio play failed", e));
+    audioRef.current.play().catch(e => );
   };
 
   const col = frameIndex % config.cols;

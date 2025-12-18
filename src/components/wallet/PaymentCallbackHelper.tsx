@@ -50,7 +50,7 @@ const PaymentCallbackHelper: React.FC<PaymentCallbackHelperProps> = ({
         `/api/payments/test/trigger-callback/${internalReference}?status=PAID`
       );
 
-      console.log('Callback response:', response.data);
+      
       setSuccess(true);
       
       // Wait a bit then refresh and close
