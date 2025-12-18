@@ -67,7 +67,10 @@ const aiRoadmapService = {
       lastRequestKey = requestKey;
       ongoingGenerateRequest = axiosInstance.post<RoadmapResponse>(
         '/api/v1/ai/roadmap/generate',
-        request
+        request,
+        {
+          timeout: 3600000 // 1 hour timeout
+        }
       ).then(response => response.data);
       
       const result = await ongoingGenerateRequest;

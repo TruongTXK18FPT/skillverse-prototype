@@ -219,7 +219,7 @@ export const createProject = async (
     headers: {
       'Content-Type': 'multipart/form-data',
     },
-    timeout: 60000, // 1 minute
+    timeout: 300000, // 5 minutes timeout (for large image uploads)
   });
   
   if (!response.data.success || !response.data.data) {
@@ -256,7 +256,7 @@ export const updateProject = async (
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      timeout: 60000, // 1 minute
+      timeout: 300000, // 5 minutes timeout
     }
   );
   
@@ -316,7 +316,7 @@ export const createCertificate = async (
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      timeout: 60000, // 1 minute
+      timeout: 300000, // 5 minutes timeout
     }
   );
   
