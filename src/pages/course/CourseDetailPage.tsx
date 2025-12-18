@@ -56,8 +56,8 @@ const CourseDetailPage: React.FC = () => {
         try {
           const profile = await getMentorProfile(courseData.author.id);
           setMentorProfile(profile);
-        } catch {
-          
+        } catch (error) {
+          console.error('Error loading mentor profile:', error);
         }
       }
 
@@ -69,7 +69,7 @@ const CourseDetailPage: React.FC = () => {
             const moduleQuizzes = await listQuizzesByModule(module.id);
             allQuizzes.push(...moduleQuizzes);
           } catch (error) {
-            
+            console.error('Error loading quizzes for module:', error);
           }
         }
         setQuizzes(allQuizzes);

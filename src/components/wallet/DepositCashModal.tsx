@@ -17,13 +17,6 @@ const DepositCashModal: React.FC<DepositCashModalProps> = ({ isOpen, onClose }) 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Debug: Log when modal opens
-  React.useEffect(() => {
-    if (isOpen) {
-      
-    }
-  }, [isOpen]);
-
   const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
     setCustomAmount(value);

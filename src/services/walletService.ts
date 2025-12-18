@@ -165,7 +165,7 @@ class WalletService {
     size: number;
   }> {
     try {
-      ...`);
+      console.log('Fetching transactions...');
       const response = await axiosInstance.get('/wallet/transactions', {
         params: { page, size }
       });
@@ -224,7 +224,7 @@ class WalletService {
     size: number;
   }> {
     try {
-      ...`);
+      console.log('Fetching withdrawal requests...');
       const response = await axiosInstance.get('/wallet/withdraw/my-requests', {
         params: { page, size }
       });

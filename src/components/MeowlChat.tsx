@@ -215,8 +215,10 @@ Cố lên nha! 💪✨ 🎓`
 
       // Log reminders and notifications if available (for future use)
       if (data.reminders && data.reminders.length > 0) {
+        // TODO: Implement reminders
       }
       if (data.notifications && data.notifications.length > 0) {
+        // TODO: Implement notifications
       }
 
     } catch (error) {

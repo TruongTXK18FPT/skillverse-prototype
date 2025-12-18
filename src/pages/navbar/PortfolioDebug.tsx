@@ -9,7 +9,7 @@ const PortfolioDebug = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('accessToken');
-      }...` : 'MISSING');
+      console.log('Token:', token ? '...' : 'MISSING');
       
       
       const response = await axiosInstance({

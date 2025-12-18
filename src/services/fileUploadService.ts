@@ -31,7 +31,6 @@ export const uploadVideo = async (
   userId: number,
   onProgress?: (progress: UploadProgress) => void
 ): Promise<UploadResponse> => {
-  );
   
   const formData = new FormData();
   formData.append('file', file);
@@ -77,7 +76,6 @@ export const uploadDocument = async (
   userId: number,
   onProgress?: (progress: UploadProgress) => void
 ): Promise<UploadResponse> => {
-  );
   
   const formData = new FormData();
   formData.append('file', file);
@@ -129,8 +127,6 @@ export const validateVideo = (file: File): { valid: boolean; error?: string } =>
   const MAX_SIZE = 300 * 1024 * 1024; // 300MB (Cloudinary Plus)
   const ALLOWED_TYPES = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo'];
   
-  );
-  
   if (file.size > MAX_SIZE) {
     return {
       valid: false,
@@ -159,8 +155,6 @@ export const validateDocument = (file: File): { valid: boolean; error?: string }
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/vnd.openxmlformats-officedocument.presentationml.presentation'
   ];
-  
-  );
   
   if (file.size > MAX_SIZE) {
     return {
@@ -201,7 +195,6 @@ export const uploadImage = async (
   actorId?: number,
   onProgress?: (progress: UploadProgress) => void
 ): Promise<ImageUploadResponse> => {
-  );
   
   const formData = new FormData();
   formData.append('file', file);
@@ -246,8 +239,6 @@ export const uploadImage = async (
 export const validateImage = (file: File): { valid: boolean; error?: string } => {
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
   const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-  
-  );
   
   if (file.size > MAX_SIZE) {
     return {

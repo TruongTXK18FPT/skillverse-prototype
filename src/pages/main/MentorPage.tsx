@@ -612,7 +612,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
           const moduleQuizzes = await listQuizzesByModule(module.id);
           allQuizzes.push(...moduleQuizzes);
         } catch (error) {
-          
+          console.error('Error loading quizzes for module:', error);
         }
       }
       setAllCourseQuizzes(allQuizzes);

@@ -73,9 +73,6 @@ const PortfolioPage = () => {
       setLoading(true);
       setError(null);
       
-      
-       ? 'Present' : 'Missing');
-      
       // Check if has extended profile
       const checkResult = await portfolioService.checkExtendedProfile();
       
@@ -99,7 +96,7 @@ const PortfolioPage = () => {
         setReviews(reviewsData);
         setCvs(cvsData);
       } else {
-        
+        // No extended profile found
       }
     } catch (err: any) {
       console.error('❌ Error loading portfolio data:', err);

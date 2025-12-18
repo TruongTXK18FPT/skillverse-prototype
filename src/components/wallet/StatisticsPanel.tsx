@@ -74,11 +74,6 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
 
   const transactionFlowData = getLast7Days();
   
-  // Debug: Log first transaction to see structure
-  if (transactions.length > 0) {
-    
-  }
-  
   transactions.forEach(tx => {
     const txDate = new Date(tx.createdAt).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
     const dayData = transactionFlowData.find(d => d.date === txDate);

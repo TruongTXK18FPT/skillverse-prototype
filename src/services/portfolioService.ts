@@ -80,15 +80,15 @@ export const createExtendedProfile = async (
   
   // Add files if provided
   if (avatar) {
-    .toFixed(2)}MB)`);
+    console.log(`Uploading avatar (${(avatar.size / 1024 / 1024).toFixed(2)}MB)`);
     formData.append('avatar', avatar);
   }
   if (video) {
-    .toFixed(2)}MB)`);
+    console.log(`Uploading video (${(video.size / 1024 / 1024).toFixed(2)}MB)`);
     formData.append('video', video);
   }
   if (coverImage) {
-    .toFixed(2)}MB)`);
+    console.log(`Uploading coverImage (${(coverImage.size / 1024 / 1024).toFixed(2)}MB)`);
     formData.append('coverImage', coverImage);
   }
   
@@ -103,7 +103,7 @@ export const createExtendedProfile = async (
     onUploadProgress: (progressEvent) => {
       if (progressEvent.total) {
         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        .toFixed(2)}MB / ${(progressEvent.total / 1024 / 1024).toFixed(2)}MB)`);
+        console.log(`Upload progress: (${(progressEvent.loaded / 1024 / 1024).toFixed(2)}MB / ${(progressEvent.total / 1024 / 1024).toFixed(2)}MB)`);
       }
     }
   });
@@ -135,15 +135,15 @@ export const updateExtendedProfile = async (
   
   // Add files if provided
   if (avatar) {
-    .toFixed(2)}MB)`);
+    console.log(`Uploading avatar (${(avatar.size / 1024 / 1024).toFixed(2)}MB)`);
     formData.append('avatar', avatar);
   }
   if (video) {
-    .toFixed(2)}MB)`);
+    console.log(`Uploading video (${(video.size / 1024 / 1024).toFixed(2)}MB)`);
     formData.append('video', video);
   }
   if (coverImage) {
-    .toFixed(2)}MB)`);
+    console.log(`Uploading coverImage (${(coverImage.size / 1024 / 1024).toFixed(2)}MB)`);
     formData.append('coverImage', coverImage);
   }
   
@@ -158,7 +158,7 @@ export const updateExtendedProfile = async (
     onUploadProgress: (progressEvent) => {
       if (progressEvent.total) {
         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        .toFixed(2)}MB / ${(progressEvent.total / 1024 / 1024).toFixed(2)}MB)`);
+        console.log(`Upload progress: (${(progressEvent.loaded / 1024 / 1024).toFixed(2)}MB / ${(progressEvent.total / 1024 / 1024).toFixed(2)}MB)`);
       }
     }
   });
@@ -211,7 +211,7 @@ export const createProject = async (
   
   // Add thumbnail if provided
   if (thumbnail) {
-    .toFixed(2)}MB)`);
+    console.log(`Uploading thumbnail (${(thumbnail.size / 1024 / 1024).toFixed(2)}MB)`);
     formData.append('thumbnail', thumbnail);
   }
   
@@ -245,7 +245,7 @@ export const updateProject = async (
   
   // Add thumbnail if provided
   if (thumbnail) {
-    .toFixed(2)}MB)`);
+    console.log(`Uploading thumbnail (${(thumbnail.size / 1024 / 1024).toFixed(2)}MB)`);
     formData.append('thumbnail', thumbnail);
   }
   
@@ -305,7 +305,7 @@ export const createCertificate = async (
   
   // Add image if provided
   if (image) {
-    .toFixed(2)}MB)`);
+    console.log(`Uploading image (${(image.size / 1024 / 1024).toFixed(2)}MB)`);
     formData.append('image', image);
   }
   

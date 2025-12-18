@@ -229,10 +229,6 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
           featureLimits: featureLimits.length > 0 ? featureLimits : undefined,
         };
         
-        ' : '');
-        
-        
-        
         await adminPremiumService.updatePlan(editingPlan.id, updateData);
         alert('✅ Cập nhật gói premium thành công!');
       } else {
