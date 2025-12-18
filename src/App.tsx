@@ -55,6 +55,7 @@ import AdminPage from './pages/main/AdminPage';
 import AdminSecurityPage from './pages/admin/AdminSecurityPage';
 import AiRoadmapPage from './pages/roadmap/AiRoadmapPage';
 import RoadmapDetailPage from './pages/roadmap/RoadmapDetailPage';
+import StudyPlannerPage from './pages/study-planner/StudyPlannerPage';
 import './styles/App.css';
 import ScrollToTop from './components/scroll/ScrollToTop';
 import CourseDetailPage from './pages/navbar/CourseDetailPage';
@@ -113,6 +114,7 @@ const App = () => {
                     <Route path="/courses" element={<CoursesPage />} />
                     <Route path="/roadmap" element={<AiRoadmapPage />} />
                     <Route path="/roadmap/:id" element={<RoadmapDetailPage />} />
+                    <Route path="/study-planner" element={<StudyPlannerPage />} />
                     <Route path="/mentorship" element={<MentorshipPage />} />
                     <Route path="/community" element={<CommunityHUD />} />
                     <Route path="/community/:id" element={<PostDetailPage />} />

@@ -1,0 +1,1586 @@
+.study-plan-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: radial-gradient(circle at center, #1a1f35 0%, #0b0e17 100%);
+  color: #e0e6ed;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.study-plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+.study-plan-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #00f0ff;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.study-plan-controls {
+  display: flex;
+  gap: 1rem;
+}
+
+.study-plan-btn {
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid #00f0ff;
+  color: #00f0ff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.study-plan-btn:hover {
+  background: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+.study-plan-btn.active {
+  background: #00f0ff;
+  color: #0b0e17;
+}
+
+/* Calendar View */
+.study-plan-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.study-plan-calendar-header {
+  background: rgba(11, 14, 23, 0.8);
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+  color: #00f0ff;
+}
+
+.study-plan-calendar-day {
+  background: rgba(11, 14, 23, 0.6);
+  min-height: 120px;
+  padding: 0.5rem;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.study-plan-calendar-day:hover {
+  background: rgba(11, 14, 23, 0.4);
+}
+
+.study-plan-day-number {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 0.9rem;
+  color: rgba(224, 230, 237, 0.5);
+}
+
+.study-plan-event {
+  background: rgba(0, 240, 255, 0.15);
+  border-left: 3px solid #00f0ff;
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 0.25rem;
+  border-radius: 2px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.study-plan-event.completed {
+  border-left-color: #00ff9d;
+  background: rgba(0, 255, 157, 0.15);
+}
+
+.study-plan-event.skipped {
+  border-left-color: #ff4d4d;
+  background: rgba(255, 77, 77, 0.15);
+}
+
+/* Task Board View */
+.study-plan-board-container {
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.study-plan-board {
+  display: flex;
+  gap: 1.5rem;
+  min-width: min-content;
+}
+
+.study-plan-column {
+  flex: 0 0 300px;
+  background: rgba(11, 14, 23, 0.6);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: calc(100vh - 200px);
+}
+
+.study-plan-column-header {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #00f0ff;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.study-plan-column-count {
+  background: rgba(0, 240, 255, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.study-plan-column-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding-right: 0.5rem;
+}
+
+/* Scrollbar for column content */
+.study-plan-column-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.study-plan-column-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.study-plan-column-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.3);
+  border-radius: 2px;
+}
+
+.study-plan-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 1rem;
+  cursor: grab;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.study-plan-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 240, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.study-plan-card-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.study-plan-card-meta {
+  font-size: 0.8rem;
+  color: rgba(224, 230, 237, 0.6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.study-plan-text-danger {
+  color: #ff4d4d;
+}
+
+.study-plan-card-badges {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.study-plan-card-badge {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.study-plan-add-card-btn {
+  background: transparent;
+  border: 1px dashed rgba(0, 240, 255, 0.3);
+  color: rgba(0, 240, 255, 0.7);
+  padding: 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.study-plan-add-card-btn:hover {
+  background: rgba(0, 240, 255, 0.05);
+  border-color: #00f0ff;
+  color: #00f0ff;
+}
+
+/* Add Column Button */
+.study-plan-add-column-wrapper {
+  background: transparent;
+  border: none;
+  min-width: 300px;
+}
+
+.study-plan-add-column-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e6ed;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.study-plan-add-column-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(0, 240, 255, 0.3);
+}
+
+.study-plan-add-column-form {
+  background: #0b0e17;
+  border: 1px solid #00f0ff;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.study-plan-add-column-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.study-plan-btn.small {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+/* Modal Overlay */
+.study-plan-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.study-plan-modal {
+  background: #0b0e17;
+  border: 1px solid #00f0ff;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 600px;
+  position: relative;
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Task Detail Modal */
+.study-plan-task-detail-modal {
+  max-width: 700px;
+}
+
+.study-plan-task-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.study-plan-task-modal-title {
+  font-size: 1.5rem;
+  color: #00f0ff;
+  margin: 0;
+}
+
+.study-plan-task-modal-close {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s;
+}
+
+.study-plan-task-modal-close:hover {
+  color: #fff;
+}
+
+.study-plan-task-modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.study-plan-task-title-input {
+  font-size: 1.5rem;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.5rem 0;
+  border-radius: 0;
+}
+
+.study-plan-task-title-input:focus {
+  border-bottom-color: #00f0ff;
+  box-shadow: none;
+}
+
+.study-plan-task-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.study-plan-description-area {
+  min-height: 200px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.study-plan-markdown-hint {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.study-plan-task-modal-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.study-plan-modal-actions-right {
+  display: flex;
+  gap: 1rem;
+}
+
+.study-plan-delete-btn {
+  background: rgba(255, 77, 77, 0.1);
+  border-color: #ff4d4d;
+  color: #ff4d4d;
+}
+
+.study-plan-delete-btn:hover {
+  background: rgba(255, 77, 77, 0.2);
+  box-shadow: 0 0 15px rgba(255, 77, 77, 0.3);
+}
+
+.study-plan-modal-header {
+  font-size: 1.5rem;
+  color: #00f0ff;
+  margin-bottom: 1.5rem;
+}
+
+.study-plan-form-group {
+  margin-bottom: 1rem;
+}
+
+.study-plan-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #a0aec0;
+}
+
+.study-plan-input, .study-plan-textarea, select.study-plan-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.study-plan-input:focus, .study-plan-textarea:focus, select.study-plan-input:focus {
+  outline: none;
+  border-color: #00f0ff;
+}
+
+select.study-plan-input option {
+  background: #0b0e17;
+  color: #fff;
+  padding: 0.5rem;
+}
+
+.study-plan-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* Loading State */
+.study-plan-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  color: #00f0ff;
+  font-size: 1.2rem;
+}
+
+/* Alert Banner */
+.study-plan-alert {
+  background: rgba(255, 77, 77, 0.15);
+  border: 1px solid #ff4d4d;
+  color: #ff4d4d;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: pulse-alert 2s infinite;
+}
+
+@keyframes pulse-alert {
+  0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 77, 77, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+}
+
+/* AI Agent Modal */
+.study-plan-ai-agent-modal {
+  max-width: 600px;
+  width: 90%;
+  border: 1px solid #00f0ff;
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+}
+
+.study-plan-ai-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.study-plan-ai-instruction {
+  font-size: 1.1rem;
+  color: #a0aec0;
+  font-style: italic;
+}
+
+.study-plan-preview-list {
+  max-height: 400px;
+  overflow-y: auto;
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.study-plan-preview-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 3px solid #00f0ff;
+}
+
+.study-plan-preview-item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #e0e6ed;
+}
+
+.study-plan-preview-item-priority {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.study-plan-preview-item-desc {
+  font-size: 0.9rem;
+  color: #a0aec0;
+}
+
+/* Column Color Picker */
+.study-plan-column-color-picker {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.study-plan-color-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.2s;
+}
+
+.study-plan-color-swatch:hover {
+  transform: scale(1.2);
+  border-color: white;
+}
+
+/* Task Progress Bar */
+.study-plan-task-progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin: 0.5rem 0;
+  overflow: hidden;
+}
+
+.study-plan-task-progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.study-plan-task-sentiment {
+  margin-left: auto;
+}
+
+.study-plan-ai-btn {
+  margin-right: 1rem;
+  border-color: #00f0ff;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+.study-plan-view-toggle {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+
+.study-plan-month-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.study-plan-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 1.5rem;
+}
+
+
+.study-plan-task-progress-section {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.study-plan-satisfaction-options {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.study-plan-satisfaction-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #a0aec0;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.study-plan-satisfaction-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.study-plan-satisfaction-btn.active {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: #00f0ff;
+  color: #00f0ff;
+}
+
+.study-plan-range {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.study-plan-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #00f0ff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+
+.study-plan-column-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.study-plan-column-title {
+  font-weight: 600;
+}
+
+.study-plan-column-header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.study-plan-column-action-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 0.2rem;
+  transition: color 0.2s;
+}
+
+.study-plan-column-action-btn:hover {
+  color: #00f0ff;
+}
+
+.study-plan-text-accent {
+  color: #00f0ff;
+}
+
+.study-plan-modal-close-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s;
+}
+
+.study-plan-modal-close-btn:hover {
+  color: #fff;
+}
+
+.study-plan-modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.study-plan-ai-preview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.study-plan-preview-title {
+  font-size: 1.2rem;
+  color: #00f0ff;
+  margin-bottom: 0.5rem;
+}
+
+.study-plan-preview-item-title {
+  font-weight: 600;
+}
+
+
+.study-plan-preview-item-time {
+  font-size: 0.8rem;
+  color: #00f0ff;
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+
+.study-plan-task-modal-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+  height: 100%;
+  overflow: hidden;
+}
+
+.study-plan-task-modal-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.study-plan-task-modal-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+}
+
+.study-plan-task-meta-grid-compact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .study-plan-task-modal-grid-layout {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+  
+  .study-plan-task-modal-right {
+    height: auto;
+  }
+}
+
+
+.study-plan-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.study-plan-sentiment-icon {
+  opacity: 0.7;
+}
+.study-plan-sentiment-icon.satisfied { color: #00ff9d; }
+.study-plan-sentiment-icon.neutral { color: #ffaa00; }
+.study-plan-sentiment-icon.unsatisfied { color: #ff4d4d; }
+
+.study-plan-task-progress-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.study-plan-task-progress-text {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  min-width: 24px;
+}
+
+.study-plan-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.study-plan-card-date {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.study-plan-card-date.overdue {
+  color: #ff4d4d;
+}
+
+.study-plan-card-icon {
+  color: #00f0ff;
+  opacity: 0.7;
+}
+
+
+.study-plan-card-notes-preview {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.study-plan-card-icon-btn {
+  background: none;
+  border: none;
+  color: #00f0ff;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.study-plan-card-icon-btn:hover {
+  opacity: 1;
+}
+
+
+/* Weekly Calendar View */
+.study-plan-calendar-weekly {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.study-plan-calendar-time-column {
+  width: 60px;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.study-plan-calendar-time-slot {
+  height: 60px; /* 1 hour = 60px */
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  padding-top: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.study-plan-calendar-days-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+}
+
+.study-plan-calendar-header-row {
+  display: flex;
+  height: 60px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.study-plan-calendar-header-cell {
+  flex: 1;
+  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.study-plan-day-name {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+}
+
+.study-plan-day-number {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.study-plan-day-number.today {
+  background: #00f0ff;
+  color: #000;
+}
+
+.study-plan-calendar-body {
+  flex: 1;
+  display: flex;
+  overflow-y: auto;
+  position: relative;
+}
+
+.study-plan-calendar-day-column {
+  flex: 1;
+  min-width: 100px;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  height: 1440px; /* 24 hours * 60px */
+}
+
+.study-plan-calendar-hour-cell {
+  height: 60px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.study-plan-calendar-event {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: 4px;
+  padding: 4px;
+  font-size: 0.75rem;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+  transition: transform 0.1s, z-index 0.1s;
+}
+
+.study-plan-calendar-event:hover {
+  transform: scale(1.02);
+  z-index: 20;
+}
+
+.study-plan-event-title {
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.study-plan-event-time {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+
+.study-plan-calendar-progress {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  margin-top: 2px;
+  overflow: hidden;
+}
+
+.study-plan-calendar-progress-fill {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.study-plan-calendar-icons {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+  opacity: 0.8;
+  font-size: 0.6rem;
+}
+
+
+.study-plan-day-number {
+  width: auto;
+  padding: 0 8px;
+  border-radius: 12px;
+}
+
+
+.study-plan-task-progress-bar-loading {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.study-plan-task-progress-fill-loading {
+  height: 100%;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+
+.study-plan-task-progress-fill-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+  animation: study-plan-progress-stripes 1s linear infinite;
+}
+
+/* AI Agent Planner Styles - Specific Naming */
+.study-plan-ai-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.study-plan-ai-modal {
+  background: #0b0e17;
+  border: 1px solid #00f0ff;
+  border-radius: 12px;
+  width: 95%;
+  max-width: 800px;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
+  animation: aiModalSlideIn 0.3s ease-out;
+}
+
+@keyframes aiModalSlideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.study-plan-ai-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 240, 255, 0.05);
+}
+
+.study-plan-ai-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #00f0ff;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.study-plan-ai-icon {
+  font-size: 1.8rem;
+}
+
+.study-plan-ai-close-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: color 0.2s;
+}
+
+.study-plan-ai-close-btn:hover {
+  color: #fff;
+}
+
+.study-plan-ai-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.study-plan-ai-form-section {
+  margin-bottom: 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.study-plan-ai-section-title {
+  font-size: 1.1rem;
+  color: #00f0ff;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.study-plan-ai-form-group {
+  margin-bottom: 1.2rem;
+}
+
+.study-plan-ai-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #a0aec0;
+  font-size: 0.9rem;
+}
+
+.study-plan-ai-form-group input[type="text"],
+.study-plan-ai-form-group input[type="number"],
+.study-plan-ai-form-group input[type="date"],
+.study-plan-ai-form-group input[type="time"],
+.study-plan-ai-form-group textarea,
+.study-plan-ai-form-group select {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.study-plan-ai-form-group input:focus,
+.study-plan-ai-form-group textarea:focus,
+.study-plan-ai-form-group select:focus {
+  outline: none;
+  border-color: #00f0ff;
+  box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.1);
+}
+
+.study-plan-ai-form-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.study-plan-ai-form-row .study-plan-ai-form-group {
+  flex: 1;
+}
+
+.study-plan-ai-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.study-plan-ai-chip {
+  background: rgba(0, 240, 255, 0.15);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: #00f0ff;
+  padding: 0.3rem 0.8rem;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.study-plan-ai-chip-remove {
+  cursor: pointer;
+  font-weight: bold;
+  opacity: 0.7;
+}
+
+.study-plan-ai-chip-remove:hover {
+  opacity: 1;
+}
+
+.study-plan-ai-multi-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.study-plan-ai-select-option {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.study-plan-ai-select-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.study-plan-ai-select-option.selected {
+  background: #00f0ff;
+  color: #000;
+  border-color: #00f0ff;
+  font-weight: 600;
+}
+
+.study-plan-ai-icon-btn {
+  background: rgba(255, 77, 77, 0.1);
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  color: #ff4d4d;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.study-plan-ai-icon-btn:hover {
+  background: rgba(255, 77, 77, 0.2);
+}
+
+.study-plan-ai-text-btn {
+  background: transparent;
+  border: none;
+  color: #00f0ff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+}
+
+.study-plan-ai-text-btn:hover {
+  text-decoration: underline;
+}
+
+.study-plan-ai-toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.study-plan-ai-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  color: #e0e6ed;
+}
+
+.study-plan-ai-toggle-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #00f0ff;
+}
+
+.study-plan-ai-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.study-plan-ai-cancel-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e0e6ed;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.study-plan-ai-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.study-plan-ai-generate-btn {
+  background: #00f0ff;
+  border: none;
+  color: #000;
+  padding: 0.8rem 2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: all 0.2s;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+.study-plan-ai-generate-btn:hover {
+  background: #99f9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+}
+
+.study-plan-ai-generate-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.study-plan-ai-error {
+  background: rgba(255, 77, 77, 0.1);
+  border: 1px solid #ff4d4d;
+  color: #ff4d4d;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Preview Styles */
+.study-plan-ai-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.study-plan-ai-preview-header h3 {
+  color: #e0e6ed;
+  margin: 0;
+}
+
+.study-plan-ai-health-report {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.study-plan-ai-health-score {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.study-plan-ai-health-score.good { color: #00ff9d; }
+.study-plan-ai-health-score.warning { color: #ffaa00; }
+.study-plan-ai-health-score.bad { color: #ff4d4d; }
+
+.study-plan-ai-health-issues {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.study-plan-ai-issue-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.8rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.study-plan-ai-issue-item.high { border-left: 3px solid #ff4d4d; }
+.study-plan-ai-issue-item.medium { border-left: 3px solid #ffaa00; }
+.study-plan-ai-issue-item.low { border-left: 3px solid #00f0ff; }
+.study-plan-ai-issue-item.good { border-left: 3px solid #00ff9d; color: #00ff9d; }
+
+.study-plan-ai-issue-suggestion {
+  font-size: 0.9rem;
+  color: #a0aec0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+}
+
+.study-plan-ai-suggest-btn {
+  margin-top: 1rem;
+  width: 100%;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px dashed #00f0ff;
+  color: #00f0ff;
+  padding: 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.study-plan-ai-suggest-btn:hover {
+  background: rgba(0, 240, 255, 0.2);
+}
+
+.study-plan-ai-preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.study-plan-ai-session-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  gap: 1.5rem;
+  transition: all 0.2s;
+}
+
+.study-plan-ai-session-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(0, 240, 255, 0.3);
+}
+
+.study-plan-ai-session-time {
+  min-width: 120px;
+  text-align: right;
+  font-family: monospace;
+  color: #00f0ff;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.study-plan-ai-session-info {
+  flex: 1;
+}
+
+.study-plan-ai-session-title {
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.3rem;
+}
+
+.study-plan-ai-session-desc {
+  font-size: 0.9rem;
+  color: #a0aec0;
+}
+
+.study-plan-ai-confirm-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  border-radius: 12px;
+}
+
+.study-plan-ai-confirm-content {
+  background: #1a1f35;
+  border: 1px solid #ffaa00;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 400px;
+  text-align: center;
+}
+
+.study-plan-ai-confirm-content h4 {
+  color: #ffaa00;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.study-plan-ai-confirm-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.study-plan-ai-confirm-btn {
+  background: #ffaa00;
+  color: #000;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.study-plan-ai-confirm-btn:hover {
+  background: #ffb733;
+}
+
