@@ -138,8 +138,9 @@ jobs:
             cd ${{ secrets.VPS_PROJECT_PATH }}
             
             # Pull code
-            git fetch origin main
-            git reset --hard origin/main
+            # Use GITHUB_TOKEN to fetch from private repo
+            git fetch https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
+            git reset --hard FETCH_HEAD
             
             # Set env
             echo "VITE_MEOWL_API_KEY=${{ secrets.VITE_MEOWL_API_KEY }}" > .env
