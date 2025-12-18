@@ -139,7 +139,7 @@ const StudyPlannerPage: React.FC = () => {
             MISSION CONTROL
           </h1>
           <div className="study-plan-hero-subtitle">
-            SYSTEM: ONLINE // MODULE: STUDY_PLANNER // USER: ACTIVE
+            Lập kế hoạch học tập thông minh và quản lý nhiệm vụ hiệu quả với công cụ AI tích hợp.
           </div>
           
           <div className="study-plan-controls">

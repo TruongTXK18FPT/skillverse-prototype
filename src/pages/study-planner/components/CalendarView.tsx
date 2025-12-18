@@ -32,7 +32,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ sessions, currentDate, onSe
 
   const getTasksForDay = (date: Date) => {
     const targetDateStr = date.toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
-    return sessions.filter(task => {
+    const dayTasks = sessions.filter(task => {
       // If task has startDate, use it
       if (task.startDate) {
         const taskDate = new Date(task.startDate);
@@ -45,9 +45,72 @@ const CalendarView: React.FC<CalendarViewProps> = ({ sessions, currentDate, onSe
       }
       return false;
     });
+
+    // Sort by start time
+    return dayTasks.sort((a, b) => {
+      const timeA = a.startDate ? new Date(a.startDate).getTime() : (a.deadline ? new Date(a.deadline).getTime() : 0);
+      const timeB = b.startDate ? new Date(b.startDate).getTime() : (b.deadline ? new Date(b.deadline).getTime() : 0);
+      return timeA - timeB;
+    });
   };
 
-  const getTaskStyle = (task: TaskResponse) => {
+  // Calculate layout for overlapping events
+  const calculateEventLayout = (tasks: TaskResponse[]) => {
+    const layout: { [key: string]: { width: string, left: string } } = {};
+    
+    // Simple overlap detection: 
+    // If tasks overlap in time, they share width.
+    // This is a simplified version. For full calendar logic, we'd need a more complex algorithm.
+    // Here we just check if a task overlaps with the previous one.
+    
+    const groups: TaskResponse[][] = [];
+    let currentGroup: TaskResponse[] = [];
+    
+    tasks.forEach((task, index) => {
+      if (currentGroup.length === 0) {
+        currentGroup.push(task);
+      } else {
+        const lastTask = currentGroup[currentGroup.length - 1];
+        const lastEnd = getTaskEndTime(lastTask);
+        const currentStart = getTaskStartTime(task);
+        
+        if (currentStart < lastEnd) {
+          currentGroup.push(task);
+        } else {
+          groups.push([...currentGroup]);
+          currentGroup = [task];
+        }
+      }
+    });
+    if (currentGroup.length > 0) groups.push(currentGroup);
+    
+    groups.forEach(group => {
+      const width = 100 / group.length;
+      group.forEach((task, index) => {
+        layout[task.id] = {
+          width: `${width}%`,
+          left: `${index * width}%`
+        };
+      });
+    });
+    
+    return layout;
+  };
+
+  const getTaskStartTime = (task: TaskResponse) => {
+    if (task.startDate) return new Date(task.startDate).getTime();
+    if (task.deadline) return new Date(task.deadline).getTime() - 60 * 60 * 1000;
+    return 0;
+  };
+
+  const getTaskEndTime = (task: TaskResponse) => {
+    if (task.endDate) return new Date(task.endDate).getTime();
+    if (task.deadline) return new Date(task.deadline).getTime();
+    if (task.startDate) return new Date(task.startDate).getTime() + 60 * 60 * 1000; // Default 1h
+    return 0;
+  };
+
+  const getTaskStyle = (task: TaskResponse, layoutStyle?: { width: string, left: string }) => {
     let start, end;
 
     if (task.startDate && task.endDate) {
@@ -84,8 +147,10 @@ const CalendarView: React.FC<CalendarViewProps> = ({ sessions, currentDate, onSe
     return {
       top: `${top}px`,
       height: `${Math.max(duration, 30)}px`, // Min height 30px
-      backgroundColor: getPriorityColor(task.priority),
-    };
+      '--event-color': getPriorityColor(task.priority),
+      width: layoutStyle?.width || '96%',
+      left: layoutStyle?.left || '2%',
+    } as React.CSSProperties;
   };
 
   const getPriorityColor = (priority: TaskPriority) => {
@@ -134,25 +199,30 @@ const CalendarView: React.FC<CalendarViewProps> = ({ sessions, currentDate, onSe
                   <div key={hour} className="study-plan-time-slot" />
                 ))}
                 
-                {getTasksForDay(day).map(task => (
-                  <div
-                    key={task.id}
-                    className="study-plan-event-item"
-                    style={getTaskStyle(task)}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onSessionClick(task);
-                    }}
-                    title={`${task.title}`}
-                  >
-                    <div style={{ fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {task.title}
+                {(() => {
+                  const dayTasks = getTasksForDay(day);
+                  const layout = calculateEventLayout(dayTasks);
+                  
+                  return dayTasks.map(task => (
+                    <div
+                      key={task.id}
+                      className="study-plan-event-item"
+                      style={getTaskStyle(task, layout[task.id])}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSessionClick(task);
+                      }}
+                      title={`${task.title}`}
+                    >
+                      <div className="event-title">
+                        {task.title}
+                      </div>
+                      <div className="event-time">
+                        {task.startDate ? new Date(task.startDate).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : ''}
+                      </div>
                     </div>
-                    <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>
-                      {task.startDate ? new Date(task.startDate).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : ''}
-                    </div>
-                  </div>
-                ))}
+                  ));
+                })()}
               </div>
             );
           })}

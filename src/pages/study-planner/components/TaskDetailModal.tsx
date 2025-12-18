@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, Flag, Link as LinkIcon, Save, Trash2, Smile, Frown, Meh, Activity, Eye, Edit2 } from 'lucide-react';
+import { X, Calendar, Flag, Save, Trash2, Smile, Frown, Meh, Activity, Eye, Edit2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { TaskResponse, TaskPriority, UpdateTaskRequest, CreateTaskRequest } from '../../../types/TaskBoard';
 import '../styles/StudyPlanner.css';
@@ -37,9 +37,9 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
 
   useEffect(() => {
     // Lock body scroll
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.classList.remove('modal-open');
     };
   }, []);
 
@@ -88,7 +88,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="study-plan-modal-form">
           <div className="study-plan-modal-content study-plan-task-modal-grid-layout">
             <div className="study-plan-task-modal-left">
               <div className="study-plan-form-group">

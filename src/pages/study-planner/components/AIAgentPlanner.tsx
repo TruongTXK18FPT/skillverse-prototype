@@ -69,45 +69,45 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
   const [showLateNightConfirm, setShowLateNightConfirm] = useState(false);
 
   useEffect(() => {
-    // Lock body scroll
-    document.body.style.overflow = 'hidden';
-    
-    // Check Premium Status
-    const checkPremium = async () => {
-      try {
-        const sub = await premiumService.getCurrentSubscription();
-        setSubscription(sub);
-        
-        if (sub && sub.isActive && sub.plan.planType !== 'FREE_TIER') {
-          setIsPremium(true);
-          
-          // Determine AI Model Name based on plan
-          const planName = sub.plan.name.toLowerCase();
-          const planType = sub.plan.planType;
-          
-          if ((planName.includes('mentor') && planName.includes('pro')) || 
-              planType === 'PREMIUM_PLUS') {
-            setAiModelName('Mistral Large (Premium)');
-          } else {
-            setAiModelName('Mistral Small (Standard)');
-          }
-        } else {
-          setIsPremium(false);
-        }
-      } catch (err) {
-        console.error('Failed to check premium status', err);
-        setIsPremium(false);
-      } finally {
-        setCheckingPremium(false);
-      }
-    };
-
     if (isOpen) {
+      document.body.classList.add('modal-open');
+      
+      const checkPremium = async () => {
+        try {
+          const sub = await premiumService.getCurrentSubscription();
+          setSubscription(sub);
+          
+          if (sub && sub.isActive && sub.plan.planType !== 'FREE_TIER') {
+            setIsPremium(true);
+            
+            // Determine AI Model Name based on plan
+            const planName = sub.plan.name.toLowerCase();
+            const planType = sub.plan.planType;
+            
+            if ((planName.includes('mentor') && planName.includes('pro')) || 
+                planType === 'PREMIUM_PLUS') {
+              setAiModelName('Mistral Large (Premium)');
+            } else {
+              setAiModelName('Mistral Small (Standard)');
+            }
+          } else {
+            setIsPremium(false);
+          }
+        } catch (err) {
+          console.error('Failed to check premium status', err);
+          setIsPremium(false);
+        } finally {
+          setCheckingPremium(false);
+        }
+      };
+
       checkPremium();
+    } else {
+      document.body.classList.remove('modal-open');
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.classList.remove('modal-open');
     };
   }, [isOpen]);
 

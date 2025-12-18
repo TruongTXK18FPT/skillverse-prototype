@@ -124,12 +124,18 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ columns, onTaskClick, onAddTask, 
   const renderLinkIcon = (text?: string) => {
     if (!text) return null;
     
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const match = text.match(urlRegex);
+    if (!match || !match[0]) return null;
+
+    const url = match[0];
+    
     // YouTube
-    if (/(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)/.test(text)) {
+    if (/(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)/.test(url)) {
        return (
          <div 
+           className="study-plan-link-icon"
            onClick={(e) => handleLinkClick(e, text)} 
-           style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
            title="Open YouTube Link"
          >
            <FaYoutube size={14} color="#FF0000" />
@@ -138,19 +144,28 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ columns, onTaskClick, onAddTask, 
     }
     
     // Google Meet
-    if (/(https?:\/\/)?meet\.google\.com/.test(text)) {
+    if (/(https?:\/\/)?meet\.google\.com/.test(url)) {
        return (
          <div 
+           className="study-plan-link-icon"
            onClick={(e) => handleLinkClick(e, text)} 
-           style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
            title="Open Google Meet"
          >
            <SiGooglemeet size={14} color="#00897B" />
          </div>
        );
     }
-    
-    return null;
+
+    // Generic Link
+    return (
+      <div 
+        className="study-plan-link-icon"
+        onClick={(e) => handleLinkClick(e, text)} 
+        title="Open Link"
+      >
+        <LinkIcon size={14} color="var(--sv-primary)" />
+      </div>
+    );
   };
 
   return (
@@ -189,6 +204,18 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ columns, onTaskClick, onAddTask, 
           )}
           
           <div className="study-plan-task-list">
+            {column.tasks.length === 0 && (
+              <div style={{ 
+                textAlign: 'center', 
+                color: 'var(--sv-text-muted)', 
+                opacity: 0.5, 
+                padding: '2rem 0',
+                fontSize: '0.9rem',
+                fontStyle: 'italic'
+              }}>
+                No tasks yet
+              </div>
+            )}
             {column.tasks.map(task => (
               <div
                 key={task.id}
@@ -216,18 +243,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ columns, onTaskClick, onAddTask, 
 
                 {task.description && (
                   <div 
-                    className="study-plan-task-desc-preview study-plan-markdown-preview" 
-                    style={{ 
-                      fontSize: '0.8rem', 
-                      color: 'var(--sv-text-muted)', 
-                      marginBottom: '0.5rem', 
-                      maxHeight: '3.6em', /* Limit height */
-                      overflow: 'hidden', 
-                      display: '-webkit-box',
-                      WebkitLineClamp: 3, /* Limit to 3 lines */
-                      WebkitBoxOrient: 'vertical',
-                      textOverflow: 'ellipsis'
-                    }}
+                    className="study-plan-task-desc-preview" 
                   >
                     <ReactMarkdown>{task.description}</ReactMarkdown>
                   </div>
@@ -259,7 +275,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ columns, onTaskClick, onAddTask, 
                       <Clock size={12} /> {new Date(task.deadline).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                     </span>
                   )}
-                  <div style={{ display: 'flex', gap: '0.5rem', marginLeft: 'auto' }}>
+                  <div className="study-plan-task-meta-right">
                     {getSentimentIcon(task.satisfactionLevel)}
                     {renderLinkIcon(task.description)}
                   </div>
