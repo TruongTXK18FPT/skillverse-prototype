@@ -51,7 +51,7 @@ export const studyPlanService = {
       preferredTimeWindows: request.preferredTimeWindows?.map(w => `${w.startTime}-${w.endTime}`)
     };
     const response = await axiosInstance.post<StudySessionResponse[]>(`${BASE_URL}/generate-schedule`, payload, {
-      timeout: 1440000 // 3 minutes timeout
+      timeout: 3600000 // 1 hour timeout (increased to handle long AI generation)
     });
     return response.data;
   },
@@ -62,7 +62,7 @@ export const studyPlanService = {
       preferredTimeWindows: request.preferredTimeWindows?.map(w => `${w.startTime}-${w.endTime}`)
     };
     const response = await axiosInstance.post<StudySessionResponse[]>(`${BASE_URL}/generate-proposal`, payload, {
-      timeout: 1440000 // 3 minutes timeout
+      timeout: 3600000 // 1 hour timeout (increased to handle long AI generation)
     });
     return response.data;
   },
