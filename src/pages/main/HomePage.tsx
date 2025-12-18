@@ -67,7 +67,7 @@ const HomePage = () => {
     {
       image: slide2,
       title: 'Lộ Trình Học Thông Minh',
-      description: 'Tạo lộ trình học tập phù hợp với mục tiêu nghề nghiệp của bạn',
+      description: 'Tạo lộ trình học tập phù hợp mục tiêu nghề nghiệp của bạn',
       cta: 'Tạo lộ trình học thông minh',
       route: '/roadmap',
       icon: Map
