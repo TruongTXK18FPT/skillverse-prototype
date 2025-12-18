@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Palette, X, Smile, Meh, Frown, Link as LinkIcon, Calendar, Clock } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import { FaYoutube } from 'react-icons/fa';
+import { SiGooglemeet } from 'react-icons/si';
 import { TaskColumnResponse, TaskResponse, TaskPriority } from '../../../types/TaskBoard';
 import { taskBoardService } from '../../../services/taskBoardService';
 import '../styles/StudyPlanner.css';
@@ -108,10 +111,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ columns, onTaskClick, onAddTask, 
     return null;
   };
 
-  const hasLink = (text?: string) => {
-    return text && (text.includes('http') || text.includes('www.'));
-  };
-
   const handleLinkClick = (e: React.MouseEvent, text?: string) => {
     e.stopPropagation();
     if (!text) return;
@@ -120,6 +119,38 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ columns, onTaskClick, onAddTask, 
     if (match && match[0]) {
       window.open(match[0], '_blank');
     }
+  };
+
+  const renderLinkIcon = (text?: string) => {
+    if (!text) return null;
+    
+    // YouTube
+    if (/(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)/.test(text)) {
+       return (
+         <div 
+           onClick={(e) => handleLinkClick(e, text)} 
+           style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+           title="Open YouTube Link"
+         >
+           <FaYoutube size={14} color="#FF0000" />
+         </div>
+       );
+    }
+    
+    // Google Meet
+    if (/(https?:\/\/)?meet\.google\.com/.test(text)) {
+       return (
+         <div 
+           onClick={(e) => handleLinkClick(e, text)} 
+           style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+           title="Open Google Meet"
+         >
+           <SiGooglemeet size={14} color="#00897B" />
+         </div>
+       );
+    }
+    
+    return null;
   };
 
   return (
@@ -171,8 +202,53 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ columns, onTaskClick, onAddTask, 
               >
                 <div className="study-plan-task-title">{task.title}</div>
                 
+                <div className="study-plan-task-status-badge" style={{ 
+                  fontSize: '0.7rem', 
+                  padding: '2px 6px', 
+                  borderRadius: '4px', 
+                  background: 'rgba(255,255,255,0.1)', 
+                  width: 'fit-content',
+                  marginBottom: '0.5rem',
+                  color: getPriorityColor(task.priority)
+                }}>
+                  {task.status || column.name}
+                </div>
+
+                {task.description && (
+                  <div 
+                    className="study-plan-task-desc-preview study-plan-markdown-preview" 
+                    style={{ 
+                      fontSize: '0.8rem', 
+                      color: 'var(--sv-text-muted)', 
+                      marginBottom: '0.5rem', 
+                      maxHeight: '3.6em', /* Limit height */
+                      overflow: 'hidden', 
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3, /* Limit to 3 lines */
+                      WebkitBoxOrient: 'vertical',
+                      textOverflow: 'ellipsis'
+                    }}
+                  >
+                    <ReactMarkdown>{task.description}</ReactMarkdown>
+                  </div>
+                )}
+
+                {task.userNotes && (
+                  <div className="study-plan-task-notes" style={{ 
+                    fontSize: '0.75rem', 
+                    color: '#fbbf24', 
+                    background: 'rgba(251, 191, 36, 0.1)', 
+                    padding: '0.5rem', 
+                    borderRadius: '4px',
+                    marginBottom: '0.5rem',
+                    fontStyle: 'italic'
+                  }}>
+                    Note: {task.userNotes}
+                  </div>
+                )}
+                
                 {task.userProgress !== undefined && (
-                  <div style={{ height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', marginTop: '0.5rem', overflow: 'hidden' }}>
+                  <div style={{ height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', marginBottom: '0.5rem', overflow: 'hidden' }}>
                     <div style={{ height: '100%', width: `${task.userProgress}%`, background: getPriorityColor(task.priority) }} />
                   </div>
                 )}
@@ -183,9 +259,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ columns, onTaskClick, onAddTask, 
                       <Clock size={12} /> {new Date(task.deadline).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                     </span>
                   )}
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginLeft: 'auto' }}>
                     {getSentimentIcon(task.satisfactionLevel)}
-                    {hasLink(task.description) && <LinkIcon size={12} />}
+                    {renderLinkIcon(task.description)}
                   </div>
                 </div>
               </div>

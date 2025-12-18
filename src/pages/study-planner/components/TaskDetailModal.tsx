@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, Flag, Link as LinkIcon, Save, Trash2, Smile, Frown, Meh, Activity } from 'lucide-react';
+import { X, Calendar, Flag, Link as LinkIcon, Save, Trash2, Smile, Frown, Meh, Activity, Eye, Edit2 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import { TaskResponse, TaskPriority, UpdateTaskRequest, CreateTaskRequest } from '../../../types/TaskBoard';
 import '../styles/StudyPlanner.css';
 
@@ -31,6 +32,8 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
     columnId: columnId || '',
     linkedSessionIds: []
   });
+
+  const [isPreview, setIsPreview] = useState(true); // Default to Preview mode
 
   useEffect(() => {
     // Lock body scroll
@@ -109,22 +112,14 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
                     onChange={e => setFormData({...formData, startDate: e.target.value})}
                   />
                 </div>
-                <div className="study-plan-form-group">
-                  <label className="study-plan-label"><Calendar size={14} /> Kết Thúc</label>
-                  <input 
-                    type="datetime-local"
-                    className="study-plan-input"
-                    value={formData.endDate}
-                    onChange={e => setFormData({...formData, endDate: e.target.value})}
-                  />
-                </div>
+                {/* End Date removed as it is redundant with Deadline */}
                 <div className="study-plan-form-group">
                   <label className="study-plan-label"><Flag size={14} /> Hạn Chót</label>
                   <input 
                     type="datetime-local"
                     className="study-plan-input"
                     value={formData.deadline}
-                    onChange={e => setFormData({...formData, deadline: e.target.value})}
+                    onChange={e => setFormData({...formData, deadline: e.target.value, endDate: e.target.value})}
                   />
                 </div>
 
@@ -182,14 +177,42 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
 
             <div className="study-plan-task-modal-right">
               <div className="study-plan-form-group" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <label className="study-plan-label">Mô Tả & Tài Nguyên</label>
-                <textarea 
-                  className="study-plan-textarea study-plan-description-area"
-                  placeholder="Thêm mô tả chi tiết, liên kết hoặc danh sách kiểm tra..."
-                  value={formData.description}
-                  onChange={e => setFormData({...formData, description: e.target.value})}
-                  style={{ flex: 1 }}
-                />
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                  <label className="study-plan-label" style={{ marginBottom: 0 }}>Mô Tả & Tài Nguyên</label>
+                  <button 
+                    type="button" 
+                    onClick={() => setIsPreview(!isPreview)}
+                    style={{ 
+                      background: 'transparent', 
+                      border: 'none', 
+                      cursor: 'pointer', 
+                      color: 'var(--sv-primary)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.85rem',
+                      fontFamily: 'var(--sv-font-tech)'
+                    }}
+                  >
+                    {isPreview ? <><Edit2 size={14} /> SOẠN THẢO</> : <><Eye size={14} /> XEM TRƯỚC</>}
+                  </button>
+                </div>
+
+                {isPreview ? (
+                  <div 
+                    className="study-plan-textarea study-plan-description-area study-plan-markdown-preview"
+                  >
+                    <ReactMarkdown>{formData.description || '*Chưa có mô tả*'}</ReactMarkdown>
+                  </div>
+                ) : (
+                  <textarea 
+                    className="study-plan-textarea study-plan-description-area"
+                    placeholder="Thêm mô tả chi tiết, liên kết hoặc danh sách kiểm tra... (Hỗ trợ Markdown)"
+                    value={formData.description}
+                    onChange={e => setFormData({...formData, description: e.target.value})}
+                    style={{ flex: 1 }}
+                  />
+                )}
               </div>
 
               <div className="study-plan-form-group">
@@ -202,24 +225,24 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
                   rows={3}
                 />
               </div>
-
-              <div className="study-plan-modal-actions-right" style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <button type="submit" className="study-plan-btn active" style={{ width: '100%', justifyContent: 'center', padding: '12px', fontSize: '1rem' }}>
-                  <Save size={16} /> {task ? 'Lưu Thay Đổi' : 'Tạo Nhiệm Vụ'}
-                </button>
-                <button type="button" className="study-plan-btn" onClick={onClose} style={{ width: '100%', justifyContent: 'center', padding: '12px', fontSize: '1rem' }}>
-                  Hủy
-                </button>
-              </div>
             </div>
           </div>
 
           <div className="study-plan-task-modal-footer">
             {task && (
-              <button type="button" className="study-plan-btn study-plan-delete-btn" onClick={handleDelete}>
+              <button type="button" className="study-plan-btn study-plan-delete-btn" onClick={handleDelete} style={{ color: 'var(--sv-warning)', borderColor: 'var(--sv-warning)' }}>
                 <Trash2 size={16} /> Xóa
               </button>
             )}
+            
+            <div className="study-plan-footer-actions">
+               <button type="button" className="study-plan-btn" onClick={onClose}>
+                Hủy
+              </button>
+              <button type="submit" className="study-plan-btn active" style={{ background: 'var(--sv-primary)', color: '#0f172a', borderColor: 'var(--sv-primary)' }}>
+                <Save size={16} /> {task ? 'Lưu Thay Đổi' : 'Tạo Nhiệm Vụ'}
+              </button>
+            </div>
           </div>
         </form>
       </div>

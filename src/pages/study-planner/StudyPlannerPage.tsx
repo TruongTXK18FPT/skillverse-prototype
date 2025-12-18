@@ -171,7 +171,7 @@ const StudyPlannerPage: React.FC = () => {
       {overdueCount > 0 && (
         <div className="study-plan-alert">
           <span style={{ fontSize: '1.2rem' }}>⚠️</span> 
-          ALERT: {overdueCount} CRITICAL TASKS DETECTED. IMMEDIATE ACTION REQUIRED.
+          CẢNH BÁO: {overdueCount} NHIỆM VỤ QUAN TRỌNG CẦN XỬ LÝ NGAY.
         </div>
       )}
 

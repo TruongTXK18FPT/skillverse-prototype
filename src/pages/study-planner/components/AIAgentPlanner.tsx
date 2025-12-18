@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { 
   FaRobot, FaTimes, FaMagic, FaCalendarAlt, FaClock, FaExclamationTriangle, 
-  FaCheckCircle, FaLightbulb, FaBrain, FaMoon, FaPlus, FaTrash 
+  FaCheckCircle, FaLightbulb, FaBrain, FaMoon, FaPlus, FaTrash, FaLock, FaGem 
 } from 'react-icons/fa';
 import { 
   GenerateScheduleRequest, 
@@ -11,6 +12,9 @@ import {
   RefineScheduleRequest
 } from '../../../types/StudyPlan';
 import { studyPlanService } from '../../../services/studyPlanService';
+import { premiumService } from '../../../services/premiumService';
+import { UserSubscriptionResponse } from '../../../data/premiumDTOs';
+import { useNavigate } from 'react-router-dom';
 import '../../study-planner/styles/StudyPlanner.css';
 
 interface AIAgentPlannerProps {
@@ -20,10 +24,17 @@ interface AIAgentPlannerProps {
 }
 
 const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlanGenerated }) => {
+  const navigate = useNavigate();
   const [step, setStep] = useState<'form' | 'preview'>('form');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
+  // Premium State
+  const [checkingPremium, setCheckingPremium] = useState(true);
+  const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
+  const [isPremium, setIsPremium] = useState(false);
+  const [aiModelName, setAiModelName] = useState<string>('Mistral Small');
+
   // Form State
   const [formData, setFormData] = useState<GenerateScheduleRequest>({
     subjectName: '',
@@ -60,10 +71,45 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
   useEffect(() => {
     // Lock body scroll
     document.body.style.overflow = 'hidden';
+    
+    // Check Premium Status
+    const checkPremium = async () => {
+      try {
+        const sub = await premiumService.getCurrentSubscription();
+        setSubscription(sub);
+        
+        if (sub && sub.isActive && sub.plan.planType !== 'FREE_TIER') {
+          setIsPremium(true);
+          
+          // Determine AI Model Name based on plan
+          const planName = sub.plan.name.toLowerCase();
+          const planType = sub.plan.planType;
+          
+          if ((planName.includes('mentor') && planName.includes('pro')) || 
+              planType === 'PREMIUM_PLUS') {
+            setAiModelName('Mistral Large (Premium)');
+          } else {
+            setAiModelName('Mistral Small (Standard)');
+          }
+        } else {
+          setIsPremium(false);
+        }
+      } catch (err) {
+        console.error('Failed to check premium status', err);
+        setIsPremium(false);
+      } finally {
+        setCheckingPremium(false);
+      }
+    };
+
+    if (isOpen) {
+      checkPremium();
+    }
+
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, []);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -140,9 +186,10 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
       
       // Auto-check health
       checkHealth(sessions);
-    } catch (err) {
-      setError('Không thể tạo đề xuất kế hoạch. Vui lòng thử lại.');
+    } catch (err: any) {
       console.error(err);
+      const msg = err.response?.data?.message || 'Không thể tạo đề xuất kế hoạch. Vui lòng thử lại.';
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -219,14 +266,53 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
           <div className="study-plan-modal-title">
             <FaRobot className="study-plan-ai-icon" />
             <span>AI Study Planner</span>
+            {isPremium && (
+              <span className="study-plan-ai-model-badge">
+                <FaBrain size={12} style={{ marginRight: 4 }} />
+                {aiModelName}
+              </span>
+            )}
           </div>
           <button className="study-plan-modal-close" onClick={onClose}>
             <FaTimes />
           </button>
         </div>
 
-        <div className="study-plan-modal-content">
-          {step === 'form' ? (
+        <div className="study-plan-modal-content" style={{ position: 'relative' }}>
+          {checkingPremium ? (
+            <div className="study-plan-loading-overlay">
+              <div className="spinner"></div>
+              <p>Đang kiểm tra quyền truy cập...</p>
+            </div>
+          ) : !isPremium ? (
+            <div className="study-plan-premium-lock">
+              <div className="study-plan-lock-icon">
+                <FaLock size={48} />
+              </div>
+              <h3>Tính Năng Premium</h3>
+              <p>
+                AI Study Planner chỉ dành cho thành viên gói <strong>Skill-Plus</strong>, 
+                <strong>Student Pack</strong> hoặc <strong>Mentor-Pro</strong>.
+              </p>
+              <div className="study-plan-premium-benefits">
+                <div className="benefit-item">
+                  <FaCheckCircle /> Tạo lịch học tự động với AI
+                </div>
+                <div className="benefit-item">
+                  <FaCheckCircle /> Tối ưu hóa theo Chronotype & Deep Work
+                </div>
+                <div className="benefit-item">
+                  <FaCheckCircle /> Sử dụng mô hình Mistral AI tiên tiến
+                </div>
+              </div>
+              <button 
+                className="study-plan-upgrade-btn"
+                onClick={() => navigate('/premium')}
+              >
+                <FaGem /> Nâng Cấp Ngay
+              </button>
+            </div>
+          ) : step === 'form' ? (
             <div className="study-plan-ai-form">
               {/* Basic Info */}
               <div className="study-plan-ai-form-section">
@@ -504,7 +590,9 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
                     </div>
                     <div className="study-plan-ai-session-info">
                       <div className="study-plan-ai-session-title">{session.title}</div>
-                      <div className="study-plan-ai-session-desc">{session.description}</div>
+                      <div className="study-plan-ai-session-desc study-plan-markdown-preview">
+                        <ReactMarkdown>{session.description}</ReactMarkdown>
+                      </div>
                     </div>
                   </div>
                 ))}
