@@ -106,7 +106,8 @@ jobs:
 
       - name: 🧪 Test Docker Image
         run: |
-          docker run --rm -p 3000:80 -d --name test-frontend skillverse-frontend:latest
+          # Run without --rm to allow log inspection on failure
+          docker run -p 3000:80 -d --name test-frontend skillverse-frontend:latest
           
           echo "Waiting for container to be ready..."
           SUCCESS=false
@@ -121,12 +122,16 @@ jobs:
           done
 
           if [ "$SUCCESS" = "true" ]; then
-            docker stop test-frontend
+            docker stop test-frontend || true
+            docker rm test-frontend || true
             exit 0
           else
             echo "Container failed to start within 30 seconds"
-            docker logs test-frontend
-            docker stop test-frontend
+            echo "=== CONTAINER LOGS ==="
+            docker logs test-frontend || echo "No logs available"
+            echo "======================"
+            docker stop test-frontend || true
+            docker rm test-frontend || true
             exit 1
           fi
 
