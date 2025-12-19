@@ -15,6 +15,7 @@ import { studyPlanService } from '../../../services/studyPlanService';
 import { premiumService } from '../../../services/premiumService';
 import { UserSubscriptionResponse } from '../../../data/premiumDTOs';
 import { useNavigate } from 'react-router-dom';
+import MeowlKuruLoader from '../../../components/kuru-loader/MeowlKuruLoader';
 import '../../study-planner/styles/StudyPlanner.css';
 
 interface AIAgentPlannerProps {
@@ -281,8 +282,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({ isOpen, onClose, onPlan
         <div className="study-plan-modal-content" style={{ position: 'relative' }}>
           {checkingPremium ? (
             <div className="study-plan-loading-overlay">
-              <div className="spinner"></div>
-              <p>Đang kiểm tra quyền truy cập...</p>
+              <MeowlKuruLoader text="Đang kiểm tra quyền truy cập..." size="small" />
             </div>
           ) : !isPremium ? (
             <div className="study-plan-premium-lock">

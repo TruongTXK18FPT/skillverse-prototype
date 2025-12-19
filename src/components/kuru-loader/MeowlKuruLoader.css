@@ -1,0 +1,27 @@
+.kuru-loader-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.kuru-loader-sprite {
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  /* Animation is handled via JS for grid support */
+}
+
+.kuru-loader-text {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #06b6d4; /* Cyan Neon */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: kuru-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes kuru-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}

@@ -4,8 +4,9 @@ import {
   Bell, AlertTriangle, Megaphone, Wrench, Eye,
   RefreshCw, X, CheckCircle, XCircle, Clock, FileText,
   Bold, Italic, Underline, List, ListOrdered, AlignLeft,
-  AlignCenter, AlignRight, Type, Palette, Link, ImagePlus, Loader2, Trash2
+  AlignCenter, AlignRight, Type, Palette, Link, ImagePlus, Trash2
 } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { 
   adminEmailService, 
   TargetRole, 
@@ -556,7 +557,7 @@ const NotificationsTabCosmic: React.FC = () => {
                 {isUploading ? (
                   <>
                     <div className="notif-upload-icon">
-                      <Loader2 size={32} className="spinning" />
+                      <MeowlKuruLoader size="tiny" text="" />
                     </div>
                     <div className="notif-upload-text">
                       <p>Đang upload... {uploadProgress}%</p>

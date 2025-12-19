@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Wallet, AlertCircle, CheckCircle, Loader2, Lock } from 'lucide-react';
+import { X, Wallet, AlertCircle, CheckCircle, Lock } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { CourseDetailDTO } from '../../data/courseDTOs';
 import walletService from '../../services/walletService';
 import { purchaseCourseWithWallet } from '../../services/courseService';
@@ -100,7 +101,7 @@ const PurchaseCourseModal: React.FC<PurchaseCourseModalProps> = ({ course, onClo
             </div>
             {loading ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--cockpit-detail-text-secondary)' }}>
-                <Loader2 size={16} className="animate-spin" /> Đang tải số dư...
+                <MeowlKuruLoader size="tiny" text="" /> Đang tải số dư...
               </div>
             ) : (
               <div className={`purchase-wallet-balance ${!canAfford ? 'insufficient' : ''}`}>
@@ -136,7 +137,7 @@ const PurchaseCourseModal: React.FC<PurchaseCourseModalProps> = ({ course, onClo
           >
             {purchasing ? (
               <>
-                <Loader2 size={20} className="animate-spin" />
+                <MeowlKuruLoader size="tiny" text="" />
                 Đang xử lý...
               </>
             ) : (

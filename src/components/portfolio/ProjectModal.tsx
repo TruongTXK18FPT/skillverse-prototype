@@ -1,6 +1,7 @@
 // Add/Edit Project Modal
 import React, { useState, useEffect } from 'react';
-import { X, Upload, Loader } from 'lucide-react';
+import { X, Upload } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { PortfolioProjectDTO, ProjectType } from '../../data/portfolioDTOs';
 import '../../styles/PortfolioModals.css';
 
@@ -348,7 +349,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
             <button type="submit" className="pf-btn pf-btn-primary" disabled={loading}>
               {loading ? (
                 <>
-                  <Loader className="pf-spinner" size={18} />
+                  <MeowlKuruLoader size="tiny" text="" />
                   Đang lưu...
                 </>
               ) : (

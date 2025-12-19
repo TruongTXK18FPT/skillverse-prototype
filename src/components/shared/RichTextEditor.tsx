@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import {
   Bold, Italic, Underline, List, ListOrdered, AlignLeft,
-  AlignCenter, AlignRight, Type, Palette, Link, ImagePlus, Loader2, Trash2
+  AlignCenter, AlignRight, Type, Palette, Link, ImagePlus, Trash2
 } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { uploadImage, validateImage, UploadProgress } from '../../services/fileUploadService';
 import './RichTextEditor.css';
 
@@ -285,7 +286,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ initialContent = '', on
       {/* Upload Status Overlay */}
       {isUploading && (
         <div className="rte-upload-status">
-          <Loader2 size={20} className="spinning" />
+          <MeowlKuruLoader size="tiny" text="" />
           <span>Đang tải ảnh... {uploadProgress}%</span>
         </div>
       )}

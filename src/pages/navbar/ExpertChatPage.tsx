@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, User, Sparkles, Loader, Plus, Trash2, Zap, Code, ArrowLeft, Menu, X, ChevronDown, Bot, Lock } from 'lucide-react';
+import { Send, User, Sparkles, Plus, Trash2, Zap, Code, ArrowLeft, Menu, X, ChevronDown, Bot, Lock } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import meowlDefault from '../../assets/meowl-skin/meowl_default.png';
 import userService from '../../services/userService';
 import { premiumService } from '../../services/premiumService';
@@ -308,8 +309,7 @@ const ExpertChatPage = () => {
       <div className="chat-hud-viewport">
         <div className="chat-hud-main-area" style={{ alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', color: 'var(--chat-hud-accent)' }}>
-            <Loader size={48} className="animate-spin" />
-            <div style={{ fontSize: '1.2rem', letterSpacing: '2px' }}>ĐANG KHỞI TẠO HỆ THỐNG CHUYÊN GIA...</div>
+            <MeowlKuruLoader text="ĐANG KHỞI TẠO HỆ THỐNG CHUYÊN GIA..." />
           </div>
         </div>
       </div>
@@ -521,7 +521,7 @@ const ExpertChatPage = () => {
         <div className="chat-hud-session-list">
           {loadingSessions ? (
             <div style={{ textAlign: 'center', padding: '20px' }}>
-              <Loader size={24} className="animate-spin" style={{ color: 'var(--chat-hud-accent)' }} />
+              <MeowlKuruLoader size="tiny" text="" />
             </div>
           ) : sessions.length === 0 ? (
             <p style={{ textAlign: 'center', color: 'rgba(229, 231, 235, 0.6)', padding: '20px' }}>
@@ -705,7 +705,7 @@ const ExpertChatPage = () => {
           {isLoading && (
             <div className="chat-hud-message-row assistant">
               <div className="chat-hud-avatar">
-                <Loader size={24} className="animate-spin" />
+                <MeowlKuruLoader size="tiny" text="" />
               </div>
               <div className="chat-hud-bubble" style={{ padding: 0, background: 'transparent', border: 'none' }}>
                 <ThinkingIndicator />

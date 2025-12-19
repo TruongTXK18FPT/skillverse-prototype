@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Lock, Eye, EyeOff, CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
+import { Lock, Eye, EyeOff, CheckCircle, AlertTriangle } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
 import Logo from '../../assets/skillverse.png';
 import './HologramResetPasswordForm.css';
@@ -254,7 +255,7 @@ const HologramResetPasswordForm: React.FC = () => {
           >
             {isLoading ? (
               <>
-                <Loader2 size={20} className="rsp-spinner" />
+                <MeowlKuruLoader size="tiny" text="" />
                 <span>ĐANG XỬ LÝ...</span>
               </>
             ) : (

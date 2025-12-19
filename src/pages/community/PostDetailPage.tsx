@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ThumbsUp, ThumbsDown, Bookmark, ArrowLeft, MessageCircle, Share2 } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import communityService, { CommentResponse, PostSummary } from '../../services/communityService';
 
 import userService from '../../services/userService';
@@ -129,10 +130,7 @@ const PostDetailPage: React.FC = () => {
   if (loading) return (
     <div className="transmission-layout">
       <div className="transmission-container">
-        <div className="transmission-loading">
-          <div className="loading-spinner"></div>
-          <p>Đang tải dữ liệu...</p>
-        </div>
+        <MeowlKuruLoader text="Đang tải dữ liệu..." />
       </div>
     </div>
   );

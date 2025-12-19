@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import MeowlKuruLoader from '../components/kuru-loader/MeowlKuruLoader';
 import { 
   Bell, 
   CheckCheck, 
@@ -263,8 +264,7 @@ const NotificationPage: React.FC = () => {
       <div className="notif-list-container">
         {loading ? (
           <div style={{ padding: 40, textAlign: 'center', color: 'var(--notif-text-dim)' }}>
-            <div className="spinner" style={{ margin: '0 auto 16px' }}></div>
-            Đang tải thông báo...
+            <MeowlKuruLoader text="Đang tải thông báo..." size="small" />
           </div>
         ) : notifications.length === 0 ? (
           <div style={{ padding: 60, textAlign: 'center', color: 'var(--notif-text-dim)' }}>

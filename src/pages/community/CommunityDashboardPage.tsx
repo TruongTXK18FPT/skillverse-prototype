@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import communityService, { PostSummary, CommentResponse } from '../../services/communityService';
-import { Edit, Trash2, MessageSquare, TrendingUp, Zap, Users, Activity, Search, X, Save, Image, Eye, EyeOff, AlertTriangle, Hash, Bookmark, Loader, Send } from 'lucide-react';
+import { Edit, Trash2, MessageSquare, TrendingUp, Zap, Users, Activity, Search, X, Save, Image, Eye, EyeOff, AlertTriangle, Hash, Bookmark, Send } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useNavigate } from 'react-router-dom';
 import CommsHeader from '../../components/community-hud/CommsHeader';
 import TelemetryWidget from '../../components/community-hud/TelemetryWidget';
@@ -826,7 +827,7 @@ const CommunityDashboardPage: React.FC = () => {
                       title="Upload ảnh"
                       disabled={isUploading}
                       >
-                        {isUploading ? <Loader size={20} style={{ animation: 'spin 1s linear infinite' }} /> : <Image size={20} />}
+                        {isUploading ? <MeowlKuruLoader size="tiny" text="" /> : <Image size={20} />}
                       </button>
                       <input ref={thumbnailInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleThumbnailUpload} />
                       {isUploading && (

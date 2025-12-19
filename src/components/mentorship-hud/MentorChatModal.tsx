@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Loader2, User } from 'lucide-react';
+import { X, Send, User } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './uplink-styles.css';
 import { getConversation, sendMessage, sendAsMentor, markRead } from '../../services/preChatService';
 import { useAuth } from '../../context/AuthContext';
@@ -171,7 +172,7 @@ const MentorChatModal: React.FC<MentorChatModalProps> = ({
           {isLoading && (
             <div className="uplink-message uplink-message-user">
               <div className="uplink-message-bubble typing">
-                <Loader2 size={16} className="animate-spin" />
+                <MeowlKuruLoader size="tiny" text="" />
               </div>
             </div>
           )}

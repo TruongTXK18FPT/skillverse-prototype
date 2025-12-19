@@ -2,9 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Users, CreditCard, Briefcase, BookOpen, TrendingUp,
   Crown, RefreshCw, Calendar, DollarSign, Activity, PieChart,
-  BarChart3, LineChart, Zap, Award, Target, Loader2, MessageSquare,
+  BarChart3, LineChart, Zap, Award, Target, MessageSquare,
   HelpCircle, GraduationCap, ShieldCheck, Clock, Ticket, Wallet, Map, CheckCircle
 } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import {
   AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip,
@@ -516,7 +517,7 @@ const AnalyticsTab: React.FC = () => {
     return (
       <div className="holo-analytics holo-analytics--loading">
         <div className="holo-loading-container">
-          <Loader2 className="holo-loading-spinner" size={48} />
+          <MeowlKuruLoader size="large" text="" />
           <p>Đang tải dữ liệu phân tích...</p>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Sparkles, Loader, LogIn, Lock, ChevronDown, Briefcase, BookOpen, ArrowLeft, Bot } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { GenerateRoadmapRequest } from '../../types/Roadmap';
 import { premiumService } from '../../services/premiumService';
 import careerChatService from '../../services/careerChatService';
@@ -374,7 +375,7 @@ const RoadmapGeneratorForm = ({
             >
               {isLoading ? (
                 <span className="rm-btn-content">
-                  <Loader className="animate-spin" size={20} />
+                  <MeowlKuruLoader size="tiny" text="" className="mr-2" />
                   <span>ĐANG PHÂN TÍCH & TẠO LỘ TRÌNH...</span>
                 </span>
               ) : (
@@ -746,7 +747,7 @@ const RoadmapGeneratorForm = ({
             >
               {isLoading ? (
                 <span className="rm-btn-content">
-                  <Loader className="animate-spin" size={20} />
+                  <MeowlKuruLoader size="tiny" text="" className="mr-2" />
                   <span>ĐANG PHÂN TÍCH & TẠO LỘ TRÌNH...</span>
                 </span>
               ) : (

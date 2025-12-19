@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, MapPin, Calendar, Edit3, Save, X, Camera, Lock, Shield } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import userService from '../../services/userService';
@@ -159,10 +160,7 @@ const ProfilePage = () => {
   if (loading) {
     return (
       <div className="profile-container" data-theme={theme}>
-        <div className="profile-loading">
-          <div className="loading-spinner"></div>
-          <p>Đang tải thông tin hồ sơ...</p>
-        </div>
+        <MeowlKuruLoader text="Đang tải thông tin hồ sơ..." />
       </div>
     );
   }

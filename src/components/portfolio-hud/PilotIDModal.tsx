@@ -1,6 +1,7 @@
 // PILOT ID MODAL - Profile Creation/Edit with Mothership Theme
 import React, { useState, useEffect } from 'react';
-import { X, Upload, Loader } from 'lucide-react';
+import { X, Upload } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { UserProfileDTO } from '../../data/portfolioDTOs';
 import { useScrollLock } from './useScrollLock';
 import SystemAlertModal from './SystemAlertModal';
@@ -571,7 +572,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
               <button type="submit" className="dossier-btn-primary" disabled={loading}>
                 {loading ? (
                   <>
-                  <Loader className="dossier-spinner" size={18} />
+                  <MeowlKuruLoader size="tiny" text="" />
                   Đang lưu...
                   </>
                 ) : (

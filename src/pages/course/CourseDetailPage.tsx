@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { 
   ArrowLeft, 
   Play, 
@@ -122,10 +123,7 @@ const CourseDetailPage: React.FC = () => {
   if (loading) {
     return (
       <div className="course-detail-container">
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p>Loading course details...</p>
-        </div>
+        <MeowlKuruLoader text="Loading course details..." />
       </div>
     );
   }

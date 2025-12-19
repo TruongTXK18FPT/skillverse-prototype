@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Sparkles, Loader, Plus, Trash2, Mic, Square, ArrowLeft, Menu, X, Bot, ChevronDown, Lock } from 'lucide-react';
+import { Send, Sparkles, Plus, Trash2, Mic, Square, ArrowLeft, Menu, X, Bot, ChevronDown, Lock } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import meowlDefault from '../../assets/meowl-skin/meowl_default.png';
 import userService from '../../services/userService';
 import { premiumService } from '../../services/premiumService';
@@ -410,7 +411,7 @@ const CareerChatPage = () => {
         <div className="chat-hud-session-list">
           {loadingSessions ? (
             <div style={{ textAlign: 'center', padding: '20px' }}>
-              <Loader size={24} className="animate-spin" style={{ color: 'var(--chat-hud-accent)' }} />
+              <MeowlKuruLoader size="small" text="" />
             </div>
           ) : sessions.length === 0 ? (
             <p style={{ textAlign: 'center', color: 'rgba(229, 231, 235, 0.6)', padding: '20px' }}>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Loader2, User, Lock, Mail, Phone, MapPin, FileText, AlertTriangle } from 'lucide-react';
+import { Eye, EyeOff, User, Lock, Mail, Phone, MapPin, FileText, AlertTriangle } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useElevator } from './ElevatorAuthLayout';
 import Logo from '../../assets/skillverse.png';
 import './HologramPersonalRegisterForm.css';
@@ -351,7 +352,7 @@ const HologramPersonalRegisterForm: React.FC<HologramPersonalRegisterFormProps> 
           >
             {isLoading ? (
               <>
-                <Loader2 className="reg-personal-spinner" size={18} />
+                <MeowlKuruLoader size="tiny" text="" />
                 <span>Đang đăng ký...</span>
               </>
             ) : (

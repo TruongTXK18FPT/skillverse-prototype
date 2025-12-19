@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react';
 import {
   Download, Edit, Share2, Eye, Award, Briefcase,
-  MapPin, Linkedin, Github as GithubIcon, Loader, AlertCircle, Plus,
+  MapPin, Linkedin, Github as GithubIcon, AlertCircle, Plus,
   Trash2, ExternalLink, Calendar, Settings
 } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -333,8 +334,7 @@ const TacticalDossierPortfolio = () => {
     return (
       <div className="dossier-portfolio-container" data-theme={theme}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: '1rem' }}>
-          <Loader size={48} className="dossier-spinner" style={{ color: 'var(--dossier-cyan)' }} />
-          <p style={{ color: 'var(--dossier-silver)' }}>Đang tải Tài liệu Chiến thuật...</p>
+          <MeowlKuruLoader text="Đang tải Tài liệu Chiến thuật..." />
         </div>
       </div>
     );

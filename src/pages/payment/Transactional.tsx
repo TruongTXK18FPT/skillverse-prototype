@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle, XCircle, Clock, ArrowLeft } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { paymentService } from '../../services/paymentService';
 import { PaymentTransactionResponse } from '../../data/paymentDTOs';
 import '../../styles/Transactional.css';
@@ -79,7 +80,7 @@ const Transactional = () => {
 
   const getStatusIcon = () => {
     if (isCancel) return <XCircle className="w-16 h-16 text-red-500" />;
-    if (!payment) return <Clock className="w-16 h-16 text-blue-500 animate-spin" />;
+    if (!payment) return <MeowlKuruLoader size="small" text="" />;
     
     switch (payment.status) {
       case 'COMPLETED':
@@ -88,7 +89,7 @@ const Transactional = () => {
       case 'CANCELLED':
         return <XCircle className="w-16 h-16 text-red-500" />;
       default:
-        return <Clock className="w-16 h-16 text-blue-500 animate-spin" />;
+        return <MeowlKuruLoader size="small" text="" />;
     }
   };
 
@@ -163,8 +164,7 @@ const Transactional = () => {
     return (
       <div className="transactional-page">
         <div className="transactional-card">
-          <Clock className="w-16 h-16 text-blue-500 animate-spin mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Đang tải...</h2>
+          <MeowlKuruLoader size="medium" text="Đang tải..." />
           <p className="text-gray-600">Vui lòng chờ trong giây lát</p>
         </div>
       </div>

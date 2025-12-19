@@ -1,6 +1,7 @@
 // DATA COMPILER MODAL - CV Generation with Mothership Theme
 import React, { useState } from 'react';
-import { X, Loader, Sparkles, FileText } from 'lucide-react';
+import { X, Sparkles, FileText } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { CVGenerationRequest } from '../../data/portfolioDTOs';
 import { useScrollLock } from './useScrollLock';
 import SystemAlertModal from './SystemAlertModal';
@@ -269,7 +270,7 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
             >
               {loading ? (
                 <>
-                <Loader className="dossier-spinner" size={18} />
+                <MeowlKuruLoader size="tiny" text="" />
                 Đang biên soạn dữ liệu...
                 </>
               ) : (

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { X, Send, Loader2, ExternalLink, Mic, Square } from 'lucide-react';
+import { X, Send, ExternalLink, Mic, Square } from 'lucide-react';
+import MeowlKuruLoader from './kuru-loader/MeowlKuruLoader';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import '../styles/MeowlChat.css';
@@ -414,7 +415,7 @@ Cố lên nha! 💪✨ 🎓`
                   <img src="/images/meowl_bg_clear.png" alt="Meowl" />
                 </div>
                 <div className="message-bubble loading">
-                  <Loader2 size={16} className="animate-spin" />
+                  <MeowlKuruLoader size="tiny" text="" />
                   <span>{language === 'en' ? 'Meowl is thinking...' : 'Meowl đang suy nghĩ...'}</span>
                 </div>
               </div>

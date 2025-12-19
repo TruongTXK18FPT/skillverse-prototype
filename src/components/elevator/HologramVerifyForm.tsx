@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Clock, CheckCircle, AlertCircle, ArrowLeft, Loader2 } from 'lucide-react';
+import { Mail, Clock, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './HologramVerifyForm.css';
 
 // Import Meowl assets
@@ -155,7 +156,7 @@ const HologramVerifyForm: React.FC<HologramVerifyFormProps> = ({
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="spinner" size={20} />
+                    <MeowlKuruLoader size="tiny" text="" />
                     <span>ĐANG XÁC THỰC...</span>
                   </>
                 ) : isExpired ? (

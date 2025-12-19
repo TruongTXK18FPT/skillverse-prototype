@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Loader } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import RoadmapDetailViewer from '../../components/roadmap/RoadmapDetailViewer';
 import aiRoadmapService from '../../services/aiRoadmapService';
 import { 
@@ -151,8 +151,7 @@ const RoadmapDetailPage = () => {
     return (
       <div className="roadmap-detail-page">
         <div className="roadmap-detail-page__loading">
-          <Loader className="animate-spin" size={48} />
-          <p>Đang tải lộ trình...</p>
+          <MeowlKuruLoader text="Đang tải lộ trình..." />
         </div>
         <MeowlGuide currentPage="roadmap" />
       </div>

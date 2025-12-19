@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Loader2, User, Lock, Mail, AlertTriangle } from 'lucide-react';
+import { Eye, EyeOff, User, Lock, Mail, AlertTriangle } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useElevator } from './ElevatorAuthLayout';
 import Logo from '../../assets/skillverse.png';
 import './HologramLoginForm.css';
@@ -204,7 +205,7 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
           >
             {isLoading ? (
               <>
-                <Loader2 className="spinner" size={20} />
+                <MeowlKuruLoader size="tiny" text="" />
                 <span>Đang xác thực...</span>
               </>
             ) : (
@@ -235,7 +236,7 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
             whileTap={{ scale: 0.98 }}
           >
             {isGoogleLoading ? (
-              <Loader2 className="spinner" size={18} />
+              <MeowlKuruLoader size="tiny" text="" />
             ) : (
               <img
                 src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"

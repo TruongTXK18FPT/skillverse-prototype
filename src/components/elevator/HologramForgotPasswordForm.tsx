@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, ArrowLeft, Loader2, AlertTriangle } from 'lucide-react';
+import { Mail, ArrowLeft, AlertTriangle } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
 import Logo from '../../assets/skillverse.png';
 import './HologramForgotPasswordForm.css';
@@ -103,7 +104,7 @@ const HologramForgotPasswordForm: React.FC = () => {
                     <button type="submit" className="fgp-submit-btn" disabled={isLoading}>
                         {isLoading ? (
                             <>
-                                <Loader2 className="fgp-spinner" size={18} />
+                                <MeowlKuruLoader size="tiny" text="" />
                                 <span>Đang gửi...</span>
                             </>
                         ) : (

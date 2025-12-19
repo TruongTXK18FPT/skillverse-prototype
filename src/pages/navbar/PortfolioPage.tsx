@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { 
   Download, Edit, Share2, Eye, Award, Briefcase,
-  MapPin, Linkedin, Github as GithubIcon, Loader, AlertCircle, Plus,
+  MapPin, Linkedin, Github as GithubIcon, AlertCircle, Plus,
   Trash2, ExternalLink, Calendar, Settings
 } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -315,8 +316,7 @@ const PortfolioPage = () => {
     return (
       <div className="sv-portfolio-container" data-theme={theme}>
         <div className="pf-loading-container">
-          <Loader size={48} className="pf-spinner" />
-          <p>Đang tải portfolio...</p>
+          <MeowlKuruLoader text="Đang tải portfolio..." />
         </div>
       </div>
     );

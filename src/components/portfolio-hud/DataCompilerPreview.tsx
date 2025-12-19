@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import {
   Download, Printer, Share2, Edit, Eye, EyeOff,
-  ArrowLeft, Layout, Palette, Save, Linkedin, Github, Loader, X
+  ArrowLeft, Layout, Palette, Save, Linkedin, Github, X
 } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -718,7 +719,7 @@ const DataCompilerPreview = () => {
               >
                 {saving ? (
                   <>
-                    <Loader className="dossier-spinner" size={18} />
+                    <MeowlKuruLoader size="tiny" text="" />
                     SAVING...
                   </>
                 ) : (
@@ -907,8 +908,7 @@ const DataCompilerPreview = () => {
 
               {loading && (
                 <div className="compiler-loading">
-                  <Loader className="compiler-spinner" size={32} />
-                  <span>LOADING CV DATA...</span>
+                  <MeowlKuruLoader size="medium" text="LOADING CV DATA..." />
                 </div>
               )}
 

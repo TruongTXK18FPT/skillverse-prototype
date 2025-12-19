@@ -1,6 +1,7 @@
 import { memo, useMemo, useCallback } from 'react';
 import { BookOpen, Clock, Target, ChevronRight } from 'lucide-react';
 import { RoadmapSessionSummary } from '../../types/Roadmap';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './RoadmapList.css';
 import '../../styles/RoadmapHUD.css';
 
@@ -98,8 +99,7 @@ const RoadmapList = memo(({
   if (isLoading) {
     return (
       <div className="roadmap-list__loading">
-        <div className="roadmap-list__spinner" />
-        <p>ĐANG TẢI DỮ LIỆU...</p>
+        <MeowlKuruLoader text="ĐANG TẢI DỮ LIỆU..." />
       </div>
     );
   }

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Loader2, GraduationCap, Lock, Mail, Phone, MapPin, FileText, Award, Briefcase, AlertTriangle, Linkedin, Target, Upload, X } from 'lucide-react';
+import { Eye, EyeOff, GraduationCap, Lock, Mail, Phone, MapPin, FileText, Award, Briefcase, AlertTriangle, Linkedin, Target, Upload, X } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useElevator } from './ElevatorAuthLayout';
 import Logo from '../../assets/skillverse.png';
 import './HologramMentorRegisterForm.css';
@@ -517,7 +518,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
           >
             {isLoading ? (
               <>
-                <Loader2 className="reg-mentor-spinner" size={18} />
+                <MeowlKuruLoader size="tiny" text="" />
                 <span>Đang đăng ký...</span>
               </>
             ) : (
