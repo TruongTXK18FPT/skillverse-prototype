@@ -14,6 +14,7 @@ import '../../styles/ModalsEnhanced.css';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import { ChevronDown, ChevronUp, BookOpen, FileText, CheckSquare, Code, Layers } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './CourseApprovalTab.css';
 
 /**
@@ -225,7 +226,7 @@ export const CourseApprovalTab: React.FC = () => {
       {/* Courses table */}
       <div className="table-container">
         {loading ? (
-          <div className="loading-spinner">Đang tải...</div>
+          <MeowlKuruLoader size="medium" text="Đang tải..." />
         ) : courses.length === 0 ? (
           <div className="empty-state">Không có khóa học chờ duyệt</div>
         ) : (

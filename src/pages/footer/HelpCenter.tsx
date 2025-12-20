@@ -6,6 +6,7 @@ import {
   Sparkles, Ticket, Clock, FileText, List, RefreshCw, XCircle
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import supportService, { TicketResponse, TicketMessageResponse } from '../../services/supportService';
 import '../../styles/HelpCenter.css';
 
@@ -326,7 +327,7 @@ const HelpCenter = () => {
                 <div className="form-note"><AlertCircle size={16} /><span>Cung cấp đầy đủ thông tin để được hỗ trợ nhanh nhất.</span></div>
                 {submitError && <div className="form-error"><AlertCircle size={16} /><span>{submitError}</span></div>}
                 <button type="submit" className="btn-submit-ticket" disabled={isSubmitting}>
-                  {isSubmitting ? <><div className="spinner"></div><span>Đang gửi...</span></> : <><Send size={18} /><span>Gửi yêu cầu</span></>}
+                  {isSubmitting ? <><MeowlKuruLoader size="small" text="" /><span>Đang gửi...</span></> : <><Send size={18} /><span>Gửi yêu cầu</span></>}
                 </button>
               </form>
             )}

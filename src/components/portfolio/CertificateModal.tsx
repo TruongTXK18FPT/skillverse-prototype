@@ -1,6 +1,7 @@
 // Add External Certificate Modal
 import React, { useState, useEffect } from 'react';
 import { X, Upload, Loader } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { ExternalCertificateDTO, CertificateCategory } from '../../data/portfolioDTOs';
 import '../../styles/PortfolioModals.css';
 
@@ -251,7 +252,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             <button type="submit" className="pf-btn pf-btn-primary" disabled={loading}>
               {loading ? (
                 <>
-                  <Loader className="pf-spinner" size={18} />
+                  <MeowlKuruLoader size="small" text="" />
                   Đang lưu...
                 </>
               ) : (

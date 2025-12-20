@@ -14,6 +14,7 @@ import {
   ExpertPromptRequest
 } from '../../services/expertPromptService';
 import { useToast } from '../../hooks/useToast';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './AIExpertManagementTab.css';
 
 // ==================== HELPER ====================
@@ -363,7 +364,7 @@ const AIExpertManagementTab: React.FC = () => {
 
       {/* Content */}
       {loading ? (
-        <div className="expert-loading-state"><div className="expert-loading-spinner" /><p>Đang tải...</p></div>
+        <div className="expert-loading-state"><MeowlKuruLoader size="small" text="" /><p>Đang tải...</p></div>
       ) : sortedDomains.length === 0 ? (
         <div className="expert-empty-state">
           <Brain size={64} />

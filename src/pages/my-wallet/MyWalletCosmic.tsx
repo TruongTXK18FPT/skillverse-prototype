@@ -7,6 +7,7 @@ import {
   Calendar, Crown, ChevronRight, Rocket, ShoppingBag, Search, Filter, Lock, Building2, AlertCircle, Shield,
   CreditCard, User, Sparkles, Minus, Target, History, FileText, Download
 } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
 import walletService from '../../services/walletService';
 import { premiumService } from '../../services/premiumService';
@@ -402,7 +403,7 @@ const MyWalletCosmic: React.FC = () => {
     return (
       <div className="cosmic-wallet-container">
         <div className="cosmic-loading">
-          <div className="cosmic-spinner"></div>
+          <MeowlKuruLoader size="medium" text="" />
           <p>Đang tải dữ liệu vũ trụ...</p>
         </div>
       </div>

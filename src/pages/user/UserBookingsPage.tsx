@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, User, CheckCircle, XCircle, AlertCircle, MessageSquare, Star } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useNavigate } from 'react-router-dom';
 import { getMyBookings, downloadBookingInvoice, cancelBooking, BookingResponse } from '../../services/bookingService';
 import { createReview, getReviewByBookingId, ReviewResponse } from '../../services/reviewService';
@@ -167,7 +168,7 @@ const UserBookingsPage = () => {
       <div className="usbk-content">
         {loading ? (
           <div className="usbk-loading">
-            <div className="usbk-spinner"></div>
+            <MeowlKuruLoader size="small" text="" />
             <span>Đang tải dữ liệu...</span>
           </div>
         ) : bookings.length === 0 ? (

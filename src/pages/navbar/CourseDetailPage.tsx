@@ -23,6 +23,7 @@ import {
   Award,
   Activity
 } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useTheme } from '../../context/ThemeContext';
 import { getCourse } from '../../services/courseService';
 import { enrollUser, checkEnrollmentStatus, getEnrollmentProgress } from '../../services/enrollmentService';
@@ -161,10 +162,7 @@ const CourseDetailPage = () => {
       <div className={`cockpit-detail-container ${theme}`} data-theme={theme}>
         <div className="cockpit-detail-hud-frame">
           <div className="cockpit-detail-loading">
-            <div className="cockpit-detail-radar-spinner">
-              <div className="cockpit-detail-radar-sweep"></div>
-              <div className="cockpit-detail-radar-blip"></div>
-            </div>
+            <MeowlKuruLoader size="medium" text="" />
             <p className="cockpit-detail-loading-text">ĐANG TẢI DỮ LIỆU MODULE...</p>
             <div className="cockpit-detail-loading-bar">
               <div className="cockpit-detail-loading-progress"></div>

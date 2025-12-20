@@ -5,6 +5,7 @@ import TransmissionCard, { CommunityPost } from './TransmissionCard';
 import TelemetryWidget from './TelemetryWidget';
 import MeowlGuide from '../MeowlGuide';
 import Pagination from '../Pagination';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { TrendingUp, Zap, Radio, Users } from 'lucide-react';
 import './community-styles.css';
 import communityService from '../../services/communityService';
@@ -206,7 +207,7 @@ const CommunityHUD: React.FC = () => {
           <div>
             {loading ? (
               <div className="transmission-loading">
-                <div className="loading-spinner"></div>
+                <MeowlKuruLoader size="medium" text="" />
                 <p>Đang tải bài viết...</p>
               </div>
             ) : error ? (

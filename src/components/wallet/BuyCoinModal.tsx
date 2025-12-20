@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Coins, Gift, X } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import walletService from '../../services/walletService';
 import './BuyCoinModal.css';
 
@@ -229,7 +230,7 @@ const BuyCoinModal: React.FC<BuyCoinModalProps> = ({ isOpen, onClose, onSuccess,
           >
             {loading ? (
               <>
-                <span className="spinner"></span> Đang xử lý...
+                <MeowlKuruLoader size="small" text="" /> Đang xử lý...
               </>
             ) : (
               <>🪙 Mua Ngay</>

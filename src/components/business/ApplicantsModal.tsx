@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import jobService from '../../services/jobService';
 import { JobApplicationResponse, JobApplicationStatus } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './ApplicantsModal.css';
 
 interface ApplicantsModalProps {
@@ -117,7 +118,7 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
         <div className="am-modal-body">
           {isLoading ? (
             <div className="am-loading-state">
-              <div className="am-spinner"></div>
+              <MeowlKuruLoader size="medium" text="" />
               <p>Đang tải...</p>
             </div>
           ) : applications.length === 0 ? (

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { paymentService } from '../../services/paymentService';
 import { CreatePaymentRequest } from '../../data/paymentDTOs';
 import { useTheme } from '../../context/ThemeContext';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './DepositCashModal.css';
 
 interface DepositCashModalProps {
@@ -159,7 +160,7 @@ const DepositCashModal: React.FC<DepositCashModalProps> = ({ isOpen, onClose }) 
           >
             {loading ? (
               <>
-                <span className="spinner"></span> Đang xử lý...
+                <MeowlKuruLoader size="small" text="" /> Đang xử lý...
               </>
             ) : (
               <>🚀 Tiến Hành Thanh Toán</>

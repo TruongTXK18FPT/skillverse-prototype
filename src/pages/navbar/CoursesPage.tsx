@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Clock, Users, Star, BookOpen, Award, Play, ChevronDown, Filter, TrendingUp, GraduationCap, Folder, Radar, Zap, Target, Shield } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useTheme } from '../../context/ThemeContext';
 import '../../styles/CoursesPageCockpit.css';
 import Pagination from '../../components/Pagination';
@@ -174,10 +175,7 @@ const categories = [
       <div className={`cockpit-courses-container ${theme}`} data-theme={theme}>
         <div className="cockpit-hud-frame">
           <div className="cockpit-loading-container">
-            <div className="cockpit-radar-spinner">
-              <div className="cockpit-radar-sweep"></div>
-              <div className="cockpit-radar-blip"></div>
-            </div>
+            <MeowlKuruLoader size="medium" text="" />
             <p className="cockpit-loading-text">KHỞI ĐỘNG HỆ THỐNG...</p>
             <div className="cockpit-loading-bar">
               <div className="cockpit-loading-progress"></div>

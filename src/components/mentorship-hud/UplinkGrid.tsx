@@ -1,5 +1,6 @@
 import React from 'react';
 import { User } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './uplink-styles.css';
 
 interface UplinkGridProps {
@@ -12,7 +13,7 @@ const UplinkGrid: React.FC<UplinkGridProps> = ({ loading, isEmpty, children }) =
   if (loading) {
     return (
       <div className="uplink-loading">
-        <div className="uplink-spinner"></div>
+        <MeowlKuruLoader size="medium" text="" />
         <p className="uplink-loading-text">Đang tải danh sách mentor...</p>
       </div>
     );

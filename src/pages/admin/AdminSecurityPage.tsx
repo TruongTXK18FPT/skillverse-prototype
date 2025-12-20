@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Shield, Eye, EyeOff } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import Toast from '../../components/Toast';
@@ -194,7 +195,7 @@ const AdminSecurityPage = () => {
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <div className="spinner">Loading...</div>
+        <MeowlKuruLoader size="medium" text="Loading..." />
       </div>
     );
   }

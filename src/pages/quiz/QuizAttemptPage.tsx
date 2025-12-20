@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, RefreshCw, Award, AlertCircle, Lock, Zap } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
 import { getQuizById, submitQuiz, getUserQuizAttempts } from '../../services/quizService';
 import '../../styles/QuizAttemptPage-HUD.css';
@@ -130,7 +131,7 @@ const QuizAttemptPage: React.FC = () => {
     return (
       <div className="hud-quiz-attempt-container">
         <div className="hud-quiz-attempt-loading">
-          <div className="hud-quiz-attempt-spinner"></div>
+          <MeowlKuruLoader size="small" text="" />
           <p>INITIALIZING NEURAL VERIFICATION</p>
         </div>
       </div>

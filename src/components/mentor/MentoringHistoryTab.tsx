@@ -4,6 +4,7 @@ import html2canvas from 'html2canvas';
 import { MentoringSession } from '../../pages/main/MentorPage';
 import { getMyBookings, BookingResponse } from '../../services/bookingService';
 import { getMentorCoursePurchases, CoursePurchaseDTO } from '../../services/courseService';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './MentoringHistoryTab.css';
 
 interface HistoryItem {
@@ -317,7 +318,7 @@ const MentoringHistoryTab: React.FC = () => {
       {/* Sessions Table */}
       <div className="mentor-history-table-container">
         {loading ? (
-          <div className="mentor-loading-state"><div className="spinner"></div><p>Đang tải dữ liệu...</p></div>
+          <div className="mentor-loading-state"><MeowlKuruLoader size="medium" text="Đang tải dữ liệu..." /></div>
         ) : paginatedSessions.length === 0 ? (
           <div className="mentor-history-no-sessions">
             <p>Không tìm thấy hoạt động nào phù hợp với tiêu chí của bạn.</p>

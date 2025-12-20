@@ -1,6 +1,7 @@
 // pages/SeminarPage.tsx
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import '../../components/seminar-hud/briefing-styles.css';
 import HoloPagination from '../../components/mentorship-hud/HoloPagination';
 import BriefingHero from '../../components/seminar-hud/BriefingHero';
@@ -78,7 +79,7 @@ const SeminarPage: React.FC = () => {
     return (
       <div className={`seminar-page ${theme}`} data-theme={theme}>
         <div className="loading-container">
-          <div className="loading-spinner"></div>
+          <MeowlKuruLoader size="small" text="" />
           <p>Đang tải thông tin seminar...</p>
         </div>
       </div>

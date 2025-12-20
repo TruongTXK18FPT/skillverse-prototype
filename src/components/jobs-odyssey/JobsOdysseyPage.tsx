@@ -7,6 +7,7 @@ import MeowlGuide from '../MeowlGuide';
 import jobService from '../../services/jobService';
 import { JobPostingResponse } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './odyssey-styles.css';
 
 const JobsOdysseyPage = () => {
@@ -84,7 +85,7 @@ const JobsOdysseyPage = () => {
       {/* Jobs Grid */}
       {isLoading ? (
         <div className="odyssey-loading">
-          <div className="odyssey-loading__spinner"></div>
+          <MeowlKuruLoader size="medium" text="" />
           <p className="odyssey-loading__text">Đang tải công việc...</p>
         </div>
       ) : filteredJobs.length === 0 ? (

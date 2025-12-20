@@ -3,6 +3,7 @@ import jobService from '../../services/jobService';
 import { JobApplicationResponse } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';
 import { Clock, MapPin, DollarSign, Calendar, CheckCircle, XCircle, Eye } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import OdysseyLayout from '../../components/jobs-odyssey/OdysseyLayout';
 import '../../components/jobs-odyssey/odyssey-styles.css';
 
@@ -108,7 +109,7 @@ const MyApplicationsPage: React.FC = () => {
     return (
       <OdysseyLayout>
         <div className="odyssey-loading">
-          <div className="odyssey-loading__spinner"></div>
+          <MeowlKuruLoader size="small" text="" />
           <p className="odyssey-loading__text">Đang tải danh sách ứng tuyển...</p>
         </div>
       </OdysseyLayout>

@@ -10,6 +10,7 @@ import {
   Award,
   BarChart2
 } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { getCourseEnrollments, EnrollmentDetailDTO } from '../../services/enrollmentService';
 import UserService from '../../services/userService';
 import { UserProfileResponse } from '../../data/userDTOs';
@@ -128,7 +129,7 @@ const StudentManagementTab: React.FC<StudentManagementTabProps> = ({ courseId, q
   if (loading) {
     return (
       <div className="smt-loading-container">
-        <div className="smt-loading-spinner"></div>
+        <MeowlKuruLoader size="medium" text="" />
         <p>Loading student data...</p>
       </div>
     );

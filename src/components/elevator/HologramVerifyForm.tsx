@@ -182,7 +182,7 @@ const HologramVerifyForm: React.FC<HologramVerifyFormProps> = ({
                   disabled={isResendLoading || resendCooldown > 0}
                 >
                   {isResendLoading ? (
-                    <span className="spinner-small"></span>
+                    <MeowlKuruLoader size="small" text="" />
                   ) : resendCooldown > 0 ? (
                     `Gửi lại sau ${resendCooldown}s`
                   ) : (

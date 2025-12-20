@@ -18,6 +18,7 @@ import {
 import { listModulesWithContent, ModuleDetailDTO } from '../../services/moduleService';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { NeuralCard } from '../learning-hud';
 import './CourseApprovalTabCosmic.css';
 
@@ -260,7 +261,7 @@ export const CourseApprovalTabCosmic: React.FC = () => {
       <div className="cosmic-table-container">
         {loading ? (
           <div className="cosmic-loading">
-            <div className="cosmic-loading-spinner" />
+            <MeowlKuruLoader size="medium" text="" />
             <p>Đang tải...</p>
           </div>
         ) : filteredCourses.length === 0 ? (

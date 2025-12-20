@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import jobService from '../../services/jobService';
 import { JobPostingResponse, JobStatus } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './MinJobListTab.css';
 
 interface MinJobListTabProps {
@@ -199,7 +200,7 @@ const MinJobListTab: React.FC<MinJobListTabProps> = ({ onViewApplicants, refresh
 
       {isLoading ? (
         <div className="mjlt-loading-state">
-          <div className="mjlt-spinner"></div>
+          <MeowlKuruLoader size="medium" text="" />
           <p>Đang tải...</p>
         </div>
       ) : filteredJobs.length === 0 ? (

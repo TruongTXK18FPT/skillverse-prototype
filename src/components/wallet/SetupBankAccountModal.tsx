@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Building2, CreditCard, User, Lock, X, AlertCircle } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import walletService from '../../services/walletService';
 import './SetupBankAccountModal.css';
 
@@ -252,7 +253,7 @@ const SetupBankAccountModal: React.FC<SetupBankAccountModalProps> = ({
           >
             {loading ? (
               <>
-                <span className="spinner"></span> Đang xử lý...
+                <MeowlKuruLoader size="small" text="" /> Đang xử lý...
               </>
             ) : (
               <>{step === 'bank' ? (needsPin ? 'Tiếp theo →' : '✓ Hoàn tất') : '✓ Hoàn tất'}</>

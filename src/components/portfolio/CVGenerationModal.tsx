@@ -1,6 +1,7 @@
 // CV Generation Modal
 import React, { useState } from 'react';
 import { X, Loader, Sparkles, FileText } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { CVGenerationRequest } from '../../data/portfolioDTOs';
 import '../../styles/PortfolioModals.css';
 
@@ -229,7 +230,7 @@ export const CVGenerationModal: React.FC<CVGenerationModalProps> = ({
             <button type="submit" className="pf-btn pf-btn-primary pf-btn-ai" disabled={loading}>
               {loading ? (
                 <>
-                  <Loader className="pf-spinner" size={18} />
+                  <MeowlKuruLoader size="small" text="" />
                   AI đang tạo CV...
                 </>
               ) : (

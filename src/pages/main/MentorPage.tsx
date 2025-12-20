@@ -24,6 +24,7 @@ import {
   X,
   AlertTriangle
 } from 'lucide-react';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
 import { listCoursesByAuthor, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse, submitCourseForApproval } from '../../services/courseService';
 import { CourseStatus, CourseLevel, CourseUpdateDTO, CourseCreateDTO } from '../../data/courseDTOs';
@@ -1194,7 +1195,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
       {/* Loading State */}
       {loading && (
         <div className="mentor-loading-state">
-          <div className="spinner"></div>
+          <MeowlKuruLoader size="small" text="" />
           <p>Đang tải khóa học...</p>
         </div>
       )}
@@ -1441,7 +1442,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                 </div>
 
                 {modulesLoading ? (
-                  <div className="mentor-loading-state"><div className="spinner"></div><p>Đang tải module...</p></div>
+                  <div className="mentor-loading-state"><MeowlKuruLoader size="small" text="" /><p>Đang tải module...</p></div>
                 ) : modules.length === 0 ? (
                   <div className="mentor-empty-state">
                     <BookOpen className="w-16 h-16 text-gray-400" />
@@ -1513,7 +1514,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                           )}
                         </div>
                         <div className="mentor-lessons-list" onDragOver={(e)=>e.preventDefault()}>
-                          {lessonsLoading && <div className="mentor-loading-state"><div className="spinner"></div><p>Đang tải bài học...</p></div>}
+                          {lessonsLoading && <div className="mentor-loading-state"><MeowlKuruLoader size="small" text="" /><p>Đang tải bài học...</p></div>}
                           {courseLessons.map((lesson, idx) => (
                             <div key={lesson.id} className="mentor-lesson-card" draggable onDragStart={(e)=>{ e.dataTransfer.setData('text/plain', String(idx)); }} onDrop={async (e)=>{
                               const from = Number(e.dataTransfer.getData('text/plain'));
@@ -1685,7 +1686,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                         <div className="mentor-lessons-list">
                           {assignmentsLoading ? (
                             <div className="mentor-loading">
-                              <div className="spinner"></div>
+                              <MeowlKuruLoader size="small" text="" />
                               <p>Đang tải bài tập...</p>
                             </div>
                           ) : moduleAssignments.length === 0 ? (
@@ -1775,7 +1776,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
               <div className="mentor-students-section" style={{ padding: '20px' }}>
                 {loadingAllQuizzes ? (
                   <div className="mentor-loading-state">
-                    <div className="spinner"></div>
+                    <MeowlKuruLoader size="small" text="" />
                     <p>Đang tải dữ liệu học viên...</p>
                   </div>
                 ) : (
@@ -2705,7 +2706,9 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                 </div>
               </div>
               {previewLoading ? (
-                <div className="mentor-loading-state"><div className="spinner"></div><p>Đang tải nội dung...</p></div>
+                <div className="mentor-loading-state">
+                  <MeowlKuruLoader size="medium" text="Đang tải nội dung..." />
+                </div>
               ) : (
                 <>
                   {previewLesson.type === 'READING' && (

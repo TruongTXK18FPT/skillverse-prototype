@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, X, ChevronDown } from 'lucide-react';
+import MeowlKuruLoader from './kuru-loader/MeowlKuruLoader';
 import careerChatService from '../services/careerChatService';
 import { ExpertFieldResponse, RoleInfo } from '../types/CareerChat';
 import '../styles/ExpertModeSelectorTech.css';
@@ -83,7 +84,7 @@ const ExpertModeSelector: React.FC<ExpertModeSelectorProps> = ({ isOpen, onClose
         <div className="expert-selector-content">
           {loading ? (
             <div className="expert-selector-loading">
-              <div className="spinner"></div>
+              <MeowlKuruLoader size="small" text="" />
               <p>Đang tải danh sách chuyên gia...</p>
             </div>
           ) : (

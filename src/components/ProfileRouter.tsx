@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import MeowlKuruLoader from './kuru-loader/MeowlKuruLoader';
 
 /**
  * ProfileRouter component
@@ -61,7 +62,7 @@ const ProfileRouter = () => {
         flexDirection: 'column',
         gap: '1rem'
       }}>
-        <div className="spinner"></div>
+        <MeowlKuruLoader size="small" text="" />
         <p>Đang tải thông tin...</p>
       </div>
     );
@@ -76,7 +77,7 @@ const ProfileRouter = () => {
       flexDirection: 'column',
       gap: '1rem'
     }}>
-      <div className="spinner"></div>
+      <MeowlKuruLoader size="small" text="" />
       <p>Đang chuyển hướng đến trang profile...</p>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, X, AlertCircle } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './PinConfirmModal.css';
 
 interface PinConfirmModalProps {
@@ -94,7 +95,7 @@ const PinConfirmModal: React.FC<PinConfirmModalProps> = ({
           >
             {loading ? (
               <>
-                <span className="spinner"></span> Đang xử lý...
+                <MeowlKuruLoader size="small" text="" /> Đang xử lý...
               </>
             ) : (
               <>🔒 Xác Nhận</>

@@ -3,6 +3,7 @@ import {
   Calendar, Clock, Video, CheckCircle, XCircle, 
   User, DollarSign, FileText 
 } from 'lucide-react';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   getMyBookings, approveBooking, rejectBooking, 
@@ -124,7 +125,7 @@ const MentorBookingManager: React.FC = () => {
     });
   };
 
-  if (loading) return <div className="mbm-loading"><div className="mbm-spinner"></div></div>;
+  if (loading) return <div className="mbm-loading"><MeowlKuruLoader size="medium" text="" /></div>;
   if (error) return <div className="mbm-error">{error}</div>;
 
   return (

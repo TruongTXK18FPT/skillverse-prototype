@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import MeowlKuruLoader from './kuru-loader/MeowlKuruLoader';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -23,7 +24,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         alignItems: 'center', 
         height: '100vh' 
       }}>
-        <div className="spinner">Loading...</div>
+        <MeowlKuruLoader size="small" text="Loading..." />
       </div>
     );
   }
