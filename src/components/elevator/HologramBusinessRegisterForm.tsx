@@ -15,6 +15,7 @@ interface BusinessRegisterData {
   taxId: string;
   password: string;
   confirmPassword: string;
+  phone: string;
   contactPersonName: string;
   contactPersonPhone: string; // Changed from optional to required for controlled input
   contactPersonPosition: string;
@@ -121,6 +122,10 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
     if (!formData.taxId.trim()) return 'Vui lòng nhập mã số thuế';
     if (!/^\d{10}(?:\d{3})?$/.test(formData.taxId)) return 'Mã số thuế phải gồm 10 hoặc 13 chữ số';
     if (!formData.companyWebsite.trim()) return 'Vui lòng nhập website công ty';
+    // if (!formData.businessAddress.trim()) return 'Vui lòng nhập địa chỉ doanh nghiệp'; // Kept as is
+    // Relaxed validation: just check if it looks somewhat like a domain (has a dot)
+    if (!formData.companyWebsite.includes('.') || formData.companyWebsite.length < 4) return 'Website không hợp lệ (ví dụ: skillverse.vn)';
+
     if (!formData.businessAddress.trim()) return 'Vui lòng nhập địa chỉ doanh nghiệp';
     if (companyDocuments.length === 0) return 'Vui lòng tải lên tài liệu doanh nghiệp (PDF)';
     if (!companyDocuments.some(f => f.type === 'application/pdf')) return 'Cần ít nhất một tệp PDF giấy phép kinh doanh';
@@ -147,6 +152,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
       taxId: formData.taxId,
       password: formData.password,
       confirmPassword: formData.confirmPassword,
+      phone: formData.phone,
       contactPersonName: formData.contactPersonName,
       contactPersonPhone: formData.contactPersonPhone || '',
       contactPersonPosition: formData.contactPersonPosition,
@@ -361,8 +367,8 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
             <div className="reg-business-input-wrapper">
               <input
                 type="tel"
-                name="contactPersonPhone"
-                value={formData.contactPersonPhone}
+                name="phone"
+                value={formData.phone}
                 onChange={handleInputChange}
                 disabled={isLoading}
                 className="reg-business-input"
@@ -396,7 +402,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
             </label>
             <div className="reg-business-input-wrapper">
               <input
-                type="url"
+                type="text"
                 name="companyWebsite"
                 value={formData.companyWebsite}
                 onChange={handleInputChange}

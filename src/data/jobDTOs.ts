@@ -2,7 +2,9 @@
 
 export enum JobStatus {
   IN_PROGRESS = 'IN_PROGRESS', // Draft/private job
+  PENDING_APPROVAL = 'PENDING_APPROVAL', // Waiting for admin approval
   OPEN = 'OPEN',               // Public job accepting applications
+  REJECTED = 'REJECTED',       // Rejected by admin
   CLOSED = 'CLOSED'            // No longer accepting applications
 }
 
@@ -70,6 +72,13 @@ export interface CreateJobRequest {
   deadline: string; // YYYY-MM-DD format
   isRemote: boolean;
   location?: string | null; // Required if isRemote = false
+  // Enhanced fields
+  experienceLevel?: string;
+  jobType?: string;
+  hiringQuantity?: number;
+  benefits?: string;
+  genderRequirement?: string;
+  isNegotiable?: boolean;
 }
 
 export interface UpdateJobRequest {
@@ -81,6 +90,13 @@ export interface UpdateJobRequest {
   deadline?: string;
   isRemote?: boolean;
   location?: string | null;
+  // Enhanced fields
+  experienceLevel?: string;
+  jobType?: string;
+  hiringQuantity?: number;
+  benefits?: string;
+  genderRequirement?: string;
+  isNegotiable?: boolean;
 }
 
 export interface ApplyJobRequest {
@@ -107,6 +123,15 @@ export interface JobPostingResponse {
   location: string | null;
   status: JobStatus;
   applicantCount: number;
+  // Enhanced fields
+  experienceLevel?: string;
+  jobType?: string;
+  hiringQuantity?: number;
+  benefits?: string;
+  genderRequirement?: string;
+  isNegotiable?: boolean;
+
+  // Recruiter information
   recruiterCompanyName: string; // From nested RecruiterProfile
   recruiterEmail: string;       // From nested User
   recruiterUserId: number;      // For checking if current user owns this job

@@ -483,6 +483,51 @@ body.modal-open {
   );
 }
 
+/* Enhanced Grid Style */
+.jdm-odyssey-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  background: rgba(15, 23, 42, 0.4);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.2); /* Gold accent */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.jdm-odyssey-meta-item-small {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.jdm-odyssey-meta-item-small strong {
+  color: #fbbf24; /* Amber/Gold for labels to match theme */
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.jdm-odyssey-meta-item-small span {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: 'Rajdhani', sans-serif; /* Tech font if available */
+  text-transform: capitalize;
+}
+
+/* Ensure consistent section titles */
+.jdm-odyssey-section-title {
+  color: #fbbf24; /* Match the gold theme */
+  border-left: 3px solid #fbbf24;
+  padding-left: 10px;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
 /* ==================== SKILLS - TECH MODULES ==================== */
 .jdm-odyssey-skills {
   display: flex;

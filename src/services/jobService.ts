@@ -14,6 +14,15 @@ type AxiosError = { response?: { data?: { message?: string } } };
 
 class JobService {
   
+  // ==================== PRIVATE HELPER ====================
+  
+  private handleError(error: unknown, defaultMessage: string): never {
+    const axiosError = error as AxiosError;
+    const errorMessage = axiosError.response?.data?.message || defaultMessage;
+    console.error(`${defaultMessage}:`, errorMessage);
+    throw new Error(errorMessage);
+  }
+
   // ==================== JOB POSTING ENDPOINTS (RECRUITER) ====================
 
   /**
@@ -22,15 +31,10 @@ class JobService {
    */
   async createJob(data: CreateJobRequest): Promise<JobPostingResponse> {
     try {
-      
       const response = await axiosInstance.post<JobPostingResponse>('/api/jobs', data);
-      
       return response.data;
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Failed to create job';
-      console.error('Error creating job:', errorMessage);
-      throw new Error(errorMessage);
+      this.handleError(error, 'Failed to create job');
     }
   }
 
@@ -40,15 +44,10 @@ class JobService {
    */
   async updateJob(jobId: number, data: UpdateJobRequest): Promise<JobPostingResponse> {
     try {
-      
       const response = await axiosInstance.put<JobPostingResponse>(`/api/jobs/${jobId}`, data);
-      
       return response.data;
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Failed to update job';
-      console.error('Error updating job:', errorMessage);
-      throw new Error(errorMessage);
+      this.handleError(error, 'Failed to update job');
     }
   }
 
@@ -58,19 +57,12 @@ class JobService {
    */
   async changeJobStatus(jobId: number, status: JobStatus): Promise<JobPostingResponse> {
     try {
-      
       const response = await axiosInstance.patch<JobPostingResponse>(
-        `/api/jobs/${jobId}/status`,
-        null,
-        { params: { status } }
+        `/api/jobs/${jobId}/status?status=${status}`
       );
-      
       return response.data;
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Failed to change job status';
-      console.error('Error changing job status:', errorMessage);
-      throw new Error(errorMessage);
+      this.handleError(error, 'Failed to change job status');
     }
   }
 
@@ -80,14 +72,9 @@ class JobService {
    */
   async deleteJob(jobId: number): Promise<void> {
     try {
-      
       await axiosInstance.delete(`/api/jobs/${jobId}`);
-      
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Failed to delete job';
-      console.error('Error deleting job:', errorMessage);
-      throw new Error(errorMessage);
+      this.handleError(error, 'Failed to delete job');
     }
   }
 
@@ -97,15 +84,10 @@ class JobService {
    */
   async reopenJob(jobId: number): Promise<JobPostingResponse> {
     try {
-      
       const response = await axiosInstance.post<JobPostingResponse>(`/api/jobs/${jobId}/reopen`);
-      
       return response.data;
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Failed to reopen job';
-      console.error('Error reopening job:', errorMessage);
-      throw new Error(errorMessage);
+      this.handleError(error, 'Failed to reopen job');
     }
   }
 
@@ -115,15 +97,10 @@ class JobService {
    */
   async getMyJobs(): Promise<JobPostingResponse[]> {
     try {
-      
       const response = await axiosInstance.get<JobPostingResponse[]>('/api/jobs/my-jobs');
-      
       return response.data;
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Failed to fetch jobs';
-      console.error('Error fetching my jobs:', errorMessage);
-      throw new Error(errorMessage);
+      this.handleError(error, 'Failed to fetch jobs');
     }
   }
 
@@ -160,10 +137,7 @@ class JobService {
       
       return response.data;
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Failed to fetch public jobs';
-      console.error('Error fetching public jobs:', errorMessage);
-      throw new Error(errorMessage);
+      this.handleError(error, 'Failed to fetch public jobs');
     }
   }
 
@@ -177,10 +151,7 @@ class JobService {
       const response = await axiosInstance.get<JobPostingResponse>(`/api/jobs/${jobId}`);
       return response.data;
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Failed to fetch job details';
-      console.error('Error fetching job details:', errorMessage);
-      throw new Error(errorMessage);
+      this.handleError(error, 'Failed to fetch job details');
     }
   }
 
@@ -200,10 +171,7 @@ class JobService {
       
       return response.data;
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Failed to apply to job';
-      console.error('Error applying to job:', errorMessage);
-      throw new Error(errorMessage);
+      this.handleError(error, 'Failed to apply to job');
     }
   }
 
@@ -218,10 +186,7 @@ class JobService {
       
       return response.data;
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Failed to fetch applications';
-      console.error('Error fetching my applications:', errorMessage);
-      throw new Error(errorMessage);
+      this.handleError(error, 'Failed to fetch applications');
     }
   }
 
@@ -240,10 +205,7 @@ class JobService {
       
       return response.data;
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Failed to fetch applicants';
-      console.error('Error fetching applicants:', errorMessage);
-      throw new Error(errorMessage);
+      this.handleError(error, 'Failed to fetch applicants');
     }
   }
 
@@ -265,10 +227,7 @@ class JobService {
       
       return response.data;
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorMessage = axiosError.response?.data?.message || 'Failed to update application status';
-      console.error('Error updating application status:', errorMessage);
-      throw new Error(errorMessage);
+      this.handleError(error, 'Failed to update application status');
     }
   }
 

@@ -114,6 +114,7 @@ export interface BusinessRegistrationRequest {
   taxId: string;
   password: string;
   confirmPassword: string;
+  phone?: string;
   // Contact Person Information
   contactPersonName: string; // Full name of contact person
   contactPersonPhone?: string; // Optional phone number

@@ -29,9 +29,14 @@ class BusinessService {
       formData.append('companyAddress', businessData.businessAddress);
       formData.append('taxCodeOrBusinessRegistrationNumber', businessData.taxId);
       
+      // Company Phone
+      if (businessData.phone) {
+        formData.append('phone', businessData.phone);
+      }
+      
       // Contact Person Information
       if (businessData.contactPersonPhone) {
-        formData.append('phone', businessData.contactPersonPhone);
+        formData.append('contactPersonPhone', businessData.contactPersonPhone);
       }
       formData.append('contactPersonPosition', businessData.contactPersonPosition);
       

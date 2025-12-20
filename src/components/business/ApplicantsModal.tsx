@@ -3,7 +3,7 @@ import jobService from '../../services/jobService';
 import { JobApplicationResponse, JobApplicationStatus } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
-import './ApplicantsModal.css';
+import './ApplicantsModal-fleet.css';
 
 interface ApplicantsModalProps {
   jobId: number;
@@ -11,7 +11,7 @@ interface ApplicantsModalProps {
   onClose: () => void;
   onAccept: (applicationId: number, applicantName: string) => void;
   onReject: (applicationId: number, applicantName: string) => void;
-  refreshTrigger?: number; // Increment this to trigger refresh
+  refreshTrigger?: number;
 }
 
 const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
@@ -30,7 +30,7 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
 
   useEffect(() => {
     fetchApplicants();
-  }, [jobId, refreshTrigger]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [jobId, refreshTrigger]);
 
   const fetchApplicants = async () => {
     setIsLoading(true);
@@ -45,7 +45,7 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
     }
   };
 
-  const getStatusBadge = (status: JobApplicationStatus): string => {
+  const getStatusBadgeClass = (status: JobApplicationStatus): string => {
     const statusClasses = {
       'PENDING': 'am-status-pending',
       'REVIEWED': 'am-status-reviewed',
@@ -66,7 +66,7 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
   };
 
   const handleMarkReviewed = async (applicationId: number) => {
-    if (processingIds.has(applicationId)) return; // Prevent double-click
+    if (processingIds.has(applicationId)) return;
     
     setProcessingIds(prev => new Set(prev).add(applicationId));
     try {
@@ -75,7 +75,10 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
         acceptanceMessage: undefined,
         rejectionReason: undefined
       });
-      fetchApplicants(); // Refresh list
+      // Update local state immediately without waiting for fetch
+      setApplications(prev => prev.map(app => 
+        app.id === applicationId ? { ...app, status: 'REVIEWED' as JobApplicationStatus } : app
+      ));
     } catch (error) {
       console.error('Error marking reviewed:', error);
       showError('Lỗi Cập Nhật', error instanceof Error ? error.message : 'Không thể đánh dấu đã xem');
@@ -95,7 +98,7 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('vi-VN', {
       year: 'numeric',
-      month: 'short',
+      month: 'numeric',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
@@ -103,127 +106,105 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
   };
 
   return (
-    <div className="am-modal-overlay" onClick={onClose}>
-      <div className="am-modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="am-modal-header">
-          <div>
+    <div className="am-fleet-overlay" onClick={onClose}>
+      <div className="am-fleet-content" onClick={(e) => e.stopPropagation()}>
+        <div className="am-fleet-header">
+          <div className="am-fleet-title">
             <h3>👥 Danh Sách Ứng Viên</h3>
-            <p className="am-job-title">{jobTitle}</p>
+            <p className="am-fleet-subtitle">CHIẾN DỊCH: {jobTitle}</p>
           </div>
-          <button className="am-close-modal" onClick={onClose}>
-            ×
-          </button>
+          <button className="am-fleet-close" onClick={onClose}>×</button>
         </div>
 
-        <div className="am-modal-body">
+        <div className="am-fleet-body">
           {isLoading ? (
             <div className="am-loading-state">
               <MeowlKuruLoader size="medium" text="" />
               <p>Đang tải...</p>
             </div>
           ) : applications.length === 0 ? (
-            <div className="am-empty-state">
-              <div className="am-empty-icon">📭</div>
+            <div className="am-fleet-empty">
+              <div className="am-fleet-empty-icon">📭</div>
               <h4>Chưa Có Ứng Viên</h4>
-              <p>Chưa có ai ứng tuyển cho công việc này.</p>
+              <p>Chưa có ai tham gia chiến dịch này.</p>
             </div>
           ) : (
-            <div className="am-applicants-table-container">
-              <table className="am-applicants-table">
-                <thead>
-                  <tr>
-                    <th>Ứng Viên</th>
-                    <th>Ngày Ứng Tuyển</th>
-                    <th>Trạng Thái</th>
-                    <th>Cover Letter</th>
-                    <th>Hành Động</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {applications.map(app => (
-                    <tr key={app.id}>
-                      <td>
-                        <div className="am-user-cell">
-                          <strong>{app.userFullName}</strong>
-                          <small>{app.userEmail}</small>
-                        </div>
-                      </td>
-                      <td className="am-date-cell">
-                        {formatDate(app.appliedAt)}
-                      </td>
-                      <td>
-                        <span className={`am-status-badge ${getStatusBadge(app.status)}`}>
-                          {getStatusText(app.status)}
-                        </span>
-                      </td>
-                      <td className="am-coverletter-cell">
-                        {app.coverLetter ? (
+            <table className="am-fleet-table">
+              <thead>
+                <tr>
+                  <th>Ứng Viên</th>
+                  <th>Thời Gian</th>
+                  <th>Trạng Thái</th>
+                  <th>Hồ Sơ (Cover Letter)</th>
+                  <th>Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                {applications.map(app => (
+                  <tr key={app.id}>
+                    <td>
+                      <div className="am-fleet-user-info">
+                        <strong>{app.userFullName}</strong>
+                        <small>{app.userEmail}</small>
+                      </div>
+                    </td>
+                    <td>{formatDate(app.appliedAt)}</td>
+                    <td>
+                      <span className={`am-fleet-badge ${getStatusBadgeClass(app.status)}`}>
+                        {getStatusText(app.status)}
+                      </span>
+                    </td>
+                    <td>
+                      {app.coverLetter ? (
+                        <>
+                          <button className="am-fleet-cover-btn" onClick={() => toggleExpand(app.id)}>
+                            {expandedId === app.id ? '▼ Ẩn' : '▶ Xem Chi Tiết'}
+                          </button>
+                          {expandedId === app.id && (
+                            <div className="am-fleet-cover-content">
+                              {app.coverLetter}
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <span style={{ color: '#64748b', fontStyle: 'italic' }}>Không có</span>
+                      )}
+                    </td>
+                    <td>
+                      <div className="am-fleet-actions">
+                        {app.status === 'PENDING' && (
+                          <button
+                            className="am-btn-action am-btn-review"
+                            onClick={() => handleMarkReviewed(app.id)}
+                            disabled={processingIds.has(app.id)}
+                          >
+                            {processingIds.has(app.id) ? '...' : '👁️ Đã Xem'}
+                          </button>
+                        )}
+                        {(app.status === 'PENDING' || app.status === 'REVIEWED') && (
                           <>
                             <button
-                              className="am-expand-btn"
-                              onClick={() => toggleExpand(app.id)}
+                              className="am-btn-action am-btn-accept"
+                              onClick={() => onAccept(app.id, app.userFullName)}
                             >
-                              {expandedId === app.id ? '▼ Ẩn' : '▶ Xem'}
+                              ✅ Duyệt
                             </button>
-                            {expandedId === app.id && (
-                              <div className="am-coverletter-content">
-                                {app.coverLetter}
-                              </div>
-                            )}
-                          </>
-                        ) : (
-                          <span className="am-no-coverletter">Không có</span>
-                        )}
-                      </td>
-                      <td>
-                        <div className="am-action-buttons">
-                          {app.status === 'PENDING' && (
                             <button
-                              className="am-action-btn am-reviewed-btn"
-                              onClick={() => handleMarkReviewed(app.id)}
-                              disabled={processingIds.has(app.id)}
-                              title="Đánh Dấu Đã Xem"
+                              className="am-btn-action am-btn-reject"
+                              onClick={() => onReject(app.id, app.userFullName)}
                             >
-                              {processingIds.has(app.id) ? '⏳ Đang xử lý...' : '👁️ Đã Xem'}
+                              ❌ Loại
                             </button>
-                          )}
-                          {(app.status === 'PENDING' || app.status === 'REVIEWED') && (
-                            <>
-                              <button
-                                className="am-action-btn am-accept-btn"
-                                onClick={() => onAccept(app.id, app.userFullName)}
-                                title="Chấp Nhận"
-                              >
-                                ✅ Chấp Nhận
-                              </button>
-                              <button
-                                className="am-action-btn am-reject-btn"
-                                onClick={() => onReject(app.id, app.userFullName)}
-                                title="Từ Chối"
-                              >
-                                ❌ Từ Chối
-                              </button>
-                            </>
-                          )}
-                          {app.status === 'ACCEPTED' && app.acceptanceMessage && (
-                            <div className="am-message-display">
-                              <strong>Tin nhắn:</strong>
-                              <p>{app.acceptanceMessage}</p>
-                            </div>
-                          )}
-                          {app.status === 'REJECTED' && app.rejectionReason && (
-                            <div className="am-message-display am-rejection">
-                              <strong>Lý do:</strong>
-                              <p>{app.rejectionReason}</p>
-                            </div>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                          </>
+                        )}
+                        {app.status === 'ACCEPTED' && <span style={{color: '#34d399'}}>Đã duyệt vào đội</span>}
+                        {app.status === 'REJECTED' && <span style={{color: '#f87171'}}>Đã từ chối</span>}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
       </div>

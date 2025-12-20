@@ -1,0 +1,194 @@
+/* Fleet Theme for Applicants Modal */
+.am-fleet-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: amFadeIn 0.2s ease-out;
+}
+
+.am-fleet-content {
+  background: #0f172a; /* Slate 900 */
+  border: 1px solid var(--fleet-cyan, #06b6d4);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  animation: amSlideUp 0.3s ease-out;
+}
+
+.am-fleet-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: rgba(6, 182, 212, 0.05);
+}
+
+.am-fleet-title h3 {
+  margin: 0;
+  color: #fff;
+  font-family: 'Rajdhani', sans-serif;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.am-fleet-subtitle {
+  margin: 5px 0 0 0;
+  color: var(--fleet-cyan, #06b6d4);
+  font-size: 0.9rem;
+}
+
+.am-fleet-close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.am-fleet-close:hover {
+  color: #fff;
+}
+
+.am-fleet-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Table Styles */
+.am-fleet-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.am-fleet-table th {
+  text-align: left;
+  padding: 15px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.am-fleet-table td {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  vertical-align: top;
+}
+
+.am-fleet-user-info strong {
+  display: block;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.am-fleet-user-info small {
+  color: #64748b;
+}
+
+/* Badges */
+.am-fleet-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.am-status-pending { background: rgba(245, 158, 11, 0.1); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+.am-status-reviewed { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+.am-status-accepted { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+.am-status-rejected { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+/* Cover Letter */
+.am-fleet-cover-btn {
+  background: transparent;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.am-fleet-cover-btn:hover {
+  border-color: #64748b;
+  color: #fff;
+}
+
+.am-fleet-cover-content {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+  border-left: 2px solid #64748b;
+}
+
+/* Actions */
+.am-fleet-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.am-btn-action {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.am-btn-review { background: rgba(6, 182, 212, 0.1); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
+.am-btn-review:hover { background: rgba(6, 182, 212, 0.2); }
+
+.am-btn-accept { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+.am-btn-accept:hover { background: rgba(16, 185, 129, 0.2); }
+
+.am-btn-reject { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+.am-btn-reject:hover { background: rgba(239, 68, 68, 0.2); }
+
+.am-fleet-empty {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+}
+
+.am-fleet-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+@keyframes amFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes amSlideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }

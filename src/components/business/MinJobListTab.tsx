@@ -149,6 +149,20 @@ const MinJobListTab: React.FC<MinJobListTabProps> = ({ onViewApplicants, refresh
     }
   };
 
+  const handleDelete = async (jobId: number) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa công việc này? Hành động này không thể hoàn tác và sẽ xóa tất cả đơn ứng tuyển liên quan.')) {
+      try {
+        await jobService.deleteJob(jobId);
+        // Remove from local state immediately
+        setJobs(prevJobs => prevJobs.filter(job => job.id !== jobId));
+        showSuccess('Thành Công', 'Đã xóa công việc');
+      } catch (err: any) {
+        console.error('Failed to delete job:', err);
+        showError('Lỗi Xóa', 'Không thể xóa công việc. Vui lòng thử lại sau.');
+      }
+    }
+  };
+
   const handleViewApplicants = (jobId: number) => {
     if (onViewApplicants) {
       onViewApplicants(jobId);
@@ -318,6 +332,13 @@ const MinJobListTab: React.FC<MinJobListTabProps> = ({ onViewApplicants, refresh
                           🔄 Mở Lại
                         </button>
                       )}
+                      <button
+                        className="mjlt-action-btn mjlt-delete-btn"
+                        onClick={() => handleDelete(job.id)}
+                        title="Xóa Công Việc"
+                      >
+                        🗑️
+                      </button>
                     </div>
                   </td>
                 </tr>

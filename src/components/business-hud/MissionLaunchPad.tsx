@@ -18,7 +18,13 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({ onMissionLaunched }
     maxBudget: '',
     deadline: '',
     isRemote: true,
-    location: ''
+    location: '',
+    experienceLevel: 'Junior',
+    jobType: 'FULL_TIME',
+    hiringQuantity: '1',
+    genderRequirement: 'ANY',
+    benefits: '',
+    isNegotiable: false
   });
   const [skillInput, setSkillInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,16 +57,29 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({ onMissionLaunched }
     e.preventDefault();
     setIsSubmitting(true);
     
+    // Check wallet balance warning
+    const confirmMsg = 'Lưu ý: Việc đăng tuyển dụng sẽ trừ 50.000 VNĐ vào ví của bạn. Bạn có chắc chắn muốn tiếp tục?';
+    if (!window.confirm(confirmMsg)) {
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       await jobService.createJob({
         title: formData.title,
         description: formData.description,
         requiredSkills: formData.skills,
-        minBudget: Number(formData.minBudget),
-        maxBudget: Number(formData.maxBudget),
+        minBudget: formData.isNegotiable ? 0 : Number(formData.minBudget),
+        maxBudget: formData.isNegotiable ? 0 : Number(formData.maxBudget),
         deadline: formData.deadline,
         isRemote: formData.isRemote,
-        location: formData.location
+        location: formData.location,
+        experienceLevel: formData.experienceLevel,
+        jobType: formData.jobType,
+        hiringQuantity: Number(formData.hiringQuantity),
+        benefits: formData.benefits,
+        genderRequirement: formData.genderRequirement,
+        isNegotiable: formData.isNegotiable
       });
       
       showSuccess('Mission Initialized', 'Operation has been successfully launched.');
@@ -74,7 +93,13 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({ onMissionLaunched }
         maxBudget: '',
         deadline: '',
         isRemote: true,
-        location: ''
+        location: '',
+        experienceLevel: 'Junior',
+        jobType: 'FULL_TIME',
+        hiringQuantity: '1',
+        genderRequirement: 'ANY',
+        benefits: '',
+        isNegotiable: false
       });
       
       if (onMissionLaunched) {
@@ -143,6 +168,96 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({ onMissionLaunched }
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div className="fleet-input-group">
+              <label className="fleet-label">Cấp Bậc & Phân Bổ (Nhập tự do)</label>
+              <input
+                list="experienceLevels"
+                name="experienceLevel"
+                className="fleet-input"
+                value={formData.experienceLevel}
+                onChange={handleInputChange}
+                placeholder="Ví dụ: 3 Fresher, 2 Junior..."
+                title="Bạn có thể nhập nhiều cấp bậc và số lượng cụ thể (VD: 3 Junior, 1 Senior)"
+              />
+              <datalist id="experienceLevels">
+                <option value="Intern">Thực tập sinh (Intern)</option>
+                <option value="Fresher">Mới tốt nghiệp (Fresher)</option>
+                <option value="Junior">Nhân viên (Junior)</option>
+                <option value="Middle">Chuyên viên (Middle)</option>
+                <option value="Senior">Trưởng nhóm (Senior)</option>
+                <option value="Manager">Trưởng phòng (Manager)</option>
+                <option value="Director">Giám đốc (Director)</option>
+                <option value="Cộng tác viên">Cộng tác viên</option>
+                <option value="Trưởng ca">Trưởng ca</option>
+                <option value="Quản lý cửa hàng">Quản lý cửa hàng</option>
+                <option value="Chuyên gia">Chuyên gia</option>
+                <option value="Tư vấn viên">Tư vấn viên</option>
+              </datalist>
+            </div>
+            <div className="fleet-input-group">
+              <label className="fleet-label">Hình Thức Làm Việc (Nhập tự do)</label>
+              <input
+                list="jobTypes"
+                name="jobType"
+                className="fleet-input"
+                value={formData.jobType}
+                onChange={handleInputChange}
+                placeholder="Ví dụ: Full-time, Remote..."
+              />
+              <datalist id="jobTypes">
+                <option value="FULL_TIME">Toàn thời gian</option>
+                <option value="PART_TIME">Bán thời gian</option>
+                <option value="CONTRACT">Hợp đồng</option>
+                <option value="FREELANCE">Freelance</option>
+                <option value="INTERNSHIP">Thực tập</option>
+                <option value="REMOTE">Làm việc từ xa (Remote)</option>
+                <option value="HYBRID">Linh hoạt (Hybrid)</option>
+                <option value="SEASONAL">Thời vụ</option>
+              </datalist>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            <div className="fleet-input-group">
+              <label className="fleet-label">Số Lượng Tuyển</label>
+              <input
+                type="number"
+                name="hiringQuantity"
+                className="fleet-input"
+                value={formData.hiringQuantity}
+                onChange={handleInputChange}
+                min="1"
+                required
+              />
+            </div>
+            <div className="fleet-input-group">
+              <label className="fleet-label">Yêu Cầu Giới Tính</label>
+              <select
+                name="genderRequirement"
+                className="fleet-input"
+                value={formData.genderRequirement}
+                onChange={handleInputChange as any}
+              >
+                <option value="ANY">Không yêu cầu</option>
+                <option value="MALE">Nam</option>
+                <option value="FEMALE">Nữ</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="fleet-input-group">
+            <label className="fleet-label">Quyền Lợi / Phúc Lợi</label>
+            <textarea
+              name="benefits"
+              className="fleet-input"
+              value={formData.benefits}
+              onChange={handleInputChange}
+              placeholder="- Lương tháng 13&#10;- Bảo hiểm đầy đủ&#10;- Laptop làm việc"
+              rows={4}
+            />
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            <div className="fleet-input-group">
               <label className="fleet-label">Ngân Sách Tối Thiểu (VND)</label>
               <input
                 type="number"
@@ -150,7 +265,8 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({ onMissionLaunched }
                 className="fleet-input"
                 value={formData.minBudget}
                 onChange={handleInputChange}
-                required
+                disabled={formData.isNegotiable}
+                required={!formData.isNegotiable}
               />
             </div>
             <div className="fleet-input-group">
@@ -161,9 +277,46 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({ onMissionLaunched }
                 className="fleet-input"
                 value={formData.maxBudget}
                 onChange={handleInputChange}
-                required
+                disabled={formData.isNegotiable}
+                required={!formData.isNegotiable}
               />
             </div>
+          </div>
+
+          <div className="fleet-input-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+            <input
+              type="checkbox"
+              name="isRemote"
+              checked={formData.isRemote}
+              onChange={handleInputChange}
+              id="remote-check"
+            />
+            <label htmlFor="remote-check" style={{ color: 'var(--fleet-text)', cursor: 'pointer' }}>Công việc từ xa (Remote)</label>
+          </div>
+
+          <div className="fleet-input-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+            <input
+              type="checkbox"
+              name="isNegotiable"
+              checked={formData.isNegotiable}
+              onChange={handleInputChange}
+              id="negotiable-check"
+            />
+            <label htmlFor="negotiable-check" style={{ color: 'var(--fleet-text)', cursor: 'pointer' }}>Thỏa thuận (Ẩn mức lương)</label>
+          </div>
+
+          <div className="fleet-input-group">
+            <label className="fleet-label">Địa Điểm Làm Việc</label>
+            <input
+              type="text"
+              name="location"
+              className="fleet-input"
+              value={formData.location}
+              onChange={handleInputChange}
+              placeholder="Nhập địa chỉ văn phòng..."
+              disabled={formData.isRemote}
+              required={!formData.isRemote}
+            />
           </div>
 
           <div className="fleet-input-group">
@@ -179,7 +332,7 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({ onMissionLaunched }
           </div>
 
           <button type="submit" className="fleet-btn-primary" disabled={isSubmitting}>
-            {isSubmitting ? 'Đang Khởi Tạo...' : 'Triển Khai Nhiệm Vụ'}
+            {isSubmitting ? 'Đang Khởi Tạo...' : 'Triển Khai Nhiệm Vụ (Phí: 50.000 VNĐ)'}
           </button>
         </form>
 
@@ -196,8 +349,25 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({ onMissionLaunched }
             <div style={{ marginTop: '15px' }}>
               <div className="fleet-label">Phân Bổ Ngân Sách</div>
               <div style={{ color: 'var(--fleet-success)', fontWeight: 'bold' }}>
-                {formData.minBudget ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(formData.minBudget)) : '0'} - 
-                {formData.maxBudget ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(formData.maxBudget)) : '0'}
+                {formData.isNegotiable ? (
+                  'Thỏa thuận'
+                ) : (
+                  <>
+                    {formData.minBudget ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(formData.minBudget)) : '0'} - 
+                    {formData.maxBudget ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(formData.maxBudget)) : '0'}
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div style={{ marginTop: '15px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div>
+                <div className="fleet-label">Cấp Bậc</div>
+                <div style={{ color: '#fff' }}>{formData.experienceLevel}</div>
+              </div>
+              <div>
+                <div className="fleet-label">Hình Thức</div>
+                <div style={{ color: '#fff' }}>{formData.jobType}</div>
               </div>
             </div>
 

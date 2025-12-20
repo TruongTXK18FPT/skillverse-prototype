@@ -49,7 +49,13 @@ const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onJobCreated }) => {
     maxBudget: '',
     deadline: '',
     isRemote: true,
-    location: ''
+    location: '',
+    experienceLevel: 'Junior',
+    jobType: 'FULL_TIME',
+    hiringQuantity: '1',
+    genderRequirement: 'ANY',
+    benefits: '',
+    isNegotiable: false
   });
   const [skillInput, setSkillInput] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -115,14 +121,16 @@ const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onJobCreated }) => {
     const minBudget = parseFloat(formData.minBudget);
     const maxBudget = parseFloat(formData.maxBudget);
     
-    if (!formData.minBudget || minBudget <= 0) {
-      newErrors.minBudget = 'Ngân sách tối thiểu hợp lệ là bắt buộc';
-    }
-    if (!formData.maxBudget || maxBudget <= 0) {
-      newErrors.maxBudget = 'Ngân sách tối đa hợp lệ là bắt buộc';
-    }
-    if (formData.minBudget && formData.maxBudget && maxBudget < minBudget) {
-      newErrors.maxBudget = 'Ngân sách tối đa phải lớn hơn hoặc bằng ngân sách tối thiểu';
+    if (!formData.isNegotiable) {
+      if (!formData.minBudget || minBudget <= 0) {
+        newErrors.minBudget = 'Ngân sách tối thiểu hợp lệ là bắt buộc';
+      }
+      if (!formData.maxBudget || maxBudget <= 0) {
+        newErrors.maxBudget = 'Ngân sách tối đa hợp lệ là bắt buộc';
+      }
+      if (formData.minBudget && formData.maxBudget && maxBudget < minBudget) {
+        newErrors.maxBudget = 'Ngân sách tối đa phải lớn hơn hoặc bằng ngân sách tối thiểu';
+      }
     }
     
     if (!formData.deadline) {
@@ -159,11 +167,17 @@ const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onJobCreated }) => {
         title: formData.title.trim(),
         description: formData.description.trim(),
         requiredSkills: formData.skills, // Will be normalized in backend
-        minBudget: parseFloat(formData.minBudget),
-        maxBudget: parseFloat(formData.maxBudget),
+        minBudget: formData.isNegotiable ? 0 : parseFloat(formData.minBudget),
+        maxBudget: formData.isNegotiable ? 0 : parseFloat(formData.maxBudget),
         deadline: formData.deadline,
         isRemote: formData.isRemote,
-        location: formData.isRemote ? null : formData.location.trim()
+        location: formData.isRemote ? null : formData.location.trim(),
+        experienceLevel: formData.experienceLevel,
+        jobType: formData.jobType,
+        hiringQuantity: parseInt(formData.hiringQuantity) || 1,
+        genderRequirement: formData.genderRequirement,
+        benefits: formData.benefits,
+        isNegotiable: formData.isNegotiable
       };
 
       await jobService.createJob(jobData);
@@ -179,7 +193,13 @@ const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onJobCreated }) => {
         maxBudget: '',
         deadline: '',
         isRemote: true,
-        location: ''
+        location: '',
+        experienceLevel: 'Junior',
+        jobType: 'FULL_TIME',
+        hiringQuantity: '1',
+        genderRequirement: 'ANY',
+        benefits: '',
+        isNegotiable: false
       });
       setSkillInput('');
       
@@ -237,6 +257,83 @@ const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onJobCreated }) => {
           {errors.description && <span className="pmjt-error-message">{errors.description}</span>}
         </div>
 
+        <div className="pmjt-form-row">
+          <div className="pmjt-form-group">
+            <label htmlFor="experienceLevel">Cấp Bậc & Phân Bổ (Nhập tự do)</label>
+            <input
+              list="experienceLevels"
+              id="experienceLevel"
+              name="experienceLevel"
+              value={formData.experienceLevel}
+              onChange={handleInputChange}
+              placeholder="Ví dụ: 3 Fresher, 2 Junior hoặc Trưởng ca..."
+              title="Bạn có thể nhập nhiều cấp bậc và số lượng cụ thể (VD: 3 Junior, 1 Senior)"
+            />
+            <datalist id="experienceLevels">
+              <option value="Intern">Thực tập sinh</option>
+              <option value="Fresher">Mới tốt nghiệp</option>
+              <option value="Junior">Nhân viên (Junior)</option>
+              <option value="Middle">Chuyên viên (Middle)</option>
+              <option value="Senior">Trưởng nhóm (Senior)</option>
+              <option value="Manager">Trưởng phòng (Manager)</option>
+              <option value="Director">Giám đốc (Director)</option>
+              <option value="Cộng tác viên">Cộng tác viên</option>
+              <option value="Trưởng ca">Trưởng ca</option>
+              <option value="Quản lý cửa hàng">Quản lý cửa hàng</option>
+              <option value="Chuyên gia">Chuyên gia</option>
+              <option value="Tư vấn viên">Tư vấn viên</option>
+            </datalist>
+          </div>
+          <div className="pmjt-form-group">
+            <label htmlFor="jobType">Hình Thức (Nhập tự do)</label>
+            <input
+              list="jobTypes"
+              id="jobType"
+              name="jobType"
+              value={formData.jobType}
+              onChange={handleInputChange}
+              placeholder="Ví dụ: Full-time, Remote hoặc Ca tối..."
+            />
+            <datalist id="jobTypes">
+              <option value="FULL_TIME">Toàn thời gian</option>
+              <option value="PART_TIME">Bán thời gian</option>
+              <option value="CONTRACT">Hợp đồng</option>
+              <option value="FREELANCE">Freelance</option>
+              <option value="INTERNSHIP">Thực tập</option>
+              <option value="REMOTE">Làm việc từ xa (Remote)</option>
+              <option value="HYBRID">Linh hoạt (Hybrid)</option>
+              <option value="SEASONAL">Thời vụ</option>
+            </datalist>
+          </div>
+        </div>
+
+        <div className="pmjt-form-row">
+           <div className="pmjt-form-group">
+            <label htmlFor="hiringQuantity">Số Lượng Tuyển</label>
+            <input
+              type="number"
+              id="hiringQuantity"
+              name="hiringQuantity"
+              value={formData.hiringQuantity}
+              onChange={handleInputChange}
+              min="1"
+            />
+          </div>
+          <div className="pmjt-form-group">
+            <label htmlFor="genderRequirement">Giới Tính</label>
+            <select
+              id="genderRequirement"
+              name="genderRequirement"
+              value={formData.genderRequirement}
+              onChange={handleInputChange}
+            >
+              <option value="ANY">Không yêu cầu</option>
+              <option value="MALE">Nam</option>
+              <option value="FEMALE">Nữ</option>
+            </select>
+          </div>
+        </div>
+
         <div className="pmjt-form-group">
           <label htmlFor="skills">Kỹ Năng Yêu Cầu *</label>
           <div className="pmjt-skills-input-container">
@@ -281,6 +378,18 @@ const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onJobCreated }) => {
           {errors.skills && <span className="pmjt-error-message">{errors.skills}</span>}
         </div>
 
+        <div className="pmjt-form-group">
+          <label htmlFor="benefits">Quyền Lợi / Phúc Lợi</label>
+          <textarea
+            id="benefits"
+            name="benefits"
+            value={formData.benefits}
+            onChange={handleInputChange}
+            placeholder="- Lương tháng 13&#10;- Bảo hiểm đầy đủ&#10;- Laptop làm việc"
+            rows={4}
+          />
+        </div>
+
         <div className="pmjt-form-row">
           <div className="pmjt-form-group">
             <label htmlFor="minBudget">Ngân Sách Tối Thiểu (VND) *</label>
@@ -292,6 +401,7 @@ const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onJobCreated }) => {
               onChange={handleInputChange}
               placeholder="5000000"
               min="1"
+              disabled={formData.isNegotiable}
               className={errors.minBudget ? 'error' : ''}
             />
             {errors.minBudget && <span className="pmjt-error-message">{errors.minBudget}</span>}
@@ -307,10 +417,23 @@ const PostMinJobTab: React.FC<PostMinJobTabProps> = ({ onJobCreated }) => {
               onChange={handleInputChange}
               placeholder="15000000"
               min="1"
+              disabled={formData.isNegotiable}
               className={errors.maxBudget ? 'error' : ''}
             />
             {errors.maxBudget && <span className="pmjt-error-message">{errors.maxBudget}</span>}
           </div>
+        </div>
+
+        <div className="pmjt-form-group">
+          <label className="pmjt-checkbox-label">
+             <input
+              type="checkbox"
+              name="isNegotiable"
+              checked={formData.isNegotiable}
+              onChange={handleInputChange}
+            />
+            <span>Thỏa thuận (Ẩn mức lương)</span>
+          </label>
         </div>
 
         <div className="pmjt-form-group">

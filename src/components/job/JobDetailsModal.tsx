@@ -163,14 +163,14 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
               <MapPin size={18} />
               <div>
                 <strong>Làm Việc</strong>
-                <span>{job.isRemote ? '🌐 Từ Xa' : `📍 ${job.location}`}</span>
+                <span>{job.isRemote ? '🌐 @ Từ Xa' : `📍 ${job.location}`}</span>
               </div>
             </div>
             <div className="jdm-odyssey-meta-item">
               <Briefcase size={18} />
               <div>
                 <strong>Ứng Viên</strong>
-                <span>{job.applicantCount} người</span>
+                <span>{job.applicantCount || 0} người</span>
               </div>
             </div>
           </div>
@@ -181,7 +181,36 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
             <p className="jdm-odyssey-description">{job.description}</p>
           </div>
 
-          {/* Skills */}
+          {/* New Sections for Benefits and Job Type */}
+          {(job.benefits && job.benefits.length > 0) && (
+            <div className="jdm-odyssey-section">
+              <h3 className="jdm-odyssey-section-title">Quyền Lợi & Phúc Lợi</h3>
+              <p className="jdm-odyssey-description">{job.benefits}</p>
+            </div>
+          )}
+
+          <div className="jdm-odyssey-section">
+             <h3 className="jdm-odyssey-section-title">Thông Tin Bổ Sung</h3>
+             <div className="jdm-odyssey-meta-grid">
+               <div className="jdm-odyssey-meta-item-small">
+                 <strong>Hình Thức</strong>
+                 <span>{job.jobType || 'Toàn thời gian'}</span>
+               </div>
+               <div className="jdm-odyssey-meta-item-small">
+                 <strong>Cấp Bậc</strong>
+                 <span>{job.experienceLevel || 'Không yêu cầu'}</span>
+               </div>
+               <div className="jdm-odyssey-meta-item-small">
+                 <strong>Giới Tính</strong>
+                 <span>{job.genderRequirement === 'ANY' ? 'Không yêu cầu' : job.genderRequirement}</span>
+               </div>
+               <div className="jdm-odyssey-meta-item-small">
+                 <strong>Số Lượng</strong>
+                 <span style={{ color: 'var(--fleet-cyan)' }}>{job.hiringQuantity || 1} người</span>
+               </div>
+             </div>
+          </div>
+
           <div className="jdm-odyssey-section">
             <h3 className="jdm-odyssey-section-title">Kỹ Năng Yêu Cầu</h3>
             <div className="jdm-odyssey-skills">

@@ -199,6 +199,32 @@ class AdminService {
     document.body.removeChild(link);
     URL.revokeObjectURL(link.href);
   }
+
+  /**
+   * Get pending jobs
+   */
+  async getPendingJobs(): Promise<any[]> {
+    const response = await axiosInstance.get<any[]>(`${this.BASE_URL}/jobs/pending`);
+    return response.data;
+  }
+
+  /**
+   * Approve job
+   */
+  async approveJob(jobId: number): Promise<any> {
+    const response = await axiosInstance.post(`${this.BASE_URL}/jobs/${jobId}/approve`);
+    return response.data;
+  }
+
+  /**
+   * Reject job
+   */
+  async rejectJob(jobId: number, reason: string): Promise<any> {
+    const response = await axiosInstance.post(`${this.BASE_URL}/jobs/${jobId}/reject`, null, {
+      params: { reason }
+    });
+    return response.data;
+  }
 }
 
 // Export singleton instance

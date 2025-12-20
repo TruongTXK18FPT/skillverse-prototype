@@ -15,57 +15,19 @@ const CommandDeck: React.FC = () => {
     setActiveTab('dashboard'); // Return to dashboard after launch
   };
 
-  // Mock Data for Freelancers (Mercenaries)
-  const mercenaries: Freelancer[] = [
-    {
-      id: '1',
-      name: 'Nguyễn Thị Sarah',
-      skills: ['React', 'TypeScript', 'Node.js', 'MongoDB'],
-      rating: 4.8,
-      completedProjects: 47,
-      hourlyRate: 6.5
-    },
-    {
-      id: '2',
-      name: 'Trần Minh Tuấn',
-      skills: ['React Native', 'JavaScript', 'Firebase', 'UI/UX'],
-      rating: 4.9,
-      completedProjects: 32,
-      hourlyRate: 5.5
-    },
-    {
-      id: '3',
-      name: 'Lê Thị Elena',
-      skills: ['Python', 'Django', 'PostgreSQL', 'AWS'],
-      rating: 4.7,
-      completedProjects: 68,
-      hourlyRate: 7
-    },
-    {
-      id: '4',
-      name: 'Phạm Văn David',
-      skills: ['Vue.js', 'PHP', 'Laravel', 'MySQL'],
-      rating: 4.6,
-      completedProjects: 25,
-      hourlyRate: 5
-    },
-    {
-      id: '5',
-      name: 'Hoàng Thị Anna',
-      skills: ['Flutter', 'Dart', 'Firebase', 'iOS', 'Android'],
-      rating: 4.9,
-      completedProjects: 41,
-      hourlyRate: 75
-    },
-    {
-      id: '6',
-      name: 'Vũ Minh Khôi',
-      skills: ['Java', 'Spring Boot', 'Microservices', 'Docker'],
-      rating: 4.8,
-      completedProjects: 55,
-      hourlyRate: 8
-    }
-  ];
+  const handleEditJob = (job: any) => {
+    // In future: Open edit modal or navigate to edit page
+    // Currently switch to mission tab and pre-fill form (if supported)
+    // For now just show alert as placeholder
+    console.log('Edit job:', job);
+    alert(`Tính năng chỉnh sửa nhiệm vụ #${job.id} đang được phát triển.`);
+  };
+
+  const handleViewApplicants = (jobId: number) => {
+    // In future: Navigate to applicant management
+    console.log('View applicants for job:', jobId);
+    alert(`Tính năng xem ứng viên cho nhiệm vụ #${jobId} đang được phát triển.`);
+  };
 
   return (
     <div className="fleet-container">
@@ -77,7 +39,9 @@ const CommandDeck: React.FC = () => {
           <div className="fleet-main">
             <FleetStatsBar activeOps={3} crewCount={6} openSlots={2} />
             <div style={{ marginTop: '20px' }}>
-              <OperationLog refreshTrigger={refreshTrigger} />
+              <OperationLog 
+                refreshTrigger={refreshTrigger} 
+              />
             </div>
           </div>
         )}
@@ -92,7 +56,7 @@ const CommandDeck: React.FC = () => {
         {/* Radar View */}
         {activeTab === 'radar' && (
           <div className="fleet-main">
-            <MercenaryRadar freelancers={mercenaries} />
+            <MercenaryRadar />
           </div>
         )}
       </div>

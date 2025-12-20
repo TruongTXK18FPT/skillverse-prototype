@@ -16,12 +16,12 @@ export interface Freelancer {
 }
 
 interface MercenaryRadarProps {
-  freelancers: Freelancer[];
+  freelancers?: Freelancer[]; // Optional now
 }
 
-const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers }) => {
+const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers = [] }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSkill, setSelectedSkill] = useState<string>('All');
+  const [selectedSkill, setSelectedSkill] = useState<string>('Tất cả');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dropdownRef = useClickOutside<HTMLDivElement>(() => {
@@ -43,6 +43,23 @@ const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers }) => {
       return matchesSearch && matchesSkill;
     });
   }, [freelancers, searchTerm, selectedSkill]);
+
+  // If no freelancers provided, show loading or empty state
+  if (freelancers.length === 0) {
+    return (
+      <div className="fleet-panel">
+        <div className="fleet-header-row">
+          <div className="fleet-title">
+            <Radar size={24} />
+            Radar Nhân Tài
+          </div>
+        </div>
+        <div className="fleet-no-results">
+          <p>Hệ thống radar đang quét... (Chưa có dữ liệu ứng viên thực tế)</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fleet-panel">
