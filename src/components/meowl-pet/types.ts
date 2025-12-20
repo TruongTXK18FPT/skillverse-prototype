@@ -19,7 +19,13 @@ export enum PetState {
   HIDING_CRY = 'HIDING_CRY',
   DRAG_CRY = 'DRAG_CRY',
   OK_FOR_NOW = 'OK_FOR_NOW',
-  ANGRY = 'ANGRY'
+  ANGRY = 'ANGRY',
+  // Coffee Interaction States
+  COFFEE_1 = 'COFFEE_1',
+  COFFEE_2 = 'COFFEE_2',
+  COFFEE_3 = 'COFFEE_3',
+  COFFEE_4 = 'COFFEE_4',
+  COFFEE_5 = 'COFFEE_5'
 }
 
 export interface Position {

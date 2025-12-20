@@ -8,6 +8,7 @@ interface SpriteAnimatorProps {
   config: SpriteConfig;
   startFrame?: number;
   endFrame?: number;
+  customSequence?: number[];
   speedMultiplier?: number;
   loop?: boolean;
 }
@@ -18,10 +19,11 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({
   config, 
   startFrame, 
   endFrame, 
+  customSequence,
   speedMultiplier = 1,
   loop = true 
 }) => {
-  const [frameIndex, setFrameIndex] = useState(startFrame || 0);
+  const [frameIndex, setFrameIndex] = useState(0);
   const [hasError, setHasError] = useState(false);
   const [currentSprite, setCurrentSprite] = useState(config.src);
 
@@ -68,6 +70,16 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({
         return SPRITE_SHEETS.okForNow;
       case PetState.ANGRY:
         return SPRITE_SHEETS.angry;
+      case PetState.COFFEE_1:
+        return SPRITE_SHEETS.coffee1;
+      case PetState.COFFEE_2:
+        return SPRITE_SHEETS.coffee2;
+      case PetState.COFFEE_3:
+        return SPRITE_SHEETS.coffee3;
+      case PetState.COFFEE_4:
+        return SPRITE_SHEETS.coffee4;
+      case PetState.COFFEE_5:
+        return SPRITE_SHEETS.coffee5;
       default: 
         return SPRITE_SHEETS.idle;
     }
@@ -86,12 +98,38 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({
   // Frame animation
   useEffect(() => {
     const totalFrames = config.cols * config.rows;
+    
+    // If custom sequence is provided, use it
+    if (customSequence && customSequence.length > 0) {
+      const interval = setInterval(() => {
+        setFrameIndex((prev) => {
+          const next = prev + 1;
+          if (next >= customSequence.length) {
+            if (!loop) return customSequence.length - 1;
+            return 0;
+          }
+          return next;
+        });
+      }, config.animationSpeed * (1 / speedMultiplier));
+      return () => clearInterval(interval);
+    }
+
+    // Standard start/end frame logic
     const start = startFrame !== undefined ? startFrame : 0;
     const end = endFrame !== undefined ? endFrame : totalFrames - 1;
     
     const interval = setInterval(() => {
       setFrameIndex((prev) => {
-        const next = prev + 1;
+        // If we switched from custom sequence to normal, prev might be out of bounds or irrelevant
+        // But usually we reset frameIndex on state change.
+        // However, if we just change props without state change, we need to be careful.
+        // For now, simple increment is fine.
+        
+        // Ensure prev is within range if we just switched modes (though useEffect deps should handle reset)
+        let current = prev;
+        if (current < start) current = start;
+        
+        const next = current + 1;
         if (next > end) {
           if (!loop) return end; // Stay at last frame if not looping
           return start;
@@ -101,7 +139,7 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({
     }, config.animationSpeed * (1 / speedMultiplier));
 
     return () => clearInterval(interval);
-  }, [config.animationSpeed, config.cols, config.rows, startFrame, endFrame, speedMultiplier, loop]);
+  }, [config.animationSpeed, config.cols, config.rows, startFrame, endFrame, customSequence, speedMultiplier, loop]);
 
   // Handle Image Error
   if (hasError) {
@@ -121,8 +159,15 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({
 
   // For 4x4 sprite sheets, we use all rows as animation frames in sequence
   // Calculate position based on frame index (0-15 for 4x4)
-  const col = frameIndex % config.cols;
-  const row = Math.floor(frameIndex / config.cols) % config.rows;
+  let actualFrame = frameIndex;
+  
+  // If using custom sequence, map index to actual frame
+  if (customSequence && customSequence.length > 0) {
+    actualFrame = customSequence[frameIndex % customSequence.length];
+  }
+
+  const col = actualFrame % config.cols;
+  const row = Math.floor(actualFrame / config.cols) % config.rows;
   
   // Using background-image approach for more reliable sprite rendering
   const bgPositionX = -(col * config.width);

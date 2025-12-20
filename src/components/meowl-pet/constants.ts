@@ -27,6 +27,13 @@ import dragCrySprite from '../../assets/meowl-pet/spritesheet/drag-cry.png';
 import okForNowSprite from '../../assets/meowl-pet/spritesheet/ok-for-now.png';
 import angrySprite from '../../assets/meowl-pet/spritesheet/angry.png';
 
+// Coffee Interaction Sprites
+import coffeeSheet1 from '../../assets/meowl-pet/interact-items/coffee/sheet1.png';
+import coffeeSheet2 from '../../assets/meowl-pet/interact-items/coffee/sheet2.png';
+import coffeeSheet3 from '../../assets/meowl-pet/interact-items/coffee/sheet3.png';
+import coffeeSheet4 from '../../assets/meowl-pet/interact-items/coffee/sheet4.png';
+import coffeeSheet5 from '../../assets/meowl-pet/interact-items/coffee/sheet5.png';
+
 import bananaCatCrySound from '../../assets/meowl-pet/sound/banana-cat-cry.mp3';
 import angrySound from '../../assets/meowl-pet/sound/angry.mp3';
 
@@ -52,6 +59,12 @@ export const SPRITE_SHEETS = {
   dragCry: dragCrySprite,
   okForNow: okForNowSprite,
   angry: angrySprite,
+  // Coffee Sprites
+  coffee1: coffeeSheet1,
+  coffee2: coffeeSheet2,
+  coffee3: coffeeSheet3,
+  coffee4: coffeeSheet4,
+  coffee5: coffeeSheet5,
 } as const;
 
 // Sound configurations

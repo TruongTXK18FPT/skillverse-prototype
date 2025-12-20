@@ -3,6 +3,7 @@ import './MeowlPet.css';
 import { SpriteAnimator } from './SpriteAnimator';
 import { PetState, Position } from './types';
 import { PET_CONFIG, MOVEMENT_SPEED, STOP_DISTANCE, INTERACTION_DURATION, SLEEP_TIMEOUT, SOUNDS, WALK_BOB_AMPLITUDE, WALK_BOB_SPEED } from './constants';
+import PetContextMenu from './PetContextMenu';
 
 interface MeowlPetProps {
   targetPosition?: Position;
@@ -26,6 +27,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   // Animation Control
   const [startFrame, setStartFrame] = useState<number | undefined>(undefined);
   const [endFrame, setEndFrame] = useState<number | undefined>(undefined);
+  const [customSequence, setCustomSequence] = useState<number[] | undefined>(undefined);
   const [eatingPhase, setEatingPhase] = useState<number>(0); // 0: none, 1: chewing, 2: swallowing
   const [toiletPhase, setToiletPhase] = useState<number>(0); // 0: running, 1: hidden
   const toiletTargetRef = useRef<Position>({ x: 0, y: 0 });
@@ -49,10 +51,18 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   // Mouse tracking for auto-follow
   const [mousePos, setMousePos] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
 
+  // New Features State
+  const [showMenu, setShowMenu] = useState(false);
+  const [level, setLevel] = useState(1);
+  const [xp, setXp] = useState(0);
+  const maxXp = 100;
+  const [isLocked, setIsLocked] = useState(false); // Replaces isFollowing logic partially
+
   // Reset animation frames when state changes
   useEffect(() => {
     setStartFrame(undefined);
     setEndFrame(undefined);
+    setCustomSequence(undefined);
   }, [petState]);
 
   // Job Page Panic Logic
@@ -121,6 +131,66 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
       history.replaceState = originalReplaceState;
     };
   }, []);
+
+  // Audio Fix: Play sound when HAPPY state is active
+  useEffect(() => {
+    if (petState === PetState.HAPPY) {
+      playInteractSound();
+    } else {
+      stopInteractSound();
+    }
+  }, [petState]);
+
+  // Coffee Sequence Logic
+  useEffect(() => {
+    if (petState === PetState.COFFEE_1) {
+      // Pull out coffee (Sheet 1)
+      const timer = setTimeout(() => {
+        setPetState(PetState.COFFEE_2);
+      }, PET_CONFIG.animationSpeed * 16);
+      return () => clearTimeout(timer);
+    } else if (petState === PetState.COFFEE_2) {
+      // Drink (Sheet 2)
+      const timer = setTimeout(() => {
+        setPetState(PetState.COFFEE_3);
+      }, 1600);
+      return () => clearTimeout(timer);
+    } else if (petState === PetState.COFFEE_3) {
+      // High (Sheet 3)
+      const timer = setTimeout(() => {
+        setPetState(PetState.COFFEE_4);
+      }, 1600);
+      return () => clearTimeout(timer);
+    } else if (petState === PetState.COFFEE_4) {
+      // Smoke (Sheet 4) - Custom Animation Sequence
+      // Loop start (0,1) 4 times for "overload"
+      // Play middle (2-11)
+      // Loop end (12-15) 3 times for "exhaustion"
+      const sequence = [
+        0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 
+        2, 3, 2, 3, 2, 3, 
+        4, 5, 4, 5, 
+        6, 7, 8, 7, 8, 7, 8, 7, 8, 9, 10, 11, 
+        12, 13, 12, 13, 12, 13, 12, 13, 
+        12, 13, 12, 13, 12, 13, 12, 13,
+        12, 13, 12, 13, 12, 13, 12, 13, 14, 15
+      ];
+      setCustomSequence(sequence);
+      
+      const duration = sequence.length * PET_CONFIG.animationSpeed;
+      
+      const timer = setTimeout(() => {
+        setPetState(PetState.COFFEE_5);
+      }, duration);
+      return () => clearTimeout(timer);
+    } else if (petState === PetState.COFFEE_5) {
+      // Recover (Sheet 5)
+      const timer = setTimeout(() => {
+        setPetState(PetState.IDLE);
+      }, PET_CONFIG.animationSpeed * 16);
+      return () => clearTimeout(timer);
+    }
+  }, [petState]);
 
   // Handle Intro Animation
   useEffect(() => {
@@ -191,6 +261,8 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   // Handle Sleep Logic
   useEffect(() => {
     const checkSleep = setInterval(() => {
+      if (showMenu) return; // Don't sleep if menu is open
+
       if (petState === PetState.WALKING) {
         // If walking, keep the pet awake by updating the interaction time
         updateInteraction();
@@ -201,14 +273,14 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
       }
     }, 1000);
     return () => clearInterval(checkSleep);
-  }, [petState]);
+  }, [petState, showMenu]);
 
   // Random Idle Behavior (Every 15s)
   useEffect(() => {
-    if (petState !== PetState.IDLE) return;
+    if (petState !== PetState.IDLE || showMenu) return; // Don't do random stuff if menu is open
 
     const randomBehavior = setInterval(() => {
-      if (petState !== PetState.IDLE) return;
+      if (petState !== PetState.IDLE || showMenu) return;
       
       const rand = Math.random();
       if (rand < 0.33) {
@@ -353,6 +425,14 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
     const currentTarget = targetPosition || mousePos;
 
     const loop = () => {
+      // Force IDLE if menu is open
+      if (showMenu) {
+        if (petState !== PetState.IDLE) setPetState(PetState.IDLE);
+        setBobOffset(0);
+        animationFrameId = requestAnimationFrame(loop);
+        return;
+      }
+
       // States where movement is disabled
       if (
         petState === PetState.DRAGGING || 
@@ -370,7 +450,12 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
         petState === PetState.STOMACH_ACHE ||
         petState === PetState.TOILET_BREAK ||
         petState === PetState.REALIZE ||
-        petState === PetState.OK_FOR_NOW
+        petState === PetState.OK_FOR_NOW ||
+        petState === PetState.COFFEE_1 ||
+        petState === PetState.COFFEE_2 ||
+        petState === PetState.COFFEE_3 ||
+        petState === PetState.COFFEE_4 ||
+        petState === PetState.COFFEE_5
       ) {
         setBobOffset(0);
         animationFrameId = requestAnimationFrame(loop);
@@ -631,7 +716,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   };
 
   const handleMouseEnter = () => {
-    if (isDragging.current) return;
+    if (isDragging.current || showMenu) return; // Don't interact if menu is open
     
     // Special hover for Hiding Cry
     if (petState === PetState.HIDING_CRY) {
@@ -650,7 +735,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
     if (petState !== PetState.ANGRY) {
       hoverTimerRef.current = setTimeout(() => {
         setPetState(PetState.HAPPY);
-        playInteractSound();
+        // Sound is handled by useEffect now
       }, 3000);
     }
   };
@@ -669,15 +754,38 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
     }
     
     if (petState === PetState.HAPPY) {
-      stopInteractSound();
       setPetState(PetState.IDLE);
     }
   };
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
-    setIsFollowing(!isFollowing);
+    setShowMenu(true);
   };
+
+  const handleMenuClose = () => {
+    setShowMenu(false);
+  };
+
+  const handleUseItem = (itemId: string) => {
+    if (itemId === 'coffee') {
+      setPetState(PetState.COFFEE_1);
+    }
+  };
+
+  const handleToggleLock = () => {
+    setIsLocked(!isLocked);
+  };
+
+  // Manage Following State based on Menu and Lock
+  useEffect(() => {
+    if (showMenu) {
+      setIsFollowing(false);
+    } else {
+      // If menu is closed, follow only if not locked
+      setIsFollowing(!isLocked);
+    }
+  }, [showMenu, isLocked]);
 
   if (petState === PetState.TOILET_BREAK) return null; // Hide pet during toilet break
 
@@ -696,6 +804,23 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
       onMouseLeave={handleMouseLeave}
       onContextMenu={handleContextMenu}
     >
+      {showMenu && (
+        <PetContextMenu 
+          petPosition={{
+            x: position.x,
+            y: position.y + bobOffset, // Include bob offset for accurate line connection
+            width: PET_CONFIG.width,
+            height: PET_CONFIG.height
+          }}
+          onClose={handleMenuClose}
+          onToggleLock={handleToggleLock}
+          isLocked={isLocked}
+          onUseItem={handleUseItem}
+          level={level}
+          xp={xp}
+          maxXp={maxXp}
+        />
+      )}
 
       <SpriteAnimator 
         state={petState} 
@@ -703,8 +828,14 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
         config={PET_CONFIG}
         startFrame={startFrame}
         endFrame={endFrame}
+        customSequence={customSequence}
         speedMultiplier={petState === PetState.OK_FOR_NOW || petState === PetState.REALIZE ? 0.5 : 1}
-        loop={petState !== PetState.INTRO && petState !== PetState.OUTRO}
+        loop={
+          petState !== PetState.INTRO && 
+          petState !== PetState.OUTRO &&
+          petState !== PetState.COFFEE_1 &&
+          petState !== PetState.COFFEE_5
+        }
       />
     </div>
   );
