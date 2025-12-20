@@ -1,16 +1,21 @@
 import React from 'react';
+import { Lock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import './pilot-styles.css';
 import idleSprite from '../../../assets/meowl-pet/spritesheet/idle.png';
 
 interface CompanionPodProps {
   isPetActive?: boolean;
   onTogglePet?: () => void;
+  isPremium?: boolean;
 }
 
 const CompanionPod: React.FC<CompanionPodProps> = ({ 
   isPetActive = true,
-  onTogglePet
+  onTogglePet,
+  isPremium = false
 }) => {
+  const navigate = useNavigate();
   
   return (
     <div className="pilot-panel companion-pod-container" style={{ 
@@ -142,34 +147,64 @@ const CompanionPod: React.FC<CompanionPodProps> = ({
         justifyContent: 'center'
       }}>
         {onTogglePet ? (
-          <button 
-            onClick={onTogglePet}
-            style={{
-              background: 'transparent',
-              border: '1px solid rgba(14, 165, 233, 0.5)',
-              color: '#0ea5e9',
-              padding: '8px 24px',
-              fontFamily: 'monospace',
-              fontSize: '0.8rem',
-              letterSpacing: '2px',
-              cursor: 'pointer',
-              position: 'relative',
-              overflow: 'hidden',
-              transition: 'all 0.3s ease',
-              textTransform: 'uppercase',
-              boxShadow: isPetActive ? '0 0 15px rgba(14, 165, 233, 0.2)' : 'none'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(14, 165, 233, 0.1)';
-              e.currentTarget.style.boxShadow = '0 0 20px rgba(14, 165, 233, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent';
-              e.currentTarget.style.boxShadow = isPetActive ? '0 0 15px rgba(14, 165, 233, 0.2)' : 'none';
-            }}
-          >
-            {isPetActive ? 'DEACTIVATE PROTOCOL' : 'INITIALIZE PET'}
-          </button>
+          isPremium ? (
+            <button 
+              onClick={onTogglePet}
+              style={{
+                background: 'transparent',
+                border: '1px solid rgba(14, 165, 233, 0.5)',
+                color: '#0ea5e9',
+                padding: '8px 24px',
+                fontFamily: 'monospace',
+                fontSize: '0.8rem',
+                letterSpacing: '2px',
+                cursor: 'pointer',
+                position: 'relative',
+                overflow: 'hidden',
+                transition: 'all 0.3s ease',
+                textTransform: 'uppercase',
+                boxShadow: isPetActive ? '0 0 15px rgba(14, 165, 233, 0.2)' : 'none'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(14, 165, 233, 0.1)';
+                e.currentTarget.style.boxShadow = '0 0 20px rgba(14, 165, 233, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.boxShadow = isPetActive ? '0 0 15px rgba(14, 165, 233, 0.2)' : 'none';
+              }}
+            >
+              {isPetActive ? 'DEACTIVATE PROTOCOL' : 'INITIALIZE PET'}
+            </button>
+          ) : (
+            <button 
+              onClick={() => navigate('/premium')}
+              style={{
+                background: 'rgba(15, 23, 42, 0.8)',
+                border: '1px solid rgba(100, 116, 139, 0.4)',
+                color: '#94a3b8',
+                padding: '8px 24px',
+                fontFamily: 'monospace',
+                fontSize: '0.8rem',
+                letterSpacing: '1px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#eab308';
+                e.currentTarget.style.color = '#eab308';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(100, 116, 139, 0.4)';
+                e.currentTarget.style.color = '#94a3b8';
+              }}
+            >
+              <Lock size={14} /> LOCKED - UPGRADE TO UNLOCK
+            </button>
+          )
         ) : (
           <div style={{ color: '#64748b', fontSize: '0.8rem', fontFamily: 'monospace' }}>CONTROLS LOCKED</div>
         )}

@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { skinService, MeowlSkinResponse } from '../services/skinService';
+import { premiumService } from '../services/premiumService';
 
 // Import meowl skins
 import meowlDefault from '../assets/meowl-skin/meowl_default.png';
 
 export type MeowlSkinType = string;
 
-interface MeowlSkin {
+export interface MeowlSkin {
   id: string;
   name: string;
   nameVi: string;
@@ -29,8 +30,10 @@ interface MeowlSkinContextType {
   setSkin: (skin: MeowlSkinType) => void;
   skins: MeowlSkin[];
   isPetActive: boolean;
+  isPremium: boolean;
   togglePet: () => void;
   refreshSkins: () => Promise<void>;
+  checkPremiumStatus: () => Promise<void>;
 }
 
 const MeowlSkinContext = createContext<MeowlSkinContextType | undefined>(undefined);
@@ -49,6 +52,8 @@ export const MeowlSkinProvider: React.FC<{ children: ReactNode }> = ({ children 
     return saved === 'true';
   });
 
+  const [isPremium, setIsPremium] = useState<boolean>(false);
+
   const [mySkins, setMySkins] = useState<MeowlSkin[]>(MEOWL_SKINS);
 
   const fetchMySkins = async () => {
@@ -62,27 +67,66 @@ export const MeowlSkinProvider: React.FC<{ children: ReactNode }> = ({ children 
         isPremium: s.isPremium
       }));
       
-      // Ensure default is always present if not returned by API (it should be, but just in case)
-      // If API returns default, we use API version (might have updated image)
-      // For now, let's merge or just use API if it returns list.
-      // Assuming API returns all owned skins including default if it's treated as a skin.
-      // If default is special and not in DB, we keep it.
-      
       const hasDefault = mappedSkins.some(s => s.id === 'default');
       let finalSkins = [...mappedSkins];
       if (!hasDefault) {
         finalSkins = [MEOWL_SKINS[0], ...mappedSkins];
       }
       setMySkins(finalSkins);
+
+      // Check for selected skin from backend
+      const selectedSkin = skins.find(s => s.isSelected);
+      if (selectedSkin) {
+        setCurrentSkin(selectedSkin.skinCode);
+      } else {
+        // If no skin is marked as selected in backend, revert to default
+        setCurrentSkin('default');
+      }
     } catch (error) {
       console.error('Failed to fetch skins', error);
-      // Fallback to default
       setMySkins(MEOWL_SKINS);
+    }
+  };
+
+  const checkPremiumStatus = async () => {
+    try {
+      // Check using the specific status endpoint first as it might be more reliable
+      const isPremiumStatus = await premiumService.checkPremiumStatus();
+      console.log('MeowlSkinContext: API status check:', isPremiumStatus);
+
+      // Also get subscription details for double verification
+      const subscription = await premiumService.getCurrentSubscription();
+      console.log('MeowlSkinContext: Subscription details:', subscription);
+      
+      const isPremSubscription = Boolean(
+        subscription && 
+        subscription.isActive && 
+        subscription.plan && 
+        subscription.plan.planType !== 'FREE_TIER'
+      );
+      
+      // Use either positive result (prefer API status if available, fallback to subscription check)
+      const isPrem = isPremiumStatus || isPremSubscription;
+      
+      console.log('MeowlSkinContext: Final isPremium:', isPrem);
+      setIsPremium(isPrem);
+      
+      if (!isPrem) {
+        setIsPetActive(false); // Force disable if not premium
+      }
+    } catch (error) {
+      console.error('Failed to check premium status', error);
+      // Don't auto-disable on error, keep previous state or retry? 
+      // Safe to disable to prevent unauthorized access, but annoying if network fails.
+      // For now, let's trust the auth check elsewhere or default to false.
+      setIsPremium(false);
+      setIsPetActive(false);
     }
   };
 
   useEffect(() => {
     fetchMySkins();
+    checkPremiumStatus();
   }, []);
 
   const currentSkinImage = mySkins.find(s => s.id === currentSkin)?.image || meowlDefault;
@@ -97,9 +141,14 @@ export const MeowlSkinProvider: React.FC<{ children: ReactNode }> = ({ children 
 
   const setSkin = (skin: MeowlSkinType) => {
     setCurrentSkin(skin);
+    // Sync with backend
+    skinService.selectSkin(skin).catch(err => {
+      console.error('Failed to update skin selection', err);
+    });
   };
 
   const togglePet = () => {
+    if (!isPremium) return;
     setIsPetActive(prev => !prev);
   };
 
@@ -110,8 +159,10 @@ export const MeowlSkinProvider: React.FC<{ children: ReactNode }> = ({ children 
       setSkin, 
       skins: mySkins,
       isPetActive,
+      isPremium,
       togglePet,
-      refreshSkins: fetchMySkins
+      refreshSkins: fetchMySkins,
+      checkPremiumStatus
     }}>
       {children}
     </MeowlSkinContext.Provider>

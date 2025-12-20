@@ -9,6 +9,7 @@ export interface MeowlSkinResponse {
   isPremium: boolean;
   price: number;
   isOwned: boolean;
+  isSelected?: boolean;
 }
 
 export interface MeowlSkinRequest {
@@ -56,6 +57,12 @@ export const skinService = {
   // Get my skins
   getMySkins: async (): Promise<MeowlSkinResponse[]> => {
     const response = await axiosInstance.get<MeowlSkinResponse[]>('/skins/my-skins');
+    return response.data;
+  },
+
+  // User: Select skin
+  selectSkin: async (skinCode: string): Promise<string> => {
+    const response = await axiosInstance.post<string>(`/skins/${skinCode}/select`);
     return response.data;
   }
 };

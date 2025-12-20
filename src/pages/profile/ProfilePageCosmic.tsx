@@ -21,7 +21,7 @@ const ProfilePageCosmic = () => {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
-  const { currentSkin, setSkin, skins, togglePet, isPetActive } = useMeowlSkin();
+  const { currentSkin, setSkin, skins, togglePet, isPetActive, isPremium, checkPremiumStatus } = useMeowlSkin();
   
   const [profile, setProfile] = useState<UserProfileResponse | null>(null);
   const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
@@ -180,6 +180,7 @@ const ProfilePageCosmic = () => {
               <CompanionPod 
                 isPetActive={isPetActive}
                 onTogglePet={togglePet}
+                isPremium={isPremium}
               />
             </div>
           </div>
