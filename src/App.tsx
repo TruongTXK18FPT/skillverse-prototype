@@ -77,6 +77,8 @@ import ForbiddenTemple from './components/easter-egg/ForbiddenTemple';
 import TicTacToeGame from './components/game/tic-tac-toe/TicTacToeGame';
 import MeowlAdventure from './components/game/meowl-adventure/MeowlAdventure';
 
+import MeowlSkinShopPage from './pages/shop/MeowlSkinShopPage';
+
 const App = () => {
   return (
     <LanguageProvider>
@@ -204,6 +206,9 @@ const App = () => {
 
                     {/* Certificate Demo Route */}
                     <Route path="/certificate-demo" element={<CertificateDemoPage />} />
+
+                    {/* Meowl Skin Shop */}
+                    <Route path="/meowl-shop" element={<MeowlSkinShopPage />} />
 
                     {/* Catch-all route for 404 errors - must be last */}
                     <Route path="*" element={<NotFoundPage />} />

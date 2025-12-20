@@ -30,6 +30,7 @@
     "lucide-react": "^0.556.0",
     "mongoose": "^8.16.4",
     "react": "^19.2.1",
+    "react-confetti": "^6.4.0",
     "react-dom": "^19.2.1",
     "react-feather": "^2.0.10",
     "react-howler": "^5.2.0",

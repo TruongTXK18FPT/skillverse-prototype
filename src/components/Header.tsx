@@ -27,7 +27,8 @@ import {
   Compass,
   Zap,
   HelpCircle,
-  BadgeQuestionMark
+  BadgeQuestionMark,
+  ShoppingBag
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -120,6 +121,12 @@ const Header: React.FC = () => {
       description: 'Tham gia các hội thảo và sự kiện',
       path: '/seminar',
       icon: Calendar
+    },
+    {
+      name: 'Meowl Shop',
+      description: 'Cửa hàng Skin Neon Tech độc quyền',
+      path: '/meowl-shop',
+      icon: ShoppingBag
     },
     // {
     //   name: 'Cầu Nguyện',

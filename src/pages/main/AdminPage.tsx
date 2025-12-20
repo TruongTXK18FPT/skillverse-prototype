@@ -14,9 +14,10 @@ import SupportTicketsTab from '../../components/admin/SupportTicketsTab';
 import AIExpertManagementTab from '../../components/admin/AIExpertManagementTab';
 import CommunityManagementTab from '../../components/admin/CommunityManagementTab';
 import { JobManagementTab } from '../../components/admin/JobManagementTab';
+import MeowlSkinUploadTab from '../../components/admin/MeowlSkinUploadTab';
 import {
   Users, UserCheck, BookOpen, BarChart3, Bell, AlertTriangle,
-  CreditCard, Banknote, Zap, Crown, Ticket, Settings, Brain, MessageSquare, Briefcase
+  CreditCard, Banknote, Zap, Crown, Ticket, Settings, Brain, MessageSquare, Briefcase, Shirt
 } from 'lucide-react';
 import adminUserService from '../../services/adminUserService';
 import adminService from '../../services/adminService';
@@ -168,6 +169,13 @@ const AdminPage: React.FC = () => {
       description: 'Quản lý AI Career Experts'
     },
     { 
+      id: 'skin-upload', 
+      label: 'Upload Skin', 
+      icon: Shirt,
+      gradient: 'linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%)',
+      description: 'Upload Meowl Skins'
+    },
+    { 
       id: 'settings', 
       label: 'Cài Đặt Hệ Thống', 
       icon: Settings,
@@ -208,6 +216,8 @@ const AdminPage: React.FC = () => {
         return <SystemSettingsTabCosmic />;
       case 'ai-experts':
         return <AIExpertManagementTab />;
+      case 'skin-upload':
+        return <MeowlSkinUploadTab />;
       default:
         return (
           <div className="administrator-default-tab">
