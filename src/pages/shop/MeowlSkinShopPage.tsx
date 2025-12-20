@@ -4,6 +4,7 @@ import { ArrowLeft, ShoppingBag, Sparkles, Check, X, ShieldCheck } from 'lucide-
 import { skinService, MeowlSkinResponse } from '../../services/skinService';
 import { useMeowlSkin } from '../../context/MeowlSkinContext';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
+import SkinLeaderboard from './SkinLeaderboard';
 import './meowl-shop.css';
 
 // Custom Confetti Component
@@ -136,13 +137,15 @@ const MeowlSkinShopPage: React.FC = () => {
         </p>
       </div>
 
+      <SkinLeaderboard />
+
       <div className="meowl-shop-grid">
         {skins.map((skin) => {
           const isOwned = skin.isOwned || myOwnedSkins.some(owned => owned.id === skin.skinCode);
           return (
             <div key={skin.skinCode} className={`meowl-shop-card ${isOwned ? 'owned' : ''}`}>
-              <div className={`meowl-shop-badge ${skin.price > 0 ? 'premium' : 'free'}`}>
-                {skin.price > 0 ? 'Premium' : 'Free'}
+              <div className={`meowl-shop-badge ${skin.isPremium ? 'premium' : skin.price > 0 ? 'paid' : 'free'}`}>
+                {skin.isPremium ? 'Premium' : skin.price > 0 ? 'Paid' : 'Free'}
               </div>
               
               <div className="meowl-shop-image-container">
@@ -152,7 +155,15 @@ const MeowlSkinShopPage: React.FC = () => {
               <div className="meowl-shop-details">
                 <h3 className="meowl-shop-name">{skin.nameVi}</h3>
                 <div className="meowl-shop-price">
-                  {skin.price > 0 ? `${skin.price.toLocaleString()} Xu` : 'Miễn phí'}
+                  {skin.isPremium ? (
+                    <span className="premium-price">
+                      <ShieldCheck size={16} /> Premium Only
+                    </span>
+                  ) : skin.price > 0 ? (
+                    `${skin.price.toLocaleString()} Xu`
+                  ) : (
+                    'Miễn phí'
+                  )}
                 </div>
 
                 <button

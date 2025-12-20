@@ -1,0 +1,181 @@
+.skin-analytics-container {
+  padding: 2rem;
+  background: #1a1b26;
+  border-radius: 1rem;
+  color: #fff;
+  font-family: 'Space Mono', monospace;
+}
+
+.skin-analytics-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.skin-analytics-title {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #4ade80 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.skin-analytics-subtitle {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.skin-analytics-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 1200px) {
+  .skin-analytics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.skin-analytics-chart-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.skin-analytics-chart-title {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #e2e8f0;
+}
+
+.skin-analytics-leaderboard-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  height: fit-content;
+}
+
+.skin-analytics-leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.skin-analytics-leaderboard-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.4);
+  border-radius: 0.8rem;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  transition: all 0.3s ease;
+}
+
+.skin-analytics-leaderboard-item:hover {
+  transform: translateX(5px);
+  background: rgba(15, 23, 42, 0.6);
+  border-color: #3b82f6;
+}
+
+.skin-analytics-rank-badge {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.skin-analytics-rank-1 {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  color: #78350f;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+}
+
+.skin-analytics-rank-2 {
+  background: linear-gradient(135deg, #94a3b8 0%, #cbd5e1 100%);
+  color: #1e293b;
+}
+
+.skin-analytics-rank-3 {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+  color: #fff;
+}
+
+.skin-analytics-rank-other {
+  background: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.skin-analytics-mini-preview {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #1e293b;
+}
+
+.skin-analytics-info {
+  flex: 1;
+}
+
+.skin-analytics-name {
+  font-weight: 600;
+  color: #e2e8f0;
+  display: block;
+}
+
+.skin-analytics-stats-row {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  display: flex;
+  gap: 1rem;
+}
+
+.skin-analytics-stat-highlight {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.skin-analytics-stat-cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.skin-analytics-stat-card {
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.6));
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.skin-analytics-stat-card-title {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.skin-analytics-stat-card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.skin-analytics-stat-icon {
+  float: right;
+  color: rgba(59, 130, 246, 0.5);
+}

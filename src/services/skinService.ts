@@ -10,6 +10,8 @@ export interface MeowlSkinResponse {
   price: number;
   isOwned: boolean;
   isSelected?: boolean;
+  purchasedCount?: number;
+  usedCount?: number;
 }
 
 export interface MeowlSkinRequest {
@@ -63,6 +65,18 @@ export const skinService = {
   // User: Select skin
   selectSkin: async (skinCode: string): Promise<string> => {
     const response = await axiosInstance.post<string>(`/skins/${skinCode}/select`);
+    return response.data;
+  },
+
+  // Get leaderboard
+  getSkinLeaderboard: async (): Promise<MeowlSkinResponse[]> => {
+    const response = await axiosInstance.get<MeowlSkinResponse[]>('/skins/leaderboard');
+    return response.data;
+  },
+
+  // Admin: Get stats
+  getSkinStats: async (): Promise<MeowlSkinResponse[]> => {
+    const response = await axiosInstance.get<MeowlSkinResponse[]>('/skins/stats');
     return response.data;
   }
 };

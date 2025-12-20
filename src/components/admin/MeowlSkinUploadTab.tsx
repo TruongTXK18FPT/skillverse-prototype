@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Upload, Image as ImageIcon, CheckCircle, AlertCircle, Trash2, Edit2, X, List, Plus } from 'lucide-react';
+import { Upload, Image as ImageIcon, CheckCircle, AlertCircle, Trash2, Edit2, X, List, Plus, BarChart2 } from 'lucide-react';
 import { skinService, MeowlSkinResponse } from '../../services/skinService';
+import SkinAnalyticsTab from './SkinAnalyticsTab';
 import './skin-upload.css';
 
 const MeowlSkinUploadTab: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'upload' | 'manage'>('manage');
+  const [activeTab, setActiveTab] = useState<'upload' | 'manage' | 'analytics'>('manage');
   const [skins, setSkins] = useState<MeowlSkinResponse[]>([]);
   const [formData, setFormData] = useState({
     skinCode: '',
@@ -165,6 +166,12 @@ const MeowlSkinUploadTab: React.FC = () => {
         >
           <Plus size={18} /> Upload Skin Mới
         </button>
+        <button 
+          className={`skin-upload-tab-btn ${activeTab === 'analytics' ? 'active' : ''}`}
+          onClick={() => setActiveTab('analytics')}
+        >
+          <BarChart2 size={18} /> Thống Kê
+        </button>
       </div>
 
       {status && (
@@ -183,6 +190,8 @@ const MeowlSkinUploadTab: React.FC = () => {
           {status.message}
         </div>
       )}
+
+      {activeTab === 'analytics' && <SkinAnalyticsTab />}
 
       {/* Upload/Edit Form Tab */}
       {activeTab === 'upload' && (
@@ -341,7 +350,7 @@ const MeowlSkinUploadTab: React.FC = () => {
                 <div className="skin-manage-name">{skin.nameVi}</div>
                 <div className="skin-manage-code">{skin.skinCode}</div>
                 <div className="skin-manage-meta">
-                  <span className="skin-manage-price">{skin.price > 0 ? `${skin.price.toLocaleString()} Xu` : 'Miễn phí'}</span>
+                  <span className="skin-manage-price">{skin.isPremium ? 'Premium Only' : skin.price > 0 ? `${skin.price.toLocaleString()} Xu` : 'Miễn phí'}</span>
                   {skin.isPremium && <span className="skin-manage-badge">PREMIUM</span>}
                 </div>
               </div>
