@@ -55,6 +55,7 @@ interface Transaction {
   currencyType?: string;
   isCredit?: boolean;
   isDebit?: boolean;
+  referenceType?: string;
 }
 
 interface WithdrawalRequestData {
@@ -354,9 +355,16 @@ const MyWalletCosmic: React.FC = () => {
     return type ? creditTypes.some(t => type.toUpperCase().includes(t)) : false;
   };
 
-  const isTransactionDebit = (type?: string) => {
+  const isTransactionDebit = (type?: string, referenceType?: string, description?: string) => {
     // Debit transactions (money OUT): -
     const debitTypes = ['WITHDRAWAL', 'PURCHASE', 'SPEND', 'TIP_MENTOR'];
+    
+    // Check reference type for SKIN_PURCHASE
+    if (referenceType && referenceType.toUpperCase() === 'SKIN_PURCHASE') return true;
+
+    // Check description for skin purchase
+    if (description && (description.toLowerCase().includes('purchase skin') || description.toLowerCase().includes('mua skin'))) return true;
+
     return type ? debitTypes.some(t => type.toUpperCase().includes(t)) : false;
   };
 
@@ -703,7 +711,9 @@ const MyWalletCosmic: React.FC = () => {
                       </p>
                     ) : null}
                     {tx.coinAmount && (
-                      <p className="tx-coins">{tx.coinAmount > 0 ? '+' : '-'}{Math.abs(tx.coinAmount)} xu</p>
+                      <p className={`tx-coins ${(tx.isDebit || isTransactionDebit(tx.transactionType, tx.referenceType, tx.description)) ? 'negative' : ''}`}>
+                        {(tx.isDebit || isTransactionDebit(tx.transactionType, tx.referenceType, tx.description)) ? '-' : '+'}{Math.abs(tx.coinAmount)} xu
+                      </p>
                     )}
                   </div>
                   <div className="tx-actions">

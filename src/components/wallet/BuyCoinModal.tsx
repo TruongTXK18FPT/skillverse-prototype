@@ -74,9 +74,35 @@ const COIN_PACKAGES: CoinPackage[] = [
     title: 'Gói Mega',
     description: 'Sức mạnh vượt trội + 600 xu thưởng',
     popular: false,
-    special: true,
+    special: false,
     color: '#10b981',
     glowColor: 'rgba(16, 185, 129, 0.4)'
+  },
+  {
+    id: 'ultimate',
+    coins: 5000,
+    price: 350000,
+    bonus: 1500,
+    discount: 30,
+    title: 'Gói Ultimate',
+    description: 'Đỉnh cao sức mạnh + 1500 xu thưởng',
+    popular: false,
+    special: true,
+    color: '#ec4899',
+    glowColor: 'rgba(236, 72, 153, 0.4)'
+  },
+  {
+    id: 'legendary',
+    coins: 10000,
+    price: 650000,
+    bonus: 3500,
+    discount: 35,
+    title: 'Gói Huyền Thoại',
+    description: 'Gói đặc biệt nhất + 3500 xu thưởng khủng',
+    popular: false,
+    special: true,
+    color: '#f59e0b',
+    glowColor: 'rgba(245, 158, 11, 0.4)'
   }
 ];
 

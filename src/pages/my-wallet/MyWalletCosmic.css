@@ -659,6 +659,11 @@
   font-size: 0.85rem;
   color: #fbbf24;
   margin-top: 0.25rem;
+  font-weight: 600;
+}
+
+.tx-coins.negative {
+  color: #ef4444;
 }
 
 .status-badge {

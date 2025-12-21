@@ -11,6 +11,7 @@ interface DepositCashModalProps {
   onSuccess?: (amount: number) => void;
 }
 
+const QUICK_AMOUNTS = [20000, 50000, 100000, 200000, 500000, 1000000];
 
 const DepositCashModal: React.FC<DepositCashModalProps> = ({ isOpen, onClose }) => {
   const { theme } = useTheme();
@@ -21,6 +22,11 @@ const DepositCashModal: React.FC<DepositCashModalProps> = ({ isOpen, onClose }) 
   const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
     setCustomAmount(value);
+    setError(null);
+  };
+
+  const handleQuickAmount = (amount: number) => {
+    setCustomAmount(amount.toString());
     setError(null);
   };
 
@@ -101,23 +107,40 @@ const DepositCashModal: React.FC<DepositCashModalProps> = ({ isOpen, onClose }) 
         </div>
 
         <div className="deposit-modal-body">
+          {/* Quick Amounts */}
+          <div className="deposit-quick-options">
+            {QUICK_AMOUNTS.map((amount) => (
+              <button
+                key={amount}
+                className={`quick-amount-btn ${customAmount === amount.toString() ? 'active' : ''}`}
+                onClick={() => handleQuickAmount(amount)}
+              >
+                {formatCurrency(amount)}
+              </button>
+            ))}
+          </div>
+
           {/* Custom Amount Input */}
           <div className="deposit-custom">
-            <h3>Nhập số tiền muốn nạp:</h3>
+            <h3>Hoặc nhập số tiền tùy chỉnh:</h3>
             <div className="custom-input-group">
               <input
                 type="text"
                 className="custom-amount-input"
-                placeholder="Nhập số tiền (VND)"
-                value={customAmount}
-                onChange={handleCustomAmountChange}
+                placeholder="0"
+                value={customAmount ? parseInt(customAmount).toLocaleString('vi-VN') : ''}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/[^0-9]/g, '');
+                  setCustomAmount(val);
+                  setError(null);
+                }}
                 autoFocus
               />
               <span className="currency-label">VND</span>
             </div>
             {customAmount && (
               <div className="custom-preview">
-                Số tiền: <strong>{formatCurrency(parseInt(customAmount))}</strong>
+                Thực nhận: <strong>{formatCurrency(parseInt(customAmount))}</strong>
               </div>
             )}
             <div className="custom-note">
