@@ -44,7 +44,7 @@ const ConfettiSystem: React.FC = () => {
 
 const MeowlSkinShopPage: React.FC = () => {
   const navigate = useNavigate();
-  const { refreshSkins, skins: myOwnedSkins } = useMeowlSkin();
+  const { refreshSkins, skins: myOwnedSkins, isPremium } = useMeowlSkin();
   const [skins, setSkins] = useState<MeowlSkinResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [purchasing, setPurchasing] = useState<string | null>(null);
@@ -52,6 +52,7 @@ const MeowlSkinShopPage: React.FC = () => {
   // Modals state
   const [selectedSkin, setSelectedSkin] = useState<MeowlSkinResponse | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
@@ -83,6 +84,11 @@ const MeowlSkinShopPage: React.FC = () => {
   };
 
   const handleBuyClick = (skin: MeowlSkinResponse) => {
+    if (skin.isPremium && !isPremium) {
+      setSelectedSkin(skin);
+      setShowUpgradeModal(true);
+      return;
+    }
     setSelectedSkin(skin);
     setShowConfirmModal(true);
   };
@@ -259,6 +265,40 @@ const MeowlSkinShopPage: React.FC = () => {
                   </button>
                   <button className="shop-v2-btn shop-v2-btn-confirm" onClick={handleConfirmPurchase}>
                     XÁC NHẬN MUA
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Upgrade Modal */}
+      {showUpgradeModal && selectedSkin && (
+        <div className="shop-v2-modal-overlay" onClick={() => setShowUpgradeModal(false)}>
+          <div className="shop-v2-modal" onClick={e => e.stopPropagation()}>
+            <div className="shop-v2-modal-content">
+              <div className="shop-v2-modal-hero">
+                <img src={selectedSkin.imageUrl} alt={selectedSkin.nameVi} className="shop-v2-modal-img" />
+              </div>
+              
+              <div className="shop-v2-modal-details">
+                <h2 className="shop-v2-modal-title" style={{ color: 'var(--shop-v2-rarity-legendary)' }}>YÊU CẦU PREMIUM</h2>
+                <p className="shop-v2-modal-desc">
+                  Skin <strong>{selectedSkin.nameVi}</strong> là trang phục dành riêng cho thành viên Premium. 
+                  Vui lòng nâng cấp tài khoản để mở khóa skin này cùng nhiều đặc quyền hấp dẫn khác.
+                </p>
+                
+                <div className="shop-v2-modal-actions">
+                  <button className="shop-v2-btn shop-v2-btn-cancel" onClick={() => setShowUpgradeModal(false)}>
+                    ĐỂ SAU
+                  </button>
+                  <button 
+                    className="shop-v2-btn shop-v2-btn-confirm" 
+                    onClick={() => navigate('/premium')}
+                    style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}
+                  >
+                    NÂNG CẤP NGAY
                   </button>
                 </div>
               </div>

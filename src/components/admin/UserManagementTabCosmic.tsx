@@ -3,11 +3,13 @@ import {
   Users, UserCheck, Shield, Search, Filter,
   Eye, Edit, Ban, CheckCircle, XCircle, Key,
   Mail, Phone, Calendar, Activity, Award, BookOpen,
-  RefreshCw, X, Save, ChevronLeft, ChevronRight, Trash2, Download
+  RefreshCw, X, Save, ChevronLeft, ChevronRight, Trash2, Download, Gift
 } from 'lucide-react';
 import adminUserService from '../../services/adminUserService';
+import walletService from '../../services/walletService';
 import { AdminUserResponse, AdminUserDetailResponse, PrimaryRole, UserStatus } from '../../types/adminUser';
 import DeleteAccountModal from './DeleteAccountModal';
+import AdminSecurityGateModal from './AdminSecurityGateModal';
 import './UserManagementTabCosmic.css';
 
 const UserManagementTabCosmic: React.FC = () => {
@@ -43,6 +45,19 @@ const UserManagementTabCosmic: React.FC = () => {
     phoneNumber: '',
     primaryRole: 'USER' as PrimaryRole
   });
+
+  // Gift Modal state
+  const [showGiftModal, setShowGiftModal] = useState(false);
+  const [giftForm, setGiftForm] = useState({
+    cashAmount: 0,
+    coinAmount: 0,
+    reason: 'Admin gift'
+  });
+  const [userToGift, setUserToGift] = useState<{ id: number; name: string } | null>(null);
+
+  // Security Modal state
+  const [showSecurityModal, setShowSecurityModal] = useState(false);
+  const [pendingGiftUser, setPendingGiftUser] = useState<{ id: number; name: string } | null>(null);
 
   useEffect(() => {
     fetchUsers();
@@ -159,6 +174,47 @@ const UserManagementTabCosmic: React.FC = () => {
     } catch (error: any) {
       console.error('❌ Error updating user:', error);
       alert(error.response?.data?.message || 'Lỗi khi cập nhật user');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleOpenGiftModal = (userId: number, userName: string) => {
+    // Instead of opening gift modal directly, open security gate first
+    setPendingGiftUser({ id: userId, name: userName });
+    setShowSecurityModal(true);
+  };
+
+  const handleSecuritySuccess = () => {
+    if (pendingGiftUser) {
+        setShowSecurityModal(false);
+        setUserToGift(pendingGiftUser);
+        setGiftForm({ cashAmount: 0, coinAmount: 0, reason: 'Admin gift' });
+        setShowGiftModal(true);
+        setPendingGiftUser(null);
+    }
+  };
+
+  const handleSendGift = async () => {
+    if (!userToGift) return;
+    if (giftForm.cashAmount <= 0 && giftForm.coinAmount <= 0) {
+        alert('Vui lòng nhập số tiền hoặc xu > 0');
+        return;
+    }
+
+    try {
+      setActionLoading(true);
+      await walletService.adminGiftUser({
+        userId: userToGift.id,
+        cashAmount: giftForm.cashAmount,
+        coinAmount: giftForm.coinAmount,
+        reason: giftForm.reason
+      });
+      alert(`✅ Đã tặng quà cho ${userToGift.name} thành công!`);
+      setShowGiftModal(false);
+    } catch (error: any) {
+      console.error('❌ Error gifting user:', error);
+      alert(error.message || 'Lỗi khi tặng quà');
     } finally {
       setActionLoading(false);
     }
@@ -515,6 +571,14 @@ const UserManagementTabCosmic: React.FC = () => {
                       <Eye size={16} />
                     </button>
                     <button
+                      className="admin-action-btn gift"
+                      onClick={() => handleOpenGiftModal(user.id, user.fullName)}
+                      title="Tặng quà (Xu/Tiền)"
+                      style={{ color: '#F59E0B', background: 'rgba(245, 158, 11, 0.1)' }}
+                    >
+                      <Gift size={16} />
+                    </button>
+                    <button
                       className="admin-action-btn edit"
                       onClick={() => handleEditUser(user.id)}
                       title="Chỉnh sửa"
@@ -811,6 +875,69 @@ const UserManagementTabCosmic: React.FC = () => {
         </div>
       )}
 
+      {/* Gift Modal */}
+      {showGiftModal && userToGift && (
+        <div className="admin-modal-overlay" onClick={() => setShowGiftModal(false)}>
+          <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3>Tặng Quà Cho {userToGift.name}</h3>
+              <button className="admin-close-btn" onClick={() => setShowGiftModal(false)}>
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="admin-modal-body">
+              <div className="admin-edit-form">
+                <div className="admin-form-group">
+                  <label>Số tiền (VNĐ)</label>
+                  <input
+                    type="number"
+                    value={giftForm.cashAmount}
+                    onChange={(e) => setGiftForm({ ...giftForm, cashAmount: Number(e.target.value) })}
+                    placeholder="Nhập số tiền"
+                  />
+                </div>
+
+                <div className="admin-form-group">
+                  <label>Số Xu (SkillCoin)</label>
+                  <input
+                    type="number"
+                    value={giftForm.coinAmount}
+                    onChange={(e) => setGiftForm({ ...giftForm, coinAmount: Number(e.target.value) })}
+                    placeholder="Nhập số xu"
+                  />
+                </div>
+
+                <div className="admin-form-group">
+                  <label>Lý do</label>
+                  <input
+                    type="text"
+                    value={giftForm.reason}
+                    onChange={(e) => setGiftForm({ ...giftForm, reason: e.target.value })}
+                    placeholder="Nhập lý do tặng"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="admin-modal-footer">
+              <button className="admin-action-btn close" onClick={() => setShowGiftModal(false)}>
+                Hủy
+              </button>
+              <button
+                className="admin-action-btn save"
+                onClick={handleSendGift}
+                disabled={actionLoading}
+                style={{ background: '#F59E0B' }}
+              >
+                <Gift size={16} />
+                {actionLoading ? 'Đang gửi...' : 'Gửi quà tặng'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Delete Account Modal */}
       <DeleteAccountModal
         isOpen={showDeleteModal}
@@ -818,6 +945,19 @@ const UserManagementTabCosmic: React.FC = () => {
         onConfirm={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
         isLoading={actionLoading}
+      />
+
+      {/* Security Gate Modal */}
+      <AdminSecurityGateModal
+        isOpen={showSecurityModal}
+        onClose={() => {
+            setShowSecurityModal(false);
+            setPendingGiftUser(null);
+        }}
+        onSuccess={handleSecuritySuccess}
+        title="Xác thực Admin"
+        description="Tính năng tặng quà yêu cầu quyền truy cập cấp cao. Vui lòng nhập mã bảo mật để tiếp tục."
+        requiredKey={import.meta.env.VITE_ADMIN_GIFT_SECRET}
       />
     </div>
   );

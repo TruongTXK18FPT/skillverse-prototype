@@ -281,6 +281,7 @@ const AdminPage: React.FC = () => {
           return (
             <button
               key={tab.id}
+              data-tab-id={tab.id}
               className={`administrator-tab-button ${activeTab === tab.id ? 'active' : ''}`}
               onClick={() => setActiveTab(tab.id)}
               style={{

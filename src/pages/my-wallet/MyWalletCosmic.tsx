@@ -348,7 +348,8 @@ const MyWalletCosmic: React.FC = () => {
       'REWARD_ACHIEVEMENT',
       'DAILY_LOGIN_BONUS',
       'MENTOR_BOOKING',
-      'COURSE_PAYOUT'
+      'COURSE_PAYOUT',
+      'ADMIN_ADJUSTMENT'
     ];
     return type ? creditTypes.some(t => type.toUpperCase().includes(t)) : false;
   };
@@ -660,8 +661,8 @@ const MyWalletCosmic: React.FC = () => {
                     </div>
                     <div className="tx-amount">
                       {tx.amount !== undefined && tx.amount !== null ? (
-                        <p className={isTransactionCredit(tx.transactionType) ? 'positive' : 'negative'}>
-                          {isTransactionCredit(tx.transactionType) ? '+' : '-'}{formatCurrency(Math.abs(tx.amount || 0))}
+                        <p className={(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? 'positive' : 'negative'}>
+                          {(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? '+' : '-'}{formatCurrency(Math.abs(tx.amount || 0))}
                         </p>
                       ) : null}
                       {tx.coinAmount && (

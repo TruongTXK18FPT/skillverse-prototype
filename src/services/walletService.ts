@@ -433,6 +433,21 @@ class WalletService {
     }
   }
 
+  /**
+   * Admin: Gift cash/coins to user
+   * POST /api/admin/wallet/users/gift
+   */
+  async adminGiftUser(request: { userId: number; cashAmount: number; coinAmount: number; reason: string }): Promise<WalletTransactionResponse> {
+    try {
+      const response = await axiosInstance.post<WalletTransactionResponse>('/admin/wallet/users/gift', request);
+      return response.data;
+    } catch (error: unknown) {
+      console.error('❌ [Admin] Gift user error:', error);
+      const errorMessage = (error as AxiosError).response?.data?.message || 'Tặng quà thất bại.';
+      throw new Error(errorMessage);
+    }
+  }
+
   // ==================== SETTINGS ====================
   
   /**
