@@ -220,3 +220,21 @@
 .corp-doc-icon {
   color: var(--corp-accent-gold);
 }
+
+.corp-doc-tag {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  transition: all 0.3s ease;
+}
+
+.corp-doc-tag:hover {
+  background: rgba(251, 191, 36, 0.15);
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.2);
+}

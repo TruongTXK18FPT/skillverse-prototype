@@ -46,8 +46,9 @@ const PowerCoreConsole: React.FC<PowerCoreConsoleProps> = ({
         <div className="cmd-game-rank-header">
           <div>
             <div style={{ fontSize: '0.8rem', color: 'var(--cmd-game-text-dim)' }}>CURRENT CLEARANCE</div>
-            <div className="cmd-game-rank-current">
-              LVL {currentLevel} // {getRankName(currentLevel)}
+            <div className="cmd-game-rank-modules">
+              <span className="rank-module-game">LVL {currentLevel}</span>
+              <span className="rank-module-game">{getRankName(currentLevel)}</span>
             </div>
           </div>
           <div className="cmd-game-rank-next">

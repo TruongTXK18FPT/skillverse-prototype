@@ -75,9 +75,14 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ seminar, onRegister }) => {
     : 'INTEL';
 
   // Format location as coordinates
-  const formatLocation = (loc: string): string => {
+  const formatLocation = (loc: string): JSX.Element => {
     const sectorNumber = Math.floor(Math.random() * 9) + 1;
-    return `SECTOR ${sectorNumber} // ${loc}`;
+    return (
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <span className="location-module">Sector {sectorNumber}</span>
+        <span className="location-module">{loc}</span>
+      </div>
+    );
   };
 
   return (
@@ -106,7 +111,7 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ seminar, onRegister }) => {
           <div className="briefing-info-item">
             <span className="briefing-info-icon">📍</span>
             <span className="briefing-info-label">Location:</span>
-            <span className="briefing-info-value">{formatLocation(seminar.location)}</span>
+            <div className="briefing-info-value">{formatLocation(seminar.location)}</div>
           </div>
 
           <div className="briefing-info-item">

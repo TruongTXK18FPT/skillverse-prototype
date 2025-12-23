@@ -114,7 +114,10 @@ const CorpDataGrid: React.FC<CorpDataGridProps> = ({ data, onChange, onSave, loa
           <FileText size={24} className="corp-doc-icon" />
           <div style={{ flex: 1 }}>
             <div style={{ color: '#f8fafc', fontSize: '0.9rem' }}>Business_License.pdf</div>
-            <div style={{ color: '#64748b', fontSize: '0.7rem' }}>ENCRYPTED // 2.4 MB</div>
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
+              <span className="corp-doc-tag">Encrypted</span>
+              <span className="corp-doc-tag">2.4 MB</span>
+            </div>
           </div>
         </div>
 

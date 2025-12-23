@@ -219,7 +219,27 @@ const Header: React.FC = () => {
       loadUnreadCount();
 
       const interval = setInterval(loadUnreadCount, 60000);
-      return () => clearInterval(interval);
+      
+      // Listen for wallet balance updates
+      const handleWalletUpdate = () => {
+        loadWalletBalance();
+      };
+      
+      // Listen for notification read events
+      const handleNotificationRead = (event: any) => {
+        if (event.detail && typeof event.detail.unreadCount === 'number') {
+          setUnreadCount(event.detail.unreadCount);
+        }
+      };
+      
+      window.addEventListener('wallet:updated', handleWalletUpdate);
+      window.addEventListener('notification:read', handleNotificationRead);
+      
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('wallet:updated', handleWalletUpdate);
+        window.removeEventListener('notification:read', handleNotificationRead);
+      };
     }
   }, [isAuthenticated, user, loadWalletBalance, loadUserProfile, loadSubscription, loadUnreadCount]);
 

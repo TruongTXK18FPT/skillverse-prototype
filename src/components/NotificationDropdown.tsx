@@ -95,7 +95,11 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
     try {
       await notificationService.markAsRead(id);
       setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
-      setUnreadCount(prev => Math.max(0, prev - 1));
+      const newCount = Math.max(0, unreadCount - 1);
+      setUnreadCount(newCount);
+      
+      // Trigger event for Header to update its unread count
+      window.dispatchEvent(new CustomEvent('notification:read', { detail: { unreadCount: newCount } }));
     } catch (error) {
       console.error('Failed to mark as read', error);
     }
@@ -106,6 +110,9 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
       await notificationService.markAllAsRead();
       setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
       setUnreadCount(0);
+      
+      // Trigger event for Header to update its unread count
+      window.dispatchEvent(new CustomEvent('notification:read', { detail: { unreadCount: 0 } }));
     } catch (error) {
       console.error('Failed to mark all as read', error);
     }
@@ -127,6 +134,9 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
         break;
       case 'PREMIUM_PURCHASE':
       case 'PREMIUM_EXPIRATION':
+      case 'PREMIUM_CANCEL':
+      case 'AUTO_RENEWAL_DISABLED':
+      case 'AUTO_RENEWAL_ENABLED':
         navigate('/premium');
         break;
       case 'WALLET_DEPOSIT':
@@ -135,7 +145,16 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
       case 'WITHDRAWAL_REJECTED':
         navigate('/my-wallet');
         break;
+      case 'BOOKING_CONFIRMED':
+      case 'BOOKING_CANCELLED':
+      case 'BOOKING_REMINDER':
+        navigate('/my-bookings');
+        break;
+      case 'WELCOME':
+        navigate('/dashboard');
+        break;
       default:
+        console.log('No specific route for notification type:', notification.type);
         break;
     }
     setIsOpen(false);

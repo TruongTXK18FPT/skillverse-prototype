@@ -108,20 +108,40 @@ const NotificationPage: React.FC = () => {
     switch (type) {
       case 'LIKE':
       case 'COMMENT':
+        // Navigate to community post detail
         navigate(`/community/${relatedId}`);
+        break;
+      case 'PRECHAT_NEW_MESSAGE':
+        // Navigate to mentorship with chat open
+        navigate('/mentorship', { state: { openChatWith: relatedId } });
         break;
       case 'PREMIUM_PURCHASE':
       case 'PREMIUM_EXPIRATION':
       case 'PREMIUM_CANCEL':
+      case 'AUTO_RENEWAL_DISABLED':
+      case 'AUTO_RENEWAL_ENABLED':
+        // Navigate to premium page
         navigate('/premium');
         break;
       case 'WALLET_DEPOSIT':
       case 'COIN_PURCHASE':
       case 'WITHDRAWAL_APPROVED':
       case 'WITHDRAWAL_REJECTED':
+        // Navigate to wallet page
         navigate('/my-wallet');
         break;
+      case 'BOOKING_CONFIRMED':
+      case 'BOOKING_CANCELLED':
+      case 'BOOKING_REMINDER':
+        // Navigate to bookings page
+        navigate('/my-bookings');
+        break;
+      case 'WELCOME':
+        // Navigate to dashboard
+        navigate('/dashboard');
+        break;
       default:
+        console.log('No specific route for notification type:', type);
         break;
     }
   };

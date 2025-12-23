@@ -64,7 +64,10 @@ const RoadmapDetailViewer = memo(({
         <div className="rm-core-info">
           <div className="rm-status-bar">
             <span className="rm-system-dot"></span>
-            <span className="rm-system-text">SYSTEM ONLINE // {isSkillBased ? 'SKILL PROTOCOL' : 'CAREER PROTOCOL'}</span>
+            <div className="rm-status-modules">
+              <span className="status-module-rm">System Online</span>
+              <span className="status-module-rm">{isSkillBased ? 'Skill Protocol' : 'Career Protocol'}</span>
+            </div>
             {roadmap.metadata.difficultyLevel && (
               <span className={`rm-badge ${roadmap.metadata.difficultyLevel.toLowerCase()}`}>
                 {roadmap.metadata.difficultyLevel}

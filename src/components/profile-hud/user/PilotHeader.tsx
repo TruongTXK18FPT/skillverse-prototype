@@ -84,8 +84,9 @@ const PilotHeader: React.FC<PilotHeaderProps> = ({ user, subscription, onEdit, o
 
             <div className="pilot-info">
                 <h1 className="pilot-name">{user.fullName || 'UNKNOWN PILOT'}</h1>
-                <div className="pilot-rank">
-                    <span>LEVEL 0 // CADET</span>
+                <div className="pilot-rank-modules">
+                    <span className="rank-module">Level 0</span>
+                    <span className="rank-module">Cadet</span>
                 </div>
 
                 <div className="pilot-stats-bar">

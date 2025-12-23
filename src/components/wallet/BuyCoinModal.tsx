@@ -139,6 +139,9 @@ const BuyCoinModal: React.FC<BuyCoinModalProps> = ({ isOpen, onClose, onSuccess,
         paymentMethod: 'WALLET_CASH'
       });
 
+      // Trigger wallet update event for Header
+      window.dispatchEvent(new Event('wallet:updated'));
+
       if (onSuccess) {
         onSuccess();
       }
