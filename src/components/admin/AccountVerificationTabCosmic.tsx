@@ -41,6 +41,11 @@ const AccountVerificationTabCosmic: React.FC = () => {
   const [rejectReason, setRejectReason] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
 
+  // Get current user to check for USER_ADMIN permission
+  const currentUserStr = localStorage.getItem('user');
+  const currentUser = currentUserStr ? JSON.parse(currentUserStr) : null;
+  const canManage = currentUser?.roles?.includes('ADMIN') || currentUser?.roles?.includes('USER_ADMIN');
+
   const fetchApplications = useCallback(async () => {
     try {
       setLoading(true);
@@ -400,7 +405,7 @@ const AccountVerificationTabCosmic: React.FC = () => {
                       >
                         <Eye size={16} />
                       </button>
-                      {data.applicationStatus === ApplicationStatus.PENDING && (
+                      {data.applicationStatus === ApplicationStatus.PENDING && canManage && (
                         <>
                           <button
                             className="verification-action-btn approve"

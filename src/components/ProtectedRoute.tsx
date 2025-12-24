@@ -72,8 +72,19 @@ export const MentorRoute: React.FC<{ children: React.ReactNode }> = ({ children 
 
 // Convenience wrapper for ADMIN-only routes
 export const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const ADMIN_ROLES = [
+    'ADMIN', 
+    'USER_ADMIN', 
+    'CONTENT_ADMIN', 
+    'COMMUNITY_ADMIN', 
+    'FINANCE_ADMIN', 
+    'PREMIUM_ADMIN', 
+    'AI_ADMIN', 
+    'SUPPORT_ADMIN', 
+    'SYSTEM_ADMIN'
+  ];
   return (
-    <ProtectedRoute allowedRoles={['ADMIN']}>
+    <ProtectedRoute allowedRoles={ADMIN_ROLES}>
       {children}
     </ProtectedRoute>
   );

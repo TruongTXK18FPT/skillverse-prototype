@@ -57,6 +57,10 @@ export interface RecruiterApplicationDto {
   applicationDate: string;
   approvalDate?: string;
   rejectionReason?: string;
+  contactPersonPhone?: string;
+  contactPersonPosition?: string;
+  companySize?: string;
+  industry?: string;
 }
 
 export interface ApplicationStatusStatsDto {

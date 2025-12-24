@@ -223,6 +223,26 @@ class AdminUserService {
   }
 
   /**
+   * Add roles to user
+   * @param userId - User ID
+   * @param roles - List of roles to add
+   * @returns Promise<AdminUserResponse>
+   */
+  async addRolesToUser(userId: number, roles: string[]): Promise<AdminUserResponse> {
+    try {
+      const response = await axiosInstance.put<AdminUserResponse>(
+        `${this.BASE_URL}/roles/add`,
+        { userId, roles }
+      );
+      
+      return response.data;
+    } catch (error) {
+      console.error(`❌ Error adding roles to user ${userId}:`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Delete a user (soft delete)
    * @param userId - User ID
    * @returns Promise<void>

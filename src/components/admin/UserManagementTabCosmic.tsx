@@ -59,6 +59,33 @@ const UserManagementTabCosmic: React.FC = () => {
   const [showSecurityModal, setShowSecurityModal] = useState(false);
   const [pendingGiftUser, setPendingGiftUser] = useState<{ id: number; name: string } | null>(null);
 
+  // Role Assignment Modal state
+  const [showRoleModal, setShowRoleModal] = useState(false);
+  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+  const [userToAssignRole, setUserToAssignRole] = useState<{ id: number; name: string } | null>(null);
+
+  const [successModal, setSuccessModal] = useState<{ show: boolean; message: string; title: string }>({
+    show: false,
+    message: '',
+    title: ''
+  });
+
+  // Get current user from storage to check permissions
+  const currentUserStr = localStorage.getItem('user');
+  const currentUser = currentUserStr ? JSON.parse(currentUserStr) : null;
+  const isSuperAdmin = currentUser?.roles?.includes('ADMIN');
+
+  const availableAdminRoles = [
+    { value: 'USER_ADMIN', label: 'User Admin (Quản lý User)' },
+    { value: 'CONTENT_ADMIN', label: 'Content Admin (Duyệt Content)' },
+    { value: 'COMMUNITY_ADMIN', label: 'Community Admin (Cộng đồng)' },
+    { value: 'FINANCE_ADMIN', label: 'Finance Admin (Tài chính)' },
+    { value: 'PREMIUM_ADMIN', label: 'Premium Admin (Gói cước)' },
+    { value: 'AI_ADMIN', label: 'AI Admin (AI Experts)' },
+    { value: 'SUPPORT_ADMIN', label: 'Support Admin (Hỗ trợ)' },
+    { value: 'SYSTEM_ADMIN', label: 'System Admin (Hệ thống)' }
+  ];
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -141,6 +168,53 @@ const UserManagementTabCosmic: React.FC = () => {
     } catch (error: any) {
       console.error('❌ Error fetching user for edit:', error);
       alert('Không thể tải thông tin user');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleOpenRoleModal = async (user: AdminUserResponse) => {
+    try {
+      setActionLoading(true);
+      const detail = await adminUserService.getUserDetailById(user.id);
+      setUserToAssignRole({ id: user.id, name: user.fullName });
+      
+      // Pre-select existing roles
+      // Note: primaryRole might be one of them, but we want all roles
+      if (detail.roles) {
+        setSelectedRoles(detail.roles);
+      } else {
+        setSelectedRoles([]);
+      }
+      
+      setShowRoleModal(true);
+    } catch (error) {
+      console.error('Failed to fetch user roles:', error);
+      alert('Không thể tải thông tin quyền hạn.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleSubmitRoles = async () => {
+    if (!userToAssignRole || selectedRoles.length === 0) {
+      alert('Vui lòng chọn ít nhất một role');
+      return;
+    }
+
+    try {
+      setActionLoading(true);
+      await adminUserService.addRolesToUser(userToAssignRole.id, selectedRoles);
+      setShowRoleModal(false);
+      setSuccessModal({
+        show: true,
+        title: 'Phân Quyền Thành Công',
+        message: `Đã thêm các quyền admin cho người dùng ${userToAssignRole.name}.`
+      });
+      fetchUsers(); // Refresh list
+    } catch (error: any) {
+      console.error('Failed to assign roles:', error);
+      alert('Thêm quyền thất bại: ' + (error.message || 'Lỗi không xác định'));
     } finally {
       setActionLoading(false);
     }
@@ -483,6 +557,12 @@ const UserManagementTabCosmic: React.FC = () => {
           >
             Học viên
           </button>
+          <button
+            className={`admin-filter-btn ${roleFilter === 'admin' ? 'active' : ''}`}
+            onClick={() => setRoleFilter('admin')}
+          >
+            Quản trị
+          </button>
         </div>
 
         <div className="admin-status-filters">
@@ -543,10 +623,18 @@ const UserManagementTabCosmic: React.FC = () => {
                   </div>
                 </td>
                 <td>
-                  <span className={`admin-role-badge ${user.primaryRole.toLowerCase()}`}>
-                    {getRoleIcon(user.primaryRole)}
-                    {getRoleLabel(user.primaryRole)}
-                  </span>
+                  <div className="admin-user-role-badge" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <span className={`admin-role-badge ${user.primaryRole.toLowerCase()}`}>
+                      {getRoleIcon(user.primaryRole)}
+                      {getRoleLabel(user.primaryRole)}
+                    </span>
+                    {user.roles && user.roles.length > 0 && user.roles.filter(r => r !== user.primaryRole && r.includes('ADMIN')).map(role => (
+                      <span key={role} className="admin-role-badge admin-sub" style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(99, 102, 241, 0.1)', color: '#818cf8', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
+                        <Shield size={10} style={{ marginRight: '3px' }} />
+                        {role.replace('_ADMIN', '')}
+                      </span>
+                    ))}
+                  </div>
                 </td>
                 <td>{getStatusBadge(user.status)}</td>
                 <td>
@@ -600,6 +688,15 @@ const UserManagementTabCosmic: React.FC = () => {
                         title="Kích hoạt"
                       >
                         <CheckCircle size={16} />
+                      </button>
+                    )}
+                    {isSuperAdmin && (
+                      <button
+                        className="admin-action-btn edit"
+                        onClick={() => handleOpenRoleModal(user)}
+                        title="Phân quyền Admin"
+                      >
+                        <Shield size={16} />
                       </button>
                     )}
                     <button
@@ -959,8 +1056,115 @@ const UserManagementTabCosmic: React.FC = () => {
         description="Tính năng tặng quà yêu cầu quyền truy cập cấp cao. Vui lòng nhập mã bảo mật để tiếp tục."
         requiredKey={import.meta.env.VITE_ADMIN_GIFT_SECRET}
       />
-    </div>
-  );
+
+      {/* Assign Role Modal */}
+      {showRoleModal && userToAssignRole && (
+        <div className="admin-modal-overlay" onClick={() => setShowRoleModal(false)}>
+          <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3>Phân Quyền Admin - {userToAssignRole.name}</h3>
+              <button className="admin-close-btn" onClick={() => setShowRoleModal(false)}>
+                <X size={24} />
+              </button>
+            </div>
+            
+            <div className="admin-modal-body">
+              <p style={{ color: '#aaa', marginBottom: '1rem' }}>
+                Chọn các quyền quản trị viên bổ sung cho người dùng này.
+                Người dùng sẽ có quyền truy cập vào các tab tương ứng.
+              </p>
+              
+              <div className="admin-role-grid" style={{ 
+                display: 'grid', 
+                gridTemplateColumns: '1fr 1fr', 
+                gap: '1rem',
+                maxHeight: '400px',
+                overflowY: 'auto'
+              }}>
+                {availableAdminRoles.map((role) => (
+                  <label 
+                    key={role.value} 
+                    className={`admin-role-card ${selectedRoles.includes(role.value) ? 'selected' : ''}`}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '1rem',
+                      background: selectedRoles.includes(role.value) ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                      border: selectedRoles.includes(role.value) ? '1px solid #6366f1' : '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedRoles.includes(role.value)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedRoles([...selectedRoles, role.value]);
+                        } else {
+                          setSelectedRoles(selectedRoles.filter(r => r !== role.value));
+                        }
+                      }}
+                      style={{ marginRight: '10px', width: '18px', height: '18px' }}
+                    />
+                    <span style={{ color: '#fff' }}>{role.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="admin-modal-footer">
+              <button className="admin-action-btn close" onClick={() => setShowRoleModal(false)}>
+                Hủy
+              </button>
+              <button
+                className="admin-action-btn save"
+                onClick={handleSubmitRoles}
+                disabled={actionLoading}
+              >
+                <Shield size={16} />
+                {actionLoading ? 'Đang lưu...' : 'Lưu quyền'}
+              </button>
+            </div>
+          </div>
+        </div>
+       )}
+
+      {/* Success Modal */}
+      {successModal.show && (
+        <div className="admin-modal-overlay" onClick={() => setSuccessModal({ ...successModal, show: false })}>
+          <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px', textAlign: 'center' }}>
+            <div className="admin-modal-body" style={{ padding: '2rem' }}>
+              <div style={{ 
+                width: '60px', 
+                height: '60px', 
+                borderRadius: '50%', 
+                background: 'rgba(16, 185, 129, 0.2)', 
+                color: '#10B981',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1.5rem'
+              }}>
+                <CheckCircle size={32} />
+              </div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#fff' }}>{successModal.title}</h3>
+              <p style={{ color: '#aaa', marginBottom: '2rem' }}>{successModal.message}</p>
+              <button 
+                className="admin-action-btn save" 
+                onClick={() => setSuccessModal({ ...successModal, show: false })}
+                style={{ width: '100%', justifyContent: 'center' }}
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+     </div>
+   );
 };
 
 export default UserManagementTabCosmic;

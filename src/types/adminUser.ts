@@ -13,6 +13,7 @@ export interface AdminUserResponse {
   fullName: string;
   phoneNumber: string | null;
   primaryRole: PrimaryRole;
+  roles?: string[];
   status: UserStatus;
   isEmailVerified: boolean;
   createdAt: string;
@@ -69,6 +70,7 @@ export interface AdminUserDetailResponse {
   fullName: string;
   phoneNumber: string | null;
   primaryRole: PrimaryRole;
+  roles?: string[]; // All assigned roles
   status: UserStatus;
   isEmailVerified: boolean;
   authProvider: string;

@@ -468,6 +468,15 @@ const Header: React.FC = () => {
 
                   <hr className="dropdown-divider" />
 
+                  {/* Admin Dashboard Link for any admin role */}
+                  {(user.roles.includes('ADMIN') || 
+                    user.roles.some(role => role.endsWith('_ADMIN'))) && (
+                    <button onClick={() => navigate('/admin')} className="dropdown-item" style={{ color: '#F472B6' }}>
+                      <Shield size={16} />
+                      <span>Quản Trị Viên</span>
+                    </button>
+                  )}
+
                   {(user.roles.includes('MENTOR') || user.roles.includes('ADMIN')) && (
                     <button onClick={handleMentor} className="dropdown-item">
                       <BookOpen size={16} />
@@ -563,6 +572,12 @@ const Header: React.FC = () => {
                 </div>
 
                 <div className="mobile-user-menu-list">
+                  {(user.roles.includes('ADMIN') || user.roles.some(role => role.endsWith('_ADMIN'))) && (
+                    <button onClick={() => { navigate('/admin'); setIsMobileMenuOpen(false); }} className="mobile-menu-item" style={{ color: '#F472B6' }}>
+                      <Shield size={18} />
+                      <span>Quản Trị Viên</span>
+                    </button>
+                  )}
                   {(user.roles.includes('MENTOR') || user.roles.includes('ADMIN')) && (
                     <button onClick={handleMentor} className="mobile-menu-item">
                       <BookOpen size={18} />
