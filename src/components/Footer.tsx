@@ -4,11 +4,19 @@ import '../styles/Footer.css';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import Logo from '../assets/skillverse.png';
+import LogoNoel from '../assets/logoNoel.png';
 
 const Footer = () => {
   const { theme } = useTheme();
   const { translations } = useLanguage();
   const mapUrl = "https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d31355.755907056393!2d106.80691566973627!3d10.841127618407334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sfpt%20university!5e0!3m2!1sen!2s!4v1709561248044!5m2!1sen!2s";
+
+  const getLogo = () => {
+    const currentMonth = new Date().getMonth() + 1;
+    return currentMonth === 12 ? LogoNoel : Logo;
+  };
+
+  const isNoel = new Date().getMonth() + 1 === 12;
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -32,7 +40,11 @@ const Footer = () => {
             {/* Brand */}
             <div className="footer-brand">
               <Link to="/" className="brand-header">
-                <img src={Logo} alt="Skillverse Logo" className="brand-logo" />
+                <img 
+                  src={getLogo()} 
+                  alt="Skillverse Logo" 
+                  className={`brand-logo ${isNoel ? 'noel-logo' : ''}`} 
+                />
               </Link>
               <p className="brand-description">
                 Hệ sinh thái học tập và làm việc tích hợp cho sinh viên và người chuyển đổi nghề nghiệp trong kỷ nguyên số.

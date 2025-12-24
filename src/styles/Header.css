@@ -80,6 +80,13 @@
   width: auto;
 }
 
+.header-logo-image.noel-logo {
+  height: 65px;
+  max-height: 65px;
+  width: auto;
+  filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.3));
+}
+
 /* Buttons: Khám Phá & Dịch Chuyển (Sci-fi Buttons) */
 .header-nav-btn, 
 .quick-nav-btn {

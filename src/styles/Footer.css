@@ -154,6 +154,11 @@
   transition: all 0.3s ease;
 }
 
+.brand-logo.noel-logo {
+  max-width: 220px;
+  filter: drop-shadow(0 4px 15px rgba(255, 0, 0, 0.4));
+}
+
 .brand-header:hover .brand-logo {
   filter: drop-shadow(0 4px 20px rgba(99, 102, 241, 0.6));
   transform: scale(1.05);

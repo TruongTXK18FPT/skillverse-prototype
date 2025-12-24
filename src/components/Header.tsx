@@ -41,6 +41,7 @@ import { UserProfileResponse } from '../data/userDTOs';
 import { UserSubscriptionResponse } from '../data/premiumDTOs';
 import NotificationDropdown from './NotificationDropdown';
 import Logo from '../assets/skillverse.png';
+import LogoNoel from '../assets/logoNoel.png';
 import '../styles/Header.css';
 
 const Header: React.FC = () => {
@@ -59,6 +60,13 @@ const Header: React.FC = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const quickNavRef = useRef<HTMLDivElement>(null);
+
+  const getLogo = () => {
+    const currentMonth = new Date().getMonth() + 1;
+    return currentMonth === 12 ? LogoNoel : Logo;
+  };
+
+  const isNoel = new Date().getMonth() + 1 === 12;
 
   // Quick navigation items
   const quickNavItems = [
@@ -302,7 +310,11 @@ const Header: React.FC = () => {
         <div className="main-header-left">
           {/* Logo */}
           <Link to="/" className="header-logo-link">
-            <img src={Logo} alt="SkillVerse" className="header-logo-image" />
+            <img 
+              src={getLogo()} 
+              alt="SkillVerse" 
+              className={`header-logo-image ${isNoel ? 'noel-logo' : ''}`} 
+            />
           </Link>
 
           {/* Explore Button */}
