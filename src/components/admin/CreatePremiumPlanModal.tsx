@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { X, Plus, Trash2, AlertCircle } from 'lucide-react';
 import * as adminPremiumService from '../../services/adminPremiumService';
 import {
@@ -258,7 +259,7 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
     }
   };
 
-  return (
+  return ReactDOM.createPortal(
     <div className="admin-modal-overlay" onClick={() => onClose()}>
       <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
@@ -607,7 +608,7 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
         </form>
       </div>
     </div>
-  );
+  , document.body);
 };
 
 export default CreatePremiumPlanModal;

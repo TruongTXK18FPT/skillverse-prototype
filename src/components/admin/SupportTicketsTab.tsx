@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Ticket, Search, Filter, Clock, AlertCircle, CheckCircle, 
@@ -97,6 +98,18 @@ const SupportTicketsTab: React.FC = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Scroll lock for modals
+  useEffect(() => {
+    if (showChatModal || showStatusModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showChatModal, showStatusModal]);
 
   // fetchTickets and fetchStats moved into useCallback above
 
@@ -324,7 +337,7 @@ const SupportTicketsTab: React.FC = () => {
 
       {/* Chat Modal */}
       <AnimatePresence>
-        {showChatModal && selectedTicket && (
+        {showChatModal && selectedTicket && ReactDOM.createPortal(
           <motion.div className="stt-modal-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowChatModal(false)}>
             <motion.div className="stt-chat-modal" initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} onClick={(e) => e.stopPropagation()}>
               <div className="stt-chat-modal-header">
@@ -386,12 +399,12 @@ const SupportTicketsTab: React.FC = () => {
               </div>
             </motion.div>
           </motion.div>
-        )}
+        , document.body)}
       </AnimatePresence>
 
       {/* Status Modal */}
       <AnimatePresence>
-        {showStatusModal && selectedTicket && (
+        {showStatusModal && selectedTicket && ReactDOM.createPortal(
           <motion.div className="stt-modal-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowStatusModal(false)}>
             <motion.div className="stt-status-modal" initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} onClick={(e) => e.stopPropagation()}>
               <div className="stt-status-modal-header">
@@ -446,7 +459,7 @@ const SupportTicketsTab: React.FC = () => {
               </div>
             </motion.div>
           </motion.div>
-        )}
+        , document.body)}
       </AnimatePresence>
     </div>
   );

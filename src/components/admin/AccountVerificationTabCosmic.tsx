@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import {
   UserCheck, Building2, Clock, CheckCircle, XCircle,
   Search, Filter, Eye, RefreshCw, X, Calendar, Mail,
@@ -68,6 +69,18 @@ const AccountVerificationTabCosmic: React.FC = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [roleFilter, searchTerm, statusFilter]);
+
+  // Scroll lock for modals
+  useEffect(() => {
+    if (showDetailModal || showRejectModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showDetailModal, showRejectModal]);
 
   // fetchApplications moved into useCallback above
 
@@ -468,7 +481,7 @@ const AccountVerificationTabCosmic: React.FC = () => {
       )}
 
       {/* Detail Modal */}
-      {showDetailModal && selectedApplication && (
+      {showDetailModal && selectedApplication && ReactDOM.createPortal(
         <div className="verification-modal-overlay" onClick={() => setShowDetailModal(false)}>
           <div className="verification-modal" onClick={(e) => e.stopPropagation()}>
             <div className="verification-modal-header">
@@ -517,11 +530,12 @@ const AccountVerificationTabCosmic: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Reject Modal */}
-      {showRejectModal && selectedApplication && (
+      {showRejectModal && selectedApplication && ReactDOM.createPortal(
         <div className="verification-modal-overlay" onClick={() => setShowRejectModal(false)}>
           <div className="verification-modal small" onClick={(e) => e.stopPropagation()}>
             <div className="verification-modal-header">
@@ -571,7 +585,8 @@ const AccountVerificationTabCosmic: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { Lock, X, ShieldAlert, Key } from 'lucide-react';
 import './AdminSecurityGateModal.css';
 
@@ -46,7 +47,7 @@ const AdminSecurityGateModal: React.FC<AdminSecurityGateModalProps> = ({
     }, 800);
   };
 
-  return (
+  return ReactDOM.createPortal(
     <div className="admin-security-modal-overlay" onClick={onClose}>
       <div className="admin-security-modal" onClick={(e) => e.stopPropagation()}>
         <div className="admin-security-header">
@@ -109,7 +110,7 @@ const AdminSecurityGateModal: React.FC<AdminSecurityGateModalProps> = ({
         </div>
       </div>
     </div>
-  );
+  , document.body);
 };
 
 export default AdminSecurityGateModal;

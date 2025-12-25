@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import {
@@ -84,6 +85,18 @@ const TransactionManagementTabCosmic: React.FC = () => {
       return () => clearTimeout(delayDebounceFn);
     }
   }, [searchTerm, typeFilter, statusFilter, transactions]);
+
+  // Scroll lock for modal
+  useEffect(() => {
+    if (showDetailModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showDetailModal]);
 
   const fetchAllTransactions = async () => {
     try {
@@ -1057,7 +1070,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
       )}
 
       {/* Detail Modal */}
-      {showDetailModal && selectedTransaction && (
+      {showDetailModal && selectedTransaction && ReactDOM.createPortal(
         <div className="admin-modal-overlay" onClick={() => setShowDetailModal(false)}>
           <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
             <div className="admin-modal-header">
@@ -1163,7 +1176,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
     </div>
   );
 };

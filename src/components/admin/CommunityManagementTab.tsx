@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import communityService, { PostSummary, CommentResponse } from '../../services/communityService';
 import adminUserService from '../../services/adminUserService';
 import { AdminUserResponse } from '../../types/adminUser';
@@ -229,6 +230,18 @@ const CommunityManagementTab: React.FC = () => {
   };
 
   useEffect(() => { loadPosts(); }, []);
+
+  // Scroll lock for modals
+  useEffect(() => {
+    if (activeModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [activeModal]);
 
   // --- Edit Handlers ---
   const openEdit = (p: PostSummary) => {
@@ -663,7 +676,7 @@ const CommunityManagementTab: React.FC = () => {
       </div>
 
       {/* --- EDIT MODAL --- */}
-      {activeModal === 'edit' && selectedPost && (
+      {activeModal === 'edit' && selectedPost && ReactDOM.createPortal(
         <div className="admin-modal-overlay" onClick={() => setActiveModal(null)}>
           <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '1200px' }}>
             <div className="admin-modal-header">
@@ -786,10 +799,10 @@ const CommunityManagementTab: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
 
       {/* --- COMMENTS MODAL --- */}
-      {activeModal === 'comments' && selectedPost && (
+      {activeModal === 'comments' && selectedPost && ReactDOM.createPortal(
         <div className="admin-modal-overlay" onClick={() => setActiveModal(null)}>
           <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '800px' }}>
             <div className="admin-modal-header">
@@ -882,7 +895,7 @@ const CommunityManagementTab: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
     </div>
   );
 };

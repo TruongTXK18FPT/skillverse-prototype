@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { 
   DollarSign, Clock, CheckCircle, XCircle, Eye, 
   Building2, CreditCard, User, Calendar,
@@ -21,6 +22,18 @@ const WithdrawalApprovalTab: React.FC = () => {
   useEffect(() => {
     fetchWithdrawalRequests();
   }, [selectedStatus]);
+
+  // Scroll lock for modal
+  useEffect(() => {
+    if (showDetailModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showDetailModal]);
 
   const fetchWithdrawalRequests = async () => {
     try {
@@ -265,7 +278,7 @@ const WithdrawalApprovalTab: React.FC = () => {
       )}
 
       {/* Detail Modal */}
-      {showDetailModal && selectedRequest && (
+      {showDetailModal && selectedRequest && ReactDOM.createPortal(
         <div className="admin-modal-overlay" onClick={() => setShowDetailModal(false)}>
           <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
             <div className="admin-modal-header">
@@ -404,7 +417,7 @@ const WithdrawalApprovalTab: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
     </div>
   );
 };

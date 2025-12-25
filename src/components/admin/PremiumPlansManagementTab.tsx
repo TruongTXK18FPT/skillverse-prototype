@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import {
   Crown, Plus, Edit, Trash2, Power, Users, DollarSign, Calendar,
   AlertCircle, RefreshCw, Eye, X, ChevronLeft, ChevronRight,
@@ -23,6 +24,18 @@ const PremiumPlansManagementTab: React.FC = () => {
   useEffect(() => {
     loadPlans();
   }, []);
+
+  // Scroll lock for modals
+  useEffect(() => {
+    if (showCreateModal || showDetailModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showCreateModal, showDetailModal]);
 
   const loadPlans = async () => {
     try {
@@ -344,7 +357,7 @@ const PremiumPlansManagementTab: React.FC = () => {
       )}
 
       {/* Detail Modal */}
-      {showDetailModal && selectedPlan && (
+      {showDetailModal && selectedPlan && ReactDOM.createPortal(
         <div className="admin-modal-overlay" onClick={() => setShowDetailModal(false)}>
           <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
             <div className="admin-modal-header">
@@ -456,7 +469,7 @@ const PremiumPlansManagementTab: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
 
       {/* Create/Edit Modal */}
       {showCreateModal && (

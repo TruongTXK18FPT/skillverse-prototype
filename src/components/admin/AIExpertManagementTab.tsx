@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import {
   Brain, Search, Plus, Edit3, Trash2, Eye, RefreshCw,
   Layers, Briefcase, Code, Users, Sparkles, ChevronDown, ChevronRight,
@@ -85,6 +86,18 @@ const AIExpertManagementTab: React.FC = () => {
   }, [showError]);
 
   useEffect(() => { loadConfigs(); }, [loadConfigs]);
+
+  // Scroll lock for modals
+  useEffect(() => {
+    if (activeModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [activeModal]);
 
   // ==================== COMPUTED ====================
   const filteredConfigs = useMemo(() => {
@@ -448,7 +461,7 @@ const AIExpertManagementTab: React.FC = () => {
       )}
 
       {/* DOMAIN MODAL */}
-      {activeModal === 'domain' && (
+      {activeModal === 'domain' && ReactDOM.createPortal(
         <div className="expert-modal-overlay" onClick={closeModal}>
           <div className="expert-modal" onClick={e => e.stopPropagation()}>
             <div className="expert-modal-header">
@@ -473,11 +486,12 @@ const AIExpertManagementTab: React.FC = () => {
               <button className="expert-btn success" onClick={handleCreateDomain}>Tạo Domain</button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* INDUSTRY MODAL */}
-      {activeModal === 'industry' && (
+      {activeModal === 'industry' && ReactDOM.createPortal(
         <div className="expert-modal-overlay" onClick={closeModal}>
           <div className="expert-modal" onClick={e => e.stopPropagation()}>
             <div className="expert-modal-header">
@@ -509,11 +523,12 @@ const AIExpertManagementTab: React.FC = () => {
               <button className="expert-btn success" onClick={handleCreateIndustry}>Tạo Industry</button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* JOB ROLE MODAL */}
-      {activeModal === 'jobRole' && (
+      {activeModal === 'jobRole' && ReactDOM.createPortal(
         <div className="expert-modal-overlay" onClick={closeModal}>
           <div className="expert-modal large" onClick={e => e.stopPropagation()}>
             <div className="expert-modal-header">
@@ -586,11 +601,12 @@ const AIExpertManagementTab: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* EDIT MODAL */}
-      {activeModal === 'edit' && selectedConfig && (
+      {activeModal === 'edit' && selectedConfig && ReactDOM.createPortal(
         <div className="expert-modal-overlay" onClick={closeModal}>
           <div className="expert-modal large" onClick={e => e.stopPropagation()}>
             <div className="expert-modal-header">
@@ -658,11 +674,12 @@ const AIExpertManagementTab: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* VIEW MODAL */}
-      {activeModal === 'view' && selectedConfig && (
+      {activeModal === 'view' && selectedConfig && ReactDOM.createPortal(
         <div className="expert-modal-overlay" onClick={closeModal}>
           <div className="expert-modal large" onClick={e => e.stopPropagation()}>
             <div className="expert-modal-header">
@@ -718,11 +735,12 @@ const AIExpertManagementTab: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* DELETE MODAL */}
-      {activeModal === 'delete' && selectedConfig && (
+      {activeModal === 'delete' && selectedConfig && ReactDOM.createPortal(
         <div className="expert-modal-overlay" onClick={closeModal}>
           <div className="expert-modal" onClick={e => e.stopPropagation()}>
             <div className="expert-modal-header">
@@ -744,7 +762,8 @@ const AIExpertManagementTab: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

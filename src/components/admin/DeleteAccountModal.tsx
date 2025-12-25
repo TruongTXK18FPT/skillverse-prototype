@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { AlertTriangle, X } from 'lucide-react';
 import './DeleteAccountModal.css';
 
@@ -41,7 +42,7 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
+  return ReactDOM.createPortal(
     <div className="delete-account-modal-overlay">
       <div className="delete-account-modal" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
@@ -121,7 +122,7 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
         </div>
       </div>
     </div>
-  );
+  , document.body);
 };
 
 export default DeleteAccountModal;

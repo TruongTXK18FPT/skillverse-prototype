@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import {
   Users, UserCheck, Shield, Search, Filter,
   Eye, Edit, Ban, CheckCircle, XCircle, Key,
@@ -96,6 +97,18 @@ const UserManagementTabCosmic: React.FC = () => {
     }, 300);
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm, roleFilter, statusFilter]);
+
+  // Scroll lock for modals
+  useEffect(() => {
+    if (showDetailModal || showEditModal || showDeleteModal || showGiftModal || showSecurityModal || showRoleModal || successModal.show) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showDetailModal, showEditModal, showDeleteModal, showGiftModal, showSecurityModal, showRoleModal, successModal.show]);
 
   const fetchUsers = async () => {
     try {
@@ -760,7 +773,7 @@ const UserManagementTabCosmic: React.FC = () => {
       )}
 
       {/* Detail Modal */}
-      {showDetailModal && selectedUser && (
+      {showDetailModal && selectedUser && ReactDOM.createPortal(
         <div className="admin-modal-overlay" onClick={() => setShowDetailModal(false)}>
           <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
             <div className="admin-modal-header">
@@ -884,11 +897,12 @@ const UserManagementTabCosmic: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Edit Modal */}
-      {showEditModal && selectedUser && (
+      {showEditModal && selectedUser && ReactDOM.createPortal(
         <div className="admin-modal-overlay" onClick={() => setShowEditModal(false)}>
           <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
             <div className="admin-modal-header">
@@ -969,11 +983,12 @@ const UserManagementTabCosmic: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Gift Modal */}
-      {showGiftModal && userToGift && (
+      {showGiftModal && userToGift && ReactDOM.createPortal(
         <div className="admin-modal-overlay" onClick={() => setShowGiftModal(false)}>
           <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
             <div className="admin-modal-header">
@@ -1032,7 +1047,8 @@ const UserManagementTabCosmic: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Delete Account Modal */}
@@ -1058,7 +1074,7 @@ const UserManagementTabCosmic: React.FC = () => {
       />
 
       {/* Assign Role Modal */}
-      {showRoleModal && userToAssignRole && (
+      {showRoleModal && userToAssignRole && ReactDOM.createPortal(
         <div className="admin-modal-overlay" onClick={() => setShowRoleModal(false)}>
           <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
             <div className="admin-modal-header">
@@ -1128,11 +1144,12 @@ const UserManagementTabCosmic: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
        )}
 
       {/* Success Modal */}
-      {successModal.show && (
+      {successModal.show && ReactDOM.createPortal(
         <div className="admin-modal-overlay" onClick={() => setSuccessModal({ ...successModal, show: false })}>
           <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px', textAlign: 'center' }}>
             <div className="admin-modal-body" style={{ padding: '2rem' }}>
@@ -1160,7 +1177,8 @@ const UserManagementTabCosmic: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
      </div>

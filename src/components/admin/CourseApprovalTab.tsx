@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import {
   listPendingCourses,
   approveCourse,
@@ -150,6 +151,18 @@ export const CourseApprovalTab: React.FC = () => {
   useEffect(() => {
     loadPendingCourses();
   }, [loadPendingCourses]);
+
+  // Scroll lock for modals
+  useEffect(() => {
+    if (showDetailsModal || showActionModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showDetailsModal, showActionModal]);
 
   // Format date
   const formatDate = (dateString?: string) => {
@@ -332,7 +345,7 @@ export const CourseApprovalTab: React.FC = () => {
       )}
 
       {/* Course Details Modal */}
-      {showDetailsModal && selectedCourse && (
+      {showDetailsModal && selectedCourse && ReactDOM.createPortal(
         <div className="module-modal-overlay" onClick={() => setShowDetailsModal(false)}>
           <div className="module-modal-content course-detail-modal" onClick={(e) => e.stopPropagation()}>
             <div className="module-modal-header">
@@ -490,10 +503,10 @@ export const CourseApprovalTab: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
 
       {/* Action Confirmation Modal */}
-      {showActionModal && selectedCourse && (
+      {showActionModal && selectedCourse && ReactDOM.createPortal(
         <div className="module-modal-overlay" onClick={() => setShowActionModal(false)}>
           <div className="module-modal-content modal-small" onClick={(e) => e.stopPropagation()}>
             <div className="module-modal-header">
@@ -535,7 +548,7 @@ export const CourseApprovalTab: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
     </div>
   );
 };

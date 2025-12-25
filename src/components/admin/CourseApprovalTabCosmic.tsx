@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import {
   BookOpen, Search, Eye, CheckCircle, XCircle,
   Clock, User, Calendar, Star, ChevronLeft, ChevronRight, 
@@ -75,6 +76,18 @@ export const CourseApprovalTabCosmic: React.FC = () => {
       loadPendingCourses();
     }
   }, [currentPage, sortBy, sortOrder, user]);
+
+  // Scroll lock for modals
+  useEffect(() => {
+    if (showDetailsModal || showActionModal || showLessonModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showDetailsModal, showActionModal, showLessonModal]);
 
   // ==================== API HANDLERS ====================
   const loadPendingCourses = useCallback(async () => {
@@ -377,7 +390,7 @@ export const CourseApprovalTabCosmic: React.FC = () => {
       )}
 
       {/* Details Modal */}
-      {showDetailsModal && selectedCourse && (
+      {showDetailsModal && selectedCourse && ReactDOM.createPortal(
         <div className="cosmic-modal-overlay" onClick={() => setShowDetailsModal(false)}>
           <div className="cosmic-modal" onClick={(e) => e.stopPropagation()}>
             <div className="cosmic-modal-header">
@@ -522,10 +535,10 @@ export const CourseApprovalTabCosmic: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
 
       {/* Action Modal */}
-      {showActionModal && selectedCourse && (
+      {showActionModal && selectedCourse && ReactDOM.createPortal(
         <div className="cosmic-modal-overlay" onClick={() => setShowActionModal(false)}>
           <div className="cosmic-modal small" onClick={(e) => e.stopPropagation()}>
             <div className="cosmic-modal-header">
@@ -571,10 +584,10 @@ export const CourseApprovalTabCosmic: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
 
       {/* Lesson Modal */}
-      {showLessonModal && selectedLesson && (
+      {showLessonModal && selectedLesson && ReactDOM.createPortal(
         <div className="cosmic-modal-overlay" onClick={() => setShowLessonModal(false)}>
           <div className="cosmic-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '900px' }}>
             <div className="cosmic-modal-header">
@@ -641,7 +654,7 @@ export const CourseApprovalTabCosmic: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
     </div>
   );
 };

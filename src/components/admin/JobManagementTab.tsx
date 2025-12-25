@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import adminService from '../../services/adminService';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
@@ -36,6 +37,18 @@ export const JobManagementTab: React.FC = () => {
   useEffect(() => {
     loadPendingJobs();
   }, [loadPendingJobs]);
+
+  // Scroll lock for modals
+  useEffect(() => {
+    if (showDetailsModal || showActionModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showDetailsModal, showActionModal]);
 
   const handleAction = async () => {
     if (!selectedJob) return;
@@ -135,7 +148,7 @@ export const JobManagementTab: React.FC = () => {
       </div>
 
       {/* Details Modal */}
-      {showDetailsModal && selectedJob && (
+      {showDetailsModal && selectedJob && ReactDOM.createPortal(
         <div className="module-modal-overlay" onClick={() => setShowDetailsModal(false)}>
           <div className="module-modal-content course-detail-modal" onClick={(e) => e.stopPropagation()}>
             <div className="module-modal-header">
@@ -192,10 +205,10 @@ export const JobManagementTab: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
 
       {/* Action Modal */}
-      {showActionModal && selectedJob && (
+      {showActionModal && selectedJob && ReactDOM.createPortal(
         <div className="module-modal-overlay" onClick={() => setShowActionModal(false)}>
           <div className="module-modal-content modal-small" onClick={(e) => e.stopPropagation()}>
             <div className="module-modal-header">
@@ -223,7 +236,7 @@ export const JobManagementTab: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
     </div>
   );
 };

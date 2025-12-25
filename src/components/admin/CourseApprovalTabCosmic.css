@@ -474,17 +474,17 @@
 
 /* Modal */
 .cosmic-modal-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  min-height: 100%;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(8px);
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 100001;
   padding: 2rem 1rem;
 }
 
@@ -494,9 +494,10 @@
   border-radius: 24px;
   max-width: 800px;
   width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.25);
-  margin-top: 2rem;
-  margin-bottom: 2rem;
 }
 
 .cosmic-modal.small {
@@ -538,6 +539,8 @@
 
 .cosmic-modal-body {
   padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .cosmic-course-detail-section h3 {

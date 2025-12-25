@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import {
   Mail, Send, Users, UserCheck, Building2, Shield,
   Bell, AlertTriangle, Megaphone, Wrench, Eye,
@@ -196,6 +197,18 @@ const NotificationsTabCosmic: React.FC = () => {
       loadPreview();
     }
   }, [targetRole, loadPreview]);
+
+  // Scroll lock for modals
+  useEffect(() => {
+    if (showPreviewModal || showReportModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showPreviewModal, showReportModal]);
 
   const handleSendEmail = async () => {
     const htmlContent = getEditorContent();
@@ -696,7 +709,7 @@ const NotificationsTabCosmic: React.FC = () => {
       </div>
 
       {/* Preview Modal */}
-      {showPreviewModal && previewData && (
+      {showPreviewModal && previewData && ReactDOM.createPortal(
         <div className="notif-modal-overlay" onClick={() => setShowPreviewModal(false)}>
           <div className="notif-modal" onClick={(e) => e.stopPropagation()}>
             <div className="notif-modal-header">
@@ -736,10 +749,10 @@ const NotificationsTabCosmic: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
 
       {/* Report Modal */}
-      {showReportModal && sendingReport && (
+      {showReportModal && sendingReport && ReactDOM.createPortal(
         <div className="notif-modal-overlay" onClick={() => setShowReportModal(false)}>
           <div className="notif-modal" onClick={(e) => e.stopPropagation()}>
             <div className="notif-modal-header">
@@ -805,7 +818,7 @@ const NotificationsTabCosmic: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
     </div>
   );
 };
