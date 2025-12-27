@@ -117,3 +117,241 @@
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+
+/* --- New Styles Extracted from SliderManagementTab.tsx --- */
+
+/* Table Column Widths & Alignment - Increased specificity to override UserManagementTabCosmic.css */
+.admin-users-table th.slider-col-order { width: 8%; text-align: center; }
+.admin-users-table th.slider-col-image { width: 20%; }
+.admin-users-table th.slider-col-info { width: 25%; }
+.admin-users-table th.slider-col-status { width: 15%; text-align: center; }
+.admin-users-table th.slider-col-date { width: 12%; text-align: center; }
+.admin-users-table th.slider-col-action { width: 10%; text-align: center; }
+
+/* Table Content */
+.slider-order-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.slider-image-container {
+  width: 120px;
+  height: 60px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.slider-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slider-info-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.slider-desc-text {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.slider-status-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+/* Status Badges & Buttons */
+.slider-badge-common {
+  width: 100%;
+  justify-content: center;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.slider-badge-login {
+  background: rgba(156, 39, 176, 0.2);
+  color: #e1bee7;
+  border: 1px solid #ce93d8;
+}
+
+.slider-badge-public {
+  background: rgba(33, 150, 243, 0.2);
+  color: #90caf9;
+  border: 1px solid #64b5f6;
+}
+
+.slider-btn-status {
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  justify-content: center;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 8px;
+}
+
+/* Modifiers for centering existing flex containers */
+.admin-date-cell.center {
+  justify-content: center;
+}
+
+.admin-action-buttons.center {
+  justify-content: center;
+}
+
+.slider-empty-table-cell {
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Modal / Form Styles */
+.slider-cropper-container {
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  position: relative;
+}
+
+.slider-cropper-wrapper {
+  position: relative;
+  flex: 1;
+  background: #333;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.slider-zoom-control {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.slider-zoom-label {
+  color: #fff;
+  min-width: 60px;
+}
+
+.slider-zoom-slider {
+  flex: 1;
+}
+
+.slider-crop-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.slider-textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 0.75rem;
+  border-radius: 8px;
+  width: 100%;
+  min-height: 80px;
+}
+
+.slider-form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.slider-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.slider-checkbox-input {
+  width: 20px;
+  height: 20px;
+}
+
+.slider-file-input-wrapper {
+  margin-bottom: 10px;
+}
+
+.slider-file-input {
+  color: #fff;
+}
+
+.slider-image-preview-container {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.slider-image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slider-status-modal {
+  max-width: 400px;
+  text-align: center;
+}
+
+.admin-users-table td.slider-cell-center {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Ensure vertical alignment for all cells in this table context */
+.admin-users-table td {
+  vertical-align: middle;
+}
+
+/* Status Modal Internals */
+.slider-status-body {
+  padding: 2rem 1rem;
+}
+
+.slider-status-icon {
+  margin-bottom: 1rem;
+}
+.slider-status-icon.success { color: #4caf50; }
+.slider-status-icon.error { color: #f44336; }
+
+.slider-status-title {
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.slider-status-message {
+  color: #aaa;
+}
+
+.slider-status-footer {
+  justify-content: center;
+}
+
+.slider-status-close-btn {
+  background: #333 !important; /* Force override if needed, or check specificity */
+  color: #fff !important;
+}
+
+/* Delete Modal Internals */
+.slider-delete-warning {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-top: 0.5rem;
+}

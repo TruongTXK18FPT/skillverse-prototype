@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import sliderService from '../../services/sliderService';
 import {
   BookOpen, Award,
@@ -42,6 +43,7 @@ import soulStone from '../../assets/infinity-stones/soul_stone.png';
 
 
 const HomePage = () => {
+  const { isAuthenticated } = useAuth();
   const [theme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     return savedTheme || 'light';
@@ -109,7 +111,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchSliders = async () => {
       try {
-        const apiSliders = await sliderService.getPublicSliders();
+        const apiSliders = await sliderService.getPublicSliders(isAuthenticated);
         if (apiSliders && apiSliders.length > 0) {
           const mappedSlides = apiSliders.map(slider => ({
             image: slider.imageUrl,
@@ -126,7 +128,7 @@ const HomePage = () => {
       }
     };
     fetchSliders();
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);

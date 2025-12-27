@@ -1,23 +1,13 @@
 import axiosInstance from './axiosInstance';
-
-export interface Slider {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  displayOrder: number;
-  isActive: boolean;
-  ctaText?: string;
-  ctaLink?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Slider } from '../data/sliderDTOs';
 
 class SliderService {
   private readonly BASE_URL = '/api';
 
-  async getPublicSliders(): Promise<Slider[]> {
-    const response = await axiosInstance.get<Slider[]>(`${this.BASE_URL}/public/sliders`);
+  async getPublicSliders(isLogin: boolean = false): Promise<Slider[]> {
+    const response = await axiosInstance.get<Slider[]>(`${this.BASE_URL}/public/sliders`, {
+      params: { isLogin }
+    });
     return response.data;
   }
 

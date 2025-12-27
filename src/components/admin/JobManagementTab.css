@@ -1,0 +1,432 @@
+/* Job Management Tab - Cosmic Galaxy Theme */
+/* Prefix: job-approval- */
+
+.job-approval-container {
+  padding: 0;
+  position: relative;
+  font-family: 'Inter', sans-serif;
+  color: #e0e7ff;
+}
+
+/* Header */
+.job-approval-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(139, 92, 246, 0.2);
+}
+
+.job-approval-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.job-approval-stats-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.job-approval-stat-badge {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #c4b5fd;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.job-approval-btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.job-approval-btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+}
+
+.job-approval-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Table */
+.job-approval-table-container {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.job-approval-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.job-approval-table th {
+  padding: 1.25rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #a5b4fc;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+  background: rgba(15, 23, 42, 0.6);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.job-approval-table td {
+  padding: 1.25rem 1rem;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+  color: #e0e7ff;
+  vertical-align: middle;
+}
+
+.job-approval-table tr:last-child td {
+  border-bottom: none;
+}
+
+.job-approval-table tr:hover td {
+  background: rgba(139, 92, 246, 0.05);
+}
+
+.job-approval-company-name {
+  font-weight: 600;
+  color: #fff;
+}
+
+.job-approval-job-title {
+  color: #a78bfa;
+  font-weight: 600;
+}
+
+.job-approval-budget {
+  color: #34d399;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+}
+
+/* Actions */
+.job-approval-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.job-approval-btn-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.1rem;
+}
+
+.job-approval-btn-view {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.job-approval-btn-view:hover {
+  background: rgba(59, 130, 246, 0.2);
+  transform: scale(1.05);
+}
+
+.job-approval-btn-approve {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.job-approval-btn-approve:hover {
+  background: rgba(16, 185, 129, 0.2);
+  transform: scale(1.05);
+}
+
+.job-approval-btn-reject {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.job-approval-btn-reject:hover {
+  background: rgba(239, 68, 68, 0.2);
+  transform: scale(1.05);
+}
+
+/* Modals */
+.job-approval-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.job-approval-modal-content {
+  background: linear-gradient(145deg, #1e1b4b 0%, #2e1065 100%);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 24px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  animation: jobApprovalModalFadeIn 0.3s ease-out;
+}
+
+.job-approval-modal-content.small {
+  max-width: 500px;
+}
+
+@keyframes jobApprovalModalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.job-approval-modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: rgba(30, 27, 75, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.job-approval-modal-title {
+  margin: 0;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.job-approval-modal-close {
+  background: transparent;
+  border: none;
+  color: #a5b4fc;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.job-approval-modal-close:hover {
+  color: #fff;
+}
+
+.job-approval-modal-body {
+  padding: 1.5rem;
+}
+
+/* Detail Modal Specifics */
+.job-approval-detail-header h3 {
+  font-size: 1.8rem;
+  margin: 0 0 1rem 0;
+  color: #fff;
+}
+
+.job-approval-meta {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.job-approval-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #cbd5e1;
+}
+
+.job-approval-badge-orange {
+  background: rgba(249, 115, 22, 0.1);
+  color: #fb923c;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(249, 115, 22, 0.2);
+}
+
+.job-approval-badge-gray {
+  background: rgba(148, 163, 184, 0.1);
+  color: #cbd5e1;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.job-approval-description {
+  background: rgba(15, 23, 42, 0.4);
+  padding: 1.5rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.job-approval-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.job-approval-stat-card {
+  background: rgba(139, 92, 246, 0.05);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.job-approval-stat-icon {
+  color: #a78bfa;
+  width: 24px;
+  height: 24px;
+}
+
+.job-approval-stat-value {
+  font-weight: 600;
+  color: #fff;
+}
+
+.job-approval-stat-label {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+/* Form Elements */
+.job-approval-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.job-approval-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #cbd5e1;
+}
+
+.job-approval-textarea {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+  color: #fff;
+  min-height: 120px;
+  resize: vertical;
+}
+
+.job-approval-textarea:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+/* Footer Actions */
+.job-approval-modal-actions {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(139, 92, 246, 0.2);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  background: rgba(30, 27, 75, 0.95);
+  border-radius: 0 0 24px 24px;
+}
+
+.job-approval-btn-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.job-approval-btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+}
+
+.job-approval-btn-danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.job-approval-btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+}
+
+.job-approval-btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.job-approval-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.job-approval-loading, .job-approval-empty {
+  text-align: center;
+  padding: 3rem;
+  color: #94a3b8;
+  font-size: 1.1rem;
+}

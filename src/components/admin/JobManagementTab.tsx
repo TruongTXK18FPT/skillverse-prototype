@@ -4,8 +4,7 @@ import adminService from '../../services/adminService';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import { Briefcase, Building2, MapPin, DollarSign, Calendar, Globe, Users } from 'lucide-react';
-import '../../styles/ModalsEnhanced.css';
-import './CourseApprovalTab.css'; // Reusing CourseApproval styles
+import './JobManagementTab.css'; // New unique CSS file
 
 export const JobManagementTab: React.FC = () => {
   const { user } = useAuth();
@@ -97,47 +96,76 @@ export const JobManagementTab: React.FC = () => {
   };
 
   return (
-    <div className="course-approval-container">
-      <div className="approval-header">
-        <h2>Quản Lý Tuyển Dụng</h2>
-        <div className="stats-group">
-          <span className="stat-badge">Chờ duyệt: {jobs.length}</span>
+    <div className="job-approval-container">
+      <div className="job-approval-header">
+        <div>
+          <h2>Quản Lý Tuyển Dụng</h2>
+          <div className="job-approval-stats-group" style={{ marginTop: '0.5rem' }}>
+            <span className="job-approval-stat-badge">Chờ duyệt: {jobs.length}</span>
+          </div>
         </div>
-        <button className="btn-primary" onClick={loadPendingJobs} disabled={loading}>
-            {loading ? 'Đang tải...' : 'Làm mới'}
+        <button className="job-approval-btn-primary" onClick={loadPendingJobs} disabled={loading}>
+            {loading ? 'Đang tải...' : '🔄 Làm mới'}
         </button>
       </div>
 
-      <div className="table-container">
+      <div className="job-approval-table-container">
         {loading ? (
-          <div className="loading-spinner">Đang tải...</div>
+          <div className="job-approval-loading">
+            <div className="spinning" style={{ display: 'inline-block', marginBottom: '10px' }}>⏳</div>
+            <div>Đang tải dữ liệu...</div>
+          </div>
         ) : jobs.length === 0 ? (
-          <div className="empty-state">Không có tin tuyển dụng nào chờ duyệt</div>
+          <div className="job-approval-empty">Không có tin tuyển dụng nào chờ duyệt</div>
         ) : (
-          <table className="courses-table">
+          <table className="job-approval-table">
             <thead>
               <tr>
                 <th>Công ty</th>
                 <th>Tiêu đề</th>
                 <th>Ngân sách</th>
                 <th>Ngày tạo</th>
-                <th>Thao tác</th>
+                <th style={{ textAlign: 'center' }}>Thao tác</th>
               </tr>
             </thead>
             <tbody>
               {jobs.map((job) => (
                 <tr key={job.id}>
-                  <td>{job.recruiterCompanyName}</td>
                   <td>
-                    <strong>{job.title}</strong>
+                    <span className="job-approval-company-name">{job.recruiterCompanyName}</span>
                   </td>
-                  <td>{formatCurrency(job.minBudget)} - {formatCurrency(job.maxBudget)}</td>
+                  <td>
+                    <strong className="job-approval-job-title">{job.title}</strong>
+                  </td>
+                  <td>
+                    <span className="job-approval-budget">
+                      {formatCurrency(job.minBudget)} - {formatCurrency(job.maxBudget)}
+                    </span>
+                  </td>
                   <td>{formatDate(job.createdAt)}</td>
                   <td>
-                    <div className="action-buttons">
-                      <button className="btn-icon btn-view" onClick={() => { setSelectedJob(job); setShowDetailsModal(true); }}>👁️</button>
-                      <button className="btn-icon btn-approve" onClick={() => { setSelectedJob(job); openActionModal('approve'); }}>✓</button>
-                      <button className="btn-icon btn-reject" onClick={() => { setSelectedJob(job); openActionModal('reject'); }}>✗</button>
+                    <div className="job-approval-actions">
+                      <button 
+                        className="job-approval-btn-icon job-approval-btn-view" 
+                        onClick={() => { setSelectedJob(job); setShowDetailsModal(true); }}
+                        title="Xem chi tiết"
+                      >
+                        👁️
+                      </button>
+                      <button 
+                        className="job-approval-btn-icon job-approval-btn-approve" 
+                        onClick={() => { setSelectedJob(job); openActionModal('approve'); }}
+                        title="Duyệt"
+                      >
+                        ✓
+                      </button>
+                      <button 
+                        className="job-approval-btn-icon job-approval-btn-reject" 
+                        onClick={() => { setSelectedJob(job); openActionModal('reject'); }}
+                        title="Từ chối"
+                      >
+                        ✗
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -149,59 +177,73 @@ export const JobManagementTab: React.FC = () => {
 
       {/* Details Modal */}
       {showDetailsModal && selectedJob && ReactDOM.createPortal(
-        <div className="module-modal-overlay" onClick={() => setShowDetailsModal(false)}>
-          <div className="module-modal-content course-detail-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="module-modal-header">
-              <h2 className="module-modal-title">Chi tiết tin tuyển dụng</h2>
-              <button className="module-modal-close-btn" onClick={() => setShowDetailsModal(false)}>×</button>
+        <div className="job-approval-modal-overlay" onClick={() => setShowDetailsModal(false)}>
+          <div className="job-approval-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="job-approval-modal-header">
+              <h2 className="job-approval-modal-title">Chi tiết tin tuyển dụng</h2>
+              <button className="job-approval-modal-close" onClick={() => setShowDetailsModal(false)}>×</button>
             </div>
-            <div className="module-modal-form">
-              <div className="course-detail-header">
-                <div className="course-header-info">
-                  <h3>{selectedJob.title}</h3>
-                  <div className="course-meta">
-                    <span className="badge badge-orange">Chờ duyệt</span>
-                    <span className="author-info"><Building2 size={14}/> {selectedJob.recruiterCompanyName}</span>
-                    <span className="author-info"><MapPin size={14}/> {selectedJob.isRemote ? 'Remote' : selectedJob.location}</span>
+            
+            <div className="job-approval-modal-body">
+              <div className="job-approval-detail-header">
+                <h3>{selectedJob.title}</h3>
+                <div className="job-approval-meta">
+                  <span className="job-approval-badge-orange">Chờ duyệt</span>
+                  <div className="job-approval-meta-item">
+                    <Building2 size={16}/> 
+                    <span>{selectedJob.recruiterCompanyName}</span>
+                  </div>
+                  <div className="job-approval-meta-item">
+                    <MapPin size={16}/> 
+                    <span>{selectedJob.isRemote ? 'Remote' : selectedJob.location}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="course-description-full">
-                <h4>Mô tả công việc</h4>
+              <div className="job-approval-description">
+                <h4 style={{ color: '#fff', marginTop: 0, marginBottom: '1rem' }}>Mô tả công việc</h4>
                 <div dangerouslySetInnerHTML={{ __html: selectedJob.description }} />
               </div>
 
-              <div className="course-stats-grid">
-                <div className="stat-card">
-                  <DollarSign className="stat-icon" />
+              <div className="job-approval-stats-grid">
+                <div className="job-approval-stat-card">
+                  <DollarSign className="job-approval-stat-icon" />
                   <div>
-                    <div className="stat-number">{formatCurrency(selectedJob.minBudget)} - {formatCurrency(selectedJob.maxBudget)}</div>
-                    <div className="cv-stat-label">Ngân sách</div>
+                    <div className="job-approval-stat-value">
+                      {formatCurrency(selectedJob.minBudget)} - {formatCurrency(selectedJob.maxBudget)}
+                    </div>
+                    <div className="job-approval-stat-label">Ngân sách</div>
                   </div>
                 </div>
-                <div className="stat-card">
-                  <Calendar className="stat-icon" />
+                <div className="job-approval-stat-card">
+                  <Calendar className="job-approval-stat-icon" />
                   <div>
-                    <div className="stat-number">{formatDate(selectedJob.deadline)}</div>
-                    <div className="cv-stat-label">Hạn nộp hồ sơ</div>
+                    <div className="job-approval-stat-value">{formatDate(selectedJob.deadline)}</div>
+                    <div className="job-approval-stat-label">Hạn nộp hồ sơ</div>
                   </div>
                 </div>
               </div>
 
-              <div className="course-modules-section">
-                <h4>Kỹ năng yêu cầu</h4>
+              <div style={{ marginBottom: '2rem' }}>
+                <h4 style={{ color: '#fff', marginBottom: '1rem' }}>Kỹ năng yêu cầu</h4>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {selectedJob.requiredSkills?.map((skill: string, idx: number) => (
-                        <span key={idx} className="badge badge-gray">{skill}</span>
+                        <span key={idx} className="job-approval-badge-gray">{skill}</span>
                     ))}
                 </div>
               </div>
             </div>
-            <div className="module-form-actions">
-              <button className="btn-success" onClick={() => openActionModal('approve')}>✓ Phê duyệt</button>
-              <button className="btn-danger" onClick={() => openActionModal('reject')}>✗ Từ chối</button>
-              <button className="btn-secondary" onClick={() => setShowDetailsModal(false)}>Đóng</button>
+
+            <div className="job-approval-modal-actions">
+              <button className="job-approval-btn-success" onClick={() => openActionModal('approve')}>
+                ✓ Phê duyệt
+              </button>
+              <button className="job-approval-btn-danger" onClick={() => openActionModal('reject')}>
+                ✗ Từ chối
+              </button>
+              <button className="job-approval-btn-secondary" onClick={() => setShowDetailsModal(false)}>
+                Đóng
+              </button>
             </div>
           </div>
         </div>
@@ -209,30 +251,51 @@ export const JobManagementTab: React.FC = () => {
 
       {/* Action Modal */}
       {showActionModal && selectedJob && ReactDOM.createPortal(
-        <div className="module-modal-overlay" onClick={() => setShowActionModal(false)}>
-          <div className="module-modal-content modal-small" onClick={(e) => e.stopPropagation()}>
-            <div className="module-modal-header">
-              <h2 className="module-modal-title">{actionType === 'approve' ? 'Duyệt' : 'Từ chối'} tin tuyển dụng</h2>
-              <button className="module-modal-close-btn" onClick={() => setShowActionModal(false)}>×</button>
+        <div className="job-approval-modal-overlay" onClick={() => setShowActionModal(false)}>
+          <div className="job-approval-modal-content small" onClick={(e) => e.stopPropagation()}>
+            <div className="job-approval-modal-header">
+              <h2 className="job-approval-modal-title">
+                {actionType === 'approve' ? 'Duyệt' : 'Từ chối'} tin tuyển dụng
+              </h2>
+              <button className="job-approval-modal-close" onClick={() => setShowActionModal(false)}>×</button>
             </div>
-            <div className="module-modal-form">
-              <p>Bạn có chắc chắn muốn {actionType === 'approve' ? 'duyệt' : 'từ chối'} tin tuyển dụng này?</p>
-              <strong>"{selectedJob.title}"</strong>
-              <div className="form-group">
-                <label>{actionType === 'reject' ? 'Lý do từ chối:' : 'Ghi chú:'}</label>
+            
+            <div className="job-approval-modal-body">
+              <p style={{ color: '#e0e7ff', marginBottom: '1rem' }}>
+                Bạn có chắc chắn muốn {actionType === 'approve' ? 'duyệt' : 'từ chối'} tin tuyển dụng này?
+              </p>
+              <div style={{ 
+                background: 'rgba(139, 92, 246, 0.1)', 
+                padding: '1rem', 
+                borderRadius: '8px', 
+                marginBottom: '1.5rem',
+                borderLeft: '4px solid #8b5cf6'
+              }}>
+                <strong style={{ color: '#fff' }}>"{selectedJob.title}"</strong>
+              </div>
+              
+              <div className="job-approval-form-group">
+                <label>{actionType === 'reject' ? 'Lý do từ chối:' : 'Ghi chú (tùy chọn):'}</label>
                 <textarea 
-                    className="form-textarea"
+                    className="job-approval-textarea"
                     value={actionReason}
                     onChange={(e) => setActionReason(e.target.value)}
-                    placeholder={actionType === 'reject' ? 'Nhập lý do...' : ''}
+                    placeholder={actionType === 'reject' ? 'Nhập lý do từ chối để gửi email thông báo...' : 'Ghi chú thêm...'}
                 />
               </div>
             </div>
-            <div className="module-form-actions">
-                <button className={actionType === 'approve' ? 'btn-success' : 'btn-danger'} onClick={handleAction} disabled={actionLoading}>
-                    {actionLoading ? 'Đang xử lý...' : 'Xác nhận'}
-                </button>
-                <button className="btn-secondary" onClick={() => setShowActionModal(false)}>Hủy</button>
+
+            <div className="job-approval-modal-actions">
+              <button 
+                className={actionType === 'approve' ? 'job-approval-btn-success' : 'job-approval-btn-danger'} 
+                onClick={handleAction} 
+                disabled={actionLoading}
+              >
+                {actionLoading ? 'Đang xử lý...' : 'Xác nhận'}
+              </button>
+              <button className="job-approval-btn-secondary" onClick={() => setShowActionModal(false)}>
+                Hủy
+              </button>
             </div>
           </div>
         </div>

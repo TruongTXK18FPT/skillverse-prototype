@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, Building2, Lock, Mail, Phone, MapPin, FileText, Globe, AlertTriangle, User, Users, Briefcase, Upload, X } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useElevator } from './ElevatorAuthLayout';
@@ -42,6 +42,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
   const { triggerLoginSuccess } = useElevator();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [formData, setFormData] = useState<BusinessRegisterData>({
     companyName: '',
     businessEmail: '',

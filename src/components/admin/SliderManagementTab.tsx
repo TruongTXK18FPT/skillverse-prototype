@@ -4,7 +4,8 @@ import {
   Image, Plus, Edit, Trash2, CheckCircle, XCircle, RefreshCw, X, Save,
   Move, ToggleLeft, ToggleRight, Crop as CropIcon, AlertTriangle
 } from 'lucide-react';
-import sliderService, { Slider } from '../../services/sliderService';
+import sliderService from '../../services/sliderService';
+import { Slider } from '../../data/sliderDTOs';
 import { validateImage } from '../../services/fileUploadService';
 import getCroppedImg from '../../utils/cropImage';
 import Cropper from 'react-easy-crop';
@@ -29,6 +30,7 @@ const SliderManagementTab: React.FC = () => {
     description: '',
     displayOrder: 0,
     isActive: true,
+    isLogin: false,
     image: null as File | null,
     imagePreview: '',
     ctaText: '',
@@ -81,6 +83,7 @@ const SliderManagementTab: React.FC = () => {
       description: '',
       displayOrder: sliders.length,
       isActive: true,
+      isLogin: false,
       image: null,
       imagePreview: '',
       ctaText: '',
@@ -97,6 +100,7 @@ const SliderManagementTab: React.FC = () => {
       description: slider.description || '',
       displayOrder: slider.displayOrder,
       isActive: slider.isActive,
+      isLogin: slider.isLogin,
       image: null,
       imagePreview: slider.imageUrl,
       ctaText: slider.ctaText || '',
@@ -191,6 +195,7 @@ const SliderManagementTab: React.FC = () => {
       data.append('displayOrder', formData.displayOrder.toString());
       if (formData.ctaText) data.append('ctaText', formData.ctaText);
       if (formData.ctaLink) data.append('ctaLink', formData.ctaLink);
+      data.append('isLogin', formData.isLogin.toString());
       if (isEditing) data.append('isActive', formData.isActive.toString());
       if (formData.image) data.append('image', formData.image);
 
@@ -284,50 +289,55 @@ const SliderManagementTab: React.FC = () => {
           <table>
             <thead>
               <tr>
-                <th>Thứ tự</th>
-                <th>Hình ảnh</th>
-                <th>Tiêu đề / Mô tả</th>
-                <th>Trạng thái</th>
-                <th>Ngày tạo</th>
-                <th>Hành động</th>
+                <th className="slider-col-order">Thứ tự</th>
+                <th className="slider-col-image">Hình ảnh</th>
+                <th className="slider-col-info">Tiêu đề / Mô tả</th>
+                <th className="slider-col-status">Trạng thái</th>
+                <th className="slider-col-date">Ngày tạo</th>
+                <th className="slider-col-action">Hành động</th>
               </tr>
             </thead>
             <tbody>
               {sliders.map((slider) => (
                 <tr key={slider.id}>
+                  <td className="slider-cell-center">
+                    <span className="slider-order-text">#{slider.displayOrder}</span>
+                  </td>
                   <td>
-                    <div className="admin-user-info">
-                      <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>#{slider.displayOrder}</span>
+                    <div className="admin-user-avatar slider-image-container">
+                      <img src={slider.imageUrl} alt={slider.title} className="slider-image" />
                     </div>
                   </td>
                   <td>
-                    <div className="admin-user-avatar" style={{ width: '120px', height: '60px', borderRadius: '4px' }}>
-                      <img src={slider.imageUrl} alt={slider.title} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
-                    </div>
-                  </td>
-                  <td>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div className="slider-info-container">
                       <span className="admin-user-name">{slider.title}</span>
-                      <span style={{ color: '#aaa', fontSize: '0.9rem' }}>{slider.description}</span>
+                      <span className="slider-desc-text">{slider.description}</span>
                     </div>
                   </td>
-                  <td>
-                    <button 
-                      onClick={() => handleToggleStatus(slider)}
-                      className={`admin-status-badge ${slider.isActive ? 'active' : 'inactive'}`}
-                      style={{ border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}
-                    >
-                      {slider.isActive ? <CheckCircle size={14} /> : <XCircle size={14} />}
-                      {slider.isActive ? 'Hiển thị' : 'Ẩn'}
-                    </button>
+                  <td className="slider-cell-center">
+                    <div className="slider-status-container">
+                      <span 
+                        className={`slider-badge-common ${slider.isLogin ? 'slider-badge-login' : 'slider-badge-public'}`}
+                      >
+                        {slider.isLogin ? 'Đăng nhập' : 'Công khai'}
+                      </span>
+                      
+                      <button 
+                        onClick={() => handleToggleStatus(slider)}
+                        className={`slider-btn-status admin-status-badge ${slider.isActive ? 'active' : 'inactive'}`}
+                      >
+                        {slider.isActive ? <CheckCircle size={14} /> : <XCircle size={14} />}
+                        {slider.isActive ? 'Hiển thị' : 'Ẩn'}
+                      </button>
+                    </div>
                   </td>
-                  <td>
-                    <div className="admin-date-cell">
+                  <td className="slider-cell-center">
+                    <div className="admin-date-cell center">
                       {new Date(slider.createdAt).toLocaleDateString('vi-VN')}
                     </div>
                   </td>
-                  <td>
-                    <div className="admin-action-buttons">
+                  <td className="slider-cell-center">
+                    <div className="admin-action-buttons center">
                       <button className="admin-action-btn edit" onClick={() => handleOpenEdit(slider)} title="Chỉnh sửa">
                         <Edit size={16} />
                       </button>
@@ -340,7 +350,7 @@ const SliderManagementTab: React.FC = () => {
               ))}
               {sliders.length === 0 && (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>Chưa có slider nào. Hãy tạo mới!</td>
+                  <td colSpan={6} className="slider-empty-table-cell">Chưa có slider nào. Hãy tạo mới!</td>
                 </tr>
               )}
             </tbody>
@@ -361,8 +371,8 @@ const SliderManagementTab: React.FC = () => {
 
             <div className="admin-modal-body">
               {isCropping && tempImgUrl ? (
-                <div style={{ display: 'flex', flexDirection: 'column', height: '400px', position: 'relative' }}>
-                  <div style={{ position: 'relative', flex: 1, background: '#333', borderRadius: '8px', overflow: 'hidden' }}>
+                <div className="slider-cropper-container">
+                  <div className="slider-cropper-wrapper">
                     <Cropper
                       image={tempImgUrl}
                       crop={crop}
@@ -374,8 +384,8 @@ const SliderManagementTab: React.FC = () => {
                       objectFit="horizontal-cover"
                     />
                   </div>
-                  <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <span style={{ color: '#fff', minWidth: '60px' }}>Zoom:</span>
+                  <div className="slider-zoom-control">
+                    <span className="slider-zoom-label">Zoom:</span>
                     <input
                       type="range"
                       value={zoom}
@@ -384,10 +394,10 @@ const SliderManagementTab: React.FC = () => {
                       step={0.1}
                       aria-labelledby="Zoom"
                       onChange={(e) => setZoom(Number(e.target.value))}
-                      style={{ flex: 1 }}
+                      className="slider-zoom-slider"
                     />
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
+                  <div className="slider-crop-actions">
                     <button className="admin-action-btn close" onClick={handleCropCancel}>
                       Hủy bỏ
                     </button>
@@ -414,11 +424,11 @@ const SliderManagementTab: React.FC = () => {
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       placeholder="Nhập mô tả ngắn"
-                      style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#fff', padding: '0.75rem', borderRadius: '8px', width: '100%', minHeight: '80px' }}
+                      className="slider-textarea"
                     />
                   </div>
 
-                  <div className="admin-form-group" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div className="admin-form-group slider-form-grid-2">
                     <div>
                       <label>Nút CTA (Text)</label>
                       <input
@@ -448,14 +458,26 @@ const SliderManagementTab: React.FC = () => {
                     />
                   </div>
 
+                  <div className="admin-form-group">
+                    <label className="slider-checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={formData.isLogin}
+                        onChange={(e) => setFormData({ ...formData, isLogin: e.target.checked })}
+                        className="slider-checkbox-input"
+                      />
+                      Yêu cầu đăng nhập (Chỉ hiển thị cho user đã đăng nhập)
+                    </label>
+                  </div>
+
                   {isEditing && (
                     <div className="admin-form-group">
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                      <label className="slider-checkbox-label">
                         <input
                           type="checkbox"
                           checked={formData.isActive}
                           onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                          style={{ width: '20px', height: '20px' }}
+                          className="slider-checkbox-input"
                         />
                         Hiển thị slider này
                       </label>
@@ -464,17 +486,17 @@ const SliderManagementTab: React.FC = () => {
 
                   <div className="admin-form-group">
                     <label>Hình ảnh (1920x800 recommended)</label>
-                    <div style={{ marginBottom: '10px' }}>
+                    <div className="slider-file-input-wrapper">
                       <input
                         type="file"
                         accept="image/*"
                         onChange={handleImageChange}
-                        style={{ color: '#fff' }}
+                        className="slider-file-input"
                       />
                     </div>
                     {formData.imagePreview && (
-                      <div style={{ width: '100%', height: '200px', borderRadius: '8px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.2)' }}>
-                        <img src={formData.imagePreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div className="slider-image-preview-container">
+                        <img src={formData.imagePreview} alt="Preview" className="slider-image-preview" />
                       </div>
                     )}
                   </div>
@@ -504,20 +526,19 @@ const SliderManagementTab: React.FC = () => {
       {/* Status Modal */}
       {statusModal.open && ReactDOM.createPortal(
         <div className="admin-modal-overlay" onClick={() => setStatusModal(prev => ({ ...prev, open: false }))}>
-          <div className="admin-detail-modal" style={{ maxWidth: '400px', textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
-            <div className="admin-modal-body" style={{ padding: '2rem 1rem' }}>
-              <div style={{ marginBottom: '1rem', color: statusModal.type === 'success' ? '#4caf50' : '#f44336' }}>
+          <div className="admin-detail-modal slider-status-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-body slider-status-body">
+              <div className={`slider-status-icon ${statusModal.type}`}>
                 {statusModal.type === 'success' ? <CheckCircle size={48} /> : <XCircle size={48} />}
               </div>
-              <h3 style={{ marginBottom: '0.5rem', color: '#fff' }}>
+              <h3 className="slider-status-title">
                 {statusModal.type === 'success' ? 'Thành công' : 'Thất bại'}
               </h3>
-              <p style={{ color: '#aaa' }}>{statusModal.message}</p>
+              <p className="slider-status-message">{statusModal.message}</p>
             </div>
-            <div className="admin-modal-footer" style={{ justifyContent: 'center' }}>
+            <div className="admin-modal-footer slider-status-footer">
               <button 
-                className="admin-action-btn" 
-                style={{ background: '#333', color: '#fff' }}
+                className="admin-action-btn slider-status-close-btn" 
                 onClick={() => setStatusModal(prev => ({ ...prev, open: false }))}
               >
                 Đóng
@@ -540,7 +561,7 @@ const SliderManagementTab: React.FC = () => {
             </div>
             <div className="slider-delete-body">
               <p>Bạn có chắc chắn muốn xóa slider này không?</p>
-              <p style={{ fontSize: '0.9rem', opacity: 0.7, marginTop: '0.5rem' }}>Hành động này không thể hoàn tác.</p>
+              <p className="slider-delete-warning">Hành động này không thể hoàn tác.</p>
             </div>
             <div className="slider-delete-footer">
               <button 
