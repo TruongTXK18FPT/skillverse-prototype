@@ -1,0 +1,370 @@
+/* HomeReskin.css - Isolated styles for Awards and Social Media sections */
+
+/* --- Common Utilities --- */
+.home-v2-glass {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- Awards Section --- */
+.home-v2-awards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+  perspective: 1000px;
+}
+
+.home-v2-award-card {
+  position: relative;
+  padding: 2rem;
+  border-radius: 24px;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  cursor: pointer;
+  transform-style: preserve-3d;
+}
+
+.home-v2-award-card:hover {
+  transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+}
+
+/* Rarity Glows */
+.home-v2-award-card.gold {
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+.home-v2-award-card.gold:hover {
+  box-shadow: 0 0 40px rgba(251, 191, 36, 0.3);
+  border: 1px solid rgba(251, 191, 36, 0.5);
+}
+
+.home-v2-award-card.silver {
+  box-shadow: 0 0 20px rgba(148, 163, 184, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+.home-v2-award-card.silver:hover {
+  box-shadow: 0 0 40px rgba(148, 163, 184, 0.3);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+}
+
+.home-v2-award-card.bronze {
+  box-shadow: 0 0 20px rgba(180, 83, 9, 0.1);
+  border: 1px solid rgba(180, 83, 9, 0.2);
+}
+.home-v2-award-card.bronze:hover {
+  box-shadow: 0 0 40px rgba(180, 83, 9, 0.3);
+  border: 1px solid rgba(180, 83, 9, 0.5);
+}
+
+.home-v2-medal-container {
+  margin-bottom: 1.5rem;
+  transition: transform 0.5s ease;
+  transform: translateZ(50px);
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+}
+
+.home-v2-award-card:hover .home-v2-medal-container {
+  transform: translateZ(80px) scale(1.1);
+  animation: home-v2-float 3s ease-in-out infinite;
+}
+
+@keyframes home-v2-float {
+  0%, 100% { transform: translateZ(80px) translateY(0); }
+  50% { transform: translateZ(80px) translateY(-15px); }
+}
+
+.home-v2-award-rank {
+  font-family: 'Space Habitat', 'Courier New', monospace;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to bottom, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.home-v2-award-card.gold .home-v2-award-rank {
+  background: linear-gradient(to bottom, #fbbf24, #b45309);
+  -webkit-background-clip: text;
+}
+
+.home-v2-award-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.home-v2-award-desc {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Impact HUD Box */
+.home-v2-hud-container {
+  margin-top: 4rem;
+  width: 100%;
+}
+
+.home-v2-hud-box {
+  background: rgba(6, 182, 212, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+  position: relative;
+  padding: 2.5rem;
+  overflow: hidden;
+}
+
+.home-v2-hud-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 20px; height: 20px;
+  border-top: 3px solid #06b6d4;
+  border-left: 3px solid #06b6d4;
+}
+
+.home-v2-hud-box::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 20px; height: 20px;
+  border-bottom: 3px solid #06b6d4;
+  border-right: 3px solid #06b6d4;
+}
+
+.home-v2-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.8);
+  animation: home-v2-scan 4s linear infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes home-v2-scan {
+  0% { top: -5%; }
+  100% { top: 105%; }
+}
+
+.home-v2-hud-content {
+  position: relative;
+  z-index: 2;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.home-v2-hud-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  color: #06b6d4;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.home-v2-hud-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.home-v2-hud-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.home-v2-hud-item {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+  color: #06b6d4;
+  opacity: 0.9;
+}
+
+.home-v2-hud-item::before {
+  content: '>';
+  font-weight: bold;
+}
+
+/* --- Social Media Section --- */
+.home-v2-social-container {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .home-v2-social-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .home-v2-social-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-v2-monitor-frame {
+  background: rgba(15, 23, 42, 0.8);
+  border: 2px solid rgba(6, 182, 212, 0.3);
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(6, 182, 212, 0.1);
+}
+
+.home-v2-monitor-header {
+  background: rgba(6, 182, 212, 0.1);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.home-v2-monitor-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: #06b6d4;
+}
+
+.home-v2-status-dot {
+  width: 8px;
+  height: 8px;
+  background: #06b6d4;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #06b6d4;
+  animation: home-v2-pulse 1.5s infinite;
+}
+
+@keyframes home-v2-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.home-v2-video-placeholder {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9/16;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-v2-video-placeholder.landscape {
+  aspect-ratio: 16/9;
+}
+
+.home-v2-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  transition: background 0.3s ease;
+}
+
+.home-v2-video-placeholder:hover .home-v2-video-overlay {
+  background: rgba(15, 23, 42, 0.2);
+}
+
+.home-v2-play-btn {
+  width: 64px;
+  height: 64px;
+  background: rgba(6, 182, 212, 0.2);
+  border: 2px solid #06b6d4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  z-index: 2;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+.home-v2-video-placeholder:hover .home-v2-play-btn {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.8);
+}
+
+.home-v2-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(239, 68, 68, 0.8);
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  z-index: 2;
+  font-family: 'Courier New', monospace;
+}
+
+.home-v2-content-active {
+  animation: home-v2-power-on 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  transform-origin: center;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes home-v2-power-on {
+  0% { 
+    opacity: 0; 
+    transform: scaleY(0.01) scaleX(0);
+    filter: brightness(3);
+  }
+  40% { 
+    opacity: 1; 
+    transform: scaleY(0.01) scaleX(1);
+    filter: brightness(2);
+  }
+  100% { 
+    opacity: 1; 
+    transform: scaleY(1) scaleX(1);
+    filter: brightness(1);
+  }
+}
+
+.home-v2-fb-posts-container {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* Fix for Facebook Embeds */
+.home-v2-monitor-frame .home-v2-content-active {
+  background: #ffffff; 
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  width: 100%;
+}

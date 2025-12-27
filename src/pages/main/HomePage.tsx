@@ -1,16 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import sliderService, { Slider } from '../../services/sliderService';
+import sliderService from '../../services/sliderService';
 import {
   BookOpen, Award,
   Brain, Target,
   Code, Zap, Globe, ChevronRight,
   Map, Briefcase as Portfolio, Building, Power,
-  Facebook, Video, Trophy, Medal, Star, Sparkles, ExternalLink, Rocket
+  Facebook, Video, Sparkles, ExternalLink, Rocket,
+  Play, Activity, Terminal, Cpu
 } from 'lucide-react';
 import MeowlGuide from '../../components/MeowlGuide';
 import '../../styles/HomePage.css';
+import '../../styles/HomeAwardV2.css';
 
 // Slider images
 import slide1 from '../../assets/slider-1.webp';
@@ -41,7 +42,6 @@ import soulStone from '../../assets/infinity-stones/soul_stone.png';
 
 
 const HomePage = () => {
-  const { isAuthenticated } = useAuth();
   const [theme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     return savedTheme || 'light';
@@ -52,6 +52,11 @@ const HomePage = () => {
   const [isFabricating, setIsFabricating] = useState(false);
   const [hasFabricated, setHasFabricated] = useState(false);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const [loadedVideos, setLoadedVideos] = useState<Record<string, boolean>>({});
+
+  const handleLoadVideo = (id: string) => {
+    setLoadedVideos(prev => ({ ...prev, [id]: true }));
+  };
 
   const constellationContainerRef = useRef<HTMLDivElement>(null);
   const globeHoverTimerRef = useRef<number | null>(null);
@@ -801,131 +806,200 @@ const HomePage = () => {
                 Các Kênh Mạng Xã Hội Của Chúng Tôi
               </h2>
             </div>
-            <p className="section-description">
-              Theo dõi chúng tôi để cập nhật những nội dung mới nhất về công nghệ và học tập
-            </p>
           </div>
 
-          {/* First Row: TikTok and Facebook Video */}
-          <div className="social-media-grid-row">
+          <div className="home-v2-social-container">
             {/* TikTok Embed */}
-            <div className="social-media-card tiktok-card">
-              <div className="card-glow tiktok-glow"></div>
-              <div className="social-media-header">
-                <div className="icon-wrapper tiktok-icon">
-                  <img src={tiktokIcon} alt="TikTok" className="social-icon-img" />
+            <div className="home-v2-monitor-frame">
+              <div className="home-v2-monitor-header">
+                <div className="home-v2-monitor-status">
+                  <div className="home-v2-status-dot"></div>
+                  <span>INCOMING TRANSMISSION: TIKTOK_FEED</span>
                 </div>
-                <h3 className="social-media-title">TikTok</h3>
+                <Activity size={14} color="#06b6d4" />
               </div>
               <div className="social-media-content">
-                <iframe
-                  src="https://www.tiktok.com/embed/7573943741975678215"
-                  style={{ 
-                    width: '100%', 
-                    height: '600px', 
-                    border: 'none',
-                    maxWidth: '605px',
-                    margin: '0 auto',
-                    display: 'block'
-                  }}
-                  allowFullScreen
-                  scrolling="no"
-                  allow="encrypted-media;"
-                  title="TikTok Video"
-                ></iframe>
+                {!loadedVideos['tiktok'] ? (
+                  <div 
+                    className="home-v2-video-placeholder" 
+                    onClick={() => handleLoadVideo('tiktok')}
+                    style={{ 
+                      backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url(${tiktokIcon})`,
+                      backgroundSize: '40%',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'center'
+                    }}
+                  >
+                    <div className="home-v2-video-overlay"></div>
+                    <div className="home-v2-badge">LIVE FEED</div>
+                    <div className="home-v2-play-btn">
+                      <Play fill="currentColor" size={32} />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="home-v2-content-active">
+                    <iframe
+                      src="https://www.tiktok.com/embed/7573943741975678215"
+                      style={{ 
+                        width: '100%', 
+                        height: '600px', 
+                        border: 'none',
+                        maxWidth: '605px',
+                        margin: '0 auto',
+                        display: 'block'
+                      }}
+                      allowFullScreen
+                      scrolling="no"
+                      allow="encrypted-media;"
+                      title="TikTok Video"
+                    ></iframe>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Facebook Video Embed */}
-            <div className="social-media-card facebook-card">
-              <div className="card-glow facebook-glow"></div>
-              <div className="social-media-header">
-                <div className="icon-wrapper facebook-icon">
-                  <img src={facebookIcon} alt="Facebook" className="social-icon-img" />
+            <div className="home-v2-monitor-frame">
+              <div className="home-v2-monitor-header">
+                <div className="home-v2-monitor-status">
+                  <div className="home-v2-status-dot"></div>
+                  <span>SYSTEM UPDATE: FB_REEL_STREAM</span>
                 </div>
-                <h3 className="social-media-title">Facebook Video</h3>
+                <Video size={14} color="#06b6d4" />
               </div>
               <div className="social-media-content">
-                <iframe 
-                  src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1201192888739159%2F&show_text=true&width=267&t=0" 
-                  width="267" 
-                  height="591" 
-                  style={{ border: 'none', overflow: 'hidden', maxWidth: '100%' }} 
-                  scrolling="no" 
-                  frameBorder="0" 
-                  allowFullScreen={true}
-                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                  title="Facebook Video"
-                ></iframe>
+                {!loadedVideos['fb-video'] ? (
+                  <div 
+                    className="home-v2-video-placeholder" 
+                    onClick={() => handleLoadVideo('fb-video')}
+                    style={{ 
+                      backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url(${facebookIcon})`,
+                      backgroundSize: '40%',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'center'
+                    }}
+                  >
+                    <div className="home-v2-video-overlay"></div>
+                    <div className="home-v2-badge">TRANSMISSION</div>
+                    <div className="home-v2-play-btn">
+                      <Play fill="currentColor" size={32} />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="home-v2-content-active">
+                    <iframe 
+                      src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1201192888739159%2F&show_text=true&width=267&t=0" 
+                      width="267" 
+                      height="591" 
+                      style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', margin: '0 auto', display: 'block' }} 
+                      scrolling="no" 
+                      frameBorder="0" 
+                      allowFullScreen={true}
+                      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                      title="Facebook Video"
+                    ></iframe>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Facebook Posts - First Post as a card */}
+            <div className="home-v2-monitor-frame">
+              <div className="home-v2-monitor-header">
+                <div className="home-v2-monitor-status">
+                  <div className="home-v2-status-dot"></div>
+                  <span>DATA STREAM: FB_POST_01</span>
+                </div>
+                <Facebook size={14} color="#06b6d4" />
+              </div>
+              <div className="social-media-content">
+                {!loadedVideos['fb-post-1'] ? (
+                  <div 
+                    className="home-v2-video-placeholder" 
+                    onClick={() => handleLoadVideo('fb-post-1')}
+                    style={{ 
+                      backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url(${facebookIcon})`,
+                      backgroundSize: '40%',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'center'
+                    }}
+                  >
+                    <div className="home-v2-video-overlay"></div>
+                    <div className="home-v2-badge">ARCHIVE</div>
+                    <div className="home-v2-play-btn">
+                      <Terminal size={32} />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="home-v2-content-active">
+                    <iframe 
+                      src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0G4FqF2Hx8hT7E4GrTxFP7JLTk2zLHtqQHcAyLe9P2fxHVwj4zrZFWvzzMN5s1VdTl%26id%3D61581184190711&show_text=true&width=500" 
+                      width="500" 
+                      height="750" 
+                      style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', margin: '0 auto', display: 'block' }} 
+                      scrolling="no" 
+                      frameBorder="0" 
+                      allowFullScreen={true}
+                      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                      title="Facebook Post 1"
+                    ></iframe>
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Second Row: Facebook Posts */}
-          <div className="social-media-grid-row full-width">
-            <div className="social-media-card facebook-posts-card fb-posts-container">
-              <div className="card-glow facebook-glow"></div>
-              <div className="social-media-header fb-posts-header">
-                <div className="icon-wrapper facebook-icon">
-                  <img src={facebookIcon} alt="Facebook" className="social-icon-img" />
+          {/* Remaining Facebook Posts */}
+          <div className="home-v2-fb-posts-container">
+            {[
+              { id: 'fb-post-2', src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02a1gaCSYddsXU8RcpXUvxrPiWf5mAbXQzrz4EYXpsFBVHjd9f1qo8VzJZRY47QC9Fl%26id%3D61581184190711&show_text=true&width=500", height: 700, title: "FB_POST_02" },
+              { id: 'fb-post-3', src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02ij7AP9pWHqquS7q8W5YE4focGDU3kcZHJgNaSdSCZr8b7vPHmWEcx4qLEvxrFKn4l%26id%3D61581184190711&show_text=true&width=500", height: 750, title: "FB_POST_03" },
+              { id: 'fb-post-4', src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0BTnRCWjrv1THzEBH1R9K9iFR2LfzNAFcfAqLHaEM1KWLMPB4cd6MhtnEHDEdTtPxl%26id%3D61581184190711&show_text=true&width=500", height: 720, title: "FB_POST_04" }
+            ].map((post) => (
+              <div key={post.id} className="home-v2-monitor-frame">
+                <div className="home-v2-monitor-header">
+                  <div className="home-v2-monitor-status">
+                    <div className="home-v2-status-dot"></div>
+                    <span>DATA STREAM: {post.title}</span>
+                  </div>
+                  <Facebook size={14} color="#06b6d4" />
                 </div>
-                <h3 className="social-media-title">Facebook Posts</h3>
-              </div>
-              <div className="facebook-posts-grid">
-                <div className="facebook-post-item fb-post-wrapper">
-                  <iframe 
-                    src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0G4FqF2Hx8hT7E4GrTxFP7JLTk2zLHtqQHcAyLe9P2fxHVwj4zrZFWvzzMN5s1VdTl%26id%3D61581184190711&show_text=true&width=500" 
-                    width="500" 
-                    height="698" 
-                    style={{ border: 'none', overflow: 'hidden', maxWidth: '100%' }} 
-                    scrolling="no" 
-                    frameBorder="0" 
-                    allowFullScreen={true}
-                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                    title="Facebook Post 1"
-                  ></iframe>
-                </div>
-                <div className="facebook-post-item fb-post-wrapper">
-                  <iframe 
-                    src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02a1gaCSYddsXU8RcpXUvxrPiWf5mAbXQzrz4EYXpsFBVHjd9f1qo8VzJZRY47QC9Fl%26id%3D61581184190711&show_text=true&width=500" 
-                    width="500" 
-                    height="641" 
-                    style={{ border: 'none', overflow: 'hidden', maxWidth: '100%' }} 
-                    scrolling="no" 
-                    frameBorder="0" 
-                    allowFullScreen={true}
-                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                    title="Facebook Post 2"
-                  ></iframe>
-                </div>
-                <div className="facebook-post-item fb-post-wrapper">
-                  <iframe 
-                    src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02ij7AP9pWHqquS7q8W5YE4focGDU3kcZHJgNaSdSCZr8b7vPHmWEcx4qLEvxrFKn4l%26id%3D61581184190711&show_text=true&width=500" 
-                    width="500" 
-                    height="712" 
-                    style={{ border: 'none', overflow: 'hidden', maxWidth: '100%' }} 
-                    scrolling="no" 
-                    frameBorder="0" 
-                    allowFullScreen={true}
-                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                    title="Facebook Post 3"
-                  ></iframe>
-                </div>
-                <div className="facebook-post-item fb-post-wrapper">
-                  <iframe 
-                    src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0BTnRCWjrv1THzEBH1R9K9iFR2LfzNAFcfAqLHaEM1KWLMPB4cd6MhtnEHDEdTtPxl%26id%3D61581184190711&show_text=true&width=500" 
-                    width="500" 
-                    height="674" 
-                    style={{ border: 'none', overflow: 'hidden', maxWidth: '100%' }} 
-                    scrolling="no" 
-                    frameBorder="0" 
-                    allowFullScreen={true}
-                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                    title="Facebook Post 4"
-                  ></iframe>
+                <div className="social-media-content">
+                  {!loadedVideos[post.id] ? (
+                    <div 
+                      className="home-v2-video-placeholder" 
+                      onClick={() => handleLoadVideo(post.id)}
+                      style={{ 
+                        backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url(${facebookIcon})`,
+                        backgroundSize: '40%',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center'
+                      }}
+                    >
+                      <div className="home-v2-video-overlay"></div>
+                      <div className="home-v2-badge">ARCHIVE</div>
+                      <div className="home-v2-play-btn">
+                        <Terminal size={32} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="home-v2-content-active">
+                      <iframe 
+                        src={post.src} 
+                        width="500" 
+                        height={post.height} 
+                        style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', margin: '0 auto', display: 'block' }} 
+                        scrolling="no" 
+                        frameBorder="0" 
+                        allowFullScreen={true}
+                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                        title={post.title}
+                      ></iframe>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -938,112 +1012,94 @@ const HomePage = () => {
             <div className="cosmic-title-wrapper">
               <img src={cup} alt="Trophy" className="cosmic-orbit-icon awards-icon" />
               <h2 className="section-title cosmic-title">
-                Giải Thưởng & Thành Tựu Của Skillverse
+                Thành Tích & Giải Thưởng
               </h2>
             </div>
-            <p className="section-description">
-              Những cột mốc quan trọng khẳng định vị thế của Skillverse trong hệ sinh thái AI & EdTech
-            </p>
           </div>
 
-          <div className="awards-grid">
+          <div className="home-v2-awards-grid">
             {/* Award 1 - Top 11 TechYouth */}
-            <div className="award-card award-gold">
-              <div className="award-glow gold-glow"></div>
-              <div className="award-medal-wrapper">
-                <div className="award-medal gold-medal">
-                  <img src={gold1} alt="Gold Medal" className="award-medal-img" />
-                  <div className="medal-shine"></div>
-                </div>
+            <div className="home-v2-award-card home-v2-glass gold">
+              <div className="home-v2-medal-container">
+                <img src={gold1} alt="Gold Medal" className="award-medal-img" style={{ width: '120px', height: 'auto' }} />
               </div>
-              <div className="award-content">
-                <div className="award-rank"> Top 11</div>
-                <h3 className="award-title">TechYouth Builder Challenge 2025</h3>
-                <p className="award-description">
-                  Vượt qua hơn 600 dự án trên toàn quốc, Skillverse được chọn vào Top 11 của TechYouth Builder Challenge – chương trình tìm kiếm giải pháp AI & EdTech đột phá dành cho người trẻ.
+              <div className="home-v2-award-rank">Top 11</div>
+              <h3 className="home-v2-award-title">TechYouth Builder Challenge 2025</h3>
+              <p className="home-v2-award-desc">
+                Vượt qua hơn 600 dự án trên toàn quốc, Skillverse được chọn vào Top 11 của TechYouth Builder Challenge – chương trình tìm kiếm giải pháp AI & EdTech đột phá dành cho người trẻ.
+              </p>
+              <div className="award-impact" style={{ marginBottom: '1.5rem', textAlign: 'left', padding: '1rem', background: 'rgba(251, 191, 36, 0.05)', borderRadius: '12px', border: '1px solid rgba(251, 191, 36, 0.1)' }}>
+                <Sparkles size={16} style={{ color: '#fbbf24', marginBottom: '0.5rem' }} />
+                <p style={{ fontSize: '0.85rem', color: '#fbbf24', margin: 0, lineHeight: '1.4' }}>
+                  Khẳng định Skillverse là nền tảng AI có tính đổi mới cao, giải quyết thực tế nhu cầu định hướng nghề nghiệp, kỹ năng và portfolio cho sinh viên.
                 </p>
-                <div className="award-impact">
-                  <Sparkles size={16} className="impact-icon" />
-                  <span className="impact-text">
-                    Khẳng định Skillverse là nền tảng AI có tính đổi mới cao, giải quyết thực tế nhu cầu định hướng nghề nghiệp, kỹ năng và portfolio cho sinh viên.
-                  </span>
-                </div>
-                <a href="https://www.facebook.com/share/p/17mWCBwJvz/" target="_blank" rel="noopener noreferrer" className="award-detail-link">
-                  <span>Xem chi tiết thành tích</span>
-                  <ExternalLink size={18} />
-                </a>
               </div>
+              <a href="https://www.facebook.com/share/p/17mWCBwJvz/" target="_blank" rel="noopener noreferrer" className="award-detail-link">
+                <span>Xem chi tiết thành tích</span>
+                <ExternalLink size={18} />
+              </a>
             </div>
 
             {/* Award 2 - Top 7 Innovation Quest */}
-            <div className="award-card award-silver">
-              <div className="award-glow silver-glow"></div>
-              <div className="award-medal-wrapper">
-                <div className="award-medal silver-medal">
-                  <img src={silver1} alt="Silver Medal" className="award-medal-img" />
-                  <div className="medal-shine"></div>
-                </div>
+            <div className="home-v2-award-card home-v2-glass silver">
+              <div className="home-v2-medal-container">
+                <img src={silver1} alt="Silver Medal" className="award-medal-img" style={{ width: '120px', height: 'auto' }} />
               </div>
-              <div className="award-content">
-                <div className="award-rank">Top 7</div>
-                <h3 className="award-title">Innovation Quest 2025</h3>
-                <p className="award-subtitle">SIHUB & Sở KH&CN TP.HCM</p>
-                <p className="award-description">
-                  Innovation Quest 2025 là chương trình ươm tạo startup công nghệ mang tính cạnh tranh cao. Skillverse xuất sắc lọt vào Top 7 dự án được chọn để ươm tạo chính thức.
+              <div className="home-v2-award-rank">Top 7</div>
+              <h3 className="home-v2-award-title">Innovation Quest 2025</h3>
+              <p className="home-v2-award-desc">
+                Innovation Quest 2025 là chương trình ươm tạo startup công nghệ mang tính cạnh tranh cao. Skillverse xuất sắc lọt vào Top 7 dự án được chọn để ươm tạo chính thức.
+              </p>
+              <div className="award-impact" style={{ marginBottom: '1.5rem', textAlign: 'left', padding: '1rem', background: 'rgba(148, 163, 184, 0.05)', borderRadius: '12px', border: '1px solid rgba(148, 163, 184, 0.1)' }}>
+                <Sparkles size={16} style={{ color: '#94a3b8', marginBottom: '0.5rem' }} />
+                <p style={{ fontSize: '0.85rem', color: '#94a3b8', margin: 0, lineHeight: '1.4' }}>
+                  Công nhận Skillverse là giải pháp có tiềm năng thương mại hóa, ứng dụng AI hiệu quả và mang lại tác động xã hội cho giáo dục & nguồn nhân lực trẻ.
                 </p>
-                <div className="award-impact">
-                  <Sparkles size={16} className="impact-icon" />
-                  <span className="impact-text">
-                    Công nhận Skillverse là giải pháp có tiềm năng thương mại hóa, ứng dụng AI hiệu quả và mang lại tác động xã hội cho giáo dục & nguồn nhân lực trẻ.
-                  </span>
-                </div>
-                <a href="https://www.facebook.com/share/p/16SzK8iyqJ/" target="_blank" rel="noopener noreferrer" className="award-detail-link">
-                  <span>Xem chi tiết thành tích</span>
-                  <ExternalLink size={18} />
-                </a>
               </div>
+              <a href="https://www.facebook.com/share/p/16SzK8iyqJ/" target="_blank" rel="noopener noreferrer" className="award-detail-link">
+                <span>Xem chi tiết thành tích</span>
+                <ExternalLink size={18} />
+              </a>
             </div>
 
             {/* Award 3 - Top 25 FIP */}
-            <div className="award-card award-bronze">
-              <div className="award-glow bronze-glow"></div>
-              <div className="award-medal-wrapper">
-                <div className="award-medal bronze-medal">
-                  <img src={bronze1} alt="Bronze Medal" className="award-medal-img" />
-                  <div className="medal-shine"></div>
-                </div>
+            <div className="home-v2-award-card home-v2-glass bronze">
+              <div className="home-v2-medal-container">
+                <img src={bronze1} alt="Bronze Medal" className="award-medal-img" style={{ width: '120px', height: 'auto' }} />
               </div>
-              <div className="award-content">
-                <div className="award-rank"> Top 25</div>
-                <h3 className="award-title">FIP Innovation Path 2025</h3>
-                <p className="award-subtitle">FPT University</p>
-                <p className="award-description">
-                  Vượt qua 65 dự án startup từ các campus FPT trên toàn quốc, Skillverse được chọn vào Top 25 FIP Innovation Path – cuộc thi sáng tạo & khởi nghiệp tiêu biểu của sinh viên FPT.
+              <div className="home-v2-award-rank">Top 25</div>
+              <h3 className="home-v2-award-title">FIP Innovation Path 2025</h3>
+              <p className="home-v2-award-desc">
+                Vượt qua 65 dự án startup từ các campus FPT trên toàn quốc, Skillverse được chọn vào Top 25 FIP Innovation Path – cuộc thi sáng tạo & khởi nghiệp tiêu biểu của sinh viên FPT.
+              </p>
+              <div className="award-impact" style={{ marginBottom: '1.5rem', textAlign: 'left', padding: '1rem', background: 'rgba(180, 83, 9, 0.05)', borderRadius: '12px', border: '1px solid rgba(180, 83, 9, 0.1)' }}>
+                <Sparkles size={16} style={{ color: '#b45309', marginBottom: '0.5rem' }} />
+                <p style={{ fontSize: '0.85rem', color: '#b45309', margin: 0, lineHeight: '1.4' }}>
+                  Xác nhận Skillverse phù hợp với hệ sinh thái sinh viên, có tính thực tế cao và khả năng mở rộng mạnh trong cộng đồng đại học.
                 </p>
-                <div className="award-impact">
-                  <Sparkles size={16} className="impact-icon" />
-                  <span className="impact-text">
-                    Xác nhận Skillverse phù hợp với hệ sinh thái sinh viên, có tính thực tế cao và khả năng mở rộng mạnh trong cộng đồng đại học.
-                  </span>
-                </div>
-                <a href="https://www.facebook.com/share/p/1DswZ39HUj/" target="_blank" rel="noopener noreferrer" className="award-detail-link">
-                  <span>Xem chi tiết thành tích</span>
-                  <ExternalLink size={18} />
-                </a>
               </div>
+              <a href="https://www.facebook.com/share/p/1DswZ39HUj/" target="_blank" rel="noopener noreferrer" className="award-detail-link">
+                <span>Xem chi tiết thành tích</span>
+                <ExternalLink size={18} />
+              </a>
             </div>
           </div>
 
-          {/* Overall Impact Summary */}
-          <div className="awards-summary">
-            <div className="summary-card">
-              <Star className="summary-icon" size={32} />
-              <h3 className="summary-title">Tổng Quan Tác Động</h3>
-              <ul className="summary-list">
-                <li>Được hội đồng chuyên môn đánh giá cao về AI Career Agent, Skill Wallet, và mô hình "Learn – Practice – Earn"</li>
-                <li>Minh chứng được tính khả thi thông qua MVP, mentor network và mô hình Freemium – Subscription</li>
-                <li>Được hỗ trợ bởi các chuyên gia từ SIHUB, doanh nghiệp, và giảng viên FPT University</li>
-              </ul>
+          {/* Overall Impact Summary - HUD Style */}
+          <div className="home-v2-hud-container">
+            <div className="home-v2-hud-box">
+              <div className="home-v2-scanline"></div>
+              <div className="home-v2-hud-content">
+                <div className="home-v2-hud-header">
+                  <Cpu size={24} />
+                  <h3 className="home-v2-hud-title">System Diagnostics: Impact Analysis</h3>
+                </div>
+                <ul className="home-v2-hud-list">
+                  <li className="home-v2-hud-item">Được hội đồng chuyên môn đánh giá cao về AI Career Agent, Skill Wallet, và mô hình "Learn – Practice – Earn"</li>
+                  <li className="home-v2-hud-item">Minh chứng được tính khả thi thông qua MVP, mentor network và mô hình Freemium – Subscription</li>
+                  <li className="home-v2-hud-item">Được hỗ trợ bởi các chuyên gia từ SIHUB, doanh nghiệp, và giảng viên FPT University</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
