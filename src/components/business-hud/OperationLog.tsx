@@ -17,6 +17,43 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
 
   const [selectedJob, setSelectedJob] = useState<JobPostingResponse | null>(null);
   const [showApplicantsModal, setShowApplicantsModal] = useState(false);
+  const [editingJob, setEditingJob] = useState<JobPostingResponse | null>(null);
+
+  // Reopen Modal State
+  const [reopenModal, setReopenModal] = useState<{
+    visible: boolean;
+    jobId: number | null;
+    deadline: string;
+    clearApplications: boolean;
+    isFree: boolean;
+  }>({
+    visible: false,
+    jobId: null,
+    deadline: '',
+    clearApplications: true,
+    isFree: false
+  });
+
+  // Close Modal State
+  const [closeModal, setCloseModal] = useState<{
+    visible: boolean;
+    jobId: number | null;
+  }>({
+    visible: false,
+    jobId: null
+  });
+
+  // Edit form state
+  const [editForm, setEditForm] = useState({
+    title: '',
+    description: '',
+    requiredSkills: [] as string[],
+    minBudget: '',
+    maxBudget: '',
+    deadline: '',
+    isRemote: true,
+    location: ''
+  });
 
   useEffect(() => {
     fetchJobs();
@@ -57,50 +94,144 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
     }
   };
 
-  const handleCloseJob = async (jobId: number) => {
-    if (window.confirm('Bạn có chắc chắn muốn ĐÓNG nhiệm vụ này? Ứng viên sẽ không thể nộp đơn nữa.')) {
-      try {
-        await jobService.changeJobStatus(jobId, 'CLOSED');
-        // Update local state
-        setJobs(prevJobs => prevJobs.map(job => 
-          job.id === jobId ? { ...job, status: 'CLOSED' } : job
-        ));
-        if (selectedJob?.id === jobId) {
-          setSelectedJob(prev => prev ? { ...prev, status: 'CLOSED' } : null);
-        }
-        showSuccess('Mission Closed', 'Nhiệm vụ đã được đóng lại.');
-      } catch (err: any) {
-        console.error('Failed to close job:', err);
-        showError('Error', 'Không thể đóng nhiệm vụ.');
+  const handleCloseJob = (jobId: number) => {
+    setCloseModal({
+      visible: true,
+      jobId: jobId
+    });
+  };
+
+  const confirmClose = async () => {
+    if (!closeModal.jobId) return;
+
+    try {
+      await jobService.changeJobStatus(closeModal.jobId, 'CLOSED');
+      // Update local state
+      setJobs(prevJobs => prevJobs.map(job => 
+        job.id === closeModal.jobId ? { ...job, status: 'CLOSED' } : job
+      ));
+      if (selectedJob?.id === closeModal.jobId) {
+        setSelectedJob(prev => prev ? { ...prev, status: 'CLOSED' } : null);
       }
+      showSuccess('Mission Closed', 'Nhiệm vụ đã được đóng lại.');
+      setCloseModal({ visible: false, jobId: null });
+    } catch (err: any) {
+      console.error('Failed to close job:', err);
+      showError('Error', 'Không thể đóng nhiệm vụ.');
     }
   };
 
-  const handleReopenJob = async (jobId: number) => {
-    if (window.confirm('Bạn có muốn MỞ LẠI nhiệm vụ này? Hành động này sẽ xóa các đơn ứng tuyển cũ và reset số lượng ứng viên.')) {
-      try {
-        await jobService.reopenJob(jobId);
-        // We need to fetch the updated job details from the server to get the correct status
-        // But for immediate UI feedback, we can update local state
-        // Reopen usually sets status to 'OPEN' or 'PENDING_APPROVAL' depending on logic
-        // Let's assume it becomes 'OPEN' for now, but best is to refetch all
-        await fetchJobs(); 
-        
-        // IMPORTANT: Also update the selectedJob if it is the one being reopened
-        // Since we just fetched fresh data, we can find the updated job in the new list
-        // However, state updates are async, so we might need to rely on the fetchJobs updating 'jobs' 
-        // and then finding it, or manually update selectedJob here.
-        // A manual update is safer for immediate feedback in the details panel.
-        if (selectedJob?.id === jobId) {
-           setSelectedJob(prev => prev ? { ...prev, status: 'OPEN' } : null);
-        }
+  const handleReopenClick = (job: JobPostingResponse) => {
+    // Check grace period (5 minutes)
+    const updatedAt = new Date(job.updatedAt).getTime();
+    const now = Date.now();
+    const diffMinutes = (now - updatedAt) / (1000 * 60);
+    const isFree = diffMinutes <= 5;
 
-        showSuccess('Mission Reopened', 'Nhiệm vụ đã được tái kích hoạt.');
-      } catch (err: any) {
-        console.error('Failed to reopen job:', err);
-        showError('Error', 'Không thể mở lại nhiệm vụ.');
-      }
+    // Default deadline: +30 days
+    const defaultDeadline = new Date();
+    defaultDeadline.setDate(defaultDeadline.getDate() + 30);
+    const deadlineStr = defaultDeadline.toISOString().split('T')[0];
+
+    setReopenModal({
+      visible: true,
+      jobId: job.id,
+      deadline: deadlineStr,
+      clearApplications: true,
+      isFree
+    });
+  };
+
+  const confirmReopen = async () => {
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() + 1); // Tomorrow
+    const minDateStr = minDate.toISOString().split('T')[0];
+
+    if (new Date(reopenModal.deadline) < minDate) {
+        showError('Lỗi Ngày Tháng', 'Hạn chót phải từ ngày mai trở đi.');
+        return;
     }
+
+    if (!reopenModal.jobId) return;
+
+    try {
+      await jobService.reopenJob(reopenModal.jobId, {
+        deadline: reopenModal.deadline,
+        clearApplications: reopenModal.clearApplications
+      });
+      
+      await fetchJobs();
+      
+      if (selectedJob?.id === reopenModal.jobId) {
+         setSelectedJob(prev => prev ? { ...prev, status: 'OPEN' } : null);
+      }
+
+      showSuccess('Mission Reopened', 'Nhiệm vụ đã được tái kích hoạt.');
+
+      // Dispatch wallet update event
+      window.dispatchEvent(new Event('wallet:updated'));
+
+      setReopenModal(prev => ({ ...prev, visible: false }));
+    } catch (err: any) {
+      console.error('Failed to reopen job:', err);
+      showError('Error', 'Không thể mở lại nhiệm vụ.');
+    }
+  };
+
+  const handleEditJob = (job: JobPostingResponse) => {
+    setEditingJob(job);
+    setEditForm({
+      title: job.title,
+      description: job.description,
+      requiredSkills: [...job.requiredSkills],
+      minBudget: job.minBudget.toString(),
+      maxBudget: job.maxBudget.toString(),
+      deadline: job.deadline,
+      isRemote: job.isRemote,
+      location: job.location || ''
+    });
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingJob) return;
+
+    try {
+      await jobService.updateJob(editingJob.id, {
+        title: editForm.title,
+        description: editForm.description,
+        requiredSkills: editForm.requiredSkills,
+        minBudget: parseFloat(editForm.minBudget),
+        maxBudget: parseFloat(editForm.maxBudget),
+        deadline: editForm.deadline,
+        isRemote: editForm.isRemote,
+        location: editForm.isRemote ? null : editForm.location
+      });
+
+      showSuccess('Mission Updated', 'Thông tin nhiệm vụ đã được cập nhật.');
+      setEditingJob(null);
+      fetchJobs();
+      
+      // Update selected job if it's the one being edited
+      if (selectedJob?.id === editingJob.id) {
+         // We should ideally fetch the fresh job, but let's update basic fields
+         setSelectedJob(prev => prev ? {
+             ...prev,
+             title: editForm.title,
+             description: editForm.description,
+             minBudget: parseFloat(editForm.minBudget),
+             maxBudget: parseFloat(editForm.maxBudget),
+             deadline: editForm.deadline
+         } : null);
+      }
+    } catch (error) {
+      console.error('Error updating job:', error);
+      showError('Update Failed', 'Không thể cập nhật thông tin nhiệm vụ.');
+    }
+  };
+
+  // Deprecated - kept for reference if needed, but UI uses handleReopenClick now
+  const handleReopenJob = async (jobId: number) => {
+     console.warn('Deprecated handleReopenJob called. Use handleReopenClick instead.');
   };
 
   const handleViewDetails = (job: JobPostingResponse) => {
@@ -300,12 +431,28 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                   )}
                   
                   {selectedJob.status === 'CLOSED' && (
-                    <button 
-                      className="fleet-btn-success"
-                      onClick={() => handleReopenJob(selectedJob.id)}
-                    >
-                      🔄 Mở Lại Nhiệm Vụ
-                    </button>
+                    <>
+                      <button 
+                        className="fleet-btn-primary-small"
+                        onClick={() => handleEditJob(selectedJob)}
+                        style={{ 
+                          background: 'rgba(245, 158, 11, 0.1)', 
+                          color: '#f59e0b', 
+                          borderColor: '#f59e0b',
+                          flex: '0 0 auto',
+                          width: 'auto',
+                          padding: '8px 16px'
+                        }}
+                      >
+                        ✏️ Chỉnh Sửa
+                      </button>
+                      <button 
+                        className="fleet-btn-success"
+                        onClick={() => handleReopenClick(selectedJob)}
+                      >
+                        🔄 Mở Lại Nhiệm Vụ
+                      </button>
+                    </>
                   )}
                   
                   <button 
@@ -329,6 +476,150 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
               onReject={handleRejectApplicant}
               refreshTrigger={localRefreshTrigger}
             />
+          )}
+
+          {/* Close Job Modal */}
+          {closeModal.visible && (
+            <div style={{
+              position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+              background: 'rgba(0,0,0,0.7)', zIndex: 1000,
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }} onClick={() => setCloseModal(prev => ({ ...prev, visible: false }))}>
+              <div className="fleet-panel" style={{ width: '500px', maxWidth: '90%' }} onClick={(e) => e.stopPropagation()}>
+                <div className="fleet-details-header">
+                  <h3 style={{ color: 'var(--fleet-warning)' }}>🛑 Xác Nhận Đóng Nhiệm Vụ</h3>
+                  <button className="fleet-close-btn" onClick={() => setCloseModal(prev => ({ ...prev, visible: false }))}>✕</button>
+                </div>
+                
+                <div style={{ padding: '20px 0', color: '#e2e8f0' }}>
+                  <p>Bạn có chắc chắn muốn đóng nhiệm vụ này không?</p>
+                  <ul style={{ margin: '15px 0 15px 20px', lineHeight: '1.6' }}>
+                    <li>Ứng viên sẽ không thể nộp đơn mới.</li>
+                    <li>Nhiệm vụ sẽ chuyển sang trạng thái <strong>CLOSED</strong>.</li>
+                    <li>Bạn có thể mở lại sau (có phí nếu quá thời gian ân hạn).</li>
+                  </ul>
+                </div>
+
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                  <button className="fleet-btn-secondary" onClick={() => setCloseModal(prev => ({ ...prev, visible: false }))}>Hủy Bỏ</button>
+                  <button className="fleet-btn-danger" onClick={confirmClose}>Xác Nhận Đóng</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Reopen Job Modal */}
+          {reopenModal.visible && (
+            <div style={{
+              position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+              background: 'rgba(0,0,0,0.7)', zIndex: 1000,
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }} onClick={() => setReopenModal(prev => ({ ...prev, visible: false }))}>
+              <div className="fleet-panel" style={{ width: '500px', maxWidth: '90%' }} onClick={(e) => e.stopPropagation()}>
+                <div className="fleet-details-header">
+                  <h3>🔄 Mở Lại Nhiệm Vụ</h3>
+                  <button className="fleet-close-btn" onClick={() => setReopenModal(prev => ({ ...prev, visible: false }))}>✕</button>
+                </div>
+                
+                <div style={{ 
+                  backgroundColor: reopenModal.isFree ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)',
+                  color: reopenModal.isFree ? '#10b981' : '#f59e0b',
+                  padding: '15px', borderRadius: '4px', marginBottom: '20px',
+                  border: `1px solid ${reopenModal.isFree ? '#10b981' : '#f59e0b'}`
+                }}>
+                  <strong>{reopenModal.isFree ? '✨ MIỄN PHÍ' : '💰 PHÍ: 20.000 VNĐ'}</strong>
+                  <p style={{ margin: '5px 0 0 0', fontSize: '0.9em', color: '#e2e8f0' }}>
+                    {reopenModal.isFree 
+                      ? 'Bạn đang trong thời gian ân hạn (5 phút). Mở lại job sẽ không tốn phí.'
+                      : 'Đã quá thời gian ân hạn 5 phút. Phí mở lại sẽ được trừ vào ví của bạn.'
+                    }
+                  </p>
+                </div>
+
+                <div className="fleet-input-group">
+                  <label className="fleet-label">Hạn Chót Mới *</label>
+                  <input
+                    type="date"
+                    className="fleet-input"
+                    value={reopenModal.deadline}
+                    onChange={(e) => setReopenModal(prev => ({ ...prev, deadline: e.target.value }))}
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+
+                <div className="fleet-input-group">
+                  <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', color: '#e2e8f0' }}>
+                    <input
+                      type="checkbox"
+                      checked={reopenModal.clearApplications}
+                      onChange={(e) => setReopenModal(prev => ({ ...prev, clearApplications: e.target.checked }))}
+                      style={{ marginRight: '10px', width: 'auto' }}
+                    />
+                    <span>
+                      <strong>Xóa danh sách ứng viên cũ?</strong>
+                    </span>
+                  </label>
+                </div>
+
+                <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+                  <button className="fleet-btn-secondary" onClick={() => setReopenModal(prev => ({ ...prev, visible: false }))}>Hủy</button>
+                  <button className="fleet-btn-primary" onClick={confirmReopen}>✅ Xác Nhận</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Edit Job Modal */}
+          {editingJob && (
+            <div style={{
+              position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+              background: 'rgba(0,0,0,0.7)', zIndex: 1000,
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }} onClick={() => setEditingJob(null)}>
+              <div className="fleet-panel" style={{ width: '600px', maxWidth: '90%', maxHeight: '90vh', overflowY: 'auto' }} onClick={(e) => e.stopPropagation()}>
+                <div className="fleet-details-header">
+                  <h3>✏️ Chỉnh Sửa Nhiệm Vụ</h3>
+                  <button className="fleet-close-btn" onClick={() => setEditingJob(null)}>✕</button>
+                </div>
+                
+                <div className="fleet-input-group">
+                  <label className="fleet-label">Tiêu Đề *</label>
+                  <input type="text" className="fleet-input" value={editForm.title} onChange={(e) => setEditForm(prev => ({ ...prev, title: e.target.value }))} />
+                </div>
+
+                <div className="fleet-input-group">
+                  <label className="fleet-label">Mô Tả *</label>
+                  <textarea 
+                    className="fleet-input" 
+                    value={editForm.description} 
+                    onChange={(e) => setEditForm(prev => ({ ...prev, description: e.target.value }))}
+                    rows={5}
+                    style={{ background: 'transparent', border: '1px solid var(--fleet-border)', width: '100%' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', gap: '20px' }}>
+                  <div className="fleet-input-group" style={{ flex: 1 }}>
+                    <label className="fleet-label">Ngân Sách Min (VND)</label>
+                    <input type="number" className="fleet-input" value={editForm.minBudget} onChange={(e) => setEditForm(prev => ({ ...prev, minBudget: e.target.value }))} />
+                  </div>
+                  <div className="fleet-input-group" style={{ flex: 1 }}>
+                    <label className="fleet-label">Ngân Sách Max (VND)</label>
+                    <input type="number" className="fleet-input" value={editForm.maxBudget} onChange={(e) => setEditForm(prev => ({ ...prev, maxBudget: e.target.value }))} />
+                  </div>
+                </div>
+
+                <div className="fleet-input-group">
+                  <label className="fleet-label">Hạn Chót</label>
+                  <input type="date" className="fleet-input" value={editForm.deadline} onChange={(e) => setEditForm(prev => ({ ...prev, deadline: e.target.value }))} />
+                </div>
+
+                <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+                  <button className="fleet-btn-secondary" onClick={() => setEditingJob(null)}>Hủy</button>
+                  <button className="fleet-btn-primary" onClick={handleSaveEdit}>💾 Lưu Thay Đổi</button>
+                </div>
+              </div>
+            </div>
           )}
         </>
       )}

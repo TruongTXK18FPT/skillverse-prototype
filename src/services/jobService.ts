@@ -82,9 +82,9 @@ class JobService {
    * Reopen a closed job (hard deletes all applications)
    * @requires RECRUITER role
    */
-  async reopenJob(jobId: number): Promise<JobPostingResponse> {
+  async reopenJob(jobId: number, data?: { deadline?: string; clearApplications?: boolean }): Promise<JobPostingResponse> {
     try {
-      const response = await axiosInstance.post<JobPostingResponse>(`/api/jobs/${jobId}/reopen`);
+      const response = await axiosInstance.post<JobPostingResponse>(`/api/jobs/${jobId}/reopen`, data);
       return response.data;
     } catch (error) {
       this.handleError(error, 'Failed to reopen job');

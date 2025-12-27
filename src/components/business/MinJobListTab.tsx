@@ -18,6 +18,21 @@ const MinJobListTab: React.FC<MinJobListTabProps> = ({ onViewApplicants, refresh
   const [isLoading, setIsLoading] = useState(true);
   const [editingJob, setEditingJob] = useState<JobPostingResponse | null>(null);
   
+  // Reopen Modal State
+  const [reopenModal, setReopenModal] = useState<{
+    visible: boolean;
+    jobId: number | null;
+    deadline: string;
+    clearApplications: boolean;
+    isFree: boolean;
+  }>({
+    visible: false,
+    jobId: null,
+    deadline: '',
+    clearApplications: true,
+    isFree: false
+  });
+  
   // Edit form state
   const [editForm, setEditForm] = useState({
     title: '',
@@ -137,16 +152,9 @@ const MinJobListTab: React.FC<MinJobListTabProps> = ({ onViewApplicants, refresh
   };
 
   const handleReopenJob = async (jobId: number) => {
-    if (!window.confirm('Mở lại job sẽ xóa tất cả applications hiện tại. Bạn có chắc chắn?')) return;
-
-    try {
-      await jobService.reopenJob(jobId);
-      showSuccess('Thành Công', 'Job đã được mở lại');
-      fetchJobs();
-    } catch (error) {
-      console.error('Error reopening job:', error);
-      showError('Lỗi Mở Lại', error instanceof Error ? error.message : 'Không thể mở lại job');
-    }
+    // THIS FUNCTION SHOULD NOT BE USED ANYMORE
+    // Logic moved to handleReopenClick (modal based)
+    console.warn('Deprecated handleReopenJob called');
   };
 
   const handleDelete = async (jobId: number) => {
@@ -402,6 +410,75 @@ const MinJobListTab: React.FC<MinJobListTabProps> = ({ onViewApplicants, refresh
                   <strong>Công Ty:</strong>
                   <span>{selectedJob.recruiterCompanyName}</span>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reopen Job Modal */}
+      {reopenModal.visible && (
+        <div className="mjlt-modal-overlay" onClick={() => setReopenModal(prev => ({ ...prev, visible: false }))}>
+          <div className="mjlt-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="mjlt-modal-header">
+              <h3>🔄 Mở Lại Công Việc</h3>
+              <button className="mjlt-close-modal" onClick={() => setReopenModal(prev => ({ ...prev, visible: false }))}>
+                ×
+              </button>
+            </div>
+            <div className="mjlt-modal-body">
+              <div className="mjlt-alert-box" style={{ 
+                backgroundColor: reopenModal.isFree ? '#d4edda' : '#fff3cd',
+                color: reopenModal.isFree ? '#155724' : '#856404',
+                padding: '10px',
+                borderRadius: '4px',
+                marginBottom: '15px'
+              }}>
+                <strong>{reopenModal.isFree ? '✨ MIỄN PHÍ' : '💰 PHÍ: 20.000 VNĐ'}</strong>
+                <p style={{ margin: '5px 0 0 0', fontSize: '0.9em' }}>
+                  {reopenModal.isFree 
+                    ? 'Bạn đang trong thời gian ân hạn (5 phút). Mở lại job sẽ không tốn phí.'
+                    : 'Đã quá thời gian ân hạn 5 phút. Phí mở lại sẽ được trừ vào ví của bạn.'
+                  }
+                </p>
+              </div>
+
+              <div className="mjlt-form-group">
+                <label>Hạn Chót Mới *</label>
+                <input
+                  type="date"
+                  value={reopenModal.deadline}
+                  onChange={(e) => setReopenModal(prev => ({ ...prev, deadline: e.target.value }))}
+                  min={new Date().toISOString().split('T')[0]}
+                />
+              </div>
+
+              <div className="mjlt-form-group">
+                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={reopenModal.clearApplications}
+                    onChange={(e) => setReopenModal(prev => ({ ...prev, clearApplications: e.target.checked }))}
+                    style={{ marginRight: '10px', width: 'auto' }}
+                  />
+                  <span>
+                    <strong>Xóa danh sách ứng viên cũ?</strong>
+                    <br />
+                    <small style={{ color: '#666' }}>Khuyên dùng để tránh nhầm lẫn với đợt tuyển dụng mới.</small>
+                  </span>
+                </label>
+              </div>
+
+              <div className="mjlt-modal-actions">
+                <button 
+                  className="mjlt-btn-secondary" 
+                  onClick={() => setReopenModal(prev => ({ ...prev, visible: false }))}
+                >
+                  Hủy
+                </button>
+                <button className="mjlt-btn-primary" onClick={confirmReopen}>
+                  ✅ Xác Nhận Mở Lại
+                </button>
               </div>
             </div>
           </div>

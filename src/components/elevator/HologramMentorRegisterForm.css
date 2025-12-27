@@ -624,19 +624,6 @@
   }
 }
 
-.reg-mentor-spinner {
-  animation: reg-mentor-spin 1s linear infinite;
-}
-
-@keyframes reg-mentor-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* Divider */
 .reg-mentor-divider {
   display: flex;
@@ -761,7 +748,7 @@
     min-width: unset;
   }
 
-  .reg-mentor-login-section{
+  .reg-mentor-login-section {
     padding: 0;
   }
 
@@ -772,8 +759,41 @@
   .reg-mentor-field {
     grid-column: 1 / -1;
   }
+  
+  .reg-mentor-field-2col,
+  .reg-mentor-field-3col {
+    grid-column: 1 / -1;
+  }
 
   .reg-mentor-title {
     font-size: 1.2rem;
   }
+}
+
+/* Password Hint */
+.reg-mentor-password-hint {
+  margin-top: 0.5rem;
+  font-size: 0.65rem;
+  color: var(--reg-mentor-text-dim);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px dashed var(--reg-mentor-border);
+}
+
+.reg-mentor-password-hint p {
+  margin: 0 0 0.3rem 0;
+  font-weight: 600;
+  color: var(--reg-mentor-primary);
+}
+
+.reg-mentor-password-hint ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reg-mentor-password-hint li {
+  margin-bottom: 0.15rem;
+  transition: color 0.3s ease;
 }

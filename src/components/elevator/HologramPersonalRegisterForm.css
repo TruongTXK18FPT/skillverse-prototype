@@ -440,6 +440,7 @@
 .reg-personal-toggle-btn:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+  distplay: none;
 }
 
 /* Submit Button - Full Width */
@@ -645,4 +646,32 @@
   .reg-personal-title {
     font-size: 1.2rem;
   }
+}
+
+/* Password Hint */
+.reg-personal-password-hint {
+  margin-top: 0.5rem;
+  font-size: 0.65rem;
+  color: var(--reg-personal-text-dim);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px dashed var(--reg-personal-border);
+}
+
+.reg-personal-password-hint p {
+  margin: 0 0 0.3rem 0;
+  font-weight: 600;
+  color: var(--reg-personal-primary);
+}
+
+.reg-personal-password-hint ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reg-personal-password-hint li {
+  margin-bottom: 0.15rem;
+  transition: color 0.3s ease;
 }

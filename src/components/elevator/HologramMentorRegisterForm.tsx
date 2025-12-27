@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, GraduationCap, Lock, Mail, Phone, MapPin, FileText, Award, Briefcase, AlertTriangle, Linkedin, Target, Upload, X } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useElevator } from './ElevatorAuthLayout';
@@ -38,6 +38,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
   const { triggerLoginSuccess } = useElevator();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [formData, setFormData] = useState<MentorRegisterData>({
     fullName: '',
     email: '',
@@ -102,7 +103,13 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
     if (!formData.email.trim()) return 'Vui lòng nhập email';
     if (!/\S+@\S+\.\S+/.test(formData.email)) return 'Email không hợp lệ';
     if (!formData.password) return 'Vui lòng nhập mật khẩu';
-    if (formData.password.length < 6) return 'Mật khẩu phải có ít nhất 6 ký tự';
+    
+    // Check password requirements
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,}$/;
+    if (!passwordRegex.test(formData.password)) {
+      return 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt';
+    }
+    
     if (formData.password !== formData.confirmPassword) return 'Mật khẩu xác nhận không khớp';
     if (!formData.mainExpertise.trim()) return 'Vui lòng nhập lĩnh vực chuyên môn';
     if (!formData.yearsOfExperience) return 'Vui lòng nhập số năm kinh nghiệm';
@@ -282,6 +289,8 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 value={formData.password}
                 onChange={handleInputChange}
                 onAnimationStart={handleAutofill}
+                onFocus={() => setIsPasswordFocused(true)}
+                onBlur={() => setIsPasswordFocused(false)}
                 disabled={isLoading}
                 className="reg-mentor-input"
                 autoComplete="new-password"
@@ -295,6 +304,38 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
+            {/* Password Hint */}
+            <AnimatePresence>
+              {(isPasswordFocused || (formData.password && formData.password.length > 0 && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/.test(formData.password))) && (
+                <motion.div
+                  className="reg-mentor-password-hint"
+                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                  animate={{ opacity: 1, height: 'auto', marginTop: '0.5rem' }}
+                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  style={{ overflow: 'hidden' }}
+                >
+                  <p>Mật khẩu cần:</p>
+                  <ul>
+                    <li style={{ color: formData.password.length >= 8 ? '#4ade80' : '#94a3b8' }}>
+                      • Ít nhất 8 ký tự
+                    </li>
+                    <li style={{ color: /[A-Z]/.test(formData.password) ? '#4ade80' : '#94a3b8' }}>
+                      • 1 chữ viết hoa
+                    </li>
+                    <li style={{ color: /[a-z]/.test(formData.password) ? '#4ade80' : '#94a3b8' }}>
+                      • 1 chữ thường
+                    </li>
+                    <li style={{ color: /\d/.test(formData.password) ? '#4ade80' : '#94a3b8' }}>
+                      • 1 số
+                    </li>
+                    <li style={{ color: /[^A-Za-z0-9]/.test(formData.password) ? '#4ade80' : '#94a3b8' }}>
+                      • 1 ký tự đặc biệt
+                    </li>
+                  </ul>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           <div className="reg-mentor-field">
