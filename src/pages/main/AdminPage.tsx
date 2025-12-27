@@ -15,9 +15,10 @@ import AIExpertManagementTab from '../../components/admin/AIExpertManagementTab'
 import CommunityManagementTab from '../../components/admin/CommunityManagementTab';
 import { JobManagementTab } from '../../components/admin/JobManagementTab';
 import MeowlSkinUploadTab from '../../components/admin/MeowlSkinUploadTab';
+import SliderManagementTab from '../../components/admin/SliderManagementTab';
 import {
   Users, UserCheck, BookOpen, BarChart3, Bell, AlertTriangle,
-  CreditCard, Banknote, Zap, Crown, Ticket, Settings, Brain, MessageSquare, Briefcase, Shirt
+  CreditCard, Banknote, Zap, Crown, Ticket, Settings, Brain, MessageSquare, Briefcase, Shirt, Image
 } from 'lucide-react';
 import adminUserService from '../../services/adminUserService';
 import adminService from '../../services/adminService';
@@ -208,6 +209,14 @@ const AdminPage: React.FC = () => {
       allowedRoles: ['AI_ADMIN']
     },
     { 
+      id: 'sliders', 
+      label: 'Quản Lý Sliders', 
+      icon: Image,
+      gradient: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+      description: 'Quản lý slider trang chủ',
+      allowedRoles: ['CONTENT_ADMIN', 'SYSTEM_ADMIN']
+    },
+    { 
       id: 'settings', 
       label: 'Cài Đặt Hệ Thống', 
       icon: Settings,
@@ -266,6 +275,8 @@ const AdminPage: React.FC = () => {
         return <AIExpertManagementTab />;
       case 'skin-upload':
         return <MeowlSkinUploadTab />;
+      case 'sliders':
+        return <SliderManagementTab />;
       default:
         return (
           <div className="administrator-default-tab">

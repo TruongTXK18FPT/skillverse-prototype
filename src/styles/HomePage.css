@@ -137,7 +137,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  animation: slider-ken-burns 20s ease-in-out infinite alternate;
+  /* animation: slider-ken-burns 20s ease-in-out infinite alternate; Removed ken-burns animation */
 }
 
 @keyframes slider-ken-burns {

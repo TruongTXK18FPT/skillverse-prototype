@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import sliderService, { Slider } from '../../services/sliderService';
 import {
   BookOpen, Award,
   Brain, Target,
@@ -55,7 +56,7 @@ const HomePage = () => {
   const constellationContainerRef = useRef<HTMLDivElement>(null);
   const globeHoverTimerRef = useRef<number | null>(null);
 
-  const slides = [
+  const defaultSlides = [
     {
       image: slide1,
       title: 'Bắt Đầu Hành Trình Của Bạn',
@@ -97,6 +98,30 @@ const HomePage = () => {
       icon: Building
     }
   ];
+
+  const [slides, setSlides] = useState<any[]>(defaultSlides);
+
+  useEffect(() => {
+    const fetchSliders = async () => {
+      try {
+        const apiSliders = await sliderService.getPublicSliders();
+        if (apiSliders && apiSliders.length > 0) {
+          const mappedSlides = apiSliders.map(slider => ({
+            image: slider.imageUrl,
+            title: slider.title,
+            description: slider.description,
+            cta: slider.ctaText || 'Khám phá ngay',
+            route: slider.ctaLink || '/',
+            icon: Sparkles // Default icon
+          }));
+          setSlides(mappedSlides);
+        }
+      } catch (error) {
+        console.error('Failed to fetch sliders, using default', error);
+      }
+    };
+    fetchSliders();
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -342,28 +367,11 @@ const HomePage = () => {
                 <slide.icon className="slider-icon" size={48} />
                 <h1 className="slider-title">{slide.title}</h1>
                 <p className="slider-description">{slide.description}</p>
-                {index === 0 ? (
-                  <div className="slider-buttons-group">
-                    <Link to="/chatbot" className="slider-cta-button slider-primary-button">
-                      <span className="slider-button-text">Bắt đầu hành trình của bạn</span>
-                      <ChevronRight className="slider-button-icon" size={20} />
-                      <span className="slider-button-glow"></span>
-                    </Link>
-                    {!isAuthenticated && (
-                      <Link to="/choose-role" className="slider-cta-button slider-gold-button">
-                        <span className="slider-button-text">Gia nhập SkillVerse</span>
-                        <ChevronRight className="slider-button-icon" size={20} />
-                        <span className="slider-button-glow"></span>
-                      </Link>
-                    )}
-                  </div>
-                ) : (
-                  <Link to={slide.route} className="slider-cta-button">
-                    <span className="slider-button-text">{slide.cta}</span>
-                    <ChevronRight className="slider-button-icon" size={20} />
-                    <span className="slider-button-glow"></span>
-                  </Link>
-                )}
+                <Link to={slide.route} className="slider-cta-button slider-primary-button">
+                  <span className="slider-button-text">{slide.cta}</span>
+                  <ChevronRight className="slider-button-icon" size={20} />
+                  <span className="slider-button-glow"></span>
+                </Link>
               </div>
             </div>
           ))}
