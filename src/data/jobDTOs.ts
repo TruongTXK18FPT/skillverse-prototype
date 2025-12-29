@@ -159,6 +159,8 @@ export interface JobApplicationResponse {
   maxBudget: number;
   isRemote: boolean;
   location: string | null;
+  isHighlighted?: boolean;
+  portfolioSlug?: string; // Added for linking to portfolio
 }
 
 // ==================== HELPER TYPES ====================

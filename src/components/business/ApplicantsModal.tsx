@@ -27,16 +27,19 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [processingIds, setProcessingIds] = useState<Set<number>>(new Set());
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
-    fetchApplicants();
-  }, [jobId, refreshTrigger]);
+    fetchApplicants(page);
+  }, [jobId, refreshTrigger, page]);
 
-  const fetchApplicants = async () => {
+  const fetchApplicants = async (pageNumber: number) => {
     setIsLoading(true);
     try {
-      const data = await jobService.getJobApplicants(jobId);
-      setApplications(data);
+      const result = await jobService.getJobApplicants(jobId, pageNumber, 3); // 3 items per page
+      setApplications(result.content);
+      setTotalPages(result.totalPages);
     } catch (error) {
       console.error('Error fetching applicants:', error);
       showError('Lỗi Tải Dữ Liệu', 'Không thể tải danh sách ứng viên');
@@ -141,11 +144,23 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
               </thead>
               <tbody>
                 {applications.map(app => (
-                  <tr key={app.id}>
+                  <tr key={app.id} className={app.isHighlighted ? 'am-fleet-row-highlighted' : ''}>
                     <td>
                       <div className="am-fleet-user-info">
-                        <strong>{app.userFullName}</strong>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <strong>{app.userFullName}</strong>
+                        </div>
                         <small>{app.userEmail}</small>
+                        {app.portfolioSlug && (
+                          <a 
+                            href={`/portfolio/${app.portfolioSlug}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="am-fleet-portfolio-link"
+                          >
+                            🔗 Xem Portfolio
+                          </a>
+                        )}
                       </div>
                     </td>
                     <td>{formatDate(app.appliedAt)}</td>
@@ -205,6 +220,54 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
                 ))}
               </tbody>
             </table>
+          )}
+          
+          {totalPages > 1 && (
+            <div className="am-fleet-pagination" style={{
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center', 
+              marginTop: '20px', 
+              gap: '15px',
+              padding: '10px 0',
+              borderTop: '1px solid rgba(45, 212, 191, 0.2)'
+            }}>
+              <button
+                className="am-fleet-pagination-btn"
+                style={{
+                  background: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid #2dd4bf',
+                  color: '#2dd4bf',
+                  padding: '5px 15px',
+                  borderRadius: '4px',
+                  cursor: page === 0 ? 'not-allowed' : 'pointer',
+                  opacity: page === 0 ? 0.5 : 1
+                }}
+                disabled={page === 0}
+                onClick={() => setPage(page - 1)}
+              >
+                &lt; Trước
+              </button>
+              <span style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+                Trang {page + 1} / {totalPages}
+              </span>
+              <button
+                className="am-fleet-pagination-btn"
+                style={{
+                  background: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid #2dd4bf',
+                  color: '#2dd4bf',
+                  padding: '5px 15px',
+                  borderRadius: '4px',
+                  cursor: page >= totalPages - 1 ? 'not-allowed' : 'pointer',
+                  opacity: page >= totalPages - 1 ? 0.5 : 1
+                }}
+                disabled={page >= totalPages - 1}
+                onClick={() => setPage(page + 1)}
+              >
+                Sau &gt;
+              </button>
+            </div>
           )}
         </div>
       </div>

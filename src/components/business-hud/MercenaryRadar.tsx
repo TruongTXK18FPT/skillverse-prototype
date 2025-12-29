@@ -1,25 +1,19 @@
 import React, { useState, useMemo } from 'react';
 import { Radar, Star, Briefcase, DollarSign, User, Crosshair, Search, Filter, ChevronDown } from 'lucide-react';
 import useClickOutside from '../../hooks/useClickOutside';
+import { FreelancerCardDisplay } from '../../data/portfolioDTOs';
 import './fleet-styles.css';
 
-// Redefining interface here to avoid circular dependency or complex imports for now
-// In a real refactor, this should be in a shared types file
-export interface Freelancer {
-  id: string;
-  name: string;
-  skills: string[];
-  rating: number;
-  completedProjects: number;
-  hourlyRate: number;
-  avatar?: string;
-}
-
 interface MercenaryRadarProps {
-  freelancers?: Freelancer[]; // Optional now
+  freelancers?: FreelancerCardDisplay[]; // Optional now
+  pagination?: {
+    page: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+  };
 }
 
-const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers = [] }) => {
+const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers = [], pagination }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSkill, setSelectedSkill] = useState<string>('Tất cả');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -43,6 +37,17 @@ const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers = [] }) => 
       return matchesSearch && matchesSkill;
     });
   }, [freelancers, searchTerm, selectedSkill]);
+
+  const handleViewProfile = (merc: FreelancerCardDisplay) => {
+    const url = merc.customUrlSlug 
+      ? `/portfolio/${merc.customUrlSlug}` 
+      : `/portfolio/profile/${merc.id}`;
+    window.open(url, '_blank');
+  };
+
+  const formatRate = (rate: number) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(rate);
+  };
 
   // If no freelancers provided, show loading or empty state
   if (freelancers.length === 0) {
@@ -135,7 +140,7 @@ const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers = [] }) => 
               <div className="merc-card-stats">
                 <div className="merc-stat-simple">
                   <DollarSign size={16} className="stat-icon-simple" />
-                  <span>${merc.hourlyRate}/giờ</span>
+                  <span>{formatRate(merc.hourlyRate)}/giờ</span>
                 </div>
                 <div className="merc-stat-simple">
                   <Briefcase size={16} className="stat-icon-simple" />
@@ -152,7 +157,7 @@ const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers = [] }) => 
               </div>
 
               <div className="merc-card-actions">
-                <button className="fleet-btn-secondary">Xem Hồ Sơ</button>
+                <button className="fleet-btn-secondary" onClick={() => handleViewProfile(merc)}>Xem Hồ Sơ</button>
                 <button className="fleet-btn-primary-small">
                   <Crosshair size={16} /> Chiêu Mộ
                 </button>
@@ -165,6 +170,28 @@ const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers = [] }) => 
           </div>
         )}
       </div>
+
+      {pagination && pagination.totalPages > 1 && (
+        <div className="fleet-pagination">
+          <button
+            className="fleet-pagination-btn"
+            disabled={pagination.page === 0}
+            onClick={() => pagination.onPageChange(pagination.page - 1)}
+          >
+            &lt; Trước
+          </button>
+          <span className="fleet-pagination-info">
+            Trang {pagination.page + 1} / {pagination.totalPages}
+          </span>
+          <button
+            className="fleet-pagination-btn"
+            disabled={pagination.page >= pagination.totalPages - 1}
+            onClick={() => pagination.onPageChange(pagination.page + 1)}
+          >
+            Sau &gt;
+          </button>
+        </div>
+      )}
     </div>
   );
 };

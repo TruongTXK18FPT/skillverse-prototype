@@ -192,3 +192,23 @@
 
 @keyframes amFadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes amSlideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* Highlighted Row */
+.am-fleet-row-highlighted {
+  background: rgba(251, 191, 36, 0.1); /* Amber 400 with 10% opacity */
+}
+
+/* Portfolio Link */
+.am-fleet-portfolio-link {
+  display: inline-block;
+  margin-top: 4px;
+  color: var(--fleet-cyan, #06b6d4);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.am-fleet-portfolio-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}

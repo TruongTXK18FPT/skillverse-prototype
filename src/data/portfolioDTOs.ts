@@ -208,3 +208,29 @@ export interface CheckExtendedProfileResponse {
   success: boolean;
   hasExtendedProfile: boolean;
 }
+
+export interface CandidateSummaryDTO {
+  userId: number;
+  fullName: string;
+  professionalTitle?: string;
+  avatarUrl?: string;
+  customUrlSlug?: string;
+  topSkills?: string; // JSON string
+  isHighlighted?: boolean;
+  hourlyRate?: number;
+  preferredCurrency?: string;
+  totalProjects?: number;
+}
+
+export interface FreelancerCardDisplay {
+  id: number | string;
+  name: string;
+  skills: string[];
+  rating: number;
+  completedProjects: number;
+  hourlyRate: number;
+  avatar?: string;
+  isHighlighted?: boolean;
+  professionalTitle?: string;
+  customUrlSlug?: string;
+}

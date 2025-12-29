@@ -16,7 +16,7 @@ const FleetStatsBar: React.FC<FleetStatsProps> = ({ activeOps, crewCount, openSl
       </div>
       <div className="fleet-stat-card">
         <span className="fleet-stat-value">{crewCount}</span>
-        <span className="fleet-stat-label">Thành Viên Phi Hành Đoàn</span>
+        <span className="fleet-stat-label">Tổng Số Ứng Viên</span>
       </div>
       <div className="fleet-stat-card">
         <span className="fleet-stat-value">{openSlots}</span>

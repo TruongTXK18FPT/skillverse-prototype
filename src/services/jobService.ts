@@ -196,16 +196,30 @@ class JobService {
    * Get all applicants for a job
    * @requires RECRUITER role (ownership validated)
    */
-  async getJobApplicants(jobId: number): Promise<JobApplicationResponse[]> {
+  async getJobApplicants(jobId: number, page: number = 0, size: number = 3): Promise<{ content: JobApplicationResponse[], totalPages: number, totalElements: number }> {
     try {
       
-      const response = await axiosInstance.get<JobApplicationResponse[]>(
-        `/api/jobs/${jobId}/applicants`
+      const response = await axiosInstance.get<any>(
+        `/api/jobs/${jobId}/applicants?page=${page}&size=${size}`
       );
       
-      return response.data;
+      if (response.data && typeof response.data.content !== 'undefined') {
+        return {
+          content: response.data.content,
+          totalPages: response.data.totalPages,
+          totalElements: response.data.totalElements
+        };
+      }
+
+      // Fallback for array response
+      if (Array.isArray(response.data)) {
+        return { content: response.data, totalPages: 1, totalElements: response.data.length };
+      }
+
+      return { content: [], totalPages: 0, totalElements: 0 };
     } catch (error) {
       this.handleError(error, 'Failed to fetch applicants');
+      return { content: [], totalPages: 0, totalElements: 0 };
     }
   }
 

@@ -63,12 +63,24 @@ const ElevatorLoginPage: React.FC = () => {
         let userMessage = 'Đăng nhập Google thất bại. Vui lòng thử lại.';
 
         if (error instanceof Error) {
-          if (error.message.includes('USER accounts')) {
+          // Xử lý thông báo lỗi cụ thể từ Backend trả về
+          if (error.message.includes('Business/Recruiter accounts must use email/password login')) {
+             userMessage = 'Tài khoản Doanh nghiệp/Nhà tuyển dụng phải đăng nhập bằng Email và Mật khẩu.';
+          } else if (error.message.includes('Only Student and Approved Mentor accounts')) {
+             userMessage = 'Chỉ tài khoản Học viên và Mentor đã được duyệt mới có thể đăng nhập bằng Google.';
+          } else if (error.message.includes('USER accounts')) {
             userMessage = 'Tài khoản này không thể đăng nhập bằng Google.';
           } else if (error.message.includes('not active')) {
-            userMessage = 'Tài khoản chưa được kích hoạt.';
+            userMessage = 'Tài khoản chưa được kích hoạt. Vui lòng liên hệ bộ phận hỗ trợ.';
+          } else if (error.message.includes('Mentor application was rejected')) {
+             userMessage = 'Đơn đăng ký Mentor của bạn đã bị từ chối. Vui lòng kiểm tra email.';
+          } else if (error.message.includes('Mentor account is pending approval')) {
+             userMessage = 'Tài khoản Mentor của bạn đang chờ phê duyệt.';
           } else if (error.message.includes('network') || error.message.includes('timeout')) {
             userMessage = 'Lỗi kết nối. Vui lòng kiểm tra internet.';
+          } else {
+             // Fallback cho các lỗi khác từ Backend (nếu có message chi tiết)
+             userMessage = error.message;
           }
         }
 
@@ -141,7 +153,15 @@ const ElevatorLoginPage: React.FC = () => {
         return { success: false };
       }
 
-      return { success: false, error: errorMessage };
+      // Xử lý các thông báo lỗi cụ thể
+      let displayError = errorMessage;
+      if (errorMessage.includes('Email does not exist')) {
+        displayError = 'Email này chưa được đăng ký trong hệ thống.';
+      } else if (errorMessage.includes('Incorrect email or password')) {
+        displayError = 'Email hoặc mật khẩu không chính xác.';
+      }
+
+      return { success: false, error: displayError };
     } finally {
       setIsLoading(false);
     }

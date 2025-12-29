@@ -8,7 +8,8 @@ import {
   GeneratedCVDTO,
   CVGenerationRequest,
   ApiResponse,
-  CheckExtendedProfileResponse
+  CheckExtendedProfileResponse,
+  CandidateSummaryDTO
 } from '../data/portfolioDTOs';
 
 // Use shared axios instance with automatic environment detection
@@ -477,6 +478,32 @@ export const portfolioService = {
   updateExtendedProfile,
   deleteExtendedProfile,
   
+  // Recruiter - Candidate Search
+  getCandidates: async (page: number = 0, size: number = 8): Promise<{ content: CandidateSummaryDTO[], totalPages: number, totalElements: number }> => {
+    const response = await api.get<any>(`/portfolio/recruiter/candidates?page=${page}&size=${size}`);
+    
+    // Handle Page response structure
+    if (response.data.success && response.data.data && typeof response.data.data.content !== 'undefined') {
+      return {
+        content: response.data.data.content,
+        totalPages: response.data.data.totalPages,
+        totalElements: response.data.data.totalElements
+      };
+    }
+    
+    // Handle direct array response (legacy/fallback)
+    if (Array.isArray(response.data)) {
+      return { content: response.data, totalPages: 1, totalElements: response.data.length };
+    }
+    
+    // Handle standardized ApiResponse with list data
+    if (response.data.success && Array.isArray(response.data.data)) {
+      return { content: response.data.data, totalPages: 1, totalElements: response.data.data.length };
+    }
+
+    throw new Error(response.data.message || 'Failed to fetch candidates');
+  },
+  
   // Projects
   getUserProjects,
   getPublicUserProjects,
@@ -500,7 +527,7 @@ export const portfolioService = {
   getActiveCV,
   getAllCVs,
   setActiveCV,
-  deleteCV, // Added this
+  deleteCV,
 };
 
 export default portfolioService;
