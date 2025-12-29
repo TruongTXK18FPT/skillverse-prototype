@@ -4,7 +4,7 @@ import { Lock, Shield, Eye, EyeOff } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
-import Toast from '../../components/Toast';
+import Toast from '../../components/shared/Toast';
 import './admin-security-page.css';
 
 const AdminSecurityPage = () => {

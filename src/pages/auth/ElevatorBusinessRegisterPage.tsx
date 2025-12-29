@@ -7,7 +7,7 @@ import businessService from '../../services/businessService';
 import { ElevatorAuthLayout, HologramBusinessRegisterForm } from '../../components/elevator';
 import PendingApprovalModal from '../../components/elevator/PendingApprovalModal';
 import { useToast } from '../../hooks/useToast';
-import Toast from '../../components/Toast';
+import Toast from '../../components/shared/Toast';
 import { BusinessRegistrationRequest } from '../../data/userDTOs';
 
 const ElevatorBusinessRegisterPage: React.FC = () => {

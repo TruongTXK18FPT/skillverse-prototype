@@ -1,5 +1,5 @@
 import React from 'react';
-import ExploreMap from '../components/ExploreMap';
+import ExploreMap from '../components/explore/ExploreMap';
 import { useNavigate } from 'react-router-dom';
 
 const ExploreMapPage: React.FC = () => {

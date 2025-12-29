@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Bell, Check, CheckCheck, Info, MessageSquare, CreditCard, Star, AlertCircle, ChevronDown } from 'lucide-react';
-import { notificationService, Notification } from '../services/notificationService';
+import { notificationService, Notification } from '../../services/notificationService';
 import { useNavigate } from 'react-router-dom';
-import '../styles/NotificationDropdown.css';
+import '../../styles/NotificationDropdown.css';
 
 type Props = { inline?: boolean; collapsible?: boolean };
 const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {

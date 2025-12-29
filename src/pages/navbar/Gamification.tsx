@@ -18,7 +18,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import '../../styles/Gamification.css';
-import MeowlGuide from '../../components/MeowlGuide';
+import MeowlGuide from '../../components/meowl/MeowlGuide';
 
 interface User {
   id: string;

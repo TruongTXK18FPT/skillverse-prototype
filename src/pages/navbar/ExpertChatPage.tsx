@@ -11,15 +11,15 @@ import { useAuth } from '../../context/AuthContext';
 import careerChatService from '../../services/careerChatService';
 import { UIMessage, ChatSession, ChatMode, ExpertContext } from '../../types/CareerChat';
 import { useToast } from '../../hooks/useToast';
-import MessageRenderer from '../../components/MessageRenderer';
+import MessageRenderer from '../../components/shared/MessageRenderer';
 import { ThinkingIndicator } from '../../components/chat/ThinkingIndicator';
 import { StreamingMessage } from '../../components/chat/StreamingMessage';
 const ENABLE_TTS = false;
 import { WavRecorder } from '../../shared/wavRecorder';
 import { transcribeAudioViaBackend } from '../../shared/speechToText';
 import { Mic, Square } from 'lucide-react';
-import ExpertModeSelector from '../../components/ExpertModeSelector';
-import avaChat from '../../assets/ava-chat.png';
+import ExpertModeSelector from '../../components/shared/ExpertModeSelector';
+import avaChat from '../../assets/chat/ava-chat.png';
 import '../../styles/ChatHUD.css';
 import '../../styles/VoiceSelector.css';
 

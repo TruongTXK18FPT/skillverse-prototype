@@ -9,7 +9,7 @@ import BriefingRow from '../../components/seminar-hud/BriefingRow';
 import BriefingSidebar from '../../components/seminar-hud/BriefingSidebar';
 import FrequencyTuner from '../../components/seminar-hud/FrequencyTuner';
 import { useNavigate } from 'react-router-dom';
-import MeowGuide from '../../components/MeowlGuide';
+import MeowGuide from '../../components/meowl/MeowlGuide';
 
 interface Seminar {
   id: string;

@@ -1,10 +1,10 @@
 import { Mail, Phone, MapPin, ArrowUp, Users, Sparkles, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import '../styles/Footer.css';
-import { useTheme } from '../context/ThemeContext';
-import { useLanguage } from '../context/LanguageContext';
-import Logo from '../assets/skillverse.png';
-import LogoNoel from '../assets/logoNoel.png';
+import '../../styles/Footer.css';
+import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
+import Logo from '../../assets/brand/skillverse.png';
+import LogoNoel from '../../assets/brand/logoNoel.png';
 
 const Footer = () => {
   const { theme } = useTheme();

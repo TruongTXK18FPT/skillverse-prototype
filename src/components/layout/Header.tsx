@@ -30,19 +30,19 @@ import {
   BadgeQuestionMark,
   ShoppingBag
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
-import walletService from '../services/walletService';
-import userService from '../services/userService';
-import { premiumService } from '../services/premiumService';
-import { notificationService } from '../services/notificationService';
-import { getMyMentorProfile, MentorProfile } from '../services/mentorProfileService';
-import { UserProfileResponse } from '../data/userDTOs';
-import { UserSubscriptionResponse } from '../data/premiumDTOs';
+import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
+import walletService from '../../services/walletService';
+import userService from '../../services/userService';
+import { premiumService } from '../../services/premiumService';
+import { notificationService } from '../../services/notificationService';
+import { getMyMentorProfile, MentorProfile } from '../../services/mentorProfileService';
+import { UserProfileResponse } from '../../data/userDTOs';
+import { UserSubscriptionResponse } from '../../data/premiumDTOs';
 import NotificationDropdown from './NotificationDropdown';
-import Logo from '../assets/skillverse.png';
-import LogoNoel from '../assets/logoNoel.png';
-import '../styles/Header.css';
+import Logo from '../../assets/brand/skillverse.png';
+import LogoNoel from '../../assets/brand/logoNoel.png';
+import '../../styles/Header.css';
 
 const Header: React.FC = () => {
   const { user, logout, isAuthenticated } = useAuth();

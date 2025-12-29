@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Eye, EyeOff, User, Lock, Mail, AlertTriangle } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useElevator } from './ElevatorAuthLayout';
-import Logo from '../../assets/skillverse.png';
+import Logo from '../../assets/brand/skillverse.png';
 import './HologramLoginForm.css';
 
 interface HologramLoginFormProps {

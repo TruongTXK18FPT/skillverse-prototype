@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Lock, Eye, EyeOff, Shield, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
-import Toast from '../../components/Toast';
+import Toast from '../../components/shared/Toast';
 import '../../styles/PasswordPages.css';
 
 const ChangePasswordPage = () => {

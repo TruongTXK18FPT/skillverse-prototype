@@ -6,8 +6,8 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useTheme } from '../context/ThemeContext';
-import '../styles/Certificate.css';
+import { useTheme } from '../../context/ThemeContext';
+import '../../styles/Certificate.css';
 
 interface CertificateData {
   id: number;

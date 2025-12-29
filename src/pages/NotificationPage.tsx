@@ -17,8 +17,7 @@ import {
 } from 'lucide-react';
 import { notificationService, Notification } from '../services/notificationService';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../components/layout/Header';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/NotificationPage.css';
 

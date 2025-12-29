@@ -4,7 +4,7 @@ import walletService from '../../services/walletService';
 import { Availability, getAvailability } from '../../services/availabilityService';
 import { createBookingWithWallet } from '../../services/bookingService';
 import { usePaymentToast } from '../../utils/useToast';
-import Toast from '../Toast';
+import Toast from '../shared/Toast';
 import './uplink-styles.css';
 
 interface BookingModalProps {

@@ -1,8 +1,8 @@
 import React from 'react';
-import '../styles/VoiceSelector.css';
+import '../../styles/VoiceSelector.css';
 import { PlayCircle, Volume2 } from 'lucide-react';
-import { FPT_VOICES, VoiceOption } from '../shared/fptVoices';
-import '../styles/VoiceSelector.css';
+import { FPT_VOICES, VoiceOption } from '../../shared/fptVoices';
+import '../../styles/VoiceSelector.css';
 
 interface VoiceSelectorProps {
   selectedVoice: string;

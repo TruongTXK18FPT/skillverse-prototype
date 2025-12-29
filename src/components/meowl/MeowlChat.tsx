@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { X, Send, ExternalLink, Mic, Square } from 'lucide-react';
-import MeowlKuruLoader from './kuru-loader/MeowlKuruLoader';
-import { useLanguage } from '../context/LanguageContext';
-import { useAuth } from '../context/AuthContext';
-import '../styles/MeowlChat.css';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
+import { useLanguage } from '../../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
+import '../../styles/MeowlChat.css';
 import { guardUserInput, pickFallback } from "./MeowlGuard.ts";
-import axiosInstance from '../services/axiosInstance';
+import axiosInstance from '../../services/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { WavRecorder } from '../shared/wavRecorder';
-import { transcribeAudioViaBackend } from '../shared/speechToText';
+import { WavRecorder } from '../../shared/wavRecorder';
+import { transcribeAudioViaBackend } from '../../shared/speechToText';
 
 interface Message {
   id: string;

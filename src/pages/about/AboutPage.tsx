@@ -7,12 +7,12 @@ import {
   Sparkles, ChevronRight, Github, Linkedin, Globe
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import Logo from '../../assets/skillverse.png';
+import Logo from '../../assets/brand/skillverse.png';
 import EarthImage from '../../assets/award/earth.png';
 import MeowlUser from '../../assets/space-role/meowl-user.png';
 import MeowlMentor from '../../assets/space-role/meowl-mentor.png';
 import MeowlBusiness from '../../assets/space-role/meowl-business.png';
-import MeowlGuide from '../../components/MeowlGuide';
+import MeowlGuide from '../../components/meowl/MeowlGuide';
 import './AboutPage.css';
 
 const AboutPage: React.FC = () => {

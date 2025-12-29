@@ -23,9 +23,9 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
-import Toast from '../../components/Toast';
+import Toast from '../../components/shared/Toast';
 import '../../styles/CoinWallet.css';
-import MeowGuide from '../../components/MeowlGuide';
+import MeowGuide from '../../components/meowl/MeowlGuide';
 
 // TipModal component moved outside of parent component
 interface TipModalProps {

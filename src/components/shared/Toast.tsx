@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { CheckCircle, XCircle, AlertTriangle, Info } from 'lucide-react';
-import '../styles/Toast.css';
+import '../../styles/Toast.css';
 
 export interface ToastProps {
   type: 'success' | 'error' | 'warning' | 'info';

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, GraduationCap, Lock, Mail, Phone, MapPin, FileText, Award, Briefcase, AlertTriangle, Linkedin, Target, Upload, X } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useElevator } from './ElevatorAuthLayout';
-import Logo from '../../assets/skillverse.png';
+import Logo from '../../assets/brand/skillverse.png';
 import './HologramMentorRegisterForm.css';
 
 interface MentorRegisterData {

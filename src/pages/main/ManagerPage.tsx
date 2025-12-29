@@ -3,8 +3,8 @@ import {
   Plus, Edit, Trash2, Eye, Search, Filter, 
   Users, BookOpen, MessageSquare, Briefcase, Star
 } from 'lucide-react';
-import Pagination from '../../components/Pagination';
-import MeowlGuide from '../../components/MeowlGuide';
+import Pagination from '../../components/shared/Pagination';
+import MeowlGuide from '../../components/meowl/MeowlGuide';
 import '../../styles/ManagerPage.css';
 
 interface Course {

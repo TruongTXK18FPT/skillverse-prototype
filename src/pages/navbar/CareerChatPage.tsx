@@ -10,14 +10,14 @@ import { useAuth } from '../../context/AuthContext';
 import careerChatService from '../../services/careerChatService';
 import { UIMessage, ChatSession, ChatMode, ExpertContext } from '../../types/CareerChat';
 import { useToast } from '../../hooks/useToast';
-import MessageRenderer from '../../components/MessageRenderer';
+import MessageRenderer from '../../components/shared/MessageRenderer';
 import { ThinkingIndicator } from '../../components/chat/ThinkingIndicator';
 import { StreamingMessage } from '../../components/chat/StreamingMessage';
 import { WavRecorder } from '../../shared/wavRecorder';
 import { transcribeAudioViaBackend } from '../../shared/speechToText';
 import '../../styles/ChatHUD.css';
 import '../../styles/VoiceSelector.css';
-import aiAvatar from '../../assets/aiChatBot.png';
+import aiAvatar from '../../assets/chat/aiChatBot.png';
 const ENABLE_TTS = false;
 
 const CareerChatPage = () => {

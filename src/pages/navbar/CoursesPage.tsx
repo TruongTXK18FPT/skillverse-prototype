@@ -3,12 +3,12 @@ import { Clock, Users, Star, BookOpen, Award, Play, ChevronDown, Filter, Trendin
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useTheme } from '../../context/ThemeContext';
 import '../../styles/CoursesPageCockpit.css';
-import Pagination from '../../components/Pagination';
+import Pagination from '../../components/shared/Pagination';
 import { useNavigate } from 'react-router-dom';
 import { parsePrice, isFreePrice, listPublishedCourses, Course } from '../../services/courseService';
 import { useAuth } from '../../context/AuthContext';
 import { getUserEnrollments } from '../../services/enrollmentService';
-import MeowlGuide from '../../components/MeowlGuide';
+import MeowlGuide from '../../components/meowl/MeowlGuide';
 import { CourseSummaryDTO } from '../../data/courseDTOs';
 
 type SortOption = 'newest' | 'oldest' | 'price-low' | 'price-high' | 'rating' | 'popular';

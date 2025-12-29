@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getAllMentors, toggleFavoriteMentor, getMyFavoriteMentors } from '../../services/mentorProfileService';
 import { getPublicBookingReviewsByMentor } from '../../services/reviewService';
-import MeowlGuide from '../../components/MeowlGuide';
+import MeowlGuide from '../../components/meowl/MeowlGuide';
 import UplinkHeader from '../../components/mentorship-hud/UplinkHeader';
 import UplinkGrid from '../../components/mentorship-hud/UplinkGrid';
 import MasterProfileCard from '../../components/mentorship-hud/MasterProfileCard';

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import '../../styles/PremiumPageCosmic.css';
-import MeowGuide from '../../components/MeowlGuide';
+import MeowGuide from '../../components/meowl/MeowlGuide';
 import { premiumService } from '../../services/premiumService';
 import { paymentService } from '../../services/paymentService';
 import walletService from '../../services/walletService';

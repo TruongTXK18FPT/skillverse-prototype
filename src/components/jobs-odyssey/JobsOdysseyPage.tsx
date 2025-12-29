@@ -3,7 +3,7 @@ import OdysseyLayout from './OdysseyLayout';
 import FateCard from './FateCard';
 import FilterConsole, { JobFilters } from './FilterConsole';
 import JobDetailsModal from '../job/JobDetailsModal';
-import MeowlGuide from '../MeowlGuide';
+import MeowlGuide from '../meowl/MeowlGuide';
 import jobService from '../../services/jobService';
 import { JobPostingResponse } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import MessageRenderer from '../MessageRenderer'; // Your existing renderer
+import MessageRenderer from '../shared/MessageRenderer'; // Your existing renderer
 
 interface StreamingMessageProps {
   content: string;

@@ -7,8 +7,8 @@ import {
   RoadmapSessionSummary, 
   GenerateRoadmapRequest
 } from '../../types/Roadmap';
-import MeowlGuide from '../../components/MeowlGuide';
-import Toast from '../../components/Toast';
+import MeowlGuide from '../../components/meowl/MeowlGuide';
+import Toast from '../../components/shared/Toast';
 import { useToast } from '../../hooks/useToast';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';

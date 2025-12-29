@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import MeowlKuruLoader from './kuru-loader/MeowlKuruLoader';
+import { useAuth } from '../../context/AuthContext';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;

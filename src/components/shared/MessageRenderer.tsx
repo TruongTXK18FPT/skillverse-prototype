@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight, Brain, ArrowRight, Sparkles } from 'lucide-react';
-import '../styles/MessageRenderer.css';
+import '../../styles/MessageRenderer.css';
 
 interface MessageRendererProps {
   content: string;

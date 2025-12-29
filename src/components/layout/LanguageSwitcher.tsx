@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../../context/LanguageContext';
 import './LanguageSwitcher.css';
 import { Globe } from 'lucide-react';
 

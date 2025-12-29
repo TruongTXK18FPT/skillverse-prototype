@@ -1,6 +1,6 @@
 import React from 'react';
 import CertificateTemplate from '../components/certificate/CertificateTemplate';
-import logoSkillverse from '../assets/LogoProject.svg'; 
+import logoSkillverse from '../assets/brand/LogoProject.svg'; 
 
 const CertificateDemoPage: React.FC = () => {
   const mockData = {

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Lock, Eye, EyeOff, CheckCircle, AlertTriangle } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
-import Logo from '../../assets/skillverse.png';
+import Logo from '../../assets/brand/skillverse.png';
 import './HologramResetPasswordForm.css';
 
 interface LocationState {

@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import MeowlGuide from '../../components/MeowlGuide';
+import MeowlGuide from '../../components/meowl/MeowlGuide';
 import portfolioService from '../../services/portfolioService';
 import {
   UserProfileDTO,

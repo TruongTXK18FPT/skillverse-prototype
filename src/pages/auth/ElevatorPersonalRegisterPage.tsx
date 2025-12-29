@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import authService from '../../services/authService';
 import { ElevatorAuthLayout, HologramPersonalRegisterForm } from '../../components/elevator';
 import { useToast } from '../../hooks/useToast';
-import Toast from '../../components/Toast';
+import Toast from '../../components/shared/Toast';
 import { UserRegistrationRequest } from '../../data/userDTOs';
 
 const ElevatorPersonalRegisterPage: React.FC = () => {

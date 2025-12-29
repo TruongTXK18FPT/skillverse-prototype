@@ -10,16 +10,16 @@ import {
   Facebook, Video, Sparkles, ExternalLink, Rocket,
   Play, Activity, Terminal, Cpu
 } from 'lucide-react';
-import MeowlGuide from '../../components/MeowlGuide';
+import MeowlGuide from '../../components/meowl/MeowlGuide';
 import '../../styles/HomePage.css';
 import '../../styles/HomeAwardV2.css';
 
 // Slider images
-import slide1 from '../../assets/slider-1.webp';
-import slide2 from '../../assets/slider-2.webp';
-import slide3 from '../../assets/slider-3.webp';
-import slide4 from '../../assets/slider-4.webp';
-import slide5 from '../../assets/slider-5.webp';
+import slide1 from '../../assets/sliders/slider-1.webp';
+import slide2 from '../../assets/sliders/slider-2.webp';
+import slide3 from '../../assets/sliders/slider-3.webp';
+import slide4 from '../../assets/sliders/slider-4.webp';
+import slide5 from '../../assets/sliders/slider-5.webp';
 
 // Award images
 import gold1 from '../../assets/award/gold1.png';

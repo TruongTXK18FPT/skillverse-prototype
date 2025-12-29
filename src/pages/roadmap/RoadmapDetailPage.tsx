@@ -10,8 +10,8 @@ import {
 } from '../../types/Roadmap';
 import { useToast } from '../../hooks/useToast';
 import { useAuth } from '../../context/AuthContext';
-import MeowlGuide from '../../components/MeowlGuide';
-import Toast from '../../components/Toast';
+import MeowlGuide from '../../components/meowl/MeowlGuide';
+import Toast from '../../components/shared/Toast';
 import './RoadmapDetailPage.css';
 import '../../styles/RoadmapHUD.css';
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, X, ChevronDown } from 'lucide-react';
-import MeowlKuruLoader from './kuru-loader/MeowlKuruLoader';
-import careerChatService from '../services/careerChatService';
-import { ExpertFieldResponse, RoleInfo } from '../types/CareerChat';
-import '../styles/ExpertModeSelectorTech.css';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
+import careerChatService from '../../services/careerChatService';
+import { ExpertFieldResponse, RoleInfo } from '../../types/CareerChat';
+import '../../styles/ExpertModeSelectorTech.css';
 
 interface ExpertModeSelectorProps {
   isOpen: boolean;

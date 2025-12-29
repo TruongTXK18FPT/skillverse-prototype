@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, Building2, Lock, Mail, Phone, MapPin, FileText, Globe, AlertTriangle, User, Users, Briefcase, Upload, X } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useElevator } from './ElevatorAuthLayout';
-import Logo from '../../assets/skillverse.png';
+import Logo from '../../assets/brand/skillverse.png';
 import './HologramBusinessRegisterForm.css';
 
 interface BusinessRegisterData {

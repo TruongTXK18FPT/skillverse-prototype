@@ -13,7 +13,7 @@ import PilotHeader from '../../components/profile-hud/user/PilotHeader';
 import PilotIdentityForm from '../../components/profile-hud/user/PilotIdentityForm';
 import CompanionPod from '../../components/profile-hud/user/CompanionPod';
 import PilotSkinSelector from '../../components/profile-hud/user/PilotSkinSelector';
-import MeowlGuide from '../../components/MeowlGuide';
+import MeowlGuide from '../../components/meowl/MeowlGuide';
 import '../../components/profile-hud/user/pilot-styles.css';
 import '../../styles/ProfileSecuritySection.css';
 

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import MeowlKuruLoader from './kuru-loader/MeowlKuruLoader';
+import { useAuth } from '../../context/AuthContext';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 
 /**
  * ProfileRouter component

@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, ChevronLeft } from 'lucide-react';
-import { UNIVERSE_ZONES, ZoneConfig } from '../config/exploreMapData';
-import ScannerHotspot from './ScannerHotspot';
-import '../styles/ExploreMap.css';
+import { UNIVERSE_ZONES, ZoneConfig } from '../../config/exploreMapData';
+import ScannerHotspot from '../shared/ScannerHotspot';
+import '../../styles/ExploreMap.css';
 
 // Import sticker assets
-import warriorSticker from '../assets/zone-map/warrior.png';
-import mothershipSticker from '../assets/zone-map/mothership.png';
-import neonMarketSticker from '../assets/zone-map/neon-market.png';
-import vortexSticker from '../assets/zone-map/vortex.png';
-import spaceMapBackground from '../assets/zone-map/space-map.jpg';
+import warriorSticker from '../../assets/zone-map/warrior.png';
+import mothershipSticker from '../../assets/zone-map/mothership.png';
+import neonMarketSticker from '../../assets/zone-map/neon-market.png';
+import vortexSticker from '../../assets/zone-map/vortex.png';
+import spaceMapBackground from '../../assets/zone-map/space-map.jpg';
 
 // Import zone detail backgrounds
-import warriorAcademyDetail from '../assets/zone-map-detail/warrior-academy.png';
-import mothershipDetail from '../assets/zone-map-detail/mothership-inside.png';
-import neonMarketDetail from '../assets/zone-map-detail/neon-market-inside.png';
-import wormholeDetail from '../assets/zone-map-detail/worm-hole.png';
+import warriorAcademyDetail from '../../assets/zone-map-detail/warrior-academy.png';
+import mothershipDetail from '../../assets/zone-map-detail/mothership-inside.png';
+import neonMarketDetail from '../../assets/zone-map-detail/neon-market-inside.png';
+import wormholeDetail from '../../assets/zone-map-detail/worm-hole.png';
 
 interface ExploreMapProps {
   onClose: () => void;

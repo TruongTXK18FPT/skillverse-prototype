@@ -22,8 +22,8 @@ import CancelSubscriptionModal from '../../components/premium/CancelSubscription
 import CancelAutoRenewalModal from '../../components/premium/CancelAutoRenewalModal';
 import EnableAutoRenewalModal from '../../components/premium/EnableAutoRenewalModal';
 import { PremiumInvoice, useInvoice } from '../../components/invoice';
-import Toast from '../../components/Toast';
-import MeowlGuide from '../../components/MeowlGuide';
+import Toast from '../../components/shared/Toast';
+import MeowlGuide from '../../components/meowl/MeowlGuide';
 import './MyWalletCosmic.css';
 
 interface WalletData {

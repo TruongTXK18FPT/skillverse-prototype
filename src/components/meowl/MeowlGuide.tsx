@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { HelpCircle, Bell, BellOff } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
-import { useMeowlSkin } from '../context/MeowlSkinContext';
-import '../styles/MeowlGuide.css';
+import { useLanguage } from '../../context/LanguageContext';
+import { useMeowlSkin } from '../../context/MeowlSkinContext';
+import '../../styles/MeowlGuide.css';
 import guideMessages from './MeowlGuideMsg.json';
 import MeowlChat from './MeowlChat';
 

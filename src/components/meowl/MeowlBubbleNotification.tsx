@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { X, Sparkles, Crown, MapPin, BookOpen, Target, Heart, Shirt, Home, User, Briefcase, Users, Trophy, Wallet, GraduationCap, MessageCircle, Compass, Info, CreditCard, Zap, Gift, Star } from 'lucide-react';
-import { useMeowlSkin } from '../context/MeowlSkinContext';
-import { useAuth } from '../context/AuthContext';
-import { useLanguage } from '../context/LanguageContext';
-import { premiumService } from '../services/premiumService';
-import '../styles/MeowlBubbleNotification.css';
+import { useMeowlSkin } from '../../context/MeowlSkinContext';
+import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { premiumService } from '../../services/premiumService';
+import '../../styles/MeowlBubbleNotification.css';
 
 interface BubbleMessage {
   id: string;

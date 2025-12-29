@@ -1,7 +1,7 @@
 import React from 'react';
 import { ElevatorAuthLayout, HologramResetPasswordForm } from '../../components/elevator';
 import { useToast } from '../../hooks/useToast';
-import Toast from '../../components/Toast';
+import Toast from '../../components/shared/Toast';
 
 const ResetPasswordPage: React.FC = () => {
   const { toast, isVisible, hideToast } = useToast();

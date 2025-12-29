@@ -7,7 +7,7 @@ import mentorService from '../../services/mentorService';
 import { ElevatorAuthLayout, HologramMentorRegisterForm } from '../../components/elevator';
 import PendingApprovalModal from '../../components/elevator/PendingApprovalModal';
 import { useToast } from '../../hooks/useToast';
-import Toast from '../../components/Toast';
+import Toast from '../../components/shared/Toast';
 import { MentorRegistrationRequest } from '../../data/userDTOs';
 
 const ElevatorMentorRegisterPage: React.FC = () => {

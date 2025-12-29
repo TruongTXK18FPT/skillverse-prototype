@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
 import MothershipDashboard from '../../components/dashboard-hud/MothershipDashboard';
-import MeowlGuide from '../../components/MeowlGuide';
+import MeowlGuide from '../../components/meowl/MeowlGuide';
 import { getUserEnrollments } from '../../services/enrollmentService';
 import { getCourse } from '../../services/courseService';
 import { getMyUsage, getCycleStats } from '../../services/usageLimitService';

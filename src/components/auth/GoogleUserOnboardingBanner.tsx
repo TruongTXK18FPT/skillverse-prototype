@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, X, ChevronRight } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import '../styles/OnboardingBanner.css';
+import { useAuth } from '../../context/AuthContext';
+import '../../styles/OnboardingBanner.css';
 
 const GoogleUserOnboardingBanner = () => {
   const { user } = useAuth();

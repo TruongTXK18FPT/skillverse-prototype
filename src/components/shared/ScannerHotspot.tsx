@@ -1,6 +1,6 @@
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
-import '../styles/ScannerHotspot.css';
+import '../../styles/ScannerHotspot.css';
 
 interface ScannerHotspotProps {
   x: number;

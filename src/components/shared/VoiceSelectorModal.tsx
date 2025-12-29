@@ -1,6 +1,6 @@
 import React from 'react';
 import VoiceSelector from './VoiceSelector';
-import '../styles/VoiceSelector.css';
+import '../../styles/VoiceSelector.css';
 
 interface VoiceSelectorModalProps {
   open: boolean;

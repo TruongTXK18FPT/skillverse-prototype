@@ -3,7 +3,7 @@ import {
   Crown, Calendar, CreditCard, User, Mail, 
   CheckCircle, Sparkles, FileText, Building2, Phone, ArrowLeft
 } from 'lucide-react';
-import Logo from '../../assets/skillverse.png';
+import Logo from '../../assets/brand/skillverse.png';
 import { useScrollLock } from '../portfolio-hud/useScrollLock';
 import './PremiumInvoice.css';
 

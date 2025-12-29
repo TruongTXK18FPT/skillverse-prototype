@@ -6,7 +6,7 @@ import authService from '../../services/authService';
 import { ElevatorAuthLayout, HologramLoginForm } from '../../components/elevator';
 import PendingApprovalModal from '../../components/elevator/PendingApprovalModal';
 import { useToast } from '../../hooks/useToast';
-import Toast from '../../components/Toast';
+import Toast from '../../components/shared/Toast';
 
 const ElevatorLoginPage: React.FC = () => {
   const { login, isAuthenticated, loading: authLoading } = useAuth();

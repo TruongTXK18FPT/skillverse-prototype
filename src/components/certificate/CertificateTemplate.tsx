@@ -1,6 +1,6 @@
 import React from 'react';
 import './certificate-styles.css';
-import logo from '../../assets/LogoProject.svg'; // Fallback logo
+import logo from '../../assets/brand/LogoProject.svg'; // Fallback logo
 
 interface CertificateProps {
   recipientName: string;
