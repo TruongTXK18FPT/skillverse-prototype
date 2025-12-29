@@ -78,7 +78,6 @@ class AuthService {
       
       // Return redirect URL based on user roles
       return this.getRedirectUrlByRole(authData.user.roles);
-      
     } catch (error: unknown) {
       console.error('Login error:', error);
       const axiosError = error as AxiosError;
@@ -384,6 +383,8 @@ class AuthService {
       return `${baseUrl}/mentor`;
     } else if (roles.includes('RECRUITER')) {
       return `${baseUrl}/business`;
+    } else if (roles.includes('PARENT')) {
+      return `${baseUrl}/parent-dashboard`;
     } else {
       return `${baseUrl}/dashboard`;
     }

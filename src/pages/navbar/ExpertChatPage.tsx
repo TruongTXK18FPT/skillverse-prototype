@@ -445,7 +445,7 @@ const ExpertChatPage = () => {
       const assistantMsg = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: response.aiResponse,
+        content: response.aiResponse || "",
         timestamp: new Date(response.timestamp),
         expertContext: response.expertContext,
         isStreaming: true

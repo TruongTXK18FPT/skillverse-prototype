@@ -89,6 +89,12 @@ const Header: React.FC = () => {
       icon: Map
     },
     {
+      name: 'Lập Kế Hoạch',
+      description: 'Lên lịch học tập và quản lý công việc hiệu quả',
+      path: '/study-planner',
+      icon: Calendar
+    },
+    {
       name: 'Cố Vấn',
       description: 'Kết nối với chuyên gia trong ngành',
       path: '/mentorship',
@@ -124,6 +130,12 @@ const Header: React.FC = () => {
       path: '/gamification',
       icon: Trophy
     },
+    // {
+    //   name: 'Hướng Dẫn',
+    //   description: 'Hướng dẫn sử dụng chi tiết cho mọi vai trò',
+    //   path: '/user-guide',
+    //   icon: BookOpen
+    // },
     {
       name: 'Hội Thảo',
       description: 'Tham gia các hội thảo và sự kiện',
@@ -489,6 +501,12 @@ const Header: React.FC = () => {
                       <span>Doanh Nghiệp</span>
                     </button>
                   )}
+                  {user.roles.includes('PARENT') && (
+                    <button onClick={() => { navigate('/parent-dashboard'); setShowUserMenu(false); }} className="dropdown-item">
+                      <Users size={16} />
+                      <span>Phụ huynh</span>
+                    </button>
+                  )}
                   {user.roles.includes('USER') && (
                     <button onClick={() => navigate('/my-applications')} className="dropdown-item">
                       <Briefcase size={16} />
@@ -582,6 +600,12 @@ const Header: React.FC = () => {
                     <button onClick={handleMentor} className="mobile-menu-item">
                       <BookOpen size={18} />
                       <span>Giảng Viên</span>
+                    </button>
+                  )}
+                  {user.roles.includes('PARENT') && (
+                    <button onClick={() => { navigate('/parent-dashboard'); setIsMobileMenuOpen(false); }} className="mobile-menu-item">
+                      <Users size={18} />
+                      <span>Phụ huynh</span>
                     </button>
                   )}
                   <button onClick={() => { handleProfile(); setIsMobileMenuOpen(false); }} className="mobile-menu-item">

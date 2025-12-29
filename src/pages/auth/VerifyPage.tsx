@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import Toast from '../../components/shared/Toast';
@@ -18,11 +18,13 @@ interface LocationState {
 const VerifyPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const { verifyEmail, resendOtp } = useAuth();
   const { toast, isVisible, hideToast, showSuccess, showError, showWarning } = useToast();
   
   const state = location.state as LocationState;
-  const email = state?.email || '';
+  // Prioritize state, then query params
+  const email = state?.email || searchParams.get('email') || '';
   const fromLogin = state?.fromLogin || false;
   const userType = state?.userType || 'user'; // Default to 'user' if not specified
   const mode = state?.mode || 'register'; // Default to 'register' if not specified

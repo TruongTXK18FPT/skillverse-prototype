@@ -3,6 +3,7 @@ export { default as HologramLoginForm } from './HologramLoginForm';
 export { default as HologramPersonalRegisterForm } from './HologramPersonalRegisterForm';
 export { default as HologramBusinessRegisterForm } from './HologramBusinessRegisterForm';
 export { default as HologramMentorRegisterForm } from './HologramMentorRegisterForm';
+export { default as HologramParentRegisterForm } from './HologramParentRegisterForm';
 export { default as HologramForgotPasswordForm } from './HologramForgotPasswordForm';
 export { default as HologramResetPasswordForm } from './HologramResetPasswordForm';
 export { useElevatorState } from '../../hooks/useElevatorState';

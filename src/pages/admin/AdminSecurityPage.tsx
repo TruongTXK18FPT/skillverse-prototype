@@ -36,7 +36,12 @@ const AdminSecurityPage = () => {
       return;
     }
 
-    const isAdmin = user.roles?.some(r => r.toUpperCase() === 'ADMIN');
+    const ADMIN_ROLES = [
+      'ADMIN', 'USER_ADMIN', 'CONTENT_ADMIN', 'COMMUNITY_ADMIN',
+      'FINANCE_ADMIN', 'PREMIUM_ADMIN', 'AI_ADMIN', 'SUPPORT_ADMIN', 'SYSTEM_ADMIN'
+    ];
+    
+    const isAdmin = user.roles?.some(r => ADMIN_ROLES.includes(r.toUpperCase()));
     if (!isAdmin) {
       navigate('/unauthorized', { replace: true });
       return;

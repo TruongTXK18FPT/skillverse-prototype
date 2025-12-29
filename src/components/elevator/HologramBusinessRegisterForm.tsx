@@ -51,6 +51,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
     taxId: '',
     password: '',
     confirmPassword: '',
+    phone: '',
     contactPersonName: '',
     contactPersonPhone: '',
     contactPersonPosition: '',

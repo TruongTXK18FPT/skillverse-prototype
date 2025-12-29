@@ -317,7 +317,7 @@ const CareerChatPage = () => {
       const assistantMsg = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: response.aiResponse,
+        content: response.aiResponse || "",
         timestamp: new Date(response.timestamp),
         expertContext: response.expertContext,
         isStreaming: true
@@ -356,7 +356,7 @@ const CareerChatPage = () => {
           const assistantMsg = {
             id: (Date.now() + 1).toString(),
             role: 'assistant',
-            content: retryResponse.aiResponse,
+            content: retryResponse.aiResponse || "",
             timestamp: new Date(retryResponse.timestamp),
             expertContext: retryResponse.expertContext,
             isStreaming: true

@@ -7,12 +7,14 @@ interface ProtectedRouteProps {
   children: React.ReactNode;
   allowedRoles?: string[];
   redirectTo?: string;
+  requireAdminGate?: boolean;
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
   allowedRoles = [],
-  redirectTo = '/unauthorized'
+  redirectTo = '/unauthorized',
+  requireAdminGate = false
 }) => {
   const { user, loading } = useAuth();
 
@@ -47,9 +49,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to={redirectTo} replace />;
   }
 
-  const requiresAdmin = allowedRoles.includes('ADMIN');
-  const isAdminUser = user.roles.some(role => role.toUpperCase() === 'ADMIN');
-  if (requiresAdmin && isAdminUser && allowedRoles.length === 1) {
+  if (requireAdminGate) {
     const verified = sessionStorage.getItem('adminKeyVerified') === 'true';
     const expiryStr = sessionStorage.getItem('adminKeyVerifiedExpiry');
     const notExpired = expiryStr ? parseInt(expiryStr, 10) > Date.now() : false;
@@ -84,7 +84,7 @@ export const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }
     'SYSTEM_ADMIN'
   ];
   return (
-    <ProtectedRoute allowedRoles={ADMIN_ROLES}>
+    <ProtectedRoute allowedRoles={ADMIN_ROLES} requireAdminGate={true}>
       {children}
     </ProtectedRoute>
   );
@@ -103,6 +103,15 @@ export const RecruiterRoute: React.FC<{ children: React.ReactNode }> = ({ childr
 export const AuthenticatedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <ProtectedRoute>
+      {children}
+    </ProtectedRoute>
+  );
+};
+
+// Convenience wrapper for PARENT-only routes
+export const ParentRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <ProtectedRoute allowedRoles={['PARENT']}>
       {children}
     </ProtectedRoute>
   );

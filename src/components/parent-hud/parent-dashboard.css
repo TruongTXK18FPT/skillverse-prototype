@@ -1,0 +1,523 @@
+.parent-db-container {
+    padding: 2rem;
+    padding-top: 6rem; /* Account for fixed header */
+    color: #e2e8f0;
+    min-height: 100vh;
+    /* background: radial-gradient(circle at top center, #1e293b 0%, #0f172a 100%); */
+    /* Background is handled by App.tsx galaxy-bg */
+    font-family: 'Inter', sans-serif;
+}
+
+.parent-db-welcome-section {
+    margin-bottom: 2rem;
+}
+
+.parent-db-title {
+    font-size: 2.5rem;
+    background: linear-gradient(45deg, #60a5fa 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.parent-db-subtitle {
+    color: #94a3b8;
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+}
+
+/* Tabs */
+.parent-db-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1px;
+}
+
+.parent-db-tab-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.parent-db-tab-btn:hover {
+    color: #e2e8f0;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px 8px 0 0;
+}
+
+.parent-db-tab-btn.active {
+    color: #60a5fa;
+    border-bottom: 2px solid #60a5fa;
+}
+
+/* Cards & Grid */
+.parent-db-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.parent-db-card {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.parent-db-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: rgba(96, 165, 250, 0.3);
+}
+
+/* Invite Card */
+.parent-db-invite-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #e2e8f0;
+    margin-top: 0;
+}
+
+.parent-db-invite-input-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.parent-db-invite-input-group input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: white;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.parent-db-invite-input-group input:focus {
+    border-color: #60a5fa;
+}
+
+.parent-db-invite-input-group button {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.parent-db-invite-input-group button:hover {
+    background: #2563eb;
+}
+
+/* Student Summary Card */
+.parent-db-student-summary-card {
+    cursor: pointer;
+}
+
+.parent-db-student-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.parent-db-student-header .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    object-fit: cover;
+}
+
+.parent-db-student-header h4 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.25rem;
+    color: #f1f5f9;
+}
+
+.parent-db-status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.parent-db-student-stats-mini {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+}
+
+.parent-db-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.parent-db-progress-bar-mini {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.parent-db-progress-bar-mini .fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    border-radius: 3px;
+}
+
+/* Student Detail View */
+.parent-db-students-detail-view {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 2rem;
+}
+
+.parent-db-student-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.parent-db-selector-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.parent-db-selector-btn:hover {
+    background: rgba(30, 41, 59, 0.6);
+    color: #e2e8f0;
+}
+
+.parent-db-selector-btn.active {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+    color: #60a5fa;
+}
+
+.parent-db-selector-btn img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.parent-db-student-detail-content {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+}
+
+.parent-db-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.parent-db-detail-header h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2rem;
+}
+
+.parent-db-detail-header p {
+    color: #94a3b8;
+    margin: 0 0 1rem 0;
+}
+
+.parent-db-badges {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.parent-db-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.parent-db-badge.premium {
+    background: rgba(234, 179, 8, 0.1);
+    color: #fbbf24;
+    border: 1px solid rgba(234, 179, 8, 0.2);
+}
+
+.parent-db-badge.streak {
+    background: rgba(249, 115, 22, 0.1);
+    color: #fb923c;
+    border: 1px solid rgba(249, 115, 22, 0.2);
+}
+
+.parent-db-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.parent-db-btn-action {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.parent-db-btn-action.primary {
+    background: #3b82f6;
+    color: white;
+    border: none;
+}
+
+.parent-db-btn-action.primary:hover {
+    background: #2563eb;
+}
+
+.parent-db-btn-action.secondary {
+    background: transparent;
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.parent-db-btn-action.secondary:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.parent-db-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.parent-db-stat-box {
+    background: rgba(15, 23, 42, 0.4);
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.parent-db-icon-bg {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+}
+
+.parent-db-icon-bg.blue { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
+.parent-db-icon-bg.green { background: rgba(34, 197, 94, 0.1); color: #4ade80; }
+.parent-db-icon-bg.purple { background: rgba(168, 85, 247, 0.1); color: #c084fc; }
+.parent-db-icon-bg.orange { background: rgba(249, 115, 22, 0.1); color: #fb923c; }
+
+.parent-db-stat-box .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.parent-db-stat-box .label {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+/* Projects Section */
+.parent-db-projects-section h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.parent-db-project-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.parent-db-project-info h4 {
+    margin: 0 0 0.5rem 0;
+}
+
+.parent-db-tech-stack {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.parent-db-tech-stack span {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: #cbd5e1;
+}
+
+.parent-db-project-status {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.parent-db-project-status.completed { color: #4ade80; }
+.parent-db-project-status.in-progress { color: #60a5fa; }
+
+/* Wallet View */
+.parent-db-wallet-view {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.parent-db-wallet-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.parent-db-balance-card {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.parent-db-balance-card.main {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.parent-db-balance-card h3 {
+    margin: 0 0 1rem 0;
+    color: #94a3b8;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.parent-db-balance-card .amount {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(45deg, #fff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.parent-db-btn-deposit {
+    width: 100%;
+    padding: 1rem;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.parent-db-btn-deposit:hover {
+    background: #2563eb;
+}
+
+.parent-db-transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.parent-db-transactions-table th,
+.parent-db-transactions-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.parent-db-transactions-table th {
+    background: rgba(15, 23, 42, 0.6);
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.parent-db-type-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.parent-db-type-badge.deposit { background: rgba(34, 197, 94, 0.1); color: #4ade80; }
+.parent-db-type-badge.purchase { background: rgba(239, 68, 68, 0.1); color: #f87171; }
+
+.parent-db-status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #94a3b8;
+    margin-right: 0.5rem;
+}
+
+.parent-db-status-dot.success { background: #4ade80; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .parent-db-students-detail-view {
+        grid-template-columns: 1fr;
+    }
+    
+    .parent-db-student-selector {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 1rem;
+    }
+    
+    .parent-db-selector-btn {
+        min-width: 150px;
+    }
+}

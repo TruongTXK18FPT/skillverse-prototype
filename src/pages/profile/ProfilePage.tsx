@@ -7,6 +7,7 @@ import { useTheme } from '../../context/ThemeContext';
 import userService from '../../services/userService';
 import { UserProfileResponse } from '../../data/userDTOs';
 import StudentReviews from '../../components/student/StudentReviews';
+import ParentConnectionSection from '../../components/profile/ParentConnectionSection';
 import '../../styles/ProfilePage.css';
 import '../../styles/ProfileSecuritySection.css';
 
@@ -380,6 +381,11 @@ const ProfilePage = () => {
 
           {/* Student Reviews Section */}
           <StudentReviews />
+
+          {/* Parent Connection Section - Show for regular users (students) */}
+          {user?.roles?.some(r => r.toLowerCase() === 'user') && (
+            <ParentConnectionSection />
+          )}
 
           {/* Security Section - ALWAYS SHOW */}
           <div className="profile-section" style={{ border: '2px solid red', padding: '20px' }}>

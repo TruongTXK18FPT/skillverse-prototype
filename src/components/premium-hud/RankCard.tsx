@@ -24,6 +24,7 @@ interface RankCardProps {
   onViewInvoice?: () => void;
   onCancelAutoRenew?: () => void;
   onCancelSubscription?: () => void;
+  targetLabel?: string;
 }
 
 const RankCard: React.FC<RankCardProps> = ({
@@ -40,7 +41,8 @@ const RankCard: React.FC<RankCardProps> = ({
   fallbackAvatarUrl,
   onViewInvoice,
   onCancelAutoRenew,
-  onCancelSubscription
+  onCancelSubscription,
+  targetLabel
 }) => {
   
   const getTierClass = (planType: string) => {
@@ -224,7 +226,7 @@ const RankCard: React.FC<RankCardProps> = ({
                     disabled={processing}
                   >
                     <Wallet size={16} style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} />
-                    THANH TOÁN VÍ
+                    {targetLabel ? `${targetLabel} (VÍ)` : 'THANH TOÁN VÍ'}
                   </button>
                   <button 
                     className="hall-btn"
@@ -232,7 +234,7 @@ const RankCard: React.FC<RankCardProps> = ({
                     disabled={processing}
                     style={{ opacity: 0.8, fontSize: '0.8rem' }}
                   >
-                    CỔNG THANH TOÁN NGOÀI
+                    {targetLabel ? `${targetLabel} (CỔNG KHÁC)` : 'CỔNG THANH TOÁN NGOÀI'}
                   </button>
                 </>
               ) : (
@@ -241,7 +243,7 @@ const RankCard: React.FC<RankCardProps> = ({
                   onClick={() => onUpgrade(plan.name)}
                   disabled={processing}
                 >
-                  {!isAuthenticated ? 'ĐĂNG NHẬP ĐỂ TRUY CẬP' : 'XÁC NHẬN NÂNG CẤP'}
+                  {!isAuthenticated ? 'ĐĂNG NHẬP ĐỂ TRUY CẬP' : (targetLabel || 'XÁC NHẬN NÂNG CẤP')}
                 </button>
               )}
             </div>

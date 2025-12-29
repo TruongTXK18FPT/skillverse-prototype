@@ -127,6 +127,11 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageO
     setIsChatOpen(true); // Open chat dialog
   };
 
+  const handleOpenUserGuide = () => {
+    setIsOpen(false);
+    window.location.href = '/user-guide';
+  };
+
   const handleChatClose = () => {
     setIsChatOpen(false);
   };
@@ -161,6 +166,16 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageO
             }}
           >
             {language === 'en' ? 'Chat with Meowl' : 'Trò chuyện với Meowl'}
+          </button>
+          <button 
+            className={`dialogue-option-floating dialogue-option--chat ${visibleOptions[0] ? 'slide-in' : 'hidden'}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOpenUserGuide();
+            }}
+            style={{ marginTop: '10px' }}
+          >
+            {language === 'en' ? 'User Guide' : 'Hướng dẫn sử dụng'}
           </button>
           <button 
             className={`dialogue-option-floating dialogue-option--continue ${visibleOptions[1] ? 'slide-in' : 'hidden'}`}
@@ -246,6 +261,15 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({ currentPage = 'home', languageO
                     }}
                   >
                     {language === 'en' ? 'Chat with Meowl' : 'Trò chuyện với Meowl'}
+                  </button>
+                  <button 
+                    className={`dialogue-option-floating dialogue-option--chat ${visibleOptions[0] ? 'slide-in' : 'hidden'}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleOpenUserGuide();
+                    }}
+                  >
+                    {language === 'en' ? 'User Guide' : 'Hướng dẫn sử dụng'}
                   </button>
                   <button 
                     className={`dialogue-option-floating dialogue-option--continue ${visibleOptions[1] ? 'slide-in' : 'hidden'}`}

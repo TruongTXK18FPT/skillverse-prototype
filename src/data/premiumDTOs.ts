@@ -20,6 +20,7 @@ export interface CreateSubscriptionRequest {
   successUrl?: string;
   cancelUrl?: string;
   couponCode?: string;
+  targetUserId?: number;
 }
 
 export interface UserSubscriptionResponse {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import '../../styles/PremiumPageCosmic.css';
 import MeowGuide from '../../components/meowl/MeowlGuide';
@@ -16,11 +16,17 @@ import CancelSubscriptionModal from '../../components/premium/CancelSubscription
 import CancelAutoRenewalModal from '../../components/premium/CancelAutoRenewalModal';
 import { PremiumInvoice, useInvoice } from '../../components/invoice';
 import ClearanceLevelPage from '../../components/premium-hud/ClearanceLevelPage';
+import parentService, { StudentDetail } from '../../services/parentService';
 
 const PremiumPageCosmic = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, isAuthenticated } = useAuth();
   const [premiumPlans, setPremiumPlans] = useState<PremiumPlan[]>([]);
+  
+  const [students, setStudents] = useState<StudentDetail[]>([]);
+  const [selectedStudentId, setSelectedStudentId] = useState<number | null>(location.state?.forStudent || null);
+
   const [processing, setProcessing] = useState(false);
   const [currentSub, setCurrentSub] = useState<UserSubscriptionResponse | null>(null);
   const [hasActive, setHasActive] = useState<boolean>(false);
@@ -44,8 +50,26 @@ const PremiumPageCosmic = () => {
       loadCurrentSubscription();
       loadWalletData();
       loadUserProfile();
+      
+      if (user?.primaryRole === 'PARENT') {
+          loadStudents();
+      }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
+
+  const loadStudents = async () => {
+      try {
+          const dashboard = await parentService.getDashboard();
+          setStudents(dashboard.students);
+          // If forStudent was passed, ensure it's valid
+          if (location.state?.forStudent) {
+              const exists = dashboard.students.find(s => s.id === location.state.forStudent);
+              if (exists) setSelectedStudentId(exists.id);
+          }
+      } catch (error) {
+          console.error("Failed to load students", error);
+      }
+  };
 
   const loadPremiumPlans = async () => {
     try {
@@ -94,6 +118,16 @@ const PremiumPageCosmic = () => {
       navigate('/login');
       return;
     }
+
+    if (selectedStudentId) {
+        const s = students.find(st => st.id === selectedStudentId);
+        // Check if student has premium (assuming 'Free' or null means no premium)
+        // Adjust logic based on actual plan names from backend
+        if (s?.progress?.premiumPlan && !s.progress.premiumPlan.toLowerCase().includes('free')) {
+            alert(`Tài khoản ${s.firstName} đã có gói Premium (${s.progress.premiumPlan})!`);
+            return;
+        }
+    }
     
     if (processing) return;
     if (hasActive && currentSub && currentSub.status === 'ACTIVE') {
@@ -119,7 +153,8 @@ const PremiumPageCosmic = () => {
         applyStudentDiscount: isStudentEligible,
         autoRenew: false,
         successUrl,
-        cancelUrl
+        cancelUrl,
+        targetUserId: selectedStudentId || undefined
       };
 
       const subscription = await premiumService.createSubscription(subscriptionRequest);
@@ -175,12 +210,18 @@ const PremiumPageCosmic = () => {
     try {
       await premiumService.purchaseWithWallet(
         selectedPlanForWallet.id,
-        isStudentEligible
+        isStudentEligible,
+        selectedStudentId || undefined
       );
       
       // Reload wallet data after successful purchase
       await loadWalletData();
       await loadCurrentSubscription();
+      
+      // Reload students to refresh their premium status
+      if (user?.primaryRole === 'PARENT') {
+        await loadStudents();
+      }
     } catch (error: any) {
       // Extract error message from response
       const errorMessage = error.response?.data?.message || 
@@ -202,10 +243,59 @@ const PremiumPageCosmic = () => {
 
   return (
     <div className="cosmic-premium-page">
+      {user?.primaryRole === 'PARENT' && (
+        <div style={{
+          background: 'rgba(20, 20, 30, 0.9)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          padding: '1rem',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '1rem',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          backdropFilter: 'blur(10px)'
+        }}>
+          <span style={{ color: '#cbd5e1' }}>Mua gói cho:</span>
+          <select 
+            value={selectedStudentId || ''} 
+            onChange={(e) => setSelectedStudentId(Number(e.target.value) || null)}
+            style={{
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                background: '#1e293b',
+                color: 'white',
+                border: '1px solid #475569',
+                outline: 'none'
+            }}
+          >
+            <option value="">Chính tôi ({user.fullName})</option>
+            {students.map(s => (
+                <option key={s.id} value={s.id}>
+                    Con: {s.firstName} {s.lastName} {s.progress?.premiumPlan && s.progress.premiumPlan !== 'Free' ? '(Đã có Premium)' : ''}
+                </option>
+            ))}
+          </select>
+          {selectedStudentId && (() => {
+              const s = students.find(st => st.id === selectedStudentId);
+              if (s?.progress?.premiumPlan && s.progress.premiumPlan !== 'Free') {
+                  return <span style={{ color: '#ef4444', fontSize: '0.9rem' }}>⚠️ Tài khoản này đã có gói Premium. Không thể nâng cấp thêm.</span>;
+              }
+              return null;
+          })()}
+        </div>
+      )}
       <ClearanceLevelPage 
         premiumPlans={premiumPlans}
         currentSub={currentSub}
-        hasActive={hasActive}
+        hasActive={selectedStudentId 
+            ? (() => {
+                const s = students.find(st => st.id === selectedStudentId);
+                return !!(s?.progress?.premiumPlan && s.progress.premiumPlan !== 'Free');
+            })()
+            : hasActive
+        }
         processing={processing}
         isAuthenticated={isAuthenticated}
         walletData={walletData}
@@ -216,6 +306,7 @@ const PremiumPageCosmic = () => {
         onViewInvoice={handleViewInvoice}
         onCancelAutoRenew={() => setShowCancelAutoRenewalModal(true)}
         onCancelSubscription={() => setShowCancelModal(true)}
+        targetLabel={selectedStudentId ? "MUA CHO CON" : "NÂNG CẤP NGAY"}
       />
 
       {/* MeowGuide positioned at bottom right */}

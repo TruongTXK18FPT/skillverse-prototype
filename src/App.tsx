@@ -4,6 +4,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider } from './context/AuthContext';
 import { MeowlSkinProvider } from './context/MeowlSkinContext';
 import { MentorRoute, AdminRoute, RecruiterRoute } from './components/shared/ProtectedRoute';
+import ParentRoute from './components/shared/ParentRoute';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import HomePage from './pages/main/HomePage';
@@ -28,8 +29,11 @@ import ElevatorLoginPage from './pages/auth/ElevatorLoginPage';
 import ElevatorPersonalRegisterPage from './pages/auth/ElevatorPersonalRegisterPage';
 import ElevatorBusinessRegisterPage from './pages/auth/ElevatorBusinessRegisterPage';
 import ElevatorMentorRegisterPage from './pages/auth/ElevatorMentorRegisterPage';
+import ElevatorParentRegisterPage from './pages/auth/ElevatorParentRegisterPage';
 import ChooseRolePage from './pages/auth/ChooseRolePage';
+import StudentParentRequestPage from './pages/user/StudentParentRequestPage';
 import VerifyPage from './pages/auth/VerifyPage';
+import ParentDashboardPage from './pages/navbar/ParentDashboardPage';
 import AlreadyAuthenticatedWarning from './pages/auth/AlreadyAuthenticatedWarning';
 import ElevatorForgotPasswordPage from './pages/auth/ElevatorForgotPasswordPage';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage';
@@ -76,8 +80,8 @@ import MeowlPetWrapper from './components/meowl-pet/MeowlPetWrapper';
 import ForbiddenTemple from './components/easter-egg/ForbiddenTemple';
 import TicTacToeGame from './components/game/tic-tac-toe/TicTacToeGame';
 import MeowlAdventure from './components/game/meowl-adventure/MeowlAdventure';
-
 import MeowlSkinShopPage from './pages/shop/MeowlSkinShopPage';
+import UserGuidePage from './pages/user-guide/UserGuidePage';
 
 const App = () => {
   return (
@@ -108,11 +112,18 @@ const App = () => {
                   <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/about" element={<AboutPage />} />
+                    <Route path="/user-guide" element={<UserGuidePage />} />
                     <Route path="/notifications" element={<NotificationPage />} />
                     <Route path="/messages" element={<MessengerPage />} />
                     <Route path="/my-bookings" element={<UserBookingsPage />} />
                     <Route path="/explore" element={<ExploreMapPage />} />
                     <Route path="/dashboard" element={<DashboardPage />} />
+                    <Route path="/user/parent-requests" element={<StudentParentRequestPage />} />
+                    <Route path="/parent-dashboard" element={
+                      <ParentRoute>
+                        <ParentDashboardPage />
+                      </ParentRoute>
+                    } />
                     <Route path="/courses" element={<CoursesPage />} />
                     <Route path="/roadmap" element={<AiRoadmapPage />} />
                     <Route path="/roadmap/:id" element={<RoadmapDetailPage />} />
@@ -142,6 +153,7 @@ const App = () => {
                     <Route path="/register" element={<ElevatorPersonalRegisterPage />} />
                     <Route path="/register/business" element={<ElevatorBusinessRegisterPage />} />
                     <Route path="/register/mentor" element={<ElevatorMentorRegisterPage />} />
+                    <Route path="/register/parent" element={<ElevatorParentRegisterPage />} />
                     <Route path="/verify-otp" element={<VerifyPage />} />
                     <Route path="/forgot-password" element={<ElevatorForgotPasswordPage />} />
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
@@ -235,6 +247,7 @@ const fullScreenRoutes = new Set<string>([
   '/register',
   '/register/business',
   '/register/mentor',
+  '/register/parent',
   '/verify-otp',
   '/forgot-password',
   '/reset-password',
@@ -290,6 +303,7 @@ const hideMeowlBubbleRoutes = new Set<string>([
   '/register',
   '/register/business',
   '/register/mentor',
+  '/register/parent',
   '/verify-otp',
   '/forgot-password',
   '/reset-password',

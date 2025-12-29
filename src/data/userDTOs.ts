@@ -4,12 +4,16 @@
 export interface BaseRegistrationRequest {
   email: string;
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
   fullName: string;
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
   phone?: string;
   bio?: string;
   address?: string;
   region?: string;
+  role?: string;
 }
 
 // User Registration Request DTO
@@ -19,6 +23,7 @@ export interface UserRegistrationRequest extends BaseRegistrationRequest {
   gender?: string;
   provinceCode?: string;
   districtCode?: string;
+  childEmail?: string;
 }
 
 // Base Registration Response (shared fields)

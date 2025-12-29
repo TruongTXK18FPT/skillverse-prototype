@@ -46,9 +46,13 @@ export const premiumService = {
     return data;
   },
 
-  async purchaseWithWallet(planId: number, applyStudentDiscount: boolean = false): Promise<UserSubscriptionResponse> {
+  async purchaseWithWallet(planId: number, applyStudentDiscount: boolean = false, targetUserId?: number): Promise<UserSubscriptionResponse> {
+    const params: Record<string, any> = { planId, applyStudentDiscount };
+    if (targetUserId) {
+      params.targetUserId = targetUserId;
+    }
     const { data } = await api.post('/api/premium/purchase-with-wallet', null, {
-      params: { planId, applyStudentDiscount }
+      params
     });
     return data;
   },

@@ -8,13 +8,13 @@ interface StreamingMessageProps {
   isExpertMode?: boolean;
 }
 
-export const StreamingMessage = ({ content, scrollToBottom, onComplete, isExpertMode }: StreamingMessageProps) => {
+export const StreamingMessage = ({ content = "", scrollToBottom, onComplete, isExpertMode }: StreamingMessageProps) => {
   const [displayedContent, setDisplayedContent] = useState("");
   const indexRef = useRef(0);
-  const contentRef = useRef(content);
+  const contentRef = useRef(content || "");
 
   useEffect(() => {
-    contentRef.current = content;
+    contentRef.current = content || "";
   }, [content]);
 
   useEffect(() => {
@@ -30,9 +30,8 @@ export const StreamingMessage = ({ content, scrollToBottom, onComplete, isExpert
       } else {
         // Check if we are done (parent controls unmounting, but we can callback)
         if (onComplete && indexRef.current >= currentTarget.length) {
-           // We don't call onComplete here immediately because content might still be growing
-           // But if the parent stops updating content, we might want to signal.
-           // For now, we just wait.
+           onComplete();
+           clearInterval(interval);
         }
       }
     }, 20);

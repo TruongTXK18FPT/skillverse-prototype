@@ -25,6 +25,7 @@ interface ClearanceLevelPageProps {
   onViewInvoice?: (sub: UserSubscriptionResponse) => void;
   onCancelAutoRenew?: () => void;
   onCancelSubscription?: () => void;
+  targetLabel?: string;
 }
 
 const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
@@ -40,7 +41,8 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
   onWalletPayment,
   onViewInvoice,
   onCancelAutoRenew,
-  onCancelSubscription
+  onCancelSubscription,
+  targetLabel = "NÂNG CẤP"
 }) => {
 
   const getTierFrame = (planType: string) => {
@@ -110,6 +112,7 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
             onViewInvoice={onViewInvoice ? () => currentSub && onViewInvoice(currentSub) : undefined}
             onCancelAutoRenew={onCancelAutoRenew}
             onCancelSubscription={onCancelSubscription}
+            targetLabel={targetLabel}
           />
           ))}
         </div>
