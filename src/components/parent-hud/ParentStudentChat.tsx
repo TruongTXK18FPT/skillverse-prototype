@@ -3,7 +3,7 @@ import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { Send, User } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import axiosInstance from '../../services/axiosInstance';
+import axiosInstance, { API_BASE_URL } from '../../services/axiosInstance';
 import '../../styles/ParentStudentChat.css';
 
 interface ChatMessage {
@@ -36,11 +36,15 @@ const ParentStudentChat: React.FC<ParentStudentChatProps> = ({ studentId, studen
         // Fetch history
         fetchChatHistory();
 
-        // Connect WebSocket
-        const socket = new SockJS('http://localhost:8080/ws');
+        // Connect WebSocket using shared axios base and token
+        const socketUrl = (axiosInstance.defaults.baseURL || API_BASE_URL).replace(/\/api\/?$/, '/ws');
+        const bearerHeader = (axiosInstance.defaults.headers?.Authorization as string) || '';
+        const token = bearerHeader.replace(/^Bearer\s+/i, '') || localStorage.getItem('accessToken') || '';
+        const socket = new SockJS(`${socketUrl}?token=${token}`);
         const client = new Client({
             webSocketFactory: () => socket,
             debug: (str) => console.log(str),
+            connectHeaders: token ? { Authorization: `Bearer ${token}` } : {},
             onConnect: () => {
                 setConnected(true);
                 client.subscribe(`/user/${user.id}/queue/messages`, (message) => {

@@ -177,14 +177,16 @@ const MessengerPage = () => {
     }
 
     if (currentContact?.type === 'FAMILY' && user) {
-        const socketUrl = API_BASE_URL.replace(/\/api\/?$/, '/ws');
-        const token = localStorage.getItem('token');
+        const socketUrl = (axiosInstance.defaults.baseURL || API_BASE_URL).replace(/\/api\/?$/, '/ws');
+        // Prefer axiosInstance Authorization header, fallback to stored accessToken
+        const bearerHeader = (axiosInstance.defaults.headers?.Authorization as string) || '';
+        const token = bearerHeader.replace(/^Bearer\s+/i, '') || localStorage.getItem('accessToken') || '';
         const socket = new SockJS(`${socketUrl}?token=${token}`);
         const client = new Client({
             webSocketFactory: () => socket,
             debug: (str) => console.log(str),
             connectHeaders: {
-                Authorization: `Bearer ${token}`
+                ...(token ? { Authorization: `Bearer ${token}` } : {})
             },
             onConnect: () => {
                 setConnected(true);
