@@ -88,7 +88,7 @@ export interface LearningReportData {
 class ParentService {
   
   async getDashboard(): Promise<ParentDashboardData> {
-    const response = await axiosInstance.get<any>('/api/parents/dashboard');
+    const response = await axiosInstance.get<any>('parents/dashboard');
     
     // Map backend response to frontend structure
     const backendData = response.data;
@@ -128,52 +128,52 @@ class ParentService {
   }
 
   async getSentRequests(): Promise<ParentStudentLinkResponse[]> {
-    const response = await axiosInstance.get<ParentStudentLinkResponse[]>('/api/parents/sent-requests');
+    const response = await axiosInstance.get<ParentStudentLinkResponse[]>('parents/sent-requests');
     return response.data;
   }
 
   async getStudentLinks(): Promise<ParentStudentLinkResponse[]> {
-    const response = await axiosInstance.get<ParentStudentLinkResponse[]>('/api/parents/student-links');
+    const response = await axiosInstance.get<ParentStudentLinkResponse[]>('parents/student-links');
     return response.data;
   }
 
   async updateLinkStatus(linkId: number, status: 'ACTIVE' | 'REJECTED'): Promise<void> {
-    await axiosInstance.put(`/api/parents/link/${linkId}`, { status });
+    await axiosInstance.put(`parents/link/${linkId}`, { status });
   }
 
   async linkStudent(studentEmail: string): Promise<void> {
-    await axiosInstance.post('/api/parents/link', { studentEmail });
+    await axiosInstance.post('parents/link', { studentEmail });
   }
 
   async unlinkStudent(studentId: number): Promise<void> {
-    await axiosInstance.delete(`/api/parents/link/${studentId}`);
+    await axiosInstance.delete(`parents/link/${studentId}`);
   }
 
   async getWalletTransactions(): Promise<Transaction[]> {
-    const response = await axiosInstance.get<Transaction[]>('/api/parents/wallet/transactions');
+    const response = await axiosInstance.get<Transaction[]>('parents/wallet/transactions');
     return response.data;
   }
 
   async topUpWallet(amount: number, paymentMethod: string): Promise<void> {
-    await axiosInstance.post('/api/parents/wallet/top-up', { amount, paymentMethod });
+    await axiosInstance.post('parents/wallet/top-up', { amount, paymentMethod });
   }
 
   async purchasePremium(studentId: number, planId: string): Promise<void> {
-    await axiosInstance.post('/api/parents/purchase/premium', { studentId, planId });
+    await axiosInstance.post('parents/purchase/premium', { studentId, planId });
   }
 
   async getStudentRoadmaps(studentId: number): Promise<RoadmapSessionSummary[]> {
-    const response = await axiosInstance.get<RoadmapSessionSummary[]>(`/api/parents/student/${studentId}/roadmaps`);
+    const response = await axiosInstance.get<RoadmapSessionSummary[]>(`parents/student/${studentId}/roadmaps`);
     return response.data;
   }
 
   async getStudentChatSessions(studentId: number): Promise<ChatSession[]> {
-    const response = await axiosInstance.get<ChatSession[]>(`/api/parents/student/${studentId}/chat-sessions`);
+    const response = await axiosInstance.get<ChatSession[]>(`parents/student/${studentId}/chat-sessions`);
     return response.data;
   }
 
   async getStudentChatSessionDetails(studentId: number, sessionId: number): Promise<ChatMessage[]> {
-    const response = await axiosInstance.get<ChatMessage[]>(`/api/parents/student/${studentId}/chat-sessions/${sessionId}`);
+    const response = await axiosInstance.get<ChatMessage[]>(`parents/student/${studentId}/chat-sessions/${sessionId}`);
     return response.data;
   }
 
@@ -184,7 +184,7 @@ class ParentService {
   async generateLearningReport(studentId: number): Promise<LearningReportData> {
     try {
       const response = await axiosInstance.post<LearningReportData>(
-        `/api/parents/student/${studentId}/learning-report`,
+        `parents/student/${studentId}/learning-report`,
         {},
         { timeout: 120000 } // 2 minute timeout for AI generation
       );
@@ -204,7 +204,7 @@ class ParentService {
    */
   async getLearningReportHistory(studentId: number): Promise<LearningReportData[]> {
     const response = await axiosInstance.get<LearningReportData[]>(
-      `/api/parents/student/${studentId}/learning-reports`
+      `parents/student/${studentId}/learning-reports`
     );
     return response.data;
   }
@@ -215,7 +215,7 @@ class ParentService {
   async getLatestLearningReport(studentId: number): Promise<LearningReportData | null> {
     try {
       const response = await axiosInstance.get<LearningReportData>(
-        `/api/parents/student/${studentId}/learning-reports/latest`
+        `parents/student/${studentId}/learning-reports/latest`
       );
       return response.data;
     } catch (error: any) {

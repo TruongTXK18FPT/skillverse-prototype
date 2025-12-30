@@ -28,12 +28,12 @@ export interface UpdateLinkStatusRequest {
 
 class StudentLinkService {
   async getStudentLinks(): Promise<ParentStudentLinkResponse[]> {
-    const response = await axiosInstance.get<ParentStudentLinkResponse[]>('/api/parents/student-links');
+    const response = await axiosInstance.get<ParentStudentLinkResponse[]>('parents/student-links');
     return response.data;
   }
 
   async updateLinkStatus(linkId: number, status: LinkStatus): Promise<ParentStudentLinkResponse> {
-    const response = await axiosInstance.put<ParentStudentLinkResponse>(`/api/parents/link/${linkId}`, { status });
+    const response = await axiosInstance.put<ParentStudentLinkResponse>(`parents/link/${linkId}`, { status });
     return response.data;
   }
 }
