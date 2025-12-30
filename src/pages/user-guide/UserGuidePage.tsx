@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { 
   GraduationCap, 
   Users, 
@@ -23,14 +23,14 @@ import {
   Building2,
   Crown,
   FileText,
-  Code,
-  Database,
-  Server,
   Globe,
-  Cpu
+  Cpu,
+  Terminal,
+  Rocket
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import './UserGuide.css';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
+import './UserGuideV2.css';
 
 interface GuideFeature {
   title: string;
@@ -52,18 +52,24 @@ interface RoleGuide {
 }
 
 const UserGuidePage: React.FC = () => {
-  const { user, isAuthenticated } = useAuth();
-  const [activeRole, setActiveRole] = useState<'student' | 'parent' | 'mentor' | 'business' | 'guest' | 'proposal'>('guest');
+  const { user, isAuthenticated, loading } = useAuth();
+  const [activeTab, setActiveTab] = useState<'proposal' | 'guide'>('guide');
+  
+  // Determine the initial role based on auth state to prevent flicker
+  const getInitialRole = () => {
+    if (isAuthenticated && user) {
+      if (user.roles.includes('PARENT')) return 'parent';
+      if (user.roles.includes('MENTOR')) return 'mentor';
+      if (user.roles.includes('RECRUITER')) return 'business';
+      return 'student';
+    }
+    return 'guest';
+  };
+
+  const [activeRole, setActiveRole] = useState<'student' | 'parent' | 'mentor' | 'business' | 'guest'>(getInitialRole());
 
   useEffect(() => {
-    if (isAuthenticated && user) {
-      if (user.roles.includes('PARENT')) setActiveRole('parent');
-      else if (user.roles.includes('MENTOR')) setActiveRole('mentor');
-      else if (user.roles.includes('RECRUITER')) setActiveRole('business');
-      else setActiveRole('student');
-    } else {
-      setActiveRole('guest');
-    }
+    setActiveRole(getInitialRole());
   }, [isAuthenticated, user]);
 
   const roles: RoleGuide[] = [
@@ -148,19 +154,7 @@ const UserGuidePage: React.FC = () => {
       icon: <Sparkles />,
       features: [
         {
-          title: 'Bước 1: Đăng Ký Tài Khoản',
-          description: 'Tạo tài khoản Skillverse để truy cập vào hệ sinh thái học tập toàn diện.',
-          icon: <UserPlus />,
-          steps: [
-            'Nhấn vào nút "Đăng Ký" ở góc trên bên phải.',
-            'Điền thông tin cá nhân hoặc đăng nhập nhanh bằng Google.',
-            'Xác thực email để kích hoạt tài khoản.'
-          ],
-          link: '/register',
-          linkText: 'Đăng Ký Ngay'
-        },
-        {
-          title: 'Bước 2: Chọn Vai Trò',
+          title: 'Bước 1: Chọn Vai Trò',
           description: 'Xác định mục tiêu của bạn tại Skillverse.',
           icon: <Users />,
           steps: [
@@ -173,6 +167,17 @@ const UserGuidePage: React.FC = () => {
           linkText: 'Chọn Vai Trò'
         },
         {
+          title: 'Bước 2: Đăng Ký Tài Khoản',
+          description: 'Tạo tài khoản Skillverse để truy cập vào hệ sinh thái học tập toàn diện.',
+          icon: <UserPlus />,
+          steps: [
+            'Nhấn vào nút "Đăng Ký" ở góc trên bên phải.',
+            'Điền thông tin cá nhân của bạn.',
+            'Xác thực email để kích hoạt tài khoản.',
+            'Meowl nhắc bạn nè! Click vào logo để quay lại trang chủ bất cứ lúc nào.'
+          ]
+        },
+        {
           title: 'Bước 3: Bắt Đầu Hành Trình',
           description: 'Sau khi đăng nhập, bạn sẽ được hướng dẫn chi tiết theo vai trò đã chọn.',
           icon: <ArrowRight />,
@@ -180,7 +185,9 @@ const UserGuidePage: React.FC = () => {
             'Truy cập Dashboard cá nhân.',
             'Khám phá các tính năng dành riêng cho bạn.',
             'Kết nối với cộng đồng Skillverse.'
-          ]
+          ],
+          link: '/login',
+          linkText: 'Trải Nghiệm Ngay'
         }
       ]
     },
@@ -401,7 +408,7 @@ const UserGuidePage: React.FC = () => {
             'Chọn các kỹ năng yêu cầu (để khớp với Portfolio học viên).',
             'Quản lý danh sách tin đăng.'
           ],
-          link: '/jobs/create', // Giả định route
+          link: '/jobs/create',
           linkText: 'Đăng Tin'
         },
         {
@@ -414,7 +421,7 @@ const UserGuidePage: React.FC = () => {
             'Mời ứng viên phỏng vấn.',
             'Lưu hồ sơ ứng viên tiềm năng.'
           ],
-          link: '/candidates', // Giả định route
+          link: '/candidates',
           linkText: 'Tìm Ứng Viên'
         }
       ]
@@ -423,7 +430,7 @@ const UserGuidePage: React.FC = () => {
 
   const visibleRoles = (() => {
     if (!isAuthenticated || !user) {
-      return roles;
+      return roles.filter(r => r.id === 'guest');
     }
 
     const userRole: RoleGuide['id'] = user.roles.includes('PARENT') ? 'parent'
@@ -431,267 +438,174 @@ const UserGuidePage: React.FC = () => {
       : user.roles.includes('RECRUITER') ? 'business'
       : 'student';
 
-    return roles.filter(r => r.id === 'proposal' || r.id === userRole);
+    return roles.filter(r => r.id === userRole);
   })();
 
-  const activeData = roles.find(r => r.id === activeRole);
+  const proposalData = roles.find(r => r.id === 'proposal');
+  const activeRoleData = roles.find(r => r.id === activeRole);
+
+  if (loading) {
+    return (
+      <div className="guide-v2-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <MeowlKuruLoader text="ACCESSING MISSION DATA..." size="large" />
+      </div>
+    );
+  }
 
   return (
-    <div className="user-guide-container">
-      <div className="user-guide-background" />
-      
-      <div className="user-guide-content">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+    <div className="guide-v2-container">
+      <div className="guide-v2-content">
+        {/* Header Section */}
+        <motion.header 
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="user-guide-hero"
+          className="guide-v2-header"
         >
-          <h1 className="user-guide-title">Skillverse Guide</h1>
-          <p className="user-guide-subtitle">
+          <h1 className="guide-v2-title">Mission Briefing</h1>
+          <p className="guide-v2-subtitle">
             {isAuthenticated 
-              ? `Chào mừng trở lại, ${user?.fullName || 'User'}. Đây là hướng dẫn dành riêng cho vai trò ${activeData?.title} của bạn.`
-              : 'Hướng dẫn toàn diện để bạn khai phá tối đa tiềm năng của vũ trụ Skillverse. Đăng nhập để xem hướng dẫn chi tiết cho vai trò của bạn.'}
+              ? `Welcome back, Agent ${user?.fullName || 'Unknown'}. Accessing tactical data for your role: ${activeRoleData?.title}.`
+              : 'Welcome to Skillverse Command Center. Please initialize your protocol to explore the ecosystem.'}
           </p>
-          
-          {!isAuthenticated && (
-            <div style={{ marginTop: '2rem' }}>
-              <Link to="/login" className="user-guide-link-btn" style={{ marginRight: '1rem' }}>
-                <LogIn size={18} style={{ marginRight: '0.5rem' }} /> Đăng Nhập
-              </Link>
-              <Link to="/register" className="user-guide-link-btn" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)' }}>
-                <UserPlus size={18} style={{ marginRight: '0.5rem' }} /> Đăng Ký
-              </Link>
-            </div>
-          )}
-        </motion.div>
+        </motion.header>
 
-        {/* Role Tabs */}
-        <div className="user-guide-role-selector">
-            {visibleRoles.map((role, index) => (
-              <motion.div
-                key={role.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`user-guide-role-card ${activeRole === role.id ? 'active' : ''}`}
-                onClick={() => setActiveRole(role.id)}
-                style={{ cursor: 'pointer' }}
-              >
-                <div className="user-guide-role-icon user-guide-float">
-                  {role.icon}
-                </div>
-                <h3 className="user-guide-role-name">{role.title}</h3>
-                <p className="user-guide-role-desc">{role.description}</p>
-              </motion.div>
-            ))}
+        {/* Mission Selector (Tabs) */}
+        <div className="guide-v2-mission-selector">
+          <div 
+            className={`guide-v2-tab ${activeTab === 'proposal' ? 'active' : ''}`}
+            onClick={() => setActiveTab('proposal')}
+          >
+            <span className="guide-v2-tab-label">Project Blueprint</span>
           </div>
+          <div 
+            className={`guide-v2-tab ${activeTab === 'guide' ? 'active' : ''}`}
+            onClick={() => setActiveTab('guide')}
+          >
+            <span className="guide-v2-tab-label">Pilot Protocol</span>
+          </div>
+        </div>
 
         <AnimatePresence mode="wait">
-          {activeRole === 'proposal' ? (
+          {activeTab === 'proposal' ? (
             <motion.div
-              key="proposal-view"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ duration: 0.6 }}
-              className="proposal-container"
+              key="proposal"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.4 }}
+              className="guide-v2-blueprint-box"
             >
-              {/* Hero Section */}
-              <div className="proposal-hero">
-                <h1>Skillverse Ecosystem</h1>
-                <p className="tagline">
-                  Nền tảng hướng nghiệp và phát triển kỹ năng toàn diện dựa trên AI, kết nối Học sinh, Phụ huynh, Mentor và Doanh nghiệp trong một vũ trụ học tập thống nhất.
-                </p>
+              <h2 className="guide-v2-blueprint-header">
+                <Terminal size={32} /> PROJECT MANIFEST
+              </h2>
+              
+              <div className="guide-v2-blueprint-grid">
+                {proposalData?.features.map((feature, idx) => (
+                  <div key={idx} className="guide-v2-blueprint-card">
+                    <span className="guide-v2-blueprint-number">
+                      {(idx + 1).toString().padStart(2, '0')}
+                    </span>
+                    <div style={{ color: 'var(--guide-v2-primary)', marginBottom: '1rem' }}>
+                      {feature.icon}
+                    </div>
+                    <h3>{feature.title}</h3>
+                    <p>{feature.description}</p>
+
+                    {feature.steps && (
+                      <ul className="guide-v2-blueprint-steps">
+                        {feature.steps.map((step, sIdx) => (
+                          <li key={sIdx}>{step}</li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {feature.link && isAuthenticated && (
+                      <Link to={feature.link} className="guide-v2-cta" style={{ marginTop: '1rem' }}>
+                        {feature.linkText || 'ACCESS'} <ArrowRight size={16} />
+                      </Link>
+                    )}
+                  </div>
+                ))}
               </div>
 
-              {/* Problem & Solution */}
-              <div className="proposal-section">
-                <h2 className="proposal-section-title"><Sparkles size={32} /> Tầm Nhìn & Sứ Mệnh</h2>
-                <div className="ecosystem-grid">
-                  <div className="ecosystem-card">
-                    <h3>Vấn Đề</h3>
-                    <p>
-                      Sự mất kết nối giữa đào tạo và nhu cầu thực tế của doanh nghiệp. Học sinh thiếu định hướng, phụ huynh thiếu công cụ giám sát, và doanh nghiệp khó tìm nhân tài phù hợp.
-                    </p>
-                  </div>
-                  <div className="ecosystem-card">
-                    <h3>Giải Pháp</h3>
-                    <p>
-                      Skillverse cung cấp lộ trình học tập cá nhân hóa bằng AI, hệ thống Mentor 1-1, và cổng thông tin việc làm, tạo ra một vòng khép kín từ Học tập &rarr; Thực hành &rarr; Việc làm.
-                    </p>
-                  </div>
-                  <div className="ecosystem-card">
-                    <h3>Giá Trị Cốt Lõi</h3>
-                    <p>
-                      Minh bạch trong đánh giá năng lực. Cá nhân hóa trải nghiệm học tập. Kết nối thực tế với chuyên gia và doanh nghiệp.
-                    </p>
-                  </div>
+              {!isAuthenticated && (
+                <div style={{ marginTop: '3rem', textAlign: 'center' }}>
+                  <Link to="/login" className="guide-v2-cta" style={{ fontSize: '1.2rem', padding: '1rem 3rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Rocket size={24} /> INITIALIZE PROJECT
+                  </Link>
                 </div>
-              </div>
-
-              {/* Core Features */}
-              <div className="proposal-section">
-                <h2 className="proposal-section-title"><Cpu size={32} /> Chức Năng Đột Phá</h2>
-                <div className="ecosystem-grid">
-                  <div className="ecosystem-card">
-                    <div className="user-guide-feature-icon"><Map /></div>
-                    <h3>AI Roadmap Generator</h3>
-                    <p>Tự động tạo lộ trình học tập chi tiết dựa trên mục tiêu nghề nghiệp và trình độ hiện tại của người học.</p>
-                  </div>
-                  <div className="ecosystem-card">
-                    <div className="user-guide-feature-icon"><MessageSquare /></div>
-                    <h3>Expert AI Chat</h3>
-                    <p>Hệ thống tư vấn nghề nghiệp 24/7 với các Persona chuyên gia trong từng lĩnh vực (IT, Marketing, Design...).</p>
-                  </div>
-                  <div className="ecosystem-card">
-                    <div className="user-guide-feature-icon"><LayoutDashboard /></div>
-                    <h3>Parent Dashboard</h3>
-                    <p>Cổng thông tin dành cho phụ huynh để theo dõi tiến độ, quản lý tài chính và đồng hành cùng con cái.</p>
-                  </div>
-                  <div className="ecosystem-card">
-                    <div className="user-guide-feature-icon"><Briefcase /></div>
-                    <h3>Recruitment Portal</h3>
-                    <p>Hệ thống tuyển dụng thông minh, tự động khớp hồ sơ ứng viên (Portfolio) với yêu cầu công việc của doanh nghiệp.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Technology Stack */}
-              <div className="proposal-section">
-                <h2 className="proposal-section-title"><Code size={32} /> Công Nghệ Cốt Lõi</h2>
-                <div className="tech-stack-grid">
-                  <div className="tech-item">
-                    <div className="tech-icon"><Globe /></div>
-                    <h4>Frontend</h4>
-                    <p>React, TypeScript, Vite, Framer Motion, TailwindCSS</p>
-                  </div>
-                  <div className="tech-item">
-                    <div className="tech-icon"><Server /></div>
-                    <h4>Backend</h4>
-                    <p>Java Spring Boot, Microservices, Spring Security, JWT</p>
-                  </div>
-                  <div className="tech-item">
-                    <div className="tech-icon"><Database /></div>
-                    <h4>Database</h4>
-                    <p>PostgreSQL, Redis (Caching), Flyway Migration</p>
-                  </div>
-                  <div className="tech-item">
-                    <div className="tech-icon"><Cpu /></div>
-                    <h4>AI & Cloud</h4>
-                    <p>OpenAI API, Docker, AWS/Azure Deployment</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Business Model */}
-              <div className="proposal-section">
-                <h2 className="proposal-section-title"><Wallet size={32} /> Mô Hình Kinh Doanh</h2>
-                <div className="business-model-container">
-                  <div className="revenue-stream">
-                    <h3>B2C (Business to Consumer)</h3>
-                    <ul className="revenue-list">
-                      <li><strong>Freemium:</strong> Miễn phí tính năng cơ bản.</li>
-                      <li><strong>Subscription:</strong> Gói Premium (Tháng/Năm) cho AI nâng cao và Unlimited Chat.</li>
-                      <li><strong>Virtual Goods:</strong> Bán Skin, Item trang trí cho Meowl Assistant.</li>
-                      <li><strong>Course Sales:</strong> Phí tham gia các khóa học chuyên sâu.</li>
-                    </ul>
-                  </div>
-                  <div className="revenue-stream">
-                    <h3>B2B (Business to Business)</h3>
-                    <ul className="revenue-list">
-                      <li><strong>Recruitment Fee:</strong> Phí đăng tin tuyển dụng và xem hồ sơ ứng viên cao cấp.</li>
-                      <li><strong>Commission:</strong> Phí hoa hồng từ các buổi Booking Mentor thành công (10-20%).</li>
-                      <li><strong>Partnership:</strong> Hợp tác đào tạo với các trung tâm và trường học.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
+              )}
             </motion.div>
-          ) : activeData && (
+          ) : (
             <motion.div
-              key={activeRole}
+              key="guide"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.5 }}
-              className="user-guide-section"
+              transition={{ duration: 0.4 }}
+              className="guide-v2-protocol-container"
             >
-              <div className="user-guide-section-header">
-                <div className="user-guide-feature-icon" style={{ fontSize: '2rem', width: '64px', height: '64px' }}>
-                  {activeData.icon}
-                </div>
-                <div>
-                  <h2 className="user-guide-section-title">
-                    {activeRole === 'guest' ? 'Bắt Đầu Hành Trình' : 
-                     `Hướng Dẫn Cho ${activeData.title}`}
-                  </h2>
-                  <p style={{ color: '#94a3b8' }}>
-                    {activeRole === 'guest' ? 'Làm theo các bước sau để gia nhập Skillverse' : 
-                     'Các tính năng và quy trình làm việc chính'}
-                  </p>
-                </div>
+              {/* Role Navigation */}
+              <div className="guide-v2-role-nav">
+                {visibleRoles.map((role) => (
+                  <button
+                    key={role.id}
+                    className={`guide-v2-role-btn ${activeRole === role.id ? 'active' : ''}`}
+                    onClick={() => setActiveRole(role.id as any)}
+                  >
+                    {role.icon} {role.title.toUpperCase()}
+                  </button>
+                ))}
               </div>
 
-              <div className="user-guide-grid">
-                {activeData.features.map((feature, idx) => (
+              <div className="guide-v2-timeline">
+                {activeRoleData?.features.map((feature, idx) => (
                   <motion.div
                     key={idx}
                     initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.1 + 0.2 }}
-                    className={`user-guide-feature-card ${feature.isPremium ? 'premium' : ''}`}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.1 }}
+                    className={`guide-v2-step-card ${feature.isPremium ? 'premium' : ''}`}
                   >
-                    {feature.isPremium && (
-                      <div className="premium-badge">
-                        <Crown size={12} fill="#ffd700" /> Premium Feature
-                      </div>
-                    )}
-                    <div className="user-guide-feature-icon">
+                    
+                    <div className="guide-v2-step-icon">
                       {feature.icon}
                     </div>
-                    <h4 className="user-guide-feature-title">{feature.title}</h4>
-                    <p className="user-guide-feature-text">{feature.description}</p>
-                    
+
+                    {feature.isPremium && (
+                      <div className="guide-v2-premium-badge">
+                        <Crown size={12} fill="currentColor" /> PRO ACCESS
+                      </div>
+                    )}
+
+                    <h3 className="guide-v2-step-title">{feature.title}</h3>
+                    <p className="guide-v2-step-desc">{feature.description}</p>
+
                     {feature.steps && (
-                      <ul style={{ 
-                        listStyle: 'none', 
-                        padding: 0, 
-                        margin: '0 0 1.5rem 0', 
-                        color: '#cbd5e1',
-                        fontSize: '0.9rem'
-                      }}>
+                      <ul className="guide-v2-protocol-steps">
                         {feature.steps.map((step, sIdx) => (
-                          <li key={sIdx} style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
-                            <span style={{ color: feature.isPremium ? '#ffd700' : '#8b5cf6', marginTop: '4px' }}>•</span>
-                            {step}
-                          </li>
+                          <li key={sIdx}>{step}</li>
                         ))}
                       </ul>
                     )}
 
                     {feature.example && (
-                      <div className="feature-example">
-                        <strong>Ví dụ:</strong>
-                        {feature.example}
+                      <div className="guide-v2-example">
+                        <strong>EXAMPLE:</strong> {feature.example}
                       </div>
                     )}
 
-                    {isAuthenticated && feature.link ? (
-                      <Link to={feature.link} className="user-guide-link-btn">
-                        {feature.linkText || 'Truy Cập'} <ArrowRight size={16} />
-                      </Link>
-                    ) : (
-                      !isAuthenticated && activeRole === 'guest' && feature.link ? (
-                         <Link to={feature.link} className="user-guide-link-btn">
-                          {feature.linkText || 'Truy Cập'} <ArrowRight size={16} />
+                    {feature.link && (
+                      isAuthenticated || activeRole === 'guest' ? (
+                        <Link to={feature.link} className="guide-v2-cta">
+                          {feature.linkText || 'ACCESS MODULE'} <ArrowRight size={16} />
                         </Link>
-                      ) : feature.link ? (
-                        <div className="user-guide-link-btn" style={{ background: 'rgba(255,255,255,0.05)', cursor: 'not-allowed', color: '#64748b' }}>
-                          <Lock size={14} style={{ marginRight: '0.5rem' }} /> Đăng nhập để truy cập
+                      ) : (
+                        <div className="guide-v2-cta guide-v2-cta-secondary" style={{ cursor: 'not-allowed', opacity: 0.6 }}>
+                          <Lock size={16} /> LOGIN REQUIRED
                         </div>
-                      ) : null
+                      )
                     )}
                   </motion.div>
                 ))}

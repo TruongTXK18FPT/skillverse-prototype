@@ -1,0 +1,419 @@
+@font-face {
+  font-family: 'Space Habitat';
+  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Minecraft';
+  src: url('/fonts/minecraft/minecraft.otf') format('opentype');
+}
+
+:root {
+  --guide-v2-primary: #06b6d4;
+  --guide-v2-accent: #f59e0b;
+  --guide-v2-bg: #020617;
+  --guide-v2-card-bg: rgba(15, 23, 42, 0.8);
+  --guide-v2-border: rgba(6, 182, 212, 0.3);
+}
+
+.guide-v2-container {
+  min-height: 100vh;
+  background-color: var(--guide-v2-bg);
+  background-image: 
+    linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  color: #f8fafc;
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.guide-v2-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.guide-v2-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.guide-v2-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.guide-v2-title {
+  font-family: 'Space Habitat', sans-serif;
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(to bottom, #fff, var(--guide-v2-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.5));
+}
+
+.guide-v2-subtitle {
+  font-size: 1.1rem;
+  color: #94a3b8;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Mission Selector (Tabs) */
+.guide-v2-mission-selector {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.guide-v2-tab {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 2.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.guide-v2-tab-label {
+  font-family: 'Space Habitat', sans-serif;
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.guide-v2-tab.active {
+  border-color: var(--guide-v2-primary);
+  background: rgba(6, 182, 212, 0.1);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+.guide-v2-tab.active .guide-v2-tab-label {
+  color: var(--guide-v2-primary);
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+}
+
+.guide-v2-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--guide-v2-primary);
+  box-shadow: 0 0 10px var(--guide-v2-primary);
+}
+
+/* View 1: Project Blueprint */
+.guide-v2-blueprint-box {
+  background: rgba(6, 182, 212, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  position: relative;
+  padding: 3rem;
+  clip-path: polygon(
+    20px 0, 100% 0, 100% calc(100% - 20px), 
+    calc(100% - 20px) 100%, 0 100%, 0 20px
+  );
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+}
+
+.guide-v2-blueprint-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.guide-v2-blueprint-header {
+  font-family: 'Space Habitat', sans-serif;
+  font-size: 2.5rem;
+  color: var(--guide-v2-primary);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.guide-v2-blueprint-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.guide-v2-blueprint-card {
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  padding: 1.5rem;
+  position: relative;
+}
+
+.guide-v2-blueprint-card h3 {
+  font-family: 'Space Habitat', sans-serif;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.guide-v2-blueprint-card p {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+.guide-v2-blueprint-number {
+  font-family: 'Minecraft', monospace;
+  font-size: 1.2rem;
+  color: var(--guide-v2-primary);
+  opacity: 0.5;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+/* View 2: Pilot Protocol */
+.guide-v2-protocol-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.guide-v2-role-nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.guide-v2-role-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Minecraft', monospace;
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+.guide-v2-role-btn.active {
+  background: var(--guide-v2-primary);
+  color: #000;
+  border-color: var(--guide-v2-primary);
+  box-shadow: 0 0 15px var(--guide-v2-primary);
+}
+
+.guide-v2-timeline {
+  border-left: 2px solid rgba(6, 182, 212, 0.2);
+  margin-left: 2rem;
+  padding-left: 3rem;
+  position: relative;
+}
+
+.guide-v2-step-card {
+  margin-bottom: 3rem;
+  background: linear-gradient(90deg, rgba(15, 23, 42, 0.8) 0%, transparent 100%);
+  border-left: 4px solid var(--guide-v2-primary);
+  padding: 2rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.guide-v2-step-card:hover {
+  transform: translateX(10px);
+  background: linear-gradient(90deg, rgba(6, 182, 212, 0.1) 0%, transparent 100%);
+}
+
+.guide-v2-step-card.premium {
+  border-left-color: var(--guide-v2-accent);
+}
+
+.guide-v2-step-icon {
+  position: absolute;
+  left: -4.2rem;
+  top: 1.5rem;
+  width: 3rem;
+  height: 3rem;
+  background: var(--guide-v2-bg);
+  border: 2px solid var(--guide-v2-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--guide-v2-primary);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+  z-index: 2;
+}
+
+.guide-v2-step-card.premium .guide-v2-step-icon {
+  border-color: var(--guide-v2-accent);
+  color: var(--guide-v2-accent);
+}
+
+.guide-v2-step-number {
+  font-family: 'Minecraft', monospace;
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.1);
+  position: absolute;
+  right: 2rem;
+  top: 1.5rem;
+}
+
+.guide-v2-step-title {
+  font-family: 'Space Habitat', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.guide-v2-step-desc {
+  color: #cbd5e1;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.guide-v2-blueprint-steps,
+.guide-v2-protocol-steps {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.guide-v2-blueprint-steps li,
+.guide-v2-protocol-steps li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+.guide-v2-blueprint-steps li::before,
+.guide-v2-protocol-steps li::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: var(--guide-v2-primary);
+  font-family: 'Minecraft', monospace;
+}
+
+.guide-v2-step-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.guide-v2-step-list li {
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+.guide-v2-step-list li::before {
+  content: '>';
+  font-family: 'Minecraft', monospace;
+  color: var(--guide-v2-primary);
+}
+
+.guide-v2-premium-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--guide-v2-accent);
+  color: var(--guide-v2-accent);
+  padding: 0.25rem 0.75rem;
+  font-family: 'Minecraft', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.guide-v2-example {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  border-radius: 4px;
+}
+
+.guide-v2-example strong {
+  color: var(--guide-v2-primary);
+  margin-right: 0.5rem;
+}
+
+.guide-v2-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--guide-v2-primary);
+  color: #000;
+  padding: 0.75rem 1.5rem;
+  font-family: 'Minecraft', monospace;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.guide-v2-cta:hover {
+  background: #fff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.guide-v2-cta-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.guide-v2-cta-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Animations */
+.guide-v2-float {
+  animation: guide-v2-float 3s ease-in-out infinite;
+}
+
+@keyframes guide-v2-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@media (max-width: 768px) {
+  .guide-v2-title { font-size: 2.5rem; }
+  .guide-v2-mission-selector { flex-direction: column; gap: 1rem; }
+  .guide-v2-timeline { margin-left: 1rem; padding-left: 2rem; }
+  .guide-v2-step-icon { left: -3.2rem; width: 2.5rem; height: 2.5rem; }
+}

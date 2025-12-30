@@ -230,7 +230,7 @@ axiosInstance.interceptors.request.use(
               clearAuthTokens();
               if (typeof window !== 'undefined') {
                 const p = window.location.pathname;
-                const pub = p.includes('/login') || p.includes('/register') || p.includes('/verify') || p === '/';
+                const pub = p.includes('/login') || p.includes('/register') || p.includes('/verify') || p === '/' || p.includes('/user-guide');
                 if (!pub) window.location.href = '/login';
               }
               reject(err);
@@ -285,7 +285,8 @@ axiosInstance.interceptors.response.use(
         const isPublicPage = currentPath.includes('/login') || 
                             currentPath.includes('/register') || 
                             currentPath.includes('/verify') ||
-                            currentPath === '/';
+                            currentPath === '/' ||
+                            currentPath.includes('/user-guide');
         
         if (!isPublicPage) {
           window.location.href = '/login';
@@ -327,7 +328,8 @@ axiosInstance.interceptors.response.use(
                             currentPath === '/jobs' ||
                             currentPath === '/premium' ||
                             currentPath === '/portfolio' ||
-                            currentPath.includes('/courses');
+                            currentPath.includes('/courses') ||
+                            currentPath.includes('/user-guide');
         
         if (!isPublicPage) {
           window.location.href = '/login';
@@ -379,7 +381,8 @@ axiosInstance.interceptors.response.use(
         const isPublicPage = currentPath.includes('/login') || 
                             currentPath.includes('/register') || 
                             currentPath.includes('/verify') ||
-                            currentPath === '/';
+                            currentPath === '/' ||
+                            currentPath.includes('/user-guide');
         
         if (!isPublicPage) {
           window.location.href = '/login';
