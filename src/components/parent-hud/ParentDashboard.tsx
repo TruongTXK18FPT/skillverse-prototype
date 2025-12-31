@@ -313,13 +313,15 @@ const ParentDashboard: React.FC = () => {
                                             <div className="parent-v2-avatar-glow" />
                                             <img 
                                                 src={student.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${student.firstName}`} 
-                                                alt={student.firstName} 
+                                                alt={student.displayName || student.firstName} 
                                                 className="avatar" 
                                                 style={{ position: 'relative', zIndex: 1 }}
                                             />
                                         </div>
                                         <div>
-                                            <h4 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--p-text)' }}>{student.firstName} {student.lastName}</h4>
+                                            <h4 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--p-text)' }}>
+                                                {student.displayName || `${student.firstName} ${student.lastName}`}
+                                            </h4>
                                             {student.progress && (
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
                                                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: getStatusColor(student.progress.learningStatus) }} />
@@ -392,7 +394,7 @@ const ParentDashboard: React.FC = () => {
                                         style={{ borderRadius: '12px', overflow: 'hidden', border: selectedStudentId === s.id ? '2px solid var(--p-accent-cyan)' : '1px solid var(--p-card-border)' }}
                                     >
                                         <img src={s.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${s.firstName}`} alt="" />
-                                        <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>{s.firstName}</span>
+                                        <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>{s.displayName || s.firstName}</span>
                                     </button>
                                 ))}
                             </div>
@@ -405,7 +407,9 @@ const ParentDashboard: React.FC = () => {
                                         <div className="parent-v2-glass-card" style={{ marginBottom: '2rem' }}>
                                             <div className="parent-db-detail-header">
                                                 <div className="info">
-                                                    <h2 style={{ fontSize: '2rem', fontWeight: 800 }}>{student.firstName} {student.lastName}</h2>
+                                                    <h2 style={{ fontSize: '2rem', fontWeight: 800 }}>
+                                                        {student.displayName || `${student.firstName} ${student.lastName}`}
+                                                    </h2>
                                                     <p style={{ color: 'var(--p-text-muted)' }}>{student.email}</p>
                                                     <div className="parent-db-badges" style={{ marginTop: '1rem' }}>
                                                         <span className="parent-db-badge premium" style={{ background: 'rgba(245, 158, 11, 0.1)', color: 'var(--p-accent-gold)', border: '1px solid var(--p-accent-gold)' }}>

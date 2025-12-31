@@ -17,6 +17,7 @@ import {
 import parentService, { StudentDetail } from '../../services/parentService';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
 
 interface StudentLearningReportProps {
     student: StudentDetail;
@@ -44,6 +45,7 @@ const StudentLearningReport: React.FC<StudentLearningReportProps> = ({ student, 
     const [report, setReport] = useState<LearningReportData | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [activeSection, setActiveSection] = useState<string>('full');
+    const displayName = student.displayName || `${student.firstName} ${student.lastName}`.trim();
 
     // Load latest report and history when modal opens (don't auto-generate)
     useEffect(() => {
@@ -94,7 +96,7 @@ const StudentLearningReport: React.FC<StudentLearningReportProps> = ({ student, 
             printWindow.document.write(`
                 <html>
                 <head>
-                    <title>Báo Cáo Học Tập - ${student.firstName} ${student.lastName}</title>
+                    <title>Báo Cáo Học Tập - ${displayName}</title>
                     <style>
                         body { font-family: 'Segoe UI', sans-serif; padding: 40px; line-height: 1.8; color: #1e293b; }
                         h1 { color: #1e40af; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; }
@@ -111,7 +113,7 @@ const StudentLearningReport: React.FC<StudentLearningReportProps> = ({ student, 
                 <body>
                     <h1>📊 Báo Cáo Học Tập</h1>
                     <div class="meta">
-                        <strong>Học viên:</strong> ${student.firstName} ${student.lastName}<br>
+                        <strong>Học viên:</strong> ${displayName}<br>
                         <strong>Email:</strong> ${student.email}<br>
                         <strong>Ngày tạo:</strong> ${report.generatedAt && new Date(report.generatedAt).getTime() ? new Date(report.generatedAt).toLocaleDateString('vi-VN', { 
                             weekday: 'long', 
@@ -195,7 +197,7 @@ const StudentLearningReport: React.FC<StudentLearningReportProps> = ({ student, 
                                         BÁO CÁO PHÂN TÍCH HỌC TẬP
                                     </h2>
                                     <p style={{ margin: 0, color: 'var(--p-text-muted)', fontSize: '0.9rem', fontWeight: 600 }}>
-                                        HỌC SINH: {student.firstName} {student.lastName}
+                                        HỌC SINH: {displayName}
                                     </p>
                                 </div>
                             </div>
@@ -299,7 +301,7 @@ const StudentLearningReport: React.FC<StudentLearningReportProps> = ({ student, 
                                         
                                         <div className="markdown-body-v2" style={{ color: 'var(--p-text)', lineHeight: '1.8', fontSize: '1.05rem' }}>
                                             <ReactMarkdown
-                                                remarkPlugins={[remarkBreaks]}
+                                                remarkPlugins={[remarkGfm, remarkBreaks]}
                                                 components={{
                                                     h1: ({children}) => <h1 style={{ color: 'var(--p-text)', borderBottom: '2px solid var(--p-accent-cyan)', paddingBottom: '0.5rem', marginTop: '2rem', fontWeight: 700 }}>{children}</h1>,
                                                     h2: ({children}) => <h2 style={{ color: 'var(--p-accent-cyan)', marginTop: '1.5rem', fontWeight: 600 }}>{children}</h2>,
@@ -308,6 +310,52 @@ const StudentLearningReport: React.FC<StudentLearningReportProps> = ({ student, 
                                                     ul: ({children}) => <ul style={{ marginLeft: '1.5rem', marginBottom: '1rem', listStyleType: 'disc' }}>{children}</ul>,
                                                     li: ({children}) => <li style={{ marginBottom: '0.5rem' }}>{children}</li>,
                                                     strong: ({children}) => <strong style={{ color: 'var(--p-accent-gold)', fontWeight: 700 }}>{children}</strong>,
+                                                    table: ({children}) => (
+                                                        <table style={{
+                                                            width: '100%',
+                                                            borderCollapse: 'collapse',
+                                                            margin: '1rem 0',
+                                                            border: '1px solid var(--p-card-border)',
+                                                            overflow: 'hidden',
+                                                            borderRadius: '8px'
+                                                        }}>
+                                                            {children}
+                                                        </table>
+                                                    ),
+                                                    thead: ({children}) => (
+                                                        <thead style={{ background: 'rgba(6, 182, 212, 0.1)' }}>
+                                                            {children}
+                                                        </thead>
+                                                    ),
+                                                    tbody: ({children}) => <tbody>{children}</tbody>,
+                                                    tr: ({children}) => (
+                                                        <tr style={{ borderBottom: '1px solid var(--p-card-border)' }}>
+                                                            {children}
+                                                        </tr>
+                                                    ),
+                                                    th: ({children}) => (
+                                                        <th style={{
+                                                            textAlign: 'left',
+                                                            padding: '0.75rem',
+                                                            fontWeight: 800,
+                                                            color: 'var(--p-text)',
+                                                            fontSize: '0.95rem',
+                                                            borderRight: '1px solid var(--p-card-border)'
+                                                        }}>
+                                                            {children}
+                                                        </th>
+                                                    ),
+                                                    td: ({children}) => (
+                                                        <td style={{
+                                                            padding: '0.75rem',
+                                                            color: 'var(--p-text)',
+                                                            fontSize: '0.95rem',
+                                                            borderRight: '1px solid var(--p-card-border)',
+                                                            background: 'rgba(148, 163, 184, 0.05)'
+                                                        }}>
+                                                            {children}
+                                                        </td>
+                                                    ),
                                                     blockquote: ({children}) => (
                                                         <blockquote style={{
                                                             borderLeft: '4px solid var(--p-accent-cyan)',

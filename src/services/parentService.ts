@@ -6,6 +6,8 @@ export interface StudentInfo {
   id: number;
   firstName: string;
   lastName: string;
+  fullName?: string;
+  displayName?: string;
   email: string;
   avatarUrl?: string;
 }
@@ -39,6 +41,7 @@ export interface StudentProject {
 }
 
 export interface StudentDetail extends StudentInfo {
+  displayName: string;
   progress: StudentProgress;
   projects: StudentProject[];
   walletBalance: number;
@@ -96,7 +99,9 @@ class ParentService {
     const students: StudentDetail[] = (backendData.students || []).map((s: any) => ({
       id: s.studentInfo.id,
       firstName: s.studentInfo.firstName || 'Unknown',
-      lastName: s.studentInfo.lastName || 'Student',
+      lastName: s.studentInfo.lastName || '',
+      fullName: s.studentInfo.fullName,
+      displayName: buildDisplayName(s.studentInfo),
       email: s.studentInfo.email,
       avatarUrl: s.studentInfo.avatarUrl,
       progress: {
@@ -573,6 +578,17 @@ ${recommendations}
 
     return lines.join('\n');
   }
+}
+
+// Prefer fullName, otherwise combine first/last, then fall back to email prefix
+function buildDisplayName(info: any): string {
+  if (info?.fullName && info.fullName.trim()) return info.fullName.trim();
+  const combined = `${info?.firstName || ''} ${info?.lastName || ''}`.trim();
+  if (combined) return combined;
+  if (info?.email && info.email.includes('@')) {
+    return info.email.split('@')[0];
+  }
+  return 'Học viên';
 }
 
 export default new ParentService();
