@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './parent-dashboard.css';
+import './parent-v2.css';
 import { toast } from 'react-toastify';
 import parentService, { ParentDashboardData } from '../../services/parentService';
-import { RoadmapSessionSummary } from '../../types/Roadmap';
 import { ChatSession, ChatMessage } from '../../types/Chat';
 import walletService from '../../services/walletService';
 import { useAuth } from '../../context/AuthContext';
@@ -11,25 +11,28 @@ import {
     Users, 
     TrendingUp, 
     Clock, 
-    Award, 
-    AlertTriangle, 
     Activity,
     BookOpen,
     Wallet,
     MessageSquare,
-    Briefcase,
-    FileText,
     X,
     Zap,
-    ClipboardList
+    ClipboardList,
+    Plus,
+    Sun,
+    Moon,
+    ChevronRight,
+    Calendar
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import StudentLearningReport from './StudentLearningReport';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
 
 const ParentDashboard: React.FC = () => {
     const { user } = useAuth();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const navigate = useNavigate();
     const [data, setData] = useState<ParentDashboardData | null>(null);
     const [loading, setLoading] = useState(true);
@@ -37,6 +40,7 @@ const ParentDashboard: React.FC = () => {
     const [inviteEmail, setInviteEmail] = useState('');
     const [selectedStudentId, setSelectedStudentId] = useState<number | null>(null);
     const [sentRequests, setSentRequests] = useState<any[]>([]);
+    const [theme, setTheme] = useState<'light' | 'dark'>('dark');
     
     // Deposit Modal State
     const [showDepositModal, setShowDepositModal] = useState(false);
@@ -45,7 +49,7 @@ const ParentDashboard: React.FC = () => {
 
     // Roadmap Modal State
     const [showRoadmapModal, setShowRoadmapModal] = useState(false);
-    const [studentRoadmaps, setStudentRoadmaps] = useState<any[]>([]); // Using any[] for now, should be RoadmapSessionSummary[]
+    const [studentRoadmaps, setStudentRoadmaps] = useState<any[]>([]);
     const [loadingRoadmaps, setLoadingRoadmaps] = useState(false);
 
     // Chat Session Modal State
@@ -59,6 +63,20 @@ const ParentDashboard: React.FC = () => {
     // Learning Report Modal State
     const [showLearningReport, setShowLearningReport] = useState(false);
     const [selectedStudentForReport, setSelectedStudentForReport] = useState<any>(null);
+
+    // Body Scroll Lock
+    useEffect(() => {
+        if (showDepositModal || showRoadmapModal || showChatSessionsModal || showLearningReport) {
+            document.body.classList.add('modal-open');
+        } else {
+            document.body.classList.remove('modal-open');
+        }
+        return () => document.body.classList.remove('modal-open');
+    }, [showDepositModal, showRoadmapModal, showChatSessionsModal, showLearningReport]);
+
+    const toggleTheme = () => {
+        setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+    };
 
     const handleViewLearningReport = (student: any) => {
         setSelectedStudentForReport(student);
@@ -144,8 +162,8 @@ const ParentDashboard: React.FC = () => {
 
         setIsDepositing(true);
         try {
-            const returnUrl = window.location.origin + '/parent/dashboard?payment=success';
-            const cancelUrl = window.location.origin + '/parent/dashboard?payment=cancel';
+            const returnUrl = window.location.origin + '/parent-dashboard?payment=success';
+            const cancelUrl = window.location.origin + '/parent-dashboard?payment=cancel';
             
             const response = await walletService.createDeposit({
                 amount: amount,
@@ -186,10 +204,19 @@ const ParentDashboard: React.FC = () => {
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case 'Good': return '#4ade80';
-            case 'Behind': return '#fb923c';
-            case 'Risk': return '#f87171';
-            default: return '#cbd5e1';
+            case 'Good': return 'var(--p-accent-green)';
+            case 'Behind': return 'var(--p-accent-gold)';
+            case 'Risk': return 'var(--p-accent-red)';
+            default: return 'var(--p-text-muted)';
+        }
+    };
+
+    const getStatusText = (status: string) => {
+        switch (status) {
+            case 'Good': return 'Ổn định';
+            case 'Behind': return 'Cần chú ý';
+            case 'Risk': return 'Cảnh báo';
+            default: return 'Bình thường';
         }
     };
 
@@ -197,48 +224,74 @@ const ParentDashboard: React.FC = () => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
     };
 
-    if (loading) return <div className="parent-db-container"><div className="parent-db-loading">Đang tải dữ liệu...</div></div>;
+    const formatAiResponse = (text: string) => {
+        if (!text) return '';
+        // Remove <thinking>...</thinking> and <suggestions>...</suggestions> tags and their content
+        return text.replace(/<thinking>[\s\S]*?<\/thinking>/g, '').replace(/<suggestions>[\s\S]*?<\/suggestions>/g, '').trim();
+    };
+
+    if (loading) return <div className="parent-v2-container"><div className="parent-db-loading">Đang tải dữ liệu...</div></div>;
 
     return (
-        <div className="parent-db-container">
-            <div className="parent-db-welcome-section">
+        <div className={`parent-v2-container ${theme === 'light' ? 'light-theme' : ''}`}>
+            <div className="parent-v2-grid-bg" />
+            
+            <div className="parent-v2-header">
                 <div style={{display: 'flex', alignItems: 'center', gap: '1.5rem'}}>
-                    {user?.avatarUrl && (
-                        <img 
-                            src={user.avatarUrl} 
-                            alt="Profile" 
-                            style={{
-                                width: 80, 
-                                height: 80, 
-                                borderRadius: '50%', 
-                                border: '3px solid rgba(96, 165, 250, 0.5)',
-                                objectFit: 'cover'
-                            }} 
-                        />
-                    )}
+                    <div className="parent-v2-avatar-wrapper">
+                        <div className="parent-v2-avatar-glow" style={{ borderColor: 'var(--p-accent-gold)' }} />
+                        {user?.avatarUrl ? (
+                            <img 
+                                src={user.avatarUrl} 
+                                alt="Profile" 
+                                style={{
+                                    width: '100%', 
+                                    height: '100%', 
+                                    borderRadius: '50%', 
+                                    objectFit: 'cover',
+                                    position: 'relative',
+                                    zIndex: 1
+                                }} 
+                            />
+                        ) : (
+                            <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: 'var(--p-card-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', zIndex: 1 }}>
+                                <Users size={32} color="var(--p-accent-cyan)" />
+                            </div>
+                        )}
+                    </div>
                     <div>
-                        <h1 className="parent-db-title">Welcome back, {user?.fullName || 'Parent'}!</h1>
-                        <p className="parent-db-subtitle">Đồng hành cùng con trên hành trình tri thức</p>
+                        <h1 className="parent-v2-title">Chào mừng trở lại, {user?.fullName?.split(' ').pop() || 'Phụ huynh'}</h1>
+                        <p className="parent-v2-subtitle">TRUNG TÂM ĐIỀU HÀNH • TRẠNG THÁI: HOẠT ĐỘNG</p>
+                    </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <button className="parent-v2-theme-toggle" onClick={toggleTheme}>
+                        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
+                    <div className="parent-v2-wallet-display">
+                        <Wallet size={20} />
+                        <span>{formatCurrency(data?.parentWalletBalance || 0)}</span>
                     </div>
                 </div>
             </div>
 
-            <div className="parent-db-tabs">
+            <div className="parent-db-tabs" style={{ position: 'relative', zIndex: 1, margin: '0 2rem' }}>
                 <button 
                     className={`parent-db-tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
                     onClick={() => setActiveTab('overview')}
                 >
-                    <Activity size={18} /> Tổng Quan
+                    <Activity size={18} /> Tổng quan
                 </button>
                 <button 
                     className={`parent-db-tab-btn ${activeTab === 'students' ? 'active' : ''}`}
                     onClick={() => setActiveTab('students')}
                 >
-                    <Users size={18} /> Chi Tiết Học Sinh
+                    <Users size={18} /> Chi tiết học sinh
                 </button>
             </div>
 
-            <div className="parent-db-content">
+            <div className="parent-db-content" style={{ position: 'relative', zIndex: 1, padding: '2rem' }}>
                 <AnimatePresence mode="wait">
                     {activeTab === 'overview' && (
                         <motion.div 
@@ -248,56 +301,67 @@ const ParentDashboard: React.FC = () => {
                             exit={{ opacity: 0, y: -20 }}
                             className="parent-db-overview-grid"
                         >
-                            {/* Invite Card */}
-                            <div className="parent-db-card parent-db-invite-card">
-                                <h3><Users size={20} /> Liên Kết Học Sinh Mới</h3>
-                                <p style={{color: '#94a3b8', marginBottom: '1rem'}}>Nhập email của con bạn để gửi lời mời liên kết tài khoản.</p>
-                                <div className="parent-db-invite-input-group">
-                                    <input 
-                                        type="email" 
-                                        placeholder="email.hocsinh@example.com" 
-                                        value={inviteEmail}
-                                        onChange={(e) => setInviteEmail(e.target.value)}
-                                    />
-                                    <button onClick={handleInvite}>Gửi Lời Mời</button>
-                                </div>
-                            </div>
-
                             {/* Student Summary Cards */}
                             {data?.students.map(student => (
-                                <div key={student.id} className="parent-db-card parent-db-student-summary-card" onClick={() => { setSelectedStudentId(student.id); setActiveTab('students'); }}>
+                                <div 
+                                    key={student.id} 
+                                    className={`parent-v2-glass-card parent-v2-student-card status-${student.progress?.learningStatus?.toLowerCase() || 'good'}`} 
+                                    onClick={() => { setSelectedStudentId(student.id); setActiveTab('students'); }}
+                                >
                                     <div className="parent-db-student-header">
-                                        <img 
-                                            src={student.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${student.firstName}`} 
-                                            alt={student.firstName} 
-                                            className="avatar" 
-                                        />
+                                        <div className="parent-v2-avatar-wrapper">
+                                            <div className="parent-v2-avatar-glow" />
+                                            <img 
+                                                src={student.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${student.firstName}`} 
+                                                alt={student.firstName} 
+                                                className="avatar" 
+                                                style={{ position: 'relative', zIndex: 1 }}
+                                            />
+                                        </div>
                                         <div>
-                                            <h4>{student.firstName} {student.lastName}</h4>
+                                            <h4 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--p-text)' }}>{student.firstName} {student.lastName}</h4>
                                             {student.progress && (
-                                                <span className="parent-db-status-badge" style={{ borderColor: getStatusColor(student.progress.learningStatus), color: getStatusColor(student.progress.learningStatus) }}>
-                                                    {student.progress.learningStatus === 'Good' ? 'Đang học tốt' : student.progress.learningStatus === 'Behind' ? 'Cần nhắc nhở' : 'Cần hỗ trợ'}
-                                                </span>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
+                                                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: getStatusColor(student.progress.learningStatus) }} />
+                                                    <span style={{ fontSize: '0.8rem', color: getStatusColor(student.progress.learningStatus), fontWeight: 'bold' }}>
+                                                        {getStatusText(student.progress.learningStatus)}
+                                                    </span>
+                                                </div>
                                             )}
                                         </div>
                                     </div>
                                     {student.progress && (
-                                    <div className="parent-db-student-stats-mini">
+                                    <div className="parent-db-student-stats-mini" style={{ marginTop: '1.5rem' }}>
                                         <div className="parent-db-stat-item">
-                                            <TrendingUp size={16} color="#4facfe" />
-                                            <span>Roadmap: {student.progress.roadmapProgress || 0}%</span>
+                                            <TrendingUp size={16} color="var(--p-accent-cyan)" />
+                                            <span>Lộ trình: {student.progress.roadmapProgress || 0}%</span>
                                         </div>
                                         <div className="parent-db-stat-item">
-                                            <Clock size={16} color="#ffd700" />
-                                            <span>Tuần này: {student.progress.studyTimeWeek || 0}h</span>
+                                            <Clock size={16} color="var(--p-accent-gold)" />
+                                            <span>Học tập: {student.progress.studyTimeWeek || 0}h</span>
                                         </div>
                                     </div>
                                     )}
-                                    <div className="parent-db-progress-bar-mini">
-                                        <div className="fill" style={{ width: `${student.progress?.roadmapProgress || 0}%` }}></div>
+                                    <div className="parent-v2-progress-container">
+                                        <div className="parent-v2-progress-fill" style={{ width: `${student.progress?.roadmapProgress || 0}%` }}></div>
                                     </div>
                                 </div>
                             ))}
+
+                            {/* Invite Card */}
+                            <div className="parent-v2-glass-card parent-v2-add-student-card" onClick={() => {
+                                const email = prompt("Nhập email học sinh để liên kết:");
+                                if (email) {
+                                    setInviteEmail(email);
+                                    handleInvite();
+                                }
+                            }}>
+                                <div style={{ color: 'var(--p-accent-cyan)', marginBottom: '1rem' }}>
+                                    <Plus size={48} />
+                                </div>
+                                <h4 style={{ color: 'var(--p-accent-cyan)', fontWeight: 700 }}>Thêm học sinh</h4>
+                                <p style={{ color: 'var(--p-text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>LIÊN KẾT TÀI KHOẢN MỚI</p>
+                            </div>
                         </motion.div>
                     )}
 
@@ -312,10 +376,10 @@ const ParentDashboard: React.FC = () => {
                             <div className="parent-db-student-selector">
                                 {sentRequests.length > 0 && (
                                     <div style={{ marginBottom: '1rem', padding: '1rem', background: 'rgba(249, 115, 22, 0.1)', borderRadius: '12px', border: '1px solid rgba(249, 115, 22, 0.2)' }}>
-                                        <h4 style={{ color: '#fb923c', margin: '0 0 0.5rem 0', fontSize: '0.9rem' }}>Đang chờ duyệt</h4>
+                                        <h4 style={{ color: 'var(--p-accent-gold)', margin: '0 0 0.5rem 0', fontSize: '0.75rem', fontWeight: 800 }}>ĐANG CHỜ DUYỆT</h4>
                                         {sentRequests.map(req => (
-                                            <div key={req.id} style={{ fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.25rem' }}>
-                                                {req.student?.email || 'Unknown'}
+                                            <div key={req.id} style={{ fontSize: '0.75rem', color: 'var(--p-text-muted)', marginBottom: '0.25rem' }}>
+                                                {req.student?.email || 'Không xác định'}
                                             </div>
                                         ))}
                                     </div>
@@ -325,9 +389,10 @@ const ParentDashboard: React.FC = () => {
                                         key={s.id} 
                                         className={`parent-db-selector-btn ${selectedStudentId === s.id ? 'active' : ''}`}
                                         onClick={() => setSelectedStudentId(s.id)}
+                                        style={{ borderRadius: '12px', overflow: 'hidden', border: selectedStudentId === s.id ? '2px solid var(--p-accent-cyan)' : '1px solid var(--p-card-border)' }}
                                     >
                                         <img src={s.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${s.firstName}`} alt="" />
-                                        {s.firstName}
+                                        <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>{s.firstName}</span>
                                     </button>
                                 ))}
                             </div>
@@ -336,102 +401,132 @@ const ParentDashboard: React.FC = () => {
                                 const student = data.students.find(s => s.id === selectedStudentId);
                                 if (!student) return <div className="parent-db-student-detail-content"><p>Vui lòng chọn học sinh</p></div>;
                                 return (
-                                    <div className="parent-db-student-detail-content">
-                                        <div className="parent-db-detail-header">
-                                            <div className="info">
-                                                <h2>{student.firstName} {student.lastName}</h2>
-                                                <p>{student.email}</p>
-                                                <div className="parent-db-badges">
-                                                    <span className="parent-db-badge premium">
-                                                        {student.progress?.premiumPlan ? `Premium: ${student.progress.premiumPlan}` : 'Free Plan'}
-                                                        {student.progress?.premiumExpiry && <span style={{ fontSize: '0.7em', marginLeft: '0.5rem', opacity: 0.8 }}>
-                                                            (Hết hạn: {new Date(student.progress.premiumExpiry).toLocaleDateString('vi-VN')})
-                                                        </span>}
-                                                    </span>
-                                                    <span className="parent-db-badge streak">
-                                                        🔥 {student.progress?.streakDays || 0} ngày streak
-                                                    </span>
+                                    <div className="parent-db-student-detail-content" style={{ background: 'transparent', padding: 0 }}>
+                                        <div className="parent-v2-glass-card" style={{ marginBottom: '2rem' }}>
+                                            <div className="parent-db-detail-header">
+                                                <div className="info">
+                                                    <h2 style={{ fontSize: '2rem', fontWeight: 800 }}>{student.firstName} {student.lastName}</h2>
+                                                    <p style={{ color: 'var(--p-text-muted)' }}>{student.email}</p>
+                                                    <div className="parent-db-badges" style={{ marginTop: '1rem' }}>
+                                                        <span className="parent-db-badge premium" style={{ background: 'rgba(245, 158, 11, 0.1)', color: 'var(--p-accent-gold)', border: '1px solid var(--p-accent-gold)' }}>
+                                                            {student.progress?.premiumPlan ? `GÓI: ${student.progress.premiumPlan}` : 'GÓI CƠ BẢN'}
+                                                            {student.progress?.premiumExpiry && <span style={{ fontSize: '0.8em', marginLeft: '0.5rem', opacity: 0.8 }}>
+                                                                (Hết hạn: {new Date(student.progress.premiumExpiry).getTime() ? new Date(student.progress.premiumExpiry).toLocaleDateString('vi-VN') : 'N/A'})
+                                                            </span>}
+                                                        </span>
+                                                        <span className="parent-db-badge streak" style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--p-accent-red)', border: '1px solid var(--p-accent-red)' }}>
+                                                             CHUỖI {student.progress?.streakDays || 0} NGÀY
+                                                        </span>
+                                                    </div>
+                                                    <div style={{ marginTop: '1.5rem' }}>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                                            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--p-accent-cyan)' }}>TIẾN ĐỘ HỌC TẬP</span>
+                                                            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--p-accent-cyan)' }}>{student.progress?.roadmapProgress || 0}%</span>
+                                                        </div>
+                                                        <div className="parent-v2-progress-container" style={{ height: '14px' }}>
+                                                            <div className="parent-v2-progress-fill" style={{ width: `${student.progress?.roadmapProgress || 0}%` }}></div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="parent-db-actions">
-                                                <button className="parent-db-btn-action primary" onClick={() => setShowDepositModal(true)}>Nạp Ví Học Tập</button>
-                                                <button className="parent-db-btn-action secondary" onClick={() => navigate('/messages', { state: { openChatWith: student.id, type: 'FAMILY' } })}>Gửi Lời Nhắn</button>
-                                                <button className="parent-db-btn-action" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: 'white' }} onClick={() => handleViewRoadmaps(student.id)}>Xem Roadmap</button>
-                                                <button className="parent-db-btn-action" style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', color: 'white' }} onClick={() => handleViewLearningReport(student)}>
-                                                    <ClipboardList size={16} style={{ marginRight: '4px', verticalAlign: 'text-bottom' }} />
-                                                    Báo Cáo Học Tập
+                                        </div>
+
+                                        <div className="parent-v2-control-panel">
+                                            <div className="parent-v2-zone">
+                                                <div className="parent-v2-zone-label">Khu vực đầu tư</div>
+                                                <button className="parent-v2-btn-gold" onClick={() => setShowDepositModal(true)}>
+                                                    <Wallet size={18} /> Nạp Ví Học Tập
                                                 </button>
-                                                <button className="parent-db-btn-action" style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: 'white' }} onClick={() => navigate('/premium', { state: { forStudent: student.id } })}>Mua Premium/Khóa Học</button>
+                                                <button className="parent-v2-btn-gold" onClick={() => navigate('/premium', { state: { forStudent: student.id } })}>
+                                                    <Zap size={18} /> Mua Premium/Khóa Học
+                                                </button>
+                                            </div>
+
+                                            <div className="parent-v2-zone">
+                                                <div className="parent-v2-zone-label">Khu vực giám sát</div>
+                                                <button className="parent-v2-btn-cyan" onClick={() => handleViewRoadmaps(student.id)}>
+                                                    <BookOpen size={18} /> Xem Lộ Trình
+                                                </button>
+                                                <button className="parent-v2-btn-cyan" onClick={() => handleViewLearningReport(student)}>
+                                                    <ClipboardList size={18} /> Báo Cáo AI
+                                                </button>
+                                                <button className="parent-v2-btn-cyan" onClick={() => navigate('/messages', { state: { openChatWith: student.id, type: 'FAMILY' } })}>
+                                                    <MessageSquare size={18} /> Nhắn Tin
+                                                </button>
                                             </div>
                                         </div>
 
-                                        <div className="parent-db-stats-grid">
-                                            <div className="parent-db-stat-box">
-                                                <div className="parent-db-icon-bg blue"><BookOpen size={24} /></div>
-                                                <div className="value">{student.progress?.totalRoadmaps || 0}</div>
-                                                <div className="label">Roadmaps đã tạo</div>
+                                        <div className="parent-v2-stats-grid">
+                                            <div className="parent-v2-stat-cell">
+                                                <div className="parent-v2-stat-number">{student.progress?.totalRoadmaps || 0}</div>
+                                                <div className="parent-v2-stat-label">Lộ trình</div>
                                             </div>
-                                            <div className="parent-db-stat-box" onClick={() => handleViewChatSessions(student.id)} style={{ cursor: 'pointer' }}>
-                                                <div className="parent-db-icon-bg green"><MessageSquare size={24} /></div>
-                                                <div className="value">{student.progress?.chatSessionsCount || 0}</div>
-                                                <div className="label">Phiên Chat AI (Xem chi tiết)</div>
+                                            <div className="parent-v2-stat-cell" onClick={() => handleViewChatSessions(student.id)} style={{ cursor: 'pointer' }}>
+                                                <div className="parent-v2-stat-number">{student.progress?.chatSessionsCount || 0}</div>
+                                                <div className="parent-v2-stat-label">Phiên AI</div>
                                             </div>
-                                            <div className="parent-db-stat-box">
-                                                <div className="parent-db-icon-bg purple"><Briefcase size={24} /></div>
-                                                <div className="value">{student.progress?.completedJobs || 0}</div>
-                                                <div className="label">Công việc hoàn thành</div>
+                                            <div className="parent-v2-stat-cell">
+                                                <div className="parent-v2-stat-number">{student.progress?.completedJobs || 0}</div>
+                                                <div className="parent-v2-stat-label">Việc làm</div>
                                             </div>
-                                            <div className="parent-db-stat-box">
-                                                <div className="parent-db-icon-bg orange"><FileText size={24} /></div>
-                                                <div className="value">{student.progress?.portfolioCreated ? 'Đã tạo' : 'Chưa có'}</div>
-                                                <div className="label">Portfolio</div>
+                                            <div className="parent-v2-stat-cell">
+                                                <div className="parent-v2-stat-number" style={{ fontSize: '1.5rem' }}>{student.progress?.portfolioCreated ? 'ĐÃ CÓ' : 'CHƯA CÓ'}</div>
+                                                <div className="parent-v2-stat-label">Hồ sơ</div>
                                             </div>
                                         </div>
 
-                                        <div className="chart-section" style={{ marginTop: '2rem', background: 'rgba(30, 41, 59, 0.5)', padding: '1.5rem', borderRadius: '16px' }}>
-                                            <h3 style={{ marginBottom: '1rem', color: '#e2e8f0' }}>Thống Kê Thời Gian Học Tập (Phút)</h3>
+                                        <div className="parent-v2-glass-card" style={{ marginTop: '2rem' }}>
+                                            <h3 style={{ marginBottom: '1.5rem', fontWeight: 700 }}>Thời gian học tập (Phút)</h3>
                                             <div style={{ height: 300, width: '100%' }}>
                                                 <ResponsiveContainer width="100%" height="100%">
-                                                    <BarChart data={[
+                                                    <AreaChart data={[
                                                         { name: 'Hôm nay', minutes: student.progress?.studyTimeToday || 0 },
                                                         { name: 'Tuần này', minutes: student.progress?.studyTimeWeek || 0 },
                                                         { name: 'Tháng này', minutes: student.progress?.studyTimeMonth || 0 },
                                                     ]}>
-                                                        <XAxis dataKey="name" stroke="#94a3b8" />
-                                                        <YAxis stroke="#94a3b8" />
+                                                        <defs>
+                                                            <linearGradient id="colorMinutes" x1="0" y1="0" x2="0" y2="1">
+                                                                <stop offset="5%" stopColor="var(--p-accent-cyan)" stopOpacity={0.3}/>
+                                                                <stop offset="95%" stopColor="var(--p-accent-cyan)" stopOpacity={0}/>
+                                                            </linearGradient>
+                                                        </defs>
+                                                        <XAxis dataKey="name" stroke="var(--p-text-muted)" tick={{ fontSize: 12 }} />
+                                                        <YAxis stroke="var(--p-text-muted)" tick={{ fontSize: 12 }} />
                                                         <Tooltip 
-                                                            contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px' }}
-                                                            itemStyle={{ color: '#e2e8f0' }}
+                                                            contentStyle={{ backgroundColor: 'var(--p-modal-bg)', border: '1px solid var(--p-card-border)', borderRadius: '12px' }}
+                                                            itemStyle={{ color: 'var(--p-accent-cyan)' }}
+                                                            labelStyle={{ color: 'var(--p-text)', fontWeight: 700, marginBottom: '4px' }}
                                                         />
-                                                        <Bar dataKey="minutes" fill="#60a5fa" radius={[4, 4, 0, 0]}>
-                                                            {
-                                                                [0, 1, 2].map((entry, index) => (
-                                                                    <Cell key={`cell-${index}`} fill={['#60a5fa', '#34d399', '#a78bfa'][index]} />
-                                                                ))
-                                                            }
-                                                        </Bar>
-                                                    </BarChart>
+                                                        <Area 
+                                                            type="monotone" 
+                                                            dataKey="minutes" 
+                                                            stroke="var(--p-accent-cyan)" 
+                                                            fillOpacity={1} 
+                                                            fill="url(#colorMinutes)" 
+                                                            strokeWidth={3}
+                                                        />
+                                                    </AreaChart>
                                                 </ResponsiveContainer>
                                             </div>
                                         </div>
 
-                                        <div className="parent-db-projects-section">
-                                            <h3>Dự Án & Thực Hành</h3>
+                                        <div className="parent-v2-glass-card" style={{ marginTop: '2rem' }}>
+                                            <h3 style={{ fontWeight: 700, marginBottom: '1.5rem' }}>Nhật ký nhiệm vụ: Dự án & Thực hành</h3>
                                             <div className="parent-db-projects-list">
                                                 {student.projects.map(p => (
-                                                    <div key={p.id} className="parent-db-project-item">
+                                                    <div key={p.id} className="parent-db-project-item" style={{ background: 'var(--p-input-bg)', border: '1px solid var(--p-card-border)' }}>
                                                         <div className="parent-db-project-info">
-                                                            <h4>{p.title}</h4>
+                                                            <h4 style={{ fontWeight: 700 }}>{p.title}</h4>
                                                             <div className="parent-db-tech-stack">
-                                                                {p.skills.map(skill => <span key={skill}>{skill}</span>)}
+                                                                {p.skills.map(skill => <span key={skill} style={{ background: 'rgba(6, 182, 212, 0.1)', color: 'var(--p-accent-cyan)', border: '1px solid rgba(6, 182, 212, 0.2)' }}>{skill}</span>)}
                                                             </div>
                                                         </div>
-                                                        <div className={`parent-db-project-status ${p.status.toLowerCase().replace(' ', '-')}`}>
+                                                        <div className={`parent-db-project-status ${p.status.toLowerCase().replace(' ', '-')}`} style={{ fontWeight: 700 }}>
                                                             {p.status} {p.score && `- ${p.score}/100`}
                                                         </div>
                                                     </div>
                                                 ))}
-                                                {student.projects.length === 0 && <p style={{color: '#94a3b8'}}>Chưa có dự án nào.</p>}
+                                                {student.projects.length === 0 && <p style={{color: 'var(--p-text-muted)'}}>CHƯA CÓ NHIỆM VỤ NÀO.</p>}
                                             </div>
                                         </div>
                                     </div>
@@ -445,363 +540,193 @@ const ParentDashboard: React.FC = () => {
             {/* Deposit Modal */}
             <AnimatePresence>
                 {showDepositModal && (
-                    <motion.div 
-                        className="modal-overlay"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setShowDepositModal(false)}
-                        style={{
-                            position: 'fixed',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            background: 'rgba(0,0,0,0.7)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            zIndex: 1000,
-                            backdropFilter: 'blur(5px)'
-                        }}
-                    >
+                    <div className="parent-v2-modal-overlay" onClick={() => setShowDepositModal(false)}>
                         <motion.div 
-                            className="deposit-modal"
+                            className="parent-v2-modal-content"
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            onClick={(e) => e.stopPropagation()}
-                            style={{
-                                background: '#1e293b',
-                                padding: '2rem',
-                                borderRadius: '16px',
-                                width: '100%',
-                                maxWidth: '400px',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
-                            }}
+                            onClick={e => e.stopPropagation()}
                         >
-                            <h2 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#e2e8f0' }}>
-                                <Wallet color="#60a5fa" /> Nạp Tiền Vào Ví
-                            </h2>
+                            <button className="parent-db-modal-close" onClick={() => setShowDepositModal(false)}>
+                                <X size={24} />
+                            </button>
+                            <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', fontWeight: 800, color: 'var(--p-text)' }}>Nạp Ví Học Tập</h2>
+                            <p style={{ textAlign: 'center', color: 'var(--p-text-muted)', marginBottom: '2rem' }}>Số dư sẽ được chuyển trực tiếp vào ví của học sinh.</p>
                             
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', color: '#94a3b8' }}>Số tiền muốn nạp (VNĐ)</label>
-                                <input 
-                                    type="number" 
-                                    value={depositAmount}
-                                    onChange={(e) => setDepositAmount(e.target.value)}
-                                    placeholder="VD: 100000"
-                                    style={{
-                                        width: '100%',
-                                        padding: '1rem',
-                                        borderRadius: '8px',
-                                        background: 'rgba(0,0,0,0.2)',
-                                        border: '1px solid rgba(255,255,255,0.1)',
-                                        color: 'white',
-                                        fontSize: '1.2rem',
-                                        outline: 'none'
-                                    }}
-                                />
-                                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
-                                    {[50000, 100000, 200000, 500000].map(amt => (
-                                        <button 
-                                            key={amt}
-                                            onClick={() => setDepositAmount(amt.toString())}
-                                            style={{
-                                                padding: '0.5rem 0.75rem',
-                                                fontSize: '0.85rem',
-                                                background: 'rgba(255,255,255,0.05)',
-                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                borderRadius: '6px',
-                                                color: '#cbd5e1',
-                                                cursor: 'pointer',
-                                                transition: 'all 0.2s'
-                                            }}
-                                        >
-                                            {formatCurrency(amt)}
-                                        </button>
-                                    ))}
-                                </div>
+                            <div className="parent-v2-chip-grid">
+                                {['50.000', '100.000', '200.000', '500.000'].map(amount => (
+                                    <div 
+                                        key={amount} 
+                                        className={`parent-v2-chip ${depositAmount === amount ? 'active' : ''}`}
+                                        onClick={() => setDepositAmount(amount)}
+                                    >
+                                        {amount} đ
+                                    </div>
+                                ))}
                             </div>
 
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                <button 
-                                    onClick={() => setShowDepositModal(false)}
-                                    style={{
-                                        flex: 1,
-                                        padding: '1rem',
-                                        borderRadius: '8px',
-                                        background: 'transparent',
-                                        border: '1px solid rgba(255,255,255,0.2)',
-                                        color: '#e2e8f0',
-                                        cursor: 'pointer',
-                                        fontWeight: 600
-                                    }}
-                                >
-                                    Hủy
-                                </button>
-                                <button 
-                                    onClick={handleDeposit}
-                                    disabled={isDepositing}
-                                    style={{
-                                        flex: 1,
-                                        padding: '1rem',
-                                        borderRadius: '8px',
-                                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-                                        border: 'none',
-                                        color: 'white',
-                                        fontWeight: 'bold',
-                                        cursor: isDepositing ? 'not-allowed' : 'pointer',
-                                        opacity: isDepositing ? 0.7 : 1
-                                    }}
-                                >
-                                    {isDepositing ? 'Đang xử lý...' : 'Thanh Toán PayOS'}
-                                </button>
+                            <div style={{ position: 'relative', marginBottom: '2rem' }}>
+                                <input 
+                                    type="text" 
+                                    className="parent-v2-input-glow"
+                                    placeholder="Số tiền khác..."
+                                    value={depositAmount}
+                                    onChange={e => setDepositAmount(e.target.value)}
+                                />
+                                <div style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--p-accent-gold)', fontWeight: 800 }}>VND</div>
                             </div>
+
+                            <button 
+                                className="parent-v2-btn-gold" 
+                                style={{ width: '100%', padding: '1.2rem', fontSize: '1.1rem' }}
+                                onClick={handleDeposit}
+                                disabled={isDepositing}
+                            >
+                                {isDepositing ? 'Đang xử lý...' : 'Xác nhận nạp tiền'}
+                            </button>
                         </motion.div>
-                    </motion.div>
+                    </div>
                 )}
             </AnimatePresence>
 
             {/* Roadmap Modal */}
             <AnimatePresence>
                 {showRoadmapModal && (
-                    <motion.div 
-                        className="modal-overlay"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setShowRoadmapModal(false)}
-                        style={{
-                            position: 'fixed',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            background: 'rgba(0,0,0,0.8)',
-                            backdropFilter: 'blur(8px)',
-                            zIndex: 1000,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '1rem'
-                        }}
-                    >
+                    <div className="parent-v2-modal-overlay" onClick={() => setShowRoadmapModal(false)}>
                         <motion.div 
-                            className="modal-content"
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="parent-v2-modal-content roadmap-modal-content"
+                            initial={{ y: 50, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: 50, opacity: 0 }}
                             onClick={e => e.stopPropagation()}
-                            style={{
-                                background: '#1e293b',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                borderRadius: '16px',
-                                padding: '2rem',
-                                width: '100%',
-                                maxWidth: '800px',
-                                maxHeight: '80vh',
-                                overflowY: 'auto',
-                                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
-                            }}
                         >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                                <h2 style={{ margin: 0, color: '#f8fafc' }}>Lộ Trình Học Tập</h2>
-                                <button 
-                                    onClick={() => setShowRoadmapModal(false)}
-                                    style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}
-                                >
-                                    <X size={24} />
-                                </button>
-                            </div>
-
+                            <button className="parent-db-modal-close" onClick={() => setShowRoadmapModal(false)}>
+                                <X size={24} />
+                            </button>
+                            <h2 style={{ marginBottom: '2rem', fontWeight: 800, color: 'var(--p-text)' }}>Lộ trình học tập</h2>
+                            
                             {loadingRoadmaps ? (
-                                <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>Đang tải dữ liệu...</div>
-                            ) : studentRoadmaps.length === 0 ? (
-                                <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>Học sinh chưa tạo lộ trình nào.</div>
+                                <div style={{ textAlign: 'center', padding: '3rem' }}>Đang tải lộ trình...</div>
                             ) : (
-                                <div className="roadmaps-list" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                    {studentRoadmaps.map((roadmap: any) => (
-                                        <div key={roadmap.id} style={{ 
-                                            background: 'rgba(255,255,255,0.05)', 
-                                            padding: '1.5rem', 
-                                            borderRadius: '12px',
-                                            border: '1px solid rgba(255,255,255,0.1)'
-                                        }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                                <h3 style={{ margin: 0, color: '#60a5fa' }}>{roadmap.title}</h3>
-                                                <span style={{ 
-                                                    fontSize: '0.8rem', 
-                                                    padding: '0.25rem 0.75rem', 
-                                                    borderRadius: '999px', 
-                                                    background: roadmap.status === 'COMPLETED' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(59, 130, 246, 0.2)',
-                                                    color: roadmap.status === 'COMPLETED' ? '#4ade80' : '#60a5fa'
-                                                }}>
-                                                    {roadmap.status}
+                                <div className="roadmap-list">
+                                    {studentRoadmaps.map((roadmap, idx) => (
+                                        <div key={idx} className="roadmap-step-card">
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                                <h4 style={{ fontWeight: 700, color: 'var(--p-accent-cyan)' }}>{roadmap.title || `Lộ trình ${idx + 1}`}</h4>
+                                                <span style={{ fontSize: '0.8rem', background: 'rgba(34, 197, 94, 0.1)', color: 'var(--p-accent-green)', padding: '0.2rem 0.6rem', borderRadius: '99px', fontWeight: 700 }}>
+                                                    {roadmap.status || 'Đang học'}
                                                 </span>
                                             </div>
-                                            <p style={{ color: '#cbd5e1', fontSize: '0.9rem', marginBottom: '1rem' }}>{roadmap.description}</p>
-                                            <div style={{ display: 'flex', gap: '1rem', fontSize: '0.85rem', color: '#94a3b8' }}>
-                                                <span>📅 {new Date(roadmap.createdAt).toLocaleDateString('vi-VN')}</span>
-                                                <span>⏱️ {roadmap.duration}</span>
+                                            <p style={{ fontSize: '0.9rem', color: 'var(--p-text-muted)', marginBottom: '1rem' }}>{roadmap.description}</p>
+                                            <div className="parent-v2-progress-container">
+                                                <div className="parent-v2-progress-fill" style={{ width: `${roadmap.progress || 0}%` }}></div>
                                             </div>
+                                            <div style={{ marginTop: '0.5rem', textAlign: 'right', fontSize: '0.8rem', fontWeight: 700 }}>{roadmap.progress || 0}% Hoàn thành</div>
                                         </div>
                                     ))}
+                                    {studentRoadmaps.length === 0 && <p style={{ textAlign: 'center', color: 'var(--p-text-muted)' }}>Chưa có lộ trình nào được tạo.</p>}
                                 </div>
                             )}
                         </motion.div>
-                    </motion.div>
+                    </div>
                 )}
             </AnimatePresence>
 
             {/* Chat Sessions Modal */}
             <AnimatePresence>
                 {showChatSessionsModal && (
-                    <motion.div 
-                        className="modal-overlay"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setShowChatSessionsModal(false)}
-                        style={{
-                            position: 'fixed',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            background: 'rgba(0,0,0,0.8)',
-                            backdropFilter: 'blur(8px)',
-                            zIndex: 1000,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '1rem'
-                        }}
-                    >
+                    <div className="parent-v2-modal-overlay" onClick={() => setShowChatSessionsModal(false)}>
                         <motion.div 
-                            className="modal-content"
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="parent-v2-modal-content"
+                            style={{ maxWidth: '1000px', width: '90%' }}
+                            initial={{ x: 50, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: 50, opacity: 0 }}
                             onClick={e => e.stopPropagation()}
-                            style={{
-                                background: '#1e293b',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                borderRadius: '16px',
-                                padding: '2rem',
-                                width: '100%',
-                                maxWidth: '800px',
-                                maxHeight: '80vh',
-                                overflowY: 'auto',
-                                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
-                            }}
                         >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                                <h2 style={{ margin: 0, color: '#f8fafc' }}>
-                                    {selectedChatSession ? 'Chi Tiết Phiên Chat' : 'Lịch Sử Chat AI'}
-                                </h2>
-                                <button 
-                                    onClick={() => {
-                                        if (selectedChatSession) {
-                                            setSelectedChatSession(null);
-                                        } else {
-                                            setShowChatSessionsModal(false);
-                                        }
-                                    }}
-                                    style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}
-                                >
-                                    <X size={24} />
-                                </button>
-                            </div>
-
-                            {loadingChatSessions ? (
-                                <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>Đang tải dữ liệu...</div>
-                            ) : selectedChatSession ? (
-                                <div className="chat-messages-list" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                    {loadingChatMessages ? (
-                                        <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>Đang tải tin nhắn...</div>
+                            <button className="parent-db-modal-close" onClick={() => setShowChatSessionsModal(false)}>
+                                <X size={24} />
+                            </button>
+                            
+                            {!selectedChatSession ? (
+                                <>
+                                    <h2 style={{ marginBottom: '1.5rem', fontWeight: 800, color: 'var(--p-text)' }}>Lịch sử tư vấn AI</h2>
+                                    {loadingChatSessions ? (
+                                        <div style={{ textAlign: 'center', padding: '2rem' }}>Đang tải...</div>
                                     ) : (
-                                        chatSessionMessages.map((msg) => (
-                                            <div key={msg.id} style={{ 
-                                                display: 'flex', 
-                                                flexDirection: 'column', 
-                                                gap: '0.5rem',
-                                                marginBottom: '1rem'
-                                            }}>
-                                                <div style={{ 
-                                                    alignSelf: 'flex-end', 
-                                                    background: '#3b82f6', 
-                                                    color: 'white', 
-                                                    padding: '0.75rem 1rem', 
-                                                    borderRadius: '12px 12px 0 12px',
-                                                    maxWidth: '80%'
-                                                }}>
-                                                    {msg.userMessage}
+                                        <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                                            {studentChatSessions.map(session => (
+                                                <div 
+                                                    key={session.sessionId} 
+                                                    className="parent-db-session-item"
+                                                    onClick={() => handleViewChatSessionDetails(selectedStudentId!, session)}
+                                                    style={{ background: 'var(--p-input-bg)', border: '1px solid var(--p-card-border)', borderRadius: '12px', padding: '1rem', marginBottom: '0.8rem', cursor: 'pointer' }}
+                                                >
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                        <div>
+                                                            <div style={{ fontWeight: 700, marginBottom: '0.2rem' }}>{session.title || 'Phiên tư vấn không tên'}</div>
+                                                            <div style={{ fontSize: '0.8rem', color: 'var(--p-text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                                                <Calendar size={12} /> {session.lastMessageAt ? new Date(session.lastMessageAt).toLocaleDateString('vi-VN') : 'Không rõ ngày'}
+                                                            </div>
+                                                        </div>
+                                                        <ChevronRight size={20} color="var(--p-text-muted)" />
+                                                    </div>
                                                 </div>
-                                                <div style={{ 
-                                                    alignSelf: 'flex-start', 
-                                                    background: '#334155', 
-                                                    color: '#e2e8f0', 
-                                                    padding: '0.75rem 1rem', 
-                                                    borderRadius: '12px 12px 12px 0',
-                                                    maxWidth: '80%'
-                                                }}>
-                                                    {msg.aiResponse}
-                                                </div>
-                                                <div style={{ fontSize: '0.7rem', color: '#64748b', textAlign: 'center' }}>
-                                                    {new Date(msg.createdAt).toLocaleString('vi-VN')}
-                                                </div>
-                                            </div>
-                                        ))
-                                    )}
-                                </div>
-                            ) : studentChatSessions.length === 0 ? (
-                                <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>Học sinh chưa có phiên chat nào.</div>
-                            ) : (
-                                <div className="chat-sessions-list" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                    {studentChatSessions.map((session) => (
-                                        <div 
-                                            key={session.sessionId} 
-                                            onClick={() => selectedStudentId && handleViewChatSessionDetails(selectedStudentId, session)}
-                                            style={{ 
-                                                background: 'rgba(255,255,255,0.05)', 
-                                                padding: '1.5rem', 
-                                                borderRadius: '12px', 
-                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                cursor: 'pointer',
-                                                transition: 'background 0.2s'
-                                            }}
-                                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                                            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-                                        >
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                                <h3 style={{ margin: 0, color: '#60a5fa', fontSize: '1rem' }}>{session.title || `Session #${session.sessionId}`}</h3>
-                                                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                                                    {new Date(session.lastMessageAt).toLocaleDateString('vi-VN')}
-                                                </span>
-                                            </div>
-                                            <div style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>
-                                                {session.messageCount} tin nhắn
-                                            </div>
+                                            ))}
+                                            {studentChatSessions.length === 0 && <p style={{ textAlign: 'center', color: 'var(--p-text-muted)' }}>Chưa có phiên tư vấn nào.</p>}
                                         </div>
-                                    ))}
-                                </div>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                                        <button onClick={() => setSelectedChatSession(null)} style={{ background: 'none', border: 'none', color: 'var(--p-accent-cyan)', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.25rem' }}> 
+                                            <ChevronRight size={18} style={{ transform: 'rotate(180deg)' }} /> Quay lại
+                                        </button>
+                                        <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: 'var(--p-text)' }}>{selectedChatSession.title}</h2>
+                                    </div>
+                                    <div style={{ maxHeight: '450px', overflowY: 'auto', padding: '1.5rem', background: 'var(--p-input-bg)', borderRadius: '16px', display: 'flex', flexDirection: 'column' }}>
+                                        {loadingChatMessages ? (
+                                            <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--p-text-muted)' }}>Đang tải nội dung...</div>
+                                        ) : (
+                                            chatSessionMessages.map((msg, idx) => (
+                                                <div key={idx} style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                                                    {/* User Message */}
+                                                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                                                        <div className="ai-chat-role-label user">Học sinh</div>
+                                                        <div className="ai-chat-bubble user">
+                                                            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
+                                                                {msg.userMessage}
+                                                            </ReactMarkdown>
+                                                        </div>
+                                                    </div>
+                                                    {/* AI Response */}
+                                                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                                                        <div className="ai-chat-role-label ai">AI Mentor</div>
+                                                        <div className="ai-chat-bubble ai">
+                                                            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
+                                                                {formatAiResponse(msg.aiResponse)}
+                                                            </ReactMarkdown>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </>
                             )}
                         </motion.div>
-                    </motion.div>
+                    </div>
                 )}
             </AnimatePresence>
 
             {/* Learning Report Modal */}
-            {selectedStudentForReport && (
-                <StudentLearningReport
-                    student={selectedStudentForReport}
+            {showLearningReport && selectedStudentForReport && (
+                <StudentLearningReport 
+                    student={selectedStudentForReport} 
                     isOpen={showLearningReport}
-                    onClose={() => {
-                        setShowLearningReport(false);
-                        setSelectedStudentForReport(null);
-                    }}
+                    onClose={() => setShowLearningReport(false)} 
                 />
             )}
         </div>

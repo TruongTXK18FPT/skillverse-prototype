@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Ticket, Search, Filter, Clock, AlertCircle, CheckCircle, 
@@ -102,12 +102,12 @@ const SupportTicketsTab: React.FC = () => {
   // Scroll lock for modals
   useEffect(() => {
     if (showChatModal || showStatusModal) {
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add('modal-open');
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.classList.remove('modal-open');
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.classList.remove('modal-open');
     };
   }, [showChatModal, showStatusModal]);
 
@@ -317,9 +317,9 @@ const SupportTicketsTab: React.FC = () => {
                 <div><span className="stt-status-badge" style={{ '--status-color': getStatusInfo(ticket.status).color } as React.CSSProperties}>{getStatusInfo(ticket.status).label}</span></div>
                 <div className="stt-td-date">{formatDate(ticket.createdAt)}</div>
                 <div className="stt-td-actions">
-                  <button className="stt-action-btn chat" title="Chat" onClick={() => handleOpenChat(ticket)}><MessageSquare size={16} /></button>
-                  <button className="stt-action-btn status" title="Trạng thái" onClick={() => handleOpenStatus(ticket)}><Settings size={16} /></button>
-                  <button className="stt-action-btn delete" title="Xóa" onClick={() => handleDeleteTicket(ticket.id)}><Trash2 size={16} /></button>
+                  <button type="button" className="stt-action-btn chat" title="Chat" onClick={(e) => { e.preventDefault(); handleOpenChat(ticket); }}><MessageSquare size={16} /></button>
+                  <button type="button" className="stt-action-btn status" title="Trạng thái" onClick={(e) => { e.preventDefault(); handleOpenStatus(ticket); }}><Settings size={16} /></button>
+                  <button type="button" className="stt-action-btn delete" title="Xóa" onClick={(e) => { e.preventDefault(); handleDeleteTicket(ticket.id); }}><Trash2 size={16} /></button>
                 </div>
               </motion.div>
             ))}
@@ -336,131 +336,135 @@ const SupportTicketsTab: React.FC = () => {
       </div>
 
       {/* Chat Modal */}
-      <AnimatePresence>
-        {showChatModal && selectedTicket && ReactDOM.createPortal(
-          <motion.div className="stt-modal-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowChatModal(false)}>
-            <motion.div className="stt-chat-modal" initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} onClick={(e) => e.stopPropagation()}>
-              <div className="stt-chat-modal-header">
-                <div className="stt-chat-modal-title">
-                  <MessageSquare size={22} />
-                  <div>
-                    <span className="stt-chat-ticket-code">{selectedTicket.ticketCode}</span>
-                    <span className="stt-chat-ticket-subject">{selectedTicket.subject}</span>
+      {createPortal(
+        <AnimatePresence>
+          {showChatModal && selectedTicket && (
+            <motion.div className="stt-modal-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowChatModal(false)}>
+              <motion.div className="stt-chat-modal" initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} onClick={(e) => e.stopPropagation()}>
+                <div className="stt-chat-modal-header">
+                  <div className="stt-chat-modal-title">
+                    <MessageSquare size={22} />
+                    <div>
+                      <span className="stt-chat-ticket-code">{selectedTicket.ticketCode}</span>
+                      <span className="stt-chat-ticket-subject">{selectedTicket.subject}</span>
+                    </div>
                   </div>
-                </div>
-                <button className="stt-close-btn" onClick={() => setShowChatModal(false)}><XCircle size={24} /></button>
-              </div>
-
-              <div className="stt-chat-modal-body">
-                {/* Ticket Info */}
-                <div className="stt-chat-ticket-info">
-                  <span><strong>Email:</strong> {selectedTicket.email}</span>
-                  <span><strong>Danh mục:</strong> {getCategoryLabel(selectedTicket.category)}</span>
-                  <span className="stt-status-badge" style={{ '--status-color': getStatusInfo(selectedTicket.status).color } as React.CSSProperties}>
-                    {getStatusInfo(selectedTicket.status).label}
-                  </span>
+                  <button className="stt-close-btn" onClick={() => setShowChatModal(false)}><XCircle size={24} /></button>
                 </div>
 
-                {/* Original Description */}
-                <div className="stt-chat-description">
-                  <label>Nội dung ban đầu:</label>
-                  <p>{selectedTicket.description}</p>
-                </div>
-
-                {/* Messages */}
-                <div className="stt-chat-messages">
-                  {messages.length === 0 ? (
-                    <div className="stt-chat-empty">Chưa có tin nhắn nào</div>
-                  ) : (
-                    messages.map(msg => (
-                      <div key={msg.id} className={`stt-chat-message ${msg.senderType.toLowerCase()}`}>
-                        <div className="stt-chat-bubble">{msg.content}</div>
-                        <div className="stt-chat-meta">
-                          <span>{msg.senderName}</span>
-                          <span>{formatDate(msg.createdAt)}</span>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                  <div ref={messagesEndRef} />
-                </div>
-              </div>
-
-              <div className="stt-chat-modal-footer">
-                <textarea 
-                  placeholder="Nhập phản hồi..." 
-                  value={newMessage} 
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }}
-                />
-                <button className="stt-chat-send" onClick={handleSendMessage} disabled={sendingMessage || !newMessage.trim()}>
-                  <Send size={20} />
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        , document.body)}
-      </AnimatePresence>
-
-      {/* Status Modal */}
-      <AnimatePresence>
-        {showStatusModal && selectedTicket && ReactDOM.createPortal(
-          <motion.div className="stt-modal-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowStatusModal(false)}>
-            <motion.div className="stt-status-modal" initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} onClick={(e) => e.stopPropagation()}>
-              <div className="stt-status-modal-header">
-                <div className="stt-status-modal-title">
-                  <Settings size={22} />
-                  <span>Cập nhật trạng thái</span>
-                </div>
-                <button className="stt-close-btn" onClick={() => setShowStatusModal(false)}><XCircle size={24} /></button>
-              </div>
-
-              <div className="stt-status-modal-body">
-                <div className="stt-status-ticket-info">
-                  <div className="stt-status-info-row">
-                    <span className="stt-status-label">Mã ticket:</span>
-                    <span className="stt-status-value stt-ticket-code">{selectedTicket.ticketCode}</span>
-                  </div>
-                  <div className="stt-status-info-row">
-                    <span className="stt-status-label">Tiêu đề:</span>
-                    <span className="stt-status-value">{selectedTicket.subject}</span>
-                  </div>
-                  <div className="stt-status-info-row">
-                    <span className="stt-status-label">Ưu tiên:</span>
-                    <span className="stt-priority-badge" style={{ '--priority-color': getPriorityInfo(selectedTicket.priority).color } as React.CSSProperties}>
-                      {getPriorityInfo(selectedTicket.priority).label}
+                <div className="stt-chat-modal-body">
+                  {/* Ticket Info */}
+                  <div className="stt-chat-ticket-info">
+                    <span><strong>Email:</strong> {selectedTicket.email}</span>
+                    <span><strong>Danh mục:</strong> {getCategoryLabel(selectedTicket.category)}</span>
+                    <span className="stt-status-badge" style={{ '--status-color': getStatusInfo(selectedTicket.status).color } as React.CSSProperties}>
+                      {getStatusInfo(selectedTicket.status).label}
                     </span>
                   </div>
-                </div>
 
-                <div className="stt-status-select-group">
-                  <label>Chọn trạng thái mới:</label>
-                  <div className="stt-status-options">
-                    {statusOptions.filter(o => o.value && o.value !== 'CLOSED').map(opt => (
-                      <button
-                        key={opt.value}
-                        className={`stt-status-option ${newStatus === opt.value ? 'active' : ''}`}
-                        style={{ '--status-color': opt.color } as React.CSSProperties}
-                        onClick={() => setNewStatus(opt.value)}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
+                  {/* Original Description */}
+                  <div className="stt-chat-description">
+                    <label>Nội dung ban đầu:</label>
+                    <p>{selectedTicket.description}</p>
                   </div>
-                  <p className="stt-status-note">* Chỉ người dùng mới có thể đóng ticket</p>
-                </div>
-              </div>
 
-              <div className="stt-status-modal-footer">
-                <button className="stt-btn-cancel" onClick={() => setShowStatusModal(false)}>Hủy</button>
-                <button className="stt-btn-save" onClick={handleUpdateStatus} disabled={isUpdating}>
-                  {isUpdating ? <><RefreshCw size={16} className="stt-spin" /> Đang lưu...</> : 'Cập nhật'}
-                </button>
-              </div>
+                  {/* Messages */}
+                  <div className="stt-chat-messages">
+                    {messages.length === 0 ? (
+                      <div className="stt-chat-empty">Chưa có tin nhắn nào</div>
+                    ) : (
+                      messages.map(msg => (
+                        <div key={msg.id} className={`stt-chat-message ${msg.senderType.toLowerCase()}`}>
+                          <div className="stt-chat-bubble">{msg.content}</div>
+                          <div className="stt-chat-meta">
+                            <span>{msg.senderName}</span>
+                            <span>{formatDate(msg.createdAt)}</span>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                    <div ref={messagesEndRef} />
+                  </div>
+                </div>
+
+                <div className="stt-chat-modal-footer">
+                  <textarea 
+                    placeholder="Nhập phản hồi..." 
+                    value={newMessage} 
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }}
+                  />
+                  <button className="stt-chat-send" onClick={handleSendMessage} disabled={sendingMessage || !newMessage.trim()}>
+                    <Send size={20} />
+                  </button>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        , document.body)}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      , document.body)}
+
+      {/* Status Modal */}
+      {createPortal(
+        <AnimatePresence>
+          {showStatusModal && selectedTicket && (
+            <motion.div className="stt-modal-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowStatusModal(false)}>
+              <motion.div className="stt-status-modal" initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} onClick={(e) => e.stopPropagation()}>
+                <div className="stt-status-modal-header">
+                  <div className="stt-status-modal-title">
+                    <Settings size={22} />
+                    <span>Cập nhật trạng thái</span>
+                  </div>
+                  <button className="stt-close-btn" onClick={() => setShowStatusModal(false)}><XCircle size={24} /></button>
+                </div>
+
+                <div className="stt-status-modal-body">
+                  <div className="stt-status-ticket-info">
+                    <div className="stt-status-info-row">
+                      <span className="stt-status-label">Mã ticket:</span>
+                      <span className="stt-status-value stt-ticket-code">{selectedTicket.ticketCode}</span>
+                    </div>
+                    <div className="stt-status-info-row">
+                      <span className="stt-status-label">Tiêu đề:</span>
+                      <span className="stt-status-value">{selectedTicket.subject}</span>
+                    </div>
+                    <div className="stt-status-info-row">
+                      <span className="stt-status-label">Ưu tiên:</span>
+                      <span className="stt-priority-badge" style={{ '--priority-color': getPriorityInfo(selectedTicket.priority).color } as React.CSSProperties}>
+                        {getPriorityInfo(selectedTicket.priority).label}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="stt-status-select-group">
+                    <label>Chọn trạng thái mới:</label>
+                    <div className="stt-status-options">
+                      {statusOptions.filter(o => o.value && o.value !== 'CLOSED').map(opt => (
+                        <button
+                          key={opt.value}
+                          className={`stt-status-option ${newStatus === opt.value ? 'active' : ''}`}
+                          style={{ '--status-color': opt.color } as React.CSSProperties}
+                          onClick={() => setNewStatus(opt.value)}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="stt-status-note">* Chỉ người dùng mới có thể đóng ticket</p>
+                  </div>
+                </div>
+
+                <div className="stt-status-modal-footer">
+                  <button className="stt-btn-cancel" onClick={() => setShowStatusModal(false)}>Hủy</button>
+                  <button className="stt-btn-save" onClick={handleUpdateStatus} disabled={isUpdating}>
+                    {isUpdating ? <><RefreshCw size={16} className="stt-spin" /> Đang lưu...</> : 'Cập nhật'}
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      , document.body)}
     </div>
   );
 };

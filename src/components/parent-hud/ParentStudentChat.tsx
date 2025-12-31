@@ -116,38 +116,80 @@ const ParentStudentChat: React.FC<ParentStudentChatProps> = ({ studentId, studen
     };
 
     return (
-        <div className="ps-chat-container">
-            <div className="ps-chat-header">
-                <div className="ps-chat-user-info">
-                    <img 
-                        src={studentAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${studentName}`} 
-                        alt={studentName} 
-                        className="ps-chat-avatar" 
-                    />
+        <div className="parent-v2-card" style={{ height: '500px', display: 'flex', flexDirection: 'column', padding: 0, overflow: 'hidden', background: 'var(--p-card-bg)', border: '1px solid var(--p-card-border)' }}>
+            <div style={{ 
+                padding: '1rem 1.5rem', 
+                borderBottom: '1px solid var(--p-card-border)', 
+                background: 'var(--p-card-bg)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ position: 'relative' }}>
+                        <img 
+                            src={studentAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${studentName}`} 
+                            alt={studentName} 
+                            style={{ width: 40, height: 40, borderRadius: '50%', border: '2px solid var(--p-accent-gold)' }} 
+                        />
+                        <div style={{ 
+                            position: 'absolute', 
+                            bottom: 0, 
+                            right: 0, 
+                            width: 12, 
+                            height: 12, 
+                            borderRadius: '50%', 
+                            background: connected ? 'var(--p-accent-green)' : 'var(--p-text-muted)',
+                            border: '2px solid var(--p-bg)'
+                        }} />
+                    </div>
                     <div>
-                        <h3>{studentName}</h3>
-                        <span className={`ps-status ${connected ? 'online' : 'offline'}`}>
-                            {connected ? 'Online' : 'Connecting...'}
+                        <h3 style={{ margin: 0, color: 'var(--p-text)', fontSize: '1rem', fontWeight: 700 }}>{studentName}</h3>
+                        <span style={{ 
+                            fontSize: '0.75rem', 
+                            color: connected ? 'var(--p-accent-green)' : 'var(--p-text-muted)',
+                            fontWeight: 600
+                        }}>
+                            {connected ? 'ĐÃ KẾT NỐI' : 'ĐANG KẾT NỐI...'}
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div className="ps-chat-messages">
+            <div style={{ 
+                flex: 1, 
+                overflowY: 'auto', 
+                padding: '1.5rem', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: '1rem',
+                background: 'var(--p-bg)'
+            }}>
                 {messages.map((msg, index) => {
                     const isMe = msg.senderId === user?.id;
                     return (
-                        <div key={index} className={`ps-message-wrapper ${isMe ? 'me' : 'other'}`}>
-                            {!isMe && (
-                                <img 
-                                    src={studentAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${studentName}`} 
-                                    className="ps-message-avatar" 
-                                    alt="avatar" 
-                                />
-                            )}
-                            <div className={`ps-message-bubble ${isMe ? 'me' : 'other'}`}>
-                                <p>{msg.content}</p>
-                                <span className="ps-message-time">
+                        <div key={index} style={{ 
+                            display: 'flex', 
+                            justifyContent: isMe ? 'flex-end' : 'flex-start',
+                            width: '100%'
+                        }}>
+                            <div style={{ 
+                                maxWidth: '80%',
+                                padding: '0.75rem 1rem',
+                                borderRadius: '12px',
+                                background: isMe ? 'rgba(245, 158, 11, 0.1)' : 'rgba(6, 182, 212, 0.1)',
+                                border: isMe ? '1px solid var(--p-accent-gold)' : '1px solid var(--p-accent-cyan)',
+                                position: 'relative'
+                            }}>
+                                <p style={{ margin: 0, color: 'var(--p-text)', fontSize: '0.95rem' }}>{msg.content}</p>
+                                <span style={{ 
+                                    display: 'block', 
+                                    textAlign: 'right', 
+                                    fontSize: '0.7rem', 
+                                    color: 'var(--p-text-muted)', 
+                                    marginTop: '0.25rem',
+                                    fontWeight: 600
+                                }}>
                                     {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </span>
                             </div>
@@ -157,16 +199,33 @@ const ParentStudentChat: React.FC<ParentStudentChatProps> = ({ studentId, studen
                 <div ref={messagesEndRef} />
             </div>
 
-            <div className="ps-chat-input-area">
+            <div style={{ 
+                padding: '1rem', 
+                borderTop: '1px solid var(--p-card-border)',
+                background: 'var(--p-card-bg)',
+                display: 'flex',
+                gap: '0.75rem'
+            }}>
                 <input
                     type="text"
                     placeholder="Nhập tin nhắn..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    className="ps-chat-input"
+                    className="parent-v2-input-glow"
+                    style={{
+                        flex: 1,
+                        padding: '0.75rem 1rem',
+                        fontSize: '0.95rem',
+                        outline: 'none'
+                    }}
                 />
-                <button onClick={handleSendMessage} className="ps-chat-send-btn" disabled={!connected}>
+                <button 
+                    onClick={handleSendMessage} 
+                    disabled={!connected}
+                    className="parent-v2-btn-gold"
+                    style={{ padding: '0.75rem' }}
+                >
                     <Send size={20} />
                 </button>
             </div>
