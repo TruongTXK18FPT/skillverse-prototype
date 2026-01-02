@@ -28,7 +28,8 @@ import {
   Zap,
   HelpCircle,
   BadgeQuestionMark,
-  ShoppingBag
+  ShoppingBag,
+  AlertTriangle
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -476,6 +477,10 @@ const Header: React.FC = () => {
                   <button onClick={() => { navigate('/help-center'); setShowUserMenu(false); }} className="dropdown-item">
                     <HelpCircle size={16} />
                     <span>Hỗ trợ</span>
+                  </button>
+                  <button onClick={() => { navigate('/report-violation'); setShowUserMenu(false); }} className="dropdown-item">
+                    <AlertTriangle size={16} />
+                    <span>Báo cáo vi phạm</span>
                   </button>
 
                   <hr className="dropdown-divider" />

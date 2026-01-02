@@ -44,6 +44,63 @@
   border-left: 4px solid #ef4444;
 }
 
+/* Error Alert */
+.rpt-error-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 16px;
+  color: #fca5a5;
+  font-size: 0.95rem;
+}
+
+/* Loading State */
+.rpt-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 2rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.rpt-loading-state .spinning {
+  animation: spin 1s linear infinite;
+}
+
+/* Empty State */
+.rpt-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.rpt-empty-state svg {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.rpt-empty-state h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.rpt-empty-state p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.4);
+  max-width: 400px;
+}
+
 /* Stats Section */
 .rpt-section-stats {
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.6) 100%);
@@ -710,6 +767,60 @@
 .rpt-evidence-item:hover {
   background: rgba(139, 92, 246, 0.2);
   border-color: rgba(139, 92, 246, 0.5);
+}
+
+.rpt-evidence-item a {
+  color: #a5b4fc;
+  text-decoration: underline;
+  margin-left: 0.5rem;
+}
+
+/* Admin Notes */
+.rpt-admin-notes {
+  padding: 1rem;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.rpt-admin-notes h5 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #c4b5fd;
+}
+
+.rpt-admin-notes p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Resolution Info */
+.rpt-resolution-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.rpt-resolution-label {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.rpt-resolution-action {
+  padding: 0.35rem 0.75rem;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 6px;
+  color: #86efac;
+  font-weight: 500;
 }
 
 /* Action Buttons */

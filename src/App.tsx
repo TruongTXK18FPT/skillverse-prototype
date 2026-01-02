@@ -48,6 +48,7 @@ import NotFoundPage from './pages/notfound/NotFoundPage';
 import UnauthorizedPage from './pages/UnauthorizedPage';
 import Certificate from './components/certificate/Certificate';
 import CertificateDemoPage from './pages/CertificateDemoPage';
+import { ReportUserPage, MyReportsPage } from './components/report';
 import TermOfService from './pages/footer/TermOfService';
 import PrivacyPolicy from './pages/footer/Privacy&Policy';
 import HelpCenter from './pages/footer/HelpCenter';
@@ -186,6 +187,10 @@ const App = () => {
                     
                     {/* User My Applications */}
                     <Route path="/my-applications" element={<MyApplicationsPage />} />
+
+                    {/* Violation Report Routes */}
+                    <Route path="/report-violation" element={<ReportUserPage />} />
+                    <Route path="/my-reports" element={<MyReportsPage />} />
 
                     {/* Protected Routes */}
                     <Route path="/business" element={
