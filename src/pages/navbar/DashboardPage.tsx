@@ -64,7 +64,6 @@ const DashboardPage = () => {
                  
                  // Calculate total lessons in the course
                 let totalLessons = 0;
-                // @ts-ignore
                 courseData.modules?.forEach((m: any) => totalLessons += (m.lessons?.length || 0));
                 
                 // Estimate completed lessons based on progress percent
@@ -81,10 +80,8 @@ const DashboardPage = () => {
                     thumbnail: courseData.thumbnailUrl || 'https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=200', // Fallback image
                     lastAccessed: 'Recently', 
                     nextLesson: 'Continue Learning', 
-                    // @ts-ignore
-                    estimatedTime: courseData.duration ? `${courseData.duration} min` : 'N/A',
-                    // @ts-ignore
-                    rawDuration: courseData.duration || 0,
+                    estimatedTime: (courseData as any).duration ? `${(courseData as any).duration} min` : 'N/A',
+                    rawDuration: (courseData as any).duration || 0,
                     group: groupData
                 };
              } catch (e) {
@@ -150,8 +147,7 @@ const DashboardPage = () => {
         roadmaps={roadmaps}
         userStats={stats}
         cycleStats={cycleStats}
-        // @ts-ignore
-        usageLimits={featureUsage}
+        featureUsage={featureUsage}
         onJoinGroup={handleJoinGroup}
       />
       
