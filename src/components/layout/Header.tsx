@@ -43,6 +43,7 @@ import { UserSubscriptionResponse } from '../../data/premiumDTOs';
 import NotificationDropdown from './NotificationDropdown';
 import Logo from '../../assets/brand/skillverse.png';
 import LogoNoel from '../../assets/brand/logoNoel.png';
+import LogoTet from '../../assets/brand/logo-tet.png';
 import '../../styles/Header.css';
 
 const Header: React.FC = () => {
@@ -63,11 +64,31 @@ const Header: React.FC = () => {
   const quickNavRef = useRef<HTMLDivElement>(null);
 
   const getLogo = () => {
-    const currentMonth = new Date().getMonth() + 1;
-    return currentMonth === 12 ? LogoNoel : Logo;
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear();
+    
+    // Logo Tết từ tháng 1 đến tháng 3 năm 2026
+    if (currentYear === 2026 && currentMonth >= 1 && currentMonth <= 3) {
+      return LogoTet;
+    }
+    
+    // Logo Noel tháng 12
+    if (currentMonth === 12) {
+      return LogoNoel;
+    }
+    
+    // Logo mặc định
+    return Logo;
   };
 
   const isNoel = new Date().getMonth() + 1 === 12;
+  const isTet = (() => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear();
+    return currentYear === 2026 && currentMonth >= 1 && currentMonth <= 3;
+  })();
 
   // Quick navigation items
   const quickNavItems = [
@@ -326,7 +347,7 @@ const Header: React.FC = () => {
             <img 
               src={getLogo()} 
               alt="SkillVerse" 
-              className={`header-logo-image ${isNoel ? 'noel-logo' : ''}`} 
+              className={`header-logo-image ${isNoel ? 'noel-logo' : ''} ${isTet ? 'tet-logo' : ''}`} 
             />
           </Link>
 

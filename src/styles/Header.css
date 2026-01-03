@@ -87,6 +87,14 @@
   filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.3));
 }
 
+.header-logo-image.tet-logo {
+  height: 80px;
+  max-height: 80px;
+  width: auto;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
+  transition: all 0.3s ease;
+}
+
 /* Buttons: Khám Phá & Dịch Chuyển (Sci-fi Buttons) */
 .header-nav-btn, 
 .quick-nav-btn {

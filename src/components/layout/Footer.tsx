@@ -5,6 +5,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import Logo from '../../assets/brand/skillverse.png';
 import LogoNoel from '../../assets/brand/logoNoel.png';
+import LogoTet from '../../assets/brand/logo-tet.png';
 
 const Footer = () => {
   const { theme } = useTheme();
@@ -12,11 +13,31 @@ const Footer = () => {
   const mapUrl = "https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d31355.755907056393!2d106.80691566973627!3d10.841127618407334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sfpt%20university!5e0!3m2!1sen!2s!4v1709561248044!5m2!1sen!2s";
 
   const getLogo = () => {
-    const currentMonth = new Date().getMonth() + 1;
-    return currentMonth === 12 ? LogoNoel : Logo;
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear();
+    
+    // Logo Tết từ tháng 1 đến tháng 3 năm 2026
+    if (currentYear === 2026 && currentMonth >= 1 && currentMonth <= 3) {
+      return LogoTet;
+    }
+    
+    // Logo Noel tháng 12
+    if (currentMonth === 12) {
+      return LogoNoel;
+    }
+    
+    // Logo mặc định
+    return Logo;
   };
 
   const isNoel = new Date().getMonth() + 1 === 12;
+  const isTet = (() => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear();
+    return currentYear === 2026 && currentMonth >= 1 && currentMonth <= 3;
+  })();
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -43,7 +64,7 @@ const Footer = () => {
                 <img 
                   src={getLogo()} 
                   alt="Skillverse Logo" 
-                  className={`brand-logo ${isNoel ? 'noel-logo' : ''}`} 
+                  className={`brand-logo ${isNoel ? 'noel-logo' : ''} ${isTet ? 'tet-logo' : ''}`} 
                 />
               </Link>
               <p className="brand-description">
