@@ -66,13 +66,6 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
     }
   }, []);
 
-  // Request notification permission
-  useEffect(() => {
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
-    }
-  }, []);
-
   // Load conversation
   useEffect(() => {
     loadMessages();
@@ -192,11 +185,13 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
     const diffHours = Math.floor(diffMs / 3600000);
     if (diffHours < 24) return `${diffHours} giờ trước`;
 
+    // Convert to Vietnam timezone (GMT+7)
     return date.toLocaleDateString('vi-VN', { 
       day: '2-digit', 
       month: '2-digit',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'Asia/Ho_Chi_Minh'
     });
   };
 

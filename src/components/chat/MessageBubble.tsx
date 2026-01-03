@@ -73,9 +73,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   const formatTime = (timestamp: string) => {
     try {
       const date = new Date(timestamp);
+      // Convert to Vietnam timezone (GMT+7)
       return date.toLocaleTimeString('vi-VN', { 
         hour: '2-digit', 
-        minute: '2-digit' 
+        minute: '2-digit',
+        timeZone: 'Asia/Ho_Chi_Minh'
       });
     } catch {
       return '';

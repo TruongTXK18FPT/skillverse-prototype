@@ -66,29 +66,29 @@ const FamilyChatWindow: React.FC<FamilyChatWindowProps> = ({
     }
   }, []);
 
-  // Request notification permission
-  useEffect(() => {
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
-    }
-  }, []);
-
   // WebSocket connection
   useEffect(() => {
+    loadChatHistory(); // Load saved messages first
     connectWebSocket();
     return () => {
       disconnectWebSocket();
     };
   }, [familyMemberId]);
+  
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (messages.length > 0) {
+      const storageKey = `family_chat_${currentUserId}_${familyMemberId}`;
+      localStorage.setItem(storageKey, JSON.stringify(messages));
+    }
+  }, [messages, currentUserId, familyMemberId]);
 
   const connectWebSocket = () => {
     const socket = new SockJS(`${API_BASE_URL.replace('/api', '')}/ws`);
     const client = new Client({
       webSocketFactory: () => socket as any,
       reconnectDelay: 5000,
-      debug: (str) => console.log('[STOMP]', str),
       onConnect: () => {
-        console.log('✅ Family Chat WebSocket connected');
         setConnected(true);
 
         // Subscribe to family chat messages
@@ -98,7 +98,6 @@ const FamilyChatWindow: React.FC<FamilyChatWindowProps> = ({
           : `/topic/family/${familyMemberId}/${currentUserId}`;
 
         client.subscribe(topic, (message: IMessage) => {
-          console.log('📨 Received family message:', message.body);
           try {
             const msg = JSON.parse(message.body);
             const newMessage: Message = {
@@ -108,7 +107,44 @@ const FamilyChatWindow: React.FC<FamilyChatWindowProps> = ({
               content: msg.content,
               timestamp: msg.timestamp || new Date().toISOString()
             };
-            setMessages(prev => [...prev, newMessage]);
+            
+            // Handle duplicates and temp message replacement
+            setMessages(prev => {
+              // Check if this is an exact duplicate (same ID)
+              const exactDuplicate = prev.some(m => m.id === newMessage.id);
+              if (exactDuplicate) {
+                return prev;
+              }
+              
+              // Check if this is our own message coming back from server (replace temp message)
+              if (newMessage.senderId === currentUserId) {
+                const tempMsgIndex = prev.findIndex(m => 
+                  m.id.toString().startsWith('temp-') &&
+                  m.content === newMessage.content &&
+                  Math.abs(new Date(m.timestamp).getTime() - new Date(newMessage.timestamp).getTime()) < 2000
+                );
+                
+                if (tempMsgIndex !== -1) {
+                  const updated = [...prev];
+                  updated[tempMsgIndex] = newMessage; // Replace temp with real
+                  return updated;
+                }
+              }
+              
+              // Check if duplicate from another user (shouldn't happen but safety check)
+              const contentDuplicate = prev.some(m =>
+                m.senderId === newMessage.senderId &&
+                m.content === newMessage.content &&
+                Math.abs(new Date(m.timestamp).getTime() - new Date(newMessage.timestamp).getTime()) < 1000
+              );
+              
+              if (contentDuplicate) {
+                return prev;
+              }
+              
+              // New message from other user
+              return [...prev, newMessage];
+            });
             
             // Show notification if message is from family member and window is not focused
             if (msg.senderId !== currentUserId && document.hidden && 'Notification' in window && Notification.permission === 'granted') {
@@ -132,7 +168,6 @@ const FamilyChatWindow: React.FC<FamilyChatWindowProps> = ({
         setConnected(false);
       },
       onWebSocketClose: () => {
-        console.log('🔌 Family Chat WebSocket closed');
         setConnected(false);
       }
     });
@@ -150,15 +185,32 @@ const FamilyChatWindow: React.FC<FamilyChatWindowProps> = ({
   };
 
   const loadChatHistory = async () => {
-    // Optional: Load previous messages from API
-    // For now, start with empty history
-    console.log('Loading family chat history...');
+    try {
+      // Load messages from localStorage as fallback until backend API is available
+      const storageKey = `family_chat_${currentUserId}_${familyMemberId}`;
+      const savedMessages = localStorage.getItem(storageKey);
+      
+      if (savedMessages) {
+        const parsed = JSON.parse(savedMessages);
+        setMessages(parsed);
+      }
+    } catch (error) {
+      console.error('Failed to load chat history:', error);
+    }
   };
 
   // Scroll to bottom
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+  
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (messages.length > 0) {
+      const storageKey = `family_chat_${currentUserId}_${familyMemberId}`;
+      localStorage.setItem(storageKey, JSON.stringify(messages));
+    }
+  }, [messages, currentUserId, familyMemberId]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -169,6 +221,18 @@ const FamilyChatWindow: React.FC<FamilyChatWindowProps> = ({
 
     const messageContent = inputText.trim();
     setInputText('');
+
+    // Optimistic update - add message immediately
+    const tempMessage: Message = {
+      id: `temp-${Date.now()}`,
+      senderId: currentUserId,
+      senderName: currentUserName,
+      content: messageContent,
+      timestamp: new Date().toISOString()
+    };
+    
+    setMessages(prev => [...prev, tempMessage]);
+    scrollToBottom();
 
     const messagePayload = {
       senderId: currentUserId,
@@ -188,8 +252,6 @@ const FamilyChatWindow: React.FC<FamilyChatWindowProps> = ({
       destination,
       body: JSON.stringify(messagePayload)
     });
-
-    console.log('📤 Sent family message:', messagePayload);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -225,8 +287,6 @@ const FamilyChatWindow: React.FC<FamilyChatWindowProps> = ({
       destination,
       body: JSON.stringify(messagePayload)
     });
-
-    console.log('📤 Sent family GIF:', messagePayload);
   };
 
   const formatTime = (timestamp: string) => {
@@ -241,11 +301,13 @@ const FamilyChatWindow: React.FC<FamilyChatWindowProps> = ({
     const diffHours = Math.floor(diffMs / 3600000);
     if (diffHours < 24) return `${diffHours} giờ trước`;
 
+    // Convert to Vietnam timezone (GMT+7)
     return date.toLocaleDateString('vi-VN', { 
       day: '2-digit', 
       month: '2-digit',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'Asia/Ho_Chi_Minh'
     });
   };
 

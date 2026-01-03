@@ -522,8 +522,8 @@ const MessengerPage: React.FC = () => {
             <GroupChatWindow
               groupId={selectedContact.id}
               currentUserId={user!.id.toString()}
-              currentUserName={user!.name || user!.email}
-              currentUserAvatar={user!.avatarUrl}
+              currentUserName={user!.fullName || user!.email || 'User'}
+              currentUserAvatar={resolveAvatarUrl(user!.avatarUrl)}
               onBack={() => setSelectedContactId(null)}
             />
           ) : selectedContact.type === 'MENTOR' ? (
@@ -541,7 +541,7 @@ const MessengerPage: React.FC = () => {
               familyMemberName={selectedContact.name}
               familyMemberAvatar={selectedContact.avatar}
               currentUserId={user!.id}
-              currentUserName={user!.name || user!.email}
+              currentUserName={user!.fullName || user!.email || 'User'}
               isParent={selectedContact.isParent || false}
               onBack={() => setSelectedContactId(null)}
             />

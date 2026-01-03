@@ -44,12 +44,15 @@ interface GroupChatWindowProps {
 
 const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
   groupId,
-  currentUserId,
+  currentUserId: rawCurrentUserId,
   currentUserName,
   currentUserAvatar,
   onBack,
   onGroupInfoUpdate
 }) => {
+  // Ensure currentUserId is always string for comparison
+  const currentUserId = String(rawCurrentUserId);
+  
   // State
   const [messages, setMessages] = useState<MessageData[]>([]);
   const [inputText, setInputText] = useState('');
@@ -101,6 +104,20 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
     };
   }, [groupId]);
 
+  // Helper to get user info from members list
+  const getUserInfo = (senderId: string) => {
+    if (!groupInfo?.members) return { name: null, avatar: null };
+    
+    const member = groupInfo.members.find(m => m.userId.toString() === senderId);
+    if (member) {
+      return {
+        name: member.userName || member.userEmail,
+        avatar: member.userAvatarUrl
+      };
+    }
+    return { name: null, avatar: null };
+  };
+
   const loadGroupData = async () => {
     setIsLoading(true);
     try {
@@ -125,21 +142,16 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
       const formattedMessages: MessageData[] = msgs.map((msg: any) => {
         const parsedSenderId = msg.senderId != null ? String(msg.senderId) : '';
         
-        console.log('🟢 Loaded message:', {
-          messageId: msg.id,
-          rawSenderId: msg.senderId,
-          parsedSenderId,
-          currentUserId,
-          isOwn: parsedSenderId === currentUserId
-        });
+        // Get user info from members if missing from message
+        const userInfo = getUserInfo(parsedSenderId);
         
         return {
           id: (msg.id || msg.messageId).toString(),
           content: msg.content,
           messageType: (msg.messageType || 'TEXT') as MessageType,
           senderId: parsedSenderId,
-          senderName: msg.senderName || 'Unknown',
-          senderAvatarUrl: msg.senderAvatarUrl,
+          senderName: msg.senderName || userInfo.name || 'Unknown',
+          senderAvatarUrl: msg.senderAvatarUrl || userInfo.avatar,
           timestamp: msg.timestamp || msg.sentAt,
           gifUrl: msg.gifUrl,
           imageUrl: msg.imageUrl,
@@ -168,8 +180,6 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
     });
 
     client.onConnect = () => {
-      console.log('WebSocket connected');
-      
       // Subscribe to group messages
       client.subscribe(`/topic/group.${groupId}`, (message: IMessage) => {
         const newMessage = JSON.parse(message.body);
@@ -190,20 +200,16 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
     const rawSenderId = msg.senderId ?? msg.sender_id;
     const parsedSenderId = rawSenderId != null ? String(rawSenderId) : '';
     
-    console.log('🔵 Received WebSocket message:', {
-      rawMessage: msg,
-      parsedSenderId,
-      currentUserId,
-      isOwn: parsedSenderId === currentUserId
-    });
+    // Get user info from members if missing from message
+    const userInfo = getUserInfo(parsedSenderId);
     
     const newMsg: MessageData = {
       id: (msg.messageId || msg.id || Date.now()).toString(),
       content: msg.content,
       messageType: (msg.messageType || 'TEXT') as MessageType,
       senderId: parsedSenderId,
-      senderName: msg.senderName || msg.sender_name || 'Unknown',
-      senderAvatarUrl: msg.senderAvatarUrl || msg.sender_avatar_url,
+      senderName: msg.senderName || msg.sender_name || userInfo.name || 'Unknown',
+      senderAvatarUrl: msg.senderAvatarUrl || msg.sender_avatar_url || userInfo.avatar,
       timestamp: msg.timestamp || new Date().toISOString(),
       gifUrl: msg.gifUrl || msg.gif_url,
       imageUrl: msg.imageUrl || msg.image_url,
@@ -211,14 +217,35 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
       status: 'delivered'
     };
 
-    setMessages(prev => [...prev, newMsg]);
-
-    // Check if user is at bottom
+    // Check if user is at bottom BEFORE adding message
     const container = messagesContainerRef.current;
+    const wasAtBottom = container ? 
+      container.scrollHeight - container.scrollTop - container.clientHeight < 100 : true;
+
+    // Check if message already exists to prevent duplicates
+    setMessages(prev => {
+      // Check if message with same ID or same content+timestamp already exists
+      const isDuplicate = prev.some(m => 
+        m.id === newMsg.id || 
+        (m.senderId === newMsg.senderId && 
+         m.content === newMsg.content && 
+         Math.abs(new Date(m.timestamp).getTime() - new Date(newMsg.timestamp).getTime()) < 1000)
+      );
+      
+      if (isDuplicate) {
+        return prev;
+      }
+      
+      return [...prev, newMsg];
+    });
+
+    // Scroll handling after state update
     if (container) {
-      const isAtBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100;
-      if (isAtBottom) {
-        setTimeout(() => scrollToBottom(), 50);
+      if (wasAtBottom) {
+        // Use requestAnimationFrame to ensure DOM has updated, instant scroll to prevent jump
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => scrollToBottom(true));
+        });
       } else if (newMsg.senderId !== currentUserId) {
         setUnreadCount(prev => prev + 1);
         setShowScrollDown(true);
@@ -236,8 +263,8 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
     }
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (instant = false) => {
+    messagesEndRef.current?.scrollIntoView({ behavior: instant ? 'auto' : 'smooth' });
     setUnreadCount(0);
     setShowScrollDown(false);
   };
@@ -331,7 +358,7 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
   };
 
   // Emoji handler - receives 3 separate parameters from EmojiPicker
-  const handleEmojiSelect = (emoji: string, isCustom?: boolean, customUrl?: string) => {
+  const handleEmojiSelect = (emoji: string, isCustom?: boolean, _customUrl?: string) => {
     if (isCustom) {
       // Send as emoji message type with custom emoji
       handleSendMessage('EMOJI', emoji, undefined, undefined, emoji);
@@ -375,7 +402,6 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
   // Reaction handler
   const handleReaction = (messageId: string, emoji: string) => {
     // TODO: Implement reaction API
-    console.log('React with', emoji, 'to message', messageId);
   };
 
   // Member kicked handler
@@ -496,7 +522,7 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
         
         {/* Scroll to bottom button */}
         {showScrollDown && (
-          <button className="scroll-down-btn" onClick={scrollToBottom}>
+          <button className="scroll-down-btn" onClick={() => scrollToBottom()}>
             <ChevronDown size={20} />
             {unreadCount > 0 && (
               <span className="unread-badge">{unreadCount}</span>

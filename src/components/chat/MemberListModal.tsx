@@ -100,10 +100,12 @@ const MemberListModal: React.FC<MemberListModalProps> = ({
 
   const formatJoinDate = (dateStr: string) => {
     const date = new Date(dateStr);
+    // Convert to Vietnam timezone (GMT+7)
     return date.toLocaleDateString('vi-VN', {
       day: '2-digit',
       month: '2-digit',
-      year: 'numeric'
+      year: 'numeric',
+      timeZone: 'Asia/Ho_Chi_Minh'
     });
   };
 
