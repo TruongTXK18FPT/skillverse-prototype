@@ -1,59 +1,77 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Send, Search, MoreVertical, User } from 'lucide-react';
-import '../../styles/MessengerPage.css';
-import { getThreads, getConversation, sendMessage, sendAsMentor, markRead } from '../../services/preChatService';
-import userService from '../../services/userService';
-import parentService from '../../services/parentService';
-import chatService from '../../services/chatService';
-import { getMyMentorProfile, getMentorProfile } from '../../services/mentorProfileService';
-import { API_BASE_URL } from '../../services/axiosInstance';
+import { 
+  Search, 
+  Plus, 
+  Users, 
+  UserCircle, 
+  Home,
+  MessageCircle,
+  Settings,
+  Bell,
+  Filter,
+  Check,
+  CheckCheck,
+  Pin,
+  Archive,
+  Trash2,
+  Star,
+  X
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { Client } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
-import axiosInstance from '../../services/axiosInstance';
-
-interface Message {
-  id: string;
-  sender: 'user' | 'mentor';
-  content: string;
-  timestamp: Date;
-}
+import { GroupChatWindow, MentorChatWindow, FamilyChatWindow } from '../../components/chat';
+import MessengerWelcome from '../../components/chat/MessengerWelcome';
+import { getMyGroups, getGroupDetail, type GroupMemberDTO } from '../../services/groupChatService';
+import { getThreads } from '../../services/preChatService';
+import userService from '../../services/userService';
+import { getMentorProfile } from '../../services/mentorProfileService';
+import parentService from '../../services/parentService';
+import studentLinkService from '../../services/studentLinkService';
+import { API_BASE_URL } from '../../services/axiosInstance';
+import '../../styles/MessengerPage.css';
 
 interface ChatContact {
-  mentorId: string;
-  mentorName: string;
-  mentorAvatar: string;
+  id: string;
+  name: string;
+  avatar: string;
   lastMessage: string;
   timestamp: string;
   unread: number;
-  isMyRoleMentor?: boolean;
-  type?: 'MENTOR' | 'FAMILY';
+  type: 'MENTOR' | 'FAMILY' | 'GROUP';
+  isOnline?: boolean;
+  isPinned?: boolean;
+  memberCount?: number;
+  mentorName?: string;
+  isMyRoleMentor?: boolean; // For mentor chats: true if I'm the mentor
+  isParent?: boolean; // For family chats: true if I'm the parent
 }
 
-
-const MessengerPage = () => {
+const MessengerPage: React.FC = () => {
   const { user, loading } = useAuth();
   const location = useLocation();
-  const [contacts, setContacts] = useState<ChatContact[]>([]);
-  const [tempContact, setTempContact] = useState<ChatContact | null>(null);
-  const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const hasHandledNav = useRef(false);
-  const [activeTab, setActiveTab] = useState<'MENTOR' | 'FAMILY'>('MENTOR');
-  const [pendingFamilyLinks, setPendingFamilyLinks] = useState<number>(0);
   
-  // WebSocket for Family Chat
-  const [connected, setConnected] = useState(false);
-  const stompClientRef = useRef<Client | null>(null);
+  // State
+  const [contacts, setContacts] = useState<ChatContact[]>([]);
+  const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<'ALL' | 'MENTOR' | 'FAMILY' | 'GROUP'>('ALL');
+  const [showSettings, setShowSettings] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [showCreateNew, setShowCreateNew] = useState(false);
+  
+  const hasHandledNav = useRef(false);
 
-  const [myUserAvatar, setMyUserAvatar] = useState<string | undefined>(undefined);
-  const [myMentorAvatar, setMyMentorAvatar] = useState<string | undefined>(undefined);
+  // Check if first time user
+  useEffect(() => {
+    const hasSeenWelcome = localStorage.getItem('skillverse_messenger_welcome_seen');
+    if (!hasSeenWelcome && user) {
+      setShowWelcome(true);
+    }
+  }, [user]);
 
-  const resolveAvatarUrl = (raw?: string): string | undefined => {
-    if (!raw) return undefined;
+  // Helper to resolve avatar URL
+  const resolveAvatarUrl = (raw?: string): string => {
+    if (!raw) return '/images/meowl.jpg';
     const trimmed = raw.trim();
     if (/^https?:\/\//i.test(trimmed)) return trimmed;
     const apiRoot = API_BASE_URL.replace(/\/api$/i, '');
@@ -61,519 +79,435 @@ const MessengerPage = () => {
     return `${apiRoot}/${trimmed}`;
   };
 
+  // Load contacts on mount and tab change
   useEffect(() => {
-    const fetchMyAvatars = async () => {
-      if (!user) return;
-      
-      try {
-        const userProf = await userService.getUserProfile(user.id);
-        setMyUserAvatar(resolveAvatarUrl(userProf.avatarMediaUrl));
-      } catch (e) {
-        setMyUserAvatar(resolveAvatarUrl(user.avatarUrl));
-      }
-
-      if (user.roles.includes('MENTOR')) {
-        try {
-          const mentorProf = await getMyMentorProfile();
-          setMyMentorAvatar(resolveAvatarUrl(mentorProf.avatar));
-        } catch (e) {
-          console.error("Failed to fetch my mentor profile", e);
-        }
-      }
-    };
-    
-    fetchMyAvatars();
-  }, [user]);
-
-  // Auto-switch tab based on role
-  useEffect(() => {
-    if (user && !loading) {
-      // USER = regular student/learner, PARENT = parent account
-      if ((user.roles.includes('PARENT') || user.roles.includes('USER')) && !user.roles.includes('MENTOR')) {
-        setActiveTab('FAMILY');
-      }
-    }
-  }, [user, loading]);
-
-  useEffect(() => {
-    if (loading) return;
+    if (!user || loading) return;
     loadContacts();
-    const interval = setInterval(loadContacts, 5000);
+    const interval = setInterval(loadContacts, 10000); // Refresh every 10s
     return () => clearInterval(interval);
-  }, [user, loading]);
+  }, [user, loading, activeTab]);
 
+  // Handle navigation state (e.g., from other pages)
   useEffect(() => {
-    const handleNav = async () => {
-      if (hasHandledNav.current) return;
-      if (location.state?.openChatWith) {
-        const targetId = location.state.openChatWith.toString();
-        hasHandledNav.current = true;
-
-        // Check if already in contacts (contacts might be empty initially)
-        const existing = contacts.find(c => c.mentorId === targetId);
-        if (existing) {
-          setSelectedContactId(targetId);
-        } else {
-          // Fetch profile and create temp contact
-          try {
-            const profile = await userService.getUserProfile(parseInt(targetId));
-            const newContact: ChatContact = {
-              mentorId: targetId,
-              mentorName: profile.fullName || `User #${targetId}`,
-              mentorAvatar: profile.avatarMediaUrl || '/images/meowl.jpg',
-              lastMessage: 'Bắt đầu cuộc trò chuyện mới',
-              timestamp: new Date().toISOString(),
-              unread: 0,
-              isMyRoleMentor: false,
-              type: location.state.type || 'MENTOR'
-            };
-            setTempContact(newContact);
-            setSelectedContactId(targetId);
-          } catch (e) {
-            console.error("Failed to fetch mentor profile", e);
-          }
-        }
-      }
-    };
-    handleNav();
-  }, [location.state, contacts]); // Re-run if contacts load and we haven't handled it? 
-  // Actually if we depend on contacts, it might run multiple times. 
-  // But hasHandledNav prevents that. 
-  // Wait, if contacts are empty initially, we fetch profile. 
-  // If contacts load later and contain the user, we should switch to using the contact from list?
-  // The render logic will handle merging.
-
-  useEffect(() => {
-    if (selectedContactId) {
-      loadMessages(selectedContactId);
-      // Poll messages for active chat
-      const msgInterval = setInterval(() => loadMessages(selectedContactId), 3000);
-      return () => clearInterval(msgInterval);
-    }
-  }, [selectedContactId]);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  useEffect(() => {
-    // Disconnect previous connection if any
-    if (stompClientRef.current && stompClientRef.current.active) {
-        stompClientRef.current.deactivate();
-        setConnected(false);
-    }
-
-    let currentContact = contacts.find(c => c.mentorId === selectedContactId && 
-        (activeTab === 'FAMILY' ? c.type === 'FAMILY' : c.type !== 'FAMILY'));
-
-    if (!currentContact && tempContact && tempContact.mentorId === selectedContactId) {
-        // Only use tempContact if it matches the active tab type (or if we are in MENTOR tab and temp is MENTOR/default)
-        // Actually tempContact usually comes from navigation which sets the type.
-        if (activeTab === 'FAMILY' && tempContact.type === 'FAMILY') {
-             currentContact = tempContact;
-        } else if (activeTab !== 'FAMILY' && tempContact.type !== 'FAMILY') {
-             currentContact = tempContact;
-        }
-    }
-
-    if (currentContact?.type === 'FAMILY' && user) {
-        const socketUrl = (axiosInstance.defaults.baseURL || API_BASE_URL).replace(/\/api\/?$/, '/ws');
-        // Prefer axiosInstance Authorization header, fallback to stored accessToken
-        const bearerHeader = (axiosInstance.defaults.headers?.Authorization as string) || '';
-        const token = bearerHeader.replace(/^Bearer\s+/i, '') || localStorage.getItem('accessToken') || '';
-        const socket = new SockJS(`${socketUrl}?token=${token}`);
-        const client = new Client({
-            webSocketFactory: () => socket,
-            debug: (str) => console.log(str),
-            connectHeaders: {
-                ...(token ? { Authorization: `Bearer ${token}` } : {})
-            },
-            onConnect: () => {
-                setConnected(true);
-                // Subscribe to user-specific queue
-                // Spring's convertAndSendToUser uses the principal name, so we subscribe to /user/queue/messages
-                client.subscribe(`/user/${user.id}/queue/messages`, (message) => {
-                    const receivedMsg = JSON.parse(message.body);
-                    console.log('Received family message:', receivedMsg);
-                    // Check if message belongs to current conversation
-                    if (receivedMsg.senderId.toString() === selectedContactId || receivedMsg.recipientId.toString() === selectedContactId) {
-                        setMessages(prev => {
-                            // Avoid duplicate messages
-                            const exists = prev.some(m => m.id === receivedMsg.id?.toString());
-                            if (exists) return prev;
-                            return [...prev, {
-                                id: receivedMsg.id?.toString() || Date.now().toString(),
-                                sender: receivedMsg.senderId === user.id ? 'user' : 'mentor',
-                                content: receivedMsg.content,
-                                timestamp: new Date(receivedMsg.timestamp)
-                            }];
-                        });
-                    }
-                });
-            },
-            onStompError: (frame) => {
-                console.error('Broker reported error: ' + frame.headers['message']);
-                console.error('Additional details: ' + frame.body);
-            },
-            onWebSocketClose: () => {
-                console.log('WebSocket closed');
-                setConnected(false);
-            }
-        });
-
-        client.activate();
-        stompClientRef.current = client;
-    }
-
-    return () => {
-        if (stompClientRef.current && stompClientRef.current.active) {
-            stompClientRef.current.deactivate();
-        }
-    };
-  }, [selectedContactId, contacts, user, tempContact, activeTab]);
+    if (hasHandledNav.current || !location.state?.openChatWith) return;
+    
+    const targetId = location.state.openChatWith.toString();
+    const type = location.state.type || 'GROUP';
+    
+    if (type === 'GROUP') setActiveTab('GROUP');
+    else if (type === 'FAMILY') setActiveTab('FAMILY');
+    else setActiveTab('MENTOR');
+    
+    setSelectedContactId(targetId);
+    hasHandledNav.current = true;
+  }, [location.state]);
 
   const loadContacts = async () => {
     if (!user) return;
+    
     try {
-      const threads = await getThreads();
+      let allContacts: ChatContact[] = [];
 
-      const mapped: ChatContact[] = await Promise.all(
-        threads.map(async (t) => {
-          let avatar = resolveAvatarUrl(t.counterpartAvatar);
-          
-          try {
-            if (t.isMyRoleMentor) {
-               // I am Mentor, Counterpart is User -> Fetch User Profile
-               const prof = await userService.getUserProfile(t.counterpartId);
-               avatar = resolveAvatarUrl(prof.avatarMediaUrl) || avatar;
-            } else {
-               // I am User, Counterpart is Mentor -> Fetch Mentor Profile
-               const prof = await getMentorProfile(t.counterpartId);
-               avatar = resolveAvatarUrl(prof.avatar) || avatar;
-            }
-          } catch (e) {
-             // Fallback
-             if (!avatar) {
-                try {
-                   const prof = await userService.getUserProfile(t.counterpartId);
-                   avatar = resolveAvatarUrl(prof.avatarMediaUrl) || avatar;
-                } catch (_e) { void 0; }
-             }
-          }
-          
-          if (!avatar) avatar = '/images/meowl.jpg';
-
-          return {
-            mentorId: t.counterpartId.toString(),
-            mentorName: t.counterpartName,
-            mentorAvatar: avatar,
-            lastMessage: t.lastContent,
-            timestamp: t.lastTime,
-            unread: t.unreadCount,
-            isMyRoleMentor: t.isMyRoleMentor,
-            type: 'MENTOR'
-          };
-        })
-      );
-
-      let allContacts = mapped;
-
-      if (user?.roles.includes('PARENT')) {
-          try {
-              const dashboard = await parentService.getDashboard();
-              const familyContacts: ChatContact[] = dashboard.students.map(s => ({
-                  mentorId: s.id.toString(),
-                  mentorName: (s.firstName || '') + ' ' + (s.lastName || '') || s.email,
-                  mentorAvatar: resolveAvatarUrl(s.avatarUrl) || '/images/meowl.jpg',
-                  lastMessage: 'Chat with your child', 
-                  timestamp: new Date().toISOString(),
-                  unread: 0,
-                  type: 'FAMILY'
-              }));
-              allContacts = [...allContacts, ...familyContacts];
-          } catch (e) {
-              console.error("Failed to fetch family contacts", e);
-          }
+      // Load group chats if GROUP tab or ALL
+      if (activeTab === 'GROUP' || activeTab === 'ALL') {
+        const groups = await getMyGroups(user.id);
+        const groupContacts: ChatContact[] = groups.map(g => ({
+          id: g.id.toString(),
+          name: g.name,
+          avatar: resolveAvatarUrl(g.avatarUrl),
+          lastMessage: 'Nhóm học tập',
+          timestamp: g.createdAt,
+          unread: 0,
+          type: 'GROUP' as const,
+          memberCount: g.memberCount || 0,
+          mentorName: g.mentorName
+        }));
+        allContacts = [...allContacts, ...groupContacts];
       }
 
-      // USER role = regular student/learner account
-      if (user?.roles.includes('USER')) {
-          try {
-              console.log('Fetching student links for user:', user.id, 'roles:', user.roles);
-              const links = await parentService.getStudentLinks();
-              console.log('Student links fetched:', links);
-              // Track pending links for notification
-              const pendingCount = links.filter(link => link.status === 'PENDING').length;
-              const activeCount = links.filter(link => link.status === 'ACTIVE').length;
-              console.log('Pending:', pendingCount, 'Active:', activeCount);
-              setPendingFamilyLinks(pendingCount);
-              
-              const familyContacts: ChatContact[] = links
-                  .filter(link => link.status === 'ACTIVE')
-                  .map(link => {
-                      console.log('Mapping parent link:', link.parent);
-                      return {
-                          mentorId: link.parent.id.toString(),
-                          mentorName: ((link.parent.firstName || '') + ' ' + (link.parent.lastName || '')).trim() || link.parent.email,
-                          mentorAvatar: resolveAvatarUrl(link.parent.avatarUrl) || '/images/meowl.jpg',
-                          lastMessage: 'Chat với phụ huynh',
-                          timestamp: new Date().toISOString(),
-                          unread: 0,
-                          type: 'FAMILY'
-                      };
-                  });
-              console.log('Family contacts created:', familyContacts);
-              allContacts = [...allContacts, ...familyContacts];
-          } catch (e) {
-              console.error("Failed to fetch parent contacts", e);
-          }
-      }
-
-      // Deduplicate contacts by mentorId and type
-      const uniqueContacts = new Map<string, ChatContact>();
-      allContacts.forEach(c => {
-        const key = `${c.mentorId}-${c.type}`;
-        if (!uniqueContacts.has(key)) {
-          uniqueContacts.set(key, c);
-        }
-      });
-      
-      setContacts(Array.from(uniqueContacts.values()));
-    } catch (error) {
-      console.error('Failed to load contacts', error);
-    }
-  };
-
-  const loadMessages = async (mentorId: string) => {
-    if (!user) return;
-    
-    const currentContact = contacts.find(c => c.mentorId === mentorId && 
-        (activeTab === 'FAMILY' ? c.type === 'FAMILY' : c.type !== 'FAMILY'));
-
-    if (currentContact?.type === 'FAMILY') {
-        try {
-            const history = await chatService.getChatHistory(user.id, parseInt(mentorId));
-            const mapped: Message[] = history.map(m => ({
-                id: m.id?.toString() || Date.now().toString(),
-                sender: m.senderId === user.id ? 'user' : 'mentor',
-                content: m.content,
-                timestamp: new Date(m.timestamp)
-            }));
-            setMessages(mapped);
-        } catch (error) {
-            console.error("Failed to fetch chat history", error);
-        }
-        return;
-    }
-
-    try {
-      const data = await getConversation(parseInt(mentorId));
-      const mapped: Message[] = data.content.map(m => ({
-        id: m.id.toString(),
-        sender: m.senderId === user.id ? 'user' : 'mentor',
-        content: m.content,
-        timestamp: new Date(m.createdAt)
-      }));
-      setMessages(mapped);
-    } catch (error) {
-      console.error('Failed to load messages', error);
-    }
-  };
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const allContacts = [...contacts];
-  if (tempContact && !allContacts.find(c => c.mentorId === tempContact.mentorId)) {
-    allContacts.unshift(tempContact);
-  }
-
-  const handleSendMessage = async () => {
-    if (!inputValue.trim() || !selectedContactId || !user) return;
-
-    const content = inputValue.trim();
-    // Find contact based on active tab to avoid ambiguity
-    const contact = allContacts.find(c => c.mentorId === selectedContactId && 
-        (activeTab === 'FAMILY' ? c.type === 'FAMILY' : c.type !== 'FAMILY'));
-    
-    if (!contact) return;
-
-    setInputValue('');
-
-    if (contact.type === 'FAMILY') {
-        if (stompClientRef.current && connected) {
-            const chatMessage = {
-                senderId: user.id,
-                recipientId: parseInt(selectedContactId),
-                senderName: user.fullName || user.email,
-                recipientName: contact.mentorName,
-                content: content,
-                timestamp: new Date().toISOString()
-            };
-
-            stompClientRef.current.publish({
-                destination: "/app/chat",
-                body: JSON.stringify(chatMessage)
-            });
+      // Load mentor/1-on-1 chats if MENTOR tab or ALL
+      if (activeTab === 'MENTOR' || activeTab === 'ALL') {
+        const threads = await getThreads();
+        const mentorContacts: ChatContact[] = await Promise.all(
+          threads.map(async (t) => {
+            let avatar = resolveAvatarUrl(t.counterpartAvatar);
             
-            // Optimistic update
-            setMessages(prev => [...prev, {
-                id: Date.now().toString(),
-                sender: 'user',
-                content: content,
-                timestamp: new Date()
-            }]);
-        } else {
-            console.error("WebSocket not connected");
-            setInputValue(content);
-        }
-        return;
-    }
+            try {
+              if (t.isMyRoleMentor) {
+                const prof = await userService.getUserProfile(t.counterpartId);
+                avatar = resolveAvatarUrl(prof.avatarMediaUrl);
+              } else {
+                const prof = await getMentorProfile(t.counterpartId);
+                avatar = resolveAvatarUrl(prof.avatar);
+              }
+            } catch (e) {
+              // Fallback to default
+            }
 
-    try {
-      if (contact.isMyRoleMentor) {
-        await sendAsMentor(parseInt(selectedContactId), content);
-      } else {
-        await sendMessage(parseInt(selectedContactId), content);
+            return {
+              id: t.counterpartId.toString(),
+              name: t.counterpartName,
+              avatar,
+              lastMessage: t.lastContent,
+              timestamp: t.lastTime,
+              unread: t.unreadCount,
+              type: 'MENTOR' as const,
+              isOnline: Math.random() > 0.5, // TODO: Implement real online status
+              isMyRoleMentor: t.isMyRoleMentor
+            };
+          })
+        );
+        allContacts = [...allContacts, ...mentorContacts];
       }
-      await loadMessages(selectedContactId);
-      await loadContacts();
+
+      // Load family chats if FAMILY tab or ALL
+      // For PARENT role: load children (students)
+      // For USER role: load parent links (upcoming feature)
+      if (activeTab === 'FAMILY' || activeTab === 'ALL') {
+        // Parents see their children
+        if (user.roles.includes('PARENT')) {
+          try {
+            const dashboard = await parentService.getDashboard();
+            const familyContacts: ChatContact[] = dashboard.students.map(student => ({
+              id: student.id.toString(),
+              name: student.displayName || student.fullName || `${student.firstName} ${student.lastName}`.trim(),
+              avatar: resolveAvatarUrl(student.avatarUrl),
+              lastMessage: 'Chat với con',
+              timestamp: new Date().toISOString(),
+              unread: 0,
+              type: 'FAMILY' as const,
+              isOnline: false,
+              isParent: true
+            }));
+            allContacts = [...allContacts, ...familyContacts];
+          } catch (error) {
+            console.error('Failed to load family contacts:', error);
+          }
+        }
+        // Students (USER role) see their linked parents (if any)
+        if (user.roles.includes('USER') && !user.roles.includes('PARENT')) {
+          try {
+            // Load parent-student links for the student
+            // The API returns links where this user is either parent or student
+            const links = await studentLinkService.getStudentLinks();
+            // Filter to get only ACTIVE links where current user is the student
+            const activeParentLinks = links.filter(
+              link => link.status === 'ACTIVE' && link.student.id === user.id
+            );
+            const parentContacts: ChatContact[] = activeParentLinks.map((link) => ({
+              id: link.parent.id.toString(),
+              name: link.parent.fullName || 'Phụ huynh',
+              avatar: resolveAvatarUrl(link.parent.avatarUrl),
+              lastMessage: 'Chat với phụ huynh',
+              timestamp: link.updatedAt || new Date().toISOString(),
+              unread: 0,
+              type: 'FAMILY' as const,
+              isOnline: false,
+              isParent: false // I'm the student, not the parent
+            }));
+            allContacts = [...allContacts, ...parentContacts];
+          } catch (error) {
+            // Parent link API may not exist yet
+            console.log('Parent links not available:', error);
+          }
+        }
+      }
+
+      // Sort by timestamp (most recent first)
+      allContacts.sort((a, b) => {
+        const aTime = new Date(a.timestamp).getTime();
+        const bTime = new Date(b.timestamp).getTime();
+        return bTime - aTime;
+      });
+
+      setContacts(allContacts);
     } catch (error) {
-      console.error('Failed to send message', error);
-      setInputValue(content); // Restore on error
+      console.error('Failed to load contacts:', error);
     }
   };
 
-  const selectedContact = allContacts.find(c => c.mentorId === selectedContactId);
-
-  const filteredContacts = allContacts.filter(c => {
-      if (activeTab === 'FAMILY') return c.type === 'FAMILY';
-      return c.type !== 'FAMILY';
+  // Filter contacts based on search
+  const filteredContacts = contacts.filter(contact => {
+    const matchesSearch = contact.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesTab = activeTab === 'ALL' || contact.type === activeTab;
+    return matchesSearch && matchesTab;
   });
 
+  // Get selected contact
+  const selectedContact = contacts.find(c => c.id === selectedContactId);
+
+  // Format timestamp
+  const formatTimestamp = (timestamp: string) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Vừa xong';
+    if (diffMins < 60) return `${diffMins} phút`;
+    if (diffHours < 24) return `${diffHours} giờ`;
+    if (diffDays < 7) return `${diffDays} ngày`;
+    return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+  };
+
+  const handleWelcomeClose = () => {
+    setShowWelcome(false);
+    localStorage.setItem('skillverse_messenger_welcome_seen', 'true');
+  };
+
+  const handleGetStarted = () => {
+    handleWelcomeClose();
+    // Auto-select first group if available
+    const firstGroup = contacts.find(c => c.type === 'GROUP');
+    if (firstGroup) {
+      setSelectedContactId(firstGroup.id);
+      setActiveTab('GROUP');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="messenger-page">
+        <div className="messenger-loading-container">
+          <Users size={48} className="spinning" />
+          <p>Đang tải tin nhắn...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="sv-messenger-container">
-      {/* Sidebar */}
-      <div className="sv-messenger-sidebar">
-        <div className="sv-messenger-header">
-          <h2>Tin Nhắn</h2>
-          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-              <button 
-                  onClick={() => setActiveTab('MENTOR')}
-                  style={{
-                      flex: 1,
-                      padding: '0.5rem',
-                      borderRadius: '8px',
-                      border: 'none',
-                      background: activeTab === 'MENTOR' ? '#60a5fa' : 'rgba(255,255,255,0.1)',
-                      color: 'white',
-                      cursor: 'pointer',
-                      fontSize: '0.9rem'
-                  }}
-              >
-                  Mentors
+    <div className="messenger-page">
+      {/* Welcome Modal */}
+      {showWelcome && (
+        <MessengerWelcome
+          onClose={handleWelcomeClose}
+          onGetStarted={handleGetStarted}
+        />
+      )}
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <div className="modal-overlay" onClick={() => setShowSettings(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Cài đặt</h2>
+              <button onClick={() => setShowSettings(false)}>
+                <X size={24} />
               </button>
-              <button 
-                  onClick={() => setActiveTab('FAMILY')}
-                  style={{
-                      flex: 1,
-                      padding: '0.5rem',
-                      borderRadius: '8px',
-                      border: 'none',
-                      background: activeTab === 'FAMILY' ? '#60a5fa' : 'rgba(255,255,255,0.1)',
-                      color: 'white',
-                      cursor: 'pointer',
-                      fontSize: '0.9rem',
-                      position: 'relative'
-                  }}
-              >
-                  Gia Đình
-                  {pendingFamilyLinks > 0 && (
-                      <span style={{
-                          position: 'absolute',
-                          top: '-4px',
-                          right: '-4px',
-                          background: '#ef4444',
-                          color: 'white',
-                          borderRadius: '50%',
-                          width: '18px',
-                          height: '18px',
-                          fontSize: '0.7rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontWeight: 'bold'
-                      }}>
-                          {pendingFamilyLinks}
-                      </span>
-                  )}
-              </button>
+            </div>
+            <div className="modal-body">
+              <div className="settings-section">
+                <h3>Thông báo</h3>
+                <label>
+                  <input type="checkbox" defaultChecked />
+                  <span>Thông báo tin nhắn mới</span>
+                </label>
+                <label>
+                  <input type="checkbox" defaultChecked />
+                  <span>Âm thanh thông báo</span>
+                </label>
+              </div>
+              <div className="settings-section">
+                <h3>Hiển thị</h3>
+                <label>
+                  <input type="checkbox" defaultChecked />
+                  <span>Hiển thị ảnh đại diện</span>
+                </label>
+                <label>
+                  <input type="checkbox" />
+                  <span>Chế độ tối</span>
+                </label>
+              </div>
+              <div className="settings-section">
+                <h3>Quyền riêng tư</h3>
+                <label>
+                  <input type="checkbox" defaultChecked />
+                  <span>Cho phép người lạ nhắn tin</span>
+                </label>
+                <label>
+                  <input type="checkbox" defaultChecked />
+                  <span>Hiển thị trạng thái online</span>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="sv-messenger-list">
+      )}
+
+      {/* Create New Modal */}
+      {showCreateNew && (
+        <div className="modal-overlay" onClick={() => setShowCreateNew(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Tạo cuộc trò chuyện mới</h2>
+              <button onClick={() => setShowCreateNew(false)}>
+                <X size={24} />
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="create-new-options">
+                <button className="create-option" onClick={() => {
+                  setShowCreateNew(false);
+                  alert('Tính năng tạo nhóm mới đang phát triển');
+                }}>
+                  <Users size={32} />
+                  <h3>Tạo nhóm học tập</h3>
+                  <p>Tạo nhóm mới với mentor và học viên</p>
+                </button>
+                <button className="create-option" onClick={() => {
+                  setShowCreateNew(false);
+                  setActiveTab('MENTOR');
+                }}>
+                  <UserCircle size={32} />
+                  <h3>Nhắn tin với Mentor</h3>
+                  <p>Bắt đầu cuộc trò chuyện 1-1</p>
+                </button>
+                {user && user.roles.includes('PARENT') && (
+                  <button className="create-option" onClick={() => {
+                    setShowCreateNew(false);
+                    setActiveTab('FAMILY');
+                  }}>
+                    <MessageCircle size={32} />
+                    <h3>Chat với con</h3>
+                    <p>Trò chuyện với con em</p>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sidebar */}
+      <div className="messenger-sidebar">
+        {/* Header */}
+        <div className="messenger-sidebar-header">
+          <div className="header-title">
+            <MessageCircle size={24} />
+            <h2>Tin nhắn</h2>
+          </div>
+          <div className="header-actions">
+            <button 
+              className="header-action-btn" 
+              title="Cài đặt"
+              onClick={() => setShowSettings(true)}
+            >
+              <Settings size={20} />
+            </button>
+            <button 
+              className="header-action-btn" 
+              title="Tạo mới"
+              onClick={() => setShowCreateNew(true)}
+            >
+              <Plus size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Search */}
+        <div className="messenger-search">
+          <Search size={18} className="search-icon" />
+          <input
+            type="text"
+            placeholder="Tìm kiếm tin nhắn..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+        </div>
+
+        {/* Tabs */}
+        <div className="messenger-tabs">
+          <button
+            className={`tab-btn ${activeTab === 'ALL' ? 'active' : ''}`}
+            onClick={() => setActiveTab('ALL')}
+          >
+            <Home size={16} />
+            <span>Tất cả</span>
+            {contacts.filter(c => c.unread > 0).length > 0 && (
+              <span className="tab-badge">
+                {contacts.filter(c => c.unread > 0).length}
+              </span>
+            )}
+          </button>
+          <button
+            className={`tab-btn ${activeTab === 'GROUP' ? 'active' : ''}`}
+            onClick={() => setActiveTab('GROUP')}
+          >
+            <Users size={16} />
+            <span>Nhóm</span>
+            {contacts.filter(c => c.type === 'GROUP' && c.unread > 0).length > 0 && (
+              <span className="tab-badge">
+                {contacts.filter(c => c.type === 'GROUP' && c.unread > 0).length}
+              </span>
+            )}
+          </button>
+          <button
+            className={`tab-btn ${activeTab === 'MENTOR' ? 'active' : ''}`}
+            onClick={() => setActiveTab('MENTOR')}
+          >
+            <UserCircle size={16} />
+            <span>Mentor</span>
+          </button>
+          {user && (user.roles.includes('PARENT') || user.roles.includes('USER')) && (
+            <button
+              className={`tab-btn ${activeTab === 'FAMILY' ? 'active' : ''}`}
+              onClick={() => setActiveTab('FAMILY')}
+            >
+              <Home size={16} />
+              <span>Gia đình</span>
+            </button>
+          )}
+        </div>
+
+        {/* Contact List */}
+        <div className="messenger-contact-list">
           {filteredContacts.length === 0 ? (
-            <div style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>
-              {activeTab === 'FAMILY' ? (
-                  <div>
-                      <p>Chưa có liên kết gia đình hoạt động.</p>
-                      {user?.roles.includes('USER') && (
-                          <>
-                              {pendingFamilyLinks > 0 ? (
-                                  <div style={{ background: 'rgba(234, 179, 8, 0.2)', padding: '0.75rem', borderRadius: '8px', marginTop: '0.75rem' }}>
-                                      <p style={{ color: '#fbbf24', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                                          🔔 Bạn có {pendingFamilyLinks} yêu cầu kết nối đang chờ!
-                                      </p>
-                                      <a href="/student-parent-request" style={{ 
-                                          fontSize: '0.9rem', 
-                                          marginTop: '0.5rem', 
-                                          display: 'inline-block',
-                                          background: '#3b82f6',
-                                          color: 'white',
-                                          padding: '0.5rem 1rem',
-                                          borderRadius: '6px',
-                                          textDecoration: 'none'
-                                      }}>
-                                          Xem và chấp nhận yêu cầu
-                                      </a>
-                                  </div>
-                              ) : (
-                                  <>
-                                      <a href="/student-parent-request" style={{ color: '#60a5fa', fontSize: '0.9rem', marginTop: '0.5rem', display: 'block' }}>
-                                          Kiểm tra yêu cầu kết nối
-                                      </a>
-                                      <p style={{ fontSize: '0.8rem', marginTop: '0.5rem', color: '#64748b' }}>
-                                          Phụ huynh có thể gửi yêu cầu kết nối từ tài khoản của họ.
-                                          Bạn cần chấp nhận yêu cầu trước khi có thể chat.
-                                      </p>
-                                  </>
-                              )}
-                          </>
-                      )}
-                      {user?.roles.includes('PARENT') && (
-                          <p style={{ fontSize: '0.8rem', marginTop: '0.5rem', color: '#64748b' }}>
-                              Hãy gửi yêu cầu kết nối đến con bạn từ Parent Dashboard.
-                          </p>
-                      )}
-                  </div>
-              ) : 'Chưa có tin nhắn nào.'}
+            <div className="contact-list-empty">
+              <MessageCircle size={48} />
+              <p>Không có tin nhắn</p>
+              <span>Bắt đầu cuộc trò chuyện mới</span>
             </div>
           ) : (
-            filteredContacts.map(contact => (
+            filteredContacts.map((contact) => (
               <div
-                key={`${contact.mentorId}-${contact.type}`}
-                className={`sv-messenger-item ${selectedContactId === contact.mentorId ? 'active' : ''}`}
-                onClick={() => setSelectedContactId(contact.mentorId)}
+                key={`${contact.id}-${contact.type}`}
+                className={`contact-item ${selectedContactId === contact.id ? 'active' : ''} ${contact.isPinned ? 'pinned' : ''}`}
+                onClick={() => setSelectedContactId(contact.id)}
               >
-                <img src={contact.mentorAvatar} alt={contact.mentorName} className="sv-messenger-avatar" />
-                <div className="sv-messenger-info">
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <div className="sv-messenger-name">{contact.mentorName}</div>
-                    <div className="sv-messenger-time">
-                      {new Date(contact.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                <div className="contact-avatar-wrapper">
+                  <img src={contact.avatar} alt={contact.name} className="contact-avatar" />
+                  {contact.isOnline && <div className="online-indicator" />}
+                  {contact.type === 'GROUP' && (
+                    <div className="contact-type-badge group">
+                      <Users size={12} />
                     </div>
+                  )}
+                </div>
+
+                <div className="contact-info">
+                  <div className="contact-header">
+                    <h4 className="contact-name">
+                      {contact.name}
+                      {contact.isPinned && <Pin size={12} className="pin-icon" />}
+                    </h4>
+                    <span className="contact-time">{formatTimestamp(contact.timestamp)}</span>
                   </div>
-                  <div className="sv-messenger-preview">{contact.lastMessage}</div>
+
+                  <div className="contact-message">
+                    {contact.type === 'GROUP' && (
+                      <span className="message-prefix">
+                        {contact.memberCount} thành viên •{' '}
+                      </span>
+                    )}
+                    <span className="message-text">{contact.lastMessage}</span>
+                    {contact.unread > 0 && (
+                      <span className="unread-badge">{contact.unread}</span>
+                    )}
+                  </div>
                 </div>
               </div>
             ))
@@ -582,73 +516,47 @@ const MessengerPage = () => {
       </div>
 
       {/* Main Chat Area */}
-      <div className="sv-messenger-main">
+      <div className="messenger-main">
         {selectedContact ? (
-          <>
-            <div className="sv-messenger-chat-header">
-              <img src={selectedContact.mentorAvatar} alt={selectedContact.mentorName} className="sv-messenger-chat-avatar" />
-              <div className="sv-messenger-chat-name">{selectedContact.mentorName}</div>
-              <div style={{ marginLeft: 'auto' }}>
-                <MoreVertical size={20} color="#94a3b8" />
-              </div>
+          selectedContact.type === 'GROUP' ? (
+            <GroupChatWindow
+              groupId={selectedContact.id}
+              currentUserId={user!.id.toString()}
+              currentUserName={user!.name || user!.email}
+              currentUserAvatar={user!.avatarUrl}
+              onBack={() => setSelectedContactId(null)}
+            />
+          ) : selectedContact.type === 'MENTOR' ? (
+            <MentorChatWindow
+              counterpartId={parseInt(selectedContact.id)}
+              counterpartName={selectedContact.name}
+              counterpartAvatar={selectedContact.avatar}
+              isMyRoleMentor={selectedContact.isMyRoleMentor || false}
+              currentUserId={user!.id}
+              onBack={() => setSelectedContactId(null)}
+            />
+          ) : selectedContact.type === 'FAMILY' ? (
+            <FamilyChatWindow
+              familyMemberId={parseInt(selectedContact.id)}
+              familyMemberName={selectedContact.name}
+              familyMemberAvatar={selectedContact.avatar}
+              currentUserId={user!.id}
+              currentUserName={user!.name || user!.email}
+              isParent={selectedContact.isParent || false}
+              onBack={() => setSelectedContactId(null)}
+            />
+          ) : (
+            <div className="messenger-placeholder">
+              <MessageCircle size={64} />
+              <h3>Tin nhắn</h3>
+              <p>Loại chat không được hỗ trợ</p>
             </div>
-
-            <div className="sv-messenger-messages">
-              {messages.map(msg => (
-                <div key={msg.id} className={`sv-msg-row ${msg.sender === 'user' ? 'sv-msg-row-user' : 'sv-msg-row-mentor'}`} style={{ display: 'flex', flexDirection: msg.sender === 'user' ? 'row-reverse' : 'row', alignItems: 'flex-end', gap: '8px', marginBottom: '1rem' }}>
-                  <div className="sv-msg-avatar">
-                    {msg.sender === 'user' ? (
-                      <img 
-                        src={
-                          (selectedContact?.isMyRoleMentor && myMentorAvatar) 
-                          ? myMentorAvatar 
-                          : (myUserAvatar || user?.avatarUrl || '/images/meowl.jpg')
-                        } 
-                        alt="Me" 
-                        style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--uplink-primary)' }} 
-                        onError={(e) => {
-                          e.currentTarget.src = '/images/meowl.jpg';
-                        }}
-                      />
-                    ) : (
-                      <img 
-                        src={selectedContact?.mentorAvatar || '/images/meowl.jpg'} 
-                        alt={selectedContact?.mentorName} 
-                        style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--uplink-border)' }} 
-                        onError={(e) => {
-                          e.currentTarget.src = '/images/meowl.jpg';
-                        }}
-                      />
-                    )}
-                  </div>
-                  <div className={`sv-msg-bubble ${msg.sender === 'user' ? 'sv-msg-user' : 'sv-msg-mentor'}`} style={{ maxWidth: 'calc(100% - 40px)' }}>
-                    {msg.content}
-                    <span className="sv-msg-time">
-                      {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                  </div>
-                </div>
-              ))}
-              <div ref={messagesEndRef} />
-            </div>
-
-            <div className="sv-messenger-input-area">
-              <input
-                type="text"
-                className="sv-messenger-input"
-                placeholder="Nhập tin nhắn..."
-                value={inputValue}
-                onChange={e => setInputValue(e.target.value)}
-                onKeyPress={e => e.key === 'Enter' && handleSendMessage()}
-              />
-              <button className="sv-messenger-send-btn" onClick={handleSendMessage}>
-                <Send size={20} />
-              </button>
-            </div>
-          </>
+          )
         ) : (
-          <div className="sv-messenger-empty">
-            Chọn một cuộc hội thoại để bắt đầu
+          <div className="messenger-placeholder">
+            <MessageCircle size={80} />
+            <h3>Chọn một cuộc trò chuyện</h3>
+            <p>Chọn từ danh sách bên trái để bắt đầu nhắn tin</p>
           </div>
         )}
       </div>

@@ -16,6 +16,11 @@ interface Course {
   lastAccessed: string;
   nextLesson: string;
   estimatedTime: string;
+  group?: {
+    id: number;
+    name: string;
+    isMember: boolean;
+  };
 }
 
 interface ActiveModulesProps {
@@ -23,13 +28,15 @@ interface ActiveModulesProps {
   title?: string;
   onCourseClick?: (courseId: number) => void;
   continueLabel?: string;
+  onJoinGroup?: (groupId: number, isMember: boolean) => void;
 }
 
 const ActiveModules: React.FC<ActiveModulesProps> = ({
   courses,
   title = 'Active Simulations',
   onCourseClick,
-  continueLabel = 'Continue'
+  continueLabel = 'Continue',
+  onJoinGroup
 }) => {
   return (
     <HUDCard title={title} subtitle={`${courses.length} Running Modules`} variant="chamfer" delay={0.3}>
@@ -94,10 +101,30 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
                   <Clock size={14} />
                   <span>{course.estimatedTime}</span>
                 </div>
-                <button className="active-modules__button">
-                  <Play size={14} />
-                  {continueLabel}
-                </button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    {course.group && (
+                        <button 
+                            className="active-modules__button"
+                            style={{ 
+                                background: course.group.isMember ? 'rgba(16, 185, 129, 0.1)' : 'rgba(59, 130, 246, 0.1)', 
+                                color: course.group.isMember ? '#10b981' : '#3b82f6',
+                                borderColor: course.group.isMember ? '#10b981' : '#3b82f6'
+                            }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (course.group) {
+                                    onJoinGroup?.(course.group.id, course.group.isMember);
+                                }
+                            }}
+                        >
+                            {course.group.isMember ? 'Chat' : 'Join Group'}
+                        </button>
+                    )}
+                    <button className="active-modules__button">
+                      <Play size={14} />
+                      {continueLabel}
+                    </button>
+                </div>
               </div>
             </div>
           </motion.div>

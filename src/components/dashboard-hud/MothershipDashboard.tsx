@@ -41,6 +41,7 @@ interface MothershipDashboardProps {
     COIN_MULTIPLIER: number;
   };
   featureUsage?: any[];
+  onJoinGroup?: (groupId: number, isMember: boolean) => void;
 }
 
 const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
@@ -57,7 +58,8 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   },
   cycleStats,
   usageLimits,
-  featureUsage
+  featureUsage,
+  onJoinGroup
 }) => {
   const navigate = useNavigate();
 
@@ -233,6 +235,7 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
           title="Active Simulations"
           onCourseClick={handleCourseClick}
           continueLabel={translations?.dashboard?.continue || 'Tiếp tục học'}
+          onJoinGroup={onJoinGroup}
         />
 
         {/* Favorite Mentors */}

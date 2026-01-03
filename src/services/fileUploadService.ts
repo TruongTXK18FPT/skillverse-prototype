@@ -22,6 +22,8 @@ export interface UploadResponse {
   originalFilename: string;
 }
 
+
+
 /**
  * Upload video with progress tracking
  * Max size: 300MB (Cloudinary Plus plan)

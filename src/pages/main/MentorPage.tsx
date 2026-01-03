@@ -49,6 +49,8 @@ import HoloProgressBar from '../../components/dashboard-hud/HoloProgressBar';
 import AttachmentManager from '../../components/course/AttachmentManager';
 import { uploadVideo } from '../../services/fileUploadService';
 import StudentManagementTab from '../../components/course/StudentManagementTab';
+import { createGroup, getGroupByCourse, updateGroup, GroupChatResponse } from '../../services/groupChatService';
+import CreateGroupModal from '../../components/course/CreateGroupModal';
 
 // Types for mentor dashboard data
 export interface Booking {
@@ -338,6 +340,65 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
     onConfirm: () => Promise<void>;
   } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [courseGroups, setCourseGroups] = useState<Record<number, GroupChatResponse | null>>({});
+  
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [activeCourseId, setActiveCourseId] = useState<number | null>(null);
+  const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
+  const [initialModalData, setInitialModalData] = useState({ name: '', avatar: '' });
+
+  useEffect(() => {
+    if (courses.length > 0) {
+      courses.forEach(async (c) => {
+        try {
+          const group = await getGroupByCourse(c.id);
+          if (group) {
+            setCourseGroups(prev => ({ ...prev, [c.id]: group }));
+          }
+        } catch (e) {
+          // ignore
+        }
+      });
+    }
+  }, [courses]);
+
+  const handleOpenCreateModal = (courseId: number, courseTitle: string) => {
+    setActiveCourseId(courseId);
+    setModalMode('create');
+    setInitialModalData({ name: `Hỗ trợ: ${courseTitle}`, avatar: '' });
+    setModalOpen(true);
+  };
+
+  const handleOpenEditModal = (courseId: number, group: GroupChatResponse) => {
+    setActiveCourseId(courseId);
+    setModalMode('edit');
+    setInitialModalData({ name: group.name, avatar: group.avatarUrl || '' });
+    setModalOpen(true);
+  };
+
+  const handleModalSubmit = async (name: string, avatarUrl: string) => {
+    if (!user || !activeCourseId) return;
+
+    try {
+        if (modalMode === 'create') {
+            const res = await createGroup(user.id, { courseId: activeCourseId, name, avatarUrl });
+            setCourseGroups(prev => ({ ...prev, [activeCourseId]: res }));
+            alert('Đã tạo group chat thành công!');
+        } else {
+            const currentGroup = courseGroups[activeCourseId];
+            if (currentGroup) {
+                const res = await updateGroup(currentGroup.id, user.id, { courseId: activeCourseId, name, avatarUrl });
+                setCourseGroups(prev => ({ ...prev, [activeCourseId]: res }));
+                alert('Đã cập nhật group chat thành công!');
+            }
+        }
+        setModalOpen(false);
+    } catch (e) {
+        console.error('Failed to save group', e);
+        alert('Có lỗi xảy ra. Vui lòng thử lại.');
+    }
+  };
 
 
 
@@ -1321,6 +1382,27 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                     <Upload className="w-4 h-4" />
                     Gửi Duyệt
                   </button>
+                )}
+                {course.status === CourseStatus.PUBLIC && (
+                  courseGroups[course.id] ? (
+                    <button
+                      className="mentor-hud-action-button"
+                      style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', borderColor: '#10b981' }}
+                      onClick={() => handleOpenEditModal(course.id, courseGroups[course.id]!)}
+                    >
+                      <Users className="w-4 h-4" />
+                      Quản Lý Group
+                    </button>
+                  ) : (
+                    <button
+                      className="mentor-hud-action-button"
+                      style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', borderColor: '#3b82f6' }}
+                      onClick={() => handleOpenCreateModal(course.id, course.title)}
+                    >
+                      <Users className="w-4 h-4" />
+                      Tạo Group
+                    </button>
+                  )
                 )}
                 <button
                   className="mentor-hud-action-button mentor-hud-delete-button"
@@ -2845,6 +2927,15 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
           </div>
         </div>
       )}
+
+      <CreateGroupModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={handleModalSubmit}
+        initialName={initialModalData.name}
+        initialAvatar={initialModalData.avatar}
+        mode={modalMode}
+      />
     </div>
   );
 };

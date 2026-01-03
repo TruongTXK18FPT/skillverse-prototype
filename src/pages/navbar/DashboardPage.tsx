@@ -6,6 +6,7 @@ import MothershipDashboard from '../../components/dashboard-hud/MothershipDashbo
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import { getUserEnrollments } from '../../services/enrollmentService';
 import { getCourse } from '../../services/courseService';
+import { getGroupByCourse, joinGroup } from '../../services/groupChatService';
 import { getMyUsage, getCycleStats } from '../../services/usageLimitService';
 import { getMyFavoriteMentors } from '../../services/mentorProfileService';
 import aiRoadmapService from '../../services/aiRoadmapService';
@@ -56,29 +57,36 @@ const DashboardPage = () => {
           // Fetch details for each course to get title, thumbnail, etc.
           const coursesPromises = enrollments.content.map(async (enrollment) => {
              try {
-                 const courseData = await getCourse(enrollment.courseId);
+                 const [courseData, groupData] = await Promise.all([
+                    getCourse(enrollment.courseId),
+                    getGroupByCourse(enrollment.courseId, user.id).catch(() => null)
+                 ]);
                  
                  // Calculate total lessons in the course
-                 let totalLessons = 0;
-                 courseData.modules?.forEach(m => totalLessons += (m.lessons?.length || 0));
-                 
-                 // Estimate completed lessons based on progress percent
-                 // This is an estimation because enrollment doesn't explicitly give completed lessons count in the basic DTO
-                 const completedLessons = Math.round((enrollment.progressPercent || 0) / 100 * totalLessons);
-                 
-                 return {
-                     id: courseData.id,
-                     title: courseData.title,
-                     progress: enrollment.progressPercent || 0,
-                     totalLessons: totalLessons || 0,
-                     completedLessons: completedLessons,
-                     instructor: courseData.author?.fullName || 'Unknown Instructor',
-                     thumbnail: courseData.thumbnailUrl || 'https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=200', // Fallback image
-                     lastAccessed: 'Recently', 
-                     nextLesson: 'Continue Learning', 
-                     estimatedTime: courseData.duration ? `${courseData.duration} min` : 'N/A',
-                     rawDuration: courseData.duration || 0
-                 };
+                let totalLessons = 0;
+                // @ts-ignore
+                courseData.modules?.forEach((m: any) => totalLessons += (m.lessons?.length || 0));
+                
+                // Estimate completed lessons based on progress percent
+                // This is an estimation because enrollment doesn't explicitly give completed lessons count in the basic DTO
+                const completedLessons = Math.round((enrollment.progressPercent || 0) / 100 * totalLessons);
+                
+                return {
+                    id: courseData.id,
+                    title: courseData.title,
+                    progress: enrollment.progressPercent || 0,
+                    totalLessons: totalLessons || 0,
+                    completedLessons: completedLessons,
+                    instructor: courseData.author?.fullName || 'Unknown Instructor',
+                    thumbnail: courseData.thumbnailUrl || 'https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=200', // Fallback image
+                    lastAccessed: 'Recently', 
+                    nextLesson: 'Continue Learning', 
+                    // @ts-ignore
+                    estimatedTime: courseData.duration ? `${courseData.duration} min` : 'N/A',
+                    // @ts-ignore
+                    rawDuration: courseData.duration || 0,
+                    group: groupData
+                };
              } catch (e) {
                  console.error(`Failed to fetch details for course ${enrollment.courseId}`, e);
                  return null;
@@ -112,20 +120,44 @@ const DashboardPage = () => {
     fetchData();
   }, [user]);
 
+  const handleJoinGroup = async (groupId: number, isMember: boolean) => {
+    if (!user) return;
+    try {
+        if (!isMember) {
+            await joinGroup(groupId, user.id);
+            // Update local state to reflect membership
+            setEnrolledCourses(prev => prev.map(c => {
+                if (c.group && c.group.id === groupId) {
+                    return { ...c, group: { ...c.group, isMember: true } };
+                }
+                return c;
+            }));
+        }
+        navigate('/messages', { state: { openChatWith: groupId, type: 'GROUP' } });
+    } catch (e) {
+        console.error('Failed to join/open group', e);
+        alert('Không thể tham gia nhóm. Vui lòng thử lại.');
+    }
+  };
+
   return (
-    <>
+    <div className="dashboard-page">
       <MothershipDashboard 
-        userName={user?.fullName || 'Explorer'}
+        userName={user?.fullName || user?.email} 
         translations={translations}
         enrolledCourses={enrolledCourses}
         favoriteMentors={favoriteMentors}
         roadmaps={roadmaps}
         userStats={stats}
-        featureUsage={featureUsage}
         cycleStats={cycleStats}
+        // @ts-ignore
+        usageLimits={featureUsage}
+        onJoinGroup={handleJoinGroup}
       />
-      <MeowlGuide currentPage="dashboard" />
-    </>
+      
+      {/* Meowl Guide Assistant */}
+      <MeowlGuide />
+    </div>
   );
 };
 

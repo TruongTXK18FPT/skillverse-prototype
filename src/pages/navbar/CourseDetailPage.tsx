@@ -25,10 +25,12 @@ import {
 } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
 import { getCourse } from '../../services/courseService';
 import { enrollUser, checkEnrollmentStatus, getEnrollmentProgress } from '../../services/enrollmentService';
 import { CourseDetailDTO } from '../../data/courseDTOs';
 import { getMentorProfile, MentorProfile } from '../../services/mentorProfileService';
+import { getGroupByCourse, joinGroup, GroupChatResponse } from '../../services/groupChatService';
 import PurchaseCourseModal from '../../components/course/PurchaseCourseModal';
 import '../../styles/CourseDetailCockpit.css';
 
@@ -47,6 +49,7 @@ const formatCurrency = (amount?: number, currency?: string): string => {
 
 const CourseDetailPage = () => {
   const { theme } = useTheme();
+  const { user } = useAuth();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,6 +64,7 @@ const CourseDetailPage = () => {
   const [loadingEnrollment, setLoadingEnrollment] = useState(false);
   const [mentorProfile, setMentorProfile] = useState<MentorProfile | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [groupChat, setGroupChat] = useState<GroupChatResponse | null>(null);
 
   const passedCourse = location.state?.course;
 
@@ -105,6 +109,27 @@ const CourseDetailPage = () => {
       })
       .finally(() => setLoading(false));
   }, [id]);
+
+  useEffect(() => {
+    if (course && user) {
+      getGroupByCourse(course.id, user.id)
+        .then(setGroupChat)
+        .catch(() => {});
+    }
+  }, [course, user]);
+
+  const handleJoinGroup = async () => {
+    if (!groupChat || !user) return;
+    try {
+      if (!groupChat.isMember) {
+        await joinGroup(groupChat.id, user.id);
+      }
+      navigate('/messages', { state: { openChatWith: groupChat.id, type: 'GROUP' } });
+    } catch (e) {
+      console.error('Failed to join group', e);
+      alert('Không thể tham gia nhóm chat. Vui lòng thử lại.');
+    }
+  };
 
   const handleEnroll = async () => {
     if (!course || loadingEnrollment) return;
@@ -347,6 +372,16 @@ const CourseDetailPage = () => {
                     <Heart className="cockpit-detail-action-icon" />
                     <span>{isWishlisted ? 'ĐÃ LƯU' : 'LƯU'}</span>
                   </button>
+                  {isEnrolled && groupChat && (
+                    <button
+                      className="cockpit-detail-action-btn"
+                      onClick={handleJoinGroup}
+                      style={{ color: '#60a5fa', borderColor: '#60a5fa' }}
+                    >
+                      <Users className="cockpit-detail-action-icon" />
+                      <span>{groupChat.isMember ? 'VÀO GROUP' : 'THAM GIA GROUP'}</span>
+                    </button>
+                  )}
                   <button className="cockpit-detail-action-btn">
                     <Share2 className="cockpit-detail-action-icon" />
                     <span>CHIA SẺ</span>
