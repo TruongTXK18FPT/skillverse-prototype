@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, User, CheckCircle, XCircle, AlertCircle, MessageSquare, Star } from 'lucide-react';
+import { Calendar, Clock, User, CheckCircle, XCircle, AlertCircle, MessageSquare, Star, Ticket } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { getMyBookings, downloadBookingInvoice, cancelBooking, BookingResponse } from '../../services/bookingService';
 import { createReview, getReviewByBookingId, ReviewResponse } from '../../services/reviewService';
+import { seminarService } from '../../services/seminarService';
+import { SeminarTicket } from '../../types/seminar';
+import Pagination from '../../components/shared/Pagination';
 import '../../styles/UserBookings.css';
 
 const UserBookingsPage = () => {
+  const [activeTab, setActiveTab] = useState<'bookings' | 'tickets'>('bookings');
   const [bookings, setBookings] = useState<BookingResponse[]>([]);
+  const [tickets, setTickets] = useState<SeminarTicket[]>([]);
+  const [totalTickets, setTotalTickets] = useState(0);
+  const [ticketPage, setTicketPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  const TICKETS_PER_PAGE = 6;
 
   // Review Modal State
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -19,6 +29,45 @@ const UserBookingsPage = () => {
   const [comment, setComment] = useState('');
   const [submittingReview, setSubmittingReview] = useState(false);
   const [existingReview, setExistingReview] = useState<ReviewResponse | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tab = params.get('tab');
+    if (tab === 'tickets') {
+        setActiveTab('tickets');
+    } else {
+        setActiveTab('bookings');
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    fetchBookings();
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000); // Update every minute
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === 'bookings') {
+        fetchBookings();
+    } else {
+        fetchTickets();
+    }
+  }, [activeTab, ticketPage]);
+
+  const fetchTickets = async () => {
+    try {
+        setLoading(true);
+        const data = await seminarService.getMyTickets(ticketPage - 1, TICKETS_PER_PAGE);
+        setTickets(data.content);
+        setTotalTickets(data.totalElements);
+    } catch (error) {
+        console.error('Failed to fetch tickets', error);
+    } finally {
+        setLoading(false);
+    }
+  };
 
   const openReviewModal = async (bookingId: number) => {
     setSelectedBookingId(bookingId);
@@ -68,14 +117,6 @@ const UserBookingsPage = () => {
       setSubmittingReview(false);
     }
   };
-
-  useEffect(() => {
-    fetchBookings();
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000); // Update every minute
-    return () => clearInterval(timer);
-  }, []);
 
   const fetchBookings = async () => {
     try {
@@ -161,8 +202,49 @@ const UserBookingsPage = () => {
   return (
     <div className="usbk-container">
       <div className="usbk-header">
-        <h1 className="usbk-title">Quản Lý Lịch Hẹn</h1>
-        <p className="usbk-subtitle">Theo dõi và quản lý các buổi mentorship của bạn</p>
+        <h1 className="usbk-title">Hoạt động của tôi</h1>
+        <p className="usbk-subtitle">Quản lý lịch hẹn Mentorship và vé tham gia Hội thảo</p>
+        
+        <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
+            <button 
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    padding: '0.75rem 1.5rem',
+                    background: activeTab === 'bookings' ? 'var(--lhud-cyan)' : 'rgba(255,255,255,0.05)',
+                    color: activeTab === 'bookings' ? '#000' : 'var(--lhud-text-bright)',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontWeight: '600',
+                    transition: 'all 0.3s ease'
+                }}
+                onClick={() => { setActiveTab('bookings'); navigate('/my-bookings?tab=bookings'); }}
+            >
+                <Calendar size={18} />
+                <span>Lịch hẹn Mentorship</span>
+            </button>
+            <button 
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    padding: '0.75rem 1.5rem',
+                    background: activeTab === 'tickets' ? 'var(--lhud-cyan)' : 'rgba(255,255,255,0.05)',
+                    color: activeTab === 'tickets' ? '#000' : 'var(--lhud-text-bright)',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontWeight: '600',
+                    transition: 'all 0.3s ease'
+                }}
+                onClick={() => { setActiveTab('tickets'); navigate('/my-bookings?tab=tickets'); }}
+            >
+                <Ticket size={18} />
+                <span>Vé Hội Thảo</span>
+            </button>
+        </div>
       </div>
 
       <div className="usbk-content">
@@ -171,83 +253,182 @@ const UserBookingsPage = () => {
             <MeowlKuruLoader size="small" text="" />
             <span>Đang tải dữ liệu...</span>
           </div>
-        ) : bookings.length === 0 ? (
-          <div className="usbk-empty">
-            <Calendar size={48} />
-            <p>Bạn chưa có lịch hẹn nào.</p>
-            <button onClick={() => navigate('/mentorship')} className="usbk-btn-primary">
-              Đặt lịch ngay
-            </button>
-          </div>
-        ) : (
-          <div className="usbk-grid">
-            {bookings.map((booking) => {
-              const { date, time } = formatDateTime(booking.startTime);
-              return (
-                <div key={booking.id} className="usbk-card">
-                  <div className="usbk-card-header">
-                    <div className="usbk-mentor-info">
-                      <img 
-                        src={booking.mentorAvatar || 'https://via.placeholder.com/150'} 
-                        alt={booking.mentorName || 'Mentor'} 
-                        className="usbk-avatar" 
-                      />
-                      <div>
-                        <h3 className="usbk-mentor-name">{booking.mentorName || 'Mentor'}</h3>
-                        <span className="usbk-price">{booking.priceVnd?.toLocaleString('vi-VN')} VND</span>
-                      </div>
-                    </div>
-                    <div className="usbk-status" style={{ color: getStatusColor(booking.status), borderColor: getStatusColor(booking.status) }}>
-                      {getStatusText(booking.status)}
-                    </div>
-                  </div>
-
-                  <div className="usbk-card-body">
-                    <div className="usbk-info-row">
-                      <Calendar size={16} />
-                      <span>{date}</span>
-                    </div>
-                    <div className="usbk-info-row">
-                      <Clock size={16} />
-                      <span>{time} ({booking.durationMinutes} phút)</span>
-                    </div>
-                    {booking.meetingLink && isMeetingActive(booking) && (
-                      <div className="usbk-meeting-link">
-                        <a href={booking.meetingLink} target="_blank" rel="noopener noreferrer">
-                          Tham gia cuộc họp
-                        </a>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="usbk-card-footer">
-                    <button className="usbk-btn-secondary" onClick={() => navigate('/messages', { state: { openChatWith: booking.mentorId } })}>
-                      <MessageSquare size={16} />
-                      Nhắn tin
+        ) : activeTab === 'bookings' ? (
+            bookings.length === 0 ? (
+                <div className="usbk-empty">
+                    <Calendar size={48} />
+                    <p>Bạn chưa có lịch hẹn nào.</p>
+                    <button onClick={() => navigate('/mentorship')} className="usbk-btn-primary">
+                    Đặt lịch ngay
                     </button>
-                    {booking.status === 'COMPLETED' && (
-                      <button className="usbk-btn-primary" onClick={() => openReviewModal(booking.id)} style={{ backgroundColor: '#eab308', borderColor: '#eab308' }}>
-                        <Star size={16} />
-                        Đánh giá
-                      </button>
-                    )}
-                    {booking.status === 'PENDING' || booking.status === 'CONFIRMED' ? (
-                      <button className="usbk-btn-danger" onClick={() => handleCancel(booking.id)}>Hủy lịch</button>
-                    ) : (
-                      <button className="usbk-btn-primary" onClick={() => navigate('/mentorship')}>Đặt lại</button>
-                    )}
-                    {(booking.status === 'COMPLETED' || booking.paymentReference) && (
-                      <button className="usbk-btn-secondary" onClick={() => handleDownloadInvoice(booking.id)}>
-                        Tải hóa đơn
-                      </button>
-                    )}
-                  </div>
                 </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
+            ) : (
+            <div className="usbk-grid">
+                {bookings.map((booking) => {
+                const { date, time } = formatDateTime(booking.startTime);
+                return (
+                    <div key={booking.id} className="usbk-card">
+                    <div className="usbk-card-header">
+                        <div className="usbk-mentor-info">
+                        <img 
+                            src={booking.mentorAvatar || 'https://via.placeholder.com/150'} 
+                            alt={booking.mentorName || 'Mentor'} 
+                            className="usbk-avatar" 
+                        />
+                        <div>
+                            <h3 className="usbk-mentor-name">{booking.mentorName || 'Mentor'}</h3>
+                            <span className="usbk-price">{booking.priceVnd?.toLocaleString('vi-VN')} VND</span>
+                        </div>
+                        </div>
+                        <div className="usbk-status" style={{ color: getStatusColor(booking.status), borderColor: getStatusColor(booking.status) }}>
+                        {getStatusText(booking.status)}
+                        </div>
+                    </div>
+
+                    <div className="usbk-card-body">
+                        <div className="usbk-info-row">
+                        <Calendar size={16} />
+                        <span>{date}</span>
+                        </div>
+                        <div className="usbk-info-row">
+                        <Clock size={16} />
+                        <span>{time} ({booking.durationMinutes} phút)</span>
+                        </div>
+                        {booking.meetingLink && isMeetingActive(booking) && (
+                        <div className="usbk-meeting-link">
+                            <a href={booking.meetingLink} target="_blank" rel="noopener noreferrer">
+                            Tham gia cuộc họp
+                            </a>
+                        </div>
+                        )}
+                    </div>
+
+                    <div className="usbk-card-footer">
+                        <button className="usbk-btn-secondary" onClick={() => navigate('/messages', { state: { openChatWith: booking.mentorId } })}>
+                        <MessageSquare size={16} />
+                        Nhắn tin
+                        </button>
+                        {booking.status === 'COMPLETED' && (
+                        <button className="usbk-btn-primary" onClick={() => openReviewModal(booking.id)} style={{ backgroundColor: '#eab308', borderColor: '#eab308' }}>
+                            <Star size={16} />
+                            Đánh giá
+                        </button>
+                        )}
+                        {booking.status === 'PENDING' || booking.status === 'CONFIRMED' ? (
+                        <button className="usbk-btn-danger" onClick={() => handleCancel(booking.id)}>Hủy lịch</button>
+                        ) : (
+                        <button className="usbk-btn-primary" onClick={() => navigate('/mentorship')}>Đặt lại</button>
+                        )}
+                        {(booking.status === 'COMPLETED' || booking.paymentReference) && (
+                        <button className="usbk-btn-secondary" onClick={() => handleDownloadInvoice(booking.id)}>
+                            Tải hóa đơn
+                        </button>
+                        )}
+                    </div>
+                    </div>
+                );
+                })}
+            </div>
+            )
+        ) : (
+            tickets.length === 0 ? (
+                <div className="usbk-empty">
+                   <Ticket size={48} />
+                   <p>Bạn chưa có vé hội thảo nào.</p>
+                   <button onClick={() => navigate('/seminar')} className="usbk-btn-primary">
+                     Khám phá hội thảo
+                   </button>
+                </div>
+              ) : (
+                <div className="usbk-grid">
+                   {tickets.map(ticket => {
+                       const isEnded = ticket.seminarStatus === 'CLOSED' || new Date() > new Date(ticket.seminarEndTime);
+                       const isLive = !isEnded && (ticket.seminarStatus === 'OPEN' || new Date() >= new Date(ticket.seminarStartTime));
+                       
+                       return (
+                       <div key={ticket.id} className="usbk-card">
+                            <div className="usbk-card-header">
+                               <div className="usbk-mentor-info">
+                                   <div style={{ 
+                                       width: '50px', 
+                                       height: '50px', 
+                                       borderRadius: '50%', 
+                                       background: isEnded ? 'rgba(239, 68, 68, 0.2)' : 'rgba(6, 182, 212, 0.2)',
+                                       display: 'flex',
+                                       alignItems: 'center',
+                                       justifyContent: 'center',
+                                       color: isEnded ? '#ef4444' : 'var(--lhud-cyan)',
+                                       fontWeight: 'bold',
+                                       fontSize: '1.5rem',
+                                       border: `1px solid ${isEnded ? '#ef4444' : 'var(--lhud-cyan)'}`
+                                   }}>
+                                       {ticket.seminarTitle.charAt(0).toUpperCase()}
+                                   </div>
+                                   <div>
+                                       <h3 className="usbk-mentor-name">{ticket.seminarTitle}</h3>
+                                       <span className="usbk-price">{ticket.pricePaid === 0 ? 'Miễn phí' : ticket.pricePaid.toLocaleString('vi-VN') + ' VND'}</span>
+                                   </div>
+                               </div>
+                               <div className="usbk-status" style={{ 
+                                   color: isEnded ? '#ef4444' : isLive ? '#22c55e' : '#22c55e', 
+                                   borderColor: isEnded ? '#ef4444' : isLive ? '#22c55e' : '#22c55e' 
+                               }}>
+                                   {isEnded ? 'Đã kết thúc' : isLive ? '🔴 Đang diễn ra' : 'Đã sở hữu'}
+                               </div>
+                            </div>
+                            <div className="usbk-card-body">
+                                <div className="usbk-info-row">
+                                   <Calendar size={16} />
+                                   <span>Bắt đầu: {new Date(ticket.seminarStartTime).toLocaleString('vi-VN')}</span>
+                                </div>
+                                <div className="usbk-info-row">
+                                   <Clock size={16} />
+                                   <span>Kết thúc: {new Date(ticket.seminarEndTime).toLocaleString('vi-VN')}</span>
+                                </div>
+                                <div className="usbk-info-row">
+                                    <Ticket size={16} />
+                                    <span>Mã vé: #{ticket.id} | Mua ngày: {new Date(ticket.purchasedAt).toLocaleDateString('vi-VN')}</span>
+                                </div>
+                                <div style={{ marginTop: '1rem' }}>
+                                    {isLive ? (
+                                        <button 
+                                            className="usbk-btn-primary" 
+                                            style={{ 
+                                                width: '100%',
+                                                background: '#22c55e',
+                                                borderColor: '#22c55e'
+                                            }}
+                                            onClick={() => navigate(`/seminar/${ticket.seminarId}`)}
+                                        >
+                                            🔗 Tham gia ngay
+                                        </button>
+                                    ) : (
+                                        <button 
+                                           className="usbk-btn-primary" 
+                                           style={{ width: '100%', opacity: isEnded ? 0.7 : 1 }}
+                                           onClick={() => navigate(`/seminar/${ticket.seminarId}`)}
+                                       >
+                                           {isEnded ? '📋 Xem chi tiết (đã kết thúc)' : 'Xem chi tiết hội thảo'}
+                                       </button>
+                                    )}
+                                </div>
+                            </div>
+                       </div>
+                   )})}
+                </div>
+              )
+        )}        
+        {/* Pagination for tickets */}
+        {activeTab === 'tickets' && totalTickets > TICKETS_PER_PAGE && (
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+                <Pagination
+                    totalItems={totalTickets}
+                    itemsPerPage={TICKETS_PER_PAGE}
+                    currentPage={ticketPage}
+                    onPageChange={setTicketPage}
+                />
+            </div>
+        )}      </div>
 
       {/* Review Modal */}
       {isReviewModalOpen && (

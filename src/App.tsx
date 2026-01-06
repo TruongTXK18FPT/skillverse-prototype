@@ -53,6 +53,7 @@ import TermOfService from './pages/footer/TermOfService';
 import PrivacyPolicy from './pages/footer/Privacy&Policy';
 import HelpCenter from './pages/footer/HelpCenter';
 import SeminarPage from './pages/navbar/SeminarPage';
+import SeminarDetailPage from './pages/navbar/SeminarDetailPage';
 import BusinessPage from './pages/main/BusinessPage';
 import MentorPage from './pages/main/MentorPage';
 import AllBadgesPage from './pages/mentor/AllBadgesPage';
@@ -81,6 +82,9 @@ import MeowlPetWrapper from './components/meowl-pet/MeowlPetWrapper';
 import ForbiddenTemple from './components/easter-egg/ForbiddenTemple';
 import TicTacToeGame from './components/game/tic-tac-toe/TicTacToeGame';
 import MeowlAdventure from './components/game/meowl-adventure/MeowlAdventure';
+
+import AdminSeminarManager from './pages/main/AdminSeminarManager';
+import RecruiterSeminarManager from './pages/main/RecruiterSeminarManager';
 import MeowlSkinShopPage from './pages/shop/MeowlSkinShopPage';
 import UserGuidePage from './pages/user-guide/UserGuidePage';
 
@@ -174,6 +178,7 @@ const App = () => {
                     <Route path="/wallet" element={<MyWalletCosmic />} />
                     <Route path="/my-wallet" element={<MyWalletCosmic />} />
                     <Route path="/seminar" element={<SeminarPage />} />
+                    <Route path="/seminar/:id" element={<SeminarDetailPage />} />
                     <Route path="/courses/:id" element={<CourseDetailPage />} />
                     <Route path="/course-learning" element={<CourseLearningPage />} />
                     <Route path="/quiz/:quizId/attempt" element={<QuizAttemptPage />} />
@@ -198,6 +203,11 @@ const App = () => {
                         <BusinessPage />
                       </RecruiterRoute>
                     } />
+                    <Route path="/recruiter/seminars" element={
+                      <RecruiterRoute>
+                        <RecruiterSeminarManager />
+                      </RecruiterRoute>
+                    } />
                     <Route path="/mentor" element={
                       <MentorRoute>
                         <MentorPage />
@@ -211,6 +221,11 @@ const App = () => {
                     <Route path="/admin" element={
                       <AdminRoute>
                         <AdminPage />
+                      </AdminRoute>
+                    } />
+                    <Route path="/admin/seminars" element={
+                      <AdminRoute>
+                        <AdminSeminarManager />
                       </AdminRoute>
                     } />
                     <Route path="/admin-security" element={<AdminSecurityPage />} />

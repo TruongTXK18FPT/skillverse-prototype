@@ -1,0 +1,413 @@
+/* Recruiter Seminar Manager Styles */
+/* Prefix: .rsm- */
+
+.rsm-container {
+    padding-top: 80px;
+    min-height: 100vh;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* When embedded in CommandDeck (BusinessHub) */
+.fleet-main .rsm-container {
+    padding-top: 0;
+    min-height: auto;
+    background: transparent;
+}
+
+.rsm-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.rsm-header {
+    margin-bottom: 2rem;
+}
+
+.rsm-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--lhud-text-bright, #fff);
+    margin-bottom: 0.5rem;
+}
+
+.rsm-description {
+    color: var(--text-secondary, #9ca3af);
+}
+
+/* Controls & Search */
+.rsm-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.rsm-search-box {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--lhud-border, #333);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    width: 300px;
+}
+
+.rsm-search-icon {
+    color: var(--text-secondary, #9ca3af);
+    margin-right: 0.5rem;
+}
+
+.rsm-search-input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary, #fff);
+    width: 100%;
+    outline: none;
+}
+
+.rsm-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--lhud-cyan, #06b6d4);
+    color: #000;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.rsm-add-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+/* Table Styles */
+.rsm-table-wrapper {
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(6, 182, 212, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
+}
+
+.rsm-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.rsm-table th {
+    background: rgba(6, 182, 212, 0.1);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--lhud-text-bright, #fff);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(6, 182, 212, 0.3);
+}
+
+.rsm-table td {
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--lhud-text-primary, #e5e7eb);
+}
+
+.rsm-time-cell {
+    font-size: 0.9rem;
+}
+
+.rsm-time-sub {
+    font-size: 0.85em;
+    color: var(--text-secondary, #9ca3af);
+}
+
+/* Status Badges */
+.rsm-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.rsm-status.accepted, .rsm-status.open {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+}
+
+.rsm-status.pending {
+    background: rgba(234, 179, 8, 0.2);
+    color: #eab308;
+}
+
+.rsm-status.rejected {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.rsm-status.draft, .rsm-status.closed {
+    background: rgba(107, 114, 128, 0.2);
+    color: #9ca3af;
+}
+
+/* Actions */
+.rsm-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.rsm-action-btn {
+    background: transparent;
+    border: none;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: var(--text-secondary, #9ca3af);
+}
+
+.rsm-action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--lhud-text-bright, #fff);
+}
+
+/* Modal Form Styles */
+.rsm-form {
+    display: grid;
+    gap: 1.25rem;
+    color: var(--lhud-text-primary, #e5e7eb);
+}
+
+.rsm-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.rsm-form-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary, #9ca3af);
+}
+
+.rsm-form-input, .rsm-form-textarea {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--lhud-border, #333);
+    color: white;
+    border-radius: 6px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.rsm-form-input:focus, .rsm-form-textarea:focus {
+    border-color: var(--lhud-cyan, #06b6d4);
+    outline: none;
+}
+
+.rsm-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.rsm-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.rsm-btn-cancel {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--lhud-border, #333);
+    color: var(--lhud-text-primary, #fff);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.rsm-btn-submit {
+    padding: 8px 16px;
+    background: var(--lhud-cyan, #06b6d4);
+    border: none;
+    color: black;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.rsm-btn-submit:hover {
+    filter: brightness(1.1);
+}
+
+/* Modal Details Styles */
+.rsm-modal-content {
+    color: var(--lhud-text-primary, #e5e7eb);
+}
+
+.rsm-modal-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--lhud-border, #333);
+}
+
+.rsm-detail-title {
+    font-size: 1.5rem;
+    color: var(--lhud-text-bright, #fff);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.rsm-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.rsm-detail-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.rsm-detail-item.full-width {
+    grid-column: span 2;
+}
+
+.rsm-detail-icon {
+    color: #06b6d4; /* Cyan color */
+    margin-top: 3px;
+}
+
+.rsm-detail-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary, #9ca3af);
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.rsm-detail-value {
+    font-size: 1rem;
+    color: var(--lhud-text-bright, #fff);
+    font-weight: 500;
+}
+
+.rsm-detail-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.rsm-detail-desc {
+    margin-top: 0.5rem;
+    line-height: 1.6;
+    color: var(--lhud-text-primary, #d1d5db);
+    white-space: pre-wrap;
+}
+
+/* Stats Bar */
+.rsm-stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.rsm-stats-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid var(--lhud-border, #333);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.rsm-stats-card:hover {
+    border-color: rgba(6, 182, 212, 0.4);
+    background: rgba(17, 24, 39, 0.8);
+}
+
+.rsm-stats-card--clickable {
+    cursor: pointer;
+}
+
+.rsm-stats-card--clickable:hover {
+    border-color: var(--lhud-cyan, #06b6d4);
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+    transform: translateY(-2px);
+}
+
+.rsm-stats-icon {
+    color: var(--lhud-text-dim, #9ca3af);
+    flex-shrink: 0;
+}
+
+.rsm-stats-icon--success {
+    color: #22c55e;
+}
+
+.rsm-stats-icon--wallet {
+    color: var(--lhud-cyan, #06b6d4);
+}
+
+.rsm-stats-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.rsm-stats-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--lhud-text-bright, #fff);
+}
+
+.rsm-stats-label {
+    font-size: 0.8rem;
+    color: var(--lhud-text-dim, #9ca3af);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+    .rsm-stats-bar {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Validation Error Styles */
+.rsm-form-input--error,
+.rsm-form-textarea--error {
+    border-color: #ef4444 !important;
+    background-color: rgba(239, 68, 68, 0.05);
+}
+
+.rsm-form-input--error:focus,
+.rsm-form-textarea--error:focus {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.rsm-form-error {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #ef4444;
+    font-weight: 500;
+}

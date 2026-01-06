@@ -1,10 +1,10 @@
 import React from 'react';
-import { LayoutDashboard, PlusCircle, Users } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, Users, Calendar } from 'lucide-react';
 import './fleet-styles.css';
 
 interface FleetHeaderProps {
-  activeTab: 'dashboard' | 'mission' | 'radar';
-  onTabChange: (tab: 'dashboard' | 'mission' | 'radar') => void;
+  activeTab: 'dashboard' | 'mission' | 'radar' | 'seminar';
+  onTabChange: (tab: 'dashboard' | 'mission' | 'radar' | 'seminar') => void;
 }
 
 const FleetHeader: React.FC<FleetHeaderProps> = ({ activeTab, onTabChange }) => {
@@ -42,6 +42,13 @@ const FleetHeader: React.FC<FleetHeaderProps> = ({ activeTab, onTabChange }) => 
           >
             <Users size={18} />
             <span>TÌM KIẾM ỨNG VIÊN</span>
+          </button>
+          <button 
+            className={`fleet-nav-btn ${activeTab === 'seminar' ? 'active' : ''}`}
+            onClick={() => onTabChange('seminar')}
+          >
+            <Calendar size={18} />
+            <span>QUẢN LÝ HỘI THẢO</span>
           </button>
         </div>
       </div>

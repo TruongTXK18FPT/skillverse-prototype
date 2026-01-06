@@ -9,9 +9,10 @@ import portfolioService from '../../services/portfolioService';
 import { FreelancerCardDisplay, CandidateSummaryDTO } from '../../data/portfolioDTOs';
 import jobService from '../../services/jobService';
 import { JobStatus } from '../../data/jobDTOs';
+import RecruiterSeminarManager from '../../pages/main/RecruiterSeminarManager';
 
 const CommandDeck: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'mission' | 'radar'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'mission' | 'radar' | 'seminar'>('dashboard');
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [freelancers, setFreelancers] = useState<FreelancerCardDisplay[]>([]);
   const [loadingRadar, setLoadingRadar] = useState(false);
@@ -151,6 +152,13 @@ const CommandDeck: React.FC = () => {
                 onPageChange: setRadarPage
               }}
             />
+          </div>
+        )}
+
+        {/* Seminar View */}
+        {activeTab === 'seminar' && (
+          <div className="fleet-main" style={{ padding: 0, background: 'transparent' }}>
+             <RecruiterSeminarManager />
           </div>
         )}
       </div>

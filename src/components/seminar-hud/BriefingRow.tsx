@@ -1,22 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './briefing-styles.css';
-
-interface Seminar {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  location: string;
-  organizer: string;
-  schedule: string;
-  speakers: string;
-  registration: string;
-  tags: string;
-  sponsors: string;
-  backgroundImageUrl: string;
-}
+import { Seminar } from '../../types/seminar';
 
 interface BriefingRowProps {
   seminar: Seminar;
@@ -30,10 +14,14 @@ const BriefingRow: React.FC<BriefingRowProps> = ({ seminar, onAction }) => {
   useEffect(() => {
     const calculateCountdown = () => {
       try {
-        const dateTimestamp = Number(seminar.date) * 1000;
-        const seminarDate = new Date(dateTimestamp);
-        const [hours, minutes] = seminar.startTime.split(':').map(Number);
-        seminarDate.setHours(hours || 0, minutes || 0, 0, 0);
+        let seminarDate: Date;
+        
+        // Handle ISO format (Backend)
+        if (seminar.startTime) {
+             seminarDate = new Date(seminar.startTime);
+        } else {
+             return 'CHỜ';
+        }
 
         const now = new Date();
         const diff = seminarDate.getTime() - now.getTime();
@@ -59,12 +47,11 @@ const BriefingRow: React.FC<BriefingRowProps> = ({ seminar, onAction }) => {
     setCountdown(calculateCountdown());
     const interval = setInterval(() => setCountdown(calculateCountdown()), 60000);
     return () => clearInterval(interval);
-  }, [seminar.date, seminar.startTime]);
+  }, [seminar.startTime]);
 
   // Extract category and sector
-  const category = typeof seminar.tags === 'string'
-    ? seminar.tags.split(',')[0]?.trim().toUpperCase() || 'THÔNG TIN'
-    : 'THÔNG TIN';
+  // Note: BE currently doesn't support tags, defaulting to "HỘI THẢO"
+  const category = 'HỘI THẢO'; 
 
   const sector = Math.floor(Math.random() * 9) + 1;
 
@@ -73,7 +60,7 @@ const BriefingRow: React.FC<BriefingRowProps> = ({ seminar, onAction }) => {
       {/* Left: Small Hologram Thumbnail */}
       <div className="briefing-row-thumb">
         <img
-          src={seminar.backgroundImageUrl}
+          src={seminar.imageUrl || 'https://via.placeholder.com/150'}
           alt={seminar.title}
           className="briefing-row-img"
         />
@@ -91,7 +78,7 @@ const BriefingRow: React.FC<BriefingRowProps> = ({ seminar, onAction }) => {
           <span className="briefing-meta-badge briefing-meta-countdown">T-{countdown}</span>
           <span className="briefing-meta-divider">|</span>
           <span className="briefing-meta-badge briefing-meta-speaker">
-            {seminar.speakers || seminar.organizer}
+            {seminar.creatorName || 'Recruiter'}
           </span>
           <span className="briefing-meta-divider">|</span>
           <span className="briefing-meta-badge briefing-meta-category">
@@ -102,7 +89,7 @@ const BriefingRow: React.FC<BriefingRowProps> = ({ seminar, onAction }) => {
 
       {/* Right: Compact Action Button */}
       <div className="briefing-row-action">
-        <button className="briefing-row-btn" onClick={() => onAction(seminar.id)}>XEM CHI TIẾT →</button>
+        <button className="briefing-row-btn" onClick={() => onAction(String(seminar.id))}>XEM CHI TIẾT →</button>
       </div>
     </div>
   );

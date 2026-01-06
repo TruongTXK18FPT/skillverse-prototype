@@ -16,9 +16,10 @@ import CommunityManagementTab from '../../components/admin/CommunityManagementTa
 import { JobManagementTab } from '../../components/admin/JobManagementTab';
 import MeowlSkinUploadTab from '../../components/admin/MeowlSkinUploadTab';
 import SliderManagementTab from '../../components/admin/SliderManagementTab';
+import AdminSeminarManager from './AdminSeminarManager';
 import {
   Users, UserCheck, BookOpen, BarChart3, Bell, AlertTriangle,
-  CreditCard, Banknote, Zap, Crown, Ticket, Settings, Brain, MessageSquare, Briefcase, Shirt, Image
+  CreditCard, Banknote, Zap, Crown, Ticket, Settings, Brain, MessageSquare, Briefcase, Shirt, Image, Calendar
 } from 'lucide-react';
 import adminUserService from '../../services/adminUserService';
 import adminService from '../../services/adminService';
@@ -217,6 +218,14 @@ const AdminPage: React.FC = () => {
       allowedRoles: ['CONTENT_ADMIN', 'SYSTEM_ADMIN']
     },
     { 
+      id: 'seminars', 
+      label: 'Duyệt Hội Thảo', 
+      icon: Calendar,
+      gradient: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)',
+      description: 'Phê duyệt hội thảo mới',
+      allowedRoles: ['CONTENT_ADMIN', 'ADMIN']
+    },
+    { 
       id: 'settings', 
       label: 'Cài Đặt Hệ Thống', 
       icon: Settings,
@@ -251,6 +260,8 @@ const AdminPage: React.FC = () => {
         return <CourseApprovalTabCosmic />;
       case 'jobs':
         return <JobManagementTab />;
+      case 'seminars':
+        return <AdminSeminarManager />;
       case 'analytics':
         return <AnalyticsTab />;
       case 'notifications':

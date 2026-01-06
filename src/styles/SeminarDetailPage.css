@@ -1,0 +1,327 @@
+/* ============================================
+   SEMINAR DETAIL PAGE - ISOLATED STYLES
+   Prefix: sdp-* (Seminar Detail Page)
+   Theme: Matches briefing-styles.css color palette
+   ============================================ */
+
+/* ============================================
+   LAYOUT CONTAINERS
+   ============================================ */
+.sdp-container {
+  padding: 2rem 10%;
+  min-height: 100vh;
+}
+
+.sdp-back-section {
+  margin-bottom: 2rem;
+}
+
+.sdp-back-btn {
+  background: transparent;
+  border: none;
+  color: var(--lhud-text-dim, #94a3b8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.sdp-back-btn:hover {
+  color: var(--lhud-cyan, #06b6d4);
+}
+
+/* ============================================
+   MAIN CARD CONTAINER
+   ============================================ */
+.sdp-card {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid var(--lhud-border, rgba(148, 163, 184, 0.1));
+  overflow: hidden;
+}
+
+/* ============================================
+   HERO IMAGE SECTION
+   ============================================ */
+.sdp-hero {
+  height: 400px;
+  width: 100%;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.sdp-hero-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 1), transparent);
+  height: 150px;
+}
+
+.sdp-hero-content {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  right: 2rem;
+}
+
+.sdp-hero-title {
+  font-size: 2.5rem;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 1rem;
+}
+
+.sdp-hero-meta {
+  display: flex;
+  gap: 2rem;
+  color: var(--lhud-text-bright, #ffffff);
+}
+
+.sdp-hero-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sdp-price {
+  color: #22c55e;
+  font-weight: bold;
+}
+
+/* ============================================
+   CONTENT GRID
+   ============================================ */
+.sdp-content {
+  padding: 2rem;
+}
+
+.sdp-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* ============================================
+   MAIN INFO SECTION
+   ============================================ */
+.sdp-main-info h3 {
+  color: var(--lhud-cyan, #06b6d4);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--lhud-border, rgba(148, 163, 184, 0.1));
+  padding-bottom: 0.5rem;
+}
+
+.sdp-description {
+  color: var(--lhud-text-primary, #f1f5f9);
+  line-height: 1.8;
+  white-space: pre-line;
+  font-size: 1.1rem;
+}
+
+/* ============================================
+   SIDEBAR INFO SECTION
+   ============================================ */
+.sdp-sidebar {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1.5rem;
+  border-radius: 12px;
+  height: fit-content;
+  color: #ffffff;
+}
+
+.sdp-sidebar-title {
+  color: #06b6d4;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* ============================================
+   STATUS BADGES
+   ============================================ */
+.sdp-status {
+  margin-bottom: 1.5rem;
+}
+
+.sdp-status-badge {
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.sdp-status-badge--ended {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+.sdp-status-badge--live {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid #22c55e;
+}
+
+.sdp-status-badge--upcoming {
+  background: rgba(6, 182, 212, 0.1);
+  color: var(--lhud-cyan, #06b6d4);
+  border: 1px solid var(--lhud-cyan, #06b6d4);
+}
+
+/* ============================================
+   TIME INFO BLOCKS
+   ============================================ */
+.sdp-time-block {
+  margin-bottom: 1.5rem;
+}
+
+.sdp-time-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--lhud-text-dim, #94a3b8);
+  font-size: 0.9rem;
+}
+
+.sdp-time-value {
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 1rem;
+  padding-left: 1.625rem; /* Align with text after icon (18px icon + 0.5rem gap) */
+}
+
+/* ============================================
+   TICKET STATUS SECTION
+   ============================================ */
+.sdp-ticket-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--lhud-border, rgba(148, 163, 184, 0.1));
+  text-align: center;
+}
+
+.sdp-ticket-owned {
+  background: rgba(6, 182, 212, 0.1);
+  color: var(--lhud-cyan, #06b6d4);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--lhud-cyan, #06b6d4);
+}
+
+.sdp-ticket-ended-msg {
+  color: var(--lhud-text-dim, #94a3b8);
+  font-size: 0.9rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.sdp-join-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  text-decoration: none;
+  background: var(--lhud-cyan, #06b6d4);
+  color: #000000;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.sdp-join-btn:hover {
+  background: #0891b2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.sdp-link-pending {
+  color: var(--lhud-text-dim, #94a3b8);
+  font-size: 0.9rem;
+}
+
+.sdp-no-ticket-msg {
+  color: var(--lhud-text-dim, #94a3b8);
+}
+
+.sdp-no-ticket-msg a {
+  color: var(--lhud-cyan, #06b6d4);
+  text-decoration: none;
+}
+
+.sdp-no-ticket-msg a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
+   LOADING & ERROR STATES
+   ============================================ */
+.sdp-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.sdp-error {
+  padding: 2rem;
+  text-align: center;
+}
+
+.sdp-error-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 1024px) {
+  .sdp-container {
+    padding: 2rem 5%;
+  }
+
+  .sdp-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sdp-sidebar {
+    order: -1; /* Move sidebar above main content on mobile */
+  }
+}
+
+@media (max-width: 768px) {
+  .sdp-container {
+    padding: 1rem;
+  }
+
+  .sdp-hero {
+    height: 250px;
+  }
+
+  .sdp-hero-title {
+    font-size: 1.75rem;
+  }
+
+  .sdp-hero-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .sdp-content {
+    padding: 1rem;
+  }
+}

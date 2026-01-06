@@ -29,7 +29,8 @@ import {
   HelpCircle,
   BadgeQuestionMark,
   ShoppingBag,
-  AlertTriangle
+  AlertTriangle,
+  Ticket
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -491,9 +492,13 @@ const Header: React.FC = () => {
                     <MessageSquare size={16} />
                     <span>Tin nhắn</span>
                   </button>
-                  <button onClick={() => { navigate('/my-bookings'); setShowUserMenu(false); }} className="dropdown-item">
+                  <button onClick={() => { navigate('/my-bookings?tab=bookings'); setShowUserMenu(false); }} className="dropdown-item">
                     <Calendar size={16} />
                     <span>Quản lý lịch hẹn</span>
+                  </button>
+                  <button onClick={() => { navigate('/my-bookings?tab=tickets'); setShowUserMenu(false); }} className="dropdown-item">
+                    <Ticket size={16} />
+                    <span>Vé của tôi</span>
                   </button>
                   <button onClick={() => { navigate('/help-center'); setShowUserMenu(false); }} className="dropdown-item">
                     <HelpCircle size={16} />
