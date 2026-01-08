@@ -72,3 +72,23 @@ export interface SeminarTicketResponse {
     size: number;
     number: number;
 }
+
+/**
+ * Top speaker by ticket sales for analytics sidebar
+ */
+export interface TopSpeaker {
+    creatorId: string;
+    companyName: string;
+    totalTicketsSold: number;
+}
+
+/**
+ * Seminar analytics data for briefing sidebar
+ * Vietnamese labels: KÊNH / HOẠT ĐỘNG / HOÀN THÀNH
+ */
+export interface SeminarAnalytics {
+    totalSeminars: number;      // KÊNH (all accepted/open/closed)
+    activeSeminars: number;     // HOẠT ĐỘNG (accepted + open)
+    completedSeminars: number;  // HOÀN THÀNH (closed)
+    topSpeakers: TopSpeaker[];  // Top 4 speakers by ticket sales
+}

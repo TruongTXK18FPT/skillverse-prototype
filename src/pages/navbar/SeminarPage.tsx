@@ -9,9 +9,10 @@ import BriefingSidebar from '../../components/seminar-hud/BriefingSidebar';
 import FrequencyTuner from '../../components/seminar-hud/FrequencyTuner';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import MeowGuide from '../../components/meowl/MeowlGuide';
-import { seminarService } from '../../services/seminarService';
-import { Seminar } from '../../types/seminar';
+import { seminarService, clearAnalyticsCache } from '../../services/seminarService';
+import { Seminar, SeminarAnalytics } from '../../types/seminar';
 import NeuralModal from '../../components/learning-hud/NeuralModal';
+import { toast } from 'react-toastify';
 
 // Helper: Ensure external URL has protocol
 const ensureExternalUrl = (url: string): string => {
@@ -33,6 +34,15 @@ const SeminarPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   
+  // Analytics State
+  const [analytics, setAnalytics] = useState<SeminarAnalytics>({
+    totalSeminars: 0,
+    activeSeminars: 0,
+    completedSeminars: 0,
+    topSpeakers: []
+  });
+  const [analyticsLoading, setAnalyticsLoading] = useState(true);
+  
   // Modal State
   const [selectedSeminar, setSelectedSeminar] = useState<Seminar | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,7 +61,27 @@ const SeminarPage: React.FC = () => {
 
   useEffect(() => {
     loadSeminars();
+    fetchAnalytics();
   }, []);
+
+  const fetchAnalytics = async () => {
+    try {
+      setAnalyticsLoading(true);
+      const data = await seminarService.getAnalytics();
+      setAnalytics(data);
+    } catch (error) {
+      console.error('Failed to fetch analytics:', error);
+      toast.error('⚠️ Không thể tải thống kê seminar');
+    } finally {
+      setAnalyticsLoading(false);
+    }
+  };
+
+  const handleRefreshAnalytics = () => {
+    clearAnalyticsCache();
+    fetchAnalytics();
+    toast.success('🔄 Đang làm mới thống kê...');
+  };
 
   const loadSeminars = async () => {
     setLoading(true);
@@ -218,7 +248,7 @@ const SeminarPage: React.FC = () => {
                 <BriefingRow
                   key={seminar.id}
                   seminar={seminar}
-                  onAction={() => handleViewDetails(String(seminar.id))}
+                  onAction={handleOpenModal}
                 />
               ))}
             </div>
@@ -237,8 +267,12 @@ const SeminarPage: React.FC = () => {
         </div>
 
         <BriefingSidebar
-          totalSeminars={seminars.length}
-          activeSeminars={filteredSeminars.length}
+          totalSeminars={analytics.totalSeminars}
+          activeSeminars={analytics.activeSeminars}
+          completedSeminars={analytics.completedSeminars}
+          topSpeakers={analytics.topSpeakers}
+          loading={analyticsLoading}
+          onRefresh={handleRefreshAnalytics}
         />
       </div>
 

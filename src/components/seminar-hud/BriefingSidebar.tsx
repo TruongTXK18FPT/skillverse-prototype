@@ -1,14 +1,44 @@
 import React from 'react';
+import { TopSpeaker } from '../../types/seminar';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './briefing-styles.css';
 
 interface BriefingSidebarProps {
   totalSeminars: number;
   activeSeminars: number;
+  completedSeminars: number;
+  topSpeakers: TopSpeaker[];
+  loading: boolean;
+  onRefresh: () => void;
 }
 
-const BriefingSidebar: React.FC<BriefingSidebarProps> = ({ totalSeminars, activeSeminars }) => {
+const BriefingSidebar: React.FC<BriefingSidebarProps> = ({ 
+  totalSeminars, 
+  activeSeminars,
+  completedSeminars,
+  topSpeakers,
+  loading,
+  onRefresh
+}) => {
+  if (loading) {
+    return (
+      <aside className="briefing-sidebar">
+        <div className="briefing-sidebar-loading">
+          <MeowlKuruLoader size="small" text="Đang tải thống kê..." />
+        </div>
+      </aside>
+    );
+  }
+
   return (
     <aside className="briefing-sidebar">
+      <button 
+        className="briefing-refresh-btn" 
+        onClick={onRefresh}
+        title="Làm mới thống kê"
+      >
+        <span className="refresh-icon">↻</span>
+      </button>
       {/* System Radar Widget */}
       <div className="sidebar-widget sidebar-radar">
         <div className="widget-header"><span className="widget-title">QUÉT RADAR</span><span className="widget-status">HOẠT ĐỘNG</span></div>
@@ -38,22 +68,21 @@ const BriefingSidebar: React.FC<BriefingSidebarProps> = ({ totalSeminars, active
       <div className="sidebar-widget sidebar-speakers">
         <div className="widget-header"><span className="widget-title">DIỄN GIẢ NỔI BẬT</span></div>
         <div className="speakers-list">
-          <div className="speaker-item">
-            <span className="speaker-rank">#1</span>
-            <span className="speaker-name">DR. SARAH CHEN</span>
-          </div>
-          <div className="speaker-item">
-            <span className="speaker-rank">#2</span>
-            <span className="speaker-name">PROF. JAMES WRIGHT</span>
-          </div>
-          <div className="speaker-item">
-            <span className="speaker-rank">#3</span>
-            <span className="speaker-name">DR. MAYA PATEL</span>
-          </div>
-          <div className="speaker-item">
-            <span className="speaker-rank">#4</span>
-            <span className="speaker-name">COL. ALEX MORGAN</span>
-          </div>
+          {topSpeakers.length > 0 ? (
+            topSpeakers.map((speaker, index) => (
+              <div key={speaker.creatorId} className="speaker-item">
+                <span className="speaker-rank">#{index + 1}</span>
+                <div className="speaker-info">
+                  <div className="speaker-name">{speaker.companyName}</div>
+                  <div className="speaker-tickets">{speaker.totalTicketsSold} vé</div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="briefing-empty-state">
+              📊 Chưa có dữ liệu diễn giả
+            </div>
+          )}
         </div>
       </div>
 
@@ -61,7 +90,7 @@ const BriefingSidebar: React.FC<BriefingSidebarProps> = ({ totalSeminars, active
       <div className="sidebar-widget sidebar-mission">
         <div className="widget-header"><span className="widget-title">THỐNG KÊ NHIỆM VỤ</span></div>
         <div className="mission-stats">
-          <div className="mission-stat"><div className="mission-stat-label">HOÀN THÀNH</div><div className="mission-stat-value">847</div></div>
+          <div className="mission-stat"><div className="mission-stat-label">HOÀN THÀNH</div><div className="mission-stat-value">{completedSeminars}</div></div>
           <div className="mission-stat"><div className="mission-stat-label">ĐANG DIỄN RA</div><div className="mission-stat-value">{activeSeminars}</div></div>
         </div>
       </div>

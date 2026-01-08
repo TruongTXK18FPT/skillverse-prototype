@@ -5,13 +5,25 @@ import {
     SeminarUpdateRequest, 
     SeminarResponse, 
     SeminarTicketResponse,
-    SeminarTicket
+    SeminarTicket,
+    SeminarAnalytics
 } from '../types/seminar';
 
 // Helper: Get auth headers if token exists (for optional auth endpoints)
 const getOptionalAuthHeaders = (): Record<string, string> => {
     const token = localStorage.getItem('accessToken');
     return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
+// Cache configuration for analytics
+const ANALYTICS_CACHE_KEY = 'seminar_analytics_cache';
+const ANALYTICS_CACHE_EXPIRY_KEY = 'seminar_analytics_cache_expiry';
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+// Cache clear utility
+export const clearAnalyticsCache = (): void => {
+    sessionStorage.removeItem(ANALYTICS_CACHE_KEY);
+    sessionStorage.removeItem(ANALYTICS_CACHE_EXPIRY_KEY);
 };
 
 class SeminarService {
@@ -100,6 +112,29 @@ class SeminarService {
             responseType: 'blob',
         });
         return response.data;
+    }
+
+    // Analytics (Public)
+    async getAnalytics(): Promise<SeminarAnalytics> {
+        // Check cache first
+        const cached = sessionStorage.getItem(ANALYTICS_CACHE_KEY);
+        const expiry = sessionStorage.getItem(ANALYTICS_CACHE_EXPIRY_KEY);
+        
+        if (cached && expiry && Date.now() < parseInt(expiry)) {
+            console.log('📊 Analytics: Using cached data');
+            return JSON.parse(cached);
+        }
+        
+        // Fetch from API
+        console.log('📊 Analytics: Fetching fresh data');
+        const response = await axiosInstance.get<SeminarAnalytics>('/seminars/analytics');
+        const data = response.data;
+        
+        // Store in cache with expiry
+        sessionStorage.setItem(ANALYTICS_CACHE_KEY, JSON.stringify(data));
+        sessionStorage.setItem(ANALYTICS_CACHE_EXPIRY_KEY, (Date.now() + CACHE_TTL_MS).toString());
+        
+        return data;
     }
 }
 
