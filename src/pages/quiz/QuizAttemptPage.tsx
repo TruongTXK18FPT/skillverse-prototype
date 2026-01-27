@@ -262,6 +262,20 @@ const QuizAttemptPage: React.FC = () => {
 
           <div className="hud-quiz-attempt-result-details">
             <div className="hud-quiz-attempt-detail-item">
+              <span className="hud-quiz-attempt-detail-label">SCORE EARNED:</span>
+              <span className="hud-quiz-attempt-detail-value">
+                {result.scoreEarned !== undefined 
+                  ? result.scoreEarned 
+                  : (Math.round((result.correctCount / totalQuestions) * 100))
+                }
+                /
+                {result.totalPossibleScore !== undefined
+                  ? result.totalPossibleScore
+                  : 100
+                }
+              </span>
+            </div>
+            <div className="hud-quiz-attempt-detail-item">
               <span className="hud-quiz-attempt-detail-label">CORRECT ANSWERS:</span>
               <span className="hud-quiz-attempt-detail-value">{result.correctCount || 0}/{totalQuestions}</span>
             </div>

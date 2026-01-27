@@ -51,6 +51,7 @@ import { uploadVideo } from '../../services/fileUploadService';
 import StudentManagementTab from '../../components/course/StudentManagementTab';
 import { createGroup, getGroupByCourse, updateGroup, GroupChatResponse } from '../../services/groupChatService';
 import CreateGroupModal from '../../components/course/CreateGroupModal';
+import BulkAddForm from '../../components/quiz/BulkAddForm';
 
 // Types for mentor dashboard data
 export interface Booking {
@@ -326,7 +327,8 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
   const [showAddCodelab, setShowAddCodelab] = useState(false);
   const [showQuizDetail, setShowQuizDetail] = useState(false);
   const [showAddQuestion, setShowAddQuestion] = useState(false);
-  const [showAddOption, setShowAddOption] = useState(false);
+  const [showAddOption, setShowAddOption] = useState<number | null>(null);
+  const [showBulkAddOption, setShowBulkAddOption] = useState<number | null>(null);
   const [_editingQuiz, setEditingQuiz] = useState<QuizDetailDTO | null>(null);
   const [_editingQuestion, setEditingQuestion] = useState<QuizQuestionDetailDTO | null>(null);
   const [_editingOption, setEditingOption] = useState<QuizOptionDTO | null>(null);
@@ -627,6 +629,16 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
   };
 
   const handleViewCourse = (course: Course) => {
+    // Reset states to prevent stale data
+    setModules([]);
+    setCourseLessons([]);
+    setModuleQuizzes([]);
+    setModuleAssignments([]);
+    setSelectedModuleId(null);
+    setSelectedQuiz(null);
+    setEditingQuiz(null);
+    setShowQuizDetail(false);
+    
     setSelectedCourse(course);
     setShowCourseDetail(true);
     // Load modules for the course
@@ -933,17 +945,23 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
     setEditingAssignment(null);
   };
 
-  const handleViewQuiz = async (quizId: number) => {
+  const handleViewQuiz = async (quizId: number, background = false) => {
     try {
-      setQuizDetailLoading(true);
+      if (!background) {
+        setQuizDetailLoading(true);
+      }
       const quiz = await getQuizById(quizId);
       setSelectedQuiz(quiz);
-      setShowQuizDetail(true);
+      if (!background) {
+        setShowQuizDetail(true);
+      }
     } catch (e) {
       console.error('Failed to load quiz details', e);
-      setError('Failed to load quiz details');
+      setError('Không thể tải chi tiết quiz');
     } finally {
-      setQuizDetailLoading(false);
+      if (!background) {
+        setQuizDetailLoading(false);
+      }
     }
   };
 
@@ -954,11 +972,15 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
   const _handleUpdateQuiz = async (quizId: number, quizData: QuizUpdateDTO) => {
     try {
       if (!user) throw new Error('User not authenticated');
-      const _updated = await updateQuiz(quizId, quizData, user.id);
+      await updateQuiz(quizId, quizData, user.id);
       setEditingQuiz(null);
       // Reload quizzes
       if (selectedModuleId) {
         await loadQuizzes(selectedModuleId);
+      }
+      // Reload quiz details if current quiz is open
+      if (selectedQuiz && selectedQuiz.id === quizId) {
+        await handleViewQuiz(quizId);
       }
     } catch (e) {
       console.error('Failed to update quiz', e);
@@ -1000,7 +1022,23 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
   const handleAddQuestion = async (quizId: number, questionData: QuizQuestionCreateDTO) => {
     try {
       if (!user) throw new Error('User not authenticated');
-      await addQuizQuestion(quizId, questionData, user.id);
+      const newQuestion = await addQuizQuestion(quizId, questionData, user.id);
+      
+      // Auto-generate True/False options
+      if (questionData.questionType === 'TRUE_FALSE') {
+        try {
+          // Default: True is correct, False is incorrect. User can change later.
+          // Use Promise.all for parallel creation
+          await Promise.all([
+            addQuizOption(newQuestion.id, { optionText: 'Đúng', correct: true }, user.id),
+            addQuizOption(newQuestion.id, { optionText: 'Sai', correct: false }, user.id)
+          ]);
+        } catch (optError) {
+          console.error('Failed to auto-generate options', optError);
+          // Continue to reload quiz even if options fail
+        }
+      }
+
       setShowAddQuestion(false);
       // Reload quiz details
       await handleViewQuiz(quizId);
@@ -1058,10 +1096,10 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
     try {
       if (!user) throw new Error('User not authenticated');
       await addQuizOption(questionId, optionData, user.id);
-      setShowAddOption(false);
-      // Reload quiz details
+      setShowAddOption(null);
+      // Reload quiz details in background to prevent scroll jump
       if (selectedQuiz) {
-        await handleViewQuiz(selectedQuiz.id);
+        await handleViewQuiz(selectedQuiz.id, true);
       }
     } catch (e) {
       console.error('Failed to add option', e);
@@ -1074,9 +1112,9 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
       if (!user) throw new Error('User not authenticated');
       await updateQuizOption(optionId, optionData, user.id);
       setEditingOption(null);
-      // Reload quiz details
+      // Reload quiz details in background
       if (selectedQuiz) {
-        await handleViewQuiz(selectedQuiz.id);
+        await handleViewQuiz(selectedQuiz.id, true);
       }
     } catch (e) {
       console.error('Failed to update option', e);
@@ -1106,7 +1144,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
         try {
           await deleteQuizOption(optionId, user.id);
           if (selectedQuiz) {
-            await handleViewQuiz(selectedQuiz.id);
+            await handleViewQuiz(selectedQuiz.id, true);
           }
           setShowDeleteConfirm(false);
           setDeleteTarget(null);
@@ -1241,7 +1279,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
     <div className="mentor-hud-courses">
       <div className="mentor-hud-courses__header">
         <div className="mentor-hud-courses__title-section">
-          <h2>MISSION MODULES</h2>
+          <h2>MODULE NHIỆM VỤ</h2>
           <p>Quản lý và tạo mới các khóa học</p>
         </div>
         <button
@@ -1725,21 +1763,21 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                                     <button 
                                       className="mentor-action-btn mentor-view-btn"
                                       onClick={() => handleViewQuiz(quiz.id)}
-                                      title="View Quiz Details"
+                                      title="Xem chi tiết Quiz"
                                     >
                                       <Eye className="w-4 h-4" />
                                     </button>
                                     <button 
                                       className="mentor-action-btn mentor-edit-btn"
                                       onClick={() => handleEditQuiz(quiz as any)}
-                                      title="Edit Quiz"
+                                      title="Sửa Quiz"
                                     >
                                       <Edit3 className="w-4 h-4" />
                                     </button>
                                     <button 
                                       className="mentor-action-btn mentor-delete-btn"
                                       onClick={() => handleDeleteQuiz(quiz.id)}
-                                      title="Delete Quiz"
+                                      title="Xóa Quiz"
                                     >
                                       <Trash2 className="w-4 h-4" />
                                     </button>
@@ -1893,7 +1931,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
       default:
         return (
           <div className="mentor-hud-default-tab">
-            <h2 className="mentor-hud-default-title">SYSTEM STANDBY</h2>
+            <h2 className="mentor-hud-default-title">HỆ THỐNG CHỜ</h2>
             <p className="mentor-hud-default-description">Chọn một tab để xem các hoạt động hướng dẫn của bạn.</p>
           </div>
         );
@@ -1907,10 +1945,10 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
           <div className="mentor-hud-header__content">
             <div className="mentor-hud-header__status">
               <div className="mentor-hud-header__status-dot"></div>
-              <span className="mentor-hud-header__status-text">SYSTEM ONLINE</span>
+              <span className="mentor-hud-header__status-text">HỆ THỐNG TRỰC TUYẾN</span>
             </div>
             <h1 className="mentor-hud-header__title">
-              MENTOR <span className="mentor-hud-header__title-accent">COMMAND CENTER</span>
+              MENTOR <span className="mentor-hud-header__title-accent">TRUNG TÂM ĐIỀU KHIỂN</span>
             </h1>
             <p className="mentor-hud-header__subtitle">Quản lý hoạt động hướng dẫn và theo dõi tác động của bạn</p>
           </div>
@@ -2266,13 +2304,14 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
               if (!user || !selectedModuleId) return;
               const form = e.target as HTMLFormElement;
               const title = (form.elements.namedItem('title') as HTMLInputElement).value.trim();
+              const description = (form.elements.namedItem('description') as HTMLTextAreaElement).value.trim();
               const passScore = Number((form.elements.namedItem('pass') as HTMLInputElement).value || '50');
               if (!title) return;
               try {
                 // Create quiz for the selected module
                 const quizPayload: QuizCreateDTO = { 
                   title, 
-                  description: '', 
+                  description, 
                   passScore
                 };
                 
@@ -2283,20 +2322,69 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                 await loadQuizzes(selectedModuleId);
               } catch(err){ 
                 console.error('Create quiz failed', err);
-                setError('Failed to create quiz: ' + (err as any).message);
+                setError('Tạo quiz thất bại: ' + (err as any).message);
               }
             }}>
               <div className="mentor-form-group">
                 <label className="mentor-form-label">Tiêu đề</label>
-                <input name="title" className="mentor-form-input" />
+                <input name="title" className="mentor-form-input" required />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Mô tả</label>
+                <textarea name="description" className="mentor-form-textarea" rows={3} placeholder="Mô tả về bài kiểm tra..." />
               </div>
               <div className="mentor-form-group">
                 <label className="mentor-form-label">Điểm đạt (%)</label>
-                <input name="pass" type="number" min={0} max={100} className="mentor-form-input" defaultValue={60} />
+                <input name="pass" type="number" min={0} max={100} className="mentor-form-input" defaultValue={80} />
               </div>
               <div className="mentor-modal-actions">
                 <button type="button" className="mentor-btn-secondary" onClick={()=>setShowAddQuiz(false)}>Hủy</button>
                 <button type="submit" className="mentor-btn-primary">Tạo</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Quiz Modal */}
+      {_editingQuiz && (
+        <div className="mentor-modal-overlay">
+          <div className="mentor-modal-content">
+            <div className="mentor-modal-header">
+              <h2 className="mentor-modal-title">Sửa Quiz</h2>
+              <button className="mentor-modal-close" onClick={()=>setEditingQuiz(null)}><X className="w-6 h-6"/></button>
+            </div>
+            <form className="mentor-form" onSubmit={async (e)=>{
+              e.preventDefault();
+              if (!_editingQuiz) return;
+              const form = e.target as HTMLFormElement;
+              const title = (form.elements.namedItem('title') as HTMLInputElement).value.trim();
+              const description = (form.elements.namedItem('description') as HTMLTextAreaElement).value.trim();
+              const passScore = Number((form.elements.namedItem('pass') as HTMLInputElement).value || '0');
+              
+              if (!title) return;
+              
+              await _handleUpdateQuiz(_editingQuiz.id, {
+                title,
+                description,
+                passScore
+              });
+            }}>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Tiêu đề</label>
+                <input name="title" className="mentor-form-input" defaultValue={_editingQuiz.title} required />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Mô tả</label>
+                <textarea name="description" className="mentor-form-textarea" rows={3} defaultValue={_editingQuiz.description} />
+              </div>
+              <div className="mentor-form-group">
+                <label className="mentor-form-label">Điểm đạt (%)</label>
+                <input name="pass" type="number" min={0} max={100} className="mentor-form-input" defaultValue={_editingQuiz.passScore} />
+              </div>
+              <div className="mentor-modal-actions">
+                <button type="button" className="mentor-btn-secondary" onClick={()=>setEditingQuiz(null)}>Hủy</button>
+                <button type="submit" className="mentor-btn-primary">Lưu</button>
               </div>
             </form>
           </div>
@@ -2308,7 +2396,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
         <div className="mentor-modal-overlay">
           <div className="mentor-modal-content mentor-quiz-detail-modal">
             <div className="mentor-modal-header">
-              <h2 className="mentor-modal-title">Quiz Details: {selectedQuiz.title}</h2>
+              <h2 className="mentor-modal-title">Chi tiết Quiz: {selectedQuiz.title}</h2>
               <button className="mentor-modal-close" onClick={() => {
                 setShowQuizDetail(false);
                 setSelectedQuiz(null);
@@ -2318,94 +2406,114 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
             </div>
             
             {quizDetailLoading ? (
-              <div className="mentor-loading">Loading quiz details...</div>
+              <div className="mentor-loading">Đang tải chi tiết quiz...</div>
             ) : (
               <div className="mentor-quiz-detail-content">
                 <div className="mentor-quiz-info">
-                  <p><strong>Description:</strong> {selectedQuiz.description || 'No description'}</p>
-                  <p><strong>Pass Score:</strong> {selectedQuiz.passScore}%</p>
-                  <p><strong>Questions:</strong> {selectedQuiz.questions.length}</p>
+                  <p><strong>Mô tả:</strong> {selectedQuiz.description || 'Không có mô tả'}</p>
+                  <p><strong>Điểm đạt:</strong> {selectedQuiz.passScore}%</p>
+                  <p><strong>Số câu hỏi:</strong> {selectedQuiz.questions.length}</p>
+                  <p>
+                    <strong>Tổng điểm:</strong> {selectedQuiz.questions.reduce((sum, q) => sum + (q.score || 0), 0)}
+                  </p>
+                  <p style={{ fontSize: '0.85rem', color: '#6b7280', marginTop: '4px' }}>
+                    * Điểm cần để đạt: {Math.ceil(selectedQuiz.questions.reduce((sum, q) => sum + (q.score || 0), 0) * (selectedQuiz.passScore / 100))}
+                  </p>
                 </div>
                 
                 <div className="mentor-quiz-questions">
                   <div className="mentor-quiz-questions-header">
-                    <h3>Questions</h3>
+                    <h3>Danh sách câu hỏi</h3>
                     <button 
                       className="mentor-btn-primary"
                       onClick={() => setShowAddQuestion(true)}
                     >
                       <Plus className="w-4 h-4" />
-                      Add Question
+                      Thêm Câu Hỏi
                     </button>
                   </div>
                   
                   {selectedQuiz.questions.length === 0 ? (
                     <div className="mentor-empty-state">
-                      <p>No questions added yet</p>
+                      <p>Chưa có câu hỏi nào</p>
                     </div>
                   ) : (
                     <div className="mentor-questions-list">
                       {selectedQuiz.questions.map((question, index) => (
                         <div key={question.id} className="mentor-question-card">
                           <div className="mentor-question-header">
-                            <h4>Question {index + 1}</h4>
+                            <h4>Câu hỏi {index + 1}</h4>
                             <div className="mentor-question-actions">
                               <button 
                                 className="mentor-action-btn mentor-edit-btn"
                                 onClick={() => setEditingQuestion(question)}
-                                title="Edit Question"
+                                title="Sửa câu hỏi"
                               >
                                 <Edit3 className="w-4 h-4" />
                               </button>
                               <button 
                                 className="mentor-action-btn mentor-delete-btn"
                                 onClick={() => handleDeleteQuestion(question.id)}
-                                title="Delete Question"
+                                title="Xóa câu hỏi"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
                             </div>
                           </div>
                           <div className="mentor-question-content">
-                            <p><strong>Text:</strong> {question.questionText}</p>
-                            <p><strong>Type:</strong> {question.questionType}</p>
-                            <p><strong>Score:</strong> {question.score}</p>
+                            <p><strong>Nội dung:</strong> {question.questionText}</p>
+                            <p><strong>Loại:</strong> {question.questionType}</p>
+                            <p><strong>Điểm:</strong> {question.score}</p>
                           </div>
                           
                           <div className="mentor-question-options">
                             <div className="mentor-options-header">
-                              <h5>Options</h5>
-                              <button 
-                                className="mentor-btn-secondary"
-                                onClick={() => setShowAddOption(true)}
-                              >
-                                <Plus className="w-4 h-4" />
-                                Add Option
-                              </button>
+                              <h5>Các lựa chọn</h5>
+                              {question.questionType !== 'SHORT_ANSWER' && (
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                  <button 
+                                    className="mentor-btn-secondary"
+                                    onClick={() => setShowAddOption(question.id)}
+                                  >
+                                    <Plus className="w-4 h-4" />
+                                    Thêm Lựa Chọn
+                                  </button>
+                                  {question.questionType === 'MULTIPLE_CHOICE' && (
+                                    <button 
+                                      className="mentor-btn-secondary"
+                                      onClick={() => setShowBulkAddOption(question.id)}
+                                      title="Thêm nhiều lựa chọn cùng lúc"
+                                    >
+                                      <Plus className="w-4 h-4" />
+                                      Thêm Nhanh
+                                    </button>
+                                  )}
+                                </div>
+                              )}
                             </div>
                             
                             {question.options.length === 0 ? (
                               <div className="mentor-empty-state">
-                                <p>No options added yet</p>
+                                <p>Chưa có lựa chọn nào</p>
                               </div>
                             ) : (
                               <div className="mentor-options-list">
                                 {question.options.map((option, optIndex) => (
                                   <div key={option.id} className={`mentor-option-item ${option.correct ? 'correct' : ''}`}>
                                     <span>{optIndex + 1}. {option.optionText}</span>
-                                    {option.correct && <span className="correct-badge">✓ Correct</span>}
+                                    {option.correct && <span className="correct-badge">✓ Đúng</span>}
                                     <div className="mentor-option-actions">
                                       <button 
                                         className="mentor-action-btn mentor-edit-btn"
                                         onClick={() => setEditingOption(option)}
-                                        title="Edit Option"
+                                        title="Sửa lựa chọn"
                                       >
                                         <Edit3 className="w-3 h-3" />
                                       </button>
                                       <button 
                                         className="mentor-action-btn mentor-delete-btn"
                                         onClick={() => handleDeleteOption(option.id)}
-                                        title="Delete Option"
+                                        title="Xóa lựa chọn"
                                       >
                                         <Trash2 className="w-3 h-3" />
                                       </button>
@@ -2431,7 +2539,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
         <div className="mentor-modal-overlay">
           <div className="mentor-modal-content">
             <div className="mentor-modal-header">
-              <h2 className="mentor-modal-title">Add Question</h2>
+              <h2 className="mentor-modal-title">Thêm Câu Hỏi</h2>
               <button className="mentor-modal-close" onClick={() => setShowAddQuestion(false)}>
                 <X className="w-6 h-6"/>
               </button>
@@ -2458,30 +2566,31 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                 await handleAddQuestion(selectedQuiz.id, questionData);
               } catch (err) {
                 console.error('Add question failed', err);
-                setError('Failed to add question: ' + (err as any).message);
+                setError('Thêm câu hỏi thất bại: ' + (err as any).message);
               }
             }}>
               <div className="mentor-form-group">
-                <label className="mentor-form-label">Question Text</label>
+                <label className="mentor-form-label">Nội dung câu hỏi</label>
                 <textarea name="questionText" className="mentor-form-input" rows={3} required />
               </div>
               <div className="mentor-form-group">
-                <label className="mentor-form-label">Question Type</label>
+                <label className="mentor-form-label">Loại câu hỏi</label>
                 <select name="questionType" className="mentor-form-input" defaultValue={QuestionType.MULTIPLE_CHOICE}>
-                  <option value={QuestionType.MULTIPLE_CHOICE}>Multiple Choice</option>
-                  <option value={QuestionType.TRUE_FALSE}>True/False</option>
-                  <option value={QuestionType.SHORT_ANSWER}>Short Answer</option>
+                  <option value={QuestionType.MULTIPLE_CHOICE}>Trắc nghiệm</option>
+                  <option value={QuestionType.TRUE_FALSE}>Đúng/Sai</option>
+                  <option value={QuestionType.SHORT_ANSWER}>Câu trả lời ngắn</option>
                 </select>
               </div>
               <div className="mentor-form-group">
-                <label className="mentor-form-label">Score</label>
-                <input name="score" type="number" min="1" className="mentor-form-input" defaultValue={1} />
+                <label className="mentor-form-label">Điểm</label>
+                <input name="score" type="number" min="1" className="mentor-form-input" defaultValue={10} />
+                <p className="mentor-form-hint">Điểm mặc định là 10. Điều chỉnh tùy độ khó.</p>
               </div>
               <div className="mentor-modal-actions">
                 <button type="button" className="mentor-btn-secondary" onClick={() => setShowAddQuestion(false)}>
-                  Cancel
+                  Hủy
                 </button>
-                <button type="submit" className="mentor-btn-primary">Add Question</button>
+                <button type="submit" className="mentor-btn-primary">Thêm</button>
               </div>
             </form>
           </div>
@@ -2493,8 +2602,8 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
         <div className="mentor-modal-overlay">
           <div className="mentor-modal-content">
             <div className="mentor-modal-header">
-              <h2 className="mentor-modal-title">Add Option</h2>
-              <button className="mentor-modal-close" onClick={() => setShowAddOption(false)}>
+              <h2 className="mentor-modal-title">Thêm Lựa Chọn</h2>
+              <button className="mentor-modal-close" onClick={() => setShowAddOption(null)}>
                 <X className="w-6 h-6"/>
               </button>
             </div>
@@ -2504,7 +2613,14 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
               const form = e.target as HTMLFormElement;
               const optionText = (form.elements.namedItem('optionText') as HTMLInputElement).value.trim();
               const correct = (form.elements.namedItem('correct') as HTMLInputElement).checked;
-              const questionId = Number((form.elements.namedItem('questionId') as HTMLSelectElement).value);
+              
+              // Handle questionId correctly based on context
+              let questionId: number;
+              if (typeof showAddOption === 'number') {
+                questionId = showAddOption;
+              } else {
+                questionId = Number((form.elements.namedItem('questionId') as HTMLSelectElement).value);
+              }
               
               if (!optionText || !questionId) return;
               
@@ -2517,37 +2633,85 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                 await handleAddOption(questionId, optionData);
               } catch (err) {
                 console.error('Add option failed', err);
-                setError('Failed to add option: ' + (err as any).message);
+                setError('Thêm lựa chọn thất bại: ' + (err as any).message);
               }
             }}>
+              {typeof showAddOption === 'number' ? (
+                <div className="mentor-form-group">
+                  <label className="mentor-form-label">Câu hỏi</label>
+                  <input 
+                    className="mentor-form-input" 
+                    value={selectedQuiz.questions.find(q => q.id === showAddOption)?.questionText || ''} 
+                    disabled 
+                    style={{ opacity: 0.7, background: '#1e293b' }}
+                  />
+                  {/* No hidden input needed since we use state directly */}
+                </div>
+              ) : (
+                <div className="mentor-form-group">
+                  <label className="mentor-form-label">Câu hỏi</label>
+                  <select name="questionId" className="mentor-form-input" required>
+                    <option value="">Chọn câu hỏi</option>
+                    {selectedQuiz.questions.map(question => (
+                      <option key={question.id} value={question.id}>
+                        {question.questionText.substring(0, 50)}...
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <div className="mentor-form-group">
-                <label className="mentor-form-label">Question</label>
-                <select name="questionId" className="mentor-form-input" required>
-                  <option value="">Select a question</option>
-                  {selectedQuiz.questions.map(question => (
-                    <option key={question.id} value={question.id}>
-                      {question.questionText.substring(0, 50)}...
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mentor-form-group">
-                <label className="mentor-form-label">Option Text</label>
+                <label className="mentor-form-label">Nội dung lựa chọn</label>
                 <input name="optionText" className="mentor-form-input" required />
               </div>
               <div className="mentor-form-group">
                 <label className="mentor-form-checkbox">
                   <input name="correct" type="checkbox" />
-                  <span>This is the correct answer</span>
+                  <span>Đây là đáp án đúng</span>
                 </label>
               </div>
               <div className="mentor-modal-actions">
-                <button type="button" className="mentor-btn-secondary" onClick={() => setShowAddOption(false)}>
-                  Cancel
+                <button type="button" className="mentor-btn-secondary" onClick={() => setShowAddOption(null)}>
+                  Hủy
                 </button>
-                <button type="submit" className="mentor-btn-primary">Add Option</button>
+                <button type="submit" className="mentor-btn-primary">Thêm</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Add Option Modal */}
+      {showBulkAddOption && selectedQuiz && (
+        <div className="mentor-modal-overlay">
+          <div className="mentor-modal-content">
+            <div className="mentor-modal-header">
+              <h2 className="mentor-modal-title">Thêm Nhanh Lựa Chọn</h2>
+              <button className="mentor-modal-close" onClick={() => setShowBulkAddOption(null)}>
+                <X className="w-6 h-6"/>
+              </button>
+            </div>
+            {/* Wrap form logic in a separate component to use state for preview */}
+            <BulkAddForm 
+              questionId={showBulkAddOption}
+              questionText={selectedQuiz.questions.find(q => q.id === showBulkAddOption)?.questionText || ''}
+              onClose={() => setShowBulkAddOption(null)}
+              onSubmit={async (options) => {
+                try {
+                  await Promise.all(options.map(optionText => 
+                    addQuizOption(showBulkAddOption, {
+                      optionText,
+                      correct: false 
+                    }, user?.id || 0)
+                  ));
+                  setShowBulkAddOption(null);
+                  await handleViewQuiz(selectedQuiz.id, true);
+                } catch (err) {
+                  console.error('Bulk add options failed', err);
+                  setError('Thêm nhanh thất bại: ' + (err as any).message);
+                }
+              }}
+            />
           </div>
         </div>
       )}
@@ -2557,7 +2721,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
         <div className="mentor-modal-overlay">
           <div className="mentor-modal-content">
             <div className="mentor-modal-header">
-              <h2 className="mentor-modal-title">Edit Question</h2>
+              <h2 className="mentor-modal-title">Sửa Câu Hỏi</h2>
               <button className="mentor-modal-close" onClick={() => setEditingQuestion(null)}>
                 <X className="w-6 h-6"/>
               </button>
@@ -2592,15 +2756,15 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                 setEditingQuestion(null);
               } catch (err) {
                 console.error('Update question failed', err);
-                setError('Failed to update question: ' + (err as any).message);
+                setError('Cập nhật câu hỏi thất bại: ' + (err as any).message);
               }
             }}>
               <div className="mentor-form-group">
-                <label className="mentor-form-label">Question Text</label>
+                <label className="mentor-form-label">Nội dung câu hỏi</label>
                 <textarea name="questionText" className="mentor-form-input" rows={3} defaultValue={_editingQuestion.questionText} required />
               </div>
               <div className="mentor-form-group">
-                <label className="mentor-form-label">Question Type</label>
+                <label className="mentor-form-label">Loại câu hỏi</label>
                 <select name="questionType" className="mentor-form-input" defaultValue={_editingQuestion.questionType}
                   onChange={(e)=>{
                     // Nếu câu hỏi đã có option, chặn đổi kiểu (để tránh 500 BE)
@@ -2612,18 +2776,18 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                     }
                   }}
                 >
-                  <option value={QuestionType.MULTIPLE_CHOICE}>Multiple Choice</option>
-                  <option value={QuestionType.TRUE_FALSE}>True/False</option>
-                  <option value={QuestionType.SHORT_ANSWER}>Short Answer</option>
+                  <option value={QuestionType.MULTIPLE_CHOICE}>Trắc nghiệm</option>
+                  <option value={QuestionType.TRUE_FALSE}>Đúng/Sai</option>
+                  <option value={QuestionType.SHORT_ANSWER}>Câu trả lời ngắn</option>
                 </select>
               </div>
               <div className="mentor-form-group">
-                <label className="mentor-form-label">Score</label>
+                <label className="mentor-form-label">Điểm</label>
                 <input name="score" type="number" min={1} className="mentor-form-input" defaultValue={_editingQuestion.score} />
               </div>
               <div className="mentor-modal-actions">
-                <button type="button" className="mentor-btn-secondary" onClick={() => setEditingQuestion(null)}>Cancel</button>
-                <button type="submit" className="mentor-btn-primary">Save</button>
+                <button type="button" className="mentor-btn-secondary" onClick={() => setEditingQuestion(null)}>Hủy</button>
+                <button type="submit" className="mentor-btn-primary">Lưu</button>
               </div>
             </form>
           </div>
@@ -2635,7 +2799,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
         <div className="mentor-modal-overlay">
           <div className="mentor-modal-content">
             <div className="mentor-modal-header">
-              <h2 className="mentor-modal-title">Edit Option</h2>
+              <h2 className="mentor-modal-title">Sửa Lựa Chọn</h2>
               <button className="mentor-modal-close" onClick={() => setEditingOption(null)}>
                 <X className="w-6 h-6"/>
               </button>
@@ -2666,22 +2830,22 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                 setEditingOption(null);
               } catch (err) {
                 console.error('Update option failed', err);
-                setError('Failed to update option: ' + (err as any).message);
+                setError('Cập nhật lựa chọn thất bại: ' + (err as any).message);
               }
             }}>
               <div className="mentor-form-group">
-                <label className="mentor-form-label">Option Text</label>
+                <label className="mentor-form-label">Nội dung lựa chọn</label>
                 <input name="optionText" className="mentor-form-input" defaultValue={_editingOption.optionText} />
               </div>
               <div className="mentor-form-group">
                 <label className="mentor-form-checkbox">
                   <input name="correct" type="checkbox" defaultChecked={_editingOption.correct} />
-                  <span>This is the correct answer</span>
+                  <span>Đây là đáp án đúng</span>
                 </label>
               </div>
               <div className="mentor-modal-actions">
-                <button type="button" className="mentor-btn-secondary" onClick={() => setEditingOption(null)}>Cancel</button>
-                <button type="submit" className="mentor-btn-primary">Save</button>
+                <button type="button" className="mentor-btn-secondary" onClick={() => setEditingOption(null)}>Hủy</button>
+                <button type="submit" className="mentor-btn-primary">Lưu</button>
               </div>
             </form>
           </div>

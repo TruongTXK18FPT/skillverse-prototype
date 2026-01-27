@@ -105,13 +105,13 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
     if (!closeModal.jobId) return;
 
     try {
-      await jobService.changeJobStatus(closeModal.jobId, 'CLOSED');
+      await jobService.changeJobStatus(closeModal.jobId, JobStatus.CLOSED);
       // Update local state
       setJobs(prevJobs => prevJobs.map(job => 
-        job.id === closeModal.jobId ? { ...job, status: 'CLOSED' } : job
+        job.id === closeModal.jobId ? { ...job, status: JobStatus.CLOSED } : job
       ));
       if (selectedJob?.id === closeModal.jobId) {
-        setSelectedJob(prev => prev ? { ...prev, status: 'CLOSED' } : null);
+        setSelectedJob(prev => prev ? { ...prev, status: JobStatus.CLOSED } : null);
       }
       showSuccess('Mission Closed', 'Nhiệm vụ đã được đóng lại.');
       setCloseModal({ visible: false, jobId: null });
@@ -163,7 +163,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
       await fetchJobs();
       
       if (selectedJob?.id === reopenModal.jobId) {
-         setSelectedJob(prev => prev ? { ...prev, status: 'OPEN' } : null);
+         setSelectedJob(prev => prev ? { ...prev, status: JobStatus.OPEN } : null);
       }
 
       showSuccess('Mission Reopened', 'Nhiệm vụ đã được tái kích hoạt.');

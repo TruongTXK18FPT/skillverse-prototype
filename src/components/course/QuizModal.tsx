@@ -94,7 +94,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
         setQuestions([]);
       });
     } else {
-      setFormData({ title: "", description: "", passScore: 70 });
+      setFormData({ title: "", description: "", passScore: 80 });
       setQuestions([]);
     }
   }, [isOpen, quizToEdit]);
