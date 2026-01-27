@@ -11,7 +11,7 @@ interface CommsHeaderProps {
 
 const CommsHeader: React.FC<CommsHeaderProps> = ({
   title = 'Kênh Cộng Đồng',
-  subtitle = 'Mã hóa: Tắt // Kênh: Mở // Trạng thái: Hoạt động',
+  subtitle = 'Kết nối và chia sẻ kiến thức với cộng đồng',
   onBroadcast,
 }) => {
   const navigate = useNavigate();
@@ -33,9 +33,7 @@ const CommsHeader: React.FC<CommsHeaderProps> = ({
           {title}
         </h1>
         <div className="transmission-status-modules">
-          <span className="status-module">Mã hóa: Tắt</span>
-          <span className="status-module">Kênh: Mở</span>
-          <span className="status-module">Trạng thái: Hoạt động</span>
+          <span className="status-module">🟢 Đang hoạt động</span>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           <button className="broadcast-button" onClick={handleBroadcast}>

@@ -90,7 +90,7 @@ const JobsOdysseyPage = () => {
         </div>
       ) : filteredJobs.length === 0 ? (
         <div className="odyssey-empty">
-          <div className="odyssey-empty__icon">🃏</div>
+          <div className="odyssey-empty__icon">💼</div>
           <h3 className="odyssey-empty__title">Không có công việc</h3>
           <p className="odyssey-empty__text">
             {searchTerm

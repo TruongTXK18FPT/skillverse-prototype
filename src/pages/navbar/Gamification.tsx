@@ -398,9 +398,11 @@ const Gamification: React.FC = () => {
             <div className="user-details">
               <h3>Vị trí của bạn</h3>
               <p>
-                {coinsToNextRank > 0 
-                  ? `Chỉ cần ${coinsToNextRank} xu nữa để lên Top ${currentUserRank - 1}!`
-                  : 'Bạn đang dẫn đầu!'
+                {currentUserRank === 1 
+                  ? 'Bạn đang dẫn đầu!'
+                  : coinsToNextRank > 0 
+                    ? `Chỉ cần ${coinsToNextRank} xu nữa để lên Top ${currentUserRank - 1}!`
+                    : `Bạn đang ở vị trí #${currentUserRank}`
                 }
               </p>
             </div>

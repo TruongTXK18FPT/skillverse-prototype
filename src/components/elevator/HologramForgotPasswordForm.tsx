@@ -74,6 +74,9 @@ const HologramForgotPasswordForm: React.FC = () => {
             </div>
             <h1 className="fgp-title">Khôi phục mật khẩu</h1>
             <p className="fgp-subtitle">Khôi phục quyền truy cập tài khoản</p>
+            <p className="fgp-instruction" style={{ fontSize: '0.75rem', color: 'rgba(148, 163, 184, 0.8)', marginTop: '0.5rem', textAlign: 'center' }}>
+              Nhập email đã đăng ký, chúng tôi sẽ gửi mã OTP để xác thực và đặt lại mật khẩu mới.
+            </p>
         </div>
 
         {error && (

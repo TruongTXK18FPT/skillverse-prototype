@@ -461,11 +461,11 @@ const UserGuidePage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="guide-v2-header"
         >
-          <h1 className="guide-v2-title">Mission Briefing</h1>
+          <h1 className="guide-v2-title">Hướng Dẫn Sử Dụng</h1>
           <p className="guide-v2-subtitle">
             {isAuthenticated 
-              ? `Welcome back, Agent ${user?.fullName || 'Unknown'}. Accessing tactical data for your role: ${activeRoleData?.title}.`
-              : 'Welcome to Skillverse Command Center. Please initialize your protocol to explore the ecosystem.'}
+              ? `Chào mừng trở lại, ${user?.fullName || 'bạn'}! Hãy khám phá hướng dẫn dành cho vai trò: ${activeRoleData?.title}.`
+              : 'Chào mừng bạn đến với Skillverse. Hãy tìm hiểu cách sử dụng nền tảng.'}
           </p>
         </motion.header>
 
@@ -475,13 +475,13 @@ const UserGuidePage: React.FC = () => {
             className={`guide-v2-tab ${activeTab === 'proposal' ? 'active' : ''}`}
             onClick={() => setActiveTab('proposal')}
           >
-            <span className="guide-v2-tab-label">Project Blueprint</span>
+            <span className="guide-v2-tab-label">Tính Năng Chính</span>
           </div>
           <div 
             className={`guide-v2-tab ${activeTab === 'guide' ? 'active' : ''}`}
             onClick={() => setActiveTab('guide')}
           >
-            <span className="guide-v2-tab-label">Pilot Protocol</span>
+            <span className="guide-v2-tab-label">Hướng Dẫn Theo Vai Trò</span>
           </div>
         </div>
 
@@ -496,7 +496,7 @@ const UserGuidePage: React.FC = () => {
               className="guide-v2-blueprint-box"
             >
               <h2 className="guide-v2-blueprint-header">
-                <Terminal size={32} /> PROJECT MANIFEST
+                <Terminal size={32} /> TÍNH NĂNG NỔI BẬT
               </h2>
               
               <div className="guide-v2-blueprint-grid">

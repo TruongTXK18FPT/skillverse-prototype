@@ -233,7 +233,7 @@ const HelpCenter = () => {
             <div className="icon-glow-ring"></div>
           </div>
           <h1 className="hero-title"><span className="title-gradient">TRUNG TÂM HỖ TRỢ</span></h1>
-          <p className="hero-tagline">HELP CENTER</p>
+          <p className="hero-tagline">HỖ TRỢ 24/7</p>
           <p className="hero-description">Chúng tôi luôn sẵn sàng giúp đỡ bạn.</p>
           <div className="help-search">
             <Search size={20} className="search-icon" />

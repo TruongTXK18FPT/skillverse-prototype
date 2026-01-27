@@ -99,7 +99,7 @@ const SeminarDetailPage = () => {
                 <div className="sdp-hero-meta">
                     <div className="sdp-hero-meta-item">
                         <User size={20} color="#06b6d4" />
-                        <span>{seminar.creatorName || 'Recruiter'}</span>
+                        <span>{seminar.creatorName || 'Chưa cập nhật'}</span>
                     </div>
                     <div className="sdp-hero-meta-item">
                         <DollarSign size={20} color="#22c55e" />

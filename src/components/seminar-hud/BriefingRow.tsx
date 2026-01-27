@@ -53,7 +53,8 @@ const BriefingRow: React.FC<BriefingRowProps> = ({ seminar, onAction }) => {
   // Note: BE currently doesn't support tags, defaulting to "HỘI THẢO"
   const category = 'HỘI THẢO'; 
 
-  const sector = Math.floor(Math.random() * 9) + 1;
+  // Use seminar.id to generate stable sector number
+  const sector = (seminar.id % 9) + 1;
 
   return (
     <div className="briefing-row">

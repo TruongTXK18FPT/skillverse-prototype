@@ -106,10 +106,10 @@ const RankCard: React.FC<RankCardProps> = ({
   return (
         <div className={`hall-rank-card ${tierClass} ${isActive ? 'active' : ''}`}>
       {plan.planType === 'STUDENT_PACK' && (
-        <div className="hall-tag hall-tag-student">STUDENT</div>
+        <div className="hall-tag hall-tag-student">SINH VIÊN</div>
       )}
       {plan.planType === 'PREMIUM_BASIC' && (
-        <div className="hall-tag hall-tag-popular">POPULAR</div>
+        <div className="hall-tag hall-tag-popular">PHỔ BIẾN</div>
       )}
       {/* Light Beam Effect */}
       <div className="hall-light-beam"></div>
@@ -157,11 +157,11 @@ const RankCard: React.FC<RankCardProps> = ({
         <p className="hall-description">{plan.description}</p>
         
         <div className="hall-price">
-          {formatPrice(plan.price)}
-          <div className="hall-currency">VND</div>
+          {parseFloat(plan.price) === 0 ? 'Miễn phí' : formatPrice(plan.price)}
+          {parseFloat(plan.price) > 0 && <div className="hall-currency">VND</div>}
         </div>
         <div className="hall-period">
-          MỖI {plan.durationMonths > 120 ? '1' : plan.durationMonths} CHU KỲ{plan.durationMonths > 1 && plan.durationMonths <= 120 ? '' : ''}
+          {parseFloat(plan.price) > 0 && (plan.durationMonths > 120 ? 'Vĩnh viễn' : plan.durationMonths === 1 ? '/ tháng' : `/ ${plan.durationMonths} tháng`)}
         </div>
 
         {/* Features */}

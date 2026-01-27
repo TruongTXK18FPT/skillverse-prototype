@@ -191,8 +191,8 @@ const SeminarPage: React.FC = () => {
   const filteredSeminars = seminars.filter(seminar => {
     const matchesSearch = seminar.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          seminar.description.toLowerCase().includes(searchTerm.toLowerCase());
-    // Note: BE doesn't have 'tags' yet, so we assume all are generic or filter by description/title if needed.
-    // For MVP preserving "all" category behavior
+    // TODO: Backend chưa hỗ trợ category/tags cho seminar
+    // Hiện tại chỉ lọc theo 'all' - cần implement khi BE có API tags
     const matchesCategory = filterCategory === 'all'; 
     return matchesSearch && matchesCategory;
   });
@@ -315,7 +315,7 @@ const SeminarPage: React.FC = () => {
                         </span>
                     </div>
                     <div>
-                         <strong>Người tổ chức:</strong> <br/> {selectedSeminar.creatorName || 'Recruiter'}
+                         <strong>Người tổ chức:</strong> <br/> {selectedSeminar.creatorName || 'Chưa cập nhật'}
                     </div>
                     {/* Capacity Information */}
                     {selectedSeminar.maxCapacity && (

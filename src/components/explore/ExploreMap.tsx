@@ -175,8 +175,8 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
           {/* Bottom-Left Corner: System Log */}
           <div className="hud-corner-map bottom-left">
             <div className="hud-ruler"></div>
-            <div className="hud-system-log">[SYSTEM LOG: A7F2E9] <br/>
-              [SONTUNGMTP]
+            <div className="hud-system-log">[HỆ THỐNG: HOẠT ĐỘNG] <br/>
+              [ĐÃ KẾT NỐI]
             </div>
           </div>
 
@@ -184,9 +184,9 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
           <div className="hud-corner-map bottom-right">
             <div className="hud-status-bottom">
               <div className="hud-scan-text">
-                {hoveredZone ? `SCANNING: ${hoveredZone.nameEnglish}` : 'SCANNING...'}
+                {hoveredZone ? `ĐANG XEM: ${hoveredZone.nameEnglish}` : 'DI CHUỘT ĐỂ KHÁM PHÁ'}
               </div>
-              <div className="hud-target-text">[TARGET: {hoveredZone ? 'ACTIVE' : 'LOW'}]</div>
+              <div className="hud-target-text">[{hoveredZone ? 'CHỌN VÙNG NÀY' : 'SẴN SÀNG'}]</div>
             </div>
           </div>
         </div>

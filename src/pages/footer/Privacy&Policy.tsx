@@ -89,7 +89,7 @@ const PrivacyPolicy = () => {
           <h1 className="hero-title">
             <span className="title-gradient">CHÍNH SÁCH QUYỀN RIÊNG TƯ</span>
           </h1>
-          <p className="hero-tagline">PRIVACY POLICY</p>
+          <p className="hero-tagline">BẢO MẬT THÔNG TIN</p>
           <p className="hero-description">
             Cam kết bảo vệ thông tin của bạn tại SkillVerse
           </p>

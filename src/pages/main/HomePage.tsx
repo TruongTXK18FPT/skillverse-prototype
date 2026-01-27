@@ -816,7 +816,7 @@ const HomePage = () => {
               <div className="home-v2-monitor-header">
                 <div className="home-v2-monitor-status">
                   <div className="home-v2-status-dot"></div>
-                  <span>INCOMING TRANSMISSION: TIKTOK_FEED</span>
+                  <span>TIKTOK SKILLVERSE</span>
                 </div>
                 <Activity size={14} color="#06b6d4" />
               </div>

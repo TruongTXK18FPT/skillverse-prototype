@@ -217,3 +217,118 @@ docs/ui-review/
 - User ID: 6
 - Không có code nào được sửa đổi, chỉ document issues
 - Mỗi file MD có format: ✅ Điểm tốt → ⚠️ Issues table → 💡 Code fixes → 📝 Notes
+
+---
+
+## Session 5: Fix UI Issues Round 1
+
+### 👤 User Prompt
+> Sửa hết mấy trang trong folder public-pages, check actual UI, sửa code, update md file, rename thành -done
+
+### 🤖 Response
+
+**Đã fix 12 trang public:**
+
+| Page | Fixes Applied |
+|------|---------------|
+| 01-homepage | Footer copyright động, TikTok feed text |
+| 02-login | HUD Vietnamese, Google icon, instructions |
+| 04-courses | Instructor fallback, enrolled display, price format |
+| 05-jobs | Joker emoji, cards count, header text |
+| 06-community | Status text Vietnamese |
+| 07-seminar | Subtitle, labels Vietnamese |
+| 08-premium | Price format (0 → "Miễn phí") |
+| 09-about | **CRITICAL** typo "Constantsly" → "Constantly", copyright |
+| 10-explore-map | Debug text "[SONTUNGMTP]" removed |
+| 11-gamification | **CRITICAL** leader message logic fixed |
+| 12-help-center | Subtitles, tab names, headers |
+| 14-choose-role | Copyright động, Privacy subtitle |
+
+**Files renamed:** All 12 files renamed with `-done` suffix
+
+**BACKEND_NOTES.md created:** Issues requiring backend changes documented
+
+---
+
+## Session 6: Deep Review Round 2 (2026-01-27)
+
+### 👤 User Prompt
+> Tiếp tục check lại UI trong các trang public, xem chỗ nào chưa hợp lý (khác mấy cái issue cũ) thì thực hiện sửa vào note. Check sâu hơn về button flows, modal, components. Tạo file extra enhance tổng hợp đợt 2. Update conversation log.
+
+### 🤖 Response
+
+**Deep Review thực hiện:**
+- Kiểm tra button flows và modal interactions
+- Review component behaviors và accessibility
+- Phát hiện issues mới chưa có trong Round 1
+
+**Fixes Applied Round 2:**
+
+| # | File | Issue | Fix |
+|---|------|-------|-----|
+| 1 | `ExploreMap.tsx` | Typo "DI CHUỖT" | "DI CHUỘT" |
+| 2 | `SeminarPage.tsx`, `SeminarDetailPage.tsx` | English "Recruiter" fallback | "Chưa cập nhật" |
+| 3 | `BriefingRow.tsx`, `BriefingCard.tsx` | Random sector number | Stable từ seminar.id |
+| 4 | `RankCard.tsx` | English tags "STUDENT"/"POPULAR" | "SINH VIÊN"/"PHỔ BIẾN" |
+| 5 | `SeminarPage.tsx` | Comment không rõ ràng | Updated TODO comment |
+
+**New Issues Discovered (Not Fixed - Cần thêm development):**
+
+| Severity | Count | Examples |
+|----------|-------|----------|
+| 🔴 Critical | 2 | Gamification 100% mock data, User Guide broken links |
+| 🟠 Medium | 6 | Native confirm()/alert(), category filter, accessibility |
+| 🟡 Low | 7 | English HUD text, console.log, hardcoded dates |
+
+**Files Updated:**
+- All 12 public-pages `-done.md` files updated with Round 2 findings
+- `BACKEND_NOTES.md` updated with Gamification/Seminar API needs
+- `EXTRA-ENHANCE-ROUND2.md` created with full summary
+
+---
+
+## 📊 Tổng Kết Cuối Cùng
+
+### Statistics After All Sessions
+
+| Metric | Round 1 | Round 2 | Total |
+|--------|---------|---------|-------|
+| Pages Reviewed | 12 | 12 | 12 |
+| Issues Fixed | ~30 | 5 | ~35 |
+| New Issues Found | - | 15 | 15 |
+| Files Modified | ~15 | 6 | ~21 |
+| MD Files Updated | 12 | 12 | 12 |
+
+### Files Structure (Final)
+
+```
+docs/ui-review/
+├── README.md
+├── SUMMARY.md
+├── CONVERSATION_LOG.md          # This file (updated)
+├── BACKEND_NOTES.md             # Backend issues (updated)
+├── public-pages/                # 13 files (all -done)
+│   ├── 01-homepage-done.md
+│   ├── 02-login-done.md
+│   ├── 04-courses-done.md
+│   ├── 05-jobs-done.md
+│   ├── 06-community-done.md
+│   ├── 07-seminar-done.md      # Updated Round 2
+│   ├── 08-premium-done.md      # Updated Round 2
+│   ├── 09-about-done.md
+│   ├── 10-explore-map-done.md  # Updated Round 2
+│   ├── 11-gamification-done.md # Updated Round 2
+│   ├── 12-help-center-done.md  # Updated Round 2
+│   ├── 14-choose-role-done.md
+│   └── EXTRA-ENHANCE-ROUND2.md # NEW - Round 2 summary
+├── protected-pages/             # 10 files (not reviewed in this session)
+└── appendix/                    # 3 files
+```
+
+### Key Takeaways
+
+1. **Most Critical Issues Fixed:** Leader message logic, typo "Constantsly", debug text
+2. **Remaining Critical:** Gamification needs full API integration
+3. **Accessibility:** Multiple pages need aria-labels
+4. **Native Dialogs:** Several confirm()/alert() need custom modals
+5. **English/Vietnamese Mix:** Some intentional (sci-fi theme), some need translation

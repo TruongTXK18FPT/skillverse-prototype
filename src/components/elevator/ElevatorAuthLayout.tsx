@@ -244,22 +244,22 @@ const ElevatorAuthLayout: React.FC<ElevatorAuthLayoutProps> = ({
         {!hideHudCorners && (
           <div className="hud-overlay">
             <div className="hud-corner top-left">
-              <span>SYS:ONLINE</span>
-              <span className="hud-value">v2.4.1</span>
+              <span>TRẠNG THÁI</span>
+              <span className="hud-value">Hoạt động</span>
             </div>
             <div className="hud-corner top-right">
-              <span>DECK:AUTH</span>
-              <span className="hud-value">LV.00</span>
+              <span>BẢO MẬT</span>
+              <span className="hud-value">Cao</span>
             </div>
             <div className="hud-corner bottom-left">
-              <span>STATUS</span>
+              <span>KẾT NỐI</span>
               <span className={`hud-value ${showAccessGranted || isExiting ? 'status-arrived' : ''}`}>
-                {(showAccessGranted || isExiting) ? 'ARRIVED' : 'STANDBY'}
+                {(showAccessGranted || isExiting) ? 'THÀNH CÔNG' : 'CHỜ XỬ LÝ'}
               </span>
             </div>
             <div className="hud-corner bottom-right">
               <span>SKILLVERSE</span>
-              <span className="hud-value">HYPERION</span>
+              <span className="hud-value">XÁC THỰC</span>
             </div>
           </div>
         )}

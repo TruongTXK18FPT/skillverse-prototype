@@ -75,8 +75,9 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ seminar, onRegister }) => {
     : 'INTEL';
 
   // Format location as coordinates
+  // Use seminar.id for stable sector number instead of random
   const formatLocation = (loc: string): JSX.Element => {
-    const sectorNumber = Math.floor(Math.random() * 9) + 1;
+    const sectorNumber = (seminar.id % 9) + 1;
     return (
       <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
         <span className="location-module">Sector {sectorNumber}</span>

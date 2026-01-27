@@ -178,7 +178,7 @@ const AboutPage: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.6 }}
           >
-            Learn Fast.Fail Smart.Improve Constantsly
+            Learn Fast. Fail Smart. Improve Constantly
           </motion.p>
           
           <motion.p 
@@ -539,7 +539,7 @@ const AboutPage: React.FC = () => {
       {/* Footer decoration */}
       <div className="about-footer-decoration">
         <div className="about-footer-line"></div>
-        <span className="about-footer-text">SKILLVERSE © 2024 - Learn Smart. Practice Real. Work Confidently.</span>
+        <span className="about-footer-text">SKILLVERSE © {new Date().getFullYear()} - Learn Smart. Practice Real. Work Confidently.</span>
         <div className="about-footer-line"></div>
       </div>
 

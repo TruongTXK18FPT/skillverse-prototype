@@ -15,8 +15,8 @@ const OdysseyLayout = ({ children }: OdysseyLayoutProps) => {
     animationDuration: 3 + Math.random() * 4
   }));
 
-  // Generate floating cards with suit symbols
-  const floatingCards = Array.from({ length: 12 }, (_, i) => ({
+  // Generate floating cards with suit symbols (reduced for less distraction)
+  const floatingCards = Array.from({ length: 6 }, (_, i) => ({
     id: i,
     left: 10 + Math.random() * 80,
     top: 10 + Math.random() * 80,
@@ -80,8 +80,8 @@ const OdysseyLayout = ({ children }: OdysseyLayoutProps) => {
       <div className="odyssey-content">
         {/* Header */}
         <header className="odyssey-header">
-          <h1 className="odyssey-header__title">Bảng Công Việc</h1>
-          <p className="odyssey-header__subtitle">Chọn cơ hội</p>
+          <h1 className="odyssey-header__title">Cơ Hội Việc Làm</h1>
+          <p className="odyssey-header__subtitle">Khám phá công việc phù hợp với bạn</p>
         </header>
 
         {/* Content */}

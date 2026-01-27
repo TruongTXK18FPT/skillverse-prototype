@@ -314,9 +314,9 @@ const categories = [
         {/* Results Info */}
         <div className="cockpit-results-info">
           <div className="cockpit-scan-result">
-            <span className="cockpit-scan-label">SCAN RESULT:</span>
+            <span className="cockpit-scan-label">KẾT QUẢ:</span>
             <span className="cockpit-scan-count">{sortedCourses.length}</span>
-            <span className="cockpit-scan-unit">MODULES DETECTED</span>
+            <span className="cockpit-scan-unit">KHÓA HỌC</span>
           </div>
           {(searchTerm || selectedCategory !== 'all' || priceFilter !== 'all' || levelFilter !== 'all') && (
             <button
@@ -450,7 +450,7 @@ const categories = [
                     <div className="cockpit-module-info">
                       <h3 className="cockpit-module-title">{course.title}</h3>
                       <p className="cockpit-module-instructor">
-                        <span className="cockpit-label">INSTRUCTOR:</span> {course.instructor}
+                        <span className="cockpit-label">GIẢNG VIÊN:</span> {course.instructor === 'Unknown' || course.instructor === 'Unknown Instructor' ? 'Đang cập nhật' : course.instructor}
                       </p>
 
                       <div className="cockpit-module-stats">
@@ -460,7 +460,7 @@ const categories = [
                         </div>
                         <div className="cockpit-stat-item">
                           <Users className="cockpit-stat-icon" />
-                          <span>{course.students} ENROLLED</span>
+                          <span>{course.students === 0 ? 'MỚI' : `${course.students} HỌC VIÊN`}</span>
                         </div>
                       </div>
 
@@ -470,7 +470,7 @@ const categories = [
                           <span className="cockpit-price">
                             {(() => {
                               const numPrice = parseInt(course.price?.replace(/[^\d]/g, '') || '0');
-                              return numPrice === 0 ? 'FREE' : course.price;
+                              return numPrice === 0 ? 'MIỄN PHÍ' : numPrice.toLocaleString('vi-VN') + ' VND';
                             })()}
                           </span>
                         </div>
@@ -484,7 +484,7 @@ const categories = [
                           }}
                         >
                           <Zap className="cockpit-btn-icon" />
-                          KHỞI ĐỘNG
+                          XEM CHI TIẾT
                         </button>
                       </div>
                     </div>

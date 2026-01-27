@@ -41,7 +41,7 @@ const BriefingSidebar: React.FC<BriefingSidebarProps> = ({
       </button>
       {/* System Radar Widget */}
       <div className="sidebar-widget sidebar-radar">
-        <div className="widget-header"><span className="widget-title">QUÉT RADAR</span><span className="widget-status">HOẠT ĐỘNG</span></div>
+        <div className="widget-header"><span className="widget-title">CẬP NHẬT</span><span className="widget-status">HOẠT ĐỘNG</span></div>
         <div className="radar-display">
           <div className="radar-circle radar-outer"></div>
           <div className="radar-circle radar-mid"></div>
@@ -88,10 +88,10 @@ const BriefingSidebar: React.FC<BriefingSidebarProps> = ({
 
       {/* Mission Stats */}
       <div className="sidebar-widget sidebar-mission">
-        <div className="widget-header"><span className="widget-title">THỐNG KÊ NHIỆM VỤ</span></div>
+        <div className="widget-header"><span className="widget-title">THỐNG KÊ THAM GIA</span></div>
         <div className="mission-stats">
-          <div className="mission-stat"><div className="mission-stat-label">HOÀN THÀNH</div><div className="mission-stat-value">{completedSeminars}</div></div>
-          <div className="mission-stat"><div className="mission-stat-label">ĐANG DIỄN RA</div><div className="mission-stat-value">{activeSeminars}</div></div>
+          <div className="mission-stat"><div className="mission-stat-label">ĐÃ THAM GIA</div><div className="mission-stat-value">{completedSeminars}</div></div>
+          <div className="mission-stat"><div className="mission-stat-label">SẮP DIỄN RA</div><div className="mission-stat-value">{activeSeminars}</div></div>
         </div>
       </div>
     </aside>

@@ -194,7 +194,7 @@ const Footer = () => {
         <div className="footer-container">
           <div className="footer-bottom-content">
             <p className="copyright">
-              © 2025 Skillverse. All rights reserved.
+              © {new Date().getFullYear()} Skillverse. All rights reserved.
             </p>
             <div className="footer-bottom-links">
               <div className="contact-item hover-float contact-address-inline">

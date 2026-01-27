@@ -210,7 +210,7 @@ const TermOfService = () => {
       </div>
 
       <div className="tos-footer">
-        <p>© 2025 Skillverse. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Skillverse. All rights reserved.</p>
       </div>
     </div>
   );
