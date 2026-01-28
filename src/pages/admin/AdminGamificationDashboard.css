@@ -1,0 +1,1828 @@
+/* ===================================================
+   Admin Gamification Dashboard - Integrated into AdminPage
+   =================================================== */
+
+.admgami-wrapper {
+  width: 100%;
+  background: transparent;
+  padding: 0;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+
+.admgami-container {
+  max-width: 100%;
+  margin: 0;
+}
+
+/* Header - Simplified for integration */
+.admgami-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admgami-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #00f5ff 0%, #9d4edd 50%, #ff006e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.25rem;
+}
+
+.admgami-header p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+/* Loading */
+.admgami-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: #00f5ff;
+}
+
+.admgami-loading .admgami-spin {
+  width: 48px;
+  height: 48px;
+  animation: admgami-spin 1s linear infinite;
+}
+
+@keyframes admgami-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error Banner */
+.admgami-error {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 0, 110, 0.2),
+    rgba(255, 0, 110, 0.1)
+  );
+  border: 1px solid rgba(255, 0, 110, 0.5);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  color: #ff006e;
+}
+
+.admgami-error button {
+  background: rgba(255, 0, 110, 0.3);
+  border: 1px solid rgba(255, 0, 110, 0.5);
+  color: #ff006e;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admgami-error button:hover {
+  background: rgba(255, 0, 110, 0.5);
+}
+
+/* Tab Navigation */
+.admgami-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.5rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+}
+
+.admgami-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.admgami-tab svg {
+  width: 18px;
+  height: 18px;
+}
+
+.admgami-tab:hover {
+  background: rgba(0, 245, 255, 0.1);
+  color: #00f5ff;
+}
+
+.admgami-tab.admgami-active {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 245, 255, 0.2),
+    rgba(157, 78, 221, 0.2)
+  );
+  color: #00f5ff;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+}
+
+/* Content Area */
+.admgami-content {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+/* ===== Overview Tab ===== */
+.admgami-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.admgami-stat-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.admgami-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.admgami-stat-card[data-type="users"] {
+  border-color: rgba(0, 245, 255, 0.3);
+}
+
+.admgami-stat-card[data-type="coins"] {
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+.admgami-stat-card[data-type="badges"] {
+  border-color: rgba(157, 78, 221, 0.3);
+}
+
+.admgami-stat-card[data-type="games"] {
+  border-color: rgba(255, 0, 110, 0.3);
+}
+
+.admgami-stat-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.admgami-stat-card[data-type="users"] .admgami-stat-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 245, 255, 0.2),
+    rgba(0, 245, 255, 0.1)
+  );
+  color: #00f5ff;
+}
+
+.admgami-stat-card[data-type="coins"] .admgami-stat-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.2),
+    rgba(255, 215, 0, 0.1)
+  );
+  color: #ffd700;
+}
+
+.admgami-stat-card[data-type="badges"] .admgami-stat-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(157, 78, 221, 0.2),
+    rgba(157, 78, 221, 0.1)
+  );
+  color: #9d4edd;
+}
+
+.admgami-stat-card[data-type="games"] .admgami-stat-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 0, 110, 0.2),
+    rgba(255, 0, 110, 0.1)
+  );
+  color: #ff006e;
+}
+
+.admgami-stat-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.admgami-stat-content h3 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.admgami-stat-content p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.admgami-stat-sub {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  color: #4ade80;
+}
+
+.admgami-trend-up {
+  width: 14px;
+  height: 14px;
+}
+
+/* Quick Actions */
+.admgami-quick-actions {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.admgami-quick-actions h3 {
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admgami-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admgami-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.admgami-action-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.admgami-action-btn.gift {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.2),
+    rgba(255, 215, 0, 0.1)
+  );
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  color: #ffd700;
+}
+
+.admgami-action-btn.badge {
+  background: linear-gradient(
+    135deg,
+    rgba(157, 78, 221, 0.2),
+    rgba(157, 78, 221, 0.1)
+  );
+  border: 1px solid rgba(157, 78, 221, 0.3);
+  color: #9d4edd;
+}
+
+.admgami-action-btn.game {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 0, 110, 0.2),
+    rgba(255, 0, 110, 0.1)
+  );
+  border: 1px solid rgba(255, 0, 110, 0.3);
+  color: #ff006e;
+}
+
+.admgami-action-btn.refresh {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 245, 255, 0.2),
+    rgba(0, 245, 255, 0.1)
+  );
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  color: #00f5ff;
+}
+
+.admgami-action-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.2);
+}
+
+/* Lists Grid */
+.admgami-lists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.admgami-list-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.admgami-list-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admgami-list-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.admgami-list-header .icon-gold {
+  color: #ffd700;
+}
+
+.admgami-list-header .icon-green {
+  color: #4ade80;
+}
+
+.admgami-list-content {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admgami-list-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+}
+
+.admgami-list-item:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 245, 255, 0.08),
+    rgba(157, 78, 221, 0.08)
+  );
+  border-color: rgba(0, 245, 255, 0.2);
+  transform: translateX(4px);
+}
+
+/* Rank styling với màu nổi bật theo thứ hạng */
+.admgami-list-item .admgami-rank,
+.admgami-list-item .rank {
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Top 3 ranks special colors */
+.admgami-list-item:nth-child(1) .admgami-rank,
+.admgami-list-item:nth-child(1) .rank {
+  background: linear-gradient(135deg, #ffd700, #ffaa00);
+  color: #1a1a2e;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+}
+
+.admgami-list-item:nth-child(2) .admgami-rank,
+.admgami-list-item:nth-child(2) .rank {
+  background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+  color: #1a1a2e;
+  box-shadow: 0 0 12px rgba(192, 192, 192, 0.4);
+}
+
+.admgami-list-item:nth-child(3) .admgami-rank,
+.admgami-list-item:nth-child(3) .rank {
+  background: linear-gradient(135deg, #cd7f32, #b87333);
+  color: #1a1a2e;
+  box-shadow: 0 0 12px rgba(205, 127, 50, 0.4);
+}
+
+/* Avatar styling */
+.admgami-list-item img,
+.admgami-list-item .admgami-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(0, 245, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.admgami-list-item:hover img,
+.admgami-list-item:hover .admgami-avatar {
+  border-color: rgba(0, 245, 255, 0.6);
+  box-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
+  transform: scale(1.05);
+}
+
+/* User info container */
+.admgami-list-item .admgami-user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+/* Name styling - màu sáng và nổi bật */
+.admgami-list-item .admgami-name,
+.admgami-list-item .name {
+  flex: 1;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Fullname styling */
+.admgami-list-item .admgami-fullname {
+  color: #00f5ff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Username subtitle */
+.admgami-list-item .admgami-username {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+/* Value styling - màu vàng gold cho xu */
+.admgami-list-item .admgami-value,
+.admgami-list-item .value {
+  color: #ffd700;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.375rem 0.75rem;
+  background: rgba(255, 215, 0, 0.15);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  white-space: nowrap;
+}
+
+/* Different value colors based on context */
+.admgami-list-card:nth-child(2) .admgami-list-item .admgami-value,
+.admgami-list-card:nth-child(2) .admgami-list-item .value {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.15);
+  border-color: rgba(74, 222, 128, 0.3);
+}
+
+/* Empty list state */
+.admgami-empty-list {
+  padding: 2rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.875rem;
+}
+
+/* Stats Tables */
+.admgami-stats-tables {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 1.5rem;
+}
+
+.admgami-table-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.admgami-table-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admgami-table-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.admgami-table-header h3 svg {
+  width: 20px;
+  height: 20px;
+  color: #9d4edd;
+}
+
+.admgami-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admgami-table th,
+.admgami-table td {
+  padding: 0.875rem 1rem;
+  text-align: left;
+}
+
+.admgami-table th {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admgami-table td {
+  color: #fff;
+  font-size: 0.875rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admgami-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ===== Badges Tab ===== */
+.admgami-tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.admgami-tab-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.admgami-add-btn,
+.admgami-refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  color: #fff;
+}
+
+.admgami-add-btn {
+  background: linear-gradient(135deg, #9d4edd, #7c3aed);
+}
+
+.admgami-refresh-btn {
+  background: linear-gradient(135deg, #00f5ff, #00b8d4);
+  margin-left: 1rem;
+}
+
+.admgami-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(157, 78, 221, 0.4);
+}
+
+.admgami-add-btn svg,
+.admgami-refresh-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===== Badges Grid ===== */
+.admgami-badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.admgami-badge-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.admgami-badge-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.admgami-badge-card.admgami-rarity-common {
+  border-color: rgba(150, 150, 150, 0.3);
+}
+
+.admgami-badge-card.admgami-rarity-rare {
+  border-color: rgba(0, 245, 255, 0.3);
+}
+
+.admgami-badge-card.admgami-rarity-epic {
+  border-color: rgba(157, 78, 221, 0.3);
+}
+
+.admgami-badge-card.admgami-rarity-legendary {
+  border-color: rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+}
+
+.admgami-badge-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.admgami-badge-info h4 {
+  color: #fff;
+  font-size: 1.125rem;
+  margin-bottom: 0.375rem;
+}
+
+.admgami-badge-info p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.admgami-badge-meta {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.admgami-badge-meta .admgami-category {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.admgami-badge-meta .admgami-rarity {
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.admgami-rarity-common .admgami-rarity {
+  background: rgba(150, 150, 150, 0.2);
+  color: #aaa;
+}
+.admgami-rarity-rare .admgami-rarity {
+  background: rgba(0, 245, 255, 0.2);
+  color: #00f5ff;
+}
+.admgami-rarity-epic .admgami-rarity {
+  background: rgba(157, 78, 221, 0.2);
+  color: #9d4edd;
+}
+.admgami-rarity-legendary .admgami-rarity {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+}
+
+.admgami-badge-rewards {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admgami-badge-rewards span {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.admgami-badge-rewards .coin {
+  color: #ffd700;
+}
+.admgami-badge-rewards .xp {
+  color: #4ade80;
+}
+
+.admgami-badge-actions {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.admgami-badge-card:hover .admgami-badge-actions {
+  opacity: 1;
+}
+
+.admgami-icon-btn {
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admgami-icon-btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+.admgami-icon-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ===== Games Tab ===== */
+.admgami-games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.admgami-game-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.admgami-game-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 0, 110, 0.3);
+}
+
+.admgami-game-card.admgami-inactive {
+  opacity: 0.6;
+  filter: grayscale(0.5);
+}
+
+.admgami-game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.admgami-game-icon {
+  font-size: 2.5rem;
+}
+
+/* Toggle Switch */
+.admgami-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+}
+
+.admgami-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.admgami-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 26px;
+  transition: 0.3s;
+}
+
+.admgami-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.admgami-switch input:checked + .admgami-slider {
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+}
+
+.admgami-switch input:checked + .admgami-slider:before {
+  transform: translateX(22px);
+}
+
+.admgami-game-info h4 {
+  color: #fff;
+  font-size: 1.125rem;
+  margin-bottom: 0.25rem;
+}
+
+.admgami-game-info .admgami-key {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+  font-family: monospace;
+  margin-bottom: 0.5rem;
+}
+
+.admgami-game-info p:not(.admgami-key) {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.admgami-game-rewards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.admgami-game-rewards .admgami-reward-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.625rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.admgami-game-rewards .admgami-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.admgami-game-rewards .admgami-value {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.admgami-premium-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.3),
+    rgba(255, 215, 0, 0.1)
+  );
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: #ffd700;
+}
+
+.admgami-game-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admgami-game-actions .admgami-edit-btn,
+.admgami-game-actions .admgami-config-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admgami-game-actions .admgami-edit-btn {
+  background: rgba(0, 245, 255, 0.1);
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  color: #00f5ff;
+}
+
+.admgami-game-actions .admgami-edit-btn:hover {
+  background: rgba(0, 245, 255, 0.2);
+}
+
+.admgami-game-actions .admgami-config-btn {
+  background: rgba(157, 78, 221, 0.1);
+  border: 1px solid rgba(157, 78, 221, 0.3);
+  color: #9d4edd;
+}
+
+.admgami-game-actions .admgami-config-btn:hover {
+  background: rgba(157, 78, 221, 0.2);
+}
+
+/* ===== Users Table ===== */
+.admgami-users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admgami-users-table th,
+.admgami-users-table td {
+  padding: 1rem;
+  text-align: left;
+}
+
+.admgami-users-table th {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admgami-users-table td {
+  color: #fff;
+  font-size: 0.875rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admgami-users-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.admgami-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admgami-user-cell img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.admgami-view-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  background: rgba(157, 78, 221, 0.1);
+  border: 1px solid rgba(157, 78, 221, 0.3);
+  border-radius: 8px;
+  color: #9d4edd;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.admgami-view-btn:hover {
+  background: rgba(157, 78, 221, 0.2);
+}
+
+.admgami-view-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ===== Leaderboard Tab ===== */
+.admgami-leaderboard-lists {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.admgami-leaderboard-section h3 {
+  color: #fff;
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+}
+
+.admgami-leaderboard-list {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.admgami-leaderboard-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.2s ease;
+}
+
+.admgami-leaderboard-item:last-child {
+  border-bottom: none;
+}
+
+.admgami-leaderboard-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.admgami-leaderboard-item.rank-1 {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.15), transparent);
+}
+
+.admgami-leaderboard-item.rank-2 {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.1), transparent);
+}
+
+.admgami-leaderboard-item.rank-3 {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.1), transparent);
+}
+
+.admgami-leaderboard-item .admgami-rank {
+  font-size: 1.25rem;
+  width: 40px;
+  text-align: center;
+}
+
+.admgami-leaderboard-item img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.admgami-leaderboard-item .admgami-info {
+  flex: 1;
+}
+
+.admgami-leaderboard-item .admgami-name {
+  display: block;
+  color: #fff;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.admgami-leaderboard-item .admgami-stats {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+}
+
+/* ===== Modal ===== */
+.admgami-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+.admgami-modal {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.admgami-modal.large {
+  max-width: 700px;
+}
+
+.admgami-modal h3 {
+  color: #fff;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.admgami-form-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admgami-form-section h4 {
+  color: #00f5ff;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admgami-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.admgami-form-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.admgami-form-row.admgami-checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admgami-form-row.admgami-checkbox input {
+  width: auto;
+  margin: 0;
+}
+
+.admgami-form-row label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+}
+
+.admgami-form-row input,
+.admgami-form-row select,
+.admgami-form-row textarea {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: #fff;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.admgami-form-row input:focus,
+.admgami-form-row select:focus,
+.admgami-form-row textarea:focus {
+  outline: none;
+  border-color: #00f5ff;
+  background: rgba(0, 245, 255, 0.05);
+}
+
+.admgami-form-row textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.admgami-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.admgami-cancel-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admgami-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.admgami-save-btn {
+  background: linear-gradient(135deg, #00f5ff, #00b8d4);
+  border: none;
+  color: #000;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admgami-save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 245, 255, 0.4);
+}
+
+/* Rarity Badges for Table */
+.admgami-rarity-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.admgami-rarity-badge.admgami-rarity-common {
+  background: rgba(150, 150, 150, 0.2);
+  color: #ccc;
+  border: 1px solid rgba(150, 150, 150, 0.3);
+}
+
+.admgami-rarity-badge.admgami-rarity-rare {
+  background: rgba(0, 245, 255, 0.2);
+  color: #00f5ff;
+  border: 1px solid rgba(0, 245, 255, 0.3);
+}
+
+.admgami-rarity-badge.admgami-rarity-epic {
+  background: rgba(157, 78, 221, 0.2);
+  color: #9d4edd;
+  border: 1px solid rgba(157, 78, 221, 0.3);
+}
+
+.admgami-rarity-badge.admgami-rarity-legendary {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+}
+
+.admgami-form-row label {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.admgami-form input[type="text"],
+.admgami-form input[type="number"],
+.admgami-form textarea,
+.admgami-form select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease;
+}
+
+.admgami-form input:focus,
+.admgami-form textarea:focus,
+.admgami-form select:focus {
+  outline: none;
+  border-color: rgba(0, 245, 255, 0.5);
+}
+
+.admgami-form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.admgami-form select {
+  cursor: pointer;
+}
+
+.admgami-form select option {
+  background: #1a1a2e;
+}
+
+.admgami-form-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.admgami-form-row.admgami-checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.admgami-form-row.admgami-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+.admgami-form-row.admgami-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #9d4edd;
+}
+
+.admgami-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admgami-modal-actions button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admgami-modal-actions .admgami-cancel-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.admgami-modal-actions .admgami-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.admgami-modal-actions .admgami-save-btn {
+  background: linear-gradient(135deg, #9d4edd, #7c3aed);
+  border: none;
+  color: #fff;
+}
+
+.admgami-modal-actions .admgami-save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(157, 78, 221, 0.4);
+}
+
+/* User Detail Modal */
+.admgami-user-detail .admgami-user-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admgami-user-detail .admgami-user-header img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(157, 78, 221, 0.5);
+}
+
+.admgami-user-detail .admgami-user-header h4 {
+  color: #fff;
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.admgami-user-detail .admgami-user-header p {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+}
+
+.admgami-counters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.admgami-counter-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.admgami-counter-item .admgami-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  margin-bottom: 0.375rem;
+}
+
+.admgami-counter-item .admgami-value {
+  color: #00f5ff;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.admgami-achievements-section,
+.admgami-recent-section {
+  margin-bottom: 1.5rem;
+}
+
+.admgami-achievements-section h4,
+.admgami-recent-section h4 {
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.admgami-achievements-list,
+.admgami-recent-list {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.admgami-achievement-item,
+.admgami-recent-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admgami-achievement-item:last-child,
+.admgami-recent-item:last-child {
+  border-bottom: none;
+}
+
+.admgami-achievement-item .admgami-icon {
+  font-size: 1.25rem;
+}
+
+.admgami-achievement-item .admgami-title,
+.admgami-recent-item .admgami-desc {
+  flex: 1;
+  color: #fff;
+  font-size: 0.875rem;
+}
+
+.admgami-achievement-item .admgami-reward,
+.admgami-recent-item .admgami-reward {
+  color: #ffd700;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.admgami-recent-item {
+  flex-wrap: wrap;
+}
+
+.admgami-recent-item .admgami-time {
+  width: 100%;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admgami-wrapper {
+    padding: 1rem;
+  }
+
+  .admgami-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .admgami-tabs {
+    flex-wrap: nowrap;
+    padding: 0.375rem;
+  }
+
+  .admgami-tab {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .admgami-tab span {
+    display: none;
+  }
+
+  .admgami-content {
+    padding: 1.25rem;
+  }
+
+  .admgami-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admgami-lists-grid,
+  .admgami-stats-tables,
+  .admgami-leaderboard-lists {
+    grid-template-columns: 1fr;
+  }
+
+  .admgami-badges-grid,
+  .admgami-games-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admgami-form-row-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admgami-modal {
+    padding: 1.5rem;
+  }
+}
+
+/* ===== Badge Image Styles ===== */
+.admgami-badge-image {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.admgami-badge-trigger {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(0, 245, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 245, 255, 0.2);
+}
+
+.admgami-trigger-type {
+  color: #00f5ff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.admgami-trigger-threshold {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.7rem;
+}
+
+/* ===== Image Upload Styles ===== */
+.admgami-image-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.admgami-image-upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 2px dashed rgba(0, 245, 255, 0.3);
+  border-radius: 12px;
+  background: rgba(0, 245, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  gap: 0.5rem;
+}
+
+.admgami-image-upload-area:hover {
+  border-color: rgba(0, 245, 255, 0.6);
+  background: rgba(0, 245, 255, 0.1);
+}
+
+.admgami-image-upload-area svg {
+  color: #00f5ff;
+  opacity: 0.7;
+}
+
+.admgami-image-upload-area span {
+  color: #00f5ff;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.admgami-image-upload-area small {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+}
+
+.admgami-image-preview {
+  position: relative;
+  display: inline-block;
+  width: 120px;
+  height: 120px;
+}
+
+.admgami-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid rgba(0, 245, 255, 0.3);
+}
+
+.admgami-image-remove-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ff006e;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.admgami-image-remove-btn:hover {
+  background: #ff3388;
+  transform: scale(1.1);
+}
+
+.admgami-upload-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+.admgami-upload-progress-bar {
+  height: 4px;
+  background: linear-gradient(90deg, #00f5ff, #9d4edd);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  flex: 1;
+}
+
+.admgami-upload-progress span {
+  color: #00f5ff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* ===== Trigger Section Styles ===== */
+.admgami-trigger-section {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 245, 255, 0.05),
+    rgba(157, 78, 221, 0.05)
+  );
+  border: 1px solid rgba(0, 245, 255, 0.2);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.admgami-section-desc {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.admgami-trigger-hint {
+  display: block;
+  margin-top: 0.5rem;
+  color: rgba(255, 215, 0, 0.8);
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+.admgami-manual-badge-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(157, 78, 221, 0.2);
+  border: 1px solid rgba(157, 78, 221, 0.4);
+  border-radius: 8px;
+  color: #9d4edd;
+}
+
+.admgami-manual-badge-info span {
+  font-size: 0.875rem;
+}
+
+/* ===== Form Section Styles ===== */
+.admgami-form-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admgami-form-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.admgami-form-section h4 {
+  color: #00f5ff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* ===== Modal Large Variant ===== */
+.admgami-modal-large {
+  max-width: 650px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.admgami-modal-large::-webkit-scrollbar {
+  width: 6px;
+}
+
+.admgami-modal-large::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.admgami-modal-large::-webkit-scrollbar-thumb {
+  background: rgba(0, 245, 255, 0.3);
+  border-radius: 3px;
+}
+
+.admgami-modal-large::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 245, 255, 0.5);
+}
+
+/* ===== Delete Button ===== */
+.admgami-delete-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(255, 0, 110, 0.2);
+  border: 1px solid rgba(255, 0, 110, 0.3);
+  color: #ff006e;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admgami-delete-btn:hover {
+  background: rgba(255, 0, 110, 0.4);
+  transform: scale(1.05);
+}
+
+.admgami-delete-btn svg {
+  width: 16px;
+  height: 16px;
+}
