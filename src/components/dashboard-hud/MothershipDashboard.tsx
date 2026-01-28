@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BookOpen, Briefcase, Award, TrendingUp } from "lucide-react";
 import CommanderWelcome from "./CommanderWelcome";
@@ -8,6 +8,7 @@ import ActiveModules from "./ActiveModules";
 import FavoriteMentors from "./FavoriteMentors";
 import AnalystTrack from "./AnalystTrack";
 import SystemLimits from "./SystemLimits";
+import { LearningReportModal, LearningReportHistory } from "../learning-report";
 import { RoadmapSessionSummary } from "../../types/Roadmap";
 import "./MothershipDashboard.css";
 import "./hud-styles.module.css";
@@ -83,6 +84,7 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   onJoinGroup,
 }) => {
   const navigate = useNavigate();
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   // Data mapping from old structure to new Sci-Fi theme
   const stats = [
@@ -155,6 +157,10 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
     navigate("/study-planner");
   };
 
+  const handleViewReport = () => {
+    setIsReportModalOpen(true);
+  };
+
   const handleCourseClick = (courseId: number) => {
     // Navigate to course learning
     navigate("/course-learning", { state: { courseId } });
@@ -169,6 +175,7 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
           subtitle="COMMAND CENTER OPERATIONAL"
           userLevel={userLevel}
           onViewPlan={handleViewPlan}
+          onViewReport={handleViewReport}
           viewPlanText={
             translations?.dashboard?.viewStudyPlan || "View Study Plan"
           }
@@ -218,6 +225,13 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
         {/* Analyst Track (Strategic Overview) */}
         <AnalystTrack roadmaps={roadmaps} />
 
+        {/* Learning Report History Section */}
+        <LearningReportHistory
+          maxItems={5}
+          showGenerateButton={true}
+          title="Báo cáo học tập"
+        />
+
         {/* Usage Limits */}
         {(featureUsage || usageLimits) && (
           <SystemLimits usageLimits={usageLimits} featureUsage={featureUsage} />
@@ -235,6 +249,12 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
         {/* Favorite Mentors */}
         <FavoriteMentors mentors={favoriteMentors} />
       </div>
+
+      {/* Learning Report Modal */}
+      <LearningReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+      />
     </div>
   );
 };

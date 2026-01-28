@@ -1,0 +1,275 @@
+import axiosInstance from "./axiosInstance";
+
+// ==================== Types ====================
+
+export type ReportType =
+  | "COMPREHENSIVE"
+  | "WEEKLY_SUMMARY"
+  | "MONTHLY_SUMMARY"
+  | "SKILL_ASSESSMENT"
+  | "GOAL_TRACKING";
+
+export interface ReportSections {
+  currentSkills: string;
+  learningGoals: string;
+  progress: string;
+  strengths: string;
+  areasToImprove: string;
+  recommendations: string;
+  skillGaps: string;
+  nextSteps: string;
+  motivation: string;
+}
+
+export interface SkillInfo {
+  id: number;
+  skillName: string;
+  status: "completed" | "in_progress" | "not_started";
+  progress: number;
+  startedAt?: string;
+  completedAt?: string;
+}
+
+export interface RoadmapProgress {
+  roadmapId: number;
+  roadmapTitle: string;
+  totalSkills: number;
+  completedSkills: number;
+  progressPercentage: number;
+  createdAt: string;
+  skills: SkillInfo[];
+}
+
+export interface StudentMetrics {
+  totalStudyHours: number;
+  totalStudySessions: number;
+  totalTasksCompleted: number;
+  totalTasksPending: number;
+  totalRoadmaps: number;
+  completedRoadmaps: number;
+  totalChatSessions: number;
+  currentStreak: number;
+  longestStreak: number;
+  lastActiveDate?: string;
+  averageSessionDuration: number;
+  mostActiveTime?: string;
+  preferredSkillCategory?: string;
+  roadmapProgressList: RoadmapProgress[];
+}
+
+export interface StudentLearningReportResponse {
+  reportId: number;
+  studentId: number;
+  studentName: string;
+  reportType: ReportType;
+  generatedAt: string;
+  validUntil?: string;
+
+  // AI-generated content
+  sections: ReportSections;
+
+  // Raw metrics
+  metrics: StudentMetrics;
+
+  // Summary
+  overallProgress: number;
+  learningTrend: "improving" | "stable" | "declining";
+  recommendedFocus?: string;
+}
+
+export interface GenerateReportRequest {
+  reportType?: ReportType;
+  includeChatHistory?: boolean;
+  includeDetailedSkills?: boolean;
+  customPrompt?: string;
+}
+
+export interface CanGenerateResponse {
+  canGenerate: boolean;
+  nextAvailableAt?: string;
+  remainingCooldownMinutes?: number;
+  reason?: string;
+}
+
+export interface ReportTypeInfo {
+  type: ReportType;
+  name: string;
+  description: string;
+  cooldownHours: number;
+}
+
+// ==================== Service Class ====================
+
+class LearningReportService {
+  private readonly BASE_URL = "/student/learning-report";
+
+  /**
+   * Generate a new learning report
+   * Rate limit: 1 comprehensive report per 6 hours
+   */
+  async generateReport(
+    request: GenerateReportRequest = {},
+  ): Promise<StudentLearningReportResponse> {
+    const response = await axiosInstance.post<StudentLearningReportResponse>(
+      `${this.BASE_URL}/generate`,
+      {
+        reportType: request.reportType || "COMPREHENSIVE",
+        includeChatHistory: request.includeChatHistory ?? true,
+        includeDetailedSkills: request.includeDetailedSkills ?? true,
+        customPrompt: request.customPrompt,
+      },
+    );
+    return response.data;
+  }
+
+  /**
+   * Generate a quick report with default settings
+   */
+  async generateQuickReport(): Promise<StudentLearningReportResponse> {
+    const response = await axiosInstance.post<StudentLearningReportResponse>(
+      `${this.BASE_URL}/generate/quick`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Get report history with pagination
+   */
+  async getReportHistory(
+    page = 0,
+    size = 10,
+  ): Promise<StudentLearningReportResponse[]> {
+    const response = await axiosInstance.get<StudentLearningReportResponse[]>(
+      `${this.BASE_URL}/history`,
+      { params: { page, size } },
+    );
+    return response.data;
+  }
+
+  /**
+   * Get the most recent report
+   */
+  async getLatestReport(): Promise<StudentLearningReportResponse | null> {
+    try {
+      const response = await axiosInstance.get<StudentLearningReportResponse>(
+        `${this.BASE_URL}/latest`,
+      );
+      return response.data;
+    } catch (error: any) {
+      if (error.response?.status === 204) {
+        return null;
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Get a specific report by ID
+   */
+  async getReportById(
+    reportId: number,
+  ): Promise<StudentLearningReportResponse> {
+    const response = await axiosInstance.get<StudentLearningReportResponse>(
+      `${this.BASE_URL}/${reportId}`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Get current metrics without generating a report
+   */
+  async getCurrentMetrics(): Promise<StudentMetrics> {
+    const response = await axiosInstance.get<StudentMetrics>(
+      `${this.BASE_URL}/metrics`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Check if user can generate a new report (rate limiting)
+   */
+  async canGenerateReport(): Promise<CanGenerateResponse> {
+    const response = await axiosInstance.get<CanGenerateResponse>(
+      `${this.BASE_URL}/can-generate`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Get available report types with descriptions
+   */
+  async getReportTypes(): Promise<ReportTypeInfo[]> {
+    const response = await axiosInstance.get<ReportTypeInfo[]>(
+      `${this.BASE_URL}/report-types`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Helper: Format report date for display
+   */
+  formatReportDate(dateString: string): string {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(date);
+  }
+
+  /**
+   * Helper: Get trend icon based on learning trend
+   */
+  getTrendIcon(trend: "improving" | "stable" | "declining"): string {
+    switch (trend) {
+      case "improving":
+        return "📈";
+      case "stable":
+        return "➡️";
+      case "declining":
+        return "📉";
+      default:
+        return "📊";
+    }
+  }
+
+  /**
+   * Helper: Get status color class
+   */
+  getStatusColor(trend: "improving" | "stable" | "declining"): string {
+    switch (trend) {
+      case "improving":
+        return "text-green-500";
+      case "stable":
+        return "text-yellow-500";
+      case "declining":
+        return "text-red-500";
+      default:
+        return "text-gray-500";
+    }
+  }
+
+  /**
+   * Helper: Calculate time until next report available
+   */
+  getTimeUntilNextReport(remainingMinutes: number): string {
+    if (remainingMinutes <= 0) return "Có thể tạo ngay";
+
+    const hours = Math.floor(remainingMinutes / 60);
+    const mins = remainingMinutes % 60;
+
+    if (hours > 0) {
+      return `${hours}h ${mins}m nữa`;
+    }
+    return `${mins} phút nữa`;
+  }
+}
+
+// Export singleton instance
+const learningReportService = new LearningReportService();
+export default learningReportService;
+
+// Also export the class for testing
+export { LearningReportService };

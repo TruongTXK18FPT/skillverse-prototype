@@ -12,6 +12,7 @@ import {
   Target,
   Lightbulb,
   Clock,
+  BarChart2,
 } from "lucide-react";
 import "./CommanderWelcome.css";
 
@@ -32,6 +33,7 @@ interface CommanderWelcomeProps {
   subtitle?: string;
   userLevel?: number;
   onViewPlan?: () => void;
+  onViewReport?: () => void;
   viewPlanText?: string;
   hasRoadmap?: boolean;
   hasCourses?: boolean;
@@ -46,6 +48,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
   subtitle = "COMMAND CENTER OPERATIONAL",
   userLevel = 1,
   onViewPlan,
+  onViewReport,
   viewPlanText = "Xem kế hoạch học tập",
   hasRoadmap = false,
   hasCourses: _hasCourses = false,
@@ -291,32 +294,44 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
               ))}
             </div>
 
-            {/* CTA Button */}
-            <button
-              onClick={onViewPlan}
-              className="commander-welcome__panel-cta"
-            >
-              <div className="commander-welcome__cta-content">
-                <div className="commander-welcome__cta-main">
-                  <FileText size={14} />
-                  <span>{viewPlanText}</span>
-                  {totalOverdue > 0 && (
-                    <span className="commander-welcome__cta-badge">
-                      {totalOverdue}
-                    </span>
+            {/* CTA Buttons */}
+            <div className="commander-welcome__cta-buttons">
+              <button
+                onClick={onViewPlan}
+                className="commander-welcome__panel-cta"
+              >
+                <div className="commander-welcome__cta-content">
+                  <div className="commander-welcome__cta-main">
+                    <FileText size={14} />
+                    <span>{viewPlanText}</span>
+                    {totalOverdue > 0 && (
+                      <span className="commander-welcome__cta-badge">
+                        {totalOverdue}
+                      </span>
+                    )}
+                  </div>
+                  {totalEstimatedMinutes > 0 && (
+                    <div className="commander-welcome__cta-time">
+                      <Clock size={11} />
+                      <span>
+                        ~{formatTime(totalEstimatedMinutes)} để hoàn thành
+                      </span>
+                    </div>
                   )}
                 </div>
-                {totalEstimatedMinutes > 0 && (
-                  <div className="commander-welcome__cta-time">
-                    <Clock size={11} />
-                    <span>
-                      ~{formatTime(totalEstimatedMinutes)} để hoàn thành
-                    </span>
-                  </div>
-                )}
-              </div>
-              <ChevronRight size={14} />
-            </button>
+                <ChevronRight size={14} />
+              </button>
+
+              {/* Learning Report Button */}
+              <button
+                onClick={onViewReport}
+                className="commander-welcome__report-cta"
+              >
+                <BarChart2 size={14} />
+                <span>Báo cáo học tập</span>
+                <ChevronRight size={14} />
+              </button>
+            </div>
           </div>
         </div>
 

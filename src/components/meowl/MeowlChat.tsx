@@ -1,20 +1,21 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { X, Send, ExternalLink, Mic, Square } from 'lucide-react';
-import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
-import { useLanguage } from '../../context/LanguageContext';
-import { useAuth } from '../../context/AuthContext';
-import '../../styles/MeowlChat.css';
+import React, { useState, useRef, useEffect, useMemo } from "react";
+import { X, Send, ExternalLink, Mic, Square, BarChart2 } from "lucide-react";
+import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
+import { useLanguage } from "../../context/LanguageContext";
+import { useAuth } from "../../context/AuthContext";
+import "../../styles/MeowlChat.css";
 import { guardUserInput, pickFallback } from "./MeowlGuard.ts";
-import axiosInstance from '../../services/axiosInstance';
-import { useNavigate } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { WavRecorder } from '../../shared/wavRecorder';
-import { transcribeAudioViaBackend } from '../../shared/speechToText';
+import axiosInstance from "../../services/axiosInstance";
+import { useNavigate } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { WavRecorder } from "../../shared/wavRecorder";
+import { transcribeAudioViaBackend } from "../../shared/speechToText";
+import { LearningReportModal } from "../learning-report";
 
 interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: Date;
   actionType?: string;
@@ -32,20 +33,23 @@ const MeowlChat: React.FC<MeowlChatProps> = ({ isOpen, onClose }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [recorder] = useState(() => new WavRecorder());
   const [isRecording, setIsRecording] = useState(false);
   // Preview speech-to-text while recording (browser Web Speech API)
-  const [previewText, setPreviewText] = useState<string>('');
+  const [previewText, setPreviewText] = useState<string>("");
   const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
+  // Learning Report Modal state
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   // No TTS in MeowlChat per requirements
   const recognitionRef = useRef<any>(null);
 
-  const welcomeMessage = useMemo(() => ({
-    en: `Hello! 💫 *Meow meow!* 🐱✨
+  const welcomeMessage = useMemo(
+    () => ({
+      en: `Hello! 💫 *Meow meow!* 🐱✨
 I have **many cool things** to help you on SkillVerse!
 
 1. **Learning & Skills**:
@@ -73,7 +77,7 @@ I have **many cool things** to help you on SkillVerse!
 
 *Meowl is right here!* 💕🦋
 You got this! 💪✨ 🎓`,
-    vi: `Hế lô! 💫 *Meow meow!* 🐱✨
+      vi: `Hế lô! 💫 *Meow meow!* 🐱✨
 Mình có **nhiều thứ hay ho** để giúp bạn trên SkillVerse đây!
 
 1. **Học tập & Kỹ năng**:
@@ -100,22 +104,24 @@ Mình có **nhiều thứ hay ho** để giúp bạn trên SkillVerse đây!
 - Hay chỉ muốn chat vui thôi? 🐾
 
 *Meowl đang ngồi sẵn đây!* 💕🦋
-Cố lên nha! 💪✨ 🎓`
-  }), []);
+Cố lên nha! 💪✨ 🎓`,
+    }),
+    [],
+  );
 
   const placeholderText = {
     en: "Ask me anything about learning and skills...",
-    vi: "Hỏi tôi bất cứ điều gì về học tập và kỹ năng..."
+    vi: "Hỏi tôi bất cứ điều gì về học tập và kỹ năng...",
   };
 
   // Initialize with welcome message
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const welcome: Message = {
-        id: 'welcome',
-        role: 'assistant',
+        id: "welcome",
+        role: "assistant",
         content: welcomeMessage[language],
-        timestamp: new Date()
+        timestamp: new Date(),
       };
       setMessages([welcome]);
     }
@@ -123,7 +129,7 @@ Cố lên nha! 💪✨ 🎓`
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   // Focus input when chat opens
@@ -148,21 +154,24 @@ Cố lên nha! 💪✨ 🎓`
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      role: 'user',
+      role: "user",
       content,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    const normalized = userMessage.content.toLowerCase().replace(/\s+/g, ' ').trim();
+    const normalized = userMessage.content
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .trim();
     if (/^con jv[!?.,]*$/.test(normalized)) {
       const eggResponse: Message = {
         id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: 'con mẹ mày',
-        timestamp: new Date()
+        role: "assistant",
+        content: "con mẹ mày",
+        timestamp: new Date(),
       };
-      setMessages(prev => [...prev, userMessage, eggResponse]);
-      setInputValue('');
+      setMessages((prev) => [...prev, userMessage, eggResponse]);
+      setInputValue("");
       return;
     }
 
@@ -171,46 +180,46 @@ Cố lên nha! 💪✨ 🎓`
     if (!guard.allow) {
       const fallback: Message = {
         id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: pickFallback(guard.reason, language === 'vi' ? 'vi' : 'en'),
-        timestamp: new Date()
+        role: "assistant",
+        content: pickFallback(guard.reason, language === "vi" ? "vi" : "en"),
+        timestamp: new Date(),
       };
-      setMessages(prev => [...prev, userMessage, fallback]);
-      setInputValue('');
+      setMessages((prev) => [...prev, userMessage, fallback]);
+      setInputValue("");
       return;
     }
 
-    setMessages(prev => [...prev, userMessage]);
-    if (!overrideText) setInputValue('');
+    setMessages((prev) => [...prev, userMessage]);
+    if (!overrideText) setInputValue("");
     setIsLoading(true);
 
     try {
       // Call backend Meowl Chat API using axiosInstance
-      const response = await axiosInstance.post('/v1/meowl/chat', {
+      const response = await axiosInstance.post("/v1/meowl/chat", {
         message: userMessage.content,
-        language: language === 'vi' ? 'vi' : 'en',
+        language: language === "vi" ? "vi" : "en",
         userId: user?.id || null,
         includeReminders: true,
-        chatHistory: messages.slice(-10).map(msg => ({
+        chatHistory: messages.slice(-10).map((msg) => ({
           role: msg.role,
-          content: msg.content
-        }))
+          content: msg.content,
+        })),
       });
 
       const data = response.data;
-      
+
       // Use the cute response from backend
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: data.message || data.originalMessage || '...',
+        role: "assistant",
+        content: data.message || data.originalMessage || "...",
         timestamp: new Date(),
         actionType: data.actionType,
         actionUrl: data.actionUrl,
-        actionLabel: data.actionLabel
+        actionLabel: data.actionLabel,
       };
 
-      setMessages(prev => [...prev, aiResponse]);
+      setMessages((prev) => [...prev, aiResponse]);
 
       // TTS intentionally disabled in MeowlChat (UI-only chat)
 
@@ -221,18 +230,18 @@ Cố lên nha! 💪✨ 🎓`
       if (data.notifications && data.notifications.length > 0) {
         // TODO: Implement notifications
       }
-
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: language === 'en'
-          ? 'Sorry, I\'m having trouble connecting right now. Please try again later.'
-          : 'Xin lỗi, tôi đang gặp sự cố kết nối. Vui lòng thử lại sau.',
-        timestamp: new Date()
+        role: "assistant",
+        content:
+          language === "en"
+            ? "Sorry, I'm having trouble connecting right now. Please try again later."
+            : "Xin lỗi, tôi đang gặp sự cố kết nối. Vui lòng thử lại sau.",
+        timestamp: new Date(),
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -244,27 +253,29 @@ Cố lên nha! 💪✨ 🎓`
       setIsRecording(true);
 
       // Start live preview using Web Speech API if available
-      const SR: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const SR: any =
+        (window as any).SpeechRecognition ||
+        (window as any).webkitSpeechRecognition;
       if (SR) {
         try {
           const recog = new SR();
           recognitionRef.current = recog;
-          recog.lang = language === 'vi' ? 'vi-VN' : 'en-US';
+          recog.lang = language === "vi" ? "vi-VN" : "en-US";
           recog.continuous = true;
           recog.interimResults = true;
-          setPreviewText('');
+          setPreviewText("");
           recog.onresult = (event: any) => {
-            let interim = '';
-            let final = '';
+            let interim = "";
+            let final = "";
             for (let i = event.resultIndex; i < event.results.length; i++) {
-              const transcript = event.results[i][0]?.transcript || '';
-              if (event.results[i].isFinal) final += transcript + ' ';
-              else interim += transcript + ' ';
+              const transcript = event.results[i][0]?.transcript || "";
+              if (event.results[i].isFinal) final += transcript + " ";
+              else interim += transcript + " ";
             }
             setPreviewText(final || interim);
           };
           recog.onerror = (err: any) => {
-            console.warn('SpeechRecognition error:', err);
+            console.warn("SpeechRecognition error:", err);
           };
           recog.onend = () => {
             setIsPreviewing(false);
@@ -272,14 +283,14 @@ Cố lên nha! 💪✨ 🎓`
           recog.start();
           setIsPreviewing(true);
         } catch (err) {
-          console.warn('Unable to start SpeechRecognition:', err);
+          console.warn("Unable to start SpeechRecognition:", err);
           setIsPreviewing(false);
         }
       } else {
         setIsPreviewing(false);
       }
     } catch (err) {
-      console.error('Unable to start recording:', err);
+      console.error("Unable to start recording:", err);
     }
   };
 
@@ -294,7 +305,7 @@ Cố lên nha! 💪✨ 🎓`
           recognitionRef.current = null;
         }
       } catch (err) {
-        console.warn('Unable to stop SpeechRecognition:', err);
+        console.warn("Unable to stop SpeechRecognition:", err);
       }
       setIsPreviewing(false);
 
@@ -305,13 +316,13 @@ Cố lên nha! 💪✨ 🎓`
         // Transcribe via backend (proxy to FPT AI)
         try {
           const stt = await transcribeAudioViaBackend(result.audioBlob);
-          const text = stt?.text?.trim() || '';
+          const text = stt?.text?.trim() || "";
           if (text) {
             // Điền transcript và tự động gửi
             setInputValue(text);
             await sendMessage(text);
           } else {
-            console.warn('No transcript from STT backend', stt);
+            console.warn("No transcript from STT backend", stt);
             // Fallback to preview text if available
             if (previewText.trim()) {
               const fallbackText = previewText.trim();
@@ -320,7 +331,7 @@ Cố lên nha! 💪✨ 🎓`
             }
           }
         } catch (e) {
-          console.error('STT backend error:', e);
+          console.error("STT backend error:", e);
           // Fallback to preview text on error
           if (previewText.trim()) {
             const fallbackText = previewText.trim();
@@ -330,16 +341,15 @@ Cố lên nha! 💪✨ 🎓`
         }
       }
     } catch (err) {
-      console.error('Unable to stop recording or transcribe:', err);
+      console.error("Unable to stop recording or transcribe:", err);
       setIsRecording(false);
     }
   };
 
   // No speak/stop-speaking in MeowlChat
 
-
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -348,12 +358,18 @@ Cố lên nha! 💪✨ 🎓`
   if (!isOpen) return null;
 
   return (
-    <div className="meowl-dialog-overlay chat-mode" onClick={(e) => e.stopPropagation()}>
-      <div className="meowl-chat-container" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="meowl-dialog-overlay chat-mode"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div
+        className="meowl-chat-container"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Chat Header */}
         <div className="dialog-header">
           <div className="character-name">
-            {language === 'en' ? 'Meowl is here!' : 'Meowl đây!'}
+            {language === "en" ? "Meowl is here!" : "Meowl đây!"}
           </div>
           <button className="meowlchat-close-btn" onClick={onClose}>
             <div className="close-btn-inner">
@@ -367,7 +383,7 @@ Cố lên nha! 💪✨ 🎓`
           {messages.map((message) => (
             <div key={message.id} className={`chat-message ${message.role}`}>
               <div className="message-content">
-                {message.role === 'assistant' && (
+                {message.role === "assistant" && (
                   <div className="meowl-chat-message-avatar">
                     <img src="/images/meowl_bg_clear.png" alt="Meowl" />
                   </div>
@@ -375,7 +391,7 @@ Cố lên nha! 💪✨ 🎓`
                 <div className="message-bubble-wrapper">
                   <div className="message-bubble">
                     <div className="message-text">
-                      <ReactMarkdown 
+                      <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={{
                           a: (props) => (
@@ -385,9 +401,13 @@ Cố lên nha! 💪✨ 🎓`
                                 e.preventDefault();
                                 if (props.href) handleActionClick(props.href);
                               }}
-                              style={{ cursor: 'pointer', color: '#8d75ff', textDecoration: 'underline' }}
+                              style={{
+                                cursor: "pointer",
+                                color: "#8d75ff",
+                                textDecoration: "underline",
+                              }}
                             />
-                          )
+                          ),
                         }}
                       >
                         {message.content}
@@ -395,12 +415,12 @@ Cố lên nha! 💪✨ 🎓`
                     </div>
                   </div>
                   {/* Render Action Button if available */}
-                  {message.actionType === 'NAVIGATE' && message.actionUrl && (
-                    <button 
+                  {message.actionType === "NAVIGATE" && message.actionUrl && (
+                    <button
                       className="meowl-action-btn"
                       onClick={() => handleActionClick(message.actionUrl!)}
                     >
-                      <span>{message.actionLabel || 'Click here'}</span>
+                      <span>{message.actionLabel || "Click here"}</span>
                       <ExternalLink size={14} />
                     </button>
                   )}
@@ -416,7 +436,11 @@ Cố lên nha! 💪✨ 🎓`
                 </div>
                 <div className="message-bubble loading">
                   <MeowlKuruLoader size="tiny" text="" />
-                  <span>{language === 'en' ? 'Meowl is thinking...' : 'Meowl đang suy nghĩ...'}</span>
+                  <span>
+                    {language === "en"
+                      ? "Meowl is thinking..."
+                      : "Meowl đang suy nghĩ..."}
+                  </span>
                 </div>
               </div>
             </div>
@@ -426,16 +450,44 @@ Cố lên nha! 💪✨ 🎓`
 
         {/* Input Container */}
         <div className="chat-input-container">
+          {/* Quick Actions - Only show Learning Report button when logged in */}
+          {user && (
+            <div className="meowl-quick-actions">
+              <button
+                className="meowl-quick-action-btn"
+                onClick={() => setIsReportModalOpen(true)}
+                title={
+                  language === "en"
+                    ? "Generate Learning Report"
+                    : "Tạo báo cáo học tập"
+                }
+              >
+                <BarChart2 size={16} />
+                <span>
+                  {language === "en" ? "Learning Report" : "Báo cáo học tập"}
+                </span>
+              </button>
+            </div>
+          )}
+
           <div className="chat-input-wrapper">
             {/* Mic control */}
-          <button
-            className="send-button"
-            onClick={isRecording ? stopRecording : startRecording}
-            title={isRecording ? (language === 'en' ? 'Stop Recording' : 'Dừng ghi âm') : (language === 'en' ? 'Start Recording' : 'Bắt đầu ghi âm')}
-            disabled={isLoading}
-          >
-            {isRecording ? <Square size={18} /> : <Mic size={18} />}
-          </button>
+            <button
+              className="send-button"
+              onClick={isRecording ? stopRecording : startRecording}
+              title={
+                isRecording
+                  ? language === "en"
+                    ? "Stop Recording"
+                    : "Dừng ghi âm"
+                  : language === "en"
+                    ? "Start Recording"
+                    : "Bắt đầu ghi âm"
+              }
+              disabled={isLoading}
+            >
+              {isRecording ? <Square size={18} /> : <Mic size={18} />}
+            </button>
             {/* No TTS in MeowlChat */}
             <input
               ref={inputRef}
@@ -456,13 +508,28 @@ Cố lên nha! 💪✨ 🎓`
             </button>
           </div>
           {isPreviewing && (
-            <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#b3e5fc' }}>
-              {language === 'en' ? 'Preview:' : 'Xem trước:'} {previewText || (language === 'en' ? 'Listening...' : 'Đang nghe...')}
+            <div
+              style={{
+                marginTop: "0.5rem",
+                fontSize: "0.85rem",
+                color: "#b3e5fc",
+              }}
+            >
+              {language === "en" ? "Preview:" : "Xem trước:"}{" "}
+              {previewText ||
+                (language === "en" ? "Listening..." : "Đang nghe...")}
             </div>
           )}
           {/* Audio playback removed: only transcribe to text as requested */}
         </div>
       </div>
+
+      {/* Learning Report Modal with Meowl Skin */}
+      <LearningReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        meowlSkin={true}
+      />
     </div>
   );
 };

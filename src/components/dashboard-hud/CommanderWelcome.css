@@ -614,6 +614,79 @@
   box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
 }
 
+/* CTA Buttons Container */
+.commander-welcome__cta-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Learning Report CTA */
+.commander-welcome__report-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.15),
+    rgba(168, 85, 247, 0.2)
+  );
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 8px;
+  color: #a78bfa;
+  font-family: "Space Habitat", monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.commander-welcome__report-cta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 92, 246, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.commander-welcome__report-cta:hover::before {
+  left: 100%;
+}
+
+.commander-welcome__report-cta:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.25),
+    rgba(168, 85, 247, 0.3)
+  );
+  border-color: rgba(139, 92, 246, 0.6);
+  box-shadow:
+    0 4px 15px rgba(139, 92, 246, 0.3),
+    0 0 20px rgba(139, 92, 246, 0.2);
+  transform: translateY(-1px);
+}
+
+.commander-welcome__report-cta > svg:last-child {
+  transition: transform 0.3s ease;
+}
+
+.commander-welcome__report-cta:hover > svg:last-child {
+  transform: translateX(3px);
+}
+
 /* Premium Card */
 .commander-welcome__premium-card {
   display: flex;
