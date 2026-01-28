@@ -18,6 +18,16 @@
 
 ---
 
+## 🆕 Round 3 (2026-01-28) – Visual polish guidelines (không sa kỹ thuật)
+
+- **Phân cấp thị giác**: 1 headline rõ + 1 câu mô tả, tránh nhiều headline đồng cấp.
+- **Spacing nhất quán**: chọn 1 nhịp (8/16/24/32/48/64) và giữ đều giữa các section.
+- **CTA rõ ràng**: mỗi trang nên có 1 nút primary duy nhất; còn lại là secondary/link.
+- **Đọc dễ trên nền space**: ưu tiên contrast; nếu nền nhiều chi tiết thì dùng overlay/blur nhẹ sau text.
+- **Empty state “ấm”**: luôn có gợi ý hành động tiếp theo (CTA) để người dùng không bị cụt hứng.
+
+---
+
 ## ✅ CÁC FIX ĐÃ THỰC HIỆN
 
 ### 1. Explore Map - Typo Fix

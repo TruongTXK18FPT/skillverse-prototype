@@ -63,48 +63,49 @@ const HomePage = () => {
   const constellationContainerRef = useRef<HTMLDivElement>(null);
   const globeHoverTimerRef = useRef<number | null>(null);
 
-  const defaultSlides = [
-    {
-      image: slide1,
-      title: 'Bắt Đầu Hành Trình Của Bạn',
-      description: 'Khám phá tiềm năng vô hạn với hướng dẫn AI cá nhân hóa',
-      cta: 'Gia nhập SkillVerse',
-      route: '/choose-role',
-      icon: Brain
-    },
-    {
-      image: slide2,
-      title: 'Lộ Trình Học Thông Minh',
-      description: 'Tạo lộ trình học tập phù hợp mục tiêu nghề nghiệp của bạn',
-      cta: 'Tạo lộ trình học thông minh',
-      route: '/roadmap',
-      icon: Map
-    },
-    {
-      image: slide3,
-      title: 'Học Tập Không Giới Hạn',
-      description: 'Truy cập hàng trăm khóa học chất lượng cao từ chuyên gia',
-      cta: 'Bắt đầu học ngay',
-      route: '/courses',
-      icon: BookOpen
-    },
-    {
-      image: slide4,
-      title: 'Xây Dựng Portfolio Ấn Tượng',
-      description: 'Tạo portfolio chuyên nghiệp để thu hút nhà tuyển dụng',
-      cta: 'Tạo Portfolio của bạn',
-      route: '/portfolio',
-      icon: Portfolio
-    },
-    {
-      image: slide5,
-      title: 'Cơ Hội Việc Làm Đang Chờ Bạn',
-      description: 'Kết nối với các nhà tuyển dụng hàng đầu và tìm công việc mơ ước',
-      cta: 'Kết nối cơ hội việc làm',
-      route: '/jobs',
-      icon: Building
-    }
-  ];
+const defaultSlides = [
+  {
+    image: slide1,
+    title: 'Bắt Đầu Hành Trình Phát Triển Kỹ Năng',
+    description: 'Nền tảng học tập thông minh kết hợp AI, lộ trình cá nhân hóa và cộng đồng thực hành',
+    cta: 'Khám phá SkillVerse',
+    route: '/choose-role',
+    icon: Brain
+  },
+  {
+    image: slide2,
+    title: 'Lộ Trình Học Thông Minh',
+    description: 'AI phân tích mục tiêu và năng lực để đề xuất lộ trình học phù hợp nhất cho bạn',
+    cta: 'Tạo lộ trình học của bạn',
+    route: '/roadmap',
+    icon: Map
+  },
+  {
+    image: slide3,
+    title: 'Học Tập Không Giới Hạn',
+    description: 'Học cùng cộng đồng và truy cập hàng trăm khóa học chất lượng cao từ chuyên gia',
+    cta: 'Bắt đầu học ngay',
+    route: '/courses',
+    icon: BookOpen
+  },
+  {
+    image: slide4,
+    title: 'Xây Dựng Portfolio Ấn Tượng',
+    description: 'Hoàn thành dự án thực tế, tích lũy chứng chỉ và xây dựng hồ sơ năng lực chuyên nghiệp',
+    cta: 'Tạo portfolio của bạn',
+    route: '/portfolio',
+    icon: Portfolio
+  },
+  {
+    image: slide5,
+    title: 'Cơ Hội Việc Làm Đang Chờ Bạn',
+    description: 'Kết nối với nhà tuyển dụng và biến kỹ năng thành cơ hội nghề nghiệp thực sự',
+    cta: 'Kết nối cơ hội việc làm',
+    route: '/jobs',
+    icon: Building
+  }
+];
+
 
   const [slides, setSlides] = useState<any[]>(defaultSlides);
 

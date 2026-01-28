@@ -36,6 +36,16 @@
 
 ---
 
+### 🆕 Round 3 (2026-01-28) – UI/UX “nịnh mắt” hơn
+
+| # | Quan sát (cảm nhận người dùng) | Vì sao “sượng” | Gợi ý cải thiện | Mức |
+|---|-------------------------------|----------------|-----------------|-----|
+| 4.8 | Empty state hơi “lạnh” khi không có job | Người dùng dễ rời đi | Thêm 1 CTA rõ ràng: “Nhận thông báo việc làm” + 1–2 gợi ý filter phổ biến | High |
+| 4.9 | Filter nhiều nhưng thiếu điểm nhấn | Người dùng không biết bắt đầu ở đâu | Thêm preset chips (Remote / Fresher / Intern) để click nhanh | Medium |
+| 4.10 | Budget slider có thể khó đọc trên nền/space theme | Cảm giác “kỹ thuật”, ít thân thiện | Tăng size label, thêm tick marks (5m/10m/20m…) và highlight giá trị đang chọn | Low |
+
+---
+
 ## 🔄 Review Date: 2026-01-27
 
 **Người thực hiện:** AI Assistant  

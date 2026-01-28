@@ -57,6 +57,7 @@
 | 11.6 | **Native confirm() call** | Khi đóng ticket dùng browser confirm | 📝 **Medium** - Cần custom modal |
 | 11.7 | **"24/7" vs "8h-22h" inconsistent** | Tagline "HỖ TRỢ 24/7" nhưng FAQ nói 8h-22h | 📝 **Medium** - Clarify AI vs human support |
 | 11.8 | **Missing accessibility** | Buttons thiếu aria-label | 📝 **Medium** |
+| 11.9 | **Guest bị redirect sang /login khi vào Help Center** | Public page nhưng bị auto-redirect | 🔴 **CRITICAL** - Block user xem nội dung |
 
 #### User Guide
 
@@ -66,3 +67,21 @@
 | 12.7 | **"INITIALIZE PROJECT" English** | CTA button text | 📝 **Low** - Đổi "Bắt Đầu Ngay" |
 | 12.8 | **"EXAMPLE:" English label** | Examples section | 📝 **Low** - Đổi "VÍ DỤ:" |
 | 12.9 | **Missing aria-labels** | Role navigation buttons | 📝 **Medium** |
+
+---
+
+### 🆕 Round 3 (2026-01-28) – UI/UX “nịnh mắt” hơn
+
+#### Help Center
+
+| # | Quan sát (cảm nhận người dùng) | Vì sao “sượng” | Gợi ý cải thiện | Mức |
+|---|-------------------------------|----------------|-----------------|-----|
+| 11.10 | FAQ nhiều mục dễ tạo cảm giác “dày” | Người dùng ngại mở từng câu | Nhóm theo top questions + thêm “Xem thêm” theo category | Medium |
+| 11.11 | Contact info có thể bị chìm | Người cần hỗ trợ gấp khó thấy | Làm 1 card nổi (hotline/email) + icon rõ + CTA “Gửi yêu cầu” | High |
+
+#### User Guide
+
+| # | Quan sát (cảm nhận người dùng) | Vì sao “sượng” | Gợi ý cải thiện | Mức |
+|---|-------------------------------|----------------|-----------------|-----|
+| 12.10 | Hướng dẫn nhiều chữ, ít “minh họa” | Dễ đọc mệt | Thêm 1–2 hình minh họa nhỏ hoặc sơ đồ 3 bước (có thể dùng icon) | Medium |
+| 12.11 | CTA nên nhất quán tone (VN/space theme) | Người dùng cảm giác lạc tone | Chuẩn hóa microcopy CTA theo cùng giọng (thân thiện, hành động rõ) | Low |

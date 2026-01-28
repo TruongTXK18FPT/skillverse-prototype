@@ -26,6 +26,7 @@
 | 5.5 | **Thiếu like/comment count preview** | Post card | Component | Thêm icon và số | ⏭️ **Bỏ qua** - Đã có sẵn |
 | 5.6 | **Tags hiển thị lạ** - "skillmistake2030" | Post card | Component | Format dễ đọc hơn | ⏭️ **Bỏ qua** - Data từ backend |
 | 5.7 | **Thumbnail bị crop** | Post card | CSS | Dùng object-fit: contain | ⏭️ **Bỏ qua** - Đã dùng object-fit: cover (phù hợp) |
+| 5.8 | **Guest bị redirect sang /login khi vào Community** 🔴 CRITICAL | On load | (Global) | Community là public page: không được auto-redirect | 🆕 **New (2026-01-28)** |
 
 ---
 
@@ -34,6 +35,17 @@
 - Nội dung bài viết chất lượng, hữu ích
 - Theme "KÊNH CỘNG ĐỒNG" phù hợp
 - Cần test trang chi tiết bài viết
+- Repro 5.8: Guest (xóa localStorage/sessionStorage) mở `/community` → bị chuyển sang `/login`
+
+---
+
+### 🆕 Round 3 (2026-01-28) – UI/UX “nịnh mắt” hơn
+
+| # | Quan sát (cảm nhận người dùng) | Vì sao “sượng” | Gợi ý cải thiện | Mức |
+|---|-------------------------------|----------------|-----------------|-----|
+| 5.9 | Card post nhìn hơi “đều đều” khi lướt nhiều bài | Ít điểm nhấn → khó chọn bài để đọc | Tăng phân cấp: title lớn hơn, excerpt 2 dòng, meta (author/date) nhỏ hơn; hover shadow nhẹ | Medium |
+| 5.10 | Category filter nếu dài sẽ gây chật trên mobile | Dễ “kẹt” layout | Chuyển sang horizontal scroll chips + indicator “kéo ngang” | Medium |
+| 5.11 | Pagination “Page 1 of 2” hơi máy móc | Cảm giác không thân thiện | Dùng nút “Trang trước / Trang sau” + hiển thị tổng bài (vd: 12 bài) | Low |
 
 ---
 

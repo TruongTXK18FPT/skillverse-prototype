@@ -34,6 +34,16 @@
 
 ---
 
+### 🆕 Round 3 (2026-01-28) – UI/UX “nịnh mắt” hơn
+
+| # | Quan sát (cảm nhận người dùng) | Vì sao “sượng” | Gợi ý cải thiện | Mức |
+|---|-------------------------------|----------------|-----------------|-----|
+| 9.9 | Map đẹp nhưng thiếu onboarding 3 giây đầu | Người mới không biết phải làm gì | Hiện 1 tip nổi bật: “Di chuột lên khu vực để xem mô tả” + “Click để vào” | High |
+| 9.10 | Nhiều HUD text cùng style | Trông như debug overlay | Tạo phân cấp: 1 dòng headline, phần status nhỏ hơn/nhạt hơn; giảm uppercase ở các dòng phụ | Medium |
+| 9.11 | Mobile dễ bị chật (map + HUD) | Cảm giác “kẹt” | Thêm chế độ mobile: HUD gọn (icon-only) + nút “Hướng dẫn” mở panel | Medium |
+
+---
+
 ## 📝 Ghi chú
 
 - Concept map rất creative

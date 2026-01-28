@@ -48,6 +48,24 @@
 
 ---
 
+### 🆕 Round 3 Issues (2026-01-28)
+
+| # | Vấn đề | Vị trí UI | File Code | Đề xuất | Trạng thái |
+|---|--------|-----------|-----------|---------|------------|
+| 6.13 | **Guest bị redirect sang /login khi vào Seminar** | Route access | `SeminarPage.tsx` / routing | Verify page này có phải public không, nếu public thì bỏ auth guard | 📝 **NEW** - Guest (clear storage) vào `http://localhost:5173/seminar` → về `/login` |
+
+---
+
+### 🆕 Round 3 (2026-01-28) – UI/UX “nịnh mắt” hơn
+
+| # | Quan sát (cảm nhận người dùng) | Vì sao “sượng” | Gợi ý cải thiện | Mức |
+|---|-------------------------------|----------------|-----------------|-----|
+| 6.14 | Empty state hiện tại dễ tạo cảm giác “không có gì ở đây” | Người dùng không biết làm gì tiếp | Thêm CTA: “Theo dõi để nhận lịch hội thảo” + gợi ý chủ đề nổi bật | High |
+| 6.15 | Dashboard-style nhiều label/ô thống kê | Có thể “ngợp” nếu người mới | Giảm mật độ chữ: 1 dòng headline + 2–3 stats quan trọng; phần còn lại cho vào tooltip | Medium |
+| 6.16 | Category filter nên cho cảm giác “đang chọn” mạnh hơn | Dễ bấm nhầm/không chắc trạng thái | Tăng contrast selected chip + thêm count (vd: Công nghệ (0)) | Low |
+
+---
+
 ## 🔄 Review Date: 2026-01-27
 
 **Người thực hiện:** AI Assistant  

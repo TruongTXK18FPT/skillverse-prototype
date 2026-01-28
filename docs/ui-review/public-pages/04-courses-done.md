@@ -73,6 +73,17 @@
 
 ---
 
+### 🆕 Round 3 (2026-01-28) – UI/UX “nịnh mắt” hơn
+
+| # | Quan sát (cảm nhận người dùng) | Vì sao “sượng” | Gợi ý cải thiện | Mức |
+|---|-------------------------------|----------------|-----------------|-----|
+| 3.10 | Card course có nhiều thông tin ngang nhau | Khó lướt nhanh để chọn khóa | Tạo phân cấp: Title/Price/CTA nổi bật; meta (modules/enrolled/instructor) nhỏ hơn | Medium |
+| 3.11 | CTA “XEM CHI TIẾT”/“XEM TRƯỚC” nếu quá giống nhau | Người dùng không rõ khác nhau | Dùng icon + đổi style: preview là secondary (outline), detail là primary | High |
+| 3.12 | Filter panel dễ tạo cảm giác “nhiều nút” | Nhìn hơi rối khi data ít | Gom filter theo nhóm + mặc định thu gọn (accordion) trên mobile | Medium |
+| 3.13 | Thumbnail placeholder lặp lại | Trông “demo” và kém tin | Tối thiểu: gradient placeholder + icon theo category để nhìn đỡ nhàm | Low |
+
+---
+
 ## 🔄 Review Date: 2026-01-27
 
 **Người thực hiện:** AI Assistant  

@@ -47,6 +47,17 @@
 
 ---
 
+### 🆕 Round 3 (2026-01-28) – UI/UX “nịnh mắt” hơn
+
+| # | Quan sát (cảm nhận người dùng) | Vì sao “sượng” | Gợi ý cải thiện | Mức |
+|---|-------------------------------|----------------|-----------------|-----|
+| 7.13 | 4 gói nhìn khá giống nhau nếu lướt nhanh | Người dùng khó phân biệt, khó quyết | Làm rõ “điểm khác biệt 1 câu” cho mỗi gói + icon riêng (không chỉ badge) | High |
+| 7.14 | CTA “ĐĂNG NHẬP ĐỂ TRUY CẬP” tạo cảm giác bị chặn | Dễ hụt hẫng với khách mới | Thêm CTA mềm: “Xem quyền lợi” (public) + CTA chính vẫn là đăng nhập khi mua | Medium |
+| 7.15 | Giá/chu kỳ nên được nhấn mạnh hơn phần mô tả | Người dùng nhìn rối chữ | Tăng size price, giảm phụ đề, thống nhất format (29K/79K/249K) | Medium |
+| 7.16 | Feature list dài dễ làm trang “nặng” | Đọc mệt | Cho phép collapse/expand: 5 feature nổi bật + “Xem thêm” | Low |
+
+---
+
 ## 🔄 Review Date: 2026-01-27
 
 **Người thực hiện:** AI Assistant  

@@ -61,6 +61,17 @@
 
 ---
 
+### 🆕 Round 3 (2026-01-28) – UI/UX “nịnh mắt” hơn
+
+| # | Quan sát (cảm nhận người dùng) | Vì sao “sượng” | Gợi ý cải thiện | Mức |
+|---|-------------------------------|----------------|-----------------|-----|
+| 1.6 | Hero có nhiều chữ/hiệu ứng cùng lúc | Dễ “ngợp”, khó biết nên nhìn gì trước | Tăng khoảng trắng + giảm 1–2 dòng copy trong hero (ưu tiên 1 thông điệp chính) | Medium |
+| 1.7 | Độ tương phản chữ trên nền vũ trụ có lúc chưa đủ | Người dùng phải “căng mắt” để đọc | Thêm lớp overlay nhẹ sau text hoặc tăng font-weight/letter-spacing có kiểm soát | Medium |
+| 1.8 | CTA chính/phụ chưa phân cấp rõ | Người dùng do dự: bấm nút nào | Chuẩn hóa: 1 nút primary (màu nổi bật), 1 nút secondary (outline), giữ nhất quán toàn trang | High |
+| 1.9 | Các section dài, chuyển đoạn chưa “mượt” | Cảm giác như nhiều mảng rời | Thêm divider/section header nhỏ + nhịp spacing nhất quán (padding top/bottom theo bậc 48/64/80) | Low |
+
+---
+
 ## 🔄 Review Date: 2026-01-27
 
 **Người thực hiện:** AI Assistant  

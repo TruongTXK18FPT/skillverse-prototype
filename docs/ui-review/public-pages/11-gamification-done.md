@@ -88,6 +88,17 @@
 
 ---
 
+### 🆕 Round 3 (2026-01-28) – UI/UX “nịnh mắt” hơn
+
+| # | Quan sát (cảm nhận người dùng) | Vì sao “sượng” | Gợi ý cải thiện | Mức |
+|---|-------------------------------|----------------|-----------------|-----|
+| 10.11 | Leaderboard nhiều cột/nhãn khiến mắt phải quét nhiều | Dễ mệt khi xem lâu | Giảm chữ, tăng icon + spacing; làm nổi top 3 bằng visual (crown/gradient) | Medium |
+| 10.12 | Filters nhiều nhưng cảm giác “không có tác dụng” khi nhìn | Người dùng bấm mà không thấy khác | Thêm micro-animation + trạng thái loading/transition nhẹ để tạo cảm giác phản hồi | High |
+| 10.13 | Mini-games section có thể thiếu “động lực” | Người dùng không thấy lý do chơi | Thêm 1 dòng reward rõ: “Chơi để nhận xu / badge” + hiển thị phần thưởng | Medium |
+| 10.14 | Avatar/ảnh stock có thể làm giảm độ tin | Trông giống template | Dùng avatar style đồng nhất (meowl/space) hoặc silhouette placeholder | Low |
+
+---
+
 ## 🔄 Review Date: 2026-01-27
 
 **Người thực hiện:** AI Assistant  

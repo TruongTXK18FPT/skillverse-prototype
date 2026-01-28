@@ -22,6 +22,18 @@
 | 2.3 | **Không có validation realtime** | Form fields | Hiển thị lỗi khi blur | ⏭️ **Bỏ qua** - Improvement, không phải bug |
 | 2.4 | **Logo Google nhỏ và mờ** | Nút Google | Tăng size và contrast | ✅ **Đã sửa** - Tăng size từ 18px lên 24px |
 | 2.5 | **"SKILLVERSE HYPERION"** lặp lại | Footer | Giữ 1 cái | ✅ **Đã sửa** - Đổi thành "SKILLVERSE XÁC THỰC" |
+| 2.6 | **Guest bị spam lỗi 401 ở console khi mở trang (premium/skins)** | DevTools console | Tránh gọi API cần auth khi chưa đăng nhập (hoặc degrade gracefully, không log error liên tục) | 🆕 **New (2026-01-28)** |
+| 2.7 | **Console bị spam lỗi từ script bên thứ 3 (fbcdn/Meta)** | DevTools console | Kiểm tra lại tích hợp tracking/chat widget; đảm bảo load đúng + không spam error | 🆕 **New (2026-01-28)** |
+
+---
+
+### 🆕 Round 3 (2026-01-28) – UI/UX “nịnh mắt” hơn (Login)
+
+| # | Quan sát (cảm nhận người dùng) | Vì sao “sượng” | Gợi ý cải thiện | Mức |
+|---|-------------------------------|----------------|-----------------|-----|
+| 2.8 | Form login dễ tạo cảm giác “khô” | Thiếu 1 câu trấn an/giá trị | Thêm 1 dòng microcopy dưới title: “Đăng nhập để tiếp tục hành trình học tập” | Low |
+| 2.9 | Primary CTA chưa chắc nổi bật trên nền space | Người dùng mất 1 nhịp để thấy nút | Tăng contrast + height nút (44–48px), giữ radius/hover nhất quán | Medium |
+| 2.10 | Error message (khi sai) nếu chỉ đỏ/nhỏ | Dễ “căng thẳng” và khó hiểu | Viết lỗi thân thiện, đặt ngay dưới field, thêm icon nhỏ + copy hướng dẫn | High |
 
 ---
 
@@ -73,6 +85,8 @@
 3. ~~Simplify technical footer text~~ ✅ Đã sửa
 4. ~~Thêm password strength indicator cho register~~ ⏭️ Improvement
 5. ~~Thêm terms checkbox trước khi register~~ 🔧 Cần Backend
+
+6. (UI) Chuẩn hóa spacing cho tất cả auth pages: khoảng cách label–input–helper text đồng nhất để nhìn “sạch” hơn
 
 ---
 

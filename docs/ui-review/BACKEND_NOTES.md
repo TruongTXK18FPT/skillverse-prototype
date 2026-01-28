@@ -38,6 +38,12 @@ Danh sách các issues từ UI Review cần xử lý ở Backend.
 |---|--------|-------|---------|
 | UG.1 | **Broken Routes** | Nhiều links có thể không tồn tại | Verify routes: `/roadmap`, `/study-planner`, `/chatbot/expert`, `/mentor-profile`, `/candidates` |
 
+### Từ các trang Public (Guest) - 2026-01-28
+
+| # | Vấn đề | Mô tả | Đề xuất |
+|---|--------|-------|---------|
+| AUTH.1 | **Guest bị 401 spam từ Premium/Skins endpoints** | Guest session (clear storage) vẫn gọi `GET /api/premium/status` và `GET /api/skins/my-skins` → trả `401 {"code":1401,"message":"Unauthenticated"}` lặp lại, gây noise và có thể trigger auth handling không mong muốn | Cân nhắc cho phép guest call trả `200` với default (premium=false, skins=[]), hoặc tách public endpoint riêng (vd: `/api/premium/status/public`) |
+
 ---
 
 ## 🔄 Cập nhật
@@ -47,4 +53,5 @@ Danh sách các issues từ UI Review cần xử lý ở Backend.
 | 2026-01-27 | AI Assistant | Khởi tạo file, thêm issue từ trang 02-login |
 | 2026-01-27 | AI Assistant | Thêm issues từ trang 08-premium |
 | 2026-01-27 | AI Assistant | **Round 2**: Thêm issues Gamification, Seminar, User Guide |
+| 2026-01-28 | AI Assistant | Thêm AUTH.1 (guest 401 spam premium/skins) |
 
