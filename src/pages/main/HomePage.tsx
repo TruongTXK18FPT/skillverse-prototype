@@ -8,18 +8,20 @@ import {
   Code, Zap, Globe, ChevronRight,
   Map, Briefcase as Portfolio, Building, Power,
   Facebook, Video, Sparkles, ExternalLink, Rocket,
-  Play, Activity, Terminal, Cpu
+  Play, Activity, Terminal, Cpu,
+  Crown
 } from 'lucide-react';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import '../../styles/HomePage.css';
 import '../../styles/HomeAwardV2.css';
 
 // Slider images
-import slide1 from '../../assets/sliders/slider-1.webp';
-import slide2 from '../../assets/sliders/slider-2.webp';
-import slide3 from '../../assets/sliders/slider-3.webp';
-import slide4 from '../../assets/sliders/slider-4.webp';
-import slide5 from '../../assets/sliders/slider-5.webp';
+import slide1 from '../../assets/sliders/slider-1.png';
+import slide2 from '../../assets/sliders/slider-2.png';
+import slide3 from '../../assets/sliders/slider-3.png';
+import slide4 from '../../assets/sliders/slider-4.png';
+import slide5 from '../../assets/sliders/slider-5.png';
+import slide6 from '../../assets/sliders/slider-6.png';
 
 // Award images
 import gold1 from '../../assets/award/gold1.png';
@@ -63,48 +65,56 @@ const HomePage = () => {
   const constellationContainerRef = useRef<HTMLDivElement>(null);
   const globeHoverTimerRef = useRef<number | null>(null);
 
-const defaultSlides = [
-  {
-    image: slide1,
-    title: 'Bắt Đầu Hành Trình Phát Triển Kỹ Năng',
-    description: 'Nền tảng học tập thông minh kết hợp AI, lộ trình cá nhân hóa và cộng đồng thực hành',
-    cta: 'Khám phá SkillVerse',
-    route: '/choose-role',
-    icon: Brain
-  },
-  {
-    image: slide2,
-    title: 'Lộ Trình Học Thông Minh',
-    description: 'AI phân tích mục tiêu và năng lực để đề xuất lộ trình học phù hợp nhất cho bạn',
-    cta: 'Tạo lộ trình học của bạn',
-    route: '/roadmap',
-    icon: Map
-  },
-  {
-    image: slide3,
-    title: 'Học Tập Không Giới Hạn',
-    description: 'Học cùng cộng đồng và truy cập hàng trăm khóa học chất lượng cao từ chuyên gia',
-    cta: 'Bắt đầu học ngay',
-    route: '/courses',
-    icon: BookOpen
-  },
-  {
-    image: slide4,
-    title: 'Xây Dựng Portfolio Ấn Tượng',
-    description: 'Hoàn thành dự án thực tế, tích lũy chứng chỉ và xây dựng hồ sơ năng lực chuyên nghiệp',
-    cta: 'Tạo portfolio của bạn',
-    route: '/portfolio',
-    icon: Portfolio
-  },
-  {
-    image: slide5,
-    title: 'Cơ Hội Việc Làm Đang Chờ Bạn',
-    description: 'Kết nối với nhà tuyển dụng và biến kỹ năng thành cơ hội nghề nghiệp thực sự',
-    cta: 'Kết nối cơ hội việc làm',
-    route: '/jobs',
-    icon: Building
-  }
-];
+  const defaultSlides = [
+    {
+      image: slide1,
+      title: 'Bắt Đầu Hành Trình Phát Triển Kỹ Năng',
+      description: 'Nền tảng học tập thông minh kết hợp AI, lộ trình cá nhân hóa và cộng đồng thực hành',
+      cta: 'Khám phá SkillVerse',
+      route: '/choose-role',
+      icon: Brain
+    },
+    {
+      image: slide2,
+      title: 'Lộ Trình Học Thông Minh',
+      description: 'AI phân tích mục tiêu và năng lực để đề xuất lộ trình học phù hợp nhất cho bạn',
+      cta: 'Tạo lộ trình học của bạn',
+      route: '/roadmap',
+      icon: Map
+    },
+    {
+      image: slide3,
+      title: 'Học Tập Không Giới Hạn',
+      description: 'Học cùng cộng đồng và truy cập hàng trăm khóa học chất lượng cao từ chuyên gia',
+      cta: 'Bắt đầu học ngay',
+      route: '/courses',
+      icon: BookOpen
+    },
+    {
+      image: slide4,
+      title: 'Xây Dựng Portfolio Ấn Tượng',
+      description: 'Hoàn thành dự án thực tế, tích lũy chứng chỉ và xây dựng hồ sơ năng lực chuyên nghiệp',
+      cta: 'Tạo portfolio của bạn',
+      route: '/portfolio',
+      icon: Portfolio
+    },
+    {
+      image: slide5,
+      title: 'Cơ Hội Việc Làm Đang Chờ Bạn',
+      description: 'Kết nối với nhà tuyển dụng và biến kỹ năng thành cơ hội nghề nghiệp thực sự',
+      cta: 'Kết nối cơ hội việc làm',
+      route: '/jobs',
+      icon: Building
+    },
+    {
+      image: slide6,
+      title: 'Mở Khóa Cấp Độ Truy Cập',
+      description: 'Nâng cấp tài khoản để mở quyền truy cập nâng cao, AI mạnh hơn và các tính năng dành cho người nghiêm túc với sự nghiệp',
+      cta: 'Xem các gói Premium',
+      route: '/premium',
+      icon: Crown
+    }
+  ];
 
 
   const [slides, setSlides] = useState<any[]>(defaultSlides);
@@ -164,7 +174,7 @@ const defaultSlides = [
     stones.forEach((stone) => observer.observe(stone));
 
     return () => observer.disconnect();
-  }, []); 
+  }, []);
 
   const infinityStones = [
     {
@@ -265,7 +275,7 @@ const defaultSlides = [
         // --- PHẦN 2: QUYẾT ĐỊNH HIỂN THỊ (Logic mới) ---
         // Kiểm tra state `activatedStars`
         const bothAreActive = activatedStars.includes(index) && activatedStars.includes(index + 1);
-        
+
         // Tự thêm/xóa class thay vì để JSX làm
         // Điều này đảm bảo hình học và hiển thị LUÔN đồng bộ
         if (bothAreActive) {
@@ -420,21 +430,21 @@ const defaultSlides = [
       <section className="constellation-section__galaxy-bg">
         <div className="constellation__galaxy-bg">
           <div className="section-container">
-        <div className="section-header">
-            <div className="section-title-wrapper">
-              <Sparkles className="section-header-icon" size={32} />
-              <h2 className="section-title">
-                Tại Sao Chọn Skillverse?
-              </h2>
+            <div className="section-header">
+              <div className="section-title-wrapper">
+                <Sparkles className="section-header-icon" size={32} />
+                <h2 className="section-title">
+                  Tại Sao Chọn Skillverse?
+                </h2>
+              </div>
+              <p className="section-description">
+                Trải nghiệm tương lai của việc học tập với nền tảng được hỗ trợ bởi AI thích ứng với nhu cầu của bạn
+              </p>
             </div>
-            <p className="section-description">
-              Trải nghiệm tương lai của việc học tập với nền tảng được hỗ trợ bởi AI thích ứng với nhu cầu của bạn
-            </p>
-          </div>
 
-          {/* Gắn ref vào đây (Giữ nguyên) */}
-          <div className="constellation-container" ref={constellationContainerRef}>
-              
+            {/* Gắn ref vào đây (Giữ nguyên) */}
+            <div className="constellation-container" ref={constellationContainerRef}>
+
               {/* PHẦN 1: RENDER CÁC VIÊN ĐÁ (Giữ nguyên) */}
               <div className="infinity-stones-grid">
                 {infinityStones.map((stone, index) => (
@@ -789,7 +799,7 @@ const defaultSlides = [
         <div className="section-container">
           <div className="section-header">
             <div className="cosmic-title-wrapper">
-              <div 
+              <div
                 className={`globe-icon-wrapper ${showEasterEgg ? 'easter-egg-active' : ''}`}
                 onMouseEnter={handleGlobeMouseEnter}
                 onMouseLeave={handleGlobeMouseLeave}
@@ -823,10 +833,10 @@ const defaultSlides = [
               </div>
               <div className="social-media-content">
                 {!loadedVideos['tiktok'] ? (
-                  <div 
-                    className="home-v2-video-placeholder" 
+                  <div
+                    className="home-v2-video-placeholder"
                     onClick={() => handleLoadVideo('tiktok')}
-                    style={{ 
+                    style={{
                       backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url(${tiktokIcon})`,
                       backgroundSize: '40%',
                       backgroundRepeat: 'no-repeat',
@@ -843,9 +853,9 @@ const defaultSlides = [
                   <div className="home-v2-content-active">
                     <iframe
                       src="https://www.tiktok.com/embed/7573943741975678215"
-                      style={{ 
-                        width: '100%', 
-                        height: '600px', 
+                      style={{
+                        width: '100%',
+                        height: '600px',
                         border: 'none',
                         maxWidth: '605px',
                         margin: '0 auto',
@@ -872,10 +882,10 @@ const defaultSlides = [
               </div>
               <div className="social-media-content">
                 {!loadedVideos['fb-video'] ? (
-                  <div 
-                    className="home-v2-video-placeholder" 
+                  <div
+                    className="home-v2-video-placeholder"
                     onClick={() => handleLoadVideo('fb-video')}
-                    style={{ 
+                    style={{
                       backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url(${facebookIcon})`,
                       backgroundSize: '40%',
                       backgroundRepeat: 'no-repeat',
@@ -890,13 +900,13 @@ const defaultSlides = [
                   </div>
                 ) : (
                   <div className="home-v2-content-active">
-                    <iframe 
-                      src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1201192888739159%2F&show_text=true&width=267&t=0" 
-                      width="267" 
-                      height="591" 
-                      style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', margin: '0 auto', display: 'block' }} 
-                      scrolling="no" 
-                      frameBorder="0" 
+                    <iframe
+                      src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1201192888739159%2F&show_text=true&width=267&t=0"
+                      width="267"
+                      height="591"
+                      style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', margin: '0 auto', display: 'block' }}
+                      scrolling="no"
+                      frameBorder="0"
                       allowFullScreen={true}
                       allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                       title="Facebook Video"
@@ -917,10 +927,10 @@ const defaultSlides = [
               </div>
               <div className="social-media-content">
                 {!loadedVideos['fb-post-1'] ? (
-                  <div 
-                    className="home-v2-video-placeholder" 
+                  <div
+                    className="home-v2-video-placeholder"
                     onClick={() => handleLoadVideo('fb-post-1')}
-                    style={{ 
+                    style={{
                       backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url(${facebookIcon})`,
                       backgroundSize: '40%',
                       backgroundRepeat: 'no-repeat',
@@ -935,13 +945,13 @@ const defaultSlides = [
                   </div>
                 ) : (
                   <div className="home-v2-content-active">
-                    <iframe 
-                      src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0G4FqF2Hx8hT7E4GrTxFP7JLTk2zLHtqQHcAyLe9P2fxHVwj4zrZFWvzzMN5s1VdTl%26id%3D61581184190711&show_text=true&width=500" 
-                      width="500" 
-                      height="750" 
-                      style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', margin: '0 auto', display: 'block' }} 
-                      scrolling="no" 
-                      frameBorder="0" 
+                    <iframe
+                      src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0G4FqF2Hx8hT7E4GrTxFP7JLTk2zLHtqQHcAyLe9P2fxHVwj4zrZFWvzzMN5s1VdTl%26id%3D61581184190711&show_text=true&width=500"
+                      width="500"
+                      height="750"
+                      style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', margin: '0 auto', display: 'block' }}
+                      scrolling="no"
+                      frameBorder="0"
                       allowFullScreen={true}
                       allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                       title="Facebook Post 1"
@@ -969,10 +979,10 @@ const defaultSlides = [
                 </div>
                 <div className="social-media-content">
                   {!loadedVideos[post.id] ? (
-                    <div 
-                      className="home-v2-video-placeholder" 
+                    <div
+                      className="home-v2-video-placeholder"
                       onClick={() => handleLoadVideo(post.id)}
-                      style={{ 
+                      style={{
                         backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url(${facebookIcon})`,
                         backgroundSize: '40%',
                         backgroundRepeat: 'no-repeat',
@@ -987,13 +997,13 @@ const defaultSlides = [
                     </div>
                   ) : (
                     <div className="home-v2-content-active">
-                      <iframe 
-                        src={post.src} 
-                        width="500" 
-                        height={post.height} 
-                        style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', margin: '0 auto', display: 'block' }} 
-                        scrolling="no" 
-                        frameBorder="0" 
+                      <iframe
+                        src={post.src}
+                        width="500"
+                        height={post.height}
+                        style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', margin: '0 auto', display: 'block' }}
+                        scrolling="no"
+                        frameBorder="0"
                         allowFullScreen={true}
                         allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                         title={post.title}
