@@ -59,6 +59,7 @@ import MentorPage from './pages/main/MentorPage';
 import AllBadgesPage from './pages/mentor/AllBadgesPage';
 import AdminPage from './pages/main/AdminPage';
 import AdminSecurityPage from './pages/admin/AdminSecurityPage';
+import AdminGamificationDashboard from './pages/admin/AdminGamificationDashboard';
 import AiRoadmapPage from './pages/roadmap/AiRoadmapPage';
 import RoadmapDetailPage from './pages/roadmap/RoadmapDetailPage';
 import StudyPlannerPage from './pages/study-planner/StudyPlannerPage';
@@ -226,6 +227,11 @@ const App = () => {
                     <Route path="/admin/seminars" element={
                       <AdminRoute>
                         <AdminSeminarManager />
+                      </AdminRoute>
+                    } />
+                    <Route path="/admin/gamification" element={
+                      <AdminRoute>
+                        <AdminGamificationDashboard />
                       </AdminRoute>
                     } />
                     <Route path="/admin-security" element={<AdminSecurityPage />} />

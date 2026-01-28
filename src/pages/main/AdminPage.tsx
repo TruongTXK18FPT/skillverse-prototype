@@ -17,9 +17,10 @@ import { JobManagementTab } from '../../components/admin/JobManagementTab';
 import MeowlSkinUploadTab from '../../components/admin/MeowlSkinUploadTab';
 import SliderManagementTab from '../../components/admin/SliderManagementTab';
 import AdminSeminarManager from './AdminSeminarManager';
+import AdminGamificationDashboard from '../admin/AdminGamificationDashboard';
 import {
   Users, UserCheck, BookOpen, BarChart3, Bell, AlertTriangle,
-  CreditCard, Banknote, Zap, Crown, Ticket, Settings, Brain, MessageSquare, Briefcase, Shirt, Image, Calendar
+  CreditCard, Banknote, Zap, Crown, Ticket, Settings, Brain, MessageSquare, Briefcase, Shirt, Image, Calendar, Trophy
 } from 'lucide-react';
 import adminUserService from '../../services/adminUserService';
 import adminService from '../../services/adminService';
@@ -226,6 +227,14 @@ const AdminPage: React.FC = () => {
       allowedRoles: ['CONTENT_ADMIN', 'ADMIN']
     },
     { 
+      id: 'gamification', 
+      label: 'Gamification', 
+      icon: Trophy,
+      gradient: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
+      description: 'Quản lý hệ thống game hóa',
+      allowedRoles: ['PREMIUM_ADMIN', 'ADMIN']
+    },
+    { 
       id: 'settings', 
       label: 'Cài Đặt Hệ Thống', 
       icon: Settings,
@@ -288,6 +297,8 @@ const AdminPage: React.FC = () => {
         return <MeowlSkinUploadTab />;
       case 'sliders':
         return <SliderManagementTab />;
+      case 'gamification':
+        return <AdminGamificationDashboard />;
       default:
         return (
           <div className="administrator-default-tab">

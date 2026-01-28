@@ -38,7 +38,11 @@
 .system-status__flame-glow {
   position: absolute;
   inset: -10px;
-  background: radial-gradient(circle, rgba(249, 115, 22, 0.4) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(249, 115, 22, 0.4) 0%,
+    transparent 70%
+  );
   animation: flame-pulse 2s ease-in-out infinite;
 }
 
@@ -51,7 +55,7 @@
 }
 
 .system-status__title {
-  font-family: 'Space Habitat', monospace;
+  font-family: "Space Habitat", monospace;
   font-size: 1.25rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -90,7 +94,7 @@
 }
 
 .system-status__stat-value {
-  font-family: 'Space Habitat', monospace;
+  font-family: "Space Habitat", monospace;
   font-size: 1rem;
   color: #06b6d4;
   font-weight: 600;
@@ -111,11 +115,25 @@
 
 /* ========== SYNC CALENDAR ========== */
 
+.system-status__calendar-wrapper {
+  margin-bottom: 2rem;
+}
+
+.system-status__calendar-year {
+  font-family: "Space Habitat", monospace;
+  font-size: 0.875rem;
+  color: #06b6d4;
+  text-align: center;
+  margin-bottom: 0.75rem;
+  letter-spacing: 2px;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+}
+
 .system-status__calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 1rem;
-  margin-bottom: 2rem;
 }
 
 .system-status__day {
@@ -166,7 +184,7 @@
 }
 
 .system-status__day-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: "Space Habitat", monospace;
   font-size: 0.75rem;
   color: #94a3b8;
   letter-spacing: 1px;
@@ -175,6 +193,117 @@
 .system-status__day--synced .system-status__day-label {
   color: #06b6d4;
   font-weight: 600;
+}
+
+/* Today Highlight */
+.system-status__day--today {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.5);
+  position: relative;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+}
+
+.system-status__day--today .system-status__day-label {
+  color: #a855f7;
+  font-weight: 700;
+}
+
+.system-status__day--today::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #a855f7;
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
+}
+
+/* Clickable today (not yet checked in) */
+.system-status__day--clickable {
+  cursor: pointer;
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.4);
+  animation: pulse-today 2s ease-in-out infinite;
+}
+
+.system-status__day--clickable:hover {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: rgba(168, 85, 247, 0.6);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+}
+
+/* Check-in hint */
+.system-status__check-in-hint {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  color: #a855f7;
+  background: rgba(168, 85, 247, 0.15);
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.system-status__day--clickable:hover .system-status__check-in-hint {
+  opacity: 1;
+}
+
+/* Check-in success message */
+.system-status__check-in-success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.2),
+    rgba(16, 185, 129, 0.1)
+  );
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 8px;
+  color: #10b981;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.system-status__coins-awarded {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+/* Day loader animation */
+.system-status__day-loader {
+  color: #a855f7;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.system-status__check-in-success svg {
+  color: #10b981;
 }
 
 /* ========== POWER LEVEL BAR ========== */
@@ -190,7 +319,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.75rem;
-  font-family: 'Space Habitat', monospace;
+  font-family: "Space Habitat", monospace;
   font-size: 0.75rem;
   letter-spacing: 1px;
   color: #94a3b8;
@@ -225,7 +354,11 @@
   right: 0;
   width: 20px;
   height: 100%;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
   filter: blur(4px);
   animation: power-shimmer 2s ease-in-out infinite;
 }
@@ -233,7 +366,8 @@
 /* ========== ANIMATIONS ========== */
 
 @keyframes flame-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -244,7 +378,8 @@
 }
 
 @keyframes flame-flicker {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.8));
   }
@@ -274,11 +409,22 @@
 }
 
 @keyframes power-shimmer {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
   50% {
     transform: translateX(10px);
+  }
+}
+
+@keyframes pulse-today {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
   }
 }
 
@@ -296,12 +442,22 @@
 }
 
 @media (max-width: 768px) {
+  .system-status__calendar-wrapper {
+    margin-bottom: 1.5rem;
+  }
+
+  .system-status__calendar-year {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
   .system-status__calendar {
     gap: 0.5rem;
   }
 
   .system-status__day {
     padding: 0.5rem;
+    position: relative;
   }
 
   .system-status__day-indicator {
@@ -311,6 +467,17 @@
 
   .system-status__day-label {
     font-size: 0.65rem;
+  }
+
+  .system-status__check-in-hint {
+    font-size: 0.55rem;
+    bottom: -18px;
+    padding: 1px 4px;
+  }
+
+  .system-status__check-in-success {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
   }
 
   .system-status__title {

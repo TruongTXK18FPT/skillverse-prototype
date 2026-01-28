@@ -1,20 +1,33 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { BookOpen, Briefcase, Award, TrendingUp } from 'lucide-react';
-import CommanderWelcome from './CommanderWelcome';
-import SystemStatus from './SystemStatus';
-import StatUnit from './StatUnit';
-import ActiveModules from './ActiveModules';
-import MissionLog from './MissionLog';
-import FavoriteMentors from './FavoriteMentors';
-import AnalystTrack from './AnalystTrack';
-import SystemLimits from './SystemLimits';
-import { RoadmapSessionSummary } from '../../types/Roadmap';
-import './MothershipDashboard.css';
-import './hud-styles.module.css';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { BookOpen, Briefcase, Award, TrendingUp } from "lucide-react";
+import CommanderWelcome from "./CommanderWelcome";
+import SystemStatus from "./SystemStatus";
+import StatUnit from "./StatUnit";
+import ActiveModules from "./ActiveModules";
+import FavoriteMentors from "./FavoriteMentors";
+import AnalystTrack from "./AnalystTrack";
+import SystemLimits from "./SystemLimits";
+import { RoadmapSessionSummary } from "../../types/Roadmap";
+import "./MothershipDashboard.css";
+import "./hud-styles.module.css";
+
+interface TaskSummary {
+  criticalOverdue: number;
+  overdue: number;
+  pending: number;
+  upcomingTasks: Array<{
+    title: string;
+    deadline: string;
+    daysOverdue: number;
+  }>;
+}
 
 interface MothershipDashboardProps {
   userName?: string;
+  userLevel?: number;
+  hasPremium?: boolean;
+  taskSummary?: TaskSummary;
   translations?: any;
   enrolledCourses?: any[];
   favoriteMentors?: any[];
@@ -45,7 +58,15 @@ interface MothershipDashboardProps {
 }
 
 const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
-  userName = 'InnoVibe Team',
+  userName = "InnoVibe Team",
+  userLevel = 1,
+  hasPremium = false,
+  taskSummary = {
+    criticalOverdue: 0,
+    overdue: 0,
+    pending: 0,
+    upcomingTasks: [],
+  },
   translations = {},
   enrolledCourses = [],
   favoriteMentors = [],
@@ -54,12 +75,12 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
     totalCourses: 0,
     totalHours: 0,
     completedProjects: 0,
-    certificates: 0
+    certificates: 0,
   },
   cycleStats,
   usageLimits,
   featureUsage,
-  onJoinGroup
+  onJoinGroup,
 }) => {
   const navigate = useNavigate();
 
@@ -67,116 +88,76 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   const stats = [
     {
       value: userStats.totalCourses,
-      label: translations?.dashboard?.stats?.coursesInProgress || 'Modules Synced',
-      change: cycleStats ? `+${cycleStats.enrolledCoursesCount} this cycle` : '+3 this cycle',
-      trend: 'up' as const,
+      label:
+        translations?.dashboard?.stats?.coursesInProgress || "Modules Synced",
+      change: cycleStats
+        ? `+${cycleStats.enrolledCoursesCount} this cycle`
+        : "+3 this cycle",
+      trend: "up" as const,
       icon: BookOpen,
-      color: 'cyan' as const
+      color: "cyan" as const,
     },
     {
       value: userStats.completedProjects,
-      label: translations?.dashboard?.stats?.projectsCompleted || 'Missions Complete',
-      change: cycleStats?.completedProjectsCount ? `+${cycleStats.completedProjectsCount} this cycle` : '+0 this cycle',
-      trend: 'up' as const,
+      label:
+        translations?.dashboard?.stats?.projectsCompleted ||
+        "Missions Complete",
+      change: cycleStats?.completedProjectsCount
+        ? `+${cycleStats.completedProjectsCount} this cycle`
+        : "+0 this cycle",
+      trend: "up" as const,
       icon: Briefcase,
-      color: 'green' as const
+      color: "green" as const,
     },
     {
       value: userStats.certificates,
-      label: translations?.dashboard?.stats?.certificatesEarned || 'Badges Unlocked',
-      change: cycleStats?.certificatesCount ? `+${cycleStats.certificatesCount} this cycle` : '+0 this cycle',
-      trend: 'up' as const,
+      label:
+        translations?.dashboard?.stats?.certificatesEarned || "Badges Unlocked",
+      change: cycleStats?.certificatesCount
+        ? `+${cycleStats.certificatesCount} this cycle`
+        : "+0 this cycle",
+      trend: "up" as const,
       icon: Award,
-      color: 'purple' as const
+      color: "purple" as const,
     },
     {
       value: userStats.totalHours,
-      label: translations?.dashboard?.stats?.totalHours || 'Energy Units',
-      change: cycleStats ? `+${cycleStats.totalHoursStudied} this cycle` : '+230 this cycle',
-      trend: 'up' as const,
+      label: translations?.dashboard?.stats?.totalHours || "Energy Units",
+      change: cycleStats
+        ? `+${cycleStats.totalHoursStudied} this cycle`
+        : "+230 this cycle",
+      trend: "up" as const,
       icon: TrendingUp,
-      color: 'orange' as const
-    }
+      color: "orange" as const,
+    },
   ];
 
   const learningStreak = {
     current: cycleStats?.currentStreak || 0,
     longest: cycleStats?.longestStreak || 0,
-    thisWeek: cycleStats?.weeklyActivity || [false, false, false, false, false, false, false],
-    weeklyGoal: 5
+    thisWeek: cycleStats?.weeklyActivity || [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+    ],
+    weeklyGoal: 5,
   };
 
   // Use passed enrolledCourses if available, otherwise use fallback (or empty)
   const recentCourses = enrolledCourses.length > 0 ? enrolledCourses : [];
 
-  const achievements = [
-    {
-      title: 'First Module Completed',
-      icon: '🎓',
-      date: '2024-01-15',
-      points: 100,
-      description: 'Completed your first simulation module'
-    },
-    {
-      title: 'Top Performer',
-      icon: '🏆',
-      date: '2024-02-20',
-      points: 250,
-      description: 'Ranked in top 5% of pilots this cycle'
-    },
-    {
-      title: 'Perfect Rating',
-      icon: '⭐',
-      date: '2024-03-10',
-      points: 150,
-      description: 'Received 5-star rating on mission'
-    },
-    {
-      title: 'Skill Master',
-      icon: '💎',
-      date: '2024-03-25',
-      points: 300,
-      description: 'Achieved advanced proficiency in React'
-    }
-  ];
-
-  const upcomingDeadlines = [
-    {
-      task: 'Complete React Advanced Module',
-      date: '2024-04-05',
-      type: 'simulation',
-      priority: 'high' as const,
-      timeLeft: '3 days'
-    },
-    {
-      task: 'Submit UI Design Mission',
-      date: '2024-04-07',
-      type: 'project',
-      priority: 'medium' as const,
-      timeLeft: '5 days'
-    },
-    {
-      task: 'Sync with Commander ABC',
-      date: '2024-04-10',
-      type: 'meeting',
-      priority: 'low' as const,
-      timeLeft: '1 week'
-    }
-  ];
-
   const handleViewPlan = () => {
     // Navigate to study plan or show modal
-    navigate('/study-planner');
-  };
-
-  const handleResumeLearning = () => {
-    // Navigate to last accessed course
-    
+    navigate("/study-planner");
   };
 
   const handleCourseClick = (courseId: number) => {
     // Navigate to course learning
-    navigate('/course-learning', { state: { courseId } });
+    navigate("/course-learning", { state: { courseId } });
   };
 
   return (
@@ -186,10 +167,17 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
         <CommanderWelcome
           userName={userName}
           subtitle="COMMAND CENTER OPERATIONAL"
+          userLevel={userLevel}
           onViewPlan={handleViewPlan}
-          onResumeLearning={handleResumeLearning}
-          viewPlanText={translations?.dashboard?.viewStudyPlan || 'View Study Plan'}
-          resumeText={translations?.dashboard?.resumeLearning || 'Resume Learning'}
+          viewPlanText={
+            translations?.dashboard?.viewStudyPlan || "View Study Plan"
+          }
+          hasRoadmap={roadmaps.length > 0}
+          hasCourses={enrolledCourses.length > 0}
+          hasPremium={hasPremium}
+          taskSummary={taskSummary}
+          roadmapCount={roadmaps.length}
+          courseCount={enrolledCourses.length}
         />
 
         {/* System Status (Learning Streak) */}
@@ -198,11 +186,17 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
           longestStreak={learningStreak.longest}
           weeklyGoal={learningStreak.weeklyGoal}
           thisWeek={learningStreak.thisWeek}
-          streakLabel={translations?.dashboard?.streak || 'System Uptime'}
-          daysLabel={translations?.dashboard?.days || 'Days'}
-          currentStreakLabel={translations?.dashboard?.currentStreak || 'Current Sync'}
-          longestStreakLabel={translations?.dashboard?.longestStreak || 'Max Uptime'}
-          weeklyGoalLabel={translations?.dashboard?.weeklyGoal || 'Weekly Target'}
+          streakLabel={translations?.dashboard?.streak || "System Uptime"}
+          daysLabel={translations?.dashboard?.days || "Days"}
+          currentStreakLabel={
+            translations?.dashboard?.currentStreak || "Current Sync"
+          }
+          longestStreakLabel={
+            translations?.dashboard?.longestStreak || "Max Uptime"
+          }
+          weeklyGoalLabel={
+            translations?.dashboard?.weeklyGoal || "Weekly Target"
+          }
         />
 
         {/* Resource Monitor (Stats Grid) */}
@@ -234,22 +228,12 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
           courses={recentCourses}
           title="Active Simulations"
           onCourseClick={handleCourseClick}
-          continueLabel={translations?.dashboard?.continue || 'Tiếp tục học'}
+          continueLabel={translations?.dashboard?.continue || "Tiếp tục học"}
           onJoinGroup={onJoinGroup}
         />
 
         {/* Favorite Mentors */}
-        {favoriteMentors && favoriteMentors.length > 0 && (
-          <FavoriteMentors mentors={favoriteMentors} />
-        )}
-
-        {/* Mission Log (Achievements + Deadlines) */}
-        <MissionLog
-          achievements={achievements}
-          deadlines={upcomingDeadlines}
-          achievementsTitle="Recent Achievements"
-          deadlinesTitle="Proximity Alerts"
-        />
+        <FavoriteMentors mentors={favoriteMentors} />
       </div>
     </div>
   );

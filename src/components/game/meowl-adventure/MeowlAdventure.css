@@ -1105,3 +1105,417 @@
     font-size: 32px;
   }
 }
+
+/* =============================================
+   MEOWL ADVENTURE - HOLOGRAM NEON TECH STYLES
+   Prefix: meowladv-
+   ============================================= */
+
+/* --- Overlay with new prefix --- */
+.meowladv-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(5, 11, 20, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.meowladv-modal {
+  position: relative;
+  width: 90vw;
+  max-width: 100%;
+  height: 80vh;
+  margin-top: 5vh;
+  background: linear-gradient(135deg, rgba(5, 11, 20, 0.98) 0%, rgba(15, 25, 45, 0.98) 100%);
+  background-image: url('/game_asset/meowl_adventure/background_battlefield.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  box-shadow: 
+    0 0 40px rgba(6, 182, 212, 0.2),
+    0 0 80px rgba(139, 92, 246, 0.1),
+    inset 0 0 60px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* --- Game Info Header --- */
+.meowladv-game-info-header {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+}
+
+.meowladv-info-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 20px;
+  color: #06b6d4;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  backdrop-filter: blur(5px);
+}
+
+.meowladv-coin-icon {
+  color: #fbbf24;
+  filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5));
+}
+
+.meowladv-premium-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #8b5cf6, #d946ef);
+  border-radius: 20px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+}
+
+/* --- Loading State --- */
+.meowladv-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #06b6d4;
+  font-family: 'Courier New', monospace;
+  z-index: 20;
+}
+
+.meowladv-spinner {
+  animation: meowladv-spin 1s linear infinite;
+  color: #06b6d4;
+  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.8));
+}
+
+@keyframes meowladv-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* --- Error Message --- */
+.meowladv-error {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 8px;
+  color: #f87171;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  z-index: 10;
+}
+
+/* --- Start Screen --- */
+.meowladv-start-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg, 
+    rgba(5, 11, 20, 0.95) 0%, 
+    rgba(15, 25, 45, 0.95) 50%,
+    rgba(5, 11, 20, 0.95) 100%
+  );
+  animation: meowladv-fade-in 0.3s ease;
+}
+
+@keyframes meowladv-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.meowladv-start-content {
+  text-align: center;
+  padding: 2rem;
+  max-width: 550px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  background: rgba(6, 182, 212, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 0 30px rgba(6, 182, 212, 0.1),
+    inset 0 0 30px rgba(6, 182, 212, 0.05);
+}
+
+.meowladv-start-content h4 {
+  font-family: 'Courier New', monospace;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #22d3ee;
+  text-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+  margin: 0;
+}
+
+.meowladv-rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.meowladv-rules-list li {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(6, 182, 212, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #06b6d4;
+  transition: all 0.2s ease;
+}
+
+.meowladv-rules-list li:hover {
+  background: rgba(6, 182, 212, 0.1);
+  border-left-color: #22d3ee;
+}
+
+/* --- End Screen (Hologram Result) --- */
+.meowladv-end-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 11, 20, 0.95);
+  backdrop-filter: blur(15px);
+  z-index: 100;
+  animation: meowladv-fade-in 0.3s ease-out;
+}
+
+.meowladv-end-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px 60px;
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.1) 0%,
+    rgba(139, 92, 246, 0.1) 50%,
+    rgba(217, 70, 239, 0.1) 100%
+  );
+  border: 2px solid transparent;
+  border-image: linear-gradient(135deg, #06b6d4, #8b5cf6, #d946ef) 1;
+  border-radius: 20px;
+  box-shadow: 
+    0 0 50px rgba(6, 182, 212, 0.3),
+    0 0 100px rgba(139, 92, 246, 0.2),
+    inset 0 0 50px rgba(6, 182, 212, 0.1);
+  animation: meowladv-hologram-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes meowladv-hologram-pulse {
+  0% {
+    box-shadow: 
+      0 0 50px rgba(6, 182, 212, 0.3),
+      0 0 100px rgba(139, 92, 246, 0.2),
+      inset 0 0 50px rgba(6, 182, 212, 0.1);
+  }
+  100% {
+    box-shadow: 
+      0 0 70px rgba(6, 182, 212, 0.5),
+      0 0 120px rgba(139, 92, 246, 0.4),
+      inset 0 0 70px rgba(139, 92, 246, 0.15);
+  }
+}
+
+.meowladv-end-icon {
+  color: #fbbf24;
+  filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.8));
+  animation: meowladv-trophy-bounce 0.6s ease-out;
+}
+
+@keyframes meowladv-trophy-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.meowladv-end-title {
+  font-family: 'Courier New', monospace;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #22d3ee;
+  text-shadow: 
+    0 0 15px rgba(34, 211, 238, 0.8),
+    0 0 30px rgba(34, 211, 238, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin: 0;
+}
+
+.meowladv-result-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meowladv-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.meowladv-stat-label {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.meowladv-stat-value {
+  font-family: 'Courier New', monospace;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.meowladv-rewards {
+  display: flex;
+  gap: 40px;
+}
+
+.meowladv-reward-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 28px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+.meowladv-reward-icon {
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.meowladv-xp-icon {
+  color: #8b5cf6;
+}
+
+.meowladv-reward-value {
+  font-family: 'Courier New', monospace;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.meowladv-reward-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.meowladv-end-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.meowladv-exit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: transparent;
+  border: 2px solid rgba(148, 163, 184, 0.3);
+  border-radius: 8px;
+  color: #94a3b8;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.meowladv-exit-btn:hover {
+  border-color: #f87171;
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.meowladv-btn-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Update existing start button with neon effect */
+.meowladv-start-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.4);
+}
+
+.meowladv-start-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 0 35px rgba(6, 182, 212, 0.6), 0 0 60px rgba(139, 92, 246, 0.4);
+}
+
+.meowladv-start-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

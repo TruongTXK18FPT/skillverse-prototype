@@ -1,7 +1,16 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Play } from 'lucide-react';
+import { X, Play, Coins, Zap, Loader2, Trophy } from 'lucide-react';
+import {
+  GameSessionResponse,
+  MiniGameDefinition,
+  startGameSession,
+  completeGameSession,
+  getGame
+} from '../../../services/gamificationService';
 import './MeowlAdventure.css';
+
+const GAME_KEY = 'meowl-adventure';
 
 // Types for game entities
 interface Enemy {
@@ -38,11 +47,25 @@ interface GameState {
 
 interface MeowlAdventureProps {
   onCoinsEarned?: (coins: number) => void;
+  onClose?: () => void;
 }
 
-const MeowlAdventure: React.FC<MeowlAdventureProps> = ({ onCoinsEarned }) => {
+const MeowlAdventure: React.FC<MeowlAdventureProps> = ({ onCoinsEarned, onClose }) => {
   const navigate = useNavigate();
-  const onClose = () => navigate('/gamification');
+  const handleCloseGame = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      navigate('/gamification');
+    }
+  };
+
+  // API state
+  const [gameSession, setGameSession] = useState<GameSessionResponse | null>(null);
+  const [gameDefinition, setGameDefinition] = useState<MiniGameDefinition | null>(null);
+  const [isLoadingApi, setIsLoadingApi] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [gameStartTime, setGameStartTime] = useState<number>(0);
 
   // Game state
   const [gameState, setGameState] = useState<GameState>({
@@ -56,7 +79,12 @@ const MeowlAdventure: React.FC<MeowlAdventureProps> = ({ onCoinsEarned }) => {
   });
 
   const [enemies, setEnemies] = useState<Enemy[]>([]);
-  const [gameResult, setGameResult] = useState<{ score: number; coinsEarned: number; performance: string } | null>(null);
+  const [gameResult, setGameResult] = useState<{ 
+    score: number; 
+    coinsEarned: number; 
+    xpEarned: number;
+    performance: string 
+  } | null>(null);
   const [actionEffects, setActionEffects] = useState<ActionEffect[]>([]);
 
   // Refs for game loop
@@ -65,8 +93,46 @@ const MeowlAdventure: React.FC<MeowlAdventureProps> = ({ onCoinsEarned }) => {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const enemyCounterRef = useRef(0);
 
+  // Load game definition on mount
+  useEffect(() => {
+    const loadGameDefinition = async () => {
+      try {
+        const gameDef = await getGame(GAME_KEY);
+        setGameDefinition(gameDef);
+      } catch (error) {
+        console.warn('Failed to load game definition, using offline mode:', error);
+      }
+    };
+    loadGameDefinition();
+  }, []);
+
+  // Start game session with API
+  const initializeGameSession = useCallback(async () => {
+    if (isLoadingApi) return;
+    
+    setIsLoadingApi(true);
+    setApiError(null);
+    
+    try {
+      const session = await startGameSession({ gameKey: GAME_KEY });
+      setGameSession(session);
+      setGameStartTime(Date.now());
+      console.log('Meowl Adventure session started:', session.sessionId);
+    } catch (error: any) {
+      console.warn('Failed to start game session:', error);
+      setGameStartTime(Date.now());
+      if (error?.response?.data?.message) {
+        setApiError(error.response.data.message);
+      }
+    } finally {
+      setIsLoadingApi(false);
+    }
+  }, [isLoadingApi]);
+
   // Initialize game
-  const startGame = useCallback(() => {
+  const startGame = useCallback(async () => {
+    await initializeGameSession();
+    
     setGameState({
       isRunning: true,
       lives: 3,
@@ -318,29 +384,70 @@ const MeowlAdventure: React.FC<MeowlAdventureProps> = ({ onCoinsEarned }) => {
       setGameState(prev => ({ ...prev, status: 'gameOver', isRunning: false }));
     }
 
-    // Time up or game over
+    // Time up or game over - finalize with API
     if (gameState.status === 'gameOver' && !gameResult) {
-      // Calculate performance and coins
-      const baseCoins = Math.floor(gameState.score / 10);
-      const killBonus = gameState.enemiesKilled * 5;
-      const totalCoins = baseCoins + killBonus;
+      const finalizeGame = async () => {
+        const durationSeconds = Math.floor((Date.now() - gameStartTime) / 1000);
+        const playerWon = gameState.time <= 0 && gameState.lives > 0; // Survived the full time
 
-      let performance = 'Tốt lắm!';
-      if (gameState.score >= 5000) performance = 'Xuất sắc!';
-      else if (gameState.score >= 3000) performance = 'Rất tốt!';
-      else if (gameState.score >= 1000) performance = 'Tốt!';
-      else if (gameState.score >= 500) performance = 'Ổn đấy!';
-      else performance = 'Cố gắng hơn!';
+        let performance = 'Tốt lắm!';
+        if (gameState.score >= 5000) performance = 'Xuất sắc!';
+        else if (gameState.score >= 3000) performance = 'Rất tốt!';
+        else if (gameState.score >= 1000) performance = 'Tốt!';
+        else if (gameState.score >= 500) performance = 'Ổn đấy!';
+        else performance = 'Cố gắng hơn!';
 
-      setGameResult({
-        score: gameState.score,
-        coinsEarned: totalCoins,
-        performance
-      });
+        if (gameSession) {
+          try {
+            const result = await completeGameSession({
+              sessionId: gameSession.sessionId,
+              sessionStatus: playerWon ? 'COMPLETED' : 'FAILED',
+              scoreAchieved: gameState.score,
+              durationSeconds,
+              sessionData: JSON.stringify({
+                enemiesKilled: gameState.enemiesKilled,
+                livesRemaining: gameState.lives,
+                timeRemaining: gameState.time
+              })
+            });
 
-      onCoinsEarned?.(totalCoins);
+            setGameResult({
+              score: gameState.score,
+              coinsEarned: result.coinsEarned || 0,
+              xpEarned: result.xpEarned || 0,
+              performance
+            });
+
+            onCoinsEarned?.(result.coinsEarned || 0);
+            console.log('Meowl Adventure completed:', result);
+          } catch (error) {
+            console.warn('Failed to complete game session:', error);
+            // Offline fallback
+            const offlineCoins = Math.floor(gameState.score / 10) + (gameState.enemiesKilled * 5);
+            setGameResult({
+              score: gameState.score,
+              coinsEarned: offlineCoins,
+              xpEarned: 10,
+              performance: performance + ' (Offline)'
+            });
+            onCoinsEarned?.(offlineCoins);
+          }
+        } else {
+          // Pure offline mode
+          const offlineCoins = Math.floor(gameState.score / 10) + (gameState.enemiesKilled * 5);
+          setGameResult({
+            score: gameState.score,
+            coinsEarned: offlineCoins,
+            xpEarned: 10,
+            performance
+          });
+          onCoinsEarned?.(offlineCoins);
+        }
+      };
+
+      finalizeGame();
     }
-  }, [gameState.lives, gameState.status, gameState.score, gameState.enemiesKilled, gameResult, onCoinsEarned]);
+  }, [gameState.lives, gameState.status, gameState.score, gameState.enemiesKilled, gameResult, onCoinsEarned, gameSession, gameStartTime]);
 
   // Close game
   const closeGame = () => {
@@ -355,21 +462,51 @@ const MeowlAdventure: React.FC<MeowlAdventureProps> = ({ onCoinsEarned }) => {
     });
     setEnemies([]);
     setGameResult(null);
+    setGameSession(null);
     if (gameLoopRef.current) clearInterval(gameLoopRef.current);
     if (spawnRef.current) clearInterval(spawnRef.current);
     if (timerRef.current) clearInterval(timerRef.current);
-    onClose();
+    handleCloseGame();
   };
 
   return (
-    <div className="meowl-adventure-overlay">
-      <div className="meowl-adventure-modal">
+    <div className="meowladv-overlay">
+      <div className="meowladv-modal">
+        {/* Game Info Header */}
+        {gameDefinition && gameState.status === 'idle' && (
+          <div className="meowladv-game-info-header">
+            <div className="meowladv-info-item">
+              <Coins size={18} className="meowladv-coin-icon" />
+              <span>{gameDefinition.baseCoinReward}-{gameDefinition.maxCoinReward} xu</span>
+            </div>
+            {gameDefinition.isPremiumOnly && (
+              <div className="meowladv-premium-badge">
+                <Zap size={14} />
+                Premium
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Loading State */}
+        {isLoadingApi && (
+          <div className="meowladv-loading">
+            <Loader2 className="meowladv-spinner" size={32} />
+            <span>Đang kết nối...</span>
+          </div>
+        )}
+
+        {/* API Error */}
+        {apiError && (
+          <div className="meowladv-error">⚠️ {apiError}</div>
+        )}
+
         {/* Game Start Screen */}
         {gameState.status === 'idle' && !gameResult && (
-          <div className="game-start-screen">
-            <div className="start-content">
-              <h4>Rhythm Adventure - 4 Finger Mode</h4>
-              <ul className="rules-list">
+          <div className="meowladv-start-screen">
+            <div className="meowladv-start-content">
+              <h4>🎮 Rhythm Adventure - 4 Finger Mode</h4>
+              <ul className="meowladv-rules-list">
                 <li>❤️ Bạn có 3 mạng sống, cố gắng sinh tồn trong 60s</li>
                 <li>🎹 Sử dụng 4 ngón tay: D, F, J, K để đánh nốt nhạc</li>
                 <li>🔵 D = Slash Blue (+100), F = Parry Blue (+200)</li>
@@ -377,7 +514,7 @@ const MeowlAdventure: React.FC<MeowlAdventureProps> = ({ onCoinsEarned }) => {
                 <li>🎯 Mỗi 10 nốt nhạc hit = +1 mạng</li>
                 <li>💥 Để nốt nhạc vượt qua = mất 1 mạng</li>
               </ul>
-              <button className="meowladv-start-btn" onClick={startGame}>
+              <button className="meowladv-start-btn" onClick={startGame} disabled={isLoadingApi}>
                 <Play className="meowladv-start-icon" />
                 Bắt đầu trò chơi!
               </button>
@@ -519,23 +656,44 @@ const MeowlAdventure: React.FC<MeowlAdventureProps> = ({ onCoinsEarned }) => {
 
         {/* Game Over Screen */}
         {gameState.status === 'gameOver' && gameResult && (
-          <div className="game-end-screen">
-            <div className="end-content">
-              <div className="end-icon">🎮</div>
-              <h4>Trò chơi kết thúc!</h4>
-              <div className="result-stats">
-                <div className="stat-item">
-                  <span className="stat-label">Điểm cuối cùng:</span>
-                  <span className="stat-value">{gameResult.score}</span>
+          <div className="meowladv-end-screen">
+            <div className="meowladv-end-content">
+              <div className="meowladv-end-icon">
+                <Trophy size={48} />
+              </div>
+              <h4 className="meowladv-end-title">{gameResult.performance}</h4>
+              
+              {/* Result Stats */}
+              <div className="meowladv-result-stats">
+                <div className="meowladv-stat-item">
+                  <span className="meowladv-stat-label">Điểm cuối cùng</span>
+                  <span className="meowladv-stat-value">{gameResult.score}</span>
                 </div>
               </div>
-              <button className="meowladv-start-btn" onClick={startGame}>
-                <Play className="restart-icon" />
-                Chơi lại
-              </button>
-              <button className="exit-btn" onClick={closeGame}>
-                Thoát
-              </button>
+
+              {/* Rewards */}
+              <div className="meowladv-rewards">
+                <div className="meowladv-reward-item">
+                  <Coins size={24} className="meowladv-reward-icon meowladv-coin-icon" />
+                  <span className="meowladv-reward-value">+{gameResult.coinsEarned}</span>
+                  <span className="meowladv-reward-label">Xu</span>
+                </div>
+                <div className="meowladv-reward-item">
+                  <Zap size={24} className="meowladv-reward-icon meowladv-xp-icon" />
+                  <span className="meowladv-reward-value">+{gameResult.xpEarned}</span>
+                  <span className="meowladv-reward-label">XP</span>
+                </div>
+              </div>
+
+              <div className="meowladv-end-buttons">
+                <button className="meowladv-start-btn" onClick={startGame}>
+                  <Play className="meowladv-btn-icon" />
+                  Chơi lại
+                </button>
+                <button className="meowladv-exit-btn" onClick={closeGame}>
+                  Thoát
+                </button>
+              </div>
             </div>
           </div>
         )}
