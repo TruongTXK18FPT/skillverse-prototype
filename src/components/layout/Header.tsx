@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { createPortal } from 'react-dom';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ChevronDown,
   User,
@@ -30,22 +30,25 @@ import {
   BadgeQuestionMark,
   ShoppingBag,
   AlertTriangle,
-  Ticket
-} from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
-import walletService from '../../services/walletService';
-import userService from '../../services/userService';
-import { premiumService } from '../../services/premiumService';
-import { notificationService } from '../../services/notificationService';
-import { getMyMentorProfile, MentorProfile } from '../../services/mentorProfileService';
-import { UserProfileResponse } from '../../data/userDTOs';
-import { UserSubscriptionResponse } from '../../data/premiumDTOs';
-import NotificationDropdown from './NotificationDropdown';
-import Logo from '../../assets/brand/skillverse.png';
-import LogoNoel from '../../assets/brand/logoNoel.png';
-import LogoTet from '../../assets/brand/logo-tet.png';
-import '../../styles/Header.css';
+  Ticket,
+} from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
+import walletService from "../../services/walletService";
+import userService from "../../services/userService";
+import { premiumService } from "../../services/premiumService";
+import { notificationService } from "../../services/notificationService";
+import {
+  getMyMentorProfile,
+  MentorProfile,
+} from "../../services/mentorProfileService";
+import { UserProfileResponse } from "../../data/userDTOs";
+import { UserSubscriptionResponse } from "../../data/premiumDTOs";
+import NotificationDropdown from "./NotificationDropdown";
+import Logo from "../../assets/brand/skillverse.png";
+import LogoNoel from "../../assets/brand/logoNoel.png";
+import LogoTet from "../../assets/brand/logo-tet.png";
+import "../../styles/Header.css";
 
 const Header: React.FC = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -54,12 +57,18 @@ const Header: React.FC = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showQuickNav, setShowQuickNav] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileMenuToggleLocked, setIsMobileMenuToggleLocked] = useState(false);
+  const [isMobileMenuToggleLocked, setIsMobileMenuToggleLocked] =
+    useState(false);
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
   const [loadingBalance, setLoadingBalance] = useState(false);
-  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
-  const [mentorProfile, setMentorProfile] = useState<MentorProfile | null>(null);
-  const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(
+    null,
+  );
+  const [mentorProfile, setMentorProfile] = useState<MentorProfile | null>(
+    null,
+  );
+  const [subscription, setSubscription] =
+    useState<UserSubscriptionResponse | null>(null);
   const [unreadCount, setUnreadCount] = useState(0);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const quickNavRef = useRef<HTMLDivElement>(null);
@@ -68,17 +77,17 @@ const Header: React.FC = () => {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear();
-    
+
     // Logo Tết từ tháng 1 đến tháng 3 năm 2026
     if (currentYear === 2026 && currentMonth >= 1 && currentMonth <= 3) {
       return LogoTet;
     }
-    
+
     // Logo Noel tháng 12
     if (currentMonth === 12) {
       return LogoNoel;
     }
-    
+
     // Logo mặc định
     return Logo;
   };
@@ -94,64 +103,64 @@ const Header: React.FC = () => {
   // Quick navigation items
   const quickNavItems = [
     {
-      name: 'Bảng Điều Khiển',
-      description: 'Theo dõi tiến độ học tập và thành tích của bạn',
-      path: '/dashboard',
-      icon: BarChart3
+      name: "Bảng Điều Khiển",
+      description: "Theo dõi tiến độ học tập và thành tích của bạn",
+      path: "/dashboard",
+      icon: BarChart3,
     },
     {
-      name: 'Khóa Học',
-      description: 'Khám phá các khóa học chất lượng cao',
-      path: '/courses',
-      icon: GraduationCap
+      name: "Khóa Học",
+      description: "Khám phá các khóa học chất lượng cao",
+      path: "/courses",
+      icon: GraduationCap,
     },
     {
-      name: 'Lộ Trình Học Tập',
-      description: 'Khám phá lộ trình học tập và phát triển kỹ năng',
-      path: '/roadmap',
-      icon: Map
+      name: "Lộ Trình Học Tập",
+      description: "Khám phá lộ trình học tập và phát triển kỹ năng",
+      path: "/roadmap",
+      icon: Map,
     },
     {
-      name: 'Lập Kế Hoạch',
-      description: 'Lên lịch học tập và quản lý công việc hiệu quả',
-      path: '/study-planner',
-      icon: Calendar
+      name: "Lập Kế Hoạch",
+      description: "Lên lịch học tập và quản lý công việc hiệu quả",
+      path: "/study-planner",
+      icon: Calendar,
     },
     {
-      name: 'Cố Vấn',
-      description: 'Kết nối với chuyên gia trong ngành',
-      path: '/mentorship',
-      icon: Users
+      name: "Cố Vấn",
+      description: "Kết nối với chuyên gia trong ngành",
+      path: "/mentorship",
+      icon: Users,
     },
     {
-      name: 'Cộng Đồng',
-      description: 'Tham gia cộng đồng học tập sôi động',
-      path: '/community',
-      icon: MessageSquare
+      name: "Cộng Đồng",
+      description: "Tham gia cộng đồng học tập sôi động",
+      path: "/community",
+      icon: MessageSquare,
     },
     {
-      name: 'Việc Làm',
-      description: 'Tìm kiếm cơ hội việc làm phù hợp',
-      path: '/jobs',
-      icon: Briefcase
+      name: "Việc Làm",
+      description: "Tìm kiếm cơ hội việc làm phù hợp",
+      path: "/jobs",
+      icon: Briefcase,
     },
     {
-      name: 'Hồ Sơ',
-      description: 'Quản lý và chia sẻ thành tích của bạn',
-      path: '/portfolio',
-      icon: User
+      name: "Hồ Sơ",
+      description: "Quản lý và chia sẻ thành tích của bạn",
+      path: "/portfolio",
+      icon: User,
     },
     {
-      name: 'Trợ Lý AI',
-      description: 'Nhận hỗ trợ từ trợ lý AI thông minh',
-      path: '/chatbot',
-      icon: Bot
+      name: "Trợ Lý AI",
+      description: "Nhận hỗ trợ từ trợ lý AI thông minh",
+      path: "/chatbot",
+      icon: Bot,
     },
     {
-      name: 'Trò Chơi',
-      description: 'Bảng xếp hạng, huy hiệu và mini-games',
-      path: '/gamification',
-      icon: Trophy
+      name: "Trò Chơi",
+      description: "Bảng xếp hạng, huy hiệu và mini-games",
+      path: "/gamification",
+      icon: Trophy,
     },
     // {
     //   name: 'Hướng Dẫn',
@@ -160,22 +169,22 @@ const Header: React.FC = () => {
     //   icon: BookOpen
     // },
     {
-      name: 'Hội Thảo',
-      description: 'Tham gia các hội thảo và sự kiện',
-      path: '/seminar',
-      icon: Calendar
+      name: "Hội Thảo",
+      description: "Tham gia các hội thảo và sự kiện",
+      path: "/seminar",
+      icon: Calendar,
     },
     {
-      name: 'Meowl Shop',
-      description: 'Cửa hàng Skin Neon Tech độc quyền',
-      path: '/meowl-shop',
-      icon: ShoppingBag
+      name: "Meowl Shop",
+      description: "Cửa hàng Skin Neon Tech độc quyền",
+      path: "/meowl-shop",
+      icon: ShoppingBag,
     },
     // {
     //   name: 'Cầu Nguyện',
     //   description: 'Đôi khi chỉ cần có niềm tin là đủ',
     //   path: '/pray',
-    //   icon: BadgeQuestionMark  
+    //   icon: BadgeQuestionMark
     // }
   ];
 
@@ -184,7 +193,7 @@ const Header: React.FC = () => {
       const profile = await userService.getMyProfile();
       setUserProfile(profile);
 
-      if (user?.roles.includes('MENTOR')) {
+      if (user?.roles.includes("MENTOR")) {
         try {
           const mProfile = await getMyMentorProfile();
           setMentorProfile(mProfile);
@@ -193,19 +202,19 @@ const Header: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error('Failed to load user profile:', error);
+      console.error("Failed to load user profile:", error);
     }
   }, [user]);
 
   const loadWalletBalance = useCallback(async () => {
     if (!user) return;
-    
+
     setLoadingBalance(true);
     try {
       const wallet = await walletService.getMyWallet();
       setWalletBalance(wallet.cashBalance);
     } catch (error) {
-      console.error('Failed to fetch wallet balance:', error);
+      console.error("Failed to fetch wallet balance:", error);
       setWalletBalance(null);
     } finally {
       setLoadingBalance(false);
@@ -217,7 +226,7 @@ const Header: React.FC = () => {
       const sub = await premiumService.getCurrentSubscription();
       setSubscription(sub);
     } catch (error) {
-      console.error('Failed to load subscription:', error);
+      console.error("Failed to load subscription:", error);
     }
   }, []);
 
@@ -226,21 +235,21 @@ const Header: React.FC = () => {
       const count = await notificationService.getUnreadCount();
       setUnreadCount(count);
     } catch (error) {
-      console.error('Failed to load unread count:', error);
+      console.error("Failed to load unread count:", error);
     }
   }, []);
 
   const getPremiumColor = () => {
     if (!subscription || !subscription.isActive) return null;
-    
+
     const planType = subscription.plan.planType;
     switch (planType) {
-      case 'STUDENT_PACK':
-        return '#c0c0c0'; // Silver
-      case 'PREMIUM_BASIC':
-        return '#ffd700'; // Gold
-      case 'PREMIUM_PLUS':
-        return '#b9f2ff'; // Diamond
+      case "STUDENT_PACK":
+        return "#c0c0c0"; // Silver
+      case "PREMIUM_BASIC":
+        return "#ffd700"; // Gold
+      case "PREMIUM_PLUS":
+        return "#b9f2ff"; // Diamond
       default:
         return null;
     }
@@ -248,9 +257,9 @@ const Header: React.FC = () => {
 
   const hexToRgb = (hex: string): string => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result 
+    return result
       ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
-      : '255, 255, 255';
+      : "255, 255, 255";
   };
 
   // Fetch wallet balance, profile and subscription when user is authenticated
@@ -262,71 +271,84 @@ const Header: React.FC = () => {
       loadUnreadCount();
 
       const interval = setInterval(loadUnreadCount, 60000);
-      
+
       // Listen for wallet balance updates
       const handleWalletUpdate = () => {
         loadWalletBalance();
       };
-      
+
       // Listen for notification read events
       const handleNotificationRead = (event: any) => {
-        if (event.detail && typeof event.detail.unreadCount === 'number') {
+        if (event.detail && typeof event.detail.unreadCount === "number") {
           setUnreadCount(event.detail.unreadCount);
         }
       };
-      
-      window.addEventListener('wallet:updated', handleWalletUpdate);
-      window.addEventListener('notification:read', handleNotificationRead);
-      
+
+      window.addEventListener("wallet:updated", handleWalletUpdate);
+      window.addEventListener("notification:read", handleNotificationRead);
+
       return () => {
         clearInterval(interval);
-        window.removeEventListener('wallet:updated', handleWalletUpdate);
-        window.removeEventListener('notification:read', handleNotificationRead);
+        window.removeEventListener("wallet:updated", handleWalletUpdate);
+        window.removeEventListener("notification:read", handleNotificationRead);
       };
     }
-  }, [isAuthenticated, user, loadWalletBalance, loadUserProfile, loadSubscription, loadUnreadCount]);
+  }, [
+    isAuthenticated,
+    user,
+    loadWalletBalance,
+    loadUserProfile,
+    loadSubscription,
+    loadUnreadCount,
+  ]);
 
   // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
         setShowUserMenu(false);
       }
-      if (quickNavRef.current && !quickNavRef.current.contains(event.target as Node)) {
+      if (
+        quickNavRef.current &&
+        !quickNavRef.current.contains(event.target as Node)
+      ) {
         setShowQuickNav(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = async () => {
     await logout();
     setShowUserMenu(false);
-    navigate('/');
+    navigate("/");
   };
 
   const handleLogin = () => {
-    navigate('/login');
+    navigate("/login");
     setIsMobileMenuOpen(false);
   };
 
   const handleProfile = () => {
-    navigate('/profile');
+    navigate("/profile");
     setShowUserMenu(false);
   };
 
   const handleUpgrade = () => {
-    navigate('/premium');
+    navigate("/premium");
   };
 
   const handleWallet = () => {
-    navigate('/my-wallet');
+    navigate("/my-wallet");
   };
 
   const handleMentor = () => {
-    navigate('/mentor');
+    navigate("/mentor");
     setShowUserMenu(false);
     setIsMobileMenuOpen(false);
   };
@@ -334,7 +356,7 @@ const Header: React.FC = () => {
   const toggleMobileMenu = () => {
     if (isMobileMenuToggleLocked) return;
     setIsMobileMenuToggleLocked(true);
-    setIsMobileMenuOpen(prev => !prev);
+    setIsMobileMenuOpen((prev) => !prev);
     setTimeout(() => setIsMobileMenuToggleLocked(false), 250);
   };
 
@@ -345,15 +367,18 @@ const Header: React.FC = () => {
         <div className="main-header-left">
           {/* Logo */}
           <Link to="/" className="header-logo-link">
-            <img 
-              src={getLogo()} 
-              alt="SkillVerse" 
-              className={`header-logo-image ${isNoel ? 'noel-logo' : ''} ${isTet ? 'tet-logo' : ''}`} 
+            <img
+              src={getLogo()}
+              alt="SkillVerse"
+              className={`header-logo-image ${isNoel ? "noel-logo" : ""} ${isTet ? "tet-logo" : ""}`}
             />
           </Link>
 
           {/* Explore Button */}
-          <Link to="/explore" className="header-nav-btn explore-btn desktop-only">
+          <Link
+            to="/explore"
+            className="header-nav-btn explore-btn desktop-only"
+          >
             <Compass size={18} />
             <span>Khám Phá</span>
           </Link>
@@ -382,7 +407,9 @@ const Header: React.FC = () => {
                       <item.icon className="category-icon" />
                       <div className="category-content">
                         <h3 className="category-title">{item.name}</h3>
-                        <p className="category-description">{item.description}</p>
+                        <p className="category-description">
+                          {item.description}
+                        </p>
                       </div>
                     </Link>
                   ))}
@@ -395,7 +422,7 @@ const Header: React.FC = () => {
         {/* Right Section */}
         <div className="header-right">
           {/* Admin Link - Only for ADMIN role */}
-          {isAuthenticated && user && user.roles.includes('ADMIN') && (
+          {isAuthenticated && user && user.roles.includes("ADMIN") && (
             <Link to="/admin" className="header-nav-link desktop-only">
               <Shield size={18} />
               <span>Quản Trị</span>
@@ -403,161 +430,281 @@ const Header: React.FC = () => {
           )}
 
           {/* Upgrade Button */}
-          <button onClick={handleUpgrade} className="header-upgrade-btn desktop-only">
+          <button
+            onClick={handleUpgrade}
+            className="header-upgrade-btn desktop-only"
+          >
             <Crown size={18} />
-            <span className="header-upgrade-text">Nâng cấp</span>
+            <span className="header-upgrade-text">Mở khóa giới hạn</span>
           </button>
 
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
             className="theme-btn desktop-only"
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
           >
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
           {/* Authentication */}
           {isAuthenticated && user ? (
             <>
-              
-
-              <div ref={userMenuRef} className="user-profile-group desktop-only" style={{
-              background: getPremiumColor() ? `linear-gradient(135deg, rgba(${hexToRgb(getPremiumColor()!)}, 0.1), rgba(${hexToRgb(getPremiumColor()!)}, 0.05))` : undefined,
-              border: getPremiumColor() ? `1px solid ${getPremiumColor()}` : undefined,
-              boxShadow: getPremiumColor() ? `0 0 20px rgba(${hexToRgb(getPremiumColor()!)}, 0.3)` : undefined
-            }}>
-              {unreadCount > 0 && (
-                <span className="header-notification-badge">
-                  {unreadCount > 99 ? '99+' : unreadCount}
-                </span>
-              )}
-              <button
-                className="user-profile-btn"
-                onClick={() => setShowUserMenu(!showUserMenu)}
+              <div
+                ref={userMenuRef}
+                className="user-profile-group desktop-only"
+                style={{
+                  background: getPremiumColor()
+                    ? `linear-gradient(135deg, rgba(${hexToRgb(getPremiumColor()!)}, 0.1), rgba(${hexToRgb(getPremiumColor()!)}, 0.05))`
+                    : undefined,
+                  border: getPremiumColor()
+                    ? `1px solid ${getPremiumColor()}`
+                    : undefined,
+                  boxShadow: getPremiumColor()
+                    ? `0 0 20px rgba(${hexToRgb(getPremiumColor()!)}, 0.3)`
+                    : undefined,
+                }}
               >
-                <div className="profile-group-content">
-                  <div className="header-user-avatar" style={{
-                    border: getPremiumColor() ? `3px solid ${getPremiumColor()}` : '2px solid rgba(255,255,255,0.2)',
-                    boxShadow: getPremiumColor() ? `0 0 15px ${getPremiumColor()}` : undefined
-                  }}>
-                    {(mentorProfile?.avatar || userProfile?.avatarMediaUrl || user.avatarUrl) ? (
-                      <img src={mentorProfile?.avatar || userProfile?.avatarMediaUrl || user.avatarUrl} alt="Avatar" className="header-avatar-img" />
-                    ) : (
-                      <User size={18} />
-                    )}
-                  </div>
-                  <div className="user-info-inline">
-                    <span className="user-greeting">
-                      Xin chào, <strong style={{ color: getPremiumColor() || undefined }}>{userProfile?.fullName || user.fullName}</strong>
-                    </span>
-                    <span className="user-balance" style={{ color: getPremiumColor() || undefined }}>
-                      💰 Số dư: {loadingBalance ? '...' : (walletBalance !== null && walletBalance !== undefined) ? walletBalance.toLocaleString('vi-VN') + ' đ' : 'N/A'}
-                    </span>
-                  </div>
-                  <ChevronDown size={16} className="dropdown-icon" />
-                </div>
-              </button>
-
-              {showUserMenu && (
-                <div className="user-dropdown">
-                  <div className="user-info">
-                    <div className="header-user-avatar-large" style={{
-                      border: getPremiumColor() ? `3px solid ${getPremiumColor()}` : '2px solid rgba(255,255,255,0.2)',
-                      boxShadow: getPremiumColor() ? `0 0 20px ${getPremiumColor()}` : undefined
-                    }}>
-                      {(mentorProfile?.avatar || userProfile?.avatarMediaUrl || user.avatarUrl) ? (
-                        <img src={mentorProfile?.avatar || userProfile?.avatarMediaUrl || user.avatarUrl} alt="Avatar" className="header-avatar-img-large" />
+                {unreadCount > 0 && (
+                  <span className="header-notification-badge">
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </span>
+                )}
+                <button
+                  className="user-profile-btn"
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                >
+                  <div className="profile-group-content">
+                    <div
+                      className="header-user-avatar"
+                      style={{
+                        border: getPremiumColor()
+                          ? `3px solid ${getPremiumColor()}`
+                          : "2px solid rgba(255,255,255,0.2)",
+                        boxShadow: getPremiumColor()
+                          ? `0 0 15px ${getPremiumColor()}`
+                          : undefined,
+                      }}
+                    >
+                      {mentorProfile?.avatar ||
+                      userProfile?.avatarMediaUrl ||
+                      user.avatarUrl ? (
+                        <img
+                          src={
+                            mentorProfile?.avatar ||
+                            userProfile?.avatarMediaUrl ||
+                            user.avatarUrl
+                          }
+                          alt="Avatar"
+                          className="header-avatar-img"
+                        />
                       ) : (
-                        <User size={24} />
+                        <User size={18} />
                       )}
                     </div>
-                    <div className="user-details">
-                      <p className="user-name">{userProfile?.fullName || user.fullName}</p>
-                      <p className="user-email">{user.email}</p>
+                    <div className="user-info-inline">
+                      <span className="user-greeting">
+                        Xin chào,{" "}
+                        <strong
+                          style={{ color: getPremiumColor() || undefined }}
+                        >
+                          {userProfile?.fullName || user.fullName}
+                        </strong>
+                      </span>
+                      <span
+                        className="user-balance"
+                        style={{ color: getPremiumColor() || undefined }}
+                      >
+                        💰 Số dư:{" "}
+                        {loadingBalance
+                          ? "..."
+                          : walletBalance !== null &&
+                              walletBalance !== undefined
+                            ? walletBalance.toLocaleString("vi-VN") + " đ"
+                            : "N/A"}
+                      </span>
                     </div>
+                    <ChevronDown size={16} className="dropdown-icon" />
                   </div>
-                  <hr className="dropdown-divider" />
+                </button>
 
-                  <div style={{ marginBottom: '12px' }}>
-                    <NotificationDropdown inline collapsible />
+                {showUserMenu && (
+                  <div className="user-dropdown">
+                    <div className="user-info">
+                      <div
+                        className="header-user-avatar-large"
+                        style={{
+                          border: getPremiumColor()
+                            ? `3px solid ${getPremiumColor()}`
+                            : "2px solid rgba(255,255,255,0.2)",
+                          boxShadow: getPremiumColor()
+                            ? `0 0 20px ${getPremiumColor()}`
+                            : undefined,
+                        }}
+                      >
+                        {mentorProfile?.avatar ||
+                        userProfile?.avatarMediaUrl ||
+                        user.avatarUrl ? (
+                          <img
+                            src={
+                              mentorProfile?.avatar ||
+                              userProfile?.avatarMediaUrl ||
+                              user.avatarUrl
+                            }
+                            alt="Avatar"
+                            className="header-avatar-img-large"
+                          />
+                        ) : (
+                          <User size={24} />
+                        )}
+                      </div>
+                      <div className="user-details">
+                        <p className="user-name">
+                          {userProfile?.fullName || user.fullName}
+                        </p>
+                        <p className="user-email">{user.email}</p>
+                      </div>
+                    </div>
+                    <hr className="dropdown-divider" />
+
+                    <div style={{ marginBottom: "12px" }}>
+                      <NotificationDropdown inline collapsible />
+                    </div>
+
+                    {/* Wallet & Notifications in dropdown */}
+                    <button
+                      onClick={() => {
+                        handleWallet();
+                        setShowUserMenu(false);
+                      }}
+                      className="dropdown-item"
+                    >
+                      <Wallet size={16} />
+                      <span>Ví</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate("/messages");
+                        setShowUserMenu(false);
+                      }}
+                      className="dropdown-item"
+                    >
+                      <MessageSquare size={16} />
+                      <span>Tin nhắn</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate("/my-bookings?tab=bookings");
+                        setShowUserMenu(false);
+                      }}
+                      className="dropdown-item"
+                    >
+                      <Calendar size={16} />
+                      <span>Quản lý lịch hẹn</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate("/my-bookings?tab=tickets");
+                        setShowUserMenu(false);
+                      }}
+                      className="dropdown-item"
+                    >
+                      <Ticket size={16} />
+                      <span>Vé của tôi</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate("/help-center");
+                        setShowUserMenu(false);
+                      }}
+                      className="dropdown-item"
+                    >
+                      <HelpCircle size={16} />
+                      <span>Hỗ trợ</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate("/report-violation");
+                        setShowUserMenu(false);
+                      }}
+                      className="dropdown-item"
+                    >
+                      <AlertTriangle size={16} />
+                      <span>Báo cáo vi phạm</span>
+                    </button>
+
+                    <hr className="dropdown-divider" />
+
+                    {/* Admin Dashboard Link for any admin role */}
+                    {(user.roles.includes("ADMIN") ||
+                      user.roles.some((role) => role.endsWith("_ADMIN"))) && (
+                      <button
+                        onClick={() => navigate("/admin")}
+                        className="dropdown-item"
+                        style={{ color: "#F472B6" }}
+                      >
+                        <Shield size={16} />
+                        <span>Quản Trị Viên</span>
+                      </button>
+                    )}
+
+                    {(user.roles.includes("MENTOR") ||
+                      user.roles.includes("ADMIN")) && (
+                      <button onClick={handleMentor} className="dropdown-item">
+                        <BookOpen size={16} />
+                        <span>Giảng Viên</span>
+                      </button>
+                    )}
+                    {user.roles.includes("RECRUITER") && (
+                      <button
+                        onClick={() => navigate("/business")}
+                        className="dropdown-item"
+                      >
+                        <Building2 size={16} />
+                        <span>Doanh Nghiệp</span>
+                      </button>
+                    )}
+                    {user.roles.includes("PARENT") && (
+                      <button
+                        onClick={() => {
+                          navigate("/parent-dashboard");
+                          setShowUserMenu(false);
+                        }}
+                        className="dropdown-item"
+                      >
+                        <Users size={16} />
+                        <span>Phụ huynh</span>
+                      </button>
+                    )}
+                    {user.roles.includes("USER") && (
+                      <button
+                        onClick={() => navigate("/my-applications")}
+                        className="dropdown-item"
+                      >
+                        <Briefcase size={16} />
+                        <span>Đơn Ứng Tuyển</span>
+                      </button>
+                    )}
+                    <button onClick={handleProfile} className="dropdown-item">
+                      <User size={16} />
+                      <span>Hồ sơ cá nhân</span>
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="dropdown-item logout"
+                    >
+                      <LogOut size={16} />
+                      <span>Đăng xuất</span>
+                    </button>
                   </div>
-
-                  {/* Wallet & Notifications in dropdown */}
-                  <button onClick={() => { handleWallet(); setShowUserMenu(false); }} className="dropdown-item">
-                    <Wallet size={16} />
-                    <span>Ví</span>
-                  </button>
-                  <button onClick={() => { navigate('/messages'); setShowUserMenu(false); }} className="dropdown-item">
-                    <MessageSquare size={16} />
-                    <span>Tin nhắn</span>
-                  </button>
-                  <button onClick={() => { navigate('/my-bookings?tab=bookings'); setShowUserMenu(false); }} className="dropdown-item">
-                    <Calendar size={16} />
-                    <span>Quản lý lịch hẹn</span>
-                  </button>
-                  <button onClick={() => { navigate('/my-bookings?tab=tickets'); setShowUserMenu(false); }} className="dropdown-item">
-                    <Ticket size={16} />
-                    <span>Vé của tôi</span>
-                  </button>
-                  <button onClick={() => { navigate('/help-center'); setShowUserMenu(false); }} className="dropdown-item">
-                    <HelpCircle size={16} />
-                    <span>Hỗ trợ</span>
-                  </button>
-                  <button onClick={() => { navigate('/report-violation'); setShowUserMenu(false); }} className="dropdown-item">
-                    <AlertTriangle size={16} />
-                    <span>Báo cáo vi phạm</span>
-                  </button>
-
-                  <hr className="dropdown-divider" />
-
-                  {/* Admin Dashboard Link for any admin role */}
-                  {(user.roles.includes('ADMIN') || 
-                    user.roles.some(role => role.endsWith('_ADMIN'))) && (
-                    <button onClick={() => navigate('/admin')} className="dropdown-item" style={{ color: '#F472B6' }}>
-                      <Shield size={16} />
-                      <span>Quản Trị Viên</span>
-                    </button>
-                  )}
-
-                  {(user.roles.includes('MENTOR') || user.roles.includes('ADMIN')) && (
-                    <button onClick={handleMentor} className="dropdown-item">
-                      <BookOpen size={16} />
-                      <span>Giảng Viên</span>
-                    </button>
-                  )}
-                  {user.roles.includes('RECRUITER') && (
-                    <button onClick={() => navigate('/business')} className="dropdown-item">
-                      <Building2 size={16} />
-                      <span>Doanh Nghiệp</span>
-                    </button>
-                  )}
-                  {user.roles.includes('PARENT') && (
-                    <button onClick={() => { navigate('/parent-dashboard'); setShowUserMenu(false); }} className="dropdown-item">
-                      <Users size={16} />
-                      <span>Phụ huynh</span>
-                    </button>
-                  )}
-                  {user.roles.includes('USER') && (
-                    <button onClick={() => navigate('/my-applications')} className="dropdown-item">
-                      <Briefcase size={16} />
-                      <span>Đơn Ứng Tuyển</span>
-                    </button>
-                  )}
-                  <button onClick={handleProfile} className="dropdown-item">
-                    <User size={16} />
-                    <span>Hồ sơ cá nhân</span>
-                  </button>
-                  <button onClick={handleLogout} className="dropdown-item logout">
-                    <LogOut size={16} />
-                    <span>Đăng xuất</span>
-                  </button>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
             </>
           ) : (
-            <button onClick={handleLogin} className="header-login-btn desktop-only">
+            <button
+              onClick={handleLogin}
+              className="header-login-btn desktop-only"
+            >
               Đăng nhập
             </button>
           )}
@@ -584,102 +731,164 @@ const Header: React.FC = () => {
       </div>
 
       {/* Mobile Menu */}
-      {isMobileMenuOpen && createPortal(
-        <div className="mobile-menu" id="sv-mobile-menu">
-          <div className="mobile-menu-content">
-            {/* Mobile User Section */}
-            {isAuthenticated && user ? (
-              <div className="mobile-user-section">
-                <div className="mobile-user-info">
-                  <div className="user-avatar-large">
-                    {(mentorProfile?.avatar || userProfile?.avatarMediaUrl || user.avatarUrl) ? (
-                      <img src={mentorProfile?.avatar || userProfile?.avatarMediaUrl || user.avatarUrl} alt="Avatar" className="header-avatar-img-large" />
-                    ) : (
-                      <User size={32} />
-                    )}
-                  </div>
-                  <div className="user-details">
-                    <p className="user-name">{user.fullName}</p>
-                    <p className="user-email">{user.email}</p>
-                  </div>
-                </div>
-                
-                {/* Mobile User Actions - Integrated */}
-                <div className="mobile-user-actions-grid">
-                   <button onClick={() => { handleWallet(); setIsMobileMenuOpen(false); }} className="mobile-action-icon-btn" title="Ví">
-                    <Wallet size={20} />
-                    <span>Ví</span>
-                  </button>
-                  <button className="mobile-action-icon-btn" title="Thông báo">
-                    <Bell size={20} />
-                    <span>Thông báo</span>
-                  </button>
-                  <button onClick={() => { handleUpgrade(); setIsMobileMenuOpen(false); }} className="mobile-action-icon-btn upgrade" title="Nâng cấp">
-                    <Crown size={20} />
-                    <span>Nâng cấp</span>
-                  </button>
-                </div>
-
-                <div className="mobile-user-menu-list">
-                  {(user.roles.includes('ADMIN') || user.roles.some(role => role.endsWith('_ADMIN'))) && (
-                    <button onClick={() => { navigate('/admin'); setIsMobileMenuOpen(false); }} className="mobile-menu-item" style={{ color: '#F472B6' }}>
-                      <Shield size={18} />
-                      <span>Quản Trị Viên</span>
-                    </button>
-                  )}
-                  {(user.roles.includes('MENTOR') || user.roles.includes('ADMIN')) && (
-                    <button onClick={handleMentor} className="mobile-menu-item">
-                      <BookOpen size={18} />
-                      <span>Giảng Viên</span>
-                    </button>
-                  )}
-                  {user.roles.includes('PARENT') && (
-                    <button onClick={() => { navigate('/parent-dashboard'); setIsMobileMenuOpen(false); }} className="mobile-menu-item">
-                      <Users size={18} />
-                      <span>Phụ huynh</span>
-                    </button>
-                  )}
-                  <button onClick={() => { handleProfile(); setIsMobileMenuOpen(false); }} className="mobile-menu-item">
-                    <User size={18} />
-                    <span>Hồ sơ cá nhân</span>
-                  </button>
-                  <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className="mobile-menu-item logout">
-                    <LogOut size={18} />
-                    <span>Đăng xuất</span>
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <button onClick={handleLogin} className="mobile-login-btn">
-                <User size={18} />
-                <span>Đăng nhập</span>
-              </button>
-            )}
-
-            {/* Mobile Quick Navigation */}
-            <div className="mobile-categories">
-              <h3 className="mobile-section-title">Dịch Chuyển Nhanh</h3>
-              <div className="mobile-category-grid">
-                {quickNavItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className="mobile-category-link"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <item.icon className="mobile-category-icon" />
-                    <div className="mobile-category-content">
-                      <span className="mobile-category-title">{item.name}</span>
-                      <span className="mobile-category-description">{item.description}</span>
+      {isMobileMenuOpen &&
+        createPortal(
+          <div className="mobile-menu" id="sv-mobile-menu">
+            <div className="mobile-menu-content">
+              {/* Mobile User Section */}
+              {isAuthenticated && user ? (
+                <div className="mobile-user-section">
+                  <div className="mobile-user-info">
+                    <div className="user-avatar-large">
+                      {mentorProfile?.avatar ||
+                      userProfile?.avatarMediaUrl ||
+                      user.avatarUrl ? (
+                        <img
+                          src={
+                            mentorProfile?.avatar ||
+                            userProfile?.avatarMediaUrl ||
+                            user.avatarUrl
+                          }
+                          alt="Avatar"
+                          className="header-avatar-img-large"
+                        />
+                      ) : (
+                        <User size={32} />
+                      )}
                     </div>
-                  </Link>
-                ))}
+                    <div className="user-details">
+                      <p className="user-name">{user.fullName}</p>
+                      <p className="user-email">{user.email}</p>
+                    </div>
+                  </div>
+
+                  {/* Mobile User Actions - Integrated */}
+                  <div className="mobile-user-actions-grid">
+                    <button
+                      onClick={() => {
+                        handleWallet();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="mobile-action-icon-btn"
+                      title="Ví"
+                    >
+                      <Wallet size={20} />
+                      <span>Ví</span>
+                    </button>
+                    <button
+                      className="mobile-action-icon-btn"
+                      title="Thông báo"
+                    >
+                      <Bell size={20} />
+                      <span>Thông báo</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleUpgrade();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="mobile-action-icon-btn upgrade"
+                      title="Nâng cấp"
+                    >
+                      <Crown size={20} />
+                      <span>Nâng cấp</span>
+                    </button>
+                  </div>
+
+                  <div className="mobile-user-menu-list">
+                    {(user.roles.includes("ADMIN") ||
+                      user.roles.some((role) => role.endsWith("_ADMIN"))) && (
+                      <button
+                        onClick={() => {
+                          navigate("/admin");
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="mobile-menu-item"
+                        style={{ color: "#F472B6" }}
+                      >
+                        <Shield size={18} />
+                        <span>Quản Trị Viên</span>
+                      </button>
+                    )}
+                    {(user.roles.includes("MENTOR") ||
+                      user.roles.includes("ADMIN")) && (
+                      <button
+                        onClick={handleMentor}
+                        className="mobile-menu-item"
+                      >
+                        <BookOpen size={18} />
+                        <span>Giảng Viên</span>
+                      </button>
+                    )}
+                    {user.roles.includes("PARENT") && (
+                      <button
+                        onClick={() => {
+                          navigate("/parent-dashboard");
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="mobile-menu-item"
+                      >
+                        <Users size={18} />
+                        <span>Phụ huynh</span>
+                      </button>
+                    )}
+                    <button
+                      onClick={() => {
+                        handleProfile();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="mobile-menu-item"
+                    >
+                      <User size={18} />
+                      <span>Hồ sơ cá nhân</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="mobile-menu-item logout"
+                    >
+                      <LogOut size={18} />
+                      <span>Đăng xuất</span>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button onClick={handleLogin} className="mobile-login-btn">
+                  <User size={18} />
+                  <span>Đăng nhập</span>
+                </button>
+              )}
+
+              {/* Mobile Quick Navigation */}
+              <div className="mobile-categories">
+                <h3 className="mobile-section-title">Dịch Chuyển Nhanh</h3>
+                <div className="mobile-category-grid">
+                  {quickNavItems.map((item) => (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className="mobile-category-link"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <item.icon className="mobile-category-icon" />
+                      <div className="mobile-category-content">
+                        <span className="mobile-category-title">
+                          {item.name}
+                        </span>
+                        <span className="mobile-category-description">
+                          {item.description}
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body,
+        )}
     </header>
   );
 };
