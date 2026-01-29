@@ -27,10 +27,13 @@ import {
   Compass,
   Zap,
   HelpCircle,
-  BadgeQuestionMark,
   ShoppingBag,
   AlertTriangle,
   Ticket,
+  Target,
+  Search,
+  Sparkles,
+  ArrowRight,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
@@ -374,45 +377,151 @@ const Header: React.FC = () => {
             />
           </Link>
 
-          {/* Explore Button */}
-          <Link
-            to="/explore"
-            className="header-nav-btn explore-btn desktop-only"
-          >
-            <Compass size={18} />
-            <span>Khám Phá</span>
-          </Link>
-
-          {/* Quick Navigation Menu */}
-          <div ref={quickNavRef} className="categories-container desktop-only">
-            <button
-              className="header-nav-btn quick-nav-btn"
-              onClick={() => setShowQuickNav(!showQuickNav)}
+          {/* Explore Button - Universe Map for exploration/onboarding */}
+          <div className="sv-nav-btn-wrapper">
+            <Link
+              to="/explore"
+              className="header-nav-btn explore-btn desktop-only sv-nav-explore"
+              title="Khám phá vũ trụ SkillVerse - Tìm hiểu các khu vực và bắt đầu hành trình"
             >
-              <Zap size={18} />
-              <span className="header-categories-text">Dịch Chuyển</span>
-              <ChevronDown size={16} />
-            </button>
+              <Compass size={18} />
+              <div className="sv-nav-btn-content">
+                <span className="sv-nav-label">Khám Phá</span>
+                <span className="sv-nav-subtext">bắt đầu từ đây</span>
+              </div>
+            </Link>
+            <div className="sv-nav-tooltip">
+              <Sparkles size={14} />
+              <span>Khám phá bản đồ vũ trụ & tìm hiểu hệ thống</span>
+            </div>
+          </div>
+
+          {/* Quick Navigation Menu - Task-oriented quick access */}
+          <div ref={quickNavRef} className="categories-container desktop-only">
+            <div className="sv-nav-btn-wrapper">
+              <button
+                className="header-nav-btn quick-nav-btn sv-nav-teleport"
+                onClick={() => setShowQuickNav(!showQuickNav)}
+                title="Dịch chuyển nhanh đến các tính năng"
+              >
+                <Zap size={18} className="sv-teleport-icon" />
+                <div className="sv-nav-btn-content">
+                  <span className="sv-nav-label">Dịch Chuyển</span>
+                  <span className="sv-nav-subtext">các tính năng chính</span>
+                </div>
+                <ChevronDown size={16} />
+              </button>
+              <div className="sv-nav-tooltip">
+                <Zap size={14} />
+                <span>Truy cập nhanh các tính năng chính</span>
+              </div>
+            </div>
 
             {showQuickNav && (
-              <div className="mega-menu">
-                <div className="mega-menu-grid">
-                  {quickNavItems.map((item) => (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className="category-link"
-                      onClick={() => setShowQuickNav(false)}
-                    >
-                      <item.icon className="category-icon" />
-                      <div className="category-content">
-                        <h3 className="category-title">{item.name}</h3>
-                        <p className="category-description">
-                          {item.description}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
+              <div className="sv-mega-menu">
+                {/* Smart Suggestion Line */}
+                <div className="sv-mega-suggestion">
+                  <Sparkles size={18} className="sv-suggestion-icon" />
+                  <span className="sv-suggestion-text">
+                    {localStorage.getItem('onboarded') === 'true' 
+                      ? 'Tiếp tục lộ trình học của bạn'
+                      : 'Bắt đầu lộ trình học đầu tiên'}
+                  </span>
+                  <Link 
+                    to="/roadmap" 
+                    className="sv-suggestion-cta"
+                    onClick={() => setShowQuickNav(false)}
+                  >
+                    <span>Đi ngay</span>
+                    <ArrowRight size={14} />
+                  </Link>
+                </div>
+
+                {/* Group 1: Primary Actions */}
+                <div className="sv-mega-section">
+                  <h4 className="sv-mega-section-title">
+                    <Target size={14} className="sv-section-icon" />
+                    <span>Hành động chính</span>
+                  </h4>
+                  <div className="sv-mega-grid sv-mega-grid--primary">
+                    {[
+                      { name: 'Bảng Điều Khiển', description: 'Theo dõi tiến độ học tập và thành tích', path: '/dashboard', icon: BarChart3 },
+                      { name: 'Lộ Trình Học Tập', description: 'Lộ trình học tập và phát triển kỹ năng', path: '/roadmap', icon: Map },
+                      { name: 'Trợ Lý AI', description: 'Nhận hỗ trợ từ trợ lý AI thông minh', path: '/chatbot', icon: Bot },
+                      { name: 'Lập Kế Hoạch', description: 'Lên lịch học tập và quản lý công việc', path: '/study-planner', icon: Calendar },
+                    ].map((item) => (
+                      <Link
+                        key={item.path + item.name}
+                        to={item.path}
+                        className="sv-mega-link sv-mega-link--primary"
+                        onClick={() => setShowQuickNav(false)}
+                      >
+                        <item.icon className="sv-mega-link-icon" />
+                        <div className="sv-mega-link-content">
+                          <h3 className="sv-mega-link-title">{item.name}</h3>
+                          <p className="sv-mega-link-desc">{item.description}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Group 2: Explore & Learn */}
+                <div className="sv-mega-section">
+                  <h4 className="sv-mega-section-title">
+                    <Search size={14} className="sv-section-icon" />
+                    <span>Khám phá & Học tập</span>
+                  </h4>
+                  <div className="sv-mega-grid sv-mega-grid--secondary">
+                    {[
+                      { name: 'Khóa Học', description: 'Khám phá các khóa học chất lượng cao', path: '/courses', icon: GraduationCap },
+                      { name: 'Cố Vấn', description: 'Kết nối với chuyên gia trong ngành', path: '/mentorship', icon: Users },
+                      { name: 'Cộng Đồng', description: 'Tham gia cộng đồng học tập sôi động', path: '/community', icon: MessageSquare },
+                      { name: 'Việc Làm', description: 'Tìm kiếm cơ hội việc làm phù hợp', path: '/jobs', icon: Briefcase },
+                    ].map((item) => (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        className="sv-mega-link"
+                        onClick={() => setShowQuickNav(false)}
+                      >
+                        <item.icon className="sv-mega-link-icon" />
+                        <div className="sv-mega-link-content">
+                          <h3 className="sv-mega-link-title">{item.name}</h3>
+                          <p className="sv-mega-link-desc">{item.description}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Group 3: Entertainment & Profile */}
+                <div className="sv-mega-section">
+                  <h4 className="sv-mega-section-title">
+                    <Trophy size={14} className="sv-section-icon" />
+                    <span>Giải trí & Cá nhân</span>
+                  </h4>
+                  <div className="sv-mega-grid sv-mega-grid--tertiary">
+                    {[
+                      { name: 'Hồ Sơ', description: 'Quản lý và chia sẻ thành tích của bạn', path: '/portfolio', icon: User },
+                      { name: 'Trò Chơi', description: 'Bảng xếp hạng, huy hiệu và mini-games', path: '/gamification', icon: Trophy },
+                      { name: 'Hội Thảo', description: 'Tham gia các hội thảo và sự kiện', path: '/seminar', icon: Calendar },
+                      { name: 'Meowl Shop', description: 'Cửa hàng Skin Neon Tech độc quyền', path: '/meowl-shop', icon: ShoppingBag },
+                    ].map((item) => (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        className="sv-mega-link"
+                        onClick={() => setShowQuickNav(false)}
+                      >
+                        <item.icon className="sv-mega-link-icon" />
+                        <div className="sv-mega-link-content">
+                          <h3 className="sv-mega-link-title">{item.name}</h3>
+                          <p className="sv-mega-link-desc">{item.description}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}

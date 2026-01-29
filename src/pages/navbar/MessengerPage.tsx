@@ -382,7 +382,7 @@ const MessengerPage: React.FC = () => {
       )}
 
       {/* Sidebar */}
-      <div className="messenger-sidebar">
+      <div className={`messenger-sidebar ${selectedContactId ? 'mobile-hidden' : ''}`}>
         {/* Header */}
         <div className="messenger-sidebar-header">
           <div className="header-title">

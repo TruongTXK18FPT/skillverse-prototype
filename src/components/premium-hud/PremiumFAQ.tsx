@@ -37,6 +37,17 @@ import {
   Music,
   HeartPulse,
   Wallet,
+  AlertCircle,
+  BarChart3,
+  GraduationCap,
+  X,
+  Sunrise,
+  Sunset,
+  Medal,
+  Flame,
+  User,
+  UserSearch,
+  Gem,
 } from "lucide-react";
 import "./PremiumFAQ.css";
 
@@ -66,24 +77,24 @@ const PremiumFAQ: React.FC = () => {
           {/* Problem Section */}
           <div className="pfaq-problem-box">
             <div className="pfaq-box-header">
-              <span className="pfaq-emoji">😰</span>
+              <AlertCircle size={20} className="pfaq-header-icon pfaq-header-icon--warning" />
               <h4>Vấn đề thường gặp</h4>
             </div>
             <ul className="pfaq-problem-list">
               <li>
-                <span className="pfaq-bullet red">✗</span>
+                <X size={14} className="pfaq-bullet-icon pfaq-bullet-icon--red" />
                 Không biết bắt đầu học từ đâu
               </li>
               <li>
-                <span className="pfaq-bullet red">✗</span>
+                <X size={14} className="pfaq-bullet-icon pfaq-bullet-icon--red" />
                 Học tràn lan, thiếu định hướng rõ ràng
               </li>
               <li>
-                <span className="pfaq-bullet red">✗</span>
+                <X size={14} className="pfaq-bullet-icon pfaq-bullet-icon--red" />
                 Không rõ kỹ năng nào cần thiết cho nghề nghiệp mục tiêu
               </li>
               <li>
-                <span className="pfaq-bullet red">✗</span>
+                <X size={14} className="pfaq-bullet-icon pfaq-bullet-icon--red" />
                 Khó đánh giá tiến độ học tập của bản thân
               </li>
             </ul>
@@ -92,7 +103,7 @@ const PremiumFAQ: React.FC = () => {
           {/* Solution Section */}
           <div className="pfaq-solution-box">
             <div className="pfaq-box-header">
-              <span className="pfaq-emoji">✨</span>
+              <Sparkles size={20} className="pfaq-header-icon pfaq-header-icon--sparkle" />
               <h4>Giải pháp - Roadmap AI</h4>
             </div>
             <p className="pfaq-desc">
@@ -118,12 +129,13 @@ const PremiumFAQ: React.FC = () => {
           {/* Roadmap Structure */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">📊</span>
+              <BarChart3 size={18} className="pfaq-block-icon" />
               Cấu trúc Roadmap
             </h4>
             <div className="pfaq-roadmap-visual">
               <div className="pfaq-roadmap-title">
-                🎯 Roadmap: "Trở thành Frontend Developer"
+                <Target size={16} className="pfaq-title-icon" />
+                <span>Roadmap: "Trở thành Frontend Developer"</span>
               </div>
               <div className="pfaq-phase phase-1">
                 <div className="pfaq-phase-header">
@@ -164,7 +176,7 @@ const PremiumFAQ: React.FC = () => {
           {/* Benefits Table */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">🎁</span>
+              <Gift size={18} className="pfaq-block-icon" />
               Lợi ích khi có Roadmap
             </h4>
             <div className="pfaq-benefits-table">
@@ -219,7 +231,7 @@ const PremiumFAQ: React.FC = () => {
           {/* Meowl Introduction */}
           <div className="pfaq-meowl-intro">
             <div className="pfaq-meowl-avatar">
-              <span className="pfaq-meowl-emoji">🐱</span>
+              <Bot size={32} className="pfaq-meowl-icon" />
               <div className="pfaq-meowl-glow"></div>
             </div>
             <div className="pfaq-meowl-info">
@@ -235,7 +247,7 @@ const PremiumFAQ: React.FC = () => {
           {/* Meowl Features */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">⚡</span>
+              <Zap size={18} className="pfaq-block-icon" />
               Các chức năng chính
             </h4>
 
@@ -244,7 +256,10 @@ const PremiumFAQ: React.FC = () => {
                 <div className="pfaq-feature-icon">
                   <BookOpen size={24} />
                 </div>
-                <h5>🎓 Hỗ trợ học tập</h5>
+                <h5>
+                  <GraduationCap size={16} className="pfaq-h5-icon" />
+                  <span>Hỗ trợ học tập</span>
+                </h5>
                 <ul>
                   <li>Giải đáp thắc mắc về các chủ đề trong roadmap</li>
                   <li>Giải thích khái niệm khó theo nhiều cách</li>
@@ -257,7 +272,10 @@ const PremiumFAQ: React.FC = () => {
                 <div className="pfaq-feature-icon">
                   <TrendingUp size={24} />
                 </div>
-                <h5>📊 Phân tích & Báo cáo</h5>
+                <h5>
+                  <BarChart3 size={16} className="pfaq-h5-icon" />
+                  <span>Phân tích & Báo cáo</span>
+                </h5>
                 <ul>
                   <li>
                     Tạo <strong>Learning Report</strong> phân tích tiến độ
@@ -271,7 +289,10 @@ const PremiumFAQ: React.FC = () => {
                 <div className="pfaq-feature-icon">
                   <MessageSquare size={24} />
                 </div>
-                <h5>💬 Các chế độ chat</h5>
+                <h5>
+                  <MessageSquare size={16} className="pfaq-h5-icon" />
+                  <span>Các chế độ chat</span>
+                </h5>
                 <div className="pfaq-chat-modes">
                   <div className="pfaq-chat-mode">
                     <span className="pfaq-mode-name">General Chat</span>
@@ -302,7 +323,10 @@ const PremiumFAQ: React.FC = () => {
                 <div className="pfaq-feature-icon">
                   <Heart size={24} />
                 </div>
-                <h5>🎯 Động lực học tập</h5>
+                <h5>
+                  <Target size={16} className="pfaq-h5-icon" />
+                  <span>Động lực học tập</span>
+                </h5>
                 <ul>
                   <li>Nhắc nhở học tập hàng ngày</li>
                   <li>Chúc mừng khi hoàn thành milestone</li>
@@ -316,7 +340,7 @@ const PremiumFAQ: React.FC = () => {
           {/* Chat Example */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">💬</span>
+              <MessageSquare size={18} className="pfaq-block-icon" />
               Ví dụ tương tác
             </h4>
             <div className="pfaq-chat-example">
@@ -326,10 +350,10 @@ const PremiumFAQ: React.FC = () => {
                 </span>
               </div>
               <div className="pfaq-chat-bubble meowl">
-                <span className="pfaq-chat-avatar">🐱</span>
+                <Bot size={20} className="pfaq-chat-avatar-icon" />
                 <div className="pfaq-chat-reply">
                   <p>
-                    <strong>Meowl giải thích nha!</strong> 🐱
+                    <strong>Meowl giải thích nha!</strong>
                   </p>
                   <p>
                     Redux giống như một <strong>'kho chứa'</strong> (store) tập
@@ -337,11 +361,12 @@ const PremiumFAQ: React.FC = () => {
                     giữ state riêng, tất cả đều lấy từ 1 nơi.
                   </p>
                   <div className="pfaq-chat-tip">
-                    💡 Ví dụ: Giống như ngân hàng trung ương quản lý tiền tệ,
-                    Redux quản lý state của app vậy đó!
+                    <Lightbulb size={14} className="pfaq-tip-icon" />
+                    <span>Ví dụ: Giống như ngân hàng trung ương quản lý tiền tệ,
+                    Redux quản lý state của app vậy đó!</span>
                   </div>
                   <p className="pfaq-chat-ask">
-                    Bạn muốn Meowl cho code example không? ✨
+                    Bạn muốn Meowl cho code example không? <Sparkles size={14} className="pfaq-inline-icon" />
                   </p>
                 </div>
               </div>
@@ -360,7 +385,7 @@ const PremiumFAQ: React.FC = () => {
           {/* Coin Introduction */}
           <div className="pfaq-coin-intro">
             <div className="pfaq-coin-visual">
-              <span className="pfaq-coin-emoji">🪙</span>
+              <Coins size={32} className="pfaq-coin-icon" />
               <div className="pfaq-coin-sparkle"></div>
             </div>
             <div className="pfaq-coin-info">
@@ -375,7 +400,7 @@ const PremiumFAQ: React.FC = () => {
           {/* How to earn */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">💰</span>
+              <Wallet size={18} className="pfaq-block-icon" />
               Cách kiếm Coin
             </h4>
             <div className="pfaq-coin-table">
@@ -383,39 +408,39 @@ const PremiumFAQ: React.FC = () => {
                 <span className="pfaq-coin-action">
                   Hoàn thành 1 skill trong roadmap
                 </span>
-                <span className="pfaq-coin-amount">+50 🪙</span>
+                <span className="pfaq-coin-amount">+50 <Coins size={14} className="pfaq-coin-inline" /></span>
               </div>
               <div className="pfaq-coin-row">
                 <span className="pfaq-coin-action">
                   Duy trì streak học tập (7 ngày)
                 </span>
-                <span className="pfaq-coin-amount">+100 🪙</span>
+                <span className="pfaq-coin-amount">+100 <Coins size={14} className="pfaq-coin-inline" /></span>
               </div>
               <div className="pfaq-coin-row">
                 <span className="pfaq-coin-action">Hoàn thành daily task</span>
-                <span className="pfaq-coin-amount">+10 🪙</span>
+                <span className="pfaq-coin-amount">+10 <Coins size={14} className="pfaq-coin-inline" /></span>
               </div>
               <div className="pfaq-coin-row">
                 <span className="pfaq-coin-action">
                   Đạt quiz score {"≥"} 80%
                 </span>
-                <span className="pfaq-coin-amount">+30 🪙</span>
+                <span className="pfaq-coin-amount">+30 <Coins size={14} className="pfaq-coin-inline" /></span>
               </div>
               <div className="pfaq-coin-row">
                 <span className="pfaq-coin-action">
                   Hoàn thành 1 phase roadmap
                 </span>
-                <span className="pfaq-coin-amount">+200 🪙</span>
+                <span className="pfaq-coin-amount">+200 <Coins size={14} className="pfaq-coin-inline" /></span>
               </div>
               <div className="pfaq-coin-row">
                 <span className="pfaq-coin-action">First login trong ngày</span>
-                <span className="pfaq-coin-amount">+5 🪙</span>
+                <span className="pfaq-coin-amount">+5 <Coins size={14} className="pfaq-coin-inline" /></span>
               </div>
               <div className="pfaq-coin-row highlight">
                 <span className="pfaq-coin-action">
-                  🎉 Refer bạn bè thành công
+                  <Gift size={14} className="pfaq-action-icon" /> Refer bạn bè thành công
                 </span>
-                <span className="pfaq-coin-amount">+500 🪙</span>
+                <span className="pfaq-coin-amount">+500 <Coins size={14} className="pfaq-coin-inline" /></span>
               </div>
             </div>
           </div>
@@ -423,7 +448,7 @@ const PremiumFAQ: React.FC = () => {
           {/* How to use */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">🎁</span>
+              <Gift size={18} className="pfaq-block-icon" />
               Cách sử dụng Coin
             </h4>
             <div className="pfaq-use-grid">
@@ -456,7 +481,7 @@ const PremiumFAQ: React.FC = () => {
           <div className="pfaq-note-box gold">
             <Shield size={20} />
             <div>
-              <strong>💰 Lưu ý quan trọng về Coin:</strong>
+              <strong><Coins size={14} className="pfaq-inline-icon" /> Lưu ý quan trọng về Coin:</strong>
               <p>
                 Coin <u>CÓ THỂ</u> mua bằng tiền thật để sử dụng các tính năng
                 premium. Tuy nhiên, Coin <u>KHÔNG THỂ</u> rút ra thành tiền mặt.
@@ -485,7 +510,7 @@ const PremiumFAQ: React.FC = () => {
           {/* Comparison Table */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">📊</span>
+              <BarChart3 size={18} className="pfaq-block-icon" />
               So sánh chi tiết
             </h4>
             <div className="pfaq-compare-table">
@@ -541,7 +566,7 @@ const PremiumFAQ: React.FC = () => {
           {/* Visual Example */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">📋</span>
+              <BookOpen size={18} className="pfaq-block-icon" />
               Ví dụ trực quan
             </h4>
             <div className="pfaq-plan-compare">
@@ -551,20 +576,20 @@ const PremiumFAQ: React.FC = () => {
                   <span>Roadmap</span>
                 </div>
                 <div className="pfaq-plan-goal">
-                  🎯 Mục tiêu: Frontend Developer
+                  <Target size={14} className="pfaq-inline-icon" /> Mục tiêu: Frontend Developer
                 </div>
                 <div className="pfaq-plan-items">
                   <div className="pfaq-plan-item done">
-                    ✅ HTML/CSS (Hoàn thành)
+                    <CheckCircle2 size={14} className="pfaq-inline-icon pfaq-icon--green" /> HTML/CSS (Hoàn thành)
                   </div>
                   <div className="pfaq-plan-item done">
-                    ✅ JavaScript (Hoàn thành)
+                    <CheckCircle2 size={14} className="pfaq-inline-icon pfaq-icon--green" /> JavaScript (Hoàn thành)
                   </div>
                   <div className="pfaq-plan-item progress">
-                    🔄 React.js (Đang học - 60%)
+                    <TrendingUp size={14} className="pfaq-inline-icon pfaq-icon--cyan" /> React.js (Đang học - 60%)
                   </div>
-                  <div className="pfaq-plan-item pending">⏳ TypeScript</div>
-                  <div className="pfaq-plan-item pending">⏳ Testing</div>
+                  <div className="pfaq-plan-item pending"><Clock size={14} className="pfaq-inline-icon pfaq-icon--gray" /> TypeScript</div>
+                  <div className="pfaq-plan-item pending"><Clock size={14} className="pfaq-inline-icon pfaq-icon--gray" /> Testing</div>
                 </div>
               </div>
 
@@ -574,7 +599,7 @@ const PremiumFAQ: React.FC = () => {
                   <span>Study Plan - Hôm nay</span>
                 </div>
                 <div className="pfaq-time-block">
-                  <span className="pfaq-time">🌅 Sáng (8:00 - 10:00)</span>
+                  <span className="pfaq-time"><Sunrise size={14} className="pfaq-inline-icon pfaq-icon--orange" /> Sáng (8:00 - 10:00)</span>
                   <ul>
                     <li>[30p] Review React hooks từ hôm qua</li>
                     <li>[1h] Học useEffect deep dive</li>
@@ -582,14 +607,14 @@ const PremiumFAQ: React.FC = () => {
                   </ul>
                 </div>
                 <div className="pfaq-time-block">
-                  <span className="pfaq-time">🌆 Chiều (14:00 - 16:00)</span>
+                  <span className="pfaq-time"><Sunset size={14} className="pfaq-inline-icon pfaq-icon--purple" /> Chiều (14:00 - 16:00)</span>
                   <ul>
                     <li>[1h] Build mini project: Todo App</li>
                     <li>[1h] Code review với Meowl AI</li>
                   </ul>
                 </div>
                 <div className="pfaq-daily-target">
-                  ✅ Daily target: 4h | 🔥 Streak: 7 ngày
+                  <CheckCircle2 size={14} className="pfaq-inline-icon pfaq-icon--green" /> Daily target: 4h | <Zap size={14} className="pfaq-inline-icon pfaq-icon--orange" /> Streak: 7 ngày
                 </div>
               </div>
             </div>
@@ -602,12 +627,12 @@ const PremiumFAQ: React.FC = () => {
               <h5>AI Study Plan Generator dựa trên:</h5>
             </div>
             <div className="pfaq-ai-factors">
-              <span className="pfaq-factor">📍 Roadmap hiện tại</span>
-              <span className="pfaq-factor">⏰ Thời gian rảnh của bạn</span>
-              <span className="pfaq-factor">📈 Tốc độ học cá nhân</span>
-              <span className="pfaq-factor">🎯 Mục tiêu deadline</span>
+              <span className="pfaq-factor"><Map size={14} className="pfaq-inline-icon" /> Roadmap hiện tại</span>
+              <span className="pfaq-factor"><Clock size={14} className="pfaq-inline-icon" /> Thời gian rảnh của bạn</span>
+              <span className="pfaq-factor"><TrendingUp size={14} className="pfaq-inline-icon" /> Tốc độ học cá nhân</span>
+              <span className="pfaq-factor"><Target size={14} className="pfaq-inline-icon" /> Mục tiêu deadline</span>
               <span className="pfaq-factor">
-                📚 Phong cách học (video, đọc, hands-on)
+                <BookOpen size={14} className="pfaq-inline-icon" /> Phong cách học (video, đọc, hands-on)
               </span>
             </div>
           </div>
@@ -633,18 +658,18 @@ const PremiumFAQ: React.FC = () => {
           {/* Flow Diagram */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">🔄</span>
+              <TrendingUp size={18} className="pfaq-block-icon" />
               Cách hoạt động
             </h4>
             <div className="pfaq-flow-diagram">
               <div className="pfaq-flow-step">
-                <div className="pfaq-flow-icon">📚</div>
+                <div className="pfaq-flow-icon"><BookOpen size={24} /></div>
                 <h5>Học tập</h5>
                 <p>Hoàn thành skills, projects, quizzes trên SkillVerse</p>
               </div>
               <div className="pfaq-flow-arrow">→</div>
               <div className="pfaq-flow-step">
-                <div className="pfaq-flow-icon">🤖</div>
+                <div className="pfaq-flow-icon"><Bot size={24} /></div>
                 <h5>AI Thu thập</h5>
                 <p>
                   Skills đã hoàn thành, Projects đã làm, Quiz scores,
@@ -653,7 +678,7 @@ const PremiumFAQ: React.FC = () => {
               </div>
               <div className="pfaq-flow-arrow">→</div>
               <div className="pfaq-flow-step highlight">
-                <div className="pfaq-flow-icon">✨</div>
+                <div className="pfaq-flow-icon"><Sparkles size={24} /></div>
                 <h5>Tạo Portfolio</h5>
                 <p>
                   Skill matrix, Project showcase, Achievement badges, AI Summary
@@ -665,14 +690,14 @@ const PremiumFAQ: React.FC = () => {
           {/* Portfolio Components */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">📄</span>
+              <FileUser size={18} className="pfaq-block-icon" />
               Thành phần Portfolio AI
             </h4>
 
             <div className="pfaq-portfolio-preview">
               {/* Skill Matrix */}
               <div className="pfaq-portfolio-card">
-                <h5>🎯 Skill Matrix</h5>
+                <h5><Target size={18} className="pfaq-inline-icon" /> Skill Matrix</h5>
                 <div className="pfaq-skill-bars">
                   <div className="pfaq-skill-bar-item">
                     <span className="pfaq-skill-name">HTML/CSS</span>
@@ -719,18 +744,18 @@ const PremiumFAQ: React.FC = () => {
 
               {/* Achievements */}
               <div className="pfaq-portfolio-card">
-                <h5>🏆 Achievements & Badges</h5>
+                <h5><Trophy size={18} className="pfaq-inline-icon pfaq-icon--gold" /> Achievements & Badges</h5>
                 <div className="pfaq-badge-grid">
                   <div className="pfaq-badge gold">
-                    <span>🥇</span>
+                    <span><Medal size={16} /></span>
                     <span>React Master</span>
                   </div>
                   <div className="pfaq-badge fire">
-                    <span>🔥</span>
+                    <span><Flame size={16} /></span>
                     <span>30 Day Streak</span>
                   </div>
                   <div className="pfaq-badge perfect">
-                    <span>💯</span>
+                    <span><Star size={16} /></span>
                     <span>Perfect Score x5</span>
                   </div>
                 </div>
@@ -738,7 +763,7 @@ const PremiumFAQ: React.FC = () => {
 
               {/* Stats */}
               <div className="pfaq-portfolio-card">
-                <h5>📊 Learning Statistics</h5>
+                <h5><BarChart3 size={18} className="pfaq-inline-icon" /> Learning Statistics</h5>
                 <div className="pfaq-stats-grid">
                   <div className="pfaq-stat">
                     <span className="pfaq-stat-value">245</span>
@@ -761,7 +786,7 @@ const PremiumFAQ: React.FC = () => {
 
               {/* AI Summary */}
               <div className="pfaq-portfolio-card ai-summary">
-                <h5>📝 AI-Generated Summary</h5>
+                <h5><Bot size={18} className="pfaq-inline-icon" /> AI-Generated Summary</h5>
                 <blockquote>
                   "Nguyễn Văn A là một Frontend Developer với 6 tháng học tập
                   chuyên sâu về React ecosystem. Thế mạnh nổi bật là UI/UX
@@ -775,7 +800,7 @@ const PremiumFAQ: React.FC = () => {
           {/* Benefits */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">✅</span>
+              <CheckCircle2 size={18} className="pfaq-block-icon pfaq-icon--green" />
               Lợi ích
             </h4>
             <div className="pfaq-benefit-chips">
@@ -831,12 +856,12 @@ const PremiumFAQ: React.FC = () => {
           {/* Tier Cards */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">👑</span>
+              <Crown size={18} className="pfaq-block-icon pfaq-icon--gold" />
               Các gói Premium
             </h4>
             <div className="pfaq-tier-grid">
               <div className="pfaq-tier-card silver">
-                <div className="pfaq-tier-crown">🥈</div>
+                <div className="pfaq-tier-crown"><Medal size={24} /></div>
                 <h5>Silver Crown</h5>
                 <div className="pfaq-tier-price">99,000đ/tháng</div>
                 <div className="pfaq-tier-for">Cho người mới bắt đầu</div>
@@ -850,8 +875,8 @@ const PremiumFAQ: React.FC = () => {
               </div>
 
               <div className="pfaq-tier-card gold popular">
-                <div className="pfaq-popular-badge">⭐ PHỔ BIẾN</div>
-                <div className="pfaq-tier-crown">🥇</div>
+                <div className="pfaq-popular-badge"><Sparkles size={12} /> PHỔ BIẾN</div>
+                <div className="pfaq-tier-crown"><Trophy size={24} /></div>
                 <h5>Gold Crown</h5>
                 <div className="pfaq-tier-price">199,000đ/tháng</div>
                 <div className="pfaq-tier-for">Cho người học nghiêm túc</div>
@@ -866,7 +891,7 @@ const PremiumFAQ: React.FC = () => {
               </div>
 
               <div className="pfaq-tier-card diamond">
-                <div className="pfaq-tier-crown">💎</div>
+                <div className="pfaq-tier-crown"><Gem size={24} /></div>
                 <h5>Diamond Crown</h5>
                 <div className="pfaq-tier-price">399,000đ/tháng</div>
                 <div className="pfaq-tier-for">Cho professional</div>
@@ -885,18 +910,18 @@ const PremiumFAQ: React.FC = () => {
           {/* Profile Badge Demo */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">🎖️</span>
+              <Award size={18} className="pfaq-block-icon" />
               Profile Badge hiển thị
             </h4>
             <div className="pfaq-profile-demo">
-              <div className="pfaq-demo-avatar">👤</div>
+              <div className="pfaq-demo-avatar"><User size={32} /></div>
               <div className="pfaq-demo-info">
                 <div className="pfaq-demo-name">Nguyễn Văn A</div>
-                <div className="pfaq-demo-badge">💎 Diamond Member</div>
+                <div className="pfaq-demo-badge"><Gem size={14} className="pfaq-inline-icon" /> Diamond Member</div>
                 <div className="pfaq-demo-stats">
-                  <span>🎯 Frontend Dev</span>
-                  <span>📊 245h learned</span>
-                  <span>🔥 30 days streak</span>
+                  <span><Target size={14} className="pfaq-inline-icon" /> Frontend Dev</span>
+                  <span><BarChart3 size={14} className="pfaq-inline-icon" /> 245h learned</span>
+                  <span><Flame size={14} className="pfaq-inline-icon" /> 30 days streak</span>
                 </div>
               </div>
             </div>
@@ -916,7 +941,7 @@ const PremiumFAQ: React.FC = () => {
             <div className="pfaq-chat-compare">
               <div className="pfaq-chat-type career">
                 <div className="pfaq-chat-header">
-                  <span className="pfaq-chat-icon">🎯</span>
+                  <span className="pfaq-chat-icon"><Target size={20} /></span>
                   <h5>Career Chat</h5>
                 </div>
                 <div className="pfaq-chat-info">
@@ -934,7 +959,7 @@ const PremiumFAQ: React.FC = () => {
                   </div>
                 </div>
                 <div className="pfaq-chat-topics">
-                  <h6>📋 Các chủ đề:</h6>
+                  <h6><BookOpen size={14} className="pfaq-inline-icon" /> Các chủ đề:</h6>
                   <ul>
                     <li>Phân tích tính cách, sở thích → gợi ý nghề</li>
                     <li>So sánh ngành nghề (salary, growth)</li>
@@ -948,7 +973,7 @@ const PremiumFAQ: React.FC = () => {
 
               <div className="pfaq-chat-type expert">
                 <div className="pfaq-chat-header">
-                  <span className="pfaq-chat-icon">🧑‍💼</span>
+                  <span className="pfaq-chat-icon"><Briefcase size={20} /></span>
                   <h5>Expert Chat</h5>
                 </div>
                 <div className="pfaq-chat-info">
@@ -966,7 +991,7 @@ const PremiumFAQ: React.FC = () => {
                   </div>
                 </div>
                 <div className="pfaq-expert-grid">
-                  <h6>👨‍💼 12 Domain Experts:</h6>
+                  <h6><UserSearch size={16} className="pfaq-h5-icon" /> 12 Domain Experts:</h6>
                   <div className="pfaq-expert-tags">
                     <span>
                       <Code size={14} /> Dev
@@ -1013,7 +1038,7 @@ const PremiumFAQ: React.FC = () => {
           {/* When to use */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">💡</span>
+              <Lightbulb size={18} className="pfaq-block-icon" />
               Khi nào dùng gì?
             </h4>
             <div className="pfaq-when-grid">
@@ -1057,7 +1082,7 @@ const PremiumFAQ: React.FC = () => {
           {/* Formula */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">🧮</span>
+              <LineChart size={18} className="pfaq-block-icon" />
               Công thức tính điểm
             </h4>
             <div className="pfaq-formula">
@@ -1116,7 +1141,7 @@ const PremiumFAQ: React.FC = () => {
               </div>
               <div className="pfaq-factor-row premium">
                 <span className="pfaq-factor-name">
-                  👑 Premium Boost <span className="pfaq-premium-tag">PRO</span>
+                  <Crown size={14} className="pfaq-inline-icon" /> Premium Boost <span className="pfaq-premium-tag">PRO</span>
                 </span>
                 <div className="pfaq-factor-bar">
                   <div
@@ -1132,19 +1157,19 @@ const PremiumFAQ: React.FC = () => {
           {/* Ranking Preview */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">🔍</span>
+              <Target size={18} className="pfaq-block-icon" />
               Hiển thị cho Recruiter
             </h4>
             <div className="pfaq-ranking-preview">
               <div className="pfaq-rank-item rank-1">
                 <span className="pfaq-rank-number">1</span>
                 <div className="pfaq-rank-info">
-                  <div className="pfaq-rank-name">💎 Nguyễn Văn A</div>
+                  <div className="pfaq-rank-name"><Gem size={14} className="pfaq-inline-icon" /> Nguyễn Văn A</div>
                   <div className="pfaq-rank-skills">
                     React: 95% | TypeScript: 80%
                   </div>
                   <div className="pfaq-rank-stats">
-                    🔥 60 day streak | 300h learned
+                    <Flame size={14} className="pfaq-inline-icon" /> 60 day streak | 300h learned
                   </div>
                 </div>
                 <div className="pfaq-rank-score">95</div>
@@ -1152,12 +1177,12 @@ const PremiumFAQ: React.FC = () => {
               <div className="pfaq-rank-item rank-2">
                 <span className="pfaq-rank-number">2</span>
                 <div className="pfaq-rank-info">
-                  <div className="pfaq-rank-name">🥇 Trần Thị B</div>
+                  <div className="pfaq-rank-name"><Medal size={14} className="pfaq-inline-icon" /> Trần Thị B</div>
                   <div className="pfaq-rank-skills">
                     React: 90% | Node.js: 75%
                   </div>
                   <div className="pfaq-rank-stats">
-                    🔥 30 day streak | 200h learned
+                    <Flame size={14} className="pfaq-inline-icon" /> 30 day streak | 200h learned
                   </div>
                 </div>
                 <div className="pfaq-rank-score">88</div>
@@ -1165,10 +1190,10 @@ const PremiumFAQ: React.FC = () => {
               <div className="pfaq-rank-item rank-3">
                 <span className="pfaq-rank-number">3</span>
                 <div className="pfaq-rank-info">
-                  <div className="pfaq-rank-name">🥈 Lê Văn C</div>
+                  <div className="pfaq-rank-name"><Medal size={14} className="pfaq-inline-icon" /> Lê Văn C</div>
                   <div className="pfaq-rank-skills">React: 85% | CSS: 90%</div>
                   <div className="pfaq-rank-stats">
-                    🔥 15 day streak | 150h learned
+                    <Flame size={14} className="pfaq-inline-icon" /> 15 day streak | 150h learned
                   </div>
                 </div>
                 <div className="pfaq-rank-score">82</div>
@@ -1188,30 +1213,30 @@ const PremiumFAQ: React.FC = () => {
           {/* How AI Matching Works */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">🔄</span>
+              <TrendingUp size={18} className="pfaq-block-icon" />
               Cách AI Matching hoạt động
             </h4>
             <div className="pfaq-job-flow">
               <div className="pfaq-job-step">
-                <div className="pfaq-job-icon">👤</div>
+                <div className="pfaq-job-icon"><User size={24} /></div>
                 <h5>User Profile</h5>
                 <p>Skills, Roadmap, Goals, Location</p>
               </div>
               <div className="pfaq-job-plus">+</div>
               <div className="pfaq-job-step">
-                <div className="pfaq-job-icon">💼</div>
+                <div className="pfaq-job-icon"><Briefcase size={24} /></div>
                 <h5>Job Database</h5>
                 <p>Full-time, Part-time, Freelance, Micro-job</p>
               </div>
               <div className="pfaq-job-arrow">↓</div>
               <div className="pfaq-job-step ai">
-                <div className="pfaq-job-icon">🤖</div>
+                <div className="pfaq-job-icon"><Bot size={24} /></div>
                 <h5>AI Matching Engine</h5>
                 <p>Skill analysis + Preference learning + Market trends</p>
               </div>
               <div className="pfaq-job-arrow">↓</div>
               <div className="pfaq-job-step result">
-                <div className="pfaq-job-icon">✨</div>
+                <div className="pfaq-job-icon"><Sparkles size={24} /></div>
                 <h5>Personalized Jobs</h5>
                 <p>Gợi ý việc làm phù hợp 95%+ với bạn</p>
               </div>
@@ -1221,27 +1246,27 @@ const PremiumFAQ: React.FC = () => {
           {/* Job Types */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">📋</span>
+              <Briefcase size={18} className="pfaq-block-icon" />
               Loại công việc được gợi ý
             </h4>
             <div className="pfaq-job-types">
               <div className="pfaq-job-type">
-                <span className="pfaq-job-emoji">💼</span>
+                <span className="pfaq-job-emoji"><Briefcase size={20} /></span>
                 <h5>Full-time</h5>
                 <p>Vị trí chính thức, match với career goal</p>
               </div>
               <div className="pfaq-job-type">
-                <span className="pfaq-job-emoji">⏰</span>
+                <span className="pfaq-job-emoji"><Clock size={20} /></span>
                 <h5>Part-time</h5>
                 <p>Phù hợp sinh viên, linh hoạt thời gian</p>
               </div>
               <div className="pfaq-job-type">
-                <span className="pfaq-job-emoji">🌐</span>
+                <span className="pfaq-job-emoji"><Cloud size={20} /></span>
                 <h5>Freelance</h5>
                 <p>Dự án ngắn hạn, làm remote</p>
               </div>
               <div className="pfaq-job-type highlight">
-                <span className="pfaq-job-emoji">⚡</span>
+                <span className="pfaq-job-emoji"><Zap size={20} /></span>
                 <h5>Micro-jobs</h5>
                 <p>Tasks nhỏ 1-8 giờ, nhận tiền ngay!</p>
               </div>
@@ -1251,7 +1276,7 @@ const PremiumFAQ: React.FC = () => {
           {/* Micro-job Examples */}
           <div className="pfaq-block">
             <h4 className="pfaq-block-title">
-              <span className="pfaq-emoji">⚡</span>
+              <Zap size={18} className="pfaq-block-icon pfaq-icon--yellow" />
               Ví dụ Micro-jobs
             </h4>
             <div className="pfaq-microjob-list">
@@ -1289,20 +1314,20 @@ const PremiumFAQ: React.FC = () => {
             </div>
             <div className="pfaq-smart-insights">
               <div className="pfaq-insight">
-                <span>📊</span>
+                <span><BarChart3 size={16} /></span>
                 <p>
                   Bạn thường accept jobs về <strong>React</strong>, bỏ qua
                   Angular
                 </p>
               </div>
               <div className="pfaq-insight">
-                <span>🏠</span>
+                <span><Building2 size={16} /></span>
                 <p>
                   Bạn prefer <strong>remote work</strong> hơn onsite
                 </p>
               </div>
               <div className="pfaq-insight">
-                <span>⏱️</span>
+                <span><Clock size={16} /></span>
                 <p>
                   Bạn hoàn thành micro-jobs frontend nhanh hơn{" "}
                   <strong>40%</strong> trung bình
@@ -1338,13 +1363,9 @@ const PremiumFAQ: React.FC = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="pfaq-badge">
-            <Lightbulb size={18} />
-            <span>Câu hỏi thường gặp</span>
-          </div>
           <h2 className="pfaq-title">
             <Sparkles className="pfaq-title-icon" size={32} />
-            Khám Phá SkillVerse
+            Câu hỏi thường gặp
             <Sparkles className="pfaq-title-icon" size={32} />
           </h2>
           <p className="pfaq-subtitle">

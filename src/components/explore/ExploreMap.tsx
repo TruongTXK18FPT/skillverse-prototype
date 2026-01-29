@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, ChevronLeft } from 'lucide-react';
+import { X, ChevronLeft, Target, Clock, ArrowRight, Star } from 'lucide-react';
 import { UNIVERSE_ZONES, ZoneConfig } from '../../config/exploreMapData';
 import ScannerHotspot from '../shared/ScannerHotspot';
 import '../../styles/ExploreMap.css';
+
+// Highlighted zone for new users
+const RECOMMENDED_ZONE_ID = 'warrior-academy';
 
 // Import sticker assets
 import warriorSticker from '../../assets/zone-map/warrior.png';
@@ -31,6 +34,23 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [currentTime, setCurrentTime] = useState<string>('00:00:00');
   const [hoveredZone, setHoveredZone] = useState<ZoneConfig | null>(null);
+  
+  // Check if user has completed onboarding
+  const [showQuestBox, setShowQuestBox] = useState(() => {
+    return localStorage.getItem('onboarded') !== 'true';
+  });
+
+  // Handle quest CTA click
+  const handleQuestClick = () => {
+    localStorage.setItem('onboarded', 'true');
+    setShowQuestBox(false);
+    navigate('/roadmap');
+  };
+
+  // Mark explore as visited
+  useEffect(() => {
+    localStorage.setItem('exploreVisited', 'true');
+  }, []);
 
   // Update time every second - Vietnam time (UTC+7)
   useEffect(() => {
@@ -201,6 +221,32 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
 
         {/* Map Content */}
         <div className="explore-map-content">
+          {/* Quest Box - Only show for new users who haven't onboarded */}
+          {showQuestBox && viewState === 'overview' && (
+            <div className="sv-quest-box">
+              <div className="sv-quest-box-icon">
+                <Target size={24} />
+              </div>
+              <div className="sv-quest-box-content">
+                <h3 className="sv-quest-box-title">
+                  <Target size={16} className="sv-quest-title-icon" />
+                  <span>Nhiệm vụ tiếp theo của bạn</span>
+                </h3>
+                <p className="sv-quest-box-description">
+                  Hoàn thành lộ trình học đầu tiên tại <strong>Học Viện Chiến Binh</strong>
+                </p>
+                <div className="sv-quest-box-meta">
+                  <Clock size={14} />
+                  <span>~10 phút</span>
+                </div>
+              </div>
+              <button className="sv-quest-box-cta" onClick={handleQuestClick}>
+                <span>Bắt đầu ngay</span>
+                <ArrowRight size={16} />
+              </button>
+            </div>
+          )}
+
           {/* STATE 1: OVERVIEW - Show all zones */}
           {viewState === 'overview' && (
             <div className="universe-map-overview">
@@ -225,37 +271,47 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
               </svg>
 
               {/* Zone Markers */}
-              {UNIVERSE_ZONES.map((zone) => (
-                <button
-                  key={zone.id}
-                  className="zone-marker"
-                  style={{
-                    /* TODO: TUNE COORDINATES HERE */
-                    left: `${zone.mapX}%`,
-                    top: `${zone.mapY}%`,
-                    '--zone-primary-color': zone.primaryColor,
-                    '--zone-secondary-color': zone.secondaryColor
-                  } as React.CSSProperties}
-                  onClick={() => handleZoneClick(zone)}
-                  onMouseEnter={() => setHoveredZone(zone)}
-                  onMouseLeave={() => setHoveredZone(null)}
-                >
-                  <div className="zone-marker-icon">
-                    {/* Spinning rings and glow effect */}
-                    <div className="zone-marker-ring"></div>
-                    <div className="zone-marker-glow"></div>
-                    {/* Sticker image on top */}
-                    <img
-                      src={getZoneSticker(zone.id)}
-                      alt={zone.name}
-                      className="zone-sticker-image"
-                    />
-                  </div>
-                  <div className="zone-marker-label">
-                    <span className="zone-marker-name">{zone.name}</span>
-                  </div>
-                </button>
-              ))}
+              {UNIVERSE_ZONES.map((zone) => {
+                const isRecommended = zone.id === RECOMMENDED_ZONE_ID;
+                return (
+                  <button
+                    key={zone.id}
+                    className={`zone-marker ${isRecommended ? 'sv-zone-marker--recommended' : ''}`}
+                    style={{
+                      /* TODO: TUNE COORDINATES HERE */
+                      left: `${zone.mapX}%`,
+                      top: `${zone.mapY}%`,
+                      '--zone-primary-color': zone.primaryColor,
+                      '--zone-secondary-color': zone.secondaryColor
+                    } as React.CSSProperties}
+                    onClick={() => handleZoneClick(zone)}
+                    onMouseEnter={() => setHoveredZone(zone)}
+                    onMouseLeave={() => setHoveredZone(null)}
+                  >
+                    {/* Recommended Badge */}
+                    {isRecommended && (
+                      <div className="sv-zone-recommended-badge">
+                        <Star size={12} />
+                        <span>Nên bắt đầu từ đây</span>
+                      </div>
+                    )}
+                    <div className="zone-marker-icon">
+                      {/* Spinning rings and glow effect */}
+                      <div className="zone-marker-ring"></div>
+                      <div className="zone-marker-glow"></div>
+                      {/* Sticker image on top */}
+                      <img
+                        src={getZoneSticker(zone.id)}
+                        alt={zone.name}
+                        className="zone-sticker-image"
+                      />
+                    </div>
+                    <div className="zone-marker-label">
+                      <span className="zone-marker-name">{zone.name}</span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           )}
 

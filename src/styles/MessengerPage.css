@@ -479,7 +479,10 @@
   .messenger-sidebar {
     width: 100%;
     min-width: auto;
-    display: ${props => props.selectedContactId ? 'none' : 'flex'};
+  }
+
+  .messenger-sidebar.mobile-hidden {
+    display: none;
   }
 
   .messenger-main {
