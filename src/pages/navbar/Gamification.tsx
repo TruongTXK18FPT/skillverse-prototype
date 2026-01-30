@@ -230,22 +230,34 @@ const Gamification: React.FC = () => {
   const convertLeaderboardEntry = (
     entry: LeaderboardEntry,
     rank: number,
-  ): User => ({
-    id: entry.userId?.toString() || "",
-    name: entry.fullName || entry.userName || "Unknown",
-    avatar:
-      entry.avatarMediaUrl ||
-      entry.userAvatar ||
-      entry.userAvatarUrl ||
-      `https://ui-avatars.com/api/?name=${encodeURIComponent(entry.fullName || entry.userName || "User")}&background=random`,
-    rank: entry.rankPosition || rank,
-    coins: entry.totalCoins,
-    xp: entry.totalXp,
-    badges: entry.badgesCount || entry.badgeCount || 0,
-    streak: entry.streakDays || entry.currentStreak || 0,
-    contributions: entry.contributionsCount || 0,
-    skins: entry.skinsCount || 0,
-  });
+    currentType: string,
+  ): User => {
+    // Map scoreValue to appropriate field based on leaderboard type
+    let scoreMapping = {
+      coins: entry.totalCoins,
+      xp: entry.totalXp,
+      streak: entry.scoreValue || entry.streakDays || 0, // scoreValue is longest streak
+      contributions: entry.contributionsCount || 0,
+      skins: entry.skinsCount || 0,
+    };
+
+    return {
+      id: entry.userId?.toString() || "",
+      name: entry.fullName || entry.userName || "Unknown",
+      avatar:
+        entry.avatarMediaUrl ||
+        entry.userAvatar ||
+        entry.userAvatarUrl ||
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(entry.fullName || entry.userName || "User")}&background=random`,
+      rank: entry.rankPosition || rank,
+      coins: scoreMapping.coins,
+      xp: scoreMapping.xp,
+      badges: entry.badgesCount || entry.badgeCount || 0,
+      streak: scoreMapping.streak,
+      contributions: scoreMapping.contributions,
+      skins: scoreMapping.skins,
+    };
+  };
 
   const convertUserBadgeToBadge = (userBadge: UserBadge): Badge => {
     const badgeDef = userBadge.badgeDefinition;
@@ -426,7 +438,7 @@ const Gamification: React.FC = () => {
           if (leaderboardEntries.length > 0) {
             const convertedLeaderboard = leaderboardEntries.map(
               (entry: LeaderboardEntry, index: number) =>
-                convertLeaderboardEntry(entry, index + 1),
+                convertLeaderboardEntry(entry, index + 1, leaderboardType),
             );
             setLeaderboardData(convertedLeaderboard);
           } else {
@@ -502,19 +514,15 @@ const Gamification: React.FC = () => {
         if (leaderboardEntries.length > 0) {
           let convertedLeaderboard = leaderboardEntries.map(
             (entry: LeaderboardEntry, index: number) =>
-              convertLeaderboardEntry(entry, index + 1),
+              convertLeaderboardEntry(entry, index + 1, leaderboardType),
           );
 
-          // If streak type, re-sort by streak and re-rank
-          if (leaderboardType === "streak") {
-            convertedLeaderboard = convertedLeaderboard
-              .sort((a, b) => b.streak - a.streak)
-              .map((user, index) => ({ ...user, rank: index + 1 }));
-          } else if (leaderboardType === "learning") {
-            convertedLeaderboard = convertedLeaderboard
-              .sort((a, b) => b.xp - a.xp)
-              .map((user, index) => ({ ...user, rank: index + 1 }));
-          }
+          // Backend already sorted correctly, no need to re-sort
+          // Just ensure ranks are sequential
+          convertedLeaderboard = convertedLeaderboard.map((user, index) => ({
+            ...user,
+            rank: index + 1,
+          }));
 
           // Add current user from response or wallet if not in leaderboard
           if (leaderboardResponse?.currentUserPosition) {
@@ -525,7 +533,7 @@ const Gamification: React.FC = () => {
             currentUserEntry.id = "current";
             currentUserEntry.name = "Bạn";
             if (!convertedLeaderboard.find((u) => u.id === "current")) {
-              convertedLeaderboard.push(currentUserEntry);
+              (leaderboardType, convertedLeaderboard.push(currentUserEntry));
             }
           } else if (walletResponse) {
             convertedLeaderboard.push({
