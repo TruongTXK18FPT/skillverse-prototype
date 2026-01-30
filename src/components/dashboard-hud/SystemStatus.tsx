@@ -1,8 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, Check, Loader2 } from "lucide-react";
+import {
+  Flame,
+  Check,
+  Loader2,
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
+  Minimize2,
+} from "lucide-react";
 import HUDCard from "./HUDCard";
 import { streakService } from "../../services/streakService";
+import { useMeowlState } from "../../context/MeowlStateContext";
 import "./SystemStatus.css";
 
 interface SystemStatusProps {
@@ -39,6 +48,16 @@ const SystemStatus: React.FC<SystemStatusProps> = ({
   const [checkInMessage, setCheckInMessage] = useState("");
   const [coinsAwarded, setCoinsAwarded] = useState(0);
 
+  // Expanded calendar state
+  const [isCalendarExpanded, setIsCalendarExpanded] = useState(false);
+  const [expandedMonth, setExpandedMonth] = useState(new Date());
+  const [monthlyCheckIns, setMonthlyCheckIns] = useState<Set<string>>(
+    new Set(),
+  );
+
+  // Get Meowl state context to update on check-in
+  const { markCheckedIn, triggerCheckInSuccess } = useMeowlState();
+
   // Get today's day index (0 = Monday, 6 = Sunday)
   const getTodayIndex = () => {
     const today = new Date().getDay();
@@ -62,6 +81,60 @@ const SystemStatus: React.FC<SystemStatusProps> = ({
       dates.push(date);
     }
     return dates;
+  };
+
+  // Get all dates in a month for expanded view
+  const getMonthDates = (monthDate: Date) => {
+    const year = monthDate.getFullYear();
+    const month = monthDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+
+    // Get first Monday of the calendar grid (might be from previous month)
+    const startDate = new Date(firstDay);
+    const dayOfWeek = startDate.getDay();
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    startDate.setDate(startDate.getDate() + mondayOffset);
+
+    const dates: Date[] = [];
+    const currentDate = new Date(startDate);
+
+    // Calculate how many weeks we need (enough to show all days of the month)
+    const firstDayOffset = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Days from Monday
+    const totalDays = firstDayOffset + daysInMonth;
+    const weeksNeeded = Math.ceil(totalDays / 7);
+    const daysToGenerate = weeksNeeded * 7;
+
+    for (let i = 0; i < daysToGenerate; i++) {
+      dates.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dates;
+  };
+
+  // Format date to string key for comparison
+  const formatDateKey = (date: Date) => {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  };
+
+  // Month navigation
+  const goToPreviousMonth = () => {
+    const newMonth = new Date(expandedMonth);
+    newMonth.setMonth(newMonth.getMonth() - 1);
+    setExpandedMonth(newMonth);
+  };
+
+  const goToNextMonth = () => {
+    const newMonth = new Date(expandedMonth);
+    newMonth.setMonth(newMonth.getMonth() + 1);
+    setExpandedMonth(newMonth);
+  };
+
+  // Format month name
+  const getMonthName = (date: Date) => {
+    return date.toLocaleDateString("vi-VN", { month: "long", year: "numeric" });
   };
 
   const todayIndex = getTodayIndex();
@@ -110,6 +183,12 @@ const SystemStatus: React.FC<SystemStatusProps> = ({
         setCheckInMessage(response.message || "Điểm danh thành công!");
         setCoinsAwarded(response.coinsAwarded || 0);
 
+        // Update Meowl state immediately (unfreeze)
+        markCheckedIn();
+
+        // Trigger Meowl success modal
+        triggerCheckInSuccess(response.coinsAwarded || 5);
+
         // Update local state with response data
         if (response.currentStreak !== undefined) {
           setCurrentStreak(response.currentStreak);
@@ -141,6 +220,10 @@ const SystemStatus: React.FC<SystemStatusProps> = ({
       setTodayCheckedIn(true);
       setShowCheckInSuccess(true);
       setCheckInMessage("Điểm danh thành công! (offline)");
+
+      // Update Meowl state and trigger success modal even in offline mode
+      markCheckedIn();
+      triggerCheckInSuccess(5);
 
       const newWeekCheckIns = [...weekCheckIns];
       newWeekCheckIns[todayIndex] = true;
@@ -183,85 +266,194 @@ const SystemStatus: React.FC<SystemStatusProps> = ({
                 {longestStreak} {daysLabel}
               </span>
             </div>
-            <div className="system-status__stat-divider"></div>
-            <div className="system-status__stat">
-              <span className="system-status__stat-label">
-                {weeklyGoalLabel}
-              </span>
-              <span className="system-status__stat-value">
-                {weeklyGoal} {daysLabel}
-              </span>
-            </div>
           </div>
         </div>
 
         {/* Sync Calendar */}
         <div className="system-status__calendar-wrapper">
-          <div className="system-status__calendar-year">{currentYear}</div>
-          <div className="system-status__calendar">
-            {weekDates.map((date, index) => {
-              const isToday = index === todayIndex;
-              const isCheckedIn = isToday
-                ? todayCheckedIn
-                : weekCheckIns[index];
-              const day = date.getDate();
-              const month = date.getMonth() + 1;
-
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{
-                    duration: 0.3,
-                    delay: 0.3 + index * 0.05,
-                    ease: [0.4, 0, 0.2, 1],
-                  }}
-                  className={`
-                    system-status__day 
-                    ${isCheckedIn ? "system-status__day--synced" : ""}
-                    ${isToday ? "system-status__day--today" : ""}
-                    ${isToday && !todayCheckedIn ? "system-status__day--clickable" : ""}
-                  `}
-                  onClick={
-                    isToday && !todayCheckedIn && !isLoading
-                      ? handleCheckIn
-                      : undefined
-                  }
-                  whileHover={
-                    isToday && !todayCheckedIn && !isLoading
-                      ? { scale: 1.1 }
-                      : {}
-                  }
-                  whileTap={
-                    isToday && !todayCheckedIn && !isLoading
-                      ? { scale: 0.95 }
-                      : {}
-                  }
-                >
-                  <div className="system-status__day-indicator">
-                    {isCheckedIn && (
-                      <div className="system-status__day-pulse"></div>
-                    )}
-                    {isToday && isLoading && (
-                      <Loader2
-                        className="system-status__day-loader"
-                        size={16}
-                      />
-                    )}
-                  </div>
-                  <span className="system-status__day-label">
-                    {day}/{month}
-                  </span>
-                  {isToday && !todayCheckedIn && !isLoading && (
-                    <span className="system-status__check-in-hint">
-                      Điểm danh
-                    </span>
-                  )}
-                </motion.div>
-              );
-            })}
+          <div className="system-status__calendar-header">
+            <div className="system-status__calendar-year">{currentYear}</div>
+            <button
+              className="system-status__expand-btn"
+              onClick={() => setIsCalendarExpanded(!isCalendarExpanded)}
+              title={isCalendarExpanded ? "Thu gọn" : "Xem cả tháng"}
+            >
+              {isCalendarExpanded ? (
+                <Minimize2 size={16} />
+              ) : (
+                <Maximize2 size={16} />
+              )}
+            </button>
           </div>
+
+          {/* Week View (Default) */}
+          {!isCalendarExpanded && (
+            <div className="system-status__calendar">
+              {weekDates.map((date, index) => {
+                const isToday = index === todayIndex;
+                const isCheckedIn = isToday
+                  ? todayCheckedIn
+                  : weekCheckIns[index];
+                const day = date.getDate();
+                const month = date.getMonth() + 1;
+
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: 0.3 + index * 0.05,
+                      ease: [0.4, 0, 0.2, 1],
+                    }}
+                    className={`
+                      system-status__day 
+                      ${isCheckedIn ? "system-status__day--synced" : ""}
+                      ${isToday ? "system-status__day--today" : ""}
+                      ${isToday && !todayCheckedIn ? "system-status__day--clickable" : ""}
+                    `}
+                    onClick={
+                      isToday && !todayCheckedIn && !isLoading
+                        ? handleCheckIn
+                        : undefined
+                    }
+                    whileHover={
+                      isToday && !todayCheckedIn && !isLoading
+                        ? { scale: 1.1 }
+                        : {}
+                    }
+                    whileTap={
+                      isToday && !todayCheckedIn && !isLoading
+                        ? { scale: 0.95 }
+                        : {}
+                    }
+                  >
+                    <div className="system-status__day-indicator">
+                      {isCheckedIn && (
+                        <div className="system-status__day-pulse"></div>
+                      )}
+                      {isToday && isLoading && (
+                        <Loader2
+                          className="system-status__day-loader"
+                          size={16}
+                        />
+                      )}
+                    </div>
+                    <span className="system-status__day-label">
+                      {day}/{month}
+                    </span>
+                    {isToday && !todayCheckedIn && !isLoading && (
+                      <span className="system-status__check-in-hint">
+                        Điểm danh
+                      </span>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Month View (Expanded) */}
+          <AnimatePresence>
+            {isCalendarExpanded && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                className="system-status__month-view"
+              >
+                {/* Month Navigation */}
+                <div className="system-status__month-nav">
+                  <button
+                    className="system-status__nav-btn"
+                    onClick={goToPreviousMonth}
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+                  <span className="system-status__month-name">
+                    {getMonthName(expandedMonth)}
+                  </span>
+                  <button
+                    className="system-status__nav-btn"
+                    onClick={goToNextMonth}
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+
+                {/* Day of Week Headers */}
+                <div className="system-status__weekday-headers">
+                  {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map((day) => (
+                    <span key={day} className="system-status__weekday">
+                      {day}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Month Grid */}
+                <div className="system-status__month-grid">
+                  {getMonthDates(expandedMonth).map((date, index) => {
+                    const today = new Date();
+                    const isCurrentMonth =
+                      date.getMonth() === expandedMonth.getMonth();
+                    const isToday =
+                      formatDateKey(date) === formatDateKey(today);
+                    const dateKey = formatDateKey(date);
+
+                    // Check if this date was checked in
+                    // For current week, use weekCheckIns; for other dates, use monthlyCheckIns
+                    let isCheckedIn = monthlyCheckIns.has(dateKey);
+
+                    // For this week's dates, sync with weekCheckIns
+                    const weekDateKeys = weekDates.map((d) => formatDateKey(d));
+                    const weekIndex = weekDateKeys.indexOf(dateKey);
+                    if (weekIndex !== -1) {
+                      isCheckedIn =
+                        weekIndex === todayIndex
+                          ? todayCheckedIn
+                          : weekCheckIns[weekIndex];
+                    }
+
+                    return (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.2, delay: index * 0.01 }}
+                        className={`
+                          system-status__month-day
+                          ${!isCurrentMonth ? "system-status__month-day--other" : ""}
+                          ${isCheckedIn ? "system-status__month-day--synced" : ""}
+                          ${isToday ? "system-status__month-day--today" : ""}
+                        `}
+                      >
+                        <span className="system-status__month-day-num">
+                          {date.getDate()}
+                        </span>
+                        {isCheckedIn && (
+                          <span className="system-status__month-day-dot"></span>
+                        )}
+                      </motion.div>
+                    );
+                  })}
+                </div>
+
+                {/* Legend */}
+                <div className="system-status__legend">
+                  <div className="system-status__legend-item">
+                    <span className="system-status__legend-dot system-status__legend-dot--synced"></span>
+                    <span>Đã điểm danh</span>
+                  </div>
+                  <div className="system-status__legend-item">
+                    <span className="system-status__legend-dot system-status__legend-dot--today"></span>
+                    <span>Hôm nay</span>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Check-in Success Message */}
