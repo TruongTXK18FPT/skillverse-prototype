@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
-import { useAuth } from "../../context/AuthContext";
 import {
   Trophy,
   Crown,
@@ -192,7 +191,6 @@ const mockBadges: Badge[] = [
 const Gamification: React.FC = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
-  const { isAuthenticated, loading: authLoading } = useAuth();
 
   // State Management
   const [activeTab, setActiveTab] = useState<
@@ -620,11 +618,8 @@ const Gamification: React.FC = () => {
       }
     };
 
-    // Wait for auth to complete before fetching data
-    if (!authLoading) {
-      fetchData();
-    }
-  }, [leaderboardPeriod, leaderboardType, isAuthenticated, authLoading]);
+    fetchData();
+  }, [leaderboardPeriod, leaderboardType]);
 
   const [currentUserData, setCurrentUserData] = useState<User | null>({
     id: "user-1",
@@ -977,64 +972,14 @@ const Gamification: React.FC = () => {
     </div>
   );
 
-  const renderMiniGames = () => {
-    // Check authentication for minigames tab
-    if (!isAuthenticated) {
-      return (
-        <div className="minigames-auth-required">
-          <div className="minigames-auth-card">
-            <div className="minigames-auth-icon">
-              <Trophy size={64} />
-              <div className="minigames-auth-lock">🔒</div>
-            </div>
-            <h2 className="minigames-auth-title">
-              Đăng nhập để chơi Mini Games
-            </h2>
-            <p className="minigames-auth-description">
-              Bạn cần đăng nhập để có thể chơi mini games, kiếm xu và nhận phần
-              thưởng hấp dẫn!
-            </p>
-            <div className="minigames-auth-features">
-              <div className="minigames-auth-feature">
-                <Coins size={20} />
-                <span>Kiếm xu miễn phí</span>
-              </div>
-              <div className="minigames-auth-feature">
-                <Star size={20} />
-                <span>Nhận huy hiệu đặc biệt</span>
-              </div>
-              <div className="minigames-auth-feature">
-                <Flame size={20} />
-                <span>Duy trì chuỗi ngày</span>
-              </div>
-            </div>
-            <button
-              className="minigames-auth-login-btn"
-              onClick={() => navigate("/login")}
-            >
-              <span>Đăng nhập ngay</span>
-              <span className="minigames-auth-arrow">→</span>
-            </button>
-            <button
-              className="minigames-auth-register-btn"
-              onClick={() => navigate("/choose-role")}
-            >
-              Chưa có tài khoản? Đăng ký
-            </button>
-          </div>
-        </div>
-      );
-    }
+  const renderMiniGames = () => (
+    <div className="mini-games-section">
+      <div className="mini-games-header">
+        <h2>🎮 Mini Games</h2>
+        <p>Chơi game vui vẻ để kiếm xu và duy trì động lực học tập</p>
 
-    // Render games for authenticated users
-    return (
-      <div className="mini-games-section">
-        <div className="mini-games-header">
-          <h2>🎮 Mini Games</h2>
-          <p>Chơi game vui vẻ để kiếm xu và duy trì động lực học tập</p>
-
-          {/* Premium Status Banner */}
-          {/* <div className="premium-status-banner">
+        {/* Premium Status Banner */}
+        {/* <div className="premium-status-banner">
           <div className="current-plan">
             <span className={`plan-badge ${userPremium}`}>
               {userPremium === 'free' && '🆓 Miễn phí'}
@@ -1053,85 +998,85 @@ const Gamification: React.FC = () => {
           </div>
         </div> */}
 
-          {/* Game Mode Toggle */}
-          <div className="game-mode-toggle">
-            <button
-              className={`mode-btn ${selectedGameMode === "free" ? "active" : ""}`}
-              onClick={() => setSelectedGameMode("free")}
-            >
-              🆓 Miễn phí
-            </button>
-            <button
-              className={`mode-btn ${selectedGameMode === "premium" ? "active" : ""}`}
-              onClick={() => setSelectedGameMode("premium")}
-            >
-              💎 Premium
-            </button>
-          </div>
+        {/* Game Mode Toggle */}
+        <div className="game-mode-toggle">
+          <button
+            className={`mode-btn ${selectedGameMode === "free" ? "active" : ""}`}
+            onClick={() => setSelectedGameMode("free")}
+          >
+            🆓 Miễn phí
+          </button>
+          <button
+            className={`mode-btn ${selectedGameMode === "premium" ? "active" : ""}`}
+            onClick={() => setSelectedGameMode("premium")}
+          >
+            💎 Premium
+          </button>
         </div>
+      </div>
 
-        {/* Games Grid */}
-        <div className="games-grid">
-          {loading ? (
-            <div className="empty-state">
-              <Loader2 className="spin" size={48} />
-              <p>Đang tải mini games...</p>
-            </div>
-          ) : miniGames.length === 0 ? (
-            <div className="empty-state">
-              <Target size={48} style={{ opacity: 0.3 }} />
-              <p>Chưa có game nào</p>
-              <small>Vui lòng quay lại sau!</small>
-            </div>
-          ) : (
-            miniGames.map((game) => {
-              const isPremiumMode = selectedGameMode === "premium";
-              const isLocked =
-                isPremiumMode &&
-                game.premium &&
-                !canAccessPremium(game.premium.requiredPlan);
+      {/* Games Grid */}
+      <div className="games-grid">
+        {loading ? (
+          <div className="empty-state">
+            <Loader2 className="spin" size={48} />
+            <p>Đang tải mini games...</p>
+          </div>
+        ) : miniGames.length === 0 ? (
+          <div className="empty-state">
+            <Target size={48} style={{ opacity: 0.3 }} />
+            <p>Chưa có game nào</p>
+            <small>Vui lòng quay lại sau!</small>
+          </div>
+        ) : (
+          miniGames.map((game) => {
+            const isPremiumMode = selectedGameMode === "premium";
+            const isLocked =
+              isPremiumMode &&
+              game.premium &&
+              !canAccessPremium(game.premium.requiredPlan);
 
-              return (
-                <div
-                  key={`${game.id}-${selectedGameMode}`}
-                  className={`game-card ${game.type}-game ${!game.available ? "unavailable" : ""} ${isPremiumMode ? "premium-mode" : ""} ${isLocked ? "locked" : ""}`}
-                >
-                  {/* Game Status & Premium Badge */}
-                  <div className="game-status-row">
-                    <div
-                      className={`game-status ${game.available ? "available" : "unavailable"}`}
-                    >
-                      {game.available ? "Có sẵn" : "Không có sẵn"}
-                    </div>
-                    {/* {isPremiumMode && (
+            return (
+              <div
+                key={`${game.id}-${selectedGameMode}`}
+                className={`game-card ${game.type}-game ${!game.available ? "unavailable" : ""} ${isPremiumMode ? "premium-mode" : ""} ${isLocked ? "locked" : ""}`}
+              >
+                {/* Game Status & Premium Badge */}
+                <div className="game-status-row">
+                  <div
+                    className={`game-status ${game.available ? "available" : "unavailable"}`}
+                  >
+                    {game.available ? "Có sẵn" : "Không có sẵn"}
+                  </div>
+                  {/* {isPremiumMode && (
                   <div className={`premium-badge ${isLocked ? 'locked' : 'unlocked'}`}>
                     {isLocked ? '🔒 Cần Premium' : '💎 Premium'}
                   </div>
                 )} */}
-                  </div>
+                </div>
 
-                  {/* Game Header */}
-                  <div className="game-header">
-                    <div className="game-icon">{game.icon}</div>
-                    <div className="game-info">
-                      <h3>
-                        {isPremiumMode && game.premium
-                          ? game.premium.title
-                          : game.title}
-                      </h3>
-                      <p>
-                        {isPremiumMode && game.premium
-                          ? game.premium.description
-                          : game.description}
-                      </p>
-                    </div>
-                    <div className="game-difficulty">
-                      {getDifficultyText(game.difficulty)}
-                    </div>
+                {/* Game Header */}
+                <div className="game-header">
+                  <div className="game-icon">{game.icon}</div>
+                  <div className="game-info">
+                    <h3>
+                      {isPremiumMode && game.premium
+                        ? game.premium.title
+                        : game.title}
+                    </h3>
+                    <p>
+                      {isPremiumMode && game.premium
+                        ? game.premium.description
+                        : game.description}
+                    </p>
                   </div>
+                  <div className="game-difficulty">
+                    {getDifficultyText(game.difficulty)}
+                  </div>
+                </div>
 
-                  {/* Premium Features */}
-                  {/* {isPremiumMode && game.premium && (
+                {/* Premium Features */}
+                {/* {isPremiumMode && game.premium && (
                 <div className="premium-features">
                   <h4>✨ Tính năng Premium:</h4>
                   <ul>
@@ -1142,93 +1087,92 @@ const Gamification: React.FC = () => {
                 </div>
               )} */}
 
-                  {/* Game Stats */}
-                  <div className="game-stats">
-                    <div className="game-stat">
-                      <div className="game-stat-value">
-                        {isPremiumMode && game.premium
-                          ? game.premium.coins
-                          : game.coins}
-                      </div>
-                      <div className="game-stat-label">Xu tối đa</div>
+                {/* Game Stats */}
+                <div className="game-stats">
+                  <div className="game-stat">
+                    <div className="game-stat-value">
+                      {isPremiumMode && game.premium
+                        ? game.premium.coins
+                        : game.coins}
                     </div>
-                    <div className="game-stat">
-                      <div className="game-stat-value">
-                        {getCooldownText(
-                          isPremiumMode && game.premium
-                            ? game.premium.cooldown
-                            : game.cooldown,
-                        )}
-                      </div>
-                      <div className="game-stat-label">Thời gian chờ</div>
-                    </div>
-                    <div className="game-stat">
-                      <div className="game-stat-value">
-                        {getDifficultyStars(game.difficulty)}
-                      </div>
-                      <div className="game-stat-label">Độ khó</div>
-                    </div>
+                    <div className="game-stat-label">Xu tối đa</div>
                   </div>
-
-                  {/* Game Actions */}
-                  <div className="game-actions">
-                    {isLocked ? (
-                      <>
-                        <button className="game-btn locked" disabled>
-                          🔒 Cần {game.premium?.requiredPlan}
-                        </button>
-                        <button
-                          className="game-btn upgrade"
-                          onClick={() => navigate("/premium")}
-                        >
-                          🚀 Nâng cấp ngay
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className={`game-btn primary ${!game.available ? "disabled" : ""}`}
-                          onClick={() => {
-                            if (game.available) {
-                              if (game.id === "meowl-adventure")
-                                setActiveGame("meowl-adventure");
-                              if (game.id === "tic-tac-toe")
-                                setActiveGame("tic-tac-toe");
-                            }
-                          }}
-                          disabled={!game.available}
-                        >
-                          {game.available ? "Chơi ngay" : "Chờ làm mới"}
-                        </button>
-                        <button className="game-btn secondary">
-                          Xem quy tắc
-                        </button>
-                      </>
-                    )}
+                  <div className="game-stat">
+                    <div className="game-stat-value">
+                      {getCooldownText(
+                        isPremiumMode && game.premium
+                          ? game.premium.cooldown
+                          : game.cooldown,
+                      )}
+                    </div>
+                    <div className="game-stat-label">Thời gian chờ</div>
+                  </div>
+                  <div className="game-stat">
+                    <div className="game-stat-value">
+                      {getDifficultyStars(game.difficulty)}
+                    </div>
+                    <div className="game-stat-label">Độ khó</div>
                   </div>
                 </div>
-              );
-            })
-          )}
-        </div>
 
-        {/* Game Components - Rendered inline */}
-        {activeGame === "tic-tac-toe" && (
-          <TicTacToeGame
-            onCoinsEarned={handleCoinsEarned}
-            onClose={() => setActiveGame(null)}
-          />
-        )}
-
-        {activeGame === "meowl-adventure" && (
-          <MeowlAdventure
-            onCoinsEarned={handleCoinsEarned}
-            onClose={() => setActiveGame(null)}
-          />
+                {/* Game Actions */}
+                <div className="game-actions">
+                  {isLocked ? (
+                    <>
+                      <button className="game-btn locked" disabled>
+                        🔒 Cần {game.premium?.requiredPlan}
+                      </button>
+                      <button
+                        className="game-btn upgrade"
+                        onClick={() => navigate("/premium")}
+                      >
+                        🚀 Nâng cấp ngay
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className={`game-btn primary ${!game.available ? "disabled" : ""}`}
+                        onClick={() => {
+                          if (game.available) {
+                            if (game.id === "meowl-adventure")
+                              setActiveGame("meowl-adventure");
+                            if (game.id === "tic-tac-toe")
+                              setActiveGame("tic-tac-toe");
+                          }
+                        }}
+                        disabled={!game.available}
+                      >
+                        {game.available ? "Chơi ngay" : "Chờ làm mới"}
+                      </button>
+                      <button className="game-btn secondary">
+                        Xem quy tắc
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            );
+          })
         )}
       </div>
-    );
-  };
+
+      {/* Game Components - Rendered inline */}
+      {activeGame === "tic-tac-toe" && (
+        <TicTacToeGame
+          onCoinsEarned={handleCoinsEarned}
+          onClose={() => setActiveGame(null)}
+        />
+      )}
+
+      {activeGame === "meowl-adventure" && (
+        <MeowlAdventure
+          onCoinsEarned={handleCoinsEarned}
+          onClose={() => setActiveGame(null)}
+        />
+      )}
+    </div>
+  );
 
   const renderAchievements = () => (
     <div className="achievements-section">
