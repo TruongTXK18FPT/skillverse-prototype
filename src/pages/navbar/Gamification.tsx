@@ -529,11 +529,12 @@ const Gamification: React.FC = () => {
             const currentUserEntry = convertLeaderboardEntry(
               leaderboardResponse.currentUserPosition,
               leaderboardResponse.currentUserPosition.rankPosition,
+              leaderboardType,
             );
             currentUserEntry.id = "current";
             currentUserEntry.name = "Bạn";
             if (!convertedLeaderboard.find((u) => u.id === "current")) {
-              (leaderboardType, convertedLeaderboard.push(currentUserEntry));
+              convertedLeaderboard.push(currentUserEntry);
             }
           } else if (walletResponse) {
             convertedLeaderboard.push({
