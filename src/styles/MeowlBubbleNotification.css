@@ -39,18 +39,19 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 
+  box-shadow:
     0 4px 20px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   animation: meowlBubblePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
   color: #e2e8f0;
-  font-family: 'Inter', sans-serif;
-  min-width: 260px;
+  font-family: "Inter", sans-serif;
+  min-width: 280px;
+  max-width: 400px;
 }
 
 /* Bubble tail - pointing RIGHT towards the cat */
 .meowl-bubble-speech::after {
-  content: '';
+  content: "";
   position: absolute;
   right: -8px;
   bottom: 0;
@@ -68,7 +69,7 @@
 
 /* Better Tail using border */
 .meowl-bubble-speech::before {
-  content: '';
+  content: "";
   position: absolute;
   right: -10px;
   bottom: 12px;
@@ -77,19 +78,37 @@
   border-style: solid;
   border-width: 10px 0 10px 12px;
   border-color: transparent transparent transparent rgba(20, 25, 40, 0.95);
-  filter: drop-shadow(2px 0 0 rgba(255,255,255,0.05));
+  filter: drop-shadow(2px 0 0 rgba(255, 255, 255, 0.05));
 }
 
 /* Type-specific styling - Subtle accents */
-.meowl-bubble-speech--welcome { border-left: 3px solid #14b8a6; }
-.meowl-bubble-speech--premium { border-left: 3px solid #8b5cf6; }
-.meowl-bubble-speech--skin { border-left: 3px solid #ec4899; }
-.meowl-bubble-speech--roadmap { border-left: 3px solid #3b82f6; }
-.meowl-bubble-speech--course { border-left: 3px solid #10b981; }
-.meowl-bubble-speech--page-intro { border-left: 3px solid #06b6d4; }
-.meowl-bubble-speech--direction { border-left: 3px solid #f59e0b; }
-.meowl-bubble-speech--motivation { border-left: 3px solid #818cf8; }
-.meowl-bubble-speech--tip { border-left: 3px solid #818cf8; }
+.meowl-bubble-speech--welcome {
+  border-left: 3px solid #14b8a6;
+}
+.meowl-bubble-speech--premium {
+  border-left: 3px solid #8b5cf6;
+}
+.meowl-bubble-speech--skin {
+  border-left: 3px solid #ec4899;
+}
+.meowl-bubble-speech--roadmap {
+  border-left: 3px solid #3b82f6;
+}
+.meowl-bubble-speech--course {
+  border-left: 3px solid #10b981;
+}
+.meowl-bubble-speech--page-intro {
+  border-left: 3px solid #06b6d4;
+}
+.meowl-bubble-speech--direction {
+  border-left: 3px solid #f59e0b;
+}
+.meowl-bubble-speech--motivation {
+  border-left: 3px solid #818cf8;
+}
+.meowl-bubble-speech--tip {
+  border-left: 3px solid #818cf8;
+}
 
 /* Close & Mute Buttons - Aesthetic & Minimal */
 .meowl-bubble-close,
@@ -199,7 +218,11 @@
   width: 100%;
   margin-top: 8px;
   padding: 8px 16px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   color: #fff;
@@ -283,7 +306,8 @@
 }
 
 @keyframes meowlBounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -292,7 +316,8 @@
 }
 
 @keyframes meowlGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.5;
     transform: scale(1);
   }
@@ -303,7 +328,8 @@
 }
 
 @keyframes meowlIconPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -312,7 +338,8 @@
 }
 
 @keyframes heartBeat {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   25% {
@@ -336,7 +363,8 @@
 }
 
 @keyframes crownFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(-5deg);
   }
   50% {
@@ -345,7 +373,8 @@
 }
 
 @keyframes sparkleAppear {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: scale(0.5) translateY(0);
   }
@@ -356,8 +385,9 @@
 }
 
 @keyframes holoBorderPulse {
-  0%, 100% {
-    box-shadow: 
+  0%,
+  100% {
+    box-shadow:
       0 0 1px rgba(0, 212, 255, 0.8),
       0 0 4px rgba(0, 212, 255, 0.4),
       0 0 15px rgba(0, 212, 255, 0.2),
@@ -365,7 +395,7 @@
       inset 0 0 20px rgba(0, 212, 255, 0.05);
   }
   50% {
-    box-shadow: 
+    box-shadow:
       0 0 2px rgba(0, 255, 200, 1),
       0 0 8px rgba(0, 255, 200, 0.6),
       0 0 25px rgba(0, 255, 200, 0.3),
@@ -376,16 +406,21 @@
 
 @keyframes holoDataStream {
   0% {
-    background-position: 0% 0%, 0% 0%;
+    background-position:
+      0% 0%,
+      0% 0%;
   }
   100% {
-    background-position: 0% 0%, 0% 200%;
+    background-position:
+      0% 0%,
+      0% 200%;
   }
 }
 
 /* Hologram Effects */
 @keyframes hologramFlicker {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   92% {
@@ -415,7 +450,8 @@
 }
 
 @keyframes zapPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     filter: brightness(1);
   }
@@ -426,7 +462,8 @@
 }
 
 @keyframes starTwinkle {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
     opacity: 1;
   }
@@ -458,7 +495,7 @@
     /* Actually, on mobile, mascot is on right. So bubble should point down-right */
     border-bottom-right-radius: 0;
   }
-  
+
   .meowl-bubble-speech::before {
     right: 0;
     bottom: -10px;
@@ -537,9 +574,21 @@
 }
 
 /* Keep colored accents in light mode */
-[data-theme="light"] .meowl-bubble-speech--welcome { border-left-color: #14b8a6; }
-[data-theme="light"] .meowl-bubble-speech--premium { border-left-color: #8b5cf6; }
-[data-theme="light"] .meowl-bubble-speech--skin { border-left-color: #ec4899; }
-[data-theme="light"] .meowl-bubble-speech--roadmap { border-left-color: #3b82f6; }
-[data-theme="light"] .meowl-bubble-speech--course { border-left-color: #10b981; }
-[data-theme="light"] .meowl-bubble-speech--page-intro { border-left-color: #06b6d4; }
+[data-theme="light"] .meowl-bubble-speech--welcome {
+  border-left-color: #14b8a6;
+}
+[data-theme="light"] .meowl-bubble-speech--premium {
+  border-left-color: #8b5cf6;
+}
+[data-theme="light"] .meowl-bubble-speech--skin {
+  border-left-color: #ec4899;
+}
+[data-theme="light"] .meowl-bubble-speech--roadmap {
+  border-left-color: #3b82f6;
+}
+[data-theme="light"] .meowl-bubble-speech--course {
+  border-left-color: #10b981;
+}
+[data-theme="light"] .meowl-bubble-speech--page-intro {
+  border-left-color: #06b6d4;
+}
