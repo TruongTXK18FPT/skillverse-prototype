@@ -233,7 +233,7 @@ const Gamification: React.FC = () => {
     currentType: string,
   ): User => {
     // Map scoreValue to appropriate field based on leaderboard type
-    let scoreMapping = {
+    const scoreMapping = {
       coins: entry.totalCoins,
       xp: entry.totalXp,
       streak: entry.scoreValue || entry.streakDays || 0, // scoreValue is longest streak
