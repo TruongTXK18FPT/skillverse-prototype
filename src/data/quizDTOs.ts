@@ -82,6 +82,7 @@ export interface QuizOptionDTO {
 export interface QuizOptionCreateDTO {
   optionText: string;
   correct: boolean;
+  orderIndex?: number;
 }
 
 // Quiz Option Update DTO
@@ -119,4 +120,18 @@ export interface SubmitQuizDTO {
     selectedOptionIds?: number[]; // For MULTIPLE_CHOICE and TRUE_FALSE
     textAnswer?: string; // For SHORT_ANSWER
   }[];
+}
+
+// Quiz Attempt Status DTO (for retry logic)
+export interface QuizAttemptStatusDTO {
+  quizId: number;
+  userId: number;
+  attemptsUsed: number;
+  maxAttempts: number;
+  canRetry: boolean;
+  hasPassed: boolean;
+  bestScore: number;
+  secondsUntilRetry: number;
+  nextRetryAt: string | null;
+  recentAttempts: QuizAttemptDTO[];
 }

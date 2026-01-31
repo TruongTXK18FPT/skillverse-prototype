@@ -11,8 +11,12 @@ import {
   QuizOptionDTO,
   QuizOptionCreateDTO,
   QuizOptionUpdateDTO,
-  SubmitQuizDTO
+  SubmitQuizDTO,
+  QuizAttemptStatusDTO
 } from '../data/quizDTOs';
+
+// Re-export for backward compatibility
+export type { QuizAttemptStatusDTO as QuizAttemptStatus };
 
 /**
  * Create a new quiz for a module
@@ -262,6 +266,23 @@ export const submitQuiz = async (
   const response = await axiosInstance.post<{ score: number; passed: boolean; attempt: QuizAttemptDTO }>(
     `/quizzes/${submitData.quizId}/submit`,
     submitData,
+    { params: { userId } }
+  );
+  return response.data;
+};
+
+/**
+ * Get quiz attempt status with retry information
+ * @param quizId - The ID of the quiz
+ * @param userId - The ID of the user
+ * @returns Promise with attempt status including retry info
+ */
+export const getQuizAttemptStatus = async (
+  quizId: number,
+  userId: number
+): Promise<QuizAttemptStatusDTO> => {
+  const response = await axiosInstance.get<QuizAttemptStatusDTO>(
+    `/quizzes/${quizId}/attempt-status`,
     { params: { userId } }
   );
   return response.data;

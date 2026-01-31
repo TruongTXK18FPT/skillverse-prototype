@@ -1,31 +1,54 @@
 import axiosInstance from './axiosInstance';
+import { 
+  ModuleCreateDTO, 
+  ModuleUpdateDTO, 
+  ModuleSummaryDTO, 
+  ModuleDetailDTO 
+} from '../data/moduleDTOs';
+import { LessonSummaryDTO } from '../data/lessonDTOs';
+import { QuizSummaryDTO } from '../data/quizDTOs';
+import { AssignmentSummaryDTO } from '../data/assignmentDTOs';
 
-export interface ModuleCreateDTO {
+// Re-export DTOs for backward compatibility (consumers can import from service)
+export type { ModuleCreateDTO, ModuleUpdateDTO, ModuleSummaryDTO, ModuleDetailDTO };
+
+// ==================== Internal API Response Types ====================
+// These are private to this service - represent raw API responses
+// that may differ from domain DTOs
+
+/** Raw API response for lesson (may have different field names) */
+interface LessonApiResponse {
+  id: number;
   title: string;
-  description?: string;
+  type?: string;
+  lessonType?: string;  // Alternative field name from some endpoints
   orderIndex?: number;
+  durationSec?: number;
 }
 
-export interface ModuleUpdateDTO {
-  title?: string;
-  description?: string;
-  orderIndex?: number;
+/** Raw API response for quiz */
+interface QuizApiResponse {
+  id: number;
+  title: string;
+  passScore: number;
+  questionCount?: number;
 }
 
-export interface ModuleSummaryDTO {
+/** Raw API response for assignment */
+interface AssignmentApiResponse {
   id: number;
   title: string;
   description?: string;
+  submissionType?: string;
+  maxScore?: number;
   orderIndex?: number;
 }
 
-export interface ModuleDetailDTO extends ModuleSummaryDTO {
-  createdAt: string;
-  updatedAt: string;
-  lessons: Array<{ id: number; title: string; type: string; orderIndex: number; durationSec?: number; }>;
-  quizzes?: Array<{ id: number; title: string; passScore?: number; questionCount?: number; }>;
-  assignments?: Array<{ id: number; title: string; submissionType?: string; maxScore?: number; }>;
-}
+// ==================== Constants ====================
+
+const DEFAULT_LESSON_TYPE = 'VIDEO';
+
+// ==================== API Functions ====================
 
 export const listModules = async (courseId: number): Promise<ModuleSummaryDTO[]> => {
   const res = await axiosInstance.get(`/courses/${courseId}/modules`);
@@ -53,37 +76,55 @@ export const assignLessonToModule = async (moduleId: number, lessonId: number, a
 // Load modules with lessons and quizzes content for admin/course detail views
 export const listModulesWithContent = async (courseId: number): Promise<ModuleDetailDTO[]> => {
   const modules = await listModules(courseId);
+  
   const results: ModuleDetailDTO[] = await Promise.all(
     modules.map(async (m) => {
-      const [lessonsRes, quizzesRes] = await Promise.all([
-        axiosInstance.get(`/modules/${m.id}/lessons`),
-        axiosInstance.get(`/quizzes/modules/${m.id}/quizzes`)
+      const [lessonsRes, quizzesRes, assignmentsRes] = await Promise.all([
+        axiosInstance.get<LessonApiResponse[]>(`/modules/${m.id}/lessons`),
+        axiosInstance.get<QuizApiResponse[]>(`/quizzes/modules/${m.id}/quizzes`),
+        axiosInstance.get<AssignmentApiResponse[]>(`/modules/${m.id}/assignments`).catch(() => ({ data: [] as AssignmentApiResponse[] }))
       ]);
-      const lessons = (lessonsRes.data || []).map((l: any) => ({
+      
+      // Transform API responses to DTOs
+      const lessons: LessonSummaryDTO[] = (lessonsRes.data || []).map((l) => ({
         id: l.id,
         title: l.title,
-        type: l.type || l.lessonType || 'VIDEO',
-        orderIndex: l.orderIndex ?? 0
+        type: (l.type || l.lessonType || DEFAULT_LESSON_TYPE) as LessonSummaryDTO['type'],
+        orderIndex: l.orderIndex ?? 0,
+        durationSec: l.durationSec ?? 0
       }));
-      const quizzes = (quizzesRes.data || []).map((q: any) => ({
+      
+      const quizzes: QuizSummaryDTO[] = (quizzesRes.data || []).map((q) => ({
         id: q.id,
         title: q.title,
+        description: '',
         passScore: q.passScore,
-        questionCount: q.questionCount
+        questionCount: q.questionCount ?? 0
       }));
+      
+      const assignments: AssignmentSummaryDTO[] = (assignmentsRes.data || []).map((a) => ({
+        id: a.id,
+        title: a.title,
+        description: a.description ?? '',
+        submissionType: (a.submissionType ?? 'TEXT') as AssignmentSummaryDTO['submissionType'],
+        maxScore: a.maxScore ?? 0
+      }));
+      
       return {
         id: m.id,
         title: m.title,
-        description: m.description,
-        orderIndex: m.orderIndex,
+        description: m.description ?? '',
+        orderIndex: m.orderIndex ?? 0,
+        courseId: courseId,
         createdAt: '',
         updatedAt: '',
         lessons,
-        quizzes
-      } as ModuleDetailDTO;
+        quizzes,
+        assignments
+      };
     })
   );
+  
   return results;
 };
-
 

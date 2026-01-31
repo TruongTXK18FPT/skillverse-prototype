@@ -148,3 +148,54 @@ export const gradeSubmission = async (
   );
   return response.data;
 };
+
+/**
+ * Get user's own submissions for an assignment (all versions)
+ * @param assignmentId - The ID of the assignment
+ * @param userId - The ID of the user
+ * @returns Promise with array of user's submissions (newest first)
+ */
+export const getMySubmissions = async (
+  assignmentId: number,
+  userId: number
+): Promise<AssignmentSubmissionDetailDTO[]> => {
+  const response = await axiosInstance.get<AssignmentSubmissionDetailDTO[]>(
+    `/assignments/${assignmentId}/submissions/mine`,
+    { params: { userId } }
+  );
+  return response.data;
+};
+
+/**
+ * Get pending submissions for grading (mentor/admin)
+ * @param assignmentId - The ID of the assignment
+ * @param actorId - The ID of the mentor/admin
+ * @returns Promise with array of pending submissions
+ */
+export const getPendingSubmissions = async (
+  assignmentId: number,
+  actorId: number
+): Promise<AssignmentSubmissionDetailDTO[]> => {
+  const response = await axiosInstance.get<AssignmentSubmissionDetailDTO[]>(
+    `/assignments/${assignmentId}/submissions/pending`,
+    { params: { actorId } }
+  );
+  return response.data;
+};
+
+/**
+ * Get count of pending submissions (for badge display)
+ * @param assignmentId - The ID of the assignment
+ * @param actorId - The ID of the mentor/admin
+ * @returns Promise with count of pending submissions
+ */
+export const countPendingSubmissions = async (
+  assignmentId: number,
+  actorId: number
+): Promise<number> => {
+  const response = await axiosInstance.get<number>(
+    `/assignments/${assignmentId}/submissions/pending/count`,
+    { params: { actorId } }
+  );
+  return response.data;
+};

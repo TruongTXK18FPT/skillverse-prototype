@@ -53,3 +53,26 @@ export interface PurchaseSummaryDTO {
   status: PurchaseStatus;
   purchasedAt: string;
 }
+
+// Course Purchase DTO (for mentor dashboard)
+export interface CoursePurchaseDTO {
+  id: number;
+  courseId: number;
+  userId: number;
+  status: string;
+  price: number;
+  currency: string;
+  purchasedAt: string;
+  couponCode?: string;
+  buyerName?: string;
+  buyerAvatarUrl?: string;
+  courseTitle?: string;
+}
+
+// Course Purchase Request DTO (for payment intent)
+export interface CoursePurchaseRequestDTO {
+  courseId: number;
+  couponCode?: string;
+  returnUrl?: string;
+  cancelUrl?: string;
+}

@@ -1,4 +1,7 @@
 // Module DTOs - Matching Backend Structure
+import { LessonSummaryDTO } from './lessonDTOs';
+import { QuizSummaryDTO } from './quizDTOs';
+import { AssignmentSummaryDTO } from './assignmentDTOs';
 
 export enum ProgressStatus {
   NOT_STARTED = 'NOT_STARTED',
@@ -15,7 +18,9 @@ export interface ModuleDetailDTO {
   courseId: number;
   createdAt: string;
   updatedAt: string;
-  lessons?: any[]; // Can be typed as LessonBriefDTO[] if needed
+  lessons?: LessonSummaryDTO[];
+  quizzes?: QuizSummaryDTO[];
+  assignments?: AssignmentSummaryDTO[];
 }
 
 // Module Summary DTO

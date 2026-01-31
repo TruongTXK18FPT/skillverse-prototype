@@ -8,7 +8,7 @@ interface HoloProgressBarProps {
 
 const HoloProgressBar: React.FC<HoloProgressBarProps> = ({
   percent,
-  label = "NEURAL SYNC RATE"
+  label = "TIẾN ĐỘ HỌC TẬP"
 }) => {
   return (
     <div className="learning-hud-progress-container">
@@ -20,7 +20,7 @@ const HoloProgressBar: React.FC<HoloProgressBarProps> = ({
         />
       </div>
       <span className="learning-hud-progress-text">
-        {Math.round(percent)}% SYNCED
+        {Math.round(percent)}% HOÀN THÀNH
       </span>
     </div>
   );

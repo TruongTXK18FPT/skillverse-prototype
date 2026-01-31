@@ -67,6 +67,7 @@ import SeminarDetailPage from "./pages/navbar/SeminarDetailPage";
 import BusinessPage from "./pages/main/BusinessPage";
 import MentorPage from "./pages/main/MentorPage";
 import AllBadgesPage from "./pages/mentor/AllBadgesPage";
+import MentorGradingPage from "./pages/mentor/MentorGradingPage";
 import AdminPage from "./pages/main/AdminPage";
 import AdminSecurityPage from "./pages/admin/AdminSecurityPage";
 import AdminGamificationDashboard from "./pages/admin/AdminGamificationDashboard";
@@ -77,6 +78,7 @@ import "./styles/App.css";
 import ScrollToTop from "./components/scroll/ScrollToTop";
 import CourseDetailPage from "./pages/navbar/CourseDetailPage";
 import CourseLearningPage from "./pages/navbar/CourseLearningPage";
+import AssignmentPage from "./pages/navbar/AssignmentPage";
 import QuizAttemptPage from "./pages/quiz/QuizAttemptPage";
 import ProfilePageCosmic from "./pages/profile/ProfilePageCosmic";
 import MentorProfilePage from "./pages/mentor/MentorProfilePage";
@@ -312,6 +314,10 @@ const App = () => {
                           element={<CourseLearningPage />}
                         />
                         <Route
+                        path="/assignment/:assignmentId"
+                        element={<AssignmentPage />}
+                      />
+                      <Route
                           path="/quiz/:quizId/attempt"
                           element={<QuizAttemptPage />}
                         />
@@ -371,6 +377,14 @@ const App = () => {
                           }
                         />
                         <Route
+                        path="/mentor/assignments/:assignmentId/grade"
+                        element={
+                          <MentorRoute>
+                            <MentorGradingPage />
+                          </MentorRoute>
+                        }
+                      />
+                      <Route
                           path="/admin"
                           element={
                             <AdminRoute>

@@ -39,7 +39,7 @@ useEffect(() => {
         user?.id ? getUserEnrollments(user.id).catch(() => ({ content: [] })) : Promise.resolve({ content: [] })
       ]);
 
-      const purchasedIds = new Set<string>((enrollments.content || []).map((enr: any) => String(enr.courseId)));
+      const purchasedIds = new Set<string>((enrollments.content || []).map((enr) => String(enr.courseId)));
 
       const legacyCourses = published.content
         .filter((dto: CourseSummaryDTO) => !purchasedIds.has(String(dto.id)))

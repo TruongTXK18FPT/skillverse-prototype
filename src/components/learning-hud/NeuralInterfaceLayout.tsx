@@ -33,7 +33,7 @@ const NeuralInterfaceLayout: React.FC<NeuralInterfaceLayoutProps> = ({
               className="learning-hud-back-btn"
             >
               <ArrowLeft size={20} />
-              <span>Exit</span>
+              <span>Thoát</span>
             </button>
             <div className="learning-hud-course-title">
               <h3>{courseTitle}</h3>
@@ -51,7 +51,7 @@ const NeuralInterfaceLayout: React.FC<NeuralInterfaceLayoutProps> = ({
               className="learning-hud-sidebar-toggle"
             >
               <LayoutDashboard size={20} />
-              <span>System Log</span>
+              <span>Danh mục</span>
             </button>
           </div>
         </header>

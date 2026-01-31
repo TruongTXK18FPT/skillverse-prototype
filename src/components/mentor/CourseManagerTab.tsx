@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   BookOpen,
   Users,
@@ -11,7 +12,8 @@ import {
   Clock,
   XCircle,
   Layers,
-  Plus
+  Plus,
+  ClipboardList
 } from 'lucide-react';
 import { NeuralCard, NeuralButton } from '../learning-hud';
 import '../../components/learning-hud/learning-hud.css';
@@ -43,6 +45,10 @@ export interface CourseCard {
   enrollmentCount: number;
   price?: number;
   currency?: string;
+  assignments?: Array<{
+    id: number;
+    title: string;
+  }>;
 }
 
 interface Props {
@@ -131,6 +137,21 @@ const CourseManagerTab: React.FC<Props> = ({
   onSubmit,
   onDelete
 }) => {
+  const navigate = useNavigate();
+  const [courseAssignments, setCourseAssignments] = useState<Record<number, Array<{ id: number; title: string }>>>({});
+
+  // Load assignments for courses with assignments
+  useEffect(() => {
+    courses.forEach(course => {
+      if (course.assignments && course.assignments.length > 0 && !courseAssignments[course.id]) {
+        setCourseAssignments(prev => ({
+          ...prev,
+          [course.id]: course.assignments || []
+        }));
+      }
+    });
+  }, [courses]);
+
   return (
     <div style={{
       padding: '2rem',
@@ -395,6 +416,20 @@ const CourseManagerTab: React.FC<Props> = ({
                     <Edit3 size={16} />
                     Edit
                   </NeuralButton>
+
+                  {courseAssignments[course.id] && courseAssignments[course.id].length > 0 && (
+                    <NeuralButton
+                      onClick={() => {
+                        const firstAssignmentId = courseAssignments[course.id][0].id;
+                        navigate(`/mentor/assignments/${firstAssignmentId}/grade`);
+                      }}
+                      variant="success"
+                      style={{ width: '100%' }}
+                    >
+                      <ClipboardList size={16} />
+                      Grade Assignments ({courseAssignments[course.id].length})
+                    </NeuralButton>
+                  )}
 
                   {course.status === 'DRAFT' && (
                     <NeuralButton

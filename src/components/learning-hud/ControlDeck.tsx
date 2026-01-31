@@ -27,7 +27,7 @@ const ControlDeck: React.FC<ControlDeckProps> = ({
         disabled={!canNavigatePrev}
       >
         <ChevronLeft size={18} />
-        <span>Prev Link</span>
+        <span>Bài trước</span>
       </button>
 
       <button
@@ -36,7 +36,7 @@ const ControlDeck: React.FC<ControlDeckProps> = ({
         disabled={!canComplete}
       >
         <CheckCircle size={20} />
-        <span>Mark Data Processed</span>
+        <span>Đánh dấu hoàn thành</span>
       </button>
 
       <button
@@ -44,7 +44,7 @@ const ControlDeck: React.FC<ControlDeckProps> = ({
         onClick={onNext}
         disabled={!canNavigateNext}
       >
-        <span>Initialize Next</span>
+        <span>Bài tiếp theo</span>
         <ChevronRight size={18} />
       </button>
     </footer>

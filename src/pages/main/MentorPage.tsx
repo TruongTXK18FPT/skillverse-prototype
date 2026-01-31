@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   BookOpen, 
   Plus, 
@@ -26,7 +27,7 @@ import {
 } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
-import { listCoursesByAuthor, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse, submitCourseForApproval } from '../../services/courseService';
+import { listCoursesByAuthor, getCourse, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse, submitCourseForApproval } from '../../services/courseService';
 import { CourseStatus, CourseLevel, CourseUpdateDTO, CourseCreateDTO } from '../../data/courseDTOs';
 import MentorBookingManager from '../../components/portfolio-hud/MentorBookingManager';
 import MentorScheduleManager from '../../components/portfolio-hud/MentorScheduleManager';
@@ -40,6 +41,7 @@ import { LessonType as ApiLessonType, LessonCreateDTO } from '../../data/lessonD
 import { createQuiz, listQuizzesByModule, getQuizById, updateQuiz, deleteQuiz, addQuizQuestion, updateQuizQuestion, deleteQuizQuestion, addQuizOption, updateQuizOption, deleteQuizOption } from '../../services/quizService';
 import { QuizCreateDTO, QuizSummaryDTO, QuizDetailDTO, QuizUpdateDTO, QuizQuestionCreateDTO, QuizQuestionDetailDTO, QuizQuestionUpdateDTO, QuizOptionCreateDTO, QuizOptionDTO, QuizOptionUpdateDTO, QuestionType } from '../../data/quizDTOs';
 import { listAssignmentsByModule, updateAssignment, deleteAssignment, getAssignmentById } from '../../services/assignmentService';
+import MentorGradingDashboard from '../../components/mentor/MentorGradingDashboard';
 import { createCodingExercise } from '../../services/codelabService';
 import { SubmissionType, AssignmentSummaryDTO } from '../../data/assignmentDTOs';
 import AssignmentModal from '../../components/course/AssignmentModal';
@@ -271,7 +273,10 @@ export interface CodingExerciseCreateData {
 
 const MentorPage: React.FC = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<string>('courses');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const locationState = location.state as { activeTab?: string } | null;
+  const [activeTab, setActiveTab] = useState<string>(locationState?.activeTab || 'courses');
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [showCreateCourse, setShowCreateCourse] = useState(false);
@@ -427,17 +432,17 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
         status: dto.status,
         author: dto.author,
         thumbnail: dto.thumbnailUrl ? {
-          id: 0, // Not available in summary
+          id: 0,
           url: dto.thumbnailUrl,
-          fileName: '' // Not available in summary
+          fileName: ''
         } : undefined,
-        lessons: [], // Load separately when needed
+        lessons: [],
         quizzes: [],
-        assignments: [],
+        assignments: [], // Will be loaded on-demand when viewing course
         codingExercises: [],
         enrollmentCount: dto.enrollmentCount,
-        moduleCount: dto.moduleCount, // ✅ Use actual moduleCount from backend
-        lessonCount: dto.lessonCount || 0, // ✅ Use actual lessonCount from backend
+        moduleCount: dto.moduleCount,
+        lessonCount: dto.lessonCount || 0,
         price: dto.price,
         currency: dto.currency,
         createdAt: dto.createdAt,
@@ -1273,6 +1278,13 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
       gradient: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
       description: 'Hồ sơ buổi học'
     },
+    { 
+      id: 'grading', 
+      label: 'Chấm Bài', 
+      icon: FileText,
+      gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+      description: 'Bài tập cần chấm điểm'
+    },
   ];
 
   const renderCoursesTab = () => (
@@ -1828,6 +1840,13 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                                     <div className="mentor-lesson-buttons">
                                       <button
                                         className="mentor-btn-icon"
+                                        onClick={() => navigate(`/mentor/assignments/${assignment.id}/grade`)}
+                                        title="View submissions & grade"
+                                      >
+                                        <FileText className="w-4 h-4" />
+                                      </button>
+                                      <button
+                                        className="mentor-btn-icon"
                                         onClick={() => handleEditAssignment(assignment.id)}
                                         title="Edit assignment"
                                       >
@@ -1928,6 +1947,8 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
         return <ReviewsTab />;
       case 'history':
         return <MentoringHistoryTab />;
+      case 'grading':
+        return <MentorGradingDashboard courses={courses} />;
       default:
         return (
           <div className="mentor-hud-default-tab">
@@ -2439,7 +2460,9 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                     </div>
                   ) : (
                     <div className="mentor-questions-list">
-                      {selectedQuiz.questions.map((question, index) => (
+                      {[...selectedQuiz.questions]
+                        .sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0))
+                        .map((question, index) => (
                         <div key={question.id} className="mentor-question-card">
                           <div className="mentor-question-header">
                             <h4>Câu hỏi {index + 1}</h4>
@@ -2555,11 +2578,16 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
               if (!questionText) return;
               
               try {
+                // Calculate next orderIndex: max existing orderIndex + 1
+                const maxOrderIndex = selectedQuiz.questions.length > 0
+                  ? Math.max(...selectedQuiz.questions.map(q => q.orderIndex || 0))
+                  : 0;
+                
                 const questionData: QuizQuestionCreateDTO = {
                   questionText,
                   questionType,
                   score,
-                  orderIndex: selectedQuiz.questions.length + 1,
+                  orderIndex: maxOrderIndex + 1,
                   options: []
                 };
                 
@@ -2652,7 +2680,9 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
                   <label className="mentor-form-label">Câu hỏi</label>
                   <select name="questionId" className="mentor-form-input" required>
                     <option value="">Chọn câu hỏi</option>
-                    {selectedQuiz.questions.map(question => (
+                    {[...selectedQuiz.questions]
+                      .sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0))
+                      .map(question => (
                       <option key={question.id} value={question.id}>
                         {question.questionText.substring(0, 50)}...
                       </option>
@@ -2698,12 +2728,21 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
               onClose={() => setShowBulkAddOption(null)}
               onSubmit={async (options) => {
                 try {
-                  await Promise.all(options.map(optionText => 
-                    addQuizOption(showBulkAddOption, {
-                      optionText,
-                      correct: false 
-                    }, user?.id || 0)
-                  ));
+                  // Get current question to find max orderIndex
+                  const currentQuestion = selectedQuiz.questions.find(q => q.id === showBulkAddOption);
+                  const maxOrderIndex = currentQuestion?.options?.length > 0
+                    ? Math.max(...currentQuestion.options.map(o => o.orderIndex || 0))
+                    : 0;
+                  
+                  // Add options sequentially with correct orderIndex
+                  for (let i = 0; i < options.length; i++) {
+                    await addQuizOption(showBulkAddOption, {
+                      optionText: options[i],
+                      correct: false,
+                      orderIndex: maxOrderIndex + i + 1
+                    }, user?.id || 0);
+                  }
+                  
                   setShowBulkAddOption(null);
                   await handleViewQuiz(selectedQuiz.id, true);
                 } catch (err) {

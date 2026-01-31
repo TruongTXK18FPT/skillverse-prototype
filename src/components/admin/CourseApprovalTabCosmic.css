@@ -541,12 +541,27 @@
   padding: 2rem;
   overflow-y: auto;
   flex: 1;
+  color: #e0e7ff; /* Fix: Ensure text is visible */
+  opacity: 1 !important; /* Fix: Prevent any opacity reduction */
+}
+
+.cosmic-modal-body * {
+  opacity: 1 !important; /* Fix: Ensure all children are fully visible */
+}
+
+.cosmic-modal-body p {
+  color: #e0e7ff !important; /* Fix: Explicit color for paragraphs */
+  line-height: 1.6;
+}
+
+.cosmic-modal-body label {
+  color: #a5b4fc !important; /* Fix: Ensure labels are visible */
 }
 
 .cosmic-course-detail-section h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.75rem;
-  color: #e0e7ff;
+  color: #e0e7ff !important;
 }
 
 .cosmic-course-detail-section .subtitle {

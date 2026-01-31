@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   ArrowLeft,
   Star,
+  User,
   Users,
   Clock,
   BookOpen,
@@ -26,12 +27,14 @@ import {
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../utils/useToast';
 import { getCourse } from '../../services/courseService';
 import { enrollUser, checkEnrollmentStatus, getEnrollmentProgress } from '../../services/enrollmentService';
 import { CourseDetailDTO } from '../../data/courseDTOs';
 import { getMentorProfile, MentorProfile } from '../../services/mentorProfileService';
 import { getGroupByCourse, joinGroup, GroupChatResponse } from '../../services/groupChatService';
 import PurchaseCourseModal from '../../components/course/PurchaseCourseModal';
+import Toast from '../../components/shared/Toast';
 import '../../styles/CourseDetailCockpit.css';
 
 // Local helpers
@@ -53,6 +56,7 @@ const CourseDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const { toast, showSuccess, showError, showInfo, hideToast } = useToast();
   const [course, setCourse] = useState<CourseDetailDTO | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
@@ -94,11 +98,13 @@ const CourseDetailPage = () => {
           }
         }
         try {
-          const enrolled = await checkEnrollmentStatus(courseIdNum, 1);
-          setIsEnrolled(enrolled);
-          if (enrolled) {
-            const progress = await getEnrollmentProgress(courseIdNum, 1);
-            setEnrollmentProgress(progress.progress);
+          if (user) {
+            const enrolled = await checkEnrollmentStatus(courseIdNum, user.id);
+            setIsEnrolled(enrolled);
+            if (enrolled) {
+              const progress = await getEnrollmentProgress(courseIdNum, user.id);
+              setEnrollmentProgress(progress.progress);
+            }
           }
         } catch {
           // ignore
@@ -108,7 +114,7 @@ const CourseDetailPage = () => {
         console.error('Error loading course:', err);
       })
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, user]);
 
   useEffect(() => {
     if (course && user) {
@@ -127,27 +133,34 @@ const CourseDetailPage = () => {
       navigate('/messages', { state: { openChatWith: groupChat.id, type: 'GROUP' } });
     } catch (e) {
       console.error('Failed to join group', e);
-      alert('Không thể tham gia nhóm chat. Vui lòng thử lại.');
+      showError('Lỗi', 'Không thể tham gia nhóm chat. Vui lòng thử lại.');
     }
   };
 
   const handleEnroll = async () => {
-    if (!course || loadingEnrollment) return;
+    if (!course || loadingEnrollment || !user) return;
 
     setLoadingEnrollment(true);
 
     try {
       if (!course.price || course.price === 0) {
-        await enrollUser(course.id, 1);
+        await enrollUser(course.id, user.id);
         setIsEnrolled(true);
         setEnrollmentProgress(0);
-        alert('Bạn đã đăng ký thành công khóa học miễn phí!');
+        showSuccess(
+          '🎉 Đăng ký thành công!', 
+          'Bạn đã tham gia khóa học miễn phí. Chúc bạn học tập hiệu quả!',
+          {
+            text: 'Bắt đầu học',
+            onClick: () => navigate('/course-learning', { state: { courseId: course.id } })
+          }
+        );
       } else {
         setShowPaymentModal(true);
       }
     } catch (error) {
       console.error('Error enrolling in course:', error);
-      alert('Có lỗi xảy ra khi đăng ký khóa học. Vui lòng thử lại.');
+      showError('Lỗi đăng ký', 'Có lỗi xảy ra khi đăng ký khóa học. Vui lòng thử lại.');
     } finally {
       setLoadingEnrollment(false);
     }
@@ -284,30 +297,6 @@ const CourseDetailPage = () => {
                 </div>
               </div>
 
-              {/* Instructor Card */}
-              {course.author && (
-                <div className="cockpit-detail-instructor-card">
-                  <div className="cockpit-detail-instructor-header">
-                    <Cpu className="cockpit-detail-instructor-icon" />
-                    <span className="cockpit-detail-instructor-label">INSTRUCTOR</span>
-                  </div>
-                  <div className="cockpit-detail-instructor-info">
-                    <img
-                      src={mentorProfile?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'}
-                      alt={course.author.firstName}
-                      className="cockpit-detail-instructor-avatar"
-                    />
-                    <div className="cockpit-detail-instructor-details">
-                      <h4 className="cockpit-detail-instructor-name">
-                        {course.author.fullName || `${course.author.firstName} ${course.author.lastName}`}
-                      </h4>
-                      {mentorProfile?.specialization && (
-                        <p className="cockpit-detail-instructor-spec">{mentorProfile.specialization}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Right: Enrollment Panel */}
@@ -415,14 +404,7 @@ const CourseDetailPage = () => {
               onClick={() => setActiveTab('overview')}
             >
               <Target className="cockpit-detail-tab-icon" />
-              <span>TỔNG QUAN</span>
-            </button>
-            <button
-              className={`cockpit-detail-tab ${activeTab === 'curriculum' ? 'active' : ''}`}
-              onClick={() => setActiveTab('curriculum')}
-            >
-              <Layers className="cockpit-detail-tab-icon" />
-              <span>NỘI DUNG</span>
+              <span>TỔNG QUAN & NỘI DUNG</span>
             </button>
             <button
               className={`cockpit-detail-tab ${activeTab === 'instructor' ? 'active' : ''}`}
@@ -452,62 +434,16 @@ const CourseDetailPage = () => {
                     <h2 className="cockpit-detail-section-title">MÔ TẢ MODULE</h2>
                   </div>
                   <div className="cockpit-detail-section-content">
-                    <p className="cockpit-detail-text">
-                      {course.description} Khóa học này được thiết kế dành cho những người muốn
-                      nắm vững các kiến thức cơ bản và nâng cao, với nhiều ví dụ thực tế và
-                      bài tập thực hành phong phú.
-                    </p>
-                    <p className="cockpit-detail-text">
-                      Bạn sẽ học được cách xây dựng các ứng dụng hoàn chỉnh từ đầu đến cuối,
-                      hiểu rõ các best practices và các kỹ thuật tối ưu hóa hiệu suất.
-                    </p>
+                    {course.description ? (
+                      <p className="cockpit-detail-text" style={{ whiteSpace: 'pre-line' }}>
+                        {course.description}
+                      </p>
+                    ) : (
+                      <p className="cockpit-detail-text italic opacity-70">
+                        Chưa có mô tả chi tiết cho module này.
+                      </p>
+                    )}
                   </div>
-                </div>
-
-                <div className="cockpit-detail-section-panel">
-                  <div className="cockpit-detail-section-header">
-                    <div className="cockpit-detail-section-marker"></div>
-                    <h3 className="cockpit-detail-section-title">NĂNG LỰC ĐẠT ĐƯỢC</h3>
-                  </div>
-                  <div className="cockpit-detail-outcomes-grid">
-                    <div className="cockpit-detail-outcome-card">
-                      <Target className="cockpit-detail-outcome-icon" />
-                      <span>Nắm vững các khái niệm cơ bản và nâng cao</span>
-                    </div>
-                    <div className="cockpit-detail-outcome-card">
-                      <Trophy className="cockpit-detail-outcome-icon" />
-                      <span>Xây dựng các dự án thực tế hoàn chỉnh</span>
-                    </div>
-                    <div className="cockpit-detail-outcome-card">
-                      <Shield className="cockpit-detail-outcome-icon" />
-                      <span>Hiểu và áp dụng các best practices</span>
-                    </div>
-                    <div className="cockpit-detail-outcome-card">
-                      <Zap className="cockpit-detail-outcome-icon" />
-                      <span>Tối ưu hóa hiệu suất và debug lỗi</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="cockpit-detail-section-panel">
-                  <div className="cockpit-detail-section-header">
-                    <div className="cockpit-detail-section-marker"></div>
-                    <h3 className="cockpit-detail-section-title">YÊU CẦU HỆ THỐNG</h3>
-                  </div>
-                  <ul className="cockpit-detail-requirements">
-                    <li>
-                      <CheckCircle className="cockpit-detail-check-icon" />
-                      <span>Kiến thức cơ bản về HTML, CSS và JavaScript</span>
-                    </li>
-                    <li>
-                      <CheckCircle className="cockpit-detail-check-icon" />
-                      <span>Máy tính có thể cài đặt phần mềm phát triển</span>
-                    </li>
-                    <li>
-                      <CheckCircle className="cockpit-detail-check-icon" />
-                      <span>Đam mê học hỏi và thực hành</span>
-                    </li>
-                  </ul>
                 </div>
               </div>
             )}
@@ -571,11 +507,6 @@ const CourseDetailPage = () => {
                   </div>
                   <div className="cockpit-detail-instructor-full-card">
                     <div className="cockpit-detail-instructor-profile">
-                      <img
-                        src={mentorProfile?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'}
-                        alt={course.author.firstName}
-                        className="cockpit-detail-instructor-photo"
-                      />
                       <div className="cockpit-detail-instructor-bio-section">
                         <h3 className="cockpit-detail-instructor-full-name">
                           {course.author.fullName || `${course.author.firstName} ${course.author.lastName}`}
@@ -648,10 +579,27 @@ const CourseDetailPage = () => {
             setIsEnrolled(true);
             setEnrollmentProgress(0);
             setShowPaymentModal(false);
-            alert('Thanh toán thành công! Bạn đã kích hoạt khóa học.');
+            showSuccess(
+              '💳 Thanh toán thành công!',
+              'Bạn đã kích hoạt khóa học. Hãy bắt đầu hành trình học tập!',
+              {
+                text: 'Bắt đầu học',
+                onClick: () => navigate('/course-learning', { state: { courseId: course.id } })
+              }
+            );
           }}
         />
       )}
+
+      {/* Toast Notification */}
+      <Toast
+        type={toast.type}
+        title={toast.title}
+        message={toast.message}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+        actionButton={toast.actionButton}
+      />
     </div>
   );
 };

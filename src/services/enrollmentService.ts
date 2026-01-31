@@ -1,36 +1,17 @@
 import axiosInstance from './axiosInstance';
+import {
+  EnrollRequestDTO,
+  EnrollmentDetailDTO,
+  EnrollmentStatsDTO
+} from '../data/enrollmentDTOs';
+
+// Re-export DTOs for backward compatibility
+export type { EnrollRequestDTO, EnrollmentDetailDTO, EnrollmentStatsDTO };
 
 /**
  * Enrollment Service - Complete API Integration
  * Matches Backend EnrollmentController endpoints
  */
-
-// ==================== DTOs ====================
-
-export interface EnrollRequestDTO {
-  courseId: number;
-}
-
-export interface EnrollmentDetailDTO {
-  id: number;
-  courseId: number;
-  userId: number;
-  status: 'ENROLLED' | 'COMPLETED' | 'CANCELLED';
-  progressPercent: number;
-  entitlementSource: 'PURCHASE' | 'FREE' | 'GIFT' | 'TRIAL';
-  entitlementRef?: string;
-  enrolledAt: string;
-  completedAt?: string;
-  completed: boolean;
-}
-
-export interface EnrollmentStatsDTO {
-  totalEnrollments: number;
-  activeEnrollments: number;
-  completedEnrollments: number;
-  averageProgress: number;
-  enrollmentsThisMonth: number;
-}
 
 // ==================== ENROLLMENT OPERATIONS ====================
 
@@ -119,7 +100,14 @@ export const getCourseEnrollments = async (
     });
     
     // Handle both PageResponse formats if needed, similar to getUserEnrollments
-    const data: any = response.data;
+    interface PageResponseVariant {
+      content?: EnrollmentDetailDTO[];
+      items?: EnrollmentDetailDTO[];
+      totalElements?: number;
+      total?: number;
+      totalPages?: number;
+    }
+    const data = response.data as PageResponseVariant;
     return {
       content: data.content || data.items || [],
       totalElements: data.totalElements || data.total || 0,

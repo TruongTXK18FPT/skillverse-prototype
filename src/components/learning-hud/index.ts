@@ -6,3 +6,4 @@ export { default as HoloProgressBar } from './HoloProgressBar';
 export { default as NeuralCard } from './NeuralCard';
 export { default as NeuralButton } from './NeuralButton';
 export { default as NeuralModal } from './NeuralModal';
+export { default as AssignmentViewer } from './AssignmentViewer';

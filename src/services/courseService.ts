@@ -8,6 +8,10 @@ import {
   PageResponse
 } from '../data/courseDTOs';
 import { CreatePaymentResponse as GatewayPaymentResponse } from '../data/paymentDTOs';
+import { CoursePurchaseDTO, CoursePurchaseRequestDTO } from '../data/purchaseDTOs';
+
+// Re-export DTOs for backward compatibility
+export type { CoursePurchaseDTO, CoursePurchaseRequestDTO as CoursePurchaseRequest };
 
 /**
  * Course Service - Complete API Integration
@@ -291,20 +295,6 @@ export const searchCourses = async (
  * Get course purchases for mentor's courses
  * GET /api/course-purchases/mentor
  */
-export interface CoursePurchaseDTO {
-  id: number;
-  courseId: number;
-  userId: number;
-  status: string;
-  price: number;
-  currency: string;
-  purchasedAt: string;
-  couponCode?: string;
-  buyerName?: string;
-  buyerAvatarUrl?: string;
-  courseTitle?: string;
-}
-
 export const getMentorCoursePurchases = async (
   page: number = 0,
   size: number = 10
@@ -325,19 +315,12 @@ export const getMentorCoursePurchases = async (
 
 // ==================== COURSE PURCHASE PAYMENT ====================
 
-export interface CoursePurchaseRequest {
-  courseId: number;
-  couponCode?: string;
-  returnUrl?: string;
-  cancelUrl?: string;
-}
-
 /**
  * Create PayOS payment intent for course purchase
  * POST /api/course-purchases/intent
  */
 export const createCoursePurchaseIntent = async (
-  request: CoursePurchaseRequest
+  request: CoursePurchaseRequestDTO
 ): Promise<GatewayPaymentResponse> => {
   try {
     const response = await axiosInstance.post<GatewayPaymentResponse>(
@@ -356,7 +339,7 @@ export const createCoursePurchaseIntent = async (
  * POST /api/course-purchases/wallet
  */
 export const purchaseCourseWithWallet = async (
-  request: CoursePurchaseRequest
+  request: CoursePurchaseRequestDTO
 ): Promise<CoursePurchaseDTO> => {
   try {
     const response = await axiosInstance.post<CoursePurchaseDTO>(

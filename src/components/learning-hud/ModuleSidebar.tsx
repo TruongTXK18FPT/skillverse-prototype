@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
   PlayCircle,
@@ -6,7 +7,8 @@ import {
   HelpCircle,
   Circle,
   CheckCircle,
-  Lock
+  Lock,
+  ClipboardList
 } from 'lucide-react';
 import HoloProgressBar from './HoloProgressBar';
 import './learning-hud.css';
@@ -24,12 +26,19 @@ interface Quiz {
   orderIndex?: number;
 }
 
+interface Assignment {
+  id: number;
+  title: string;
+  orderIndex?: number;
+}
+
 interface Module {
   id: number;
   title: string;
   orderIndex?: number;
   lessons?: Lesson[];
   quizzes?: Quiz[];
+  assignments?: Assignment[];
 }
 
 interface ModuleSidebarProps {
@@ -67,6 +76,8 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
   onSelectLesson,
   isOpen
 }) => {
+  const navigate = useNavigate();
+
   return (
     <aside className={`learning-hud-sidebar ${isOpen ? 'open' : ''}`}>
       <div className="learning-hud-sidebar-content">
@@ -169,9 +180,48 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
                         );
                       })}
 
+                  {/* Render Assignments */}
+                  {module.assignments && module.assignments.length > 0 &&
+                    module.assignments
+                      .slice()
+                      .sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0))
+                      .map((assignment) => {
+                        const isActive =
+                          activeLesson.moduleId === module.id &&
+                          activeLesson.lessonId === assignment.id;
+
+                        return (
+                          <li key={`assignment-${assignment.id}`}>
+                            <button
+                              type="button"
+                              className={`learning-hud-lesson-item ${
+                                isActive ? 'active' : ''
+                              }`}
+                              onClick={() => {
+                                // Navigate to dedicated assignment page
+                                navigate(`/assignment/${assignment.id}`);
+                              }}
+                            >
+                              <div className="learning-hud-lesson-info">
+                                <ClipboardList className="learning-hud-lesson-icon" size={18} />
+                                <div className="learning-hud-lesson-details">
+                                  <span className="learning-hud-lesson-title">
+                                    {assignment.title}
+                                  </span>
+                                  <span className="learning-hud-lesson-badge assignment-badge">
+                                    ASSIGNMENT
+                                  </span>
+                                </div>
+                              </div>
+                            </button>
+                          </li>
+                        );
+                      })}
+
                   {/* Empty State */}
                   {(!module.lessons || module.lessons.length === 0) &&
-                    (!module.quizzes || module.quizzes.length === 0) && (
+                    (!module.quizzes || module.quizzes.length === 0) &&
+                    (!module.assignments || module.assignments.length === 0) && (
                       <li>
                         <div className="learning-hud-lesson-item learning-hud-empty-state">
                           <div className="learning-hud-lesson-info">
