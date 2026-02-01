@@ -4,12 +4,6 @@
    =========================================== */
 
 /* Font Import */
-@font-face {
-  font-family: 'Space Habitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
 
 /* CSS Variables */
 :root {
@@ -189,7 +183,7 @@
 }
 
 .cockpit-detail-loading-text {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.2rem;
   color: var(--cockpit-detail-neon-cyan);
   letter-spacing: 3px;
@@ -234,7 +228,7 @@
 }
 
 .cockpit-detail-error-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.8rem;
   color: var(--cockpit-detail-neon-orange);
   letter-spacing: 3px;
@@ -255,7 +249,7 @@
   background: var(--cockpit-detail-bg-panel);
   border: 2px solid var(--cockpit-detail-border-primary);
   color: var(--cockpit-detail-text-primary);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   letter-spacing: 2px;
   cursor: pointer;
@@ -306,7 +300,7 @@
 }
 
 .cockpit-detail-status-text {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   color: var(--cockpit-detail-neon-green);
   letter-spacing: 2px;
@@ -341,7 +335,7 @@
   padding: 0.5rem 1rem;
   width: fit-content;
   border: 2px solid;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -425,7 +419,7 @@
 }
 
 .cockpit-detail-stat-value {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   font-weight: bold;
   color: var(--cockpit-detail-neon-cyan);
@@ -434,7 +428,7 @@
 }
 
 .cockpit-detail-stat-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
   color: var(--cockpit-detail-text-secondary);
   letter-spacing: 1px;
@@ -465,7 +459,7 @@
 }
 
 .cockpit-detail-instructor-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   color: var(--cockpit-detail-neon-cyan);
   letter-spacing: 2px;
@@ -563,7 +557,7 @@
   background: rgba(0, 246, 255, 0.9);
   border: 2px solid var(--cockpit-detail-neon-cyan);
   color: var(--cockpit-detail-bg-dark);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   letter-spacing: 2px;
   cursor: pointer;
@@ -626,14 +620,14 @@
 }
 
 .cockpit-detail-price-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   color: var(--cockpit-detail-text-secondary);
   letter-spacing: 1px;
 }
 
 .cockpit-detail-price-value {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 2rem;
   font-weight: bold;
   color: var(--cockpit-detail-neon-green);
@@ -652,7 +646,7 @@
   background: linear-gradient(135deg, var(--cockpit-detail-neon-cyan), var(--cockpit-detail-neon-blue));
   border: 2px solid var(--cockpit-detail-neon-cyan);
   color: var(--cockpit-detail-bg-dark);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: bold;
   letter-spacing: 2px;
@@ -702,7 +696,7 @@
   background: var(--cockpit-detail-bg-panel);
   border: 1px solid var(--cockpit-detail-border-secondary);
   color: var(--cockpit-detail-text-primary);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   letter-spacing: 1px;
   cursor: pointer;
@@ -749,7 +743,7 @@
 }
 
 .cockpit-detail-progress-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   color: var(--cockpit-detail-text-secondary);
   letter-spacing: 1px;
@@ -771,7 +765,7 @@
 }
 
 .cockpit-detail-progress-text {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   color: var(--cockpit-detail-neon-green);
   letter-spacing: 1px;
@@ -806,7 +800,7 @@
   background: transparent;
   border: 1px solid var(--cockpit-detail-border-secondary);
   color: var(--cockpit-detail-text-secondary);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   letter-spacing: 1px;
   cursor: pointer;
@@ -864,7 +858,7 @@
 }
 
 .cockpit-detail-section-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.3rem;
   color: var(--cockpit-detail-neon-cyan);
   letter-spacing: 2px;
@@ -989,7 +983,7 @@
 }
 
 .cockpit-detail-module-index {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.2rem;
   font-weight: bold;
   color: var(--cockpit-detail-neon-cyan);
@@ -1132,7 +1126,7 @@
 }
 
 .cockpit-detail-rating-number {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 4rem;
   font-weight: bold;
   color: var(--cockpit-detail-neon-yellow);
@@ -1159,7 +1153,7 @@
 }
 
 .cockpit-detail-rating-count {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   color: var(--cockpit-detail-text-secondary);
   letter-spacing: 1px;
@@ -1250,7 +1244,7 @@
 }
 
 .cockpit-detail-modal-play-overlay span {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.2rem;
   color: var(--cockpit-detail-neon-cyan);
   letter-spacing: 3px;

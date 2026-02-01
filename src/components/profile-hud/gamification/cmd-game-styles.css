@@ -19,7 +19,7 @@
   --cmd-game-text-white: #ffffff;
   --cmd-game-text-dim: #8b9bb4;
   --cmd-game-border: rgba(0, 240, 255, 0.3);
-  --cmd-game-font-header: 'Space Habitat', 'Rajdhani', sans-serif;
+  --cmd-game-font-header: 'Inter', 'Rajdhani', sans-serif;
   --cmd-game-font-body: 'Inter', system-ui, sans-serif;
   --cmd-game-font-mono: 'JetBrains Mono', monospace;
 }

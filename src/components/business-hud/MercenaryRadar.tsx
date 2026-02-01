@@ -60,7 +60,7 @@ const MercenaryRadar: React.FC<MercenaryRadarProps> = ({ freelancers = [], pagin
           </div>
         </div>
         <div className="fleet-no-results">
-          <p>Hệ thống radar đang quét... (Chưa có dữ liệu ứng viên thực tế)</p>
+          <p>Đang tìm kiếm ứng viên... (Chưa có dữ liệu)</p>
         </div>
       </div>
     );

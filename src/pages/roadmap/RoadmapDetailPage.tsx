@@ -119,13 +119,13 @@ const RoadmapDetailPage = () => {
       const { completedQuests, totalQuests, completionPercentage } = response.stats;
       if (completed) {
         showSuccess(
-          'Quest Completed! 🎉', 
-          `${completedQuests}/${totalQuests} quests done (${completionPercentage.toFixed(1)}%)`
+          'Hoàn thành! 🎉', 
+          `${completedQuests}/${totalQuests} mục tiêu hoàn thành (${completionPercentage.toFixed(1)}%)`
         );
       } else {
         showSuccess(
-          'Quest Unchecked', 
-          `${completedQuests}/${totalQuests} quests done (${completionPercentage.toFixed(1)}%)`
+          'Đã bỏ chọn', 
+          `${completedQuests}/${totalQuests} mục tiêu hoàn thành (${completionPercentage.toFixed(1)}%)`
         );
       }
     } catch (error) {

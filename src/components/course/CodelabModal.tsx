@@ -323,7 +323,7 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
               <label htmlFor="title" style={{
                 display: 'block',
                 fontSize: '0.875rem',
-                fontFamily: 'Space Habitat, monospace',
+                fontFamily: "Inter, sans-serif",
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 color: 'var(--lhud-cyan)',
@@ -351,7 +351,7 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
               <label htmlFor="description" style={{
                 display: 'block',
                 fontSize: '0.875rem',
-                fontFamily: 'Space Habitat, monospace',
+                fontFamily: "Inter, sans-serif",
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 color: 'var(--lhud-cyan)',
@@ -380,7 +380,7 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
                 <label htmlFor="difficulty" style={{
                   display: 'block',
                   fontSize: '0.875rem',
-                  fontFamily: 'Space Habitat, monospace',
+                  fontFamily: "Inter, sans-serif",
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                   color: 'var(--lhud-cyan)',
@@ -410,7 +410,7 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
                 <label htmlFor="language" style={{
                   display: 'block',
                   fontSize: '0.875rem',
-                  fontFamily: 'Space Habitat, monospace',
+                  fontFamily: "Inter, sans-serif",
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                   color: 'var(--lhud-cyan)',
@@ -442,7 +442,7 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
               <label htmlFor="starterCode" style={{
                 display: 'block',
                 fontSize: '0.875rem',
-                fontFamily: 'Space Habitat, monospace',
+                fontFamily: "Inter, sans-serif",
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 color: 'var(--lhud-cyan)',
@@ -478,7 +478,7 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
               <label htmlFor="solutionCode" style={{
                 display: 'block',
                 fontSize: '0.875rem',
-                fontFamily: 'Space Habitat, monospace',
+                fontFamily: "Inter, sans-serif",
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 color: 'var(--lhud-cyan)',
@@ -557,7 +557,7 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <GripVertical size={20} style={{ color: 'var(--lhud-text-dim)' }} />
                         <span style={{
-                          fontFamily: 'Space Habitat, monospace',
+                          fontFamily: "Inter, sans-serif",
                           fontSize: '0.875rem',
                           color: 'var(--lhud-cyan)',
                           textTransform: 'uppercase'
@@ -617,7 +617,7 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
                         <label style={{
                           display: 'block',
                           fontSize: '0.75rem',
-                          fontFamily: 'Space Habitat, monospace',
+                          fontFamily: "Inter, sans-serif",
                           textTransform: 'uppercase',
                           color: 'var(--lhud-text-secondary)',
                           marginBottom: '0.5rem'
@@ -641,7 +641,7 @@ const CodelabModal: React.FC<CodelabModalProps> = ({
                         <label style={{
                           display: 'block',
                           fontSize: '0.75rem',
-                          fontFamily: 'Space Habitat, monospace',
+                          fontFamily: "Inter, sans-serif",
                           textTransform: 'uppercase',
                           color: 'var(--lhud-text-secondary)',
                           marginBottom: '0.5rem'

@@ -10,7 +10,7 @@
   --cmdr-text-white: #ffffff;
   --cmdr-text-dim: #8b9bb4;
   --cmdr-border: rgba(0, 240, 255, 0.3);
-  --cmdr-font-header: 'Space Habitat', 'Rajdhani', sans-serif;
+  --cmdr-font-header: 'Inter', 'Rajdhani', sans-serif;
   --cmdr-font-body: 'Inter', system-ui, sans-serif;
   --cmdr-font-mono: 'JetBrains Mono', monospace;
 }

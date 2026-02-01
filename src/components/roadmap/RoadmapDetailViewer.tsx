@@ -65,8 +65,8 @@ const RoadmapDetailViewer = memo(({
           <div className="rm-status-bar">
             <span className="rm-system-dot"></span>
             <div className="rm-status-modules">
-              <span className="status-module-rm">System Online</span>
-              <span className="status-module-rm">{isSkillBased ? 'Skill Protocol' : 'Career Protocol'}</span>
+              <span className="status-module-rm">Hoạt động</span>
+              <span className="status-module-rm">{isSkillBased ? 'Kỹ năng' : 'Sự nghiệp'}</span>
             </div>
             {roadmap.metadata.difficultyLevel && (
               <span className={`rm-badge ${roadmap.metadata.difficultyLevel.toLowerCase()}`}>
@@ -82,7 +82,7 @@ const RoadmapDetailViewer = memo(({
           <div className="rm-objective-box">
             <Target size={18} className="rm-icon-accent" />
             <div>
-              <span className="rm-label">MỤC TIÊU CHIẾN DỊCH</span>
+              <span className="rm-label">MỤC TIÊU HỌC TẬP</span>
               <p className="rm-value">{roadmap.metadata.originalGoal}</p>
             </div>
           </div>
@@ -157,7 +157,7 @@ const RoadmapDetailViewer = memo(({
           <div className="rm-stat-box">
             <div className="rm-stat-icon-wrapper"><Trophy size={20} /></div>
             <div className="rm-stat-content">
-              <span className="rm-stat-label">NHIỆM VỤ CHÍNH</span>
+              <span className="rm-stat-label">MỤC TIÊU CHÍNH</span>
               <span className="rm-stat-value rm-text-accent">{roadmap.statistics?.mainNodes || 0}</span>
             </div>
           </div>
@@ -166,7 +166,7 @@ const RoadmapDetailViewer = memo(({
           <div className="rm-stat-box">
             <div className="rm-stat-icon-wrapper"><Hash size={20} /></div>
             <div className="rm-stat-content">
-              <span className="rm-stat-label">NHIỆM VỤ PHỤ</span>
+              <span className="rm-stat-label">MỤC TIÊU PHỤ</span>
               <span className="rm-stat-value">{roadmap.statistics?.sideNodes || 0}</span>
             </div>
           </div>
@@ -331,7 +331,7 @@ const RoadmapDetailViewer = memo(({
       <div className="roadmap-detail-viewer__header">
         <button onClick={onBack} className="roadmap-detail-viewer__back-btn">
           <ArrowLeft className="h-5 w-5" />
-          <span>TRỞ VỀ TRUNG TÂM CHỈ HUY</span>
+          <span>QUAY LẠI</span>
         </button>
       </div>
 

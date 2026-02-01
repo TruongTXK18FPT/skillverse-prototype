@@ -83,7 +83,7 @@ const CommanderHeader: React.FC<CommanderHeaderProps> = ({ profile, onAvatarUplo
 
       <div className="cmdr-actions-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', marginLeft: 'auto' }}>
         <div style={{ fontSize: '0.7rem', color: 'var(--cmdr-text-dim)', marginBottom: '0.5rem', letterSpacing: '1px' }}>
-          SYSTEM STATUS
+          TRẠNG THÁI
         </div>
         <button 
           type="button"
@@ -91,7 +91,7 @@ const CommanderHeader: React.FC<CommanderHeaderProps> = ({ profile, onAvatarUplo
           onClick={onTogglePreChat}
           style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
         >
-          {preChatEnabled ? 'COMMS ONLINE' : 'COMMS OFFLINE'}
+          {preChatEnabled ? 'TRỰC TUYẾN' : 'NGOẠI TUYẾN'}
         </button>
       </div>
     </div>

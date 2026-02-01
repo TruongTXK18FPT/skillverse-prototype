@@ -3,13 +3,7 @@
    Isolated Styles (Prefix: uplink-)
    ============================================ */
 
-/* Font Import - Space Habitat for Metrics */
-@font-face {
-  font-family: 'Space Habitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
+/* Font Import - Inter for Metrics */
 
 /* ============================================
    CSS VARIABLES - ACADEMY PALETTE
@@ -142,7 +136,7 @@
   position: absolute;
   top: 0.75rem;
   right: 1rem;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.65rem;
   color: #22d3ee;
   opacity: 0.5;
@@ -167,7 +161,7 @@
   background-clip: text;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   animation: uplink-glow 3s ease-in-out infinite;
 }
 
@@ -302,7 +296,7 @@
 .uplink-freq-count {
   font-size: 0.75rem;
   opacity: 0.8;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
 /* ============================================
@@ -409,7 +403,7 @@
 }
 
 .uplink-price-capsule-value {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
   color: #22d3ee;
@@ -690,7 +684,7 @@
 
 /* Special styling for PRICE metric only */
 .uplink-metric-value.price {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   color: #22d3ee;
   font-size: 1.1rem;
   font-weight: 700;
@@ -927,7 +921,7 @@
 
 /* Page Numbers */
 .holo-page-number {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
   color: var(--uplink-text-grey);
   transition: all 0.3s ease;

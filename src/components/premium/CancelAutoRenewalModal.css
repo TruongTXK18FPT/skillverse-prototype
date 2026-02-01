@@ -114,7 +114,7 @@
 
 /* Title */
 .auto-renewal-modal-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 24px;
   font-weight: normal;
   color: var(--rank-gold, #fbbf24);

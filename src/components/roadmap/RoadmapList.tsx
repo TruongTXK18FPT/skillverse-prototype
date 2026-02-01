@@ -63,7 +63,7 @@ const RoadmapList = memo(({
         <div className="roadmap-hud-card-stats">
           <div className="roadmap-hud-stat">
             <BookOpen size={14} />
-            <span>{roadmap.totalQuests} Nhiệm vụ</span>
+            <span>{roadmap.totalQuests} Mục tiêu</span>
           </div>
           <div className="roadmap-hud-stat">
             <Clock size={14} />

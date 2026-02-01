@@ -99,7 +99,7 @@ const SkillPointManagementTabCosmic: React.FC = () => {
       user: 'Hoàng Văn E',
       userId: 'USR005',
       amount: 150,
-      reason: 'Hoàn thành nhiệm vụ hàng ngày',
+      reason: 'Hoàn thành công việc hàng ngày',
       date: '2024-01-13 18:00',
       admin: 'System',
       type: 'add'

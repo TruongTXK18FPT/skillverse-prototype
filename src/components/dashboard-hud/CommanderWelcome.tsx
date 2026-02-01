@@ -114,7 +114,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
         icon: <AlertTriangle size={12} />,
         message: firstCritical
           ? `Ưu tiên cao: "${firstCritical.title.substring(0, 25)}..."`
-          : `${taskSummary.criticalOverdue} nhiệm vụ cần xử lý gấp!`,
+          : `${taskSummary.criticalOverdue} công việc cần xử lý gấp!`,
       });
     }
 
@@ -127,7 +127,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
         icon: <Target size={12} />,
         message: firstOverdue
           ? `Tiếp theo: "${firstOverdue.title.substring(0, 25)}..."`
-          : `Hoàn thành ${taskSummary.overdue} nhiệm vụ quá hạn`,
+          : `Hoàn thành ${taskSummary.overdue} công việc quá hạn`,
       });
     }
 
@@ -135,7 +135,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
       suggestions.push({
         type: "info",
         icon: <Clock size={12} />,
-        message: `${taskSummary.pending} nhiệm vụ pending - giữ tiến độ!`,
+        message: `${taskSummary.pending} công việc đang chờ - giữ tiến độ!`,
       });
     }
 

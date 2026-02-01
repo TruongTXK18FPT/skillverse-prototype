@@ -54,7 +54,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
@@ -81,7 +81,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 0.8rem;
@@ -146,7 +146,7 @@
   color: var(--uplink-text-white);
   min-width: 150px;
   text-align: center;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
 /* Calendar Grid */
@@ -191,7 +191,7 @@
   font-size: 18px;
   font-weight: 700;
   margin-top: 4px;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
 .msm-grid-body {
@@ -225,7 +225,7 @@
   font-size: 11px;
   color: var(--uplink-text-grey);
   padding-top: 4px;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
 .msm-day-column {
@@ -303,7 +303,7 @@
   font-weight: 600;
   font-size: 10px;
   margin-bottom: 2px;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   opacity: 0.8;
 }
 
@@ -380,7 +380,7 @@
   font-size: 18px;
   font-weight: 700;
   color: #22d3ee;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
@@ -426,7 +426,7 @@
   font-size: 14px;
   color: var(--uplink-text-white);
   transition: all 0.2s;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
 .msm-form-input:focus, .msm-form-select:focus {
@@ -467,7 +467,7 @@
   align-items: center;
   height: 100%;
   color: #22d3ee;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   animation: pulse 2s infinite;
 }
 

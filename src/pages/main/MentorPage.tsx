@@ -1291,7 +1291,7 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
     <div className="mentor-hud-courses">
       <div className="mentor-hud-courses__header">
         <div className="mentor-hud-courses__title-section">
-          <h2>MODULE NHIỆM VỤ</h2>
+          <h2>QUẢN LÝ KHÓA HỌC</h2>
           <p>Quản lý và tạo mới các khóa học</p>
         </div>
         <button
@@ -1966,10 +1966,10 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
           <div className="mentor-hud-header__content">
             <div className="mentor-hud-header__status">
               <div className="mentor-hud-header__status-dot"></div>
-              <span className="mentor-hud-header__status-text">HỆ THỐNG TRỰC TUYẾN</span>
+              <span className="mentor-hud-header__status-text">TRỰC TUYẾN</span>
             </div>
             <h1 className="mentor-hud-header__title">
-              MENTOR <span className="mentor-hud-header__title-accent">TRUNG TÂM ĐIỀU KHIỂN</span>
+              MENTOR <span className="mentor-hud-header__title-accent">BẢNG ĐIỀU KHIỂN</span>
             </h1>
             <p className="mentor-hud-header__subtitle">Quản lý hoạt động hướng dẫn và theo dõi tác động của bạn</p>
           </div>

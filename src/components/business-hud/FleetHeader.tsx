@@ -13,12 +13,12 @@ const FleetHeader: React.FC<FleetHeaderProps> = ({ activeTab, onTabChange }) => 
       <div className="fleet-header-content">
         <h1 className="fleet-header-title">
           <LayoutDashboard size={32} style={{ marginRight: '15px' }} />
-          TRUNG TÂM ĐIỀU HÀNH DOANH NGHIỆP
+          TRUNG TÂM QUẢN LÝ DOANH NGHIỆP
         </h1>
         <div className="fleet-status-modules">
           <span className="status-module">Hệ Thống: Trực Tuyến</span>
           <span className="status-module">Khu Vực: Doanh Nghiệp</span>
-          <span className="status-module">Cấp Độ: Chỉ Huy</span>
+          <span className="status-module">Cấp Độ: Chuyên Nghiệp</span>
         </div>
         
         <div className="fleet-nav-tabs">

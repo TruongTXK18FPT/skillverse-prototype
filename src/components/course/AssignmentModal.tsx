@@ -238,7 +238,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
               <label style={{
                 display: 'block',
                 fontSize: '0.875rem',
-                fontFamily: 'Space Habitat, monospace',
+                fontFamily: "Inter, sans-serif",
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 color: 'var(--lhud-cyan)',
@@ -331,7 +331,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
               <label htmlFor="title" style={{
                 display: 'block',
                 fontSize: '0.875rem',
-                fontFamily: 'Space Habitat, monospace',
+                fontFamily: "Inter, sans-serif",
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 color: 'var(--lhud-cyan)',
@@ -370,7 +370,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
               <label htmlFor="description" style={{
                 display: 'block',
                 fontSize: '0.875rem',
-                fontFamily: 'Space Habitat, monospace',
+                fontFamily: "Inter, sans-serif",
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 color: 'var(--lhud-cyan)',
@@ -420,7 +420,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
                 <label htmlFor="maxScore" style={{
                   display: 'block',
                   fontSize: '0.875rem',
-                  fontFamily: 'Space Habitat, monospace',
+                  fontFamily: "Inter, sans-serif",
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                   color: 'var(--lhud-cyan)',
@@ -462,7 +462,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
                   alignItems: 'center',
                   gap: '0.5rem',
                   fontSize: '0.875rem',
-                  fontFamily: 'Space Habitat, monospace',
+                  fontFamily: "Inter, sans-serif",
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                   color: 'var(--lhud-cyan)',

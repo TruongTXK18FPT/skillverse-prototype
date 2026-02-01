@@ -398,7 +398,7 @@ const CommunityDashboardPage: React.FC = () => {
   return (
     <div className="transmission-layout">
       <div className="transmission-container">
-        <CommsHeader title="Trung Tâm Chỉ Huy" subtitle="Quản lý & Giám sát Cộng đồng" />
+        <CommsHeader title="Trung Tâm Cộng Đồng" subtitle="Quản lý & Giám sát Cộng đồng" />
 
         {/* Stats Overview */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>

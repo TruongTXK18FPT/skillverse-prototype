@@ -10,7 +10,7 @@
   --pilot-text-white: #f8fafc;
   --pilot-text-dim: #94a3b8;
   --pilot-border: rgba(14, 165, 233, 0.3);
-  --pilot-font-header: 'Space Habitat', 'Rajdhani', sans-serif;
+  --pilot-font-header: 'Inter', 'Rajdhani', sans-serif;
   --pilot-font-body: 'Inter', system-ui, sans-serif;
   --pilot-font-mono: 'JetBrains Mono', monospace;
 }

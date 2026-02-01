@@ -525,7 +525,7 @@ const CourseLearningPage = () => {
                         margin: '0 0 16px 0',
                         fontSize: '2.2rem',
                         color: 'var(--lhud-text-primary)',
-                        fontFamily: '"Space Habitat", monospace',
+                        fontFamily: "Inter, sans-serif",
                         letterSpacing: '1px',
                         textTransform: 'uppercase'
                       }}>
@@ -571,7 +571,7 @@ const CourseLearningPage = () => {
                           fontSize: '2rem',
                           color: (activeQuizDetail.questions?.length || 0) === 0 ? 'var(--lhud-red)' : 'var(--lhud-cyan)',
                           marginBottom: '8px',
-                          fontFamily: '"Space Habitat", monospace'
+                          fontFamily: "Inter, sans-serif"
                         }}>
                           {activeQuizDetail.questions?.length || 0}
                         </div>
@@ -602,7 +602,7 @@ const CourseLearningPage = () => {
                           fontSize: '2rem',
                           color: 'var(--lhud-cyan)',
                           marginBottom: '8px',
-                          fontFamily: '"Space Habitat", monospace'
+                          fontFamily: "Inter, sans-serif"
                         }}>
                           {activeQuizDetail.passScore}%
                         </div>
@@ -639,7 +639,7 @@ const CourseLearningPage = () => {
                               ? '#10b981' 
                               : '#f97316',
                             marginBottom: '8px',
-                            fontFamily: '"Space Habitat", monospace'
+                            fontFamily: "Inter, sans-serif"
                           }}>
                             {activeQuizDetail.bestScore}%
                           </div>
@@ -678,7 +678,7 @@ const CourseLearningPage = () => {
                             fontSize: '2rem',
                             color: activeQuizDetail.attemptsCount >= 3 ? '#ef4444' : 'var(--lhud-cyan)',
                             marginBottom: '8px',
-                            fontFamily: '"Space Habitat", monospace'
+                            fontFamily: "Inter, sans-serif"
                           }}>
                             {activeQuizDetail.attemptsCount}/3
                           </div>
@@ -707,7 +707,7 @@ const CourseLearningPage = () => {
                         style={{
                           padding: '16px 48px',
                           fontSize: '1.1rem',
-                          fontFamily: '"Space Habitat", monospace',
+                          fontFamily: "Inter, sans-serif",
                           fontWeight: 'bold',
                           letterSpacing: '1px',
                           textTransform: 'uppercase',
@@ -869,7 +869,7 @@ const CourseLearningPage = () => {
                         marginBottom: '16px',
                         fontSize: '1.2rem',
                         color: 'var(--lhud-cyan)',
-                        fontFamily: '"Space Habitat", monospace',
+                        fontFamily: "Inter, sans-serif",
                         letterSpacing: '1px'
                       }}>
                         TỆP ĐÍNH KÈM
@@ -892,7 +892,7 @@ const CourseLearningPage = () => {
                   {course.description}
                 </p>
                 <p style={{ color: 'var(--lhud-text-dim)', marginTop: '1rem' }}>
-                  Chọn một bài học từ Nhật ký hệ thống để bắt đầu đồng bộ.
+                  Chọn một bài học từ danh sách để bắt đầu.
                 </p>
               </>
             )}

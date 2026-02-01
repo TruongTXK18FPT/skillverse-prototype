@@ -126,7 +126,7 @@ const QuizDisplay: React.FC<QuizDisplayProps> = ({ quiz, onComplete, onClose }) 
           borderBottom: '1px solid var(--lhud-border)'
         }}>
           <div style={{
-            fontFamily: 'Space Habitat, monospace',
+            fontFamily: "Inter, sans-serif",
             fontSize: '0.875rem',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
@@ -139,7 +139,7 @@ const QuizDisplay: React.FC<QuizDisplayProps> = ({ quiz, onComplete, onClose }) 
             background: 'rgba(6, 182, 212, 0.1)',
             border: '1px solid var(--lhud-cyan)',
             borderRadius: '4px',
-            fontFamily: 'Space Habitat, monospace',
+            fontFamily: "Inter, sans-serif",
             fontSize: '0.875rem',
             color: 'var(--lhud-cyan)'
           }}>
@@ -363,7 +363,7 @@ const QuizDisplay: React.FC<QuizDisplayProps> = ({ quiz, onComplete, onClose }) 
             <div style={{
               fontSize: '0.75rem',
               color: 'var(--lhud-text-dim)',
-              fontFamily: 'Space Habitat, monospace',
+              fontFamily: "Inter, sans-serif",
               textTransform: 'uppercase',
               letterSpacing: '0.05em'
             }}>
@@ -436,7 +436,7 @@ const QuizDisplay: React.FC<QuizDisplayProps> = ({ quiz, onComplete, onClose }) 
             }}>
               <Clock size={20} color={timeRemaining < 300 ? '#ef4444' : 'var(--lhud-cyan)'} />
               <span style={{
-                fontFamily: 'Space Habitat, monospace',
+                fontFamily: "Inter, sans-serif",
                 fontSize: '0.95rem',
                 fontWeight: 600,
                 color: timeRemaining < 300 ? '#ef4444' : 'var(--lhud-cyan)'
@@ -531,7 +531,7 @@ const QuizDisplay: React.FC<QuizDisplayProps> = ({ quiz, onComplete, onClose }) 
                     border: isActive ? '2px solid var(--lhud-cyan)' : isAnswered ? '2px solid var(--lhud-green)' : '2px solid var(--lhud-border)',
                     background: isActive ? 'var(--lhud-cyan)' : isAnswered ? 'rgba(16, 185, 129, 0.1)' : 'var(--lhud-surface)',
                     color: isActive ? 'var(--lhud-deep-space)' : isAnswered ? 'var(--lhud-green)' : 'var(--lhud-text-secondary)',
-                    fontFamily: 'Space Habitat, monospace',
+                    fontFamily: "Inter, sans-serif",
                     fontSize: '0.875rem',
                     fontWeight: 600,
                     cursor: 'pointer',

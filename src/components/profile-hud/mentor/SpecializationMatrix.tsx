@@ -72,7 +72,7 @@ const SpecializationMatrix: React.FC<SpecializationMatrixProps> = ({ formData, o
 
       {/* Social Links / Domain */}
       <div style={{ marginTop: '2rem' }}>
-        <label className="cmdr-label" style={{ marginBottom: '1rem' }}>Comms Uplinks</label>
+        <label className="cmdr-label" style={{ marginBottom: '1rem' }}>Liên kết mạng xã hội</label>
         
         <div className="cmdr-grid-2">
           <div className="cmdr-input-group">
@@ -82,7 +82,7 @@ const SpecializationMatrix: React.FC<SpecializationMatrixProps> = ({ formData, o
                 type="text" 
                 name="socialLinks.linkedin" 
                 className="cmdr-input" 
-                placeholder="LinkedIn Frequency"
+                placeholder="LinkedIn URL"
                 value={formData.socialLinks?.linkedin || ''} 
                 onChange={onChange} 
               />

@@ -76,7 +76,7 @@
   border: 1px solid rgba(6, 182, 212, 0.3);
   padding: 10px 24px;
   border-radius: 4px; /* Less rounded for tech feel */
-  font-family: 'Space Habitat', 'Inter', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--pfaq-hud-cyan);
@@ -87,7 +87,7 @@
 }
 
 .pfaq-title {
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 3rem;
   font-weight: 800;
   color: #fff;
@@ -299,7 +299,7 @@
 }
 
 .pfaq-block-title {
-  font-family: 'Space Habitat', 'Inter', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
   color: #f1f5f9;
@@ -327,7 +327,7 @@
 
 .pfaq-box-header h4 {
   margin: 0;
-  font-family: 'Space Habitat', 'Inter', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.05rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -417,7 +417,7 @@
 }
 
 .pfaq-roadmap-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
   color: #f1f5f9;
   margin-bottom: 20px;
@@ -459,7 +459,7 @@
   padding: 6px 14px;
   font-size: 0.75rem;
   font-weight: 700;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
 }
 

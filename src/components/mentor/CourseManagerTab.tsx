@@ -86,7 +86,7 @@ const statusStyle = (status: string): React.CSSProperties => {
     padding: '0.5rem 0.75rem',
     borderRadius: '4px',
     fontSize: '0.75rem',
-    fontFamily: '"Space Habitat", monospace',
+    fontFamily: "Inter, sans-serif",
     letterSpacing: '0.5px',
     textTransform: 'uppercase',
     border: '1px solid',
@@ -181,7 +181,7 @@ const CourseManagerTab: React.FC<Props> = ({
           <p style={{
             fontSize: '0.9rem',
             color: 'var(--lhud-text-secondary)',
-            fontFamily: '"Space Habitat", monospace',
+            fontFamily: "Inter, sans-serif",
             letterSpacing: '0.5px',
             margin: 0
           }}>
@@ -237,7 +237,7 @@ const CourseManagerTab: React.FC<Props> = ({
           <p style={{
             color: 'var(--lhud-text-secondary)',
             marginBottom: '1.5rem',
-            fontFamily: '"Space Habitat", monospace',
+            fontFamily: "Inter, sans-serif",
             letterSpacing: '0.5px'
           }}>
             INITIALIZE YOUR FIRST COURSE
@@ -344,7 +344,7 @@ const CourseManagerTab: React.FC<Props> = ({
                     borderRadius: '4px',
                     fontSize: '0.75rem',
                     color: 'var(--lhud-cyan)',
-                    fontFamily: '"Space Habitat", monospace',
+                    fontFamily: "Inter, sans-serif",
                     letterSpacing: '0.5px',
                     textTransform: 'uppercase',
                     marginBottom: '0.75rem'

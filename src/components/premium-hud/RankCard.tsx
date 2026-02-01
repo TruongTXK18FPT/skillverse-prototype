@@ -67,10 +67,10 @@ const RankCard: React.FC<RankCardProps> = ({
 
   const getTierBadge = (planType: string) => {
     switch (planType) {
-      case 'FREE_TIER': return 'HỌC VIÊN';
-      case 'STUDENT_PACK': return 'HỌC GIẢ';
-      case 'PREMIUM_BASIC': return 'SĨ QUAN';
-      case 'PREMIUM_PLUS': return 'CHỈ HUY';
+      case 'FREE_TIER': return 'MIỄN PHÍ';
+      case 'STUDENT_PACK': return 'SINH VIÊN';
+      case 'PREMIUM_BASIC': return 'CƠ BẢN';
+      case 'PREMIUM_PLUS': return 'CHUYÊN GIA';
       default: return 'KHÔNG XÁC ĐỊNH';
     }
   };

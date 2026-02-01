@@ -99,7 +99,7 @@
 }
 
 .commander-welcome__status-text {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.75rem;
   color: #10b981;
   letter-spacing: 2px;
@@ -109,7 +109,7 @@
 /* ========== TITLE ========== */
 
 .commander-welcome__title {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 2rem;
   font-weight: 700;
   color: #e2e8f0;
@@ -146,14 +146,14 @@
 }
 
 .commander-welcome__id-label {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.75rem;
   color: #94a3b8;
   letter-spacing: 1px;
 }
 
 .commander-welcome__id-value {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 1rem;
   color: #06b6d4;
   letter-spacing: 2px;
@@ -198,14 +198,14 @@
 }
 
 .commander-welcome__level-label {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.65rem;
   color: #94a3b8;
   letter-spacing: 2px;
 }
 
 .commander-welcome__level-value {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 1.25rem;
   color: #a855f7;
   font-weight: 700;
@@ -294,7 +294,7 @@
   border: 1px solid rgba(168, 85, 247, 0.4);
   border-radius: 7px;
   color: #a855f7;
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.75rem;
   font-weight: 600;
   box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
@@ -399,7 +399,7 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.65rem;
   padding: 0.15rem 0.35rem;
   border-radius: 4px;
@@ -412,7 +412,7 @@
 }
 
 .commander-welcome__task-days {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.65rem;
   padding: 0.15rem 0.4rem;
   border-radius: 4px;
@@ -518,7 +518,7 @@
   border: 1px solid rgba(6, 182, 212, 0.4);
   border-radius: 10px;
   color: #06b6d4;
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
@@ -636,7 +636,7 @@
   border: 1px solid rgba(139, 92, 246, 0.4);
   border-radius: 8px;
   color: #a78bfa;
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -726,7 +726,7 @@
 }
 
 .commander-welcome__premium-title {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.8rem;
   font-weight: 600;
   color: #fbbf24;
@@ -856,7 +856,7 @@
   font-size: 0.7rem;
   color: #64748b;
   margin-left: 0.25rem;
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-weight: 500;
 }
 
@@ -976,7 +976,7 @@
   gap: 0.5rem;
   margin-bottom: 0.75rem;
   color: #94a3b8;
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.7rem;
   letter-spacing: 2px;
 }
@@ -1038,7 +1038,7 @@
 }
 
 .commander-welcome__task-count {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1;
@@ -1088,7 +1088,7 @@
 }
 
 .commander-welcome__overdue-days {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.7rem;
   font-weight: 600;
   min-width: 30px;
@@ -1257,7 +1257,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 1px;

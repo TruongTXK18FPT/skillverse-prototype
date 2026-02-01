@@ -136,10 +136,10 @@ const StudyPlannerPage: React.FC = () => {
         <div className="study-plan-hero-content">
           <h1 className="study-plan-hero-title">
             <Radio size={40} />
-            MISSION CONTROL
+            KẾ HOẠCH HỌC TẬP
           </h1>
           <div className="study-plan-hero-subtitle">
-            Lập kế hoạch học tập thông minh và quản lý nhiệm vụ hiệu quả với công cụ AI tích hợp.
+            Lập kế hoạch học tập thông minh và quản lý công việc hiệu quả với công cụ AI tích hợp.
           </div>
           
           <div className="study-plan-controls">
@@ -171,7 +171,7 @@ const StudyPlannerPage: React.FC = () => {
       {overdueCount > 0 && (
         <div className="study-plan-alert">
           <span style={{ fontSize: '1.2rem' }}>⚠️</span> 
-          CẢNH BÁO: {overdueCount} NHIỆM VỤ QUAN TRỌNG CẦN XỬ LÝ NGAY.
+          CẢNH BÁO: {overdueCount} CÔNG VIỆC QUÁ HẠN CẦN XỬ LÝ NGAY.
         </div>
       )}
 
@@ -195,7 +195,7 @@ const StudyPlannerPage: React.FC = () => {
 
       {loading && viewMode === 'calendar' ? (
         <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--sv-primary)', fontFamily: 'var(--sv-font-tech)' }}>
-          INITIALIZING DATA STREAM...
+          Đang tải dữ liệu...
         </div>
       ) : (
         <>

@@ -447,7 +447,7 @@ const UserGuidePage: React.FC = () => {
   if (loading) {
     return (
       <div className="guide-v2-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <MeowlKuruLoader text="ACCESSING MISSION DATA..." size="large" />
+        <MeowlKuruLoader text="Đang tải dữ liệu..." size="large" />
       </div>
     );
   }
@@ -531,7 +531,7 @@ const UserGuidePage: React.FC = () => {
               {!isAuthenticated && (
                 <div style={{ marginTop: '3rem', textAlign: 'center' }}>
                   <Link to="/login" className="guide-v2-cta" style={{ fontSize: '1.2rem', padding: '1rem 3rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Rocket size={24} /> INITIALIZE PROJECT
+                    <Rocket size={24} /> BẮT ĐẦU NGAY
                   </Link>
                 </div>
               )}

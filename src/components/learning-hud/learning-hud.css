@@ -3,13 +3,6 @@
    Isolated namespace: learning-hud-*
    ======================================== */
 
-@font-face {
-  font-family: 'Space Habitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 /* --- CSS Variables --- */
 :root {
   --lhud-deep-space: #0a0e17;
@@ -131,7 +124,7 @@
   border-radius: 6px;
   color: var(--lhud-text-secondary);
   font-weight: 500;
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   letter-spacing: 0.5px;
   cursor: pointer;
@@ -173,7 +166,7 @@
 }
 
 .learning-hud-progress-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
   letter-spacing: 1px;
   color: var(--lhud-cyan);
@@ -223,7 +216,7 @@
 }
 
 .learning-hud-progress-text {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--lhud-text-secondary);
@@ -446,7 +439,7 @@
 }
 
 .learning-hud-lesson-duration {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
   color: var(--lhud-text-dim);
   letter-spacing: 0.5px;
@@ -457,7 +450,7 @@
   display: inline-block;
   padding: 0.25rem 0.5rem;
   font-size: 0.65rem;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
   letter-spacing: 0.5px;
   border-radius: 12px;
@@ -544,7 +537,7 @@
 
 .learning-hud-corner-label {
   position: absolute;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.65rem;
   letter-spacing: 1px;
   color: var(--lhud-cyan);
@@ -628,7 +621,7 @@
   padding: 0.7rem 1.5rem;
   border-radius: 4px;
   color: var(--lhud-text-secondary);
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   letter-spacing: 0.8px;
   cursor: pointer;
@@ -655,7 +648,7 @@
   padding: 0.8rem 2rem;
   border-radius: 4px;
   border: 1px solid var(--lhud-green);
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 1px;
@@ -743,7 +736,7 @@
   justify-content: center;
   padding: 3rem;
   color: var(--lhud-cyan);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 1px;
 }
 
@@ -791,7 +784,7 @@
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   border-radius: 4px;
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.8px;
@@ -978,7 +971,7 @@
 .learning-hud-form-label {
   display: block;
   font-size: 0.875rem;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--lhud-cyan);
@@ -1070,7 +1063,7 @@
   gap: 0.5rem;
   color: var(--lhud-text-dim);
   font-size: 0.875rem;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
 .learning-hud-progress-step.active {
@@ -1183,7 +1176,7 @@ body:has(.learning-hud-quiz-overlay) {
 }
 
 .learning-hud-assignment-title-row h2 {
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   color: var(--lhud-cyan);
   margin: 0;

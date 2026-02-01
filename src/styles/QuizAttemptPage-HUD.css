@@ -3,13 +3,6 @@
    Isolated namespace: hud-quiz-attempt-*
    ============================================ */
 
-@font-face {
-  font-family: 'Space Habitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 :root {
   --hqa-deep-space: #0a0e17;
   --hqa-space-alt: #12171f;
@@ -84,7 +77,7 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--hqa-border);
   color: var(--hqa-text-secondary);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   letter-spacing: 1px;
   cursor: pointer;
@@ -107,7 +100,7 @@
 
 .hud-quiz-attempt-title {
   flex: 1;
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -120,7 +113,7 @@
   padding: 0.625rem 1.25rem;
   background: rgba(6, 182, 212, 0.1);
   border: 1px solid var(--hqa-cyan);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 1px;
@@ -153,7 +146,7 @@
 }
 
 .hud-quiz-attempt-loading p {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.1rem;
   letter-spacing: 2px;
   color: var(--hqa-cyan);
@@ -179,7 +172,7 @@
 }
 
 .hud-quiz-attempt-error h2 {
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -251,7 +244,7 @@
 }
 
 .hud-quiz-attempt-start-title {
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 2rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -290,7 +283,7 @@
 }
 
 .hud-quiz-attempt-info-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -353,7 +346,7 @@
 
 .hud-quiz-attempt-passed-notice h3,
 .hud-quiz-attempt-no-attempts h3 {
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -370,7 +363,7 @@
 }
 
 .hud-quiz-attempt-passed-score {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.1rem;
   color: var(--hqa-text-primary);
   margin: 0 0 0.75rem 0;
@@ -384,7 +377,7 @@
 }
 
 .hud-quiz-attempt-cooldown {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   color: var(--hqa-orange);
   font-weight: 600;
 }
@@ -408,7 +401,7 @@
   gap: 0.625rem;
   padding: 0.875rem 2rem;
   border: none;
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -549,7 +542,7 @@
 }
 
 .hud-quiz-attempt-result-header h2 {
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -602,7 +595,7 @@
 }
 
 .hud-quiz-attempt-score-value {
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 3.5rem;
   font-weight: 700;
   color: var(--hqa-text-primary);
@@ -610,7 +603,7 @@
 }
 
 .hud-quiz-attempt-score-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -638,7 +631,7 @@
 }
 
 .hud-quiz-attempt-detail-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -719,7 +712,7 @@
 }
 
 .hud-quiz-attempt-question-number {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -730,7 +723,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -868,7 +861,7 @@
 }
 
 .hud-quiz-attempt-status-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -876,7 +869,7 @@
 }
 
 .hud-quiz-attempt-status-value {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   color: var(--hqa-text-primary);
@@ -888,7 +881,7 @@
   gap: 0.625rem;
   padding: 0.875rem 2rem;
   border: none;
-  font-family: 'Space Habitat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   text-transform: uppercase;

@@ -25,42 +25,42 @@ const NotFoundHud: React.FC = () => {
   return (
     <div className="error-404-container">
       <div className="error-404-content">
-        <h1 className="error-404-glitch" data-text="ERROR 404: SECTOR COLLAPSED">
-          ERROR 404: SECTOR COLLAPSED
+        <h1 className="error-404-glitch" data-text="LỖI 404: KHÔNG TÌM THẤY TRANG">
+          LỖI 404: KHÔNG TÌM THẤY TRANG
         </h1>
         
         <p className="error-404-description">
-          Navigation systems failed. You are drifting in the void.
+          Trang bạn tìm kiếm không tồn tại.
         </p>
 
         <div className="error-404-actions">
           <button className="error-btn-safe" onClick={handleSafePath}>
-            [ INITIATE EMERGENCY REBOOT ]
+            [ QUAY VỀ TRANG CHỦ ]
           </button>
           
           <button className="error-btn-danger" onClick={handleDangerousPath}>
-            [ ATTEMPT FORBIDDEN UPLINK ]
+            [ KHÁM PHÁ BÍ MẬT ]
           </button>
         </div>
       </div>
 
-      {/* Horror Modal */}
+      {/* Hidden Easter Egg Modal */}
       {showHorrorModal && (
         <div className="horror-modal-overlay">
           <div className="horror-modal-content">
             <div className="horror-cracks"></div>
-            <h2 className="horror-title" data-text="WARNING: FATAL ERROR">WARNING: FATAL ERROR</h2>
+            <h2 className="horror-title" data-text="CẢNH BÁO">CẢNH BÁO</h2>
             <p className="horror-text">
-              DETECTED UNSTABLE REALITY ANCHOR.<br/>
-              PROCEEDING MAY CAUSE IRREVERSIBLE PSYCHOLOGICAL CORRUPTION.<br/>
-              <span className="horror-highlight">ARE YOU SURE?</span>
+              Bạn sắp khám phá một tính năng ẩn.<br/>
+              Đây là easter egg thú vị của SkillVerse.<br/>
+              <span className="horror-highlight">BẠN CÓ CHẮC KHÔNG?</span>
             </p>
             <div className="horror-actions">
               <button className="horror-btn-confirm" onClick={confirmDangerousPath}>
-                YES, I ACCEPT MY FATE
+                ĐỒNG Ý, TIẾP TỤC
               </button>
               <button className="horror-btn-cancel" onClick={cancelDangerousPath}>
-                NO, TURN BACK
+                KHÔNG, QUAY LẠI
               </button>
             </div>
           </div>

@@ -425,7 +425,7 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
                 <strong>{report.metrics?.totalStudyHours ?? 0} giờ</strong> học
                 tập và hoàn thành{" "}
                 <strong>
-                  {report.metrics?.totalTasksCompleted ?? 0} nhiệm vụ
+                  {report.metrics?.totalTasksCompleted ?? 0} công việc
                 </strong>
                 .
                 {report.metrics?.currentStreak &&

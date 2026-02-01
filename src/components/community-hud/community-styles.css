@@ -2,13 +2,6 @@
    INTERSTELLAR COMMS - BASE STYLES
    ======================================== */
 
-@font-face {
-  font-family: 'Space Habitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 /* CSS Variables */
 :root {
   --signal-cyan: #06b6d4;
@@ -87,7 +80,7 @@
 }
 
 .transmission-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 2.5rem;
   letter-spacing: 2px;
   margin: 0 0 0.5rem 0;
@@ -489,7 +482,7 @@
 }
 
 .telemetry-widget-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   letter-spacing: 1px;
   color: var(--signal-cyan);
@@ -584,7 +577,7 @@
 }
 
 .stat-value {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   color: var(--signal-cyan);
   letter-spacing: 1px;

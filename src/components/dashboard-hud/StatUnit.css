@@ -116,7 +116,7 @@
 }
 
 .stat-unit__value {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 2rem;
   font-weight: 700;
   line-height: 1;

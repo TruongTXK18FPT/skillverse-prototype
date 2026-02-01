@@ -1,10 +1,4 @@
 /* Hall of Ranks Styles */
-@font-face {
-  font-family: 'Space Habitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
 
 :root {
   --rank-bronze: #cd7f32;
@@ -113,7 +107,6 @@
   align-items: center;
 }
 
-
 .clearance-header-content {
   display: flex;
   flex-direction: column; /* Xếp dọc */
@@ -123,7 +116,7 @@
 }
 
 .clearance-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 3.5rem; /* Tăng kích thước font */
   /* Gradient kim loại bạc sang trắng */
   background: linear-gradient(to bottom, #ffffff 0%, #94a3b8 100%); 
@@ -276,7 +269,6 @@
 }
 .hall-rank-diamond:hover { box-shadow: 0 0 60px rgba(34, 211, 238, 0.6); border-color: var(--rank-diamond); }
 
-
 /* Card Content */
 .hall-card-top {
   height: 140px;
@@ -367,7 +359,7 @@
 }
 
 .hall-price {
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 2.5rem; /* Huge */
   margin-bottom: 5px;
   color: #fff;

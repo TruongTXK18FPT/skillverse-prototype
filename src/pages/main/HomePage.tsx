@@ -893,7 +893,7 @@ const HomePage = () => {
                     }}
                   >
                     <div className="home-v2-video-overlay"></div>
-                    <div className="home-v2-badge">TRANSMISSION</div>
+                    <div className="home-v2-badge">VIDEO</div>
                     <div className="home-v2-play-btn">
                       <Play fill="currentColor" size={32} />
                     </div>

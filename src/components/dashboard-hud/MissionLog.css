@@ -53,7 +53,7 @@
 }
 
 .mission-log__achievement-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   color: #e2e8f0;
@@ -82,7 +82,7 @@
 }
 
 .mission-log__achievement-points {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   color: #a855f7;
   font-weight: 600;
@@ -188,7 +188,7 @@
 }
 
 .mission-log__deadline-task {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   color: #e2e8f0;
@@ -199,7 +199,7 @@
 }
 
 .mission-log__deadline-badge {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.65rem;
   font-weight: 600;
   padding: 0.25rem 0.5rem;
@@ -240,7 +240,7 @@
 }
 
 .mission-log__deadline-time {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   color: #94a3b8;
   letter-spacing: 1px;

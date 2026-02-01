@@ -244,7 +244,7 @@ const LessonModal: React.FC<LessonModalProps> = ({
               <label style={{
                 display: 'block',
                 fontSize: '0.875rem',
-                fontFamily: 'Space Habitat, monospace',
+                fontFamily: "Inter, sans-serif",
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 color: 'var(--lhud-cyan)',
@@ -347,7 +347,7 @@ const LessonModal: React.FC<LessonModalProps> = ({
               <label htmlFor="title" style={{
                 display: 'block',
                 fontSize: '0.875rem',
-                fontFamily: 'Space Habitat, monospace',
+                fontFamily: "Inter, sans-serif",
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 color: 'var(--lhud-cyan)',
@@ -386,7 +386,7 @@ const LessonModal: React.FC<LessonModalProps> = ({
               <label htmlFor="contentText" style={{
                 display: 'block',
                 fontSize: '0.875rem',
-                fontFamily: 'Space Habitat, monospace',
+                fontFamily: "Inter, sans-serif",
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 color: 'var(--lhud-cyan)',
@@ -435,7 +435,7 @@ const LessonModal: React.FC<LessonModalProps> = ({
                 <label htmlFor="videoUrl" style={{
                   display: 'block',
                   fontSize: '0.875rem',
-                  fontFamily: 'Space Habitat, monospace',
+                  fontFamily: "Inter, sans-serif",
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                   color: 'var(--lhud-cyan)',
@@ -483,7 +483,7 @@ const LessonModal: React.FC<LessonModalProps> = ({
                 <label htmlFor="durationSec" style={{
                   display: 'block',
                   fontSize: '0.875rem',
-                  fontFamily: 'Space Habitat, monospace',
+                  fontFamily: "Inter, sans-serif",
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                   color: 'var(--lhud-cyan)',
@@ -531,7 +531,7 @@ const LessonModal: React.FC<LessonModalProps> = ({
               <label htmlFor="orderIndex" style={{
                 display: 'block',
                 fontSize: '0.875rem',
-                fontFamily: 'Space Habitat, monospace',
+                fontFamily: "Inter, sans-serif",
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 color: 'var(--lhud-cyan)',

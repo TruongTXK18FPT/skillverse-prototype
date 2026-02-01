@@ -117,14 +117,14 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({ onMissionLaunched }
     <div className="fleet-panel">
       <div className="fleet-title">
         <i className="fas fa-rocket"></i>
-        Khởi Tạo Giao Thức Nhiệm Vụ
+        Đăng Tin Tuyển Dụng
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
         {/* Left: Input Fields */}
         <form onSubmit={handleSubmit}>
           <div className="fleet-input-group">
-            <label className="fleet-label">Mã Chiến Dịch (Tiêu Đề)</label>
+            <label className="fleet-label">Tiêu Đề Công Việc</label>
             <input
               type="text"
               name="title"
@@ -137,7 +137,7 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({ onMissionLaunched }
           </div>
 
           <div className="fleet-input-group">
-            <label className="fleet-label">Tóm Tắt Nhiệm Vụ (Mô Tả)</label>
+            <label className="fleet-label">Mô Tả Công Việc</label>
             <textarea
               name="description"
               className="fleet-input"
@@ -332,18 +332,18 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({ onMissionLaunched }
           </div>
 
           <button type="submit" className="fleet-btn-primary" disabled={isSubmitting}>
-            {isSubmitting ? 'Đang Khởi Tạo...' : 'Triển Khai Nhiệm Vụ (Phí: 50.000 VNĐ)'}
+            {isSubmitting ? 'Đang Xử Lý...' : 'Đăng Tin Tuyển Dụng (Phí: 50.000 VNĐ)'}
           </button>
         </form>
 
         {/* Right: Preview */}
         <div style={{ background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '8px' }}>
-          <div className="fleet-label" style={{ marginBottom: '10px' }}>Xem Trước Nhiệm Vụ</div>
+          <div className="fleet-label" style={{ marginBottom: '10px' }}>Xem Trước Tin Tuyển Dụng</div>
           
           <div className="fleet-panel" style={{ border: '1px dashed var(--fleet-cyan)' }}>
-            <h3 style={{ color: '#fff', margin: '0 0 10px 0' }}>{formData.title || 'Tiêu Đề Chiến Dịch'}</h3>
+            <h3 style={{ color: '#fff', margin: '0 0 10px 0' }}>{formData.title || 'Tiêu đề công việc'}</h3>
             <p style={{ color: 'var(--fleet-text-muted)', fontSize: '0.9rem' }}>
-              {formData.description || 'Mô tả nhiệm vụ sẽ xuất hiện ở đây...'}
+              {formData.description || 'Mô tả công việc sẽ xuất hiện ở đây...'}
             </p>
             
             <div style={{ marginTop: '15px' }}>

@@ -55,7 +55,7 @@
 }
 
 .system-status__title {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 1.25rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -94,7 +94,7 @@
 }
 
 .system-status__stat-value {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 1rem;
   color: #06b6d4;
   font-weight: 600;
@@ -120,7 +120,7 @@
 }
 
 .system-status__calendar-year {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.875rem;
   color: #06b6d4;
   text-align: center;
@@ -184,7 +184,7 @@
 }
 
 .system-status__day-label {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.75rem;
   color: #94a3b8;
   letter-spacing: 1px;
@@ -319,7 +319,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.75rem;
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.75rem;
   letter-spacing: 1px;
   color: #94a3b8;
@@ -491,7 +491,7 @@
 }
 
 .system-status__month-name {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.9rem;
   color: #06b6d4;
   text-transform: capitalize;
@@ -506,7 +506,7 @@
 }
 
 .system-status__weekday {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.65rem;
   color: #64748b;
   text-align: center;
@@ -559,7 +559,7 @@
 }
 
 .system-status__month-day-num {
-  font-family: "Space Habitat", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.7rem;
   color: #94a3b8;
 }

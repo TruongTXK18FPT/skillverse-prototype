@@ -2,12 +2,6 @@
 /* All classes prefixed with "odyssey-" for CSS isolation */
 
 /* ==================== FONT FACE ==================== */
-@font-face {
-  font-family: 'Space Habitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
 
 /* ==================== CSS VARIABLES ==================== */
 :root {
@@ -200,7 +194,7 @@
   content: attr(data-symbol);
   font-size: 1.5rem;
   color: rgba(6, 182, 212, 0.4);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
 /* Varying animation delays and durations for natural effect */
@@ -390,7 +384,7 @@
   inset: 0;
   pointer-events: none;
   z-index: 99;
-  font-family: 'Space Habitat', 'Inter', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
 .odyssey-hud__top {
@@ -512,7 +506,7 @@
 }
 
 .odyssey-header__title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 4rem;
   font-weight: bold;
   color: var(--odyssey-cyan);
@@ -551,7 +545,7 @@
 }
 
 .odyssey-header__subtitle {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   color: var(--odyssey-cyan-light);
   margin-top: 1rem;
@@ -560,7 +554,6 @@
   opacity: 0.7;
   text-shadow: 0 0 10px var(--odyssey-neon-cyan);
 }
-
 
 /* ==================== CARDS GRID ==================== */
 .odyssey-grid {
@@ -656,7 +649,7 @@
   color: rgba(6, 182, 212, 0.04);
   pointer-events: none;
   z-index: 0;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   transition: all 0.3s ease;
 }
 
@@ -837,7 +830,6 @@
   z-index: 1;
 }
 
-
 /* ==================== CARD HEADER - FACTION ==================== */
 .odyssey-card__faction {
   text-align: center;
@@ -861,7 +853,7 @@
   font-size: 1.6rem;
   font-weight: bold;
   color: var(--odyssey-cyan-light);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 0.05em;
   position: relative;
 }
@@ -1028,7 +1020,7 @@
 }
 
 .odyssey-card__bounty-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
   color: rgba(6, 182, 212, 0.7);
   text-transform: uppercase;
@@ -1185,7 +1177,7 @@
 }
 
 .odyssey-loading__text {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.2rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -1212,7 +1204,7 @@
 }
 
 .odyssey-empty__title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 2rem;
   color: var(--odyssey-gold);
   margin: 0 0 1rem;
@@ -1310,7 +1302,7 @@
 }
 
 .odyssey-filter-console__title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.2rem;
   color: var(--odyssey-cyan);
   text-transform: uppercase;

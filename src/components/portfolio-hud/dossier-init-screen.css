@@ -257,7 +257,7 @@
 
 /* ===== GLITCH TEXT ===== */
 .init-glitch-text {
-  font-family: 'Space Habitat', 'Courier New', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--init-cyan);

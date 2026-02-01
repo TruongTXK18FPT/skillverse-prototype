@@ -139,7 +139,7 @@ const mockBadges: Badge[] = [
   },
   {
     id: "weekly-champion",
-    title: "Nhà Vô Địch Tuần",
+    title: "Top Tuần",
     description: "Đứng đầu bảng xếp hạng tuần",
     icon: <Trophy className="w-5 h-5 text-purple-500" />,
     category: "coins",
@@ -150,7 +150,7 @@ const mockBadges: Badge[] = [
   },
   {
     id: "streak-warrior",
-    title: "Chiến Binh Chuỗi",
+    title: "Người Kiên Trì",
     description: "Duy trì chuỗi học tập 30 ngày",
     icon: <Flame className="w-5 h-5 text-orange-500" />,
     category: "learning",
@@ -163,7 +163,7 @@ const mockBadges: Badge[] = [
   },
   {
     id: "helper-hero",
-    title: "Anh Hùng Hỗ Trợ",
+    title: "Người Hỗ Trợ",
     description: "Giúp đỡ 50 thành viên khác",
     icon: <Target className="w-5 h-5 text-red-500" />,
     category: "community",

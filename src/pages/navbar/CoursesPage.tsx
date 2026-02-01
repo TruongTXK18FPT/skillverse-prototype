@@ -176,7 +176,7 @@ const categories = [
         <div className="cockpit-hud-frame">
           <div className="cockpit-loading-container">
             <MeowlKuruLoader size="medium" text="" />
-            <p className="cockpit-loading-text">KHỞI ĐỘNG HỆ THỐNG...</p>
+            <p className="cockpit-loading-text">Đang tải khóa học...</p>
             <div className="cockpit-loading-bar">
               <div className="cockpit-loading-progress"></div>
             </div>

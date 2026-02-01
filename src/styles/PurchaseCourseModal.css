@@ -55,7 +55,7 @@
 }
 
 .purchase-modal-header h2 {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.4rem;
   font-weight: 700;
   color: var(--cockpit-detail-neon-cyan, #00f6ff);
@@ -112,7 +112,7 @@
 }
 
 .purchase-course-details h3 {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--cockpit-detail-text-primary, #e0e8f5);
@@ -122,7 +122,7 @@
 }
 
 .purchase-course-price {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   color: var(--cockpit-detail-neon-green, #00ff9d);
   font-weight: 500;
@@ -145,7 +145,7 @@
 }
 
 .purchase-wallet-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--cockpit-detail-text-secondary, #8b9bb8);
@@ -154,7 +154,7 @@
 }
 
 .purchase-wallet-balance {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.8rem;
   font-weight: 700;
   color: var(--cockpit-detail-text-primary, #e0e8f5);
@@ -178,7 +178,7 @@
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
   color: var(--cockpit-detail-text-secondary, #8b9bb8);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 1px;
 }
 
@@ -202,7 +202,7 @@
 .purchase-btn {
   width: 100%;
   padding: 1rem;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-weight: 700;
   font-size: 1rem;
   display: flex;
@@ -248,7 +248,7 @@
   padding: 1rem;
   border: 1px solid var(--cockpit-detail-neon-orange, #ff8800);
   clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 1px;
 }
 
@@ -256,7 +256,7 @@
   text-align: center;
   font-size: 0.85rem;
   color: var(--cockpit-detail-text-secondary, #8b9bb8);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 1px;
 }
 

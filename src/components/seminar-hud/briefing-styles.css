@@ -4,13 +4,7 @@
    Theme: Sky Blue (#0ea5e9) Academy
    ============================================ */
 
-/* Import Space Habitat Font */
-@font-face {
-  font-family: 'Space Habitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
+/* Import Inter Font */
 
 /* ============================================
    COLOR PALETTE (Zone 1 - Academy Blue/Cyan)
@@ -115,7 +109,7 @@
 }
 
 .briefing-header-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 2.5rem;
   color: var(--briefing-accent);
   text-transform: uppercase;
@@ -169,7 +163,7 @@
 }
 
 .briefing-stat-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   color: var(--briefing-text-muted);
   text-transform: uppercase;
@@ -177,7 +171,7 @@
 }
 
 .briefing-stat-value {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   color: #10b981; /* Green for active status */
   text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
@@ -268,7 +262,7 @@
   background: rgba(14, 165, 233, 0.9);
   color: #0b1120;
   padding: 0.25rem 0.75rem;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
   font-weight: bold;
   text-transform: uppercase;
@@ -327,7 +321,7 @@
 
 /* Countdown Clock - DANGER BOX */
 .briefing-countdown {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.1rem;
   color: #ef4444; /* Red danger color */
   margin-bottom: 1rem;
@@ -382,7 +376,7 @@
 }
 
 .briefing-info-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
   color: var(--briefing-text-muted);
   text-transform: uppercase;
@@ -401,7 +395,7 @@
   background: linear-gradient(135deg, var(--briefing-accent) 0%, #0284c7 100%);
   color: #ffffff;
   border: none;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   font-weight: bold;
   text-transform: uppercase;
@@ -461,7 +455,7 @@
 }
 
 .briefing-tuner-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   color: var(--briefing-text-muted);
   text-transform: uppercase;
@@ -649,7 +643,7 @@
 }
 
 .briefing-marquee-content {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   color: var(--briefing-accent);
   white-space: nowrap;
@@ -784,13 +778,13 @@
 }
 
 .briefing-meta-sector {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   color: var(--briefing-accent);
   font-weight: bold;
 }
 
 .briefing-meta-countdown {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   color: #fbbf24;
   font-weight: bold;
 }
@@ -822,7 +816,7 @@
   background: transparent;
   border: 1px solid var(--briefing-accent);
   color: var(--briefing-accent);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   font-weight: bold;
   cursor: pointer;
@@ -880,7 +874,7 @@
 }
 
 .widget-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   color: var(--briefing-accent);
   letter-spacing: 0.1em;
@@ -888,7 +882,7 @@
 }
 
 .widget-status {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
   color: #10b981;
   background: rgba(16, 185, 129, 0.1);
@@ -981,14 +975,14 @@
 }
 
 .status-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   color: var(--briefing-text-muted);
   text-transform: uppercase;
 }
 
 .status-value {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: bold;
 }
@@ -1025,7 +1019,7 @@
 }
 
 .speaker-rank {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   color: var(--briefing-accent);
   font-weight: bold;
@@ -1054,7 +1048,7 @@
 }
 
 .mission-stat-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.65rem;
   color: var(--briefing-text-muted);
   margin-bottom: 0.5rem;
@@ -1062,7 +1056,7 @@
 }
 
 .mission-stat-value {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   color: var(--briefing-accent);
   font-weight: bold;
@@ -1169,11 +1163,11 @@
   background-size: 40px 40px, 40px 40px, 100% 100%;
 }
 .hero-marquee-top { position: absolute; top: 0; left: 0; right: 0; background: rgba(14, 165, 233, 0.15); border-bottom: 1px solid var(--briefing-accent); padding: 0.5rem 0; overflow: hidden; }
-.hero-marquee-content { font-family: 'Space Habitat', monospace; font-size: 0.75rem; color: var(--briefing-accent); white-space: nowrap; animation: briefing-scroll 25s linear infinite; letter-spacing: 0.15em; }
+.hero-marquee-content { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--briefing-accent); white-space: nowrap; animation: briefing-scroll 25s linear infinite; letter-spacing: 0.15em; }
 .hero-radar-pulse { position: absolute; top: 50%; left: 50%; width: 600px; height: 600px; transform: translate(-50%, -50%); background: radial-gradient(circle at center, transparent 0%, transparent 30%, rgba(14, 165, 233, 0.1) 31%, transparent 32%); animation: hero-radar-pulse 6s ease-in-out infinite; opacity: 0.4; pointer-events: none; }
 @keyframes hero-radar-pulse { 0%, 100% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; } 50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.4; } }
 .hero-content { position: relative; z-index: 2; text-align: center; padding-top: 2rem; }
-.hero-title { font-family: 'Space Habitat', monospace; font-size: 3.5rem; color: var(--briefing-accent); text-transform: uppercase; letter-spacing: 0.3em; margin-bottom: 1rem; text-shadow: 0 0 30px var(--briefing-glow), 0 0 60px rgba(14, 165, 233, 0.4); animation: hero-title-glow 3s ease-in-out infinite; }
+.hero-title { font-family: 'Inter', sans-serif; font-size: 3.5rem; color: var(--briefing-accent); text-transform: uppercase; letter-spacing: 0.3em; margin-bottom: 1rem; text-shadow: 0 0 30px var(--briefing-glow), 0 0 60px rgba(14, 165, 233, 0.4); animation: hero-title-glow 3s ease-in-out infinite; }
 @keyframes hero-title-glow { 0%, 100% { text-shadow: 0 0 20px var(--briefing-glow), 0 0 40px rgba(14, 165, 233, 0.3); } 50% { text-shadow: 0 0 40px var(--briefing-glow), 0 0 80px rgba(14, 165, 233, 0.5); } }
 .hero-subtitle { font-family: 'Inter', system-ui, sans-serif; font-size: 1rem; color: var(--briefing-text-dim); text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 1rem; }
 @media (max-width: 768px) { .briefing-hero { padding: 3rem 1.5rem; } .hero-title { font-size: 2rem; letter-spacing: 0.2em; } .hero-subtitle { font-size: 0.85rem; } .hero-stats-dashboard { gap: 1rem; } .hero-stat-box { min-width: 140px; padding: 1rem 1.5rem; } }
@@ -1207,7 +1201,7 @@
   transition: all 0.3s ease;
   font-size: 16px;
   z-index: 10;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
 .briefing-refresh-btn:hover {
@@ -1253,7 +1247,7 @@
 .speaker-tickets {
   font-size: 0.7rem;
   color: var(--briefing-accent);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   text-align: left;
   margin-top: 2px;
   letter-spacing: 0.05em;

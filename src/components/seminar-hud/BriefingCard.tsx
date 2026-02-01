@@ -133,7 +133,7 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ seminar, onRegister }) => {
           className="briefing-uplink-btn"
           onClick={() => onRegister(seminar.id)}
         >
-          ⚡ INITIALIZE UPLINK
+          ⚡ ĐĂNG KÝ THAM GIA
         </button>
       </div>
     </div>

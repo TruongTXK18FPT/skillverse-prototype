@@ -865,7 +865,6 @@ body.modal-open {
   background: var(--sv-primary);
 }
 
-
 /* AI Planner Styles */
 .study-plan-ai-form-section {
   margin-bottom: 2rem;
@@ -1035,7 +1034,6 @@ body.modal-open {
   margin-top: 0.2rem;
 }
 
-
 .study-plan-alert {
   background: rgba(244, 63, 94, 0.1);
   border: 1px solid var(--sv-warning);
@@ -1056,17 +1054,9 @@ body.modal-open {
   100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
 }
 
-
 /* ========================================
    SCIFI UPGRADES & FIXES
    ======================================== */
-
-@font-face {
-  font-family: 'Space Habitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
 
 /* Force Dark Mode for Native Inputs (Date Picker, etc.) */
 .study-plan-container {
@@ -1104,7 +1094,7 @@ body.modal-open {
 }
 
 .study-plan-hero-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 3rem;
   letter-spacing: 2px;
   margin: 0 0 0.5rem 0;
@@ -1244,7 +1234,7 @@ body.modal-open {
 }
 
 .study-plan-modal-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.8rem;
   letter-spacing: 1px;
 }
@@ -1338,7 +1328,6 @@ input[type='checkbox']:checked::after {
   border-left: none;
   border-top: none;
 }
-
 
 /* ========================================
    AI PLANNER GOLD THEME & FIXES
@@ -1508,7 +1497,6 @@ input[type='checkbox']:checked::after {
 .study-plan-ai-select-option:hover {
   background: rgba(255, 255, 255, 0.1);
 }
-
 
 /* AI Planner Premium UI */
 .study-plan-ai-model-badge {

@@ -99,7 +99,7 @@
 }
 
 .wallet-payment-modal__header h2 {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 24px;
   font-weight: normal;
   color: var(--rank-diamond, #22d3ee);
@@ -154,7 +154,7 @@
 .payment-detail--price .payment-detail__value {
   font-size: 24px;
   color: var(--rank-gold, #fbbf24);
-  /* font-family: 'Space Habitat', monospace; Removed for readability */
+  /* font-family: 'Inter', sans-serif; Removed for readability */
   font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
   text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
 }
@@ -260,7 +260,7 @@
 }
 
 .wallet-payment-modal__success h3 {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 24px;
   color: #10b981;
   margin-bottom: 10px;

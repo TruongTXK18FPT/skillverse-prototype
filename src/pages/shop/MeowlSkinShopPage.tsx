@@ -136,7 +136,7 @@ const MeowlSkinShopPage: React.FC = () => {
       <div className="shop-v2-container">
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
           <MeowlKuruLoader size="large" text="" />
-          <p style={{ marginTop: '2rem', color: '#94a3b8', letterSpacing: '2px' }}>INITIALIZING DIGITAL BOUTIQUE...</p>
+          <p style={{ marginTop: '2rem', color: '#94a3b8', letterSpacing: '2px' }}>Đang tải cửa hàng...</p>
         </div>
       </div>
     );
@@ -154,15 +154,15 @@ const MeowlSkinShopPage: React.FC = () => {
       <div className="shop-v2-header">
         <div className="shop-v2-header-status">
           <div className="shop-v2-status-dot"></div>
-          <span className="shop-v2-status-text">DIGITAL BOUTIQUE ONLINE</span>
+          <span className="shop-v2-status-text">CỬA HÀNG TRỰC TUYẾN</span>
         </div>
         <h1 className="shop-v2-title">
-          MEOWL SKIN SHOP
+          CỬA HÀNG MEOWL
           <span className="shop-v2-title-neon">V2.0</span>
         </h1>
         <p className="shop-v2-subtitle">
-          Nâng cấp trợ lý Meowl của bạn với những bộ trang phục công nghệ cao từ tương lai. 
-          Hệ thống đã sẵn sàng cho các giao dịch mã hóa.
+          Nâng cấp trợ lý Meowl của bạn với những bộ trang phục độc đáo. 
+          Chọn skin yêu thích để cá nhân hóa trợ lý học tập.
         </p>
       </div>
 

@@ -373,7 +373,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
   const labelStyle = {
     display: 'block',
     fontSize: '0.875rem',
-    fontFamily: 'Space Habitat, monospace',
+    fontFamily: "Inter, sans-serif",
     textTransform: 'uppercase' as const,
     letterSpacing: '0.05em',
     color: 'var(--lhud-cyan)',
@@ -473,7 +473,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
               gap: '0.5rem',
               color: step === "basic" ? 'var(--lhud-cyan)' : 'var(--lhud-green)',
               fontSize: '0.875rem',
-              fontFamily: 'Space Habitat, monospace'
+              fontFamily: "Inter, sans-serif"
             }}>
               <div style={{
                 width: '32px',
@@ -500,7 +500,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
               gap: '0.5rem',
               color: step === "questions" ? 'var(--lhud-cyan)' : 'var(--lhud-text-dim)',
               fontSize: '0.875rem',
-              fontFamily: 'Space Habitat, monospace'
+              fontFamily: "Inter, sans-serif"
             }}>
               <div style={{
                 width: '32px',
@@ -703,7 +703,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, moduleId, onSucc
                       }}>
                         <GripVertical size={20} />
                         <span style={{
-                          fontFamily: 'Space Habitat, monospace',
+                          fontFamily: "Inter, sans-serif",
                           fontSize: '0.875rem',
                           textTransform: 'uppercase',
                           letterSpacing: '0.05em',

@@ -541,8 +541,8 @@ const DataCompilerPreview = () => {
           <div className="dossier-modal-container" onClick={(e) => e.stopPropagation()}>
             <div className="dossier-modal-header">
               <div>
-                <h2 className="dossier-modal-title">EDIT CV DATA</h2>
-                <p className="dossier-modal-subtitle">Modify tactical resume information</p>
+                <h2 className="dossier-modal-title">CHỈNH SỬA CV</h2>
+                <p className="dossier-modal-subtitle">Chỉnh sửa thông tin CV</p>
               </div>
               <button className="dossier-modal-close" onClick={() => setShowEditModal(false)} type="button">
                 <X size={20} />

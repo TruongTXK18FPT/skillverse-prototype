@@ -208,9 +208,9 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
         <div className="dossier-modal-header">
           <div>
             <h2 className="dossier-modal-title">
-              {mode === 'create' ? 'Tạo ID phi công' : 'Cập nhật ID phi công'}
+              {mode === 'create' ? 'Tạo hồ sơ cá nhân' : 'Cập nhật hồ sơ cá nhân'}
             </h2>
-            <p className="dossier-modal-subtitle">Cấu hình thông số hồ sơ chiến thuật</p>
+            <p className="dossier-modal-subtitle">Cấu hình thông tin hồ sơ nghề nghiệp</p>
           </div>
           <button className="dossier-modal-close" onClick={onClose} type="button">
             <X size={20} />
@@ -220,7 +220,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
         <form onSubmit={handleSubmit} className="dossier-modal-body">
           {/* Professional Info */}
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">Thông tin phi công</h3>
+            <h3 className="dossier-form-section-title">Thông tin cá nhân</h3>
 
             <div className="dossier-form-group">
               <label className="dossier-form-label">Họ và tên *</label>

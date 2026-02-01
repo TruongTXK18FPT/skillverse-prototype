@@ -109,7 +109,7 @@
 }
 
 .hud-card__title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.25rem;
   font-weight: 600;
   text-transform: uppercase;

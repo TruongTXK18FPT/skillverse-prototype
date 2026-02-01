@@ -174,7 +174,7 @@ const CompanionPod: React.FC<CompanionPodProps> = ({
                 e.currentTarget.style.boxShadow = isPetActive ? '0 0 15px rgba(14, 165, 233, 0.2)' : 'none';
               }}
             >
-              {isPetActive ? 'DEACTIVATE PROTOCOL' : 'INITIALIZE PET'}
+              {isPetActive ? 'TẮT THÚ CƯNG' : 'KÍCH HOẠT THÚ CƯNG'}
             </button>
           ) : (
             <button 

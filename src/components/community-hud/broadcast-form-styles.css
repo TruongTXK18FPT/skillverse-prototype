@@ -71,7 +71,7 @@
 }
 
 .broadcast-form-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 2rem;
   letter-spacing: 2px;
   margin: 0;
@@ -139,7 +139,7 @@
 }
 
 .broadcast-form-label {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -315,7 +315,7 @@
 }
 
 .broadcast-sidebar-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
   letter-spacing: 1px;
   text-transform: uppercase;

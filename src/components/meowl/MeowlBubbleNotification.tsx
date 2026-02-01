@@ -422,7 +422,7 @@ const BUBBLE_MESSAGES: BubbleMessage[] = [
     id: 'reward-1',
     type: 'motivation',
     messageEn: "🎁 Daily rewards waiting! Complete missions to earn free coins~",
-    messageVi: "🎁 Phần thưởng hàng ngày đang chờ! Hoàn thành nhiệm vụ để nhận xu miễn phí~",
+    messageVi: "🎁 Phần thưởng hàng ngày đang chờ! Hoàn thành công việc để nhận xu miễn phí~",
     icon: <Gift size={20} className="bubble-icon-gift" />,
     actionUrl: '/gamification',
     actionLabelEn: 'Claim Rewards 🎁',

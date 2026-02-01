@@ -1,7 +1,4 @@
-@font-face {
-  font-family: 'Space Habitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-}
+
 
 @font-face {
   font-family: 'Minecraft';
@@ -55,7 +52,7 @@
 }
 
 .guide-v2-title {
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 4rem;
   margin-bottom: 1rem;
   background: linear-gradient(to bottom, #fff, var(--guide-v2-primary));
@@ -93,7 +90,7 @@
 }
 
 .guide-v2-tab-label {
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.2rem;
   color: rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
@@ -146,7 +143,7 @@
 }
 
 .guide-v2-blueprint-header {
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 2.5rem;
   color: var(--guide-v2-primary);
   margin-bottom: 2rem;
@@ -169,7 +166,7 @@
 }
 
 .guide-v2-blueprint-card h3 {
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.2rem;
   margin-bottom: 1rem;
   color: #fff;
@@ -284,7 +281,7 @@
 }
 
 .guide-v2-step-title {
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.8rem;
   margin-bottom: 1rem;
   color: #fff;

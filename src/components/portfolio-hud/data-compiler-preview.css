@@ -147,7 +147,7 @@ body:has(.compiler-container) {
 }
 
 .compiler-header__title {
-  font-family: 'Space Habitat', 'Courier New', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--dossier-cyan);
@@ -295,7 +295,7 @@ body:has(.compiler-container) {
   margin-bottom: 1.25rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-family: 'Space Habitat', 'Courier New', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
 .compiler-controls {
@@ -491,7 +491,7 @@ body:has(.compiler-preview--fullscreen) {
   justify-content: center;
   font-size: 1.75rem;
   color: var(--dossier-cyan);
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
 .compiler-overlay-meta {
@@ -505,7 +505,7 @@ body:has(.compiler-preview--fullscreen) {
   font-weight: 700;
   color: var(--dossier-cyan) !important;
   text-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
-  font-family: 'Space Habitat', 'Courier New', monospace;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 1px;
 }
 
@@ -638,7 +638,7 @@ body:has(.compiler-preview--fullscreen) {
 }
 
 .compiler-modal-title {
-  font-family: 'Space Habitat', 'Courier New', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--dossier-cyan);
@@ -683,7 +683,7 @@ body:has(.compiler-preview--fullscreen) {
 }
 
 .compiler-form-section-title {
-  font-family: 'Space Habitat', 'Courier New', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 700;
   color: var(--dossier-cyan);

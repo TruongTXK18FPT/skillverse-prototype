@@ -16,7 +16,7 @@
 }
 
 .mbm-title {
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   color: var(--dossier-cyan, #06b6d4);
   text-transform: uppercase;

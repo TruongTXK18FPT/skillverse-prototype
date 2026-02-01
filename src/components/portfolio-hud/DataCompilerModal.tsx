@@ -107,9 +107,9 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
           <div>
             <h2 className="dossier-modal-title">
               <Sparkles size={24} style={{ display: 'inline', marginRight: '0.5rem' }} />
-              Biên soạn dữ liệu triển khai
+              Tạo CV bằng AI
             </h2>
-            <p className="dossier-modal-subtitle">AI sẽ tạo CV chiến thuật từ hồ sơ người dùng</p>
+            <p className="dossier-modal-subtitle">AI sẽ tạo CV chuyên nghiệp từ hồ sơ người dùng</p>
           </div>
           <button className="dossier-modal-close" onClick={onClose} type="button">
             <X size={20} />

@@ -312,7 +312,7 @@ const TacticalDossierPortfolio = () => {
           <div className="dossier-panel-frame" style={{ maxWidth: '600px', padding: '3rem 2rem' }}>
             <h2 className="dossier-modal-title" style={{ marginBottom: '1rem' }}>🔒 Cần đăng nhập</h2>
             <p style={{ color: 'var(--dossier-silver)', marginBottom: '2rem' }}>
-              Bạn cần đăng nhập để truy cập Tài liệu Chiến thuật. Tạo và quản lý hồ sơ cá nhân với nhật ký dự án và chứng chỉ.
+              Bạn cần đăng nhập để truy cập Hồ sơ nghề nghiệp. Tạo và quản lý hồ sơ cá nhân với nhật ký dự án và chứng chỉ.
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <button onClick={() => navigate('/login')} className="dossier-btn-primary">
@@ -334,7 +334,7 @@ const TacticalDossierPortfolio = () => {
     return (
       <div className="dossier-portfolio-container" data-theme={theme}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: '1rem' }}>
-          <MeowlKuruLoader text="Đang tải Tài liệu Chiến thuật..." />
+          <MeowlKuruLoader text="Đang tải Hồ sơ nghề nghiệp..." />
         </div>
       </div>
     );
@@ -346,7 +346,7 @@ const TacticalDossierPortfolio = () => {
       <div className="dossier-portfolio-container" data-theme={theme}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: '1rem', textAlign: 'center', padding: '2rem' }}>
           <AlertCircle size={48} color="#ef4444" />
-          <h2 style={{ color: 'var(--dossier-cyan)', fontFamily: "'Space Habitat', monospace" }}>Không thể tải hồ sơ</h2>
+          <h2 style={{ color: 'var(--dossier-cyan)', fontFamily: "'Inter', sans-serif" }}>Không thể tải hồ sơ</h2>
           <p style={{ color: 'var(--dossier-silver)' }}>{error}</p>
           <button onClick={loadPortfolioData} className="dossier-btn-primary">
             Thử lại
@@ -399,10 +399,10 @@ const TacticalDossierPortfolio = () => {
         <div className="dossier-header-content">
           <div>
             <h1 className="dossier-header-title">
-              TÀI LIỆU CHIẾN THUẬT
+              HỒ SƠ NGHỀ NGHIỆP
             </h1>
             <p className="dossier-header-rank">
-              CẤP BẬC: CHỈ HUY • {profile?.professionalTitle || 'Chức danh'}
+              {profile?.professionalTitle || 'Chức danh'}
             </p>
             <p className="dossier-header-subtitle">
               {profile?.fullName || 'Tên của bạn'}
@@ -877,7 +877,7 @@ const TacticalDossierPortfolio = () => {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', gap: '1rem' }}>
                 <div>
                   <h2 className="dossier-modal-title">Trình tạo dữ liệu</h2>
-                  <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Sử dụng AI để tạo CV chiến thuật từ hồ sơ người dùng</p>
+                  <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Sử dụng AI để tạo CV chuyên nghiệp từ hồ sơ người dùng</p>
                 </div>
                 <button
                   onClick={() => setCvModalOpen(true)}
@@ -905,7 +905,7 @@ const TacticalDossierPortfolio = () => {
                             background: 'var(--dossier-green)',
                             color: '#000',
                             fontSize: '0.75rem',
-                            fontFamily: "'Space Habitat', monospace",
+                            fontFamily: "'Inter', sans-serif",
                             letterSpacing: '1px'
                           }}>
                             ĐANG DÙNG

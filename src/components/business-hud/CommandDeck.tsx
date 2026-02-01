@@ -104,13 +104,13 @@ const CommandDeck: React.FC = () => {
     // Currently switch to mission tab and pre-fill form (if supported)
     // For now just show alert as placeholder
     console.log('Edit job:', job);
-    alert(`Tính năng chỉnh sửa nhiệm vụ #${job.id} đang được phát triển.`);
+    alert(`Tính năng chỉnh sửa tin tuyển dụng #${job.id} đang được phát triển.`);
   };
 
   const handleViewApplicants = (jobId: number) => {
     // In future: Navigate to applicant management
     console.log('View applicants for job:', jobId);
-    alert(`Tính năng xem ứng viên cho nhiệm vụ #${jobId} đang được phát triển.`);
+    alert(`Tính năng xem ứng viên cho tin #${jobId} đang được phát triển.`);
   };
 
   return (

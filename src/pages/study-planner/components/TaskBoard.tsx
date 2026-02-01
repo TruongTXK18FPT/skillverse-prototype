@@ -288,7 +288,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ columns, onTaskClick, onAddTask, 
             className="study-plan-add-task-btn"
             onClick={() => onAddTask(column.id)}
           >
-            <Plus size={16} /> Thêm Nhiệm Vụ
+            <Plus size={16} /> Thêm Công Việc
           </button>
         </div>
       ))}

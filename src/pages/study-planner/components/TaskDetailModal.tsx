@@ -69,7 +69,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
 
   const handleDelete = async () => {
     if (task && onDelete) {
-      if (window.confirm('Bạn có chắc chắn muốn xóa nhiệm vụ này không?')) {
+      if (window.confirm('Bạn có chắc chắn muốn xóa công việc này không?')) {
         await onDelete(task.id);
         onClose();
       }
@@ -81,7 +81,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
       <div className="study-plan-modal study-plan-task-detail-modal" onClick={e => e.stopPropagation()}>
         <div className="study-plan-modal-header">
           <h3 className="study-plan-modal-title">
-            {task ? 'Chi Tiết Nhiệm Vụ' : 'Nhiệm Vụ Mới'}
+            {task ? 'Chi Tiết Công Việc' : 'Công Việc Mới'}
           </h3>
           <button className="study-plan-modal-close" onClick={onClose}>
             <X size={20} />
@@ -94,7 +94,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
               <div className="study-plan-form-group">
                 <input 
                   className="study-plan-input study-plan-task-title-input"
-                  placeholder="Tên Nhiệm Vụ"
+                  placeholder="Tên công việc"
                   value={formData.title}
                   onChange={e => setFormData({...formData, title: e.target.value})}
                   required
@@ -240,7 +240,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
                 Hủy
               </button>
               <button type="submit" className="study-plan-btn active" style={{ background: 'var(--sv-primary)', color: '#0f172a', borderColor: 'var(--sv-primary)' }}>
-                <Save size={16} /> {task ? 'Lưu Thay Đổi' : 'Tạo Nhiệm Vụ'}
+                <Save size={16} /> {task ? 'Lưu Thay Đổi' : 'Tạo Công Việc'}
               </button>
             </div>
           </div>

@@ -128,7 +128,7 @@ const SkillPointsTab: React.FC = () => {
 
   const filteredActivities = getFilteredActivities();
 
-  if (loading) return <div className="p-4 text-white" style={{ fontFamily: 'var(--cmd-game-font-mono)' }}>INITIALIZING POWER CORE...</div>;
+  if (loading) return <div className="p-4 text-white" style={{ fontFamily: 'var(--cmd-game-font-mono)' }}>Đang tải dữ liệu...</div>;
   if (error) return <div className="p-4 text-red-500">{error}</div>;
 
   return (

@@ -261,7 +261,7 @@ const ParentDashboard: React.FC = () => {
                     </div>
                     <div>
                         <h1 className="parent-v2-title">Chào mừng trở lại, {user?.fullName?.split(' ').pop() || 'Phụ huynh'}</h1>
-                        <p className="parent-v2-subtitle">TRUNG TÂM ĐIỀU HÀNH • TRẠNG THÁI: HOẠT ĐỘNG</p>
+                        <p className="parent-v2-subtitle">BẢNG ĐIỀU KHIỂN • TRẠNG THÁI: HOẠT ĐỘNG</p>
                     </div>
                 </div>
 
@@ -515,7 +515,7 @@ const ParentDashboard: React.FC = () => {
                                         </div>
 
                                         <div className="parent-v2-glass-card" style={{ marginTop: '2rem' }}>
-                                            <h3 style={{ fontWeight: 700, marginBottom: '1.5rem' }}>Nhật ký nhiệm vụ: Dự án & Thực hành</h3>
+                                            <h3 style={{ fontWeight: 700, marginBottom: '1.5rem' }}>Dự án & Thực hành</h3>
                                             <div className="parent-db-projects-list">
                                                 {student.projects.map(p => (
                                                     <div key={p.id} className="parent-db-project-item" style={{ background: 'var(--p-input-bg)', border: '1px solid var(--p-card-border)' }}>
@@ -530,7 +530,7 @@ const ParentDashboard: React.FC = () => {
                                                         </div>
                                                     </div>
                                                 ))}
-                                                {student.projects.length === 0 && <p style={{color: 'var(--p-text-muted)'}}>CHƯA CÓ NHIỆM VỤ NÀO.</p>}
+                                                {student.projects.length === 0 && <p style={{color: 'var(--p-text-muted)'}}>CHƯA CÓ DỰ ÁN NÀO.</p>}
                                             </div>
                                         </div>
                                     </div>

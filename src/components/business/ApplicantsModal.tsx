@@ -114,7 +114,7 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
         <div className="am-fleet-header">
           <div className="am-fleet-title">
             <h3>👥 Danh Sách Ứng Viên</h3>
-            <p className="am-fleet-subtitle">CHIẾN DỊCH: {jobTitle}</p>
+            <p className="am-fleet-subtitle">TIN TUYỂN DỤNG: {jobTitle}</p>
           </div>
           <button className="am-fleet-close" onClick={onClose}>×</button>
         </div>
@@ -129,7 +129,7 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
             <div className="am-fleet-empty">
               <div className="am-fleet-empty-icon">📭</div>
               <h4>Chưa Có Ứng Viên</h4>
-              <p>Chưa có ai tham gia chiến dịch này.</p>
+              <p>Chưa có ai ứng tuyển cho vị trí này.</p>
             </div>
           ) : (
             <table className="am-fleet-table">

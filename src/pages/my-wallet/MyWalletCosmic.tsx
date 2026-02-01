@@ -413,7 +413,7 @@ const MyWalletCosmic: React.FC = () => {
       <div className="cosmic-wallet-container">
         <div className="cosmic-loading">
           <MeowlKuruLoader size="medium" text="" />
-          <p>Đang tải dữ liệu vũ trụ...</p>
+          <p>Đang tải dữ liệu...</p>
         </div>
       </div>
     );
@@ -433,10 +433,10 @@ const MyWalletCosmic: React.FC = () => {
         <div className="header-content">
           <div className="header-title">
             <Wallet className="header-icon" />
-            <h1>Ví Vũ Trụ</h1>
+            <h1>Ví SkillVerse</h1>
             <Sparkles className="sparkle-icon" />
           </div>
-          <p className="header-subtitle">Quản lý tài sản của bạn trong vũ trụ SkillVerse</p>
+          <p className="header-subtitle">Quản lý tài sản của bạn trên nền tảng SkillVerse</p>
         </div>
       </div>
 

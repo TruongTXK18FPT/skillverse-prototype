@@ -4,13 +4,6 @@
    ============================================ */
 
 /* ========== FONT FACE ========== */
-@font-face {
-  font-family: 'Space Habitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* ========== CSS VARIABLES ========== */
 :root {
@@ -47,7 +40,7 @@
   --hud-spacing-xl: 3rem;
 
   /* Typography */
-  --hud-font-display: 'Space Habitat', monospace;
+  --hud-font-display: 'Inter', monospace;
   --hud-font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 

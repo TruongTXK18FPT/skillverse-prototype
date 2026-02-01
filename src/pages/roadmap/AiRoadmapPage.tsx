@@ -81,7 +81,7 @@ const AiRoadmapPage = () => {
       };
 
       const roadmap = await aiRoadmapService.generateRoadmap(apiRequest);
-      showSuccess('Success', 'Roadmap generated successfully!');
+      showSuccess('Thành công', 'Lộ trình đã được tạo!');
       // Navigate to the new roadmap detail page
       navigate(`/roadmap/${roadmap.sessionId}`);
       // Reload list to include new roadmap
@@ -97,7 +97,7 @@ const AiRoadmapPage = () => {
         
         // Show banner/toast
         showError(
-          'Premium Plus Required', 
+          'Yêu cầu Premium Plus', 
           'Chế độ Deep Research chỉ dành cho gói Mentor Pro. Hệ thống sẽ tự động chuyển về Normal Agent.',
           6
         );
@@ -107,7 +107,7 @@ const AiRoadmapPage = () => {
           const retryRequest = { ...request, aiAgentMode: 'NORMAL' as const };
           const roadmap = await aiRoadmapService.generateRoadmap(retryRequest);
           
-          showSuccess('Success', 'Roadmap generated successfully (Normal Mode)!');
+          showSuccess('Thành công', 'Lộ trình đã được tạo (Chế độ Thường)!');
           navigate(`/roadmap/${roadmap.sessionId}`);
           await loadUserRoadmaps();
           return; // Exit after successful retry
@@ -233,11 +233,11 @@ const AiRoadmapPage = () => {
           
           <div className="roadmap-page__header-content">
             <h1 className="roadmap-page__title" style={{ fontFamily: 'var(--hud-font-mono)', color: 'var(--hud-accent)', textShadow: '0 0 10px var(--hud-accent-glow)' }}>
-              {viewMode === 'list' && 'NAVIGATION CONTROL DECK'}
+              {viewMode === 'list' && 'QUẢN LÝ LỘ TRÌNH'}
               {viewMode === 'generate' && ''}
             </h1>
             <p className="roadmap-page__subtitle" style={{ color: 'var(--hud-text-dim)' }}>
-              {viewMode === 'list' && 'Hệ thống định vị lộ trình học tập AI'}
+              {viewMode === 'list' && 'Hệ thống lộ trình học tập AI'}
               {viewMode === 'generate' && ''}
             </p>
           </div>

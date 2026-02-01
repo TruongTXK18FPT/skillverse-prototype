@@ -83,9 +83,9 @@ const DossierInitScreen = ({ onInitiate }: DossierInitScreenProps) => {
 
         {/* Description */}
         <p className="init-description">
-          Hệ thống Hồ sơ Chiến thuật đang ở <span className="init-highlight">CHẾ ĐỘ CHỜ</span>.
+          Hồ sơ nghề nghiệp đang ở <span className="init-highlight">CHẾ ĐỘ CHỞ</span>.
           <br />
-          Khởi tạo quy trình tạo ID Phi công để truy cập điều khiển Mothership.
+          Bắt đầu tạo hồ sơ cá nhân để truy cập đầy đủ tính năng.
         </p>
 
         {/* Action Button */}
@@ -103,11 +103,11 @@ const DossierInitScreen = ({ onInitiate }: DossierInitScreenProps) => {
         <div className="init-system-info">
           <div className="init-info-item">
             <span className="init-info-label">HỆ THỐNG</span>
-            <span className="init-info-value">TACTICAL DOSSIER v2.5</span>
+            <span className="init-info-value">HỒ SƠ NGHỀ NGHIỆP v2.5</span>
           </div>
           <div className="init-info-item">
             <span className="init-info-label">TRẠNG THÁI</span>
-            <span className="init-info-value init-blink">Đang chờ phi công</span>
+            <span className="init-info-value init-blink">Đang chờ người dùng</span>
           </div>
           <div className="init-info-item">
             <span className="init-info-label">BẢO MẬT</span>

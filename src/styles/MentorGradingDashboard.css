@@ -71,7 +71,7 @@
 }
 
 .mentor-grading-header h2 {
-  font-family: var(--mentor-hud-font-display, 'Space Habitat', monospace);
+  font-family: var(--mentor-hud-font-display, 'Inter', monospace);
   font-size: 24px;
   color: var(--mentor-hud-accent-cyan, #06b6d4);
   text-transform: uppercase;
@@ -110,7 +110,7 @@
 .mentor-submissions-table th {
   padding: 16px;
   text-align: left;
-  font-family: var(--mentor-hud-font-display, 'Space Habitat', monospace);
+  font-family: var(--mentor-hud-font-display, 'Inter', monospace);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1.5px;
