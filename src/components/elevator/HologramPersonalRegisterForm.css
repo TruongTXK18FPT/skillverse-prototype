@@ -24,7 +24,7 @@
   width: 100%;
   max-width: 1200px;
   padding: 2px;
-  font-family: 'SpaceHabitat', 'Inter', 'Roboto', 'Arial', sans-serif;
+  font-family:  'Inter', 'Roboto', 'Arial', sans-serif;
 }
 
 /* Hologram Border */
@@ -458,7 +458,7 @@
   );
   border: 2px solid var(--reg-personal-primary);
   color: var(--reg-personal-primary);
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 3px;
@@ -548,7 +548,7 @@
   background: var(--reg-personal-bg-light);
   border: 1px solid var(--reg-personal-border);
   color: var(--reg-personal-text-dim);
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.65rem;
   letter-spacing: 2px;
   cursor: pointer;

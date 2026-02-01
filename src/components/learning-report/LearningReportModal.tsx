@@ -526,17 +526,19 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
           {/* Header */}
           <div className="lr-modal__header">
             <div className="lr-modal__header-left">
-              <motion.img
-                src="/images/meowl_bg_clear.png"
-                alt="Meowl"
-                className="lr-modal__header-meowl"
-                animate={{ y: [0, -4, 0] }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
+              <div className="lr-modal__header-meowl-wrapper">
+                <motion.img
+                  src="/images/meowl_bg_clear.png"
+                  alt="Meowl"
+                  className="lr-modal__header-meowl"
+                  animate={{ y: [0, -4, 0] }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+              </div>
               <div className="lr-modal__header-info">
                 <h2>🐱 Meowl Learning Report</h2>
                 <p>{meowlSpeech}</p>

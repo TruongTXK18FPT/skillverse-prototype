@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { X, Sparkles, Crown, MapPin, BookOpen, Target, Heart, Shirt, Home, User, Briefcase, Users, Trophy, Wallet, GraduationCap, MessageCircle, Compass, Info, CreditCard, Zap, Gift, Star } from 'lucide-react';
+import { X, Sparkles, Crown, MapPin, BookOpen, Target, Heart, Shirt, Home, User, Briefcase, Users, Trophy, Wallet, GraduationCap, MessageCircle, Compass, Info, CreditCard, Zap, Gift, Star, ShieldAlert } from 'lucide-react';
 import { useMeowlSkin } from '../../context/MeowlSkinContext';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useMeowlState } from '../../context/MeowlStateContext';
 import { premiumService } from '../../services/premiumService';
 import '../../styles/MeowlBubbleNotification.css';
 
 interface BubbleMessage {
   id: string;
-  type: 'welcome' | 'premium' | 'skin' | 'roadmap' | 'course' | 'direction' | 'motivation' | 'tip' | 'page-intro';
+  type: 'welcome' | 'premium' | 'skin' | 'roadmap' | 'course' | 'direction' | 'motivation' | 'tip' | 'page-intro' | 'attendance';
   messageEn: string;
   messageVi: string;
   icon: React.ReactNode;
@@ -437,6 +438,41 @@ const BUBBLE_MESSAGES: BubbleMessage[] = [
     icon: <Star size={20} className="bubble-icon-star" />,
     priority: 3,
   },
+
+  // Attendance/Rescue messages (Triggered when lose-streak)
+  {
+    id: 'attendance-rescue-1',
+    type: 'attendance',
+    messageEn: "Meowl is freezing! ❄️ Please check in to save me and continue your streak!",
+    messageVi: "Meowl đang đóng băng rồi! ❄️ Điểm danh ngay để cứu mình và giữ chuỗi học tập nhé!",
+    icon: <ShieldAlert size={20} style={{ color: '#f59e0b' }} />,
+    actionUrl: '/dashboard',
+    actionLabelEn: 'Save Meowl 🔥',
+    actionLabelVi: 'Cứu Meowl 🔥',
+    priority: 10,
+  },
+  {
+    id: 'attendance-rescue-2',
+    type: 'attendance',
+    messageEn: "System sync required! ⚠️ Don't let your learning streak die. Check in now!",
+    messageVi: "Yêu cầu đồng bộ hệ thống! ⚠️ Đừng để chuỗi học tập bị ngắt quãng. Điểm danh ngay!",
+    icon: <Zap size={20} style={{ color: '#f59e0b' }} />,
+    actionUrl: '/dashboard',
+    actionLabelEn: 'Go to Dashboard 📍',
+    actionLabelVi: 'Vào Dashboard 📍',
+    priority: 10,
+  },
+  {
+    id: 'attendance-rescue-3',
+    type: 'attendance',
+    messageEn: "System Critical! 🚨 Help Meowl recover by checking in now!",
+    messageVi: "Hệ thống nguy kịch! 🚨 Điểm danh ngay để cứu Meowl nào!",
+    icon: <ShieldAlert size={20} style={{ color: '#ff4757' }} />,
+    actionUrl: '/dashboard',
+    actionLabelEn: 'SOS Meowl 🆘',
+    actionLabelVi: 'Cứu Meowl 🆘',
+    priority: 11,
+  },
 ];
 
 interface MeowlBubbleNotificationProps {
@@ -449,6 +485,7 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
   const { currentSkinImage } = useMeowlSkin();
   const { isAuthenticated } = useAuth();
   const { language } = useLanguage();
+  const { meowlState } = useMeowlState();
   
   const [currentBubble, setCurrentBubble] = useState<BubbleMessage | null>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -514,6 +551,12 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
 
   // Select appropriate bubble message (for non-page-intro scenarios)
   const selectRandomBubble = useCallback((): BubbleMessage | null => {
+    // Priority 0: If in lose-streak, ONLY show attendance rescue messages
+    if (meowlState === 'lose-streak') {
+      const rescueMessages = BUBBLE_MESSAGES.filter(m => m.type === 'attendance');
+      return rescueMessages[Math.floor(Math.random() * rescueMessages.length)];
+    }
+
     const now = Date.now();
     const lastPremiumPrompt = parseInt(localStorage.getItem(STORAGE_KEYS.LAST_PREMIUM_PROMPT) || '0');
     const lastSkinPrompt = parseInt(localStorage.getItem(STORAGE_KEYS.LAST_SKIN_PROMPT) || '0');
@@ -563,8 +606,8 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
 
   // Show bubble helper
   const showBubble = useCallback((bubble: BubbleMessage, autoHideDelay: number = 8000) => {
-    // Don't show if disabled
-    if (isBubbleDisabled) return;
+    // Don't show if disabled - BYPASS if in lose-streak (mandatory notification)
+    if (isBubbleDisabled && meowlState !== 'lose-streak') return;
     
     setCurrentBubble(bubble);
     setIsVisible(true);
@@ -679,7 +722,8 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
   };
 
   // If disabled, do nothing (button is now in MeowlGuide)
-  if (isBubbleDisabled) return null;
+  // BYPASS disabled check if in lose-streak state
+  if (isBubbleDisabled && meowlState !== 'lose-streak') return null;
 
   if (!isVisible || !currentBubble || !isAuthenticated) return null;
 

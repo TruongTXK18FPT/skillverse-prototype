@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import jobService from '../../services/jobService';
 import { JobPostingResponse, JobStatus, JobApplicationStatus } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';
@@ -55,41 +55,49 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
     location: ''
   });
 
-  useEffect(() => {
-    fetchJobs();
-  }, [refreshTrigger, localRefreshTrigger]);
-
-  const fetchJobs = async () => {
+  // 1. Define fetchJobs with useCallback to stabilize the function reference
+  const fetchJobs = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await jobService.getMyJobs();
       setJobs(data);
-      
-      // If a job is selected, update its details from the fresh data
-      if (selectedJob) {
-        const updatedSelectedJob = data.find(job => job.id === selectedJob.id);
-        if (updatedSelectedJob) {
-          setSelectedJob(updatedSelectedJob);
-        }
-      }
     } catch (error) {
       console.error('Error fetching jobs:', error);
-      showError('System Error', 'Failed to retrieve operation logs.');
+      showError('Lỗi Hệ Thống', 'Không thể tải nhật ký hoạt động.');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [showError]); // Dependencies that don't change often
+
+  // 2. Fetch jobs when triggers change
+  useEffect(() => {
+    fetchJobs();
+  }, [refreshTrigger, localRefreshTrigger, fetchJobs]);
+
+  // 3. Separate effect to update selectedJob details when jobs list updates
+  // This prevents the infinite loop of fetchJobs -> setJobs -> selectedJob -> fetchJobs
+  useEffect(() => {
+    if (selectedJob) {
+      const updatedSelectedJob = jobs.find(job => job.id === selectedJob.id);
+      if (updatedSelectedJob) {
+        // Only update if data actually changed to avoid render loops
+        if (JSON.stringify(updatedSelectedJob) !== JSON.stringify(selectedJob)) {
+          setSelectedJob(updatedSelectedJob);
+        }
+      }
+    }
+  }, [jobs, selectedJob]);
 
   const handleDelete = async (jobId: number) => {
-    if (window.confirm('Cáº¢NH BÃO: Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n há»§y tin tuyá»ƒn dá»¥ng nÃ y? HÃ nh Ä‘á»™ng nÃ y sáº½ xÃ³a vÄ©nh viá»…n dá»¯ liá»‡u vÃ  Ä‘Æ¡n á»©ng tuyá»ƒn.')) {
+    if (window.confirm('CẢNH BÁO: Bạn có chắc chắn muốn hủy tin tuyển dụng này? Hành động này sẽ xóa vĩnh viễn dữ liệu và đơn ứng tuyển.')) {
       try {
         await jobService.deleteJob(jobId);
         setJobs(prevJobs => prevJobs.filter(job => job.id !== jobId));
         if (selectedJob?.id === jobId) setSelectedJob(null);
-        showSuccess('ThÃ nh CÃ´ng', 'Tin tuyá»ƒn dá»¥ng Ä‘Ã£ Ä‘Æ°á»£c há»§y thÃ nh cÃ´ng.');
+        showSuccess('Thành Công', 'Tin tuyển dụng đã được hủy thành công.');
       } catch (err: any) {
         console.error('Failed to delete job:', err);
-        showError('Error', 'KhÃ´ng thá»ƒ há»§y tin tuyá»ƒn dá»¥ng. Vui lÃ²ng thá»­ láº¡i.');
+        showError('Lỗi', 'Không thể hủy tin tuyển dụng. Vui lòng thử lại.');
       }
     }
   };
@@ -113,11 +121,11 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
       if (selectedJob?.id === closeModal.jobId) {
         setSelectedJob(prev => prev ? { ...prev, status: JobStatus.CLOSED } : null);
       }
-      showSuccess('Thành Công', 'Nhiá»‡m vá»¥ Ä‘Ã£ Ä‘Æ°á»£c Ä‘Ã³ng láº¡i.');
+      showSuccess('Thành Công', 'Nhiệm vụ đã được đóng lại.');
       setCloseModal({ visible: false, jobId: null });
     } catch (err: any) {
       console.error('Failed to close job:', err);
-      showError('Error', 'KhÃ´ng thá»ƒ Ä‘Ã³ng nhiá»‡m vá»¥.');
+      showError('Lỗi', 'Không thể đóng nhiệm vụ.');
     }
   };
 
@@ -145,10 +153,11 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
   const confirmReopen = async () => {
     const minDate = new Date();
     minDate.setDate(minDate.getDate() + 1); // Tomorrow
-    const minDateStr = minDate.toISOString().split('T')[0];
+    
+    // Removed unused minDateStr to fix lint warning
 
     if (new Date(reopenModal.deadline) < minDate) {
-        showError('Lá»—i NgÃ y ThÃ¡ng', 'Háº¡n chÃ³t pháº£i tá»« ngÃ y mai trá»Ÿ Ä‘i.');
+        showError('Lỗi Ngày Tháng', 'Hạn chót phải từ ngày mai trở đi.');
         return;
     }
 
@@ -166,7 +175,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
          setSelectedJob(prev => prev ? { ...prev, status: JobStatus.OPEN } : null);
       }
 
-      showSuccess('Thành Công', 'Nhiá»‡m vá»¥ Ä‘Ã£ Ä‘Æ°á»£c tÃ¡i kÃ­ch hoáº¡t.');
+      showSuccess('Thành Công', 'Nhiệm vụ đã được tái kích hoạt.');
 
       // Dispatch wallet update event
       window.dispatchEvent(new Event('wallet:updated'));
@@ -174,7 +183,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
       setReopenModal(prev => ({ ...prev, visible: false }));
     } catch (err: any) {
       console.error('Failed to reopen job:', err);
-      showError('Error', 'KhÃ´ng thá»ƒ má»Ÿ láº¡i nhiá»‡m vá»¥.');
+      showError('Lỗi', 'Không thể mở lại nhiệm vụ.');
     }
   };
 
@@ -207,13 +216,12 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
         location: editForm.isRemote ? null : editForm.location
       });
 
-      showSuccess('Thành Công', 'ThÃ´ng tin nhiá»‡m vá»¥ Ä‘Ã£ Ä‘Æ°á»£c cáº­p nháº­t.');
+      showSuccess('Thành Công', 'Thông tin nhiệm vụ đã được cập nhật.');
       setEditingJob(null);
       fetchJobs();
       
       // Update selected job if it's the one being edited
       if (selectedJob?.id === editingJob.id) {
-         // We should ideally fetch the fresh job, but let's update basic fields
          setSelectedJob(prev => prev ? {
              ...prev,
              title: editForm.title,
@@ -225,12 +233,13 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
       }
     } catch (error) {
       console.error('Error updating job:', error);
-      showError('Update Failed', 'KhÃ´ng thá»ƒ cáº­p nháº­t thÃ´ng tin nhiá»‡m vá»¥.');
+      showError('Lỗi Cập Nhật', 'Không thể cập nhật thông tin nhiệm vụ.');
     }
   };
 
-  // Deprecated - kept for reference if needed, but UI uses handleReopenClick now
-  const handleReopenJob = async (jobId: number) => {
+  // Deprecated - kept for reference if needed
+  // Added underscore to suppress unused warning
+  const _handleReopenJob = async (_jobId: number) => {
      console.warn('Deprecated handleReopenJob called. Use handleReopenClick instead.');
   };
 
@@ -245,33 +254,33 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
   };
 
   const handleAcceptApplicant = async (appId: number, name: string) => {
-    if (window.confirm(`Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n CHáº¤P NHáº¬N á»©ng viÃªn ${name}?`)) {
+    if (window.confirm(`Bạn có chắc chắn muốn CHẤP NHẬN ứng viên ${name}?`)) {
       try {
         await jobService.updateApplicationStatus(appId, {
           status: 'ACCEPTED' as JobApplicationStatus,
-          acceptanceMessage: 'ChÃºc má»«ng! Báº¡n Ä‘Ã£ Ä‘Æ°á»£c chá»n tham gia Ä‘á»™i ngÅ©.'
+          acceptanceMessage: 'Chúc mừng! Bạn đã được chọn tham gia đội ngũ.'
         });
         // Trigger local refresh for modal
         setLocalRefreshTrigger(prev => prev + 1);
-        showSuccess('Tuyá»ƒn Dá»¥ng ThÃ nh CÃ´ng', `ÄÃ£ cháº¥p nháº­n ${name} vÃ o Ä‘á»™i!`);
-      } catch (e) {
-        showError('Lá»—i', 'KhÃ´ng thá»ƒ cháº¥p nháº­n á»©ng viÃªn nÃ y.');
+        showSuccess('Tuyển Dụng Thành Công', `Đã chấp nhận ${name} vào đội!`);
+      } catch (_e) { // Renamed e to _e
+        showError('Lỗi', 'Không thể chấp nhận ứng viên này.');
       }
     }
   };
 
   const handleRejectApplicant = async (appId: number, name: string) => {
-    if (window.confirm(`Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n Tá»ª CHá»I á»©ng viÃªn ${name}?`)) {
+    if (window.confirm(`Bạn có chắc chắn muốn TỪ CHỐI ứng viên ${name}?`)) {
       try {
         await jobService.updateApplicationStatus(appId, {
           status: 'REJECTED' as JobApplicationStatus,
-          rejectionReason: 'Há»“ sÆ¡ chÆ°a phÃ¹ há»£p vá»›i yÃªu cáº§u hiá»‡n táº¡i.'
+          rejectionReason: 'Hồ sơ chưa phù hợp với yêu cầu hiện tại.'
         });
         // Trigger local refresh for modal
         setLocalRefreshTrigger(prev => prev + 1);
-        showSuccess('ÄÃ£ Tá»« Chá»‘i', `ÄÃ£ gá»­i thÃ´ng bÃ¡o tá»« chá»‘i cho ${name}.`);
-      } catch (e) {
-        showError('Lá»—i', 'KhÃ´ng thá»ƒ tá»« chá»‘i á»©ng viÃªn nÃ y.');
+        showSuccess('Đã Từ Chối', `Đã gửi thông báo từ chối cho ${name}.`);
+      } catch (_e) { // Renamed e to _e
+        showError('Lỗi', 'Không thể từ chối ứng viên này.');
       }
     }
   };
@@ -292,12 +301,12 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
     <div className="fleet-panel">
       <div className="fleet-title">
         <i className="fas fa-list-alt"></i>
-        Nháº­t KÃ½ Hoáº¡t Äá»™ng
+        Nhật Ký Hoạt Động
       </div>
       
       {isLoading ? (
         <div style={{ color: 'var(--fleet-cyan)', padding: '20px', textAlign: 'center' }}>
-          Äang táº£i dá»¯ liá»‡u...
+          Đang tải dữ liệu...
         </div>
       ) : (
         <>
@@ -305,18 +314,18 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Vá»‹ TrÃ­ Tuyá»ƒn Dá»¥ng</th>
-                <th>Háº¡n ChÃ³t</th>
-                <th>NgÃ¢n SÃ¡ch</th>
-                <th>Tráº¡ng ThÃ¡i</th>
-                <th>HÃ nh Äá»™ng</th>
+                <th>Vị Trí Tuyển Dụng</th>
+                <th>Hạn Chót</th>
+                <th>Ngân Sách</th>
+                <th>Trạng Thái</th>
+                <th>Hành Động</th>
               </tr>
             </thead>
             <tbody>
               {jobs.length === 0 ? (
                 <tr>
                   <td colSpan={6} style={{ textAlign: 'center', color: 'var(--fleet-text-muted)' }}>
-                    KhÃ´ng tÃ¬m tháº¥y tin tuyá»ƒn dá»¥ng nÃ o. HÃ£y táº¡o tin má»›i.
+                    Không tìm thấy tin tuyển dụng nào. Hãy tạo tin mới.
                   </td>
                 </tr>
               ) : (
@@ -333,10 +342,10 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                     </td>
                     <td style={{ fontWeight: 'bold' }}>{job.title}</td>
                     <td>{formatDate(job.deadline)}</td>
-                    <td>{job.isNegotiable ? 'Thá»a thuáº­n' : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(job.maxBudget)}</td>
+                    <td>{job.isNegotiable ? 'Thỏa thuận' : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(job.maxBudget)}</td>
                     <td>
                       <span className={`fleet-status-badge ${getStatusBadgeClass(job.status)}`}>
-                        [{job.status === 'OPEN' ? 'Má»ž' : job.status === 'PENDING_APPROVAL' ? 'CHá»œ DUYá»†T' : 'ÄÃ“NG'}]
+                        [{job.status === 'OPEN' ? 'MỞ' : job.status === 'PENDING_APPROVAL' ? 'CHỜ DUYỆT' : 'ĐÓNG'}]
                       </span>
                     </td>
                     <td>
@@ -344,10 +353,10 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                         <button 
                           className="fleet-btn-icon" 
                           onClick={() => handleViewDetails(job)}
-                          title="Xem Chi Tiáº¿t & Thao TÃ¡c"
+                          title="Xem Chi Tiết & Thao Tác"
                           style={{ color: 'var(--fleet-cyan)', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '1.2em' }}
                         >
-                          <i className="fas fa-info-circle"></i> â„¹ï¸
+                          <i className="fas fa-info-circle"></i> ℹ️
                         </button>
                       </div>
                     </td>
@@ -361,47 +370,47 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
           {selectedJob && (
             <div className="fleet-details-panel">
               <div className="fleet-details-header">
-                <h3>Chi Tiáº¿t Tin #{selectedJob.id}</h3>
+                <h3>Chi Tiết Tin #{selectedJob.id}</h3>
                 <button 
                   className="fleet-close-btn"
                   onClick={() => setSelectedJob(null)}
                 >
-                  âœ•
+                  ✕
                 </button>
               </div>
               
               <div className="fleet-details-content">
                 <div className="fleet-detail-row">
-                  <label>TiÃªu Äá»:</label>
+                  <label>Tiêu Đề:</label>
                   <span>{selectedJob.title}</span>
                 </div>
                 <div className="fleet-detail-row">
-                  <label>Tráº¡ng ThÃ¡i:</label>
+                  <label>Trạng Thái:</label>
                   <span className={`fleet-status-badge ${getStatusBadgeClass(selectedJob.status)}`}>
                     {selectedJob.status}
                   </span>
                 </div>
                 <div className="fleet-detail-row">
-                  <label>MÃ´ Táº£:</label>
+                  <label>Mô Tả:</label>
                   <p>{selectedJob.description}</p>
                 </div>
                 <div className="fleet-detail-row">
-                  <label>Quyá»n Lá»£i:</label>
-                  <p>{selectedJob.benefits || 'ChÆ°a cáº­p nháº­t'}</p>
+                  <label>Quyền Lợi:</label>
+                  <p>{selectedJob.benefits || 'Chưa cập nhật'}</p>
                 </div>
                 <div className="fleet-detail-row">
-                  <label>Ká»¹ NÄƒng:</label>
+                  <label>Kỹ Năng:</label>
                   <div className="fleet-merc-skills">
-                    {selectedJob.requiredSkills?.map(s => <span key={s} className="fleet-chip">{s}</span>) || 'KhÃ´ng cÃ³ yÃªu cáº§u'}
+                    {selectedJob.requiredSkills?.map(s => <span key={s} className="fleet-chip">{s}</span>) || 'Không có yêu cầu'}
                   </div>
                 </div>
                 <div className="fleet-detail-row">
-                  <label>HÃ¬nh Thá»©c:</label>
-                  <span>{selectedJob.isRemote ? 'LÃ m viá»‡c tá»« xa (Remote)' : selectedJob.location} - {selectedJob.jobType}</span>
+                  <label>Hình Thức:</label>
+                  <span>{selectedJob.isRemote ? 'Làm việc từ xa (Remote)' : selectedJob.location} - {selectedJob.jobType}</span>
                 </div>
                 <div className="fleet-detail-row">
-                  <label>Tuyá»ƒn Dá»¥ng:</label>
-                  <span>{selectedJob.hiringQuantity} ngÆ°á»i ({selectedJob.experienceLevel})</span>
+                  <label>Tuyển Dụng:</label>
+                  <span>{selectedJob.hiringQuantity} người ({selectedJob.experienceLevel})</span>
                 </div>
                 
                 <div className="fleet-details-actions" style={{ marginTop: '20px', display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
@@ -418,7 +427,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                       fontWeight: 600
                     }}
                   >
-                    ðŸ‘¥ Xem á»¨ng ViÃªn
+                    👥 Xem Ứng Viên
                   </button>
 
                   {selectedJob.status === 'OPEN' && (
@@ -426,7 +435,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                       className="fleet-btn-warning"
                       onClick={() => handleCloseJob(selectedJob.id)}
                     >
-                      ðŸ›‘ ÄÃ³ng Nhiá»‡m Vá»¥
+                      🛑 Đóng Nhiệm Vụ
                     </button>
                   )}
                   
@@ -444,13 +453,13 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                           padding: '8px 16px'
                         }}
                       >
-                        âœï¸ Chá»‰nh Sá»­a
+                        ✏️ Chỉnh Sửa
                       </button>
                       <button 
                         className="fleet-btn-success"
                         onClick={() => handleReopenClick(selectedJob)}
                       >
-                        ðŸ”„ Má»Ÿ Láº¡i Nhiá»‡m Vá»¥
+                        🔄 Mở Lại Nhiệm Vụ
                       </button>
                     </>
                   )}
@@ -459,7 +468,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                     className="fleet-btn-danger"
                     onClick={() => handleDelete(selectedJob.id)}
                   >
-                    ðŸ—‘ï¸ Há»§y Nhiá»‡m Vá»¥
+                    🗑️ Hủy Nhiệm Vụ
                   </button>
                 </div>
               </div>
@@ -487,22 +496,22 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
             }} onClick={() => setCloseModal(prev => ({ ...prev, visible: false }))}>
               <div className="fleet-panel" style={{ width: '500px', maxWidth: '90%' }} onClick={(e) => e.stopPropagation()}>
                 <div className="fleet-details-header">
-                  <h3 style={{ color: 'var(--fleet-warning)' }}>ðŸ›‘ XÃ¡c Nháº­n ÄÃ³ng Nhiá»‡m Vá»¥</h3>
-                  <button className="fleet-close-btn" onClick={() => setCloseModal(prev => ({ ...prev, visible: false }))}>âœ•</button>
+                  <h3 style={{ color: 'var(--fleet-warning)' }}>🛑 Xác Nhận Đóng Nhiệm Vụ</h3>
+                  <button className="fleet-close-btn" onClick={() => setCloseModal(prev => ({ ...prev, visible: false }))}>✕</button>
                 </div>
                 
                 <div style={{ padding: '20px 0', color: '#e2e8f0' }}>
-                  <p>Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n Ä‘Ã³ng nhiá»‡m vá»¥ nÃ y khÃ´ng?</p>
+                  <p>Bạn có chắc chắn muốn đóng nhiệm vụ này không?</p>
                   <ul style={{ margin: '15px 0 15px 20px', lineHeight: '1.6' }}>
-                    <li>á»¨ng viÃªn sáº½ khÃ´ng thá»ƒ ná»™p Ä‘Æ¡n má»›i.</li>
-                    <li>Nhiá»‡m vá»¥ sáº½ chuyá»ƒn sang tráº¡ng thÃ¡i <strong>CLOSED</strong>.</li>
-                    <li>Báº¡n cÃ³ thá»ƒ má»Ÿ láº¡i sau (cÃ³ phÃ­ náº¿u quÃ¡ thá»i gian Ã¢n háº¡n).</li>
+                    <li>Ứng viên sẽ không thể nộp đơn mới.</li>
+                    <li>Nhiệm vụ sẽ chuyển sang trạng thái <strong>CLOSED</strong>.</li>
+                    <li>Bạn có thể mở lại sau (có phí nếu quá thời gian ân hạn).</li>
                   </ul>
                 </div>
 
                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                  <button className="fleet-btn-secondary" onClick={() => setCloseModal(prev => ({ ...prev, visible: false }))}>Há»§y Bá»</button>
-                  <button className="fleet-btn-danger" onClick={confirmClose}>XÃ¡c Nháº­n ÄÃ³ng</button>
+                  <button className="fleet-btn-secondary" onClick={() => setCloseModal(prev => ({ ...prev, visible: false }))}>Hủy Bỏ</button>
+                  <button className="fleet-btn-danger" onClick={confirmClose}>Xác Nhận Đóng</button>
                 </div>
               </div>
             </div>
@@ -517,8 +526,8 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
             }} onClick={() => setReopenModal(prev => ({ ...prev, visible: false }))}>
               <div className="fleet-panel" style={{ width: '500px', maxWidth: '90%' }} onClick={(e) => e.stopPropagation()}>
                 <div className="fleet-details-header">
-                  <h3>ðŸ”„ Má»Ÿ Láº¡i Nhiá»‡m Vá»¥</h3>
-                  <button className="fleet-close-btn" onClick={() => setReopenModal(prev => ({ ...prev, visible: false }))}>âœ•</button>
+                  <h3>🔄 Mở Lại Nhiệm Vụ</h3>
+                  <button className="fleet-close-btn" onClick={() => setReopenModal(prev => ({ ...prev, visible: false }))}>✕</button>
                 </div>
                 
                 <div style={{ 
@@ -527,17 +536,17 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                   padding: '15px', borderRadius: '4px', marginBottom: '20px',
                   border: `1px solid ${reopenModal.isFree ? '#10b981' : '#f59e0b'}`
                 }}>
-                  <strong>{reopenModal.isFree ? 'âœ¨ MIá»„N PHÃ' : 'ðŸ’° PHÃ: 20.000 VNÄ'}</strong>
+                  <strong>{reopenModal.isFree ? '✨ MIỄN PHÍ' : '💰 PHÍ: 20.000 VNĐ'}</strong>
                   <p style={{ margin: '5px 0 0 0', fontSize: '0.9em', color: '#e2e8f0' }}>
                     {reopenModal.isFree 
-                      ? 'Báº¡n Ä‘ang trong thá»i gian Ã¢n háº¡n (5 phÃºt). Má»Ÿ láº¡i job sáº½ khÃ´ng tá»‘n phÃ­.'
-                      : 'ÄÃ£ quÃ¡ thá»i gian Ã¢n háº¡n 5 phÃºt. PhÃ­ má»Ÿ láº¡i sáº½ Ä‘Æ°á»£c trá»« vÃ o vÃ­ cá»§a báº¡n.'
+                      ? 'Bạn đang trong thời gian ân hạn (5 phút). Mở lại job sẽ không tốn phí.'
+                      : 'Đã quá thời gian ân hạn 5 phút. Phí mở lại sẽ được trừ vào ví của bạn.'
                     }
                   </p>
                 </div>
 
                 <div className="fleet-input-group">
-                  <label className="fleet-label">Háº¡n ChÃ³t Má»›i *</label>
+                  <label className="fleet-label">Hạn Chót Mới *</label>
                   <input
                     type="date"
                     className="fleet-input"
@@ -556,14 +565,14 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                       style={{ marginRight: '10px', width: 'auto' }}
                     />
                     <span>
-                      <strong>XÃ³a danh sÃ¡ch á»©ng viÃªn cÅ©?</strong>
+                      <strong>Xóa danh sách ứng viên cũ?</strong>
                     </span>
                   </label>
                 </div>
 
                 <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                  <button className="fleet-btn-secondary" onClick={() => setReopenModal(prev => ({ ...prev, visible: false }))}>Há»§y</button>
-                  <button className="fleet-btn-primary" onClick={confirmReopen}>âœ… XÃ¡c Nháº­n</button>
+                  <button className="fleet-btn-secondary" onClick={() => setReopenModal(prev => ({ ...prev, visible: false }))}>Hủy</button>
+                  <button className="fleet-btn-primary" onClick={confirmReopen}>✅ Xác Nhận</button>
                 </div>
               </div>
             </div>
@@ -578,17 +587,17 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
             }} onClick={() => setEditingJob(null)}>
               <div className="fleet-panel" style={{ width: '600px', maxWidth: '90%', maxHeight: '90vh', overflowY: 'auto' }} onClick={(e) => e.stopPropagation()}>
                 <div className="fleet-details-header">
-                  <h3>âœï¸ Chá»‰nh Sá»­a Tin Tuyá»ƒn Dá»¥ng</h3>
-                  <button className="fleet-close-btn" onClick={() => setEditingJob(null)}>âœ•</button>
+                  <h3>✏️ Chỉnh Sửa Tin Tuyển Dụng</h3>
+                  <button className="fleet-close-btn" onClick={() => setEditingJob(null)}>✕</button>
                 </div>
                 
                 <div className="fleet-input-group">
-                  <label className="fleet-label">TiÃªu Äá» *</label>
+                  <label className="fleet-label">Tiêu Đề *</label>
                   <input type="text" className="fleet-input" value={editForm.title} onChange={(e) => setEditForm(prev => ({ ...prev, title: e.target.value }))} />
                 </div>
 
                 <div className="fleet-input-group">
-                  <label className="fleet-label">MÃ´ Táº£ *</label>
+                  <label className="fleet-label">Mô Tả *</label>
                   <textarea 
                     className="fleet-input" 
                     value={editForm.description} 
@@ -600,23 +609,23 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
 
                 <div style={{ display: 'flex', gap: '20px' }}>
                   <div className="fleet-input-group" style={{ flex: 1 }}>
-                    <label className="fleet-label">NgÃ¢n SÃ¡ch Min (VND)</label>
+                    <label className="fleet-label">Ngân Sách Min (VND)</label>
                     <input type="number" className="fleet-input" value={editForm.minBudget} onChange={(e) => setEditForm(prev => ({ ...prev, minBudget: e.target.value }))} />
                   </div>
                   <div className="fleet-input-group" style={{ flex: 1 }}>
-                    <label className="fleet-label">NgÃ¢n SÃ¡ch Max (VND)</label>
+                    <label className="fleet-label">Ngân Sách Max (VND)</label>
                     <input type="number" className="fleet-input" value={editForm.maxBudget} onChange={(e) => setEditForm(prev => ({ ...prev, maxBudget: e.target.value }))} />
                   </div>
                 </div>
 
                 <div className="fleet-input-group">
-                  <label className="fleet-label">Háº¡n ChÃ³t</label>
+                  <label className="fleet-label">Hạn Chót</label>
                   <input type="date" className="fleet-input" value={editForm.deadline} onChange={(e) => setEditForm(prev => ({ ...prev, deadline: e.target.value }))} />
                 </div>
 
                 <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                  <button className="fleet-btn-secondary" onClick={() => setEditingJob(null)}>Há»§y</button>
-                  <button className="fleet-btn-primary" onClick={handleSaveEdit}>ðŸ’¾ LÆ°u Thay Äá»•i</button>
+                  <button className="fleet-btn-secondary" onClick={() => setEditingJob(null)}>Hủy</button>
+                  <button className="fleet-btn-primary" onClick={handleSaveEdit}>💾 Lưu Thay Đổi</button>
                 </div>
               </div>
             </div>

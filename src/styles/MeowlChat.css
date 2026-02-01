@@ -1,5 +1,5 @@
 /* Mascot Icon */
-/* Import Orbitron font from Google Fonts */
+
 @font-face {
   font-family: "Minecraft";
   src: url("/fonts/minecraft/minecraft.otf") format("opentype");
@@ -1471,3 +1471,4 @@
     padding: 0.5rem;
   }
 }
+

@@ -13,6 +13,8 @@ import {
   Lightbulb,
   Clock,
   BarChart2,
+  BookOpen,
+  TrendingUp,
 } from "lucide-react";
 import "./CommanderWelcome.css";
 
@@ -59,6 +61,8 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
     pending: 0,
     upcomingTasks: [],
   },
+  roadmapCount = 0,
+  courseCount = 0,
 }) => {
   // Keep _hasCourses for future use
   void _hasCourses;
@@ -174,7 +178,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-      className="commander-welcome commander-welcome--compact"
+      className={`commander-welcome commander-welcome--compact ${hasPremium ? 'commander-welcome--premium' : ''}`}
     >
       <div className="commander-welcome__backdrop"></div>
 
@@ -246,6 +250,39 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
                 </div>
               </div>
             </div>
+
+            {/* Premium Stats Row */}
+            {hasPremium && (
+              <div className="commander-welcome__premium-stats">
+                <div className="commander-welcome__premium-stat-item">
+                  <div className="commander-welcome__premium-stat-icon">
+                    <BookOpen size={14} />
+                  </div>
+                  <div className="commander-welcome__premium-stat-info">
+                    <span className="commander-welcome__premium-stat-label">Modules</span>
+                    <span className="commander-welcome__premium-stat-value">{courseCount}</span>
+                  </div>
+                </div>
+                <div className="commander-welcome__premium-stat-item">
+                  <div className="commander-welcome__premium-stat-icon">
+                    <TrendingUp size={14} />
+                  </div>
+                  <div className="commander-welcome__premium-stat-info">
+                    <span className="commander-welcome__premium-stat-label">Analysis</span>
+                    <span className="commander-welcome__premium-stat-value">{roadmapCount}</span>
+                  </div>
+                </div>
+                <div className="commander-welcome__premium-stat-item">
+                  <div className="commander-welcome__premium-stat-icon commander-welcome__premium-stat-icon--highlight">
+                    <Target size={14} />
+                  </div>
+                  <div className="commander-welcome__premium-stat-info">
+                    <span className="commander-welcome__premium-stat-label">Missions</span>
+                    <span className="commander-welcome__premium-stat-value">{totalTasks}</span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Task List */}
             {topTasks.length > 0 && (

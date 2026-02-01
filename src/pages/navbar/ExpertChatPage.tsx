@@ -1,5 +1,5 @@
-﻿import React, { useState, useRef, useEffect } from 'react';
-import { Send, User, Sparkles, Plus, Trash2, Zap, Code, ArrowLeft, Menu, X, ChevronDown, Bot, Lock } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Send, Sparkles, Plus, Trash2, Code, Menu, X, ChevronDown, Bot, Lock } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import meowlDefault from '../../assets/meowl-skin/meowl_default.png';
 import userService from '../../services/userService';
@@ -76,6 +76,7 @@ const ExpertChatPage = () => {
     
     checkAccess();
   }, [user, loading]);
+
   const [showExpertSelector, setShowExpertSelector] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -88,7 +89,7 @@ const ExpertChatPage = () => {
   const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
   const recognitionRef = useRef<any>(null);
 
-  const loadSessions = async () => {
+  const loadSessions = useCallback(async () => {
     try {
       setLoadingSessions(true);
       const userSessions = await careerChatService.getSessions(ChatMode.EXPERT_MODE);
@@ -98,7 +99,7 @@ const ExpertChatPage = () => {
     } finally {
       setLoadingSessions(false);
     }
-  };
+  }, []);
 
   // STT toggle via audio mode button
   const startRecording = async () => {
@@ -149,7 +150,9 @@ const ExpertChatPage = () => {
           recognitionRef.current.stop();
           recognitionRef.current = null;
         }
-      } catch (err) { void 0; }
+      } catch { 
+        // Ignore specific clean up errors
+      }
       setIsPreviewing(false);
 
       const result = await recorder.stop();
@@ -166,7 +169,7 @@ const ExpertChatPage = () => {
             const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
             await handleSendMessage(fakeEvent);
           }
-        } catch (e) {
+        } catch {
           const fallbackText = previewText.trim();
           if (fallbackText) {
             setInputMessage(fallbackText);
@@ -180,7 +183,8 @@ const ExpertChatPage = () => {
       setIsRecording(false);
     }
   };
-  const handleLoadSession = async (selectedSessionId: number) => {
+
+  const handleLoadSession = useCallback(async (selectedSessionId: number) => {
     try {
       setIsLoading(true);
       const history = await careerChatService.getHistory(selectedSessionId);
@@ -208,11 +212,9 @@ const ExpertChatPage = () => {
       const session = sessions.find(s => s.sessionId === selectedSessionId);
       if (session && session.title.startsWith('Expert ')) {
         const jobRole = session.title.replace('Expert ', '');
-        // For now, we'll set a basic context. In a real implementation, 
-        // you might want to store the full context in the session or backend
         extractedExpertContext = {
-          domain: 'Technology', // Default, should be stored elsewhere
-          industry: 'Software', // Default, should be stored elsewhere
+          domain: 'Technology',
+          industry: 'Software',
           jobRole: jobRole,
           expertName: `${jobRole} Expert`,
           mediaUrl: avaChat
@@ -222,13 +224,13 @@ const ExpertChatPage = () => {
 
       setMessages(uiMessages);
       setSessionId(selectedSessionId);
-      showSuccess('ÄÃ£ táº£i', `ÄÃ£ táº£i lá»‹ch sá»­ phiÃªn ${selectedSessionId}`);
-    } catch (error) {
-      showError('Lá»—i', 'KhÃ´ng thá»ƒ táº£i lá»‹ch sá»­ cuá»™c trÃ² chuyá»‡n');
+      showSuccess('Đã tải', `Đã tải lịch sử phiên ${selectedSessionId}`);
+    } catch {
+      showError('Lỗi', 'Không thể tải lịch sử cuộc trò chuyện');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [expertContext, sessions, showError, showSuccess]);
 
   useEffect(() => {
     const initializePage = async () => {
@@ -260,7 +262,7 @@ const ExpertChatPage = () => {
         setMessages([{
           id: '1',
           role: 'assistant',
-          content: `ðŸŽ¯ **HỆ THỐNG CHUYÊN GIA**\n\nâœ¨ Xin chÃ o! TÃ´i lÃ  chuyÃªn gia **${expertState.jobRole}** cá»§a SkillVerse.\n\n**LÄ©nh vá»±c**: ${expertState.domain}\n**NgÃ nh nghá»**: ${expertState.industry}\n**ChuyÃªn mÃ´n**: ${expertState.jobRole}\n\n---\n\nTÃ´i cÃ³ thá»ƒ tÆ° váº¥n chuyÃªn sÃ¢u vá»:\n- ðŸ“Š **Ká»¹ nÄƒng chuyÃªn mÃ´n** cáº§n thiáº¿t\n- ðŸš€ **Lá»™ trÃ¬nh phÃ¡t triá»ƒn** cá»¥ thá»ƒ\n- ðŸ’¼ **CÆ¡ há»™i nghá» nghiá»‡p** trong lÄ©nh vá»±c\n- ðŸŽ“ **TÃ i nguyÃªn há»c táº­p** cháº¥t lÆ°á»£ng cao\n- ðŸ’° **Má»©c lÆ°Æ¡ng & thá»‹ trÆ°á»ng** hiá»‡n táº¡i\n\nðŸ’¬ **HÃ£y há»i tÃ´i báº¥t cá»© Ä‘iá»u gÃ¬ vá» ${expertState.jobRole}!**`,
+          content: `🎯 **EXPERT SYSTEM INITIALIZED**\n\n✨ Xin chào! Tôi là chuyên gia **${expertState.jobRole}** của SkillVerse.\n\n**Lĩnh vực**: ${expertState.domain}\n**Ngành nghề**: ${expertState.industry}\n**Chuyên môn**: ${expertState.jobRole}\n\n---\n\nTôi có thể tư vấn chuyên sâu về:\n- 📊 **Kỹ năng chuyên môn** cần thiết\n- 🚀 **Lộ trình phát triển** cụ thể\n- 💼 **Cơ hội nghề nghiệp** trong lĩnh vực\n- 🎓 **Tài nguyên học tập** chất lượng cao\n- 💰 **Mức lương & thị trường** hiện tại\n\n💬 **Hãy hỏi tôi bất cứ điều gì về ${expertState.jobRole}!**`,
           timestamp: new Date(),
           expertContext: {
             domain: expertState.domain,
@@ -272,7 +274,6 @@ const ExpertChatPage = () => {
         }]);
       } else {
         // Handle reload case - no expert state available
-        // Try to load the most recent expert session or show selector
         try {
           const userSessions = await careerChatService.getSessions(ChatMode.EXPERT_MODE);
           if (userSessions.length > 0) {
@@ -293,7 +294,7 @@ const ExpertChatPage = () => {
     };
     
     initializePage();
-  }, [loading, isAuthenticated, expertState, navigate, showError]);
+  }, [loading, isAuthenticated, expertState, navigate, handleLoadSession]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -301,7 +302,7 @@ const ExpertChatPage = () => {
 
   useEffect(() => {
     if (isAuthenticated) loadSessions();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, loadSessions]);
 
   // Show loading screen while initializing
   if (isInitializing || checkingAccess) {
@@ -309,7 +310,7 @@ const ExpertChatPage = () => {
       <div className="chat-hud-viewport">
         <div className="chat-hud-main-area" style={{ alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', color: 'var(--chat-hud-accent)' }}>
-            <MeowlKuruLoader text="ÄANG KHá»žI Táº O Há»† THá»NG CHUYÃŠN GIA..." />
+            <MeowlKuruLoader text="ĐANG KHỞI TẠO HỆ THỐNG CHUYÊN GIA..." />
           </div>
         </div>
       </div>
@@ -336,22 +337,22 @@ const ExpertChatPage = () => {
               ACCESS DENIED
             </h2>
             <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '32px', lineHeight: '1.6' }}>
-              Cháº¿ Ä‘á»™ <strong>Expert Chat</strong> chá»‰ dÃ nh cho thÃ nh viÃªn Premium.<br/>
-              Vui lÃ²ng nÃ¢ng cáº¥p tÃ i khoáº£n Ä‘á»ƒ truy cáº­p há»‡ thá»‘ng chuyÃªn gia AI.
+              Chế độ <strong>Expert Chat</strong> chỉ dành cho thành viên Premium.<br/>
+              Vui lòng nâng cấp tài khoản để truy cập hệ thống chuyên gia AI.
             </p>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
               <button onClick={() => navigate('/chatbot')} style={{
                 background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', 
                 padding: '12px 24px', borderRadius: '8px', fontSize: '16px', cursor: 'pointer'
               }}>
-                Quay láº¡i
+                Quay lại
               </button>
               <button onClick={() => navigate('/premium')} style={{
                 background: 'linear-gradient(135deg, #06b6d4, #2563eb)', color: '#fff', border: 'none', 
                 padding: '12px 32px', borderRadius: '8px', fontSize: '16px', fontWeight: 600, cursor: 'pointer',
                 boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)'
               }}>
-                NÃ¢ng cáº¥p ngay
+                Nâng cấp ngay
               </button>
             </div>
           </div>
@@ -376,24 +377,24 @@ const ExpertChatPage = () => {
     setMessages([{
       id: '1',
       role: 'assistant',
-      content: `ðŸŽ¯ **HỆ THỐNG CHUYÊN GIA**\n\nâœ¨ Xin chÃ o! TÃ´i lÃ  chuyÃªn gia **${context.jobRole}** cá»§a SkillVerse.\n\n**LÄ©nh vá»±c**: ${context.domain}\n**NgÃ nh nghá»**: ${context.industry}\n**ChuyÃªn mÃ´n**: ${context.jobRole}\n\n---\n\nTÃ´i cÃ³ thá»ƒ tÆ° váº¥n chuyÃªn sÃ¢u vá»:\n- ðŸ“Š **Ká»¹ nÄƒng chuyÃªn mÃ´n** cáº§n thiáº¿t\n- ðŸš€ **Lá»™ trÃ¬nh phÃ¡t triá»ƒn** cá»¥ thá»ƒ\n- ðŸ’¼ **CÆ¡ há»™i nghá» nghiá»‡p** trong lÄ©nh vá»±c\n- ðŸŽ“ **TÃ i nguyÃªn há»c táº­p** cháº¥t lÆ°á»£ng cao\n- ðŸ’° **Má»©c lÆ°Æ¡ng & thá»‹ trÆ°á»ng** hiá»‡n táº¡i\n\nðŸ’¬ **HÃ£y há»i tÃ´i báº¥t cá»© Ä‘iá»u gÃ¬ vá» ${context.jobRole}!**`,
+      content: `🎯 **EXPERT SYSTEM INITIALIZED**\n\n✨ Xin chào! Tôi là chuyên gia **${context.jobRole}** của SkillVerse.\n\n**Lĩnh vực**: ${context.domain}\n**Ngành nghề**: ${context.industry}\n**Chuyên môn**: ${context.jobRole}\n\n---\n\nTôi có thể tư vấn chuyên sâu về:\n- 📊 **Kỹ năng chuyên môn** cần thiết\n- 🚀 **Lộ trình phát triển** cụ thể\n- 💼 **Cơ hội nghề nghiệp** trong lĩnh vực\n- 🎓 **Tài nguyên học tập** chất lượng cao\n- 💰 **Mức lương & thị trường** hiện tại\n\n💬 **Hãy hỏi tôi bất cứ điều gì về ${context.jobRole}!**`,
       timestamp: new Date(),
       expertContext: updatedContext
     }]);
     setShowExpertSelector(false);
-    showSuccess('ThÃ nh cÃ´ng', `ÄÃ£ chuyá»ƒn sang chuyÃªn gia ${context.jobRole}`);
+    showSuccess('Thành công', `Đã chuyển sang chuyên gia ${context.jobRole}`);
   };
 
   const handleDeleteSession = async (sessionIdToDelete: number) => {
-    if (!window.confirm(`XÃ³a phiÃªn ${sessionIdToDelete}?`)) return;
+    if (!window.confirm(`Xóa phiên ${sessionIdToDelete}?`)) return;
 
     try {
       await careerChatService.deleteSession(sessionIdToDelete);
       await loadSessions();
       if (sessionId === sessionIdToDelete) handleNewChat();
-      showSuccess('ÄÃ£ xÃ³a', `ÄÃ£ xÃ³a phiÃªn ${sessionIdToDelete}`);
-    } catch (error) {
-      showError('Lá»—i', 'KhÃ´ng thá»ƒ xÃ³a phiÃªn trÃ² chuyá»‡n');
+      showSuccess('Đã xóa', `Đã xóa phiên ${sessionIdToDelete}`);
+    } catch {
+      showError('Lỗi', 'Không thể xóa phiên trò chuyện');
     }
   };
 
@@ -460,7 +461,7 @@ const ExpertChatPage = () => {
       if (error?.response?.status === 403 && aiAgentMode === 'DEEP_RESEARCH') {
         showError(
           'Premium Required', 
-          'Cháº¿ Ä‘á»™ Deep Research chá»‰ dÃ nh cho tÃ i khoáº£n Premium. Há»‡ thá»‘ng sáº½ tá»± Ä‘á»™ng chuyá»ƒn vá» Normal Agent.',
+          'Chế độ Deep Research chỉ dành cho tài khoản Premium. Hệ thống sẽ tự động chuyển về Normal Agent.',
           6
         );
         
@@ -496,11 +497,11 @@ const ExpertChatPage = () => {
         }
       }
 
-      showError('Lá»—i', error.message || 'KhÃ´ng thá»ƒ gá»­i tin nháº¯n');
+      showError('Lỗi', error.message || 'Không thể gửi tin nhắn');
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: 'âš ï¸ Xin lá»—i, cÃ³ lá»—i xáº£y ra. Vui lÃ²ng thá»­ láº¡i sau.',
+        content: '⚠️ Xin lỗi, có lỗi xảy ra. Vui lòng thử lại sau.',
         timestamp: new Date()
       }]);
     } finally {
@@ -513,10 +514,10 @@ const ExpertChatPage = () => {
       {/* Sidebar */}
       <div className={`chat-hud-sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="chat-hud-sidebar-header">
-          Há»† THá»NG CHUYÃŠN GIA
+          HỆ THỐNG CHUYÊN GIA
         </div>
         <button className="chat-hud-new-chat-btn" onClick={handleNewChat}>
-          <Plus size={18} /> Táº¡o trÃ² chuyá»‡n má»›i
+          <Plus size={18} /> Tạo trò chuyện mới
         </button>
         <div className="chat-hud-session-list">
           {loadingSessions ? (
@@ -525,7 +526,7 @@ const ExpertChatPage = () => {
             </div>
           ) : sessions.length === 0 ? (
             <p style={{ textAlign: 'center', color: 'rgba(229, 231, 235, 0.6)', padding: '20px' }}>
-              ChÆ°a cÃ³ phiÃªn lÃ m viá»‡c nÃ o
+              Chưa có phiên làm việc nào
             </p>
           ) : (
             sessions.map(s => (
@@ -545,7 +546,7 @@ const ExpertChatPage = () => {
         </div>
         <div style={{ padding: '10px', borderTop: '1px solid var(--chat-hud-border)' }}>
            <button className="chat-hud-new-chat-btn" onClick={handleBackToLanding} style={{ width: 'calc(100% - 20px)', margin: '0 10px' }}>
-            ThoÃ¡t cháº¿ Ä‘á»™ chuyÃªn gia
+            Thoát chế độ chuyên gia
           </button>
         </div>
       </div>
@@ -604,7 +605,7 @@ const ExpertChatPage = () => {
                   </div>
                   <div className="model-info">
                     <span className="model-name">Normal Agent</span>
-                    <span className="model-desc">Tá»‘c Ä‘á»™ tiÃªu chuáº©n, pháº£n há»“i nhanh</span>
+                    <span className="model-desc">Tốc độ tiêu chuẩn, phản hồi nhanh</span>
                   </div>
                 </div>
 
@@ -615,7 +616,7 @@ const ExpertChatPage = () => {
                       setAiAgentMode('DEEP_RESEARCH');
                       setShowModelDropdown(false);
                     } else {
-                      showError('Premium Plus Required', 'Cháº¿ Ä‘á»™ Deep Research chá»‰ dÃ nh cho gÃ³i Premium Plus (Mentor Pro).');
+                      showError('Premium Plus Required', 'Chế độ Deep Research chỉ dành cho gói Premium Plus (Mentor Pro).');
                     }
                   }}
                   style={{ opacity: isPremiumPlus ? 1 : 0.6, cursor: isPremiumPlus ? 'pointer' : 'not-allowed' }}
@@ -629,7 +630,7 @@ const ExpertChatPage = () => {
                       <span className="premium-badge-mini">PLUS</span>
                     </span>
                     <span className="model-desc">
-                      {isPremiumPlus ? 'PhÃ¢n tÃ­ch sÃ¢u, dá»¯ liá»‡u chi tiáº¿t' : 'YÃªu cáº§u gÃ³i Premium Plus'}
+                      {isPremiumPlus ? 'Phân tích sâu, dữ liệu chi tiết' : 'Yêu cầu gói Premium Plus'}
                     </span>
                   </div>
                 </div>
@@ -683,7 +684,7 @@ const ExpertChatPage = () => {
                   <div className="sv-tts-play-below" style={{ marginTop: '8px' }}>
                     {ttsPreparing && !speaking ? (
                       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', color: '#94a3b8' }}>
-                        <span className="sv-preview-loading" /> Äang chuáº©n bá»‹ audio...
+                        <span className="sv-preview-loading" /> Đang chuẩn bị audio...
                       </span>
                     ) : (
                       <button
@@ -691,10 +692,10 @@ const ExpertChatPage = () => {
                         type="button"
                         onClick={() => speakText(msg.content)}
                         disabled={speaking}
-                        title="Äá»c to tin nháº¯n nÃ y"
+                        title="Đọc to tin nhắn này"
                         style={{ background: 'none', border: 'none', color: 'var(--chat-hud-accent)', cursor: 'pointer', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}
                       >
-                        {speaking ? 'Äang phÃ¡t...' : 'ðŸ”Š Äá»c to'}
+                        {speaking ? 'Đang phát...' : '🔊 Đọc to'}
                       </button>
                     )}
                   </div>
@@ -723,7 +724,7 @@ const ExpertChatPage = () => {
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Há»i chuyÃªn gia..."
+                placeholder="Hỏi chuyên gia..."
                 className="chat-hud-input"
                 disabled={isLoading}
               />
@@ -731,7 +732,7 @@ const ExpertChatPage = () => {
                 type="button"
                 className={`chat-hud-mic-btn ${isRecording ? 'active' : ''}`}
                 onClick={isRecording ? stopRecording : startRecording}
-                title={isRecording ? 'Dá»«ng ghi Ã¢m' : 'Báº¯t Ä‘áº§u ghi Ã¢m'}
+                title={isRecording ? 'Dừng ghi âm' : 'Bắt đầu ghi âm'}
               >
                 {isRecording ? <Square size={18} /> : <Mic size={18} />}
               </button>
@@ -744,7 +745,7 @@ const ExpertChatPage = () => {
             <div style={{ position: 'absolute', bottom: '80px', left: '20px', right: '20px', background: 'rgba(0,0,0,0.8)', padding: '10px', borderRadius: '4px', color: '#fff', zIndex: 100 }}>
               {previewText}
               <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px' }}>
-                {isPreviewing ? 'Äang nháº­n diá»‡n...' : (isRecording ? 'Äang ghi Ã¢m...' : '')}
+                {isPreviewing ? 'Đang nhận diện...' : (isRecording ? 'Đang ghi âm...' : '')}
               </div>
             </div>
           )}
@@ -771,4 +772,3 @@ const ExpertChatPage = () => {
 };
 
 export default ExpertChatPage;
-

@@ -188,23 +188,25 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
         />
 
         {/* System Status (Learning Streak) */}
-        <SystemStatus
-          currentStreak={learningStreak.current}
-          longestStreak={learningStreak.longest}
-          weeklyGoal={learningStreak.weeklyGoal}
-          thisWeek={learningStreak.thisWeek}
-          streakLabel={translations?.dashboard?.streak || "System Uptime"}
-          daysLabel={translations?.dashboard?.days || "Days"}
-          currentStreakLabel={
-            translations?.dashboard?.currentStreak || "Current Sync"
-          }
-          longestStreakLabel={
-            translations?.dashboard?.longestStreak || "Max Uptime"
-          }
-          weeklyGoalLabel={
-            translations?.dashboard?.weeklyGoal || "Weekly Target"
-          }
-        />
+        <div id="learning-streak-section">
+          <SystemStatus
+            currentStreak={learningStreak.current}
+            longestStreak={learningStreak.longest}
+            weeklyGoal={learningStreak.weeklyGoal}
+            thisWeek={learningStreak.thisWeek}
+            streakLabel={translations?.dashboard?.streak || "System Uptime"}
+            daysLabel={translations?.dashboard?.days || "Days"}
+            currentStreakLabel={
+              translations?.dashboard?.currentStreak || "Current Sync"
+            }
+            longestStreakLabel={
+              translations?.dashboard?.longestStreak || "Max Uptime"
+            }
+            weeklyGoalLabel={
+              translations?.dashboard?.weeklyGoal || "Weekly Target"
+            }
+          />
+        </div>
 
         {/* Resource Monitor (Stats Grid) */}
         <div className="mothership-dashboard__stats-grid">
@@ -222,15 +224,18 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
           ))}
         </div>
 
-        {/* Analyst Track (Strategic Overview) */}
-        <AnalystTrack roadmaps={roadmaps} />
+        {/* Center Operations: Study Plan & Reports */}
+        <section id="study-plan-section" className="mothership-dashboard__center-ops">
+          {/* Analyst Track (Strategic Overview) */}
+          <AnalystTrack roadmaps={roadmaps} />
 
-        {/* Learning Report History Section */}
-        <LearningReportHistory
-          maxItems={5}
-          showGenerateButton={true}
-          title="Báo cáo học tập"
-        />
+          {/* Learning Report History Section */}
+          <LearningReportHistory
+            maxItems={5}
+            showGenerateButton={true}
+            title="Báo cáo học tập"
+          />
+        </section>
 
         {/* Usage Limits */}
         {(featureUsage || usageLimits) && (

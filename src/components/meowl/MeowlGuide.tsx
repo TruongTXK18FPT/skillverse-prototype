@@ -65,6 +65,13 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
     false,
   ]);
 
+  // Animation state for post-attendance
+  const [isPerformingPostAttendanceAnim, setIsPerformingPostAttendanceAnim] =
+    useState(false);
+  const [animPhase, setAnimPhase] = useState<
+    "none" | "exit" | "pause" | "enter" | "blink"
+  >("none");
+
   // Load messages based on current page
   useEffect(() => {
     const messages =
@@ -165,15 +172,64 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
   useEffect(() => {
     if (showCheckInSuccessModal) {
       const timer = setTimeout(() => {
-        closeCheckInSuccess();
+        handleCloseSuccess();
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [showCheckInSuccessModal, closeCheckInSuccess]);
+  }, [showCheckInSuccessModal]);
+
+  const startPostAttendanceAnim = () => {
+    setIsPerformingPostAttendanceAnim(true);
+    setAnimPhase("exit");
+
+    // Phase 1: Exit stage right (0.5s)
+    setTimeout(() => {
+      setAnimPhase("pause");
+
+      // Phase 2: Pause (0.5s)
+      setTimeout(() => {
+        setAnimPhase("enter");
+
+        // Phase 3: Enter and blink (1s)
+        setTimeout(() => {
+          setAnimPhase("blink");
+
+          // Phase 4: Reset (after blink animation)
+          setTimeout(() => {
+            setAnimPhase("none");
+            setIsPerformingPostAttendanceAnim(false);
+          }, 2000);
+        }, 1000);
+      }, 500);
+    }, 500);
+  };
+
+  const handleCloseSuccess = () => {
+    closeCheckInSuccess();
+
+    // Trigger animation sequence if not default skin
+    if (currentSkin !== "default") {
+      startPostAttendanceAnim();
+    }
+  };
 
   // Navigate to dashboard for check-in
   const goToDashboard = () => {
-    navigate("/dashboard");
+    if (window.location.pathname === "/dashboard") {
+      const element = document.getElementById("learning-streak-section");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      navigate("/dashboard");
+      // Use logic to scroll after navigation
+      setTimeout(() => {
+        const element = document.getElementById("learning-streak-section");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 800);
+    }
   };
 
   const handleMascotClick = () => {
@@ -254,30 +310,33 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
 
       {/* Mascot Button */}
       <div
-        className={`meowl-mascot ${isOpen ? "mascot-active" : ""} ${meowlState !== "active" ? `meowl-state--${meowlState}` : ""} ${meowlState === "lose-streak" ? "meowl-frozen" : ""}`}
+        className={`meowl-mascot ${isOpen ? "mascot-active" : ""} ${meowlState !== "active" ? `meowl-state--${meowlState}` : ""} ${meowlState === "lose-streak" ? "meowl-frozen" : ""} ${animPhase !== "none" ? `meowl-anim-${animPhase}` : ""}`}
         onClick={handleMascotClick}
       >
-        {/* Mute/Unmute Button (Replaces Quest Indicator) */}
-        <div
-          className="meowl-mute-btn"
-          onClick={toggleBubbleMute}
-          title={
-            isBubbleDisabled
-              ? language === "en"
-                ? "Enable Notifications"
-                : "Bật thông báo"
-              : language === "en"
-                ? "Mute Notifications"
-                : "Tắt thông báo"
-          }
-        >
-          {isBubbleDisabled ? <BellOff size={18} /> : <Bell size={18} />}
-        </div>
+        {/* Mute/Unmute Button (Hidden when lose-streak) */}
+        {meowlState !== "lose-streak" && (
+          <div
+            className="meowl-mute-btn"
+            onClick={toggleBubbleMute}
+            title={
+              isBubbleDisabled
+                ? language === "en"
+                  ? "Enable Notifications"
+                  : "Bật thông báo"
+                : language === "en"
+                  ? "Mute Notifications"
+                  : "Tắt thông báo"
+            }
+          >
+            {isBubbleDisabled ? <BellOff size={18} /> : <Bell size={18} />}
+          </div>
+        )}
 
-        {/* Check-in reminder indicator */}
+        {/* Check-in reminder indicator (Moved to bell position when lose-streak) */}
         {isAuthenticated && !hasCheckedInToday && (
           <div
-            className="meowl-checkin-reminder"
+            className={`meowl-checkin-reminder ${meowlState === "lose-streak" ? "reminder-replacement" : ""}`}
+            onClick={handleMascotClick}
             title={
               language === "en"
                 ? "You haven't checked in today!"
@@ -288,23 +347,17 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
           </div>
         )}
 
-        {/* Frozen Meowl notification bubble - Dark glass style */}
-        {isAuthenticated && meowlState === "lose-streak" && (
-          <div className="meowl-freeze-bubble" onClick={handleFreezeClick}>
-            <div className="freeze-bubble-icon">🔥</div>
-            <span className="freeze-bubble-text">
-              {language === "en"
-                ? "Check in to ignite Meowl and continue your streak!"
-                : "Điểm danh để tiếp lửa cho Meowl đồng hành cùng bạn!"}
-            </span>
-            <button className="freeze-bubble-action">
-              {language === "en" ? "Go to Dashboard 🔥" : "Vào Dashboard 🔥"}
-            </button>
-          </div>
-        )}
-
         <img src={displayImage} alt="Meowl Guide" className="mascot-image" />
         <div className="mascot-pulse"></div>
+
+        {/* Blink efekt particles */}
+        {animPhase === "blink" && (
+          <div className="meowl-blink-particles">
+            <div className="particle">✨</div>
+            <div className="particle">💎</div>
+            <div className="particle">⭐</div>
+          </div>
+        )}
       </div>
 
       {/* Guide Dialog */}
@@ -381,43 +434,59 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
         </div>
       )}
 
-      {/* Check-in Success Modal */}
+      {/* Check-in Success Modal (Refined HUD) */}
       {showCheckInSuccessModal && (
-        <div
-          className="checkin-success-overlay"
-          onClick={() => closeCheckInSuccess()}
-        >
+        <div className="checkin-success-overlay" onClick={handleCloseSuccess}>
           <div
-            className="checkin-success-modal"
+            className="checkin-success-modal tech-hud-modal"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Background FX */}
+            <div className="hud-grid-bg"></div>
+            <div className="hud-scan-line"></div>
+
+            {/* Tech Corners */}
+            <div className="hud-corner top-left"></div>
+            <div className="hud-corner top-right"></div>
+            <div className="hud-corner bottom-left"></div>
+            <div className="hud-corner bottom-right"></div>
+
             <div className="checkin-success-content">
-              <div className="checkin-success-meowl">
+              {/* Left Side: Holo Projector */}
+              <div className="checkin-meowl-container">
+                <div className="meowl-holo-base"></div> {/* Đế chiếu hologram */}
+                <div className="meowl-holo-beam"></div> {/* Ánh sáng chiếu lên */}
                 <img
                   src={displayImage}
                   alt="Meowl"
                   className="checkin-meowl-image"
                 />
-                <div className="checkin-sparkles">✨</div>
               </div>
+
+              {/* Right Side: Data readout */}
               <div className="checkin-success-info">
-                <div className="checkin-success-title">
-                  {language === "en"
-                    ? "🎉 Check-in Successful!"
-                    : "🎉 Điểm danh thành công!"}
+                <div className="checkin-status-badge">
+                  <span className="status-dot"></span>
+                  SYSTEM SYNCED
                 </div>
-                <div className="checkin-success-message">
-                  {language === "en"
-                    ? "Meowl is happy to see you today!"
-                    : "Meowl rất vui khi gặp bạn hôm nay!"}
+
+                <h2 className="checkin-success-title">
+                  {language === "en" ? "CHECK-IN COMPLETE" : "ĐIỂM DANH THÀNH CÔNG"}
+                </h2>
+
+                <div className="checkin-reward-box">
+                  <div className="reward-label">REWARD ACQUIRED</div>
+                  <div className="reward-value">
+                    <span className="reward-icon">🪙</span>
+                    <span className="reward-amount">+{checkInCoins}</span>
+                  </div>
+                  <div className="reward-unit">CREDITS ADDED</div>
                 </div>
-                <div className="checkin-success-reward">
-                  <span className="reward-icon">🪙</span>
-                  <span className="reward-text">+{checkInCoins} Coins</span>
-                </div>
-                <div className="checkin-progress-bar">
-                  <div className="checkin-progress-fill"></div>
-                </div>
+
+                <button className="hud-action-btn" onClick={handleCloseSuccess}>
+                  <span className="btn-text">{language === "en" ? "CONFIRM" : "XÁC NHẬN"}</span>
+                  <div className="btn-glare"></div>
+                </button>
               </div>
             </div>
           </div>

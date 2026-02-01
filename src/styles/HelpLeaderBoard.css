@@ -1,8 +1,8 @@
-/* ===============================
+﻿/* ===============================
    RETRO ARCADE HELP LEADERBOARD STYLES
    =============================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap');
+
 
 /* Local Minecraft Font */
 @font-face {
@@ -38,7 +38,7 @@
 }
 
 .help-leaderboard-modal {
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   background: linear-gradient(135deg, 
     #0a0a0a 0%, 
     #1a1a2e 25%,
@@ -149,7 +149,7 @@
   color: #00ff88;
   font-size: 1.8rem;
   font-weight: 700;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -166,7 +166,7 @@
   margin: 8px 0 0 0;
   color: #00ffaa;
   font-size: 1rem;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   text-transform: uppercase;
   letter-spacing: 1px;
   text-shadow: 0 0 10px rgba(0, 255, 170, 0.6);
@@ -260,7 +260,7 @@
   color: rgba(0, 255, 170, 0.7);
   font-size: 1rem;
   font-weight: 600;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -366,7 +366,7 @@
   color: #00ff88;
   font-size: 1.4rem;
   font-weight: 700;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   text-transform: uppercase;
   letter-spacing: 2px;
   text-shadow: 
@@ -444,7 +444,7 @@
 
 .stat-details {
   color: white;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
 }
 
 .stat-value {
@@ -478,7 +478,7 @@
   color: #00ff88;
   font-size: 1.4rem;
   font-weight: 700;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   margin: 0 0 24px 0;
   text-align: center;
   text-transform: uppercase;
@@ -535,7 +535,7 @@
   min-width: 140px;
   position: relative;
   overflow: hidden;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
 }
 
 .podium-place::before {
@@ -645,7 +645,7 @@
   color: #00ff88;
   font-size: 1.4rem;
   font-weight: 700;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   margin: 0 0 20px 0;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -672,7 +672,7 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   box-shadow: 
     0 0 15px rgba(0, 255, 136, 0.2),
     inset 0 0 15px rgba(0, 255, 136, 0.05);
@@ -1122,7 +1122,7 @@
 .help-leaderboard-modal *,
 .help-leaderboard-modal *::before,
 .help-leaderboard-modal *::after {
-  font-family: 'Minecraft', 'Orbitron', monospace !important;
+  font-family: 'Inter', 'Minecraft', monospace !important;
 }
 
 /* Challenge and Reward Cards Enhanced Styling */
@@ -1185,7 +1185,7 @@
   border-radius: 12px;
   padding: 8px 16px;
   font-weight: 700;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
@@ -1394,3 +1394,4 @@
     padding: 16px;
   }
 }
+

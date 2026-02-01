@@ -1,8 +1,8 @@
-/* ===============================
+﻿/* ===============================
    RETRO ARCADE DAILY SPIN STYLES
    =============================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap');
+
 
 /* Local Minecraft Font */
 @font-face {
@@ -37,7 +37,7 @@
 }
 
 .daily-spin-modal {
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   background: linear-gradient(135deg, 
     #0a0a0a 0%, 
     #1a1a2e 25%,
@@ -201,7 +201,7 @@
   border-radius: 10px;
   font-size: 0.85rem;
   font-weight: 700;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
@@ -313,7 +313,7 @@
   color: #00ff88;
   font-size: 1.2rem;
   font-weight: 700;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   text-transform: uppercase;
   letter-spacing: 2px;
   text-shadow: 
@@ -338,12 +338,12 @@
   line-height: 1.6;
   position: relative;
   padding-left: 2rem;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   text-shadow: 0 0 5px rgba(0, 255, 170, 0.5);
 }
 
 .rules-section li::before {
-  content: "▶";
+  content: "â–¶";
   position: absolute;
   left: 0;
   color: #ffd700;
@@ -495,7 +495,7 @@
   gap: 0.25rem;
   color: white;
   font-weight: 800;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   text-shadow: 
     0 0 10px rgba(0, 0, 0, 0.8),
     0 2px 4px rgba(0, 0, 0, 0.6);
@@ -542,7 +542,7 @@
   border-radius: 15px;
   font-size: 1.2rem;
   font-weight: 900;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   cursor: pointer;
   transition: all 0.4s ease;
   box-shadow: 
@@ -632,7 +632,7 @@
   border-radius: 10px;
   font-size: 0.9rem;
   font-weight: 700;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
@@ -705,7 +705,7 @@
   text-align: center;
   color: white;
   padding: 2rem;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   position: relative;
   z-index: 1;
 }
@@ -826,7 +826,7 @@
   border-radius: 15px;
   font-size: 1.1rem;
   font-weight: 800;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   cursor: pointer;
   transition: all 0.4s ease;
   text-transform: uppercase;
@@ -876,7 +876,7 @@
   border-radius: 15px;
   color: #00ffaa;
   font-size: 1rem;
-  font-family: 'Minecraft', 'Orbitron', monospace;
+  font-family: 'Inter', 'Minecraft', monospace;
   margin-top: 1.5rem;
   text-shadow: 0 0 10px rgba(0, 255, 170, 0.6);
   text-transform: uppercase;
@@ -1056,5 +1056,6 @@
 .daily-spin-modal *,
 .daily-spin-modal *::before,
 .daily-spin-modal *::after {
-  font-family: 'Minecraft', 'Orbitron', monospace !important;
+  font-family: 'Inter', 'Minecraft', monospace !important;
 }
+

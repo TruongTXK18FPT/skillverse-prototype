@@ -1,4 +1,4 @@
-/* RoadmapGeneratorForm.css */
+﻿/* RoadmapGeneratorForm.css */
 
 /* --- Main Wrapper --- */
 .rm-generator-wrapper {
@@ -62,7 +62,7 @@
 }
 
 .rm-gen-title {
-  font-family: 'Orbitron', sans-serif; /* Fallback to sans-serif if not loaded */
+  font-family: 'Inter', sans-serif; /* Fallback to sans-serif if not loaded */
   font-size: 1.5rem;
   font-weight: 700;
   color: #e2e8f0;
@@ -565,4 +565,5 @@
     grid-template-columns: 1fr;
   }
 }
+
 

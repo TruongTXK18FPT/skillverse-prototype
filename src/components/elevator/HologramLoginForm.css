@@ -4,13 +4,6 @@
    ===================================================== */
 
 /* Inter Font */
-@font-face {
-  font-family: 'SpaceHabitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* Variables */
 :root {
@@ -33,7 +26,7 @@
   width: 100%;
   max-width: 900px;
   padding: 2px;
-  font-family: 'SpaceHabitat', 'Inter', 'Roboto', 'Arial', sans-serif;
+  font-family:  'Inter', 'Roboto', 'Arial', sans-serif;
 }
 
 /* Hologram Border */
@@ -460,7 +453,7 @@
   );
   border: 2px solid var(--holo-primary);
   color: var(--holo-primary);
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 3px;
@@ -555,7 +548,7 @@
   background: var(--holo-bg-light);
   border: 1px solid var(--holo-border);
   color: var(--holo-text-dim);
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.6rem;
   letter-spacing: 1px;
   cursor: pointer;

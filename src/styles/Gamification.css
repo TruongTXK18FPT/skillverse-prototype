@@ -1,8 +1,8 @@
-/* ===============================
+﻿/* ===============================
    RETRO ARCADE GAMIFICATION STYLES
    =============================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap");
+
 
 /* Local Minecraft Font */
 @font-face {
@@ -1253,7 +1253,7 @@
 }
 
 /* ===============================
-   ACTIVITY STATS SECTION (Chi tiết hoạt động)
+   ACTIVITY STATS SECTION (Chi tiáº¿t hoáº¡t Ä‘á»™ng)
    =============================== */
 .activity-stats-section {
   margin: 2rem 0;
@@ -3287,7 +3287,7 @@
 }
 
 .game-info p {
-  font-family: "Orbitron", monospace;
+  font-family: 'Inter', monospace;
   font-size: 0.85rem;
   color: #cccccc;
   margin: 0;
@@ -4053,3 +4053,4 @@
     font-size: 0.6rem;
   }
 }
+
