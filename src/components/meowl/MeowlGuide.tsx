@@ -6,7 +6,7 @@ import { useMeowlSkin } from "../../context/MeowlSkinContext";
 import { useMeowlState } from "../../context/MeowlStateContext";
 import "../../styles/MeowlGuide.css";
 import guideMessages from "./MeowlGuideMsg.json";
-import MeowlChat from "./MeowlChat";
+import MeowlChatV2 from "./MeowlChatV2";
 
 interface GuideStep {
   id: number;
@@ -260,10 +260,19 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
   const content =
     language === "en" ? currentGuide.contentEn : currentGuide.contentVi;
 
+  // Handler for login request from MeowlChatV2
+  const handleRequestLogin = () => {
+    navigate("/login");
+  };
+
   return (
     <>
-      {/* MeowlChat Component */}
-      <MeowlChat isOpen={isChatOpen} onClose={handleChatClose} />
+      {/* MeowlChat Component - V2 with responsive design & guest management */}
+      <MeowlChatV2
+        isOpen={isChatOpen}
+        onClose={handleChatClose}
+        onRequestLogin={handleRequestLogin}
+      />
 
       {/* Dialogue Options - Above Mascot with staggered animation (Desktop Only) */}
       {isOpen && showOptions && (
@@ -454,8 +463,10 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
             <div className="checkin-success-content">
               {/* Left Side: Holo Projector */}
               <div className="checkin-meowl-container">
-                <div className="meowl-holo-base"></div> {/* Đế chiếu hologram */}
-                <div className="meowl-holo-beam"></div> {/* Ánh sáng chiếu lên */}
+                <div className="meowl-holo-base"></div>{" "}
+                {/* Đế chiếu hologram */}
+                <div className="meowl-holo-beam"></div>{" "}
+                {/* Ánh sáng chiếu lên */}
                 <img
                   src={displayImage}
                   alt="Meowl"
@@ -471,7 +482,9 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
                 </div>
 
                 <h2 className="checkin-success-title">
-                  {language === "en" ? "CHECK-IN COMPLETE" : "ĐIỂM DANH THÀNH CÔNG"}
+                  {language === "en"
+                    ? "CHECK-IN COMPLETE"
+                    : "ĐIỂM DANH THÀNH CÔNG"}
                 </h2>
 
                 <div className="checkin-reward-box">
@@ -484,7 +497,9 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
                 </div>
 
                 <button className="hud-action-btn" onClick={handleCloseSuccess}>
-                  <span className="btn-text">{language === "en" ? "CONFIRM" : "XÁC NHẬN"}</span>
+                  <span className="btn-text">
+                    {language === "en" ? "CONFIRM" : "XÁC NHẬN"}
+                  </span>
                   <div className="btn-glare"></div>
                 </button>
               </div>
