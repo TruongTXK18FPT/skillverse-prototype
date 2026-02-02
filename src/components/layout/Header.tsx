@@ -48,6 +48,7 @@ import {
 import { UserProfileResponse } from "../../data/userDTOs";
 import { UserSubscriptionResponse } from "../../data/premiumDTOs";
 import NotificationDropdown from "./NotificationDropdown";
+import LoginRequiredModal from "../auth/LoginRequiredModal";
 import Logo from "../../assets/brand/skillverse.png";
 import LogoNoel from "../../assets/brand/logoNoel.png";
 import LogoTet from "../../assets/brand/logo-tet.png";
@@ -73,6 +74,8 @@ const Header: React.FC = () => {
   const [subscription, setSubscription] =
     useState<UserSubscriptionResponse | null>(null);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginRequiredFeature, setLoginRequiredFeature] = useState("");
   const userMenuRef = useRef<HTMLDivElement>(null);
   const quickNavRef = useRef<HTMLDivElement>(null);
 
@@ -110,12 +113,14 @@ const Header: React.FC = () => {
       description: "Theo dõi tiến độ học tập và thành tích của bạn",
       path: "/dashboard",
       icon: BarChart3,
+      hideForRoles: ["MENTOR"],
     },
     {
       name: "Khóa Học",
       description: "Khám phá các khóa học chất lượng cao",
       path: "/courses",
       icon: GraduationCap,
+      hideForRoles: ["BUSINESS"],
     },
     {
       name: "Lộ Trình Học Tập",
@@ -134,6 +139,7 @@ const Header: React.FC = () => {
       description: "Kết nối với chuyên gia trong ngành",
       path: "/mentorship",
       icon: Users,
+      hideForRoles: ["MENTOR", "BUSINESS"],
     },
     {
       name: "Cộng Đồng",
@@ -146,12 +152,14 @@ const Header: React.FC = () => {
       description: "Tìm kiếm cơ hội việc làm phù hợp",
       path: "/jobs",
       icon: Briefcase,
+      hideForRoles: ["MENTOR"],
     },
     {
       name: "Hồ Sơ",
       description: "Quản lý và chia sẻ thành tích của bạn",
       path: "/portfolio",
       icon: User,
+      hideForRoles: ["BUSINESS"],
     },
     {
       name: "Trợ Lý AI",
@@ -164,6 +172,7 @@ const Header: React.FC = () => {
       description: "Bảng xếp hạng, huy hiệu và mini-games",
       path: "/gamification",
       icon: Trophy,
+      hideForRoles: ["MENTOR", "BUSINESS"],
     },
     // {
     //   name: 'Hướng Dẫn',
@@ -182,6 +191,7 @@ const Header: React.FC = () => {
       description: "Cửa hàng Skin Neon Tech độc quyền",
       path: "/meowl-shop",
       icon: ShoppingBag,
+      hideForRoles: ["MENTOR", "BUSINESS"],
     },
     // {
     //   name: 'Cầu Nguyện',
@@ -364,290 +374,381 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="header-minimal">
-      <div className="header-container">
-        {/* Left Section */}
-        <div className="main-header-left">
-          {/* Logo */}
-          <Link to="/" className="header-logo-link">
-            <img
-              src={getLogo()}
-              alt="SkillVerse"
-              className={`header-logo-image ${isNoel ? "noel-logo" : ""} ${isTet ? "tet-logo" : ""}`}
-            />
-          </Link>
+    <>
+      {/* Login Required Modal */}
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Yêu cầu đăng nhập"
+        message="Bạn cần đăng nhập để sử dụng tính năng này"
+        feature={loginRequiredFeature}
+      />
 
-          {/* Explore Button - Universe Map for exploration/onboarding */}
-          <div className="sv-nav-btn-wrapper">
-            <Link
-              to="/explore"
-              className="header-nav-btn explore-btn desktop-only sv-nav-explore"
-              title="Khám phá vũ trụ SkillVerse - Tìm hiểu các khu vực và bắt đầu hành trình"
-            >
-              <Compass size={18} />
-              <div className="sv-nav-btn-content">
-                <span className="sv-nav-label">Khám Phá</span>
-                <span className="sv-nav-subtext">bắt đầu từ đây</span>
-              </div>
+      <header className="header-minimal">
+        <div className="header-container">
+          {/* Left Section */}
+          <div className="main-header-left">
+            {/* Logo */}
+            <Link to="/" className="header-logo-link">
+              <img
+                src={getLogo()}
+                alt="SkillVerse"
+                className={`header-logo-image ${isNoel ? "noel-logo" : ""} ${isTet ? "tet-logo" : ""}`}
+              />
             </Link>
-            <div className="sv-nav-tooltip">
-              <Sparkles size={14} />
-              <span>Khám phá bản đồ vũ trụ & tìm hiểu hệ thống</span>
-            </div>
-          </div>
 
-          {/* Quick Navigation Menu - Task-oriented quick access */}
-          <div ref={quickNavRef} className="categories-container desktop-only">
+            {/* Explore Button - Universe Map for exploration/onboarding */}
             <div className="sv-nav-btn-wrapper">
-              <button
-                className="header-nav-btn quick-nav-btn sv-nav-teleport"
-                onClick={() => setShowQuickNav(!showQuickNav)}
-                title="Dịch chuyển nhanh đến các tính năng"
+              <Link
+                to="/explore"
+                className="header-nav-btn explore-btn desktop-only sv-nav-explore"
+                title="Khám phá vũ trụ SkillVerse - Tìm hiểu các khu vực và bắt đầu hành trình"
               >
-                <Zap size={18} className="sv-teleport-icon" />
+                <Compass size={18} />
                 <div className="sv-nav-btn-content">
-                  <span className="sv-nav-label">Dịch Chuyển</span>
-                  <span className="sv-nav-subtext">các tính năng chính</span>
+                  <span className="sv-nav-label">Khám Phá</span>
+                  <span className="sv-nav-subtext">bắt đầu từ đây</span>
                 </div>
-                <ChevronDown size={16} />
-              </button>
+              </Link>
               <div className="sv-nav-tooltip">
-                <Zap size={14} />
-                <span>Truy cập nhanh các tính năng chính</span>
+                <Sparkles size={14} />
+                <span>Khám phá bản đồ vũ trụ & tìm hiểu hệ thống</span>
               </div>
             </div>
 
-            {showQuickNav && (
-              <div className="sv-mega-menu">
-                {/* Smart Suggestion Line */}
-                <div className="sv-mega-suggestion">
-                  <Sparkles size={18} className="sv-suggestion-icon" />
-                  <span className="sv-suggestion-text">
-                    {localStorage.getItem('onboarded') === 'true' 
-                      ? 'Tiếp tục lộ trình học của bạn'
-                      : 'Bắt đầu lộ trình học đầu tiên'}
-                  </span>
-                  <Link 
-                    to="/roadmap" 
-                    className="sv-suggestion-cta"
-                    onClick={() => setShowQuickNav(false)}
-                  >
-                    <span>Đi ngay</span>
-                    <ArrowRight size={14} />
-                  </Link>
-                </div>
-
-                {/* Group 1: Primary Actions */}
-                <div className="sv-mega-section">
-                  <h4 className="sv-mega-section-title">
-                    <Target size={14} className="sv-section-icon" />
-                    <span>Hành động chính</span>
-                  </h4>
-                  <div className="sv-mega-grid sv-mega-grid--primary">
-                    {[
-                      { name: 'Bảng Điều Khiển', description: 'Theo dõi tiến độ học tập và thành tích', path: '/dashboard', icon: BarChart3 },
-                      { name: 'Lộ Trình Học Tập', description: 'Lộ trình học tập và phát triển kỹ năng', path: '/roadmap', icon: Map },
-                      { name: 'Trợ Lý AI', description: 'Nhận hỗ trợ từ trợ lý AI thông minh', path: '/chatbot', icon: Bot },
-                      { name: 'Lập Kế Hoạch', description: 'Lên lịch học tập và quản lý công việc', path: '/study-planner', icon: Calendar },
-                    ].map((item) => (
-                      <Link
-                        key={item.path + item.name}
-                        to={item.path}
-                        className="sv-mega-link sv-mega-link--primary"
-                        onClick={() => setShowQuickNav(false)}
-                      >
-                        <item.icon className="sv-mega-link-icon" />
-                        <div className="sv-mega-link-content">
-                          <h3 className="sv-mega-link-title">{item.name}</h3>
-                          <p className="sv-mega-link-desc">{item.description}</p>
-                        </div>
-                      </Link>
-                    ))}
+            {/* Quick Navigation Menu - Task-oriented quick access */}
+            <div
+              ref={quickNavRef}
+              className="categories-container desktop-only"
+            >
+              <div className="sv-nav-btn-wrapper">
+                <button
+                  className="header-nav-btn quick-nav-btn sv-nav-teleport"
+                  onClick={() => setShowQuickNav(!showQuickNav)}
+                  title="Dịch chuyển nhanh đến các tính năng"
+                >
+                  <Zap size={18} className="sv-teleport-icon" />
+                  <div className="sv-nav-btn-content">
+                    <span className="sv-nav-label">Dịch Chuyển</span>
+                    <span className="sv-nav-subtext">các tính năng chính</span>
                   </div>
-                </div>
-
-                {/* Group 2: Explore & Learn */}
-                <div className="sv-mega-section">
-                  <h4 className="sv-mega-section-title">
-                    <Search size={14} className="sv-section-icon" />
-                    <span>Khám phá & Học tập</span>
-                  </h4>
-                  <div className="sv-mega-grid sv-mega-grid--secondary">
-                    {[
-                      { name: 'Khóa Học', description: 'Khám phá các khóa học chất lượng cao', path: '/courses', icon: GraduationCap },
-                      { name: 'Cố Vấn', description: 'Kết nối với chuyên gia trong ngành', path: '/mentorship', icon: Users },
-                      { name: 'Cộng Đồng', description: 'Tham gia cộng đồng học tập sôi động', path: '/community', icon: MessageSquare },
-                      { name: 'Việc Làm', description: 'Tìm kiếm cơ hội việc làm phù hợp', path: '/jobs', icon: Briefcase },
-                    ].map((item) => (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        className="sv-mega-link"
-                        onClick={() => setShowQuickNav(false)}
-                      >
-                        <item.icon className="sv-mega-link-icon" />
-                        <div className="sv-mega-link-content">
-                          <h3 className="sv-mega-link-title">{item.name}</h3>
-                          <p className="sv-mega-link-desc">{item.description}</p>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Group 3: Entertainment & Profile */}
-                <div className="sv-mega-section">
-                  <h4 className="sv-mega-section-title">
-                    <Trophy size={14} className="sv-section-icon" />
-                    <span>Giải trí & Cá nhân</span>
-                  </h4>
-                  <div className="sv-mega-grid sv-mega-grid--tertiary">
-                    {[
-                      { name: 'Hồ Sơ', description: 'Quản lý và chia sẻ thành tích của bạn', path: '/portfolio', icon: User },
-                      { name: 'Trò Chơi', description: 'Bảng xếp hạng, huy hiệu và mini-games', path: '/gamification', icon: Trophy },
-                      { name: 'Hội Thảo', description: 'Tham gia các hội thảo và sự kiện', path: '/seminar', icon: Calendar },
-                      { name: 'Meowl Shop', description: 'Cửa hàng Skin Neon Tech độc quyền', path: '/meowl-shop', icon: ShoppingBag },
-                    ].map((item) => (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        className="sv-mega-link"
-                        onClick={() => setShowQuickNav(false)}
-                      >
-                        <item.icon className="sv-mega-link-icon" />
-                        <div className="sv-mega-link-content">
-                          <h3 className="sv-mega-link-title">{item.name}</h3>
-                          <p className="sv-mega-link-desc">{item.description}</p>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
+                  <ChevronDown size={16} />
+                </button>
+                <div className="sv-nav-tooltip">
+                  <Zap size={14} />
+                  <span>Truy cập nhanh các tính năng chính</span>
                 </div>
               </div>
-            )}
-          </div>
-        </div>
 
-        {/* Right Section */}
-        <div className="header-right">
-          {/* Admin Link - Only for ADMIN role */}
-          {isAuthenticated && user && user.roles.includes("ADMIN") && (
-            <Link to="/admin" className="header-nav-link desktop-only">
-              <Shield size={18} />
-              <span>Quản Trị</span>
-            </Link>
-          )}
-
-          {/* Upgrade Button */}
-          <button
-            onClick={handleUpgrade}
-            className="header-upgrade-btn desktop-only"
-          >
-            <Crown size={18} />
-            <span className="header-upgrade-text">Mở khóa giới hạn</span>
-          </button>
-
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="theme-btn desktop-only"
-            style={{ display: "none" }}
-          >
-            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
-
-          {/* Authentication */}
-          {isAuthenticated && user ? (
-            <>
-              <div
-                ref={userMenuRef}
-                className="user-profile-group desktop-only"
-                style={{
-                  background: getPremiumColor()
-                    ? `linear-gradient(135deg, rgba(${hexToRgb(getPremiumColor()!)}, 0.1), rgba(${hexToRgb(getPremiumColor()!)}, 0.05))`
-                    : undefined,
-                  border: getPremiumColor()
-                    ? `1px solid ${getPremiumColor()}`
-                    : undefined,
-                  boxShadow: getPremiumColor()
-                    ? `0 0 20px rgba(${hexToRgb(getPremiumColor()!)}, 0.3)`
-                    : undefined,
-                }}
-              >
-                {unreadCount > 0 && (
-                  <span className="header-notification-badge">
-                    {unreadCount > 99 ? "99+" : unreadCount}
-                  </span>
-                )}
-                <button
-                  className="user-profile-btn"
-                  onClick={() => setShowUserMenu(!showUserMenu)}
-                >
-                  <div className="profile-group-content">
-                    <div
-                      className="header-user-avatar"
-                      style={{
-                        border: getPremiumColor()
-                          ? `3px solid ${getPremiumColor()}`
-                          : "2px solid rgba(255,255,255,0.2)",
-                        boxShadow: getPremiumColor()
-                          ? `0 0 15px ${getPremiumColor()}`
-                          : undefined,
-                      }}
+              {showQuickNav && (
+                <div className="sv-mega-menu">
+                  {/* Smart Suggestion Line */}
+                  <div className="sv-mega-suggestion">
+                    <Sparkles size={18} className="sv-suggestion-icon" />
+                    <span className="sv-suggestion-text">
+                      {localStorage.getItem("onboarded") === "true"
+                        ? "Tiếp tục lộ trình học của bạn"
+                        : "Bắt đầu lộ trình học đầu tiên"}
+                    </span>
+                    <Link
+                      to="/roadmap"
+                      className="sv-suggestion-cta"
+                      onClick={() => setShowQuickNav(false)}
                     >
-                      {mentorProfile?.avatar ||
-                      userProfile?.avatarMediaUrl ||
-                      user.avatarUrl ? (
-                        <img
-                          src={
-                            mentorProfile?.avatar ||
-                            userProfile?.avatarMediaUrl ||
-                            user.avatarUrl
-                          }
-                          alt="Avatar"
-                          className="header-avatar-img"
-                        />
-                      ) : (
-                        <User size={18} />
-                      )}
-                    </div>
-                    <div className="user-info-inline">
-                      <span className="user-greeting">
-                        Xin chào,{" "}
-                        <strong
-                          style={{ color: getPremiumColor() || undefined }}
-                        >
-                          {userProfile?.fullName || user.fullName}
-                        </strong>
-                      </span>
-                      <span
-                        className="user-balance"
-                        style={{ color: getPremiumColor() || undefined }}
-                      >
-                        💰 Số dư:{" "}
-                        {loadingBalance
-                          ? "..."
-                          : walletBalance !== null &&
-                              walletBalance !== undefined
-                            ? walletBalance.toLocaleString("vi-VN") + " đ"
-                            : "N/A"}
-                      </span>
-                    </div>
-                    <ChevronDown size={16} className="dropdown-icon" />
+                      <span>Đi ngay</span>
+                      <ArrowRight size={14} />
+                    </Link>
                   </div>
-                </button>
 
-                {showUserMenu && (
-                  <div className="user-dropdown">
-                    <div className="user-info">
+                  {/* Group 1: Primary Actions */}
+                  {/* Hide for BUSINESS role */}
+                  {!user?.roles.includes("BUSINESS") && (
+                    <div className="sv-mega-section">
+                      <h4 className="sv-mega-section-title">
+                        <Target size={14} className="sv-section-icon" />
+                        <span>Hành động chính</span>
+                      </h4>
+                      <div className="sv-mega-grid sv-mega-grid--primary">
+                        {[
+                          {
+                            name: "Bảng Điều Khiển",
+                            description:
+                              "Theo dõi tiến độ học tập và thành tích",
+                            path: "/dashboard",
+                            icon: BarChart3,
+                            requireAuth: true,
+                            hideForRoles: ["MENTOR"],
+                          },
+                          {
+                            name: "Lộ Trình Học Tập",
+                            description:
+                              "Lộ trình học tập và phát triển kỹ năng",
+                            path: "/roadmap",
+                            icon: Map,
+                            requireAuth: true,
+                          },
+                          {
+                            name: "Trợ Lý AI",
+                            description: "Nhận hỗ trợ từ trợ lý AI thông minh",
+                            path: "/chatbot",
+                            icon: Bot,
+                            requireAuth: true,
+                          },
+                          {
+                            name: "Lập Kế Hoạch",
+                            description:
+                              "Lên lịch học tập và quản lý công việc",
+                            path: "/study-planner",
+                            icon: Calendar,
+                            requireAuth: true,
+                          },
+                        ]
+                          .filter(
+                            (item) =>
+                              !item.hideForRoles?.some((role) =>
+                                user?.roles.includes(role),
+                              ),
+                          )
+                          .map((item) =>
+                            item.requireAuth && !isAuthenticated ? (
+                              <div
+                                key={item.path + item.name}
+                                className="sv-mega-link sv-mega-link--primary"
+                                style={{ cursor: "pointer" }}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setLoginRequiredFeature(item.name);
+                                  setShowLoginModal(true);
+                                  setShowQuickNav(false);
+                                }}
+                              >
+                                <item.icon className="sv-mega-link-icon" />
+                                <div className="sv-mega-link-content">
+                                  <h3 className="sv-mega-link-title">
+                                    {item.name}
+                                  </h3>
+                                  <p className="sv-mega-link-desc">
+                                    {item.description}
+                                  </p>
+                                </div>
+                              </div>
+                            ) : (
+                              <Link
+                                key={item.path + item.name}
+                                to={item.path}
+                                className="sv-mega-link sv-mega-link--primary"
+                                onClick={() => setShowQuickNav(false)}
+                              >
+                                <item.icon className="sv-mega-link-icon" />
+                                <div className="sv-mega-link-content">
+                                  <h3 className="sv-mega-link-title">
+                                    {item.name}
+                                  </h3>
+                                  <p className="sv-mega-link-desc">
+                                    {item.description}
+                                  </p>
+                                </div>
+                              </Link>
+                            ),
+                          )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Group 2: Explore & Learn */}
+                  <div className="sv-mega-section">
+                    <h4 className="sv-mega-section-title">
+                      <Search size={14} className="sv-section-icon" />
+                      <span>Khám phá & Học tập</span>
+                    </h4>
+                    <div className="sv-mega-grid sv-mega-grid--secondary">
+                      {[
+                        {
+                          name: "Khóa Học",
+                          description: "Khám phá các khóa học chất lượng cao",
+                          path: "/courses",
+                          icon: GraduationCap,
+                          hideForRoles: ["BUSINESS"],
+                        },
+                        {
+                          name: "Cố Vấn",
+                          description: "Kết nối với chuyên gia trong ngành",
+                          path: "/mentorship",
+                          icon: Users,
+                          hideForRoles: ["MENTOR", "BUSINESS"],
+                        },
+                        {
+                          name: "Cộng Đồng",
+                          description: "Tham gia cộng đồng học tập sôi động",
+                          path: "/community",
+                          icon: MessageSquare,
+                        },
+                        {
+                          name: "Việc Làm",
+                          description: "Tìm kiếm cơ hội việc làm phù hợp",
+                          path: "/jobs",
+                          icon: Briefcase,
+                          hideForRoles: ["MENTOR"],
+                        },
+                      ]
+                        .filter(
+                          (item) =>
+                            !item.hideForRoles?.some((role) =>
+                              user?.roles.includes(role),
+                            ),
+                        )
+                        .map((item) => (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            className="sv-mega-link"
+                            onClick={() => setShowQuickNav(false)}
+                          >
+                            <item.icon className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">
+                                {item.name}
+                              </h3>
+                              <p className="sv-mega-link-desc">
+                                {item.description}
+                              </p>
+                            </div>
+                          </Link>
+                        ))}
+                    </div>
+                  </div>
+
+                  {/* Group 3: Entertainment & Profile */}
+                  <div className="sv-mega-section">
+                    <h4 className="sv-mega-section-title">
+                      <Trophy size={14} className="sv-section-icon" />
+                      <span>Giải trí & Cá nhân</span>
+                    </h4>
+                    <div className="sv-mega-grid sv-mega-grid--tertiary">
+                      {[
+                        {
+                          name: "Hồ Sơ",
+                          description: "Quản lý và chia sẻ thành tích của bạn",
+                          path: "/portfolio",
+                          icon: User,
+                          hideForRoles: ["BUSINESS"],
+                        },
+                        {
+                          name: "Trò Chơi",
+                          description: "Bảng xếp hạng, huy hiệu và mini-games",
+                          path: "/gamification",
+                          icon: Trophy,
+                          hideForRoles: ["MENTOR", "BUSINESS"],
+                        },
+                        {
+                          name: "Hội Thảo",
+                          description: "Tham gia các hội thảo và sự kiện",
+                          path: "/seminar",
+                          icon: Calendar,
+                        },
+                        {
+                          name: "Meowl Shop",
+                          description: "Cửa hàng Skin Neon Tech độc quyền",
+                          path: "/meowl-shop",
+                          icon: ShoppingBag,
+                          hideForRoles: ["MENTOR", "BUSINESS"],
+                        },
+                      ]
+                        .filter(
+                          (item) =>
+                            !item.hideForRoles?.some((role) =>
+                              user?.roles.includes(role),
+                            ),
+                        )
+                        .map((item) => (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            className="sv-mega-link"
+                            onClick={() => setShowQuickNav(false)}
+                          >
+                            <item.icon className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">
+                                {item.name}
+                              </h3>
+                              <p className="sv-mega-link-desc">
+                                {item.description}
+                              </p>
+                            </div>
+                          </Link>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right Section */}
+          <div className="header-right">
+            {/* Admin Link - Only for ADMIN role */}
+            {isAuthenticated && user && user.roles.includes("ADMIN") && (
+              <Link to="/admin" className="header-nav-link desktop-only">
+                <Shield size={18} />
+                <span>Quản Trị</span>
+              </Link>
+            )}
+
+            {/* Upgrade Button */}
+            <button
+              onClick={handleUpgrade}
+              className="header-upgrade-btn desktop-only"
+            >
+              <Crown size={18} />
+              <span className="header-upgrade-text">Mở khóa giới hạn</span>
+            </button>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="theme-btn desktop-only"
+              style={{ display: "none" }}
+            >
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+
+            {/* Authentication */}
+            {isAuthenticated && user ? (
+              <>
+                <div
+                  ref={userMenuRef}
+                  className="user-profile-group desktop-only"
+                  style={{
+                    background: getPremiumColor()
+                      ? `linear-gradient(135deg, rgba(${hexToRgb(getPremiumColor()!)}, 0.1), rgba(${hexToRgb(getPremiumColor()!)}, 0.05))`
+                      : undefined,
+                    border: getPremiumColor()
+                      ? `1px solid ${getPremiumColor()}`
+                      : undefined,
+                    boxShadow: getPremiumColor()
+                      ? `0 0 20px rgba(${hexToRgb(getPremiumColor()!)}, 0.3)`
+                      : undefined,
+                  }}
+                >
+                  {unreadCount > 0 && (
+                    <span className="header-notification-badge">
+                      {unreadCount > 99 ? "99+" : unreadCount}
+                    </span>
+                  )}
+                  <button
+                    className="user-profile-btn"
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                  >
+                    <div className="profile-group-content">
                       <div
-                        className="header-user-avatar-large"
+                        className="header-user-avatar"
                         style={{
                           border: getPremiumColor()
                             ? `3px solid ${getPremiumColor()}`
                             : "2px solid rgba(255,255,255,0.2)",
                           boxShadow: getPremiumColor()
-                            ? `0 0 20px ${getPremiumColor()}`
+                            ? `0 0 15px ${getPremiumColor()}`
                             : undefined,
                         }}
                       >
@@ -661,344 +762,411 @@ const Header: React.FC = () => {
                               user.avatarUrl
                             }
                             alt="Avatar"
-                            className="header-avatar-img-large"
+                            className="header-avatar-img"
                           />
                         ) : (
-                          <User size={24} />
+                          <User size={18} />
                         )}
                       </div>
-                      <div className="user-details">
-                        <p className="user-name">
-                          {userProfile?.fullName || user.fullName}
-                        </p>
-                        <p className="user-email">{user.email}</p>
+                      <div className="user-info-inline">
+                        <span className="user-greeting">
+                          Xin chào,{" "}
+                          <strong
+                            style={{ color: getPremiumColor() || undefined }}
+                          >
+                            {userProfile?.fullName || user.fullName}
+                          </strong>
+                        </span>
+                        <span
+                          className="user-balance"
+                          style={{ color: getPremiumColor() || undefined }}
+                        >
+                          💰 Số dư:{" "}
+                          {loadingBalance
+                            ? "..."
+                            : walletBalance !== null &&
+                                walletBalance !== undefined
+                              ? walletBalance.toLocaleString("vi-VN") + " đ"
+                              : "N/A"}
+                        </span>
                       </div>
+                      <ChevronDown size={16} className="dropdown-icon" />
                     </div>
-                    <hr className="dropdown-divider" />
+                  </button>
 
-                    <div style={{ marginBottom: "12px" }}>
-                      <NotificationDropdown inline collapsible />
-                    </div>
+                  {showUserMenu && (
+                    <div className="user-dropdown">
+                      <div className="user-info">
+                        <div
+                          className="header-user-avatar-large"
+                          style={{
+                            border: getPremiumColor()
+                              ? `3px solid ${getPremiumColor()}`
+                              : "2px solid rgba(255,255,255,0.2)",
+                            boxShadow: getPremiumColor()
+                              ? `0 0 20px ${getPremiumColor()}`
+                              : undefined,
+                          }}
+                        >
+                          {mentorProfile?.avatar ||
+                          userProfile?.avatarMediaUrl ||
+                          user.avatarUrl ? (
+                            <img
+                              src={
+                                mentorProfile?.avatar ||
+                                userProfile?.avatarMediaUrl ||
+                                user.avatarUrl
+                              }
+                              alt="Avatar"
+                              className="header-avatar-img-large"
+                            />
+                          ) : (
+                            <User size={24} />
+                          )}
+                        </div>
+                        <div className="user-details">
+                          <p className="user-name">
+                            {userProfile?.fullName || user.fullName}
+                          </p>
+                          <p className="user-email">{user.email}</p>
+                        </div>
+                      </div>
+                      <hr className="dropdown-divider" />
 
-                    {/* Wallet & Notifications in dropdown */}
-                    <button
-                      onClick={() => {
-                        handleWallet();
-                        setShowUserMenu(false);
-                      }}
-                      className="dropdown-item"
-                    >
-                      <Wallet size={16} />
-                      <span>Ví</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        navigate("/messages");
-                        setShowUserMenu(false);
-                      }}
-                      className="dropdown-item"
-                    >
-                      <MessageSquare size={16} />
-                      <span>Tin nhắn</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        navigate("/my-bookings?tab=bookings");
-                        setShowUserMenu(false);
-                      }}
-                      className="dropdown-item"
-                    >
-                      <Calendar size={16} />
-                      <span>Quản lý lịch hẹn</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        navigate("/my-bookings?tab=tickets");
-                        setShowUserMenu(false);
-                      }}
-                      className="dropdown-item"
-                    >
-                      <Ticket size={16} />
-                      <span>Vé của tôi</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        navigate("/help-center");
-                        setShowUserMenu(false);
-                      }}
-                      className="dropdown-item"
-                    >
-                      <HelpCircle size={16} />
-                      <span>Hỗ trợ</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        navigate("/report-violation");
-                        setShowUserMenu(false);
-                      }}
-                      className="dropdown-item"
-                    >
-                      <AlertTriangle size={16} />
-                      <span>Báo cáo vi phạm</span>
-                    </button>
+                      <div style={{ marginBottom: "12px" }}>
+                        <NotificationDropdown inline collapsible />
+                      </div>
 
-                    <hr className="dropdown-divider" />
-
-                    {/* Admin Dashboard Link for any admin role */}
-                    {(user.roles.includes("ADMIN") ||
-                      user.roles.some((role) => role.endsWith("_ADMIN"))) && (
-                      <button
-                        onClick={() => navigate("/admin")}
-                        className="dropdown-item"
-                        style={{ color: "#F472B6" }}
-                      >
-                        <Shield size={16} />
-                        <span>Quản Trị Viên</span>
-                      </button>
-                    )}
-
-                    {(user.roles.includes("MENTOR") ||
-                      user.roles.includes("ADMIN")) && (
-                      <button onClick={handleMentor} className="dropdown-item">
-                        <BookOpen size={16} />
-                        <span>Giảng Viên</span>
-                      </button>
-                    )}
-                    {user.roles.includes("RECRUITER") && (
-                      <button
-                        onClick={() => navigate("/business")}
-                        className="dropdown-item"
-                      >
-                        <Building2 size={16} />
-                        <span>Doanh Nghiệp</span>
-                      </button>
-                    )}
-                    {user.roles.includes("PARENT") && (
+                      {/* Wallet & Notifications in dropdown */}
                       <button
                         onClick={() => {
-                          navigate("/parent-dashboard");
+                          handleWallet();
                           setShowUserMenu(false);
                         }}
                         className="dropdown-item"
                       >
-                        <Users size={16} />
-                        <span>Phụ huynh</span>
+                        <Wallet size={16} />
+                        <span>Ví</span>
                       </button>
-                    )}
-                    {user.roles.includes("USER") && (
                       <button
-                        onClick={() => navigate("/my-applications")}
+                        onClick={() => {
+                          navigate("/messages");
+                          setShowUserMenu(false);
+                        }}
                         className="dropdown-item"
                       >
-                        <Briefcase size={16} />
-                        <span>Đơn Ứng Tuyển</span>
+                        <MessageSquare size={16} />
+                        <span>Tin nhắn</span>
                       </button>
-                    )}
-                    <button onClick={handleProfile} className="dropdown-item">
-                      <User size={16} />
-                      <span>Hồ sơ cá nhân</span>
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="dropdown-item logout"
-                    >
-                      <LogOut size={16} />
-                      <span>Đăng xuất</span>
-                    </button>
-                  </div>
-                )}
-              </div>
-            </>
-          ) : (
-            <button
-              onClick={handleLogin}
-              className="header-login-btn desktop-only"
-            >
-              Đăng nhập
-            </button>
-          )}
+                      <button
+                        onClick={() => {
+                          navigate("/my-bookings?tab=bookings");
+                          setShowUserMenu(false);
+                        }}
+                        className="dropdown-item"
+                      >
+                        <Calendar size={16} />
+                        <span>Quản lý lịch hẹn</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          navigate("/my-bookings?tab=tickets");
+                          setShowUserMenu(false);
+                        }}
+                        className="dropdown-item"
+                      >
+                        <Ticket size={16} />
+                        <span>Vé của tôi</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          navigate("/help-center");
+                          setShowUserMenu(false);
+                        }}
+                        className="dropdown-item"
+                      >
+                        <HelpCircle size={16} />
+                        <span>Hỗ trợ</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          navigate("/report-violation");
+                          setShowUserMenu(false);
+                        }}
+                        className="dropdown-item"
+                      >
+                        <AlertTriangle size={16} />
+                        <span>Báo cáo vi phạm</span>
+                      </button>
 
-          {/* Mobile quick actions */}
-          <button
-            className="mobile-icon-btn mobile-only"
-            aria-label="Upgrade"
-            onClick={handleUpgrade}
-          >
-            <Crown size={18} />
-          </button>
+                      <hr className="dropdown-divider" />
 
-          {/* Mobile Menu Button */}
-          <button
-            className="mobile-menu-btn mobile-only"
-            onClick={toggleMobileMenu}
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="sv-mobile-menu"
-          >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen &&
-        createPortal(
-          <div className="mobile-menu" id="sv-mobile-menu">
-            <div className="mobile-menu-content">
-              {/* Mobile User Section */}
-              {isAuthenticated && user ? (
-                <div className="mobile-user-section">
-                  <div className="mobile-user-info">
-                    <div className="user-avatar-large">
-                      {mentorProfile?.avatar ||
-                      userProfile?.avatarMediaUrl ||
-                      user.avatarUrl ? (
-                        <img
-                          src={
-                            mentorProfile?.avatar ||
-                            userProfile?.avatarMediaUrl ||
-                            user.avatarUrl
-                          }
-                          alt="Avatar"
-                          className="header-avatar-img-large"
-                        />
-                      ) : (
-                        <User size={32} />
+                      {/* Admin Dashboard Link for any admin role */}
+                      {(user.roles.includes("ADMIN") ||
+                        user.roles.some((role) => role.endsWith("_ADMIN"))) && (
+                        <button
+                          onClick={() => navigate("/admin")}
+                          className="dropdown-item"
+                          style={{ color: "#F472B6" }}
+                        >
+                          <Shield size={16} />
+                          <span>Quản Trị Viên</span>
+                        </button>
                       )}
-                    </div>
-                    <div className="user-details">
-                      <p className="user-name">{user.fullName}</p>
-                      <p className="user-email">{user.email}</p>
-                    </div>
-                  </div>
 
-                  {/* Mobile User Actions - Integrated */}
-                  <div className="mobile-user-actions-grid">
-                    <button
-                      onClick={() => {
-                        handleWallet();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="mobile-action-icon-btn"
-                      title="Ví"
-                    >
-                      <Wallet size={20} />
-                      <span>Ví</span>
-                    </button>
-                    <button
-                      className="mobile-action-icon-btn"
-                      title="Thông báo"
-                    >
-                      <Bell size={20} />
-                      <span>Thông báo</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleUpgrade();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="mobile-action-icon-btn upgrade"
-                      title="Nâng cấp"
-                    >
-                      <Crown size={20} />
-                      <span>Nâng cấp</span>
-                    </button>
-                  </div>
-
-                  <div className="mobile-user-menu-list">
-                    {(user.roles.includes("ADMIN") ||
-                      user.roles.some((role) => role.endsWith("_ADMIN"))) && (
-                      <button
-                        onClick={() => {
-                          navigate("/admin");
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="mobile-menu-item"
-                        style={{ color: "#F472B6" }}
-                      >
-                        <Shield size={18} />
-                        <span>Quản Trị Viên</span>
+                      {(user.roles.includes("MENTOR") ||
+                        user.roles.includes("ADMIN")) && (
+                        <button
+                          onClick={handleMentor}
+                          className="dropdown-item"
+                        >
+                          <BookOpen size={16} />
+                          <span>Giảng Viên</span>
+                        </button>
+                      )}
+                      {user.roles.includes("RECRUITER") && (
+                        <button
+                          onClick={() => navigate("/business")}
+                          className="dropdown-item"
+                        >
+                          <Building2 size={16} />
+                          <span>Doanh Nghiệp</span>
+                        </button>
+                      )}
+                      {user.roles.includes("PARENT") && (
+                        <button
+                          onClick={() => {
+                            navigate("/parent-dashboard");
+                            setShowUserMenu(false);
+                          }}
+                          className="dropdown-item"
+                        >
+                          <Users size={16} />
+                          <span>Phụ huynh</span>
+                        </button>
+                      )}
+                      {user.roles.includes("USER") && (
+                        <button
+                          onClick={() => navigate("/my-applications")}
+                          className="dropdown-item"
+                        >
+                          <Briefcase size={16} />
+                          <span>Đơn Ứng Tuyển</span>
+                        </button>
+                      )}
+                      <button onClick={handleProfile} className="dropdown-item">
+                        <User size={16} />
+                        <span>Hồ sơ cá nhân</span>
                       </button>
-                    )}
-                    {(user.roles.includes("MENTOR") ||
-                      user.roles.includes("ADMIN")) && (
                       <button
-                        onClick={handleMentor}
-                        className="mobile-menu-item"
+                        onClick={handleLogout}
+                        className="dropdown-item logout"
                       >
-                        <BookOpen size={18} />
-                        <span>Giảng Viên</span>
+                        <LogOut size={16} />
+                        <span>Đăng xuất</span>
                       </button>
-                    )}
-                    {user.roles.includes("PARENT") && (
-                      <button
-                        onClick={() => {
-                          navigate("/parent-dashboard");
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="mobile-menu-item"
-                      >
-                        <Users size={18} />
-                        <span>Phụ huynh</span>
-                      </button>
-                    )}
-                    <button
-                      onClick={() => {
-                        handleProfile();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="mobile-menu-item"
-                    >
-                      <User size={18} />
-                      <span>Hồ sơ cá nhân</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleLogout();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="mobile-menu-item logout"
-                    >
-                      <LogOut size={18} />
-                      <span>Đăng xuất</span>
-                    </button>
-                  </div>
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <button onClick={handleLogin} className="mobile-login-btn">
-                  <User size={18} />
-                  <span>Đăng nhập</span>
-                </button>
-              )}
+              </>
+            ) : (
+              <button
+                onClick={handleLogin}
+                className="header-login-btn desktop-only"
+              >
+                Đăng nhập
+              </button>
+            )}
 
-              {/* Mobile Quick Navigation */}
-              <div className="mobile-categories">
-                <h3 className="mobile-section-title">Dịch Chuyển Nhanh</h3>
-                <div className="mobile-category-grid">
-                  {quickNavItems.map((item) => (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className="mobile-category-link"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <item.icon className="mobile-category-icon" />
-                      <div className="mobile-category-content">
-                        <span className="mobile-category-title">
-                          {item.name}
-                        </span>
-                        <span className="mobile-category-description">
-                          {item.description}
-                        </span>
+            {/* Mobile quick actions */}
+            <button
+              className="mobile-icon-btn mobile-only"
+              aria-label="Upgrade"
+              onClick={handleUpgrade}
+            >
+              <Crown size={18} />
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="mobile-menu-btn mobile-only"
+              onClick={toggleMobileMenu}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="sv-mobile-menu"
+            >
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen &&
+          createPortal(
+            <div className="mobile-menu" id="sv-mobile-menu">
+              <div className="mobile-menu-content">
+                {/* Mobile User Section */}
+                {isAuthenticated && user ? (
+                  <div className="mobile-user-section">
+                    <div className="mobile-user-info">
+                      <div className="user-avatar-large">
+                        {mentorProfile?.avatar ||
+                        userProfile?.avatarMediaUrl ||
+                        user.avatarUrl ? (
+                          <img
+                            src={
+                              mentorProfile?.avatar ||
+                              userProfile?.avatarMediaUrl ||
+                              user.avatarUrl
+                            }
+                            alt="Avatar"
+                            className="header-avatar-img-large"
+                          />
+                        ) : (
+                          <User size={32} />
+                        )}
                       </div>
-                    </Link>
-                  ))}
+                      <div className="user-details">
+                        <p className="user-name">{user.fullName}</p>
+                        <p className="user-email">{user.email}</p>
+                      </div>
+                    </div>
+
+                    {/* Mobile User Actions - Integrated */}
+                    <div className="mobile-user-actions-grid">
+                      <button
+                        onClick={() => {
+                          handleWallet();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="mobile-action-icon-btn"
+                        title="Ví"
+                      >
+                        <Wallet size={20} />
+                        <span>Ví</span>
+                      </button>
+                      <button
+                        className="mobile-action-icon-btn"
+                        title="Thông báo"
+                      >
+                        <Bell size={20} />
+                        <span>Thông báo</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleUpgrade();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="mobile-action-icon-btn upgrade"
+                        title="Nâng cấp"
+                      >
+                        <Crown size={20} />
+                        <span>Nâng cấp</span>
+                      </button>
+                    </div>
+
+                    <div className="mobile-user-menu-list">
+                      {(user.roles.includes("ADMIN") ||
+                        user.roles.some((role) => role.endsWith("_ADMIN"))) && (
+                        <button
+                          onClick={() => {
+                            navigate("/admin");
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="mobile-menu-item"
+                          style={{ color: "#F472B6" }}
+                        >
+                          <Shield size={18} />
+                          <span>Quản Trị Viên</span>
+                        </button>
+                      )}
+                      {(user.roles.includes("MENTOR") ||
+                        user.roles.includes("ADMIN")) && (
+                        <button
+                          onClick={handleMentor}
+                          className="mobile-menu-item"
+                        >
+                          <BookOpen size={18} />
+                          <span>Giảng Viên</span>
+                        </button>
+                      )}
+                      {user.roles.includes("PARENT") && (
+                        <button
+                          onClick={() => {
+                            navigate("/parent-dashboard");
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="mobile-menu-item"
+                        >
+                          <Users size={18} />
+                          <span>Phụ huynh</span>
+                        </button>
+                      )}
+                      <button
+                        onClick={() => {
+                          handleProfile();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="mobile-menu-item"
+                      >
+                        <User size={18} />
+                        <span>Hồ sơ cá nhân</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="mobile-menu-item logout"
+                      >
+                        <LogOut size={18} />
+                        <span>Đăng xuất</span>
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button onClick={handleLogin} className="mobile-login-btn">
+                    <User size={18} />
+                    <span>Đăng nhập</span>
+                  </button>
+                )}
+
+                {/* Mobile Quick Navigation */}
+                <div className="mobile-categories">
+                  <h3 className="mobile-section-title">Dịch Chuyển Nhanh</h3>
+                  <div className="mobile-category-grid">
+                    {quickNavItems
+                      .filter(
+                        (item) =>
+                          !item.hideForRoles?.some((role) =>
+                            user?.roles.includes(role),
+                          ),
+                      )
+                      .map((item) => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className="mobile-category-link"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <item.icon className="mobile-category-icon" />
+                          <div className="mobile-category-content">
+                            <span className="mobile-category-title">
+                              {item.name}
+                            </span>
+                            <span className="mobile-category-description">
+                              {item.description}
+                            </span>
+                          </div>
+                        </Link>
+                      ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>,
-          document.body,
-        )}
-    </header>
+            </div>,
+            document.body,
+          )}
+      </header>
+    </>
   );
 };
 
