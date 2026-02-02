@@ -9,11 +9,15 @@ import {
   Sparkles,
   Eye,
   BarChart2,
+  AlertCircle,
+  Download,
 } from "lucide-react";
 import learningReportService, {
   StudentLearningReportResponse,
+  isValidReportId,
 } from "../../services/learningReportService";
 import LearningReportModal from "./LearningReportModal";
+import { downloadLearningReportPDF } from "./PDFGenerator";
 import "./LearningReportHistory.css";
 
 interface LearningReportHistoryProps {
@@ -29,10 +33,15 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
 }) => {
   const [reports, setReports] = useState<StudentLearningReportResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [selectedReport, setSelectedReport] =
     useState<StudentLearningReportResponse | null>(null);
+  const [selectedReportId, setSelectedReportId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [canGenerate, setCanGenerate] = useState(true);
+  const [downloadingId, setDownloadingId] = useState<number | null>(null);
+
+  // Using imported validation helper from learningReportService
 
   useEffect(() => {
     loadReports();
@@ -40,32 +49,75 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
 
   const loadReports = async () => {
     setIsLoading(true);
+    setLoadError(null);
     try {
       const [history, canGen] = await Promise.all([
         learningReportService.getReportHistory(0, maxItems),
         learningReportService.canGenerateReport(),
       ]);
-      setReports(history);
+      // Filter out any reports with invalid IDs
+      const validReports = history.filter((r) => isValidReportId(r.reportId));
+      setReports(validReports);
       setCanGenerate(canGen.canGenerate);
     } catch (error) {
       console.error("Error loading reports:", error);
+      setLoadError("Không thể tải danh sách báo cáo. Vui lòng thử lại.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleViewReport = async (reportId: number) => {
+  const handleViewReport = async (reportId: number | undefined) => {
+    // Validate reportId before making API call
+    if (!isValidReportId(reportId)) {
+      console.error("Invalid reportId:", reportId);
+      setLoadError("ID báo cáo không hợp lệ. Vui lòng tải lại trang.");
+      return;
+    }
+
     try {
-      const report = await learningReportService.getReportById(reportId);
+      setSelectedReportId(reportId as number);
+      const report = await learningReportService.getReportById(
+        reportId as number,
+      );
       setSelectedReport(report);
       setIsModalOpen(true);
+      setLoadError(null);
     } catch (error) {
       console.error("Error loading report:", error);
+      setLoadError("Không thể tải báo cáo. Báo cáo có thể không tồn tại.");
+      // Open modal anyway to show error state
+      setSelectedReport(null);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleDownloadPDF = async (
+    report: StudentLearningReportResponse,
+    e: React.MouseEvent,
+  ) => {
+    e.stopPropagation(); // Prevent opening modal
+
+    if (!isValidReportId(report.reportId)) {
+      console.error("Invalid reportId for PDF download:", report.reportId);
+      return;
+    }
+
+    setDownloadingId(report.reportId);
+    try {
+      await downloadLearningReportPDF(report, {
+        filename: `learning-report-${report.reportId}`,
+      });
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    } finally {
+      setDownloadingId(null);
     }
   };
 
   const handleGenerateNew = () => {
     setSelectedReport(null);
+    setSelectedReportId(null);
     setIsModalOpen(true);
   };
 
@@ -172,7 +224,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
                     <div className="lr-history__item-info">
                       <div className="lr-history__item-title-row">
                         <span className="lr-history__item-title">
-                          Báo cáo #{report.reportId}
+                          Báo cáo #{report.reportId || "N/A"}
                         </span>
                         <span
                           className="lr-history__type-badge"
@@ -194,7 +246,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
                         </span>
                         <span className="lr-history__meta-item">
                           <BarChart2 size={12} />
-                          {report.overallProgress}%
+                          {report.overallProgress ?? 0}%
                         </span>
                         <span
                           className="lr-history__meta-item lr-history__meta-item--trend"
@@ -209,9 +261,29 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
                       </div>
                     </div>
 
-                    <div className="lr-history__item-action">
-                      <Eye size={16} />
-                      <ChevronRight size={16} />
+                    <div className="lr-history__item-actions">
+                      <button
+                        className="lr-history__action-btn lr-history__action-btn--download"
+                        onClick={(e) => handleDownloadPDF(report, e)}
+                        disabled={downloadingId === report.reportId}
+                        title="Tải PDF"
+                      >
+                        <Download
+                          size={14}
+                          className={
+                            downloadingId === report.reportId
+                              ? "lr-history__spinning"
+                              : ""
+                          }
+                        />
+                      </button>
+                      <button
+                        className="lr-history__action-btn"
+                        title="Xem báo cáo"
+                      >
+                        <Eye size={16} />
+                        <ChevronRight size={16} />
+                      </button>
                     </div>
                   </motion.div>
                 );
@@ -229,6 +301,14 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
             </>
           )}
         </div>
+
+        {/* Error Message */}
+        {loadError && (
+          <div className="lr-history__error-message">
+            <AlertCircle size={16} />
+            <span>{loadError}</span>
+          </div>
+        )}
 
         {/* Quick Stats Preview */}
         {reports.length > 0 && reports[0] && reports[0].metrics && (
@@ -267,9 +347,12 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
         onClose={() => {
           setIsModalOpen(false);
           setSelectedReport(null);
+          setSelectedReportId(null);
+          setLoadError(null);
           loadReports();
         }}
         initialReport={selectedReport}
+        initialReportId={selectedReportId}
       />
     </>
   );

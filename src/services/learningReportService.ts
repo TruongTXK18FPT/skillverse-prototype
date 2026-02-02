@@ -12,7 +12,8 @@ export type ReportType =
 export interface ReportSections {
   currentSkills: string;
   learningGoals: string;
-  progress: string;
+  progress: string; // Maps to backend 'progressSummary'
+  progressSummary?: string; // Direct mapping from backend
   strengths: string;
   areasToImprove: string;
   recommendations: string;
@@ -98,6 +99,88 @@ export interface ReportTypeInfo {
   cooldownHours: number;
 }
 
+// ==================== Validation Helpers ====================
+
+/**
+ * Validate if a reportId is valid
+ */
+function isValidReportId(id: number | string | null | undefined): boolean {
+  if (id === null || id === undefined) return false;
+  if (typeof id === "string") {
+    if (id === "undefined" || id === "null" || id.trim() === "") return false;
+    const parsed = parseInt(id, 10);
+    return !isNaN(parsed) && parsed > 0;
+  }
+  return typeof id === "number" && !isNaN(id) && id > 0;
+}
+
+/**
+ * Parse and validate reportId
+ */
+function parseReportId(id: number | string | null | undefined): number {
+  if (!isValidReportId(id)) {
+    throw new Error("Invalid report ID. Please select a valid report.");
+  }
+  if (typeof id === "number") return id;
+  return parseInt(id as string, 10);
+}
+
+/**
+ * Normalize report response to handle backend field naming differences
+ * Maps backend fields to frontend expected fields
+ */
+function normalizeReportResponse(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  response: any,
+): StudentLearningReportResponse {
+  // Map 'id' to 'reportId' if needed
+  const normalized: StudentLearningReportResponse = {
+    ...response,
+    reportId: response.reportId || response.id,
+  };
+
+  // Map sections fields
+  if (normalized.sections) {
+    // Map progressSummary to progress if progress is missing
+    if (!normalized.sections.progress && normalized.sections.progressSummary) {
+      normalized.sections.progress = normalized.sections.progressSummary;
+    }
+  }
+
+  // Map metrics fields
+  if (normalized.metrics) {
+    // Map streakDays to currentStreak if needed
+    if (
+      normalized.metrics.currentStreak === undefined &&
+      (normalized.metrics as any).streakDays !== undefined
+    ) {
+      normalized.metrics.currentStreak = (normalized.metrics as any).streakDays;
+    }
+
+    // Map totalStudyMinutesWeek to totalStudyHours
+    if (
+      normalized.metrics.totalStudyHours === undefined &&
+      (normalized.metrics as any).totalStudyMinutesWeek !== undefined
+    ) {
+      normalized.metrics.totalStudyHours = Math.round(
+        ((normalized.metrics as any).totalStudyMinutesWeek || 0) / 60,
+      );
+    }
+
+    // Map completedTasks to totalTasksCompleted
+    if (
+      normalized.metrics.totalTasksCompleted === undefined &&
+      (normalized.metrics as any).completedTasks !== undefined
+    ) {
+      normalized.metrics.totalTasksCompleted = (
+        normalized.metrics as any
+      ).completedTasks;
+    }
+  }
+
+  return normalized;
+}
+
 // ==================== Service Class ====================
 
 class LearningReportService {
@@ -119,7 +202,7 @@ class LearningReportService {
         customPrompt: request.customPrompt,
       },
     );
-    return response.data;
+    return normalizeReportResponse(response.data);
   }
 
   /**
@@ -129,7 +212,7 @@ class LearningReportService {
     const response = await axiosInstance.post<StudentLearningReportResponse>(
       `${this.BASE_URL}/generate/quick`,
     );
-    return response.data;
+    return normalizeReportResponse(response.data);
   }
 
   /**
@@ -143,7 +226,7 @@ class LearningReportService {
       `${this.BASE_URL}/history`,
       { params: { page, size } },
     );
-    return response.data;
+    return response.data.map(normalizeReportResponse);
   }
 
   /**
@@ -154,7 +237,7 @@ class LearningReportService {
       const response = await axiosInstance.get<StudentLearningReportResponse>(
         `${this.BASE_URL}/latest`,
       );
-      return response.data;
+      return normalizeReportResponse(response.data);
     } catch (error: any) {
       if (error.response?.status === 204) {
         return null;
@@ -164,15 +247,34 @@ class LearningReportService {
   }
 
   /**
-   * Get a specific report by ID
+   * Get a specific report by ID with validation
    */
   async getReportById(
-    reportId: number,
+    reportId: number | string,
   ): Promise<StudentLearningReportResponse> {
-    const response = await axiosInstance.get<StudentLearningReportResponse>(
-      `${this.BASE_URL}/${reportId}`,
-    );
-    return response.data;
+    // Validate reportId before making the request
+    const validatedId = parseReportId(reportId);
+
+    try {
+      const response = await axiosInstance.get<StudentLearningReportResponse>(
+        `${this.BASE_URL}/${validatedId}`,
+      );
+      return normalizeReportResponse(response.data);
+    } catch (error: any) {
+      // Handle specific error cases
+      if (error.response?.status === 404) {
+        throw new Error("Báo cáo không tồn tại hoặc đã bị xóa.");
+      }
+      if (error.response?.status === 403) {
+        throw new Error("Bạn không có quyền xem báo cáo này.");
+      }
+      if (error.response?.status === 400) {
+        throw new Error(
+          error.response.data?.message || "ID báo cáo không hợp lệ.",
+        );
+      }
+      throw error;
+    }
   }
 
   /**
@@ -273,3 +375,6 @@ export default learningReportService;
 
 // Also export the class for testing
 export { LearningReportService };
+
+// Export validation helpers for use in components
+export { isValidReportId, parseReportId };

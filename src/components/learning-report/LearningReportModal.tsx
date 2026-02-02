@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -22,22 +22,27 @@ import {
   Star,
   ChevronRight,
   GraduationCap,
+  Download,
 } from "lucide-react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import learningReportService, {
   StudentLearningReportResponse,
   ReportType,
   CanGenerateResponse,
+  isValidReportId,
+  parseReportId,
 } from "../../services/learningReportService";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
+import MarkdownRenderer from "./MarkdownRenderer";
+import { downloadLearningReportPDF } from "./PDFGenerator";
 import "./LearningReportModal.css";
+import "./MarkdownRenderer.css";
 
 interface LearningReportModalProps {
   isOpen: boolean;
   onClose: () => void;
   meowlSkin?: boolean;
   initialReport?: StudentLearningReportResponse | null;
+  initialReportId?: number | null;
 }
 
 // Section configuration for navigation
@@ -113,9 +118,11 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
   onClose,
   meowlSkin: _meowlSkin = true,
   initialReport = null,
+  initialReportId = null,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isDownloadingPDF, setIsDownloadingPDF] = useState(false);
   const [report, setReport] = useState<StudentLearningReportResponse | null>(
     null,
   );
@@ -128,6 +135,9 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
     useState<ReportType>("COMPREHENSIVE");
   const [meowlSpeech, setMeowlSpeech] = useState("");
   const [generatingStep, setGeneratingStep] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Using imported validation helpers from learningReportService
 
   useEffect(() => {
     if (isOpen) {
@@ -141,13 +151,55 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
           .canGenerateReport()
           .then(setCanGenerate)
           .catch(console.error);
+      } else if (isValidReportId(initialReportId)) {
+        // Load specific report by ID with validation
+        try {
+          const validId = parseReportId(initialReportId);
+          loadReportById(validId);
+        } catch {
+          // If parsing fails, fall back to latest report
+          loadInitialData();
+        }
       } else {
         // Otherwise load the latest report
         loadInitialData();
       }
       setActiveSection("overview");
     }
-  }, [isOpen, initialReport]);
+  }, [isOpen, initialReport, initialReportId]);
+
+  // Load a specific report by ID with error handling
+  const loadReportById = async (reportId: number) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const [reportData, canGen] = await Promise.all([
+        learningReportService.getReportById(reportId),
+        learningReportService.canGenerateReport(),
+      ]);
+      setReport(reportData);
+      setCanGenerate(canGen);
+    } catch (err: unknown) {
+      console.error("Error loading report by ID:", err);
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Không thể tải báo cáo. Báo cáo có thể không tồn tại hoặc đã bị xóa.";
+      setError(errorMessage);
+      // Try to load latest report as fallback
+      try {
+        const latestReport = await learningReportService.getLatestReport();
+        if (latestReport) {
+          setReport(latestReport);
+          setError(null);
+        }
+      } catch {
+        // Keep the original error
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Update Meowl speech based on state
   useEffect(() => {
@@ -240,6 +292,75 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
     }
   };
 
+  // Handle PDF download
+  const handleDownloadPDF = async () => {
+    if (!report) return;
+
+    setIsDownloadingPDF(true);
+    try {
+      await downloadLearningReportPDF(report, {
+        filename: `learning-report-${report.reportId}-${new Date().toISOString().split("T")[0]}`,
+        includeHeader: true,
+        includeFooter: true,
+        includePageNumbers: true,
+        quality: "high",
+        branding: {
+          companyName: "SkillVerse",
+          tagline: "Your AI-Powered Learning Companion",
+        },
+      });
+    } catch (err) {
+      console.error("Error downloading PDF:", err);
+      setError("Không thể tải PDF. Vui lòng thử lại.");
+    } finally {
+      setIsDownloadingPDF(false);
+    }
+  };
+
+  // Format study hours from minutes
+  const formatStudyHours = (totalMinutes: number | undefined): string => {
+    if (!totalMinutes) return "0h";
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    if (hours === 0) return `${minutes}m`;
+    if (minutes === 0) return `${hours}h`;
+    return `${hours}h ${minutes}m`;
+  };
+
+  // Calculate total study hours from metrics
+  const getTotalStudyHours = (): string => {
+    if (!report?.metrics) return "0h";
+    const totalHours = report.metrics.totalStudyHours || 0;
+    return `${totalHours}h`;
+  };
+
+  // Get streak display with fire emoji intensity
+  const getStreakDisplay = (): {
+    value: number;
+    emoji: string;
+    description: string;
+  } => {
+    const streak = report?.metrics?.currentStreak || 0;
+    let emoji = "🔥";
+    let description = "ngày liên tiếp";
+
+    if (streak === 0) {
+      emoji = "💤";
+      description = "Bắt đầu streak!";
+    } else if (streak >= 30) {
+      emoji = "🔥🔥🔥";
+      description = "Streak cháy!";
+    } else if (streak >= 14) {
+      emoji = "🔥🔥";
+      description = "Streak mạnh!";
+    } else if (streak >= 7) {
+      emoji = "🔥";
+      description = "Streak tốt!";
+    }
+
+    return { value: streak, emoji, description };
+  };
+
   const getSectionTitle = (key: string): string => {
     const titles: Record<string, string> = {
       overview: "📊 Tổng quan báo cáo",
@@ -312,7 +433,7 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
               </div>
               <div className="lr-modal__stat-details">
                 <span className="lr-modal__stat-value">
-                  {report.metrics?.totalStudyHours ?? 0}h
+                  {getTotalStudyHours()}
                 </span>
                 <span className="lr-modal__stat-label">Giờ học tổng</span>
               </div>
@@ -329,10 +450,10 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
               </div>
               <div className="lr-modal__stat-details">
                 <span className="lr-modal__stat-value">
-                  {report.metrics?.currentStreak ?? 0}
+                  {getStreakDisplay().emoji} {getStreakDisplay().value}
                 </span>
                 <span className="lr-modal__stat-label">
-                  Chuỗi ngày liên tiếp
+                  {getStreakDisplay().description}
                 </span>
               </div>
             </motion.div>
@@ -352,6 +473,45 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
                 </span>
                 <span className="lr-modal__stat-label">Tasks hoàn thành</span>
               </div>
+            </motion.div>
+          </div>
+
+          {/* Additional Stats Row */}
+          <div className="lr-modal__stats-row">
+            <motion.div
+              className="lr-modal__mini-stat"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <span className="lr-modal__mini-stat-label">Phiên học TB:</span>
+              <span className="lr-modal__mini-stat-value">
+                {formatStudyHours(report.metrics?.averageSessionDuration)}
+              </span>
+            </motion.div>
+            <motion.div
+              className="lr-modal__mini-stat"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.35 }}
+            >
+              <span className="lr-modal__mini-stat-label">Tổng phiên:</span>
+              <span className="lr-modal__mini-stat-value">
+                {report.metrics?.totalStudySessions ?? 0}
+              </span>
+            </motion.div>
+            <motion.div
+              className="lr-modal__mini-stat"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <span className="lr-modal__mini-stat-label">
+                Streak dài nhất:
+              </span>
+              <span className="lr-modal__mini-stat-value">
+                {report.metrics?.longestStreak ?? 0} ngày
+              </span>
             </motion.div>
           </div>
 
@@ -443,7 +603,7 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
       );
     }
 
-    // Render section content with markdown
+    // Render section content with enhanced markdown
     const content =
       report.sections?.[activeSection as keyof typeof report.sections];
     if (!content) {
@@ -462,45 +622,7 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
         animate={{ opacity: 1, y: 0 }}
         key={activeSection}
       >
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          components={{
-            h1: ({ children }) => <h1 className="lr-md__h1">{children}</h1>,
-            h2: ({ children }) => <h2 className="lr-md__h2">{children}</h2>,
-            h3: ({ children }) => <h3 className="lr-md__h3">{children}</h3>,
-            p: ({ children }) => <p className="lr-md__p">{children}</p>,
-            ul: ({ children }) => <ul className="lr-md__ul">{children}</ul>,
-            ol: ({ children }) => <ol className="lr-md__ol">{children}</ol>,
-            li: ({ children }) => <li className="lr-md__li">{children}</li>,
-            strong: ({ children }) => (
-              <strong className="lr-md__strong">{children}</strong>
-            ),
-            em: ({ children }) => <em className="lr-md__em">{children}</em>,
-            blockquote: ({ children }) => (
-              <blockquote className="lr-md__blockquote">{children}</blockquote>
-            ),
-            code: ({ children, className }) => {
-              const isInline = !className;
-              return isInline ? (
-                <code className="lr-md__code-inline">{children}</code>
-              ) : (
-                <code className={`lr-md__code-block ${className || ""}`}>
-                  {children}
-                </code>
-              );
-            },
-            hr: () => <hr className="lr-md__hr" />,
-            table: ({ children }) => (
-              <div className="lr-md__table-wrapper">
-                <table className="lr-md__table">{children}</table>
-              </div>
-            ),
-            th: ({ children }) => <th className="lr-md__th">{children}</th>,
-            td: ({ children }) => <td className="lr-md__td">{children}</td>,
-          }}
-        >
-          {content}
-        </ReactMarkdown>
+        <MarkdownRenderer content={content} />
       </motion.div>
     );
   };
@@ -737,6 +859,19 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
 
                   {/* Generate New Button */}
                   <div className="lr-modal__sidebar-footer">
+                    {/* Download PDF Button */}
+                    <button
+                      className="lr-modal__download-pdf-btn"
+                      onClick={handleDownloadPDF}
+                      disabled={isDownloadingPDF}
+                    >
+                      <Download
+                        size={16}
+                        className={isDownloadingPDF ? "lr-modal__spinning" : ""}
+                      />
+                      {isDownloadingPDF ? "Đang tải..." : "Tải PDF"}
+                    </button>
+
                     <button
                       className="lr-modal__new-report-btn"
                       onClick={handleGenerateQuickReport}
@@ -762,7 +897,7 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
                 </div>
 
                 {/* Content Area */}
-                <div className="lr-modal__content">
+                <div className="lr-modal__content" ref={contentRef}>
                   <div className="lr-modal__content-header">
                     <h3>{getSectionTitle(activeSection)}</h3>
                   </div>

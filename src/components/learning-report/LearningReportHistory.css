@@ -74,7 +74,7 @@
 
 .lr-history__header h3 {
   margin: 0;
-  font-family:  sans-serif;
+  font-family: sans-serif;
   font-size: 1.1rem;
   font-weight: 400;
   color: #fff;
@@ -83,7 +83,7 @@
 }
 
 .lr-history__report-count {
-  font-family: 'Minecraft', monospace;
+  font-family: "Minecraft", monospace;
   font-size: 0.75rem;
   color: var(--hud-accent-cyan, #06b6d4);
   background: rgba(6, 182, 212, 0.1);
@@ -101,7 +101,7 @@
   border: none;
   border-radius: 4px;
   color: #fff;
-  font-family:  sans-serif;
+  font-family: sans-serif;
   font-size: 0.85rem;
   font-weight: 400;
   cursor: pointer;
@@ -195,7 +195,7 @@
 }
 
 .lr-history__type-badge {
-  font-family: 'Minecraft', monospace;
+  font-family: "Minecraft", monospace;
   font-size: 0.65rem;
   padding: 0.15rem 0.5rem;
   border-radius: 2px;
@@ -213,7 +213,7 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  font-family: 'Minecraft', monospace;
+  font-family: "Minecraft", monospace;
   font-size: 0.75rem;
   color: var(--hud-text-dim, #64748b);
 }
@@ -251,7 +251,7 @@
 }
 
 .lr-history__empty-state p {
-  font-family:  sans-serif;
+  font-family: sans-serif;
   color: var(--hud-text-secondary, #94a3b8);
   font-size: 0.9rem;
   margin: 0;
@@ -261,7 +261,7 @@
 }
 
 .lr-history__create-first-btn {
-  font-family:  sans-serif;
+  font-family: sans-serif;
   background: rgba(168, 85, 247, 0.1);
   border: 1px solid rgba(168, 85, 247, 0.4);
   color: #a855f7;
@@ -292,7 +292,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family:  sans-serif;
+  font-family: sans-serif;
   font-size: 0.75rem;
   color: var(--hud-text-dim, #64748b);
   margin-bottom: 0.75rem;
@@ -323,7 +323,7 @@
 }
 
 .lr-history__preview-stat-value {
-  font-family: 'Minecraft', monospace;
+  font-family: "Minecraft", monospace;
   font-size: 1.2rem;
   font-weight: 400;
   color: var(--hud-accent-cyan, #06b6d4);
@@ -331,7 +331,7 @@
 }
 
 .lr-history__preview-stat-label {
-  font-family:  sans-serif;
+  font-family: sans-serif;
   font-size: 0.6rem;
   color: var(--hud-text-dim, #64748b);
   text-transform: uppercase;
@@ -350,7 +350,7 @@
   border: 1px dashed rgba(6, 182, 212, 0.2);
   border-radius: 4px;
   color: var(--hud-text-secondary, #94a3b8);
-  font-family:  sans-serif;
+  font-family: sans-serif;
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -377,7 +377,7 @@
   padding: 3rem;
   gap: 1rem;
   color: var(--hud-accent-cyan, #06b6d4);
-  font-family:  sans-serif;
+  font-family: sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
   position: relative;
@@ -394,7 +394,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Skeleton */
@@ -440,8 +442,81 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Item Actions */
+.lr-history__item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lr-history__action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--hud-text-secondary, #94a3b8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.lr-history__action-btn:hover:not(:disabled) {
+  color: var(--hud-accent-cyan, #06b6d4);
+  background: rgba(6, 182, 212, 0.1);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.lr-history__action-btn--download:hover:not(:disabled) {
+  color: #a855f7;
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.lr-history__action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lr-history__spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error Message */
+.lr-history__error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 4px;
+  color: #f87171;
+  font-size: 0.9rem;
+}
+
+.lr-history__error-message svg {
+  flex-shrink: 0;
 }
 
 /* Responsive */
@@ -455,5 +530,10 @@
   .lr-history__generate-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .lr-history__item-actions {
+    flex-direction: column;
+    gap: 0.25rem;
   }
 }
