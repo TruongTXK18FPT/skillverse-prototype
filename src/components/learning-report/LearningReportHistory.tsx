@@ -43,10 +43,6 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
 
   // Using imported validation helper from learningReportService
 
-  useEffect(() => {
-    loadReports();
-  }, [loadReports]);
-
   const loadReports = async () => {
     setIsLoading(true);
     setLoadError(null);
@@ -66,6 +62,11 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadReports();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleViewReport = async (reportId: number | undefined) => {
     // Validate reportId before making API call
