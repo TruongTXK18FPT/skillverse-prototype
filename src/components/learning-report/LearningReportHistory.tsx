@@ -16,6 +16,7 @@ import learningReportService, {
   StudentLearningReportResponse,
   isValidReportId,
 } from "../../services/learningReportService";
+import { useAuth } from "../../context/AuthContext";
 import LearningReportModal from "./LearningReportModal";
 import { downloadLearningReportPDF } from "./PDFGenerator";
 import "./LearningReportHistory.css";
@@ -31,6 +32,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
   showGenerateButton = true,
   title = "Báo cáo học tập",
 }) => {
+  const { user } = useAuth();
   const [reports, setReports] = useState<StudentLearningReportResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -106,8 +108,11 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
 
     setDownloadingId(report.reportId);
     try {
+      // Prefer avatarMediaUrl over avatarUrl
+      const avatarUrl = user?.avatarMediaUrl || user?.avatarUrl;
       await downloadLearningReportPDF(report, {
         filename: `learning-report-${report.reportId}`,
+        userAvatar: avatarUrl,
       });
     } catch (error) {
       console.error("Error downloading PDF:", error);

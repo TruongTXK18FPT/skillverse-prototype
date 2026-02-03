@@ -31,6 +31,7 @@ import learningReportService, {
   isValidReportId,
   parseReportId,
 } from "../../services/learningReportService";
+import { useAuth } from "../../context/AuthContext";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
 import MarkdownRenderer from "./MarkdownRenderer";
 import { downloadLearningReportPDF } from "./PDFGenerator";
@@ -120,6 +121,7 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
   initialReport = null,
   initialReportId = null,
 }) => {
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isDownloadingPDF, setIsDownloadingPDF] = useState(false);
@@ -297,13 +299,35 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
     if (!report) return;
 
     setIsDownloadingPDF(true);
+    
     try {
+      // Debug logging
+      
+      // Try to get fresh user data with avatarMediaUrl
+      let avatarUrl = user?.avatarMediaUrl || user?.avatarUrl;
+      
+      // If user doesn't have avatarMediaUrl, try fetching fresh profile
+      if (!user?.avatarMediaUrl && user?.id) {
+        try {
+          const userService = (await import('../../services/userService')).default;
+          const freshUser = await userService.getUserProfile(user.id);
+          
+          if (freshUser.avatarMediaUrl) {
+            avatarUrl = freshUser.avatarMediaUrl;
+          }
+        } catch (error) {
+          console.error('❌ Failed to fetch fresh profile:', error);
+        }
+      }
+      
+      
       await downloadLearningReportPDF(report, {
         filename: `learning-report-${report.reportId}-${new Date().toISOString().split("T")[0]}`,
         includeHeader: true,
         includeFooter: true,
         includePageNumbers: true,
         quality: "high",
+        userAvatar: avatarUrl,
         branding: {
           companyName: "SkillVerse",
           tagline: "Your AI-Powered Learning Companion",

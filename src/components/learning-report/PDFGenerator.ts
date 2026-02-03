@@ -15,6 +15,7 @@ interface PDFGeneratorOptions {
   includePageNumbers?: boolean;
   quality?: "low" | "medium" | "high";
   useVietnameseNormalization?: boolean;
+  userAvatar?: string;
   branding?: {
     logo?: string;
     companyName?: string;
@@ -943,7 +944,10 @@ export async function downloadLearningReportPDF(
     options?.filename ||
     `bao-cao-hoc-tap-${report.studentName?.replace(/\s+/g, "-") || "student"}-${new Date().toISOString().split("T")[0]}`;
 
-  await downloadVietnamesePDF(report, { filename });
+  await downloadVietnamesePDF(report, { 
+    filename,
+    userAvatar: options?.userAvatar
+  });
 }
 
 /**

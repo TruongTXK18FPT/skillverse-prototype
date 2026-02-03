@@ -41,7 +41,10 @@ export interface UserDto {
   id: number;
   email: string;
   fullName: string;
-  avatarUrl?: string; // User avatar/profile picture URL
+  avatarUrl?: string; // User avatar/profile picture URL (legacy)
+  avatarMediaUrl?: string; // New field from backend
+  avatarMediaId?: number;
+  avatarPosition?: string;
   roles: string[];
   authProvider: string; // 'LOCAL' or 'GOOGLE'
   googleLinked: boolean; // Whether user has linked Google account
