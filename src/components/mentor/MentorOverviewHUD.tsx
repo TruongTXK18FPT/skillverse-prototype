@@ -83,9 +83,6 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
     try {
       // First, get mentor profile to get mentor ID
       const mentorProfile = await getMyMentorProfile();
-      console.log("🔍 MentorProfile response:", mentorProfile);
-      console.log("📊 ratingAverage:", mentorProfile.ratingAverage);
-      console.log("📊 ratingCount:", mentorProfile.ratingCount);
 
       // Fetch all data in parallel
       const [
@@ -182,8 +179,6 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
       // Use real rating data from SkillTab
       const totalReviews = skillTabData.totalReviews || 0;
       const fiveStarCount = skillTabData.fiveStarCount || 0;
-      console.log("📊 SkillTab totalReviews:", totalReviews);
-      console.log("📊 SkillTab fiveStarCount:", fiveStarCount);
 
       // Calculate average rating
       // If mentorProfile.ratingAverage is 0 but we have reviews, calculate from fiveStarCount
@@ -194,15 +189,6 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
         // Estimate: If all reviews are 5 stars, rating is 5.0
         avgRating = totalReviews > 0 ? (fiveStarCount / totalReviews) * 5 : 0;
       }
-
-      console.log(
-        "⭐ Final avgRating:",
-        avgRating,
-        "from mentorProfile.ratingAverage:",
-        mentorProfile.ratingAverage,
-        "calculated from SkillTab:",
-        totalReviews > 0 ? (fiveStarCount / totalReviews) * 5 : 0,
-      );
 
       // Simple distribution: we know exact 5-star count, estimate others
       const fiveStarPercent =

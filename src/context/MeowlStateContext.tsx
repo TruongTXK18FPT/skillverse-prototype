@@ -87,12 +87,6 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
           const userProfile = await userService.getMyProfile();
           const role = userProfile.roles?.[0] || null;
           setUserRole(role);
-          console.log(
-            "✅ User role loaded from API:",
-            role,
-            "Full profile:",
-            userProfile,
-          );
         } catch (error) {
           console.error(
             "Failed to get user role from API, checking localStorage:",
@@ -104,12 +98,6 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
             const user = JSON.parse(userStr);
             const role = user.roles?.[0] || null;
             setUserRole(role);
-            console.log(
-              "✅ User role from localStorage:",
-              role,
-              "Full user:",
-              user,
-            );
           } else {
             setUserRole(null);
           }
@@ -140,16 +128,8 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
       ["RECRUITER", "MENTOR", "ADMIN"].includes(userRole.toUpperCase())
     ) {
       setHasCheckedInToday(true); // Always true for these roles
-      console.log(
-        "✅ Role exempt from check-in:",
-        userRole,
-        "Upper:",
-        userRole.toUpperCase(),
-      );
       return;
     }
-
-    console.log("⚠️ Role NOT exempt, checking attendance API:", userRole);
 
     try {
       const status = await streakService.hasCheckedInToday();
@@ -204,18 +184,9 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
       const isExemptRole =
         userRole &&
         ["RECRUITER", "MENTOR", "ADMIN"].includes(userRole.toUpperCase());
-      console.log(
-        "🔍 Calculating state - userRole:",
-        userRole,
-        "isExemptRole:",
-        isExemptRole,
-        "hasCheckedInToday:",
-        hasCheckedInToday,
-      );
       if (isExemptRole) {
         // For exempt roles, never show lose-streak state
         setMeowlState("active");
-        console.log("✅ Exempt role - meowl always active:", userRole);
         return;
       }
 

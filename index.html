@@ -2,29 +2,73 @@
 <html lang="vi">
   <head>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJS4L7JPGZ"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-SJS4L7JPGZ"
+    ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-      gtag('config', 'G-SJS4L7JPGZ');
+      gtag("config", "G-SJS4L7JPGZ");
     </script>
     <script>
       // Polyfill for sockjs-client
       window.global = window;
     </script>
-    
+
+    <script>
+      // Suppress Facebook SDK errors in console
+      (function () {
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        const isFacebookError = (args) => {
+          const msg = args.map(arg => String(arg)).join(' ');
+          return (
+            msg.includes("ErrorUtils caught an error") ||
+            (msg.includes("Could not find element") && msg.includes("Caught in: Module")) ||
+            msg.includes("fburl.com/debugjs")
+          );
+        };
+
+        console.error = function (...args) {
+          if (isFacebookError(args)) return;
+          originalError.apply(console, args);
+        };
+
+        console.warn = function (...args) {
+          if (isFacebookError(args)) return;
+          originalWarn.apply(console, args);
+        };
+      })();
+    </script>
+
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./public/favicon.webp" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="google-site-verification" content="nMhd0MLE0weetWQrKLQfBXxCO0XSKRlQfh5bsZiNPj4" />
-  <title>Skillverse - Hệ sinh thái học tập & làm việc tích hợp</title>
-  <meta name="description" content="Nền tảng tích hợp định hướng nghề nghiệp, đào tạo kỹ năng và cơ hội việc làm cho sinh viên Việt Nam" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="google-site-verification"
+      content="nMhd0MLE0weetWQrKLQfBXxCO0XSKRlQfh5bsZiNPj4"
+    />
+    <title>Skillverse - Hệ sinh thái học tập & làm việc tích hợp</title>
+    <meta
+      name="description"
+      content="Nền tảng tích hợp định hướng nghề nghiệp, đào tạo kỹ năng và cơ hội việc làm cho sinh viên Việt Nam"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="root"></div>

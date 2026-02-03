@@ -110,7 +110,7 @@ const Footer = () => {
             <h3 className="footer-title">Facebook</h3>
             <div className="facebook-embed-tech">
               <iframe
-                src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D61581184190711&tabs=timeline&width=500&height=280&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
+                src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D61581184190711&tabs=timeline&width=500&height=280&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true"
                 width="100%"
                 height="280"
                 style={{ border: 'none', overflow: 'hidden', borderRadius: '12px' }}
