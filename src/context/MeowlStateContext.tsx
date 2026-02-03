@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { streakService } from "../services/streakService";
 import authService from "../services/authService";
+import userService from "../services/userService";
 
 // Import special state images
 import meowlLoseStreak from "../assets/streak/meowl-losestreak.png";
@@ -58,6 +59,7 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
   });
   const [meowlState, setMeowlState] = useState<MeowlState>("active");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   // Check-in success modal state
   const [showCheckInSuccessModal, setShowCheckInSuccessModal] =
@@ -73,16 +75,53 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
     setShowCheckInSuccessModal(false);
   }, []);
 
-  // Check authentication status
+  // Check authentication status and user role
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = async () => {
       const authenticated = authService.isAuthenticated();
       setIsAuthenticated(authenticated);
+
+      // Get user role if authenticated
+      if (authenticated) {
+        try {
+          const userProfile = await userService.getMyProfile();
+          const role = userProfile.roles?.[0] || null;
+          setUserRole(role);
+          console.log(
+            "✅ User role loaded from API:",
+            role,
+            "Full profile:",
+            userProfile,
+          );
+        } catch (error) {
+          console.error(
+            "Failed to get user role from API, checking localStorage:",
+            error,
+          );
+          // Fallback: get role from localStorage if API fails
+          const userStr = localStorage.getItem("user");
+          if (userStr) {
+            const user = JSON.parse(userStr);
+            const role = user.roles?.[0] || null;
+            setUserRole(role);
+            console.log(
+              "✅ User role from localStorage:",
+              role,
+              "Full user:",
+              user,
+            );
+          } else {
+            setUserRole(null);
+          }
+        }
+      } else {
+        setUserRole(null);
+      }
     };
     checkAuth();
 
     // Listen for auth changes
-    const interval = setInterval(checkAuth, 1000);
+    const interval = setInterval(checkAuth, 5000); // Check every 5 seconds
     return () => clearInterval(interval);
   }, []);
 
@@ -93,6 +132,25 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
       setHasCheckedInToday(true); // Default to true if not logged in
       return;
     }
+
+    // RECRUITER (BUSINESS), MENTOR, ADMIN roles are EXEMPT from daily check-in requirement
+    // Only USER role needs to check in
+    if (
+      userRole &&
+      ["RECRUITER", "MENTOR", "ADMIN"].includes(userRole.toUpperCase())
+    ) {
+      setHasCheckedInToday(true); // Always true for these roles
+      console.log(
+        "✅ Role exempt from check-in:",
+        userRole,
+        "Upper:",
+        userRole.toUpperCase(),
+      );
+      return;
+    }
+
+    console.log("⚠️ Role NOT exempt, checking attendance API:", userRole);
+
     try {
       const status = await streakService.hasCheckedInToday();
       setHasCheckedInToday(status);
@@ -100,7 +158,7 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
       console.error("Failed to check attendance status:", error);
       // On error, don't change state to avoid showing wrong image
     }
-  }, []);
+  }, [userRole]);
 
   // Immediately mark as checked in (for instant UI update after check-in)
   const markCheckedIn = useCallback(() => {
@@ -142,7 +200,26 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
         return;
       }
 
-      // Priority 1: If user hasn't checked in today, show lose-streak (frozen)
+      // RECRUITER (BUSINESS), MENTOR, ADMIN are EXEMPT from check-in requirement
+      const isExemptRole =
+        userRole &&
+        ["RECRUITER", "MENTOR", "ADMIN"].includes(userRole.toUpperCase());
+      console.log(
+        "🔍 Calculating state - userRole:",
+        userRole,
+        "isExemptRole:",
+        isExemptRole,
+        "hasCheckedInToday:",
+        hasCheckedInToday,
+      );
+      if (isExemptRole) {
+        // For exempt roles, never show lose-streak state
+        setMeowlState("active");
+        console.log("✅ Exempt role - meowl always active:", userRole);
+        return;
+      }
+
+      // Priority 1: If user (USER role only) hasn't checked in today, show lose-streak (frozen)
       if (!hasCheckedInToday) {
         setMeowlState("lose-streak");
         return;
@@ -164,7 +241,7 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
     const stateInterval = setInterval(calculateState, 60 * 1000);
 
     return () => clearInterval(stateInterval);
-  }, [hasCheckedInToday, lastInteractionTime, isAuthenticated]);
+  }, [hasCheckedInToday, lastInteractionTime, isAuthenticated, userRole]); // Added userRole dependency
 
   // Determine which image to use (null means use the skin image from MeowlSkinContext)
   const getStateImage = (): string | null => {

@@ -1,4 +1,4 @@
-import { axiosInstance } from './axiosInstance';
+import { axiosInstance } from "./axiosInstance";
 
 export interface MentorProfile {
   id: number;
@@ -58,6 +58,7 @@ export interface SkillTabResponseDTO {
   nextLevelPoints: number;
   sessionsCompleted: number;
   fiveStarCount: number;
+  totalReviews: number;
   courseSales: number;
   revenueVnd: number;
   badges: SkillTabBadgeInfo[];
@@ -69,10 +70,10 @@ export interface SkillTabResponseDTO {
  */
 export const getAllMentors = async (): Promise<MentorProfile[]> => {
   try {
-    const response = await axiosInstance.get<MentorProfile[]>('/api/mentors');
+    const response = await axiosInstance.get<MentorProfile[]>("/api/mentors");
     return response.data;
   } catch (error) {
-    console.error('Error fetching all mentors:', error);
+    console.error("Error fetching all mentors:", error);
     throw error;
   }
 };
@@ -83,10 +84,12 @@ export const getAllMentors = async (): Promise<MentorProfile[]> => {
  */
 export const getMyMentorProfile = async (): Promise<MentorProfile> => {
   try {
-    const response = await axiosInstance.get<MentorProfile>('/api/mentors/profile');
+    const response = await axiosInstance.get<MentorProfile>(
+      "/api/mentors/profile",
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching my mentor profile:', error);
+    console.error("Error fetching my mentor profile:", error);
     throw error;
   }
 };
@@ -95,32 +98,42 @@ export const getMyMentorProfile = async (): Promise<MentorProfile> => {
  * Get mentor profile by ID
  * GET /api/mentors/{mentorId}/profile
  */
-export const getMentorProfile = async (mentorId: number): Promise<MentorProfile> => {
+export const getMentorProfile = async (
+  mentorId: number,
+): Promise<MentorProfile> => {
   try {
-    const response = await axiosInstance.get<MentorProfile>(`/api/mentors/${mentorId}/profile`);
+    const response = await axiosInstance.get<MentorProfile>(
+      `/api/mentors/${mentorId}/profile`,
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching mentor profile:', error);
+    console.error("Error fetching mentor profile:", error);
     throw error;
   }
 };
 
 export const getMySkillTab = async (): Promise<SkillTabResponseDTO> => {
   try {
-    const response = await axiosInstance.get<SkillTabResponseDTO>('/api/mentors/skilltab');
+    const response = await axiosInstance.get<SkillTabResponseDTO>(
+      "/api/mentors/skilltab",
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching my mentor skilltab:', error);
+    console.error("Error fetching my mentor skilltab:", error);
     throw error;
   }
 };
 
-export const getMentorSkillTab = async (mentorId: number): Promise<SkillTabResponseDTO> => {
+export const getMentorSkillTab = async (
+  mentorId: number,
+): Promise<SkillTabResponseDTO> => {
   try {
-    const response = await axiosInstance.get<SkillTabResponseDTO>(`/api/mentors/${mentorId}/skilltab`);
+    const response = await axiosInstance.get<SkillTabResponseDTO>(
+      `/api/mentors/${mentorId}/skilltab`,
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching mentor skilltab:', error);
+    console.error("Error fetching mentor skilltab:", error);
     throw error;
   }
 };
@@ -130,16 +143,16 @@ export const getMentorSkillTab = async (mentorId: number): Promise<SkillTabRespo
  * PUT /api/mentors/profile
  */
 export const updateMyMentorProfile = async (
-  profileData: MentorProfileUpdateDTO
+  profileData: MentorProfileUpdateDTO,
 ): Promise<MentorProfile> => {
   try {
     const response = await axiosInstance.put<MentorProfile>(
-      '/api/mentors/profile',
-      profileData
+      "/api/mentors/profile",
+      profileData,
     );
     return response.data;
   } catch (error) {
-    console.error('Error updating my mentor profile:', error);
+    console.error("Error updating my mentor profile:", error);
     throw error;
   }
 };
@@ -150,16 +163,16 @@ export const updateMyMentorProfile = async (
  */
 export const updateMentorProfile = async (
   mentorId: number,
-  profileData: MentorProfileUpdateDTO
+  profileData: MentorProfileUpdateDTO,
 ): Promise<MentorProfile> => {
   try {
     const response = await axiosInstance.put<MentorProfile>(
       `/api/mentors/${mentorId}/profile`,
-      profileData
+      profileData,
     );
     return response.data;
   } catch (error) {
-    console.error('Error updating mentor profile:', error);
+    console.error("Error updating mentor profile:", error);
     throw error;
   }
 };
@@ -169,19 +182,19 @@ export const updateMentorProfile = async (
  * POST /api/mentors/avatar
  */
 export const uploadMyMentorAvatar = async (
-  file: File
+  file: File,
 ): Promise<{ avatarUrl: string }> => {
   try {
     const formData = new FormData();
-    formData.append('file', file);
-    
+    formData.append("file", file);
+
     const response = await axiosInstance.post<{ avatarUrl: string }>(
-      '/api/mentors/avatar',
-      formData
+      "/api/mentors/avatar",
+      formData,
     );
     return response.data;
   } catch (error) {
-    console.error('Error uploading my mentor avatar:', error);
+    console.error("Error uploading my mentor avatar:", error);
     throw error;
   }
 };
@@ -192,19 +205,19 @@ export const uploadMyMentorAvatar = async (
  */
 export const uploadMentorAvatar = async (
   mentorId: number,
-  file: File
+  file: File,
 ): Promise<{ avatarUrl: string }> => {
   try {
     const formData = new FormData();
-    formData.append('file', file);
-    
+    formData.append("file", file);
+
     const response = await axiosInstance.post<{ avatarUrl: string }>(
       `/api/mentors/${mentorId}/avatar`,
-      formData
+      formData,
     );
     return response.data;
   } catch (error) {
-    console.error('Error uploading mentor avatar:', error);
+    console.error("Error uploading mentor avatar:", error);
     throw error;
   }
 };
@@ -217,7 +230,7 @@ export const setPreChatEnabled = async (enabled: boolean): Promise<void> => {
   try {
     await axiosInstance.put(`/api/mentors/prechat-enabled?enabled=${enabled}`);
   } catch (error) {
-    console.error('Error setting pre-chat enabled:', error);
+    console.error("Error setting pre-chat enabled:", error);
     throw error;
   }
 };
@@ -226,12 +239,16 @@ export const setPreChatEnabled = async (enabled: boolean): Promise<void> => {
  * Toggle favorite status for a mentor
  * POST /api/favorites/toggle/{mentorId}
  */
-export const toggleFavoriteMentor = async (mentorId: number): Promise<boolean> => {
+export const toggleFavoriteMentor = async (
+  mentorId: number,
+): Promise<boolean> => {
   try {
-    const response = await axiosInstance.post<{ isFavorite: boolean }>(`/api/favorites/toggle/${mentorId}`);
+    const response = await axiosInstance.post<{ isFavorite: boolean }>(
+      `/api/favorites/toggle/${mentorId}`,
+    );
     return response.data.isFavorite;
   } catch (error) {
-    console.error('Error toggling favorite mentor:', error);
+    console.error("Error toggling favorite mentor:", error);
     throw error;
   }
 };
@@ -242,10 +259,43 @@ export const toggleFavoriteMentor = async (mentorId: number): Promise<boolean> =
  */
 export const getMyFavoriteMentors = async (): Promise<MentorProfile[]> => {
   try {
-    const response = await axiosInstance.get<MentorProfile[]>('/api/favorites/me');
+    const response =
+      await axiosInstance.get<MentorProfile[]>("/api/favorites/me");
     return response.data;
   } catch (error) {
-    console.error('Error fetching favorite mentors:', error);
+    console.error("Error fetching favorite mentors:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get total students count for current mentor across all courses
+ * GET /api/mentors/stats/total-students
+ */
+export const getMyTotalStudents = async (): Promise<number> => {
+  try {
+    const response = await axiosInstance.get<{ totalStudents: number }>(
+      "/api/mentors/stats/total-students",
+    );
+    return response.data.totalStudents;
+  } catch (error) {
+    console.error("Error fetching total students:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get total students count for mentor by ID across all courses
+ * GET /api/mentors/{mentorId}/stats/total-students
+ */
+export const getTotalStudents = async (mentorId: number): Promise<number> => {
+  try {
+    const response = await axiosInstance.get<{ totalStudents: number }>(
+      `/api/mentors/${mentorId}/stats/total-students`,
+    );
+    return response.data.totalStudents;
+  } catch (error) {
+    console.error("Error fetching total students:", error);
     throw error;
   }
 };

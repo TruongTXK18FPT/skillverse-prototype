@@ -120,7 +120,7 @@ const Header: React.FC = () => {
       description: "Khám phá các khóa học chất lượng cao",
       path: "/courses",
       icon: GraduationCap,
-      hideForRoles: ["BUSINESS"],
+      hideForRoles: ["RECRUITER"],
     },
     {
       name: "Lộ Trình Học Tập",
@@ -139,7 +139,7 @@ const Header: React.FC = () => {
       description: "Kết nối với chuyên gia trong ngành",
       path: "/mentorship",
       icon: Users,
-      hideForRoles: ["MENTOR", "BUSINESS"],
+      hideForRoles: ["MENTOR", "RECRUITER"],
     },
     {
       name: "Cộng Đồng",
@@ -159,7 +159,7 @@ const Header: React.FC = () => {
       description: "Quản lý và chia sẻ thành tích của bạn",
       path: "/portfolio",
       icon: User,
-      hideForRoles: ["BUSINESS"],
+      hideForRoles: ["RECRUITER"],
     },
     {
       name: "Trợ Lý AI",
@@ -172,7 +172,7 @@ const Header: React.FC = () => {
       description: "Bảng xếp hạng, huy hiệu và mini-games",
       path: "/gamification",
       icon: Trophy,
-      hideForRoles: ["MENTOR", "BUSINESS"],
+      hideForRoles: ["MENTOR", "RECRUITER"],
     },
     // {
     //   name: 'Hướng Dẫn',
@@ -191,7 +191,7 @@ const Header: React.FC = () => {
       description: "Cửa hàng Skin Neon Tech độc quyền",
       path: "/meowl-shop",
       icon: ShoppingBag,
-      hideForRoles: ["MENTOR", "BUSINESS"],
+      hideForRoles: ["MENTOR", "RECRUITER"],
     },
     // {
     //   name: 'Cầu Nguyện',
@@ -462,7 +462,7 @@ const Header: React.FC = () => {
 
                   {/* Group 1: Primary Actions */}
                   {/* Hide for BUSINESS role */}
-                  {!user?.roles.includes("BUSINESS") && (
+                  {!user?.roles.includes("RECRUITER") && (
                     <div className="sv-mega-section">
                       <h4 className="sv-mega-section-title">
                         <Target size={14} className="sv-section-icon" />
@@ -568,14 +568,14 @@ const Header: React.FC = () => {
                           description: "Khám phá các khóa học chất lượng cao",
                           path: "/courses",
                           icon: GraduationCap,
-                          hideForRoles: ["BUSINESS"],
+                          hideForRoles: ["RECRUITER"],
                         },
                         {
                           name: "Cố Vấn",
                           description: "Kết nối với chuyên gia trong ngành",
                           path: "/mentorship",
                           icon: Users,
-                          hideForRoles: ["MENTOR", "BUSINESS"],
+                          hideForRoles: ["MENTOR", "RECRUITER"],
                         },
                         {
                           name: "Cộng Đồng",
@@ -631,14 +631,14 @@ const Header: React.FC = () => {
                           description: "Quản lý và chia sẻ thành tích của bạn",
                           path: "/portfolio",
                           icon: User,
-                          hideForRoles: ["BUSINESS"],
+                          hideForRoles: ["RECRUITER"],
                         },
                         {
                           name: "Trò Chơi",
                           description: "Bảng xếp hạng, huy hiệu và mini-games",
                           path: "/gamification",
                           icon: Trophy,
-                          hideForRoles: ["MENTOR", "BUSINESS"],
+                          hideForRoles: ["MENTOR", "RECRUITER"],
                         },
                         {
                           name: "Hội Thảo",
@@ -651,7 +651,7 @@ const Header: React.FC = () => {
                           description: "Cửa hàng Skin Neon Tech độc quyền",
                           path: "/meowl-shop",
                           icon: ShoppingBag,
-                          hideForRoles: ["MENTOR", "BUSINESS"],
+                          hideForRoles: ["MENTOR", "RECRUITER"],
                         },
                       ]
                         .filter(

@@ -314,10 +314,10 @@ const App = () => {
                           element={<CourseLearningPage />}
                         />
                         <Route
-                        path="/assignment/:assignmentId"
-                        element={<AssignmentPage />}
-                      />
-                      <Route
+                          path="/assignment/:assignmentId"
+                          element={<AssignmentPage />}
+                        />
+                        <Route
                           path="/quiz/:quizId/attempt"
                           element={<QuizAttemptPage />}
                         />
@@ -377,14 +377,14 @@ const App = () => {
                           }
                         />
                         <Route
-                        path="/mentor/assignments/:assignmentId/grade"
-                        element={
-                          <MentorRoute>
-                            <MentorGradingPage />
-                          </MentorRoute>
-                        }
-                      />
-                      <Route
+                          path="/mentor/assignments/:assignmentId/grade"
+                          element={
+                            <MentorRoute>
+                              <MentorGradingPage />
+                            </MentorRoute>
+                          }
+                        />
+                        <Route
                           path="/admin"
                           element={
                             <AdminRoute>
@@ -475,6 +475,7 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/notifications",
   "/messages",
   "/premium",
+  "/mentor",
 ]);
 
 // Check if path matches quiz attempt pattern
