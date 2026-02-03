@@ -243,16 +243,20 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
         )}
 
         {/* Active Simulations (Current Courses) */}
-        <ActiveModules
-          courses={recentCourses}
-          title="Active Simulations"
-          onCourseClick={handleCourseClick}
-          continueLabel={translations?.dashboard?.continue || "Tiếp tục học"}
-          onJoinGroup={onJoinGroup}
-        />
+        <div id="modules-section">
+          <ActiveModules
+            courses={recentCourses}
+            title="Active Simulations"
+            onCourseClick={handleCourseClick}
+            continueLabel={translations?.dashboard?.continue || "Tiếp tục học"}
+            onJoinGroup={onJoinGroup}
+          />
+        </div>
 
         {/* Favorite Mentors */}
-        <FavoriteMentors mentors={favoriteMentors} />
+        <div id="mentors-section">
+          <FavoriteMentors mentors={favoriteMentors} />
+        </div>
       </div>
 
       {/* Learning Report Modal */}

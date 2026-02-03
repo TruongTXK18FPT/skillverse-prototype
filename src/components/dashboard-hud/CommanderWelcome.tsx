@@ -15,6 +15,7 @@ import {
   BarChart2,
   BookOpen,
   TrendingUp,
+  Users,
 } from "lucide-react";
 import "./CommanderWelcome.css";
 
@@ -64,9 +65,24 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
   roadmapCount = 0,
   courseCount = 0,
 }) => {
-  // Keep _hasCourses for future use
   void _hasCourses;
   const navigate = useNavigate();
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 100; // Khoảng cách offset để không bị che bởi header
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
 
   const totalOverdue = taskSummary.criticalOverdue + taskSummary.overdue;
   const totalTasks = totalOverdue + taskSummary.pending;
@@ -200,6 +216,42 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
           </h1>
 
           <p className="commander-welcome__subtitle">{subtitle}</p>
+
+          {/* Quick Jump Links */}
+          <div className="commander-welcome__jump-links">
+            <button
+              onClick={() => scrollToSection("learning-streak-section")}
+              className="commander-welcome__jump-btn"
+              title="Xem tình trạng hệ thống"
+            >
+              <Zap size={14} />
+              <span>Trạng thái hệ thống</span>
+            </button>
+            <button
+              onClick={() => scrollToSection("study-plan-section")}
+              className="commander-welcome__jump-btn"
+              title="Xem lộ trình học tập"
+            >
+              <TrendingUp size={14} />
+              <span>Chiến lược học tập</span>
+            </button>
+            <button
+              onClick={() => scrollToSection("modules-section")}
+              className="commander-welcome__jump-btn"
+              title="Xem các khóa học"
+            >
+              <BookOpen size={14} />
+              <span>Khóa học đang học</span>
+            </button>
+            <button
+              onClick={() => scrollToSection("mentors-section")}
+              className="commander-welcome__jump-btn"
+              title="Xem mentors yêu thích"
+            >
+              <Users size={14} />
+              <span>Cố vấn yêu thích</span>
+            </button>
+          </div>
         </div>
 
         {/* Center Section - Task Panel */}
@@ -284,7 +336,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
               </div>
             )}
 
-            {/* Task List */}
+            {/* Task List
             {topTasks.length > 0 && (
               <div className="commander-welcome__task-list">
                 {topTasks.map((task, index) => (
@@ -315,7 +367,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
                   </div>
                 ))}
               </div>
-            )}
+            )} */}
 
             {/* Suggestions */}
             <div className="commander-welcome__suggestions">
@@ -370,30 +422,6 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
               </button>
             </div>
           </div>
-        </div>
-
-        {/* Right Section - Premium */}
-        <div className="commander-welcome__right">
-          {!hasPremium && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="commander-welcome__premium-card"
-              onClick={() => navigate("/premium")}
-            >
-              <Crown size={16} />
-              <div className="commander-welcome__premium-info">
-                <span className="commander-welcome__premium-title">
-                  Premium
-                </span>
-                <span className="commander-welcome__premium-desc">
-                  Nâng cấp ngay
-                </span>
-              </div>
-              <ChevronRight size={14} />
-            </motion.div>
-          )}
         </div>
       </div>
 

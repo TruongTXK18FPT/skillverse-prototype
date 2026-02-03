@@ -215,6 +215,61 @@
   letter-spacing: 1px;
 }
 
+/* ========== QUICK JUMP LINKS ========== */
+
+.commander-welcome__jump-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.commander-welcome__jump-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  background: rgba(6, 182, 212, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 4px;
+  color: #94a3b8;
+  font-family: 'Inter', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.commander-welcome__jump-btn:hover {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: rgba(6, 182, 212, 0.5);
+  color: #06b6d4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.1);
+}
+
+.commander-welcome__jump-btn svg {
+  color: #06b6d4;
+  opacity: 0.8;
+}
+
+.commander-welcome--premium .commander-welcome__jump-btn {
+  background: rgba(168, 85, 247, 0.05);
+  border-color: rgba(168, 85, 247, 0.2);
+}
+
+.commander-welcome--premium .commander-welcome__jump-btn:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.5);
+  color: #a855f7;
+}
+
+.commander-welcome--premium .commander-welcome__jump-btn svg {
+  color: #a855f7;
+}
+
 /* ========== ID CARD ========== */
 
 .commander-welcome__id-card {

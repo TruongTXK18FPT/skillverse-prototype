@@ -23,7 +23,8 @@ import {
   Code,
   PenTool,
   X,
-  AlertTriangle
+  AlertTriangle,
+  Menu
 } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
@@ -54,6 +55,10 @@ import StudentManagementTab from '../../components/course/StudentManagementTab';
 import { createGroup, getGroupByCourse, updateGroup, GroupChatResponse } from '../../services/groupChatService';
 import CreateGroupModal from '../../components/course/CreateGroupModal';
 import BulkAddForm from '../../components/quiz/BulkAddForm';
+import MentorSidebar from '../../components/mentor/MentorSidebar';
+import MentorOverviewHUD from '../../components/mentor/MentorOverviewHUD';
+import EarningsTab from '../../components/mentor/EarningsTab';
+import MentorProfilePage from '../mentor/MentorProfilePage';
 
 // Types for mentor dashboard data
 export interface Booking {
@@ -276,15 +281,29 @@ const MentorPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const locationState = location.state as { activeTab?: string } | null;
-  const [activeTab, setActiveTab] = useState<string>(locationState?.activeTab || 'courses');
+  const [activeTab, setActiveTab] = useState<string>(locationState?.activeTab || 'overview');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [showCreateCourse, setShowCreateCourse] = useState(false);
   const [showCourseDetail, setShowCourseDetail] = useState(false);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(false);
+  const [overviewLoading, setOverviewLoading] = useState(false);
   const [activeContentTab, setActiveContentTab] = useState<string>('lessons');
   const [error, setError] = useState<string | null>(null);
+
+  // Simulated effect for Overview Loading (Backend Readiness)
+  useEffect(() => {
+    if (activeTab === 'overview') {
+      setOverviewLoading(true);
+      const timer = setTimeout(() => {
+        setOverviewLoading(false);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [activeTab]);
 
   // Modules state for selected course
   const [modules, setModules] = useState<ModuleItem[]>([]);
@@ -1294,13 +1313,6 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
           <h2>QUẢN LÝ KHÓA HỌC</h2>
           <p>Quản lý và tạo mới các khóa học</p>
         </div>
-        <button
-          className="mentor-hud-create-button"
-          onClick={() => setShowCreateCourse(true)}
-        >
-          <Plus className="w-5 h-5" />
-          Tạo Khóa Học Mới
-        </button>
       </div>
 
       {/* Loading State */}
@@ -1342,8 +1354,22 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
       )}
 
       {/* Courses Grid */}
-      {!loading && !error && courses.length > 0 && (
+      {!loading && !error && (
         <div className="mentor-hud-courses__grid">
+          {/* Create New Course Card */}
+          <div 
+            className="mentor-hud-course-card mentor-hud-course-card--create"
+            onClick={() => setShowCreateCourse(true)}
+          >
+            <div className="mentor-hud-course-card--create-content">
+              <div className="create-icon-wrapper">
+                <Plus className="w-8 h-8" />
+              </div>
+              <h3>Tạo Khóa Học Mới</h3>
+              <p>Bắt đầu xây dựng lộ trình tri thức của bạn</p>
+            </div>
+          </div>
+
           {courses.map((course) => (
           <div key={course.id} className="mentor-hud-course-card">
             <div className="mentor-hud-course-thumbnail">
@@ -1935,12 +1961,37 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
 
   const renderActiveTab = () => {
     switch (activeTab) {
+      case 'overview':
+        return (
+          <MentorOverviewHUD 
+            loading={overviewLoading}
+            stats={{
+              totalStudents: courses.reduce((sum, c) => sum + (c.enrollmentCount || 0), 0),
+              rating: 4.8, 
+              monthEarnings: 15400000, 
+              pendingGrading: 3,
+              pendingBookings: 2
+            }}
+            nextClass={null} // Dễ dàng thay thế bằng data từ BE sau này
+            onNavigate={(tab) => setActiveTab(tab)}
+          />
+        );
       case 'courses':
         return renderCoursesTab();
       case 'bookings':
         return <MentorBookingManager />;
       case 'schedule':
-        return <MentorScheduleManager />;
+        return (
+          <div className="mentor-combined-schedule">
+            <MentorScheduleManager />
+            <div className="mentor-schedule-divider">
+              <div className="divider-line"></div>
+              <span>QUẢN LÝ ĐẶT LỊCH</span>
+              <div className="divider-line"></div>
+            </div>
+            <MentorBookingManager />
+          </div>
+        );
       case 'skillpoints':
         return <SkillPointsTab />;
       case 'reviews':
@@ -1949,6 +2000,10 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
         return <MentoringHistoryTab />;
       case 'grading':
         return <MentorGradingDashboard courses={courses} />;
+      case 'profile':
+        return <MentorProfilePage />;
+      case 'earnings':
+        return <EarningsTab />;
       default:
         return (
           <div className="mentor-hud-default-tab">
@@ -1960,45 +2015,57 @@ const [selectedLessonType, setSelectedLessonType] = useState<ApiLessonType>(ApiL
   };
 
   return (
-    <div className="mentor-hud-dashboard">
-      <div className="mentor-hud-dashboard__container">
-        <div className="mentor-hud-header">
-          <div className="mentor-hud-header__content">
-            <div className="mentor-hud-header__status">
-              <div className="mentor-hud-header__status-dot"></div>
-              <span className="mentor-hud-header__status-text">TRỰC TUYẾN</span>
+    <div className={`mentor-dashboard-layout ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+      <MentorSidebar 
+        activeTab={activeTab} 
+        setActiveTab={(tab) => {
+          setActiveTab(tab);
+          setIsMobileMenuOpen(false);
+        }}
+        isCollapsed={isSidebarCollapsed}
+        setIsCollapsed={setIsSidebarCollapsed}
+        isMobileOpen={isMobileMenuOpen}
+        pendingGradingCount={3}
+      />
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="mentor-sidebar-overlay" 
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+      
+      <main className="mentor-content-area">
+        <div className="mentor-hud-dashboard__container">
+          <div className="mentor-hud-header">
+            <button 
+              className="mentor-mobile-toggle"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <Menu size={24} />
+            </button>
+            <div className="mentor-hud-header__content">
+              <div className="mentor-hud-header__status">
+                <div className="mentor-hud-header__status-dot"></div>
+                <span className="mentor-hud-header__status-text">TRỰC TUYẾN</span>
+              </div>
+              <h1 className="mentor-hud-header__title">
+                MENTOR <span className="mentor-hud-header__title-accent">BẢNG ĐIỀU KHIỂN</span>
+              </h1>
+              <p className="mentor-hud-header__subtitle">Quản lý hoạt động hướng dẫn và theo dõi tác động của bạn</p>
             </div>
-            <h1 className="mentor-hud-header__title">
-              MENTOR <span className="mentor-hud-header__title-accent">BẢNG ĐIỀU KHIỂN</span>
-            </h1>
-            <p className="mentor-hud-header__subtitle">Quản lý hoạt động hướng dẫn và theo dõi tác động của bạn</p>
+            <div className="mentor-hud-header__corner mentor-hud-header__corner--tl"></div>
+            <div className="mentor-hud-header__corner mentor-hud-header__corner--tr"></div>
+            <div className="mentor-hud-header__corner mentor-hud-header__corner--bl"></div>
+            <div className="mentor-hud-header__corner mentor-hud-header__corner--br"></div>
           </div>
-          <div className="mentor-hud-header__corner mentor-hud-header__corner--tl"></div>
-          <div className="mentor-hud-header__corner mentor-hud-header__corner--tr"></div>
-          <div className="mentor-hud-header__corner mentor-hud-header__corner--bl"></div>
-          <div className="mentor-hud-header__corner mentor-hud-header__corner--br"></div>
-        </div>
 
-        <div className="mentor-hud-navigation">
-          {tabs.map((tab) => {
-            const IconComponent = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                className={`mentor-hud-tab ${activeTab === tab.id ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab.id)}
-              >
-                <IconComponent className="mentor-hud-tab__icon" />
-                <span className="mentor-hud-tab__label">{tab.label}</span>
-              </button>
-            );
-          })}
+          <div className="mentor-hud-content">
+            {renderActiveTab()}
+          </div>
         </div>
-
-        <div className="mentor-hud-content">
-          {renderActiveTab()}
-        </div>
-      </div>
+      </main>
 
       {/* Course Creation Modal */}
       {showCreateCourse && (
