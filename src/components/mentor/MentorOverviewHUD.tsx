@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Users, 
   Star, 
@@ -8,50 +8,123 @@ import {
   AlertCircle, 
   ArrowRight,
   ChevronRight,
-  TrendingUp
+  TrendingUp,
+  BarChart
 } from 'lucide-react';
+import walletService from '../../services/walletService';
+import { useToast } from '../../hooks/useToast';
 import './MentorOverviewHUD.css';
 
 interface MentorOverviewHUDProps {
-  loading?: boolean;
-  stats?: {
-    totalStudents: number;
-    rating: number;
-    monthEarnings: number;
-    pendingGrading: number;
-    pendingBookings: number;
-  };
-  nextClass?: {
-    title: string;
-    time: string;
-    link: string;
-  } | null;
   onNavigate: (tab: string) => void;
 }
 
-const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({ 
-  loading = false,
-  stats = {
+interface MentorStats {
+  totalStudents: number;
+  rating: number;
+  monthEarnings: number;
+  pendingGrading: number;
+  pendingBookings: number;
+}
+
+interface SystemLog {
+  time: string;
+  message: string;
+  type?: 'info' | 'warning' | 'error';
+}
+
+const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({ onNavigate }) => {
+  const { showError } = useToast();
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<MentorStats>({
     totalStudents: 0,
     rating: 0,
     monthEarnings: 0,
     pendingGrading: 0,
     pendingBookings: 0
-  }, 
-  nextClass,
-  onNavigate 
-}) => {
-  if (loading) {
-    return (
-      <div className="mentor-overview mentor-overview--loading">
-        <div className="mentor-overview__loading-spinner">
-          <div className="spinner-ring"></div>
-          <span>INITIALIZING COMMAND OVERVIEW...</span>
-        </div>
-      </div>
-    );
-  }
+  });
+  const [systemLogs, setSystemLogs] = useState<SystemLog[]>([]);
 
+  useEffect(() => {
+    loadMentorOverview();
+  }, []);
+
+  const loadMentorOverview = async () => {
+    setLoading(true);
+    try {
+      // Fetch wallet statistics for earnings
+      const walletStats = await walletService.getWalletStatistics();
+      const walletData = await walletService.getMyWallet();
+      
+      // Get recent transactions for system logs
+      const recentTransactions = await walletService.getTransactions(0, 5);
+      
+      // Generate system logs from transactions
+      const logs: SystemLog[] = recentTransactions.content.map((tx) => {
+        const time = new Date(tx.createdAt).toLocaleTimeString('vi-VN', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+        
+        let message = '';
+        let type: 'info' | 'warning' | 'error' = 'info';
+        
+        if (tx.transactionType === 'EARN_FROM_SESSION') {
+          message = `Nhận thanh toán ${formatCurrency(tx.cashAmount || 0)} từ buổi học`;
+        } else if (tx.transactionType === 'EARN_FROM_COURSE') {
+          message = `Nhận thu nhập ${formatCurrency(tx.cashAmount || 0)} từ khóa học`;
+        } else if (tx.transactionType === 'DEPOSIT') {
+          message = `Nạp tiền ${formatCurrency(tx.cashAmount || 0)} thành công`;
+        } else if (tx.transactionType === 'WITHDRAWAL') {
+          message = `Rút tiền ${formatCurrency(tx.cashAmount || 0)}`;
+          type = 'warning';
+        } else {
+          message = tx.description || 'Giao dịch mới';
+        }
+        
+        return { time, message, type };
+      });
+
+      // Add default logs if no transactions
+      if (logs.length < 3) {
+        logs.push(
+          {
+            time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+            message: 'Hệ thống đồng bộ dữ liệu hoàn tất.',
+            type: 'info'
+          }
+        );
+      }
+
+      // Calculate month earnings from wallet statistics
+      // Use total deposited as month earnings approximation
+      const monthEarnings = walletStats.totalDeposited || walletData.cashBalance;
+
+      setStats({
+        totalStudents: 0, // TODO: Implement student count API
+        rating: 4.8, // TODO: Implement rating API  
+        monthEarnings: monthEarnings,
+        pendingGrading: 0, // TODO: Implement pending grading count
+        pendingBookings: 0  // TODO: Implement pending bookings count
+      });
+
+      setSystemLogs(logs);
+    } catch (error) {
+      console.error('Error loading mentor overview:', error);
+      showError('Lỗi', 'Không thể tải dữ liệu tổng quan');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+      minimumFractionDigits: 0
+    }).format(amount);
+  };
   return (
     <div className="mentor-overview">
       <div className="mentor-overview__grid">
@@ -63,26 +136,12 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
             <div className="header-status-dot pulse"></div>
           </div>
           <div className="card-body">
-            {nextClass ? (
-              <>
-                <h2>{nextClass.title}</h2>
-                <div className="class-time">
-                  <Clock size={16} />
-                  <span>Bắt đầu lúc {nextClass.time}</span>
-                </div>
-                <button className="join-class-btn">
-                  VÀO LỚP NGAY
-                  <ArrowRight size={16} />
-                </button>
-              </>
-            ) : (
-              <div className="no-class">
-                <p>Không có lớp học sắp diễn ra</p>
-                <button className="view-schedule-btn" onClick={() => onNavigate('schedule')}>
-                  Xem lịch trình
-                </button>
-              </div>
-            )}
+            <div className="no-class">
+              <p>Không có lớp học sắp diễn ra</p>
+              <button className="view-schedule-btn" onClick={() => onNavigate('schedule')}>
+                Xem lịch trình
+              </button>
+            </div>
           </div>
         </div>
 
@@ -111,38 +170,20 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
         </div>
 
         {/* Stats Summary */}
-        <div className="overview-stats-container">
-          <div className="stat-card">
-            <div className="stat-icon">
-              <Users size={24} />
-            </div>
-            <div className="stat-info">
-              <span className="stat-label">Học viên</span>
-              <span className="stat-value">{stats.totalStudents}</span>
-            </div>
-            <div className="stat-trend positive">
-              <TrendingUp size={12} />
-              <span>+12%</span>
-            </div>
+        <div className="overview-card stats-summary-card">
+          <div className="card-header">
+            <BarChart size={18} className="icon--yellow" />
+            <span>THỐNG KÊ THÁNG NÀY</span>
           </div>
-
-          <div className="stat-card">
-            <div className="stat-icon">
-              <Star size={24} />
-            </div>
-            <div className="stat-info">
-              <span className="stat-label">Đánh giá</span>
-              <span className="stat-value">{stats.rating.toFixed(1)}/5.0</span>
-            </div>
-          </div>
-
-          <div className="stat-card stat-card--highlight">
-            <div className="stat-icon">
-              <DollarSign size={24} />
-            </div>
-            <div className="stat-info">
-              <span className="stat-label">Thu nhập tháng này</span>
-              <span className="stat-value">{stats.monthEarnings.toLocaleString()} VND</span>
+          <div className="card-body">
+            <div className="stat-card stat-card--highlight">
+              <div className="stat-icon">
+                <DollarSign size={24} />
+              </div>
+              <div className="stat-info">
+                <span className="stat-label">Thu nhập tháng này</span>
+                <span className="stat-value">{formatCurrency(stats.monthEarnings)}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -152,18 +193,12 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
         <div className="system-logs">
           <h3>SYSTEM LOGS</h3>
           <div className="log-entries">
-            <div className="log-entry">
-              <span className="log-time">[10:00:24]</span>
-              <span className="log-msg">Hệ thống đồng bộ dữ liệu hoàn tất.</span>
-            </div>
-            <div className="log-entry">
-              <span className="log-time">[09:45:12]</span>
-              <span className="log-msg">Nhận thanh toán mới từ học viên Trần Văn A.</span>
-            </div>
-            <div className="log-entry warning">
-              <span className="log-time">[08:30:00]</span>
-              <span className="log-msg">Bạn có 3 bài tập sắp hết hạn chấm bài.</span>
-            </div>
+            {systemLogs.map((log, idx) => (
+              <div key={idx} className={`log-entry ${log.type !== 'info' ? log.type : ''}`}>
+                <span className="log-time">[{log.time}]</span>
+                <span className="log-msg">{log.message}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
