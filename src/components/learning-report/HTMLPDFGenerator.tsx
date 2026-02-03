@@ -83,7 +83,7 @@ function processCellContent(content: string): string {
   
   // FIX: Regex mạnh hơn cho Bảng (bắt cả xuống dòng)
   processed = processed.replace(/\*\*([\s\S]+?)\*\*/g, "<strong>$1</strong>");
-  processed = processed.replace(/\*([^\*]+)\*/g, "<em>$1</em>");
+  processed = processed.replace(/\*([^*]+)\*/g, "<em>$1</em>");
   processed = processed.replace(/`(.+?)`/g, '<code class="pdf-code-inline">$1</code>');
   
   // CLEANUP: Xóa các dấu ** thừa (nếu AI viết lỗi)
@@ -174,7 +174,7 @@ export function markdownToHTML(markdown: string): string {
 
     // Formatting - FIX: Bắt multiline và ký tự đặc biệt
     processed = processed.replace(/\*\*([\s\S]+?)\*\*/g, '<strong class="pdf-bold">$1</strong>');
-    processed = processed.replace(/\*([^\*]+)\*/g, '<em class="pdf-italic">$1</em>');
+    processed = processed.replace(/\*([^*]+)\*/g, '<em class="pdf-italic">$1</em>');
     processed = processed.replace(/`(.+?)`/g, '<code class="pdf-inline-code">$1</code>');
 
     // Lists - Improved with proper processing
