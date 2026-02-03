@@ -198,7 +198,7 @@ function parseMarkdownTable(markdown: string): string {
 export function markdownToHTML(markdown: string): string {
   if (!markdown) return "";
 
-  let html = markdown;
+  const html = markdown;
 
   // Split into blocks to handle tables separately
   const blocks = html.split(/\n\n+/);

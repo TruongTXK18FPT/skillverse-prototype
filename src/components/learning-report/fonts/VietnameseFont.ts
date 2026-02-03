@@ -314,13 +314,13 @@ export function markdownToPlainText(markdown: string): string {
   text = text.replace(/!\[(.+?)\]\(.+?\)/g, "[Hình: $1]");
 
   // Convert bullet lists (- item or * item)
-  text = text.replace(/^[\-\*]\s+/gm, "• ");
+  text = text.replace(/^[-*]\s+/gm, "• ");
 
   // Convert numbered lists
   text = text.replace(/^\d+\.\s+/gm, "• ");
 
   // Remove horizontal rules
-  text = text.replace(/^[\-\*_]{3,}$/gm, "");
+  text = text.replace(/^[-*_]{3,}$/gm, "");
 
   // Remove blockquotes
   text = text.replace(/^>\s*/gm, "");

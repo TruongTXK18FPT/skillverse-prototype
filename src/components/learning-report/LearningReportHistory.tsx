@@ -45,7 +45,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
 
   useEffect(() => {
     loadReports();
-  }, []);
+  }, [loadReports]);
 
   const loadReports = async () => {
     setIsLoading(true);
