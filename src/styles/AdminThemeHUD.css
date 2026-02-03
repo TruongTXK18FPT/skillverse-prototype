@@ -1,0 +1,188 @@
+/* 
+   HUD THEME OVERRIDES 
+   Targeting existing "Cosmic" components to apply the new High-Tech System Core theme.
+*/
+
+:root {
+  --hud-bg: #0f172a;
+  --hud-panel: rgba(15, 23, 42, 0.7);
+  --hud-primary: #3b82f6;
+  --hud-primary-glow: rgba(59, 130, 246, 0.4);
+  --hud-success: #10b981;
+  --hud-warning: #f59e0b;
+  --hud-danger: #f43f5e;
+  --hud-text: #f8fafc;
+  --hud-text-secondary: #94a3b8;
+  --hud-border: rgba(59, 130, 246, 0.2);
+  --hud-font: 'Inter', system-ui, sans-serif;
+}
+
+/* Global Font Override for Admin */
+.admin-layout-hud * {
+  font-family: var(--hud-font) !important;
+}
+
+/* Components Containers */
+[class*="-cosmic"], 
+[class*="admin-"][class*="-tab"],
+.admin-job-management,
+.admin-premium-plans-management,
+.admin-support-tickets,
+.admin-ai-expert-management,
+.admin-community-management,
+.admin-meowl-skin-upload,
+.admin-slider-management {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* Section Headers */
+[class*="admin-"][class*="-header"] {
+  border-bottom: 1px solid var(--hud-border) !important;
+  background: transparent !important;
+  padding: 0 0 1.5rem 0 !important;
+  margin-bottom: 2rem !important;
+  box-shadow: none !important;
+}
+
+[class*="admin-"][class*="-header"] h1,
+[class*="admin-"][class*="-header"] h2 {
+  background: none !important;
+  -webkit-text-fill-color: var(--hud-text) !important;
+  color: var(--hud-text) !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  margin: 0 !important;
+}
+
+[class*="admin-"][class*="-header"] p {
+  color: var(--hud-text-secondary) !important;
+  font-size: 0.875rem !important;
+  margin-top: 0.5rem !important;
+}
+
+/* Buttons */
+.admin-refresh-btn, .admin-download-btn, .admin-add-btn, .admin-action-btn {
+  border-radius: 4px !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.2s ease !important;
+  padding: 0.6rem 1.2rem !important;
+}
+
+.admin-refresh-btn { background: var(--hud-primary) !important; }
+.admin-download-btn { background: var(--hud-success) !important; }
+
+/* Filter Sections */
+[class*="-filters"], .admin-user-filters, .admin-course-filters {
+  background: var(--hud-panel) !important;
+  border: 1px solid var(--hud-border) !important;
+  border-radius: 8px !important;
+  padding: 1.25rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Tables */
+.admin-user-table, .admin-verification-table, .admin-course-table, 
+.admin-withdrawal-table, .admin-transaction-table, .admin-reports-table {
+  background: var(--hud-panel) !important;
+  border: 1px solid var(--hud-border) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  border-collapse: collapse !important;
+}
+
+.admin-user-table th, .admin-verification-table th, .admin-course-table th,
+.admin-withdrawal-table th, th {
+  background: rgba(59, 130, 246, 0.05) !important;
+  color: var(--hud-text-secondary) !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  padding: 1rem !important;
+  border-bottom: 1px solid var(--hud-border) !important;
+}
+
+.admin-user-table td, .admin-verification-table td, .admin-course-table td,
+.admin-withdrawal-table td, td {
+  padding: 1rem !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+  color: var(--hud-text) !important;
+  font-size: 0.875rem !important;
+}
+
+tr:hover td {
+  background: rgba(59, 130, 246, 0.03) !important;
+}
+
+/* Stat Cards inside components */
+.admin-user-stats, .admin-verification-stats, .admin-course-stats {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+  gap: 1.25rem !important;
+  margin-bottom: 2rem !important;
+}
+
+.admin-stat-card, .admin-user-stat-card {
+  background: var(--hud-panel) !important;
+  border: 1px solid var(--hud-border) !important;
+  border-radius: 8px !important;
+  padding: 1.25rem !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
+}
+
+.admin-stat-number, .admin-user-stat-number {
+  font-size: 1.5rem !important;
+  font-weight: 800 !important;
+  color: var(--hud-text) !important;
+  background: none !important;
+  -webkit-text-fill-color: var(--hud-text) !important;
+}
+
+.admin-stat-label, .admin-user-stat-label {
+  color: var(--hud-text-secondary) !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+/* Modals */
+.admin-modal, .admin-security-modal-content, [class*="-modal"] {
+  background: #1e293b !important;
+  border: 1px solid var(--hud-primary) !important;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--hud-primary-glow) !important;
+  border-radius: 8px !important;
+}
+
+/* Inputs & Forms */
+input, select, textarea {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid var(--hud-border) !important;
+  color: var(--hud-text) !important;
+  border-radius: 4px !important;
+  padding: 0.5rem 0.75rem !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--hud-primary) !important;
+  outline: none !important;
+  box-shadow: 0 0 5px var(--hud-primary-glow) !important;
+}
+
+/* Badges */
+.admin-status-badge, .status-badge {
+  border-radius: 4px !important;
+  padding: 2px 8px !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+}

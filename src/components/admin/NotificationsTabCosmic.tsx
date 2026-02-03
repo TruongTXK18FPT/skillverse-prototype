@@ -323,7 +323,7 @@ const NotificationsTabCosmic: React.FC = () => {
       {/* Stats Section - Multi-color vibrant cards */}
       {statistics && (
         <div className="notif-section notif-section-stats">
-          <div className="notif-stats-grid">
+          <div className="admin-notif-stats-grid">
             <div className="notif-stat-card vibrant-purple">
               <div className="notif-stat-glow"></div>
               <div className="notif-stat-icon"><Users size={28} /></div>

@@ -292,7 +292,6 @@ const AdminSeminarManager = () => {
         </div>
       </NeuralModal>
 
-      <MeowlGuide currentPage="manager" />
     </div>
   );
 };

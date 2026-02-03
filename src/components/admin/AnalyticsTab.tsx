@@ -723,25 +723,55 @@ const AnalyticsTab: React.FC = () => {
 
       {/* Charts Section */}
       <div className="holo-charts-grid">
+        {/* Support Ticket Status - Moved to Top with full width logic */}
+        <div className="holo-chart-card holo-chart--support">
+          <div className="holo-chart-header">
+            <Ticket size={20} />
+            <h3>Trạng Thái Support Tickets</h3>
+          </div>
+          <div className="holo-chart-content holo-chart-content--full">
+            {ticketDistribution.length > 0 ? (
+              <>
+                <div className="holo-chart-visual">
+                  {renderBarChart(ticketDistribution, 140)}
+                </div>
+                <div className="holo-chart-legend holo-chart-legend--grid">
+                  {ticketDistribution.map((d, i) => (
+                    <div key={i} className="holo-legend-item">
+                      <span className="holo-legend-color" style={{ background: d.color }} />
+                      <span className="holo-legend-label">{d.label}</span>
+                      <span className="holo-legend-value">{formatNumber(d.value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="holo-chart-empty">Chưa có dữ liệu ticket</div>
+            )}
+          </div>
+        </div>
+
         {/* User Distribution */}
         <div className="holo-chart-card">
           <div className="holo-chart-header">
             <PieChart size={20} />
             <h3>Phân Bố Người Dùng</h3>
           </div>
-          <div className="holo-chart-content">
+          <div className="holo-chart-content holo-chart-content--horizontal">
             <div className="holo-chart-visual">
-              {renderDonutChart(userDistribution, 180)}
+              {renderDonutChart(userDistribution, 200)}
             </div>
-            <div className="holo-chart-legend">
+            <div className="holo-chart-legend holo-chart-legend--side">
               {userDistribution.map((d, i) => (
                 <div key={i} className="holo-legend-item">
                   <span className="holo-legend-color" style={{ background: d.color }} />
                   <span className="holo-legend-label">{d.label}</span>
-                  <span className="holo-legend-value">{formatNumber(d.value)}</span>
-                  <span className="holo-legend-percent">
-                    ({totalUsers > 0 ? ((d.value / totalUsers) * 100).toFixed(1) : 0}%)
-                  </span>
+                  <div className="holo-legend-stats">
+                    <span className="holo-legend-value">{formatNumber(d.value)}</span>
+                    <span className="holo-legend-percent">
+                      ({totalUsers > 0 ? ((d.value / totalUsers) * 100).toFixed(1) : 0}%)
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -754,13 +784,13 @@ const AnalyticsTab: React.FC = () => {
             <Crown size={20} />
             <h3>Gói Premium</h3>
           </div>
-          <div className="holo-chart-content">
+          <div className="holo-chart-content holo-chart-content--full">
             {premiumDistribution.length > 0 ? (
               <>
                 <div className="holo-chart-visual">
-                  {renderBarChart(premiumDistribution, 120)}
+                  {renderBarChart(premiumDistribution, 140)}
                 </div>
-                <div className="holo-chart-legend">
+                <div className="holo-chart-legend holo-chart-legend--grid">
                   {state.premiumPlans
                     .filter(plan => plan.planType !== 'FREE_TIER')
                     .map((plan, i) => (
@@ -773,8 +803,10 @@ const AnalyticsTab: React.FC = () => {
                           }} 
                         />
                         <span className="holo-legend-label">{plan.displayName}</span>
-                        <span className="holo-legend-value">{formatNumber(plan.currentSubscribers)}</span>
-                        <span className="holo-legend-revenue">{formatCurrency(plan.totalRevenue)}</span>
+                        <div className="holo-legend-stats">
+                          <span className="holo-legend-value">{formatNumber(plan.currentSubscribers)} Sv</span>
+                          <span className="holo-legend-revenue">{formatCurrency(plan.totalRevenue)}</span>
+                        </div>
                       </div>
                     ))}
                 </div>
@@ -791,47 +823,19 @@ const AnalyticsTab: React.FC = () => {
             <BarChart3 size={20} />
             <h3>Trạng Thái Giao Dịch</h3>
           </div>
-          <div className="holo-chart-content">
+          <div className="holo-chart-content holo-chart-content--horizontal">
             <div className="holo-chart-visual">
-              {renderDonutChart(transactionDistribution, 180)}
+              {renderDonutChart(transactionDistribution, 200)}
             </div>
-            <div className="holo-chart-legend">
+            <div className="holo-chart-legend holo-chart-legend--side">
               {transactionDistribution.map((d, i) => (
                 <div key={i} className="holo-legend-item">
                   <span className="holo-legend-color" style={{ background: d.color }} />
                   <span className="holo-legend-label">{d.label}</span>
-                  <span className="holo-legend-value">{formatNumber(d.value)}</span>
+                  <span className="holo-legend-value">{formatNumber(d.value)} đơn</span>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Support Ticket Status */}
-        <div className="holo-chart-card holo-chart--support">
-          <div className="holo-chart-header">
-            <Ticket size={20} />
-            <h3>Trạng Thái Support Tickets</h3>
-          </div>
-          <div className="holo-chart-content">
-            {ticketDistribution.length > 0 ? (
-              <>
-                <div className="holo-chart-visual">
-                  {renderBarChart(ticketDistribution, 120)}
-                </div>
-                <div className="holo-chart-legend">
-                  {ticketDistribution.map((d, i) => (
-                    <div key={i} className="holo-legend-item">
-                      <span className="holo-legend-color" style={{ background: d.color }} />
-                      <span className="holo-legend-label">{d.label}</span>
-                      <span className="holo-legend-value">{formatNumber(d.value)}</span>
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="holo-chart-empty">Chưa có dữ liệu ticket</div>
-            )}
           </div>
         </div>
       </div>

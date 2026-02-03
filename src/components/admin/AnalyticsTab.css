@@ -173,9 +173,15 @@
 
 .holo-metrics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(3, 1fr); /* 4 items per row as requested */
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 1400px) {
+  .holo-metrics-grid {
+    grid-template-columns: repeat(2, 1fr); /* Fallback for smaller screens */
+  }
 }
 
 .holo-metric-card {
@@ -915,7 +921,7 @@
 
 .holo-charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: 1fr; /* 1 item per row for clarity in charts */
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -926,6 +932,47 @@
   border: 1px solid rgba(147, 197, 253, 0.15);
   padding: 1.5rem;
   transition: all 0.3s ease;
+}
+
+.holo-chart-content--horizontal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.holo-chart-content--full {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.5rem 0;
+}
+
+.holo-chart-legend--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.holo-chart-legend--side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  justify-content: center;
+}
+
+.holo-legend-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.holo-legend-percent {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
 }
 
 .holo-chart-card:hover {
@@ -1157,7 +1204,7 @@
 
 .holo-performance-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr); /* 4 items per row */
   gap: 1.5rem;
 }
 
@@ -1244,7 +1291,7 @@
 
 .holo-summary-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr); /* 4 items per row */
   gap: 1rem;
 }
 
@@ -1314,8 +1361,8 @@
 
 .holo-revenue-charts-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: 1fr; /* 1 item per row for clarity in revenue charts */
+  gap: 2rem;
 }
 
 /* Individual Revenue Card */

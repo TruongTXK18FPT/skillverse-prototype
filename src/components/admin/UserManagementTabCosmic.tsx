@@ -532,75 +532,63 @@ const UserManagementTabCosmic: React.FC = () => {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="admin-user-filters">
-        <div className="admin-search-box">
-          <Search size={20} />
-          <input
-            type="text"
-            placeholder="Tìm kiếm theo tên hoặc email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+      {/* Filters - 2 columns: left search, right filters (2 rows) */}
+      <div className="admin-user-filters-grid">
+        <div className="admin-user-filters-left">
+          <div className="admin-search-box">
+            <Search size={20} />
+            <input
+              type="text"
+              placeholder="Tìm kiếm theo tên hoặc email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
-
-        <div className="admin-status-filters">
-          <Filter size={20} />
-          <button
-            className={`admin-filter-btn ${roleFilter === 'all' ? 'active' : ''}`}
-            onClick={() => setRoleFilter('all')}
-          >
-            Tất cả vai trò
-          </button>
-          <button
-            className={`admin-filter-btn ${roleFilter === 'mentor' ? 'active' : ''}`}
-            onClick={() => setRoleFilter('mentor')}
-          >
-            Mentor
-          </button>
-          <button
-            className={`admin-filter-btn ${roleFilter === 'recruiter' ? 'active' : ''}`}
-            onClick={() => setRoleFilter('recruiter')}
-          >
-            Doanh nghiệp
-          </button>
-          <button
-            className={`admin-filter-btn ${roleFilter === 'user' ? 'active' : ''}`}
-            onClick={() => setRoleFilter('user')}
-          >
-            Học viên
-          </button>
-          <button
-            className={`admin-filter-btn ${roleFilter === 'admin' ? 'active' : ''}`}
-            onClick={() => setRoleFilter('admin')}
-          >
-            Quản trị
-          </button>
-        </div>
-
-        <div className="admin-status-filters">
-          <button
-            className={`admin-filter-btn ${statusFilter === 'all' ? 'active' : ''}`}
-            onClick={() => setStatusFilter('all')}
-          >
-            Tất cả trạng thái
-          </button>
-          <button
-            className={`admin-filter-btn ${statusFilter === 'active' ? 'active' : ''}`}
-            onClick={() => setStatusFilter('active')}
-          >
-            Hoạt động
-          </button>
-          <button
-            className={`admin-filter-btn ${statusFilter === 'inactive' ? 'active' : ''}`}
-            onClick={() => setStatusFilter('inactive')}
-          >
-            Không hoạt động
-          </button>
+        <div className="admin-user-filters-right">
+          <div className="admin-filter-row">
+            <Filter size={20} />
+            <span style={{ fontWeight: 500, marginRight: 8 }}>Vai trò:</span>
+            <button
+              className={`admin-filter-btn ${roleFilter === 'all' ? 'active' : ''}`}
+              onClick={() => setRoleFilter('all')}
+            >Tất cả</button>
+            <button
+              className={`admin-filter-btn ${roleFilter === 'mentor' ? 'active' : ''}`}
+              onClick={() => setRoleFilter('mentor')}
+            >Mentor</button>
+            <button
+              className={`admin-filter-btn ${roleFilter === 'recruiter' ? 'active' : ''}`}
+              onClick={() => setRoleFilter('recruiter')}
+            >Doanh nghiệp</button>
+            <button
+              className={`admin-filter-btn ${roleFilter === 'user' ? 'active' : ''}`}
+              onClick={() => setRoleFilter('user')}
+            >Học viên</button>
+            <button
+              className={`admin-filter-btn ${roleFilter === 'admin' ? 'active' : ''}`}
+              onClick={() => setRoleFilter('admin')}
+            >Quản trị</button>
+          </div>
+          <div className="admin-filter-row">
+            <span style={{ fontWeight: 500, marginRight: 8 }}>Trạng thái:</span>
+            <button
+              className={`admin-filter-btn ${statusFilter === 'all' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('all')}
+            >Tất cả</button>
+            <button
+              className={`admin-filter-btn ${statusFilter === 'active' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('active')}
+            >Hoạt động</button>
+            <button
+              className={`admin-filter-btn ${statusFilter === 'inactive' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('inactive')}
+            >Không hoạt động</button>
+          </div>
         </div>
       </div>
 
-      {/* Table */}
+      {/* Table - only 5 columns, actions in dropdown below */}
       <div className="admin-users-table">
         <table>
           <thead>
@@ -611,126 +599,134 @@ const UserManagementTabCosmic: React.FC = () => {
               <th>Trạng thái</th>
               <th>Ngày tham gia</th>
               <th>Hoạt động cuối</th>
-              <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
             {currentUsers.map((user) => (
-              <tr key={user.id}>
-                <td>
-                  <div className="admin-user-info">
-                    <div className="admin-user-avatar">
-                      {user.avatarUrl ? (
-                        <img src={user.avatarUrl} alt={user.fullName} />
-                      ) : (
-                        user.fullName.charAt(0).toUpperCase()
-                      )}
+              <React.Fragment key={user.id}>
+                <tr>
+                  <td>
+                    <div className="admin-user-info">
+                      <div className="admin-user-avatar">
+                        {user.avatarUrl ? (
+                          <img src={user.avatarUrl} alt={user.fullName} />
+                        ) : (
+                          user.fullName.charAt(0).toUpperCase()
+                        )}
+                      </div>
+                      <span className="admin-user-name">{user.fullName}</span>
                     </div>
-                    <span className="admin-user-name">{user.fullName}</span>
-                  </div>
-                </td>
-                <td>
-                  <div className="admin-user-email">
-                    <Mail size={14} />
-                    {user.email}
-                  </div>
-                </td>
-                <td>
-                  <div className="admin-user-role-badge" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span className={`admin-role-badge ${user.primaryRole.toLowerCase()}`}>
-                      {getRoleIcon(user.primaryRole)}
-                      {getRoleLabel(user.primaryRole)}
-                    </span>
-                    {user.roles && user.roles.length > 0 && user.roles.filter(r => r !== user.primaryRole && r.includes('ADMIN')).map(role => (
-                      <span key={role} className="admin-role-badge admin-sub" style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(99, 102, 241, 0.1)', color: '#818cf8', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
-                        <Shield size={10} style={{ marginRight: '3px' }} />
-                        {role.replace('_ADMIN', '')}
+                  </td>
+                  <td>
+                    <div className="admin-user-email">
+                      <Mail size={14} />
+                      {user.email}
+                    </div>
+                  </td>
+                  <td>
+                    <div className="admin-user-role-badge" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <span className={`admin-role-badge ${user.primaryRole.toLowerCase()}`}>
+                        {getRoleIcon(user.primaryRole)}
+                        {getRoleLabel(user.primaryRole)}
                       </span>
-                    ))}
-                  </div>
-                </td>
-                <td>{getStatusBadge(user.status)}</td>
-                <td>
-                  <div className="admin-date-cell">
-                    <Calendar size={14} />
-                    {formatDate(user.createdAt)}
-                  </div>
-                </td>
-                <td>
-                  <div className="admin-date-cell">
-                    <Activity size={14} />
-                    {formatDate(user.lastActive)}
-                  </div>
-                </td>
-                <td>
-                  <div className="admin-action-buttons">
-                    <button
-                      className="admin-action-btn view"
-                      onClick={() => handleViewDetail(user.id)}
-                      title="Xem chi tiết"
-                    >
-                      <Eye size={16} />
-                    </button>
-                    <button
-                      className="admin-action-btn gift"
-                      onClick={() => handleOpenGiftModal(user.id, user.fullName)}
-                      title="Tặng quà (Xu/Tiền)"
-                      style={{ color: '#F59E0B', background: 'rgba(245, 158, 11, 0.1)' }}
-                    >
-                      <Gift size={16} />
-                    </button>
-                    <button
-                      className="admin-action-btn edit"
-                      onClick={() => handleEditUser(user.id)}
-                      title="Chỉnh sửa"
-                    >
-                      <Edit size={16} />
-                    </button>
-                    {user.status === 'ACTIVE' ? (
-                      <button
-                        className="admin-action-btn ban"
-                        onClick={() => handleBanUser(user.id)}
-                        title="Cấm tài khoản"
-                      >
-                        <Ban size={16} />
-                      </button>
-                    ) : (
-                      <button
-                        className="admin-action-btn unban"
-                        onClick={() => handleUnbanUser(user.id)}
-                        title="Kích hoạt"
-                      >
-                        <CheckCircle size={16} />
-                      </button>
-                    )}
-                    {isSuperAdmin && (
-                      <button
-                        className="admin-action-btn edit"
-                        onClick={() => handleOpenRoleModal(user)}
-                        title="Phân quyền Admin"
-                      >
-                        <Shield size={16} />
-                      </button>
-                    )}
-                    <button
-                      className="admin-action-btn reset"
-                      onClick={() => handleResetPassword(user.id)}
-                      title="Reset mật khẩu"
-                    >
-                      <Key size={16} />
-                    </button>
-                    {user.status === 'INACTIVE' && (
-                      <button
-                        className="admin-action-btn delete"
-                        onClick={() => handleOpenDeleteModal(user.id, user.fullName)}
-                        title="Xóa vĩnh viễn"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    )}
-                  </div>
-                </td>
-              </tr>
+                      {user.roles && user.roles.length > 0 && user.roles.filter(r => r !== user.primaryRole && r.includes('ADMIN')).map(role => (
+                        <span key={role} className="admin-role-badge admin-sub" style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(99, 102, 241, 0.1)', color: '#818cf8', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
+                          <Shield size={10} style={{ marginRight: '3px' }} />
+                          {role.replace('_ADMIN', '')}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                  <td>{getStatusBadge(user.status)}</td>
+                  <td>
+                    <div className="admin-date-cell">
+                      <Calendar size={14} />
+                      {formatDate(user.createdAt)}
+                    </div>
+                  </td>
+                  <td>
+                    <div className="admin-date-cell">
+                      <Activity size={14} />
+                      {formatDate(user.lastActive)}
+                    </div>
+                  </td>
+                </tr>
+                <tr className="admin-user-actions-row">
+                  <td colSpan={6} style={{ padding: 0, background: 'transparent' }}>
+                    <div className="admin-action-dropdown-wrapper">
+                      <details className="admin-usermgmt-action-dropdown">
+                        <summary className="admin-action-dropdown-btn">Hành động</summary>
+                        <div className="admin-action-buttons-row">
+                          <button
+                            className="admin-action-btn view"
+                            onClick={() => handleViewDetail(user.id)}
+                            title="Xem chi tiết"
+                          >
+                            <Eye size={16} /> Xem chi tiết
+                          </button>
+                          <button
+                            className="admin-action-btn gift"
+                            onClick={() => handleOpenGiftModal(user.id, user.fullName)}
+                            title="Tặng quà (Xu/Tiền)"
+                            style={{ color: '#F59E0B', background: 'rgba(245, 158, 11, 0.1)' }}
+                          >
+                            <Gift size={16} /> Tặng quà
+                          </button>
+                          <button
+                            className="admin-action-btn edit"
+                            onClick={() => handleEditUser(user.id)}
+                            title="Chỉnh sửa"
+                          >
+                            <Edit size={16} /> Chỉnh sửa
+                          </button>
+                          {user.status === 'ACTIVE' ? (
+                            <button
+                              className="admin-action-btn ban"
+                              onClick={() => handleBanUser(user.id)}
+                              title="Cấm tài khoản"
+                            >
+                              <Ban size={16} /> Cấm
+                            </button>
+                          ) : (
+                            <button
+                              className="admin-action-btn unban"
+                              onClick={() => handleUnbanUser(user.id)}
+                              title="Kích hoạt"
+                            >
+                              <CheckCircle size={16} /> Kích hoạt
+                            </button>
+                          )}
+                          {isSuperAdmin && (
+                            <button
+                              className="admin-action-btn edit"
+                              onClick={() => handleOpenRoleModal(user)}
+                              title="Phân quyền Admin"
+                            >
+                              <Shield size={16} /> Phân quyền
+                            </button>
+                          )}
+                          <button
+                            className="admin-action-btn reset"
+                            onClick={() => handleResetPassword(user.id)}
+                            title="Reset mật khẩu"
+                          >
+                            <Key size={16} /> Reset mật khẩu
+                          </button>
+                          {user.status === 'INACTIVE' && (
+                            <button
+                              className="admin-action-btn delete"
+                              onClick={() => handleOpenDeleteModal(user.id, user.fullName)}
+                              title="Xóa vĩnh viễn"
+                            >
+                              <Trash2 size={16} /> Xóa vĩnh viễn
+                            </button>
+                          )}
+                        </div>
+                      </details>
+                    </div>
+                  </td>
+                </tr>
+              </React.Fragment>
             ))}
           </tbody>
         </table>
