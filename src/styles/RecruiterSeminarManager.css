@@ -1,101 +1,320 @@
-/* Recruiter Seminar Manager Styles */
-/* Prefix: .rsm- */
+/* Recruiter Seminar Manager - Cosmic HUD Theme */
 
-.rsm-container {
-    padding-top: 80px;
-    min-height: 100vh;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-}
-
-/* When embedded in CommandDeck (BusinessHub) */
-.fleet-main .rsm-container {
-    padding-top: 0;
-    min-height: auto;
-    background: transparent;
-}
-
-.rsm-content {
-    max-width: 1200px;
-    margin: 0 auto;
+.rsm-cosmic-container {
     padding: 2rem;
+    min-height: 100vh;
+    background: transparent;
+    color: #f8fafc;
+    animation: fadeIn 0.5s ease-out;
 }
 
-.rsm-header {
-    margin-bottom: 2rem;
+.rsm-cosmic-content {
+    max-width: 1300px;
+    margin: 0 auto;
 }
 
-.rsm-title {
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--lhud-text-bright, #fff);
+/* Header Section */
+.rsm-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2.5rem;
+}
+
+.rsm-cosmic-title {
+    font-size: 2.25rem !important;
+    font-weight: 800 !important;
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
 }
 
-.rsm-description {
-    color: var(--text-secondary, #9ca3af);
+.rsm-cosmic-description {
+    color: #94a3b8;
+    font-size: 1.1rem;
 }
 
-/* Controls & Search */
-.rsm-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.rsm-search-box {
+.rsm-cosmic-add-btn {
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--lhud-border, #333);
-    border-radius: 8px;
-    padding: 0.5rem 1rem;
-    width: 300px;
-}
-
-.rsm-search-icon {
-    color: var(--text-secondary, #9ca3af);
-    margin-right: 0.5rem;
-}
-
-.rsm-search-input {
-    background: transparent;
-    border: none;
-    color: var(--text-primary, #fff);
-    width: 100%;
-    outline: none;
-}
-
-.rsm-add-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--lhud-cyan, #06b6d4);
+    gap: 10px;
+    background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
     color: #000;
     border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+    padding: 0.8rem 1.8rem;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+}
+
+.rsm-cosmic-add-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(6, 182, 212, 0.5);
+    filter: brightness(1.1);
+}
+
+/* Stats Grid */
+.rsm-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.rsm-stat-card {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.rsm-stat-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(6, 182, 212, 0.3);
+}
+
+.rsm-stat-icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+}
+
+.rsm-stat-card.success .rsm-stat-icon-wrap {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+.rsm-stat-card.clickable {
+    cursor: pointer;
+}
+
+.rsm-stat-icon-wrap.wallet {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.rsm-stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #f8fafc;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.rsm-stat-label {
+    font-size: 0.85rem;
     font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-arrow {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    color: #f59e0b;
+    opacity: 0.5;
+}
+
+/* Controls */
+.rsm-controls-bar {
+    margin-bottom: 2rem;
+}
+
+.rsm-search-cosmic {
+    display: flex;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 0.75rem 1.25rem;
+    width: 350px;
+    gap: 10px;
+    transition: all 0.3s;
+}
+
+.rsm-search-cosmic:focus-within {
+    border-color: #06b6d4;
+    background: rgba(15, 23, 42, 0.8);
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.1);
+}
+
+.rsm-search-cosmic input {
+    background: transparent;
+    border: none;
+    color: #f8fafc;
+    width: 100%;
+    outline: none;
+    font-size: 0.95rem;
+}
+
+/* Table */
+.rsm-table-outer {
+    background: rgba(15, 23, 42, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.rsm-cosmic-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.rsm-cosmic-table th {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 1.5rem;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rsm-cosmic-table td {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    vertical-align: middle;
+}
+
+.rsm-row-hover:hover {
+    background: rgba(6, 182, 212, 0.04);
+}
+
+/* Table Content */
+.rsm-seminar-info {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.rsm-seminar-img {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid rgba(6, 182, 212, 0.2);
+}
+
+.rsm-seminar-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rsm-seminar-title {
+    display: block;
+    font-weight: 600;
+    color: #f1f5f9;
+    font-size: 1rem;
+    margin-bottom: 2px;
+}
+
+.rsm-seminar-id {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.rsm-time-info .time-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.rsm-price-cell .badge-free {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+.rsm-price-cell .price-val {
+    color: #f8fafc;
+    font-weight: 600;
+}
+
+/* Status Badges */
+.rsm-status-badge {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rsm-status-badge.draft { background: rgba(148, 163, 184, 0.1); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.2); }
+.rsm-status-badge.pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+.rsm-status-badge.accepted { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+.rsm-status-badge.open { background: rgba(6, 182, 212, 0.1); color: #06b6d4; border: 1px solid rgba(6, 182, 212, 0.2); }
+.rsm-status-badge.closed { background: rgba(244, 63, 94, 0.1); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.2); }
+
+/* Actions */
+.rsm-actions-group {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.rsm-btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
     cursor: pointer;
     transition: all 0.2s;
 }
 
-.rsm-add-btn:hover {
-    filter: brightness(1.1);
-    transform: translateY(-1px);
+.rsm-btn-icon:hover {
+    transform: translateY(-2px);
+    border-color: rgba(6, 182, 212, 0.4);
+    color: #f8fafc;
 }
 
-/* Table Styles */
-.rsm-table-wrapper {
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid rgba(6, 182, 212, 0.5);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 2rem;
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
+.rsm-btn-icon.view:hover { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+.rsm-btn-icon.edit:hover { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.rsm-btn-icon.submit:hover { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.rsm-btn-icon.link:hover { background: rgba(6, 182, 212, 0.1); color: #06b6d4; }
+.rsm-btn-icon.download:hover { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+
+/* Empty & Loading */
+.rsm-empty-state {
+    padding: 6rem !important;
+}
+
+.rsm-empty-wrap {
+    text-align: center;
+    color: #64748b;
+    font-size: 1.1rem;
 }
 
 .rsm-table {

@@ -1,100 +1,417 @@
-/* Admin Seminar Manager Styles */
-/* Prefix: .asm- */
+/* Admin Seminar Manager - Cosmic HUD Theme */
 
-.asm-container {
-    padding-top: 80px;
+.asm-cosmic-container {
+    padding-top: 2rem;
     min-height: 100vh;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-}
-
-/* When inside AdminPage tab content */
-.administrator-content .asm-container {
-    padding-top: 0;
-    min-height: auto;
     background: transparent;
+    color: var(--hud-text, #f8fafc);
+    animation: fadeIn 0.5s ease-out;
 }
 
-.asm-content {
-    max-width: 1200px;
+.asm-cosmic-content {
+    max-width: 1300px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 0 1rem 2rem 1rem;
 }
 
-.asm-header {
-    margin-bottom: 2rem;
+/* Header Styles */
+.asm-cosmic-title {
+    font-size: 1.75rem !important;
+    font-weight: 800 !important;
+    color: #f1f5f9 !important;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.asm-title {
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--lhud-text-bright, #fff);
-    margin-bottom: 0.5rem;
+.asm-cosmic-title .title-icon {
+    color: #3b82f6;
 }
 
-.asm-description {
-    color: var(--text-secondary, #9ca3af);
+.asm-cosmic-description {
+    color: #94a3b8;
+    margin-top: 0.25rem;
+    font-size: 0.95rem;
 }
 
-/* Table Styles */
-.asm-table-wrapper {
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid var(--lhud-border, rgba(255,255,255,0.1));
-    border-radius: 12px;
+.asm-refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.asm-refresh-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.4);
+    transform: translateY(-2px);
+}
+
+.spinning {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Stats Grid */
+.asm-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.asm-stat-card {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    position: relative;
     overflow: hidden;
-    margin-bottom: 2rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.asm-table {
+.asm-stat-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.asm-stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.asm-stat-card.pending .asm-stat-icon {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.asm-stat-card.info .asm-stat-icon {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.asm-stat-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.asm-stat-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.asm-stat-glow {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.15;
+}
+
+.asm-stat-card.pending .asm-stat-glow { background: #f59e0b; }
+.asm-stat-card.info .asm-stat-glow { background: #3b82f6; }
+
+/* Table Section */
+.asm-table-outer {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.asm-table-wrapper {
+    overflow-x: auto;
+}
+
+.asm-cosmic-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.asm-table th {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 1rem;
+.asm-cosmic-table th {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.25rem 1.5rem;
     text-align: left;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.asm-cosmic-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    vertical-align: middle;
+}
+
+.asm-row-hover:hover {
+    background: rgba(59, 130, 246, 0.04);
+}
+
+/* Table Content Cells */
+.asm-seminar-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.asm-seminar-img-mini {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.asm-seminar-img-mini img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.asm-seminar-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.asm-seminar-title {
     font-weight: 600;
-    color: var(--lhud-text-bright, #fff);
+    color: #f1f5f9;
 }
 
-.asm-table td {
-    padding: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--lhud-text-primary, #e5e7eb);
+.asm-seminar-id {
+    font-size: 0.7rem;
+    color: #64748b;
+    font-family: monospace;
 }
 
-.asm-empty-state {
-    text-align: center;
-    padding: 3rem;
-    color: var(--text-secondary, #9ca3af);
-    font-style: italic;
+.asm-creator-info, .asm-time-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.asm-price-tag .price-free {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.asm-price-tag .price-amount {
+    color: #f8fafc;
+    font-weight: 600;
 }
 
 /* Actions */
 .asm-actions {
     display: flex;
-    gap: 0.5rem;
-}
-
-.asm-action-btn {
-    background: transparent;
-    border: none;
-    padding: 6px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
+    gap: 0.75rem;
     justify-content: center;
 }
 
-.asm-btn-view {
-    color: var(--text-secondary, #9ca3af);
+.asm-action-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
 }
+
 .asm-btn-view:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.asm-btn-approve:hover {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.asm-btn-reject:hover {
+    background: rgba(244, 63, 94, 0.1);
+    color: #f43f5e;
+    border-color: rgba(244, 63, 94, 0.3);
+}
+
+/* Loading & Empty States */
+.asm-loading-cell {
+    padding: 4rem !important;
+}
+
+.asm-loader-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: #3b82f6;
+}
+
+.asm-empty-state {
+    padding: 5rem !important;
+}
+
+.asm-empty-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #64748b;
+}
+
+.asm-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Modal Content Styles - HUD Style */
+.asm-modal-content {
+    padding: 1rem;
+}
+
+.asm-modal-img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.asm-detail-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 1.5rem;
+}
+
+.asm-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.asm-detail-item {
+    display: flex;
+    gap: 12px;
+}
+
+.asm-detail-item.full-width {
+    grid-column: span 2;
+}
+
+.asm-detail-icon {
+    color: #3b82f6;
+    margin-top: 3px;
+}
+
+.asm-detail-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #64748b;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.asm-detail-value {
+    color: #f8fafc;
+    font-weight: 500;
+}
+
+.asm-detail-section {
+    margin-bottom: 2rem;
+}
+
+.asm-detail-desc {
+    color: #cbd5e1;
+    line-height: 1.6;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.25rem;
+    border-radius: 12px;
+    margin-top: 0.5rem;
+}
+
+.asm-modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.asm-modal-btn {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.asm-modal-btn.approve {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.asm-modal-btn.reject {
+    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
+}
+
+.asm-modal-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
 }
 
 .asm-btn-approve {

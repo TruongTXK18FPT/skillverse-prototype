@@ -34,6 +34,7 @@ import {
   Search,
   Sparkles,
   ArrowRight,
+  DollarSign,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
@@ -781,7 +782,7 @@ const Header: React.FC = () => {
                           className="user-balance"
                           style={{ color: getPremiumColor() || undefined }}
                         >
-                          💰 Số dư:{" "}
+                          Số dư:{" "}
                           {loadingBalance
                             ? "..."
                             : walletBalance !== null &&

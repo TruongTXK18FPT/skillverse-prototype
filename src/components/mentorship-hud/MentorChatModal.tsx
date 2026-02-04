@@ -65,11 +65,16 @@ const MentorChatModal: React.FC<MentorChatModalProps> = ({
       fetchMessages();
       // Poll every 3 seconds
       pollingRef.current = setInterval(fetchMessages, 3000);
+      // Lock scroll
+      document.body.classList.add('uplink-scroll-lock');
     } else {
       if (pollingRef.current) clearInterval(pollingRef.current);
+      // Unlock scroll
+      document.body.classList.remove('uplink-scroll-lock');
     }
     return () => {
       if (pollingRef.current) clearInterval(pollingRef.current);
+      document.body.classList.remove('uplink-scroll-lock');
     };
   }, [isOpen, mentorId]);
 
@@ -104,7 +109,7 @@ const MentorChatModal: React.FC<MentorChatModalProps> = ({
 
   return (
     <div className="uplink-modal-overlay" onClick={onClose}>
-      <div className="uplink-chat-window" onClick={e => e.stopPropagation()}>
+      <div className="uplink-chat-window chat-variant" onClick={e => e.stopPropagation()}>
         <div className="uplink-chat-header">
           <div className="uplink-chat-user">
             <img src={mentorAvatar} alt={mentorName} className="uplink-chat-avatar" />

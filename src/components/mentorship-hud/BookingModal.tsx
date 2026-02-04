@@ -50,7 +50,15 @@ const BookingModal: React.FC<BookingModalProps> = ({
       setPaymentMethod('wallet');
       fetchWalletBalance();
       fetchAvailableSlots();
+      // Lock scroll
+      document.body.classList.add('uplink-scroll-lock');
+    } else {
+      // Unlock scroll
+      document.body.classList.remove('uplink-scroll-lock');
     }
+    return () => {
+      document.body.classList.remove('uplink-scroll-lock');
+    };
   }, [isOpen, mentorId]);
 
   const fetchWalletBalance = async () => {
@@ -209,8 +217,8 @@ const BookingModal: React.FC<BookingModalProps> = ({
   const currentSlots = getSlotsForDate(selectedDate);
 
   return (
-    <div className="uplink-modal-overlay">
-      <div className="uplink-chat-window" style={{ height: 'auto', maxHeight: '90vh', width: '600px' }}>
+    <div className="uplink-modal-overlay" onClick={onClose}>
+      <div className="uplink-chat-window booking-variant" onClick={(e) => e.stopPropagation()}>
         <div className="uplink-chat-header">
           <h3 className="uplink-chat-name">
             {step === 'schedule' ? 'Đặt lịch hẹn' : 'Thanh toán'}
@@ -232,7 +240,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                     </div>
                 </div>
                 
-                <div className="date-picker-strip" style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                <div className="date-picker-strip">
                     {days.map((date, index) => {
                         const isSelected = date.getDate() === selectedDate.getDate() && date.getMonth() === selectedDate.getMonth();
                         const isToday = date.getDate() === new Date().getDate() && date.getMonth() === new Date().getMonth();
@@ -240,27 +248,15 @@ const BookingModal: React.FC<BookingModalProps> = ({
                             <div 
                                 key={index}
                                 onClick={() => setSelectedDate(date)}
-                                style={{
-                                    minWidth: '70px',
-                                    padding: '0.75rem 0.5rem',
-                                    borderRadius: '0.5rem',
-                                    background: isSelected ? 'rgba(34, 211, 238, 0.2)' : 'var(--uplink-bg-secondary)',
-                                    border: `1px solid ${isSelected ? 'var(--uplink-primary)' : 'var(--uplink-border)'}`,
-                                    cursor: 'pointer',
-                                    textAlign: 'center',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '0.25rem'
-                                }}
+                                className={`date-capsule ${isSelected ? 'active' : ''}`}
                             >
-                                <span style={{ fontSize: '0.8rem', color: 'var(--uplink-text-grey)' }}>
+                                <span className="date-capsule-day">
                                     {date.toLocaleDateString('vi-VN', { weekday: 'short' })}
                                 </span>
-                                <span style={{ fontSize: '1.1rem', fontWeight: 'bold', color: isSelected ? '#22d3ee' : 'white' }}>
+                                <span className="date-capsule-num">
                                     {date.getDate()}
                                 </span>
-                                {isToday && <span style={{ fontSize: '0.6rem', color: '#10b981' }}>Hôm nay</span>}
+                                {isToday && <span className="is-today-label">Hôm nay</span>}
                             </div>
                         );
                     })}

@@ -8,9 +8,11 @@ import {
   ChevronRight,
   Globe,
   Clock,
-  Eye
+  Eye,
+  Star
 } from 'lucide-react';
 import './uplink-styles.css';
+import { color } from 'framer-motion';
 
 interface MasterProfileCardProps {
   id: string;
@@ -62,142 +64,100 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
 
   return (
     <div className="uplink-card">
-      {/* Tech Brackets - Decorative Corner Borders */}
-      <div className="uplink-tech-bracket top-right"></div>
-      <div className="uplink-tech-bracket bottom-left"></div>
-
-      {/* Avatar Section with Tech Ring */}
-      <div className="uplink-avatar-section" onClick={onViewProfile} style={{ cursor: 'pointer' }}>
-        <div className="uplink-avatar-wrapper">
-          {/* Rotating Dashed Ring */}
+      <div className="uplink-card-header">
+        <div className="uplink-avatar-container" onClick={onViewProfile} style={{ cursor: 'pointer' }}>
           <div className="uplink-avatar-ring"></div>
-
-          {/* Avatar Image */}
-          <img
-            src={avatar}
-            alt={name}
-            className="uplink-avatar-img"
+          <img 
+            src={avatar} 
+            alt={name} 
+            className="uplink-avatar-img" 
           />
-
-          {/* Status LED */}
-          <div className={`uplink-status-led ${isOnline ? 'online' : 'offline'}`}></div>
+          {isOnline && <div className="uplink-online-indicator"></div>}
+          
+          <button
+            className={`uplink-favorite-btn ${isFavorite ? 'active' : ''}`}
+            onClick={(e) => { e.stopPropagation(); onToggleFavorite?.(); }}
+            aria-label="Toggle favorite"
+            style={{ position: 'absolute', top: '-5px', right: '-5px', zIndex: 10, background: 'rgba(15, 23, 42, 0.8)', border: '1px solid var(--uplink-border)', borderRadius: '50%', padding: '4px', color: isFavorite ? '#ef4444' : 'var(--uplink-text-grey)' }}
+          >
+            <Heart size={14} fill={isFavorite ? '#ef4444' : 'none'} />
+          </button>
         </div>
-
-        {/* Favorite Button */}
-        <button
-          className={`uplink-favorite-btn ${isFavorite ? 'active' : ''}`}
-          onClick={onToggleFavorite}
-          aria-label="Toggle favorite"
-        >
-          <Heart size={18} />
-        </button>
+        
+        <div className="uplink-profile-info">
+          <div className="uplink-badge-row">
+             <div className="uplink-rating">
+                <Star size={12} fill="var(--uplink-primary)" stroke="var(--uplink-primary)" />
+                <span style={{color: 'var(--uplink-primary)', marginLeft: '4px'}}>{(Number(rating) || 0).toFixed(1)}</span>
+                <span style={{ fontSize: '0.65rem', color: 'var(--uplink-text-grey)', marginLeft: '4px' }}>({reviews})</span>
+             </div>
+          </div>
+          <h3 className="uplink-mentor-name" onClick={onViewProfile} style={{ cursor: 'pointer' }}>{name}</h3>
+          <p className="uplink-mentor-title">{title}</p>
+        </div>
       </div>
 
-      {/* Master Info */}
-      <div className="uplink-card-info">
-        <h3 className="uplink-master-name" onClick={onViewProfile} style={{ cursor: 'pointer' }}>{name}</h3>
-        <p className="uplink-master-title">{title}</p>
-
-        {/* Signal Strength (Rating) */}
-        <div className="uplink-signal-strength">
-          <div className="uplink-signal-bars">
-            {[1, 2, 3, 4, 5].map((bar) => (
-              <div
-                key={bar}
-                className={`uplink-signal-bar ${bar <= signalStrength ? 'active' : ''}`}
-              ></div>
-            ))}
-          </div>
-          <span className="uplink-signal-value">
-            {(Number(rating) || 0).toFixed(1)} ({reviews} reviews)
-          </span>
+      <div className="uplink-card-body">
+        <div className="uplink-expertise-grid">
+          {expertise.slice(0, 4).map((skill, index) => (
+            <span key={index} className="uplink-tech-chip">
+              {skill.toUpperCase()}
+            </span>
+          ))}
+          {expertise.length > 4 && (
+            <span className="uplink-tech-chip" style={{ opacity: 0.6 }}>
+              +{expertise.length - 4}
+            </span>
+          )}
         </div>
-
-        {/* Badges */}
-        {badges.length > 0 && (
-          <div className="uplink-badges">
-            {badges.slice(0, 3).map((badge, index) => (
-              <span key={index} className="uplink-badge">
-                <Award size={12} />
-                {badge}
-              </span>
-            ))}
+        
+        <div className="uplink-metrics">
+          <div className="uplink-metric-item">
+            <span className="uplink-metric-label">KINH NGHIỆM</span>
+            <span className="uplink-metric-value">{experience.toUpperCase()}</span>
           </div>
-        )}
-
-        {/* Expertise Modules */}
-        <div className="uplink-expertise-modules">
-          <div className="uplink-expertise-label">Chuyên môn</div>
-          <div className="uplink-expertise-tags">
-            {expertise.slice(0, 4).map((skill, index) => (
-              <span key={index} className="uplink-expertise-tag">
-                {skill}
-              </span>
-            ))}
-            {expertise.length > 4 && (
-              <span className="uplink-expertise-tag">+{expertise.length - 4} nữa</span>
-            )}
+          <div className="uplink-metric-item">
+             <span className="uplink-metric-label">NGÔN NGỮ</span>
+             <span className="uplink-metric-value">{languages.slice(0, 2).join(', ').toUpperCase()}</span>
           </div>
         </div>
 
-        {/* Bio */}
-        <div className="uplink-bio">
-          <p className="uplink-bio-text">
-            {bio.length > 120 ? `${bio.substring(0, 120)}...` : bio}
+        <div className="uplink-bio" style={{ marginTop: '1rem', borderTop: '1px solid rgba(6, 182, 212, 0.1)', paddingTop: '0.75rem' }}>
+          <p style={{ fontSize: '0.8rem', color: 'var(--uplink-text-grey)', lineHeight: 1.4, margin: 0 }}>
+            {bio.length > 100 ? `${bio.substring(0, 100)}...` : bio}
           </p>
         </div>
-
-        {/* Metrics Row */}
-        <div className="uplink-metrics-row">
-          <div className="uplink-metric">
-            <Briefcase className="uplink-metric-icon" size={16} />
-            <span className="uplink-metric-value">{experience}</span>
-          </div>
-          <div className="uplink-metric">
-            <DollarSign className="uplink-metric-icon" size={16} />
-            <span className="uplink-metric-value price">{hourlyRate.toLocaleString('vi-VN')} VND/giờ</span>
-          </div>
-          <div className="uplink-metric">
-            <Globe className="uplink-metric-icon" size={16} />
-            <span className="uplink-metric-value">
-              {languages.slice(0, 2).join(', ')}
-            </span>
-          </div>
-          <div className="uplink-metric">
-            <Clock className="uplink-metric-icon" size={16} />
-            <span className="uplink-metric-value">{availability}</span>
-          </div>
-        </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="uplink-actions">
-        <button 
-          className="uplink-establish-btn" 
-          onClick={onEstablishLink}
-          disabled={!preChatEnabled}
-          style={{ opacity: preChatEnabled ? 1 : 0.5, cursor: preChatEnabled ? 'pointer' : 'not-allowed' }}
-        >
-          {preChatEnabled ? 'Đặt lịch' : 'Tạm dừng'}
-          <ChevronRight size={18} />
-        </button>
+      <div className="uplink-card-footer">
+        <div className="uplink-price-section" style={{ marginBottom: '1rem' }}>
+          <span className="uplink-price-label">ĐƠN GIÁ / GIỜ</span>
+          <div className="uplink-price-value">{hourlyRate.toLocaleString('vi-VN')} <span style={{ fontSize: '0.7rem' }}>VND</span></div>
+        </div>
         
-        <button
-          className="uplink-message-btn"
-          onClick={onViewProfile}
-          aria-label="View Profile"
-          title="Xem chi tiết hồ sơ"
-        >
-          <Eye size={18} />
-        </button>
-
-        <button
-          className="uplink-message-btn"
-          onClick={onMessage}
-          aria-label="Send message"
-        >
-          <MessageCircle size={18} />
-        </button>
+        <div className="uplink-action-group">
+          <button 
+            className="uplink-message-btn" 
+            onClick={onViewProfile}
+            title="Xem hồ sơ"
+          >
+            <Eye size={18} />
+          </button>
+          <button 
+            className="uplink-message-btn" 
+            onClick={onMessage}
+            title="Gửi tín nhắn"
+          >
+            <MessageCircle size={18} />
+          </button>
+          <button 
+            className="uplink-establish-btn" 
+            onClick={onEstablishLink}
+            disabled={!preChatEnabled}
+          >
+            ĐẶT LỊCH NGAY
+          </button>
+        </div>
       </div>
     </div>
   );

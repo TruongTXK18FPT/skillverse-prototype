@@ -417,14 +417,14 @@
 /* =====================================================
    HUD OVERLAY
    ===================================================== */
-.hud-overlay {
+.hud-auth-overlay {
   position: absolute;
   inset: 0;
   z-index: 6;
   pointer-events: none;
 }
 
-.hud-corner {
+.hud-corner-auth {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -435,44 +435,44 @@
   opacity: 0.8;
 }
 
-.hud-corner.top-left {
+.hud-corner-auth.top-left {
   top: 80px;
   left: 160px;
 }
 
-.hud-corner.top-right {
+.hud-corner-auth.top-right {
   top: 80px;
   right: 160px;
   text-align: right;
 }
 
-.hud-corner.bottom-left {
+.hud-corner-auth.bottom-left {
   bottom: 60px;
   left: 160px;
 }
 
-.hud-corner.bottom-right {
+.hud-corner-auth.bottom-right {
   bottom: 60px;
   right: 160px;
   text-align: right;
 }
 
-.hud-value {
+.hud-value-auth {
   color: var(--elevator-accent);
   font-weight: bold;
 }
 
-.hud-value.status-moving {
+.hud-value-auth.status-moving {
   color: var(--elevator-success);
   animation: statusBlink 0.5s ease-in-out infinite;
 }
 
-.hud-value.status-stopping {
+.hud-value-auth.status-stopping {
   color: var(--elevator-accent);
   animation: statusBlink 1s ease-in-out infinite;
 }
 
-.hud-value.status-arrived {
+.hud-value-auth.status-arrived {
   color: var(--elevator-primary);
 }
 

@@ -242,24 +242,24 @@ const ElevatorAuthLayout: React.FC<ElevatorAuthLayoutProps> = ({
 
         {/* HUD Overlay */}
         {!hideHudCorners && (
-          <div className="hud-overlay">
-            <div className="hud-corner top-left">
+          <div className="hud-auth-overlay">
+            <div className="hud-corner-auth top-left">
               <span>TRẠNG THÁI</span>
-              <span className="hud-value">Hoạt động</span>
+              <span className="hud-value-auth">Hoạt động</span>
             </div>
-            <div className="hud-corner top-right">
+            <div className="hud-corner-auth top-right">
               <span>BẢO MẬT</span>
-              <span className="hud-value">Cao</span>
+              <span className="hud-value-auth">Cao</span>
             </div>
-            <div className="hud-corner bottom-left">
+            <div className="hud-corner-auth bottom-left">
               <span>KẾT NỐI</span>
-              <span className={`hud-value ${showAccessGranted || isExiting ? 'status-arrived' : ''}`}>
+              <span className={`hud-value-auth ${showAccessGranted || isExiting ? 'status-arrived' : ''}`}>
                 {(showAccessGranted || isExiting) ? 'THÀNH CÔNG' : 'CHỜ XỬ LÝ'}
               </span>
             </div>
-            <div className="hud-corner bottom-right">
+            <div className="hud-corner-auth bottom-right">
               <span>SKILLVERSE</span>
-              <span className="hud-value">XÁC THỰC</span>
+              <span className="hud-value-auth">XÁC THỰC</span>
             </div>
           </div>
         )}

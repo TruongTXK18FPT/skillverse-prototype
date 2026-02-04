@@ -1,11 +1,5 @@
 /* ====== EXPLORE MAP - SCI-FI HUD ====== */
 
-@font-face {
-  font-family: 'Space Habitat';
-  src: url('/fonts/spacehabitat/MBFSpaceHabitat.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
 
 /* Prevent body scroll when explore map is active */
 body:has(.explore-map-overlay) {
@@ -168,7 +162,7 @@ body:has(.explore-map-overlay) {
 .hud-corner-map {
   position: absolute;
   color: #06b6d4;
-  font-family: 'Space Habitat', monospace;
+  font-family: 'Inter', monospace;
   text-shadow: 0 0 8px rgba(6, 182, 212, 0.6), 0 0 16px rgba(6, 182, 212, 0.3);
   pointer-events: none;
   font-size: 9px;
@@ -486,7 +480,7 @@ body:has(.explore-map-overlay) {
 
 /* Main Title */
 .explore-map-title {
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.8rem;
   color: #06b6d4;
   text-shadow: 
@@ -702,9 +696,10 @@ body:has(.explore-map-overlay) {
 
 .zone-marker-name {
   color: #06b6d4;
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 1px;
   font-size: 0.95rem;
+  text-transform: uppercase;
   font-weight: 600;
 }
 
@@ -712,7 +707,7 @@ body:has(.explore-map-overlay) {
   color: rgba(6, 182, 212, 0.6);
   font-size: 0.7rem;
   letter-spacing: 0.5px;
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 /* ====== TRANSITION - CHROMATIC ABERRATION EFFECT ====== */
@@ -839,7 +834,7 @@ body:has(.explore-map-overlay) {
   font-size: 2.2rem;
   font-weight: 700;
   text-align: center;
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 3px;
   text-transform: uppercase;
   animation: zoneNameChromatic 0.8s ease-out;
@@ -968,7 +963,7 @@ body:has(.explore-map-overlay) {
   border: 1px solid rgba(6, 182, 212, 0.4);
   padding: 0.3rem 0.8rem;
   border-radius: 2px;
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
 }
 
@@ -1092,7 +1087,7 @@ body:has(.explore-map-overlay) {
   color: #06b6d4;
   text-align: center;
   white-space: nowrap;
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 1px;
   text-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
 }
@@ -1142,7 +1137,7 @@ body:has(.explore-map-overlay) {
   font-weight: 700;
   color: var(--zone-primary-color);
   margin: 0 0 0.8rem 0;
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
   text-shadow: 0 0 15px var(--zone-primary-color, rgba(6, 182, 212, 0.4));
@@ -1309,7 +1304,7 @@ body:has(.explore-map-overlay) {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 13px;
   color: #e2e8f0;
   margin: 0 0 4px 0;
@@ -1458,7 +1453,7 @@ body:has(.explore-map-overlay) {
 }
 
 .sv-zone-recommended-badge span {
-  font-family: 'Space Habitat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 11px;
   color: #a5f3fc;
   font-weight: 600;

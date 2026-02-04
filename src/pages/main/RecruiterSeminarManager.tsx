@@ -16,6 +16,15 @@ import { SeminarErrorDisplay } from '../../components/seminar/SeminarErrorDispla
 import '../../styles/RecruiterSeminarManager.css';
 import { useTheme } from '../../context/ThemeContext';
 
+// Helper: Ensure external URL has protocol
+const ensureExternalUrl = (url: string): string => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  return `https://${url}`;
+};
+
 const RecruiterSeminarManager = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
@@ -24,6 +33,7 @@ const RecruiterSeminarManager = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [seminars, setSeminars] = useState<Seminar[]>([]);
+  const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -46,7 +56,7 @@ const RecruiterSeminarManager = () => {
   const [viewSeminar, setViewSeminar] = useState<Seminar | null>(null);
   const [currentUser, setCurrentUser] = useState<{fullName: string} | null>(null);
 
-  const itemsPerPage = 6;
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const userStr = localStorage.getItem('user');
@@ -68,6 +78,7 @@ const RecruiterSeminarManager = () => {
     try {
         const response = await seminarService.getMySeminars(currentPage - 1, itemsPerPage);
         setSeminars(response.content);
+        setTotalElements(response.totalElements);
     } catch (error) {
         console.error("Failed to fetch seminars", error);
     } finally {
@@ -241,149 +252,180 @@ const RecruiterSeminarManager = () => {
   };
 
   return (
-    <div className={`rsm-container ${theme}`}>
-      <div className="rsm-content">
-        <div className="rsm-header">
-          <h1 className="rsm-title">Quản Lý Hội Thảo</h1>
-          <p className="rsm-description">
-            Tạo và quản lý các buổi hội thảo trực tuyến của bạn
-          </p>
-        </div>
-
-        <div className="rsm-controls">
-          <div className="rsm-search-box">
-            <Search className="rsm-search-icon" size={20} />
-            <input
-              type="text"
-              placeholder="Tìm kiếm hội thảo..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="rsm-search-input"
-            />
+    <div className={`rsm-cosmic-container ${theme}`}>
+      <div className="rsm-cosmic-content">
+        <div className="rsm-header-section">
+          <div className="header-text">
+            <h1 className="rsm-cosmic-title">Hệ Thống Hội Thảo</h1>
+            <p className="rsm-cosmic-description">
+              Tạo và quản lý các buổi hội thảo trực tuyến của doanh nghiệp bạn
+            </p>
           </div>
-          
           <button
             onClick={() => { resetForm(); setIsModalOpen(true); }}
-            className="rsm-add-btn"
+            className="rsm-cosmic-add-btn"
           >
             <Plus size={20} />
             <span>Tạo Hội Thảo Mới</span>
           </button>
         </div>
 
-        {/* Stats Bar */}
-        <div className="rsm-stats-bar">
-          <div className="rsm-stats-card">
-            <FileText size={24} className="rsm-stats-icon" />
-            <div className="rsm-stats-info">
-              <span className="rsm-stats-value">{seminars.length}</span>
-              <span className="rsm-stats-label">Tổng Hội Thảo</span>
+        {/* Stats Grid */}
+        <div className="rsm-stats-grid">
+          <div className="rsm-stat-card">
+            <div className="rsm-stat-icon-wrap">
+              <FileText size={24} />
+            </div>
+            <div className="rsm-stat-info">
+              <span className="rsm-stat-value">{seminars.length}</span>
+              <span className="rsm-stat-label">Tổng Hội Thảo</span>
             </div>
           </div>
-          <div className="rsm-stats-card">
-            <CheckCircle size={24} className="rsm-stats-icon rsm-stats-icon--success" />
-            <div className="rsm-stats-info">
-              <span className="rsm-stats-value">{seminars.filter(s => s.status === 'ACCEPTED' || s.status === 'OPEN').length}</span>
-              <span className="rsm-stats-label">Đã Được Duyệt</span>
+          <div className="rsm-stat-card success">
+            <div className="rsm-stat-icon-wrap">
+              <CheckCircle size={24} />
+            </div>
+            <div className="rsm-stat-info">
+              <span className="rsm-stat-value">{seminars.filter(s => s.status === 'ACCEPTED' || s.status === 'OPEN').length}</span>
+              <span className="rsm-stat-label">Đã Được Duyệt</span>
             </div>
           </div>
           <div 
-            className="rsm-stats-card rsm-stats-card--clickable"
+            className="rsm-stat-card clickable"
             onClick={() => navigate('/my-wallet')}
-            title="Xem lịch sử thu nhập từ bán vé"
           >
-            <Wallet size={24} className="rsm-stats-icon rsm-stats-icon--wallet" />
-            <div className="rsm-stats-info">
-              <span className="rsm-stats-value">Xem Thu Nhập</span>
-              <span className="rsm-stats-label">Wallet History →</span>
+            <div className="rsm-stat-icon-wrap wallet">
+              <Wallet size={24} />
             </div>
+            <div className="rsm-stat-info">
+              <span className="rsm-stat-value">Ví Thu Nhập</span>
+              <span className="rsm-stat-label">Xem lịch sử →</span>
+            </div>
+            <div className="card-arrow"><DollarSign size={16} /></div>
           </div>
         </div>
 
-        <div className="rsm-table-wrapper">
-          <table className="rsm-table">
-            <thead>
-              <tr>
-                <th>Tiêu Đề</th>
-                <th>Bắt Đầu</th>
-                <th>Kết Thúc</th>
-                <th>Giá Vé</th>
-                <th>Trạng Thái</th>
-                <th>Thao Tác</th>
-              </tr>
-            </thead>
+        <div className="rsm-controls-bar">
+          <div className="rsm-search-cosmic">
+            <Search size={18} />
+            <input
+              type="text"
+              placeholder="Tìm kiếm hội thảo..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="rsm-table-outer">
+          <div className="rsm-table-wrapper">
+            <table className="rsm-cosmic-table">
+              <thead>
+                <tr>
+                  <th>Hội Thảo</th>
+                  <th>Thời Gian</th>
+                  <th>Giá Vé</th>
+                  <th>Trạng Thái</th>
+                  <th style={{ textAlign: 'center' }}>Thao Tác</th>
+                </tr>
+              </thead>
             <tbody>
-              {filteredSeminars.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.title}</td>
-                  <td className="rsm-time-cell">
-                    {new Date(item.startTime).toLocaleDateString()} <br/>
-                    <span className="rsm-time-sub">
-                        {new Date(item.startTime).toLocaleTimeString()}
-                    </span>
-                  </td>
-                  <td className="rsm-time-cell">
-                    {new Date(item.endTime).toLocaleDateString()} <br/>
-                    <span className="rsm-time-sub">
-                        {new Date(item.endTime).toLocaleTimeString()}
-                    </span>
-                  </td>
-                  <td>
-                    {item.price === 0 ? <span style={{ color: 'var(--lhud-cyan)' }}>Miễn phí</span> : item.price.toLocaleString() + ' đ'}
-                  </td>
-                  <td>
-                    <span className={`rsm-status ${item.status.toLowerCase()}`}>
-                      {item.status}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="rsm-actions">
-                      {item.status === 'DRAFT' && (
-                          <>
-                            <button 
-                                className="rsm-action-btn" 
-                                onClick={() => handleEdit(item)}
-                                title="Chỉnh sửa"
-                            >
-                                <Edit size={16} />
-                            </button>
-                            <button 
-                                className="rsm-action-btn" 
-                                onClick={() => handleSubmitSeminar(item.id)}
-                                title="Gửi duyệt"
-                                style={{ color: '#eab308' }}
-                            >
-                                <Send size={16} />
-                            </button>
-                          </>
-                      )}
-                      {(item.status === 'ACCEPTED' || item.status === 'OPEN' || item.status === 'CLOSED') && (
+                {filteredSeminars.map((item) => (
+                  <tr key={item.id} className="rsm-row-hover">
+                    <td>
+                      <div className="rsm-seminar-info">
+                        <div className="rsm-seminar-img">
+                           <img src={item.imageUrl || 'https://via.placeholder.com/80'} alt="" />
+                        </div>
+                        <div className="rsm-seminar-text">
+                          <span className="rsm-seminar-title">{item.title}</span>
+                          <span className="rsm-seminar-id">#ID-{item.id}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="rsm-time-info">
+                        <div className="time-item">
+                           <Calendar size={12} />
+                           <span>{new Date(item.startTime).toLocaleDateString('vi-VN')}</span>
+                        </div>
+                        <div className="time-sub">
+                           {new Date(item.startTime).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="rsm-price-cell">
+                        {item.price === 0 ? (
+                           <span className="badge-free">Miễn phí</span>
+                        ) : (
+                           <span className="price-val">{item.price.toLocaleString()} đ</span>
+                        )}
+                      </div>
+                    </td>
+                    <td>
+                      <span className={`rsm-status-badge ${item.status.toLowerCase()}`}>
+                        {item.status}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="rsm-actions-group">
                         <button 
-                          className="rsm-action-btn" 
-                          onClick={() => handleDownloadRevenueInvoice(item.id, item.title)}
-                          title="Tải báo cáo doanh thu"
-                          style={{ color: '#10b981' }}
-                        >
-                          <Download size={16} />
-                        </button>
-                      )}
-                      <button 
-                          className="rsm-action-btn" 
+                          className="rsm-btn-icon view" 
                           onClick={() => handleView(item)}
                           title="Xem chi tiết"
-                      >
-                        <Eye size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                        >
+                          <Eye size={18} />
+                        </button>
+                        
+                        {item.status === 'DRAFT' && (
+                          <>
+                            <button 
+                              className="rsm-btn-icon edit" 
+                              onClick={() => handleEdit(item)}
+                              title="Chỉnh sửa"
+                            >
+                              <Edit size={18} />
+                            </button>
+                            <button 
+                              className="rsm-btn-icon submit" 
+                              onClick={() => handleSubmitSeminar(item.id)}
+                              title="Gửi duyệt"
+                            >
+                              <Send size={18} />
+                            </button>
+                          </>
+                        )}
+                        
+                        {(item.status === 'ACCEPTED' || item.status === 'OPEN') && (
+                          <button 
+                            className="rsm-btn-icon link" 
+                            onClick={() => window.open(ensureExternalUrl(item.meetingLink), '_blank')}
+                            title="Vào phòng họp"
+                          >
+                            <LinkIcon size={18} />
+                          </button>
+                        )}
+
+                        {(item.status === 'CLOSED') && (
+                          <button 
+                            className="rsm-btn-icon download" 
+                            onClick={() => handleDownloadRevenueInvoice(item.id, item.title)}
+                            title="Tải báo cáo doanh thu"
+                          >
+                            <Download size={18} />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
 
         <Pagination
-          totalItems={filteredSeminars.length}
+          totalItems={totalElements}
           itemsPerPage={itemsPerPage}
           currentPage={currentPage}
           onPageChange={setCurrentPage}
@@ -671,7 +713,7 @@ const RecruiterSeminarManager = () => {
                         <div>
                             <span className="rsm-detail-label">Link Meeting</span>
                             <div className="rsm-detail-value">
-                                <a href={viewSeminar.meetingLink} target="_blank" rel="noopener noreferrer" style={{ color: '#06b6d4' }}>
+                                <a href={ensureExternalUrl(viewSeminar.meetingLink)} target="_blank" rel="noopener noreferrer" style={{ color: '#06b6d4' }}>
                                     {viewSeminar.meetingLink || 'Chưa cập nhật'}
                                 </a>
                             </div>
@@ -712,7 +754,8 @@ const RecruiterSeminarManager = () => {
         />
       )}
     </div>
-  );
+  </div>
+);
 };
 
 export default RecruiterSeminarManager;

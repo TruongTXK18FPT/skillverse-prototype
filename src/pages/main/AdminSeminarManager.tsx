@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Check, X, Eye, User, DollarSign, Calendar, Link as LinkIcon, Clock
+  Check, X, Eye, User, DollarSign, Calendar, Link as LinkIcon, Clock, RefreshCw
 } from 'lucide-react';
 import Pagination from '../../components/shared/Pagination';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
@@ -10,16 +10,26 @@ import { Seminar } from '../../types/seminar';
 import '../../styles/AdminSeminarManager.css';
 import { useTheme } from '../../context/ThemeContext';
 
+// Helper: Ensure external URL has protocol
+const ensureExternalUrl = (url: string): string => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  return `https://${url}`;
+};
+
 const AdminSeminarManager = () => {
   const { theme } = useTheme();
   const [currentPage, setCurrentPage] = useState(1);
   const [seminars, setSeminars] = useState<Seminar[]>([]);
+  const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selectedSeminar, setSelectedSeminar] = useState<Seminar | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState<{ type: 'approve' | 'reject', id: number } | null>(null);
   
-  const itemsPerPage = 6;
+  const itemsPerPage = 10;
 
   const loadSeminars = async () => {
     setLoading(true);
@@ -27,6 +37,7 @@ const AdminSeminarManager = () => {
         // Admin sees Pending by default
         const response = await seminarService.getAllSeminars(currentPage - 1, itemsPerPage, 'PENDING');
         setSeminars(response.content);
+        setTotalElements(response.totalElements);
     } catch (error) {
         console.error("Failed to fetch seminars", error);
     } finally {
@@ -79,75 +90,155 @@ const AdminSeminarManager = () => {
   };
 
   return (
-    <div className={`asm-container ${theme}`}>
-      <div className="asm-content">
-        <div className="asm-header">
-          <h1 className="asm-title">Duyệt Hội Thảo</h1>
-          <p className="asm-description">
-            Kiểm duyệt các hội thảo đang chờ (Pending)
-          </p>
+    <div className={`asm-cosmic-container ${theme}`}>
+      <div className="asm-cosmic-content">
+        <div className="admin-content-header">
+          <div className="header-title-area">
+            <h2 className="asm-cosmic-title">
+              <Calendar className="title-icon" />
+              Duyệt Hội Thảo
+            </h2>
+            <p className="asm-cosmic-description">
+              Hệ thống kiểm duyệt các yêu cầu tổ chức hội thảo từ doanh nghiệp
+            </p>
+          </div>
+          <div className="header-actions">
+             <button className="asm-refresh-btn" onClick={loadSeminars} disabled={loading}>
+                <RefreshCw size={18} className={loading ? 'spinning' : ''} />
+                Làm mới
+             </button>
+          </div>
         </div>
 
-        <div className="asm-table-wrapper">
-          <table className="asm-table">
-            <thead>
-              <tr>
-                <th>Tiêu Đề</th>
-                <th>Người Tạo</th>
-                <th>Thời Gian</th>
-                <th>Giá Vé</th>
-                <th>Thao Tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              {seminars.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.title}</td>
-                  <td>{item.creatorName || item.creatorId}</td>
-                  <td>
-                    {new Date(item.startTime).toLocaleDateString()}
-                  </td>
-                  <td>
-                    {item.price === 0 ? <span style={{ color: '#22c55e' }}>Miễn phí</span> : item.price.toLocaleString() + ' đ'}
-                  </td>
-                  <td>
-                    <div className="asm-actions">
-                      <button 
-                        className="asm-action-btn asm-btn-view" 
-                        onClick={() => handleView(item)}
-                        title="Xem chi tiết"
-                      >
-                        <Eye size={16} />
-                      </button>
-                      <button 
-                        className="asm-action-btn asm-btn-approve" 
-                        onClick={() => handleApprove(item.id)}
-                        title="Duyệt"
-                      >
-                        <Check size={16} />
-                      </button>
-                      <button 
-                        className="asm-action-btn asm-btn-reject" 
-                        onClick={() => handleReject(item.id)}
-                        title="Từ chối"
-                      >
-                        <X size={16} />
-                      </button>
-                    </div>
-                  </td>
+        {/* Stats Row */}
+        <div className="asm-stats-grid">
+          <div className="asm-stat-card pending">
+            <div className="asm-stat-icon">
+              <Clock size={28} />
+            </div>
+            <div className="asm-stat-info">
+              <div className="asm-stat-value">{totalElements}</div>
+              <div className="asm-stat-label">Chờ duyệt</div>
+            </div>
+            <div className="asm-stat-glow"></div>
+          </div>
+          
+          <div className="asm-stat-card info">
+            <div className="asm-stat-icon">
+              <User size={28} />
+            </div>
+            <div className="asm-stat-info">
+              <div className="asm-stat-value">{seminars.length}</div>
+              <div className="asm-stat-label">Hiển thị</div>
+            </div>
+            <div className="asm-stat-glow"></div>
+          </div>
+        </div>
+
+        <div className="asm-table-outer">
+          <div className="asm-table-wrapper">
+            <table className="asm-cosmic-table">
+              <thead>
+                <tr>
+                  <th>Hội Thảo</th>
+                  <th>Người Tạo</th>
+                  <th>Thời Gian</th>
+                  <th>Giá Vé</th>
+                  <th style={{ textAlign: 'center' }}>Thao Tác</th>
                 </tr>
-              ))}
-              {seminars.length === 0 && !loading && (
-                  <tr>
-                      <td colSpan={5} className="asm-empty-state">Không có hội thảo nào đang chờ duyệt</td>
-                  </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {loading ? (
+                   <tr>
+                     <td colSpan={5} className="asm-loading-cell">
+                        <div className="asm-loader-wrap">
+                          <RefreshCw size={40} className="spinning" />
+                          <span>Đang truy xuất dữ liệu...</span>
+                        </div>
+                     </td>
+                   </tr>
+                ) : (
+                  <>
+                    {seminars.map((item) => (
+                      <tr key={item.id} className="asm-row-hover">
+                        <td>
+                          <div className="asm-seminar-info">
+                            <div className="asm-seminar-img-mini">
+                               <img src={item.imageUrl || 'https://via.placeholder.com/80'} alt="" />
+                            </div>
+                            <div className="asm-seminar-text">
+                              <span className="asm-seminar-title">{item.title}</span>
+                              <span className="asm-seminar-id">#ID-{item.id}</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="asm-creator-info">
+                            <User size={14} />
+                            <span>{item.creatorName || 'Doanh nghiệp'}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="asm-time-info">
+                            <Calendar size={14} />
+                            <span>{new Date(item.startTime).toLocaleDateString('vi-VN')}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="asm-price-tag">
+                            {item.price === 0 ? (
+                               <span className="price-free">Miễn phí</span>
+                            ) : (
+                               <span className="price-amount">{item.price.toLocaleString()} đ</span>
+                            )}
+                          </div>
+                        </td>
+                        <td>
+                          <div className="asm-actions">
+                            <button 
+                              className="asm-action-btn asm-btn-view" 
+                              onClick={() => handleView(item)}
+                              title="Xem chi tiết"
+                            >
+                              <Eye size={18} />
+                            </button>
+                            <button 
+                              className="asm-action-btn asm-btn-approve" 
+                              onClick={() => handleApprove(item.id)}
+                              title="Duyệt"
+                            >
+                              <Check size={18} />
+                            </button>
+                            <button 
+                              className="asm-action-btn asm-btn-reject" 
+                              onClick={() => handleReject(item.id)}
+                              title="Từ chối"
+                            >
+                              <X size={18} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {seminars.length === 0 && (
+                        <tr>
+                            <td colSpan={5} className="asm-empty-state">
+                               <div className="asm-empty-wrap">
+                                  <div className="asm-empty-icon">📂</div>
+                                  <p>Hiện không có hội thảo nào đang chờ duyệt</p>
+                               </div>
+                            </td>
+                        </tr>
+                    )}
+                  </>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <Pagination
-          totalItems={seminars.length}
+          totalItems={totalElements}
           itemsPerPage={itemsPerPage}
           currentPage={currentPage}
           onPageChange={setCurrentPage}
@@ -216,8 +307,8 @@ const AdminSeminarManager = () => {
                         <div>
                             <span className="asm-detail-label">Link Meeting</span>
                             <div className="asm-detail-value">
-                                <a href={selectedSeminar.meetingLink} target="_blank" rel="noopener noreferrer" style={{ color: '#06b6d4', wordBreak: 'break-all' }}>
-                                    {selectedSeminar.meetingLink}
+                                <a href={ensureExternalUrl(selectedSeminar.meetingLink)} target="_blank" rel="noopener noreferrer" style={{ color: '#06b6d4', wordBreak: 'break-all' }}>
+                                    {selectedSeminar.meetingLink || 'Chưa cập nhật'}
                                 </a>
                             </div>
                         </div>
