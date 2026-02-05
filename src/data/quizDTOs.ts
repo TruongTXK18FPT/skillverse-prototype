@@ -6,12 +6,26 @@ export enum QuestionType {
   SHORT_ANSWER = 'SHORT_ANSWER'
 }
 
+export enum QuizGradingMethod {
+  HIGHEST = 'HIGHEST',
+  AVERAGE = 'AVERAGE',
+  FIRST = 'FIRST',
+  LAST = 'LAST'
+}
+
 // Quiz Detail DTO
 export interface QuizDetailDTO {
   id: number;
   title: string;
   description: string;
   passScore: number;
+  maxAttempts?: number;
+  timeLimitMinutes?: number;
+  roundingIncrement?: number;
+  gradingMethod?: QuizGradingMethod;
+  isAssessment?: boolean;
+  cooldownHours?: number;
+  orderIndex?: number;
   moduleId: number;
   questions: QuizQuestionDetailDTO[];
   createdAt: string;
@@ -24,6 +38,13 @@ export interface QuizSummaryDTO {
   title: string;
   description: string;
   passScore: number;
+  maxAttempts?: number;
+  timeLimitMinutes?: number;
+  roundingIncrement?: number;
+  gradingMethod?: QuizGradingMethod;
+  isAssessment?: boolean;
+  cooldownHours?: number;
+  orderIndex?: number;
   questionCount: number;
   moduleId?: number;
 }
@@ -33,6 +54,12 @@ export interface QuizCreateDTO {
   title: string;
   description: string;
   passScore: number;
+  maxAttempts?: number;
+  timeLimitMinutes?: number;
+  roundingIncrement?: number;
+  gradingMethod?: QuizGradingMethod;
+  isAssessment?: boolean;
+  cooldownHours?: number;
   questions?: QuizQuestionCreateDTO[]; // Optional - can be added later
 }
 
@@ -41,6 +68,12 @@ export interface QuizUpdateDTO {
   title?: string;
   description?: string;
   passScore?: number;
+  maxAttempts?: number;
+  timeLimitMinutes?: number;
+  roundingIncrement?: number;
+  gradingMethod?: QuizGradingMethod;
+  isAssessment?: boolean;
+  cooldownHours?: number;
 }
 
 // Quiz Question Detail DTO
@@ -55,6 +88,8 @@ export interface QuizQuestionDetailDTO {
 
 // Quiz Question Create DTO
 export interface QuizQuestionCreateDTO {
+  id?: number;
+  clientId?: string;
   questionText: string;
   questionType: QuestionType;
   score: number;
@@ -80,9 +115,12 @@ export interface QuizOptionDTO {
 
 // Quiz Option Create DTO
 export interface QuizOptionCreateDTO {
+  id?: number;
+  clientId?: string;
   optionText: string;
   correct: boolean;
   orderIndex?: number;
+  feedback?: string;
 }
 
 // Quiz Option Update DTO
@@ -95,12 +133,19 @@ export interface QuizOptionUpdateDTO {
 export interface QuizAttemptDTO {
   id: number;
   quizId: number;
-  studentId: number;
   score: number;
   passed: boolean;
-  startedAt: string;
+  quizTitle?: string;
+  userId?: number;
+  correctAnswers?: number;
+  totalQuestions?: number;
+  submittedAt?: string;
+  createdAt?: string;
+  // Legacy fields (kept for backward compatibility)
+  studentId?: number;
+  startedAt?: string;
   completedAt?: string;
-  answers: QuizAnswerDTO[];
+  answers?: QuizAnswerDTO[];
 }
 
 // Quiz Answer DTO

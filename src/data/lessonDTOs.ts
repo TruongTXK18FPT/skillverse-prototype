@@ -16,6 +16,7 @@ export interface LessonDetailDTO {
   orderIndex: number;
   durationSec: number;
   contentText?: string;
+  resourceUrl?: string;
   videoUrl?: string;
   videoMediaId?: number;
   moduleId: number;
@@ -39,6 +40,7 @@ export interface LessonCreateDTO {
   orderIndex: number;
   durationSec: number;
   contentText?: string;
+  resourceUrl?: string;
   videoUrl?: string;
   videoMediaId?: number;
 }
@@ -50,6 +52,7 @@ export interface LessonUpdateDTO {
   orderIndex?: number;
   durationSec?: number;
   contentText?: string;
+  resourceUrl?: string;
   videoUrl?: string;
   videoMediaId?: number;
 }

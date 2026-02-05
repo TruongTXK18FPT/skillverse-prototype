@@ -3,44 +3,68 @@ import {
   Users, 
   Search, 
   Filter, 
-  MoreVertical, 
   CheckCircle, 
   XCircle, 
-  Clock,
-  Award,
-  BarChart2
+  Clock
 } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { getCourseEnrollments, EnrollmentDetailDTO } from '../../services/enrollmentService';
 import UserService from '../../services/userService';
 import { UserProfileResponse } from '../../data/userDTOs';
 import { QuizSummaryDTO, QuizAttemptDTO } from '../../data/quizDTOs';
-import { getUserQuizAttempts } from '../../services/quizService';
+import { getUserQuizAttemptsBatch } from '../../services/quizService';
+import { listModulesWithContent } from '../../services/moduleService';
 import { useToast } from '../../hooks/useToast';
 import '../../styles/StudentManagementTab.css';
 
 interface StudentManagementTabProps {
   courseId: number;
-  quizzes: QuizSummaryDTO[];
   currentUserId: number;
+  quizzes?: QuizSummaryDTO[];
 }
 
 interface StudentData {
   enrollment: EnrollmentDetailDTO;
   profile: UserProfileResponse | null;
   quizResults: Record<number, QuizAttemptDTO[]>; // quizId -> attempts
+  quizLoaded?: boolean;
 }
 
 const StudentManagementTab: React.FC<StudentManagementTabProps> = ({ courseId, quizzes, currentUserId }) => {
   const { showError } = useToast();
   const [students, setStudents] = useState<StudentData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [quizLoading, setQuizLoading] = useState(false);
+  const [courseQuizzes, setCourseQuizzes] = useState<QuizSummaryDTO[]>(quizzes || []);
+  const [loadingQuizUsers, setLoadingQuizUsers] = useState<Record<number, boolean>>({});
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
   useEffect(() => {
     loadStudents();
   }, [courseId]);
+
+  useEffect(() => {
+    if (quizzes) {
+      setCourseQuizzes(quizzes);
+      return;
+    }
+    loadCourseQuizzes();
+  }, [courseId, quizzes]);
+
+  const loadCourseQuizzes = async () => {
+    setQuizLoading(true);
+    try {
+      const modules = await listModulesWithContent(courseId);
+      const quizList = modules.flatMap(m => m.quizzes || []);
+      setCourseQuizzes(quizList);
+    } catch (error) {
+      console.error('Error loading course quizzes:', error);
+      showError('Error', 'Không thể tải danh sách quiz.');
+    } finally {
+      setQuizLoading(false);
+    }
+  };
 
   const loadStudents = async () => {
     setLoading(true);
@@ -59,27 +83,11 @@ const StudentManagementTab: React.FC<StudentManagementTabProps> = ({ courseId, q
             console.error(`Failed to load profile for user ${enrollment.userId}`, error);
           }
 
-          const quizResults: Record<number, QuizAttemptDTO[]> = {};
-          
-          // Fetch quiz attempts for this student for all quizzes in the course
-          // This might be heavy, so maybe we should load it on demand or optimize
-          // For now, let's load it to show "full integration"
-          await Promise.all(
-            quizzes.map(async (quiz) => {
-              try {
-                const attempts = await getUserQuizAttempts(quiz.id, enrollment.userId);
-                quizResults[quiz.id] = attempts;
-              } catch (error) {
-                // console.error(`Failed to load attempts for quiz ${quiz.id} user ${enrollment.userId}`, error);
-                quizResults[quiz.id] = [];
-              }
-            })
-          );
-
           return {
             enrollment,
             profile,
-            quizResults
+            quizResults: {},
+            quizLoaded: false
           };
         })
       );
@@ -204,7 +212,7 @@ const StudentManagementTab: React.FC<StudentManagementTabProps> = ({ courseId, q
               <th>Student</th>
               <th>Enrolled Date</th>
               <th>Progress</th>
-              {quizzes.map(quiz => (
+              {courseQuizzes.map(quiz => (
                 <th key={quiz.id} title={quiz.title}>
                   Quiz: {quiz.title.length > 15 ? quiz.title.substring(0, 15) + '...' : quiz.title}
                 </th>
@@ -250,7 +258,7 @@ const StudentManagementTab: React.FC<StudentManagementTabProps> = ({ courseId, q
                       <span className="smt-progress-text">{student.enrollment.progressPercent}%</span>
                     </div>
                   </td>
-                  {quizzes.map(quiz => (
+                  {courseQuizzes.map(quiz => (
                     <td key={quiz.id} className="smt-quiz-score-cell">
                       <span className={`smt-score-badge ${getQuizStatus(student, quiz.id)}`}>
                         {getQuizScore(student, quiz.id)}
@@ -263,15 +271,65 @@ const StudentManagementTab: React.FC<StudentManagementTabProps> = ({ courseId, q
                     </span>
                   </td>
                   <td>
-                    <button className="smt-action-btn">
-                      <MoreVertical size={16} />
+                    <button
+                      className="smt-action-btn"
+                      onClick={() => {
+                        const userId = student.enrollment.userId;
+                        if (loadingQuizUsers[userId]) return;
+                        setLoadingQuizUsers(prev => ({ ...prev, [userId]: true }));
+                        const quizIds = courseQuizzes.map(quiz => quiz.id);
+                        if (quizIds.length === 0) {
+                          setStudents(prev => prev.map(s => (
+                            s.enrollment.userId === userId ? { ...s, quizResults: {}, quizLoaded: true } : s
+                          )));
+                          setLoadingQuizUsers(prev => ({ ...prev, [userId]: false }));
+                          return;
+                        }
+
+                        getUserQuizAttemptsBatch(quizIds, userId)
+                          .then((attempts) => {
+                            const nextResults: Record<number, QuizAttemptDTO[]> = {};
+                            quizIds.forEach(id => {
+                              nextResults[id] = [];
+                            });
+                            attempts.forEach(attempt => {
+                              if (!nextResults[attempt.quizId]) {
+                                nextResults[attempt.quizId] = [];
+                              }
+                              nextResults[attempt.quizId].push(attempt);
+                            });
+                            setStudents(prev => prev.map(s => (
+                              s.enrollment.userId === userId
+                                ? { ...s, quizResults: nextResults, quizLoaded: true }
+                                : s
+                            )));
+                          })
+                          .catch(() => {
+                            setStudents(prev => prev.map(s => (
+                              s.enrollment.userId === userId
+                                ? { ...s, quizResults: {}, quizLoaded: true }
+                                : s
+                            )));
+                          })
+                          .finally(() => {
+                            setLoadingQuizUsers(prev => ({ ...prev, [userId]: false }));
+                          });
+                      }}
+                      title={student.quizLoaded ? 'Tải lại kết quả quiz' : 'Tải kết quả quiz'}
+                      disabled={courseQuizzes.length === 0 || loadingQuizUsers[student.enrollment.userId]}
+                    >
+                      {loadingQuizUsers[student.enrollment.userId] ? (
+                        <span>Đang tải...</span>
+                      ) : (
+                        <span>{student.quizLoaded ? 'Làm mới' : 'Tải quiz'}</span>
+                      )}
                     </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={5 + quizzes.length} className="smt-empty-state">
+                <td colSpan={5 + courseQuizzes.length} className="smt-empty-state">
                   No students found matching your criteria.
                 </td>
               </tr>
@@ -279,6 +337,11 @@ const StudentManagementTab: React.FC<StudentManagementTabProps> = ({ courseId, q
           </tbody>
         </table>
       </div>
+      {quizLoading && (
+        <div className="smt-loading-container">
+          <p>Đang tải danh sách quiz...</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -5,7 +5,8 @@ import {
   AssignmentUpdateDTO,
   AssignmentSummaryDTO,
   AssignmentSubmissionDetailDTO,
-  AssignmentSubmissionCreateDTO
+  AssignmentSubmissionCreateDTO,
+  GradeAssignmentDTO
 } from '../data/assignmentDTOs';
 
 /**
@@ -137,14 +138,13 @@ export const getAssignmentSubmissions = async (
  */
 export const gradeSubmission = async (
   submissionId: number,
-  score: number,
-  feedback: string | undefined,
+  grading: GradeAssignmentDTO,
   graderId: number
 ): Promise<AssignmentSubmissionDetailDTO> => {
   const response = await axiosInstance.put<AssignmentSubmissionDetailDTO>(
     `/assignments/submissions/${submissionId}/grade`,
-    undefined,
-    { params: { graderId, score, feedback } }
+    grading,
+    { params: { graderId } }
   );
   return response.data;
 };

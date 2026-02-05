@@ -7,7 +7,7 @@ import Toast from '../../components/shared/Toast';
 import '../../styles/PasswordPages.css';
 
 const ChangePasswordPage = () => {
-  const { user, changePassword } = useAuth();
+  const { changePassword } = useAuth();
   const { toast, isVisible, hideToast, showSuccess, showError } = useToast();
   const navigate = useNavigate();
   
@@ -77,7 +77,7 @@ const ChangePasswordPage = () => {
     setLoading(true);
     
     try {
-      const response = await changePassword({
+      await changePassword({
         currentPassword,
         newPassword,
         confirmPassword
@@ -85,7 +85,7 @@ const ChangePasswordPage = () => {
       
       showSuccess(
         'Thành công!',
-        response.message,
+        'Mật khẩu đã được thay đổi. Vui lòng đăng nhập lại.',
         5
       );
       
@@ -94,8 +94,9 @@ const ChangePasswordPage = () => {
       setNewPassword('');
       setConfirmPassword('');
       
+      // ✅ SECURITY: Token invalidated, redirect to login
       setTimeout(() => {
-        navigate('/profile');
+        navigate('/login');
       }, 2000);
       
     } catch (error: unknown) {
@@ -135,8 +136,8 @@ const ChangePasswordPage = () => {
         <div className="password-page__security-notice">
           <AlertCircle size={20} />
           <div>
-            <strong>Lưu ý bảo mật:</strong> Sau khi đổi mật khẩu, bạn sẽ cần sử dụng 
-            mật khẩu mới để đăng nhập vào tất cả các thiết bị.
+            <strong>Lưu ý bảo mật:</strong> Sau khi đổi mật khẩu, bạn sẽ được
+            đăng xuất và cần đăng nhập lại bằng mật khẩu mới.
           </div>
         </div>
 

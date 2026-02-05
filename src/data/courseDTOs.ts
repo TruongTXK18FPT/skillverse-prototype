@@ -41,6 +41,7 @@ export interface CourseSummaryDTO {
   title: string;
   description: string;
   shortDescription?: string; // For list view
+  category?: string;
   level: CourseLevel;
   status: CourseStatus;
   author: AuthorDTO;
@@ -52,6 +53,8 @@ export interface CourseSummaryDTO {
   lessonCount?: number; // Total lesson count across modules
   price?: number;
   currency?: string;
+  estimatedDurationHours?: number;
+  language?: string;
   averageRating?: number; // Average rating
   totalReviews?: number; // Total reviews
   createdAt: string;
@@ -75,6 +78,7 @@ export interface CourseDetailDTO {
   title: string;
   description: string;
   shortDescription?: string;
+  category?: string;
   level: CourseLevel;
   status: CourseStatus;
   author: AuthorDTO;
@@ -85,6 +89,10 @@ export interface CourseDetailDTO {
   enrollmentCount: number;
   price?: number;
   currency?: string;
+  estimatedDurationHours?: number;
+  language?: string;
+  learningObjectives?: string[];
+  requirements?: string[];
   averageRating?: number;
   totalReviews?: number;
   createdAt: string;
@@ -99,6 +107,12 @@ export interface CourseCreateDTO {
   title: string;
   description: string;
   level: CourseLevel;
+  shortDescription?: string;
+  category?: string;
+  estimatedDurationHours?: number;
+  language?: string;
+  learningObjectives?: string[];
+  requirements?: string[];
   thumbnailMediaId?: number;
   price?: number;
   currency?: string;
@@ -110,6 +124,12 @@ export interface CourseUpdateDTO {
   title?: string;
   description?: string;
   level?: CourseLevel;
+  shortDescription?: string;
+  category?: string;
+  estimatedDurationHours?: number;
+  language?: string;
+  learningObjectives?: string[];
+  requirements?: string[];
   thumbnailMediaId?: number;
   price?: number;
   currency?: string;

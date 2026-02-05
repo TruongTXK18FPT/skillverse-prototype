@@ -65,9 +65,14 @@ import HelpCenter from "./pages/footer/HelpCenter";
 import SeminarPage from "./pages/navbar/SeminarPage";
 import SeminarDetailPage from "./pages/navbar/SeminarDetailPage";
 import BusinessPage from "./pages/main/BusinessPage";
-import MentorPage from "./pages/main/MentorPage";
+// Mentor pages - organized in /pages/mentor/
+import MentorDashboard from "./pages/mentor/MentorDashboard";
 import AllBadgesPage from "./pages/mentor/AllBadgesPage";
 import MentorGradingPage from "./pages/mentor/MentorGradingPage";
+import CourseCreationPage from "./pages/mentor/course-builder/CourseCreationPage";
+import CourseContentPage from "./pages/mentor/course-builder/CourseContentPage";
+import { CourseManagementProvider } from "./context/mentor/CourseManagementContext";
+import { MentorNoticeProvider } from "./context/mentor/MentorNoticeContext";
 import AdminPage from "./pages/main/AdminPage";
 import AdminSecurityPage from "./pages/admin/AdminSecurityPage";
 import AdminGamificationDashboard from "./pages/admin/AdminGamificationDashboard";
@@ -310,6 +315,10 @@ const App = () => {
                           element={<CourseDetailPage />}
                         />
                         <Route
+                          path="/course/:id/preview"
+                          element={<CourseDetailPage />}
+                        />
+                        <Route
                           path="/course-learning"
                           element={<CourseLearningPage />}
                         />
@@ -364,7 +373,46 @@ const App = () => {
                           path="/mentor"
                           element={
                             <MentorRoute>
-                              <MentorPage />
+                              <MentorNoticeProvider>
+                                <MentorDashboard />
+                              </MentorNoticeProvider>
+                            </MentorRoute>
+                          }
+                        />
+                        {/* Course Builder Routes */}
+                        <Route
+                          path="/mentor/courses/create"
+                          element={
+                            <MentorRoute>
+                              <MentorNoticeProvider>
+                                <CourseManagementProvider>
+                                  <CourseCreationPage />
+                                </CourseManagementProvider>
+                              </MentorNoticeProvider>
+                            </MentorRoute>
+                          }
+                        />
+                        <Route
+                          path="/mentor/courses/:courseId/edit"
+                          element={
+                            <MentorRoute>
+                              <MentorNoticeProvider>
+                                <CourseManagementProvider>
+                                  <CourseCreationPage />
+                                </CourseManagementProvider>
+                              </MentorNoticeProvider>
+                            </MentorRoute>
+                          }
+                        />
+                        <Route
+                          path="/mentor/courses/:courseId/content"
+                          element={
+                            <MentorRoute>
+                              <MentorNoticeProvider>
+                                <CourseManagementProvider>
+                                  <CourseContentPage />
+                                </CourseManagementProvider>
+                              </MentorNoticeProvider>
                             </MentorRoute>
                           }
                         />
@@ -372,7 +420,9 @@ const App = () => {
                           path="/mentor/badges"
                           element={
                             <MentorRoute>
-                              <AllBadgesPage />
+                              <MentorNoticeProvider>
+                                <AllBadgesPage />
+                              </MentorNoticeProvider>
                             </MentorRoute>
                           }
                         />
@@ -380,7 +430,9 @@ const App = () => {
                           path="/mentor/assignments/:assignmentId/grade"
                           element={
                             <MentorRoute>
-                              <MentorGradingPage />
+                              <MentorNoticeProvider>
+                                <MentorGradingPage />
+                              </MentorNoticeProvider>
                             </MentorRoute>
                           }
                         />
@@ -488,6 +540,11 @@ const isRoadmapDetailRoute = (pathname: string) => {
   return /^\/roadmap\/[^/]+$/.test(pathname);
 };
 
+// Check if path is any mentor management route
+const isMentorRoute = (pathname: string) => {
+  return pathname === "/mentor" || pathname.startsWith("/mentor/");
+};
+
 // Hide Header on specific routes
 const HeaderVisibilityWrapper = () => {
   const location = useLocation();
@@ -501,6 +558,7 @@ const FooterVisibilityWrapper = () => {
   if (
     fullScreenRoutes.has(location.pathname) ||
     hideFooterOnlyRoutes.has(location.pathname) ||
+    isMentorRoute(location.pathname) ||
     isQuizAttemptRoute(location.pathname) ||
     isRoadmapDetailRoute(location.pathname)
   ) {

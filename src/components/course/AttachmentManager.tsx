@@ -16,11 +16,17 @@ import './AttachmentManager.css';
 interface AttachmentManagerProps {
   lessonId: number;
   editable?: boolean; // Can add/delete attachments
+  hideWhenEmpty?: boolean;
+  showHeader?: boolean;
+  headerText?: string;
 }
 
 const AttachmentManager: React.FC<AttachmentManagerProps> = ({
   lessonId,
-  editable = false
+  editable = false,
+  hideWhenEmpty = false,
+  showHeader = true,
+  headerText
 }) => {
   const { user } = useAuth();
   
@@ -102,25 +108,33 @@ const AttachmentManager: React.FC<AttachmentManagerProps> = ({
   if (loading) {
     return <div className="attachment-manager-loading">Đang tải...</div>;
   }
+
+  if (hideWhenEmpty && !editable && attachments.length === 0 && !error) {
+    return null;
+  }
+
+  const shouldShowHeader = showHeader && (editable || attachments.length > 0 || !!error);
   
   return (
     <div className="attachment-manager">
-      <div className="attachment-manager-header">
-        <h3>📎 Tài liệu đính kèm</h3>
-        {editable && (
-          <div className="attachment-actions">
-            <button 
-              type="button"
-              onClick={() => setShowUploadModal(true)}
-              className="btn-add-attachment"
-              title="Upload PDF"
-            >
-              <Plus size={16} />
-              Upload PDF
-            </button>
-          </div>
-        )}
-      </div>
+      {shouldShowHeader && (
+        <div className="attachment-manager-header">
+          <h3>{headerText || 'Tài liệu đính kèm'}</h3>
+          {editable && (
+            <div className="attachment-actions">
+              <button 
+                type="button"
+                onClick={() => setShowUploadModal(true)}
+                className="btn-add-attachment"
+                title="Upload PDF"
+              >
+                <Plus size={16} />
+                Upload PDF
+              </button>
+            </div>
+          )}
+        </div>
+      )}
       
       {error && (
         <div className="attachment-error">

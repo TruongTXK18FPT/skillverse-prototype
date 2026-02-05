@@ -5,10 +5,10 @@ import React, {
   useEffect,
   ReactNode,
   useCallback,
+  useMemo,
 } from "react";
 import { streakService } from "../services/streakService";
-import authService from "../services/authService";
-import userService from "../services/userService";
+import { useAuth } from "./AuthContext";
 
 // Import special state images
 import meowlLoseStreak from "../assets/streak/meowl-losestreak.png";
@@ -52,14 +52,18 @@ const SLEEP_TIMEOUT = 60 * 60 * 1000;
 export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const { user, isAuthenticated: authIsAuthenticated } = useAuth();
   const [hasCheckedInToday, setHasCheckedInToday] = useState<boolean>(true); // Assume true initially
   const [lastInteractionTime, setLastInteractionTime] = useState<number>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.LAST_INTERACTION);
     return saved ? parseInt(saved, 10) : Date.now();
   });
   const [meowlState, setMeowlState] = useState<MeowlState>("active");
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [userRole, setUserRole] = useState<string | null>(null);
+
+  const roleNames = useMemo(
+    () => (user?.roles || []).map((r) => String(r).toUpperCase()),
+    [user?.roles],
+  );
 
   // Check-in success modal state
   const [showCheckInSuccessModal, setShowCheckInSuccessModal] =
@@ -75,58 +79,17 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
     setShowCheckInSuccessModal(false);
   }, []);
 
-  // Check authentication status and user role
-  useEffect(() => {
-    const checkAuth = async () => {
-      const authenticated = authService.isAuthenticated();
-      setIsAuthenticated(authenticated);
-
-      // Get user role if authenticated
-      if (authenticated) {
-        try {
-          const userProfile = await userService.getMyProfile();
-          const role = userProfile.roles?.[0] || null;
-          setUserRole(role);
-        } catch (error) {
-          console.error(
-            "Failed to get user role from API, checking localStorage:",
-            error,
-          );
-          // Fallback: get role from localStorage if API fails
-          const userStr = localStorage.getItem("user");
-          if (userStr) {
-            const user = JSON.parse(userStr);
-            const role = user.roles?.[0] || null;
-            setUserRole(role);
-          } else {
-            setUserRole(null);
-          }
-        }
-      } else {
-        setUserRole(null);
-      }
-    };
-    checkAuth();
-
-    // Listen for auth changes
-    const interval = setInterval(checkAuth, 5000); // Check every 5 seconds
-    return () => clearInterval(interval);
-  }, []);
-
   // Check if user has checked in today
   const refreshCheckInStatus = useCallback(async () => {
     // Only check if authenticated
-    if (!authService.isAuthenticated()) {
+    if (!authIsAuthenticated) {
       setHasCheckedInToday(true); // Default to true if not logged in
       return;
     }
 
     // RECRUITER (BUSINESS), MENTOR, ADMIN roles are EXEMPT from daily check-in requirement
     // Only USER role needs to check in
-    if (
-      userRole &&
-      ["RECRUITER", "MENTOR", "ADMIN"].includes(userRole.toUpperCase())
-    ) {
+    if (roleNames.some((r) => ["RECRUITER", "MENTOR", "ADMIN"].includes(r))) {
       setHasCheckedInToday(true); // Always true for these roles
       return;
     }
@@ -138,7 +101,7 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
       console.error("Failed to check attendance status:", error);
       // On error, don't change state to avoid showing wrong image
     }
-  }, [userRole]);
+  }, [authIsAuthenticated, roleNames]);
 
   // Immediately mark as checked in (for instant UI update after check-in)
   const markCheckedIn = useCallback(() => {
@@ -157,15 +120,23 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     refreshCheckInStatus();
 
-    // Set up periodic check (every 5 minutes)
-    const checkInterval = setInterval(
-      () => {
+    // Refresh when user returns to the tab
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
         refreshCheckInStatus();
-      },
-      5 * 60 * 1000,
-    );
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
 
-    return () => clearInterval(checkInterval);
+    // Optional: periodic check (every 10 minutes) to keep state fresh
+    const checkInterval = setInterval(() => {
+      refreshCheckInStatus();
+    }, 10 * 60 * 1000);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      clearInterval(checkInterval);
+    };
   }, [refreshCheckInStatus]);
 
   // Calculate Meowl state based on check-in and interaction
@@ -175,15 +146,15 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
       const timeSinceLastInteraction = now - lastInteractionTime;
 
       // If not authenticated, always show active (default) state
-      if (!isAuthenticated) {
+      if (!authIsAuthenticated) {
         setMeowlState("active");
         return;
       }
 
       // RECRUITER (BUSINESS), MENTOR, ADMIN are EXEMPT from check-in requirement
-      const isExemptRole =
-        userRole &&
-        ["RECRUITER", "MENTOR", "ADMIN"].includes(userRole.toUpperCase());
+      const isExemptRole = roleNames.some((r) =>
+        ["RECRUITER", "MENTOR", "ADMIN"].includes(r),
+      );
       if (isExemptRole) {
         // For exempt roles, never show lose-streak state
         setMeowlState("active");
@@ -212,7 +183,7 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
     const stateInterval = setInterval(calculateState, 60 * 1000);
 
     return () => clearInterval(stateInterval);
-  }, [hasCheckedInToday, lastInteractionTime, isAuthenticated, userRole]); // Added userRole dependency
+  }, [hasCheckedInToday, lastInteractionTime, authIsAuthenticated, roleNames]);
 
   // Determine which image to use (null means use the skin image from MeowlSkinContext)
   const getStateImage = (): string | null => {
@@ -235,13 +206,13 @@ export const MeowlStateProvider: React.FC<{ children: ReactNode }> = ({
         lastInteractionTime,
         stateImage: getStateImage(),
         recordInteraction,
-        refreshCheckInStatus,
-        markCheckedIn,
-        isAuthenticated,
-        showCheckInSuccessModal,
-        checkInCoins,
-        triggerCheckInSuccess,
-        closeCheckInSuccess,
+      refreshCheckInStatus,
+      markCheckedIn,
+      isAuthenticated: authIsAuthenticated,
+      showCheckInSuccessModal,
+      checkInCoins,
+      triggerCheckInSuccess,
+      closeCheckInSuccess,
       }}
     >
       {children}

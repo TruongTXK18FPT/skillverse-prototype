@@ -117,8 +117,10 @@ const MentorGradingPage: React.FC = () => {
     try {
       await gradeSubmission(
         gradingModal.submission.id,
-        score,
-        gradingModal.feedback || undefined,
+        {
+          score,
+          feedback: gradingModal.feedback || undefined
+        },
         user.id
       );
       setGradingModal({

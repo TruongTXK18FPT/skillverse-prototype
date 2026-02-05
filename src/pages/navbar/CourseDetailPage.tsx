@@ -3,17 +3,11 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   ArrowLeft,
   Star,
-  User,
   Users,
-  Clock,
-  BookOpen,
-  Trophy,
   Play,
-  CheckCircle,
-  Globe,
-  Download,
   Share2,
   Heart,
+  Eye,
   ChevronDown,
   ChevronUp,
   Target,
@@ -21,7 +15,6 @@ import {
   Shield,
   Cpu,
   Layers,
-  Award,
   Activity
 } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
@@ -30,7 +23,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../utils/useToast';
 import { getCourse } from '../../services/courseService';
 import { enrollUser, checkEnrollmentStatus, getEnrollmentProgress } from '../../services/enrollmentService';
-import { CourseDetailDTO } from '../../data/courseDTOs';
+import { CourseDetailDTO, CourseStatus } from '../../data/courseDTOs';
 import { getMentorProfile, MentorProfile } from '../../services/mentorProfileService';
 import { getGroupByCourse, joinGroup, GroupChatResponse } from '../../services/groupChatService';
 import PurchaseCourseModal from '../../components/course/PurchaseCourseModal';
@@ -70,7 +63,38 @@ const CourseDetailPage = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [groupChat, setGroupChat] = useState<GroupChatResponse | null>(null);
 
-  const passedCourse = location.state?.course;
+  const isPreviewMode = location.pathname.includes('/preview');
+  const isCoursePublic = course?.status === CourseStatus.PUBLIC;
+  const isActivationLocked = isPreviewMode || (!!course && course.status !== CourseStatus.PUBLIC);
+  const canPreviewLearning = Boolean(user?.roles?.some((role) => role === 'MENTOR' || role === 'ADMIN'));
+
+  const formatDate = (value?: string) => {
+    if (!value) return 'Chưa cập nhật';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Chưa cập nhật';
+    return date.toLocaleDateString('vi-VN');
+  };
+
+  const formatDuration = (hours?: number) => {
+    if (!hours || hours <= 0) return 'Chưa cập nhật';
+    if (hours < 1) return `${Math.round(hours * 60)} phút`;
+    return `${hours.toFixed(hours % 1 === 0 ? 0 : 1)} giờ`;
+  };
+
+  const getStatusLabel = (status?: CourseStatus) => {
+    switch (status) {
+      case CourseStatus.PUBLIC:
+        return 'Đã công khai';
+      case CourseStatus.PENDING:
+        return 'Đang chờ duyệt';
+      case CourseStatus.DRAFT:
+        return 'Bản nháp';
+      case CourseStatus.ARCHIVED:
+        return 'Đã lưu trữ';
+      default:
+        return 'Chưa cập nhật';
+    }
+  };
 
   useEffect(() => {
     if (isEnrolled) {
@@ -140,6 +164,16 @@ const CourseDetailPage = () => {
   const handleEnroll = async () => {
     if (!course || loadingEnrollment || !user) return;
 
+    if (isPreviewMode) {
+      showInfo('Chế độ xem trước', 'Bạn đang xem trước khóa học. Không thể kích hoạt trong chế độ này.');
+      return;
+    }
+
+    if (!isCoursePublic) {
+      showInfo('Chưa được duyệt', 'Khóa học cần được admin duyệt trước khi học viên có thể kích hoạt.');
+      return;
+    }
+
     setLoadingEnrollment(true);
 
     try {
@@ -170,6 +204,11 @@ const CourseDetailPage = () => {
     setShowTrailer(true);
   };
 
+  const handlePreviewLearning = () => {
+    if (!course) return;
+    navigate('/course-learning', { state: { courseId: course.id, preview: true } });
+  };
+
   const closeTrailer = () => {
     setShowTrailer(false);
   };
@@ -195,13 +234,26 @@ const CourseDetailPage = () => {
     }
   };
 
+  const getLevelLabel = (level?: string) => {
+    switch (level?.toUpperCase()) {
+      case 'BEGINNER':
+        return 'Cơ bản';
+      case 'INTERMEDIATE':
+        return 'Trung cấp';
+      case 'ADVANCED':
+        return 'Nâng cao';
+      default:
+        return level || 'Chưa cập nhật';
+    }
+  };
+
   if (loading) {
     return (
       <div className={`cockpit-detail-container ${theme}`} data-theme={theme}>
         <div className="cockpit-detail-hud-frame">
           <div className="cockpit-detail-loading">
             <MeowlKuruLoader size="medium" text="" />
-            <p className="cockpit-detail-loading-text">ĐANG TẢI DỮ LIỆU MODULE...</p>
+            <p className="cockpit-detail-loading-text">ĐANG TẢI DỮ LIỆU KHÓA HỌC...</p>
             <div className="cockpit-detail-loading-bar">
               <div className="cockpit-detail-loading-progress"></div>
             </div>
@@ -217,17 +269,23 @@ const CourseDetailPage = () => {
         <div className="cockpit-detail-hud-frame">
           <div className="cockpit-detail-error">
             <Shield className="cockpit-detail-error-icon" />
-            <h2 className="cockpit-detail-error-title">KHÔNG TÌM THẤY MODULE</h2>
-            <p className="cockpit-detail-error-text">Module không tồn tại trong hệ thống</p>
+            <h2 className="cockpit-detail-error-title">KHÔNG TÌM THẤY KHÓA HỌC</h2>
+            <p className="cockpit-detail-error-text">Khóa học không tồn tại trong hệ thống</p>
             <button onClick={() => navigate('/courses')} className="cockpit-detail-back-btn">
               <ArrowLeft className="cockpit-detail-btn-icon" />
-              QUAY LẠI HỆ THỐNG
+              QUAY LẠI
             </button>
           </div>
         </div>
       </div>
     );
   }
+
+  const statusNotice = isPreviewMode
+    ? 'Bạn đang xem trước khóa học. Học viên chỉ có thể kích hoạt khi khóa học được admin duyệt và công khai.'
+    : (course.status !== CourseStatus.PUBLIC
+      ? `Khóa học hiện đang ở trạng thái ${getStatusLabel(course.status)}. Chỉ có thể kích hoạt sau khi được duyệt.`
+      : null);
 
   return (
     <div className={`cockpit-detail-container ${theme}`} data-theme={theme}>
@@ -248,10 +306,23 @@ const CourseDetailPage = () => {
             <span>QUAY LẠI</span>
           </button>
           <div className="cockpit-detail-nav-status">
-            <Activity className="cockpit-detail-status-icon" />
-            <span className="cockpit-detail-status-text">MODULE ACTIVE</span>
+            <span className={`cockpit-detail-status-pill ${course.status?.toLowerCase()}`}>
+              {getStatusLabel(course.status)}
+            </span>
+            {isPreviewMode && (
+              <span className="cockpit-detail-status-pill preview">
+                Xem trước
+              </span>
+            )}
           </div>
         </div>
+
+        {statusNotice && (
+          <div className="cockpit-detail-status-banner">
+            <div className="cockpit-detail-status-banner-title">Lưu ý</div>
+            <p className="cockpit-detail-status-banner-text">{statusNotice}</p>
+          </div>
+        )}
 
         {/* Hero Section */}
         <div className="cockpit-detail-hero">
@@ -262,7 +333,7 @@ const CourseDetailPage = () => {
               {course.level && (
                 <div className={`cockpit-detail-level-badge cockpit-detail-level-${getLevelColor(course.level)}`}>
                   <Shield className="cockpit-detail-badge-icon" />
-                  <span>{course.level}</span>
+                  <span>{getLevelLabel(course.level)}</span>
                 </div>
               )}
 
@@ -270,7 +341,9 @@ const CourseDetailPage = () => {
               <h1 className="cockpit-detail-title">{course.title}</h1>
 
               {/* Description */}
-              <p className="cockpit-detail-description">{course.description}</p>
+              <p className="cockpit-detail-description">
+                {course.shortDescription || course.description}
+              </p>
 
               {/* Stats Grid */}
               <div className="cockpit-detail-stats-grid">
@@ -278,21 +351,21 @@ const CourseDetailPage = () => {
                   <Star className="cockpit-detail-stat-icon" />
                   <div className="cockpit-detail-stat-content">
                     <span className="cockpit-detail-stat-value">{course.averageRating?.toFixed(1) ?? '0.0'}</span>
-                    <span className="cockpit-detail-stat-label">RATING</span>
+                    <span className="cockpit-detail-stat-label">ĐIỂM ĐÁNH GIÁ</span>
                   </div>
                 </div>
                 <div className="cockpit-detail-stat-card">
                   <Users className="cockpit-detail-stat-icon" />
                   <div className="cockpit-detail-stat-content">
                     <span className="cockpit-detail-stat-value">{formatStudentCount(course.enrollmentCount)}</span>
-                    <span className="cockpit-detail-stat-label">USERS</span>
+                    <span className="cockpit-detail-stat-label">HỌC VIÊN</span>
                   </div>
                 </div>
                 <div className="cockpit-detail-stat-card">
                   <Layers className="cockpit-detail-stat-icon" />
                   <div className="cockpit-detail-stat-content">
                     <span className="cockpit-detail-stat-value">{course.modules?.length ?? 0}</span>
-                    <span className="cockpit-detail-stat-label">MODULES</span>
+                    <span className="cockpit-detail-stat-label">CHƯƠNG</span>
                   </div>
                 </div>
               </div>
@@ -335,20 +408,27 @@ const CourseDetailPage = () => {
                 {/* Enrollment Button */}
                 {isEnrolled ? (
                   <button
-                    className="cockpit-detail-enroll-btn enrolled"
-                    onClick={() => navigate('/course-learning', { state: { courseId: course.id } })}
+                    className={`cockpit-detail-enroll-btn enrolled ${isActivationLocked ? 'locked' : ''}`}
+                    onClick={() => {
+                      if (!isActivationLocked) {
+                        navigate('/course-learning', { state: { courseId: course.id } });
+                      }
+                    }}
+                    disabled={isActivationLocked}
                   >
-                    <BookOpen className="cockpit-detail-btn-icon" />
-                    <span>TIẾP TỤC HỌC</span>
+                    <span>{isActivationLocked ? 'CHƯA THỂ TRUY CẬP' : 'TIẾP TỤC HỌC'}</span>
                   </button>
                 ) : (
                   <button
-                    className={`cockpit-detail-enroll-btn ${loadingEnrollment ? 'loading' : ''}`}
+                    className={`cockpit-detail-enroll-btn ${loadingEnrollment ? 'loading' : ''} ${isActivationLocked ? 'locked' : ''}`}
                     onClick={handleEnroll}
-                    disabled={loadingEnrollment}
+                    disabled={loadingEnrollment || isActivationLocked}
                   >
-                    <Zap className="cockpit-detail-btn-icon" />
-                    <span>{loadingEnrollment ? 'ĐANG XỬ LÝ...' : 'KÍCH HOẠT MODULE'}</span>
+                    <span>
+                      {isActivationLocked
+                        ? (isPreviewMode ? 'CHẾ ĐỘ XEM TRƯỚC' : 'CHỜ DUYỆT')
+                        : (loadingEnrollment ? 'ĐANG XỬ LÝ...' : 'KÍCH HOẠT KHÓA HỌC')}
+                    </span>
                   </button>
                 )}
 
@@ -361,7 +441,16 @@ const CourseDetailPage = () => {
                     <Heart className="cockpit-detail-action-icon" />
                     <span>{isWishlisted ? 'ĐÃ LƯU' : 'LƯU'}</span>
                   </button>
-                  {isEnrolled && groupChat && (
+                  {canPreviewLearning && (
+                    <button
+                      className="cockpit-detail-action-btn"
+                      onClick={handlePreviewLearning}
+                    >
+                      <Eye className="cockpit-detail-action-icon" />
+                      <span>XEM TRƯỚC NỘI DUNG</span>
+                    </button>
+                  )}
+                  {isEnrolled && !isActivationLocked && groupChat && (
                     <button
                       className="cockpit-detail-action-btn"
                       onClick={handleJoinGroup}
@@ -378,7 +467,7 @@ const CourseDetailPage = () => {
                 </div>
 
                 {/* Progress Section (if enrolled) */}
-                {isEnrolled && (
+                {isEnrolled && !isActivationLocked && (
                   <div className="cockpit-detail-progress-section">
                     <div className="cockpit-detail-progress-header">
                       <Activity className="cockpit-detail-progress-icon" />
@@ -407,6 +496,13 @@ const CourseDetailPage = () => {
               <span>TỔNG QUAN & NỘI DUNG</span>
             </button>
             <button
+              className={`cockpit-detail-tab ${activeTab === 'curriculum' ? 'active' : ''}`}
+              onClick={() => setActiveTab('curriculum')}
+            >
+              <Layers className="cockpit-detail-tab-icon" />
+              <span>CHƯƠNG TRÌNH</span>
+            </button>
+            <button
               className={`cockpit-detail-tab ${activeTab === 'instructor' ? 'active' : ''}`}
               onClick={() => setActiveTab('instructor')}
             >
@@ -431,7 +527,7 @@ const CourseDetailPage = () => {
                 <div className="cockpit-detail-section-panel">
                   <div className="cockpit-detail-section-header">
                     <div className="cockpit-detail-section-marker"></div>
-                    <h2 className="cockpit-detail-section-title">MÔ TẢ MODULE</h2>
+                    <h2 className="cockpit-detail-section-title">GIỚI THIỆU KHÓA HỌC</h2>
                   </div>
                   <div className="cockpit-detail-section-content">
                     {course.description ? (
@@ -440,11 +536,78 @@ const CourseDetailPage = () => {
                       </p>
                     ) : (
                       <p className="cockpit-detail-text italic opacity-70">
-                        Chưa có mô tả chi tiết cho module này.
+                        Chưa có mô tả chi tiết cho khóa học này.
                       </p>
                     )}
                   </div>
                 </div>
+
+                <div className="cockpit-detail-section-panel">
+                  <div className="cockpit-detail-section-header">
+                    <div className="cockpit-detail-section-marker"></div>
+                    <h2 className="cockpit-detail-section-title">THÔNG TIN KHÓA HỌC</h2>
+                  </div>
+                  <div className="cockpit-detail-facts-grid">
+                    <div className="cockpit-detail-fact">
+                      <span className="cockpit-detail-fact-label">Cấp độ</span>
+                      <span className="cockpit-detail-fact-value">{getLevelLabel(course.level)}</span>
+                    </div>
+                    <div className="cockpit-detail-fact">
+                      <span className="cockpit-detail-fact-label">Danh mục</span>
+                      <span className="cockpit-detail-fact-value">{course.category || 'Chưa cập nhật'}</span>
+                    </div>
+                    <div className="cockpit-detail-fact">
+                      <span className="cockpit-detail-fact-label">Ngôn ngữ</span>
+                      <span className="cockpit-detail-fact-value">{course.language || 'Chưa cập nhật'}</span>
+                    </div>
+                    <div className="cockpit-detail-fact">
+                      <span className="cockpit-detail-fact-label">Thời lượng</span>
+                      <span className="cockpit-detail-fact-value">{formatDuration(course.estimatedDurationHours)}</span>
+                    </div>
+                    <div className="cockpit-detail-fact">
+                      <span className="cockpit-detail-fact-label">Cập nhật</span>
+                      <span className="cockpit-detail-fact-value">
+                        {formatDate(course.publishedDate || course.updatedAt)}
+                      </span>
+                    </div>
+                    <div className="cockpit-detail-fact">
+                      <span className="cockpit-detail-fact-label">Số chương</span>
+                      <span className="cockpit-detail-fact-value">{course.modules?.length ?? 0}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {Boolean(course.learningObjectives?.length) && (
+                  <div className="cockpit-detail-section-panel">
+                    <div className="cockpit-detail-section-header">
+                      <div className="cockpit-detail-section-marker"></div>
+                      <h2 className="cockpit-detail-section-title">BẠN SẼ HỌC ĐƯỢC</h2>
+                    </div>
+                    <div className="cockpit-detail-outcomes-grid">
+                      {(course.learningObjectives || []).map((objective, idx) => (
+                        <div key={`${objective}-${idx}`} className="cockpit-detail-outcome-card">
+                          <span>{objective}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {Boolean(course.requirements?.length) && (
+                  <div className="cockpit-detail-section-panel">
+                    <div className="cockpit-detail-section-header">
+                      <div className="cockpit-detail-section-marker"></div>
+                      <h2 className="cockpit-detail-section-title">YÊU CẦU</h2>
+                    </div>
+                    <ul className="cockpit-detail-requirements">
+                      {(course.requirements || []).map((requirement, idx) => (
+                        <li key={`${requirement}-${idx}`}>
+                          <span>{requirement}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             )}
 
@@ -453,7 +616,7 @@ const CourseDetailPage = () => {
                 <div className="cockpit-detail-section-panel">
                   <div className="cockpit-detail-section-header">
                     <div className="cockpit-detail-section-marker"></div>
-                    <h2 className="cockpit-detail-section-title">DANH SÁCH CÁC MODULE CON</h2>
+                    <h2 className="cockpit-detail-section-title">DANH SÁCH CHƯƠNG</h2>
                   </div>
                   {course.modules && course.modules.length > 0 ? (
                     <div className="cockpit-detail-modules-list">
@@ -482,7 +645,7 @@ const CourseDetailPage = () => {
                           </div>
                           {expandedModule === module.id && (
                             <div className="cockpit-detail-module-content">
-                              <p className="cockpit-detail-module-detail">Chi tiết module sẽ được hiển thị ở đây</p>
+                              <p className="cockpit-detail-module-detail">Chi tiết chương sẽ được hiển thị ở đây</p>
                             </div>
                           )}
                         </div>
@@ -491,7 +654,7 @@ const CourseDetailPage = () => {
                   ) : (
                     <div className="cockpit-detail-empty">
                       <Layers className="cockpit-detail-empty-icon" />
-                      <p className="cockpit-detail-empty-text">Chưa có nội dung module</p>
+                      <p className="cockpit-detail-empty-text">Chưa có nội dung chương</p>
                     </div>
                   )}
                 </div>

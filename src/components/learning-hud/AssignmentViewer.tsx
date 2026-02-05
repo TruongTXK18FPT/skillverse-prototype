@@ -31,9 +31,10 @@ import './learning-hud.css';
 interface AssignmentViewerProps {
   assignmentId: number;
   onClose?: () => void;
+  readOnly?: boolean;
 }
 
-const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClose }) => {
+const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClose, readOnly = false }) => {
   const { user } = useAuth();
   const [assignment, setAssignment] = useState<AssignmentDetailDTO | null>(null);
   const [submissions, setSubmissions] = useState<AssignmentSubmissionDetailDTO[]>([]);
@@ -53,10 +54,8 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
     setLoading(true);
     setError(null);
     try {
-      const [assignmentData, submissionsData] = await Promise.all([
-        getAssignmentById(assignmentId),
-        getMySubmissions(assignmentId, user.id)
-      ]);
+      const assignmentData = await getAssignmentById(assignmentId);
+      const submissionsData = readOnly ? [] : await getMySubmissions(assignmentId, user.id);
       setAssignment(assignmentData);
       setSubmissions(submissionsData);
     } catch (err: unknown) {
@@ -65,7 +64,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
     } finally {
       setLoading(false);
     }
-  }, [assignmentId, user?.id]);
+  }, [assignmentId, user?.id, readOnly]);
 
   useEffect(() => {
     loadData();
@@ -235,7 +234,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
       </div>
 
       {/* Current Submission Status */}
-      {newestSubmission && (
+      {!readOnly && newestSubmission && (
         <div className="learning-hud-current-submission">
           <div className="learning-hud-submission-header">
             <h3>Your Submission (Attempt #{newestSubmission.attemptNumber})</h3>
@@ -288,7 +287,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
       )}
 
       {/* Submission History */}
-      {previousSubmissions.length > 0 && (
+      {!readOnly && previousSubmissions.length > 0 && (
         <div className="learning-hud-submission-history">
           <button
             className="learning-hud-history-toggle"
@@ -317,7 +316,8 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
       )}
 
       {/* Submission Form (Unlimited Resubmissions) */}
-      <div className="learning-hud-submission-form">
+      {!readOnly && (
+        <div className="learning-hud-submission-form">
         <h3>
           {newestSubmission ? 'Submit New Attempt' : 'Submit Your Work'}
         </h3>
@@ -408,6 +408,14 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
           </p>
         </div>
       </div>
+      )}
+      {readOnly && (
+        <div className="learning-hud-submission-note">
+          <p>
+            Chế độ xem trước: phần nộp bài được tắt. Học viên sẽ thấy biểu mẫu nộp bài khi tham gia khóa học.
+          </p>
+        </div>
+      )}
     </div>
   );
 };

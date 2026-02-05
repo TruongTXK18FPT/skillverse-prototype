@@ -26,6 +26,7 @@ import {
   ControlDeck,
   AssignmentViewer,
 } from "../../components/learning-hud";
+import "../../styles/CourseLearningQuiz.css";
 
 // --- LOCAL INTERFACES --- //
 
@@ -61,6 +62,10 @@ const CourseLearningPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const courseId: number | undefined = location.state?.courseId;
+  const isPreviewMode = Boolean(
+    location.state?.preview ||
+    new URLSearchParams(location.search).get('preview') === '1'
+  );
 
   const [course, setCourse] = useState<CourseDetailDTO | null>(null);
   const [loading, setLoading] = useState(true);
@@ -142,7 +147,9 @@ const CourseLearningPage = () => {
       .catch(() => {})
       .finally(() => setLoading(false));
 
-    getEnrollment(courseId, 1).catch(() => {});
+    if (!isPreviewMode) {
+      getEnrollment(courseId, 1).catch(() => {});
+    }
 
     // Load modules + lessons for sidebar content
     listModulesWithContent(courseId)
@@ -165,11 +172,15 @@ const CourseLearningPage = () => {
         }
       })
       .catch(() => setModulesWithContent([]));
-  }, [courseId]);
+  }, [courseId, isPreviewMode]);
 
   // Load module progress when active module/lesson changes
   useEffect(() => {
     if (!activeLesson.moduleId) return;
+    if (isPreviewMode) {
+      setProgress({ completedLessons: 0, totalLessons: 0, percent: 0 });
+      return;
+    }
     const userId = user?.id || 0;
     if (!userId) return;
     getModuleProgress(activeLesson.moduleId, userId)
@@ -177,7 +188,7 @@ const CourseLearningPage = () => {
       .catch(() =>
         setProgress({ completedLessons: 0, totalLessons: 0, percent: 0 })
       );
-  }, [activeLesson.moduleId, user?.id]);
+  }, [activeLesson.moduleId, user?.id, isPreviewMode]);
 
   // Load content (lesson, quiz, or assignment) when active item changes - LAZY LOADING
   useEffect(() => {
@@ -313,6 +324,7 @@ const CourseLearningPage = () => {
 
   const handleMarkAsComplete = async () => {
     if (!activeLesson.moduleId || !activeLesson.lessonId) return;
+    if (isPreviewMode) return;
     const userId = user?.id || 0;
     if (!userId) return;
     try {
@@ -406,7 +418,7 @@ const CourseLearningPage = () => {
         <main className="learning-hud-main-content">
           <div className="learning-hud-content-viewer">
             <h1 className="learning-hud-viewer-title">KHÔNG TÌM THẤY KHÓA HỌC</h1>
-            <p style={{ color: 'var(--lhud-text-secondary)' }}>
+            <p className="lhud-text-secondary">
               Không thể kết nối đến dữ liệu khóa học. Vui lòng thử lại sau.
             </p>
           </div>
@@ -442,356 +454,184 @@ const CourseLearningPage = () => {
           <h1 className="learning-hud-viewer-title">
             {activeLessonTitle || course.title}
           </h1>
+          {isPreviewMode && (
+            <div className="lhud-preview-banner">
+              <strong>Chế độ xem trước:</strong> Bạn có thể xem nội dung như học viên, nhưng không thể làm bài, nộp bài hoặc đánh dấu hoàn thành.
+            </div>
+          )}
 
           <div className="learning-hud-reading-content">
             {loadingLessonDetail ? (
               <div className="learning-hud-loading">ĐANG TẢI DÒNG DỮ LIỆU</div>
             ) : activeItemType === 'assignment' && activeAssignmentId ? (
-              <AssignmentViewer assignmentId={activeAssignmentId} />
+              <AssignmentViewer assignmentId={activeAssignmentId} readOnly={isPreviewMode} />
             ) : activeItemType === 'quiz' && activeQuizDetail ? (
               <>
                 {activeQuizDetail.hasPassed ? (
                   /* SHOW RESULT IF ALREADY PASSED */
-                  <div style={{
-                    padding: '40px',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    borderRadius: '12px',
-                    textAlign: 'center',
-                    border: '2px solid var(--lhud-green)'
-                  }}>
-                    <h3 style={{
-                      marginBottom: '16px',
-                      fontSize: '1.8rem',
-                      color: 'var(--lhud-green)'
-                    }}>
-                      BÀI KIỂM TRA HOÀN TẤT - DỮ LIỆU ĐÃ XÁC MINH
+                  <div className="lhud-quiz-complete-card">
+                    <h3 className="lhud-quiz-complete-title">
+                      Bạn đã hoàn thành bài kiểm tra
                     </h3>
-                    <div style={{
-                      display: 'inline-block',
-                      marginBottom: '24px',
-                      padding: '20px',
-                      backgroundColor: 'var(--lhud-space-light)',
-                      borderRadius: '8px',
-                      border: '1px solid var(--lhud-border)'
-                    }}>
-                      <p style={{ marginBottom: '8px', fontSize: '1.2rem', color: 'var(--lhud-text-primary)' }}>
+                    <div className="lhud-quiz-complete-score">
+                      <p className="lhud-quiz-complete-score-main">
                         <strong>ĐIỂM SỐ:</strong> {activeQuizDetail.bestAttempt?.score}%
                       </p>
-                      <p style={{ fontSize: '1rem', color: 'var(--lhud-text-secondary)' }}>
+                      <p className="lhud-quiz-complete-score-sub">
                         ĐIỂM ĐẠT: {activeQuizDetail.passScore}%
                       </p>
                     </div>
-                    <p style={{ color: 'var(--lhud-text-secondary)', marginBottom: '16px' }}>
-                      Đã xác minh đồng bộ thần kinh. Không cần thử lại.
+                    <p className="lhud-quiz-complete-note">
+                      Bạn đã đạt yêu cầu. Không cần làm lại bài kiểm tra.
                     </p>
-                    <button
-                      onClick={() => navigate(`/quiz/${activeQuizDetail.id}/attempt`)}
-                      className="learning-hud-nav-btn"
-                      style={{ marginTop: '1rem' }}
-                    >
-                      XEM CHI TIẾT
-                    </button>
+                    {!isPreviewMode && (
+                      <button
+                        onClick={() => navigate(`/quiz/${activeQuizDetail.id}/attempt`)}
+                        className="learning-hud-nav-btn lhud-quiz-complete-action"
+                      >
+                        Xem kết quả
+                      </button>
+                    )}
                   </div>
                 ) : (
                   /* QUIZ PREVIEW - Navigate to quiz page */
-                  <div style={{
-                    maxWidth: '800px',
-                    margin: '0 auto',
-                    padding: '32px',
-                    backgroundColor: 'var(--lhud-space-light)',
-                    borderRadius: '16px',
-                    border: '2px solid var(--lhud-cyan)',
-                    boxShadow: '0 8px 32px rgba(0, 255, 255, 0.1)'
-                  }}>
+                  <div className="lhud-quiz-card">
                     {/* Quiz Header */}
-                    <div style={{
-                      textAlign: 'center',
-                      marginBottom: '32px',
-                      paddingBottom: '24px',
-                      borderBottom: '1px solid var(--lhud-border)'
-                    }}>
+                    <div className="lhud-quiz-card-header">
                       {/* Context Breadcrumb */}
-                      <div style={{
-                         marginBottom: '16px',
-                         color: 'var(--lhud-cyan)',
-                         fontSize: '0.9rem',
-                         textTransform: 'uppercase',
-                         letterSpacing: '1px'
-                      }}>
-                        {(modulesWithContent.find(m => m.id === activeLesson.moduleId) || sortedModules.find(m => m.id === activeLesson.moduleId))?.title || 'Module'} › Bài đánh giá kiến thức
+                      <div className="lhud-quiz-card-breadcrumb">
+                        {(modulesWithContent.find(m => m.id === activeLesson.moduleId) || sortedModules.find(m => m.id === activeLesson.moduleId))?.title || 'Chương'} › Bài đánh giá kiến thức
                       </div>
 
-                      <h2 style={{
-                        margin: '0 0 16px 0',
-                        fontSize: '2.2rem',
-                        color: 'var(--lhud-text-primary)',
-                        fontFamily: "Inter, sans-serif",
-                        letterSpacing: '1px',
-                        textTransform: 'uppercase'
-                      }}>
+                      <h2 className="lhud-quiz-card-title">
                         {activeQuizDetail.title}
                       </h2>
-                      <p style={{
-                        margin: '0',
-                        color: 'var(--lhud-text-secondary)',
-                        fontSize: '1.1rem',
-                        lineHeight: '1.6'
-                      }}>
+                      <p className="lhud-quiz-card-desc">
                         {activeQuizDetail.description || 'Đánh giá mức độ hiểu bài trước khi tiếp tục học'}
                       </p>
                       
                       {/* Quiz Objective */}
-                      <p style={{ 
-                        marginTop: '12px', 
-                        fontStyle: 'italic', 
-                        color: 'var(--lhud-text-dim)',
-                        maxWidth: '600px',
-                        marginLeft: 'auto',
-                        marginRight: 'auto'
-                      }}>
-                        "Hoàn thành quiz để xác nhận bạn đã hiểu các khái niệm cốt lõi và tiếp tục sang nội dung tiếp theo."
+                      <p className="lhud-quiz-card-objective">
+                        Hoàn thành bài kiểm tra để xác nhận bạn đã hiểu các khái niệm cốt lõi và tiếp tục sang nội dung tiếp theo.
                       </p>
                     </div>
 
                     {/* Quiz Stats Grid */}
-                    <div style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                      gap: '20px',
-                      marginBottom: '32px'
-                    }}>
-                      <div style={{
-                        padding: '20px',
-                        backgroundColor: 'var(--lhud-deep-space)',
-                        borderRadius: '12px',
-                        border: '1px solid var(--lhud-border)',
-                        textAlign: 'center'
-                      }}>
-                        <div style={{
-                          fontSize: '2rem',
-                          color: (activeQuizDetail.questions?.length || 0) === 0 ? 'var(--lhud-red)' : 'var(--lhud-cyan)',
-                          marginBottom: '8px',
-                          fontFamily: "Inter, sans-serif"
-                        }}>
+                    <div className="lhud-quiz-stats">
+                      <div className={`lhud-quiz-stat ${(activeQuizDetail.questions?.length || 0) === 0 ? 'is-empty' : ''}`}>
+                        <div className="lhud-quiz-stat-value">
                           {activeQuizDetail.questions?.length || 0}
                         </div>
-                        <p style={{
-                          margin: '0',
-                          color: 'var(--lhud-text-secondary)',
-                          fontSize: '0.9rem',
-                          textTransform: 'uppercase',
-                          letterSpacing: '1px'
-                        }}>
+                        <p className="lhud-quiz-stat-label">
                           {(activeQuizDetail.questions?.length || 0) === 0 ? 'Chưa có câu hỏi' : 'Câu hỏi'}
                         </p>
                         {(activeQuizDetail.questions?.length || 0) === 0 && (
-                          <div style={{ fontSize: '0.8rem', color: 'var(--lhud-red)', marginTop: '8px' }}>
+                          <div className="lhud-quiz-stat-sub is-empty">
                             Đang cập nhật
                           </div>
                         )}
                       </div>
 
-                      <div style={{
-                        padding: '20px',
-                        backgroundColor: 'var(--lhud-deep-space)',
-                        borderRadius: '12px',
-                        border: '1px solid var(--lhud-border)',
-                        textAlign: 'center'
-                      }}>
-                        <div style={{
-                          fontSize: '2rem',
-                          color: 'var(--lhud-cyan)',
-                          marginBottom: '8px',
-                          fontFamily: "Inter, sans-serif"
-                        }}>
+                      <div className="lhud-quiz-stat">
+                        <div className="lhud-quiz-stat-value">
                           {activeQuizDetail.passScore}%
                         </div>
-                        <p style={{
-                          margin: '0',
-                          color: 'var(--lhud-text-secondary)',
-                          fontSize: '0.9rem',
-                          textTransform: 'uppercase',
-                          letterSpacing: '1px'
-                        }}>
+                        <p className="lhud-quiz-stat-label">
                           Điểm đạt
                         </p>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--lhud-text-dim)', marginTop: '8px' }}>
+                        <div className="lhud-quiz-stat-sub">
                           Cần đạt tối thiểu {activeQuizDetail.passScore}%
                         </div>
                       </div>
 
                       {/* Điểm cao nhất - Chỉ hiện khi đã có attempts */}
                       {activeQuizDetail.hasAttempts && activeQuizDetail.bestScore !== null && (
-                        <div style={{
-                          padding: '20px',
-                          backgroundColor: activeQuizDetail.bestScore >= activeQuizDetail.passScore 
-                            ? 'rgba(16, 185, 129, 0.1)' 
-                            : 'var(--lhud-deep-space)',
-                          borderRadius: '12px',
-                          border: activeQuizDetail.bestScore >= activeQuizDetail.passScore 
-                            ? '1px solid rgba(16, 185, 129, 0.3)' 
-                            : '1px solid var(--lhud-border)',
-                          textAlign: 'center'
-                        }}>
-                          <div style={{
-                            fontSize: '2rem',
-                            color: activeQuizDetail.bestScore >= activeQuizDetail.passScore 
-                              ? '#10b981' 
-                              : '#f97316',
-                            marginBottom: '8px',
-                            fontFamily: "Inter, sans-serif"
-                          }}>
+                        <div className={`lhud-quiz-stat is-best ${activeQuizDetail.bestScore >= activeQuizDetail.passScore ? 'is-pass' : 'is-fail'}`}>
+                          <div className="lhud-quiz-stat-value">
                             {activeQuizDetail.bestScore}%
                           </div>
-                          <p style={{
-                            margin: '0',
-                            color: 'var(--lhud-text-secondary)',
-                            fontSize: '0.9rem',
-                            textTransform: 'uppercase',
-                            letterSpacing: '1px'
-                          }}>
+                          <p className="lhud-quiz-stat-label">
                             Điểm cao nhất
                           </p>
-                          <div style={{ 
-                            fontSize: '0.75rem', 
-                            color: activeQuizDetail.bestScore >= activeQuizDetail.passScore ? '#34d399' : '#fb923c', 
-                            marginTop: '8px' 
-                          }}>
+                          <div className="lhud-quiz-stat-sub">
                             {activeQuizDetail.bestScore >= activeQuizDetail.passScore ? '✓ Đã đạt yêu cầu' : '✗ Chưa đạt yêu cầu'}
                           </div>
                         </div>
                       )}
 
                       {activeQuizDetail.hasAttempts && (
-                        <div style={{
-                          padding: '20px',
-                          backgroundColor: activeQuizDetail.attemptsCount >= 3 
-                            ? 'rgba(239, 68, 68, 0.1)' 
-                            : 'var(--lhud-deep-space)',
-                          borderRadius: '12px',
-                          border: activeQuizDetail.attemptsCount >= 3 
-                            ? '1px solid rgba(239, 68, 68, 0.3)' 
-                            : '1px solid var(--lhud-border)',
-                          textAlign: 'center'
-                        }}>
-                          <div style={{
-                            fontSize: '2rem',
-                            color: activeQuizDetail.attemptsCount >= 3 ? '#ef4444' : 'var(--lhud-cyan)',
-                            marginBottom: '8px',
-                            fontFamily: "Inter, sans-serif"
-                          }}>
-                            {activeQuizDetail.attemptsCount}/3
+                        <div className={`lhud-quiz-stat is-attempts ${activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts ? 'is-maxed' : ''}`}>
+                          <div className="lhud-quiz-stat-value">
+                            {activeQuizDetail.attemptsCount}/{activeQuizDetail.maxAttempts}
                           </div>
-                          <p style={{
-                            margin: '0',
-                            color: activeQuizDetail.attemptsCount >= 3 ? '#fca5a5' : 'var(--lhud-text-secondary)',
-                            fontSize: '0.9rem',
-                            textTransform: 'uppercase',
-                            letterSpacing: '1px'
-                        }}>
-                          {activeQuizDetail.attemptsCount >= 3 ? 'Hết lượt' : 'Số lần thử'}
-                        </p>
-                        {activeQuizDetail.attemptsCount >= 3 && (
-                          <div style={{ fontSize: '0.75rem', color: '#fca5a5', marginTop: '8px' }}>
-                            Chờ 24h để làm lại
-                          </div>
-                        )}
+                          <p className="lhud-quiz-stat-label">
+                            {activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts ? 'Hết lượt' : 'Số lần thử'}
+                          </p>
+                          {activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts && (
+                            <div className="lhud-quiz-stat-sub is-warning">
+                              Chờ 24h để làm lại
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
 
                     {/* Action Button */}
-                    <div style={{ textAlign: 'center' }}>
+                    <div className="lhud-quiz-action">
                       <button
-                        onClick={() => navigate(`/quiz/${activeQuizDetail.id}/attempt`)}
-                        style={{
-                          padding: '16px 48px',
-                          fontSize: '1.1rem',
-                          fontFamily: "Inter, sans-serif",
-                          fontWeight: 'bold',
-                          letterSpacing: '1px',
-                          textTransform: 'uppercase',
-                          background: activeQuizDetail.attemptsCount >= 3
-                            ? 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'
-                            : activeQuizDetail.hasAttempts 
-                            ? 'linear-gradient(135deg, var(--lhud-orange) 0%, #ea580c 100%)'
-                            : 'linear-gradient(135deg, var(--lhud-cyan) 0%, #0891b2 100%)',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '12px',
-                          cursor: (activeQuizDetail.attemptsCount >= 3 || (activeQuizDetail.questions?.length || 0) === 0) ? 'not-allowed' : 'pointer',
-                          transition: 'all 0.3s ease',
-                          boxShadow: activeQuizDetail.attemptsCount >= 3 ? 'none' : '0 4px 20px rgba(6, 182, 212, 0.3)',
-                          transform: 'translateY(0)',
-                          opacity: (activeQuizDetail.questions?.length || 0) === 0 ? 0.5 : 1,
-                        }}
-                        onMouseEnter={(e) => {
-                          if ((activeQuizDetail.questions?.length || 0) > 0 && activeQuizDetail.attemptsCount < 3) {
-                             const target = e.target as HTMLButtonElement;
-                             target.style.transform = 'translateY(-2px)';
-                             target.style.boxShadow = '0 6px 25px rgba(6, 182, 212, 0.4)';
+                        onClick={() => {
+                          if (!isPreviewMode) {
+                            navigate(`/quiz/${activeQuizDetail.id}/attempt`);
                           }
                         }}
-                        onMouseLeave={(e) => {
-                          const target = e.target as HTMLButtonElement;
-                          target.style.transform = 'translateY(0)';
-                          target.style.boxShadow = activeQuizDetail.attemptsCount >= 3 ? 'none' : '0 4px 20px rgba(6, 182, 212, 0.3)';
-                        }}
-                        disabled={activeQuizDetail.attemptsCount >= 3 || (activeQuizDetail.questions?.length || 0) === 0}
+                        className={`lhud-quiz-action-btn ${
+                          activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts
+                            ? 'is-locked'
+                            : (activeQuizDetail.questions?.length || 0) === 0
+                            ? 'is-disabled'
+                            : activeQuizDetail.hasAttempts
+                            ? 'is-retry'
+                            : 'is-start'
+                        } ${isPreviewMode ? 'is-preview' : ''}`}
+                        disabled={
+                          isPreviewMode ||
+                          activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts ||
+                          (activeQuizDetail.questions?.length || 0) === 0
+                        }
                       >
-                        {activeQuizDetail.attemptsCount >= 3
-                          ? '🔒 HẾT LƯỢT LÀM BÀI'
+                        {isPreviewMode
+                          ? 'Chế độ xem trước'
+                          : activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts
+                          ? 'Hết lượt làm bài'
                           : (activeQuizDetail.questions?.length || 0) === 0
-                          ? 'BÀI QUIZ CHƯA CÓ CÂU HỎI'
+                          ? 'Bài kiểm tra chưa có câu hỏi'
                           : activeQuizDetail.hasAttempts
-                          ? `🔄 LÀM LẠI BÀI KIỂM TRA (${activeQuizDetail.attemptsCount}/3)`
-                          : '⚡ BẮT ĐẦU LÀM BÀI'}
+                          ? `Làm lại (${activeQuizDetail.attemptsCount}/${activeQuizDetail.maxAttempts})`
+                          : 'Bắt đầu làm bài'}
                       </button>
 
                       {/* Thông báo khi hết lượt với countdown timer */}
-                      {activeQuizDetail.attemptsCount >= 3 && (
-                        <div style={{
-                          marginTop: '20px',
-                          padding: '16px 24px',
-                          backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                          border: '1px solid rgba(239, 68, 68, 0.3)',
-                          borderRadius: '8px',
-                          color: '#fca5a5'
-                        }}>
-                          <p style={{ margin: '0 0 8px 0', fontWeight: 'bold', color: '#ef4444' }}>
-                            ⏰ Đã sử dụng hết 3 lượt làm bài
+                      {activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts && (
+                        <div className="lhud-quiz-lock-banner">
+                          <p className="lhud-quiz-lock-title">
+                            Đã sử dụng hết 3 lượt làm bài
                           </p>
                           {retryCountdown > 0 ? (
-                            <div style={{ margin: 0 }}>
-                              <p style={{ margin: '0 0 12px 0', fontSize: '0.9rem', color: 'var(--lhud-text-secondary)' }}>
+                            <div className="lhud-quiz-lock-body">
+                              <p className="lhud-quiz-lock-text">
                                 Bạn có thể làm lại sau:
                               </p>
-                              <div style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                gap: '8px',
-                                marginBottom: '12px'
-                              }}>
-                                <div style={{
-                                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                                  padding: '12px 16px',
-                                  borderRadius: '8px',
-                                  fontFamily: 'monospace',
-                                  fontSize: '1.5rem',
-                                  fontWeight: 'bold',
-                                  color: 'var(--lhud-cyan)',
-                                  letterSpacing: '2px',
-                                  border: '1px solid var(--lhud-cyan-dim)'
-                                }}>
+                              <div className="lhud-quiz-countdown">
+                                <div className="lhud-quiz-countdown-timer">
                                   {formatCountdown(retryCountdown)}
                                 </div>
                               </div>
-                              <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--lhud-text-secondary)', opacity: 0.8 }}>
+                              <p className="lhud-quiz-lock-hint">
                                 Hãy xem lại bài học trong thời gian chờ để chuẩn bị tốt hơn.
                               </p>
                             </div>
                           ) : (
-                            <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--lhud-text-secondary)' }}>
+                            <p className="lhud-quiz-lock-text">
                               Bạn có thể làm lại sau 24 giờ kể từ lần làm đầu tiên. Hãy xem lại bài học trong thời gian chờ.
                             </p>
                           )}
@@ -799,28 +639,15 @@ const CourseLearningPage = () => {
                       )}
 
                       {/* Reassurance Info */}
-                      {(activeQuizDetail.questions?.length || 0) > 0 && activeQuizDetail.attemptsCount < 3 && (
+                      {(activeQuizDetail.questions?.length || 0) > 0 && activeQuizDetail.attemptsCount < activeQuizDetail.maxAttempts && (
                         <>
-                          <div style={{ 
-                            marginTop: '24px', 
-                            display: 'flex', 
-                            justifyContent: 'center', 
-                            gap: '24px', 
-                            color: 'var(--lhud-text-secondary)', 
-                            fontSize: '0.9rem',
-                            flexWrap: 'wrap'
-                          }}>
-                             <span title="Thời gian làm bài dự kiến">⏱️ Thời gian: 10 phút</span>
-                             <span title="Số lần làm lại tối đa">🔄 Còn lại: {3 - activeQuizDetail.attemptsCount} lần</span>
-                             <span title="Tiến trình được lưu tự động">💾 Lưu tự động</span>
+                          <div className="lhud-quiz-meta">
+                             <span title="Thời gian làm bài dự kiến">Thời gian: 10 phút</span>
+                             <span title="Số lần làm lại tối đa">Còn lại: {activeQuizDetail.maxAttempts - activeQuizDetail.attemptsCount} lần</span>
+                             <span title="Tiến trình được lưu tự động">Tự động lưu tiến độ</span>
                           </div>
                           
-                          <div style={{ 
-                             marginTop: '16px',
-                             fontSize: '0.9rem',
-                             color: 'var(--lhud-cyan)',
-                             opacity: 0.8
-                          }}>
+                          <div className="lhud-quiz-note">
                              Hoàn thành quiz để mở khóa bài học tiếp theo trong module.
                           </div>
                         </>
@@ -850,35 +677,16 @@ const CourseLearningPage = () => {
                 {/* READING LESSON */}
                 {activeLessonDetail.type === 'READING' && (
                   <>
-                    <div style={{
-                      whiteSpace: 'pre-wrap',
-                      lineHeight: '1.8',
-                      marginBottom: '24px',
-                      color: 'var(--lhud-text-secondary)'
-                    }}>
+                    <div className="lhud-reading-text">
                       {activeLessonDetail.contentText || 'Dữ liệu nội dung không khả dụng.'}
                     </div>
 
-                    {/* ATTACHMENTS */}
-                    <div style={{
-                      marginTop: '32px',
-                      paddingTop: '24px',
-                      borderTop: '1px solid var(--lhud-border)'
-                    }}>
-                      <h3 style={{
-                        marginBottom: '16px',
-                        fontSize: '1.2rem',
-                        color: 'var(--lhud-cyan)',
-                        fontFamily: "Inter, sans-serif",
-                        letterSpacing: '1px'
-                      }}>
-                        TỆP ĐÍNH KÈM
-                      </h3>
-                      <AttachmentManager
-                        lessonId={activeLessonDetail.id}
-                        editable={false}
-                      />
-                    </div>
+                    <AttachmentManager
+                      lessonId={activeLessonDetail.id}
+                      editable={false}
+                      hideWhenEmpty
+                      headerText="Tài liệu đính kèm"
+                    />
                   </>
                 )}
               </>
@@ -888,10 +696,10 @@ const CourseLearningPage = () => {
               </div>
             ) : (
               <>
-                <p style={{ color: 'var(--lhud-text-secondary)' }}>
+                <p className="lhud-text-secondary">
                   {course.description}
                 </p>
-                <p style={{ color: 'var(--lhud-text-dim)', marginTop: '1rem' }}>
+                <p className="lhud-text-dim lhud-mt-16">
                   Chọn một bài học từ danh sách để bắt đầu.
                 </p>
               </>
@@ -905,7 +713,7 @@ const CourseLearningPage = () => {
             onComplete={handleMarkAsComplete}
             canNavigatePrev={!!activeLesson.lessonId}
             canNavigateNext={!!activeLesson.lessonId}
-            canComplete={!!activeLesson.moduleId}
+            canComplete={!!activeLesson.moduleId && !isPreviewMode}
           />
         </div>
       </main>

@@ -695,7 +695,6 @@
 .elevator-container input[type="email"],
 .elevator-container input[type="text"] {
   font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
-  text-transform: capitalize !important;
 }
 
 /* ====== MOBILE RESPONSIVENESS ====== */

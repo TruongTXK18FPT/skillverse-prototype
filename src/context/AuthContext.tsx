@@ -146,7 +146,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const changePassword = async (request: ChangePasswordRequest): Promise<ChangePasswordResponse> => {
     try {
       setLoading(true);
-      return await authService.changePassword(request);
+      const response = await authService.changePassword(request);
+      
+      // ✅ SECURITY: After password change, tokens are invalidated by backend
+      // Clear all auth data and force re-login
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      setUser(null);
+      
+      return response;
     } finally {
       setLoading(false);
     }

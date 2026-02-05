@@ -302,6 +302,21 @@ axiosInstance.interceptors.response.use(
       !originalRequest._retry
     ) {
       const requestUrl = originalRequest.url || "";
+      
+      // ✅ SECURITY: Check if 401 is due to password change (token invalidated)
+      const errorMessage = (error.response?.data as { message?: string })?.message || '';
+      if (errorMessage.includes('password change') || 
+          errorMessage.includes('Token invalidated')) {
+        console.warn('🔒 Token invalidated due to password change, forcing logout');
+        clearAuthTokens();
+        
+        // Don't redirect if already on login page
+        const currentPath = window.location.pathname;
+        if (!currentPath.includes('/login')) {
+          window.location.href = '/login?reason=password_changed';
+        }
+        return Promise.reject(error);
+      }
 
       // Don't retry if it's already a refresh or login request
       if (

@@ -49,10 +49,26 @@ export const createCourse = async (
     formData.append('authorId', authorId.toString());
     formData.append('title', courseData.title);
     if (courseData.description) formData.append('description', courseData.description);
+    if (courseData.shortDescription) formData.append('shortDescription', courseData.shortDescription);
     if (courseData.level) formData.append('level', courseData.level);
+    if (courseData.category) formData.append('category', courseData.category);
+    if (courseData.estimatedDurationHours !== undefined && courseData.estimatedDurationHours !== null) {
+      formData.append('estimatedDurationHours', courseData.estimatedDurationHours.toString());
+    }
+    if (courseData.language) formData.append('language', courseData.language);
+    if (courseData.learningObjectives?.length) {
+      courseData.learningObjectives.forEach((item) => formData.append('learningObjectives', item));
+    }
+    if (courseData.requirements?.length) {
+      courseData.requirements.forEach((item) => formData.append('requirements', item));
+    }
     if (thumbnailFile) formData.append('thumbnailFile', thumbnailFile);
-    if (courseData.price) formData.append('price', courseData.price.toString());
-    if (courseData.currency) formData.append('currency', courseData.currency);
+    if (courseData.price !== undefined && courseData.price !== null) {
+      formData.append('price', courseData.price.toString());
+    }
+    if (courseData.currency) {
+      formData.append('currency', courseData.currency);
+    }
 
     const response = await axiosInstance.post<CourseDetailDTO>(
       '/courses',
@@ -85,7 +101,19 @@ export const updateCourse = async (
     formData.append('actorId', actorId.toString());
     if (courseData.title) formData.append('title', courseData.title);
     if (courseData.description) formData.append('description', courseData.description);
+    if (courseData.shortDescription) formData.append('shortDescription', courseData.shortDescription);
     if (courseData.level) formData.append('level', courseData.level);
+    if (courseData.category) formData.append('category', courseData.category);
+    if (courseData.estimatedDurationHours !== undefined && courseData.estimatedDurationHours !== null) {
+      formData.append('estimatedDurationHours', courseData.estimatedDurationHours.toString());
+    }
+    if (courseData.language) formData.append('language', courseData.language);
+    if (courseData.learningObjectives?.length) {
+      courseData.learningObjectives.forEach((item) => formData.append('learningObjectives', item));
+    }
+    if (courseData.requirements?.length) {
+      courseData.requirements.forEach((item) => formData.append('requirements', item));
+    }
     if (thumbnailFile) formData.append('thumbnailFile', thumbnailFile);
     if (courseData.price !== undefined && courseData.price !== null) {
       formData.append('price', courseData.price.toString());

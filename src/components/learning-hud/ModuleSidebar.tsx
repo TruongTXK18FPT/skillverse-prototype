@@ -97,7 +97,7 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
                 onClick={() => onToggleModule(module.id)}
               >
                 <span className="learning-hud-module-title">
-                  MODULE {module.orderIndex ?? idx + 1}: {module.title}
+                  CHƯƠNG {module.orderIndex ?? idx + 1}: {module.title}
                 </span>
                 <ChevronDown
                   className={`learning-hud-expand-icon ${isExpanded ? 'expanded' : ''}`}
@@ -171,7 +171,7 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
                                 <HelpCircle className="learning-hud-lesson-icon" size={18} />
                                 <div className="learning-hud-lesson-details">
                                   <span className="learning-hud-lesson-title">
-                                    {quiz.title} (QUIZ)
+                                    {quiz.title} (BÀI KIỂM TRA)
                                   </span>
                                 </div>
                               </div>
@@ -209,7 +209,7 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
                                     {assignment.title}
                                   </span>
                                   <span className="learning-hud-lesson-badge assignment-badge">
-                                    ASSIGNMENT
+                                    BÀI TẬP
                                   </span>
                                 </div>
                               </div>
@@ -228,7 +228,7 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
                             <FileText className="learning-hud-lesson-icon" size={18} />
                             <div className="learning-hud-lesson-details">
                               <span className="learning-hud-lesson-title">
-                                DATA PENDING...
+                                Đang cập nhật nội dung...
                               </span>
                             </div>
                           </div>

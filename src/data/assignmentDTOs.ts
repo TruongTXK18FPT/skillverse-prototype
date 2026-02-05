@@ -15,6 +15,7 @@ export enum SubmissionStatus {
 // Assignment Criteria DTO
 export interface AssignmentCriteriaDTO {
   id?: number;
+  clientId?: string;
   name: string;
   description: string;
   maxPoints: number;
@@ -78,7 +79,12 @@ export interface AssignmentUpdateDTO {
   description?: string;
   submissionType?: SubmissionType;
   maxScore?: number;
+  passingScore?: number;
   dueAt?: string;
+  isRequired?: boolean;
+  learningOutcome?: string;
+  gradingCriteria?: string;
+  criteria?: AssignmentCriteriaDTO[];
 }
 
 // Assignment Submission Detail DTO - Updated with version tracking

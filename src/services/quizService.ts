@@ -254,6 +254,23 @@ export const getUserQuizAttempts = async (
 };
 
 /**
+ * Get quiz attempts for a user across multiple quizzes (batch)
+ * @param quizIds - The list of quiz IDs
+ * @param userId - The ID of the user
+ * @returns Promise with array of attempts
+ */
+export const getUserQuizAttemptsBatch = async (
+  quizIds: number[],
+  userId: number
+): Promise<QuizAttemptDTO[]> => {
+  const response = await axiosInstance.post<QuizAttemptDTO[]>(
+    `/quizzes/attempts/batch`,
+    { quizIds, userId }
+  );
+  return response.data;
+};
+
+/**
  * Submit quiz directly (simplified version)
  * @param submitData - Quiz submission data
  * @param userId - The ID of the user submitting
