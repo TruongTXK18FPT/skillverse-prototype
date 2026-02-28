@@ -19,6 +19,7 @@ export interface AssignmentCriteriaDTO {
   name: string;
   description: string;
   maxPoints: number;
+  passingPoints?: number; // Coursera: min score to pass this criterion
   orderIndex: number;
   isRequired: boolean;
 }
@@ -30,6 +31,8 @@ export interface CriteriaScoreDTO {
   criteriaName?: string;
   score: number;
   maxPoints: number;
+  passingPoints?: number; // Min score to pass this criterion
+  passed?: boolean;       // Whether this criterion is passed
   feedback?: string;
 }
 
@@ -112,6 +115,9 @@ export interface AssignmentSubmissionDetailDTO {
   isNewest: boolean;
   isPrevious: boolean;
   isLate: boolean;
+  // Criteria-based pass/fail (Coursera pattern)
+  isPassed?: boolean;     // True if all required criteria met their passingPoints
+  passingScore?: number;  // Effective passing score (from criteria or assignment-level)
 }
 
 // Assignment Submission Create DTO
@@ -127,4 +133,14 @@ export interface GradeAssignmentDTO {
   score: number;
   feedback?: string;
   criteriaScores?: CriteriaScoreDTO[];  // NEW: Grade by criteria
+}
+
+// Pending Submission Item DTO (batch endpoint for mentor dashboard)
+export interface PendingSubmissionItemDTO {
+  submission: AssignmentSubmissionDetailDTO;
+  courseName: string;
+  courseId: number;
+  moduleName: string;
+  moduleId: number;
+  assignmentName: string;
 }

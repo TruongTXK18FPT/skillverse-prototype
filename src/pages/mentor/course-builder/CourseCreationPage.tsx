@@ -3,7 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { 
   FiBookOpen, FiList, FiFileText, FiPlay, FiHelpCircle, FiClipboard, 
   FiPlus, FiTrash2, FiSettings, FiChevronDown, FiChevronUp, FiInfo,
-  FiArrowLeft, FiSave, FiCheck, FiImage, FiX, FiAlertTriangle
+  FiArrowLeft, FiSave, FiCheck, FiImage, FiX, FiAlertTriangle,
+  FiArrowUp, FiArrowDown
 } from 'react-icons/fi';
 import { useCourseManagement } from '../../../context/mentor/CourseManagementContext';
 import { useAuth } from '../../../context/AuthContext';
@@ -61,11 +62,21 @@ const LEVELS = [
 ];
 
 const LESSON_TYPES = [
-  { value: 'reading', label: 'Bài đọc', icon: <FiFileText /> },
-  { value: 'video', label: 'Video', icon: <FiPlay /> },
-  { value: 'quiz', label: 'Quiz', icon: <FiHelpCircle /> },
-  { value: 'assignment', label: 'Bài tập', icon: <FiClipboard /> }
+  { value: 'reading', label: 'Bài đọc', icon: <FiFileText />, color: '#3b82f6' },
+  { value: 'video', label: 'Video', icon: <FiPlay />, color: '#ef4444' },
+  { value: 'quiz', label: 'Quiz', icon: <FiHelpCircle />, color: '#8b5cf6' },
+  { value: 'assignment', label: 'Bài tập', icon: <FiClipboard />, color: '#f59e0b' }
 ];
+
+/** Get display info (Icon, color, label) for a lesson type */
+const getLessonTypeMeta = (type: string) => {
+  const found = LESSON_TYPES.find(t => t.value === type);
+  return {
+    Icon: type === 'video' ? FiPlay : type === 'quiz' ? FiHelpCircle : type === 'assignment' ? FiClipboard : FiFileText,
+    color: found?.color || '#3b82f6',
+    label: found?.label || 'Bài đọc',
+  };
+};
 
 const createId = () => Date.now().toString() + Math.random().toString(36).substr(2, 5);
 
@@ -78,6 +89,9 @@ const CourseCreationPage = () => {
   const { courseId } = useParams();
   const isEditMode = Boolean(courseId);
   const { user } = useAuth();
+
+  /** Prevent scroll-wheel from accidentally changing number inputs */
+  const blurOnWheel = (e: React.WheelEvent<HTMLInputElement>) => e.currentTarget.blur();
 
   const {
     state,
@@ -189,6 +203,13 @@ const CourseCreationPage = () => {
     }
   }, [isEditMode, courseId, loadCourseForEdit, resetState]);
 
+  // Show error notification when context error changes
+  useEffect(() => {
+    if (state.error) {
+      showToast('error', state.error);
+    }
+  }, [state.error]);
+
   // Sync from context to local state
   useEffect(() => {
     if (!isEditMode || isLoading || !state.currentCourse) return;
@@ -204,15 +225,16 @@ const CourseCreationPage = () => {
     // This part assumes we might need to transform data structure
     if (state.modules.length > 0 && modules.length === 0) {
         const mappedModules: ModuleDraft[] = state.modules.map(m => ({
-            id: createId(), // Or keep server ID as string
+            id: m.id.toString(),
             serverId: m.id,
             title: m.title,
             description: m.description,
             lessons: m.lessons.map(rawLesson => {
-                const lesson = rawLesson as Partial<LessonDraft> & { id: number; type?: LessonType | string; durationSec?: number; videoUrl?: string };
+                const lessonId = (rawLesson as unknown as { id: number }).id;
+                const lesson = rawLesson as unknown as Partial<LessonDraft> & { id: number; type?: LessonType | string; durationSec?: number; videoUrl?: string };
                 return {
-                  id: createId(),
-                  serverId: lesson.id,
+                  id: lessonId.toString(),
+                  serverId: lessonId,
                   title: lesson.title || '',
                   type: (lesson.type?.toString().toLowerCase() || 'reading') as LessonKind,
                   durationMin: lesson.durationSec ? Math.round(lesson.durationSec / 60) : undefined,
@@ -304,6 +326,31 @@ const CourseCreationPage = () => {
         setActiveView({ type: 'module', moduleId });
       }
     });
+  };
+
+  const handleMoveModule = (moduleId: string, direction: 'up' | 'down') => {
+    setModules(prev => {
+      const idx = prev.findIndex(m => m.id === moduleId);
+      if (idx < 0) return prev;
+      const targetIdx = direction === 'up' ? idx - 1 : idx + 1;
+      if (targetIdx < 0 || targetIdx >= prev.length) return prev;
+      const next = [...prev];
+      [next[idx], next[targetIdx]] = [next[targetIdx], next[idx]];
+      return next;
+    });
+  };
+
+  const handleMoveLesson = (moduleId: string, lessonId: string, direction: 'up' | 'down') => {
+    setModules(prev => prev.map(m => {
+      if (m.id !== moduleId) return m;
+      const idx = m.lessons.findIndex(l => l.id === lessonId);
+      if (idx < 0) return m;
+      const targetIdx = direction === 'up' ? idx - 1 : idx + 1;
+      if (targetIdx < 0 || targetIdx >= m.lessons.length) return m;
+      const lessons = [...m.lessons];
+      [lessons[idx], lessons[targetIdx]] = [lessons[targetIdx], lessons[idx]];
+      return { ...m, lessons };
+    }));
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -440,25 +487,44 @@ const CourseCreationPage = () => {
                 <FiList /> 
                 <span style={{ fontWeight: 500 }}>{index + 1}. {module.title || '(Chưa có tiêu đề)'}</span>
               </div>
-              <button 
-                className="cb-icon-button" 
-                style={{ width: 24, height: 24, fontSize: 12 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCollapsedModules(prev => ({ ...prev, [module.id]: !prev[module.id] }));
-                }}
-              >
-                {collapsedModules[module.id] ? <FiChevronDown /> : <FiChevronUp />}
-              </button>
+              <div style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                {isEditable && index > 0 && (
+                  <button
+                    className="cb-icon-button"
+                    style={{ width: 22, height: 22, fontSize: 11 }}
+                    title="Di chuyển lên"
+                    onClick={(e) => { e.stopPropagation(); handleMoveModule(module.id, 'up'); }}
+                  >
+                    <FiArrowUp />
+                  </button>
+                )}
+                {isEditable && index < modules.length - 1 && (
+                  <button
+                    className="cb-icon-button"
+                    style={{ width: 22, height: 22, fontSize: 11 }}
+                    title="Di chuyển xuống"
+                    onClick={(e) => { e.stopPropagation(); handleMoveModule(module.id, 'down'); }}
+                  >
+                    <FiArrowDown />
+                  </button>
+                )}
+                <button 
+                  className="cb-icon-button" 
+                  style={{ width: 24, height: 24, fontSize: 12 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCollapsedModules(prev => ({ ...prev, [module.id]: !prev[module.id] }));
+                  }}
+                >
+                  {collapsedModules[module.id] ? <FiChevronDown /> : <FiChevronUp />}
+                </button>
+              </div>
             </div>
 
             {!collapsedModules[module.id] && (
               <div className="cb-sidebar__sub-list">
                 {module.lessons.map((lesson, lIndex) => {
-                  let Icon = FiFileText;
-                  if (lesson.type === 'video') Icon = FiPlay;
-                  if (lesson.type === 'quiz') Icon = FiHelpCircle;
-                  if (lesson.type === 'assignment') Icon = FiClipboard;
+                  const meta = getLessonTypeMeta(lesson.type);
 
                   return (
                     <div 
@@ -469,9 +535,43 @@ const CourseCreationPage = () => {
                       onClick={() => setActiveView({ type: 'lesson', moduleId: module.id, lessonId: lesson.id })}
                     >
                       <div className="cb-sidebar__item-label">
-                        <Icon size={14} />
-                        <span>{lIndex + 1}. {lesson.title || '(Chưa có tiêu đề)'}</span>
+                        <span
+                          className="cb-sidebar__lesson-icon"
+                          style={{ backgroundColor: `${meta.color}20`, color: meta.color }}
+                        >
+                          <meta.Icon size={12} />
+                        </span>
+                        <span className="cb-sidebar__lesson-text">
+                          <span>{lIndex + 1}. {lesson.title || '(Chưa có tiêu đề)'}</span>
+                          <span className="cb-sidebar__lesson-badge" style={{ backgroundColor: `${meta.color}18`, color: meta.color, borderColor: `${meta.color}40` }}>
+                            {meta.label}
+                          </span>
+                        </span>
                       </div>
+                      {isEditable && (
+                        <div style={{ display: 'flex', gap: 1, alignItems: 'center', marginLeft: 'auto' }}>
+                          {lIndex > 0 && (
+                            <button
+                              className="cb-icon-button"
+                              style={{ width: 20, height: 20, fontSize: 10, border: 'none' }}
+                              title="Di chuyển lên"
+                              onClick={(e) => { e.stopPropagation(); handleMoveLesson(module.id, lesson.id, 'up'); }}
+                            >
+                              <FiArrowUp />
+                            </button>
+                          )}
+                          {lIndex < module.lessons.length - 1 && (
+                            <button
+                              className="cb-icon-button"
+                              style={{ width: 20, height: 20, fontSize: 10, border: 'none' }}
+                              title="Di chuyển xuống"
+                              onClick={(e) => { e.stopPropagation(); handleMoveLesson(module.id, lesson.id, 'down'); }}
+                            >
+                              <FiArrowDown />
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -592,6 +692,7 @@ const CourseCreationPage = () => {
                         <input 
                            type="number" className="cb-input"
                            value={courseForm.price ?? 0}
+                           onWheel={blurOnWheel}
                            onChange={(e) => updateCourseForm({ price: parseInt(e.target.value) || 0 })}
                         />
                      </div>
@@ -600,6 +701,7 @@ const CourseCreationPage = () => {
                         <input 
                            type="number" className="cb-input"
                            value={courseForm.estimatedDuration ?? 0}
+                           onWheel={blurOnWheel}
                            onChange={(e) => updateCourseForm({ estimatedDuration: parseFloat(e.target.value) || 0 })}
                         />
                      </div>
@@ -788,8 +890,16 @@ const CourseCreationPage = () => {
                              className={`cb-chip ${lesson.type === type.value ? 'is-active' : ''}`}
                              onClick={() => {
                                 const next: Partial<LessonDraft> = { type: type.value as LessonKind };
-                                if (type.value === 'assignment' && !lesson.assignmentSubmissionType) {
-                                   next.assignmentSubmissionType = SubmissionType.TEXT;
+                                if (type.value === 'assignment') {
+                                   if (!lesson.assignmentSubmissionType) {
+                                      next.assignmentSubmissionType = SubmissionType.TEXT;
+                                   }
+                                   if (lesson.assignmentMaxScore == null) {
+                                      next.assignmentMaxScore = 100;
+                                   }
+                                   if (lesson.assignmentPassingScore == null) {
+                                      next.assignmentPassingScore = 50;
+                                   }
                                 }
                                 updateLessonField(module.id, lesson.id, next);
                              }}
@@ -949,9 +1059,15 @@ const CourseCreationPage = () => {
                        <RichTextEditor 
                           key={`assign-${lesson.id}`}
                           initialContent={lesson.assignmentDescription || ''}
-                          onChange={(val) => updateLessonField(module.id, lesson.id, { assignmentDescription: val })}
+                          onChange={(val) => {
+                             updateLessonField(module.id, lesson.id, { assignmentDescription: val });
+                             clearAssignmentError(lesson.id, 'description');
+                          }}
                           placeholder="Mô tả yêu cầu bài tập, hướng dẫn nộp bài..."
                        />
+                       {lessonErrors?.description && (
+                         <div className="cb-error-text">{lessonErrors.description}</div>
+                       )}
                        
                        <div className="cb-grid cb-grid--2" style={{ marginTop: 16 }}>
                           <div className="cb-form-group">
@@ -959,6 +1075,7 @@ const CourseCreationPage = () => {
                              <input 
                                 type="number" className="cb-input"
                                 value={lesson.assignmentMaxScore ?? 100}
+                                onWheel={blurOnWheel}
                                 onChange={(e) => {
                                    updateLessonField(module.id, lesson.id, { assignmentMaxScore: parseInt(e.target.value) });
                                    clearAssignmentError(lesson.id, 'maxScore');
@@ -973,6 +1090,7 @@ const CourseCreationPage = () => {
                              <input 
                                 type="number" className="cb-input"
                                 value={lesson.assignmentPassingScore ?? 50}
+                                onWheel={blurOnWheel}
                                 onChange={(e) => {
                                    updateLessonField(module.id, lesson.id, { assignmentPassingScore: parseInt(e.target.value) });
                                    clearAssignmentError(lesson.id, 'passingScore');
@@ -985,7 +1103,10 @@ const CourseCreationPage = () => {
                        </div>
 
                        <div className="cb-form-group" style={{ marginTop: 24 }}>
-                          <label className="cb-label">Tiêu chí chấm điểm (Rubric)</label>
+                          <label className="cb-label">Tiêu chí chấm điểm (Rubric) <span style={{ color: 'var(--cb-error-color)' }}>*</span></label>
+                          {lessonErrors?.criteriaRequired && (
+                            <div className="cb-error-text" style={{ marginBottom: 8 }}>{lessonErrors.criteriaRequired}</div>
+                          )}
                           <div className="cb-criteria-list">
                              {(lesson.assignmentCriteria || []).map((crit: AssignmentCriteriaDraft, idx: number) => {
                                 const criteriaError = lessonErrors?.criteriaItems?.[idx];
@@ -1029,6 +1150,7 @@ const CourseCreationPage = () => {
                                          value={crit.maxPoints}
                                          placeholder="Điểm"
                                          title="Điểm tối đa"
+                                         onWheel={blurOnWheel}
                                          onChange={(e) => {
                                             const newCrit = [...(lesson.assignmentCriteria || [])];
                                             newCrit[idx].maxPoints = parseInt(e.target.value) || 0;
@@ -1071,6 +1193,7 @@ const CourseCreationPage = () => {
                                       orderIndex: (lesson.assignmentCriteria?.length || 0) 
                                    };
                                    updateLessonField(module.id, lesson.id, { assignmentCriteria: [...(lesson.assignmentCriteria || []), newCrit] });
+                                   clearAssignmentError(lesson.id, 'criteriaRequired');
                                 }}
                              >
                                 <FiPlus /> Thêm tiêu chí
@@ -1116,6 +1239,7 @@ const CourseCreationPage = () => {
                                 <input 
                                    type="number" className="cb-input"
                                    value={lesson.passScore ?? 80}
+                                   onWheel={blurOnWheel}
                                    onChange={(e) => updateLessonField(module.id, lesson.id, { passScore: parseInt(e.target.value) })}
                                 />
                              </div>
@@ -1124,6 +1248,7 @@ const CourseCreationPage = () => {
                                 <input 
                                    type="number" className="cb-input"
                                    value={lesson.quizMaxAttempts ?? 3}
+                                   onWheel={blurOnWheel}
                                    onChange={(e) => updateLessonField(module.id, lesson.id, { quizMaxAttempts: parseInt(e.target.value) })}
                                 />
                              </div>
@@ -1133,6 +1258,7 @@ const CourseCreationPage = () => {
                                    type="number" className="cb-input"
                                    value={lesson.quizTimeLimitMinutes ?? ''}
                                    placeholder="Không giới hạn"
+                                   onWheel={blurOnWheel}
                                    onChange={(e) => updateLessonField(module.id, lesson.id, { quizTimeLimitMinutes: parseInt(e.target.value) })}
                                 />
                              </div>
@@ -1181,6 +1307,7 @@ const CourseCreationPage = () => {
                                                className="cb-input cb-input--compact"
                                                style={{ width: 80, height: 32 }}
                                                value={q.score ?? 1}
+                                               onWheel={blurOnWheel}
                                                onChange={(e) => {
                                                   const nextScore = parseInt(e.target.value, 10);
                                                   const newQ = [...(lesson.questions || [])];
@@ -1395,7 +1522,7 @@ const CourseCreationPage = () => {
          </div>
       )}
 
-      <div className="cb-container" style={{ maxWidth: '100%', padding: '0 24px', paddingBottom: 0 }}>
+      <div className="cb-container" style={{ maxWidth: '100%', padding: '0 24px', paddingBottom: 0, flexShrink: 0 }}>
         <header className="cb-header" style={{ marginBottom: 16 }}>
           <div className="cb-header__left">
             <button className="cb-back-button" onClick={handleGoBack}>
@@ -1446,10 +1573,11 @@ const CourseCreationPage = () => {
                                title: module.title,
                                description: module.description,
                                lessons: (module.lessons || []).map(rawLesson => {
-                                 const lesson = rawLesson as Partial<LessonDraft> & { id: number; type?: LessonType | string; durationSec?: number; videoUrl?: string };
+                                 const lessonId = (rawLesson as unknown as { id: number }).id;
+                                 const lesson = rawLesson as unknown as Partial<LessonDraft> & { id: number; type?: LessonType | string; durationSec?: number; videoUrl?: string };
                                  return {
-                                   id: lesson.id.toString(),
-                                   serverId: lesson.id,
+                                   id: lessonId.toString(),
+                                   serverId: lessonId,
                                    title: lesson.title || '',
                                    type: (lesson.type?.toString().toLowerCase() || 'reading') as LessonKind,
                                    durationMin: lesson.durationSec ? Math.round(lesson.durationSec / 60) : undefined,
@@ -1478,8 +1606,39 @@ const CourseCreationPage = () => {
                              };
                          });
                          
+                         // Build old→new ID map so activeView stays valid
+                         const oldModules = modules;
+                         const idMap = new Map<string, { newModuleId: string; lessonMap: Map<string, string> }>();
+                         oldModules.forEach((om, mi) => {
+                           const nm = mappedModules[mi];
+                           if (!nm) return;
+                           const lessonMap = new Map<string, string>();
+                           om.lessons.forEach((ol, li) => {
+                             const nl = nm.lessons[li];
+                             if (nl) lessonMap.set(ol.id, nl.id);
+                           });
+                           idMap.set(om.id, { newModuleId: nm.id, lessonMap });
+                         });
+
                          setModules(mappedModules);
                          setAssignmentErrors({});
+
+                         // Update activeView to use the new (server-based) IDs
+                         setActiveView(prev => {
+                           if (prev.type === 'module') {
+                             const entry = idMap.get(prev.moduleId);
+                             return entry ? { type: 'module', moduleId: entry.newModuleId } : prev;
+                           }
+                           if (prev.type === 'lesson') {
+                             const entry = idMap.get(prev.moduleId);
+                             if (!entry) return prev;
+                             const newLessonId = entry.lessonMap.get(prev.lessonId);
+                             return newLessonId
+                               ? { type: 'lesson', moduleId: entry.newModuleId, lessonId: newLessonId }
+                               : prev;
+                           }
+                           return prev;
+                         });
                          
                          if (!isEditMode) {
                             navigate(`/mentor/courses/${savedCourse.id}/edit`, { replace: true });

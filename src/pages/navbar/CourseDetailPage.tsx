@@ -91,6 +91,10 @@ const CourseDetailPage = () => {
         return 'Bản nháp';
       case CourseStatus.ARCHIVED:
         return 'Đã lưu trữ';
+      case CourseStatus.REJECTED:
+        return 'Bị từ chối';
+      case CourseStatus.SUSPENDED:
+        return 'Tạm khóa';
       default:
         return 'Chưa cập nhật';
     }
@@ -182,7 +186,7 @@ const CourseDetailPage = () => {
         setIsEnrolled(true);
         setEnrollmentProgress(0);
         showSuccess(
-          '🎉 Đăng ký thành công!', 
+          'Đăng ký thành công!', 
           'Bạn đã tham gia khóa học miễn phí. Chúc bạn học tập hiệu quả!',
           {
             text: 'Bắt đầu học',
@@ -743,7 +747,7 @@ const CourseDetailPage = () => {
             setEnrollmentProgress(0);
             setShowPaymentModal(false);
             showSuccess(
-              '💳 Thanh toán thành công!',
+              'Thanh toán thành công!',
               'Bạn đã kích hoạt khóa học. Hãy bắt đầu hành trình học tập!',
               {
                 text: 'Bắt đầu học',

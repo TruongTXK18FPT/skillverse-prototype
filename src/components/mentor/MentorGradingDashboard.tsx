@@ -8,27 +8,14 @@ import {
 } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
-import { AssignmentSubmissionDetailDTO } from '../../data/assignmentDTOs';
-import { 
-  listAssignmentsByModule, 
-  getPendingSubmissions 
-} from '../../services/assignmentService';
-import { listModules } from '../../services/moduleService';
+import { PendingSubmissionItemDTO } from '../../data/assignmentDTOs';
+import { getAllPendingForMentor } from '../../services/assignmentService';
 import '../../styles/MentorGradingDashboard.css';
 
 interface Course {
   id: number;
   title: string;
   [key: string]: any;
-}
-
-interface PendingSubmissionItem {
-  submission: AssignmentSubmissionDetailDTO;
-  courseName: string;
-  courseId: number;
-  moduleName: string;
-  moduleId: number;
-  assignmentName: string;
 }
 
 interface MentorGradingDashboardProps {
@@ -39,56 +26,19 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ courses
   const { user } = useAuth();
   const navigate = useNavigate();
   
-  const [pendingSubmissions, setPendingSubmissions] = useState<PendingSubmissionItem[]>([]);
+  const [pendingSubmissions, setPendingSubmissions] = useState<PendingSubmissionItemDTO[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Load all pending submissions across all courses/modules/assignments
+  // Load all pending submissions via single batch endpoint
   const loadAllPendingSubmissions = async () => {
     if (!user) return;
     setLoading(true);
     setError(null);
     
     try {
-      const allPending: PendingSubmissionItem[] = [];
-      
-      // Get all courses
-      for (const course of courses) {
-        try {
-          const courseModules = await listModules(course.id);
-          
-          for (const module of courseModules) {
-            try {
-              const assignments = await listAssignmentsByModule(module.id);
-              
-              for (const assignment of assignments) {
-                try {
-                  const submissions = await getPendingSubmissions(assignment.id, user.id);
-                  
-                  submissions.forEach(sub => {
-                    allPending.push({
-                      submission: sub,
-                      courseName: course.title,
-                      courseId: course.id,
-                      moduleName: module.title,
-                      moduleId: module.id,
-                      assignmentName: assignment.title
-                    });
-                  });
-                } catch (e) {
-                  console.error(`Failed to load submissions for assignment ${assignment.id}`, e);
-                }
-              }
-            } catch (e) {
-              console.error(`Failed to load assignments for module ${module.id}`, e);
-            }
-          }
-        } catch (e) {
-          console.error(`Failed to load modules for course ${course.id}`, e);
-        }
-      }
-      
-      setPendingSubmissions(allPending);
+      const items = await getAllPendingForMentor();
+      setPendingSubmissions(items);
     } catch (e) {
       console.error('Failed to load pending submissions', e);
       setError('Không thể tải danh sách bài chấm');

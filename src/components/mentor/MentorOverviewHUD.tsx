@@ -15,13 +15,17 @@ import {
   getMySkillTab,
   getMyTotalStudents,
 } from "../../services/mentorProfileService";
-import { listCoursesByAuthor } from "../../services/courseService";
 import { getMyBookings } from "../../services/bookingService";
 import { useToast } from "../../hooks/useToast";
 import "./MentorOverviewHUD.css";
 
 interface MentorOverviewHUDProps {
   onNavigate: (tab: string) => void;
+  /** 
+   * Pre-loaded course count from parent (MentorDashboard).
+   * Avoids a duplicate listCoursesByAuthor API call.
+   */
+  courseCount?: number;
 }
 
 interface MentorStats {
@@ -51,6 +55,7 @@ interface SystemLog {
 
 const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
   onNavigate,
+  courseCount,
 }) => {
   const { showError } = useToast();
   const [loading, setLoading] = useState(true);
@@ -84,30 +89,17 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
       // First, get mentor profile to get mentor ID
       const mentorProfile = await getMyMentorProfile();
 
-      // Fetch all data in parallel
+      // Fetch all data in parallel (courses already loaded by parent)
       const [
         walletStats,
-        walletData,
         recentTransactions,
         skillTabData,
-        coursesResponse,
         bookingsResponse,
         totalStudentsCount,
       ] = await Promise.all([
         walletService.getWalletStatistics(),
-        walletService.getMyWallet(),
         walletService.getTransactions(0, 5),
         getMySkillTab(),
-        listCoursesByAuthor(mentorProfile.id, 0, 1000).catch(() => ({
-          content: [],
-          totalElements: 0,
-          totalPages: 0,
-          page: 0,
-          size: 0,
-          first: true,
-          last: true,
-          empty: true,
-        })),
         getMyBookings(true, 0, 1000).catch(() => ({
           content: [],
           totalElements: 0,
@@ -220,8 +212,7 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
         },
         monthEarnings: actualMonthEarnings,
         totalEarnings: actualTotalEarnings,
-        totalCourses:
-          coursesResponse.totalElements || coursesResponse.content.length,
+        totalCourses: courseCount ?? 0,
         totalBookings:
           bookingsResponse.totalElements || bookingsResponse.content.length,
         pendingGrading: 0, // TODO: Implement assignment grading count

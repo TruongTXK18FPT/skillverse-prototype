@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Clock, Users, Star, BookOpen, Award, Play, ChevronDown, Filter, TrendingUp, GraduationCap, Folder, Radar, Zap, Target, Shield } from 'lucide-react';
+import { useEffect, useState, useCallback } from 'react';
+import { Users, Star, BookOpen, Play, Filter, TrendingUp, Folder, Radar, Zap, Target, Shield } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useTheme } from '../../context/ThemeContext';
 import '../../styles/CoursesPageCockpit.css';
 import Pagination from '../../components/shared/Pagination';
 import { useNavigate } from 'react-router-dom';
-import { parsePrice, isFreePrice, listPublishedCourses, Course } from '../../services/courseService';
+import { listCourses } from '../../services/courseService';
 import { useAuth } from '../../context/AuthContext';
 import { getUserEnrollments } from '../../services/enrollmentService';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
@@ -17,8 +17,9 @@ type PriceFilter = 'all' | 'free' | 'paid';
 const CoursesPage = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<CourseSummaryDTO[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState<SortOption>('newest');
@@ -26,115 +27,123 @@ const CoursesPage = () => {
   const [levelFilter, setLevelFilter] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [totalItems, setTotalItems] = useState(0);
+  const [enrolledIds, setEnrolledIds] = useState<Set<number>>(new Set());
   const itemsPerPage = 12;
   const { user } = useAuth();
 
+  // Helper: get effective price from course
+  const getCoursePrice = (course: CourseSummaryDTO): number => {
+    return course.purchaseOption?.price ?? course.price ?? 0;
+  };
 
-useEffect(() => {
-  setLoading(true);
-  const fetchData = async () => {
-    try {
-      const [published, enrollments] = await Promise.all([
-        listPublishedCourses(0, 100),
-        user?.id ? getUserEnrollments(user.id).catch(() => ({ content: [] })) : Promise.resolve({ content: [] })
-      ]);
+  // Helper: get effective currency from course
+  const getCourseCurrency = (course: CourseSummaryDTO): string => {
+    return course.purchaseOption?.currency ?? course.currency ?? 'VND';
+  };
 
-      const purchasedIds = new Set<string>((enrollments.content || []).map((enr) => String(enr.courseId)));
+  // Helper: check if course is free
+  const isCourseFree = (course: CourseSummaryDTO): boolean => {
+    return getCoursePrice(course) === 0;
+  };
 
-      const legacyCourses = published.content
-        .filter((dto: CourseSummaryDTO) => !purchasedIds.has(String(dto.id)))
-        .map((dto: CourseSummaryDTO) => {
-        const authorFullName = dto.authorName ||
-                              (dto.author?.fullName) ||
-                              `${dto.author?.firstName || ''} ${dto.author?.lastName || ''}`.trim() ||
-                              'Unknown Instructor';
+  // Helper: get author display name
+  const getAuthorName = (course: CourseSummaryDTO): string => {
+    return course.authorName ||
+      course.author?.fullName ||
+      `${course.author?.firstName || ''} ${course.author?.lastName || ''}`.trim() ||
+      'Unknown Instructor';
+  };
 
-        // Get price from purchaseOption first, fallback to dto.price
-        const actualPrice = dto.purchaseOption?.price ?? dto.price ?? 0;
-        const actualCurrency = dto.purchaseOption?.currency ?? dto.currency ?? 'VND';
-
-        return {
-          id: dto.id.toString(),
-          title: dto.title,
-          instructor: authorFullName,
-          category: 'general',
-          image: dto.thumbnailUrl || '/images/default-course.jpg',
-          level: (dto.level || 'BEGINNER').toLowerCase(),
-          price: (actualPrice !== null && actualPrice !== undefined && actualPrice !== 0)
-            ? `${actualPrice} ${actualCurrency}`
-            : '0',
-          rating: 0,
-          students: dto.enrollmentCount || 0,
-          description: dto.title || '',
-          duration: '0',
-          modules: (dto.moduleCount !== null && dto.moduleCount !== undefined) ? dto.moduleCount : 0,
-          certificate: false
-        };
-      });
-
-      setCourses(legacyCourses);
-    } catch (e) {
-      setCourses([]);
-    } finally {
-      setLoading(false);
+  // Map sort options to Spring Pageable sort format
+  const getServerSort = useCallback((sort: SortOption): { field: string; direction: 'asc' | 'desc' } => {
+    switch (sort) {
+      case 'newest': return { field: 'createdAt', direction: 'desc' };
+      case 'oldest': return { field: 'createdAt', direction: 'asc' };
+      case 'price-low': return { field: 'price', direction: 'asc' };
+      case 'price-high': return { field: 'price', direction: 'desc' };
+      default: return { field: 'createdAt', direction: 'desc' };
     }
-  };
-  fetchData();
-}, [user?.id]);
+  }, []);
 
-  // Sort courses
-  const sortCourses = (coursesToSort: Course[]): Course[] => {
-    return [...coursesToSort].sort((a, b) => {
-      switch (sortBy) {
-        case 'price-low':
-          return parsePrice(a.price ?? '') - parsePrice(b.price ?? '');
-        case 'price-high':
-          return parsePrice(b.price ?? '') - parsePrice(a.price ?? '');
-        case 'rating':
-          return (b.rating ?? 0) - (a.rating ?? 0);
-        case 'popular': {
-          const aStudents = typeof a.students === 'number' ? a.students : parseInt(a.students ?? '0');
-          const bStudents = typeof b.students === 'number' ? b.students : parseInt(b.students ?? '0');
-          return bStudents - aStudents;
-        }
-        case 'oldest': {
-          const aId = parseInt(String(a.id)) || 0;
-          const bId = parseInt(String(b.id)) || 0;
-          return aId - bId;
-        }
-        case 'newest':
-        default: {
-          const aId = parseInt(String(a.id)) || 0;
-          const bId = parseInt(String(b.id)) || 0;
-          return bId - aId;
-        }
+  // Debounce search input (300ms)
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+      setCurrentPage(1);
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [searchTerm]);
+
+  // Fetch enrolled course IDs once
+  useEffect(() => {
+    if (user?.id) {
+      getUserEnrollments(user.id)
+        .then(res => setEnrolledIds(new Set((res.content || []).map((e) => e.courseId))))
+        .catch(() => setEnrolledIds(new Set()));
+    }
+  }, [user?.id]);
+
+  // Fetch courses from server with pagination
+  useEffect(() => {
+    setLoading(true);
+    const fetchData = async () => {
+      try {
+        const { field, direction } = getServerSort(sortBy);
+        const result = await listCourses(
+          currentPage - 1,       // 0-indexed for server
+          itemsPerPage,
+          undefined,              // level - not supported server-side yet
+          'PUBLIC',               // always filter PUBLIC courses
+          debouncedSearch || undefined,
+          field,
+          direction
+        );
+
+        // Filter out already-enrolled courses (client-side)
+        const available = result.content.filter(c => !enrolledIds.has(c.id));
+        setCourses(available);
+        setTotalItems(result.totalElements);
+      } catch (e) {
+        setCourses([]);
+        setTotalItems(0);
+      } finally {
+        setLoading(false);
       }
-    });
-  };
+    };
+    fetchData();
+  }, [currentPage, debouncedSearch, sortBy, enrolledIds, getServerSort]);
 
+  // Client-side post-filters for category, price, level (applied to current page)
+  // Note: search and sort are handled server-side
   const filteredCourses = courses.filter(course => {
-    const matchSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        course.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        course.description?.toLowerCase().includes(searchTerm.toLowerCase());
-
     const matchCategory = selectedCategory === 'all' || course.category === selectedCategory;
 
     const matchPrice = priceFilter === 'all' ||
-                      (priceFilter === 'free' && isFreePrice(course.price)) ||
-                      (priceFilter === 'paid' && !isFreePrice(course.price));
+                      (priceFilter === 'free' && isCourseFree(course)) ||
+                      (priceFilter === 'paid' && !isCourseFree(course));
 
     const matchLevel = levelFilter === 'all' || course.level?.toLowerCase() === levelFilter;
 
-    return matchSearch && matchCategory && matchPrice && matchLevel;
+    return matchCategory && matchPrice && matchLevel;
   });
 
-  const sortedCourses = sortCourses(filteredCourses);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedCourses = sortedCourses.slice(startIndex, startIndex + itemsPerPage);
+  // For rating/popular sort: client-side re-sort (server doesn't support these fields)
+  const sortedCourses = (sortBy === 'rating' || sortBy === 'popular')
+    ? [...filteredCourses].sort((a, b) =>
+        sortBy === 'rating'
+          ? (b.averageRating ?? 0) - (a.averageRating ?? 0)
+          : (b.enrollmentCount ?? 0) - (a.enrollmentCount ?? 0)
+      )
+    : filteredCourses;
+
+  // Use server-provided totalItems for pagination
+  const displayedCourses = sortedCourses;
 
   // Extract dynamic category counts
   const categoriesMap: Record<string, number> = courses.reduce((acc, course) => {
-    acc[course.category] = (acc[course.category] ?? 0) + 1;
+    const cat = course.category || 'general';
+    acc[cat] = (acc[cat] ?? 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 
@@ -315,7 +324,7 @@ const categories = [
         <div className="cockpit-results-info">
           <div className="cockpit-scan-result">
             <span className="cockpit-scan-label">KẾT QUẢ:</span>
-            <span className="cockpit-scan-count">{sortedCourses.length}</span>
+            <span className="cockpit-scan-count">{displayedCourses.length}</span>
             <span className="cockpit-scan-unit">KHÓA HỌC</span>
           </div>
           {(searchTerm || selectedCategory !== 'all' || priceFilter !== 'all' || levelFilter !== 'all') && (
@@ -371,25 +380,25 @@ const categories = [
               <div className="cockpit-status-item">
                 <div className="cockpit-status-bar">
                   <div className="cockpit-status-fill" style={{
-                    width: `${courses.length > 0 ? (courses.filter(c => isFreePrice(c.price)).length / courses.length * 100) : 0}%`
+                    width: `${courses.length > 0 ? (courses.filter(c => isCourseFree(c)).length / courses.length * 100) : 0}%`
                   }}></div>
                 </div>
-                <span className="cockpit-status-label">Miễn phí: {courses.filter(c => isFreePrice(c.price)).length} khóa</span>
+                <span className="cockpit-status-label">Miễn phí: {courses.filter(c => isCourseFree(c)).length} khóa</span>
               </div>
               <div className="cockpit-status-item">
                 <div className="cockpit-status-bar">
                   <div className="cockpit-status-fill cockpit-status-fill-alt" style={{
-                    width: `${courses.length > 0 ? (courses.filter(c => !isFreePrice(c.price)).length / courses.length * 100) : 0}%`
+                    width: `${courses.length > 0 ? (courses.filter(c => !isCourseFree(c)).length / courses.length * 100) : 0}%`
                   }}></div>
                 </div>
-                <span className="cockpit-status-label">Có phí: {courses.filter(c => !isFreePrice(c.price)).length} khóa</span>
+                <span className="cockpit-status-label">Có phí: {courses.filter(c => !isCourseFree(c)).length} khóa</span>
               </div>
             </div>
           </div>
 
           {/* Modules Grid */}
           <div className="cockpit-modules-section">
-            {paginatedCourses.length === 0 ? (
+            {displayedCourses.length === 0 ? (
               <div className="cockpit-empty-state">
                 <div className="cockpit-empty-icon">
                   <Radar className="cockpit-radar-empty" />
@@ -412,7 +421,12 @@ const categories = [
               </div>
             ) : (
               <div className="cockpit-modules-grid">
-                {paginatedCourses.map((course, index) => (
+                {displayedCourses.map((course, index) => {
+                  const authorName = getAuthorName(course);
+                  const courseImage = course.thumbnailUrl || course.thumbnail?.url || '/images/default-course.jpg';
+                  const price = getCoursePrice(course);
+
+                  return (
                   <div
                     key={course.id}
                     className="cockpit-module-card"
@@ -432,7 +446,7 @@ const categories = [
 
                     {/* Module Image */}
                     <div className="cockpit-module-image-container">
-                      <img src={course.image} alt={course.title} className="cockpit-module-image" />
+                      <img src={courseImage} alt={course.title} className="cockpit-module-image" />
                       <div className="cockpit-module-overlay">
                         <button className="cockpit-preview-btn">
                           <Play className="cockpit-play-icon" />
@@ -450,17 +464,17 @@ const categories = [
                     <div className="cockpit-module-info">
                       <h3 className="cockpit-module-title">{course.title}</h3>
                       <p className="cockpit-module-instructor">
-                        <span className="cockpit-label">GIẢNG VIÊN:</span> {course.instructor === 'Unknown' || course.instructor === 'Unknown Instructor' ? 'Đang cập nhật' : course.instructor}
+                        <span className="cockpit-label">GIẢNG VIÊN:</span> {authorName === 'Unknown' || authorName === 'Unknown Instructor' ? 'Đang cập nhật' : authorName}
                       </p>
 
                       <div className="cockpit-module-stats">
                         <div className="cockpit-stat-item">
                           <BookOpen className="cockpit-stat-icon" />
-                          <span>{course.modules ?? 0} MODULES</span>
+                          <span>{course.moduleCount ?? 0} MODULES</span>
                         </div>
                         <div className="cockpit-stat-item">
                           <Users className="cockpit-stat-icon" />
-                          <span>{course.students === 0 ? 'MỚI' : `${course.students} HỌC VIÊN`}</span>
+                          <span>{(course.enrollmentCount ?? 0) === 0 ? 'MỚI' : `${course.enrollmentCount} HỌC VIÊN`}</span>
                         </div>
                       </div>
 
@@ -468,10 +482,7 @@ const categories = [
                       <div className="cockpit-module-footer">
                         <div className="cockpit-price-display">
                           <span className="cockpit-price">
-                            {(() => {
-                              const numPrice = parseInt(course.price?.replace(/[^\d]/g, '') || '0');
-                              return numPrice === 0 ? 'MIỄN PHÍ' : numPrice.toLocaleString('vi-VN') + ' VND';
-                            })()}
+                            {price === 0 ? 'MIỄN PHÍ' : price.toLocaleString('vi-VN') + ' ' + getCourseCurrency(course)}
                           </span>
                         </div>
                         <button
@@ -497,17 +508,18 @@ const categories = [
                       <div className="cockpit-card-corner cockpit-card-corner-br"></div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
         </div>
 
         {/* Pagination */}
-        {sortedCourses.length > itemsPerPage && (
+        {totalItems > itemsPerPage && (
           <div className="cockpit-pagination-wrapper">
             <Pagination
-              totalItems={sortedCourses.length}
+              totalItems={totalItems}
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
               onPageChange={setCurrentPage}

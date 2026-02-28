@@ -117,7 +117,7 @@ const MentorDashboard: React.FC = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'overview':
-        return <MentorOverviewHUD onNavigate={handleNavigate} />;
+        return <MentorOverviewHUD onNavigate={handleNavigate} courseCount={courses.length} />;
 
       case 'courses':
         return <CoursesTab />;
@@ -141,7 +141,7 @@ const MentorDashboard: React.FC = () => {
         return <MentorGradingDashboard courses={courses} />;
 
       default:
-        return <MentorOverviewHUD onNavigate={handleNavigate} />;
+        return <MentorOverviewHUD onNavigate={handleNavigate} courseCount={courses.length} />;
     }
   };
 

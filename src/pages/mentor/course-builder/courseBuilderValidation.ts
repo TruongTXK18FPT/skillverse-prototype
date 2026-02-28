@@ -8,8 +8,10 @@ export interface AssignmentCriteriaItemErrors {
 
 export interface AssignmentFieldErrors {
   submissionType?: string;
+  description?: string;
   maxScore?: string;
   passingScore?: string;
+  criteriaRequired?: string;
   criteriaTotal?: string;
   criteriaItems?: Record<number, AssignmentCriteriaItemErrors>;
 }
@@ -96,6 +98,20 @@ export const validateAssignmentsBeforeSave = (modulesToCheck: ModuleDraft[]): As
           lessonError.passingScore = 'Điểm đạt không được vượt quá Điểm tối đa.';
           setFirst(msg);
         }
+      }
+
+      // Assignment MUST have a description
+      if (!lesson.assignmentDescription || lesson.assignmentDescription.replace(/<[^>]*>/g, '').trim().length === 0) {
+        const msg = `Bài tập "${lessonLabel}" (Module ${mIndex + 1}) chưa có mô tả.`;
+        lessonError.description = 'Mô tả bài tập là bắt buộc.';
+        setFirst(msg);
+      }
+
+      // Assignment MUST have at least 1 rubric criterion
+      if (!lesson.assignmentCriteria || lesson.assignmentCriteria.length === 0) {
+        const msg = `Bài tập "${lessonLabel}" (Module ${mIndex + 1}) cần ít nhất 1 tiêu chí chấm điểm (Rubric).`;
+        lessonError.criteriaRequired = 'Bài tập phải có ít nhất 1 tiêu chí chấm điểm.';
+        setFirst(msg);
       }
 
       if (lesson.assignmentCriteria && lesson.assignmentCriteria.length > 0) {

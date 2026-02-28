@@ -74,57 +74,40 @@ export const assignLessonToModule = async (moduleId: number, lessonId: number, a
 };
 
 // Load modules with lessons and quizzes content for admin/course detail views
+// Uses single batch endpoint — eliminates N+1 HTTP requests
 export const listModulesWithContent = async (courseId: number): Promise<ModuleDetailDTO[]> => {
-  const modules = await listModules(courseId);
-  
-  const results: ModuleDetailDTO[] = await Promise.all(
-    modules.map(async (m) => {
-      const [lessonsRes, quizzesRes, assignmentsRes] = await Promise.all([
-        axiosInstance.get<LessonApiResponse[]>(`/modules/${m.id}/lessons`),
-        axiosInstance.get<QuizApiResponse[]>(`/quizzes/modules/${m.id}/quizzes`),
-        axiosInstance.get<AssignmentApiResponse[]>(`/modules/${m.id}/assignments`).catch(() => ({ data: [] as AssignmentApiResponse[] }))
-      ]);
-      
-      // Transform API responses to DTOs
-      const lessons: LessonSummaryDTO[] = (lessonsRes.data || []).map((l) => ({
-        id: l.id,
-        title: l.title,
-        type: (l.type || l.lessonType || DEFAULT_LESSON_TYPE) as LessonSummaryDTO['type'],
-        orderIndex: l.orderIndex ?? 0,
-        durationSec: l.durationSec ?? 0
-      }));
-      
-      const quizzes: QuizSummaryDTO[] = (quizzesRes.data || []).map((q) => ({
-        id: q.id,
-        title: q.title,
-        description: '',
-        passScore: q.passScore,
-        questionCount: q.questionCount ?? 0
-      }));
-      
-      const assignments: AssignmentSummaryDTO[] = (assignmentsRes.data || []).map((a) => ({
-        id: a.id,
-        title: a.title,
-        description: a.description ?? '',
-        submissionType: (a.submissionType ?? 'TEXT') as AssignmentSummaryDTO['submissionType'],
-        maxScore: a.maxScore ?? 0
-      }));
-      
-      return {
-        id: m.id,
-        title: m.title,
-        description: m.description ?? '',
-        orderIndex: m.orderIndex ?? 0,
-        courseId: courseId,
-        createdAt: '',
-        updatedAt: '',
-        lessons,
-        quizzes,
-        assignments
-      };
-    })
-  );
-  
-  return results;
+  const res = await axiosInstance.get<any[]>(`/courses/${courseId}/modules/full`);
+  const raw = res.data || [];
+
+  return raw.map((m) => ({
+    id: m.id,
+    title: m.title,
+    description: m.description ?? '',
+    orderIndex: m.orderIndex ?? 0,
+    courseId: courseId,
+    createdAt: m.createdAt ?? '',
+    updatedAt: m.updatedAt ?? '',
+    lessons: (m.lessons || []).map((l: LessonApiResponse) => ({
+      id: l.id,
+      title: l.title,
+      type: (l.type || l.lessonType || DEFAULT_LESSON_TYPE) as LessonSummaryDTO['type'],
+      orderIndex: l.orderIndex ?? 0,
+      durationSec: l.durationSec ?? 0
+    })) as LessonSummaryDTO[],
+    quizzes: (m.quizzes || []).map((q: QuizApiResponse) => ({
+      id: q.id,
+      title: q.title,
+      description: '',
+      passScore: q.passScore,
+      questionCount: q.questionCount ?? 0
+    })) as QuizSummaryDTO[],
+    assignments: (m.assignments || []).map((a: AssignmentApiResponse) => ({
+      id: a.id,
+      title: a.title,
+      description: a.description ?? '',
+      submissionType: (a.submissionType ?? 'TEXT') as AssignmentSummaryDTO['submissionType'],
+      maxScore: a.maxScore ?? 0
+    })) as AssignmentSummaryDTO[]
+  }));
 };
 

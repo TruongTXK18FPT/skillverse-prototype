@@ -55,7 +55,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
     setError(null);
     try {
       const assignmentData = await getAssignmentById(assignmentId);
-      const submissionsData = readOnly ? [] : await getMySubmissions(assignmentId, user.id);
+      const submissionsData = readOnly ? [] : await getMySubmissions(assignmentId);
       setAssignment(assignmentData);
       setSubmissions(submissionsData);
     } catch (err: unknown) {
@@ -112,7 +112,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
         submissionData.fileMediaId = mediaResult.id;
       }
 
-      await submitAssignment(assignmentId, submissionData, user.id);
+      await submitAssignment(assignmentId, submissionData);
 
       // Reset form
       setSubmissionText('');
@@ -132,7 +132,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
 
   const getStatusBadge = (submission: AssignmentSubmissionDetailDTO) => {
     if (submission.status === SubmissionStatus.GRADED) {
-      const isPassed = submission.score! >= submission.maxScore * 0.7;
+      const isPassed = submission.isPassed === true;
       return (
         <span className={`learning-hud-submission-badge ${isPassed ? 'passed' : 'failed'}`}>
           <CheckCircle size={14} />
@@ -233,6 +233,39 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
         <div dangerouslySetInnerHTML={{ __html: assignment.description }} />
       </div>
 
+      {/* Rubric Preview — show grading criteria before submission */}
+      {assignment.criteria && assignment.criteria.length > 0 && (
+        <div className="learning-hud-rubric-preview">
+          <h3>Tiêu Chí Chấm Điểm</h3>
+          <div className="learning-hud-rubric-list">
+            {assignment.criteria.map((criterion) => (
+              <div key={criterion.id ?? criterion.name} className="learning-hud-rubric-item">
+                <div className="learning-hud-rubric-header">
+                  <span className="learning-hud-rubric-name">
+                    {criterion.name}
+                    {criterion.isRequired && <span className="learning-hud-rubric-required">*</span>}
+                  </span>
+                  <span className="learning-hud-rubric-points">
+                    {criterion.passingPoints != null && criterion.passingPoints > 0
+                      ? `≥${criterion.passingPoints}/${criterion.maxPoints}`
+                      : `/${criterion.maxPoints}`
+                    }
+                  </span>
+                </div>
+                {criterion.description && (
+                  <p className="learning-hud-rubric-desc">{criterion.description}</p>
+                )}
+              </div>
+            ))}
+          </div>
+          {assignment.passingScore != null && (
+            <div className="learning-hud-rubric-summary">
+              Điểm đạt tối thiểu: <strong>{assignment.passingScore}/{assignment.maxScore}</strong>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Current Submission Status */}
       {!readOnly && newestSubmission && (
         <div className="learning-hud-current-submission">
@@ -283,6 +316,31 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
               )}
             </div>
           )}
+          {/* Criteria Score Breakdown (Coursera pattern) */}
+          {newestSubmission.criteriaScores && newestSubmission.criteriaScores.length > 0 && newestSubmission.status === SubmissionStatus.GRADED && (
+            <div className="learning-hud-criteria-breakdown">
+              <h4>Chi Tiết Tiêu Chí</h4>
+              {newestSubmission.criteriaScores.map((cs) => (
+                <div key={cs.criteriaId} className={`learning-hud-criteria-row ${cs.passed ? 'passed' : 'failed'}`}>
+                  <div className="learning-hud-criteria-info">
+                    <span className="learning-hud-criteria-name">{cs.criteriaName}</span>
+                    <span className={`learning-hud-criteria-badge ${cs.passed ? 'passed' : 'failed'}`}>
+                      {cs.passed ? '✓ Đạt' : '✗ Chưa đạt'}
+                    </span>
+                  </div>
+                  <div className="learning-hud-criteria-score">
+                    {cs.score}/{cs.maxPoints}
+                    {cs.passingPoints != null && (
+                      <span className="learning-hud-criteria-threshold"> (cần ≥{cs.passingPoints})</span>
+                    )}
+                  </div>
+                  {cs.feedback && (
+                    <div className="learning-hud-criteria-feedback">{cs.feedback}</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -315,100 +373,130 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
         </div>
       )}
 
-      {/* Submission Form (Unlimited Resubmissions) */}
-      {!readOnly && (
-        <div className="learning-hud-submission-form">
-        <h3>
-          {newestSubmission ? 'Submit New Attempt' : 'Submit Your Work'}
-        </h3>
-        {isDueDatePassed && (
-          <div className="learning-hud-late-warning">
-            <AlertCircle size={16} />
-            This assignment is past due. Your submission will be marked as late.
-          </div>
-        )}
-
-        {error && (
-          <div className="learning-hud-form-error">
-            <AlertCircle size={16} />
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          {assignment.submissionType === SubmissionType.TEXT && (
-            <textarea
-              className="learning-hud-text-input"
-              placeholder="Enter your submission text..."
-              value={submissionText}
-              onChange={(e) => setSubmissionText(e.target.value)}
-              rows={8}
-              disabled={submitting}
-            />
-          )}
-
-          {assignment.submissionType === SubmissionType.LINK && (
-            <input
-              type="url"
-              className="learning-hud-link-input"
-              placeholder="https://your-work-url.com"
-              value={linkUrl}
-              onChange={(e) => setLinkUrl(e.target.value)}
-              disabled={submitting}
-            />
-          )}
-
-          {assignment.submissionType === SubmissionType.FILE && (
-            <div className="learning-hud-file-upload">
-              <input
-                type="file"
-                id="file-upload"
-                className="learning-hud-file-input"
-                onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                disabled={submitting}
-              />
-              <label htmlFor="file-upload" className="learning-hud-file-label">
-                <Upload size={24} />
-                {selectedFile ? selectedFile.name : 'Click to select file'}
-              </label>
-              {uploadProgress > 0 && uploadProgress < 100 && (
-                <div className="learning-hud-upload-progress">
-                  <div
-                    className="learning-hud-upload-bar"
-                    style={{ width: `${uploadProgress}%` }}
-                  />
-                </div>
-              )}
+      {/* Submission Form — gated by submission status */}
+      {!readOnly && (() => {
+        // Gate logic: determine if student can submit
+        if (newestSubmission) {
+          // PENDING: waiting for grading — block resubmission
+          if (newestSubmission.status === SubmissionStatus.PENDING || newestSubmission.status === SubmissionStatus.LATE_PENDING) {
+            return (
+              <div className="learning-hud-submission-gate">
+                <Clock size={24} />
+                <p>Đang chờ mentor chấm điểm...</p>
+                <span className="learning-hud-gate-hint">
+                  Bạn sẽ có thể nộp lại sau khi bài được chấm (nếu chưa đạt).
+                </span>
+              </div>
+            );
+          }
+          // PASSED: no resubmission needed
+          if (newestSubmission.isPassed === true) {
+            return (
+              <div className="learning-hud-submission-gate passed">
+                <CheckCircle size={24} />
+                <p>Bạn đã hoàn thành bài tập này ✓</p>
+                <span className="learning-hud-gate-hint">
+                  Điểm: {newestSubmission.score}/{newestSubmission.maxScore}
+                </span>
+              </div>
+            );
+          }
+          // FAIL: allow reattempt — fall through to form
+        }
+        // No submission yet OR failed → show form
+        return (
+          <div className="learning-hud-submission-form">
+          <h3>
+            {newestSubmission ? 'Nộp Lại Bài Tập' : 'Nộp Bài Tập'}
+          </h3>
+          {isDueDatePassed && (
+            <div className="learning-hud-late-warning">
+              <AlertCircle size={16} />
+              This assignment is past due. Your submission will be marked as late.
             </div>
           )}
 
-          <button
-            type="submit"
-            className="learning-hud-submit-btn"
-            disabled={submitting}
-          >
-            {submitting ? (
-              <>
-                <div className="learning-hud-spinner small" />
-                Submitting...
-              </>
-            ) : (
-              <>
-                <Send size={18} />
-                Submit {newestSubmission ? 'New Attempt' : 'Assignment'}
-              </>
-            )}
-          </button>
-        </form>
+          {error && (
+            <div className="learning-hud-form-error">
+              <AlertCircle size={16} />
+              {error}
+            </div>
+          )}
 
-        <div className="learning-hud-submission-note">
-          <p>
-            💡 Unlimited resubmissions allowed. Only your latest 2 attempts are kept
-            (newest + previous). Mentor will grade your newest submission.
-          </p>
+          <form onSubmit={handleSubmit}>
+            {assignment.submissionType === SubmissionType.TEXT && (
+              <textarea
+                className="learning-hud-text-input"
+                placeholder="Enter your submission text..."
+                value={submissionText}
+                onChange={(e) => setSubmissionText(e.target.value)}
+                rows={8}
+                disabled={submitting}
+              />
+            )}
+
+            {assignment.submissionType === SubmissionType.LINK && (
+              <input
+                type="url"
+                className="learning-hud-link-input"
+                placeholder="https://your-work-url.com"
+                value={linkUrl}
+                onChange={(e) => setLinkUrl(e.target.value)}
+                disabled={submitting}
+              />
+            )}
+
+            {assignment.submissionType === SubmissionType.FILE && (
+              <div className="learning-hud-file-upload">
+                <input
+                  type="file"
+                  id="file-upload"
+                  className="learning-hud-file-input"
+                  onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                  disabled={submitting}
+                />
+                <label htmlFor="file-upload" className="learning-hud-file-label">
+                  <Upload size={24} />
+                  {selectedFile ? selectedFile.name : 'Click to select file'}
+                </label>
+                {uploadProgress > 0 && uploadProgress < 100 && (
+                  <div className="learning-hud-upload-progress">
+                    <div
+                      className="learning-hud-upload-bar"
+                      style={{ width: `${uploadProgress}%` }}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="learning-hud-submit-btn"
+              disabled={submitting}
+            >
+              {submitting ? (
+                <>
+                  <div className="learning-hud-spinner small" />
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <Send size={18} />
+                  {newestSubmission ? 'Nộp Lại' : 'Nộp Bài'}
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="learning-hud-submission-note">
+            <p>
+              💡 Bạn có thể nộp lại nếu bài chưa đạt. Mentor sẽ chấm bài nộp mới nhất.
+            </p>
+          </div>
         </div>
-      </div>
-      )}
+        );
+      })()}
       {readOnly && (
         <div className="learning-hud-submission-note">
           <p>

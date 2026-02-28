@@ -106,7 +106,7 @@ const AssignmentPage: React.FC = () => {
     try {
       const [assignmentData, submissionsData] = await Promise.all([
         getAssignmentById(parseInt(assignmentId)),
-        getMySubmissions(parseInt(assignmentId), user.id)
+        getMySubmissions(parseInt(assignmentId))
       ]);
       setAssignment(assignmentData);
       setSubmissions(submissionsData);
@@ -167,7 +167,7 @@ const AssignmentPage: React.FC = () => {
         submissionData.fileMediaId = mediaResult.id;
       }
 
-      await submitAssignment(parseInt(assignmentId!), submissionData, user.id);
+      await submitAssignment(parseInt(assignmentId!), submissionData);
 
       setSuccess('✅ Submission successful!');
       setSubmissionText('');

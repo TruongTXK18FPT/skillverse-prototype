@@ -20,11 +20,12 @@ import {
   Play,
   DollarSign,
   Eye,
-  MessageSquare
+  MessageSquare,
+  Archive
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { listCoursesByAuthor, deleteCourse, submitCourseForApproval } from '../../services/courseService';
-import { CourseStatus, CourseLevel } from '../../data/courseDTOs';
+import { CourseStatus } from '../../data/courseDTOs';
 import { createGroup, getGroupByCourse, updateGroup, GroupChatResponse } from '../../services/groupChatService';
 import CreateGroupModal from '../course/CreateGroupModal';
 import StudentManagementTab from '../course/StudentManagementTab';
@@ -51,6 +52,7 @@ const getStatusColor = (status: CourseStatus): string => {
     case CourseStatus.PENDING: return 'mentor-hud-status-pending';
     case CourseStatus.PUBLIC: return 'mentor-hud-status-public';
     case CourseStatus.REJECTED: return 'mentor-hud-status-rejected';
+    case CourseStatus.SUSPENDED: return 'mentor-hud-status-archived';
     case CourseStatus.ARCHIVED: return 'mentor-hud-status-archived';
     default: return '';
   }
@@ -62,17 +64,10 @@ const getStatusLabel = (status: CourseStatus): string => {
     case CourseStatus.PENDING: return 'Chờ duyệt';
     case CourseStatus.PUBLIC: return 'Đã xuất bản';
     case CourseStatus.REJECTED: return 'Bị từ chối';
+    case CourseStatus.SUSPENDED: return 'Tạm khóa';
     case CourseStatus.ARCHIVED: return 'Đã lưu trữ';
     default: return status;
   }
-};
-
-const formatDuration = (seconds: number): string => {
-  if (!seconds) return '0 phút';
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  if (hours > 0) return `${hours}h ${minutes}m`;
-  return `${minutes} phút`;
 };
 
 const resolveCourseThumbnail = (course: Course): string | null => {
@@ -124,19 +119,22 @@ const CoursesTab: React.FC = () => {
     }
   }, [user?.id]);
 
-  // Load group info for each course
+  // Load group info for all courses in parallel (batched)
   useEffect(() => {
     if (courses.length > 0) {
-      courses.forEach(async (c) => {
-        try {
-          const group = await getGroupByCourse(c.id);
-          if (group) {
-            setCourseGroups(prev => ({ ...prev, [c.id]: group }));
+      const loadGroups = async () => {
+        const results = await Promise.allSettled(
+          courses.map(c => getGroupByCourse(c.id).then(group => ({ courseId: c.id, group })))
+        );
+        const groups: Record<number, GroupChatResponse | null> = {};
+        results.forEach(r => {
+          if (r.status === 'fulfilled' && r.value.group) {
+            groups[r.value.courseId] = r.value.group;
           }
-        } catch {
-          // ignore - course may not have a group
-        }
-      });
+        });
+        setCourseGroups(groups);
+      };
+      loadGroups();
     }
   }, [courses]);
 
@@ -160,17 +158,47 @@ const CoursesTab: React.FC = () => {
     if (!user) return;
     const course = courses.find(c => c.id === courseId);
     if (!course) return;
+
+    const hasEnrollments = (course.enrollmentCount ?? 0) > 0;
+    const isPublic = course.status === CourseStatus.PUBLIC;
+
+    let title: string;
+    let message: string;
+    let confirmLabel: string;
+
+    if (isPublic && hasEnrollments) {
+      title = 'Lưu trữ khóa học';
+      message = `Khóa học "${course.title}" đang có ${course.enrollmentCount} học viên. Khóa học sẽ được lưu trữ (không hiển thị công khai) nhưng học viên hiện tại vẫn có thể truy cập nội dung đã mua.`;
+      confirmLabel = 'Lưu trữ';
+    } else if (hasEnrollments) {
+      title = 'Lưu trữ khóa học';
+      message = `Khóa học "${course.title}" có ${course.enrollmentCount} học viên đã đăng ký. Khóa học sẽ được lưu trữ thay vì xóa vĩnh viễn.`;
+      confirmLabel = 'Lưu trữ';
+    } else {
+      title = 'Xóa khóa học';
+      message = `Bạn có chắc chắn muốn xóa khóa học "${course.title}"? Hành động này không thể hoàn tác.`;
+      confirmLabel = 'Xóa';
+    }
+
     setConfirmDialog({
-      title: 'Xóa khóa học',
-      message: `Bạn có chắc chắn muốn xóa khóa học "${course.title}"? Hành động này không thể hoàn tác.`,
-      confirmLabel: 'Xóa',
+      title,
+      message,
+      confirmLabel,
       variant: 'danger',
       onConfirm: async () => {
         setConfirmDialog(null);
         try {
           await deleteCourse(courseId, user.id);
-          setCourses(prev => prev.filter(c => c.id !== courseId));
-          showNotice('success', 'Đã xóa khóa học.');
+          if (hasEnrollments) {
+            // BE archives instead of deleting — update local state
+            setCourses(prev => prev.map(c =>
+              c.id === courseId ? { ...c, status: CourseStatus.ARCHIVED } : c
+            ));
+            showNotice('success', 'Khóa học đã được lưu trữ.');
+          } else {
+            setCourses(prev => prev.filter(c => c.id !== courseId));
+            showNotice('success', 'Đã xóa khóa học.');
+          }
         } catch (err) {
           console.error('Failed to delete course:', err);
           setError('Không thể xóa khóa học. Vui lòng thử lại.');
@@ -319,7 +347,7 @@ const CoursesTab: React.FC = () => {
       {/* Empty State */}
       {!loading && courses.length === 0 && (
         <div className="mentor-hud-empty">
-          <BookOpen className="w-16 h-16" style={{ color: 'var(--mentor-hud-accent-cyan)' }} />
+          <BookOpen className="w-16 h-16 mentor-hud-empty-icon" />
           <h3>Chưa có khóa học nào</h3>
           <p>Bắt đầu tạo khóa học đầu tiên của bạn!</p>
           <button
@@ -371,6 +399,23 @@ const CoursesTab: React.FC = () => {
                 <h3 className="mentor-hud-course-title">{course.title}</h3>
                 <p className="mentor-hud-course-description">{course.description}</p>
 
+                {/* Rejection reason banner */}
+                {course.status === CourseStatus.REJECTED && course.rejectionReason && (
+                  <div className="mentor-hud-rejection-banner">
+                    <strong>Lý do từ chối:</strong> {course.rejectionReason}
+                  </div>
+                )}
+
+                {/* Suspension reason banner */}
+                {course.status === CourseStatus.SUSPENDED && course.suspensionReason && (
+                  <div className="mentor-hud-rejection-banner mentor-hud-suspension-banner">
+                    <strong>Lý do tạm khóa:</strong> {course.suspensionReason}
+                    <p style={{ margin: '4px 0 0', fontSize: '0.85em', opacity: 0.85 }}>
+                      Bạn có thể chỉnh sửa nội dung và gửi kháng cáo để admin xem xét lại.
+                    </p>
+                  </div>
+                )}
+
                 {/* Meta */}
                 <div className="mentor-hud-course-meta">
                   <span className="mentor-hud-level-badge">{course.level}</span>
@@ -385,7 +430,7 @@ const CoursesTab: React.FC = () => {
                     </div>
                     <div className="mentor-hud-course-stat">
                       <Play className="w-4 h-4" />
-                      <span>{course.lessonCount || course.lessons?.length || 0} Bài học</span>
+                      <span>{course.lessonCount ?? 0} Bài học</span>
                     </div>
                     {course.price !== undefined && course.price !== null && (
                       <div className="mentor-hud-course-stat">
@@ -398,26 +443,29 @@ const CoursesTab: React.FC = () => {
 
                 {/* Actions */}
                 <div className="mentor-hud-course-actions">
-                  <button
-                    className="mentor-hud-action-button mentor-hud-edit-button"
-                    onClick={() => navigate(`/mentor/courses/${course.id}/edit`)}
-                    title="Chỉnh sửa thông tin"
-                  >
-                    <Edit3 className="w-4 h-4" />
-                    Sửa
-                  </button>
+                  {/* Sửa: cho DRAFT / REJECTED / SUSPENDED */}
+                  {(course.status === CourseStatus.DRAFT || course.status === CourseStatus.REJECTED || course.status === CourseStatus.SUSPENDED) ? (
+                    <button
+                      className="mentor-hud-action-button mentor-hud-edit-button"
+                      onClick={() => navigate(`/mentor/courses/${course.id}/edit`)}
+                      title="Chỉnh sửa khóa học"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                      Sửa
+                    </button>
+                  ) : (
+                    <button
+                      className="mentor-hud-action-button mentor-hud-view-button"
+                      onClick={() => navigate(`/mentor/courses/${course.id}/edit`)}
+                      title="Xem chi tiết khóa học"
+                    >
+                      <Eye className="w-4 h-4" />
+                      Xem
+                    </button>
+                  )}
 
                   <button
-                    className="mentor-hud-action-button mentor-hud-view-button"
-                    onClick={() => navigate(`/mentor/courses/${course.id}/content`)}
-                    title="Quản lý nội dung"
-                  >
-                    <Eye className="w-4 h-4" />
-                    Nội Dung
-                  </button>
-
-                  <button
-                    className="mentor-hud-action-button"
+                    className="mentor-hud-action-button mentor-hud-students-button"
                     onClick={() => setSelectedCourseForStudents(course)}
                     title="Quản lý học viên"
                   >
@@ -425,7 +473,7 @@ const CoursesTab: React.FC = () => {
                     Học Viên
                   </button>
 
-                  {course.status === CourseStatus.DRAFT && (
+                  {(course.status === CourseStatus.DRAFT || course.status === CourseStatus.REJECTED) && (
                     <button
                       className="mentor-hud-action-button mentor-hud-submit-button"
                       onClick={() => handleSubmitForApproval(course.id)}
@@ -437,11 +485,22 @@ const CoursesTab: React.FC = () => {
                     </button>
                   )}
 
+                  {course.status === CourseStatus.SUSPENDED && (
+                    <button
+                      className="mentor-hud-action-button mentor-hud-submit-button"
+                      onClick={() => handleSubmitForApproval(course.id)}
+                      disabled={loading}
+                      title="Gửi kháng cáo để admin xem xét lại"
+                    >
+                      <Upload className="w-4 h-4" />
+                      Kháng Cáo
+                    </button>
+                  )}
+
                   {course.status === CourseStatus.PUBLIC && (
                     courseGroups[course.id] ? (
                       <button
-                        className="mentor-hud-action-button"
-                        style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', borderColor: '#10b981' }}
+                        className="mentor-hud-action-button mentor-hud-group-button"
                         onClick={() => handleOpenEditModal(course.id, courseGroups[course.id]!)}
                         title="Quản lý Group"
                       >
@@ -450,8 +509,7 @@ const CoursesTab: React.FC = () => {
                       </button>
                     ) : (
                       <button
-                        className="mentor-hud-action-button"
-                        style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', borderColor: '#3b82f6' }}
+                        className="mentor-hud-action-button mentor-hud-create-group-button"
                         onClick={() => handleOpenCreateModal(course.id, course.title)}
                         title="Tạo Group"
                       >
@@ -461,15 +519,21 @@ const CoursesTab: React.FC = () => {
                     )
                   )}
 
-                  <button
-                    className="mentor-hud-action-button mentor-hud-delete-button"
-                    onClick={() => handleDeleteCourse(course.id)}
-                    disabled={loading}
-                    title="Xóa khóa học"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    Xóa
-                  </button>
+                  {/* Xóa/Lưu trữ — ẩn cho ARCHIVED */}
+                  {course.status !== CourseStatus.ARCHIVED ? (
+                    <button
+                      className="mentor-hud-action-button mentor-hud-delete-button"
+                      onClick={() => handleDeleteCourse(course.id)}
+                      disabled={loading}
+                      title={(course.enrollmentCount ?? 0) > 0 ? 'Lưu trữ khóa học' : 'Xóa khóa học'}
+                    >
+                      {(course.enrollmentCount ?? 0) > 0 ? (
+                        <><Archive className="w-4 h-4" /> Lưu trữ</>
+                      ) : (
+                        <><Trash2 className="w-4 h-4" /> Xóa</>
+                      )}
+                    </button>
+                  ) : null}
                 </div>
               </div>
             </div>

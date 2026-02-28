@@ -5,7 +5,9 @@ export enum CourseStatus {
   DRAFT = 'DRAFT',
   PENDING = 'PENDING',
   PUBLIC = 'PUBLIC',
-  ARCHIVED = 'ARCHIVED'
+  ARCHIVED = 'ARCHIVED',
+  REJECTED = 'REJECTED',
+  SUSPENDED = 'SUSPENDED'
 }
 
 export enum CourseLevel {
@@ -61,6 +63,7 @@ export interface CourseSummaryDTO {
   updatedAt: string;
   submittedDate?: string;
   publishedDate?: string;
+  rejectionReason?: string; // Set when status = REJECTED
   purchaseOption?: CoursePurchaseOption; // Purchase configuration
 }
 
@@ -99,6 +102,10 @@ export interface CourseDetailDTO {
   updatedAt: string;
   submittedDate?: string;
   publishedDate?: string;
+  rejectionReason?: string; // Set when status = REJECTED
+  rejectedAt?: string;
+  suspensionReason?: string; // Set when status = SUSPENDED
+  suspendedAt?: string;
   purchaseOption?: CoursePurchaseOption; // Purchase configuration
 }
 

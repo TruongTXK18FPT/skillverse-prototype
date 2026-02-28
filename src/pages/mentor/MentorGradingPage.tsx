@@ -17,6 +17,8 @@ import {
 import {
   AssignmentDetailDTO,
   AssignmentSubmissionDetailDTO,
+  AssignmentCriteriaDTO,
+  CriteriaScoreDTO,
   SubmissionStatus,
   SubmissionType
 } from '../../data/assignmentDTOs';
@@ -59,12 +61,16 @@ const MentorGradingPage: React.FC = () => {
     submission: AssignmentSubmissionDetailDTO | null;
     score: string;
     feedback: string;
+    criteriaScores: Record<number, string>; // criteriaId -> score string
+    criteriaFeedback: Record<number, string>; // criteriaId -> feedback
     submitting: boolean;
   }>({
     isOpen: false,
     submission: null,
     score: '',
     feedback: '',
+    criteriaScores: {},
+    criteriaFeedback: {},
     submitting: false
   });
 
@@ -84,7 +90,7 @@ const MentorGradingPage: React.FC = () => {
     try {
       const [assignmentData, submissionsData] = await Promise.all([
         getAssignmentById(Number(assignmentId)),
-        getAssignmentSubmissions(Number(assignmentId), user.id)
+        getAssignmentSubmissions(Number(assignmentId))
       ]);
       setAssignment(assignmentData);
       setSubmissions(submissionsData);
@@ -99,50 +105,114 @@ const MentorGradingPage: React.FC = () => {
     loadData();
   }, [loadData]);
 
+  const hasCriteria = assignment?.criteria && assignment.criteria.length > 0;
+
+  // Compute total from criteria scores (auto-sum)
+  const criteriaTotal = hasCriteria
+    ? Object.values(gradingModal.criteriaScores).reduce((sum, v) => {
+        const n = parseFloat(v);
+        return sum + (isNaN(n) ? 0 : n);
+      }, 0)
+    : 0;
+
   const handleGrade = async () => {
     if (!gradingModal.submission || !user?.id) return;
     
-    const score = parseFloat(gradingModal.score);
-    if (isNaN(score) || score < 0) {
-      setError('Please enter a valid score');
-      return;
-    }
-    if (assignment && score > assignment.maxScore) {
-      setError(`Score cannot exceed ${assignment.maxScore}`);
-      return;
-    }
+    if (hasCriteria) {
+      // Criteria-based grading: validate each criterion
+      const criteria = assignment!.criteria!;
+      for (const c of criteria) {
+        const val = parseFloat(gradingModal.criteriaScores[c.id!] || '');
+        if (isNaN(val) || val < 0) {
+          setError(`Vui lòng nhập điểm hợp lệ cho tiêu chí "${c.name}"`);
+          return;
+        }
+        if (val > c.maxPoints) {
+          setError(`Điểm tiêu chí "${c.name}" không được vượt quá ${c.maxPoints}`);
+          return;
+        }
+      }
 
-    setGradingModal(prev => ({ ...prev, submitting: true }));
+      setGradingModal(prev => ({ ...prev, submitting: true }));
 
-    try {
-      await gradeSubmission(
-        gradingModal.submission.id,
-        {
-          score,
-          feedback: gradingModal.feedback || undefined
-        },
-        user.id
-      );
-      setGradingModal({
-        isOpen: false,
-        submission: null,
-        score: '',
-        feedback: '',
-        submitting: false
-      });
-      await loadData();
-    } catch (err: any) {
-      setError(err?.response?.data?.message || 'Failed to grade submission');
-      setGradingModal(prev => ({ ...prev, submitting: false }));
+      try {
+        const criteriaScoresPayload: CriteriaScoreDTO[] = criteria.map(c => ({
+          criteriaId: c.id!,
+          score: parseFloat(gradingModal.criteriaScores[c.id!] || '0'),
+          maxPoints: c.maxPoints,
+          feedback: gradingModal.criteriaFeedback[c.id!] || undefined
+        }));
+
+        await gradeSubmission(
+          gradingModal.submission.id,
+          {
+            score: criteriaTotal,
+            feedback: gradingModal.feedback || undefined,
+            criteriaScores: criteriaScoresPayload
+          }
+        );
+        setGradingModal({
+          isOpen: false, submission: null, score: '', feedback: '',
+          criteriaScores: {}, criteriaFeedback: {}, submitting: false
+        });
+        await loadData();
+      } catch (err: any) {
+        setError(err?.response?.data?.message || 'Chấm điểm thất bại');
+        setGradingModal(prev => ({ ...prev, submitting: false }));
+      }
+    } else {
+      // Flat score grading (no criteria)
+      const score = parseFloat(gradingModal.score);
+      if (isNaN(score) || score < 0) {
+        setError('Vui lòng nhập điểm hợp lệ');
+        return;
+      }
+      if (assignment && score > assignment.maxScore) {
+        setError(`Điểm không được vượt quá ${assignment.maxScore}`);
+        return;
+      }
+
+      setGradingModal(prev => ({ ...prev, submitting: true }));
+
+      try {
+        await gradeSubmission(
+          gradingModal.submission.id,
+          {
+            score,
+            feedback: gradingModal.feedback || undefined
+          }
+        );
+        setGradingModal({
+          isOpen: false, submission: null, score: '', feedback: '',
+          criteriaScores: {}, criteriaFeedback: {}, submitting: false
+        });
+        await loadData();
+      } catch (err: any) {
+        setError(err?.response?.data?.message || 'Chấm điểm thất bại');
+        setGradingModal(prev => ({ ...prev, submitting: false }));
+      }
     }
   };
 
   const openGradingModal = (submission: AssignmentSubmissionDetailDTO) => {
+    // Pre-populate criteria scores from existing grading data if re-grading
+    const criteriaScores: Record<number, string> = {};
+    const criteriaFeedback: Record<number, string> = {};
+    if (submission.criteriaScores && submission.criteriaScores.length > 0) {
+      for (const cs of submission.criteriaScores) {
+        if (cs.criteriaId != null) {
+          criteriaScores[cs.criteriaId] = cs.score?.toString() || '';
+          criteriaFeedback[cs.criteriaId] = cs.feedback || '';
+        }
+      }
+    }
     setGradingModal({
       isOpen: true,
       submission,
       score: submission.score?.toString() || '',
       feedback: submission.feedback || '',
+      criteriaScores,
+      criteriaFeedback,
       submitting: false
     });
   };
@@ -168,7 +238,7 @@ const MentorGradingPage: React.FC = () => {
 
   const getStatusIcon = (sub: AssignmentSubmissionDetailDTO) => {
     if (sub.status === SubmissionStatus.GRADED) {
-      const isPassed = sub.score! >= sub.maxScore * 0.7;
+      const isPassed = sub.isPassed === true;
       return isPassed ? 
         <CheckCircle className="status-icon passed" size={18} /> :
         <AlertCircle className="status-icon failed" size={18} />;
@@ -476,9 +546,9 @@ const MentorGradingPage: React.FC = () => {
       {/* Grading Modal */}
       {gradingModal.isOpen && gradingModal.submission && (
         <div className="grading-modal-overlay" onClick={() => !gradingModal.submitting && setGradingModal(prev => ({ ...prev, isOpen: false }))}>
-          <div className="grading-modal" onClick={e => e.stopPropagation()}>
+          <div className="grading-modal" onClick={e => e.stopPropagation()} style={hasCriteria ? { maxWidth: 640 } : undefined}>
             <div className="modal-header">
-              <h2>Grade Submission</h2>
+              <h2>Chấm Điểm</h2>
               <button
                 className="modal-close"
                 onClick={() => setGradingModal(prev => ({ ...prev, isOpen: false }))}
@@ -489,37 +559,143 @@ const MentorGradingPage: React.FC = () => {
             </div>
             <div className="modal-body">
               <div className="submission-detail-row">
-                <label>Student:</label>
+                <label>Học viên:</label>
                 <span>{gradingModal.submission.userName}</span>
               </div>
               <div className="submission-detail-row">
-                <label>Attempt:</label>
+                <label>Lần nộp:</label>
                 <span>#{gradingModal.submission.attemptNumber}</span>
               </div>
+
+              {hasCriteria ? (
+                <>
+                  {/* Criteria-based grading */}
+                  <div className="criteria-grading-section">
+                    <label style={{ display: 'block', color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.75rem', fontWeight: 600 }}>
+                      Chấm theo tiêu chí ({assignment!.criteria!.length} tiêu chí)
+                    </label>
+                    {assignment!.criteria!.map((c: AssignmentCriteriaDTO) => {
+                      const currentScore = parseFloat(gradingModal.criteriaScores[c.id!] || '');
+                      const threshold = c.passingPoints ?? c.maxPoints;
+                      const isCriterionPassed = !isNaN(currentScore) && currentScore >= threshold;
+                      const hasInput = !isNaN(currentScore);
+                      return (
+                      <div key={c.id} className="criteria-score-row" style={{
+                        padding: '0.75rem', marginBottom: '0.5rem',
+                        background: 'rgba(0,0,0,0.2)', borderRadius: 8,
+                        border: `1px solid ${hasInput ? (isCriterionPassed ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)') : 'rgba(255,255,255,0.06)'}`,
+                        borderLeft: hasInput ? `3px solid ${isCriterionPassed ? '#10b981' : '#ef4444'}` : '3px solid transparent'
+                      }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                          <span style={{ color: '#e2e8f0', fontWeight: 500, fontSize: '0.9rem' }}>
+                            {c.name}
+                            {c.isRequired && <span style={{ color: '#ef4444', marginLeft: 4 }}>*</span>}
+                          </span>
+                          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                            {c.passingPoints != null && (
+                              <span style={{ color: '#f59e0b', fontSize: '0.75rem' }}>Pass: ≥{c.passingPoints}</span>
+                            )}
+                            <span style={{ color: '#64748b', fontSize: '0.8rem' }}>Tối đa: {c.maxPoints}</span>
+                          </div>
+                        </div>
+                        {c.description && (
+                          <p style={{ color: '#64748b', fontSize: '0.8rem', margin: '0 0 0.5rem 0' }}>{c.description}</p>
+                        )}
+                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                          <input
+                            type="number"
+                            min="0"
+                            max={c.maxPoints}
+                            step="0.5"
+                            value={gradingModal.criteriaScores[c.id!] || ''}
+                            onChange={e => setGradingModal(prev => ({
+                              ...prev,
+                              criteriaScores: { ...prev.criteriaScores, [c.id!]: e.target.value }
+                            }))}
+                            placeholder="Điểm"
+                            disabled={gradingModal.submitting}
+                            style={{
+                              width: 90, padding: '0.5rem', background: 'rgba(0,0,0,0.3)',
+                              border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6,
+                              color: '#e2e8f0', fontSize: '0.9rem', textAlign: 'center'
+                            }}
+                          />
+                          <input
+                            type="text"
+                            value={gradingModal.criteriaFeedback[c.id!] || ''}
+                            onChange={e => setGradingModal(prev => ({
+                              ...prev,
+                              criteriaFeedback: { ...prev.criteriaFeedback, [c.id!]: e.target.value }
+                            }))}
+                            placeholder="Nhận xét tiêu chí (tùy chọn)"
+                            disabled={gradingModal.submitting}
+                            style={{
+                              flex: 1, padding: '0.5rem', background: 'rgba(0,0,0,0.3)',
+                              border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6,
+                              color: '#e2e8f0', fontSize: '0.85rem'
+                            }}
+                          />
+                        </div>
+                      </div>
+                    );
+                    })}
+                    {/* Auto-calculated total + criteria pass/fail summary */}
+                    <div style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      padding: '0.75rem', marginTop: '0.5rem',
+                      background: 'rgba(6, 182, 212, 0.1)', borderRadius: 8,
+                      border: '1px solid rgba(6, 182, 212, 0.2)'
+                    }}>
+                      <div>
+                        <span style={{ color: '#06b6d4', fontWeight: 600, fontSize: '0.9rem' }}>Tổng điểm</span>
+                        {assignment?.criteria?.some(c => c.passingPoints != null) && (
+                          <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: 2 }}>
+                            {assignment.criteria.filter(c => c.isRequired).every(c => {
+                              const score = parseFloat(gradingModal.criteriaScores[c.id!] || '0');
+                              const threshold = c.passingPoints ?? c.maxPoints;
+                              return score >= threshold;
+                            })
+                              ? <span style={{ color: '#10b981' }}>✓ Đạt tất cả tiêu chí bắt buộc</span>
+                              : <span style={{ color: '#ef4444' }}>✗ Chưa đạt một số tiêu chí bắt buộc</span>
+                            }
+                          </div>
+                        )}
+                      </div>
+                      <span style={{ 
+                        color: criteriaTotal > (assignment?.maxScore || 0) ? '#ef4444' : '#06b6d4', 
+                        fontWeight: 700, fontSize: '1.1rem' 
+                      }}>
+                        {criteriaTotal} / {assignment?.maxScore}
+                      </span>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                /* Flat score grading (no criteria) */
+                <div className="grade-input-group">
+                  <label htmlFor="score">Điểm (Tối đa: {assignment?.maxScore}):</label>
+                  <input
+                    id="score"
+                    type="number"
+                    min="0"
+                    max={assignment?.maxScore}
+                    step="0.5"
+                    value={gradingModal.score}
+                    onChange={e => setGradingModal(prev => ({ ...prev, score: e.target.value }))}
+                    placeholder="Nhập điểm"
+                    disabled={gradingModal.submitting}
+                  />
+                </div>
+              )}
               
               <div className="grade-input-group">
-                <label htmlFor="score">Score (Max: {assignment?.maxScore}):</label>
-                <input
-                  id="score"
-                  type="number"
-                  min="0"
-                  max={assignment?.maxScore}
-                  step="0.5"
-                  value={gradingModal.score}
-                  onChange={e => setGradingModal(prev => ({ ...prev, score: e.target.value }))}
-                  placeholder="Enter score"
-                  disabled={gradingModal.submitting}
-                />
-              </div>
-              
-              <div className="grade-input-group">
-                <label htmlFor="feedback">Feedback (optional):</label>
+                <label htmlFor="feedback">Nhận xét chung (tùy chọn):</label>
                 <textarea
                   id="feedback"
                   value={gradingModal.feedback}
                   onChange={e => setGradingModal(prev => ({ ...prev, feedback: e.target.value }))}
-                  placeholder="Enter feedback for the student..."
-                  rows={4}
+                  placeholder="Nhập nhận xét cho học viên..."
+                  rows={3}
                   disabled={gradingModal.submitting}
                 />
               </div>
@@ -530,22 +706,27 @@ const MentorGradingPage: React.FC = () => {
                 onClick={() => setGradingModal(prev => ({ ...prev, isOpen: false }))}
                 disabled={gradingModal.submitting}
               >
-                Cancel
+                Hủy
               </button>
               <button
                 className="modal-btn primary"
                 onClick={handleGrade}
-                disabled={gradingModal.submitting || !gradingModal.score}
+                disabled={
+                  gradingModal.submitting || 
+                  (hasCriteria 
+                    ? Object.keys(gradingModal.criteriaScores).length < (assignment?.criteria?.length || 0)
+                    : !gradingModal.score)
+                }
               >
                 {gradingModal.submitting ? (
                   <>
                     <div className="grading-spinner small" />
-                    Saving...
+                    Đang lưu...
                   </>
                 ) : (
                   <>
                     <CheckCircle size={16} />
-                    Save Grade
+                    Lưu Điểm
                   </>
                 )}
               </button>

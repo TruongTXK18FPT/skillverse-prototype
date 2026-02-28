@@ -12,7 +12,7 @@ import {
   getModuleProgress,
 } from "../../services/lessonService";
 import { getQuizById, getQuizAttemptStatus } from "../../services/quizService";
-import { CourseDetailDTO, ModuleSummaryDTO } from "../../data/courseDTOs";
+import { CourseDetailDTO, CourseStatus, ModuleSummaryDTO } from "../../data/courseDTOs";
 import { LessonSummaryDTO, LessonDetailDTO } from "../../data/lessonDTOs";
 import { QuizSummaryDTO, QuizDetailDTO } from "../../data/quizDTOs";
 import { AssignmentSummaryDTO } from "../../data/assignmentDTOs";
@@ -421,6 +421,36 @@ const CourseLearningPage = () => {
             <p className="lhud-text-secondary">
               Không thể kết nối đến dữ liệu khóa học. Vui lòng thử lại sau.
             </p>
+          </div>
+        </main>
+      </NeuralInterfaceLayout>
+    );
+  }
+
+  if (course.status === CourseStatus.SUSPENDED && !isPreviewMode) {
+    return (
+      <NeuralInterfaceLayout
+        courseTitle={course.title}
+        progress={{ percent: 0 }}
+        isSidebarOpen={false}
+        onToggleSidebar={() => {}}
+        onBack={() => navigate("/courses")}
+      >
+        <main className="learning-hud-main-content">
+          <div className="learning-hud-content-viewer" style={{ textAlign: 'center', padding: '3rem 1.5rem' }}>
+            <h1 className="learning-hud-viewer-title" style={{ color: '#fbbf24' }}>KHÓA HỌC TẠM KHÓA</h1>
+            <p className="lhud-text-secondary" style={{ maxWidth: 520, margin: '1rem auto' }}>
+              Khóa học này đang bị tạm khóa bởi quản trị viên để xem xét.
+              Tiến độ học tập của bạn được giữ nguyên và sẽ khả dụng trở lại
+              khi khóa học được mở lại.
+            </p>
+            <button
+              className="learning-hud-nav-button"
+              onClick={() => navigate('/courses')}
+              style={{ marginTop: '1.5rem' }}
+            >
+              Quay lại danh sách khóa học
+            </button>
           </div>
         </main>
       </NeuralInterfaceLayout>

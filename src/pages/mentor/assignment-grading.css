@@ -184,7 +184,7 @@
   margin-bottom: 1.5rem;
 }
 
-.stat-card {
+.mentor-grading-page .stat-card {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -196,36 +196,36 @@
   transition: all 0.2s ease;
 }
 
-.stat-card:hover {
+.mentor-grading-page .stat-card:hover {
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(6, 182, 212, 0.3);
 }
 
-.stat-card.active {
+.mentor-grading-page .stat-card.active {
   background: rgba(6, 182, 212, 0.1);
   border-color: #06b6d4;
 }
 
-.stat-card svg {
+.mentor-grading-page .stat-card svg {
   color: #64748b;
 }
 
-.stat-card.active svg {
+.mentor-grading-page .stat-card.active svg {
   color: #06b6d4;
 }
 
-.stat-content {
+.mentor-grading-page .stat-content {
   display: flex;
   flex-direction: column;
 }
 
-.stat-value {
+.mentor-grading-page .stat-value {
   font-size: 1.5rem;
   font-weight: 700;
   color: #e2e8f0;
 }
 
-.stat-label {
+.mentor-grading-page .stat-label {
   font-size: 0.75rem;
   color: #94a3b8;
   text-transform: uppercase;
@@ -237,7 +237,7 @@
   margin-bottom: 1.5rem;
 }
 
-.search-box {
+.mentor-grading-page .search-box {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -248,11 +248,11 @@
   max-width: 400px;
 }
 
-.search-box svg {
+.mentor-grading-page .search-box svg {
   color: #64748b;
 }
 
-.search-box input {
+.mentor-grading-page .search-box input {
   flex: 1;
   background: transparent;
   border: none;
@@ -261,7 +261,7 @@
   outline: none;
 }
 
-.search-box input::placeholder {
+.mentor-grading-page .search-box input::placeholder {
   color: #64748b;
 }
 
@@ -383,7 +383,7 @@
   gap: 0.5rem;
 }
 
-.action-btn {
+.mentor-grading-page .action-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -397,17 +397,17 @@
   transition: all 0.2s ease;
 }
 
-.action-btn:hover {
+.mentor-grading-page .action-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #e2e8f0;
 }
 
-.action-btn.view:hover {
+.mentor-grading-page .action-btn.view:hover {
   border-color: #06b6d4;
   color: #06b6d4;
 }
 
-.action-btn.grade:hover {
+.mentor-grading-page .action-btn.grade:hover {
   border-color: #10b981;
   color: #10b981;
 }
@@ -436,7 +436,7 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-.modal-header {
+.grading-modal .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -444,13 +444,13 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.modal-header h2 {
+.grading-modal .modal-header h2 {
   margin: 0;
   font-size: 1.25rem;
   color: #e2e8f0;
 }
 
-.modal-close {
+.grading-modal .modal-close {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -464,12 +464,12 @@
   transition: all 0.2s ease;
 }
 
-.modal-close:hover {
+.grading-modal .modal-close:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #e2e8f0;
 }
 
-.modal-body {
+.grading-modal .modal-body {
   padding: 1.5rem;
 }
 
@@ -622,7 +622,7 @@
 }
 
 /* --- Modal Actions --- */
-.modal-actions {
+.grading-modal .modal-actions {
   display: flex;
   gap: 1rem;
   padding: 1.25rem 1.5rem;
@@ -630,7 +630,7 @@
   justify-content: flex-end;
 }
 
-.modal-btn {
+.grading-modal .modal-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -642,29 +642,29 @@
   transition: all 0.2s ease;
 }
 
-.modal-btn.secondary {
+.grading-modal .modal-btn.secondary {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #94a3b8;
 }
 
-.modal-btn.secondary:hover {
+.grading-modal .modal-btn.secondary:hover {
   border-color: rgba(255, 255, 255, 0.4);
   color: #e2e8f0;
 }
 
-.modal-btn.primary {
+.grading-modal .modal-btn.primary {
   background: linear-gradient(135deg, #06b6d4, #0891b2);
   border: none;
   color: white;
 }
 
-.modal-btn.primary:hover:not(:disabled) {
+.grading-modal .modal-btn.primary:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
 }
 
-.modal-btn:disabled {
+.grading-modal .modal-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -698,4 +698,30 @@
   .submissions-table td:nth-child(5) {
     display: none;
   }
+}
+
+/* --- Criteria Grading Section --- */
+.criteria-grading-section {
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.criteria-grading-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.criteria-grading-section::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.criteria-grading-section::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.3);
+  border-radius: 3px;
+}
+
+.criteria-grading-section::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.5);
 }

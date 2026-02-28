@@ -161,13 +161,15 @@ export const deleteCourse = async (
  * GET /api/courses/{courseId}
  */
 export const getCourse = async (
-  courseId: number,
-  actorId?: number
+  courseId: number
 ): Promise<CourseDetailDTO> => {
   try {
+    // Manually attach JWT if available — this is a public endpoint
+    // but authenticated users need it to view their own DRAFT courses
+    const token = localStorage.getItem('accessToken');
     const response = await axiosInstance.get<CourseDetailDTO>(
       `/courses/${courseId}`,
-      actorId ? { params: { actorId } } : undefined
+      token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
     );
     return response.data;
   } catch (error) {
@@ -181,11 +183,15 @@ export const getCourse = async (
 /**
  * List courses with pagination, search, and filtering
  * GET /api/courses
+ * 
+ * @param search - Maps to BE `q` query param for title search
+ * @param sortBy - Field to sort by (uses Spring Pageable `sort` format)
+ * @param sortOrder - Sort direction
  */
 export const listCourses = async (
   page: number = 0,
   size: number = 10,
-  level?: string,
+  _level?: string,
   status?: string,
   search?: string,
   sortBy: string = 'createdAt',
@@ -195,13 +201,11 @@ export const listCourses = async (
     const params: Record<string, string | number> = {
       page,
       size,
-      sortBy,
-      sortOrder
+      sort: `${sortBy},${sortOrder}`
     };
 
-    if (level) params.level = level;
     if (status) params.status = status;
-    if (search) params.search = search;
+    if (search) params.q = search;
 
     const response = await axiosInstance.get<PageResponse<CourseSummaryDTO>>(
       '/courses',
@@ -239,23 +243,22 @@ export const listCoursesByAuthor = async (
 
 /**
  * List pending courses (for admin approval)
- * GET /api/courses/pending
+ * GET /api/admin/courses/pending
  */
 export const listPendingCourses = async (
   page: number = 0,
   size: number = 10,
-  sortBy: string = 'submittedDate',
+  sortBy: string = 'submittedAt',
   sortOrder: 'asc' | 'desc' = 'desc'
 ): Promise<PageResponse<CourseSummaryDTO>> => {
   try {
     const response = await axiosInstance.get<PageResponse<CourseSummaryDTO>>(
-      '/courses/pending',
+      '/admin/courses/pending',
       {
         params: {
           page,
           size,
-          sortBy,
-          sortOrder
+          sort: `${sortBy},${sortOrder}`
         }
       }
     );
@@ -288,33 +291,6 @@ export const listPublishedCourses = async (
     return normalizePageResponse<CourseSummaryDTO>(response.data);
   } catch (error) {
     console.error('Error listing published courses:', error);
-    throw error;
-  }
-};
-
-/**
- * Search courses
- * GET /api/courses/search
- */
-export const searchCourses = async (
-  query: string,
-  page: number = 0,
-  size: number = 10
-): Promise<PageResponse<CourseSummaryDTO>> => {
-  try {
-    const response = await axiosInstance.get<PageResponse<CourseSummaryDTO>>(
-      '/courses/search',
-      {
-        params: {
-          q: query,
-          page,
-          size
-        }
-      }
-    );
-    return normalizePageResponse<CourseSummaryDTO>(response.data);
-  } catch (error) {
-    console.error('Error searching courses:', error);
     throw error;
   }
 };
@@ -408,21 +384,16 @@ export const submitCourseForApproval = async (
 
 /**
  * Approve course (admin only)
- * POST /api/courses/{courseId}/approve
+ * POST /api/admin/courses/{courseId}/approve
+ * AdminId is extracted from JWT on backend — no need to send it.
  */
 export const approveCourse = async (
   courseId: number,
-  actorId: number
+  _actorId?: number
 ): Promise<CourseDetailDTO> => {
   try {
     const response = await axiosInstance.post<CourseDetailDTO>(
-      `/courses/${courseId}/approve`,
-      null,
-      {
-        params: {
-          adminId: actorId
-        }
-      }
+      `/admin/courses/${courseId}/approve`
     );
     return response.data;
   } catch (error) {
@@ -433,22 +404,19 @@ export const approveCourse = async (
 
 /**
  * Reject course (admin only)
- * POST /api/courses/{courseId}/reject
+ * POST /api/admin/courses/{courseId}/reject
  */
 export const rejectCourse = async (
   courseId: number,
-  actorId: number,
+  _actorId: number,
   reason: string
 ): Promise<CourseDetailDTO> => {
   try {
     const response = await axiosInstance.post<CourseDetailDTO>(
-      `/courses/${courseId}/reject`,
+      `/admin/courses/${courseId}/reject`,
       null,
       {
-        params: {
-          adminId: actorId,
-          reason
-        }
+        params: { reason }
       }
     );
     return response.data;
@@ -459,70 +427,103 @@ export const rejectCourse = async (
 };
 
 /**
- * Publish course
- * PUT /api/courses/{courseId}/publish
+ * Suspend course (admin only)
+ * POST /api/admin/courses/{courseId}/suspend
  */
-export const publishCourse = async (
+export const suspendCourse = async (
   courseId: number,
-  actorId: number
+  _adminId: number,
+  reason: string
 ): Promise<CourseDetailDTO> => {
   try {
-    const response = await axiosInstance.put<CourseDetailDTO>(
-      `/courses/${courseId}/publish`,
+    const response = await axiosInstance.post<CourseDetailDTO>(
+      `/admin/courses/${courseId}/suspend`,
       null,
-      {
-        params: { actorId }
-      }
+      { params: { reason } }
     );
     return response.data;
   } catch (error) {
-    console.error('Error publishing course:', error);
+    console.error('Error suspending course:', error);
     throw error;
   }
 };
 
 /**
- * Unpublish course
- * PUT /api/courses/{courseId}/unpublish
+ * Restore suspended course (admin only)
+ * POST /api/admin/courses/{courseId}/restore
  */
-export const unpublishCourse = async (
+export const restoreCourse = async (
   courseId: number,
-  actorId: number
+  _adminId?: number
 ): Promise<CourseDetailDTO> => {
   try {
-    const response = await axiosInstance.put<CourseDetailDTO>(
-      `/courses/${courseId}/unpublish`,
-      null,
-      {
-        params: { actorId }
-      }
+    const response = await axiosInstance.post<CourseDetailDTO>(
+      `/admin/courses/${courseId}/restore`
     );
     return response.data;
   } catch (error) {
-    console.error('Error unpublishing course:', error);
+    console.error('Error restoring course:', error);
+    throw error;
+  }
+};
+
+// ==================== ADMIN COURSE MANAGEMENT ====================
+
+/**
+ * Course stats response from admin endpoint
+ */
+export interface CourseStatsResponse {
+  totalPending: number;
+  totalApproved: number;
+  totalRejected: number;
+  totalSuspended: number;
+  totalDraft: number;
+  totalArchived: number;
+  totalAll: number;
+}
+
+/**
+ * Get course statistics grouped by status (admin only)
+ * GET /api/admin/courses/stats
+ */
+export const getAdminCourseStats = async (): Promise<CourseStatsResponse> => {
+  try {
+    const response = await axiosInstance.get<CourseStatsResponse>('/admin/courses/stats');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching admin course stats:', error);
     throw error;
   }
 };
 
 /**
- * Archive course
- * PUT /api/courses/{courseId}/archive
+ * List all courses with optional status filter (admin only)
+ * GET /api/admin/courses
  */
-export const archiveCourse = async (
-  courseId: number,
-  actorId: number
-): Promise<CourseDetailDTO> => {
+export const listAllCoursesAdmin = async (
+  page: number = 0,
+  size: number = 10,
+  status?: string,
+  search?: string,
+  sortBy: string = 'createdAt',
+  sortOrder: 'asc' | 'desc' = 'desc'
+): Promise<PageResponse<CourseSummaryDTO>> => {
   try {
-    const response = await axiosInstance.put<CourseDetailDTO>(
-      `/courses/${courseId}/archive`,
-      null,
-      {
-        params: { actorId }
-      }
+    const params: Record<string, string | number> = {
+      page,
+      size,
+      sort: `${sortBy},${sortOrder}`
+    };
+    if (status) params.status = status;
+    if (search) params.q = search;
+
+    const response = await axiosInstance.get<PageResponse<CourseSummaryDTO>>(
+      '/admin/courses',
+      { params }
     );
-    return response.data;
+    return normalizePageResponse<CourseSummaryDTO>(response.data);
   } catch (error) {
-    console.error('Error archiving course:', error);
+    console.error('Error listing admin courses:', error);
     throw error;
   }
 };
@@ -534,15 +535,15 @@ export const archiveCourse = async (
  */
 export const canEditCourse = (course: CourseDetailDTO | CourseSummaryDTO, userId: number): boolean => {
   return course.author.id === userId && 
-    (course.status === CourseStatus.DRAFT || course.status === CourseStatus.PENDING);
+    (course.status === CourseStatus.DRAFT || course.status === CourseStatus.PENDING || course.status === CourseStatus.REJECTED || course.status === CourseStatus.SUSPENDED);
 };
 
 /**
  * Check if course can be submitted for approval
- * Requirements: Must be DRAFT status and have at least one module
+ * Requirements: Must be DRAFT, REJECTED, or SUSPENDED status and have at least one module
  */
 export const canSubmitForApproval = (course: CourseDetailDTO): boolean => {
-  return course.status === CourseStatus.DRAFT &&
+  return (course.status === CourseStatus.DRAFT || course.status === CourseStatus.REJECTED || course.status === CourseStatus.SUSPENDED) &&
     course.modules && 
     course.modules.length > 0; // Must have at least one module (modules contain lessons)
 };
@@ -560,6 +561,10 @@ export const getCourseStatusColor = (status: CourseStatus): string => {
       return 'green';
     case CourseStatus.ARCHIVED:
       return 'red';
+    case CourseStatus.REJECTED:
+      return 'red';
+    case CourseStatus.SUSPENDED:
+      return 'purple';
     default:
       return 'gray';
   }
@@ -578,133 +583,11 @@ export const getCourseStatusText = (status: CourseStatus): string => {
       return 'Public';
     case CourseStatus.ARCHIVED:
       return 'Archived';
+    case CourseStatus.REJECTED:
+      return 'Bị từ chối';
+    case CourseStatus.SUSPENDED:
+      return 'Tạm khóa (vi phạm)';
     default:
       return status;
   }
-};
-
-// ==================== LEGACY SUPPORT ====================
-
-/**
- * Legacy Course interface (for backward compatibility)
- */
-export interface Course {
-  id: string;
-  title: string;
-  instructor: string;
-  category: string;
-  image: string;
-  level?: string;
-  price?: string;
-  rating?: number;
-  students?: string | number;
-  description?: string;
-  duration?: string;
-  modules?: number;
-  certificate?: boolean;
-}
-
-/**
- * Convert CourseDetailDTO to legacy Course format
- */
-const convertToLegacyCourse = (dto: CourseSummaryDTO): Course => {
-  return {
-    id: dto.id.toString(),
-    title: dto.title,
-    instructor: dto.authorName || dto.author?.fullName || `${dto.author?.firstName} ${dto.author?.lastName}`,
-    category: 'general', // No category field in DTO
-    image: dto.thumbnailUrl || dto.thumbnail?.url || '/images/default-course.jpg',
-    level: dto.level,
-    price: '0', // Pricing not in current DTO
-    rating: 0, // Rating not in summary DTO
-    students: dto.enrollmentCount,
-    description: dto.description,
-    duration: '0', // Duration not in DTO
-    modules: 0, // Module count not in summary DTO
-    certificate: false
-  };
-};
-
-/**
- * Fetch all courses (legacy support)
- */
-export const fetchAllCourses = async (): Promise<Course[]> => {
-  try {
-    const response = await listPublishedCourses(0, 100);
-    return response.content.map(convertToLegacyCourse);
-  } catch (error) {
-    console.error('Error fetching all courses:', error);
-    return [];
-  }
-};
-
-/**
- * Find course by ID (legacy support)
- */
-export const findCourseById = async (id: string): Promise<Course | null> => {
-  try {
-    const courseId = parseInt(id);
-    if (isNaN(courseId)) return null;
-    
-    const course = await getCourse(courseId);
-    const summary: CourseSummaryDTO = {
-      id: course.id,
-      title: course.title,
-      description: course.description,
-      level: course.level,
-      status: course.status,
-      author: course.author,
-      thumbnail: course.thumbnail,
-      enrollmentCount: course.enrollmentCount,
-      createdAt: course.createdAt,
-      updatedAt: course.updatedAt
-    };
-    
-    return convertToLegacyCourse(summary);
-  } catch (error) {
-    console.error('Error finding course by ID:', error);
-    return null;
-  }
-};
-
-/**
- * Parse price (legacy)
- */
-export const parsePrice = (priceStr?: string): number => {
-  if (!priceStr) return 0;
-
-  const normalized = priceStr.toLowerCase().trim();
-
-  // Check for exact free price patterns
-  if (normalized === 'miễn phí' ||
-      normalized === 'free' ||
-      normalized === '0' ||
-      normalized === '0 vnd' ||
-      normalized === '0vnd' ||
-      normalized === '0 vnđ' ||
-      normalized === '0vnđ') {
-    return 0;
-  }
-
-  // Extract numeric value
-  const numStr = priceStr.replace(/[^\d]/g, '');
-  return parseInt(numStr) || 0;
-};
-
-/**
- * Check if price is free (legacy)
- */
-export const isFreePrice = (priceStr?: string): boolean => {
-  if (!priceStr) return true;
-  const lowerPrice = priceStr.toLowerCase().trim();
-  // Check exact patterns only, not substring matches
-  if (lowerPrice === '0' || lowerPrice === 'miễn phí' || lowerPrice === 'free' || lowerPrice === 'gratis') {
-    return true;
-  }
-  // Check for patterns like "0 vnd", "0vnd", "0 vnđ", "0vnđ" 
-  if (lowerPrice === '0 vnd' || lowerPrice === '0vnd' || lowerPrice === '0 vnđ' || lowerPrice === '0vnđ') {
-    return true;
-  }
-  // Parse the numeric price and check if it's 0
-  return parsePrice(priceStr) === 0;
 };

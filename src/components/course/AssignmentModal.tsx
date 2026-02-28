@@ -143,7 +143,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
           maxScore: formData.maxScore,
           dueAt: formData.dueAt || undefined,
         };
-        await updateAssignment(assignmentToEdit.id, updateData, user.id);
+        await updateAssignment(assignmentToEdit.id, updateData);
       } else {
         const createData: AssignmentCreateDTO = {
           title: formData.title,
@@ -152,7 +152,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
           maxScore: formData.maxScore,
           dueAt: formData.dueAt || undefined,
         };
-        await createAssignment(moduleId, createData, user.id);
+        await createAssignment(moduleId, createData);
       }
 
       onSuccess();

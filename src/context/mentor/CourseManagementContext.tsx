@@ -412,9 +412,9 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                        let assignmentId = lessonId;
                        
                        if (assignmentId) {
-                          await assignmentService.updateAssignment(assignmentId, assignmentDTO, user?.id || 0);
+                          await assignmentService.updateAssignment(assignmentId, assignmentDTO);
                        } else {
-                          const newAssignment = await assignmentService.createAssignment(moduleId, assignmentDTO, user?.id || 0);
+                          const newAssignment = await assignmentService.createAssignment(moduleId, assignmentDTO);
                           assignmentId = newAssignment.id;
                        }
                     } else {
@@ -524,7 +524,8 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
       const moduleService = await import('../../services/moduleService');
       const lessonService = await import('../../services/lessonService');
       const quizService = await import('../../services/quizService');
-      const attachmentService = await import('../../services/attachmentService'); // Import attachment service
+      const assignmentService = await import('../../services/assignmentService');
+      const attachmentService = await import('../../services/attachmentService');
 
       const updatedCourse = await courseService.updateCourse(id, courseUpdateDTO, user?.id || 0, thumbnailFile);
       
@@ -638,9 +639,9 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                      let assignmentId = lessonId;
                      
                      if (assignmentId) {
-                        await assignmentService.updateAssignment(assignmentId, assignmentDTO, user?.id || 0);
+                        await assignmentService.updateAssignment(assignmentId, assignmentDTO);
                      } else {
-                        const newAssignment = await assignmentService.createAssignment(moduleId, assignmentDTO, user?.id || 0);
+                        const newAssignment = await assignmentService.createAssignment(moduleId, assignmentDTO);
                         assignmentId = newAssignment.id;
                      }
                   } else {

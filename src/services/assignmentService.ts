@@ -6,61 +6,56 @@ import {
   AssignmentSummaryDTO,
   AssignmentSubmissionDetailDTO,
   AssignmentSubmissionCreateDTO,
-  GradeAssignmentDTO
+  GradeAssignmentDTO,
+  PendingSubmissionItemDTO
 } from '../data/assignmentDTOs';
 
 /**
- * Create a new assignment for a module
+ * Create a new assignment for a module.
+ * Actor identity is resolved server-side from JWT.
  * @param moduleId - The ID of the module
  * @param assignmentData - The assignment data
- * @param actorId - The ID of the user creating the assignment
  * @returns Promise with the created assignment detail
  */
 export const createAssignment = async (
   moduleId: number,
-  assignmentData: AssignmentCreateDTO,
-  actorId: number
+  assignmentData: AssignmentCreateDTO
 ): Promise<AssignmentDetailDTO> => {
   const response = await axiosInstance.post<AssignmentDetailDTO>(
     `/assignments`,
     assignmentData,
-    { params: { moduleId, actorId } }
+    { params: { moduleId } }
   );
   return response.data;
 };
 
 /**
- * Update an existing assignment
+ * Update an existing assignment.
+ * Actor identity is resolved server-side from JWT.
  * @param assignmentId - The ID of the assignment to update
  * @param assignmentData - The updated assignment data
- * @param actorId - The ID of the user updating the assignment
  * @returns Promise with the updated assignment detail
  */
 export const updateAssignment = async (
   assignmentId: number,
-  assignmentData: AssignmentUpdateDTO,
-  actorId: number
+  assignmentData: AssignmentUpdateDTO
 ): Promise<AssignmentDetailDTO> => {
   const response = await axiosInstance.put<AssignmentDetailDTO>(
     `/assignments/${assignmentId}`,
-    assignmentData,
-    { params: { actorId } }
+    assignmentData
   );
   return response.data;
 };
 
 /**
- * Delete an assignment
+ * Delete an assignment.
+ * Actor identity is resolved server-side from JWT.
  * @param assignmentId - The ID of the assignment to delete
- * @param actorId - The ID of the user deleting the assignment
  */
 export const deleteAssignment = async (
-  assignmentId: number,
-  actorId: number
+  assignmentId: number
 ): Promise<void> => {
-  await axiosInstance.delete(`/assignments/${assignmentId}`, {
-    params: { actorId }
-  });
+  await axiosInstance.delete(`/assignments/${assignmentId}`);
 };
 
 /**
@@ -92,110 +87,110 @@ export const listAssignmentsByModule = async (
 };
 
 /**
- * Submit an assignment
+ * Submit an assignment.
+ * User identity is resolved server-side from JWT.
  * @param assignmentId - The ID of the assignment
  * @param submissionData - The submission data
- * @param userId - The ID of the user submitting
  * @returns Promise with the submission detail
  */
 export const submitAssignment = async (
   assignmentId: number,
-  submissionData: AssignmentSubmissionCreateDTO,
-  userId: number
+  submissionData: AssignmentSubmissionCreateDTO
 ): Promise<AssignmentSubmissionDetailDTO> => {
   const response = await axiosInstance.post<AssignmentSubmissionDetailDTO>(
     `/assignments/${assignmentId}/submissions`,
-    submissionData,
-    { params: { userId } }
+    submissionData
   );
   return response.data;
 };
 
 /**
- * Get submissions for an assignment (mentor/admin)
+ * Get submissions for an assignment (mentor/admin).
+ * Identity resolved server-side from JWT.
  * @param assignmentId - The ID of the assignment
- * @param actorId - The ID of the mentor/admin
  * @returns Promise with array of submissions
  */
 export const getAssignmentSubmissions = async (
-  assignmentId: number,
-  actorId: number
+  assignmentId: number
 ): Promise<AssignmentSubmissionDetailDTO[]> => {
   const response = await axiosInstance.get<AssignmentSubmissionDetailDTO[]>(
-    `/assignments/${assignmentId}/submissions`,
-    { params: { actorId } }
+    `/assignments/${assignmentId}/submissions`
   );
   return response.data;
 };
 
 /**
- * Grade an assignment submission
+ * Grade an assignment submission.
+ * Grader identity is resolved server-side from JWT.
  * @param submissionId - The ID of the submission
- * @param score - The score to assign
- * @param feedback - Optional feedback
- * @param graderId - The ID of the grader
+ * @param grading - The grading data (score, feedback, criteria)
  * @returns Promise with the updated submission
  */
 export const gradeSubmission = async (
   submissionId: number,
-  grading: GradeAssignmentDTO,
-  graderId: number
+  grading: GradeAssignmentDTO
 ): Promise<AssignmentSubmissionDetailDTO> => {
   const response = await axiosInstance.put<AssignmentSubmissionDetailDTO>(
     `/assignments/submissions/${submissionId}/grade`,
-    grading,
-    { params: { graderId } }
+    grading
   );
   return response.data;
 };
 
 /**
- * Get user's own submissions for an assignment (all versions)
+ * Get user's own submissions for an assignment (all versions).
+ * User identity is resolved server-side from JWT.
  * @param assignmentId - The ID of the assignment
- * @param userId - The ID of the user
  * @returns Promise with array of user's submissions (newest first)
  */
 export const getMySubmissions = async (
-  assignmentId: number,
-  userId: number
+  assignmentId: number
 ): Promise<AssignmentSubmissionDetailDTO[]> => {
   const response = await axiosInstance.get<AssignmentSubmissionDetailDTO[]>(
-    `/assignments/${assignmentId}/submissions/mine`,
-    { params: { userId } }
+    `/assignments/${assignmentId}/submissions/mine`
   );
   return response.data;
 };
 
 /**
- * Get pending submissions for grading (mentor/admin)
+ * Get pending submissions for grading (mentor/admin).
+ * Identity resolved server-side from JWT.
  * @param assignmentId - The ID of the assignment
- * @param actorId - The ID of the mentor/admin
  * @returns Promise with array of pending submissions
  */
 export const getPendingSubmissions = async (
-  assignmentId: number,
-  actorId: number
+  assignmentId: number
 ): Promise<AssignmentSubmissionDetailDTO[]> => {
   const response = await axiosInstance.get<AssignmentSubmissionDetailDTO[]>(
-    `/assignments/${assignmentId}/submissions/pending`,
-    { params: { actorId } }
+    `/assignments/${assignmentId}/submissions/pending`
   );
   return response.data;
 };
 
 /**
- * Get count of pending submissions (for badge display)
+ * Get count of pending submissions (for badge display).
+ * Identity resolved server-side from JWT.
  * @param assignmentId - The ID of the assignment
- * @param actorId - The ID of the mentor/admin
  * @returns Promise with count of pending submissions
  */
 export const countPendingSubmissions = async (
-  assignmentId: number,
-  actorId: number
+  assignmentId: number
 ): Promise<number> => {
   const response = await axiosInstance.get<number>(
-    `/assignments/${assignmentId}/submissions/pending/count`,
-    { params: { actorId } }
+    `/assignments/${assignmentId}/submissions/pending/count`
+  );
+  return response.data;
+};
+
+/**
+ * Get ALL pending submissions across all assignments for a mentor (batch endpoint).
+ * Replaces the N+1 pattern of loading per-course/module/assignment.
+ * Mentor ID is resolved server-side from the JWT token.
+ * @returns Promise with array of pending submission items with context
+ */
+export const getAllPendingForMentor = async (): Promise<PendingSubmissionItemDTO[]> => {
+  const response = await axiosInstance.get<PendingSubmissionItemDTO[]>(
+    `/assignments/mentor/pending-all`
   );
   return response.data;
 };

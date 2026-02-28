@@ -17,6 +17,7 @@
   --mentor-hud-accent-green: #10b981;
   --mentor-hud-accent-red: #ef4444;
   --mentor-hud-accent-yellow: #eab308;
+  --mentor-hud-accent-blue: #3b82f6;
 
   /* Text Colors */
   --mentor-hud-text-primary: #e2e8f0;
@@ -677,6 +678,17 @@
   box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
 }
 
+.mentor-hud-students-button {
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--mentor-hud-accent-green);
+}
+
+.mentor-hud-students-button:hover {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--mentor-hud-accent-green);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
 .mentor-hud-submit-button {
   border-color: rgba(234, 179, 8, 0.3);
   color: var(--mentor-hud-accent-yellow);
@@ -709,11 +721,55 @@
   cursor: not-allowed;
 }
 
-/* Empty State */
+/* Group management button (active green tint — always visible, not just on hover) */
+.mentor-hud-group-button {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--mentor-hud-accent-green);
+  color: var(--mentor-hud-accent-green);
+}
+
+.mentor-hud-group-button:hover {
+  background: rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+/* Create group button (blue) */
+.mentor-hud-create-group-button {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: var(--mentor-hud-accent-blue);
+  color: var(--mentor-hud-accent-blue);
+}
+
+.mentor-hud-create-group-button:hover {
+  background: rgba(59, 130, 246, 0.2);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+
+/* Rejection reason banner (shown when course status = REJECTED) */
+.mentor-hud-rejection-banner {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.4);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+  color: #fca5a5;
+}
+
+/* Suspension reason banner (shown when course status = SUSPENDED) */
+.mentor-hud-suspension-banner {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.45);
+  color: #fcd34d;
+}
 .mentor-hud-empty {
   text-align: center;
   padding: 4rem 2rem;
   color: var(--mentor-hud-text-secondary);
+}
+
+.mentor-hud-empty-icon {
+  color: var(--mentor-hud-accent-cyan);
 }
 
 .mentor-hud-empty h3 {

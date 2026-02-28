@@ -70,12 +70,12 @@ import MentorDashboard from "./pages/mentor/MentorDashboard";
 import AllBadgesPage from "./pages/mentor/AllBadgesPage";
 import MentorGradingPage from "./pages/mentor/MentorGradingPage";
 import CourseCreationPage from "./pages/mentor/course-builder/CourseCreationPage";
-import CourseContentPage from "./pages/mentor/course-builder/CourseContentPage";
 import { CourseManagementProvider } from "./context/mentor/CourseManagementContext";
 import { MentorNoticeProvider } from "./context/mentor/MentorNoticeContext";
 import AdminPage from "./pages/main/AdminPage";
 import AdminSecurityPage from "./pages/admin/AdminSecurityPage";
 import AdminGamificationDashboard from "./pages/admin/AdminGamificationDashboard";
+import AdminCoursePreviewPage from "./pages/admin/AdminCoursePreviewPage";
 import AiRoadmapPage from "./pages/roadmap/AiRoadmapPage";
 import RoadmapDetailPage from "./pages/roadmap/RoadmapDetailPage";
 import StudyPlannerPage from "./pages/study-planner/StudyPlannerPage";
@@ -405,18 +405,6 @@ const App = () => {
                           }
                         />
                         <Route
-                          path="/mentor/courses/:courseId/content"
-                          element={
-                            <MentorRoute>
-                              <MentorNoticeProvider>
-                                <CourseManagementProvider>
-                                  <CourseContentPage />
-                                </CourseManagementProvider>
-                              </MentorNoticeProvider>
-                            </MentorRoute>
-                          }
-                        />
-                        <Route
                           path="/mentor/badges"
                           element={
                             <MentorRoute>
@@ -457,6 +445,14 @@ const App = () => {
                           element={
                             <AdminRoute>
                               <AdminGamificationDashboard />
+                            </AdminRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/courses/:courseId/preview"
+                          element={
+                            <AdminRoute>
+                              <AdminCoursePreviewPage />
                             </AdminRoute>
                           }
                         />
@@ -521,7 +517,6 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/chatbot/expert",
   "/roadmap",
   "/cv",
-  "/admin",
   "/admin-security",
   "/course-learning",
   "/notifications",
@@ -538,6 +533,11 @@ const isQuizAttemptRoute = (pathname: string) => {
 // Check if path matches roadmap detail pattern
 const isRoadmapDetailRoute = (pathname: string) => {
   return /^\/roadmap\/[^/]+$/.test(pathname);
+};
+
+// Check if path is any admin route
+const isAdminRoute = (pathname: string) => {
+  return pathname === "/admin" || pathname.startsWith("/admin/");
 };
 
 // Check if path is any mentor management route
@@ -558,6 +558,7 @@ const FooterVisibilityWrapper = () => {
   if (
     fullScreenRoutes.has(location.pathname) ||
     hideFooterOnlyRoutes.has(location.pathname) ||
+    isAdminRoute(location.pathname) ||
     isMentorRoute(location.pathname) ||
     isQuizAttemptRoute(location.pathname) ||
     isRoadmapDetailRoute(location.pathname)
