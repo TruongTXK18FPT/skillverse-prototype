@@ -67,7 +67,10 @@
    ============================================================================ */
 
 .cb-page {
-  height: 100vh;
+  /* Offset global app header to avoid double scrollbars (body + inner) */
+  --app-shell-offset: 72px;
+  height: calc(100vh - var(--app-shell-offset));
+  min-height: calc(100vh - var(--app-shell-offset));
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -2331,6 +2334,7 @@
 
 .cb-main-content {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: var(--cb-spacing-lg);
   background: var(--cb-glass-bg);

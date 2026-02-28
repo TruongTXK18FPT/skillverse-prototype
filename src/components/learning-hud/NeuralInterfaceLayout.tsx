@@ -37,7 +37,6 @@ const NeuralInterfaceLayout: React.FC<NeuralInterfaceLayoutProps> = ({
             </button>
             <div className="learning-hud-course-title">
               <h3>{courseTitle}</h3>
-              {courseDescription && <span>{courseDescription}</span>}
             </div>
           </div>
 

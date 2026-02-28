@@ -17,6 +17,47 @@ import { LessonSummaryDTO, LessonDetailDTO } from "../../data/lessonDTOs";
 import { QuizSummaryDTO, QuizDetailDTO } from "../../data/quizDTOs";
 import { AssignmentSummaryDTO } from "../../data/assignmentDTOs";
 import AttachmentManager from "../../components/course/AttachmentManager";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
+/**
+ * Normalize mixed HTML+Markdown content so ReactMarkdown can parse it correctly.
+ * Converts common HTML tags to their Markdown/plain equivalents.
+ */
+function normalizeContent(raw: string): string {
+  return raw
+    // <br>, <br/>, <br /> → newline
+    .replace(/<br\s*\/?>/gi, '\n')
+    // <p>...</p> → paragraph with double newline
+    .replace(/<p[^>]*>/gi, '\n\n')
+    .replace(/<\/p>/gi, '\n\n')
+    // <strong>...</strong> → **...**
+    .replace(/<strong>(.*?)<\/strong>/gis, '**$1**')
+    // <em>...</em> → *...*
+    .replace(/<em>(.*?)<\/em>/gis, '*$1*')
+    // <b>...</b> → **...**
+    .replace(/<b>(.*?)<\/b>/gis, '**$1**')
+    // <i>...</i> → *...*
+    .replace(/<i>(.*?)<\/i>/gis, '*$1*')
+    // <h1>...</h1> through <h6>...</h6> → # heading
+    .replace(/<h1[^>]*>(.*?)<\/h1>/gis, '# $1\n')
+    .replace(/<h2[^>]*>(.*?)<\/h2>/gis, '## $1\n')
+    .replace(/<h3[^>]*>(.*?)<\/h3>/gis, '### $1\n')
+    .replace(/<h4[^>]*>(.*?)<\/h4>/gis, '#### $1\n')
+    // <li>...</li> → - ...
+    .replace(/<li[^>]*>(.*?)<\/li>/gis, '- $1\n')
+    // strip remaining HTML tags
+    .replace(/<[^>]+>/g, '')
+    // decode common HTML entities
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&quot;/g, '"')
+    // collapse 3+ consecutive newlines to 2
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
 
 // Import Neural HUD Components
 import {
@@ -708,7 +749,9 @@ const CourseLearningPage = () => {
                 {activeLessonDetail.type === 'READING' && (
                   <>
                     <div className="lhud-reading-text">
-                      {activeLessonDetail.contentText || 'Dữ liệu nội dung không khả dụng.'}
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {normalizeContent(activeLessonDetail.contentText || 'Dữ liệu nội dung không khả dụng.')}
+                      </ReactMarkdown>
                     </div>
 
                     <AttachmentManager

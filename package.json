@@ -43,6 +43,7 @@
     "react-youtube": "^10.1.0",
     "reactflow": "^11.11.4",
     "recharts": "^3.4.1",
+    "rehype-raw": "^7.0.0",
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.1",
     "sockjs-client": "^1.6.1",

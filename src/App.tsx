@@ -507,6 +507,7 @@ const fullScreenRoutes = new Set<string>([
   "/verify-otp",
   "/forgot-password",
   "/reset-password",
+  "/course-learning",
 ]);
 
 // Routes that only hide footer (keep header visible)
