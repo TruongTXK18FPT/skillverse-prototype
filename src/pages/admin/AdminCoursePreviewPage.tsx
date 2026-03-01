@@ -8,19 +8,20 @@
  * Access: ADMIN / CONTENT_ADMIN only (wrapped in <AdminRoute>)
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   ArrowLeft, User, Award, Layers, Play, FileText,
   CheckCircle, XCircle, ShieldOff, ShieldCheck,
   Clock, BookOpen, ChevronDown, ChevronUp,
   Calendar, DollarSign, Tag, ClipboardList, HelpCircle,
-  CheckSquare, AlertCircle, PenTool
+  CheckSquare, AlertCircle, PenTool, Paperclip, Download, ExternalLink
 } from 'lucide-react';
 import { getCourse, approveCourse, rejectCourse, suspendCourse, restoreCourse } from '../../services/courseService';
 import { listModulesWithContent, ModuleDetailDTO } from '../../services/moduleService';
 import { getLessonById } from '../../services/lessonService';
 import { getQuizById } from '../../services/quizService';
 import { getAssignmentById } from '../../services/assignmentService';
+import { LessonAttachmentDTO, listAttachments } from '../../services/attachmentService';
 import { CourseDetailDTO, CourseStatus } from '../../data/courseDTOs';
 import { QuizDetailDTO, QuizQuestionDetailDTO, QuestionType } from '../../data/quizDTOs';
 import { AssignmentDetailDTO } from '../../data/assignmentDTOs';
@@ -28,13 +29,112 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { NeuralCard } from '../../components/learning-hud';
+import Toast from '../../components/shared/Toast';
 import './AdminCoursePreviewPage.css';
 
 // ==================== SUB-COMPONENTS ====================
 
+type ModulePreviewItem =
+  | { kind: 'lesson'; id: number; title: string; orderIndex: number; lessonType: string; durationSec?: number }
+  | { kind: 'assignment'; id: number; title: string; orderIndex: number; description?: string; maxScore?: number }
+  | { kind: 'quiz'; id: number; title: string; orderIndex: number; passScore: number; questionCount?: number };
+
+const previewKindPriority: Record<ModulePreviewItem['kind'], number> = {
+  lesson: 0,
+  assignment: 1,
+  quiz: 2
+};
+
+const getModulePreviewItems = (module: ModuleDetailDTO): ModulePreviewItem[] => {
+  const lessonItems: ModulePreviewItem[] = (module.lessons || []).map((lesson) => ({
+    kind: 'lesson',
+    id: lesson.id,
+    title: lesson.title,
+    orderIndex: lesson.orderIndex ?? 0,
+    lessonType: lesson.type,
+    durationSec: lesson.durationSec
+  }));
+
+  const assignmentItems: ModulePreviewItem[] = (module.assignments || []).map((assignment) => ({
+    kind: 'assignment',
+    id: assignment.id,
+    title: assignment.title,
+    orderIndex: assignment.orderIndex ?? 0,
+    description: assignment.description,
+    maxScore: assignment.maxScore
+  }));
+
+  const quizItems: ModulePreviewItem[] = (module.quizzes || []).map((quiz) => ({
+    kind: 'quiz',
+    id: quiz.id,
+    title: quiz.title,
+    orderIndex: quiz.orderIndex ?? 0,
+    passScore: quiz.passScore,
+    questionCount: quiz.questionCount
+  }));
+
+  return [...lessonItems, ...assignmentItems, ...quizItems].sort((a, b) => {
+    if (a.orderIndex !== b.orderIndex) {
+      return a.orderIndex - b.orderIndex;
+    }
+    if (previewKindPriority[a.kind] !== previewKindPriority[b.kind]) {
+      return previewKindPriority[a.kind] - previewKindPriority[b.kind];
+    }
+    return a.id - b.id;
+  });
+};
+
+const getPreviewItemLabel = (item: ModulePreviewItem) => {
+  if (item.kind === 'lesson') {
+    switch (item.lessonType) {
+      case 'READING':
+        return 'Bài đọc';
+      case 'VIDEO':
+        return 'Video';
+      default:
+        return item.lessonType;
+    }
+  }
+
+  if (item.kind === 'assignment') {
+    return 'Bài tập';
+  }
+
+  return 'Quiz';
+};
+
+const getPreviewItemBadgeClass = (item: ModulePreviewItem) => {
+  if (item.kind === 'lesson') {
+    return item.lessonType === 'READING'
+      ? 'acp-type-badge-reading'
+      : item.lessonType === 'VIDEO'
+        ? 'acp-type-badge-video'
+        : 'acp-type-badge-lesson';
+  }
+
+  if (item.kind === 'assignment') {
+    return 'acp-type-badge-assignment';
+  }
+
+  return 'acp-type-badge-quiz';
+};
+
+const isSafePreviewUrl = (value?: string | null) => {
+  if (!value) {
+    return false;
+  }
+  try {
+    const parsed = new URL(value, window.location.origin);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+};
+
 /** Expandable lesson detail — loaded on-demand when user clicks */
 const LessonDetail: React.FC<{ lessonId: number }> = ({ lessonId }) => {
   const [lesson, setLesson] = useState<any>(null);
+  const [attachments, setAttachments] = useState<LessonAttachmentDTO[]>([]);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -44,6 +144,10 @@ const LessonDetail: React.FC<{ lessonId: number }> = ({ lessonId }) => {
       setLoading(true);
       const data = await getLessonById(lessonId);
       setLesson(data);
+      if (data.type === 'READING') {
+        const attachmentList = await listAttachments(lessonId);
+        setAttachments(attachmentList);
+      }
       setExpanded(true);
     } catch (err) {
       console.error('Error loading lesson:', err);
@@ -72,6 +176,59 @@ const LessonDetail: React.FC<{ lessonId: number }> = ({ lessonId }) => {
           )}
           {lesson.type === 'READING' && lesson.contentText && (
             <div className="acp-reading-content" dangerouslySetInnerHTML={{ __html: lesson.contentText }} />
+          )}
+          {lesson.type === 'READING' && lesson.resourceUrl && (
+            <div className="acp-reading-resource">
+              <span className="acp-reading-resource-label">Liên kết tham khảo</span>
+              {isSafePreviewUrl(lesson.resourceUrl) ? (
+                <a
+                  href={lesson.resourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="acp-reading-resource-link"
+                >
+                  <ExternalLink size={14} /> Mở liên kết
+                </a>
+              ) : (
+                <span className="acp-reading-resource-invalid">Liên kết không hợp lệ</span>
+              )}
+            </div>
+          )}
+          {lesson.type === 'READING' && attachments.length > 0 && (
+            <div className="acp-reading-attachments">
+              <div className="acp-reading-attachments-title">
+                <Paperclip size={15} /> Tài liệu đính kèm ({attachments.length})
+              </div>
+              <div className="acp-reading-attachments-list">
+                {attachments.map((attachment) => (
+                  <div key={attachment.id} className="acp-reading-attachment-item">
+                    <div className="acp-reading-attachment-info">
+                      <span className="acp-reading-attachment-name">{attachment.title}</span>
+                      <div className="acp-reading-attachment-meta">
+                        <span className="acp-reading-attachment-type">{attachment.type}</span>
+                        {attachment.fileSizeFormatted && (
+                          <span className="acp-reading-attachment-size">{attachment.fileSizeFormatted}</span>
+                        )}
+                      </div>
+                    </div>
+                    {isSafePreviewUrl(attachment.downloadUrl) ? (
+                      <a
+                        href={attachment.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="acp-reading-attachment-link"
+                        title="Mở tài liệu"
+                      >
+                        <Download size={14} />
+                        <span>Mở file</span>
+                      </a>
+                    ) : (
+                      <span className="acp-reading-resource-invalid">File/link không hợp lệ</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
           {lesson.type === 'VIDEO' && !lesson.videoUrl && (
             <div className="acp-empty-content"><Play size={32} /><p>Chưa có video</p></div>
@@ -109,7 +266,7 @@ const QuizDetail: React.FC<{ quizId: number }> = ({ quizId }) => {
     switch (type) {
       case QuestionType.MULTIPLE_CHOICE: return 'Trắc nghiệm';
       case QuestionType.TRUE_FALSE: return 'Đúng/Sai';
-      case QuestionType.SHORT_ANSWER: return 'Tự luận ngắn';
+      case QuestionType.SHORT_ANSWER: return 'Điền từ';
       default: return type;
     }
   };
@@ -326,8 +483,9 @@ const ActionModal: React.FC<{
 const AdminCoursePreviewPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
-  const { showSuccess, showError, showWarning } = useToast();
+  const { toast, isVisible, hideToast, showSuccess, showError, showWarning } = useToast();
 
   const [course, setCourse] = useState<CourseDetailDTO | null>(null);
   const [modules, setModules] = useState<ModuleDetailDTO[]>([]);
@@ -335,6 +493,30 @@ const AdminCoursePreviewPage: React.FC = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const [actionModal, setActionModal] = useState<{ type: 'approve' | 'reject' | 'suspend' | 'restore' } | null>(null);
   const [expandedModules, setExpandedModules] = useState<Record<number, boolean>>({});
+  const returnTo = ((location.state as { returnTo?: string } | null)?.returnTo || '/admin?tab=courses');
+
+  const getApiErrorMessage = useCallback((error: unknown, fallbackMessage: string) => {
+    const responseData = (error as { response?: { data?: unknown } })?.response?.data;
+    if (typeof responseData === 'string' && responseData.trim()) {
+      return responseData;
+    }
+
+    if (responseData && typeof responseData === 'object') {
+      const responseObject = responseData as { message?: string; error?: string };
+      if (responseObject.message?.trim()) {
+        return responseObject.message;
+      }
+      if (responseObject.error?.trim()) {
+        return responseObject.error;
+      }
+    }
+
+    if (error instanceof Error && error.message.trim()) {
+      return error.message;
+    }
+
+    return fallbackMessage;
+  }, []);
 
   // ---- Data Loading ----
   const loadCourse = useCallback(async () => {
@@ -346,11 +528,12 @@ const AdminCoursePreviewPage: React.FC = () => {
         getCourse(id),
         listModulesWithContent(id)
       ]);
+      const sortedModules = [...(moduleData as ModuleDetailDTO[])].sort((a, b) => a.orderIndex - b.orderIndex);
       setCourse(courseData);
-      setModules(moduleData as ModuleDetailDTO[]);
+      setModules(sortedModules);
       // Expand all modules by default
       const expanded: Record<number, boolean> = {};
-      (moduleData as ModuleDetailDTO[]).forEach(m => { expanded[m.id] = true; });
+      sortedModules.forEach(m => { expanded[m.id] = true; });
       setExpandedModules(expanded);
     } catch (err) {
       console.error('Error loading course:', err);
@@ -373,30 +556,34 @@ const AdminCoursePreviewPage: React.FC = () => {
 
     try {
       setActionLoading(true);
+      let successMessage = '';
       switch (actionModal.type) {
         case 'approve':
           await approveCourse(course.id, user.id);
-          showSuccess('Thành công', 'Đã duyệt khóa học thành công');
+          successMessage = `Đã duyệt khóa học "${course.title}".`;
           break;
         case 'reject':
           await rejectCourse(course.id, user.id, reason);
-          showSuccess('Thành công', 'Đã từ chối khóa học');
+          successMessage = `Đã từ chối khóa học "${course.title}".`;
           break;
         case 'suspend':
           await suspendCourse(course.id, user.id, reason);
-          showSuccess('Thành công', 'Đã tạm khóa khóa học');
+          successMessage = `Đã tạm khóa khóa học "${course.title}".`;
           break;
         case 'restore':
           await restoreCourse(course.id, user.id);
-          showSuccess('Thành công', 'Đã khôi phục khóa học');
+          successMessage = `Đã khôi phục khóa học "${course.title}".`;
           break;
       }
       setActionModal(null);
-      // Reload to reflect new status
       await loadCourse();
+      showSuccess('Cập nhật khóa học', successMessage);
     } catch (err) {
       console.error('Error processing action:', err);
-      showError('Lỗi', 'Có lỗi xảy ra khi xử lý yêu cầu');
+      showError(
+        'Không thể cập nhật khóa học',
+        getApiErrorMessage(err, 'Có lỗi xảy ra khi xử lý yêu cầu.')
+      );
     } finally {
       setActionLoading(false);
     }
@@ -453,7 +640,7 @@ const AdminCoursePreviewPage: React.FC = () => {
         <div className="acp-empty">
           <BookOpen size={64} />
           <h3>Không tìm thấy khóa học</h3>
-          <button className="acp-btn-secondary" onClick={() => navigate('/admin')}>
+          <button className="acp-btn-secondary" onClick={() => navigate(returnTo)}>
             <ArrowLeft size={18} /> Quay lại
           </button>
         </div>
@@ -465,7 +652,7 @@ const AdminCoursePreviewPage: React.FC = () => {
     <div className="acp-page">
       {/* Top Bar */}
       <div className="acp-topbar">
-        <button className="acp-back-btn" onClick={() => navigate('/admin')}>
+        <button className="acp-back-btn" onClick={() => navigate(returnTo)}>
           <ArrowLeft size={20} />
           <span>Quay lại quản lý</span>
         </button>
@@ -596,71 +783,68 @@ const AdminCoursePreviewPage: React.FC = () => {
               {/* Module Content (collapsible) */}
               {expandedModules[module.id] && (
                 <div className="acp-module-body">
-                  {/* Lessons */}
-                  {module.lessons && module.lessons.length > 0 && (
-                    <div className="acp-content-group">
-                      <h4 className="acp-group-title acp-group-lesson">
-                        <BookOpen size={16} /> Bài học ({module.lessons.length})
-                      </h4>
-                      {module.lessons.map((lesson: any) => (
-                        <div key={lesson.id} className="acp-content-item">
-                          <div className="acp-content-item-header">
-                            <span className="acp-content-item-name">• {lesson.title}</span>
-                            <div className="acp-content-item-meta">
-                              <span className="acp-type-badge">{lesson.type}</span>
-                              {lesson.duration && <span className="acp-duration">{lesson.duration} phút</span>}
-                            </div>
-                          </div>
-                          <LessonDetail lessonId={lesson.id} />
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  {getModulePreviewItems(module).length > 0 && (
+                    <>
+                      <div className="acp-module-summary">
+                        {!!module.lessons?.length && (
+                          <span className="acp-summary-pill acp-summary-pill-lesson">
+                            <BookOpen size={14} /> Bài học ({module.lessons.length})
+                          </span>
+                        )}
+                        {!!module.assignments?.length && (
+                          <span className="acp-summary-pill acp-summary-pill-assignment">
+                            <PenTool size={14} /> Bài tập ({module.assignments.length})
+                          </span>
+                        )}
+                        {!!module.quizzes?.length && (
+                          <span className="acp-summary-pill acp-summary-pill-quiz">
+                            <ClipboardList size={14} /> Bài kiểm tra ({module.quizzes.length})
+                          </span>
+                        )}
+                      </div>
 
-                  {/* Assignments */}
-                  {module.assignments && module.assignments.length > 0 && (
-                    <div className="acp-content-group">
-                      <h4 className="acp-group-title acp-group-assignment">
-                        <PenTool size={16} /> Bài tập ({module.assignments.length})
-                      </h4>
-                      {module.assignments.map((a: any) => (
-                        <div key={a.id} className="acp-content-item">
-                          <div className="acp-content-item-header">
-                            <span className="acp-content-item-name">• {a.title}</span>
-                            <span className="acp-score-badge">{a.maxScore} điểm</span>
-                          </div>
-                          {a.description && <p className="acp-content-item-desc">{a.description}</p>}
-                          <AssignmentDetailView assignmentId={a.id} />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Quizzes */}
-                  {module.quizzes && module.quizzes.length > 0 && (
-                    <div className="acp-content-group">
-                      <h4 className="acp-group-title acp-group-quiz">
-                        <ClipboardList size={16} /> Bài kiểm tra ({module.quizzes.length})
-                      </h4>
-                      {module.quizzes.map((q: any) => (
-                        <div key={q.id} className="acp-content-item">
-                          <div className="acp-content-item-header">
-                            <span className="acp-content-item-name">• {q.title}</span>
-                            <div className="acp-content-item-meta">
-                              {q.questionCount != null && <span className="acp-quiz-count">{q.questionCount} câu</span>}
-                              <span className="acp-score-badge">{q.passScore}% để đạt</span>
+                      <div className="acp-content-sequence">
+                        {getModulePreviewItems(module).map((item, itemIdx) => (
+                          <div key={`${item.kind}-${item.id}`} className={`acp-content-item acp-content-item-${item.kind}`}>
+                            <div className="acp-content-item-header">
+                              <div className="acp-content-item-leading">
+                                <span className="acp-content-order">{itemIdx + 1}.</span>
+                                <span className="acp-content-item-name">{item.title}</span>
+                              </div>
+                              <div className="acp-content-item-meta">
+                                <span className={`acp-type-badge ${getPreviewItemBadgeClass(item)}`}>
+                                  {getPreviewItemLabel(item)}
+                                </span>
+                                {item.kind === 'lesson' && !!item.durationSec && (
+                                  <span className="acp-duration">{Math.ceil(item.durationSec / 60)} phút</span>
+                                )}
+                                {item.kind === 'assignment' && (
+                                  <span className="acp-score-badge">{item.maxScore ?? 0} điểm</span>
+                                )}
+                                {item.kind === 'quiz' && (
+                                  <>
+                                    {item.questionCount != null && <span className="acp-quiz-count">{item.questionCount} câu</span>}
+                                    <span className="acp-score-badge">{item.passScore}% để đạt</span>
+                                  </>
+                                )}
+                              </div>
                             </div>
+
+                            {item.kind === 'assignment' && item.description && (
+                              <p className="acp-content-item-desc">{item.description}</p>
+                            )}
+
+                            {item.kind === 'lesson' && <LessonDetail lessonId={item.id} />}
+                            {item.kind === 'assignment' && <AssignmentDetailView assignmentId={item.id} />}
+                            {item.kind === 'quiz' && <QuizDetail quizId={item.id} />}
                           </div>
-                          <QuizDetail quizId={q.id} />
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    </>
                   )}
 
                   {/* Empty module */}
-                  {(!module.lessons || module.lessons.length === 0) &&
-                   (!module.assignments || module.assignments.length === 0) &&
-                   (!module.quizzes || module.quizzes.length === 0) && (
+                  {getModulePreviewItems(module).length === 0 && (
                     <div className="acp-empty-content">
                       <p>Module này chưa có nội dung</p>
                     </div>
@@ -675,7 +859,7 @@ const AdminCoursePreviewPage: React.FC = () => {
       {/* Bottom Action Bar (sticky) */}
       {(course.status === CourseStatus.PENDING || course.status === CourseStatus.PUBLIC || course.status === CourseStatus.SUSPENDED) && (
         <div className="acp-bottom-bar">
-          <button className="acp-btn-secondary" onClick={() => navigate('/admin')}>
+          <button className="acp-btn-secondary" onClick={() => navigate(returnTo)}>
             <ArrowLeft size={18} /> Quay lại
           </button>
           <div className="acp-bottom-actions">
@@ -711,6 +895,20 @@ const AdminCoursePreviewPage: React.FC = () => {
           onConfirm={handleConfirmAction}
           onCancel={() => setActionModal(null)}
           loading={actionLoading}
+        />
+      )}
+
+      {toast && (
+        <Toast
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          isVisible={isVisible}
+          onClose={hideToast}
+          autoCloseDelay={toast.autoCloseDelay}
+          showCountdown={toast.showCountdown}
+          countdownText={toast.countdownText}
+          actionButton={toast.actionButton}
         />
       )}
     </div>

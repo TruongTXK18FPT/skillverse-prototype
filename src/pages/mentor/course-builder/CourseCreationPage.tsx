@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { 
   FiBookOpen, FiList, FiFileText, FiPlay, FiHelpCircle, FiClipboard, 
   FiPlus, FiTrash2, FiSettings, FiChevronDown, FiChevronUp, FiInfo,
@@ -12,7 +12,9 @@ import { CourseLevel, LessonType, CourseStatus } from '../../../data/courseDTOs'
 import { SubmissionType } from '../../../data/assignmentDTOs';
 import { QuestionType } from '../../../data/quizDTOs';
 import { uploadMedia } from '../../../services/mediaService';
-import { useMentorNotice } from '../../../context/mentor/MentorNoticeContext';
+import { submitCourseForApproval } from '../../../services/courseService';
+import { useToast } from '../../../hooks/useToast';
+import Toast from '../../../components/shared/Toast';
 import RichTextEditor from '../../../components/shared/RichTextEditor';
 import { 
   AssignmentCriteriaDraft,
@@ -80,12 +82,40 @@ const getLessonTypeMeta = (type: string) => {
 
 const createId = () => Date.now().toString() + Math.random().toString(36).substr(2, 5);
 
+const normalizeLessonAttachments = (attachments?: LessonAttachmentDraft[]) => {
+  return (attachments || [])
+    .map((attachment) => {
+      const draftLike = attachment as LessonAttachmentDraft & {
+        id?: string | number;
+        title?: string;
+        downloadUrl?: string;
+      };
+
+      const name = draftLike.name || draftLike.title;
+      const url = draftLike.url || draftLike.downloadUrl;
+      const serverId = draftLike.serverId ?? (typeof draftLike.id === 'number' ? draftLike.id : undefined);
+
+      if (!serverId && !draftLike.mediaId && !(url && url.trim())) {
+        return null;
+      }
+
+      return {
+        ...attachment,
+        serverId,
+        name: name || 'Attachment',
+        url
+      };
+    })
+    .filter((attachment): attachment is LessonAttachmentDraft => Boolean(attachment));
+};
+
 // ============================================================================
 // COMPONENT
 // ============================================================================
 
 const CourseCreationPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { courseId } = useParams();
   const isEditMode = Boolean(courseId);
   const { user } = useAuth();
@@ -103,6 +133,7 @@ const CourseCreationPage = () => {
   } = useCourseManagement();
 
   const { courseForm, isLoading } = state;
+  const { toast, isVisible, hideToast, showSuccess, showError, showWarning, showInfo } = useToast();
   
   const isEditable = !isEditMode || 
                      !state.currentCourse || 
@@ -122,12 +153,24 @@ const CourseCreationPage = () => {
   
   // Quiz Editor State (for tab switching)
   const [lessonEditor, setLessonEditor] = useState<{ activeTab: 'settings' | 'questions' }>({ activeTab: 'settings' });
-  const { showNotice } = useMentorNotice();
-
-  const showToast = (type: 'success' | 'error' | 'info' | 'warning', message: string) => {
-    showNotice(type, message);
-  };
-  const getApiErrorMessage = (err: unknown): string => {
+  const showToast = useCallback((type: 'success' | 'error' | 'info' | 'warning', message: string) => {
+    switch (type) {
+      case 'success':
+        showSuccess('Đã cập nhật', message);
+        break;
+      case 'error':
+        showError('Không thể tiếp tục', message);
+        break;
+      case 'warning':
+        showWarning('Cần kiểm tra lại', message);
+        break;
+      case 'info':
+      default:
+        showInfo('Thông tin', message);
+        break;
+    }
+  }, [showError, showInfo, showSuccess, showWarning]);
+  const getApiErrorMessage = useCallback((err: unknown): string => {
     const responseData = (err as { response?: { data?: unknown } })?.response?.data;
     if (responseData) {
       if (typeof responseData === 'string') return responseData;
@@ -139,7 +182,7 @@ const CourseCreationPage = () => {
     }
     if (err instanceof Error) return err.message;
     return String(err);
-  };
+  }, []);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
@@ -208,7 +251,17 @@ const CourseCreationPage = () => {
     if (state.error) {
       showToast('error', state.error);
     }
-  }, [state.error]);
+  }, [showToast, state.error]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('submitted') !== '1') {
+      return;
+    }
+
+    showToast('success', 'Đã gửi khóa học tới quản trị viên để xét duyệt.');
+    navigate(location.pathname, { replace: true });
+  }, [location.pathname, location.search, navigate, showToast]);
 
   // Sync from context to local state
   useEffect(() => {
@@ -257,13 +310,21 @@ const CourseCreationPage = () => {
                   assignmentMaxScore: lesson.assignmentMaxScore,
                   assignmentPassingScore: lesson.assignmentPassingScore,
                   assignmentCriteria: lesson.assignmentCriteria,
-                  attachments: lesson.attachments
+                  attachments: normalizeLessonAttachments(lesson.attachments)
                 };
             })
         }));
         setModules(mappedModules);
     }
-  }, [isEditMode, isLoading, state.currentCourse, state.modules]);
+  }, [
+    isEditMode,
+    isLoading,
+    modules.length,
+    state.courseForm.learningObjectives,
+    state.courseForm.requirements,
+    state.currentCourse,
+    state.modules,
+  ]);
 
   // ============================================================================
   // HANDLERS
@@ -450,6 +511,198 @@ const CourseCreationPage = () => {
 
     return base;
   };
+
+  const persistCourseDraft = useCallback(async (
+    options?: { silentSuccess?: boolean; redirectToEdit?: boolean }
+  ) => {
+    if (saveInFlightRef.current) {
+      return null;
+    }
+
+    const assignmentValidation = validateAssignmentsBeforeSave(modules);
+    setAssignmentErrors(assignmentValidation.errorsByLesson);
+    if (Object.keys(assignmentValidation.errorsByLesson).length > 0) {
+      showToast('error', assignmentValidation.firstMessage || 'Vui lòng kiểm tra lại thông tin bài tập.');
+      return null;
+    }
+
+    const quizValidation = validateQuizzesBeforeSave(modules);
+    if (Object.keys(quizValidation.errorsByLesson).length > 0) {
+      showToast('error', quizValidation.firstMessage || 'Vui lòng kiểm tra lại thông tin quiz.');
+      return null;
+    }
+
+    saveInFlightRef.current = true;
+    setIsSaving(true);
+
+    try {
+      let savedCourse;
+      const fileToUpload = thumbnailFile || undefined;
+
+      if (isEditMode && courseId) {
+        savedCourse = await updateCourse(courseId, modules, {}, fileToUpload);
+      } else {
+        savedCourse = await createCourse(modules, {}, fileToUpload);
+      }
+
+      if (!savedCourse) {
+        showToast('error', 'Lỗi khi lưu: Không nhận được dữ liệu từ server.');
+        return null;
+      }
+
+      const mappedModules: ModuleDraft[] = savedCourse.modules.map(rawModule => {
+        const module = rawModule as {
+          id: number;
+          title: string;
+          description?: string;
+          lessons?: Array<Partial<LessonDraft> & { id: number; type?: LessonType | string; durationSec?: number; videoUrl?: string }>;
+        };
+
+        return {
+          id: module.id.toString(),
+          serverId: module.id,
+          title: module.title,
+          description: module.description,
+          lessons: (module.lessons || []).map(rawLesson => {
+            const lessonId = (rawLesson as { id: number }).id;
+            const lesson = rawLesson as Partial<LessonDraft> & {
+              id: number;
+              type?: LessonType | string;
+              durationSec?: number;
+              videoUrl?: string;
+            };
+
+            return {
+              id: lessonId.toString(),
+              serverId: lessonId,
+              title: lesson.title || '',
+              type: (lesson.type?.toString().toLowerCase() || 'reading') as LessonKind,
+              durationMin: lesson.durationSec ? Math.round(lesson.durationSec / 60) : undefined,
+              contentText: lesson.contentText,
+              resourceUrl: lesson.resourceUrl,
+              youtubeUrl: lesson.youtubeUrl || lesson.videoUrl,
+              videoMediaId: lesson.videoMediaId,
+              passScore: lesson.passScore,
+              quizTimeLimitMinutes: lesson.quizTimeLimitMinutes,
+              quizMaxAttempts: lesson.quizMaxAttempts,
+              quizDescription: lesson.quizDescription,
+              gradingMethod: lesson.gradingMethod,
+              isAssessment: lesson.isAssessment,
+              questions: (lesson.questions || []).map((question: QuizQuestionDraft) => ({
+                ...question,
+                score: Number.isFinite(Number(question.score)) && Number(question.score) > 0 ? Number(question.score) : 1
+              })),
+              assignmentSubmissionType: (
+                lesson.assignmentSubmissionType ||
+                (lesson as { submissionType?: SubmissionType }).submissionType ||
+                SubmissionType.TEXT
+              ) as SubmissionType,
+              assignmentDescription: lesson.assignmentDescription,
+              assignmentMaxScore: lesson.assignmentMaxScore,
+              assignmentPassingScore: lesson.assignmentPassingScore,
+              assignmentCriteria: lesson.assignmentCriteria,
+              attachments: normalizeLessonAttachments(lesson.attachments)
+            };
+          })
+        };
+      });
+
+      const idMap = new Map<string, { newModuleId: string; lessonMap: Map<string, string> }>();
+      modules.forEach((oldModule, moduleIndex) => {
+        const newModule = mappedModules[moduleIndex];
+        if (!newModule) return;
+
+        const lessonMap = new Map<string, string>();
+        oldModule.lessons.forEach((oldLesson, lessonIndex) => {
+          const newLesson = newModule.lessons[lessonIndex];
+          if (newLesson) {
+            lessonMap.set(oldLesson.id, newLesson.id);
+          }
+        });
+
+        idMap.set(oldModule.id, { newModuleId: newModule.id, lessonMap });
+      });
+
+      setModules(mappedModules);
+      setAssignmentErrors({});
+
+      setActiveView(prev => {
+        if (prev.type === 'module') {
+          const entry = idMap.get(prev.moduleId);
+          return entry ? { type: 'module', moduleId: entry.newModuleId } : prev;
+        }
+
+        if (prev.type === 'lesson') {
+          const entry = idMap.get(prev.moduleId);
+          if (!entry) return prev;
+
+          const newLessonId = entry.lessonMap.get(prev.lessonId);
+          return newLessonId
+            ? { type: 'lesson', moduleId: entry.newModuleId, lessonId: newLessonId }
+            : prev;
+        }
+
+        return prev;
+      });
+
+      const shouldRedirectToEdit = options?.redirectToEdit ?? !isEditMode;
+      if (!isEditMode && shouldRedirectToEdit) {
+        navigate(`/mentor/courses/${savedCourse.id}/edit`, { replace: true });
+      }
+
+      if (!options?.silentSuccess) {
+        showToast('success', 'Đã lưu thành công. Dữ liệu đã được đồng bộ.');
+      }
+
+      return savedCourse;
+    } catch (err) {
+      const message = getApiErrorMessage(err);
+      showToast('error', `Lỗi khi lưu: ${message}`);
+      return null;
+    } finally {
+      saveInFlightRef.current = false;
+      setIsSaving(false);
+    }
+  }, [courseId, createCourse, getApiErrorMessage, isEditMode, modules, navigate, showToast, thumbnailFile, updateCourse]);
+
+  const handleSaveDraft = useCallback(async () => {
+    await persistCourseDraft();
+  }, [persistCourseDraft]);
+
+  const handlePublishCourse = useCallback(async () => {
+    if (!user?.id) {
+      showToast('error', 'Không xác định được tài khoản người hướng dẫn hiện tại.');
+      return;
+    }
+
+    const hasLearningContent = modules.some(module => module.lessons.length > 0);
+    if (!hasLearningContent) {
+      showToast('warning', 'Khóa học phải có ít nhất 1 module chứa nội dung trước khi gửi duyệt.');
+      return;
+    }
+
+    const savedCourse = await persistCourseDraft({
+      silentSuccess: true,
+      redirectToEdit: false,
+    });
+    if (!savedCourse) {
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      showToast('info', 'Đang gửi khóa học tới quản trị viên để xét duyệt.');
+      const submittedCourse = await submitCourseForApproval(savedCourse.id, user.id);
+      if (isEditMode) {
+        await loadCourseForEdit(submittedCourse.id.toString());
+      }
+      navigate(`/mentor/courses/${submittedCourse.id}/edit?submitted=1`, { replace: true });
+    } catch (error) {
+      showToast('error', `Không thể gửi duyệt: ${getApiErrorMessage(error)}`);
+    } finally {
+      setIsSaving(false);
+    }
+  }, [getApiErrorMessage, isEditMode, loadCourseForEdit, modules, navigate, persistCourseDraft, showToast, user?.id]);
 
   // ============================================================================
   // RENDERERS
@@ -959,7 +1212,7 @@ const CourseCreationPage = () => {
                                    <div key={idx} className="cb-attachment-item" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px', border: '1px solid var(--cb-border-color)', borderRadius: 4, marginBottom: 8 }}>
                                       <FiFileText />
                                       <a href={att.url || '#'} target="_blank" rel="noopener noreferrer" style={{ flex: 1, color: 'var(--cb-accent-cyan)' }}>
-                                         {att.name}
+                                         {att.name || 'Attachment'}
                                       </a>
                                       <button 
                                          className="cb-icon-button"
@@ -1534,132 +1787,16 @@ const CourseCreationPage = () => {
              <button 
                 className="cb-button cb-button--secondary" 
                 disabled={isSaving || !isEditable} 
-                onClick={async () => {
-                   if (saveInFlightRef.current) return;
-                   const assignmentValidation = validateAssignmentsBeforeSave(modules);
-                   setAssignmentErrors(assignmentValidation.errorsByLesson);
-                   if (Object.keys(assignmentValidation.errorsByLesson).length > 0) {
-                      showToast('error', assignmentValidation.firstMessage || 'Vui lòng kiểm tra lại thông tin bài tập.');
-                      return;
-                   }
-                   const quizValidation = validateQuizzesBeforeSave(modules);
-                   if (Object.keys(quizValidation.errorsByLesson).length > 0) {
-                      showToast('error', quizValidation.firstMessage || 'Vui lòng kiểm tra lại thông tin quiz.');
-                      return;
-                   }
-                   saveInFlightRef.current = true;
-                   setIsSaving(true);
-                   try {
-                      // Pass local modules state to save logic
-                      let savedCourse;
-                      const courseDataOverride = {};
-                      const fileToUpload = thumbnailFile || undefined;
-
-                      if (isEditMode && courseId) {
-                         savedCourse = await updateCourse(courseId, modules, courseDataOverride, fileToUpload);
-                      } else {
-                         savedCourse = await createCourse(modules, courseDataOverride, fileToUpload);
-                      }
-                      
-                      if (savedCourse) {
-                         // Sync local state with saved data (server IDs)
-                         // We need to reload modules from the returned course
-                         // Map savedCourse.modules to ModuleDraft[]
-                         const mappedModules: ModuleDraft[] = savedCourse.modules.map(rawModule => {
-                             const module = rawModule as { id: number; title: string; description?: string; lessons?: Array<Partial<LessonDraft> & { id: number; type?: LessonType | string; durationSec?: number; videoUrl?: string }>; };
-                             return {
-                               id: module.id.toString(),
-                               serverId: module.id,
-                               title: module.title,
-                               description: module.description,
-                               lessons: (module.lessons || []).map(rawLesson => {
-                                 const lessonId = (rawLesson as unknown as { id: number }).id;
-                                 const lesson = rawLesson as unknown as Partial<LessonDraft> & { id: number; type?: LessonType | string; durationSec?: number; videoUrl?: string };
-                                 return {
-                                   id: lessonId.toString(),
-                                   serverId: lessonId,
-                                   title: lesson.title || '',
-                                   type: (lesson.type?.toString().toLowerCase() || 'reading') as LessonKind,
-                                   durationMin: lesson.durationSec ? Math.round(lesson.durationSec / 60) : undefined,
-                                   contentText: lesson.contentText,
-                                   resourceUrl: lesson.resourceUrl,
-                                   youtubeUrl: lesson.youtubeUrl || lesson.videoUrl,
-                                   videoMediaId: lesson.videoMediaId,
-                                   passScore: lesson.passScore,
-                                   quizTimeLimitMinutes: lesson.quizTimeLimitMinutes,
-                                   quizMaxAttempts: lesson.quizMaxAttempts,
-                                   quizDescription: lesson.quizDescription,
-                                   gradingMethod: lesson.gradingMethod,
-                                   isAssessment: lesson.isAssessment,
-                                   questions: (lesson.questions || []).map((q: QuizQuestionDraft) => ({
-                                     ...q,
-                                     score: Number.isFinite(Number(q.score)) && Number(q.score) > 0 ? Number(q.score) : 1
-                                   })),
-                                   assignmentSubmissionType: (lesson.assignmentSubmissionType || (lesson as { submissionType?: SubmissionType }).submissionType || SubmissionType.TEXT) as SubmissionType,
-                                   assignmentDescription: lesson.assignmentDescription,
-                                   assignmentMaxScore: lesson.assignmentMaxScore,
-                                   assignmentPassingScore: lesson.assignmentPassingScore,
-                                   assignmentCriteria: lesson.assignmentCriteria,
-                                   attachments: lesson.attachments
-                                 };
-                               })
-                             };
-                         });
-                         
-                         // Build old→new ID map so activeView stays valid
-                         const oldModules = modules;
-                         const idMap = new Map<string, { newModuleId: string; lessonMap: Map<string, string> }>();
-                         oldModules.forEach((om, mi) => {
-                           const nm = mappedModules[mi];
-                           if (!nm) return;
-                           const lessonMap = new Map<string, string>();
-                           om.lessons.forEach((ol, li) => {
-                             const nl = nm.lessons[li];
-                             if (nl) lessonMap.set(ol.id, nl.id);
-                           });
-                           idMap.set(om.id, { newModuleId: nm.id, lessonMap });
-                         });
-
-                         setModules(mappedModules);
-                         setAssignmentErrors({});
-
-                         // Update activeView to use the new (server-based) IDs
-                         setActiveView(prev => {
-                           if (prev.type === 'module') {
-                             const entry = idMap.get(prev.moduleId);
-                             return entry ? { type: 'module', moduleId: entry.newModuleId } : prev;
-                           }
-                           if (prev.type === 'lesson') {
-                             const entry = idMap.get(prev.moduleId);
-                             if (!entry) return prev;
-                             const newLessonId = entry.lessonMap.get(prev.lessonId);
-                             return newLessonId
-                               ? { type: 'lesson', moduleId: entry.newModuleId, lessonId: newLessonId }
-                               : prev;
-                           }
-                           return prev;
-                         });
-                         
-                         if (!isEditMode) {
-                            navigate(`/mentor/courses/${savedCourse.id}/edit`, { replace: true });
-                         }
-                         showToast('success', 'Đã lưu thành công! Dữ liệu đã được đồng bộ.');
-                      } else {
-                         showToast('error', 'Lỗi khi lưu: Không nhận được dữ liệu từ server.');
-                      }
-                   } catch (err) {
-                      const message = getApiErrorMessage(err);
-                      showToast('error', `Lỗi khi lưu: ${message}`);
-                   } finally {
-                      saveInFlightRef.current = false;
-                      setIsSaving(false);
-                   }
-                }}
+                onClick={() => void handleSaveDraft()}
              >
                 <FiSave /> Lưu nháp
              </button>
-             <button className="cb-button cb-button--success" disabled={isSaving || !isEditable} onClick={() => showToast('info', 'Chức năng xuất bản đang phát triển')}>
-                <FiCheck /> Xuất bản
+             <button
+                className="cb-button cb-button--success"
+                disabled={isSaving || !isEditable}
+                onClick={() => void handlePublishCourse()}
+             >
+                <FiCheck /> Gửi duyệt
              </button>
           </div>
         </header>
@@ -1700,6 +1837,20 @@ const CourseCreationPage = () => {
          onChange={handleVideoUpload} 
          accept="video/mp4,video/webm,video/ogg"
       />
+
+      {toast && (
+        <Toast
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          isVisible={isVisible}
+          onClose={hideToast}
+          autoCloseDelay={toast.autoCloseDelay}
+          showCountdown={toast.showCountdown}
+          countdownText={toast.countdownText}
+          actionButton={toast.actionButton}
+        />
+      )}
     </div>
   );
 };

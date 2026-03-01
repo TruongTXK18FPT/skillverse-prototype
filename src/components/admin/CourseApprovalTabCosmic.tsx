@@ -25,6 +25,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import Pagination from '../shared/Pagination';
+import Toast from '../shared/Toast';
 import './CourseApprovalTabCosmic.css';
 
 // ==================== TYPES ====================
@@ -40,7 +41,7 @@ const STATUS_TAB_CONFIG: { key: StatusFilterTab; label: string; icon: React.Reac
 
 export const CourseApprovalTabCosmic: React.FC = () => {
   const { user } = useAuth();
-  const { showSuccess, showError, showWarning } = useToast();
+  const { toast, isVisible, hideToast, showSuccess, showError, showWarning, showInfo } = useToast();
   const navigate = useNavigate();
 
   // ==================== STATE ====================
@@ -59,7 +60,6 @@ export const CourseApprovalTabCosmic: React.FC = () => {
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState(1);
   const [totalElements, setTotalElements] = useState(0);
 
   // Filters
@@ -78,6 +78,29 @@ export const CourseApprovalTabCosmic: React.FC = () => {
     totalArchived: 0,
     totalAll: 0
   });
+
+  const getApiErrorMessage = useCallback((error: unknown, fallbackMessage: string) => {
+    const responseData = (error as { response?: { data?: unknown } })?.response?.data;
+    if (typeof responseData === 'string' && responseData.trim()) {
+      return responseData;
+    }
+
+    if (responseData && typeof responseData === 'object') {
+      const responseObject = responseData as { message?: string; error?: string };
+      if (responseObject.message?.trim()) {
+        return responseObject.message;
+      }
+      if (responseObject.error?.trim()) {
+        return responseObject.error;
+      }
+    }
+
+    if (error instanceof Error && error.message.trim()) {
+      return error.message;
+    }
+
+    return fallbackMessage;
+  }, []);
 
   // ==================== API HANDLERS (defined before effects) ====================
   const loadStats = useCallback(async () => {
@@ -106,7 +129,6 @@ export const CourseApprovalTabCosmic: React.FC = () => {
       }
 
       setCourses(response.content);
-      setTotalPages(response.totalPages);
       setTotalElements(response.totalElements);
     } catch (error) {
       console.error('Error loading courses:', error);
@@ -153,7 +175,9 @@ export const CourseApprovalTabCosmic: React.FC = () => {
   }, [showActionModal]);
 
   const handleViewDetails = (course: CourseSummaryDTO) => {
-    navigate(`/admin/courses/${course.id}/preview`);
+    navigate(`/admin/courses/${course.id}/preview`, {
+      state: { returnTo: '/admin?tab=courses' }
+    });
   };
 
   const handleAction = (type: 'approve' | 'reject' | 'suspend' | 'restore', course: CourseSummaryDTO) => {
@@ -173,34 +197,50 @@ export const CourseApprovalTabCosmic: React.FC = () => {
 
     try {
       setActionLoading(true);
+      let successMessage = '';
       switch (actionType) {
         case 'approve':
           await approveCourse(selectedCourse.id, user.id);
-          showSuccess('Thành công', 'Đã duyệt khóa học thành công');
+          successMessage = `Đã duyệt khóa học "${selectedCourse.title}".`;
           break;
         case 'reject':
           await rejectCourse(selectedCourse.id, user.id, actionReason);
-          showSuccess('Thành công', 'Đã từ chối khóa học');
+          successMessage = `Đã từ chối khóa học "${selectedCourse.title}".`;
           break;
         case 'suspend':
           await suspendCourse(selectedCourse.id, user.id, actionReason);
-          showSuccess('Thành công', 'Đã tạm khóa khóa học');
+          successMessage = `Đã tạm khóa khóa học "${selectedCourse.title}".`;
           break;
         case 'restore':
           await restoreCourse(selectedCourse.id, user.id);
-          showSuccess('Thành công', 'Đã khôi phục khóa học');
+          successMessage = `Đã khôi phục khóa học "${selectedCourse.title}".`;
           break;
       }
       setShowActionModal(false);
-      loadCourses();
-      loadStats();
+      await Promise.all([loadCourses(), loadStats()]);
+      showSuccess('Cập nhật khóa học', successMessage);
     } catch (error) {
       console.error('Error processing action:', error);
-      showError('Lỗi', 'Có lỗi xảy ra khi xử lý yêu cầu');
+      showError(
+        'Không thể cập nhật khóa học',
+        getApiErrorMessage(error, 'Có lỗi xảy ra khi xử lý yêu cầu.')
+      );
     } finally {
       setActionLoading(false);
     }
   };
+
+  const handleRefresh = useCallback(async () => {
+    try {
+      await Promise.all([loadCourses(), loadStats()]);
+      showInfo('Đã làm mới', 'Danh sách khóa học và thống kê đã được cập nhật.');
+    } catch (error) {
+      showError(
+        'Không thể làm mới dữ liệu',
+        getApiErrorMessage(error, 'Vui lòng thử lại sau.')
+      );
+    }
+  }, [getApiErrorMessage, loadCourses, loadStats, showError, showInfo]);
 
   // ==================== HELPERS ====================
   const formatDate = (dateString: string): string => {
@@ -345,7 +385,7 @@ export const CourseApprovalTabCosmic: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <button className="cosmic-filter-btn" onClick={() => { loadCourses(); loadStats(); }}>
+        <button className="cosmic-filter-btn" onClick={() => void handleRefresh()}>
           <RefreshCw size={18} /> Làm mới
         </button>
       </div>
@@ -505,6 +545,20 @@ export const CourseApprovalTabCosmic: React.FC = () => {
           </div>
         </div>
       , document.body)}
+
+      {toast && (
+        <Toast
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          isVisible={isVisible}
+          onClose={hideToast}
+          autoCloseDelay={toast.autoCloseDelay}
+          showCountdown={toast.showCountdown}
+          countdownText={toast.countdownText}
+          actionButton={toast.actionButton}
+        />
+      )}
 
     </div>
   );

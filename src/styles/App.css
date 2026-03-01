@@ -3,6 +3,10 @@
   padding-top: 70px; /* Same as header height */
 }
 
+.app-container--no-header-offset {
+  padding-top: 0;
+}
+
 /* Theme Variables */
 :root {
   --bg-primary: #ffffff;

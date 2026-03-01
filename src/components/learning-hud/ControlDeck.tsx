@@ -9,6 +9,8 @@ interface ControlDeckProps {
   canNavigatePrev: boolean;
   canNavigateNext: boolean;
   canComplete: boolean;
+  completeLabel?: string;
+  completeState?: 'ready' | 'completed' | 'blocked';
 }
 
 const ControlDeck: React.FC<ControlDeckProps> = ({
@@ -17,7 +19,9 @@ const ControlDeck: React.FC<ControlDeckProps> = ({
   onComplete,
   canNavigatePrev,
   canNavigateNext,
-  canComplete
+  canComplete,
+  completeLabel = 'Đánh dấu hoàn thành',
+  completeState = 'ready'
 }) => {
   return (
     <footer className="learning-hud-control-deck">
@@ -31,12 +35,12 @@ const ControlDeck: React.FC<ControlDeckProps> = ({
       </button>
 
       <button
-        className="learning-hud-complete-btn"
+        className={`learning-hud-complete-btn ${completeState !== 'ready' ? `is-${completeState}` : ''}`}
         onClick={onComplete}
         disabled={!canComplete}
       >
         <CheckCircle size={20} />
-        <span>Đánh dấu hoàn thành</span>
+        <span>{completeLabel}</span>
       </button>
 
       <button

@@ -30,7 +30,9 @@ interface LessonApiResponse {
 interface QuizApiResponse {
   id: number;
   title: string;
+  description?: string;
   passScore: number;
+  orderIndex?: number;
   questionCount?: number;
 }
 
@@ -42,6 +44,7 @@ interface AssignmentApiResponse {
   submissionType?: string;
   maxScore?: number;
   orderIndex?: number;
+  dueAt?: string;
 }
 
 // ==================== Constants ====================
@@ -97,8 +100,9 @@ export const listModulesWithContent = async (courseId: number): Promise<ModuleDe
     quizzes: (m.quizzes || []).map((q: QuizApiResponse) => ({
       id: q.id,
       title: q.title,
-      description: '',
+      description: q.description ?? '',
       passScore: q.passScore,
+      orderIndex: q.orderIndex ?? 0,
       questionCount: q.questionCount ?? 0
     })) as QuizSummaryDTO[],
     assignments: (m.assignments || []).map((a: AssignmentApiResponse) => ({
@@ -106,7 +110,9 @@ export const listModulesWithContent = async (courseId: number): Promise<ModuleDe
       title: a.title,
       description: a.description ?? '',
       submissionType: (a.submissionType ?? 'TEXT') as AssignmentSummaryDTO['submissionType'],
-      maxScore: a.maxScore ?? 0
+      maxScore: a.maxScore ?? 0,
+      orderIndex: a.orderIndex ?? 0,
+      dueAt: a.dueAt
     })) as AssignmentSummaryDTO[]
   }));
 };

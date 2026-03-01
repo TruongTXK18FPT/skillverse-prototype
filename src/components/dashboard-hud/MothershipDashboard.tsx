@@ -10,6 +10,10 @@ import AnalystTrack from "./AnalystTrack";
 import SystemLimits from "./SystemLimits";
 import { LearningReportModal, LearningReportHistory } from "../learning-report";
 import { RoadmapSessionSummary } from "../../types/Roadmap";
+import {
+  buildCourseLearningDestination,
+  buildCourseLearningOrigin,
+} from "../../utils/courseLearningNavigation";
 import "./MothershipDashboard.css";
 import "./hud-styles.module.css";
 
@@ -162,8 +166,16 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   };
 
   const handleCourseClick = (courseId: number) => {
-    // Navigate to course learning
-    navigate("/course-learning", { state: { courseId } });
+    const courseLearningState = {
+      courseId,
+      origin: buildCourseLearningOrigin("/dashboard", {
+        label: "bảng điều khiển",
+      }),
+    };
+
+    navigate(buildCourseLearningDestination(courseLearningState), {
+      state: courseLearningState,
+    });
   };
 
   return (

@@ -9,6 +9,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Star,
+  PenTool,
 } from "lucide-react";
 import "./MentorSidebar.css";
 
@@ -61,6 +62,12 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({
           icon: CheckSquare,
           badge: pendingGradingCount > 0 ? pendingGradingCount : undefined,
         },
+      ],
+    },
+    {
+      label: "SETTINGS",
+      items: [
+        { id: "certificate-settings", label: "Cài đặt chứng chỉ", icon: PenTool },
       ],
     },
   ];

@@ -7,6 +7,7 @@ import {
   AssignmentSubmissionDetailDTO,
   AssignmentSubmissionCreateDTO,
   GradeAssignmentDTO,
+  MentorSubmissionItemDTO,
   PendingSubmissionItemDTO
 } from '../data/assignmentDTOs';
 
@@ -191,6 +192,17 @@ export const countPendingSubmissions = async (
 export const getAllPendingForMentor = async (): Promise<PendingSubmissionItemDTO[]> => {
   const response = await axiosInstance.get<PendingSubmissionItemDTO[]>(
     `/assignments/mentor/pending-all`
+  );
+  return response.data;
+};
+
+/**
+ * Get all newest submissions across assignments for the authenticated mentor.
+ * Used by mentor grading dashboards that need pending and graded items together.
+ */
+export const getAllMentorSubmissions = async (): Promise<MentorSubmissionItemDTO[]> => {
+  const response = await axiosInstance.get<MentorSubmissionItemDTO[]>(
+    `/assignments/mentor/submissions`
   );
   return response.data;
 };

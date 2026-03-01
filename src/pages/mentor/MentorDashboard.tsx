@@ -18,6 +18,7 @@ import { Menu } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { listCoursesByAuthor } from '../../services/courseService';
+import { getAllPendingForMentor } from '../../services/assignmentService';
 import { CourseSummaryDTO } from '../../data/courseDTOs';
 
 // Sidebar
@@ -32,6 +33,7 @@ import SkillPointsTab from '../../components/mentor/SkillPointsTab';
 import EarningsTab from '../../components/mentor/EarningsTab';
 import ReviewsTab from '../../components/mentor/ReviewsTab';
 import MentorGradingDashboard from '../../components/mentor/MentorGradingDashboard';
+import MentorCertificateSettingsTab from '../../components/mentor/MentorCertificateSettingsTab';
 
 // Styles
 import '../../styles/MentorPage-HUD.css';
@@ -67,6 +69,7 @@ const MentorDashboard: React.FC = () => {
   useEffect(() => {
     if (user?.id) {
       loadCourses();
+      loadPendingGradingCount();
     }
   }, [user?.id]);
 
@@ -81,6 +84,17 @@ const MentorDashboard: React.FC = () => {
       console.error('Failed to load courses:', err);
     } finally {
       setCoursesLoading(false);
+    }
+  }, [user?.id]);
+
+  const loadPendingGradingCount = useCallback(async () => {
+    if (!user?.id) return;
+    try {
+      const pendingItems = await getAllPendingForMentor();
+      setPendingGradingCount(pendingItems.length);
+    } catch (err) {
+      console.error('Failed to load pending grading count:', err);
+      setPendingGradingCount(0);
     }
   }, [user?.id]);
 
@@ -138,7 +152,10 @@ const MentorDashboard: React.FC = () => {
         return <ReviewsTab />;
 
       case 'grading':
-        return <MentorGradingDashboard courses={courses} />;
+        return <MentorGradingDashboard courses={courses} onPendingCountChange={setPendingGradingCount} />;
+
+      case 'certificate-settings':
+        return <MentorCertificateSettingsTab />;
 
       default:
         return <MentorOverviewHUD onNavigate={handleNavigate} courseCount={courses.length} />;

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import UserManagementTabCosmic from '../../components/admin/UserManagementTabCosmic';
 import AccountVerificationTabCosmic from '../../components/admin/AccountVerificationTabCosmic';
 import { CourseApprovalTabCosmic } from '../../components/admin/CourseApprovalTabCosmic';
@@ -37,7 +38,10 @@ interface AdminStats {
 }
 
 const AdminPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('overview');
+  const [searchParams] = useSearchParams();
+  const requestedTab = searchParams.get('tab');
+  const initialTab = useMemo(() => requestedTab?.trim() || 'overview', [requestedTab]);
+  const [activeTab, setActiveTab] = useState<string>(initialTab);
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
@@ -62,6 +66,10 @@ const AdminPage: React.FC = () => {
       console.error('Error parsing user roles', e);
     }
   }, []);
+
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
 
   // Fetch real stats on mount
   useEffect(() => {

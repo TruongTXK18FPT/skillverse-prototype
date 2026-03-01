@@ -13,6 +13,47 @@
   line-height: 1.5;
 }
 
+.lhud-certificate-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 1.5rem 0;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  border-left: 3px solid var(--lhud-green);
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.lhud-certificate-banner strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #d1fae5;
+}
+
+.lhud-certificate-banner p {
+  margin: 0;
+  color: var(--lhud-text-secondary);
+  line-height: 1.5;
+}
+
+.lhud-certificate-banner__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.lhud-certificate-banner.is-revoked {
+  border-color: rgba(239, 68, 68, 0.32);
+  border-left-color: var(--lhud-red);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.lhud-certificate-banner.is-revoked strong {
+  color: #fecaca;
+}
+
 .lhud-text-secondary {
   color: var(--lhud-text-secondary);
 }
@@ -219,6 +260,10 @@
   text-align: center;
 }
 
+.lhud-quiz-review-btn {
+  margin-bottom: 12px;
+}
+
 .lhud-quiz-action-btn {
   padding: 16px 48px;
   font-size: 1.1rem;
@@ -328,6 +373,15 @@
 }
 
 @media (max-width: 768px) {
+  .lhud-certificate-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lhud-certificate-banner__actions {
+    width: 100%;
+  }
+
   .lhud-quiz-card {
     padding: 24px;
   }

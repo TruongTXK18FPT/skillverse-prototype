@@ -34,6 +34,7 @@ export interface QuizQuestionErrors {
 
 export interface QuizLessonErrors {
   lesson?: string;
+  passScore?: string;
   questions?: Record<string, QuizQuestionErrors>;
 }
 
@@ -41,6 +42,9 @@ export interface QuizValidationResult {
   errorsByLesson: Record<string, QuizLessonErrors>;
   firstMessage: string | null;
 }
+
+const normalizeOptionText = (value: string) =>
+  value.trim().toLowerCase().replace(/\s+/g, ' ');
 
 export const validateAssignmentScore = (lesson: LessonDraft): boolean => {
   if (lesson.type !== 'assignment' || !lesson.assignmentCriteria?.length) return true;
@@ -176,10 +180,17 @@ export const validateQuizzesBeforeSave = (modulesToCheck: ModuleDraft[]): QuizVa
       const lessonLabel = lesson.title?.trim() || `Bài học ${lIndex + 1}`;
       const questions = lesson.questions || [];
       const lessonErrors: QuizLessonErrors = {};
+      const passScore = Number(lesson.passScore ?? 80);
 
       if (questions.length === 0) {
         const msg = `Quiz "${lessonLabel}" (Module ${mIndex + 1}) chưa có câu hỏi.`;
         lessonErrors.lesson = 'Quiz cần ít nhất 1 câu hỏi.';
+        setFirst(msg);
+      }
+
+      if (!Number.isFinite(passScore) || passScore < 0 || passScore > 100) {
+        const msg = `Quiz "${lessonLabel}" (Module ${mIndex + 1}) có điểm đạt không hợp lệ.`;
+        lessonErrors.passScore = 'Điểm đạt phải trong khoảng 0 đến 100.';
         setFirst(msg);
       }
 
@@ -205,12 +216,24 @@ export const validateQuizzesBeforeSave = (modulesToCheck: ModuleDraft[]): QuizVa
         const optionItems: Record<number, QuizOptionErrors> = {};
         let hasCorrect = false;
         let filledCount = 0;
+        const normalizedOptionIndexMap = new Map<string, number>();
 
         for (let oIndex = 0; oIndex < options.length; oIndex++) {
           const opt = options[oIndex];
           const text = (opt.text || '').trim();
           if (text) {
             filledCount += 1;
+            const normalized = normalizeOptionText(text);
+            const duplicatedIndex = normalizedOptionIndexMap.get(normalized);
+            if (duplicatedIndex !== undefined) {
+              optionItems[oIndex] = { text: 'Đáp án này đang bị trùng nội dung với một đáp án khác.' };
+              optionItems[duplicatedIndex] = optionItems[duplicatedIndex] || {
+                text: 'Đáp án này đang bị trùng nội dung với một đáp án khác.',
+              };
+              setFirst(`${questionLabel} có đáp án bị trùng nội dung.`);
+            } else {
+              normalizedOptionIndexMap.set(normalized, oIndex);
+            }
           } else {
             optionItems[oIndex] = { text: 'Nội dung đáp án là bắt buộc.' };
             setFirst(`${questionLabel} còn đáp án chưa có nội dung.`);
@@ -229,6 +252,29 @@ export const validateQuizzesBeforeSave = (modulesToCheck: ModuleDraft[]): QuizVa
         if (!hasCorrect) {
           qErrors.options = qErrors.options || 'Cần chọn ít nhất 1 đáp án đúng.';
           setFirst(`${questionLabel} chưa có đáp án đúng.`);
+        }
+
+        const correctCount = options.filter((opt) => opt.correct).length;
+        if (question.type === QuestionType.TRUE_FALSE) {
+          if (options.length !== 2 || filledCount !== 2) {
+            qErrors.options = qErrors.options || 'Câu Đúng/Sai phải có đúng 2 lựa chọn có nội dung.';
+            setFirst(`${questionLabel} phải có đúng 2 lựa chọn Đúng/Sai.`);
+          }
+          if (correctCount !== 1) {
+            qErrors.options = qErrors.options || 'Câu Đúng/Sai phải có đúng 1 đáp án đúng.';
+            setFirst(`${questionLabel} phải có đúng 1 đáp án đúng.`);
+          }
+        }
+
+        if (question.type === QuestionType.SHORT_ANSWER) {
+          if (filledCount !== 1) {
+            qErrors.options = qErrors.options || 'Câu điền từ chỉ được có đúng 1 đáp án mẫu.';
+            setFirst(`${questionLabel} chỉ được có đúng 1 đáp án mẫu.`);
+          }
+          if (correctCount !== 1) {
+            qErrors.options = qErrors.options || 'Câu điền từ phải có đúng 1 đáp án đúng.';
+            setFirst(`${questionLabel} phải có đúng 1 đáp án đúng.`);
+          }
         }
 
         if (Object.keys(optionItems).length > 0) {

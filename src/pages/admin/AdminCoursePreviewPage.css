@@ -340,28 +340,45 @@
   margin-top: 0.75rem;
 }
 
-/* ==================== Content Groups (lessons, assignments, quizzes) ==================== */
-.acp-content-group {
-  margin-bottom: 1.5rem;
-  padding-left: 1.5rem;
+/* ==================== Ordered Curriculum Preview ==================== */
+.acp-module-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
-.acp-group-title {
-  font-size: 0.95rem;
+.acp-summary-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
   font-weight: 600;
-  margin-bottom: 0.75rem;
+  border: 1px solid transparent;
 }
 
-.acp-group-lesson {
+.acp-summary-pill-lesson {
   color: #06b6d4;
+  background: rgba(6, 182, 212, 0.12);
+  border-color: rgba(6, 182, 212, 0.2);
 }
 
-.acp-group-assignment {
+.acp-summary-pill-assignment {
   color: #22c55e;
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.2);
 }
 
-.acp-group-quiz {
+.acp-summary-pill-quiz {
   color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.2);
+}
+
+.acp-content-sequence {
+  padding-left: 1.5rem;
 }
 
 .acp-content-item {
@@ -377,10 +394,35 @@
   border-color: rgba(99, 102, 241, 0.3);
 }
 
+.acp-content-item-lesson {
+  border-left: 3px solid rgba(6, 182, 212, 0.45);
+}
+
+.acp-content-item-assignment {
+  border-left: 3px solid rgba(34, 197, 94, 0.45);
+}
+
+.acp-content-item-quiz {
+  border-left: 3px solid rgba(251, 191, 36, 0.45);
+}
+
 .acp-content-item-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.acp-content-item-leading {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.acp-content-order {
+  min-width: 1.25rem;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  font-weight: 600;
 }
 
 .acp-content-item-name {
@@ -404,10 +446,25 @@
 .acp-type-badge {
   font-size: 0.75rem;
   padding: 0.2rem 0.5rem;
-  background: rgba(6, 182, 212, 0.15);
-  color: #06b6d4;
   border-radius: 4px;
   font-weight: 500;
+}
+
+.acp-type-badge-reading,
+.acp-type-badge-video,
+.acp-type-badge-lesson {
+  background: rgba(6, 182, 212, 0.15);
+  color: #06b6d4;
+}
+
+.acp-type-badge-assignment {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.acp-type-badge-quiz {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
 }
 
 .acp-duration {
@@ -488,6 +545,82 @@
 .acp-reading-content::-webkit-scrollbar-thumb {
   background: rgba(99, 102, 241, 0.3);
   border-radius: 3px;
+}
+
+.acp-reading-resource,
+.acp-reading-attachments {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  background: rgba(2, 6, 23, 0.42);
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  border-radius: 10px;
+}
+
+.acp-reading-resource-label,
+.acp-reading-attachments-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #67e8f9;
+  margin-bottom: 0.75rem;
+}
+
+.acp-reading-resource-link,
+.acp-reading-attachment-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #93c5fd;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.acp-reading-resource-link:hover,
+.acp-reading-attachment-link:hover {
+  color: #bfdbfe;
+}
+
+.acp-reading-resource-invalid {
+  color: #fca5a5;
+  font-size: 0.82rem;
+}
+
+.acp-reading-attachments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.acp-reading-attachment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 0.9rem;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.acp-reading-attachment-info {
+  min-width: 0;
+}
+
+.acp-reading-attachment-name {
+  display: block;
+  color: #e2e8f0;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.acp-reading-attachment-meta {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: #94a3b8;
 }
 
 .acp-empty-content {

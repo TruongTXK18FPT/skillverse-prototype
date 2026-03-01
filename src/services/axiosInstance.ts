@@ -169,6 +169,7 @@ const PUBLIC_ENDPOINTS = [
   "/v1/meowl/health", // Meowl health check
   "/premium/plans", // Public premium plans listing
   "/jobs/public", // Public jobs listing
+  "/certificates/verify", // Public certificate verification
   "/courses", // Public course listing and details
   "/gamification/leaderboard", // Public gamification leaderboard
   "/gamification/badges/definitions", // Public badge definitions

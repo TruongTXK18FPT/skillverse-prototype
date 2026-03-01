@@ -9,6 +9,7 @@ export interface MentorProfile {
   specialization?: string;
   experience?: number;
   avatar?: string;
+  signatureUrl?: string;
   socialLinks?: {
     linkedin?: string;
     github?: string;
@@ -33,6 +34,7 @@ export interface MentorProfileUpdateDTO {
   experience?: number;
   hourlyRate?: number;
   avatar?: string;
+  signatureUrl?: string;
   socialLinks?: {
     linkedin?: string;
     github?: string;
@@ -195,6 +197,71 @@ export const uploadMyMentorAvatar = async (
     return response.data;
   } catch (error) {
     console.error("Error uploading my mentor avatar:", error);
+    throw error;
+  }
+};
+
+/**
+ * Upload current logged-in mentor signature
+ * POST /api/mentors/signature
+ */
+export const uploadMyMentorSignature = async (
+  file: File,
+): Promise<{ signatureUrl: string }> => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await axiosInstance.post<{ signatureUrl: string }>(
+      "/api/mentors/signature",
+      formData,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading my mentor signature:", error);
+    throw error;
+  }
+};
+
+/**
+ * Upload mentor signature by ID (Admin)
+ * POST /api/mentors/{mentorId}/signature
+ */
+export const uploadMentorSignature = async (
+  mentorId: number,
+  file: File,
+): Promise<{ signatureUrl: string }> => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await axiosInstance.post<{ signatureUrl: string }>(
+      `/api/mentors/${mentorId}/signature`,
+      formData,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading mentor signature:", error);
+    throw error;
+  }
+};
+
+export const removeMyMentorSignature = async (): Promise<void> => {
+  try {
+    await axiosInstance.delete("/api/mentors/signature");
+  } catch (error) {
+    console.error("Error removing my mentor signature:", error);
+    throw error;
+  }
+};
+
+export const removeMentorSignature = async (
+  mentorId: number,
+): Promise<void> => {
+  try {
+    await axiosInstance.delete(`/api/mentors/${mentorId}/signature`);
+  } catch (error) {
+    console.error("Error removing mentor signature:", error);
     throw error;
   }
 };

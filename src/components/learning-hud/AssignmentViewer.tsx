@@ -26,6 +26,12 @@ import {
 } from '../../services/assignmentService';
 import { uploadMedia } from '../../services/mediaService';
 import { useAuth } from '../../context/AuthContext';
+import {
+  getSubmissionTimingInfo,
+  getSubmissionWorkflowLabel,
+  hasAssignmentDueDate,
+  isAssignmentPastDue,
+} from '../../utils/assignmentPresentation';
 import './learning-hud.css';
 
 interface AssignmentViewerProps {
@@ -41,6 +47,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [selectedHistorySubmissionId, setSelectedHistorySubmissionId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Form state
@@ -58,6 +65,10 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
       const submissionsData = readOnly ? [] : await getMySubmissions(assignmentId);
       setAssignment(assignmentData);
       setSubmissions(submissionsData);
+      setSelectedHistorySubmissionId((current) => {
+        if (!current) return null;
+        return submissionsData.some((submission) => submission.id === current) ? current : null;
+      });
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load assignment';
       setError(errorMessage);
@@ -136,22 +147,23 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
       return (
         <span className={`learning-hud-submission-badge ${isPassed ? 'passed' : 'failed'}`}>
           <CheckCircle size={14} />
-          {submission.score}/{submission.maxScore} {isPassed ? 'PASSED' : 'Needs Improvement'}
+          {submission.score}/{submission.maxScore} {isPassed ? 'Đạt' : 'Cần cải thiện'}
         </span>
       );
     }
-    if (submission.isLate) {
+    const timingInfo = getSubmissionTimingInfo(assignment?.dueAt, submission.isLate);
+    if (timingInfo?.tone === 'late') {
       return (
         <span className="learning-hud-submission-badge late">
           <AlertCircle size={14} />
-          Late - Pending Review
+          {timingInfo.text}
         </span>
       );
     }
     return (
       <span className="learning-hud-submission-badge pending">
         <Clock size={14} />
-        Pending Review
+        {getSubmissionWorkflowLabel(submission.status)}
       </span>
     );
   };
@@ -166,12 +178,110 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
     });
   };
 
-  const isDueDatePassed = assignment?.dueAt
-    ? new Date(assignment.dueAt) < new Date()
-    : false;
+  const hasDueDate = hasAssignmentDueDate(assignment?.dueAt);
+  const isDueDatePassed = isAssignmentPastDue(assignment?.dueAt);
 
   const newestSubmission = submissions.find(s => s.isNewest);
   const previousSubmissions = submissions.filter(s => !s.isNewest);
+  const selectedHistorySubmission = previousSubmissions.find((submission) => submission.id === selectedHistorySubmissionId) ?? null;
+  const hasMeaningfulCriteriaThreshold = (passingPoints?: number | null) =>
+    passingPoints != null && Number(passingPoints) > 0;
+
+  const renderSubmissionDetails = (submission: AssignmentSubmissionDetailDTO, heading: string) => (
+    <div className="learning-hud-current-submission">
+      <div className="learning-hud-submission-header">
+        <h3>{heading}</h3>
+        {getStatusBadge(submission)}
+      </div>
+      <div className="learning-hud-submission-content">
+        {submission.submissionText && (
+          <div className="learning-hud-submission-text">
+            {submission.submissionText}
+          </div>
+        )}
+        {submission.linkUrl && (
+          <a
+            href={submission.linkUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="learning-hud-submission-link"
+          >
+            <LinkIcon size={16} />
+            {submission.linkUrl}
+          </a>
+        )}
+        {submission.fileMediaUrl && (
+          <a
+            href={submission.fileMediaUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="learning-hud-submission-file"
+          >
+            <Upload size={16} />
+            View Uploaded File
+          </a>
+        )}
+        <div className="learning-hud-submission-meta">
+          <span>Nộp lúc: {formatDate(submission.submittedAt)}</span>
+          {(() => {
+            const timingInfo = getSubmissionTimingInfo(assignment?.dueAt, submission.isLate);
+            if (!timingInfo) {
+              return null;
+            }
+            return (
+              <span className={`learning-hud-timing-badge ${timingInfo.tone}`}>
+                {timingInfo.text}
+              </span>
+            );
+          })()}
+          {submission.gradedAt && (
+            <span>Chấm lúc: {formatDate(submission.gradedAt)}</span>
+          )}
+        </div>
+      </div>
+      {submission.feedback && (
+        <div className="learning-hud-submission-feedback">
+          <h4>Nhận xét của mentor:</h4>
+          <p>{submission.feedback}</p>
+          {submission.gradedByName && (
+            <span className="learning-hud-grader">
+              - {submission.gradedByName}
+            </span>
+          )}
+        </div>
+      )}
+      {submission.criteriaScores && submission.criteriaScores.length > 0 && submission.status === SubmissionStatus.GRADED && (
+        <div className="learning-hud-criteria-breakdown">
+          <h4>Chi Tiết Tiêu Chí</h4>
+          {submission.criteriaScores.map((cs) => {
+            const hasThreshold = hasMeaningfulCriteriaThreshold(cs.passingPoints);
+            const criteriaState = hasThreshold ? (cs.passed ? 'passed' : 'failed') : '';
+
+            return (
+            <div key={`${submission.id}-${cs.criteriaId}`} className={`learning-hud-criteria-row ${criteriaState}`}>
+              <div className="learning-hud-criteria-info">
+                <span className="learning-hud-criteria-name">{cs.criteriaName}</span>
+                {hasThreshold && (
+                  <span className={`learning-hud-criteria-badge ${cs.passed ? 'passed' : 'failed'}`}>
+                    {cs.passed ? '✓ Đạt' : '✗ Chưa đạt'}
+                  </span>
+                )}
+              </div>
+              <div className="learning-hud-criteria-score">
+                {cs.score}/{cs.maxPoints}
+                {hasThreshold && (
+                  <span className="learning-hud-criteria-threshold"> (cần ≥{cs.passingPoints})</span>
+                )}
+              </div>
+              {cs.feedback && (
+                <div className="learning-hud-criteria-feedback">{cs.feedback}</div>
+              )}
+            </div>
+          )})}
+        </div>
+      )}
+    </div>
+  );
 
   if (loading) {
     return (
@@ -215,13 +325,13 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
             {assignment.submissionType}
           </span>
           <span className="learning-hud-assignment-score">
-            Max Score: {assignment.maxScore}
+            Điểm tối đa: {assignment.maxScore}
           </span>
-          {assignment.dueAt && (
+          {hasDueDate && assignment.dueAt && (
             <span className={`learning-hud-assignment-due ${isDueDatePassed ? 'overdue' : ''}`}>
               <Clock size={16} />
-              Due: {formatDate(assignment.dueAt)}
-              {isDueDatePassed && ' (Overdue)'}
+              Hạn nộp: {formatDate(assignment.dueAt)}
+              {isDueDatePassed && ' (Đã quá hạn)'}
             </span>
           )}
         </div>
@@ -229,7 +339,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
 
       {/* Description */}
       <div className="learning-hud-assignment-description">
-        <h3>Instructions</h3>
+        <h3>Yêu cầu bài tập</h3>
         <div dangerouslySetInnerHTML={{ __html: assignment.description }} />
       </div>
 
@@ -268,80 +378,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
 
       {/* Current Submission Status */}
       {!readOnly && newestSubmission && (
-        <div className="learning-hud-current-submission">
-          <div className="learning-hud-submission-header">
-            <h3>Your Submission (Attempt #{newestSubmission.attemptNumber})</h3>
-            {getStatusBadge(newestSubmission)}
-          </div>
-          <div className="learning-hud-submission-content">
-            {newestSubmission.submissionText && (
-              <div className="learning-hud-submission-text">
-                {newestSubmission.submissionText}
-              </div>
-            )}
-            {newestSubmission.linkUrl && (
-              <a
-                href={newestSubmission.linkUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="learning-hud-submission-link"
-              >
-                <LinkIcon size={16} />
-                {newestSubmission.linkUrl}
-              </a>
-            )}
-            {newestSubmission.fileMediaUrl && (
-              <a
-                href={newestSubmission.fileMediaUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="learning-hud-submission-file"
-              >
-                <Upload size={16} />
-                View Uploaded File
-              </a>
-            )}
-            <div className="learning-hud-submission-meta">
-              Submitted: {formatDate(newestSubmission.submittedAt)}
-            </div>
-          </div>
-          {newestSubmission.feedback && (
-            <div className="learning-hud-submission-feedback">
-              <h4>Mentor Feedback:</h4>
-              <p>{newestSubmission.feedback}</p>
-              {newestSubmission.gradedByName && (
-                <span className="learning-hud-grader">
-                  - {newestSubmission.gradedByName}
-                </span>
-              )}
-            </div>
-          )}
-          {/* Criteria Score Breakdown (Coursera pattern) */}
-          {newestSubmission.criteriaScores && newestSubmission.criteriaScores.length > 0 && newestSubmission.status === SubmissionStatus.GRADED && (
-            <div className="learning-hud-criteria-breakdown">
-              <h4>Chi Tiết Tiêu Chí</h4>
-              {newestSubmission.criteriaScores.map((cs) => (
-                <div key={cs.criteriaId} className={`learning-hud-criteria-row ${cs.passed ? 'passed' : 'failed'}`}>
-                  <div className="learning-hud-criteria-info">
-                    <span className="learning-hud-criteria-name">{cs.criteriaName}</span>
-                    <span className={`learning-hud-criteria-badge ${cs.passed ? 'passed' : 'failed'}`}>
-                      {cs.passed ? '✓ Đạt' : '✗ Chưa đạt'}
-                    </span>
-                  </div>
-                  <div className="learning-hud-criteria-score">
-                    {cs.score}/{cs.maxPoints}
-                    {cs.passingPoints != null && (
-                      <span className="learning-hud-criteria-threshold"> (cần ≥{cs.passingPoints})</span>
-                    )}
-                  </div>
-                  {cs.feedback && (
-                    <div className="learning-hud-criteria-feedback">{cs.feedback}</div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        renderSubmissionDetails(newestSubmission, `Bài nộp của bạn (Lần #${newestSubmission.attemptNumber})`)
       )}
 
       {/* Submission History */}
@@ -352,22 +389,53 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
             onClick={() => setShowHistory(!showHistory)}
           >
             <History size={16} />
-            Previous Submissions ({previousSubmissions.length})
+            Lịch sử nộp bài ({previousSubmissions.length})
             {showHistory ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
           {showHistory && (
             <div className="learning-hud-history-list">
               {previousSubmissions.map(sub => (
-                <div key={sub.id} className="learning-hud-history-item">
+                <div
+                  key={sub.id}
+                  className={`learning-hud-history-item ${selectedHistorySubmissionId === sub.id ? 'active' : ''}`}
+                >
                   <div className="learning-hud-history-header">
-                    <span>Attempt #{sub.attemptNumber}</span>
+                    <span>Lần #{sub.attemptNumber}</span>
                     {getStatusBadge(sub)}
                   </div>
                   <div className="learning-hud-history-meta">
-                    Submitted: {formatDate(sub.submittedAt)}
+                    <span>Nộp lúc: {formatDate(sub.submittedAt)}</span>
+                    {(() => {
+                      const timingInfo = getSubmissionTimingInfo(assignment?.dueAt, sub.isLate);
+                      if (!timingInfo) {
+                        return null;
+                      }
+                      return (
+                        <span className={`learning-hud-timing-badge ${timingInfo.tone}`}>
+                          {timingInfo.text}
+                        </span>
+                      );
+                    })()}
+                  </div>
+                  <div className="learning-hud-history-actions">
+                    <button
+                      type="button"
+                      className="learning-hud-history-action-btn"
+                      onClick={() => setSelectedHistorySubmissionId((current) => current === sub.id ? null : sub.id)}
+                    >
+                      {selectedHistorySubmissionId === sub.id ? 'Ẩn chi tiết' : 'Xem chi tiết'}
+                    </button>
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+          {showHistory && selectedHistorySubmission && (
+            <div className="learning-hud-history-detail">
+              {renderSubmissionDetails(
+                selectedHistorySubmission,
+                `Xem lại lần nộp #${selectedHistorySubmission.attemptNumber}`
+              )}
             </div>
           )}
         </div>
@@ -409,10 +477,10 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
           <h3>
             {newestSubmission ? 'Nộp Lại Bài Tập' : 'Nộp Bài Tập'}
           </h3>
-          {isDueDatePassed && (
+          {hasDueDate && isDueDatePassed && (
             <div className="learning-hud-late-warning">
               <AlertCircle size={16} />
-              This assignment is past due. Your submission will be marked as late.
+              Bài tập đã quá hạn. Nếu nộp lúc này, hệ thống sẽ ghi nhận là nộp muộn.
             </div>
           )}
 
@@ -427,7 +495,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
             {assignment.submissionType === SubmissionType.TEXT && (
               <textarea
                 className="learning-hud-text-input"
-                placeholder="Enter your submission text..."
+                placeholder="Nhập nội dung bài nộp..."
                 value={submissionText}
                 onChange={(e) => setSubmissionText(e.target.value)}
                 rows={8}
@@ -439,7 +507,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
               <input
                 type="url"
                 className="learning-hud-link-input"
-                placeholder="https://your-work-url.com"
+                placeholder="https://duong-dan-bai-lam-cua-ban"
                 value={linkUrl}
                 onChange={(e) => setLinkUrl(e.target.value)}
                 disabled={submitting}
@@ -457,7 +525,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
                 />
                 <label htmlFor="file-upload" className="learning-hud-file-label">
                   <Upload size={24} />
-                  {selectedFile ? selectedFile.name : 'Click to select file'}
+                  {selectedFile ? selectedFile.name : 'Chọn tệp để tải lên'}
                 </label>
                 {uploadProgress > 0 && uploadProgress < 100 && (
                   <div className="learning-hud-upload-progress">
@@ -478,7 +546,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
               {submitting ? (
                 <>
                   <div className="learning-hud-spinner small" />
-                  Submitting...
+                  Đang nộp...
                 </>
               ) : (
                 <>

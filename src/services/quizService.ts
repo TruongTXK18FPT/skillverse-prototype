@@ -12,7 +12,8 @@ import {
   QuizOptionCreateDTO,
   QuizOptionUpdateDTO,
   SubmitQuizDTO,
-  QuizAttemptStatusDTO
+  QuizAttemptStatusDTO,
+  QuizAttemptReviewDTO
 } from '../data/quizDTOs';
 
 // Re-export for backward compatibility
@@ -82,6 +83,19 @@ export const getQuizById = async (
 ): Promise<QuizDetailDTO> => {
   const response = await axiosInstance.get<QuizDetailDTO>(
     `/quizzes/${quizId}`
+  );
+  return response.data;
+};
+
+/**
+ * Get learner-safe quiz details for attempt screens.
+ * This endpoint strips answer-key metadata from options.
+ */
+export const getQuizForAttemptById = async (
+  quizId: number
+): Promise<QuizDetailDTO> => {
+  const response = await axiosInstance.get<QuizDetailDTO>(
+    `/quizzes/${quizId}/attempt-view`
   );
   return response.data;
 };
@@ -226,12 +240,11 @@ export const startQuizAttempt = async (
 export const submitQuizAnswers = async (
   attemptId: number,
   submitData: SubmitQuizDTO,
-  userId: number
+  _userId: number
 ): Promise<QuizAttemptDTO> => {
   const response = await axiosInstance.post<QuizAttemptDTO>(
     `/quiz-attempts/${attemptId}/submit`,
-    submitData,
-    { params: { userId } }
+    submitData
   );
   return response.data;
 };
@@ -244,11 +257,10 @@ export const submitQuizAnswers = async (
  */
 export const getUserQuizAttempts = async (
   quizId: number,
-  userId: number
+  _userId: number
 ): Promise<QuizAttemptDTO[]> => {
   const response = await axiosInstance.get<QuizAttemptDTO[]>(
-    `/quizzes/${quizId}/attempts`,
-    { params: { userId } }
+    `/quizzes/${quizId}/attempts`
   );
   return response.data;
 };
@@ -278,12 +290,11 @@ export const getUserQuizAttemptsBatch = async (
  */
 export const submitQuiz = async (
   submitData: SubmitQuizDTO,
-  userId: number
+  _userId: number
 ): Promise<{ score: number; passed: boolean; attempt: QuizAttemptDTO }> => {
   const response = await axiosInstance.post<{ score: number; passed: boolean; attempt: QuizAttemptDTO }>(
     `/quizzes/${submitData.quizId}/submit`,
-    submitData,
-    { params: { userId } }
+    submitData
   );
   return response.data;
 };
@@ -296,11 +307,20 @@ export const submitQuiz = async (
  */
 export const getQuizAttemptStatus = async (
   quizId: number,
-  userId: number
+  _userId: number
 ): Promise<QuizAttemptStatusDTO> => {
   const response = await axiosInstance.get<QuizAttemptStatusDTO>(
-    `/quizzes/${quizId}/attempt-status`,
-    { params: { userId } }
+    `/quizzes/${quizId}/attempt-status`
+  );
+  return response.data;
+};
+
+export const getMyLatestQuizReview = async (
+  quizId: number,
+  _userId: number
+): Promise<QuizAttemptReviewDTO> => {
+  const response = await axiosInstance.get<QuizAttemptReviewDTO>(
+    `/quizzes/${quizId}/my-latest-review`
   );
   return response.data;
 };

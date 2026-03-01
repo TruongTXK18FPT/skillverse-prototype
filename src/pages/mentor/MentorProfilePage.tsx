@@ -205,7 +205,6 @@ const MentorProfilePage: React.FC = () => {
             onChange={handleInputChange}
           />
 
-
         </div>
 
         {/* Right Column: Specialization & Experience */}

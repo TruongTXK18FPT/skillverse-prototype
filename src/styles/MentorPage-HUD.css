@@ -420,6 +420,21 @@
   letter-spacing: 0.5px;
 }
 
+.mentor-hud-courses__helper {
+  margin-top: 0.75rem;
+  color: var(--mentor-hud-accent-cyan);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  max-width: 620px;
+}
+
+.mentor-hud-courses__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .mentor-hud-create-button {
   display: flex;
   align-items: center;
@@ -465,6 +480,30 @@
 
 .mentor-hud-create-button:hover::before {
   left: 100%;
+}
+
+.mentor-hud-secondary-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  background: rgba(6, 182, 212, 0.08);
+  color: var(--mentor-hud-accent-cyan);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  font-family: var(--mentor-hud-font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 0 transparent;
+}
+
+.mentor-hud-secondary-button:hover {
+  transform: translateY(-2px);
+  background: rgba(6, 182, 212, 0.14);
+  box-shadow: var(--mentor-hud-glow-cyan);
 }
 
 /* ============================================
@@ -947,6 +986,10 @@
     gap: 1rem;
   }
 
+  .mentor-hud-courses__header-actions {
+    width: 100%;
+  }
+
   .mentor-hud-courses__grid {
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -958,6 +1001,12 @@
 
   .mentor-hud-action-button {
     min-width: auto;
+  }
+
+  .mentor-hud-secondary-button,
+  .mentor-hud-create-button {
+    justify-content: center;
+    width: 100%;
   }
 }
 

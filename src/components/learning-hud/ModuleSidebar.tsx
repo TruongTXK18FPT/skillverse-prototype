@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
   PlayCircle,
@@ -41,14 +40,19 @@ interface Module {
   assignments?: Assignment[];
 }
 
+type SidebarItem =
+  | { itemType: 'lesson'; id: number; title: string; orderIndex: number; lessonType: string }
+  | { itemType: 'quiz'; id: number; title: string; orderIndex: number }
+  | { itemType: 'assignment'; id: number; title: string; orderIndex: number };
+
 interface ModuleSidebarProps {
   modules: Module[];
   expandedModules: number[];
-  activeLesson: { moduleId: number | null; lessonId: number | null };
-  lessonStatuses: { [key: string]: 'completed' | 'in-progress' };
-  progress: { completedLessons: number; totalLessons: number; percent: number };
+  activeLesson: { moduleId: number | null; lessonId: number | null; itemType?: string | null };
+  itemStatuses: { [key: string]: 'completed' | 'in-progress' };
+  progress: { completedItems: number; totalItems: number; percent: number };
   onToggleModule: (moduleId: number) => void;
-  onSelectLesson: (moduleId: number, lessonId: number) => void;
+  onSelectLesson: (moduleId: number, lessonId: number, itemType?: string) => void;
   isOpen: boolean;
 }
 
@@ -66,18 +70,56 @@ const LessonIcon = ({ type }: { type: string }) => {
   }
 };
 
+const sidebarItemPriority: Record<SidebarItem['itemType'], number> = {
+  lesson: 0,
+  assignment: 1,
+  quiz: 2,
+};
+
+const buildOrderedModuleItems = (module: Module): SidebarItem[] => {
+  const lessonItems: SidebarItem[] = (module.lessons || []).map((lesson) => ({
+    itemType: 'lesson',
+    id: lesson.id,
+    title: lesson.title,
+    orderIndex: lesson.orderIndex ?? 0,
+    lessonType: lesson.type || '',
+  }));
+
+  const quizItems: SidebarItem[] = (module.quizzes || []).map((quiz) => ({
+    itemType: 'quiz',
+    id: quiz.id,
+    title: quiz.title,
+    orderIndex: quiz.orderIndex ?? 0,
+  }));
+
+  const assignmentItems: SidebarItem[] = (module.assignments || []).map((assignment) => ({
+    itemType: 'assignment',
+    id: assignment.id,
+    title: assignment.title,
+    orderIndex: assignment.orderIndex ?? 0,
+  }));
+
+  return [...lessonItems, ...quizItems, ...assignmentItems].sort((a, b) => {
+    if (a.orderIndex !== b.orderIndex) {
+      return a.orderIndex - b.orderIndex;
+    }
+    if (sidebarItemPriority[a.itemType] !== sidebarItemPriority[b.itemType]) {
+      return sidebarItemPriority[a.itemType] - sidebarItemPriority[b.itemType];
+    }
+    return a.id - b.id;
+  });
+};
+
 const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
   modules,
   expandedModules,
   activeLesson,
-  lessonStatuses,
+  itemStatuses,
   progress,
   onToggleModule,
   onSelectLesson,
   isOpen
 }) => {
-  const navigate = useNavigate();
-
   return (
     <aside className={`learning-hud-sidebar ${isOpen ? 'open' : ''}`}>
       <div className="learning-hud-sidebar-content">
@@ -89,6 +131,7 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
         {/* Modules List */}
         {modules.map((module, idx) => {
           const isExpanded = expandedModules.includes(module.id);
+          const orderedItems = buildOrderedModuleItems(module);
 
           return (
             <div key={module.id} className="learning-hud-module">
@@ -97,7 +140,7 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
                 onClick={() => onToggleModule(module.id)}
               >
                 <span className="learning-hud-module-title">
-                  CHƯƠNG {module.orderIndex ?? idx + 1}: {module.title}
+                  CHƯƠNG {idx + 1}: {module.title}
                 </span>
                 <ChevronDown
                   className={`learning-hud-expand-icon ${isExpanded ? 'expanded' : ''}`}
@@ -107,121 +150,56 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
 
               {isExpanded && (
                 <ul className="learning-hud-lessons-list">
-                  {/* Render Lessons */}
-                  {module.lessons && module.lessons.length > 0 ? (
-                    module.lessons
-                      .slice()
-                      .sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0))
-                      .map((lesson) => {
-                        const statusKey = `${module.id}-${lesson.id}`;
-                        const status = lessonStatuses[statusKey];
-                        const isActive =
-                          activeLesson.moduleId === module.id &&
-                          activeLesson.lessonId === lesson.id;
+                  {orderedItems.map((item) => {
+                    const statusKey = `${module.id}-${item.itemType}-${item.id}`;
+                    const status = itemStatuses[statusKey];
+                    const isActive =
+                      activeLesson.moduleId === module.id &&
+                      activeLesson.lessonId === item.id &&
+                      (activeLesson.itemType === item.itemType ||
+                        (item.itemType === 'lesson' && activeLesson.itemType == null));
 
-                        return (
-                          <li key={lesson.id}>
-                            <button
-                              type="button"
-                              className={`learning-hud-lesson-item ${
-                                isActive ? 'active' : ''
-                              } ${status === 'completed' ? 'completed' : ''}`}
-                              onClick={() => onSelectLesson(module.id, lesson.id)}
-                            >
-                              <div className="learning-hud-lesson-info">
-                                <LessonIcon type={lesson.type || ''} />
-                                <div className="learning-hud-lesson-details">
-                                  <span className="learning-hud-lesson-title">
-                                    {lesson.title}
-                                  </span>
-                                </div>
-                              </div>
-                              {status === 'completed' && (
-                                <CheckCircle
-                                  className="learning-hud-status-icon completed"
-                                  size={18}
-                                />
+                    return (
+                      <li key={`${item.itemType}-${item.id}`}>
+                        <button
+                          type="button"
+                          className={`learning-hud-lesson-item ${
+                            isActive ? 'active' : ''
+                          } ${status === 'completed' ? 'completed' : ''}`}
+                          onClick={() => onSelectLesson(module.id, item.id, item.itemType)}
+                        >
+                          <div className="learning-hud-lesson-info">
+                            {item.itemType === 'lesson' ? (
+                              <LessonIcon type={item.lessonType || ''} />
+                            ) : item.itemType === 'quiz' ? (
+                              <HelpCircle className="learning-hud-lesson-icon" size={18} />
+                            ) : (
+                              <ClipboardList className="learning-hud-lesson-icon" size={18} />
+                            )}
+                            <div className="learning-hud-lesson-details">
+                              <span className="learning-hud-lesson-title">
+                                {item.itemType === 'quiz' ? `${item.title} (BÀI KIỂM TRA)` : item.title}
+                              </span>
+                              {item.itemType === 'assignment' && (
+                                <span className="learning-hud-lesson-badge assignment-badge">
+                                  BÀI TẬP
+                                </span>
                               )}
-                            </button>
-                          </li>
-                        );
-                      })
-                  ) : null}
-
-                  {/* Render Quizzes */}
-                  {module.quizzes && module.quizzes.length > 0 &&
-                    module.quizzes
-                      .slice()
-                      .sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0))
-                      .map((quiz) => {
-                        const isActive =
-                          activeLesson.moduleId === module.id &&
-                          activeLesson.lessonId === quiz.id;
-
-                        return (
-                          <li key={`quiz-${quiz.id}`}>
-                            <button
-                              type="button"
-                              className={`learning-hud-lesson-item ${
-                                isActive ? 'active' : ''
-                              }`}
-                              onClick={() => onSelectLesson(module.id, quiz.id)}
-                            >
-                              <div className="learning-hud-lesson-info">
-                                <HelpCircle className="learning-hud-lesson-icon" size={18} />
-                                <div className="learning-hud-lesson-details">
-                                  <span className="learning-hud-lesson-title">
-                                    {quiz.title} (BÀI KIỂM TRA)
-                                  </span>
-                                </div>
-                              </div>
-                            </button>
-                          </li>
-                        );
-                      })}
-
-                  {/* Render Assignments */}
-                  {module.assignments && module.assignments.length > 0 &&
-                    module.assignments
-                      .slice()
-                      .sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0))
-                      .map((assignment) => {
-                        const isActive =
-                          activeLesson.moduleId === module.id &&
-                          activeLesson.lessonId === assignment.id;
-
-                        return (
-                          <li key={`assignment-${assignment.id}`}>
-                            <button
-                              type="button"
-                              className={`learning-hud-lesson-item ${
-                                isActive ? 'active' : ''
-                              }`}
-                              onClick={() => {
-                                // Navigate to dedicated assignment page
-                                navigate(`/assignment/${assignment.id}`);
-                              }}
-                            >
-                              <div className="learning-hud-lesson-info">
-                                <ClipboardList className="learning-hud-lesson-icon" size={18} />
-                                <div className="learning-hud-lesson-details">
-                                  <span className="learning-hud-lesson-title">
-                                    {assignment.title}
-                                  </span>
-                                  <span className="learning-hud-lesson-badge assignment-badge">
-                                    BÀI TẬP
-                                  </span>
-                                </div>
-                              </div>
-                            </button>
-                          </li>
-                        );
-                      })}
+                            </div>
+                          </div>
+                          {status === 'completed' && (
+                            <CheckCircle
+                              className="learning-hud-status-icon completed"
+                              size={18}
+                            />
+                          )}
+                        </button>
+                      </li>
+                    );
+                  })}
 
                   {/* Empty State */}
-                  {(!module.lessons || module.lessons.length === 0) &&
-                    (!module.quizzes || module.quizzes.length === 0) &&
-                    (!module.assignments || module.assignments.length === 0) && (
+                  {orderedItems.length === 0 && (
                       <li>
                         <div className="learning-hud-lesson-item learning-hud-empty-state">
                           <div className="learning-hud-lesson-info">

@@ -131,6 +131,19 @@ export const completeLesson = async (
 };
 
 /**
+ * Get completed lesson IDs in a course for a user.
+ */
+export const getCompletedLessonIds = async (
+  courseId: number,
+  userId: number
+): Promise<number[]> => {
+  const response = await axiosInstance.get<number[]>(
+    `/lessons/progress/course/${courseId}/user/${userId}/completed-ids`
+  );
+  return response.data ?? [];
+};
+
+/**
  * Get module progress for a user
  */
 export const getModuleProgress = async (

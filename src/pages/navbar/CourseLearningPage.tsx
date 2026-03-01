@@ -1,21 +1,35 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import {
+  Calendar,
+  ClipboardList,
+  ExternalLink,
+  Gauge,
+  Link as LinkIcon,
+} from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { getCourse } from "../../services/courseService";
 import { listModulesWithContent } from "../../services/moduleService";
-import { getEnrollment } from "../../services/enrollmentService";
 import {
   getLessonById,
-  getNextLesson,
-  getPrevLesson,
   completeLesson,
-  getModuleProgress,
 } from "../../services/lessonService";
-import { getQuizById, getQuizAttemptStatus } from "../../services/quizService";
+import { getQuizAttemptStatus, getQuizForAttemptById, getUserQuizAttempts } from "../../services/quizService";
+import { getCourseLearningStatus } from "../../services/courseLearningService";
 import { CourseDetailDTO, CourseStatus, ModuleSummaryDTO } from "../../data/courseDTOs";
 import { LessonSummaryDTO, LessonDetailDTO } from "../../data/lessonDTOs";
-import { QuizSummaryDTO, QuizDetailDTO } from "../../data/quizDTOs";
+import { QuizSummaryDTO, QuizDetailDTO, QuizAttemptDTO } from "../../data/quizDTOs";
 import { AssignmentSummaryDTO } from "../../data/assignmentDTOs";
+import {
+  CourseLearningLocationState,
+  LearningContentType,
+  clearCourseLearningReturnContext,
+  persistCourseLearningReturnContext,
+  readStoredCourseLearningReturnContext,
+  resolveCourseLearningOrigin,
+} from "../../utils/courseLearningNavigation";
+import { hasAssignmentDueDate } from "../../utils/assignmentPresentation";
+import { buildCertificateVerificationUrl } from "../../components/certificate/certificatePresentation";
 import AttachmentManager from "../../components/course/AttachmentManager";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -65,7 +79,6 @@ import {
   ModuleSidebar,
   VideoHudWrapper,
   ControlDeck,
-  AssignmentViewer,
 } from "../../components/learning-hud";
 import "../../styles/CourseLearningQuiz.css";
 
@@ -87,6 +100,7 @@ interface QuizWithAttemptStatus extends QuizDetailDTO {
   hasAttempts: boolean;
   hasPassed: boolean;
   bestAttempt: { passed: boolean; score: number } | null;
+  latestAttempt: QuizAttemptDTO | null;
   attemptsCount: number;
   bestScore: number | null;
   totalAttempts: number;
@@ -97,16 +111,147 @@ interface QuizWithAttemptStatus extends QuizDetailDTO {
   attemptsRemaining: number;
 }
 
+interface CurriculumItem {
+  moduleId: number;
+  moduleTitle: string;
+  itemId: number;
+  itemType: LearningContentType;
+  title: string;
+  orderIndex: number;
+  assignment?: AssignmentSummaryDTO;
+}
+
+type ItemStatus = "completed" | "in-progress";
+
+const EMPTY_PROGRESS_STATE = {
+  completedItems: 0,
+  totalItems: 0,
+  percent: 0,
+  certificateId: null as number | null,
+  certificateSerial: null as string | null,
+  certificateRevoked: false,
+  certificateRevokedAt: null as string | null,
+};
+
+const buildStatusKey = (
+  moduleId: number,
+  itemId: number,
+  itemType: LearningContentType
+) => `${moduleId}-${itemType}-${itemId}`;
+
+const buildCurriculumItems = (modules: ModuleWithContent[]): CurriculumItem[] =>
+  modules
+    .slice()
+    .sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0))
+    .flatMap((module) => {
+      const items: CurriculumItem[] = [
+        ...(module.lessons ?? []).map((lesson) => ({
+          moduleId: module.id,
+          moduleTitle: module.title,
+          itemId: lesson.id,
+          itemType: "lesson" as const,
+          title: lesson.title,
+          orderIndex: lesson.orderIndex ?? 0,
+        })),
+        ...(module.quizzes ?? []).map((quiz) => ({
+          moduleId: module.id,
+          moduleTitle: module.title,
+          itemId: quiz.id,
+          itemType: "quiz" as const,
+          title: quiz.title,
+          orderIndex: quiz.orderIndex ?? 0,
+        })),
+        ...(module.assignments ?? []).map((assignment) => ({
+          moduleId: module.id,
+          moduleTitle: module.title,
+          itemId: assignment.id,
+          itemType: "assignment" as const,
+          title: assignment.title,
+          orderIndex: assignment.orderIndex ?? 0,
+          assignment,
+        })),
+      ];
+
+      return items.sort((a, b) => a.orderIndex - b.orderIndex);
+    });
+
+const formatShortDate = (dateString?: string) => {
+  if (!dateString) return "Không giới hạn";
+
+  return new Date(dateString).toLocaleString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+const summarizeHtml = (html?: string) => {
+  if (!html) return "Bài tập này đang chờ cập nhật mô tả chi tiết.";
+
+  const plainText = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  if (!plainText) return "Bài tập này đang chờ cập nhật mô tả chi tiết.";
+
+  return plainText.length > 220 ? `${plainText.slice(0, 220).trim()}...` : plainText;
+};
+
 // --- MAIN COMPONENT --- //
 const CourseLearningPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const courseId: number | undefined = location.state?.courseId;
-  const isPreviewMode = Boolean(
-    location.state?.preview ||
-    new URLSearchParams(location.search).get('preview') === '1'
+  const routerState = (location.state as CourseLearningLocationState | null) ?? null;
+  const searchParams = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search]
   );
+  const queryCourseId = useMemo(() => {
+    const rawCourseId = searchParams.get("courseId");
+    if (!rawCourseId) return undefined;
+
+    const parsedCourseId = Number(rawCourseId);
+    return Number.isFinite(parsedCourseId) && parsedCourseId > 0
+      ? parsedCourseId
+      : undefined;
+  }, [searchParams]);
+  const isPreviewMode = searchParams.get("preview") === "1" || Boolean(routerState?.preview);
+  const locationState = useMemo(() => {
+    const storedContext = readStoredCourseLearningReturnContext();
+
+    if (queryCourseId) {
+      if (routerState) {
+        return {
+          ...routerState,
+          courseId: queryCourseId,
+          preview: isPreviewMode,
+        };
+      }
+
+      if (storedContext?.courseId === queryCourseId) {
+        return {
+          ...storedContext,
+          courseId: queryCourseId,
+          preview: isPreviewMode,
+        };
+      }
+
+      return {
+        courseId: queryCourseId,
+        preview: isPreviewMode,
+      };
+    }
+
+    if (routerState?.courseId) {
+      return {
+        ...routerState,
+        preview: isPreviewMode,
+      };
+    }
+
+    return null;
+  }, [isPreviewMode, queryCourseId, routerState]);
+  const courseId: number | undefined = locationState?.courseId;
 
   const [course, setCourse] = useState<CourseDetailDTO | null>(null);
   const [loading, setLoading] = useState(true);
@@ -117,57 +262,99 @@ const CourseLearningPage = () => {
   const [activeLesson, setActiveLesson] = useState<{
     moduleId: number | null;
     lessonId: number | null;
-  }>({ moduleId: null, lessonId: null });
+    itemType: LearningContentType | null;
+  }>({ moduleId: null, lessonId: null, itemType: null });
   const [activeLessonTitle, setActiveLessonTitle] = useState<string>("");
-  const [lessonStatuses, setLessonStatuses] = useState<{
-    [key: string]: "completed" | "in-progress";
-  }>({});
+  const [itemStatuses, setItemStatuses] = useState<Record<string, ItemStatus>>({});
   const [progress, setProgress] = useState<{
-    completedLessons: number;
-    totalLessons: number;
+    completedItems: number;
+    totalItems: number;
     percent: number;
-  }>({ completedLessons: 0, totalLessons: 0, percent: 0 });
+    certificateId: number | null;
+    certificateSerial: string | null;
+    certificateRevoked: boolean;
+    certificateRevokedAt: string | null;
+  }>({ ...EMPTY_PROGRESS_STATE });
   const [activeLessonDetail, setActiveLessonDetail] = useState<LessonDetailDTO | null>(null);
   const [loadingLessonDetail, setLoadingLessonDetail] = useState(false);
-  const [activeItemType, setActiveItemType] = useState<'lesson' | 'quiz' | 'assignment' | null>(null);
   const [activeQuizDetail, setActiveQuizDetail] = useState<QuizWithAttemptStatus | null>(null);
-  const [activeAssignmentId, setActiveAssignmentId] = useState<number | null>(null);
-  
+
   // Countdown timer state cho quiz retry
   const [retryCountdown, setRetryCountdown] = useState<number>(0);
 
+  const curriculumItems = useMemo(
+    () => buildCurriculumItems(modulesWithContent),
+    [modulesWithContent]
+  );
+
+  const activeCurriculumItem = useMemo(
+    () =>
+      curriculumItems.find(
+        (item) =>
+          item.moduleId === activeLesson.moduleId &&
+          item.itemId === activeLesson.lessonId &&
+          item.itemType === activeLesson.itemType
+      ) ?? null,
+    [activeLesson.itemType, activeLesson.lessonId, activeLesson.moduleId, curriculumItems]
+  );
+
+  const activeItemType = activeCurriculumItem?.itemType ?? null;
+  const activeAssignmentId =
+    activeCurriculumItem?.itemType === "assignment"
+      ? activeCurriculumItem.itemId
+      : null;
+  const activeAssignmentSummary =
+    activeCurriculumItem?.itemType === "assignment"
+      ? activeCurriculumItem.assignment ?? null
+      : null;
+  const activeStatusKey = activeCurriculumItem
+    ? buildStatusKey(
+        activeCurriculumItem.moduleId,
+        activeCurriculumItem.itemId,
+        activeCurriculumItem.itemType
+      )
+    : null;
+  const isActiveItemCompleted = activeStatusKey
+    ? itemStatuses[activeStatusKey] === "completed"
+    : false;
+  const activeQuizRetrySeconds = activeQuizDetail?.secondsUntilRetry ?? 0;
+  const shouldTrackQuizRetryCountdown = activeQuizRetrySeconds > 0;
+
   // Effect để cập nhật countdown mỗi giây
   useEffect(() => {
-    if (activeQuizDetail && activeQuizDetail.secondsUntilRetry > 0) {
-      setRetryCountdown(activeQuizDetail.secondsUntilRetry);
-      
-      const interval = setInterval(() => {
-        setRetryCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            // Reload quiz status khi countdown hết
-            if (activeLesson.lessonId && user?.id) {
-              getQuizAttemptStatus(activeLesson.lessonId, user.id).then((status) => {
-                if (status) {
-                  setActiveQuizDetail((prevQuiz) => prevQuiz ? ({
-                    ...prevQuiz,
-                    canRetry: status.canRetry,
-                    secondsUntilRetry: status.secondsUntilRetry,
-                    attemptsCount: status.attemptsUsed,
-                    attemptsRemaining: status.maxAttempts - status.attemptsUsed
-                  }) : null);
-                }
-              });
-            }
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      
-      return () => clearInterval(interval);
+    if (!shouldTrackQuizRetryCountdown) {
+      setRetryCountdown(0);
+      return;
     }
-  }, [activeQuizDetail?.secondsUntilRetry, activeLesson.lessonId, user?.id]);
+
+    setRetryCountdown(activeQuizRetrySeconds);
+
+    const interval = setInterval(() => {
+      setRetryCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          // Reload quiz status khi countdown hết
+          if (activeLesson.lessonId && user?.id) {
+            getQuizAttemptStatus(activeLesson.lessonId, user.id).then((status) => {
+              if (status) {
+                setActiveQuizDetail((prevQuiz) => prevQuiz ? ({
+                  ...prevQuiz,
+                  canRetry: status.canRetry,
+                  secondsUntilRetry: status.secondsUntilRetry,
+                  attemptsCount: status.attemptsUsed,
+                  attemptsRemaining: status.maxAttempts - status.attemptsUsed
+                }) : null);
+              }
+            });
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [activeLesson.lessonId, activeQuizRetrySeconds, shouldTrackQuizRetryCountdown, user?.id]);
 
   // Helper function để format countdown thành HH:MM:SS
   const formatCountdown = (seconds: number): string => {
@@ -176,6 +363,64 @@ const CourseLearningPage = () => {
     const secs = seconds % 60;
     return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
+
+  const loadCourseLearningState = useCallback(async (modules: ModuleWithContent[]) => {
+    if (!courseId || isPreviewMode || !user?.id) {
+      setProgress({ ...EMPTY_PROGRESS_STATE });
+      setItemStatuses({});
+      return;
+    }
+
+    try {
+      const status = await getCourseLearningStatus(courseId);
+      const completedLessons = new Set(status.completedLessonIds ?? []);
+      const completedQuizzes = new Set(status.completedQuizIds ?? []);
+      const completedAssignments = new Set(status.completedAssignmentIds ?? []);
+
+      const completedStatuses = modules.reduce<Record<string, "completed">>((acc, module) => {
+        for (const lesson of module.lessons ?? []) {
+          if (completedLessons.has(lesson.id)) {
+            acc[buildStatusKey(module.id, lesson.id, "lesson")] = "completed";
+          }
+        }
+        for (const quiz of module.quizzes ?? []) {
+          if (completedQuizzes.has(quiz.id)) {
+            acc[buildStatusKey(module.id, quiz.id, "quiz")] = "completed";
+          }
+        }
+        for (const assignment of module.assignments ?? []) {
+          if (completedAssignments.has(assignment.id)) {
+            acc[buildStatusKey(module.id, assignment.id, "assignment")] = "completed";
+          }
+        }
+        return acc;
+      }, {});
+
+      setProgress({
+        completedItems: status.completedItemCount ?? 0,
+        totalItems: status.totalItemCount ?? 0,
+        percent: status.percent ?? 0,
+        certificateId: status.certificateId ?? null,
+        certificateSerial: status.certificateSerial ?? null,
+        certificateRevoked: Boolean(status.certificateRevoked),
+        certificateRevokedAt: status.certificateRevokedAt ?? null,
+      });
+      setItemStatuses((prev) => {
+        const inProgressEntries = Object.entries(prev).filter(([, statusValue]) => statusValue === "in-progress");
+        return {
+          ...(Object.fromEntries(inProgressEntries) as Record<string, "in-progress">),
+          ...completedStatuses,
+        };
+      });
+    } catch {
+      setProgress({ ...EMPTY_PROGRESS_STATE });
+      setItemStatuses((prev) =>
+        Object.fromEntries(
+          Object.entries(prev).filter(([, statusValue]) => statusValue === "in-progress")
+        ) as Record<string, "in-progress">
+      );
+    }
+  }, [courseId, isPreviewMode, user?.id]);
 
   useEffect(() => {
     if (!courseId) {
@@ -188,94 +433,101 @@ const CourseLearningPage = () => {
       .catch(() => {})
       .finally(() => setLoading(false));
 
-    if (!isPreviewMode) {
-      getEnrollment(courseId, 1).catch(() => {});
-    }
-
     // Load modules + lessons for sidebar content
     listModulesWithContent(courseId)
       .then((mods) => {
-        setModulesWithContent(mods as ModuleWithContent[]);
-        // Auto select first lesson to make sidebar interactive immediately
-        const firstWithLesson = mods.find(
-          (m) => (m.lessons || []).length > 0
-        );
-        if (firstWithLesson && firstWithLesson.lessons) {
-          const firstLesson = [...firstWithLesson.lessons].sort(
-            (a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0)
-          )[0];
-          setExpandedModules([firstWithLesson.id]);
+        const normalizedModules = mods as ModuleWithContent[];
+        setModulesWithContent(normalizedModules);
+        loadCourseLearningState(normalizedModules);
+        const curriculum = buildCurriculumItems(normalizedModules);
+        const resumeItem = locationState?.resumeItem;
+        const restoredItem = resumeItem
+          ? curriculum.find(
+              (item) =>
+                item.moduleId === resumeItem.moduleId &&
+                item.itemId === resumeItem.lessonId &&
+                item.itemType === resumeItem.itemType
+            ) ?? null
+          : null;
+        const initialItem = restoredItem ?? curriculum[0];
+
+        if (initialItem) {
+          setExpandedModules([initialItem.moduleId]);
           setActiveLesson({
-            moduleId: firstWithLesson.id,
-            lessonId: firstLesson.id,
+            moduleId: initialItem.moduleId,
+            lessonId: initialItem.itemId,
+            itemType: initialItem.itemType,
           });
-          setActiveLessonTitle(firstLesson.title);
         }
       })
       .catch(() => setModulesWithContent([]));
-  }, [courseId, isPreviewMode]);
+  }, [courseId, isPreviewMode, loadCourseLearningState, locationState?.resumeItem]);
 
-  // Load module progress when active module/lesson changes
   useEffect(() => {
-    if (!activeLesson.moduleId) return;
-    if (isPreviewMode) {
-      setProgress({ completedLessons: 0, totalLessons: 0, percent: 0 });
+    setActiveLessonTitle(activeCurriculumItem?.title ?? "");
+  }, [activeCurriculumItem]);
+
+  const buildReturnContext = useCallback(
+    (item: CurriculumItem | null = activeCurriculumItem): CourseLearningLocationState => ({
+      courseId,
+      preview: isPreviewMode,
+      origin: locationState?.origin,
+      resumeItem: item
+        ? {
+            moduleId: item.moduleId,
+            lessonId: item.itemId,
+            itemType: item.itemType,
+          }
+        : undefined,
+    }),
+    [activeCurriculumItem, courseId, isPreviewMode, locationState?.origin]
+  );
+
+  useEffect(() => {
+    if (!courseId) {
       return;
     }
-    const userId = user?.id || 0;
-    if (!userId) return;
-    getModuleProgress(activeLesson.moduleId, userId)
-      .then(setProgress)
-      .catch(() =>
-        setProgress({ completedLessons: 0, totalLessons: 0, percent: 0 })
-      );
-  }, [activeLesson.moduleId, user?.id, isPreviewMode]);
+    persistCourseLearningReturnContext(buildReturnContext(activeCurriculumItem));
+  }, [activeCurriculumItem, buildReturnContext, courseId]);
 
   // Load content (lesson, quiz, or assignment) when active item changes - LAZY LOADING
   useEffect(() => {
-    if (!activeLesson.lessonId) {
+    if (!activeCurriculumItem) {
       setActiveLessonDetail(null);
       setActiveQuizDetail(null);
-      setActiveAssignmentId(null);
-      setActiveItemType(null);
       return;
     }
 
-    // Determine if current item is quiz, assignment, or lesson
-    const currentModule = modulesWithContent.find(m => m.id === activeLesson.moduleId);
-    const isQuiz = currentModule?.quizzes?.some((q) => q.id === activeLesson.lessonId);
-    const isAssignment = currentModule?.assignments?.some((a) => a.id === activeLesson.lessonId);
-
     setLoadingLessonDetail(true);
 
-    if (isAssignment) {
-      // ASSIGNMENT - Just set ID, AssignmentViewer will handle loading
-      setActiveItemType('assignment');
+    if (activeCurriculumItem.itemType === "assignment") {
       setActiveLessonDetail(null);
       setActiveQuizDetail(null);
-      setActiveAssignmentId(activeLesson.lessonId);
       setLoadingLessonDetail(false);
-    } else if (isQuiz) {
+    } else if (activeCurriculumItem.itemType === "quiz") {
       // LAZY LOAD QUIZ + CHECK ATTEMPTS với API mới có countdown
-      
-      setActiveItemType('quiz');
       setActiveLessonDetail(null);
 
       Promise.all([
-        getQuizById(activeLesson.lessonId),
-        getQuizAttemptStatus(activeLesson.lessonId, user?.id || 0).catch(() => null)
+        getQuizForAttemptById(activeCurriculumItem.itemId),
+        getQuizAttemptStatus(activeCurriculumItem.itemId, user?.id || 0).catch(() => null),
+        user?.id
+          ? getUserQuizAttempts(activeCurriculumItem.itemId, user.id).catch(() => [])
+          : Promise.resolve([])
       ])
-        .then(([quiz, attemptStatus]) => {
+        .then(([quiz, attemptStatus, attempts]) => {
           if (attemptStatus) {
+            const latestAttempt = attempts[0] ?? attemptStatus.recentAttempts?.[0] ?? null;
             // Sử dụng dữ liệu từ API mới
             setActiveQuizDetail({
               ...quiz,
-              hasAttempts: attemptStatus.attemptsUsed > 0,
+              hasAttempts: attempts.length > 0 || attemptStatus.attemptsUsed > 0,
               hasPassed: attemptStatus.hasPassed,
               bestAttempt: attemptStatus.hasPassed ? { passed: true, score: attemptStatus.bestScore } : null,
+              latestAttempt,
               attemptsCount: attemptStatus.attemptsUsed,
               bestScore: attemptStatus.bestScore,
-              totalAttempts: attemptStatus.recentAttempts?.length || attemptStatus.attemptsUsed,
+              totalAttempts: attempts.length || attemptStatus.recentAttempts?.length || attemptStatus.attemptsUsed,
               // Thông tin countdown mới
               canRetry: attemptStatus.canRetry,
               secondsUntilRetry: attemptStatus.secondsUntilRetry,
@@ -290,6 +542,7 @@ const CourseLearningPage = () => {
               hasAttempts: false,
               hasPassed: false,
               bestAttempt: null,
+              latestAttempt: null,
               attemptsCount: 0,
               bestScore: null,
               totalAttempts: 0,
@@ -308,13 +561,10 @@ const CourseLearningPage = () => {
         .finally(() => setLoadingLessonDetail(false));
     } else {
       // LAZY LOAD LESSON
-      
-      setActiveItemType('lesson');
       setActiveQuizDetail(null);
 
-      getLessonById(activeLesson.lessonId)
+      getLessonById(activeCurriculumItem.itemId)
         .then((detail) => {
-          
           setActiveLessonDetail(detail);
         })
         .catch((err) => {
@@ -323,7 +573,7 @@ const CourseLearningPage = () => {
         })
         .finally(() => setLoadingLessonDetail(false));
     }
-  }, [activeLesson.lessonId, activeLesson.moduleId, modulesWithContent, user?.id]);
+  }, [activeCurriculumItem, user?.id]);
 
   const sortedModules = useMemo((): ModuleSummaryDTO[] => {
     const list = course?.modules ? [...course.modules] : [];
@@ -333,6 +583,18 @@ const CourseLearningPage = () => {
   }, [course]);
 
   const progressPercentage = useMemo(() => progress.percent || 0, [progress]);
+  const activeCurriculumIndex = useMemo(
+    () =>
+      activeCurriculumItem
+        ? curriculumItems.findIndex(
+            (item) =>
+              item.moduleId === activeCurriculumItem.moduleId &&
+              item.itemId === activeCurriculumItem.itemId &&
+              item.itemType === activeCurriculumItem.itemType
+          )
+        : -1,
+    [activeCurriculumItem, curriculumItems]
+  );
 
   const handleToggleModule = (moduleId: number) => {
     setExpandedModules((prev) =>
@@ -342,30 +604,69 @@ const CourseLearningPage = () => {
     );
   };
 
-  const handleSelectLesson = (moduleId: number, lessonId: number) => {
-    const statusKey = `${moduleId}-${lessonId}`;
-    if (lessonStatuses[statusKey] === "completed") {
-      setActiveLesson({ moduleId, lessonId });
-    } else {
-      setActiveLesson({ moduleId, lessonId });
-      setLessonStatuses((prev) => ({ ...prev, [statusKey]: "in-progress" }));
+  const handleExitCourseLearning = useCallback(() => {
+    const target = resolveCourseLearningOrigin(locationState, "/courses");
+    clearCourseLearningReturnContext();
+    navigate(
+      {
+        pathname: target.pathname,
+        search: target.search,
+        hash: target.hash,
+      },
+      { replace: false }
+    );
+  }, [locationState, navigate]);
+
+  const handleOpenCertificate = useCallback(() => {
+    if (!progress.certificateId) {
+      return;
     }
-    // Use modulesWithContent if available (has lessons/quizzes), fallback to sortedModules
-    const moduleSource = modulesWithContent.length ? modulesWithContent : [];
-    const foundModule = moduleSource.find((m) => m.id === moduleId);
-    const foundLesson = foundModule?.lessons?.find(
-      (l) => l.id === lessonId
+
+    navigate(`/certificate/${progress.certificateId}`);
+  }, [navigate, progress.certificateId]);
+
+  const handleCopyCertificateVerificationLink = useCallback(async () => {
+    if (!progress.certificateSerial) {
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(
+        buildCertificateVerificationUrl(progress.certificateSerial)
+      );
+    } catch {
+      // Clipboard access can fail outside secure/browser-supported contexts.
+    }
+  }, [progress.certificateSerial]);
+
+  const handleSelectLesson = (
+    moduleId: number,
+    lessonId: number,
+    itemType?: string
+  ) => {
+    const selectedItem = curriculumItems.find(
+      (item) =>
+        item.moduleId === moduleId &&
+        item.itemId === lessonId &&
+        (!itemType || item.itemType === itemType)
     );
-    const foundQuiz = foundModule?.quizzes?.find(
-      (q) => q.id === lessonId
-    );
-    if (foundLesson) setActiveLessonTitle(foundLesson.title);
-    if (foundQuiz) setActiveLessonTitle(foundQuiz.title);
+
+    setActiveLesson({
+      moduleId,
+      lessonId,
+      itemType: (selectedItem?.itemType ?? null) as LearningContentType | null,
+    });
+    if (selectedItem?.itemType === "lesson") {
+      const statusKey = buildStatusKey(moduleId, lessonId, "lesson");
+      if (itemStatuses[statusKey] !== "completed") {
+        setItemStatuses((prev) => ({ ...prev, [statusKey]: "in-progress" }));
+      }
+    }
   };
 
   const handleMarkAsComplete = async () => {
-    if (!activeLesson.moduleId || !activeLesson.lessonId) return;
-    if (isPreviewMode) return;
+    if (!activeLesson.moduleId || !activeLesson.lessonId || activeItemType !== "lesson") return;
+    if (isPreviewMode || isActiveItemCompleted) return;
     const userId = user?.id || 0;
     if (!userId) return;
     try {
@@ -374,60 +675,111 @@ const CourseLearningPage = () => {
         activeLesson.lessonId,
         userId
       );
-      const statusKey = `${activeLesson.moduleId}-${activeLesson.lessonId}`;
-      setLessonStatuses((prev) => ({ ...prev, [statusKey]: "completed" }));
-      const p = await getModuleProgress(activeLesson.moduleId, userId);
-      setProgress(p);
+      await loadCourseLearningState(modulesWithContent);
     } catch (error) {
       console.error("Error completing lesson:", error);
     }
   };
 
-  const findNextLesson = async (): Promise<{
-    moduleId: number;
-    lessonId: number;
-  } | null> => {
-    if (!activeLesson.moduleId || !activeLesson.lessonId) return null;
-    const next = await getNextLesson(
-      activeLesson.moduleId,
-      activeLesson.lessonId
-    );
-    if (next && typeof next.id === "number") {
-      return { moduleId: activeLesson.moduleId, lessonId: next.id };
-    }
-    return null;
-  };
+  const handleNextLesson = () => {
+    if (!activeCurriculumItem) return;
 
-  const findPrevLesson = async (): Promise<{
-    moduleId: number;
-    lessonId: number;
-  } | null> => {
-    if (!activeLesson.moduleId || !activeLesson.lessonId) return null;
-    const prev = await getPrevLesson(
-      activeLesson.moduleId,
-      activeLesson.lessonId
+    const activeIndex = curriculumItems.findIndex(
+      (item) =>
+        item.moduleId === activeCurriculumItem.moduleId &&
+        item.itemId === activeCurriculumItem.itemId &&
+        item.itemType === activeCurriculumItem.itemType
     );
-    if (prev && typeof prev.id === "number") {
-      return { moduleId: activeLesson.moduleId, lessonId: prev.id };
-    }
-    return null;
-  };
+    const nextItem = activeIndex >= 0 ? curriculumItems[activeIndex + 1] : null;
 
-  const handleNextLesson = async () => {
-    const nextLesson = await findNextLesson();
-    if (nextLesson) {
-      handleSelectLesson(nextLesson.moduleId, nextLesson.lessonId);
+    if (nextItem) {
+      handleSelectLesson(nextItem.moduleId, nextItem.itemId, nextItem.itemType);
     } else {
       alert("Chúc mừng! Bạn đã hoàn thành module này.");
     }
   };
 
-  const handlePrevLesson = async () => {
-    const prevLesson = await findPrevLesson();
-    if (prevLesson) {
-      handleSelectLesson(prevLesson.moduleId, prevLesson.lessonId);
+  const handlePrevLesson = () => {
+    if (!activeCurriculumItem) return;
+
+    const activeIndex = curriculumItems.findIndex(
+      (item) =>
+        item.moduleId === activeCurriculumItem.moduleId &&
+        item.itemId === activeCurriculumItem.itemId &&
+        item.itemType === activeCurriculumItem.itemType
+    );
+    const prevItem = activeIndex > 0 ? curriculumItems[activeIndex - 1] : null;
+
+    if (prevItem) {
+      handleSelectLesson(prevItem.moduleId, prevItem.itemId, prevItem.itemType);
     }
   };
+
+  const handleOpenAssignmentPage = () => {
+    if (!courseId || !activeCurriculumItem || activeCurriculumItem.itemType !== "assignment") {
+      return;
+    }
+
+    const returnContext = buildReturnContext(activeCurriculumItem);
+    persistCourseLearningReturnContext(returnContext);
+    navigate(`/assignment/${activeCurriculumItem.itemId}`, { state: returnContext });
+  };
+
+  const handleOpenQuizAttemptPage = useCallback((view: 'start' | 'result' = 'start') => {
+    if (!activeCurriculumItem || activeCurriculumItem.itemType !== "quiz") {
+      return;
+    }
+
+    const returnContext = buildReturnContext(activeCurriculumItem);
+    persistCourseLearningReturnContext(returnContext);
+    navigate(
+      {
+        pathname: `/quiz/${activeCurriculumItem.itemId}/attempt`,
+        search: view === 'result' ? '?view=result' : '',
+      },
+      { state: returnContext }
+    );
+  }, [activeCurriculumItem, buildReturnContext, navigate]);
+
+  const completeDeckConfig = useMemo(() => {
+    if (isPreviewMode) {
+      return {
+        canComplete: false,
+        completeLabel: "Chế độ xem trước",
+        completeState: "blocked" as const,
+      };
+    }
+
+    if (activeItemType === "lesson") {
+      return {
+        canComplete: !!activeLesson.moduleId && !isActiveItemCompleted,
+        completeLabel: isActiveItemCompleted ? "Đã hoàn thành" : "Đánh dấu hoàn thành",
+        completeState: isActiveItemCompleted ? "completed" as const : "ready" as const,
+      };
+    }
+
+    if (activeItemType === "quiz") {
+      return {
+        canComplete: false,
+        completeLabel: isActiveItemCompleted ? "Quiz đã đạt" : "Hoàn thành khi đạt quiz",
+        completeState: isActiveItemCompleted ? "completed" as const : "blocked" as const,
+      };
+    }
+
+    if (activeItemType === "assignment") {
+      return {
+        canComplete: false,
+        completeLabel: isActiveItemCompleted ? "Bài tập đã đạt" : "Hoàn thành sau khi pass",
+        completeState: isActiveItemCompleted ? "completed" as const : "blocked" as const,
+      };
+    }
+
+    return {
+      canComplete: false,
+      completeLabel: "Chọn nội dung để bắt đầu",
+      completeState: "blocked" as const,
+    };
+  }, [activeItemType, activeLesson.moduleId, isActiveItemCompleted, isPreviewMode]);
 
   if (loading) {
     return (
@@ -436,7 +788,7 @@ const CourseLearningPage = () => {
         progress={{ percent: 0 }}
         isSidebarOpen={false}
         onToggleSidebar={() => {}}
-        onBack={() => navigate("/courses")}
+        onBack={handleExitCourseLearning}
       >
         <main className="learning-hud-main-content">
           <div className="learning-hud-content-viewer">
@@ -454,7 +806,7 @@ const CourseLearningPage = () => {
         progress={{ percent: 0 }}
         isSidebarOpen={false}
         onToggleSidebar={() => {}}
-        onBack={() => navigate("/courses")}
+        onBack={handleExitCourseLearning}
       >
         <main className="learning-hud-main-content">
           <div className="learning-hud-content-viewer">
@@ -475,7 +827,7 @@ const CourseLearningPage = () => {
         progress={{ percent: 0 }}
         isSidebarOpen={false}
         onToggleSidebar={() => {}}
-        onBack={() => navigate("/courses")}
+        onBack={handleExitCourseLearning}
       >
         <main className="learning-hud-main-content">
           <div className="learning-hud-content-viewer" style={{ textAlign: 'center', padding: '3rem 1.5rem' }}>
@@ -487,7 +839,7 @@ const CourseLearningPage = () => {
             </p>
             <button
               className="learning-hud-nav-button"
-              onClick={() => navigate('/courses')}
+              onClick={handleExitCourseLearning}
               style={{ marginTop: '1.5rem' }}
             >
               Quay lại danh sách khóa học
@@ -505,14 +857,14 @@ const CourseLearningPage = () => {
       progress={{ percent: progressPercentage }}
       isSidebarOpen={isSidebarOpen}
       onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-      onBack={() => navigate("/courses")}
+      onBack={handleExitCourseLearning}
     >
       {/* Sidebar */}
       <ModuleSidebar
         modules={modulesWithContent.length ? modulesWithContent : sortedModules}
         expandedModules={expandedModules}
         activeLesson={activeLesson}
-        lessonStatuses={lessonStatuses}
+        itemStatuses={itemStatuses}
         progress={progress}
         onToggleModule={handleToggleModule}
         onSelectLesson={handleSelectLesson}
@@ -530,12 +882,115 @@ const CourseLearningPage = () => {
               <strong>Chế độ xem trước:</strong> Bạn có thể xem nội dung như học viên, nhưng không thể làm bài, nộp bài hoặc đánh dấu hoàn thành.
             </div>
           )}
+          {!isPreviewMode && progress.percent >= 100 && progress.certificateId && (
+            <div className="lhud-certificate-banner">
+              <div>
+                <strong>Chứng chỉ đã được cấp</strong>
+                <p>
+                  Bạn đã hoàn thành khóa học. Trang chứng chỉ riêng tư dành cho bạn đã sẵn sàng; nếu muốn gửi cho người khác, hãy sao chép liên kết xác thực công khai.
+                </p>
+              </div>
+              <div className="lhud-certificate-banner__actions">
+                {progress.certificateSerial && (
+                  <button
+                    type="button"
+                    className="learning-hud-secondary-btn"
+                    onClick={handleCopyCertificateVerificationLink}
+                  >
+                    <LinkIcon size={16} />
+                    Sao chép liên kết công khai
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="learning-hud-secondary-btn"
+                  onClick={handleOpenCertificate}
+                >
+                  <ExternalLink size={16} />
+                  Xem chứng chỉ
+                </button>
+              </div>
+            </div>
+          )}
+          {!isPreviewMode && progress.percent >= 100 && !progress.certificateId && progress.certificateRevoked && (
+            <div className="lhud-certificate-banner is-revoked">
+              <div>
+                <strong>Chứng chỉ đã bị thu hồi</strong>
+                <p>
+                  Bạn đã hoàn thành khóa học nhưng chứng chỉ hiện không còn hiệu lực.
+                  {progress.certificateRevokedAt
+                    ? ` Thời điểm thu hồi: ${new Date(progress.certificateRevokedAt).toLocaleString("vi-VN")}.`
+                    : ""}
+                </p>
+              </div>
+            </div>
+          )}
 
           <div className="learning-hud-reading-content">
             {loadingLessonDetail ? (
               <div className="learning-hud-loading">ĐANG TẢI DÒNG DỮ LIỆU</div>
             ) : activeItemType === 'assignment' && activeAssignmentId ? (
-              <AssignmentViewer assignmentId={activeAssignmentId} readOnly={isPreviewMode} />
+              <div className="lhud-assignment-brief-shell">
+                <section className="lhud-assignment-brief">
+                  <div className="lhud-assignment-brief-header">
+                    <div>
+                      <div className="lhud-assignment-brief-breadcrumb">
+                        {activeCurriculumItem?.moduleTitle || "Chương"} › Bài tập thực hành
+                      </div>
+                      <h2 className="lhud-assignment-brief-title">
+                        {activeAssignmentSummary?.title || activeLessonTitle}
+                      </h2>
+                    </div>
+                    <span className="lhud-assignment-brief-badge">
+                      <ClipboardList size={16} />
+                      Bài tập
+                    </span>
+                  </div>
+
+                  <p className="lhud-assignment-brief-description">
+                    {summarizeHtml(activeAssignmentSummary?.description)}
+                  </p>
+
+                  <div className="lhud-assignment-brief-grid">
+                    <div className="lhud-assignment-brief-stat">
+                      <Gauge size={16} />
+                      <div>
+                        <span>Điểm tối đa</span>
+                        <strong>{activeAssignmentSummary?.maxScore ?? 0} điểm</strong>
+                      </div>
+                    </div>
+                    <div className="lhud-assignment-brief-stat">
+                      <LinkIcon size={16} />
+                      <div>
+                        <span>Hình thức nộp</span>
+                        <strong>{activeAssignmentSummary?.submissionType ?? "Đang cập nhật"}</strong>
+                      </div>
+                    </div>
+                    {hasAssignmentDueDate(activeAssignmentSummary?.dueAt) && (
+                      <div className="lhud-assignment-brief-stat">
+                        <Calendar size={16} />
+                        <div>
+                          <span>Hạn nộp</span>
+                          <strong>{formatShortDate(activeAssignmentSummary?.dueAt)}</strong>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="lhud-assignment-brief-actions">
+                    {!isPreviewMode && (
+                      <button
+                        type="button"
+                        className="learning-hud-secondary-btn"
+                        onClick={handleOpenAssignmentPage}
+                      >
+                        <ExternalLink size={16} />
+                        Mở trang bài tập
+                      </button>
+                    )}
+                  </div>
+                </section>
+              </div>
             ) : activeItemType === 'quiz' && activeQuizDetail ? (
               <>
                 {activeQuizDetail.hasPassed ? (
@@ -557,7 +1012,7 @@ const CourseLearningPage = () => {
                     </p>
                     {!isPreviewMode && (
                       <button
-                        onClick={() => navigate(`/quiz/${activeQuizDetail.id}/attempt`)}
+                        onClick={() => handleOpenQuizAttemptPage('result')}
                         className="learning-hud-nav-btn lhud-quiz-complete-action"
                       >
                         Xem kết quả
@@ -649,10 +1104,19 @@ const CourseLearningPage = () => {
 
                     {/* Action Button */}
                     <div className="lhud-quiz-action">
+                      {!isPreviewMode && activeQuizDetail.latestAttempt && (
+                        <button
+                          type="button"
+                          className="learning-hud-secondary-btn lhud-quiz-review-btn"
+                          onClick={() => handleOpenQuizAttemptPage('result')}
+                        >
+                          Xem lại kết quả gần nhất
+                        </button>
+                      )}
                       <button
                         onClick={() => {
                           if (!isPreviewMode) {
-                            navigate(`/quiz/${activeQuizDetail.id}/attempt`);
+                            handleOpenQuizAttemptPage('start');
                           }
                         }}
                         className={`lhud-quiz-action-btn ${
@@ -784,9 +1248,14 @@ const CourseLearningPage = () => {
             onPrevious={handlePrevLesson}
             onNext={handleNextLesson}
             onComplete={handleMarkAsComplete}
-            canNavigatePrev={!!activeLesson.lessonId}
-            canNavigateNext={!!activeLesson.lessonId}
-            canComplete={!!activeLesson.moduleId && !isPreviewMode}
+            canNavigatePrev={activeCurriculumIndex > 0}
+            canNavigateNext={
+              activeCurriculumIndex >= 0 &&
+              activeCurriculumIndex < curriculumItems.length - 1
+            }
+            canComplete={completeDeckConfig.canComplete}
+            completeLabel={completeDeckConfig.completeLabel}
+            completeState={completeDeckConfig.completeState}
           />
         </div>
       </main>

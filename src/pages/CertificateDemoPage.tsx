@@ -17,6 +17,7 @@ const CertificateDemoPage: React.FC = () => {
       recipientName={mockData.recipientName}
       courseName={mockData.courseName}
       instructorName={mockData.instructorName}
+      issuerName="Skillverse"
       date={mockData.date}
       certificateId={mockData.certificateId}
       logoUrl={mockData.logoUrl}

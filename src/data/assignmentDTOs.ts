@@ -61,6 +61,7 @@ export interface AssignmentSummaryDTO {
   description: string;
   submissionType: SubmissionType;
   maxScore: number;
+  orderIndex?: number;
   dueAt?: string;
   moduleId?: number;
 }
@@ -143,4 +144,14 @@ export interface PendingSubmissionItemDTO {
   moduleName: string;
   moduleId: number;
   assignmentName: string;
+}
+
+export interface MentorSubmissionItemDTO {
+  submission: AssignmentSubmissionDetailDTO;
+  courseName: string;
+  courseId: number;
+  moduleName: string;
+  moduleId: number;
+  assignmentName: string;
+  assignmentDueAt?: string;
 }

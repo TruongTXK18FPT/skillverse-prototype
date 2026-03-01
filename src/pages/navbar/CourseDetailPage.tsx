@@ -26,6 +26,10 @@ import { enrollUser, checkEnrollmentStatus, getEnrollmentProgress } from '../../
 import { CourseDetailDTO, CourseStatus } from '../../data/courseDTOs';
 import { getMentorProfile, MentorProfile } from '../../services/mentorProfileService';
 import { getGroupByCourse, joinGroup, GroupChatResponse } from '../../services/groupChatService';
+import {
+  buildCourseLearningDestination,
+  buildCourseLearningOrigin,
+} from '../../utils/courseLearningNavigation';
 import PurchaseCourseModal from '../../components/course/PurchaseCourseModal';
 import Toast from '../../components/shared/Toast';
 import '../../styles/CourseDetailCockpit.css';
@@ -67,6 +71,20 @@ const CourseDetailPage = () => {
   const isCoursePublic = course?.status === CourseStatus.PUBLIC;
   const isActivationLocked = isPreviewMode || (!!course && course.status !== CourseStatus.PUBLIC);
   const canPreviewLearning = Boolean(user?.roles?.some((role) => role === 'MENTOR' || role === 'ADMIN'));
+
+  const buildCourseLearningState = (preview = false) => {
+    if (!course) return null;
+
+    return {
+      courseId: course.id,
+      preview,
+      origin: buildCourseLearningOrigin(location.pathname, {
+        search: location.search,
+        hash: location.hash,
+        label: 'trang khóa học'
+      })
+    };
+  };
 
   const formatDate = (value?: string) => {
     if (!value) return 'Chưa cập nhật';
@@ -190,7 +208,14 @@ const CourseDetailPage = () => {
           'Bạn đã tham gia khóa học miễn phí. Chúc bạn học tập hiệu quả!',
           {
             text: 'Bắt đầu học',
-            onClick: () => navigate('/course-learning', { state: { courseId: course.id } })
+            onClick: () => {
+              const courseLearningState = buildCourseLearningState();
+              if (!courseLearningState) return;
+
+              navigate(buildCourseLearningDestination(courseLearningState), {
+                state: courseLearningState
+              });
+            }
           }
         );
       } else {
@@ -210,7 +235,13 @@ const CourseDetailPage = () => {
 
   const handlePreviewLearning = () => {
     if (!course) return;
-    navigate('/course-learning', { state: { courseId: course.id, preview: true } });
+
+    const courseLearningState = buildCourseLearningState(true);
+    if (!courseLearningState) return;
+
+    navigate(buildCourseLearningDestination(courseLearningState), {
+      state: courseLearningState
+    });
   };
 
   const closeTrailer = () => {
@@ -415,7 +446,12 @@ const CourseDetailPage = () => {
                     className={`cockpit-detail-enroll-btn enrolled ${isActivationLocked ? 'locked' : ''}`}
                     onClick={() => {
                       if (!isActivationLocked) {
-                        navigate('/course-learning', { state: { courseId: course.id } });
+                        const courseLearningState = buildCourseLearningState();
+                        if (!courseLearningState) return;
+
+                        navigate(buildCourseLearningDestination(courseLearningState), {
+                          state: courseLearningState
+                        });
                       }
                     }}
                     disabled={isActivationLocked}
@@ -751,7 +787,14 @@ const CourseDetailPage = () => {
               'Bạn đã kích hoạt khóa học. Hãy bắt đầu hành trình học tập!',
               {
                 text: 'Bắt đầu học',
-                onClick: () => navigate('/course-learning', { state: { courseId: course.id } })
+                onClick: () => {
+                  const courseLearningState = buildCourseLearningState();
+                  if (!courseLearningState) return;
+
+                  navigate(buildCourseLearningDestination(courseLearningState), {
+                    state: courseLearningState
+                  });
+                }
               }
             );
           }}

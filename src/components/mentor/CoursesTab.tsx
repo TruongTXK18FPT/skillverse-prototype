@@ -21,7 +21,8 @@ import {
   DollarSign,
   Eye,
   MessageSquare,
-  Archive
+  Archive,
+  PenTool
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { listCoursesByAuthor, deleteCourse, submitCourseForApproval } from '../../services/courseService';
@@ -274,6 +275,10 @@ const CoursesTab: React.FC = () => {
     }
   };
 
+  const handleOpenCertificateSettings = () => {
+    navigate('/mentor', { state: { activeTab: 'certificate-settings' } });
+  };
+
   // Render
   if (loading && courses.length === 0) {
     return (
@@ -326,14 +331,27 @@ const CoursesTab: React.FC = () => {
           <p className="mentor-hud-courses__subtitle">
             Tạo, chỉnh sửa và quản lý nội dung khóa học của bạn
           </p>
+          <p className="mentor-hud-courses__helper">
+            Muốn chứng chỉ hiển thị chữ ký riêng? Bạn có thể cấu hình ngay trong mục cài đặt chứng chỉ.
+          </p>
         </div>
-        <button
-          className="mentor-hud-create-button"
-          onClick={() => navigate('/mentor/courses/create')}
-        >
-          <Plus className="w-5 h-5" />
-          Tạo Khóa Học Mới
-        </button>
+        <div className="mentor-hud-courses__header-actions">
+          <button
+            type="button"
+            className="mentor-hud-secondary-button"
+            onClick={handleOpenCertificateSettings}
+          >
+            <PenTool className="w-4 h-4" />
+            Cài đặt chứng chỉ
+          </button>
+          <button
+            className="mentor-hud-create-button"
+            onClick={() => navigate('/mentor/courses/create')}
+          >
+            <Plus className="w-5 h-5" />
+            Tạo Khóa Học Mới
+          </button>
+        </div>
       </div>
 
       {/* Error Message */}

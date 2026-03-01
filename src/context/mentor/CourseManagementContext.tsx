@@ -17,6 +17,7 @@ import {
   LessonSummaryDTO,
   LessonType
 } from '../../data/courseDTOs';
+import { AttachmentType, LessonAttachmentDTO } from '../../services/attachmentService';
 
 // ============================================================================
 // TYPES
@@ -170,6 +171,77 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
     }));
   }, []);
 
+  const normalizeAttachmentDrafts = useCallback((attachments: unknown[] | undefined) => {
+    if (!attachments || attachments.length === 0) {
+      return [];
+    }
+
+    return attachments
+      .map((attachment) => {
+        if (!attachment || typeof attachment !== 'object') {
+          return null;
+        }
+
+        const att = attachment as Partial<LessonAttachmentDTO> & {
+          serverId?: number;
+          name?: string;
+          url?: string;
+          mediaId?: number;
+        };
+
+        const url = att.url || att.downloadUrl;
+        const name = att.name || att.title;
+        const serverId = att.serverId ?? att.id;
+
+        if (!serverId && !att.mediaId && !url) {
+          return null;
+        }
+
+        return {
+          serverId,
+          mediaId: att.mediaId,
+          name: name || 'Attachment',
+          url
+        };
+      })
+      .filter((attachment): attachment is { serverId?: number; mediaId?: number; name: string; url?: string } => Boolean(attachment));
+  }, []);
+
+  const buildAttachmentRequest = useCallback((attachment: {
+    serverId?: number;
+    mediaId?: number;
+    name?: string;
+    url?: string;
+  }) => {
+    if (!attachment.mediaId && !(attachment.url && attachment.url.trim())) {
+      return null;
+    }
+
+    const attachmentRequest: {
+      title: string;
+      orderIndex: number;
+      type?: AttachmentType;
+      mediaId?: number;
+      externalUrl?: string;
+    } = {
+      title: attachment.name || 'Attachment',
+      orderIndex: 0
+    };
+
+    if (attachment.mediaId) {
+      attachmentRequest.type = AttachmentType.PDF;
+      if (attachment.name?.toLowerCase().endsWith('.docx')) attachmentRequest.type = AttachmentType.DOCX;
+      if (attachment.name?.toLowerCase().endsWith('.pptx')) attachmentRequest.type = AttachmentType.PPTX;
+      if (attachment.name?.toLowerCase().endsWith('.xlsx')) attachmentRequest.type = AttachmentType.XLSX;
+      attachmentRequest.mediaId = attachment.mediaId;
+    } else if (attachment.url) {
+      attachmentRequest.type = AttachmentType.EXTERNAL_LINK;
+      attachmentRequest.externalUrl = attachment.url;
+    }
+
+    return attachmentRequest;
+  }, []);
+
   // ============================================================================
   // COURSE OPERATIONS
   // ============================================================================
@@ -191,7 +263,10 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                 const detail = await import('../../services/lessonService').then(m => m.getLessonById(summary.id));
                 // Fetch attachments
                 const attachments = await import('../../services/attachmentService').then(m => m.listAttachments(summary.id));
-                return { ...detail, attachments };
+                return {
+                  ...detail,
+                  attachments: normalizeAttachmentDrafts(attachments)
+                };
              })
            );
 
@@ -441,23 +516,10 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                        if (lesson.type === 'reading' && lesson.attachments && lesson.attachments.length > 0) {
                            for (const att of lesson.attachments) {
                                if (!att.serverId) {
-                                   const attachmentRequest: any = {
-                                       title: att.name || 'Attachment',
-                                       orderIndex: 0
-                                   };
-
-                                   if (att.mediaId) {
-                                       attachmentRequest.type = attachmentService.AttachmentType.PDF; 
-                                       if (att.name?.toLowerCase().endsWith('.docx')) attachmentRequest.type = attachmentService.AttachmentType.DOCX;
-                                       if (att.name?.toLowerCase().endsWith('.pptx')) attachmentRequest.type = attachmentService.AttachmentType.PPTX;
-                                       if (att.name?.toLowerCase().endsWith('.xlsx')) attachmentRequest.type = attachmentService.AttachmentType.XLSX;
-                                       
-                                       attachmentRequest.mediaId = att.mediaId;
-                                   } else {
-                                       attachmentRequest.type = attachmentService.AttachmentType.EXTERNAL_LINK;
-                                       attachmentRequest.externalUrl = att.url;
+                                   const attachmentRequest = buildAttachmentRequest(att);
+                                   if (!attachmentRequest) {
+                                      continue;
                                    }
-
                                    await attachmentService.addAttachment(savedLesson.id, attachmentRequest, user?.id || 0);
                                }
                            }
@@ -667,27 +729,11 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                      // Handle Attachments
                      if (lesson.type === 'reading' && lesson.attachments && lesson.attachments.length > 0) {
                          for (const att of lesson.attachments) {
-                             // Check if we have attachment ID or not (meaning it's new)
                              if (!att.serverId) {
-                                 const attachmentRequest: any = {
-                                     title: att.name || 'Attachment',
-                                     orderIndex: 0
-                                 };
-
-                                 if (att.mediaId) {
-                                     // Handle Uploaded File
-                                     attachmentRequest.type = attachmentService.AttachmentType.PDF; // Default or detect from name
-                                     if (att.name?.toLowerCase().endsWith('.docx')) attachmentRequest.type = attachmentService.AttachmentType.DOCX;
-                                     if (att.name?.toLowerCase().endsWith('.pptx')) attachmentRequest.type = attachmentService.AttachmentType.PPTX;
-                                     if (att.name?.toLowerCase().endsWith('.xlsx')) attachmentRequest.type = attachmentService.AttachmentType.XLSX;
-                                     
-                                     attachmentRequest.mediaId = att.mediaId;
-                                 } else {
-                                     // Handle External Link
-                                     attachmentRequest.type = attachmentService.AttachmentType.EXTERNAL_LINK;
-                                     attachmentRequest.externalUrl = att.url;
+                                 const attachmentRequest = buildAttachmentRequest(att);
+                                 if (!attachmentRequest) {
+                                     continue;
                                  }
-
                                  await attachmentService.addAttachment(savedLesson.id, attachmentRequest, user?.id || 0);
                              }
                          }

@@ -84,6 +84,7 @@ export interface QuizQuestionDetailDTO {
   score: number;
   orderIndex: number;
   options: QuizOptionDTO[];
+  correctOptionCount?: number;
 }
 
 // Quiz Question Create DTO
@@ -179,4 +180,39 @@ export interface QuizAttemptStatusDTO {
   secondsUntilRetry: number;
   nextRetryAt: string | null;
   recentAttempts: QuizAttemptDTO[];
+}
+
+export interface QuizAttemptAnswerReviewDTO {
+  questionId: number;
+  questionOrderIndex?: number | null;
+  questionText: string;
+  questionType: QuestionType;
+  submittedAnswer?: QuizAttemptSubmittedAnswerReviewDTO | null;
+  optionsSnapshot?: QuizAttemptAnswerOptionReviewDTO[];
+  submittedAnswerText?: string | null;
+  correctAnswerText?: string | null;
+  answered: boolean;
+  correct: boolean;
+  scoreEarned: number;
+  maxScore: number;
+}
+
+export interface QuizAttemptSubmittedAnswerReviewDTO {
+  selectedOptionIds?: number[];
+  selectedOptionTexts?: string[];
+  textAnswer?: string | null;
+}
+
+export interface QuizAttemptAnswerOptionReviewDTO {
+  optionId: number;
+  orderIndex?: number | null;
+  optionText: string;
+  correct: boolean;
+  selected: boolean;
+  feedback?: string | null;
+}
+
+export interface QuizAttemptReviewDTO {
+  attempt: QuizAttemptDTO;
+  answers: QuizAttemptAnswerReviewDTO[];
 }

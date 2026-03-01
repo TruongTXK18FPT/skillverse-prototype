@@ -18,18 +18,20 @@
   --font-sig: 'Great Vibes', cursive;
 }
 
-.cert-wrapper {
+.sv-cert-template-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px;
-  background: #2d2d2d;
-  min-height: 100vh;
+  padding: clamp(14px, 2vw, 28px);
+  background:
+    radial-gradient(circle at top, rgba(15, 118, 110, 0.14), transparent 28%),
+    linear-gradient(180deg, #1f2937 0%, #0f172a 100%);
 }
 
-.cert-paper {
-  width: 1100px;
-  height: 800px;
+.sv-cert-template-paper {
+  width: min(1040px, 100%);
+  aspect-ratio: 11 / 8;
+  height: auto;
   background: var(--c-paper);
   display: flex;
   box-shadow: 0 0 40px rgba(0,0,0,0.5);
@@ -40,9 +42,9 @@
 }
 
 /* ================= LEFT COLUMN (75%) ================= */
-.cert-left-content {
+.sv-cert-template-left-content {
   flex: 7.5;
-  padding: 60px 80px;
+  padding: 52px 72px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -50,23 +52,23 @@
 }
 
 /* --- LOGO FIX: TO MÀ KHÔNG ĐẨY --- */
-.cert-header-container {
+.sv-cert-template-header-container {
   /* Tạo một khoảng trống ảo nhỏ để giữ vị trí đầu trang */
   position: relative;
-  height: 80px; 
-  margin-bottom: 20px;
+  height: 86px; 
+  margin-bottom: 10px;
   /* border: 1px dashed red; Remove this: chỉ để debug */
 }
 
-.cert-big-logo {
+.sv-cert-template-big-logo {
   position: absolute; /* Nhấc logo ra khỏi dòng chảy layout */
   
   /* Điều chỉnh vị trí tùy thích */
-  top: -30px;  /* Kéo lên trên một chút để sát lề */
-  left: -10px; /* Kéo sang trái một chút */
+  top: -6px;
+  left: -4px;
   
   /* SIZE TO KHỔNG LỒ Ở ĐÂY */
-  height: 180px; /* Tăng lên 200px, 250px thoải mái */
+  height: 82px;
   width: auto;
   object-fit: contain;
   
@@ -77,90 +79,121 @@
 }
 
 /* Phần nội dung chính */
-.cert-body {
+.sv-cert-template-body {
   flex: 1;
   position: relative;
   z-index: 2; /* Nội dung luôn nổi trên logo */
 }
 
-.cert-date {
+.sv-cert-template-date {
   font-family: var(--font-sans);
   font-size: 14px;
   color: var(--c-text-muted);
   display: block;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
+  padding-left: 8px;
 }
 
-.cert-recipient {
+.sv-cert-template-recipient {
   font-family: var(--font-serif);
-  font-size: 48px;
+  font-size: clamp(28px, 3.6vw, 46px);
   font-weight: 700;
   color: #000;
-  margin: 10px 0 20px 0;
-  line-height: 1.1;
+  margin: 8px 0 18px 0;
+  line-height: 1;
+  max-width: 84%;
+  letter-spacing: -0.02em;
+  word-break: break-word;
 }
 
-.cert-statement {
+.sv-cert-template-recipient-line {
+  display: block;
+}
+
+.sv-cert-template-recipient--compact {
+  font-size: clamp(26px, 3.15vw, 40px);
+  max-width: 88%;
+}
+
+.sv-cert-template-recipient--tight {
+  font-size: clamp(24px, 2.85vw, 34px);
+  max-width: 92%;
+}
+
+.sv-cert-template-statement {
   font-family: var(--font-sans);
-  font-size: 18px;
+  font-size: 17px;
   color: var(--c-text-main);
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  max-width: 74%;
+  line-height: 1.5;
 }
 
-.cert-course-name {
+.sv-cert-template-course-name {
   font-family: var(--font-sans);
-  font-size: 28px;
+  font-size: clamp(23px, 2.2vw, 30px);
   font-weight: 700;
   color: #000;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   line-height: 1.3;
+  max-width: 76%;
 }
 
-.cert-description {
+.sv-cert-template-description {
   font-family: var(--font-sans);
   font-size: 16px;
   color: var(--c-text-main);
-  max-width: 90%;
+  max-width: 80%;
   line-height: 1.5;
 }
 
 /* FOOTER */
-.cert-footer {
+.sv-cert-template-footer {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: auto;
+  margin-top: 32px;
   position: relative;
   z-index: 2;
+  gap: 24px;
 }
 
-.cert-signature-script {
+.sv-cert-template-signature-script {
   font-family: var(--font-sig);
   font-size: 36px;
   color: #000;
   margin-bottom: -5px;
 }
 
-.cert-signature-line {
+.sv-cert-template-signature-image {
+  display: block;
+  max-width: 240px;
+  max-height: 72px;
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+
+.sv-cert-template-signature-line {
   width: 250px;
   height: 1px;
   background: #ccc;
   margin-bottom: 8px;
 }
 
-.cert-instructor-info {
+.sv-cert-template-instructor-info {
   font-family: var(--font-sans);
   font-size: 12px;
   color: var(--c-text-muted);
   line-height: 1.4;
 }
 
-.cert-verify-block {
+.sv-cert-template-verify-block {
   text-align: right;
-  max-width: 250px;
+  max-width: 240px;
+  flex-shrink: 0;
 }
 
-.cert-verify-label {
+.sv-cert-template-verify-label {
   font-family: var(--font-sans);
   font-size: 11px;
   color: var(--c-text-muted);
@@ -168,7 +201,7 @@
   margin-bottom: 4px;
 }
 
-.cert-verify-sub {
+.sv-cert-template-verify-sub {
   font-family: var(--font-sans);
   font-size: 9px;
   color: #aaa;
@@ -177,30 +210,31 @@
 }
 
 /* ================= RIGHT COLUMN (25%) ================= */
-.cert-right-ribbon {
+.sv-cert-template-right-ribbon {
   flex: 2.5;
   background-color: var(--c-ribbon);
   border-left: 1px solid var(--c-border);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 100px;
+  justify-content: center;
+  padding: 42px 24px;
   position: relative;
 }
 
-.cert-ribbon-title {
+.sv-cert-template-ribbon-title {
   font-family: var(--font-sans);
   font-weight: 700;
   font-size: 18px;
   color: var(--c-blue);
   text-align: center;
   letter-spacing: 1px;
-  margin-bottom: 40px;
+  margin-bottom: 28px;
   line-height: 1.4;
 }
 
 /* THE SEAL */
-.cert-seal-container {
+.sv-cert-template-seal-container {
   position: relative;
   width: 140px;
   height: 140px;
@@ -209,7 +243,7 @@
   justify-content: center;
 }
 
-.cert-seal-border {
+.sv-cert-template-seal-border {
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -221,7 +255,7 @@
   z-index: 2;
 }
 
-.cert-seal-inner {
+.sv-cert-template-seal-inner {
   width: 90%;
   height: 90%;
   border-radius: 50%;
@@ -231,20 +265,20 @@
   justify-content: center;
 }
 
-.cert-seal-img {
+.sv-cert-template-seal-img {
   width: 50%;
   filter: grayscale(1);
   opacity: 0.6;
 }
 
-.cert-seal-text-path {
+.sv-cert-template-seal-text-path {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
   z-index: 1;
 }
 
-.cert-seal-svg-text {
+.sv-cert-template-seal-svg-text {
   font-family: var(--font-sans);
   font-weight: 700;
   font-size: 10px;
@@ -254,24 +288,110 @@
 }
 
 @media print {
-  @page {
-    size: landscape;
-    margin: 0;
-  }
-  body {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .cert-wrapper {
+  .sv-cert-template-wrapper {
     padding: 0;
     background: white;
     display: block;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
-  .cert-paper {
+  .sv-cert-template-paper {
     box-shadow: none;
     border: none;
     outline: none;
     width: 100%;
     height: 100vh;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+@media (max-width: 960px) {
+  .sv-cert-template-left-content {
+    padding: 42px 44px;
+  }
+
+  .sv-cert-template-right-ribbon {
+    padding: 28px 18px;
+  }
+
+  .sv-cert-template-recipient {
+    max-width: 88%;
+  }
+
+  .sv-cert-template-course-name {
+    max-width: 84%;
+  }
+
+  .sv-cert-template-big-logo {
+    height: 74px;
+    top: -2px;
+    left: -4px;
+  }
+
+  .sv-cert-template-statement,
+  .sv-cert-template-description {
+    max-width: 86%;
+  }
+}
+
+@media (max-width: 720px) {
+  .sv-cert-template-wrapper {
+    padding: 12px;
+  }
+
+  .sv-cert-template-paper {
+    aspect-ratio: auto;
+    min-height: 0;
+    flex-direction: column;
+  }
+
+  .sv-cert-template-left-content {
+    padding: 32px 24px 24px;
+  }
+
+  .sv-cert-template-right-ribbon {
+    padding: 28px 24px 32px;
+    border-left: none;
+    border-top: 1px solid var(--c-border);
+  }
+
+  .sv-cert-template-ribbon-title {
+    margin-bottom: 20px;
+  }
+
+  .sv-cert-template-recipient {
+    max-width: 100%;
+    font-size: 30px;
+  }
+
+  .sv-cert-template-statement,
+  .sv-cert-template-description {
+    font-size: 15px;
+    max-width: 100%;
+  }
+
+  .sv-cert-template-course-name {
+    max-width: 100%;
+  }
+
+  .sv-cert-template-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .sv-cert-template-verify-block {
+    text-align: left;
+    max-width: none;
+  }
+
+  .sv-cert-template-signature-line {
+    width: 220px;
+  }
+
+  .sv-cert-template-signature-image {
+    max-width: 220px;
+    max-height: 60px;
   }
 }
