@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, GraduationCap, Lock, Mail, Phone, MapPin, FileText, Award, Briefcase, AlertTriangle, Linkedin, Target, Upload, X } from 'lucide-react';
@@ -54,6 +54,17 @@ const normalizeOptionalUrl = (value?: string): string | null => {
   }
 };
 
+const FIELD_NAVIGATION_ORDER = [
+  'fullName',
+  'email',
+  'password',
+  'confirmPassword',
+  'linkedinProfile',
+  'mainExpertise',
+  'yearsOfExperience',
+  'personalBio'
+] as const;
+
 const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
   onSubmit,
   onGoogleRegister,
@@ -78,11 +89,50 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [certifications, setCertifications] = useState<File[]>([]);
+  const fieldRefs = useRef<Record<string, HTMLInputElement | HTMLTextAreaElement | null>>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+    const { name } = e.target;
+    const value = name === 'yearsOfExperience'
+      ? e.target.value.replace(/\D/g, '')
+      : e.target.value;
+
     setFormData(prev => ({ ...prev, [name]: value }));
     setError(null);
+  };
+
+  const registerFieldRef = (fieldName: string) => (element: HTMLInputElement | HTMLTextAreaElement | null) => {
+    fieldRefs.current[fieldName] = element;
+  };
+
+  const moveFocus = (fieldName: string, direction: -1 | 1) => {
+    const currentIndex = FIELD_NAVIGATION_ORDER.indexOf(fieldName as typeof FIELD_NAVIGATION_ORDER[number]);
+
+    if (currentIndex === -1) {
+      return;
+    }
+
+    const nextFieldName = FIELD_NAVIGATION_ORDER[currentIndex + direction];
+    if (!nextFieldName) {
+      return;
+    }
+
+    fieldRefs.current[nextFieldName]?.focus();
+  };
+
+  const handleFieldNavigation = (
+    fieldName: string,
+    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      moveFocus(fieldName, 1);
+    }
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      moveFocus(fieldName, -1);
+    }
   };
 
   // Handle autofill detection for Chrome
@@ -276,7 +326,9 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleInputChange}
+                onKeyDown={(e) => handleFieldNavigation('fullName', e)}
                 onAnimationStart={handleAutofill}
+                ref={registerFieldRef('fullName')}
                 disabled={isLoading}
                 className="reg-mentor-input"
                 autoComplete="name"
@@ -295,7 +347,9 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
+                onKeyDown={(e) => handleFieldNavigation('email', e)}
                 onAnimationStart={handleAutofill}
+                ref={registerFieldRef('email')}
                 disabled={isLoading}
                 className="reg-mentor-input"
                 autoComplete="email"
@@ -315,9 +369,11 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
+                onKeyDown={(e) => handleFieldNavigation('password', e)}
                 onAnimationStart={handleAutofill}
                 onFocus={() => setIsPasswordFocused(true)}
                 onBlur={() => setIsPasswordFocused(false)}
+                ref={registerFieldRef('password')}
                 disabled={isLoading}
                 className="reg-mentor-input"
                 autoComplete="new-password"
@@ -376,7 +432,9 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
+                onKeyDown={(e) => handleFieldNavigation('confirmPassword', e)}
                 onAnimationStart={handleAutofill}
+                ref={registerFieldRef('confirmPassword')}
                 disabled={isLoading}
                 className="reg-mentor-input"
                 autoComplete="new-password"
@@ -413,11 +471,12 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 name="linkedinProfile"
                 value={formData.linkedinProfile}
                 onChange={handleInputChange}
+                onKeyDown={(e) => handleFieldNavigation('linkedinProfile', e)}
                 onAnimationStart={handleAutofill}
+                ref={registerFieldRef('linkedinProfile')}
                 disabled={isLoading}
                 className="reg-mentor-input"
                 autoComplete="url"
-                placeholder="linkedin.com/in/ban-hoac-skillverse.vn"
               />
             </div>
           </div>
@@ -433,6 +492,8 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 name="mainExpertise"
                 value={formData.mainExpertise}
                 onChange={handleInputChange}
+                onKeyDown={(e) => handleFieldNavigation('mainExpertise', e)}
+                ref={registerFieldRef('mainExpertise')}
                 disabled={isLoading}
                 className="reg-mentor-input"
               />
@@ -446,13 +507,17 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
             </label>
             <div className="reg-mentor-input-wrapper">
               <input
-                type="number"
+                type="text"
                 name="yearsOfExperience"
                 value={formData.yearsOfExperience}
                 onChange={handleInputChange}
+                onKeyDown={(e) => handleFieldNavigation('yearsOfExperience', e)}
+                ref={registerFieldRef('yearsOfExperience')}
                 disabled={isLoading}
                 className="reg-mentor-input"
-                min="0"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                autoComplete="off"
               />
             </div>
           </div>
@@ -468,6 +533,8 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 name="personalBio"
                 value={formData.personalBio}
                 onChange={handleInputChange}
+                onKeyDown={(e) => handleFieldNavigation('personalBio', e)}
+                ref={registerFieldRef('personalBio')}
                 disabled={isLoading}
                 className="reg-mentor-input reg-mentor-textarea"
                 rows={2}
