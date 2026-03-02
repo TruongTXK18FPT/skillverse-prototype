@@ -28,6 +28,32 @@ interface HologramMentorRegisterFormProps {
   googleRegisterSuccess?: { userName: string } | null;
 }
 
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
+const normalizeOptionalUrl = (value?: string): string | null => {
+  const trimmedValue = value?.trim();
+
+  if (!trimmedValue) {
+    return null;
+  }
+
+  const normalizedValue = /^[a-z][a-z\d+.-]*:\/\//i.test(trimmedValue)
+    ? trimmedValue
+    : `https://${trimmedValue}`;
+
+  try {
+    const parsedUrl = new URL(normalizedValue);
+
+    if (!parsedUrl.hostname) {
+      return null;
+    }
+
+    return parsedUrl.toString();
+  } catch {
+    return null;
+  }
+};
+
 const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
   onSubmit,
   onGoogleRegister,
@@ -103,17 +129,17 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
     if (!formData.email.trim()) return 'Vui lòng nhập email';
     if (!/\S+@\S+\.\S+/.test(formData.email)) return 'Email không hợp lệ';
     if (!formData.password) return 'Vui lòng nhập mật khẩu';
-    
-    // Check password requirements
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,}$/;
-    if (!passwordRegex.test(formData.password)) {
+
+    if (!PASSWORD_REGEX.test(formData.password)) {
       return 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt';
     }
-    
+
     if (formData.password !== formData.confirmPassword) return 'Mật khẩu xác nhận không khớp';
+    if (formData.linkedinProfile?.trim() && !normalizeOptionalUrl(formData.linkedinProfile)) {
+      return 'Liên kết LinkedIn không hợp lệ';
+    }
     if (!formData.mainExpertise.trim()) return 'Vui lòng nhập lĩnh vực chuyên môn';
     if (!formData.yearsOfExperience) return 'Vui lòng nhập số năm kinh nghiệm';
-    if (!formData.personalBio.trim()) return 'Vui lòng nhập giới thiệu bản thân';
     if (!cvFile) return 'Vui lòng tải lên CV';
     return null;
   };
@@ -128,12 +154,13 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
     }
 
     // Chuyển đổi từ local formData sang format mà Page component mong đợi
+    const normalizedLinkedinProfile = normalizeOptionalUrl(formData.linkedinProfile);
     const submitData: MentorRegisterData = {
       fullName: formData.fullName,
       email: formData.email,
       password: formData.password,
       confirmPassword: formData.confirmPassword,
-      linkedinProfile: formData.linkedinProfile || undefined,
+      linkedinProfile: normalizedLinkedinProfile || undefined,
       mainExpertise: formData.mainExpertise,
       yearsOfExperience: formData.yearsOfExperience,
       personalBio: formData.personalBio,
@@ -228,7 +255,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="reg-mentor-form">
+          <form onSubmit={handleSubmit} className="reg-mentor-form" noValidate>
           {/* Personal Information Section */}
           <div className="reg-mentor-section">
             <h3 className="reg-mentor-section-title">
@@ -306,7 +333,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
             </div>
             {/* Password Hint */}
             <AnimatePresence>
-              {(isPasswordFocused || (formData.password && formData.password.length > 0 && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/.test(formData.password))) && (
+              {(isPasswordFocused || (formData.password && formData.password.length > 0 && !PASSWORD_REGEX.test(formData.password))) && (
                 <motion.div
                   className="reg-mentor-password-hint"
                   initial={{ opacity: 0, height: 0, marginTop: 0 }}
@@ -382,13 +409,15 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
             </label>
             <div className="reg-mentor-input-wrapper">
               <input
-                type="url"
+                type="text"
                 name="linkedinProfile"
                 value={formData.linkedinProfile}
                 onChange={handleInputChange}
                 onAnimationStart={handleAutofill}
                 disabled={isLoading}
                 className="reg-mentor-input"
+                autoComplete="url"
+                placeholder="linkedin.com/in/ban-hoac-skillverse.vn"
               />
             </div>
           </div>
