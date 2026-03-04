@@ -311,7 +311,15 @@ class LearningReportService {
    * Helper: Format report date for display
    */
   formatReportDate(dateString: string): string {
+    if (!dateString) {
+      return "Thời gian không xác định";
+    }
+
     const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) {
+      return dateString;
+    }
+
     return new Intl.DateTimeFormat("vi-VN", {
       day: "2-digit",
       month: "2-digit",

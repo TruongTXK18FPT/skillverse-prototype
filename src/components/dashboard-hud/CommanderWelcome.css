@@ -59,7 +59,7 @@
 
 .commander-welcome__left {
   flex: 0 0 auto;
-  max-width: 320px;
+  max-width: 600px;
 }
 
 .commander-welcome__center {
@@ -71,14 +71,6 @@
   max-width: 500px;
 }
 
-.commander-welcome__right {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  align-items: flex-end;
-  justify-content: center;
-}
 
 /* Premium Layout Specifics (2 columns) */
 .commander-welcome--premium .commander-welcome__left {
@@ -220,12 +212,17 @@
 .commander-welcome__jump-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  flex-direction: row;
+  gap: 16px; /* Adjust spacing between buttons */
+  justify-content: flex-start; /* Align buttons to the start */
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
 .commander-welcome__jump-btn {
+  flex: 1 1 calc(50% - 16px); /* Two buttons per row with spacing */
+  max-width: calc(50% - 16px); /* Ensure buttons don't exceed half the row width */
+  text-align: center; /* Center text inside buttons */
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -255,19 +252,39 @@
   opacity: 0.8;
 }
 
-.commander-welcome--premium .commander-welcome__jump-btn {
-  background: rgba(168, 85, 247, 0.05);
-  border-color: rgba(168, 85, 247, 0.2);
+/* Ensure the arrow icon is aligned to the right */
+.commander-welcome__jump-btn {
+  display: flex;
+  justify-content: space-between; /* Space out text and icon */
+  align-items: center; /* Vertically center content */
 }
 
-.commander-welcome--premium .commander-welcome__jump-btn:hover {
-  background: rgba(168, 85, 247, 0.15);
-  border-color: rgba(168, 85, 247, 0.5);
-  color: #a855f7;
+.commander-welcome__jump-btn span {
+  flex-grow: 1; /* Allow text to take available space */
+  text-align: left; /* Align text to the left */
 }
 
-.commander-welcome--premium .commander-welcome__jump-btn svg {
-  color: #a855f7;
+.commander-welcome__jump-btn svg:last-child {
+  flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+/* Use Lucide icon for the arrow */
+.commander-welcome__jump-btn::after {
+  content: ''; /* Remove the Unicode arrow */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+}
+
+.commander-welcome__jump-btn svg:last-child {
+  margin-left: auto;
+  color: inherit; /* Match the color of the button */
+}
+
+.commander-welcome--premium .commander-welcome__jump-btn::after {
+  background: rgba(168, 85, 247, 0.1); /* Match premium leading icon background */
+  color: #a855f7; /* Match premium leading icon color */
 }
 
 /* ========== ID CARD ========== */

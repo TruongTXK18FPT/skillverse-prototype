@@ -443,74 +443,82 @@ const Header: React.FC = () => {
 
               {showQuickNav && (
                 <div className="sv-mega-menu">
-                  {/* Smart Suggestion Line */}
-                  <div className="sv-mega-suggestion">
-                    <Sparkles size={18} className="sv-suggestion-icon" />
-                    <span className="sv-suggestion-text">
-                      {localStorage.getItem("onboarded") === "true"
-                        ? "Tiếp tục lộ trình học của bạn"
-                        : "Bắt đầu lộ trình học đầu tiên"}
-                    </span>
-                    <Link
-                      to="/roadmap"
-                      className="sv-suggestion-cta"
-                      onClick={() => setShowQuickNav(false)}
-                    >
-                      <span>Đi ngay</span>
-                      <ArrowRight size={14} />
-                    </Link>
-                  </div>
+                  {/* Smart Suggestion Line - Only for STUDENT role */}
+                  {!user?.roles.includes("MENTOR") &&
+                    !user?.roles.includes("RECRUITER") &&
+                    !user?.roles.includes("ADMIN") && (
+                      <div className="sv-mega-suggestion">
+                        <Sparkles size={18} className="sv-suggestion-icon" />
+                        <span className="sv-suggestion-text">
+                          {localStorage.getItem("onboarded") === "true"
+                            ? "Tiếp tục lộ trình học của bạn"
+                            : "Bắt đầu lộ trình học đầu tiên"}
+                        </span>
+                        <Link
+                          to="/roadmap"
+                          className="sv-suggestion-cta"
+                          onClick={() => setShowQuickNav(false)}
+                        >
+                          <span>Đi ngay</span>
+                          <ArrowRight size={14} />
+                        </Link>
+                      </div>
+                    )}
 
                   {/* Group 1: Primary Actions */}
                   {/* Hide for BUSINESS role */}
-                  {!user?.roles.includes("RECRUITER") && (
-                    <div className="sv-mega-section">
-                      <h4 className="sv-mega-section-title">
-                        <Target size={14} className="sv-section-icon" />
-                        <span>Hành động chính</span>
-                      </h4>
-                      <div className="sv-mega-grid sv-mega-grid--primary">
-                        {[
-                          {
-                            name: "Bảng Điều Khiển",
-                            description:
-                              "Theo dõi tiến độ học tập và thành tích",
-                            path: "/dashboard",
-                            icon: BarChart3,
-                            requireAuth: true,
-                            hideForRoles: ["MENTOR"],
-                          },
-                          {
-                            name: "Lộ Trình Học Tập",
-                            description:
-                              "Lộ trình học tập và phát triển kỹ năng",
-                            path: "/roadmap",
-                            icon: Map,
-                            requireAuth: true,
-                          },
-                          {
-                            name: "Trợ Lý AI",
-                            description: "Nhận hỗ trợ từ trợ lý AI thông minh",
-                            path: "/chatbot",
-                            icon: Bot,
-                            requireAuth: true,
-                          },
-                          {
-                            name: "Lập Kế Hoạch",
-                            description:
-                              "Lên lịch học tập và quản lý công việc",
-                            path: "/study-planner",
-                            icon: Calendar,
-                            requireAuth: true,
-                          },
-                        ]
-                          .filter(
-                            (item) =>
-                              !item.hideForRoles?.some((role) =>
-                                user?.roles.includes(role),
-                              ),
-                          )
-                          .map((item) =>
+                  {(() => {
+                    const primaryItems = [
+                      {
+                        name: "Bảng Điều Khiển",
+                        description: "Theo dõi tiến độ học tập và thành tích",
+                        path: "/dashboard",
+                        icon: BarChart3,
+                        requireAuth: true,
+                        hideForRoles: ["MENTOR"],
+                      },
+                      {
+                        name: "Lộ Trình Học Tập",
+                        description: "Lộ trình học tập và phát triển kỹ năng",
+                        path: "/roadmap",
+                        icon: Map,
+                        requireAuth: true,
+                      },
+                      {
+                        name: "Trợ Lý AI",
+                        description: "Nhận hỗ trợ từ trợ lý AI thông minh",
+                        path: "/chatbot",
+                        icon: Bot,
+                        requireAuth: true,
+                      },
+                      {
+                        name: "Lập Kế Hoạch",
+                        description: "Lên lịch học tập và quản lý công việc",
+                        path: "/study-planner",
+                        icon: Calendar,
+                        requireAuth: true,
+                      },
+                    ].filter(
+                      (item) =>
+                        !item.hideForRoles?.some((role) =>
+                          user?.roles.includes(role),
+                        ),
+                    );
+
+                    if (
+                      primaryItems.length === 0 ||
+                      user?.roles.includes("RECRUITER")
+                    )
+                      return null;
+
+                    return (
+                      <div className="sv-mega-section">
+                        <h4 className="sv-mega-section-title">
+                          <Target size={14} className="sv-section-icon" />
+                          <span>Hành động chính</span>
+                        </h4>
+                        <div className="sv-mega-grid sv-mega-grid--primary">
+                          {primaryItems.map((item) =>
                             item.requireAuth && !isAuthenticated ? (
                               <div
                                 key={item.path + item.name}
@@ -552,135 +560,135 @@ const Header: React.FC = () => {
                               </Link>
                             ),
                           )}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    );
+                  })()}
 
                   {/* Group 2: Explore & Learn */}
-                  <div className="sv-mega-section">
-                    <h4 className="sv-mega-section-title">
-                      <Search size={14} className="sv-section-icon" />
-                      <span>Khám phá & Học tập</span>
-                    </h4>
-                    <div className="sv-mega-grid sv-mega-grid--secondary">
-                      {[
-                        {
-                          name: "Khóa Học",
-                          description: "Khám phá các khóa học chất lượng cao",
-                          path: "/courses",
-                          icon: GraduationCap,
-                          hideForRoles: ["RECRUITER"],
-                        },
-                        {
-                          name: "Cố Vấn",
-                          description: "Kết nối với chuyên gia trong ngành",
-                          path: "/mentorship",
-                          icon: Users,
-                          hideForRoles: ["MENTOR", "RECRUITER"],
-                        },
-                        {
-                          name: "Cộng Đồng",
-                          description: "Tham gia cộng đồng học tập sôi động",
-                          path: "/community",
-                          icon: MessageSquare,
-                        },
-                        {
-                          name: "Việc Làm",
-                          description: "Tìm kiếm cơ hội việc làm phù hợp",
-                          path: "/jobs",
-                          icon: Briefcase,
-                          hideForRoles: ["MENTOR"],
-                        },
-                      ]
-                        .filter(
-                          (item) =>
-                            !item.hideForRoles?.some((role) =>
-                              user?.roles.includes(role),
-                            ),
-                        )
-                        .map((item) => (
-                          <Link
-                            key={item.path}
-                            to={item.path}
-                            className="sv-mega-link"
-                            onClick={() => setShowQuickNav(false)}
-                          >
-                            <item.icon className="sv-mega-link-icon" />
-                            <div className="sv-mega-link-content">
-                              <h3 className="sv-mega-link-title">
-                                {item.name}
-                              </h3>
-                              <p className="sv-mega-link-desc">
-                                {item.description}
-                              </p>
-                            </div>
-                          </Link>
-                        ))}
-                    </div>
-                  </div>
+                  {(() => {
+                    const secondaryItems = [
+                      {
+                        name: "Khóa Học",
+                        description: "Khám phá các khóa học chất lượng cao",
+                        path: "/courses",
+                        icon: GraduationCap,
+                        hideForRoles: ["RECRUITER"],
+                      },
+                      {
+                        name: "Cố Vấn",
+                        description: "Kết nối với chuyên gia trong ngành",
+                        path: "/mentorship",
+                        icon: Users,
+                        hideForRoles: ["MENTOR", "RECRUITER"],
+                      },
+                      {
+                        name: "Cộng Đồng",
+                        description: "Tham gia cộng đồng học tập sôi động",
+                        path: "/community",
+                        icon: MessageSquare,
+                      },
+                      {
+                        name: "Việc Làm",
+                        description: "Tìm kiếm cơ hội việc làm phù hợp",
+                        path: "/jobs",
+                        icon: Briefcase,
+                        hideForRoles: ["MENTOR"],
+                      },
+                    ].filter(
+                      (item) =>
+                        !item.hideForRoles?.some((role) =>
+                          user?.roles.includes(role),
+                        ),
+                    );
+
+                    if (secondaryItems.length === 0) return null;
+
+                    return (
+                      <div className="sv-mega-section">
+                        <h4 className="sv-mega-section-title">
+                          <Search size={14} className="sv-section-icon" />
+                          <span>Khám phá & Học tập</span>
+                        </h4>
+                        <div className="sv-mega-grid sv-mega-grid--secondary">
+                          {secondaryItems.map((item) => (
+                            <Link
+                              key={item.path}
+                              to={item.path}
+                              className="sv-mega-link"
+                              onClick={() => setShowQuickNav(false)}
+                            >
+                              <item.icon className="sv-mega-link-icon" />
+                              <div className="sv-mega-link-content">
+                                <h3 className="sv-mega-link-title">
+                                  {item.name}
+                                </h3>
+                                <p className="sv-mega-link-desc">
+                                  {item.description}
+                                </p>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
 
                   {/* Group 3: Entertainment & Profile */}
-                  <div className="sv-mega-section">
-                    <h4 className="sv-mega-section-title">
-                      <Trophy size={14} className="sv-section-icon" />
-                      <span>Giải trí & Cá nhân</span>
-                    </h4>
-                    <div className="sv-mega-grid sv-mega-grid--tertiary">
-                      {[
-                        {
-                          name: "Hồ Sơ",
-                          description: "Quản lý và chia sẻ thành tích của bạn",
-                          path: "/portfolio",
-                          icon: User,
-                          hideForRoles: ["RECRUITER"],
-                        },
-                        {
-                          name: "Trò Chơi",
-                          description: "Bảng xếp hạng, huy hiệu và mini-games",
-                          path: "/gamification",
-                          icon: Trophy,
-                          hideForRoles: ["MENTOR", "RECRUITER"],
-                        },
-                        {
-                          name: "Hội Thảo",
-                          description: "Tham gia các hội thảo và sự kiện",
-                          path: "/seminar",
-                          icon: Calendar,
-                        },
-                        {
-                          name: "Meowl Shop",
-                          description: "Cửa hàng Skin Neon Tech độc quyền",
-                          path: "/meowl-shop",
-                          icon: ShoppingBag,
-                          hideForRoles: ["MENTOR", "RECRUITER"],
-                        },
-                      ]
-                        .filter(
-                          (item) =>
-                            !item.hideForRoles?.some((role) =>
-                              user?.roles.includes(role),
-                            ),
-                        )
-                        .map((item) => (
-                          <Link
-                            key={item.path}
-                            to={item.path}
-                            className="sv-mega-link"
-                            onClick={() => setShowQuickNav(false)}
-                          >
-                            <item.icon className="sv-mega-link-icon" />
-                            <div className="sv-mega-link-content">
-                              <h3 className="sv-mega-link-title">
-                                {item.name}
-                              </h3>
-                              <p className="sv-mega-link-desc">
-                                {item.description}
-                              </p>
-                            </div>
-                          </Link>
-                        ))}
-                    </div>
-                  </div>
+                  {(() => {
+                    const tertiaryItems = [
+                      {
+                        name: "Hồ Sơ",
+                        description: "Quản lý và chia sẻ thành tích của bạn",
+                        path: "/portfolio",
+                        icon: User,
+                        hideForRoles: ["RECRUITER"],
+                      },
+                      {
+                        name: "Meowl Shop",
+                        description: "Cửa hàng Skin Neon Tech độc quyền",
+                        path: "/meowl-shop",
+                        icon: ShoppingBag,
+                        hideForRoles: ["MENTOR", "RECRUITER"],
+                      },
+                    ].filter(
+                      (item) =>
+                        !item.hideForRoles?.some((role) =>
+                          user?.roles.includes(role),
+                        ),
+                    );
+
+                    if (tertiaryItems.length === 0) return null;
+
+                    return (
+                      <div className="sv-mega-section">
+                        <h4 className="sv-mega-section-title">
+                          <Trophy size={14} className="sv-section-icon" />
+                          <span>Giải trí & Cá nhân</span>
+                        </h4>
+                        <div className="sv-mega-grid sv-mega-grid--tertiary">
+                          {tertiaryItems.map((item) => (
+                            <Link
+                              key={item.path}
+                              to={item.path}
+                              className="sv-mega-link"
+                              onClick={() => setShowQuickNav(false)}
+                            >
+                              <item.icon className="sv-mega-link-icon" />
+                              <div className="sv-mega-link-content">
+                                <h3 className="sv-mega-link-title">
+                                  {item.name}
+                                </h3>
+                                <p className="sv-mega-link-desc">
+                                  {item.description}
+                                </p>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
             </div>

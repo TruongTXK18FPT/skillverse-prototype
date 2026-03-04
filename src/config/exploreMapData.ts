@@ -193,15 +193,26 @@ const BLACK_MARKET: ZoneConfig = {
       lineLength: 95
     },
     {
-      id: 'star-whale-games',
-      name: 'Bụng Cá Voi',
-      description: 'Trò chơi, bảng xếp hạng và huy hiệu',
-      path: '/gamification',
+      id: 'meowl-shop',
+      name: 'Meowl Shop',
+      description: 'Kho hàng quý hiếm và đặc biệt',
+      path: '/meowl-shop',
       icon: Trophy,
-      zoneX: 50,
-      zoneY: 27,
+      zoneX: 32,
+      zoneY: 43,
       direction: 'top-right' as const,
       lineLength: 110
+    },
+    {
+      id: 'premium',
+      name: 'Premium',
+      description: 'Cửa hàng đặc biệt',
+      path: '/premium',
+      icon: Trophy,
+      zoneX: 80,
+      zoneY: 40,
+      direction: 'bottom-left' as const,
+      lineLength: 105
     }
   ]
 };

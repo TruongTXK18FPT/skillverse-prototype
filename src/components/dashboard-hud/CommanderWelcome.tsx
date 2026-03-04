@@ -226,6 +226,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
             >
               <Zap size={14} />
               <span>Trạng thái hệ thống</span>
+              <ChevronRight size={14} /> {/* Add arrow icon */}
             </button>
             <button
               onClick={() => scrollToSection("study-plan-section")}
@@ -234,6 +235,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
             >
               <TrendingUp size={14} />
               <span>Chiến lược học tập</span>
+              <ChevronRight size={14} /> {/* Add arrow icon */}
             </button>
             <button
               onClick={() => scrollToSection("modules-section")}
@@ -242,6 +244,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
             >
               <BookOpen size={14} />
               <span>Khóa học đang học</span>
+              <ChevronRight size={14} /> {/* Add arrow icon */}
             </button>
             <button
               onClick={() => scrollToSection("mentors-section")}
@@ -250,6 +253,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
             >
               <Users size={14} />
               <span>Cố vấn yêu thích</span>
+              <ChevronRight size={14} /> {/* Add arrow icon */}
             </button>
           </div>
         </div>

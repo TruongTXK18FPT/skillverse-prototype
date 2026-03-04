@@ -83,15 +83,19 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
 
               {/* Stats */}
               <div className="active-modules__stats">
+                {course.totalLessons > 0 && (
+                  <div className="active-modules__stat">
+                    <span className="active-modules__stat-label">SYCHRONIZED</span>
+                    <span className="active-modules__stat-value">
+                      {course.completedLessons}/{course.totalLessons} UNITS
+                    </span>
+                  </div>
+                )}
                 <div className="active-modules__stat">
-                  <span className="active-modules__stat-label">LESSONS</span>
-                  <span className="active-modules__stat-value">
-                    {course.completedLessons}/{course.totalLessons}
+                  <span className="active-modules__stat-label">NEXT OBJECTIVE</span>
+                  <span className="active-modules__stat-value" title={course.nextLesson}>
+                    {course.nextLesson}
                   </span>
-                </div>
-                <div className="active-modules__stat">
-                  <span className="active-modules__stat-label">NEXT</span>
-                  <span className="active-modules__stat-value">{course.nextLesson}</span>
                 </div>
               </div>
 

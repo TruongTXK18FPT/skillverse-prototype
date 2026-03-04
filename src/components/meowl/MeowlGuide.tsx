@@ -213,12 +213,28 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
     }
   };
 
+    const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 100; // Khoảng cách offset để không bị che bởi header
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+
   // Navigate to dashboard for check-in
   const goToDashboard = () => {
     if (window.location.pathname === "/dashboard") {
       const element = document.getElementById("learning-streak-section");
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+        scrollToSection("learning-streak-section");
       }
     } else {
       navigate("/dashboard");

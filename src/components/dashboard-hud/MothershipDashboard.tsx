@@ -184,7 +184,7 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
         {/* Commander Welcome */}
         <CommanderWelcome
           userName={userName}
-          subtitle="COMMAND CENTER OPERATIONAL"
+          subtitle="HỆ THỐNG ĐÃ SẴN SÀNG - BẠN MUỐN LÀM GÌ HÔM NAY?"
           userLevel={userLevel}
           onViewPlan={handleViewPlan}
           onViewReport={handleViewReport}
@@ -258,7 +258,7 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
         <div id="modules-section">
           <ActiveModules
             courses={recentCourses}
-            title="Active Simulations"
+            title="Khóa Học Đang Học"
             onCourseClick={handleCourseClick}
             continueLabel={translations?.dashboard?.continue || "Tiếp tục học"}
             onJoinGroup={onJoinGroup}

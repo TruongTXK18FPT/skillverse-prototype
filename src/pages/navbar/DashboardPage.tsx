@@ -6,6 +6,7 @@ import MothershipDashboard from "../../components/dashboard-hud/MothershipDashbo
 import MeowlGuide from "../../components/meowl/MeowlGuide";
 import { getUserEnrollments } from "../../services/enrollmentService";
 import { getCourse } from "../../services/courseService";
+import { getCourseLearningStatus } from "../../services/courseLearningService";
 import { getGroupByCourse, joinGroup } from "../../services/groupChatService";
 import { getMyUsage, getCycleStats } from "../../services/usageLimitService";
 import { getMyFavoriteMentors } from "../../services/mentorProfileService";
@@ -156,30 +157,45 @@ const DashboardPage = () => {
           const coursesPromises = enrollments.content.map(
             async (enrollment) => {
               try {
-                const [courseData, groupData] = await Promise.all([
+                const [courseData, progressData, groupData] = await Promise.all([
                   getCourse(enrollment.courseId),
+                  getCourseLearningStatus(enrollment.courseId).catch(() => null),
                   getGroupByCourse(enrollment.courseId, user.id).catch(
                     () => null,
                   ),
                 ]);
 
-                // Calculate total lessons in the course
-                let totalLessons = 0;
-                courseData.modules?.forEach(
-                  (m: any) => (totalLessons += m.lessons?.length || 0),
-                );
+                // Use actual lesson counts if available from progress service
+                const totalLessons = progressData?.totalLessonCount || 0;
+                const completedLessons = progressData?.completedLessonCount || 0;
 
-                // Estimate completed lessons based on progress percent
-                // This is an estimation because enrollment doesn't explicitly give completed lessons count in the basic DTO
-                const completedLessons = Math.round(
-                  ((enrollment.progressPercent || 0) / 100) * totalLessons,
-                );
+                // Determine next lesson or item name
+                let nextLessonLabel = "Continue Learning";
+                if (progressData) {
+                  if (progressData.percent === 100) {
+                    nextLessonLabel = "Course Completed";
+                  } else {
+                    // Try to find the first uncompleted lesson in the module structure
+                    const allItems: any[] = [];
+                    courseData.modules?.forEach((m: any) => {
+                      m.lessons?.forEach((l: any) => allItems.push({ ...l, type: 'lesson' }));
+                    });
+
+                    const firstUncompleted = allItems.find(item => 
+                      !progressData.completedLessonIds.includes(item.id)
+                    );
+                    
+                    if (firstUncompleted) {
+                      nextLessonLabel = firstUncompleted.title;
+                    }
+                  }
+                }
 
                 return {
                   id: courseData.id,
                   title: courseData.title,
-                  progress: enrollment.progressPercent || 0,
-                  totalLessons: totalLessons || 0,
+                  progress: progressData?.percent ?? enrollment.progressPercent ?? 0,
+                  totalLessons: totalLessons,
                   completedLessons: completedLessons,
                   instructor:
                     courseData.author?.fullName || "Unknown Instructor",
@@ -187,11 +203,11 @@ const DashboardPage = () => {
                     courseData.thumbnailUrl ||
                     "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=200", // Fallback image
                   lastAccessed: "Recently",
-                  nextLesson: "Continue Learning",
-                  estimatedTime: (courseData as any).duration
-                    ? `${(courseData as any).duration} min`
+                  nextLesson: nextLessonLabel,
+                  estimatedTime: courseData.estimatedDurationHours
+                    ? `${courseData.estimatedDurationHours} hours`
                     : "N/A",
-                  rawDuration: (courseData as any).duration || 0,
+                  rawDuration: courseData.estimatedDurationHours ? courseData.estimatedDurationHours * 60 : 0,
                   group: groupData,
                 };
               } catch (e) {
