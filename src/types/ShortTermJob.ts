@@ -591,7 +591,7 @@ export interface ShortTermApplicationResponse extends ShortTermJobApplication {
   };
 }
 
-export interface JobReviewResponse extends JobReview {}
+export type JobReviewResponse = JobReview;
 
 export interface UpdateShortTermApplicationStatusRequest {
   status: ShortTermApplicationStatus;

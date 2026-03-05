@@ -21,7 +21,8 @@
   --stj-form-amber: #f6ad55;
   --stj-form-red: #fc8181;
   --stj-form-glow: 0 0 12px rgba(99, 179, 237, 0.25);
-  --stj-form-glow-focus: 0 0 20px rgba(99, 179, 237, 0.45), 0 0 40px rgba(99, 179, 237, 0.12);
+  --stj-form-glow-focus:
+    0 0 20px rgba(99, 179, 237, 0.45), 0 0 40px rgba(99, 179, 237, 0.12);
   --stj-form-radius: 10px;
   --stj-form-radius-sm: 6px;
 }
@@ -47,9 +48,16 @@
 .stj-form__section::before {
   content: "";
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--stj-form-accent), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--stj-form-accent),
+    transparent
+  );
   opacity: 0.5;
 }
 
@@ -155,7 +163,10 @@
   font-family: inherit;
   padding: 0.6rem 0.85rem;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
   box-sizing: border-box;
 }
 
@@ -208,7 +219,9 @@
   border: 1px solid var(--stj-form-border);
   border-radius: var(--stj-form-radius-sm);
   overflow: hidden;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .stj-form__number-wrap:focus-within {
@@ -247,7 +260,9 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
   user-select: none;
   padding: 0.6rem 0;
 }
@@ -279,7 +294,10 @@
   font-size: 0.84rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
   white-space: nowrap;
 }
 
@@ -414,7 +432,9 @@
   background: rgba(99, 179, 237, 0.12);
   border: 1px solid var(--stj-form-border);
   cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
 }
 
 .stj-form__switch input:checked ~ .stj-form__switch-track {
@@ -431,11 +451,16 @@
   height: 16px;
   border-radius: 50%;
   background: rgba(150, 180, 220, 0.6);
-  transition: transform 0.2s, background 0.2s;
+  transition:
+    transform 0.2s,
+    background 0.2s;
   pointer-events: none;
 }
 
-.stj-form__switch input:checked ~ .stj-form__switch-track .stj-form__switch-thumb {
+.stj-form__switch
+  input:checked
+  ~ .stj-form__switch-track
+  .stj-form__switch-thumb {
   transform: translateX(20px);
   background: var(--stj-form-cyan);
   box-shadow: 0 0 6px rgba(0, 212, 255, 0.6);
@@ -508,7 +533,9 @@
   font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s, box-shadow 0.15s;
+  transition:
+    background 0.15s,
+    box-shadow 0.15s;
   letter-spacing: 0.03em;
 }
 
@@ -571,15 +598,25 @@
 }
 
 .stj-form__btn--publish {
-  background: linear-gradient(135deg, rgba(99, 179, 237, 0.25), rgba(0, 212, 255, 0.2));
+  background: linear-gradient(
+    135deg,
+    rgba(99, 179, 237, 0.25),
+    rgba(0, 212, 255, 0.2)
+  );
   border-color: rgba(99, 179, 237, 0.55);
   color: #e8f4ff;
 }
 
 .stj-form__btn--publish:hover:not(:disabled) {
-  background: linear-gradient(135deg, rgba(99, 179, 237, 0.4), rgba(0, 212, 255, 0.32));
+  background: linear-gradient(
+    135deg,
+    rgba(99, 179, 237, 0.4),
+    rgba(0, 212, 255, 0.32)
+  );
   border-color: var(--stj-form-cyan);
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), 0 0 40px rgba(0, 212, 255, 0.12);
+  box-shadow:
+    0 0 20px rgba(0, 212, 255, 0.4),
+    0 0 40px rgba(0, 212, 255, 0.12);
   color: #fff;
 }
 
@@ -587,7 +624,11 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.06));
+  background: linear-gradient(
+    135deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.06)
+  );
   pointer-events: none;
 }
 
@@ -603,13 +644,25 @@
 }
 
 @keyframes stj-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Scan line animation on section cards */
 @keyframes stj-scan {
-  0% { transform: translateY(-100%); opacity: 0; }
-  10% { opacity: 0.4; }
-  90% { opacity: 0.4; }
-  100% { transform: translateY(1000%); opacity: 0; }
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.4;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(1000%);
+    opacity: 0;
+  }
 }

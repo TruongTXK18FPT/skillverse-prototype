@@ -650,7 +650,6 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
                                     <Trash2 size={14} />
                                   </button>
                                 )}
-
                               </div>
                             </td>
                           </tr>

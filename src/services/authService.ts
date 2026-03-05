@@ -62,7 +62,7 @@ class AuthService {
       if (!exp) return false; // No expiry set
 
       return Date.now() >= exp * 1000;
-    } catch (e) {
+    } catch {
       return true; // Invalid token
     }
   }

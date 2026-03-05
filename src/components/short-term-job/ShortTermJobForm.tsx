@@ -1,5 +1,17 @@
 import React, { useState } from "react";
-import { FiPlus, FiTrash2, FiSave, FiSend, FiX, FiZap, FiCode, FiDollarSign, FiMapPin, FiTag, FiCheckSquare } from "react-icons/fi";
+import {
+  FiPlus,
+  FiTrash2,
+  FiSave,
+  FiSend,
+  FiX,
+  FiZap,
+  FiCode,
+  FiDollarSign,
+  FiMapPin,
+  FiTag,
+  FiCheckSquare,
+} from "react-icons/fi";
 import {
   CreateShortTermJobRequest,
   CreateMilestoneRequest,
@@ -325,7 +337,6 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
   // ========== RENDER ==========
   return (
     <div className="stj-form">
-
       {/* ── Basic Info ─────────────────────────────────────── */}
       <div className="stj-form__section">
         <div className="stj-form__section-header">
@@ -335,10 +346,11 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
           </h3>
         </div>
         <div className="stj-form__section-body">
-
           {/* Title */}
           <div className="stj-form__field">
-            <label className="stj-form__label stj-form__label--required">Tiêu đề công việc</label>
+            <label className="stj-form__label stj-form__label--required">
+              Tiêu đề công việc
+            </label>
             <input
               className={`stj-form__input${errors.title ? " stj-form__input--error" : ""}`}
               name="title"
@@ -347,13 +359,19 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
               placeholder="VD: Thiết kế logo cho startup công nghệ"
               maxLength={200}
             />
-            {errors.title && <span className="stj-form__error">⚠ {errors.title}</span>}
-            <span className="stj-form__hint">{formData.title.length}/200 ký tự</span>
+            {errors.title && (
+              <span className="stj-form__error">⚠ {errors.title}</span>
+            )}
+            <span className="stj-form__hint">
+              {formData.title.length}/200 ký tự
+            </span>
           </div>
 
           {/* Description */}
           <div className="stj-form__field">
-            <label className="stj-form__label stj-form__label--required">Mô tả chi tiết</label>
+            <label className="stj-form__label stj-form__label--required">
+              Mô tả chi tiết
+            </label>
             <textarea
               className={`stj-form__textarea${errors.description ? " stj-form__textarea--error" : ""}`}
               name="description"
@@ -363,8 +381,12 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
               rows={6}
               maxLength={5000}
             />
-            {errors.description && <span className="stj-form__error">⚠ {errors.description}</span>}
-            <span className="stj-form__hint">{formData.description.length}/5000 ký tự</span>
+            {errors.description && (
+              <span className="stj-form__error">⚠ {errors.description}</span>
+            )}
+            <span className="stj-form__hint">
+              {formData.description.length}/5000 ký tự
+            </span>
           </div>
 
           {/* Requirements */}
@@ -384,7 +406,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
           {/* Category + Urgency */}
           <div className="stj-form__row">
             <div className="stj-form__field">
-              <label className="stj-form__label stj-form__label--required">Danh mục</label>
+              <label className="stj-form__label stj-form__label--required">
+                Danh mục
+              </label>
               <select
                 className="stj-form__select"
                 name="subCategory"
@@ -392,12 +416,16 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                 onChange={handleInputChange}
               >
                 {SUBCATEGORY_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="stj-form__field">
-              <label className="stj-form__label stj-form__label--required">Độ gấp</label>
+              <label className="stj-form__label stj-form__label--required">
+                Độ gấp
+              </label>
               <select
                 className="stj-form__select"
                 name="urgency"
@@ -405,7 +433,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                 onChange={handleInputChange}
               >
                 {URGENCY_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>{opt.label} — {opt.description}</option>
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label} — {opt.description}
+                  </option>
                 ))}
               </select>
             </div>
@@ -429,25 +459,39 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
               onChange={(e) => setSkillInput(e.target.value)}
               placeholder="Nhập kỹ năng và Enter"
               onKeyDown={(e) => {
-                if (e.key === "Enter") { e.preventDefault(); handleAddSkill(); }
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleAddSkill();
+                }
               }}
             />
-            <button className="stj-form__pill-add-btn" onClick={handleAddSkill} type="button">
+            <button
+              className="stj-form__pill-add-btn"
+              onClick={handleAddSkill}
+              type="button"
+            >
               <FiPlus size={13} /> Thêm
             </button>
           </div>
-          {errors.requiredSkills && <span className="stj-form__error">⚠ {errors.requiredSkills}</span>}
+          {errors.requiredSkills && (
+            <span className="stj-form__error">⚠ {errors.requiredSkills}</span>
+          )}
 
           <span className="stj-form__suggest-label">Gợi ý nhanh:</span>
           <div className="stj-form__pill-list">
-            {SKILL_SUGGESTIONS.filter((s) => !formData.requiredSkills.includes(s))
+            {SKILL_SUGGESTIONS.filter(
+              (s) => !formData.requiredSkills.includes(s),
+            )
               .slice(0, 12)
               .map((skill) => (
                 <span
                   key={skill}
                   className="stj-form__pill stj-form__pill--suggest"
                   onClick={() => {
-                    setFormData((prev) => ({ ...prev, requiredSkills: [...prev.requiredSkills, skill] }));
+                    setFormData((prev) => ({
+                      ...prev,
+                      requiredSkills: [...prev.requiredSkills, skill],
+                    }));
                   }}
                 >
                   + {skill}
@@ -457,12 +501,22 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
 
           <hr className="stj-form__divider" />
 
-          <span className="stj-form__count-label">Đã chọn ({formData.requiredSkills.length})</span>
+          <span className="stj-form__count-label">
+            Đã chọn ({formData.requiredSkills.length})
+          </span>
           <div className="stj-form__pill-list">
             {formData.requiredSkills.map((skill) => (
-              <span key={skill} className="stj-form__pill stj-form__pill--selected">
+              <span
+                key={skill}
+                className="stj-form__pill stj-form__pill--selected"
+              >
                 {skill}
-                <span className="stj-form__pill-x" onClick={() => handleRemoveSkill(skill)}>✕</span>
+                <span
+                  className="stj-form__pill-x"
+                  onClick={() => handleRemoveSkill(skill)}
+                >
+                  ✕
+                </span>
               </span>
             ))}
           </div>
@@ -478,11 +532,12 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
           </h3>
         </div>
         <div className="stj-form__section-body">
-
           <div className="stj-form__row">
             {/* Budget */}
             <div className="stj-form__field">
-              <label className="stj-form__label stj-form__label--required">Ngân sách (VND)</label>
+              <label className="stj-form__label stj-form__label--required">
+                Ngân sách (VND)
+              </label>
               <div className="stj-form__number-wrap">
                 <input
                   className="stj-form__number-input"
@@ -490,18 +545,46 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                   value={formData.budget || ""}
                   min={100000}
                   step={100000}
-                  onChange={(e) => handleNumberChange("budget", Number(e.target.value))}
+                  onChange={(e) =>
+                    handleNumberChange("budget", Number(e.target.value))
+                  }
                   placeholder="100000"
                 />
-                <button className="stj-form__number-btn" type="button" onClick={() => handleNumberChange("budget", (formData.budget || 0) + 100000)}>+</button>
-                <button className="stj-form__number-btn" type="button" onClick={() => handleNumberChange("budget", Math.max(0, (formData.budget || 0) - 100000))}>−</button>
+                <button
+                  className="stj-form__number-btn"
+                  type="button"
+                  onClick={() =>
+                    handleNumberChange(
+                      "budget",
+                      (formData.budget || 0) + 100000,
+                    )
+                  }
+                >
+                  +
+                </button>
+                <button
+                  className="stj-form__number-btn"
+                  type="button"
+                  onClick={() =>
+                    handleNumberChange(
+                      "budget",
+                      Math.max(0, (formData.budget || 0) - 100000),
+                    )
+                  }
+                >
+                  −
+                </button>
               </div>
-              {errors.budget && <span className="stj-form__error">⚠ {errors.budget}</span>}
+              {errors.budget && (
+                <span className="stj-form__error">⚠ {errors.budget}</span>
+              )}
             </div>
 
             {/* Payment Method */}
             <div className="stj-form__field">
-              <label className="stj-form__label stj-form__label--required">Hình thức thanh toán</label>
+              <label className="stj-form__label stj-form__label--required">
+                Hình thức thanh toán
+              </label>
               <select
                 className="stj-form__select"
                 name="paymentMethod"
@@ -509,7 +592,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                 onChange={handleInputChange}
               >
                 {PAYMENT_METHOD_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
                 ))}
               </select>
             </div>
@@ -518,7 +603,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
           <div className="stj-form__row">
             {/* Deadline */}
             <div className="stj-form__field">
-              <label className="stj-form__label stj-form__label--required">Hạn nhận đơn ứng tuyển</label>
+              <label className="stj-form__label stj-form__label--required">
+                Hạn nhận đơn ứng tuyển
+              </label>
               <input
                 className={`stj-form__input${errors.deadline ? " stj-form__input--error" : ""}`}
                 name="deadline"
@@ -526,7 +613,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                 value={formData.deadline}
                 onChange={handleInputChange}
               />
-              {errors.deadline && <span className="stj-form__error">⚠ {errors.deadline}</span>}
+              {errors.deadline && (
+                <span className="stj-form__error">⚠ {errors.deadline}</span>
+              )}
             </div>
 
             {/* Work Deadline */}
@@ -539,14 +628,18 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                 value={formData.workDeadline || ""}
                 onChange={handleInputChange}
               />
-              {errors.workDeadline && <span className="stj-form__error">⚠ {errors.workDeadline}</span>}
+              {errors.workDeadline && (
+                <span className="stj-form__error">⚠ {errors.workDeadline}</span>
+              )}
             </div>
           </div>
 
           <div className="stj-form__row">
             {/* Estimated Duration */}
             <div className="stj-form__field">
-              <label className="stj-form__label stj-form__label--required">Thời gian ước tính</label>
+              <label className="stj-form__label stj-form__label--required">
+                Thời gian ước tính
+              </label>
               <input
                 className={`stj-form__input${errors.estimatedDuration ? " stj-form__input--error" : ""}`}
                 name="estimatedDuration"
@@ -554,12 +647,18 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                 onChange={handleInputChange}
                 placeholder="VD: 3-5 ngày, 1 tuần..."
               />
-              {errors.estimatedDuration && <span className="stj-form__error">⚠ {errors.estimatedDuration}</span>}
+              {errors.estimatedDuration && (
+                <span className="stj-form__error">
+                  ⚠ {errors.estimatedDuration}
+                </span>
+              )}
             </div>
 
             {/* Max Applicants */}
             <div className="stj-form__field">
-              <label className="stj-form__label stj-form__label--required">Số ứng viên tối đa</label>
+              <label className="stj-form__label stj-form__label--required">
+                Số ứng viên tối đa
+              </label>
               <div className="stj-form__number-wrap">
                 <input
                   className="stj-form__number-input"
@@ -567,12 +666,40 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                   value={formData.maxApplicants || ""}
                   min={1}
                   max={100}
-                  onChange={(e) => handleNumberChange("maxApplicants", Number(e.target.value))}
+                  onChange={(e) =>
+                    handleNumberChange("maxApplicants", Number(e.target.value))
+                  }
                 />
-                <button className="stj-form__number-btn" type="button" onClick={() => handleNumberChange("maxApplicants", Math.min(100, (formData.maxApplicants || 10) + 1))}>+</button>
-                <button className="stj-form__number-btn" type="button" onClick={() => handleNumberChange("maxApplicants", Math.max(1, (formData.maxApplicants || 10) - 1))}>−</button>
+                <button
+                  className="stj-form__number-btn"
+                  type="button"
+                  onClick={() =>
+                    handleNumberChange(
+                      "maxApplicants",
+                      Math.min(100, (formData.maxApplicants || 10) + 1),
+                    )
+                  }
+                >
+                  +
+                </button>
+                <button
+                  className="stj-form__number-btn"
+                  type="button"
+                  onClick={() =>
+                    handleNumberChange(
+                      "maxApplicants",
+                      Math.max(1, (formData.maxApplicants || 10) - 1),
+                    )
+                  }
+                >
+                  −
+                </button>
               </div>
-              {errors.maxApplicants && <span className="stj-form__error">⚠ {errors.maxApplicants}</span>}
+              {errors.maxApplicants && (
+                <span className="stj-form__error">
+                  ⚠ {errors.maxApplicants}
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -587,15 +714,18 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
           </h3>
         </div>
         <div className="stj-form__section-body">
-
           {/* Remote toggle */}
           <div className="stj-form__toggle-row">
-            <span className="stj-form__toggle-label">Làm việc từ xa (Remote)</span>
+            <span className="stj-form__toggle-label">
+              Làm việc từ xa (Remote)
+            </span>
             <label className="stj-form__switch">
               <input
                 type="checkbox"
                 checked={formData.isRemote}
-                onChange={(e) => handleSwitchChange("isRemote", e.target.checked)}
+                onChange={(e) =>
+                  handleSwitchChange("isRemote", e.target.checked)
+                }
               />
               <div className="stj-form__switch-track">
                 <div className="stj-form__switch-thumb" />
@@ -620,12 +750,16 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
 
           {/* Allows revision toggle */}
           <div className="stj-form__toggle-row">
-            <span className="stj-form__toggle-label">Cho phép yêu cầu chỉnh sửa</span>
+            <span className="stj-form__toggle-label">
+              Cho phép yêu cầu chỉnh sửa
+            </span>
             <label className="stj-form__switch">
               <input
                 type="checkbox"
                 checked={formData.allowsRevision ?? true}
-                onChange={(e) => handleSwitchChange("allowsRevision", e.target.checked)}
+                onChange={(e) =>
+                  handleSwitchChange("allowsRevision", e.target.checked)
+                }
               />
               <div className="stj-form__switch-track">
                 <div className="stj-form__switch-thumb" />
@@ -643,10 +777,34 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                   value={formData.maxRevisions || ""}
                   min={1}
                   max={10}
-                  onChange={(e) => handleNumberChange("maxRevisions", Number(e.target.value))}
+                  onChange={(e) =>
+                    handleNumberChange("maxRevisions", Number(e.target.value))
+                  }
                 />
-                <button className="stj-form__number-btn" type="button" onClick={() => handleNumberChange("maxRevisions", Math.min(10, (formData.maxRevisions || 2) + 1))}>+</button>
-                <button className="stj-form__number-btn" type="button" onClick={() => handleNumberChange("maxRevisions", Math.max(1, (formData.maxRevisions || 2) - 1))}>−</button>
+                <button
+                  className="stj-form__number-btn"
+                  type="button"
+                  onClick={() =>
+                    handleNumberChange(
+                      "maxRevisions",
+                      Math.min(10, (formData.maxRevisions || 2) + 1),
+                    )
+                  }
+                >
+                  +
+                </button>
+                <button
+                  className="stj-form__number-btn"
+                  type="button"
+                  onClick={() =>
+                    handleNumberChange(
+                      "maxRevisions",
+                      Math.max(1, (formData.maxRevisions || 2) - 1),
+                    )
+                  }
+                >
+                  −
+                </button>
               </div>
             </div>
           )}
@@ -661,7 +819,11 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
               <FiCheckSquare className="stj-form__icon" />
               Cột mốc thanh toán
             </h3>
-            <button className="stj-form__add-btn" type="button" onClick={handleAddMilestone}>
+            <button
+              className="stj-form__add-btn"
+              type="button"
+              onClick={handleAddMilestone}
+            >
               <FiPlus size={13} /> Thêm cột mốc
             </button>
           </div>
@@ -669,7 +831,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
             {formData.milestones?.map((milestone, index) => (
               <div key={index} className="stj-form__milestone">
                 <div className="stj-form__milestone-header">
-                  <span className="stj-form__milestone-title">Cột mốc {index + 1}</span>
+                  <span className="stj-form__milestone-title">
+                    Cột mốc {index + 1}
+                  </span>
                   <button
                     className="stj-form__milestone-del"
                     type="button"
@@ -683,14 +847,18 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                   className="stj-form__input"
                   placeholder="Tên cột mốc"
                   value={milestone.title}
-                  onChange={(e) => handleUpdateMilestone(index, "title", e.target.value)}
+                  onChange={(e) =>
+                    handleUpdateMilestone(index, "title", e.target.value)
+                  }
                 />
                 <textarea
                   className="stj-form__textarea"
                   placeholder="Mô tả"
                   rows={2}
                   value={milestone.description}
-                  onChange={(e) => handleUpdateMilestone(index, "description", e.target.value)}
+                  onChange={(e) =>
+                    handleUpdateMilestone(index, "description", e.target.value)
+                  }
                 />
                 <div className="stj-form__row">
                   <div className="stj-form__field">
@@ -699,7 +867,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                       className="stj-form__input"
                       type="datetime-local"
                       value={milestone.deadline}
-                      onChange={(e) => handleUpdateMilestone(index, "deadline", e.target.value)}
+                      onChange={(e) =>
+                        handleUpdateMilestone(index, "deadline", e.target.value)
+                      }
                     />
                   </div>
                   <div className="stj-form__field">
@@ -711,10 +881,40 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                         value={milestone.amount || ""}
                         min={0}
                         step={100000}
-                        onChange={(e) => handleUpdateMilestone(index, "amount", Number(e.target.value))}
+                        onChange={(e) =>
+                          handleUpdateMilestone(
+                            index,
+                            "amount",
+                            Number(e.target.value),
+                          )
+                        }
                       />
-                      <button className="stj-form__number-btn" type="button" onClick={() => handleUpdateMilestone(index, "amount", (milestone.amount || 0) + 100000)}>+</button>
-                      <button className="stj-form__number-btn" type="button" onClick={() => handleUpdateMilestone(index, "amount", Math.max(0, (milestone.amount || 0) - 100000))}>−</button>
+                      <button
+                        className="stj-form__number-btn"
+                        type="button"
+                        onClick={() =>
+                          handleUpdateMilestone(
+                            index,
+                            "amount",
+                            (milestone.amount || 0) + 100000,
+                          )
+                        }
+                      >
+                        +
+                      </button>
+                      <button
+                        className="stj-form__number-btn"
+                        type="button"
+                        onClick={() =>
+                          handleUpdateMilestone(
+                            index,
+                            "amount",
+                            Math.max(0, (milestone.amount || 0) - 100000),
+                          )
+                        }
+                      >
+                        −
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -745,10 +945,17 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
               onChange={(e) => setTagInput(e.target.value)}
               placeholder="Nhập tag..."
               onKeyDown={(e) => {
-                if (e.key === "Enter") { e.preventDefault(); handleAddTag(); }
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleAddTag();
+                }
               }}
             />
-            <button className="stj-form__pill-add-btn" type="button" onClick={handleAddTag}>
+            <button
+              className="stj-form__pill-add-btn"
+              type="button"
+              onClick={handleAddTag}
+            >
               <FiPlus size={13} /> Thêm
             </button>
           </div>
@@ -756,7 +963,12 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
             {formData.tags?.map((tag) => (
               <span key={tag} className="stj-form__pill stj-form__pill--tag">
                 {tag}
-                <span className="stj-form__pill-x" onClick={() => handleRemoveTag(tag)}>✕</span>
+                <span
+                  className="stj-form__pill-x"
+                  onClick={() => handleRemoveTag(tag)}
+                >
+                  ✕
+                </span>
               </span>
             ))}
           </div>
@@ -781,7 +993,11 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
           onClick={() => handleSubmit(false)}
           disabled={isLoading}
         >
-          {isLoading ? <span className="stj-form__spinner" /> : <FiSave size={14} />}
+          {isLoading ? (
+            <span className="stj-form__spinner" />
+          ) : (
+            <FiSave size={14} />
+          )}
           Lưu nháp
         </button>
         <button
@@ -790,7 +1006,11 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
           onClick={() => handleSubmit(true)}
           disabled={isLoading}
         >
-          {isLoading ? <span className="stj-form__spinner" /> : <FiSend size={14} />}
+          {isLoading ? (
+            <span className="stj-form__spinner" />
+          ) : (
+            <FiSend size={14} />
+          )}
           {mode === "create" ? "Đăng công việc" : "Cập nhật & Đăng"}
         </button>
       </div>

@@ -15,7 +15,7 @@ import {
   Rocket,
   CheckCircle,
   AlertTriangle,
-  Infinity,
+  Infinity as InfinityIcon,
 } from "lucide-react";
 import recruiterSubscriptionService, {
   RecruiterSubscriptionInfoResponse,
@@ -305,7 +305,7 @@ const SubscriptionWidget: React.FC = () => {
             <div className="rcr-sub-quota__value">
               {info.jobPostingUnlimited ? (
                 <span className="rcr-sub-quota__unlimited">
-                  <Infinity size={14} /> Không giới hạn
+                  <InfinityIcon size={14} /> Không giới hạn
                 </span>
               ) : (
                 <span className="rcr-sub-quota__count">
@@ -356,7 +356,7 @@ const SubscriptionWidget: React.FC = () => {
             <div className="rcr-sub-quota__value">
               {info.shortTermJobPostingUnlimited ? (
                 <span className="rcr-sub-quota__unlimited">
-                  <Infinity size={14} /> Không giới hạn
+                  <InfinityIcon size={14} /> Không giới hạn
                 </span>
               ) : (
                 <span className="rcr-sub-quota__count">

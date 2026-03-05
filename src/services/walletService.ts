@@ -13,7 +13,6 @@ import {
   WithdrawalRequest,
   UpdateBankAccountRequest,
   SetTransactionPinRequest,
-  Toggle2FARequest,
   CoinPackage,
   WalletStatistics,
   CreatePaymentResponse,
