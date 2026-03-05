@@ -89,7 +89,7 @@ import ProfilePageCosmic from "./pages/profile/ProfilePageCosmic";
 import MentorProfilePage from "./pages/mentor/MentorProfilePage";
 import RecruiterProfilePage from "./pages/business/RecruiterProfilePage";
 import ProfileRouter from "./components/shared/ProfileRouter";
-import MyApplicationsPage from "./pages/user/MyApplicationsPage";
+import JobLabPage from "./pages/user/JobLabPage";
 import ExploreMapPage from "./pages/ExploreMapPage";
 import AboutPage from "./pages/about/AboutPage";
 import NotificationPage from "./pages/NotificationPage";
@@ -361,10 +361,15 @@ const App = () => {
                             path="/privacy-policy"
                             element={<PrivacyPolicy />}
                           />
-                          {/* User My Applications */}
+                          {/* User My Applications - Using JobLab for better UX */}
                           <Route
                             path="/my-applications"
-                            element={<MyApplicationsPage />}
+                            element={<JobLabPage />}
+                          />
+                          {/* Job Lab - Career Hub (alias) */}
+                          <Route
+                            path="/job-lab"
+                            element={<JobLabPage />}
                           />
                           {/* Violation Report Routes */}
                           <Route

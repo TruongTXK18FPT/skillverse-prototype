@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import {
   X,
@@ -18,6 +18,8 @@ import {
   CheckCircle,
   Loader2,
   ShieldCheck,
+  Timer,
+  Ban,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import shortTermJobService from "../../services/shortTermJobService";
@@ -45,6 +47,49 @@ const ShortTermJobDetailModal: React.FC<ShortTermJobDetailModalProps> = ({
   const [coverLetter, setCoverLetter] = useState("");
   const [proposedPrice, setProposedPrice] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // ── Cooldown tracking ──
+  const COOLDOWN_MS_TOTAL = 3_600_000;
+  const JLAB_COOLDOWN_KEY = "jlab_cancel_cooldowns";
+  const [cooldownMs, setCooldownMs] = useState(0);
+
+  // Recompute remaining cooldown whenever the apply panel opens
+  useEffect(() => {
+    if (!showApplyForm) return;
+    try {
+      const stored: Record<string, string> = JSON.parse(
+        localStorage.getItem(JLAB_COOLDOWN_KEY) || "{}",
+      );
+      const ts = stored[String(job.id)];
+      if (ts) {
+        const remaining = COOLDOWN_MS_TOTAL - (Date.now() - new Date(ts).getTime());
+        setCooldownMs(remaining > 0 ? remaining : 0);
+      } else {
+        setCooldownMs(0);
+      }
+    } catch {
+      setCooldownMs(0);
+    }
+  }, [showApplyForm, job.id]);
+
+  // Tick down every second while cooldown is active
+  useEffect(() => {
+    if (cooldownMs <= 0) return;
+    const t = setTimeout(
+      () => setCooldownMs((prev) => Math.max(0, prev - 1000)),
+      1000,
+    );
+    return () => clearTimeout(t);
+  }, [cooldownMs]);
+
+  const formatCooldownTime = (ms: number) => {
+    const totalSec = Math.ceil(ms / 1000);
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+  };
+
+  const cooldownPct = Math.max(0, (cooldownMs / COOLDOWN_MS_TOTAL) * 100);
 
   const userRole = user?.roles?.[0];
   const isRecruiter = userRole === "RECRUITER";
@@ -307,39 +352,78 @@ const ShortTermJobDetailModal: React.FC<ShortTermJobDetailModalProps> = ({
             </div>
           )}
 
-          {/* Apply form */}
+          {/* Apply form / Cooldown widget */}
           {showApplyForm && (
-            <div className="stm-apply-form">
-              <h4 className="stm-section__title">
-                <CheckCircle size={15} /> Đơn ứng tuyển
-              </h4>
-              <div className="stm-form-group">
-                <label className="stm-form-label">
-                  Thư giới thiệu (tùy chọn)
-                </label>
-                <textarea
-                  className="stm-textarea"
-                  rows={4}
-                  value={coverLetter}
-                  onChange={(e) => setCoverLetter(e.target.value)}
-                  placeholder="Giới thiệu bản thân và lý do bạn phù hợp với công việc này..."
-                />
+            cooldownMs > 0 ? (
+              /* ── Cooldown countdown panel ── */
+              <div className="stmcd-panel">
+                <div className="stmcd-ring-wrap">
+                  <svg className="stmcd-ring-svg" viewBox="0 0 80 80" width="80" height="80">
+                    <circle className="stmcd-ring-bg" cx="40" cy="40" r="34" />
+                    <circle
+                      className="stmcd-ring-progress"
+                      cx="40"
+                      cy="40"
+                      r="34"
+                      strokeDasharray={`${2 * Math.PI * 34}`}
+                      strokeDashoffset={`${2 * Math.PI * 34 * (1 - cooldownPct / 100)}`}
+                    />
+                  </svg>
+                  <div className="stmcd-ring-inner">
+                    <Timer size={20} className="stmcd-ring-icon" />
+                    <span className="stmcd-ring-time">{formatCooldownTime(cooldownMs)}</span>
+                  </div>
+                </div>
+
+                <div className="stmcd-copy">
+                  <div className="stmcd-headline">
+                    <Ban size={15} className="stmcd-headline-icon" />
+                    Đang có thời gian chờ
+                  </div>
+                  <p className="stmcd-desc">
+                    Bạn đã hủy đơn ứng tuyển vị trí này gần đây.
+                    Vui lòng chờ hết thời gian để ứng tuyển lại.
+                  </p>
+                  <div className="stmcd-tip">
+                    <Clock size={12} />
+                    Sau khi ứng tuyển lại, đơn sẽ <strong>không thể hủy thêm lần nữa</strong>.
+                  </div>
+                </div>
               </div>
-              {job.isNegotiable && (
+            ) : (
+              /* ── Normal apply form ── */
+              <div className="stm-apply-form">
+                <h4 className="stm-section__title">
+                  <CheckCircle size={15} /> Đơn ứng tuyển
+                </h4>
                 <div className="stm-form-group">
                   <label className="stm-form-label">
-                    Giá đề xuất (VND, tùy chọn)
+                    Thư giới thiệu (tùy chọn)
                   </label>
-                  <input
-                    className="stm-input"
-                    type="number"
-                    value={proposedPrice}
-                    onChange={(e) => setProposedPrice(e.target.value)}
-                    placeholder={`Mặc định: ${job.budget.toLocaleString("vi-VN")} ₫`}
+                  <textarea
+                    className="stm-textarea"
+                    rows={4}
+                    value={coverLetter}
+                    onChange={(e) => setCoverLetter(e.target.value)}
+                    placeholder="Giới thiệu bản thân và lý do bạn phù hợp với công việc này..."
                   />
                 </div>
-              )}
-            </div>
+                {job.isNegotiable && (
+                  <div className="stm-form-group">
+                    <label className="stm-form-label">
+                      Giá đề xuất (VND, tùy chọn)
+                    </label>
+                    <input
+                      className="stm-input"
+                      type="number"
+                      value={proposedPrice}
+                      onChange={(e) => setProposedPrice(e.target.value)}
+                      placeholder={`Mặc định: ${job.budget.toLocaleString("vi-VN")} ₫`}
+                    />
+                  </div>
+                )}
+              </div>
+            )
           )}
         </div>
 
@@ -353,7 +437,7 @@ const ShortTermJobDetailModal: React.FC<ShortTermJobDetailModalProps> = ({
               <Zap size={16} /> Ứng tuyển ngay
             </button>
           )}
-          {isCanApply && showApplyForm && (
+          {isCanApply && showApplyForm && cooldownMs === 0 && (
             <button
               className={`stm-btn stm-btn--apply stm-btn--${variant}`}
               onClick={handleApply}
@@ -375,7 +459,7 @@ const ShortTermJobDetailModal: React.FC<ShortTermJobDetailModalProps> = ({
               className="stm-btn stm-btn--secondary"
               onClick={() => setShowApplyForm(false)}
             >
-              Hủy
+              {cooldownMs > 0 ? "Quay lại" : "Hủy"}
             </button>
           )}
           {!isCanApply && !isAuthenticated && (

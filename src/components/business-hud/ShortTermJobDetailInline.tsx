@@ -208,10 +208,15 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
         data.status !== ShortTermJobStatus.PENDING_APPROVAL
       ) {
         try {
-          const result = await shortTermJobService.getJobApplicants(jobId);
-          setApplications(result.content);
-        } catch {
-          // May not have permission — ignore
+          const result = await shortTermJobService.getJobApplicants(jobId, 0, 100);
+          // Handle both paged and non-paged responses
+          const apps = result.content || result;
+          setApplications(Array.isArray(apps) ? apps : []);
+          console.log('[ShortTermJobDetail] Fetched applicants:', apps?.length || 0);
+        } catch (err) {
+          console.error('[ShortTermJobDetail] Failed to fetch applicants:', err);
+          // Set empty array but log the error for debugging
+          setApplications([]);
         }
       }
     } catch (error) {
@@ -537,10 +542,21 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
         {/* ---- Applicants Tab ---- */}
         {activeTab === "applicants" && (
           <div className="stj-detail__applicants">
-            {applications.length === 0 ? (
+            {job.status === ShortTermJobStatus.PENDING_APPROVAL ? (
+              <div className="stj-detail__no-data">
+                <Shield size={32} />
+                <p>Đang chờ Admin duyệt</p>
+                <p style={{ fontSize: '0.85rem', opacity: 0.7 }}>
+                  Sau khi được duyệt, bạn sẽ thấy các ứng viên tại đây
+                </p>
+              </div>
+            ) : applications.length === 0 ? (
               <div className="stj-detail__no-data">
                 <Users size={32} />
                 <p>Chưa có ứng viên nào</p>
+                <p style={{ fontSize: '0.85rem', opacity: 0.7 }}>
+                  Hãy chia sẻ công việc này để thu hút ứng viên
+                </p>
               </div>
             ) : (
               <div className="stj-detail__applicant-list">

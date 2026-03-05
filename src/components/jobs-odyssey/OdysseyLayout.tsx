@@ -2,9 +2,10 @@ import { ReactNode } from 'react';
 
 interface OdysseyLayoutProps {
   children: ReactNode;
+  hideHeader?: boolean;
 }
 
-const OdysseyLayout = ({ children }: OdysseyLayoutProps) => {
+const OdysseyLayout = ({ children, hideHeader = false }: OdysseyLayoutProps) => {
   // Generate wormhole particles
   const particles = Array.from({ length: 80 }, (_, i) => ({
     id: i,
@@ -78,11 +79,13 @@ const OdysseyLayout = ({ children }: OdysseyLayoutProps) => {
 
       {/* Main Content Area */}
       <div className="odyssey-content">
-        {/* Header */}
-        <header className="odyssey-header">
-          <h1 className="odyssey-header__title">Cơ Hội Việc Làm</h1>
-          <p className="odyssey-header__subtitle">Khám phá công việc phù hợp với bạn</p>
-        </header>
+        {/* Header - hide when child component renders its own header */}
+        {!hideHeader && (
+          <header className="odyssey-header">
+            <h1 className="odyssey-header__title">Cơ Hội Việc Làm</h1>
+            <p className="odyssey-header__subtitle">Khám phá công việc phù hợp với bạn</p>
+          </header>
+        )}
 
         {/* Content */}
         {children}

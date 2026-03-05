@@ -1,0 +1,1379 @@
+/* ============================================================
+   JOB LAB — Neon-Tech Holographic Design System
+   Job Marketplace + Recruiter Dashboard
+   ============================================================ */
+
+/* ─── CSS VARIABLES ─────────────────────────────────────── */
+:root {
+  --jl-cyan: #22d3ee;
+  --jl-cyan-dim: rgba(34, 211, 238, 0.15);
+  --jl-purple: #a78bfa;
+  --jl-purple-dim: rgba(167, 139, 250, 0.15);
+  --jl-green: #34d399;
+  --jl-amber: #f59e0b;
+  --jl-red: #f87171;
+  --jl-bg-0: #020617;
+  --jl-bg-1: #0f172a;
+  --jl-bg-2: #1e293b;
+  --jl-bg-3: #263248;
+  --jl-border: rgba(34, 211, 238, 0.12);
+  --jl-border-dim: rgba(255, 255, 255, 0.06);
+  --jl-text-1: #f1f5f9;
+  --jl-text-2: #94a3b8;
+  --jl-text-3: #475569;
+  --jl-font: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* ─── ROOT & BG ──────────────────────────────────────────── */
+.jlab-root {
+  position: relative;
+  min-height: 100vh;
+  background: var(--jl-bg-0);
+  font-family: var(--jl-font);
+  color: var(--jl-text-1);
+  overflow-x: hidden;
+}
+
+.jlab-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.jlab-bg__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.jlab-bg__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.35;
+  animation: jlab-orb-drift 18s ease-in-out infinite alternate;
+}
+.jlab-bg__orb--1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #22d3ee 0%, transparent 70%);
+  top: -150px;
+  left: -100px;
+  animation-delay: 0s;
+}
+.jlab-bg__orb--2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #a78bfa 0%, transparent 70%);
+  top: 40%;
+  right: -120px;
+  animation-delay: -6s;
+}
+.jlab-bg__orb--3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, #34d399 0%, transparent 70%);
+  bottom: 5%;
+  left: 30%;
+  animation-delay: -12s;
+}
+
+@keyframes jlab-orb-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, 30px) scale(1.08);
+  }
+  100% {
+    transform: translate(-30px, 50px) scale(0.95);
+  }
+}
+
+/* ─── HERO ───────────────────────────────────────────────── */
+.jlab-hero {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 56px 24px 32px;
+  border-bottom: 1px solid var(--jl-border);
+}
+
+.jlab-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 100px;
+  color: var(--jl-cyan);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.jlab-hero__title {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--jl-text-1);
+  margin: 0 0 12px;
+  line-height: 1.05;
+}
+
+.jlab-hero__title-glow {
+  color: var(--jl-cyan);
+  text-shadow:
+    0 0 30px rgba(34, 211, 238, 0.6),
+    0 0 60px rgba(34, 211, 238, 0.3);
+}
+
+.jlab-hero__sub {
+  font-size: 1rem;
+  color: var(--jl-text-2);
+  margin: 0 0 28px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ─── STATS BAR ──────────────────────────────────────────── */
+.jlab-stats-bar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.jlab-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(34, 211, 238, 0.07);
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  border-radius: 100px;
+  color: var(--jl-cyan);
+  font-size: 13px;
+  font-weight: 600;
+}
+.jlab-stat-pill--warn {
+  background: rgba(245, 158, 11, 0.07);
+  border-color: rgba(245, 158, 11, 0.25);
+  color: var(--jl-amber);
+}
+.jlab-stat-pill--purple {
+  background: rgba(167, 139, 250, 0.07);
+  border-color: rgba(167, 139, 250, 0.25);
+  color: var(--jl-purple);
+}
+.jlab-stat-pill--green {
+  background: rgba(52, 211, 153, 0.07);
+  border-color: rgba(52, 211, 153, 0.25);
+  color: var(--jl-green);
+}
+
+.jlab-stat-pill__num {
+  font-size: 16px;
+  font-weight: 800;
+}
+.jlab-stat-pill__lbl {
+  font-size: 11px;
+  font-weight: 500;
+  color: inherit;
+  opacity: 0.75;
+}
+
+/* ─── TABS ───────────────────────────────────────────────── */
+.jlab-tabs {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--jl-border);
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(12px);
+  flex-wrap: wrap;
+}
+
+.jlab-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 20px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--jl-text-2);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.jlab-tab:hover {
+  color: var(--jl-text-1);
+  background: rgba(255, 255, 255, 0.05);
+}
+.jlab-tab--active {
+  color: var(--jl-cyan);
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.1);
+}
+.jlab-tab__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  background: var(--jl-cyan);
+  color: #000;
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 100px;
+}
+.jlab-tabs__actions {
+  margin-left: auto;
+}
+
+/* ─── BUTTONS ────────────────────────────────────────────── */
+.jlab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+/* Primary – Amber pulse */
+.jlab-btn--primary {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000;
+  border-color: #f59e0b;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+}
+.jlab-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(245, 158, 11, 0.45);
+}
+
+/* Search – Cyan gradient with scan-line */
+.jlab-btn--search {
+  background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+  color: #000;
+  border-color: #22d3ee;
+  box-shadow: 0 4px 14px rgba(34, 211, 238, 0.3);
+  overflow: hidden;
+  position: relative;
+}
+.jlab-btn--search::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -75%;
+  width: 50%;
+  height: 300%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: 0.5s;
+}
+.jlab-btn--search:hover::after {
+  left: 130%;
+}
+
+/* Filter – Neon purple outline */
+.jlab-btn--filter {
+  background: transparent;
+  border-color: rgba(167, 139, 250, 0.4);
+  color: var(--jl-purple);
+}
+.jlab-btn--filter:hover,
+.jlab-btn--filter.active {
+  background: rgba(167, 139, 250, 0.12);
+  border-color: var(--jl-purple);
+  box-shadow: 0 0 12px rgba(167, 139, 250, 0.25);
+}
+.jlab-btn__dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--jl-amber);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--jl-amber);
+}
+
+/* Ghost */
+.jlab-btn--ghost {
+  background: transparent;
+  border-color: var(--jl-border);
+  color: var(--jl-text-2);
+}
+.jlab-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--jl-text-1);
+}
+
+/* View – Outline Cyan */
+.jlab-btn--view {
+  background: transparent;
+  border-color: rgba(34, 211, 238, 0.35);
+  color: var(--jl-cyan);
+  padding: 7px 14px;
+}
+.jlab-btn--view:hover {
+  background: rgba(34, 211, 238, 0.12);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+}
+
+/* Edit – Outline Green */
+.jlab-btn--edit {
+  background: transparent;
+  border-color: rgba(52, 211, 153, 0.35);
+  color: var(--jl-green);
+  padding: 7px 14px;
+}
+.jlab-btn--edit:hover {
+  background: rgba(52, 211, 153, 0.12);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.2);
+}
+
+/* Cancel / Danger */
+.jlab-btn--cancel {
+  background: transparent;
+  border-color: rgba(248, 113, 113, 0.4);
+  color: var(--jl-red);
+  padding: 7px 14px;
+}
+.jlab-btn--cancel:hover {
+  background: rgba(248, 113, 113, 0.12);
+  border-color: var(--jl-red);
+  box-shadow: 0 0 12px rgba(248, 113, 113, 0.25);
+}
+.jlab-btn--danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  border-color: #ef4444;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+}
+.jlab-btn--danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45);
+}
+
+/* Sizes */
+.jlab-btn--sm {
+  padding: 7px 14px;
+  font-size: 12px;
+}
+.jlab-btn--xs {
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+.jlab-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ─── PANEL ──────────────────────────────────────────────── */
+.jlab-panel {
+  position: relative;
+  z-index: 2;
+  padding: 28px 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.jlab-panel--lab {
+  padding-top: 28px;
+}
+
+@media (max-width: 768px) {
+  .jlab-panel {
+    padding: 16px;
+  }
+}
+
+/* ─── SEARCH ROW ─────────────────────────────────────────── */
+.jlab-search-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.jlab-search-input-wrap {
+  flex: 1;
+  min-width: 220px;
+  position: relative;
+}
+.jlab-search-input-wrap__icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--jl-text-3);
+  pointer-events: none;
+}
+
+.jlab-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--jl-border);
+  border-radius: 8px;
+  color: var(--jl-text-1);
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  font-family: var(--jl-font);
+}
+.jlab-input:focus {
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.08);
+}
+.jlab-input::placeholder {
+  color: var(--jl-text-3);
+}
+
+.jlab-input--search {
+  padding-left: 40px;
+}
+
+.jlab-select {
+  padding: 10px 36px 10px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--jl-border);
+  border-radius: 8px;
+  color: var(--jl-text-1);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: var(--jl-font);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+.jlab-select:focus {
+  border-color: rgba(34, 211, 238, 0.5);
+}
+.jlab-select option {
+  background: #1e293b;
+}
+
+/* ─── FILTER DRAWER ──────────────────────────────────────── */
+.jlab-filter-drawer {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid var(--jl-border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  backdrop-filter: blur(12px);
+  animation: jlab-slide-in 0.2s ease-out;
+}
+
+@keyframes jlab-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.jlab-filter-section {
+  flex: 1;
+  min-width: 180px;
+}
+
+.jlab-filter-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--jl-text-3);
+  margin: 0 0 10px;
+}
+
+.jlab-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.jlab-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--jl-border);
+  border-radius: 6px;
+  color: var(--jl-text-2);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.jlab-filter-chip input[type="checkbox"] {
+  display: none;
+}
+.jlab-filter-chip:hover {
+  border-color: rgba(34, 211, 238, 0.3);
+  color: var(--jl-text-1);
+}
+.jlab-filter-chip.active {
+  background: rgba(34, 211, 238, 0.12);
+  border-color: rgba(34, 211, 238, 0.5);
+  color: var(--jl-cyan);
+}
+
+.jlab-filter-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.jlab-filter-range__sep {
+  color: var(--jl-text-3);
+  font-weight: 700;
+}
+.jlab-filter-range .jlab-input {
+  padding: 8px 10px;
+}
+
+.jlab-filter-actions {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  margin-top: auto;
+  padding-top: 8px;
+  width: 100%;
+}
+
+/* ─── ACTIVE FILTERS ─────────────────────────────────────── */
+.jlab-active-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.jlab-active-filters__label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--jl-text-3);
+}
+.jlab-active-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  border-radius: 100px;
+  color: var(--jl-cyan);
+  font-size: 12px;
+  font-weight: 500;
+}
+.jlab-active-chip button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+}
+.jlab-active-chip button:hover {
+  opacity: 1;
+}
+
+/* ─── SECTIONS ───────────────────────────────────────────── */
+.jlab-section {
+  margin-bottom: 32px;
+}
+
+.jlab-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.jlab-section__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--jl-text-1);
+  margin: 0;
+}
+.jlab-section__title-icon {
+  font-size: 18px;
+}
+
+/* ─── FEATURED GRID ──────────────────────────────────────── */
+.jlab-featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+/* ─── RESULTS HEADER ─────────────────────────────────────── */
+.jlab-results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.jlab-results-header__count {
+  font-size: 14px;
+  color: var(--jl-text-2);
+  margin: 0;
+}
+.jlab-results-header__count strong {
+  color: var(--jl-text-1);
+}
+
+/* ─── LOADING ────────────────────────────────────────────── */
+.jlab-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  gap: 16px;
+  color: var(--jl-text-2);
+  font-size: 14px;
+}
+
+.jlab-loading__ring {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(34, 211, 238, 0.15);
+  border-top-color: var(--jl-cyan);
+  border-radius: 50%;
+  animation: jlab-spin 0.8s linear infinite;
+}
+
+@keyframes jlab-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.jlab-spin {
+  animation: jlab-spin 0.8s linear infinite;
+}
+
+/* ─── PAGINATION ─────────────────────────────────────────── */
+.jlab-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.jlab-page-btn {
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--jl-border);
+  border-radius: 7px;
+  color: var(--jl-text-2);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: var(--jl-font);
+}
+.jlab-page-btn:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.08);
+  border-color: rgba(34, 211, 238, 0.35);
+  color: var(--jl-cyan);
+}
+.jlab-page-btn.active {
+  background: rgba(34, 211, 238, 0.15);
+  border-color: var(--jl-cyan);
+  color: var(--jl-cyan);
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+}
+.jlab-page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ─── MY STATS ───────────────────────────────────────────── */
+.jlab-my-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.jlab-my-stat {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--jl-border-dim);
+  border-radius: 12px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.jlab-my-stat::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 2px 0 0 2px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.jlab-my-stat:hover {
+  transform: translateY(-2px);
+}
+
+.jlab-my-stat--blue {
+  border-color: rgba(96, 165, 250, 0.2);
+}
+.jlab-my-stat--blue::before {
+  background: #60a5fa;
+}
+.jlab-my-stat--blue .jlab-my-stat__icon {
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.12);
+}
+.jlab-my-stat--cyan {
+  border-color: rgba(34, 211, 238, 0.2);
+}
+.jlab-my-stat--cyan::before {
+  background: var(--jl-cyan);
+}
+.jlab-my-stat--cyan .jlab-my-stat__icon {
+  color: var(--jl-cyan);
+  background: var(--jl-cyan-dim);
+}
+.jlab-my-stat--green {
+  border-color: rgba(52, 211, 153, 0.2);
+}
+.jlab-my-stat--green::before {
+  background: var(--jl-green);
+}
+.jlab-my-stat--green .jlab-my-stat__icon {
+  color: var(--jl-green);
+  background: rgba(52, 211, 153, 0.12);
+}
+.jlab-my-stat--purple {
+  border-color: rgba(167, 139, 250, 0.2);
+}
+.jlab-my-stat--purple::before {
+  background: var(--jl-purple);
+}
+.jlab-my-stat--purple .jlab-my-stat__icon {
+  color: var(--jl-purple);
+  background: var(--jl-purple-dim);
+}
+.jlab-my-stat--amber {
+  border-color: rgba(245, 158, 11, 0.2);
+}
+.jlab-my-stat--amber::before {
+  background: var(--jl-amber);
+}
+.jlab-my-stat--amber .jlab-my-stat__icon {
+  color: var(--jl-amber);
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.jlab-my-stat:hover::before {
+  opacity: 1;
+}
+
+.jlab-my-stat__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.jlab-my-stat__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.jlab-my-stat__num {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--jl-text-1);
+}
+.jlab-my-stat__lbl {
+  font-size: 11px;
+  color: var(--jl-text-2);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── CHARTS ─────────────────────────────────────────────── */
+.jlab-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 1100px) {
+  .jlab-charts {
+    grid-template-columns: 1fr 1fr;
+  }
+  .jlab-chart-card--wide {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 680px) {
+  .jlab-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+.jlab-chart-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--jl-border-dim);
+  border-radius: 14px;
+  padding: 20px;
+  transition: border-color 0.2s;
+}
+.jlab-chart-card:hover {
+  border-color: var(--jl-border);
+}
+.jlab-chart-card--wide {
+  grid-column: span 1;
+}
+
+.jlab-chart-card__title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--jl-text-2);
+  margin: 0 0 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.jlab-chart-tooltip {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--jl-border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  backdrop-filter: blur(8px);
+}
+.jlab-chart-tooltip__label {
+  font-size: 11px;
+  color: var(--jl-text-2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.jlab-chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 170px;
+  font-size: 13px;
+  color: var(--jl-text-3);
+  font-style: italic;
+}
+
+/* ─── MY JOB GRID ────────────────────────────────────────── */
+.jlab-myjob-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+/* ─── MY JOB CARD ────────────────────────────────────────── */
+.jlab-myjob-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--jl-border-dim);
+  border-radius: 14px;
+  padding: 20px;
+  overflow: hidden;
+  transition:
+    transform 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.jlab-myjob-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--jl-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+.jlab-myjob-card__glow {
+  position: absolute;
+  top: -40%;
+  right: -40%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle,
+    rgba(34, 211, 238, 0.06) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.jlab-myjob-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.jlab-myjob-card__status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid currentColor;
+  border-opacity: 0.3;
+}
+.jlab-myjob-card__status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: jlab-pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes jlab-pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.4);
+  }
+}
+
+.jlab-myjob-card__urgency {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--jl-text-2);
+}
+.jlab-myjob-card__urgency[data-urgency="ASAP"] {
+  color: #ef4444;
+}
+.jlab-myjob-card__urgency[data-urgency="VERY_URGENT"] {
+  color: var(--jl-amber);
+}
+.jlab-myjob-card__urgency[data-urgency="URGENT"] {
+  color: #f59e0b;
+}
+
+.jlab-myjob-card__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--jl-text-1);
+  margin: 0;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.jlab-myjob-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--jl-text-2);
+}
+.jlab-myjob-card__meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.jlab-myjob-card__deadline {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--jl-text-3);
+}
+
+.jlab-myjob-card__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.jlab-skill-chip {
+  padding: 3px 8px;
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--jl-purple);
+  font-weight: 500;
+}
+.jlab-skill-chip--more {
+  background: rgba(148, 163, 184, 0.1);
+  border-color: rgba(148, 163, 184, 0.2);
+  color: var(--jl-text-2);
+}
+
+.jlab-myjob-card__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
+  flex-wrap: wrap;
+}
+.jlab-myjob-card__actions .jlab-btn {
+  font-size: 12px;
+  flex: 1;
+  justify-content: center;
+  min-width: 70px;
+}
+
+/* ─── EMPTY STATE ────────────────────────────────────────── */
+.jlab-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  gap: 12px;
+  color: var(--jl-text-3);
+  text-align: center;
+}
+.jlab-empty svg {
+  opacity: 0.3;
+}
+.jlab-empty h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--jl-text-2);
+  margin: 0;
+}
+.jlab-empty p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ─── CANCEL MODAL ───────────────────────────────────────── */
+.jlab-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: jlab-fade-in 0.2s ease-out;
+}
+
+@keyframes jlab-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.jlab-modal {
+  background: var(--jl-bg-1);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(248, 113, 113, 0.1);
+  animation: jlab-modal-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+@keyframes jlab-modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.jlab-modal__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--jl-border-dim);
+}
+
+.jlab-modal__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.jlab-modal__icon--warn {
+  background: rgba(248, 113, 113, 0.12);
+  color: var(--jl-red);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+}
+
+.jlab-modal__title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--jl-text-1);
+  margin: 0 0 4px;
+}
+.jlab-modal__subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: var(--jl-text-2);
+}
+.jlab-modal__job-name {
+  color: var(--jl-cyan);
+  font-weight: 600;
+}
+
+.jlab-modal__close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--jl-text-3);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+.jlab-modal__close:hover {
+  color: var(--jl-text-1);
+}
+
+.jlab-modal__body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.jlab-modal__desc {
+  font-size: 13px;
+  color: var(--jl-text-2);
+  line-height: 1.6;
+  background: rgba(248, 113, 113, 0.07);
+  border: 1px solid rgba(248, 113, 113, 0.15);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 0;
+}
+.jlab-modal__desc b {
+  color: var(--jl-red);
+}
+
+.jlab-modal__field-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--jl-text-3);
+  margin: 0 0 8px;
+}
+
+.jlab-modal__preset-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.jlab-modal__preset-chip {
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--jl-border);
+  border-radius: 6px;
+  color: var(--jl-text-2);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--jl-font);
+}
+.jlab-modal__preset-chip:hover {
+  border-color: rgba(34, 211, 238, 0.3);
+  color: var(--jl-text-1);
+}
+.jlab-modal__preset-chip.active {
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(34, 211, 238, 0.5);
+  color: var(--jl-cyan);
+}
+
+.jlab-modal__textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--jl-border);
+  border-radius: 8px;
+  color: var(--jl-text-1);
+  font-size: 13px;
+  padding: 10px 12px;
+  resize: vertical;
+  outline: none;
+  font-family: var(--jl-font);
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.jlab-modal__textarea:focus {
+  border-color: rgba(34, 211, 238, 0.4);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.07);
+}
+.jlab-modal__textarea::placeholder {
+  color: var(--jl-text-3);
+}
+
+.jlab-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.jlab-modal__footer {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--jl-border-dim);
+}
+
+/* ─── SPINNER ────────────────────────────────────────────── */
+.jlab-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: jlab-spin 0.75s linear infinite;
+}
+
+/* ─── RECHARTS OVERRIDES ─────────────────────────────────── */
+.recharts-layer.recharts-legend-item text {
+  fill: #94a3b8 !important;
+  font-size: 11px !important;
+}
+.recharts-tooltip-wrapper {
+  z-index: 100;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .jlab-my-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .jlab-hero {
+    padding: 32px 16px 20px;
+  }
+  .jlab-hero__title {
+    font-size: 2.5rem;
+  }
+  .jlab-tabs {
+    padding: 12px 16px;
+  }
+  .jlab-my-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+  .jlab-myjob-grid {
+    grid-template-columns: 1fr;
+  }
+  .jlab-search-row {
+    gap: 8px;
+  }
+  .jlab-select {
+    min-width: 0;
+  }
+}
