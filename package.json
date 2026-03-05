@@ -15,6 +15,9 @@
     "build:analyze": "vite build --mode analyze"
   },
   "dependencies": {
+    "@chakra-ui/react": "^3.32.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@react-oauth/google": "^0.12.2",
     "@stomp/stompjs": "^7.2.1",
     "@typescript-eslint/eslint-plugin": "^8.46.2",

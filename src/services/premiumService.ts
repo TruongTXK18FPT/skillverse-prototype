@@ -1,10 +1,14 @@
-import api from './axiosInstance';
-import axios from 'axios';
-import { PremiumPlan, CreateSubscriptionRequest, UserSubscriptionResponse } from '../data/premiumDTOs';
+import api from "./axiosInstance";
+import axios from "axios";
+import {
+  PremiumPlan,
+  CreateSubscriptionRequest,
+  UserSubscriptionResponse,
+} from "../data/premiumDTOs";
 
 export const premiumService = {
   async getPremiumPlans(): Promise<PremiumPlan[]> {
-    const { data } = await api.get('/api/premium/plans');
+    const { data } = await api.get("/api/premium/plans");
     return data;
   },
 
@@ -13,14 +17,16 @@ export const premiumService = {
     return data;
   },
 
-  async createSubscription(request: CreateSubscriptionRequest): Promise<UserSubscriptionResponse> {
-    const { data } = await api.post('/api/premium/subscribe', request);
+  async createSubscription(
+    request: CreateSubscriptionRequest,
+  ): Promise<UserSubscriptionResponse> {
+    const { data } = await api.post("/api/premium/subscribe", request);
     return data;
   },
 
   async getCurrentSubscription(): Promise<UserSubscriptionResponse | null> {
     try {
-      const { data } = await api.get('/api/premium/subscription/current');
+      const { data } = await api.get("/api/premium/subscription/current");
       return data;
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
@@ -31,57 +37,81 @@ export const premiumService = {
   },
 
   async getSubscriptionHistory(): Promise<UserSubscriptionResponse[]> {
-    const { data } = await api.get('/api/premium/subscription/history');
+    const { data } = await api.get("/api/premium/subscription/history");
     return data;
   },
 
   async cancelSubscription(reason?: string): Promise<void> {
-    await api.put('/api/premium/subscription/cancel', null, {
-      params: { reason }
+    await api.put("/api/premium/subscription/cancel", null, {
+      params: { reason },
     });
   },
 
   async checkPremiumStatus(): Promise<boolean> {
-    const { data } = await api.get('/api/premium/status');
+    const { data } = await api.get("/api/premium/status");
     return data;
   },
 
-  async purchaseWithWallet(planId: number, applyStudentDiscount: boolean = false, targetUserId?: number): Promise<UserSubscriptionResponse> {
+  async purchaseWithWallet(
+    planId: number,
+    applyStudentDiscount: boolean = false,
+    targetUserId?: number,
+  ): Promise<UserSubscriptionResponse> {
     const params: Record<string, any> = { planId, applyStudentDiscount };
     if (targetUserId) {
       params.targetUserId = targetUserId;
     }
-    const { data } = await api.post('/api/premium/purchase-with-wallet', null, {
-      params
+    const { data } = await api.post("/api/premium/purchase-with-wallet", null, {
+      params,
     });
     return data;
   },
 
   async enableAutoRenewal(): Promise<{ success: boolean; message: string }> {
-    const { data } = await api.post('/api/premium/subscription/enable-auto-renewal');
+    const { data } = await api.post(
+      "/api/premium/subscription/enable-auto-renewal",
+    );
     return data;
   },
 
   async cancelAutoRenewal(): Promise<{ success: boolean; message: string }> {
-    const { data } = await api.post('/api/premium/subscription/cancel-auto-renewal');
+    const { data } = await api.post(
+      "/api/premium/subscription/cancel-auto-renewal",
+    );
     return data;
   },
 
-  async cancelSubscriptionWithRefund(reason?: string): Promise<{ success: boolean; message: string; refundAmount: number }> {
-    const { data } = await api.post('/api/premium/subscription/cancel-with-refund', null, {
-      params: { reason }
-    });
+  async cancelSubscriptionWithRefund(
+    reason?: string,
+  ): Promise<{ success: boolean; message: string; refundAmount: number }> {
+    const { data } = await api.post(
+      "/api/premium/subscription/cancel-with-refund",
+      null,
+      {
+        params: { reason },
+      },
+    );
     return data;
   },
 
-  async checkRefundEligibility(): Promise<{ 
-    eligible: boolean; 
-    refundPercentage: number; 
-    refundAmount: number; 
-    daysUsed: number; 
-    message: string 
+  async checkRefundEligibility(): Promise<{
+    eligible: boolean;
+    refundPercentage: number;
+    refundAmount: number;
+    daysUsed: number;
+    message: string;
   }> {
-    const { data } = await api.get('/api/premium/subscription/refund-eligibility');
+    const { data } = await api.get(
+      "/api/premium/subscription/refund-eligibility",
+    );
+    return data;
+  },
+
+  async recoverPendingSubscriptions(): Promise<{
+    recovered: boolean;
+    message: string;
+  }> {
+    const { data } = await api.post("/api/premium/subscription/recover");
     return data;
   },
 
@@ -94,7 +124,7 @@ export const premiumService = {
       status?: string;
       userId?: number;
       planId?: number;
-    }
+    },
   ): Promise<{
     content: UserSubscriptionResponse[];
     totalElements: number;
@@ -103,11 +133,15 @@ export const premiumService = {
     size: number;
   }> {
     const params: any = { page, size, ...filters };
-    const { data } = await api.get('/api/admin/premium/subscriptions', { params });
+    const { data } = await api.get("/api/admin/premium/subscriptions", {
+      params,
+    });
     return data;
   },
 
-  async adminGetSubscriptionDetail(id: number): Promise<UserSubscriptionResponse> {
+  async adminGetSubscriptionDetail(
+    id: number,
+  ): Promise<UserSubscriptionResponse> {
     const { data } = await api.get(`/api/admin/premium/subscriptions/${id}`);
     return data;
   },
@@ -119,7 +153,7 @@ export const premiumService = {
     cancelledSubscriptions: number;
     totalRevenue: number;
   }> {
-    const { data } = await api.get('/api/admin/premium/statistics');
+    const { data } = await api.get("/api/admin/premium/statistics");
     return data;
-  }
+  },
 };

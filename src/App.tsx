@@ -61,8 +61,8 @@ import { ReportUserPage, MyReportsPage } from "./components/report";
 import TermOfService from "./pages/footer/TermOfService";
 import PrivacyPolicy from "./pages/footer/Privacy&Policy";
 import HelpCenter from "./pages/footer/HelpCenter";
-import SeminarPage from "./pages/navbar/SeminarPage";
-import SeminarDetailPage from "./pages/navbar/SeminarDetailPage";
+// import SeminarPage from "./pages/navbar/SeminarPage";
+// import SeminarDetailPage from "./pages/navbar/SeminarDetailPage";
 import BusinessPage from "./pages/main/BusinessPage";
 // Mentor pages - organized in /pages/mentor/
 import MentorDashboard from "./pages/mentor/MentorDashboard";
@@ -100,12 +100,17 @@ import ForbiddenTemple from "./components/easter-egg/ForbiddenTemple";
 import TicTacToeGame from "./components/game/tic-tac-toe/TicTacToeGame";
 import MeowlAdventure from "./components/game/meowl-adventure/MeowlAdventure";
 
-import AdminSeminarManager from "./pages/main/AdminSeminarManager";
-import RecruiterSeminarManager from "./pages/main/RecruiterSeminarManager";
+// import AdminSeminarManager from "./pages/main/AdminSeminarManager";
+// import RecruiterSeminarManager from "./pages/main/RecruiterSeminarManager";
+import ShortTermJobRoutes from "./routes/ShortTermJobRoutes";
 import MeowlSkinShopPage from "./pages/shop/MeowlSkinShopPage";
 import UserGuidePage from "./pages/user-guide/UserGuidePage";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import Certificate from "./components/certificate/Certificate";
 
-const CertificatePage = lazy(() => import("./components/certificate/Certificate"));
+const CertificatePage = lazy(
+  () => import("./components/certificate/Certificate"),
+);
 const CertificateVerifyPage = lazy(
   () => import("./components/certificate/CertificateVerifyPage"),
 );
@@ -113,326 +118,394 @@ const CertificateDemoPage = lazy(() => import("./pages/CertificateDemoPage"));
 
 const App = () => {
   return (
-    <LanguageProvider>
-      <ThemeProvider>
-        <AuthProvider>
-          <MeowlSkinProvider>
-            <MeowlStateProvider>
-              <Router>
-                <AppShell />
-              </Router>
-            </MeowlStateProvider>
-          </MeowlSkinProvider>
-        </AuthProvider>
-      </ThemeProvider>
-    </LanguageProvider>
-  );
-};
-
-export default App;
-
-const AppShell = () => {
-  const location = useLocation();
-  const shouldRemoveHeaderOffset =
-    fullScreenRoutes.has(location.pathname) || isCertificateRoute(location.pathname);
-
-  return (
-    <div
-      className={`app-container${shouldRemoveHeaderOffset ? " app-container--no-header-offset" : ""}`}
-    >
-      <ScrollToTop />
-      <HeaderVisibilityWrapper />
-      <div className="app__galaxy-bg">
-        <div className="cosmic-dust">
-          {[...Array(40)].map((_, i) => (
-            <div
-              key={i}
-              className="dust-particle"
-              style={{
-                left: `${Math.random() * 95}%`,
-                top: `${Math.random() * 95}%`,
-                animationDelay: `${Math.random() * 10}s`,
-                animationDuration: `${20 + Math.random() * 15}s`,
-              }}
-            />
-          ))}
-        </div>
-        <main>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/user-guide" element={<UserGuidePage />} />
-            <Route path="/notifications" element={<NotificationPage />} />
-            <Route path="/messages" element={<MessengerPage />} />
-            <Route path="/my-bookings" element={<UserBookingsPage />} />
-            <Route path="/explore" element={<ExploreMapPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route
-              path="/user/parent-requests"
-              element={<StudentParentRequestPage />}
-            />
-            <Route
-              path="/parent-dashboard"
-              element={
-                <ParentRoute>
-                  <ParentDashboardPage />
-                </ParentRoute>
-              }
-            />
-            <Route path="/courses" element={<CoursesPage />} />
-            <Route path="/roadmap" element={<AiRoadmapPage />} />
-            <Route path="/roadmap/:id" element={<RoadmapDetailPage />} />
-            <Route path="/study-planner" element={<StudyPlannerPage />} />
-            <Route path="/mentorship" element={<MentorshipPage />} />
-            <Route path="/community" element={<CommunityHUD />} />
-            <Route path="/community/:id" element={<PostDetailPage />} />
-            <Route path="/community/create" element={<BroadcastForm />} />
-            <Route
-              path="/community/manage"
-              element={<CommunityDashboardPage />}
-            />
-            <Route path="/jobs" element={<JobsPage />} />
-            <Route path="/chatbot" element={<CareerChatLanding />} />
-            <Route path="/chatbot/general" element={<CareerChatPage />} />
-            <Route path="/chatbot/expert" element={<ExpertChatPage />} />
-            <Route path="/gamification" element={<Gamification />} />
-            <Route
-              path="/gamification/tic-tac-toe"
-              element={<TicTacToeGame />}
-            />
-            <Route
-              path="/gamification/meowl-adventure"
-              element={<MeowlAdventure />}
-            />
-            <Route
-              path="/portfolio"
-              element={<TacticalDossierPortfolio />}
-            />
-            <Route
-              path="/portfolio/:slug"
-              element={<TacticalDossierPortfolio />}
-            />
-            <Route path="/portfolio-debug" element={<PortfolioDebug />} />
-            <Route path="/cv" element={<DataCompilerPreview />} />
-            <Route
-              path="/certificate/:id"
-              element={
-                <Suspense fallback={null}>
-                  <CertificatePage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/verify/certificate/:serial"
-              element={
-                <Suspense fallback={null}>
-                  <CertificateVerifyPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/certificate/verify/:serial"
-              element={
-                <Suspense fallback={null}>
-                  <CertificateVerifyPage />
-                </Suspense>
-              }
-            />
-            <Route path="/login" element={<ElevatorLoginPage />} />
-            <Route
-              path="/auth-warning"
-              element={<AlreadyAuthenticatedWarning />}
-            />
-            <Route path="/choose-role" element={<ChooseRolePage />} />
-            <Route
-              path="/register"
-              element={<ElevatorPersonalRegisterPage />}
-            />
-            <Route
-              path="/register/business"
-              element={<ElevatorBusinessRegisterPage />}
-            />
-            <Route
-              path="/register/mentor"
-              element={<ElevatorMentorRegisterPage />}
-            />
-            <Route
-              path="/register/parent"
-              element={<ElevatorParentRegisterPage />}
-            />
-            <Route path="/verify-otp" element={<VerifyPage />} />
-            <Route
-              path="/forgot-password"
-              element={<ElevatorForgotPasswordPage />}
-            />
-            <Route path="/reset-password" element={<ResetPasswordPage />} />
-            <Route path="/set-password" element={<SetPasswordPage />} />
-            <Route
-              path="/change-password"
-              element={<ChangePasswordPage />}
-            />
-            <Route path="/profile" element={<ProfileRouter />} />
-            <Route path="/profile/user" element={<ProfilePageCosmic />} />
-            <Route path="/profile/mentor" element={<MentorProfilePage />} />
-            <Route
-              path="/profile/business"
-              element={<RecruiterProfilePage />}
-            />
-            <Route
-              path="/payment/transactional"
-              element={<Transactional />}
-            />
-            <Route path="/premium" element={<PremiumPageCosmic />} />
-            <Route path="/manager" element={<ManagerPage />} />
-            <Route path="/wallet" element={<MyWalletCosmic />} />
-            <Route path="/my-wallet" element={<MyWalletCosmic />} />
-            <Route path="/seminar" element={<SeminarPage />} />
-            <Route path="/seminar/:id" element={<SeminarDetailPage />} />
-            <Route path="/courses/:id" element={<CourseDetailPage />} />
-            <Route path="/course/:id/preview" element={<CourseDetailPage />} />
-            <Route path="/course-learning" element={<CourseLearningPage />} />
-            <Route
-              path="/assignment/:assignmentId"
-              element={<AssignmentPage />}
-            />
-            <Route
-              path="/quiz/:quizId/attempt"
-              element={<QuizAttemptPage />}
-            />
-            <Route path="/help-center" element={<HelpCenter />} />
-            <Route path="/terms-of-service" element={<TermOfService />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route
-              path="/my-applications"
-              element={<MyApplicationsPage />}
-            />
-            <Route
-              path="/report-violation"
-              element={<ReportUserPage />}
-            />
-            <Route path="/my-reports" element={<MyReportsPage />} />
-            <Route
-              path="/business"
-              element={
-                <RecruiterRoute>
-                  <BusinessPage />
-                </RecruiterRoute>
-              }
-            />
-            <Route
-              path="/recruiter/seminars"
-              element={
-                <RecruiterRoute>
-                  <RecruiterSeminarManager />
-                </RecruiterRoute>
-              }
-            />
-            <Route
-              path="/mentor"
-              element={
-                <MentorRoute>
-                  <MentorNoticeProvider>
-                    <MentorDashboard />
-                  </MentorNoticeProvider>
-                </MentorRoute>
-              }
-            />
-            <Route
-              path="/mentor/courses/create"
-              element={
-                <MentorRoute>
-                  <MentorNoticeProvider>
-                    <CourseManagementProvider>
-                      <CourseCreationPage />
-                    </CourseManagementProvider>
-                  </MentorNoticeProvider>
-                </MentorRoute>
-              }
-            />
-            <Route
-              path="/mentor/courses/:courseId/edit"
-              element={
-                <MentorRoute>
-                  <MentorNoticeProvider>
-                    <CourseManagementProvider>
-                      <CourseCreationPage />
-                    </CourseManagementProvider>
-                  </MentorNoticeProvider>
-                </MentorRoute>
-              }
-            />
-            <Route
-              path="/mentor/badges"
-              element={
-                <MentorRoute>
-                  <MentorNoticeProvider>
-                    <AllBadgesPage />
-                  </MentorNoticeProvider>
-                </MentorRoute>
-              }
-            />
-            <Route
-              path="/mentor/assignments/:assignmentId/grade"
-              element={
-                <MentorRoute>
-                  <MentorNoticeProvider>
-                    <MentorGradingPage />
-                  </MentorNoticeProvider>
-                </MentorRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <AdminRoute>
-                  <AdminPage />
-                </AdminRoute>
-              }
-            />
-            <Route
-              path="/admin/seminars"
-              element={
-                <AdminRoute>
-                  <AdminSeminarManager />
-                </AdminRoute>
-              }
-            />
-            <Route
-              path="/admin/gamification"
-              element={
-                <AdminRoute>
-                  <AdminGamificationDashboard />
-                </AdminRoute>
-              }
-            />
-            <Route
-              path="/admin/courses/:courseId/preview"
-              element={
-                <AdminRoute>
-                  <AdminCoursePreviewPage />
-                </AdminRoute>
-              }
-            />
-            <Route path="/admin-security" element={<AdminSecurityPage />} />
-            <Route path="/unauthorized" element={<UnauthorizedPage />} />
-            <Route path="/pray" element={<ForbiddenTemple />} />
-            <Route
-              path="/certificate-demo"
-              element={
-                <Suspense fallback={null}>
-                  <CertificateDemoPage />
-                </Suspense>
-              }
-            />
-            <Route path="/meowl-shop" element={<MeowlSkinShopPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </main>
-        <FooterVisibilityWrapper />
-        <MeowlBubbleWrapper />
-        <MeowlPetWrapper />
-      </div>
-    </div>
+    <ChakraProvider value={defaultSystem}>
+      <LanguageProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <MeowlSkinProvider>
+              <MeowlStateProvider>
+                <Router>
+                  <div className="app-container">
+                    <ScrollToTop />
+                    <HeaderVisibilityWrapper />
+                    <div className="app__galaxy-bg">
+                      <div className="cosmic-dust">
+                        {[...Array(40)].map((_, i) => (
+                          <div
+                            key={i}
+                            className="dust-particle"
+                            style={{
+                              left: `${Math.random() * 95}%`,
+                              top: `${Math.random() * 95}%`,
+                              animationDelay: `${Math.random() * 10}s`,
+                              animationDuration: `${20 + Math.random() * 15}s`,
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <main>
+                        <Routes>
+                          <Route path="/" element={<HomePage />} />
+                          <Route path="/about" element={<AboutPage />} />
+                          <Route
+                            path="/user-guide"
+                            element={<UserGuidePage />}
+                          />
+                          <Route
+                            path="/notifications"
+                            element={<NotificationPage />}
+                          />
+                          <Route path="/messages" element={<MessengerPage />} />
+                          <Route
+                            path="/my-bookings"
+                            element={<UserBookingsPage />}
+                          />
+                          <Route path="/explore" element={<ExploreMapPage />} />
+                          <Route
+                            path="/dashboard"
+                            element={<DashboardPage />}
+                          />
+                          <Route
+                            path="/user/parent-requests"
+                            element={<StudentParentRequestPage />}
+                          />
+                          <Route
+                            path="/parent-dashboard"
+                            element={
+                              <ParentRoute>
+                                <ParentDashboardPage />
+                              </ParentRoute>
+                            }
+                          />
+                          <Route path="/courses" element={<CoursesPage />} />
+                          <Route path="/roadmap" element={<AiRoadmapPage />} />
+                          <Route
+                            path="/roadmap/:id"
+                            element={<RoadmapDetailPage />}
+                          />
+                          <Route
+                            path="/study-planner"
+                            element={<StudyPlannerPage />}
+                          />
+                          <Route
+                            path="/mentorship"
+                            element={<MentorshipPage />}
+                          />
+                          <Route path="/community" element={<CommunityHUD />} />
+                          <Route
+                            path="/community/:id"
+                            element={<PostDetailPage />}
+                          />
+                          <Route
+                            path="/community/create"
+                            element={<BroadcastForm />}
+                          />
+                          <Route
+                            path="/community/manage"
+                            element={<CommunityDashboardPage />}
+                          />
+                          <Route path="/jobs" element={<JobsPage />} />
+                          <Route
+                            path="/chatbot"
+                            element={<CareerChatLanding />}
+                          />
+                          <Route
+                            path="/chatbot/general"
+                            element={<CareerChatPage />}
+                          />
+                          <Route
+                            path="/chatbot/expert"
+                            element={<ExpertChatPage />}
+                          />
+                          <Route
+                            path="/gamification"
+                            element={<Gamification />}
+                          />
+                          <Route
+                            path="/gamification/tic-tac-toe"
+                            element={<TicTacToeGame />}
+                          />
+                          <Route
+                            path="/gamification/meowl-adventure"
+                            element={<MeowlAdventure />}
+                          />
+                          {/* <Route path="/portfolio" element={<PortfolioPage />} /> */}{" "}
+                          {/* BACKUP - Old Portfolio */}
+                          <Route
+                            path="/portfolio"
+                            element={<TacticalDossierPortfolio />}
+                          />{" "}
+                          {/* ACTIVE - Mothership Theme */}
+                          <Route
+                            path="/portfolio/:slug"
+                            element={<TacticalDossierPortfolio />}
+                          />
+                          <Route
+                            path="/portfolio-debug"
+                            element={<PortfolioDebug />}
+                          />
+                          {/* <Route path="/cv" element={<CVPage />} /> */}{" "}
+                          {/* BACKUP - Old CV Page */}
+                          <Route
+                            path="/cv"
+                            element={<DataCompilerPreview />}
+                          />{" "}
+                          {/* ACTIVE - Mothership Theme */}
+                          <Route
+                            path="/certificate/:id"
+                            element={<Certificate />}
+                          />
+                          <Route
+                            path="/login"
+                            element={<ElevatorLoginPage />}
+                          />
+                          <Route
+                            path="/auth-warning"
+                            element={<AlreadyAuthenticatedWarning />}
+                          />
+                          <Route
+                            path="/choose-role"
+                            element={<ChooseRolePage />}
+                          />
+                          <Route
+                            path="/register"
+                            element={<ElevatorPersonalRegisterPage />}
+                          />
+                          <Route
+                            path="/register/business"
+                            element={<ElevatorBusinessRegisterPage />}
+                          />
+                          <Route
+                            path="/register/mentor"
+                            element={<ElevatorMentorRegisterPage />}
+                          />
+                          <Route
+                            path="/register/parent"
+                            element={<ElevatorParentRegisterPage />}
+                          />
+                          <Route path="/verify-otp" element={<VerifyPage />} />
+                          <Route
+                            path="/forgot-password"
+                            element={<ElevatorForgotPasswordPage />}
+                          />
+                          <Route
+                            path="/reset-password"
+                            element={<ResetPasswordPage />}
+                          />
+                          <Route
+                            path="/set-password"
+                            element={<SetPasswordPage />}
+                          />
+                          <Route
+                            path="/change-password"
+                            element={<ChangePasswordPage />}
+                          />
+                          {/* Profile Routes by Role */}
+                          <Route path="/profile" element={<ProfileRouter />} />
+                          <Route
+                            path="/profile/user"
+                            element={<ProfilePageCosmic />}
+                          />
+                          <Route
+                            path="/profile/mentor"
+                            element={<MentorProfilePage />}
+                          />
+                          <Route
+                            path="/profile/business"
+                            element={<RecruiterProfilePage />}
+                          />
+                          <Route
+                            path="/payment/transactional"
+                            element={<Transactional />}
+                          />
+                          <Route
+                            path="/premium"
+                            element={<PremiumPageCosmic />}
+                          />
+                          <Route path="/manager" element={<ManagerPage />} />
+                          <Route path="/wallet" element={<MyWalletCosmic />} />
+                          <Route
+                            path="/my-wallet"
+                            element={<MyWalletCosmic />}
+                          />
+                          <Route
+                            path="/courses/:id"
+                            element={<CourseDetailPage />}
+                          />
+                          <Route
+                            path="/course/:id/preview"
+                            element={<CourseDetailPage />}
+                          />
+                          <Route
+                            path="/course-learning"
+                            element={<CourseLearningPage />}
+                          />
+                          <Route
+                            path="/assignment/:assignmentId"
+                            element={<AssignmentPage />}
+                          />
+                          <Route
+                            path="/quiz/:quizId/attempt"
+                            element={<QuizAttemptPage />}
+                          />
+                          {/* Add the missing footer routes */}
+                          {/* Add these missing footer routes */}
+                          <Route path="/help-center" element={<HelpCenter />} />
+                          <Route
+                            path="/terms-of-service"
+                            element={<TermOfService />}
+                          />
+                          <Route
+                            path="/privacy-policy"
+                            element={<PrivacyPolicy />}
+                          />
+                          {/* User My Applications */}
+                          <Route
+                            path="/my-applications"
+                            element={<MyApplicationsPage />}
+                          />
+                          {/* Violation Report Routes */}
+                          <Route
+                            path="/report-violation"
+                            element={<ReportUserPage />}
+                          />
+                          <Route
+                            path="/my-reports"
+                            element={<MyReportsPage />}
+                          />
+                          {/* Protected Routes */}
+                          <Route
+                            path="/business"
+                            element={
+                              <RecruiterRoute>
+                                <BusinessPage />
+                              </RecruiterRoute>
+                            }
+                          />
+                          <Route
+                            path="/business/premium"
+                            element={
+                              <RecruiterRoute>
+                                <PremiumPageCosmic />
+                              </RecruiterRoute>
+                            }
+                          />
+                          <Route
+                            path="/mentor"
+                            element={
+                              <MentorRoute>
+                                <MentorNoticeProvider>
+                                  <MentorDashboard />
+                                </MentorNoticeProvider>
+                              </MentorRoute>
+                            }
+                          />
+                          {/* Course Builder Routes */}
+                          <Route
+                            path="/mentor/courses/create"
+                            element={
+                              <MentorRoute>
+                                <MentorNoticeProvider>
+                                  <CourseManagementProvider>
+                                    <CourseCreationPage />
+                                  </CourseManagementProvider>
+                                </MentorNoticeProvider>
+                              </MentorRoute>
+                            }
+                          />
+                          <Route
+                            path="/mentor/courses/:courseId/edit"
+                            element={
+                              <MentorRoute>
+                                <MentorNoticeProvider>
+                                  <CourseManagementProvider>
+                                    <CourseCreationPage />
+                                  </CourseManagementProvider>
+                                </MentorNoticeProvider>
+                              </MentorRoute>
+                            }
+                          />
+                          <Route
+                            path="/mentor/badges"
+                            element={
+                              <MentorRoute>
+                                <MentorNoticeProvider>
+                                  <AllBadgesPage />
+                                </MentorNoticeProvider>
+                              </MentorRoute>
+                            }
+                          />
+                          <Route
+                            path="/mentor/assignments/:assignmentId/grade"
+                            element={
+                              <MentorRoute>
+                                <MentorNoticeProvider>
+                                  <MentorGradingPage />
+                                </MentorNoticeProvider>
+                              </MentorRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin"
+                            element={
+                              <AdminRoute>
+                                <AdminPage />
+                              </AdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/gamification"
+                            element={
+                              <AdminRoute>
+                                <AdminGamificationDashboard />
+                              </AdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/courses/:courseId/preview"
+                            element={
+                              <AdminRoute>
+                                <AdminCoursePreviewPage />
+                              </AdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin-security"
+                            element={<AdminSecurityPage />}
+                          />
+                          {/* Unauthorized Access */}
+                          <Route
+                            path="/unauthorized"
+                            element={<UnauthorizedPage />}
+                          />
+                          {/* Easter Egg Route */}
+                          <Route path="/pray" element={<ForbiddenTemple />} />
+                          {/* Certificate Demo Route */}
+                          <Route
+                            path="/certificate-demo"
+                            element={<CertificateDemoPage />}
+                          />
+                          {/* Meowl Skin Shop */}
+                          <Route
+                            path="/meowl-shop"
+                            element={<MeowlSkinShopPage />}
+                          />
+                          {/* Catch-all route for 404 errors - must be last */}
+                          <Route path="*" element={<NotFoundPage />} />
+                        </Routes>
+                      </main>
+                      <FooterVisibilityWrapper />
+                      <MeowlBubbleWrapper />
+                      <MeowlPetWrapper />
+                    </div>
+                  </div>
+                </Router>
+              </MeowlStateProvider>
+            </MeowlSkinProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </LanguageProvider>
+    </ChakraProvider>
   );
 };
 
@@ -463,6 +536,8 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/messages",
   "/premium",
   "/mentor",
+  "/business",
+  "/jobs",
 ]);
 
 // Check if path matches quiz attempt pattern
@@ -501,7 +576,11 @@ const isMentorRoute = (pathname: string) => {
 // Hide Header on specific routes
 const HeaderVisibilityWrapper = () => {
   const location = useLocation();
-  if (fullScreenRoutes.has(location.pathname) || isCertificateRoute(location.pathname)) return null;
+  if (
+    fullScreenRoutes.has(location.pathname) ||
+    isCertificateRoute(location.pathname)
+  )
+    return null;
   return <Header />;
 };
 
@@ -548,3 +627,5 @@ const MeowlBubbleWrapper = () => {
     isCertificateRoute(location.pathname);
   return <MeowlBubbleNotification disabled={shouldHide} />;
 };
+
+export default App;

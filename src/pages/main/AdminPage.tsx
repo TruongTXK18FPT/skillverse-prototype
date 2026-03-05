@@ -1,34 +1,51 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import UserManagementTabCosmic from '../../components/admin/UserManagementTabCosmic';
-import AccountVerificationTabCosmic from '../../components/admin/AccountVerificationTabCosmic';
-import { CourseApprovalTabCosmic } from '../../components/admin/CourseApprovalTabCosmic';
-import AnalyticsTab from '../../components/admin/AnalyticsTab';
-import NotificationsTabCosmic from '../../components/admin/NotificationsTabCosmic';
-import ReportsTabCosmic from '../../components/admin/ReportsTabCosmic';
-import TransactionManagementTabCosmic from '../../components/admin/TransactionManagementTabCosmic';
-import WithdrawalApprovalTab from '../../components/admin/WithdrawalApprovalTab';
-import SkillPointManagementTabCosmic from '../../components/admin/SkillPointManagementTabCosmic';
-import SystemSettingsTabCosmic from '../../components/admin/SystemSettingsTabCosmic';
-import PremiumPlansManagementTab from '../../components/admin/PremiumPlansManagementTab';
-import SupportTicketsTab from '../../components/admin/SupportTicketsTab';
-import AIExpertManagementTab from '../../components/admin/AIExpertManagementTab';
-import CommunityManagementTab from '../../components/admin/CommunityManagementTab';
-import { JobManagementTab } from '../../components/admin/JobManagementTab';
-import MeowlSkinUploadTab from '../../components/admin/MeowlSkinUploadTab';
-import SliderManagementTab from '../../components/admin/SliderManagementTab';
-import AdminSeminarManager from './AdminSeminarManager';
-import AdminGamificationDashboard from '../admin/AdminGamificationDashboard';
+import React, { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
+import UserManagementTabCosmic from "../../components/admin/UserManagementTabCosmic";
+import AccountVerificationTabCosmic from "../../components/admin/AccountVerificationTabCosmic";
+import { CourseApprovalTabCosmic } from "../../components/admin/CourseApprovalTabCosmic";
+import AnalyticsTab from "../../components/admin/AnalyticsTab";
+import NotificationsTabCosmic from "../../components/admin/NotificationsTabCosmic";
+import ReportsTabCosmic from "../../components/admin/ReportsTabCosmic";
+import TransactionManagementTabCosmic from "../../components/admin/TransactionManagementTabCosmic";
+import WithdrawalApprovalTab from "../../components/admin/WithdrawalApprovalTab";
+import SkillPointManagementTabCosmic from "../../components/admin/SkillPointManagementTabCosmic";
+import SystemSettingsTabCosmic from "../../components/admin/SystemSettingsTabCosmic";
+import PremiumPlansManagementTab from "../../components/admin/PremiumPlansManagementTab";
+import SupportTicketsTab from "../../components/admin/SupportTicketsTab";
+import AIExpertManagementTab from "../../components/admin/AIExpertManagementTab";
+import CommunityManagementTab from "../../components/admin/CommunityManagementTab";
+import { JobManagementTab } from "../../components/admin/JobManagementTab";
+import MeowlSkinUploadTab from "../../components/admin/MeowlSkinUploadTab";
+import SliderManagementTab from "../../components/admin/SliderManagementTab";
+// import AdminSeminarManager from './AdminSeminarManager';
+import AdminGamificationDashboard from "../admin/AdminGamificationDashboard";
 import {
-  Users, UserCheck, BookOpen, BarChart3, Bell, AlertTriangle,
-  CreditCard, Banknote, Zap, Crown, Ticket, Settings, Brain, MessageSquare, Briefcase, Shirt, Image, Calendar, Trophy
-} from 'lucide-react';
-import adminUserService from '../../services/adminUserService';
-import adminService from '../../services/adminService';
-import supportService from '../../services/supportService';
-import AdminSidebar from '../../components/admin/AdminSidebar';
-import '../../styles/AdminPageCosmic.css';
-import '../../styles/AdminLayoutHUD.css';
+  Users,
+  UserCheck,
+  BookOpen,
+  BarChart3,
+  Bell,
+  AlertTriangle,
+  CreditCard,
+  Banknote,
+  Zap,
+  Crown,
+  Ticket,
+  Settings,
+  Brain,
+  MessageSquare,
+  Briefcase,
+  Shirt,
+  Image,
+  Calendar,
+  Trophy,
+} from "lucide-react";
+import adminUserService from "../../services/adminUserService";
+import adminService from "../../services/adminService";
+import supportService from "../../services/supportService";
+import AdminSidebar from "../../components/admin/AdminSidebar";
+import "../../styles/AdminPageCosmic.css";
+import "../../styles/AdminLayoutHUD.css";
 
 interface AdminStats {
   totalUsers: number;
@@ -39,8 +56,11 @@ interface AdminStats {
 
 const AdminPage: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const requestedTab = searchParams.get('tab');
-  const initialTab = useMemo(() => requestedTab?.trim() || 'overview', [requestedTab]);
+  const requestedTab = searchParams.get("tab");
+  const initialTab = useMemo(
+    () => requestedTab?.trim() || "overview",
+    [requestedTab],
+  );
   const [activeTab, setActiveTab] = useState<string>(initialTab);
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
@@ -49,13 +69,13 @@ const AdminPage: React.FC = () => {
     totalUsers: 0,
     pendingWithdrawals: 0,
     pendingVerifications: 0,
-    totalTickets: 0
+    totalTickets: 0,
   });
 
   // Fetch user roles on mount
   useEffect(() => {
     try {
-      const userStr = localStorage.getItem('user');
+      const userStr = localStorage.getItem("user");
       if (userStr) {
         const user = JSON.parse(userStr);
         if (user.roles && Array.isArray(user.roles)) {
@@ -63,7 +83,7 @@ const AdminPage: React.FC = () => {
         }
       }
     } catch (e) {
-      console.error('Error parsing user roles', e);
+      console.error("Error parsing user roles", e);
     }
   }, []);
 
@@ -75,25 +95,34 @@ const AdminPage: React.FC = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [usersData, ticketStats, withdrawalData, pendingApps] = await Promise.allSettled([
-          adminUserService.getAllUsers(),
-          supportService.getTicketStats(),
-          walletService.adminGetWithdrawalRequests(0, 100, 'PENDING'),
-          adminService.getPendingApplications()
-        ]);
+        const [usersData, ticketStats, withdrawalData, pendingApps] =
+          await Promise.allSettled([
+            adminUserService.getAllUsers(),
+            supportService.getTicketStats(),
+            walletService.adminGetWithdrawalRequests(0, 100, "PENDING"),
+            adminService.getPendingApplications(),
+          ]);
 
         setStats({
-          totalUsers: usersData.status === 'fulfilled' ? usersData.value.totalUsers : 0,
-          totalTickets: ticketStats.status === 'fulfilled' ? ticketStats.value.totalTickets : 0,
-          pendingWithdrawals: withdrawalData.status === 'fulfilled'
-            ? (withdrawalData.value?.content?.length || withdrawalData.value?.totalElements || 0)
-            : 0,
-          pendingVerifications: pendingApps.status === 'fulfilled'
-            ? pendingApps.value.totalApplications
-            : 0,
+          totalUsers:
+            usersData.status === "fulfilled" ? usersData.value.totalUsers : 0,
+          totalTickets:
+            ticketStats.status === "fulfilled"
+              ? ticketStats.value.totalTickets
+              : 0,
+          pendingWithdrawals:
+            withdrawalData.status === "fulfilled"
+              ? withdrawalData.value?.content?.length ||
+                withdrawalData.value?.totalElements ||
+                0
+              : 0,
+          pendingVerifications:
+            pendingApps.status === "fulfilled"
+              ? pendingApps.value.totalApplications
+              : 0,
         });
       } catch (error) {
-        console.error('Error fetching admin stats:', error);
+        console.error("Error fetching admin stats:", error);
       }
     };
     fetchStats();
@@ -101,43 +130,43 @@ const AdminPage: React.FC = () => {
 
   const renderActiveTab = () => {
     switch (activeTab) {
-      case 'users':
+      case "users":
         return <UserManagementTabCosmic />;
-      case 'verification':
+      case "verification":
         return <AccountVerificationTabCosmic />;
-      case 'courses':
+      case "courses":
         return <CourseApprovalTabCosmic />;
-      case 'jobs':
+      case "jobs":
         return <JobManagementTab />;
-      case 'seminars':
-        return <AdminSeminarManager />;
-      case 'analytics':
+      // case 'seminars':
+      //   return <AdminSeminarManager />;
+      case "analytics":
         return <AnalyticsTab />;
-      case 'notifications':
+      case "notifications":
         return <NotificationsTabCosmic />;
-      case 'reports':
+      case "reports":
         return <ReportsTabCosmic />;
-      case 'community':
+      case "community":
         return <CommunityManagementTab />;
-      case 'payments':
+      case "payments":
         return <TransactionManagementTabCosmic />;
-      case 'withdrawals':
+      case "withdrawals":
         return <WithdrawalApprovalTab />;
-      case 'skillpoints':
+      case "skillpoints":
         return <SkillPointManagementTabCosmic />;
-      case 'premium':
+      case "premium":
         return <PremiumPlansManagementTab />;
-      case 'support':
+      case "support":
         return <SupportTicketsTab />;
-      case 'settings':
+      case "settings":
         return <SystemSettingsTabCosmic />;
-      case 'ai-experts':
+      case "ai-experts":
         return <AIExpertManagementTab />;
-      case 'skin-upload':
+      case "skin-upload":
         return <MeowlSkinUploadTab />;
-      case 'sliders':
+      case "sliders":
         return <SliderManagementTab />;
-      case 'gamification':
+      case "gamification":
         return <AdminGamificationDashboard />;
       default:
         return <AnalyticsTab />;
@@ -154,9 +183,7 @@ const AdminPage: React.FC = () => {
         setIsCollapsed={setIsCollapsed}
       />
       <main className="admin-main-content">
-        <div className="admin-content-inner">
-          {renderActiveTab()}
-        </div>
+        <div className="admin-content-inner">{renderActiveTab()}</div>
       </main>
     </div>
   );

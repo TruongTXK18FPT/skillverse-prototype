@@ -5,8 +5,13 @@ export interface PremiumPlan {
   description: string;
   durationMonths: number;
   price: string;
-  currency: 'VND' | 'USD';
-  planType: 'FREE_TIER' | 'PREMIUM_BASIC' | 'PREMIUM_PLUS' | 'STUDENT_PACK';
+  currency: "VND" | "USD";
+  planType:
+    | "FREE_TIER"
+    | "PREMIUM_BASIC"
+    | "PREMIUM_PLUS"
+    | "STUDENT_PACK"
+    | "RECRUITER_PRO";
   features: string;
   studentDiscountPercent: string;
   isActive: boolean;
@@ -14,7 +19,7 @@ export interface PremiumPlan {
 
 export interface CreateSubscriptionRequest {
   planId: number;
-  paymentMethod: 'PAYOS';
+  paymentMethod: "PAYOS";
   applyStudentDiscount?: boolean;
   autoRenew?: boolean;
   successUrl?: string;
@@ -33,7 +38,7 @@ export interface UserSubscriptionResponse {
   startDate: string;
   endDate: string;
   isActive: boolean;
-  status: 'PENDING' | 'ACTIVE' | 'EXPIRED' | 'CANCELLED' | 'SUSPENDED';
+  status: "PENDING" | "ACTIVE" | "EXPIRED" | "CANCELLED" | "SUSPENDED";
   isStudentSubscription: boolean;
   autoRenew: boolean;
   paymentTransactionId?: number;

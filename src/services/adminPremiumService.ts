@@ -1,4 +1,4 @@
-import axiosInstance from './axiosInstance';
+import axiosInstance from "./axiosInstance";
 
 /**
  * Admin Premium Plan Management Service
@@ -8,13 +8,29 @@ import axiosInstance from './axiosInstance';
 // ==================== Types ====================
 
 export type FeatureType =
-  | 'AI_CHATBOT_REQUESTS'
-  | 'AI_ROADMAP_GENERATION'
-  | 'MENTOR_BOOKING_MONTHLY'
-  | 'COIN_EARNING_MULTIPLIER'
-  | 'PRIORITY_SUPPORT';
+  | "AI_CHATBOT_REQUESTS"
+  | "AI_ROADMAP_GENERATION"
+  | "MENTOR_BOOKING_MONTHLY"
+  | "COIN_EARNING_MULTIPLIER"
+  | "PRIORITY_SUPPORT"
+  | "JOB_POSTING_MONTHLY"
+  | "SHORT_TERM_JOB_POSTING"
+  | "JOB_BOOST_MONTHLY"
+  | "HIGHLIGHT_JOB_POST"
+  | "AI_CANDIDATE_SUGGESTION"
+  | "COMPANY_PROFILE_PREMIUM"
+  | "ANALYTICS_DASHBOARD"
+  | "CANDIDATE_DATABASE_ACCESS"
+  | "AUTOMATED_OUTREACH"
+  | "API_ACCESS"
+  | "RECRUITER_PRIORITY_SUPPORT";
 
-export type ResetPeriod = 'HOURLY' | 'DAILY' | 'MONTHLY' | 'CUSTOM_8_HOURS' | 'NEVER';
+export type ResetPeriod =
+  | "HOURLY"
+  | "DAILY"
+  | "MONTHLY"
+  | "CUSTOM_8_HOURS"
+  | "NEVER";
 
 export interface FeatureLimitConfig {
   featureType: FeatureType;
@@ -49,7 +65,12 @@ export interface AdminPremiumPlan {
   durationMonths: number;
   price: number;
   currency: string;
-  planType: 'FREE_TIER' | 'PREMIUM_BASIC' | 'PREMIUM_PLUS' | 'STUDENT_PACK';
+  planType:
+    | "FREE_TIER"
+    | "PREMIUM_BASIC"
+    | "PREMIUM_PLUS"
+    | "STUDENT_PACK"
+    | "RECRUITER_PRO";
   studentDiscountPercent: number;
   studentPrice: number;
   features: string[];
@@ -70,7 +91,7 @@ export interface CreatePremiumPlanRequest {
   description: string;
   durationMonths: number;
   price: number;
-  planType: 'PREMIUM_BASIC' | 'PREMIUM_PLUS' | 'STUDENT_PACK';
+  planType: "PREMIUM_BASIC" | "PREMIUM_PLUS" | "STUDENT_PACK" | "RECRUITER_PRO";
   studentDiscountPercent: number;
   features: string; // JSON string array
   maxSubscribers?: number | null;
@@ -92,21 +113,27 @@ export interface UpdatePremiumPlanRequest {
 
 // ==================== API Service ====================
 
-const BASE_URL = '/api/admin/premium';
+const BASE_URL = "/api/admin/premium";
 
 /**
  * Get all premium plans (including inactive)
  */
 export const getAllPlans = async (): Promise<AdminPremiumPlan[]> => {
-  const response = await axiosInstance.get<AdminPremiumPlan[]>(`${BASE_URL}/plans`);
+  const response = await axiosInstance.get<AdminPremiumPlan[]>(
+    `${BASE_URL}/plans`,
+  );
   return response.data;
 };
 
 /**
  * Get premium plan by ID
  */
-export const getPlanById = async (planId: number): Promise<AdminPremiumPlan> => {
-  const response = await axiosInstance.get<AdminPremiumPlan>(`${BASE_URL}/plans/${planId}`);
+export const getPlanById = async (
+  planId: number,
+): Promise<AdminPremiumPlan> => {
+  const response = await axiosInstance.get<AdminPremiumPlan>(
+    `${BASE_URL}/plans/${planId}`,
+  );
   return response.data;
 };
 
@@ -117,8 +144,13 @@ export const getPlanById = async (planId: number): Promise<AdminPremiumPlan> => 
  * - Cannot create FREE_TIER
  * - Plan name must be unique
  */
-export const createPlan = async (data: CreatePremiumPlanRequest): Promise<AdminPremiumPlan> => {
-  const response = await axiosInstance.post<AdminPremiumPlan>(`${BASE_URL}/plans`, data);
+export const createPlan = async (
+  data: CreatePremiumPlanRequest,
+): Promise<AdminPremiumPlan> => {
+  const response = await axiosInstance.post<AdminPremiumPlan>(
+    `${BASE_URL}/plans`,
+    data,
+  );
   return response.data;
 };
 
@@ -129,9 +161,12 @@ export const createPlan = async (data: CreatePremiumPlanRequest): Promise<AdminP
  */
 export const updatePlan = async (
   planId: number,
-  data: UpdatePremiumPlanRequest
+  data: UpdatePremiumPlanRequest,
 ): Promise<AdminPremiumPlan> => {
-  const response = await axiosInstance.put<AdminPremiumPlan>(`${BASE_URL}/plans/${planId}`, data);
+  const response = await axiosInstance.put<AdminPremiumPlan>(
+    `${BASE_URL}/plans/${planId}`,
+    data,
+  );
   return response.data;
 };
 
@@ -150,9 +185,11 @@ export const deletePlan = async (planId: number): Promise<void> => {
  * Validation:
  * - Cannot deactivate FREE_TIER
  */
-export const togglePlanActive = async (planId: number): Promise<AdminPremiumPlan> => {
+export const togglePlanActive = async (
+  planId: number,
+): Promise<AdminPremiumPlan> => {
   const response = await axiosInstance.patch<AdminPremiumPlan>(
-    `${BASE_URL}/plans/${planId}/toggle-active`
+    `${BASE_URL}/plans/${planId}/toggle-active`,
   );
   return response.data;
 };
@@ -163,9 +200,9 @@ export const togglePlanActive = async (planId: number): Promise<AdminPremiumPlan
  * Format price to VND currency
  */
 export const formatPrice = (price: number): string => {
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
     maximumFractionDigits: 0,
   }).format(price);
 };
@@ -177,7 +214,7 @@ export const parseFeatures = (featuresJson: string): string[] => {
   try {
     return JSON.parse(featuresJson);
   } catch (error) {
-    console.error('Failed to parse features JSON:', error);
+    console.error("Failed to parse features JSON:", error);
     return [];
   }
 };
@@ -201,15 +238,16 @@ export const validatePlanName = (name: string): boolean => {
  * Get plan type display name
  */
 export const getPlanTypeDisplayName = (
-  planType: AdminPremiumPlan['planType']
+  planType: AdminPremiumPlan["planType"],
 ): string => {
-  const displayNames: Record<AdminPremiumPlan['planType'], string> = {
-    FREE_TIER: 'Miễn Phí',
-    PREMIUM_BASIC: 'Premium Cơ Bản',
-    PREMIUM_PLUS: 'Premium Plus',
-    STUDENT_PACK: 'Gói Sinh Viên',
+  const displayNames: Record<AdminPremiumPlan["planType"], string> = {
+    FREE_TIER: "Miễn Phí",
+    PREMIUM_BASIC: "Premium Cơ Bản",
+    PREMIUM_PLUS: "Premium Plus",
+    STUDENT_PACK: "Gói Sinh Viên",
+    RECRUITER_PRO: "Gói Nhà Tuyển Dụng",
   };
-  return displayNames[planType];
+  return displayNames[planType] || planType;
 };
 
 /**
@@ -217,27 +255,51 @@ export const getPlanTypeDisplayName = (
  */
 export const getFeatureTypeDisplayName = (featureType: FeatureType): string => {
   const names: Record<FeatureType, string> = {
-    AI_CHATBOT_REQUESTS: 'AI Chatbot Requests',
-    AI_ROADMAP_GENERATION: 'AI Roadmap Generation',
-    MENTOR_BOOKING_MONTHLY: 'Mentor Booking (Monthly)',
-    COIN_EARNING_MULTIPLIER: 'Coin Earning Multiplier',
-    PRIORITY_SUPPORT: 'Priority Support',
+    AI_CHATBOT_REQUESTS: "AI Chatbot Requests",
+    AI_ROADMAP_GENERATION: "AI Roadmap Generation",
+    MENTOR_BOOKING_MONTHLY: "Mentor Booking (Monthly)",
+    COIN_EARNING_MULTIPLIER: "Coin Earning Multiplier",
+    PRIORITY_SUPPORT: "Priority Support",
+    JOB_POSTING_MONTHLY: "Job Posting (Monthly)",
+    SHORT_TERM_JOB_POSTING: "Short-term Job Posting",
+    JOB_BOOST_MONTHLY: "Job Boost (Monthly)",
+    HIGHLIGHT_JOB_POST: "Highlight Job Post",
+    AI_CANDIDATE_SUGGESTION: "AI Candidate Suggestion",
+    COMPANY_PROFILE_PREMIUM: "Premium Company Profile",
+    ANALYTICS_DASHBOARD: "Analytics Dashboard",
+    CANDIDATE_DATABASE_ACCESS: "Candidate Database Access",
+    AUTOMATED_OUTREACH: "Automated Outreach",
+    API_ACCESS: "API Access",
+    RECRUITER_PRIORITY_SUPPORT: "Recruiter Priority Support",
   };
-  return names[featureType];
+  return names[featureType] || featureType;
 };
 
 /**
  * Get feature type display name (Vietnamese)
  */
-export const getFeatureTypeDisplayNameVi = (featureType: FeatureType): string => {
+export const getFeatureTypeDisplayNameVi = (
+  featureType: FeatureType,
+): string => {
   const names: Record<FeatureType, string> = {
-    AI_CHATBOT_REQUESTS: 'Số lượng request chat AI',
-    AI_ROADMAP_GENERATION: 'Số lần tạo roadmap',
-    MENTOR_BOOKING_MONTHLY: 'Số lần đặt mentor/tháng',
-    COIN_EARNING_MULTIPLIER: 'Hệ số nhân xu',
-    PRIORITY_SUPPORT: 'Hỗ trợ ưu tiên',
+    AI_CHATBOT_REQUESTS: "Số lượng request chat AI",
+    AI_ROADMAP_GENERATION: "Số lần tạo roadmap",
+    MENTOR_BOOKING_MONTHLY: "Số lần đặt mentor/tháng",
+    COIN_EARNING_MULTIPLIER: "Hệ số nhân xu",
+    PRIORITY_SUPPORT: "Hỗ trợ ưu tiên",
+    JOB_POSTING_MONTHLY: "Số tin tuyển dụng/tháng",
+    SHORT_TERM_JOB_POSTING: "Số tin việc ngắn hạn",
+    JOB_BOOST_MONTHLY: "Số lần đẩy tin/tháng",
+    HIGHLIGHT_JOB_POST: "Highlight bài đăng",
+    AI_CANDIDATE_SUGGESTION: "AI gợi ý ứng viên",
+    COMPANY_PROFILE_PREMIUM: "Hồ sơ công ty nâng cao",
+    ANALYTICS_DASHBOARD: "Bảng phân tích",
+    CANDIDATE_DATABASE_ACCESS: "Truy cập CSDL ứng viên",
+    AUTOMATED_OUTREACH: "Liên hệ tự động",
+    API_ACCESS: "Truy cập API",
+    RECRUITER_PRIORITY_SUPPORT: "Hỗ trợ ưu tiên (Recruiter)",
   };
-  return names[featureType];
+  return names[featureType] || featureType;
 };
 
 /**
@@ -245,11 +307,11 @@ export const getFeatureTypeDisplayNameVi = (featureType: FeatureType): string =>
  */
 export const getResetPeriodDisplayName = (period: ResetPeriod): string => {
   const names: Record<ResetPeriod, string> = {
-    HOURLY: 'Mỗi giờ',
-    DAILY: 'Mỗi ngày',
-    MONTHLY: 'Mỗi tháng',
-    CUSTOM_8_HOURS: 'Mỗi 8 giờ',
-    NEVER: 'Không reset',
+    HOURLY: "Mỗi giờ",
+    DAILY: "Mỗi ngày",
+    MONTHLY: "Mỗi tháng",
+    CUSTOM_8_HOURS: "Mỗi 8 giờ",
+    NEVER: "Không reset",
   };
   return names[period];
 };
@@ -258,14 +320,25 @@ export const getResetPeriodDisplayName = (period: ResetPeriod): string => {
  * Check if feature is multiplier type
  */
 export const isMultiplierFeature = (featureType: FeatureType): boolean => {
-  return featureType === 'COIN_EARNING_MULTIPLIER';
+  return featureType === "COIN_EARNING_MULTIPLIER";
 };
 
 /**
  * Check if feature is boolean type
  */
 export const isBooleanFeature = (featureType: FeatureType): boolean => {
-  return featureType === 'PRIORITY_SUPPORT';
+  const booleanFeatures: FeatureType[] = [
+    "PRIORITY_SUPPORT",
+    "HIGHLIGHT_JOB_POST",
+    "AI_CANDIDATE_SUGGESTION",
+    "COMPANY_PROFILE_PREMIUM",
+    "ANALYTICS_DASHBOARD",
+    "CANDIDATE_DATABASE_ACCESS",
+    "AUTOMATED_OUTREACH",
+    "API_ACCESS",
+    "RECRUITER_PRIORITY_SUPPORT",
+  ];
+  return booleanFeatures.includes(featureType);
 };
 
 export default {

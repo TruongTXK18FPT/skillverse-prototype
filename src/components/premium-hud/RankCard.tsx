@@ -1,11 +1,21 @@
-import React from 'react';
-import { Check, Award, GraduationCap, Crown, Gem, Wallet } from 'lucide-react';
-import { PremiumPlan, UserSubscriptionResponse } from '../../data/premiumDTOs';
-import { UserProfileResponse } from '../../data/userDTOs';
-import { WalletResponse } from '../../data/walletDTOs';
-import './rank-styles.css';
+import React from "react";
+import {
+  Check,
+  Award,
+  GraduationCap,
+  Crown,
+  Gem,
+  Wallet,
+  Briefcase,
+  Rocket,
+  Star,
+} from "lucide-react";
+import { PremiumPlan, UserSubscriptionResponse } from "../../data/premiumDTOs";
+import { UserProfileResponse } from "../../data/userDTOs";
+import { WalletResponse } from "../../data/walletDTOs";
+import "./rank-styles.css";
 
-// Import avatar frames directly here or pass them as props. 
+// Import avatar frames directly here or pass them as props.
 // Since we want to encapsulate, let's accept them as props or import if they are static assets.
 // Assuming they are passed as props for flexibility.
 
@@ -42,73 +52,117 @@ const RankCard: React.FC<RankCardProps> = ({
   onViewInvoice,
   onCancelAutoRenew,
   onCancelSubscription,
-  targetLabel
+  targetLabel,
 }) => {
-  
   const getTierClass = (planType: string) => {
     switch (planType) {
-      case 'FREE_TIER': return 'hall-rank-bronze';
-      case 'STUDENT_PACK': return 'hall-rank-silver';
-      case 'PREMIUM_BASIC': return 'hall-rank-gold';
-      case 'PREMIUM_PLUS': return 'hall-rank-diamond';
-      default: return '';
+      case "FREE_TIER":
+        return "hall-rank-bronze";
+      case "STUDENT_PACK":
+        return "hall-rank-silver";
+      case "PREMIUM_BASIC":
+        return "hall-rank-gold";
+      case "PREMIUM_PLUS":
+        return "hall-rank-diamond";
+      case "RECRUITER_PRO":
+        return getRecruiterTierClass(plan.name);
+      default:
+        return "";
     }
   };
 
   const getTierIcon = (planType: string) => {
     switch (planType) {
-      case 'FREE_TIER': return Award;
-      case 'STUDENT_PACK': return GraduationCap;
-      case 'PREMIUM_BASIC': return Crown;
-      case 'PREMIUM_PLUS': return Gem;
-      default: return Award;
+      case "FREE_TIER":
+        return Award;
+      case "STUDENT_PACK":
+        return GraduationCap;
+      case "PREMIUM_BASIC":
+        return Crown;
+      case "PREMIUM_PLUS":
+        return Gem;
+      case "RECRUITER_PRO":
+        return getRecruiterTierIcon(plan.name);
+      default:
+        return Award;
     }
   };
 
   const getTierBadge = (planType: string) => {
     switch (planType) {
-      case 'FREE_TIER': return 'MIỄN PHÍ';
-      case 'STUDENT_PACK': return 'SINH VIÊN';
-      case 'PREMIUM_BASIC': return 'CƠ BẢN';
-      case 'PREMIUM_PLUS': return 'CHUYÊN GIA';
-      default: return 'KHÔNG XÁC ĐỊNH';
+      case "FREE_TIER":
+        return "MIỄN PHÍ";
+      case "STUDENT_PACK":
+        return "SINH VIÊN";
+      case "PREMIUM_BASIC":
+        return "CƠ BẢN";
+      case "PREMIUM_PLUS":
+        return "CHUYÊN GIA";
+      case "RECRUITER_PRO":
+        return getRecruiterBadge(plan.name);
+      default:
+        return plan.displayName?.toUpperCase() || "KHÔNG XÁC ĐỊNH";
     }
   };
 
   const getOriginalName = (planType: string) => {
     switch (planType) {
-      case 'FREE_TIER': return 'Miễn phí';
-      case 'STUDENT_PACK': return 'Gói Sinh Viên';
-      case 'PREMIUM_BASIC': return 'Kỹ Năng+';
-      case 'PREMIUM_PLUS': return 'Cố Vấn Pro';
-      default: return plan.displayName;
+      case "FREE_TIER":
+        return "Miễn phí";
+      case "STUDENT_PACK":
+        return "Gói Sinh Viên";
+      case "PREMIUM_BASIC":
+        return "Kỹ Năng+";
+      case "PREMIUM_PLUS":
+        return "Cố Vấn Pro";
+      case "RECRUITER_PRO":
+        return plan.displayName;
+      default:
+        return plan.displayName;
     }
   };
 
   const formatPrice = (price: string) => {
     const num = parseFloat(price);
-    return num.toLocaleString('vi-VN');
+    return num.toLocaleString("vi-VN");
   };
 
   const parseFeatures = (featuresString: string): string[] => {
     try {
       return JSON.parse(featuresString);
     } catch {
-      return featuresString.split(',').map(f => f.trim());
+      return featuresString.split(",").map((f) => f.trim());
     }
+  };
+
+  // Helper functions for recruiter plan differentiation
+  const getRecruiterTierClass = (name: string) => {
+    if (name.includes("enterprise")) return "hall-rank-recruiter-enterprise";
+    return "hall-rank-recruiter-business";
+  };
+
+  const getRecruiterTierIcon = (name: string) => {
+    if (name.includes("enterprise")) return Crown;
+    return Star;
+  };
+
+  const getRecruiterBadge = (name: string) => {
+    if (name.includes("enterprise")) return "DOANH NGHIỆP";
+    if (name.includes("plus")) return "NÂNG CAO";
+    return "NHÀ TUYỂN DỤNG";
   };
 
   const IconComponent = getTierIcon(plan.planType);
   const tierClass = getTierClass(plan.planType);
   const features = parseFeatures(plan.features);
-  const isFreeTier = plan.planType === 'FREE_TIER';
+  const isFreeTier = plan.planType === "FREE_TIER";
 
   return (
-        <div className={`hall-rank-card ${tierClass} ${isActive ? 'active' : ''}`}>
-      {plan.planType === 'STUDENT_PACK' && (
+    <div className={`hall-rank-card ${tierClass} ${isActive ? "active" : ""}`}>
+      {plan.planType === "STUDENT_PACK" && (
         <div className="hall-tag hall-tag-student">SINH VIÊN</div>
       )}
-      {plan.planType === 'PREMIUM_BASIC' && (
+      {plan.planType === "PREMIUM_BASIC" && (
         <div className="hall-tag hall-tag-popular">PHỔ BIẾN</div>
       )}
       {/* Light Beam Effect */}
@@ -130,38 +184,47 @@ const RankCard: React.FC<RankCardProps> = ({
               );
             }
             return (
-              <div className="hall-avatar-img" style={{ background: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div
+                className="hall-avatar-img"
+                style={{
+                  background: "#334155",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <IconComponent size={40} color="#fff" />
               </div>
             );
           })()}
           {frameImage && (
-            <img 
-              src={frameImage} 
-              alt="Rank Frame" 
-              className="hall-frame-img"
-            />
+            <img src={frameImage} alt="Rank Frame" className="hall-frame-img" />
           )}
         </div>
       </div>
 
       {/* Middle: Info */}
       <div className="hall-card-body">
-        <div className="hall-rank-badge">
-          {getTierBadge(plan.planType)}
-        </div>
+        <div className="hall-rank-badge">{getTierBadge(plan.planType)}</div>
         <div className="hall-rank-name-original">
           {getOriginalName(plan.planType)}
         </div>
-        
+
         <p className="hall-description">{plan.description}</p>
-        
+
         <div className="hall-price">
-          {parseFloat(plan.price) === 0 ? 'Miễn phí' : formatPrice(plan.price)}
-          {parseFloat(plan.price) > 0 && <div className="hall-currency">VND</div>}
+          {parseFloat(plan.price) === 0 ? "Miễn phí" : formatPrice(plan.price)}
+          {parseFloat(plan.price) > 0 && (
+            <div className="hall-currency">VND</div>
+          )}
         </div>
         <div className="hall-period">
-          {parseFloat(plan.price) > 0 && (plan.durationMonths > 120 ? 'Vĩnh viễn' : plan.durationMonths === 1 ? '/ tháng' : `/ ${plan.durationMonths} tháng`)}
+          {parseFloat(plan.price) > 0 &&
+            (plan.durationMonths > 120
+              ? "Vĩnh viễn"
+              : plan.durationMonths === 1
+                ? "/ tháng"
+                : `/ ${plan.durationMonths} tháng`)}
         </div>
 
         {/* Features */}
@@ -177,39 +240,58 @@ const RankCard: React.FC<RankCardProps> = ({
         </div>
 
         {/* Action Button */}
-        {!isFreeTier && (
-          isActive ? (
-            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {!isFreeTier &&
+          (isActive ? (
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+              }}
+            >
               <button className="hall-btn" disabled>
                 CẤP ĐỘ HIỆN TẠI
               </button>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "4px",
+                  marginTop: "8px",
+                }}
+              >
                 {onViewInvoice && (
-                  <button 
-                    onClick={onViewInvoice} 
+                  <button
+                    onClick={onViewInvoice}
                     className="hall-btn"
-                    style={{ fontSize: '0.8rem', padding: '8px', opacity: 0.9 }}
+                    style={{ fontSize: "0.8rem", padding: "8px", opacity: 0.9 }}
                   >
                     Xem Hóa Đơn
                   </button>
                 )}
-                
+
                 {currentSub?.autoRenew && onCancelAutoRenew && (
-                  <button 
-                    onClick={onCancelAutoRenew} 
+                  <button
+                    onClick={onCancelAutoRenew}
                     className="hall-btn"
-                    style={{ fontSize: '0.8rem', padding: '8px', opacity: 0.9 }}
+                    style={{ fontSize: "0.8rem", padding: "8px", opacity: 0.9 }}
                   >
                     Hủy Tự Động Gia Hạn
                   </button>
                 )}
-                
+
                 {onCancelSubscription && (
-                  <button 
-                    onClick={onCancelSubscription} 
+                  <button
+                    onClick={onCancelSubscription}
                     className="hall-btn"
-                    style={{ fontSize: '0.8rem', padding: '8px', borderColor: '#ef4444', color: '#ef4444' }}
+                    style={{
+                      fontSize: "0.8rem",
+                      padding: "8px",
+                      borderColor: "#ef4444",
+                      color: "#ef4444",
+                    }}
                   >
                     Hủy Đăng Ký
                   </button>
@@ -217,43 +299,59 @@ const RankCard: React.FC<RankCardProps> = ({
               </div>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                width: "100%",
+              }}
+            >
               {isAuthenticated && walletData ? (
                 <>
-                  <button 
+                  <button
                     className="hall-btn"
                     onClick={() => onWalletPayment(plan.name)}
                     disabled={processing}
                   >
-                    <Wallet size={16} style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} />
-                    {targetLabel ? `${targetLabel} (VÍ)` : 'THANH TOÁN VÍ'}
+                    <Wallet
+                      size={16}
+                      style={{
+                        marginRight: "8px",
+                        verticalAlign: "text-bottom",
+                      }}
+                    />
+                    {targetLabel ? `${targetLabel} (VÍ)` : "THANH TOÁN VÍ"}
                   </button>
-                  <button 
+                  <button
                     className="hall-btn"
                     onClick={() => onUpgrade(plan.name)}
                     disabled={processing}
-                    style={{ opacity: 0.8, fontSize: '0.8rem' }}
+                    style={{ opacity: 0.8, fontSize: "0.8rem" }}
                   >
-                    {targetLabel ? `${targetLabel} (CỔNG KHÁC)` : 'CỔNG THANH TOÁN NGOÀI'}
+                    {targetLabel
+                      ? `${targetLabel} (CỔNG KHÁC)`
+                      : "CỔNG THANH TOÁN NGOÀI"}
                   </button>
                 </>
               ) : (
-                <button 
+                <button
                   className="hall-btn"
                   onClick={() => onUpgrade(plan.name)}
                   disabled={processing}
                 >
-                  {!isAuthenticated ? 'ĐĂNG NHẬP ĐỂ TRUY CẬP' : (targetLabel || 'XÁC NHẬN NÂNG CẤP')}
+                  {!isAuthenticated
+                    ? "ĐĂNG NHẬP ĐỂ TRUY CẬP"
+                    : targetLabel || "XÁC NHẬN NÂNG CẤP"}
                 </button>
               )}
             </div>
-          )
-        )}
-        
+          ))}
+
         {isFreeTier && (
-           <button className="hall-btn" disabled style={{ opacity: 0.5 }}>
-             TIÊU CHUẨN
-           </button>
+          <button className="hall-btn" disabled style={{ opacity: 0.5 }}>
+            TIÊU CHUẨN
+          </button>
         )}
       </div>
     </div>

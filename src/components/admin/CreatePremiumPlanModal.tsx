@@ -1,40 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import { X, Plus, Trash2, AlertCircle } from 'lucide-react';
-import * as adminPremiumService from '../../services/adminPremiumService';
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import { X, Plus, Trash2, AlertCircle } from "lucide-react";
+import * as adminPremiumService from "../../services/adminPremiumService";
 import {
   AdminPremiumPlan,
   CreatePremiumPlanRequest,
   UpdatePremiumPlanRequest,
   FeatureLimitConfig,
   FeatureType,
-  ResetPeriod
-} from '../../services/adminPremiumService';
-import './CreatePremiumPlanModal.css';
+  ResetPeriod,
+} from "../../services/adminPremiumService";
+import "./CreatePremiumPlanModal.css";
 
 interface CreatePremiumPlanModalProps {
   editingPlan: AdminPremiumPlan | null;
   onClose: (shouldRefresh?: boolean) => void;
 }
 
-const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editingPlan, onClose }) => {
+const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
+  editingPlan,
+  onClose,
+}) => {
   const isEditMode = !!editingPlan;
   const isFreeTier = editingPlan?.isFreeTier || false;
 
   // Form state
   const [formData, setFormData] = useState({
-    name: '',
-    displayName: '',
-    description: '',
+    name: "",
+    displayName: "",
+    description: "",
     durationMonths: 1,
     price: 0,
-    planType: 'PREMIUM_BASIC' as 'PREMIUM_BASIC' | 'PREMIUM_PLUS' | 'STUDENT_PACK',
+    planType: "PREMIUM_BASIC" as
+      | "PREMIUM_BASIC"
+      | "PREMIUM_PLUS"
+      | "STUDENT_PACK"
+      | "RECRUITER_PRO",
     studentDiscountPercent: 0,
     maxSubscribers: null as number | null,
     isActive: true,
   });
 
-  const [features, setFeatures] = useState<string[]>(['']);
+  const [features, setFeatures] = useState<string[]>([""]);
   const [featureLimits, setFeatureLimits] = useState<FeatureLimitConfig[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +49,6 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
   // Load editing plan data
   useEffect(() => {
     if (editingPlan) {
-      
       setFormData({
         name: editingPlan.name,
         displayName: editingPlan.displayName,
@@ -54,37 +60,44 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
         maxSubscribers: editingPlan.maxSubscribers,
         isActive: editingPlan.isActive,
       });
-      setFeatures(editingPlan.features.length > 0 ? editingPlan.features : ['']);
-      
+      setFeatures(
+        editingPlan.features.length > 0 ? editingPlan.features : [""],
+      );
+
       // Load feature limits
       if (editingPlan.featureLimits && editingPlan.featureLimits.length > 0) {
-        const mappedLimits = editingPlan.featureLimits.map(fl => ({
+        const mappedLimits = editingPlan.featureLimits.map((fl) => ({
           featureType: fl.featureType,
           limitValue: fl.limitValue,
           resetPeriod: fl.resetPeriod,
           isUnlimited: fl.isUnlimited,
           bonusMultiplier: fl.bonusMultiplier,
-          description: fl.description || '',
+          description: fl.description || "",
           isActive: fl.isActive,
         }));
         setFeatureLimits(mappedLimits);
       } else {
-        console.warn('⚠️ No feature limits found in editingPlan');
+        console.warn("⚠️ No feature limits found in editingPlan");
         setFeatureLimits([]);
       }
     }
   }, [editingPlan]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     const { name, value, type } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'number' ? (value === '' ? 0 : parseFloat(value)) : value,
+      [name]:
+        type === "number" ? (value === "" ? 0 : parseFloat(value)) : value,
     }));
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.checked,
     }));
@@ -97,7 +110,7 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
   };
 
   const addFeature = () => {
-    setFeatures([...features, '']);
+    setFeatures([...features, ""]);
   };
 
   const removeFeature = (index: number) => {
@@ -108,37 +121,47 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
 
   // Feature Limits handlers
   const addFeatureLimit = () => {
-    setFeatureLimits([...featureLimits, {
-      featureType: 'AI_CHATBOT_REQUESTS',
-      limitValue: 10,
-      resetPeriod: 'DAILY',
-      isUnlimited: false,
-      isActive: true,
-    }]);
+    setFeatureLimits([
+      ...featureLimits,
+      {
+        featureType: "AI_CHATBOT_REQUESTS",
+        limitValue: 10,
+        resetPeriod: "DAILY",
+        isUnlimited: false,
+        isActive: true,
+      },
+    ]);
   };
 
-  const updateFeatureLimit = (index: number, updates: Partial<FeatureLimitConfig>) => {
+  const updateFeatureLimit = (
+    index: number,
+    updates: Partial<FeatureLimitConfig>,
+  ) => {
     const newLimits = [...featureLimits];
     newLimits[index] = { ...newLimits[index], ...updates };
-    
+
     // Auto-adjust based on feature type
     if (updates.featureType) {
       if (adminPremiumService.isMultiplierFeature(updates.featureType)) {
         newLimits[index].limitValue = null;
-        newLimits[index].bonusMultiplier = newLimits[index].bonusMultiplier || 1.0;
+        newLimits[index].bonusMultiplier =
+          newLimits[index].bonusMultiplier || 1.0;
       } else {
         newLimits[index].bonusMultiplier = undefined;
-        if (newLimits[index].limitValue === null && !newLimits[index].isUnlimited) {
+        if (
+          newLimits[index].limitValue === null &&
+          !newLimits[index].isUnlimited
+        ) {
           newLimits[index].limitValue = 10;
         }
       }
     }
-    
+
     // Clear limitValue if unlimited
     if (updates.isUnlimited === true) {
       newLimits[index].limitValue = null;
     }
-    
+
     setFeatureLimits(newLimits);
   };
 
@@ -153,36 +176,39 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
     }
 
     if (!isEditMode && !formData.name.trim()) {
-      return 'Tên gói không được để trống';
+      return "Tên gói không được để trống";
     }
 
     if (!isEditMode && !adminPremiumService.validatePlanName(formData.name)) {
-      return 'Tên gói chỉ được chứa chữ thường, số, gạch ngang và gạch dưới';
+      return "Tên gói chỉ được chứa chữ thường, số, gạch ngang và gạch dưới";
     }
 
     if (!formData.displayName.trim()) {
-      return 'Tên hiển thị không được để trống';
+      return "Tên hiển thị không được để trống";
     }
 
     if (!formData.description.trim()) {
-      return 'Mô tả không được để trống';
+      return "Mô tả không được để trống";
     }
 
     if (formData.durationMonths < 1 || formData.durationMonths > 12) {
-      return 'Thời hạn phải từ 1-12 tháng';
+      return "Thời hạn phải từ 1-12 tháng";
     }
 
     if (formData.price < 1000) {
-      return 'Giá phải từ 1,000 VND trở lên';
+      return "Giá phải từ 1,000 VND trở lên";
     }
 
-    if (formData.studentDiscountPercent < 0 || formData.studentDiscountPercent > 100) {
-      return 'Giảm giá sinh viên phải từ 0-100%';
+    if (
+      formData.studentDiscountPercent < 0 ||
+      formData.studentDiscountPercent > 100
+    ) {
+      return "Giảm giá sinh viên phải từ 0-100%";
     }
 
-    const validFeatures = features.filter(f => f.trim());
+    const validFeatures = features.filter((f) => f.trim());
     if (validFeatures.length === 0) {
-      return 'Phải có ít nhất 1 tính năng';
+      return "Phải có ít nhất 1 tính năng";
     }
 
     return null;
@@ -190,7 +216,7 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const validationError = validateForm();
     if (validationError) {
       setError(validationError);
@@ -201,37 +227,41 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
     setError(null);
 
     try {
-      const validFeatures = features.filter(f => f.trim());
+      const validFeatures = features.filter((f) => f.trim());
       const featuresJson = adminPremiumService.stringifyFeatures(validFeatures);
 
       if (isEditMode && editingPlan) {
         // For FREE_TIER: Only send feature limits (backend will reject core property updates)
-        const updateData: UpdatePremiumPlanRequest = isFreeTier ? {
-          // Send original values for required fields (backend will ignore them for FREE_TIER)
-          displayName: editingPlan.displayName,
-          description: editingPlan.description,
-          durationMonths: editingPlan.durationMonths,
-          price: editingPlan.price,
-          studentDiscountPercent: editingPlan.studentDiscountPercent,
-          features: JSON.stringify(editingPlan.features), // Convert array to JSON string
-          maxSubscribers: editingPlan.maxSubscribers,
-          isActive: editingPlan.isActive,
-          featureLimits: featureLimits.length > 0 ? featureLimits : undefined,
-        } : {
-          // For other plans: Send all updated fields
-          displayName: formData.displayName,
-          description: formData.description,
-          durationMonths: formData.durationMonths,
-          price: formData.price,
-          studentDiscountPercent: formData.studentDiscountPercent,
-          features: featuresJson,
-          maxSubscribers: formData.maxSubscribers,
-          isActive: formData.isActive,
-          featureLimits: featureLimits.length > 0 ? featureLimits : undefined,
-        };
-        
+        const updateData: UpdatePremiumPlanRequest = isFreeTier
+          ? {
+              // Send original values for required fields (backend will ignore them for FREE_TIER)
+              displayName: editingPlan.displayName,
+              description: editingPlan.description,
+              durationMonths: editingPlan.durationMonths,
+              price: editingPlan.price,
+              studentDiscountPercent: editingPlan.studentDiscountPercent,
+              features: JSON.stringify(editingPlan.features), // Convert array to JSON string
+              maxSubscribers: editingPlan.maxSubscribers,
+              isActive: editingPlan.isActive,
+              featureLimits:
+                featureLimits.length > 0 ? featureLimits : undefined,
+            }
+          : {
+              // For other plans: Send all updated fields
+              displayName: formData.displayName,
+              description: formData.description,
+              durationMonths: formData.durationMonths,
+              price: formData.price,
+              studentDiscountPercent: formData.studentDiscountPercent,
+              features: featuresJson,
+              maxSubscribers: formData.maxSubscribers,
+              isActive: formData.isActive,
+              featureLimits:
+                featureLimits.length > 0 ? featureLimits : undefined,
+            };
+
         await adminPremiumService.updatePlan(editingPlan.id, updateData);
-        alert('✅ Cập nhật gói premium thành công!');
+        alert("✅ Cập nhật gói premium thành công!");
       } else {
         // Create new plan
         const createData: CreatePremiumPlanRequest = {
@@ -248,12 +278,12 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
           featureLimits: featureLimits.length > 0 ? featureLimits : undefined,
         };
         await adminPremiumService.createPlan(createData);
-        alert('✅ Tạo gói premium thành công!');
+        alert("✅ Tạo gói premium thành công!");
       }
 
       onClose(true); // Refresh the list
     } catch (err: any) {
-      setError(err.response?.data?.message || err.message || 'Có lỗi xảy ra');
+      setError(err.response?.data?.message || err.message || "Có lỗi xảy ra");
     } finally {
       setLoading(false);
     }
@@ -265,7 +295,11 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
         {/* Header */}
         <div className="admin-modal-header">
           <h3>
-            {isEditMode ? (isFreeTier ? 'Chỉnh Sửa Giới Hạn FREE_TIER' : 'Chỉnh Sửa Gói Premium') : 'Tạo Gói Premium Mới'}
+            {isEditMode
+              ? isFreeTier
+                ? "Chỉnh Sửa Giới Hạn FREE_TIER"
+                : "Chỉnh Sửa Gói Premium"
+              : "Tạo Gói Premium Mới"}
           </h3>
           <button className="admin-close-btn" onClick={() => onClose()}>
             <X size={24} />
@@ -284,7 +318,10 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
           {isFreeTier && (
             <div className="admin-form-info">
               <AlertCircle size={18} />
-              <span>Gói FREE_TIER: Chỉ có thể chỉnh sửa giới hạn tính năng. Các thuộc tính khác không thể thay đổi.</span>
+              <span>
+                Gói FREE_TIER: Chỉ có thể chỉnh sửa giới hạn tính năng. Các
+                thuộc tính khác không thể thay đổi.
+              </span>
             </div>
           )}
 
@@ -292,7 +329,9 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
             {/* Plan Name (only for create) */}
             {!isEditMode && (
               <div className="admin-form-group full-width">
-                <label htmlFor="name">Tên Gói <span className="required">*</span></label>
+                <label htmlFor="name">
+                  Tên Gói <span className="required">*</span>
+                </label>
                 <input
                   type="text"
                   id="name"
@@ -304,13 +343,18 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                   pattern="[a-z0-9_-]+"
                   title="Chỉ chữ thường, số, gạch ngang và gạch dưới"
                 />
-                <small>Chỉ chữ thường, số, gạch ngang và gạch dưới (không thể thay đổi sau khi tạo)</small>
+                <small>
+                  Chỉ chữ thường, số, gạch ngang và gạch dưới (không thể thay
+                  đổi sau khi tạo)
+                </small>
               </div>
             )}
 
             {/* Display Name */}
             <div className="admin-form-group full-width">
-              <label htmlFor="displayName">Tên Hiển Thị <span className="required">*</span></label>
+              <label htmlFor="displayName">
+                Tên Hiển Thị <span className="required">*</span>
+              </label>
               <input
                 type="text"
                 id="displayName"
@@ -325,7 +369,9 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
 
             {/* Description */}
             <div className="admin-form-group full-width">
-              <label htmlFor="description">Mô Tả <span className="required">*</span></label>
+              <label htmlFor="description">
+                Mô Tả <span className="required">*</span>
+              </label>
               <textarea
                 id="description"
                 name="description"
@@ -341,7 +387,9 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
             {/* Plan Type (only for create) */}
             {!isEditMode && (
               <div className="admin-form-group">
-                <label htmlFor="planType">Loại Gói <span className="required">*</span></label>
+                <label htmlFor="planType">
+                  Loại Gói <span className="required">*</span>
+                </label>
                 <select
                   id="planType"
                   name="planType"
@@ -352,13 +400,16 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                   <option value="PREMIUM_BASIC">Premium Cơ Bản</option>
                   <option value="PREMIUM_PLUS">Premium Plus</option>
                   <option value="STUDENT_PACK">Gói Sinh Viên</option>
+                  <option value="RECRUITER_PRO">Gói Nhà Tuyển Dụng</option>
                 </select>
               </div>
             )}
 
             {/* Duration */}
             <div className="admin-form-group">
-              <label htmlFor="durationMonths">Thời Hạn (tháng) <span className="required">*</span></label>
+              <label htmlFor="durationMonths">
+                Thời Hạn (tháng) <span className="required">*</span>
+              </label>
               <input
                 type="number"
                 id="durationMonths"
@@ -374,7 +425,9 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
 
             {/* Price */}
             <div className="admin-form-group">
-              <label htmlFor="price">Giá (VND) <span className="required">*</span></label>
+              <label htmlFor="price">
+                Giá (VND) <span className="required">*</span>
+              </label>
               <input
                 type="number"
                 id="price"
@@ -390,7 +443,9 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
 
             {/* Student Discount */}
             <div className="admin-form-group">
-              <label htmlFor="studentDiscountPercent">Giảm Giá SV (%) <span className="required">*</span></label>
+              <label htmlFor="studentDiscountPercent">
+                Giảm Giá SV (%) <span className="required">*</span>
+              </label>
               <input
                 type="number"
                 id="studentDiscountPercent"
@@ -411,11 +466,14 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                 type="number"
                 id="maxSubscribers"
                 name="maxSubscribers"
-                value={formData.maxSubscribers || ''}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  maxSubscribers: e.target.value === '' ? null : parseInt(e.target.value)
-                }))}
+                value={formData.maxSubscribers || ""}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    maxSubscribers:
+                      e.target.value === "" ? null : parseInt(e.target.value),
+                  }))
+                }
                 min="1"
                 placeholder="Không giới hạn"
               />
@@ -425,14 +483,18 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
             {/* Features */}
             {!isFreeTier && (
               <div className="admin-form-group full-width">
-                <label>Tính Năng <span className="required">*</span></label>
+                <label>
+                  Tính Năng <span className="required">*</span>
+                </label>
                 <div className="admin-features-list">
                   {features.map((feature, index) => (
                     <div key={index} className="admin-feature-input">
                       <input
                         type="text"
                         value={feature}
-                        onChange={(e) => handleFeatureChange(index, e.target.value)}
+                        onChange={(e) =>
+                          handleFeatureChange(index, e.target.value)
+                        }
                         placeholder={`Tính năng ${index + 1}`}
                       />
                       {features.length > 1 && (
@@ -481,17 +543,68 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                         <label>Loại Tính Năng</label>
                         <select
                           value={limit.featureType}
-                          onChange={(e) => updateFeatureLimit(index, { featureType: e.target.value as FeatureType })}
+                          onChange={(e) =>
+                            updateFeatureLimit(index, {
+                              featureType: e.target.value as FeatureType,
+                            })
+                          }
                         >
-                          <option value="AI_CHATBOT_REQUESTS">AI Chatbot Requests</option>
-                          <option value="AI_ROADMAP_GENERATION">AI Roadmap Generation</option>
-                          <option value="MENTOR_BOOKING_MONTHLY">Mentor Booking</option>
-                          <option value="COIN_EARNING_MULTIPLIER">Coin Multiplier</option>
-                          <option value="PRIORITY_SUPPORT">Priority Support</option>
+                          <optgroup label="Học viên / Chung">
+                            <option value="AI_CHATBOT_REQUESTS">
+                              AI Chatbot Requests
+                            </option>
+                            <option value="AI_ROADMAP_GENERATION">
+                              AI Roadmap Generation
+                            </option>
+                            <option value="MENTOR_BOOKING_MONTHLY">
+                              Mentor Booking
+                            </option>
+                            <option value="COIN_EARNING_MULTIPLIER">
+                              Coin Multiplier
+                            </option>
+                            <option value="PRIORITY_SUPPORT">
+                              Priority Support
+                            </option>
+                          </optgroup>
+                          <optgroup label="Nhà tuyển dụng">
+                            <option value="JOB_POSTING_MONTHLY">
+                              Số tin tuyển dụng/tháng
+                            </option>
+                            <option value="SHORT_TERM_JOB_POSTING">
+                              Số tin việc ngắn hạn
+                            </option>
+                            <option value="JOB_BOOST_MONTHLY">
+                              Đẩy tin/tháng
+                            </option>
+                            <option value="HIGHLIGHT_JOB_POST">
+                              Highlight bài đăng
+                            </option>
+                            <option value="AI_CANDIDATE_SUGGESTION">
+                              AI gợi ý ứng viên
+                            </option>
+                            <option value="COMPANY_PROFILE_PREMIUM">
+                              Hồ sơ công ty nâng cao
+                            </option>
+                            <option value="ANALYTICS_DASHBOARD">
+                              Bảng phân tích
+                            </option>
+                            <option value="CANDIDATE_DATABASE_ACCESS">
+                              CSDL ứng viên
+                            </option>
+                            <option value="AUTOMATED_OUTREACH">
+                              Liên hệ tự động
+                            </option>
+                            <option value="API_ACCESS">API Access</option>
+                            <option value="RECRUITER_PRIORITY_SUPPORT">
+                              Hỗ trợ ưu tiên (Recruiter)
+                            </option>
+                          </optgroup>
                         </select>
                       </div>
 
-                      {adminPremiumService.isMultiplierFeature(limit.featureType) ? (
+                      {adminPremiumService.isMultiplierFeature(
+                        limit.featureType,
+                      ) ? (
                         <div className="admin-limit-field">
                           <label>Hệ Số Nhân</label>
                           <input
@@ -500,7 +613,12 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                             min="0"
                             max="10"
                             value={limit.bonusMultiplier || 1.0}
-                            onChange={(e) => updateFeatureLimit(index, { bonusMultiplier: parseFloat(e.target.value) || 1.0 })}
+                            onChange={(e) =>
+                              updateFeatureLimit(index, {
+                                bonusMultiplier:
+                                  parseFloat(e.target.value) || 1.0,
+                              })
+                            }
                             placeholder="1.0"
                           />
                         </div>
@@ -511,7 +629,11 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                             type="number"
                             min="0"
                             value={limit.limitValue || 0}
-                            onChange={(e) => updateFeatureLimit(index, { limitValue: parseInt(e.target.value) || 0 })}
+                            onChange={(e) =>
+                              updateFeatureLimit(index, {
+                                limitValue: parseInt(e.target.value) || 0,
+                              })
+                            }
                             placeholder="Số lượng"
                             disabled={limit.isUnlimited}
                           />
@@ -522,7 +644,11 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                         <label>Reset</label>
                         <select
                           value={limit.resetPeriod}
-                          onChange={(e) => updateFeatureLimit(index, { resetPeriod: e.target.value as ResetPeriod })}
+                          onChange={(e) =>
+                            updateFeatureLimit(index, {
+                              resetPeriod: e.target.value as ResetPeriod,
+                            })
+                          }
                         >
                           <option value="HOURLY">Mỗi giờ</option>
                           <option value="DAILY">Mỗi ngày</option>
@@ -532,13 +658,19 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                         </select>
                       </div>
 
-                      {!adminPremiumService.isMultiplierFeature(limit.featureType) && (
+                      {!adminPremiumService.isMultiplierFeature(
+                        limit.featureType,
+                      ) && (
                         <div className="admin-limit-field checkbox-field">
                           <label>
                             <input
                               type="checkbox"
                               checked={limit.isUnlimited}
-                              onChange={(e) => updateFeatureLimit(index, { isUnlimited: e.target.checked })}
+                              onChange={(e) =>
+                                updateFeatureLimit(index, {
+                                  isUnlimited: e.target.checked,
+                                })
+                              }
                             />
                             <span>Không giới hạn</span>
                           </label>
@@ -549,8 +681,12 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                         <label>Mô Tả</label>
                         <input
                           type="text"
-                          value={limit.description || ''}
-                          onChange={(e) => updateFeatureLimit(index, { description: e.target.value })}
+                          value={limit.description || ""}
+                          onChange={(e) =>
+                            updateFeatureLimit(index, {
+                              description: e.target.value,
+                            })
+                          }
                           placeholder="Mô tả giới hạn..."
                         />
                       </div>
@@ -567,7 +703,9 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
                   ))}
                 </div>
               ) : (
-                <p className="admin-empty-hint">Chưa có giới hạn tính năng. Nhấn "Thêm" để thêm.</p>
+                <p className="admin-empty-hint">
+                  Chưa có giới hạn tính năng. Nhấn "Thêm" để thêm.
+                </p>
               )}
             </div>
 
@@ -602,13 +740,14 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({ editing
               className="admin-action-btn save"
               disabled={loading}
             >
-              {loading ? 'Đang xử lý...' : (isEditMode ? 'Cập Nhật' : 'Tạo Gói')}
+              {loading ? "Đang xử lý..." : isEditMode ? "Cập Nhật" : "Tạo Gói"}
             </button>
           </div>
         </form>
       </div>
-    </div>
-  , document.body);
+    </div>,
+    document.body,
+  );
 };
 
 export default CreatePremiumPlanModal;

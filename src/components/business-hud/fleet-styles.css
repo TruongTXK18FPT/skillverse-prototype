@@ -16,17 +16,21 @@
   background-color: var(--fleet-bg);
   color: var(--fleet-text);
   min-height: 100vh;
-  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
+  font-family: "Inter", "Roboto", "Arial", sans-serif;
   padding: 20px;
-  background-image: 
+  background-image:
     linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)),
-    url('/assets/zone-map/grid-bg.png');
+    url("/assets/zone-map/grid-bg.png");
   background-size: cover;
 }
 
 /* Header Banner */
 .fleet-header-banner {
-  background: linear-gradient(135deg, var(--fleet-bg-secondary) 0%, rgba(15, 23, 42, 0.8) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--fleet-bg-secondary) 0%,
+    rgba(15, 23, 42, 0.8) 100%
+  );
   backdrop-filter: blur(20px);
   border: 1px solid var(--fleet-border);
   border-radius: 16px;
@@ -38,18 +42,23 @@
 }
 
 .fleet-header-banner::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--fleet-cyan), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--fleet-cyan),
+    transparent
+  );
   animation: scanLine 3s linear infinite;
 }
 
 .fleet-header-title {
-  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
+  font-family: "Inter", "Roboto", "Arial", sans-serif;
   font-size: 2.5rem;
   letter-spacing: 2px;
   margin: 0 0 0.5rem 0;
@@ -71,7 +80,7 @@
   background: rgba(6, 182, 212, 0.1);
   border: 1px solid var(--fleet-border);
   color: var(--fleet-cyan);
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 0.85rem;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -87,7 +96,7 @@
 
 .fleet-header-subtitle {
   color: var(--fleet-cyan);
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 0.9rem;
   letter-spacing: 1px;
   opacity: 0.8;
@@ -110,7 +119,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
+  font-family: "Inter", "Roboto", "Arial", sans-serif;
   font-weight: 600;
   letter-spacing: 1px;
   transition: all 0.3s ease;
@@ -131,8 +140,12 @@
 }
 
 @keyframes scanLine {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 /* Layout */
@@ -156,8 +169,14 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 
@@ -179,22 +198,27 @@
   border-radius: 8px;
   padding: 20px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .fleet-panel::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--fleet-cyan), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--fleet-cyan),
+    transparent
+  );
   opacity: 0.5;
 }
 
 .fleet-panel::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   right: 0;
@@ -220,6 +244,19 @@
   font-size: 1.2rem;
 }
 
+/* Responsive form layout (form + preview) */
+.fleet-form-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 1100px) {
+  .fleet-form-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Stats Bar */
 .fleet-stats-bar {
   display: grid;
@@ -237,7 +274,14 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  clip-path: polygon(
+    10px 0,
+    100% 0,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%,
+    0 10px
+  );
 }
 
 .fleet-stat-value {
@@ -475,7 +519,14 @@ select.fleet-input option {
   text-transform: uppercase;
   letter-spacing: 1px;
   cursor: pointer;
-  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  clip-path: polygon(
+    10px 0,
+    100% 0,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%,
+    0 10px
+  );
   transition: all 0.3s;
   width: 100%;
   margin-top: 10px;
@@ -498,8 +549,14 @@ select.fleet-input option {
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .fleet-details-header {
@@ -545,7 +602,8 @@ select.fleet-input option {
   font-size: 0.8rem;
 }
 
-.fleet-detail-row span, .fleet-detail-row p {
+.fleet-detail-row span,
+.fleet-detail-row p {
   color: #fff;
   margin: 0;
   line-height: 1.5;
@@ -632,13 +690,18 @@ select.fleet-input option {
 }
 
 .fleet-merc-card-detailed::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--fleet-cyan), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--fleet-cyan),
+    transparent
+  );
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -680,7 +743,7 @@ select.fleet-input option {
   font-weight: 700;
   color: #fff;
   margin: 0 0 5px 0;
-  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
+  font-family: "Inter", "Roboto", "Arial", sans-serif;
   letter-spacing: 0.5px;
 }
 
@@ -745,7 +808,7 @@ select.fleet-input option {
 }
 
 .fleet-header-row::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -785,12 +848,19 @@ select.fleet-input option {
   border: 1px solid var(--fleet-border);
   color: #fff;
   padding: 12px 15px 12px 45px;
-  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
+  font-family: "Inter", "Roboto", "Arial", sans-serif;
   font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.5px;
   transition: all 0.3s;
-  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  clip-path: polygon(
+    10px 0,
+    100% 0,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%,
+    0 10px
+  );
 }
 
 .fleet-search-input:focus {
@@ -806,13 +876,20 @@ select.fleet-input option {
   border: 1px solid var(--fleet-border);
   color: #fff;
   padding: 12px 40px 12px 45px;
-  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
+  font-family: "Inter", "Roboto", "Arial", sans-serif;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   letter-spacing: 0.5px;
   transition: all 0.3s;
-  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  clip-path: polygon(
+    10px 0,
+    100% 0,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%,
+    0 10px
+  );
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -856,7 +933,7 @@ select.fleet-input option {
   color: var(--fleet-text);
   cursor: pointer;
   transition: all 0.2s;
-  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
+  font-family: "Inter", "Roboto", "Arial", sans-serif;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -908,7 +985,7 @@ select.fleet-input option {
   padding: 8px;
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
+  font-family: "Inter", "Roboto", "Arial", sans-serif;
   font-weight: 600;
   text-transform: uppercase;
   transition: all 0.2s;
@@ -927,7 +1004,7 @@ select.fleet-input option {
   padding: 8px;
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
+  font-family: "Inter", "Roboto", "Arial", sans-serif;
   font-weight: 600;
   text-transform: uppercase;
   display: flex;

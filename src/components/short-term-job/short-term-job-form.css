@@ -1,0 +1,615 @@
+/* ============================================================
+   SHORT-TERM JOB FORM — Neon Tech / Hologram Theme
+   Prefix: stj-form__*
+   ============================================================ */
+
+/* ---- Root Variables (inherits from fleet theme) ----------- */
+:root {
+  --stj-form-bg: rgba(6, 10, 28, 0.95);
+  --stj-form-card-bg: rgba(10, 18, 45, 0.8);
+  --stj-form-card-hover-bg: rgba(14, 25, 58, 0.9);
+  --stj-form-border: rgba(99, 179, 237, 0.18);
+  --stj-form-border-focus: rgba(99, 179, 237, 0.7);
+  --stj-form-border-error: rgba(252, 129, 129, 0.7);
+  --stj-form-text: #e8f4ff;
+  --stj-form-text-muted: rgba(180, 210, 240, 0.55);
+  --stj-form-text-label: rgba(180, 210, 240, 0.85);
+  --stj-form-accent: #63b3ed;
+  --stj-form-accent-bright: #90cdf4;
+  --stj-form-cyan: #00d4ff;
+  --stj-form-green: #68d391;
+  --stj-form-amber: #f6ad55;
+  --stj-form-red: #fc8181;
+  --stj-form-glow: 0 0 12px rgba(99, 179, 237, 0.25);
+  --stj-form-glow-focus: 0 0 20px rgba(99, 179, 237, 0.45), 0 0 40px rgba(99, 179, 237, 0.12);
+  --stj-form-radius: 10px;
+  --stj-form-radius-sm: 6px;
+}
+
+/* ---- Form Container ---------------------------------------- */
+.stj-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem;
+}
+
+/* ---- Section Card ------------------------------------------ */
+.stj-form__section {
+  background: var(--stj-form-card-bg);
+  border: 1px solid var(--stj-form-border);
+  border-radius: var(--stj-form-radius);
+  overflow: hidden;
+  transition: border-color 0.2s;
+  position: relative;
+}
+
+.stj-form__section::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--stj-form-accent), transparent);
+  opacity: 0.5;
+}
+
+.stj-form__section:hover {
+  border-color: rgba(99, 179, 237, 0.32);
+}
+
+.stj-form__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  background: rgba(99, 179, 237, 0.06);
+  border-bottom: 1px solid var(--stj-form-border);
+}
+
+.stj-form__section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--stj-form-accent-bright);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.stj-form__section-title svg,
+.stj-form__section-title .stj-form__icon {
+  color: var(--stj-form-cyan);
+  flex-shrink: 0;
+}
+
+.stj-form__section-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+/* ---- Row (horizontal group) -------------------------------- */
+.stj-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .stj-form__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Field ------------------------------------------------- */
+.stj-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.stj-form__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--stj-form-text-label);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.stj-form__label--required::after {
+  content: "*";
+  color: var(--stj-form-cyan);
+  font-size: 0.85em;
+}
+
+.stj-form__hint {
+  font-size: 0.73rem;
+  color: var(--stj-form-text-muted);
+  margin-top: 0.15rem;
+}
+
+.stj-form__error {
+  font-size: 0.73rem;
+  color: var(--stj-form-red);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* ---- Input / Textarea / Select ----------------------------- */
+.stj-form__input,
+.stj-form__textarea,
+.stj-form__select {
+  width: 100%;
+  background: rgba(6, 12, 30, 0.9);
+  border: 1px solid var(--stj-form-border);
+  border-radius: var(--stj-form-radius-sm);
+  color: var(--stj-form-text);
+  font-size: 0.88rem;
+  font-family: inherit;
+  padding: 0.6rem 0.85rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  box-sizing: border-box;
+}
+
+.stj-form__input::placeholder,
+.stj-form__textarea::placeholder {
+  color: rgba(120, 160, 200, 0.4);
+}
+
+.stj-form__input:focus,
+.stj-form__textarea:focus,
+.stj-form__select:focus {
+  border-color: var(--stj-form-border-focus);
+  box-shadow: var(--stj-form-glow-focus);
+  background: rgba(8, 16, 40, 0.95);
+}
+
+.stj-form__input--error,
+.stj-form__textarea--error,
+.stj-form__select--error {
+  border-color: var(--stj-form-border-error);
+  box-shadow: 0 0 10px rgba(252, 129, 129, 0.15);
+}
+
+.stj-form__textarea {
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.55;
+}
+
+.stj-form__select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2363b3ed' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  padding-right: 2.2rem;
+  cursor: pointer;
+}
+
+.stj-form__select option {
+  background: #0a1228;
+  color: var(--stj-form-text);
+}
+
+/* ---- Number Input ------------------------------------------ */
+.stj-form__number-wrap {
+  display: flex;
+  align-items: center;
+  background: rgba(6, 12, 30, 0.9);
+  border: 1px solid var(--stj-form-border);
+  border-radius: var(--stj-form-radius-sm);
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.stj-form__number-wrap:focus-within {
+  border-color: var(--stj-form-border-focus);
+  box-shadow: var(--stj-form-glow-focus);
+}
+
+.stj-form__number-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--stj-form-text);
+  font-size: 0.88rem;
+  font-family: inherit;
+  padding: 0.6rem 0.85rem;
+  outline: none;
+  min-width: 0;
+}
+
+.stj-form__number-input::-webkit-inner-spin-button,
+.stj-form__number-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.stj-form__number-btn {
+  background: rgba(99, 179, 237, 0.08);
+  border: none;
+  border-left: 1px solid var(--stj-form-border);
+  color: var(--stj-form-accent);
+  font-size: 1.15rem;
+  line-height: 1;
+  width: 34px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  user-select: none;
+  padding: 0.6rem 0;
+}
+
+.stj-form__number-btn:hover {
+  background: rgba(99, 179, 237, 0.18);
+  color: var(--stj-form-cyan);
+}
+
+/* ---- Skill / Tag Pills ------------------------------------- */
+.stj-form__pill-input-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.stj-form__pill-input-row .stj-form__input {
+  flex: 1;
+}
+
+.stj-form__pill-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.6rem 1rem;
+  background: rgba(99, 179, 237, 0.1);
+  border: 1px solid var(--stj-form-border);
+  border-radius: var(--stj-form-radius-sm);
+  color: var(--stj-form-accent);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+
+.stj-form__pill-add-btn:hover {
+  background: rgba(99, 179, 237, 0.22);
+  border-color: var(--stj-form-accent);
+  box-shadow: 0 0 10px rgba(99, 179, 237, 0.2);
+}
+
+.stj-form__suggest-label {
+  font-size: 0.73rem;
+  color: var(--stj-form-text-muted);
+  margin-top: 0.1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.stj-form__pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.stj-form__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.stj-form__pill--suggest {
+  background: rgba(99, 179, 237, 0.07);
+  border: 1px solid rgba(99, 179, 237, 0.22);
+  color: var(--stj-form-accent);
+}
+
+.stj-form__pill--suggest:hover {
+  background: rgba(99, 179, 237, 0.2);
+  border-color: var(--stj-form-accent);
+  box-shadow: 0 0 8px rgba(99, 179, 237, 0.2);
+}
+
+.stj-form__pill--selected {
+  background: rgba(99, 179, 237, 0.15);
+  border: 1px solid rgba(99, 179, 237, 0.45);
+  color: var(--stj-form-accent-bright);
+}
+
+.stj-form__pill--tag {
+  background: rgba(104, 211, 145, 0.12);
+  border: 1px solid rgba(104, 211, 145, 0.35);
+  color: var(--stj-form-green);
+}
+
+.stj-form__pill-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.65rem;
+  line-height: 1;
+  transition: background 0.15s;
+  margin-left: 0.1rem;
+}
+
+.stj-form__pill-x:hover {
+  background: rgba(252, 129, 129, 0.35);
+  color: var(--stj-form-red);
+}
+
+.stj-form__divider {
+  border: none;
+  border-top: 1px solid var(--stj-form-border);
+  margin: 0.5rem 0;
+}
+
+.stj-form__count-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--stj-form-accent);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+
+/* ---- Toggle Switch ----------------------------------------- */
+.stj-form__toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.9rem;
+  background: rgba(99, 179, 237, 0.04);
+  border: 1px solid var(--stj-form-border);
+  border-radius: var(--stj-form-radius-sm);
+}
+
+.stj-form__toggle-label {
+  font-size: 0.86rem;
+  color: var(--stj-form-text-label);
+  font-weight: 500;
+}
+
+/* custom switch */
+.stj-form__switch {
+  position: relative;
+  width: 42px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.stj-form__switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.stj-form__switch-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: rgba(99, 179, 237, 0.12);
+  border: 1px solid var(--stj-form-border);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.stj-form__switch input:checked ~ .stj-form__switch-track {
+  background: rgba(99, 179, 237, 0.3);
+  border-color: var(--stj-form-accent);
+  box-shadow: 0 0 10px rgba(99, 179, 237, 0.35);
+}
+
+.stj-form__switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(150, 180, 220, 0.6);
+  transition: transform 0.2s, background 0.2s;
+  pointer-events: none;
+}
+
+.stj-form__switch input:checked ~ .stj-form__switch-track .stj-form__switch-thumb {
+  transform: translateX(20px);
+  background: var(--stj-form-cyan);
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.6);
+}
+
+/* ---- Milestone Card --------------------------------------- */
+.stj-form__milestone {
+  background: rgba(99, 179, 237, 0.04);
+  border: 1px solid var(--stj-form-border);
+  border-radius: var(--stj-form-radius-sm);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.stj-form__milestone-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stj-form__milestone-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--stj-form-accent);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.stj-form__milestone-del {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(252, 129, 129, 0.1);
+  border: 1px solid rgba(252, 129, 129, 0.25);
+  border-radius: 6px;
+  color: var(--stj-form-red);
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 0.8rem;
+}
+
+.stj-form__milestone-del:hover {
+  background: rgba(252, 129, 129, 0.25);
+}
+
+.stj-form__empty-note {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--stj-form-text-muted);
+  font-size: 0.84rem;
+  border: 1px dashed rgba(99, 179, 237, 0.18);
+  border-radius: var(--stj-form-radius-sm);
+}
+
+/* ---- Additional Section Header Add Button ----------------- */
+.stj-form__add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.85rem;
+  background: rgba(99, 179, 237, 0.1);
+  border: 1px solid rgba(99, 179, 237, 0.3);
+  border-radius: var(--stj-form-radius-sm);
+  color: var(--stj-form-accent);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+  letter-spacing: 0.03em;
+}
+
+.stj-form__add-btn:hover {
+  background: rgba(99, 179, 237, 0.2);
+  box-shadow: 0 0 10px rgba(99, 179, 237, 0.25);
+}
+
+/* ---- Actions ---------------------------------------------- */
+.stj-form__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 0 0.25rem 0.5rem;
+}
+
+.stj-form__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.35rem;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.18s;
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+}
+
+.stj-form__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.stj-form__btn--cancel {
+  background: transparent;
+  border-color: rgba(180, 210, 240, 0.2);
+  color: var(--stj-form-text-muted);
+}
+
+.stj-form__btn--cancel:hover:not(:disabled) {
+  border-color: rgba(180, 210, 240, 0.45);
+  color: var(--stj-form-text);
+}
+
+.stj-form__btn--draft {
+  background: rgba(99, 179, 237, 0.08);
+  border-color: rgba(99, 179, 237, 0.35);
+  color: var(--stj-form-accent);
+}
+
+.stj-form__btn--draft:hover:not(:disabled) {
+  background: rgba(99, 179, 237, 0.18);
+  border-color: var(--stj-form-accent);
+  box-shadow: 0 0 14px rgba(99, 179, 237, 0.3);
+}
+
+.stj-form__btn--publish {
+  background: linear-gradient(135deg, rgba(99, 179, 237, 0.25), rgba(0, 212, 255, 0.2));
+  border-color: rgba(99, 179, 237, 0.55);
+  color: #e8f4ff;
+}
+
+.stj-form__btn--publish:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(99, 179, 237, 0.4), rgba(0, 212, 255, 0.32));
+  border-color: var(--stj-form-cyan);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), 0 0 40px rgba(0, 212, 255, 0.12);
+  color: #fff;
+}
+
+.stj-form__btn--publish::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.06));
+  pointer-events: none;
+}
+
+/* Spinner */
+.stj-form__spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(99, 179, 237, 0.3);
+  border-top-color: var(--stj-form-accent);
+  border-radius: 50%;
+  animation: stj-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes stj-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Scan line animation on section cards */
+@keyframes stj-scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 0.4; }
+  90% { opacity: 0.4; }
+  100% { transform: translateY(1000%); opacity: 0; }
+}

@@ -1,15 +1,15 @@
-import React from 'react';
-import RankCard from './RankCard';
-import ClearanceHeader from './ClearanceHeader';
-import { PremiumPlan, UserSubscriptionResponse } from '../../data/premiumDTOs';
-import { UserProfileResponse } from '../../data/userDTOs';
-import { WalletResponse } from '../../data/walletDTOs';
-import './rank-styles.css';
+import React from "react";
+import RankCard from "./RankCard";
+import ClearanceHeader from "./ClearanceHeader";
+import { PremiumPlan, UserSubscriptionResponse } from "../../data/premiumDTOs";
+import { UserProfileResponse } from "../../data/userDTOs";
+import { WalletResponse } from "../../data/walletDTOs";
+import "./rank-styles.css";
 
 // Import avatar frames
-import silverAvatar from '../../assets/premium/silver_avatar.png';
-import goldenAvatar from '../../assets/premium/golden_avatar.png';
-import diamondAvatar from '../../assets/premium/diamond_avatar.png';
+import silverAvatar from "../../assets/premium/silver_avatar.png";
+import goldenAvatar from "../../assets/premium/golden_avatar.png";
+import diamondAvatar from "../../assets/premium/diamond_avatar.png";
 
 interface ClearanceLevelPageProps {
   premiumPlans: PremiumPlan[];
@@ -42,23 +42,26 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
   onViewInvoice,
   onCancelAutoRenew,
   onCancelSubscription,
-  targetLabel = "NÂNG CẤP"
+  targetLabel = "NÂNG CẤP",
 }) => {
-
-  const getTierFrame = (planType: string) => {
+  const getTierFrame = (planType: string, planName?: string) => {
     switch (planType) {
-      case 'STUDENT_PACK':
+      case "STUDENT_PACK":
         return silverAvatar;
-      case 'PREMIUM_BASIC':
+      case "PREMIUM_BASIC":
         return goldenAvatar;
-      case 'PREMIUM_PLUS':
+      case "PREMIUM_PLUS":
         return diamondAvatar;
+      case "RECRUITER_PRO":
+        // Use different frames for different recruiter tiers
+        if (planName?.includes("enterprise")) return diamondAvatar;
+        if (planName?.includes("business") || planName?.includes("plus"))
+          return goldenAvatar;
+        return silverAvatar;
       default:
         return null;
     }
   };
-
-
 
   // We need to know if ANY plan is active to disable others if that's the logic
   // But usually upgrades are allowed.
@@ -72,48 +75,52 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
   // This suggests if you have Premium, ALL premium cards show "Active until...".
   // That's a bit weird UI, but I must preserve logic.
   // I will pass `hasActive` to RankCard and let it handle the "Active" state display based on that.
-  
+
   return (
     <div className="hall-container">
       <div className="hall-god-ray"></div>
       <div className="hall-particles">
         {[...Array(20)].map((_, i) => (
-          <div 
-            key={i} 
+          <div
+            key={i}
             className="hall-particle"
             style={{
               left: `${Math.random() * 100}%`,
               animationDuration: `${10 + Math.random() * 20}s`,
               animationDelay: `${Math.random() * 5}s`,
-              opacity: Math.random() * 0.5 + 0.2
+              opacity: Math.random() * 0.5 + 0.2,
             }}
           />
         ))}
       </div>
-      
+
       <div className="hall-content">
         <ClearanceHeader />
 
         <div className="hall-rank-grid">
           {premiumPlans.map((plan) => (
-          <RankCard
-            key={plan.id}
-            plan={plan}
-            isActive={hasActive}
-            currentSub={currentSub}
-            onUpgrade={onUpgrade}
-            onWalletPayment={onWalletPayment}
-            processing={processing}
-            isAuthenticated={isAuthenticated}
-            walletData={walletData}
-            userProfile={userProfile}
-            frameImage={getTierFrame(plan.planType)}
-            fallbackAvatarUrl={fallbackAvatarUrl}
-            onViewInvoice={onViewInvoice ? () => currentSub && onViewInvoice(currentSub) : undefined}
-            onCancelAutoRenew={onCancelAutoRenew}
-            onCancelSubscription={onCancelSubscription}
-            targetLabel={targetLabel}
-          />
+            <RankCard
+              key={plan.id}
+              plan={plan}
+              isActive={hasActive}
+              currentSub={currentSub}
+              onUpgrade={onUpgrade}
+              onWalletPayment={onWalletPayment}
+              processing={processing}
+              isAuthenticated={isAuthenticated}
+              walletData={walletData}
+              userProfile={userProfile}
+              frameImage={getTierFrame(plan.planType, plan.name)}
+              fallbackAvatarUrl={fallbackAvatarUrl}
+              onViewInvoice={
+                onViewInvoice
+                  ? () => currentSub && onViewInvoice(currentSub)
+                  : undefined
+              }
+              onCancelAutoRenew={onCancelAutoRenew}
+              onCancelSubscription={onCancelSubscription}
+              targetLabel={targetLabel}
+            />
           ))}
         </div>
       </div>

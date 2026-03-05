@@ -1,18 +1,21 @@
-import React from 'react';
-import { LayoutDashboard, PlusCircle, Users, Calendar } from 'lucide-react';
-import './fleet-styles.css';
+import React from "react";
+import { LayoutDashboard, Briefcase, Users, Calendar } from "lucide-react";
+import "./fleet-styles.css";
 
 interface FleetHeaderProps {
-  activeTab: 'dashboard' | 'mission' | 'radar' | 'seminar';
-  onTabChange: (tab: 'dashboard' | 'mission' | 'radar' | 'seminar') => void;
+  activeTab: "dashboard" | "jobs" | "radar" | "seminar";
+  onTabChange: (tab: "dashboard" | "jobs" | "radar" | "seminar") => void;
 }
 
-const FleetHeader: React.FC<FleetHeaderProps> = ({ activeTab, onTabChange }) => {
+const FleetHeader: React.FC<FleetHeaderProps> = ({
+  activeTab,
+  onTabChange,
+}) => {
   return (
     <div className="fleet-header-banner">
       <div className="fleet-header-content">
         <h1 className="fleet-header-title">
-          <LayoutDashboard size={32} style={{ marginRight: '15px' }} />
+          <LayoutDashboard size={32} style={{ marginRight: "15px" }} />
           TRUNG TÂM QUẢN LÝ DOANH NGHIỆP
         </h1>
         <div className="fleet-status-modules">
@@ -20,32 +23,32 @@ const FleetHeader: React.FC<FleetHeaderProps> = ({ activeTab, onTabChange }) => 
           <span className="status-module">Khu Vực: Doanh Nghiệp</span>
           <span className="status-module">Cấp Độ: Chuyên Nghiệp</span>
         </div>
-        
+
         <div className="fleet-nav-tabs">
-          <button 
-            className={`fleet-nav-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
-            onClick={() => onTabChange('dashboard')}
+          <button
+            className={`fleet-nav-btn ${activeTab === "dashboard" ? "active" : ""}`}
+            onClick={() => onTabChange("dashboard")}
           >
             <LayoutDashboard size={18} />
             <span>TỔNG QUAN</span>
           </button>
-          <button 
-            className={`fleet-nav-btn ${activeTab === 'mission' ? 'active' : ''}`}
-            onClick={() => onTabChange('mission')}
+          <button
+            className={`fleet-nav-btn ${activeTab === "jobs" ? "active" : ""}`}
+            onClick={() => onTabChange("jobs")}
           >
-            <PlusCircle size={18} />
-            <span>ĐĂNG TUYỂN DỤNG</span>
+            <Briefcase size={18} />
+            <span>QUẢN LÝ TUYỂN DỤNG</span>
           </button>
-          <button 
-            className={`fleet-nav-btn ${activeTab === 'radar' ? 'active' : ''}`}
-            onClick={() => onTabChange('radar')}
+          <button
+            className={`fleet-nav-btn ${activeTab === "radar" ? "active" : ""}`}
+            onClick={() => onTabChange("radar")}
           >
             <Users size={18} />
             <span>TÌM KIẾM ỨNG VIÊN</span>
           </button>
-          <button 
-            className={`fleet-nav-btn ${activeTab === 'seminar' ? 'active' : ''}`}
-            onClick={() => onTabChange('seminar')}
+          <button
+            className={`fleet-nav-btn ${activeTab === "seminar" ? "active" : ""}`}
+            onClick={() => onTabChange("seminar")}
           >
             <Calendar size={18} />
             <span>QUẢN LÝ HỘI THẢO</span>

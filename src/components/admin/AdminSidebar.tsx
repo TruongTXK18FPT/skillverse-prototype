@@ -1,11 +1,30 @@
-import React from 'react';
+import React from "react";
 import {
-  Users, UserCheck, BookOpen, BarChart3, Bell, AlertTriangle,
-  CreditCard, Banknote, Zap, Crown, Ticket, Settings, Brain, 
-  MessageSquare, Briefcase, Shirt, Image, Calendar, Trophy,
-  LayoutDashboard, ChevronLeft, ChevronRight, Shield
-} from 'lucide-react';
-import './AdminSidebar.css';
+  Users,
+  UserCheck,
+  BookOpen,
+  BarChart3,
+  Bell,
+  AlertTriangle,
+  CreditCard,
+  Banknote,
+  Zap,
+  Crown,
+  Ticket,
+  Settings,
+  Brain,
+  MessageSquare,
+  Briefcase,
+  Shirt,
+  Image,
+  Calendar,
+  Trophy,
+  LayoutDashboard,
+  ChevronLeft,
+  ChevronRight,
+  Shield,
+} from "lucide-react";
+import "./AdminSidebar.css";
 
 interface AdminSidebarProps {
   activeTab: string;
@@ -20,79 +39,178 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   setActiveTab,
   userRoles,
   isCollapsed,
-  setIsCollapsed
+  setIsCollapsed,
 }) => {
   const allGroups = [
     {
-      label: 'HỆ THỐNG',
+      label: "HỆ THỐNG",
       items: [
-        { id: 'analytics', label: 'Thống Kê', icon: BarChart3, allowedRoles: ['ADMIN'] },
-        { id: 'notifications', label: 'Thông Báo', icon: Bell, allowedRoles: ['SUPPORT_ADMIN', 'ADMIN'] },
-      ]
+        {
+          id: "analytics",
+          label: "Thống Kê",
+          icon: BarChart3,
+          allowedRoles: ["ADMIN"],
+        },
+        {
+          id: "notifications",
+          label: "Thông Báo",
+          icon: Bell,
+          allowedRoles: ["SUPPORT_ADMIN", "ADMIN"],
+        },
+      ],
     },
     {
-      label: 'NGƯỜI DÙNG',
+      label: "NGƯỜI DÙNG",
       items: [
-        { id: 'users', label: 'Người Dùng', icon: Users, allowedRoles: ['USER_ADMIN', 'ADMIN'] },
-        { id: 'verification', label: 'Xác Thực', icon: UserCheck, allowedRoles: ['USER_ADMIN', 'ADMIN'] },
-      ]
+        {
+          id: "users",
+          label: "Người Dùng",
+          icon: Users,
+          allowedRoles: ["USER_ADMIN", "ADMIN"],
+        },
+        {
+          id: "verification",
+          label: "Xác Thực",
+          icon: UserCheck,
+          allowedRoles: ["USER_ADMIN", "ADMIN"],
+        },
+      ],
     },
     {
-      label: 'NỘI DUNG',
+      label: "NỘI DUNG",
       items: [
-        { id: 'courses', label: 'Khóa Học', icon: BookOpen, allowedRoles: ['CONTENT_ADMIN', 'ADMIN'] },
-        { id: 'jobs', label: 'Tuyển Dụng', icon: Briefcase, allowedRoles: ['CONTENT_ADMIN', 'ADMIN'] },
-        { id: 'seminars', label: 'Hội Thảo', icon: Calendar, allowedRoles: ['CONTENT_ADMIN', 'ADMIN'] },
-        { id: 'sliders', label: 'Sliders', icon: Image, allowedRoles: ['CONTENT_ADMIN', 'SYSTEM_ADMIN', 'ADMIN'] },
-      ]
+        {
+          id: "courses",
+          label: "Khóa Học",
+          icon: BookOpen,
+          allowedRoles: ["CONTENT_ADMIN", "ADMIN"],
+        },
+        {
+          id: "jobs",
+          label: "Tuyển Dụng",
+          icon: Briefcase,
+          allowedRoles: ["CONTENT_ADMIN", "ADMIN"],
+        },
+        // { id: 'seminars', label: 'Hội Thảo', icon: Calendar, allowedRoles: ['CONTENT_ADMIN', 'ADMIN'] },
+        {
+          id: "sliders",
+          label: "Sliders",
+          icon: Image,
+          allowedRoles: ["CONTENT_ADMIN", "SYSTEM_ADMIN", "ADMIN"],
+        },
+      ],
     },
     {
-      label: 'CỘNG ĐỒNG',
+      label: "CỘNG ĐỒNG",
       items: [
-        { id: 'community', label: 'Cộng Đồng', icon: MessageSquare, allowedRoles: ['COMMUNITY_ADMIN', 'ADMIN'] },
-        { id: 'reports', label: 'Báo Cáo', icon: AlertTriangle, allowedRoles: ['COMMUNITY_ADMIN', 'FINANCE_ADMIN', 'USER_ADMIN', 'ADMIN'] },
-        { id: 'support', label: 'Hỗ Trợ', icon: Ticket, allowedRoles: ['SUPPORT_ADMIN', 'ADMIN'] },
-      ]
+        {
+          id: "community",
+          label: "Cộng Đồng",
+          icon: MessageSquare,
+          allowedRoles: ["COMMUNITY_ADMIN", "ADMIN"],
+        },
+        {
+          id: "reports",
+          label: "Báo Cáo",
+          icon: AlertTriangle,
+          allowedRoles: [
+            "COMMUNITY_ADMIN",
+            "FINANCE_ADMIN",
+            "USER_ADMIN",
+            "ADMIN",
+          ],
+        },
+        {
+          id: "support",
+          label: "Hỗ Trợ",
+          icon: Ticket,
+          allowedRoles: ["SUPPORT_ADMIN", "ADMIN"],
+        },
+      ],
     },
     {
-      label: 'TÀI CHÍNH',
+      label: "TÀI CHÍNH",
       items: [
-        { id: 'payments', label: 'Thanh Toán', icon: CreditCard, allowedRoles: ['FINANCE_ADMIN', 'ADMIN'] },
-        { id: 'withdrawals', label: 'Rút Tiền', icon: Banknote, allowedRoles: ['FINANCE_ADMIN', 'ADMIN'] },
-      ]
+        {
+          id: "payments",
+          label: "Thanh Toán",
+          icon: CreditCard,
+          allowedRoles: ["FINANCE_ADMIN", "ADMIN"],
+        },
+        {
+          id: "withdrawals",
+          label: "Rút Tiền",
+          icon: Banknote,
+          allowedRoles: ["FINANCE_ADMIN", "ADMIN"],
+        },
+      ],
     },
     {
-      label: 'PREMIUM',
+      label: "PREMIUM",
       items: [
-        { id: 'premium', label: 'Gói Premium', icon: Crown, allowedRoles: ['PREMIUM_ADMIN', 'ADMIN'] },
-        { id: 'skillpoints', label: 'Điểm Kỹ Năng', icon: Zap, allowedRoles: ['PREMIUM_ADMIN', 'ADMIN'] },
-        { id: 'gamification', label: 'Gamification', icon: Trophy, allowedRoles: ['PREMIUM_ADMIN', 'ADMIN'] },
-      ]
+        {
+          id: "premium",
+          label: "Gói Premium",
+          icon: Crown,
+          allowedRoles: ["PREMIUM_ADMIN", "ADMIN"],
+        },
+        {
+          id: "skillpoints",
+          label: "Điểm Kỹ Năng",
+          icon: Zap,
+          allowedRoles: ["PREMIUM_ADMIN", "ADMIN"],
+        },
+        {
+          id: "gamification",
+          label: "Gamification",
+          icon: Trophy,
+          allowedRoles: ["PREMIUM_ADMIN", "ADMIN"],
+        },
+      ],
     },
     {
-      label: 'AI & ASSETS',
+      label: "AI & ASSETS",
       items: [
-        { id: 'ai-experts', label: 'AI Experts', icon: Brain, allowedRoles: ['AI_ADMIN', 'ADMIN'] },
-        { id: 'skin-upload', label: 'Upload Skin', icon: Shirt, allowedRoles: ['AI_ADMIN', 'ADMIN'] },
-      ]
+        {
+          id: "ai-experts",
+          label: "AI Experts",
+          icon: Brain,
+          allowedRoles: ["AI_ADMIN", "ADMIN"],
+        },
+        {
+          id: "skin-upload",
+          label: "Upload Skin",
+          icon: Shirt,
+          allowedRoles: ["AI_ADMIN", "ADMIN"],
+        },
+      ],
     },
     {
-      label: 'CẤU HÌNH',
+      label: "CẤU HÌNH",
       items: [
-        { id: 'settings', label: 'Hệ Thống', icon: Settings, allowedRoles: ['SYSTEM_ADMIN', 'ADMIN'] },
-      ]
-    }
+        {
+          id: "settings",
+          label: "Hệ Thống",
+          icon: Settings,
+          allowedRoles: ["SYSTEM_ADMIN", "ADMIN"],
+        },
+      ],
+    },
   ];
 
-  const filteredGroups = allGroups.map(group => ({
-    ...group,
-    items: group.items.filter(item => 
-      userRoles.includes('ADMIN') || item.allowedRoles.some(role => userRoles.includes(role))
-    )
-  })).filter(group => group.items.length > 0);
+  const filteredGroups = allGroups
+    .map((group) => ({
+      ...group,
+      items: group.items.filter(
+        (item) =>
+          userRoles.includes("ADMIN") ||
+          item.allowedRoles.some((role) => userRoles.includes(role)),
+      ),
+    }))
+    .filter((group) => group.items.length > 0);
 
   return (
-    <aside className={`admin-sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+    <aside className={`admin-sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <div className="admin-sidebar-header">
         {!isCollapsed && (
           <div className="admin-sidebar-logo">
@@ -100,7 +218,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             <span>SYSTEM CORE</span>
           </div>
         )}
-        <button 
+        <button
           className="admin-sidebar-toggle"
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
@@ -111,21 +229,27 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       <div className="admin-sidebar-nav">
         {filteredGroups.map((group, idx) => (
           <div key={idx} className="admin-sidebar-group">
-            {!isCollapsed && <h4 className="admin-sidebar-group-label">{group.label}</h4>}
+            {!isCollapsed && (
+              <h4 className="admin-sidebar-group-label">{group.label}</h4>
+            )}
             <div className="admin-sidebar-items">
-              {group.items.map(item => {
+              {group.items.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
                 return (
                   <button
                     key={item.id}
-                    className={`admin-sidebar-item ${isActive ? 'active' : ''}`}
+                    className={`admin-sidebar-item ${isActive ? "active" : ""}`}
                     onClick={() => setActiveTab(item.id)}
-                    title={isCollapsed ? item.label : ''}
+                    title={isCollapsed ? item.label : ""}
                   >
                     <Icon size={20} className="item-icon" />
-                    {!isCollapsed && <span className="item-label">{item.label}</span>}
-                    {isActive && !isCollapsed && <div className="active-indicator" />}
+                    {!isCollapsed && (
+                      <span className="item-label">{item.label}</span>
+                    )}
+                    {isActive && !isCollapsed && (
+                      <div className="active-indicator" />
+                    )}
                   </button>
                 );
               })}

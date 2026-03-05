@@ -1,0 +1,651 @@
+/* ==================================================================
+   RECRUITER SUBSCRIPTION WIDGET (rcr-sub-*)
+   Premium quota dashboard for recruiter business HUD.
+   Prefix: rcr-sub- to avoid CSS conflicts with other modules.
+   ================================================================== */
+
+/* ===== Panel Container ===== */
+.rcr-sub-panel {
+  position: relative;
+  background: rgba(10, 15, 30, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  transition:
+    border-color 0.4s,
+    box-shadow 0.4s;
+}
+
+.rcr-sub-panel:hover {
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+/* Decorative glow line at top */
+.rcr-sub-panel__glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  opacity: 0.9;
+  z-index: 1;
+}
+
+/* ===== Loading State ===== */
+.rcr-sub-panel--loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  padding: 2.5rem;
+  color: rgba(148, 163, 184, 0.7);
+  font-size: 0.85rem;
+}
+
+.rcr-sub-spinner {
+  animation: rcr-sub-spin 1s linear infinite;
+  color: #a78bfa;
+}
+
+@keyframes rcr-sub-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== Free Tier ===== */
+.rcr-sub-panel--free {
+  border-color: rgba(167, 139, 250, 0.15);
+  background: linear-gradient(
+    160deg,
+    rgba(10, 15, 30, 0.8),
+    rgba(30, 27, 75, 0.35)
+  );
+}
+
+.rcr-sub-panel--free .rcr-sub-panel__glow {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(167, 139, 250, 0.5),
+    transparent
+  );
+}
+
+.rcr-sub-free-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 1.15rem;
+}
+
+.rcr-sub-free-icon {
+  width: 54px;
+  height: 54px;
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.22);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a78bfa;
+  flex-shrink: 0;
+}
+
+.rcr-sub-free-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 3px;
+  letter-spacing: 0.3px;
+}
+
+.rcr-sub-free-desc {
+  font-size: 0.8rem;
+  color: rgba(148, 163, 184, 0.8);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Free tier perks list */
+.rcr-sub-free-perks {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 1.15rem;
+  padding: 0.85rem 1rem;
+  background: rgba(167, 139, 250, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(167, 139, 250, 0.1);
+}
+
+.rcr-sub-free-perk {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.8rem;
+  color: rgba(203, 213, 225, 0.9);
+}
+
+.rcr-sub-free-perk svg {
+  color: #a78bfa;
+  flex-shrink: 0;
+}
+
+/* Upgrade button */
+.rcr-sub-upgrade-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+  letter-spacing: 0.3px;
+}
+
+.rcr-sub-upgrade-btn:hover {
+  background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(124, 58, 237, 0.35);
+  color: #fff;
+}
+
+/* ===== Plus Tier ===== */
+.rcr-sub-panel--plus {
+  border-color: rgba(59, 130, 246, 0.18);
+  background: linear-gradient(
+    160deg,
+    rgba(10, 15, 30, 0.8),
+    rgba(23, 37, 84, 0.25)
+  );
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.04);
+}
+
+.rcr-sub-panel--plus:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 50px rgba(59, 130, 246, 0.08);
+}
+
+.rcr-sub-panel--plus .rcr-sub-panel__glow {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.65),
+    rgba(96, 165, 250, 0.3),
+    transparent
+  );
+}
+
+/* ===== Enterprise Tier ===== */
+.rcr-sub-panel--enterprise {
+  border-color: rgba(167, 139, 250, 0.2);
+  background: linear-gradient(
+    160deg,
+    rgba(10, 15, 30, 0.8),
+    rgba(46, 16, 101, 0.2)
+  );
+  box-shadow: 0 0 40px rgba(167, 139, 250, 0.04);
+}
+
+.rcr-sub-panel--enterprise:hover {
+  border-color: rgba(167, 139, 250, 0.35);
+  box-shadow: 0 0 50px rgba(167, 139, 250, 0.1);
+}
+
+.rcr-sub-panel--enterprise .rcr-sub-panel__glow {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(167, 139, 250, 0.7),
+    rgba(236, 72, 153, 0.3),
+    transparent
+  );
+}
+
+/* ===== Plan Header ===== */
+.rcr-sub-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.rcr-sub-header__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+}
+
+.rcr-sub-header__icon:hover {
+  transform: scale(1.08);
+}
+
+.rcr-sub-header__icon--plus {
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: #60a5fa;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+}
+
+.rcr-sub-header__icon--enterprise {
+  background: rgba(167, 139, 250, 0.12);
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  color: #c4b5fd;
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.1);
+}
+
+.rcr-sub-header__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rcr-sub-header__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rcr-sub-header__plan {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.2px;
+}
+
+/* Plan tier badge */
+.rcr-sub-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 5px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.rcr-sub-badge--plus {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.rcr-sub-badge--enterprise {
+  background: linear-gradient(
+    135deg,
+    rgba(167, 139, 250, 0.15),
+    rgba(236, 72, 153, 0.1)
+  );
+  color: #c4b5fd;
+  border: 1px solid rgba(167, 139, 250, 0.3);
+}
+
+/* Time metadata */
+.rcr-sub-header__meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.73rem;
+  color: rgba(148, 163, 184, 0.7);
+  margin-top: 4px;
+}
+
+.rcr-sub-header__meta svg {
+  flex-shrink: 0;
+}
+
+.rcr-sub-header__meta strong {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.rcr-sub-header__dot {
+  opacity: 0.35;
+}
+
+/* Manage link */
+.rcr-sub-manage-link {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: rgba(148, 163, 184, 0.6);
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  text-decoration: none;
+  transition: all 0.25s;
+  flex-shrink: 0;
+}
+
+.rcr-sub-manage-link:hover {
+  color: #fff;
+  background: rgba(148, 163, 184, 0.12);
+  border-color: rgba(148, 163, 184, 0.25);
+  transform: translateY(-1px);
+}
+
+/* ===== Quotas Section ===== */
+.rcr-sub-quotas {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 1rem;
+}
+
+.rcr-sub-quotas__title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(148, 163, 184, 0.55);
+  margin-bottom: 2px;
+}
+
+.rcr-sub-quotas__title svg {
+  opacity: 0.7;
+}
+
+/* Individual Quota Card */
+.rcr-sub-quota {
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  border-radius: 12px;
+  transition:
+    border-color 0.3s,
+    background 0.3s;
+}
+
+.rcr-sub-quota:hover {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(148, 163, 184, 0.14);
+}
+
+/* Quota status variants */
+.rcr-sub-quota--unlimited {
+  border-color: rgba(34, 197, 94, 0.15);
+  background: rgba(34, 197, 94, 0.03);
+}
+
+.rcr-sub-quota--healthy {
+  border-color: rgba(148, 163, 184, 0.08);
+}
+
+.rcr-sub-quota--warning {
+  border-color: rgba(245, 158, 11, 0.2);
+  background: rgba(245, 158, 11, 0.03);
+}
+
+.rcr-sub-quota--exhausted {
+  border-color: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.rcr-sub-quota__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.rcr-sub-quota__label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  color: rgba(226, 232, 240, 0.9);
+  font-weight: 500;
+}
+
+.rcr-sub-quota__label svg {
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.rcr-sub-quota__value {
+  flex-shrink: 0;
+}
+
+.rcr-sub-quota__count {
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.rcr-sub-quota__count strong {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.rcr-sub-quota__total {
+  font-size: 0.72rem;
+  color: rgba(148, 163, 184, 0.6);
+  margin-left: 2px;
+}
+
+.rcr-sub-quota__unlimited {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4ade80;
+  letter-spacing: 0.2px;
+}
+
+/* Quota Progress Bar */
+.rcr-sub-quota__bar {
+  height: 7px;
+  background: rgba(148, 163, 184, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.rcr-sub-quota__fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 3px;
+  position: relative;
+}
+
+.rcr-sub-quota__fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25));
+  border-radius: 0 4px 4px 0;
+}
+
+.rcr-sub-quota__fill--blue {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+}
+
+.rcr-sub-quota__fill--amber {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+.rcr-sub-quota__fill--green {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+}
+
+/* Warning / Danger bar override */
+.rcr-sub-quota--warning .rcr-sub-quota__fill {
+  background: linear-gradient(90deg, #f59e0b, #fb923c) !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.rcr-sub-quota--exhausted .rcr-sub-quota__fill {
+  background: linear-gradient(90deg, #ef4444, #f87171) !important;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+  animation: rcr-sub-pulse 2s ease-in-out infinite;
+}
+
+@keyframes rcr-sub-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+/* Quota Footer */
+.rcr-sub-quota__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.rcr-sub-quota__hint {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  color: rgba(74, 222, 128, 0.8);
+}
+
+.rcr-sub-quota__hint svg {
+  flex-shrink: 0;
+}
+
+.rcr-sub-quota__alert {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  color: rgba(248, 113, 113, 0.9);
+  font-weight: 500;
+}
+
+.rcr-sub-quota__alert svg {
+  flex-shrink: 0;
+}
+
+.rcr-sub-quota__reset {
+  font-size: 0.65rem;
+  color: rgba(148, 163, 184, 0.45);
+  font-style: italic;
+}
+
+/* ===== Feature Tags ===== */
+.rcr-sub-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.06);
+}
+
+.rcr-sub-ftag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  color: rgba(203, 213, 225, 0.8);
+  transition: all 0.2s;
+}
+
+.rcr-sub-ftag:hover {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.rcr-sub-ftag--plus {
+  background: rgba(59, 130, 246, 0.07);
+  border-color: rgba(59, 130, 246, 0.15);
+  color: rgba(147, 197, 253, 0.9);
+}
+
+.rcr-sub-ftag--plus:hover {
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.rcr-sub-ftag--enterprise {
+  background: rgba(167, 139, 250, 0.07);
+  border-color: rgba(167, 139, 250, 0.15);
+  color: rgba(196, 181, 253, 0.9);
+}
+
+.rcr-sub-ftag--enterprise:hover {
+  background: rgba(167, 139, 250, 0.12);
+}
+
+.rcr-sub-ftag svg {
+  flex-shrink: 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+  .rcr-sub-panel {
+    padding: 1.15rem;
+  }
+
+  .rcr-sub-header {
+    gap: 10px;
+  }
+
+  .rcr-sub-header__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .rcr-sub-header__plan {
+    font-size: 0.95rem;
+  }
+
+  .rcr-sub-quota {
+    padding: 0.7rem 0.8rem;
+  }
+
+  .rcr-sub-quota__footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

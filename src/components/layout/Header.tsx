@@ -29,7 +29,6 @@ import {
   HelpCircle,
   ShoppingBag,
   AlertTriangle,
-  Ticket,
   Target,
   Search,
   Sparkles,
@@ -181,12 +180,12 @@ const Header: React.FC = () => {
     //   path: '/user-guide',
     //   icon: BookOpen
     // },
-    {
-      name: "Hội Thảo",
-      description: "Tham gia các hội thảo và sự kiện",
-      path: "/seminar",
-      icon: Calendar,
-    },
+    // {
+    //   name: "Hội Thảo",
+    //   description: "Tham gia các hội thảo và sự kiện",
+    //   path: "/seminar",
+    //   icon: Calendar,
+    // },
     {
       name: "Meowl Shop",
       description: "Cửa hàng Skin Neon Tech độc quyền",
@@ -876,16 +875,6 @@ const Header: React.FC = () => {
                       >
                         <Calendar size={16} />
                         <span>Quản lý lịch hẹn</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          navigate("/my-bookings?tab=tickets");
-                          setShowUserMenu(false);
-                        }}
-                        className="dropdown-item"
-                      >
-                        <Ticket size={16} />
-                        <span>Vé của tôi</span>
                       </button>
                       <button
                         onClick={() => {

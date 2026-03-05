@@ -167,8 +167,12 @@ const PUBLIC_ENDPOINTS = [
   "/v1/meowl/reminders", // Meowl reminders
   "/v1/meowl/notifications", // Meowl notifications
   "/v1/meowl/health", // Meowl health check
-  "/premium/plans", // Public premium plans listing
+  // "/premium/plans", // Removed: requires auth for role-based filtering
   "/jobs/public", // Public jobs listing
+  "/short-term-jobs/public", // Public short-term jobs listing
+  "/short-term-jobs/search", // Public short-term job search
+  "/job-reviews/user", // Public user rating summary
+  "/job-reviews/public", // Public job reviews
   "/certificates/verify", // Public certificate verification
   "/courses", // Public course listing and details
   "/gamification/leaderboard", // Public gamification leaderboard
@@ -199,6 +203,13 @@ const isPublicEndpoint = (url: string, method?: string): boolean => {
       return false;
     }
     return true;
+  }
+
+  // Short-term job detail: Public GET /short-term-jobs/{id}
+  if (/^\/short-term-jobs\/\d+$/.test(normalizedUrl)) {
+    if (method && method.toUpperCase() === "GET") {
+      return true;
+    }
   }
 
   return PUBLIC_ENDPOINTS.some((endpoint) => {
@@ -303,18 +314,23 @@ axiosInstance.interceptors.response.use(
       !originalRequest._retry
     ) {
       const requestUrl = originalRequest.url || "";
-      
+
       // ✅ SECURITY: Check if 401 is due to password change (token invalidated)
-      const errorMessage = (error.response?.data as { message?: string })?.message || '';
-      if (errorMessage.includes('password change') || 
-          errorMessage.includes('Token invalidated')) {
-        console.warn('🔒 Token invalidated due to password change, forcing logout');
+      const errorMessage =
+        (error.response?.data as { message?: string })?.message || "";
+      if (
+        errorMessage.includes("password change") ||
+        errorMessage.includes("Token invalidated")
+      ) {
+        console.warn(
+          "🔒 Token invalidated due to password change, forcing logout",
+        );
         clearAuthTokens();
-        
+
         // Don't redirect if already on login page
         const currentPath = window.location.pathname;
-        if (!currentPath.includes('/login')) {
-          window.location.href = '/login?reason=password_changed';
+        if (!currentPath.includes("/login")) {
+          window.location.href = "/login?reason=password_changed";
         }
         return Promise.reject(error);
       }

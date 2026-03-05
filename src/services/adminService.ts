@@ -1,35 +1,36 @@
-import axiosInstance from './axiosInstance';
+import axiosInstance from "./axiosInstance";
 import {
   ApplicationActionRequest,
   AdminApprovalResponse,
   ApplicationsResponse,
-  ApplicationStatusFilter
-} from '../data/adminDTOs';
+  ApplicationStatusFilter,
+} from "../data/adminDTOs";
 
 /**
  * AdminService - Service for admin operations to manage mentor/recruiter applications
  */
 class AdminService {
-  private readonly BASE_URL = '/api/admin';
+  private readonly BASE_URL = "/api/admin";
 
   /**
    * Get all applications with optional status filter
    * @param status - Filter by status: 'ALL', 'PENDING', 'APPROVED', 'REJECTED' (default: 'ALL')
    * @returns Promise<ApplicationsResponse> - List of mentor and recruiter applications with stats
    */
-  async getApplications(status: ApplicationStatusFilter = 'ALL'): Promise<ApplicationsResponse> {
+  async getApplications(
+    status: ApplicationStatusFilter = "ALL",
+  ): Promise<ApplicationsResponse> {
     try {
       const response = await axiosInstance.get<ApplicationsResponse>(
         `${this.BASE_URL}/applications`,
         {
-          params: { status }
-        }
+          params: { status },
+        },
       );
-      
-      
+
       return response.data;
     } catch (error) {
-      console.error('❌ Error fetching applications:', error);
+      console.error("❌ Error fetching applications:", error);
       throw error;
     }
   }
@@ -39,25 +40,31 @@ class AdminService {
    * @param request - ApplicationActionRequest containing userId, applicationType, action, and optional rejectionReason
    * @returns Promise<AdminApprovalResponse> - Response with success status and message
    */
-  async processApplication(request: ApplicationActionRequest): Promise<AdminApprovalResponse> {
+  async processApplication(
+    request: ApplicationActionRequest,
+  ): Promise<AdminApprovalResponse> {
     try {
       // Validate rejectionReason if action is REJECT
-      if (request.action === 'REJECT' && !request.rejectionReason) {
-        throw new Error('Rejection reason is required when rejecting an application');
+      if (request.action === "REJECT" && !request.rejectionReason) {
+        throw new Error(
+          "Rejection reason is required when rejecting an application",
+        );
       }
 
       const response = await axiosInstance.post<AdminApprovalResponse>(
         `${this.BASE_URL}/applications/process`,
-        request
+        request,
       );
-      
-      console.log(`Processed ${request.applicationType} application for user ${request.userId}`);
+
+      console.log(
+        `Processed ${request.applicationType} application for user ${request.userId}`,
+      );
       return response.data;
     } catch (error: any) {
-      console.error('❌ Error processing application:', error);
-      console.error('📋 Request was:', JSON.stringify(request, null, 2));
-      console.error('📋 Error response:', error.response?.data);
-      console.error('📋 Error status:', error.response?.status);
+      console.error("❌ Error processing application:", error);
+      console.error("📋 Request was:", JSON.stringify(request, null, 2));
+      console.error("📋 Error response:", error.response?.data);
+      console.error("📋 Error status:", error.response?.status);
       throw error;
     }
   }
@@ -67,11 +74,13 @@ class AdminService {
    * @param userId - User ID of the mentor applicant
    * @returns Promise<AdminApprovalResponse>
    */
-  async approveMentorApplication(userId: number): Promise<AdminApprovalResponse> {
+  async approveMentorApplication(
+    userId: number,
+  ): Promise<AdminApprovalResponse> {
     return this.processApplication({
       userId,
-      applicationType: 'MENTOR',
-      action: 'APPROVE'
+      applicationType: "MENTOR",
+      action: "APPROVE",
     });
   }
 
@@ -81,12 +90,15 @@ class AdminService {
    * @param rejectionReason - Reason for rejection
    * @returns Promise<AdminApprovalResponse>
    */
-  async rejectMentorApplication(userId: number, rejectionReason: string): Promise<AdminApprovalResponse> {
+  async rejectMentorApplication(
+    userId: number,
+    rejectionReason: string,
+  ): Promise<AdminApprovalResponse> {
     return this.processApplication({
       userId,
-      applicationType: 'MENTOR',
-      action: 'REJECT',
-      rejectionReason
+      applicationType: "MENTOR",
+      action: "REJECT",
+      rejectionReason,
     });
   }
 
@@ -95,11 +107,13 @@ class AdminService {
    * @param userId - User ID of the recruiter applicant
    * @returns Promise<AdminApprovalResponse>
    */
-  async approveRecruiterApplication(userId: number): Promise<AdminApprovalResponse> {
+  async approveRecruiterApplication(
+    userId: number,
+  ): Promise<AdminApprovalResponse> {
     return this.processApplication({
       userId,
-      applicationType: 'RECRUITER',
-      action: 'APPROVE'
+      applicationType: "RECRUITER",
+      action: "APPROVE",
     });
   }
 
@@ -109,12 +123,15 @@ class AdminService {
    * @param rejectionReason - Reason for rejection
    * @returns Promise<AdminApprovalResponse>
    */
-  async rejectRecruiterApplication(userId: number, rejectionReason: string): Promise<AdminApprovalResponse> {
+  async rejectRecruiterApplication(
+    userId: number,
+    rejectionReason: string,
+  ): Promise<AdminApprovalResponse> {
     return this.processApplication({
       userId,
-      applicationType: 'RECRUITER',
-      action: 'REJECT',
-      rejectionReason
+      applicationType: "RECRUITER",
+      action: "REJECT",
+      rejectionReason,
     });
   }
 
@@ -123,7 +140,7 @@ class AdminService {
    * @returns Promise<ApplicationsResponse>
    */
   async getPendingApplications(): Promise<ApplicationsResponse> {
-    return this.getApplications('PENDING');
+    return this.getApplications("PENDING");
   }
 
   /**
@@ -131,7 +148,7 @@ class AdminService {
    * @returns Promise<ApplicationsResponse>
    */
   async getApprovedApplications(): Promise<ApplicationsResponse> {
-    return this.getApplications('APPROVED');
+    return this.getApplications("APPROVED");
   }
 
   /**
@@ -139,17 +156,24 @@ class AdminService {
    * @returns Promise<ApplicationsResponse>
    */
   async getRejectedApplications(): Promise<ApplicationsResponse> {
-    return this.getApplications('REJECTED');
+    return this.getApplications("REJECTED");
   }
 
   /**
    * Download users report (CSV, Vietnamese)
    */
-  async downloadUsersReport(params?: { role?: string; status?: string; search?: string }): Promise<void> {
+  async downloadUsersReport(params?: {
+    role?: string;
+    status?: string;
+    search?: string;
+  }): Promise<void> {
     const url = `${this.BASE_URL}/reports/users`;
-    const response = await axiosInstance.get(url, { params, responseType: 'blob' });
-    const blob = new Blob([response.data], { type: 'text/csv;charset=utf-8' });
-    const link = document.createElement('a');
+    const response = await axiosInstance.get(url, {
+      params,
+      responseType: "blob",
+    });
+    const blob = new Blob([response.data], { type: "text/csv;charset=utf-8" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `bao-cao-nguoi-dung.csv`;
     document.body.appendChild(link);
@@ -161,11 +185,20 @@ class AdminService {
   /**
    * Download transactions report (CSV, Vietnamese)
    */
-  async downloadTransactionsReport(params?: { status?: string; userId?: number; startDate?: string; endDate?: string; walletType?: string }): Promise<void> {
+  async downloadTransactionsReport(params?: {
+    status?: string;
+    userId?: number;
+    startDate?: string;
+    endDate?: string;
+    walletType?: string;
+  }): Promise<void> {
     const url = `${this.BASE_URL}/reports/transactions`;
-    const response = await axiosInstance.get(url, { params, responseType: 'blob' });
-    const blob = new Blob([response.data], { type: 'text/csv;charset=utf-8' });
-    const link = document.createElement('a');
+    const response = await axiosInstance.get(url, {
+      params,
+      responseType: "blob",
+    });
+    const blob = new Blob([response.data], { type: "text/csv;charset=utf-8" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `bao-cao-giao-dich.csv`;
     document.body.appendChild(link);
@@ -174,11 +207,18 @@ class AdminService {
     URL.revokeObjectURL(link.href);
   }
 
-  async downloadUsersReportPdf(params?: { role?: string; status?: string; search?: string }): Promise<void> {
+  async downloadUsersReportPdf(params?: {
+    role?: string;
+    status?: string;
+    search?: string;
+  }): Promise<void> {
     const url = `${this.BASE_URL}/reports/users/pdf`;
-    const response = await axiosInstance.get(url, { params, responseType: 'blob' });
-    const blob = new Blob([response.data], { type: 'application/pdf' });
-    const link = document.createElement('a');
+    const response = await axiosInstance.get(url, {
+      params,
+      responseType: "blob",
+    });
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `bao-cao-nguoi-dung.pdf`;
     document.body.appendChild(link);
@@ -187,11 +227,20 @@ class AdminService {
     URL.revokeObjectURL(link.href);
   }
 
-  async downloadTransactionsReportPdf(params?: { status?: string; userId?: number; startDate?: string; endDate?: string; walletType?: string }): Promise<void> {
+  async downloadTransactionsReportPdf(params?: {
+    status?: string;
+    userId?: number;
+    startDate?: string;
+    endDate?: string;
+    walletType?: string;
+  }): Promise<void> {
     const url = `${this.BASE_URL}/reports/transactions/pdf`;
-    const response = await axiosInstance.get(url, { params, responseType: 'blob' });
-    const blob = new Blob([response.data], { type: 'application/pdf' });
-    const link = document.createElement('a');
+    const response = await axiosInstance.get(url, {
+      params,
+      responseType: "blob",
+    });
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `bao-cao-giao-dich.pdf`;
     document.body.appendChild(link);
@@ -204,7 +253,9 @@ class AdminService {
    * Get pending jobs
    */
   async getPendingJobs(): Promise<any[]> {
-    const response = await axiosInstance.get<any[]>(`${this.BASE_URL}/jobs/pending`);
+    const response = await axiosInstance.get<any[]>(
+      `${this.BASE_URL}/jobs/pending`,
+    );
     return response.data;
   }
 
@@ -212,7 +263,9 @@ class AdminService {
    * Approve job
    */
   async approveJob(jobId: number): Promise<any> {
-    const response = await axiosInstance.post(`${this.BASE_URL}/jobs/${jobId}/approve`);
+    const response = await axiosInstance.post(
+      `${this.BASE_URL}/jobs/${jobId}/approve`,
+    );
     return response.data;
   }
 
@@ -220,9 +273,49 @@ class AdminService {
    * Reject job
    */
   async rejectJob(jobId: number, reason: string): Promise<any> {
-    const response = await axiosInstance.post(`${this.BASE_URL}/jobs/${jobId}/reject`, null, {
-      params: { reason }
-    });
+    const response = await axiosInstance.post(
+      `${this.BASE_URL}/jobs/${jobId}/reject`,
+      null,
+      {
+        params: { reason },
+      },
+    );
+    return response.data;
+  }
+
+  // ===================== SHORT-TERM JOB ADMIN =====================
+
+  /**
+   * Get pending short-term jobs
+   */
+  async getPendingShortTermJobs(): Promise<any[]> {
+    const response = await axiosInstance.get<any[]>(
+      `${this.BASE_URL}/short-term-jobs/pending`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Approve short-term job
+   */
+  async approveShortTermJob(jobId: number): Promise<any> {
+    const response = await axiosInstance.post(
+      `${this.BASE_URL}/short-term-jobs/${jobId}/approve`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Reject short-term job
+   */
+  async rejectShortTermJob(jobId: number, reason: string): Promise<any> {
+    const response = await axiosInstance.post(
+      `${this.BASE_URL}/short-term-jobs/${jobId}/reject`,
+      null,
+      {
+        params: { reason },
+      },
+    );
     return response.data;
   }
 }
