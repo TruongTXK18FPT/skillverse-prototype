@@ -117,7 +117,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
     if (!formData.password) return 'Vui lòng nhập mật khẩu';
     
     // Check password requirements
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
     if (!passwordRegex.test(formData.password)) {
       return 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt';
     }
