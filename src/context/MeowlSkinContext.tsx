@@ -67,6 +67,15 @@ export const MeowlSkinProvider: React.FC<{ children: ReactNode }> = ({
   const [mySkins, setMySkins] = useState<MeowlSkin[]>(MEOWL_SKINS);
 
   const fetchMySkins = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      setMySkins(MEOWL_SKINS);
+      setCurrentSkin((prev) =>
+        MEOWL_SKINS.some((skin) => skin.id === prev) ? prev : "default",
+      );
+      return;
+    }
+
     try {
       const skins = await skinService.getMySkins();
       const mappedSkins: MeowlSkin[] = skins.map((s) => ({
@@ -99,6 +108,13 @@ export const MeowlSkinProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const checkPremiumStatus = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      setIsPremium(false);
+      setIsPetActive(false);
+      return;
+    }
+
     try {
       // Check using the specific status endpoint first as it might be more reliable
       const isPremiumStatus = await premiumService.checkPremiumStatus();
@@ -147,10 +163,23 @@ export const MeowlSkinProvider: React.FC<{ children: ReactNode }> = ({
   }, [isPetActive]);
 
   const setSkin = (skin: MeowlSkinType) => {
+    if (!mySkins.some((ownedSkin) => ownedSkin.id === skin)) {
+      return;
+    }
+
+    const previousSkin = currentSkin;
     setCurrentSkin(skin);
-    // Sync with backend
+
+    // Guest mode: local-only selection, do not call protected API
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      return;
+    }
+
+    // Auth mode: sync with backend
     skinService.selectSkin(skin).catch((err) => {
       console.error("Failed to update skin selection", err);
+      setCurrentSkin(previousSkin);
     });
   };
 

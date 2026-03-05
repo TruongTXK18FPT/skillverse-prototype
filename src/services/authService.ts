@@ -19,7 +19,15 @@ import {
 } from "../data/authDTOs";
 
 // Helper type for axios error handling
-type AxiosError = { response?: { data?: { message?: string } } };
+type AxiosError = {
+  response?: {
+    status?: number;
+    data?: {
+      message?: string;
+      code?: string;
+    };
+  };
+};
 
 class AuthService {
   private token: string | null = null;
@@ -81,12 +89,14 @@ class AuthService {
     } catch (error: unknown) {
       console.error("Login error:", error);
       const axiosError = error as AxiosError;
+      const errorCode = axiosError.response?.data?.code || "";
       const errorMessage =
         axiosError.response?.data?.message ||
         "Đăng nhập thất bại. Vui lòng thử lại.";
 
       // Check if error is related to unverified email
       const isUnverifiedError =
+        errorCode === "EMAIL_NOT_VERIFIED" ||
         errorMessage.toLowerCase().includes("verify") ||
         errorMessage.toLowerCase().includes("xác thực") ||
         errorMessage.toLowerCase().includes("not verified") ||
