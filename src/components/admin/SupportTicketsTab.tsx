@@ -172,7 +172,7 @@ const SupportTicketsTab: React.FC = () => {
   };
 
   const handleDeleteTicket = async (id: number) => {
-    if (!confirm('Bạn có chắc muốn xóa ticket này?')) return;
+    if (!(await confirmAction('Bạn có chắc muốn xóa ticket này?'))) return;
     try {
       await supportService.deleteTicket(id);
       setTickets(prev => prev.filter(t => t.id !== id));

@@ -34,7 +34,6 @@ export interface MentorProfileUpdateDTO {
   experience?: number;
   hourlyRate?: number;
   avatar?: string;
-  signatureUrl?: string;
   socialLinks?: {
     linkedin?: string;
     github?: string;
@@ -64,6 +63,22 @@ export interface SkillTabResponseDTO {
   courseSales: number;
   revenueVnd: number;
   badges: SkillTabBadgeInfo[];
+}
+
+export interface MentorSignatureDrawPointDTO {
+  x: number;
+  y: number;
+}
+
+export interface MentorSignatureDrawStrokeDTO {
+  lineWidth: number;
+  points: MentorSignatureDrawPointDTO[];
+}
+
+export interface MentorSignatureDrawRequestDTO {
+  canvasWidth: number;
+  canvasHeight: number;
+  strokes: MentorSignatureDrawStrokeDTO[];
 }
 
 /**
@@ -202,46 +217,40 @@ export const uploadMyMentorAvatar = async (
 };
 
 /**
- * Upload current logged-in mentor signature
- * POST /api/mentors/signature
+ * Create mentor signature by ID (Admin) from system drawing data
+ * POST /api/mentors/{mentorId}/signature/system
  */
-export const uploadMyMentorSignature = async (
-  file: File,
+export const createMentorSignatureFromDrawing = async (
+  mentorId: number,
+  payload: MentorSignatureDrawRequestDTO,
 ): Promise<{ signatureUrl: string }> => {
   try {
-    const formData = new FormData();
-    formData.append("file", file);
-
     const response = await axiosInstance.post<{ signatureUrl: string }>(
-      "/api/mentors/signature",
-      formData,
+      `/api/mentors/${mentorId}/signature/system`,
+      payload,
     );
     return response.data;
   } catch (error) {
-    console.error("Error uploading my mentor signature:", error);
+    console.error("Error creating mentor signature from drawing:", error);
     throw error;
   }
 };
 
 /**
- * Upload mentor signature by ID (Admin)
- * POST /api/mentors/{mentorId}/signature
+ * Create current logged-in mentor signature from system drawing data
+ * POST /api/mentors/signature/system
  */
-export const uploadMentorSignature = async (
-  mentorId: number,
-  file: File,
+export const createMyMentorSignatureFromDrawing = async (
+  payload: MentorSignatureDrawRequestDTO,
 ): Promise<{ signatureUrl: string }> => {
   try {
-    const formData = new FormData();
-    formData.append("file", file);
-
     const response = await axiosInstance.post<{ signatureUrl: string }>(
-      `/api/mentors/${mentorId}/signature`,
-      formData,
+      "/api/mentors/signature/system",
+      payload,
     );
     return response.data;
   } catch (error) {
-    console.error("Error uploading mentor signature:", error);
+    console.error("Error creating my mentor signature from drawing:", error);
     throw error;
   }
 };

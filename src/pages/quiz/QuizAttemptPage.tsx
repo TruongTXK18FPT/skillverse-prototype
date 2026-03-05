@@ -296,7 +296,7 @@ const QuizAttemptPage: React.FC = () => {
     const answeredCount = quiz.questions?.filter(isQuestionAnswered).length || 0;
     
     if (answeredCount < totalQuestions) {
-      if (!window.confirm(`Bạn mới trả lời ${answeredCount}/${totalQuestions} câu. Xác nhận nộp bài?`)) {
+      if (!(await confirmAction(`Bạn mới trả lời ${answeredCount}/${totalQuestions} câu. Xác nhận nộp bài?`))) {
         return;
       }
     }

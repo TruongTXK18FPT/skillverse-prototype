@@ -331,7 +331,7 @@ const AdminGamificationDashboard: React.FC = () => {
   };
 
   const handleDeleteBadge = async (badgeDefId: number) => {
-    if (!window.confirm("Bạn có chắc muốn xóa huy hiệu này?")) return;
+    if (!(await confirmAction("Bạn có chắc muốn xóa huy hiệu này?"))) return;
     try {
       await adminGamificationService.deleteBadge(badgeDefId);
       fetchDashboardData();
@@ -1987,3 +1987,6 @@ const AdminGamificationDashboard: React.FC = () => {
 };
 
 export default AdminGamificationDashboard;
+
+
+

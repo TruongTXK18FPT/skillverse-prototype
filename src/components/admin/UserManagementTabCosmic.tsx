@@ -308,7 +308,7 @@ const UserManagementTabCosmic: React.FC = () => {
   };
 
   const handleBanUser = async (userId: number) => {
-    if (!confirm('Bạn có chắc muốn cấm user này?')) return;
+    if (!(await confirmAction('Bạn có chắc muốn cấm user này?'))) return;
 
     try {
       setActionLoading(true);

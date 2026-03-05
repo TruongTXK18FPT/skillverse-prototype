@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import adminService from '../../services/adminService';
 import axiosInstance, { API_BASE_URL } from '../../services/axiosInstance';
+import { useToast } from '../../hooks/useToast';
+import Toast from '../shared/Toast';
 import {
   MentorApplicationDto,
   RecruiterApplicationDto,
@@ -41,6 +43,7 @@ const AccountVerificationTabCosmic: React.FC = () => {
   } | null>(null);
   const [rejectReason, setRejectReason] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
+  const { toast, isVisible, hideToast, showSuccess, showError, showWarning } = useToast();
 
   // Get current user to check for USER_ADMIN permission
   const currentUserStr = localStorage.getItem('user');
@@ -141,16 +144,20 @@ const AccountVerificationTabCosmic: React.FC = () => {
         : await adminService.approveRecruiterApplication(userId);
       
       if (response.success) {
-        alert(`✅ Đã duyệt đơn ${type === 'MENTOR' ? 'Mentor' : 'Recruiter'} thành công!`);
+        showSuccess(
+          'Duyệt thành công',
+          `Đã duyệt đơn ${type === 'MENTOR' ? 'Mentor' : 'Doanh nghiệp'} thành công.`,
+          4
+        );
         setShowDetailModal(false);
         fetchApplications();
       } else {
-        alert(`❌ Lỗi: ${response.message || 'Không thể duyệt đơn'}`);
+        showError('Duyệt thất bại', response.message || 'Không thể duyệt đơn.');
       }
     } catch (err: any) {
       console.error('❌ Error approving:', err);
       const errorMsg = err.response?.data?.message || err.message || 'Có lỗi xảy ra khi duyệt đơn';
-      alert(`❌ Lỗi: ${errorMsg}`);
+      showError('Duyệt thất bại', errorMsg);
     } finally {
       setActionLoading(false);
     }
@@ -158,7 +165,7 @@ const AccountVerificationTabCosmic: React.FC = () => {
 
   const handleRejectConfirm = async () => {
     if (!selectedApplication || !rejectReason.trim()) {
-      alert('Vui lòng nhập lý do từ chối!');
+      showWarning('Thiếu thông tin', 'Vui lòng nhập lý do từ chối.');
       return;
     }
 
@@ -173,18 +180,18 @@ const AccountVerificationTabCosmic: React.FC = () => {
         : await adminService.rejectRecruiterApplication(userId, rejectReason);
       
       if (response.success) {
-        alert(`✅ Đã từ chối đơn!`);
+        showSuccess('Từ chối thành công', 'Đã từ chối đơn đăng ký.', 4);
         setShowRejectModal(false);
         setShowDetailModal(false);
         setRejectReason('');
         fetchApplications();
       } else {
-        alert(`❌ Lỗi: ${response.message || 'Không thể từ chối đơn'}`);
+        showError('Từ chối thất bại', response.message || 'Không thể từ chối đơn.');
       }
     } catch (err: any) {
       console.error('❌ Error rejecting:', err);
       const errorMsg = err.response?.data?.message || err.message || 'Có lỗi xảy ra khi từ chối đơn';
-      alert(`❌ Lỗi: ${errorMsg}`);
+      showError('Từ chối thất bại', errorMsg);
     } finally {
       setActionLoading(false);
     }
@@ -587,6 +594,22 @@ const AccountVerificationTabCosmic: React.FC = () => {
           </div>
         </div>,
         document.body
+      )}
+
+      {toast && (
+        <Toast
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          isVisible={isVisible}
+          onClose={hideToast}
+          autoCloseDelay={toast.autoCloseDelay}
+          showCountdown={false}
+          countdownText={toast.countdownText}
+          position="top-right"
+          useOverlay={false}
+          actionButton={toast.actionButton}
+        />
       )}
     </div>
   );

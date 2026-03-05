@@ -142,8 +142,8 @@ const ManagerPage = () => {
     ]);
   };
 
-  const handleDelete = (id: string, type: string) => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa?')) {
+  const handleDelete = async (id: string, type: string) => {
+    if (await confirmAction('Bạn có chắc chắn muốn xóa?')) {
       switch (type) {
         case 'courses':
           setCourses(courses.filter(item => item.id !== id));
@@ -473,3 +473,5 @@ const ManagerPage = () => {
 };
 
 export default ManagerPage;
+
+

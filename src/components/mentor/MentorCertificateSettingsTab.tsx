@@ -1,25 +1,25 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { AlertCircle, PenTool, RotateCcw, Save, ShieldCheck, Trash2, Upload } from 'lucide-react';
+import { AlertCircle, PenTool, RotateCcw, Save, ShieldCheck, Trash2 } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import Toast from '../shared/Toast';
 import { useToast } from '../../hooks/useToast';
 import {
+  createMyMentorSignatureFromDrawing,
   getMyMentorProfile,
+  MentorSignatureDrawStrokeDTO,
   MentorProfile,
   removeMyMentorSignature,
-  uploadMyMentorSignature,
 } from '../../services/mentorProfileService';
 import '../../styles/MentorCertificateSettingsTab.css';
 
-const MAX_SIGNATURE_SIZE_BYTES = 5 * 1024 * 1024;
-const ALLOWED_SIGNATURE_TYPES = new Set(['image/png', 'image/jpeg', 'image/webp']);
 const SIGNATURE_CANVAS_WIDTH = 720;
 const SIGNATURE_CANVAS_HEIGHT = 220;
 
 const MentorCertificateSettingsTab: React.FC = () => {
   const { toast, isVisible, hideToast, showError, showSuccess, showInfo } = useToast();
-  const signatureInputRef = useRef<HTMLInputElement | null>(null);
   const signatureCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const signatureStrokesRef = useRef<MentorSignatureDrawStrokeDTO[]>([]);
+  const currentStrokeRef = useRef<MentorSignatureDrawStrokeDTO | null>(null);
 
   const [profile, setProfile] = useState<MentorProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -64,6 +64,8 @@ const MentorCertificateSettingsTab: React.FC = () => {
     context.lineWidth = 3;
     context.lineCap = 'round';
     context.lineJoin = 'round';
+    signatureStrokesRef.current = [];
+    currentStrokeRef.current = null;
     setHasDrawnSignature(false);
   }, []);
 
@@ -73,24 +75,14 @@ const MentorCertificateSettingsTab: React.FC = () => {
     }
   }, [drawMode, resetCanvas]);
 
-  const handleSignatureUpload = async (file: File) => {
-    if (!file) {
-      return;
-    }
-
-    if (!ALLOWED_SIGNATURE_TYPES.has(file.type)) {
-      showError('Tệp không hợp lệ', 'Chỉ chấp nhận ảnh PNG, JPG hoặc WEBP cho chữ ký.');
-      return;
-    }
-
-    if (file.size > MAX_SIGNATURE_SIZE_BYTES) {
-      showError('Tệp quá lớn', 'Kích thước chữ ký phải nhỏ hơn hoặc bằng 5 MB.');
-      return;
-    }
-
+  const persistDrawingSignature = async (strokes: MentorSignatureDrawStrokeDTO[]) => {
     setUploading(true);
     try {
-      const result = await uploadMyMentorSignature(file);
+      const result = await createMyMentorSignatureFromDrawing({
+        canvasWidth: SIGNATURE_CANVAS_WIDTH,
+        canvasHeight: SIGNATURE_CANVAS_HEIGHT,
+        strokes,
+      });
       setProfile((prev) => (
         prev
           ? {
@@ -103,8 +95,8 @@ const MentorCertificateSettingsTab: React.FC = () => {
       setDrawMode(false);
       showSuccess('Thành công', 'Đã cập nhật chữ ký dùng cho chứng chỉ cấp mới');
     } catch (error) {
-      console.error('Failed to upload mentor signature:', error);
-      showError('Lỗi', 'Tải chữ ký thất bại');
+      console.error('Failed to create mentor signature from drawing:', error);
+      showError('Lỗi', 'Lưu chữ ký từ hệ thống thất bại');
     } finally {
       setUploading(false);
     }
@@ -137,6 +129,12 @@ const MentorCertificateSettingsTab: React.FC = () => {
     canvas.setPointerCapture(event.pointerId);
     context.beginPath();
     context.moveTo(point.x, point.y);
+    const nextStroke: MentorSignatureDrawStrokeDTO = {
+      lineWidth: 3,
+      points: [{ x: point.x, y: point.y }],
+    };
+    signatureStrokesRef.current.push(nextStroke);
+    currentStrokeRef.current = nextStroke;
     setIsDrawing(true);
     setHasDrawnSignature(true);
   };
@@ -154,6 +152,9 @@ const MentorCertificateSettingsTab: React.FC = () => {
 
     context.lineTo(point.x, point.y);
     context.stroke();
+    if (currentStrokeRef.current) {
+      currentStrokeRef.current.points.push({ x: point.x, y: point.y });
+    }
   };
 
   const handleCanvasPointerUp = (event: React.PointerEvent<HTMLCanvasElement>) => {
@@ -161,6 +162,7 @@ const MentorCertificateSettingsTab: React.FC = () => {
     if (canvas?.hasPointerCapture(event.pointerId)) {
       canvas.releasePointerCapture(event.pointerId);
     }
+    currentStrokeRef.current = null;
     setIsDrawing(false);
   };
 
@@ -170,28 +172,19 @@ const MentorCertificateSettingsTab: React.FC = () => {
       return;
     }
 
-    const canvas = signatureCanvasRef.current;
-    if (!canvas) {
-      showError('Lỗi', 'Không tìm thấy vùng ký hiện tại.');
+    const strokes = signatureStrokesRef.current
+      .filter((stroke) => stroke.points.length >= 2)
+      .map((stroke) => ({
+        lineWidth: stroke.lineWidth,
+        points: stroke.points.map((point) => ({ x: point.x, y: point.y })),
+      }));
+
+    if (strokes.length === 0) {
+      showInfo('Chưa có chữ ký', 'Nét ký chưa đủ để lưu. Hãy ký thêm.');
       return;
     }
 
-    const blob = await new Promise<Blob | null>((resolve) => {
-      canvas.toBlob(resolve, 'image/png');
-    });
-
-    if (!blob) {
-      showError('Lỗi', 'Không thể tạo ảnh chữ ký từ nét vẽ hiện tại.');
-      return;
-    }
-
-    const generatedFile = new File(
-      [blob],
-      `mentor-signature-${Date.now()}.png`,
-      { type: 'image/png' }
-    );
-
-    await handleSignatureUpload(generatedFile);
+    await persistDrawingSignature(strokes);
   };
 
   const handleRemoveSignature = async () => {
@@ -200,7 +193,7 @@ const MentorCertificateSettingsTab: React.FC = () => {
       return;
     }
 
-    if (!window.confirm('Gỡ chữ ký hiện tại và chuyển về xác thực nền tảng?')) {
+    if (!(await confirmAction('Gỡ chữ ký hiện tại và chuyển về xác thực nền tảng?'))) {
       return;
     }
 
@@ -272,7 +265,7 @@ const MentorCertificateSettingsTab: React.FC = () => {
                   onPointerLeave={handleCanvasPointerUp}
                 />
                 <p className="mentor-certificate-settings__draw-hint">
-                  Ký trực tiếp trong khung rồi lưu thành ảnh PNG trên hệ thống.
+                  Ký trực tiếp trong khung. Hệ thống chỉ nhận chữ ký tạo từ canvas này.
                 </p>
               </div>
             ) : shouldShowSignatureImage ? (
@@ -289,7 +282,7 @@ const MentorCertificateSettingsTab: React.FC = () => {
                   <strong>{signatureLoadFailed ? 'Chữ ký hiện tại không thể hiển thị' : 'Chưa có chữ ký riêng'}</strong>
                   <p>
                     {signatureLoadFailed
-                      ? 'Bạn có thể tải lại ảnh chữ ký mới hoặc ký trực tiếp trên hệ thống.'
+                      ? 'Bạn có thể ký lại trực tiếp trên hệ thống để thay thế.'
                       : 'Chứng chỉ mới sẽ dùng xác thực nền tảng thay cho chữ ký tay của người hướng dẫn.'}
                   </p>
                 </div>
@@ -298,34 +291,10 @@ const MentorCertificateSettingsTab: React.FC = () => {
           </div>
 
           <p className="mentor-certificate-settings__hint">
-            Nên dùng ảnh nền trong hoặc nền sáng, tỷ lệ ngang, dung lượng tối đa 5 MB.
+            Chữ ký chỉ được tạo từ nét vẽ trực tiếp trên hệ thống (không nhận upload ảnh bên ngoài).
           </p>
 
-          <input
-            ref={signatureInputRef}
-            type="file"
-            accept="image/png,image/jpeg,image/webp"
-            className="mentor-certificate-settings__input"
-            onChange={(event) => {
-              const file = event.target.files?.[0];
-              if (file) {
-                void handleSignatureUpload(file);
-              }
-              event.target.value = '';
-            }}
-          />
-
           <div className="mentor-certificate-settings__actions">
-            <button
-              type="button"
-              className="mentor-certificate-settings__primary-btn"
-              onClick={() => signatureInputRef.current?.click()}
-              disabled={uploading}
-            >
-              <Upload size={16} />
-              {uploading ? 'Đang tải chữ ký...' : profile?.signatureUrl ? 'Thay chữ ký' : 'Tải chữ ký lên'}
-            </button>
-
             <button
               type="button"
               className="mentor-certificate-settings__secondary-btn"

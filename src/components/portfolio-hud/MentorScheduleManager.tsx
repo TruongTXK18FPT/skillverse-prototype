@@ -135,7 +135,7 @@ const MentorScheduleManager: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     if (id.startsWith('avail-')) {
-      if (confirm('Bạn có chắc muốn xóa lịch rảnh này?')) {
+      if (await confirmAction('Bạn có chắc muốn xóa lịch rảnh này?')) {
         try {
           const availId = parseInt(id.split('-')[1]);
           await deleteAvailability(availId);
@@ -373,3 +373,6 @@ const MentorScheduleManager: React.FC = () => {
 };
 
 export default MentorScheduleManager;
+
+
+

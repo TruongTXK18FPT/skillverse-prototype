@@ -147,12 +147,24 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
   const handleCvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const isValidType = file.type.includes('pdf') || file.type.includes('image') || 
-                         file.type.includes('msword') || file.type.includes('wordprocessingml');
+      const fileName = file.name.toLowerCase();
+      const isPdfMime = file.type === 'application/pdf';
+      const isPdfExt = fileName.endsWith('.pdf');
+      const isValidType = isPdfMime || isPdfExt;
       const isValidSize = file.size <= 10 * 1024 * 1024; // 10MB
-      if (isValidType && isValidSize) {
-        setCvFile(file);
+      if (!isValidType) {
+        setError('CV/Portfolio chỉ hỗ trợ file PDF để hệ thống có thể xem trước và duyệt ổn định.');
+        setCvFile(null);
+        return;
       }
+      if (!isValidSize) {
+        setError('CV/Portfolio vượt quá 10MB. Vui lòng chọn file nhỏ hơn.');
+        setCvFile(null);
+        return;
+      }
+
+      setCvFile(file);
+      setError(null);
     }
   };
 
@@ -555,7 +567,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
             <input
               type="file"
               id="mentor-cv"
-              accept=".pdf,.doc,.docx,image/*"
+              accept=".pdf,application/pdf"
               onChange={handleCvUpload}
               style={{ display: 'none' }}
             />
@@ -564,10 +576,10 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                 <Upload size={24} />
               </div>
               <div className="reg-mentor-upload-text">
-                Tải lên CV hoặc Portfolio
+                Tải lên CV/Portfolio (PDF)
               </div>
               <div className="reg-mentor-upload-hint">
-                PDF, DOC, DOCX hoặc hình ảnh, tối đa 10MB
+                Chỉ hỗ trợ PDF, tối đa 10MB
               </div>
             </label>
             {cvFile && (
@@ -582,12 +594,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
                     <X size={16} />
                   </button>
                 </div>
-                {cvFile.type.startsWith('image/') && (
-                  <div className="reg-mentor-file-preview">
-                    <img src={URL.createObjectURL(cvFile)} alt="Preview" style={{ maxWidth: '100%', maxHeight: 180 }} />
-                  </div>
-                )}
-                {cvFile.type === 'application/pdf' && (
+                {(cvFile.type === 'application/pdf' || cvFile.name.toLowerCase().endsWith('.pdf')) && (
                   <div className="reg-mentor-file-preview">
                     <embed src={URL.createObjectURL(cvFile)} type="application/pdf" width="100%" height="180" />
                   </div>

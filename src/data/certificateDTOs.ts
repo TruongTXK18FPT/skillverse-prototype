@@ -12,6 +12,8 @@ export interface CertificateDTO {
   issuedAt: string;
   revokedAt?: string | null;
   criteria?: string | null;
+  platformProof?: string | null;
+  proofVerified?: boolean | null;
 }
 
 export interface CertificateVerificationDTO {
@@ -27,4 +29,6 @@ export interface CertificateVerificationDTO {
   verificationStatus: "VALID" | "REVOKED";
   completionStatement: string;
   disclaimer: string;
+  platformProof?: string | null;
+  proofVerified?: boolean | null;
 }

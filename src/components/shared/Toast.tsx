@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { CheckCircle, XCircle, AlertTriangle, Info } from 'lucide-react';
 import '../../styles/Toast.css';
 
@@ -11,6 +12,8 @@ export interface ToastProps {
   autoCloseDelay?: number; // in seconds
   showCountdown?: boolean;
   countdownText?: string;
+  position?: 'center' | 'top-right' | 'bottom-right';
+  useOverlay?: boolean;
   actionButton?: {
     text: string;
     onClick: () => void;
@@ -46,9 +49,13 @@ const Toast: React.FC<ToastProps> = ({
   autoCloseDelay = 5,
   showCountdown = false,
   countdownText = "Closing in {countdown} seconds...",
+  position,
+  useOverlay,
   actionButton
 }) => {
   const [countdown, setCountdown] = React.useState(autoCloseDelay);
+  const resolvedPosition = position ?? (type === 'success' ? 'top-right' : 'center');
+  const resolvedUseOverlay = useOverlay ?? (type !== 'success');
 
   useEffect(() => {
     if (!isVisible) {
@@ -76,12 +83,23 @@ const Toast: React.FC<ToastProps> = ({
     return `toast toast-${type}`;
   };
 
+  const getOverlayClass = () => {
+    const classes = ['toast-overlay'];
+    if (!resolvedUseOverlay) {
+      classes.push('toast-overlay-no-backdrop');
+    }
+    if (resolvedPosition !== 'center') {
+      classes.push(resolvedPosition);
+    }
+    return classes.join(' ');
+  };
+
   const getCountdownText = () => {
     return countdownText.replace('{countdown}', countdown.toString());
   };
 
-  return (
-    <div className="toast-overlay">
+  const toastNode = (
+    <div className={getOverlayClass()}>
       <div className={getToastClass()}>
         <div className="toast-icon-container">
           <ToastIcon type={type} />
@@ -125,6 +143,12 @@ const Toast: React.FC<ToastProps> = ({
       </div>
     </div>
   );
+
+  if (typeof document === 'undefined') {
+    return toastNode;
+  }
+
+  return ReactDOM.createPortal(toastNode, document.body);
 };
 
 export default Toast;

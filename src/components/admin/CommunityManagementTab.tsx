@@ -329,7 +329,7 @@ const CommunityManagementTab: React.FC = () => {
 
   // --- Delete Post ---
   const deletePost = async (p: PostSummary) => {
-    if (!window.confirm('Xóa bài viết này? Hành động không thể hoàn tác.')) return;
+    if (!(await confirmAction('Xóa bài viết này? Hành động không thể hoàn tác.'))) return;
     try {
       await communityService.deletePost(p.id);
       await loadPosts();

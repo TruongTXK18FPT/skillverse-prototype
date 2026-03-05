@@ -157,7 +157,7 @@ const HelpCenter = () => {
 
   const handleCloseTicket = async () => {
     if (!selectedTicket || selectedTicket.status === 'CLOSED') return;
-    if (!confirm('Bạn có chắc muốn đóng ticket này? Sau khi đóng, bạn sẽ không thể gửi tin nhắn nữa.')) return;
+    if (!(await confirmAction('Bạn có chắc muốn đóng ticket này? Sau khi đóng, bạn sẽ không thể gửi tin nhắn nữa.'))) return;
     try {
       const updated = await supportService.closeTicket(selectedTicket.id);
       setSelectedTicket(updated);
@@ -531,3 +531,6 @@ const HelpCenter = () => {
 };
 
 export default HelpCenter;
+
+
+

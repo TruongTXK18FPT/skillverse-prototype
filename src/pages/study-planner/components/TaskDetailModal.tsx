@@ -69,7 +69,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
 
   const handleDelete = async () => {
     if (task && onDelete) {
-      if (window.confirm('Bạn có chắc chắn muốn xóa công việc này không?')) {
+      if (await confirmAction('Bạn có chắc chắn muốn xóa công việc này không?')) {
         await onDelete(task.id);
         onClose();
       }

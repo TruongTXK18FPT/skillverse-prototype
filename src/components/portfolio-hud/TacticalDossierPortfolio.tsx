@@ -167,7 +167,7 @@ const TacticalDossierPortfolio = () => {
   };
 
   const handleDeleteProject = async (projectId: number) => {
-    if (confirm('Bạn có chắc muốn xóa dự án này?')) {
+    if (await confirmAction('Bạn có chắc muốn xóa dự án này?')) {
       await portfolioService.deleteProject(projectId);
       await loadPortfolioData();
     }
@@ -179,7 +179,7 @@ const TacticalDossierPortfolio = () => {
   };
 
   const handleDeleteCertificate = async (certId: number) => {
-    if (confirm('Bạn có chắc muốn xóa chứng chỉ này?')) {
+    if (await confirmAction('Bạn có chắc muốn xóa chứng chỉ này?')) {
       await portfolioService.deleteCertificate(certId);
       await loadPortfolioData();
     }
@@ -201,7 +201,7 @@ const TacticalDossierPortfolio = () => {
   };
 
   const handleDeleteCV = async (cvId: number) => {
-    if (confirm('Bạn có chắc muốn xóa CV này?')) {
+    if (await confirmAction('Bạn có chắc muốn xóa CV này?')) {
       try {
         await portfolioService.deleteCV(cvId);
         await loadPortfolioData();

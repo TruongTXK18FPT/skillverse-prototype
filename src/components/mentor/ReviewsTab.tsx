@@ -1,42 +1,95 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { getReviewsByMentor, replyToReview, ReviewResponse } from '../../services/reviewService';
+import {
+  getMyMentorReviewsPage,
+  getMyMentorReviewStats,
+  replyToReview,
+  ReviewResponse,
+  ReviewStatsResponse
+} from '../../services/reviewService';
+import Pagination from '../shared/Pagination';
 import './ReviewsTab.css';
 
 const ReviewsTab: React.FC = () => {
   const { user } = useAuth();
   const [reviews, setReviews] = useState<ReviewResponse[]>([]);
+  const [stats, setStats] = useState<ReviewStatsResponse>({
+    totalReviews: 0,
+    averageRating: 0,
+    fiveStarCount: 0,
+    fourStarCount: 0,
+    threeStarCount: 0,
+    twoStarCount: 0,
+    oneStarCount: 0
+  });
+  const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'highest' | 'lowest'>('newest');
+  const [currentPage, setCurrentPage] = useState(1);
   
   // Reply state
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const [replyText, setReplyText] = useState('');
   const [submittingReply, setSubmittingReply] = useState(false);
+  const itemsPerPage = 6;
 
   useEffect(() => {
-    if (user) {
-      fetchReviews();
+    if (!user) return;
+    fetchReviewStats();
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (!user) return;
+    fetchReviews();
+  }, [user?.id, currentPage, selectedRating, sortBy]);
+
+  const mapSortToApi = () => {
+    switch (sortBy) {
+      case 'oldest':
+        return 'createdAt,asc';
+      case 'highest':
+        return 'rating,desc';
+      case 'lowest':
+        return 'rating,asc';
+      case 'newest':
+      default:
+        return 'createdAt,desc';
     }
-  }, [user]);
+  };
+
+  const fetchReviewStats = async () => {
+    if (!user) return;
+    try {
+      const statsData = await getMyMentorReviewStats();
+      setStats(statsData);
+    } catch (error) {
+      console.error('Failed to fetch review stats', error);
+    }
+  };
 
   const fetchReviews = async () => {
     if (!user) return;
     try {
       setLoading(true);
-      const data = await getReviewsByMentor(user.id, 0, 100); // Fetch all for now
-      // Backend returns a List, not a Page, so use data directly
-      if (Array.isArray(data)) {
-        setReviews(data);
-      } else if (data.content) {
-        setReviews(data.content);
-      } else {
-        setReviews([]);
+      const pageData = await getMyMentorReviewsPage(
+        currentPage - 1,
+        itemsPerPage,
+        selectedRating,
+        mapSortToApi()
+      );
+
+      if (currentPage > 1 && pageData.content.length === 0 && pageData.totalElements > 0) {
+        setCurrentPage((prev) => Math.max(1, prev - 1));
+        return;
       }
+
+      setReviews(pageData.content || []);
+      setTotalItems(pageData.totalElements || 0);
     } catch (error) {
       console.error('Failed to fetch reviews', error);
       setReviews([]);
+      setTotalItems(0);
     } finally {
       setLoading(false);
     }
@@ -49,6 +102,7 @@ const ReviewsTab: React.FC = () => {
       await replyToReview(reviewId, { reply: replyText });
       // Refresh reviews
       await fetchReviews();
+      await fetchReviewStats();
       setReplyingTo(null);
       setReplyText('');
     } catch (error) {
@@ -59,15 +113,24 @@ const ReviewsTab: React.FC = () => {
     }
   };
 
-  const averageRating = reviews.length > 0 
-    ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
-    : 0;
+  const averageRating = stats.averageRating || 0;
 
   const ratingDistribution = [5, 4, 3, 2, 1].map(rating => ({
     rating,
-    count: reviews.filter(review => review.rating === rating).length,
-    percentage: reviews.length > 0 
-      ? (reviews.filter(review => review.rating === rating).length / reviews.length) * 100
+    count:
+      rating === 5 ? stats.fiveStarCount :
+      rating === 4 ? stats.fourStarCount :
+      rating === 3 ? stats.threeStarCount :
+      rating === 2 ? stats.twoStarCount :
+      stats.oneStarCount,
+    percentage: stats.totalReviews > 0
+      ? (
+          (rating === 5 ? stats.fiveStarCount :
+            rating === 4 ? stats.fourStarCount :
+            rating === 3 ? stats.threeStarCount :
+            rating === 2 ? stats.twoStarCount :
+            stats.oneStarCount) / stats.totalReviews
+        ) * 100
       : 0
   }));
 
@@ -94,34 +157,9 @@ const ReviewsTab: React.FC = () => {
     return stars;
   };
 
-  const getFilteredAndSortedReviews = () => {
-    let filtered = reviews;
-    
-    // Filter by rating if selected
-    if (selectedRating !== null) {
-      filtered = reviews.filter(review => review.rating === selectedRating);
-    }
-
-    // Sort reviews
-    const sorted = [...filtered].sort((a, b) => {
-      switch (sortBy) {
-        case 'newest':
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        case 'oldest':
-          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-        case 'highest':
-          return b.rating - a.rating;
-        case 'lowest':
-          return a.rating - b.rating;
-        default:
-          return 0;
-      }
-    });
-
-    return sorted;
-  };
-
-  const filteredReviews = getFilteredAndSortedReviews();
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedRating, sortBy]);
 
   if (loading) {
     return <div className="mentor-reviews-loading">Đang tải đánh giá...</div>;
@@ -137,7 +175,7 @@ const ReviewsTab: React.FC = () => {
             <div className="mentor-reviews-stars-large">
               {renderStars(Math.round(averageRating), 'large')}
             </div>
-            <p>Dựa trên {reviews.length} đánh giá</p>
+            <p>Dựa trên {stats.totalReviews} đánh giá</p>
           </div>
         </div>
 
@@ -199,8 +237,8 @@ const ReviewsTab: React.FC = () => {
 
       {/* Reviews List */}
       <div className="mentor-reviews-list">
-        {filteredReviews.length > 0 ? (
-          filteredReviews.map(review => (
+        {reviews.length > 0 ? (
+          reviews.map(review => (
             <div key={review.id} className="mentor-reviews-card">
               <div className="mentor-reviews-header">
                 <div className="mentor-reviews-student-info">
@@ -282,6 +320,14 @@ const ReviewsTab: React.FC = () => {
           </div>
         )}
       </div>
+      {totalItems > 0 && (
+        <Pagination
+          totalItems={totalItems}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 };

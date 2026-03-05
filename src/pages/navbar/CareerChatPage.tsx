@@ -189,7 +189,7 @@ const CareerChatPage = () => {
   };
 
   const handleDeleteSession = async (sessionIdToDelete: number) => {
-    if (!window.confirm(`Xóa phiên ${sessionIdToDelete}?`)) return;
+    if (!(await confirmAction(`Xóa phiên ${sessionIdToDelete}?`))) return;
 
     try {
       await careerChatService.deleteSession(sessionIdToDelete);

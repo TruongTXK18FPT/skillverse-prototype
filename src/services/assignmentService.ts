@@ -11,6 +11,21 @@ import {
   PendingSubmissionItemDTO
 } from '../data/assignmentDTOs';
 
+interface SpringPageResponse<T> {
+  content: T[];
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number;
+}
+
+export interface MentorSubmissionStatsResponse {
+  totalCount: number;
+  pendingCount: number;
+  gradedCount: number;
+  lateCount: number;
+}
+
 /**
  * Create a new assignment for a module.
  * Actor identity is resolved server-side from JWT.
@@ -203,6 +218,38 @@ export const getAllPendingForMentor = async (): Promise<PendingSubmissionItemDTO
 export const getAllMentorSubmissions = async (): Promise<MentorSubmissionItemDTO[]> => {
   const response = await axiosInstance.get<MentorSubmissionItemDTO[]>(
     `/assignments/mentor/submissions`
+  );
+  return response.data;
+};
+
+/**
+ * Get paged newest submissions for mentor grading dashboard.
+ * Supports server-side filter and search for performance at scale.
+ */
+export const getMentorSubmissionsPage = async (
+  page: number = 0,
+  size: number = 10,
+  filter: 'ALL' | 'PENDING' | 'GRADED' | 'LATE' = 'ALL',
+  search?: string
+): Promise<SpringPageResponse<MentorSubmissionItemDTO>> => {
+  const params: Record<string, string | number> = { page, size, filter };
+  if (search && search.trim()) {
+    params.search = search.trim();
+  }
+
+  const response = await axiosInstance.get<SpringPageResponse<MentorSubmissionItemDTO>>(
+    `/assignments/mentor/submissions/paged`,
+    { params }
+  );
+  return response.data;
+};
+
+/**
+ * Get aggregate stats for mentor grading dashboard cards.
+ */
+export const getMentorSubmissionStats = async (): Promise<MentorSubmissionStatsResponse> => {
+  const response = await axiosInstance.get<MentorSubmissionStatsResponse>(
+    `/assignments/mentor/submissions/stats`
   );
   return response.data;
 };

@@ -13,17 +13,11 @@ import {
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
 import { MentorSubmissionItemDTO, SubmissionStatus } from '../../data/assignmentDTOs';
-import { getAllMentorSubmissions } from '../../services/assignmentService';
+import { getMentorSubmissionStats, getMentorSubmissionsPage } from '../../services/assignmentService';
+import Pagination from '../shared/Pagination';
 import '../../styles/MentorGradingDashboard.css';
 
-interface Course {
-  id: number;
-  title: string;
-  [key: string]: any;
-}
-
 interface MentorGradingDashboardProps {
-  courses: Course[];
   onPendingCountChange?: (count: number) => void;
 }
 
@@ -48,15 +42,25 @@ const getWorkflowLabel = (status: SubmissionStatus) => {
   }
 };
 
-const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ courses, onPendingCountChange }) => {
+const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ onPendingCountChange }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   
   const [submissions, setSubmissions] = useState<MentorSubmissionItemDTO[]>([]);
+  const [totalItems, setTotalItems] = useState(0);
+  const [stats, setStats] = useState({
+    totalCount: 0,
+    pendingCount: 0,
+    gradedCount: 0,
+    lateCount: 0
+  });
   const [activeFilter, setActiveFilter] = useState<DashboardFilter>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const itemsPerPage = 10;
 
   const loadMentorSubmissions = async () => {
     if (!user) return;
@@ -64,53 +68,76 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ courses
     setError(null);
     
     try {
-      const items = await getAllMentorSubmissions();
-      setSubmissions(items);
-      onPendingCountChange?.(
-        items.filter(({ submission }) => submission.status !== SubmissionStatus.GRADED).length
+      const page = await getMentorSubmissionsPage(
+        currentPage - 1,
+        itemsPerPage,
+        activeFilter,
+        debouncedSearch
       );
+
+      if (currentPage > 1 && page.content.length === 0 && page.totalElements > 0) {
+        setCurrentPage((prev) => Math.max(1, prev - 1));
+        return;
+      }
+
+      setSubmissions(page.content || []);
+      setTotalItems(page.totalElements || 0);
     } catch (e) {
       console.error('Failed to load mentor submissions', e);
       setError('Không thể tải danh sách bài chấm');
-      onPendingCountChange?.(0);
+      setSubmissions([]);
+      setTotalItems(0);
     } finally {
       setLoading(false);
     }
   };
 
+  const loadMentorSubmissionStats = async () => {
+    if (!user) return;
+
+    try {
+      const statsData = await getMentorSubmissionStats();
+      setStats(statsData);
+      onPendingCountChange?.(statsData.pendingCount ?? 0);
+    } catch (e) {
+      console.error('Failed to load mentor submission stats', e);
+      setStats({
+        totalCount: 0,
+        pendingCount: 0,
+        gradedCount: 0,
+        lateCount: 0
+      });
+      onPendingCountChange?.(0);
+    }
+  };
+
   useEffect(() => {
-    if (courses.length > 0) {
+    const handle = setTimeout(() => {
+      setDebouncedSearch(searchQuery.trim());
+    }, 300);
+    return () => clearTimeout(handle);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilter, debouncedSearch]);
+
+  useEffect(() => {
+    if (user) {
       loadMentorSubmissions();
     }
-  }, [courses, user]);
+  }, [user, currentPage, activeFilter, debouncedSearch]);
 
-  const pendingCount = submissions.filter(({ submission }) => submission.status !== SubmissionStatus.GRADED).length;
-  const gradedCount = submissions.length - pendingCount;
-  const lateCount = submissions.filter(({ submission }) => submission.isLate).length;
-  const visibleSubmissions = submissions.filter(({ submission }) => {
-    if (activeFilter === 'PENDING') {
-      return submission.status !== SubmissionStatus.GRADED;
+  useEffect(() => {
+    if (user) {
+      loadMentorSubmissionStats();
     }
-    if (activeFilter === 'GRADED') {
-      return submission.status === SubmissionStatus.GRADED;
-    }
-    if (activeFilter === 'LATE') {
-      return submission.isLate;
-    }
-    return true;
-  }).filter(({ submission, courseName, moduleName, assignmentName }) => {
-    const query = searchQuery.trim().toLowerCase();
-    if (!query) {
-      return true;
-    }
+  }, [user]);
 
-    return [
-      resolveLearnerName(submission.userName, submission.userId),
-      courseName,
-      moduleName,
-      assignmentName
-    ].some((value) => value?.toLowerCase().includes(query));
-  });
+  const pendingCount = stats.pendingCount;
+  const gradedCount = stats.gradedCount;
+  const lateCount = stats.lateCount;
+  const visibleSubmissions = submissions;
 
   if (loading) {
     return (
@@ -133,7 +160,7 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ courses
     );
   }
 
-  if (submissions.length === 0) {
+  if (stats.totalCount === 0) {
     return (
       <div className="mentor-grading-empty">
         <CheckCircle className="w-16 h-16" />
@@ -195,7 +222,7 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ courses
         >
           <FileText className="w-6 h-6" />
           <div className="mentor-grading-stat-card__content">
-            <span className="mentor-grading-stat-card__value">{submissions.length}</span>
+            <span className="mentor-grading-stat-card__value">{stats.totalCount}</span>
             <span className="mentor-grading-stat-card__label">Tất cả</span>
           </div>
         </button>
@@ -247,7 +274,7 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ courses
         <div className="mentor-grading-toolbar__meta">
           <span className="mentor-grading-toolbar__item">
             <User className="w-4 h-4" />
-            {visibleSubmissions.length} mục đang hiển thị
+            {totalItems} mục phù hợp
           </span>
           {activeFilter !== 'ALL' && (
             <span className="mentor-grading-toolbar__item mentor-grading-toolbar__item--active">
@@ -361,6 +388,14 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ courses
         </table>
         )}
       </div>
+      {totalItems > 0 && (
+        <Pagination
+          totalItems={totalItems}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 };

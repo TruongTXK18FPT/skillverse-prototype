@@ -132,8 +132,8 @@ const SystemSettingsTabCosmic: React.FC = () => {
     }, 1500);
   };
 
-  const handleReset = () => {
-    if (window.confirm('Bạn có chắc chắn muốn khôi phục cài đặt mặc định?')) {
+  const handleReset = async () => {
+    if (await confirmAction('Bạn có chắc chắn muốn khôi phục cài đặt mặc định?')) {
       // TODO: Implement reset logic
     }
   };

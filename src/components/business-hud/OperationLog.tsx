@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import jobService from '../../services/jobService';
 import { JobPostingResponse, JobStatus, JobApplicationStatus } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';
@@ -89,7 +89,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
   }, [jobs, selectedJob]);
 
   const handleDelete = async (jobId: number) => {
-    if (window.confirm('CẢNH BÁO: Bạn có chắc chắn muốn hủy tin tuyển dụng này? Hành động này sẽ xóa vĩnh viễn dữ liệu và đơn ứng tuyển.')) {
+    if (await confirmAction('CẢNH BÁO: Bạn có chắc chắn muốn hủy tin tuyển dụng này? Hành động này sẽ xóa vĩnh viễn dữ liệu và đơn ứng tuyển.')) {
       try {
         await jobService.deleteJob(jobId);
         setJobs(prevJobs => prevJobs.filter(job => job.id !== jobId));
@@ -254,7 +254,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
   };
 
   const handleAcceptApplicant = async (appId: number, name: string) => {
-    if (window.confirm(`Bạn có chắc chắn muốn CHẤP NHẬN ứng viên ${name}?`)) {
+    if (await confirmAction(`Bạn có chắc chắn muốn CHẤP NHẬN ứng viên ${name}?`)) {
       try {
         await jobService.updateApplicationStatus(appId, {
           status: 'ACCEPTED' as JobApplicationStatus,
@@ -270,7 +270,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
   };
 
   const handleRejectApplicant = async (appId: number, name: string) => {
-    if (window.confirm(`Bạn có chắc chắn muốn TỪ CHỐI ứng viên ${name}?`)) {
+    if (await confirmAction(`Bạn có chắc chắn muốn TỪ CHỐI ứng viên ${name}?`)) {
       try {
         await jobService.updateApplicationStatus(appId, {
           status: 'REJECTED' as JobApplicationStatus,

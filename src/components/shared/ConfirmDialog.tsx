@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../../styles/ConfirmDialog.css';
 
 export type ConfirmVariant = 'default' | 'danger' | 'primary';
@@ -24,11 +24,28 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onConfirm,
   onCancel
 }) => {
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onCancel();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen, onCancel]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="confirm-dialog-overlay" role="dialog" aria-modal="true">
-      <div className={`confirm-dialog confirm-dialog--${variant}`}>
+    <div className="confirm-dialog-overlay" role="dialog" aria-modal="true" onClick={onCancel}>
+      <div className={`confirm-dialog confirm-dialog--${variant}`} onClick={(event) => event.stopPropagation()}>
         <div className="confirm-dialog__header">
           <h3>{title}</h3>
         </div>

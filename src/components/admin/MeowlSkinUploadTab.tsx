@@ -78,7 +78,7 @@ const MeowlSkinUploadTab: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm('Bạn có chắc chắn muốn xóa skin này? Hành động này không thể hoàn tác.')) return;
+    if (!(await confirmAction('Bạn có chắc chắn muốn xóa skin này? Hành động này không thể hoàn tác.'))) return;
 
     try {
       setLoading(true);

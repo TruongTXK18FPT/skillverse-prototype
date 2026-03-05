@@ -33,6 +33,7 @@ import StudentManagementTab from '../course/StudentManagementTab';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { API_BASE_URL } from '../../services/axiosInstance';
 import ConfirmDialog from '../shared/ConfirmDialog';
+import Pagination from '../shared/Pagination';
 import { useMentorNotice } from '../../context/mentor/MentorNoticeContext';
 
 // ============================================================================
@@ -94,10 +95,12 @@ const CoursesTab: React.FC = () => {
 
   // State
   const [courses, setCourses] = useState<Course[]>([]);
+  const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [courseGroups, setCourseGroups] = useState<Record<number, GroupChatResponse | null>>({});
   const [selectedCourseForStudents, setSelectedCourseForStudents] = useState<Course | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const [confirmDialog, setConfirmDialog] = useState<{
     title: string;
     message: string;
@@ -112,13 +115,14 @@ const CoursesTab: React.FC = () => {
   const [activeCourseId, setActiveCourseId] = useState<number | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [initialModalData, setInitialModalData] = useState({ name: '', avatar: '' });
+  const itemsPerPage = 8;
 
   // Load courses on mount
   useEffect(() => {
     if (user?.id) {
-      loadCourses();
+      loadCourses(currentPage);
     }
-  }, [user?.id]);
+  }, [user?.id, currentPage]);
 
   // Load group info for all courses in parallel (batched)
   useEffect(() => {
@@ -139,16 +143,27 @@ const CoursesTab: React.FC = () => {
     }
   }, [courses]);
 
-  const loadCourses = async () => {
+  const loadCourses = async (pageToLoad: number = currentPage) => {
     if (!user?.id) return;
     setLoading(true);
     setError(null);
     try {
-      const response = await listCoursesByAuthor(user.id, 0, 1000);
-      // API returns PageResponse, extract content array
-      setCourses(response.content || []);
+      const response = await listCoursesByAuthor(user.id, pageToLoad - 1, itemsPerPage);
+      const fetchedCourses = response.content || [];
+      const fetchedTotal = response.totalElements ?? fetchedCourses.length;
+
+      // If current page becomes invalid after data changes (e.g. delete last item on page), move back 1 page.
+      if (pageToLoad > 1 && fetchedCourses.length === 0 && fetchedTotal > 0) {
+        setCurrentPage(pageToLoad - 1);
+        return;
+      }
+
+      setCourses(fetchedCourses);
+      setTotalItems(fetchedTotal);
     } catch (err) {
       console.error('Failed to load courses:', err);
+      setCourses([]);
+      setTotalItems(0);
       setError('Không thể tải danh sách khóa học. Vui lòng thử lại.');
     } finally {
       setLoading(false);
@@ -190,16 +205,8 @@ const CoursesTab: React.FC = () => {
         setConfirmDialog(null);
         try {
           await deleteCourse(courseId, user.id);
-          if (hasEnrollments) {
-            // BE archives instead of deleting — update local state
-            setCourses(prev => prev.map(c =>
-              c.id === courseId ? { ...c, status: CourseStatus.ARCHIVED } : c
-            ));
-            showNotice('success', 'Khóa học đã được lưu trữ.');
-          } else {
-            setCourses(prev => prev.filter(c => c.id !== courseId));
-            showNotice('success', 'Đã xóa khóa học.');
-          }
+          await loadCourses(currentPage);
+          showNotice('success', hasEnrollments ? 'Khóa học đã được lưu trữ.' : 'Đã xóa khóa học.');
         } catch (err) {
           console.error('Failed to delete course:', err);
           setError('Không thể xóa khóa học. Vui lòng thử lại.');
@@ -219,12 +226,8 @@ const CoursesTab: React.FC = () => {
         setConfirmDialog(null);
         setLoading(true);
         try {
-          const updatedCourse = await submitCourseForApproval(courseId, user.id);
-          setCourses(prev => prev.map(c =>
-            c.id === courseId
-              ? { ...c, status: updatedCourse.status, updatedAt: updatedCourse.updatedAt }
-              : c
-          ));
+          await submitCourseForApproval(courseId, user.id);
+          await loadCourses(currentPage);
           showNotice('success', 'Khóa học đã được gửi để duyệt thành công!');
         } catch (err: any) {
           const errorMessage = err.response?.data?.message || 'Không thể gửi khóa học để duyệt.';
@@ -380,24 +383,25 @@ const CoursesTab: React.FC = () => {
 
       {/* Courses Grid */}
       {courses.length > 0 && (
-        <div className="mentor-hud-courses__grid">
-          {/* Create Card */}
-          <div
-            className="mentor-hud-course-card mentor-hud-course-card--create"
-            onClick={() => navigate('/mentor/courses/create')}
-          >
-            <div className="mentor-hud-course-card--create-content">
-              <div className="create-icon-wrapper">
-                <Plus className="w-8 h-8" />
+        <>
+          <div className="mentor-hud-courses__grid">
+            {/* Create Card */}
+            <div
+              className="mentor-hud-course-card mentor-hud-course-card--create"
+              onClick={() => navigate('/mentor/courses/create')}
+            >
+              <div className="mentor-hud-course-card--create-content">
+                <div className="create-icon-wrapper">
+                  <Plus className="w-8 h-8" />
+                </div>
+                <h3>Tạo Khóa Học Mới</h3>
+                <p>Bắt đầu xây dựng lộ trình tri thức của bạn</p>
               </div>
-              <h3>Tạo Khóa Học Mới</h3>
-              <p>Bắt đầu xây dựng lộ trình tri thức của bạn</p>
             </div>
-          </div>
 
-          {/* Course Cards */}
-          {courses.map((course) => (
-            <div key={course.id} className="mentor-hud-course-card">
+            {/* Course Cards */}
+            {courses.map((course) => (
+              <div key={course.id} className="mentor-hud-course-card">
               {/* Thumbnail */}
               <div className="mentor-hud-course-thumbnail">
                 {resolveCourseThumbnail(course) ? (
@@ -554,9 +558,16 @@ const CoursesTab: React.FC = () => {
                   ) : null}
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+              </div>
+            ))}
+          </div>
+          <Pagination
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
+        </>
       )}
 
       {confirmDialog && (

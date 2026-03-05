@@ -303,7 +303,7 @@ const CommunityDashboardPage: React.FC = () => {
 
   // --- Delete Post ---
   const deletePost = async (p: PostSummary) => {
-    if (!window.confirm('Xóa bài viết này? Hành động không thể hoàn tác.')) return;
+    if (!(await confirmAction('Xóa bài viết này? Hành động không thể hoàn tác.'))) return;
     try {
       await communityService.deletePost(p.id);
       await loadPosts();
@@ -314,7 +314,7 @@ const CommunityDashboardPage: React.FC = () => {
   };
 
   const publishPost = async (p: PostSummary) => {
-    if (!window.confirm('Bạn có chắc chắn muốn đăng bài viết này?')) return;
+    if (!(await confirmAction('Bạn có chắc chắn muốn đăng bài viết này?'))) return;
     try {
       await communityService.updatePost(p.id, { status: 'PUBLISHED' });
       await loadPosts();
@@ -1037,3 +1037,6 @@ const CommunityDashboardPage: React.FC = () => {
 };
 
 export default CommunityDashboardPage;
+
+
+

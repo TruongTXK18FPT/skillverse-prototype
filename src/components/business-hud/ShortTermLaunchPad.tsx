@@ -251,7 +251,7 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
       setIsSubmitting(false);
       return;
     }
-    if (!window.confirm(confirmMsg || "")) {
+    if (!(await confirmAction(confirmMsg || ""))) {
       setIsSubmitting(false);
       return;
     }

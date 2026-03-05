@@ -18,8 +18,7 @@ import { Menu } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { listCoursesByAuthor } from '../../services/courseService';
-import { getAllPendingForMentor } from '../../services/assignmentService';
-import { CourseSummaryDTO } from '../../data/courseDTOs';
+import { getMentorSubmissionStats } from '../../services/assignmentService';
 
 // Sidebar
 import MentorSidebar from '../../components/mentor/MentorSidebar';
@@ -53,10 +52,7 @@ const MentorDashboard: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [pendingGradingCount, setPendingGradingCount] = useState(0);
-  
-  // Courses state for grading dashboard
-  const [courses, setCourses] = useState<CourseSummaryDTO[]>([]);
-  const [coursesLoading, setCoursesLoading] = useState(false);
+  const [courseCount, setCourseCount] = useState(0);
 
   // Auth check
   useEffect(() => {
@@ -65,33 +61,30 @@ const MentorDashboard: React.FC = () => {
     }
   }, [user, authLoading, navigate]);
 
-  // Load courses when user is available (needed for grading dashboard)
+  // Load lightweight mentor stats when user is available
   useEffect(() => {
     if (user?.id) {
-      loadCourses();
+      loadCourseCount();
       loadPendingGradingCount();
     }
   }, [user?.id]);
 
-  const loadCourses = useCallback(async () => {
+  const loadCourseCount = useCallback(async () => {
     if (!user?.id) return;
-    setCoursesLoading(true);
     try {
-      const response = await listCoursesByAuthor(user.id, 0, 1000);
-      // API returns PageResponse, extract content array
-      setCourses(response.content || []);
+      // Only request one record, rely on totalElements for accurate total course count.
+      const response = await listCoursesByAuthor(user.id, 0, 1);
+      setCourseCount(response.totalElements ?? (response.content?.length || 0));
     } catch (err) {
       console.error('Failed to load courses:', err);
-    } finally {
-      setCoursesLoading(false);
     }
   }, [user?.id]);
 
   const loadPendingGradingCount = useCallback(async () => {
     if (!user?.id) return;
     try {
-      const pendingItems = await getAllPendingForMentor();
-      setPendingGradingCount(pendingItems.length);
+      const stats = await getMentorSubmissionStats();
+      setPendingGradingCount(stats.pendingCount ?? 0);
     } catch (err) {
       console.error('Failed to load pending grading count:', err);
       setPendingGradingCount(0);
@@ -131,7 +124,7 @@ const MentorDashboard: React.FC = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'overview':
-        return <MentorOverviewHUD onNavigate={handleNavigate} courseCount={courses.length} />;
+        return <MentorOverviewHUD onNavigate={handleNavigate} courseCount={courseCount} />;
 
       case 'courses':
         return <CoursesTab />;
@@ -152,13 +145,13 @@ const MentorDashboard: React.FC = () => {
         return <ReviewsTab />;
 
       case 'grading':
-        return <MentorGradingDashboard courses={courses} onPendingCountChange={setPendingGradingCount} />;
+        return <MentorGradingDashboard onPendingCountChange={setPendingGradingCount} />;
 
       case 'certificate-settings':
         return <MentorCertificateSettingsTab />;
 
       default:
-        return <MentorOverviewHUD onNavigate={handleNavigate} courseCount={courses.length} />;
+        return <MentorOverviewHUD onNavigate={handleNavigate} courseCount={courseCount} />;
     }
   };
 

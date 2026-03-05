@@ -10,8 +10,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 200500;
   animation: fadeIn 0.3s ease-out;
+}
+
+.toast-overlay-no-backdrop {
+  background: transparent;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+.toast-overlay-no-backdrop .toast {
+  pointer-events: auto;
 }
 
 .toast {
@@ -47,8 +57,16 @@
 
 /* Toast Icon Container */
 .toast-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   margin-bottom: 1.5rem;
   animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+.toast-icon-container svg {
+  display: block;
 }
 
 .toast-icon-success {

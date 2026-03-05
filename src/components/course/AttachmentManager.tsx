@@ -80,7 +80,7 @@ const AttachmentManager: React.FC<AttachmentManagerProps> = ({
   };
   
   const handleDelete = async (attachmentId: number) => {
-    if (!user || !confirm('Xóa attachment này?')) return;
+    if (!user || !(await confirmAction('Xóa attachment này?'))) return;
     
     
     

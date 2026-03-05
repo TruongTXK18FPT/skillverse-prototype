@@ -78,7 +78,7 @@ const MentorBookingManager: React.FC = () => {
   };
 
   const handleComplete = async (id: number) => {
-    if (confirm('Xác nhận hoàn thành buổi học?')) {
+    if (await confirmAction('Xác nhận hoàn thành buổi học?')) {
       try {
         await completeBooking(id);
         fetchBookings();

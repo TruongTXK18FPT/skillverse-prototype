@@ -10,6 +10,7 @@ import { LanguageProvider } from "./context/LanguageContext";
 import { AuthProvider } from "./context/AuthContext";
 import { MeowlSkinProvider } from "./context/MeowlSkinContext";
 import { MeowlStateProvider } from "./context/MeowlStateContext";
+import { ConfirmDialogProvider } from "./context/ConfirmDialogContext";
 import {
   MentorRoute,
   AdminRoute,
@@ -124,27 +125,28 @@ const App = () => {
           <AuthProvider>
             <MeowlSkinProvider>
               <MeowlStateProvider>
-                <Router>
-                  <div className="app-container">
-                    <ScrollToTop />
-                    <HeaderVisibilityWrapper />
-                    <div className="app__galaxy-bg">
-                      <div className="cosmic-dust">
-                        {[...Array(40)].map((_, i) => (
-                          <div
-                            key={i}
-                            className="dust-particle"
-                            style={{
-                              left: `${Math.random() * 95}%`,
-                              top: `${Math.random() * 95}%`,
-                              animationDelay: `${Math.random() * 10}s`,
-                              animationDuration: `${20 + Math.random() * 15}s`,
-                            }}
-                          />
-                        ))}
-                      </div>
-                      <main>
-                        <Routes>
+                <ConfirmDialogProvider>
+                  <Router>
+                    <div className="app-container">
+                      <ScrollToTop />
+                      <HeaderVisibilityWrapper />
+                      <div className="app__galaxy-bg">
+                        <div className="cosmic-dust">
+                          {[...Array(40)].map((_, i) => (
+                            <div
+                              key={i}
+                              className="dust-particle"
+                              style={{
+                                left: `${Math.random() * 95}%`,
+                                top: `${Math.random() * 95}%`,
+                                animationDelay: `${Math.random() * 10}s`,
+                                animationDuration: `${20 + Math.random() * 15}s`,
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <main>
+                          <Routes>
                           <Route path="/" element={<HomePage />} />
                           <Route path="/about" element={<AboutPage />} />
                           <Route
@@ -492,14 +494,15 @@ const App = () => {
                           />
                           {/* Catch-all route for 404 errors - must be last */}
                           <Route path="*" element={<NotFoundPage />} />
-                        </Routes>
-                      </main>
-                      <FooterVisibilityWrapper />
-                      <MeowlBubbleWrapper />
-                      <MeowlPetWrapper />
+                          </Routes>
+                        </main>
+                        <FooterVisibilityWrapper />
+                        <MeowlBubbleWrapper />
+                        <MeowlPetWrapper />
+                      </div>
                     </div>
-                  </div>
-                </Router>
+                  </Router>
+                </ConfirmDialogProvider>
               </MeowlStateProvider>
             </MeowlSkinProvider>
           </AuthProvider>

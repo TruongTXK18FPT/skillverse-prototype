@@ -176,7 +176,7 @@ const UserBookingsPage = () => {
   };
 
   const handleCancel = async (id: number) => {
-    if (window.confirm("Bạn có chắc chắn muốn hủy lịch hẹn này không?")) {
+    if (await confirmAction('Bạn có chắc chắn muốn hủy lịch hẹn này không?')) {
       try {
         await cancelBooking(id);
         fetchBookings(); // Refresh list

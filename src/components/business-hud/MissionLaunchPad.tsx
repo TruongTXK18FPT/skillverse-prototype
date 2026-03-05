@@ -157,7 +157,7 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
       confirmMsg =
         "Lưu ý: Việc đăng tuyển dụng sẽ trừ 50.000 VNĐ vào ví của bạn. Bạn có chắc chắn muốn tiếp tục?";
     }
-    if (!window.confirm(confirmMsg)) {
+    if (!(await confirmAction(confirmMsg))) {
       setIsSubmitting(false);
       return;
     }

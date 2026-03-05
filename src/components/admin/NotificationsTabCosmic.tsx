@@ -218,7 +218,7 @@ const NotificationsTabCosmic: React.FC = () => {
       return;
     }
 
-    const confirmed = window.confirm(
+    const confirmed = await confirmAction(
       `Bạn có chắc muốn gửi email đến ${previewData?.totalCount || 0} người dùng?`
     );
 
