@@ -367,13 +367,15 @@
   display: grid;
   grid-template-columns: 1.5fr 1fr;
   gap: 2rem;
+  align-items: stretch;
 }
 
 /* Info Panel (Left) */
 .cockpit-detail-info-panel {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
+  height: 100%;
 }
 
 .cockpit-detail-level-badge {
@@ -483,7 +485,190 @@
   margin-top: 0.25rem;
 }
 
-/* Instructor Card */
+/* Quick Info Section (Newly moved under stats) */
+.cockpit-detail-quick-info {
+  margin-top: 0.5rem;
+  padding: 1.25rem;
+  background: rgba(0, 246, 255, 0.03);
+  border: 1px solid rgba(0, 246, 255, 0.15);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.cockpit-detail-quick-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.cockpit-detail-quick-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 120px;
+}
+
+.cockpit-detail-quick-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  color: var(--cockpit-detail-neon-cyan);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.cockpit-detail-quick-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cockpit-detail-text-primary);
+  letter-spacing: 0.5px;
+}
+
+/* Instructor Mini Card (Newly moved under Quick Info) */
+.cockpit-detail-instructor-mini-card {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  background: rgba(0, 102, 255, 0.05);
+  border: 1px solid rgba(0, 102, 255, 0.2);
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.cockpit-detail-instructor-mini-footer {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.cockpit-detail-instructor-mini-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 246, 255, 0.05);
+  border: 1px solid rgba(0, 246, 255, 0.2);
+  color: var(--cockpit-detail-neon-cyan);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+}
+
+.cockpit-detail-instructor-mini-btn:hover {
+  background: rgba(0, 246, 255, 0.15);
+  border-color: var(--cockpit-detail-neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 246, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.cockpit-detail-instructor-mini-btn.primary {
+  background: rgba(0, 102, 255, 0.15);
+  border-color: rgba(0, 102, 255, 0.4);
+  color: #fff;
+}
+
+.cockpit-detail-instructor-mini-btn.primary:hover {
+  background: rgba(0, 102, 255, 0.3);
+  border-color: var(--cockpit-detail-neon-blue);
+  box-shadow: 0 0 10px rgba(0, 102, 255, 0.4);
+}
+
+.cockpit-detail-instructor-mini-btn-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.cockpit-detail-instructor-mini-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 246, 255, 0.05) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.cockpit-detail-instructor-mini-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(0, 246, 255, 0.1);
+}
+
+.cockpit-detail-instructor-mini-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--cockpit-detail-neon-cyan);
+}
+
+.cockpit-detail-instructor-mini-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  color: var(--cockpit-detail-neon-cyan);
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.cockpit-detail-instructor-mini-body {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.cockpit-detail-instructor-mini-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid var(--cockpit-detail-neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 246, 255, 0.3);
+  object-fit: cover;
+}
+
+.cockpit-detail-instructor-mini-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cockpit-detail-instructor-mini-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--cockpit-detail-text-primary);
+  margin: 0;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.cockpit-detail-instructor-mini-spec {
+  font-size: 0.85rem;
+  color: var(--cockpit-detail-neon-cyan);
+  margin: 0;
+  opacity: 0.9;
+}
+
+.cockpit-detail-instructor-mini-bio {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--cockpit-detail-text-secondary);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+/* Instructor Card (Old code below - can be kept or cleaned up) */
 .cockpit-detail-instructor-card {
   padding: 1.25rem;
   background: var(--cockpit-detail-bg-panel);
@@ -575,11 +760,6 @@
   object-fit: cover;
   filter: brightness(0.8);
   transition: all 0.3s ease;
-}
-
-.cockpit-detail-preview-card:hover .cockpit-detail-preview-image {
-  filter: brightness(1);
-  transform: scale(1.05);
 }
 
 .cockpit-detail-preview-overlay {
@@ -732,6 +912,40 @@
   border-color: var(--cockpit-detail-border-secondary);
   color: var(--cockpit-detail-text-secondary);
   box-shadow: none;
+}
+
+/* Share Button Under Enroll */
+.cockpit-detail-share-full-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  background: rgba(168, 85, 247, 0.05);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  color: #a855f7;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.cockpit-detail-share-full-btn:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: #a855f7;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+  transform: translateY(-2px);
+}
+
+.cockpit-detail-share-icon {
+  width: 18px;
+  height: 18px;
 }
 
 /* Action Buttons */
@@ -1096,9 +1310,104 @@
 }
 
 .cockpit-detail-module-content {
-  padding: 1.25rem;
-  border-top: 1px solid var(--cockpit-detail-border-secondary);
-  animation: slideDown 0.3s ease-out;
+  padding: 1rem 1.5rem 1.5rem 4rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(0, 243, 255, 0.1);
+  box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.cockpit-detail-module-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cockpit-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.85rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 243, 255, 0.1);
+  border-radius: 4px;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.cockpit-detail-item:hover {
+  background: rgba(0, 243, 255, 0.08);
+  border-color: rgba(0, 243, 255, 0.3);
+  transform: translateX(8px);
+}
+
+.cockpit-detail-item-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(0, 243, 255, 0.1);
+  border: 1px solid rgba(0, 243, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--skillverse-cyan, #00f3ff);
+}
+
+.cockpit-detail-item-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cockpit-detail-item-type {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+
+.cockpit-detail-item-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.cockpit-detail-item-meta {
+  font-family: var(--font-mono, "Fira Code", monospace);
+  font-size: 0.75rem;
+  color: var(--skillverse-cyan, #00f3ff);
+  background: rgba(0, 243, 255, 0.08);
+  padding: 0.25rem 0.6rem;
+  border: 1px solid rgba(0, 243, 255, 0.15);
+  border-radius: 4px;
+}
+
+/* Quiz Specific Styling */
+.cockpit-detail-item.quiz .cockpit-detail-item-icon {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.2);
+}
+
+.cockpit-detail-item.quiz .cockpit-detail-item-meta {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.08);
+  border-color: rgba(251, 191, 36, 0.15);
+}
+
+/* Assignment Specific Styling */
+.cockpit-detail-item.assignment .cockpit-detail-item-icon {
+  color: #f472b6;
+  background: rgba(244, 114, 182, 0.1);
+  border-color: rgba(244, 114, 182, 0.2);
+}
+
+.cockpit-detail-item.assignment .cockpit-detail-item-meta {
+  color: #f472b6;
+  background: rgba(244, 114, 182, 0.08);
+  border-color: rgba(244, 114, 182, 0.15);
 }
 
 .cockpit-detail-module-detail {

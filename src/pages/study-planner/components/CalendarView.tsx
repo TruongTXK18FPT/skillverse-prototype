@@ -137,6 +137,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ sessions, currentDate, onSe
     const startTime = getVietnamTime(start);
     const endTime = getVietnamTime(end);
     
+    // Each hour is 60px in CSS (.study-plan-time-slot height)
     const top = (startTime.h * 60 + startTime.m); 
     let duration = (endTime.h * 60 + endTime.m) - (startTime.h * 60 + startTime.m);
     
@@ -146,7 +147,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({ sessions, currentDate, onSe
     
     return {
       top: `${top}px`,
-      height: `${Math.max(duration, 30)}px`, // Min height 30px
+      minHeight: '40px',
+      height: `${duration}px`,
       '--event-color': getPriorityColor(task.priority),
       width: layoutStyle?.width || '96%',
       left: layoutStyle?.left || '2%',

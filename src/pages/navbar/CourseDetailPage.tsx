@@ -15,15 +15,21 @@ import {
   Shield,
   Cpu,
   Layers,
-  Activity
+  Activity,
+  MessageSquare,
+  ExternalLink
 } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../utils/useToast';
-import { getCourse } from '../../services/courseService';
+import {
+  getCourse,
+} from '../../services/courseService';
+import { listModulesWithContent } from '../../services/moduleService';
 import { enrollUser, checkEnrollmentStatus, getEnrollmentProgress } from '../../services/enrollmentService';
 import { CourseDetailDTO, CourseStatus } from '../../data/courseDTOs';
+import { ModuleDetailDTO } from '../../data/moduleDTOs';
 import { getMentorProfile, MentorProfile } from '../../services/mentorProfileService';
 import { getGroupByCourse, joinGroup, GroupChatResponse } from '../../services/groupChatService';
 import {
@@ -55,6 +61,7 @@ const CourseDetailPage = () => {
   const location = useLocation();
   const { toast, showSuccess, showError, showInfo, hideToast } = useToast();
   const [course, setCourse] = useState<CourseDetailDTO | null>(null);
+  const [modules, setModules] = useState<ModuleDetailDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [expandedModule, setExpandedModule] = useState<number | null>(null);
@@ -135,6 +142,27 @@ const CourseDetailPage = () => {
     getCourse(courseIdNum)
       .then(async (dto) => {
         setCourse(dto);
+        
+        // Fetch detailed module content (lessons, quizzes, etc.)
+        try {
+          const detailModules = await listModulesWithContent(courseIdNum);
+          setModules(detailModules);
+        } catch (mErr) {
+          console.error('Error loading module content:', mErr);
+          // Fallback to basic modules from course DTO if detail fetch fails
+          if (dto.modules) {
+            setModules(dto.modules.map(m => ({
+              ...m,
+              courseId: courseIdNum,
+              createdAt: '',
+              updatedAt: '',
+              lessons: [],
+              quizzes: [],
+              assignments: []
+            })));
+          }
+        }
+
         if (dto.author?.id) {
           try {
             const profile = await getMentorProfile(dto.author.id);
@@ -184,7 +212,20 @@ const CourseDetailPage = () => {
   };
 
   const handleEnroll = async () => {
-    if (!course || loadingEnrollment || !user) return;
+    if (!course || loadingEnrollment) return;
+
+    if (!user) {
+      showInfo(
+        'Yêu cầu đăng nhập', 
+        'Vui lòng đăng nhập để kích hoạt khóa học này.',
+        {
+          text: 'Đăng nhập ngay',
+          onClick: () => navigate('/login', { state: { from: location.pathname } })
+        },
+        true
+      );
+      return;
+    }
 
     if (isPreviewMode) {
       showInfo('Chế độ xem trước', 'Bạn đang xem trước khóa học. Không thể kích hoạt trong chế độ này.');
@@ -231,6 +272,33 @@ const CourseDetailPage = () => {
 
   const handleTrailerPreview = () => {
     setShowTrailer(true);
+  };
+
+  const handleShare = () => {
+    const shareUrl = `skillverse.vn/courses/${id}`;
+    navigator.clipboard.writeText(shareUrl)
+      .then(() => {
+        showSuccess('Thành công', 'Đã sao chép liên kết khóa học vào bộ nhớ tạm!', undefined, true);
+      })
+      .catch(() => {
+        showError('Lỗi', 'Không thể sao chép liên kết.');
+      });
+  };
+
+  const handleMentorChat = () => {
+    if (!user) {
+      showInfo(
+        'Yêu cầu đăng nhập', 
+        'Vui lòng đăng nhập để nhắn tin với Mentor.',
+        {
+          text: 'Đăng nhập ngay',
+          onClick: () => navigate('/login', { state: { from: location.pathname } })
+        },
+        true
+      );
+      return;
+    }
+    navigate('/messages', { state: { openChatWith: course?.author?.id, type: 'DIRECT' } });
   };
 
   const handlePreviewLearning = () => {
@@ -405,6 +473,68 @@ const CourseDetailPage = () => {
                 </div>
               </div>
 
+              {/* Course Facts / Quick Info */}
+              <div className="cockpit-detail-quick-info">
+                <div className="cockpit-detail-quick-grid">
+                  <div className="cockpit-detail-quick-item">
+                    <span className="cockpit-detail-quick-label">CẤP ĐỘ</span>
+                    <span className="cockpit-detail-quick-value">{getLevelLabel(course.level)}</span>
+                  </div>
+                  <div className="cockpit-detail-quick-item">
+                    <span className="cockpit-detail-quick-label">DANH MỤC</span>
+                    <span className="cockpit-detail-quick-value">{course.category || 'Chưa cập nhật'}</span>
+                  </div>
+                  <div className="cockpit-detail-quick-item">
+                    <span className="cockpit-detail-quick-label">NGÔN NGỮ</span>
+                    <span className="cockpit-detail-quick-value">{course.language || 'Chưa cập nhật'}</span>
+                  </div>
+                  <div className="cockpit-detail-quick-item">
+                    <span className="cockpit-detail-quick-label">THỜI LƯỢNG</span>
+                    <span className="cockpit-detail-quick-value">{formatDuration(course.estimatedDurationHours)}</span>
+                  </div>
+                  <div className="cockpit-detail-quick-item">
+                    <span className="cockpit-detail-quick-label">CẬP NHẬT</span>
+                    <span className="cockpit-detail-quick-value">{formatDate(course.publishedDate || course.updatedAt)}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Instructor Quick Info */}
+              {course.author && (
+                <div className="cockpit-detail-instructor-mini-card">
+                  <div className="cockpit-detail-instructor-mini-header">
+                    <Cpu className="cockpit-detail-instructor-mini-icon" />
+                    <span className="cockpit-detail-instructor-mini-label">AUTHOR / INSTRUCTOR</span>
+                  </div>
+                  <div className="cockpit-detail-instructor-mini-body">
+                    <img 
+                      src={mentorProfile?.avatar || course.author.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(course.author.fullName || 'Instructor')}&background=00f6ff&color=0a0e1a`} 
+                      alt={course.author.fullName} 
+                      className="cockpit-detail-instructor-mini-avatar"
+                    />
+                    <div className="cockpit-detail-instructor-mini-info">
+                      <h3 className="cockpit-detail-instructor-mini-name">
+                        {course.author.fullName || `${course.author.firstName} ${course.author.lastName}`}
+                      </h3>
+                      {mentorProfile?.specialization && (
+                        <p className="cockpit-detail-instructor-mini-spec">{mentorProfile.specialization}</p>
+                      )}
+                    </div>
+                  </div>
+                  {/* Instructor Actions */}
+                  <div className="cockpit-detail-instructor-mini-footer">
+                    <button className="cockpit-detail-instructor-mini-btn" onClick={() => navigate(`/mentorship?search=${encodeURIComponent(course.author?.fullName || '')}`)}>
+                      <ExternalLink className="cockpit-detail-instructor-mini-btn-icon" />
+                      HỒ SƠ MENTOR
+                    </button>
+                    <button className="cockpit-detail-instructor-mini-btn primary" onClick={handleMentorChat}>
+                      <MessageSquare className="cockpit-detail-instructor-mini-btn-icon" />
+                      NHẮN TIN
+                    </button>
+                  </div>
+                </div>
+              )}
+
             </div>
 
             {/* Right: Enrollment Panel */}
@@ -417,12 +547,6 @@ const CourseDetailPage = () => {
                     alt={course.title}
                     className="cockpit-detail-preview-image"
                   />
-                  <div className="cockpit-detail-preview-overlay">
-                    <button className="cockpit-detail-play-btn" onClick={handleTrailerPreview}>
-                      <Play className="cockpit-detail-play-icon" />
-                      <span>PREVIEW</span>
-                    </button>
-                  </div>
                   {/* Energy Indicator */}
                   <div className="cockpit-detail-energy-indicator">
                     <div className="cockpit-detail-energy-pulse"></div>
@@ -472,39 +596,14 @@ const CourseDetailPage = () => {
                   </button>
                 )}
 
-                {/* Action Buttons */}
-                <div className="cockpit-detail-action-grid">
-                  <button
-                    className={`cockpit-detail-action-btn ${isWishlisted ? 'active' : ''}`}
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                  >
-                    <Heart className="cockpit-detail-action-icon" />
-                    <span>{isWishlisted ? 'ĐÃ LƯU' : 'LƯU'}</span>
-                  </button>
-                  {canPreviewLearning && (
-                    <button
-                      className="cockpit-detail-action-btn"
-                      onClick={handlePreviewLearning}
-                    >
-                      <Eye className="cockpit-detail-action-icon" />
-                      <span>XEM TRƯỚC NỘI DUNG</span>
-                    </button>
-                  )}
-                  {isEnrolled && !isActivationLocked && groupChat && (
-                    <button
-                      className="cockpit-detail-action-btn"
-                      onClick={handleJoinGroup}
-                      style={{ color: '#60a5fa', borderColor: '#60a5fa' }}
-                    >
-                      <Users className="cockpit-detail-action-icon" />
-                      <span>{groupChat.isMember ? 'VÀO GROUP' : 'THAM GIA GROUP'}</span>
-                    </button>
-                  )}
-                  <button className="cockpit-detail-action-btn">
-                    <Share2 className="cockpit-detail-action-icon" />
-                    <span>CHIA SẺ</span>
-                  </button>
-                </div>
+                {/* Share Button */}
+                <button 
+                  className="cockpit-detail-share-full-btn"
+                  onClick={handleShare}
+                >
+                  <Share2 className="cockpit-detail-share-icon" />
+                  CHIA SẺ KHÓA HỌC
+                </button>
 
                 {/* Progress Section (if enrolled) */}
                 {isEnrolled && !isActivationLocked && (
@@ -542,13 +641,6 @@ const CourseDetailPage = () => {
               <Layers className="cockpit-detail-tab-icon" />
               <span>CHƯƠNG TRÌNH</span>
             </button>
-            <button
-              className={`cockpit-detail-tab ${activeTab === 'instructor' ? 'active' : ''}`}
-              onClick={() => setActiveTab('instructor')}
-            >
-              <Cpu className="cockpit-detail-tab-icon" />
-              <span>GIẢNG VIÊN</span>
-            </button>
             {Boolean(course.totalReviews && course.totalReviews > 0) && (
               <button
                 className={`cockpit-detail-tab ${activeTab === 'reviews' ? 'active' : ''}`}
@@ -579,41 +671,6 @@ const CourseDetailPage = () => {
                         Chưa có mô tả chi tiết cho khóa học này.
                       </p>
                     )}
-                  </div>
-                </div>
-
-                <div className="cockpit-detail-section-panel">
-                  <div className="cockpit-detail-section-header">
-                    <div className="cockpit-detail-section-marker"></div>
-                    <h2 className="cockpit-detail-section-title">THÔNG TIN KHÓA HỌC</h2>
-                  </div>
-                  <div className="cockpit-detail-facts-grid">
-                    <div className="cockpit-detail-fact">
-                      <span className="cockpit-detail-fact-label">Cấp độ</span>
-                      <span className="cockpit-detail-fact-value">{getLevelLabel(course.level)}</span>
-                    </div>
-                    <div className="cockpit-detail-fact">
-                      <span className="cockpit-detail-fact-label">Danh mục</span>
-                      <span className="cockpit-detail-fact-value">{course.category || 'Chưa cập nhật'}</span>
-                    </div>
-                    <div className="cockpit-detail-fact">
-                      <span className="cockpit-detail-fact-label">Ngôn ngữ</span>
-                      <span className="cockpit-detail-fact-value">{course.language || 'Chưa cập nhật'}</span>
-                    </div>
-                    <div className="cockpit-detail-fact">
-                      <span className="cockpit-detail-fact-label">Thời lượng</span>
-                      <span className="cockpit-detail-fact-value">{formatDuration(course.estimatedDurationHours)}</span>
-                    </div>
-                    <div className="cockpit-detail-fact">
-                      <span className="cockpit-detail-fact-label">Cập nhật</span>
-                      <span className="cockpit-detail-fact-value">
-                        {formatDate(course.publishedDate || course.updatedAt)}
-                      </span>
-                    </div>
-                    <div className="cockpit-detail-fact">
-                      <span className="cockpit-detail-fact-label">Số chương</span>
-                      <span className="cockpit-detail-fact-value">{course.modules?.length ?? 0}</span>
-                    </div>
                   </div>
                 </div>
 
@@ -658,9 +715,9 @@ const CourseDetailPage = () => {
                     <div className="cockpit-detail-section-marker"></div>
                     <h2 className="cockpit-detail-section-title">DANH SÁCH CHƯƠNG</h2>
                   </div>
-                  {course.modules && course.modules.length > 0 ? (
+                  {modules && modules.length > 0 ? (
                     <div className="cockpit-detail-modules-list">
-                      {course.modules.map((module, idx) => (
+                      {modules.map((module, idx) => (
                         <div key={module.id} className="cockpit-detail-module-card">
                           <div className="cockpit-detail-module-header">
                             <div className="cockpit-detail-module-number">
@@ -685,7 +742,61 @@ const CourseDetailPage = () => {
                           </div>
                           {expandedModule === module.id && (
                             <div className="cockpit-detail-module-content">
-                              <p className="cockpit-detail-module-detail">Chi tiết chương sẽ được hiển thị ở đây</p>
+                              {/* Integrated lesson, quiz, assignment list */}
+                              <div className="cockpit-detail-module-items">
+                                {(module.lessons && module.lessons.length > 0) || 
+                                 (module.quizzes && module.quizzes.length > 0) || 
+                                 (module.assignments && module.assignments.length > 0) ? (
+                                  <>
+                                    {module.lessons?.map((lesson, lIdx) => (
+                                      <div key={`lesson-${lesson.id}`} className="cockpit-detail-item">
+                                        <div className="cockpit-detail-item-icon">
+                                          <Play className="w-4 h-4" />
+                                        </div>
+                                        <div className="cockpit-detail-item-text">
+                                          <span className="cockpit-detail-item-type">BÀI HỌC {lIdx + 1}</span>
+                                          <span className="cockpit-detail-item-title">{lesson.title}</span>
+                                        </div>
+                                        {lesson.durationSec > 0 && (
+                                          <div className="cockpit-detail-item-meta">
+                                            {Math.floor(lesson.durationSec / 60)} PHÚT
+                                          </div>
+                                        )}
+                                      </div>
+                                    ))}
+                                    {module.quizzes?.map((quiz, qIdx) => (
+                                      <div key={`quiz-${quiz.id}`} className="cockpit-detail-item quiz">
+                                        <div className="cockpit-detail-item-icon">
+                                          <Zap className="w-4 h-4" />
+                                        </div>
+                                        <div className="cockpit-detail-item-text">
+                                          <span className="cockpit-detail-item-type">BÀI KIỂM TRA</span>
+                                          <span className="cockpit-detail-item-title">{quiz.title}</span>
+                                        </div>
+                                        <div className="cockpit-detail-item-meta">
+                                          {quiz.questionCount} CÂU HỎI
+                                        </div>
+                                      </div>
+                                    ))}
+                                    {module.assignments?.map((assignment, aIdx) => (
+                                      <div key={`assignment-${assignment.id}`} className="cockpit-detail-item assignment">
+                                        <div className="cockpit-detail-item-icon">
+                                          <Target className="w-4 h-4" />
+                                        </div>
+                                        <div className="cockpit-detail-item-text">
+                                          <span className="cockpit-detail-item-type">BÀI TẬP</span>
+                                          <span className="cockpit-detail-item-title">{assignment.title}</span>
+                                        </div>
+                                        <div className="cockpit-detail-item-meta">
+                                          {assignment.maxScore} ĐIỂM
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </>
+                                ) : (
+                                  <p className="cockpit-detail-module-detail">Nội dung chi tiết chương đang được cập nhật</p>
+                                )}
+                              </div>
                             </div>
                           )}
                         </div>
@@ -697,32 +808,6 @@ const CourseDetailPage = () => {
                       <p className="cockpit-detail-empty-text">Chưa có nội dung chương</p>
                     </div>
                   )}
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'instructor' && course.author && (
-              <div className="cockpit-detail-instructor-section">
-                <div className="cockpit-detail-section-panel">
-                  <div className="cockpit-detail-section-header">
-                    <div className="cockpit-detail-section-marker"></div>
-                    <h2 className="cockpit-detail-section-title">THÔNG TIN GIẢNG VIÊN</h2>
-                  </div>
-                  <div className="cockpit-detail-instructor-full-card">
-                    <div className="cockpit-detail-instructor-profile">
-                      <div className="cockpit-detail-instructor-bio-section">
-                        <h3 className="cockpit-detail-instructor-full-name">
-                          {course.author.fullName || `${course.author.firstName} ${course.author.lastName}`}
-                        </h3>
-                        {mentorProfile?.specialization && (
-                          <p className="cockpit-detail-instructor-role">{mentorProfile.specialization}</p>
-                        )}
-                        {mentorProfile?.bio && (
-                          <p className="cockpit-detail-instructor-bio">{mentorProfile.bio}</p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             )}
@@ -809,6 +894,7 @@ const CourseDetailPage = () => {
         isVisible={toast.isVisible}
         onClose={hideToast}
         actionButton={toast.actionButton}
+        useOverlay={toast.useOverlay}
       />
     </div>
   );

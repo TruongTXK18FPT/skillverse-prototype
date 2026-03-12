@@ -167,7 +167,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
             </div>
             <h3>{title}</h3>
             <span className="lr-history__report-count">
-              {reports.length} báo cáo
+              {reports.length} BÁO CÁO
             </span>
           </div>
 
@@ -205,7 +205,6 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
                 className="lr-history__create-first-btn"
                 onClick={handleGenerateNew}
               >
-                <Sparkles size={16} />
                 Tạo báo cáo đầu tiên
               </button>
             </div>

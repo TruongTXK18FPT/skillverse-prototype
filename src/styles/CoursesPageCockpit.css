@@ -883,9 +883,6 @@
   transition: opacity 0.3s ease;
 }
 
-.cockpit-module-card:hover .cockpit-module-overlay {
-  opacity: 1;
-}
 
 .cockpit-preview-btn {
   display: flex;

@@ -83,7 +83,6 @@
 }
 
 .lr-history__report-count {
-  font-family: "Minecraft", monospace;
   font-size: 0.75rem;
   color: var(--hud-accent-cyan, #06b6d4);
   background: rgba(6, 182, 212, 0.1);

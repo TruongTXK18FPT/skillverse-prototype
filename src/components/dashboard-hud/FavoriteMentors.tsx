@@ -1,7 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { User, Star, ExternalLink, Plus } from "lucide-react";
-import "./hud-styles.module.css";
+import { User, Star, ExternalLink, Plus, MessageSquare } from "lucide-react";
+import { motion } from "framer-motion";
+import HUDCard from "./HUDCard";
+import "./ActiveModules.css";
 
 interface Mentor {
   id: number;
@@ -15,29 +17,19 @@ interface Mentor {
 interface FavoriteMentorsProps {
   mentors: Mentor[];
   title?: string;
+  onOpenChat: (mentor: Mentor) => void;
 }
 
 const FavoriteMentors: React.FC<FavoriteMentorsProps> = ({
   mentors,
-  title = "Favorite Mentors",
+  title = "Mentor Yêu Thích",
+  onOpenChat
 }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="hud-panel active-modules">
-      <div className="hud-panel-header">
-        <div className="hud-panel-title">
-          <Star size={18} className="hud-icon" />
-          {title}
-        </div>
-        <div className="hud-panel-controls">
-          <div className="hud-control-dot red"></div>
-          <div className="hud-control-dot yellow"></div>
-          <div className="hud-control-dot green"></div>
-        </div>
-      </div>
-
-      <div className="hud-panel-content">
+    <HUDCard title={title} subtitle={`${mentors?.length || 0} Registered Mentors`} variant="chamfer" delay={0.4}>
+      <div className="active-modules">
         {!mentors || mentors.length === 0 ? (
           <div
             style={{
@@ -82,119 +74,122 @@ const FavoriteMentors: React.FC<FavoriteMentorsProps> = ({
             </p>
             <button
               onClick={() => navigate("/mentorship")}
-              style={{
-                background: "transparent",
-                border: "1px solid rgba(0, 255, 255, 0.3)",
-                borderRadius: "4px",
-                padding: "8px 16px",
-                color: "#00ffff",
-                fontSize: "13px",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(0, 255, 255, 0.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-              }}
+              className="active-modules__button"
+              style={{ marginTop: "8px" }}
             >
               Xem trang Mentorship
             </button>
           </div>
         ) : (
-          <div
-            className="favorite-mentors-grid"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-              gap: "15px",
-            }}
-          >
-            {mentors.map((mentor) => (
-              <div
+          mentors.map((mentor, index) => (
+              <motion.div
                 key={mentor.id}
-                className="favorite-mentor-card"
-                style={{
-                  background: "rgba(0, 20, 40, 0.4)",
-                  border: "1px solid rgba(0, 255, 255, 0.1)",
-                  borderRadius: "8px",
-                  padding: "15px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "15px",
-                  transition: "all 0.3s ease",
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  duration: 0.4,
+                  delay: 0.5 + index * 0.1,
+                  ease: [0.4, 0, 0.2, 1]
+                }}
+                className="active-modules__card"
+                style={{ 
+                  cursor: "default",
+                  borderLeft: "1px solid rgba(6, 182, 212, 0.2)",
+                  transform: "none",
+                  background: "rgba(6, 182, 212, 0.03)"
                 }}
               >
-                <div className="mentor-avatar" style={{ position: "relative" }}>
+                <style>{`
+                  .active-modules__card:hover { 
+                    transform: none !important; 
+                    background: rgba(6, 182, 212, 0.05) !important;
+                    border-color: rgba(6, 182, 212, 0.2) !important;
+                  }
+                  .active-modules__card::before { display: none !important; }
+                `}</style>
+                
+                {/* Avatar as Thumbnail */}
+                <div className="active-modules__thumbnail" style={{ width: "100px", height: "100px" }}>
                   <img
                     src={mentor.avatar || "/images/meowl.jpg"}
                     alt={`${mentor.firstName} ${mentor.lastName}`}
-                    style={{
-                      width: "50px",
-                      height: "50px",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      border: "2px solid #00ffff",
-                    }}
                   />
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: "-2px",
-                      right: "-2px",
-                      background: "#000",
-                      borderRadius: "50%",
-                      padding: "2px",
-                    }}
-                  >
-                    <User size={12} color="#00ffff" />
+                  <div className="active-modules__thumbnail-overlay" style={{ opacity: 0 }}>
+                    <User size={24} className="active-modules__play-icon" />
                   </div>
                 </div>
 
-                <div className="mentor-info" style={{ flex: 1 }}>
-                  <h4 style={{ margin: 0, color: "#fff", fontSize: "14px" }}>
-                    {mentor.firstName} {mentor.lastName}
-                  </h4>
-                  <p
-                    style={{
-                      margin: "4px 0 0",
-                      color: "#a0c0ff",
-                      fontSize: "12px",
-                    }}
-                  >
-                    {mentor.specialization || "Mentor"}
-                  </p>
-                </div>
+                {/* Content */}
+                <div className="active-modules__content" style={{ flex: 1 }}>
+                  <div className="active-modules__header">
+                    <h4 
+                      className="active-modules__title" 
+                      style={{ cursor: "pointer", display: "inline-block" }} 
+                      onClick={() => mentor.slug && navigate(`/portfolio/${mentor.slug}`)}
+                    >
+                      {mentor.firstName} {mentor.lastName}
+                    </h4>
+                    <p className="active-modules__instructor">
+                      SPECIALIZATION: {(mentor.specialization || "Mentor").toUpperCase()}
+                    </p>
+                  </div>
 
-                <button
-                  onClick={() =>
-                    mentor.slug
-                      ? navigate(`/portfolio/${mentor.slug}`)
-                      : alert("No portfolio available")
-                  }
-                  style={{
-                    background: "transparent",
-                    border: "1px solid rgba(0, 255, 255, 0.3)",
-                    borderRadius: "4px",
-                    padding: "8px",
-                    cursor: "pointer",
-                    color: "#00ffff",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  title="View Profile"
-                >
-                  <ExternalLink size={16} />
-                </button>
-              </div>
-            ))}
-          </div>
+                  {/* Info Stats (Like course units/objective) */}
+                  <div className="active-modules__stats">
+                    <div className="active-modules__stat">
+                      <span className="active-modules__stat-label">STATUS</span>
+                      <span className="active-modules__stat-value" style={{ color: "#10b981" }}>
+                        AVAILABLE
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Footer */}
+                  <div className="active-modules__footer">
+                    <div className="active-modules__time">
+                      <Star size={14} color="#f59e0b" fill="#f59e0b" />
+                      <span>Top Mentor</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', position: 'relative', zIndex: 10 }}>
+                      <button 
+                        className="active-modules__button"
+                        style={{ 
+                          background: 'rgba(6, 182, 212, 0.1)', 
+                          color: '#06b6d4',
+                          borderColor: '#06b6d4',
+                          pointerEvents: 'auto'
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onOpenChat(mentor);
+                        }}
+                      >
+                        <MessageSquare size={14} />
+                        Chat
+                      </button>
+                      <button 
+                        className="active-modules__button"
+                        style={{ pointerEvents: 'auto' }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (mentor.slug) {
+                            navigate(`/portfolio/${mentor.slug}`);
+                          }
+                        }}
+                      >
+                        <ExternalLink size={14} />
+                        Profile
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+          ))
         )}
       </div>
-    </div>
+    </HUDCard>
   );
 };
 
 export default FavoriteMentors;
+

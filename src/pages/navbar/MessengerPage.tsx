@@ -452,15 +452,6 @@ const MessengerPage: React.FC = () => {
             <UserCircle size={16} />
             <span>Mentor</span>
           </button>
-          {user && (user.roles.includes('PARENT') || user.roles.includes('USER')) && (
-            <button
-              className={`tab-btn ${activeTab === 'FAMILY' ? 'active' : ''}`}
-              onClick={() => setActiveTab('FAMILY')}
-            >
-              <Home size={16} />
-              <span>Gia đình</span>
-            </button>
-          )}
         </div>
 
         {/* Contact List */}

@@ -11,6 +11,7 @@ export interface ToastState {
   type: 'success' | 'error' | 'warning' | 'info';
   title: string;
   message: string;
+  useOverlay?: boolean;
   actionButton?: {
     text: string;
     onClick: () => void;
@@ -22,21 +23,24 @@ export const useToast = (options: UseToastOptions = {}) => {
     isVisible: false,
     type: 'success',
     title: '',
-    message: ''
+    message: '',
+    useOverlay: false
   });
 
   const showToast = (
     type: 'success' | 'error' | 'warning' | 'info',
     title: string,
     message: string,
-    actionButton?: { text: string; onClick: () => void }
+    actionButton?: { text: string; onClick: () => void },
+    useOverlay?: boolean
   ) => {
     setToast({
       isVisible: true,
       type,
       title,
       message,
-      actionButton
+      actionButton,
+      useOverlay
     });
   };
 
@@ -48,17 +52,17 @@ export const useToast = (options: UseToastOptions = {}) => {
   };
 
   // Convenience methods for different toast types
-  const showSuccess = (title: string, message: string, actionButton?: { text: string; onClick: () => void }) => 
-    showToast('success', title, message, actionButton);
+  const showSuccess = (title: string, message: string, actionButton?: { text: string; onClick: () => void }, useOverlay?: boolean) => 
+    showToast('success', title, message, actionButton, useOverlay);
 
-  const showError = (title: string, message: string, actionButton?: { text: string; onClick: () => void }) => 
-    showToast('error', title, message, actionButton);
+  const showError = (title: string, message: string, actionButton?: { text: string; onClick: () => void }, useOverlay?: boolean) => 
+    showToast('error', title, message, actionButton, useOverlay);
 
-  const showWarning = (title: string, message: string, actionButton?: { text: string; onClick: () => void }) => 
-    showToast('warning', title, message, actionButton);
+  const showWarning = (title: string, message: string, actionButton?: { text: string; onClick: () => void }, useOverlay?: boolean) => 
+    showToast('warning', title, message, actionButton, useOverlay);
 
-  const showInfo = (title: string, message: string, actionButton?: { text: string; onClick: () => void }) => 
-    showToast('info', title, message, actionButton);
+  const showInfo = (title: string, message: string, actionButton?: { text: string; onClick: () => void }, useOverlay?: boolean) => 
+    showToast('info', title, message, actionButton, useOverlay);
 
   return {
     toast,

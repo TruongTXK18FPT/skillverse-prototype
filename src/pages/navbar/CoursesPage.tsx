@@ -140,22 +140,41 @@ const CoursesPage = () => {
   // Use server-provided totalItems for pagination
   const displayedCourses = sortedCourses;
 
-  // Extract dynamic category counts
-  const categoriesMap: Record<string, number> = courses.reduce((acc, course) => {
-    const cat = course.category || 'general';
-    acc[cat] = (acc[cat] ?? 0) + 1;
+  // Extract dynamic category counts for the filtering panel
+  // We use all fetched courses (or a broader course set if available) to build the categories list
+  const categoriesMap: { [key: string]: { name: string; count: number } } = courses.reduce((acc, course) => {
+    const catId = course.category || 'general';
+    const catName = course.categoryName || (catId.charAt(0).toUpperCase() + catId.slice(1));
+    
+    if (!acc[catId]) {
+      acc[catId] = { name: catName, count: 0 };
+    }
+    acc[catId].count++;
     return acc;
-  }, {} as Record<string, number>);
+  }, {} as { [key: string]: { name: string; count: number } });
 
-const categories = [
-  { id: 'all', name: 'Tất Cả', count: courses.length, icon: Shield },
-  { id: 'tech', name: 'Công Nghệ', count: categoriesMap['tech'] ?? 0, icon: Zap },
-  { id: 'design', name: 'Thiết Kế', count: categoriesMap['design'] ?? 0, icon: Target },
-  { id: 'business', name: 'Kinh Doanh', count: categoriesMap['business'] ?? 0, icon: TrendingUp },
-  { id: 'marketing', name: 'Marketing', count: categoriesMap['marketing'] ?? 0, icon: Star },
-  { id: 'language', name: 'Ngoại Ngữ', count: categoriesMap['language'] ?? 0, icon: BookOpen },
-  { id: 'soft-skills', name: 'Kỹ Năng Mềm', count: categoriesMap['soft-skills'] ?? 0, icon: Users }
-];
+  // Map icons to some common category IDs
+  const getCategoryIcon = (id: string) => {
+    switch (id.toLowerCase()) {
+      case 'tech': return Zap;
+      case 'design': return Target;
+      case 'business': return TrendingUp;
+      case 'marketing': return Star;
+      case 'language': return BookOpen;
+      case 'soft-skills': return Users;
+      default: return Folder;
+    }
+  };
+
+  const categories = [
+    { id: 'all', name: 'Tất Cả', count: courses.length, icon: Shield },
+    ...Object.entries(categoriesMap).map(([id, data]) => ({
+      id,
+      name: data.name,
+      count: data.count,
+      icon: getCategoryIcon(id)
+    }))
+  ];
 
   const sortOptions = [
     { value: 'newest', label: 'Mới nhất' },
@@ -349,7 +368,7 @@ const categories = [
           <div className="cockpit-control-panel">
             <div className="cockpit-panel-header">
               <Folder className="cockpit-panel-icon" />
-              <span className="cockpit-panel-title">BẢNG ĐIỀU KHIỂN</span>
+              <span className="cockpit-panel-title">Danh mục</span>
             </div>
 
             <div className="cockpit-categories-list">
@@ -448,10 +467,6 @@ const categories = [
                     <div className="cockpit-module-image-container">
                       <img src={courseImage} alt={course.title} className="cockpit-module-image" />
                       <div className="cockpit-module-overlay">
-                        <button className="cockpit-preview-btn">
-                          <Play className="cockpit-play-icon" />
-                          <span>XEM TRƯỚC</span>
-                        </button>
                       </div>
 
                       {/* Energy Crystal Icon */}

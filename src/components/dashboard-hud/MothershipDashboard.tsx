@@ -8,6 +8,7 @@ import ActiveModules from "./ActiveModules";
 import FavoriteMentors from "./FavoriteMentors";
 import AnalystTrack from "./AnalystTrack";
 import SystemLimits from "./SystemLimits";
+import MentorChatModal from "../mentorship-hud/MentorChatModal";
 import { LearningReportModal, LearningReportHistory } from "../learning-report";
 import { RoadmapSessionSummary } from "../../types/Roadmap";
 import {
@@ -89,6 +90,13 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
 }) => {
   const navigate = useNavigate();
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [chatModalOpen, setChatModalOpen] = useState(false);
+  const [selectedMentorForChat, setSelectedMentorForChat] = useState<any>(null);
+
+  const handleOpenChat = (mentor: any) => {
+    setSelectedMentorForChat(mentor);
+    setChatModalOpen(true);
+  };
 
   // Data mapping from old structure to new Sci-Fi theme
   const stats = [
@@ -267,7 +275,10 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
 
         {/* Favorite Mentors */}
         <div id="mentors-section">
-          <FavoriteMentors mentors={favoriteMentors} />
+          <FavoriteMentors 
+            mentors={favoriteMentors} 
+            onOpenChat={handleOpenChat}
+          />
         </div>
       </div>
 
@@ -276,6 +287,17 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
         isOpen={isReportModalOpen}
         onClose={() => setIsReportModalOpen(false)}
       />
+
+      {/* Mentor Chat Modal */}
+      {selectedMentorForChat && (
+        <MentorChatModal
+          isOpen={chatModalOpen}
+          onClose={() => setChatModalOpen(false)}
+          mentorId={selectedMentorForChat.id.toString()}
+          mentorName={`${selectedMentorForChat.firstName} ${selectedMentorForChat.lastName}`}
+          mentorAvatar={selectedMentorForChat.avatar || ""}
+        />
+      )}
     </div>
   );
 };
