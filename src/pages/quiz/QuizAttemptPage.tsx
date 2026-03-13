@@ -220,9 +220,9 @@ const QuizAttemptPage: React.FC = () => {
     }));
   };
 
-  // Handler để làm lại quiz - reset state thay vì reload page
+  // Handler để làm lại quiz - chuyển thẳng vào chế độ làm bài
   const handleRetryQuiz = useCallback(() => {
-    setViewMode('start');
+    setViewMode('taking');
     setAnswers({});
     setResult(null);
   }, []);
@@ -599,7 +599,7 @@ const QuizAttemptPage: React.FC = () => {
             <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-btn-back">
               Quay lại khóa học
             </button>
-            {!passed && canRetry && attemptsUsed < maxAttempts && (
+            {canRetry && attemptsUsed < maxAttempts && (
               <button onClick={handleRetryQuiz} className="hud-quiz-attempt-btn-retry">
                 Làm lại ({attemptsUsed}/{maxAttempts})
               </button>

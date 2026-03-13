@@ -15,6 +15,7 @@ import violationReportService, {
 } from '../../services/violationReportService';
 import { uploadImage, UploadProgress } from '../../services/fileUploadService';
 import './ReportUserPage.css';
+import './HUDReportStyles.css';
 
 interface ReportUserPageProps {
   reportedUserEmail?: string;
@@ -231,30 +232,30 @@ const ReportUserPage: React.FC<ReportUserPageProps> = ({
   // Success view
   if (success && createdReport) {
     return (
-      <div className="vr-page">
-        <div className="vr-success-card">
-          <div className="vr-success-icon">
+      <div className="hud-report-container">
+        <div className="hud-report-card" style={{ maxWidth: '600px', margin: '4rem auto', textAlign: 'center', padding: '3rem' }}>
+          <div className="hud-report-icon-box" style={{ width: '80px', height: '80px', margin: '0 auto 1.5rem', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', borderColor: 'var(--hud-accent-green)', color: 'var(--hud-accent-green)', boxShadow: '0 0 20px rgba(16, 185, 129, 0.4)' }}>
             <Check size={48} />
           </div>
-          <h2>Báo Cáo Đã Gửi Thành Công!</h2>
-          <p>Cảm ơn bạn đã báo cáo. Đội ngũ quản trị sẽ xem xét và phản hồi sớm nhất.</p>
+          <h2 style={{ fontFamily: 'var(--hud-font-display)', color: 'var(--hud-accent-green)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '1rem' }}>Báo Cáo Đã Gửi Thành Công!</h2>
+          <p style={{ color: 'var(--hud-text-secondary)', marginBottom: '2rem' }}>Cảm ơn bạn đã báo cáo. Đội ngũ quản trị sẽ xem xét và phản hồi sớm nhất.</p>
           
-          <div className="vr-tracking-code">
-            <span className="vr-label">Mã theo dõi:</span>
-            <span className="vr-code">{createdReport.reportCode}</span>
+          <div style={{ background: 'rgba(6, 182, 212, 0.05)', border: '1px dashed var(--hud-border-bright)', padding: '1.5rem', borderRadius: '4px', marginBottom: '2rem' }}>
+            <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--hud-accent-cyan)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Mã theo dõi:</span>
+            <span style={{ fontFamily: 'var(--hud-font-display)', fontSize: '1.5rem', color: '#fff', letterSpacing: '3px' }}>{createdReport.reportCode}</span>
           </div>
           
-          <p className="vr-note">
+          <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: 'var(--hud-text-dim)', fontSize: '0.9rem', marginBottom: '2.5rem' }}>
             <Info size={16} />
             Lưu mã này để theo dõi trạng thái báo cáo
           </p>
           
-          <div className="vr-success-buttons">
-            <button className="vr-btn vr-btn-outline" onClick={() => navigate('/my-reports')}>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <button className="hud-report-btn hud-report-btn-ghost" onClick={() => navigate('/my-reports')}>
               <FileStack size={18} />
               Xem lịch sử
             </button>
-            <button className="vr-btn vr-btn-primary" onClick={() => {
+            <button className="hud-report-btn hud-report-btn-primary" onClick={() => {
               setSuccess(false);
               setTitle('');
               setTargetEmail('');
@@ -273,228 +274,271 @@ const ReportUserPage: React.FC<ReportUserPageProps> = ({
   }
 
   return (
-    <div className="vr-page">
-      {/* Header */}
-      <div className="vr-header">
-        <div className="vr-header-left">
-          <div className="vr-header-icon">
-            <Shield size={24} />
+    <div className="hud-report-container">
+      <div className="hud-report-card" style={{ maxWidth: '900px', margin: '0 auto' }}>
+        {/* Header */}
+        <div className="hud-report-header">
+          <div className="hud-report-title-section">
+            <div className="hud-report-icon-box">
+              <Shield size={24} />
+            </div>
+            <div>
+              <h1>Báo Cáo Vi Phạm</h1>
+              <p>Hệ thống giám sát an ninh cộng đồng</p>
+            </div>
           </div>
-          <div className="vr-header-text">
-            <h1>Báo Cáo Vi Phạm</h1>
-            <p>Giúp cộng đồng an toàn hơn</p>
-          </div>
-        </div>
-        {currentUserId && (
-          <button 
-            type="button"
-            className="vr-btn vr-btn-ghost"
-            onClick={() => navigate('/my-reports')}
-          >
-            <FileStack size={18} />
-            <span>Lịch sử báo cáo</span>
-          </button>
-        )}
-      </div>
-
-      {/* Error Alert */}
-      {error && (
-        <div className="vr-alert vr-alert-error">
-          <AlertTriangle size={20} />
-          <span>{error}</span>
-          <button onClick={() => setError(null)} className="vr-alert-close">
-            <X size={16} />
-          </button>
-        </div>
-      )}
-
-      {/* Form */}
-      <form className="vr-form" onSubmit={handleSubmit}>
-        {/* Row 1: Title + Email */}
-        <div className="vr-form-row">
-          <div className="vr-field">
-            <label>
-              <FileText size={16} />
-              Tiêu đề <span className="vr-required">*</span>
-            </label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Mô tả ngắn gọn vấn đề"
-              maxLength={200}
-              required
-            />
-          </div>
-          
-          <div className="vr-field">
-            <label>
-              <Mail size={16} />
-              Email người vi phạm <span className="vr-required">*</span>
-            </label>
-            <input
-              type="email"
-              value={targetEmail}
-              onChange={(e) => setTargetEmail(e.target.value)}
-              placeholder="email@example.com"
-              required
-              disabled={!!initialEmail}
-            />
-          </div>
-        </div>
-
-        {/* Row 2: Type + Severity */}
-        <div className="vr-form-row">
-          <div className="vr-field">
-            <label>
-              <AlertTriangle size={16} />
-              Loại vi phạm <span className="vr-required">*</span>
-            </label>
-            <select
-              value={reportType}
-              onChange={(e) => setReportType(e.target.value)}
-              required
+          {currentUserId && (
+            <button 
+              type="button"
+              className="hud-report-btn hud-report-btn-ghost"
+              onClick={() => navigate('/my-reports')}
+              style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}
             >
-              <option value="">Chọn loại vi phạm</option>
-              {Object.entries(REPORT_TYPES).map(([key, label]) => (
-                <option key={key} value={key}>{label}</option>
-              ))}
-            </select>
-          </div>
-          
-          <div className="vr-field">
-            <label>Mức độ nghiêm trọng</label>
-            <div className="vr-severity-group">
-              {Object.entries(REPORT_SEVERITIES).map(([key, label]) => (
-                <button
-                  key={key}
-                  type="button"
-                  className={`vr-severity-btn ${key.toLowerCase()} ${severity === key ? 'active' : ''}`}
-                  onClick={() => setSeverity(key)}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Description */}
-        <div className="vr-field vr-field-full">
-          <label>
-            <FileText size={16} />
-            Mô tả chi tiết <span className="vr-required">*</span>
-          </label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Mô tả chi tiết hành vi vi phạm: thời gian, bối cảnh, nội dung cụ thể..."
-            rows={4}
-            minLength={20}
-            required
-          />
-          <span className="vr-char-count">{description.length}/20+ ký tự</span>
-        </div>
-
-        {/* File Upload */}
-        <div className="vr-field vr-field-full">
-          <label>
-            <Upload size={16} />
-            Bằng chứng đính kèm
-          </label>
-          
-          <div className="vr-upload-area">
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              accept="image/*,video/mp4,video/webm,application/pdf"
-              onChange={handleFileSelect}
-              className="vr-file-input"
-              id="evidence-files"
-            />
-            <label htmlFor="evidence-files" className="vr-upload-label">
-              <Upload size={32} />
-              <span className="vr-upload-text">Kéo thả hoặc click để chọn file</span>
-              <span className="vr-upload-hint">Ảnh, Video, PDF • Tối đa 10MB/file</span>
-            </label>
-          </div>
-
-          {/* Uploaded Files List */}
-          {uploadedFiles.length > 0 && (
-            <div className="vr-files-list">
-              {uploadedFiles.map((item, index) => (
-                <div key={index} className={`vr-file-item ${item.error ? 'error' : ''}`}>
-                  <div className="vr-file-icon">
-                    {getFileIcon(item.file)}
-                  </div>
-                  <div className="vr-file-info">
-                    <span className="vr-file-name">{item.file.name}</span>
-                    <span className="vr-file-size">{formatFileSize(item.file.size)}</span>
-                  </div>
-                  <div className="vr-file-status">
-                    {item.uploading ? (
-                      <div className="vr-upload-progress">
-                        <Loader size={16} className="vr-spinner" />
-                        <span>{item.progress}%</span>
-                      </div>
-                    ) : item.error ? (
-                      <span className="vr-file-error">{item.error}</span>
-                    ) : (
-                      <Check size={16} className="vr-file-success" />
-                    )}
-                  </div>
-                  <button
-                    type="button"
-                    className="vr-file-remove"
-                    onClick={() => handleRemoveFile(index)}
-                    disabled={item.uploading}
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Actions */}
-        <div className="vr-form-actions">
-          {onClose && (
-            <button type="button" className="vr-btn vr-btn-ghost" onClick={onClose}>
-              Hủy
+              <FileStack size={16} />
+              <span>Lịch sử báo cáo</span>
             </button>
           )}
-          <button 
-            type="submit" 
-            className="vr-btn vr-btn-primary vr-btn-submit"
-            disabled={loading || uploadedFiles.some(f => f.uploading)}
-          >
-            {loading ? (
-              <>
-                <Loader size={18} className="vr-spinner" />
-                Đang gửi...
-              </>
-            ) : (
-              <>
-                <Send size={18} />
-                Gửi báo cáo
-              </>
-            )}
-          </button>
         </div>
-      </form>
 
-      {/* Tips */}
-      <div className="vr-tips">
-        <Info size={18} />
-        <div>
-          <strong>Lưu ý:</strong>
-          <ul>
-            <li>Cung cấp bằng chứng giúp xử lý nhanh hơn</li>
-            <li>Báo cáo sai sự thật có thể bị xử lý ngược</li>
-            <li>Thông tin người báo cáo được bảo mật</li>
-          </ul>
+        {/* Error Alert */}
+        {error && (
+          <div style={{ 
+            background: 'rgba(239, 68, 68, 0.1)', 
+            border: '1px solid var(--hud-accent-red)', 
+            color: 'var(--hud-accent-red)',
+            padding: '1rem',
+            borderRadius: '4px',
+            marginBottom: '1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem'
+          }}>
+            <AlertTriangle size={20} />
+            <span style={{ flex: 1 }}>{error}</span>
+            <button type="button" onClick={() => setError(null)} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>
+              <X size={16} />
+            </button>
+          </div>
+        )}
+
+        {/* Form */}
+        <form className="hud-report-form" onSubmit={handleSubmit}>
+          {/* Row 1: Title + Email */}
+          <div className="hud-report-form-row">
+            <div className="hud-report-field">
+              <label>
+                <FileText size={14} />
+                Tiêu đề <span style={{ color: 'var(--hud-accent-red)' }}>*</span>
+              </label>
+              <input
+                className="hud-report-input"
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="MÔ TẢ NGẮN GỌN VẤN ĐỀ"
+                maxLength={200}
+                required
+              />
+            </div>
+            
+            <div className="hud-report-field">
+              <label>
+                <Mail size={14} />
+                Email đối tượng <span style={{ color: 'var(--hud-accent-red)' }}>*</span>
+              </label>
+              <input
+                className="hud-report-input"
+                type="email"
+                value={targetEmail}
+                onChange={(e) => setTargetEmail(e.target.value)}
+                placeholder="EMAIL@EXAMPLE.COM"
+                required
+                disabled={!!initialEmail}
+              />
+            </div>
+          </div>
+
+          {/* Row 2: Type + Severity */}
+          <div className="hud-report-form-row">
+            <div className="hud-report-field">
+              <label>
+                <AlertTriangle size={14} />
+                Loại vi phạm <span style={{ color: 'var(--hud-accent-red)' }}>*</span>
+              </label>
+              <select
+                className="hud-report-select"
+                value={reportType}
+                onChange={(e) => setReportType(e.target.value)}
+                required
+              >
+                <option value="">CHỌN LOẠI VI PHẠM</option>
+                {Object.entries(REPORT_TYPES).map(([key, label]) => (
+                  <option key={key} value={key} style={{ background: '#050b14' }}>{label.toUpperCase()}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div className="hud-report-field">
+              <label>Mức độ nghiêm trọng</label>
+              <div className="hud-severity-group">
+                {Object.entries(REPORT_SEVERITIES).map(([key, label]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    className={`hud-severity-btn ${key.toLowerCase()} ${severity === key ? 'active' : ''}`}
+                    onClick={() => setSeverity(key)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="hud-report-field">
+            <label>
+              <FileText size={14} />
+              Chi tiết hành vi <span style={{ color: 'var(--hud-accent-red)' }}>*</span>
+            </label>
+            <textarea
+              className="hud-report-textarea"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Cung cấp chi tiết hành vi vi phạm: thời gian, bối cảnh, nội dung cụ thể..."
+              rows={5}
+              minLength={20}
+              required
+            />
+            <span style={{ alignSelf: 'flex-end', fontSize: '0.7rem', color: 'var(--hud-text-dim)', marginTop: '0.2rem' }}>
+              {description.length}/20+ KÝ TỰ
+            </span>
+          </div>
+
+          {/* File Upload */}
+          <div className="hud-report-field">
+            <label>
+              <Upload size={14} />
+              Dữ liệu bằng chứng
+            </label>
+            
+            <div style={{ 
+              border: '1px dashed rgba(6, 182, 212, 0.3)', 
+              background: 'rgba(6, 182, 212, 0.02)',
+              borderRadius: '4px',
+              padding: '2rem',
+              textAlign: 'center',
+              position: 'relative'
+            }}>
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept="image/*,video/mp4,video/webm,application/pdf"
+                onChange={handleFileSelect}
+                style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
+                id="evidence-files"
+              />
+              <div style={{ pointerEvents: 'none' }}>
+                <Upload size={32} style={{ color: 'var(--hud-accent-cyan)', marginBottom: '1rem', opacity: 0.7 }} />
+                <div style={{ color: 'var(--hud-accent-cyan)', fontWeight: 600, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Kéo thả hoặc click để chọn file</div>
+                <div style={{ color: 'var(--hud-text-dim)', fontSize: '0.75rem', marginTop: '0.5rem' }}>Ảnh, Video, PDF • Tối đa 10MB/file</div>
+              </div>
+            </div>
+
+            {/* Uploaded Files List */}
+            {uploadedFiles.length > 0 && (
+              <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                {uploadedFiles.map((item, index) => (
+                  <div key={index} style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '1rem', 
+                    background: 'rgba(255, 255, 255, 0.03)', 
+                    padding: '0.75rem', 
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '4px'
+                  }}>
+                    <div style={{ color: 'var(--hud-accent-cyan)' }}>
+                      {getFileIcon(item.file)}
+                    </div>
+                    <div style={{ flex: 1, overflow: 'hidden' }}>
+                      <div style={{ color: 'var(--hud-text-primary)', fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.file.name}</div>
+                      <div style={{ color: 'var(--hud-text-dim)', fontSize: '0.7rem' }}>{formatFileSize(item.file.size)}</div>
+                    </div>
+                    <div>
+                      {item.uploading ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--hud-accent-cyan)', fontSize: '0.75rem' }}>
+                          <Loader size={14} className="hud-spinning" />
+                          <span>{item.progress}%</span>
+                        </div>
+                      ) : item.error ? (
+                        <span style={{ color: 'var(--hud-accent-red)', fontSize: '0.75rem' }}>Lỗi</span>
+                      ) : (
+                        <Check size={16} style={{ color: 'var(--hud-accent-green)' }} />
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveFile(index)}
+                      disabled={item.uploading}
+                      style={{ background: 'none', border: 'none', color: 'var(--hud-text-dim)', cursor: 'pointer', padding: '0.2rem' }}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
+            {onClose && (
+              <button type="button" className="hud-report-btn hud-report-btn-ghost" onClick={onClose}>
+                Hủy
+              </button>
+            )}
+            <button 
+              type="submit" 
+              className="hud-report-btn hud-report-btn-primary"
+              disabled={loading || uploadedFiles.some(f => f.uploading)}
+              style={{ minWidth: '180px' }}
+            >
+              {loading ? (
+                <>
+                  <Loader size={18} className="hud-spinning" />
+                  Đang xử lý...
+                </>
+              ) : (
+                <>
+                  <Send size={18} />
+                  Gửi dữ liệu
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+
+        {/* Tips / Info */}
+        <div style={{ 
+          marginTop: '2.5rem', 
+          padding: '1rem', 
+          background: 'rgba(6, 182, 212, 0.05)', 
+          borderLeft: '2px solid var(--hud-accent-cyan)',
+          display: 'flex',
+          gap: '1rem',
+          fontSize: '0.85rem'
+        }}>
+          <Info size={18} style={{ color: 'var(--hud-accent-cyan)', flexShrink: 0 }} />
+          <div>
+            <strong style={{ color: 'var(--hud-accent-cyan)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem' }}>Giao thức an toàn:</strong>
+            <ul style={{ margin: '0.5rem 0 0', paddingLeft: '1.2rem', color: 'var(--hud-text-secondary)', listStyleType: 'square' }}>
+              <li>Mọi dữ liệu báo cáo được mã hóa đa lớp</li>
+              <li>Bằng chứng rõ ràng giúp tăng tốc độ xử lý của đơn vị phán quyết</li>
+              <li>Thông tin người khởi tạo báo cáo được bảo mật tuyệt đối theo chuẩn Cosmic-Level</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

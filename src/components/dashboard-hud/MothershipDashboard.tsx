@@ -170,7 +170,7 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   };
 
   const handleViewReport = () => {
-    setIsReportModalOpen(true);
+    navigate("/learning-report");
   };
 
   const handleCourseClick = (courseId: number) => {
@@ -281,12 +281,6 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
           />
         </div>
       </div>
-
-      {/* Learning Report Modal */}
-      <LearningReportModal
-        isOpen={isReportModalOpen}
-        onClose={() => setIsReportModalOpen(false)}
-      />
 
       {/* Mentor Chat Modal */}
       {selectedMentorForChat && (

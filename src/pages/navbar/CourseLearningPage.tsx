@@ -993,8 +993,8 @@ const CourseLearningPage = () => {
               </div>
             ) : activeItemType === 'quiz' && activeQuizDetail ? (
               <>
-                {activeQuizDetail.hasPassed ? (
-                  /* SHOW RESULT IF ALREADY PASSED */
+                {activeQuizDetail.hasPassed && !activeQuizDetail.canRetry ? (
+                  /* SHOW RESULT IF ALREADY PASSED AND CANNOT RETRY */
                   <div className="lhud-quiz-complete-card">
                     <h3 className="lhud-quiz-complete-title">
                       Bạn đã hoàn thành bài kiểm tra
@@ -1117,6 +1117,7 @@ const CourseLearningPage = () => {
                         onClick={() => {
                           if (!isPreviewMode) {
                             handleOpenQuizAttemptPage('start');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
                           }
                         }}
                         className={`lhud-quiz-action-btn ${

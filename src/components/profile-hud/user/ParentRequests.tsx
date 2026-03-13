@@ -113,69 +113,6 @@ const ParentRequests = () => {
                     </div>
                 </>
             )}
-
-            {/* Active Connections Section */}
-            {activeLinks.length > 0 && (
-                <>
-                    <div className="section-header" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                        <Users size={20} color="#22c55e" />
-                        <h3 style={{ margin: 0, color: '#22c55e' }}>Phụ huynh đã kết nối ({activeLinks.length})</h3>
-                    </div>
-                    <div className="active-links-list" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        {activeLinks.map(link => (
-                            <div key={link.id} style={{ 
-                                background: 'rgba(34, 197, 94, 0.1)', 
-                                padding: '1rem', 
-                                borderRadius: '12px',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                border: '1px solid rgba(34, 197, 94, 0.3)'
-                            }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                    <img 
-                                        src={link.parent?.avatarUrl || '/images/meowl.jpg'} 
-                                        alt={link.parent?.firstName || 'Parent'} 
-                                        style={{ 
-                                            width: '48px', 
-                                            height: '48px', 
-                                            borderRadius: '50%', 
-                                            objectFit: 'cover',
-                                            border: '2px solid #22c55e'
-                                        }}
-                                    />
-                                    <div>
-                                        <div style={{ fontWeight: 'bold', color: '#fff' }}>
-                                            {link.parent?.firstName} {link.parent?.lastName}
-                                        </div>
-                                        <div style={{ fontSize: '0.9rem', color: '#aaa' }}>{link.parent?.email}</div>
-                                        <div style={{ fontSize: '0.8rem', color: '#22c55e', marginTop: '0.25rem' }}>
-                                            ✓ Đã kết nối
-                                        </div>
-                                    </div>
-                                </div>
-                                <button 
-                                    onClick={() => navigate('/messages', { state: { openFamily: true } })}
-                                    style={{ 
-                                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', 
-                                        border: 'none', 
-                                        borderRadius: '8px', 
-                                        padding: '0.5rem 1rem', 
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.5rem',
-                                        color: 'white',
-                                        fontWeight: 'bold'
-                                    }}
-                                >
-                                    <MessageSquare size={18} /> Nhắn tin
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                </>
-            )}
         </div>
     );
 };

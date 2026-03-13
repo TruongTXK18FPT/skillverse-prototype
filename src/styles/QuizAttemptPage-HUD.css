@@ -572,7 +572,10 @@
 }
 
 .hud-quiz-attempt-result-details {
-  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 1.5rem;
   background: rgba(6, 182, 212, 0.03);
   border-top: 1px solid var(--hqa-border);
   border-bottom: 1px solid var(--hqa-border);
@@ -580,24 +583,75 @@
 
 .hud-quiz-attempt-detail-item {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--hqa-border);
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--hqa-border);
+  border-radius: 12px;
 }
 
 .hud-quiz-attempt-detail-item:last-child {
-  border-bottom: none;
+  border-bottom: 1px solid var(--hqa-border);
 }
 
 .hud-quiz-attempt-detail-label {
   font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   letter-spacing: 0.3px;
   color: var(--hqa-text-secondary);
+  margin-bottom: 0.4rem;
+  white-space: nowrap;
 }
 
 .hud-quiz-attempt-detail-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--hqa-cyan);
+}
+
+@media (max-width: 1024px) {
+  .hud-quiz-attempt-result-details {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .hud-quiz-attempt-result-details {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hud-quiz-attempt-result-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.hud-quiz-attempt-btn-back,
+.hud-quiz-attempt-btn-retry {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hud-quiz-attempt-btn-back {
+  background: transparent;
+  border: 1px solid var(--hqa-border-bright);
+  color: var(--hqa-text-primary);
+}
+
+.hud-quiz-attempt-btn-retry {
+  background: var(--hqa-cyan);
+  border: none;
+  color: #000;
+  box-shadow: 0 0 15px var(--hqa-cyan-glow);
+}
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--hqa-text-primary);

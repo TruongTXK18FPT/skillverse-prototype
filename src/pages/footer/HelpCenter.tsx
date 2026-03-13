@@ -228,10 +228,6 @@ const HelpCenter = () => {
 
       <section className="help-hero">
         <motion.div className="hero-content" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <div className="hero-icon-container">
-            <HelpCircle size={64} className="hero-icon" />
-            <div className="icon-glow-ring"></div>
-          </div>
           <h1 className="hero-title"><span className="title-gradient">TRUNG TÂM HỖ TRỢ</span></h1>
           <p className="hero-tagline">HỖ TRỢ 24/7</p>
           <p className="hero-description">Chúng tôi luôn sẵn sàng giúp đỡ bạn.</p>

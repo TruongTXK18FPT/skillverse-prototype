@@ -12,12 +12,12 @@ import {
   AlertCircle,
   Download,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import learningReportService, {
   StudentLearningReportResponse,
   isValidReportId,
 } from "../../services/learningReportService";
 import { useAuth } from "../../context/AuthContext";
-import LearningReportModal from "./LearningReportModal";
 import { downloadLearningReportPDF } from "./PDFGenerator";
 import "./LearningReportHistory.css";
 
@@ -33,13 +33,10 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
   title = "Báo cáo học tập",
 }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [reports, setReports] = useState<StudentLearningReportResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [selectedReport, setSelectedReport] =
-    useState<StudentLearningReportResponse | null>(null);
-  const [selectedReportId, setSelectedReportId] = useState<number | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [canGenerate, setCanGenerate] = useState(true);
   const [downloadingId, setDownloadingId] = useState<number | null>(null);
 
@@ -71,28 +68,15 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
   }, []);
 
   const handleViewReport = async (reportId: number | undefined) => {
-    // Validate reportId before making API call
     if (!isValidReportId(reportId)) {
-      console.error("Invalid reportId:", reportId);
-      setLoadError("ID báo cáo không hợp lệ. Vui lòng tải lại trang.");
+      setLoadError("ID báo cáo không hợp lệ.");
       return;
     }
+    navigate(`/learning-report?id=${reportId}`);
+  };
 
-    try {
-      setSelectedReportId(reportId as number);
-      const report = await learningReportService.getReportById(
-        reportId as number,
-      );
-      setSelectedReport(report);
-      setIsModalOpen(true);
-      setLoadError(null);
-    } catch (error) {
-      console.error("Error loading report:", error);
-      setLoadError("Không thể tải báo cáo. Báo cáo có thể không tồn tại.");
-      // Open modal anyway to show error state
-      setSelectedReport(null);
-      setIsModalOpen(true);
-    }
+  const handleCreateNewReport = () => {
+    navigate("/learning-report");
   };
 
   const handleDownloadPDF = async (
@@ -122,9 +106,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
   };
 
   const handleGenerateNew = () => {
-    setSelectedReport(null);
-    setSelectedReportId(null);
-    setIsModalOpen(true);
+    navigate("/learning-report");
   };
 
   const getTrendColor = (trend: string) => {
@@ -345,20 +327,6 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
           </div>
         )}
       </motion.div>
-
-      {/* Report Modal */}
-      <LearningReportModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setSelectedReport(null);
-          setSelectedReportId(null);
-          setLoadError(null);
-          loadReports();
-        }}
-        initialReport={selectedReport}
-        initialReportId={selectedReportId}
-      />
     </>
   );
 };

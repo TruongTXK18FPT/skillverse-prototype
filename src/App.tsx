@@ -22,6 +22,7 @@ import Footer from "./components/layout/Footer";
 import HomePage from "./pages/main/HomePage";
 import DashboardPage from "./pages/navbar/DashboardPage";
 import CoursesPage from "./pages/navbar/CoursesPage";
+import LearningReportPage from "./pages/user/LearningReportPage";
 import MentorshipPage from "./pages/navbar/MentorshipPage";
 import CommunityHUD from "./components/community-hud/CommunityHUD";
 import PostDetailPage from "./pages/community/PostDetailPage";
@@ -117,38 +118,39 @@ const CertificateVerifyPage = lazy(
 );
 const CertificateDemoPage = lazy(() => import("./pages/CertificateDemoPage"));
 
-const App = () => {
+const AppContents = () => {
+  const location = useLocation();
+
+  // Determine if header is hidden
+  const isHeaderHidden =
+    fullScreenRoutes.has(location.pathname) ||
+    isCertificateRoute(location.pathname);
+
   return (
-    <ChakraProvider value={defaultSystem}>
-      <LanguageProvider>
-        <ThemeProvider>
-          <AuthProvider>
-            <MeowlSkinProvider>
-              <MeowlStateProvider>
-                <ConfirmDialogProvider>
-                  <Router>
-                    <div className="app-container">
-                      <ScrollToTop />
-                      <HeaderVisibilityWrapper />
-                      <div className="app__galaxy-bg">
-                        <div className="cosmic-dust">
-                          {[...Array(40)].map((_, i) => (
-                            <div
-                              key={i}
-                              className="dust-particle"
-                              style={{
-                                left: `${Math.random() * 95}%`,
-                                top: `${Math.random() * 95}%`,
-                                animationDelay: `${Math.random() * 10}s`,
-                                animationDuration: `${20 + Math.random() * 15}s`,
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <main>
-                          <Routes>
-                          <Route path="/" element={<HomePage />} />
-                          <Route path="/about" element={<AboutPage />} />
+    <div
+      className={`app-container ${isHeaderHidden ? "app-container--no-header-offset" : ""}`}
+    >
+      <ScrollToTop />
+      <HeaderVisibilityWrapper />
+      <div className="app__galaxy-bg">
+        <div className="cosmic-dust">
+          {[...Array(40)].map((_, i) => (
+            <div
+              key={i}
+              className="dust-particle"
+              style={{
+                left: `${Math.random() * 95}%`,
+                top: `${Math.random() * 95}%`,
+                animationDelay: `${Math.random() * 10}s`,
+                animationDuration: `${20 + Math.random() * 15}s`,
+              }}
+            />
+          ))}
+        </div>
+        <main>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
                           <Route
                             path="/user-guide"
                             element={<UserGuidePage />}
@@ -166,6 +168,10 @@ const App = () => {
                           <Route
                             path="/dashboard"
                             element={<DashboardPage />}
+                          />
+                          <Route
+                            path="/learning-report"
+                            element={<LearningReportPage />}
                           />
                           <Route
                             path="/user/parent-requests"
@@ -506,6 +512,20 @@ const App = () => {
                         <MeowlPetWrapper />
                       </div>
                     </div>
+  );
+};
+
+const App = () => {
+  return (
+    <ChakraProvider value={defaultSystem}>
+      <LanguageProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <MeowlSkinProvider>
+              <MeowlStateProvider>
+                <ConfirmDialogProvider>
+                  <Router>
+                    <AppContents />
                   </Router>
                 </ConfirmDialogProvider>
               </MeowlStateProvider>
@@ -538,6 +558,7 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/chatbot/expert",
   "/roadmap",
   "/cv",
+  "/learning-report",
   "/admin-security",
   "/course-learning",
   "/notifications",

@@ -166,31 +166,35 @@
 /* --- Stats --- */
 .lhud-quiz-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
   margin-bottom: 32px;
 }
 
 .lhud-quiz-stat {
-  padding: 20px;
+  padding: 16px;
   background: var(--lhud-deep-space);
   border-radius: 12px;
   border: 1px solid var(--lhud-border);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.3s ease;
 }
 
 .lhud-quiz-stat.is-best.is-pass {
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(16, 185, 129, 0.08);
   border-color: rgba(16, 185, 129, 0.3);
 }
 
 .lhud-quiz-stat.is-best.is-fail {
-  background: var(--lhud-deep-space);
-  border-color: var(--lhud-border);
+  background: rgba(249, 115, 22, 0.05);
+  border-color: rgba(249, 115, 22, 0.2);
 }
 
 .lhud-quiz-stat.is-attempts.is-maxed {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(239, 68, 68, 0.08);
   border-color: rgba(239, 68, 68, 0.3);
 }
 
@@ -199,10 +203,11 @@
 }
 
 .lhud-quiz-stat-value {
-  font-size: 2rem;
+  font-size: 1.75rem;
   color: var(--lhud-cyan);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   font-family: "Inter", sans-serif;
+  font-weight: 700;
 }
 
 .lhud-quiz-stat.is-empty .lhud-quiz-stat-value {
@@ -213,69 +218,63 @@
   color: #10b981;
 }
 
-.lhud-quiz-stat.is-best.is-fail .lhud-quiz-stat-value {
-  color: #f97316;
-}
-
-.lhud-quiz-stat.is-attempts.is-maxed .lhud-quiz-stat-value {
-  color: #ef4444;
-}
-
 .lhud-quiz-stat-label {
   margin: 0;
   color: var(--lhud-text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
 .lhud-quiz-stat-sub {
-  margin-top: 8px;
-  font-size: 0.75rem;
+  margin-top: 6px;
+  font-size: 0.7rem;
   color: var(--lhud-text-dim);
-}
-
-.lhud-quiz-stat-sub.is-empty {
-  color: var(--lhud-red);
-  font-size: 0.8rem;
-}
-
-.lhud-quiz-stat-sub.is-warning {
-  color: #fca5a5;
-}
-
-.lhud-quiz-stat.is-attempts.is-maxed .lhud-quiz-stat-label,
-.lhud-quiz-stat.is-attempts.is-maxed .lhud-quiz-stat-sub {
-  color: #fca5a5;
-}
-
-.lhud-quiz-stat.is-best.is-pass .lhud-quiz-stat-sub {
-  color: #34d399;
-}
-
-.lhud-quiz-stat.is-best.is-fail .lhud-quiz-stat-sub {
-  color: #fb923c;
+  line-height: 1.2;
 }
 
 /* --- Action Button --- */
 .lhud-quiz-action {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
 
 .lhud-quiz-review-btn {
-  margin-bottom: 12px;
+  width: auto;
+  min-width: 200px;
 }
 
 .lhud-quiz-action-btn {
-  padding: 16px 48px;
-  font-size: 1.1rem;
+  padding: 12px 32px;
+  font-size: 1rem;
   font-family: "Inter", sans-serif;
-  font-weight: bold;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   transform: translateY(0);
+  width: auto;
+  min-width: 240px;
+}
+
+@media (max-width: 1024px) {
+  .lhud-quiz-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .lhud-quiz-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .lhud-quiz-action-btn {
+    width: 100%;
+  }
 }
 
 .lhud-quiz-action-btn.is-start {
