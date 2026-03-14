@@ -4,6 +4,7 @@ import { Lock, Eye, EyeOff, CheckCircle, Info, Shield, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import Toast from '../../components/shared/Toast';
+import { getStoredUserRaw, updateStoredUser } from '../../utils/authStorage';
 import '../../styles/PasswordPages.css';
 
 const SetPasswordPage = () => {
@@ -51,11 +52,11 @@ const SetPasswordPage = () => {
       const response = await setPassword({ newPassword, confirmPassword });
       
       // Update user in localStorage to reflect password has been set
-      const storedUser = localStorage.getItem('user');
+      const storedUser = getStoredUserRaw();
       if (storedUser) {
         const userData = JSON.parse(storedUser);
         userData.googleLinked = true; // Mark as having password
-        localStorage.setItem('user', JSON.stringify(userData));
+        updateStoredUser(userData);
       }
       
       showSuccess(

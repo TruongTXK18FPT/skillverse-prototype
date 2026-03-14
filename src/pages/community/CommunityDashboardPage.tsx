@@ -10,6 +10,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import { decodeHtml } from '../../utils/htmlDecoder';
+import { getStoredUserRaw } from '../../utils/authStorage';
 
 // Helper to strip HTML tags for preview
 const stripHtml = (html: string) => {
@@ -123,7 +124,7 @@ const CommunityDashboardPage: React.FC = () => {
       setError(null);
       
       // Get user ID from localStorage
-      const userStr = localStorage.getItem('user');
+      const userStr = getStoredUserRaw();
       const user = userStr ? JSON.parse(userStr) : null;
       const userId = user?.id;
 
@@ -242,7 +243,7 @@ const CommunityDashboardPage: React.FC = () => {
     if (!file) return;
 
     // Get user ID from localStorage
-    const userStr = localStorage.getItem('user');
+    const userStr = getStoredUserRaw();
     const user = userStr ? JSON.parse(userStr) : null;
     const userId = user?.id;
 

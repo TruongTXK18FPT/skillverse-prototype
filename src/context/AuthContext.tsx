@@ -1,14 +1,15 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 import authService from '../services/authService';
 import userService from '../services/userService';
-import { AUTH_LOGOUT_EVENT } from '../services/axiosInstance';
+import { AUTH_LOGOUT_EVENT, clearAuthTokens } from '../services/axiosInstance';
 import { LoginRequest, UserDto, VerifyEmailRequest, ResendOtpRequest, ForgotPasswordResponse, ResetPasswordRequest, ResetPasswordResponse, SetPasswordRequest, SetPasswordResponse, ChangePasswordRequest, ChangePasswordResponse } from '../data/authDTOs';
 import { UserRegistrationRequest } from '../data/userDTOs';
+import { AUTH_SESSION_SYNCED_EVENT, initAuthTabSync, requestSessionFromOtherTabs } from '../utils/authTabSync';
 
 interface AuthContextType {
   user: UserDto | null;
   loading: boolean;
-  login: (credentials: LoginRequest) => Promise<string>;
+  login: (credentials: LoginRequest, rememberMe?: boolean) => Promise<string>;
   register: (userData: UserRegistrationRequest) => Promise<{ requiresVerification: boolean; email: string; message: string; otpExpiryTime?: string }>;
   verifyEmail: (request: VerifyEmailRequest) => Promise<void>;
   resendOtp: (request: ResendOtpRequest) => Promise<string>;
@@ -38,6 +39,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDto | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Initialize cross-tab auth sync channel once.
+  useEffect(() => {
+    const cleanup = initAuthTabSync();
+    return cleanup;
+  }, []);
+
   // Listen for global logout events (from axios interceptors)
   useEffect(() => {
     const handleLogoutEvent = () => {
@@ -45,16 +52,50 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(null);
     };
 
+    const handleSessionSynced = () => {
+      const syncedUser = authService.getStoredUser();
+      if (syncedUser) {
+        setUser(syncedUser);
+      }
+    };
+
     window.addEventListener(AUTH_LOGOUT_EVENT, handleLogoutEvent);
-    return () => window.removeEventListener(AUTH_LOGOUT_EVENT, handleLogoutEvent);
+    window.addEventListener(AUTH_SESSION_SYNCED_EVENT, handleSessionSynced);
+    return () => {
+      window.removeEventListener(AUTH_LOGOUT_EVENT, handleLogoutEvent);
+      window.removeEventListener(AUTH_SESSION_SYNCED_EVENT, handleSessionSynced);
+    };
   }, []);
 
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const storedUser = authService.getStoredUser();
-        if (storedUser && authService.isAuthenticated()) {
+        let storedUser = authService.getStoredUser();
+
+        // For sessionStorage-only logins, a new tab can request auth state from existing tabs.
+        if (!storedUser) {
+          await requestSessionFromOtherTabs();
+          storedUser = authService.getStoredUser();
+        }
+
+        if (!storedUser) {
+          return;
+        }
+
+        if (authService.isAuthenticated()) {
           setUser(storedUser);
+          return;
+        }
+
+        // Access token may be expired after reload; attempt silent refresh first.
+        const refreshed = await authService.refreshAccessToken();
+        if (refreshed?.user) {
+          setUser(refreshed.user);
+        } else {
+          const fallbackUser = authService.getStoredUser();
+          if (fallbackUser) {
+            setUser(fallbackUser);
+          }
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
@@ -67,10 +108,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     initializeAuth();
   }, []);
 
-  const login = async (credentials: LoginRequest): Promise<string> => {
+  const login = async (credentials: LoginRequest, rememberMe = false): Promise<string> => {
     try {
       setLoading(true);
-      const redirectUrl = await authService.login(credentials);
+      const redirectUrl = await authService.login(credentials, rememberMe);
       
       // Get updated user data after login
       const updatedUser = authService.getStoredUser();
@@ -150,9 +191,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       // ✅ SECURITY: After password change, tokens are invalidated by backend
       // Clear all auth data and force re-login
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
+      clearAuthTokens();
       setUser(null);
       
       return response;

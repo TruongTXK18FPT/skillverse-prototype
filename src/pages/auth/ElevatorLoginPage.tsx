@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../../context/AuthContext';
@@ -20,6 +20,8 @@ const ElevatorLoginPage: React.FC = () => {
   const [googleLoginSuccess, setGoogleLoginSuccess] = useState<{ userName: string } | null>(null);
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [pendingApprovalEmail, setPendingApprovalEmail] = useState<string>('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const googleRememberMeRef = useRef(false);
 
   // Check if already authenticated
   useEffect(() => {
@@ -44,7 +46,11 @@ const ElevatorLoginPage: React.FC = () => {
     onSuccess: async (tokenResponse) => {
       setIsGoogleLoading(true);
       try {
-        const result = await authService.loginWithGoogle(tokenResponse.access_token);
+        // Use remember choice captured at click time for deterministic behavior
+        const result = await authService.loginWithGoogle(
+          tokenResponse.access_token,
+          googleRememberMeRef.current,
+        );
 
         // Store redirect URL for after animation
         if (result.needsProfileCompletion) {
@@ -97,12 +103,13 @@ const ElevatorLoginPage: React.FC = () => {
   // Form submit handler
   const handleFormSubmit = async (
     email: string,
-    password: string
+    password: string,
+    rememberUser: boolean,
   ): Promise<{ success: boolean; userName?: string; error?: string }> => {
     setIsLoading(true);
 
     try {
-      const redirectUrl = await login({ email, password });
+      const redirectUrl = await login({ email, password }, rememberUser);
 
       // Store redirect for after animation
       const urlPath = new URL(redirectUrl).pathname;
@@ -180,10 +187,15 @@ const ElevatorLoginPage: React.FC = () => {
       <ElevatorAuthLayout onTransitionComplete={handleTransitionComplete}>
         <HologramLoginForm
           onSubmit={handleFormSubmit}
-          onGoogleLogin={() => handleGoogleLogin()}
+          onGoogleLogin={(rememberUser) => {
+            googleRememberMeRef.current = rememberUser;
+            handleGoogleLogin();
+          }}
           isLoading={isLoading}
           isGoogleLoading={isGoogleLoading}
           googleLoginSuccess={googleLoginSuccess}
+          rememberMe={rememberMe}
+          onRememberMeChange={setRememberMe}
         />
       </ElevatorAuthLayout>
 

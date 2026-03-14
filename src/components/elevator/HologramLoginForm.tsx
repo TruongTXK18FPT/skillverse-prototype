@@ -8,11 +8,13 @@ import Logo from '../../assets/brand/skillverse.png';
 import './HologramLoginForm.css';
 
 interface HologramLoginFormProps {
-  onSubmit: (email: string, password: string) => Promise<{ success: boolean; userName?: string; error?: string }>;
-  onGoogleLogin?: () => void;
+  onSubmit: (email: string, password: string, rememberMe: boolean) => Promise<{ success: boolean; userName?: string; error?: string }>;
+  onGoogleLogin?: (rememberMe: boolean) => void;
   isLoading?: boolean;
   isGoogleLoading?: boolean;
   googleLoginSuccess?: { userName: string } | null;
+  rememberMe: boolean;
+  onRememberMeChange: (rememberMe: boolean) => void;
 }
 
 const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
@@ -21,6 +23,8 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
   isLoading = false,
   isGoogleLoading = false,
   googleLoginSuccess = null,
+  rememberMe,
+  onRememberMeChange,
 }) => {
   const { triggerLoginSuccess } = useElevator();
   const [showPassword, setShowPassword] = useState(false);
@@ -48,7 +52,7 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
       return;
     }
 
-    const result = await onSubmit(formData.email, formData.password);
+    const result = await onSubmit(formData.email, formData.password, rememberMe);
 
     if (result.success) {
       await triggerLoginSuccess(result.userName || 'Commander');
@@ -187,7 +191,12 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
 
           <div className="form-options">
             <label className="remember-option">
-              <input type="checkbox" disabled={isLoading} />
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => onRememberMeChange(e.target.checked)}
+                disabled={isLoading}
+              />
               <span className="checkbox-custom"></span>
               <span>Ghi nhớ đăng nhập</span>
             </label>
@@ -230,7 +239,7 @@ const HologramLoginForm: React.FC<HologramLoginFormProps> = ({
           <motion.button
             type="button"
             className="social-btn google"
-            onClick={onGoogleLogin}
+            onClick={() => onGoogleLogin?.(rememberMe)}
             disabled={isLoading || isGoogleLoading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

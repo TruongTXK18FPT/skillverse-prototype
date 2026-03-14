@@ -44,6 +44,7 @@ import adminUserService from "../../services/adminUserService";
 import adminService from "../../services/adminService";
 import supportService from "../../services/supportService";
 import AdminSidebar from "../../components/admin/AdminSidebar";
+import { getStoredUserRaw } from "../../utils/authStorage";
 import "../../styles/AdminPageCosmic.css";
 import "../../styles/AdminLayoutHUD.css";
 
@@ -75,7 +76,7 @@ const AdminPage: React.FC = () => {
   // Fetch user roles on mount
   useEffect(() => {
     try {
-      const userStr = localStorage.getItem("user");
+      const userStr = getStoredUserRaw();
       if (userStr) {
         const user = JSON.parse(userStr);
         if (user.roles && Array.isArray(user.roles)) {

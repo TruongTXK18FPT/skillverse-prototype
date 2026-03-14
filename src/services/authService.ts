@@ -17,6 +17,18 @@ import {
   ChangePasswordRequest,
   ChangePasswordResponse,
 } from "../data/authDTOs";
+import {
+  clearAuthSession,
+  getAccessToken,
+  getRefreshToken,
+  getStoredUserRaw,
+  setAuthSession,
+  updateAuthSession,
+} from "../utils/authStorage";
+import {
+  broadcastLogoutToOtherTabs,
+  broadcastSessionToOtherTabs,
+} from "../utils/authTabSync";
 
 // Helper type for axios error handling
 type AxiosError = {
@@ -34,17 +46,19 @@ class AuthService {
   private refreshToken: string | null = null;
 
   constructor() {
-    this.token = localStorage.getItem("accessToken");
-    this.refreshToken = localStorage.getItem("refreshToken");
+    this.token = getAccessToken();
+    this.refreshToken = getRefreshToken();
 
-    // Check if token is expired on initialization
+    // On startup, avoid clearing refresh session if access token is expired.
+    // Keep refresh token so app can silently refresh and restore auth state.
     if (this.token && this.isTokenExpired(this.token)) {
       this.token = null;
-      this.refreshToken = null;
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("user");
     }
+  }
+
+  private syncTokensFromStorage(): void {
+    this.token = getAccessToken() ?? this.token;
+    this.refreshToken = getRefreshToken() ?? this.refreshToken;
   }
 
   // Helper to check if token is expired
@@ -68,21 +82,32 @@ class AuthService {
   }
 
   // Login endpoint
-  async login(credentials: LoginRequest): Promise<string> {
+  async login(credentials: LoginRequest, rememberMe = false): Promise<string> {
     try {
       const response = await axiosInstance.post<AuthResponse>(
         "/api/auth/login",
-        credentials,
+        {
+          email: credentials.email,
+          password: credentials.password,
+          rememberMe,
+        },
       );
       const authData = response.data;
+      const persistedRefreshToken = rememberMe
+        ? authData.refreshToken ?? null
+        : null;
 
       // Store tokens and user data
       this.token = authData.accessToken;
-      this.refreshToken = authData.refreshToken;
+      this.refreshToken = persistedRefreshToken;
 
-      localStorage.setItem("accessToken", authData.accessToken);
-      localStorage.setItem("refreshToken", authData.refreshToken);
-      localStorage.setItem("user", JSON.stringify(authData.user));
+      setAuthSession(
+        authData.accessToken,
+        persistedRefreshToken,
+        authData.user,
+        rememberMe,
+      );
+      broadcastSessionToOtherTabs();
 
       // Return redirect URL based on user roles
       return this.getRedirectUrlByRole(authData.user.roles);
@@ -122,28 +147,38 @@ class AuthService {
     }
   }
 
-  // Google OAuth login
-  async loginWithGoogle(googleAccessToken: string): Promise<{
+  // Google OAuth login (currently receives Google access_token from useGoogleLogin)
+  async loginWithGoogle(googleAccessToken: string, rememberMe = false): Promise<{
     redirectUrl: string;
     needsProfileCompletion: boolean;
     authData: AuthResponse;
   }> {
     try {
       // Send access token as idToken (backend will use it to fetch user info)
-      const request: GoogleAuthRequest = { idToken: googleAccessToken };
+      const request: GoogleAuthRequest = {
+        idToken: googleAccessToken,
+        rememberMe,
+      };
       const response = await axiosInstance.post<AuthResponse>(
         "/api/auth/google",
         request,
       );
       const authData = response.data;
+      const persistedRefreshToken = rememberMe
+        ? authData.refreshToken ?? null
+        : null;
 
       // Store tokens and user data
       this.token = authData.accessToken;
-      this.refreshToken = authData.refreshToken;
+      this.refreshToken = persistedRefreshToken;
 
-      localStorage.setItem("accessToken", authData.accessToken);
-      localStorage.setItem("refreshToken", authData.refreshToken);
-      localStorage.setItem("user", JSON.stringify(authData.user));
+      setAuthSession(
+        authData.accessToken,
+        persistedRefreshToken,
+        authData.user,
+        rememberMe,
+      );
+      broadcastSessionToOtherTabs();
 
       // Return redirect URL and profile completion status
       return {
@@ -280,6 +315,7 @@ class AuthService {
   // Refresh access token
   async refreshAccessToken(): Promise<AuthResponse> {
     try {
+      this.syncTokensFromStorage();
       if (!this.refreshToken) {
         console.error("❌ No refresh token available");
         throw new Error("No refresh token available");
@@ -294,38 +330,55 @@ class AuthService {
 
       // Update tokens
       this.token = authData.accessToken;
-      this.refreshToken = authData.refreshToken;
+      this.refreshToken = authData.refreshToken ?? null;
 
-      localStorage.setItem("accessToken", authData.accessToken);
-      localStorage.setItem("refreshToken", authData.refreshToken);
-
-      // ✅ FIX: Only update user data if it exists in response
-      if (authData.user) {
-        localStorage.setItem("user", JSON.stringify(authData.user));
-      } else {
-        console.warn(
-          "⚠️ No user data in refresh response, keeping existing user data",
-        );
-        // Keep existing user data in localStorage
-      }
+      updateAuthSession(
+        authData.accessToken,
+        this.refreshToken,
+        authData.user,
+      );
+      broadcastSessionToOtherTabs();
 
       return authData;
     } catch (error: unknown) {
       console.error("❌ Token refresh failed:", error);
       const axiosError = error as AxiosError;
-      const errorMessage =
-        axiosError.response?.data?.message || "Token refresh failed";
+      const data = axiosError.response?.data as
+        | { code?: string; message?: string }
+        | undefined;
+      const errorMessage = data?.message || "Token refresh failed";
       console.error("Error details:", errorMessage);
+
+      if (
+        error instanceof Error &&
+        error.message === "No refresh token available"
+      ) {
+        throw error;
+      }
 
       // Clear tokens on refresh failure
       this.logout();
-      throw new Error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+
+      const errorCode = data?.code;
+      if (errorCode === "ACCOUNT_INACTIVE") {
+        throw new Error(
+          "Tài khoản của bạn đang bị khóa hoặc không hoạt động. Vui lòng liên hệ hỗ trợ.",
+        );
+      }
+      if (errorCode === "REFRESH_TOKEN_EXPIRED") {
+        throw new Error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+      }
+
+      throw new Error(
+        errorMessage || "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+      );
     }
   }
 
   // Logout user with Meowl chat history cleanup
   async logout(): Promise<void> {
     try {
+      this.syncTokensFromStorage();
       // Get user ID before clearing data for Meowl history cleanup
       const storedUser = this.getStoredUser();
       const userId = storedUser?.id;
@@ -354,9 +407,8 @@ class AuthService {
       // Clear tokens and user data
       this.token = null;
       this.refreshToken = null;
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("user");
+      clearAuthSession();
+      broadcastLogoutToOtherTabs();
       // Clear Meowl preferences
       localStorage.removeItem("meowl_dark_mode");
       localStorage.removeItem("meowl_font_size");
@@ -378,9 +430,8 @@ class AuthService {
       // Even if there's an error, clear local storage
       this.token = null;
       this.refreshToken = null;
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("user");
+      clearAuthSession();
+      broadcastLogoutToOtherTabs();
       localStorage.removeItem("meowl_dark_mode");
       localStorage.removeItem("meowl_font_size");
       sessionStorage.removeItem("meowl_guest_session");
@@ -394,13 +445,14 @@ class AuthService {
 
   // Get current access token
   getToken(): string | null {
+    this.syncTokensFromStorage();
     return this.token;
   }
 
   // Get stored user data
   getStoredUser(): UserDto | null {
     try {
-      const userStr = localStorage.getItem("user");
+      const userStr = getStoredUserRaw();
       return userStr ? JSON.parse(userStr) : null;
     } catch (error) {
       console.error("Error parsing stored user:", error);
@@ -410,15 +462,12 @@ class AuthService {
 
   // Check if user is authenticated
   isAuthenticated(): boolean {
+    this.syncTokensFromStorage();
     if (!this.token) return false;
 
     if (this.isTokenExpired(this.token)) {
-      // Token expired, clear session
+      // Token expired; keep refresh token/session for silent refresh flow
       this.token = null;
-      this.refreshToken = null;
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("user");
       return false;
     }
 

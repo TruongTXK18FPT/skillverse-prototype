@@ -17,6 +17,7 @@ import {
   ApplicationsResponse,
   ApplicationStatus
 } from '../../data/adminDTOs';
+import { getStoredUserRaw } from '../../utils/authStorage';
 import './AccountVerificationTabCosmic.css';
 
 const AccountVerificationTabCosmic: React.FC = () => {
@@ -46,7 +47,7 @@ const AccountVerificationTabCosmic: React.FC = () => {
   const { toast, isVisible, hideToast, showSuccess, showError, showWarning } = useToast();
 
   // Get current user to check for USER_ADMIN permission
-  const currentUserStr = localStorage.getItem('user');
+  const currentUserStr = getStoredUserRaw();
   const currentUser = currentUserStr ? JSON.parse(currentUserStr) : null;
   const canManage = currentUser?.roles?.includes('ADMIN') || currentUser?.roles?.includes('USER_ADMIN');
 

@@ -7,10 +7,11 @@ import {
   SeminarTicket,
   SeminarAnalytics,
 } from "../types/seminar";
+import { getAccessToken } from "../utils/authStorage";
 
 // Helper: Get auth headers if token exists (for optional auth endpoints)
 const getOptionalAuthHeaders = (): Record<string, string> => {
-  const token = localStorage.getItem("accessToken");
+  const token = getAccessToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 

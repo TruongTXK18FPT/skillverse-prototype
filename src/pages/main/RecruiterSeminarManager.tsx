@@ -15,6 +15,7 @@ import { useToast } from '../../hooks/useToast';
 import { SeminarErrorDisplay } from '../../components/seminar/SeminarErrorDisplay';
 import '../../styles/RecruiterSeminarManager.css';
 import { useTheme } from '../../context/ThemeContext';
+import { getStoredUserRaw } from '../../utils/authStorage';
 
 // Helper: Ensure external URL has protocol
 const ensureExternalUrl = (url: string): string => {
@@ -59,7 +60,7 @@ const RecruiterSeminarManager = () => {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    const userStr = localStorage.getItem('user');
+    const userStr = getStoredUserRaw();
     if (userStr) {
         try {
             setCurrentUser(JSON.parse(userStr));

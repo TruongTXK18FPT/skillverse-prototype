@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { axiosInstance } from '../../services/axiosInstance';
+import { getAccessToken, getRefreshToken, getStoredUserRaw } from '../../utils/authStorage';
 
 const PortfolioDebug = () => {
   const [result, setResult] = useState<any>(null);
@@ -8,7 +9,7 @@ const PortfolioDebug = () => {
   const testEndpoint = async (endpoint: string, method: 'GET' | 'POST' = 'GET') => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = getAccessToken();
       console.log('Token:', token ? '...' : 'MISSING');
       
       
@@ -40,14 +41,19 @@ const PortfolioDebug = () => {
 
   return (
     <div style={{ padding: '2rem', fontFamily: 'monospace' }}>
+      {(() => {
+        const userRaw = getStoredUserRaw();
+        const user = userRaw ? JSON.parse(userRaw) : null;
+        return (
+          <div style={{ marginBottom: '2rem' }}>
+            <h3>Authentication</h3>
+            <p>Access Token: {getAccessToken() ? '✅ Present' : '❌ Missing'}</p>
+            <p>Refresh Token: {getRefreshToken() ? '✅ Present' : '❌ Missing'}</p>
+            <p>User: {user?.email || 'N/A'}</p>
+          </div>
+        );
+      })()}
       <h1>Portfolio API Debug</h1>
-      
-      <div style={{ marginBottom: '2rem' }}>
-        <h3>Authentication</h3>
-        <p>Access Token: {localStorage.getItem('accessToken') ? '✅ Present' : '❌ Missing'}</p>
-        <p>Refresh Token: {localStorage.getItem('refreshToken') ? '✅ Present' : '❌ Missing'}</p>
-        <p>User: {localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!).email : 'N/A'}</p>
-      </div>
 
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
         <button onClick={() => testEndpoint('/profile/check')} disabled={loading}>

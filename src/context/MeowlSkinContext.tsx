@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { skinService, MeowlSkinResponse } from "../services/skinService";
 import { premiumService } from "../services/premiumService";
+import { getAccessToken } from "../utils/authStorage";
 
 // Import meowl skins
 import meowlDefault from "../assets/meowl-skin/meowl_default.png";
@@ -67,7 +68,7 @@ export const MeowlSkinProvider: React.FC<{ children: ReactNode }> = ({
   const [mySkins, setMySkins] = useState<MeowlSkin[]>(MEOWL_SKINS);
 
   const fetchMySkins = async () => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = getAccessToken();
     if (!accessToken) {
       setMySkins(MEOWL_SKINS);
       setCurrentSkin((prev) =>
@@ -108,7 +109,7 @@ export const MeowlSkinProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const checkPremiumStatus = async () => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = getAccessToken();
     if (!accessToken) {
       setIsPremium(false);
       setIsPetActive(false);
@@ -171,7 +172,7 @@ export const MeowlSkinProvider: React.FC<{ children: ReactNode }> = ({
     setCurrentSkin(skin);
 
     // Guest mode: local-only selection, do not call protected API
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = getAccessToken();
     if (!accessToken) {
       return;
     }

@@ -1,3 +1,8 @@
+import {
+  clearAuthSession,
+  getAccessToken,
+} from "./authStorage";
+
 /**
  * Token utility functions for handling JWT tokens
  */
@@ -6,24 +11,21 @@
  * Clear all authentication tokens from localStorage
  */
 export const clearAuthTokens = (): void => {
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
-  localStorage.removeItem('user');
-  
+  clearAuthSession();
 };
 
 /**
  * Check if token exists
  */
 export const hasToken = (): boolean => {
-  return !!localStorage.getItem('accessToken');
+  return !!getAccessToken();
 };
 
 /**
  * Get current token
  */
 export const getToken = (): string | null => {
-  return localStorage.getItem('accessToken');
+  return getAccessToken();
 };
 
 /**

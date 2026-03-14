@@ -4,6 +4,7 @@
 export interface LoginRequest {
   email: string;
   password: string;
+  rememberMe?: boolean;
 }
 
 // Register Request DTO
@@ -53,12 +54,13 @@ export interface UserDto {
 // Google Auth Request DTO
 export interface GoogleAuthRequest {
   idToken: string;
+  rememberMe?: boolean;
 }
 
 // Auth Response DTO
 export interface AuthResponse {
   accessToken: string;
-  refreshToken: string;
+  refreshToken?: string | null;
   tokenType: string;
   expiresIn: number;
   user: UserDto;

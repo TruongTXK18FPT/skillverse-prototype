@@ -4,6 +4,7 @@ import SockJS from 'sockjs-client';
 import { Send, User } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import axiosInstance, { API_BASE_URL } from '../../services/axiosInstance';
+import { getAccessToken } from '../../utils/authStorage';
 import '../../styles/ParentStudentChat.css';
 
 interface ChatMessage {
@@ -39,7 +40,7 @@ const ParentStudentChat: React.FC<ParentStudentChatProps> = ({ studentId, studen
         // Connect WebSocket using shared axios base and token
         const socketUrl = (axiosInstance.defaults.baseURL || API_BASE_URL).replace(/\/api\/?$/, '/ws');
         const bearerHeader = (axiosInstance.defaults.headers?.Authorization as string) || '';
-        const token = bearerHeader.replace(/^Bearer\s+/i, '') || localStorage.getItem('accessToken') || '';
+        const token = bearerHeader.replace(/^Bearer\s+/i, '') || getAccessToken() || '';
         const socket = new SockJS(`${socketUrl}?token=${token}`);
         const client = new Client({
             webSocketFactory: () => socket,

@@ -3,6 +3,16 @@ import axios, {
   AxiosResponse,
   AxiosError,
 } from "axios";
+import {
+  clearAuthSession,
+  getAccessToken,
+  getRefreshToken,
+  updateAuthSession,
+} from "../utils/authStorage";
+import {
+  broadcastLogoutToOtherTabs,
+  broadcastSessionToOtherTabs,
+} from "../utils/authTabSync";
 
 // Determine baseURL based on environment
 
@@ -57,6 +67,9 @@ let failedQueue: Array<{
   reject: (reason?: unknown) => void;
 }> = [];
 
+const hasActiveSession = (): boolean =>
+  Boolean(getAccessToken() || getRefreshToken());
+
 // Decode JWT payload safely without external deps
 const decodeJwtPayload = (token: string): Record<string, unknown> | null => {
   try {
@@ -93,7 +106,7 @@ const isTokenExpiringSoon = (token: string, leewaySeconds = 120): boolean => {
 
 // Centralized refresh call reused by both request- and response-interceptors
 const performRefresh = async (): Promise<string> => {
-  const refreshToken = localStorage.getItem("refreshToken");
+  const refreshToken = getRefreshToken();
   if (!refreshToken) throw new Error("No refresh token");
   const response = await axios.post(`${baseURL}/auth/refresh`, {
     refreshToken,
@@ -103,11 +116,8 @@ const performRefresh = async (): Promise<string> => {
     refreshToken: newRefreshToken,
     user: newUser,
   } = response.data;
-  localStorage.setItem("accessToken", newAccessToken);
-  localStorage.setItem("refreshToken", newRefreshToken);
-  if (newUser) {
-    localStorage.setItem("user", JSON.stringify(newUser));
-  }
+  updateAuthSession(newAccessToken, newRefreshToken, newUser);
+  broadcastSessionToOtherTabs();
   return newAccessToken as string;
 };
 
@@ -243,9 +253,10 @@ axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // Only add token for protected endpoints
     if (!isPublicEndpoint(config.url || "", config.method)) {
-      const token = localStorage.getItem("accessToken");
+      const token = getAccessToken();
+      const refreshToken = getRefreshToken();
       // Pre-emptive refresh if token is about to expire (leeway window)
-      if (token && isTokenExpiringSoon(token) && !isRefreshing) {
+      if (token && refreshToken && isTokenExpiringSoon(token) && !isRefreshing) {
         isRefreshing = true;
         return new Promise<InternalAxiosRequestConfig>((resolve, reject) => {
           performRefresh()
@@ -342,9 +353,7 @@ axiosInstance.interceptors.response.use(
         requestUrl.includes("/auth/google")
       ) {
         console.warn("Authentication failed on auth endpoint, clearing tokens");
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("user");
+        clearAuthTokens();
 
         const currentPath = window.location.pathname;
         const isPublicPage =
@@ -379,7 +388,7 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const refreshToken = localStorage.getItem("refreshToken");
+      const refreshToken = getRefreshToken();
 
       if (!refreshToken) {
         console.warn("❌ No refresh token available, clearing tokens");
@@ -420,17 +429,8 @@ axiosInstance.interceptors.response.use(
         } = response.data;
 
         // ✅ UPDATE STORAGE: Save new tokens
-        localStorage.setItem("accessToken", newAccessToken);
-        localStorage.setItem("refreshToken", newRefreshToken);
-
-        // ✅ FIX: Only update user data if it exists in response
-        if (newUser) {
-          localStorage.setItem("user", JSON.stringify(newUser));
-        } else {
-          console.warn(
-            "⚠️ No user data in refresh response, keeping existing user data",
-          );
-        }
+        updateAuthSession(newAccessToken, newRefreshToken, newUser);
+        broadcastSessionToOtherTabs();
 
         // ✅ UPDATE REQUEST: Retry original request with new token
         if (originalRequest.headers) {
@@ -472,9 +472,11 @@ axiosInstance.interceptors.response.use(
 
 // Utility function to clear authentication tokens
 export const clearAuthTokens = (): void => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("refreshToken");
-  localStorage.removeItem("user");
+  const shouldBroadcastLogout = hasActiveSession();
+  clearAuthSession();
+  if (shouldBroadcastLogout) {
+    broadcastLogoutToOtherTabs();
+  }
   window.dispatchEvent(new Event(AUTH_LOGOUT_EVENT));
 };
 

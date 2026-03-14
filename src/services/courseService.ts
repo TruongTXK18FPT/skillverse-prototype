@@ -9,6 +9,7 @@ import {
 } from '../data/courseDTOs';
 import { CreatePaymentResponse as GatewayPaymentResponse } from '../data/paymentDTOs';
 import { CoursePurchaseDTO, CoursePurchaseRequestDTO } from '../data/purchaseDTOs';
+import { getAccessToken } from '../utils/authStorage';
 
 // Re-export DTOs for backward compatibility
 export type { CoursePurchaseDTO, CoursePurchaseRequestDTO as CoursePurchaseRequest };
@@ -166,7 +167,7 @@ export const getCourse = async (
   try {
     // Manually attach JWT if available — this is a public endpoint
     // but authenticated users need it to view their own DRAFT courses
-    const token = localStorage.getItem('accessToken');
+    const token = getAccessToken();
     const response = await axiosInstance.get<CourseDetailDTO>(
       `/courses/${courseId}`,
       token ? { headers: { Authorization: `Bearer ${token}` } } : undefined

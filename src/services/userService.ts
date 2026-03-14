@@ -6,6 +6,7 @@ import {
   UserProfileResponse,
   UserSkillResponse,
 } from "../data/userDTOs";
+import { getStoredUserRaw } from "../utils/authStorage";
 
 // Helper type for axios error handling
 type AxiosError = { response?: { data?: { message?: string } } };
@@ -62,7 +63,7 @@ class UserService {
   async getMyProfile(): Promise<UserProfileResponse> {
     try {
       // Check user role to determine correct endpoint
-      const userStr = localStorage.getItem("user");
+      const userStr = getStoredUserRaw();
       const user = userStr ? JSON.parse(userStr) : null;
 
       let endpoint = "/api/user/profile"; // Default for USER
@@ -110,7 +111,7 @@ class UserService {
   ): Promise<UserProfileResponse> {
     try {
       // Check user role to determine correct endpoint
-      const userStr = localStorage.getItem("user");
+      const userStr = getStoredUserRaw();
       const user = userStr ? JSON.parse(userStr) : null;
 
       let endpoint = "/api/user/profile"; // Default for USER

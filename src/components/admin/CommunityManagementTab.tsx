@@ -25,6 +25,7 @@ import {
   BarChart,
   Bar
 } from 'recharts';
+import { getStoredUserRaw } from '../../utils/authStorage';
 import './CommunityManagementTab.css';
 
 const COLORS = ['#06b6d4', '#3b82f6', '#a855f7', '#10b981', '#f59e0b', '#ef4444'];
@@ -272,7 +273,7 @@ const CommunityManagementTab: React.FC = () => {
     if (!file) return;
 
     // Get user ID from localStorage
-    const userStr = localStorage.getItem('user');
+    const userStr = getStoredUserRaw();
     const user = userStr ? JSON.parse(userStr) : null;
     const userId = user?.id;
 

@@ -11,6 +11,7 @@ import walletService from '../../services/walletService';
 import { AdminUserResponse, AdminUserDetailResponse, PrimaryRole, UserStatus } from '../../types/adminUser';
 import DeleteAccountModal from './DeleteAccountModal';
 import AdminSecurityGateModal from './AdminSecurityGateModal';
+import { getStoredUserRaw } from '../../utils/authStorage';
 import './UserManagementTabCosmic.css';
 
 const UserManagementTabCosmic: React.FC = () => {
@@ -72,7 +73,7 @@ const UserManagementTabCosmic: React.FC = () => {
   });
 
   // Get current user from storage to check permissions
-  const currentUserStr = localStorage.getItem('user');
+  const currentUserStr = getStoredUserRaw();
   const currentUser = currentUserStr ? JSON.parse(currentUserStr) : null;
   const isSuperAdmin = currentUser?.roles?.includes('ADMIN');
 
