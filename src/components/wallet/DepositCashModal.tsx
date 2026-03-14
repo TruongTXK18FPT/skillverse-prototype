@@ -129,11 +129,7 @@ const DepositCashModal: React.FC<DepositCashModalProps> = ({ isOpen, onClose }) 
                 className="custom-amount-input"
                 placeholder="0"
                 value={customAmount ? parseInt(customAmount).toLocaleString('vi-VN') : ''}
-                onChange={(e) => {
-                  const val = e.target.value.replace(/[^0-9]/g, '');
-                  setCustomAmount(val);
-                  setError(null);
-                }}
+                onChange={handleCustomAmountChange}
                 autoFocus
               />
               <span className="currency-label">VND</span>

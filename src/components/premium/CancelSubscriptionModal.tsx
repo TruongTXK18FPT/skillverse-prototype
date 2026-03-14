@@ -158,119 +158,121 @@ const CancelSubscriptionModal: React.FC<CancelSubscriptionModalProps> = ({
           </div>
         ) : (
           <>
-            {/* Subscription Info */}
-            {subscription && (
-              <div className="cancel-modal-info">
-                <div className="cancel-info-item">
-                  <span className="cancel-info-label">Gói hiện tại:</span>
-                  <span className="cancel-info-value">{subscription.plan.name}</span>
+            <div className="cancel-modal-main">
+              {/* Subscription Info */}
+              {subscription && (
+                <div className="cancel-modal-info">
+                  <div className="cancel-info-item">
+                    <span className="cancel-info-label">Gói hiện tại:</span>
+                    <span className="cancel-info-value">{subscription.plan.name}</span>
+                  </div>
+                  <div className="cancel-info-item">
+                    <span className="cancel-info-label">Ngày đăng ký:</span>
+                    <span className="cancel-info-value">
+                      {new Date(subscription.startDate).toLocaleDateString('vi-VN')}
+                    </span>
+                  </div>
+                  <div className="cancel-info-item">
+                    <span className="cancel-info-label">Số ngày đã sử dụng:</span>
+                    <span className="cancel-info-value">{daysSincePurchase} ngày</span>
+                  </div>
                 </div>
-                <div className="cancel-info-item">
-                  <span className="cancel-info-label">Ngày đăng ký:</span>
-                  <span className="cancel-info-value">
-                    {new Date(subscription.startDate).toLocaleDateString('vi-VN')}
-                  </span>
-                </div>
-                <div className="cancel-info-item">
-                  <span className="cancel-info-label">Số ngày đã sử dụng:</span>
-                  <span className="cancel-info-value">{daysSincePurchase} ngày</span>
-                </div>
-              </div>
-            )}
+              )}
 
-            {/* Refund Eligibility */}
-            <div className={`cancel-modal-eligibility ${refundPercentage > 0 ? 'eligible' : 'not-eligible'}`}>
-              {refundPercentage === 100 ? (
-                <>
-                  <CheckCircle size={24} />
-                  <div className="eligibility-content">
-                    <h3>✅ Hoàn tiền 100%</h3>
-                    <p>Trong vòng 24 giờ - Hoàn tiền đầy đủ</p>
-                    <div className="refund-amount">
-                      <Wallet size={20} />
-                      <span>Số tiền hoàn lại: <strong>{refundAmount.toLocaleString('vi-VN')} VND</strong></span>
+              {/* Refund Eligibility */}
+              <div className={`cancel-modal-eligibility ${refundPercentage > 0 ? 'eligible' : 'not-eligible'}`}>
+                {refundPercentage === 100 ? (
+                  <>
+                    <CheckCircle size={24} />
+                    <div className="eligibility-content">
+                      <h3>✅ Hoàn tiền 100%</h3>
+                      <p>Trong vòng 24 giờ - Hoàn tiền đầy đủ</p>
+                      <div className="refund-amount">
+                        <Wallet size={20} />
+                        <span>Số tiền hoàn lại: <strong>{refundAmount.toLocaleString('vi-VN')} VND</strong></span>
+                      </div>
                     </div>
-                  </div>
-                </>
-              ) : refundPercentage === 50 ? (
-                <>
-                  <CheckCircle size={24} />
-                  <div className="eligibility-content">
-                    <h3>⚡ Hoàn tiền 50%</h3>
-                    <p>Từ 1-3 ngày - Hoàn một nửa số tiền</p>
-                    <div className="refund-amount">
-                      <Wallet size={20} />
-                      <span>Số tiền hoàn lại: <strong>{refundAmount.toLocaleString('vi-VN')} VND</strong></span>
+                  </>
+                ) : refundPercentage === 50 ? (
+                  <>
+                    <CheckCircle size={24} />
+                    <div className="eligibility-content">
+                      <h3>⚡ Hoàn tiền 50%</h3>
+                      <p>Từ 1-3 ngày - Hoàn một nửa số tiền</p>
+                      <div className="refund-amount">
+                        <Wallet size={20} />
+                        <span>Số tiền hoàn lại: <strong>{refundAmount.toLocaleString('vi-VN')} VND</strong></span>
+                      </div>
                     </div>
+                  </>
+                ) : (
+                  <>
+                    <Clock size={24} />
+                    <div className="eligibility-content">
+                      <h3>❌ Không hoàn tiền</h3>
+                      <p>Quá 3 ngày - Chỉ có thể hủy gia hạn tự động</p>
+                      <p className="error-message">{eligibilityMessage}</p>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Reason Input - Only for refund */}
+              {refundPercentage > 0 && (
+                <div className="cancel-modal-reason">
+                  <label htmlFor="cancel-reason">Lý do hủy (tùy chọn):</label>
+                  <textarea
+                    id="cancel-reason"
+                    value={reason}
+                    onChange={(e) => setReason(e.target.value)}
+                    placeholder="Vui lòng cho chúng tôi biết lý do bạn muốn hủy gói..."
+                    rows={4}
+                    maxLength={500}
+                  />
+                  <span className="char-count">{reason.length}/500</span>
+                </div>
+              )}
+
+              {/* Warning for Refund */}
+              {refundPercentage > 0 && (
+                <div className="cancel-modal-warning">
+                  <AlertTriangle size={20} />
+                  <div>
+                    <strong>Lưu ý khi hủy & hoàn tiền:</strong>
+                    <ul>
+                      <li>Gói Premium sẽ bị hủy ngay lập tức</li>
+                      <li>Bạn sẽ quay về gói Free Tier</li>
+                      <li>Hoàn {refundPercentage}% số tiền vào ví trong vài phút</li>
+                      <li>Bạn có thể đăng ký lại bất cứ lúc nào</li>
+                    </ul>
                   </div>
-                </>
-              ) : (
-                <>
-                  <Clock size={24} />
-                  <div className="eligibility-content">
-                    <h3>❌ Không hoàn tiền</h3>
-                    <p>Quá 3 ngày - Chỉ có thể hủy gia hạn tự động</p>
-                    <p className="error-message">{eligibilityMessage}</p>
+                </div>
+              )}
+
+              {/* Warning for Cancel Auto-Renewal Only */}
+              {refundPercentage === 0 && (
+                <div className="cancel-modal-warning">
+                  <AlertTriangle size={20} />
+                  <div>
+                    <strong>Lưu ý khi hủy gia hạn:</strong>
+                    <ul>
+                      <li>Gói Premium tiếp tục hoạt động đến hết kỳ</li>
+                      <li>Không bị charge ở kỳ tiếp theo</li>
+                      <li>Không hoàn tiền (quá 3 ngày)</li>
+                      <li>Có thể bật lại gia hạn tự động bất cứ lúc nào</li>
+                    </ul>
                   </div>
-                </>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {error && !isEligible && (
+                <div className="cancel-modal-error">
+                  <AlertTriangle size={20} />
+                  <p>{error}</p>
+                </div>
               )}
             </div>
-
-            {/* Reason Input - Only for refund */}
-            {refundPercentage > 0 && (
-              <div className="cancel-modal-reason">
-                <label htmlFor="cancel-reason">Lý do hủy (tùy chọn):</label>
-                <textarea
-                  id="cancel-reason"
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  placeholder="Vui lòng cho chúng tôi biết lý do bạn muốn hủy gói..."
-                  rows={4}
-                  maxLength={500}
-                />
-                <span className="char-count">{reason.length}/500</span>
-              </div>
-            )}
-
-            {/* Warning for Refund */}
-            {refundPercentage > 0 && (
-              <div className="cancel-modal-warning">
-                <AlertTriangle size={20} />
-                <div>
-                  <strong>Lưu ý khi hủy & hoàn tiền:</strong>
-                  <ul>
-                    <li>Gói Premium sẽ bị hủy ngay lập tức</li>
-                    <li>Bạn sẽ quay về gói Free Tier</li>
-                    <li>Hoàn {refundPercentage}% số tiền vào ví trong vài phút</li>
-                    <li>Bạn có thể đăng ký lại bất cứ lúc nào</li>
-                  </ul>
-                </div>
-              </div>
-            )}
-
-            {/* Warning for Cancel Auto-Renewal Only */}
-            {refundPercentage === 0 && (
-              <div className="cancel-modal-warning">
-                <AlertTriangle size={20} />
-                <div>
-                  <strong>Lưu ý khi hủy gia hạn:</strong>
-                  <ul>
-                    <li>Gói Premium tiếp tục hoạt động đến hết kỳ</li>
-                    <li>Không bị charge ở kỳ tiếp theo</li>
-                    <li>Không hoàn tiền (quá 3 ngày)</li>
-                    <li>Có thể bật lại gia hạn tự động bất cứ lúc nào</li>
-                  </ul>
-                </div>
-              </div>
-            )}
-
-            {/* Error Message */}
-            {error && !isEligible && (
-              <div className="cancel-modal-error">
-                <AlertTriangle size={20} />
-                <p>{error}</p>
-              </div>
-            )}
 
             {/* Actions */}
             <div className="cancel-modal-actions">

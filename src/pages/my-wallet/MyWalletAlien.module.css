@@ -1,0 +1,665 @@
+@import '../../components/dashboard-hud/hud-styles.module.css';
+
+.alien-wallet-container {
+  composes: hud-container from '../../components/dashboard-hud/hud-styles.module.css';
+  padding: var(--hud-spacing-lg);
+  z-index: 1;
+  position: relative;
+}
+
+.alien-header {
+  margin-bottom: var(--hud-spacing-xl);
+  text-align: left;
+  border: 1px solid rgba(6, 182, 212, 0.42);
+  border-left: 4px solid var(--hud-accent-cyan);
+  padding: var(--hud-spacing-md);
+  background:
+    radial-gradient(circle at top right, rgba(6, 182, 212, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.12) 0%, transparent 42%),
+    linear-gradient(110deg, rgba(6, 182, 212, 0.12), rgba(168, 85, 247, 0.08));
+  box-shadow: var(--hud-glow-cyan), 0 0 34px rgba(6, 182, 212, 0.18);
+  position: relative;
+  clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 0 100%);
+}
+
+.alien-header::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(6, 182, 212, 0.8), transparent);
+}
+
+.alien-header-shell {
+  position: relative;
+  z-index: 2;
+}
+
+.alien-header-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.alien-status-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.alien-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+  animation: alien-status-pulse 2s ease-in-out infinite;
+}
+
+.alien-status-text {
+  font-family: var(--hud-font-display);
+  font-size: 0.68rem;
+  color: #6ee7b7;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.alien-id-chip {
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  background: rgba(6, 182, 212, 0.09);
+  color: #67e8f9;
+  font-family: var(--hud-font-display);
+  font-size: 0.68rem;
+  letter-spacing: 1.3px;
+  padding: 0.38rem 0.58rem;
+}
+
+.alien-header-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 1rem;
+  align-items: end;
+}
+
+.alien-header-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.alien-header-icon {
+  width: 34px;
+  height: 34px;
+  color: #67e8f9;
+  filter: drop-shadow(0 0 14px rgba(6, 182, 212, 0.6));
+}
+
+.alien-sparkle-icon {
+  width: 22px;
+  height: 22px;
+  color: #22d3ee;
+  animation: alien-sparkle 2.2s ease-in-out infinite;
+}
+
+.alien-header-title {
+  composes: hud-font-display from '../../components/dashboard-hud/hud-styles.module.css';
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+  margin: 0;
+  color: var(--hud-accent-cyan);
+  text-shadow: var(--hud-glow-cyan), 0 0 24px rgba(6, 182, 212, 0.45);
+}
+
+.alien-header-subtitle {
+  color: var(--hud-text-secondary);
+  font-size: 0.92rem;
+  margin-top: 0.35rem;
+  letter-spacing: 1.2px;
+  max-width: 620px;
+}
+
+.alien-header-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.alien-header-kpi {
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.24);
+  padding: 0.55rem 0.6rem;
+  min-height: 58px;
+}
+
+.alien-header-kpi-label {
+  display: block;
+  font-family: var(--hud-font-display);
+  font-size: 0.61rem;
+  color: #94a3b8;
+  letter-spacing: 1.2px;
+  margin-bottom: 0.2rem;
+}
+
+.alien-header-kpi-value {
+  color: #e0f2fe;
+  font-family: var(--hud-font-display);
+  font-size: 1.02rem;
+  letter-spacing: 0.4px;
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.34);
+}
+
+/* Balance Grid */
+.alien-balance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--hud-spacing-lg);
+  margin-bottom: var(--hud-spacing-xl);
+}
+
+.alien-balance-card {
+  composes: hud-panel from '../../components/dashboard-hud/hud-styles.module.css';
+  padding: var(--hud-spacing-lg);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+  box-shadow: var(--hud-glow-cyan), 0 0 28px rgba(6, 182, 212, 0.15);
+}
+
+.alien-card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top left, rgba(6, 182, 212, 0.1), transparent 70%);
+  pointer-events: none;
+}
+
+.alien-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--hud-spacing-md);
+  border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+  padding-bottom: var(--hud-spacing-xs);
+}
+
+.alien-toggle-balance-btn {
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  border-radius: 4px;
+  padding: 0.46rem;
+  color: #67e8f9;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.alien-toggle-balance-btn:hover {
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.35);
+  transform: translateY(-1px);
+}
+
+.alien-balance-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-bottom: 0.9rem;
+}
+
+.alien-balance-kpi-chip {
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.24);
+  padding: 0.52rem 0.6rem;
+}
+
+.alien-balance-kpi-chip span {
+  display: block;
+  font-family: var(--hud-font-display);
+  font-size: 0.58rem;
+  color: #94a3b8;
+  letter-spacing: 1.1px;
+  margin-bottom: 0.15rem;
+}
+
+.alien-balance-kpi-chip strong {
+  color: #e0f2fe;
+  font-family: var(--hud-font-display);
+  font-size: 0.93rem;
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.32);
+}
+
+.alien-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--hud-accent-cyan);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.alien-balance-split {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--hud-spacing-md);
+  margin-bottom: var(--hud-spacing-md);
+}
+
+.alien-balance-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid transparent;
+}
+
+.alien-balance-item.cash {
+  background: linear-gradient(120deg, rgba(16, 185, 129, 0.1), transparent 75%);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.alien-balance-item.coin {
+  background: linear-gradient(120deg, rgba(6, 182, 212, 0.12), transparent 75%);
+  border-color: rgba(6, 182, 212, 0.24);
+}
+
+.alien-balance-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--hud-text-secondary);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.alien-balance-value {
+  font-family: var(--hud-font-display);
+  font-size: clamp(1.9rem, 3.2vw, 2.4rem);
+  color: #f0f9ff;
+  font-weight: 800;
+  text-shadow: 0 0 20px rgba(6, 182, 212, 0.52);
+}
+
+.alien-balance-percent {
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  color: #a3b8cc;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.alien-coin-vnd-value {
+  font-size: 0.85rem;
+  color: #67e8f9;
+  font-weight: 800;
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.36);
+}
+
+.alien-coin-label {
+  font-size: 0.85rem;
+  margin-left: 0.2rem;
+  opacity: 0.92;
+}
+
+.alien-balance-divider {
+  width: 1px;
+  height: 60%;
+  background: rgba(6, 182, 212, 0.2);
+}
+
+.alien-total-assets {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(6, 182, 212, 0.1);
+  padding: var(--hud-spacing-sm);
+  border-radius: 4px;
+  margin-bottom: var(--hud-spacing-md);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+.alien-total-assets span {
+  color: var(--hud-text-secondary);
+  font-size: 0.9rem;
+}
+
+.alien-total-assets strong {
+  color: #67e8f9;
+  font-family: var(--hud-font-display);
+  font-size: 1.22rem;
+  text-shadow: 0 0 18px rgba(6, 182, 212, 0.5);
+}
+
+.alien-card-actions {
+  display: flex;
+  gap: var(--hud-spacing-md);
+  flex-wrap: wrap;
+}
+
+.alien-action-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 0.8rem;
+  border: 1px solid var(--hud-accent-cyan);
+  background: rgba(6, 182, 212, 0.1);
+  color: var(--hud-accent-cyan);
+  font-family: var(--hud-font-display);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+}
+
+.alien-action-btn:hover {
+  background: var(--hud-accent-cyan);
+  color: var(--hud-bg-deep-space);
+  box-shadow: var(--hud-glow-cyan);
+}
+
+.alien-action-btn.secondary {
+  border-color: var(--hud-accent-purple);
+  color: var(--hud-accent-purple);
+  background: rgba(168, 85, 247, 0.1);
+}
+
+.alien-action-btn.secondary:hover {
+  background: var(--hud-accent-purple);
+  color: var(--hud-bg-deep-space);
+  box-shadow: var(--hud-glow-purple);
+}
+
+/* Tabs */
+.alien-tabs {
+  display: flex;
+  gap: var(--hud-spacing-xs);
+  margin-bottom: var(--hud-spacing-lg);
+  border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+  padding-bottom: 2px;
+}
+
+.alien-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--hud-text-secondary);
+  padding: var(--hud-spacing-sm) var(--hud-spacing-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--hud-font-display);
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  position: relative;
+  text-transform: uppercase;
+}
+
+.alien-tab-btn:hover {
+  color: var(--hud-accent-cyan);
+}
+
+.alien-tab-btn.active {
+  color: var(--hud-accent-cyan);
+}
+
+.alien-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--hud-accent-cyan);
+  box-shadow: var(--hud-glow-cyan);
+}
+
+/* Content Sections */
+.alien-content {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.alien-section-title {
+  composes: hud-font-display from '../../components/dashboard-hud/hud-styles.module.css';
+  font-size: 1.2rem;
+  color: var(--hud-accent-cyan);
+  margin-bottom: var(--hud-spacing-md);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Transactions */
+.alien-transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hud-spacing-sm);
+}
+
+.alien-transaction-item {
+  composes: hud-panel from '../../components/dashboard-hud/hud-styles.module.css';
+  padding: var(--hud-spacing-md);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.alien-transaction-item:hover {
+  border-color: rgba(6, 182, 212, 0.3);
+  background: rgba(6, 182, 212, 0.05);
+}
+
+.alien-tx-info {
+  display: flex;
+  align-items: center;
+  gap: var(--hud-spacing-md);
+}
+
+.alien-tx-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.alien-tx-details h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--hud-text-primary);
+}
+
+.alien-tx-details p {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: var(--hud-text-dim);
+}
+
+.alien-tx-amount {
+  text-align: right;
+}
+
+.alien-amount-value {
+  font-family: var(--hud-font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
+  margin-bottom: 2px;
+}
+
+.alien-amount-value.credit { color: var(--hud-accent-green); }
+.alien-amount-value.debit { color: var(--hud-accent-red); }
+
+/* Buttons */
+.alien-view-all-btn {
+  margin-top: var(--hud-spacing-md);
+  background: transparent;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: var(--hud-text-secondary);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.alien-view-all-btn:hover {
+  border-color: var(--hud-accent-cyan);
+  color: var(--hud-accent-cyan);
+}
+
+/* Status Badges */
+.alien-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.alien-status-badge.success { background: rgba(16, 185, 129, 0.1); color: var(--hud-accent-green); border: 1px solid rgba(16, 185, 129, 0.2); }
+.alien-status-badge.pending { background: rgba(234, 179, 8, 0.1); color: var(--hud-accent-yellow); border: 1px solid rgba(234, 179, 8, 0.2); }
+.alien-status-badge.failed { background: rgba(239, 68, 68, 0.1); color: var(--hud-accent-red); border: 1px solid rgba(239, 68, 68, 0.2); }
+
+/* Store */
+.alien-store-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--hud-spacing-lg);
+}
+
+.alien-store-card {
+  composes: hud-panel from '../../components/dashboard-hud/hud-styles.module.css';
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--hud-spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--hud-spacing-md);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.alien-store-card:hover {
+  border-color: var(--hud-accent-cyan);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+}
+
+.alien-store-thumbnail {
+  height: 140px;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  border-radius: 4px;
+  border: 1px solid rgba(6, 182, 212, 0.1);
+}
+
+.alien-store-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--hud-accent-cyan);
+}
+
+.alien-store-info p {
+  font-size: 0.85rem;
+  color: var(--hud-text-secondary);
+  height: 2.5rem;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.alien-store-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alien-store-price {
+  composes: hud-font-display from '../../components/dashboard-hud/hud-styles.module.css';
+  color: var(--hud-accent-yellow);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.alien-buy-btn {
+  background: var(--hud-accent-cyan);
+  color: var(--hud-bg-deep-space);
+  border: none;
+  padding: 0.5rem 1rem;
+  font-family: var(--hud-font-display);
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.alien-buy-btn:hover {
+  box-shadow: var(--hud-glow-cyan);
+}
+
+@keyframes alien-status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+@keyframes alien-sparkle {
+  0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.9; }
+  50% { transform: rotate(160deg) scale(1.14); opacity: 1; }
+}
+
+@media (max-width: 980px) {
+  .alien-header-main {
+    grid-template-columns: 1fr;
+  }
+
+  .alien-header-kpis {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .alien-balance-kpi-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .alien-header-status {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .alien-header-kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .alien-balance-split {
+    grid-template-columns: 1fr;
+  }
+
+  .alien-balance-divider {
+    display: none;
+  }
+}

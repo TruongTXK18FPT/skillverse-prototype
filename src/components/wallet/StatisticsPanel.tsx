@@ -38,6 +38,16 @@ interface StatisticsPanelProps {
 }
 
 const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transactions }) => {
+  const HUD_COLORS = {
+    cyan: '#06b6d4',
+    cyanSoft: 'rgba(6, 182, 212, 0.12)',
+    green: '#10b981',
+    red: '#ef4444',
+    yellow: '#fbbf24',
+    blue: '#3b82f6',
+    text: '#94a3b8'
+  };
+
   const formatCurrency = (amount: number) => {
     const safeAmount = typeof amount === 'number' && !isNaN(amount) ? amount : 0;
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(safeAmount);
@@ -299,9 +309,9 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
                     <stop offset="95%" stopColor="#fbbf24" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(139, 92, 246, 0.1)" />
-                <XAxis dataKey="date" stroke="#a5b4fc" />
-                <YAxis stroke="#a5b4fc" />
+                <CartesianGrid strokeDasharray="3 3" stroke={HUD_COLORS.cyanSoft} />
+                <XAxis dataKey="date" stroke={HUD_COLORS.text} />
+                <YAxis stroke={HUD_COLORS.text} />
                 <Tooltip content={<CustomTooltip />} />
                 <Area 
                   type="monotone" 
@@ -370,13 +380,13 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
           <div className="chart-container">
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={transactionFlowData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(139, 92, 246, 0.1)" />
-                <XAxis dataKey="date" stroke="#a5b4fc" />
-                <YAxis stroke="#a5b4fc" />
+                <CartesianGrid strokeDasharray="3 3" stroke={HUD_COLORS.cyanSoft} />
+                <XAxis dataKey="date" stroke={HUD_COLORS.text} />
+                <YAxis stroke={HUD_COLORS.text} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend />
-                <Bar dataKey="deposit" fill="#22c55e" name="Nạp tiền" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="withdraw" fill="#ef4444" name="Rút tiền" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="deposit" fill={HUD_COLORS.green} name="Nạp tiền" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="withdraw" fill={HUD_COLORS.red} name="Rút tiền" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -395,23 +405,23 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
               <AreaChart data={monthlyTrendData}>
                 <defs>
                   <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
+                    <stop offset="5%" stopColor={HUD_COLORS.green} stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor={HUD_COLORS.green} stopOpacity={0}/>
                   </linearGradient>
                   <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                    <stop offset="5%" stopColor={HUD_COLORS.red} stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor={HUD_COLORS.red} stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(139, 92, 246, 0.1)" />
-                <XAxis dataKey="month" stroke="#a5b4fc" />
-                <YAxis stroke="#a5b4fc" />
+                <CartesianGrid strokeDasharray="3 3" stroke={HUD_COLORS.cyanSoft} />
+                <XAxis dataKey="month" stroke={HUD_COLORS.text} />
+                <YAxis stroke={HUD_COLORS.text} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend />
                 <Area 
                   type="monotone" 
                   dataKey="income" 
-                  stroke="#22c55e" 
+                  stroke={HUD_COLORS.green} 
                   fillOpacity={1} 
                   fill="url(#colorIncome)" 
                   name="Thu nhập"
@@ -419,7 +429,7 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
                 <Area 
                   type="monotone" 
                   dataKey="expense" 
-                  stroke="#ef4444" 
+                  stroke={HUD_COLORS.red} 
                   fillOpacity={1} 
                   fill="url(#colorExpense)" 
                   name="Chi tiêu"

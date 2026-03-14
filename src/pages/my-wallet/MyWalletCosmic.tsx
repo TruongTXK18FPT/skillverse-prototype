@@ -23,6 +23,7 @@ import EnableAutoRenewalModal from '../../components/premium/EnableAutoRenewalMo
 import { PremiumInvoice, useInvoice } from '../../components/invoice';
 import Toast from '../../components/shared/Toast';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
+import styles from './MyWalletAlien.module.css';
 import './MyWalletCosmic.css';
 
 interface WalletData {
@@ -328,6 +329,8 @@ const MyWalletCosmic: React.FC = () => {
     };
   };
 
+  const assetAllocation = calculateAssetAllocation();
+
   const getTransactionIcon = (type?: string) => {
     switch (type) {
       case 'DEPOSIT': return <ArrowDownLeft className="tx-icon deposit" />;
@@ -373,12 +376,12 @@ const MyWalletCosmic: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     const badges: { [key: string]: JSX.Element } = {
-      'COMPLETED': <span className="status-badge success"><CheckCircle size={14} /> Hoàn thành</span>,
-      'PENDING': <span className="status-badge pending"><Clock size={14} /> Đang xử lý</span>,
-      'FAILED': <span className="status-badge failed"><XCircle size={14} /> Thất bại</span>,
-      'CANCELLED': <span className="status-badge cancelled"><XCircle size={14} /> Đã hủy</span>
+      'COMPLETED': <span className={`${styles['alien-status-badge']} ${styles['success']}`}><CheckCircle size={14} /> Hoàn thành</span>,
+      'PENDING': <span className={`${styles['alien-status-badge']} ${styles['pending']}`}><Clock size={14} /> Đang xử lý</span>,
+      'FAILED': <span className={`${styles['alien-status-badge']} ${styles['failed']}`}><XCircle size={14} /> Thất bại</span>,
+      'CANCELLED': <span className={`${styles['alien-status-badge']} ${styles['cancelled']}`}><XCircle size={14} /> Đã hủy</span>
     };
-    return badges[status] || <span className="status-badge">{status}</span>;
+    return badges[status] || <span className={styles['alien-status-badge']}>{status}</span>;
   };
 
   // Check if transaction type supports invoice download
@@ -423,76 +426,117 @@ const MyWalletCosmic: React.FC = () => {
   }
 
   return (
-    <div className="cosmic-wallet-container">
-      {/* Cosmic Background */}
-      <div className="cosmic-bg">
-        <div className="stars"></div>
-        <div className="stars2"></div>
-        <div className="stars3"></div>
-      </div>
-
+    <div className={styles['alien-wallet-container']}>
       {/* Header */}
-      <div className="cosmic-header">
-        <div className="header-content">
-          <div className="header-title">
-            <Wallet className="header-icon" />
-            <h1>Ví SkillVerse</h1>
-            <Sparkles className="sparkle-icon" />
+      <div className={styles['alien-header']}>
+        <div className={styles['alien-header-shell']}>
+          <div className={styles['alien-header-status']}>
+            <div className={styles['alien-status-left']}>
+              <span className={styles['alien-status-dot']}></span>
+              <span className={styles['alien-status-text']}>WALLET CORE ONLINE</span>
+            </div>
+            <div className={styles['alien-id-chip']}>
+              ID {walletData?.walletId || '--'}
+            </div>
           </div>
-          <p className="header-subtitle">Quản lý tài sản của bạn trên nền tảng SkillVerse</p>
+
+          <div className={styles['alien-header-main']}>
+            <div className={styles['alien-header-title-wrap']}>
+              <Wallet className={styles['alien-header-icon']} />
+              <h1 className={styles['alien-header-title']}>Ví SkillVerse</h1>
+              <Sparkles className={styles['alien-sparkle-icon']} />
+            </div>
+            <p className={styles['alien-header-subtitle']}>Quản lý tài sản của bạn trên nền tảng SkillVerse</p>
+
+            <div className={styles['alien-header-kpis']}>
+              <div className={styles['alien-header-kpi']}>
+                <span className={styles['alien-header-kpi-label']}>Tài sản ròng</span>
+                <strong className={styles['alien-header-kpi-value']}>
+                  {showBalance ? formatCurrency(calculateTotalAssets()) : '••••••'}
+                </strong>
+              </div>
+              <div className={styles['alien-header-kpi']}>
+                <span className={styles['alien-header-kpi-label']}>Tiền mặt</span>
+                <strong className={styles['alien-header-kpi-value']}>
+                  {showBalance ? `${assetAllocation.cashPercent.toFixed(1)}%` : '•••'}
+                </strong>
+              </div>
+              <div className={styles['alien-header-kpi']}>
+                <span className={styles['alien-header-kpi-label']}>SkillCoin</span>
+                <strong className={styles['alien-header-kpi-value']}>
+                  {showBalance ? `${assetAllocation.coinPercent.toFixed(1)}%` : '•••'}
+                </strong>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Balance Cards */}
-      <div className="balance-grid">
+      <div className={styles['alien-balance-grid']}>
         {/* Combined Balance Card */}
-        <div className="balance-card combined-card">
-          <div className="card-glow"></div>
-          <div className="card-header">
-            <div className="card-title">
-              <Wallet className="card-icon" />
+        <div className={styles['alien-balance-card']}>
+          <div className={styles['alien-card-glow']}></div>
+          <div className={styles['alien-card-header']}>
+            <div className={styles['alien-card-title']}>
+              <Wallet size={18} />
               <span>Số Dư Tài Khoản</span>
             </div>
             <button 
-              className="toggle-balance-btn"
+              className={styles['alien-toggle-balance-btn']}
               onClick={() => setShowBalance(!showBalance)}
             >
               {showBalance ? <Eye size={18} /> : <EyeOff size={18} />}
             </button>
           </div>
+
+          <div className={styles['alien-balance-kpi-row']}>
+            <div className={styles['alien-balance-kpi-chip']}>
+              <span>CASH SHARE</span>
+              <strong>{showBalance ? `${assetAllocation.cashPercent.toFixed(1)}%` : '•••'}</strong>
+            </div>
+            <div className={styles['alien-balance-kpi-chip']}>
+              <span>COIN SHARE</span>
+              <strong>{showBalance ? `${assetAllocation.coinPercent.toFixed(1)}%` : '•••'}</strong>
+            </div>
+            <div className={styles['alien-balance-kpi-chip']}>
+              <span>ASSET VALUE</span>
+              <strong>{showBalance ? formatCurrency(calculateTotalAssets()) : '••••••'}</strong>
+            </div>
+          </div>
           
-          <div className="balance-split">
-            <div className="balance-item cash">
-              <div className="balance-label">
-                <DollarSign size={20} />
+          <div className={styles['alien-balance-split']}>
+            <div className={`${styles['alien-balance-item']} ${styles['cash']}`}>
+              <div className={styles['alien-balance-label']}>
+                <DollarSign size={16} />
                 <span>Tiền Mặt</span>
               </div>
-              <div className="balance-value">
+              <div className={styles['alien-balance-value']}>
                 {showBalance ? formatCurrency(walletData?.cashBalance || 0) : '••••••'}
               </div>
               {showBalance && (
-                <div className="balance-percent">
-                  {calculateAssetAllocation().cashPercent.toFixed(1)}% tổng tài sản
+                <div className={styles['alien-balance-percent']}>
+                  {assetAllocation.cashPercent.toFixed(1)}% tổng tài sản
                 </div>
               )}
             </div>
             
-            <div className="balance-divider"></div>
+            <div className={styles['alien-balance-divider']}></div>
             
-            <div className="balance-item coin">
-              <div className="balance-label">
-                <Coins size={20} />
+            <div className={`${styles['alien-balance-item']} ${styles['coin']}`}>
+              <div className={styles['alien-balance-label']}>
+                <Coins size={16} />
                 <span>SkillCoin</span>
               </div>
-              <div className="balance-value">
+              <div className={styles['alien-balance-value']}>
                 {showBalance ? (walletData?.coinBalance || 0).toLocaleString() : '••••••'}
-                <span className="coin-label">xu</span>
+                <span className={styles['alien-coin-label']}> xu</span>
               </div>
               {showBalance && (
-                <div className="balance-percent">
-                  {calculateAssetAllocation().coinPercent.toFixed(1)}% tổng tài sản
-                  <span className="coin-vnd-value">
-                    ≈ {formatCurrency(calculateAssetAllocation().coinValue || 0)}
+                <div className={styles['alien-balance-percent']}>
+                  {assetAllocation.coinPercent.toFixed(1)}% tổng tài sản
+                  <span className={styles['alien-coin-vnd-value']}>
+                    ≈ {formatCurrency(assetAllocation.coinValue || 0)}
                   </span>
                 </div>
               )}
@@ -500,23 +544,23 @@ const MyWalletCosmic: React.FC = () => {
           </div>
           
           {showBalance && (
-            <div className="total-assets">
+            <div className={styles['alien-total-assets']}>
               <TrendingUp size={18} />
               <span>Tổng tài sản:</span>
               <strong>{formatCurrency(calculateTotalAssets())}</strong>
             </div>
           )}
           
-          <div className="card-actions">
-            <button className="w-action-btn primary" onClick={() => setShowDepositModal(true)}>
+          <div className={styles['alien-card-actions']}>
+            <button className={styles['alien-action-btn']} onClick={() => setShowDepositModal(true)}>
               <Plus size={16} />
               Nạp tiền
             </button>
-            <button className="w-action-btn primary" onClick={() => setShowBuyCoinModal(true)}>
+            <button className={styles['alien-action-btn']} onClick={() => setShowBuyCoinModal(true)}>
               <Rocket size={16} />
               Mua xu
             </button>
-            <button className="w-action-btn secondary" onClick={() => setShowWithdrawModal(true)}>
+            <button className={`${styles['alien-action-btn']} ${styles['secondary']}`} onClick={() => setShowWithdrawModal(true)}>
               <Minus size={16} />
               Rút tiền
             </button>
@@ -528,37 +572,37 @@ const MyWalletCosmic: React.FC = () => {
       <StatisticsPanel walletData={walletData} transactions={transactions} />
 
       {/* Tabs */}
-      <div className="cosmic-tabs">
+      <div className={styles['alien-tabs']}>
         <button 
-          className={`tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
+          className={`${styles['alien-tab-btn']} ${activeTab === 'overview' ? styles['active'] : ''}`}
           onClick={() => setActiveTab('overview')}
         >
           <Target size={18} />
           Tổng quan
         </button>
         <button 
-          className={`tab-btn ${activeTab === 'store' ? 'active' : ''}`}
+          className={`${styles['alien-tab-btn']} ${activeTab === 'store' ? styles['active'] : ''}`}
           onClick={() => setActiveTab('store')}
         >
           <ShoppingBag size={18} />
           Cửa Hàng
         </button>
         <button 
-          className={`tab-btn ${activeTab === 'transactions' ? 'active' : ''}`}
+          className={`${styles['alien-tab-btn']} ${activeTab === 'transactions' ? styles['active'] : ''}`}
           onClick={() => setActiveTab('transactions')}
         >
           <History size={18} />
           Lịch sử
         </button>
         <button 
-          className={`tab-btn ${activeTab === 'withdrawals' ? 'active' : ''}`}
+          className={`${styles['alien-tab-btn']} ${activeTab === 'withdrawals' ? styles['active'] : ''}`}
           onClick={() => setActiveTab('withdrawals')}
         >
           <ArrowUpRight size={18} />
           Yêu cầu rút tiền
         </button>
         <button 
-          className={`tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
+          className={`${styles['alien-tab-btn']} ${activeTab === 'settings' ? styles['active'] : ''}`}
           onClick={() => setActiveTab('settings')}
         >
           <Settings size={18} />
@@ -567,96 +611,14 @@ const MyWalletCosmic: React.FC = () => {
       </div>
 
       {/* Content */}
-      <div className="cosmic-content">
+      <div className={styles['alien-content']}>
         {activeTab === 'overview' && (
           <div className="overview-section">
-            {/* Premium Subscription Section */}
-            {subscription && (
-              <div className="premium-subscription-card">
-                <div className="premium-header">
-                  <Crown className="premium-icon" />
-                  <h3>Gói Premium</h3>
-                </div>
-                <div className="premium-content">
-                  <div className="premium-info">
-                    <div className="premium-plan">
-                      <span className="plan-label">Gói hiện tại:</span>
-                      <span className="plan-name">{subscription.plan.displayName}</span>
-                    </div>
-                    <div className="premium-dates">
-                      <div className="date-item">
-                        <Calendar size={16} />
-                        <span>Bắt đầu: {new Date(subscription.startDate).toLocaleDateString('vi-VN')}</span>
-                      </div>
-                      <div className="date-item">
-                        <Calendar size={16} />
-                        <span>Hết hạn: {new Date(subscription.endDate).toLocaleDateString('vi-VN')}</span>
-                      </div>
-                    </div>
-                    <div className="premium-status">
-                      <span className={`status-badge status-${subscription.status.toLowerCase()}`}>
-                        {subscription.status === 'ACTIVE' ? '✓ Đang hoạt động' : subscription.status}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="premium-actions">
-                    {subscription.plan.planType !== 'FREE_TIER' && (
-                      <>
-                        <button 
-                          className="view-invoice-btn"
-                          onClick={() => openInvoice(
-                            subscription,
-                            user?.fullName || 'Khách hàng',
-                            user?.email || '',
-                            user?.id
-                          )}
-                        >
-                          <FileText size={16} />
-                          Xem hóa đơn
-                        </button>
-                        {subscription.autoRenew ? (
-                          <button 
-                            className="cancel-auto-renewal-btn"
-                            onClick={() => setShowCancelAutoRenewalModal(true)}
-                          >
-                            <RefreshCw size={16} />
-                            Hủy thanh toán tự động
-                          </button>
-                        ) : (
-                          <button 
-                            className="enable-auto-renewal-btn"
-                            onClick={() => setShowEnableAutoRenewalModal(true)}
-                          >
-                            <RefreshCw size={16} />
-                            Bật thanh toán tự động
-                          </button>
-                        )}
-                        <button 
-                          className="cancel-subscription-btn"
-                          onClick={() => setShowCancelModal(true)}
-                        >
-                          <XCircle size={16} />
-                          Hủy gói & hoàn tiền
-                        </button>
-                      </>
-                    )}
-                    <button 
-                      className="upgrade-btn"
-                      onClick={() => window.location.href = '/premium'}
-                    >
-                      <Zap size={16} />
-                      Nâng cấp
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <h2 className="section-title">
-              <Zap className="title-icon" />
+            <h2 className={styles['alien-section-title']}>
+              <Zap size={18} />
               Giao dịch gần đây
             </h2>
-            <div className="transactions-list">
+            <div className={styles['alien-transactions-list']}>
               {transactions.length === 0 ? (
                 <div className="empty-state">
                   <Sparkles size={48} />
@@ -664,29 +626,33 @@ const MyWalletCosmic: React.FC = () => {
                 </div>
               ) : (
                 transactions.slice(0, 5).map((tx) => (
-                  <div key={tx.transactionId} className="transaction-item">
-                    {getTransactionIcon(tx.transactionType)}
-                    <div className="tx-info">
-                      <p className="tx-desc">{tx.description}</p>
-                      <p className="tx-date">{formatDate(tx.createdAt)}</p>
+                  <div key={tx.transactionId} className={styles['alien-transaction-item']}>
+                    <div className={styles['alien-tx-info']}>
+                      <div className={styles['alien-tx-icon-wrapper']}>
+                        {getTransactionIcon(tx.transactionType)}
+                      </div>
+                      <div className={styles['alien-tx-details']}>
+                        <h4>{tx.description}</h4>
+                        <p>{formatDate(tx.createdAt)}</p>
+                      </div>
                     </div>
-                    <div className="tx-amount">
+                    <div className={styles['alien-tx-amount']}>
                       {tx.amount !== undefined && tx.amount !== null ? (
-                        <p className={(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? 'positive' : 'negative'}>
+                        <div className={`${styles['alien-amount-value']} ${(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? styles['credit'] : styles['debit']}`}>
                           {(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? '+' : '-'}{formatCurrency(Math.abs(tx.amount || 0))}
-                        </p>
+                        </div>
                       ) : null}
                       {tx.coinAmount && (
-                        <p className="tx-coins">{tx.coinAmount > 0 ? '+' : '-'}{Math.abs(tx.coinAmount)} xu</p>
+                        <div className={styles['alien-amount-value']}>{tx.coinAmount > 0 ? '+' : '-'}{Math.abs(tx.coinAmount)} xu</div>
                       )}
+                      {getStatusBadge(tx.status)}
                     </div>
-                    {getStatusBadge(tx.status)}
                   </div>
                 ))
               )}
             </div>
             {transactions.length > 5 && (
-              <button className="view-all-btn" onClick={() => setActiveTab('transactions')}>
+              <button className={styles['alien-view-all-btn']} onClick={() => setActiveTab('transactions')}>
                 Xem tất cả <ChevronRight size={16} />
               </button>
             )}
@@ -695,41 +661,45 @@ const MyWalletCosmic: React.FC = () => {
 
         {activeTab === 'transactions' && (
           <div className="transactions-section">
-            <h2 className="section-title">
-              <History className="title-icon" />
+            <h2 className={styles['alien-section-title']}>
+              <History size={18} />
               Tất cả giao dịch
             </h2>
-            <div className="transactions-list">
+            <div className={styles['alien-transactions-list']}>
               {transactions.map((tx) => (
-                <div key={tx.transactionId} className="transaction-item">
-                  {getTransactionIcon(tx.transactionType)}
-                  <div className="tx-info">
-                    <p className="tx-desc">{tx.description}</p>
-                    <p className="tx-date">{formatDate(tx.createdAt)}</p>
+                <div key={tx.transactionId} className={styles['alien-transaction-item']}>
+                  <div className={styles['alien-tx-info']}>
+                    <div className={styles['alien-tx-icon-wrapper']}>
+                      {getTransactionIcon(tx.transactionType)}
+                    </div>
+                    <div className={styles['alien-tx-details']}>
+                      <h4>{tx.description}</h4>
+                      <p>{formatDate(tx.createdAt)}</p>
+                    </div>
                   </div>
-                  <div className="tx-amount">
+                  <div className={styles['alien-tx-amount']}>
                     {tx.amount !== undefined && tx.amount !== null ? (
-                      <p className={(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? 'positive' : 'negative'}>
+                      <div className={`${styles['alien-amount-value']} ${(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? styles['credit'] : styles['debit']}`}>
                         {(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? '+' : '-'}{formatCurrency(Math.abs(tx.amount || 0))}
-                      </p>
+                      </div>
                     ) : null}
                     {tx.coinAmount && (
-                      <p className={`tx-coins ${(tx.isDebit || isTransactionDebit(tx.transactionType, tx.referenceType, tx.description)) ? 'negative' : ''}`}>
+                      <div className={styles['alien-amount-value']}>
                         {(tx.isDebit || isTransactionDebit(tx.transactionType, tx.referenceType, tx.description)) ? '-' : '+'}{Math.abs(tx.coinAmount)} xu
-                      </p>
+                      </div>
                     )}
-                  </div>
-                  <div className="tx-actions">
-                    {getStatusBadge(tx.status)}
-                    {canDownloadInvoice(tx) && (
-                      <button 
-                        className="tx-download-btn"
-                        onClick={() => handleDownloadInvoice(tx.transactionId)}
-                        title="Tải hóa đơn PDF"
-                      >
-                        <Download size={16} />
-                      </button>
-                    )}
+                    <div className="tx-actions">
+                      {getStatusBadge(tx.status)}
+                      {canDownloadInvoice(tx) && (
+                        <button 
+                          className="tx-download-btn"
+                          onClick={() => handleDownloadInvoice(tx.transactionId)}
+                          title="Tải hóa đơn PDF"
+                        >
+                          <Download size={16} />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -742,64 +712,58 @@ const MyWalletCosmic: React.FC = () => {
           <div className="store-section">
             <div className="store-header">
               <div>
-                <h2 className="section-title">
-                  <ShoppingBag className="title-icon" />
+                <h2 className={styles['alien-section-title']}>
+                  <ShoppingBag size={18} />
                   Cửa Hàng SkillCoin
                 </h2>
-                <p className="section-subtitle">Sử dụng SkillCoin để mua các mặt hàng độc quyền</p>
-              </div>
-              <div className="store-balance">
-                <Coins size={20} />
-                <span>Số dư: {walletData?.coinBalance || 0} xu</span>
-              </div>
-            </div>
-
-            <div className="store-filters">
-              <div className="search-box">
-                <Search size={18} />
-                <input 
-                  type="text"
-                  placeholder="Tìm kiếm sản phẩm..."
-                  value={storeSearchTerm}
-                  onChange={(e) => setStoreSearchTerm(e.target.value)}
-                />
-              </div>
-              <div className="category-filters">
-                <button 
-                  className={`filter-btn ${selectedStoreCategory === 'all' ? 'active' : ''}`}
-                  onClick={() => setSelectedStoreCategory('all')}
-                >
-                  <Filter size={16} />
-                  Tất cả
-                </button>
-                <button 
-                  className={`filter-btn ${selectedStoreCategory === 'courses' ? 'active' : ''}`}
-                  onClick={() => setSelectedStoreCategory('courses')}
-                >
-                  Khóa học
-                </button>
-                <button 
-                  className={`filter-btn ${selectedStoreCategory === 'certificates' ? 'active' : ''}`}
-                  onClick={() => setSelectedStoreCategory('certificates')}
-                >
-                  Chứng chỉ
-                </button>
-                <button 
-                  className={`filter-btn ${selectedStoreCategory === 'upgrades' ? 'active' : ''}`}
-                  onClick={() => setSelectedStoreCategory('upgrades')}
-                >
-                  Nâng cấp
-                </button>
-                <button 
-                  className={`filter-btn ${selectedStoreCategory === 'gifts' ? 'active' : ''}`}
-                  onClick={() => setSelectedStoreCategory('gifts')}
-                >
-                  Quà tặng
-                </button>
+                <div className="store-filters">
+                  <div className="search-box">
+                    <Search size={18} />
+                    <input 
+                      type="text"
+                      placeholder="Tìm kiếm sản phẩm..."
+                      value={storeSearchTerm}
+                      onChange={(e) => setStoreSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <div className="category-filters">
+                    <button 
+                      className={`filter-btn ${selectedStoreCategory === 'all' ? 'active' : ''}`}
+                      onClick={() => setSelectedStoreCategory('all')}
+                    >
+                      <Filter size={16} />
+                      Tất cả
+                    </button>
+                    <button 
+                      className={`filter-btn ${selectedStoreCategory === 'courses' ? 'active' : ''}`}
+                      onClick={() => setSelectedStoreCategory('courses')}
+                    >
+                      Khóa học
+                    </button>
+                    <button 
+                      className={`filter-btn ${selectedStoreCategory === 'certificates' ? 'active' : ''}`}
+                      onClick={() => setSelectedStoreCategory('certificates')}
+                    >
+                      Chứng chỉ
+                    </button>
+                    <button 
+                      className={`filter-btn ${selectedStoreCategory === 'upgrades' ? 'active' : ''}`}
+                      onClick={() => setSelectedStoreCategory('upgrades')}
+                    >
+                      Nâng cấp
+                    </button>
+                    <button 
+                      className={`filter-btn ${selectedStoreCategory === 'gifts' ? 'active' : ''}`}
+                      onClick={() => setSelectedStoreCategory('gifts')}
+                    >
+                      Quà tặng
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="store-grid">
+            <div className={styles['alien-store-grid']}>
               {filteredStoreItems.length === 0 ? (
                 <div className="empty-state">
                   <Sparkles size={48} />
@@ -807,21 +771,22 @@ const MyWalletCosmic: React.FC = () => {
                 </div>
               ) : (
                 filteredStoreItems.map((item) => (
-                  <div key={item.id} className="store-item">
+                  <div key={item.id} className={styles['alien-store-card']}>
                     {item.isNew && <div className="item-badge new-badge">✨ MỚI</div>}
                     {item.isRecommended && <div className="item-badge recommend-badge">⭐ ĐỀ XUẤT</div>}
+                    <div className={styles['alien-store-thumbnail']}>{item.thumbnail}</div>
+                    <div className={styles['alien-store-info']}>
+                      <h3>{item.title}</h3>
+                      <p>{item.description}</p>
+                    </div>
                     
-                    <div className="item-thumbnail">{item.thumbnail}</div>
-                    <h3 className="item-title">{item.title}</h3>
-                    <p className="item-description">{item.description}</p>
-                    
-                    <div className="item-footer">
-                      <div className="item-price">
+                    <div className={styles['alien-store-footer']}>
+                      <div className={styles['alien-store-price']}>
                         <Coins size={16} />
-                        <span>{item.price} xu</span>
+                        <span>{item.price}</span>
                       </div>
                       <button 
-                        className="item-buy-btn"
+                        className={styles['alien-buy-btn']}
                         onClick={() => handleBuyStoreItem(item)}
                         disabled={!walletData || walletData.coinBalance < item.price}
                       >
@@ -837,14 +802,14 @@ const MyWalletCosmic: React.FC = () => {
 
         {activeTab === 'settings' && (
           <div className="settings-section">
-            <h2 className="section-title">
-              <Settings className="title-icon" />
+            <h2 className={styles['alien-section-title']}>
+              <Settings size={18} />
               Cài Đặt Tài Khoản
             </h2>
             
             <div className="settings-grid">
               {/* Bank Account Settings */}
-              <div className="settings-card">
+              <div className={styles['alien-store-card']}>
                 <div className="settings-card-header">
                   <div className="settings-icon bank">
                     <Building2 size={24} />
@@ -860,9 +825,7 @@ const MyWalletCosmic: React.FC = () => {
                     <div className="settings-info">
                       <div className="info-row">
                         <span className="info-label">Trạng thái:</span>
-                        <span className="status-badge success">
-                          <CheckCircle size={14} /> Đã thiết lập
-                        </span>
+                        {getStatusBadge('COMPLETED')}
                       </div>
                       <div className="info-row">
                         <span className="info-label">Ngân hàng:</span>
@@ -883,7 +846,7 @@ const MyWalletCosmic: React.FC = () => {
                 
                 <div className="settings-card-footer">
                   <button 
-                    className="settings-btn primary"
+                    className={styles['alien-action-btn']}
                     onClick={() => setShowBankSetupModal(true)}
                   >
                     <Building2 size={16} />
@@ -893,7 +856,7 @@ const MyWalletCosmic: React.FC = () => {
               </div>
 
               {/* Transaction PIN Settings */}
-              <div className="settings-card">
+              <div className={styles['alien-store-card']}>
                 <div className="settings-card-header">
                   <div className="settings-icon pin">
                     <Lock size={24} />
@@ -909,9 +872,7 @@ const MyWalletCosmic: React.FC = () => {
                     <div className="settings-info">
                       <div className="info-row">
                         <span className="info-label">Trạng thái:</span>
-                        <span className="status-badge success">
-                          <CheckCircle size={14} /> Đã thiết lập
-                        </span>
+                        {getStatusBadge('COMPLETED')}
                       </div>
                       <div className="info-row">
                         <span className="info-label">Mã PIN:</span>
@@ -932,7 +893,7 @@ const MyWalletCosmic: React.FC = () => {
                 
                 <div className="settings-card-footer">
                   <button 
-                    className="settings-btn primary"
+                    className={styles['alien-action-btn']}
                     onClick={() => setShowPinSetupModal(true)}
                   >
                     <Lock size={16} />
@@ -944,7 +905,7 @@ const MyWalletCosmic: React.FC = () => {
 
             {/* Security Tips */}
             <div className="security-tips">
-              <h3>
+              <h3 className={styles['alien-section-title']}>
                 <Shield size={20} />
                 Lưu Ý Bảo Mật
               </h3>
@@ -972,8 +933,8 @@ const MyWalletCosmic: React.FC = () => {
 
         {activeTab === 'withdrawals' && (
           <div className="withdrawals-section">
-            <h2 className="section-title">
-              <ArrowUpRight className="title-icon" />
+            <h2 className={styles['alien-section-title']}>
+              <ArrowUpRight size={18} />
               Yêu Cầu Rút Tiền
             </h2>
 
@@ -982,82 +943,29 @@ const MyWalletCosmic: React.FC = () => {
                 <DollarSign size={64} />
                 <h3>Chưa có yêu cầu rút tiền</h3>
                 <p>Các yêu cầu rút tiền của bạn sẽ hiển thị ở đây</p>
-                <button className="btn-primary" onClick={() => setShowWithdrawModal(true)}>
+                <button className={styles['alien-action-btn']} onClick={() => setShowWithdrawModal(true)}>
                   <Plus size={18} />
                   Tạo yêu cầu rút tiền
                 </button>
               </div>
             ) : (
-              <div className="withdrawal-requests-list">
+              <div className={styles['alien-transactions-list']}>
                 {withdrawalRequests.map((request) => (
-                  <div key={request.requestId} className="withdrawal-request-card">
-                    <div className="request-header">
-                      <div className="request-code">
-                        <span className="code-label">Mã yêu cầu:</span>
-                        <span className="code-value">{request.requestCode}</span>
+                  <div key={request.requestId} className={styles['alien-transaction-item']}>
+                    <div className={styles['alien-tx-info']}>
+                      <div className={styles['alien-tx-icon-wrapper']}>
+                        <ArrowUpRight size={18} />
                       </div>
-                      <div className={`status-badge ${request.status.toLowerCase()}`}>
-                        {request.status === 'PENDING' && <Clock size={14} />}
-                        {request.status === 'APPROVED' && <CheckCircle size={14} />}
-                        {request.status === 'COMPLETED' && <CheckCircle size={14} />}
-                        {request.status === 'REJECTED' && <XCircle size={14} />}
-                        {request.status === 'CANCELLED' && <XCircle size={14} />}
-                        {request.status === 'PENDING' && 'Chờ duyệt'}
-                        {request.status === 'APPROVED' && 'Đã duyệt'}
-                        {request.status === 'COMPLETED' && 'Hoàn thành'}
-                        {request.status === 'REJECTED' && 'Từ chối'}
-                        {request.status === 'CANCELLED' && 'Đã hủy'}
+                      <div className={styles['alien-tx-details']}>
+                        <h4>Mã yêu cầu: {request.requestCode}</h4>
+                        <p>{formatDate(request.createdAt)}</p>
                       </div>
                     </div>
-
-                    <div className="request-body">
-                      <div className="request-amount">
-                        <DollarSign size={24} />
-                        <div>
-                          <span className="amount-label">Số tiền rút</span>
-                          <span className="amount-value">{formatCurrency(request.amount)}</span>
-                        </div>
+                    <div className={styles['alien-tx-amount']}>
+                      <div className={`${styles['alien-amount-value']} ${styles['debit']}`}>
+                        -{formatCurrency(request.amount)}
                       </div>
-
-                      <div className="request-details">
-                        <div className="detail-row">
-                          <Building2 size={16} />
-                          <span className="detail-label">Ngân hàng:</span>
-                          <span className="detail-value">{request.bankName}</span>
-                        </div>
-                        <div className="detail-row">
-                          <CreditCard size={16} />
-                          <span className="detail-label">Số TK:</span>
-                          <span className="detail-value">{request.bankAccountNumber}</span>
-                        </div>
-                        <div className="detail-row">
-                          <User size={16} />
-                          <span className="detail-label">Chủ TK:</span>
-                          <span className="detail-value">{request.bankAccountName}</span>
-                        </div>
-                        <div className="detail-row">
-                          <Clock size={16} />
-                          <span className="detail-label">Ngày tạo:</span>
-                          <span className="detail-value">{formatDate(request.createdAt)}</span>
-                        </div>
-                        {request.processedAt && (
-                          <div className="detail-row">
-                            <CheckCircle size={16} />
-                            <span className="detail-label">Ngày xử lý:</span>
-                            <span className="detail-value">{formatDate(request.processedAt)}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {request.adminNotes && (
-                        <div className="admin-notes">
-                          <AlertCircle size={16} />
-                          <div>
-                            <strong>Ghi chú từ Admin:</strong>
-                            <p>{request.adminNotes}</p>
-                          </div>
-                        </div>
-                      )}
+                      {getStatusBadge(request.status)}
                     </div>
                   </div>
                 ))}
@@ -1065,7 +973,6 @@ const MyWalletCosmic: React.FC = () => {
             )}
           </div>
         )}
-
       </div>
 
       {/* Deposit Modal */}
