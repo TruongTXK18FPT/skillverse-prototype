@@ -177,7 +177,7 @@ const PUBLIC_ENDPOINTS = [
   "/v1/meowl/reminders", // Meowl reminders
   "/v1/meowl/notifications", // Meowl notifications
   "/v1/meowl/health", // Meowl health check
-  // "/premium/plans", // Removed: requires auth for role-based filtering
+  "/premium/plans", // Public premium plans listing
   "/jobs/public", // Public jobs listing
   "/short-term-jobs/public", // Public short-term jobs listing
   "/short-term-jobs/search", // Public short-term job search

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   Wallet, DollarSign, Coins, TrendingDown, TrendingUp,
@@ -11,12 +11,15 @@ import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
 import walletService from '../../services/walletService';
 import { premiumService } from '../../services/premiumService';
+import { paymentService } from '../../services/paymentService';
 import { UserSubscriptionResponse } from '../../data/premiumDTOs';
+import { PaymentTransactionResponse } from '../../data/paymentDTOs';
 import DepositCashModal from '../../components/wallet/DepositCashModal';
 import BuyCoinModal from '../../components/wallet/BuyCoinModal';
 import WithdrawModal from '../../components/wallet/WithdrawModal';
 import SetupBankAccountModal from '../../components/wallet/SetupBankAccountModal';
 import StatisticsPanel from '../../components/wallet/StatisticsPanel';
+import PaymentOrderHistorySection from '../../components/wallet/PaymentOrderHistorySection';
 import CancelSubscriptionModal from '../../components/premium/CancelSubscriptionModal';
 import CancelAutoRenewalModal from '../../components/premium/CancelAutoRenewalModal';
 import EnableAutoRenewalModal from '../../components/premium/EnableAutoRenewalModal';
@@ -90,6 +93,9 @@ const MyWalletCosmic: React.FC = () => {
   // State
   const [walletData, setWalletData] = useState<WalletData | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [paymentOrders, setPaymentOrders] = useState<PaymentTransactionResponse[]>([]);
+  const [paymentOrdersLoaded, setPaymentOrdersLoaded] = useState(false);
+  const [paymentOrdersLoading, setPaymentOrdersLoading] = useState(false);
   const [withdrawalRequests, setWithdrawalRequests] = useState<WithdrawalRequestData[]>([]);
   const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -216,6 +222,27 @@ const MyWalletCosmic: React.FC = () => {
       console.error('Error fetching transactions:', error);
     }
   };
+
+  const fetchPaymentOrders = useCallback(async (options: { force?: boolean } = {}) => {
+    const shouldForce = options.force === true;
+
+    if (!shouldForce && (paymentOrdersLoaded || paymentOrdersLoading)) {
+      return;
+    }
+
+    try {
+      setPaymentOrdersLoading(true);
+      const orders = await paymentService.getPaymentHistory();
+      setPaymentOrders(
+        orders.filter((order) => (order.paymentMethod || '').toUpperCase() === 'PAYOS')
+      );
+      setPaymentOrdersLoaded(true);
+    } catch (error) {
+      console.error('Error fetching payment order history:', error);
+    } finally {
+      setPaymentOrdersLoading(false);
+    }
+  }, [paymentOrdersLoaded, paymentOrdersLoading]);
   //sivi fetch fix
   // Fetch withdrawal requests 
   const fetchWithdrawalRequests = async () => {
@@ -250,6 +277,9 @@ const MyWalletCosmic: React.FC = () => {
       );
       fetchWalletData();
       fetchTransactions();
+      if (paymentOrdersLoaded) {
+        fetchPaymentOrders({ force: true });
+      }
       // Clean URL
       window.history.replaceState({}, '', '/my-wallet');
     } else if (paymentStatus === 'cancel') {
@@ -267,6 +297,18 @@ const MyWalletCosmic: React.FC = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (activeTab === 'transactions' && user) {
+      fetchPaymentOrders();
+    }
+  }, [activeTab, user, fetchPaymentOrders]);
+
+  useEffect(() => {
+    setPaymentOrders([]);
+    setPaymentOrdersLoaded(false);
+    setPaymentOrdersLoading(false);
+  }, [user?.id]);
+
   const showToast = (type: 'success' | 'error' | 'warning' | 'info', title: string, message: string) => {
     setToast({ isVisible: true, type, title, message });
     setTimeout(() => setToast(prev => ({ ...prev, isVisible: false })), 5000);
@@ -276,6 +318,9 @@ const MyWalletCosmic: React.FC = () => {
     showToast('success', '🪙 Thành công', 'Mua xu thành công!');
     fetchWalletData();
     fetchTransactions();
+    if (paymentOrdersLoaded) {
+      fetchPaymentOrders({ force: true });
+    }
   };
 
   const handleWithdrawSuccess = () => {
@@ -659,51 +704,69 @@ const MyWalletCosmic: React.FC = () => {
         )}
 
         {activeTab === 'transactions' && (
-          <div className="transactions-section">
-            <h2 className={styles['alien-section-title']}>
-              <History size={18} />
-              Tất cả giao dịch
-            </h2>
-            <div className={styles['alien-transactions-list']}>
-              {transactions.map((tx) => (
-                <div key={tx.transactionId} className={styles['alien-transaction-item']}>
-                  <div className={styles['alien-tx-info']}>
-                    <div className={styles['alien-tx-icon-wrapper']}>
-                      {getTransactionIcon(tx.transactionType)}
-                    </div>
-                    <div className={styles['alien-tx-details']}>
-                      <h4>{tx.description}</h4>
-                      <p>{formatDate(tx.createdAt)}</p>
-                    </div>
-                  </div>
-                  <div className={styles['alien-tx-amount']}>
-                    {tx.amount !== undefined && tx.amount !== null ? (
-                      <div className={`${styles['alien-amount-value']} ${(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? styles['credit'] : styles['debit']}`}>
-                        {(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? '+' : '-'}{formatCurrency(Math.abs(tx.amount || 0))}
+          <>
+            <div className="transactions-section">
+              <h2 className={styles['alien-section-title']}>
+                <History size={18} />
+                Tất cả giao dịch
+              </h2>
+              <div className={styles['alien-transactions-list']}>
+                {transactions.map((tx) => (
+                  <div key={tx.transactionId} className={styles['alien-transaction-item']}>
+                    <div className={styles['alien-tx-info']}>
+                      <div className={styles['alien-tx-icon-wrapper']}>
+                        {getTransactionIcon(tx.transactionType)}
                       </div>
-                    ) : null}
-                    {tx.coinAmount && (
-                      <div className={styles['alien-amount-value']}>
-                        {(tx.isDebit || isTransactionDebit(tx.transactionType, tx.referenceType, tx.description)) ? '-' : '+'}{Math.abs(tx.coinAmount)} xu
+                      <div className={styles['alien-tx-details']}>
+                        <h4>{tx.description}</h4>
+                        <p>{formatDate(tx.createdAt)}</p>
                       </div>
-                    )}
-                    <div className="tx-actions">
-                      {getStatusBadge(tx.status)}
-                      {canDownloadInvoice(tx) && (
-                        <button 
-                          className="tx-download-btn"
-                          onClick={() => handleDownloadInvoice(tx.transactionId)}
-                          title="Tải hóa đơn PDF"
-                        >
-                          <Download size={16} />
-                        </button>
+                    </div>
+                    <div className={styles['alien-tx-amount']}>
+                      {tx.amount !== undefined && tx.amount !== null ? (
+                        <div className={`${styles['alien-amount-value']} ${(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? styles['credit'] : styles['debit']}`}>
+                          {(tx.isCredit ?? isTransactionCredit(tx.transactionType)) ? '+' : '-'}{formatCurrency(Math.abs(tx.amount || 0))}
+                        </div>
+                      ) : null}
+                      {tx.coinAmount && (
+                        <div className={styles['alien-amount-value']}>
+                          {(tx.isDebit || isTransactionDebit(tx.transactionType, tx.referenceType, tx.description)) ? '-' : '+'}{Math.abs(tx.coinAmount)} xu
+                        </div>
                       )}
+                      <div className="tx-actions">
+                        {getStatusBadge(tx.status)}
+                        {canDownloadInvoice(tx) && (
+                          <button 
+                            className="tx-download-btn"
+                            onClick={() => handleDownloadInvoice(tx.transactionId)}
+                            title="Tải hóa đơn PDF"
+                          >
+                            <Download size={16} />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+            
+            <PaymentOrderHistorySection
+              orders={paymentOrders}
+              isLoading={paymentOrdersLoading}
+              itemsPerPage={6}
+              formatDate={formatDate}
+              formatCurrency={formatCurrency}
+              getStatusBadge={getStatusBadge}
+              listClassName={styles['alien-transactions-list']}
+              itemClassName={styles['alien-transaction-item']}
+              txInfoClassName={styles['alien-tx-info']}
+              txIconWrapperClassName={styles['alien-tx-icon-wrapper']}
+              txDetailsClassName={styles['alien-tx-details']}
+              txAmountClassName={styles['alien-tx-amount']}
+              sectionTitleClassName={styles['alien-section-title']}
+            />
+          </>
         )}
 
 
@@ -982,6 +1045,9 @@ const MyWalletCosmic: React.FC = () => {
           showToast('success', '✅ Thành công', `Đã nạp ${formatCurrency(amount)} vào ví!`);
           fetchWalletData();
           fetchTransactions();
+          if (paymentOrdersLoaded) {
+            fetchPaymentOrders({ force: true });
+          }
         }}
       />
 
