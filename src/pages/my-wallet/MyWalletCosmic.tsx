@@ -17,7 +17,6 @@ import BuyCoinModal from '../../components/wallet/BuyCoinModal';
 import WithdrawModal from '../../components/wallet/WithdrawModal';
 import SetupBankAccountModal from '../../components/wallet/SetupBankAccountModal';
 import StatisticsPanel from '../../components/wallet/StatisticsPanel';
-import PaymentCallbackHelper from '../../components/wallet/PaymentCallbackHelper';
 import CancelSubscriptionModal from '../../components/premium/CancelSubscriptionModal';
 import CancelAutoRenewalModal from '../../components/premium/CancelAutoRenewalModal';
 import EnableAutoRenewalModal from '../../components/premium/EnableAutoRenewalModal';
@@ -102,7 +101,6 @@ const MyWalletCosmic: React.FC = () => {
   const [showEnableAutoRenewalModal, setShowEnableAutoRenewalModal] = useState(false);
   const [showBankSetupModal, setShowBankSetupModal] = useState(false);
   const [showPinSetupModal, setShowPinSetupModal] = useState(false);
-  const [showCallbackHelper, setShowCallbackHelper] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'transactions' | 'store' | 'settings' | 'withdrawals'>('overview');
   const [selectedStoreCategory, setSelectedStoreCategory] = useState<string>('all');
   const [storeSearchTerm, setStoreSearchTerm] = useState('');
@@ -244,8 +242,13 @@ const MyWalletCosmic: React.FC = () => {
     const paymentMessage = searchParams.get('message');
     
     if (paymentStatus === 'success') {
-      // Show callback helper for localhost development
-      setShowCallbackHelper(true);
+      showToast(
+        'success',
+        '✅ Thanh toán thành công',
+        paymentMessage || 'Giao dịch đã hoàn tất. Hệ thống sẽ tự đồng bộ số dư trong giây lát.'
+      );
+      fetchWalletData();
+      fetchTransactions();
       // Clean URL
       window.history.replaceState({}, '', '/my-wallet');
     } else if (paymentStatus === 'cancel') {
@@ -1121,17 +1124,6 @@ const MyWalletCosmic: React.FC = () => {
         }}
         needsBank={false}
         needsPin={!walletData?.hasTransactionPin}
-      />
-
-      {/* Payment Callback Helper */}
-      <PaymentCallbackHelper
-        isVisible={showCallbackHelper}
-        onClose={() => setShowCallbackHelper(false)}
-        onSuccess={() => {
-          fetchWalletData();
-          fetchTransactions();
-          showToast('success', '✅ Nạp tiền thành công!', 'Số dư đã được cập nhật');
-        }}
       />
 
       {/* Enable Auto-Renewal Modal */}
