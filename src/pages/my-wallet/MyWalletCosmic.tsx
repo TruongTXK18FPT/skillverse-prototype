@@ -215,8 +215,8 @@ const MyWalletCosmic: React.FC = () => {
       console.error('Error fetching transactions:', error);
     }
   };
-
-  // Fetch withdrawal requests
+  //sivi fetch fix
+  // Fetch withdrawal requests 
   const fetchWithdrawalRequests = async () => {
     try {
       const response = await walletService.getMyWithdrawalRequests(0, 20);
