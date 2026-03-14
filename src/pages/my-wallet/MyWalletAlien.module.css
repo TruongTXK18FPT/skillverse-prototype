@@ -1,7 +1,6 @@
 @import '../../components/dashboard-hud/hud-styles.module.css';
 
 .alien-wallet-container {
-  composes: hud-container from '../../components/dashboard-hud/hud-styles.module.css';
   padding: var(--hud-spacing-lg);
   z-index: 1;
   position: relative;
@@ -478,6 +477,7 @@
   justify-content: center;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #67e8f9;
 }
 
 .alien-tx-details h4 {

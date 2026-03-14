@@ -446,7 +446,6 @@ const MyWalletCosmic: React.FC = () => {
               <h1 className={styles['alien-header-title']}>Ví SkillVerse</h1>
               <Sparkles className={styles['alien-sparkle-icon']} />
             </div>
-            <p className={styles['alien-header-subtitle']}>Quản lý tài sản của bạn trên nền tảng SkillVerse</p>
 
             <div className={styles['alien-header-kpis']}>
               <div className={styles['alien-header-kpi']}>
