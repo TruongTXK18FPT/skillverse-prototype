@@ -1,54 +1,68 @@
-import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import sliderService from '../../services/sliderService';
+import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import sliderService from "../../services/sliderService";
 import {
-  BookOpen, Award,
-  Brain, Target,
-  Code, Zap, Globe, ChevronRight,
-  Map, Briefcase as Portfolio, Building, Power,
-  Facebook, Video, Sparkles, ExternalLink, Rocket,
-  Play, Activity, Terminal, Cpu,
-  Crown
-} from 'lucide-react';
-import MeowlGuide from '../../components/meowl/MeowlGuide';
-import '../../styles/HomePage.css';
-import '../../styles/HomeAwardV2.css';
+  BookOpen,
+  Award,
+  Brain,
+  Target,
+  Code,
+  Zap,
+  Globe,
+  ChevronRight,
+  Map,
+  Briefcase as Portfolio,
+  Building,
+  Power,
+  Facebook,
+  Video,
+  Sparkles,
+  ExternalLink,
+  Rocket,
+  Play,
+  Activity,
+  Terminal,
+  Cpu,
+  Crown,
+} from "lucide-react";
+import MeowlGuide from "../../components/meowl/MeowlGuide";
+import "../../styles/HomePage.css";
+import "../../styles/HomeAwardV2.css";
 
 // Slider images
-import slide1 from '../../assets/sliders/slider-1.png';
-import slide2 from '../../assets/sliders/slider-2.png';
-import slide3 from '../../assets/sliders/slider-3.png';
-import slide4 from '../../assets/sliders/slider-4.png';
-import slide5 from '../../assets/sliders/slider-5.png';
-import slide6 from '../../assets/sliders/slider-6.png';
+import slide1 from "../../assets/sliders/slider-1.png";
+import slide2 from "../../assets/sliders/slider-2.png";
+import slide3 from "../../assets/sliders/slider-3.png";
+import slide4 from "../../assets/sliders/slider-4.png";
+import slide5 from "../../assets/sliders/slider-5.png";
+import slide6 from "../../assets/sliders/slider-6.png";
 
 // Award images
-import gold1 from '../../assets/award/gold1.png';
-import silver1 from '../../assets/award/silver1.png';
-import bronze1 from '../../assets/award/bronze1.png';
-import cup from '../../assets/award/cup.png';
-import earth from '../../assets/award/earth.png';
-import roisao from '../../assets/social/roisao.jpg';
+import gold1 from "../../assets/award/gold1.png";
+import silver1 from "../../assets/award/silver1.png";
+import bronze1 from "../../assets/award/bronze1.png";
+import cup from "../../assets/award/cup.png";
+import earth from "../../assets/award/earth.png";
+import roisao from "../../assets/social/roisao.jpg";
 
 // Social media images
-import tiktokIcon from '../../assets/social/tiktok.png';
-import facebookIcon from '../../assets/social/facebook.png';
+import tiktokIcon from "../../assets/social/tiktok.png";
+import facebookIcon from "../../assets/social/facebook.png";
 
 // Infinity Stones
-import spaceStone from '../../assets/infinity-stones/space_stone.png';
-import mindStone from '../../assets/infinity-stones/mind-stone.png';
-import realityStone from '../../assets/infinity-stones/reality_stone.png';
-import powerStone from '../../assets/infinity-stones/power_stone.png';
-import timeStone from '../../assets/infinity-stones/time_stone.png';
-import soulStone from '../../assets/infinity-stones/soul_stone.png';
-
+import spaceStone from "../../assets/infinity-stones/space_stone.png";
+import mindStone from "../../assets/infinity-stones/mind-stone.png";
+import realityStone from "../../assets/infinity-stones/reality_stone.png";
+import powerStone from "../../assets/infinity-stones/power_stone.png";
+import timeStone from "../../assets/infinity-stones/time_stone.png";
+import soulStone from "../../assets/infinity-stones/soul_stone.png";
 
 const HomePage = () => {
   const { isAuthenticated } = useAuth();
   const [theme] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme || 'light';
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme || "light";
   });
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -59,7 +73,7 @@ const HomePage = () => {
   const [loadedVideos, setLoadedVideos] = useState<Record<string, boolean>>({});
 
   const handleLoadVideo = (id: string) => {
-    setLoadedVideos(prev => ({ ...prev, [id]: true }));
+    setLoadedVideos((prev) => ({ ...prev, [id]: true }));
   };
 
   const constellationContainerRef = useRef<HTMLDivElement>(null);
@@ -68,93 +82,101 @@ const HomePage = () => {
   const defaultSlides = [
     {
       image: slide1,
-      title: 'Bắt Đầu Hành Trình Phát Triển Kỹ Năng',
-      description: 'Nền tảng học tập thông minh kết hợp AI, lộ trình cá nhân hóa và cộng đồng thực hành',
-      cta: 'Khám phá SkillVerse',
-      route: '/choose-role',
-      icon: Brain
+      title: "Bắt Đầu Hành Trình Phát Triển Kỹ Năng",
+      description:
+        "Nền tảng học tập thông minh kết hợp AI, lộ trình cá nhân hóa và cộng đồng thực hành",
+      cta: "Khám phá SkillVerse",
+      route: "/journey",
+      icon: Brain,
     },
     {
       image: slide2,
-      title: 'Lộ Trình Học Thông Minh',
-      description: 'AI phân tích mục tiêu và năng lực để đề xuất lộ trình học phù hợp nhất cho bạn',
-      cta: 'Tạo lộ trình học của bạn',
-      route: '/roadmap',
-      icon: Map
+      title: "Lộ Trình Học Thông Minh",
+      description:
+        "AI phân tích mục tiêu và năng lực để đề xuất lộ trình học phù hợp nhất cho bạn",
+      cta: "Tạo lộ trình học của bạn",
+      route: "/roadmap",
+      icon: Map,
     },
     {
       image: slide3,
-      title: 'Học Tập Không Giới Hạn',
-      description: 'Học cùng cộng đồng và truy cập hàng trăm khóa học chất lượng cao từ chuyên gia',
-      cta: 'Bắt đầu học ngay',
-      route: '/courses',
-      icon: BookOpen
+      title: "Học Tập Không Giới Hạn",
+      description:
+        "Học cùng cộng đồng và truy cập hàng trăm khóa học chất lượng cao từ chuyên gia",
+      cta: "Bắt đầu học ngay",
+      route: "/courses",
+      icon: BookOpen,
     },
     {
       image: slide4,
-      title: 'Xây Dựng Portfolio Ấn Tượng',
-      description: 'Hoàn thành dự án thực tế, tích lũy chứng chỉ và xây dựng hồ sơ năng lực chuyên nghiệp',
-      cta: 'Tạo portfolio của bạn',
-      route: '/portfolio',
-      icon: Portfolio
+      title: "Xây Dựng Portfolio Ấn Tượng",
+      description:
+        "Hoàn thành dự án thực tế, tích lũy chứng chỉ và xây dựng hồ sơ năng lực chuyên nghiệp",
+      cta: "Tạo portfolio của bạn",
+      route: "/portfolio",
+      icon: Portfolio,
     },
     {
       image: slide5,
-      title: 'Cơ Hội Việc Làm Đang Chờ Bạn',
-      description: 'Kết nối với nhà tuyển dụng và biến kỹ năng thành cơ hội nghề nghiệp thực sự',
-      cta: 'Kết nối cơ hội việc làm',
-      route: '/jobs',
-      icon: Building
+      title: "Cơ Hội Việc Làm Đang Chờ Bạn",
+      description:
+        "Kết nối với nhà tuyển dụng và biến kỹ năng thành cơ hội nghề nghiệp thực sự",
+      cta: "Kết nối cơ hội việc làm",
+      route: "/jobs",
+      icon: Building,
     },
     {
       image: slide6,
-      title: 'Mở Khóa Cấp Độ Truy Cập',
-      description: 'Nâng cấp tài khoản để mở quyền truy cập nâng cao, AI mạnh hơn và các tính năng dành cho người nghiêm túc với sự nghiệp',
-      cta: 'Xem các gói Premium',
-      route: '/premium',
-      icon: Crown
-    }
+      title: "Mở Khóa Cấp Độ Truy Cập",
+      description:
+        "Nâng cấp tài khoản để mở quyền truy cập nâng cao, AI mạnh hơn và các tính năng dành cho người nghiêm túc với sự nghiệp",
+      cta: "Xem các gói Premium",
+      route: "/premium",
+      icon: Crown,
+    },
   ];
-
 
   const [slides, setSlides] = useState<any[]>(defaultSlides);
 
   useEffect(() => {
     const fetchSliders = async () => {
       try {
-        const apiSliders = await sliderService.getPublicSliders(isAuthenticated);
+        const apiSliders =
+          await sliderService.getPublicSliders(isAuthenticated);
         if (apiSliders && apiSliders.length > 0) {
-          const mappedSlides = apiSliders.map(slider => ({
+          const mappedSlides = apiSliders.map((slider) => ({
             image: slider.imageUrl,
             title: slider.title,
             description: slider.description,
-            cta: slider.ctaText || 'Khám phá ngay',
-            route: slider.ctaLink || '/',
-            icon: Sparkles // Default icon
+            cta: slider.ctaText || "Khám phá ngay",
+            route: slider.ctaLink || "/",
+            icon: Sparkles, // Default icon
           }));
           setSlides(mappedSlides);
         }
       } catch (error) {
-        console.error('Failed to fetch sliders, using default', error);
+        console.error("Failed to fetch sliders, using default", error);
       }
     };
     fetchSliders();
   }, [isAuthenticated]);
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   // Intersection Observer (Giữ nguyên)
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const index = parseInt(entry.target.getAttribute('data-star-index') || '0');
+            const index = parseInt(
+              entry.target.getAttribute("data-star-index") || "0",
+            );
             setActivatedStars((prev) => {
               if (!prev.includes(index)) {
                 return [...prev, index];
@@ -166,11 +188,11 @@ const HomePage = () => {
       },
       {
         threshold: 0.3,
-        rootMargin: '-50px'
-      }
+        rootMargin: "-50px",
+      },
     );
 
-    const stones = document.querySelectorAll('.infinity-stone-item');
+    const stones = document.querySelectorAll(".infinity-stone-item");
     stones.forEach((stone) => observer.observe(stone));
 
     return () => observer.disconnect();
@@ -179,63 +201,69 @@ const HomePage = () => {
   const infinityStones = [
     {
       icon: Brain,
-      title: 'Cố Vấn Nghề Nghiệp AI',
-      description: 'Nhận hướng dẫn nghề nghiệp cá nhân và đề xuất kỹ năng được hỗ trợ bởi AI tiên tiến',
+      title: "Cố Vấn Nghề Nghiệp AI",
+      description:
+        "Nhận hướng dẫn nghề nghiệp cá nhân và đề xuất kỹ năng được hỗ trợ bởi AI tiên tiến",
       stone: mindStone,
-      stoneName: 'Mind Stone',
-      glowColor: '#ffd43b',
-      position: 'left'
+      stoneName: "Mind Stone",
+      glowColor: "#ffd43b",
+      position: "left",
     },
     {
       icon: Code,
-      title: 'Học Tập Tương Tác',
-      description: 'Học thông qua thực hành với các bài tập lập trình và dự án thực tế',
+      title: "Học Tập Tương Tác",
+      description:
+        "Học thông qua thực hành với các bài tập lập trình và dự án thực tế",
       stone: powerStone,
-      stoneName: 'Power Stone',
-      glowColor: '#a855f7',
-      position: 'right'
+      stoneName: "Power Stone",
+      glowColor: "#a855f7",
+      position: "right",
     },
     {
       icon: Target,
-      title: 'Hồ Sơ Thông Minh',
-      description: 'Trình bày kỹ năng và dự án của bạn với hồ sơ năng động được hỗ trợ bởi AI',
+      title: "Hồ Sơ Thông Minh",
+      description:
+        "Trình bày kỹ năng và dự án của bạn với hồ sơ năng động được hỗ trợ bởi AI",
       stone: soulStone,
-      stoneName: 'Soul Stone',
-      glowColor: '#ff922b',
-      position: 'left'
+      stoneName: "Soul Stone",
+      glowColor: "#ff922b",
+      position: "left",
     },
     {
       icon: Zap,
-      title: 'Phản Hồi Tức Thì',
-      description: 'Nhận phản hồi thời gian thực về mã và dự án của bạn từ AI và chuyên gia',
+      title: "Phản Hồi Tức Thì",
+      description:
+        "Nhận phản hồi thời gian thực về mã và dự án của bạn từ AI và chuyên gia",
       stone: timeStone,
-      stoneName: 'Time Stone',
-      glowColor: '#51cf66',
-      position: 'right'
+      stoneName: "Time Stone",
+      glowColor: "#51cf66",
+      position: "right",
     },
     {
       icon: Globe,
-      title: 'Cộng Đồng Toàn Cầu',
-      description: 'Kết nối với các chuyên gia và người học từ khắp nơi trên thế giới',
+      title: "Cộng Đồng Toàn Cầu",
+      description:
+        "Kết nối với các chuyên gia và người học từ khắp nơi trên thế giới",
       stone: spaceStone,
-      stoneName: 'Space Stone',
-      glowColor: '#4dabf7',
-      position: 'left'
+      stoneName: "Space Stone",
+      glowColor: "#4dabf7",
+      position: "left",
     },
     {
       icon: Award,
-      title: 'Chứng Chỉ Được Công Nhận',
-      description: 'Nhận chứng chỉ có giá trị công nhận kỹ năng của bạn và nâng cao hồ sơ của bạn',
+      title: "Chứng Chỉ Được Công Nhận",
+      description:
+        "Nhận chứng chỉ có giá trị công nhận kỹ năng của bạn và nâng cao hồ sơ của bạn",
       stone: realityStone,
-      stoneName: 'Reality Stone',
-      glowColor: '#ff6b6b',
-      position: 'right'
-    }
+      stoneName: "Reality Stone",
+      glowColor: "#ff6b6b",
+      position: "right",
+    },
   ];
 
   // --- BẮT ĐẦU KHỐI CODE ĐƯỢC CẬP NHẬT ---
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     // 1. Định nghĩa hàm vẽ (giờ nó làm cả 2 việc)
     const connectStonesAndUpdate = () => {
@@ -274,14 +302,15 @@ const HomePage = () => {
 
         // --- PHẦN 2: QUYẾT ĐỊNH HIỂN THỊ (Logic mới) ---
         // Kiểm tra state `activatedStars`
-        const bothAreActive = activatedStars.includes(index) && activatedStars.includes(index + 1);
+        const bothAreActive =
+          activatedStars.includes(index) && activatedStars.includes(index + 1);
 
         // Tự thêm/xóa class thay vì để JSX làm
         // Điều này đảm bảo hình học và hiển thị LUÔN đồng bộ
         if (bothAreActive) {
-          line.classList.add('both-stones-active');
+          line.classList.add("both-stones-active");
         } else {
-          line.classList.remove('both-stones-active');
+          line.classList.remove("both-stones-active");
         }
       });
     };
@@ -291,27 +320,27 @@ const HomePage = () => {
     connectStonesAndUpdate();
 
     // 3. Chạy hàm khi resize cửa sổ (để cập nhật hình học)
-    window.addEventListener('resize', connectStonesAndUpdate);
+    window.addEventListener("resize", connectStonesAndUpdate);
 
     // 4. Lắng nghe sự kiện KẾT THÚC ANIMATION (để cập nhật hình học)
     // Điều này khắc phục "snap" khi viên đá bay vào
     const container = constellationContainerRef.current;
     const handleTransitionEnd = (event: TransitionEvent) => {
-      if ((event.target as HTMLElement).classList.contains('infinity-stone-item')) {
+      if (
+        (event.target as HTMLElement).classList.contains("infinity-stone-item")
+      ) {
         connectStonesAndUpdate();
       }
     };
-    container?.addEventListener('transitionend', handleTransitionEnd);
+    container?.addEventListener("transitionend", handleTransitionEnd);
 
     // 5. Dọn dẹp
     return () => {
-      window.removeEventListener('resize', connectStonesAndUpdate);
-      container?.removeEventListener('transitionend', handleTransitionEnd);
+      window.removeEventListener("resize", connectStonesAndUpdate);
+      container?.removeEventListener("transitionend", handleTransitionEnd);
     };
-
   }, [infinityStones, activatedStars]); // <-- QUAN TRỌNG: Thêm `activatedStars` vào đây
   // --- KẾT THÚC KHỐI CODE ĐƯỢC CẬP NHẬT ---
-
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
@@ -369,7 +398,7 @@ const HomePage = () => {
           {slides.map((slide, index) => (
             <div
               key={index}
-              className={`slider-slide ${index === currentSlide ? 'slider-slide-active' : ''}`}
+              className={`slider-slide ${index === currentSlide ? "slider-slide-active" : ""}`}
             >
               <div className="slider-image-wrapper">
                 <img
@@ -385,7 +414,10 @@ const HomePage = () => {
                 <slide.icon className="slider-icon" size={48} />
                 <h1 className="slider-title">{slide.title}</h1>
                 <p className="slider-description">{slide.description}</p>
-                <Link to={slide.route} className="slider-cta-button slider-primary-button">
+                <Link
+                  to={slide.route}
+                  className="slider-cta-button slider-primary-button"
+                >
                   <span className="slider-button-text">{slide.cta}</span>
                   <ChevronRight className="slider-button-icon" size={20} />
                   <span className="slider-button-glow"></span>
@@ -415,7 +447,7 @@ const HomePage = () => {
             {slides.map((_, index) => (
               <button
                 key={index}
-                className={`slider-dot ${index === currentSlide ? 'slider-dot-active' : ''}`}
+                className={`slider-dot ${index === currentSlide ? "slider-dot-active" : ""}`}
                 onClick={() => goToSlide(index)}
                 aria-label={`Go to slide ${index + 1}`}
               >
@@ -433,29 +465,40 @@ const HomePage = () => {
             <div className="section-header">
               <div className="section-title-wrapper">
                 <Sparkles className="section-header-icon" size={32} />
-                <h2 className="section-title">
-                  Tại Sao Chọn Skillverse?
-                </h2>
+                <h2 className="section-title">Tại Sao Chọn Skillverse?</h2>
               </div>
               <p className="section-description">
-                Trải nghiệm tương lai của việc học tập với nền tảng được hỗ trợ bởi AI thích ứng với nhu cầu của bạn
+                Trải nghiệm tương lai của việc học tập với nền tảng được hỗ trợ
+                bởi AI thích ứng với nhu cầu của bạn
               </p>
             </div>
 
             {/* Gắn ref vào đây (Giữ nguyên) */}
-            <div className="constellation-container" ref={constellationContainerRef}>
-
+            <div
+              className="constellation-container"
+              ref={constellationContainerRef}
+            >
               {/* PHẦN 1: RENDER CÁC VIÊN ĐÁ (Giữ nguyên) */}
               <div className="infinity-stones-grid">
                 {infinityStones.map((stone, index) => (
                   <div
                     key={index}
-                    className={`infinity-stone-item ${activatedStars.includes(index) ? 'active' : ''}`}
+                    className={`infinity-stone-item ${activatedStars.includes(index) ? "active" : ""}`}
                     data-star-index={index}
-                    style={{ '--stone-glow-color': stone.glowColor } as React.CSSProperties}
+                    style={
+                      {
+                        "--stone-glow-color": stone.glowColor,
+                      } as React.CSSProperties
+                    }
                   >
-                    <div className="stone-image-wrapper" id={`stone-wrapper-${index}`}>
-                      <div className="stone-glow" style={{ backgroundColor: stone.glowColor }}></div>
+                    <div
+                      className="stone-image-wrapper"
+                      id={`stone-wrapper-${index}`}
+                    >
+                      <div
+                        className="stone-glow"
+                        style={{ backgroundColor: stone.glowColor }}
+                      ></div>
                       <img
                         src={stone.stone}
                         alt={stone.stoneName}
@@ -465,7 +508,11 @@ const HomePage = () => {
 
                     <div className="stone-content">
                       <div className="stone-content-header">
-                        <stone.icon size={32} className="stone-content-icon" style={{ color: stone.glowColor }} />
+                        <stone.icon
+                          size={32}
+                          className="stone-content-icon"
+                          style={{ color: stone.glowColor }}
+                        />
                         <h3 className="stone-title">{stone.title}</h3>
                       </div>
                       <p className="stone-description">{stone.description}</p>
@@ -484,10 +531,12 @@ const HomePage = () => {
                     key={`line-${index}`}
                     id={`line-connector-${index}`}
                     className="connector-wrapper" // <-- CHỈ CÒN CLASS GỐC
-                    style={{
-                      '--connector-color-1': stone.glowColor,
-                      '--connector-color-2': nextStone.glowColor,
-                    } as React.CSSProperties}
+                    style={
+                      {
+                        "--connector-color-1": stone.glowColor,
+                        "--connector-color-2": nextStone.glowColor,
+                      } as React.CSSProperties
+                    }
                   >
                     <svg
                       className="lightning-connector"
@@ -499,10 +548,26 @@ const HomePage = () => {
                         {/* Radial gradient cho collision point - theo hướng của đường sét */}
                         <radialGradient id={`collision-gradient-${index}`}>
                           <stop offset="0%" stopColor="white" stopOpacity="1" />
-                          <stop offset="30%" stopColor="white" stopOpacity="0.9" />
-                          <stop offset="60%" stopColor="var(--connector-color-1)" stopOpacity="0.7" />
-                          <stop offset="80%" stopColor="var(--connector-color-2)" stopOpacity="0.5" />
-                          <stop offset="100%" stopColor="var(--connector-color-2)" stopOpacity="0.2" />
+                          <stop
+                            offset="30%"
+                            stopColor="white"
+                            stopOpacity="0.9"
+                          />
+                          <stop
+                            offset="60%"
+                            stopColor="var(--connector-color-1)"
+                            stopOpacity="0.7"
+                          />
+                          <stop
+                            offset="80%"
+                            stopColor="var(--connector-color-2)"
+                            stopOpacity="0.5"
+                          />
+                          <stop
+                            offset="100%"
+                            stopColor="var(--connector-color-2)"
+                            stopOpacity="0.2"
+                          />
                         </radialGradient>
                       </defs>
 
@@ -623,19 +688,28 @@ const HomePage = () => {
                       {/* Collision point với gradient radial */}
                       <circle
                         className="collision-glow"
-                        cx="50" cy="40" r="12"
+                        cx="50"
+                        cy="40"
+                        r="12"
                         fill={`url(#collision-gradient-${index})`}
                         opacity="0.95"
                       />
                       <circle
                         className="collision-glow-outer"
-                        cx="50" cy="40" r="20"
+                        cx="50"
+                        cy="40"
+                        r="20"
                         fill={`url(#collision-gradient-${index})`}
                         opacity="0.6"
                       />
                       <circle
-                        cx="50" cy="40" r="28" fill="none"
-                        stroke="white" strokeWidth="1.5" opacity="0.4"
+                        cx="50"
+                        cy="40"
+                        r="28"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="1.5"
+                        opacity="0.4"
                         className="collision-ring"
                       />
                     </svg>
@@ -653,9 +727,7 @@ const HomePage = () => {
           <div className="section-header">
             <div className="section-title-wrapper">
               <Rocket className="section-header-icon" size={32} />
-              <h2 className="section-title">
-                Con Đường Đến Thành Công
-              </h2>
+              <h2 className="section-title">Con Đường Đến Thành Công</h2>
             </div>
             <p className="section-description">
               Hành trình học tập cá nhân hóa được hỗ trợ bởi AI
@@ -674,7 +746,13 @@ const HomePage = () => {
                   </div>
                   <div className="fabricator-lights">
                     {[...Array(8)].map((_, i) => (
-                      <div key={i} className={`status-light ${isFabricating ? 'active' : ''}`} style={{ '--delay': `${i * 0.1}s` } as React.CSSProperties}></div>
+                      <div
+                        key={i}
+                        className={`status-light ${isFabricating ? "active" : ""}`}
+                        style={
+                          { "--delay": `${i * 0.1}s` } as React.CSSProperties
+                        }
+                      ></div>
                     ))}
                   </div>
                 </div>
@@ -684,12 +762,16 @@ const HomePage = () => {
                   <div className="fabricator-screen">
                     <div className="screen-scan-line"></div>
                     <div className="screen-text">
-                      {isFabricating && !hasFabricated ? 'FABRICATING...' : (hasFabricated ? 'COMPLETE' : 'READY')}
+                      {isFabricating && !hasFabricated
+                        ? "FABRICATING..."
+                        : hasFabricated
+                          ? "COMPLETE"
+                          : "READY"}
                     </div>
                   </div>
 
                   <button
-                    className={`fabricator-button ${isFabricating ? 'active' : ''} ${hasFabricated ? 'completed' : ''}`}
+                    className={`fabricator-button ${isFabricating ? "active" : ""} ${hasFabricated ? "completed" : ""}`}
                     onClick={handleFabricatorClick}
                     disabled={isFabricating || hasFabricated}
                   >
@@ -698,7 +780,9 @@ const HomePage = () => {
                 </div>
 
                 {/* Fabrication Chamber */}
-                <div className={`fabrication-chamber ${isFabricating ? 'active' : ''}`}>
+                <div
+                  className={`fabrication-chamber ${isFabricating ? "active" : ""}`}
+                >
                   <div className="chamber-glass">
                     <div className="glass-reflection"></div>
                   </div>
@@ -711,11 +795,13 @@ const HomePage = () => {
                           <div
                             key={i}
                             className="spark"
-                            style={{
-                              '--angle': `${Math.random() * 360}deg`,
-                              '--distance': `${20 + Math.random() * 40}px`,
-                              '--delay': `${Math.random() * 0.5}s`
-                            } as React.CSSProperties}
+                            style={
+                              {
+                                "--angle": `${Math.random() * 360}deg`,
+                                "--distance": `${20 + Math.random() * 40}px`,
+                                "--delay": `${Math.random() * 0.5}s`,
+                              } as React.CSSProperties
+                            }
                           ></div>
                         ))}
                       </div>
@@ -726,11 +812,13 @@ const HomePage = () => {
                           <div
                             key={i}
                             className="molecule"
-                            style={{
-                              '--x': `${Math.random() * 100}%`,
-                              '--y': `${Math.random() * 100}%`,
-                              '--delay': `${Math.random() * 2}s`
-                            } as React.CSSProperties}
+                            style={
+                              {
+                                "--x": `${Math.random() * 100}%`,
+                                "--y": `${Math.random() * 100}%`,
+                                "--delay": `${Math.random() * 2}s`,
+                              } as React.CSSProperties
+                            }
                           ></div>
                         ))}
                       </div>
@@ -750,8 +838,8 @@ const HomePage = () => {
                       <Link
                         key={index}
                         to={slide.route}
-                        className={`energy-cube ${isFabricating ? 'materializing' : ''} ${hasFabricated ? 'clickable' : ''}`}
-                        style={{ '--index': index } as React.CSSProperties}
+                        className={`energy-cube ${isFabricating ? "materializing" : ""} ${hasFabricated ? "clickable" : ""}`}
+                        style={{ "--index": index } as React.CSSProperties}
                       >
                         <div className="cube-glow"></div>
                         <div className="cube-core">
@@ -767,7 +855,9 @@ const HomePage = () => {
                         <div className="cube-content">
                           <div className="cube-number">{index + 1}</div>
                           <h3 className="cube-title">{slide.title}</h3>
-                          <p className="cube-description">{slide.description}</p>
+                          <p className="cube-description">
+                            {slide.description}
+                          </p>
                         </div>
                         {hasFabricated && (
                           <div className="cube-cta">
@@ -800,14 +890,18 @@ const HomePage = () => {
           <div className="section-header">
             <div className="cosmic-title-wrapper">
               <div
-                className={`globe-icon-wrapper ${showEasterEgg ? 'easter-egg-active' : ''}`}
+                className={`globe-icon-wrapper ${showEasterEgg ? "easter-egg-active" : ""}`}
                 onMouseEnter={handleGlobeMouseEnter}
                 onMouseLeave={handleGlobeMouseLeave}
                 onClick={showEasterEgg ? handleEasterEggClick : undefined}
-                style={{ cursor: showEasterEgg ? 'pointer' : 'default' }}
+                style={{ cursor: showEasterEgg ? "pointer" : "default" }}
               >
                 {showEasterEgg ? (
-                  <img src={roisao} alt="Rồi Sao" className="easter-egg-image" />
+                  <img
+                    src={roisao}
+                    alt="Rồi Sao"
+                    className="easter-egg-image"
+                  />
                 ) : (
                   <>
                     <Globe className="cosmic-orbit-icon globe-icon" size={40} />
@@ -832,15 +926,15 @@ const HomePage = () => {
                 <Activity size={14} color="#06b6d4" />
               </div>
               <div className="social-media-content">
-                {!loadedVideos['tiktok'] ? (
+                {!loadedVideos["tiktok"] ? (
                   <div
                     className="home-v2-video-placeholder"
-                    onClick={() => handleLoadVideo('tiktok')}
+                    onClick={() => handleLoadVideo("tiktok")}
                     style={{
                       backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url(${tiktokIcon})`,
-                      backgroundSize: '40%',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'center'
+                      backgroundSize: "40%",
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
                     }}
                   >
                     <div className="home-v2-video-overlay"></div>
@@ -854,12 +948,12 @@ const HomePage = () => {
                     <iframe
                       src="https://www.tiktok.com/embed/7573943741975678215"
                       style={{
-                        width: '100%',
-                        height: '600px',
-                        border: 'none',
-                        maxWidth: '605px',
-                        margin: '0 auto',
-                        display: 'block'
+                        width: "100%",
+                        height: "600px",
+                        border: "none",
+                        maxWidth: "605px",
+                        margin: "0 auto",
+                        display: "block",
                       }}
                       allowFullScreen
                       scrolling="no"
@@ -881,15 +975,15 @@ const HomePage = () => {
                 <Video size={14} color="#06b6d4" />
               </div>
               <div className="social-media-content">
-                {!loadedVideos['fb-video'] ? (
+                {!loadedVideos["fb-video"] ? (
                   <div
                     className="home-v2-video-placeholder"
-                    onClick={() => handleLoadVideo('fb-video')}
+                    onClick={() => handleLoadVideo("fb-video")}
                     style={{
                       backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url(${facebookIcon})`,
-                      backgroundSize: '40%',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'center'
+                      backgroundSize: "40%",
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
                     }}
                   >
                     <div className="home-v2-video-overlay"></div>
@@ -904,7 +998,13 @@ const HomePage = () => {
                       src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1201192888739159%2F&show_text=true&width=267&t=0"
                       width="267"
                       height="591"
-                      style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', margin: '0 auto', display: 'block' }}
+                      style={{
+                        border: "none",
+                        overflow: "hidden",
+                        maxWidth: "100%",
+                        margin: "0 auto",
+                        display: "block",
+                      }}
                       scrolling="no"
                       frameBorder="0"
                       allowFullScreen={true}
@@ -926,15 +1026,15 @@ const HomePage = () => {
                 <Facebook size={14} color="#06b6d4" />
               </div>
               <div className="social-media-content">
-                {!loadedVideos['fb-post-1'] ? (
+                {!loadedVideos["fb-post-1"] ? (
                   <div
                     className="home-v2-video-placeholder"
-                    onClick={() => handleLoadVideo('fb-post-1')}
+                    onClick={() => handleLoadVideo("fb-post-1")}
                     style={{
                       backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url(${facebookIcon})`,
-                      backgroundSize: '40%',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'center'
+                      backgroundSize: "40%",
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
                     }}
                   >
                     <div className="home-v2-video-overlay"></div>
@@ -949,7 +1049,13 @@ const HomePage = () => {
                       src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0G4FqF2Hx8hT7E4GrTxFP7JLTk2zLHtqQHcAyLe9P2fxHVwj4zrZFWvzzMN5s1VdTl%26id%3D61581184190711&show_text=true&width=500"
                       width="500"
                       height="750"
-                      style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', margin: '0 auto', display: 'block' }}
+                      style={{
+                        border: "none",
+                        overflow: "hidden",
+                        maxWidth: "100%",
+                        margin: "0 auto",
+                        display: "block",
+                      }}
                       scrolling="no"
                       frameBorder="0"
                       allowFullScreen={true}
@@ -965,9 +1071,24 @@ const HomePage = () => {
           {/* Remaining Facebook Posts */}
           <div className="home-v2-fb-posts-container">
             {[
-              { id: 'fb-post-2', src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02a1gaCSYddsXU8RcpXUvxrPiWf5mAbXQzrz4EYXpsFBVHjd9f1qo8VzJZRY47QC9Fl%26id%3D61581184190711&show_text=true&width=500", height: 700, title: "FB_POST_02" },
-              { id: 'fb-post-3', src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02ij7AP9pWHqquS7q8W5YE4focGDU3kcZHJgNaSdSCZr8b7vPHmWEcx4qLEvxrFKn4l%26id%3D61581184190711&show_text=true&width=500", height: 750, title: "FB_POST_03" },
-              { id: 'fb-post-4', src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0BTnRCWjrv1THzEBH1R9K9iFR2LfzNAFcfAqLHaEM1KWLMPB4cd6MhtnEHDEdTtPxl%26id%3D61581184190711&show_text=true&width=500", height: 720, title: "FB_POST_04" }
+              {
+                id: "fb-post-2",
+                src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02a1gaCSYddsXU8RcpXUvxrPiWf5mAbXQzrz4EYXpsFBVHjd9f1qo8VzJZRY47QC9Fl%26id%3D61581184190711&show_text=true&width=500",
+                height: 700,
+                title: "FB_POST_02",
+              },
+              {
+                id: "fb-post-3",
+                src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02ij7AP9pWHqquS7q8W5YE4focGDU3kcZHJgNaSdSCZr8b7vPHmWEcx4qLEvxrFKn4l%26id%3D61581184190711&show_text=true&width=500",
+                height: 750,
+                title: "FB_POST_03",
+              },
+              {
+                id: "fb-post-4",
+                src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0BTnRCWjrv1THzEBH1R9K9iFR2LfzNAFcfAqLHaEM1KWLMPB4cd6MhtnEHDEdTtPxl%26id%3D61581184190711&show_text=true&width=500",
+                height: 720,
+                title: "FB_POST_04",
+              },
             ].map((post) => (
               <div key={post.id} className="home-v2-monitor-frame">
                 <div className="home-v2-monitor-header">
@@ -984,9 +1105,9 @@ const HomePage = () => {
                       onClick={() => handleLoadVideo(post.id)}
                       style={{
                         backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url(${facebookIcon})`,
-                        backgroundSize: '40%',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center'
+                        backgroundSize: "40%",
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center",
                       }}
                     >
                       <div className="home-v2-video-overlay"></div>
@@ -1001,7 +1122,13 @@ const HomePage = () => {
                         src={post.src}
                         width="500"
                         height={post.height}
-                        style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', margin: '0 auto', display: 'block' }}
+                        style={{
+                          border: "none",
+                          overflow: "hidden",
+                          maxWidth: "100%",
+                          margin: "0 auto",
+                          display: "block",
+                        }}
                         scrolling="no"
                         frameBorder="0"
                         allowFullScreen={true}
@@ -1023,7 +1150,11 @@ const HomePage = () => {
         <div className="section-container">
           <div className="section-header">
             <div className="cosmic-title-wrapper">
-              <img src={cup} alt="Trophy" className="cosmic-orbit-icon awards-icon" />
+              <img
+                src={cup}
+                alt="Trophy"
+                className="cosmic-orbit-icon awards-icon"
+              />
               <h2 className="section-title cosmic-title">
                 Thành Tích & Giải Thưởng
               </h2>
@@ -1034,20 +1165,56 @@ const HomePage = () => {
             {/* Award 1 - Top 11 TechYouth */}
             <div className="home-v2-award-card home-v2-glass gold">
               <div className="home-v2-medal-container">
-                <img src={gold1} alt="Gold Medal" className="award-medal-img" style={{ width: '120px', height: 'auto' }} />
+                <img
+                  src={gold1}
+                  alt="Gold Medal"
+                  className="award-medal-img"
+                  style={{ width: "120px", height: "auto" }}
+                />
               </div>
               <div className="home-v2-award-rank">Top 11</div>
-              <h3 className="home-v2-award-title">TechYouth Builder Challenge 2025</h3>
+              <h3 className="home-v2-award-title">
+                TechYouth Builder Challenge 2025
+              </h3>
               <p className="home-v2-award-desc">
-                Vượt qua hơn 600 dự án trên toàn quốc, Skillverse được chọn vào Top 11 của TechYouth Builder Challenge – chương trình tìm kiếm giải pháp AI & EdTech đột phá dành cho người trẻ.
+                Vượt qua hơn 600 dự án trên toàn quốc, Skillverse được chọn vào
+                Top 11 của TechYouth Builder Challenge – chương trình tìm kiếm
+                giải pháp AI & EdTech đột phá dành cho người trẻ.
               </p>
-              <div className="award-impact" style={{ marginBottom: '1.5rem', textAlign: 'left', padding: '1rem', background: 'rgba(251, 191, 36, 0.05)', borderRadius: '12px', border: '1px solid rgba(251, 191, 36, 0.1)' }}>
-                <Sparkles size={16} style={{ color: '#fbbf24', marginBottom: '0.5rem' }} />
-                <p style={{ fontSize: '0.85rem', color: '#fbbf24', margin: 0, lineHeight: '1.4' }}>
-                  Khẳng định Skillverse là nền tảng AI có tính đổi mới cao, giải quyết thực tế nhu cầu định hướng nghề nghiệp, kỹ năng và portfolio cho sinh viên.
+              <div
+                className="award-impact"
+                style={{
+                  marginBottom: "1.5rem",
+                  textAlign: "left",
+                  padding: "1rem",
+                  background: "rgba(251, 191, 36, 0.05)",
+                  borderRadius: "12px",
+                  border: "1px solid rgba(251, 191, 36, 0.1)",
+                }}
+              >
+                <Sparkles
+                  size={16}
+                  style={{ color: "#fbbf24", marginBottom: "0.5rem" }}
+                />
+                <p
+                  style={{
+                    fontSize: "0.85rem",
+                    color: "#fbbf24",
+                    margin: 0,
+                    lineHeight: "1.4",
+                  }}
+                >
+                  Khẳng định Skillverse là nền tảng AI có tính đổi mới cao, giải
+                  quyết thực tế nhu cầu định hướng nghề nghiệp, kỹ năng và
+                  portfolio cho sinh viên.
                 </p>
               </div>
-              <a href="https://www.facebook.com/share/p/17mWCBwJvz/" target="_blank" rel="noopener noreferrer" className="award-detail-link">
+              <a
+                href="https://www.facebook.com/share/p/17mWCBwJvz/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="award-detail-link"
+              >
                 <span>Xem chi tiết thành tích</span>
                 <ExternalLink size={18} />
               </a>
@@ -1056,20 +1223,54 @@ const HomePage = () => {
             {/* Award 2 - Top 7 Innovation Quest */}
             <div className="home-v2-award-card home-v2-glass silver">
               <div className="home-v2-medal-container">
-                <img src={silver1} alt="Silver Medal" className="award-medal-img" style={{ width: '120px', height: 'auto' }} />
+                <img
+                  src={silver1}
+                  alt="Silver Medal"
+                  className="award-medal-img"
+                  style={{ width: "120px", height: "auto" }}
+                />
               </div>
               <div className="home-v2-award-rank">Top 7</div>
               <h3 className="home-v2-award-title">Innovation Quest 2025</h3>
               <p className="home-v2-award-desc">
-                Innovation Quest 2025 là chương trình ươm tạo startup công nghệ mang tính cạnh tranh cao. Skillverse xuất sắc lọt vào Top 7 dự án được chọn để ươm tạo chính thức.
+                Innovation Quest 2025 là chương trình ươm tạo startup công nghệ
+                mang tính cạnh tranh cao. Skillverse xuất sắc lọt vào Top 7 dự
+                án được chọn để ươm tạo chính thức.
               </p>
-              <div className="award-impact" style={{ marginBottom: '1.5rem', textAlign: 'left', padding: '1rem', background: 'rgba(148, 163, 184, 0.05)', borderRadius: '12px', border: '1px solid rgba(148, 163, 184, 0.1)' }}>
-                <Sparkles size={16} style={{ color: '#94a3b8', marginBottom: '0.5rem' }} />
-                <p style={{ fontSize: '0.85rem', color: '#94a3b8', margin: 0, lineHeight: '1.4' }}>
-                  Công nhận Skillverse là giải pháp có tiềm năng thương mại hóa, ứng dụng AI hiệu quả và mang lại tác động xã hội cho giáo dục & nguồn nhân lực trẻ.
+              <div
+                className="award-impact"
+                style={{
+                  marginBottom: "1.5rem",
+                  textAlign: "left",
+                  padding: "1rem",
+                  background: "rgba(148, 163, 184, 0.05)",
+                  borderRadius: "12px",
+                  border: "1px solid rgba(148, 163, 184, 0.1)",
+                }}
+              >
+                <Sparkles
+                  size={16}
+                  style={{ color: "#94a3b8", marginBottom: "0.5rem" }}
+                />
+                <p
+                  style={{
+                    fontSize: "0.85rem",
+                    color: "#94a3b8",
+                    margin: 0,
+                    lineHeight: "1.4",
+                  }}
+                >
+                  Công nhận Skillverse là giải pháp có tiềm năng thương mại hóa,
+                  ứng dụng AI hiệu quả và mang lại tác động xã hội cho giáo dục
+                  & nguồn nhân lực trẻ.
                 </p>
               </div>
-              <a href="https://www.facebook.com/share/p/16SzK8iyqJ/" target="_blank" rel="noopener noreferrer" className="award-detail-link">
+              <a
+                href="https://www.facebook.com/share/p/16SzK8iyqJ/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="award-detail-link"
+              >
                 <span>Xem chi tiết thành tích</span>
                 <ExternalLink size={18} />
               </a>
@@ -1078,20 +1279,54 @@ const HomePage = () => {
             {/* Award 3 - Top 25 FIP */}
             <div className="home-v2-award-card home-v2-glass bronze">
               <div className="home-v2-medal-container">
-                <img src={bronze1} alt="Bronze Medal" className="award-medal-img" style={{ width: '120px', height: 'auto' }} />
+                <img
+                  src={bronze1}
+                  alt="Bronze Medal"
+                  className="award-medal-img"
+                  style={{ width: "120px", height: "auto" }}
+                />
               </div>
               <div className="home-v2-award-rank">Top 25</div>
               <h3 className="home-v2-award-title">FIP Innovation Path 2025</h3>
               <p className="home-v2-award-desc">
-                Vượt qua 65 dự án startup từ các campus FPT trên toàn quốc, Skillverse được chọn vào Top 25 FIP Innovation Path – cuộc thi sáng tạo & khởi nghiệp tiêu biểu của sinh viên FPT.
+                Vượt qua 65 dự án startup từ các campus FPT trên toàn quốc,
+                Skillverse được chọn vào Top 25 FIP Innovation Path – cuộc thi
+                sáng tạo & khởi nghiệp tiêu biểu của sinh viên FPT.
               </p>
-              <div className="award-impact" style={{ marginBottom: '1.5rem', textAlign: 'left', padding: '1rem', background: 'rgba(180, 83, 9, 0.05)', borderRadius: '12px', border: '1px solid rgba(180, 83, 9, 0.1)' }}>
-                <Sparkles size={16} style={{ color: '#b45309', marginBottom: '0.5rem' }} />
-                <p style={{ fontSize: '0.85rem', color: '#b45309', margin: 0, lineHeight: '1.4' }}>
-                  Xác nhận Skillverse phù hợp với hệ sinh thái sinh viên, có tính thực tế cao và khả năng mở rộng mạnh trong cộng đồng đại học.
+              <div
+                className="award-impact"
+                style={{
+                  marginBottom: "1.5rem",
+                  textAlign: "left",
+                  padding: "1rem",
+                  background: "rgba(180, 83, 9, 0.05)",
+                  borderRadius: "12px",
+                  border: "1px solid rgba(180, 83, 9, 0.1)",
+                }}
+              >
+                <Sparkles
+                  size={16}
+                  style={{ color: "#b45309", marginBottom: "0.5rem" }}
+                />
+                <p
+                  style={{
+                    fontSize: "0.85rem",
+                    color: "#b45309",
+                    margin: 0,
+                    lineHeight: "1.4",
+                  }}
+                >
+                  Xác nhận Skillverse phù hợp với hệ sinh thái sinh viên, có
+                  tính thực tế cao và khả năng mở rộng mạnh trong cộng đồng đại
+                  học.
                 </p>
               </div>
-              <a href="https://www.facebook.com/share/p/1DswZ39HUj/" target="_blank" rel="noopener noreferrer" className="award-detail-link">
+              <a
+                href="https://www.facebook.com/share/p/1DswZ39HUj/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="award-detail-link"
+              >
                 <span>Xem chi tiết thành tích</span>
                 <ExternalLink size={18} />
               </a>
@@ -1105,12 +1340,23 @@ const HomePage = () => {
               <div className="home-v2-hud-content">
                 <div className="home-v2-hud-header">
                   <Cpu size={24} />
-                  <h3 className="home-v2-hud-title">System Diagnostics: Impact Analysis</h3>
+                  <h3 className="home-v2-hud-title">
+                    System Diagnostics: Impact Analysis
+                  </h3>
                 </div>
                 <ul className="home-v2-hud-list">
-                  <li className="home-v2-hud-item">Được hội đồng chuyên môn đánh giá cao về AI Career Agent, Skill Wallet, và mô hình "Learn – Practice – Earn"</li>
-                  <li className="home-v2-hud-item">Minh chứng được tính khả thi thông qua MVP, mentor network và mô hình Freemium – Subscription</li>
-                  <li className="home-v2-hud-item">Được hỗ trợ bởi các chuyên gia từ SIHUB, doanh nghiệp, và giảng viên FPT University</li>
+                  <li className="home-v2-hud-item">
+                    Được hội đồng chuyên môn đánh giá cao về AI Career Agent,
+                    Skill Wallet, và mô hình "Learn – Practice – Earn"
+                  </li>
+                  <li className="home-v2-hud-item">
+                    Minh chứng được tính khả thi thông qua MVP, mentor network
+                    và mô hình Freemium – Subscription
+                  </li>
+                  <li className="home-v2-hud-item">
+                    Được hỗ trợ bởi các chuyên gia từ SIHUB, doanh nghiệp, và
+                    giảng viên FPT University
+                  </li>
                 </ul>
               </div>
             </div>

@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Map, Play, Pause, CheckCircle, Target,
   Brain, Award, BookOpen, Activity, Sparkles,
@@ -43,6 +43,8 @@ const DOMAIN_ICONS: Record<string, string> = {
 
 const GSJJourneyPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const autoOpenedJourneyIdRef = useRef<number | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [journeys, setJourneys] = useState<JourneySummaryResponse[]>([]);
   const [selectedJourney, setSelectedJourney] = useState<JourneyDetailResponse | null>(null);
@@ -72,7 +74,7 @@ const GSJJourneyPage: React.FC = () => {
   }, [loadJourneys]);
 
   // Select journey and load details
-  const handleSelectJourney = async (journeyId: number) => {
+  const handleSelectJourney = useCallback(async (journeyId: number) => {
     try {
       setLoading(true);
       const detail = await journeyService.getJourneyById(journeyId);
@@ -87,7 +89,21 @@ const GSJJourneyPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const routeState = location.state as { autoOpenJourneyId?: number } | null;
+    const autoOpenJourneyId = routeState?.autoOpenJourneyId;
+
+    if (!autoOpenJourneyId || autoOpenedJourneyIdRef.current === autoOpenJourneyId) {
+      return;
+    }
+
+    autoOpenedJourneyIdRef.current = autoOpenJourneyId;
+    void handleSelectJourney(autoOpenJourneyId);
+
+    navigate(location.pathname, { replace: true, state: null });
+  }, [handleSelectJourney, location.pathname, location.state, navigate]);
 
   // Generate assessment test
   const handleGenerateTest = async () => {

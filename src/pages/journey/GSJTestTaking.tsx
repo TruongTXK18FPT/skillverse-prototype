@@ -39,7 +39,7 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
   const getOptionLabel = (index: number): string => String.fromCharCode(65 + index);
 
   const normalizeOptionText = (option: string): string =>
-    option.replace(/^[A-Z]\s*[\.\):\-]\s*/i, '').trim() || option;
+    option.replace(/^[A-Z]\s*[.):-]\s*/i, '').trim() || option;
 
   useEffect(() => {
     const timer = setInterval(() => {
