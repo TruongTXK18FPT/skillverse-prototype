@@ -8,7 +8,12 @@ import { getUserEnrollments } from "../../services/enrollmentService";
 import { getCourse } from "../../services/courseService";
 import { getCourseLearningStatus } from "../../services/courseLearningService";
 import { getGroupByCourse, joinGroup } from "../../services/groupChatService";
-import { getMyUsage, getCycleStats } from "../../services/usageLimitService";
+import {
+  FeatureLimitInfo,
+  UserCycleStats,
+  getMyUsage,
+  getCycleStats,
+} from "../../services/usageLimitService";
 import { getMyFavoriteMentors } from "../../services/mentorProfileService";
 import aiRoadmapService from "../../services/aiRoadmapService";
 import { RoadmapSessionSummary } from "../../types/Roadmap";
@@ -24,8 +29,10 @@ const DashboardPage = () => {
   const [favoriteMentors, setFavoriteMentors] = useState<any[]>([]);
   const [roadmaps, setRoadmaps] = useState<RoadmapSessionSummary[]>([]);
   const [loading, setLoading] = useState(true);
-  const [featureUsage, setFeatureUsage] = useState<any[]>([]);
-  const [cycleStats, setCycleStats] = useState<any>(null);
+  const [featureUsage, setFeatureUsage] = useState<FeatureLimitInfo[]>([]);
+  const [featureUsageError, setFeatureUsageError] = useState<string | null>(null);
+  const [featureUsageLoading, setFeatureUsageLoading] = useState(false);
+  const [cycleStats, setCycleStats] = useState<UserCycleStats | null>(null);
   const [hasPremium, setHasPremium] = useState(false);
   const [taskSummary, setTaskSummary] = useState<{
     criticalOverdue: number; // >30 days overdue
@@ -56,11 +63,36 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (user?.id) {
+        setFeatureUsageLoading(true);
+        setFeatureUsageError(null);
+
         try {
+          const usagePromise = getMyUsage()
+            .then((data) => ({ data, error: null as string | null }))
+            .catch((error) => {
+              console.error("Error fetching usage limits", error);
+              const err = error as {
+                response?: {
+                  data?: {
+                    message?: string;
+                  };
+                };
+              };
+              const serverMessage =
+                err.response?.data?.message &&
+                typeof err.response.data.message === "string"
+                  ? err.response.data.message
+                  : null;
+              return {
+                data: [] as FeatureLimitInfo[],
+                error: serverMessage || "Không thể tải giới hạn sử dụng lúc này.",
+              };
+            });
+
           // Fetch limits, stats, premium status, task board, and wallet in parallel with enrollments
           const [
             enrollments,
-            limits,
+            usageResult,
             cStats,
             favorites,
             userRoadmaps,
@@ -69,16 +101,35 @@ const DashboardPage = () => {
             wallet,
           ] = await Promise.all([
             getUserEnrollments(user.id),
-            getMyUsage().catch((e) => []),
-            getCycleStats().catch((e) => null),
-            getMyFavoriteMentors().catch((e) => []),
-            aiRoadmapService.getUserRoadmaps().catch((e) => []),
-            premiumService.checkPremiumStatus().catch((e) => false),
-            taskBoardService.getBoard().catch((e) => []),
-            getWallet().catch((e) => null),
+            usagePromise,
+            getCycleStats().catch((error) => {
+              console.error("Error fetching cycle stats", error);
+              return null;
+            }),
+            getMyFavoriteMentors().catch((error) => {
+              console.error("Error fetching favorite mentors", error);
+              return [];
+            }),
+            aiRoadmapService.getUserRoadmaps().catch((error) => {
+              console.error("Error fetching user roadmaps", error);
+              return [];
+            }),
+            premiumService.checkPremiumStatus().catch((error) => {
+              console.error("Error checking premium status", error);
+              return false;
+            }),
+            taskBoardService.getBoard().catch((error) => {
+              console.error("Error fetching task board", error);
+              return [];
+            }),
+            getWallet().catch((error) => {
+              console.error("Error fetching wallet", error);
+              return null;
+            }),
           ]);
 
-          setFeatureUsage(limits);
+          setFeatureUsage(usageResult.data);
+          setFeatureUsageError(usageResult.error);
           setCycleStats(cStats);
           setFavoriteMentors(favorites);
           setRoadmaps(userRoadmaps);
@@ -244,6 +295,7 @@ const DashboardPage = () => {
           console.error("Error fetching dashboard data", error);
         } finally {
           setLoading(false);
+          setFeatureUsageLoading(false);
         }
       }
     };
@@ -279,6 +331,7 @@ const DashboardPage = () => {
     <div className="dashboard-page">
       <MothershipDashboard
         userName={user?.fullName || user?.email}
+        userRoles={user?.roles || []}
         userLevel={userLevel}
         hasPremium={hasPremium}
         taskSummary={taskSummary}
@@ -289,6 +342,8 @@ const DashboardPage = () => {
         userStats={stats}
         cycleStats={cycleStats}
         featureUsage={featureUsage}
+        featureUsageLoading={featureUsageLoading}
+        featureUsageError={featureUsageError}
         onJoinGroup={handleJoinGroup}
       />
 

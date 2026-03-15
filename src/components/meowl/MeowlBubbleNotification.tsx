@@ -185,6 +185,22 @@ const PAGE_INTRODUCTIONS: Record<string, BubbleMessage> = {
     icon: <Target size={20} className="bubble-icon-target" />,
     priority: 10,
   },
+  '/journey': {
+    id: 'intro-journey',
+    type: 'page-intro',
+    messageEn: "Guided Journey! 🗺️ Let AI create a personalized learning path from assessment to mastery~",
+    messageVi: "Hành trình có hướng dẫn! 🗺️ Để AI tạo lộ trình học tập cá nhân hóa từ đánh giá đến thành thạo~",
+    icon: <MapPin size={20} className="bubble-icon-map" />,
+    priority: 10,
+  },
+  '/journey/create': {
+    id: 'intro-journey-create',
+    type: 'page-intro',
+    messageEn: "Let's build your journey! 🚀 Fill in your info and I'll help you every step of the way~",
+    messageVi: "Cùng xây dựng hành trình của bạn nhé! 🚀 Điền thông tin và mình sẽ hỗ trợ bạn từng bước~",
+    icon: <Sparkles size={20} className="bubble-icon-sparkle" />,
+    priority: 10,
+  },
   '/seminar': {
     id: 'intro-seminar',
     type: 'page-intro',

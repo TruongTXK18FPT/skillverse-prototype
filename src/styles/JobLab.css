@@ -26,8 +26,14 @@
 .jlab-ody-nav-override .ody-nav__track {
   /* Slightly deeper background matching jlab dark palette */
   background:
-    linear-gradient(135deg, rgba(10,14,23,0.92), rgba(17,24,39,0.92)),
-    repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(0,245,255,0.03) 8px, rgba(0,245,255,0.03) 9px);
+    linear-gradient(135deg, rgba(10, 14, 23, 0.92), rgba(17, 24, 39, 0.92)),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 8px,
+      rgba(0, 245, 255, 0.03) 8px,
+      rgba(0, 245, 255, 0.03) 9px
+    );
   border-color: rgba(0, 245, 255, 0.12);
 }
 /* Use jlab cyan accent for active normal pills */
@@ -35,9 +41,10 @@
   background: rgba(0, 245, 255, 0.12);
   color: #00f5ff;
   border-color: rgba(0, 245, 255, 0.3);
-  box-shadow: 0 0 14px rgba(0,245,255,0.2), inset 0 0 10px rgba(0,245,255,0.05);
+  box-shadow:
+    0 0 14px rgba(0, 245, 255, 0.2),
+    inset 0 0 10px rgba(0, 245, 255, 0.05);
 }
-
 
 /* Mini Buttons */
 .jlab-btn-mini {
@@ -1938,13 +1945,23 @@ button.jlab-workspace-job-item {
 ═══════════════════════════════════════════════════════════════ */
 
 @keyframes jlabcm-backdrop-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes jlabcm-slide-up {
-  from { opacity: 0; transform: translateY(28px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .jlabcm-overlay {
@@ -1968,7 +1985,7 @@ button.jlab-workspace-job-item {
   width: 100%;
   max-width: 480px;
   box-shadow:
-    0 0 0 1px rgba(255, 80, 80, 0.10),
+    0 0 0 1px rgba(255, 80, 80, 0.1),
     0 24px 60px rgba(0, 0, 0, 0.65),
     0 0 40px rgba(255, 80, 80, 0.06);
   animation: jlabcm-slide-up 0.24s cubic-bezier(0.34, 1.2, 0.64, 1);
@@ -2025,7 +2042,9 @@ button.jlab-workspace-job-item {
   cursor: pointer;
   padding: 4px;
   border-radius: 6px;
-  transition: color 0.15s, background 0.15s;
+  transition:
+    color 0.15s,
+    background 0.15s;
   display: flex;
   align-items: center;
 }
@@ -2111,8 +2130,12 @@ button.jlab-workspace-job-item {
   flex-shrink: 0;
   margin-top: 1px;
 }
-.jlabcm-notice-icon--red   { color: #ff6060; }
-.jlabcm-notice-icon--yellow { color: #f0c040; }
+.jlabcm-notice-icon--red {
+  color: #ff6060;
+}
+.jlabcm-notice-icon--yellow {
+  color: #f0c040;
+}
 
 /* Reason selector */
 .jlabcm-reason-section {
@@ -2142,7 +2165,7 @@ button.jlab-workspace-job-item {
   gap: 6px;
   padding: 8px 11px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   font-size: 0.76rem;
   color: #8a92a8;
@@ -2158,7 +2181,7 @@ button.jlab-workspace-job-item {
 }
 .jlabcm-reason-chip.selected {
   border-color: rgba(0, 212, 255, 0.55);
-  background: rgba(0, 212, 255, 0.10);
+  background: rgba(0, 212, 255, 0.1);
   color: #dde4f5;
 }
 .jlabcm-reason-chip-check {
@@ -2208,7 +2231,7 @@ button.jlab-workspace-job-item {
   font-family: inherit;
 }
 .jlabcm-btn-keep:hover {
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.1);
   color: #c0c8d8;
 }
 .jlabcm-btn-confirm {
@@ -2240,11 +2263,20 @@ button.jlab-workspace-job-item {
 
 /* Mobile adjust */
 @media (max-width: 520px) {
-  .jlabcm-dialog { border-radius: 12px; }
-  .jlabcm-reasons-grid { grid-template-columns: 1fr; }
-  .jlabcm-footer { flex-direction: column-reverse; }
+  .jlabcm-dialog {
+    border-radius: 12px;
+  }
+  .jlabcm-reasons-grid {
+    grid-template-columns: 1fr;
+  }
+  .jlabcm-footer {
+    flex-direction: column-reverse;
+  }
   .jlabcm-btn-keep,
-  .jlabcm-btn-confirm { width: 100%; justify-content: center; }
+  .jlabcm-btn-confirm {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2253,12 +2285,22 @@ button.jlab-workspace-job-item {
 ═══════════════════════════════════════════════════════════════ */
 
 @keyframes jlabtoast-enter {
-  from { opacity: 0; transform: translateX(100%) scale(0.9); }
-  to   { opacity: 1; transform: translateX(0)    scale(1);   }
+  from {
+    opacity: 0;
+    transform: translateX(100%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
 }
 @keyframes jlabtoast-progress {
-  from { width: 100%; }
-  to   { width: 0%;   }
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
 }
 
 .jlabtoast-stack {
@@ -2283,7 +2325,9 @@ button.jlab-workspace-job-item {
   border-radius: 12px;
   border-left: 3px solid transparent;
   background: #171c2a;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
   animation: jlabtoast-enter 0.28s cubic-bezier(0.34, 1.2, 0.64, 1);
   position: relative;
   overflow: hidden;
@@ -2293,26 +2337,46 @@ button.jlab-workspace-job-item {
 .jlabtoast--success {
   border-left-color: #22c55e;
 }
-.jlabtoast--success .jlabtoast-icon-wrap { color: #22c55e; background: rgba(34, 197, 94, 0.12); }
-.jlabtoast--success .jlabtoast-progress  { background: #22c55e; }
+.jlabtoast--success .jlabtoast-icon-wrap {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.12);
+}
+.jlabtoast--success .jlabtoast-progress {
+  background: #22c55e;
+}
 
 .jlabtoast--error {
   border-left-color: #ef4444;
 }
-.jlabtoast--error .jlabtoast-icon-wrap { color: #ef4444; background: rgba(239, 68, 68, 0.12); }
-.jlabtoast--error .jlabtoast-progress  { background: #ef4444; }
+.jlabtoast--error .jlabtoast-icon-wrap {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.12);
+}
+.jlabtoast--error .jlabtoast-progress {
+  background: #ef4444;
+}
 
 .jlabtoast--warning {
   border-left-color: #f59e0b;
 }
-.jlabtoast--warning .jlabtoast-icon-wrap { color: #f59e0b; background: rgba(245, 158, 11, 0.12); }
-.jlabtoast--warning .jlabtoast-progress  { background: #f59e0b; }
+.jlabtoast--warning .jlabtoast-icon-wrap {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+}
+.jlabtoast--warning .jlabtoast-progress {
+  background: #f59e0b;
+}
 
 .jlabtoast--info {
   border-left-color: #00d4ff;
 }
-.jlabtoast--info .jlabtoast-icon-wrap { color: #00d4ff; background: rgba(0, 212, 255, 0.12); }
-.jlabtoast--info .jlabtoast-progress  { background: #00d4ff; }
+.jlabtoast--info .jlabtoast-icon-wrap {
+  color: #00d4ff;
+  background: rgba(0, 212, 255, 0.12);
+}
+.jlabtoast--info .jlabtoast-progress {
+  background: #00d4ff;
+}
 
 .jlabtoast-icon-wrap {
   flex-shrink: 0;
@@ -2357,7 +2421,9 @@ button.jlab-workspace-job-item {
   transition: color 0.15s;
   margin-top: -1px;
 }
-.jlabtoast-dismiss:hover { color: #9aa0b8; }
+.jlabtoast-dismiss:hover {
+  color: #9aa0b8;
+}
 
 .jlabtoast-progress {
   position: absolute;

@@ -137,7 +137,8 @@ const JobLab: React.FC = () => {
   const getCooldownRemaining = (jobId: number): number => {
     const cd = getCooldowns();
     if (!cd[jobId]) return 0;
-    const remaining = COOLDOWN_MS - (Date.now() - new Date(cd[jobId]).getTime());
+    const remaining =
+      COOLDOWN_MS - (Date.now() - new Date(cd[jobId]).getTime());
     return remaining > 0 ? remaining : 0;
   };
   const formatCooldown = (ms: number) => {
@@ -209,7 +210,11 @@ const JobLab: React.FC = () => {
     const finalReason =
       cancelReason === "other" ? cancelReasonOther.trim() : cancelReason;
     if (!finalReason) {
-      showToast("error", "Thiếu lý do", "Vui lòng chọn hoặc nhập lý do hủy đơn.");
+      showToast(
+        "error",
+        "Thiếu lý do",
+        "Vui lòng chọn hoặc nhập lý do hủy đơn.",
+      );
       return;
     }
     const appId = cancelModalApp.id;
@@ -230,7 +235,11 @@ const JobLab: React.FC = () => {
         `Đơn "${appSnapshot.title}" đã được rút. Bạn có thể ứng tuyển lại sau 1 giờ — lưu ý: sau khi ứng tuyển lại sẽ không thể hủy nữa.`,
       );
     } catch {
-      showToast("error", "Hủy thất bại", "Không thể rút đơn. Vui lòng thử lại.");
+      showToast(
+        "error",
+        "Hủy thất bại",
+        "Không thể rút đơn. Vui lòng thử lại.",
+      );
     } finally {
       setCancelling(null);
     }
@@ -886,7 +895,9 @@ const JobLab: React.FC = () => {
                 >
                   <Briefcase size={14} />
                   <span className="ody-nav__label">Tất cả</span>
-                  <span className="ody-nav__count">{allApplications.length}</span>
+                  <span className="ody-nav__count">
+                    {allApplications.length}
+                  </span>
                 </button>
                 <button
                   className={`ody-nav__pill${jobType === "REGULAR" ? " ody-nav__pill--active" : ""}`}
@@ -905,7 +916,10 @@ const JobLab: React.FC = () => {
                   <Zap size={14} />
                   <span className="ody-nav__label">Gig / Short-term</span>
                   <span className="ody-nav__count">
-                    {allApplications.filter((a) => a.type === "SHORT_TERM").length}
+                    {
+                      allApplications.filter((a) => a.type === "SHORT_TERM")
+                        .length
+                    }
                   </span>
                 </button>
               </div>
@@ -1721,10 +1735,7 @@ const JobLab: React.FC = () => {
 
       {/* ══════════════ CANCEL APPLICATION MODAL ══════════════ */}
       {cancelModalApp && (
-        <div
-          className="jlabcm-overlay"
-          onClick={() => setCancelModalApp(null)}
-        >
+        <div className="jlabcm-overlay" onClick={() => setCancelModalApp(null)}>
           <div
             className="jlabcm-dialog"
             onClick={(e) => e.stopPropagation()}
@@ -1775,7 +1786,9 @@ const JobLab: React.FC = () => {
                   </span>
                   <span
                     className="jlabcm-job-meta-item"
-                    style={{ color: getStatusInfo(cancelModalApp.status).color }}
+                    style={{
+                      color: getStatusInfo(cancelModalApp.status).color,
+                    }}
                   >
                     {getStatusInfo(cancelModalApp.status).label}
                   </span>
@@ -1786,14 +1799,20 @@ const JobLab: React.FC = () => {
             {/* Warning notice */}
             <div className="jlabcm-notice">
               <div className="jlabcm-notice-row">
-                <Ban size={14} className="jlabcm-notice-icon jlabcm-notice-icon--red" />
+                <Ban
+                  size={14}
+                  className="jlabcm-notice-icon jlabcm-notice-icon--red"
+                />
                 <span>
                   Sau khi hủy, bạn phải chờ <strong>1 giờ</strong> mới có thể
                   ứng tuyển lại vị trí này.
                 </span>
               </div>
               <div className="jlabcm-notice-row">
-                <AlertTriangle size={14} className="jlabcm-notice-icon jlabcm-notice-icon--yellow" />
+                <AlertTriangle
+                  size={14}
+                  className="jlabcm-notice-icon jlabcm-notice-icon--yellow"
+                />
                 <span>
                   Nếu ứng tuyển lại, đơn đó sẽ{" "}
                   <strong>không thể hủy thêm lần nữa</strong>.
@@ -1808,7 +1827,10 @@ const JobLab: React.FC = () => {
               </label>
               <div className="jlabcm-reasons-grid">
                 {[
-                  { value: "found_better", label: "Tìm được công việc tốt hơn" },
+                  {
+                    value: "found_better",
+                    label: "Tìm được công việc tốt hơn",
+                  },
                   { value: "change_mind", label: "Thay đổi ý định" },
                   { value: "wrong_job", label: "Ứng tuyển nhầm vị trí" },
                   { value: "salary", label: "Mức lương không phù hợp" },
@@ -1822,7 +1844,10 @@ const JobLab: React.FC = () => {
                     onClick={() => setCancelReason(opt.value)}
                   >
                     {cancelReason === opt.value && (
-                      <CheckCircle size={13} className="jlabcm-reason-chip-check" />
+                      <CheckCircle
+                        size={13}
+                        className="jlabcm-reason-chip-check"
+                      />
                     )}
                     {opt.label}
                   </button>
@@ -1869,10 +1894,7 @@ const JobLab: React.FC = () => {
       {/* ══════════════ TOAST STACK ══════════════ */}
       <div className="jlabtoast-stack" aria-live="polite">
         {toasts.map((toast) => (
-          <div
-            key={toast.id}
-            className={`jlabtoast jlabtoast--${toast.type}`}
-          >
+          <div key={toast.id} className={`jlabtoast jlabtoast--${toast.type}`}>
             <div className="jlabtoast-icon-wrap">
               {toast.type === "success" && <CheckCircle size={18} />}
               {toast.type === "error" && <XCircle size={18} />}

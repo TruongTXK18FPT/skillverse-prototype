@@ -454,7 +454,7 @@ const Header: React.FC = () => {
                             : "Bắt đầu lộ trình học đầu tiên"}
                         </span>
                         <Link
-                          to="/roadmap"
+                          to="/journey"
                           className="sv-suggestion-cta"
                           onClick={() => setShowQuickNav(false)}
                         >

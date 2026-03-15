@@ -11,6 +11,7 @@ import SystemLimits from "./SystemLimits";
 import MentorChatModal from "../mentorship-hud/MentorChatModal";
 import { LearningReportModal, LearningReportHistory } from "../learning-report";
 import { RoadmapSessionSummary } from "../../types/Roadmap";
+import { FeatureLimitInfo } from "../../services/usageLimitService";
 import {
   buildCourseLearningDestination,
   buildCourseLearningOrigin,
@@ -31,6 +32,7 @@ interface TaskSummary {
 
 interface MothershipDashboardProps {
   userName?: string;
+  userRoles?: string[];
   userLevel?: number;
   hasPremium?: boolean;
   taskSummary?: TaskSummary;
@@ -59,12 +61,15 @@ interface MothershipDashboardProps {
     ROADM_MAPS_LIMIT: number;
     COIN_MULTIPLIER: number;
   };
-  featureUsage?: any[];
+  featureUsage?: FeatureLimitInfo[];
+  featureUsageLoading?: boolean;
+  featureUsageError?: string | null;
   onJoinGroup?: (groupId: number, isMember: boolean) => void;
 }
 
 const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   userName = "InnoVibe Team",
+  userRoles = [],
   userLevel = 1,
   hasPremium = false,
   taskSummary = {
@@ -86,6 +91,8 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   cycleStats,
   usageLimits,
   featureUsage,
+  featureUsageLoading = false,
+  featureUsageError = null,
   onJoinGroup,
 }) => {
   const navigate = useNavigate();
@@ -259,7 +266,13 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
 
         {/* Usage Limits */}
         {(featureUsage || usageLimits) && (
-          <SystemLimits usageLimits={usageLimits} featureUsage={featureUsage} />
+          <SystemLimits
+            usageLimits={usageLimits}
+            featureUsage={featureUsage}
+            isLoading={featureUsageLoading}
+            error={featureUsageError}
+            roleNames={userRoles}
+          />
         )}
 
         {/* Active Simulations (Current Courses) */}
