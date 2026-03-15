@@ -375,13 +375,13 @@ const formatInsightLabel = (item: SkillInsightItem): string => {
 
 const normalizeAnswerText = (value: string): string => {
   return value
-    .replace(/^[A-D](?:\s*[\.\):\-]|\s+)/i, '')
+    .replace(/^[A-D](?:\s*[.):-]|\s+)/i, '')
     .trim()
     .toLowerCase();
 };
 
 const extractOptionKey = (value: string): string => {
-  const match = value.trim().match(/^([A-D])(?:\s*[\.\):\-]|\s+|$)/i);
+  const match = value.trim().match(/^([A-D])(?:\s*[.):-]|\s+|$)/i);
   return match?.[1]?.toUpperCase() ?? '';
 };
 
