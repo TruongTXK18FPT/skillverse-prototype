@@ -335,6 +335,12 @@
   background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.82));
 }
 
+.sv-roadmap-node__planner-btn--existing {
+  border-color: rgba(52, 211, 153, 0.55);
+  color: #86efac;
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.78), rgba(15, 23, 42, 0.88));
+}
+
 .sv-roadmap-node__planner-spinner {
   animation: sv-roadmap-node-spin 1s linear infinite;
 }

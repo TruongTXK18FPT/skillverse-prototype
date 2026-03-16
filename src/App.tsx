@@ -593,7 +593,7 @@ const isCertificateRoute = (pathname: string) => {
 
 // Check if path matches roadmap detail pattern
 const isRoadmapDetailRoute = (pathname: string) => {
-  return /^\/roadmap\/[^/]+$/.test(pathname);
+  return pathname.startsWith("/roadmap/") && pathname !== "/roadmap";
 };
 
 // Check if path is any admin route

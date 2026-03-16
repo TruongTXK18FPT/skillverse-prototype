@@ -15,6 +15,7 @@ import {
   SkillAnalysis,
   QuestionReviewItem
 } from '../types/Journey';
+import { RoadmapNodeStudyPlanRequest } from '../types/Roadmap';
 
 const DEFAULT_PASSING_SCORE = 70;
 
@@ -891,10 +892,15 @@ const journeyService = {
   /**
    * Create study plan for specific roadmap node
    */
-  createStudyPlanForNode: async (journeyId: number, nodeId: string): Promise<any> => {
+  createStudyPlanForNode: async (
+    journeyId: number,
+    nodeId: string,
+    request?: RoadmapNodeStudyPlanRequest
+  ): Promise<any> => {
     try {
       const response = await axiosInstance.post(
-        `/v1/journey/${journeyId}/study-plan/node/${encodeURIComponent(nodeId)}`
+        `/v1/journey/${journeyId}/study-plan/node/${encodeURIComponent(nodeId)}`,
+        request
       );
       return response.data;
     } catch (error) {
@@ -906,10 +912,15 @@ const journeyService = {
   /**
    * Create study plan task for roadmap node using roadmap session id.
    */
-  createStudyPlanForRoadmapNode: async (roadmapSessionId: number, nodeId: string): Promise<any> => {
+  createStudyPlanForRoadmapNode: async (
+    roadmapSessionId: number,
+    nodeId: string,
+    request?: RoadmapNodeStudyPlanRequest
+  ): Promise<any> => {
     try {
       const response = await axiosInstance.post(
-        `/v1/journey/roadmap/${roadmapSessionId}/study-plan/node/${encodeURIComponent(nodeId)}`
+        `/v1/journey/roadmap/${roadmapSessionId}/study-plan/node/${encodeURIComponent(nodeId)}`,
+        request
       );
       return response.data;
     } catch (error) {

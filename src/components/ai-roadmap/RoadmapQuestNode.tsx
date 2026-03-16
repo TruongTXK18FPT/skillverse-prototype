@@ -7,11 +7,23 @@ import { Clock, CheckCircle, PlayCircle, Star, ChevronRight, ChevronDown, Target
  * Custom React Flow node for roadmap quests (V2 Enhanced)
  */
 const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
-  const { node, progress, onComplete, onCreateStudyTask, isCreatingStudyTask, isEligibleForStudyTask } = data;
+  const {
+    node,
+    progress,
+    onComplete,
+    onCreateStudyTask,
+    isCreatingStudyTask,
+    isEligibleForStudyTask,
+    hasStudyTask
+  } = data;
   const isCompleted = progress?.status === 'COMPLETED';
   const isInProgress = progress?.status === 'IN_PROGRESS';
   const isMain = node.type === 'MAIN';
-  const canCreateStudyTask = Boolean(onCreateStudyTask) && !isCompleted && (isEligibleForStudyTask ?? true);
+  const hasExistingStudyTask = Boolean(hasStudyTask);
+  const canCreateStudyTask =
+    Boolean(onCreateStudyTask) && !isCompleted && !hasExistingStudyTask && (isEligibleForStudyTask ?? true);
+  const canShowExistingTaskNotice = Boolean(onCreateStudyTask) && !isCompleted && hasExistingStudyTask;
+  const canInteractWithPlanner = canCreateStudyTask || canShowExistingTaskNotice;
   
   // State for collapsible sections (V2 Enhanced fields)
   const [showDetails, setShowDetails] = useState(false);
@@ -41,7 +53,7 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
   const handleCreateTaskClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    if (!onCreateStudyTask || isCreatingStudyTask || !canCreateStudyTask) {
+    if (!onCreateStudyTask || isCreatingStudyTask || !canInteractWithPlanner) {
       return;
     }
     onCreateStudyTask(node.id);
@@ -127,18 +139,34 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
       {onCreateStudyTask && !isCompleted && (
         <div className="sv-roadmap-node__planner">
           <button
-            className={`sv-roadmap-node__planner-btn ${isCreatingStudyTask ? 'sv-roadmap-node__planner-btn--loading' : ''} ${!canCreateStudyTask ? 'sv-roadmap-node__planner-btn--locked' : ''}`}
+            className={`sv-roadmap-node__planner-btn ${isCreatingStudyTask ? 'sv-roadmap-node__planner-btn--loading' : ''} ${!canInteractWithPlanner ? 'sv-roadmap-node__planner-btn--locked' : ''} ${hasExistingStudyTask ? 'sv-roadmap-node__planner-btn--existing' : ''}`}
             onClick={handleCreateTaskClick}
-            disabled={Boolean(isCreatingStudyTask) || !canCreateStudyTask}
-            title={canCreateStudyTask ? 'Tạo task học tập trong Study Planner' : 'Bạn cần hoàn thành node hiện tại trước'}
+            disabled={Boolean(isCreatingStudyTask) || !canInteractWithPlanner}
+            title={
+              canCreateStudyTask
+                ? 'Tạo task học tập trong Study Planner'
+                : hasExistingStudyTask
+                  ? 'Node này đã có task Study Planner'
+                  : 'Bạn cần hoàn thành node hiện tại trước'
+            }
           >
-            {isCreatingStudyTask ? <Loader2 size={14} className="sv-roadmap-node__planner-spinner" /> : canCreateStudyTask ? <PlusCircle size={14} /> : <Lock size={14} />}
+            {isCreatingStudyTask ? (
+              <Loader2 size={14} className="sv-roadmap-node__planner-spinner" />
+            ) : canCreateStudyTask ? (
+              <PlusCircle size={14} />
+            ) : hasExistingStudyTask ? (
+              <CheckCircle size={14} />
+            ) : (
+              <Lock size={14} />
+            )}
             <span>
               {isCreatingStudyTask
                 ? 'Đang tạo task...'
                 : canCreateStudyTask
                   ? 'Tạo task Planner'
-                  : 'Hoàn thành node trước'}
+                  : hasExistingStudyTask
+                    ? 'Đã có task Planner'
+                    : 'Hoàn thành node trước'}
             </span>
           </button>
         </div>

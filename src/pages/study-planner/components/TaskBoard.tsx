@@ -45,6 +45,41 @@ const COLUMN_COLORS = [
   '#8b5cf6',
 ];
 
+const ROADMAP_NOTE_MARKER_PATTERN =
+  /\[ROADMAP_NODE_LINK\]\s+journey=(\d+)\s+roadmap=(\d+)\s+node=([^\s]+)(?:\s+nodeOrder=([^\s]+))?(?:\s+step=([^\s]+))?/i;
+
+const formatRoadmapTaskNote = (rawNotes: string): string => {
+  const normalized = rawNotes.trim();
+  if (!normalized) {
+    return rawNotes;
+  }
+
+  const lines = normalized
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const markerLine = lines.find((line) => line.includes('[ROADMAP_NODE_LINK]'));
+  if (!markerLine) {
+    return rawNotes;
+  }
+
+  const readableLines = lines.filter((line) => !line.includes('[ROADMAP_NODE_LINK]'));
+  if (readableLines.length > 0) {
+    return readableLines.join(' • ');
+  }
+
+  const markerMatch = markerLine.match(ROADMAP_NOTE_MARKER_PATTERN);
+  if (!markerMatch) {
+    return rawNotes;
+  }
+
+  const [, journeyId, roadmapId, nodeId, nodeOrder, step] = markerMatch;
+  const nodeLabel = nodeOrder ? `Node ${nodeOrder}` : `Node ${nodeId}`;
+  const taskLabel = step ? `Task ${step}` : 'Task roadmap';
+
+  return `${nodeLabel} • ${taskLabel} • Journey #${journeyId} • Roadmap #${roadmapId}`;
+};
+
 const TaskBoard: React.FC<TaskBoardProps> = ({
   columns,
   onTaskClick,
@@ -374,7 +409,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                         fontStyle: 'italic',
                       }}
                     >
-                      Ghi chú: {task.userNotes}
+                      Ghi chú: {formatRoadmapTaskNote(task.userNotes)}
                     </div>
                   )}
 

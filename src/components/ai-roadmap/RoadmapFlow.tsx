@@ -23,6 +23,7 @@ interface RoadmapFlowProps {
   onCreateStudyTask?: (nodeId: string) => void;
   creatingTaskNodeId?: string | null;
   eligibleNodeId?: string | null;
+  studyTaskNodeIds?: Set<string>;
 }
 
 // Cấu hình ELK Layout
@@ -41,7 +42,8 @@ const RoadmapFlow = ({
   onQuestComplete,
   onCreateStudyTask,
   creatingTaskNodeId,
-  eligibleNodeId
+  eligibleNodeId,
+  studyTaskNodeIds
 }: RoadmapFlowProps) => {
   // Giữ nguyên Node cũ của bạn
   const nodeTypes = useMemo(() => ({
@@ -112,7 +114,8 @@ const RoadmapFlow = ({
         onComplete: onQuestComplete,
         onCreateStudyTask,
         isCreatingStudyTask: creatingTaskNodeId === node.id,
-        isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id
+        isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id,
+        hasStudyTask: studyTaskNodeIds?.has(node.id) ?? false
       }
     }));
 
@@ -149,7 +152,7 @@ const RoadmapFlow = ({
       setEdges(layoutedEdges);
     });
 
-  }, [roadmap, getLayoutedElements, onQuestComplete, onCreateStudyTask, creatingTaskNodeId, eligibleNodeId]); // Chỉ chạy lại khi cấu trúc roadmap thay đổi
+  }, [roadmap, getLayoutedElements, onQuestComplete, onCreateStudyTask, creatingTaskNodeId, eligibleNodeId, studyTaskNodeIds]); // Chỉ chạy lại khi cấu trúc roadmap thay đổi
 
   // 3. Effect: Cập nhật tiến độ (Không chạy lại Layout -> Fix Lag)
   useEffect(() => {
@@ -164,12 +167,13 @@ const RoadmapFlow = ({
             onComplete: onQuestComplete,
             onCreateStudyTask,
             isCreatingStudyTask: creatingTaskNodeId === node.id,
-            isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id
+            isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id,
+            hasStudyTask: studyTaskNodeIds?.has(node.id) ?? false
           }
         }))
       );
     }
-  }, [progressMap, onQuestComplete, onCreateStudyTask, creatingTaskNodeId, eligibleNodeId, setNodes]);
+  }, [progressMap, onQuestComplete, onCreateStudyTask, creatingTaskNodeId, eligibleNodeId, setNodes, studyTaskNodeIds]);
 
   return (
     <div className="sv-roadmap-flow" style={{ width: '100%', height: '100%' }}>

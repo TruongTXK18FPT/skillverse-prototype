@@ -15,6 +15,7 @@ interface RoadmapDetailViewerProps {
   onCreateStudyTask?: (nodeId: string) => void;
   creatingTaskNodeId?: string | null;
   eligibleNodeId?: string | null;
+  studyTaskNodeIds?: Set<string>;
 }
 
 const InfoItem = ({ label, value, icon: Icon }: { label: string, value?: string | boolean, icon?: any }) => {
@@ -34,7 +35,8 @@ const RoadmapDetailViewer = memo(({
   onQuestComplete,
   onCreateStudyTask,
   creatingTaskNodeId,
-  eligibleNodeId
+  eligibleNodeId,
+  studyTaskNodeIds
 }: RoadmapDetailViewerProps) => {
   const { showSuccess, showError } = useToast();
 
@@ -352,6 +354,7 @@ const RoadmapDetailViewer = memo(({
             onCreateStudyTask={onCreateStudyTask}
             creatingTaskNodeId={creatingTaskNodeId}
             eligibleNodeId={eligibleNodeId}
+            studyTaskNodeIds={studyTaskNodeIds}
           />
         </div>
         

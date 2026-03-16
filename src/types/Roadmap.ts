@@ -244,6 +244,33 @@ export interface RoadmapResponse {
 }
 
 /**
+ * Optional preferences when creating study tasks from a roadmap node.
+ * The backend merges these preferences with node content before calling AI.
+ */
+export interface RoadmapNodeStudyPlanRequest {
+  startDate?: string;
+  deadline?: string;
+  timezone?: string;
+  preferredDays?: string[];
+  preferredTimeWindows?: string[];
+  freeTimeDescription?: string;
+  desiredOutcome?: string;
+  intensityLevel?: string;
+  durationMinutes?: number;
+  maxSessionsPerDay?: number;
+  breakMinutesBetweenSessions?: number;
+  maxDailyStudyMinutes?: number;
+  studyMethod?: string;
+  resourcesPreference?: string;
+  studyPreference?: string;
+  earliestStartLocalTime?: string;
+  latestEndLocalTime?: string;
+  avoidLateNight?: boolean;
+  allowLateNight?: boolean;
+  confirmLateNight?: boolean;
+}
+
+/**
  * Summary of a roadmap session (for list view) - V2 Fields
  */
 export interface RoadmapSessionSummary {
@@ -290,5 +317,6 @@ export interface FlowNodeData {
   onCreateStudyTask?: (nodeId: string) => void;
   isCreatingStudyTask?: boolean;
   isEligibleForStudyTask?: boolean;
+  hasStudyTask?: boolean;
   isExpanded?: boolean;
 }

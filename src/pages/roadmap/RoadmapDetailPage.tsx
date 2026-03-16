@@ -2,13 +2,18 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import RoadmapDetailViewer from '../../components/roadmap/RoadmapDetailViewer';
+import RoadmapNodeStudyPlanModal from '../../components/roadmap/RoadmapNodeStudyPlanModal';
 import aiRoadmapService from '../../services/aiRoadmapService';
 import journeyService from '../../services/journeyService';
-import { 
-  RoadmapResponse, 
-  QuestProgress, 
-  ProgressStatus 
+import { taskBoardService } from '../../services/taskBoardService';
+import {
+  RoadmapResponse,
+  QuestProgress,
+  ProgressStatus,
+  RoadmapNode,
+  RoadmapNodeStudyPlanRequest
 } from '../../types/Roadmap';
+import { TaskColumnResponse } from '../../types/TaskBoard';
 import { useToast } from '../../hooks/useToast';
 import { useAuth } from '../../context/AuthContext';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
@@ -20,15 +25,50 @@ import '../../styles/RoadmapHUD.css';
  * Dedicated page for viewing roadmap details
  * Separated from main roadmap page for better performance
  */
+const ROADMAP_NODE_LINK_PATTERN = /\[ROADMAP_NODE_LINK\]\s+journey=\d+\s+roadmap=(\d+)\s+node=([^\s]+)/gi;
+
+const extractLinkedNodeIds = (
+  board: TaskColumnResponse[],
+  roadmapSessionId: number
+): Set<string> => {
+  const linkedNodeIds = new Set<string>();
+
+  if (!Number.isFinite(roadmapSessionId)) {
+    return linkedNodeIds;
+  }
+
+  board.forEach((column) => {
+    column.tasks?.forEach((task) => {
+      if (!task.userNotes) {
+        return;
+      }
+
+      const linkRegex = new RegExp(ROADMAP_NODE_LINK_PATTERN);
+      for (const match of task.userNotes.matchAll(linkRegex)) {
+        const matchedRoadmapId = Number(match[1]);
+        const matchedNodeId = match[2]?.trim();
+        if (matchedRoadmapId === roadmapSessionId && matchedNodeId) {
+          linkedNodeIds.add(matchedNodeId);
+        }
+      }
+    });
+  });
+
+  return linkedNodeIds;
+};
+
 const RoadmapDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const { toast, isVisible, showError, showSuccess, hideToast } = useToast();
-  
+  const { toast, isVisible, showError, showSuccess, showToast, hideToast } = useToast();
+
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
   const [progressMap, setProgressMap] = useState<Map<string, QuestProgress>>(new Map());
   const [creatingTaskNodeId, setCreatingTaskNodeId] = useState<string | null>(null);
+  const [planModalNode, setPlanModalNode] = useState<RoadmapNode | null>(null);
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
+  const [studyTaskNodeIds, setStudyTaskNodeIds] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,7 +90,6 @@ const RoadmapDetailPage = () => {
     return null;
   }, [roadmap, progressMap]);
 
-  // Load roadmap data - Simple approach, rely on backend security
   const loadRoadmap = useCallback(async () => {
     if (!id) {
       setError('Roadmap ID không hợp lệ');
@@ -67,123 +106,214 @@ const RoadmapDetailPage = () => {
     try {
       setIsLoading(true);
       setError(null);
-      
-      // Backend sẽ tự động kiểm tra quyền truy cập
-      const roadmapData = await aiRoadmapService.getRoadmapById(parseInt(id));
+
+      const roadmapData = await aiRoadmapService.getRoadmapById(parseInt(id, 10));
       setRoadmap(roadmapData);
-      
-      // Load progress data from backend response
+
       if (roadmapData.progress) {
-        const progressMap = new Map<string, QuestProgress>();
+        const nextProgressMap = new Map<string, QuestProgress>();
         Object.entries(roadmapData.progress).forEach(([questId, progress]) => {
-          progressMap.set(questId, {
+          nextProgressMap.set(questId, {
             questId: progress.questId,
             status: progress.status as ProgressStatus,
             progress: progress.progress,
             completedAt: progress.completedAt
           });
         });
-        setProgressMap(progressMap);
+        setProgressMap(nextProgressMap);
       } else {
         setProgressMap(new Map());
       }
-    } catch (error) {
-      console.error('Failed to load roadmap:', error);
-      const errorMessage = (error as Error).message;
-      
-      // Backend sẽ trả về lỗi phù hợp nếu không có quyền truy cập
+
+      try {
+        const board = await taskBoardService.getBoard();
+        setStudyTaskNodeIds(extractLinkedNodeIds(board, roadmapData.sessionId));
+      } catch (boardError) {
+        console.warn('Failed to load linked study tasks for roadmap nodes:', boardError);
+        setStudyTaskNodeIds(new Set());
+      }
+    } catch (loadError) {
+      console.error('Failed to load roadmap:', loadError);
+      const errorMessage = (loadError as Error).message;
       if (errorMessage.includes('not found') || errorMessage.includes('Roadmap not found')) {
         setError('Không tìm thấy lộ trình hoặc bạn không có quyền truy cập');
       } else {
         setError(errorMessage);
       }
-      
       showError('Error', errorMessage);
     } finally {
       setIsLoading(false);
     }
-  }, [id, isAuthenticated, showError]);
+  }, [id, isAuthenticated, navigate, showError]);
 
-  // Load roadmap on mount
   useEffect(() => {
     loadRoadmap();
   }, [loadRoadmap]);
 
-  // Handle quest completion
   const handleQuestComplete = useCallback(async (questId: string, completed: boolean) => {
     if (!roadmap) return;
-    
-    try {
-      // Update backend first
-      const response = await aiRoadmapService.updateQuestProgress(
-        roadmap.sessionId, 
-        questId, 
-        completed
-      );
 
-      // Update local state with new progress
-      const newProgress = new Map(progressMap);
+    try {
+      const response = await aiRoadmapService.updateQuestProgress(roadmap.sessionId, questId, completed);
+
+      const nextProgress = new Map(progressMap);
       if (completed) {
-        newProgress.set(questId, {
+        nextProgress.set(questId, {
           questId,
           status: ProgressStatus.COMPLETED,
           progress: 100,
           completedAt: new Date().toISOString()
         });
       } else {
-        newProgress.delete(questId);
+        nextProgress.delete(questId);
       }
-      setProgressMap(newProgress);
+      setProgressMap(nextProgress);
 
-      // Show progress stats
       const { completedQuests, totalQuests, completionPercentage } = response.stats;
       if (completed) {
         showSuccess(
-          'Hoàn thành! 🎉', 
-          `${completedQuests}/${totalQuests} mục tiêu hoàn thành (${completionPercentage.toFixed(1)}%)`
+          'Hoàn thành',
+          `${completedQuests}/${totalQuests} mục tiêu đã hoàn thành (${completionPercentage.toFixed(1)}%)`
         );
       } else {
         showSuccess(
-          'Đã bỏ chọn', 
-          `${completedQuests}/${totalQuests} mục tiêu hoàn thành (${completionPercentage.toFixed(1)}%)`
+          'Đã bỏ chọn',
+          `${completedQuests}/${totalQuests} mục tiêu đã hoàn thành (${completionPercentage.toFixed(1)}%)`
         );
       }
-    } catch (error) {
-      showError('Error', (error as Error).message);
+    } catch (updateError) {
+      showError('Error', (updateError as Error).message);
     }
   }, [roadmap, progressMap, showSuccess, showError]);
 
-  const handleCreateStudyTask = useCallback(async (nodeId: string) => {
+  const handleCreateStudyTask = useCallback((nodeId: string) => {
     if (!roadmap || !nodeId || !nodeId.trim()) return;
-    if (eligibleNodeId && nodeId !== eligibleNodeId) {
+
+    const normalizedNodeId = nodeId.trim();
+    const node = roadmap.roadmap.find((item) => item?.id === normalizedNodeId) ?? null;
+    if (!node) {
+      showError('Không tìm thấy node', 'Node này không tồn tại trong roadmap hiện tại.');
+      return;
+    }
+
+    if (studyTaskNodeIds.has(normalizedNodeId)) {
+      showToast({
+        type: 'info',
+        title: 'Node đã có task Study Planner',
+        message: `Node "${node.title}" đã được tạo kế hoạch học tập trước đó. Bạn có thể mở Study Planner để xem và cập nhật.`,
+        autoCloseDelay: 10,
+        showCountdown: true,
+        countdownText: 'Tự đóng sau {countdown}s',
+        actionButton: {
+          text: 'Mở Study Planner',
+          onClick: () => {
+            hideToast();
+            const params = new URLSearchParams({
+              source: 'roadmap-node',
+              roadmapSessionId: String(roadmap.sessionId),
+              nodeId: normalizedNodeId
+            });
+            navigate(`/study-planner?${params.toString()}`);
+          }
+        }
+      });
+      return;
+    }
+
+    if (eligibleNodeId && normalizedNodeId !== eligibleNodeId) {
       showError('Chưa thể tạo plan', 'Bạn cần hoàn thành node hiện tại trước khi mở plan node tiếp theo.');
       return;
     }
 
-    try {
-      setCreatingTaskNodeId(nodeId);
-      const response = await journeyService.createStudyPlanForRoadmapNode(roadmap.sessionId, nodeId);
-      const created = Boolean((response as { created?: boolean })?.created);
-      const message = (response as { message?: string })?.message || 'Đã liên kết node roadmap với Study Planner.';
+    setPlanModalNode(node);
+    setIsPlanModalOpen(true);
+  }, [roadmap, eligibleNodeId, showError, studyTaskNodeIds, showToast, hideToast, navigate]);
 
-      if (created) {
-        showSuccess('Đã tạo task học tập', message);
-      } else {
-        showSuccess('Task đã tồn tại', message);
+  const handleClosePlanModal = useCallback(() => {
+    if (creatingTaskNodeId) return;
+    setIsPlanModalOpen(false);
+    setPlanModalNode(null);
+  }, [creatingTaskNodeId]);
+
+  const handleSubmitNodePlan = useCallback(async (request: RoadmapNodeStudyPlanRequest) => {
+    if (!roadmap || !planModalNode) return;
+
+    try {
+      setCreatingTaskNodeId(planModalNode.id);
+      const response = await journeyService.createStudyPlanForRoadmapNode(
+        roadmap.sessionId,
+        planModalNode.id,
+        request
+      );
+
+      const created = Boolean((response as { created?: boolean })?.created);
+      const taskCount = Number((response as { taskCount?: number })?.taskCount ?? 0);
+      const message =
+        (response as { message?: string })?.message || 'Đã liên kết roadmap node với Study Planner.';
+      const responseMeta = response as {
+        studyPlanId?: number | string;
+        taskId?: number | string;
+        boardTaskId?: number | string;
+        id?: number | string;
+      };
+      const linkedTaskId =
+        responseMeta.studyPlanId ??
+        responseMeta.taskId ??
+        responseMeta.boardTaskId ??
+        responseMeta.id;
+      const normalizedTaskId =
+        linkedTaskId !== undefined && linkedTaskId !== null ? String(linkedTaskId) : '';
+      const hasTaskPayload =
+        taskCount > 0 ||
+        Boolean((response as { task?: unknown }).task) ||
+        (Array.isArray((response as { tasks?: unknown[] }).tasks) &&
+          (response as { tasks?: unknown[] }).tasks!.length > 0);
+
+      if (created || hasTaskPayload) {
+        setStudyTaskNodeIds((previous) => {
+          const next = new Set(previous);
+          next.add(planModalNode.id);
+          return next;
+        });
       }
-    } catch (err) {
-      showError('Không thể tạo task', (err as Error).message);
+
+      showToast({
+        type: 'success',
+        title: created ? 'Đã tạo kế hoạch AI' : 'Task đã tồn tại',
+        message: taskCount > 0 ? `${message} (${taskCount} task)` : message,
+        autoCloseDelay: 10,
+        showCountdown: true,
+        countdownText: 'Tự đóng sau {countdown}s',
+        actionButton: {
+          text: 'Xem ngay',
+          onClick: () => {
+            hideToast();
+            const params = new URLSearchParams({
+              source: 'roadmap-node',
+              roadmapSessionId: String(roadmap.sessionId),
+              nodeId: planModalNode.id
+            });
+            if (normalizedTaskId) {
+              params.set('taskId', normalizedTaskId);
+            }
+            navigate(`/study-planner?${params.toString()}`);
+          }
+        }
+      });
+
+      setIsPlanModalOpen(false);
+      setPlanModalNode(null);
+    } catch (submitError) {
+      showError('Không thể tạo task', (submitError as Error).message);
     } finally {
       setCreatingTaskNodeId(null);
     }
-  }, [roadmap, eligibleNodeId, showSuccess, showError]);
+  }, [roadmap, planModalNode, showToast, showError, hideToast, navigate]);
 
-  // Handle back navigation
   const handleBack = useCallback(() => {
     navigate('/roadmap');
   }, [navigate]);
 
-  // Redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để xem lộ trình.');
@@ -191,7 +321,20 @@ const RoadmapDetailPage = () => {
     }
   }, [isAuthenticated, navigate, showError]);
 
-  // Loading state
+  useEffect(() => {
+    const footer = document.querySelector('footer');
+    if (!(footer instanceof HTMLElement)) {
+      return;
+    }
+
+    const previousDisplay = footer.style.display;
+    footer.style.display = 'none';
+
+    return () => {
+      footer.style.display = previousDisplay;
+    };
+  }, []);
+
   if (isLoading) {
     return (
       <div className="roadmap-detail-page">
@@ -203,7 +346,6 @@ const RoadmapDetailPage = () => {
     );
   }
 
-  // Error state
   if (error || !roadmap) {
     return (
       <div className="roadmap-detail-page">
@@ -219,14 +361,12 @@ const RoadmapDetailPage = () => {
     );
   }
 
-  // Main content
   return (
     <div className="roadmap-hud-container">
-      {/* Cosmic dust particles - Same as main roadmap page */}
       <div className="cosmic-dust">
-        {[...Array(40)].map((_, i) => (
-          <div 
-            key={i} 
+        {[...Array(40)].map((_, index) => (
+          <div
+            key={index}
             className="dust-particle"
             style={{
               left: `${Math.random() * 100}%`,
@@ -237,7 +377,7 @@ const RoadmapDetailPage = () => {
           />
         ))}
       </div>
-      
+
       <div className="roadmap-hud-starmap">
         <RoadmapDetailViewer
           roadmap={roadmap}
@@ -247,12 +387,19 @@ const RoadmapDetailPage = () => {
           onCreateStudyTask={handleCreateStudyTask}
           creatingTaskNodeId={creatingTaskNodeId}
           eligibleNodeId={eligibleNodeId}
+          studyTaskNodeIds={studyTaskNodeIds}
         />
-        
         <MeowlGuide currentPage="roadmap" />
       </div>
-      
-      {/* Toast Notification */}
+
+      <RoadmapNodeStudyPlanModal
+        isOpen={isPlanModalOpen}
+        node={planModalNode}
+        isSubmitting={Boolean(creatingTaskNodeId)}
+        onClose={handleClosePlanModal}
+        onSubmit={handleSubmitNodePlan}
+      />
+
       {toast && (
         <Toast
           type={toast.type}
