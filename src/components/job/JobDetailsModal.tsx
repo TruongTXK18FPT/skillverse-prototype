@@ -97,10 +97,16 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ job, onClose, onApply
     } catch (error) {
       console.error('Error applying to job:', error);
       const errorMessage = error instanceof Error ? error.message : 'Không thể ứng tuyển. Vui lòng thử lại.';
-      
-      // Show specific error for recruiter self-apply
-      if (errorMessage.includes('own job') || errorMessage.includes('Recruiters cannot')) {
-        showError('Không Được Phép', '⛔ Nhà tuyển dụng không thể ứng tuyển vào công việc của chính mình!');
+
+      // Show specific error for portfolio requirement
+      if (errorMessage.includes('portfolio') || errorMessage.includes('Portfolio')) {
+        showError(
+          'Cần Tạo Portfolio',
+          'Bạn cần tạo portfolio trước khi ứng tuyển! Vui lòng tạo portfolio tại trang cá nhân.'
+        );
+      } else if (errorMessage.includes('own job') || errorMessage.includes('Recruiters cannot')) {
+        // Show specific error for recruiter self-apply
+        showError('Không Được Phép', 'Nhà tuyển dụng không thể ứng tuyển vào công việc của chính mình!');
       } else {
         showError('Lỗi Ứng Tuyển', errorMessage);
       }

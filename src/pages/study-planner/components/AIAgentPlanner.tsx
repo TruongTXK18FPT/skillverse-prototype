@@ -307,21 +307,21 @@ const buildOutcome = (goalPreset: GoalPreset, subjectName: string): string => {
 const buildPresetDrivenFormData = (
   startDate: string,
   subjectPresetId: string,
-  goalPresetId: string,
+  _goalPresetId: string,
   intensityPresetId: string,
   availabilityPresetId: string,
   timelinePresetId: string,
 ): GenerateScheduleRequest => {
   const subjectPreset = getPresetById(SUBJECT_PRESETS, subjectPresetId);
-  const goalPreset = getPresetById(GOAL_PRESETS, goalPresetId);
   const intensityPreset = getPresetById(INTENSITY_PRESETS, intensityPresetId);
   const availabilityPreset = getPresetById(AVAILABILITY_PRESETS, availabilityPresetId);
   const timelinePreset = getPresetById(TIMELINE_PRESETS, timelinePresetId);
 
   return {
-    subjectName: subjectPreset.subjectName,
-    topics: [...subjectPreset.topics],
-    desiredOutcome: buildOutcome(goalPreset, subjectPreset.subjectName),
+    // Keep initial form lean, avoid pre-filling too many user-facing inputs.
+    subjectName: '',
+    topics: [],
+    desiredOutcome: '',
     studyMethod: subjectPreset.studyMethod,
     resourcesPreference: subjectPreset.resourcesPreference,
     startDate,
@@ -334,10 +334,8 @@ const buildPresetDrivenFormData = (
     breakMinutesBetweenSessions: intensityPreset.breakMinutes,
     maxSessionsPerDay: intensityPreset.maxSessionsPerDay,
     maxDailyStudyMinutes: intensityPreset.maxDailyStudyMinutes,
-    preferredDays: [...availabilityPreset.preferredDays],
-    preferredTimeWindows: availabilityPreset.preferredTimeWindows.map((window) => ({
-      ...window,
-    })),
+    preferredDays: [],
+    preferredTimeWindows: [],
     studyPreference: 'BALANCED',
     chronotype: availabilityPreset.chronotype,
     idealFocusWindows: [...availabilityPreset.idealFocusWindows],
@@ -409,6 +407,16 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
   const activeGoalPreset = useMemo(
     () => getPresetById(GOAL_PRESETS, selectedGoalPresetId),
     [selectedGoalPresetId],
+  );
+
+  const activeIntensityPreset = useMemo(
+    () => getPresetById(INTENSITY_PRESETS, selectedIntensityPresetId),
+    [selectedIntensityPresetId],
+  );
+
+  const activeAvailabilityPreset = useMemo(
+    () => getPresetById(AVAILABILITY_PRESETS, selectedAvailabilityPresetId),
+    [selectedAvailabilityPresetId],
   );
 
   const activeTimelinePreset = useMemo(
@@ -532,32 +540,36 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
     const preset = getPresetById(SUBJECT_PRESETS, presetId);
     setSelectedSubjectPresetId(presetId);
     setFormData((previous) => {
+      const previousPreset = getPresetById(SUBJECT_PRESETS, selectedSubjectPresetId);
+      const hasManualSubjectName =
+        !!previous.subjectName?.trim() &&
+        previous.subjectName.trim() !== previousPreset.subjectName;
+
       if (presetId === 'custom') {
         return {
           ...previous,
-          subjectName: '',
-          topics: previous.topics || [],
-          desiredOutcome: buildOutcome(activeGoalPreset, previous.subjectName),
+          subjectName: hasManualSubjectName ? previous.subjectName : '',
+          resourcesPreference: 'MIXED',
+          studyMethod: 'POMODORO',
         };
       }
 
       return {
         ...previous,
-        subjectName: preset.subjectName,
-        topics: [...preset.topics],
+        subjectName: hasManualSubjectName ? previous.subjectName : preset.subjectName,
         resourcesPreference: preset.resourcesPreference,
         studyMethod: preset.studyMethod,
-        desiredOutcome: buildOutcome(activeGoalPreset, preset.subjectName),
       };
     });
   };
 
   const handlePresetGoalChange = (presetId: string) => {
-    const preset = getPresetById(GOAL_PRESETS, presetId);
     setSelectedGoalPresetId(presetId);
     setFormData((previous) => ({
       ...previous,
-      desiredOutcome: buildOutcome(preset, previous.subjectName),
+      desiredOutcome: previous.desiredOutcome?.trim()
+        ? previous.desiredOutcome
+        : '',
     }));
   };
 
@@ -682,21 +694,62 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
       .map((topic) => topic.trim())
       .filter(Boolean);
     const fallbackTopics = activeSubjectPreset.topics;
+    const fallbackSubjectName = activeSubjectPreset.id === 'custom'
+      ? ''
+      : activeSubjectPreset.subjectName;
+    const fallbackPreferredDays = activeAvailabilityPreset.preferredDays || [];
+    const fallbackPreferredTimeWindows = (activeAvailabilityPreset.preferredTimeWindows || []).map(
+      (window) => ({ ...window }),
+    );
 
-    const normalizedSubjectName = formData.subjectName.trim();
+    const normalizedSubjectName = formData.subjectName.trim() || fallbackSubjectName;
+    const normalizedPreferredDays = (formData.preferredDays || []).length > 0
+      ? [...(formData.preferredDays || [])]
+      : [...fallbackPreferredDays];
+    const normalizedPreferredTimeWindows = (formData.preferredTimeWindows || []).length > 0
+      ? (formData.preferredTimeWindows || []).map((window) => ({ ...window }))
+      : fallbackPreferredTimeWindows;
+
     return {
       ...formData,
       subjectName: normalizedSubjectName,
       topics: normalizedTopics.length > 0 ? normalizedTopics : fallbackTopics,
       desiredOutcome:
         formData.desiredOutcome?.trim() || buildOutcome(activeGoalPreset, normalizedSubjectName),
+      studyMethod: formData.studyMethod || activeSubjectPreset.studyMethod,
+      resourcesPreference: formData.resourcesPreference || activeSubjectPreset.resourcesPreference,
+      durationMinutes:
+        formData.durationMinutes && formData.durationMinutes > 0
+          ? formData.durationMinutes
+          : activeIntensityPreset.durationMinutes,
+      breakMinutesBetweenSessions:
+        formData.breakMinutesBetweenSessions && formData.breakMinutesBetweenSessions > 0
+          ? formData.breakMinutesBetweenSessions
+          : activeIntensityPreset.breakMinutes,
+      maxSessionsPerDay:
+        formData.maxSessionsPerDay && formData.maxSessionsPerDay > 0
+          ? formData.maxSessionsPerDay
+          : activeIntensityPreset.maxSessionsPerDay,
+      maxDailyStudyMinutes:
+        formData.maxDailyStudyMinutes && formData.maxDailyStudyMinutes > 0
+          ? formData.maxDailyStudyMinutes
+          : activeIntensityPreset.maxDailyStudyMinutes,
       deadline:
         formData.deadline ||
         (activeTimelinePreset.offsetDays !== null
           ? addDaysToDate(formData.startDate, activeTimelinePreset.offsetDays)
           : ''),
-      preferredDays: formData.preferredDays || [],
-      preferredTimeWindows: formData.preferredTimeWindows || [],
+      preferredDays: normalizedPreferredDays,
+      preferredTimeWindows: normalizedPreferredTimeWindows,
+      chronotype: formData.chronotype || activeAvailabilityPreset.chronotype,
+      idealFocusWindows:
+        (formData.idealFocusWindows || []).length > 0
+          ? [...(formData.idealFocusWindows || [])]
+          : [...(activeAvailabilityPreset.idealFocusWindows || [])],
+      earliestStartLocalTime:
+        formData.earliestStartLocalTime || activeAvailabilityPreset.earliestStartLocalTime,
+      latestEndLocalTime:
+        formData.latestEndLocalTime || activeAvailabilityPreset.latestEndLocalTime,
     };
   };
 
@@ -816,6 +869,20 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
     .map((window) => `${window.startTime} - ${window.endTime}`)
     .join(' | ');
 
+  const fallbackPreferredDaySummary = (activeAvailabilityPreset.preferredDays || [])
+    .map((day) => DAY_LABELS[day] || day)
+    .join(', ');
+
+  const fallbackPreferredWindowSummary = (activeAvailabilityPreset.preferredTimeWindows || [])
+    .map((window) => `${window.startTime} - ${window.endTime}`)
+    .join(' | ');
+
+  const effectivePreferredDaySummary =
+    preferredDaySummary || (fallbackPreferredDaySummary ? `Theo mẫu: ${fallbackPreferredDaySummary}` : '');
+
+  const effectivePreferredWindowSummary =
+    preferredWindowSummary || (fallbackPreferredWindowSummary ? `Theo mẫu: ${fallbackPreferredWindowSummary}` : '');
+
   return (
     <div className="study-plan-modal-overlay" onClick={onClose}>
       <div className="study-plan-modal theme-gold" onClick={(event) => event.stopPropagation()}>
@@ -921,6 +988,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
                 <div className="study-plan-ai-section-title">
                   <FaBrain /> 2. Mục tiêu và cường độ học
                 </div>
+                <div className="study-plan-ai-subgroup-label">Mục tiêu học tập</div>
                 <div className="study-plan-ai-choice-grid">
                   {GOAL_PRESETS.map((preset) => (
                     <button
@@ -937,7 +1005,8 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
                     </button>
                   ))}
                 </div>
-                <div className="study-plan-ai-choice-grid">
+                <div className="study-plan-ai-subgroup-label">Cường độ học</div>
+                <div className="study-plan-ai-choice-grid study-plan-ai-choice-grid--compact">
                   {INTENSITY_PRESETS.map((preset) => (
                     <button
                       key={preset.id}
@@ -959,6 +1028,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
                 <div className="study-plan-ai-section-title">
                   <FaCalendarAlt /> 3. Lịch học và deadline
                 </div>
+                <div className="study-plan-ai-subgroup-label">Lịch rảnh mẫu</div>
                 <div className="study-plan-ai-choice-grid">
                   {AVAILABILITY_PRESETS.map((preset) => (
                     <button
@@ -975,7 +1045,8 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
                     </button>
                   ))}
                 </div>
-                <div className="study-plan-ai-choice-grid">
+                <div className="study-plan-ai-subgroup-label">Mốc thời gian</div>
+                <div className="study-plan-ai-choice-grid study-plan-ai-choice-grid--compact">
                   {TIMELINE_PRESETS.map((preset) => (
                     <button
                       key={preset.id}
@@ -1079,7 +1150,10 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
                 <div className="study-plan-ai-summary-grid">
                   <div className="study-plan-ai-summary-item">
                     <span>Môn học</span>
-                    <strong>{formData.subjectName || 'Chưa chọn'}</strong>
+                    <strong>
+                      {formData.subjectName ||
+                        (activeSubjectPreset.id !== 'custom' ? activeSubjectPreset.subjectName : 'Chưa chọn')}
+                    </strong>
                   </div>
                   <div className="study-plan-ai-summary-item">
                     <span>Mục tiêu</span>
@@ -1087,11 +1161,11 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
                   </div>
                   <div className="study-plan-ai-summary-item">
                     <span>Lịch học</span>
-                    <strong>{preferredDaySummary || 'Chưa chọn ngày học'}</strong>
+                    <strong>{effectivePreferredDaySummary || 'Chưa chọn ngày học'}</strong>
                   </div>
                   <div className="study-plan-ai-summary-item">
                     <span>Khung giờ</span>
-                    <strong>{preferredWindowSummary || 'Chưa chọn khung giờ'}</strong>
+                    <strong>{effectivePreferredWindowSummary || 'Chưa chọn khung giờ'}</strong>
                   </div>
                   <div className="study-plan-ai-summary-item">
                     <span>Tổng thời lượng</span>

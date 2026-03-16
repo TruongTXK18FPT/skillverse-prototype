@@ -165,8 +165,17 @@ const ShortTermJobDetailModal: React.FC<ShortTermJobDetailModalProps> = ({
       setShowApplyForm(false);
       onApplySuccess?.();
     } catch (err: any) {
-      const msg = err?.response?.data?.message || "Không thể gửi đơn ứng tuyển";
-      showError("Lỗi", msg);
+      const msg = err?.response?.data?.message || err?.message || "Không thể gửi đơn ứng tuyển";
+
+      // Show specific error for portfolio requirement
+      if (msg.includes('portfolio') || msg.includes('Portfolio')) {
+        showError(
+          "Cần Tạo Portfolio",
+          "Bạn cần tạo portfolio trước khi ứng tuyển! Vui lòng tạo portfolio tại trang cá nhân."
+        );
+      } else {
+        showError("Lỗi", msg);
+      }
     } finally {
       setIsSubmitting(false);
     }
