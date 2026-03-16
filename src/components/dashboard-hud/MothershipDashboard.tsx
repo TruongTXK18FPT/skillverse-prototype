@@ -9,8 +9,9 @@ import FavoriteMentors from "./FavoriteMentors";
 import AnalystTrack from "./AnalystTrack";
 import SystemLimits from "./SystemLimits";
 import MentorChatModal from "../mentorship-hud/MentorChatModal";
-import { LearningReportModal, LearningReportHistory } from "../learning-report";
+import { LearningReportHistory } from "../learning-report";
 import { RoadmapSessionSummary } from "../../types/Roadmap";
+import { FeatureLimitInfo } from "../../services/usageLimitService";
 import {
   buildCourseLearningDestination,
   buildCourseLearningOrigin,
@@ -31,6 +32,7 @@ interface TaskSummary {
 
 interface MothershipDashboardProps {
   userName?: string;
+  userRoles?: string[];
   userLevel?: number;
   hasPremium?: boolean;
   taskSummary?: TaskSummary;
@@ -59,12 +61,15 @@ interface MothershipDashboardProps {
     ROADM_MAPS_LIMIT: number;
     COIN_MULTIPLIER: number;
   };
-  featureUsage?: any[];
+  featureUsage?: FeatureLimitInfo[];
+  featureUsageLoading?: boolean;
+  featureUsageError?: string | null;
   onJoinGroup?: (groupId: number, isMember: boolean) => void;
 }
 
 const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   userName = "InnoVibe Team",
+  userRoles = [],
   userLevel = 1,
   hasPremium = false,
   taskSummary = {
@@ -86,10 +91,11 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   cycleStats,
   usageLimits,
   featureUsage,
+  featureUsageLoading = false,
+  featureUsageError = null,
   onJoinGroup,
 }) => {
   const navigate = useNavigate();
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [chatModalOpen, setChatModalOpen] = useState(false);
   const [selectedMentorForChat, setSelectedMentorForChat] = useState<any>(null);
 
@@ -207,6 +213,75 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
           courseCount={enrolledCourses.length}
         />
 
+        {/* <section className="mothership-dashboard__intro-board">
+          <div className="mothership-dashboard__intro-panel">
+            <div className="mothership-dashboard__intro-heading">
+              <span className="mothership-dashboard__intro-eyebrow">
+                <Sparkles size={14} />
+                Bảng điều khiển Journey
+              </span>
+              <h2 className="mothership-dashboard__intro-title">
+                Tiếp tục hành trình thông minh cùng Meowl
+              </h2>
+              <p className="mothership-dashboard__intro-subtitle">
+                Theo dõi roadmap, học theo từng bước và xử lý task còn tồn đọng
+                trong một màn hình duy nhất.
+              </p>
+            </div>
+
+            <div className="mothership-dashboard__intro-metrics">
+              <article className="mothership-dashboard__intro-metric">
+                <Compass size={15} />
+                <div>
+                  <strong>{roadmaps.length}</strong>
+                  <span>Roadmap đang có</span>
+                </div>
+              </article>
+              <article className="mothership-dashboard__intro-metric">
+                <BookOpen size={15} />
+                <div>
+                  <strong>{enrolledCourses.length}</strong>
+                  <span>Khóa học đang học</span>
+                </div>
+              </article>
+              <article className="mothership-dashboard__intro-metric">
+                <Bot size={15} />
+                <div>
+                  <strong>{totalOverdueTasks}</strong>
+                  <span>Task quá hạn cần xử lý</span>
+                </div>
+              </article>
+            </div>
+
+            <div className="mothership-dashboard__intro-actions">
+              <button
+                type="button"
+                className="mothership-dashboard__intro-action mothership-dashboard__intro-action--primary"
+                onClick={() => navigate("/journey")}
+              >
+                Mở Journey ngay
+                <ArrowRight size={14} />
+              </button>
+              <button
+                type="button"
+                className="mothership-dashboard__intro-action mothership-dashboard__intro-action--ghost"
+                onClick={() => navigate("/roadmap")}
+              >
+                Xem tất cả Roadmap
+              </button>
+            </div>
+          </div>
+
+          <div className="mothership-dashboard__intro-meowl-wrap" aria-hidden="true">
+            <img
+              src={meowlUser}
+              alt=""
+              className="mothership-dashboard__intro-meowl"
+              loading="lazy"
+            />
+          </div>
+        </section> */}
+
         {/* System Status (Learning Streak) */}
         <div id="learning-streak-section">
           <SystemStatus
@@ -259,7 +334,13 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
 
         {/* Usage Limits */}
         {(featureUsage || usageLimits) && (
-          <SystemLimits usageLimits={usageLimits} featureUsage={featureUsage} />
+          <SystemLimits
+            usageLimits={usageLimits}
+            featureUsage={featureUsage}
+            isLoading={featureUsageLoading}
+            error={featureUsageError}
+            roleNames={userRoles}
+          />
         )}
 
         {/* Active Simulations (Current Courses) */}

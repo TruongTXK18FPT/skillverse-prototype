@@ -56,6 +56,7 @@ export interface StudentMetrics {
   mostActiveTime?: string;
   preferredSkillCategory?: string;
   roadmapProgressList: RoadmapProgress[];
+  averageProgress?: number;  // Backend field mapping
 }
 
 export interface StudentLearningReportResponse {
@@ -167,6 +168,14 @@ function normalizeReportResponse(
       );
     }
 
+    // Map totalStudyHours from backend if available
+    if (
+      normalized.metrics.totalStudyHours === undefined &&
+      (normalized.metrics as any).totalStudyHours !== undefined
+    ) {
+      normalized.metrics.totalStudyHours = (normalized.metrics as any).totalStudyHours;
+    }
+
     // Map completedTasks to totalTasksCompleted
     if (
       normalized.metrics.totalTasksCompleted === undefined &&
@@ -175,6 +184,15 @@ function normalizeReportResponse(
       normalized.metrics.totalTasksCompleted = (
         normalized.metrics as any
       ).completedTasks;
+    }
+  }
+
+  // Map averageProgress to overallProgress if not set
+  if (normalized.overallProgress === undefined) {
+    if (normalized.metrics?.averageProgress !== undefined) {
+      normalized.overallProgress = normalized.metrics.averageProgress;
+    } else if ((normalized.metrics as any)?.averageProgress !== undefined) {
+      normalized.overallProgress = (normalized.metrics as any).averageProgress;
     }
   }
 

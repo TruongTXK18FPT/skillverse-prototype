@@ -8,6 +8,8 @@ import PendingApprovalModal from '../../components/elevator/PendingApprovalModal
 import { useToast } from '../../hooks/useToast';
 import Toast from '../../components/shared/Toast';
 
+const POST_LOGIN_JOURNEY_PROMPT_KEY = 'showPostLoginJourneyPrompt';
+
 const ElevatorLoginPage: React.FC = () => {
   const { login, isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -22,6 +24,12 @@ const ElevatorLoginPage: React.FC = () => {
   const [pendingApprovalEmail, setPendingApprovalEmail] = useState<string>('');
   const [rememberMe, setRememberMe] = useState(false);
   const googleRememberMeRef = useRef(false);
+
+  const markPostLoginPrompt = (path: string) => {
+    if (path.startsWith('/dashboard')) {
+      sessionStorage.setItem(POST_LOGIN_JOURNEY_PROMPT_KEY, '1');
+    }
+  };
 
   // Check if already authenticated
   useEffect(() => {
@@ -57,6 +65,7 @@ const ElevatorLoginPage: React.FC = () => {
           setPendingRedirect('/profile');
         } else {
           const urlPath = new URL(result.redirectUrl).pathname;
+          markPostLoginPrompt(urlPath);
           setPendingRedirect(urlPath);
         }
 
@@ -113,6 +122,7 @@ const ElevatorLoginPage: React.FC = () => {
 
       // Store redirect for after animation
       const urlPath = new URL(redirectUrl).pathname;
+      markPostLoginPrompt(urlPath);
       setPendingRedirect(urlPath);
 
       // Extract user name from email for welcome message

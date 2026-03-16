@@ -11,6 +11,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { MeowlSkinProvider } from "./context/MeowlSkinContext";
 import { MeowlStateProvider } from "./context/MeowlStateContext";
 import { ConfirmDialogProvider } from "./context/ConfirmDialogContext";
+import JourneyPromptWrapper from "./components/journey/JourneyPromptWrapper";
 import {
   MentorRoute,
   AdminRoute,
@@ -80,6 +81,8 @@ import AdminCoursePreviewPage from "./pages/admin/AdminCoursePreviewPage";
 import AiRoadmapPage from "./pages/roadmap/AiRoadmapPage";
 import RoadmapDetailPage from "./pages/roadmap/RoadmapDetailPage";
 import StudyPlannerPage from "./pages/study-planner/StudyPlannerPage";
+import GSJJourneyPage from "./pages/journey/GSJJourneyPage";
+import JourneyCreatePage from "./pages/journey/JourneyCreatePage";
 import "./styles/App.css";
 import ScrollToTop from "./components/scroll/ScrollToTop";
 import CourseDetailPage from "./pages/navbar/CourseDetailPage";
@@ -187,6 +190,8 @@ const AppContents = () => {
                           />
                           <Route path="/courses" element={<CoursesPage />} />
                           <Route path="/roadmap" element={<AiRoadmapPage />} />
+                          <Route path="/journey" element={<GSJJourneyPage />} />
+                          <Route path="/journey/create" element={<JourneyCreatePage />} />
                           <Route
                             path="/roadmap/:id"
                             element={<RoadmapDetailPage />}
@@ -525,6 +530,7 @@ const App = () => {
               <MeowlStateProvider>
                 <ConfirmDialogProvider>
                   <Router>
+                    <JourneyPromptWrapper />
                     <AppContents />
                   </Router>
                 </ConfirmDialogProvider>
