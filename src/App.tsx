@@ -11,7 +11,6 @@ import { AuthProvider } from "./context/AuthContext";
 import { MeowlSkinProvider } from "./context/MeowlSkinContext";
 import { MeowlStateProvider } from "./context/MeowlStateContext";
 import { ConfirmDialogProvider } from "./context/ConfirmDialogContext";
-import JourneyPromptWrapper from "./components/journey/JourneyPromptWrapper";
 import {
   MentorRoute,
   AdminRoute,
@@ -530,7 +529,6 @@ const App = () => {
               <MeowlStateProvider>
                 <ConfirmDialogProvider>
                   <Router>
-                    <JourneyPromptWrapper />
                     <AppContents />
                   </Router>
                 </ConfirmDialogProvider>

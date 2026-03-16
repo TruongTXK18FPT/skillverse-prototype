@@ -20,6 +20,9 @@ interface RoadmapFlowProps {
   roadmap: RoadmapNodeType[];
   progressMap?: Map<string, QuestProgress>;
   onQuestComplete?: (questId: string, completed: boolean) => void;
+  onCreateStudyTask?: (nodeId: string) => void;
+  creatingTaskNodeId?: string | null;
+  eligibleNodeId?: string | null;
 }
 
 // Cấu hình ELK Layout
@@ -32,7 +35,14 @@ const elkOptions = {
   'elk.layered.noCollision.handling': 'true', // Tự động tránh đè lên nhau
 };
 
-const RoadmapFlow = ({ roadmap, progressMap, onQuestComplete }: RoadmapFlowProps) => {
+const RoadmapFlow = ({
+  roadmap,
+  progressMap,
+  onQuestComplete,
+  onCreateStudyTask,
+  creatingTaskNodeId,
+  eligibleNodeId
+}: RoadmapFlowProps) => {
   // Giữ nguyên Node cũ của bạn
   const nodeTypes = useMemo(() => ({
     questNode: RoadmapQuestNode
@@ -99,7 +109,10 @@ const RoadmapFlow = ({ roadmap, progressMap, onQuestComplete }: RoadmapFlowProps
       data: {
         node,
         progress: progressMap?.get(node.id),
-        onComplete: onQuestComplete
+        onComplete: onQuestComplete,
+        onCreateStudyTask,
+        isCreatingStudyTask: creatingTaskNodeId === node.id,
+        isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id
       }
     }));
 
@@ -136,7 +149,7 @@ const RoadmapFlow = ({ roadmap, progressMap, onQuestComplete }: RoadmapFlowProps
       setEdges(layoutedEdges);
     });
 
-  }, [roadmap, getLayoutedElements]); // Chỉ chạy lại khi cấu trúc roadmap thay đổi
+  }, [roadmap, getLayoutedElements, onQuestComplete, onCreateStudyTask, creatingTaskNodeId, eligibleNodeId]); // Chỉ chạy lại khi cấu trúc roadmap thay đổi
 
   // 3. Effect: Cập nhật tiến độ (Không chạy lại Layout -> Fix Lag)
   useEffect(() => {
@@ -148,12 +161,15 @@ const RoadmapFlow = ({ roadmap, progressMap, onQuestComplete }: RoadmapFlowProps
             ...node.data,
             progress: progressMap.get(node.id),
             // Quan trọng: Update lại callback để tránh stale closure
-            onComplete: onQuestComplete
+            onComplete: onQuestComplete,
+            onCreateStudyTask,
+            isCreatingStudyTask: creatingTaskNodeId === node.id,
+            isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id
           }
         }))
       );
     }
-  }, [progressMap, onQuestComplete, setNodes]);
+  }, [progressMap, onQuestComplete, onCreateStudyTask, creatingTaskNodeId, eligibleNodeId, setNodes]);
 
   return (
     <div className="sv-roadmap-flow" style={{ width: '100%', height: '100%' }}>

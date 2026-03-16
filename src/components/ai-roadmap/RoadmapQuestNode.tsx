@@ -1,16 +1,17 @@
 import { memo, useState } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 import { FlowNodeData } from '../../types/Roadmap';
-import { Clock, CheckCircle, PlayCircle, Star, ChevronRight, ChevronDown, Target, Lightbulb, BookOpen } from 'lucide-react';
+import { Clock, CheckCircle, PlayCircle, Star, ChevronRight, ChevronDown, Target, Lightbulb, BookOpen, PlusCircle, Loader2, Lock } from 'lucide-react';
 
 /**
  * Custom React Flow node for roadmap quests (V2 Enhanced)
  */
 const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
-  const { node, progress, onComplete } = data;
+  const { node, progress, onComplete, onCreateStudyTask, isCreatingStudyTask, isEligibleForStudyTask } = data;
   const isCompleted = progress?.status === 'COMPLETED';
   const isInProgress = progress?.status === 'IN_PROGRESS';
   const isMain = node.type === 'MAIN';
+  const canCreateStudyTask = Boolean(onCreateStudyTask) && !isCompleted && (isEligibleForStudyTask ?? true);
   
   // State for collapsible sections (V2 Enhanced fields)
   const [showDetails, setShowDetails] = useState(false);
@@ -35,6 +36,15 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
     if (onComplete) {
       onComplete(node.id, !isCompleted);
     }
+  };
+
+  const handleCreateTaskClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (!onCreateStudyTask || isCreatingStudyTask || !canCreateStudyTask) {
+      return;
+    }
+    onCreateStudyTask(node.id);
   };
 
   return (
@@ -113,6 +123,26 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
           </div>
         )}
       </div>
+
+      {onCreateStudyTask && !isCompleted && (
+        <div className="sv-roadmap-node__planner">
+          <button
+            className={`sv-roadmap-node__planner-btn ${isCreatingStudyTask ? 'sv-roadmap-node__planner-btn--loading' : ''} ${!canCreateStudyTask ? 'sv-roadmap-node__planner-btn--locked' : ''}`}
+            onClick={handleCreateTaskClick}
+            disabled={Boolean(isCreatingStudyTask) || !canCreateStudyTask}
+            title={canCreateStudyTask ? 'Tạo task học tập trong Study Planner' : 'Bạn cần hoàn thành node hiện tại trước'}
+          >
+            {isCreatingStudyTask ? <Loader2 size={14} className="sv-roadmap-node__planner-spinner" /> : canCreateStudyTask ? <PlusCircle size={14} /> : <Lock size={14} />}
+            <span>
+              {isCreatingStudyTask
+                ? 'Đang tạo task...'
+                : canCreateStudyTask
+                  ? 'Tạo task Planner'
+                  : 'Hoàn thành node trước'}
+            </span>
+          </button>
+        </div>
+      )}
 
       {/* V2 Enhanced Details (Collapsible) */}
       {hasEnhancedFields && (

@@ -296,6 +296,58 @@
   transition: width 0.3s ease;
 }
 
+.sv-roadmap-node__planner {
+  margin-top: 8px;
+}
+
+.sv-roadmap-node__planner-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(34, 211, 238, 0.45);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(8, 47, 73, 0.75));
+  color: #67e8f9;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sv-roadmap-node__planner-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(34, 211, 238, 0.7);
+  box-shadow: 0 8px 18px rgba(6, 182, 212, 0.2);
+}
+
+.sv-roadmap-node__planner-btn:disabled,
+.sv-roadmap-node__planner-btn--loading {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.sv-roadmap-node__planner-btn--locked {
+  border-color: rgba(148, 163, 184, 0.45);
+  color: #cbd5e1;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.82));
+}
+
+.sv-roadmap-node__planner-spinner {
+  animation: sv-roadmap-node-spin 1s linear infinite;
+}
+
+@keyframes sv-roadmap-node-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Node Handles (Connection Points)
    ========================================================================== */
 .sv-roadmap-node__handle {
@@ -1368,4 +1420,3 @@
     font-size: 13px;
   }
 }
-

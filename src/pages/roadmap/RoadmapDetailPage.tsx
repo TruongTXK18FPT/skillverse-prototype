@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import RoadmapDetailViewer from '../../components/roadmap/RoadmapDetailViewer';
 import aiRoadmapService from '../../services/aiRoadmapService';
+import journeyService from '../../services/journeyService';
 import { 
   RoadmapResponse, 
   QuestProgress, 
@@ -27,8 +28,27 @@ const RoadmapDetailPage = () => {
   
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
   const [progressMap, setProgressMap] = useState<Map<string, QuestProgress>>(new Map());
+  const [creatingTaskNodeId, setCreatingTaskNodeId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const eligibleNodeId = useMemo(() => {
+    if (!roadmap || !Array.isArray(roadmap.roadmap)) {
+      return null;
+    }
+
+    for (const node of roadmap.roadmap) {
+      if (!node?.id) {
+        continue;
+      }
+      const progress = progressMap.get(node.id);
+      if (progress?.status !== ProgressStatus.COMPLETED) {
+        return node.id;
+      }
+    }
+
+    return null;
+  }, [roadmap, progressMap]);
 
   // Load roadmap data - Simple approach, rely on backend security
   const loadRoadmap = useCallback(async () => {
@@ -133,6 +153,31 @@ const RoadmapDetailPage = () => {
     }
   }, [roadmap, progressMap, showSuccess, showError]);
 
+  const handleCreateStudyTask = useCallback(async (nodeId: string) => {
+    if (!roadmap || !nodeId || !nodeId.trim()) return;
+    if (eligibleNodeId && nodeId !== eligibleNodeId) {
+      showError('Chưa thể tạo plan', 'Bạn cần hoàn thành node hiện tại trước khi mở plan node tiếp theo.');
+      return;
+    }
+
+    try {
+      setCreatingTaskNodeId(nodeId);
+      const response = await journeyService.createStudyPlanForRoadmapNode(roadmap.sessionId, nodeId);
+      const created = Boolean((response as { created?: boolean })?.created);
+      const message = (response as { message?: string })?.message || 'Đã liên kết node roadmap với Study Planner.';
+
+      if (created) {
+        showSuccess('Đã tạo task học tập', message);
+      } else {
+        showSuccess('Task đã tồn tại', message);
+      }
+    } catch (err) {
+      showError('Không thể tạo task', (err as Error).message);
+    } finally {
+      setCreatingTaskNodeId(null);
+    }
+  }, [roadmap, eligibleNodeId, showSuccess, showError]);
+
   // Handle back navigation
   const handleBack = useCallback(() => {
     navigate('/roadmap');
@@ -199,6 +244,9 @@ const RoadmapDetailPage = () => {
           progressMap={progressMap}
           onBack={handleBack}
           onQuestComplete={handleQuestComplete}
+          onCreateStudyTask={handleCreateStudyTask}
+          creatingTaskNodeId={creatingTaskNodeId}
+          eligibleNodeId={eligibleNodeId}
         />
         
         <MeowlGuide currentPage="roadmap" />

@@ -137,15 +137,16 @@
 
 .dashboard-journey-prompt__meowl-notify {
   position: absolute;
-  right: 18px;
-  top: 46px;
-  width: clamp(132px, 20vw, 210px);
+  right: 20px;
+  top: 18px;
+  width: clamp(84px, 11vw, 126px);
   aspect-ratio: 1 / 1;
-  background-image: url("../assets/space-role/meowl-user.png");
+  background-image: url("../assets/meowl-skin/meowl-robotic.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.36));
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
+  opacity: 0.96;
   pointer-events: none;
 }
 

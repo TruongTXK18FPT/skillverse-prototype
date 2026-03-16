@@ -891,15 +891,30 @@ const journeyService = {
   /**
    * Create study plan for specific roadmap node
    */
-  createStudyPlanForNode: async (journeyId: number, nodeId: number): Promise<any> => {
+  createStudyPlanForNode: async (journeyId: number, nodeId: string): Promise<any> => {
     try {
       const response = await axiosInstance.post(
-        `/v1/journey/${journeyId}/study-plan/node/${nodeId}`
+        `/v1/journey/${journeyId}/study-plan/node/${encodeURIComponent(nodeId)}`
       );
       return response.data;
     } catch (error) {
       console.error('Failed to create study plan:', error);
       throw new Error(getErrorMessage(error, 'Failed to create study plan.'));
+    }
+  },
+
+  /**
+   * Create study plan task for roadmap node using roadmap session id.
+   */
+  createStudyPlanForRoadmapNode: async (roadmapSessionId: number, nodeId: string): Promise<any> => {
+    try {
+      const response = await axiosInstance.post(
+        `/v1/journey/roadmap/${roadmapSessionId}/study-plan/node/${encodeURIComponent(nodeId)}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Failed to create study plan from roadmap node:', error);
+      throw new Error(getErrorMessage(error, 'Failed to create study plan from roadmap node.'));
     }
   },
 

@@ -1,66 +1,115 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, Trello, Bot, ChevronLeft, ChevronRight, ArrowLeft, Radio } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import {
+  Calendar,
+  Trello,
+  Bot,
+  ChevronLeft,
+  ChevronRight,
+  ArrowLeft,
+  Radio,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { studyPlanService } from '../../services/studyPlanService';
 import { taskBoardService } from '../../services/taskBoardService';
-import { StudySessionResponse, StudySessionStatus } from '../../types/StudyPlan';
-import { TaskResponse, TaskColumnResponse, CreateTaskRequest, UpdateTaskRequest } from '../../types/TaskBoard';
+import {
+  TaskResponse,
+  TaskColumnResponse,
+  CreateTaskRequest,
+  UpdateTaskRequest,
+} from '../../types/TaskBoard';
 import CalendarView from './components/CalendarView';
 import TaskBoard from './components/TaskBoard';
 import AIAgentPlanner from './components/AIAgentPlanner';
 import TaskDetailModal from './components/TaskDetailModal';
+import ClearOverdueConfirmModal from './components/ClearOverdueConfirmModal';
 import './styles/StudyPlanner.css';
+
+const OVERDUE_CLEAR_DAYS = 30;
+const FEEDBACK_HIDE_DELAY_MS = 4000;
+
+type ClearOverdueTarget = {
+  columnId?: string;
+  columnName?: string;
+  targetCount: number;
+};
 
 const StudyPlannerPage: React.FC = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'calendar' | 'board'>('calendar');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [loading, setLoading] = useState(true);
-  
-  // Data State
-  const [columns, setColumns] = useState<TaskColumnResponse[]>([]);
-  const [tasks, setTasks] = useState<TaskResponse[]>([]); // Flattened tasks for Calendar
-  const [overdueCount, setOverdueCount] = useState(0);
 
-  // Modal State
+  const [columns, setColumns] = useState<TaskColumnResponse[]>([]);
+  const [tasks, setTasks] = useState<TaskResponse[]>([]);
+  const [overdueCount, setOverdueCount] = useState(0);
+  const [oldOverdueCount, setOldOverdueCount] = useState(0);
+  const [isClearingOverdue, setIsClearingOverdue] = useState(false);
+  const [clearOverdueTarget, setClearOverdueTarget] =
+    useState<ClearOverdueTarget | null>(null);
+  const [clearOverdueFeedback, setClearOverdueFeedback] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
+
   const [isAIModalOpen, setIsAIModalOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<TaskResponse | undefined>(undefined);
-  const [targetColumnId, setTargetColumnId] = useState<string | undefined>(undefined);
+  const [selectedTask, setSelectedTask] = useState<TaskResponse | undefined>(
+    undefined,
+  );
+  const [targetColumnId, setTargetColumnId] = useState<string | undefined>(
+    undefined,
+  );
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 
   useEffect(() => {
-    // Hide footer on mount
     const footer = document.querySelector('footer');
     if (footer) footer.style.display = 'none';
     return () => {
-      // Show footer on unmount
       if (footer) footer.style.display = '';
     };
   }, []);
 
   useEffect(() => {
-    fetchData();
+    void fetchData();
   }, [currentDate]);
+
+  useEffect(() => {
+    if (!clearOverdueFeedback) return;
+    const timer = window.setTimeout(
+      () => setClearOverdueFeedback(null),
+      FEEDBACK_HIDE_DELAY_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [clearOverdueFeedback]);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      // Fetch Board Data (Source of Truth)
       const boardData = await taskBoardService.getBoard();
       setColumns(boardData);
-      
-      // Flatten tasks for Calendar
-      const allTasks = boardData.flatMap(col => col.tasks);
+
+      const allTasks = boardData.flatMap((column) => column.tasks);
       setTasks(allTasks);
 
-      // Check for overdue tasks
       const now = new Date();
-      const overdue = allTasks.filter(t => 
-        t.deadline && 
-        new Date(t.deadline) < now && 
-        (t.userProgress === undefined || t.userProgress < 100)
-      ).length;
-      setOverdueCount(overdue);
+      const overdueTasks = allTasks.filter(
+        (task) =>
+          task.deadline &&
+          new Date(task.deadline) < now &&
+          (task.userProgress === undefined || task.userProgress < 100),
+      );
+      setOverdueCount(overdueTasks.length);
+
+      const oldOverdueThreshold = new Date(now);
+      oldOverdueThreshold.setDate(
+        oldOverdueThreshold.getDate() - OVERDUE_CLEAR_DAYS,
+      );
+      const oldOverdueTasks = allTasks.filter(
+        (task) =>
+          task.deadline &&
+          new Date(task.deadline) < oldOverdueThreshold &&
+          (task.userProgress === undefined || task.userProgress < 100) &&
+          task.status?.toLowerCase() !== 'done',
+      );
+      setOldOverdueCount(oldOverdueTasks.length);
     } catch (error) {
       console.error('Failed to fetch data:', error);
     } finally {
@@ -80,17 +129,12 @@ const StudyPlannerPage: React.FC = () => {
     setIsTaskModalOpen(true);
   };
 
-  const handleDateClick = (date: Date) => {
+  const handleDateClick = (_date: Date) => {
     const defaultColumn = columns[0];
-    if (defaultColumn) {
-      setSelectedTask(undefined);
-      setTargetColumnId(defaultColumn.id);
-      // Ideally pass date to modal, but for now just open it.
-      // We can use a context or modify modal to accept initialDate if needed.
-      // For this iteration, user just wants "direct selection", opening modal is step 1.
-      // To be perfect, we should set a temporary "newTaskDefaults" state.
-      setIsTaskModalOpen(true);
-    }
+    if (!defaultColumn) return;
+    setSelectedTask(undefined);
+    setTargetColumnId(defaultColumn.id);
+    setIsTaskModalOpen(true);
   };
 
   const handleSaveTask = async (data: CreateTaskRequest | UpdateTaskRequest) => {
@@ -100,7 +144,7 @@ const StudyPlannerPage: React.FC = () => {
       } else {
         await taskBoardService.createTask(data as CreateTaskRequest);
       }
-      fetchData();
+      await fetchData();
       setIsTaskModalOpen(false);
     } catch (error) {
       console.error('Failed to save task:', error);
@@ -110,10 +154,46 @@ const StudyPlannerPage: React.FC = () => {
   const handleDeleteTask = async (taskId: string) => {
     try {
       await taskBoardService.deleteTask(taskId);
-      fetchData();
+      await fetchData();
       setIsTaskModalOpen(false);
     } catch (error) {
       console.error('Failed to delete task:', error);
+    }
+  };
+
+  const handleClearOverdueTasks = (
+    columnId?: string,
+    columnName?: string,
+    columnOverdueCount?: number,
+  ) => {
+    const targetCount = columnOverdueCount ?? oldOverdueCount;
+    if (targetCount <= 0) return;
+    setClearOverdueTarget({ columnId, columnName, targetCount });
+  };
+
+  const executeClearOverdueTasks = async () => {
+    if (!clearOverdueTarget) return;
+
+    try {
+      setIsClearingOverdue(true);
+      const result = await taskBoardService.clearOverdueTasks(
+        OVERDUE_CLEAR_DAYS,
+        clearOverdueTarget.columnId,
+      );
+      await fetchData();
+      setClearOverdueFeedback({
+        type: 'success',
+        message: `Đã xóa ${result.deletedCount} task overdue cũ.`,
+      });
+    } catch (error) {
+      console.error('Failed to clear old overdue tasks:', error);
+      setClearOverdueFeedback({
+        type: 'error',
+        message: 'Không thể xóa nhanh task overdue lúc này. Vui lòng thử lại.',
+      });
+    } finally {
+      setIsClearingOverdue(false);
+      setClearOverdueTarget(null);
     }
   };
 
@@ -123,41 +203,42 @@ const StudyPlannerPage: React.FC = () => {
     setCurrentDate(newDate);
   };
 
-  // Map Tasks to Sessions for CalendarView
-  const calendarSessions: TaskResponse[] = tasks;
-
   return (
     <div className="study-plan-container">
       <div className="study-plan-header-hero">
-        <button className="study-plan-back-btn" onClick={() => navigate('/dashboard')}>
-          <ArrowLeft size={16} /> BACK TO DASHBOARD
+        <button
+          className="study-plan-back-btn"
+          onClick={() => navigate('/dashboard')}
+        >
+          <ArrowLeft size={16} /> QUAY LẠI DASHBOARD
         </button>
-        
+
         <div className="study-plan-hero-content">
           <h1 className="study-plan-hero-title">
             <Radio size={40} />
             KẾ HOẠCH HỌC TẬP
           </h1>
           <div className="study-plan-hero-subtitle">
-            Lập kế hoạch học tập thông minh và quản lý công việc hiệu quả với công cụ AI tích hợp.
+            Lập kế hoạch học tập thông minh và quản lý công việc hiệu quả với công
+            cụ AI tích hợp.
           </div>
-          
+
           <div className="study-plan-controls">
-            <button 
+            <button
               className="study-plan-btn"
               onClick={() => setIsAIModalOpen(true)}
               style={{ borderColor: 'var(--sv-accent)', color: 'var(--sv-accent)' }}
             >
-              <Bot size={18} /> AI STRATEGIST
+              <Bot size={18} /> TRỢ LÝ AI
             </button>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button 
+              <button
                 className={`study-plan-btn ${viewMode === 'calendar' ? 'active' : ''}`}
                 onClick={() => setViewMode('calendar')}
               >
-                <Calendar size={18} /> TIMELINE
+                <Calendar size={18} /> LỊCH
               </button>
-              <button 
+              <button
                 className={`study-plan-btn ${viewMode === 'board' ? 'active' : ''}`}
                 onClick={() => setViewMode('board')}
               >
@@ -170,60 +251,117 @@ const StudyPlannerPage: React.FC = () => {
 
       {overdueCount > 0 && (
         <div className="study-plan-alert">
-          <span style={{ fontSize: '1.2rem' }}>⚠️</span> 
-          CẢNH BÁO: {overdueCount} CÔNG VIỆC QUÁ HẠN CẦN XỬ LÝ NGAY.
+          <span style={{ fontSize: '1.2rem' }}>!</span>
+          <div className="study-plan-alert-content">
+            <span>CẢNH BÁO: {overdueCount} CÔNG VIỆC QUÁ HẠN CẦN XỬ LÝ NGAY.</span>
+            {oldOverdueCount > 0 && (
+              <button
+                className="study-plan-alert-clear-btn"
+                onClick={() => handleClearOverdueTasks()}
+                disabled={isClearingOverdue}
+              >
+                {isClearingOverdue
+                  ? 'Đang xóa...'
+                  : `Xóa nhanh ${oldOverdueCount} task > ${OVERDUE_CLEAR_DAYS} ngày`}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {clearOverdueFeedback && (
+        <div
+          className={`study-plan-overdue-feedback study-plan-overdue-feedback--${clearOverdueFeedback.type}`}
+        >
+          {clearOverdueFeedback.message}
         </div>
       )}
 
       {viewMode === 'calendar' && (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem', marginBottom: '1.5rem' }}>
-          <button className="study-plan-btn" onClick={() => navigateWeek('prev')} style={{ padding: '0.5rem' }}><ChevronLeft size={24} /></button>
-          <h2 style={{ 
-            minWidth: '300px', 
-            textAlign: 'center', 
-            fontFamily: 'var(--sv-font-tech)', 
-            color: 'var(--sv-primary)',
-            textShadow: '0 0 10px var(--sv-primary-glow)',
-            fontSize: '1.5rem',
-            margin: 0
-          }}>
-            {currentDate.toLocaleString('en-US', { month: 'long', year: 'numeric' }).toUpperCase()}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '2rem',
+            marginBottom: '1.5rem',
+          }}
+        >
+          <button
+            className="study-plan-btn"
+            onClick={() => navigateWeek('prev')}
+            style={{ padding: '0.5rem' }}
+          >
+            <ChevronLeft size={24} />
+          </button>
+
+          <h2
+            style={{
+              minWidth: '300px',
+              textAlign: 'center',
+              fontFamily: 'var(--sv-font-tech)',
+              color: 'var(--sv-primary)',
+              textShadow: '0 0 10px var(--sv-primary-glow)',
+              fontSize: '1.5rem',
+              margin: 0,
+            }}
+          >
+            {currentDate
+              .toLocaleString('en-US', { month: 'long', year: 'numeric' })
+              .toUpperCase()}
           </h2>
-          <button className="study-plan-btn" onClick={() => navigateWeek('next')} style={{ padding: '0.5rem' }}><ChevronRight size={24} /></button>
+
+          <button
+            className="study-plan-btn"
+            onClick={() => navigateWeek('next')}
+            style={{ padding: '0.5rem' }}
+          >
+            <ChevronRight size={24} />
+          </button>
         </div>
       )}
 
       {loading && viewMode === 'calendar' ? (
-        <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--sv-primary)', fontFamily: 'var(--sv-font-tech)' }}>
+        <div
+          style={{
+            textAlign: 'center',
+            padding: '4rem',
+            color: 'var(--sv-primary)',
+            fontFamily: 'var(--sv-font-tech)',
+          }}
+        >
           Đang tải dữ liệu...
         </div>
       ) : (
         <>
           {viewMode === 'calendar' ? (
-            <CalendarView 
-              sessions={calendarSessions} 
+            <CalendarView
+              sessions={tasks}
               currentDate={currentDate}
-              onSessionClick={(task) => handleTaskClick(task)}
+              onSessionClick={handleTaskClick}
               onDateClick={handleDateClick}
             />
           ) : (
-            <TaskBoard 
+            <TaskBoard
               columns={columns}
               onTaskClick={handleTaskClick}
               onAddTask={handleAddTask}
               onColumnsChange={setColumns}
               onRefresh={fetchData}
+              onClearColumnOverdue={handleClearOverdueTasks}
+              overdueDaysThreshold={OVERDUE_CLEAR_DAYS}
+              isClearingOverdue={isClearingOverdue}
             />
           )}
         </>
       )}
 
       {isAIModalOpen && (
-        <AIAgentPlanner 
-          isOpen={true}
+        <AIAgentPlanner
+          isOpen
           onClose={() => setIsAIModalOpen(false)}
           onPlanGenerated={() => {
-            fetchData();
+            void fetchData();
             setViewMode('board');
           }}
         />
@@ -238,6 +376,20 @@ const StudyPlannerPage: React.FC = () => {
           onDelete={handleDeleteTask}
         />
       )}
+
+      <ClearOverdueConfirmModal
+        isOpen={Boolean(clearOverdueTarget)}
+        targetCount={clearOverdueTarget?.targetCount ?? 0}
+        overdueDays={OVERDUE_CLEAR_DAYS}
+        scopeLabel={
+          clearOverdueTarget?.columnName
+            ? `cột "${clearOverdueTarget.columnName}"`
+            : 'toàn bộ bảng'
+        }
+        isSubmitting={isClearingOverdue}
+        onCancel={() => setClearOverdueTarget(null)}
+        onConfirm={executeClearOverdueTasks}
+      />
     </div>
   );
 };

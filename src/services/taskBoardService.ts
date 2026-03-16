@@ -3,7 +3,8 @@ import {
   TaskColumnResponse, 
   TaskResponse, 
   CreateTaskRequest, 
-  UpdateTaskRequest 
+  UpdateTaskRequest,
+  ClearOverdueTasksResponse,
 } from '../types/TaskBoard';
 
 const BASE_URL = '/task-board';
@@ -40,6 +41,22 @@ export const taskBoardService = {
 
   deleteTask: async (taskId: string): Promise<void> => {
     await axiosInstance.delete(`${BASE_URL}/tasks/${taskId}`);
+  },
+
+  clearOverdueTasks: async (
+    overdueDays = 30,
+    columnId?: string,
+  ): Promise<ClearOverdueTasksResponse> => {
+    const response = await axiosInstance.delete<ClearOverdueTasksResponse>(
+      `${BASE_URL}/tasks/clear-overdue`,
+      {
+        params: {
+          overdueDays,
+          ...(columnId ? { columnId } : {}),
+        },
+      },
+    );
+    return response.data;
   },
 
   moveTask: async (taskId: string, targetColumnId: string): Promise<void> => {

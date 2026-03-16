@@ -287,5 +287,8 @@ export interface FlowNodeData {
   progress?: QuestProgress;
   onExpand?: (nodeId: string) => void;
   onComplete?: (nodeId: string, completed: boolean) => void;
+  onCreateStudyTask?: (nodeId: string) => void;
+  isCreatingStudyTask?: boolean;
+  isEligibleForStudyTask?: boolean;
   isExpanded?: boolean;
 }

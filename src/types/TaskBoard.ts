@@ -1,5 +1,3 @@
-import { StudySessionResponse, StudySessionStatus } from './StudyPlan';
-
 export enum TaskPriority {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
@@ -64,4 +62,11 @@ export interface DashboardNote {
   content: string;
   createdAt: string;
   updatedAt?: string;
+}
+
+export interface ClearOverdueTasksResponse {
+  deletedCount: number;
+  overdueDays: number;
+  columnId?: string;
+  message: string;
 }
