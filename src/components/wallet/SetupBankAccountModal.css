@@ -222,6 +222,13 @@
   color: #64748b;
 }
 
+.bank-acc-input-label {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem !important;
+  color: #64748b !important;
+  font-weight: 600;
+}
+
 .input-error {
   margin-top: 0.5rem;
   font-size: 0.85rem;

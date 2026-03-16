@@ -78,15 +78,66 @@
 
 .alien-header-main {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: 1rem;
-  align-items: end;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.alien-header-title-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .alien-header-title-wrap {
   display: flex;
   align-items: center;
   gap: 0.65rem;
+}
+
+.alien-header-chart-mini {
+  position: relative;
+  height: 80px;
+  width: 100%;
+  max-width: 450px;
+  justify-self: end;
+  overflow: visible;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.4));
+  margin-right: 5rem;
+}
+
+.alien-mini-chart-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.alien-mini-chart-path {
+  stroke: var(--hud-accent-cyan);
+  stroke-width: 2.5;
+  fill: none;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: alien-chart-draw 4s cubic-bezier(0.4, 0, 0.2, 1) forwards infinite alternate;
+  filter: drop-shadow(0 0 5px var(--hud-accent-cyan));
+}
+
+.alien-mini-chart-fill {
+  fill: url(#chart-gradient);
+  opacity: 0.25;
+}
+
+.alien-chart-dot {
+  fill: #fff;
+  filter: drop-shadow(0 0 6px var(--hud-accent-cyan));
+  animation: alien-dot-pulse 2s ease-in-out infinite;
+}
+
+.alien-chart-scanline {
+  stroke: rgba(103, 232, 249, 0.5);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  animation: alien-scanline-move 6s linear infinite;
 }
 
 .alien-header-icon {
@@ -106,6 +157,7 @@
 .alien-header-title {
   composes: hud-font-display from '../../components/dashboard-hud/hud-styles.module.css';
   font-size: clamp(1.8rem, 4vw, 2.7rem);
+  font-weight: 900;
   margin: 0;
   color: var(--hud-accent-cyan);
   text-shadow: var(--hud-glow-cyan), 0 0 24px rgba(6, 182, 212, 0.45);
@@ -120,9 +172,15 @@
 }
 
 .alien-header-kpis {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.55rem;
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+@keyframes alien-chart-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 .alien-header-kpi {
@@ -252,7 +310,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 0.4rem 0.5rem;
+  padding: 1rem;
   border: 1px solid transparent;
 }
 
@@ -288,8 +346,9 @@
   font-size: 0.82rem;
   color: #a3b8cc;
   display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .alien-coin-vnd-value {
@@ -297,6 +356,8 @@
   color: #67e8f9;
   font-weight: 800;
   text-shadow: 0 0 12px rgba(6, 182, 212, 0.36);
+  display: flex;
+  align-items: center;
 }
 
 .alien-coin-label {
@@ -481,19 +542,43 @@
 }
 
 .alien-tx-details h4 {
-  margin: 0;
-  font-size: 1rem;
+  margin: 0 0 6px 0;
+  font-size: 1.05rem;
   color: var(--hud-text-primary);
+  font-family: var(--hud-font-display);
+  letter-spacing: 0.5px;
+}
+
+.alien-tx-details .tx-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.alien-tx-details .tx-id-tag {
+  color: var(--hud-accent-cyan);
+  opacity: 0.7;
+  font-family: var(--hud-font-display);
+  font-size: 0.75rem;
 }
 
 .alien-tx-details p {
-  margin: 2px 0 0;
+  margin: 0;
   font-size: 0.8rem;
-  color: var(--hud-text-dim);
+  color: #94a3b8; /* Tông màu xám sáng hơn để dễ đọc trên nền tối */
+  opacity: 0.9;
+}
+
+.tx-details p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #94a3b8 !important;
+  opacity: 0.9;
 }
 
 .alien-tx-amount {
   text-align: right;
+  color: #06b6d4 !important;
 }
 
 .alien-amount-value {
@@ -506,6 +591,7 @@
 
 .alien-amount-value.credit { color: var(--hud-accent-green); }
 .alien-amount-value.debit { color: var(--hud-accent-red); }
+.alien-amount-value { color: var(--hud-accent-cyan); }
 
 /* Buttons */
 .alien-view-all-btn {
@@ -542,6 +628,15 @@
 .alien-status-badge.success { background: rgba(16, 185, 129, 0.1); color: var(--hud-accent-green); border: 1px solid rgba(16, 185, 129, 0.2); }
 .alien-status-badge.pending { background: rgba(234, 179, 8, 0.1); color: var(--hud-accent-yellow); border: 1px solid rgba(234, 179, 8, 0.2); }
 .alien-status-badge.failed { background: rgba(239, 68, 68, 0.1); color: var(--hud-accent-red); border: 1px solid rgba(239, 68, 68, 0.2); }
+.alien-status-badge.canceled { background: rgba(100, 116, 139, 0.1); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.2); }
+
+.tx-status-label {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
 
 /* Store */
 .alien-store-grid {

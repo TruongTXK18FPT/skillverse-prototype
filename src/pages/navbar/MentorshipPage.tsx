@@ -188,7 +188,7 @@ const MentorshipPage = () => {
     } catch (error) {
       console.error("Error fetching mentors:", error);
       // Fallback to mock data
-      setMentors(mockMentors);
+      // setMentors(mockMentors);
     } finally {
       setLoading(false);
     }

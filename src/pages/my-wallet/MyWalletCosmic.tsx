@@ -420,13 +420,15 @@ const MyWalletCosmic: React.FC = () => {
   };
 
   const getStatusBadge = (status: string) => {
+    const s = status.toUpperCase();
     const badges: { [key: string]: JSX.Element } = {
       'COMPLETED': <span className={`${styles['alien-status-badge']} ${styles['success']}`}><CheckCircle size={14} /> Hoàn thành</span>,
       'PENDING': <span className={`${styles['alien-status-badge']} ${styles['pending']}`}><Clock size={14} /> Đang xử lý</span>,
       'FAILED': <span className={`${styles['alien-status-badge']} ${styles['failed']}`}><XCircle size={14} /> Thất bại</span>,
-      'CANCELLED': <span className={`${styles['alien-status-badge']} ${styles['cancelled']}`}><XCircle size={14} /> Đã hủy</span>
+      'CANCELLED': <span className={`${styles['alien-status-badge']} ${styles['canceled']}`}><XCircle size={14} /> Đã hủy</span>,
+      'CANCELED': <span className={`${styles['alien-status-badge']} ${styles['canceled']}`}><XCircle size={14} /> Đã hủy</span>
     };
-    return badges[status] || <span className={styles['alien-status-badge']}>{status}</span>;
+    return badges[s] || <span className={styles['alien-status-badge']}>{status}</span>;
   };
 
   // Check if transaction type supports invoice download
@@ -486,31 +488,56 @@ const MyWalletCosmic: React.FC = () => {
           </div>
 
           <div className={styles['alien-header-main']}>
-            <div className={styles['alien-header-title-wrap']}>
-              <Wallet className={styles['alien-header-icon']} />
-              <h1 className={styles['alien-header-title']}>Ví SkillVerse</h1>
-              <Sparkles className={styles['alien-sparkle-icon']} />
+            <div className={styles['alien-header-title-container']}>
+              <div className={styles['alien-header-title-wrap']}>
+                <Wallet className={styles['alien-header-icon']} />
+                <h1 className={styles['alien-header-title']}>Ví SkillVerse</h1>
+                <Sparkles className={styles['alien-sparkle-icon']} />
+              </div>
             </div>
 
-            <div className={styles['alien-header-kpis']}>
-              <div className={styles['alien-header-kpi']}>
-                <span className={styles['alien-header-kpi-label']}>Tài sản ròng</span>
-                <strong className={styles['alien-header-kpi-value']}>
-                  {showBalance ? formatCurrency(calculateTotalAssets()) : '••••••'}
-                </strong>
-              </div>
-              <div className={styles['alien-header-kpi']}>
-                <span className={styles['alien-header-kpi-label']}>Tiền mặt</span>
-                <strong className={styles['alien-header-kpi-value']}>
-                  {showBalance ? `${assetAllocation.cashPercent.toFixed(1)}%` : '•••'}
-                </strong>
-              </div>
-              <div className={styles['alien-header-kpi']}>
-                <span className={styles['alien-header-kpi-label']}>SkillCoin</span>
-                <strong className={styles['alien-header-kpi-value']}>
-                  {showBalance ? `${assetAllocation.coinPercent.toFixed(1)}%` : '•••'}
-                </strong>
-              </div>
+            <div className={styles['alien-header-chart-mini']}>
+              <svg viewBox="0 0 200 60" className={styles['alien-mini-chart-svg']} preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="chart-gradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#22d3ee" stopOpacity="0" />
+                  </linearGradient>
+                  <mask id="chart-mask">
+                    <rect x="0" y="0" width="200" height="60" fill="white" />
+                  </mask>
+                </defs>
+                
+                {/* Background Grid Lines */}
+                <line x1="0" y1="15" x2="200" y2="15" stroke="rgba(34, 211, 238, 0.05)" strokeWidth="0.5" />
+                <line x1="0" y1="30" x2="200" y2="30" stroke="rgba(34, 211, 238, 0.05)" strokeWidth="0.5" />
+                <line x1="0" y1="45" x2="200" y2="45" stroke="rgba(34, 211, 238, 0.05)" strokeWidth="0.5" />
+
+                <path 
+                  d="M0,45 Q20,40 40,50 T80,30 T120,40 T160,10 T200,25 L200,60 L0,60 Z" 
+                  className={styles['alien-mini-chart-fill']}
+                />
+                
+                <path 
+                  d="M0,45 Q20,40 40,50 T80,30 T120,40 T160,10 T200,25" 
+                  className={styles['alien-mini-chart-path']}
+                />
+
+                {/* Data Points */}
+                <circle cx="40" cy="50" r="2.5" className={styles['alien-chart-dot']} />
+                <circle cx="80" cy="30" r="2.5" className={styles['alien-chart-dot']} style={{ animationDelay: '0.5s' }} />
+                <circle cx="120" cy="40" r="2.5" className={styles['alien-chart-dot']} style={{ animationDelay: '1s' }} />
+                <circle cx="160" cy="10" r="2.5" className={styles['alien-chart-dot']} style={{ animationDelay: '1.5s' }} />
+                <circle cx="200" cy="25" r="3" className={styles['alien-chart-dot']} style={{ fill: '#22d3ee' }} />
+
+                {/* Scanline */}
+                <line x1="0" y1="0" x2="0" y2="60" className={styles['alien-chart-scanline']} />
+
+                {/* HUD markings */}
+                <line x1="0" y1="10" x2="5" y2="10" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="2" />
+                <line x1="0" y1="30" x2="3" y2="30" stroke="rgba(34, 211, 238, 0.4)" strokeWidth="1" />
+                <line x1="0" y1="50" x2="5" y2="50" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="2" />
+              </svg>
             </div>
           </div>
         </div>
@@ -536,15 +563,15 @@ const MyWalletCosmic: React.FC = () => {
 
           <div className={styles['alien-balance-kpi-row']}>
             <div className={styles['alien-balance-kpi-chip']}>
-              <span>CASH SHARE</span>
+              <span>TIỀN MẶT</span>
               <strong>{showBalance ? `${assetAllocation.cashPercent.toFixed(1)}%` : '•••'}</strong>
             </div>
             <div className={styles['alien-balance-kpi-chip']}>
-              <span>COIN SHARE</span>
+              <span>XU</span>
               <strong>{showBalance ? `${assetAllocation.coinPercent.toFixed(1)}%` : '•••'}</strong>
             </div>
             <div className={styles['alien-balance-kpi-chip']}>
-              <span>ASSET VALUE</span>
+              <span>TỔNG TÀI SẢN</span>
               <strong>{showBalance ? formatCurrency(calculateTotalAssets()) : '••••••'}</strong>
             </div>
           </div>

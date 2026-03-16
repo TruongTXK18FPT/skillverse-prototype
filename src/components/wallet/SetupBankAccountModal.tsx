@@ -135,7 +135,7 @@ const SetupBankAccountModal: React.FC<SetupBankAccountModalProps> = ({
               </div>
 
               <div className="form-group">
-                <label>Tên ngân hàng *</label>
+                <label className="bank-acc-input-label">Tên ngân hàng *</label>
                 <input
                   type="text"
                   placeholder="VD: Vietcombank, Techcombank, BIDV..."
@@ -146,10 +146,10 @@ const SetupBankAccountModal: React.FC<SetupBankAccountModalProps> = ({
               </div>
 
               <div className="form-group">
-                <label>Số tài khoản *</label>
+                <label className="bank-acc-input-label">Số tài khoản *</label>
                 <div className="input-with-icon">
                   <CreditCard size={18} />
-                  <input
+                  <input style={{ paddingLeft: '2.5rem' }}
                     type="text"
                     placeholder="Nhập số tài khoản"
                     value={bankAccountNumber}
@@ -159,10 +159,10 @@ const SetupBankAccountModal: React.FC<SetupBankAccountModalProps> = ({
               </div>
 
               <div className="form-group">
-                <label>Tên chủ tài khoản *</label>
+                <label className="bank-acc-input-label">Tên chủ tài khoản *</label>
                 <div className="input-with-icon">
                   <User size={18} />
-                  <input
+                  <input style={{ paddingLeft: '2.5rem' }}
                     type="text"
                     placeholder="Họ và tên chủ tài khoản"
                     value={bankAccountName}
@@ -189,10 +189,10 @@ const SetupBankAccountModal: React.FC<SetupBankAccountModalProps> = ({
               </div>
 
               <div className="form-group">
-                <label>Mã PIN (6 chữ số) *</label>
+                <label className="bank-acc-input-label">Mã PIN (6 chữ số) *</label>
                 <div className="input-with-icon">
                   <Lock size={18} />
-                  <input
+                  <input style={{ paddingLeft: '2.5rem' }}
                     type="password"
                     placeholder="Nhập mã PIN 6 số"
                     value={pin}
@@ -207,10 +207,10 @@ const SetupBankAccountModal: React.FC<SetupBankAccountModalProps> = ({
               </div>
 
               <div className="form-group">
-                <label>Xác nhận mã PIN *</label>
+                <label className="bank-acc-input-label">Xác nhận mã PIN *</label>
                 <div className="input-with-icon">
                   <Lock size={18} />
-                  <input
+                  <input style={{ paddingLeft: '2.5rem' }}
                     type="password"
                     placeholder="Nhập lại mã PIN"
                     value={confirmPin}
