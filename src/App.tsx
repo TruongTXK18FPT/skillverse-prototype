@@ -35,6 +35,7 @@ import ExpertChatPage from "./pages/navbar/ExpertChatPage";
 import Gamification from "./pages/navbar/Gamification";
 // import PortfolioPage from './pages/navbar/PortfolioPage';  // OLD - Backup
 import TacticalDossierPortfolio from "./components/portfolio-hud/TacticalDossierPortfolio"; // NEW - Mothership Theme
+import DossierCreatePortfolioPage from "./components/portfolio-hud/DossierCreatePortfolioPage";
 import PortfolioDebug from "./pages/navbar/PortfolioDebug";
 // import CVPage from './pages/navbar/CV';  // OLD - Backup
 import DataCompilerPreview from "./components/portfolio-hud/DataCompilerPreview"; // NEW - Mothership Theme
@@ -248,6 +249,10 @@ const AppContents = () => {
                             element={<TacticalDossierPortfolio />}
                           />{" "}
                           {/* ACTIVE - Mothership Theme */}
+                          <Route
+                            path="/portfolio/create"
+                            element={<DossierCreatePortfolioPage />}
+                          />
                           <Route
                             path="/portfolio/:slug"
                             element={<TacticalDossierPortfolio />}
@@ -571,6 +576,7 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/mentor",
   "/business",
   "/jobs",
+  "/portfolio/create",
 ]);
 
 // Check if path matches quiz attempt pattern

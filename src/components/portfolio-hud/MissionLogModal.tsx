@@ -179,11 +179,13 @@ export const MissionLogModal: React.FC<MissionLogModalProps> = ({
                   onChange={(e) => setFormData({ ...formData, projectType: e.target.value as ProjectType })}
                   required
                 >
-                  <option value={ProjectType.MICROJOB}>Việc nhỏ</option>
+                  <option value={ProjectType.MICRO_JOB}>Việc nhỏ</option>
                   <option value={ProjectType.FREELANCE}>Tự do</option>
                   <option value={ProjectType.PERSONAL}>Cá nhân</option>
                   <option value={ProjectType.ACADEMIC}>Học thuật</option>
                   <option value={ProjectType.OPEN_SOURCE}>Mã nguồn mở</option>
+                  <option value={ProjectType.INTERNSHIP}>Thực tập</option>
+                  <option value={ProjectType.FULL_TIME}>Toàn thời gian</option>
                 </select>
               </div>
 

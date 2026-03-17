@@ -7,6 +7,8 @@ import { useScrollLock } from './useScrollLock';
 import SystemAlertModal from './SystemAlertModal';
 import './dossier-portfolio-styles.css';
 
+const RESERVED_PORTFOLIO_SLUGS = new Set(['create']);
+
 interface PilotIDModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -39,7 +41,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
     location: '',
     availabilityStatus: 'AVAILABLE',
     hourlyRate: 0,
-    preferredCurrency: 'USD',
+    preferredCurrency: 'VND',
     linkedinUrl: '',
     githubUrl: '',
     portfolioWebsiteUrl: '',
@@ -74,7 +76,10 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      setFormData({
+        ...initialData,
+        preferredCurrency: 'VND'
+      });
       setAvatarPreview(initialData.portfolioAvatarUrl || '');
       setVideoPreview(initialData.videoIntroUrl || '');
       setCoverPreview(initialData.coverImageUrl || '');
@@ -171,9 +176,20 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
         setLoading(false);
         return;
       }
+      const normalizedSlug = (formData.customUrlSlug || '').trim().toLowerCase();
+      if (normalizedSlug && RESERVED_PORTFOLIO_SLUGS.has(normalizedSlug)) {
+        setAlertModal({
+          show: true,
+          message: `"${normalizedSlug}" là slug dự trữ hệ thống. Vui lòng chọn slug khác.`,
+          type: 'warning'
+        });
+        setLoading(false);
+        return;
+      }
 
       const profileData = {
         ...formData,
+        preferredCurrency: 'VND',
         topSkills: JSON.stringify(skills),
         languagesSpoken: JSON.stringify(languages),
       };
@@ -296,14 +312,14 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
 
           {/* Media Uploads */}
           <div className="dossier-form-section">
-            <h3 className="dossier-form-section-title">Tài nguyên media</h3>
+            <h3 className="dossier-form-section-title">Tài nguyên phương tiện</h3>
 
             <div className="dossier-form-row">
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Avatar</label>
+                <label className="dossier-form-label">Ảnh đại diện</label>
                 <div style={{ border: '1px solid var(--dossier-border-silver)', padding: '1rem', textAlign: 'center' }}>
                   {avatarPreview && (
-                    <img src={avatarPreview} alt="Avatar" style={{ width: '120px', height: '120px', objectFit: 'cover', marginBottom: '1rem', clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)' }} />
+                    <img src={avatarPreview} alt="Ảnh đại diện" style={{ width: '120px', height: '120px', objectFit: 'cover', marginBottom: '1rem', clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)' }} />
                   )}
                   <input
                     type="file"
@@ -320,10 +336,10 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
               </div>
 
               <div className="dossier-form-group">
-                <label className="dossier-form-label">Cover Image</label>
+                <label className="dossier-form-label">Ảnh bìa</label>
                 <div style={{ border: '1px solid var(--dossier-border-silver)', padding: '1rem', textAlign: 'center' }}>
                   {coverPreview && (
-                    <img src={coverPreview} alt="Cover" style={{ width: '100%', height: '100px', objectFit: 'cover', marginBottom: '1rem' }} />
+                    <img src={coverPreview} alt="Ảnh bìa" style={{ width: '100%', height: '100px', objectFit: 'cover', marginBottom: '1rem' }} />
                   )}
                   <input
                     type="file"
@@ -495,21 +511,13 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
                   value={formData.hourlyRate || 0}
                   onChange={(e) => setFormData({ ...formData, hourlyRate: parseFloat(e.target.value) || 0 })}
                   min="0"
-                  step="0.01"
+                  step="1000"
                 />
               </div>
 
               <div className="dossier-form-group">
               <label className="dossier-form-label">Đơn vị tiền tệ</label>
-                <select
-                  className="dossier-select"
-                  value={formData.preferredCurrency || 'USD'}
-                  onChange={(e) => setFormData({ ...formData, preferredCurrency: e.target.value })}
-                >
-                  <option value="USD">USD</option>
-                  <option value="VND">VND</option>
-                  <option value="EUR">EUR</option>
-                </select>
+                <div className="dossier-static-field">VND</div>
               </div>
             </div>
           </div>
@@ -518,40 +526,49 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
           <div className="dossier-form-section">
             <h3 className="dossier-form-section-title">Cài đặt quyền riêng tư</h3>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}>
+            <div className="dossier-toggle-list">
+              <label className="dossier-toggle-card">
                 <input
                   type="checkbox"
+                  className="dossier-toggle-input"
                   checked={formData.isPublic || false}
                   onChange={(e) => setFormData({ ...formData, isPublic: e.target.checked })}
-                  style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                 />
-                <span style={{ color: 'var(--dossier-silver)' }}>Hiển thị công khai</span>
+                <div className="dossier-toggle-content">
+                  <span className="dossier-toggle-title">Công khai Portfolio</span>
+                  <span className="dossier-toggle-desc">Cho phép người khác xem hồ sơ của bạn qua liên kết Portfolio.</span>
+                </div>
               </label>
 
-              <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}>
+              <label className="dossier-toggle-card">
                 <input
                   type="checkbox"
+                  className="dossier-toggle-input"
                   checked={formData.showContactInfo || false}
                   onChange={(e) => setFormData({ ...formData, showContactInfo: e.target.checked })}
-                  style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                 />
-                <span style={{ color: 'var(--dossier-silver)' }}>Hiển thị thông tin liên hệ</span>
+                <div className="dossier-toggle-content">
+                  <span className="dossier-toggle-title">Hiển thị thông tin liên hệ</span>
+                  <span className="dossier-toggle-desc">Hiển thị số điện thoại và các liên kết mạng xã hội trên hồ sơ công khai.</span>
+                </div>
               </label>
 
-              <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}>
+              <label className="dossier-toggle-card">
                 <input
                   type="checkbox"
+                  className="dossier-toggle-input"
                   checked={formData.allowJobOffers || false}
                   onChange={(e) => setFormData({ ...formData, allowJobOffers: e.target.checked })}
-                  style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                 />
-                <span style={{ color: 'var(--dossier-silver)' }}>Nhận đề nghị việc làm</span>
+                <div className="dossier-toggle-content">
+                  <span className="dossier-toggle-title">Nhận đề nghị việc làm</span>
+                  <span className="dossier-toggle-desc">Cho phép nhà tuyển dụng hoặc đối tác gửi lời mời hợp tác.</span>
+                </div>
               </label>
             </div>
 
             <div className="dossier-form-group" style={{ marginTop: '1rem' }}>
-              <label className="dossier-form-label">Đường dẫn tùy chỉnh</label>
+              <label className="dossier-form-label">Đường dẫn tùy chỉnh (slug)</label>
               <input
                 type="text"
                 className="dossier-input"
@@ -560,7 +577,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
                 placeholder="Ví dụ: john-doe-developer"
               />
               <small style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.75rem', marginTop: '0.25rem', display: 'block' }}>
-                URL: /portfolio/{formData.customUrlSlug || 'your-slug'}
+                Liên kết: /portfolio/{formData.customUrlSlug || 'duong-dan-cua-ban'}
               </small>
             </div>
           </div>
@@ -594,3 +611,4 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
 };
 
 export default PilotIDModal;
+

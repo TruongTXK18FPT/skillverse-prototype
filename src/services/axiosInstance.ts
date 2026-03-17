@@ -183,6 +183,8 @@ const PUBLIC_ENDPOINTS = [
   "/short-term-jobs/search", // Public short-term job search
   "/job-reviews/user", // Public user rating summary
   "/job-reviews/public", // Public job reviews
+  "/portfolio/public", // Public portfolio listing/details
+  "/portfolio/profile/slug", // Public portfolio by slug
   "/certificates/verify", // Public certificate verification
   "/courses", // Public course listing and details
   "/gamification/leaderboard", // Public gamification leaderboard
@@ -217,6 +219,13 @@ const isPublicEndpoint = (url: string, method?: string): boolean => {
 
   // Short-term job detail: Public GET /short-term-jobs/{id}
   if (/^\/short-term-jobs\/\d+$/.test(normalizedUrl)) {
+    if (method && method.toUpperCase() === "GET") {
+      return true;
+    }
+  }
+
+  // Public portfolio by numeric user id: GET /portfolio/profile/{userId}
+  if (/^\/portfolio\/profile\/\d+$/.test(normalizedUrl)) {
     if (method && method.toUpperCase() === "GET") {
       return true;
     }

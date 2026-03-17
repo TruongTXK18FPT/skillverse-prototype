@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import {
   Map, Play, Pause, CheckCircle, Target,
   Brain, Award, BookOpen, Activity, Sparkles,
@@ -380,6 +382,48 @@ const GSJJourneyPage: React.FC = () => {
       minute: '2-digit'
     });
   };
+
+  const normalizeMarkdownText = (input?: string, fallback = 'Chưa có nội dung để hiển thị.'): string => {
+    const value = (input || '').replace(/\r\n/g, '\n').trim();
+    if (!value) {
+      return fallback;
+    }
+
+    return value
+      .split('\n')
+      .map((line) => line.replace(/^\s*[+•]\s+/, '- '))
+      .join('\n');
+  };
+
+  const toMarkdownList = (items: string[], fallback: string): string => {
+    const normalizedItems = items
+      .map((item) => item.replace(/^\s*[-+•]\s+/, '').trim())
+      .filter(Boolean)
+      .map((item) => `- ${item}`);
+
+    if (normalizedItems.length > 0) {
+      return normalizedItems.join('\n');
+    }
+
+    return fallback ? `- ${fallback}` : '';
+  };
+
+  const renderMarkdownContent = (content: string, className?: string) => (
+    <div className={className ? `gsj-markdown ${className}` : 'gsj-markdown'}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          a: ({ href, children }) => (
+            <a href={href} target="_blank" rel="noopener noreferrer">
+              {children}
+            </a>
+          )
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    </div>
+  );
 
   const activeJourneyStatuses: JourneyStatus[] = [
     JourneyStatus.ASSESSMENT_PENDING,
@@ -1239,34 +1283,42 @@ const GSJJourneyPage: React.FC = () => {
           <div className="gsj-result-section-grid">
             <section className="gsj-result-section">
               <h4 className="gsj-result-section__title">Đánh giá chung</h4>
-              <p className="gsj-result-section__text">{currentResult.evaluationSummary}</p>
+              {renderMarkdownContent(
+                normalizeMarkdownText(currentResult.evaluationSummary, 'Chưa có đánh giá tổng quan từ AI.'),
+                'gsj-result-section__markdown'
+              )}
+            </section>
+
+            <section className="gsj-result-section">
+              <h4 className="gsj-result-section__title">Phản hồi chi tiết</h4>
+              {renderMarkdownContent(
+                normalizeMarkdownText(currentResult.detailedFeedback, 'Chưa có phản hồi chi tiết cho bài đánh giá này.'),
+                'gsj-result-section__markdown'
+              )}
             </section>
 
             <section className="gsj-result-section gsj-result-section--strength">
               <h4 className="gsj-result-section__title">Điểm mạnh</h4>
-              <ul className="gsj-result-list">
-                {strengths.map((item, index) => (
-                  <li key={`strength-${index}`}>{item}</li>
-                ))}
-              </ul>
+              {renderMarkdownContent(
+                toMarkdownList(strengths, 'Chưa có dữ liệu điểm mạnh nổi bật.'),
+                'gsj-result-section__markdown'
+              )}
             </section>
 
             <section className="gsj-result-section gsj-result-section--weakness">
               <h4 className="gsj-result-section__title">Cần cải thiện</h4>
-              <ul className="gsj-result-list">
-                {weaknesses.map((item, index) => (
-                  <li key={`weakness-${index}`}>{item}</li>
-                ))}
-              </ul>
+              {renderMarkdownContent(
+                toMarkdownList(weaknesses, 'Chưa có dữ liệu điểm cần cải thiện.'),
+                'gsj-result-section__markdown'
+              )}
             </section>
 
             <section className="gsj-result-section">
               <h4 className="gsj-result-section__title">Gợi ý hành động</h4>
-              <ul className="gsj-result-list">
-                {improvementTips.map((tip, index) => (
-                  <li key={`tip-${index}`}>{tip}</li>
-                ))}
-              </ul>
+              {renderMarkdownContent(
+                toMarkdownList(improvementTips, 'Hãy tiếp tục học theo roadmap để cải thiện kết quả.'),
+                'gsj-result-section__markdown'
+              )}
             </section>
           </div>
 
@@ -1282,20 +1334,13 @@ const GSJJourneyPage: React.FC = () => {
                         {getSkillLevelLabel(skill.currentLevel)}
                       </span>
                     </div>
-                    {skill.strengths.length > 0 && (
-                      <p className="gsj-result-skill-card__text">
-                        <span>Thế mạnh:</span> {skill.strengths.join(', ')}
-                      </p>
-                    )}
-                    {skill.weaknesses.length > 0 && (
-                      <p className="gsj-result-skill-card__text">
-                        <span>Cần cải thiện:</span> {skill.weaknesses.join(', ')}
-                      </p>
-                    )}
-                    {skill.recommendations.length > 0 && (
-                      <p className="gsj-result-skill-card__text">
-                        <span>Gợi ý:</span> {skill.recommendations.join(', ')}
-                      </p>
+                    {renderMarkdownContent(
+                      [
+                        skill.strengths.length > 0 ? `**Thế mạnh**\n${toMarkdownList(skill.strengths, '')}` : '',
+                        skill.weaknesses.length > 0 ? `**Cần cải thiện**\n${toMarkdownList(skill.weaknesses, '')}` : '',
+                        skill.recommendations.length > 0 ? `**Gợi ý hành động**\n${toMarkdownList(skill.recommendations, '')}` : ''
+                      ].filter(Boolean).join('\n\n') || '- Chưa có phân tích chi tiết cho nhóm kỹ năng này.',
+                      'gsj-result-skill-card__markdown'
                     )}
                   </article>
                 ))}
@@ -1336,7 +1381,12 @@ const GSJJourneyPage: React.FC = () => {
                       <strong>Đáp án đúng:</strong> {question.correctAnswer}
                     </p>
                     {question.explanation && (
-                      <p className="gsj-result-review-item__explain">{question.explanation}</p>
+                      <div className="gsj-result-review-item__explain">
+                        {renderMarkdownContent(
+                          normalizeMarkdownText(question.explanation, ''),
+                          'gsj-result-review-item__markdown'
+                        )}
+                      </div>
                     )}
                   </article>
                 ))}

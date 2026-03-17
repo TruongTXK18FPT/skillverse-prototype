@@ -32,8 +32,7 @@ export const checkExtendedProfile =
         "Error checking extended profile:",
         error.response?.data || error.message,
       );
-      // If error, assume no extended profile
-      return { success: false, hasExtendedProfile: false };
+      throw error;
     }
   };
 

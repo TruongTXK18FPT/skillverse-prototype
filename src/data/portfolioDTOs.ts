@@ -65,11 +65,13 @@ export interface UserProfileDTO {
 }
 
 export enum ProjectType {
-  MICROJOB = 'MICROJOB',
+  MICRO_JOB = 'MICRO_JOB',
   FREELANCE = 'FREELANCE',
   PERSONAL = 'PERSONAL',
   ACADEMIC = 'ACADEMIC',
-  OPEN_SOURCE = 'OPEN_SOURCE'
+  OPEN_SOURCE = 'OPEN_SOURCE',
+  INTERNSHIP = 'INTERNSHIP',
+  FULL_TIME = 'FULL_TIME',
 }
 
 export interface ProjectAttachmentDTO {

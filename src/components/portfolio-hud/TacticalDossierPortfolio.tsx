@@ -51,7 +51,6 @@ const TacticalDossierPortfolio = () => {
 
   // Modal States
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [profileModalMode, setProfileModalMode] = useState<'create' | 'edit'>('create');
   const [projectModalOpen, setProjectModalOpen] = useState(false);
   const [projectModalMode, setProjectModalMode] = useState<'create' | 'edit'>('create');
   const [selectedProject, setSelectedProject] = useState<PortfolioProjectDTO | undefined>();
@@ -134,16 +133,6 @@ const TacticalDossierPortfolio = () => {
   };
 
   // Handler Functions
-  const handleCreateProfile = async (
-    profileData: Partial<UserProfileDTO>,
-    avatar?: File,
-    video?: File,
-    coverImage?: File
-  ) => {
-    await portfolioService.createExtendedProfile(profileData, avatar, video, coverImage);
-    await loadPortfolioData();
-  };
-
   const handleUpdateProfile = async (
     profileData: Partial<UserProfileDTO>,
     avatar?: File,
@@ -361,17 +350,7 @@ const TacticalDossierPortfolio = () => {
     return (
       <div className="dossier-portfolio-container" data-theme={theme}>
         <DossierInitScreen
-          onInitiate={() => {
-            setProfileModalMode('create');
-            setProfileModalOpen(true);
-          }}
-        />
-
-        <PilotIDModal
-          isOpen={profileModalOpen}
-          onClose={() => setProfileModalOpen(false)}
-          onSubmit={handleCreateProfile}
-          mode="create"
+          onInitiate={() => navigate('/portfolio/create')}
         />
       </div>
     );
@@ -516,7 +495,11 @@ const TacticalDossierPortfolio = () => {
                     {profile?.hourlyRate !== undefined && profile.hourlyRate > 0 && (
                       <p className="dossier-pilot-location" style={{ marginTop: '0.25rem', color: 'var(--dossier-green)' }}>
                         <span style={{ fontWeight: 'bold', fontSize: '1.1em' }}>
-                          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: profile.preferredCurrency || 'USD' }).format(profile.hourlyRate)}
+                          {new Intl.NumberFormat('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND',
+                            maximumFractionDigits: 0
+                          }).format(profile.hourlyRate)}
                         </span>
                         <span style={{ fontSize: '0.85em', opacity: 0.8 }}> / giờ</span>
                       </p>
@@ -527,7 +510,6 @@ const TacticalDossierPortfolio = () => {
                     {isOwner && (
                       <button
                         onClick={() => {
-                          setProfileModalMode('edit');
                           setProfileModalOpen(true);
                         }}
                         className="dossier-btn-primary"
@@ -541,7 +523,7 @@ const TacticalDossierPortfolio = () => {
 
                 <div>
                   {/* Contact & Links */}
-                  {(profile?.phone || profile?.linkedinUrl || profile?.githubUrl) && (
+                  {(isOwner || Boolean(profile?.showContactInfo)) && (profile?.phone || profile?.linkedinUrl || profile?.githubUrl) && (
                     <div style={{ display: 'flex', gap: '1rem', padding: '1rem 0', borderBottom: '1px solid var(--dossier-border-silver)', marginBottom: '1.5rem' }}>
                       {profile?.phone && (
                         <a href={`tel:${profile.phone}`} style={{ color: 'var(--dossier-cyan)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -669,7 +651,7 @@ const TacticalDossierPortfolio = () => {
 
               {/* Project Filters */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '2rem' }}>
-                {['Tất cả', 'MICROJOB', 'FREELANCE', 'PERSONAL', 'ACADEMIC', 'OPEN_SOURCE'].map((type) => (
+                {['Tất cả', 'MICRO_JOB', 'FREELANCE', 'PERSONAL', 'ACADEMIC', 'OPEN_SOURCE', 'INTERNSHIP', 'FULL_TIME'].map((type) => (
                   <button
                     key={type}
                     onClick={() => setSelectedProjectType(type)}
@@ -987,9 +969,9 @@ const TacticalDossierPortfolio = () => {
       <PilotIDModal
         isOpen={profileModalOpen}
         onClose={() => setProfileModalOpen(false)}
-        onSubmit={profileModalMode === 'create' ? handleCreateProfile : handleUpdateProfile}
+        onSubmit={handleUpdateProfile}
         initialData={profile || undefined}
-        mode={profileModalMode}
+        mode="edit"
       />
 
       <MissionLogModal

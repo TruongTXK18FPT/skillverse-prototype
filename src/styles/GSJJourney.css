@@ -1126,6 +1126,91 @@
   color: var(--gsj-text-secondary);
 }
 
+.gsj-result-section__markdown {
+  margin-top: 4px;
+}
+
+.gsj-markdown {
+  color: var(--gsj-text-secondary);
+  font-size: 14px;
+  line-height: 1.7;
+  word-break: break-word;
+}
+
+.gsj-markdown > *:first-child {
+  margin-top: 0;
+}
+
+.gsj-markdown > *:last-child {
+  margin-bottom: 0;
+}
+
+.gsj-markdown p {
+  margin: 0 0 10px;
+}
+
+.gsj-markdown ul,
+.gsj-markdown ol {
+  margin: 0 0 10px;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+.gsj-markdown li {
+  margin: 0;
+}
+
+.gsj-markdown strong {
+  color: #ecf7ff;
+  font-weight: 700;
+}
+
+.gsj-markdown em {
+  color: #d8ecfc;
+}
+
+.gsj-markdown a {
+  color: #38bdf8;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.gsj-markdown blockquote {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border-left: 3px solid rgba(56, 189, 248, 0.8);
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.08);
+  color: #d5edff;
+}
+
+.gsj-markdown code {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 12px;
+  color: #9fe8ff;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+
+.gsj-markdown pre {
+  margin: 10px 0;
+  overflow-x: auto;
+  background: rgba(4, 16, 32, 0.92);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.gsj-markdown pre code {
+  border: none;
+  background: transparent;
+  color: #d5edff;
+  padding: 0;
+}
+
 .gsj-result-list {
   margin: 0;
   padding-left: 18px;
@@ -1172,16 +1257,15 @@
   font-weight: 700;
 }
 
-.gsj-result-skill-card__text {
-  margin: 0;
-  color: var(--gsj-text-secondary);
+.gsj-result-skill-card__markdown {
+  margin-top: 2px;
   font-size: 13px;
-  line-height: 1.5;
 }
 
-.gsj-result-skill-card__text span {
-  color: #d8ecfc;
-  font-weight: 600;
+.gsj-result-skill-card__markdown .gsj-markdown ul,
+.gsj-result-skill-card__markdown .gsj-markdown ol {
+  gap: 4px;
+  margin-bottom: 8px;
 }
 
 .gsj-result-review-list {
@@ -1257,6 +1341,16 @@
   color: #cde6f7;
   font-size: 13px;
   line-height: 1.45;
+}
+
+.gsj-result-review-item__markdown {
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.gsj-result-review-item__markdown .gsj-markdown {
+  font-size: 13px;
+  line-height: 1.55;
 }
 
 .gsj-result-actions {
