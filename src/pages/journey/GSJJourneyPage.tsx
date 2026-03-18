@@ -23,6 +23,7 @@ import {
 } from '../../types/Journey';
 import GSJTestTaking from './GSJTestTaking';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import './../../styles/GSJJourney.css';
 
 type ViewMode = 'list' | 'detail' | 'test' | 'result';
@@ -47,6 +48,7 @@ const GSJJourneyPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const autoOpenedJourneyIdRef = useRef<number | null>(null);
+  const assessmentSectionRef = useRef<HTMLDivElement>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [journeys, setJourneys] = useState<JourneySummaryResponse[]>([]);
   const [selectedJourney, setSelectedJourney] = useState<JourneyDetailResponse | null>(null);
@@ -102,7 +104,12 @@ const GSJJourneyPage: React.FC = () => {
     }
 
     autoOpenedJourneyIdRef.current = autoOpenJourneyId;
-    void handleSelectJourney(autoOpenJourneyId);
+    void handleSelectJourney(autoOpenJourneyId).then(() => {
+      // Small delay to ensure render is complete before scrolling
+      setTimeout(() => {
+        assessmentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 500);
+    });
 
     navigate(location.pathname, { replace: true, state: null });
   }, [handleSelectJourney, location.pathname, location.state, navigate]);
@@ -899,7 +906,7 @@ const GSJJourneyPage: React.FC = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="gsj-card gsj-mt-24">
+        <div className="gsj-card gsj-mt-24" ref={assessmentSectionRef}>
           <div className="gsj-card__body">
             <div className="gsj-assessment-meta gsj-mb-16">
               <div className="gsj-assessment-meta__item">
@@ -1438,6 +1445,11 @@ const GSJJourneyPage: React.FC = () => {
       <div className="gsj-container">
         {/* Hero Section */}
         {renderHero()}
+
+        {/* Action Loading Overlay */}
+        {actionLoading && (
+          <MeowlKuruLoader text="Meowl đang chuẩn bị cho bạn đây..." fullScreen />
+        )}
 
         {/* Error Message */}
         {error && (

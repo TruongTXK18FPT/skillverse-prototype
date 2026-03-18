@@ -7,13 +7,15 @@ interface MeowlKuruLoaderProps {
   size?: 'tiny' | 'small' | 'medium' | 'large';
   fullScreen?: boolean;
   className?: string;
+  layout?: 'horizontal' | 'vertical'; // New prop for layout control
 }
 
 const MeowlKuruLoader: React.FC<MeowlKuruLoaderProps> = ({ 
   text = "Kuru Kuru...", 
   size = 'medium',
   fullScreen = false,
-  className = ''
+  className = '',
+  layout = 'horizontal' // Default is historical horizontal layout
 }) => {
   const [frameIndex, setFrameIndex] = useState(0);
   const startFrame = 0;
@@ -44,9 +46,15 @@ const MeowlKuruLoader: React.FC<MeowlKuruLoaderProps> = ({
   const bgX = -(col * dim);
   const bgY = -(row * dim);
 
-  const containerClass = fullScreen 
-    ? "fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center" 
-    : `flex flex-col items-center justify-center ${size === 'tiny' ? '' : 'py-8'} ${className}`;
+  const isVertical = layout === 'vertical';
+
+  const containerClass = [
+    'kuru-loader-root',
+    fullScreen ? 'kuru-loader-root--fullscreen' : '',
+    isVertical ? 'kuru-loader-root--vertical' : 'kuru-loader-root--horizontal',
+    size !== 'tiny' ? 'kuru-loader-root--with-padding' : '',
+    className
+  ].filter(Boolean).join(' ');
 
   return (
     <div className={containerClass}>
@@ -60,7 +68,11 @@ const MeowlKuruLoader: React.FC<MeowlKuruLoaderProps> = ({
           backgroundSize: '400%', // 4 cols
         }} 
       />
-      {text && <div className="kuru-loader-text mt-4">{text}</div>}
+      {text && (
+        <div className={`kuru-loader-text ${isVertical ? 'kuru-loader-text--vertical' : 'kuru-loader-text--horizontal'}`}>
+          {text}
+        </div>
+      )}
     </div>
   );
 };

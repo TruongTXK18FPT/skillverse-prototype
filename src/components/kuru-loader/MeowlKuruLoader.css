@@ -6,6 +6,34 @@
   gap: 1rem;
 }
 
+.kuru-loader-root {
+  display: flex;
+  justify-content: center;
+}
+
+.kuru-loader-root--horizontal {
+  align-items: center;
+  flex-direction: row;
+}
+
+.kuru-loader-root--vertical {
+  align-items: center;
+  flex-direction: column;
+}
+
+.kuru-loader-root--with-padding {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.kuru-loader-root--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(4px);
+}
+
 .kuru-loader-sprite {
   background-repeat: no-repeat;
   image-rendering: pixelated;
@@ -19,6 +47,15 @@
   text-transform: uppercase;
   letter-spacing: 2px;
   animation: kuru-pulse 1.5s ease-in-out infinite;
+}
+
+.kuru-loader-text--horizontal {
+  margin-left: 1rem;
+}
+
+.kuru-loader-text--vertical {
+  margin-top: 1rem;
+  text-align: center;
 }
 
 @keyframes kuru-pulse {

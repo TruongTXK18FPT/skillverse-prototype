@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Sparkles, Check, ChevronRight, Search, X,
@@ -20,6 +20,7 @@ import journeyService from '../../services/journeyService';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import CareerForm from '../../components/journey/CareerForm';
 import SkillForm from '../../components/journey/SkillForm';
+import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import './../../styles/GSJJourney.css';
 
 const JourneyCreatePage: React.FC = () => {
@@ -27,6 +28,18 @@ const JourneyCreatePage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [journeyType, setJourneyType] = useState<JourneyType | null>(null);
+
+  // Prevent scrolling when loading
+  useEffect(() => {
+    if (loading) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [loading]);
 
   // Form state
   const [formData, setFormData] = useState<StartJourneyRequest>({
@@ -139,7 +152,8 @@ const JourneyCreatePage: React.FC = () => {
       await journeyService.generateAssessmentTest(journey.id);
 
       // 3. Navigate to journey page where user can take the test
-      navigate('/journey');
+      // Pass autoOpenJourneyId to GSJJourneyPage to automatically select this journey
+      navigate('/journey', { state: { autoOpenJourneyId: journey.id } });
     } catch (error) {
       console.error('Failed to create journey:', error);
     } finally {
@@ -420,12 +434,28 @@ const JourneyCreatePage: React.FC = () => {
   if (loading) {
     return (
       <div className="gsj-page gsj-create-page">
-        <div className="gsj-loading-screen">
-          <div className="gsj-loading-screen__icon">
-            <Sparkles size={48} className="gsj-spinner" />
+        <div className="gsj-hud-loader">
+          <div className="gsj-hud-loader__container">
+            <div className="gsj-hud-loader__corners">
+              <div className="gsj-hud-loader__corner gsj-hud-loader__corner--tl"></div>
+              <div className="gsj-hud-loader__corner gsj-hud-loader__corner--tr"></div>
+              <div className="gsj-hud-loader__corner gsj-hud-loader__corner--bl"></div>
+              <div className="gsj-hud-loader__corner gsj-hud-loader__corner--br"></div>
+            </div>
+            <div className="gsj-hud-loader__content">
+              <MeowlKuruLoader 
+                text="MEOWL ĐANG CHUẨN BỊ CHO BẠN..." 
+                layout="vertical"
+                className="gsj-hud-loader__meowl"
+              />
+              <div className="gsj-hud-loader__status">
+                <div className="gsj-hud-loader__text-main">AI ĐANG TẠO BÀI TEST PHÙ HỢP</div>
+                <div className="gsj-hud-loader__scan-line"></div>
+                <div className="gsj-hud-loader__text-sub">Vui lòng chờ trong giây lát...</div>
+              </div>
+            </div>
           </div>
-          <h2 className="gsj-loading-screen__title">AI đang tạo bài test phù hợp với bạn...</h2>
-          <p className="gsj-loading-screen__subtitle">Vui lòng chờ trong giây lát</p>
+          <div className="gsj-hud-loader__overlay"></div>
         </div>
       </div>
     );
