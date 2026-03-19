@@ -23,7 +23,7 @@ import {
   CreateShortTermJobRequest,
 } from "../../types/ShortTermJob";
 import { ShortTermJobForm } from "../../components/short-term-job";
-import ShortTermJobDetailInline from "./ShortTermJobDetailInline";
+import ShortTermJobFullPage from "./ShortTermJobFullPage";
 import { useToast } from "../../hooks/useToast";
 import "./short-term-fleet.css";
 
@@ -184,6 +184,14 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
     ).length,
     totalApplicants: jobs.reduce((sum, j) => sum + (j.applicantCount || 0), 0),
   };
+  const handoverQueue = jobs.filter((job) =>
+    [
+      ShortTermJobStatus.SUBMITTED,
+      ShortTermJobStatus.UNDER_REVIEW,
+      ShortTermJobStatus.APPROVED,
+      ShortTermJobStatus.COMPLETED,
+    ].includes(job.status),
+  );
 
   // ==================== ACTIONS ====================
   const handleSubmitForApproval = async (jobId: number) => {
@@ -335,11 +343,10 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
           />
         </div>
       ) : selectedJobId ? (
-        <ShortTermJobDetailInline
+        <ShortTermJobFullPage
           jobId={selectedJobId}
           onBack={() => setSelectedJobId(null)}
           onEdit={(id) => handleEdit(id)}
-          onRefresh={fetchJobs}
         />
       ) : (
         <>
@@ -440,6 +447,46 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
               <option value={ShortTermJobStatus.CANCELLED}>Đã hủy</option>
             </select>
           </div>
+
+          {handoverQueue.length > 0 && (
+            <section className="stj-handover-queue">
+              <div className="stj-handover-queue__header">
+                <div>
+                  <span className="stj-handover-queue__eyebrow">Bàn giao cần xử lý</span>
+                  <h3>Các job đang chờ recruiter kiểm tra</h3>
+                </div>
+                <span className="stj-handover-queue__count">{handoverQueue.length}</span>
+              </div>
+
+              <div className="stj-handover-queue__grid">
+                {handoverQueue.slice(0, 6).map((job) => {
+                  const statusInfo = STATUS_MAP[job.status] || {
+                    label: job.status,
+                    cssClass: "",
+                  };
+
+                  return (
+                    <button
+                      key={job.id}
+                      type="button"
+                      className="stj-handover-card"
+                      onClick={() => handleViewDetail(job.id)}
+                    >
+                      <div className="stj-handover-card__top">
+                        <span className={`stj-badge ${statusInfo.cssClass}`}>{statusInfo.label}</span>
+                        <span className="stj-handover-card__deadline">{formatDate(job.deadline)}</span>
+                      </div>
+                      <strong className="stj-handover-card__title">{job.title}</strong>
+                      <p className="stj-handover-card__meta">
+                        {job.applicantCount || 0} ứng viên • ngân sách {formatBudget(job.budget)}đ
+                      </p>
+                      <span className="stj-handover-card__cta">Mở khu bàn giao</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          )}
 
           {/* Content */}
           {isLoading ? (

@@ -184,6 +184,8 @@ export interface ShortTermJobApplication {
   userId: number;
   userFullName: string;
   userEmail: string;
+  userAvatar?: string;
+  userProfessionalTitle?: string;
   userRating?: number;
   userCompletedJobs?: number;
 
@@ -192,6 +194,7 @@ export interface ShortTermJobApplication {
   proposedPrice?: number; // Giá đề xuất (nếu negotiable)
   proposedDuration?: string; // Thời gian đề xuất
   portfolio?: string[]; // Links to relevant work
+  portfolioSlug?: string;
 
   // Status
   status: ShortTermApplicationStatus;
@@ -578,6 +581,10 @@ export interface ShortTermJobResponse extends ShortTermJobPosting {
   };
   isExpired?: boolean;
   canApply?: boolean;
+  /** True if current user has already applied to this job */
+  hasApplied?: boolean;
+  /** Current user's application status for this job (if hasApplied) */
+  userApplicationStatus?: ShortTermApplicationStatus;
 }
 
 export interface ShortTermApplicationResponse extends ShortTermJobApplication {

@@ -474,6 +474,26 @@
   margin-left: auto;
 }
 
+.stm-applied-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  box-shadow: 0 2px 10px rgba(74, 222, 128, 0.15);
+}
+
+.stm-applied-badge__status {
+  font-weight: 500;
+  color: #86efac;
+  font-size: 0.82rem;
+}
+
 .stm-login-hint {
   font-size: 0.82rem;
   color: #64748b;

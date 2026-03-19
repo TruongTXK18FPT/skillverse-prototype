@@ -29,6 +29,17 @@ const PremiumPageCosmic = () => {
   const { user, isAuthenticated } = useAuth();
   const [premiumPlans, setPremiumPlans] = useState<PremiumPlan[]>([]);
 
+  const roles = (user?.roles || []).map((role) => String(role).toUpperCase());
+  const isRecruiter = roles.includes("RECRUITER");
+  const isParent = roles.includes("PARENT");
+  const isRecruiterRoute = location.pathname.startsWith("/business");
+  const requestedTargetRole: PremiumPlan["targetRole"] =
+    isRecruiterRoute || isRecruiter
+      ? "RECRUITER"
+      : isParent
+        ? "PARENT"
+        : "LEARNER";
+
   const [students, setStudents] = useState<StudentDetail[]>([]);
   const [selectedStudentId, setSelectedStudentId] = useState<number | null>(
     location.state?.forStudent || null,
@@ -69,11 +80,11 @@ const PremiumPageCosmic = () => {
       loadWalletData();
       loadUserProfile();
 
-      if (user?.primaryRole === "PARENT") {
+      if (isParent) {
         loadStudents();
       }
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, isParent, requestedTargetRole, user]);
 
   const loadStudents = async () => {
     try {
@@ -93,7 +104,20 @@ const PremiumPageCosmic = () => {
 
   const loadPremiumPlans = async () => {
     try {
-      const plans = await premiumService.getPremiumPlans();
+      const plans = await premiumService.getPremiumPlans(
+        requestedTargetRole,
+        true,
+      );
+
+      if (plans.length === 0 && requestedTargetRole === "PARENT") {
+        const learnerPlans = await premiumService.getPremiumPlans(
+          "LEARNER",
+          true,
+        );
+        setPremiumPlans(learnerPlans);
+        return;
+      }
+
       setPremiumPlans(plans);
     } catch (error) {
       console.error("Failed to load premium plans:", error);
@@ -245,7 +269,7 @@ const PremiumPageCosmic = () => {
       await loadCurrentSubscription();
 
       // Reload students to refresh their premium status
-      if (user?.primaryRole === "PARENT") {
+      if (isParent) {
         await loadStudents();
       }
     } catch (error: any) {
@@ -270,7 +294,7 @@ const PremiumPageCosmic = () => {
 
   return (
     <div className="cosmic-premium-page">
-      {user?.primaryRole === "PARENT" && (
+      {isParent && (
         <div
           style={{
             background: "rgba(20, 20, 30, 0.9)",

@@ -6,10 +6,14 @@ export interface ChatMessage {
   content: string;
 }
 
+export type MeowlRoleMode = "LEARNER" | "MENTOR" | "RECRUITER" | "GENERAL";
+
 export interface MeowlChatRequest {
   message: string;
   language: "vi" | "en";
   userId?: number | null;
+  activeRole?: MeowlRoleMode | null;
+  sessionId?: string;
   includeReminders?: boolean;
   chatHistory?: ChatMessage[];
 }
@@ -22,9 +26,35 @@ export interface MeowlChatResponse {
   reminders?: MeowlReminder[];
   notifications?: MeowlNotification[];
   mood?: string;
+  activeRole?: MeowlRoleMode;
+  nextBestAction?: string;
   actionType?: "NAVIGATE" | "LINK" | "NONE";
   actionUrl?: string;
   actionLabel?: string;
+}
+
+export interface MeowlQuickAction {
+  id: string;
+  label: string;
+  description: string;
+  actionType: "NAVIGATE" | "PROMPT";
+  actionValue: string;
+}
+
+export interface MeowlOnboardingContextResponse {
+  success: boolean;
+  language: "vi" | "en";
+  activeRole: MeowlRoleMode;
+  availableRoles: MeowlRoleMode[];
+  roleSwitchEnabled: boolean;
+  onboardingSeen: boolean;
+  onboardingSeenAt?: string;
+  welcomeMessage: string;
+  nextBestAction: string;
+  whatYouCanDo: string[];
+  quickActions: MeowlQuickAction[];
+  suggestedPrompts: string[];
+  contextSummary: Record<string, string>;
 }
 
 export interface MeowlReminder {
@@ -41,6 +71,26 @@ export interface MeowlNotification {
   message: string;
   type: string;
 }
+
+export const MEOWL_CHAT_PERSISTENCE_PREFIX = "meowl_chat_state:";
+
+export const getMeowlChatPersistenceKey = (userId: number): string =>
+  `${MEOWL_CHAT_PERSISTENCE_PREFIX}${userId}`;
+
+export const clearPersistedMeowlChatState = (
+  storage: Storage = localStorage,
+): void => {
+  const keysToRemove: string[] = [];
+
+  for (let index = 0; index < storage.length; index += 1) {
+    const key = storage.key(index);
+    if (key?.startsWith(MEOWL_CHAT_PERSISTENCE_PREFIX)) {
+      keysToRemove.push(key);
+    }
+  }
+
+  keysToRemove.forEach((key) => storage.removeItem(key));
+};
 
 // Guest session management
 const GUEST_SESSION_KEY = "meowl_guest_session";
@@ -205,6 +255,37 @@ class MeowlChatService {
       const response = await axiosInstance.get("/v1/meowl/health");
       return response.status === 200;
     } catch {
+      return false;
+    }
+  }
+
+  async getOnboardingContext(
+    userId: number,
+    language: "vi" | "en",
+    activeRole?: MeowlRoleMode | null,
+  ): Promise<MeowlOnboardingContextResponse | null> {
+    try {
+      const roleQuery = activeRole ? `&activeRole=${activeRole}` : "";
+      const response = await axiosInstance.get<MeowlOnboardingContextResponse>(
+        `/v1/meowl/onboarding/${userId}?language=${language}${roleQuery}`,
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to get Meowl onboarding context:", error);
+      return null;
+    }
+  }
+
+  async markOnboardingSeen(
+    userId: number,
+    activeRole?: MeowlRoleMode | null,
+  ): Promise<boolean> {
+    try {
+      const roleQuery = activeRole ? `?activeRole=${activeRole}` : "";
+      await axiosInstance.post(`/v1/meowl/onboarding/${userId}/seen${roleQuery}`);
+      return true;
+    } catch (error) {
+      console.error("Failed to mark onboarding seen:", error);
       return false;
     }
   }

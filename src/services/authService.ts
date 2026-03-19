@@ -29,6 +29,7 @@ import {
   broadcastLogoutToOtherTabs,
   broadcastSessionToOtherTabs,
 } from "../utils/authTabSync";
+import { clearPersistedMeowlChatState } from "./meowlChatService";
 
 // Helper type for axios error handling
 type AxiosError = {
@@ -413,6 +414,7 @@ class AuthService {
       localStorage.removeItem("meowl_dark_mode");
       localStorage.removeItem("meowl_font_size");
       localStorage.removeItem("meowl_theme");
+      clearPersistedMeowlChatState();
       // Clear guest session
       sessionStorage.removeItem("meowl_guest_session");
       try {
@@ -434,12 +436,15 @@ class AuthService {
       broadcastLogoutToOtherTabs();
       localStorage.removeItem("meowl_dark_mode");
       localStorage.removeItem("meowl_font_size");
+      localStorage.removeItem("meowl_theme");
+      clearPersistedMeowlChatState();
       sessionStorage.removeItem("meowl_guest_session");
       try {
         sessionStorage.removeItem("adminKeyVerified");
       } catch (e) {
         void e;
       }
+      window.dispatchEvent(new CustomEvent("meowl-logout"));
     }
   }
 

@@ -71,6 +71,7 @@ export interface AdminPremiumPlan {
     | "PREMIUM_PLUS"
     | "STUDENT_PACK"
     | "RECRUITER_PRO";
+  targetRole?: "LEARNER" | "RECRUITER" | "PARENT";
   studentDiscountPercent: number;
   studentPrice: number;
   features: string[];
@@ -92,6 +93,7 @@ export interface CreatePremiumPlanRequest {
   durationMonths: number;
   price: number;
   planType: "PREMIUM_BASIC" | "PREMIUM_PLUS" | "STUDENT_PACK" | "RECRUITER_PRO";
+  targetRole?: "LEARNER" | "RECRUITER" | "PARENT";
   studentDiscountPercent: number;
   features: string; // JSON string array
   maxSubscribers?: number | null;
@@ -108,6 +110,7 @@ export interface UpdatePremiumPlanRequest {
   features: string; // JSON string array
   maxSubscribers?: number | null;
   isActive?: boolean;
+  targetRole?: "LEARNER" | "RECRUITER" | "PARENT";
   featureLimits?: FeatureLimitConfig[];
 }
 

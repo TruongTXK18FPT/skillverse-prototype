@@ -456,7 +456,7 @@ const GSJJourneyForm: React.FC<GSJJourneyFormProps> = ({ onSubmit, onClose, load
                       <input
                         type="number"
                         className="gsj-form-input"
-                        placeholder="e.g., 2025"
+                        placeholder="e.g., 2026"
                         min="1950"
                         max="2030"
                         value={formData.graduationYear}
@@ -662,3 +662,4 @@ const GSJJourneyForm: React.FC<GSJJourneyFormProps> = ({ onSubmit, onClose, load
 };
 
 export default GSJJourneyForm;
+

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
   ArrowLeft,
   Calendar,
+  CheckCircle2,
   Clock,
   DollarSign,
   Edit2,
@@ -19,14 +20,30 @@ import {
   FileText,
   Eye,
   Shield,
+  MessageSquare,
+  XCircle,
 } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import {
+  RecruitmentSessionResponse,
+} from "../../data/portfolioDTOs";
+import recruitmentChatService from "../../services/recruitmentChatService";
 import shortTermJobService from "../../services/shortTermJobService";
 import {
   ShortTermJobResponse,
   ShortTermJobStatus,
+  ShortTermApplicationStatus,
   ShortTermApplicationResponse,
 } from "../../types/ShortTermJob";
 import { useToast } from "../../hooks/useToast";
+import {
+  getApplicantDisplayName,
+  getApplicantInitials,
+  getApplicantSubtitle,
+  getPortfolioPath,
+  resolveRecruitmentAssetUrl,
+} from "../../utils/recruitmentUi";
+import RecruiterChatWindow from "../chat/RecruiterChatWindow";
 import "./short-term-fleet.css";
 
 // ==================== HELPERS ====================
@@ -184,6 +201,7 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
   onRefresh,
 }) => {
   const { showSuccess, showError } = useToast();
+  const { user } = useAuth();
 
   const [job, setJob] = useState<ShortTermJobResponse | null>(null);
   const [applications, setApplications] = useState<
@@ -191,9 +209,19 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
   >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<
-    "overview" | "applicants" | "milestones"
+    "overview" | "applicants" | "handover" | "milestones"
   >("overview");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isActionBusy, setIsActionBusy] = useState(false);
+  const [decisionModal, setDecisionModal] = useState<{
+    application: ShortTermApplicationResponse;
+    status: "ACCEPTED" | "REJECTED";
+  } | null>(null);
+  const [decisionNote, setDecisionNote] = useState("");
+  const [selectedSession, setSelectedSession] =
+    useState<RecruitmentSessionResponse | null>(null);
+  const [chatApplicant, setChatApplicant] =
+    useState<ShortTermApplicationResponse | null>(null);
 
   // ==================== DATA FETCHING ====================
   const fetchJobDetail = useCallback(async () => {
@@ -251,6 +279,144 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
     window.open(`/short-term-jobs/${jobId}`, "_blank");
   };
 
+  const handleOpenPortfolio = (application: ShortTermApplicationResponse) => {
+    const portfolioPath = getPortfolioPath(application.portfolioSlug);
+    if (!portfolioPath) {
+      showError("Chưa có portfolio", "Ứng viên này chưa công khai portfolio trên SkillVerse.");
+      return;
+    }
+
+    window.open(portfolioPath, "_blank", "noopener,noreferrer");
+  };
+
+  const handleOpenChat = async (application: ShortTermApplicationResponse) => {
+    try {
+      setIsActionBusy(true);
+      const session = await recruitmentChatService.getOrCreateSession(
+        application.userId,
+        jobId,
+        "MANUAL",
+      );
+      setChatApplicant(application);
+      setSelectedSession(session);
+      showSuccess("Đã mở chat", "Conversation đã được gắn đúng với công việc hiện tại.");
+    } catch (error: any) {
+      showError(
+        "Không thể mở chat",
+        error?.message || "Vui lòng thử lại sau.",
+      );
+    } finally {
+      setIsActionBusy(false);
+    }
+  };
+
+  const handleDecisionSubmit = async () => {
+    if (!decisionModal) return;
+
+    const note = decisionNote.trim();
+    if (!note) {
+      showError("Thiếu nội dung", "Vui lòng nhập ghi chú hoặc lý do đầy đủ.");
+      return;
+    }
+
+    try {
+      setIsActionBusy(true);
+      await shortTermJobService.updateApplicationStatus(decisionModal.application.id, {
+        status:
+          decisionModal.status === "ACCEPTED"
+            ? ShortTermApplicationStatus.ACCEPTED
+            : ShortTermApplicationStatus.REJECTED,
+        message: decisionModal.status === "ACCEPTED" ? note : undefined,
+        reason: note,
+      });
+      setDecisionModal(null);
+      setDecisionNote("");
+      await fetchJobDetail();
+      showSuccess(
+        decisionModal.status === "ACCEPTED" ? "Đã duyệt ứng viên" : "Đã từ chối ứng viên",
+        `${getApplicantDisplayName(
+          decisionModal.application.userFullName,
+          decisionModal.application.userEmail,
+        )} đã được cập nhật trạng thái.`,
+      );
+    } catch (error: any) {
+      showError(
+        "Không thể cập nhật ứng viên",
+        error?.message || "Vui lòng thử lại sau.",
+      );
+    } finally {
+      setIsActionBusy(false);
+    }
+  };
+
+  const handleApproveDeliverables = async (application: ShortTermApplicationResponse) => {
+    try {
+      setIsActionBusy(true);
+      await shortTermJobService.approveWork(application.id, "Recruiter approved submitted work");
+      await fetchJobDetail();
+      onRefresh?.();
+      showSuccess("Đã duyệt bàn giao", "Ứng viên đã được xác nhận hoàn thành phần bàn giao hiện tại.");
+    } catch (error: any) {
+      showError("Không thể duyệt bàn giao", error?.message || "Vui lòng thử lại sau.");
+    } finally {
+      setIsActionBusy(false);
+    }
+  };
+
+  const handleRequestRevision = async (application: ShortTermApplicationResponse) => {
+    const note = window.prompt("Nhập yêu cầu chỉnh sửa cho ứng viên:", "");
+    if (!note || !note.trim()) {
+      return;
+    }
+
+    try {
+      setIsActionBusy(true);
+      await shortTermJobService.requestRevision({
+        applicationId: application.id,
+        note: note.trim(),
+      });
+      await fetchJobDetail();
+      onRefresh?.();
+      showSuccess("Đã yêu cầu chỉnh sửa", "Phản hồi đã được gửi lại cho ứng viên theo đúng context job.");
+    } catch (error: any) {
+      showError("Không thể yêu cầu chỉnh sửa", error?.message || "Vui lòng thử lại sau.");
+    } finally {
+      setIsActionBusy(false);
+    }
+  };
+
+  const handleCompleteCurrentJob = async () => {
+    if (!job) return;
+
+    try {
+      setIsActionBusy(true);
+      await shortTermJobService.completeJob(job.id);
+      await fetchJobDetail();
+      onRefresh?.();
+      showSuccess("Đã hoàn tất job", "Job đã được chuyển sang trạng thái hoàn thành.");
+    } catch (error: any) {
+      showError("Không thể hoàn tất job", error?.message || "Vui lòng thử lại sau.");
+    } finally {
+      setIsActionBusy(false);
+    }
+  };
+
+  const handleMarkJobPaid = async () => {
+    if (!job) return;
+
+    try {
+      setIsActionBusy(true);
+      await shortTermJobService.markAsPaid(job.id);
+      await fetchJobDetail();
+      onRefresh?.();
+      showSuccess("Đã xác nhận thanh toán", "Job đã được ghi nhận thanh toán thành công.");
+    } catch (error: any) {
+      showError("Không thể cập nhật thanh toán", error?.message || "Vui lòng thử lại sau.");
+    } finally {
+      setIsActionBusy(false);
+    }
+  };
+
   // ==================== RENDER ====================
   if (isLoading) {
     return (
@@ -282,6 +448,15 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
     icon: null,
   };
   const deadline = getDaysRemaining(job.deadline);
+  const handoverApplications = applications.filter((application) =>
+    [
+      ShortTermApplicationStatus.SUBMITTED,
+      ShortTermApplicationStatus.REVISION_REQUIRED,
+      ShortTermApplicationStatus.APPROVED,
+      ShortTermApplicationStatus.COMPLETED,
+      ShortTermApplicationStatus.PAID,
+    ].includes(application.status),
+  );
 
   return (
     <div className="stj-detail">
@@ -439,6 +614,14 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
         >
           <Users size={14} /> Ứng viên ({applications.length})
         </button>
+        {handoverApplications.length > 0 && (
+          <button
+            className={`stj-detail__tab ${activeTab === "handover" ? "stj-detail__tab--active" : ""}`}
+            onClick={() => setActiveTab("handover")}
+          >
+            <Send size={14} /> Bàn giao ({handoverApplications.length})
+          </button>
+        )}
         {job.milestones && job.milestones.length > 0 && (
           <button
             className={`stj-detail__tab ${activeTab === "milestones" ? "stj-detail__tab--active" : ""}`}
@@ -563,15 +746,26 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
                 {applications.map((app) => (
                   <div key={app.id} className="stj-detail__applicant-card">
                     <div className="stj-detail__applicant-info">
-                      <div className="stj-detail__applicant-avatar">
-                        {app.userFullName?.charAt(0) || "?"}
-                      </div>
+                      {resolveRecruitmentAssetUrl(app.userAvatar) ? (
+                        <img
+                          src={resolveRecruitmentAssetUrl(app.userAvatar)}
+                          alt={getApplicantDisplayName(app.userFullName, app.userEmail)}
+                          className="stj-detail__applicant-avatar stj-detail__applicant-avatar--image"
+                        />
+                      ) : (
+                        <div className="stj-detail__applicant-avatar">
+                          {getApplicantInitials(app.userFullName, app.userEmail)}
+                        </div>
+                      )}
                       <div>
                         <span className="stj-detail__applicant-name">
-                          {app.userFullName}
+                          {getApplicantDisplayName(app.userFullName, app.userEmail)}
                         </span>
-                        <span className="stj-detail__applicant-email">
-                          {app.userEmail}
+                        <span className="stj-detail__applicant-subtitle">
+                          {getApplicantSubtitle(
+                            app.userProfessionalTitle,
+                            Boolean(app.portfolioSlug),
+                          )}
                         </span>
                       </div>
                     </div>
@@ -595,10 +789,192 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
                           : app.coverLetter}
                       </p>
                     )}
-                    <span className="stj-detail__applicant-date">
-                      Ứng tuyển: {formatDateShort(app.appliedAt)}
-                    </span>
+                    <div className="stj-detail__applicant-footer">
+                      <span className="stj-detail__applicant-date">
+                        Ứng tuyển: {formatDateShort(app.appliedAt)}
+                      </span>
+                      <div className="stj-detail__applicant-actions">
+                        <button
+                          type="button"
+                          className="stj-detail__applicant-btn"
+                          onClick={() => handleOpenPortfolio(app)}
+                        >
+                          <Eye size={14} />
+                          Portfolio
+                        </button>
+                        <button
+                          type="button"
+                          className="stj-detail__applicant-btn"
+                          onClick={() => handleOpenChat(app)}
+                          disabled={isActionBusy}
+                        >
+                          <MessageSquare size={14} />
+                          Chat theo job
+                        </button>
+                        {app.status === "PENDING" && (
+                          <>
+                            <button
+                              type="button"
+                              className="stj-detail__applicant-btn stj-detail__applicant-btn--accept"
+                              onClick={() => {
+                                setDecisionModal({ application: app, status: "ACCEPTED" });
+                                setDecisionNote("");
+                              }}
+                            >
+                              <CheckCircle2 size={14} />
+                              Duyệt
+                            </button>
+                            <button
+                              type="button"
+                              className="stj-detail__applicant-btn stj-detail__applicant-btn--reject"
+                              onClick={() => {
+                                setDecisionModal({ application: app, status: "REJECTED" });
+                                setDecisionNote("");
+                              }}
+                            >
+                              <XCircle size={14} />
+                              Từ chối
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === "handover" && (
+          <div className="stj-detail__handover">
+            {handoverApplications.length === 0 ? (
+              <div className="stj-detail__no-data">
+                <Send size={32} />
+                <p>Chưa có bàn giao nào cần xử lý</p>
+              </div>
+            ) : (
+              <div className="stj-detail__handover-list">
+                {handoverApplications.map((application) => (
+                  <article key={application.id} className="stj-detail__handover-card">
+                    <div className="stj-detail__handover-top">
+                      <div className="stj-detail__applicant-info">
+                        {resolveRecruitmentAssetUrl(application.userAvatar) ? (
+                          <img
+                            src={resolveRecruitmentAssetUrl(application.userAvatar)}
+                            alt={getApplicantDisplayName(application.userFullName, application.userEmail)}
+                            className="stj-detail__applicant-avatar stj-detail__applicant-avatar--image"
+                          />
+                        ) : (
+                          <div className="stj-detail__applicant-avatar">
+                            {getApplicantInitials(application.userFullName, application.userEmail)}
+                          </div>
+                        )}
+                        <div>
+                          <span className="stj-detail__applicant-name">
+                            {getApplicantDisplayName(application.userFullName, application.userEmail)}
+                          </span>
+                          <span className="stj-detail__applicant-subtitle">
+                            {application.submittedAt
+                              ? `Bàn giao lúc ${formatDate(application.submittedAt)}`
+                              : `Cập nhật ${formatDateShort(application.appliedAt)}`}
+                          </span>
+                        </div>
+                      </div>
+                      <span
+                        className={`stj-detail__applicant-status stj-detail__applicant-status--${application.status.toLowerCase()}`}
+                      >
+                        {application.status}
+                      </span>
+                    </div>
+
+                    <div className="stj-detail__handover-metrics">
+                      <span>{application.deliverables?.length || 0} deliverable</span>
+                      <span>{application.revisionCount || 0} vòng chỉnh sửa</span>
+                      {application.proposedPrice && <span>{formatBudget(application.proposedPrice)}</span>}
+                    </div>
+
+                    {application.workNote && (
+                      <div className="stj-detail__handover-note">
+                        {application.workNote}
+                      </div>
+                    )}
+
+                    {!!application.deliverables?.length && (
+                      <div className="stj-detail__handover-files">
+                        {application.deliverables.map((deliverable) => (
+                          <a
+                            key={deliverable.id}
+                            className="stj-detail__handover-file"
+                            href={deliverable.fileUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <FileText size={14} />
+                            <span>{deliverable.fileName}</span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="stj-detail__handover-actions">
+                      <button
+                        type="button"
+                        className="stj-detail__applicant-btn"
+                        onClick={() => handleOpenChat(application)}
+                        disabled={isActionBusy}
+                      >
+                        <MessageSquare size={14} />
+                        Chat theo job
+                      </button>
+                      {application.status === ShortTermApplicationStatus.SUBMITTED && (
+                        <>
+                          <button
+                            type="button"
+                            className="stj-detail__applicant-btn"
+                            onClick={() => handleRequestRevision(application)}
+                            disabled={isActionBusy}
+                          >
+                            <AlertTriangle size={14} />
+                            Yêu cầu sửa
+                          </button>
+                          <button
+                            type="button"
+                            className="stj-detail__applicant-btn stj-detail__applicant-btn--accept"
+                            onClick={() => handleApproveDeliverables(application)}
+                            disabled={isActionBusy}
+                          >
+                            <CheckCircle2 size={14} />
+                            Duyệt bàn giao
+                          </button>
+                        </>
+                      )}
+                      {application.status === ShortTermApplicationStatus.APPROVED &&
+                        job.status === ShortTermJobStatus.APPROVED && (
+                          <button
+                            type="button"
+                            className="stj-detail__applicant-btn stj-detail__applicant-btn--accept"
+                            onClick={handleCompleteCurrentJob}
+                            disabled={isActionBusy}
+                          >
+                            <CheckCircle size={14} />
+                            Hoàn tất job
+                          </button>
+                        )}
+                      {application.status === ShortTermApplicationStatus.COMPLETED &&
+                        job.status === ShortTermJobStatus.COMPLETED && (
+                          <button
+                            type="button"
+                            className="stj-detail__applicant-btn stj-detail__applicant-btn--accept"
+                            onClick={handleMarkJobPaid}
+                            disabled={isActionBusy}
+                          >
+                            <DollarSign size={14} />
+                            Xác nhận thanh toán
+                          </button>
+                        )}
+                    </div>
+                  </article>
                 ))}
               </div>
             )}
@@ -669,6 +1045,101 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
           </div>
         )}
       </div>
+
+      {decisionModal && (
+        <div
+          className="stj-detail__dialog-overlay"
+          onClick={() => setDecisionModal(null)}
+        >
+          <div
+            className="stj-detail__dialog"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h3>
+              {decisionModal.status === "ACCEPTED"
+                ? "Duyệt ứng viên với ghi chú rõ ràng"
+                : "Từ chối ứng viên với lý do cụ thể"}
+            </h3>
+            <p>
+              {decisionModal.status === "ACCEPTED"
+                ? "Thông điệp này sẽ được lưu cùng quyết định tuyển chọn cho hồ sơ hiện tại."
+                : "Hãy nêu rõ lý do để quy trình tuyển chọn minh bạch và dễ theo dõi hơn."}
+            </p>
+            <textarea
+              className="stj-detail__dialog-textarea"
+              value={decisionNote}
+              onChange={(event) => setDecisionNote(event.target.value)}
+              placeholder={
+                decisionModal.status === "ACCEPTED"
+                  ? "Ví dụ: Hồ sơ phù hợp, mời bạn vào bước trao đổi tiếp theo..."
+                  : "Ví dụ: Kinh nghiệm hiện tại chưa khớp với phạm vi công việc này..."
+              }
+              rows={6}
+              maxLength={1200}
+            />
+            <div className="stj-detail__dialog-meta">
+              {decisionNote.length}/1200 ký tự
+            </div>
+            <div className="stj-detail__dialog-actions">
+              <button
+                type="button"
+                className="stj-detail__applicant-btn"
+                onClick={() => setDecisionModal(null)}
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                className={`stj-detail__applicant-btn ${
+                  decisionModal.status === "ACCEPTED"
+                    ? "stj-detail__applicant-btn--accept"
+                    : "stj-detail__applicant-btn--reject"
+                }`}
+                onClick={handleDecisionSubmit}
+                disabled={isActionBusy}
+              >
+                {decisionModal.status === "ACCEPTED" ? (
+                  <CheckCircle2 size={14} />
+                ) : (
+                  <XCircle size={14} />
+                )}
+                {decisionModal.status === "ACCEPTED"
+                  ? "Xác nhận duyệt"
+                  : "Xác nhận từ chối"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedSession && (
+        <div
+          className="stj-detail__chat-overlay"
+          onClick={() => setSelectedSession(null)}
+        >
+          <div
+            className="stj-detail__chat-shell"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <RecruiterChatWindow
+              session={selectedSession}
+              currentUserId={user?.id || 0}
+              currentUserName={user?.fullName || user?.email || "Recruiter"}
+              onBack={() => setSelectedSession(null)}
+              onViewProfile={() =>
+                chatApplicant ? handleOpenPortfolio(chatApplicant) : undefined
+              }
+              onUpdateStatus={(sessionId, status) => {
+                setSelectedSession((current) =>
+                  current && current.id === sessionId
+                    ? { ...current, status }
+                    : current,
+                );
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

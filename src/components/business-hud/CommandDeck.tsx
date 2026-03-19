@@ -5,7 +5,6 @@ import {
   Briefcase,
   Zap,
   Users,
-  Calendar,
   Plus,
   TrendingUp,
   FileText,
@@ -28,9 +27,8 @@ import OperationLog from "./OperationLog";
 import MissionLaunchPad from "./MissionLaunchPad";
 import ShortTermLaunchPad from "./ShortTermLaunchPad";
 import ShortTermJobManager from "./ShortTermJobManager";
-import MercenaryRadar from "./MercenaryRadar";
+import RecruiterTalentWorkspace from "./RecruiterTalentWorkspace";
 import SubscriptionWidget from "./SubscriptionWidget";
-import RecruiterSeminarManager from "../../pages/main/RecruiterSeminarManager";
 import portfolioService from "../../services/portfolioService";
 import {
   FreelancerCardDisplay,
@@ -169,9 +167,9 @@ const CommandDeck: React.FC = () => {
 
   const [ftJobs, setFtJobs] = useState<JobPostingResponse[]>([]);
   const [stJobs, setStJobs] = useState<ShortTermJobResponse[]>([]);
-  const [freelancers, setFreelancers] = useState<FreelancerCardDisplay[]>([]);
+  const [_freelancers, setFreelancers] = useState<FreelancerCardDisplay[]>([]);
   const [radarPage, setRadarPage] = useState(0);
-  const [radarTotalPages, setRadarTotalPages] = useState(0);
+  const [_radarTotalPages, setRadarTotalPages] = useState(0);
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -1003,14 +1001,7 @@ const CommandDeck: React.FC = () => {
                 </p>
               </div>
             </div>
-            <MercenaryRadar
-              freelancers={freelancers}
-              pagination={{
-                page: radarPage,
-                totalPages: radarTotalPages,
-                onPageChange: setRadarPage,
-              }}
-            />
+            <RecruiterTalentWorkspace jobs={ftJobs} />
           </div>
         )}
 

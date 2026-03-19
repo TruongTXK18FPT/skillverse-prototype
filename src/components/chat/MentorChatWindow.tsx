@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Send, 
-  Smile, 
+import {
+  Send,
+  Smile,
   ArrowLeft,
-  User,
   MoreVertical,
   Search,
-  Image as ImageIcon
+  Image as ImageIcon,
 } from 'lucide-react';
-import { 
-  getConversation, 
-  sendMessage as sendPreChatMessage, 
+import {
+  getConversation,
+  sendMessage as sendPreChatMessage,
   sendAsMentor,
   markRead,
-  type PreChatMessageResponse 
+  type PreChatMessageResponse,
 } from '../../services/preChatService';
 import { API_BASE_URL } from '../../services/axiosInstance';
 import EmojiPicker from './EmojiPicker';
@@ -42,7 +41,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
   counterpartAvatar,
   isMyRoleMentor,
   currentUserId,
-  onBack
+  onBack,
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
@@ -69,22 +68,25 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
   // Load conversation
   useEffect(() => {
     loadMessages();
-    // Mark as read
     if (!isMyRoleMentor) {
-      markRead(counterpartId).catch(err => console.error('Mark read failed:', err));
+      markRead(counterpartId).catch((err) =>
+        console.error('Mark read failed:', err),
+      );
     }
   }, [counterpartId]);
 
   const loadMessages = async () => {
     try {
       const response = await getConversation(counterpartId, 0, 100);
-      const formattedMessages: Message[] = response.content.map((msg: PreChatMessageResponse) => ({
-        id: msg.id,
-        senderId: msg.senderId,
-        content: msg.content,
-        timestamp: msg.createdAt
-      }));
-      setMessages(formattedMessages.reverse()); // Oldest first
+      const formattedMessages: Message[] = response.content.map(
+        (msg: PreChatMessageResponse) => ({
+          id: msg.id,
+          senderId: msg.senderId,
+          content: msg.content,
+          timestamp: msg.createdAt,
+        }),
+      );
+      setMessages(formattedMessages.reverse());
     } catch (error) {
       console.error('Failed to load messages:', error);
     }
@@ -92,12 +94,8 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
 
   // Scroll to bottom
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!inputText.trim() || isSending) return;
@@ -109,21 +107,18 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
     try {
       let response: PreChatMessageResponse;
       if (isMyRoleMentor) {
-        // I'm mentor, sending to learner
         response = await sendAsMentor(counterpartId, messageText);
       } else {
-        // I'm learner, sending to mentor
         response = await sendPreChatMessage(counterpartId, messageText);
       }
 
-      // Add to messages
       const newMessage: Message = {
         id: response.id,
         senderId: response.senderId,
         content: response.content,
-        timestamp: response.createdAt
+        timestamp: response.createdAt,
       };
-      setMessages(prev => [...prev, newMessage]);
+      setMessages((prev) => [...prev, newMessage]);
     } catch (error) {
       console.error('Failed to send message:', error);
       alert('Gửi tin nhắn thất bại');
@@ -139,19 +134,17 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
     }
   };
 
-  const handleEmojiSelect = (emoji: string, isCustom?: boolean, customUrl?: string) => {
-    // emoji is the actual emoji character or URL, not an object
-    setInputText(prev => prev + emoji);
+  const handleEmojiSelect = (emoji: string) => {
+    setInputText((prev) => prev + emoji);
     setShowEmojiPicker(false);
   };
 
-  const handleGifSelect = async (gifUrl: string, previewUrl: string) => {
+  const handleGifSelect = async (gifUrl: string) => {
     setShowGifPicker(false);
     setIsSending(true);
-    
+
     try {
       let response: PreChatMessageResponse;
-      // Send GIF URL as message content
       if (isMyRoleMentor) {
         response = await sendAsMentor(counterpartId, `[GIF]${gifUrl}`);
       } else {
@@ -162,9 +155,9 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
         id: response.id,
         senderId: response.senderId,
         content: response.content,
-        timestamp: response.createdAt
+        timestamp: response.createdAt,
       };
-      setMessages(prev => [...prev, newMessage]);
+      setMessages((prev) => [...prev, newMessage]);
     } catch (error) {
       console.error('Failed to send GIF:', error);
       alert('Gửi GIF thất bại');
@@ -181,85 +174,87 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
 
     if (diffMins < 1) return 'Vừa xong';
     if (diffMins < 60) return `${diffMins} phút trước`;
-    
-    const diffHours = Math.floor(diffMs / 3600000);
-    if (diffHours < 24) return `${diffHours} giờ trước`;
 
-    // Convert to Vietnam timezone (GMT+7)
-    return date.toLocaleDateString('vi-VN', { 
-      day: '2-digit', 
+    const diffHours = Math.floor(diffMs / 3600000);
+    if (diffHours < 24)
+      return `${diffHours} giờ trước`;
+
+    return date.toLocaleDateString('vi-VN', {
+      day: '2-digit',
       month: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
-      timeZone: 'Asia/Ho_Chi_Minh'
+      timeZone: 'Asia/Ho_Chi_Minh',
     });
   };
 
   return (
-    <div className="mentor-chat-window">
+    <div className="mcw-window">
       {/* Header */}
-      <div className="mentor-chat-header">
-        <button className="back-btn" onClick={onBack}>
-          <ArrowLeft size={20} />
+      <div className="mcw-header">
+        <button className="mcw-back-btn" onClick={onBack} title="Quay lại">
+          <ArrowLeft size={18} />
         </button>
-        
-        <div className="mentor-chat-header-info">
-          <img 
-            src={resolveAvatarUrl(counterpartAvatar)} 
+
+        <div className="mcw-info">
+          <img
+            src={resolveAvatarUrl(counterpartAvatar)}
             alt={counterpartName}
-            className="mentor-avatar"
+            className="mcw-avatar"
           />
-          <div className="mentor-info">
-            <h3>{counterpartName}</h3>
-            <span className="mentor-role">
+          <div className="mcw-user-info">
+            <h3 className="mcw-user-info__name">{counterpartName}</h3>
+            <span className="mcw-user-info__role">
               {isMyRoleMentor ? 'Học viên' : 'Mentor'}
             </span>
           </div>
         </div>
 
-        <div className="mentor-chat-header-actions">
-          <button className="header-action-btn" title="Tìm kiếm">
-            <Search size={20} />
+        <div className="mcw-header-actions">
+          <button className="mcw-header-btn" title="Tìm kiếm">
+            <Search size={18} />
           </button>
-          <button className="header-action-btn" title="Thêm">
-            <MoreVertical size={20} />
+          <button className="mcw-header-btn" title="Thêm">
+            <MoreVertical size={18} />
           </button>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="mentor-chat-messages">
+      <div className="mcw-messages">
         {messages.map((msg) => {
           const isMine = msg.senderId === currentUserId;
           const isGif = msg.content.startsWith('[GIF]');
           const gifUrl = isGif ? msg.content.replace('[GIF]', '') : null;
-          
+
           return (
-            <div 
-              key={msg.id} 
-              className={`mentor-message ${isMine ? 'mine' : 'theirs'}`}
+            <div
+              key={msg.id}
+              className={`mcw-msg ${isMine ? 'mcw-msg--mine' : 'mcw-msg--theirs'}`}
             >
               {!isMine && (
-                <img 
-                  src={resolveAvatarUrl(counterpartAvatar)} 
-                  alt="" 
-                  className="msg-avatar"
+                <img
+                  src={resolveAvatarUrl(counterpartAvatar)}
+                  alt=""
+                  className="mcw-msg__avatar"
                 />
               )}
-              <div className="msg-content">
-                <div className={`msg-bubble ${isGif ? 'gif-message' : ''}`}>
+              <div className="mcw-msg__body">
+                <div
+                  className={`mcw-msg__bubble${isGif ? ' mcw-msg__bubble--gif' : ''}`}
+                >
                   {isGif && gifUrl ? (
-                    <img 
-                      src={gifUrl} 
-                      alt="GIF" 
-                      className="msg-gif-image"
+                    <img
+                      src={gifUrl}
+                      alt="GIF"
+                      className="mcw-msg__gif"
                       onClick={() => window.open(gifUrl, '_blank')}
                     />
                   ) : (
                     msg.content
                   )}
                 </div>
-                <span className="msg-time">{formatTime(msg.timestamp)}</span>
+                <span className="mcw-msg__time">{formatTime(msg.timestamp)}</span>
               </div>
             </div>
           );
@@ -268,31 +263,31 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
       </div>
 
       {/* Input */}
-      <div className="mentor-chat-input">
-        <button 
-          className="input-action-btn"
+      <div className="mcw-input">
+        <button
+          className="mcw-input__action"
           onClick={() => {
             setShowEmojiPicker(!showEmojiPicker);
             setShowGifPicker(false);
           }}
-          title="Emoji"
+          title="Biểu tượng cảm xúc"
         >
-          <Smile size={22} />
+          <Smile size={20} />
         </button>
 
-        <button 
-          className="input-action-btn gif-btn"
+        <button
+          className="mcw-input__action"
           onClick={() => {
             setShowGifPicker(!showGifPicker);
             setShowEmojiPicker(false);
           }}
           title="GIF"
         >
-          <ImageIcon size={22} />
+          <ImageIcon size={20} />
         </button>
 
         <textarea
-          className="message-input"
+          className="mcw-input__textarea"
           placeholder="Nhập tin nhắn..."
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
@@ -300,17 +295,18 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
           rows={1}
         />
 
-        <button 
-          className="send-btn"
+        <button
+          className="mcw-send-btn"
           onClick={handleSendMessage}
           disabled={isSending || !inputText.trim()}
+          title="Gửi"
         >
-          <Send size={20} />
+          <Send size={18} />
         </button>
 
         {/* Emoji Picker */}
         {showEmojiPicker && (
-          <div className="emoji-picker-container">
+          <div className="mcw-emoji-wrap">
             <EmojiPicker
               isOpen={showEmojiPicker}
               onEmojiSelect={handleEmojiSelect}
@@ -321,7 +317,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
 
         {/* GIF Picker */}
         {showGifPicker && (
-          <div className="gif-picker-container">
+          <div className="mcw-gif-wrap">
             <GifPicker
               isOpen={showGifPicker}
               onGifSelect={handleGifSelect}

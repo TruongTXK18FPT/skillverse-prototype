@@ -5,6 +5,7 @@
 export { default as GroupChatWindow } from './GroupChatWindow';
 export { default as MentorChatWindow } from './MentorChatWindow';
 export { default as FamilyChatWindow } from './FamilyChatWindow';
+export { default as RecruiterChatWindow } from './RecruiterChatWindow';
 
 // Message Components
 export { default as MessageBubble } from './MessageBubble';

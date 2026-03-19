@@ -45,7 +45,7 @@ const CareerChatPage = () => {
 - Gợi ý lộ trình phát triển
 
 **📊 Thông tin thị trường**
-- Xu hướng nghề nghiệp 2024-2025
+- Xu hướng nghề nghiệp 2026
 - Mức lương theo vị trí
 - Cơ hội việc làm
 
@@ -157,7 +157,7 @@ const CareerChatPage = () => {
 
 ---
 
-### � Mình có thể giúp bạn:
+### 💡 Mình có thể giúp bạn:
 
 **🎓 Định hướng nghề nghiệp**
 - Tìm ngành học phù hợp với đam mê
@@ -165,18 +165,18 @@ const CareerChatPage = () => {
 - Gợi ý lộ trình phát triển
 
 **📊 Thông tin thị trường**
-- Xu hướng nghề nghiệp 2024-2025
+- Xu hướng nghề nghiệp 2026
 - Mức lương theo vị trí
 - Cơ hội việc làm
 
 **🚀 Phát triển kỹ năng**
 - Kỹ năng cần thiết cho từng ngành
-- Khóa học & chứng chỉ đề xuất
+- Khóa học và chứng chỉ đề xuất
 - Roadmap học tập cá nhân hóa
 
 **💼 Chuyển đổi sự nghiệp**
 - Tư vấn chuyển ngành
-- Chuẩn bị CV & phỏng vấn
+- Chuẩn bị CV và phỏng vấn
 - Chiến lược tìm việc
 
 ---
@@ -331,8 +331,8 @@ const CareerChatPage = () => {
       // Handle Premium Restriction (403) for Deep Research
       if (error?.response?.status === 403 && aiAgentMode === 'DEEP_RESEARCH') {
         showError(
-          'Premium Required', 
-          'Chế độ Deep Research chỉ dành cho tài khoản Premium. Hệ thống sẽ tự động chuyển về Normal Agent.',
+          'Yêu cầu Premium',
+          'Chế độ Nghiên cứu sâu chỉ dành cho tài khoản Premium. Hệ thống sẽ tự động chuyển về chế độ Tiêu chuẩn.',
           6
         );
         
@@ -461,7 +461,7 @@ const CareerChatPage = () => {
           
           <div className="chat-hud-title">
             <Sparkles size={18} style={{ marginRight: '8px', color: 'var(--chat-hud-accent)' }} />
-            Meowl Assistant
+            Trợ lý Meowl
           </div>
 
           {/* Model Selector */}
@@ -473,12 +473,12 @@ const CareerChatPage = () => {
               {aiAgentMode === 'NORMAL' ? (
                 <>
                   <Bot size={16} />
-                  <span>Normal Agent</span>
+                  <span>Chế độ Tiêu chuẩn</span>
                 </>
               ) : (
                 <>
                   <Sparkles size={16} />
-                  <span>Deep Research</span>
+                  <span>Nghiên cứu sâu</span>
                 </>
               )}
               <ChevronDown size={14} />
@@ -497,8 +497,8 @@ const CareerChatPage = () => {
                     <Bot size={18} />
                   </div>
                   <div className="model-info">
-                    <span className="model-name">Normal Agent</span>
-                    <span className="model-desc">Tốc độ tiêu chuẩn, phản hồi nhanh</span>
+                    <span className="model-name">Chế độ Tiêu chuẩn</span>
+                    <span className="model-desc">Phản hồi nhanh, phù hợp trò chuyện hằng ngày</span>
                   </div>
                 </div>
 
@@ -513,7 +513,7 @@ const CareerChatPage = () => {
                       setAiAgentMode('DEEP_RESEARCH');
                       setShowModelDropdown(false);
                     } else {
-                      showError('Premium Required', 'Tính năng Deep Research chỉ dành cho gói Mentor Pro (Premium Plus)!');
+                      showError('Yêu cầu Premium', 'Tính năng Nghiên cứu sâu chỉ dành cho gói Mentor Pro (Premium Plus).');
                     }
                   }}
                 >
@@ -522,10 +522,10 @@ const CareerChatPage = () => {
                   </div>
                   <div className="model-info">
                     <span className="model-name">
-                      Deep Research
+                      Nghiên cứu sâu
                       <span className="premium-badge-mini">PLUS</span>
                     </span>
-                    <span className="model-desc">Phân tích sâu, dữ liệu chi tiết</span>
+                    <span className="model-desc">Phân tích sâu hơn, ưu tiên dữ liệu chi tiết</span>
                   </div>
                 </div>
               </div>
@@ -544,7 +544,7 @@ const CareerChatPage = () => {
             <div key={msg.id} className={`chat-hud-message-row ${msg.role}`}>
               <div className="chat-hud-avatar">
                 {msg.role === 'assistant' ? (
-                  <img src={aiAvatar} alt="AI" />
+                  <img src={aiAvatar} alt="Meowl AI" />
                 ) : (
                   <img 
                     src={userAvatar || meowlDefault} 
@@ -596,7 +596,7 @@ const CareerChatPage = () => {
           {isLoading && (
             <div className="chat-hud-message-row assistant">
               <div className="chat-hud-avatar">
-                <img src={aiAvatar} alt="AI" />
+                  <img src={aiAvatar} alt="Meowl AI" />
               </div>
               <div className="chat-hud-bubble" style={{ padding: 0, background: 'transparent', border: 'none' }}>
                 <ThinkingIndicator />

@@ -94,6 +94,8 @@ const ShortTermJobDetailModal: React.FC<ShortTermJobDetailModalProps> = ({
   const userRole = user?.roles?.[0];
   const isRecruiter = userRole === "RECRUITER";
   const isCanApply = isAuthenticated && !isRecruiter;
+  const hasApplied = job.hasApplied === true;
+  const applicationStatus = job.userApplicationStatus;
 
   const getVariant = (): "urgent" | "high" | "normal" => {
     if (job.urgency === "VERY_URGENT" || job.urgency === "ASAP")
@@ -438,7 +440,19 @@ const ShortTermJobDetailModal: React.FC<ShortTermJobDetailModalProps> = ({
 
         {/* Footer */}
         <div className="stm-footer">
-          {isCanApply && !showApplyForm && (
+          {/* Already applied — show status instead of apply button */}
+          {isCanApply && hasApplied && (
+            <div className="stm-applied-badge">
+              <CheckCircle size={16} />
+              Đã ứng tuyển
+              {applicationStatus && (
+                <span className="stm-applied-badge__status">
+                  · {shortTermJobService.getStatusText(applicationStatus)}
+                </span>
+              )}
+            </div>
+          )}
+          {isCanApply && !hasApplied && !showApplyForm && (
             <button
               className={`stm-btn stm-btn--apply stm-btn--${variant}`}
               onClick={() => setShowApplyForm(true)}
@@ -446,7 +460,7 @@ const ShortTermJobDetailModal: React.FC<ShortTermJobDetailModalProps> = ({
               <Zap size={16} /> Ứng tuyển ngay
             </button>
           )}
-          {isCanApply && showApplyForm && cooldownMs === 0 && (
+          {isCanApply && !hasApplied && showApplyForm && cooldownMs === 0 && (
             <button
               className={`stm-btn stm-btn--apply stm-btn--${variant}`}
               onClick={handleApply}
@@ -463,7 +477,7 @@ const ShortTermJobDetailModal: React.FC<ShortTermJobDetailModalProps> = ({
               )}
             </button>
           )}
-          {isCanApply && showApplyForm && (
+          {isCanApply && !hasApplied && showApplyForm && (
             <button
               className="stm-btn stm-btn--secondary"
               onClick={() => setShowApplyForm(false)}

@@ -1,0 +1,321 @@
+/* JobBoostButton Styles */
+
+.jb-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+}
+
+.jb-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Boost Button - Primary */
+.jb-button--boost {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.jb-button--boost:hover:not(:disabled) {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px);
+}
+
+.jb-button--boost:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Upgrade Button */
+.jb-button--upgrade {
+  background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(167, 139, 250, 0.3);
+}
+
+.jb-button--upgrade:hover:not(:disabled) {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  box-shadow: 0 4px 12px rgba(167, 139, 250, 0.4);
+}
+
+/* Quota Badge */
+.jb-quota-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.125rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Skeleton */
+.jb-button-skeleton {
+  width: 120px;
+  height: 36px;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: jb-skeleton-loading 1.5s infinite;
+  border-radius: 8px;
+}
+
+.jb-skeleton-line {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes jb-skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Active Boost Display */
+.jb-boost-active {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.jb-boost-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.jb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.jb-badge--active {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.jb-badge--scheduled {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+}
+
+.jb-badge--expired {
+  background: #ef4444;
+  color: white;
+}
+
+.jb-badge--cancelled {
+  background: #6b7280;
+  color: white;
+}
+
+.jb-days-remaining {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+.jb-days-warning {
+  color: #f59e0b;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Boost Actions */
+.jb-boost-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.jb-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.jb-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.jb-action-btn--extend {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.jb-action-btn--extend:hover:not(:disabled) {
+  background: #dbeafe;
+}
+
+.jb-action-btn--cancel {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.jb-action-btn--cancel:hover:not(:disabled) {
+  background: #fee2e2;
+}
+
+/* Modal */
+.jb-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: jb-fade-in 0.2s ease;
+}
+
+@keyframes jb-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.jb-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: jb-slide-up 0.3s ease;
+}
+
+@keyframes jb-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.jb-modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+
+.jb-modal-subtitle {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0 0 1rem 0;
+}
+
+.jb-modal-subtitle strong {
+  color: #111827;
+}
+
+/* Duration Options */
+.jb-duration-options {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.jb-duration-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  color: #374151;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.jb-duration-btn:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+.jb-duration-btn--selected {
+  border-color: #f59e0b;
+  background: #fffbeb;
+  color: #d97706;
+}
+
+/* Quota Info */
+.jb-quota-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f0fdf4;
+  border-radius: 8px;
+  color: #166534;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+/* Modal Actions */
+.jb-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.jb-btn {
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.jb-btn--secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.jb-btn--secondary:hover {
+  background: #e5e7eb;
+}
+
+.jb-btn--primary {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.jb-btn--primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.jb-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

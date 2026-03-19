@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { FiChevronRight, FiArrowLeft, FiZap, FiInfo } from "react-icons/fi";
+import React, { useEffect, useState } from "react";
+import { FiArrowLeft, FiChevronRight, FiInfo, FiZap } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 import { ShortTermJobForm } from "../../components/short-term-job";
 import shortTermJobService from "../../services/shortTermJobService";
@@ -10,8 +10,6 @@ import {
 } from "../../types/ShortTermJob";
 import { useToast } from "../../hooks/useToast";
 import "../../components/business-hud/recruiter-hub.css";
-
-// ==================== PAGE COMPONENT ====================
 
 const CreateShortTermJobPage: React.FC = () => {
   const navigate = useNavigate();
@@ -25,24 +23,27 @@ const CreateShortTermJobPage: React.FC = () => {
   const [isFetching, setIsFetching] = useState(!!jobId);
 
   const isEditMode = !!jobId;
+  const editableJob =
+    existingJob as (ShortTermJobResponse & Partial<CreateShortTermJobRequest>) |
+      null;
 
-  // Fetch existing job for edit mode
   useEffect(() => {
     const fetchJob = async () => {
-      if (!jobId) return;
+      if (!jobId) {
+        return;
+      }
 
       setIsFetching(true);
       try {
         const job = await shortTermJobService.getJobDetails(Number(jobId));
 
-        // Check if job can be edited (allow DRAFT and PUBLISHED)
         if (
           job.status !== ShortTermJobStatus.DRAFT &&
           job.status !== ShortTermJobStatus.PUBLISHED
         ) {
           showError(
             "Không thể chỉnh sửa",
-            "Chỉ có thể chỉnh sửa công việc ở trạng thái Nháp hoặc Đã đăng",
+            "Chỉ có thể chỉnh sửa công việc ở trạng thái Nháp hoặc Đã đăng.",
           );
           navigate(`/short-term-jobs/${jobId}`);
           return;
@@ -51,17 +52,16 @@ const CreateShortTermJobPage: React.FC = () => {
         setExistingJob(job);
       } catch (error) {
         console.error("Failed to fetch job:", error);
-        showError("Lỗi", "Không thể tải thông tin công việc");
+        showError("Lỗi", "Không thể tải thông tin công việc.");
         navigate("/short-term-jobs");
       } finally {
         setIsFetching(false);
       }
     };
 
-    fetchJob();
+    void fetchJob();
   }, [jobId, navigate, showError]);
 
-  // ========== HANDLERS ==========
   const handleSubmit = async (
     data: CreateShortTermJobRequest,
     publish: boolean,
@@ -71,7 +71,6 @@ const CreateShortTermJobPage: React.FC = () => {
       let savedJob: ShortTermJobResponse;
 
       if (isEditMode && jobId) {
-        // Update existing job
         savedJob = await shortTermJobService.updateJob(Number(jobId), data);
 
         if (publish && savedJob.status === ShortTermJobStatus.DRAFT) {
@@ -81,11 +80,10 @@ const CreateShortTermJobPage: React.FC = () => {
         showSuccess(
           "Thành công",
           publish
-            ? "Công việc đã được cập nhật và đăng"
-            : "Công việc đã được cập nhật",
+            ? "Công việc đã được cập nhật và đăng."
+            : "Công việc đã được cập nhật.",
         );
       } else {
-        // Create new job
         savedJob = await shortTermJobService.createJob(data);
 
         if (publish) {
@@ -94,7 +92,7 @@ const CreateShortTermJobPage: React.FC = () => {
 
         showSuccess(
           "Thành công",
-          publish ? "Công việc đã được đăng" : "Công việc đã được lưu nháp",
+          publish ? "Công việc đã được đăng." : "Công việc đã được lưu nháp.",
         );
       }
 
@@ -103,7 +101,7 @@ const CreateShortTermJobPage: React.FC = () => {
       console.error("Failed to save job:", error);
       const errMsg =
         (error as { response?: { data?: { message?: string } } })?.response
-          ?.data?.message || "Không thể lưu công việc";
+          ?.data?.message || "Không thể lưu công việc.";
       showError("Lỗi", errMsg);
     } finally {
       setIsLoading(false);
@@ -113,12 +111,12 @@ const CreateShortTermJobPage: React.FC = () => {
   const handleCancel = () => {
     if (isEditMode && jobId) {
       navigate(`/short-term-jobs/${jobId}`);
-    } else {
-      navigate("/short-term-jobs");
+      return;
     }
+
+    navigate("/short-term-jobs");
   };
 
-  // ========== RENDER ==========
   if (isFetching) {
     return (
       <div className="stj-create-shell">
@@ -132,8 +130,7 @@ const CreateShortTermJobPage: React.FC = () => {
 
   return (
     <div className="stj-create-shell">
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
-        {/* Breadcrumb */}
+      <div style={{ maxWidth: 980, margin: "0 auto" }}>
         <div
           className="stj-create-breadcrumb"
           style={{ marginBottom: "1.25rem" }}
@@ -149,7 +146,6 @@ const CreateShortTermJobPage: React.FC = () => {
           </span>
         </div>
 
-        {/* Hero Header */}
         <div className="stj-create-hero">
           <div className="stj-create-hero__icon">
             <FiZap size={26} />
@@ -162,8 +158,8 @@ const CreateShortTermJobPage: React.FC = () => {
             </h1>
             <p>
               {isEditMode
-                ? "Cập nhật thông tin và yêu cầu của công việc"
-                : "Tìm kiếm ứng viên phù hợp cho công việc ngắn hạn / gig của bạn"}
+                ? "Cập nhật thông tin, yêu cầu và cách phối hợp cho công việc của bạn."
+                : "Tạo một tin đăng ngắn gọn, đủ ý và dễ nhận việc cho ứng viên phù hợp."}
             </p>
           </div>
           <button
@@ -175,39 +171,44 @@ const CreateShortTermJobPage: React.FC = () => {
           </button>
         </div>
 
-        {/* Info notice */}
         <div className="stj-create-info-box">
           <FiInfo size={16} />
           <div>
             <strong style={{ color: "#e2e8f0" }}>Lưu ý: </strong>
-            Bạn có thể lưu nháp và chỉnh sửa sau. Khi đăng công việc, nó sẽ được
-            hiển thị công khai và các ứng viên có thể bắt đầu ứng tuyển.
+            Bạn có thể lưu nháp trước, sau đó quay lại chỉnh sửa và xuất bản khi
+            nội dung đã hoàn chỉnh. Tin đăng sau khi xuất bản sẽ bắt đầu hiển
+            thị cho ứng viên.
           </div>
         </div>
 
-        {/* Form */}
         <ShortTermJobForm
           initialData={
-            existingJob
+            editableJob
               ? {
-                  title: existingJob.title,
-                  description: existingJob.description,
-                  budget: existingJob.budget,
-                  deadline: existingJob.deadline,
-                  requiredSkills: existingJob.requiredSkills,
-                  urgency: existingJob.urgency,
-                  isRemote: existingJob.isRemote,
-                  location: existingJob.location,
-                  estimatedDuration: existingJob.estimatedDuration,
-                  maxApplicants: existingJob.maxApplicants,
-                  paymentMethod: existingJob.paymentMethod,
-                  isNegotiable: existingJob.isNegotiable,
-                  milestones: existingJob.milestones?.map((m) => ({
-                    title: m.title,
-                    description: m.description,
-                    amount: m.amount,
-                    deadline: m.deadline,
-                    order: m.order,
+                  title: editableJob.title,
+                  description: editableJob.description,
+                  budget: editableJob.budget,
+                  deadline: editableJob.deadline,
+                  requiredSkills: editableJob.requiredSkills,
+                  urgency: editableJob.urgency,
+                  isRemote: editableJob.isRemote,
+                  location: editableJob.location,
+                  estimatedDuration: editableJob.estimatedDuration,
+                  maxApplicants: editableJob.maxApplicants,
+                  paymentMethod: editableJob.paymentMethod,
+                  isNegotiable: editableJob.isNegotiable,
+                  requirements: editableJob.requirements,
+                  workDeadline: editableJob.workDeadline,
+                  subCategory: editableJob.subCategory,
+                  allowsRevision: editableJob.allowsRevision,
+                  maxRevisions: editableJob.maxRevisions,
+                  tags: editableJob.tags,
+                  milestones: editableJob.milestones?.map((milestone) => ({
+                    title: milestone.title,
+                    description: milestone.description,
+                    amount: milestone.amount,
+                    deadline: milestone.deadline,
+                    order: milestone.order,
                   })),
                 }
               : undefined

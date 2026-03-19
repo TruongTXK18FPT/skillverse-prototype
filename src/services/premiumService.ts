@@ -6,28 +6,92 @@ import {
   UserSubscriptionResponse,
 } from "../data/premiumDTOs";
 
+type PremiumPlanApiResponse = Omit<
+  PremiumPlan,
+  "price" | "studentDiscountPercent" | "studentPrice" | "features"
+> & {
+  price: number | string;
+  studentDiscountPercent: number | string;
+  studentPrice?: number | string;
+  features: string[] | string | null;
+};
+
+type UserSubscriptionApiResponse = Omit<UserSubscriptionResponse, "plan"> & {
+  plan: PremiumPlanApiResponse;
+};
+
+const normalizeFeatures = (
+  features: PremiumPlanApiResponse["features"],
+): string => {
+  if (Array.isArray(features)) {
+    return JSON.stringify(features);
+  }
+
+  if (typeof features === "string" && features.trim()) {
+    return features;
+  }
+
+  return "[]";
+};
+
+const normalizePlan = (plan: PremiumPlanApiResponse): PremiumPlan => ({
+  ...plan,
+  price: String(plan.price ?? "0"),
+  studentDiscountPercent: String(plan.studentDiscountPercent ?? "0"),
+  studentPrice:
+    plan.studentPrice !== undefined ? String(plan.studentPrice) : undefined,
+  features: normalizeFeatures(plan.features),
+});
+
+const normalizeSubscription = (
+  subscription: UserSubscriptionApiResponse,
+): UserSubscriptionResponse => ({
+  ...subscription,
+  plan: normalizePlan(subscription.plan),
+});
+
+type PremiumTargetRole = PremiumPlan["targetRole"];
+
 export const premiumService = {
-  async getPremiumPlans(): Promise<PremiumPlan[]> {
-    const { data } = await api.get("/api/premium/plans");
-    return data;
+  async getPremiumPlans(
+    targetRole?: PremiumTargetRole,
+    includeFreeTier: boolean = false,
+  ): Promise<PremiumPlan[]> {
+    const params: Record<string, string | boolean> = {};
+    if (targetRole) {
+      params.targetRole = targetRole;
+      params.includeFreeTier = includeFreeTier;
+    }
+
+    const { data } = await api.get<PremiumPlanApiResponse[]>("/api/premium/plans", {
+      params,
+    });
+    return data.map(normalizePlan);
   },
 
   async getPlanById(planId: number): Promise<PremiumPlan> {
-    const { data } = await api.get(`/api/premium/plans/${planId}`);
-    return data;
+    const { data } = await api.get<PremiumPlanApiResponse>(
+      `/api/premium/plans/${planId}`,
+    );
+    return normalizePlan(data);
   },
 
   async createSubscription(
     request: CreateSubscriptionRequest,
   ): Promise<UserSubscriptionResponse> {
-    const { data } = await api.post("/api/premium/subscribe", request);
-    return data;
+    const { data } = await api.post<UserSubscriptionApiResponse>(
+      "/api/premium/subscribe",
+      request,
+    );
+    return normalizeSubscription(data);
   },
 
   async getCurrentSubscription(): Promise<UserSubscriptionResponse | null> {
     try {
-      const { data } = await api.get("/api/premium/subscription/current");
-      return data;
+      const { data } = await api.get<UserSubscriptionApiResponse>(
+        "/api/premium/subscription/current",
+      );
+      return normalizeSubscription(data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
         return null;
@@ -37,8 +101,10 @@ export const premiumService = {
   },
 
   async getSubscriptionHistory(): Promise<UserSubscriptionResponse[]> {
-    const { data } = await api.get("/api/premium/subscription/history");
-    return data;
+    const { data } = await api.get<UserSubscriptionApiResponse[]>(
+      "/api/premium/subscription/history",
+    );
+    return data.map(normalizeSubscription);
   },
 
   async cancelSubscription(reason?: string): Promise<void> {
@@ -61,10 +127,14 @@ export const premiumService = {
     if (targetUserId) {
       params.targetUserId = targetUserId;
     }
-    const { data } = await api.post("/api/premium/purchase-with-wallet", null, {
-      params,
-    });
-    return data;
+    const { data } = await api.post<UserSubscriptionApiResponse>(
+      "/api/premium/purchase-with-wallet",
+      null,
+      {
+        params,
+      },
+    );
+    return normalizeSubscription(data);
   },
 
   async enableAutoRenewal(): Promise<{ success: boolean; message: string }> {
@@ -133,17 +203,28 @@ export const premiumService = {
     size: number;
   }> {
     const params: any = { page, size, ...filters };
-    const { data } = await api.get("/api/admin/premium/subscriptions", {
+    const { data } = await api.get<{
+      content: UserSubscriptionApiResponse[];
+      totalElements: number;
+      totalPages: number;
+      number: number;
+      size: number;
+    }>("/api/admin/premium/subscriptions", {
       params,
     });
-    return data;
+    return {
+      ...data,
+      content: data.content.map(normalizeSubscription),
+    };
   },
 
   async adminGetSubscriptionDetail(
     id: number,
   ): Promise<UserSubscriptionResponse> {
-    const { data } = await api.get(`/api/admin/premium/subscriptions/${id}`);
-    return data;
+    const { data } = await api.get<UserSubscriptionApiResponse>(
+      `/api/admin/premium/subscriptions/${id}`,
+    );
+    return normalizeSubscription(data);
   },
 
   async adminGetPremiumStatistics(): Promise<{

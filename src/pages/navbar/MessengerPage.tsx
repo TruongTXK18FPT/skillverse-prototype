@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { 
-  Search, 
-  Plus, 
-  Users, 
-  UserCircle, 
+import {
+  Search,
+  Plus,
+  Users,
+  UserCircle,
   Home,
   MessageCircle,
   Settings,
@@ -16,18 +16,21 @@ import {
   Archive,
   Trash2,
   Star,
-  X
+  X,
+  Briefcase
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { GroupChatWindow, MentorChatWindow, FamilyChatWindow } from '../../components/chat';
+import { GroupChatWindow, MentorChatWindow, FamilyChatWindow, RecruiterChatWindow } from '../../components/chat';
 import MessengerWelcome from '../../components/chat/MessengerWelcome';
 import { getMyGroups, getGroupDetail, type GroupMemberDTO } from '../../services/groupChatService';
 import { getThreads } from '../../services/preChatService';
+import recruitmentChatService from '../../services/recruitmentChatService';
 import userService from '../../services/userService';
 import { getMentorProfile } from '../../services/mentorProfileService';
 import parentService from '../../services/parentService';
 import studentLinkService from '../../services/studentLinkService';
 import { API_BASE_URL } from '../../services/axiosInstance';
+import { RecruitmentSessionResponse } from '../../data/portfolioDTOs';
 import '../../styles/MessengerPage.css';
 
 interface ChatContact {
@@ -37,27 +40,33 @@ interface ChatContact {
   lastMessage: string;
   timestamp: string;
   unread: number;
-  type: 'MENTOR' | 'FAMILY' | 'GROUP';
+  type: 'MENTOR' | 'FAMILY' | 'GROUP' | 'RECRUITMENT';
   isOnline?: boolean;
   isPinned?: boolean;
   memberCount?: number;
   mentorName?: string;
   isMyRoleMentor?: boolean; // For mentor chats: true if I'm the mentor
   isParent?: boolean; // For family chats: true if I'm the parent
+  // For recruitment chat
+  recruitmentSession?: RecruitmentSessionResponse;
 }
 
 const MessengerPage: React.FC = () => {
   const { user, loading } = useAuth();
   const location = useLocation();
-  
+
   // State
   const [contacts, setContacts] = useState<ChatContact[]>([]);
   const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<'ALL' | 'MENTOR' | 'FAMILY' | 'GROUP'>('ALL');
+  const [activeTab, setActiveTab] = useState<'ALL' | 'MENTOR' | 'FAMILY' | 'GROUP' | 'RECRUITMENT'>('ALL');
   const [showSettings, setShowSettings] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showCreateNew, setShowCreateNew] = useState(false);
+
+  // Recruitment session state
+  const [recruitmentSessions, setRecruitmentSessions] = useState<RecruitmentSessionResponse[]>([]);
+  const [selectedRecruitmentSession, setSelectedRecruitmentSession] = useState<RecruitmentSessionResponse | null>(null);
   
   const hasHandledNav = useRef(false);
 
@@ -90,17 +99,46 @@ const MessengerPage: React.FC = () => {
   // Handle navigation state (e.g., from other pages)
   useEffect(() => {
     if (hasHandledNav.current || !location.state?.openChatWith) return;
-    
+
     const targetId = location.state.openChatWith.toString();
     const type = location.state.type || 'GROUP';
-    
+
     if (type === 'GROUP') setActiveTab('GROUP');
     else if (type === 'FAMILY') setActiveTab('FAMILY');
-    else setActiveTab('MENTOR');
-    
+    else if (type === 'RECRUITMENT') {
+      // For recruitment chat, find the session by ID
+      const session = recruitmentSessions.find(s => s.id.toString() === targetId);
+      if (session) {
+        setSelectedRecruitmentSession(session);
+        setActiveTab('RECRUITMENT');
+      }
+    } else setActiveTab('MENTOR');
+
     setSelectedContactId(targetId);
     hasHandledNav.current = true;
-  }, [location.state]);
+  }, [location.state, recruitmentSessions]);
+
+  // Load recruitment sessions for recruiters
+  const loadRecruitmentSessions = async () => {
+    if (!user) return;
+
+    try {
+      const isRecruiter = user.roles.includes('RECRUITER');
+      if (!isRecruiter) return;
+
+      const result = await recruitmentChatService.getRecruiterSessions(0, 50);
+      setRecruitmentSessions(result.sessions);
+    } catch (error) {
+      console.error('Failed to load recruitment sessions:', error);
+    }
+  };
+
+  // Load recruitment sessions on mount
+  useEffect(() => {
+    if (user && user.roles.includes('RECRUITER')) {
+      loadRecruitmentSessions();
+    }
+  }, [user]);
 
   const loadContacts = async () => {
     if (!user) return;
@@ -210,6 +248,29 @@ const MessengerPage: React.FC = () => {
             // Parent link API may not exist yet
             console.log('Parent links not available:', error);
           }
+        }
+      }
+
+      // Load recruitment sessions if user is recruiter
+      const isRecruiter = user.roles.includes('RECRUITER');
+      if (isRecruiter && (activeTab === 'RECRUITMENT' || activeTab === 'ALL')) {
+        try {
+          const sessions = await recruitmentChatService.getRecruiterSessions(0, 50);
+          setRecruitmentSessions(sessions.sessions);
+
+          const recruitmentContacts: ChatContact[] = sessions.sessions.map(s => ({
+            id: s.id.toString(),
+            name: s.candidateFullName,
+            avatar: resolveAvatarUrl(s.candidateAvatar),
+            lastMessage: s.lastMessagePreview || (s.jobTitle ? `Tuyển: ${s.jobTitle}` : 'Cuộc trò chuyện'),
+            timestamp: s.lastMessageAt || s.createdAt,
+            unread: s.unreadCount,
+            type: 'RECRUITMENT' as const,
+            recruitmentSession: s
+          }));
+          allContacts = [...allContacts, ...recruitmentContacts];
+        } catch (error) {
+          console.error('Failed to load recruitment sessions:', error);
         }
       }
 
@@ -452,6 +513,20 @@ const MessengerPage: React.FC = () => {
             <UserCircle size={16} />
             <span>Mentor</span>
           </button>
+          {user?.roles.includes('RECRUITER') && (
+            <button
+              className={`tab-btn ${activeTab === 'RECRUITMENT' ? 'active' : ''}`}
+              onClick={() => setActiveTab('RECRUITMENT')}
+            >
+              <Briefcase size={16} />
+              <span>Tuyển dụng</span>
+              {contacts.filter(c => c.type === 'RECRUITMENT' && c.unread > 0).length > 0 && (
+                <span className="tab-badge">
+                  {contacts.filter(c => c.type === 'RECRUITMENT' && c.unread > 0).length}
+                </span>
+              )}
+            </button>
+          )}
         </div>
 
         {/* Contact List */}
@@ -535,6 +610,36 @@ const MessengerPage: React.FC = () => {
               currentUserName={user!.fullName || user!.email || 'User'}
               isParent={selectedContact.isParent || false}
               onBack={() => setSelectedContactId(null)}
+            />
+          ) : selectedContact.type === 'RECRUITMENT' && selectedContact.recruitmentSession ? (
+            <RecruiterChatWindow
+              session={selectedContact.recruitmentSession}
+              currentUserId={user!.id}
+              currentUserName={user!.fullName || user!.email || 'User'}
+              onBack={() => setSelectedContactId(null)}
+              onViewProfile={(session) => {
+                if (session.candidateSlug) {
+                  window.open(`/portfolio/${session.candidateSlug}`, '_blank');
+                } else {
+                  window.open(`/portfolio/profile/${session.candidateId}`, '_blank');
+                }
+              }}
+              onUpdateStatus={(sessionId, status) => {
+                // Update local state
+                setRecruitmentSessions(prev =>
+                  prev.map(s =>
+                    s.id === sessionId ? { ...s, status } : s
+                  )
+                );
+                // Also refresh contacts
+                setContacts(prev =>
+                  prev.map(c =>
+                    c.recruitmentSession?.id === sessionId
+                      ? { ...c, recruitmentSession: { ...c.recruitmentSession, status } }
+                      : c
+                  )
+                );
+              }}
             />
           ) : (
             <div className="messenger-placeholder">

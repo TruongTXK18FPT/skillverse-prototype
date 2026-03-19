@@ -56,6 +56,19 @@ export interface RecruiterPlanResponse {
   isActive: boolean;
 }
 
+type RecruiterPlanApiResponse = Omit<RecruiterPlanResponse, "features"> & {
+  features: string[] | string | null;
+};
+
+const normalizeRecruiterPlan = (
+  plan: RecruiterPlanApiResponse,
+): RecruiterPlanResponse => ({
+  ...plan,
+  features: Array.isArray(plan.features)
+    ? JSON.stringify(plan.features)
+    : plan.features || "[]",
+});
+
 export const recruiterSubscriptionService = {
   /**
    * Get current recruiter subscription info
@@ -82,8 +95,10 @@ export const recruiterSubscriptionService = {
    * Get available recruiter plans
    */
   async getPlans(): Promise<RecruiterPlanResponse[]> {
-    const { data } = await api.get('/api/recruiter/subscription/plans');
-    return data;
+    const { data } = await api.get<RecruiterPlanApiResponse[]>(
+      '/api/recruiter/subscription/plans',
+    );
+    return data.map(normalizeRecruiterPlan);
   },
 
   /**

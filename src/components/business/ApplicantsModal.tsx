@@ -1,34 +1,95 @@
-import React, { useState, useEffect } from 'react';
-import jobService from '../../services/jobService';
+import React, { useEffect, useState } from 'react';
+import {
+  CheckCircle2,
+  Clock3,
+  Eye,
+  Loader2,
+  MessageSquare,
+  Send,
+  ShieldCheck,
+  Sparkles,
+  XCircle,
+} from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import { JobApplicationResponse, JobApplicationStatus } from '../../data/jobDTOs';
+import { RecruitmentSessionResponse } from '../../data/portfolioDTOs';
 import { useToast } from '../../hooks/useToast';
-import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
+import jobService from '../../services/jobService';
+import recruitmentChatService from '../../services/recruitmentChatService';
+import {
+  getApplicantDisplayName,
+  getApplicantInitials,
+  getApplicantSubtitle,
+  getPortfolioPath,
+  resolveRecruitmentAssetUrl,
+} from '../../utils/recruitmentUi';
+import RecruiterChatWindow from '../chat/RecruiterChatWindow';
 import './ApplicantsModal-fleet.css';
 
 interface ApplicantsModalProps {
   jobId: number;
   jobTitle: string;
   onClose: () => void;
-  onAccept: (applicationId: number, applicantName: string) => void;
-  onReject: (applicationId: number, applicantName: string) => void;
+  onChanged?: () => void;
   refreshTrigger?: number;
 }
+
+type DecisionStatus = 'ACCEPTED' | 'REJECTED';
+
+const getStatusBadgeClass = (status: JobApplicationStatus): string => {
+  const statusClasses = {
+    PENDING: 'am-status-pending',
+    REVIEWED: 'am-status-reviewed',
+    ACCEPTED: 'am-status-accepted',
+    REJECTED: 'am-status-rejected',
+  };
+
+  return statusClasses[status] || 'am-status-pending';
+};
+
+const getStatusText = (status: JobApplicationStatus): string => {
+  const statusTexts = {
+    PENDING: 'Mới nộp',
+    REVIEWED: 'Đã xem',
+    ACCEPTED: 'Đã duyệt',
+    REJECTED: 'Đã từ chối',
+  };
+
+  return statusTexts[status] || status;
+};
+
+const formatDate = (dateString: string) =>
+  new Date(dateString).toLocaleDateString('vi-VN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
 const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
   jobId,
   jobTitle,
   onClose,
-  onAccept,
-  onReject,
-  refreshTrigger
+  onChanged,
+  refreshTrigger,
 }) => {
-  const { showError } = useToast();
+  const { user } = useAuth();
+  const { showError, showSuccess, showInfo } = useToast();
   const [applications, setApplications] = useState<JobApplicationResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [processingIds, setProcessingIds] = useState<Set<number>>(new Set());
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [decisionModal, setDecisionModal] = useState<{
+    application: JobApplicationResponse;
+    status: DecisionStatus;
+  } | null>(null);
+  const [decisionNote, setDecisionNote] = useState('');
+  const [selectedSession, setSelectedSession] = useState<RecruitmentSessionResponse | null>(null);
+  const [activeApplicant, setActiveApplicant] = useState<JobApplicationResponse | null>(null);
+  const [isChatLoading, setIsChatLoading] = useState(false);
 
   useEffect(() => {
     fetchApplicants(page);
@@ -37,241 +98,433 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
   const fetchApplicants = async (pageNumber: number) => {
     setIsLoading(true);
     try {
-      const result = await jobService.getJobApplicants(jobId, pageNumber, 3); // 3 items per page
-      setApplications(result.content);
-      setTotalPages(result.totalPages);
+      const result = await jobService.getJobApplicants(jobId, pageNumber, 6);
+      setApplications(result.content || []);
+      setTotalPages(result.totalPages || 0);
     } catch (error) {
       console.error('Error fetching applicants:', error);
-      showError('Lỗi Tải Dữ Liệu', 'Không thể tải danh sách ứng viên');
+      showError('Lỗi tải dữ liệu', 'Không thể tải danh sách ứng viên cho công việc này.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const getStatusBadgeClass = (status: JobApplicationStatus): string => {
-    const statusClasses = {
-      'PENDING': 'am-status-pending',
-      'REVIEWED': 'am-status-reviewed',
-      'ACCEPTED': 'am-status-accepted',
-      'REJECTED': 'am-status-rejected'
-    };
-    return statusClasses[status] || 'am-status-pending';
+  const markBusy = (applicationId: number) => {
+    setProcessingIds((previous) => new Set(previous).add(applicationId));
   };
 
-  const getStatusText = (status: JobApplicationStatus): string => {
-    const statusTexts = {
-      'PENDING': 'Chờ Xét',
-      'REVIEWED': 'Đã Xem',
-      'ACCEPTED': 'Chấp Nhận',
-      'REJECTED': 'Từ Chối'
-    };
-    return statusTexts[status] || status;
-  };
-
-  const handleMarkReviewed = async (applicationId: number) => {
-    if (processingIds.has(applicationId)) return;
-    
-    setProcessingIds(prev => new Set(prev).add(applicationId));
-    try {
-      await jobService.updateApplicationStatus(applicationId, {
-        status: 'REVIEWED' as JobApplicationStatus,
-        acceptanceMessage: undefined,
-        rejectionReason: undefined
-      });
-      // Update local state immediately without waiting for fetch
-      setApplications(prev => prev.map(app => 
-        app.id === applicationId ? { ...app, status: 'REVIEWED' as JobApplicationStatus } : app
-      ));
-    } catch (error) {
-      console.error('Error marking reviewed:', error);
-      showError('Lỗi Cập Nhật', error instanceof Error ? error.message : 'Không thể đánh dấu đã xem');
-    } finally {
-      setProcessingIds(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(applicationId);
-        return newSet;
-      });
-    }
-  };
-
-  const toggleExpand = (id: number) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('vi-VN', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+  const clearBusy = (applicationId: number) => {
+    setProcessingIds((previous) => {
+      const next = new Set(previous);
+      next.delete(applicationId);
+      return next;
     });
   };
 
-  return (
-    <div className="am-fleet-overlay" onClick={onClose}>
-      <div className="am-fleet-content" onClick={(e) => e.stopPropagation()}>
-        <div className="am-fleet-header">
-          <div className="am-fleet-title">
-            <h3>👥 Danh Sách Ứng Viên</h3>
-            <p className="am-fleet-subtitle">TIN TUYỂN DỤNG: {jobTitle}</p>
-          </div>
-          <button className="am-fleet-close" onClick={onClose}>×</button>
-        </div>
+  const handleMarkReviewed = async (applicationId: number) => {
+    if (processingIds.has(applicationId)) {
+      return;
+    }
 
-        <div className="am-fleet-body">
-          {isLoading ? (
-            <div className="am-loading-state">
-              <MeowlKuruLoader size="medium" text="" />
-              <p>Đang tải...</p>
+    markBusy(applicationId);
+    try {
+      await jobService.updateApplicationStatus(applicationId, {
+        status: 'REVIEWED' as JobApplicationStatus,
+      });
+      setApplications((previous) =>
+        previous.map((application) =>
+          application.id === applicationId
+            ? { ...application, status: 'REVIEWED' as JobApplicationStatus }
+            : application,
+        ),
+      );
+      onChanged?.();
+    } catch (error) {
+      console.error('Error marking reviewed:', error);
+      showError(
+        'Lỗi cập nhật',
+        error instanceof Error ? error.message : 'Không thể đánh dấu hồ sơ đã xem.',
+      );
+    } finally {
+      clearBusy(applicationId);
+    }
+  };
+
+  const handleOpenPortfolio = (application: JobApplicationResponse) => {
+    const portfolioPath = getPortfolioPath(application.portfolioSlug);
+    if (!portfolioPath) {
+      showInfo('Chưa có portfolio', 'Ứng viên này chưa công khai portfolio trên SkillVerse.');
+      return;
+    }
+
+    window.open(portfolioPath, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleOpenChat = async (application: JobApplicationResponse) => {
+    try {
+      setIsChatLoading(true);
+      const session = await recruitmentChatService.getOrCreateSession(
+        application.userId,
+        jobId,
+        'MANUAL',
+      );
+      setActiveApplicant(application);
+      setSelectedSession(session);
+    } catch (error) {
+      console.error('Error opening recruiter chat:', error);
+      showError(
+        'Không thể mở chat',
+        error instanceof Error ? error.message : 'Vui lòng thử lại sau.',
+      );
+    } finally {
+      setIsChatLoading(false);
+    }
+  };
+
+  const handleDecisionSubmit = async () => {
+    if (!decisionModal) {
+      return;
+    }
+
+    const note = decisionNote.trim();
+    if (!note) {
+      showError('Thiếu nội dung', 'Vui lòng nhập nội dung đầy đủ cho quyết định này.');
+      return;
+    }
+
+    const applicationId = decisionModal.application.id;
+    markBusy(applicationId);
+    try {
+      await jobService.updateApplicationStatus(applicationId, {
+        status: decisionModal.status as JobApplicationStatus,
+        acceptanceMessage: decisionModal.status === 'ACCEPTED' ? note : undefined,
+        rejectionReason: decisionModal.status === 'REJECTED' ? note : undefined,
+      });
+
+      showSuccess(
+        decisionModal.status === 'ACCEPTED' ? 'Đã duyệt ứng viên' : 'Đã từ chối ứng viên',
+        `${getApplicantDisplayName(
+          decisionModal.application.userFullName,
+          decisionModal.application.userEmail,
+        )} đã được cập nhật trạng thái.`,
+      );
+
+      setDecisionModal(null);
+      setDecisionNote('');
+      await fetchApplicants(page);
+      onChanged?.();
+    } catch (error) {
+      console.error('Error updating applicant decision:', error);
+      showError(
+        'Không thể cập nhật hồ sơ',
+        error instanceof Error ? error.message : 'Vui lòng thử lại.',
+      );
+    } finally {
+      clearBusy(applicationId);
+    }
+  };
+
+  const currentUserName = user?.fullName || user?.email || 'Recruiter';
+
+  return (
+    <>
+      <div className="am-fleet-overlay" onClick={onClose}>
+        <div className="am-fleet-content" onClick={(event) => event.stopPropagation()}>
+          <div className="am-fleet-header">
+            <div className="am-fleet-title">
+              <h3>
+                <Sparkles size={20} />
+                Pipeline Ứng Viên
+              </h3>
+              <p className="am-fleet-subtitle">Job context: {jobTitle}</p>
             </div>
-          ) : applications.length === 0 ? (
-            <div className="am-fleet-empty">
-              <div className="am-fleet-empty-icon">📭</div>
-              <h4>Chưa Có Ứng Viên</h4>
-              <p>Chưa có ai ứng tuyển cho vị trí này.</p>
-            </div>
-          ) : (
-            <table className="am-fleet-table">
-              <thead>
-                <tr>
-                  <th>Ứng Viên</th>
-                  <th>Thời Gian</th>
-                  <th>Trạng Thái</th>
-                  <th>Hồ Sơ (Cover Letter)</th>
-                  <th>Thao Tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {applications.map(app => (
-                  <tr key={app.id} className={app.isHighlighted ? 'am-fleet-row-highlighted' : ''}>
-                    <td>
-                      <div className="am-fleet-user-info">
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <strong>{app.userFullName}</strong>
-                        </div>
-                        <small>{app.userEmail}</small>
-                        {app.portfolioSlug && (
-                          <a 
-                            href={`/portfolio/${app.portfolioSlug}`} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="am-fleet-portfolio-link"
-                          >
-                            🔗 Xem Portfolio
-                          </a>
-                        )}
-                      </div>
-                    </td>
-                    <td>{formatDate(app.appliedAt)}</td>
-                    <td>
-                      <span className={`am-fleet-badge ${getStatusBadgeClass(app.status)}`}>
-                        {getStatusText(app.status)}
-                      </span>
-                    </td>
-                    <td>
-                      {app.coverLetter ? (
-                        <>
-                          <button className="am-fleet-cover-btn" onClick={() => toggleExpand(app.id)}>
-                            {expandedId === app.id ? '▼ Ẩn' : '▶ Xem Chi Tiết'}
-                          </button>
-                          {expandedId === app.id && (
-                            <div className="am-fleet-cover-content">
-                              {app.coverLetter}
+            <button className="am-fleet-close" onClick={onClose} type="button">
+              ×
+            </button>
+          </div>
+
+          <div className="am-fleet-body">
+            {isLoading ? (
+              <div className="am-loading-state">
+                <Loader2 size={24} className="am-spin" />
+                <p>Đang tải danh sách ứng viên...</p>
+              </div>
+            ) : applications.length === 0 ? (
+              <div className="am-fleet-empty">
+                <div className="am-fleet-empty-icon">📭</div>
+                <h4>Chưa có ứng viên</h4>
+                <p>Danh sách nộp đơn sẽ xuất hiện ở đây ngay khi công việc nhận được hồ sơ mới.</p>
+              </div>
+            ) : (
+              <div className="am-fleet-list">
+                {applications.map((application) => {
+                  const displayName = getApplicantDisplayName(
+                    application.userFullName,
+                    application.userEmail,
+                  );
+                  const avatarUrl = resolveRecruitmentAssetUrl(application.userAvatar);
+                  const portfolioPath = getPortfolioPath(application.portfolioSlug);
+                  const isBusy = processingIds.has(application.id);
+
+                  return (
+                    <article
+                      key={application.id}
+                      className={`am-fleet-card ${application.isHighlighted ? 'am-fleet-card--highlighted' : ''}`}
+                    >
+                      <div className="am-fleet-card__header">
+                        <div className="am-fleet-card__identity">
+                          {avatarUrl ? (
+                            <img
+                              src={avatarUrl}
+                              alt={displayName}
+                              className="am-fleet-card__avatar"
+                            />
+                          ) : (
+                            <div className="am-fleet-card__avatar am-fleet-card__avatar--fallback">
+                              {getApplicantInitials(application.userFullName, application.userEmail)}
                             </div>
                           )}
-                        </>
+
+                          <div>
+                            <h4>{displayName}</h4>
+                            <p>
+                              {getApplicantSubtitle(
+                                application.userProfessionalTitle,
+                                Boolean(portfolioPath),
+                              )}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="am-fleet-card__summary">
+                          <span className={`am-fleet-badge ${getStatusBadgeClass(application.status)}`}>
+                            {getStatusText(application.status)}
+                          </span>
+                          <span className="am-fleet-card__date">
+                            <Clock3 size={13} />
+                            {formatDate(application.appliedAt)}
+                          </span>
+                        </div>
+                      </div>
+
+                      {application.coverLetter ? (
+                        <div className="am-fleet-card__letter">
+                          <div className="am-fleet-card__letter-head">
+                            <strong>Cover letter</strong>
+                            <button
+                              className="am-fleet-cover-btn"
+                              onClick={() =>
+                                setExpandedId((current) =>
+                                  current === application.id ? null : application.id,
+                                )
+                              }
+                              type="button"
+                            >
+                              {expandedId === application.id ? 'Thu gọn' : 'Xem đầy đủ'}
+                            </button>
+                          </div>
+                          <p>
+                            {expandedId === application.id || application.coverLetter.length <= 220
+                              ? application.coverLetter
+                              : `${application.coverLetter.slice(0, 220)}...`}
+                          </p>
+                        </div>
                       ) : (
-                        <span style={{ color: '#64748b', fontStyle: 'italic' }}>Không có</span>
+                        <div className="am-fleet-card__letter am-fleet-card__letter--empty">
+                          Ứng viên chưa để lại cover letter.
+                        </div>
                       )}
-                    </td>
-                    <td>
+
+                      {(application.acceptanceMessage || application.rejectionReason) && (
+                        <div className="am-fleet-card__note">
+                          <strong>{application.status === 'ACCEPTED' ? 'Ghi chú duyệt' : 'Lý do từ chối'}</strong>
+                          <p>{application.acceptanceMessage || application.rejectionReason}</p>
+                        </div>
+                      )}
+
+                      <div className="am-fleet-card__meta">
+                        <span>
+                          <ShieldCheck size={13} />
+                          {portfolioPath ? 'Portfolio công khai sẵn sàng review' : 'Chưa có portfolio công khai'}
+                        </span>
+                        {application.isHighlighted && (
+                          <span>
+                            <Sparkles size={13} />
+                            Hồ sơ nổi bật
+                          </span>
+                        )}
+                      </div>
+
                       <div className="am-fleet-actions">
-                        {app.status === 'PENDING' && (
+                        <button
+                          className="am-btn-action"
+                          onClick={() => handleOpenPortfolio(application)}
+                          type="button"
+                        >
+                          <Eye size={15} />
+                          Xem portfolio
+                        </button>
+                        <button
+                          className="am-btn-action"
+                          onClick={() => handleOpenChat(application)}
+                          type="button"
+                          disabled={isChatLoading}
+                        >
+                          <MessageSquare size={15} />
+                          Chat theo job
+                        </button>
+                        {application.status === 'PENDING' && (
                           <button
                             className="am-btn-action am-btn-review"
-                            onClick={() => handleMarkReviewed(app.id)}
-                            disabled={processingIds.has(app.id)}
+                            onClick={() => handleMarkReviewed(application.id)}
+                            disabled={isBusy}
+                            type="button"
                           >
-                            {processingIds.has(app.id) ? '...' : '👁️ Đã Xem'}
+                            {isBusy ? <Loader2 size={15} className="am-spin" /> : <CheckCircle2 size={15} />}
+                            Đã xem
                           </button>
                         )}
-                        {(app.status === 'PENDING' || app.status === 'REVIEWED') && (
+                        {(application.status === 'PENDING' || application.status === 'REVIEWED') && (
                           <>
                             <button
                               className="am-btn-action am-btn-accept"
-                              onClick={() => onAccept(app.id, app.userFullName)}
+                              onClick={() => {
+                                setDecisionModal({ application, status: 'ACCEPTED' });
+                                setDecisionNote('');
+                              }}
+                              type="button"
                             >
-                              ✅ Duyệt
+                              <Send size={15} />
+                              Duyệt có ghi chú
                             </button>
                             <button
                               className="am-btn-action am-btn-reject"
-                              onClick={() => onReject(app.id, app.userFullName)}
+                              onClick={() => {
+                                setDecisionModal({ application, status: 'REJECTED' });
+                                setDecisionNote('');
+                              }}
+                              type="button"
                             >
-                              ❌ Loại
+                              <XCircle size={15} />
+                              Từ chối có lý do
                             </button>
                           </>
                         )}
-                        {app.status === 'ACCEPTED' && <span style={{color: '#34d399'}}>Đã duyệt vào đội</span>}
-                        {app.status === 'REJECTED' && <span style={{color: '#f87171'}}>Đã từ chối</span>}
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-          
-          {totalPages > 1 && (
-            <div className="am-fleet-pagination" style={{
-              display: 'flex', 
-              justifyContent: 'center', 
-              alignItems: 'center', 
-              marginTop: '20px', 
-              gap: '15px',
-              padding: '10px 0',
-              borderTop: '1px solid rgba(45, 212, 191, 0.2)'
-            }}>
-              <button
-                className="am-fleet-pagination-btn"
-                style={{
-                  background: 'rgba(15, 23, 42, 0.8)',
-                  border: '1px solid #2dd4bf',
-                  color: '#2dd4bf',
-                  padding: '5px 15px',
-                  borderRadius: '4px',
-                  cursor: page === 0 ? 'not-allowed' : 'pointer',
-                  opacity: page === 0 ? 0.5 : 1
-                }}
-                disabled={page === 0}
-                onClick={() => setPage(page - 1)}
-              >
-                &lt; Trước
-              </button>
-              <span style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
-                Trang {page + 1} / {totalPages}
-              </span>
-              <button
-                className="am-fleet-pagination-btn"
-                style={{
-                  background: 'rgba(15, 23, 42, 0.8)',
-                  border: '1px solid #2dd4bf',
-                  color: '#2dd4bf',
-                  padding: '5px 15px',
-                  borderRadius: '4px',
-                  cursor: page >= totalPages - 1 ? 'not-allowed' : 'pointer',
-                  opacity: page >= totalPages - 1 ? 0.5 : 1
-                }}
-                disabled={page >= totalPages - 1}
-                onClick={() => setPage(page + 1)}
-              >
-                Sau &gt;
-              </button>
-            </div>
-          )}
+                    </article>
+                  );
+                })}
+              </div>
+            )}
+
+            {totalPages > 1 && (
+              <div className="am-fleet-pagination">
+                <button
+                  className="am-fleet-pagination-btn"
+                  disabled={page === 0}
+                  onClick={() => setPage((current) => current - 1)}
+                  type="button"
+                >
+                  Trước
+                </button>
+                <span>
+                  Trang {page + 1} / {totalPages}
+                </span>
+                <button
+                  className="am-fleet-pagination-btn"
+                  disabled={page >= totalPages - 1}
+                  onClick={() => setPage((current) => current + 1)}
+                  type="button"
+                >
+                  Sau
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+
+      {decisionModal && (
+        <div className="am-decision-overlay" onClick={() => setDecisionModal(null)}>
+          <div className="am-decision-modal" onClick={(event) => event.stopPropagation()}>
+            <h3>
+              {decisionModal.status === 'ACCEPTED'
+                ? 'Duyệt ứng viên với thông điệp rõ ràng'
+                : 'Từ chối ứng viên với lý do cụ thể'}
+            </h3>
+            <p>
+              {decisionModal.status === 'ACCEPTED'
+                ? `Thông điệp này sẽ được gửi cho ${getApplicantDisplayName(
+                    decisionModal.application.userFullName,
+                    decisionModal.application.userEmail,
+                  )}.`
+                : `Hãy nêu lý do đủ rõ để ${getApplicantDisplayName(
+                    decisionModal.application.userFullName,
+                    decisionModal.application.userEmail,
+                  )} hiểu quyết định của bạn.`}
+            </p>
+
+            <textarea
+              value={decisionNote}
+              onChange={(event) => setDecisionNote(event.target.value)}
+              placeholder={
+                decisionModal.status === 'ACCEPTED'
+                  ? 'Ví dụ: Hồ sơ của bạn phù hợp với nhu cầu hiện tại. Chúng tôi muốn mời bạn vào vòng tiếp theo...'
+                  : 'Ví dụ: Kinh nghiệm hiện tại chưa khớp với stack và phạm vi triển khai của vị trí này...'
+              }
+              rows={6}
+              maxLength={1200}
+            />
+
+            <div className="am-decision-meta">{decisionNote.length}/1200 ký tự</div>
+
+            <div className="am-decision-actions">
+              <button
+                type="button"
+                className="am-btn-action"
+                onClick={() => setDecisionModal(null)}
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                className={`am-btn-action ${decisionModal.status === 'ACCEPTED' ? 'am-btn-accept' : 'am-btn-reject'}`}
+                onClick={handleDecisionSubmit}
+                disabled={processingIds.has(decisionModal.application.id)}
+              >
+                {processingIds.has(decisionModal.application.id) ? (
+                  <Loader2 size={15} className="am-spin" />
+                ) : decisionModal.status === 'ACCEPTED' ? (
+                  <Send size={15} />
+                ) : (
+                  <XCircle size={15} />
+                )}
+                {decisionModal.status === 'ACCEPTED' ? 'Xác nhận duyệt' : 'Xác nhận từ chối'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedSession && (
+        <div className="am-chat-overlay" onClick={() => setSelectedSession(null)}>
+          <div className="am-chat-shell" onClick={(event) => event.stopPropagation()}>
+            <RecruiterChatWindow
+              session={selectedSession}
+              currentUserId={user?.id || 0}
+              currentUserName={currentUserName}
+              onBack={() => setSelectedSession(null)}
+              onViewProfile={() => activeApplicant && handleOpenPortfolio(activeApplicant)}
+              onUpdateStatus={(sessionId, status) => {
+                setSelectedSession((current) =>
+                  current && current.id === sessionId ? { ...current, status } : current,
+                );
+              }}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -1,10 +1,10 @@
 // TACTICAL DOSSIER PORTFOLIO - Mothership Theme
 // 100% Logic Preservation from PortfolioPage.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Download, Edit, Share2, Eye, Award, Briefcase,
   MapPin, Linkedin, Github as GithubIcon, AlertCircle, Plus,
-  Trash2, ExternalLink, Calendar, Settings
+  Trash2, ExternalLink, Calendar, Settings, Camera, Loader2
 } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -25,7 +25,6 @@ import { PilotIDModal } from './PilotIDModal';
 import { MissionLogModal } from './MissionLogModal';
 import { CommendationModal } from './CommendationModal';
 import { DataCompilerModal } from './DataCompilerModal';
-import MentorBookingManager from './MentorBookingManager';
 import SystemAlertModal from './SystemAlertModal';
 import DossierInitScreen from './DossierInitScreen';
 import './dossier-portfolio-styles.css';
@@ -66,6 +65,8 @@ const TacticalDossierPortfolio = () => {
     message: '',
     type: 'info'
   });
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const avatarInputRef = useRef<HTMLInputElement | null>(null);
 
   // Load data on mount
   useEffect(() => {
@@ -141,6 +142,60 @@ const TacticalDossierPortfolio = () => {
   ) => {
     await portfolioService.updateExtendedProfile(profileData, avatar, video, coverImage);
     await loadPortfolioData();
+  };
+
+  const handleQuickAvatarUpdate = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+
+    if (!file || !profile) {
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      setAlertModal({
+        show: true,
+        message: 'Vui lòng chọn một tệp ảnh hợp lệ cho avatar.',
+        type: 'warning'
+      });
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setAlertModal({
+        show: true,
+        message: 'Ảnh avatar vượt quá 10MB. Vui lòng chọn ảnh nhẹ hơn.',
+        type: 'warning'
+      });
+      return;
+    }
+
+    try {
+      setAvatarUploading(true);
+      await portfolioService.updateExtendedProfile(
+        {
+          ...profile,
+          preferredCurrency: profile.preferredCurrency || 'VND',
+        },
+        file,
+      );
+      await loadPortfolioData();
+      setAlertModal({
+        show: true,
+        message: 'Avatar portfolio đã được cập nhật.',
+        type: 'success'
+      });
+    } catch (error: any) {
+      setAlertModal({
+        show: true,
+        message: error?.message || 'Không thể cập nhật avatar portfolio.',
+        type: 'error'
+      });
+    } finally {
+      setAvatarUploading(false);
+    }
   };
 
   const handleCreateProject = async (project: PortfolioProjectDTO, thumbnail?: File) => {
@@ -432,7 +487,6 @@ const TacticalDossierPortfolio = () => {
             { id: 'projects', label: 'Nhật ký dự án', icon: Briefcase },
             { id: 'certificates', label: 'Chứng chỉ', icon: Award },
             ...(isOwner ? [
-              { id: 'bookings', label: 'Quản lý Booking', icon: Calendar },
               { id: 'cv-builder', label: 'Trình tạo dữ liệu', icon: Settings }
             ] : [])
           ].map((tab) => {
@@ -469,7 +523,14 @@ const TacticalDossierPortfolio = () => {
               {/* Profile Card - Pilot ID */}
               <div className="dossier-pilot-card">
                 <div className="dossier-pilot-header">
-                  <div>
+                  <div className="dossier-avatar-stack">
+                    <input
+                      ref={avatarInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleQuickAvatarUpdate}
+                      style={{ display: 'none' }}
+                    />
                     {profile?.portfolioAvatarUrl || profile?.basicAvatarUrl ? (
                       <img
                         src={profile.portfolioAvatarUrl || profile.basicAvatarUrl}
@@ -480,6 +541,26 @@ const TacticalDossierPortfolio = () => {
                       <div className="dossier-pilot-avatar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, var(--dossier-cyan), #0891b2)', color: '#000', fontSize: '2.5rem', fontWeight: 'bold' }}>
                         {profile?.fullName?.[0] || 'U'}
                       </div>
+                    )}
+                    {isOwner && (
+                      <>
+                        <button
+                          type="button"
+                          className="dossier-avatar-edit"
+                          onClick={() => avatarInputRef.current?.click()}
+                          disabled={avatarUploading}
+                          aria-label="Đổi avatar portfolio"
+                        >
+                          {avatarUploading ? (
+                            <Loader2 size={18} className="dossier-spinner" />
+                          ) : (
+                            <Camera size={18} />
+                          )}
+                        </button>
+                        <span className="dossier-avatar-caption">
+                          Đổi avatar ngay trên hồ sơ
+                        </span>
+                      </>
                     )}
                   </div>
 
@@ -508,15 +589,30 @@ const TacticalDossierPortfolio = () => {
 
                   <div style={{ marginLeft: 'auto' }}>
                     {isOwner && (
-                      <button
-                        onClick={() => {
-                          setProfileModalOpen(true);
-                        }}
-                        className="dossier-btn-primary"
-                      >
-                        <Edit size={16} />
-                        Sửa ID
-                      </button>
+                      <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                        <button
+                          type="button"
+                          onClick={() => avatarInputRef.current?.click()}
+                          className="dossier-btn-secondary"
+                          disabled={avatarUploading}
+                        >
+                          {avatarUploading ? (
+                            <Loader2 size={16} className="dossier-spinner" />
+                          ) : (
+                            <Camera size={16} />
+                          )}
+                          Đổi avatar
+                        </button>
+                        <button
+                          onClick={() => {
+                            setProfileModalOpen(true);
+                          }}
+                          className="dossier-btn-primary"
+                        >
+                          <Edit size={16} />
+                          Sửa ID
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -833,18 +929,6 @@ const TacticalDossierPortfolio = () => {
                   ))
                 )}
               </div>
-            </motion.div>
-          )}
-
-          {/* Booking Management Section */}
-          {activeSection === 'bookings' && (
-            <motion.div
-              key="bookings"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <MentorBookingManager />
             </motion.div>
           )}
 

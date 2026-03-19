@@ -10,7 +10,7 @@ import MeowlGuide from "../meowl/MeowlGuide";
 import jobService from "../../services/jobService";
 import shortTermJobService from "../../services/shortTermJobService";
 import { JobPostingResponse } from "../../data/jobDTOs";
-import { ShortTermJobResponse } from "../../types/ShortTermJob";
+import { ShortTermJobResponse, ShortTermApplicationStatus } from "../../types/ShortTermJob";
 import { useToast } from "../../hooks/useToast";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
 import "./odyssey-styles.css";
@@ -44,6 +44,11 @@ const JobsOdysseyPage = () => {
   );
   const [isGigModalOpen, setIsGigModalOpen] = useState(false);
 
+  // Track which jobs the current user has applied to
+  const [userApplications, setUserApplications] = useState<
+    Map<number, ShortTermApplicationStatus>
+  >(new Map());
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -53,15 +58,33 @@ const JobsOdysseyPage = () => {
   const fetchJobs = async () => {
     setIsLoading(true);
     try {
-      const [regularJobs, gigJobs] = await Promise.all([
+      const [regularJobs, gigJobs, myApplications] = await Promise.all([
         jobService.getPublicJobs({
           search: searchTerm || undefined,
           status: "OPEN",
         }),
         shortTermJobService.getPublishedJobs(),
+        shortTermJobService.getMyApplications(),
       ]);
+
+      // Build map of jobId -> applicationStatus for applied jobs
+      const appliedMap = new Map<number, ShortTermApplicationStatus>();
+      for (const app of myApplications) {
+        appliedMap.set(app.jobId, app.status);
+      }
+      setUserApplications(appliedMap);
+
+      // Inject hasApplied/canApply into gig jobs
+      const enrichedGigs = gigJobs.map((gig) => ({
+        ...gig,
+        hasApplied: appliedMap.has(gig.id),
+        canApply:
+          appliedMap.has(gig.id) ||
+          (gig.applicantCount ?? 0) >= (gig.maxApplicants ?? Infinity),
+      }));
+
       setJobs(regularJobs);
-      setShortTermJobs(gigJobs);
+      setShortTermJobs(enrichedGigs);
     } catch (error) {
       console.error("Error fetching jobs:", error);
       showError(

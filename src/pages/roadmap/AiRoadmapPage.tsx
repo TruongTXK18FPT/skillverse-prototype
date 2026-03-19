@@ -47,7 +47,7 @@ const AiRoadmapPage = () => {
       const data = await aiRoadmapService.getUserRoadmaps();
       setRoadmaps(data);
     } catch (error) {
-      showError('Error', (error as Error).message);
+      showError('Lỗi', (error as Error).message);
     } finally {
       setIsLoadingList(false);
     }
@@ -97,8 +97,8 @@ const AiRoadmapPage = () => {
         
         // Show banner/toast
         showError(
-          'Yêu cầu Premium Plus', 
-          'Chế độ Deep Research chỉ dành cho gói Mentor Pro. Hệ thống sẽ tự động chuyển về Normal Agent.',
+          'Yêu cầu Premium Plus',
+          'Chế độ Nghiên cứu sâu chỉ dành cho gói Mentor Pro. Hệ thống sẽ tự động chuyển về chế độ Tiêu chuẩn.',
           6
         );
 

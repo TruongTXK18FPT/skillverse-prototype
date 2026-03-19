@@ -1,0 +1,1594 @@
+/* ======================================================================
+   JOB LAB WORKSPACE — FULL REDESIGN
+   Cyber HUD aesthetic: deep navy + cyan glow + violet accent
+   ====================================================================== */
+
+/* === SHELL & BACKGROUND === */
+.jlx-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 288px minmax(0, 1fr);
+  background:
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(8, 145, 178, 0.18), transparent 50%),
+    radial-gradient(ellipse 60% 40% at 90% 5%, rgba(124, 58, 237, 0.14), transparent 50%),
+    linear-gradient(160deg, #060e1c 0%, #0b1628 50%, #07111f 100%);
+  color: #e2e8f0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* === LOADING === */
+.jlx-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+/* === BUTTONS === */
+.jlx-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.56);
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.jlx-btn:hover {
+  background: rgba(34, 211, 238, 0.08);
+  border-color: rgba(34, 211, 238, 0.2);
+  color: #67e8f9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(34, 211, 238, 0.1);
+}
+
+.jlx-btn:active {
+  transform: translateY(0);
+}
+
+.jlx-btn--primary {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.22), rgba(124, 58, 237, 0.18));
+  border-color: rgba(34, 211, 238, 0.3);
+  color: #67e8f9;
+  box-shadow: 0 4px 20px rgba(8, 145, 178, 0.18);
+}
+
+.jlx-btn--primary:hover {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.32), rgba(124, 58, 237, 0.28));
+  border-color: rgba(34, 211, 238, 0.45);
+  box-shadow: 0 6px 28px rgba(34, 211, 238, 0.2);
+  color: #67e8f9;
+}
+
+.jlx-btn--ghost {
+  background: transparent;
+  border-color: rgba(148, 163, 184, 0.14);
+  color: #94a3b8;
+}
+
+.jlx-btn--ghost:hover {
+  background: rgba(148, 163, 184, 0.06);
+  border-color: rgba(148, 163, 184, 0.22);
+  color: #e2e8f0;
+  transform: none;
+  box-shadow: none;
+}
+
+.jlx-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.jlx-icon-btn:hover {
+  background: rgba(34, 211, 238, 0.08);
+  color: #67e8f9;
+}
+
+/* === SIDEBAR === */
+.jlx-sidebar {
+  padding: 1.4rem;
+  border-right: 1px solid rgba(148, 163, 184, 0.08);
+  background: rgba(5, 12, 24, 0.75);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.jlx-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 1rem;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 16px;
+}
+
+.jlx-brand__icon {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #22d3ee, #7c3aed);
+  color: #020617;
+  flex-shrink: 0;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.25);
+}
+
+.jlx-brand div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.jlx-brand strong {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.01em;
+}
+
+.jlx-brand span {
+  font-size: 0.72rem;
+  color: #67e8f9;
+  margin-top: 0.05rem;
+}
+
+/* === NAVIGATION === */
+.jlx-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.jlx-nav__item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  border-radius: 13px;
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  background: transparent;
+  color: #94a3b8;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  text-align: left;
+}
+
+.jlx-nav__item:hover {
+  background: rgba(34, 211, 238, 0.06);
+  border-color: rgba(34, 211, 238, 0.14);
+  color: #e2e8f0;
+}
+
+.jlx-nav__item.is-active {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(124, 58, 237, 0.16));
+  border-color: rgba(34, 211, 238, 0.28);
+  color: #67e8f9;
+  box-shadow: 0 0 24px rgba(8, 145, 178, 0.12), inset 0 0 12px rgba(34, 211, 238, 0.04);
+}
+
+.jlx-nav__icon {
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(34, 211, 238, 0.08);
+  color: #67e8f9;
+  flex-shrink: 0;
+}
+
+.jlx-nav__item.is-active .jlx-nav__icon {
+  background: rgba(34, 211, 238, 0.16);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+}
+
+.jlx-nav__count {
+  margin-left: auto;
+  min-width: 1.8rem;
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(34, 211, 238, 0.14);
+  color: #67e8f9;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* === SIDEBAR META === */
+.jlx-sidebar__meta {
+  margin-top: auto;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.jlx-sidebar__card {
+  padding: 0.9rem 1rem;
+  background: rgba(8, 15, 30, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+}
+
+.jlx-sidebar__card span {
+  font-size: 0.72rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.jlx-sidebar__card strong {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+}
+
+/* === MAIN CONTENT === */
+.jlx-main {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+/* === HEADER === */
+.jlx-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  background: rgba(8, 15, 30, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+}
+
+.jlx-header h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+}
+
+.jlx-header p {
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.jlx-header__actions {
+  display: flex;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+/* === BANNER === */
+.jlx-banner {
+  padding: 0.85rem 1.1rem;
+  border-radius: 14px;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  color: #67e8f9;
+  font-size: 0.84rem;
+  font-weight: 500;
+}
+
+/* === STAT GRID === */
+.jlx-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.jlx-stat-card {
+  padding: 1.15rem 1.25rem;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top right, rgba(34, 211, 238, 0.04), transparent 50%),
+    rgba(8, 15, 30, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(12px);
+}
+
+.jlx-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.jlx-stat-card.is-cyan { border-color: rgba(34, 211, 238, 0.22); }
+.jlx-stat-card.is-cyan svg { color: #67e8f9; }
+.jlx-stat-card.is-amber { border-color: rgba(245, 158, 11, 0.22); }
+.jlx-stat-card.is-amber svg { color: #fbbf24; }
+.jlx-stat-card.is-violet { border-color: rgba(167, 139, 250, 0.22); }
+.jlx-stat-card.is-violet svg { color: #c4b5fd; }
+.jlx-stat-card.is-green { border-color: rgba(34, 197, 94, 0.22); }
+.jlx-stat-card.is-green svg { color: #86efac; }
+
+.jlx-stat-card svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  opacity: 0.8;
+}
+
+.jlx-stat-card strong {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.jlx-stat-card span {
+  font-size: 0.76rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* === PANEL === */
+.jlx-panel {
+  padding: 1.15rem 1.25rem;
+  background: rgba(8, 15, 30, 0.42);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.jlx-panel h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.jlx-panel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.jlx-panel__eyebrow {
+  font-size: 0.7rem;
+  color: #67e8f9;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+/* === DASHBOARD GRID === */
+.jlx-dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: 1rem;
+}
+
+/* === LIST === */
+.jlx-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.jlx-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 13px;
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  background: rgba(15, 23, 42, 0.4);
+  cursor: pointer;
+  transition: all 0.22s ease;
+  text-align: left;
+  font: inherit;
+  width: 100%;
+}
+
+.jlx-list__item:hover {
+  background: rgba(34, 211, 238, 0.06);
+  border-color: rgba(34, 211, 238, 0.14);
+  transform: translateX(2px);
+}
+
+.jlx-list__item strong {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  display: block;
+}
+
+.jlx-list__item p {
+  font-size: 0.76rem;
+  color: #64748b;
+  margin: 0.2rem 0 0;
+}
+
+/* === STATUS BLOCKS === */
+.jlx-status-stack {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.jlx-status-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  transition: all 0.22s ease;
+}
+
+.jlx-status-block:hover {
+  border-color: rgba(34, 211, 238, 0.14);
+  background: rgba(34, 211, 238, 0.03);
+}
+
+.jlx-status-block strong {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  display: block;
+}
+
+.jlx-status-block p {
+  font-size: 0.72rem;
+  color: #475569;
+  margin: 0.2rem 0 0;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.jlx-status-block span:last-child {
+  min-width: 2.2rem;
+  text-align: center;
+  padding: 0.4rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(34, 211, 238, 0.12);
+  color: #67e8f9;
+  font-weight: 800;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+/* === STATUS BADGES === */
+.jlx-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.jlx-status.is-amber   { background: rgba(245, 158, 11, 0.14); color: #fbbf24; }
+.jlx-status.is-sky     { background: rgba(56, 189, 248, 0.14); color: #7dd3fc; }
+.jlx-status.is-emerald { background: rgba(34, 197, 94, 0.14); color: #86efac; }
+.jlx-status.is-green   { background: rgba(34, 197, 94, 0.14); color: #86efac; }
+.jlx-status.is-violet  { background: rgba(139, 92, 246, 0.14); color: #c4b5fd; }
+.jlx-status.is-orange  { background: rgba(249, 115, 22, 0.14); color: #fdba74; }
+.jlx-status.is-cyan    { background: rgba(34, 211, 238, 0.14); color: #67e8f9; }
+.jlx-status.is-fuchsia { background: rgba(217, 70, 239, 0.14); color: #f0abfc; }
+.jlx-status.is-red     { background: rgba(248, 113, 113, 0.14); color: #fca5a5; }
+.jlx-status.is-slate   { background: rgba(148, 163, 184, 0.12); color: #cbd5e1; }
+
+/* === JOB TYPE BADGES === */
+.jlx-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.08);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.jlx-type.is-gig { color: #67e8f9; background: rgba(34, 211, 238, 0.1); }
+.jlx-type.is-regular { color: #c4b5fd; background: rgba(139, 92, 246, 0.1); }
+.jlx-type.is-compact { margin-left: auto; font-size: 0.68rem; }
+
+/* === TOOLBAR === */
+.jlx-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.jlx-type-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.jlx-type-tab {
+  padding: 0.55rem 1rem;
+  border-radius: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.jlx-type-tab:hover {
+  background: rgba(34, 211, 238, 0.06);
+  color: #e2e8f0;
+}
+
+.jlx-type-tab.is-active {
+  background: rgba(34, 211, 238, 0.14);
+  border-color: rgba(34, 211, 238, 0.28);
+  color: #67e8f9;
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.1);
+}
+
+/* === SEARCH === */
+.jlx-search {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+  min-width: 280px;
+  border-radius: 13px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(15, 23, 42, 0.45);
+  transition: all 0.2s ease;
+}
+
+.jlx-search:focus-within {
+  border-color: rgba(34, 211, 238, 0.28);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.06);
+}
+
+.jlx-search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #f8fafc;
+  font: inherit;
+  font-size: 0.84rem;
+}
+
+.jlx-search input::placeholder {
+  color: #475569;
+}
+
+/* === JOB CARDS === */
+.jlx-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.jlx-job-card {
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 120% -10%, rgba(34, 211, 238, 0.05), transparent 45%),
+    radial-gradient(circle at -5% 110%, rgba(124, 58, 237, 0.04), transparent 40%),
+    rgba(8, 15, 30, 0.55);
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(14px);
+  position: relative;
+  overflow: hidden;
+}
+
+.jlx-job-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.jlx-job-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(34, 211, 238, 0.25);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(34, 211, 238, 0.06);
+}
+
+.jlx-job-card:hover::before {
+  opacity: 1;
+}
+
+.jlx-job-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.jlx-job-card h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.jlx-job-card__company {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.jlx-job-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.jlx-job-card__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.jlx-job-card__hint {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+  padding: 0.55rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.06);
+}
+
+.jlx-job-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+/* Status glow on hover */
+.jlx-job-card:hover .jlx-status.is-cyan   { box-shadow: 0 0 14px rgba(34, 211, 238, 0.3); }
+.jlx-job-card:hover .jlx-status.is-amber  { box-shadow: 0 0 14px rgba(251, 191, 36, 0.3); }
+.jlx-job-card:hover .jlx-status.is-violet { box-shadow: 0 0 14px rgba(139, 92, 246, 0.3); }
+.jlx-job-card:hover .jlx-status.is-green  { box-shadow: 0 0 14px rgba(74, 222, 128, 0.3); }
+.jlx-job-card:hover .jlx-status.is-fuchsia{ box-shadow: 0 0 14px rgba(217, 70, 239, 0.3); }
+.jlx-job-card:hover .jlx-status.is-red    { box-shadow: 0 0 14px rgba(239, 68, 68, 0.3); }
+
+/* === EMPTY STATE === */
+.jlx-empty-state {
+  padding: 3.5rem 1.5rem;
+  text-align: center;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at center, rgba(34, 211, 238, 0.04), transparent 60%),
+    rgba(8, 15, 30, 0.35);
+  border: 1px dashed rgba(148, 163, 184, 0.14);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.jlx-empty-state svg {
+  color: #334155;
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.jlx-empty-state h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.jlx-empty-state p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #334155;
+  max-width: 320px;
+}
+
+.jlx-empty-inline {
+  padding: 2rem 1rem;
+  text-align: center;
+  border-radius: 14px;
+  background: rgba(8, 15, 30, 0.3);
+  border: 1px dashed rgba(148, 163, 184, 0.1);
+  color: #475569;
+  font-size: 0.84rem;
+}
+
+/* ======================================================================
+   WORKSPACE MODE — FULL PAGE REDESIGN
+   ====================================================================== */
+.jlx-shell--workspace {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  background:
+    radial-gradient(ellipse 60% 40% at 5% -5%, rgba(8, 145, 178, 0.2), transparent 50%),
+    radial-gradient(ellipse 50% 35% at 95% 8%, rgba(124, 58, 237, 0.16), transparent 50%),
+    linear-gradient(160deg, #060d1c 0%, #08131f 100%);
+}
+
+/* Starfield effect */
+.jlx-shell--workspace::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.15), transparent),
+    radial-gradient(1px 1px at 45% 70%, rgba(255, 255, 255, 0.1), transparent),
+    radial-gradient(1.5px 1.5px at 60% 20%, rgba(34, 211, 238, 0.2), transparent),
+    radial-gradient(1px 1px at 80% 50%, rgba(255, 255, 255, 0.08), transparent),
+    radial-gradient(1px 1px at 10% 80%, rgba(34, 211, 238, 0.12), transparent),
+    radial-gradient(1px 1px at 70% 90%, rgba(255, 255, 255, 0.06), transparent),
+    radial-gradient(1.5px 1.5px at 35% 55%, rgba(124, 58, 237, 0.15), transparent),
+    radial-gradient(1px 1px at 90% 15%, rgba(255, 255, 255, 0.1), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.jlx-shell--workspace .jlx-sidebar { display: none; }
+
+.jlx-shell--workspace .jlx-main {
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* === WORKSPACE BAR === */
+.jlx-workspace-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.5rem;
+  background: rgba(5, 12, 24, 0.8);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  backdrop-filter: blur(20px);
+  gap: 1.2rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.jlx-workspace-bar__left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.jlx-workspace-bar__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.5);
+  color: #94a3b8;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.jlx-workspace-bar__back:hover {
+  background: rgba(34, 211, 238, 0.08);
+  border-color: rgba(34, 211, 238, 0.22);
+  color: #67e8f9;
+}
+
+.jlx-workspace-bar__info {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.jlx-workspace-bar__info strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.jlx-workspace-bar__info span {
+  font-size: 0.72rem;
+  color: #67e8f9;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(34, 211, 238, 0.1);
+  font-weight: 600;
+}
+
+/* === WORKSPACE LAYOUT === */
+.jlx-workspace {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 0;
+}
+
+.jlx-workspace-layout {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  align-items: start;
+  gap: 1.25rem;
+}
+
+/* === WORKSPACE RAIL (sidebar) === */
+.jlx-workspace-rail {
+  position: sticky;
+  top: 1.5rem;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at top right, rgba(124, 58, 237, 0.06), transparent 50%),
+    rgba(6, 13, 26, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  backdrop-filter: blur(20px);
+  max-height: calc(100vh - 3rem);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.jlx-workspace-rail__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 1.2rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.07);
+}
+
+.jlx-workspace-rail__head h3 {
+  margin: 0.15rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.jlx-pill-count {
+  min-width: 1.8rem;
+  text-align: center;
+  padding: 0.22rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(34, 211, 238, 0.14);
+  color: #67e8f9;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.jlx-workspace-rail__list {
+  overflow-y: auto;
+  padding: 0.75rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.12) transparent;
+}
+
+.jlx-workspace-entry {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border-radius: 13px;
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  background: rgba(15, 23, 42, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.jlx-workspace-entry:hover {
+  border-color: rgba(34, 211, 238, 0.18);
+  background: rgba(34, 211, 238, 0.04);
+  transform: translateX(2px);
+}
+
+.jlx-workspace-entry.is-active {
+  border-color: rgba(34, 211, 238, 0.3);
+  background: rgba(34, 211, 238, 0.08);
+  box-shadow: 0 4px 20px rgba(34, 211, 238, 0.08);
+}
+
+.jlx-workspace-entry__top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.jlx-workspace-entry strong {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.jlx-workspace-entry p {
+  font-size: 0.74rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* === WORKSPACE DETAIL === */
+.jlx-workspace-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+/* === HERO REDESIGN === */
+.jlx-workspace-hero {
+  padding: 1.75rem 2rem;
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse 80% 60% at 95% -5%, rgba(34, 211, 238, 0.1), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 5% 105%, rgba(124, 58, 237, 0.07), transparent 50%),
+    linear-gradient(135deg, rgba(8, 15, 30, 0.92), rgba(12, 20, 38, 0.85));
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.jlx-workspace-hero::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -5%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.07), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.jlx-workspace-hero::after {
+  content: "";
+  position: absolute;
+  bottom: -25%;
+  left: 8%;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.05), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.jlx-workspace-hero > div:first-child {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.jlx-workspace-hero > .jlx-hero-right {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.85rem;
+}
+
+.jlx-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  color: #67e8f9;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+  width: fit-content;
+}
+
+.jlx-workspace-hero h2 {
+  margin: 0 0 0.6rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.jlx-workspace-hero > div:first-child > p {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.55;
+  max-width: 520px;
+}
+
+.jlx-hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.jlx-hero-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: flex-end;
+}
+
+.jlx-hero-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+/* === CHIP ROW === */
+.jlx-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.jlx-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.8rem;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 10px;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  transition: all 0.2s ease;
+}
+
+.jlx-chip:hover {
+  border-color: rgba(34, 211, 238, 0.14);
+  color: #e2e8f0;
+}
+
+/* ======================================================================
+   STEPPER — CONNECTOR LINES REDESIGN
+   ====================================================================== */
+.jlx-stepper {
+  padding: 1.1rem 1.25rem;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(34, 211, 238, 0.04), transparent 60%),
+    rgba(8, 15, 30, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: relative;
+}
+
+.jlx-stepper::-webkit-scrollbar { display: none; }
+
+.jlx-step {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.22s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.jlx-step.is-active { color: #22d3ee; }
+.jlx-step.is-done   { color: #4ade80; }
+
+.jlx-step__dot {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.5);
+  font-size: 0.72rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.jlx-step.is-active .jlx-step__dot {
+  background: rgba(34, 211, 238, 0.18);
+  border-color: rgba(34, 211, 238, 0.4);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.25), 0 0 40px rgba(34, 211, 238, 0.08);
+  color: #22d3ee;
+  transform: scale(1.08);
+}
+
+.jlx-step.is-done .jlx-step__dot {
+  background: rgba(74, 222, 128, 0.14);
+  border-color: rgba(74, 222, 128, 0.3);
+  color: #4ade80;
+}
+
+.jlx-step__connector {
+  flex: 1;
+  min-width: 1.2rem;
+  height: 1px;
+  background: rgba(148, 163, 184, 0.12);
+  margin: 0 0.2rem;
+  position: relative;
+}
+
+.jlx-step__connector::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, rgba(148, 163, 184, 0.12), rgba(148, 163, 184, 0.12));
+}
+
+.jlx-step.is-done .jlx-step__connector::before {
+  background: linear-gradient(90deg, rgba(74, 222, 128, 0.4), rgba(34, 211, 238, 0.15));
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.2);
+}
+
+/* ======================================================================
+   INFO CARDS & WORKSPACE PANELS
+   ====================================================================== */
+.jlx-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+.jlx-info-card {
+  padding: 0.9rem 1rem;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  border-radius: 13px;
+  transition: all 0.2s ease;
+}
+
+.jlx-info-card:hover {
+  border-color: rgba(34, 211, 238, 0.1);
+  background: rgba(34, 211, 238, 0.02);
+}
+
+.jlx-info-card span {
+  display: block;
+  font-size: 0.7rem;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+.jlx-info-card strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+/* === NOTE / INFO BOX === */
+.jlx-note,
+.jlx-status-explainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.jlx-note h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #67e8f9;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.jlx-status-explainer strong {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.jlx-note p,
+.jlx-status-explainer p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+/* === WORKSPACE GRID === */
+.jlx-workspace-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.jlx-workspace-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* === DELIVERABLES === */
+.jlx-deliverables {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.jlx-deliverable,
+.jlx-upload-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.8rem;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 10px;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.jlx-deliverable:hover {
+  border-color: rgba(34, 211, 238, 0.2);
+  color: #67e8f9;
+  background: rgba(34, 211, 238, 0.04);
+}
+
+/* ======================================================================
+   WORK SUBMISSION FORM
+   ====================================================================== */
+.jlx-panel--workspace {
+  gap: 1rem;
+}
+
+.jlx-panel--workspace .jlx-field:first-child {
+  grid-row: span 2;
+}
+
+.jlx-form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 1rem;
+}
+
+.jlx-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.jlx-field label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.jlx-field textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 13px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.5);
+  color: #f8fafc;
+  font: inherit;
+  font-size: 0.84rem;
+  resize: vertical;
+  outline: none;
+  transition: all 0.2s ease;
+  min-height: 140px;
+}
+
+.jlx-field textarea:focus {
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.06);
+}
+
+.jlx-field textarea::placeholder {
+  color: #334155;
+}
+
+/* === UPLOAD === */
+.jlx-upload {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+  border-radius: 13px;
+  border: 1px dashed rgba(148, 163, 184, 0.18);
+  background: rgba(15, 23, 42, 0.4);
+  color: #64748b;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.jlx-upload:hover {
+  border-color: rgba(34, 211, 238, 0.3);
+  background: rgba(34, 211, 238, 0.04);
+  color: #67e8f9;
+}
+
+.jlx-upload input { display: none; }
+
+.jlx-upload-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* === LINK STACK === */
+.jlx-link-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.jlx-link-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.jlx-link-row input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #f8fafc;
+  font: inherit;
+  font-size: 0.82rem;
+}
+
+.jlx-link-row input::placeholder {
+  color: #334155;
+}
+
+/* === FINAL TOGGLE === */
+.jlx-final-toggle {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.9rem 1rem;
+  border-radius: 13px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(15, 23, 42, 0.45);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.jlx-final-toggle:hover {
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.jlx-final-toggle.is-active {
+  border-color: rgba(34, 197, 94, 0.25);
+  background: rgba(34, 197, 94, 0.05);
+}
+
+.jlx-final-toggle__check {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.5);
+  color: #64748b;
+}
+
+.jlx-final-toggle.is-active .jlx-final-toggle__check {
+  background: rgba(34, 197, 94, 0.16);
+  color: #4ade80;
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.2);
+}
+
+.jlx-final-toggle strong {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  display: block;
+}
+
+.jlx-final-toggle span {
+  font-size: 0.75rem;
+  color: #64748b;
+  display: block;
+}
+
+/* === SUBMIT BAR === */
+.jlx-submit-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.jlx-submit-bar__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+/* ======================================================================
+   SPINNER
+   ====================================================================== */
+.jlx-spin { animation: jlx-spin 1s linear infinite; }
+@keyframes jlx-spin { to { transform: rotate(360deg); } }
+
+/* ======================================================================
+   RESPONSIVE
+   ====================================================================== */
+@media (max-width: 1200px) {
+  .jlx-shell,
+  .jlx-workspace-layout,
+  .jlx-dashboard-grid,
+  .jlx-workspace-grid,
+  .jlx-stat-grid { grid-template-columns: 1fr; }
+
+  .jlx-workspace-rail {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .jlx-header,
+  .jlx-toolbar,
+  .jlx-submit-bar,
+  .jlx-panel__head,
+  .jlx-workspace-hero {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .jlx-search { min-width: 0; }
+
+  .jlx-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jlx-panel--workspace .jlx-field:first-child {
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .jlx-main,
+  .jlx-sidebar { padding: 1rem; }
+
+  .jlx-brand { padding: 0.8rem; }
+
+  .jlx-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .jlx-card-grid {
+    grid-template-columns: 1fr;
+  }
+}

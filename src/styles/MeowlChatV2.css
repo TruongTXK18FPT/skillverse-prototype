@@ -439,6 +439,48 @@
   transform: skew(1deg);
 }
 
+/* Role switcher */
+.meowl-chat-v2-role-switcher {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  background: var(--meowl-bg-header);
+  border-bottom: 1px solid var(--meowl-border);
+  transform: skew(1deg);
+  overflow-x: auto;
+}
+
+.meowl-chat-v2-role-btn {
+  border: 1px solid var(--meowl-border);
+  background: transparent;
+  color: var(--meowl-text-secondary);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.meowl-chat-v2-role-btn:hover:not(:disabled) {
+  background: var(--meowl-accent-bg);
+  color: var(--meowl-text-primary);
+}
+
+.meowl-chat-v2-role-btn.active {
+  background: var(--meowl-accent);
+  border-color: var(--meowl-accent-light);
+  color: white;
+  box-shadow: 0 0 12px var(--meowl-accent-bg);
+}
+
+.meowl-chat-v2-role-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 /* Messages Container */
 .meowl-chat-v2-messages {
   flex: 1;
@@ -671,14 +713,50 @@
 
 /* Input Container */
 .meowl-chat-v2-input {
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 0.75rem;
   background: var(--meowl-bg-header);
   border-top: 1px solid var(--meowl-border);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.35rem;
   flex-shrink: 0;
   transform: skew(1deg);
+}
+
+/* Suggested input chips */
+.meowl-chat-v2-suggested-inputs {
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding-bottom: 0.1rem;
+  scrollbar-width: thin;
+}
+
+.meowl-chat-v2-suggested-input-btn {
+  border: 1px dashed var(--meowl-border);
+  background: rgba(0, 188, 212, 0.08);
+  color: var(--meowl-text-secondary);
+  border-radius: 999px;
+  padding: 0.24rem 0.62rem;
+  font-size: 0.68rem;
+  line-height: 1.15;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meowl-chat-v2-suggested-input-btn:hover:not(:disabled) {
+  background: var(--meowl-accent-bg);
+  border-color: var(--meowl-accent-light);
+  color: var(--meowl-text-primary);
+}
+
+.meowl-chat-v2-suggested-input-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 /* Voice Preview */
@@ -696,15 +774,15 @@
 .meowl-chat-v2-input-wrapper {
   display: flex;
   align-items: flex-end;
-  gap: 0.5rem;
+  gap: 0.4rem;
   background: linear-gradient(
     135deg,
     rgba(0, 20, 40, 0.5),
     rgba(0, 30, 60, 0.3)
   );
   border: 1px solid var(--meowl-border);
-  border-radius: 8px;
-  padding: 0.5rem;
+  border-radius: 7px;
+  padding: 0.35rem 0.45rem;
   transition: all 0.2s ease;
 }
 
@@ -716,8 +794,8 @@
 /* Input Buttons */
 .meowl-chat-v2-input-btn {
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -774,15 +852,15 @@
 /* Textarea */
 .meowl-chat-v2-chat-textarea {
   flex: 1;
-  min-height: 36px;
-  max-height: 120px;
-  padding: 0.5rem;
+  min-height: 26px;
+  max-height: 84px;
+  padding: 0.2rem 0.3rem;
   border: none;
   background: transparent;
   color: var(--meowl-text-primary);
-  font-size: inherit;
+  font-size: 0.86em;
   font-family: inherit;
-  line-height: 1.4;
+  line-height: 1.2;
   resize: none;
   outline: none;
 }
@@ -944,7 +1022,9 @@
   .meowl-chat-v2-messages,
   .meowl-chat-v2-input,
   .meowl-chat-v2-settings-panel,
-  .meowl-chat-v2-guest-counter {
+  .meowl-chat-v2-guest-counter,
+  .meowl-chat-v2-role-switcher,
+  .meowl-chat-v2-suggested-inputs {
     transform: none;
   }
 

@@ -146,6 +146,8 @@ export interface JobApplicationResponse {
   userId: number;
   userFullName: string; // firstName + lastName concatenated
   userEmail: string;
+  userAvatar?: string;
+  userProfessionalTitle?: string;
   coverLetter: string | null;
   status: JobApplicationStatus;
   appliedAt: string;
@@ -177,4 +179,62 @@ export interface JobFilters {
 export interface ApplicationFilters {
   status?: JobApplicationStatus;
   jobId?: number;
+}
+
+// ==================== JOB BOOST TYPES ====================
+
+export enum JobBoostStatus {
+  NOT_BOOSTED = "NOT_BOOSTED",
+  ACTIVE = "ACTIVE",
+  SCHEDULED = "SCHEDULED",
+  EXPIRED = "EXPIRED",
+  CANCELLED = "CANCELLED"
+}
+
+export interface JobBoostResponse {
+  id: number;
+  jobId: number;
+  jobTitle: string;
+  recruiterId: number;
+  status: JobBoostStatus;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  // Analytics
+  impressions: number;
+  clicks: number;
+  applications: number;
+}
+
+export interface CreateJobBoostRequest {
+  jobId: number;
+  durationDays: number;
+  startDate?: string; // ISO date string for scheduled boost
+}
+
+export interface JobBoostQuotaResponse {
+  totalQuota: number;
+  usedQuota: number;
+  availableQuota: number;
+}
+
+export interface JobBoostAnalyticsResponse {
+  boostId: number;
+  jobId: number;
+  jobTitle: string;
+  status: JobBoostStatus;
+  startDate: string;
+  endDate: string;
+  impressions: number;
+  clicks: number;
+  applications: number;
+  ctr: number; // Click-through rate
+  conversionRate: number;
+}
+
+// Extended JobPostingResponse with boost info for display
+export interface JobPostingWithBoost extends JobPostingResponse {
+  isBoosted: boolean;
+  boostStatus?: JobBoostStatus;
+  boostEndDate?: string;
 }

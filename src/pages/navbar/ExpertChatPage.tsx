@@ -88,6 +88,84 @@ const ExpertChatPage = () => {
   const [previewText, setPreviewText] = useState<string>('');
   const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
   const recognitionRef = useRef<any>(null);
+  const expertContextRef = useRef<ExpertContext | null>(null);
+
+  useEffect(() => {
+    expertContextRef.current = expertContext;
+  }, [expertContext]);
+
+  const normalizeSessionTitle = (title?: string) =>
+    (title ?? '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toLowerCase();
+
+  const extractExpertRoleFromTitle = (title?: string) => {
+    const rawTitle = title?.trim() ?? '';
+    const normalizedTitle = normalizeSessionTitle(rawTitle);
+
+    if (normalizedTitle.startsWith('expert ')) {
+      return rawTitle.substring(7).trim();
+    }
+
+    if (normalizedTitle.startsWith('chuyen gia ')) {
+      const firstSpace = rawTitle.indexOf(' ');
+      return firstSpace >= 0 ? rawTitle.substring(firstSpace + 1).trim() : rawTitle;
+    }
+
+    return '';
+  };
+
+  const extractMarkdownField = (content: string, label: string) => {
+    const escapedLabel = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp(`\\*\\*${escapedLabel}\\*\\*:\\s*(.+)`, 'i');
+    const match = content.match(pattern);
+    return match?.[1]?.split('\n')[0]?.trim() ?? '';
+  };
+
+  const buildExpertWelcomeMessage = (context: Pick<ExpertContext, 'domain' | 'industry' | 'jobRole'>) => `🎯 **CHẾ ĐỘ CHUYÊN GIA ĐÃ SẴN SÀNG**
+
+✨ Xin chào! Tôi là chuyên gia **${context.jobRole}** của SkillVerse.
+
+**Lĩnh vực**: ${context.domain || 'Đang cập nhật'}
+**Ngành nghề**: ${context.industry || 'Đang cập nhật'}
+**Chuyên môn**: ${context.jobRole}
+
+---
+
+Tôi có thể tư vấn chuyên sâu về:
+- 📊 **Kỹ năng chuyên môn** cần thiết
+- 🚀 **Lộ trình phát triển** cụ thể
+- 💼 **Cơ hội nghề nghiệp** trong lĩnh vực
+- 🎓 **Tài nguyên học tập** chất lượng cao
+- 💰 **Mức lương và thị trường** hiện tại
+
+💬 **Hãy hỏi tôi bất cứ điều gì về ${context.jobRole}!**`;
+
+  const resolveExpertContext = (
+    history: { aiResponse: string }[],
+    sessionSummary?: ChatSession,
+  ): ExpertContext | null => {
+    const firstAssistantMessage = history.find((item) => item.aiResponse)?.aiResponse || '';
+    const fallbackContext = expertContextRef.current;
+    const jobRole = extractMarkdownField(firstAssistantMessage, 'Chuyên môn')
+      || extractExpertRoleFromTitle(sessionSummary?.title)
+      || fallbackContext?.jobRole
+      || '';
+
+    if (!jobRole) {
+      return fallbackContext;
+    }
+
+    return {
+      domain: extractMarkdownField(firstAssistantMessage, 'Lĩnh vực') || fallbackContext?.domain || '',
+      industry: extractMarkdownField(firstAssistantMessage, 'Ngành nghề') || fallbackContext?.industry || '',
+      jobRole,
+      expertName: `${jobRole} Expert`,
+      mediaUrl: fallbackContext?.mediaUrl || avaChat
+    };
+  };
 
   const loadSessions = useCallback(async () => {
     try {
@@ -184,42 +262,30 @@ const ExpertChatPage = () => {
     }
   };
 
-  const handleLoadSession = useCallback(async (selectedSessionId: number) => {
+  const handleLoadSession = useCallback(async (selectedSessionId: number, sessionSummary?: ChatSession) => {
     try {
       setIsLoading(true);
       const history = await careerChatService.getHistory(selectedSessionId);
-      
-      const uiMessages: UIMessage[] = [];
-      let extractedExpertContext: ExpertContext | null = null;
-      
-      history.forEach((msg, index) => {
-        uiMessages.push({
+      const resolvedContext = resolveExpertContext(history, sessionSummary);
+
+      const uiMessages: UIMessage[] = history.flatMap((msg, index) => [
+        {
           id: `${selectedSessionId}-${index}-user`,
-          role: 'user',
+          role: 'user' as const,
           content: msg.userMessage,
           timestamp: new Date(msg.createdAt)
-        });
-        uiMessages.push({
+        },
+        {
           id: `${selectedSessionId}-${index}-ai`,
-          role: 'assistant',
+          role: 'assistant' as const,
           content: msg.aiResponse,
           timestamp: new Date(msg.createdAt),
-          expertContext: expertContext || undefined
-        });
-      });
+          expertContext: resolvedContext || undefined
+        }
+      ]);
 
-      // Try to extract expert context from the session
-      const session = sessions.find(s => s.sessionId === selectedSessionId);
-      if (session && session.title.startsWith('Expert ')) {
-        const jobRole = session.title.replace('Expert ', '');
-        extractedExpertContext = {
-          domain: 'Technology',
-          industry: 'Software',
-          jobRole: jobRole,
-          expertName: `${jobRole} Expert`,
-          mediaUrl: avaChat
-        };
-        setExpertContext(extractedExpertContext);
+      if (resolvedContext) {
+        setExpertContext(resolvedContext);
       }
 
       setMessages(uiMessages);
@@ -230,7 +296,7 @@ const ExpertChatPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [expertContext, sessions, showError, showSuccess]);
+  }, [showError, showSuccess]);
 
   useEffect(() => {
     const initializePage = async () => {
@@ -262,7 +328,11 @@ const ExpertChatPage = () => {
         setMessages([{
           id: '1',
           role: 'assistant',
-          content: `🎯 **EXPERT SYSTEM INITIALIZED**\n\n✨ Xin chào! Tôi là chuyên gia **${expertState.jobRole}** của SkillVerse.\n\n**Lĩnh vực**: ${expertState.domain}\n**Ngành nghề**: ${expertState.industry}\n**Chuyên môn**: ${expertState.jobRole}\n\n---\n\nTôi có thể tư vấn chuyên sâu về:\n- 📊 **Kỹ năng chuyên môn** cần thiết\n- 🚀 **Lộ trình phát triển** cụ thể\n- 💼 **Cơ hội nghề nghiệp** trong lĩnh vực\n- 🎓 **Tài nguyên học tập** chất lượng cao\n- 💰 **Mức lương & thị trường** hiện tại\n\n💬 **Hãy hỏi tôi bất cứ điều gì về ${expertState.jobRole}!**`,
+          content: buildExpertWelcomeMessage({
+            domain: expertState.domain,
+            industry: expertState.industry,
+            jobRole: expertState.jobRole
+          }),
           timestamp: new Date(),
           expertContext: {
             domain: expertState.domain,
@@ -279,7 +349,7 @@ const ExpertChatPage = () => {
           if (userSessions.length > 0) {
             // Load the most recent session
             const mostRecentSession = userSessions[0];
-            handleLoadSession(mostRecentSession.sessionId);
+            await handleLoadSession(mostRecentSession.sessionId, mostRecentSession);
           } else {
             // No sessions exist, show expert selector
             setShowExpertSelector(true);
@@ -334,10 +404,10 @@ const ExpertChatPage = () => {
           }}>
             <Lock size={64} style={{ color: 'var(--chat-hud-accent)', marginBottom: '24px' }} />
             <h2 style={{ color: '#fff', fontSize: '28px', marginBottom: '16px', fontFamily: 'Space Grotesk' }}>
-              ACCESS DENIED
+              YÊU CẦU NÂNG CẤP
             </h2>
             <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '32px', lineHeight: '1.6' }}>
-              Chế độ <strong>Expert Chat</strong> chỉ dành cho thành viên Premium.<br/>
+              Chế độ <strong>Chat Chuyên gia</strong> chỉ dành cho thành viên Premium.<br/>
               Vui lòng nâng cấp tài khoản để truy cập hệ thống chuyên gia AI.
             </p>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
@@ -377,7 +447,11 @@ const ExpertChatPage = () => {
     setMessages([{
       id: '1',
       role: 'assistant',
-      content: `🎯 **EXPERT SYSTEM INITIALIZED**\n\n✨ Xin chào! Tôi là chuyên gia **${context.jobRole}** của SkillVerse.\n\n**Lĩnh vực**: ${context.domain}\n**Ngành nghề**: ${context.industry}\n**Chuyên môn**: ${context.jobRole}\n\n---\n\nTôi có thể tư vấn chuyên sâu về:\n- 📊 **Kỹ năng chuyên môn** cần thiết\n- 🚀 **Lộ trình phát triển** cụ thể\n- 💼 **Cơ hội nghề nghiệp** trong lĩnh vực\n- 🎓 **Tài nguyên học tập** chất lượng cao\n- 💰 **Mức lương & thị trường** hiện tại\n\n💬 **Hãy hỏi tôi bất cứ điều gì về ${context.jobRole}!**`,
+      content: buildExpertWelcomeMessage({
+        domain: context.domain,
+        industry: context.industry,
+        jobRole: context.jobRole
+      }),
       timestamp: new Date(),
       expertContext: updatedContext
     }]);
@@ -436,7 +510,7 @@ const ExpertChatPage = () => {
         setSessionId(response.sessionId);
         // Rename the session to the job role for new sessions
         try {
-          await careerChatService.renameSession(response.sessionId, `Expert ${expertContext.jobRole}`);
+          await careerChatService.renameSession(response.sessionId, `Chuyên gia ${expertContext.jobRole}`);
         } catch (renameError) {
           console.error('Failed to rename session:', renameError);
         }
@@ -460,8 +534,8 @@ const ExpertChatPage = () => {
       // Handle Premium Restriction (403) for Deep Research
       if (error?.response?.status === 403 && aiAgentMode === 'DEEP_RESEARCH') {
         showError(
-          'Premium Required', 
-          'Chế độ Deep Research chỉ dành cho tài khoản Premium. Hệ thống sẽ tự động chuyển về Normal Agent.',
+          'Yêu cầu Premium',
+          'Chế độ Nghiên cứu sâu chỉ dành cho tài khoản Premium. Hệ thống sẽ tự động chuyển về chế độ Tiêu chuẩn.',
           6
         );
         
@@ -531,9 +605,9 @@ const ExpertChatPage = () => {
           ) : (
             sessions.map(s => (
               <div key={s.sessionId} className={`chat-hud-session-item ${sessionId === s.sessionId ? 'active' : ''}`}>
-                <div onClick={() => handleLoadSession(s.sessionId)} style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {s.title}
-                </div>
+                    <div onClick={() => handleLoadSession(s.sessionId, s)} style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {s.title}
+                    </div>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleDeleteSession(s.sessionId); }}
                   style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', opacity: 0.7 }}
@@ -564,7 +638,7 @@ const ExpertChatPage = () => {
           <div className="chat-hud-title" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: '1.2' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Sparkles size={16} style={{ color: 'var(--chat-hud-accent)' }} />
-              {expertContext?.jobRole || 'Expert'}
+              {expertContext?.jobRole || 'Chuyên gia'}
             </div>
             <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 'normal' }}>
               {expertContext?.domain}
@@ -580,12 +654,12 @@ const ExpertChatPage = () => {
               {aiAgentMode === 'NORMAL' ? (
                 <>
                   <Bot size={16} />
-                  <span>Normal Agent</span>
+                  <span>Chế độ Tiêu chuẩn</span>
                 </>
               ) : (
                 <>
                   <Sparkles size={16} />
-                  <span>Deep Research</span>
+                  <span>Nghiên cứu sâu</span>
                 </>
               )}
               <ChevronDown size={14} />
@@ -604,8 +678,8 @@ const ExpertChatPage = () => {
                     <Bot size={18} />
                   </div>
                   <div className="model-info">
-                    <span className="model-name">Normal Agent</span>
-                    <span className="model-desc">Tốc độ tiêu chuẩn, phản hồi nhanh</span>
+                    <span className="model-name">Chế độ Tiêu chuẩn</span>
+                    <span className="model-desc">Phản hồi nhanh, phù hợp tư vấn nhanh</span>
                   </div>
                 </div>
 
@@ -616,7 +690,7 @@ const ExpertChatPage = () => {
                       setAiAgentMode('DEEP_RESEARCH');
                       setShowModelDropdown(false);
                     } else {
-                      showError('Premium Plus Required', 'Chế độ Deep Research chỉ dành cho gói Premium Plus (Mentor Pro).');
+                      showError('Yêu cầu Premium Plus', 'Chế độ Nghiên cứu sâu chỉ dành cho gói Premium Plus (Mentor Pro).');
                     }
                   }}
                   style={{ opacity: isPremiumPlus ? 1 : 0.6, cursor: isPremiumPlus ? 'pointer' : 'not-allowed' }}
@@ -626,11 +700,11 @@ const ExpertChatPage = () => {
                   </div>
                   <div className="model-info">
                     <span className="model-name">
-                      Deep Research
+                      Nghiên cứu sâu
                       <span className="premium-badge-mini">PLUS</span>
                     </span>
                     <span className="model-desc">
-                      {isPremiumPlus ? 'Phân tích sâu, dữ liệu chi tiết' : 'Yêu cầu gói Premium Plus'}
+                      {isPremiumPlus ? 'Phân tích sâu hơn, ưu tiên dữ liệu chi tiết' : 'Yêu cầu gói Premium Plus'}
                     </span>
                   </div>
                 </div>
@@ -651,7 +725,7 @@ const ExpertChatPage = () => {
               <div className="chat-hud-avatar">
                 {msg.role === 'assistant' ? (
                   expertContext?.mediaUrl ? (
-                    <img src={expertContext.mediaUrl} alt="Expert" />
+                    <img src={expertContext.mediaUrl} alt="Chuyên gia" />
                   ) : (
                     <Code size={24} />
                   )

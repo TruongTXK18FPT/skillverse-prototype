@@ -17,6 +17,37 @@ class CareerChatService {
   private readonly EXPERT_FIELDS_URL = '/v1/expert-fields';
   private readonly EXPERT_SESSIONS_KEY = 'expert_session_ids';
 
+  private normalizeSessionTitle(title?: string): string {
+    return (title ?? '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toLowerCase();
+  }
+
+  private looksLikeExpertSession(title?: string): boolean {
+    const normalizedTitle = this.normalizeSessionTitle(title);
+    return normalizedTitle.startsWith('expert ') || normalizedTitle.startsWith('chuyen gia ');
+  }
+
+  private syncExpertSessionIds(sessions: ChatSession[]): number[] {
+    const expertSessionIds = new Set(this.getExpertSessionIds());
+
+    sessions.forEach((session) => {
+      if (this.looksLikeExpertSession(session.title)) {
+        expertSessionIds.add(session.sessionId);
+      }
+    });
+
+    const syncedIds = Array.from(expertSessionIds);
+    localStorage.setItem(this.EXPERT_SESSIONS_KEY, JSON.stringify(syncedIds));
+    return syncedIds;
+  }
+
+  private isExpertSession(session: ChatSession, expertSessionIds: number[]): boolean {
+    return this.looksLikeExpertSession(session.title) || expertSessionIds.includes(session.sessionId);
+  }
+
   /**
    * Mark a session as expert mode session
    */
@@ -94,13 +125,13 @@ class CareerChatService {
         return sessions.filter(s => s.chatMode === chatMode);
       }
       
-      // Fallback: Use localStorage to filter
-      const expertSessionIds = this.getExpertSessionIds();
+      // Fallback: infer expert sessions by title and heal localStorage tracking
+      const expertSessionIds = this.syncExpertSessionIds(sessions);
       
       if (chatMode === ChatMode.EXPERT_MODE) {
-        return sessions.filter(s => expertSessionIds.includes(s.sessionId));
+        return sessions.filter(s => this.isExpertSession(s, expertSessionIds));
       } else {
-        return sessions.filter(s => !expertSessionIds.includes(s.sessionId));
+        return sessions.filter(s => !this.isExpertSession(s, expertSessionIds));
       }
     } catch (error) {
       console.error('Error fetching sessions:', error);
@@ -128,6 +159,11 @@ class CareerChatService {
         params: { newTitle }
       }
     );
+
+    if (this.looksLikeExpertSession(response.data?.title || newTitle)) {
+      this.markExpertSession(sessionId);
+    }
+
     return response.data;
   }
 

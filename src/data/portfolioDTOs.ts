@@ -236,3 +236,147 @@ export interface FreelancerCardDisplay {
   professionalTitle?: string;
   customUrlSlug?: string;
 }
+
+// ==================== CANDIDATE SEARCH TYPES ====================
+
+export interface CandidateSearchFilters {
+  query?: string;
+  skills?: string[];
+  experienceLevel?: string;
+  minHourlyRate?: number;
+  maxHourlyRate?: number;
+  isAvailable?: boolean;
+  hasPortfolio?: boolean;
+  isVerified?: boolean;
+  isPremium?: boolean;
+  hasCertificates?: boolean;
+  openToOffers?: boolean;
+  enableAIMatching?: boolean;
+  jobId?: number; // For job-specific matching
+}
+
+export interface CandidateSearchResult {
+  userId: number;
+  fullName: string;
+  professionalTitle?: string;
+  avatarUrl?: string;
+  customUrlSlug?: string;
+  topSkills: string[] | string;
+  isHighlighted?: boolean;
+  isPremium?: boolean;
+  isVerified?: boolean;
+  hasPortfolio?: boolean;
+  hourlyRate?: number;
+  preferredCurrency?: string;
+  totalProjects?: number;
+  matchScore?: number;
+  skillMatchPercent?: number;
+  matchQuality?: 'EXCELLENT' | 'GOOD' | 'FAIR' | 'POOR';
+  fitExplanation?: string;
+  aiSummary?: string;
+  lastActive?: string;
+  shortlistId?: number;
+  shortlistStatus?: string;
+  shortlistNotes?: string;
+}
+
+export interface CandidateSearchResponse {
+  candidates: CandidateSearchResult[];
+  totalElements: number;
+  totalPages: number;
+  currentPage: number;
+  pageSize: number;
+}
+
+export interface AICandidateMatchResponse {
+  candidateId: number;
+  jobId: number;
+  matchScore: number;
+  skillMatchPercent: number;
+  extractedSkills: string[];
+  fitExplanation: string;
+  reasoning: string;
+  confidence: number;
+  generatedAt: string;
+}
+
+// ==================== Recruitment Chat Types ====================
+
+export enum RecruitmentSessionStatus {
+  CONTACTED = 'CONTACTED',
+  INTERESTED = 'INTERESTED',
+  INVITED = 'INVITED',
+  APPLICATION_RECEIVED = 'APPLICATION_RECEIVED',
+  SCREENING = 'SCREENING',
+  OFFER_SENT = 'OFFER_SENT',
+  HIRED = 'HIRED',
+  NOT_INTERESTED = 'NOT_INTERESTED',
+  ARCHIVED = 'ARCHIVED'
+}
+
+export enum RecruitmentSessionSource {
+  MANUAL = 'MANUAL',
+  AI_SEARCH = 'AI_SEARCH',
+  RECOMMENDATION = 'RECOMMENDATION',
+  PROFILE_VIEW = 'PROFILE_VIEW',
+  SHORTLIST = 'SHORTLIST'
+}
+
+export interface RecruitmentSessionResponse {
+  id: number;
+  recruiterId: number;
+  recruiterName: string;
+  recruiterCompany?: string;
+  candidateId: number;
+  candidateFullName: string;
+  candidateTitle?: string;
+  candidateAvatar?: string;
+  candidateHasPortfolio?: boolean;
+  candidateSlug?: string;
+  jobId?: number;
+  jobTitle?: string;
+  isRemote?: boolean;
+  jobLocation?: string;
+  status: RecruitmentSessionStatus;
+  sourceType: RecruitmentSessionSource;
+  matchScore?: number;
+  skillMatchPercent?: number;
+  unreadCount: number;
+  lastMessageAt?: string;
+  createdAt: string;
+  updatedAt?: string;
+  lastMessagePreview?: string;
+}
+
+export interface RecruitmentMessageResponse {
+  id: number;
+  sessionId: number;
+  senderId: number;
+  senderName: string;
+  senderAvatar?: string;
+  senderRole: 'RECRUITER' | 'CANDIDATE';
+  content: string;
+  messageType: 'TEXT' | 'IMAGE' | 'GIF' | 'EMOJI' | 'SYSTEM';
+  actionType?: string;
+  actionData?: string;
+  isRead: boolean;
+  readAt?: string;
+  createdAt: string;
+}
+
+export interface CreateRecruitmentSessionRequest {
+  candidateId: number;
+  jobId?: number;
+  sourceType?: RecruitmentSessionSource;
+  matchScore?: number;
+  skillMatchPercent?: number;
+  initialMessage?: string;
+}
+
+export interface SendRecruitmentMessageRequest {
+  sessionId: number;
+  content: string;
+  messageType?: 'TEXT' | 'IMAGE' | 'GIF' | 'EMOJI';
+  actionType?: string;
+  actionData?: string;
+}

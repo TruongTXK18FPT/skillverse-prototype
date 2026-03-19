@@ -31,6 +31,7 @@ import {
   FiClock,
   FiDollarSign,
   FiEdit,
+  FiEye,
   FiMapPin,
   FiMessageSquare,
   FiSend,
@@ -63,6 +64,16 @@ import {
 } from "../../types/ShortTermJob";
 import { useToast } from "../../hooks/useToast";
 import { useAuth } from "../../context/AuthContext";
+import recruitmentChatService from "../../services/recruitmentChatService";
+import { RecruitmentSessionResponse } from "../../data/portfolioDTOs";
+import RecruiterChatWindow from "../../components/chat/RecruiterChatWindow";
+import {
+  getApplicantDisplayName,
+  getApplicantInitials,
+  getApplicantSubtitle,
+  getPortfolioPath,
+  resolveRecruitmentAssetUrl,
+} from "../../utils/recruitmentUi";
 
 // ==================== HELPERS ====================
 
@@ -73,6 +84,13 @@ const getInitials = (name: string) =>
     .join("")
     .toUpperCase()
     .slice(0, 2);
+
+type ApplicantDecisionModalState = {
+  application: ShortTermJobApplication;
+  status:
+    | ShortTermApplicationStatus.ACCEPTED
+    | ShortTermApplicationStatus.REJECTED;
+};
 
 // ==================== PAGE COMPONENT ====================
 
@@ -110,6 +128,14 @@ const ShortTermJobDetailPage: React.FC = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [applyMessage, setApplyMessage] = useState("");
   const [isApplying, setIsApplying] = useState(false);
+  const [isActionBusy, setIsActionBusy] = useState(false);
+  const [decisionModal, setDecisionModal] =
+    useState<ApplicantDecisionModalState | null>(null);
+  const [decisionNote, setDecisionNote] = useState("");
+  const [selectedSession, setSelectedSession] =
+    useState<RecruitmentSessionResponse | null>(null);
+  const [chatApplicant, setChatApplicant] =
+    useState<ShortTermJobApplication | null>(null);
 
   // ========== FETCH DATA ==========
   const fetchJob = useCallback(async () => {
@@ -293,6 +319,133 @@ const ShortTermJobDetailPage: React.FC = () => {
     }
   };
 
+  const handleOpenPortfolio = (application: ShortTermJobApplication) => {
+    const portfolioPath = getPortfolioPath(application.portfolioSlug);
+    if (!portfolioPath) {
+      showInfo(
+        "Chưa có portfolio",
+        "Ứng viên này chưa công khai portfolio trên SkillVerse.",
+      );
+      return;
+    }
+
+    window.open(portfolioPath, "_blank", "noopener,noreferrer");
+  };
+
+  const handleOpenChat = async (application: ShortTermJobApplication) => {
+    if (!jobId) return;
+
+    try {
+      setIsActionBusy(true);
+      const session = await recruitmentChatService.getOrCreateSession(
+        application.userId,
+        Number(jobId),
+        "MANUAL",
+      );
+      setChatApplicant(application);
+      setSelectedSession(session);
+      showSuccess(
+        "Đã mở chat",
+        "Cuộc trò chuyện đã được gắn đúng ngữ cảnh công việc hiện tại.",
+      );
+    } catch (error: unknown) {
+      const errMsg =
+        (error as { message?: string })?.message ||
+        "Không thể mở cuộc trò chuyện với ứng viên";
+      showError("Lỗi", errMsg);
+    } finally {
+      setIsActionBusy(false);
+    }
+  };
+
+  const handleOpenDecision = (
+    application: ShortTermJobApplication,
+    status:
+      | ShortTermApplicationStatus.ACCEPTED
+      | ShortTermApplicationStatus.REJECTED,
+  ) => {
+    const applicantName = getApplicantDisplayName(
+      application.userFullName,
+      application.userEmail,
+    );
+    const noteTemplate =
+      status === ShortTermApplicationStatus.ACCEPTED
+        ? `Chào ${applicantName}, hồ sơ của bạn phù hợp với công việc "${job?.title}". Mời bạn vào chat theo job để thống nhất phạm vi công việc, timeline và cách phối hợp.`
+        : `Chào ${applicantName}, cảm ơn bạn đã ứng tuyển vào "${job?.title}". Hiện tại chúng tôi ưu tiên hồ sơ phù hợp hơn với yêu cầu chuyên môn và tiến độ của công việc này.`;
+
+    setDecisionModal({ application, status });
+    setDecisionNote(noteTemplate);
+  };
+
+  const refreshOwnerSnapshot = useCallback(async () => {
+    if (!jobId) return;
+
+    const jobData = await shortTermJobService.getJobDetails(Number(jobId));
+    setJob(jobData);
+
+    const currentUserId = user?.id ?? 0;
+    const ownerView = jobData.recruiterId === currentUserId;
+    setIsOwner(ownerView);
+
+    if (ownerView) {
+      const response = await shortTermJobService.getJobApplicants(
+        Number(jobId),
+        0,
+        50,
+      );
+      setApplications(response.content);
+    }
+  }, [jobId, user]);
+
+  const handleDecisionSubmit = async () => {
+    if (!decisionModal) return;
+
+    const note = decisionNote.trim();
+    if (!note || note.length < 12) {
+      showError(
+        "Thiếu nội dung",
+        "Vui lòng nhập ghi chú hoặc lý do đầy đủ để ứng viên nhận được phản hồi rõ ràng.",
+      );
+      return;
+    }
+
+    try {
+      setIsActionBusy(true);
+      const request: UpdateShortTermApplicationStatusRequest = {
+        status: decisionModal.status,
+        message:
+          decisionModal.status === ShortTermApplicationStatus.ACCEPTED
+            ? note
+            : undefined,
+        reason: note,
+      };
+
+      await shortTermJobService.updateApplicationStatus(
+        decisionModal.application.id,
+        request,
+      );
+      await refreshOwnerSnapshot();
+      showSuccess(
+        decisionModal.status === ShortTermApplicationStatus.ACCEPTED
+          ? "Đã duyệt ứng viên"
+          : "Đã từ chối ứng viên",
+        `${getApplicantDisplayName(
+          decisionModal.application.userFullName,
+          decisionModal.application.userEmail,
+        )} đã được cập nhật trạng thái.`,
+      );
+      setDecisionModal(null);
+      setDecisionNote("");
+    } catch (error: unknown) {
+      const errMsg =
+        (error as { message?: string })?.message ||
+        "Không thể cập nhật trạng thái ứng tuyển";
+      showError("Lỗi", errMsg);
+    } finally {
+      setIsActionBusy(false);
+    }
+  };
+
   // ========== RENDER HELPERS ==========
   const formatBudget = (amount: number) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -318,6 +471,24 @@ const ShortTermJobDetailPage: React.FC = () => {
     !isExpired &&
     !isOwner &&
     !hasApplied;
+  const pendingApplicants = applications.filter(
+    (application) => application.status === ShortTermApplicationStatus.PENDING,
+  ).length;
+  const shortlistedApplicants = applications.filter((application) =>
+    [
+      ShortTermApplicationStatus.ACCEPTED,
+      ShortTermApplicationStatus.WORKING,
+      ShortTermApplicationStatus.IN_PROGRESS,
+      ShortTermApplicationStatus.SUBMITTED,
+      ShortTermApplicationStatus.APPROVED,
+      ShortTermApplicationStatus.COMPLETED,
+      ShortTermApplicationStatus.PAID,
+    ].includes(application.status),
+  ).length;
+  const portfolioApplicants = applications.filter((application) =>
+    Boolean(application.portfolioSlug),
+  ).length;
+  const currentUserName = user?.fullName || user?.email || "Recruiter";
 
   // ========== RENDER ==========
   if (isLoading) {
@@ -564,77 +735,349 @@ const ShortTermJobDetailPage: React.FC = () => {
 
               {/* Applications Tab (Owner only) */}
               {isOwner && (
-                <Tabs.Content value="applicants">
-                  <VStack gap={4} align="stretch">
-                    {applications.length === 0 ? (
-                      <Alert.Root status="info">
-                        <Alert.Indicator />
-                        <Alert.Content>Chưa có ứng viên nào</Alert.Content>
-                      </Alert.Root>
-                    ) : (
-                      applications.map((app) => (
-                        <Card.Root key={app.id} bg="white">
-                          <Card.Body>
-                            <Flex align="center" gap={4}>
-                              <Avatar.Root size="md">
-                                <Avatar.Fallback>
-                                  {getInitials(app.userFullName)}
-                                </Avatar.Fallback>
-                              </Avatar.Root>
-                              <VStack align="start" gap={0} flex="1">
-                                <Text fontWeight="bold">
-                                  {app.userFullName}
-                                </Text>
-                                <StatusBadge
-                                  status={app.status}
-                                  type="application"
-                                  size="sm"
-                                />
-                              </VStack>
-                              <Text fontSize="sm" color="gray.500">
-                                {formatDate(app.appliedAt)}
+                <>
+                  <Tabs.Content value="applicants">
+                    <VStack gap={4} align="stretch">
+                      <Card.Root
+                        bg="white"
+                        borderWidth="1px"
+                        borderColor="blue.100"
+                        shadow="sm"
+                      >
+                        <Card.Body>
+                          <Flex
+                            gap={4}
+                            justify="space-between"
+                            direction={{ base: "column", lg: "row" }}
+                            align={{ base: "stretch", lg: "center" }}
+                          >
+                            <VStack align="start" gap={1}>
+                              <Heading size="md">
+                                Bảng điều phối ứng viên
+                              </Heading>
+                              <Text color="gray.600" maxW="2xl">
+                                Xem nhanh hồ sơ phù hợp, mở portfolio, phản hồi
+                                có lý do rõ ràng và chat đúng ngữ cảnh công việc
+                                ngay trên trang chi tiết.
                               </Text>
-                            </Flex>
+                            </VStack>
 
-                            {app.coverLetter && (
-                              <Box mt={4} p={3} bg="gray.50" borderRadius="md">
-                                <Text fontSize="sm">{app.coverLetter}</Text>
+                            <SimpleGrid
+                              columns={{ base: 1, sm: 3 }}
+                              gap={3}
+                              minW={{ base: "100%", lg: "380px" }}
+                            >
+                              <Box
+                                p={4}
+                                borderRadius="xl"
+                                bg="blue.50"
+                                borderWidth="1px"
+                                borderColor="blue.100"
+                              >
+                                <Text fontSize="sm" color="blue.700">
+                                  Tổng ứng viên
+                                </Text>
+                                <Heading size="lg" color="blue.900">
+                                  {applications.length}
+                                </Heading>
                               </Box>
-                            )}
+                              <Box
+                                p={4}
+                                borderRadius="xl"
+                                bg="orange.50"
+                                borderWidth="1px"
+                                borderColor="orange.100"
+                              >
+                                <Text fontSize="sm" color="orange.700">
+                                  Chờ duyệt
+                                </Text>
+                                <Heading size="lg" color="orange.900">
+                                  {pendingApplicants}
+                                </Heading>
+                              </Box>
+                              <Box
+                                p={4}
+                                borderRadius="xl"
+                                bg="purple.50"
+                                borderWidth="1px"
+                                borderColor="purple.100"
+                              >
+                                <Text fontSize="sm" color="purple.700">
+                                  Có portfolio
+                                </Text>
+                                <Heading size="lg" color="purple.900">
+                                  {portfolioApplicants}
+                                </Heading>
+                              </Box>
+                            </SimpleGrid>
+                          </Flex>
 
-                            {app.status ===
-                              ShortTermApplicationStatus.PENDING && (
-                              <HStack mt={4}>
-                                <Button
-                                  colorPalette="green"
-                                  size="sm"
-                                  onClick={() =>
-                                    handleAcceptApplication(app.id)
-                                  }
-                                >
-                                  <FiCheck /> Chấp nhận
-                                </Button>
-                                <Button
-                                  colorPalette="red"
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() =>
-                                    handleRejectApplication(app.id)
-                                  }
-                                >
-                                  <FiX /> Từ chối
-                                </Button>
-                                <Button variant="ghost" size="sm">
-                                  <FiMessageSquare /> Nhắn tin
-                                </Button>
-                              </HStack>
-                            )}
-                          </Card.Body>
-                        </Card.Root>
-                      ))
-                    )}
-                  </VStack>
-                </Tabs.Content>
+                          {shortlistedApplicants > 0 && (
+                            <Alert.Root
+                              status="success"
+                              mt={4}
+                              borderRadius="xl"
+                            >
+                              <Alert.Indicator />
+                              <Alert.Content>
+                                Đã có {shortlistedApplicants} ứng viên được đưa
+                                vào giai đoạn tiếp theo của công việc này.
+                              </Alert.Content>
+                            </Alert.Root>
+                          )}
+                        </Card.Body>
+                      </Card.Root>
+
+                      {job.status === ShortTermJobStatus.PENDING_APPROVAL ? (
+                        <Alert.Root status="info" borderRadius="xl">
+                          <Alert.Indicator />
+                          <Alert.Content>
+                            Công việc đang chờ duyệt. Sau khi được duyệt, danh
+                            sách ứng viên sẽ hiển thị đầy đủ tại đây.
+                          </Alert.Content>
+                        </Alert.Root>
+                      ) : applications.length === 0 ? (
+                        <Alert.Root status="info" borderRadius="xl">
+                          <Alert.Indicator />
+                          <Alert.Content>
+                            Chưa có ứng viên nào cho công việc này.
+                          </Alert.Content>
+                        </Alert.Root>
+                      ) : (
+                        applications.map((app) => {
+                          const displayName = getApplicantDisplayName(
+                            app.userFullName,
+                            app.userEmail,
+                          );
+                          const subtitle = getApplicantSubtitle(
+                            app.userProfessionalTitle,
+                            Boolean(app.portfolioSlug),
+                          );
+                          const avatarUrl = resolveRecruitmentAssetUrl(
+                            app.userAvatar,
+                          );
+
+                          return (
+                            <Card.Root
+                              key={app.id}
+                              bg="white"
+                              borderWidth="1px"
+                              borderColor={
+                                app.status ===
+                                ShortTermApplicationStatus.PENDING
+                                  ? "orange.100"
+                                  : "gray.200"
+                              }
+                              shadow="sm"
+                              overflow="hidden"
+                            >
+                              <Card.Body>
+                                <VStack align="stretch" gap={4}>
+                                  <Flex
+                                    justify="space-between"
+                                    gap={4}
+                                    direction={{ base: "column", lg: "row" }}
+                                    align={{ base: "stretch", lg: "center" }}
+                                  >
+                                    <HStack align="start" gap={4}>
+                                      <Avatar.Root
+                                        size="lg"
+                                        bg="blue.50"
+                                        color="blue.700"
+                                      >
+                                        {avatarUrl ? (
+                                          <Avatar.Image
+                                            src={avatarUrl}
+                                            alt={displayName}
+                                          />
+                                        ) : (
+                                          <Avatar.Fallback name={displayName}>
+                                            {getApplicantInitials(
+                                              app.userFullName,
+                                              app.userEmail,
+                                            )}
+                                          </Avatar.Fallback>
+                                        )}
+                                      </Avatar.Root>
+                                      <VStack align="start" gap={1}>
+                                        <Flex
+                                          wrap="wrap"
+                                          gap={2}
+                                          align="center"
+                                        >
+                                          <Heading size="sm">
+                                            {displayName}
+                                          </Heading>
+                                          <StatusBadge
+                                            status={app.status}
+                                            type="application"
+                                            size="sm"
+                                          />
+                                          {app.portfolioSlug && (
+                                            <Badge
+                                              colorPalette="purple"
+                                              variant="subtle"
+                                            >
+                                              Portfolio
+                                            </Badge>
+                                          )}
+                                        </Flex>
+                                        <Text fontSize="sm" color="gray.600">
+                                          {subtitle}
+                                        </Text>
+                                        <Flex wrap="wrap" gap={2}>
+                                          <Tag.Root
+                                            size="sm"
+                                            colorPalette="gray"
+                                            variant="subtle"
+                                          >
+                                            <Tag.Label>
+                                              Ứng tuyển{" "}
+                                              {formatDate(app.appliedAt)}
+                                            </Tag.Label>
+                                          </Tag.Root>
+                                          {app.proposedDuration && (
+                                            <Tag.Root
+                                              size="sm"
+                                              colorPalette="blue"
+                                              variant="subtle"
+                                            >
+                                              <Tag.Label>
+                                                Thời lượng{" "}
+                                                {app.proposedDuration}
+                                              </Tag.Label>
+                                            </Tag.Root>
+                                          )}
+                                        </Flex>
+                                      </VStack>
+                                    </HStack>
+
+                                    <Flex wrap="wrap" gap={2}>
+                                      {typeof app.userCompletedJobs ===
+                                        "number" && (
+                                        <Badge
+                                          colorPalette="blue"
+                                          variant="subtle"
+                                          px={3}
+                                          py={2}
+                                        >
+                                          {app.userCompletedJobs} job hoàn thành
+                                        </Badge>
+                                      )}
+                                      {typeof app.userRating === "number" && (
+                                        <Badge
+                                          colorPalette="yellow"
+                                          variant="subtle"
+                                          px={3}
+                                          py={2}
+                                        >
+                                          ⭐ {app.userRating.toFixed(1)}
+                                        </Badge>
+                                      )}
+                                      {app.proposedPrice && (
+                                        <Badge
+                                          colorPalette="green"
+                                          variant="subtle"
+                                          px={3}
+                                          py={2}
+                                        >
+                                          {formatBudget(app.proposedPrice)}
+                                        </Badge>
+                                      )}
+                                    </Flex>
+                                  </Flex>
+
+                                  {app.coverLetter && (
+                                    <Box
+                                      p={4}
+                                      bg="gray.50"
+                                      borderRadius="xl"
+                                      borderWidth="1px"
+                                      borderColor="gray.100"
+                                    >
+                                      <Text
+                                        fontSize="xs"
+                                        textTransform="uppercase"
+                                        letterSpacing="0.08em"
+                                        color="gray.500"
+                                        mb={2}
+                                        fontWeight="semibold"
+                                      >
+                                        Lời nhắn ứng tuyển
+                                      </Text>
+                                      <Text
+                                        fontSize="sm"
+                                        color="gray.700"
+                                        whiteSpace="pre-wrap"
+                                      >
+                                        {app.coverLetter}
+                                      </Text>
+                                    </Box>
+                                  )}
+
+                                  <Flex wrap="wrap" gap={3}>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => handleOpenPortfolio(app)}
+                                    >
+                                      <FiEye /> Xem portfolio
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => handleOpenChat(app)}
+                                      disabled={isActionBusy}
+                                    >
+                                      <FiMessageSquare /> Chat theo job
+                                    </Button>
+                                    {(app.status ===
+                                      ShortTermApplicationStatus.PENDING ||
+                                      app.status ===
+                                        ShortTermApplicationStatus.REJECTED) && (
+                                      <Button
+                                        colorPalette="green"
+                                        size="sm"
+                                        onClick={() =>
+                                          handleOpenDecision(
+                                            app,
+                                            ShortTermApplicationStatus.ACCEPTED,
+                                          )
+                                        }
+                                        disabled={isActionBusy}
+                                      >
+                                        <FiCheck /> Duyệt ứng viên
+                                      </Button>
+                                    )}
+                                    {(app.status ===
+                                      ShortTermApplicationStatus.PENDING ||
+                                      app.status ===
+                                        ShortTermApplicationStatus.ACCEPTED) && (
+                                      <Button
+                                        colorPalette="red"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() =>
+                                          handleOpenDecision(
+                                            app,
+                                            ShortTermApplicationStatus.REJECTED,
+                                          )
+                                        }
+                                        disabled={isActionBusy}
+                                      >
+                                        <FiX /> Từ chối có lý do
+                                      </Button>
+                                    )}
+                                  </Flex>
+                                </VStack>
+                              </Card.Body>
+                            </Card.Root>
+                          );
+                        })
+                      )}
+                    </VStack>
+                  </Tabs.Content>
+                </>
               )}
 
               {/* My Application Tab */}
@@ -903,6 +1346,134 @@ const ShortTermJobDetailPage: React.FC = () => {
           </Box>
         </Flex>
       </Container>
+
+      <Dialog.Root
+        open={Boolean(decisionModal)}
+        onOpenChange={(event) => {
+          if (!event.open) {
+            setDecisionModal(null);
+            setDecisionNote("");
+          }
+        }}
+        size="lg"
+      >
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>
+              {decisionModal?.status === ShortTermApplicationStatus.ACCEPTED
+                ? "Duyệt ứng viên"
+                : "Từ chối ứng viên"}
+            </Dialog.Header>
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <VStack align="stretch" gap={4}>
+                <Alert.Root
+                  status={
+                    decisionModal?.status ===
+                    ShortTermApplicationStatus.ACCEPTED
+                      ? "success"
+                      : "warning"
+                  }
+                  borderRadius="xl"
+                >
+                  <Alert.Indicator />
+                  <Alert.Content>
+                    {decisionModal ? (
+                      <>
+                        {decisionModal.status ===
+                        ShortTermApplicationStatus.ACCEPTED
+                          ? `Chia sẻ lời mời hợp tác rõ ràng cho ${getApplicantDisplayName(
+                              decisionModal.application.userFullName,
+                              decisionModal.application.userEmail,
+                            )}.`
+                          : `Nêu lý do cụ thể để ${getApplicantDisplayName(
+                              decisionModal.application.userFullName,
+                              decisionModal.application.userEmail,
+                            )} nhận được phản hồi minh bạch.`}
+                      </>
+                    ) : null}
+                  </Alert.Content>
+                </Alert.Root>
+                <Textarea
+                  value={decisionNote}
+                  onChange={(event) => setDecisionNote(event.target.value)}
+                  placeholder={
+                    decisionModal?.status ===
+                    ShortTermApplicationStatus.ACCEPTED
+                      ? "Mô tả lý do chọn ứng viên, bước tiếp theo, timeline và cách phối hợp."
+                      : "Mô tả lý do từ chối rõ ràng, lịch sự và đủ cụ thể."
+                  }
+                  rows={7}
+                />
+              </VStack>
+            </Dialog.Body>
+            <Dialog.Footer>
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setDecisionModal(null);
+                  setDecisionNote("");
+                }}
+              >
+                Hủy
+              </Button>
+              <Button
+                colorPalette={
+                  decisionModal?.status === ShortTermApplicationStatus.ACCEPTED
+                    ? "green"
+                    : "red"
+                }
+                onClick={handleDecisionSubmit}
+                loading={isActionBusy}
+              >
+                {decisionModal?.status === ShortTermApplicationStatus.ACCEPTED
+                  ? "Xác nhận duyệt"
+                  : "Xác nhận từ chối"}
+              </Button>
+            </Dialog.Footer>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Dialog.Root>
+
+      <Dialog.Root
+        open={Boolean(selectedSession)}
+        onOpenChange={(event) => {
+          if (!event.open) {
+            setSelectedSession(null);
+            setChatApplicant(null);
+          }
+        }}
+        size="cover"
+      >
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content
+            maxW="1120px"
+            w="calc(100vw - 32px)"
+            h={{ base: "80vh", xl: "84vh" }}
+            p={0}
+            overflow="hidden"
+          >
+            {selectedSession && (
+              <RecruiterChatWindow
+                session={selectedSession}
+                currentUserId={user?.id || 0}
+                currentUserName={currentUserName}
+                onBack={() => {
+                  setSelectedSession(null);
+                  setChatApplicant(null);
+                }}
+                onViewProfile={() => {
+                  if (chatApplicant) {
+                    handleOpenPortfolio(chatApplicant);
+                  }
+                }}
+              />
+            )}
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Dialog.Root>
 
       {/* Apply Dialog */}
       <Dialog.Root

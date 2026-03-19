@@ -481,8 +481,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
               jobId={selectedJob.id}
               jobTitle={selectedJob.title}
               onClose={() => setShowApplicantsModal(false)}
-              onAccept={handleAcceptApplicant}
-              onReject={handleRejectApplicant}
+              onChanged={() => setLocalRefreshTrigger(prev => prev + 1)}
               refreshTrigger={localRefreshTrigger}
             />
           )}

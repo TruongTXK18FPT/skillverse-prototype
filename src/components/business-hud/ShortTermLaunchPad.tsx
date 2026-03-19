@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import shortTermJobService from "../../services/shortTermJobService";
 import { useToast } from "../../hooks/useToast";
 import { recruiterSubscriptionService } from "../../services/recruiterSubscriptionService";
@@ -8,9 +8,35 @@ import {
   JobUrgency,
   PaymentMethod,
 } from "../../types/ShortTermJob";
-import "./fleet-styles.css";
+import "./streamlined-job-forms.css";
 
-// ==================== CONSTANTS ====================
+interface ShortTermLaunchPadProps {
+  onJobCreated?: () => void;
+}
+
+interface PostingQuota {
+  hasSubscription: boolean;
+  shortTermJobPostingRemaining: number;
+  shortTermJobPostingUnlimited: boolean;
+}
+
+interface ShortTermFormState {
+  title: string;
+  description: string;
+  requirements: string;
+  budget: string;
+  isNegotiable: boolean;
+  paymentMethod: PaymentMethod;
+  deadline: string;
+  workDeadline: string;
+  estimatedDuration: string;
+  urgency: JobUrgency;
+  isRemote: boolean;
+  location: string;
+  maxApplicants: string;
+  subCategory: string;
+  requiredSkills: string[];
+}
 
 const SUBCATEGORY_OPTIONS = [
   { value: "DESIGN", label: "Thiết kế" },
@@ -25,46 +51,94 @@ const SUBCATEGORY_OPTIONS = [
   { value: "OTHER", label: "Khác" },
 ];
 
-const URGENCY_OPTIONS: { value: JobUrgency; label: string; badge: string }[] = [
-  { value: JobUrgency.NORMAL, label: "Bình thường", badge: "🟢" },
-  { value: JobUrgency.URGENT, label: "Gấp — vài ngày", badge: "🟡" },
-  { value: JobUrgency.VERY_URGENT, label: "Rất gấp — 24-48h", badge: "🟠" },
-  { value: JobUrgency.ASAP, label: "Cần ngay lập tức", badge: "🔴" },
+const URGENCY_OPTIONS: { value: JobUrgency; label: string }[] = [
+  { value: JobUrgency.NORMAL, label: "Bình thường" },
+  { value: JobUrgency.URGENT, label: "Gấp trong vài ngày" },
+  { value: JobUrgency.VERY_URGENT, label: "Rất gấp 24-48h" },
+  { value: JobUrgency.ASAP, label: "Cần làm ngay" },
 ];
 
 const PAYMENT_OPTIONS: { value: PaymentMethod; label: string; desc: string }[] =
   [
-    { value: "FIXED", label: "Trả một lần", desc: "Thanh toán khi hoàn thành" },
-    { value: "MILESTONE", label: "Theo cột mốc", desc: "Chia theo giai đoạn" },
-    { value: "HOURLY", label: "Theo giờ", desc: "Tính theo thời gian làm" },
+    {
+      value: "FIXED",
+      label: "Trả một lần",
+      desc: "Chốt giá và thanh toán khi hoàn thành",
+    },
+    {
+      value: "MILESTONE",
+      label: "Theo cột mốc",
+      desc: "Phù hợp việc chia thành nhiều giai đoạn",
+    },
+    {
+      value: "HOURLY",
+      label: "Theo giờ",
+      desc: "Phù hợp việc phát sinh linh hoạt",
+    },
   ];
 
 const SKILL_SUGGESTIONS = [
   "React",
   "TypeScript",
-  "JavaScript",
   "Node.js",
-  "Python",
-  "Java",
-  "UI/UX Design",
   "Figma",
-  "Photoshop",
-  "Illustrator",
-  "Content Writing",
   "SEO",
-  "Social Media",
+  "Content Writing",
   "Video Editing",
   "Data Analysis",
-  "Excel",
-  "Translation",
   "WordPress",
+  "Translation",
 ];
 
-// ==================== COMPONENT ====================
+const BUDGET_PRESETS = [
+  { label: "500k", value: 500000 },
+  { label: "1 triệu", value: 1000000 },
+  { label: "3 triệu", value: 3000000 },
+  { label: "5 triệu", value: 5000000 },
+];
 
-interface ShortTermLaunchPadProps {
-  onJobCreated?: () => void;
-}
+const DURATION_PRESETS = ["4 giờ", "1 ngày", "3 ngày", "1 tuần", "2 tuần"];
+
+const DESCRIPTION_TEMPLATE = `Mục tiêu công việc:
+- Nêu đầu ra cần bàn giao.
+
+Phạm vi công việc:
+- Liệt kê các đầu việc chính.
+
+Tiêu chí hoàn thành:
+- Chất lượng, định dạng, deadline cần đạt.`;
+
+const REQUIREMENTS_TEMPLATE = `- Có kinh nghiệm với hạng mục tương tự
+- Có thể trao đổi và cập nhật tiến độ rõ ràng`;
+
+const createInitialFormData = (): ShortTermFormState => ({
+  title: "",
+  description: "",
+  requirements: "",
+  budget: "",
+  isNegotiable: false,
+  paymentMethod: "FIXED",
+  deadline: "",
+  workDeadline: "",
+  estimatedDuration: "",
+  urgency: JobUrgency.NORMAL,
+  isRemote: true,
+  location: "",
+  maxApplicants: "10",
+  subCategory: "OTHER",
+  requiredSkills: [],
+});
+
+const currencyFormatter = new Intl.NumberFormat("vi-VN", {
+  style: "currency",
+  currency: "VND",
+  maximumFractionDigits: 0,
+});
+
+const appendBlock = (current: string, block: string) => {
+  const trimmed = current.trim();
+  return trimmed ? `${trimmed}\n\n${block}` : block;
+};
 
 const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
   onJobCreated,
@@ -73,12 +147,18 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
   const [hasSubscription, setHasSubscription] = useState(false);
   const [shortTermRemaining, setShortTermRemaining] = useState(0);
   const [shortTermUnlimited, setShortTermUnlimited] = useState(false);
+  const [formData, setFormData] = useState<ShortTermFormState>(
+    createInitialFormData(),
+  );
+  const [skillInput, setSkillInput] = useState("");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    checkSubscriptionStatus();
+    void checkSubscriptionStatus();
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
-        checkSubscriptionStatus();
+        void checkSubscriptionStatus();
       }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -86,9 +166,8 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
       document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
 
-  const checkSubscriptionStatus = async () => {
+  const checkSubscriptionStatus = async (): Promise<PostingQuota | null> => {
     try {
-      // 1) Try recruiter-specific endpoint first
       const info = await recruiterSubscriptionService.getSubscriptionInfo();
       setHasSubscription(info.hasSubscription);
       if (info.hasSubscription) {
@@ -96,147 +175,150 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
         setShortTermRemaining(info.shortTermJobPostingRemaining);
         return info;
       }
-    } catch {
-      // Endpoint failed — fall through to general premium check
+    } catch (error) {
+      console.log("Recruiter subscription check failed:", error);
     }
 
-    // 2) Fallback: check general premium subscription
     try {
       const generalSub = await premiumService.getCurrentSubscription();
-      if (generalSub && generalSub.status === "ACTIVE") {
+      if (generalSub?.status === "ACTIVE") {
         const planType = generalSub.plan?.planType || "";
         const isEnterprise = planType === "RECRUITER_PRO";
         const isPremiumPlus = planType === "PREMIUM_PLUS";
         const isBasic = planType === "PREMIUM_BASIC";
         const hasSub = isEnterprise || isPremiumPlus || isBasic;
+
         if (hasSub) {
-          const unlimited = isEnterprise;
-          const remaining = isEnterprise ? 9999 : isPremiumPlus ? 50 : 10;
-          setHasSubscription(true);
-          setShortTermUnlimited(unlimited);
-          setShortTermRemaining(remaining);
-          return {
+          const quota: PostingQuota = {
             hasSubscription: true,
-            shortTermJobPostingUnlimited: unlimited,
-            shortTermJobPostingRemaining: remaining,
+            shortTermJobPostingUnlimited: isEnterprise,
+            shortTermJobPostingRemaining: isEnterprise
+              ? 9999
+              : isPremiumPlus
+                ? 50
+                : 10,
           };
+          setHasSubscription(true);
+          setShortTermUnlimited(quota.shortTermJobPostingUnlimited);
+          setShortTermRemaining(quota.shortTermJobPostingRemaining);
+          return quota;
         }
       }
-    } catch {
-      // General premium check also failed
+    } catch (error) {
+      console.log("General premium check failed:", error);
     }
 
-    // No subscription found
     setHasSubscription(false);
     setShortTermUnlimited(false);
     setShortTermRemaining(0);
     return null;
   };
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    requirements: "",
-    budget: "",
-    isNegotiable: false,
-    paymentMethod: "FIXED" as PaymentMethod,
-    deadline: "",
-    workDeadline: "",
-    estimatedDuration: "",
-    urgency: JobUrgency.NORMAL,
-    isRemote: true,
-    location: "",
-    maxApplicants: "10",
-    subCategory: "OTHER",
-    requiredSkills: [] as string[],
-  });
-
-  const [skillInput, setSkillInput] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-
   const handleChange = (
-    e: React.ChangeEvent<
+    event: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
+    const { name, type, value } = event.target;
+    const checked = (event.target as HTMLInputElement).checked;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const handleSkillAdd = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && skillInput.trim()) {
-      e.preventDefault();
-      addSkill(skillInput.trim());
-    }
-  };
-
   const addSkill = (skill: string) => {
-    if (!formData.requiredSkills.includes(skill)) {
-      setFormData((prev) => ({
-        ...prev,
-        requiredSkills: [...prev.requiredSkills, skill],
-      }));
+    const normalized = skill.trim();
+    if (!normalized || formData.requiredSkills.includes(normalized)) {
+      return;
     }
+
+    setFormData((prev) => ({
+      ...prev,
+      requiredSkills: [...prev.requiredSkills, normalized],
+    }));
     setSkillInput("");
-    setShowSuggestions(false);
   };
 
   const removeSkill = (skill: string) => {
     setFormData((prev) => ({
       ...prev,
-      requiredSkills: prev.requiredSkills.filter((s) => s !== skill),
+      requiredSkills: prev.requiredSkills.filter((item) => item !== skill),
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent, publish: boolean) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Basic validation
-    if (!formData.title.trim() || formData.title.length < 10) {
-      showError("Lỗi", "Tiêu đề phải có ít nhất 10 ký tự");
-      setIsSubmitting(false);
-      return;
+  const validateForm = () => {
+    if (formData.title.trim().length < 8) {
+      showError("Thiếu tiêu đề", "Tiêu đề nên có ít nhất 8 ký tự.");
+      return false;
     }
-    if (!formData.description.trim() || formData.description.length < 50) {
-      showError("Lỗi", "Mô tả phải có ít nhất 50 ký tự");
-      setIsSubmitting(false);
-      return;
-    }
-    if (!formData.isNegotiable && Number(formData.budget) < 100000) {
-      showError("Lỗi", "Ngân sách tối thiểu là 100.000 VND");
-      setIsSubmitting(false);
-      return;
-    }
-    if (!formData.deadline) {
-      showError("Lỗi", "Vui lòng chọn hạn nhận đơn");
-      setIsSubmitting(false);
-      return;
+    if (formData.description.trim().length < 50) {
+      showError(
+        "Thiếu mô tả",
+        "Mô tả nên có ít nhất 50 ký tự để ứng viên hiểu đầu việc cần làm.",
+      );
+      return false;
     }
     if (formData.requiredSkills.length === 0) {
-      showError("Lỗi", "Vui lòng thêm ít nhất 1 kỹ năng yêu cầu");
-      setIsSubmitting(false);
+      showError("Thiếu kỹ năng", "Hãy thêm ít nhất 1 kỹ năng quan trọng.");
+      return false;
+    }
+    if (!formData.deadline) {
+      showError("Thiếu hạn nhận việc", "Vui lòng chọn hạn nhận đơn.");
+      return false;
+    }
+    if (!formData.estimatedDuration.trim()) {
+      showError("Thiếu thời lượng", "Hãy nhập thời gian ước tính hoàn thành.");
+      return false;
+    }
+    if (!formData.isRemote && !formData.location.trim()) {
+      showError("Thiếu địa điểm", "Hãy nhập địa điểm nếu công việc không remote.");
+      return false;
+    }
+    if (!formData.isNegotiable && Number(formData.budget) < 100000) {
+      showError(
+        "Ngân sách chưa hợp lệ",
+        "Ngân sách tối thiểu cho việc ngắn hạn là 100.000 VNĐ.",
+      );
+      return false;
+    }
+    if (
+      formData.workDeadline &&
+      formData.deadline &&
+      new Date(formData.workDeadline) < new Date(formData.deadline)
+    ) {
+      showError(
+        "Mốc thời gian chưa hợp lý",
+        "Hạn hoàn thành nên sau hoặc bằng hạn nhận đơn.",
+      );
+      return false;
+    }
+    return true;
+  };
+
+  const submitJob = async (publish: boolean) => {
+    if (!validateForm()) {
       return;
     }
 
-    // Re-fetch fresh subscription data before making posting decisions
+    setIsSubmitting(true);
+
     const freshInfo = await checkSubscriptionStatus();
     const currentHasSub = freshInfo?.hasSubscription ?? false;
-    const currentUnlimited = freshInfo?.shortTermJobPostingUnlimited ?? false;
-    const currentRemaining = freshInfo?.shortTermJobPostingRemaining ?? 0;
+    const currentUnlimited =
+      freshInfo?.shortTermJobPostingUnlimited ?? false;
+    const currentRemaining =
+      freshInfo?.shortTermJobPostingRemaining ?? 0;
 
-    const confirmMsg = publish
+    const confirmMessage = publish
       ? currentHasSub && (currentUnlimited || currentRemaining > 0)
-        ? `Bạn còn ${currentUnlimited ? "không giới hạn" : currentRemaining} lượt đăng tin ngắn hạn. Đăng và xuất bản ngay?`
+        ? currentUnlimited
+          ? "Bạn đang dùng gói recruiter không giới hạn tin ngắn hạn. Xuất bản ngay?"
+          : `Bạn còn ${currentRemaining} lượt đăng việc ngắn hạn. Xác nhận xuất bản?`
         : currentHasSub && currentRemaining <= 0
-          ? null // Will show error instead
-          : "Đăng và xuất bản tin ngay? (Phí: 30.000 VNĐ sẽ trừ vào ví)"
-      : "Lưu bản nháp để chỉnh sửa sau?";
+          ? ""
+          : "Tin ngắn hạn sẽ trừ 30.000 VNĐ từ ví recruiter. Bạn có muốn xuất bản ngay?"
+      : "Lưu nháp để hoàn thiện và xuất bản sau?";
 
     if (
       publish &&
@@ -245,26 +327,19 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
       currentRemaining <= 0
     ) {
       showError(
-        "Hết quota",
-        "Bạn đã hết lượt đăng tin ngắn hạn trong tháng này.",
+        "Đã hết lượt đăng",
+        "Bạn đã dùng hết quota việc ngắn hạn trong tháng này.",
       );
       setIsSubmitting(false);
       return;
     }
-    if (!(await confirmAction(confirmMsg || ""))) {
+
+    if (!(await confirmAction(confirmMessage))) {
       setIsSubmitting(false);
       return;
     }
 
     try {
-      // Append time component to date strings for LocalDateTime backend fields
-      const deadlineDateTime = formData.deadline
-        ? `${formData.deadline}T23:59:59`
-        : formData.deadline;
-      const workDeadlineDateTime = formData.workDeadline
-        ? `${formData.workDeadline}T23:59:59`
-        : undefined;
-
       const payload: CreateShortTermJobRequest = {
         title: formData.title.trim(),
         description: formData.description.trim(),
@@ -272,621 +347,794 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
         budget: formData.isNegotiable ? 0 : Number(formData.budget),
         isNegotiable: formData.isNegotiable,
         paymentMethod: formData.paymentMethod,
-        deadline: deadlineDateTime,
-        workDeadline: workDeadlineDateTime,
-        estimatedDuration: formData.estimatedDuration || "1 ngày",
+        deadline: `${formData.deadline}T23:59:59`,
+        workDeadline: formData.workDeadline
+          ? `${formData.workDeadline}T23:59:59`
+          : undefined,
+        estimatedDuration: formData.estimatedDuration.trim(),
         urgency: formData.urgency,
         isRemote: formData.isRemote,
-        location: formData.isRemote ? undefined : formData.location,
+        location: formData.isRemote ? undefined : formData.location.trim(),
         maxApplicants: Number(formData.maxApplicants) || 10,
         subCategory: formData.subCategory,
         requiredSkills: formData.requiredSkills,
       };
 
       const created = await shortTermJobService.createJob(payload);
-
       if (publish && created?.id) {
         await shortTermJobService.publishJob(created.id);
       }
 
       showSuccess(
-        publish ? "Đã Gửi Duyệt" : "Đã Lưu Nháp",
+        publish ? "Đã gửi duyệt" : "Đã lưu nháp",
         publish
-          ? "Tin việc ngắn hạn đã được gửi để admin phê duyệt!"
-          : "Bản nháp đã được lưu. Bạn có thể chỉnh sửa và xuất bản sau.",
+          ? "Tin việc ngắn hạn đã được gửi để hiển thị cho ứng viên."
+          : "Bản nháp đã được lưu. Bạn có thể chỉnh sửa tiếp bất cứ lúc nào.",
       );
 
-      // Reset form
-      setFormData({
-        title: "",
-        description: "",
-        requirements: "",
-        budget: "",
-        isNegotiable: false,
-        paymentMethod: "FIXED",
-        deadline: "",
-        workDeadline: "",
-        estimatedDuration: "",
-        urgency: JobUrgency.NORMAL,
-        isRemote: true,
-        location: "",
-        maxApplicants: "10",
-        subCategory: "OTHER",
-        requiredSkills: [],
-      });
-
+      setFormData(createInitialFormData());
+      setSkillInput("");
+      setShowAdvanced(false);
       onJobCreated?.();
-    } catch (err) {
-      console.error("Short-term job creation failed:", err);
-      showError("Thất bại", "Không thể tạo việc ngắn hạn. Vui lòng thử lại.");
+    } catch (error) {
+      console.error("Short-term job creation failed:", error);
+      showError(
+        "Không thể tạo việc ngắn hạn",
+        "Có lỗi xảy ra khi lưu công việc. Vui lòng thử lại.",
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const filteredSuggestions = SKILL_SUGGESTIONS.filter(
-    (s) =>
-      !formData.requiredSkills.includes(s) &&
-      s.toLowerCase().includes(skillInput.toLowerCase()),
-  );
+  const budgetPreview = formData.isNegotiable
+    ? "Thỏa thuận"
+    : Number(formData.budget) > 0
+      ? currencyFormatter.format(Number(formData.budget))
+      : "Chưa nhập ngân sách";
+
+  const quotaPreview = hasSubscription
+    ? shortTermUnlimited
+      ? "Premium recruiter: không giới hạn tin ngắn hạn"
+      : shortTermRemaining > 0
+        ? `Premium recruiter: còn ${shortTermRemaining} lượt`
+        : "Premium recruiter: đã hết quota tháng này"
+    : "Đăng lẻ: 30.000 VNĐ mỗi tin";
+
+  const completedEssentials = [
+    formData.title.trim(),
+    formData.description.trim(),
+    formData.requiredSkills.length > 0 ? "skills" : "",
+    formData.deadline,
+    formData.estimatedDuration.trim(),
+    formData.isNegotiable || formData.budget ? "budget" : "",
+  ].filter(Boolean).length;
+
+  const previewMetrics = [
+    { label: "Ngân sách", value: budgetPreview },
+    {
+      label: "Danh mục",
+      value:
+        SUBCATEGORY_OPTIONS.find(
+          (option) => option.value === formData.subCategory,
+        )?.label || "Khác",
+    },
+    { label: "Thanh toán", value: formData.paymentMethod },
+    {
+      label: "Địa điểm",
+      value: formData.isRemote ? "Remote" : formData.location || "Onsite",
+    },
+  ];
 
   return (
-    <div className="fleet-panel">
-      <div className="fleet-title">
-        <i className="fas fa-bolt"></i>
-        Đăng Tin Việc Ngắn Hạn / Gig
+    <div className="sjf-shell">
+      {/* Hero Banner */}
+      <div className="sjf-hero">
+        <div className="sjf-hero__content">
+          {/* Badge row */}
+          <div className="sjf-hero__badges">
+            <span className="sjf-badge sjf-badge--teal">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+              Short-term Gig
+            </span>
+            <span className="sjf-badge sjf-badge--ghost">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              Đăng nhanh
+            </span>
+          </div>
+
+          {/* Headline */}
+          <h2 className="sjf-hero__title">
+            Tuyển freelancer cho
+            <br />
+            <span className="sjf-hero__title--accent">công việc ngắn hạn</span>
+          </h2>
+
+          {/* Description */}
+          <p className="sjf-hero__desc">
+            Đăng việc ngắn hạn với mục tiêu rõ ràng, ngân sách minh bạch và thời hạn cụ thể
+            để thu hút freelancer chất lượng cao nhất. Mọi thứ chỉ mất vài phút để hoàn tất.
+          </p>
+
+          {/* 3 pillars */}
+          <div className="sjf-hero__pillars">
+            <div className="sjf-pillar">
+              <div className="sjf-pillar__icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <div className="sjf-pillar__text">
+                <strong>Phản hồi nhanh</strong>
+                <span>Freelancer nhận việc và bắt đầu trong vài giờ đến vài ngày</span>
+              </div>
+            </div>
+            <div className="sjf-pillar">
+              <div className="sjf-pillar__icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+              </div>
+              <div className="sjf-pillar__text">
+                <strong>Thanh toán linh hoạt</strong>
+                <span>Trả một lần, theo cột mốc hoặc theo giờ — tùy độ phức tạp</span>
+              </div>
+            </div>
+            <div className="sjf-pillar">
+              <div className="sjf-pillar__icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <div className="sjf-pillar__text">
+                <strong>Kết nối chuyên gia</strong>
+                <span>Tìm đúng người với kỹ năng cụ thể cho từng hạng mục</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Meta chips */}
+          <div className="sjf-hero__meta">
+            <span className="sjf-meta-chip">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              {quotaPreview}
+            </span>
+            <span className="sjf-meta-chip">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+              </svg>
+              Hoàn thiện {completedEssentials}/6 mục cốt lõi
+            </span>
+          </div>
+        </div>
+
+        {/* Aside panel */}
+        <div className="sjf-hero__aside">
+          {/* Tip card */}
+          <div className="sjf-tip-card">
+            <div className="sjf-tip-card__header">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+              Mẹo đăng việc hiệu quả
+            </div>
+            <ul className="sjf-tip-card__list">
+              <li>Tiêu đề càng cụ thể, ứng viên càng đúng — tránh tiêu đề chung chung</li>
+              <li>Ngân sách rõ ràng giúp freelancer tự đánh giá phù hợp trước khi ứng tuyển</li>
+              <li>Deadline hợp lý: quá gấp khó tuyển, quá xa freelancer sẽ trễ</li>
+              <li>3-5 kỹ năng chính là đủ — danh sách quá dài sẽ không ai nhìn</li>
+            </ul>
+          </div>
+
+          {/* Quick stats */}
+          <div className="sjf-quick-stats">
+            <div className="sjf-quick-stat">
+              <span className="sjf-quick-stat__val">24h</span>
+              <span className="sjf-quick-stat__lbl">Thời gian đăng trung bình</span>
+            </div>
+            <div className="sjf-quick-stat">
+              <span className="sjf-quick-stat__val">3</span>
+              <span className="sjf-quick-stat__lbl">Bước để hoàn tất đăng tin</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="fleet-form-layout">
-        {/* ======================== LEFT: FORM ======================== */}
-        <form onSubmit={(e) => handleSubmit(e, true)}>
-          {/* Title */}
-          <div className="fleet-input-group">
-            <label className="fleet-label">Tiêu Đề Công Việc *</label>
-            <input
-              type="text"
-              name="title"
-              className="fleet-input"
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="VD: Thiết kế banner quảng cáo cho fanpage"
-              required
-            />
-            {formData.title.length > 0 && formData.title.length < 10 && (
-              <small style={{ color: "#fca5a5", fontSize: "0.75rem" }}>
-                Cần ít nhất 10 ký tự ({formData.title.length}/10)
-              </small>
+      <div className="sjf-grid">
+        <form
+          className="sjf-form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            void submitJob(true);
+          }}
+        >
+          {/* Section 1: Core Description */}
+          <div className="sjf-step-card">
+            <div className="sjf-step-card__header sjf-step-card__header--teal">
+              <div className="sjf-step-card__num">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                </svg>
+              </div>
+              <div>
+                <h3 className="sjf-step-card__title">Mô tả công việc</h3>
+                <p className="sjf-step-card__desc">Viết để ứng viên hiểu ngay đầu ra — không phải đoán việc.</p>
+              </div>
+            </div>
+
+            <div className="sjf-field-grid">
+              <div className="sjf-field sjf-field--full">
+                <label className="sjf-label">
+                  Tiêu đề công việc
+                  <span className="sjf-label__required">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  className="sjf-input"
+                  value={formData.title}
+                  onChange={handleChange}
+                  placeholder="Ví dụ: Thiết kế landing page bán hàng 5 section"
+                  required
+                />
+              </div>
+
+              <div className="sjf-field sjf-field--full">
+                <div className="sjf-label-row">
+                  <label className="sjf-label">
+                    Mô tả công việc
+                    <span className="sjf-label__required">*</span>
+                  </label>
+                  <button
+                    type="button"
+                    className="sjf-link-button"
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        description: appendBlock(
+                          prev.description,
+                          DESCRIPTION_TEMPLATE,
+                        ),
+                      }))
+                    }
+                  >
+                    Chèn mẫu
+                  </button>
+                </div>
+                <textarea
+                  name="description"
+                  className="sjf-textarea"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={5}
+                  placeholder="Mô tả đầu ra cần bàn giao, phạm vi công việc và tiêu chí hoàn thành."
+                  required
+                />
+              </div>
+
+              <div className="sjf-field sjf-field--full">
+                <label className="sjf-label">
+                  Kỹ năng quan trọng
+                  <span className="sjf-label__required">*</span>
+                </label>
+                <div className="sjf-inline-input">
+                  <input
+                    type="text"
+                    className="sjf-input"
+                    value={skillInput}
+                    onChange={(event) => setSkillInput(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        addSkill(skillInput);
+                      }
+                    }}
+                    placeholder="Nhập kỹ năng rồi nhấn Enter"
+                  />
+                  <button
+                    type="button"
+                    className="sjf-button sjf-button--secondary"
+                    onClick={() => addSkill(skillInput)}
+                  >
+                    Thêm
+                  </button>
+                </div>
+
+                <div className="sjf-pill-row">
+                  {SKILL_SUGGESTIONS.filter(
+                    (skill) => !formData.requiredSkills.includes(skill),
+                  ).map((skill) => (
+                    <button
+                      key={skill}
+                      type="button"
+                      className="sjf-preset"
+                      onClick={() => addSkill(skill)}
+                    >
+                      + {skill}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="sjf-chip-row">
+                  {formData.requiredSkills.length > 0 ? (
+                    formData.requiredSkills.map((skill) => (
+                      <span key={skill} className="sjf-chip sjf-chip--active sjf-chip--teal">
+                        {skill}
+                        <button
+                          type="button"
+                          className="sjf-chip__remove"
+                          onClick={() => removeSkill(skill)}
+                          aria-label={`Xóa ${skill}`}
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))
+                  ) : (
+                    <span className="sjf-empty">
+                      Chưa có kỹ năng nào.
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Budget & Timeline */}
+          <div className="sjf-step-card">
+            <div className="sjf-step-card__header sjf-step-card__header--teal">
+              <div className="sjf-step-card__num">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+              </div>
+              <div>
+                <h3 className="sjf-step-card__title">Ngân sách & Thời hạn</h3>
+                <p className="sjf-step-card__desc">Ứng viên cần biết giá trị công việc và tốc độ cần hoàn thành.</p>
+              </div>
+            </div>
+
+            <div className="sjf-field-grid">
+              <div className="sjf-field">
+                <label className="sjf-label">
+                  Ngân sách (VNĐ)
+                  {!formData.isNegotiable && (
+                    <span className="sjf-label__required">*</span>
+                  )}
+                </label>
+                <input
+                  type="number"
+                  name="budget"
+                  className="sjf-input"
+                  value={formData.budget}
+                  onChange={handleChange}
+                  disabled={formData.isNegotiable}
+                  placeholder="1000000"
+                />
+              </div>
+
+              <div className="sjf-field">
+                <label className="sjf-label">Cách thanh toán</label>
+                <select
+                  name="paymentMethod"
+                  className="sjf-select"
+                  value={formData.paymentMethod}
+                  onChange={handleChange}
+                >
+                  {PAYMENT_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <span className="sjf-hint">
+                  {
+                    PAYMENT_OPTIONS.find(
+                      (option) => option.value === formData.paymentMethod,
+                    )?.desc
+                  }
+                </span>
+              </div>
+
+              <div className="sjf-field sjf-field--full">
+                <span className="sjf-label">Ngân sách nhanh</span>
+                <div className="sjf-pill-row">
+                  {BUDGET_PRESETS.map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      className={`sjf-preset ${
+                        Number(formData.budget) === preset.value
+                          ? "sjf-preset--active"
+                          : ""
+                      }`}
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          budget: String(preset.value),
+                          isNegotiable: false,
+                        }))
+                      }
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="sjf-field sjf-field--full">
+                <div className="sjf-toggle-card sjf-toggle-card--teal">
+                  <div className="sjf-toggle-card__content">
+                    <span className="sjf-toggle-card__title">
+                      Cho phép thương lượng giá
+                    </span>
+                    <span className="sjf-note">
+                      Bật khi muốn nhận báo giá từ ứng viên thay vì chốt giá ngay.
+                    </span>
+                  </div>
+                  <label className="sjf-switch sjf-switch--teal">
+                    <input
+                      type="checkbox"
+                      name="isNegotiable"
+                      checked={formData.isNegotiable}
+                      onChange={handleChange}
+                    />
+                    <span className="sjf-switch__track" />
+                  </label>
+                </div>
+              </div>
+
+              <div className="sjf-field">
+                <label className="sjf-label">
+                  Hạn nhận đơn
+                  <span className="sjf-label__required">*</span>
+                </label>
+                <input
+                  type="date"
+                  name="deadline"
+                  className="sjf-input"
+                  value={formData.deadline}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="sjf-field">
+                <label className="sjf-label">
+                  Thời lượng ước tính
+                  <span className="sjf-label__required">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="estimatedDuration"
+                  className="sjf-input"
+                  value={formData.estimatedDuration}
+                  onChange={handleChange}
+                  placeholder="Ví dụ: 3 ngày, 8 giờ"
+                  required
+                />
+              </div>
+
+              <div className="sjf-field sjf-field--full">
+                <span className="sjf-label">Thời lượng nhanh</span>
+                <div className="sjf-pill-row">
+                  {DURATION_PRESETS.map((duration) => (
+                    <button
+                      key={duration}
+                      type="button"
+                      className={`sjf-preset ${
+                        formData.estimatedDuration === duration
+                          ? "sjf-preset--active"
+                          : ""
+                      }`}
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          estimatedDuration: duration,
+                        }))
+                      }
+                    >
+                      {duration}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 3: Collaboration */}
+          <div className="sjf-step-card">
+            <div className="sjf-step-card__header sjf-step-card__header--teal">
+              <div className="sjf-step-card__num">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              </div>
+              <div>
+                <h3 className="sjf-step-card__title">Danh mục & Cách làm việc</h3>
+                <p className="sjf-step-card__desc">Chọn danh mục và cách phối hợp để ứng viên hình dung công việc.</p>
+              </div>
+            </div>
+
+            <div className="sjf-field-grid">
+              <div className="sjf-field sjf-field--full">
+                <label className="sjf-label">Danh mục công việc</label>
+                <div className="sjf-segment">
+                  {SUBCATEGORY_OPTIONS.slice(0, 6).map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      className={`sjf-segment__button sjf-segment__button--teal ${
+                        formData.subCategory === option.value
+                          ? "sjf-segment__button--active"
+                          : ""
+                      }`}
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          subCategory: option.value,
+                        }))
+                      }
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="sjf-field sjf-field--full">
+                <div className="sjf-toggle-card sjf-toggle-card--teal">
+                  <div className="sjf-toggle-card__content">
+                    <span className="sjf-toggle-card__title">
+                      Làm việc từ xa / Remote
+                    </span>
+                    <span className="sjf-note">
+                      Tắt nếu công việc yêu cầu gặp trực tiếp hoặc onsite tại văn phòng.
+                    </span>
+                  </div>
+                  <label className="sjf-switch sjf-switch--teal">
+                    <input
+                      type="checkbox"
+                      name="isRemote"
+                      checked={formData.isRemote}
+                      onChange={handleChange}
+                    />
+                    <span className="sjf-switch__track" />
+                  </label>
+                </div>
+              </div>
+
+              {!formData.isRemote && (
+                <div className="sjf-field sjf-field--full">
+                  <label className="sjf-label">
+                    Địa điểm làm việc
+                    <span className="sjf-label__required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="location"
+                    className="sjf-input"
+                    value={formData.location}
+                    onChange={handleChange}
+                    placeholder="Quận 3, TP.HCM"
+                  />
+                </div>
+              )}
+            </div>
+
+            <button
+              type="button"
+              className="sjf-advanced-toggle sjf-advanced-toggle--teal"
+              onClick={() => setShowAdvanced((prev) => !prev)}
+            >
+              <span>Thông tin bổ sung: yêu cầu ứng viên, độ gấp...</span>
+              <span>{showAdvanced ? "Thu gọn" : "Mở rộng"}</span>
+            </button>
+
+            {showAdvanced && (
+              <div className="sjf-advanced">
+                <div className="sjf-field-grid">
+                  <div className="sjf-field sjf-field--full">
+                    <div className="sjf-label-row">
+                      <label className="sjf-label">Yêu cầu ứng viên</label>
+                      <button
+                        type="button"
+                        className="sjf-link-button"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            requirements: appendBlock(
+                              prev.requirements,
+                              REQUIREMENTS_TEMPLATE,
+                            ),
+                          }))
+                        }
+                      >
+                        Chèn mẫu
+                      </button>
+                    </div>
+                    <textarea
+                      name="requirements"
+                      className="sjf-textarea"
+                      value={formData.requirements}
+                      onChange={handleChange}
+                      rows={4}
+                      placeholder="Nêu rõ kỳ vọng về kinh nghiệm, kỹ năng mềm hoặc công cụ cần dùng."
+                    />
+                  </div>
+
+                  <div className="sjf-field">
+                    <label className="sjf-label">Độ gấp</label>
+                    <select
+                      name="urgency"
+                      className="sjf-select"
+                      value={formData.urgency}
+                      onChange={handleChange}
+                    >
+                      {URGENCY_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="sjf-field">
+                    <label className="sjf-label">Số ứng viên tối đa</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="100"
+                      name="maxApplicants"
+                      className="sjf-input"
+                      value={formData.maxApplicants}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="sjf-field">
+                    <label className="sjf-label">Hạn hoàn thành</label>
+                    <input
+                      type="date"
+                      name="workDeadline"
+                      className="sjf-input"
+                      value={formData.workDeadline}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+              </div>
             )}
           </div>
 
-          {/* Description */}
-          <div className="fleet-input-group">
-            <label className="fleet-label">Mô Tả Chi Tiết *</label>
-            <textarea
-              name="description"
-              className="fleet-input"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Mô tả công việc cần làm, yêu cầu cụ thể, bàn giao..."
-              rows={4}
-              required
-            />
-            {formData.description.length > 0 &&
-              formData.description.length < 50 && (
-                <small style={{ color: "#fca5a5", fontSize: "0.75rem" }}>
-                  Cần ít nhất 50 ký tự ({formData.description.length}/50)
-                </small>
-              )}
-          </div>
-
-          {/* Requirements */}
-          <div className="fleet-input-group">
-            <label className="fleet-label">Yêu Cầu Ứng Viên</label>
-            <textarea
-              name="requirements"
-              className="fleet-input"
-              value={formData.requirements}
-              onChange={handleChange}
-              placeholder="- Có kinh nghiệm thiết kế&#10;- Sử dụng thành thạo Figma&#10;- ..."
-              rows={3}
-            />
-          </div>
-
-          {/* Category & Urgency row */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "10px",
-            }}
-          >
-            <div className="fleet-input-group">
-              <label className="fleet-label">Danh Mục</label>
-              <select
-                name="subCategory"
-                className="fleet-input"
-                value={formData.subCategory}
-                onChange={handleChange}
-              >
-                {SUBCATEGORY_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="fleet-input-group">
-              <label className="fleet-label">Mức Độ Gấp</label>
-              <select
-                name="urgency"
-                className="fleet-input"
-                value={formData.urgency}
-                onChange={handleChange}
-              >
-                {URGENCY_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.badge} {o.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Skills */}
-          <div className="fleet-input-group" style={{ position: "relative" }}>
-            <label className="fleet-label">
-              Kỹ Năng Yêu Cầu * — Nhấn Enter hoặc chọn gợi ý
-            </label>
-            <input
-              type="text"
-              className="fleet-input"
-              value={skillInput}
-              onChange={(e) => {
-                setSkillInput(e.target.value);
-                setShowSuggestions(true);
-              }}
-              onKeyDown={handleSkillAdd}
-              onFocus={() => setShowSuggestions(true)}
-              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-              placeholder="Nhập kỹ năng và nhấn Enter"
-            />
-            {/* Suggestions dropdown */}
-            {showSuggestions &&
-              skillInput &&
-              filteredSuggestions.length > 0 && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "100%",
-                    left: 0,
-                    right: 0,
-                    background: "#1e293b",
-                    border: "1px solid rgba(6,182,212,0.3)",
-                    borderRadius: 8,
-                    maxHeight: 150,
-                    overflowY: "auto",
-                    zIndex: 20,
-                  }}
-                >
-                  {filteredSuggestions.slice(0, 6).map((s) => (
-                    <div
-                      key={s}
-                      onMouseDown={() => addSkill(s)}
-                      style={{
-                        padding: "8px 12px",
-                        cursor: "pointer",
-                        fontSize: "0.85rem",
-                        color: "#e2e8f0",
-                        borderBottom: "1px solid rgba(255,255,255,0.05)",
-                      }}
-                      onMouseOver={(e) =>
-                        ((e.target as HTMLElement).style.background =
-                          "rgba(6,182,212,0.12)")
-                      }
-                      onMouseOut={(e) =>
-                        ((e.target as HTMLElement).style.background =
-                          "transparent")
-                      }
-                    >
-                      {s}
-                    </div>
-                  ))}
-                </div>
-              )}
-            <div className="fleet-merc-skills" style={{ marginTop: "10px" }}>
-              {formData.requiredSkills.map((skill) => (
-                <span
-                  key={skill}
-                  className="fleet-chip"
-                  onClick={() => removeSkill(skill)}
-                  style={{ cursor: "pointer" }}
-                  title="Click để xóa"
-                >
-                  {skill} ✕
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Budget & Payment row */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "10px",
-            }}
-          >
-            <div className="fleet-input-group">
-              <label className="fleet-label">Ngân Sách (VND) *</label>
-              <input
-                type="number"
-                name="budget"
-                className="fleet-input"
-                value={formData.budget}
-                onChange={handleChange}
-                placeholder="VD: 500000"
-                disabled={formData.isNegotiable}
-                required={!formData.isNegotiable}
-                min="100000"
-              />
-            </div>
-            <div className="fleet-input-group">
-              <label className="fleet-label">Phương Thức Thanh Toán</label>
-              <select
-                name="paymentMethod"
-                className="fleet-input"
-                value={formData.paymentMethod}
-                onChange={handleChange}
-              >
-                {PAYMENT_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label} — {o.desc}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div
-            className="fleet-input-group"
-            style={{ flexDirection: "row", alignItems: "center", gap: "10px" }}
-          >
-            <input
-              type="checkbox"
-              name="isNegotiable"
-              checked={formData.isNegotiable}
-              onChange={handleChange}
-              id="st-negotiable-check"
-            />
-            <label
-              htmlFor="st-negotiable-check"
-              style={{ color: "var(--fleet-text)", cursor: "pointer" }}
+          <div className="sjf-actions">
+            <button
+              type="button"
+              className="sjf-button sjf-button--secondary"
+              disabled={isSubmitting}
+              onClick={() => void submitJob(false)}
             >
-              Thỏa thuận (Ẩn mức giá)
-            </label>
-          </div>
-
-          {/* Deadlines row */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "10px",
-            }}
-          >
-            <div className="fleet-input-group">
-              <label className="fleet-label">Hạn Nhận Đơn *</label>
-              <input
-                type="date"
-                name="deadline"
-                className="fleet-input"
-                value={formData.deadline}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="fleet-input-group">
-              <label className="fleet-label">Hạn Hoàn Thành</label>
-              <input
-                type="date"
-                name="workDeadline"
-                className="fleet-input"
-                value={formData.workDeadline}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Duration & Max Applicants */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "10px",
-            }}
-          >
-            <div className="fleet-input-group">
-              <label className="fleet-label">Thời Gian Ước Tính</label>
-              <input
-                type="text"
-                name="estimatedDuration"
-                className="fleet-input"
-                value={formData.estimatedDuration}
-                onChange={handleChange}
-                placeholder="VD: 2 ngày, 4 giờ"
-              />
-            </div>
-            <div className="fleet-input-group">
-              <label className="fleet-label">Số Ứng Viên Tối Đa</label>
-              <input
-                type="number"
-                name="maxApplicants"
-                className="fleet-input"
-                value={formData.maxApplicants}
-                onChange={handleChange}
-                min="1"
-                max="100"
-              />
-            </div>
-          </div>
-
-          {/* Remote / Location */}
-          <div
-            className="fleet-input-group"
-            style={{ flexDirection: "row", alignItems: "center", gap: "10px" }}
-          >
-            <input
-              type="checkbox"
-              name="isRemote"
-              checked={formData.isRemote}
-              onChange={handleChange}
-              id="st-remote-check"
-            />
-            <label
-              htmlFor="st-remote-check"
-              style={{ color: "var(--fleet-text)", cursor: "pointer" }}
-            >
-              Làm việc từ xa (Remote)
-            </label>
-          </div>
-
-          {!formData.isRemote && (
-            <div className="fleet-input-group">
-              <label className="fleet-label">Địa Điểm Làm Việc</label>
-              <input
-                type="text"
-                name="location"
-                className="fleet-input"
-                value={formData.location}
-                onChange={handleChange}
-                placeholder="Nhập địa chỉ cụ thể..."
-                required
-              />
-            </div>
-          )}
-
-          {/* Action buttons */}
-          <div style={{ display: "flex", gap: "12px", marginTop: "16px" }}>
+              {isSubmitting ? "Đang lưu..." : "Lưu nháp"}
+            </button>
             <button
               type="submit"
-              className="fleet-btn-primary"
-              disabled={isSubmitting}
-              style={{ flex: 1 }}
+              className="sjf-button sjf-button--primary sjf-button--teal"
+              disabled={
+                isSubmitting ||
+                (hasSubscription &&
+                  !shortTermUnlimited &&
+                  shortTermRemaining <= 0)
+              }
             >
               {isSubmitting
                 ? "Đang xử lý..."
                 : hasSubscription &&
                     (shortTermUnlimited || shortTermRemaining > 0)
-                  ? `⚡ Xuất Bản Ngay (Gói Premium${!shortTermUnlimited ? ` - còn ${shortTermRemaining} lượt` : ""})`
+                  ? shortTermUnlimited
+                    ? "Xuất bản bằng gói Premium"
+                    : `Xuất bản • còn ${shortTermRemaining} lượt`
                   : hasSubscription && shortTermRemaining <= 0
-                    ? "Đã hết lượt đăng tin ngắn hạn"
-                    : "⚡ Xuất Bản Ngay (Phí: 30.000 VNĐ)"}
-            </button>
-            <button
-              type="button"
-              className="fleet-btn-primary"
-              disabled={isSubmitting}
-              style={{
-                flex: 0.6,
-                background: "rgba(100,116,139,0.25)",
-                borderColor: "rgba(100,116,139,0.4)",
-              }}
-              onClick={(e) => handleSubmit(e as any, false)}
-            >
-              💾 Lưu Nháp
+                    ? "Đã hết lượt đăng tháng này"
+                    : "Xuất bản • phí 30.000 VNĐ"}
             </button>
           </div>
         </form>
 
-        {/* ======================== RIGHT: PREVIEW ======================== */}
-        <div
-          style={{
-            background: "rgba(0,0,0,0.3)",
-            padding: "20px",
-            borderRadius: "8px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-          }}
-        >
-          <div className="fleet-label" style={{ marginBottom: "4px" }}>
-            Xem Trước Tin Đăng
-          </div>
-
-          <div
-            className="fleet-panel"
-            style={{ border: "1px dashed var(--fleet-cyan)", margin: 0 }}
-          >
-            <h3 style={{ color: "#fff", margin: "0 0 8px 0" }}>
-              {formData.title || "Tiêu đề công việc"}
-            </h3>
-
-            {/* Tags row */}
-            <div
-              style={{
-                display: "flex",
-                gap: "6px",
-                flexWrap: "wrap",
-                marginBottom: "12px",
-              }}
-            >
-              <span
-                className="fleet-chip"
-                style={{
-                  background: "rgba(245,158,11,0.2)",
-                  borderColor: "rgba(245,158,11,0.4)",
-                }}
-              >
-                {SUBCATEGORY_OPTIONS.find(
-                  (o) => o.value === formData.subCategory,
-                )?.label || "Khác"}
-              </span>
-              <span
-                className="fleet-chip"
-                style={{
-                  background: "rgba(6,182,212,0.2)",
-                  borderColor: "rgba(6,182,212,0.4)",
-                }}
-              >
-                {formData.isRemote
-                  ? "🌐 Remote"
-                  : `📍 ${formData.location || "Onsite"}`}
-              </span>
-              <span className="fleet-chip">
-                {
-                  URGENCY_OPTIONS.find((o) => o.value === formData.urgency)
-                    ?.badge
-                }{" "}
-                {
-                  URGENCY_OPTIONS.find((o) => o.value === formData.urgency)
-                    ?.label
-                }
-              </span>
-            </div>
-
-            <p
-              style={{
-                color: "var(--fleet-text-muted)",
-                fontSize: "0.9rem",
-                whiteSpace: "pre-line",
-              }}
-            >
-              {formData.description || "Mô tả công việc sẽ xuất hiện ở đây..."}
-            </p>
-
-            {formData.requirements && (
-              <div style={{ marginTop: "12px" }}>
-                <div className="fleet-label">Yêu Cầu</div>
-                <p
-                  style={{
-                    color: "var(--fleet-text-muted)",
-                    fontSize: "0.85rem",
-                    whiteSpace: "pre-line",
-                  }}
-                >
-                  {formData.requirements}
-                </p>
-              </div>
-            )}
-
-            <div
-              style={{
-                marginTop: "16px",
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "12px",
-              }}
-            >
-              <div>
-                <div className="fleet-label">Ngân Sách</div>
-                <div
-                  style={{ color: "var(--fleet-success)", fontWeight: "bold" }}
-                >
-                  {formData.isNegotiable
-                    ? "Thỏa thuận"
-                    : formData.budget
-                      ? new Intl.NumberFormat("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(Number(formData.budget))
-                      : "0 ₫"}
-                </div>
+        <aside className="sjf-card sjf-card--sticky">
+          <div className="sjf-preview">
+            <div className="sjf-preview__header">
+              <div className="sjf-preview__header-icon sjf-preview__header-icon--teal">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
               </div>
               <div>
-                <div className="fleet-label">Thanh Toán</div>
-                <div style={{ color: "#fff" }}>
-                  {
-                    PAYMENT_OPTIONS.find(
-                      (o) => o.value === formData.paymentMethod,
-                    )?.label
-                  }
-                </div>
+                <h3 className="sjf-card__title">Xem trước việc ngắn hạn</h3>
+                <p className="sjf-card__desc">Cách tin đăng sẽ hiển thị với ứng viên.</p>
               </div>
             </div>
 
-            <div
-              style={{
-                marginTop: "12px",
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "12px",
-              }}
-            >
-              <div>
-                <div className="fleet-label">Hạn Nhận Đơn</div>
-                <div style={{ color: "#fff" }}>
-                  {formData.deadline
-                    ? new Date(formData.deadline).toLocaleDateString("vi-VN")
-                    : "—"}
-                </div>
-              </div>
-              <div>
-                <div className="fleet-label">Thời Gian</div>
-                <div style={{ color: "#fff" }}>
-                  {formData.estimatedDuration || "—"}
-                </div>
-              </div>
+            <div className="sjf-progress sjf-progress--teal" aria-hidden="true">
+              <div
+                className="sjf-progress__bar sjf-progress__bar--teal"
+                style={{ width: `${(completedEssentials / 6) * 100}%` }}
+              />
             </div>
 
-            <div style={{ marginTop: "16px" }}>
-              <div className="fleet-label">Kỹ Năng Yêu Cầu</div>
-              <div className="fleet-merc-skills">
-                {formData.requiredSkills.length > 0 ? (
-                  formData.requiredSkills.map((s) => (
-                    <span key={s} className="fleet-chip">
-                      {s}
-                    </span>
-                  ))
-                ) : (
-                  <span
-                    style={{
-                      color: "var(--fleet-text-muted)",
-                      fontStyle: "italic",
-                    }}
-                  >
-                    Chưa chỉ định kỹ năng
+            <div className="sjf-preview__hero sjf-preview__hero--teal">
+              <h4 className="sjf-preview__title">
+                {formData.title || "Tiêu đề việc ngắn hạn sẽ hiển thị ở đây"}
+              </h4>
+              <p className="sjf-preview__body">
+                {formData.description ||
+                  "Mô tả rõ đầu ra, cách bàn giao và tiêu chí hoàn thành để freelancer tự đánh giá phù hợp."}
+              </p>
+            </div>
+
+            <div className="sjf-preview__grid">
+              {previewMetrics.map((metric) => (
+                <div key={metric.label} className="sjf-preview__metric sjf-preview__metric--teal">
+                  <span className="sjf-preview__metric-label">
+                    {metric.label}
                   </span>
-                )}
-              </div>
+                  <span className="sjf-preview__metric-value">
+                    {metric.value}
+                  </span>
+                </div>
+              ))}
             </div>
 
-            <div
-              style={{
-                marginTop: "16px",
-                padding: "10px 14px",
-                background: "rgba(245,158,11,0.08)",
-                borderRadius: 8,
-                border: "1px solid rgba(245,158,11,0.18)",
-                fontSize: "0.8rem",
-                color: "#f59e0b",
-              }}
-            >
-              ⚡ Tối đa {formData.maxApplicants || 10} ứng viên
-              {formData.workDeadline &&
-                ` · Hoàn thành trước ${new Date(formData.workDeadline).toLocaleDateString("vi-VN")}`}
+            <div className="sjf-preview__list">
+              <div className="sjf-preview__list-item sjf-preview__list-item--teal">
+                <span className="sjf-preview__list-label">Kỹ năng yêu cầu</span>
+                <div className="sjf-chip-row">
+                  {formData.requiredSkills.length > 0 ? (
+                    formData.requiredSkills.map((skill) => (
+                      <span key={skill} className="sjf-chip sjf-chip--active sjf-chip--teal">
+                        {skill}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="sjf-empty">
+                      Chưa có kỹ năng nào.
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="sjf-preview__list-item sjf-preview__list-item--teal">
+                <span className="sjf-preview__list-label">Tiến độ</span>
+                <span className="sjf-preview__list-value">
+                  {`Nhận đơn đến ${formData.deadline || "..."} • Ước tính ${
+                    formData.estimatedDuration || "..."
+                  }`}
+                </span>
+              </div>
+
+              <div className="sjf-preview__list-item sjf-preview__list-item--teal">
+                <span className="sjf-preview__list-label">
+                  Yêu cầu hỗ trợ
+                </span>
+                <span className="sjf-preview__list-value">
+                  {formData.requirements ? (
+                    formData.requirements
+                  ) : (
+                    <span className="sjf-empty">
+                      Có thể thêm yêu cầu chi tiết trong phần nâng cao.
+                    </span>
+                  )}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   );

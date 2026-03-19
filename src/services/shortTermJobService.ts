@@ -1,4 +1,5 @@
 import axiosInstance from "./axiosInstance";
+import { uploadMedia } from "./mediaService";
 import {
   CreateShortTermJobRequest,
   UpdateShortTermJobRequest,
@@ -10,8 +11,10 @@ import {
   ShortTermJobFilters,
   ShortTermJobStatus,
   ShortTermApplicationStatus,
+  DeliverableType,
   UpdateShortTermApplicationStatusRequest,
 } from "../types/ShortTermJob";
+import { getStoredUserRaw } from "../utils/authStorage";
 
 // Helper type for axios error handling
 type AxiosError = { response?: { data?: { message?: string } } };
@@ -41,6 +44,54 @@ class ShortTermJobService {
         data.recruiterRating ?? data.recruiterInfo?.rating ?? undefined,
       recruiterId: data.recruiterId ?? data.recruiterInfo?.id ?? 0,
     };
+  }
+
+  private getCurrentActorId(): number {
+    try {
+      const storedUser = getStoredUserRaw();
+      if (!storedUser) {
+        return 0;
+      }
+
+      const parsed = JSON.parse(storedUser) as { id?: number };
+      return typeof parsed.id === "number" ? parsed.id : 0;
+    } catch {
+      return 0;
+    }
+  }
+
+  private inferDeliverableType(file: File): DeliverableType {
+    const mimeType = file.type.toLowerCase();
+    const fileName = file.name.toLowerCase();
+
+    if (mimeType.startsWith("image/")) return DeliverableType.IMAGE;
+    if (mimeType.startsWith("video/")) return DeliverableType.VIDEO;
+    if (
+      mimeType.includes("pdf") ||
+      mimeType.includes("document") ||
+      mimeType.includes("spreadsheet") ||
+      mimeType.includes("presentation")
+    ) {
+      return DeliverableType.DOCUMENT;
+    }
+    if (
+      fileName.endsWith(".zip") ||
+      fileName.endsWith(".rar") ||
+      fileName.endsWith(".tar") ||
+      fileName.endsWith(".gz") ||
+      fileName.endsWith(".js") ||
+      fileName.endsWith(".ts") ||
+      fileName.endsWith(".tsx") ||
+      fileName.endsWith(".jsx") ||
+      fileName.endsWith(".java") ||
+      fileName.endsWith(".py") ||
+      fileName.endsWith(".cs") ||
+      fileName.endsWith(".cpp") ||
+      fileName.endsWith(".c")
+    ) {
+      return DeliverableType.CODE;
+    }
+    return DeliverableType.FILE;
   }
 
   // ==================== JOB POSTING ENDPOINTS (RECRUITER) ====================
@@ -405,9 +456,42 @@ class ShortTermJobService {
     data: SubmitDeliverableRequest,
   ): Promise<ShortTermApplicationResponse> {
     try {
+      const actorId = this.getCurrentActorId();
+      const uploadedDeliverables = await Promise.all(
+        (data.files || []).map(async (file) => {
+          const media = await uploadMedia(file, actorId);
+          return {
+            type: this.inferDeliverableType(file),
+            fileName: media.fileName || file.name,
+            fileUrl: media.url,
+            fileSize: media.fileSize ?? file.size,
+            mimeType: file.type || undefined,
+            description: undefined,
+          };
+        }),
+      );
+
+      const linkDeliverables = (data.links || [])
+        .map((url) => url.trim())
+        .filter(Boolean)
+        .map((url) => ({
+          type: DeliverableType.LINK,
+          fileName: url,
+          fileUrl: url,
+          fileSize: 0,
+          mimeType: "text/uri-list",
+          description: undefined,
+        }));
+
       const response = await axiosInstance.post<ShortTermApplicationResponse>(
         "/api/short-term-jobs/applications/submit-deliverables",
-        data,
+        {
+          applicationId: data.applicationId,
+          milestoneId: data.milestoneId,
+          workNote: data.workNote,
+          deliverables: [...uploadedDeliverables, ...linkDeliverables],
+          isFinalSubmission: data.isFinalSubmission,
+        },
       );
       return response.data;
     } catch (error) {

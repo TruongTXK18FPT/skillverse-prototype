@@ -1,14 +1,39 @@
-import { MapPin, Clock, Users, ArrowRight } from 'lucide-react';
-import { JobPostingResponse } from '../../data/jobDTOs';
+import { useEffect, useState } from 'react';
+import { MapPin, Clock, Users, ArrowRight, Sparkles, Zap } from 'lucide-react';
+import { JobPostingResponse, JobBoostResponse, JobBoostStatus } from '../../data/jobDTOs';
+import jobBoostService from '../../services/jobBoostService';
 
 interface FateCardProps {
   job: JobPostingResponse;
   onClick: () => void;
+  showBoostBadge?: boolean;
 }
 
-const FateCard = ({ job, onClick }: FateCardProps) => {
+const FateCard: React.FC<FateCardProps> = ({ job, onClick, showBoostBadge = true }) => {
+  const [boost, setBoost] = useState<JobBoostResponse | null>(null);
+
+  useEffect(() => {
+    if (showBoostBadge) {
+      loadBoostStatus();
+    }
+  }, [job.id, showBoostBadge]);
+
+  const loadBoostStatus = async () => {
+    try {
+      const boostData = await jobBoostService.getBoostByJob(job.id);
+      setBoost(boostData);
+    } catch (error) {
+      console.error('Error loading boost status:', error);
+    }
+  };
+
   // Determine card rarity based on salary
-  const getRarity = (): 'gold' | 'crimson' | 'blue' => {
+  const getRarity = (): 'gold' | 'crimson' | 'blue' | 'premium' => {
+    // Check if boosted first
+    if (boost && boost.status === JobBoostStatus.ACTIVE) {
+      return 'premium';
+    }
+
     const avgSalary = (job.minBudget + job.maxBudget) / 2;
 
     if (avgSalary > 5000000) return 'crimson'; // Above 5M VND - Red
@@ -58,31 +83,48 @@ const FateCard = ({ job, onClick }: FateCardProps) => {
 
   // Check if high salary (red card)
   const isHighSalary = rarity === 'crimson';
+  const isPremium = rarity === 'premium';
+
+  // Get days remaining for boosted job
+  const getDaysRemaining = () => {
+    if (!boost) return 0;
+    const endDate = new Date(boost.endDate);
+    const now = new Date();
+    const diff = endDate.getTime() - now.getTime();
+    return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+  };
 
   return (
     <div className="odyssey-card-wrapper" onClick={onClick}>
       <div className={`odyssey-card odyssey-card--${rarity}`}>
+        {/* Badge for boosted job */}
+        {isPremium && (
+          <div className="odyssey-card__badge odyssey-card__badge--premium">
+            <Sparkles size={12} />
+            Được đẩy top
+          </div>
+        )}
         {/* Badge for high salary or remote */}
-        {isHighSalary && (
+        {!isPremium && isHighSalary && (
           <div className="odyssey-card__badge odyssey-card__badge--urgent">
             Lương cao
           </div>
         )}
-        {job.isRemote && !isHighSalary && (
+        {!isPremium && job.isRemote && !isHighSalary && (
           <div className="odyssey-card__badge odyssey-card__badge--remote">
             Làm việc từ xa
           </div>
         )}
 
         {/* Corner Hologram Indicators */}
-        <div className="odyssey-card__corner-indicator odyssey-card__corner-indicator--tl"></div>
-        <div className="odyssey-card__corner-indicator odyssey-card__corner-indicator--br"></div>
+        <div className={`odyssey-card__corner-indicator odyssey-card__corner-indicator--tl ${isPremium ? 'odyssey-card__corner-indicator--premium' : ''}`}></div>
+        <div className={`odyssey-card__corner-indicator odyssey-card__corner-indicator--br ${isPremium ? 'odyssey-card__corner-indicator--premium' : ''}`}></div>
 
         {/* Content Wrapper */}
         <div className="odyssey-card__content-wrapper">
           {/* Faction (Company) */}
           <div className="odyssey-card__faction">
-            <div className="odyssey-card__faction-ring">
+            <div className={`odyssey-card__faction-ring ${isPremium ? 'odyssey-card__faction-ring--premium' : ''}`}>
               {getCompanyInitials()}
             </div>
             <div className="odyssey-card__company">
@@ -103,30 +145,46 @@ const FateCard = ({ job, onClick }: FateCardProps) => {
                   </span>
                 ))}
                 {job.requiredSkills.length > 4 && (
-                  <span className="odyssey-card__tag">
+                  <span className="odyssey-card__tag odyssey-card__tag--more">
                     +{job.requiredSkills.length - 4}
                   </span>
                 )}
               </div>
             )}
-          </div>
 
-          {/* Bounty (Salary) */}
-          <div className="odyssey-card__bounty">
-            <div className="odyssey-card__bounty-label">Ngân sách</div>
-            <div className="odyssey-card__bounty-amount">
-              {formatBudget()}
+            {/* Budget */}
+            <div className="odyssey-card__bounty">
+              <span className="odyssey-card__bounty-value">{formatBudget()}</span>
+              <span className="odyssey-card__bounty-label">/tháng</span>
+            </div>
+
+            {/* Meta Info */}
+            <div className="odyssey-card__meta">
+              <div className="odyssey-card__meta-item">
+                <MapPin size={14} />
+                <span>{job.isRemote ? 'Remote' : job.location || 'Việt Nam'}</span>
+              </div>
+              <div className="odyssey-card__meta-item">
+                <Clock size={14} />
+                <span>{formatRelativeTime()}</span>
+              </div>
+              <div className="odyssey-card__meta-item">
+                <Users size={14} />
+                <span>{job.applicantCount || 0} ứng tuyển</span>
+              </div>
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="odyssey-card__footer">
-            <button className="odyssey-card__btn" onClick={onClick}>
-              <span>Xem chi tiết</span>
-              <ArrowRight className="odyssey-card__btn-icon" />
-            </button>
+          {/* Arrow */}
+          <div className={`odyssey-card__arrow ${isPremium ? 'odyssey-card__arrow--premium' : ''}`}>
+            <ArrowRight size={20} />
           </div>
         </div>
+
+        {/* Premium Glow Effect */}
+        {isPremium && (
+          <div className="odyssey-card__glow"></div>
+        )}
       </div>
     </div>
   );

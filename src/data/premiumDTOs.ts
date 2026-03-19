@@ -12,6 +12,8 @@ export interface PremiumPlan {
     | "PREMIUM_PLUS"
     | "STUDENT_PACK"
     | "RECRUITER_PRO";
+  targetRole?: "LEARNER" | "RECRUITER" | "PARENT";
+  studentPrice?: string;
   features: string;
   studentDiscountPercent: string;
   isActive: boolean;
