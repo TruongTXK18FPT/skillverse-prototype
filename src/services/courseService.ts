@@ -546,7 +546,7 @@ export interface CourseRevisionDTO {
   autoUpgradeReasonDetail?: string;
 }
 
-export interface ApproveRevisionResponse extends CourseRevisionDTO {}
+export type ApproveRevisionResponse = CourseRevisionDTO;
 
 export interface CourseRevisionUpdateDTO {
   title?: string;

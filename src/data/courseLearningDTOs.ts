@@ -29,6 +29,6 @@ export interface CourseLearningRevisionInfoDTO {
   hasNewerRevision: boolean;
 }
 
-export interface RevisionInfoResponse extends CourseLearningRevisionInfoDTO {}
+export type RevisionInfoResponse = CourseLearningRevisionInfoDTO;
 
-export interface UpgradeToActiveResponse extends CourseLearningRevisionInfoDTO {}
+export type UpgradeToActiveResponse = CourseLearningRevisionInfoDTO;
