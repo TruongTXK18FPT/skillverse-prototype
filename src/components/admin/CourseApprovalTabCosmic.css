@@ -823,6 +823,93 @@
   font-weight: 700;
 }
 
+.cosmic-revision-canary-panel {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  background: rgba(30, 41, 59, 0.45);
+}
+
+.cosmic-revision-canary-title {
+  font-weight: 700;
+  color: #c4b5fd;
+  margin-bottom: 0.25rem;
+}
+
+.cosmic-revision-canary-subtitle {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.cosmic-revision-canary-empty {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+}
+
+.cosmic-revision-table-container {
+  margin-bottom: 0;
+  overflow: auto;
+}
+
+.cosmic-revision-table {
+  min-width: 860px;
+}
+
+.cosmic-revision-table td {
+  vertical-align: top;
+}
+
+.cosmic-revision-cell-main {
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.cosmic-revision-cell-sub {
+  color: #94a3b8;
+  font-size: 0.76rem;
+  margin-top: 0.15rem;
+}
+
+.cosmic-revision-result-inline {
+  margin-top: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.cosmic-revision-upgrade-badge {
+  width: fit-content;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cosmic-revision-upgrade-badge.upgraded {
+  background: rgba(34, 197, 94, 0.18);
+  color: #65f5a9;
+}
+
+.cosmic-revision-upgrade-badge.skipped {
+  background: rgba(245, 158, 11, 0.2);
+  color: #ffd27a;
+}
+
+.cosmic-revision-upgrade-badge.error {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ff9a9a;
+}
+
+.cosmic-revision-upgrade-reason {
+  font-size: 0.8rem;
+  color: #d7defb;
+}
+
 /* Reason text in table */
 .cosmic-reason-text {
   display: inline-flex;

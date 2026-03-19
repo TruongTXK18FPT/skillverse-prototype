@@ -15,11 +15,16 @@ import {
   completeLesson,
 } from "../../services/lessonService";
 import { getQuizAttemptStatus, getQuizForAttemptById, getUserQuizAttempts } from "../../services/quizService";
-import { getCourseLearningStatus } from "../../services/courseLearningService";
+import {
+  getCourseLearningRevisionInfo,
+  getCourseLearningStatus,
+  upgradeCourseToActiveRevision
+} from "../../services/courseLearningService";
 import { CourseDetailDTO, CourseStatus, ModuleSummaryDTO } from "../../data/courseDTOs";
 import { LessonSummaryDTO, LessonDetailDTO } from "../../data/lessonDTOs";
 import { QuizSummaryDTO, QuizDetailDTO, QuizAttemptDTO } from "../../data/quizDTOs";
 import { AssignmentSummaryDTO } from "../../data/assignmentDTOs";
+import { CourseLearningRevisionInfoDTO } from "../../data/courseLearningDTOs";
 import {
   CourseLearningLocationState,
   LearningContentType,
@@ -30,6 +35,11 @@ import {
 } from "../../utils/courseLearningNavigation";
 import { hasAssignmentDueDate } from "../../utils/assignmentPresentation";
 import { buildCertificateVerificationUrl } from "../../components/certificate/certificatePresentation";
+import {
+  getUpgradePolicyMessage,
+  mapReasonCodeToVietnameseMessage,
+  mapUpgradeApiErrorToVietnameseMessage
+} from "../../utils/courseRevisionMessages";
 import AttachmentManager from "../../components/course/AttachmentManager";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -275,6 +285,11 @@ const CourseLearningPage = () => {
     certificateRevoked: boolean;
     certificateRevokedAt: string | null;
   }>({ ...EMPTY_PROGRESS_STATE });
+  const [revisionInfo, setRevisionInfo] = useState<CourseLearningRevisionInfoDTO | null>(null);
+  const [revisionActionMessage, setRevisionActionMessage] = useState<string | null>(null);
+  const [isUpgradingRevision, setIsUpgradingRevision] = useState(false);
+  const [isRevisionInfoLoading, setIsRevisionInfoLoading] = useState(false);
+  const [revisionInfoError, setRevisionInfoError] = useState<string | null>(null);
   const [activeLessonDetail, setActiveLessonDetail] = useState<LessonDetailDTO | null>(null);
   const [loadingLessonDetail, setLoadingLessonDetail] = useState(false);
   const [activeQuizDetail, setActiveQuizDetail] = useState<QuizWithAttemptStatus | null>(null);
@@ -368,11 +383,19 @@ const CourseLearningPage = () => {
     if (!courseId || isPreviewMode || !user?.id) {
       setProgress({ ...EMPTY_PROGRESS_STATE });
       setItemStatuses({});
+      setRevisionInfo(null);
+      setRevisionActionMessage(null);
       return;
     }
 
-    try {
-      const status = await getCourseLearningStatus(courseId);
+    setIsRevisionInfoLoading(true);
+    const [statusResult, revisionInfoResult] = await Promise.allSettled([
+      getCourseLearningStatus(courseId),
+      getCourseLearningRevisionInfo(courseId)
+    ]);
+
+    if (statusResult.status === "fulfilled") {
+      const status = statusResult.value;
       const completedLessons = new Set(status.completedLessonIds ?? []);
       const completedQuizzes = new Set(status.completedQuizIds ?? []);
       const completedAssignments = new Set(status.completedAssignmentIds ?? []);
@@ -412,7 +435,7 @@ const CourseLearningPage = () => {
           ...completedStatuses,
         };
       });
-    } catch {
+    } else {
       setProgress({ ...EMPTY_PROGRESS_STATE });
       setItemStatuses((prev) =>
         Object.fromEntries(
@@ -420,6 +443,15 @@ const CourseLearningPage = () => {
         ) as Record<string, "in-progress">
       );
     }
+
+    if (revisionInfoResult.status === "fulfilled") {
+      setRevisionInfo(revisionInfoResult.value);
+      setRevisionInfoError(null);
+    } else {
+      setRevisionInfo(null);
+      setRevisionInfoError("Không tải được thông tin revision. Bạn vẫn có thể học bình thường.");
+    }
+    setIsRevisionInfoLoading(false);
   }, [courseId, isPreviewMode, user?.id]);
 
   useEffect(() => {
@@ -595,6 +627,25 @@ const CourseLearningPage = () => {
         : -1,
     [activeCurriculumItem, curriculumItems]
   );
+  const hasNewerRevision = Boolean(
+    !isPreviewMode && revisionInfo?.hasNewerRevision && courseId
+  );
+  const revisionPolicyLabel = useMemo(() => {
+    if (revisionInfo?.upgradePolicy === "AUTO_COMPATIBLE_ONLY") {
+      return "Tự động nâng cấp khi thay đổi tương thích";
+    }
+    if (revisionInfo?.upgradePolicy === "MANUAL") {
+      return "Nâng cấp thủ công";
+    }
+    return "Chưa có chính sách";
+  }, [revisionInfo?.upgradePolicy]);
+  const revisionPolicyMessage = useMemo(
+    () => getUpgradePolicyMessage(revisionInfo?.upgradePolicy),
+    [revisionInfo?.upgradePolicy]
+  );
+  const isCourseCompleted = progress.percent >= 100;
+  const hasActiveCertificate = Boolean(progress.certificateId);
+  const canUpgradeRevision = hasNewerRevision && !hasActiveCertificate;
 
   const handleToggleModule = (moduleId: number) => {
     setExpandedModules((prev) =>
@@ -638,6 +689,44 @@ const CourseLearningPage = () => {
       // Clipboard access can fail outside secure/browser-supported contexts.
     }
   }, [progress.certificateSerial]);
+
+  const handleUpgradeToActiveRevision = useCallback(async () => {
+    if (!courseId || isPreviewMode || isUpgradingRevision || !canUpgradeRevision) {
+      return;
+    }
+
+    try {
+      setIsUpgradingRevision(true);
+      setRevisionActionMessage(null);
+      const upgraded = await upgradeCourseToActiveRevision(courseId);
+      setRevisionInfo(upgraded);
+      if (upgraded.hasNewerRevision) {
+        setRevisionActionMessage(
+          mapReasonCodeToVietnameseMessage(
+            "ITEM_RULE_CHANGED",
+            "Revision mới có thay đổi breaking nên hệ thống chưa tự nâng cấp. Bạn có thể tiếp tục học revision hiện tại."
+          )
+        );
+      } else {
+        setRevisionActionMessage("Đã chuyển sang phiên bản mới.");
+      }
+      if (modulesWithContent.length > 0) {
+        await loadCourseLearningState(modulesWithContent);
+      }
+    } catch (error) {
+      const rawMessage = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      setRevisionActionMessage(mapUpgradeApiErrorToVietnameseMessage(rawMessage));
+    } finally {
+      setIsUpgradingRevision(false);
+    }
+  }, [
+    courseId,
+    canUpgradeRevision,
+    isPreviewMode,
+    isUpgradingRevision,
+    loadCourseLearningState,
+    modulesWithContent
+  ]);
 
   const handleSelectLesson = (
     moduleId: number,
@@ -882,6 +971,76 @@ const CourseLearningPage = () => {
               <strong>Chế độ xem trước:</strong> Bạn có thể xem nội dung như học viên, nhưng không thể làm bài, nộp bài hoặc đánh dấu hoàn thành.
             </div>
           )}
+          {hasNewerRevision && revisionInfo && (
+            <div className="lhud-revision-banner">
+              <div>
+                <strong>Khóa học đã có phiên bản mới</strong>
+                <p>
+                  Khóa học đã có phiên bản mới. Bạn có muốn chuyển sang phiên bản mới không?
+                </p>
+                <p>{revisionPolicyMessage}</p>
+                {isCourseCompleted ? (
+                  <p>
+                    Bạn đã hoàn thành khóa học hiện tại.
+                    {hasActiveCertificate
+                      ? ' Bạn đã có chứng chỉ nên hiện không thể chuyển sang phiên bản mới.'
+                      : ' Nếu muốn nhận chứng chỉ theo phiên bản mới, hãy nâng cấp và hoàn thành lại các nội dung cần thiết.'}
+                  </p>
+                ) : (
+                  <p>
+                    Bạn không bắt buộc nâng cấp ngay. Nếu nâng cấp, tiến độ sẽ được tính theo nội dung và điều kiện của phiên bản mới.
+                  </p>
+                )}
+                {revisionActionMessage && (
+                  <p className="lhud-revision-banner__message">{revisionActionMessage}</p>
+                )}
+              </div>
+              {canUpgradeRevision && (
+                <div className="lhud-revision-banner__actions">
+                  <button
+                    type="button"
+                    className="learning-hud-secondary-btn"
+                    onClick={() => void handleUpgradeToActiveRevision()}
+                    disabled={isUpgradingRevision}
+                  >
+                    {isUpgradingRevision ? "Đang nâng cấp..." : "Chuyển sang phiên bản mới"}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+          {!hasNewerRevision && !isPreviewMode && revisionInfo && (
+            <div className="lhud-revision-banner is-success">
+              <div>
+                <strong>Revision hiện tại đã đồng bộ</strong>
+                <p>{revisionPolicyMessage}</p>
+              </div>
+            </div>
+          )}
+          {!isPreviewMode && isRevisionInfoLoading && (
+            <div className="lhud-revision-banner">
+              <div>
+                <strong>Đang đồng bộ revision...</strong>
+                <p>Hệ thống đang kiểm tra phiên bản học hiện tại của bạn.</p>
+              </div>
+            </div>
+          )}
+          {!isPreviewMode && revisionInfoError && (
+            <div className="lhud-revision-banner is-warning">
+              <div>
+                <strong>Lưu ý về revision</strong>
+                <p>{revisionInfoError}</p>
+              </div>
+            </div>
+          )}
+          {!hasNewerRevision && revisionActionMessage && (
+            <div className="lhud-revision-banner is-success">
+              <div>
+                <strong>Revision đã đồng bộ</strong>
+                <p className="lhud-revision-banner__message">{revisionActionMessage}</p>
+              </div>
+            </div>
+          )}
           {!isPreviewMode && progress.percent >= 100 && progress.certificateId && (
             <div className="lhud-certificate-banner">
               <div>
@@ -1095,7 +1254,7 @@ const CourseLearningPage = () => {
                           </p>
                           {activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts && (
                             <div className="lhud-quiz-stat-sub is-warning">
-                              Chờ 24h để làm lại
+                              Chờ 8h để làm lại
                             </div>
                           )}
                         </div>
@@ -1150,7 +1309,7 @@ const CourseLearningPage = () => {
                       {activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts && (
                         <div className="lhud-quiz-lock-banner">
                           <p className="lhud-quiz-lock-title">
-                            Đã sử dụng hết 3 lượt làm bài
+                            Đã sử dụng hết {activeQuizDetail.maxAttempts} lượt làm bài
                           </p>
                           {retryCountdown > 0 ? (
                             <div className="lhud-quiz-lock-body">
@@ -1168,7 +1327,7 @@ const CourseLearningPage = () => {
                             </div>
                           ) : (
                             <p className="lhud-quiz-lock-text">
-                              Bạn có thể làm lại sau 24 giờ kể từ lần làm đầu tiên. Hãy xem lại bài học trong thời gian chờ.
+                              Bạn có thể làm lại sau 8 giờ kể từ lần làm đầu tiên. Hãy xem lại bài học trong thời gian chờ.
                             </p>
                           )}
                         </div>

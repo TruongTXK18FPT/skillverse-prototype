@@ -12,6 +12,7 @@ import {
   QuizOptionCreateDTO,
   QuizOptionUpdateDTO,
   SubmitQuizDTO,
+  QuizAttemptSessionDTO,
   QuizAttemptStatusDTO,
   QuizAttemptReviewDTO
 } from '../data/quizDTOs';
@@ -220,12 +221,21 @@ export const deleteQuizOption = async (
  */
 export const startQuizAttempt = async (
   quizId: number,
-  userId: number
-): Promise<QuizAttemptDTO> => {
-  const response = await axiosInstance.post<QuizAttemptDTO>(
-    `/quizzes/${quizId}/attempts`,
-    {},
-    { params: { userId } }
+  _userId: number
+): Promise<QuizAttemptSessionDTO> => {
+  const response = await axiosInstance.post<QuizAttemptSessionDTO>(
+    `/quizzes/${quizId}/attempt-session/start`
+  );
+  return response.data;
+};
+
+export const heartbeatQuizAttemptSession = async (
+  quizId: number,
+  sessionToken: string
+): Promise<QuizAttemptSessionDTO> => {
+  const response = await axiosInstance.post<QuizAttemptSessionDTO>(
+    `/quizzes/${quizId}/attempt-session/heartbeat`,
+    { sessionToken }
   );
   return response.data;
 };

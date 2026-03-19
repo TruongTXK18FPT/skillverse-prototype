@@ -3,7 +3,15 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
-import { getMyLatestQuizReview, getQuizAttemptStatus, getQuizForAttemptById, getUserQuizAttempts, submitQuiz } from '../../services/quizService';
+import {
+  getMyLatestQuizReview,
+  getQuizAttemptStatus,
+  getQuizForAttemptById,
+  getUserQuizAttempts,
+  heartbeatQuizAttemptSession,
+  startQuizAttempt,
+  submitQuiz
+} from '../../services/quizService';
 import {
   QuizAttemptAnswerOptionReviewDTO,
   QuizAttemptAnswerReviewDTO,
@@ -52,6 +60,7 @@ const QuizAttemptPage: React.FC = () => {
   const [maxAttempts, setMaxAttempts] = useState(3);
   const [cooldownSeconds, setCooldownSeconds] = useState(0);
   const [nextRetryAt, setNextRetryAt] = useState<string | null>(null);
+  const [attemptSessionToken, setAttemptSessionToken] = useState<string | null>(null);
 
   const getOptionReviewTone = useCallback((option: QuizAttemptAnswerOptionReviewDTO) => {
     if (option.correct && option.selected) {
@@ -110,11 +119,11 @@ const QuizAttemptPage: React.FC = () => {
         <>
           <div className="hud-quiz-attempt-review-block">
             <span>Câu trả lời của bạn</span>
-            <p>{answer.submittedAnswer?.textAnswer?.trim() || answer.submittedAnswerText || 'Khong tra loi'}</p>
+            <p>{answer.submittedAnswer?.textAnswer?.trim() || answer.submittedAnswerText || 'Không trả lời'}</p>
           </div>
           <div className="hud-quiz-attempt-review-block">
             <span>Đáp án chấp nhận</span>
-            <p>{answer.correctAnswerText || 'Dang cap nhat'}</p>
+            <p>{answer.correctAnswerText || 'Đang cập nhật'}</p>
           </div>
         </>
       );
@@ -127,7 +136,7 @@ const QuizAttemptPage: React.FC = () => {
           <p>
             {answer.submittedAnswer?.selectedOptionTexts?.length
               ? answer.submittedAnswer.selectedOptionTexts.join('\n')
-              : answer.submittedAnswerText || 'Khong tra loi'}
+              : answer.submittedAnswerText || 'Không trả lời'}
           </p>
         </div>
         {renderReviewOptionList(answer)}
@@ -220,12 +229,28 @@ const QuizAttemptPage: React.FC = () => {
     }));
   };
 
+  const beginQuizAttempt = useCallback(async () => {
+    if (!quiz || !user) {
+      return false;
+    }
+    try {
+      const session = await startQuizAttempt(quiz.id, user.id);
+      setAttemptSessionToken(session.sessionToken ?? null);
+      setViewMode('taking');
+      setAnswers({});
+      setResult(null);
+      return true;
+    } catch (err) {
+      console.error('[QUIZ_SESSION] Failed to start session:', err);
+      alert('Không thể bắt đầu phiên làm bài lúc này. Vui lòng thử lại.');
+      return false;
+    }
+  }, [quiz, user]);
+
   // Handler để làm lại quiz - chuyển thẳng vào chế độ làm bài
-  const handleRetryQuiz = useCallback(() => {
-    setViewMode('taking');
-    setAnswers({});
-    setResult(null);
-  }, []);
+  const handleRetryQuiz = useCallback(async () => {
+    await beginQuizAttempt();
+  }, [beginQuizAttempt]);
 
   const handleReviewLatestResult = useCallback(() => {
     if (!latestAttemptResult) {
@@ -249,19 +274,40 @@ const QuizAttemptPage: React.FC = () => {
     navigate(-1);
   }, [locationState, navigate]);
 
-  const handleStartQuiz = () => {
+  const handleStartQuiz = async () => {
     if (!canRetry) {
       if (cooldownSeconds > 0) {
         const hours = Math.ceil(cooldownSeconds / 3600);
-        alert(`Bạn đã hết lượt làm bài. Vui lòng quay lại sau ${hours} giờ.`);
+        alert(`Bạn đã hết lượt làm bài. Vui lòng quay lại sau ${hours} giờ (tính từ lần làm đầu tiên).`);
       } else {
         alert('Bạn đã hết lượt làm bài.');
       }
       return;
     }
-    setViewMode('taking');
-    setAnswers({});
+    await beginQuizAttempt();
   };
+
+  useEffect(() => {
+    if (viewMode !== 'taking' || !quiz || !attemptSessionToken) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      heartbeatQuizAttemptSession(quiz.id, attemptSessionToken)
+        .then((session) => {
+          if (session.sessionToken && session.sessionToken !== attemptSessionToken) {
+            setAttemptSessionToken(session.sessionToken);
+          }
+        })
+        .catch((error) => {
+          console.warn('[QUIZ_SESSION] Heartbeat failed:', error);
+        });
+    }, 20000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [attemptSessionToken, quiz, viewMode]);
 
   const isQuestionAnswered = useCallback((question: QuizQuestionDetailDTO) => {
     const answer = answers[question.id];
@@ -305,6 +351,7 @@ const QuizAttemptPage: React.FC = () => {
       
       const submitData = {
         quizId: quiz.id,
+        sessionToken: attemptSessionToken ?? undefined,
         answers: Object.entries(answers)
           .map(([questionId, answer]) => ({
             questionId: Number(questionId),
@@ -323,6 +370,7 @@ const QuizAttemptPage: React.FC = () => {
       setLatestAttemptResult(res.attempt);
       setAttemptHistory((prev) => [res.attempt, ...prev.filter((attempt) => attempt.id !== res.attempt.id)]);
       setViewMode('result');
+      setAttemptSessionToken(null);
 
       try {
         const [status, attempts, latestReview] = await Promise.all([
@@ -481,6 +529,9 @@ const QuizAttemptPage: React.FC = () => {
           <div className="hud-quiz-attempt-no-attempts">
             <h3>Hết lượt làm bài</h3>
             <p>Bạn đã sử dụng hết {maxAttempts} lượt làm bài.</p>
+            <p className="hud-quiz-attempt-cooldown">
+              Lượt làm bài sẽ được reset sau 8 giờ kể từ lần làm đầu tiên.
+            </p>
               {cooldownSeconds > 0 && (
                 <p className="hud-quiz-attempt-cooldown">
                   Thời gian chờ: {Math.ceil(cooldownSeconds / 3600)} giờ

@@ -12,9 +12,14 @@ import {
   rejectCourse,
   suspendCourse,
   restoreCourse,
+  getCourse,
   listAllCoursesAdmin,
   getAdminCourseStats,
-  CourseStatsResponse
+  CourseStatsResponse,
+  CourseRevisionDTO,
+  listAdminCourseRevisions,
+  approveCourseRevision,
+  rejectCourseRevision
 } from '../../services/courseService';
 import {
   CourseDetailDTO,
@@ -26,10 +31,20 @@ import { useToast } from '../../hooks/useToast';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import Pagination from '../shared/Pagination';
 import Toast from '../shared/Toast';
+import {
+  getAutoUpgradeOutcomeClass,
+  getAutoUpgradeOutcomeLabel,
+  mapReasonCodeToVietnameseMessage
+} from '../../utils/courseRevisionMessages';
 import './CourseApprovalTabCosmic.css';
 
 // ==================== TYPES ====================
 type StatusFilterTab = 'ALL' | 'PENDING' | 'PUBLIC' | 'REJECTED' | 'SUSPENDED';
+
+type RevisionCourseMeta = {
+  title: string;
+  authorName: string;
+};
 
 const STATUS_TAB_CONFIG: { key: StatusFilterTab; label: string; icon: React.ReactNode }[] = [
   { key: 'ALL', label: 'Tất Cả', icon: <BarChart3 size={16} /> },
@@ -78,6 +93,13 @@ export const CourseApprovalTabCosmic: React.FC = () => {
     totalArchived: 0,
     totalAll: 0
   });
+  const [revisionQueue, setRevisionQueue] = useState<CourseRevisionDTO[]>([]);
+  const [revisionCourseMeta, setRevisionCourseMeta] = useState<Record<number, RevisionCourseMeta>>({});
+  const [revisionActionLoading, setRevisionActionLoading] = useState(false);
+  const [revisionApproveResults, setRevisionApproveResults] = useState<Record<number, CourseRevisionDTO>>({});
+  const [showRevisionRejectModal, setShowRevisionRejectModal] = useState(false);
+  const [selectedRevisionForReject, setSelectedRevisionForReject] = useState<CourseRevisionDTO | null>(null);
+  const [revisionRejectReason, setRevisionRejectReason] = useState('');
 
   const getApiErrorMessage = useCallback((error: unknown, fallbackMessage: string) => {
     const responseData = (error as { response?: { data?: unknown } })?.response?.data;
@@ -111,6 +133,43 @@ export const CourseApprovalTabCosmic: React.FC = () => {
       console.error('Error loading course stats:', error);
     }
   }, []);
+
+  const loadRevisionQueue = useCallback(async () => {
+    try {
+      const response = await listAdminCourseRevisions(0, 20, 'PENDING');
+      const queue = response.content ?? [];
+      setRevisionQueue(queue);
+
+      const uniqueCourseIds = Array.from(new Set(queue.map(item => item.courseId)));
+      const courseMetaEntries = await Promise.all(
+        uniqueCourseIds.map(async (courseId) => {
+          try {
+            const course = await getCourse(courseId);
+            return [
+              courseId,
+              {
+                title: course.title || `Course #${courseId}`,
+                authorName: course.authorName || 'N/A'
+              }
+            ] as const;
+          } catch {
+            return [
+              courseId,
+              {
+                title: `Course #${courseId}`,
+                authorName: 'N/A'
+              }
+            ] as const;
+          }
+        })
+      );
+
+      setRevisionCourseMeta(Object.fromEntries(courseMetaEntries));
+    } catch (error) {
+      console.error('Error loading revision queue:', error);
+      showError('Lỗi', 'Không thể tải danh sách revision chờ duyệt');
+    }
+  }, [showError]);
 
   const loadCourses = useCallback(async () => {
     if (!user) return;
@@ -162,9 +221,15 @@ export const CourseApprovalTabCosmic: React.FC = () => {
     }
   }, [user, loadStats]);
 
+  useEffect(() => {
+    if (user) {
+      void loadRevisionQueue();
+    }
+  }, [user, loadRevisionQueue]);
+
   // Scroll lock for modals
   useEffect(() => {
-    if (showActionModal) {
+    if (showActionModal || showRevisionRejectModal) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -172,7 +237,7 @@ export const CourseApprovalTabCosmic: React.FC = () => {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [showActionModal]);
+  }, [showActionModal, showRevisionRejectModal]);
 
   const handleViewDetails = (course: CourseSummaryDTO) => {
     navigate(`/admin/courses/${course.id}/preview`, {
@@ -232,7 +297,7 @@ export const CourseApprovalTabCosmic: React.FC = () => {
 
   const handleRefresh = useCallback(async () => {
     try {
-      await Promise.all([loadCourses(), loadStats()]);
+      await Promise.all([loadCourses(), loadStats(), loadRevisionQueue()]);
       showInfo('Đã làm mới', 'Danh sách khóa học và thống kê đã được cập nhật.');
     } catch (error) {
       showError(
@@ -240,7 +305,75 @@ export const CourseApprovalTabCosmic: React.FC = () => {
         getApiErrorMessage(error, 'Vui lòng thử lại sau.')
       );
     }
-  }, [getApiErrorMessage, loadCourses, loadStats, showError, showInfo]);
+  }, [getApiErrorMessage, loadCourses, loadRevisionQueue, loadStats, showError, showInfo]);
+
+  const handleApproveRevision = async (revision: CourseRevisionDTO) => {
+    try {
+      setRevisionActionLoading(true);
+      const result = await approveCourseRevision(revision.id);
+      setRevisionApproveResults(prev => ({ ...prev, [revision.id]: result }));
+      await Promise.all([loadCourses(), loadStats(), loadRevisionQueue()]);
+      const reasonMessage = mapReasonCodeToVietnameseMessage(
+        result.autoUpgradeReasonCode,
+        result.autoUpgradeReasonDetail
+      );
+      showSuccess(
+        'Duyệt revision thành công',
+        `Revision #${result.revisionNumber} (ID: ${result.id}) đã được duyệt. Kết quả auto-upgrade: ${getAutoUpgradeOutcomeLabel(result.autoUpgradeOutcome)}. ${reasonMessage}`
+      );
+    } catch (error) {
+      showError(
+        'Không thể duyệt revision',
+        getApiErrorMessage(error, 'Vui lòng kiểm tra revision queue hoặc quyền admin.')
+      );
+    } finally {
+      setRevisionActionLoading(false);
+    }
+  };
+
+  const handleViewRevision = (revision: CourseRevisionDTO) => {
+    navigate(`/admin/courses/${revision.courseId}/preview?revisionId=${revision.id}`, {
+      state: { returnTo: '/admin?tab=courses' }
+    });
+  };
+
+  const handleOpenRejectRevisionModal = (revision: CourseRevisionDTO) => {
+    setSelectedRevisionForReject(revision);
+    setRevisionRejectReason('');
+    setShowRevisionRejectModal(true);
+  };
+
+  const handleRejectRevision = async () => {
+    if (!selectedRevisionForReject) {
+      return;
+    }
+
+    const reason = revisionRejectReason.trim();
+    if (!reason) {
+      showWarning('Thiếu lý do', 'Vui lòng nhập lý do từ chối trước khi reject revision.');
+      return;
+    }
+
+    try {
+      setRevisionActionLoading(true);
+      const result = await rejectCourseRevision(selectedRevisionForReject.id, reason);
+      await Promise.all([loadCourses(), loadStats(), loadRevisionQueue()]);
+      setShowRevisionRejectModal(false);
+      setSelectedRevisionForReject(null);
+      setRevisionRejectReason('');
+      showSuccess(
+        'Từ chối revision thành công',
+        `Revision #${result.revisionNumber} (ID: ${result.id}) đã bị từ chối.`
+      );
+    } catch (error) {
+      showError(
+        'Không thể từ chối revision',
+        getApiErrorMessage(error, 'Vui lòng kiểm tra revision queue hoặc quyền admin.')
+      );
+    } finally {
+      setRevisionActionLoading(false);
+    }
+  };
 
   // ==================== HELPERS ====================
   const formatDate = (dateString: string): string => {
@@ -388,6 +521,102 @@ export const CourseApprovalTabCosmic: React.FC = () => {
         <button className="cosmic-filter-btn" onClick={() => void handleRefresh()}>
           <RefreshCw size={18} /> Làm mới
         </button>
+      </div>
+
+      <div className="cosmic-revision-canary-panel">
+        <div className="cosmic-revision-canary-title">Course Revision</div>
+        <div className="cosmic-revision-canary-subtitle">
+          Danh sách phiên bản đang chờ duyệt, có thể duyệt/từ chối trực tiếp.
+        </div>
+
+        {revisionQueue.length === 0 ? (
+          <div className="cosmic-revision-canary-empty">Không có revision PENDING trong queue.</div>
+        ) : (
+          <div className="cosmic-table-container cosmic-revision-table-container">
+            <table className="cosmic-table cosmic-revision-table">
+              <thead>
+                <tr>
+                  <th>Revision</th>
+                  <th>Khóa Học</th>
+                  <th>Giảng Viên</th>
+                  <th>Cấp độ</th>
+                  <th>Ngày Submitted</th>
+                  <th>Hành Động</th>
+                </tr>
+              </thead>
+              <tbody>
+                {revisionQueue.map((revision) => {
+                  const courseMeta = revisionCourseMeta[revision.courseId];
+                  const approvedResult = revisionApproveResults[revision.id];
+                  return (
+                    <tr key={revision.id}>
+                      <td>
+                        <div className="cosmic-revision-cell-main">Rev #{revision.revisionNumber}</div>
+                        <div className="cosmic-revision-cell-sub">ID: {revision.id}</div>
+                      </td>
+                      <td>{courseMeta?.title || revision.title || `Course #${revision.courseId}`}</td>
+                      <td>
+                        <div className="cosmic-instructor-info">
+                          <User size={16} />
+                          <span>{courseMeta?.authorName || 'N/A'}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span className="cosmic-category-badge">{revision.level || 'N/A'}</span>
+                      </td>
+                      <td>
+                        <div className="cosmic-date-info">
+                          <Calendar size={16} />
+                          <span>{revision.submittedAt ? formatDate(revision.submittedAt) : 'N/A'}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="cosmic-action-buttons">
+                          <button
+                            className="cosmic-action-btn view"
+                            onClick={() => handleViewRevision(revision)}
+                            title="Xem chi tiết revision"
+                          >
+                            <Eye size={18} />
+                          </button>
+                          <button
+                            className="cosmic-action-btn approve"
+                            onClick={() => void handleApproveRevision(revision)}
+                            disabled={revisionActionLoading}
+                            title="Approve revision"
+                          >
+                            <CheckCircle size={18} />
+                          </button>
+                          <button
+                            className="cosmic-action-btn reject"
+                            onClick={() => handleOpenRejectRevisionModal(revision)}
+                            disabled={revisionActionLoading}
+                            title="Reject revision"
+                          >
+                            <XCircle size={18} />
+                          </button>
+                        </div>
+                        {approvedResult && (
+                          <div className="cosmic-revision-result-inline">
+                            <span className={`cosmic-revision-upgrade-badge ${getAutoUpgradeOutcomeClass(approvedResult.autoUpgradeOutcome)}`}>
+                              {getAutoUpgradeOutcomeLabel(approvedResult.autoUpgradeOutcome)}
+                            </span>
+                            <span className="cosmic-revision-upgrade-reason">
+                              {mapReasonCodeToVietnameseMessage(
+                                approvedResult.autoUpgradeReasonCode,
+                                approvedResult.autoUpgradeReasonDetail
+                              )}
+                            </span>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Courses Table */}
@@ -545,6 +774,51 @@ export const CourseApprovalTabCosmic: React.FC = () => {
           </div>
         </div>
       , document.body)}
+
+      {showRevisionRejectModal && selectedRevisionForReject && ReactDOM.createPortal(
+        <div className="cosmic-modal-overlay" onClick={() => setShowRevisionRejectModal(false)}>
+          <div className="cosmic-modal small" onClick={(e) => e.stopPropagation()}>
+            <div className="cosmic-modal-header">
+              <h2>Từ Chối Revision</h2>
+              <button className="cosmic-close-btn" onClick={() => setShowRevisionRejectModal(false)}>×</button>
+            </div>
+
+            <div className="cosmic-modal-body">
+              <p style={{ marginBottom: '1rem' }}>
+                Vui lòng nhập lý do từ chối cho revision #{selectedRevisionForReject.revisionNumber} (ID: {selectedRevisionForReject.id}).
+              </p>
+              <label style={{ display: 'block', marginBottom: '0.5rem', color: '#a5b4fc' }}>
+                Lý do từ chối <span style={{ color: '#ef4444' }}>*</span>
+              </label>
+              <textarea
+                className="reason-input"
+                value={revisionRejectReason}
+                onChange={(e) => setRevisionRejectReason(e.target.value)}
+                placeholder="Nhập lý do từ chối revision..."
+                rows={4}
+              />
+            </div>
+
+            <div className="cosmic-modal-footer">
+              <button
+                className="btn-secondary"
+                onClick={() => setShowRevisionRejectModal(false)}
+                disabled={revisionActionLoading}
+              >
+                Hủy
+              </button>
+              <button
+                className="btn-reject"
+                onClick={() => void handleRejectRevision()}
+                disabled={revisionActionLoading}
+              >
+                {revisionActionLoading ? 'Đang xử lý...' : 'Xác nhận từ chối'}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
 
       {toast && (
         <Toast

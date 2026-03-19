@@ -18,3 +18,17 @@ export interface CourseLearningStatusDTO {
   certificateRevoked?: boolean | null;
   certificateRevokedAt?: string | null;
 }
+
+export interface CourseLearningRevisionInfoDTO {
+  courseId: number;
+  userId: number;
+  learningRevisionId: number | null;
+  activeRevisionId: number | null;
+  latestRevisionId: number | null;
+  upgradePolicy: string | null;
+  hasNewerRevision: boolean;
+}
+
+export interface RevisionInfoResponse extends CourseLearningRevisionInfoDTO {}
+
+export interface UpgradeToActiveResponse extends CourseLearningRevisionInfoDTO {}

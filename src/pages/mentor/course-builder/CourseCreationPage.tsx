@@ -12,7 +12,15 @@ import { CourseLevel, LessonType, CourseStatus } from '../../../data/courseDTOs'
 import { SubmissionType } from '../../../data/assignmentDTOs';
 import { QuestionType } from '../../../data/quizDTOs';
 import { uploadMedia } from '../../../services/mediaService';
-import { submitCourseForApproval } from '../../../services/courseService';
+import {
+  submitCourseForApproval,
+  createCourseRevision,
+  getCourseRevision,
+  listCourseRevisions,
+  submitCourseRevision,
+  updateCourseRevision,
+  CourseRevisionDTO
+} from '../../../services/courseService';
 import { useToast } from '../../../hooks/useToast';
 import Toast from '../../../components/shared/Toast';
 import RichTextEditor from '../../../components/shared/RichTextEditor';
@@ -83,31 +91,259 @@ const getLessonTypeMeta = (type: string) => {
 const createId = () => Date.now().toString() + Math.random().toString(36).substr(2, 5);
 
 const normalizeLessonAttachments = (attachments?: LessonAttachmentDraft[]) => {
-  return (attachments || [])
-    .map((attachment) => {
-      const draftLike = attachment as LessonAttachmentDraft & {
-        id?: string | number;
+  const normalized: LessonAttachmentDraft[] = [];
+
+  (attachments || []).forEach((attachment) => {
+    const draftLike = attachment as LessonAttachmentDraft & {
+      id?: string | number;
+      title?: string;
+      downloadUrl?: string;
+    };
+
+    const name = draftLike.name || draftLike.title;
+    const url = draftLike.url || draftLike.downloadUrl;
+    const serverId = draftLike.serverId ?? (typeof draftLike.id === 'number' ? draftLike.id : undefined);
+
+    if (!serverId && !draftLike.mediaId && !(url && url.trim())) {
+      return;
+    }
+
+    normalized.push({
+      ...attachment,
+      ...(serverId ? { serverId } : {}),
+      name: name || 'Attachment',
+      url
+    });
+  });
+
+  return normalized;
+};
+
+const normalizeSnapshotText = (value?: string | null) => {
+  if (value == null) return null;
+  const collapsed = value.replace(/\s+/g, ' ').trim();
+  return collapsed.length > 0 ? collapsed : null;
+};
+
+const buildRevisionContentSnapshot = (modules: ModuleDraft[]) => ({
+  snapshotVersion: 1,
+  modules: modules.map((module, moduleIndex) => ({
+    orderIndex: moduleIndex,
+    title: normalizeSnapshotText(module.title),
+    description: normalizeSnapshotText(module.description),
+    lessons: module.lessons.map((lesson, lessonIndex) => ({
+      orderIndex: lessonIndex,
+      title: normalizeSnapshotText(lesson.title),
+      type: lesson.type,
+      durationMin: lesson.durationMin ?? null,
+      contentText: normalizeSnapshotText(lesson.contentText),
+      resourceUrl: normalizeSnapshotText(lesson.resourceUrl),
+      youtubeUrl: normalizeSnapshotText(lesson.youtubeUrl),
+      videoMediaId: lesson.videoMediaId ?? null,
+      passScore: lesson.passScore ?? null,
+      quizMaxAttempts: lesson.quizMaxAttempts ?? null,
+      quizTimeLimitMinutes: lesson.quizTimeLimitMinutes ?? null,
+      quizDescription: normalizeSnapshotText(lesson.quizDescription),
+      gradingMethod: normalizeSnapshotText(lesson.gradingMethod),
+      isAssessment: lesson.isAssessment ?? null,
+      assignmentSubmissionType: lesson.assignmentSubmissionType ?? null,
+      assignmentDescription: normalizeSnapshotText(lesson.assignmentDescription),
+      assignmentMaxScore: lesson.assignmentMaxScore ?? null,
+      assignmentPassingScore: lesson.assignmentPassingScore ?? null,
+      questions: (lesson.questions || []).map((question, questionIndex) => ({
+        orderIndex: question.orderIndex ?? questionIndex,
+        text: normalizeSnapshotText(question.text),
+        type: question.type,
+        score: question.score ?? null,
+        options: (question.options || []).map((option, optionIndex) => ({
+          orderIndex: option.orderIndex ?? optionIndex,
+          text: normalizeSnapshotText(option.text),
+          correct: option.correct
+        }))
+      })),
+      assignmentCriteria: (lesson.assignmentCriteria || []).map((criteria, criteriaIndex) => ({
+        orderIndex: criteria.orderIndex ?? criteriaIndex,
+        name: normalizeSnapshotText(criteria.name),
+        description: normalizeSnapshotText(criteria.description),
+        maxPoints: criteria.maxPoints ?? null,
+        isRequired: criteria.isRequired ?? null
+      })),
+      attachments: normalizeLessonAttachments(lesson.attachments).map((attachment, attachmentIndex) => ({
+        orderIndex: attachmentIndex,
+        name: normalizeSnapshotText(attachment.name),
+        mediaId: attachment.mediaId ?? attachment.serverId ?? null,
+        url: normalizeSnapshotText(attachment.url)
+      }))
+    }))
+  }))
+});
+
+const toPositiveNumberOrUndefined = (value: unknown): number | undefined => {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) {
+    return undefined;
+  }
+  return value;
+};
+
+const parseQuestionTypeFromSnapshot = (value: unknown): QuestionType => {
+  if (typeof value === 'string') {
+    const upper = value.toUpperCase();
+    if (upper === QuestionType.TRUE_FALSE) return QuestionType.TRUE_FALSE;
+    if (upper === QuestionType.SHORT_ANSWER) return QuestionType.SHORT_ANSWER;
+    if (upper === QuestionType.MULTIPLE_CHOICE) return QuestionType.MULTIPLE_CHOICE;
+  }
+  return QuestionType.MULTIPLE_CHOICE;
+};
+
+const parseLessonKindFromSnapshot = (value: unknown): LessonKind => {
+  if (typeof value !== 'string') return 'reading';
+  const normalized = value.toLowerCase();
+  if (normalized === 'video' || normalized === 'quiz' || normalized === 'assignment' || normalized === 'reading') {
+    return normalized;
+  }
+  return 'reading';
+};
+
+const parseSubmissionTypeFromSnapshot = (value: unknown): SubmissionType => {
+  if (typeof value === 'string') {
+    const upper = value.toUpperCase();
+    if (upper === SubmissionType.FILE) return SubmissionType.FILE;
+    if (upper === SubmissionType.TEXT) return SubmissionType.TEXT;
+    if (upper === SubmissionType.LINK) return SubmissionType.LINK;
+  }
+  return SubmissionType.TEXT;
+};
+
+const parseModulesFromRevisionSnapshot = (contentSnapshotJson?: string): ModuleDraft[] => {
+  if (!contentSnapshotJson) return [];
+
+  try {
+    const parsed = JSON.parse(contentSnapshotJson) as {
+      modules?: Array<{
         title?: string;
-        downloadUrl?: string;
-      };
+        description?: string;
+        lessons?: Array<Record<string, unknown>>;
+      }>;
+    };
 
-      const name = draftLike.name || draftLike.title;
-      const url = draftLike.url || draftLike.downloadUrl;
-      const serverId = draftLike.serverId ?? (typeof draftLike.id === 'number' ? draftLike.id : undefined);
+    if (!Array.isArray(parsed.modules)) {
+      return [];
+    }
 
-      if (!serverId && !draftLike.mediaId && !(url && url.trim())) {
-        return null;
-      }
+    return parsed.modules.map((module, moduleIndex) => {
+      const moduleId = `snapshot-module-${moduleIndex}-${createId()}`;
+      const lessons = Array.isArray(module.lessons) ? module.lessons : [];
 
       return {
-        ...attachment,
-        serverId,
-        name: name || 'Attachment',
-        url
+        id: moduleId,
+        title: typeof module.title === 'string' ? module.title : `Module ${moduleIndex + 1}`,
+        description: typeof module.description === 'string' ? module.description : '',
+        lessons: lessons.map((lessonRaw, lessonIndex) => {
+          const lessonId = `snapshot-lesson-${moduleIndex}-${lessonIndex}-${createId()}`;
+          const questionsRaw = Array.isArray(lessonRaw.questions) ? lessonRaw.questions : [];
+          const criteriaRaw = Array.isArray(lessonRaw.assignmentCriteria) ? lessonRaw.assignmentCriteria : [];
+          const attachmentsRaw = Array.isArray(lessonRaw.attachments) ? lessonRaw.attachments : [];
+
+          const questions: QuizQuestionDraft[] = questionsRaw.map((questionRaw, questionIndex) => {
+            const optionsRaw = Array.isArray(questionRaw.options) ? questionRaw.options : [];
+            return {
+              id: `snapshot-q-${moduleIndex}-${lessonIndex}-${questionIndex}-${createId()}`,
+              text: typeof questionRaw.text === 'string' ? questionRaw.text : '',
+              type: parseQuestionTypeFromSnapshot(questionRaw.type),
+              score: toPositiveNumberOrUndefined(questionRaw.score) ?? 1,
+              orderIndex: toPositiveNumberOrUndefined(questionRaw.orderIndex) ?? questionIndex,
+              options: optionsRaw.map((optionRaw: Record<string, unknown>, optionIndex: number) => ({
+                id: `snapshot-opt-${moduleIndex}-${lessonIndex}-${questionIndex}-${optionIndex}-${createId()}`,
+                text: typeof optionRaw.text === 'string' ? optionRaw.text : '',
+                correct: Boolean(optionRaw.correct),
+                orderIndex: toPositiveNumberOrUndefined(optionRaw.orderIndex) ?? optionIndex
+              }))
+            };
+          });
+
+          const assignmentCriteria: AssignmentCriteriaDraft[] = criteriaRaw.map((criteriaRawItem, criteriaIndex) => ({
+            clientId: `snapshot-criteria-${moduleIndex}-${lessonIndex}-${criteriaIndex}-${createId()}`,
+            name: typeof criteriaRawItem.name === 'string' ? criteriaRawItem.name : '',
+            description: typeof criteriaRawItem.description === 'string' ? criteriaRawItem.description : '',
+            maxPoints: toPositiveNumberOrUndefined(criteriaRawItem.maxPoints) ?? 0,
+            orderIndex: toPositiveNumberOrUndefined(criteriaRawItem.orderIndex) ?? criteriaIndex,
+            isRequired: typeof criteriaRawItem.isRequired === 'boolean' ? criteriaRawItem.isRequired : true
+          }));
+
+          const attachments = normalizeLessonAttachments(
+            attachmentsRaw.map((attachmentRaw, attachmentIndex) => ({
+              id: `snapshot-attachment-${moduleIndex}-${lessonIndex}-${attachmentIndex}-${createId()}`,
+              name: typeof attachmentRaw.name === 'string' ? attachmentRaw.name : 'Attachment',
+              url: typeof attachmentRaw.url === 'string' ? attachmentRaw.url : undefined,
+              mediaId: typeof attachmentRaw.mediaId === 'number' ? attachmentRaw.mediaId : undefined
+            }))
+          );
+
+          return {
+            id: lessonId,
+            title: typeof lessonRaw.title === 'string' ? lessonRaw.title : `Bài học ${lessonIndex + 1}`,
+            type: parseLessonKindFromSnapshot(lessonRaw.type),
+            durationMin: toPositiveNumberOrUndefined(lessonRaw.durationMin),
+            contentText: typeof lessonRaw.contentText === 'string' ? lessonRaw.contentText : '',
+            resourceUrl: typeof lessonRaw.resourceUrl === 'string' ? lessonRaw.resourceUrl : undefined,
+            youtubeUrl: typeof lessonRaw.youtubeUrl === 'string' ? lessonRaw.youtubeUrl : undefined,
+            videoMediaId: typeof lessonRaw.videoMediaId === 'number' ? lessonRaw.videoMediaId : undefined,
+            passScore: toPositiveNumberOrUndefined(lessonRaw.passScore),
+            quizMaxAttempts: toPositiveNumberOrUndefined(lessonRaw.quizMaxAttempts),
+            quizTimeLimitMinutes: toPositiveNumberOrUndefined(lessonRaw.quizTimeLimitMinutes),
+            quizDescription: typeof lessonRaw.quizDescription === 'string' ? lessonRaw.quizDescription : undefined,
+            gradingMethod: typeof lessonRaw.gradingMethod === 'string' ? lessonRaw.gradingMethod : undefined,
+            isAssessment: typeof lessonRaw.isAssessment === 'boolean' ? lessonRaw.isAssessment : undefined,
+            assignmentSubmissionType: parseSubmissionTypeFromSnapshot(lessonRaw.assignmentSubmissionType),
+            assignmentDescription:
+              typeof lessonRaw.assignmentDescription === 'string' ? lessonRaw.assignmentDescription : undefined,
+            assignmentMaxScore: toPositiveNumberOrUndefined(lessonRaw.assignmentMaxScore),
+            assignmentPassingScore: toPositiveNumberOrUndefined(lessonRaw.assignmentPassingScore),
+            questions,
+            assignmentCriteria,
+            attachments
+          };
+        })
       };
-    })
-    .filter((attachment): attachment is LessonAttachmentDraft => Boolean(attachment));
+    });
+  } catch (error) {
+    console.error('Failed to parse revision content snapshot:', error);
+    return [];
+  }
 };
+
+const formatRevisionStatusLabel = (status?: string | null) => {
+  switch (status) {
+    case 'DRAFT':
+      return 'Bản nháp';
+    case 'PENDING':
+      return 'Chờ duyệt';
+    case 'APPROVED':
+      return 'Đã duyệt';
+    case 'REJECTED':
+      return 'Bị từ chối';
+    default:
+      return status || 'N/A';
+  }
+};
+
+const getRevisionStatusTone = (status?: string | null) => {
+  switch (status) {
+    case 'DRAFT':
+      return 'draft';
+    case 'PENDING':
+      return 'pending';
+    case 'APPROVED':
+      return 'approved';
+    case 'REJECTED':
+      return 'rejected';
+    default:
+      return 'neutral';
+  }
+};
+
+const formatRevisionDate = (date?: string | null) =>
+  date ? new Date(date).toLocaleString('vi-VN') : '—';
 
 // ============================================================================
 // COMPONENT
@@ -134,11 +370,23 @@ const CourseCreationPage = () => {
 
   const { courseForm, isLoading } = state;
   const { toast, isVisible, hideToast, showSuccess, showError, showWarning, showInfo } = useToast();
+  const searchParams = new URLSearchParams(location.search);
+  const revisionIdParam = searchParams.get('revisionId');
+  const revisionId = revisionIdParam ? Number(revisionIdParam) : null;
+  const isRevisionMode = Boolean(revisionId && !Number.isNaN(revisionId));
+  const [activeRevision, setActiveRevision] = useState<CourseRevisionDTO | null>(null);
+  const [revisionHistory, setRevisionHistory] = useState<CourseRevisionDTO[]>([]);
+  const [isRevisionLoading, setIsRevisionLoading] = useState(false);
+  const [isRevisionHistoryModalOpen, setIsRevisionHistoryModalOpen] = useState(false);
+  const revisionIsEditable = activeRevision?.status === 'DRAFT' || activeRevision?.status === 'REJECTED';
   
-  const isEditable = !isEditMode || 
-                     !state.currentCourse || 
-                     state.currentCourse.status === CourseStatus.DRAFT || 
-                     state.currentCourse.status === 'REJECTED' as CourseStatus; // Cast if string
+  const isEditable = isRevisionMode
+    ? revisionIsEditable
+    : (!isEditMode ||
+      !state.currentCourse ||
+      state.currentCourse.status === CourseStatus.DRAFT ||
+      state.currentCourse.status === CourseStatus.REJECTED ||
+      state.currentCourse.status === CourseStatus.SUSPENDED);
 
   // Local State
   const [activeView, setActiveView] = useState<ViewState>({ type: 'course_info' });
@@ -188,6 +436,12 @@ const CourseCreationPage = () => {
 
   const [isSaving, setIsSaving] = useState(false);
   const saveInFlightRef = useRef(false);
+  const latestRevision = revisionHistory[0] ?? activeRevision;
+  const openRevision = revisionHistory.find(
+    (revision) => revision.status === 'DRAFT' || revision.status === 'PENDING'
+  );
+  const hasPendingOpenRevision = !isRevisionMode && openRevision?.status === 'PENDING';
+  const hasDraftOpenRevision = !isRevisionMode && openRevision?.status === 'DRAFT';
   
   const clearAssignmentError = (
      lessonId: string,
@@ -255,13 +509,106 @@ const CourseCreationPage = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (params.get('submitted') !== '1') {
+    const submitted = params.get('submitted') === '1';
+    const revisionCreated = params.get('revisionCreated') === '1';
+    const revisionSubmitted = params.get('revisionSubmitted') === '1';
+    if (!submitted && !revisionCreated && !revisionSubmitted) {
       return;
     }
 
-    showToast('success', 'Đã gửi khóa học tới quản trị viên để xét duyệt.');
+    if (submitted) {
+      showToast('success', 'Đã gửi khóa học tới quản trị viên để xét duyệt.');
+    }
+    if (revisionCreated) {
+      showToast('success', 'Đã tạo phiên bản mới. Bạn có thể chỉnh sửa rồi gửi duyệt phiên bản.');
+    }
+    if (revisionSubmitted) {
+      showToast('success', 'Đã gửi phiên bản tới quản trị viên để xét duyệt.');
+    }
     navigate(location.pathname, { replace: true });
   }, [location.pathname, location.search, navigate, showToast]);
+
+  useEffect(() => {
+    if (!isEditMode || !courseId) {
+      setRevisionHistory([]);
+      return;
+    }
+
+    const loadHistory = async () => {
+      try {
+        const response = await listCourseRevisions(Number(courseId), 0, 10);
+        setRevisionHistory(response.content ?? []);
+      } catch {
+        setRevisionHistory([]);
+      }
+    };
+
+    void loadHistory();
+  }, [courseId, isEditMode]);
+
+  useEffect(() => {
+    if (!isRevisionMode || !revisionId) {
+      setActiveRevision(null);
+      return;
+    }
+
+    const loadRevision = async () => {
+      try {
+        setIsRevisionLoading(true);
+        const revision = await getCourseRevision(revisionId);
+        setActiveRevision(revision);
+        const revisionFormData: Partial<typeof state.courseForm> = {};
+        if (revision.title !== undefined) revisionFormData.title = revision.title;
+        if (revision.description !== undefined) revisionFormData.description = revision.description;
+        if (revision.shortDescription !== undefined) revisionFormData.summary = revision.shortDescription;
+        if (revision.category !== undefined) revisionFormData.category = revision.category;
+        if (revision.level !== undefined) revisionFormData.level = revision.level as CourseLevel;
+        if (revision.price !== undefined) revisionFormData.price = revision.price;
+        if (revision.currency !== undefined) revisionFormData.currency = revision.currency;
+        if (revision.estimatedDurationHours !== undefined) {
+          revisionFormData.estimatedDuration = revision.estimatedDurationHours;
+        }
+        if (revision.language !== undefined) revisionFormData.language = revision.language;
+        if (Object.keys(revisionFormData).length > 0) {
+          updateCourseForm(revisionFormData);
+        }
+        if (revision.learningObjectivesJson) {
+          const parsedObjectives = JSON.parse(revision.learningObjectivesJson) as string[];
+          if (Array.isArray(parsedObjectives) && parsedObjectives.length > 0) {
+            setLearningObjectives(parsedObjectives);
+          }
+        }
+        if (revision.requirementsJson) {
+          const parsedRequirements = JSON.parse(revision.requirementsJson) as string[];
+          if (Array.isArray(parsedRequirements) && parsedRequirements.length > 0) {
+            setRequirements(parsedRequirements);
+          }
+        }
+        const snapshotModules = parseModulesFromRevisionSnapshot(revision.contentSnapshotJson);
+        if (snapshotModules.length > 0) {
+          setModules(snapshotModules);
+          setAssignmentErrors({});
+        }
+      } catch (error) {
+        showToast('error', `Không thể tải thông tin phiên bản: ${getApiErrorMessage(error)}`);
+      } finally {
+        setIsRevisionLoading(false);
+      }
+    };
+
+    void loadRevision();
+  }, [getApiErrorMessage, isRevisionMode, revisionId, showToast, updateCourseForm]);
+
+  useEffect(() => {
+    if (!isRevisionHistoryModalOpen) return undefined;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsRevisionHistoryModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isRevisionHistoryModalOpen]);
 
   // Sync from context to local state
   useEffect(() => {
@@ -330,9 +677,85 @@ const CourseCreationPage = () => {
   // HANDLERS
   // ============================================================================
 
-  const handleGoBack = () => navigate('/mentor', { state: { activeTab: 'courses' } });
+  const handleGoBack = () => {
+    const fromState = location.state as { activeTab?: string; coursesPage?: number } | null;
+    const targetPage = fromState?.coursesPage;
+    navigate('/mentor', {
+      state: {
+        activeTab: fromState?.activeTab || 'courses',
+        ...(typeof targetPage === 'number' && Number.isFinite(targetPage) && targetPage > 0
+          ? { coursesPage: targetPage }
+          : {})
+      }
+    });
+  };
+
+  const handleCreateRevisionFromPublic = useCallback(async () => {
+    if (!state.currentCourse?.id) {
+      showToast('error', 'Không tìm thấy khóa học để tạo phiên bản mới.');
+      return;
+    }
+
+    try {
+      setIsRevisionLoading(true);
+      const createdRevision = await createCourseRevision(state.currentCourse.id);
+      const refreshed = await listCourseRevisions(state.currentCourse.id, 0, 10);
+      setRevisionHistory(refreshed.content ?? []);
+      navigate(
+        `/mentor/courses/${state.currentCourse.id}/edit?revisionId=${createdRevision.id}&revisionCreated=1`,
+        { replace: true }
+      );
+    } catch (error) {
+      const apiErrorMessage = getApiErrorMessage(error);
+
+      if (apiErrorMessage.includes('COURSE_HAS_OPEN_REVISION')) {
+        try {
+          const refreshed = await listCourseRevisions(state.currentCourse.id, 0, 20);
+          const history = refreshed.content ?? [];
+          setRevisionHistory(history);
+
+          const openRevision = history.find(
+            (revision) => revision.status === 'DRAFT' || revision.status === 'PENDING'
+          );
+
+          if (openRevision) {
+            const isPending = openRevision.status === 'PENDING';
+            showToast(
+              isPending ? 'warning' : 'info',
+              isPending
+                ? `Khóa học đã có phiên bản #${openRevision.revisionNumber} đang chờ duyệt. Chưa thể tạo phiên bản mới cho tới khi admin xử lý phiên bản này.`
+                : `Khóa học đã có phiên bản nháp #${openRevision.revisionNumber}. Mở phiên bản hiện có để bạn tiếp tục chỉnh sửa.`
+            );
+            navigate(
+              `/mentor/courses/${state.currentCourse.id}/edit?revisionId=${openRevision.id}`,
+              { replace: true }
+            );
+            return;
+          }
+        } catch {
+          // Fall through and show original backend message.
+        }
+      }
+
+      showToast('error', `Không thể tạo phiên bản mới: ${apiErrorMessage}`);
+    } finally {
+      setIsRevisionLoading(false);
+    }
+  }, [getApiErrorMessage, navigate, showToast, state.currentCourse]);
+
+  const handleOpenRevisionInEditor = useCallback((targetRevision: CourseRevisionDTO) => {
+    if (!state.currentCourse?.id) return;
+    setIsRevisionHistoryModalOpen(false);
+    navigate(`/mentor/courses/${state.currentCourse.id}/edit?revisionId=${targetRevision.id}`);
+  }, [navigate, state.currentCourse?.id]);
 
   const handleThumbnailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isEditable) {
+      if (e.target) e.target.value = '';
+      showToast('warning', 'Khóa học đang ở chế độ xem, bạn không thể thay đổi ảnh bìa.');
+      return;
+    }
+
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       if (file.size > 5 * 1024 * 1024) {
@@ -343,7 +766,7 @@ const CourseCreationPage = () => {
       // Preview immediately
       updateCourseForm({ thumbnailUrl: URL.createObjectURL(file) });
     }
-  }, [showToast, updateCourseForm]);
+  }, [isEditable, showToast, updateCourseForm]);
 
   const updateLessonField = (moduleId: string, lessonId: string, data: Partial<LessonDraft>) => {
     setModules(prev => prev.map(m => {
@@ -415,6 +838,11 @@ const CourseCreationPage = () => {
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isEditable) {
+      if (e.target) e.target.value = '';
+      showToast('warning', 'Khóa học đang ở chế độ xem, bạn không thể thêm tệp đính kèm.');
+      return;
+    }
     if (activeView.type !== 'lesson' || !e.target.files || !e.target.files[0]) return;
     
     const file = e.target.files[0];
@@ -453,6 +881,11 @@ const CourseCreationPage = () => {
   };
 
   const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isEditable) {
+      if (e.target) e.target.value = '';
+      showToast('warning', 'Khóa học đang ở chế độ xem, bạn không thể tải video lên.');
+      return;
+    }
     if (activeView.type !== 'lesson' || !e.target.files || !e.target.files[0]) return;
     
     const file = e.target.files[0];
@@ -536,6 +969,29 @@ const CourseCreationPage = () => {
     setIsSaving(true);
 
     try {
+      if (isRevisionMode && activeRevision) {
+        const contentSnapshotJson = JSON.stringify(buildRevisionContentSnapshot(modules));
+        const updatedRevision = await updateCourseRevision(activeRevision.id, {
+          title: state.courseForm.title,
+          description: state.courseForm.description,
+          shortDescription: state.courseForm.summary,
+          category: state.courseForm.category,
+          level: state.courseForm.level,
+          estimatedDurationHours: state.courseForm.estimatedDuration,
+          language: state.courseForm.language,
+          price: state.courseForm.price,
+          currency: state.courseForm.currency,
+          learningObjectives,
+          requirements,
+          contentSnapshotJson
+        });
+        setActiveRevision(updatedRevision);
+        if (!options?.silentSuccess) {
+          showToast('success', `Đã lưu bản nháp phiên bản #${updatedRevision.revisionNumber}.`);
+        }
+        return state.currentCourse;
+      }
+
       let savedCourse;
       const fileToUpload = thumbnailFile || undefined;
 
@@ -657,13 +1113,33 @@ const CourseCreationPage = () => {
       return savedCourse;
     } catch (err) {
       const message = getApiErrorMessage(err);
-      showToast('error', `Lỗi khi lưu: ${message}`);
+      if (message.includes('COURSE_REVISION_CONTENT_SNAPSHOT_TOO_LARGE')) {
+        showToast('error', 'Nội dung phiên bản quá lớn. Vui lòng chia nhỏ hoặc tinh gọn nội dung trước khi lưu.');
+      } else {
+        showToast('error', `Lỗi khi lưu: ${message}`);
+      }
       return null;
     } finally {
       saveInFlightRef.current = false;
       setIsSaving(false);
     }
-  }, [courseId, createCourse, getApiErrorMessage, isEditMode, modules, navigate, showToast, thumbnailFile, updateCourse]);
+  }, [
+    activeRevision,
+    courseId,
+    createCourse,
+    getApiErrorMessage,
+    isEditMode,
+    isRevisionMode,
+    learningObjectives,
+    modules,
+    navigate,
+    requirements,
+    showToast,
+    state.courseForm,
+    state.currentCourse,
+    thumbnailFile,
+    updateCourse
+  ]);
 
   const handleSaveDraft = useCallback(async () => {
     await persistCourseDraft();
@@ -691,6 +1167,18 @@ const CourseCreationPage = () => {
 
     try {
       setIsSaving(true);
+      if (isRevisionMode && activeRevision) {
+        showToast('info', 'Đang gửi phiên bản tới quản trị viên để xét duyệt.');
+        const submittedRevision = await submitCourseRevision(activeRevision.id);
+        setActiveRevision(submittedRevision);
+        if (courseId) {
+          const refreshed = await listCourseRevisions(Number(courseId), 0, 10);
+          setRevisionHistory(refreshed.content ?? []);
+        }
+        navigate(`/mentor/courses/${savedCourse.id}/edit?revisionId=${submittedRevision.id}&revisionSubmitted=1`, { replace: true });
+        return;
+      }
+
       showToast('info', 'Đang gửi khóa học tới quản trị viên để xét duyệt.');
       const submittedCourse = await submitCourseForApproval(savedCourse.id, user.id);
       if (isEditMode) {
@@ -698,11 +1186,32 @@ const CourseCreationPage = () => {
       }
       navigate(`/mentor/courses/${submittedCourse.id}/edit?submitted=1`, { replace: true });
     } catch (error) {
-      showToast('error', `Không thể gửi duyệt: ${getApiErrorMessage(error)}`);
+      const apiErrorMessage = getApiErrorMessage(error);
+      if (apiErrorMessage.includes('COURSE_REVISION_NO_CHANGES_TO_SUBMIT')) {
+        showToast('warning', 'Phiên bản chưa có thay đổi thực tế so với bản gốc, nên chưa thể gửi duyệt.');
+      } else if (apiErrorMessage.includes('COURSE_REVISION_NO_CHANGES_SINCE_REJECTION')) {
+        showToast('warning', 'Phiên bản bị từ chối trước đó nhưng chưa có cập nhật mới, nên chưa thể gửi duyệt lại.');
+      } else if (apiErrorMessage.includes('COURSE_REVISION_BASELINE_NOT_FOUND')) {
+        showToast('error', 'Không xác định được bản gốc để so sánh thay đổi. Vui lòng liên hệ quản trị viên để xử lý dữ liệu phiên bản.');
+      } else {
+        showToast('error', `Không thể gửi duyệt: ${apiErrorMessage}`);
+      }
     } finally {
       setIsSaving(false);
     }
-  }, [getApiErrorMessage, isEditMode, loadCourseForEdit, modules, navigate, persistCourseDraft, showToast, user?.id]);
+  }, [
+    activeRevision,
+    courseId,
+    getApiErrorMessage,
+    isEditMode,
+    isRevisionMode,
+    loadCourseForEdit,
+    modules,
+    navigate,
+    persistCourseDraft,
+    showToast,
+    user?.id
+  ]);
 
   // ============================================================================
   // RENDERERS
@@ -964,10 +1473,23 @@ const CourseCreationPage = () => {
                    <div className="cb-form-group">
                       <label className="cb-label">Ảnh bìa</label>
                       <div 
-                         className="cb-course-upload"
-                         onClick={() => document.getElementById('thumbnail-upload')?.click()}
+                         className={`cb-course-upload${!isEditable ? ' cb-course-upload--disabled' : ''}`}
+                         onClick={() => {
+                           if (!isEditable) {
+                             showToast('info', 'Chỉ có thể xem trong trạng thái hiện tại. Tạo hoặc mở phiên bản nháp để chỉnh sửa.');
+                             return;
+                           }
+                           document.getElementById('thumbnail-upload')?.click();
+                         }}
                       >
-                         <input id="thumbnail-upload" type="file" hidden onChange={handleThumbnailChange} accept="image/*" />
+                         <input
+                           id="thumbnail-upload"
+                           type="file"
+                           hidden
+                           onChange={handleThumbnailChange}
+                           accept="image/*"
+                           disabled={!isEditable}
+                         />
                          {courseForm.thumbnailUrl ? (
                             <img src={courseForm.thumbnailUrl} alt="Thumbnail" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                          ) : (
@@ -1758,20 +2280,33 @@ const CourseCreationPage = () => {
   return (
     <div className="cb-page">
       {!isEditable && (
-         <div className="cb-banner-warning" style={{ 
-            backgroundColor: '#fff3cd', 
-            color: '#856404', 
-            padding: '12px 24px', 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: 12,
-            borderBottom: '1px solid #ffeeba'
-         }}>
+         <div className="cb-banner-warning">
             <FiAlertTriangle size={20} />
             <div>
                <strong>Chế độ xem:</strong> Khóa học này đang ở trạng thái <strong>{state.currentCourse?.status}</strong> và không thể chỉnh sửa trực tiếp. 
-               Vui lòng tạo phiên bản mới hoặc gửi yêu cầu chỉnh sửa.
+               {isRevisionMode
+                 ? ` Phiên bản hiện tại đang ở trạng thái ${activeRevision?.status ?? 'N/A'}, bạn chỉ có thể xem.`
+                 : hasPendingOpenRevision
+                   ? ` Khóa học đã có phiên bản #${openRevision?.revisionNumber ?? ''} đang chờ duyệt. Vui lòng chờ admin xử lý phiên bản này trước khi tạo phiên bản mới.`
+                   : hasDraftOpenRevision
+                     ? ` Khóa học đã có phiên bản nháp #${openRevision?.revisionNumber ?? ''}. Vui lòng mở phiên bản này để tiếp tục chỉnh sửa.`
+                     : ' Vui lòng tạo phiên bản mới để cập nhật khóa học đã xuất bản.'}
             </div>
+            {!isRevisionMode && state.currentCourse?.status === CourseStatus.PUBLIC && (
+              <button
+                className="cb-button cb-banner-warning__action"
+                onClick={() => {
+                  if (openRevision) {
+                    handleOpenRevisionInEditor(openRevision);
+                    return;
+                  }
+                  void handleCreateRevisionFromPublic();
+                }}
+                disabled={isRevisionLoading}
+              >
+                <FiPlus /> {openRevision ? `Mở phiên bản #${openRevision.revisionNumber}` : 'Tạo phiên bản mới'}
+              </button>
+            )}
          </div>
       )}
 
@@ -1781,14 +2316,29 @@ const CourseCreationPage = () => {
             <button className="cb-back-button" onClick={handleGoBack}>
               <FiArrowLeft /> Quay lại
             </button>
-            <h1 className="cb-title">{isEditMode ? 'Chỉnh sửa khóa học' : 'Tạo khóa học'}</h1>
+            <h1 className="cb-title">
+              {isEditMode ? 'Chỉnh sửa khóa học' : 'Tạo khóa học'}
+              {isRevisionMode && activeRevision ? ` • Phiên bản #${activeRevision.revisionNumber}` : ''}
+            </h1>
           </div>
           <div className="cb-header__right">
-             <button 
-                className="cb-button cb-button--secondary" 
-                disabled={isSaving || !isEditable} 
-                onClick={() => void handleSaveDraft()}
-             >
+              {isEditMode && state.currentCourse?.id && revisionHistory.length > 0 && (
+                <button
+                  className="cb-revision-history-trigger"
+                  onClick={() => setIsRevisionHistoryModalOpen(true)}
+                >
+                  <FiList />
+                  <span>Xem lịch sử</span>
+                  {latestRevision && (
+                    <span className="cb-revision-history-trigger__latest">#{latestRevision.revisionNumber}</span>
+                  )}
+                </button>
+              )}
+              <button 
+                 className="cb-button cb-button--secondary" 
+                 disabled={isSaving || !isEditable} 
+                 onClick={() => void handleSaveDraft()}
+              >
                 <FiSave /> Lưu nháp
              </button>
              <button
@@ -1798,9 +2348,10 @@ const CourseCreationPage = () => {
              >
                 <FiCheck /> Gửi duyệt
              </button>
-          </div>
-        </header>
-      </div>
+           </div>
+         </header>
+
+       </div>
       
       <div className="cb-workspace">
         {renderSidebar()}
@@ -1820,6 +2371,69 @@ const CourseCreationPage = () => {
                  }}>{confirmDialog.confirmLabel || 'Xác nhận'}</button>
               </div>
            </div>
+        </div>
+      )}
+
+      {isRevisionHistoryModalOpen && (
+        <div
+          className="cb-modal-overlay"
+          role="presentation"
+          onClick={() => setIsRevisionHistoryModalOpen(false)}
+        >
+          <div
+            className="cb-modal cb-revision-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Lịch sử phiên bản"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="cb-modal__header">
+              <div>
+                <h3>Lịch sử phiên bản</h3>
+                <p className="cb-revision-modal__subtitle">
+                  {state.courseForm.title || state.currentCourse?.title || 'Khóa học'}
+                </p>
+              </div>
+              <button
+                className="cb-button cb-button--secondary cb-button--sm"
+                onClick={() => setIsRevisionHistoryModalOpen(false)}
+              >
+                <FiX /> Đóng
+              </button>
+            </div>
+
+            <div className="cb-revision-modal__list">
+              {revisionHistory.map((revision) => {
+                const isCurrentRevision = activeRevision?.id === revision.id;
+                return (
+                  <article
+                    key={revision.id}
+                    className={`cb-revision-row${isCurrentRevision ? ' is-current' : ''}`}
+                  >
+                    <div className="cb-revision-row__info">
+                      <div className="cb-revision-row__line">
+                        <span className={`cb-revision-status cb-revision-status--${getRevisionStatusTone(revision.status)}`}>
+                          {formatRevisionStatusLabel(revision.status)}
+                        </span>
+                        <span className="cb-revision-row__number">#{revision.revisionNumber}</span>
+                        {isCurrentRevision && <span className="cb-revision-row__current">Đang mở</span>}
+                      </div>
+                      <div className="cb-revision-row__meta">
+                        <span>Tạo: {formatRevisionDate(revision.createdAt)}</span>
+                        <span>Cập nhật: {formatRevisionDate(revision.updatedAt)}</span>
+                      </div>
+                    </div>
+                    <button
+                      className="cb-button cb-button--secondary cb-button--sm"
+                      onClick={() => handleOpenRevisionInEditor(revision)}
+                    >
+                      Mở
+                    </button>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
 

@@ -14,17 +14,27 @@ import {
   CheckCircle, XCircle, ShieldOff, ShieldCheck,
   Clock, BookOpen, ChevronDown, ChevronUp,
   Calendar, DollarSign, Tag, ClipboardList, HelpCircle,
-  CheckSquare, AlertCircle, PenTool, Paperclip, Download, ExternalLink
+  CheckSquare, AlertCircle, PenTool, Paperclip, Download, ExternalLink, Settings2, Info
 } from 'lucide-react';
-import { getCourse, approveCourse, rejectCourse, suspendCourse, restoreCourse } from '../../services/courseService';
+import {
+  getCourse,
+  getCourseRevision,
+  approveCourse,
+  rejectCourse,
+  suspendCourse,
+  restoreCourse,
+  updateCourseUpgradePolicy,
+  CourseRevisionDTO
+} from '../../services/courseService';
 import { listModulesWithContent, ModuleDetailDTO } from '../../services/moduleService';
 import { getLessonById } from '../../services/lessonService';
 import { getQuizById } from '../../services/quizService';
 import { getAssignmentById } from '../../services/assignmentService';
 import { LessonAttachmentDTO, listAttachments } from '../../services/attachmentService';
-import { CourseDetailDTO, CourseStatus } from '../../data/courseDTOs';
+import { LessonType } from '../../data/lessonDTOs';
+import { CourseDetailDTO, CourseStatus, CourseUpgradePolicy } from '../../data/courseDTOs';
 import { QuizDetailDTO, QuizQuestionDetailDTO, QuestionType } from '../../data/quizDTOs';
-import { AssignmentDetailDTO } from '../../data/assignmentDTOs';
+import { AssignmentDetailDTO, SubmissionType } from '../../data/assignmentDTOs';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
@@ -128,6 +138,108 @@ const isSafePreviewUrl = (value?: string | null) => {
     return parsed.protocol === 'http:' || parsed.protocol === 'https:';
   } catch {
     return false;
+  }
+};
+
+const toPositiveNumberOrDefault = (value: unknown, fallback: number) => {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value < 0) {
+    return fallback;
+  }
+  return value;
+};
+
+const snapshotSubmissionType = (value: unknown): SubmissionType => {
+  if (typeof value === 'string') {
+    const upper = value.toUpperCase();
+    if (upper === SubmissionType.FILE) return SubmissionType.FILE;
+    if (upper === SubmissionType.LINK) return SubmissionType.LINK;
+    if (upper === SubmissionType.TEXT) return SubmissionType.TEXT;
+  }
+  return SubmissionType.TEXT;
+};
+
+const parseModulesFromRevisionSnapshot = (
+  contentSnapshotJson: string | undefined,
+  courseId: number
+): ModuleDetailDTO[] => {
+  if (!contentSnapshotJson) return [];
+
+  try {
+    const parsed = JSON.parse(contentSnapshotJson) as {
+      modules?: Array<{
+        title?: string;
+        description?: string;
+        lessons?: Array<Record<string, unknown>>;
+      }>;
+    };
+
+    if (!Array.isArray(parsed.modules)) {
+      return [];
+    }
+
+    return parsed.modules.map((module, moduleIndex) => {
+      const lessonRawList = Array.isArray(module.lessons) ? module.lessons : [];
+      const lessons: ModuleDetailDTO['lessons'] = [];
+      const quizzes: ModuleDetailDTO['quizzes'] = [];
+      const assignments: ModuleDetailDTO['assignments'] = [];
+
+      lessonRawList.forEach((lessonRaw, lessonIndex) => {
+        const lessonType = typeof lessonRaw.type === 'string' ? lessonRaw.type.toUpperCase() : 'READING';
+        const title = typeof lessonRaw.title === 'string' ? lessonRaw.title : `Bài học ${lessonIndex + 1}`;
+        const orderIndex = toPositiveNumberOrDefault(lessonRaw.orderIndex, lessonIndex);
+        const generatedId = -1 * (moduleIndex * 1000 + lessonIndex + 1);
+
+        if (lessonType === 'QUIZ') {
+          const questions = Array.isArray(lessonRaw.questions) ? lessonRaw.questions : [];
+          quizzes?.push({
+            id: generatedId,
+            title,
+            description: typeof lessonRaw.quizDescription === 'string' ? lessonRaw.quizDescription : '',
+            passScore: toPositiveNumberOrDefault(lessonRaw.passScore, 0),
+            orderIndex,
+            questionCount: questions.length,
+            moduleId: generatedId
+          });
+          return;
+        }
+
+        if (lessonType === 'ASSIGNMENT') {
+          assignments?.push({
+            id: generatedId,
+            title,
+            description: typeof lessonRaw.assignmentDescription === 'string' ? lessonRaw.assignmentDescription : '',
+            submissionType: snapshotSubmissionType(lessonRaw.assignmentSubmissionType),
+            maxScore: toPositiveNumberOrDefault(lessonRaw.assignmentMaxScore, 0),
+            orderIndex
+          });
+          return;
+        }
+
+        lessons?.push({
+          id: generatedId,
+          title,
+          type: lessonType === 'VIDEO' ? LessonType.VIDEO : LessonType.READING,
+          orderIndex,
+          durationSec: toPositiveNumberOrDefault(lessonRaw.durationMin, 0) * 60
+        });
+      });
+
+      return {
+        id: -1 * (moduleIndex + 1),
+        title: module.title || `Module ${moduleIndex + 1}`,
+        description: module.description || '',
+        orderIndex: moduleIndex,
+        courseId,
+        createdAt: '',
+        updatedAt: '',
+        lessons,
+        quizzes,
+        assignments
+      } as ModuleDetailDTO;
+    });
+  } catch (error) {
+    console.error('Error parsing revision snapshot for admin preview:', error);
+    return [];
   }
 };
 
@@ -484,14 +596,21 @@ const AdminCoursePreviewPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const revisionIdParam = new URLSearchParams(location.search).get('revisionId');
+  const revisionId = revisionIdParam ? Number(revisionIdParam) : null;
+  const hasRevisionId = typeof revisionId === 'number' && Number.isFinite(revisionId) && revisionId > 0;
   const { user } = useAuth();
   const { toast, isVisible, hideToast, showSuccess, showError, showWarning } = useToast();
 
   const [course, setCourse] = useState<CourseDetailDTO | null>(null);
   const [modules, setModules] = useState<ModuleDetailDTO[]>([]);
+  const [selectedRevision, setSelectedRevision] = useState<CourseRevisionDTO | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [actionModal, setActionModal] = useState<{ type: 'approve' | 'reject' | 'suspend' | 'restore' } | null>(null);
+  const [selectedUpgradePolicy, setSelectedUpgradePolicy] = useState<CourseUpgradePolicy>(CourseUpgradePolicy.MANUAL);
+  const [isSavingUpgradePolicy, setIsSavingUpgradePolicy] = useState(false);
+  const [upgradePolicyFeedback, setUpgradePolicyFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [expandedModules, setExpandedModules] = useState<Record<number, boolean>>({});
   const returnTo = ((location.state as { returnTo?: string } | null)?.returnTo || '/admin?tab=courses');
 
@@ -518,6 +637,13 @@ const AdminCoursePreviewPage: React.FC = () => {
     return fallbackMessage;
   }, []);
 
+  const getUpgradePolicyLabel = (policy: CourseUpgradePolicy) => {
+    if (policy === CourseUpgradePolicy.AUTO_COMPATIBLE_ONLY) {
+      return 'AUTO_COMPATIBLE_ONLY - Tự động nâng cấp nếu tương thích';
+    }
+    return 'MANUAL - Learner tự nâng cấp thủ công';
+  };
+
   // ---- Data Loading ----
   const loadCourse = useCallback(async () => {
     if (!courseId) return;
@@ -530,10 +656,32 @@ const AdminCoursePreviewPage: React.FC = () => {
       ]);
       const sortedModules = [...(moduleData as ModuleDetailDTO[])].sort((a, b) => a.orderIndex - b.orderIndex);
       setCourse(courseData);
-      setModules(sortedModules);
+      setSelectedUpgradePolicy(courseData.upgradePolicy ?? CourseUpgradePolicy.MANUAL);
+      setUpgradePolicyFeedback(null);
+      let effectiveModules = sortedModules;
+
+      if (hasRevisionId && revisionId !== null) {
+        try {
+          const revision = await getCourseRevision(revisionId);
+          setSelectedRevision(revision);
+          const snapshotModules = parseModulesFromRevisionSnapshot(revision.contentSnapshotJson, id)
+            .sort((a, b) => a.orderIndex - b.orderIndex);
+          if (snapshotModules.length > 0) {
+            effectiveModules = snapshotModules;
+          }
+        } catch (revisionError) {
+          console.error('Error loading revision snapshot:', revisionError);
+          setSelectedRevision(null);
+          showWarning('Cảnh báo', 'Không tải được snapshot revision, hiển thị nội dung khóa học hiện tại.');
+        }
+      } else {
+        setSelectedRevision(null);
+      }
+
+      setModules(effectiveModules);
       // Expand all modules by default
       const expanded: Record<number, boolean> = {};
-      sortedModules.forEach(m => { expanded[m.id] = true; });
+      effectiveModules.forEach(m => { expanded[m.id] = true; });
       setExpandedModules(expanded);
     } catch (err) {
       console.error('Error loading course:', err);
@@ -541,7 +689,7 @@ const AdminCoursePreviewPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [courseId, showError]);
+  }, [courseId, hasRevisionId, revisionId, showError, showWarning]);
 
   useEffect(() => { loadCourse(); }, [loadCourse]);
 
@@ -589,6 +737,49 @@ const AdminCoursePreviewPage: React.FC = () => {
     }
   };
 
+  const handleSaveUpgradePolicy = async () => {
+    if (!course) {
+      return;
+    }
+
+    const currentPolicy = course.upgradePolicy ?? CourseUpgradePolicy.MANUAL;
+    if (selectedUpgradePolicy === currentPolicy) {
+      setUpgradePolicyFeedback({
+        type: 'success',
+        message: 'Policy hiện tại đã đúng, không có thay đổi cần lưu.'
+      });
+      return;
+    }
+
+    try {
+      setIsSavingUpgradePolicy(true);
+      setUpgradePolicyFeedback(null);
+
+      const updatedCourse = await updateCourseUpgradePolicy(course.id, selectedUpgradePolicy);
+      const effectivePolicy = updatedCourse.upgradePolicy ?? selectedUpgradePolicy;
+
+      setCourse(updatedCourse);
+      setSelectedUpgradePolicy(effectivePolicy);
+      setUpgradePolicyFeedback({
+        type: 'success',
+        message: updatedCourse.upgradePolicyStatusMessage?.trim()
+          ? updatedCourse.upgradePolicyStatusMessage
+          : `Đã cập nhật policy sang ${getUpgradePolicyLabel(effectivePolicy)}.`
+      });
+      await loadCourse();
+      showSuccess('Cập nhật policy', `Policy đã đổi sang ${effectivePolicy}.`);
+    } catch (error) {
+      const message = getApiErrorMessage(error, 'Không thể cập nhật upgrade policy.');
+      setUpgradePolicyFeedback({
+        type: 'error',
+        message
+      });
+      showError('Lỗi cập nhật policy', message);
+    } finally {
+      setIsSavingUpgradePolicy(false);
+    }
+  };
+
   const toggleModule = (moduleId: number) => {
     setExpandedModules(prev => ({ ...prev, [moduleId]: !prev[moduleId] }));
   };
@@ -621,6 +812,8 @@ const AdminCoursePreviewPage: React.FC = () => {
   const totalLessons = modules.reduce((sum, m) => sum + (m.lessons?.length || 0), 0);
   const totalAssignments = modules.reduce((sum, m) => sum + (m.assignments?.length || 0), 0);
   const totalQuizzes = modules.reduce((sum, m) => sum + (m.quizzes?.length || 0), 0);
+  const currentUpgradePolicy = course?.upgradePolicy ?? CourseUpgradePolicy.MANUAL;
+  const hasPendingUpgradePolicyChange = selectedUpgradePolicy !== currentUpgradePolicy;
 
   // ---- Render ----
   if (loading) {
@@ -657,7 +850,7 @@ const AdminCoursePreviewPage: React.FC = () => {
           <span>Quay lại quản lý</span>
         </button>
         <div className="acp-topbar-actions">
-          {course.status === CourseStatus.PENDING && (
+          {!selectedRevision && course.status === CourseStatus.PENDING && (
             <>
               <button className="acp-btn-approve" onClick={() => setActionModal({ type: 'approve' })}>
                 <CheckCircle size={18} /> Duyệt
@@ -667,12 +860,12 @@ const AdminCoursePreviewPage: React.FC = () => {
               </button>
             </>
           )}
-          {course.status === CourseStatus.PUBLIC && (
+          {!selectedRevision && course.status === CourseStatus.PUBLIC && (
             <button className="acp-btn-suspend" onClick={() => setActionModal({ type: 'suspend' })}>
               <ShieldOff size={18} /> Tạm khóa
             </button>
           )}
-          {course.status === CourseStatus.SUSPENDED && (
+          {!selectedRevision && course.status === CourseStatus.SUSPENDED && (
             <button className="acp-btn-restore" onClick={() => setActionModal({ type: 'restore' })}>
               <ShieldCheck size={18} /> Khôi phục
             </button>
@@ -690,6 +883,11 @@ const AdminCoursePreviewPage: React.FC = () => {
             <div className="acp-title-row">
               <h1 className="acp-title">{course.title}</h1>
               {getStatusBadge(course.status)}
+              {selectedRevision && (
+                <span className="acp-status-badge acp-status-pending">
+                  Revision #{selectedRevision.id} - {selectedRevision.status}
+                </span>
+              )}
             </div>
             <div className="acp-meta-row">
               <span className="acp-meta-item"><User size={16} /> {course.authorName || 'N/A'}</span>
@@ -725,6 +923,73 @@ const AdminCoursePreviewPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {selectedRevision && (
+        <div className="acp-alert acp-alert-pending">
+          <Info size={20} />
+          <div>
+            <strong>Đang xem nội dung revision chờ duyệt #{selectedRevision.id}.</strong>{' '}
+            Các mục trong snapshot có thể không có dữ liệu chi tiết mở rộng như bản đã public.
+          </div>
+        </div>
+      )}
+
+      <NeuralCard className="acp-policy-panel">
+        <div className="acp-policy-header">
+          <div className="acp-policy-title-wrap">
+            <Settings2 size={18} />
+            <h2 className="acp-policy-title">Upgrade Policy Cho Learner</h2>
+          </div>
+          <span className="acp-policy-current">Hiện tại: <strong>{currentUpgradePolicy}</strong></span>
+        </div>
+
+        <p className="acp-policy-description">
+          <code>MANUAL</code>: learner đang học giữ revision cũ và tự bấm nâng cấp.{' '}
+          <code>AUTO_COMPATIBLE_ONLY</code>: chỉ tự nâng cấp khi revision mới non-breaking và được đánh dấu tương thích.
+        </p>
+
+        <div className="acp-policy-controls">
+          <label htmlFor="acp-upgrade-policy-select" className="acp-policy-label">
+            Chế độ nâng cấp revision
+          </label>
+          <select
+            id="acp-upgrade-policy-select"
+            className="acp-policy-select"
+            value={selectedUpgradePolicy}
+            onChange={(event) => {
+              setSelectedUpgradePolicy(event.target.value as CourseUpgradePolicy);
+              setUpgradePolicyFeedback(null);
+            }}
+            disabled={isSavingUpgradePolicy || actionLoading}
+          >
+            <option value={CourseUpgradePolicy.MANUAL}>{getUpgradePolicyLabel(CourseUpgradePolicy.MANUAL)}</option>
+            <option value={CourseUpgradePolicy.AUTO_COMPATIBLE_ONLY}>
+              {getUpgradePolicyLabel(CourseUpgradePolicy.AUTO_COMPATIBLE_ONLY)}
+            </option>
+          </select>
+
+          <button
+            type="button"
+            className="acp-btn-save-policy"
+            onClick={() => void handleSaveUpgradePolicy()}
+            disabled={!hasPendingUpgradePolicyChange || isSavingUpgradePolicy || actionLoading}
+          >
+            {isSavingUpgradePolicy ? 'Đang lưu policy...' : 'Lưu policy'}
+          </button>
+        </div>
+
+        {hasPendingUpgradePolicyChange && (
+          <p className="acp-policy-pending">
+            Sẽ đổi từ <strong>{currentUpgradePolicy}</strong> sang <strong>{selectedUpgradePolicy}</strong>.
+          </p>
+        )}
+
+        {upgradePolicyFeedback && (
+          <div className={`acp-policy-feedback acp-policy-feedback-${upgradePolicyFeedback.type}`}>
+            {upgradePolicyFeedback.message}
+          </div>
+        )}
+      </NeuralCard>
 
       {/* Stats Overview */}
       <div className="acp-stats-grid">
@@ -834,9 +1099,9 @@ const AdminCoursePreviewPage: React.FC = () => {
                               <p className="acp-content-item-desc">{item.description}</p>
                             )}
 
-                            {item.kind === 'lesson' && <LessonDetail lessonId={item.id} />}
-                            {item.kind === 'assignment' && <AssignmentDetailView assignmentId={item.id} />}
-                            {item.kind === 'quiz' && <QuizDetail quizId={item.id} />}
+                            {!selectedRevision && item.kind === 'lesson' && <LessonDetail lessonId={item.id} />}
+                            {!selectedRevision && item.kind === 'assignment' && <AssignmentDetailView assignmentId={item.id} />}
+                            {!selectedRevision && item.kind === 'quiz' && <QuizDetail quizId={item.id} />}
                           </div>
                         ))}
                       </div>
@@ -857,7 +1122,7 @@ const AdminCoursePreviewPage: React.FC = () => {
       </div>
 
       {/* Bottom Action Bar (sticky) */}
-      {(course.status === CourseStatus.PENDING || course.status === CourseStatus.PUBLIC || course.status === CourseStatus.SUSPENDED) && (
+      {!selectedRevision && (course.status === CourseStatus.PENDING || course.status === CourseStatus.PUBLIC || course.status === CourseStatus.SUSPENDED) && (
         <div className="acp-bottom-bar">
           <button className="acp-btn-secondary" onClick={() => navigate(returnTo)}>
             <ArrowLeft size={18} /> Quay lại

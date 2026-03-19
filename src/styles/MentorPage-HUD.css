@@ -671,9 +671,10 @@
 
 /* Course Actions */
 .mentor-hud-course-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem;
-  flex-wrap: wrap;
+  align-items: stretch;
 }
 
 .mentor-hud-action-button {
@@ -688,9 +689,13 @@
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.2s ease;
-  flex: 1;
+  flex: 0 1 auto;
   justify-content: center;
-  min-width: 80px;
+  min-width: 0;
+  width: 100%;
+  min-height: 38px;
+  white-space: nowrap;
+  line-height: 1.1;
   background: transparent;
   position: relative;
 }
@@ -801,6 +806,212 @@
   border-color: rgba(245, 158, 11, 0.45);
   color: #fcd34d;
 }
+
+.mentor-hud-revision-hint {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: rgba(167, 139, 250, 0.95);
+}
+
+.mentor-hud-revision-panel {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: rgba(8, 17, 31, 0.75);
+  border: 1px solid rgba(6, 182, 212, 0.22);
+  border-radius: 8px;
+}
+
+.mentor-hud-revision-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.mentor-hud-revision-panel__header--single {
+  justify-content: flex-end;
+  margin-bottom: 0;
+}
+
+.mentor-hud-revision-panel__title {
+  color: var(--mentor-hud-text-primary);
+  font-size: 0.82rem;
+  letter-spacing: 0.4px;
+}
+
+.mentor-hud-revision-panel__open-btn {
+  min-width: 0;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.68rem;
+}
+
+.mentor-hud-revision-list {
+  display: grid;
+  gap: 6px;
+}
+
+.mentor-hud-revision-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mentor-hud-revision-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
+}
+
+.mentor-hud-revision-meta {
+  color: #9ca9c1;
+  font-size: 0.72rem;
+}
+
+.mentor-hud-revision-current {
+  color: #9ca9c1;
+  font-size: 0.72rem;
+}
+
+.mentor-hud-revision-summary {
+  color: #7c8ca8;
+  font-size: 0.7rem;
+  letter-spacing: 0.2px;
+}
+
+.mentor-hud-revision-status--draft {
+  color: #c084fc;
+  border-color: rgba(192, 132, 252, 0.5);
+  background: rgba(192, 132, 252, 0.12);
+}
+
+.mentor-hud-revision-status--pending {
+  color: #facc15;
+  border-color: rgba(250, 204, 21, 0.5);
+  background: rgba(250, 204, 21, 0.12);
+}
+
+.mentor-hud-revision-status--approved {
+  color: #34d399;
+  border-color: rgba(52, 211, 153, 0.5);
+  background: rgba(52, 211, 153, 0.12);
+}
+
+.mentor-hud-revision-status--rejected {
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.5);
+  background: rgba(248, 113, 113, 0.12);
+}
+
+.mentor-hud-revision-status--archived {
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.45);
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.mentor-hud-revision-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 11, 20, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 1200;
+}
+
+.mentor-hud-revision-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(820px, 92vw);
+  max-height: 82vh;
+  background: linear-gradient(180deg, rgba(10, 21, 36, 0.98), rgba(7, 15, 27, 0.98));
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 20px 56px rgba(2, 8, 20, 0.72);
+  z-index: 1201;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mentor-hud-revision-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+.mentor-hud-revision-modal__title {
+  margin: 0;
+  font-family: var(--mentor-hud-font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #dbe7ff;
+  text-transform: uppercase;
+}
+
+.mentor-hud-revision-modal__subtitle {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: #8ca3c8;
+}
+
+.mentor-hud-revision-modal__close {
+  min-width: 0;
+  padding: 0.38rem 0.72rem;
+  font-size: 0.68rem;
+}
+
+.mentor-hud-revision-modal__body {
+  padding: 14px 16px 18px;
+  overflow: auto;
+  flex: 1;
+}
+
+.mentor-hud-revision-modal__list {
+  display: grid;
+  gap: 8px;
+}
+
+.mentor-hud-revision-modal__item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 10px;
+  border: 1px solid rgba(6, 182, 212, 0.22);
+  border-radius: 8px;
+  background: rgba(8, 17, 31, 0.78);
+}
+
+.mentor-hud-revision-modal__item-main {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.mentor-hud-revision-modal__open {
+  min-width: 0;
+  padding: 0.36rem 0.7rem;
+  font-size: 0.68rem;
+}
+
+.mentor-hud-revision-modal__footnote {
+  margin: 2px 2px 0;
+  color: #7e90ae;
+  font-size: 0.72rem;
+}
+
 .mentor-hud-empty {
   text-align: center;
   padding: 4rem 2rem;
@@ -996,7 +1207,7 @@
   }
 
   .mentor-hud-course-actions {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .mentor-hud-action-button {

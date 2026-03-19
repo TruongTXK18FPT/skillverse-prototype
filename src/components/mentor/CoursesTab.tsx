@@ -9,11 +9,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { createPortal } from 'react-dom';
 import {
   BookOpen,
   Plus,
   Edit3,
-  Trash2,
   Upload,
   Users,
   ArrowLeft,
@@ -22,10 +22,19 @@ import {
   Eye,
   MessageSquare,
   Archive,
-  PenTool
+  PenTool,
+  Clock,
+  X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { listCoursesByAuthor, deleteCourse, submitCourseForApproval } from '../../services/courseService';
+import {
+  listCoursesByAuthor,
+  deleteCourse,
+  submitCourseForApproval,
+  createCourseRevision,
+  listCourseRevisions
+} from '../../services/courseService';
+import type { CourseRevisionDTO } from '../../services/courseService';
 import { CourseStatus } from '../../data/courseDTOs';
 import { createGroup, getGroupByCourse, updateGroup, GroupChatResponse } from '../../services/groupChatService';
 import CreateGroupModal from '../course/CreateGroupModal';
@@ -92,6 +101,7 @@ const resolveCourseThumbnail = (course: Course): string | null => {
 const CoursesTab: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const COURSES_PAGE_STORAGE_KEY = 'mentor.courses.currentPage';
 
   // State
   const [courses, setCourses] = useState<Course[]>([]);
@@ -100,7 +110,13 @@ const CoursesTab: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [courseGroups, setCourseGroups] = useState<Record<number, GroupChatResponse | null>>({});
   const [selectedCourseForStudents, setSelectedCourseForStudents] = useState<Course | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(() => {
+    const saved = typeof window !== 'undefined'
+      ? window.sessionStorage.getItem(COURSES_PAGE_STORAGE_KEY)
+      : null;
+    const parsed = saved ? Number(saved) : 1;
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
+  });
   const [confirmDialog, setConfirmDialog] = useState<{
     title: string;
     message: string;
@@ -108,7 +124,33 @@ const CoursesTab: React.FC = () => {
     variant?: 'default' | 'danger' | 'primary';
     onConfirm: () => void;
   } | null>(null);
+  const [courseRevisions, setCourseRevisions] = useState<Record<number, CourseRevisionDTO[]>>({});
+  const [revisionLoadingCourseId, setRevisionLoadingCourseId] = useState<number | null>(null);
+  const [revisionDrawer, setRevisionDrawer] = useState<{
+    isOpen: boolean;
+    courseId: number | null;
+    courseTitle: string;
+    revisions: CourseRevisionDTO[];
+    total: number;
+    loading: boolean;
+  }>({
+    isOpen: false,
+    courseId: null,
+    courseTitle: '',
+    revisions: [],
+    total: 0,
+    loading: false
+  });
   const { showNotice } = useMentorNotice();
+
+  useEffect(() => {
+    if (!revisionDrawer.isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [revisionDrawer.isOpen]);
   
   // Group Modal State
   const [modalOpen, setModalOpen] = useState(false);
@@ -123,6 +165,11 @@ const CoursesTab: React.FC = () => {
       loadCourses(currentPage);
     }
   }, [user?.id, currentPage]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.sessionStorage.setItem(COURSES_PAGE_STORAGE_KEY, String(currentPage));
+  }, [currentPage]);
 
   // Load group info for all courses in parallel (batched)
   useEffect(() => {
@@ -141,6 +188,33 @@ const CoursesTab: React.FC = () => {
       };
       loadGroups();
     }
+  }, [courses]);
+
+  useEffect(() => {
+    const publicCourses = courses.filter(course => course.status === CourseStatus.PUBLIC);
+    if (publicCourses.length === 0) {
+      setCourseRevisions({});
+      return;
+    }
+
+    const loadRevisionSnapshots = async () => {
+      const results = await Promise.allSettled(
+        publicCourses.map(async (course) => {
+          const response = await listCourseRevisions(course.id, 0, 1);
+          return { courseId: course.id, revisions: response.content ?? [] };
+        })
+      );
+
+      const revisionMap: Record<number, CourseRevisionDTO[]> = {};
+      results.forEach(result => {
+        if (result.status === 'fulfilled') {
+          revisionMap[result.value.courseId] = result.value.revisions;
+        }
+      });
+      setCourseRevisions(revisionMap);
+    };
+
+    void loadRevisionSnapshots();
   }, [courses]);
 
   const loadCourses = async (pageToLoad: number = currentPage) => {
@@ -174,27 +248,17 @@ const CoursesTab: React.FC = () => {
     if (!user) return;
     const course = courses.find(c => c.id === courseId);
     if (!course) return;
+    if (course.status === CourseStatus.SUSPENDED) {
+      showNotice('warning', 'Khóa học đang tạm khóa. Vui lòng chỉnh sửa và gửi kháng cáo thay vì xóa/lưu trữ.');
+      return;
+    }
 
     const hasEnrollments = (course.enrollmentCount ?? 0) > 0;
-    const isPublic = course.status === CourseStatus.PUBLIC;
-
-    let title: string;
-    let message: string;
-    let confirmLabel: string;
-
-    if (isPublic && hasEnrollments) {
-      title = 'Lưu trữ khóa học';
-      message = `Khóa học "${course.title}" đang có ${course.enrollmentCount} học viên. Khóa học sẽ được lưu trữ (không hiển thị công khai) nhưng học viên hiện tại vẫn có thể truy cập nội dung đã mua.`;
-      confirmLabel = 'Lưu trữ';
-    } else if (hasEnrollments) {
-      title = 'Lưu trữ khóa học';
-      message = `Khóa học "${course.title}" có ${course.enrollmentCount} học viên đã đăng ký. Khóa học sẽ được lưu trữ thay vì xóa vĩnh viễn.`;
-      confirmLabel = 'Lưu trữ';
-    } else {
-      title = 'Xóa khóa học';
-      message = `Bạn có chắc chắn muốn xóa khóa học "${course.title}"? Hành động này không thể hoàn tác.`;
-      confirmLabel = 'Xóa';
-    }
+    const title = 'Lưu trữ khóa học';
+    const message = hasEnrollments
+      ? `Khóa học "${course.title}" có ${course.enrollmentCount} học viên đã đăng ký. Khóa học sẽ được lưu trữ (không hiển thị công khai) nhưng học viên hiện tại vẫn có thể tiếp tục truy cập nội dung đã mua.`
+      : `Bạn có chắc chắn muốn lưu trữ khóa học "${course.title}"? Khóa học sẽ bị ẩn khỏi luồng công khai và có thể cần quy trình nội bộ để mở lại.`;
+    const confirmLabel = 'Lưu trữ';
 
     setConfirmDialog({
       title,
@@ -206,10 +270,10 @@ const CoursesTab: React.FC = () => {
         try {
           await deleteCourse(courseId, user.id);
           await loadCourses(currentPage);
-          showNotice('success', hasEnrollments ? 'Khóa học đã được lưu trữ.' : 'Đã xóa khóa học.');
+          showNotice('success', 'Khóa học đã được lưu trữ.');
         } catch (err) {
-          console.error('Failed to delete course:', err);
-          setError('Không thể xóa khóa học. Vui lòng thử lại.');
+          console.error('Failed to archive course:', err);
+          setError('Không thể lưu trữ khóa học. Vui lòng thử lại.');
         }
       }
     });
@@ -238,6 +302,283 @@ const CoursesTab: React.FC = () => {
         }
       }
     });
+  };
+
+  const getApiErrorMessage = (error: any, fallback: string) => {
+    const responseData = error?.response?.data;
+    if (typeof responseData === 'string' && responseData.trim()) return responseData;
+    if (responseData?.message && typeof responseData.message === 'string') return responseData.message;
+    if (responseData?.error && typeof responseData.error === 'string') return responseData.error;
+    if (error?.message && typeof error.message === 'string') return error.message;
+    return fallback;
+  };
+
+  const getRevisionStatusLabel = (status: CourseRevisionDTO['status']) => {
+    switch (status) {
+      case 'DRAFT':
+        return 'Bản nháp';
+      case 'PENDING':
+        return 'Chờ duyệt';
+      case 'APPROVED':
+        return 'Đã duyệt';
+      case 'REJECTED':
+        return 'Bị từ chối';
+      case 'ARCHIVED':
+        return 'Đã lưu trữ';
+      default:
+        return status;
+    }
+  };
+
+  const getActionableRevision = (courseId: number): CourseRevisionDTO | null => {
+    const revisions = courseRevisions[courseId] ?? [];
+    const openRevision = revisions.find(
+      revision =>
+        revision.status === 'DRAFT' ||
+        revision.status === 'PENDING' ||
+        revision.status === 'REJECTED'
+    );
+    return openRevision ?? null;
+  };
+
+  const refreshCourseRevisions = async (courseId: number) => {
+    const response = await listCourseRevisions(courseId, 0, 1);
+    setCourseRevisions(prev => ({ ...prev, [courseId]: response.content ?? [] }));
+    return response.content ?? [];
+  };
+
+  const formatDateTime = (value?: string) => {
+    if (!value) return '—';
+    return new Date(value).toLocaleString('vi-VN');
+  };
+
+  const handleCreateRevision = async (course: Course) => {
+    try {
+      setRevisionLoadingCourseId(course.id);
+      // Always re-check revision state right before creating to avoid stale UI races.
+      const latestRevisions = await refreshCourseRevisions(course.id);
+      const openRevision = latestRevisions.find(
+        (revision) =>
+          revision.status === 'DRAFT' ||
+          revision.status === 'PENDING' ||
+          revision.status === 'REJECTED'
+      );
+
+      if (openRevision) {
+        const isPending = openRevision.status === 'PENDING';
+        showNotice(
+          isPending ? 'warning' : 'info',
+          isPending
+            ? `Khóa học đã có phiên bản #${openRevision.revisionNumber} đang chờ duyệt. Vui lòng đợi admin xử lý trước khi tạo phiên bản mới.`
+            : `Khóa học đã có phiên bản #${openRevision.revisionNumber}. Đang mở phiên bản hiện có để bạn tiếp tục cập nhật.`
+        );
+        navigate(`/mentor/courses/${course.id}/edit?revisionId=${openRevision.id}`, {
+          state: { activeTab: 'courses', coursesPage: currentPage }
+        });
+        return;
+      }
+
+      const created = await createCourseRevision(course.id);
+      await refreshCourseRevisions(course.id);
+      showNotice(
+        'success',
+        `Đã tạo phiên bản #${created.revisionNumber}. Đang chuyển sang trang chỉnh sửa phiên bản.`
+      );
+      navigate(`/mentor/courses/${course.id}/edit?revisionId=${created.id}`, {
+        state: { activeTab: 'courses', coursesPage: currentPage }
+      });
+    } catch (err: any) {
+      const apiErrorMessage = getApiErrorMessage(err, 'Không thể tạo phiên bản mới.');
+
+      if (apiErrorMessage.includes('COURSE_HAS_OPEN_REVISION')) {
+        try {
+          const latestRevisions = await refreshCourseRevisions(course.id);
+          const openRevision = latestRevisions.find(
+            (revision) =>
+              revision.status === 'DRAFT' ||
+              revision.status === 'PENDING' ||
+              revision.status === 'REJECTED'
+          );
+          if (openRevision) {
+            const isPending = openRevision.status === 'PENDING';
+            showNotice(
+              isPending ? 'warning' : 'info',
+              isPending
+                ? `Khóa học đã có phiên bản #${openRevision.revisionNumber} đang chờ duyệt. Vui lòng đợi admin xử lý trước khi tạo phiên bản mới.`
+                : `Khóa học đã có phiên bản #${openRevision.revisionNumber}. Đang mở phiên bản hiện có để bạn tiếp tục cập nhật.`
+            );
+            navigate(`/mentor/courses/${course.id}/edit?revisionId=${openRevision.id}`, {
+              state: { activeTab: 'courses', coursesPage: currentPage }
+            });
+            return;
+          }
+        } catch {
+          // Ignore and fallback to generic message below.
+        }
+      }
+
+      if (apiErrorMessage.includes('FORBIDDEN') || apiErrorMessage.toLowerCase().includes('access denied')) {
+        showNotice(
+          'error',
+          'Bạn không có quyền cập nhật revision cho khóa học này (không phải tác giả hoặc thiếu quyền mentor/admin).'
+        );
+        return;
+      }
+
+      showNotice('error', apiErrorMessage);
+    } finally {
+      setRevisionLoadingCourseId(null);
+    }
+  };
+
+  const getRevisionStatusClass = (status: CourseRevisionDTO['status']) => {
+    switch (status) {
+      case 'DRAFT':
+        return 'mentor-hud-revision-status--draft';
+      case 'PENDING':
+        return 'mentor-hud-revision-status--pending';
+      case 'APPROVED':
+        return 'mentor-hud-revision-status--approved';
+      case 'REJECTED':
+        return 'mentor-hud-revision-status--rejected';
+      case 'ARCHIVED':
+        return 'mentor-hud-revision-status--archived';
+      default:
+        return '';
+    }
+  };
+
+  const handleUpdateRevision = async (course: Course) => {
+    const revision = getActionableRevision(course.id);
+    if (!revision) {
+      showNotice('warning', 'Chưa có revision để cập nhật.');
+      return;
+    }
+    if (revision.status !== 'DRAFT' && revision.status !== 'REJECTED') {
+      showNotice('warning', 'Revision hiện tại không cho phép chỉnh sửa.');
+      return;
+    }
+
+    try {
+      setRevisionLoadingCourseId(course.id);
+      navigate(`/mentor/courses/${course.id}/edit?revisionId=${revision.id}`, {
+        state: { activeTab: 'courses', coursesPage: currentPage }
+      });
+    } catch (err: any) {
+      showNotice('error', getApiErrorMessage(err, 'Không thể mở phiên bản để chỉnh sửa.'));
+    } finally {
+      setRevisionLoadingCourseId(null);
+    }
+  };
+
+  const handleOpenRevisionReadOnly = (courseId: number, revisionId: number) => {
+    navigate(`/mentor/courses/${courseId}/edit?revisionId=${revisionId}`, {
+      state: { activeTab: 'courses', coursesPage: currentPage }
+    });
+  };
+
+  const handleOpenRevisionHistory = async (course: Course) => {
+    setRevisionDrawer({
+      isOpen: true,
+      courseId: course.id,
+      courseTitle: course.title,
+      revisions: [],
+      total: 0,
+      loading: true
+    });
+
+    try {
+      const response = await listCourseRevisions(course.id, 0, 20);
+      setRevisionDrawer({
+        isOpen: true,
+        courseId: course.id,
+        courseTitle: course.title,
+        revisions: response.content ?? [],
+        total: response.totalElements ?? (response.content?.length ?? 0),
+        loading: false
+      });
+    } catch (err: any) {
+      setRevisionDrawer(prev => ({ ...prev, loading: false }));
+      showNotice('error', getApiErrorMessage(err, 'Không thể tải lịch sử phiên bản.'));
+    }
+  };
+
+  const handleCloseRevisionHistory = () => {
+    setRevisionDrawer(prev => ({ ...prev, isOpen: false }));
+  };
+
+  const renderRevisionHistoryModal = () => {
+    if (!revisionDrawer.isOpen || typeof document === 'undefined') {
+      return null;
+    }
+
+    return createPortal(
+      <>
+        <div className="mentor-hud-revision-modal-overlay" onClick={handleCloseRevisionHistory} />
+        <section className="mentor-hud-revision-modal" role="dialog" aria-modal="true">
+          <div className="mentor-hud-revision-modal__header">
+            <div>
+              <h3 className="mentor-hud-revision-modal__title">Lịch sử phiên bản</h3>
+              <p className="mentor-hud-revision-modal__subtitle">{revisionDrawer.courseTitle}</p>
+            </div>
+            <button
+              className="mentor-hud-action-button mentor-hud-view-button mentor-hud-revision-modal__close"
+              onClick={handleCloseRevisionHistory}
+              title="Đóng lịch sử phiên bản"
+            >
+              <X className="w-4 h-4" />
+              Đóng
+            </button>
+          </div>
+
+          <div className="mentor-hud-revision-modal__body">
+            {revisionDrawer.loading && (
+              <div className="mentor-hud-loading">
+                <MeowlKuruLoader size="small" />
+                <p>Đang tải lịch sử phiên bản...</p>
+              </div>
+            )}
+
+            {!revisionDrawer.loading && revisionDrawer.revisions.length === 0 && (
+              <div className="mentor-hud-empty">
+                <p>Chưa có phiên bản nào.</p>
+              </div>
+            )}
+
+            {!revisionDrawer.loading && revisionDrawer.revisions.length > 0 && (
+              <div className="mentor-hud-revision-modal__list">
+                {revisionDrawer.revisions.map((revision) => (
+                  <div key={revision.id} className="mentor-hud-revision-modal__item">
+                    <div className="mentor-hud-revision-modal__item-main">
+                      <span className={`mentor-hud-revision-status ${getRevisionStatusClass(revision.status)}`}>
+                        {getRevisionStatusLabel(revision.status)}
+                      </span>
+                      <span className="mentor-hud-revision-meta">
+                        #{revision.revisionNumber} • Tạo {formatDateTime(revision.createdAt)} • Cập nhật {formatDateTime(revision.updatedAt)}
+                      </span>
+                    </div>
+                    <button
+                      className="mentor-hud-action-button mentor-hud-view-button mentor-hud-revision-modal__open"
+                      onClick={() => handleOpenRevisionReadOnly(revision.courseId, revision.id)}
+                      title="Mở phiên bản này"
+                    >
+                      <Eye className="w-4 h-4" />
+                      Mở
+                    </button>
+                  </div>
+                ))}
+                {revisionDrawer.total > revisionDrawer.revisions.length && (
+                  <p className="mentor-hud-revision-modal__footnote">
+                    Đang hiển thị {revisionDrawer.revisions.length}/{revisionDrawer.total} phiên bản gần nhất.
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+        </section>
+      </>,
+      document.body
+    );
   };
 
   // Group modal handlers
@@ -400,7 +741,12 @@ const CoursesTab: React.FC = () => {
             </div>
 
             {/* Course Cards */}
-            {courses.map((course) => (
+            {courses.map((course) => {
+              const revisionHistory = courseRevisions[course.id] ?? [];
+              const actionableRevision = getActionableRevision(course.id);
+              const latestRevision = revisionHistory[0];
+
+              return (
               <div key={course.id} className="mentor-hud-course-card">
               {/* Thumbnail */}
               <div className="mentor-hud-course-thumbnail">
@@ -541,25 +887,77 @@ const CoursesTab: React.FC = () => {
                     )
                   )}
 
-                  {/* Xóa/Lưu trữ — ẩn cho ARCHIVED */}
-                  {course.status !== CourseStatus.ARCHIVED ? (
+                  {course.status === CourseStatus.PUBLIC && (
+                    <>
+                      {!actionableRevision && (
+                        <button
+                          className="mentor-hud-action-button mentor-hud-submit-button"
+                          onClick={() => handleCreateRevision(course)}
+                          disabled={revisionLoadingCourseId === course.id}
+                          title="Tạo phiên bản nháp để cập nhật khóa học đã xuất bản"
+                        >
+                          <PenTool className="w-4 h-4" />
+                          Cập nhật phiên bản
+                        </button>
+                      )}
+
+                      {actionableRevision && (
+                        <>
+                          {(actionableRevision.status === 'DRAFT' ||
+                            actionableRevision.status === 'REJECTED') && (
+                            <button
+                              className="mentor-hud-action-button mentor-hud-edit-button"
+                              onClick={() => handleUpdateRevision(course)}
+                              disabled={revisionLoadingCourseId === course.id}
+                              title="Mở phiên bản nháp để chỉnh sửa"
+                            >
+                              <Edit3 className="w-4 h-4" />
+                              Tiếp tục phiên bản
+                            </button>
+                          )}
+
+                          {actionableRevision.status === 'PENDING' && (
+                            <button
+                              className="mentor-hud-action-button mentor-hud-view-button"
+                              disabled={true}
+                              title="Revision đang chờ admin duyệt"
+                            >
+                              <Clock className="w-4 h-4" />
+                              Phiên bản chờ duyệt
+                            </button>
+                          )}
+                        </>
+                      )}
+                    </>
+                  )}
+
+                  {latestRevision && (
+                    <button
+                      className="mentor-hud-action-button mentor-hud-view-button"
+                      onClick={() => void handleOpenRevisionHistory(course)}
+                      title="Xem lịch sử phiên bản"
+                    >
+                      <Eye className="w-4 h-4" />
+                      Lịch sử phiên bản
+                    </button>
+                  )}
+
+                  {/* Xóa/Lưu trữ — ẩn cho ARCHIVED/SUSPENDED */}
+                  {(course.status !== CourseStatus.ARCHIVED && course.status !== CourseStatus.SUSPENDED) ? (
                     <button
                       className="mentor-hud-action-button mentor-hud-delete-button"
                       onClick={() => handleDeleteCourse(course.id)}
                       disabled={loading}
-                      title={(course.enrollmentCount ?? 0) > 0 ? 'Lưu trữ khóa học' : 'Xóa khóa học'}
+                      title="Lưu trữ khóa học"
                     >
-                      {(course.enrollmentCount ?? 0) > 0 ? (
-                        <><Archive className="w-4 h-4" /> Lưu trữ</>
-                      ) : (
-                        <><Trash2 className="w-4 h-4" /> Xóa</>
-                      )}
+                      <><Archive className="w-4 h-4" /> Lưu trữ</>
                     </button>
                   ) : null}
                 </div>
+
               </div>
               </div>
-            ))}
+            )})}
           </div>
           <Pagination
             totalItems={totalItems}
@@ -569,6 +967,8 @@ const CoursesTab: React.FC = () => {
           />
         </>
       )}
+
+      {renderRevisionHistoryModal()}
 
       {confirmDialog && (
         <ConfirmDialog

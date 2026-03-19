@@ -161,11 +161,22 @@ export interface QuizAnswerDTO {
 // Submit Quiz DTO
 export interface SubmitQuizDTO {
   quizId: number;
+  sessionToken?: string;
   answers: {
     questionId: number;
     selectedOptionIds?: number[]; // For MULTIPLE_CHOICE and TRUE_FALSE
     textAnswer?: string; // For SHORT_ANSWER
   }[];
+}
+
+export interface QuizAttemptSessionDTO {
+  quizId: number;
+  userId: number;
+  sessionToken?: string;
+  status?: string;
+  startedAt?: string;
+  lastSeenAt?: string;
+  expiresAt?: string;
 }
 
 // Quiz Attempt Status DTO (for retry logic)

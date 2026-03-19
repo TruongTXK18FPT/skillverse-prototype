@@ -4,6 +4,7 @@ import {
   CourseSummaryDTO,
   CourseCreateDTO,
   CourseUpdateDTO,
+  CourseUpgradePolicy,
   CourseStatus,
   PageResponse
 } from '../data/courseDTOs';
@@ -140,7 +141,7 @@ export const updateCourse = async (
 };
 
 /**
- * Delete a course
+ * Archive a course (API still uses DELETE verb, archive-by-default on backend)
  * DELETE /api/courses/{courseId}
  */
 export const deleteCourse = async (
@@ -152,7 +153,7 @@ export const deleteCourse = async (
       params: { actorId }
     });
   } catch (error) {
-    console.error('Error deleting course:', error);
+    console.error('Error archiving course:', error);
     throw error;
   }
 };
@@ -226,13 +227,19 @@ export const listCourses = async (
 export const listCoursesByAuthor = async (
   authorId: number,
   page: number = 0,
-  size: number = 10
+  size: number = 10,
+  sortBy: string = 'updatedAt',
+  sortOrder: 'asc' | 'desc' = 'desc'
 ): Promise<PageResponse<CourseSummaryDTO>> => {
   try {
     const response = await axiosInstance.get<PageResponse<CourseSummaryDTO>>(
       `/courses/by-author/${authorId}`,
       {
-        params: { page, size }
+        params: {
+          page,
+          size,
+          sort: `${sortBy},${sortOrder}`
+        }
       }
     );
     return normalizePageResponse<CourseSummaryDTO>(response.data);
@@ -468,6 +475,29 @@ export const restoreCourse = async (
   }
 };
 
+/**
+ * Update course upgrade policy (admin only)
+ * POST /api/admin/courses/{courseId}/upgrade-policy?policy=...
+ */
+export const updateCourseUpgradePolicy = async (
+  courseId: number,
+  policy: CourseUpgradePolicy
+): Promise<CourseDetailDTO> => {
+  try {
+    const response = await axiosInstance.post<CourseDetailDTO>(
+      `/admin/courses/${courseId}/upgrade-policy`,
+      null,
+      {
+        params: { policy }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error updating course upgrade policy:', error);
+    throw error;
+  }
+};
+
 // ==================== ADMIN COURSE MANAGEMENT ====================
 
 /**
@@ -482,6 +512,58 @@ export interface CourseStatsResponse {
   totalArchived: number;
   totalAll: number;
 }
+
+export interface CourseRevisionDTO {
+  id: number;
+  courseId: number;
+  revisionNumber: number;
+  isActive?: boolean;
+  status: CourseRevisionStatus;
+  title?: string;
+  description?: string;
+  level?: string;
+  category?: string;
+  shortDescription?: string;
+  estimatedDurationHours?: number;
+  language?: string;
+  price?: number;
+  currency?: string;
+  learningObjectivesJson?: string;
+  requirementsJson?: string;
+  contentSnapshotJson?: string;
+  sourceCourseStatus?: string;
+  createdBy?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  submittedAt?: string;
+  approvedAt?: string;
+  rejectedAt?: string;
+  rejectionReason?: string;
+  archivedAt?: string;
+  autoUpgradeOutcome?: 'UPGRADED' | 'SKIPPED' | 'ERROR';
+  autoUpgradeAffectedEnrollments?: number;
+  autoUpgradeReasonCode?: string;
+  autoUpgradeReasonDetail?: string;
+}
+
+export interface ApproveRevisionResponse extends CourseRevisionDTO {}
+
+export interface CourseRevisionUpdateDTO {
+  title?: string;
+  description?: string;
+  level?: string;
+  category?: string;
+  shortDescription?: string;
+  estimatedDurationHours?: number;
+  language?: string;
+  price?: number;
+  currency?: string;
+  learningObjectives?: string[];
+  requirements?: string[];
+  contentSnapshotJson?: string;
+}
+
+export type CourseRevisionStatus = 'DRAFT' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'ARCHIVED';
 
 /**
  * Get course statistics grouped by status (admin only)
@@ -529,6 +611,110 @@ export const listAllCoursesAdmin = async (
   }
 };
 
+// ==================== COURSE REVISION (CANARY APIs) ====================
+
+export const createCourseRevision = async (
+  courseId: number
+): Promise<CourseRevisionDTO> => {
+  const response = await axiosInstance.post<CourseRevisionDTO>(
+    `/courses/${courseId}/revisions`
+  );
+  return response.data;
+};
+
+export const submitCourseRevision = async (
+  revisionId: number
+): Promise<CourseRevisionDTO> => {
+  const response = await axiosInstance.post<CourseRevisionDTO>(
+    `/course-revisions/${revisionId}/submit`
+  );
+  return response.data;
+};
+
+export const updateCourseRevision = async (
+  revisionId: number,
+  payload: CourseRevisionUpdateDTO
+): Promise<CourseRevisionDTO> => {
+  const response = await axiosInstance.put<CourseRevisionDTO>(
+    `/course-revisions/${revisionId}`,
+    payload
+  );
+  return response.data;
+};
+
+export const getCourseRevision = async (
+  revisionId: number
+): Promise<CourseRevisionDTO> => {
+  const response = await axiosInstance.get<CourseRevisionDTO>(`/course-revisions/${revisionId}`);
+  return response.data;
+};
+
+export const listCourseRevisions = async (
+  courseId: number,
+  page: number = 0,
+  size: number = 20,
+  status?: CourseRevisionStatus
+): Promise<PageResponse<CourseRevisionDTO>> => {
+  const response = await axiosInstance.get<PageResponse<CourseRevisionDTO>>(
+    `/courses/${courseId}/revisions`,
+    {
+      params: {
+        page,
+        size,
+        ...(status ? { status } : {})
+      }
+    }
+  );
+
+  return normalizePageResponse<CourseRevisionDTO>(response.data);
+};
+
+export const listAdminCourseRevisions = async (
+  page: number = 0,
+  size: number = 20,
+  status: CourseRevisionStatus = 'PENDING'
+): Promise<PageResponse<CourseRevisionDTO>> => {
+  const response = await axiosInstance.get<PageResponse<CourseRevisionDTO>>(
+    '/admin/course-revisions',
+    {
+      params: {
+        page,
+        size,
+        status,
+        sort: 'submittedAt,asc'
+      }
+    }
+  );
+
+  return normalizePageResponse<CourseRevisionDTO>(response.data);
+};
+
+export const approveCourseRevision = async (
+  revisionId: number
+): Promise<ApproveRevisionResponse> => {
+  const response = await axiosInstance.post<ApproveRevisionResponse>(
+    `/admin/course-revisions/${revisionId}/approve`
+  );
+  return {
+    ...response.data,
+    autoUpgradeOutcome: response.data?.autoUpgradeOutcome ?? 'SKIPPED',
+    autoUpgradeReasonCode: response.data?.autoUpgradeReasonCode ?? 'UNKNOWN',
+    autoUpgradeReasonDetail: response.data?.autoUpgradeReasonDetail ?? 'Không có chi tiết từ hệ thống.'
+  };
+};
+
+export const rejectCourseRevision = async (
+  revisionId: number,
+  reason?: string
+): Promise<CourseRevisionDTO> => {
+  const response = await axiosInstance.post<CourseRevisionDTO>(
+    `/admin/course-revisions/${revisionId}/reject`,
+    null,
+    reason ? { params: { reason } } : undefined
+  );
+  return response.data;
+};
+
 // ==================== HELPER FUNCTIONS ====================
 
 /**
@@ -536,7 +722,7 @@ export const listAllCoursesAdmin = async (
  */
 export const canEditCourse = (course: CourseDetailDTO | CourseSummaryDTO, userId: number): boolean => {
   return course.author.id === userId && 
-    (course.status === CourseStatus.DRAFT || course.status === CourseStatus.PENDING || course.status === CourseStatus.REJECTED || course.status === CourseStatus.SUSPENDED);
+    (course.status === CourseStatus.DRAFT || course.status === CourseStatus.REJECTED || course.status === CourseStatus.SUSPENDED);
 };
 
 /**

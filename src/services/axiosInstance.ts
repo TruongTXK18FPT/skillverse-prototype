@@ -195,6 +195,7 @@ const PUBLIC_ENDPOINTS = [
 const isPublicEndpoint = (url: string, method?: string): boolean => {
   // Normalize URL by removing /api prefix if present
   const normalizedUrl = url.replace(/^\/api/, "");
+  const pathOnly = normalizedUrl.split("?")[0];
 
   // ✅ Admin course endpoints - ALWAYS require authentication
   const adminCourseEndpoints = [
@@ -238,13 +239,12 @@ const isPublicEndpoint = (url: string, method?: string): boolean => {
       if (method && method.toUpperCase() !== "GET") {
         return false;
       }
-      // GET /courses or GET /courses/{id} or GET /courses?params are public
-      // But GET /courses/pending is NOT public (handled above)
+      // Only GET /courses and GET /courses/{id} are public.
+      // Nested protected routes such as /courses/{id}/revisions must NOT be public.
       return (
-        normalizedUrl === "/courses" ||
-        normalizedUrl.startsWith("/courses?") ||
-        /^\/courses\/\d+/.test(normalizedUrl)
-      ); // Match /courses/123 but not /courses/pending
+        pathOnly === "/courses" ||
+        /^\/courses\/\d+$/.test(pathOnly)
+      );
     }
 
     // Use startsWith for exact path matching (more secure)

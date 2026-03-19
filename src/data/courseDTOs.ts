@@ -10,6 +10,11 @@ export enum CourseStatus {
   SUSPENDED = 'SUSPENDED'
 }
 
+export enum CourseUpgradePolicy {
+  MANUAL = 'MANUAL',
+  AUTO_COMPATIBLE_ONLY = 'AUTO_COMPATIBLE_ONLY'
+}
+
 export enum CourseLevel {
   BEGINNER = 'BEGINNER',
   INTERMEDIATE = 'INTERMEDIATE',
@@ -64,6 +69,7 @@ export interface CourseSummaryDTO {
   submittedDate?: string;
   publishedDate?: string;
   rejectionReason?: string; // Set when status = REJECTED
+  upgradePolicy?: CourseUpgradePolicy;
   purchaseOption?: CoursePurchaseOption; // Purchase configuration
 }
 
@@ -106,6 +112,8 @@ export interface CourseDetailDTO {
   rejectedAt?: string;
   suspensionReason?: string; // Set when status = SUSPENDED
   suspendedAt?: string;
+  upgradePolicy?: CourseUpgradePolicy;
+  upgradePolicyStatusMessage?: string;
   purchaseOption?: CoursePurchaseOption; // Purchase configuration
 }
 

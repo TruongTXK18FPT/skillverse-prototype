@@ -232,6 +232,146 @@
   opacity: 0.7;
 }
 
+/* ==================== Upgrade Policy Panel ==================== */
+.acp-policy-panel {
+  margin: 0 2rem 1.5rem !important;
+  border: 1px solid rgba(99, 102, 241, 0.18) !important;
+}
+
+.acp-policy-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.acp-policy-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.acp-policy-title-wrap svg {
+  color: #818cf8;
+}
+
+.acp-policy-title {
+  margin: 0;
+  font-size: 1.02rem;
+  color: #e0e7ff;
+}
+
+.acp-policy-current {
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.acp-policy-current strong {
+  color: #e2e8f0;
+}
+
+.acp-policy-description {
+  margin-top: 0.65rem;
+  margin-bottom: 0.85rem;
+  color: #cbd5e1;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.acp-policy-description code {
+  color: #67e8f9;
+  background: rgba(2, 132, 199, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 6px;
+  padding: 0.08rem 0.4rem;
+  font-size: 0.78rem;
+}
+
+.acp-policy-controls {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) auto;
+  gap: 0.7rem;
+  align-items: end;
+}
+
+.acp-policy-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.8rem;
+  color: #a5b4fc;
+}
+
+.acp-policy-select {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  background: rgba(15, 23, 42, 0.82);
+  color: #e2e8f0;
+  font-size: 0.88rem;
+  padding: 0.55rem 0.75rem;
+  box-sizing: border-box;
+}
+
+.acp-policy-select:focus {
+  outline: none;
+  border-color: rgba(129, 140, 248, 0.8);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.acp-btn-save-policy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.58rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(129, 140, 248, 0.45);
+  background: rgba(99, 102, 241, 0.22);
+  color: #e0e7ff;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 132px;
+}
+
+.acp-btn-save-policy:hover:not(:disabled) {
+  background: rgba(99, 102, 241, 0.35);
+  border-color: rgba(129, 140, 248, 0.65);
+}
+
+.acp-btn-save-policy:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.acp-policy-pending {
+  margin-top: 0.65rem;
+  margin-bottom: 0;
+  font-size: 0.82rem;
+  color: #fbbf24;
+}
+
+.acp-policy-feedback {
+  margin-top: 0.7rem;
+  border-radius: 8px;
+  padding: 0.58rem 0.75rem;
+  font-size: 0.84rem;
+}
+
+.acp-policy-feedback-success {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  color: #86efac;
+}
+
+.acp-policy-feedback-error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
 /* ==================== Stats Grid ==================== */
 .acp-stats-grid {
   display: grid;
@@ -1125,6 +1265,18 @@
 
   .acp-alert {
     margin: 0 1rem 1rem;
+  }
+
+  .acp-policy-panel {
+    margin: 0 1rem 1rem !important;
+  }
+
+  .acp-policy-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .acp-btn-save-policy {
+    width: 100%;
   }
 
   .acp-content-group {
