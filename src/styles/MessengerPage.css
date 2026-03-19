@@ -748,3 +748,171 @@
   }
 }
 
+/* ================================
+   HUD Reskin Overrides
+   ================================ */
+
+.messenger-page {
+  --msg-nav-offset: 76px;
+  --msg-hud-bg-1: #020617;
+  --msg-hud-bg-2: #0b1e38;
+  --msg-hud-panel: rgba(2, 6, 23, 0.78);
+  --msg-hud-border: rgba(34, 211, 238, 0.24);
+  --msg-hud-border-strong: rgba(34, 211, 238, 0.45);
+  --msg-hud-accent: #22d3ee;
+  --msg-hud-accent-soft: rgba(34, 211, 238, 0.2);
+  --msg-hud-text: #e0f2fe;
+  --msg-hud-sub: #94a3b8;
+  box-sizing: border-box;
+  padding-top: var(--msg-nav-offset);
+  height: 100dvh;
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(34, 211, 238, 0.12), transparent 38%),
+    radial-gradient(circle at 92% 82%, rgba(56, 189, 248, 0.12), transparent 32%),
+    linear-gradient(145deg, var(--msg-hud-bg-1) 0%, var(--msg-hud-bg-2) 100%);
+}
+
+.messenger-sidebar {
+  background: linear-gradient(160deg, rgba(2, 6, 23, 0.88), rgba(6, 22, 45, 0.84));
+  border-right: 1px solid var(--msg-hud-border);
+}
+
+.messenger-sidebar-header {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(56, 189, 248, 0.1));
+  border-bottom: 1px solid var(--msg-hud-border);
+}
+
+.header-title,
+.header-title h2 {
+  color: var(--msg-hud-text);
+}
+
+.header-title svg,
+.create-option svg,
+.settings-section h3 {
+  color: var(--msg-hud-accent);
+}
+
+.header-action-btn,
+.tab-btn,
+.search-input,
+.create-option,
+.modal-content,
+.settings-section label {
+  border-color: var(--msg-hud-border);
+}
+
+.header-action-btn,
+.tab-btn,
+.search-input,
+.create-option,
+.settings-section label {
+  background: var(--msg-hud-panel);
+}
+
+.header-action-btn,
+.tab-btn,
+.header-action-btn:hover,
+.tab-btn:hover,
+.modal-header button,
+.modal-header button:hover,
+.search-input {
+  color: var(--msg-hud-text);
+}
+
+.header-action-btn:hover,
+.tab-btn:hover,
+.settings-section label:hover,
+.create-option:hover {
+  border-color: var(--msg-hud-border-strong);
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.08) inset;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.32), rgba(8, 145, 178, 0.26));
+  border-color: var(--msg-hud-border-strong);
+}
+
+.search-input:focus {
+  border-color: var(--msg-hud-border-strong);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
+}
+
+.messenger-main {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(34, 211, 238, 0.09), transparent 35%),
+    linear-gradient(150deg, rgba(2, 6, 23, 0.96), rgba(8, 23, 46, 0.94));
+}
+
+.contact-item:hover,
+.contact-item.active {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(14, 116, 144, 0.12));
+}
+
+.contact-item.active {
+  border-left: 3px solid var(--msg-hud-accent);
+}
+
+.contact-item.active::before {
+  background: linear-gradient(135deg, var(--msg-hud-accent), #0ea5e9);
+}
+
+.contact-avatar,
+.contact-item.active .contact-avatar {
+  border-color: var(--msg-hud-border-strong);
+}
+
+.contact-name,
+.modal-header h2,
+.create-option h3,
+.settings-section label span,
+.messenger-placeholder h3 {
+  color: var(--msg-hud-text);
+}
+
+.contact-time,
+.message-prefix,
+.message-text,
+.create-option p,
+.messenger-placeholder p,
+.contact-list-empty,
+.contact-list-empty p,
+.contact-list-empty span {
+  color: var(--msg-hud-sub);
+}
+
+.messenger-contact-list::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.28);
+}
+
+.modal-overlay {
+  background: rgba(2, 6, 23, 0.82);
+}
+
+.modal-content {
+  background: linear-gradient(160deg, rgba(2, 6, 23, 0.98), rgba(10, 30, 52, 0.95));
+  box-shadow: 0 26px 70px rgba(2, 6, 23, 0.7), 0 0 24px rgba(34, 211, 238, 0.2);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--msg-hud-border);
+}
+
+@media (max-width: 768px) {
+  .messenger-page {
+    --msg-nav-offset: 64px;
+    padding-top: var(--msg-nav-offset);
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+
+  .messenger-main {
+    position: fixed;
+    top: var(--msg-nav-offset);
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}
+

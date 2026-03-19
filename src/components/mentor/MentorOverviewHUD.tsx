@@ -243,97 +243,97 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
         </div>
       ) : (
         <>
-          <div className="mentor-overview__grid">
+          <div className="mentor-overview__grid mentor-overview__grid--summary">
             {/* Stats Summary */}
-            <div className="overview-card stats-summary-card">
-              <div className="card-header">
+            <div className="mentor-overview__card mentor-overview__stats-summary-card">
+              <div className="mentor-overview__card-header">
                 <BarChart size={18} className="icon--yellow" />
                 <span>THỐNG KÊ TỔNG QUAN</span>
               </div>
-              <div className="card-body">
+              <div className="mentor-overview__card-body">
                 {/* Review Stats */}
-                <div className="stat-section">
-                  <h4 className="stat-section-title">Đánh giá</h4>
-                  <div className="rating-overview">
-                    <div className="rating-score">
+                <div className="mentor-overview__stat-section">
+                  <h4 className="mentor-overview__stat-section-title">Đánh giá</h4>
+                  <div className="mentor-overview__rating-overview">
+                    <div className="mentor-overview__rating-score">
                       <Star size={32} fill="#FFD700" color="#FFD700" />
-                      <div className="rating-value">
-                        <span className="rating-number">
+                      <div className="mentor-overview__rating-value">
+                        <span className="mentor-overview__rating-number">
                           {stats.rating.toFixed(1)}
                         </span>
-                        <span className="rating-count">
+                        <span className="mentor-overview__rating-count">
                           ({stats.ratingCount} đánh giá)
                         </span>
                       </div>
                     </div>
-                    <div className="star-distribution">
-                      <div className="star-bar">
-                        <span className="star-label">5★</span>
-                        <div className="bar-container">
+                    <div className="mentor-overview__star-distribution">
+                      <div className="mentor-overview__star-bar">
+                        <span className="mentor-overview__star-label">5★</span>
+                        <div className="mentor-overview__bar-container">
                           <div
-                            className="bar-fill"
+                            className="mentor-overview__bar-fill"
                             style={{
                               width: `${stats.ratingCount > 0 ? (stats.starDistribution.fiveStar / stats.ratingCount) * 100 : 0}%`,
                             }}
                           ></div>
                         </div>
-                        <span className="star-count">
+                        <span className="mentor-overview__star-count">
                           {stats.starDistribution.fiveStar}
                         </span>
                       </div>
-                      <div className="star-bar">
-                        <span className="star-label">4★</span>
-                        <div className="bar-container">
+                      <div className="mentor-overview__star-bar">
+                        <span className="mentor-overview__star-label">4★</span>
+                        <div className="mentor-overview__bar-container">
                           <div
-                            className="bar-fill"
+                            className="mentor-overview__bar-fill"
                             style={{
                               width: `${stats.ratingCount > 0 ? (stats.starDistribution.fourStar / stats.ratingCount) * 100 : 0}%`,
                             }}
                           ></div>
                         </div>
-                        <span className="star-count">
+                        <span className="mentor-overview__star-count">
                           {stats.starDistribution.fourStar}
                         </span>
                       </div>
-                      <div className="star-bar">
-                        <span className="star-label">3★</span>
-                        <div className="bar-container">
+                      <div className="mentor-overview__star-bar">
+                        <span className="mentor-overview__star-label">3★</span>
+                        <div className="mentor-overview__bar-container">
                           <div
-                            className="bar-fill"
+                            className="mentor-overview__bar-fill"
                             style={{
                               width: `${stats.ratingCount > 0 ? (stats.starDistribution.threeStar / stats.ratingCount) * 100 : 0}%`,
                             }}
                           ></div>
                         </div>
-                        <span className="star-count">
+                        <span className="mentor-overview__star-count">
                           {stats.starDistribution.threeStar}
                         </span>
                       </div>
-                      <div className="star-bar">
-                        <span className="star-label">2★</span>
-                        <div className="bar-container">
+                      <div className="mentor-overview__star-bar">
+                        <span className="mentor-overview__star-label">2★</span>
+                        <div className="mentor-overview__bar-container">
                           <div
-                            className="bar-fill"
+                            className="mentor-overview__bar-fill"
                             style={{
                               width: `${stats.ratingCount > 0 ? (stats.starDistribution.twoStar / stats.ratingCount) * 100 : 0}%`,
                             }}
                           ></div>
                         </div>
-                        <span className="star-count">
+                        <span className="mentor-overview__star-count">
                           {stats.starDistribution.twoStar}
                         </span>
                       </div>
-                      <div className="star-bar">
-                        <span className="star-label">1★</span>
-                        <div className="bar-container">
+                      <div className="mentor-overview__star-bar">
+                        <span className="mentor-overview__star-label">1★</span>
+                        <div className="mentor-overview__bar-container">
                           <div
-                            className="bar-fill"
+                            className="mentor-overview__bar-fill"
                             style={{
                               width: `${stats.ratingCount > 0 ? (stats.starDistribution.oneStar / stats.ratingCount) * 100 : 0}%`,
                             }}
                           ></div>
                         </div>
-                        <span className="star-count">
+                        <span className="mentor-overview__star-count">
                           {stats.starDistribution.oneStar}
                         </span>
                       </div>
@@ -342,23 +342,23 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
                 </div>
 
                 {/* Financial Stats */}
-                <div className="stat-section">
-                  <h4 className="stat-section-title">Thu nhập</h4>
-                  <div className="stat-grid">
-                    <div className="stat-item">
-                      <DollarSign size={20} className="stat-item-icon" />
-                      <div className="stat-item-info">
-                        <span className="stat-item-label">Tháng này</span>
-                        <span className="stat-item-value">
+                <div className="mentor-overview__stat-section">
+                  <h4 className="mentor-overview__stat-section-title">Thu nhập</h4>
+                  <div className="mentor-overview__stat-grid">
+                    <div className="mentor-overview__stat-item">
+                      <DollarSign size={20} className="mentor-overview__stat-item-icon" />
+                      <div className="mentor-overview__stat-item-info">
+                        <span className="mentor-overview__stat-item-label">Tháng này</span>
+                        <span className="mentor-overview__stat-item-value">
                           {formatCurrency(stats.monthEarnings)}
                         </span>
                       </div>
                     </div>
-                    <div className="stat-item">
-                      <DollarSign size={20} className="stat-item-icon" />
-                      <div className="stat-item-info">
-                        <span className="stat-item-label">Tổng thu nhập</span>
-                        <span className="stat-item-value">
+                    <div className="mentor-overview__stat-item">
+                      <DollarSign size={20} className="mentor-overview__stat-item-icon" />
+                      <div className="mentor-overview__stat-item-info">
+                        <span className="mentor-overview__stat-item-label">Tổng thu nhập</span>
+                        <span className="mentor-overview__stat-item-value">
                           {formatCurrency(stats.totalEarnings)}
                         </span>
                       </div>
@@ -367,32 +367,32 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
                 </div>
 
                 {/* Activity Stats */}
-                <div className="stat-section">
-                  <h4 className="stat-section-title">Hoạt động</h4>
-                  <div className="stat-grid">
-                    <div className="stat-item">
-                      <Users size={20} className="stat-item-icon" />
-                      <div className="stat-item-info">
-                        <span className="stat-item-label">Học viên</span>
-                        <span className="stat-item-value">
+                <div className="mentor-overview__stat-section">
+                  <h4 className="mentor-overview__stat-section-title">Hoạt động</h4>
+                  <div className="mentor-overview__stat-grid">
+                    <div className="mentor-overview__stat-item">
+                      <Users size={20} className="mentor-overview__stat-item-icon" />
+                      <div className="mentor-overview__stat-item-info">
+                        <span className="mentor-overview__stat-item-label">Học viên</span>
+                        <span className="mentor-overview__stat-item-value">
                           {stats.totalStudents}
                         </span>
                       </div>
                     </div>
-                    <div className="stat-item">
-                      <Video size={20} className="stat-item-icon" />
-                      <div className="stat-item-info">
-                        <span className="stat-item-label">Khóa học</span>
-                        <span className="stat-item-value">
+                    <div className="mentor-overview__stat-item">
+                      <Video size={20} className="mentor-overview__stat-item-icon" />
+                      <div className="mentor-overview__stat-item-info">
+                        <span className="mentor-overview__stat-item-label">Khóa học</span>
+                        <span className="mentor-overview__stat-item-value">
                           {stats.totalCourses}
                         </span>
                       </div>
                     </div>
-                    <div className="stat-item">
-                      <Clock size={20} className="stat-item-icon" />
-                      <div className="stat-item-info">
-                        <span className="stat-item-label">Buổi booking</span>
-                        <span className="stat-item-value">
+                    <div className="mentor-overview__stat-item">
+                      <Clock size={20} className="mentor-overview__stat-item-icon" />
+                      <div className="mentor-overview__stat-item-info">
+                        <span className="mentor-overview__stat-item-label">Buổi booking</span>
+                        <span className="mentor-overview__stat-item-value">
                           {stats.totalBookings}
                         </span>
                       </div>
@@ -403,17 +403,17 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
             </div>
 
             {/* Next Class Card */}
-            <div className="overview-card next-class-card">
-              <div className="card-header">
+            <div className="mentor-overview__card mentor-overview__next-class-card">
+              <div className="mentor-overview__card-header">
                 <Video size={18} className="icon--cyan" />
                 <span>LỚP HỌC TIẾP THEO</span>
-                <div className="header-status-dot pulse"></div>
+                <div className="mentor-overview__header-status-dot pulse"></div>
               </div>
-              <div className="card-body">
-                <div className="no-class">
+              <div className="mentor-overview__card-body">
+                <div className="mentor-overview__no-class">
                   <p>Không có lớp học sắp diễn ra</p>
                   <button
-                    className="view-schedule-btn"
+                    className="mentor-overview__view-schedule-btn"
                     onClick={() => onNavigate("schedule")}
                   >
                     Xem lịch trình
@@ -423,29 +423,29 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
             </div>
 
             {/* Pending Tasks */}
-            <div className="overview-card pending-tasks-card">
-              <div className="card-header">
+            <div className="mentor-overview__card mentor-overview__pending-tasks-card">
+              <div className="mentor-overview__card-header">
                 <AlertCircle size={18} className="icon--red" />
                 <span>TÁC VỤ CẦN XỬ LÝ GẤP</span>
               </div>
-              <div className="card-body">
+              <div className="mentor-overview__card-body">
                 <div
-                  className="task-item"
+                  className="mentor-overview__task-item"
                   onClick={() => onNavigate("grading")}
                 >
-                  <div className="task-info">
-                    <span className="task-count">{stats.pendingGrading}</span>
-                    <span className="task-label">Bài tập cần chấm</span>
+                  <div className="mentor-overview__task-info">
+                    <span className="mentor-overview__task-count">{stats.pendingGrading}</span>
+                    <span className="mentor-overview__task-label">Bài tập cần chấm</span>
                   </div>
                   <ChevronRight size={16} />
                 </div>
                 <div
-                  className="task-item"
+                  className="mentor-overview__task-item"
                   onClick={() => onNavigate("bookings")}
                 >
-                  <div className="task-info">
-                    <span className="task-count">{stats.pendingBookings}</span>
-                    <span className="task-label">Yêu cầu đặt lịch mới</span>
+                  <div className="mentor-overview__task-info">
+                    <span className="mentor-overview__task-count">{stats.pendingBookings}</span>
+                    <span className="mentor-overview__task-label">Yêu cầu đặt lịch mới</span>
                   </div>
                   <ChevronRight size={16} />
                 </div>
