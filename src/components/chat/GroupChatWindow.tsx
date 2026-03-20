@@ -20,6 +20,8 @@ import GifPicker from './GifPicker';
 import MemberListModal from './MemberListModal';
 import MessageBubble, { MessageData, MessageType } from './MessageBubble';
 import { getGroupMessages, sendMessage, getGroupDetail, type GroupMemberDTO } from '../../services/groupChatService';
+import { useChatSettings } from '../../context/ChatSettingsContext';
+import { playNotificationSound } from '../../utils/notificationSound';
 import './GroupChatWindow.css';
 
 interface GroupInfo {
@@ -52,7 +54,8 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
 }) => {
   // Ensure currentUserId is always string for comparison
   const currentUserId = String(rawCurrentUserId);
-  
+  const { settings } = useChatSettings();
+
   // State
   const [messages, setMessages] = useState<MessageData[]>([]);
   const [inputText, setInputText] = useState('');
@@ -250,14 +253,20 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
         setUnreadCount(prev => prev + 1);
         setShowScrollDown(true);
         
-        // Show browser notification if not focused and not muted
-        if (!isMuted && document.hidden && 'Notification' in window && Notification.permission === 'granted') {
-          new Notification(newMsg.senderName, {
-            body: newMsg.messageType === 'TEXT' ? newMsg.content : `Đã gửi ${newMsg.messageType === 'GIF' ? 'GIF' : newMsg.messageType === 'IMAGE' ? 'hình ảnh' : 'emoji'}`,
-            icon: newMsg.senderAvatarUrl || '/images/meowl.jpg',
-            tag: `group-${groupId}`,
-            requireInteraction: false
-          });
+        // Browser notification (controlled by notifyNewMessage)
+        if (settings.notifyNewMessage && !isMuted && document.hidden) {
+          if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification(newMsg.senderName, {
+              body: newMsg.messageType === 'TEXT' ? newMsg.content : `Đã gửi ${newMsg.messageType === 'GIF' ? 'GIF' : newMsg.messageType === 'IMAGE' ? 'hình ảnh' : 'emoji'}`,
+              icon: newMsg.senderAvatarUrl || '/images/meowl.jpg',
+              tag: `group-${groupId}`,
+              requireInteraction: false
+            });
+          }
+        }
+        // Sound notification (controlled by soundNotification)
+        if (settings.soundNotification && !isMuted) {
+          playNotificationSound();
         }
       }
     }

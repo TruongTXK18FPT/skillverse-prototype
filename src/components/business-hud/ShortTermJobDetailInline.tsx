@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import {
+  RecruitmentJobContextType,
   RecruitmentSessionResponse,
 } from "../../data/portfolioDTOs";
 import recruitmentChatService from "../../services/recruitmentChatService";
@@ -296,6 +297,7 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
         application.userId,
         jobId,
         "MANUAL",
+        RecruitmentJobContextType.SHORT_TERM_JOB,
       );
       setChatApplicant(application);
       setSelectedSession(session);

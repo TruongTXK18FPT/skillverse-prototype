@@ -7,7 +7,6 @@ import {
   FileText,
   Loader2,
   RefreshCw,
-  XCircle,
 } from 'lucide-react';
 import {
   ShortTermApplicationResponse,
@@ -37,39 +36,69 @@ const ShortTermJobHandoverBoard = ({
   const [revisionModal, setRevisionModal] = useState<ShortTermApplicationResponse | null>(null);
   const [revisionNote, setRevisionNote] = useState('');
 
-  const handoverApps = applications.filter((app) =>
-    app.status === ShortTermApplicationStatus.SUBMITTED ||
-    app.status === ShortTermApplicationStatus.REVISION_REQUIRED ||
-    app.status === ShortTermApplicationStatus.APPROVED ||
-    app.status === ShortTermApplicationStatus.COMPLETED ||
-    app.status === ShortTermApplicationStatus.PAID
+  const handoverApps = applications.filter(
+    (app) =>
+      app.status === ShortTermApplicationStatus.SUBMITTED
+      || app.status === ShortTermApplicationStatus.REVISION_REQUIRED
+      || app.status === ShortTermApplicationStatus.APPROVED
+      || app.status === ShortTermApplicationStatus.COMPLETED
+      || app.status === ShortTermApplicationStatus.PAID
   );
 
   const filteredApps = handoverApps.filter((app) => {
     if (filter === 'submitted') return app.status === ShortTermApplicationStatus.SUBMITTED;
     if (filter === 'revision') return app.status === ShortTermApplicationStatus.REVISION_REQUIRED;
     if (filter === 'approved') return app.status === ShortTermApplicationStatus.APPROVED;
-    if (filter === 'completed') return (
-      app.status === ShortTermApplicationStatus.COMPLETED ||
-      app.status === ShortTermApplicationStatus.PAID
-    );
+    if (filter === 'completed') {
+      return (
+        app.status === ShortTermApplicationStatus.COMPLETED
+        || app.status === ShortTermApplicationStatus.PAID
+      );
+    }
     return true;
   });
 
   const countSubmitted = handoverApps.filter(
-    (a) => a.status === ShortTermApplicationStatus.SUBMITTED
+    (application) => application.status === ShortTermApplicationStatus.SUBMITTED
   ).length;
   const countRevision = handoverApps.filter(
-    (a) => a.status === ShortTermApplicationStatus.REVISION_REQUIRED
+    (application) => application.status === ShortTermApplicationStatus.REVISION_REQUIRED
   ).length;
   const countApproved = handoverApps.filter(
-    (a) => a.status === ShortTermApplicationStatus.APPROVED
+    (application) => application.status === ShortTermApplicationStatus.APPROVED
   ).length;
   const countCompleted = handoverApps.filter(
-    (a) =>
-      a.status === ShortTermApplicationStatus.COMPLETED ||
-      a.status === ShortTermApplicationStatus.PAID
+    (application) =>
+      application.status === ShortTermApplicationStatus.COMPLETED
+      || application.status === ShortTermApplicationStatus.PAID
   ).length;
+
+  const statCards = [
+    {
+      key: 'submitted',
+      label: 'Đã nộp',
+      meta: 'Chờ recruiter review',
+      value: countSubmitted,
+    },
+    {
+      key: 'revision',
+      label: 'Cần sửa',
+      meta: 'Chờ ứng viên cập nhật',
+      value: countRevision,
+    },
+    {
+      key: 'approved',
+      label: 'Đã duyệt',
+      meta: 'Sẵn sàng chốt job',
+      value: countApproved,
+    },
+    {
+      key: 'completed',
+      label: 'Hoàn tất',
+      meta: 'Đã nghiệm thu / thanh toán',
+      value: countCompleted,
+    },
+  ] as const;
 
   const handleApproveWork = async (application: ShortTermApplicationResponse) => {
     try {
@@ -151,12 +180,18 @@ const ShortTermJobHandoverBoard = ({
 
   const getStatusLabel = (status: ShortTermApplicationStatus): string => {
     switch (status) {
-      case ShortTermApplicationStatus.SUBMITTED: return 'Đã nộp';
-      case ShortTermApplicationStatus.REVISION_REQUIRED: return 'Cần sửa lại';
-      case ShortTermApplicationStatus.APPROVED: return 'Đã duyệt';
-      case ShortTermApplicationStatus.COMPLETED: return 'Hoàn thành';
-      case ShortTermApplicationStatus.PAID: return 'Đã thanh toán';
-      default: return status;
+      case ShortTermApplicationStatus.SUBMITTED:
+        return 'Đã nộp';
+      case ShortTermApplicationStatus.REVISION_REQUIRED:
+        return 'Cần sửa lại';
+      case ShortTermApplicationStatus.APPROVED:
+        return 'Đã duyệt';
+      case ShortTermApplicationStatus.COMPLETED:
+        return 'Hoàn thành';
+      case ShortTermApplicationStatus.PAID:
+        return 'Đã thanh toán';
+      default:
+        return status;
     }
   };
 
@@ -171,35 +206,23 @@ const ShortTermJobHandoverBoard = ({
 
   return (
     <div className="stj-handover-board">
-      {/* Stats Row */}
       <div className="stj-handover-stats">
-        <div className="stj-handover-stat">
-          <span className="stj-handover-stat__num stj-handover-stat__num--submitted">
-            {countSubmitted}
-          </span>
-          <span className="stj-handover-stat__label">Đã nộp</span>
-        </div>
-        <div className="stj-handover-stat">
-          <span className="stj-handover-stat__num stj-handover-stat__num--revision">
-            {countRevision}
-          </span>
-          <span className="stj-handover-stat__label">Cần sửa</span>
-        </div>
-        <div className="stj-handover-stat">
-          <span className="stj-handover-stat__num stj-handover-stat__num--approved">
-            {countApproved}
-          </span>
-          <span className="stj-handover-stat__label">Đã duyệt</span>
-        </div>
-        <div className="stj-handover-stat">
-          <span className="stj-handover-stat__num stj-handover-stat__num--completed">
-            {countCompleted}
-          </span>
-          <span className="stj-handover-stat__label">Hoàn tất</span>
-        </div>
+        {statCards.map((stat) => (
+          <div
+            key={stat.key}
+            className={`stj-handover-stat stj-handover-stat--${stat.key}`}
+          >
+            <div className="stj-handover-stat__body">
+              <span className="stj-handover-stat__label">{stat.label}</span>
+              <span className="stj-handover-stat__meta">{stat.meta}</span>
+            </div>
+            <span className={`stj-handover-stat__num stj-handover-stat__num--${stat.key}`}>
+              {stat.value}
+            </span>
+          </div>
+        ))}
       </div>
 
-      {/* Filter Chips */}
       <div className="stj-handover-filters">
         <button
           className={`stj-filter-chip ${filter === 'all' ? 'stj-filter-chip--active' : ''}`}
@@ -233,7 +256,6 @@ const ShortTermJobHandoverBoard = ({
         </button>
       </div>
 
-      {/* Cards Grid */}
       {filteredApps.length === 0 ? (
         <div className="stj-handover-empty">
           <CheckCircle2 size={32} />
@@ -244,31 +266,30 @@ const ShortTermJobHandoverBoard = ({
         </div>
       ) : (
         <div className="stj-handover-grid">
-          {filteredApps.map((app) => {
-            const isBusy = actionLoading === app.id;
-            const deliverables = app.deliverables || [];
-            const revisionCount = app.revisionCount || 0;
+          {filteredApps.map((application) => {
+            const isBusy = actionLoading === application.id;
+            const deliverables = application.deliverables || [];
+            const revisionCount = application.revisionCount || 0;
 
             return (
               <div
-                key={app.id}
-                className={`stj-handover-card ${getStatusBadgeClass(app.status)}`}
+                key={application.id}
+                className={`stj-handover-card ${getStatusBadgeClass(application.status)}`}
               >
-                {/* Card Header */}
                 <div className="stj-handover-card__header">
                   <div className="stj-handover-card__identity">
-                    {app.userAvatar ? (
+                    {application.userAvatar ? (
                       <img
-                        src={app.userAvatar}
-                        alt={app.userFullName}
+                        src={application.userAvatar}
+                        alt={application.userFullName}
                         className="stj-handover-card__avatar"
                       />
                     ) : (
                       <div className="stj-handover-card__avatar stj-handover-card__avatar--fallback">
-                        {app.userFullName
-                          ? app.userFullName
+                        {application.userFullName
+                          ? application.userFullName
                               .split(' ')
-                              .map((n) => n[0])
+                              .map((name) => name[0])
                               .join('')
                               .slice(0, 2)
                               .toUpperCase()
@@ -277,23 +298,22 @@ const ShortTermJobHandoverBoard = ({
                     )}
                     <div>
                       <strong className="stj-handover-card__name">
-                        {app.userFullName || 'Không xác định'}
+                        {application.userFullName || 'Không xác định'}
                       </strong>
                       <span className="stj-handover-card__subtitle">
-                        {app.userProfessionalTitle || 'Ứng viên'}
+                        {application.userProfessionalTitle || 'Ứng viên'}
                       </span>
                     </div>
                   </div>
-                  <span className={`stj-handover-badge ${getStatusBadgeClass(app.status)}`}>
-                    {getStatusLabel(app.status)}
+                  <span className={`stj-handover-badge ${getStatusBadgeClass(application.status)}`}>
+                    {getStatusLabel(application.status)}
                   </span>
                 </div>
 
-                {/* Meta */}
                 <div className="stj-handover-card__meta">
                   <span>
                     <Clock3 size={12} />
-                    Nộp: {formatDate(app.submittedAt || app.appliedAt)}
+                    Nộp: {formatDate(application.submittedAt || application.appliedAt)}
                   </span>
                   <span>
                     <FileText size={12} />
@@ -307,14 +327,12 @@ const ShortTermJobHandoverBoard = ({
                   )}
                 </div>
 
-                {/* Work Note */}
-                {app.workNote && (
+                {application.workNote && (
                   <p className="stj-handover-card__note">
-                    {app.workNote}
+                    {application.workNote}
                   </p>
                 )}
 
-                {/* Deliverables */}
                 {deliverables.length > 0 && (
                   <div className="stj-handover-card__files">
                     <span className="stj-handover-card__files-label">
@@ -322,16 +340,16 @@ const ShortTermJobHandoverBoard = ({
                       Bàn giao ({deliverables.length})
                     </span>
                     <ul className="stj-handover-card__file-list">
-                      {deliverables.map((d, idx) => (
-                        <li key={d.id || idx}>
+                      {deliverables.map((deliverable, index) => (
+                        <li key={deliverable.id || index}>
                           <a
-                            href={d.fileUrl}
+                            href={deliverable.fileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="stj-handover-card__file-link"
                           >
                             <ExternalLink size={11} />
-                            {d.fileName || 'File bàn giao'}
+                            {deliverable.fileName || 'File bàn giao'}
                           </a>
                         </li>
                       ))}
@@ -339,14 +357,13 @@ const ShortTermJobHandoverBoard = ({
                   </div>
                 )}
 
-                {/* Actions */}
                 <div className="stj-handover-card__actions">
-                  {app.status === ShortTermApplicationStatus.SUBMITTED && (
+                  {application.status === ShortTermApplicationStatus.SUBMITTED && (
                     <>
                       <button
                         className="stj-action-btn stj-action-btn--approve"
                         disabled={isBusy}
-                        onClick={() => handleApproveWork(app)}
+                        onClick={() => handleApproveWork(application)}
                       >
                         {isBusy ? <Loader2 size={13} className="stj-spin" /> : <CheckCircle2 size={13} />}
                         Duyệt bàn giao
@@ -355,7 +372,7 @@ const ShortTermJobHandoverBoard = ({
                         className="stj-action-btn stj-action-btn--revision"
                         disabled={isBusy}
                         onClick={() => {
-                          setRevisionModal(app);
+                          setRevisionModal(application);
                           setRevisionNote('');
                         }}
                       >
@@ -365,36 +382,36 @@ const ShortTermJobHandoverBoard = ({
                     </>
                   )}
 
-                  {app.status === ShortTermApplicationStatus.REVISION_REQUIRED && (
+                  {application.status === ShortTermApplicationStatus.REVISION_REQUIRED && (
                     <div className="stj-handover-card__info-chip">
                       <RefreshCw size={13} />
                       Đã yêu cầu sửa lại - chờ ứng viên nộp lại
                     </div>
                   )}
 
-                  {app.status === ShortTermApplicationStatus.APPROVED && (
+                  {application.status === ShortTermApplicationStatus.APPROVED && (
                     <button
                       className="stj-action-btn stj-action-btn--approve"
                       disabled={isBusy}
-                      onClick={() => handleCompleteJob(app)}
+                      onClick={() => handleCompleteJob(application)}
                     >
                       {isBusy ? <Loader2 size={13} className="stj-spin" /> : <CheckCircle2 size={13} />}
                       Hoàn tất job
                     </button>
                   )}
 
-                  {app.status === ShortTermApplicationStatus.COMPLETED && (
+                  {application.status === ShortTermApplicationStatus.COMPLETED && (
                     <button
                       className="stj-action-btn stj-action-btn--approve"
                       disabled={isBusy}
-                      onClick={() => handleMarkAsPaid(app)}
+                      onClick={() => handleMarkAsPaid(application)}
                     >
                       {isBusy ? <Loader2 size={13} className="stj-spin" /> : <CheckCircle2 size={13} />}
                       Xác nhận thanh toán
                     </button>
                   )}
 
-                  {app.status === ShortTermApplicationStatus.PAID && (
+                  {application.status === ShortTermApplicationStatus.PAID && (
                     <div className="stj-handover-card__info-chip stj-handover-card__info-chip--success">
                       <CheckCircle2 size={13} />
                       Đã hoàn tất và thanh toán
@@ -407,17 +424,16 @@ const ShortTermJobHandoverBoard = ({
         </div>
       )}
 
-      {/* Revision Modal */}
       {revisionModal && (
         <div className="stj-modal-backdrop" onClick={() => setRevisionModal(null)}>
-          <div className="stj-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="stj-modal" onClick={(event) => event.stopPropagation()}>
             <span className="stj-modal__eyebrow">Yêu cầu sửa bàn giao</span>
             <h3>{revisionModal.userFullName}</h3>
             <p>Mô tả chi tiết những gì cần sửa để ứng viên hiểu rõ yêu cầu.</p>
             <textarea
               className="stj-textarea"
               value={revisionNote}
-              onChange={(e) => setRevisionNote(e.target.value)}
+              onChange={(event) => setRevisionNote(event.target.value)}
               placeholder="Ví dụ: Logo cần đặt ở vị trí chính giữa, màu nền cần chuyển sang #020617..."
               rows={4}
             />
@@ -426,7 +442,7 @@ const ShortTermJobHandoverBoard = ({
                 className="stj-btn stj-btn--secondary"
                 onClick={() => setRevisionModal(null)}
               >
-                Huỷ
+                Hủy
               </button>
               <button
                 className="stj-btn stj-btn--revision"

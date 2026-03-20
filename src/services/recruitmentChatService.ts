@@ -4,7 +4,8 @@ import {
   RecruitmentMessageResponse,
   CreateRecruitmentSessionRequest,
   SendRecruitmentMessageRequest,
-  RecruitmentSessionStatus
+  RecruitmentSessionStatus,
+  RecruitmentJobContextType
 } from '../data/portfolioDTOs';
 
 // Helper type for axios error handling
@@ -42,12 +43,14 @@ class RecruitmentChatService {
   async getOrCreateSession(
     candidateId: number,
     jobId?: number,
-    sourceType: string = 'MANUAL'
+    sourceType: string = 'MANUAL',
+    jobContextType: RecruitmentJobContextType = RecruitmentJobContextType.JOB_POSTING
   ): Promise<RecruitmentSessionResponse> {
     try {
       const params = new URLSearchParams();
       params.append('candidateId', candidateId.toString());
       if (jobId) params.append('jobId', jobId.toString());
+      params.append('jobContextType', jobContextType);
       params.append('sourceType', sourceType);
 
       const response = await axiosInstance.post<RecruitmentSessionResponse>(

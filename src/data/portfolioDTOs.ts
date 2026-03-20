@@ -322,10 +322,16 @@ export enum RecruitmentSessionSource {
   SHORTLIST = 'SHORTLIST'
 }
 
+export enum RecruitmentJobContextType {
+  JOB_POSTING = 'JOB_POSTING',
+  SHORT_TERM_JOB = 'SHORT_TERM_JOB',
+}
+
 export interface RecruitmentSessionResponse {
   id: number;
   recruiterId: number;
   recruiterName: string;
+  recruiterAvatar?: string;
   recruiterCompany?: string;
   candidateId: number;
   candidateFullName: string;
@@ -335,8 +341,12 @@ export interface RecruitmentSessionResponse {
   candidateSlug?: string;
   jobId?: number;
   jobTitle?: string;
+  jobContextType?: RecruitmentJobContextType;
+  jobStatus?: string;
   isRemote?: boolean;
   jobLocation?: string;
+  isChatAvailable?: boolean;
+  chatDisabledReason?: string;
   status: RecruitmentSessionStatus;
   sourceType: RecruitmentSessionSource;
   matchScore?: number;
@@ -367,6 +377,7 @@ export interface RecruitmentMessageResponse {
 export interface CreateRecruitmentSessionRequest {
   candidateId: number;
   jobId?: number;
+  jobContextType?: RecruitmentJobContextType;
   sourceType?: RecruitmentSessionSource;
   matchScore?: number;
   skillMatchPercent?: number;

@@ -1,41 +1,90 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, CheckCheck, ChevronDown } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { MessageSquare, ChevronDown, Briefcase } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import '../../styles/NotificationDropdown.css'; // Reuse styles
+import { useAuth } from '../../context/AuthContext';
 import { getThreads } from '../../services/preChatService';
+import recruitmentChatService from '../../services/recruitmentChatService';
+import { RecruitmentSessionResponse } from '../../data/portfolioDTOs';
+import { API_BASE_URL } from '../../services/axiosInstance';
+import '../../styles/NotificationDropdown.css';
 
-interface RecentChat {
-  mentorId: string;
-  mentorName: string;
-  mentorAvatar: string;
+interface DropdownChat {
+  id: string;
+  name: string;
+  avatar: string;
   lastMessage: string;
-  timestamp: string; // JSON stringified date
+  timestamp: string;
   unread: number;
+  channel: 'PRECHAT' | 'RECRUITMENT';
   isMyRoleMentor?: boolean;
 }
 
 type Props = { inline?: boolean; collapsible?: boolean };
 
 const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
-  const [chats, setChats] = useState<RecentChat[]>([]);
+  const { user } = useAuth();
+  const [chats, setChats] = useState<DropdownChat[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const [inlineOpen, setInlineOpen] = useState<boolean>(!collapsible);
 
+  const resolveAvatarUrl = (raw?: string): string => {
+    if (!raw) return '/images/meowl.jpg';
+    const trimmed = raw.trim();
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+    const apiRoot = API_BASE_URL.replace(/\/api$/i, '');
+    if (trimmed.startsWith('/')) return `${apiRoot}${trimmed}`;
+    return `${apiRoot}/${trimmed}`;
+  };
+
+  const mapRecruitmentChat = (session: RecruitmentSessionResponse): DropdownChat => {
+    const isRecruiter = user?.roles.includes('RECRUITER') ?? false;
+    return {
+      id: session.id.toString(),
+      name: isRecruiter
+        ? session.candidateFullName || 'Ứng viên'
+        : session.recruiterName || session.recruiterCompany || 'Nhà tuyển dụng',
+      avatar: resolveAvatarUrl(isRecruiter ? session.candidateAvatar : session.recruiterAvatar),
+      lastMessage: session.lastMessagePreview || session.jobTitle || 'Cuộc trò chuyện tuyển dụng',
+      timestamp: session.lastMessageAt || session.createdAt,
+      unread: session.unreadCount,
+      channel: 'RECRUITMENT',
+    };
+  };
+
   const fetchChats = async () => {
     try {
-      const threads = await getThreads();
-      const mapped: RecentChat[] = threads.map(t => ({
-        mentorId: t.counterpartId.toString(),
-        mentorName: t.counterpartName,
-        mentorAvatar: t.counterpartAvatar || '/images/meowl.jpg',
-        lastMessage: t.lastContent,
-        timestamp: t.lastTime,
-        unread: t.unreadCount,
-        isMyRoleMentor: t.isMyRoleMentor
+      const canAccessRecruitment = Boolean(
+        user?.roles.includes('RECRUITER') || user?.roles.includes('USER')
+      );
+
+      const [threads, recruitmentResult] = await Promise.all([
+        getThreads(),
+        canAccessRecruitment
+          ? (user?.roles.includes('RECRUITER')
+              ? recruitmentChatService.getRecruiterSessions(0, 10)
+              : recruitmentChatService.getCandidateSessions(0, 10))
+          : Promise.resolve({ sessions: [] as RecruitmentSessionResponse[], totalElements: 0, totalPages: 0 }),
+      ]);
+
+      const mentorChats: DropdownChat[] = threads.map((thread) => ({
+        id: thread.counterpartId.toString(),
+        name: thread.counterpartName,
+        avatar: resolveAvatarUrl(thread.counterpartAvatar),
+        lastMessage: thread.lastContent,
+        timestamp: thread.lastTime,
+        unread: thread.unreadCount,
+        channel: 'PRECHAT',
+        isMyRoleMentor: thread.isMyRoleMentor,
       }));
-      setChats(mapped);
+
+      const recruitmentChats = recruitmentResult.sessions.map(mapRecruitmentChat);
+      const mergedChats = [...mentorChats, ...recruitmentChats].sort(
+        (left, right) => new Date(right.timestamp).getTime() - new Date(left.timestamp).getTime()
+      );
+
+      setChats(mergedChats);
     } catch (error) {
       console.error('Failed to load chats', error);
     }
@@ -43,10 +92,9 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
 
   useEffect(() => {
     fetchChats();
-    // Poll for updates
     const interval = setInterval(fetchChats, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -66,16 +114,26 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
     setIsOpen(!isOpen);
   };
 
-  const handleChatClick = (chat: RecentChat) => {
+  const handleChatClick = (chat: DropdownChat) => {
     setIsOpen(false);
-    // Navigate to mentorship page with state to open chat
-    navigate('/mentorship', { 
-      state: { 
-        openChatWith: chat.mentorId,
-        name: chat.mentorName,
-        avatar: chat.mentorAvatar,
-        isMyRoleMentor: chat.isMyRoleMentor
-      } 
+
+    if (chat.channel === 'RECRUITMENT') {
+      navigate('/messages', {
+        state: {
+          openChatWith: chat.id,
+          type: 'RECRUITMENT',
+        },
+      });
+      return;
+    }
+
+    navigate('/mentorship', {
+      state: {
+        openChatWith: chat.id,
+        name: chat.name,
+        avatar: chat.avatar,
+        isMyRoleMentor: chat.isMyRoleMentor,
+      },
     });
   };
 
@@ -83,15 +141,17 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
     const date = new Date(dateString);
     const now = new Date();
     const diff = now.getTime() - date.getTime();
-    
+
     const minutes = Math.floor(diff / 60000);
     if (minutes < 60) return `${minutes} phút trước`;
-    
+
     const hours = Math.floor(minutes / 60);
     if (hours < 24) return `${hours} giờ trước`;
-    
+
     return date.toLocaleDateString('vi-VN');
   };
+
+  const totalUnread = chats.reduce((count, chat) => count + chat.unread, 0);
 
   if (inline) {
     return (
@@ -99,7 +159,7 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
         <button
           className="inline-toggle"
           onClick={() => {
-            setInlineOpen(v => !v);
+            setInlineOpen((value) => !value);
             if (!inlineOpen) fetchChats();
           }}
         >
@@ -108,7 +168,12 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
             <span>Tin nhắn</span>
           </div>
           <div className="inline-header-right">
-             <ChevronDown size={16} className={`inline-chevron ${inlineOpen ? 'open' : ''}`} />
+            {totalUnread > 0 && (
+              <span className="notification-badge inline-badge">
+                {totalUnread > 99 ? '99+' : totalUnread}
+              </span>
+            )}
+            <ChevronDown size={16} className={`inline-chevron ${inlineOpen ? 'open' : ''}`} />
           </div>
         </button>
 
@@ -116,21 +181,24 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
           {chats.length === 0 ? (
             <div className="notification-empty">Không có tin nhắn</div>
           ) : (
-            chats.slice(0, 5).map(chat => (
+            chats.slice(0, 5).map((chat) => (
               <div
-                key={chat.mentorId}
-                className="notification-item"
+                key={`${chat.channel}-${chat.id}`}
+                className={`notification-item ${chat.unread > 0 ? 'unread' : ''}`}
                 onClick={() => handleChatClick(chat)}
               >
                 <div className="notification-icon-wrapper">
                   <img
-                    src={chat.mentorAvatar}
-                    alt={chat.mentorName}
+                    src={chat.avatar}
+                    alt={chat.name}
                     style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }}
                   />
                 </div>
                 <div className="notification-content">
-                  <p className="notification-title">{chat.mentorName}</p>
+                  <p className="notification-title">
+                    {chat.channel === 'RECRUITMENT' && <Briefcase size={12} style={{ marginRight: '6px', verticalAlign: 'text-bottom' }} />}
+                    {chat.name}
+                  </p>
                   <p className="notification-message truncate">{chat.lastMessage}</p>
                   <span className="notification-time">{formatTime(chat.timestamp)}</span>
                 </div>
@@ -146,7 +214,9 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
     <div className="notification-container" ref={dropdownRef}>
       <button className="notification-trigger" onClick={handleToggle}>
         <MessageSquare size={20} />
-        {/* Badge could go here if we tracked unread count globally */}
+        {totalUnread > 0 && (
+          <span className="notification-badge">{totalUnread > 99 ? '99+' : totalUnread}</span>
+        )}
       </button>
 
       {isOpen && (
@@ -159,22 +229,28 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
             {chats.length === 0 ? (
               <div className="notification-empty">Không có tin nhắn nào</div>
             ) : (
-              chats.map(chat => (
-                <div 
-                  key={chat.mentorId} 
-                  className="notification-item"
+              chats.map((chat) => (
+                <div
+                  key={`${chat.channel}-${chat.id}`}
+                  className={`notification-item ${chat.unread > 0 ? 'unread' : ''}`}
                   onClick={() => handleChatClick(chat)}
                 >
                   <div className="notification-icon-wrapper">
-                    <img 
-                      src={chat.mentorAvatar} 
-                      alt={chat.mentorName} 
+                    <img
+                      src={chat.avatar}
+                      alt={chat.name}
                       style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
                     />
                   </div>
                   <div className="notification-content">
-                    <p className="notification-title">{chat.mentorName}</p>
-                    <p className="notification-message truncate" style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <p className="notification-title">
+                      {chat.channel === 'RECRUITMENT' && <Briefcase size={12} style={{ marginRight: '6px', verticalAlign: 'text-bottom' }} />}
+                      {chat.name}
+                    </p>
+                    <p
+                      className="notification-message truncate"
+                      style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                    >
                       {chat.lastMessage}
                     </p>
                     <span className="notification-time">{formatTime(chat.timestamp)}</span>
@@ -183,7 +259,7 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
               ))
             )}
           </div>
-          
+
           <div className="notification-footer">
             <button onClick={() => navigate('/messages')}>Xem tất cả</button>
           </div>

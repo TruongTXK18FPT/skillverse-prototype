@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   Search,
@@ -8,21 +8,19 @@ import {
   Home,
   MessageCircle,
   Settings,
-  Bell,
-  Filter,
-  Check,
-  CheckCheck,
   Pin,
-  Archive,
-  Trash2,
-  Star,
   X,
-  Briefcase
+  Briefcase,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { GroupChatWindow, MentorChatWindow, FamilyChatWindow, RecruiterChatWindow } from '../../components/chat';
+import {
+  GroupChatWindow,
+  MentorChatWindow,
+  FamilyChatWindow,
+  RecruiterChatWindow,
+} from '../../components/chat';
 import MessengerWelcome from '../../components/chat/MessengerWelcome';
-import { getMyGroups, getGroupDetail, type GroupMemberDTO } from '../../services/groupChatService';
+import { getMyGroups } from '../../services/groupChatService';
 import { getThreads } from '../../services/preChatService';
 import recruitmentChatService from '../../services/recruitmentChatService';
 import userService from '../../services/userService';
@@ -31,6 +29,7 @@ import parentService from '../../services/parentService';
 import studentLinkService from '../../services/studentLinkService';
 import { API_BASE_URL } from '../../services/axiosInstance';
 import { RecruitmentSessionResponse } from '../../data/portfolioDTOs';
+import { useChatSettings } from '../../context/ChatSettingsContext';
 import '../../styles/MessengerPage.css';
 
 interface ChatContact {
@@ -45,17 +44,16 @@ interface ChatContact {
   isPinned?: boolean;
   memberCount?: number;
   mentorName?: string;
-  isMyRoleMentor?: boolean; // For mentor chats: true if I'm the mentor
-  isParent?: boolean; // For family chats: true if I'm the parent
-  // For recruitment chat
+  isMyRoleMentor?: boolean;
+  isParent?: boolean;
   recruitmentSession?: RecruitmentSessionResponse;
 }
 
 const MessengerPage: React.FC = () => {
   const { user, loading } = useAuth();
   const location = useLocation();
+  const { settings, updateSetting } = useChatSettings();
 
-  // State
   const [contacts, setContacts] = useState<ChatContact[]>([]);
   const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -63,14 +61,13 @@ const MessengerPage: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showCreateNew, setShowCreateNew] = useState(false);
-
-  // Recruitment session state
   const [recruitmentSessions, setRecruitmentSessions] = useState<RecruitmentSessionResponse[]>([]);
-  const [selectedRecruitmentSession, setSelectedRecruitmentSession] = useState<RecruitmentSessionResponse | null>(null);
-  
-  const hasHandledNav = useRef(false);
 
-  // Check if first time user
+  const hasHandledNav = useRef(false);
+  const canAccessRecruitmentMessages = Boolean(
+    user?.roles.includes('RECRUITER') || user?.roles.includes('USER')
+  );
+
   useEffect(() => {
     const hasSeenWelcome = localStorage.getItem('skillverse_messenger_welcome_seen');
     if (!hasSeenWelcome && user) {
@@ -78,7 +75,6 @@ const MessengerPage: React.FC = () => {
     }
   }, [user]);
 
-  // Helper to resolve avatar URL
   const resolveAvatarUrl = (raw?: string): string => {
     if (!raw) return '/images/meowl.jpg';
     const trimmed = raw.trim();
@@ -88,197 +84,194 @@ const MessengerPage: React.FC = () => {
     return `${apiRoot}/${trimmed}`;
   };
 
-  // Load contacts on mount and tab change
+  const loadRecruitmentSessions = async (): Promise<RecruitmentSessionResponse[]> => {
+    if (!user) return [];
+
+    try {
+      const isRecruiter = user.roles.includes('RECRUITER');
+      const isCandidate = user.roles.includes('USER');
+
+      if (!isRecruiter && !isCandidate) {
+        setRecruitmentSessions([]);
+        return [];
+      }
+
+      const result = isRecruiter
+        ? await recruitmentChatService.getRecruiterSessions(0, 50)
+        : await recruitmentChatService.getCandidateSessions(0, 50);
+
+      setRecruitmentSessions(result.sessions);
+      return result.sessions;
+    } catch (error) {
+      console.error('Failed to load recruitment sessions:', error);
+      return [];
+    }
+  };
+
+  const mapRecruitmentContact = (session: RecruitmentSessionResponse): ChatContact => {
+    const isRecruiter = user?.roles.includes('RECRUITER') ?? false;
+    const displayName = isRecruiter
+      ? session.candidateFullName || 'Ứng viên'
+      : session.recruiterName || session.recruiterCompany || 'Nhà tuyển dụng';
+    const displayAvatar = isRecruiter ? session.candidateAvatar : session.recruiterAvatar;
+    const lastMessage = session.lastMessagePreview
+      || (session.jobTitle
+        ? `${isRecruiter ? 'Ứng viên chờ' : 'Trao đổi về'} ${session.jobTitle}`
+        : 'Cuộc trò chuyện tuyển dụng');
+
+    return {
+      id: session.id.toString(),
+      name: displayName,
+      avatar: resolveAvatarUrl(displayAvatar),
+      lastMessage,
+      timestamp: session.lastMessageAt || session.createdAt,
+      unread: session.unreadCount,
+      type: 'RECRUITMENT',
+      recruitmentSession: session,
+    };
+  };
+
   useEffect(() => {
     if (!user || loading) return;
     loadContacts();
-    const interval = setInterval(loadContacts, 10000); // Refresh every 10s
+    const interval = setInterval(loadContacts, 10000);
     return () => clearInterval(interval);
   }, [user, loading, activeTab]);
 
-  // Handle navigation state (e.g., from other pages)
   useEffect(() => {
     if (hasHandledNav.current || !location.state?.openChatWith) return;
 
     const targetId = location.state.openChatWith.toString();
     const type = location.state.type || 'GROUP';
 
-    if (type === 'GROUP') setActiveTab('GROUP');
-    else if (type === 'FAMILY') setActiveTab('FAMILY');
-    else if (type === 'RECRUITMENT') {
-      // For recruitment chat, find the session by ID
-      const session = recruitmentSessions.find(s => s.id.toString() === targetId);
-      if (session) {
-        setSelectedRecruitmentSession(session);
+    if (type === 'GROUP') {
+      setActiveTab('GROUP');
+    } else if (type === 'FAMILY') {
+      setActiveTab('FAMILY');
+    } else if (type === 'RECRUITMENT') {
+      const sessionExists = recruitmentSessions.some((session) => session.id.toString() === targetId);
+      if (sessionExists || recruitmentSessions.length === 0) {
         setActiveTab('RECRUITMENT');
       }
-    } else setActiveTab('MENTOR');
+    } else {
+      setActiveTab('MENTOR');
+    }
 
     setSelectedContactId(targetId);
     hasHandledNav.current = true;
   }, [location.state, recruitmentSessions]);
 
-  // Load recruitment sessions for recruiters
-  const loadRecruitmentSessions = async () => {
-    if (!user) return;
-
-    try {
-      const isRecruiter = user.roles.includes('RECRUITER');
-      if (!isRecruiter) return;
-
-      const result = await recruitmentChatService.getRecruiterSessions(0, 50);
-      setRecruitmentSessions(result.sessions);
-    } catch (error) {
-      console.error('Failed to load recruitment sessions:', error);
-    }
-  };
-
-  // Load recruitment sessions on mount
-  useEffect(() => {
-    if (user && user.roles.includes('RECRUITER')) {
-      loadRecruitmentSessions();
-    }
-  }, [user]);
-
   const loadContacts = async () => {
     if (!user) return;
-    
+
     try {
       let allContacts: ChatContact[] = [];
 
-      // Load group chats if GROUP tab or ALL
       if (activeTab === 'GROUP' || activeTab === 'ALL') {
         const groups = await getMyGroups(user.id);
-        const groupContacts: ChatContact[] = groups.map(g => ({
-          id: g.id.toString(),
-          name: g.name,
-          avatar: resolveAvatarUrl(g.avatarUrl),
+        const groupContacts: ChatContact[] = groups.map((group) => ({
+          id: group.id.toString(),
+          name: group.name,
+          avatar: resolveAvatarUrl(group.avatarUrl),
           lastMessage: 'Nhóm học tập',
-          timestamp: g.createdAt,
+          timestamp: group.createdAt,
           unread: 0,
-          type: 'GROUP' as const,
-          memberCount: g.memberCount || 0,
-          mentorName: g.mentorName
+          type: 'GROUP',
+          memberCount: group.memberCount || 0,
+          mentorName: group.mentorName,
         }));
         allContacts = [...allContacts, ...groupContacts];
       }
 
-      // Load mentor/1-on-1 chats if MENTOR tab or ALL
       if (activeTab === 'MENTOR' || activeTab === 'ALL') {
         const threads = await getThreads();
         const mentorContacts: ChatContact[] = await Promise.all(
-          threads.map(async (t) => {
-            let avatar = resolveAvatarUrl(t.counterpartAvatar);
-            
+          threads.map(async (thread) => {
+            let avatar = resolveAvatarUrl(thread.counterpartAvatar);
+
             try {
-              if (t.isMyRoleMentor) {
-                const prof = await userService.getUserProfile(t.counterpartId);
-                avatar = resolveAvatarUrl(prof.avatarMediaUrl);
+              if (thread.isMyRoleMentor) {
+                const profile = await userService.getUserProfile(thread.counterpartId);
+                avatar = resolveAvatarUrl(profile.avatarMediaUrl);
               } else {
-                const prof = await getMentorProfile(t.counterpartId);
-                avatar = resolveAvatarUrl(prof.avatar);
+                const profile = await getMentorProfile(thread.counterpartId);
+                avatar = resolveAvatarUrl(profile.avatar);
               }
-            } catch (e) {
-              // Fallback to default
+            } catch {
+              // Keep fallback avatar.
             }
 
             return {
-              id: t.counterpartId.toString(),
-              name: t.counterpartName,
+              id: thread.counterpartId.toString(),
+              name: thread.counterpartName,
               avatar,
-              lastMessage: t.lastContent,
-              timestamp: t.lastTime,
-              unread: t.unreadCount,
-              type: 'MENTOR' as const,
-              isOnline: Math.random() > 0.5, // TODO: Implement real online status
-              isMyRoleMentor: t.isMyRoleMentor
+              lastMessage: thread.lastContent,
+              timestamp: thread.lastTime,
+              unread: thread.unreadCount,
+              type: 'MENTOR',
+              isOnline: Math.random() > 0.5,
+              isMyRoleMentor: thread.isMyRoleMentor,
             };
           })
         );
         allContacts = [...allContacts, ...mentorContacts];
       }
 
-      // Load family chats if FAMILY tab or ALL
-      // For PARENT role: load children (students)
-      // For USER role: load parent links (upcoming feature)
       if (activeTab === 'FAMILY' || activeTab === 'ALL') {
-        // Parents see their children
         if (user.roles.includes('PARENT')) {
           try {
             const dashboard = await parentService.getDashboard();
-            const familyContacts: ChatContact[] = dashboard.students.map(student => ({
+            const familyContacts: ChatContact[] = dashboard.students.map((student) => ({
               id: student.id.toString(),
               name: student.displayName || student.fullName || `${student.firstName} ${student.lastName}`.trim(),
               avatar: resolveAvatarUrl(student.avatarUrl),
-              lastMessage: 'Chat với con',
+              lastMessage: 'Trò chuyện với con',
               timestamp: new Date().toISOString(),
               unread: 0,
-              type: 'FAMILY' as const,
+              type: 'FAMILY',
               isOnline: false,
-              isParent: true
+              isParent: true,
             }));
             allContacts = [...allContacts, ...familyContacts];
           } catch (error) {
             console.error('Failed to load family contacts:', error);
           }
         }
-        // Students (USER role) see their linked parents (if any)
+
         if (user.roles.includes('USER') && !user.roles.includes('PARENT')) {
           try {
-            // Load parent-student links for the student
-            // The API returns links where this user is either parent or student
             const links = await studentLinkService.getStudentLinks();
-            // Filter to get only ACTIVE links where current user is the student
             const activeParentLinks = links.filter(
-              link => link.status === 'ACTIVE' && link.student.id === user.id
+              (link) => link.status === 'ACTIVE' && link.student.id === user.id
             );
             const parentContacts: ChatContact[] = activeParentLinks.map((link) => ({
               id: link.parent.id.toString(),
               name: link.parent.fullName || 'Phụ huynh',
               avatar: resolveAvatarUrl(link.parent.avatarUrl),
-              lastMessage: 'Chat với phụ huynh',
+              lastMessage: 'Trò chuyện với phụ huynh',
               timestamp: link.updatedAt || new Date().toISOString(),
               unread: 0,
-              type: 'FAMILY' as const,
+              type: 'FAMILY',
               isOnline: false,
-              isParent: false // I'm the student, not the parent
+              isParent: false,
             }));
             allContacts = [...allContacts, ...parentContacts];
           } catch (error) {
-            // Parent link API may not exist yet
             console.log('Parent links not available:', error);
           }
         }
       }
 
-      // Load recruitment sessions if user is recruiter
-      const isRecruiter = user.roles.includes('RECRUITER');
-      if (isRecruiter && (activeTab === 'RECRUITMENT' || activeTab === 'ALL')) {
-        try {
-          const sessions = await recruitmentChatService.getRecruiterSessions(0, 50);
-          setRecruitmentSessions(sessions.sessions);
-
-          const recruitmentContacts: ChatContact[] = sessions.sessions.map(s => ({
-            id: s.id.toString(),
-            name: s.candidateFullName,
-            avatar: resolveAvatarUrl(s.candidateAvatar),
-            lastMessage: s.lastMessagePreview || (s.jobTitle ? `Tuyển: ${s.jobTitle}` : 'Cuộc trò chuyện'),
-            timestamp: s.lastMessageAt || s.createdAt,
-            unread: s.unreadCount,
-            type: 'RECRUITMENT' as const,
-            recruitmentSession: s
-          }));
-          allContacts = [...allContacts, ...recruitmentContacts];
-        } catch (error) {
-          console.error('Failed to load recruitment sessions:', error);
-        }
+      if (canAccessRecruitmentMessages && (activeTab === 'RECRUITMENT' || activeTab === 'ALL')) {
+        const sessions = await loadRecruitmentSessions();
+        const recruitmentContacts = sessions.map(mapRecruitmentContact);
+        allContacts = [...allContacts, ...recruitmentContacts];
       }
 
-      // Sort by timestamp (most recent first)
-      allContacts.sort((a, b) => {
-        const aTime = new Date(a.timestamp).getTime();
-        const bTime = new Date(b.timestamp).getTime();
-        return bTime - aTime;
+      allContacts.sort((left, right) => {
+        const leftTime = new Date(left.timestamp).getTime();
+        const rightTime = new Date(right.timestamp).getTime();
+        return rightTime - leftTime;
       });
 
       setContacts(allContacts);
@@ -287,17 +280,14 @@ const MessengerPage: React.FC = () => {
     }
   };
 
-  // Filter contacts based on search
-  const filteredContacts = contacts.filter(contact => {
+  const filteredContacts = contacts.filter((contact) => {
     const matchesSearch = contact.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesTab = activeTab === 'ALL' || contact.type === activeTab;
     return matchesSearch && matchesTab;
   });
 
-  // Get selected contact
-  const selectedContact = contacts.find(c => c.id === selectedContactId);
+  const selectedContact = contacts.find((contact) => contact.id === selectedContactId);
 
-  // Format timestamp
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
     const now = new Date();
@@ -320,8 +310,7 @@ const MessengerPage: React.FC = () => {
 
   const handleGetStarted = () => {
     handleWelcomeClose();
-    // Auto-select first group if available
-    const firstGroup = contacts.find(c => c.type === 'GROUP');
+    const firstGroup = contacts.find((contact) => contact.type === 'GROUP');
     if (firstGroup) {
       setSelectedContactId(firstGroup.id);
       setActiveTab('GROUP');
@@ -341,7 +330,6 @@ const MessengerPage: React.FC = () => {
 
   return (
     <div className="messenger-page">
-      {/* Welcome Modal */}
       {showWelcome && (
         <MessengerWelcome
           onClose={handleWelcomeClose}
@@ -349,59 +337,111 @@ const MessengerPage: React.FC = () => {
         />
       )}
 
-      {/* Settings Modal */}
       {showSettings && (
-        <div className="modal-overlay" onClick={() => setShowSettings(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
+        <div className="neon-settings-overlay" onClick={() => setShowSettings(false)}>
+          <div className="neon-settings-modal" onClick={(event) => event.stopPropagation()}>
+            <div className="neon-settings-header">
               <h2>Cài đặt</h2>
-              <button onClick={() => setShowSettings(false)}>
-                <X size={24} />
+              <button className="neon-settings-close" onClick={() => setShowSettings(false)}>
+                <X size={22} />
               </button>
             </div>
-            <div className="modal-body">
-              <div className="settings-section">
-                <h3>Thông báo</h3>
-                <label>
-                  <input type="checkbox" defaultChecked />
-                  <span>Thông báo tin nhắn mới</span>
-                </label>
-                <label>
-                  <input type="checkbox" defaultChecked />
-                  <span>Âm thanh thông báo</span>
-                </label>
+            <div className="neon-settings-body">
+              <div className="neon-settings-section">
+                <h3 className="neon-settings-section__title">THÔNG BÁO</h3>
+                <div className="neon-settings-list">
+                  <label className="neon-settings-item">
+                    <div className="neon-settings-item__left">
+                      <div className="neon-settings-item__icon neon-settings-item__icon--pink">
+                        <MessageCircle size={16} />
+                      </div>
+                      <div>
+                        <span className="neon-settings-item__label">Thông báo tin nhắn</span>
+                        <span className="neon-settings-item__desc">Nhận thông báo khi có tin nhắn mới</span>
+                      </div>
+                    </div>
+                    <label className="neon-toggle">
+                      <input
+                        type="checkbox"
+                        checked={settings.notifyNewMessage}
+                        onChange={(e) => updateSetting('notifyNewMessage', e.target.checked)}
+                      />
+                      <span className="neon-toggle__slider neon-toggle__slider--pink" />
+                    </label>
+                  </label>
+                  <label className="neon-settings-item">
+                    <div className="neon-settings-item__left">
+                      <div className="neon-settings-item__icon neon-settings-item__icon--pink">
+                        <span className="neon-sound-icon">♪</span>
+                      </div>
+                      <div>
+                        <span className="neon-settings-item__label">Âm thanh thông báo</span>
+                        <span className="neon-settings-item__desc">Phát âm thanh khi có tin nhắn mới</span>
+                      </div>
+                    </div>
+                    <label className="neon-toggle">
+                      <input
+                        type="checkbox"
+                        checked={settings.soundNotification}
+                        onChange={(e) => updateSetting('soundNotification', e.target.checked)}
+                      />
+                      <span className="neon-toggle__slider neon-toggle__slider--pink" />
+                    </label>
+                  </label>
+                </div>
               </div>
-              <div className="settings-section">
-                <h3>Hiển thị</h3>
-                <label>
-                  <input type="checkbox" defaultChecked />
-                  <span>Hiển thị ảnh đại diện</span>
-                </label>
-                <label>
-                  <input type="checkbox" />
-                  <span>Chế độ tối</span>
-                </label>
-              </div>
-              <div className="settings-section">
-                <h3>Quyền riêng tư</h3>
-                <label>
-                  <input type="checkbox" defaultChecked />
-                  <span>Cho phép người lạ nhắn tin</span>
-                </label>
-                <label>
-                  <input type="checkbox" defaultChecked />
-                  <span>Hiển thị trạng thái online</span>
-                </label>
+
+              <div className="neon-settings-section">
+                <h3 className="neon-settings-section__title">HIỂN THỊ</h3>
+                <div className="neon-settings-list">
+                  <label className="neon-settings-item">
+                    <div className="neon-settings-item__left">
+                      <div className="neon-settings-item__icon neon-settings-item__icon--cyan">
+                        <UserCircle size={16} />
+                      </div>
+                      <div>
+                        <span className="neon-settings-item__label">Hiển thị ảnh đại diện</span>
+                        <span className="neon-settings-item__desc">Hiện ảnh đại diện của người nhắn tin</span>
+                      </div>
+                    </div>
+                    <label className="neon-toggle">
+                      <input
+                        type="checkbox"
+                        checked={settings.showAvatar}
+                        onChange={(e) => updateSetting('showAvatar', e.target.checked)}
+                      />
+                      <span className="neon-toggle__slider neon-toggle__slider--cyan" />
+                    </label>
+                  </label>
+                  <label className="neon-settings-item">
+                    <div className="neon-settings-item__left">
+                      <div className="neon-settings-item__icon neon-settings-item__icon--cyan">
+                        <div className="neon-online-dot" />
+                      </div>
+                      <div>
+                        <span className="neon-settings-item__label">Hiển thị trạng thái online</span>
+                        <span className="neon-settings-item__desc">Thấy người khác đang trực tuyến hay không</span>
+                      </div>
+                    </div>
+                    <label className="neon-toggle">
+                      <input
+                        type="checkbox"
+                        checked={settings.showOnlineStatus}
+                        onChange={(e) => updateSetting('showOnlineStatus', e.target.checked)}
+                      />
+                      <span className="neon-toggle__slider neon-toggle__slider--cyan" />
+                    </label>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Create New Modal */}
       {showCreateNew && (
         <div className="modal-overlay" onClick={() => setShowCreateNew(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={(event) => event.stopPropagation()}>
             <div className="modal-header">
               <h2>Tạo cuộc trò chuyện mới</h2>
               <button onClick={() => setShowCreateNew(false)}>
@@ -410,27 +450,36 @@ const MessengerPage: React.FC = () => {
             </div>
             <div className="modal-body">
               <div className="create-new-options">
-                <button className="create-option" onClick={() => {
-                  setShowCreateNew(false);
-                  alert('Tính năng tạo nhóm mới đang phát triển');
-                }}>
+                <button
+                  className="create-option"
+                  onClick={() => {
+                    setShowCreateNew(false);
+                    alert('Tính năng tạo nhóm mới đang phát triển');
+                  }}
+                >
                   <Users size={32} />
                   <h3>Tạo nhóm học tập</h3>
                   <p>Tạo nhóm mới với mentor và học viên</p>
                 </button>
-                <button className="create-option" onClick={() => {
-                  setShowCreateNew(false);
-                  setActiveTab('MENTOR');
-                }}>
+                <button
+                  className="create-option"
+                  onClick={() => {
+                    setShowCreateNew(false);
+                    setActiveTab('MENTOR');
+                  }}
+                >
                   <UserCircle size={32} />
                   <h3>Nhắn tin với Mentor</h3>
                   <p>Bắt đầu cuộc trò chuyện 1-1</p>
                 </button>
                 {user && user.roles.includes('PARENT') && (
-                  <button className="create-option" onClick={() => {
-                    setShowCreateNew(false);
-                    setActiveTab('FAMILY');
-                  }}>
+                  <button
+                    className="create-option"
+                    onClick={() => {
+                      setShowCreateNew(false);
+                      setActiveTab('FAMILY');
+                    }}
+                  >
                     <MessageCircle size={32} />
                     <h3>Chat với con</h3>
                     <p>Trò chuyện với con em</p>
@@ -442,24 +491,22 @@ const MessengerPage: React.FC = () => {
         </div>
       )}
 
-      {/* Sidebar */}
       <div className={`messenger-sidebar ${selectedContactId ? 'mobile-hidden' : ''}`}>
-        {/* Header */}
         <div className="messenger-sidebar-header">
           <div className="header-title">
             <MessageCircle size={24} />
             <h2>Tin nhắn</h2>
           </div>
           <div className="header-actions">
-            <button 
-              className="header-action-btn" 
+            <button
+              className="header-action-btn"
               title="Cài đặt"
               onClick={() => setShowSettings(true)}
             >
               <Settings size={20} />
             </button>
-            <button 
-              className="header-action-btn" 
+            <button
+              className="header-action-btn"
               title="Tạo mới"
               onClick={() => setShowCreateNew(true)}
             >
@@ -468,19 +515,17 @@ const MessengerPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Search */}
         <div className="messenger-search">
           <Search size={18} className="search-icon" />
           <input
             type="text"
             placeholder="Tìm kiếm tin nhắn..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(event) => setSearchQuery(event.target.value)}
             className="search-input"
           />
         </div>
 
-        {/* Tabs */}
         <div className="messenger-tabs">
           <button
             className={`tab-btn ${activeTab === 'ALL' ? 'active' : ''}`}
@@ -488,9 +533,9 @@ const MessengerPage: React.FC = () => {
           >
             <Home size={16} />
             <span>Tất cả</span>
-            {contacts.filter(c => c.unread > 0).length > 0 && (
+            {contacts.filter((contact) => contact.unread > 0).length > 0 && (
               <span className="tab-badge">
-                {contacts.filter(c => c.unread > 0).length}
+                {contacts.filter((contact) => contact.unread > 0).length}
               </span>
             )}
           </button>
@@ -500,9 +545,9 @@ const MessengerPage: React.FC = () => {
           >
             <Users size={16} />
             <span>Nhóm</span>
-            {contacts.filter(c => c.type === 'GROUP' && c.unread > 0).length > 0 && (
+            {contacts.filter((contact) => contact.type === 'GROUP' && contact.unread > 0).length > 0 && (
               <span className="tab-badge">
-                {contacts.filter(c => c.type === 'GROUP' && c.unread > 0).length}
+                {contacts.filter((contact) => contact.type === 'GROUP' && contact.unread > 0).length}
               </span>
             )}
           </button>
@@ -513,23 +558,22 @@ const MessengerPage: React.FC = () => {
             <UserCircle size={16} />
             <span>Mentor</span>
           </button>
-          {user?.roles.includes('RECRUITER') && (
+          {canAccessRecruitmentMessages && (
             <button
               className={`tab-btn ${activeTab === 'RECRUITMENT' ? 'active' : ''}`}
               onClick={() => setActiveTab('RECRUITMENT')}
             >
               <Briefcase size={16} />
               <span>Tuyển dụng</span>
-              {contacts.filter(c => c.type === 'RECRUITMENT' && c.unread > 0).length > 0 && (
+              {contacts.filter((contact) => contact.type === 'RECRUITMENT' && contact.unread > 0).length > 0 && (
                 <span className="tab-badge">
-                  {contacts.filter(c => c.type === 'RECRUITMENT' && c.unread > 0).length}
+                  {contacts.filter((contact) => contact.type === 'RECRUITMENT' && contact.unread > 0).length}
                 </span>
               )}
             </button>
           )}
         </div>
 
-        {/* Contact List */}
         <div className="messenger-contact-list">
           {filteredContacts.length === 0 ? (
             <div className="contact-list-empty">
@@ -545,8 +589,10 @@ const MessengerPage: React.FC = () => {
                 onClick={() => setSelectedContactId(contact.id)}
               >
                 <div className="contact-avatar-wrapper">
-                  <img src={contact.avatar} alt={contact.name} className="contact-avatar" />
-                  {contact.isOnline && <div className="online-indicator" />}
+                  {settings.showAvatar && (
+                    <img src={contact.avatar} alt={contact.name} className="contact-avatar" />
+                  )}
+                  {settings.showOnlineStatus && contact.isOnline && <div className="online-indicator" />}
                   {contact.type === 'GROUP' && (
                     <div className="contact-type-badge group">
                       <Users size={12} />
@@ -581,7 +627,6 @@ const MessengerPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Chat Area */}
       <div className="messenger-main">
         {selectedContact ? (
           selectedContact.type === 'GROUP' ? (
@@ -594,7 +639,7 @@ const MessengerPage: React.FC = () => {
             />
           ) : selectedContact.type === 'MENTOR' ? (
             <MentorChatWindow
-              counterpartId={parseInt(selectedContact.id)}
+              counterpartId={parseInt(selectedContact.id, 10)}
               counterpartName={selectedContact.name}
               counterpartAvatar={selectedContact.avatar}
               isMyRoleMentor={selectedContact.isMyRoleMentor || false}
@@ -603,7 +648,7 @@ const MessengerPage: React.FC = () => {
             />
           ) : selectedContact.type === 'FAMILY' ? (
             <FamilyChatWindow
-              familyMemberId={parseInt(selectedContact.id)}
+              familyMemberId={parseInt(selectedContact.id, 10)}
               familyMemberName={selectedContact.name}
               familyMemberAvatar={selectedContact.avatar}
               currentUserId={user!.id}
@@ -617,26 +662,32 @@ const MessengerPage: React.FC = () => {
               currentUserId={user!.id}
               currentUserName={user!.fullName || user!.email || 'User'}
               onBack={() => setSelectedContactId(null)}
-              onViewProfile={(session) => {
-                if (session.candidateSlug) {
-                  window.open(`/portfolio/${session.candidateSlug}`, '_blank');
-                } else {
-                  window.open(`/portfolio/profile/${session.candidateId}`, '_blank');
-                }
-              }}
+              onViewProfile={user?.roles.includes('RECRUITER')
+                ? ((session) => {
+                    if (session.candidateSlug) {
+                      window.open(`/portfolio/${session.candidateSlug}`, '_blank');
+                    } else {
+                      window.open(`/portfolio/profile/${session.candidateId}`, '_blank');
+                    }
+                  })
+                : undefined}
               onUpdateStatus={(sessionId, status) => {
-                // Update local state
-                setRecruitmentSessions(prev =>
-                  prev.map(s =>
-                    s.id === sessionId ? { ...s, status } : s
+                setRecruitmentSessions((previous) =>
+                  previous.map((session) =>
+                    session.id === sessionId ? { ...session, status } : session
                   )
                 );
-                // Also refresh contacts
-                setContacts(prev =>
-                  prev.map(c =>
-                    c.recruitmentSession?.id === sessionId
-                      ? { ...c, recruitmentSession: { ...c.recruitmentSession, status } }
-                      : c
+                setContacts((previous) =>
+                  previous.map((contact) =>
+                    contact.recruitmentSession?.id === sessionId
+                      ? {
+                          ...contact,
+                          recruitmentSession: {
+                            ...contact.recruitmentSession,
+                            status,
+                          },
+                        }
+                      : contact
                   )
                 );
               }}

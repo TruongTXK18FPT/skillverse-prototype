@@ -65,7 +65,7 @@ import {
 import { useToast } from "../../hooks/useToast";
 import { useAuth } from "../../context/AuthContext";
 import recruitmentChatService from "../../services/recruitmentChatService";
-import { RecruitmentSessionResponse } from "../../data/portfolioDTOs";
+import { RecruitmentJobContextType, RecruitmentSessionResponse } from "../../data/portfolioDTOs";
 import RecruiterChatWindow from "../../components/chat/RecruiterChatWindow";
 import {
   getApplicantDisplayName,
@@ -341,6 +341,7 @@ const ShortTermJobDetailPage: React.FC = () => {
         application.userId,
         Number(jobId),
         "MANUAL",
+        RecruitmentJobContextType.SHORT_TERM_JOB,
       );
       setChatApplicant(application);
       setSelectedSession(session);

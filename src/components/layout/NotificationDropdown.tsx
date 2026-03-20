@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bell, Check, CheckCheck, Info, MessageSquare, CreditCard, Star, AlertCircle, ChevronDown } from 'lucide-react';
+import { Bell, Check, CheckCheck, Info, MessageSquare, CreditCard, Star, AlertCircle, ChevronDown, Briefcase } from 'lucide-react';
 import { notificationService, Notification } from '../../services/notificationService';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/NotificationDropdown.css';
@@ -132,6 +132,14 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
       case 'PRECHAT_NEW_MESSAGE':
         navigate('/mentorship', { state: { openChatWith: notification.relatedId } });
         break;
+      case 'RECRUITMENT_MESSAGE':
+        navigate('/messages', {
+          state: {
+            openChatWith: notification.relatedId,
+            type: 'RECRUITMENT'
+          }
+        });
+        break;
       case 'PREMIUM_PURCHASE':
       case 'PREMIUM_EXPIRATION':
       case 'PREMIUM_CANCEL':
@@ -167,6 +175,8 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
         return <MessageSquare size={16} className="notification-icon-community" />;
       case 'PRECHAT_NEW_MESSAGE':
         return <MessageSquare size={16} className="notification-icon-community" />;
+      case 'RECRUITMENT_MESSAGE':
+        return <Briefcase size={16} className="notification-icon-community" />;
       case 'PREMIUM_PURCHASE':
       case 'PREMIUM_EXPIRATION':
         return <Star size={16} className="notification-icon-premium" />;

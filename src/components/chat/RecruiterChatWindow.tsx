@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
   Send,
@@ -13,6 +13,7 @@ import {
   CheckCheck,
   Image as ImageIcon,
   User,
+  AlertTriangle,
 } from 'lucide-react';
 import recruitmentChatService from '../../services/recruitmentChatService';
 import userService from '../../services/userService';
@@ -40,66 +41,31 @@ interface RecruiterChatWindowProps {
 const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
   session,
   currentUserId,
-  currentUserName,
   onBack,
   onViewProfile,
   onUpdateStatus,
 }) => {
   const { showError, showSuccess } = useToast();
+  const [sessionState, setSessionState] = useState<RecruitmentSessionResponse>(session);
   const [messages, setMessages] = useState<RecruitmentMessageResponse[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifPicker, setShowGifPicker] = useState(false);
-  const [candidateName, setCandidateName] = useState(session.candidateFullName || 'Ứng viên');
-  const [candidateAvatar, setCandidateAvatar] = useState(session.candidateAvatar || '');
+  const [counterpartName, setCounterpartName] = useState('');
+  const [counterpartAvatar, setCounterpartAvatar] = useState('');
+  const [counterpartSubtitle, setCounterpartSubtitle] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Fetch candidate profile if name/avatar missing from session
+  const isRecruiter = currentUserId === sessionState.recruiterId;
+  const chatBlocked = sessionState.isChatAvailable === false;
+  const blockedReason = sessionState.chatDisabledReason || 'Cuộc trò chuyện này hiện không thể tiếp tục.';
+
   useEffect(() => {
-    const fetchCandidateInfo = async () => {
-      // If name is missing or uses default, try to fetch
-      const needsName = !session.candidateFullName || session.candidateFullName === 'Unknown';
-      const needsAvatar = !session.candidateAvatar;
+    setSessionState(session);
+  }, [session]);
 
-      if (!needsName && !needsAvatar) {
-        setCandidateName(session.candidateFullName);
-        setCandidateAvatar(session.candidateAvatar || '');
-        return;
-      }
-
-      if (!session.candidateId) return;
-
-      try {
-        // Try userService first (basic profile)
-        const userProfile = await userService.getUserProfile(session.candidateId);
-        if (needsName && userProfile.fullName) {
-          setCandidateName(userProfile.fullName);
-        }
-        if (needsAvatar && userProfile.avatarMediaUrl) {
-          setCandidateAvatar(userProfile.avatarMediaUrl);
-        }
-      } catch {
-        // Fallback: try portfolioService
-        try {
-          const portfolioProfile = await getPublicProfile(session.candidateId);
-          if (needsName && portfolioProfile.fullName) {
-            setCandidateName(portfolioProfile.fullName);
-          }
-          if (needsAvatar && portfolioProfile.portfolioAvatarUrl) {
-            setCandidateAvatar(portfolioProfile.portfolioAvatarUrl);
-          }
-        } catch {
-          // Both failed — keep default name
-        }
-      }
-    };
-
-    fetchCandidateInfo();
-  }, [session.candidateId, session.candidateFullName, session.candidateAvatar]);
-
-  // Resolve avatar URL
   const resolveAvatarUrl = (raw?: string): string => {
     if (!raw) return '/images/meowl.jpg';
     const trimmed = raw.trim();
@@ -109,52 +75,121 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
     return `${apiRoot}/${trimmed}`;
   };
 
-  // Load messages
+  const refreshSession = useCallback(async () => {
+    try {
+      const freshSession = await recruitmentChatService.getSessionById(session.id);
+      setSessionState(freshSession);
+    } catch (error) {
+      console.error('Failed to refresh recruitment session:', error);
+    }
+  }, [session.id]);
+
+  useEffect(() => {
+    refreshSession();
+  }, [refreshSession]);
+
+  useEffect(() => {
+    const fetchCounterpartInfo = async () => {
+      if (isRecruiter) {
+        const name = sessionState.candidateFullName || 'Ứng viên';
+        const title = sessionState.candidateTitle || 'Ứng viên';
+        setCounterpartName(name);
+        setCounterpartAvatar(sessionState.candidateAvatar || '');
+        setCounterpartSubtitle(title);
+
+        const needsName = !sessionState.candidateFullName || sessionState.candidateFullName === 'Unknown';
+        const needsAvatar = !sessionState.candidateAvatar;
+        if (!needsName && !needsAvatar) return;
+
+        try {
+          const userProfile = await userService.getUserProfile(sessionState.candidateId);
+          setCounterpartName(userProfile.fullName || name);
+          setCounterpartAvatar(userProfile.avatarMediaUrl || sessionState.candidateAvatar || '');
+        } catch {
+          try {
+            const portfolioProfile = await getPublicProfile(sessionState.candidateId);
+            setCounterpartName(portfolioProfile.fullName || name);
+            setCounterpartAvatar(portfolioProfile.portfolioAvatarUrl || sessionState.candidateAvatar || '');
+          } catch {
+            // Keep session data fallback.
+          }
+        }
+        return;
+      }
+
+      const recruiterName = sessionState.recruiterName || 'Nhà tuyển dụng';
+      setCounterpartName(recruiterName);
+      setCounterpartAvatar(sessionState.recruiterAvatar || '');
+      setCounterpartSubtitle(sessionState.recruiterCompany || 'Nhà tuyển dụng');
+
+      if (sessionState.recruiterAvatar) return;
+
+      try {
+        const userProfile = await userService.getUserProfile(sessionState.recruiterId);
+        setCounterpartName(userProfile.fullName || recruiterName);
+        setCounterpartAvatar(userProfile.avatarMediaUrl || sessionState.recruiterAvatar || '');
+      } catch {
+        // Keep session data fallback.
+      }
+    };
+
+    fetchCounterpartInfo();
+  }, [
+    isRecruiter,
+    sessionState.candidateAvatar,
+    sessionState.candidateFullName,
+    sessionState.candidateId,
+    sessionState.candidateTitle,
+    sessionState.recruiterAvatar,
+    sessionState.recruiterCompany,
+    sessionState.recruiterId,
+    sessionState.recruiterName,
+  ]);
+
   const loadMessages = useCallback(async () => {
     setIsLoading(true);
     try {
-      const result = await recruitmentChatService.getSessionMessages(session.id, 0, 50);
+      const result = await recruitmentChatService.getSessionMessages(sessionState.id, 0, 50);
       setMessages(result.messages.reverse());
     } catch (error) {
       showError('Lỗi', 'Không thể tải tin nhắn');
     } finally {
       setIsLoading(false);
     }
-  }, [session.id, showError]);
+  }, [sessionState.id, showError]);
 
-  // Load messages on mount
   useEffect(() => {
     loadMessages();
-    recruitmentChatService.markMessagesAsRead(session.id).catch(console.error);
-  }, [session.id, loadMessages]);
+    recruitmentChatService.markMessagesAsRead(sessionState.id).catch(console.error);
+  }, [sessionState.id, loadMessages]);
 
-  // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Send message
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || isSending) return;
+    if (!newMessage.trim() || isSending || chatBlocked) return;
 
     setIsSending(true);
     try {
       const message = await recruitmentChatService.sendMessage({
-        sessionId: session.id,
+        sessionId: sessionState.id,
         content: newMessage.trim(),
         messageType: 'TEXT',
       });
       setMessages((prev) => [...prev, message]);
       setNewMessage('');
+      await refreshSession();
     } catch (error) {
-      showError('Lỗi', 'Không thể gửi tin nhắn');
+      await refreshSession();
+      const message = error instanceof Error ? error.message : 'Không thể gửi tin nhắn';
+      showError('Lỗi', message);
     } finally {
       setIsSending(false);
     }
   };
 
-  // Get status color
   const getStatusColor = (status: RecruitmentSessionStatus): string => {
     switch (status) {
       case RecruitmentSessionStatus.CONTACTED: return '#6b7280';
@@ -169,7 +204,6 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
     }
   };
 
-  // Get status label
   const getStatusLabel = (status: RecruitmentSessionStatus): string => {
     switch (status) {
       case RecruitmentSessionStatus.CONTACTED: return 'Đã liên hệ';
@@ -184,70 +218,66 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
     }
   };
 
-  // Handle status update
   const handleStatusUpdate = async (newStatus: RecruitmentSessionStatus) => {
     try {
-      await recruitmentChatService.updateSessionStatus(session.id, newStatus);
+      const updated = await recruitmentChatService.updateSessionStatus(sessionState.id, newStatus);
+      setSessionState(updated);
       showSuccess('Thành công', 'Đã cập nhật trạng thái');
-      if (onUpdateStatus) {
-        onUpdateStatus(session.id, newStatus);
-      }
+      onUpdateStatus?.(sessionState.id, newStatus);
     } catch (error) {
-      showError('Lỗi', 'Không thể cập nhật trạng thái');
+      const message = error instanceof Error ? error.message : 'Không thể cập nhật trạng thái';
+      showError('Lỗi', message);
     }
   };
 
-  // Check if current user is recruiter
-  const isRecruiter = currentUserId === session.recruiterId;
-
-  // Format timestamp
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
   };
 
-  // Handle emoji selection
   const handleEmojiSelect = (emoji: string) => {
     setNewMessage((prev) => prev + emoji);
     setShowEmojiPicker(false);
   };
 
-  // Handle GIF selection
   const handleGifSelect = async (gifUrl: string) => {
+    if (chatBlocked) return;
+
     setShowGifPicker(false);
     setIsSending(true);
     try {
       const message = await recruitmentChatService.sendMessage({
-        sessionId: session.id,
+        sessionId: sessionState.id,
         content: `[GIF]${gifUrl}`,
         messageType: 'TEXT',
       });
       setMessages((prev) => [...prev, message]);
+      await refreshSession();
     } catch (error) {
-      showError('Lỗi', 'Không thể gửi GIF');
+      await refreshSession();
+      const message = error instanceof Error ? error.message : 'Không thể gửi GIF';
+      showError('Lỗi', message);
     } finally {
       setIsSending(false);
     }
   };
 
-  // Handle GIF display in message
   const isGifContent = (content: string) => content.startsWith('[GIF]');
   const extractGifUrl = (content: string) =>
     content.startsWith('[GIF]') ? content.replace('[GIF]', '') : null;
 
   return (
     <div className="rcw-window">
-      {/* Header */}
       <div className="rcw-header">
         <button className="rcw-back-btn" onClick={onBack} title="Quay lại">
           <ArrowLeft size={18} />
         </button>
 
         <div className="rcw-candidate-info">
-          {candidateAvatar ? (
+          {counterpartAvatar ? (
             <img
-              src={resolveAvatarUrl(candidateAvatar)}
-              alt={candidateName}
+              src={resolveAvatarUrl(counterpartAvatar)}
+              alt={counterpartName}
               className="rcw-avatar"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
@@ -255,84 +285,99 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
               }}
             />
           ) : null}
-          <div className={`rcw-avatar-fallback${candidateAvatar ? ' rcw-avatar-fallback--hidden' : ''}`}>
+          <div className={`rcw-avatar-fallback${counterpartAvatar ? ' rcw-avatar-fallback--hidden' : ''}`}>
             <User size={22} />
           </div>
           <div className="rcw-info">
-            <h3 className="rcw-info__name">{candidateName}</h3>
-            <span className="rcw-info__title">
-              {session.candidateTitle || 'Ứng viên'}
-            </span>
+            <h3 className="rcw-info__name">{counterpartName}</h3>
+            <span className="rcw-info__title">{counterpartSubtitle}</span>
           </div>
         </div>
 
         <div className="rcw-header-actions">
           <div
             className="rcw-status-badge"
-            style={{ backgroundColor: getStatusColor(session.status) }}
+            style={{ backgroundColor: getStatusColor(sessionState.status) }}
           >
             <Clock size={11} />
-            {getStatusLabel(session.status)}
+            {getStatusLabel(sessionState.status)}
           </div>
         </div>
       </div>
 
-      {/* Context Info Bar */}
-      {session.jobId && (
+      {sessionState.jobId && (
         <div className="rcw-context">
           <Briefcase size={14} />
-          <span className="rcw-context__job">{session.jobTitle}</span>
-          {session.isRemote && (
+          <span className="rcw-context__job">{sessionState.jobTitle}</span>
+          {sessionState.isRemote && (
             <span className="rcw-remote-tag">
               <Star size={10} />
               Remote
             </span>
           )}
-          {session.jobLocation && (
+          {sessionState.jobLocation && (
             <>
               <span className="rcw-context__divider">·</span>
-              <span>{session.jobLocation}</span>
+              <span>{sessionState.jobLocation}</span>
             </>
           )}
-          {session.matchScore && (
+          {sessionState.jobStatus && (
+            <>
+              <span className="rcw-context__divider">·</span>
+              <span>Trạng thái job: {sessionState.jobStatus}</span>
+            </>
+          )}
+          {sessionState.matchScore && (
             <span className="rcw-match-score">
               <Star size={12} />
-              {session.matchScore}% match
+              {sessionState.matchScore}% match
             </span>
           )}
         </div>
       )}
 
-      {/* Action Buttons */}
-      <div className="rcw-actions">
-        <button
-          className="rcw-action-btn"
-          onClick={() => onViewProfile?.(session)}
+      {chatBlocked && (
+        <div
+          className="rcw-context"
+          style={{
+            background: 'rgba(239, 68, 68, 0.12)',
+            borderColor: 'rgba(239, 68, 68, 0.2)',
+            color: '#fecaca',
+          }}
         >
-          <Eye size={14} />
-          Xem hồ sơ
-        </button>
+          <AlertTriangle size={14} />
+          <span>{blockedReason}</span>
+        </div>
+      )}
+
+      <div className="rcw-actions">
+        {onViewProfile && (
+          <button
+            className="rcw-action-btn"
+            onClick={() => onViewProfile?.(sessionState)}
+          >
+            <Eye size={14} />
+            Xem hồ sơ
+          </button>
+        )}
 
         {isRecruiter && (
           <div className="rcw-status-group">
             <button
               className="rcw-status-btn rcw-status-btn--interested"
-              onClick={() =>
-                handleStatusUpdate(RecruitmentSessionStatus.INTERESTED)
-              }
-              disabled={session.status === RecruitmentSessionStatus.INTERESTED}
+              onClick={() => handleStatusUpdate(RecruitmentSessionStatus.INTERESTED)}
+              disabled={chatBlocked || sessionState.status === RecruitmentSessionStatus.INTERESTED}
             >
               <CheckCircle size={13} />
               Quan tâm
             </button>
             <button
               className="rcw-status-btn rcw-status-btn--invite"
-              onClick={() =>
-                handleStatusUpdate(RecruitmentSessionStatus.INVITED)
-              }
+              onClick={() => handleStatusUpdate(RecruitmentSessionStatus.INVITED)}
               disabled={
-                session.status === RecruitmentSessionStatus.INVITED ||
-                !session.jobId
+                chatBlocked ||
+                sessionState.status === RecruitmentSessionStatus.INVITED ||
+                !sessionState.jobId
               }
             >
               <MessageSquare size={13} />
@@ -340,9 +385,8 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
             </button>
             <button
               className="rcw-status-btn rcw-status-btn--screening"
-              onClick={() =>
-                handleStatusUpdate(RecruitmentSessionStatus.SCREENING)
-              }
+              onClick={() => handleStatusUpdate(RecruitmentSessionStatus.SCREENING)}
+              disabled={chatBlocked}
             >
               <Clock size={13} />
               Sàng lọc
@@ -351,7 +395,6 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
         )}
       </div>
 
-      {/* Messages */}
       <div className="rcw-messages">
         {isLoading ? (
           <div className="rcw-loading">Đang tải tin nhắn...</div>
@@ -359,7 +402,7 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
           <div className="rcw-empty">
             <MessageSquare size={44} />
             <p>Chưa có tin nhắn nào</p>
-            <span>Bắt đầu cuộc trò chuyện với ứng viên</span>
+            <span>Bắt đầu cuộc trò chuyện trong đúng context tuyển dụng này</span>
           </div>
         ) : (
           messages.map((message) => {
@@ -371,8 +414,8 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
               >
                 {!isOwn && (
                   <img
-                    src={resolveAvatarUrl(message.senderAvatar || candidateAvatar)}
-                    alt={message.senderName || candidateName}
+                    src={resolveAvatarUrl(message.senderAvatar || counterpartAvatar)}
+                    alt={message.senderName || counterpartName}
                     className="rcw-message__avatar"
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
@@ -385,9 +428,7 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
                       src={extractGifUrl(message.content)!}
                       alt="GIF"
                       className="rcw-message__gif"
-                      onClick={() =>
-                        window.open(extractGifUrl(message.content)!, '_blank')
-                      }
+                      onClick={() => window.open(extractGifUrl(message.content)!, '_blank')}
                     />
                   ) : (
                     <div className="rcw-message__bubble">{message.content}</div>
@@ -396,11 +437,7 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
                     <span>{formatTime(message.createdAt)}</span>
                     {isOwn && (
                       <span className="rcw-message__status">
-                        {message.isRead ? (
-                          <CheckCheck size={13} />
-                        ) : (
-                          <Check size={13} />
-                        )}
+                        {message.isRead ? <CheckCheck size={13} /> : <Check size={13} />}
                       </span>
                     )}
                   </div>
@@ -412,7 +449,6 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
       <div className="rcw-input">
         <button
           type="button"
@@ -422,6 +458,7 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
             setShowGifPicker(false);
           }}
           title="Biểu tượng cảm xúc"
+          disabled={chatBlocked || isSending}
         >
           <Smile size={18} />
         </button>
@@ -434,6 +471,7 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
             setShowEmojiPicker(false);
           }}
           title="GIF"
+          disabled={chatBlocked || isSending}
         >
           <ImageIcon size={18} />
         </button>
@@ -441,31 +479,30 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
         <input
           className="rcw-input__field"
           type="text"
-          placeholder="Nhập tin nhắn..."
+          placeholder={chatBlocked ? blockedReason : 'Nhập tin nhắn...'}
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
-              if (newMessage.trim() && !isSending) {
+              if (newMessage.trim() && !isSending && !chatBlocked) {
                 handleSendMessage(e as unknown as React.FormEvent);
               }
             }
           }}
-          disabled={isSending}
+          disabled={isSending || chatBlocked}
         />
         <button
           type="button"
           className="rcw-send-btn"
           onClick={(e) => handleSendMessage(e as unknown as React.FormEvent)}
-          disabled={!newMessage.trim() || isSending}
+          disabled={!newMessage.trim() || isSending || chatBlocked}
           title="Gửi"
         >
           <Send size={18} />
         </button>
 
-        {/* Emoji Picker */}
-        {showEmojiPicker && (
+        {showEmojiPicker && !chatBlocked && (
           <div className="rcw-emoji-wrap">
             <EmojiPicker
               isOpen={showEmojiPicker}
@@ -475,8 +512,7 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
           </div>
         )}
 
-        {/* GIF Picker */}
-        {showGifPicker && (
+        {showGifPicker && !chatBlocked && (
           <div className="rcw-gif-wrap">
             <GifPicker
               isOpen={showGifPicker}
