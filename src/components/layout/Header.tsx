@@ -33,7 +33,6 @@ import {
   Search,
   Sparkles,
   ArrowRight,
-  DollarSign,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
@@ -434,52 +433,50 @@ const Header: React.FC = () => {
             ) : null}
 
             {/* USER role features — always show alongside management nav if user also has USER role */}
-            {user?.roles.includes("USER") ? (
-              <>
-                {/* Explore Button - Universe Map for exploration/onboarding */}
-                {!shouldShowManagementNav && (
-                  <div className="sv-nav-btn-wrapper">
-                    <Link
-                      to="/explore"
-                      className="header-nav-btn explore-btn desktop-only sv-nav-explore"
-                      title="Khám phá vũ trụ SkillVerse - Tìm hiểu các khu vực và bắt đầu hành trình"
-                    >
-                      <Compass size={18} />
-                      <div className="sv-nav-btn-content">
-                        <span className="sv-nav-label">Khám Phá</span>
-                        <span className="sv-nav-subtext">bắt đầu từ đây</span>
-                      </div>
-                    </Link>
-                    <div className="sv-nav-tooltip">
-                      <Sparkles size={14} />
-                      <span>Khám phá bản đồ vũ trụ & tìm hiểu hệ thống</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Quick Navigation Menu - Task-oriented quick access */}
-                <div
-                  ref={quickNavRef}
-                  className="categories-container desktop-only"
+            {/* Explore Button - always visible */}
+            {!shouldShowManagementNav && (
+              <div className="sv-nav-btn-wrapper">
+                <Link
+                  to="/explore"
+                  className="header-nav-btn explore-btn desktop-only sv-nav-explore"
+                  title="Khám phá vũ trụ SkillVerse - Tìm hiểu các khu vực và bắt đầu hành trình"
                 >
-                  <div className="sv-nav-btn-wrapper">
-                    <button
-                      className="header-nav-btn quick-nav-btn sv-nav-teleport"
-                      onClick={() => setShowQuickNav(!showQuickNav)}
-                      title="Dịch chuyển nhanh đến các tính năng"
-                    >
-                      <Zap size={18} className="sv-teleport-icon" />
-                      <div className="sv-nav-btn-content">
-                        <span className="sv-nav-label">Dịch Chuyển</span>
-                        <span className="sv-nav-subtext">các tính năng chính</span>
-                      </div>
-                      <ChevronDown size={16} />
-                    </button>
-                    <div className="sv-nav-tooltip">
-                      <Zap size={14} />
-                      <span>Truy cập nhanh các tính năng chính</span>
-                    </div>
+                  <Compass size={18} />
+                  <div className="sv-nav-btn-content">
+                    <span className="sv-nav-label">Khám Phá</span>
+                    <span className="sv-nav-subtext">bắt đầu từ đây</span>
                   </div>
+                </Link>
+                <div className="sv-nav-tooltip">
+                  <Sparkles size={14} />
+                  <span>Khám phá bản đồ vũ trụ & tìm hiểu hệ thống</span>
+                </div>
+              </div>
+            )}
+
+            {/* Quick Navigation Menu — always visible to everyone */}
+            <div
+              ref={quickNavRef}
+              className="categories-container desktop-only"
+            >
+              <div className="sv-nav-btn-wrapper">
+                <button
+                  className="header-nav-btn quick-nav-btn sv-nav-teleport"
+                  onClick={() => setShowQuickNav(!showQuickNav)}
+                  title="Dịch chuyển nhanh đến các tính năng"
+                >
+                  <Zap size={18} className="sv-teleport-icon" />
+                  <div className="sv-nav-btn-content">
+                    <span className="sv-nav-label">Dịch Chuyển</span>
+                    <span className="sv-nav-subtext">các tính năng chính</span>
+                  </div>
+                  <ChevronDown size={16} />
+                </button>
+                <div className="sv-nav-tooltip">
+                  <Zap size={14} />
+                  <span>Truy cập nhanh các tính năng chính</span>
+                </div>
+              </div>
 
                   {showQuickNav && (
                     <div className="sv-mega-menu">
@@ -880,11 +877,143 @@ const Header: React.FC = () => {
                       </>
                     );
                   })()}
-                    </div>
+
+                  {/* Default items for guest users (no USER role) — full menu like USER */}
+                  {!user?.roles.includes("USER") && (
+                    <>
+                      {/* Group 1: Primary Actions */}
+                      <div className="sv-mega-section">
+                        <h4 className="sv-mega-section-title">
+                          <Target size={14} className="sv-section-icon" />
+                          <span>Hành động chính</span>
+                        </h4>
+                        <div className="sv-mega-grid sv-mega-grid--primary">
+                          <Link
+                            to="/roadmap"
+                            className="sv-mega-link sv-mega-link--primary"
+                            onClick={() => setShowQuickNav(false)}
+                          >
+                            <Map className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">Lộ Trình Học Tập</h3>
+                              <p className="sv-mega-link-desc">Lộ trình học tập và phát triển kỹ năng</p>
+                            </div>
+                          </Link>
+                          <Link
+                            to="/chatbot"
+                            className="sv-mega-link sv-mega-link--primary"
+                            onClick={() => setShowQuickNav(false)}
+                          >
+                            <Bot className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">Trợ Lý AI</h3>
+                              <p className="sv-mega-link-desc">Nhận hỗ trợ từ trợ lý AI thông minh</p>
+                            </div>
+                          </Link>
+                          <Link
+                            to="/study-planner"
+                            className="sv-mega-link sv-mega-link--primary"
+                            onClick={() => setShowQuickNav(false)}
+                          >
+                            <Calendar className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">Lập Kế Hoạch</h3>
+                              <p className="sv-mega-link-desc">Lên lịch học tập và quản lý công việc</p>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* Group 2: Explore & Learn */}
+                      <div className="sv-mega-section">
+                        <h4 className="sv-mega-section-title">
+                          <Search size={14} className="sv-section-icon" />
+                          <span>Khám phá & Học tập</span>
+                        </h4>
+                        <div className="sv-mega-grid sv-mega-grid--secondary">
+                          <Link
+                            to="/courses"
+                            className="sv-mega-link"
+                            onClick={() => setShowQuickNav(false)}
+                          >
+                            <GraduationCap className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">Khóa Học</h3>
+                              <p className="sv-mega-link-desc">Khám phá các khóa học chất lượng cao</p>
+                            </div>
+                          </Link>
+                          <Link
+                            to="/mentorship"
+                            className="sv-mega-link"
+                            onClick={() => setShowQuickNav(false)}
+                          >
+                            <Users className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">Cố Vấn</h3>
+                              <p className="sv-mega-link-desc">Kết nối với chuyên gia trong ngành</p>
+                            </div>
+                          </Link>
+                          <Link
+                            to="/community"
+                            className="sv-mega-link"
+                            onClick={() => setShowQuickNav(false)}
+                          >
+                            <MessageSquare className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">Cộng Đồng</h3>
+                              <p className="sv-mega-link-desc">Tham gia cộng đồng học tập sôi động</p>
+                            </div>
+                          </Link>
+                          <Link
+                            to="/jobs"
+                            className="sv-mega-link"
+                            onClick={() => setShowQuickNav(false)}
+                          >
+                            <Briefcase className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">Việc Làm</h3>
+                              <p className="sv-mega-link-desc">Tìm kiếm cơ hội việc làm phù hợp</p>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* Group 3: Entertainment & Profile */}
+                      <div className="sv-mega-section">
+                        <h4 className="sv-mega-section-title">
+                          <Trophy size={14} className="sv-section-icon" />
+                          <span>Giải trí & Cá nhân</span>
+                        </h4>
+                        <div className="sv-mega-grid sv-mega-grid--tertiary">
+                          <Link
+                            to="/portfolio"
+                            className="sv-mega-link"
+                            onClick={() => setShowQuickNav(false)}
+                          >
+                            <User className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">Hồ Sơ</h3>
+                              <p className="sv-mega-link-desc">Quản lý và chia sẻ thành tích của bạn</p>
+                            </div>
+                          </Link>
+                          <Link
+                            to="/meowl-shop"
+                            className="sv-mega-link"
+                            onClick={() => setShowQuickNav(false)}
+                          >
+                            <ShoppingBag className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">Meowl Shop</h3>
+                              <p className="sv-mega-link-desc">Cửa hàng Skin Neon Tech độc quyền</p>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
+                    </>
                   )}
                 </div>
-              </>
-            ) : null}
+              )}
+            </div>
           </div>
 
           {/* Right Section */}
