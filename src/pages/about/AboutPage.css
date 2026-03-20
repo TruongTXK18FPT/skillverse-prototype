@@ -549,6 +549,7 @@
   margin-bottom: 1rem;
   filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.3));
   transition: all 0.3s ease;
+  margin-left: 3rem;
 }
 
 .about-user-card:hover .about-user-meowl-img {

@@ -273,16 +273,14 @@ const UserGuidePage: React.FC = () => {
           linkText: 'Tạo Portfolio'
         },
         {
-          title: 'Gamification & Meowl Shop',
+          title: 'Meowl Shop',
           description: 'Học tập thú vị hơn với hệ thống thưởng.',
           icon: <Award />,
           steps: [
             'Hoàn thành bài học để nhận điểm thưởng.',
             'Vào "Meowl Shop" để mua Skin cho trợ lý ảo.',
-            'Xem bảng xếp hạng thành tích.',
-            'Tham gia các mini-game để giải trí.'
           ],
-          link: '/gamification',
+          link: '/meowl-shop',
           linkText: 'Vào Shop'
         }
       ]

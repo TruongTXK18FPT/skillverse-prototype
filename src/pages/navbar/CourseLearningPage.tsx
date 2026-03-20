@@ -335,6 +335,10 @@ const CourseLearningPage = () => {
   const activeQuizRetrySeconds = activeQuizDetail?.secondsUntilRetry ?? 0;
   const shouldTrackQuizRetryCountdown = activeQuizRetrySeconds > 0;
 
+  const quizStatsClass = activeQuizDetail
+    ? `lhud-quiz-stats ${activeQuizDetail.hasAttempts ? 'lhud-quiz-stats--four-items' : 'lhud-quiz-stats--two-items'}`
+    : 'lhud-quiz-stats';
+
   // Effect để cập nhật countdown mỗi giây
   useEffect(() => {
     if (!shouldTrackQuizRetryCountdown) {
@@ -1201,8 +1205,8 @@ const CourseLearningPage = () => {
                       </p>
                     </div>
 
-                    {/* Quiz Stats Grid */}
-                    <div className="lhud-quiz-stats">
+
+                    <div className={quizStatsClass}>
                       <div className={`lhud-quiz-stat ${(activeQuizDetail.questions?.length || 0) === 0 ? 'is-empty' : ''}`}>
                         <div className="lhud-quiz-stat-value">
                           {activeQuizDetail.questions?.length || 0}

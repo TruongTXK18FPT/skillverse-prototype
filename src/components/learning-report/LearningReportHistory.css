@@ -194,7 +194,6 @@
 }
 
 .lr-history__type-badge {
-  font-family: "Minecraft", monospace;
   font-size: 0.65rem;
   padding: 0.15rem 0.5rem;
   border-radius: 2px;
@@ -212,7 +211,6 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  font-family: "Minecraft", monospace;
   font-size: 0.75rem;
   color: var(--hud-text-dim, #64748b);
 }

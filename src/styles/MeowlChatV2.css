@@ -128,8 +128,7 @@
 /* Main Container */
 .meowl-chat-v2-container {
   position: relative;
-  width: 520px;
-  max-width: 92vw;
+  width: 50vw !important;
   height: 78vh;
   max-height: 700px;
   min-height: 420px;

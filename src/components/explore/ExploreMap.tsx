@@ -381,6 +381,7 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
                     icon={interaction.icon}
                     onClick={() => handleInteractionClick(interaction.path)}
                     primaryColor={selectedZone.primaryColor}
+                    additionalClass={interaction.highlight ? 'interaction-point--highlighted' : ''}
                   />
                 ))}
               </div>

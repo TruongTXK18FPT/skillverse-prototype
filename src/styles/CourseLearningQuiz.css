@@ -214,9 +214,19 @@
 /* --- Stats --- */
 .lhud-quiz-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin-bottom: 32px;
+}
+
+.lhud-quiz-stats.lhud-quiz-stats--two-items {
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  justify-content: center;
+  max-width: 680px;
+  margin: 0 auto 32px;
+}
+
+.lhud-quiz-stats.lhud-quiz-stats--four-items {
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
 }
 
 .lhud-quiz-stat {

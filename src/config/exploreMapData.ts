@@ -32,6 +32,8 @@ export interface InteractionPoint {
   // Visual configuration for Scanner Line
   direction: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   lineLength: number;
+  // Optional highlight style for important action points
+  highlight?: boolean;
 }
 
 /**
@@ -109,6 +111,18 @@ const WARRIOR_ACADEMY: ZoneConfig = {
       zoneY: 75,
       direction: 'bottom-left' as const,
       lineLength: 120
+    },
+    {
+      id: 'journey',
+      name: 'Hành Trình',
+      description: 'Theo dõi trình tự phát triển kỹ năng của bạn',
+      path: '/journey',
+      icon: Trophy,
+      zoneX: 60,
+      zoneY: 60,
+      direction: 'top-right' as const,
+      lineLength: 160,
+      highlight: true,
     }
   ]
 };

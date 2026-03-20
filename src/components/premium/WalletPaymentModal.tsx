@@ -134,14 +134,14 @@ const WalletPaymentModal: React.FC<WalletPaymentModalProps> = ({
               {hasEnoughBalance ? (
                 <>
                   <button 
-                    className="btn-secondary" 
+                    className="wallet-btn-secondary" 
                     onClick={onClose}
                     disabled={processing}
                   >
                     Hủy
                   </button>
                   <button 
-                    className="btn-primary" 
+                    className="wallet-btn-primary" 
                     onClick={handleConfirm}
                     disabled={processing}
                   >
@@ -150,11 +150,11 @@ const WalletPaymentModal: React.FC<WalletPaymentModalProps> = ({
                 </>
               ) : (
                 <>
-                  <button className="btn-secondary" onClick={onClose}>
+                  <button className="wallet-btn-secondary" onClick={onClose}>
                     Hủy
                   </button>
                   <button 
-                    className="btn-primary" 
+                    className="wallet-btn-primary" 
                     onClick={() => {
                       onClose();
                       window.location.href = '/my-wallet';

@@ -1410,7 +1410,7 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
               <Settings size={18} />
             </button>
             {/* Learning Report (logged in only) */}
-            {isAuthenticated && (
+            {/* {isAuthenticated && (
               <button
                 className="meowl-chat-v2-header-btn report"
                 onClick={() => setIsReportModalOpen(true)}
@@ -1420,7 +1420,7 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
               >
                 <BarChart2 size={18} />
               </button>
-            )}
+            )} */}
             {/* History navigation */}
             <button
               className="meowl-chat-v2-header-btn"
@@ -1521,7 +1521,8 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
               </button>
             ))}
           </div>
-        )}
+        )}
+
         {/* Messages Container */}
         <div className="meowl-chat-v2-messages" ref={messagesContainerRef}>
           {messages.map((message) => (

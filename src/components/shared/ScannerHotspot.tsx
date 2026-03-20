@@ -10,6 +10,7 @@ interface ScannerHotspotProps {
   icon: LucideIcon;
   onClick: () => void;
   primaryColor?: string;
+  additionalClass?: string;
 }
 
 const ScannerHotspot: React.FC<ScannerHotspotProps> = ({
@@ -19,11 +20,12 @@ const ScannerHotspot: React.FC<ScannerHotspotProps> = ({
   description,
   icon: Icon,
   onClick,
-  primaryColor = '#06b6d4'
+  primaryColor = '#06b6d4',
+  additionalClass = ''
 }) => {
   return (
     <button
-      className="scanner-hotspot-simple"
+      className={`scanner-hotspot-simple ${additionalClass}`}
       style={{
         left: `${x}%`,
         top: `${y}%`,

@@ -41,6 +41,37 @@
   background: rgba(2, 6, 23, 0.92);
 }
 
+/* Highlighted interactive node (for journey) */
+.scanner-hotspot-simple.interaction-point--highlighted {
+  border-color: rgba(249, 115, 22, 0.95);
+  background: rgba(34, 34, 34, 0.96);
+  box-shadow:
+    0 0 25px rgba(249, 115, 22, 0.75),
+    inset 0 0 18px rgba(249, 115, 22, 0.32);
+  animation: scannerHotspotHighlightPulse 1.4s ease-in-out infinite;
+}
+
+.scanner-hotspot-simple.interaction-point--highlighted .scanner-info-icon {
+  border-color: rgba(249, 115, 22, 0.98);
+  background: rgba(249, 115, 22, 0.16);
+  color: rgba(249, 115, 22, 0.96);
+}
+
+@keyframes scannerHotspotHighlightPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow:
+      0 0 20px rgba(249, 115, 22, 0.55),
+      inset 0 0 16px rgba(249, 115, 22, 0.32);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.04);
+    box-shadow:
+      0 0 28px rgba(249, 115, 22, 0.9),
+      inset 0 0 20px rgba(249, 115, 22, 0.4);
+  }
+}
+
 /* Stagger animation for multiple hotspots */
 .scanner-hotspot-simple:nth-child(1) { animation-delay: 0.1s; }
 .scanner-hotspot-simple:nth-child(2) { animation-delay: 0.2s; }

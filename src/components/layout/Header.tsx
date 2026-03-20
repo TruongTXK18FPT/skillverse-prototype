@@ -373,6 +373,21 @@ const Header: React.FC = () => {
     setTimeout(() => setIsMobileMenuToggleLocked(false), 250);
   };
 
+  const isAdminRole =
+    !!user &&
+    (user.roles.includes("ADMIN") ||
+      user.roles.some((role) => role.endsWith("_ADMIN")));
+  const isMentorRole = !!user && user.roles.includes("MENTOR");
+  const isRecruiterRole = !!user && user.roles.includes("RECRUITER");
+  const shouldShowManagementNav =
+    isAuthenticated && !!user && (isAdminRole || isRecruiterRole);
+
+  const managementNav = isAdminRole
+    ? { to: "/admin", label: "Quản lý Quản Trị", icon: Shield }
+    : isRecruiterRole
+      ? { to: "/business", label: "Quản lý Doanh Nghiệp", icon: Building2 }
+      : null;
+
   return (
     <>
       {/* Login Required Modal */}
@@ -397,51 +412,68 @@ const Header: React.FC = () => {
               />
             </Link>
 
-            {/* Explore Button - Universe Map for exploration/onboarding */}
-            <div className="sv-nav-btn-wrapper">
-              <Link
-                to="/explore"
-                className="header-nav-btn explore-btn desktop-only sv-nav-explore"
-                title="Khám phá vũ trụ SkillVerse - Tìm hiểu các khu vực và bắt đầu hành trình"
-              >
-                <Compass size={18} />
-                <div className="sv-nav-btn-content">
-                  <span className="sv-nav-label">Khám Phá</span>
-                  <span className="sv-nav-subtext">bắt đầu từ đây</span>
-                </div>
-              </Link>
-              <div className="sv-nav-tooltip">
-                <Sparkles size={14} />
-                <span>Khám phá bản đồ vũ trụ & tìm hiểu hệ thống</span>
-              </div>
-            </div>
-
-            {/* Quick Navigation Menu - Task-oriented quick access */}
-            <div
-              ref={quickNavRef}
-              className="categories-container desktop-only"
-            >
+            {shouldShowManagementNav && managementNav ? (
               <div className="sv-nav-btn-wrapper">
-                <button
-                  className="header-nav-btn quick-nav-btn sv-nav-teleport"
-                  onClick={() => setShowQuickNav(!showQuickNav)}
-                  title="Dịch chuyển nhanh đến các tính năng"
+                <Link
+                  to={managementNav.to}
+                  className="header-nav-btn explore-btn desktop-only sv-nav-explore"
                 >
-                  <Zap size={18} className="sv-teleport-icon" />
+                  <managementNav.icon size={18} />
                   <div className="sv-nav-btn-content">
-                    <span className="sv-nav-label">Dịch Chuyển</span>
-                    <span className="sv-nav-subtext">các tính năng chính</span>
+                    <span className="sv-nav-label">{managementNav.label}</span>
+                    <span className="sv-nav-subtext">trang quản lý</span>
                   </div>
-                  <ChevronDown size={16} />
-                </button>
-                <div className="sv-nav-tooltip">
-                  <Zap size={14} />
-                  <span>Truy cập nhanh các tính năng chính</span>
-                </div>
+                </Link>
               </div>
+            ) : (
+              <>
+                {/* Explore Button - Universe Map for exploration/onboarding */}
+                {!isMentorRole && (
+                  <div className="sv-nav-btn-wrapper">
+                    <Link
+                      to="/explore"
+                      className="header-nav-btn explore-btn desktop-only sv-nav-explore"
+                      title="Khám phá vũ trụ SkillVerse - Tìm hiểu các khu vực và bắt đầu hành trình"
+                    >
+                      <Compass size={18} />
+                      <div className="sv-nav-btn-content">
+                        <span className="sv-nav-label">Khám Phá</span>
+                        <span className="sv-nav-subtext">bắt đầu từ đây</span>
+                      </div>
+                    </Link>
+                    <div className="sv-nav-tooltip">
+                      <Sparkles size={14} />
+                      <span>Khám phá bản đồ vũ trụ & tìm hiểu hệ thống</span>
+                    </div>
+                  </div>
+                )}
 
-              {showQuickNav && (
-                <div className="sv-mega-menu">
+                {/* Quick Navigation Menu - Task-oriented quick access */}
+                <div
+                  ref={quickNavRef}
+                  className="categories-container desktop-only"
+                >
+                  <div className="sv-nav-btn-wrapper">
+                    <button
+                      className="header-nav-btn quick-nav-btn sv-nav-teleport"
+                      onClick={() => setShowQuickNav(!showQuickNav)}
+                      title="Dịch chuyển nhanh đến các tính năng"
+                    >
+                      <Zap size={18} className="sv-teleport-icon" />
+                      <div className="sv-nav-btn-content">
+                        <span className="sv-nav-label">Dịch Chuyển</span>
+                        <span className="sv-nav-subtext">các tính năng chính</span>
+                      </div>
+                      <ChevronDown size={16} />
+                    </button>
+                    <div className="sv-nav-tooltip">
+                      <Zap size={14} />
+                      <span>Truy cập nhanh các tính năng chính</span>
+                    </div>
+                  </div>
+
+                  {showQuickNav && (
+                    <div className="sv-mega-menu">
                   {/* Smart Suggestion Line - Only for STUDENT role */}
                   {!user?.roles.includes("MENTOR") &&
                     !user?.roles.includes("RECRUITER") &&
@@ -467,37 +499,61 @@ const Header: React.FC = () => {
                   {/* Group 1: Primary Actions */}
                   {/* Hide for BUSINESS role */}
                   {(() => {
-                    const primaryItems = [
-                      {
-                        name: "Bảng Điều Khiển",
-                        description: "Theo dõi tiến độ học tập và thành tích",
-                        path: "/dashboard",
-                        icon: BarChart3,
-                        requireAuth: true,
-                        hideForRoles: ["MENTOR"],
-                      },
-                      {
-                        name: "Lộ Trình Học Tập",
-                        description: "Lộ trình học tập và phát triển kỹ năng",
-                        path: "/roadmap",
-                        icon: Map,
-                        requireAuth: true,
-                      },
-                      {
-                        name: "Trợ Lý AI",
-                        description: "Nhận hỗ trợ từ trợ lý AI thông minh",
-                        path: "/chatbot",
-                        icon: Bot,
-                        requireAuth: true,
-                      },
-                      {
-                        name: "Lập Kế Hoạch",
-                        description: "Lên lịch học tập và quản lý công việc",
-                        path: "/study-planner",
-                        icon: Calendar,
-                        requireAuth: true,
-                      },
-                    ].filter(
+                    const primaryItems = (isMentorRole
+                      ? [
+                          {
+                            name: "Quản lý Giảng Viên",
+                            description: "Đi đến trang quản lý giảng viên",
+                            path: "/mentor",
+                            icon: BookOpen,
+                            requireAuth: true,
+                          },
+                          {
+                            name: "Khóa Học",
+                            description: "Quản lý nội dung khóa học của bạn",
+                            path: "/courses",
+                            icon: GraduationCap,
+                            requireAuth: true,
+                          },
+                          {
+                            name: "Cộng Đồng",
+                            description: "Tương tác cùng cộng đồng học tập",
+                            path: "/community",
+                            icon: MessageSquare,
+                            requireAuth: true,
+                          },
+                        ]
+                      : [
+                          {
+                            name: "Bảng Điều Khiển",
+                            description: "Theo dõi tiến độ học tập và thành tích",
+                            path: "/dashboard",
+                            icon: BarChart3,
+                            requireAuth: true,
+                            hideForRoles: ["MENTOR"],
+                          },
+                          {
+                            name: "Lộ Trình Học Tập",
+                            description: "Lộ trình học tập và phát triển kỹ năng",
+                            path: "/roadmap",
+                            icon: Map,
+                            requireAuth: true,
+                          },
+                          {
+                            name: "Trợ Lý AI",
+                            description: "Nhận hỗ trợ từ trợ lý AI thông minh",
+                            path: "/chatbot",
+                            icon: Bot,
+                            requireAuth: true,
+                          },
+                          {
+                            name: "Lập Kế Hoạch",
+                            description: "Lên lịch học tập và quản lý công việc",
+                            path: "/study-planner",
+                            icon: Calendar,
+                            requireAuth: true,
+                          },
+                        ]).filter(
                       (item) =>
                         !item.hideForRoles?.some((role) =>
                           user?.roles.includes(role),
@@ -566,35 +622,50 @@ const Header: React.FC = () => {
 
                   {/* Group 2: Explore & Learn */}
                   {(() => {
-                    const secondaryItems = [
-                      {
-                        name: "Khóa Học",
-                        description: "Khám phá các khóa học chất lượng cao",
-                        path: "/courses",
-                        icon: GraduationCap,
-                        hideForRoles: ["RECRUITER"],
-                      },
-                      {
-                        name: "Cố Vấn",
-                        description: "Kết nối với chuyên gia trong ngành",
-                        path: "/mentorship",
-                        icon: Users,
-                        hideForRoles: ["MENTOR", "RECRUITER"],
-                      },
-                      {
-                        name: "Cộng Đồng",
-                        description: "Tham gia cộng đồng học tập sôi động",
-                        path: "/community",
-                        icon: MessageSquare,
-                      },
-                      {
-                        name: "Việc Làm",
-                        description: "Tìm kiếm cơ hội việc làm phù hợp",
-                        path: "/jobs",
-                        icon: Briefcase,
-                        hideForRoles: ["MENTOR"],
-                      },
-                    ].filter(
+                    const secondaryItems = (isMentorRole
+                      ? [
+                          {
+                            name: "Hồ Sơ",
+                            description: "Quản lý hồ sơ giảng viên của bạn",
+                            path: "/profile/mentor",
+                            icon: User,
+                          },
+                          {
+                            name: "Trợ Lý AI",
+                            description: "Nhận hỗ trợ từ trợ lý AI thông minh",
+                            path: "/chatbot",
+                            icon: Bot,
+                          },
+                        ]
+                      : [
+                          {
+                            name: "Khóa Học",
+                            description: "Khám phá các khóa học chất lượng cao",
+                            path: "/courses",
+                            icon: GraduationCap,
+                            hideForRoles: ["RECRUITER"],
+                          },
+                          {
+                            name: "Cố Vấn",
+                            description: "Kết nối với chuyên gia trong ngành",
+                            path: "/mentorship",
+                            icon: Users,
+                            hideForRoles: ["MENTOR", "RECRUITER"],
+                          },
+                          {
+                            name: "Cộng Đồng",
+                            description: "Tham gia cộng đồng học tập sôi động",
+                            path: "/community",
+                            icon: MessageSquare,
+                          },
+                          {
+                            name: "Việc Làm",
+                            description: "Tìm kiếm cơ hội việc làm phù hợp",
+                            path: "/jobs",
+                            icon: Briefcase,
+                            hideForRoles: ["MENTOR"],
+                          },
+                        ]).filter(
                       (item) =>
                         !item.hideForRoles?.some((role) =>
                           user?.roles.includes(role),
@@ -635,6 +706,8 @@ const Header: React.FC = () => {
 
                   {/* Group 3: Entertainment & Profile */}
                   {(() => {
+                    if (isMentorRole) return null;
+
                     const tertiaryItems = [
                       {
                         name: "Hồ Sơ",
@@ -688,29 +761,25 @@ const Header: React.FC = () => {
                       </div>
                     );
                   })()}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              </>
+            )}
           </div>
 
           {/* Right Section */}
           <div className="header-right">
-            {/* Admin Link - Only for ADMIN role */}
-            {isAuthenticated && user && user.roles.includes("ADMIN") && (
-              <Link to="/admin" className="header-nav-link desktop-only">
-                <Shield size={18} />
-                <span>Quản Trị</span>
-              </Link>
-            )}
-
             {/* Upgrade Button */}
-            <button
-              onClick={handleUpgrade}
-              className="header-upgrade-btn desktop-only"
-            >
-              <Crown size={18} />
-              <span className="header-upgrade-text">Mở khóa giới hạn</span>
-            </button>
+            {!isMentorRole && (
+              <button
+                onClick={handleUpgrade}
+                className="header-upgrade-btn desktop-only"
+              >
+                <Crown size={18} />
+                <span className="header-upgrade-text">Mở khóa giới hạn</span>
+              </button>
+            )}
 
             {/* Theme Toggle */}
             <button
@@ -899,38 +968,6 @@ const Header: React.FC = () => {
 
                       <hr className="dropdown-divider" />
 
-                      {/* Admin Dashboard Link for any admin role */}
-                      {(user.roles.includes("ADMIN") ||
-                        user.roles.some((role) => role.endsWith("_ADMIN"))) && (
-                        <button
-                          onClick={() => navigate("/admin")}
-                          className="dropdown-item"
-                          style={{ color: "#F472B6" }}
-                        >
-                          <Shield size={16} />
-                          <span>Quản Trị Viên</span>
-                        </button>
-                      )}
-
-                      {(user.roles.includes("MENTOR") ||
-                        user.roles.includes("ADMIN")) && (
-                        <button
-                          onClick={handleMentor}
-                          className="dropdown-item"
-                        >
-                          <BookOpen size={16} />
-                          <span>Giảng Viên</span>
-                        </button>
-                      )}
-                      {user.roles.includes("RECRUITER") && (
-                        <button
-                          onClick={() => navigate("/business")}
-                          className="dropdown-item"
-                        >
-                          <Building2 size={16} />
-                          <span>Doanh Nghiệp</span>
-                        </button>
-                      )}
                       {user.roles.includes("PARENT") && (
                         <button
                           onClick={() => {
@@ -977,13 +1014,15 @@ const Header: React.FC = () => {
             )}
 
             {/* Mobile quick actions */}
-            <button
-              className="mobile-icon-btn mobile-only"
-              aria-label="Upgrade"
-              onClick={handleUpgrade}
-            >
-              <Crown size={18} />
-            </button>
+            {!isMentorRole && (
+              <button
+                className="mobile-icon-btn mobile-only"
+                aria-label="Upgrade"
+                onClick={handleUpgrade}
+              >
+                <Crown size={18} />
+              </button>
+            )}
 
             {/* Mobile Menu Button */}
             <button
@@ -1049,17 +1088,19 @@ const Header: React.FC = () => {
                         <Bell size={20} />
                         <span>Thông báo</span>
                       </button>
-                      <button
-                        onClick={() => {
-                          handleUpgrade();
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="mobile-action-icon-btn upgrade"
-                        title="Nâng cấp"
-                      >
-                        <Crown size={20} />
-                        <span>Nâng cấp</span>
-                      </button>
+                      {!isMentorRole && (
+                        <button
+                          onClick={() => {
+                            handleUpgrade();
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="mobile-action-icon-btn upgrade"
+                          title="Nâng cấp"
+                        >
+                          <Crown size={20} />
+                          <span>Nâng cấp</span>
+                        </button>
+                      )}
                     </div>
 
                     <div className="mobile-user-menu-list">
