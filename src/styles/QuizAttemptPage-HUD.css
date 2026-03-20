@@ -275,6 +275,12 @@
 
 .hud-quiz-attempt-start-actions {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  margin-top: 1rem;
 }
 
 /* ============================================
@@ -392,7 +398,7 @@
 .hud-quiz-attempt-btn-start {
   background: linear-gradient(135deg, var(--hqa-cyan) 0%, #0891b2 100%);
   color: white;
-  box-shadow: 0 0 20px var(--hqa-cyan-glow);
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.22);
 }
 
 .hud-quiz-attempt-btn-primary::before,
@@ -403,14 +409,14 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
   transition: left 0.5s ease;
 }
 
 .hud-quiz-attempt-btn-primary:hover,
 .hud-quiz-attempt-btn-start:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(6, 182, 212, 0.26);
 }
 
 .hud-quiz-attempt-btn-primary:hover::before,
@@ -1212,8 +1218,7 @@
   line-height: 1.5;
 }
 
-.hud-quiz-attempt-review-empty,
-.hud-quiz-attempt-review-note {
+.hud-quiz-attempt-review-empty {
   margin-top: 1rem;
   padding: 1rem;
   border-radius: 12px;

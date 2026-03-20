@@ -24,6 +24,10 @@ interface LessonApiResponse {
   lessonType?: string;  // Alternative field name from some endpoints
   orderIndex?: number;
   durationSec?: number;
+  contentText?: string;
+  resourceUrl?: string;
+  videoUrl?: string;
+  videoMediaId?: number;
 }
 
 /** Raw API response for quiz */
@@ -95,7 +99,11 @@ export const listModulesWithContent = async (courseId: number): Promise<ModuleDe
       title: l.title,
       type: (l.type || l.lessonType || DEFAULT_LESSON_TYPE) as LessonSummaryDTO['type'],
       orderIndex: l.orderIndex ?? 0,
-      durationSec: l.durationSec ?? 0
+      durationSec: l.durationSec ?? 0,
+      contentText: l.contentText,
+      resourceUrl: l.resourceUrl,
+      videoUrl: l.videoUrl,
+      videoMediaId: l.videoMediaId
     })) as LessonSummaryDTO[],
     quizzes: (m.quizzes || []).map((q: QuizApiResponse) => ({
       id: q.id,

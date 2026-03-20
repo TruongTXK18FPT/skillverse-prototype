@@ -317,9 +317,12 @@ export const CourseApprovalTabCosmic: React.FC = () => {
         result.autoUpgradeReasonCode,
         result.autoUpgradeReasonDetail
       );
+      const autoUpgradeSummary = result.autoUpgradeReasonCode === 'POLICY_NOT_AUTO_COMPATIBLE_ONLY'
+        ? 'Khóa học đang ở chế độ MANUAL nên hệ thống không tự nâng cấp learner.'
+        : `Kết quả auto-upgrade: ${getAutoUpgradeOutcomeLabel(result.autoUpgradeOutcome)}. ${reasonMessage}`;
       showSuccess(
         'Duyệt revision thành công',
-        `Revision #${result.revisionNumber} (ID: ${result.id}) đã được duyệt. Kết quả auto-upgrade: ${getAutoUpgradeOutcomeLabel(result.autoUpgradeOutcome)}. ${reasonMessage}`
+        `Revision #${result.revisionNumber} (ID: ${result.id}) đã được duyệt. ${autoUpgradeSummary}`
       );
     } catch (error) {
       showError(

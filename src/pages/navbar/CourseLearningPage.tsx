@@ -152,7 +152,11 @@ const buildStatusKey = (
 const buildCurriculumItems = (modules: ModuleWithContent[]): CurriculumItem[] =>
   modules
     .slice()
-    .sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0))
+    .sort((a, b) => {
+      const orderDiff = (a.orderIndex ?? 0) - (b.orderIndex ?? 0);
+      if (orderDiff !== 0) return orderDiff;
+      return a.id - b.id;
+    })
     .flatMap((module) => {
       const items: CurriculumItem[] = [
         ...(module.lessons ?? []).map((lesson) => ({
@@ -182,7 +186,19 @@ const buildCurriculumItems = (modules: ModuleWithContent[]): CurriculumItem[] =>
         })),
       ];
 
-      return items.sort((a, b) => a.orderIndex - b.orderIndex);
+      const itemTypeRank: Record<LearningContentType, number> = {
+        lesson: 0,
+        quiz: 1,
+        assignment: 2,
+      };
+
+      return items.sort((a, b) => {
+        const orderDiff = a.orderIndex - b.orderIndex;
+        if (orderDiff !== 0) return orderDiff;
+        const typeDiff = itemTypeRank[a.itemType] - itemTypeRank[b.itemType];
+        if (typeDiff !== 0) return typeDiff;
+        return a.itemId - b.itemId;
+      });
     });
 
 const formatShortDate = (dateString?: string) => {
@@ -205,6 +221,21 @@ const summarizeHtml = (html?: string) => {
 
   return plainText.length > 220 ? `${plainText.slice(0, 220).trim()}...` : plainText;
 };
+
+const buildLessonDetailFromSummary = (lesson: LessonSummaryDTO): LessonDetailDTO => ({
+  id: lesson.id,
+  title: lesson.title,
+  type: lesson.type,
+  orderIndex: lesson.orderIndex ?? 0,
+  durationSec: lesson.durationSec ?? 0,
+  contentText: lesson.contentText,
+  resourceUrl: lesson.resourceUrl,
+  videoUrl: lesson.videoUrl,
+  videoMediaId: lesson.videoMediaId,
+  moduleId: 0,
+  createdAt: '',
+  updatedAt: '',
+});
 
 // --- MAIN COMPONENT --- //
 const CourseLearningPage = () => {
@@ -297,6 +328,10 @@ const CourseLearningPage = () => {
   // Countdown timer state cho quiz retry
   const [retryCountdown, setRetryCountdown] = useState<number>(0);
 
+  useEffect(() => {
+    setRevisionActionMessage(null);
+  }, [courseId]);
+
   const curriculumItems = useMemo(
     () => buildCurriculumItems(modulesWithContent),
     [modulesWithContent]
@@ -331,6 +366,12 @@ const CourseLearningPage = () => {
     : null;
   const isActiveItemCompleted = activeStatusKey
     ? itemStatuses[activeStatusKey] === "completed"
+    : false;
+  const quizAttemptsCount = Number(activeQuizDetail?.attemptsCount ?? 0);
+  const quizHasAttemptHistory = quizAttemptsCount > 0;
+  const quizBestScore = activeQuizDetail?.bestScore;
+  const quizBestScorePassed = typeof quizBestScore === 'number'
+    ? quizBestScore >= activeQuizDetail.passScore
     : false;
   const activeQuizRetrySeconds = activeQuizDetail?.secondsUntilRetry ?? 0;
   const shouldTrackQuizRetryCountdown = activeQuizRetrySeconds > 0;
@@ -458,6 +499,64 @@ const CourseLearningPage = () => {
     setIsRevisionInfoLoading(false);
   }, [courseId, isPreviewMode, user?.id]);
 
+  const reloadModulesWithLearningState = useCallback(async (
+    options?: {
+      preferredItem?: {
+        moduleId: number;
+        itemId: number;
+        itemType: LearningContentType;
+      } | null;
+      fallbackToResume?: boolean;
+    }
+  ) => {
+    if (!courseId) {
+      setModulesWithContent([]);
+      setActiveLesson({ moduleId: null, lessonId: null, itemType: null });
+      return;
+    }
+
+    try {
+      const mods = await listModulesWithContent(courseId);
+      const normalizedModules = mods as ModuleWithContent[];
+      setModulesWithContent(normalizedModules);
+      await loadCourseLearningState(normalizedModules);
+
+      const curriculum = buildCurriculumItems(normalizedModules);
+      const preferred = options?.preferredItem
+        ? curriculum.find(
+            (item) =>
+              item.moduleId === options.preferredItem?.moduleId &&
+              item.itemId === options.preferredItem?.itemId &&
+              item.itemType === options.preferredItem?.itemType
+          ) ?? null
+        : null;
+      const resumeItem = options?.fallbackToResume
+        ? (locationState?.resumeItem
+          ? curriculum.find(
+              (item) =>
+                item.moduleId === locationState.resumeItem?.moduleId &&
+                item.itemId === locationState.resumeItem?.lessonId &&
+                item.itemType === locationState.resumeItem?.itemType
+            ) ?? null
+          : null)
+        : null;
+      const nextItem = preferred ?? resumeItem ?? curriculum[0] ?? null;
+
+      if (nextItem) {
+        setExpandedModules([nextItem.moduleId]);
+        setActiveLesson({
+          moduleId: nextItem.moduleId,
+          lessonId: nextItem.itemId,
+          itemType: nextItem.itemType,
+        });
+      } else {
+        setActiveLesson({ moduleId: null, lessonId: null, itemType: null });
+      }
+    } catch {
+      setModulesWithContent([]);
+    }
+  }, [courseId, loadCourseLearningState, locationState?.resumeItem]);
+
   useEffect(() => {
     if (!courseId) {
       setLoading(false);
@@ -470,34 +569,8 @@ const CourseLearningPage = () => {
       .finally(() => setLoading(false));
 
     // Load modules + lessons for sidebar content
-    listModulesWithContent(courseId)
-      .then((mods) => {
-        const normalizedModules = mods as ModuleWithContent[];
-        setModulesWithContent(normalizedModules);
-        loadCourseLearningState(normalizedModules);
-        const curriculum = buildCurriculumItems(normalizedModules);
-        const resumeItem = locationState?.resumeItem;
-        const restoredItem = resumeItem
-          ? curriculum.find(
-              (item) =>
-                item.moduleId === resumeItem.moduleId &&
-                item.itemId === resumeItem.lessonId &&
-                item.itemType === resumeItem.itemType
-            ) ?? null
-          : null;
-        const initialItem = restoredItem ?? curriculum[0];
-
-        if (initialItem) {
-          setExpandedModules([initialItem.moduleId]);
-          setActiveLesson({
-            moduleId: initialItem.moduleId,
-            lessonId: initialItem.itemId,
-            itemType: initialItem.itemType,
-          });
-        }
-      })
-      .catch(() => setModulesWithContent([]));
-  }, [courseId, isPreviewMode, loadCourseLearningState, locationState?.resumeItem]);
+    void reloadModulesWithLearningState({ fallbackToResume: true });
+  }, [courseId, isPreviewMode, reloadModulesWithLearningState]);
 
   useEffect(() => {
     setActiveLessonTitle(activeCurriculumItem?.title ?? "");
@@ -543,6 +616,11 @@ const CourseLearningPage = () => {
     } else if (activeCurriculumItem.itemType === "quiz") {
       // LAZY LOAD QUIZ + CHECK ATTEMPTS với API mới có countdown
       setActiveLessonDetail(null);
+      if (activeCurriculumItem.itemId <= 0) {
+        setActiveQuizDetail(null);
+        setLoadingLessonDetail(false);
+        return;
+      }
 
       Promise.all([
         getQuizForAttemptById(activeCurriculumItem.itemId),
@@ -598,18 +676,25 @@ const CourseLearningPage = () => {
     } else {
       // LAZY LOAD LESSON
       setActiveQuizDetail(null);
+      const module = modulesWithContent.find((m) => m.id === activeCurriculumItem.moduleId);
+      const lessonSummary = module?.lessons?.find((lesson) => lesson.id === activeCurriculumItem.itemId);
 
-      getLessonById(activeCurriculumItem.itemId)
-        .then((detail) => {
-          setActiveLessonDetail(detail);
-        })
-        .catch((err) => {
-          console.error('[LESSON] Failed:', err);
-          setActiveLessonDetail(null);
-        })
-        .finally(() => setLoadingLessonDetail(false));
+      if (lessonSummary) {
+        setActiveLessonDetail(buildLessonDetailFromSummary(lessonSummary));
+        setLoadingLessonDetail(false);
+      } else {
+        getLessonById(activeCurriculumItem.itemId)
+          .then((detail) => {
+            setActiveLessonDetail(detail);
+          })
+          .catch((err) => {
+            console.error('[LESSON] Failed:', err);
+            setActiveLessonDetail(null);
+          })
+          .finally(() => setLoadingLessonDetail(false));
+      }
     }
-  }, [activeCurriculumItem, user?.id]);
+  }, [activeCurriculumItem, modulesWithContent, user?.id]);
 
   const sortedModules = useMemo((): ModuleSummaryDTO[] => {
     const list = course?.modules ? [...course.modules] : [];
@@ -714,9 +799,16 @@ const CourseLearningPage = () => {
       } else {
         setRevisionActionMessage("Đã chuyển sang phiên bản mới.");
       }
-      if (modulesWithContent.length > 0) {
-        await loadCourseLearningState(modulesWithContent);
-      }
+      await reloadModulesWithLearningState({
+        preferredItem: activeCurriculumItem
+          ? {
+              moduleId: activeCurriculumItem.moduleId,
+              itemId: activeCurriculumItem.itemId,
+              itemType: activeCurriculumItem.itemType,
+            }
+          : null,
+        fallbackToResume: false,
+      });
     } catch (error) {
       const rawMessage = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
       setRevisionActionMessage(mapUpgradeApiErrorToVietnameseMessage(rawMessage));
@@ -728,8 +820,8 @@ const CourseLearningPage = () => {
     canUpgradeRevision,
     isPreviewMode,
     isUpgradingRevision,
-    loadCourseLearningState,
-    modulesWithContent
+    activeCurriculumItem,
+    reloadModulesWithLearningState
   ]);
 
   const handleSelectLesson = (
@@ -812,6 +904,10 @@ const CourseLearningPage = () => {
     if (!courseId || !activeCurriculumItem || activeCurriculumItem.itemType !== "assignment") {
       return;
     }
+    if (activeCurriculumItem.itemId <= 0) {
+      alert("Bài tập này chưa sẵn sàng do chưa đồng bộ định danh. Vui lòng thử lại sau.");
+      return;
+    }
 
     const returnContext = buildReturnContext(activeCurriculumItem);
     persistCourseLearningReturnContext(returnContext);
@@ -820,6 +916,10 @@ const CourseLearningPage = () => {
 
   const handleOpenQuizAttemptPage = useCallback((view: 'start' | 'result' = 'start') => {
     if (!activeCurriculumItem || activeCurriculumItem.itemType !== "quiz") {
+      return;
+    }
+    if (activeCurriculumItem.itemId <= 0) {
+      alert("Quiz này chưa sẵn sàng do chưa đồng bộ định danh. Vui lòng thử lại sau.");
       return;
     }
 
@@ -1011,14 +1111,6 @@ const CourseLearningPage = () => {
                   </button>
                 </div>
               )}
-            </div>
-          )}
-          {!hasNewerRevision && !isPreviewMode && revisionInfo && (
-            <div className="lhud-revision-banner is-success">
-              <div>
-                <strong>Revision hiện tại đã đồng bộ</strong>
-                <p>{revisionPolicyMessage}</p>
-              </div>
             </div>
           )}
           {!isPreviewMode && isRevisionInfoLoading && (
@@ -1233,41 +1325,62 @@ const CourseLearningPage = () => {
                         </div>
                       </div>
 
-                      {/* Điểm cao nhất - Chỉ hiện khi đã có attempts */}
-                      {activeQuizDetail.hasAttempts && activeQuizDetail.bestScore !== null && (
-                        <div className={`lhud-quiz-stat is-best ${activeQuizDetail.bestScore >= activeQuizDetail.passScore ? 'is-pass' : 'is-fail'}`}>
-                          <div className="lhud-quiz-stat-value">
-                            {activeQuizDetail.bestScore}%
-                          </div>
-                          <p className="lhud-quiz-stat-label">
-                            Điểm cao nhất
-                          </p>
-                          <div className="lhud-quiz-stat-sub">
-                            {activeQuizDetail.bestScore >= activeQuizDetail.passScore ? '✓ Đã đạt yêu cầu' : '✗ Chưa đạt yêu cầu'}
-                          </div>
+                      <div
+                        className={`lhud-quiz-stat is-best ${
+                          !quizHasAttemptHistory
+                            ? 'is-pending'
+                            : quizBestScorePassed
+                            ? 'is-pass'
+                            : 'is-fail'
+                        }`}
+                      >
+                        <div className="lhud-quiz-stat-value">
+                          {typeof quizBestScore === 'number' ? `${quizBestScore}%` : '--'}
                         </div>
-                      )}
+                        <p className="lhud-quiz-stat-label">
+                          Điểm cao nhất
+                        </p>
+                        <div className="lhud-quiz-stat-sub">
+                          {!quizHasAttemptHistory
+                            ? 'Chưa có lần làm'
+                            : quizBestScorePassed
+                            ? '✓ Đã đạt yêu cầu'
+                            : '✗ Chưa đạt yêu cầu'}
+                        </div>
+                      </div>
 
-                      {activeQuizDetail.hasAttempts && (
-                        <div className={`lhud-quiz-stat is-attempts ${activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts ? 'is-maxed' : ''}`}>
-                          <div className="lhud-quiz-stat-value">
-                            {activeQuizDetail.attemptsCount}/{activeQuizDetail.maxAttempts}
-                          </div>
-                          <p className="lhud-quiz-stat-label">
-                            {activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts ? 'Hết lượt' : 'Số lần thử'}
-                          </p>
-                          {activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts && (
-                            <div className="lhud-quiz-stat-sub is-warning">
-                              Chờ 8h để làm lại
-                            </div>
-                          )}
+                      <div
+                        className={`lhud-quiz-stat is-attempts ${
+                          quizAttemptsCount >= activeQuizDetail.maxAttempts
+                            ? 'is-maxed'
+                            : !quizHasAttemptHistory
+                            ? 'is-pending'
+                            : ''
+                        }`}
+                      >
+                        <div className="lhud-quiz-stat-value">
+                          {quizAttemptsCount}/{activeQuizDetail.maxAttempts}
                         </div>
-                      )}
+                        <p className="lhud-quiz-stat-label">
+                          {quizAttemptsCount >= activeQuizDetail.maxAttempts ? 'Hết lượt' : 'Số lần thử'}
+                        </p>
+                        {quizAttemptsCount >= activeQuizDetail.maxAttempts ? (
+                          <div className="lhud-quiz-stat-sub is-warning">
+                            Chờ 8h để làm lại
+                          </div>
+                        ) : (
+                          <div className="lhud-quiz-stat-sub">
+                            {!quizHasAttemptHistory
+                              ? `Tối đa ${activeQuizDetail.maxAttempts} lượt`
+                              : `Còn lại ${Math.max(activeQuizDetail.maxAttempts - quizAttemptsCount, 0)} lượt`}
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     {/* Action Button */}
                     <div className="lhud-quiz-action">
-                      {!isPreviewMode && activeQuizDetail.latestAttempt && (
+                      {!isPreviewMode && quizHasAttemptHistory && !activeQuizDetail.hasPassed && activeQuizDetail.latestAttempt && (
                         <button
                           type="button"
                           className="learning-hud-secondary-btn lhud-quiz-review-btn"
@@ -1284,33 +1397,33 @@ const CourseLearningPage = () => {
                           }
                         }}
                         className={`lhud-quiz-action-btn ${
-                          activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts
+                          quizAttemptsCount >= activeQuizDetail.maxAttempts
                             ? 'is-locked'
                             : (activeQuizDetail.questions?.length || 0) === 0
                             ? 'is-disabled'
-                            : activeQuizDetail.hasAttempts
+                            : quizHasAttemptHistory
                             ? 'is-retry'
                             : 'is-start'
                         } ${isPreviewMode ? 'is-preview' : ''}`}
                         disabled={
                           isPreviewMode ||
-                          activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts ||
+                          quizAttemptsCount >= activeQuizDetail.maxAttempts ||
                           (activeQuizDetail.questions?.length || 0) === 0
                         }
                       >
                         {isPreviewMode
                           ? 'Chế độ xem trước'
-                          : activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts
+                          : quizAttemptsCount >= activeQuizDetail.maxAttempts
                           ? 'Hết lượt làm bài'
                           : (activeQuizDetail.questions?.length || 0) === 0
                           ? 'Bài kiểm tra chưa có câu hỏi'
-                          : activeQuizDetail.hasAttempts
-                          ? `Làm lại (${activeQuizDetail.attemptsCount}/${activeQuizDetail.maxAttempts})`
+                          : quizHasAttemptHistory
+                          ? `Làm lại (${quizAttemptsCount}/${activeQuizDetail.maxAttempts})`
                           : 'Bắt đầu làm bài'}
                       </button>
 
                       {/* Thông báo khi hết lượt với countdown timer */}
-                      {activeQuizDetail.attemptsCount >= activeQuizDetail.maxAttempts && (
+                      {quizAttemptsCount >= activeQuizDetail.maxAttempts && (
                         <div className="lhud-quiz-lock-banner">
                           <p className="lhud-quiz-lock-title">
                             Đã sử dụng hết {activeQuizDetail.maxAttempts} lượt làm bài
@@ -1338,16 +1451,12 @@ const CourseLearningPage = () => {
                       )}
 
                       {/* Reassurance Info */}
-                      {(activeQuizDetail.questions?.length || 0) > 0 && activeQuizDetail.attemptsCount < activeQuizDetail.maxAttempts && (
+                      {(activeQuizDetail.questions?.length || 0) > 0 && quizAttemptsCount < activeQuizDetail.maxAttempts && (
                         <>
                           <div className="lhud-quiz-meta">
                              <span title="Thời gian làm bài dự kiến">Thời gian: 10 phút</span>
-                             <span title="Số lần làm lại tối đa">Còn lại: {activeQuizDetail.maxAttempts - activeQuizDetail.attemptsCount} lần</span>
+                             <span title="Số lần làm lại tối đa">Còn lại: {activeQuizDetail.maxAttempts - quizAttemptsCount} lần</span>
                              <span title="Tiến trình được lưu tự động">Tự động lưu tiến độ</span>
-                          </div>
-                          
-                          <div className="lhud-quiz-note">
-                             Hoàn thành quiz để mở khóa bài học tiếp theo trong module.
                           </div>
                         </>
                       )}

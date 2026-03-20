@@ -34,6 +34,21 @@ type AnswerDraft = {
   textAnswer?: string;
 };
 
+const extractApiErrorMessage = (error: unknown): string => {
+  if (typeof error === 'string') return error;
+  if (error instanceof Error) return error.message;
+
+  const responseData = (error as { response?: { data?: unknown } })?.response?.data;
+  if (typeof responseData === 'string') return responseData;
+  if (responseData && typeof responseData === 'object') {
+    const responseObj = responseData as { message?: string; error?: string };
+    if (responseObj.message) return responseObj.message;
+    if (responseObj.error) return responseObj.error;
+  }
+
+  return 'Unknown error';
+};
+
 const QuizAttemptPage: React.FC = () => {
   const { quizId } = useParams<{ quizId: string }>();
   const navigate = useNavigate();
@@ -62,11 +77,11 @@ const QuizAttemptPage: React.FC = () => {
   const [nextRetryAt, setNextRetryAt] = useState<string | null>(null);
   const [attemptSessionToken, setAttemptSessionToken] = useState<string | null>(null);
 
-  const getOptionReviewTone = useCallback((option: QuizAttemptAnswerOptionReviewDTO) => {
+  const getOptionReviewTone = useCallback((option: QuizAttemptAnswerOptionReviewDTO, revealCorrect: boolean) => {
     if (option.correct && option.selected) {
       return 'is-correct-selected';
     }
-    if (option.correct) {
+    if (revealCorrect && option.correct) {
       return 'is-correct';
     }
     if (option.selected) {
@@ -75,7 +90,7 @@ const QuizAttemptPage: React.FC = () => {
     return 'is-neutral';
   }, []);
 
-  const renderReviewOptionList = useCallback((answer: QuizAttemptAnswerReviewDTO) => {
+  const renderReviewOptionList = useCallback((answer: QuizAttemptAnswerReviewDTO, revealCorrect: boolean) => {
     if (!answer.optionsSnapshot || answer.optionsSnapshot.length === 0) {
       return null;
     }
@@ -83,7 +98,7 @@ const QuizAttemptPage: React.FC = () => {
     return (
       <div className="hud-quiz-attempt-review-options">
         {answer.optionsSnapshot.map((option) => {
-          const tone = getOptionReviewTone(option);
+          const tone = getOptionReviewTone(option, revealCorrect);
           return (
             <div
               key={option.optionId}
@@ -98,11 +113,11 @@ const QuizAttemptPage: React.FC = () => {
                   {option.selected && (
                     <span className="hud-quiz-attempt-review-option-tag is-selected">Bạn chọn</span>
                   )}
-                  {option.correct && (
+                  {revealCorrect && option.correct && (
                     <span className="hud-quiz-attempt-review-option-tag is-correct">Đáp án đúng</span>
                   )}
                 </div>
-                {option.feedback && (option.selected || option.correct) && (
+                {option.feedback && (option.selected || (revealCorrect && option.correct)) && (
                   <p className="hud-quiz-attempt-review-option-feedback">{option.feedback}</p>
                 )}
               </div>
@@ -113,7 +128,7 @@ const QuizAttemptPage: React.FC = () => {
     );
   }, [getOptionReviewTone]);
 
-  const renderReviewAnswerBody = useCallback((answer: QuizAttemptAnswerReviewDTO) => {
+  const renderReviewAnswerBody = useCallback((answer: QuizAttemptAnswerReviewDTO, revealCorrect: boolean) => {
     if (answer.questionType === QuestionType.SHORT_ANSWER) {
       return (
         <>
@@ -121,10 +136,12 @@ const QuizAttemptPage: React.FC = () => {
             <span>Câu trả lời của bạn</span>
             <p>{answer.submittedAnswer?.textAnswer?.trim() || answer.submittedAnswerText || 'Không trả lời'}</p>
           </div>
-          <div className="hud-quiz-attempt-review-block">
-            <span>Đáp án chấp nhận</span>
-            <p>{answer.correctAnswerText || 'Đang cập nhật'}</p>
-          </div>
+          {revealCorrect && (
+            <div className="hud-quiz-attempt-review-block">
+              <span>Đáp án chấp nhận</span>
+              <p>{answer.correctAnswerText || 'Đang cập nhật'}</p>
+            </div>
+          )}
         </>
       );
     }
@@ -139,7 +156,7 @@ const QuizAttemptPage: React.FC = () => {
               : answer.submittedAnswerText || 'Không trả lời'}
           </p>
         </div>
-        {renderReviewOptionList(answer)}
+        {renderReviewOptionList(answer, revealCorrect)}
       </>
     );
   }, [renderReviewOptionList]);
@@ -242,7 +259,14 @@ const QuizAttemptPage: React.FC = () => {
       return true;
     } catch (err) {
       console.error('[QUIZ_SESSION] Failed to start session:', err);
-      alert('Không thể bắt đầu phiên làm bài lúc này. Vui lòng thử lại.');
+      const message = extractApiErrorMessage(err);
+      if (message.includes('QUIZ_RETRY_LOCKED_BY_PASS')) {
+        setCanRetry(false);
+        setHasPassed(true);
+        alert('Bạn đã đạt quiz này, hệ thống đã khóa làm lại.');
+      } else {
+        alert('Không thể bắt đầu phiên làm bài lúc này. Vui lòng thử lại.');
+      }
       return false;
     }
   }, [quiz, user]);
@@ -275,6 +299,10 @@ const QuizAttemptPage: React.FC = () => {
   }, [locationState, navigate]);
 
   const handleStartQuiz = async () => {
+    if (hasPassed) {
+      alert('Bạn đã đạt bài kiểm tra này, không cần làm lại.');
+      return;
+    }
     if (!canRetry) {
       if (cooldownSeconds > 0) {
         const hours = Math.ceil(cooldownSeconds / 3600);
@@ -392,11 +420,20 @@ const QuizAttemptPage: React.FC = () => {
         setAttemptsUsed(attemptsUsed + 1);
         if (res.passed) {
           setHasPassed(true);
+          setCanRetry(false);
+        } else {
+          setCanRetry(attemptsUsed + 1 < maxAttempts);
         }
       }
     } catch (err: unknown) {
       console.error('[QUIZ_SUBMIT] Failed:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      const errorMessage = extractApiErrorMessage(err);
+      if (errorMessage.includes('QUIZ_RETRY_LOCKED_BY_PASS')) {
+        setCanRetry(false);
+        setHasPassed(true);
+        alert('Bạn đã đạt quiz này, hệ thống đã khóa làm lại.');
+        return;
+      }
       alert('Không thể nộp bài: ' + errorMessage);
     }
   };
@@ -523,6 +560,11 @@ const QuizAttemptPage: React.FC = () => {
               <button onClick={handleReviewLatestResult} className="hud-quiz-attempt-btn-primary">
                 Xem kết quả gần nhất
               </button>
+              {canRetry && attemptsUsed < maxAttempts && (
+                <button onClick={handleStartQuiz} className="hud-quiz-attempt-btn-start">
+                  Làm lại ({attemptsUsed}/{maxAttempts})
+                </button>
+              )}
             </div>
           </div>
         ) : !canRetry ? (
@@ -562,6 +604,7 @@ const QuizAttemptPage: React.FC = () => {
   // RESULT SCREEN - Màn hình kết quả
   if (viewMode === 'result' && result) {
     const passed = result.passed || (result.score >= quiz.passScore);
+    const revealCorrectAnswers = passed;
     const shouldShowLatestReviewDetail = Boolean(
       latestAttemptReview &&
       latestAttemptReview.attempt?.id === result.id
@@ -625,7 +668,7 @@ const QuizAttemptPage: React.FC = () => {
                         <span>{answer.scoreEarned}/{answer.maxScore} điểm</span>
                       </div>
                       <h4>{answer.questionText}</h4>
-                      {renderReviewAnswerBody(answer)}
+                      {renderReviewAnswerBody(answer, revealCorrectAnswers)}
                       <div className={`hud-quiz-attempt-review-status ${answer.correct ? 'is-correct' : 'is-incorrect'}`}>
                         {answer.correct ? 'Đúng' : 'Sai'}
                       </div>
@@ -641,7 +684,7 @@ const QuizAttemptPage: React.FC = () => {
           )}
 
           {!shouldShowLatestReviewDetail && latestAttemptReview && (
-            <div className="hud-quiz-attempt-review-note">
+            <div className="hud-quiz-attempt-review-empty">
               Chi tiết đáp án hiện chỉ hiển thị cho lần làm mới nhất của bạn.
             </div>
           )}
@@ -650,7 +693,7 @@ const QuizAttemptPage: React.FC = () => {
             <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-btn-back">
               Quay lại khóa học
             </button>
-            {canRetry && attemptsUsed < maxAttempts && (
+            {!hasPassed && canRetry && attemptsUsed < maxAttempts && (
               <button onClick={handleRetryQuiz} className="hud-quiz-attempt-btn-retry">
                 Làm lại ({attemptsUsed}/{maxAttempts})
               </button>

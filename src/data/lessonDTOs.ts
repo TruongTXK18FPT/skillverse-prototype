@@ -31,6 +31,10 @@ export interface LessonSummaryDTO {
   type: LessonType;
   orderIndex: number;
   durationSec: number;
+  contentText?: string;
+  resourceUrl?: string;
+  videoUrl?: string;
+  videoMediaId?: number;
 }
 
 // Lesson Create DTO

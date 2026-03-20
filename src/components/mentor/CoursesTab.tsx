@@ -477,6 +477,16 @@ const CoursesTab: React.FC = () => {
     });
   };
 
+  const handleOpenCourseView = (course: Course, latestRevision?: CourseRevisionDTO) => {
+    const revisionId = latestRevision?.id;
+    const target = revisionId
+      ? `/mentor/courses/${course.id}/edit?revisionId=${revisionId}`
+      : `/mentor/courses/${course.id}/edit`;
+    navigate(target, {
+      state: { activeTab: 'courses', coursesPage: currentPage }
+    });
+  };
+
   const handleOpenRevisionHistory = async (course: Course) => {
     setRevisionDrawer({
       isOpen: true,
@@ -824,7 +834,7 @@ const CoursesTab: React.FC = () => {
                   ) : (
                     <button
                       className="mentor-hud-action-button mentor-hud-view-button"
-                      onClick={() => navigate(`/mentor/courses/${course.id}/edit`)}
+                      onClick={() => handleOpenCourseView(course, latestRevision)}
                       title="Xem chi tiết khóa học"
                     >
                       <Eye className="w-4 h-4" />

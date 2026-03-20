@@ -80,3 +80,42 @@ export const mapUpgradeApiErrorToVietnameseMessage = (
 
   return 'Không thể nâng cấp revision lúc này. Vui lòng thử lại.';
 };
+
+const parseSnapshotIdentityPath = (rawMessage?: string | null): string | null => {
+  if (!rawMessage) return null;
+  const match = rawMessage.match(/COURSE_REVISION_CONTENT_ID_REQUIRED\s*[:@-]?\s*([^\s].*)?$/i);
+  const rawPath = match?.[1]?.trim();
+  return rawPath && rawPath.length > 0 ? rawPath : null;
+};
+
+const formatSnapshotIdentityPath = (path: string): string => {
+  const moduleMatch = path.match(/^modules\[(\d+)]\.id$/i);
+  if (moduleMatch) {
+    const moduleIndex = Number(moduleMatch[1]);
+    return `Module #${moduleIndex + 1}`;
+  }
+
+  const itemMatch = path.match(/^modules\[(\d+)]\.lessons\[(\d+)]\.id$/i);
+  if (itemMatch) {
+    const moduleIndex = Number(itemMatch[1]);
+    const itemIndex = Number(itemMatch[2]);
+    return `Module #${moduleIndex + 1}, nội dung #${itemIndex + 1}`;
+  }
+
+  return path;
+};
+
+export const mapRevisionSnapshotIdentityErrorToVietnameseMessage = (
+  rawMessage?: string | null
+): string | null => {
+  if (!rawMessage || !rawMessage.toUpperCase().includes('COURSE_REVISION_CONTENT_ID_REQUIRED')) {
+    return null;
+  }
+
+  const path = parseSnapshotIdentityPath(rawMessage);
+  if (!path) {
+    return 'Snapshot revision đang thiếu ID hợp lệ cho module hoặc nội dung học. Vui lòng lưu lại các mục vừa tạo rồi thử lại.';
+  }
+
+  return `Snapshot revision có mục thiếu ID hợp lệ tại ${formatSnapshotIdentityPath(path)}. Vui lòng mở mục này, lưu lại rồi gửi duyệt lại.`;
+};

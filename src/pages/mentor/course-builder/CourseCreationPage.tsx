@@ -40,6 +40,7 @@ import {
   validateAssignmentsBeforeSave,
   validateQuizzesBeforeSave
 } from './courseBuilderValidation';
+import { mapRevisionSnapshotIdentityErrorToVietnameseMessage } from '../../../utils/courseRevisionMessages';
 import '../../../styles/course-builder.css';
 
 // ============================================================================
@@ -50,6 +51,8 @@ type ViewState =
   | { type: 'course_info' }
   | { type: 'module'; moduleId: string }
   | { type: 'lesson'; moduleId: string; lessonId: string };
+
+type BuilderFlowState = 'submitted' | 'revisionCreated' | 'revisionSubmitted';
 
 interface ConfirmDialogState {
   title: string;
@@ -89,6 +92,38 @@ const getLessonTypeMeta = (type: string) => {
 };
 
 const createId = () => Date.now().toString() + Math.random().toString(36).substr(2, 5);
+const COURSE_BUILDER_FLOW_PARAM = 'flow';
+
+const parseBuilderFlowState = (params: URLSearchParams): BuilderFlowState | null => {
+  const flow = params.get(COURSE_BUILDER_FLOW_PARAM);
+  if (flow === 'submitted' || flow === 'revisionCreated' || flow === 'revisionSubmitted') {
+    return flow;
+  }
+
+  // Backward compatibility for old links generated with dedicated flags.
+  if (params.get('submitted') === '1') return 'submitted';
+  if (params.get('revisionCreated') === '1') return 'revisionCreated';
+  if (params.get('revisionSubmitted') === '1') return 'revisionSubmitted';
+
+  return null;
+};
+
+const buildCourseEditUrl = (
+  courseId: string | number,
+  options?: { revisionId?: number; flow?: BuilderFlowState }
+) => {
+  const params = new URLSearchParams();
+  if (typeof options?.revisionId === 'number' && Number.isFinite(options.revisionId) && options.revisionId > 0) {
+    params.set('revisionId', String(options.revisionId));
+  }
+  if (options?.flow) {
+    params.set(COURSE_BUILDER_FLOW_PARAM, options.flow);
+  }
+  const query = params.toString();
+  return query
+    ? `/mentor/courses/${courseId}/edit?${query}`
+    : `/mentor/courses/${courseId}/edit`;
+};
 
 const normalizeLessonAttachments = (attachments?: LessonAttachmentDraft[]) => {
   const normalized: LessonAttachmentDraft[] = [];
@@ -128,10 +163,12 @@ const normalizeSnapshotText = (value?: string | null) => {
 const buildRevisionContentSnapshot = (modules: ModuleDraft[]) => ({
   snapshotVersion: 1,
   modules: modules.map((module, moduleIndex) => ({
+    ...(typeof module.serverId === 'number' && module.serverId > 0 ? { id: module.serverId } : {}),
     orderIndex: moduleIndex,
     title: normalizeSnapshotText(module.title),
     description: normalizeSnapshotText(module.description),
     lessons: module.lessons.map((lesson, lessonIndex) => ({
+      ...(typeof lesson.serverId === 'number' && lesson.serverId > 0 ? { id: lesson.serverId } : {}),
       orderIndex: lessonIndex,
       title: normalizeSnapshotText(lesson.title),
       type: lesson.type,
@@ -151,17 +188,20 @@ const buildRevisionContentSnapshot = (modules: ModuleDraft[]) => ({
       assignmentMaxScore: lesson.assignmentMaxScore ?? null,
       assignmentPassingScore: lesson.assignmentPassingScore ?? null,
       questions: (lesson.questions || []).map((question, questionIndex) => ({
+        ...(typeof question.serverId === 'number' && question.serverId > 0 ? { id: question.serverId } : {}),
         orderIndex: question.orderIndex ?? questionIndex,
         text: normalizeSnapshotText(question.text),
         type: question.type,
         score: question.score ?? null,
         options: (question.options || []).map((option, optionIndex) => ({
+          ...(typeof option.serverId === 'number' && option.serverId > 0 ? { id: option.serverId } : {}),
           orderIndex: option.orderIndex ?? optionIndex,
           text: normalizeSnapshotText(option.text),
           correct: option.correct
         }))
       })),
       assignmentCriteria: (lesson.assignmentCriteria || []).map((criteria, criteriaIndex) => ({
+        ...(typeof criteria.id === 'number' && criteria.id > 0 ? { id: criteria.id } : {}),
         orderIndex: criteria.orderIndex ?? criteriaIndex,
         name: normalizeSnapshotText(criteria.name),
         description: normalizeSnapshotText(criteria.description),
@@ -169,6 +209,7 @@ const buildRevisionContentSnapshot = (modules: ModuleDraft[]) => ({
         isRequired: criteria.isRequired ?? null
       })),
       attachments: normalizeLessonAttachments(lesson.attachments).map((attachment, attachmentIndex) => ({
+        ...(typeof attachment.serverId === 'number' && attachment.serverId > 0 ? { id: attachment.serverId } : {}),
         orderIndex: attachmentIndex,
         name: normalizeSnapshotText(attachment.name),
         mediaId: attachment.mediaId ?? attachment.serverId ?? null,
@@ -183,6 +224,23 @@ const toPositiveNumberOrUndefined = (value: unknown): number | undefined => {
     return undefined;
   }
   return value;
+};
+
+const toPositiveIntegerIdOrUndefined = (value: unknown): number | undefined => {
+  if (typeof value === 'number' && Number.isInteger(value) && value > 0) {
+    return value;
+  }
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return undefined;
+    }
+    const parsed = Number.parseInt(trimmed, 10);
+    if (Number.isInteger(parsed) && parsed > 0) {
+      return parsed;
+    }
+  }
+  return undefined;
 };
 
 const parseQuestionTypeFromSnapshot = (value: unknown): QuestionType => {
@@ -220,6 +278,7 @@ const parseModulesFromRevisionSnapshot = (contentSnapshotJson?: string): ModuleD
   try {
     const parsed = JSON.parse(contentSnapshotJson) as {
       modules?: Array<{
+        id?: unknown;
         title?: string;
         description?: string;
         lessons?: Array<Record<string, unknown>>;
@@ -232,55 +291,73 @@ const parseModulesFromRevisionSnapshot = (contentSnapshotJson?: string): ModuleD
 
     return parsed.modules.map((module, moduleIndex) => {
       const moduleId = `snapshot-module-${moduleIndex}-${createId()}`;
+      const moduleServerId = toPositiveIntegerIdOrUndefined(module.id);
       const lessons = Array.isArray(module.lessons) ? module.lessons : [];
 
       return {
         id: moduleId,
+        ...(moduleServerId ? { serverId: moduleServerId } : {}),
         title: typeof module.title === 'string' ? module.title : `Module ${moduleIndex + 1}`,
         description: typeof module.description === 'string' ? module.description : '',
         lessons: lessons.map((lessonRaw, lessonIndex) => {
           const lessonId = `snapshot-lesson-${moduleIndex}-${lessonIndex}-${createId()}`;
+          const lessonServerId = toPositiveIntegerIdOrUndefined(lessonRaw.id);
           const questionsRaw = Array.isArray(lessonRaw.questions) ? lessonRaw.questions : [];
           const criteriaRaw = Array.isArray(lessonRaw.assignmentCriteria) ? lessonRaw.assignmentCriteria : [];
           const attachmentsRaw = Array.isArray(lessonRaw.attachments) ? lessonRaw.attachments : [];
 
           const questions: QuizQuestionDraft[] = questionsRaw.map((questionRaw, questionIndex) => {
             const optionsRaw = Array.isArray(questionRaw.options) ? questionRaw.options : [];
+            const questionServerId = toPositiveIntegerIdOrUndefined(questionRaw.id);
             return {
               id: `snapshot-q-${moduleIndex}-${lessonIndex}-${questionIndex}-${createId()}`,
+              ...(questionServerId ? { serverId: questionServerId } : {}),
               text: typeof questionRaw.text === 'string' ? questionRaw.text : '',
               type: parseQuestionTypeFromSnapshot(questionRaw.type),
               score: toPositiveNumberOrUndefined(questionRaw.score) ?? 1,
               orderIndex: toPositiveNumberOrUndefined(questionRaw.orderIndex) ?? questionIndex,
-              options: optionsRaw.map((optionRaw: Record<string, unknown>, optionIndex: number) => ({
-                id: `snapshot-opt-${moduleIndex}-${lessonIndex}-${questionIndex}-${optionIndex}-${createId()}`,
-                text: typeof optionRaw.text === 'string' ? optionRaw.text : '',
-                correct: Boolean(optionRaw.correct),
-                orderIndex: toPositiveNumberOrUndefined(optionRaw.orderIndex) ?? optionIndex
-              }))
+              options: optionsRaw.map((optionRaw: Record<string, unknown>, optionIndex: number) => {
+                const optionServerId = toPositiveIntegerIdOrUndefined(optionRaw.id);
+                return {
+                  id: `snapshot-opt-${moduleIndex}-${lessonIndex}-${questionIndex}-${optionIndex}-${createId()}`,
+                  ...(optionServerId ? { serverId: optionServerId } : {}),
+                  text: typeof optionRaw.text === 'string' ? optionRaw.text : '',
+                  correct: Boolean(optionRaw.correct),
+                  orderIndex: toPositiveNumberOrUndefined(optionRaw.orderIndex) ?? optionIndex
+                };
+              })
             };
           });
 
-          const assignmentCriteria: AssignmentCriteriaDraft[] = criteriaRaw.map((criteriaRawItem, criteriaIndex) => ({
-            clientId: `snapshot-criteria-${moduleIndex}-${lessonIndex}-${criteriaIndex}-${createId()}`,
-            name: typeof criteriaRawItem.name === 'string' ? criteriaRawItem.name : '',
-            description: typeof criteriaRawItem.description === 'string' ? criteriaRawItem.description : '',
-            maxPoints: toPositiveNumberOrUndefined(criteriaRawItem.maxPoints) ?? 0,
-            orderIndex: toPositiveNumberOrUndefined(criteriaRawItem.orderIndex) ?? criteriaIndex,
-            isRequired: typeof criteriaRawItem.isRequired === 'boolean' ? criteriaRawItem.isRequired : true
-          }));
+          const assignmentCriteria: AssignmentCriteriaDraft[] = criteriaRaw.map((criteriaRawItem, criteriaIndex) => {
+            const criteriaId = toPositiveIntegerIdOrUndefined(criteriaRawItem.id);
+            return {
+              clientId: `snapshot-criteria-${moduleIndex}-${lessonIndex}-${criteriaIndex}-${createId()}`,
+              ...(criteriaId ? { id: criteriaId } : {}),
+              name: typeof criteriaRawItem.name === 'string' ? criteriaRawItem.name : '',
+              description: typeof criteriaRawItem.description === 'string' ? criteriaRawItem.description : '',
+              maxPoints: toPositiveNumberOrUndefined(criteriaRawItem.maxPoints) ?? 0,
+              orderIndex: toPositiveNumberOrUndefined(criteriaRawItem.orderIndex) ?? criteriaIndex,
+              isRequired: typeof criteriaRawItem.isRequired === 'boolean' ? criteriaRawItem.isRequired : true
+            };
+          });
 
           const attachments = normalizeLessonAttachments(
-            attachmentsRaw.map((attachmentRaw, attachmentIndex) => ({
-              id: `snapshot-attachment-${moduleIndex}-${lessonIndex}-${attachmentIndex}-${createId()}`,
-              name: typeof attachmentRaw.name === 'string' ? attachmentRaw.name : 'Attachment',
-              url: typeof attachmentRaw.url === 'string' ? attachmentRaw.url : undefined,
-              mediaId: typeof attachmentRaw.mediaId === 'number' ? attachmentRaw.mediaId : undefined
-            }))
+            attachmentsRaw.map((attachmentRaw, attachmentIndex) => {
+              const attachmentServerId = toPositiveIntegerIdOrUndefined(attachmentRaw.id);
+              return {
+                id: `snapshot-attachment-${moduleIndex}-${lessonIndex}-${attachmentIndex}-${createId()}`,
+                name: typeof attachmentRaw.name === 'string' ? attachmentRaw.name : 'Attachment',
+                url: typeof attachmentRaw.url === 'string' ? attachmentRaw.url : undefined,
+                mediaId: typeof attachmentRaw.mediaId === 'number' ? attachmentRaw.mediaId : undefined,
+                ...(attachmentServerId ? { serverId: attachmentServerId } : {})
+              };
+            })
           );
 
           return {
             id: lessonId,
+            ...(lessonServerId ? { serverId: lessonServerId } : {}),
             title: typeof lessonRaw.title === 'string' ? lessonRaw.title : `Bài học ${lessonIndex + 1}`,
             type: parseLessonKindFromSnapshot(lessonRaw.type),
             durationMin: toPositiveNumberOrUndefined(lessonRaw.durationMin),
@@ -509,23 +586,33 @@ const CourseCreationPage = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const submitted = params.get('submitted') === '1';
-    const revisionCreated = params.get('revisionCreated') === '1';
-    const revisionSubmitted = params.get('revisionSubmitted') === '1';
-    if (!submitted && !revisionCreated && !revisionSubmitted) {
+    const flowState = parseBuilderFlowState(params);
+
+    if (!flowState) {
       return;
     }
 
-    if (submitted) {
+    if (flowState === 'submitted') {
       showToast('success', 'Đã gửi khóa học tới quản trị viên để xét duyệt.');
-    }
-    if (revisionCreated) {
+    } else if (flowState === 'revisionCreated') {
       showToast('success', 'Đã tạo phiên bản mới. Bạn có thể chỉnh sửa rồi gửi duyệt phiên bản.');
-    }
-    if (revisionSubmitted) {
+    } else if (flowState === 'revisionSubmitted') {
       showToast('success', 'Đã gửi phiên bản tới quản trị viên để xét duyệt.');
     }
-    navigate(location.pathname, { replace: true });
+
+    params.delete(COURSE_BUILDER_FLOW_PARAM);
+    params.delete('submitted');
+    params.delete('revisionCreated');
+    params.delete('revisionSubmitted');
+
+    const nextSearch = params.toString();
+    navigate(
+      {
+        pathname: location.pathname,
+        search: nextSearch ? `?${nextSearch}` : ''
+      },
+      { replace: true }
+    );
   }, [location.pathname, location.search, navigate, showToast]);
 
   useEffect(() => {
@@ -545,6 +632,34 @@ const CourseCreationPage = () => {
 
     void loadHistory();
   }, [courseId, isEditMode]);
+
+  useEffect(() => {
+    if (!isEditMode || !courseId || isRevisionMode) {
+      return;
+    }
+    if (state.currentCourse?.status !== CourseStatus.PUBLIC) {
+      return;
+    }
+    if (revisionHistory.length === 0) {
+      return;
+    }
+
+    const preferredRevision =
+      revisionHistory.find((revision) => revision.status === 'APPROVED') ?? revisionHistory[0];
+
+    if (!preferredRevision?.id) {
+      return;
+    }
+
+    navigate(`/mentor/courses/${courseId}/edit?revisionId=${preferredRevision.id}`, { replace: true });
+  }, [
+    courseId,
+    isEditMode,
+    isRevisionMode,
+    navigate,
+    revisionHistory,
+    state.currentCourse?.status
+  ]);
 
   useEffect(() => {
     if (!isRevisionMode || !revisionId) {
@@ -702,7 +817,10 @@ const CourseCreationPage = () => {
       const refreshed = await listCourseRevisions(state.currentCourse.id, 0, 10);
       setRevisionHistory(refreshed.content ?? []);
       navigate(
-        `/mentor/courses/${state.currentCourse.id}/edit?revisionId=${createdRevision.id}&revisionCreated=1`,
+        buildCourseEditUrl(state.currentCourse.id, {
+          revisionId: createdRevision.id,
+          flow: 'revisionCreated'
+        }),
         { replace: true }
       );
     } catch (error) {
@@ -1113,7 +1231,10 @@ const CourseCreationPage = () => {
       return savedCourse;
     } catch (err) {
       const message = getApiErrorMessage(err);
-      if (message.includes('COURSE_REVISION_CONTENT_SNAPSHOT_TOO_LARGE')) {
+      const identityMessage = mapRevisionSnapshotIdentityErrorToVietnameseMessage(message);
+      if (identityMessage) {
+        showToast('error', identityMessage);
+      } else if (message.includes('COURSE_REVISION_CONTENT_SNAPSHOT_TOO_LARGE')) {
         showToast('error', 'Nội dung phiên bản quá lớn. Vui lòng chia nhỏ hoặc tinh gọn nội dung trước khi lưu.');
       } else {
         showToast('error', `Lỗi khi lưu: ${message}`);
@@ -1175,7 +1296,13 @@ const CourseCreationPage = () => {
           const refreshed = await listCourseRevisions(Number(courseId), 0, 10);
           setRevisionHistory(refreshed.content ?? []);
         }
-        navigate(`/mentor/courses/${savedCourse.id}/edit?revisionId=${submittedRevision.id}&revisionSubmitted=1`, { replace: true });
+        navigate(
+          buildCourseEditUrl(savedCourse.id, {
+            revisionId: submittedRevision.id,
+            flow: 'revisionSubmitted'
+          }),
+          { replace: true }
+        );
         return;
       }
 
@@ -1184,10 +1311,13 @@ const CourseCreationPage = () => {
       if (isEditMode) {
         await loadCourseForEdit(submittedCourse.id.toString());
       }
-      navigate(`/mentor/courses/${submittedCourse.id}/edit?submitted=1`, { replace: true });
+      navigate(buildCourseEditUrl(submittedCourse.id, { flow: 'submitted' }), { replace: true });
     } catch (error) {
       const apiErrorMessage = getApiErrorMessage(error);
-      if (apiErrorMessage.includes('COURSE_REVISION_NO_CHANGES_TO_SUBMIT')) {
+      const identityMessage = mapRevisionSnapshotIdentityErrorToVietnameseMessage(apiErrorMessage);
+      if (identityMessage) {
+        showToast('error', identityMessage);
+      } else if (apiErrorMessage.includes('COURSE_REVISION_NO_CHANGES_TO_SUBMIT')) {
         showToast('warning', 'Phiên bản chưa có thay đổi thực tế so với bản gốc, nên chưa thể gửi duyệt.');
       } else if (apiErrorMessage.includes('COURSE_REVISION_NO_CHANGES_SINCE_REJECTION')) {
         showToast('warning', 'Phiên bản bị từ chối trước đó nhưng chưa có cập nhật mới, nên chưa thể gửi duyệt lại.');
