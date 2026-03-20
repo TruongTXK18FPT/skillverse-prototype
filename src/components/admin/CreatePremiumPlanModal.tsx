@@ -36,7 +36,7 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
       | "PREMIUM_PLUS"
       | "STUDENT_PACK"
       | "RECRUITER_PRO",
-    targetRole: "LEARNER" as "LEARNER" | "RECRUITER" | "PARENT",
+    targetRole: "LEARNER" as "LEARNER" | "RECRUITER",
     studentDiscountPercent: 0,
     maxSubscribers: null as number | null,
     isActive: true,
@@ -57,7 +57,8 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
         durationMonths: editingPlan.durationMonths,
         price: editingPlan.price,
         planType: editingPlan.planType as any,
-        targetRole: (editingPlan.targetRole as any) || "LEARNER",
+        targetRole:
+          editingPlan.targetRole === "RECRUITER" ? "RECRUITER" : "LEARNER",
         studentDiscountPercent: editingPlan.studentDiscountPercent,
         maxSubscribers: editingPlan.maxSubscribers,
         isActive: editingPlan.isActive,
@@ -424,7 +425,6 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
                 >
                   <option value="LEARNER">Học viên / Người dùng</option>
                   <option value="RECRUITER">Nhà tuyển dụng</option>
-                  <option value="PARENT">Phụ huynh</option>
                 </select>
                 <small>Role sẽ hiển thị gói này cho đúng nhóm người dùng</small>
               </div>

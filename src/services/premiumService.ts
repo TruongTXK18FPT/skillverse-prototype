@@ -50,18 +50,11 @@ const normalizeSubscription = (
   plan: normalizePlan(subscription.plan),
 });
 
-type PremiumTargetRole = PremiumPlan["targetRole"];
-
 export const premiumService = {
-  async getPremiumPlans(
-    targetRole?: PremiumTargetRole,
-    includeFreeTier: boolean = false,
-  ): Promise<PremiumPlan[]> {
-    const params: Record<string, string | boolean> = {};
-    if (targetRole) {
-      params.targetRole = targetRole;
-      params.includeFreeTier = includeFreeTier;
-    }
+  async getPremiumPlans(includeFreeTier: boolean = false): Promise<PremiumPlan[]> {
+    const params: Record<string, string | boolean> = {
+      includeFreeTier,
+    };
 
     const { data } = await api.get<PremiumPlanApiResponse[]>("/api/premium/plans", {
       params,

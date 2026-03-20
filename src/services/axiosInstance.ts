@@ -177,7 +177,9 @@ const PUBLIC_ENDPOINTS = [
   "/v1/meowl/reminders", // Meowl reminders
   "/v1/meowl/notifications", // Meowl notifications
   "/v1/meowl/health", // Meowl health check
-  "/premium/plans", // Public premium plans listing
+  // NOTE: Keep premium plan endpoints out of this list so authenticated users
+  // still send JWT and backend can role-filter correctly (USER -> LEARNER).
+  // Guests without token can still call these endpoints normally.
   "/jobs/public", // Public jobs listing
   "/short-term-jobs/public", // Public short-term jobs listing
   "/short-term-jobs/search", // Public short-term job search

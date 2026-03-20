@@ -30,15 +30,7 @@ const PremiumPageCosmic = () => {
   const [premiumPlans, setPremiumPlans] = useState<PremiumPlan[]>([]);
 
   const roles = (user?.roles || []).map((role) => String(role).toUpperCase());
-  const isRecruiter = roles.includes("RECRUITER");
   const isParent = roles.includes("PARENT");
-  const isRecruiterRoute = location.pathname.startsWith("/business");
-  const requestedTargetRole: PremiumPlan["targetRole"] =
-    isRecruiterRoute || isRecruiter
-      ? "RECRUITER"
-      : isParent
-        ? "PARENT"
-        : "LEARNER";
 
   const [students, setStudents] = useState<StudentDetail[]>([]);
   const [selectedStudentId, setSelectedStudentId] = useState<number | null>(
@@ -84,7 +76,7 @@ const PremiumPageCosmic = () => {
         loadStudents();
       }
     }
-  }, [isAuthenticated, isParent, requestedTargetRole, user]);
+  }, [isAuthenticated, isParent, user]);
 
   const loadStudents = async () => {
     try {
@@ -104,20 +96,7 @@ const PremiumPageCosmic = () => {
 
   const loadPremiumPlans = async () => {
     try {
-      const plans = await premiumService.getPremiumPlans(
-        requestedTargetRole,
-        true,
-      );
-
-      if (plans.length === 0 && requestedTargetRole === "PARENT") {
-        const learnerPlans = await premiumService.getPremiumPlans(
-          "LEARNER",
-          true,
-        );
-        setPremiumPlans(learnerPlans);
-        return;
-      }
-
+      const plans = await premiumService.getPremiumPlans(true);
       setPremiumPlans(plans);
     } catch (error) {
       console.error("Failed to load premium plans:", error);
