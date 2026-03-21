@@ -126,12 +126,14 @@ const Header: React.FC = () => {
       description: "Khám phá lộ trình học tập và phát triển kỹ năng",
       path: "/roadmap",
       icon: Map,
+      hideForRoles: ["RECRUITER"],
     },
     {
       name: "Lập Kế Hoạch",
       description: "Lên lịch học tập và quản lý công việc hiệu quả",
       path: "/study-planner",
       icon: Calendar,
+      hideForRoles: ["RECRUITER"],
     },
     {
       name: "Cố Vấn",
@@ -676,6 +678,40 @@ const Header: React.FC = () => {
                     );
                   })()}
 
+                  {/* RECRUITER section — only Việc Làm & Cộng Đồng */}
+                  {isRecruiterRole && (
+                    <div className="sv-mega-section">
+                      <h4 className="sv-mega-section-title">
+                        <Target size={14} className="sv-section-icon" />
+                        <span>Hành động chính</span>
+                      </h4>
+                      <div className="sv-mega-grid sv-mega-grid--primary">
+                        <Link
+                          to="/jobs"
+                          className="sv-mega-link sv-mega-link--primary"
+                          onClick={() => setShowQuickNav(false)}
+                        >
+                          <Briefcase className="sv-mega-link-icon" />
+                          <div className="sv-mega-link-content">
+                            <h3 className="sv-mega-link-title">Việc Làm</h3>
+                            <p className="sv-mega-link-desc">Tìm kiếm & quản lý tin tuyển dụng</p>
+                          </div>
+                        </Link>
+                        <Link
+                          to="/community"
+                          className="sv-mega-link sv-mega-link--primary"
+                          onClick={() => setShowQuickNav(false)}
+                        >
+                          <MessageSquare className="sv-mega-link-icon" />
+                          <div className="sv-mega-link-content">
+                            <h3 className="sv-mega-link-title">Cộng Đồng</h3>
+                            <p className="sv-mega-link-desc">Tham gia cộng đồng học tập sôi động</p>
+                          </div>
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Group 2: Explore & Learn */}
                   {(() => {
                     const mentorSecondaryItems = [
@@ -878,8 +914,8 @@ const Header: React.FC = () => {
                     );
                   })()}
 
-                  {/* Default items for guest users (no USER role) — full menu like USER */}
-                  {!user?.roles.includes("USER") && (
+                  {/* Default items for guest users (no USER role and not RECRUITER) */}
+                  {!user?.roles.includes("USER") && !isRecruiterRole && (
                     <>
                       {/* Group 1: Primary Actions */}
                       <div className="sv-mega-section">

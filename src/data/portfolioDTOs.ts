@@ -252,7 +252,8 @@ export interface CandidateSearchFilters {
   hasCertificates?: boolean;
   openToOffers?: boolean;
   enableAIMatching?: boolean;
-  jobId?: number; // For job-specific matching
+  jobId?: number; // For long-term job matching
+  shortTermJobId?: number; // For short-term job (gig/freelance) matching
 }
 
 export interface CandidateSearchResult {

@@ -145,6 +145,7 @@ class CandidateSearchService {
       if (filters.hasCertificates !== undefined) params.append('hasCertificates', filters.hasCertificates.toString());
       if (filters.openToOffers !== undefined) params.append('openToOffers', filters.openToOffers.toString());
       if (filters.jobId !== undefined) params.append('jobId', filters.jobId.toString());
+      if (filters.shortTermJobId !== undefined) params.append('shortTermJobId', filters.shortTermJobId.toString());
       if (filters.enableAIMatching !== undefined) params.append('enableAIMatching', filters.enableAIMatching.toString());
 
       params.append('page', page.toString());

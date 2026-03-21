@@ -13,12 +13,15 @@ import { JobPostingResponse } from "../../data/jobDTOs";
 import { ShortTermJobResponse, ShortTermApplicationStatus } from "../../types/ShortTermJob";
 import { useToast } from "../../hooks/useToast";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
+import { useAuth } from "../../context/AuthContext";
 import "./odyssey-styles.css";
 
 type ViewType = "all" | "fulltime" | "shortterm";
 
 const JobsOdysseyPage = () => {
   const { showError } = useToast();
+  const { user } = useAuth();
+  const isRecruiter = user?.roles.includes("RECRUITER") ?? false;
 
   const [viewType, setViewType] = useState<ViewType>("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -45,7 +48,8 @@ const JobsOdysseyPage = () => {
   const [isGigModalOpen, setIsGigModalOpen] = useState(false);
 
   // Track which jobs the current user has applied to
-  const [userApplications, setUserApplications] = useState<
+  // Track which jobs the current user has applied to
+  const [_userApplications, _setUserApplications] = useState<
     Map<number, ShortTermApplicationStatus>
   >(new Map());
 
@@ -58,21 +62,28 @@ const JobsOdysseyPage = () => {
   const fetchJobs = async () => {
     setIsLoading(true);
     try {
-      const [regularJobs, gigJobs, myApplications] = await Promise.all([
+      const [regularJobs, gigJobs] = await Promise.all([
         jobService.getPublicJobs({
           search: searchTerm || undefined,
           status: "OPEN",
         }),
         shortTermJobService.getPublishedJobs(),
-        shortTermJobService.getMyApplications(),
       ]);
 
-      // Build map of jobId -> applicationStatus for applied jobs
+      // Only fetch my applications if user has USER role (not recruiter)
       const appliedMap = new Map<number, ShortTermApplicationStatus>();
-      for (const app of myApplications) {
-        appliedMap.set(app.jobId, app.status);
+      if (!isRecruiter) {
+        try {
+          const myApplications = await shortTermJobService.getMyApplications();
+          for (const app of myApplications) {
+            appliedMap.set(app.jobId, app.status);
+          }
+        } catch (e) {
+          // Silently ignore — user may not have USER role
+          console.warn("Could not fetch my applications:", e);
+        }
       }
-      setUserApplications(appliedMap);
+      _setUserApplications(appliedMap);
 
       // Inject hasApplied/canApply into gig jobs
       const enrichedGigs = gigJobs.map((gig) => ({

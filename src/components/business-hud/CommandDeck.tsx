@@ -311,7 +311,7 @@ const CommandDeck: React.FC = () => {
     {
       id: "candidates",
       icon: <Users size={18} />,
-      label: "Tìm Ứng Viên",
+      label: "Khu vực lọc Ứng Viên",
       color: "#a78bfa",
       rgb: "167,139,250",
     },
@@ -835,7 +835,7 @@ const CommandDeck: React.FC = () => {
                   >
                     <div className="rh-quick-card__header">
                       <Users size={18} />
-                      <h3>Tìm Ứng Viên</h3>
+                      <h3>Khu vực lọc Ứng Viên</h3>
                       <ChevronRight
                         size={16}
                         className="rh-quick-card__arrow"
@@ -994,7 +994,7 @@ const CommandDeck: React.FC = () => {
             <div className="rh-panel-header">
               <div className="rh-panel-header__left">
                 <h2 className="rh-panel-header__title">
-                  <Users size={22} /> Tìm Kiếm Ứng Viên
+                  <Users size={22} /> Khu vực lọc Ứng Viên
                 </h2>
                 <p className="rh-panel-header__subtitle">
                   Duyệt hồ sơ và tìm kiếm người phù hợp với vị trí tuyển dụng

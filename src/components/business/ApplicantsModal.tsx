@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   CheckCircle2,
   Clock3,
@@ -9,22 +9,25 @@ import {
   ShieldCheck,
   Sparkles,
   XCircle,
-} from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { JobApplicationResponse, JobApplicationStatus } from '../../data/jobDTOs';
-import { RecruitmentSessionResponse } from '../../data/portfolioDTOs';
-import { useToast } from '../../hooks/useToast';
-import jobService from '../../services/jobService';
-import recruitmentChatService from '../../services/recruitmentChatService';
+} from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import {
+  JobApplicationResponse,
+  JobApplicationStatus,
+} from "../../data/jobDTOs";
+import { RecruitmentSessionResponse } from "../../data/portfolioDTOs";
+import { useToast } from "../../hooks/useToast";
+import jobService from "../../services/jobService";
+import recruitmentChatService from "../../services/recruitmentChatService";
 import {
   getApplicantDisplayName,
   getApplicantInitials,
   getApplicantSubtitle,
   getPortfolioPath,
   resolveRecruitmentAssetUrl,
-} from '../../utils/recruitmentUi';
-import RecruiterChatWindow from '../chat/RecruiterChatWindow';
-import './ApplicantsModal-fleet.css';
+} from "../../utils/recruitmentUi";
+import RecruiterChatWindow from "../chat/RecruiterChatWindow";
+import "./ApplicantsModal-fleet.css";
 
 interface ApplicantsModalProps {
   jobId: number;
@@ -34,37 +37,37 @@ interface ApplicantsModalProps {
   refreshTrigger?: number;
 }
 
-type DecisionStatus = 'ACCEPTED' | 'REJECTED';
+type DecisionStatus = "ACCEPTED" | "REJECTED";
 
 const getStatusBadgeClass = (status: JobApplicationStatus): string => {
   const statusClasses = {
-    PENDING: 'am-status-pending',
-    REVIEWED: 'am-status-reviewed',
-    ACCEPTED: 'am-status-accepted',
-    REJECTED: 'am-status-rejected',
+    PENDING: "am-status-pending",
+    REVIEWED: "am-status-reviewed",
+    ACCEPTED: "am-status-accepted",
+    REJECTED: "am-status-rejected",
   };
 
-  return statusClasses[status] || 'am-status-pending';
+  return statusClasses[status] || "am-status-pending";
 };
 
 const getStatusText = (status: JobApplicationStatus): string => {
   const statusTexts = {
-    PENDING: 'Mới nộp',
-    REVIEWED: 'Đã xem',
-    ACCEPTED: 'Đã duyệt',
-    REJECTED: 'Đã từ chối',
+    PENDING: "Mới nộp",
+    REVIEWED: "Đã xem",
+    ACCEPTED: "Đã duyệt",
+    REJECTED: "Đã từ chối",
   };
 
   return statusTexts[status] || status;
 };
 
 const formatDate = (dateString: string) =>
-  new Date(dateString).toLocaleDateString('vi-VN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
+  new Date(dateString).toLocaleDateString("vi-VN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 
 const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
@@ -76,19 +79,24 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
 }) => {
   const { user } = useAuth();
   const { showError, showSuccess, showInfo } = useToast();
-  const [applications, setApplications] = useState<JobApplicationResponse[]>([]);
+  const [applications, setApplications] = useState<JobApplicationResponse[]>(
+    [],
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [processingIds, setProcessingIds] = useState<Set<number>>(new Set());
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
   const [decisionModal, setDecisionModal] = useState<{
     application: JobApplicationResponse;
     status: DecisionStatus;
   } | null>(null);
-  const [decisionNote, setDecisionNote] = useState('');
-  const [selectedSession, setSelectedSession] = useState<RecruitmentSessionResponse | null>(null);
-  const [activeApplicant, setActiveApplicant] = useState<JobApplicationResponse | null>(null);
+  const [decisionNote, setDecisionNote] = useState("");
+  const [selectedSession, setSelectedSession] =
+    useState<RecruitmentSessionResponse | null>(null);
+  const [activeApplicant, setActiveApplicant] =
+    useState<JobApplicationResponse | null>(null);
   const [isChatLoading, setIsChatLoading] = useState(false);
 
   useEffect(() => {
@@ -101,9 +109,13 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
       const result = await jobService.getJobApplicants(jobId, pageNumber, 6);
       setApplications(result.content || []);
       setTotalPages(result.totalPages || 0);
+      setTotalElements(result.totalElements || 0);
     } catch (error) {
-      console.error('Error fetching applicants:', error);
-      showError('Lỗi tải dữ liệu', 'Không thể tải danh sách ứng viên cho công việc này.');
+      console.error("Error fetching applicants:", error);
+      showError(
+        "Lỗi tải dữ liệu",
+        "Không thể tải danh sách ứng viên cho công việc này.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -129,21 +141,23 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
     markBusy(applicationId);
     try {
       await jobService.updateApplicationStatus(applicationId, {
-        status: 'REVIEWED' as JobApplicationStatus,
+        status: "REVIEWED" as JobApplicationStatus,
       });
       setApplications((previous) =>
         previous.map((application) =>
           application.id === applicationId
-            ? { ...application, status: 'REVIEWED' as JobApplicationStatus }
+            ? { ...application, status: "REVIEWED" as JobApplicationStatus }
             : application,
         ),
       );
       onChanged?.();
     } catch (error) {
-      console.error('Error marking reviewed:', error);
+      console.error("Error marking reviewed:", error);
       showError(
-        'Lỗi cập nhật',
-        error instanceof Error ? error.message : 'Không thể đánh dấu hồ sơ đã xem.',
+        "Lỗi cập nhật",
+        error instanceof Error
+          ? error.message
+          : "Không thể đánh dấu hồ sơ đã xem.",
       );
     } finally {
       clearBusy(applicationId);
@@ -153,11 +167,14 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
   const handleOpenPortfolio = (application: JobApplicationResponse) => {
     const portfolioPath = getPortfolioPath(application.portfolioSlug);
     if (!portfolioPath) {
-      showInfo('Chưa có portfolio', 'Ứng viên này chưa công khai portfolio trên SkillVerse.');
+      showInfo(
+        "Chưa có portfolio",
+        "Ứng viên này chưa công khai portfolio trên SkillVerse.",
+      );
       return;
     }
 
-    window.open(portfolioPath, '_blank', 'noopener,noreferrer');
+    window.open(portfolioPath, "_blank", "noopener,noreferrer");
   };
 
   const handleOpenChat = async (application: JobApplicationResponse) => {
@@ -166,15 +183,15 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
       const session = await recruitmentChatService.getOrCreateSession(
         application.userId,
         jobId,
-        'MANUAL',
+        "MANUAL",
       );
       setActiveApplicant(application);
       setSelectedSession(session);
     } catch (error) {
-      console.error('Error opening recruiter chat:', error);
+      console.error("Error opening recruiter chat:", error);
       showError(
-        'Không thể mở chat',
-        error instanceof Error ? error.message : 'Vui lòng thử lại sau.',
+        "Không thể mở chat",
+        error instanceof Error ? error.message : "Vui lòng thử lại sau.",
       );
     } finally {
       setIsChatLoading(false);
@@ -188,7 +205,10 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
 
     const note = decisionNote.trim();
     if (!note) {
-      showError('Thiếu nội dung', 'Vui lòng nhập nội dung đầy đủ cho quyết định này.');
+      showError(
+        "Thiếu nội dung",
+        "Vui lòng nhập nội dung đầy đủ cho quyết định này.",
+      );
       return;
     }
 
@@ -197,12 +217,15 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
     try {
       await jobService.updateApplicationStatus(applicationId, {
         status: decisionModal.status as JobApplicationStatus,
-        acceptanceMessage: decisionModal.status === 'ACCEPTED' ? note : undefined,
-        rejectionReason: decisionModal.status === 'REJECTED' ? note : undefined,
+        acceptanceMessage:
+          decisionModal.status === "ACCEPTED" ? note : undefined,
+        rejectionReason: decisionModal.status === "REJECTED" ? note : undefined,
       });
 
       showSuccess(
-        decisionModal.status === 'ACCEPTED' ? 'Đã duyệt ứng viên' : 'Đã từ chối ứng viên',
+        decisionModal.status === "ACCEPTED"
+          ? "Đã duyệt ứng viên"
+          : "Đã từ chối ứng viên",
         `${getApplicantDisplayName(
           decisionModal.application.userFullName,
           decisionModal.application.userEmail,
@@ -210,37 +233,94 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
       );
 
       setDecisionModal(null);
-      setDecisionNote('');
+      setDecisionNote("");
       await fetchApplicants(page);
       onChanged?.();
     } catch (error) {
-      console.error('Error updating applicant decision:', error);
+      console.error("Error updating applicant decision:", error);
       showError(
-        'Không thể cập nhật hồ sơ',
-        error instanceof Error ? error.message : 'Vui lòng thử lại.',
+        "Không thể cập nhật hồ sơ",
+        error instanceof Error ? error.message : "Vui lòng thử lại.",
       );
     } finally {
       clearBusy(applicationId);
     }
   };
 
-  const currentUserName = user?.fullName || user?.email || 'Recruiter';
+  const currentUserName = user?.fullName || user?.email || "Recruiter";
 
   return (
     <>
       <div className="am-fleet-overlay" onClick={onClose}>
-        <div className="am-fleet-content" onClick={(event) => event.stopPropagation()}>
+        <div
+          className="am-fleet-content"
+          onClick={(event) => event.stopPropagation()}
+        >
           <div className="am-fleet-header">
-            <div className="am-fleet-title">
-              <h3>
-                <Sparkles size={20} />
-                Pipeline Ứng Viên
-              </h3>
-              <p className="am-fleet-subtitle">Job context: {jobTitle}</p>
+            <div className="am-fleet-title-row">
+              <div className="am-fleet-title">
+                <h3>
+                  <span className="am-title-icon">
+                    <Sparkles size={16} />
+                  </span>
+                  Pipeline Ứng Viên
+                </h3>
+                <p className="am-fleet-subtitle">{jobTitle}</p>
+              </div>
+              <button
+                className="am-fleet-close"
+                onClick={onClose}
+                title="Đóng"
+                type="button"
+              >
+                ×
+              </button>
             </div>
-            <button className="am-fleet-close" onClick={onClose} type="button">
-              ×
-            </button>
+
+            {/* Stats Row */}
+            <div className="am-fleet-stats">
+              <div className="am-fleet-stat">
+                <span
+                  className="am-fleet-stat-dot"
+                  style={{
+                    background: "#00f5ff",
+                    boxShadow: "0 0 6px #00f5ff",
+                  }}
+                />
+                <span>Tổng:</span>
+                <span className="am-fleet-stat-value">{totalElements}</span>
+              </div>
+              <div className="am-fleet-stat">
+                <span
+                  className="am-fleet-stat-dot"
+                  style={{ background: "#fbbf24" }}
+                />
+                <span>Chờ duyệt:</span>
+                <span className="am-fleet-stat-value">
+                  {applications.filter((a) => a.status === "PENDING").length}
+                </span>
+              </div>
+              <div className="am-fleet-stat">
+                <span
+                  className="am-fleet-stat-dot"
+                  style={{ background: "#34d399" }}
+                />
+                <span>Đã duyệt:</span>
+                <span className="am-fleet-stat-value">
+                  {applications.filter((a) => a.status === "ACCEPTED").length}
+                </span>
+              </div>
+              <div className="am-fleet-stat">
+                <span
+                  className="am-fleet-stat-dot"
+                  style={{ background: "#f87171" }}
+                />
+                <span>Từ chối:</span>
+                <span className="am-fleet-stat-value">
+                  {applications.filter((a) => a.status === "REJECTED").length}
+                </span>
+              </div>
+            </div>
           </div>
 
           <div className="am-fleet-body">
@@ -253,7 +333,10 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
               <div className="am-fleet-empty">
                 <div className="am-fleet-empty-icon">📭</div>
                 <h4>Chưa có ứng viên</h4>
-                <p>Danh sách nộp đơn sẽ xuất hiện ở đây ngay khi công việc nhận được hồ sơ mới.</p>
+                <p>
+                  Danh sách nộp đơn sẽ xuất hiện ở đây ngay khi công việc nhận
+                  được hồ sơ mới.
+                </p>
               </div>
             ) : (
               <div className="am-fleet-list">
@@ -262,14 +345,18 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
                     application.userFullName,
                     application.userEmail,
                   );
-                  const avatarUrl = resolveRecruitmentAssetUrl(application.userAvatar);
-                  const portfolioPath = getPortfolioPath(application.portfolioSlug);
+                  const avatarUrl = resolveRecruitmentAssetUrl(
+                    application.userAvatar,
+                  );
+                  const portfolioPath = getPortfolioPath(
+                    application.portfolioSlug,
+                  );
                   const isBusy = processingIds.has(application.id);
 
                   return (
                     <article
                       key={application.id}
-                      className={`am-fleet-card ${application.isHighlighted ? 'am-fleet-card--highlighted' : ''}`}
+                      className={`am-fleet-card ${application.isHighlighted ? "am-fleet-card--highlighted" : ""}`}
                     >
                       <div className="am-fleet-card__header">
                         <div className="am-fleet-card__identity">
@@ -281,7 +368,10 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
                             />
                           ) : (
                             <div className="am-fleet-card__avatar am-fleet-card__avatar--fallback">
-                              {getApplicantInitials(application.userFullName, application.userEmail)}
+                              {getApplicantInitials(
+                                application.userFullName,
+                                application.userEmail,
+                              )}
                             </div>
                           )}
 
@@ -297,7 +387,9 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
                         </div>
 
                         <div className="am-fleet-card__summary">
-                          <span className={`am-fleet-badge ${getStatusBadgeClass(application.status)}`}>
+                          <span
+                            className={`am-fleet-badge ${getStatusBadgeClass(application.status)}`}
+                          >
                             {getStatusText(application.status)}
                           </span>
                           <span className="am-fleet-card__date">
@@ -307,106 +399,141 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
                         </div>
                       </div>
 
-                      {application.coverLetter ? (
-                        <div className="am-fleet-card__letter">
-                          <div className="am-fleet-card__letter-head">
-                            <strong>Cover letter</strong>
-                            <button
-                              className="am-fleet-cover-btn"
-                              onClick={() =>
-                                setExpandedId((current) =>
-                                  current === application.id ? null : application.id,
-                                )
-                              }
-                              type="button"
-                            >
-                              {expandedId === application.id ? 'Thu gọn' : 'Xem đầy đủ'}
-                            </button>
+                      <div className="am-fleet-card-body">
+                        {application.coverLetter ? (
+                          <div className="am-fleet-card__letter">
+                            <div className="am-fleet-card__letter-head">
+                              <strong>Cover letter</strong>
+                              <button
+                                className="am-fleet-cover-btn"
+                                onClick={() =>
+                                  setExpandedId((current) =>
+                                    current === application.id
+                                      ? null
+                                      : application.id,
+                                  )
+                                }
+                                type="button"
+                              >
+                                {expandedId === application.id
+                                  ? "Thu gọn"
+                                  : "Xem đầy đủ"}
+                              </button>
+                            </div>
+                            <p>
+                              {expandedId === application.id ||
+                              application.coverLetter.length <= 220
+                                ? application.coverLetter
+                                : `${application.coverLetter.slice(0, 220)}...`}
+                            </p>
                           </div>
-                          <p>
-                            {expandedId === application.id || application.coverLetter.length <= 220
-                              ? application.coverLetter
-                              : `${application.coverLetter.slice(0, 220)}...`}
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="am-fleet-card__letter am-fleet-card__letter--empty">
-                          Ứng viên chưa để lại cover letter.
-                        </div>
-                      )}
-
-                      {(application.acceptanceMessage || application.rejectionReason) && (
-                        <div className="am-fleet-card__note">
-                          <strong>{application.status === 'ACCEPTED' ? 'Ghi chú duyệt' : 'Lý do từ chối'}</strong>
-                          <p>{application.acceptanceMessage || application.rejectionReason}</p>
-                        </div>
-                      )}
-
-                      <div className="am-fleet-card__meta">
-                        <span>
-                          <ShieldCheck size={13} />
-                          {portfolioPath ? 'Portfolio công khai sẵn sàng review' : 'Chưa có portfolio công khai'}
-                        </span>
-                        {application.isHighlighted && (
-                          <span>
-                            <Sparkles size={13} />
-                            Hồ sơ nổi bật
-                          </span>
+                        ) : (
+                          <div className="am-fleet-card__letter am-fleet-card__letter--empty">
+                            Ứng viên chưa để lại cover letter.
+                          </div>
                         )}
+
+                        {(application.acceptanceMessage ||
+                          application.rejectionReason) && (
+                          <div className="am-fleet-card__note">
+                            <strong>
+                              {application.status === "ACCEPTED"
+                                ? "Ghi chú duyệt"
+                                : "Lý do từ chối"}
+                            </strong>
+                            <p>
+                              {application.acceptanceMessage ||
+                                application.rejectionReason}
+                            </p>
+                          </div>
+                        )}
+
+                        <div className="am-fleet-card__meta">
+                          <span>
+                            <ShieldCheck size={13} />
+                            {portfolioPath
+                              ? "Portfolio công khai sẵn sàng review"
+                              : "Chưa có portfolio công khai"}
+                          </span>
+                          {application.isHighlighted && (
+                            <span>
+                              <Sparkles size={13} />
+                              Hồ sơ nổi bật
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       <div className="am-fleet-actions">
                         <button
-                          className="am-btn-action"
+                          className="am-btn-icon am-btn-view"
+                          title="Xem portfolio"
                           onClick={() => handleOpenPortfolio(application)}
                           type="button"
                         >
-                          <Eye size={15} />
-                          Xem portfolio
+                          <Eye size={14} />
                         </button>
                         <button
-                          className="am-btn-action"
+                          className="am-btn-icon am-btn-chat"
+                          title="Chat theo job"
                           onClick={() => handleOpenChat(application)}
-                          type="button"
                           disabled={isChatLoading}
+                          type="button"
                         >
-                          <MessageSquare size={15} />
-                          Chat theo job
+                          {isChatLoading ? (
+                            <Loader2 size={14} className="am-spin" />
+                          ) : (
+                            <MessageSquare size={14} />
+                          )}
                         </button>
-                        {application.status === 'PENDING' && (
+
+                        <span className="am-btn-sep" />
+
+                        {application.status === "PENDING" && (
                           <button
-                            className="am-btn-action am-btn-review"
+                            className="am-btn-icon am-btn-review"
+                            title="Đánh dấu đã xem"
                             onClick={() => handleMarkReviewed(application.id)}
                             disabled={isBusy}
                             type="button"
                           >
-                            {isBusy ? <Loader2 size={15} className="am-spin" /> : <CheckCircle2 size={15} />}
-                            Đã xem
+                            {isBusy ? (
+                              <Loader2 size={14} className="am-spin" />
+                            ) : (
+                              <CheckCircle2 size={14} />
+                            )}
                           </button>
                         )}
-                        {(application.status === 'PENDING' || application.status === 'REVIEWED') && (
+                        {(application.status === "PENDING" ||
+                          application.status === "REVIEWED") && (
                           <>
                             <button
-                              className="am-btn-action am-btn-accept"
+                              className="am-btn-icon am-btn-accept"
+                              title="Duyệt ứng viên"
                               onClick={() => {
-                                setDecisionModal({ application, status: 'ACCEPTED' });
-                                setDecisionNote('');
+                                setDecisionModal({
+                                  application,
+                                  status: "ACCEPTED",
+                                });
+                                setDecisionNote("");
                               }}
                               type="button"
                             >
-                              <Send size={15} />
-                              Duyệt có ghi chú
+                              <CheckCircle2 size={14} />
                             </button>
                             <button
-                              className="am-btn-action am-btn-reject"
+                              className="am-btn-icon am-btn-reject"
+                              title="Từ chối ứng viên"
                               onClick={() => {
-                                setDecisionModal({ application, status: 'REJECTED' });
-                                setDecisionNote('');
+                                setDecisionModal({
+                                  application,
+                                  status: "REJECTED",
+                                });
+                                setDecisionNote("");
                               }}
                               type="button"
                             >
-                              <XCircle size={15} />
-                              Từ chối có lý do
+                              <XCircle size={14} />
                             </button>
                           </>
                         )}
@@ -445,15 +572,21 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
       </div>
 
       {decisionModal && (
-        <div className="am-decision-overlay" onClick={() => setDecisionModal(null)}>
-          <div className="am-decision-modal" onClick={(event) => event.stopPropagation()}>
+        <div
+          className="am-decision-overlay"
+          onClick={() => setDecisionModal(null)}
+        >
+          <div
+            className="am-decision-modal"
+            onClick={(event) => event.stopPropagation()}
+          >
             <h3>
-              {decisionModal.status === 'ACCEPTED'
-                ? 'Duyệt ứng viên với thông điệp rõ ràng'
-                : 'Từ chối ứng viên với lý do cụ thể'}
+              {decisionModal.status === "ACCEPTED"
+                ? "Duyệt ứng viên với thông điệp rõ ràng"
+                : "Từ chối ứng viên với lý do cụ thể"}
             </h3>
             <p>
-              {decisionModal.status === 'ACCEPTED'
+              {decisionModal.status === "ACCEPTED"
                 ? `Thông điệp này sẽ được gửi cho ${getApplicantDisplayName(
                     decisionModal.application.userFullName,
                     decisionModal.application.userEmail,
@@ -468,15 +601,17 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
               value={decisionNote}
               onChange={(event) => setDecisionNote(event.target.value)}
               placeholder={
-                decisionModal.status === 'ACCEPTED'
-                  ? 'Ví dụ: Hồ sơ của bạn phù hợp với nhu cầu hiện tại. Chúng tôi muốn mời bạn vào vòng tiếp theo...'
-                  : 'Ví dụ: Kinh nghiệm hiện tại chưa khớp với stack và phạm vi triển khai của vị trí này...'
+                decisionModal.status === "ACCEPTED"
+                  ? "Ví dụ: Hồ sơ của bạn phù hợp với nhu cầu hiện tại. Chúng tôi muốn mời bạn vào vòng tiếp theo..."
+                  : "Ví dụ: Kinh nghiệm hiện tại chưa khớp với stack và phạm vi triển khai của vị trí này..."
               }
               rows={6}
               maxLength={1200}
             />
 
-            <div className="am-decision-meta">{decisionNote.length}/1200 ký tự</div>
+            <div className="am-decision-meta">
+              {decisionNote.length}/1200 ký tự
+            </div>
 
             <div className="am-decision-actions">
               <button
@@ -488,18 +623,20 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
               </button>
               <button
                 type="button"
-                className={`am-btn-action ${decisionModal.status === 'ACCEPTED' ? 'am-btn-accept' : 'am-btn-reject'}`}
+                className={`am-btn-action ${decisionModal.status === "ACCEPTED" ? "am-btn-accept" : "am-btn-reject"}`}
                 onClick={handleDecisionSubmit}
                 disabled={processingIds.has(decisionModal.application.id)}
               >
                 {processingIds.has(decisionModal.application.id) ? (
                   <Loader2 size={15} className="am-spin" />
-                ) : decisionModal.status === 'ACCEPTED' ? (
+                ) : decisionModal.status === "ACCEPTED" ? (
                   <Send size={15} />
                 ) : (
                   <XCircle size={15} />
                 )}
-                {decisionModal.status === 'ACCEPTED' ? 'Xác nhận duyệt' : 'Xác nhận từ chối'}
+                {decisionModal.status === "ACCEPTED"
+                  ? "Xác nhận duyệt"
+                  : "Xác nhận từ chối"}
               </button>
             </div>
           </div>
@@ -507,17 +644,27 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
       )}
 
       {selectedSession && (
-        <div className="am-chat-overlay" onClick={() => setSelectedSession(null)}>
-          <div className="am-chat-shell" onClick={(event) => event.stopPropagation()}>
+        <div
+          className="am-chat-overlay"
+          onClick={() => setSelectedSession(null)}
+        >
+          <div
+            className="am-chat-shell"
+            onClick={(event) => event.stopPropagation()}
+          >
             <RecruiterChatWindow
               session={selectedSession}
               currentUserId={user?.id || 0}
               currentUserName={currentUserName}
               onBack={() => setSelectedSession(null)}
-              onViewProfile={() => activeApplicant && handleOpenPortfolio(activeApplicant)}
+              onViewProfile={() =>
+                activeApplicant && handleOpenPortfolio(activeApplicant)
+              }
               onUpdateStatus={(sessionId, status) => {
                 setSelectedSession((current) =>
-                  current && current.id === sessionId ? { ...current, status } : current,
+                  current && current.id === sessionId
+                    ? { ...current, status }
+                    : current,
                 );
               }}
             />
