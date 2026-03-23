@@ -137,6 +137,20 @@ const initialState: CourseBuilderState = {
   error: null
 };
 
+const COURSE_DRAFT_ORDER_DEBUG_KEY = 'sv_debug_draft_order';
+
+const isCourseDraftOrderDebugEnabled = () =>
+  typeof window !== 'undefined' && window.localStorage.getItem(COURSE_DRAFT_ORDER_DEBUG_KEY) === '1';
+
+const debugCourseDraftOrder = (label: string, payload: unknown) => {
+  if (!isCourseDraftOrderDebugEnabled()) {
+    return;
+  }
+  console.groupCollapsed(`[COURSE-ORDER-DEBUG] ${label}`);
+  console.log(payload);
+  console.groupEnd();
+};
+
 // ============================================================================
 // CONTEXT
 // ============================================================================
@@ -246,7 +260,10 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
   // COURSE OPERATIONS
   // ============================================================================
 
-  const fetchFullCourseDetails = async (courseId: number): Promise<CourseDetailDTO> => {
+  const fetchFullCourseDetails = async (
+    courseId: number,
+    preferredOrderByModule?: Map<number, Map<string, number>>
+  ): Promise<CourseDetailDTO> => {
       // 1. Fetch course details
       const course = await import('../../services/courseService').then(m => m.getCourse(courseId));
       
@@ -256,49 +273,102 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
            const lessonSummaries = await import('../../services/lessonService').then(m => m.listLessonsByModule(module.id));
            const quizSummaries = await import('../../services/quizService').then(m => m.listQuizzesByModule(module.id));
            const assignmentSummaries = await import('../../services/assignmentService').then(m => m.listAssignmentsByModule(module.id));
+
+           debugCourseDraftOrder(`module ${module.id} summaries`, {
+             moduleId: module.id,
+             lessons: (lessonSummaries || []).map((item: any) => ({ id: item.id, title: item.title, orderIndex: item.orderIndex })),
+             quizzes: (quizSummaries || []).map((item: any) => ({ id: item.id, title: item.title, orderIndex: item.orderIndex })),
+             assignments: (assignmentSummaries || []).map((item: any) => ({ id: item.id, title: item.title, orderIndex: item.orderIndex }))
+           });
            
+           const resolveOrderIndex = (
+             primary: unknown,
+             fallback: unknown,
+             preferred: unknown,
+             sourceIndex: number
+           ): number => {
+             if (typeof primary === 'number' && Number.isFinite(primary)) {
+               return primary;
+             }
+             if (typeof fallback === 'number' && Number.isFinite(fallback)) {
+               return fallback;
+             }
+             if (typeof preferred === 'number' && Number.isFinite(preferred)) {
+               return preferred;
+             }
+             return sourceIndex;
+           };
+
+           const preferredModuleOrder = preferredOrderByModule?.get(module.id);
+           const getPreferredOrder = (itemType: 'LESSON' | 'QUIZ' | 'ASSIGNMENT', itemId: unknown) => {
+             if (!preferredModuleOrder || typeof itemId !== 'number') {
+               return undefined;
+             }
+             return preferredModuleOrder.get(`${itemType}:${itemId}`);
+           };
+
            // Fetch full details for each lesson
            const fullLessons = await Promise.all(
-             (lessonSummaries || []).map(async (summary) => {
+             (lessonSummaries || []).map(async (summary, summaryIndex) => {
                 const detail = await import('../../services/lessonService').then(m => m.getLessonById(summary.id));
                 // Fetch attachments
                 const attachments = await import('../../services/attachmentService').then(m => m.listAttachments(summary.id));
                 return {
                   ...detail,
+                  sourceOrderIndex: resolveOrderIndex((detail as any).orderIndex, (summary as any).orderIndex, undefined, summaryIndex),
+                  preferredOrderIndex: getPreferredOrder('LESSON', summary.id),
                   attachments: normalizeAttachmentDrafts(attachments)
                 };
              })
            );
 
            // Fetch full details for each quiz
-           const fullQuizzes = await Promise.all(
-              (quizSummaries || []).map(async (quiz) => {
+            const fullQuizzes = await Promise.all(
+              (quizSummaries || []).map(async (quiz, summaryIndex) => {
                  const details = await import('../../services/quizService').then(m => m.getQuizById(quiz.id));
-                 return { ...details, type: 'QUIZ' }; 
+                return {
+                 ...details,
+                 type: 'QUIZ',
+                   sourceOrderIndex: resolveOrderIndex((details as any).orderIndex, (quiz as any).orderIndex, undefined, summaryIndex),
+                   preferredOrderIndex: getPreferredOrder('QUIZ', quiz.id)
+                };
               })
            );
 
            // Fetch full details for each assignment
-           const fullAssignments = await Promise.all(
-              (assignmentSummaries || []).map(async (assign) => {
+            const fullAssignments = await Promise.all(
+              (assignmentSummaries || []).map(async (assign, summaryIndex) => {
                  const details = await import('../../services/assignmentService').then(m => m.getAssignmentById(assign.id));
-                 return { ...details, type: 'ASSIGNMENT' };
+                return {
+                 ...details,
+                 type: 'ASSIGNMENT',
+                   sourceOrderIndex: resolveOrderIndex((details as any).orderIndex, (assign as any).orderIndex, undefined, summaryIndex),
+                   preferredOrderIndex: getPreferredOrder('ASSIGNMENT', assign.id)
+                };
               })
            );
 
            // Merge lessons, quizzes, and assignments
            const mergedItems = [
-              ...fullLessons.map(l => ({ ...l, type: l.type || 'READING' })), // Ensure type
-              ...fullQuizzes.map(q => ({
+                ...fullLessons.map((l, sourceIndex) => ({
+                ...l,
+                type: l.type || 'READING',
+                 orderIndex: resolveOrderIndex((l as any).orderIndex, (l as any).sourceOrderIndex, (l as any).preferredOrderIndex, sourceIndex),
+                  sourceOrderIndex: resolveOrderIndex((l as any).sourceOrderIndex, (l as any).orderIndex, (l as any).preferredOrderIndex, sourceIndex)
+              })), // Ensure type
+              ...fullQuizzes.map((q, sourceIndex) => ({
                  id: q.id,
                  title: q.title,
                  type: 'QUIZ',
-                 orderIndex: (q as any).orderIndex || 0,
+                orderIndex: resolveOrderIndex((q as any).orderIndex, (q as any).sourceOrderIndex, (q as any).preferredOrderIndex, sourceIndex),
+                 sourceOrderIndex: resolveOrderIndex((q as any).sourceOrderIndex, (q as any).orderIndex, (q as any).preferredOrderIndex, sourceIndex),
                  durationSec: (q as any).timeLimitMinutes ? (q as any).timeLimitMinutes * 60 : 0,
                  quizDescription: q.description,
                  passScore: q.passScore,
                  quizTimeLimitMinutes: (q as any).timeLimitMinutes,
                  quizMaxAttempts: (q as any).maxAttempts,
+                 roundingIncrement: (q as any).roundingIncrement,
+                 cooldownHours: (q as any).cooldownHours,
                  questions: ((q as any).questions || []).map((qu: any, qIndex: number) => ({
                     id: qu.id?.toString() || Date.now().toString(),
                     serverId: qu.id,
@@ -315,19 +385,38 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                     }))
                  }))
               })),
-                  ...fullAssignments.map(a => ({
+                  ...fullAssignments.map((a, sourceIndex) => ({
                      id: a.id,
                      title: a.title,
                      type: 'ASSIGNMENT',
-                     orderIndex: (a as any).orderIndex || 0,
+                    orderIndex: resolveOrderIndex((a as any).orderIndex, (a as any).sourceOrderIndex, (a as any).preferredOrderIndex, sourceIndex),
+                     sourceOrderIndex: resolveOrderIndex((a as any).sourceOrderIndex, (a as any).orderIndex, (a as any).preferredOrderIndex, sourceIndex),
                      durationSec: 0, // Assignment duration?
                      assignmentDescription: a.description,
                      assignmentSubmissionType: (a as any).submissionType || 'TEXT',
                      assignmentMaxScore: (a as any).maxScore,
                      assignmentPassingScore: (a as any).passingScore,
+                     assignmentIsRequired: (a as any).isRequired,
                      assignmentCriteria: (a as any).criteria || [] // Map criteria back
                   }))
-           ].sort((a, b) => a.orderIndex - b.orderIndex);
+           ].sort((a, b) => {
+             const orderDiff = (a.orderIndex ?? 0) - (b.orderIndex ?? 0);
+             if (orderDiff !== 0) {
+               return orderDiff;
+             }
+             return ((a as any).sourceOrderIndex ?? 0) - ((b as any).sourceOrderIndex ?? 0);
+           });
+
+           debugCourseDraftOrder(`module ${module.id} merged items`, {
+             moduleId: module.id,
+             mergedItems: mergedItems.map((item: any, index: number) => ({
+               index,
+               id: item.id,
+               type: item.type,
+               title: item.title,
+               orderIndex: item.orderIndex
+             }))
+           });
 
            return {
              ...module,
@@ -411,6 +500,10 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                           passScore: lesson.passScore || 80,
                           timeLimitMinutes: lesson.quizTimeLimitMinutes,
                           maxAttempts: lesson.quizMaxAttempts,
+                          roundingIncrement: lesson.roundingIncrement,
+                          gradingMethod: lesson.gradingMethod,
+                          isAssessment: lesson.isAssessment,
+                          cooldownHours: lesson.cooldownHours,
                           orderIndex: j
                        };
 
@@ -480,6 +573,7 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                          submissionType: lesson.assignmentSubmissionType || 'TEXT',
                          maxScore: lesson.assignmentMaxScore || 100,
                          passingScore: lesson.assignmentPassingScore || 50,
+                         isRequired: lesson.assignmentIsRequired,
                          orderIndex: j,
                          criteria: lesson.assignmentCriteria || [] // Map criteria
                       };
@@ -591,6 +685,8 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
 
       const updatedCourse = await courseService.updateCourse(id, courseUpdateDTO, user?.id || 0, thumbnailFile);
       
+      const preferredOrderByModule = new Map<number, Map<string, number>>();
+
       // Save Modules and Lessons
       if (modulesSnapshot) {
          for (let i = 0; i < modulesSnapshot.length; i++) {
@@ -610,9 +706,58 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                moduleId = newMod.id;
             }
 
-            if (mod.lessons) {
-               for (let j = 0; j < mod.lessons.length; j++) {
-                  const lesson = mod.lessons[j];
+            if (moduleId && Array.isArray(mod.lessons)) {
+              const modulePreferredOrder = new Map<string, number>();
+              mod.lessons.forEach((lesson: any, lessonIndex: number) => {
+                if (typeof lesson?.serverId !== 'number') {
+                  return;
+                }
+                const itemType = lesson.type === 'quiz'
+                  ? 'QUIZ'
+                  : lesson.type === 'assignment'
+                    ? 'ASSIGNMENT'
+                    : 'LESSON';
+                modulePreferredOrder.set(`${itemType}:${lesson.serverId}`, lessonIndex);
+              });
+              preferredOrderByModule.set(moduleId, modulePreferredOrder);
+            }
+
+            const existingLessonIds = new Set<number>();
+            const existingQuizIds = new Set<number>();
+            const existingAssignmentIds = new Set<number>();
+
+            if (moduleId) {
+              const [existingLessons, existingQuizzes, existingAssignments] = await Promise.all([
+                lessonService.listLessonsByModule(moduleId),
+                quizService.listQuizzesByModule(moduleId),
+                assignmentService.listAssignmentsByModule(moduleId)
+              ]);
+
+              (existingLessons || []).forEach((item: any) => {
+                if (typeof item?.id === 'number') {
+                  existingLessonIds.add(item.id);
+                }
+              });
+              (existingQuizzes || []).forEach((item: any) => {
+                if (typeof item?.id === 'number') {
+                  existingQuizIds.add(item.id);
+                }
+              });
+              (existingAssignments || []).forEach((item: any) => {
+                if (typeof item?.id === 'number') {
+                  existingAssignmentIds.add(item.id);
+                }
+              });
+            }
+
+            const keptLessonIds = new Set<number>();
+            const keptQuizIds = new Set<number>();
+            const keptAssignmentIds = new Set<number>();
+            const snapshotLessons = Array.isArray(mod.lessons) ? mod.lessons : [];
+
+            if (snapshotLessons.length > 0) {
+               for (let j = 0; j < snapshotLessons.length; j++) {
+                  const lesson = snapshotLessons[j];
                   const lessonId = lesson.serverId;
 
                   if (lesson.type === 'quiz') {
@@ -623,6 +768,10 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                         passScore: lesson.passScore || 80,
                         timeLimitMinutes: lesson.quizTimeLimitMinutes,
                         maxAttempts: lesson.quizMaxAttempts,
+                        roundingIncrement: lesson.roundingIncrement,
+                        gradingMethod: lesson.gradingMethod,
+                        isAssessment: lesson.isAssessment,
+                        cooldownHours: lesson.cooldownHours,
                         orderIndex: j
                      };
 
@@ -634,6 +783,10 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                         const newQuiz = await quizService.createQuiz(moduleId, quizDTO, user?.id || 0);
                         quizId = newQuiz.id;
                      }
+
+                    if (typeof quizId === 'number') {
+                      keptQuizIds.add(quizId);
+                    }
 
                      if (lesson.questions && lesson.questions.length > 0) {
                         for (let qIndex = 0; qIndex < lesson.questions.length; qIndex++) {
@@ -694,6 +847,7 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                         submissionType: lesson.assignmentSubmissionType || 'TEXT',
                         maxScore: lesson.assignmentMaxScore || 100,
                         passingScore: lesson.assignmentPassingScore || 50,
+                        isRequired: lesson.assignmentIsRequired,
                         orderIndex: j,
                         criteria: lesson.assignmentCriteria || [] // Map criteria
                      };
@@ -706,6 +860,10 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                         const newAssignment = await assignmentService.createAssignment(moduleId, assignmentDTO);
                         assignmentId = newAssignment.id;
                      }
+
+                    if (typeof assignmentId === 'number') {
+                      keptAssignmentIds.add(assignmentId);
+                    }
                   } else {
                      // Handle Regular Lesson (Video / Reading)
                      const lessonDTO: any = {
@@ -725,6 +883,14 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                      } else {
                         savedLesson = await lessonService.createLesson(moduleId, lessonDTO, user?.id || 0);
                      }
+
+                     const resolvedLessonId = typeof savedLesson?.id === 'number'
+                       ? savedLesson.id
+                       : (typeof lessonId === 'number' ? lessonId : undefined);
+
+                     if (typeof resolvedLessonId === 'number') {
+                       keptLessonIds.add(resolvedLessonId);
+                     }
                      
                      // Handle Attachments
                      if (lesson.type === 'reading' && lesson.attachments && lesson.attachments.length > 0) {
@@ -741,11 +907,29 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                   }
                }
             }
+
+            if (moduleId) {
+              const staleLessonIds = Array.from(existingLessonIds).filter((existingId) => !keptLessonIds.has(existingId));
+              const staleQuizIds = Array.from(existingQuizIds).filter((existingId) => !keptQuizIds.has(existingId));
+              const staleAssignmentIds = Array.from(existingAssignmentIds).filter((existingId) => !keptAssignmentIds.has(existingId));
+
+              for (const staleLessonId of staleLessonIds) {
+                await lessonService.deleteLesson(staleLessonId, user?.id || 0);
+              }
+
+              for (const staleQuizId of staleQuizIds) {
+                await quizService.deleteQuiz(staleQuizId, user?.id || 0);
+              }
+
+              for (const staleAssignmentId of staleAssignmentIds) {
+                await assignmentService.deleteAssignment(staleAssignmentId);
+              }
+            }
          }
       }
 
       // Reload to ensure sync (including questions)
-      const finalCourse = await fetchFullCourseDetails(id);
+      const finalCourse = await fetchFullCourseDetails(id, preferredOrderByModule);
       setState(prev => ({ 
          ...prev, 
          isLoading: false, 

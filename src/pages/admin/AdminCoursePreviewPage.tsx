@@ -14,7 +14,7 @@ import {
   CheckCircle, XCircle, ShieldOff, ShieldCheck,
   Clock, BookOpen, ChevronDown, ChevronUp,
   Calendar, DollarSign, Tag, ClipboardList, HelpCircle,
-  CheckSquare, AlertCircle, PenTool, Paperclip, Download, ExternalLink, Settings2, Info
+  CheckSquare, AlertCircle, PenTool, Paperclip, Download, ExternalLink, Info
 } from 'lucide-react';
 import {
   getCourse,
@@ -23,7 +23,6 @@ import {
   rejectCourse,
   suspendCourse,
   restoreCourse,
-  updateCourseUpgradePolicy,
   CourseRevisionDTO
 } from '../../services/courseService';
 import { listModulesWithContent, ModuleDetailDTO } from '../../services/moduleService';
@@ -32,7 +31,7 @@ import { getQuizById } from '../../services/quizService';
 import { getAssignmentById } from '../../services/assignmentService';
 import { LessonAttachmentDTO, listAttachments } from '../../services/attachmentService';
 import { LessonType } from '../../data/lessonDTOs';
-import { CourseDetailDTO, CourseStatus, CourseUpgradePolicy } from '../../data/courseDTOs';
+import { CourseDetailDTO, CourseStatus } from '../../data/courseDTOs';
 import { QuizDetailDTO, QuizQuestionDetailDTO, QuestionType } from '../../data/quizDTOs';
 import { AssignmentDetailDTO, SubmissionType } from '../../data/assignmentDTOs';
 import { useAuth } from '../../context/AuthContext';
@@ -608,9 +607,6 @@ const AdminCoursePreviewPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [actionModal, setActionModal] = useState<{ type: 'approve' | 'reject' | 'suspend' | 'restore' } | null>(null);
-  const [selectedUpgradePolicy, setSelectedUpgradePolicy] = useState<CourseUpgradePolicy>(CourseUpgradePolicy.MANUAL);
-  const [isSavingUpgradePolicy, setIsSavingUpgradePolicy] = useState(false);
-  const [upgradePolicyFeedback, setUpgradePolicyFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [expandedModules, setExpandedModules] = useState<Record<number, boolean>>({});
   const returnTo = ((location.state as { returnTo?: string } | null)?.returnTo || '/admin?tab=courses');
 
@@ -637,13 +633,6 @@ const AdminCoursePreviewPage: React.FC = () => {
     return fallbackMessage;
   }, []);
 
-  const getUpgradePolicyLabel = (policy: CourseUpgradePolicy) => {
-    if (policy === CourseUpgradePolicy.AUTO_COMPATIBLE_ONLY) {
-      return 'AUTO_COMPATIBLE_ONLY - Tự động nâng cấp nếu tương thích';
-    }
-    return 'MANUAL - Learner tự nâng cấp thủ công';
-  };
-
   // ---- Data Loading ----
   const loadCourse = useCallback(async () => {
     if (!courseId) return;
@@ -656,8 +645,6 @@ const AdminCoursePreviewPage: React.FC = () => {
       ]);
       const sortedModules = [...(moduleData as ModuleDetailDTO[])].sort((a, b) => a.orderIndex - b.orderIndex);
       setCourse(courseData);
-      setSelectedUpgradePolicy(courseData.upgradePolicy ?? CourseUpgradePolicy.MANUAL);
-      setUpgradePolicyFeedback(null);
       let effectiveModules = sortedModules;
 
       if (hasRevisionId && revisionId !== null) {
@@ -737,49 +724,6 @@ const AdminCoursePreviewPage: React.FC = () => {
     }
   };
 
-  const handleSaveUpgradePolicy = async () => {
-    if (!course) {
-      return;
-    }
-
-    const currentPolicy = course.upgradePolicy ?? CourseUpgradePolicy.MANUAL;
-    if (selectedUpgradePolicy === currentPolicy) {
-      setUpgradePolicyFeedback({
-        type: 'success',
-        message: 'Policy hiện tại đã đúng, không có thay đổi cần lưu.'
-      });
-      return;
-    }
-
-    try {
-      setIsSavingUpgradePolicy(true);
-      setUpgradePolicyFeedback(null);
-
-      const updatedCourse = await updateCourseUpgradePolicy(course.id, selectedUpgradePolicy);
-      const effectivePolicy = updatedCourse.upgradePolicy ?? selectedUpgradePolicy;
-
-      setCourse(updatedCourse);
-      setSelectedUpgradePolicy(effectivePolicy);
-      setUpgradePolicyFeedback({
-        type: 'success',
-        message: updatedCourse.upgradePolicyStatusMessage?.trim()
-          ? updatedCourse.upgradePolicyStatusMessage
-          : `Đã cập nhật policy sang ${getUpgradePolicyLabel(effectivePolicy)}.`
-      });
-      await loadCourse();
-      showSuccess('Cập nhật policy', `Policy đã đổi sang ${effectivePolicy}.`);
-    } catch (error) {
-      const message = getApiErrorMessage(error, 'Không thể cập nhật upgrade policy.');
-      setUpgradePolicyFeedback({
-        type: 'error',
-        message
-      });
-      showError('Lỗi cập nhật policy', message);
-    } finally {
-      setIsSavingUpgradePolicy(false);
-    }
-  };
-
   const toggleModule = (moduleId: number) => {
     setExpandedModules(prev => ({ ...prev, [moduleId]: !prev[moduleId] }));
   };
@@ -812,8 +756,6 @@ const AdminCoursePreviewPage: React.FC = () => {
   const totalLessons = modules.reduce((sum, m) => sum + (m.lessons?.length || 0), 0);
   const totalAssignments = modules.reduce((sum, m) => sum + (m.assignments?.length || 0), 0);
   const totalQuizzes = modules.reduce((sum, m) => sum + (m.quizzes?.length || 0), 0);
-  const currentUpgradePolicy = course?.upgradePolicy ?? CourseUpgradePolicy.MANUAL;
-  const hasPendingUpgradePolicyChange = selectedUpgradePolicy !== currentUpgradePolicy;
 
   // ---- Render ----
   if (loading) {
@@ -933,63 +875,6 @@ const AdminCoursePreviewPage: React.FC = () => {
           </div>
         </div>
       )}
-
-      <NeuralCard className="acp-policy-panel">
-        <div className="acp-policy-header">
-          <div className="acp-policy-title-wrap">
-            <Settings2 size={18} />
-            <h2 className="acp-policy-title">Upgrade Policy Cho Learner</h2>
-          </div>
-          <span className="acp-policy-current">Hiện tại: <strong>{currentUpgradePolicy}</strong></span>
-        </div>
-
-        <p className="acp-policy-description">
-          <code>MANUAL</code>: learner đang học giữ revision cũ và tự bấm nâng cấp.{' '}
-          <code>AUTO_COMPATIBLE_ONLY</code>: chỉ tự nâng cấp khi revision mới non-breaking và được đánh dấu tương thích.
-        </p>
-
-        <div className="acp-policy-controls">
-          <label htmlFor="acp-upgrade-policy-select" className="acp-policy-label">
-            Chế độ nâng cấp revision
-          </label>
-          <select
-            id="acp-upgrade-policy-select"
-            className="acp-policy-select"
-            value={selectedUpgradePolicy}
-            onChange={(event) => {
-              setSelectedUpgradePolicy(event.target.value as CourseUpgradePolicy);
-              setUpgradePolicyFeedback(null);
-            }}
-            disabled={isSavingUpgradePolicy || actionLoading}
-          >
-            <option value={CourseUpgradePolicy.MANUAL}>{getUpgradePolicyLabel(CourseUpgradePolicy.MANUAL)}</option>
-            <option value={CourseUpgradePolicy.AUTO_COMPATIBLE_ONLY}>
-              {getUpgradePolicyLabel(CourseUpgradePolicy.AUTO_COMPATIBLE_ONLY)}
-            </option>
-          </select>
-
-          <button
-            type="button"
-            className="acp-btn-save-policy"
-            onClick={() => void handleSaveUpgradePolicy()}
-            disabled={!hasPendingUpgradePolicyChange || isSavingUpgradePolicy || actionLoading}
-          >
-            {isSavingUpgradePolicy ? 'Đang lưu policy...' : 'Lưu policy'}
-          </button>
-        </div>
-
-        {hasPendingUpgradePolicyChange && (
-          <p className="acp-policy-pending">
-            Sẽ đổi từ <strong>{currentUpgradePolicy}</strong> sang <strong>{selectedUpgradePolicy}</strong>.
-          </p>
-        )}
-
-        {upgradePolicyFeedback && (
-          <div className={`acp-policy-feedback acp-policy-feedback-${upgradePolicyFeedback.type}`}>
-            {upgradePolicyFeedback.message}
-          </div>
-        )}
-      </NeuralCard>
 
       {/* Stats Overview */}
       <div className="acp-stats-grid">

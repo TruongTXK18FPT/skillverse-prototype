@@ -4,10 +4,19 @@
   background: rgba(4, 10, 20, 0.7);
   backdrop-filter: blur(6px);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  /* Keep dialog below sticky top navigation instead of sticking to viewport edge. */
+  padding: calc(env(safe-area-inset-top, 0px) + 96px) 16px 16px;
+  overflow-y: auto;
   z-index: 9999;
   animation: mentor-hud-fade-in 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .confirm-dialog-overlay {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 76px);
+  }
 }
 
 .confirm-dialog {

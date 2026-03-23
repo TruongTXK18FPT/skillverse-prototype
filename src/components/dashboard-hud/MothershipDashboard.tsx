@@ -179,9 +179,10 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
     navigate("/learning-report");
   };
 
-  const handleCourseClick = (courseId: number) => {
+  const handleCourseClick = (courseId: number, courseTitle?: string) => {
     const courseLearningState = {
       courseId,
+      courseTitle,
       origin: buildCourseLearningOrigin("/dashboard", {
         label: "bảng điều khiển",
       }),

@@ -34,6 +34,7 @@ interface Assignment {
 interface Module {
   id: number;
   title: string;
+  description?: string;
   orderIndex?: number;
   lessons?: Lesson[];
   quizzes?: Quiz[];
@@ -53,6 +54,8 @@ interface ModuleSidebarProps {
   progress: { completedItems: number; totalItems: number; percent: number };
   onToggleModule: (moduleId: number) => void;
   onSelectLesson: (moduleId: number, lessonId: number, itemType?: string) => void;
+  disableLessonSelection?: boolean;
+  onLockedLessonSelect?: () => void;
   isOpen: boolean;
 }
 
@@ -118,6 +121,8 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
   progress,
   onToggleModule,
   onSelectLesson,
+  disableLessonSelection = false,
+  onLockedLessonSelect,
   isOpen
 }) => {
   return (
@@ -149,6 +154,7 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
               </button>
 
               {isExpanded && (
+                <>
                 <ul className="learning-hud-lessons-list">
                   {orderedItems.map((item) => {
                     const statusKey = `${module.id}-${item.itemType}-${item.id}`;
@@ -165,8 +171,15 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
                           type="button"
                           className={`learning-hud-lesson-item ${
                             isActive ? 'active' : ''
-                          } ${status === 'completed' ? 'completed' : ''}`}
-                          onClick={() => onSelectLesson(module.id, item.id, item.itemType)}
+                          } ${status === 'completed' ? 'completed' : ''} ${disableLessonSelection ? 'locked' : ''}`}
+                          onClick={() => {
+                            if (disableLessonSelection) {
+                              onLockedLessonSelect?.();
+                              return;
+                            }
+                            onSelectLesson(module.id, item.id, item.itemType);
+                          }}
+                          disabled={disableLessonSelection}
                         >
                           <div className="learning-hud-lesson-info">
                             {item.itemType === 'lesson' ? (
@@ -214,6 +227,7 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
                       </li>
                     )}
                 </ul>
+                </>
               )}
             </div>
           );

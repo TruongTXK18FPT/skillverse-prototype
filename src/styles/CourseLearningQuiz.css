@@ -114,6 +114,58 @@
   margin-top: 1rem;
 }
 
+.lhud-module-overview-card {
+  width: 100%;
+  margin: 0 0 0.9rem 0;
+  padding: 1.05rem 1.2rem;
+  border: 1px solid rgba(6, 182, 212, 0.24);
+  border-left: 3px solid var(--lhud-cyan);
+  background: rgba(6, 182, 212, 0.06);
+}
+
+.lhud-module-overview-badge {
+  display: inline-block;
+  margin-bottom: 0.8rem;
+  padding: 0.22rem 0.56rem;
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  color: var(--lhud-cyan);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.lhud-module-overview-content {
+  color: var(--lhud-text-secondary);
+  line-height: 1.72;
+}
+
+.lhud-module-overview-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.lhud-module-overview-meta span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.52rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: var(--lhud-text-secondary);
+  background: rgba(15, 23, 42, 0.45);
+  font-size: 0.74rem;
+}
+
+.lhud-module-overview-content p {
+  margin: 0 0 0.85rem;
+}
+
+.lhud-module-overview-content p:last-child {
+  margin-bottom: 0;
+}
+
 .lhud-reading-text {
   white-space: pre-wrap;
   line-height: 1.8;

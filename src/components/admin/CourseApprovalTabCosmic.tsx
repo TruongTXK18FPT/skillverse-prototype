@@ -95,6 +95,7 @@ export const CourseApprovalTabCosmic: React.FC = () => {
   });
   const [revisionQueue, setRevisionQueue] = useState<CourseRevisionDTO[]>([]);
   const [revisionCourseMeta, setRevisionCourseMeta] = useState<Record<number, RevisionCourseMeta>>({});
+  const [revisionQueueLoading, setRevisionQueueLoading] = useState(false);
   const [revisionActionLoading, setRevisionActionLoading] = useState(false);
   const [revisionApproveResults, setRevisionApproveResults] = useState<Record<number, CourseRevisionDTO>>({});
   const [showRevisionRejectModal, setShowRevisionRejectModal] = useState(false);
@@ -136,6 +137,7 @@ export const CourseApprovalTabCosmic: React.FC = () => {
 
   const loadRevisionQueue = useCallback(async () => {
     try {
+      setRevisionQueueLoading(true);
       const response = await listAdminCourseRevisions(0, 20, 'PENDING');
       const queue = response.content ?? [];
       setRevisionQueue(queue);
@@ -168,6 +170,8 @@ export const CourseApprovalTabCosmic: React.FC = () => {
     } catch (error) {
       console.error('Error loading revision queue:', error);
       showError('Lỗi', 'Không thể tải danh sách revision chờ duyệt');
+    } finally {
+      setRevisionQueueLoading(false);
     }
   }, [showError]);
 
@@ -307,6 +311,30 @@ export const CourseApprovalTabCosmic: React.FC = () => {
     }
   }, [getApiErrorMessage, loadCourses, loadRevisionQueue, loadStats, showError, showInfo]);
 
+  const handleRefreshRevisionQueue = useCallback(async () => {
+    try {
+      await loadRevisionQueue();
+      showInfo('Đã làm mới', 'Danh sách revision chờ duyệt đã được cập nhật.');
+    } catch (error) {
+      showError(
+        'Không thể làm mới revision queue',
+        getApiErrorMessage(error, 'Vui lòng thử lại sau.')
+      );
+    }
+  }, [getApiErrorMessage, loadRevisionQueue, showError, showInfo]);
+
+  const handleRefreshCoursesOnly = useCallback(async () => {
+    try {
+      await Promise.all([loadCourses(), loadStats()]);
+      showInfo('Đã làm mới', 'Danh sách khóa học đã được cập nhật.');
+    } catch (error) {
+      showError(
+        'Không thể làm mới khóa học',
+        getApiErrorMessage(error, 'Vui lòng thử lại sau.')
+      );
+    }
+  }, [getApiErrorMessage, loadCourses, loadStats, showError, showInfo]);
+
   const handleApproveRevision = async (revision: CourseRevisionDTO) => {
     try {
       setRevisionActionLoading(true);
@@ -317,9 +345,10 @@ export const CourseApprovalTabCosmic: React.FC = () => {
         result.autoUpgradeReasonCode,
         result.autoUpgradeReasonDetail
       );
-      const autoUpgradeSummary = result.autoUpgradeReasonCode === 'POLICY_NOT_AUTO_COMPATIBLE_ONLY'
-        ? 'Khóa học đang ở chế độ MANUAL nên hệ thống không tự nâng cấp learner.'
-        : `Kết quả auto-upgrade: ${getAutoUpgradeOutcomeLabel(result.autoUpgradeOutcome)}. ${reasonMessage}`;
+      const isManualPolicyReason = result.autoUpgradeReasonCode === 'POLICY_MANUAL_ONLY';
+      const autoUpgradeSummary = isManualPolicyReason
+        ? 'Manual-only: learner hiện tại giữ revision cũ và chỉ nâng cấp khi chủ động thao tác.'
+        : `Kết quả xử lý nâng cấp: ${getAutoUpgradeOutcomeLabel(result.autoUpgradeOutcome)}. ${reasonMessage}`;
       showSuccess(
         'Duyệt revision thành công',
         `Revision #${result.revisionNumber} (ID: ${result.id}) đã được duyệt. ${autoUpgradeSummary}`
@@ -527,9 +556,21 @@ export const CourseApprovalTabCosmic: React.FC = () => {
       </div>
 
       <div className="cosmic-revision-canary-panel">
-        <div className="cosmic-revision-canary-title">Course Revision</div>
-        <div className="cosmic-revision-canary-subtitle">
-          Danh sách phiên bản đang chờ duyệt, có thể duyệt/từ chối trực tiếp.
+        <div className="cosmic-revision-canary-header">
+          <div>
+            <div className="cosmic-revision-canary-title">Course Revision</div>
+            <div className="cosmic-revision-canary-subtitle">
+              Danh sách phiên bản đang chờ duyệt, có thể duyệt/từ chối trực tiếp.
+            </div>
+          </div>
+          <button
+            className="cosmic-filter-btn cosmic-revision-refresh-btn"
+            onClick={() => void handleRefreshRevisionQueue()}
+            disabled={revisionQueueLoading || revisionActionLoading}
+            title="Gọi lại API revision queue"
+          >
+            <RefreshCw size={16} /> Tải lại revision
+          </button>
         </div>
 
         {revisionQueue.length === 0 ? (
@@ -623,6 +664,18 @@ export const CourseApprovalTabCosmic: React.FC = () => {
       </div>
 
       {/* Courses Table */}
+      <div className="cosmic-courses-panel-header">
+        <div className="cosmic-courses-panel-title">Danh sách khóa học</div>
+        <button
+          className="cosmic-filter-btn cosmic-courses-refresh-btn"
+          onClick={() => void handleRefreshCoursesOnly()}
+          disabled={loading || actionLoading}
+          title="Gọi lại API danh sách khóa học"
+        >
+          <RefreshCw size={16} /> Tải lại khóa học
+        </button>
+      </div>
+
       <div className="cosmic-table-container">
         {loading ? (
           <div className="cosmic-loading">

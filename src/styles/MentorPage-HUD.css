@@ -525,6 +525,8 @@
   overflow: hidden;
   transition: all 0.3s ease;
   position: relative;
+  display: flex;
+  flex-direction: column;
   clip-path: polygon(
     0 0,
     100% 0,
@@ -608,6 +610,10 @@
   padding: 1.5rem;
   position: relative;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 .mentor-hud-course-title {
@@ -619,6 +625,12 @@
   color: var(--mentor-hud-text-primary);
   margin: 0 0 0.75rem 0;
   line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  min-height: calc(1.3em * 2);
 }
 
 .mentor-hud-course-description {
@@ -650,9 +662,9 @@
 }
 
 .mentor-hud-course-stats {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
-  flex-wrap: wrap;
   margin-bottom: 1.25rem;
 }
 
@@ -663,10 +675,19 @@
   color: var(--mentor-hud-text-secondary);
   font-size: 0.8rem;
   font-weight: 500;
+  min-width: 0;
+}
+
+.mentor-hud-course-stat span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .mentor-hud-course-stat svg {
   color: var(--mentor-hud-accent-cyan);
+  flex-shrink: 0;
 }
 
 /* Course Actions */
@@ -675,6 +696,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem;
   align-items: stretch;
+  margin-top: auto;
 }
 
 .mentor-hud-action-button {
@@ -698,6 +720,8 @@
   line-height: 1.1;
   background: transparent;
   position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mentor-hud-view-button {
@@ -1239,7 +1263,7 @@
   }
 
   .mentor-hud-course-stats {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     gap: 0.5rem;
   }
 }

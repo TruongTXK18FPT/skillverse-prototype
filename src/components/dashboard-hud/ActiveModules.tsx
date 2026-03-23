@@ -26,7 +26,7 @@ interface Course {
 interface ActiveModulesProps {
   courses: Course[];
   title?: string;
-  onCourseClick?: (courseId: number) => void;
+  onCourseClick?: (courseId: number, courseTitle?: string) => void;
   continueLabel?: string;
   onJoinGroup?: (groupId: number, isMember: boolean) => void;
 }
@@ -52,7 +52,7 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
               ease: [0.4, 0, 0.2, 1]
             }}
             className="active-modules__card"
-            onClick={() => onCourseClick?.(course.id)}
+            onClick={() => onCourseClick?.(course.id, course.title)}
           >
             {/* Thumbnail */}
             <div className="active-modules__thumbnail">

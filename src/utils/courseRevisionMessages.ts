@@ -1,9 +1,17 @@
 export type AutoUpgradeOutcome = 'UPGRADED' | 'SKIPPED' | 'ERROR';
 
+export const BREAKING_ITEM_RETAKE_MESSAGE = 'Nội dung đã thay đổi, bạn cần làm lại mục này.';
+
+export interface RevisionItemWarning {
+  isBreaking: boolean;
+  reasonCode?: string;
+  message: string;
+}
+
 const REASON_CODE_MESSAGE_MAP: Record<string, string> = {
   NONE: 'Không có vấn đề tương thích.',
   INVALID_INPUT: 'Thiếu dữ liệu cần thiết để nâng cấp revision.',
-  POLICY_NOT_AUTO_COMPATIBLE_ONLY: 'Khóa học đang ở chế độ nâng cấp thủ công.',
+  POLICY_MANUAL_ONLY: 'Khóa học đang ở chế độ nâng cấp thủ công.',
   NO_REVISION_CHANGE: 'Revision hiện tại đã là revision mới nhất.',
   SOURCE_REVISION_NOT_FOUND: 'Không tìm thấy revision nguồn của learner.',
   TARGET_REVISION_NOT_APPROVED: 'Revision đích chưa được duyệt, hệ thống không thể nâng cấp.',
@@ -53,13 +61,8 @@ export const getAutoUpgradeOutcomeClass = (outcome?: string | null): 'upgraded' 
 };
 
 export const getUpgradePolicyMessage = (policy?: string | null): string => {
-  if (policy === 'AUTO_COMPATIBLE_ONLY') {
-    return 'Chế độ tự động: hệ thống chỉ tự chuyển khi phiên bản mới tương thích (không breaking).';
-  }
-  if (policy === 'MANUAL') {
-    return 'Chế độ thủ công: bạn chủ động chọn thời điểm chuyển sang phiên bản mới.';
-  }
-  return 'Không xác định chính sách nâng cấp revision.';
+  void policy;
+  return 'Chế độ thủ công: bạn chủ động chọn thời điểm chuyển sang phiên bản mới.';
 };
 
 export const mapUpgradeApiErrorToVietnameseMessage = (
@@ -79,6 +82,88 @@ export const mapUpgradeApiErrorToVietnameseMessage = (
   }
 
   return 'Không thể nâng cấp revision lúc này. Vui lòng thử lại.';
+};
+
+const parseBooleanLike = (value: unknown): boolean | null => {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value !== 0;
+  if (typeof value !== 'string') return null;
+
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return null;
+  if (normalized === 'true' || normalized === '1' || normalized === 'yes' || normalized === 'y') {
+    return true;
+  }
+  if (normalized === 'false' || normalized === '0' || normalized === 'no' || normalized === 'n') {
+    return false;
+  }
+  return null;
+};
+
+const normalizeOptionalText = (value: unknown): string | undefined => {
+  if (typeof value !== 'string') return undefined;
+  const normalized = value.trim();
+  return normalized ? normalized : undefined;
+};
+
+const normalizeReasonCode = (value: unknown): string | undefined => {
+  const raw = normalizeOptionalText(value);
+  return raw ? raw.toUpperCase() : undefined;
+};
+
+const pickContractReasonCode = (raw: Record<string, unknown>): string | undefined =>
+  normalizeReasonCode(raw.breakingReason)
+  ?? normalizeReasonCode(raw.reasonCode);
+
+const pickContractBreakingFlag = (raw: Record<string, unknown>): boolean | null =>
+  parseBooleanLike(raw.isBreakingChanged)
+  ?? parseBooleanLike(raw.requiresRetake);
+
+const pickReasonCode = (raw: Record<string, unknown>): string | undefined =>
+  normalizeReasonCode(raw.reasonCode)
+  ?? normalizeReasonCode(raw.breakingReason)
+  ?? normalizeReasonCode(raw.revisionWarningReasonCode)
+  ?? normalizeReasonCode(raw.code);
+
+export const resolveRevisionItemWarning = (value: unknown): RevisionItemWarning | null => {
+  if (!value || typeof value !== 'object') {
+    return null;
+  }
+
+  const raw = value as Record<string, unknown>;
+  const rawNested = raw.revisionWarning;
+  const nested = rawNested && typeof rawNested === 'object'
+    ? (rawNested as Record<string, unknown>)
+    : null;
+
+  // Contract-first: prefer stable BE fields, then fallback to legacy keys.
+  const reasonCode = pickContractReasonCode(raw)
+    ?? pickReasonCode(raw)
+    ?? (nested ? pickContractReasonCode(nested) : undefined)
+    ?? (nested ? pickReasonCode(nested) : undefined);
+  const explicitBreaking = pickContractBreakingFlag(raw)
+    ?? parseBooleanLike(raw.isBreaking)
+    ?? parseBooleanLike(raw.revisionWarningFlag)
+    ?? (nested
+      ? pickContractBreakingFlag(nested)
+        ?? parseBooleanLike(nested.isBreaking)
+      : null);
+
+  const inferredBreaking = Boolean(
+    reasonCode === 'ITEM_RULE_CHANGED'
+    || reasonCode === 'ITEM_REMOVED'
+  );
+
+  const isBreaking = explicitBreaking ?? inferredBreaking;
+  if (!isBreaking) {
+    return null;
+  }
+
+  return {
+    isBreaking: true,
+    reasonCode,
+    message: BREAKING_ITEM_RETAKE_MESSAGE,
+  };
 };
 
 const parseSnapshotIdentityPath = (rawMessage?: string | null): string | null => {

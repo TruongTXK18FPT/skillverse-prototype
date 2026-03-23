@@ -4,12 +4,13 @@ import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useTheme } from '../../context/ThemeContext';
 import '../../styles/CoursesPageCockpit.css';
 import Pagination from '../../components/shared/Pagination';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { listCourses } from '../../services/courseService';
 import { useAuth } from '../../context/AuthContext';
 import { getUserEnrollments } from '../../services/enrollmentService';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import { CourseSummaryDTO } from '../../data/courseDTOs';
+import { buildCourseDetailPath } from '../../utils/courseRoute';
 
 type SortOption = 'newest' | 'oldest' | 'price-low' | 'price-high' | 'rating' | 'popular';
 type PriceFilter = 'all' | 'free' | 'paid';
@@ -17,6 +18,7 @@ type PriceFilter = 'all' | 'free' | 'paid';
 const CoursesPage = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
   const [courses, setCourses] = useState<CourseSummaryDTO[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -450,8 +452,14 @@ const CoursesPage = () => {
                     key={course.id}
                     className="cockpit-module-card"
                     style={{ animationDelay: `${index * 0.05}s` }}
-                    onClick={() => navigate(`/courses/${course.id}`, {
-                      state: { course: course }
+                    onClick={() => navigate(buildCourseDetailPath({ id: course.id, title: course.title }), {
+                      state: {
+                        course: course,
+                        fromPath: location.pathname,
+                        fromSearch: location.search,
+                        fromHash: location.hash,
+                        fromLabel: 'danh sách khóa học'
+                      }
                     })}
                   >
                     {/* Module Header */}
@@ -504,8 +512,14 @@ const CoursesPage = () => {
                           className="cockpit-engage-btn"
                           onClick={(e) => {
                             e.stopPropagation();
-                            navigate(`/courses/${course.id}`, {
-                              state: { course: course }
+                            navigate(buildCourseDetailPath({ id: course.id, title: course.title }), {
+                              state: {
+                                course: course,
+                                fromPath: location.pathname,
+                                fromSearch: location.search,
+                                fromHash: location.hash,
+                                fromLabel: 'danh sách khóa học'
+                              }
                             });
                           }}
                         >

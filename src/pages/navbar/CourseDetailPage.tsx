@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -36,9 +36,22 @@ import {
   buildCourseLearningDestination,
   buildCourseLearningOrigin,
 } from '../../utils/courseLearningNavigation';
+import {
+  buildCourseDetailPath,
+  resolveCourseIdFromRouteParams,
+} from '../../utils/courseRoute';
 import PurchaseCourseModal from '../../components/course/PurchaseCourseModal';
 import Toast from '../../components/shared/Toast';
 import '../../styles/CourseDetailCockpit.css';
+
+const COURSE_DETAIL_RETURN_PREFIX = 'course-detail-return-context:';
+
+interface CourseDetailReturnState {
+  fromPath?: string;
+  fromSearch?: string;
+  fromHash?: string;
+  fromLabel?: string;
+}
 
 // Local helpers
 const formatCurrency = (amount?: number, currency?: string): string => {
@@ -56,9 +69,13 @@ const formatCurrency = (amount?: number, currency?: string): string => {
 const CourseDetailPage = () => {
   const { theme } = useTheme();
   const { user } = useAuth();
-  const { id } = useParams<{ id: string }>();
+  const { id, coursePublicId } = useParams<{
+    id?: string;
+    coursePublicId?: string;
+  }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const routeState = (location.state as CourseDetailReturnState | undefined) ?? undefined;
   const { toast, showSuccess, showError, showInfo, hideToast } = useToast();
   const [course, setCourse] = useState<CourseDetailDTO | null>(null);
   const [modules, setModules] = useState<ModuleDetailDTO[]>([]);
@@ -79,11 +96,71 @@ const CourseDetailPage = () => {
   const isActivationLocked = isPreviewMode || (!!course && course.status !== CourseStatus.PUBLIC);
   const canPreviewLearning = Boolean(user?.roles?.some((role) => role === 'MENTOR' || role === 'ADMIN'));
 
+  const courseId = useMemo(
+    () => resolveCourseIdFromRouteParams({ legacyId: id, coursePublicId }),
+    [coursePublicId, id]
+  );
+
+  const detailReturnStorageKey = `${COURSE_DETAIL_RETURN_PREFIX}${courseId ?? id ?? 'unknown'}`;
+
+  useEffect(() => {
+    if (!courseId && !id) return;
+    if (!routeState?.fromPath) return;
+
+    const payload: CourseDetailReturnState = {
+      fromPath: routeState.fromPath,
+      fromSearch: routeState.fromSearch ?? '',
+      fromHash: routeState.fromHash ?? '',
+      fromLabel: routeState.fromLabel ?? 'danh sách khóa học',
+    };
+    sessionStorage.setItem(detailReturnStorageKey, JSON.stringify(payload));
+  }, [courseId, detailReturnStorageKey, id, routeState?.fromHash, routeState?.fromLabel, routeState?.fromPath, routeState?.fromSearch]);
+
+  const resolveDetailReturnTarget = () => {
+    const isValidPath = (value?: string) => typeof value === 'string' && value.startsWith('/') && value !== location.pathname;
+
+    if (isValidPath(routeState?.fromPath)) {
+      return {
+        pathname: routeState!.fromPath!,
+        search: routeState?.fromSearch ?? '',
+        hash: routeState?.fromHash ?? '',
+      };
+    }
+
+    try {
+      const raw = sessionStorage.getItem(detailReturnStorageKey);
+      if (raw) {
+        const parsed = JSON.parse(raw) as CourseDetailReturnState;
+        if (isValidPath(parsed?.fromPath)) {
+          return {
+            pathname: parsed.fromPath!,
+            search: parsed.fromSearch ?? '',
+            hash: parsed.fromHash ?? '',
+          };
+        }
+      }
+    } catch {
+      // Ignore malformed cached return context.
+    }
+
+    return {
+      pathname: '/courses',
+      search: '',
+      hash: '',
+    };
+  };
+
+  const handleBackNavigation = () => {
+    const target = resolveDetailReturnTarget();
+    navigate(target, { replace: true });
+  };
+
   const buildCourseLearningState = (preview = false) => {
     if (!course) return null;
 
     return {
       courseId: course.id,
+      courseTitle: course.title,
       preview,
       origin: buildCourseLearningOrigin(location.pathname, {
         search: location.search,
@@ -132,20 +209,19 @@ const CourseDetailPage = () => {
   }, [isEnrolled]);
 
   useEffect(() => {
-    if (!id) {
+    if (!courseId) {
       setLoading(false);
       return;
     }
 
     setLoading(true);
-    const courseIdNum = parseInt(id);
-    getCourse(courseIdNum)
+    getCourse(courseId)
       .then(async (dto) => {
         setCourse(dto);
         
         // Fetch detailed module content (lessons, quizzes, etc.)
         try {
-          const detailModules = await listModulesWithContent(courseIdNum);
+          const detailModules = await listModulesWithContent(courseId);
           setModules(detailModules);
         } catch (mErr) {
           console.error('Error loading module content:', mErr);
@@ -153,7 +229,7 @@ const CourseDetailPage = () => {
           if (dto.modules) {
             setModules(dto.modules.map(m => ({
               ...m,
-              courseId: courseIdNum,
+              courseId,
               createdAt: '',
               updatedAt: '',
               lessons: [],
@@ -173,10 +249,10 @@ const CourseDetailPage = () => {
         }
         try {
           if (user) {
-            const enrolled = await checkEnrollmentStatus(courseIdNum, user.id);
+            const enrolled = await checkEnrollmentStatus(courseId, user.id);
             setIsEnrolled(enrolled);
             if (enrolled) {
-              const progress = await getEnrollmentProgress(courseIdNum, user.id);
+              const progress = await getEnrollmentProgress(courseId, user.id);
               setEnrollmentProgress(progress.progress);
             }
           }
@@ -188,7 +264,7 @@ const CourseDetailPage = () => {
         console.error('Error loading course:', err);
       })
       .finally(() => setLoading(false));
-  }, [id, user]);
+  }, [courseId, user]);
 
   useEffect(() => {
     if (course && user) {
@@ -275,8 +351,35 @@ const CourseDetailPage = () => {
   };
 
   const handleShare = () => {
-    const shareUrl = `skillverse.vn/courses/${id}`;
-    navigator.clipboard.writeText(shareUrl)
+    if (!course) return;
+
+    const shareUrl = `${window.location.origin}${buildCourseDetailPath({
+      id: course.id,
+      title: course.title,
+    })}`;
+
+    if (navigator.share) {
+      navigator
+        .share({
+          title: course.title,
+          text: course.shortDescription || 'Khám phá khóa học này trên SkillVerse',
+          url: shareUrl,
+        })
+        .catch(() => {
+          navigator.clipboard
+            .writeText(shareUrl)
+            .then(() => {
+              showSuccess('Thành công', 'Đã sao chép liên kết khóa học vào bộ nhớ tạm!', undefined, true);
+            })
+            .catch(() => {
+              showError('Lỗi', 'Không thể chia sẻ hoặc sao chép liên kết.');
+            });
+        });
+      return;
+    }
+
+    navigator.clipboard
+      .writeText(shareUrl)
       .then(() => {
         showSuccess('Thành công', 'Đã sao chép liên kết khóa học vào bộ nhớ tạm!', undefined, true);
       })
@@ -404,7 +507,7 @@ const CourseDetailPage = () => {
       <div className="cockpit-detail-hud-frame">
         {/* Navigation Bar */}
         <div className="cockpit-detail-nav-bar">
-          <button onClick={() => navigate(-1)} className="cockpit-detail-nav-back">
+          <button onClick={handleBackNavigation} className="cockpit-detail-nav-back">
             <ArrowLeft className="cockpit-detail-nav-icon" />
             <span>QUAY LẠI</span>
           </button>

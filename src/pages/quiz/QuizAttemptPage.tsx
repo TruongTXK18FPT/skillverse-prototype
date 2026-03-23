@@ -27,6 +27,10 @@ import {
   CourseLearningLocationState,
   readStoredCourseLearningReturnContext,
 } from '../../utils/courseLearningNavigation';
+import {
+  BREAKING_ITEM_RETAKE_MESSAGE as BREAKING_ITEM_MESSAGE,
+  resolveRevisionItemWarning,
+} from '../../utils/courseRevisionMessages';
 import '../../styles/QuizAttemptPage-HUD.css';
 
 type AnswerDraft = {
@@ -76,6 +80,10 @@ const QuizAttemptPage: React.FC = () => {
   const [cooldownSeconds, setCooldownSeconds] = useState(0);
   const [nextRetryAt, setNextRetryAt] = useState<string | null>(null);
   const [attemptSessionToken, setAttemptSessionToken] = useState<string | null>(null);
+  const hasRevisionItemWarning = useMemo(
+    () => Boolean(quiz && resolveRevisionItemWarning(quiz)),
+    [quiz]
+  );
 
   const getOptionReviewTone = useCallback((option: QuizAttemptAnswerOptionReviewDTO, revealCorrect: boolean) => {
     if (option.correct && option.selected) {
@@ -480,6 +488,14 @@ const QuizAttemptPage: React.FC = () => {
         </div>
 
         <div className="hud-quiz-attempt-start-screen">
+          {hasRevisionItemWarning && (
+            <div className="lhud-revision-banner is-warning">
+              <div>
+                <strong>Nội dung cần làm lại</strong>
+                <p>{BREAKING_ITEM_MESSAGE}</p>
+              </div>
+            </div>
+          )}
           <h1 className="hud-quiz-attempt-start-title">{quiz.title}</h1>
           <p className="hud-quiz-attempt-start-description">
             {quiz.description || 'Hoàn thành bài kiểm tra để đánh giá kiến thức của bạn'}
@@ -613,6 +629,14 @@ const QuizAttemptPage: React.FC = () => {
     return (
       <div className="hud-quiz-attempt-container">
         <div className="hud-quiz-attempt-result">
+          {hasRevisionItemWarning && (
+            <div className="lhud-revision-banner is-warning">
+              <div>
+                <strong>Nội dung cần làm lại</strong>
+                <p>{BREAKING_ITEM_MESSAGE}</p>
+              </div>
+            </div>
+          )}
           <div className={`hud-quiz-attempt-result-header ${passed ? 'passed' : 'failed'}`}>
             <h2>{passed ? 'Chúc mừng! Bạn đã đạt' : 'Chưa đạt yêu cầu'}</h2>
             <p className="hud-quiz-attempt-result-subtitle">
@@ -707,6 +731,14 @@ const QuizAttemptPage: React.FC = () => {
   // TAKING QUIZ SCREEN - Màn hình làm bài
   return (
     <div className="hud-quiz-attempt-container hud-quiz-attempt-taking">
+      {hasRevisionItemWarning && (
+        <div className="lhud-revision-banner is-warning">
+          <div>
+            <strong>Nội dung cần làm lại</strong>
+            <p>{BREAKING_ITEM_MESSAGE}</p>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className="hud-quiz-attempt-header">
         <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-back-btn">

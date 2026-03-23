@@ -93,6 +93,33 @@ const getLessonTypeMeta = (type: string) => {
 
 const createId = () => Date.now().toString() + Math.random().toString(36).substr(2, 5);
 const COURSE_BUILDER_FLOW_PARAM = 'flow';
+const COURSE_DRAFT_ORDER_DEBUG_KEY = 'sv_debug_draft_order';
+
+const isCourseDraftOrderDebugEnabled = () =>
+  typeof window !== 'undefined' && window.localStorage.getItem(COURSE_DRAFT_ORDER_DEBUG_KEY) === '1';
+
+const buildModuleOrderDebugSnapshot = (draftModules: ModuleDraft[]) =>
+  draftModules.map((module, moduleIndex) => ({
+    moduleIndex,
+    moduleId: module.id,
+    moduleServerId: module.serverId ?? null,
+    moduleTitle: module.title,
+    lessons: (module.lessons || []).map((lesson, lessonIndex) => ({
+      lessonIndex,
+      lessonId: lesson.id,
+      lessonServerId: lesson.serverId ?? null,
+      type: lesson.type,
+      title: lesson.title,
+      orderIndex: lesson.orderIndex ?? null
+    }))
+  }));
+
+const logCourseDraftOrderDebug = (label: string, draftModules: ModuleDraft[]) => {
+  if (!isCourseDraftOrderDebugEnabled()) return;
+  console.groupCollapsed(`[COURSE-ORDER-DEBUG] ${label}`);
+  console.log(buildModuleOrderDebugSnapshot(draftModules));
+  console.groupEnd();
+};
 
 const parseBuilderFlowState = (params: URLSearchParams): BuilderFlowState | null => {
   const flow = params.get(COURSE_BUILDER_FLOW_PARAM);
@@ -160,8 +187,39 @@ const normalizeSnapshotText = (value?: string | null) => {
   return collapsed.length > 0 ? collapsed : null;
 };
 
+const hasOwnKey = (value: object, key: string): boolean =>
+  Object.prototype.hasOwnProperty.call(value, key);
+
+const isFiniteNumber = (value: unknown): value is number =>
+  typeof value === 'number' && Number.isFinite(value);
+
+const isBooleanOrNull = (value: unknown): boolean =>
+  typeof value === 'boolean' || value === null;
+
+const normalizeSnapshotLessonType = (value: unknown): LessonKind | null => {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim().toLowerCase();
+  if (normalized === 'reading' || normalized === 'video' || normalized === 'quiz' || normalized === 'assignment') {
+    return normalized;
+  }
+  return null;
+};
+
+const normalizeSnapshotQuestionType = (value: unknown): QuestionType | null => {
+  if (typeof value !== 'string') return null;
+  const upper = value.trim().toUpperCase();
+  if (upper === QuestionType.MULTIPLE_CHOICE) return QuestionType.MULTIPLE_CHOICE;
+  if (upper === QuestionType.TRUE_FALSE) return QuestionType.TRUE_FALSE;
+  if (upper === QuestionType.SHORT_ANSWER) return QuestionType.SHORT_ANSWER;
+  return null;
+};
+
 const buildRevisionContentSnapshot = (modules: ModuleDraft[]) => ({
   snapshotVersion: 1,
+  compatibility: {
+    autoCompatibleOnly: true,
+      level: 'NON_BREAKING'
+  },
   modules: modules.map((module, moduleIndex) => ({
     ...(typeof module.serverId === 'number' && module.serverId > 0 ? { id: module.serverId } : {}),
     orderIndex: moduleIndex,
@@ -177,50 +235,237 @@ const buildRevisionContentSnapshot = (modules: ModuleDraft[]) => ({
       resourceUrl: normalizeSnapshotText(lesson.resourceUrl),
       youtubeUrl: normalizeSnapshotText(lesson.youtubeUrl),
       videoMediaId: lesson.videoMediaId ?? null,
-      passScore: lesson.passScore ?? null,
-      quizMaxAttempts: lesson.quizMaxAttempts ?? null,
-      quizTimeLimitMinutes: lesson.quizTimeLimitMinutes ?? null,
-      quizDescription: normalizeSnapshotText(lesson.quizDescription),
-      gradingMethod: normalizeSnapshotText(lesson.gradingMethod),
-      isAssessment: lesson.isAssessment ?? null,
-      assignmentSubmissionType: lesson.assignmentSubmissionType ?? null,
-      assignmentDescription: normalizeSnapshotText(lesson.assignmentDescription),
-      assignmentMaxScore: lesson.assignmentMaxScore ?? null,
-      assignmentPassingScore: lesson.assignmentPassingScore ?? null,
-      questions: (lesson.questions || []).map((question, questionIndex) => ({
-        ...(typeof question.serverId === 'number' && question.serverId > 0 ? { id: question.serverId } : {}),
-        orderIndex: question.orderIndex ?? questionIndex,
-        text: normalizeSnapshotText(question.text),
-        type: question.type,
-        score: question.score ?? null,
-        options: (question.options || []).map((option, optionIndex) => ({
-          ...(typeof option.serverId === 'number' && option.serverId > 0 ? { id: option.serverId } : {}),
-          orderIndex: option.orderIndex ?? optionIndex,
-          text: normalizeSnapshotText(option.text),
-          correct: option.correct
-        }))
-      })),
-      assignmentCriteria: (lesson.assignmentCriteria || []).map((criteria, criteriaIndex) => ({
-        ...(typeof criteria.id === 'number' && criteria.id > 0 ? { id: criteria.id } : {}),
-        orderIndex: criteria.orderIndex ?? criteriaIndex,
-        name: normalizeSnapshotText(criteria.name),
-        description: normalizeSnapshotText(criteria.description),
-        maxPoints: criteria.maxPoints ?? null,
-        isRequired: criteria.isRequired ?? null
-      })),
+      ...(lesson.passScore !== undefined ? { passScore: lesson.passScore } : {}),
+      ...(lesson.quizMaxAttempts !== undefined ? { quizMaxAttempts: lesson.quizMaxAttempts } : {}),
+      ...(lesson.quizTimeLimitMinutes !== undefined ? { quizTimeLimitMinutes: lesson.quizTimeLimitMinutes } : {}),
+      ...(lesson.roundingIncrement !== undefined ? { roundingIncrement: lesson.roundingIncrement } : {}),
+      ...(lesson.quizDescription !== undefined
+        ? { quizDescription: normalizeSnapshotText(lesson.quizDescription) }
+        : {}),
+      ...(lesson.gradingMethod !== undefined
+        ? { gradingMethod: normalizeSnapshotText(lesson.gradingMethod) }
+        : {}),
+      ...(lesson.isAssessment !== undefined ? { isAssessment: lesson.isAssessment } : {}),
+      ...(lesson.cooldownHours !== undefined ? { cooldownHours: lesson.cooldownHours } : {}),
+      ...(lesson.assignmentSubmissionType !== undefined
+        ? { assignmentSubmissionType: lesson.assignmentSubmissionType }
+        : {}),
+      ...(lesson.assignmentDescription !== undefined
+        ? { assignmentDescription: normalizeSnapshotText(lesson.assignmentDescription) }
+        : {}),
+      ...(lesson.assignmentMaxScore !== undefined ? { assignmentMaxScore: lesson.assignmentMaxScore } : {}),
+      ...(lesson.assignmentPassingScore !== undefined
+        ? { assignmentPassingScore: lesson.assignmentPassingScore }
+        : {}),
+      ...(lesson.type === 'assignment'
+        ? { isRequired: lesson.assignmentIsRequired ?? true }
+        : (lesson.assignmentIsRequired !== undefined ? { isRequired: lesson.assignmentIsRequired } : {})),
+      ...(hasOwnKey(lesson, 'questions')
+        ? {
+          questions: (lesson.questions || []).map((question, questionIndex) => ({
+            ...(typeof question.serverId === 'number' && question.serverId > 0 ? { id: question.serverId } : {}),
+            orderIndex: question.orderIndex ?? questionIndex,
+            text: normalizeSnapshotText(question.text),
+            type: question.type,
+            score: question.score ?? null,
+            options: (question.options || []).map((option, optionIndex) => ({
+              ...(typeof option.serverId === 'number' && option.serverId > 0 ? { id: option.serverId } : {}),
+              orderIndex: option.orderIndex ?? optionIndex,
+              text: normalizeSnapshotText(option.text),
+              correct: option.correct
+            }))
+          }))
+        }
+        : {}),
+      ...(hasOwnKey(lesson, 'assignmentCriteria')
+        ? {
+          assignmentCriteria: (lesson.assignmentCriteria || []).map((criteria, criteriaIndex) => ({
+            ...(typeof criteria.id === 'number' && criteria.id > 0 ? { id: criteria.id } : {}),
+            orderIndex: criteria.orderIndex ?? criteriaIndex,
+            name: normalizeSnapshotText(criteria.name),
+            description: normalizeSnapshotText(criteria.description),
+            maxPoints: criteria.maxPoints ?? null,
+            // Keep rubric threshold aligned with criteria points when passingPoints is not explicitly set.
+            passingPoints: criteria.passingPoints ?? criteria.maxPoints ?? null,
+            isRequired: criteria.isRequired ?? null
+          }))
+        }
+        : {}),
       attachments: normalizeLessonAttachments(lesson.attachments).map((attachment, attachmentIndex) => ({
         ...(typeof attachment.serverId === 'number' && attachment.serverId > 0 ? { id: attachment.serverId } : {}),
         orderIndex: attachmentIndex,
         name: normalizeSnapshotText(attachment.name),
-        mediaId: attachment.mediaId ?? attachment.serverId ?? null,
+        mediaId: attachment.mediaId ?? null,
         url: normalizeSnapshotText(attachment.url)
       }))
     }))
   }))
 });
 
+type RevisionSnapshotPayload = ReturnType<typeof buildRevisionContentSnapshot>;
+
+const normalizeRevisionSnapshotPayload = (snapshot: RevisionSnapshotPayload): RevisionSnapshotPayload => {
+  const normalizedModules = Array.isArray(snapshot.modules)
+    ? snapshot.modules.map((module, moduleIndex) => ({
+      ...module,
+      orderIndex: typeof module.orderIndex === 'number' ? module.orderIndex : moduleIndex,
+      lessons: Array.isArray(module.lessons)
+        ? module.lessons.map((lesson, lessonIndex) => {
+          const lessonType = normalizeSnapshotLessonType(lesson.type);
+          return {
+          ...lesson,
+          orderIndex: typeof lesson.orderIndex === 'number' ? lesson.orderIndex : lessonIndex,
+          ...(lessonType === 'assignment' && !hasOwnKey(lesson, 'isRequired')
+            ? { isRequired: true }
+            : {}),
+          ...(hasOwnKey(lesson, 'questions')
+            ? {
+              questions: Array.isArray(lesson.questions)
+                ? lesson.questions.map((question, questionIndex) => ({
+                  ...question,
+                  orderIndex: typeof question.orderIndex === 'number' ? question.orderIndex : questionIndex,
+                  options: Array.isArray(question.options)
+                    ? question.options.map((option, optionIndex) => ({
+                      ...option,
+                      orderIndex: typeof option.orderIndex === 'number' ? option.orderIndex : optionIndex,
+                    }))
+                    : [],
+                }))
+                : [],
+            }
+            : {}),
+          ...(hasOwnKey(lesson, 'assignmentCriteria')
+            ? {
+              assignmentCriteria: Array.isArray(lesson.assignmentCriteria)
+                ? lesson.assignmentCriteria.map((criteria, criteriaIndex) => ({
+                  ...criteria,
+                  orderIndex: typeof criteria.orderIndex === 'number' ? criteria.orderIndex : criteriaIndex,
+                }))
+                : [],
+            }
+            : {}),
+          attachments: Array.isArray(lesson.attachments)
+            ? lesson.attachments.map((attachment, attachmentIndex) => ({
+              ...attachment,
+              orderIndex: typeof attachment.orderIndex === 'number' ? attachment.orderIndex : attachmentIndex,
+              mediaId: Object.prototype.hasOwnProperty.call(attachment, 'mediaId') ? attachment.mediaId : null,
+              url: Object.prototype.hasOwnProperty.call(attachment, 'url') ? attachment.url : null,
+            }))
+            : [],
+        }})
+        : [],
+    }))
+    : [];
+
+  return {
+    ...snapshot,
+    snapshotVersion: 1,
+    compatibility: {
+      autoCompatibleOnly: true,
+      level: 'NON_BREAKING',
+    },
+    modules: normalizedModules,
+  };
+};
+
+const validateRevisionSnapshotPayload = (snapshot: RevisionSnapshotPayload): string | null => {
+  if (!Array.isArray(snapshot.modules)) {
+    return 'Snapshot không hợp lệ: thiếu danh sách module.';
+  }
+
+  for (let moduleIndex = 0; moduleIndex < snapshot.modules.length; moduleIndex += 1) {
+    const module = snapshot.modules[moduleIndex];
+    if (!Array.isArray(module.lessons)) {
+      return `Snapshot không hợp lệ tại module #${moduleIndex + 1}: thiếu danh sách lessons.`;
+    }
+
+    for (let lessonIndex = 0; lessonIndex < module.lessons.length; lessonIndex += 1) {
+      const lesson = module.lessons[lessonIndex];
+      const lessonType = normalizeSnapshotLessonType(lesson.type);
+      if (!lessonType) {
+        return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, item #${lessonIndex + 1}: thiếu type.`;
+      }
+      if (typeof lesson.orderIndex !== 'number' || Number.isNaN(lesson.orderIndex)) {
+        return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, item #${lessonIndex + 1}: orderIndex không hợp lệ.`;
+      }
+
+      if (lessonType === 'quiz') {
+        if (!hasOwnKey(lesson, 'passScore')) {
+          return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, quiz #${lessonIndex + 1}: thiếu passScore (field thiếu khác với explicit null).`;
+        }
+        if (!isFiniteNumber(lesson.passScore) || lesson.passScore < 0 || lesson.passScore > 100) {
+          return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, quiz #${lessonIndex + 1}: passScore phải trong khoảng 0-100.`;
+        }
+
+        if (!hasOwnKey(lesson, 'questions')) {
+          return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, quiz #${lessonIndex + 1}: thiếu questions.`;
+        }
+        if (!Array.isArray(lesson.questions) || lesson.questions.length === 0) {
+          return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, quiz #${lessonIndex + 1}: questions phải là mảng và có ít nhất 1 câu.`;
+        }
+
+        for (let questionIndex = 0; questionIndex < lesson.questions.length; questionIndex += 1) {
+          const question = lesson.questions[questionIndex];
+          if (typeof question !== 'object' || question == null) {
+            return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, quiz #${lessonIndex + 1}, câu #${questionIndex + 1}: dữ liệu câu hỏi sai cấu trúc.`;
+          }
+          const questionType = normalizeSnapshotQuestionType((question as Record<string, unknown>).type);
+          if (!questionType) {
+            return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, quiz #${lessonIndex + 1}, câu #${questionIndex + 1}: thiếu type hợp lệ.`;
+          }
+          if (!Array.isArray((question as Record<string, unknown>).options)
+            || ((question as Record<string, unknown>).options as unknown[]).length === 0) {
+            return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, quiz #${lessonIndex + 1}, câu #${questionIndex + 1}: thiếu options.`;
+          }
+        }
+      }
+
+      if (lessonType === 'assignment') {
+        const assignmentRequiredValue = hasOwnKey(lesson, 'isRequired') ? lesson.isRequired : true;
+        if (!isBooleanOrNull(assignmentRequiredValue)) {
+          return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, assignment #${lessonIndex + 1}: isRequired phải là boolean hoặc null.`;
+        }
+
+        if (!hasOwnKey(lesson, 'assignmentCriteria')) {
+          return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, assignment #${lessonIndex + 1}: thiếu rubric (assignmentCriteria).`;
+        }
+        if (!Array.isArray(lesson.assignmentCriteria) || lesson.assignmentCriteria.length === 0) {
+          return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, assignment #${lessonIndex + 1}: rubric phải có ít nhất 1 tiêu chí.`;
+        }
+
+        for (let criteriaIndex = 0; criteriaIndex < lesson.assignmentCriteria.length; criteriaIndex += 1) {
+          const criteria = lesson.assignmentCriteria[criteriaIndex];
+          if (typeof criteria !== 'object' || criteria == null) {
+            return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, assignment #${lessonIndex + 1}, rubric #${criteriaIndex + 1}: dữ liệu tiêu chí sai cấu trúc.`;
+          }
+          const criteriaRecord = criteria as Record<string, unknown>;
+          const criteriaName = typeof criteriaRecord.name === 'string' ? criteriaRecord.name.trim() : '';
+          if (!criteriaName) {
+            return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, assignment #${lessonIndex + 1}, rubric #${criteriaIndex + 1}: thiếu tên tiêu chí.`;
+          }
+          if (!isFiniteNumber(criteriaRecord.maxPoints) || criteriaRecord.maxPoints <= 0) {
+            return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, assignment #${lessonIndex + 1}, rubric #${criteriaIndex + 1}: maxPoints phải > 0.`;
+          }
+          if (!hasOwnKey(criteriaRecord, 'isRequired') || !isBooleanOrNull(criteriaRecord.isRequired)) {
+            return `Snapshot không hợp lệ tại module #${moduleIndex + 1}, assignment #${lessonIndex + 1}, rubric #${criteriaIndex + 1}: isRequired phải là boolean hoặc null.`;
+          }
+        }
+      }
+    }
+  }
+
+  return null;
+};
+
 const toPositiveNumberOrUndefined = (value: unknown): number | undefined => {
   if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) {
+    return undefined;
+  }
+  return value;
+};
+
+const toNonNegativeNumberOrUndefined = (value: unknown): number | undefined => {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value < 0) {
     return undefined;
   }
   return value;
@@ -241,6 +486,214 @@ const toPositiveIntegerIdOrUndefined = (value: unknown): number | undefined => {
     }
   }
   return undefined;
+};
+
+const toStringOrUndefined = (value: unknown): string | undefined => {
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : undefined;
+  }
+  return undefined;
+};
+
+const normalizeKey = (value?: string): string =>
+  (value || '').trim().toLowerCase();
+
+const isSuspiciousNumericText = (value?: string): boolean => {
+  if (!value) return false;
+  return /^\d{5,}$/.test(value.trim());
+};
+
+const pickPreferredText = (primary?: string, fallback?: string): string | undefined => {
+  if (primary && !isSuspiciousNumericText(primary)) {
+    return primary;
+  }
+  if (fallback && !isSuspiciousNumericText(fallback)) {
+    return fallback;
+  }
+  return primary || fallback;
+};
+
+const buildLessonFingerprint = (lesson: LessonDraft): string => {
+  const normalizedTitle = normalizeKey(lesson.title);
+  const normalizedContent = normalizeKey(lesson.contentText);
+  const normalizedResource = normalizeKey(lesson.resourceUrl);
+  const normalizedYoutube = normalizeKey(lesson.youtubeUrl);
+  const type = lesson.type || 'reading';
+
+  return [
+    type,
+    normalizedTitle,
+    normalizedContent,
+    normalizedResource,
+    normalizedYoutube,
+    lesson.passScore ?? '',
+    lesson.assignmentSubmissionType ?? '',
+    lesson.assignmentMaxScore ?? '',
+    lesson.assignmentPassingScore ?? ''
+  ].join('|');
+};
+
+const dedupeDraftLessons = (lessons: LessonDraft[]): LessonDraft[] => {
+  const seenServerIds = new Set<number>();
+  const seenFingerprints = new Set<string>();
+
+  return lessons.filter((lesson) => {
+    if (typeof lesson.serverId === 'number') {
+      if (seenServerIds.has(lesson.serverId)) {
+        return false;
+      }
+      seenServerIds.add(lesson.serverId);
+      return true;
+    }
+
+    const fingerprint = buildLessonFingerprint(lesson);
+    if (seenFingerprints.has(fingerprint)) {
+      return false;
+    }
+    seenFingerprints.add(fingerprint);
+    return true;
+  });
+};
+
+const mapCourseModulesToDraftModules = (courseModules: Array<Record<string, unknown>>): ModuleDraft[] =>
+  courseModules.map((module) => {
+    const moduleRecord = module as Record<string, unknown>;
+    const moduleLessons = Array.isArray(moduleRecord.lessons)
+      ? (moduleRecord.lessons as Array<Record<string, unknown>>)
+      : [];
+
+    return {
+      id: String(moduleRecord.id ?? createId()),
+      ...(typeof moduleRecord.id === 'number' ? { serverId: moduleRecord.id } : {}),
+      title: toStringOrUndefined(moduleRecord.title) || '',
+      description: toStringOrUndefined(moduleRecord.description) || '',
+      lessons: moduleLessons.map((rawLesson) => {
+        const lessonId = rawLesson.id;
+        const quizQuestions = Array.isArray(rawLesson.questions)
+          ? (rawLesson.questions as QuizQuestionDraft[])
+          : [];
+        const assignmentCriteria = Array.isArray(rawLesson.assignmentCriteria)
+          ? (rawLesson.assignmentCriteria as AssignmentCriteriaDraft[])
+          : (Array.isArray((rawLesson as Record<string, unknown>).criteria)
+            ? ((rawLesson as Record<string, unknown>).criteria as AssignmentCriteriaDraft[])
+            : []);
+
+        return {
+          id: String(lessonId ?? createId()),
+          ...(typeof lessonId === 'number' ? { serverId: lessonId } : {}),
+          title: toStringOrUndefined(rawLesson.title) || '',
+          type: parseLessonKindFromSnapshot(rawLesson.type),
+          durationMin: toPositiveNumberOrUndefined(rawLesson.durationSec)
+            ? Math.round(Number(rawLesson.durationSec) / 60)
+            : toPositiveNumberOrUndefined(rawLesson.durationMin),
+          contentText: toStringOrUndefined(rawLesson.contentText),
+          resourceUrl: toStringOrUndefined(rawLesson.resourceUrl),
+          youtubeUrl: toStringOrUndefined(rawLesson.youtubeUrl) || toStringOrUndefined(rawLesson.videoUrl),
+          videoMediaId: typeof rawLesson.videoMediaId === 'number' ? rawLesson.videoMediaId : undefined,
+          passScore: toPositiveNumberOrUndefined(rawLesson.passScore),
+          quizTimeLimitMinutes: toPositiveNumberOrUndefined(rawLesson.quizTimeLimitMinutes),
+          quizMaxAttempts: toPositiveNumberOrUndefined(rawLesson.quizMaxAttempts),
+          roundingIncrement: toPositiveNumberOrUndefined(rawLesson.roundingIncrement),
+          quizDescription: toStringOrUndefined(rawLesson.quizDescription),
+          gradingMethod: toStringOrUndefined(rawLesson.gradingMethod),
+          isAssessment: typeof rawLesson.isAssessment === 'boolean' ? rawLesson.isAssessment : undefined,
+          cooldownHours: toPositiveNumberOrUndefined(rawLesson.cooldownHours),
+          assignmentSubmissionType: parseSubmissionTypeFromSnapshot(
+            rawLesson.assignmentSubmissionType ?? rawLesson.submissionType
+          ),
+          assignmentDescription: toStringOrUndefined(rawLesson.assignmentDescription),
+          assignmentMaxScore: toPositiveNumberOrUndefined(rawLesson.assignmentMaxScore),
+          assignmentPassingScore: toPositiveNumberOrUndefined(rawLesson.assignmentPassingScore),
+          assignmentIsRequired:
+            typeof rawLesson.assignmentIsRequired === 'boolean'
+              ? rawLesson.assignmentIsRequired
+              : (typeof rawLesson.isRequired === 'boolean' ? rawLesson.isRequired : undefined),
+          questions: quizQuestions,
+          assignmentCriteria,
+          attachments: normalizeLessonAttachments(rawLesson.attachments as LessonAttachmentDraft[] | undefined)
+        };
+      })
+    };
+  });
+
+const mergeSnapshotModulesWithFallback = (
+  snapshotModules: ModuleDraft[],
+  fallbackModules: ModuleDraft[]
+): ModuleDraft[] => {
+  if (snapshotModules.length === 0) {
+    return fallbackModules;
+  }
+
+  const fallbackByModuleId = new Map<number, ModuleDraft>();
+  const fallbackByModuleTitle = new Map<string, ModuleDraft>();
+
+  fallbackModules.forEach((module) => {
+    if (module.serverId) {
+      fallbackByModuleId.set(module.serverId, module);
+    }
+    fallbackByModuleTitle.set(normalizeKey(module.title), module);
+  });
+
+  const merged: ModuleDraft[] = snapshotModules.map((snapshotModule) => {
+    const fallbackModule =
+      (snapshotModule.serverId ? fallbackByModuleId.get(snapshotModule.serverId) : undefined)
+      || fallbackByModuleTitle.get(normalizeKey(snapshotModule.title));
+
+    if (!fallbackModule) {
+      return snapshotModule;
+    }
+
+    const fallbackByLessonId = new Map<number, { lesson: LessonDraft; index: number }>();
+    const fallbackByTypeAndOrder = new Map<string, { lesson: LessonDraft; index: number }>();
+
+    fallbackModule.lessons.forEach((lesson, index) => {
+      if (lesson.serverId) {
+        fallbackByLessonId.set(lesson.serverId, { lesson, index });
+      }
+      fallbackByTypeAndOrder.set(`${lesson.type}:${index}`, { lesson, index });
+    });
+
+    const mergedLessons = snapshotModule.lessons.map((snapshotLesson, index) => {
+      const fallbackMatch =
+        (snapshotLesson.serverId ? fallbackByLessonId.get(snapshotLesson.serverId) : undefined)
+        || fallbackByTypeAndOrder.get(`${snapshotLesson.type}:${index}`);
+
+      const fallbackLesson = fallbackMatch?.lesson;
+
+      if (!fallbackLesson) {
+        return snapshotLesson;
+      }
+
+      return {
+        ...fallbackLesson,
+        ...snapshotLesson,
+        contentText: pickPreferredText(snapshotLesson.contentText, fallbackLesson.contentText),
+        resourceUrl: snapshotLesson.resourceUrl || fallbackLesson.resourceUrl,
+        youtubeUrl: snapshotLesson.youtubeUrl || fallbackLesson.youtubeUrl,
+        videoMediaId: snapshotLesson.videoMediaId ?? fallbackLesson.videoMediaId,
+        questions: (snapshotLesson.questions && snapshotLesson.questions.length > 0)
+          ? snapshotLesson.questions
+          : fallbackLesson.questions,
+        assignmentCriteria: (snapshotLesson.assignmentCriteria && snapshotLesson.assignmentCriteria.length > 0)
+          ? snapshotLesson.assignmentCriteria
+          : fallbackLesson.assignmentCriteria,
+        attachments: (snapshotLesson.attachments && snapshotLesson.attachments.length > 0)
+          ? snapshotLesson.attachments
+          : fallbackLesson.attachments,
+      };
+    });
+
+    return {
+      ...fallbackModule,
+      ...snapshotModule,
+      description: pickPreferredText(snapshotModule.description, fallbackModule.description) || '',
+      // Snapshot is authoritative in revision mode: do not append unmatched fallback lessons.
+      lessons: dedupeDraftLessons(mergedLessons)
+    };
+  });
+
+  return merged;
 };
 
 const parseQuestionTypeFromSnapshot = (value: unknown): QuestionType => {
@@ -277,12 +730,7 @@ const parseModulesFromRevisionSnapshot = (contentSnapshotJson?: string): ModuleD
 
   try {
     const parsed = JSON.parse(contentSnapshotJson) as {
-      modules?: Array<{
-        id?: unknown;
-        title?: string;
-        description?: string;
-        lessons?: Array<Record<string, unknown>>;
-      }>;
+      modules?: Array<Record<string, unknown>>;
     };
 
     if (!Array.isArray(parsed.modules)) {
@@ -292,18 +740,86 @@ const parseModulesFromRevisionSnapshot = (contentSnapshotJson?: string): ModuleD
     return parsed.modules.map((module, moduleIndex) => {
       const moduleId = `snapshot-module-${moduleIndex}-${createId()}`;
       const moduleServerId = toPositiveIntegerIdOrUndefined(module.id);
-      const lessons = Array.isArray(module.lessons) ? module.lessons : [];
+      const baseLessons = Array.isArray(module.lessons) ? module.lessons : [];
+      const legacyItems = Array.isArray(module.items) ? module.items : [];
+      const legacyQuizzes = Array.isArray(module.quizzes)
+        ? module.quizzes.map((quizRaw) => ({
+          ...(quizRaw as Record<string, unknown>),
+          type: 'quiz',
+          quizDescription: toStringOrUndefined((quizRaw as Record<string, unknown>).quizDescription)
+            || toStringOrUndefined((quizRaw as Record<string, unknown>).description),
+          quizTimeLimitMinutes:
+            toPositiveNumberOrUndefined((quizRaw as Record<string, unknown>).quizTimeLimitMinutes)
+            ?? toPositiveNumberOrUndefined((quizRaw as Record<string, unknown>).timeLimitMinutes),
+          quizMaxAttempts:
+            toPositiveNumberOrUndefined((quizRaw as Record<string, unknown>).quizMaxAttempts)
+            ?? toPositiveNumberOrUndefined((quizRaw as Record<string, unknown>).maxAttempts),
+        }))
+        : [];
+      const legacyAssignments = Array.isArray(module.assignments)
+        ? module.assignments.map((assignmentRaw) => ({
+          ...(assignmentRaw as Record<string, unknown>),
+          type: 'assignment',
+          assignmentDescription: toStringOrUndefined((assignmentRaw as Record<string, unknown>).assignmentDescription)
+            || toStringOrUndefined((assignmentRaw as Record<string, unknown>).description),
+          assignmentSubmissionType:
+            (assignmentRaw as Record<string, unknown>).assignmentSubmissionType
+            ?? (assignmentRaw as Record<string, unknown>).submissionType,
+          assignmentMaxScore:
+            toPositiveNumberOrUndefined((assignmentRaw as Record<string, unknown>).assignmentMaxScore)
+            ?? toPositiveNumberOrUndefined((assignmentRaw as Record<string, unknown>).maxScore),
+          assignmentPassingScore:
+            toPositiveNumberOrUndefined((assignmentRaw as Record<string, unknown>).assignmentPassingScore)
+            ?? toPositiveNumberOrUndefined((assignmentRaw as Record<string, unknown>).passingScore),
+          assignmentCriteria:
+            (assignmentRaw as Record<string, unknown>).assignmentCriteria
+            ?? (assignmentRaw as Record<string, unknown>).criteria,
+        }))
+        : [];
+
+      // Some older snapshots may contain both `lessons` and legacy `quizzes/assignments/items` arrays.
+      // Merge all sources so revision editor does not silently drop quiz/assignment items.
+      const combinedLessonSources = [...baseLessons, ...legacyItems, ...legacyQuizzes, ...legacyAssignments]
+        .filter((lesson): lesson is Record<string, unknown> => typeof lesson === 'object' && lesson != null);
+
+      const seenSnapshotItemKeys = new Set<string>();
+      const lessonsSource = combinedLessonSources.filter((lesson, lessonIndex) => {
+        const type = parseLessonKindFromSnapshot(lesson.type);
+        const id = toPositiveIntegerIdOrUndefined(lesson.id);
+        const orderIndex = toPositiveNumberOrUndefined(lesson.orderIndex) ?? lessonIndex;
+        const title = normalizeKey(toStringOrUndefined(lesson.title) || '');
+        const dedupeKey = id
+          ? `${type}:${id}`
+          : `${type}:${orderIndex}:${title}`;
+
+        if (seenSnapshotItemKeys.has(dedupeKey)) {
+          return false;
+        }
+        seenSnapshotItemKeys.add(dedupeKey);
+        return true;
+      });
+
+      const lessons = lessonsSource
+        .sort((a, b) => {
+          const left = toPositiveNumberOrUndefined(a.orderIndex) ?? 0;
+          const right = toPositiveNumberOrUndefined(b.orderIndex) ?? 0;
+          return left - right;
+        });
 
       return {
         id: moduleId,
         ...(moduleServerId ? { serverId: moduleServerId } : {}),
         title: typeof module.title === 'string' ? module.title : `Module ${moduleIndex + 1}`,
         description: typeof module.description === 'string' ? module.description : '',
-        lessons: lessons.map((lessonRaw, lessonIndex) => {
+        lessons: dedupeDraftLessons(lessons.map((lessonRaw, lessonIndex) => {
           const lessonId = `snapshot-lesson-${moduleIndex}-${lessonIndex}-${createId()}`;
           const lessonServerId = toPositiveIntegerIdOrUndefined(lessonRaw.id);
           const questionsRaw = Array.isArray(lessonRaw.questions) ? lessonRaw.questions : [];
-          const criteriaRaw = Array.isArray(lessonRaw.assignmentCriteria) ? lessonRaw.assignmentCriteria : [];
+          const criteriaRaw = Array.isArray(lessonRaw.assignmentCriteria)
+            ? lessonRaw.assignmentCriteria
+            : (Array.isArray((lessonRaw as Record<string, unknown>).criteria)
+              ? ((lessonRaw as Record<string, unknown>).criteria as unknown[])
+              : []);
           const attachmentsRaw = Array.isArray(lessonRaw.attachments) ? lessonRaw.attachments : [];
 
           const questions: QuizQuestionDraft[] = questionsRaw.map((questionRaw, questionIndex) => {
@@ -331,12 +847,14 @@ const parseModulesFromRevisionSnapshot = (contentSnapshotJson?: string): ModuleD
 
           const assignmentCriteria: AssignmentCriteriaDraft[] = criteriaRaw.map((criteriaRawItem, criteriaIndex) => {
             const criteriaId = toPositiveIntegerIdOrUndefined(criteriaRawItem.id);
+            const maxPoints = toPositiveNumberOrUndefined(criteriaRawItem.maxPoints) ?? 0;
             return {
               clientId: `snapshot-criteria-${moduleIndex}-${lessonIndex}-${criteriaIndex}-${createId()}`,
               ...(criteriaId ? { id: criteriaId } : {}),
               name: typeof criteriaRawItem.name === 'string' ? criteriaRawItem.name : '',
               description: typeof criteriaRawItem.description === 'string' ? criteriaRawItem.description : '',
-              maxPoints: toPositiveNumberOrUndefined(criteriaRawItem.maxPoints) ?? 0,
+              maxPoints,
+              passingPoints: toNonNegativeNumberOrUndefined(criteriaRawItem.passingPoints) ?? maxPoints,
               orderIndex: toPositiveNumberOrUndefined(criteriaRawItem.orderIndex) ?? criteriaIndex,
               isRequired: typeof criteriaRawItem.isRequired === 'boolean' ? criteriaRawItem.isRequired : true
             };
@@ -361,32 +879,281 @@ const parseModulesFromRevisionSnapshot = (contentSnapshotJson?: string): ModuleD
             title: typeof lessonRaw.title === 'string' ? lessonRaw.title : `Bài học ${lessonIndex + 1}`,
             type: parseLessonKindFromSnapshot(lessonRaw.type),
             durationMin: toPositiveNumberOrUndefined(lessonRaw.durationMin),
-            contentText: typeof lessonRaw.contentText === 'string' ? lessonRaw.contentText : '',
-            resourceUrl: typeof lessonRaw.resourceUrl === 'string' ? lessonRaw.resourceUrl : undefined,
-            youtubeUrl: typeof lessonRaw.youtubeUrl === 'string' ? lessonRaw.youtubeUrl : undefined,
+            contentText:
+              toStringOrUndefined(lessonRaw.contentText)
+              || toStringOrUndefined(lessonRaw.content)
+              || toStringOrUndefined(lessonRaw.description)
+              || '',
+            resourceUrl: toStringOrUndefined(lessonRaw.resourceUrl),
+            youtubeUrl: toStringOrUndefined(lessonRaw.youtubeUrl) || toStringOrUndefined(lessonRaw.videoUrl),
             videoMediaId: typeof lessonRaw.videoMediaId === 'number' ? lessonRaw.videoMediaId : undefined,
             passScore: toPositiveNumberOrUndefined(lessonRaw.passScore),
             quizMaxAttempts: toPositiveNumberOrUndefined(lessonRaw.quizMaxAttempts),
             quizTimeLimitMinutes: toPositiveNumberOrUndefined(lessonRaw.quizTimeLimitMinutes),
+            roundingIncrement: toPositiveNumberOrUndefined(lessonRaw.roundingIncrement),
             quizDescription: typeof lessonRaw.quizDescription === 'string' ? lessonRaw.quizDescription : undefined,
             gradingMethod: typeof lessonRaw.gradingMethod === 'string' ? lessonRaw.gradingMethod : undefined,
             isAssessment: typeof lessonRaw.isAssessment === 'boolean' ? lessonRaw.isAssessment : undefined,
-            assignmentSubmissionType: parseSubmissionTypeFromSnapshot(lessonRaw.assignmentSubmissionType),
+            cooldownHours: toPositiveNumberOrUndefined(lessonRaw.cooldownHours),
+            assignmentSubmissionType: parseSubmissionTypeFromSnapshot(
+              lessonRaw.assignmentSubmissionType ?? lessonRaw.submissionType
+            ),
             assignmentDescription:
-              typeof lessonRaw.assignmentDescription === 'string' ? lessonRaw.assignmentDescription : undefined,
-            assignmentMaxScore: toPositiveNumberOrUndefined(lessonRaw.assignmentMaxScore),
-            assignmentPassingScore: toPositiveNumberOrUndefined(lessonRaw.assignmentPassingScore),
+              toStringOrUndefined(lessonRaw.assignmentDescription)
+              || toStringOrUndefined(lessonRaw.description),
+            assignmentMaxScore:
+              toPositiveNumberOrUndefined(lessonRaw.assignmentMaxScore)
+              ?? toPositiveNumberOrUndefined(lessonRaw.maxScore),
+            assignmentPassingScore:
+              toPositiveNumberOrUndefined(lessonRaw.assignmentPassingScore)
+              ?? toPositiveNumberOrUndefined(lessonRaw.passingScore),
+            assignmentIsRequired:
+              typeof lessonRaw.isRequired === 'boolean'
+                ? lessonRaw.isRequired
+                : (typeof lessonRaw.required === 'boolean' ? lessonRaw.required : undefined),
             questions,
             assignmentCriteria,
             attachments
           };
-        })
+        }))
       };
     });
   } catch (error) {
     console.error('Failed to parse revision content snapshot:', error);
     return [];
   }
+};
+
+type ChangeInfo = {
+  isNew: boolean;
+  changedFields: string[];
+};
+
+const normalizeComparableContent = (value?: string): string =>
+  normalizeKey((value || '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/gi, ' '));
+
+const normalizeStringList = (items?: string[]): string[] =>
+  (items || [])
+    .map((item) => normalizeKey(item))
+    .filter((item) => item.length > 0);
+
+const parseJsonStringArray = (raw?: string): string[] => {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter((item): item is string => typeof item === 'string');
+  } catch {
+    return [];
+  }
+};
+
+const arraysEqualIgnoringOrder = (left: string[], right: string[]): boolean => {
+  if (left.length !== right.length) {
+    return false;
+  }
+  const sortedLeft = [...left].sort();
+  const sortedRight = [...right].sort();
+  return sortedLeft.every((item, index) => item === sortedRight[index]);
+};
+
+const findMatchingModule = (
+  baselineModules: ModuleDraft[],
+  module: ModuleDraft,
+  moduleIndex: number
+): ModuleDraft | undefined => {
+  if (typeof module.serverId === 'number') {
+    const byId = baselineModules.find((candidate) => candidate.serverId === module.serverId);
+    if (byId) return byId;
+  }
+  if (baselineModules[moduleIndex]) {
+    return baselineModules[moduleIndex];
+  }
+  return baselineModules.find((candidate) => normalizeKey(candidate.title) === normalizeKey(module.title));
+};
+
+const findMatchingLesson = (
+  baselineLessons: LessonDraft[],
+  lesson: LessonDraft,
+  lessonIndex: number
+): LessonDraft | undefined => {
+  if (typeof lesson.serverId === 'number') {
+    const byId = baselineLessons.find((candidate) => candidate.serverId === lesson.serverId);
+    if (byId) return byId;
+  }
+  if (baselineLessons[lessonIndex]) {
+    return baselineLessons[lessonIndex];
+  }
+  return baselineLessons.find(
+    (candidate) =>
+      candidate.type === lesson.type &&
+      normalizeKey(candidate.title) === normalizeKey(lesson.title)
+  );
+};
+
+const getModuleChangeInfo = (
+  module: ModuleDraft,
+  moduleIndex: number,
+  baselineModules: ModuleDraft[]
+): { info: ChangeInfo; baselineModule?: ModuleDraft } => {
+  const baselineModule = findMatchingModule(baselineModules, module, moduleIndex);
+  if (!baselineModule) {
+    return {
+      info: {
+        isNew: true,
+        changedFields: ['Module mới']
+      }
+    };
+  }
+
+  const changedFields: string[] = [];
+  if (normalizeKey(module.title) !== normalizeKey(baselineModule.title)) {
+    changedFields.push('Tên module');
+  }
+  if (normalizeComparableContent(module.description) !== normalizeComparableContent(baselineModule.description)) {
+    changedFields.push('Mô tả module');
+  }
+  if ((module.lessons?.length || 0) !== (baselineModule.lessons?.length || 0)) {
+    changedFields.push('Số lượng bài học');
+  }
+
+  return {
+    info: {
+      isNew: false,
+      changedFields
+    },
+    baselineModule
+  };
+};
+
+const getLessonChangeInfo = (
+  lesson: LessonDraft,
+  lessonIndex: number,
+  baselineLessons: LessonDraft[]
+): ChangeInfo => {
+  const baselineLesson = findMatchingLesson(baselineLessons, lesson, lessonIndex);
+  if (!baselineLesson) {
+    return {
+      isNew: true,
+      changedFields: ['Bài học mới']
+    };
+  }
+
+  const changedFields: string[] = [];
+  if (lesson.type !== baselineLesson.type) {
+    changedFields.push('Loại bài học');
+  }
+  if (normalizeKey(lesson.title) !== normalizeKey(baselineLesson.title)) {
+    changedFields.push('Tiêu đề');
+  }
+
+  if (lesson.type === 'reading' || lesson.type === 'video') {
+    if (normalizeComparableContent(lesson.contentText) !== normalizeComparableContent(baselineLesson.contentText)) {
+      changedFields.push('Nội dung');
+    }
+    if (normalizeKey(lesson.resourceUrl) !== normalizeKey(baselineLesson.resourceUrl)) {
+      changedFields.push('Tài liệu');
+    }
+    if (normalizeKey(lesson.youtubeUrl) !== normalizeKey(baselineLesson.youtubeUrl)) {
+      changedFields.push('Video URL');
+    }
+  }
+
+  if (lesson.type === 'quiz') {
+    if (normalizeComparableContent(lesson.quizDescription) !== normalizeComparableContent(baselineLesson.quizDescription)) {
+      changedFields.push('Mô tả quiz');
+    }
+    if ((lesson.passScore ?? null) !== (baselineLesson.passScore ?? null)) {
+      changedFields.push('Điểm đạt');
+    }
+    if ((lesson.quizMaxAttempts ?? null) !== (baselineLesson.quizMaxAttempts ?? null)) {
+      changedFields.push('Số lần làm');
+    }
+    if ((lesson.quizTimeLimitMinutes ?? null) !== (baselineLesson.quizTimeLimitMinutes ?? null)) {
+      changedFields.push('Thời gian làm');
+    }
+    if ((lesson.questions?.length || 0) !== (baselineLesson.questions?.length || 0)) {
+      changedFields.push('Số câu hỏi');
+    }
+  }
+
+  if (lesson.type === 'assignment') {
+    if (normalizeComparableContent(lesson.assignmentDescription) !== normalizeComparableContent(baselineLesson.assignmentDescription)) {
+      changedFields.push('Mô tả bài tập');
+    }
+    if ((lesson.assignmentSubmissionType || '') !== (baselineLesson.assignmentSubmissionType || '')) {
+      changedFields.push('Hình thức nộp');
+    }
+    if ((lesson.assignmentMaxScore ?? null) !== (baselineLesson.assignmentMaxScore ?? null)) {
+      changedFields.push('Điểm tối đa');
+    }
+    if ((lesson.assignmentPassingScore ?? null) !== (baselineLesson.assignmentPassingScore ?? null)) {
+      changedFields.push('Điểm đạt');
+    }
+    if ((lesson.assignmentCriteria?.length || 0) !== (baselineLesson.assignmentCriteria?.length || 0)) {
+      changedFields.push('Tiêu chí chấm');
+    }
+  }
+
+  return {
+    isNew: false,
+    changedFields
+  };
+};
+
+const getCourseInfoChangedFields = (
+  courseForm: {
+    title?: string;
+    summary?: string;
+    description?: string;
+    category?: string;
+    level?: string;
+    price?: number;
+    estimatedDuration?: number;
+  },
+  learningObjectives: string[],
+  requirements: string[],
+  baselineRevision: CourseRevisionDTO | null
+): string[] => {
+  if (!baselineRevision) return [];
+
+  const changedFields: string[] = [];
+
+  if (normalizeKey(courseForm.title) !== normalizeKey(baselineRevision.title)) {
+    changedFields.push('Tên khóa học');
+  }
+  if (normalizeComparableContent(courseForm.summary) !== normalizeComparableContent(baselineRevision.shortDescription)) {
+    changedFields.push('Mô tả ngắn');
+  }
+  if (normalizeComparableContent(courseForm.description) !== normalizeComparableContent(baselineRevision.description)) {
+    changedFields.push('Mô tả chi tiết');
+  }
+  if (normalizeKey(courseForm.category) !== normalizeKey(baselineRevision.category)) {
+    changedFields.push('Danh mục');
+  }
+  if (normalizeKey(courseForm.level) !== normalizeKey(baselineRevision.level)) {
+    changedFields.push('Độ khó');
+  }
+  if ((courseForm.price ?? null) !== (baselineRevision.price ?? null)) {
+    changedFields.push('Giá');
+  }
+  if ((courseForm.estimatedDuration ?? null) !== (baselineRevision.estimatedDurationHours ?? null)) {
+    changedFields.push('Thời lượng');
+  }
+
+  const baselineObjectives = normalizeStringList(parseJsonStringArray(baselineRevision.learningObjectivesJson));
+  const baselineRequirements = normalizeStringList(parseJsonStringArray(baselineRevision.requirementsJson));
+  const currentObjectives = normalizeStringList(learningObjectives);
+  const currentRequirements = normalizeStringList(requirements);
+
+  if (!arraysEqualIgnoringOrder(currentObjectives, baselineObjectives)) {
+    changedFields.push('Mục tiêu khóa học');
+  }
+  if (!arraysEqualIgnoringOrder(currentRequirements, baselineRequirements)) {
+    changedFields.push('Yêu cầu đầu vào');
+  }
+
+  return changedFields;
 };
 
 const formatRevisionStatusLabel = (status?: string | null) => {
@@ -452,6 +1219,8 @@ const CourseCreationPage = () => {
   const revisionId = revisionIdParam ? Number(revisionIdParam) : null;
   const isRevisionMode = Boolean(revisionId && !Number.isNaN(revisionId));
   const [activeRevision, setActiveRevision] = useState<CourseRevisionDTO | null>(null);
+  const [baselineRevision, setBaselineRevision] = useState<CourseRevisionDTO | null>(null);
+  const [baselineSnapshotModules, setBaselineSnapshotModules] = useState<ModuleDraft[]>([]);
   const [revisionHistory, setRevisionHistory] = useState<CourseRevisionDTO[]>([]);
   const [isRevisionLoading, setIsRevisionLoading] = useState(false);
   const [isRevisionHistoryModalOpen, setIsRevisionHistoryModalOpen] = useState(false);
@@ -519,6 +1288,20 @@ const CourseCreationPage = () => {
   );
   const hasPendingOpenRevision = !isRevisionMode && openRevision?.status === 'PENDING';
   const hasDraftOpenRevision = !isRevisionMode && openRevision?.status === 'DRAFT';
+  const changedCourseInfoFields = getCourseInfoChangedFields(
+    {
+      title: courseForm.title,
+      summary: courseForm.summary,
+      description: courseForm.description,
+      category: courseForm.category,
+      level: courseForm.level,
+      price: courseForm.price,
+      estimatedDuration: courseForm.estimatedDuration
+    },
+    learningObjectives,
+    requirements,
+    baselineRevision
+  );
   
   const clearAssignmentError = (
      lessonId: string,
@@ -664,6 +1447,8 @@ const CourseCreationPage = () => {
   useEffect(() => {
     if (!isRevisionMode || !revisionId) {
       setActiveRevision(null);
+      setBaselineRevision(null);
+      setBaselineSnapshotModules([]);
       return;
     }
 
@@ -672,6 +1457,22 @@ const CourseCreationPage = () => {
         setIsRevisionLoading(true);
         const revision = await getCourseRevision(revisionId);
         setActiveRevision(revision);
+
+        const sourceRevisionId = typeof revision.sourceRevisionId === 'number' ? revision.sourceRevisionId : null;
+        if (sourceRevisionId && sourceRevisionId > 0 && sourceRevisionId !== revision.id) {
+          try {
+            const sourceRevision = await getCourseRevision(sourceRevisionId);
+            setBaselineRevision(sourceRevision);
+            setBaselineSnapshotModules(parseModulesFromRevisionSnapshot(sourceRevision.contentSnapshotJson));
+          } catch {
+            setBaselineRevision(null);
+            setBaselineSnapshotModules([]);
+          }
+        } else {
+          setBaselineRevision(null);
+          setBaselineSnapshotModules([]);
+        }
+
         const revisionFormData: Partial<typeof state.courseForm> = {};
         if (revision.title !== undefined) revisionFormData.title = revision.title;
         if (revision.description !== undefined) revisionFormData.description = revision.description;
@@ -700,8 +1501,11 @@ const CourseCreationPage = () => {
           }
         }
         const snapshotModules = parseModulesFromRevisionSnapshot(revision.contentSnapshotJson);
-        if (snapshotModules.length > 0) {
-          setModules(snapshotModules);
+        const fallbackModules = mapCourseModulesToDraftModules(state.modules as Array<Record<string, unknown>>);
+        const mergedModules = mergeSnapshotModulesWithFallback(snapshotModules, fallbackModules);
+
+        if (mergedModules.length > 0) {
+          setModules(mergedModules);
           setAssignmentErrors({});
         }
       } catch (error) {
@@ -739,44 +1543,8 @@ const CourseCreationPage = () => {
     // Map context modules to local draft modules if needed
     // This part assumes we might need to transform data structure
     if (state.modules.length > 0 && modules.length === 0) {
-        const mappedModules: ModuleDraft[] = state.modules.map(m => ({
-            id: m.id.toString(),
-            serverId: m.id,
-            title: m.title,
-            description: m.description,
-            lessons: m.lessons.map(rawLesson => {
-                const lessonId = (rawLesson as unknown as { id: number }).id;
-                const lesson = rawLesson as unknown as Partial<LessonDraft> & { id: number; type?: LessonType | string; durationSec?: number; videoUrl?: string };
-                return {
-                  id: lessonId.toString(),
-                  serverId: lessonId,
-                  title: lesson.title || '',
-                  type: (lesson.type?.toString().toLowerCase() || 'reading') as LessonKind,
-                  durationMin: lesson.durationSec ? Math.round(lesson.durationSec / 60) : undefined,
-                  contentText: lesson.contentText,
-                  resourceUrl: lesson.resourceUrl,
-                  youtubeUrl: lesson.youtubeUrl || lesson.videoUrl,
-                  videoMediaId: lesson.videoMediaId,
-                  passScore: lesson.passScore,
-                  quizTimeLimitMinutes: lesson.quizTimeLimitMinutes,
-                  quizMaxAttempts: lesson.quizMaxAttempts,
-                  quizDescription: lesson.quizDescription,
-                  gradingMethod: lesson.gradingMethod,
-                  isAssessment: lesson.isAssessment,
-                  questions: (lesson.questions || []).map((q: QuizQuestionDraft) => ({
-                     ...q,
-                     score: Number.isFinite(Number(q.score)) && Number(q.score) > 0 ? Number(q.score) : 1
-                  })),
-                  assignmentSubmissionType: (lesson.assignmentSubmissionType || (lesson as { submissionType?: SubmissionType }).submissionType || SubmissionType.TEXT) as SubmissionType,
-                  assignmentDescription: lesson.assignmentDescription,
-                  assignmentMaxScore: lesson.assignmentMaxScore,
-                  assignmentPassingScore: lesson.assignmentPassingScore,
-                  assignmentCriteria: lesson.assignmentCriteria,
-                  attachments: normalizeLessonAttachments(lesson.attachments)
-                };
-            })
-        }));
-        setModules(mappedModules);
+      const mappedModules = mapCourseModulesToDraftModules(state.modules as Array<Record<string, unknown>>);
+      setModules(mappedModules);
     }
   }, [
     isEditMode,
@@ -787,6 +1555,39 @@ const CourseCreationPage = () => {
     state.currentCourse,
     state.modules,
   ]);
+
+  // In revision mode, context modules may arrive after revision snapshot is parsed.
+  // Reconcile once context modules are ready to avoid missing lesson-like items.
+  useEffect(() => {
+    if (!isRevisionMode || !activeRevision || isRevisionLoading) {
+      return;
+    }
+    if (!Array.isArray(state.modules) || state.modules.length === 0) {
+      return;
+    }
+
+    const snapshotModules = parseModulesFromRevisionSnapshot(activeRevision.contentSnapshotJson);
+    if (snapshotModules.length === 0) {
+      return;
+    }
+
+    const fallbackModules = mapCourseModulesToDraftModules(state.modules as Array<Record<string, unknown>>);
+    const reconciledModules = mergeSnapshotModulesWithFallback(snapshotModules, fallbackModules);
+    if (reconciledModules.length === 0) {
+      return;
+    }
+
+    const countLessonLikeItems = (moduleList: ModuleDraft[]): number =>
+      moduleList.reduce((total, module) => total + (Array.isArray(module.lessons) ? module.lessons.length : 0), 0);
+
+    const currentCount = countLessonLikeItems(modules);
+    const reconciledCount = countLessonLikeItems(reconciledModules);
+
+    if (reconciledCount > currentCount) {
+      setModules(reconciledModules);
+      setAssignmentErrors({});
+    }
+  }, [activeRevision, isRevisionLoading, isRevisionMode, modules, state.modules]);
 
   // ============================================================================
   // HANDLERS
@@ -913,6 +1714,138 @@ const CourseCreationPage = () => {
         })
       };
     }));
+  };
+
+  const hasConfiguredTypeSpecificData = (lesson: LessonDraft): boolean => {
+    if (lesson.type === 'quiz') {
+      return Boolean(
+        (lesson.questions && lesson.questions.length > 0)
+        || (lesson.quizDescription && lesson.quizDescription.trim().length > 0)
+        || lesson.passScore !== undefined
+        || lesson.quizMaxAttempts !== undefined
+        || lesson.quizTimeLimitMinutes !== undefined
+      );
+    }
+
+    if (lesson.type === 'video') {
+      return Boolean(
+        (lesson.youtubeUrl && lesson.youtubeUrl.trim().length > 0)
+        || (typeof lesson.videoMediaId === 'number' && lesson.videoMediaId > 0)
+      );
+    }
+
+    if (lesson.type === 'assignment') {
+      return Boolean(
+        (lesson.assignmentDescription && lesson.assignmentDescription.trim().length > 0)
+        || (lesson.assignmentCriteria && lesson.assignmentCriteria.length > 0)
+        || lesson.assignmentMaxScore !== undefined
+        || lesson.assignmentPassingScore !== undefined
+      );
+    }
+
+    return Boolean(
+      (lesson.contentText && lesson.contentText.trim().length > 0)
+      || (lesson.resourceUrl && lesson.resourceUrl.trim().length > 0)
+      || (lesson.attachments && lesson.attachments.length > 0)
+    );
+  };
+
+  const buildTypeSwitchPayload = (
+    lesson: LessonDraft,
+    nextType: LessonKind
+  ): Partial<LessonDraft> => {
+    const base: Partial<LessonDraft> = {
+      type: nextType,
+      contentText: undefined,
+      resourceUrl: undefined,
+      attachments: [],
+      youtubeUrl: undefined,
+      videoMediaId: undefined,
+      passScore: undefined,
+      quizTimeLimitMinutes: undefined,
+      quizMaxAttempts: undefined,
+      quizDescription: undefined,
+      roundingIncrement: undefined,
+      gradingMethod: undefined,
+      isAssessment: undefined,
+      cooldownHours: undefined,
+      questions: [],
+      assignmentSubmissionType: undefined,
+      assignmentDescription: undefined,
+      assignmentMaxScore: undefined,
+      assignmentPassingScore: undefined,
+      assignmentIsRequired: undefined,
+      assignmentCriteria: []
+    };
+
+    if (nextType === 'reading') {
+      return {
+        ...base,
+        contentText: lesson.type === 'reading' ? (lesson.contentText || '') : ''
+      };
+    }
+
+    if (nextType === 'video') {
+      return {
+        ...base,
+        youtubeUrl: lesson.type === 'video' ? lesson.youtubeUrl : undefined,
+        videoMediaId: lesson.type === 'video' ? lesson.videoMediaId : undefined
+      };
+    }
+
+    if (nextType === 'quiz') {
+      return {
+        ...base,
+        quizDescription: lesson.type === 'quiz' ? lesson.quizDescription : undefined,
+        passScore: lesson.type === 'quiz' ? lesson.passScore : 80,
+        quizMaxAttempts: lesson.type === 'quiz' ? lesson.quizMaxAttempts : undefined,
+        quizTimeLimitMinutes: lesson.type === 'quiz' ? lesson.quizTimeLimitMinutes : undefined,
+        roundingIncrement: lesson.type === 'quiz' ? lesson.roundingIncrement : undefined,
+        gradingMethod: lesson.type === 'quiz' ? lesson.gradingMethod : undefined,
+        isAssessment: lesson.type === 'quiz' ? lesson.isAssessment : undefined,
+        cooldownHours: lesson.type === 'quiz' ? lesson.cooldownHours : undefined,
+        questions: lesson.type === 'quiz' ? (lesson.questions || []) : []
+      };
+    }
+
+    return {
+      ...base,
+      assignmentSubmissionType: lesson.type === 'assignment'
+        ? (lesson.assignmentSubmissionType || SubmissionType.TEXT)
+        : SubmissionType.TEXT,
+      assignmentDescription: lesson.type === 'assignment' ? lesson.assignmentDescription : undefined,
+      assignmentMaxScore: lesson.type === 'assignment' ? (lesson.assignmentMaxScore ?? 100) : 100,
+      assignmentPassingScore: lesson.type === 'assignment' ? (lesson.assignmentPassingScore ?? 50) : 50,
+      assignmentIsRequired: lesson.type === 'assignment' ? lesson.assignmentIsRequired : undefined,
+      assignmentCriteria: lesson.type === 'assignment' ? (lesson.assignmentCriteria || []) : []
+    };
+  };
+
+  const handleLessonTypeSwitch = (
+    moduleId: string,
+    lesson: LessonDraft,
+    nextType: LessonKind
+  ) => {
+    if (lesson.type === nextType) {
+      return;
+    }
+
+    const applySwitch = () => {
+      const payload = buildTypeSwitchPayload(lesson, nextType);
+      updateLessonField(moduleId, lesson.id, payload);
+    };
+
+    if (hasConfiguredTypeSpecificData(lesson)) {
+      setConfirmDialog({
+        title: 'Đổi loại bài học',
+        message: 'Đổi loại sẽ xóa cấu hình chi tiết của loại hiện tại. Bạn có chắc chắn?',
+        confirmLabel: 'Đổi loại',
+        onConfirm: applySwitch
+      });
+      return;
+    }
+
+    applySwitch();
   };
 
   const handleRemoveLesson = (moduleId: string, lessonId: string) => {
@@ -1087,8 +2020,18 @@ const CourseCreationPage = () => {
     setIsSaving(true);
 
     try {
+      logCourseDraftOrderDebug('before-save current modules', modules);
+
       if (isRevisionMode && activeRevision) {
-        const contentSnapshotJson = JSON.stringify(buildRevisionContentSnapshot(modules));
+        const normalizedSnapshotPayload = normalizeRevisionSnapshotPayload(buildRevisionContentSnapshot(modules));
+        logCourseDraftOrderDebug('revision snapshot modules before updateRevision', normalizedSnapshotPayload.modules as ModuleDraft[]);
+        const snapshotValidationError = validateRevisionSnapshotPayload(normalizedSnapshotPayload);
+        if (snapshotValidationError) {
+          showToast('error', snapshotValidationError);
+          return null;
+        }
+
+        const contentSnapshotJson = JSON.stringify(normalizedSnapshotPayload);
         const updatedRevision = await updateCourseRevision(activeRevision.id, {
           title: state.courseForm.title,
           description: state.courseForm.description,
@@ -1123,6 +2066,8 @@ const CourseCreationPage = () => {
         showToast('error', 'Lỗi khi lưu: Không nhận được dữ liệu từ server.');
         return null;
       }
+
+      logCourseDraftOrderDebug('after-save API response modules', (savedCourse.modules || []) as unknown as ModuleDraft[]);
 
       const mappedModules: ModuleDraft[] = savedCourse.modules.map(rawModule => {
         const module = rawModule as {
@@ -1159,9 +2104,11 @@ const CourseCreationPage = () => {
               passScore: lesson.passScore,
               quizTimeLimitMinutes: lesson.quizTimeLimitMinutes,
               quizMaxAttempts: lesson.quizMaxAttempts,
+              roundingIncrement: lesson.roundingIncrement,
               quizDescription: lesson.quizDescription,
               gradingMethod: lesson.gradingMethod,
               isAssessment: lesson.isAssessment,
+              cooldownHours: lesson.cooldownHours,
               questions: (lesson.questions || []).map((question: QuizQuestionDraft) => ({
                 ...question,
                 score: Number.isFinite(Number(question.score)) && Number(question.score) > 0 ? Number(question.score) : 1
@@ -1174,12 +2121,15 @@ const CourseCreationPage = () => {
               assignmentDescription: lesson.assignmentDescription,
               assignmentMaxScore: lesson.assignmentMaxScore,
               assignmentPassingScore: lesson.assignmentPassingScore,
+              assignmentIsRequired: lesson.assignmentIsRequired,
               assignmentCriteria: lesson.assignmentCriteria,
               attachments: normalizeLessonAttachments(lesson.attachments)
             };
           })
         };
       });
+
+      logCourseDraftOrderDebug('after-save mapped modules in builder', mappedModules);
 
       const idMap = new Map<string, { newModuleId: string; lessonMap: Map<string, string> }>();
       modules.forEach((oldModule, moduleIndex) => {
@@ -1371,6 +2321,10 @@ const CourseCreationPage = () => {
         
         {modules.map((module, index) => (
           <div key={module.id} className="cb-sidebar__module-group">
+            {(() => {
+              const moduleDiff = getModuleChangeInfo(module, index, baselineSnapshotModules);
+              const hasModuleChanges = moduleDiff.info.isNew || moduleDiff.info.changedFields.length > 0;
+              return (
             <div 
               className={`cb-sidebar__item ${activeView.type === 'module' && activeView.moduleId === module.id ? 'is-active' : ''}`}
               onClick={() => setActiveView({ type: 'module', moduleId: module.id })}
@@ -1378,6 +2332,15 @@ const CourseCreationPage = () => {
               <div className="cb-sidebar__item-label">
                 <FiList /> 
                 <span style={{ fontWeight: 500 }}>{index + 1}. {module.title || '(Chưa có tiêu đề)'}</span>
+                {isRevisionMode && hasModuleChanges && (
+                  <span
+                    className="cb-sidebar__lesson-badge"
+                    style={{ marginLeft: 8, backgroundColor: 'rgba(245, 158, 11, 0.18)', color: '#f59e0b', borderColor: 'rgba(245, 158, 11, 0.35)' }}
+                    title={moduleDiff.info.changedFields.length > 0 ? `Đã thay đổi: ${moduleDiff.info.changedFields.join(', ')}` : 'Module mới tạo'}
+                  >
+                    {moduleDiff.info.isNew ? 'Mới' : 'Đã đổi'}
+                  </span>
+                )}
               </div>
               <div style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                 {isEditable && index > 0 && (
@@ -1412,11 +2375,16 @@ const CourseCreationPage = () => {
                 </button>
               </div>
             </div>
+              );
+            })()}
 
             {!collapsedModules[module.id] && (
               <div className="cb-sidebar__sub-list">
                 {module.lessons.map((lesson, lIndex) => {
                   const meta = getLessonTypeMeta(lesson.type);
+                  const baselineModule = findMatchingModule(baselineSnapshotModules, module, index);
+                  const lessonDiff = getLessonChangeInfo(lesson, lIndex, baselineModule?.lessons || []);
+                  const hasLessonChanges = lessonDiff.isNew || lessonDiff.changedFields.length > 0;
 
                   return (
                     <div 
@@ -1438,6 +2406,15 @@ const CourseCreationPage = () => {
                           <span className="cb-sidebar__lesson-badge" style={{ backgroundColor: `${meta.color}18`, color: meta.color, borderColor: `${meta.color}40` }}>
                             {meta.label}
                           </span>
+                          {isRevisionMode && hasLessonChanges && (
+                            <span
+                              className="cb-sidebar__lesson-badge"
+                              style={{ marginLeft: 6, backgroundColor: 'rgba(245, 158, 11, 0.18)', color: '#f59e0b', borderColor: 'rgba(245, 158, 11, 0.35)' }}
+                              title={lessonDiff.changedFields.length > 0 ? `Đã thay đổi: ${lessonDiff.changedFields.join(', ')}` : 'Bài học mới tạo'}
+                            >
+                              {lessonDiff.isNew ? 'Mới' : 'Đã đổi'}
+                            </span>
+                          )}
                         </span>
                       </div>
                       {isEditable && (
@@ -1525,6 +2502,21 @@ const CourseCreationPage = () => {
               <div className="cb-panel__title"><FiInfo /> Thông tin cơ bản</div>
             </div>
             <div className="cb-panel__body">
+              {isRevisionMode && changedCourseInfoFields.length > 0 && (
+                <div
+                  style={{
+                    marginBottom: 16,
+                    padding: '10px 12px',
+                    border: '1px solid rgba(245, 158, 11, 0.35)',
+                    backgroundColor: 'rgba(245, 158, 11, 0.08)',
+                    borderRadius: 8,
+                    color: '#f5c36a',
+                    fontSize: '0.9rem'
+                  }}
+                >
+                  <strong>Đang có thay đổi so với phiên bản gốc:</strong> {changedCourseInfoFields.join(', ')}
+                </div>
+              )}
               <div className="cb-grid cb-grid--2">
                 <div>
                   <div className="cb-form-group">
@@ -1718,11 +2710,26 @@ const CourseCreationPage = () => {
     if (activeView.type === 'module') {
       const module = modules.find(m => m.id === activeView.moduleId);
       if (!module) return <div className="cb-empty-state">Module không tồn tại</div>;
+      const moduleIndex = modules.findIndex((m) => m.id === module.id);
+      const moduleDiff = moduleIndex >= 0 ? getModuleChangeInfo(module, moduleIndex, baselineSnapshotModules) : null;
+      const moduleChangedFields = moduleDiff?.info.changedFields || [];
+      const isNewModule = Boolean(moduleDiff?.info.isNew);
       return (
          <div className="cb-main-content">
             <div className="cb-panel">
                <div className="cb-panel__header">
-                  <div className="cb-panel__title">Chỉnh sửa Module</div>
+                  <div className="cb-panel__title">
+                    Chỉnh sửa Module
+                    {isRevisionMode && (isNewModule || moduleChangedFields.length > 0) && (
+                      <span
+                        className="cb-sidebar__lesson-badge"
+                        style={{ marginLeft: 10, backgroundColor: 'rgba(245, 158, 11, 0.18)', color: '#f59e0b', borderColor: 'rgba(245, 158, 11, 0.35)' }}
+                        title={moduleChangedFields.length > 0 ? `Đã thay đổi: ${moduleChangedFields.join(', ')}` : 'Module mới tạo'}
+                      >
+                        {isNewModule ? 'Mới' : 'Đã đổi'}
+                      </span>
+                    )}
+                  </div>
                   <button 
                      className="cb-button cb-button--danger cb-button--sm"
                      onClick={() => {
@@ -1767,6 +2774,11 @@ const CourseCreationPage = () => {
       const lesson = module?.lessons.find(l => l.id === activeView.lessonId);
       if (!module || !lesson) return <div className="cb-empty-state">Bài học không tồn tại</div>;
       const lessonErrors = assignmentErrors[lesson.id];
+      const moduleIndex = modules.findIndex((m) => m.id === module.id);
+      const lessonIndex = module.lessons.findIndex((l) => l.id === lesson.id);
+      const baselineModule = moduleIndex >= 0 ? findMatchingModule(baselineSnapshotModules, module, moduleIndex) : undefined;
+      const lessonDiff = lessonIndex >= 0 ? getLessonChangeInfo(lesson, lessonIndex, baselineModule?.lessons || []) : { isNew: false, changedFields: [] };
+      const hasLessonChanges = lessonDiff.isNew || lessonDiff.changedFields.length > 0;
 
       return (
         <div className="cb-main-content">
@@ -1777,6 +2789,15 @@ const CourseCreationPage = () => {
                     {lesson.type === 'video' && <FiPlay />}
                     {lesson.type === 'reading' && <FiFileText />}
                     <span style={{ marginLeft: 8 }}>{lesson.title}</span>
+                    {isRevisionMode && hasLessonChanges && (
+                      <span
+                        className="cb-sidebar__lesson-badge"
+                        style={{ marginLeft: 10, backgroundColor: 'rgba(245, 158, 11, 0.18)', color: '#f59e0b', borderColor: 'rgba(245, 158, 11, 0.35)' }}
+                        title={lessonDiff.changedFields.length > 0 ? `Đã thay đổi: ${lessonDiff.changedFields.join(', ')}` : 'Bài học mới tạo'}
+                      >
+                        {lessonDiff.isNew ? 'Mới' : 'Đã đổi'}
+                      </span>
+                    )}
                  </div>
                  <button 
                     className="cb-button cb-button--danger cb-button--sm"
@@ -1793,21 +2814,7 @@ const CourseCreationPage = () => {
                           <button
                              key={type.value}
                              className={`cb-chip ${lesson.type === type.value ? 'is-active' : ''}`}
-                             onClick={() => {
-                                const next: Partial<LessonDraft> = { type: type.value as LessonKind };
-                                if (type.value === 'assignment') {
-                                   if (!lesson.assignmentSubmissionType) {
-                                      next.assignmentSubmissionType = SubmissionType.TEXT;
-                                   }
-                                   if (lesson.assignmentMaxScore == null) {
-                                      next.assignmentMaxScore = 100;
-                                   }
-                                   if (lesson.assignmentPassingScore == null) {
-                                      next.assignmentPassingScore = 50;
-                                   }
-                                }
-                                updateLessonField(module.id, lesson.id, next);
-                             }}
+                            onClick={() => handleLessonTypeSwitch(module.id, lesson, type.value as LessonKind)}
                           >
                              {type.icon} {type.label}
                           </button>
@@ -2489,11 +3496,11 @@ const CourseCreationPage = () => {
       </div>
 
       {confirmDialog && (
-        <div className="cb-modal-overlay">
-           <div className="cb-modal">
-              <h3>{confirmDialog.title}</h3>
-              <p>{confirmDialog.message}</p>
-              <div className="cb-modal__actions">
+        <div className="cb-confirm-overlay">
+          <div className="cb-confirm-modal" role="dialog" aria-modal="true">
+            <h3 className="cb-confirm-modal__title">{confirmDialog.title}</h3>
+            <p className="cb-confirm-modal__message">{confirmDialog.message}</p>
+            <div className="cb-confirm-modal__actions">
                  <button className="cb-button cb-button--secondary" onClick={() => setConfirmDialog(null)}>Hủy</button>
                  <button className="cb-button cb-button--danger" onClick={() => {
                     confirmDialog.onConfirm();

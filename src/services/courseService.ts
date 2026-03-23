@@ -517,6 +517,7 @@ export interface CourseRevisionDTO {
   id: number;
   courseId: number;
   revisionNumber: number;
+  sourceRevisionId?: number | null;
   isActive?: boolean;
   status: CourseRevisionStatus;
   title?: string;

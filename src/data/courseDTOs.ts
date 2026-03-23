@@ -11,8 +11,7 @@ export enum CourseStatus {
 }
 
 export enum CourseUpgradePolicy {
-  MANUAL = 'MANUAL',
-  AUTO_COMPATIBLE_ONLY = 'AUTO_COMPATIBLE_ONLY'
+  MANUAL = 'MANUAL'
 }
 
 export enum CourseLevel {

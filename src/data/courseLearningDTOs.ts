@@ -1,3 +1,11 @@
+export interface LearningResultHistoryItemDTO {
+  itemId: number;
+  itemType: 'QUIZ' | 'ASSIGNMENT' | string;
+  title: string;
+  scoreLabel?: string | null;
+  completedAt?: string | null;
+}
+
 export interface CourseLearningStatusDTO {
   courseId: number;
   userId: number;
@@ -13,6 +21,8 @@ export interface CourseLearningStatusDTO {
   completedItemCount: number;
   totalItemCount: number;
   percent: number;
+  legacyQuizResults?: LearningResultHistoryItemDTO[];
+  legacyAssignmentResults?: LearningResultHistoryItemDTO[];
   certificateId?: number | null;
   certificateSerial?: string | null;
   certificateRevoked?: boolean | null;

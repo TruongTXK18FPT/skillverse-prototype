@@ -831,6 +831,19 @@
   background: rgba(30, 41, 59, 0.45);
 }
 
+.cosmic-revision-canary-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.cosmic-revision-refresh-btn {
+  white-space: nowrap;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.85rem;
+}
+
 .cosmic-revision-canary-title {
   font-weight: 700;
   color: #c4b5fd;
@@ -908,6 +921,25 @@
 .cosmic-revision-upgrade-reason {
   font-size: 0.8rem;
   color: #d7defb;
+}
+
+.cosmic-courses-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.cosmic-courses-panel-title {
+  font-weight: 700;
+  color: #c4b5fd;
+}
+
+.cosmic-courses-refresh-btn {
+  white-space: nowrap;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.85rem;
 }
 
 /* Reason text in table */

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import '../../styles/ConfirmDialog.css';
 
 export type ConfirmVariant = 'default' | 'danger' | 'primary';
@@ -43,7 +44,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
   if (!isOpen) return null;
 
-  return (
+  const dialogNode = (
     <div className="confirm-dialog-overlay" role="dialog" aria-modal="true" onClick={onCancel}>
       <div className={`confirm-dialog confirm-dialog--${variant}`} onClick={(event) => event.stopPropagation()}>
         <div className="confirm-dialog__header">
@@ -61,6 +62,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       </div>
     </div>
   );
+
+  return createPortal(dialogNode, document.body);
 };
 
 export default ConfirmDialog;

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   Calendar,
   ClipboardList,
@@ -33,9 +33,11 @@ import {
   readStoredCourseLearningReturnContext,
   resolveCourseLearningOrigin,
 } from "../../utils/courseLearningNavigation";
+import { decodeCoursePublicId } from "../../utils/courseRoute";
 import { hasAssignmentDueDate } from "../../utils/assignmentPresentation";
 import { buildCertificateVerificationUrl } from "../../components/certificate/certificatePresentation";
 import {
+  BREAKING_ITEM_RETAKE_MESSAGE,
   getUpgradePolicyMessage,
   mapReasonCodeToVietnameseMessage,
   mapUpgradeApiErrorToVietnameseMessage
@@ -131,6 +133,11 @@ interface CurriculumItem {
   assignment?: AssignmentSummaryDTO;
 }
 
+interface RevisionWarningDecoratedItem {
+  revisionWarning?: boolean;
+  revisionWarningMessage?: string | null;
+}
+
 type ItemStatus = "completed" | "in-progress";
 
 const EMPTY_PROGRESS_STATE = {
@@ -201,6 +208,15 @@ const buildCurriculumItems = (modules: ModuleWithContent[]): CurriculumItem[] =>
       });
     });
 
+const getItemRevisionWarningMessage = (
+  item: Partial<RevisionWarningDecoratedItem> | null | undefined
+) => {
+  if (!item?.revisionWarning) {
+    return null;
+  }
+  return BREAKING_ITEM_RETAKE_MESSAGE;
+};
+
 const formatShortDate = (dateString?: string) => {
   if (!dateString) return "Không giới hạn";
 
@@ -242,6 +258,7 @@ const CourseLearningPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { coursePublicId } = useParams<{ courseSlug?: string; coursePublicId?: string }>();
   const routerState = (location.state as CourseLearningLocationState | null) ?? null;
   const searchParams = useMemo(
     () => new URLSearchParams(location.search),
@@ -256,6 +273,10 @@ const CourseLearningPage = () => {
       ? parsedCourseId
       : undefined;
   }, [searchParams]);
+  const routeCourseId = useMemo(
+    () => decodeCoursePublicId(coursePublicId),
+    [coursePublicId]
+  );
   const isPreviewMode = searchParams.get("preview") === "1" || Boolean(routerState?.preview);
   const locationState = useMemo(() => {
     const storedContext = readStoredCourseLearningReturnContext();
@@ -283,6 +304,29 @@ const CourseLearningPage = () => {
       };
     }
 
+    if (routeCourseId) {
+      if (routerState) {
+        return {
+          ...routerState,
+          courseId: routeCourseId,
+          preview: isPreviewMode,
+        };
+      }
+
+      if (storedContext?.courseId === routeCourseId) {
+        return {
+          ...storedContext,
+          courseId: routeCourseId,
+          preview: isPreviewMode,
+        };
+      }
+
+      return {
+        courseId: routeCourseId,
+        preview: isPreviewMode,
+      };
+    }
+
     if (routerState?.courseId) {
       return {
         ...routerState,
@@ -291,7 +335,7 @@ const CourseLearningPage = () => {
     }
 
     return null;
-  }, [isPreviewMode, queryCourseId, routerState]);
+  }, [isPreviewMode, queryCourseId, routeCourseId, routerState]);
   const courseId: number | undefined = locationState?.courseId;
 
   const [course, setCourse] = useState<CourseDetailDTO | null>(null);
@@ -300,6 +344,7 @@ const CourseLearningPage = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [expandedModules, setExpandedModules] = useState<number[]>([]);
+  const [activeModulePreviewId, setActiveModulePreviewId] = useState<number | null>(null);
   const [activeLesson, setActiveLesson] = useState<{
     moduleId: number | null;
     lessonId: number | null;
@@ -379,6 +424,29 @@ const CourseLearningPage = () => {
   const quizStatsClass = activeQuizDetail
     ? `lhud-quiz-stats ${activeQuizDetail.hasAttempts ? 'lhud-quiz-stats--four-items' : 'lhud-quiz-stats--two-items'}`
     : 'lhud-quiz-stats';
+
+  const activeItemWarningMessage = useMemo(() => {
+    if (!activeCurriculumItem) {
+      return null;
+    }
+    const module = modulesWithContent.find((candidate) => candidate.id === activeCurriculumItem.moduleId);
+    if (!module) {
+      return null;
+    }
+
+    if (activeCurriculumItem.itemType === "lesson") {
+      const lesson = module.lessons?.find((candidate) => candidate.id === activeCurriculumItem.itemId);
+      return getItemRevisionWarningMessage(lesson as RevisionWarningDecoratedItem | undefined);
+    }
+
+    if (activeCurriculumItem.itemType === "quiz") {
+      const quiz = module.quizzes?.find((candidate) => candidate.id === activeCurriculumItem.itemId);
+      return getItemRevisionWarningMessage(quiz as RevisionWarningDecoratedItem | undefined);
+    }
+
+    const assignment = module.assignments?.find((candidate) => candidate.id === activeCurriculumItem.itemId);
+    return getItemRevisionWarningMessage(assignment as RevisionWarningDecoratedItem | undefined);
+  }, [activeCurriculumItem, modulesWithContent]);
 
   // Effect để cập nhật countdown mỗi giây
   useEffect(() => {
@@ -511,6 +579,7 @@ const CourseLearningPage = () => {
   ) => {
     if (!courseId) {
       setModulesWithContent([]);
+      setActiveModulePreviewId(null);
       setActiveLesson({ moduleId: null, lessonId: null, itemType: null });
       return;
     }
@@ -541,15 +610,23 @@ const CourseLearningPage = () => {
           : null)
         : null;
       const nextItem = preferred ?? resumeItem ?? curriculum[0] ?? null;
+      const hasExplicitTarget = Boolean(preferred ?? resumeItem);
 
-      if (nextItem) {
+      if (nextItem && hasExplicitTarget) {
         setExpandedModules([nextItem.moduleId]);
+        setActiveModulePreviewId(null);
         setActiveLesson({
           moduleId: nextItem.moduleId,
           lessonId: nextItem.itemId,
           itemType: nextItem.itemType,
         });
+      } else if (normalizedModules.length > 0) {
+        const firstModuleId = normalizedModules[0].id;
+        setExpandedModules([firstModuleId]);
+        setActiveModulePreviewId(firstModuleId);
+        setActiveLesson({ moduleId: null, lessonId: null, itemType: null });
       } else {
+        setActiveModulePreviewId(null);
         setActiveLesson({ moduleId: null, lessonId: null, itemType: null });
       }
     } catch {
@@ -579,6 +656,7 @@ const CourseLearningPage = () => {
   const buildReturnContext = useCallback(
     (item: CurriculumItem | null = activeCurriculumItem): CourseLearningLocationState => ({
       courseId,
+      courseTitle: course?.title,
       preview: isPreviewMode,
       origin: locationState?.origin,
       resumeItem: item
@@ -589,7 +667,7 @@ const CourseLearningPage = () => {
           }
         : undefined,
     }),
-    [activeCurriculumItem, courseId, isPreviewMode, locationState?.origin]
+    [activeCurriculumItem, course?.title, courseId, isPreviewMode, locationState?.origin]
   );
 
   useEffect(() => {
@@ -704,6 +782,11 @@ const CourseLearningPage = () => {
   }, [course]);
 
   const progressPercentage = useMemo(() => progress.percent || 0, [progress]);
+  const moduleSourceForView = modulesWithContent.length ? modulesWithContent : sortedModules;
+  const activeModulePreview = useMemo(
+    () => moduleSourceForView.find((module) => module.id === activeModulePreviewId) ?? null,
+    [activeModulePreviewId, moduleSourceForView]
+  );
   const activeCurriculumIndex = useMemo(
     () =>
       activeCurriculumItem
@@ -716,32 +799,33 @@ const CourseLearningPage = () => {
         : -1,
     [activeCurriculumItem, curriculumItems]
   );
-  const hasNewerRevision = Boolean(
+  const hasNewerRevisionRaw = Boolean(
     !isPreviewMode && revisionInfo?.hasNewerRevision && courseId
-  );
-  const revisionPolicyLabel = useMemo(() => {
-    if (revisionInfo?.upgradePolicy === "AUTO_COMPATIBLE_ONLY") {
-      return "Tự động nâng cấp khi thay đổi tương thích";
-    }
-    if (revisionInfo?.upgradePolicy === "MANUAL") {
-      return "Nâng cấp thủ công";
-    }
-    return "Chưa có chính sách";
-  }, [revisionInfo?.upgradePolicy]);
-  const revisionPolicyMessage = useMemo(
-    () => getUpgradePolicyMessage(revisionInfo?.upgradePolicy),
-    [revisionInfo?.upgradePolicy]
   );
   const isCourseCompleted = progress.percent >= 100;
   const hasActiveCertificate = Boolean(progress.certificateId);
+  const shouldSuppressNewRevisionBanner = isCourseCompleted && hasActiveCertificate;
+  const hasNewerRevision = hasNewerRevisionRaw && !shouldSuppressNewRevisionBanner;
   const canUpgradeRevision = hasNewerRevision && !hasActiveCertificate;
+  const requiresManualUpgradeGate = canUpgradeRevision && !isCourseCompleted;
 
   const handleToggleModule = (moduleId: number) => {
-    setExpandedModules((prev) =>
-      prev.includes(moduleId)
-        ? prev.filter((id) => id !== moduleId)
-        : [...prev, moduleId]
-    );
+    setExpandedModules((prev) => {
+      const isExpanded = prev.includes(moduleId);
+      const isCurrentPreview = activeModulePreviewId === moduleId;
+
+      // If user clicks the same module that is already in preview mode, treat as close/toggle off.
+      if (isExpanded && isCurrentPreview) {
+        setActiveModulePreviewId(null);
+        setActiveLesson({ moduleId: null, lessonId: null, itemType: null });
+        return prev.filter((id) => id !== moduleId);
+      }
+
+      // Single click should always show module overview immediately.
+      setActiveModulePreviewId(moduleId);
+      setActiveLesson({ moduleId: null, lessonId: null, itemType: null });
+      return isExpanded ? prev : [...prev, moduleId];
+    });
   };
 
   const handleExitCourseLearning = useCallback(() => {
@@ -753,7 +837,7 @@ const CourseLearningPage = () => {
         search: target.search,
         hash: target.hash,
       },
-      { replace: false }
+      { replace: true }
     );
   }, [locationState, navigate]);
 
@@ -793,7 +877,7 @@ const CourseLearningPage = () => {
         setRevisionActionMessage(
           mapReasonCodeToVietnameseMessage(
             "ITEM_RULE_CHANGED",
-            "Revision mới có thay đổi breaking nên hệ thống chưa tự nâng cấp. Bạn có thể tiếp tục học revision hiện tại."
+            "Revision mới có thay đổi lớn. Bạn cần nâng cấp thủ công sang phiên bản mới trước khi tiếp tục học."
           )
         );
       } else {
@@ -829,6 +913,11 @@ const CourseLearningPage = () => {
     lessonId: number,
     itemType?: string
   ) => {
+    if (requiresManualUpgradeGate) {
+      setRevisionActionMessage("Vui lòng chuyển sang phiên bản mới để tiếp tục học.");
+      return;
+    }
+
     const selectedItem = curriculumItems.find(
       (item) =>
         item.moduleId === moduleId &&
@@ -841,6 +930,8 @@ const CourseLearningPage = () => {
       lessonId,
       itemType: (selectedItem?.itemType ?? null) as LearningContentType | null,
     });
+    setExpandedModules((prev) => (prev.includes(moduleId) ? prev : [...prev, moduleId]));
+    setActiveModulePreviewId(null);
     if (selectedItem?.itemType === "lesson") {
       const statusKey = buildStatusKey(moduleId, lessonId, "lesson");
       if (itemStatuses[statusKey] !== "completed") {
@@ -852,6 +943,10 @@ const CourseLearningPage = () => {
   const handleMarkAsComplete = async () => {
     if (!activeLesson.moduleId || !activeLesson.lessonId || activeItemType !== "lesson") return;
     if (isPreviewMode || isActiveItemCompleted) return;
+    if (requiresManualUpgradeGate) {
+      setRevisionActionMessage("Vui lòng chuyển sang phiên bản mới để tiếp tục học.");
+      return;
+    }
     const userId = user?.id || 0;
     if (!userId) return;
     try {
@@ -867,6 +962,11 @@ const CourseLearningPage = () => {
   };
 
   const handleNextLesson = () => {
+    if (requiresManualUpgradeGate) {
+      setRevisionActionMessage("Vui lòng chuyển sang phiên bản mới để tiếp tục học.");
+      return;
+    }
+
     if (!activeCurriculumItem) return;
 
     const activeIndex = curriculumItems.findIndex(
@@ -885,6 +985,11 @@ const CourseLearningPage = () => {
   };
 
   const handlePrevLesson = () => {
+    if (requiresManualUpgradeGate) {
+      setRevisionActionMessage("Vui lòng chuyển sang phiên bản mới để tiếp tục học.");
+      return;
+    }
+
     if (!activeCurriculumItem) return;
 
     const activeIndex = curriculumItems.findIndex(
@@ -904,6 +1009,10 @@ const CourseLearningPage = () => {
     if (!courseId || !activeCurriculumItem || activeCurriculumItem.itemType !== "assignment") {
       return;
     }
+    if (requiresManualUpgradeGate) {
+      setRevisionActionMessage("Vui lòng chuyển sang phiên bản mới để tiếp tục học.");
+      return;
+    }
     if (activeCurriculumItem.itemId <= 0) {
       alert("Bài tập này chưa sẵn sàng do chưa đồng bộ định danh. Vui lòng thử lại sau.");
       return;
@@ -918,6 +1027,10 @@ const CourseLearningPage = () => {
     if (!activeCurriculumItem || activeCurriculumItem.itemType !== "quiz") {
       return;
     }
+    if (requiresManualUpgradeGate) {
+      setRevisionActionMessage("Vui lòng chuyển sang phiên bản mới để tiếp tục học.");
+      return;
+    }
     if (activeCurriculumItem.itemId <= 0) {
       alert("Quiz này chưa sẵn sàng do chưa đồng bộ định danh. Vui lòng thử lại sau.");
       return;
@@ -925,20 +1038,33 @@ const CourseLearningPage = () => {
 
     const returnContext = buildReturnContext(activeCurriculumItem);
     persistCourseLearningReturnContext(returnContext);
+    const params = new URLSearchParams();
+    if (view === 'result') {
+      params.set('view', 'result');
+    }
+
     navigate(
       {
         pathname: `/quiz/${activeCurriculumItem.itemId}/attempt`,
-        search: view === 'result' ? '?view=result' : '',
+        search: params.toString() ? `?${params.toString()}` : '',
       },
       { state: returnContext }
     );
-  }, [activeCurriculumItem, buildReturnContext, navigate]);
+  }, [activeCurriculumItem, buildReturnContext, navigate, requiresManualUpgradeGate]);
 
   const completeDeckConfig = useMemo(() => {
     if (isPreviewMode) {
       return {
         canComplete: false,
         completeLabel: "Chế độ xem trước",
+        completeState: "blocked" as const,
+      };
+    }
+
+    if (requiresManualUpgradeGate) {
+      return {
+        canComplete: false,
+        completeLabel: "Cần nâng cấp revision để học tiếp",
         completeState: "blocked" as const,
       };
     }
@@ -972,7 +1098,7 @@ const CourseLearningPage = () => {
       completeLabel: "Chọn nội dung để bắt đầu",
       completeState: "blocked" as const,
     };
-  }, [activeItemType, activeLesson.moduleId, isActiveItemCompleted, isPreviewMode]);
+  }, [activeItemType, activeLesson.moduleId, isActiveItemCompleted, isPreviewMode, requiresManualUpgradeGate]);
 
   if (loading) {
     return (
@@ -1061,6 +1187,8 @@ const CourseLearningPage = () => {
         progress={progress}
         onToggleModule={handleToggleModule}
         onSelectLesson={handleSelectLesson}
+        disableLessonSelection={requiresManualUpgradeGate}
+        onLockedLessonSelect={() => setRevisionActionMessage("Vui lòng chuyển sang phiên bản mới để tiếp tục học.")}
         isOpen={isSidebarOpen}
       />
 
@@ -1068,7 +1196,7 @@ const CourseLearningPage = () => {
       <main className="learning-hud-main-content">
         <div className="learning-hud-content-viewer">
           <h1 className="learning-hud-viewer-title">
-            {activeLessonTitle || course.title}
+            {activeLessonTitle || activeModulePreview?.title || course.title}
           </h1>
           {isPreviewMode && (
             <div className="lhud-preview-banner">
@@ -1080,21 +1208,8 @@ const CourseLearningPage = () => {
               <div>
                 <strong>Khóa học đã có phiên bản mới</strong>
                 <p>
-                  Khóa học đã có phiên bản mới. Bạn có muốn chuyển sang phiên bản mới không?
+                  Khóa học đã có phiên bản mới, vui lòng cập nhật để tiếp tục học đúng quy định của khóa học.
                 </p>
-                <p>{revisionPolicyMessage}</p>
-                {isCourseCompleted ? (
-                  <p>
-                    Bạn đã hoàn thành khóa học hiện tại.
-                    {hasActiveCertificate
-                      ? ' Bạn đã có chứng chỉ nên hiện không thể chuyển sang phiên bản mới.'
-                      : ' Nếu muốn nhận chứng chỉ theo phiên bản mới, hãy nâng cấp và hoàn thành lại các nội dung cần thiết.'}
-                  </p>
-                ) : (
-                  <p>
-                    Bạn không bắt buộc nâng cấp ngay. Nếu nâng cấp, tiến độ sẽ được tính theo nội dung và điều kiện của phiên bản mới.
-                  </p>
-                )}
                 {revisionActionMessage && (
                   <p className="lhud-revision-banner__message">{revisionActionMessage}</p>
                 )}
@@ -1134,6 +1249,14 @@ const CourseLearningPage = () => {
               <div>
                 <strong>Revision đã đồng bộ</strong>
                 <p className="lhud-revision-banner__message">{revisionActionMessage}</p>
+              </div>
+            </div>
+          )}
+          {!isPreviewMode && activeItemWarningMessage && (
+            <div className="lhud-revision-banner is-warning">
+              <div>
+                <strong>Nội dung cần làm lại</strong>
+                <p>{activeItemWarningMessage}</p>
               </div>
             </div>
           )}
@@ -1238,6 +1361,7 @@ const CourseLearningPage = () => {
                         type="button"
                         className="learning-hud-secondary-btn"
                         onClick={handleOpenAssignmentPage}
+                        disabled={requiresManualUpgradeGate}
                       >
                         <ExternalLink size={16} />
                         Mở trang bài tập
@@ -1269,6 +1393,7 @@ const CourseLearningPage = () => {
                       <button
                         onClick={() => handleOpenQuizAttemptPage('result')}
                         className="learning-hud-nav-btn lhud-quiz-complete-action"
+                        disabled={requiresManualUpgradeGate}
                       >
                         Xem kết quả
                       </button>
@@ -1407,12 +1532,15 @@ const CourseLearningPage = () => {
                         } ${isPreviewMode ? 'is-preview' : ''}`}
                         disabled={
                           isPreviewMode ||
+                          requiresManualUpgradeGate ||
                           quizAttemptsCount >= activeQuizDetail.maxAttempts ||
                           (activeQuizDetail.questions?.length || 0) === 0
                         }
                       >
                         {isPreviewMode
                           ? 'Chế độ xem trước'
+                          : requiresManualUpgradeGate
+                          ? 'Cần nâng cấp revision để học tiếp'
                           : quizAttemptsCount >= activeQuizDetail.maxAttempts
                           ? 'Hết lượt làm bài'
                           : (activeQuizDetail.questions?.length || 0) === 0
@@ -1500,6 +1628,26 @@ const CourseLearningPage = () => {
                   </>
                 )}
               </>
+            ) : activeModulePreview ? (
+              <section className="lhud-module-overview-card">
+                <div className="lhud-module-overview-badge">Tổng quan chương</div>
+                <div className="lhud-module-overview-meta">
+                  <span>{activeModulePreview.lessons?.length ?? 0} Bài học</span>
+                  <span>{activeModulePreview.quizzes?.length ?? 0} Bài kiểm tra</span>
+                  <span>{activeModulePreview.assignments?.length ?? 0} Bài tập</span>
+                </div>
+                {activeModulePreview.description?.trim() ? (
+                  <div className="lhud-module-overview-content">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {normalizeContent(activeModulePreview.description)}
+                    </ReactMarkdown>
+                  </div>
+                ) : (
+                  <p className="lhud-text-secondary">
+                    Chương này hiện chưa có mô tả chi tiết.
+                  </p>
+                )}
+              </section>
             ) : activeLessonTitle ? (
               <div className="learning-hud-empty-state">
                 KHÔNG THỂ TẢI NỘI DUNG
@@ -1521,8 +1669,9 @@ const CourseLearningPage = () => {
             onPrevious={handlePrevLesson}
             onNext={handleNextLesson}
             onComplete={handleMarkAsComplete}
-            canNavigatePrev={activeCurriculumIndex > 0}
+            canNavigatePrev={!requiresManualUpgradeGate && activeCurriculumIndex > 0}
             canNavigateNext={
+              !requiresManualUpgradeGate &&
               activeCurriculumIndex >= 0 &&
               activeCurriculumIndex < curriculumItems.length - 1
             }

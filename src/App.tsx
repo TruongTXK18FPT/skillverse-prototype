@@ -265,8 +265,16 @@ const AppContents = () => {
             <Route path="/manager" element={<ManagerPage />} />
             <Route path="/wallet" element={<MyWalletCosmic />} />
             <Route path="/my-wallet" element={<MyWalletCosmic />} />
+            <Route
+              path="/courses/:courseSlug/:coursePublicId"
+              element={<CourseDetailPage />}
+            />
             <Route path="/courses/:id" element={<CourseDetailPage />} />
             <Route path="/course/:id/preview" element={<CourseDetailPage />} />
+            <Route
+              path="/course-learning/:courseSlug/:coursePublicId"
+              element={<CourseLearningPage />}
+            />
             <Route path="/course-learning" element={<CourseLearningPage />} />
             <Route
               path="/assignment/:assignmentId"
@@ -483,6 +491,10 @@ const isRoadmapDetailRoute = (pathname: string) => {
   return pathname.startsWith("/roadmap/") && pathname !== "/roadmap";
 };
 
+const isCourseLearningRoute = (pathname: string) => {
+  return pathname === "/course-learning" || pathname.startsWith("/course-learning/");
+};
+
 // Check if path is any admin route
 const isAdminRoute = (pathname: string) => {
   return pathname === "/admin" || pathname.startsWith("/admin/");
@@ -498,6 +510,7 @@ const HeaderVisibilityWrapper = () => {
   const location = useLocation();
   if (
     fullScreenRoutes.has(location.pathname) ||
+    isCourseLearningRoute(location.pathname) ||
     isCertificateRoute(location.pathname)
   )
     return null;
@@ -510,6 +523,7 @@ const FooterVisibilityWrapper = () => {
   if (
     fullScreenRoutes.has(location.pathname) ||
     hideFooterOnlyRoutes.has(location.pathname) ||
+    isCourseLearningRoute(location.pathname) ||
     isAdminRoute(location.pathname) ||
     isMentorRoute(location.pathname) ||
     isCertificateRoute(location.pathname) ||

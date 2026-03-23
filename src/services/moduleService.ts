@@ -8,6 +8,7 @@ import {
 import { LessonSummaryDTO } from '../data/lessonDTOs';
 import { QuizSummaryDTO } from '../data/quizDTOs';
 import { AssignmentSummaryDTO } from '../data/assignmentDTOs';
+import { resolveRevisionItemWarning } from '../utils/courseRevisionMessages';
 
 // Re-export DTOs for backward compatibility (consumers can import from service)
 export type { ModuleCreateDTO, ModuleUpdateDTO, ModuleSummaryDTO, ModuleDetailDTO };
@@ -28,6 +29,14 @@ interface LessonApiResponse {
   resourceUrl?: string;
   videoUrl?: string;
   videoMediaId?: number;
+  // Keep revision-sensitive fields when backend provides them to avoid accidental snapshot drift.
+  passScore?: number;
+  questions?: unknown[];
+  assignmentCriteria?: unknown[];
+  assignmentSubmissionType?: string;
+  assignmentMaxScore?: number;
+  assignmentPassingScore?: number;
+  isRequired?: boolean;
 }
 
 /** Raw API response for quiz */
@@ -50,6 +59,28 @@ interface AssignmentApiResponse {
   orderIndex?: number;
   dueAt?: string;
 }
+
+interface RevisionWarningDecorated {
+  revisionWarning?: boolean;
+  revisionWarningMessage?: string | null;
+  revisionWarningReasonCode?: string | null;
+}
+
+const decorateRevisionWarning = <T extends object>(
+  item: T,
+  warningSource?: unknown
+): T & RevisionWarningDecorated => {
+  const warning = resolveRevisionItemWarning(warningSource ?? item);
+  if (!warning) {
+    return item;
+  }
+  return {
+    ...item,
+    revisionWarning: warning.isBreaking,
+    revisionWarningMessage: warning.message,
+    revisionWarningReasonCode: warning.reasonCode ?? null,
+  };
+};
 
 // ==================== Constants ====================
 
@@ -94,34 +125,47 @@ export const listModulesWithContent = async (courseId: number): Promise<ModuleDe
     courseId: courseId,
     createdAt: m.createdAt ?? '',
     updatedAt: m.updatedAt ?? '',
-    lessons: (m.lessons || []).map((l: LessonApiResponse) => ({
-      id: l.id,
-      title: l.title,
-      type: (l.type || l.lessonType || DEFAULT_LESSON_TYPE) as LessonSummaryDTO['type'],
-      orderIndex: l.orderIndex ?? 0,
-      durationSec: l.durationSec ?? 0,
-      contentText: l.contentText,
-      resourceUrl: l.resourceUrl,
-      videoUrl: l.videoUrl,
-      videoMediaId: l.videoMediaId
-    })) as LessonSummaryDTO[],
-    quizzes: (m.quizzes || []).map((q: QuizApiResponse) => ({
-      id: q.id,
-      title: q.title,
-      description: q.description ?? '',
-      passScore: q.passScore,
-      orderIndex: q.orderIndex ?? 0,
-      questionCount: q.questionCount ?? 0
-    })) as QuizSummaryDTO[],
-    assignments: (m.assignments || []).map((a: AssignmentApiResponse) => ({
-      id: a.id,
-      title: a.title,
-      description: a.description ?? '',
-      submissionType: (a.submissionType ?? 'TEXT') as AssignmentSummaryDTO['submissionType'],
-      maxScore: a.maxScore ?? 0,
-      orderIndex: a.orderIndex ?? 0,
-      dueAt: a.dueAt
-    })) as AssignmentSummaryDTO[]
+    lessons: (m.lessons || []).map((l: LessonApiResponse) =>
+      decorateRevisionWarning({
+        id: l.id,
+        title: l.title,
+        type: (l.type || l.lessonType || DEFAULT_LESSON_TYPE) as LessonSummaryDTO['type'],
+        orderIndex: l.orderIndex ?? 0,
+        durationSec: l.durationSec ?? 0,
+        contentText: l.contentText,
+        resourceUrl: l.resourceUrl,
+        videoUrl: l.videoUrl,
+        videoMediaId: l.videoMediaId,
+        passScore: l.passScore,
+        questions: Array.isArray(l.questions) ? l.questions : undefined,
+        assignmentCriteria: Array.isArray(l.assignmentCriteria) ? l.assignmentCriteria : undefined,
+        assignmentSubmissionType: l.assignmentSubmissionType,
+        assignmentMaxScore: l.assignmentMaxScore,
+        assignmentPassingScore: l.assignmentPassingScore,
+        isRequired: l.isRequired,
+      }, l)
+    ) as LessonSummaryDTO[],
+    quizzes: (m.quizzes || []).map((q: QuizApiResponse) =>
+      decorateRevisionWarning({
+        id: q.id,
+        title: q.title,
+        description: q.description ?? '',
+        passScore: q.passScore,
+        orderIndex: q.orderIndex ?? 0,
+        questionCount: q.questionCount ?? 0,
+      }, q)
+    ) as QuizSummaryDTO[],
+    assignments: (m.assignments || []).map((a: AssignmentApiResponse) =>
+      decorateRevisionWarning({
+        id: a.id,
+        title: a.title,
+        description: a.description ?? '',
+        submissionType: (a.submissionType ?? 'TEXT') as AssignmentSummaryDTO['submissionType'],
+        maxScore: a.maxScore ?? 0,
+        orderIndex: a.orderIndex ?? 0,
+        dueAt: a.dueAt,
+      }, a)
+    ) as AssignmentSummaryDTO[]
   }));
 };
 

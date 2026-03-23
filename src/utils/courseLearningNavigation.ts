@@ -1,3 +1,5 @@
+import { buildCourseLearningPath } from './courseRoute';
+
 export type LearningContentType = 'lesson' | 'quiz' | 'assignment';
 
 export interface CourseLearningOrigin {
@@ -9,6 +11,7 @@ export interface CourseLearningOrigin {
 
 export interface CourseLearningLocationState {
   courseId?: number;
+  courseTitle?: string;
   preview?: boolean;
   resumeItem?: {
     moduleId: number;
@@ -40,13 +43,9 @@ export const buildCourseLearningOrigin = (
 });
 
 export const buildCourseLearningSearch = (
-  state: Pick<CourseLearningLocationState, 'courseId' | 'preview'>
+  state: Pick<CourseLearningLocationState, 'preview'>
 ) => {
   const params = new URLSearchParams();
-
-  if (state.courseId) {
-    params.set('courseId', String(state.courseId));
-  }
 
   if (state.preview) {
     params.set('preview', '1');
@@ -58,10 +57,22 @@ export const buildCourseLearningSearch = (
 
 export const buildCourseLearningDestination = (
   state: CourseLearningLocationState
-) => ({
-  pathname: '/course-learning',
-  search: buildCourseLearningSearch(state),
-});
+) => {
+  if (!state.courseId) {
+    return {
+      pathname: '/course-learning',
+      search: buildCourseLearningSearch(state),
+    };
+  }
+
+  return {
+    pathname: buildCourseLearningPath({
+      id: state.courseId,
+      title: state.courseTitle,
+    }),
+    search: buildCourseLearningSearch(state),
+  };
+};
 
 export const clearCourseLearningReturnContext = () => {
   sessionStorage.removeItem(COURSE_LEARNING_RETURN_KEY);
@@ -110,6 +121,7 @@ export const readStoredCourseLearningReturnContext =
 
       return {
         courseId: parsed.courseId,
+        courseTitle: parsed.courseTitle,
         preview: Boolean(parsed.preview),
         origin: parsed.origin,
         resumeItem: parsed.resumeItem,

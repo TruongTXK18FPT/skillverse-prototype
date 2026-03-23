@@ -27,6 +27,7 @@ export interface AssignmentCriteriaDraft {
   name: string;
   description?: string;
   maxPoints: number;
+  passingPoints?: number;
   orderIndex: number;
   isRequired?: boolean;
 }
@@ -53,6 +54,8 @@ export interface LessonDraft {
   passScore?: number;
   quizMaxAttempts?: number;
   quizTimeLimitMinutes?: number;
+  roundingIncrement?: number;
+  cooldownHours?: number;
   quizDescription?: string;
   gradingMethod?: string;
   isAssessment?: boolean;
@@ -62,6 +65,7 @@ export interface LessonDraft {
   assignmentDescription?: string;
   assignmentMaxScore?: number;
   assignmentPassingScore?: number;
+  assignmentIsRequired?: boolean;
   assignmentCriteria?: AssignmentCriteriaDraft[];
   attachments?: LessonAttachmentDraft[];
 }
