@@ -56,6 +56,12 @@ export interface StudySessionResponse {
 
 export type StudySession = StudySessionResponse;
 
+export interface ScheduleHealthIssue {
+  message: string;
+  severity: 'WARNING' | 'ERROR';
+  suggestion?: string;
+}
+
 export interface CheckScheduleHealthRequest {
   sessions: StudySessionResponse[];
   timezone?: string;
@@ -70,8 +76,9 @@ export interface CheckScheduleHealthRequest {
 }
 
 export interface ScheduleHealthReport {
+  healthy?: boolean;
   overallScore: number;
-  issues: { message: string; severity: 'WARNING' | 'ERROR'; suggestion?: string }[];
+  issues: ScheduleHealthIssue[];
   warnings: string[];
   errors: string[];
   sessionScores: Record<string, number>; // sessionId -> score

@@ -49,6 +49,10 @@ const StudyPlannerPage: React.FC = () => {
     type: 'success' | 'error';
     message: string;
   } | null>(null);
+  const [planFeedback, setPlanFeedback] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
 
   const [isAIModalOpen, setIsAIModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<TaskResponse | undefined>(
@@ -79,6 +83,15 @@ const StudyPlannerPage: React.FC = () => {
     );
     return () => window.clearTimeout(timer);
   }, [clearOverdueFeedback]);
+
+  useEffect(() => {
+    if (!planFeedback) return;
+    const timer = window.setTimeout(
+      () => setPlanFeedback(null),
+      FEEDBACK_HIDE_DELAY_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [planFeedback]);
 
   const fetchData = async () => {
     try {
@@ -203,6 +216,21 @@ const StudyPlannerPage: React.FC = () => {
     setCurrentDate(newDate);
   };
 
+  const handlePlanGenerated = async (result?: {
+    createdCount: number;
+    subjectName: string;
+  }) => {
+    await fetchData();
+    setViewMode('board');
+    setPlanFeedback({
+      type: 'success',
+      message:
+        result && result.createdCount > 0
+          ? `Đã tạo ${result.createdCount} phiên học cho ${result.subjectName}. Study plan đã được áp dụng vào bảng của bạn.`
+          : 'Study plan đã được áp dụng vào bảng của bạn.',
+    });
+  };
+
   return (
     <div className="study-plan-container">
       <div className="study-plan-header-hero">
@@ -274,6 +302,14 @@ const StudyPlannerPage: React.FC = () => {
           className={`study-plan-overdue-feedback study-plan-overdue-feedback--${clearOverdueFeedback.type}`}
         >
           {clearOverdueFeedback.message}
+        </div>
+      )}
+
+      {planFeedback && (
+        <div
+          className={`study-plan-overdue-feedback study-plan-overdue-feedback--${planFeedback.type}`}
+        >
+          {planFeedback.message}
         </div>
       )}
 
@@ -360,10 +396,7 @@ const StudyPlannerPage: React.FC = () => {
         <AIAgentPlanner
           isOpen
           onClose={() => setIsAIModalOpen(false)}
-          onPlanGenerated={() => {
-            void fetchData();
-            setViewMode('board');
-          }}
+          onPlanGenerated={handlePlanGenerated}
         />
       )}
 

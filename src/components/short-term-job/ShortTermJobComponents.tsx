@@ -23,6 +23,7 @@ import {
   SHORT_TERM_JOB_STATUS_DISPLAY,
   APPLICATION_STATUS_DISPLAY,
 } from "../../types/ShortTermJob";
+import TrustScoreDisplay from "../short-term-job/TrustScoreDisplay";
 
 // ==================== STATUS BADGE ====================
 
@@ -377,4 +378,5 @@ export default {
   JobInfoDisplay,
   JobWorkflowIndicator,
   StarRating,
+  TrustScoreDisplay,
 };

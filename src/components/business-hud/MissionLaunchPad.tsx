@@ -3,6 +3,8 @@ import jobService from "../../services/jobService";
 import { useToast } from "../../hooks/useToast";
 import { recruiterSubscriptionService } from "../../services/recruiterSubscriptionService";
 import { premiumService } from "../../services/premiumService";
+import { RichMarkdownEditor } from "../short-term-job/RichMarkdownEditor";
+import { JobMarkdownSurface } from "../shared/JobMarkdownSurface";
 import "./streamlined-job-forms.css";
 
 interface MissionLaunchPadProps {
@@ -75,15 +77,6 @@ const BENEFIT_SUGGESTIONS = [
   "Review lương định kỳ",
 ];
 
-const DESCRIPTION_TEMPLATE = `Mục tiêu vị trí:
-- Vai trò chính của ứng viên trong 3 tháng đầu.
-
-Đầu việc chính:
-- Các đầu việc cần chịu trách nhiệm.
-
-Kết quả mong đợi:
-- Nêu rõ đầu ra hoặc chỉ số quan trọng.`;
-
 const createInitialFormData = (): MissionFormState => ({
   title: "",
   description: "",
@@ -109,11 +102,6 @@ const currencyFormatter = new Intl.NumberFormat("vi-VN", {
 const formatCurrency = (value?: string | number) => {
   const amount = Number(value || 0);
   return amount > 0 ? currencyFormatter.format(amount) : "Chưa thiết lập";
-};
-
-const appendBlock = (current: string, block: string) => {
-  const trimmed = current.trim();
-  return trimmed ? `${trimmed}\n\n${block}` : block;
 };
 
 const appendUniqueLine = (current: string, line: string) => {
@@ -610,35 +598,17 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
               </div>
 
               <div className="sjf-field sjf-field--full">
-                <div className="sjf-label-row">
-                  <label className="sjf-label">
-                    Mô tả công việc
-                    <span className="sjf-label__required">*</span>
-                  </label>
-                  <button
-                    type="button"
-                    className="sjf-link-button"
-                    onClick={() =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        description: appendBlock(
-                          prev.description,
-                          DESCRIPTION_TEMPLATE,
-                        ),
-                      }))
-                    }
-                  >
-                    Chèn mẫu
-                  </button>
-                </div>
-                <textarea
-                  name="description"
-                  className="sjf-textarea"
+                <label className="sjf-label">
+                  Mô tả công việc
+                  <span className="sjf-label__required">*</span>
+                </label>
+                <RichMarkdownEditor
                   value={formData.description}
-                  onChange={handleInputChange}
-                  rows={5}
+                  onChange={(value) =>
+                    setFormData((prev) => ({ ...prev, description: value }))
+                  }
                   placeholder="Nêu rõ: mục tiêu vị trí trong 3 tháng đầu, đầu việc chính và kết quả mong đợi."
-                  required
+                  minHeight={240}
                 />
               </div>
 
@@ -1023,10 +993,14 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
               <h4 className="sjf-preview__title">
                 {formData.title || "Tiêu đề vị trí sẽ hiển thị ở đây"}
               </h4>
-              <p className="sjf-preview__body">
-                {formData.description ||
-                  "Mô tả rõ đầu việc và kết quả mong đợi giúp ứng viên quyết định nhanh hơn."}
-              </p>
+              <JobMarkdownSurface
+                content={formData.description}
+                className="sjf-preview__body"
+                density="preview"
+                theme="gold"
+                maxHeight={220}
+                placeholder="Mô tả rõ đầu việc và kết quả mong đợi giúp ứng viên quyết định nhanh hơn."
+              />
             </div>
 
             <div className="sjf-preview__grid">

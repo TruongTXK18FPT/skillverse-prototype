@@ -13,6 +13,15 @@ import {
   ShortTermApplicationStatus,
   DeliverableType,
   UpdateShortTermApplicationStatusRequest,
+  EscrowStatus,
+  JobEscrow,
+  EscrowTransaction,
+  DisputeType,
+  Dispute,
+  DisputeEvidence,
+  DisputeResponseEntity,
+  TrustScore,
+  TrustTier,
 } from "../types/ShortTermJob";
 import { getStoredUserRaw } from "../utils/authStorage";
 
@@ -27,6 +36,143 @@ class ShortTermJobService {
     const errorMessage = axiosError.response?.data?.message || defaultMessage;
     console.error(`${defaultMessage}:`, errorMessage);
     throw new Error(errorMessage);
+  }
+
+  private toNumber(value: unknown, fallback: number = 0): number {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  }
+
+  private normalizeEscrow(data: any, fallbackJobId?: number): JobEscrow | null {
+    if (!data) {
+      return null;
+    }
+
+    const totalAmount = this.toNumber(data.totalAmount);
+    const platformFee = this.toNumber(data.platformFee);
+
+    return {
+      escrowId: this.toNumber(data.escrowId ?? data.id),
+      jobId: this.toNumber(data.jobId ?? data.job?.id ?? fallbackJobId),
+      jobTitle: data.jobTitle ?? data.job?.title,
+      recruiterId: this.toNumber(data.recruiterId),
+      recruiterName: data.recruiterName,
+      workerId:
+        data.workerId !== undefined && data.workerId !== null
+          ? this.toNumber(data.workerId)
+          : undefined,
+      workerName: data.workerName,
+      totalAmount,
+      platformFee,
+      netAmount: this.toNumber(data.netAmount, totalAmount - platformFee),
+      escrowBalance: this.toNumber(data.escrowBalance),
+      pendingPayoutBalance: this.toNumber(data.pendingPayoutBalance),
+      status: (data.status ?? EscrowStatus.PENDING) as EscrowStatus,
+      fundedAt: data.fundedAt ?? data.createdAt ?? new Date().toISOString(),
+      releasedAt: data.releasedAt ?? undefined,
+      refundedAt: data.refundedAt ?? undefined,
+      transactions: Array.isArray(data.transactions)
+        ? data.transactions.map((tx: any) => ({
+            id: this.toNumber(tx.id),
+            escrowId: this.toNumber(tx.escrowId ?? data.escrowId ?? data.id),
+            type: tx.type ?? tx.transactionType,
+            amount: this.toNumber(tx.amount),
+            feeAmount: this.toNumber(tx.feeAmount),
+            netAmount: this.toNumber(tx.netAmount),
+            actorId:
+              tx.actorId !== undefined && tx.actorId !== null
+                ? this.toNumber(tx.actorId)
+                : undefined,
+            actorName: tx.actorName,
+            reason: tx.reason,
+            metadata: tx.metadata,
+            createdAt: tx.createdAt ?? new Date().toISOString(),
+          }))
+        : undefined,
+    };
+  }
+
+  private normalizeDisputeResponse(data: any): Dispute | null {
+    const raw = Array.isArray(data) ? data[0] : data;
+    if (!raw) {
+      return null;
+    }
+
+    return {
+      id: this.toNumber(raw.id),
+      jobId: this.toNumber(raw.jobId),
+      applicationId: this.toNumber(raw.applicationId),
+      jobTitle: raw.jobTitle,
+      initiatorId: this.toNumber(raw.initiatorId),
+      initiatorName: raw.initiatorName,
+      respondentId: this.toNumber(raw.respondentId),
+      respondentName: raw.respondentName,
+      disputeType: raw.disputeType as DisputeType,
+      reason: raw.reason ?? "",
+      status: raw.status,
+      resolution: raw.resolution,
+      partialRefundPct:
+        raw.partialRefundPct !== undefined && raw.partialRefundPct !== null
+          ? this.toNumber(raw.partialRefundPct)
+          : undefined,
+      resolutionNotes: raw.resolutionNotes,
+      resolvedBy:
+        raw.resolvedBy !== undefined && raw.resolvedBy !== null
+          ? this.toNumber(raw.resolvedBy)
+          : undefined,
+      resolvedAt: raw.resolvedAt ?? undefined,
+      createdAt: raw.createdAt ?? new Date().toISOString(),
+      evidence: Array.isArray(raw.evidence)
+        ? raw.evidence.map((ev: any) => ({
+            id: this.toNumber(ev.id),
+            disputeId: this.toNumber(ev.disputeId ?? raw.id),
+            submittedBy: this.toNumber(ev.submittedBy),
+            submittedByName: ev.submittedByName,
+            evidenceType: ev.evidenceType,
+            content: ev.content,
+            fileUrl: ev.fileUrl,
+            fileName: ev.fileName,
+            description: ev.description,
+            isOfficial: Boolean(ev.isOfficial),
+            createdAt: ev.createdAt ?? new Date().toISOString(),
+            responses: Array.isArray(ev.responses)
+              ? ev.responses.map((resp: any) => ({
+                  id: this.toNumber(resp.id),
+                  disputeId: this.toNumber(resp.disputeId ?? raw.id),
+                  evidenceId: this.toNumber(resp.evidenceId ?? ev.id),
+                  respondedBy: this.toNumber(resp.respondedBy),
+                  respondedByName: resp.respondedByName,
+                  content: resp.content ?? "",
+                  createdAt: resp.createdAt ?? new Date().toISOString(),
+                }))
+              : [],
+          }))
+        : [],
+    };
+  }
+
+  private normalizeTrustScore(data: any): TrustScore | null {
+    if (!data) {
+      return null;
+    }
+
+    return {
+      userId: this.toNumber(data.userId),
+      userName: data.userName,
+      totalScore: this.toNumber(data.totalScore),
+      trustTier: (data.trustTier ?? TrustTier.NEWCOMER) as TrustTier,
+      completionRate: this.toNumber(data.completionRate),
+      disputeRate: this.toNumber(data.disputeRate),
+      responseTimeHours: this.toNumber(data.responseTimeHours),
+      avgRating: this.toNumber(data.avgRating),
+      totalJobs: this.toNumber(data.totalJobs),
+      completedJobs: this.toNumber(data.completedJobs),
+      disputedJobs: this.toNumber(data.disputedJobs),
+      totalReviews: this.toNumber(data.totalReviews),
+      accountAgeDays: this.toNumber(data.accountAgeDays),
+      createdAt: data.createdAt ?? new Date().toISOString(),
+      updatedAt: data.updatedAt ?? new Date().toISOString(),
+    };
   }
 
   /**
@@ -250,6 +396,34 @@ class ShortTermJobService {
         "/api/short-term-jobs/public",
       );
       return response.data.map((job) => this.transformResponse(job));
+    } catch (error) {
+      this.handleError(error, "Failed to fetch published jobs");
+    }
+  }
+
+  /**
+   * Get published short-term jobs with pagination
+   * @public No authentication required
+   */
+  async getPublishedJobsPaged(
+    page: number = 0,
+    size: number = 10,
+  ): Promise<{
+    content: ShortTermJobResponse[];
+    totalPages: number;
+    totalElements: number;
+  }> {
+    try {
+      const response = await axiosInstance.get<{
+        content: any[];
+        totalPages: number;
+        totalElements: number;
+      }>(`/api/short-term-jobs/public/paged?page=${page}&size=${size}`);
+      return {
+        content: response.data.content.map((job) => this.transformResponse(job)),
+        totalPages: response.data.totalPages,
+        totalElements: response.data.totalElements,
+      };
     } catch (error) {
       this.handleError(error, "Failed to fetch published jobs");
     }
@@ -666,6 +840,303 @@ class ShortTermJobService {
       style: "currency",
       currency: "VND",
     }).format(budget);
+  }
+
+  // ==================== ESCROW METHODS ====================
+
+  /**
+   * Fund escrow for a job
+   * POST /api/short-term-jobs/{jobId}/fund-escrow
+   */
+  async fundEscrow(jobId: number): Promise<JobEscrow> {
+    try {
+      const response = await axiosInstance.post<JobEscrow>(
+        `/api/short-term-jobs/${jobId}/fund-escrow`,
+      );
+      return this.normalizeEscrow(response.data, jobId)!;
+    } catch (error) {
+      this.handleError(error, "Không thể ký quỹ");
+    }
+  }
+
+  /**
+   * Get escrow status for a job
+   * GET /api/short-term-jobs/{jobId}/escrow
+   */
+  async getEscrowStatus(jobId: number): Promise<JobEscrow | null> {
+    try {
+      const response = await axiosInstance.get(
+        `/api/short-term-jobs/${jobId}/escrow`,
+      );
+      // Backend returns 204 (empty body) when no escrow exists
+      if (!response.data) return null;
+      return this.normalizeEscrow(response.data, jobId);
+    } catch (error) {
+      this.handleError(error, "Không thể lấy trạng thái ký quỹ");
+    }
+  }
+
+  /**
+   * Release escrow (pay worker)
+   * POST /api/short-term-jobs/{jobId}/release-escrow
+   */
+  async releaseEscrow(jobId: number, message?: string): Promise<JobEscrow> {
+    try {
+      const params = message ? `?message=${encodeURIComponent(message)}` : "";
+      const response = await axiosInstance.post(
+        `/api/short-term-jobs/${jobId}/release-escrow${params}`,
+      );
+      return this.normalizeEscrow(response.data, jobId)!;
+    } catch (error) {
+      this.handleError(error, "Không thể giải phóng ký quỹ");
+    }
+  }
+
+  /**
+   * Refund escrow to recruiter
+   * POST /api/short-term-jobs/{jobId}/refund-escrow
+   */
+  async refundEscrow(jobId: number, reason: string): Promise<JobEscrow> {
+    try {
+      const response = await axiosInstance.post(
+        `/api/short-term-jobs/${jobId}/refund-escrow`,
+        { reason },
+      );
+      return this.normalizeEscrow(response.data, jobId)!;
+    } catch (error) {
+      this.handleError(error, "Không thể hoàn ký quỹ");
+    }
+  }
+
+  /**
+   * Get escrow transactions
+   * GET /api/short-term-jobs/{jobId}/escrow-transactions
+   */
+  async getEscrowTransactions(
+    jobId: number,
+    page: number = 0,
+    size: number = 20,
+  ): Promise<{
+    content: EscrowTransaction[];
+    totalElements: number;
+    totalPages: number;
+  }> {
+    try {
+      const response = await axiosInstance.get<any>(
+        `/api/short-term-jobs/${jobId}/escrow-transactions?page=${page}&size=${size}`,
+      );
+      return {
+        content: response.data.content || [],
+        totalElements: response.data.totalElements || 0,
+        totalPages: response.data.totalPages || 0,
+      };
+    } catch (error) {
+      this.handleError(error, "Không thể lấy lịch sử giao dịch ký quỹ");
+    }
+  }
+
+  // ==================== DISPUTE METHODS ====================
+
+  /**
+   * Open a dispute
+   * POST /api/disputes
+   */
+  async openDispute(data: {
+    jobId: number;
+    applicationId: number;
+    disputeType: DisputeType;
+    reason: string;
+  }): Promise<Dispute> {
+    try {
+      const response = await axiosInstance.post("/api/disputes", data);
+      return this.normalizeDisputeResponse(response.data) ?? response.data;
+    } catch (error) {
+      this.handleError(error, "Không thể mở dispute");
+    }
+  }
+
+  /**
+   * Get dispute by ID
+   * GET /api/disputes/{id}
+   */
+  async getDispute(disputeId: number): Promise<Dispute> {
+    try {
+      const response = await axiosInstance.get(`/api/disputes/${disputeId}`);
+      return this.normalizeDisputeResponse(response.data) ?? response.data;
+    } catch (error) {
+      this.handleError(error, "Không thể lấy chi tiết dispute");
+    }
+  }
+
+  /**
+   * Get dispute by job ID
+   * GET /api/disputes/job/{jobId}
+   */
+  async getDisputeByJob(jobId: number): Promise<Dispute | null> {
+    try {
+      const response = await axiosInstance.get(`/api/disputes/job/${jobId}`);
+      const raw = response.data;
+      if (!raw) return null;
+      const list = Array.isArray(raw) ? raw : [raw];
+      return this.normalizeDisputeResponse(list[0]) ?? list[0] ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Submit evidence to a dispute
+   * POST /api/disputes/{disputeId}/evidence
+   */
+  async submitEvidence(
+    disputeId: number,
+    data: {
+      evidenceType: string;
+      content?: string;
+      fileUrl?: string;
+      fileName?: string;
+      description?: string;
+    },
+  ): Promise<DisputeEvidence> {
+    try {
+      const response = await axiosInstance.post<DisputeEvidence>(
+        `/api/disputes/${disputeId}/evidence`,
+        data,
+      );
+      return response.data;
+    } catch (error) {
+      this.handleError(error, "Không thể gửi bằng chứng");
+    }
+  }
+
+  /**
+   * Respond to evidence
+   * POST /api/disputes/{disputeId}/evidence/{evidenceId}/respond
+   */
+  async respondToEvidence(
+    disputeId: number,
+    evidenceId: number,
+    content: string,
+  ): Promise<DisputeResponseEntity> {
+    try {
+      const response = await axiosInstance.post<DisputeResponseEntity>(
+        `/api/disputes/${disputeId}/evidence/${evidenceId}/respond`,
+        { content },
+      );
+      return response.data;
+    } catch (error) {
+      this.handleError(error, "Không thể phản hồi bằng chứng");
+    }
+  }
+
+  // ==================== TRUST SCORE METHODS ====================
+
+  /**
+   * Get trust score for a user
+   * GET /api/trust-scores/{userId}
+   */
+  async getTrustScore(userId: number): Promise<TrustScore | null> {
+    try {
+      const response = await axiosInstance.get(`/api/trust-scores/${userId}`);
+      if (!response.data) return null;
+      return this.normalizeTrustScore(response.data);
+    } catch (error: any) {
+      if (error?.response?.status === 404) {
+        return null;
+      }
+      this.handleError(error, "Không thể lấy trust score");
+    }
+  }
+
+  /**
+   * Get escrow status color
+   */
+  getEscrowStatusColor(status: EscrowStatus | string): string {
+    const colorMap: Record<string, string> = {
+      PENDING: "yellow",
+      FUNDED: "blue",
+      PARTIALLY_RELEASED: "purple",
+      FULLY_RELEASED: "green",
+      REFUNDED: "gray",
+      DISPUTED: "red",
+    };
+    return colorMap[status] || "gray";
+  }
+
+  /**
+   * Get escrow status text (Vietnamese)
+   */
+  getEscrowStatusText(status: EscrowStatus | string): string {
+    const textMap: Record<string, string> = {
+      PENDING: "Chờ ký quỹ",
+      FUNDED: "Đã ký quỹ",
+      PARTIALLY_RELEASED: "Đã giải phóng một phần",
+      FULLY_RELEASED: "Đã giải phóng toàn bộ",
+      REFUNDED: "Đã hoàn ký quỹ",
+      DISPUTED: "Đang tranh chấp",
+    };
+    return textMap[status] || status;
+  }
+
+  /**
+   * Get dispute status color
+   */
+  getDisputeStatusColor(status: string): string {
+    const colorMap: Record<string, string> = {
+      OPEN: "red",
+      UNDER_INVESTIGATION: "yellow",
+      AWAITING_RESPONSE: "blue",
+      RESOLVED: "green",
+      DISMISSED: "gray",
+      ESCALATED: "purple",
+    };
+    return colorMap[status] || "gray";
+  }
+
+  /**
+   * Get dispute status text (Vietnamese)
+   */
+  getDisputeStatusText(status: string): string {
+    const textMap: Record<string, string> = {
+      OPEN: "Mở",
+      UNDER_INVESTIGATION: "Đang điều tra",
+      AWAITING_RESPONSE: "Chờ phản hồi",
+      RESOLVED: "Đã giải quyết",
+      DISMISSED: "Bác bỏ",
+      ESCALATED: "Đã leo thang",
+    };
+    return textMap[status] || status;
+  }
+
+  /**
+   * Get dispute type text (Vietnamese)
+   */
+  getDisputeTypeText(type: DisputeType | string): string {
+    const textMap: Record<string, string> = {
+      NO_SUBMISSION: "Không nộp bài",
+      POOR_QUALITY: "Chất lượng kém",
+      MISSING_DELIVERABLE: "Thiếu sản phẩm",
+      DEADLINE_VIOLATION: "Vi phạm deadline",
+      PAYMENT_ISSUE: "Vấn đề thanh toán",
+      COMMUNICATION_FAILURE: "Không liên lạc được",
+      SCOPE_CHANGE: "Thay đổi phạm vi",
+      SCAM_REPORT: "Báo lừa đảo",
+      OTHER: "Khác",
+    };
+    return textMap[type] || type;
+  }
+
+  /**
+   * Get trust tier text (Vietnamese)
+   */
+  getTrustTierText(tier: string): string {
+    const textMap: Record<string, string> = {
+      NEWCOMER: "Tân binh",
+      BASIC: "Cơ bản",
+      TRUSTED: "Đáng tin cậy",
+      ELITE: "Elite",
+    };
+    return textMap[tier] || tier;
   }
 }
 

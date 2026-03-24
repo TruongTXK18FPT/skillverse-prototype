@@ -1807,6 +1807,18 @@ input[type='checkbox']:checked::after {
   color: var(--sv-text-muted);
 }
 
+.study-plan-loading-overlay--modal {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  height: auto;
+  min-height: 100%;
+  border-radius: 16px;
+  background: rgba(7, 10, 18, 0.82);
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
 .study-plan-premium-lock {
   display: flex;
   flex-direction: column;

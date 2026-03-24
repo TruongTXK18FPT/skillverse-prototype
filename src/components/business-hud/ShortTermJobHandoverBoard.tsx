@@ -5,22 +5,33 @@ import {
   Download,
   ExternalLink,
   FileText,
+  Image as ImageIcon,
   Loader2,
   RefreshCw,
+  X,
+  ZoomIn,
 } from 'lucide-react';
 import {
   ShortTermApplicationResponse,
   ShortTermJobResponse,
   ShortTermApplicationStatus,
+  ShortTermJobStatus,
+  DeliverableType,
+  Deliverable,
 } from '../../types/ShortTermJob';
 import shortTermJobService from '../../services/shortTermJobService';
 import { useToast } from '../../hooks/useToast';
+import { resolveRecruitmentAssetUrl } from '../../utils/recruitmentUi';
+import TrustScoreDisplay from '../short-term-job/TrustScoreDisplay';
+import DisputePanel from '../short-term-job/DisputePanel';
+import { useAuth } from '../../context/AuthContext';
 import './short-term-fleet.css';
 
 interface ShortTermJobHandoverBoardProps {
   job: ShortTermJobResponse;
   applications: ShortTermApplicationResponse[];
   onRefresh: () => void;
+  onJobUpdate?: (updatedJob: ShortTermJobResponse) => void;
 }
 
 type HandoverFilter = 'all' | 'submitted' | 'revision' | 'approved' | 'completed';
@@ -29,12 +40,15 @@ const ShortTermJobHandoverBoard = ({
   job,
   applications,
   onRefresh,
+  onJobUpdate,
 }: ShortTermJobHandoverBoardProps) => {
+  const { user } = useAuth();
   const { showError, showSuccess } = useToast();
   const [actionLoading, setActionLoading] = useState<number | null>(null);
   const [filter, setFilter] = useState<HandoverFilter>('all');
   const [revisionModal, setRevisionModal] = useState<ShortTermApplicationResponse | null>(null);
   const [revisionNote, setRevisionNote] = useState('');
+  const [lightboxImage, setLightboxImage] = useState<Deliverable | null>(null);
 
   const handoverApps = applications.filter(
     (app) =>
@@ -103,7 +117,20 @@ const ShortTermJobHandoverBoard = ({
   const handleApproveWork = async (application: ShortTermApplicationResponse) => {
     try {
       setActionLoading(application.id);
-      await shortTermJobService.approveWork(application.id, 'Bàn giao đạt yêu cầu.');
+      // Nếu chưa có selectedApplicantId, gọi selectCandidate trước
+      if (!job.selectedApplicantId) {
+        await shortTermJobService.selectCandidate(job.id, application.id);
+      }
+      const approvedApp = await shortTermJobService.approveWork(application.id, 'Bàn giao đạt yêu cầu.');
+      // Log trạng thái trả về để debug
+      console.debug('[STJ Handover] approveWork returned:', {
+        id: approvedApp.id,
+        status: approvedApp.status,
+        jobId: approvedApp.jobId,
+      });
+      // Refresh job + applicants để UI cập nhật đúng trạng thái
+      const refreshedJob = await shortTermJobService.getJobDetails(job.id);
+      onJobUpdate?.(refreshedJob);
       showSuccess('Đã duyệt bàn giao', 'Công việc đã được chấp thuận.');
       onRefresh();
     } catch (error: any) {
@@ -138,6 +165,26 @@ const ShortTermJobHandoverBoard = ({
   const handleCompleteJob = async (application: ShortTermApplicationResponse) => {
     try {
       setActionLoading(application.id);
+      // Debug: check current application status
+      console.debug('[STJ Handover] handleCompleteJob', {
+        applicationId: application.id,
+        applicationStatus: application.status,
+        jobId: job.id,
+        selectedApplicantId: job.selectedApplicantId,
+      });
+      // Re-fetch latest job + applicants to get current state
+      const freshJob = await shortTermJobService.getJobDetails(job.id);
+      const freshApps = await shortTermJobService.getJobApplicants(job.id, 0, 50);
+      const currentApp = freshApps.content?.find((a) => a.id === application.id);
+      console.debug('[STJ Handover] before completeJob', {
+        currentAppStatus: currentApp?.status,
+        freshJobSelectedId: freshJob.selectedApplicantId,
+      });
+      if (currentApp?.status !== ShortTermApplicationStatus.APPROVED) {
+        showError('Chưa duyệt bàn giao', 'Vui lòng duyệt bàn giao trước khi hoàn tất.');
+        setActionLoading(null);
+        return;
+      }
       await shortTermJobService.completeJob(job.id);
       showSuccess('Đã hoàn tất job', 'Công việc đã được đánh dấu hoàn thành.');
       onRefresh();
@@ -280,7 +327,7 @@ const ShortTermJobHandoverBoard = ({
                   <div className="stj-handover-card__identity">
                     {application.userAvatar ? (
                       <img
-                        src={application.userAvatar}
+                        src={resolveRecruitmentAssetUrl(application.userAvatar)}
                         alt={application.userFullName}
                         className="stj-handover-card__avatar"
                       />
@@ -303,6 +350,11 @@ const ShortTermJobHandoverBoard = ({
                       <span className="stj-handover-card__subtitle">
                         {application.userProfessionalTitle || 'Ứng viên'}
                       </span>
+                      {application.userId && (
+                        <div style={{ marginTop: '0.25rem' }}>
+                          <TrustScoreDisplay userId={application.userId} size="small" />
+                        </div>
+                      )}
                     </div>
                   </div>
                   <span className={`stj-handover-badge ${getStatusBadgeClass(application.status)}`}>
@@ -340,19 +392,122 @@ const ShortTermJobHandoverBoard = ({
                       Bàn giao ({deliverables.length})
                     </span>
                     <ul className="stj-handover-card__file-list">
-                      {deliverables.map((deliverable, index) => (
-                        <li key={deliverable.id || index}>
-                          <a
-                            href={deliverable.fileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="stj-handover-card__file-link"
-                          >
-                            <ExternalLink size={11} />
-                            {deliverable.fileName || 'File bàn giao'}
-                          </a>
-                        </li>
-                      ))}
+                      {deliverables.map((deliverable, index) => {
+                        // TODO: remove debug log after verifying images load
+                        console.debug('[STJ Handover] deliverable', index, {
+                          rawUrl: deliverable.fileUrl,
+                          type: deliverable.type,
+                          mimeType: deliverable.mimeType,
+                          fileName: deliverable.fileName,
+                          resolvedUrl: resolveRecruitmentAssetUrl(deliverable.fileUrl),
+                        });
+                        const resolvedUrl = resolveRecruitmentAssetUrl(deliverable.fileUrl);
+                        console.debug(`[STJ Handover] Image URL debug: raw="${deliverable.fileUrl}", resolved="${resolvedUrl}", type=${deliverable.type}, mimeType=${deliverable.mimeType}`);
+                        const isImage = deliverable.type === DeliverableType.IMAGE || /^\s*image\//i.test(deliverable.mimeType || '');
+                        const isVideo = deliverable.type === DeliverableType.VIDEO || /^\s*video\//i.test(deliverable.mimeType || '');
+                        const fileSize = deliverable.fileSize > 0
+                          ? `${(deliverable.fileSize / 1024).toFixed(1)} KB`
+                          : '';
+
+                        return (
+                          <li key={deliverable.id || index}>
+                            {isImage ? (
+                              <div className="stj-handover-card__image-item">
+                                <img
+                                  src={resolvedUrl}
+                                  alt={deliverable.fileName || 'Hình ảnh bàn giao'}
+                                  className="stj-handover-card__image-thumb"
+                                  onClick={() => setLightboxImage({ ...deliverable, fileUrl: resolvedUrl || deliverable.fileUrl })}
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).style.display = 'none';
+                                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove('stj-handover-card__image-fallback--hidden');
+                                  }}
+                                />
+                                <div className="stj-handover-card__image-fallback stj-handover-card__image-fallback--hidden">
+                                  <ImageIcon size={20} />
+                                  <span>{deliverable.fileName}</span>
+                                </div>
+                                <div className="stj-handover-card__image-overlay">
+                                  <button
+                                    className="stj-handover-card__image-btn"
+                                    onClick={() => setLightboxImage({ ...deliverable, fileUrl: resolvedUrl || deliverable.fileUrl })}
+                                    title="Xem ảnh"
+                                  >
+                                    <ZoomIn size={14} />
+                                  </button>
+                                  <a
+                                    href={resolvedUrl}
+                                    download={deliverable.fileName}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="stj-handover-card__image-btn"
+                                    title="Tải về"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <Download size={14} />
+                                  </a>
+                                </div>
+                                {fileSize && (
+                                  <span className="stj-handover-card__image-size">{fileSize}</span>
+                                )}
+                              </div>
+                            ) : isVideo ? (
+                              <div className="stj-handover-card__file-item stj-handover-card__file-item--video">
+                                <video
+                                  src={resolvedUrl}
+                                  className="stj-handover-card__video-thumb"
+                                  onClick={() => window.open(resolvedUrl, '_blank')}
+                                />
+                                <div className="stj-handover-card__file-info">
+                                  <a
+                                    href={resolvedUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="stj-handover-card__file-link"
+                                  >
+                                    <ExternalLink size={11} />
+                                    {deliverable.fileName || 'Video bàn giao'}
+                                  </a>
+                                  {fileSize && <span className="stj-handover-card__file-size">{fileSize}</span>}
+                                </div>
+                                <a
+                                  href={resolvedUrl}
+                                  download={deliverable.fileName}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="stj-handover-card__file-download"
+                                  title="Tải về"
+                                >
+                                  <Download size={12} />
+                                </a>
+                              </div>
+                            ) : (
+                              <div className="stj-handover-card__file-item">
+                                <a
+                                  href={resolvedUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="stj-handover-card__file-link"
+                                >
+                                  <ExternalLink size={11} />
+                                  {deliverable.fileName || 'File bàn giao'}
+                                </a>
+                                {fileSize && <span className="stj-handover-card__file-size">{fileSize}</span>}
+                                <a
+                                  href={resolvedUrl}
+                                  download={deliverable.fileName}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="stj-handover-card__file-download"
+                                  title="Tải về"
+                                >
+                                  <Download size={12} />
+                                </a>
+                              </div>
+                            )}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 )}
@@ -400,7 +555,8 @@ const ShortTermJobHandoverBoard = ({
                     </button>
                   )}
 
-                  {application.status === ShortTermApplicationStatus.COMPLETED && (
+                  {application.status === ShortTermApplicationStatus.COMPLETED &&
+                    job.status !== ShortTermJobStatus.COMPLETED && job.status !== ShortTermJobStatus.PAID && (
                     <button
                       className="stj-action-btn stj-action-btn--approve"
                       disabled={isBusy}
@@ -423,6 +579,15 @@ const ShortTermJobHandoverBoard = ({
           })}
         </div>
       )}
+
+      {/* Dispute Panel */}
+      <DisputePanel
+        jobId={job.id}
+        applicationId={job.selectedApplicantId}
+        currentUserId={user?.id || 0}
+        currentUserRole="RECRUITER"
+        jobStatus={job.status}
+      />
 
       {revisionModal && (
         <div className="stj-modal-backdrop" onClick={() => setRevisionModal(null)}>
@@ -456,6 +621,43 @@ const ShortTermJobHandoverBoard = ({
                 )}
                 Gửi yêu cầu sửa
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {lightboxImage && (
+        <div
+          className="stj-lightbox"
+          onClick={() => setLightboxImage(null)}
+        >
+          <div className="stj-lightbox__inner" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="stj-lightbox__close"
+              onClick={() => setLightboxImage(null)}
+            >
+              <X size={20} />
+            </button>
+            <img
+              src={resolveRecruitmentAssetUrl(lightboxImage.fileUrl)}
+              alt={lightboxImage.fileName || 'Hình ảnh bàn giao'}
+              className="stj-lightbox__img"
+            />
+            <div className="stj-lightbox__footer">
+              <span className="stj-lightbox__filename">
+                <ImageIcon size={14} />
+                {lightboxImage.fileName || 'Hình ảnh bàn giao'}
+              </span>
+              <a
+                href={resolveRecruitmentAssetUrl(lightboxImage.fileUrl)}
+                download={lightboxImage.fileName}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="stj-lightbox__download"
+              >
+                <Download size={14} />
+                Tải về
+              </a>
             </div>
           </div>
         </div>

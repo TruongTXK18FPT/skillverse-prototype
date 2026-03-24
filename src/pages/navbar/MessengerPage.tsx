@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import {
   Search,
   Plus,
@@ -53,6 +53,7 @@ interface ChatContact {
 const MessengerPage: React.FC = () => {
   const { user, loading } = useAuth();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const { settings, updateSetting } = useChatSettings();
 
   const [contacts, setContacts] = useState<ChatContact[]>([]);
@@ -65,6 +66,7 @@ const MessengerPage: React.FC = () => {
   const [recruitmentSessions, setRecruitmentSessions] = useState<RecruitmentSessionResponse[]>([]);
 
   const hasHandledNav = useRef(false);
+  const hasHandledSessionParam = useRef(false);
   const canAccessRecruitmentMessages = Boolean(
     user?.roles.includes('RECRUITER') || user?.roles.includes('USER')
   );
@@ -161,6 +163,19 @@ const MessengerPage: React.FC = () => {
     setSelectedContactId(targetId);
     hasHandledNav.current = true;
   }, [location.state, recruitmentSessions]);
+
+  // Handle direct navigation to a recruitment session via URL param (e.g. /messenger?sessionId=123)
+  useEffect(() => {
+    const sessionIdParam = searchParams.get('sessionId');
+    if (!sessionIdParam || hasHandledSessionParam.current) return;
+
+    const found = recruitmentSessions.find((s) => s.id.toString() === sessionIdParam);
+    if (found) {
+      hasHandledSessionParam.current = true;
+      setActiveTab('RECRUITMENT');
+      setSelectedContactId(sessionIdParam);
+    }
+  }, [searchParams, recruitmentSessions]);
 
   const loadContacts = async () => {
     if (!user) return;

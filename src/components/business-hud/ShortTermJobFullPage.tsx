@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   ArrowLeft,
   Calendar,
@@ -16,20 +16,28 @@ import {
   Trash2,
   Users,
   XCircle,
-} from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { confirmAction } from '../../context/ConfirmDialogContext';
-import { getApplicantDisplayName, resolveRecruitmentAssetUrl } from '../../utils/recruitmentUi';
+} from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import {
+  getApplicantDisplayName,
+  resolveRecruitmentAssetUrl,
+} from "../../utils/recruitmentUi";
 import {
   ShortTermApplicationResponse,
   ShortTermApplicationStatus,
   ShortTermJobResponse,
   ShortTermJobStatus,
-} from '../../types/ShortTermJob';
-import shortTermJobService from '../../services/shortTermJobService';
-import { useToast } from '../../hooks/useToast';
-import ShortTermJobHandoverBoard from './ShortTermJobHandoverBoard';
-import './short-term-fleet.css';
+  JobEscrow,
+} from "../../types/ShortTermJob";
+import shortTermJobService from "../../services/shortTermJobService";
+import walletService from "../../services/walletService";
+import { useToast } from "../../hooks/useToast";
+import ShortTermJobHandoverBoard from "./ShortTermJobHandoverBoard";
+import EscrowStatusBanner from "../short-term-job/EscrowStatusBanner";
+import FundingModal from "../short-term-job/FundingModal";
+import DisputePanel from "../short-term-job/DisputePanel";
+import { JobMarkdownSurface } from "../shared/JobMarkdownSurface";
+import "./short-term-fleet.css";
 
 interface ShortTermJobFullPageProps {
   jobId: number;
@@ -37,80 +45,90 @@ interface ShortTermJobFullPageProps {
   onEdit: (jobId: number) => void;
 }
 
-type FullPageTab = 'overview' | 'applicants' | 'handover' | 'milestone';
+type FullPageTab = "overview" | "applicants" | "handover" | "milestone";
 
 const STATUS_COLORS: Record<string, string> = {
-  DRAFT: '#64748b',
-  PENDING_APPROVAL: '#fbbf24',
-  PUBLISHED: '#3b82f6',
-  APPLIED: '#22d3ee',
-  IN_PROGRESS: '#f97316',
-  SUBMITTED: '#a855f7',
-  UNDER_REVIEW: '#fbbf24',
-  APPROVED: '#34d399',
-  REJECTED: '#fb7185',
-  COMPLETED: '#4ade80',
-  PAID: '#4ade80',
-  CANCELLED: '#64748b',
-  DISPUTED: '#fb7185',
-  CLOSED: '#94a3b8',
+  DRAFT: "#64748b",
+  PENDING_APPROVAL: "#fbbf24",
+  PUBLISHED: "#3b82f6",
+  APPLIED: "#22d3ee",
+  IN_PROGRESS: "#f97316",
+  SUBMITTED: "#a855f7",
+  UNDER_REVIEW: "#fbbf24",
+  APPROVED: "#34d399",
+  REJECTED: "#fb7185",
+  COMPLETED: "#4ade80",
+  PAID: "#4ade80",
+  CANCELLED: "#64748b",
+  DISPUTED: "#fb7185",
+  CLOSED: "#94a3b8",
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  DRAFT: 'Bản nháp',
-  PENDING_APPROVAL: 'Chờ duyệt',
-  PUBLISHED: 'Đang tuyển',
-  APPLIED: 'Có ứng viên',
-  IN_PROGRESS: 'Đang thực hiện',
-  SUBMITTED: 'Đã nộp',
-  UNDER_REVIEW: 'Đang review',
-  APPROVED: 'Đã duyệt',
-  REJECTED: 'Từ chối',
-  COMPLETED: 'Hoàn thành',
-  PAID: 'Đã thanh toán',
-  CANCELLED: 'Đã hủy',
-  DISPUTED: 'Tranh chấp',
-  CLOSED: 'Đã đóng',
+  DRAFT: "Bản nháp",
+  PENDING_APPROVAL: "Chờ duyệt",
+  PUBLISHED: "Đang tuyển",
+  APPLIED: "Có ứng viên",
+  IN_PROGRESS: "Đang thực hiện",
+  SUBMITTED: "Đã nộp",
+  UNDER_REVIEW: "Đang review",
+  APPROVED: "Đã duyệt",
+  REJECTED: "Từ chối",
+  COMPLETED: "Hoàn thành",
+  PAID: "Đã thanh toán",
+  CANCELLED: "Đã hủy",
+  DISPUTED: "Tranh chấp",
+  CLOSED: "Đã đóng",
 };
 
 const APP_STATUS_COLORS: Record<string, string> = {
-  PENDING: '#3b82f6',
-  ACCEPTED: '#34d399',
-  REJECTED: '#fb7185',
-  WORKING: '#f97316',
-  SUBMITTED: '#a855f7',
-  REVISION_REQUIRED: '#fbbf24',
-  APPROVED: '#34d399',
-  COMPLETED: '#4ade80',
-  PAID: '#4ade80',
-  CANCELLED: '#64748b',
-  WITHDRAWN: '#64748b',
+  PENDING: "#3b82f6",
+  ACCEPTED: "#34d399",
+  REJECTED: "#fb7185",
+  WORKING: "#f97316",
+  SUBMITTED: "#a855f7",
+  REVISION_REQUIRED: "#fbbf24",
+  APPROVED: "#34d399",
+  COMPLETED: "#4ade80",
+  PAID: "#4ade80",
+  CANCELLED: "#64748b",
+  WITHDRAWN: "#64748b",
 };
 
 const APP_STATUS_LABELS: Record<string, string> = {
-  PENDING: 'Chờ duyệt',
-  ACCEPTED: 'Được chọn',
-  REJECTED: 'Từ chối',
-  WORKING: 'Đang làm',
-  SUBMITTED: 'Đã nộp',
-  REVISION_REQUIRED: 'Cần sửa',
-  APPROVED: 'Đã duyệt',
-  COMPLETED: 'Hoàn thành',
-  PAID: 'Đã thanh toán',
-  CANCELLED: 'Đã hủy',
-  WITHDRAWN: 'Đã rút đơn',
+  PENDING: "Chờ duyệt",
+  ACCEPTED: "Được chọn",
+  REJECTED: "Từ chối",
+  WORKING: "Đang làm",
+  SUBMITTED: "Đã nộp",
+  REVISION_REQUIRED: "Cần sửa",
+  APPROVED: "Đã duyệt",
+  COMPLETED: "Hoàn thành",
+  PAID: "Đã thanh toán",
+  CANCELLED: "Đã hủy",
+  WITHDRAWN: "Đã rút đơn",
 };
 
-const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPageProps) => {
+const ShortTermJobFullPage = ({
+  jobId,
+  onBack,
+  onEdit,
+}: ShortTermJobFullPageProps) => {
   const { user } = useAuth();
   const { showError, showSuccess } = useToast();
-  const [activeTab, setActiveTab] = useState<FullPageTab>('overview');
+  const [activeTab, setActiveTab] = useState<FullPageTab>("overview");
   const [job, setJob] = useState<ShortTermJobResponse | null>(null);
-  const [applications, setApplications] = useState<ShortTermApplicationResponse[]>([]);
+  const [applications, setApplications] = useState<
+    ShortTermApplicationResponse[]
+  >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isActionBusy, setIsActionBusy] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [acceptModal, setAcceptModal] = useState<ShortTermApplicationResponse | null>(null);
+  const [acceptModal, setAcceptModal] =
+    useState<ShortTermApplicationResponse | null>(null);
+  const [escrow, setEscrow] = useState<JobEscrow | null>(null);
+  const [walletBalance, setWalletBalance] = useState<number>(0);
+  const [showFundingModal, setShowFundingModal] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -119,14 +137,21 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
   const loadData = async () => {
     setIsLoading(true);
     try {
-      const [jobData, appData] = await Promise.all([
+      const [jobData, appData, escrowData, walletData] = await Promise.all([
         shortTermJobService.getJobDetails(jobId),
         shortTermJobService.getJobApplicants(jobId, 0, 50),
+        shortTermJobService.getEscrowStatus(jobId).catch(() => null),
+        walletService.getMyWallet().catch(() => null),
       ]);
       setJob(jobData);
       setApplications(appData.content || []);
+      setEscrow(escrowData);
+      setWalletBalance(walletData?.cashBalance || 0);
     } catch (error: any) {
-      showError('Không thể tải chi tiết job', error.message || 'Vui lòng thử lại.');
+      showError(
+        "Không thể tải chi tiết job",
+        error.message || "Vui lòng thử lại.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -141,10 +166,10 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
     try {
       setIsActionBusy(true);
       await shortTermJobService.deleteJob(jobId);
-      showSuccess('Đã xóa job', 'Job đã được xóa thành công.');
+      showSuccess("Đã xóa job", "Job đã được xóa thành công.");
       onBack();
     } catch (error: any) {
-      showError('Không thể xóa job', error.message || 'Vui lòng thử lại.');
+      showError("Không thể xóa job", error.message || "Vui lòng thử lại.");
     } finally {
       setIsActionBusy(false);
       setConfirmDelete(false);
@@ -157,9 +182,9 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
       setIsActionBusy(true);
       const updated = await shortTermJobService.submitForApproval(jobId);
       setJob(updated);
-      showSuccess('Đã gửi duyệt', 'Job đã được gửi để admin phê duyệt.');
+      showSuccess("Đã gửi duyệt", "Job đã được gửi để admin phê duyệt.");
     } catch (error: any) {
-      showError('Không thể gửi duyệt', error.message || 'Vui lòng thử lại.');
+      showError("Không thể gửi duyệt", error.message || "Vui lòng thử lại.");
     } finally {
       setIsActionBusy(false);
     }
@@ -167,14 +192,25 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
 
   const handleCloseJob = async () => {
     if (!job) return;
-    if (!(await confirmAction(`Đóng job "${job.title}"? Người đã nộp vẫn có thể tiếp tục nộp bài.`))) return;
+    if (
+      !window.confirm(
+        `Đóng job "${job.title}"? Người đã nộp vẫn có thể tiếp tục nộp bài.`,
+      )
+    )
+      return;
     try {
       setIsActionBusy(true);
-      await shortTermJobService.changeJobStatus(jobId, ShortTermJobStatus.CLOSED);
-      showSuccess('Đã đóng job', 'Job đã được đóng lại. Ứng viên đã nộp vẫn có thể tiếp tục nộp bài.');
+      await shortTermJobService.changeJobStatus(
+        jobId,
+        ShortTermJobStatus.CLOSED,
+      );
+      showSuccess(
+        "Đã đóng job",
+        "Job đã được đóng lại. Ứng viên đã nộp vẫn có thể tiếp tục nộp bài.",
+      );
       await loadData();
     } catch (error: any) {
-      showError('Không thể đóng job', error.message || 'Vui lòng thử lại.');
+      showError("Không thể đóng job", error.message || "Vui lòng thử lại.");
     } finally {
       setIsActionBusy(false);
     }
@@ -185,11 +221,14 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
     try {
       setIsActionBusy(true);
       await shortTermJobService.selectCandidate(jobId, acceptModal.id);
-      showSuccess('Đã chấp nhận ứng viên', `${acceptModal.userFullName} đã được chọn cho job này.`);
+      showSuccess(
+        "Đã chấp nhận ứng viên",
+        `${acceptModal.userFullName} đã được chọn cho job này.`,
+      );
       setAcceptModal(null);
       await loadData();
     } catch (error: any) {
-      showError('Không thể chấp nhận', error.message || 'Vui lòng thử lại.');
+      showError("Không thể chấp nhận", error.message || "Vui lòng thử lại.");
     } finally {
       setIsActionBusy(false);
     }
@@ -201,29 +240,29 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
       await shortTermJobService.updateApplicationStatus(app.id, {
         status: ShortTermApplicationStatus.REJECTED,
       });
-      showSuccess('Đã từ chối', 'Ứng viên đã được thông báo.');
+      showSuccess("Đã từ chối", "Ứng viên đã được thông báo.");
       await loadData();
     } catch (error: any) {
-      showError('Không thể từ chối', error.message || 'Vui lòng thử lại.');
+      showError("Không thể từ chối", error.message || "Vui lòng thử lại.");
     } finally {
       setIsActionBusy(false);
     }
   };
 
   const formatBudget = (amount: number): string => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
       maximumFractionDigits: 0,
     }).format(amount);
   };
 
   const formatDate = (date?: string): string => {
-    if (!date) return 'N/A';
-    return new Date(date).toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
+    if (!date) return "N/A";
+    return new Date(date).toLocaleDateString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
     });
   };
 
@@ -250,14 +289,16 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
     );
   }
 
-  const pendingApps = applications.filter((a) => a.status === ShortTermApplicationStatus.PENDING);
+  const pendingApps = applications.filter(
+    (a) => a.status === ShortTermApplicationStatus.PENDING,
+  );
   const handoverApps = applications.filter(
     (a) =>
       a.status === ShortTermApplicationStatus.SUBMITTED ||
       a.status === ShortTermApplicationStatus.REVISION_REQUIRED ||
       a.status === ShortTermApplicationStatus.APPROVED ||
       a.status === ShortTermApplicationStatus.COMPLETED ||
-      a.status === ShortTermApplicationStatus.PAID
+      a.status === ShortTermApplicationStatus.PAID,
   );
 
   return (
@@ -265,7 +306,11 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
       {/* Header */}
       <header className="stj-fullpage__header">
         <div className="stj-fullpage__header-left">
-          <button className="stj-fullpage__back" onClick={onBack} title="Quay lại">
+          <button
+            className="stj-fullpage__back"
+            onClick={onBack}
+            title="Quay lại"
+          >
             <ArrowLeft size={18} />
           </button>
           <div className="stj-fullpage__job-info">
@@ -310,7 +355,11 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
                 disabled={isActionBusy}
                 onClick={handleSubmitForApproval}
               >
-                {isActionBusy ? <Loader2 size={14} className="stj-spin" /> : <Send size={14} />}
+                {isActionBusy ? (
+                  <Loader2 size={14} className="stj-spin" />
+                ) : (
+                  <Send size={14} />
+                )}
                 Gửi duyệt
               </button>
             )}
@@ -326,20 +375,25 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
               </button>
             )}
 
-            {(
-              job.status === ShortTermJobStatus.PUBLISHED ||
+            {(job.status === ShortTermJobStatus.PUBLISHED ||
               job.status === ShortTermJobStatus.APPLIED ||
-              job.status === ShortTermJobStatus.IN_PROGRESS
-            ) && applications.some((a) => a.status === ShortTermApplicationStatus.ACCEPTED) && (
-              <button
-                className="stj-btn stj-btn--ghost"
-                disabled={isActionBusy}
-                onClick={handleCloseJob}
-              >
-                {isActionBusy ? <Loader2 size={14} className="stj-spin" /> : <ShieldCheck size={14} />}
-                Đóng job
-              </button>
-            )}
+              job.status === ShortTermJobStatus.IN_PROGRESS) &&
+              applications.some(
+                (a) => a.status === ShortTermApplicationStatus.ACCEPTED,
+              ) && (
+                <button
+                  className="stj-btn stj-btn--ghost"
+                  disabled={isActionBusy}
+                  onClick={handleCloseJob}
+                >
+                  {isActionBusy ? (
+                    <Loader2 size={14} className="stj-spin" />
+                  ) : (
+                    <ShieldCheck size={14} />
+                  )}
+                  Đóng job
+                </button>
+              )}
           </div>
         </div>
       </header>
@@ -351,7 +405,7 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
           <strong>{applications.length}</strong>
           <span>Ứng viên</span>
         </div>
-        {job.urgency && job.urgency !== 'NORMAL' && (
+        {job.urgency && job.urgency !== "NORMAL" && (
           <div className="stj-fullpage__stat-item stj-fullpage__stat-item--urgent">
             <Target size={16} />
             <strong>{job.urgency}</strong>
@@ -360,7 +414,7 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
         )}
         <div className="stj-fullpage__stat-item">
           {job.isRemote ? <Globe size={16} /> : <MapPin size={16} />}
-          <strong>{job.isRemote ? 'Từ xa' : (job.location || 'On-site')}</strong>
+          <strong>{job.isRemote ? "Từ xa" : job.location || "On-site"}</strong>
           <span>Loại</span>
         </div>
         {job.minRating !== undefined && (
@@ -372,33 +426,77 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
         )}
       </div>
 
+      {/* Escrow Status Banner */}
+      <EscrowStatusBanner
+        escrow={escrow}
+        jobId={jobId}
+        currentUserRole="RECRUITER"
+        onFund={() => setShowFundingModal(true)}
+        onRelease={async () => {
+          try {
+            setIsActionBusy(true);
+            await shortTermJobService.releaseEscrow(jobId);
+            showSuccess(
+              "Đã giải phóng thanh toán",
+              "Thanh toán đã được giải phóng cho ứng viên.",
+            );
+            window.dispatchEvent(new Event("wallet:updated"));
+            await loadData();
+          } catch (error: any) {
+            showError(
+              "Không thể giải phóng",
+              error.message || "Vui lòng thử lại.",
+            );
+          } finally {
+            setIsActionBusy(false);
+          }
+        }}
+        onDispute={() => {}}
+        onRefund={async () => {
+          try {
+            setIsActionBusy(true);
+            await shortTermJobService.refundEscrow(jobId, "Hoàn tiền ký quỹ");
+            showSuccess("Đã hoàn tiền", "Tiền ký quỹ đã được hoàn vào ví.");
+            window.dispatchEvent(new Event("wallet:updated"));
+            await loadData();
+          } catch (error: any) {
+            showError(
+              "Không thể hoàn tiền",
+              error.message || "Vui lòng thử lại.",
+            );
+          } finally {
+            setIsActionBusy(false);
+          }
+        }}
+      />
+
       {/* Tabs */}
       <nav className="stj-fullpage__tabs">
         <button
-          className={`stj-fullpage__tab ${activeTab === 'overview' ? 'is-active' : ''}`}
-          onClick={() => setActiveTab('overview')}
+          className={`stj-fullpage__tab ${activeTab === "overview" ? "is-active" : ""}`}
+          onClick={() => setActiveTab("overview")}
         >
           <FileText size={14} />
           Tổng quan
         </button>
         <button
-          className={`stj-fullpage__tab ${activeTab === 'applicants' ? 'is-active' : ''}`}
-          onClick={() => setActiveTab('applicants')}
+          className={`stj-fullpage__tab ${activeTab === "applicants" ? "is-active" : ""}`}
+          onClick={() => setActiveTab("applicants")}
         >
           <Users size={14} />
           Ứng viên ({applications.length})
         </button>
         <button
-          className={`stj-fullpage__tab ${activeTab === 'handover' ? 'is-active' : ''}`}
-          onClick={() => setActiveTab('handover')}
+          className={`stj-fullpage__tab ${activeTab === "handover" ? "is-active" : ""}`}
+          onClick={() => setActiveTab("handover")}
         >
           <CheckCircle2 size={14} />
           Bàn giao ({handoverApps.length})
         </button>
         {job.milestones && job.milestones.length > 0 && (
           <button
-            className={`stj-fullpage__tab ${activeTab === 'milestone' ? 'is-active' : ''}`}
-            onClick={() => setActiveTab('milestone')}
+            className={`stj-fullpage__tab ${activeTab === "milestone" ? "is-active" : ""}`}
+            onClick={() => setActiveTab("milestone")}
           >
             <Target size={14} />
             Milestone ({job.milestones.length})
@@ -409,14 +507,22 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
       {/* Tab Content */}
       <div className="stj-fullpage__content">
         {/* Overview Tab */}
-        {activeTab === 'overview' && (
+        {activeTab === "overview" && (
           <div className="stj-fullpage__overview">
             <div className="stj-fullpage__overview-grid">
-              <div className="stj-fullpage__detail-card">
+              <div className="stj-fullpage__detail-card stj-fullpage__detail-card--description">
                 <h3>Mô tả công việc</h3>
-                <p className="stj-fullpage__description">
+                <div className="stj-fullpage__description">
+                  <JobMarkdownSurface
+                    content={job.description || "Chưa có mô tả chi tiết."}
+                    density="detail"
+                    theme="cyan"
+                    placeholder="Chưa có mô tả chi tiết."
+                  />
+                  {/*
                   {job.description || 'Chưa có mô tả chi tiết.'}
-                </p>
+                  */}
+                </div>
               </div>
 
               <div className="stj-fullpage__detail-card">
@@ -432,11 +538,13 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
                   </div>
                   <div className="stj-fullpage__info-row">
                     <span>Ước tính thời gian</span>
-                    <strong>{job.estimatedDuration || 'N/A'}</strong>
+                    <strong>{job.estimatedDuration || "N/A"}</strong>
                   </div>
                   <div className="stj-fullpage__info-row">
                     <span>Hình thức</span>
-                    <strong>{job.isRemote ? 'Từ xa' : (job.location || 'On-site')}</strong>
+                    <strong>
+                      {job.isRemote ? "Từ xa" : job.location || "On-site"}
+                    </strong>
                   </div>
                   <div className="stj-fullpage__info-row">
                     <span>Đăng lúc</span>
@@ -469,7 +577,9 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
                         <strong>{ms.title}</strong>
                         <span
                           className="stj-fullpage__milestone-status"
-                          style={{ color: STATUS_COLORS[ms.status] || '#64748b' }}
+                          style={{
+                            color: STATUS_COLORS[ms.status] || "#64748b",
+                          }}
                         >
                           {STATUS_LABELS[ms.status] || ms.status}
                         </span>
@@ -484,18 +594,30 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
                 </div>
               </div>
             )}
+
+            {/* Dispute Panel */}
+            <DisputePanel
+              jobId={jobId}
+              applicationId={job.selectedApplicantId}
+              currentUserId={user?.id || 0}
+              currentUserRole="RECRUITER"
+              jobStatus={job.status}
+            />
           </div>
         )}
 
         {/* Applicants Tab */}
-        {activeTab === 'applicants' && (
+        {activeTab === "applicants" && (
           <div className="stj-fullpage__applicants">
             {applications.length === 0 ? (
               <div className="stj-handover-empty">
                 <Users size={32} />
                 <div>
                   <strong>Chưa có ứng viên nào</strong>
-                  <p>Job này chưa có ai ứng tuyển. Hãy đăng job để thu hút ứng viên.</p>
+                  <p>
+                    Job này chưa có ai ứng tuyển. Hãy đăng job để thu hút ứng
+                    viên.
+                  </p>
                 </div>
               </div>
             ) : (
@@ -506,20 +628,32 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
                       <div className="stj-fullpage__app-identity">
                         {app.userAvatar ? (
                           <img
-                            src={resolveRecruitmentAssetUrl(app.userAvatar) || ''}
+                            src={
+                              resolveRecruitmentAssetUrl(app.userAvatar) || ""
+                            }
                             alt={app.userFullName}
                             className="stj-handover-card__avatar"
                           />
                         ) : (
                           <div className="stj-handover-card__avatar stj-handover-card__avatar--fallback">
                             {app.userFullName
-                              ? app.userFullName.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
-                              : '??'}
+                              ? app.userFullName
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")
+                                  .slice(0, 2)
+                                  .toUpperCase()
+                              : "??"}
                           </div>
                         )}
                         <div>
-                          <strong>{getApplicantDisplayName(app.userFullName, app.userEmail)}</strong>
-                          <span>{app.userProfessionalTitle || 'Ứng viên'}</span>
+                          <strong>
+                            {getApplicantDisplayName(
+                              app.userFullName,
+                              app.userEmail,
+                            )}
+                          </strong>
+                          <span>{app.userProfessionalTitle || "Ứng viên"}</span>
                         </div>
                       </div>
                       <span
@@ -577,51 +711,57 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
         )}
 
         {/* Handover Tab */}
-        {activeTab === 'handover' && (
+        {activeTab === "handover" && (
           <ShortTermJobHandoverBoard
             job={job}
             applications={applications}
             onRefresh={handleRefresh}
+            onJobUpdate={(updated) => setJob(updated)}
           />
         )}
 
         {/* Milestone Tab */}
-        {activeTab === 'milestone' && job.milestones && job.milestones.length > 0 && (
-          <div className="stj-fullpage__milestones">
-            {job.milestones.map((ms, idx) => (
-              <div key={ms.id} className="stj-fullpage__milestone-card">
-                <div className="stj-fullpage__milestone-header">
-                  <div className="stj-fullpage__milestone-num">
-                    {idx + 1}
+        {activeTab === "milestone" &&
+          job.milestones &&
+          job.milestones.length > 0 && (
+            <div className="stj-fullpage__milestones">
+              {job.milestones.map((ms, idx) => (
+                <div key={ms.id} className="stj-fullpage__milestone-card">
+                  <div className="stj-fullpage__milestone-header">
+                    <div className="stj-fullpage__milestone-num">{idx + 1}</div>
+                    <div>
+                      <strong>{ms.title}</strong>
+                      <span
+                        style={{
+                          color: STATUS_COLORS[ms.status] || "#64748b",
+                          fontSize: "0.78rem",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {STATUS_LABELS[ms.status] || ms.status}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <strong>{ms.title}</strong>
-                    <span
-                      style={{
-                        color: STATUS_COLORS[ms.status] || '#64748b',
-                        fontSize: '0.78rem',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {STATUS_LABELS[ms.status] || ms.status}
-                    </span>
+                  <p>{ms.description}</p>
+                  <div className="stj-fullpage__milestone-footer">
+                    <span>{formatBudget(ms.amount)}</span>
+                    <span>Deadline: {formatDate(ms.deadline)}</span>
+                    {ms.completedAt && (
+                      <span>Hoàn thành: {formatDate(ms.completedAt)}</span>
+                    )}
                   </div>
                 </div>
-                <p>{ms.description}</p>
-                <div className="stj-fullpage__milestone-footer">
-                  <span>{formatBudget(ms.amount)}</span>
-                  <span>Deadline: {formatDate(ms.deadline)}</span>
-                  {ms.completedAt && <span>Hoàn thành: {formatDate(ms.completedAt)}</span>}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
       </div>
 
       {/* Accept Confirmation Modal */}
       {acceptModal && (
-        <div className="stj-modal-backdrop" onClick={() => setAcceptModal(null)}>
+        <div
+          className="stj-modal-backdrop"
+          onClick={() => setAcceptModal(null)}
+        >
           <div className="stj-modal" onClick={(e) => e.stopPropagation()}>
             <span className="stj-modal__eyebrow">Chấp nhận ứng viên</span>
             <h3>{acceptModal.userFullName}</h3>
@@ -630,7 +770,10 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
               Ứng viên sẽ nhận được thông báo và bắt đầu nhận việc.
             </p>
             <div className="stj-modal__actions">
-              <button className="stj-btn stj-btn--secondary" onClick={() => setAcceptModal(null)}>
+              <button
+                className="stj-btn stj-btn--secondary"
+                onClick={() => setAcceptModal(null)}
+              >
                 Huỷ
               </button>
               <button
@@ -638,7 +781,11 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
                 disabled={isActionBusy}
                 onClick={handleAcceptApplication}
               >
-                {isActionBusy ? <Loader2 size={13} className="stj-spin" /> : <CheckCircle2 size={13} />}
+                {isActionBusy ? (
+                  <Loader2 size={13} className="stj-spin" />
+                ) : (
+                  <CheckCircle2 size={13} />
+                )}
                 Xác nhận chọn
               </button>
             </div>
@@ -648,15 +795,22 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
 
       {/* Delete Confirmation Modal */}
       {confirmDelete && (
-        <div className="stj-modal-backdrop" onClick={() => setConfirmDelete(false)}>
+        <div
+          className="stj-modal-backdrop"
+          onClick={() => setConfirmDelete(false)}
+        >
           <div className="stj-modal" onClick={(e) => e.stopPropagation()}>
             <span className="stj-modal__eyebrow">Xác nhận xóa</span>
             <h3>Xóa job "{job.title}"?</h3>
             <p>
-              Hành động này không thể hoàn tác. Job sẽ bị xóa vĩnh viễn cùng với tất cả dữ liệu liên quan.
+              Hành động này không thể hoàn tác. Job sẽ bị xóa vĩnh viễn cùng với
+              tất cả dữ liệu liên quan.
             </p>
             <div className="stj-modal__actions">
-              <button className="stj-btn stj-btn--secondary" onClick={() => setConfirmDelete(false)}>
+              <button
+                className="stj-btn stj-btn--secondary"
+                onClick={() => setConfirmDelete(false)}
+              >
                 Huỷ
               </button>
               <button
@@ -664,13 +818,33 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
                 disabled={isActionBusy}
                 onClick={handleDeleteJob}
               >
-                {isActionBusy ? <Loader2 size={13} className="stj-spin" /> : <Trash2 size={13} />}
+                {isActionBusy ? (
+                  <Loader2 size={13} className="stj-spin" />
+                ) : (
+                  <Trash2 size={13} />
+                )}
                 Xóa vĩnh viễn
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Funding Modal */}
+      <FundingModal
+        visible={showFundingModal}
+        jobId={jobId}
+        jobTitle={job.title}
+        budget={job.budget}
+        walletBalance={walletBalance}
+        onClose={() => setShowFundingModal(false)}
+        onEscrowFunded={async () => {
+          setShowFundingModal(false);
+          await loadData();
+          showSuccess("Đã ký quỹ", "Tiền đã được ký quỹ thành công.");
+          window.dispatchEvent(new Event("wallet:updated"));
+        }}
+      />
     </div>
   );
 };

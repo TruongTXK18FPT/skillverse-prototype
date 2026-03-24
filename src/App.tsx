@@ -94,6 +94,7 @@ import QuizAttemptPage from "./pages/quiz/QuizAttemptPage";
 import ProfilePageCosmic from "./pages/profile/ProfilePageCosmic";
 import MentorProfilePage from "./pages/mentor/MentorProfilePage";
 import RecruiterProfilePage from "./pages/business/RecruiterProfilePage";
+import RecruiterPublicProfilePage from "./pages/business/RecruiterPublicProfilePage";
 import ProfileRouter from "./components/shared/ProfileRouter";
 import JobLabPage from "./pages/user/JobLabPage";
 import ExploreMapPage from "./pages/ExploreMapPage";
@@ -110,6 +111,7 @@ import MeowlAdventure from "./components/game/meowl-adventure/MeowlAdventure";
 // import AdminSeminarManager from "./pages/main/AdminSeminarManager";
 // import RecruiterSeminarManager from "./pages/main/RecruiterSeminarManager";
 import ShortTermJobRoutes from "./routes/ShortTermJobRoutes";
+import FateDetailPage from "./components/jobs-odyssey/FateDetailPage";
 import MeowlSkinShopPage from "./pages/shop/MeowlSkinShopPage";
 import UserGuidePage from "./pages/user-guide/UserGuidePage";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
@@ -190,6 +192,7 @@ const AppContents = () => {
               element={<CommunityDashboardPage />}
             />
             <Route path="/jobs" element={<JobsPage />} />
+            <Route path="/jobs/:jobId" element={<FateDetailPage />} />
             <Route path="/chatbot" element={<CareerChatLanding />} />
             <Route path="/chatbot/general" element={<CareerChatPage />} />
             <Route path="/chatbot/expert" element={<ExpertChatPage />} />
@@ -261,6 +264,10 @@ const AppContents = () => {
               path="/profile/business"
               element={<RecruiterProfilePage />}
             />
+            <Route
+              path="/profile/business/:id"
+              element={<RecruiterPublicProfilePage />}
+            />
             <Route path="/payment/transactional" element={<Transactional />} />
             <Route path="/premium" element={<PremiumPageCosmic />} />
             <Route path="/manager" element={<ManagerPage />} />
@@ -291,6 +298,8 @@ const AppContents = () => {
             <Route path="/my-applications" element={<JobLabPage />} />
             {/* Job Lab - Career Hub (alias) */}
             <Route path="/job-lab" element={<JobLabPage />} />
+            {/* Short-term Job Routes */}
+            <Route path="/short-term-jobs/*" element={<ShortTermJobRoutes />} />
             {/* Violation Report Routes */}
             <Route path="/report-violation" element={<ReportUserPage />} />
             <Route path="/my-reports" element={<MyReportsPage />} />
@@ -510,6 +519,11 @@ const isMentorRoute = (pathname: string) => {
   return pathname === "/mentor" || pathname.startsWith("/mentor/");
 };
 
+// Check if path is job detail route
+const isJobDetailRoute = (pathname: string) => {
+  return /^\/jobs\/\d+$/.test(pathname) || /^\/short-term-jobs\/\d+\/view$/.test(pathname);
+};
+
 // Hide Header on specific routes
 const HeaderVisibilityWrapper = () => {
   const location = useLocation();
@@ -534,7 +548,8 @@ const FooterVisibilityWrapper = () => {
     isCertificateRoute(location.pathname) ||
     isAssignmentRoute(location.pathname) ||
     isQuizAttemptRoute(location.pathname) ||
-    isRoadmapDetailRoute(location.pathname)
+    isRoadmapDetailRoute(location.pathname) ||
+    isJobDetailRoute(location.pathname)
   ) {
     return null;
   }

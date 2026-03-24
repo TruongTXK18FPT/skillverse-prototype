@@ -348,17 +348,26 @@
 
 .oplog__workspace {
   display: grid;
-  grid-template-columns: minmax(320px, 0.88fr) minmax(360px, 1.12fr);
+  grid-template-columns: 1fr;
   gap: 1rem;
 }
 
 .oplog__list-panel,
 .oplog__detail-panel {
-  min-height: 640px;
   border-radius: 22px;
   border: 1px solid var(--line);
   background: var(--surface-strong);
   overflow: hidden;
+}
+
+.oplog__list-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.oplog__detail-panel {
+  min-height: 720px;
 }
 
 .oplog__panel-head,
@@ -400,11 +409,19 @@
   padding: 1rem;
 }
 
+.oplog__list-shell {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .oplog__list {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  max-height: 560px;
+  flex: 1;
+  max-height: 430px;
   overflow: auto;
 }
 
@@ -507,6 +524,15 @@
 .oplog__item > p {
   margin: 0.7rem 0 0.8rem;
   font-size: 0.84rem;
+}
+
+.oplog__item-markdown {
+  margin: 0.8rem 0 0.9rem;
+}
+
+.oplog__item-markdown.job-markdown {
+  --job-markdown-text: rgba(226, 232, 240, 0.84);
+  --job-markdown-soft: rgba(148, 163, 184, 0.72);
 }
 
 .oplog__item-meta {
@@ -619,7 +645,7 @@
 
 .oplog__metrics {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.8rem;
 }
 
@@ -645,14 +671,24 @@
 .oplog__cards,
 .oplog__form {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.85rem;
+}
+
+.oplog__cards {
+  grid-template-columns: 1fr;
+}
+
+.oplog__form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .oplog__card {
   position: relative;
   overflow: hidden;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
   border-radius: 20px;
   border: 1px solid var(--line);
   background: rgba(9, 17, 32, 0.82);
@@ -708,9 +744,40 @@
   gap: 0.6rem;
 }
 
+.oplog__section-split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  align-items: start;
+}
+
 .oplog__timeline {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 0.9rem;
+  margin-top: 0;
+}
+
+.oplog__markdown-panel {
+  padding: 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(34, 211, 238, 0.12);
+  background:
+    linear-gradient(180deg, rgba(6, 15, 28, 0.88), rgba(5, 11, 22, 0.96)),
+    radial-gradient(circle at top left, rgba(34, 211, 238, 0.08), transparent 38%);
+}
+
+.oplog__markdown.job-markdown {
+  --job-markdown-text: rgba(226, 232, 240, 0.92);
+  --job-markdown-strong: #f8fafc;
+  --job-markdown-soft: rgba(148, 163, 184, 0.78);
+  --job-markdown-muted: rgba(203, 213, 225, 0.76);
+}
+
+.oplog__markdown .job-markdown__figure {
+  margin-top: 0.95rem;
+}
+
+.oplog__info--horizontal {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .oplog__timeline div,
@@ -911,6 +978,7 @@
 
 .oplog-modal__icon--rose { background: rgba(251, 113, 133, 0.12); color: var(--rose); }
 .oplog-modal__icon--emerald { background: rgba(52, 211, 153, 0.12); color: var(--emerald); }
+.oplog-modal__icon--amber { background: rgba(251, 191, 36, 0.12); color: var(--amber); }
 
 .oplog-modal__body ul {
   margin: 0;
@@ -933,6 +1001,44 @@
 .oplog-modal__notice.is-free { background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.18); }
 .oplog-modal__notice.is-paid { background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.18); }
 
+.oplog-modal--validation {
+  width: min(640px, 100%);
+}
+
+.oplog-validation {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.oplog-validation__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.85rem 0.9rem;
+  border-radius: 16px;
+  border: 1px solid rgba(251, 191, 36, 0.14);
+  background: rgba(251, 191, 36, 0.06);
+}
+
+.oplog-validation__item span {
+  width: 1.9rem;
+  height: 1.9rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(251, 191, 36, 0.14);
+  color: var(--amber);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.oplog-validation__item p {
+  margin: 0;
+  color: #e2e8f0;
+  line-height: 1.65;
+}
+
 .oplog__check {
   display: inline-flex;
   align-items: center;
@@ -946,13 +1052,91 @@
   accent-color: var(--cyan);
 }
 
+.oplog__pagination {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.9rem 1rem 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
+  background: rgba(8, 16, 31, 0.72);
+}
+
+.oplog__pagination-btn,
+.oplog__pagination-page {
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(10, 18, 32, 0.82);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.oplog__pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.68rem 0.85rem;
+  font-weight: 700;
+}
+
+.oplog__pagination-page {
+  min-width: 2.4rem;
+  height: 2.4rem;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+
+.oplog__pagination-pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: center;
+}
+
+.oplog__pagination-page.is-active {
+  color: var(--cyan);
+  border-color: rgba(34, 211, 238, 0.32);
+  background: rgba(34, 211, 238, 0.1);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.06);
+}
+
+.oplog__pagination-btn:hover:not(:disabled),
+.oplog__pagination-page:hover {
+  transform: translateY(-1px);
+  border-color: rgba(34, 211, 238, 0.24);
+}
+
+.oplog__pagination-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.oplog__pagination-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.14rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.oplog__pagination-meta strong {
+  color: #fff;
+  font-size: 0.8rem;
+}
+
 @media (max-width: 980px) {
   .oplog__hero,
-  .oplog__workspace,
   .oplog__cards,
   .oplog__form,
   .oplog__metrics,
-  .oplog__timeline {
+  .oplog__timeline,
+  .oplog__section-split,
+  .oplog__info--horizontal,
+  .oplog__pagination {
     grid-template-columns: 1fr;
   }
 
@@ -967,6 +1151,14 @@
 
   .oplog__list {
     max-height: none;
+  }
+
+  .oplog__pagination-meta {
+    align-items: flex-start;
+  }
+
+  .oplog__pagination-pages {
+    justify-content: flex-start;
   }
 }
 

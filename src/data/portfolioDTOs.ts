@@ -292,14 +292,24 @@ export interface CandidateSearchResponse {
 export interface AICandidateMatchResponse {
   candidateId: number;
   jobId: number;
-  matchScore: number;
-  skillMatchPercent: number;
-  extractedSkills: string[];
-  fitExplanation: string;
+  fitSummary: string;
+  skillSignals: SkillSignal[];
   reasoning: string;
-  confidence: number;
-  generatedAt: string;
+  confidenceScore: number;
+  matchQuality: MatchQuality;
+  modelUsed?: string;
+  processingTimeMs?: number;
+  isFallback?: boolean;
 }
+
+export interface SkillSignal {
+  skill: string;
+  evidence: string;
+  isRequired: boolean;
+  relevanceScore: number;
+}
+
+export type MatchQuality = 'EXCELLENT' | 'GOOD' | 'FAIR' | 'POOR';
 
 // ==================== Recruitment Chat Types ====================
 

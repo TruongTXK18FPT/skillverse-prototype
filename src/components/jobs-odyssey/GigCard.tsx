@@ -1,53 +1,116 @@
+import type { KeyboardEvent } from "react";
 import {
-  Flame,
-  TrendingUp,
-  Clock,
-  MapPin,
   ArrowRight,
-  Zap,
+  Clock,
+  Flame,
+  MapPin,
+  TrendingUp,
   Users,
+  Zap,
 } from "lucide-react";
 import { ShortTermJobResponse } from "../../types/ShortTermJob";
+import { JobMarkdownSurface } from "../shared/JobMarkdownSurface";
 
 interface GigCardProps {
   job: ShortTermJobResponse;
   onClick: () => void;
 }
 
+const getDescriptionPlainText = (value?: string | null) => {
+  if (!value) {
+    return "";
+  }
+
+  return value
+    .replace(/\r\n?/g, "\n")
+    .replace(/<img\b[^>]*>/gi, " [image] ")
+    .replace(/!\[[^\]]*]\([^)]+\)/g, " [image] ")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/[#>*_`~-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
 const GigCard = ({ job, onClick }: GigCardProps) => {
-  // Determine card rarity based on urgency  (mirrors FateCard's rarity approach)
   const getRarity = (): "emerald" | "amber" | "crimson" => {
-    if (job.urgency === "VERY_URGENT" || job.urgency === "ASAP")
+    if (job.urgency === "VERY_URGENT" || job.urgency === "ASAP") {
       return "crimson";
-    if (job.urgency === "URGENT") return "amber";
+    }
+    if (job.urgency === "URGENT") {
+      return "amber";
+    }
     return "emerald";
   };
 
   const rarity = getRarity();
+  const descriptionText = getDescriptionPlainText(job.description);
+  const showDescriptionHint =
+    Boolean(job.description?.trim()) &&
+    (descriptionText.length > 210 ||
+      /!\[[^\]]*]\([^)]+\)|<img\b|```|^\s*[-*]\s|^\s*\d+\.\s/m.test(
+        job.description ?? "",
+      ));
 
-  // Format budget
   const formatBudget = (amount: number) => {
     const formatter = new Intl.NumberFormat("vi-VN", {
       maximumFractionDigits: 0,
-      notation: "compact",
+      notation: amount >= 1_000_000 ? "compact" : "standard",
       compactDisplay: "short",
     });
     return formatter.format(amount);
   };
 
-  // Deadline countdown
+  const getPostedTime = () => {
+    if (!job.createdAt) {
+      return "Đang tuyển";
+    }
+
+    const createdAt = new Date(job.createdAt);
+    const now = new Date();
+    const diffMs = now.getTime() - createdAt.getTime();
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffHours < 1) {
+      return "Mới đăng";
+    }
+    if (diffHours < 24) {
+      return `${diffHours}h trước`;
+    }
+    if (diffDays < 7) {
+      return `${diffDays}d trước`;
+    }
+
+    return createdAt.toLocaleDateString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+    });
+  };
+
   const getDeadlineInfo = () => {
-    if (!job.deadline) return { text: "Không rõ", urgent: false };
+    if (!job.deadline) {
+      return { text: "Không rõ deadline", urgent: false };
+    }
+
     const now = new Date();
     const deadline = new Date(job.deadline);
     const diffMs = deadline.getTime() - now.getTime();
     const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
-    if (diffDays < 0) return { text: "Đã hết hạn", urgent: true };
-    if (diffDays === 0) return { text: "Hôm nay", urgent: true };
-    if (diffDays === 1) return { text: "Còn 1 ngày", urgent: true };
-    if (diffDays <= 3) return { text: `Còn ${diffDays} ngày`, urgent: true };
-    if (diffDays <= 7) return { text: `Còn ${diffDays} ngày`, urgent: false };
+    if (diffDays < 0) {
+      return { text: "Đã hết hạn", urgent: true };
+    }
+    if (diffDays === 0) {
+      return { text: "Hôm nay", urgent: true };
+    }
+    if (diffDays === 1) {
+      return { text: "Còn 1 ngày", urgent: true };
+    }
+    if (diffDays <= 7) {
+      return { text: `Còn ${diffDays} ngày`, urgent: diffDays <= 3 };
+    }
+
     return {
       text: deadline.toLocaleDateString("vi-VN", {
         day: "2-digit",
@@ -57,136 +120,159 @@ const GigCard = ({ job, onClick }: GigCardProps) => {
     };
   };
 
-  // Company initials for faction ring
   const getCompanyInitials = () => {
     const name =
-      job.recruiterInfo?.companyName || job.recruiterCompanyName || "XX";
+      job.recruiterInfo?.companyName || job.recruiterCompanyName || "SV";
+
     return name
       .split(" ")
-      .map((w) => w[0])
+      .map((part) => part[0])
       .join("")
       .toUpperCase()
       .slice(0, 2);
   };
 
-  const deadline = getDeadlineInfo();
-  const isUrgent = rarity === "crimson";
+  const budgetUnit =
+    job.paymentMethod === "HOURLY"
+      ? "/giờ"
+      : job.paymentMethod === "MILESTONE"
+        ? "/milestone"
+        : "/công việc";
 
-  const urgencyConfig: Record<
-    string,
-    { label: string; icon: React.ReactNode }
-  > = {
-    crimson: { label: "Rất gấp", icon: <Flame size={11} /> },
-    amber: { label: "Ưu tiên", icon: <TrendingUp size={11} /> },
-    emerald: { label: "Gig", icon: <Zap size={11} /> },
+  const urgencyConfig = {
+    crimson: { label: "Rất gấp", icon: <Flame size={12} /> },
+    amber: { label: "Ưu tiên", icon: <TrendingUp size={12} /> },
+    emerald: { label: "Ngắn hạn", icon: <Zap size={12} /> },
+  }[rarity];
+
+  const variantClass =
+    rarity === "crimson" ? "fate-card--crimson" : "fate-card--blue";
+  const deadline = getDeadlineInfo();
+  const postedTime = getPostedTime();
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onClick();
+    }
   };
-  const cfg = urgencyConfig[rarity];
 
   return (
-    <div className="odyssey-gig-wrapper" onClick={onClick}>
-      <div className={`odyssey-gig odyssey-gig--${rarity}`}>
-        {/* Badges */}
-        {isUrgent && (
-          <div className="odyssey-gig__badge odyssey-gig__badge--urgent">
-            {cfg.icon} {cfg.label}
+    <div
+      className={`fate-card ${variantClass} fate-card--gig fate-card--gig-${rarity}`}
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+    >
+      <div className="fate-card__top fate-card__top--gig">
+        <div className={`fate-card__gig-badge fate-card__gig-badge--${rarity}`}>
+          {urgencyConfig.icon}
+          <span>{urgencyConfig.label}</span>
+        </div>
+        <div className="fate-card__gig-meta-badge">
+          {job.isRemote ? "Remote" : postedTime}
+        </div>
+      </div>
+
+      <div className="fate-card__company">
+        <div className="fate-card__company-avatar fate-card__company-avatar--gig">
+          {getCompanyInitials()}
+        </div>
+        <div className="fate-card__company-stack">
+          <div className="fate-card__company-name">
+            {job.recruiterInfo?.companyName ||
+              job.recruiterCompanyName ||
+              "Công ty SkillVerse"}
           </div>
-        )}
-        {!isUrgent && job.isRemote && (
-          <div className="odyssey-gig__badge odyssey-gig__badge--remote">
-            Remote
-          </div>
-        )}
-
-        {/* Corner Indicators – same as FateCard */}
-        <div className="odyssey-gig__corner odyssey-gig__corner--tl" />
-        <div className="odyssey-gig__corner odyssey-gig__corner--br" />
-
-        {/* Content wrapper */}
-        <div className="odyssey-gig__content-wrapper">
-          {/* Faction (Company) */}
-          <div className="odyssey-gig__faction">
-            <div className="odyssey-gig__faction-ring">
-              {getCompanyInitials()}
-            </div>
-            <div className="odyssey-gig__company">
-              {job.recruiterInfo?.companyName ||
-                job.recruiterCompanyName ||
-                "Công ty"}
-            </div>
-            <span className="odyssey-gig__type-tag">
-              <Zap size={10} /> Ngắn hạn
-            </span>
-          </div>
-
-          {/* Title */}
-          <div className="odyssey-gig__content">
-            <h3 className="odyssey-gig__title">{job.title}</h3>
-
-            {/* Skills */}
-            {job.requiredSkills?.length > 0 && (
-              <div className="odyssey-gig__tags">
-                {job.requiredSkills.slice(0, 4).map((skill, i) => (
-                  <span key={i} className="odyssey-gig__tag">
-                    {skill}
-                  </span>
-                ))}
-                {job.requiredSkills.length > 4 && (
-                  <span className="odyssey-gig__tag">
-                    +{job.requiredSkills.length - 4}
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Bounty (Budget) */}
-          <div className="odyssey-gig__bounty">
-            <div className="odyssey-gig__bounty-label">Ngân sách</div>
-            <div className="odyssey-gig__bounty-amount">
-              {formatBudget(job.budget)} ₫
-              {job.isNegotiable && (
-                <span className="odyssey-gig__negotiable"> · TL</span>
-              )}
-            </div>
-          </div>
-
-          {/* Meta + Footer */}
-          <div className="odyssey-gig__footer">
-            <div className="odyssey-gig__meta">
-              <div className="odyssey-gig__meta-item">
-                <Clock size={13} className="odyssey-gig__meta-icon" />
-                {job.estimatedDuration || "N/A"}
-              </div>
-              <div className="odyssey-gig__meta-item">
-                <MapPin size={13} className="odyssey-gig__meta-icon" />
-                {job.isRemote ? "Remote" : job.location || "N/A"}
-              </div>
-              {job.maxApplicants && (
-                <div className="odyssey-gig__meta-item">
-                  <Users size={13} className="odyssey-gig__meta-icon" />
-                  {job.applicantCount || 0}/{job.maxApplicants}
-                </div>
-              )}
-              <div
-                className={`odyssey-gig__meta-item${deadline.urgent ? " odyssey-gig__meta-item--warn" : ""}`}
-              >
-                <Clock size={13} className="odyssey-gig__meta-icon" />
-                {deadline.text}
-              </div>
-            </div>
-
-            <button
-              className="odyssey-gig__btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                onClick();
-              }}
-            >
-              <span>Xem chi tiết</span>
-              <ArrowRight className="odyssey-gig__btn-icon" />
-            </button>
+          <div className="fate-card__company-subtitle">
+            <Zap size={11} />
+            <span>Gig ngắn hạn</span>
           </div>
         </div>
+      </div>
+
+      <h3 className="fate-card__title">{job.title}</h3>
+
+      <div className="fate-card__salary fate-card__salary--gig">
+        <span className="fate-card__salary-value">{formatBudget(job.budget)}</span>
+        <span className="fate-card__salary-unit">VND {budgetUnit}</span>
+        {job.isNegotiable && (
+          <span className="fate-card__gig-negotiable">Thương lượng</span>
+        )}
+      </div>
+
+      {job.requiredSkills?.length > 0 && (
+        <div className="fate-card__skills">
+          {job.requiredSkills.slice(0, 3).map((skill, index) => (
+            <span key={index} className="fate-card__skill">
+              {skill}
+            </span>
+          ))}
+          {job.requiredSkills.length > 3 && (
+            <span className="fate-card__skill fate-card__skill--more">
+              +{job.requiredSkills.length - 3}
+            </span>
+          )}
+        </div>
+      )}
+
+      {job.description?.trim() && (
+        <div className="fate-card__description fate-card__description--gig">
+          <JobMarkdownSurface
+            content={job.description}
+            className="fate-card__gig-markdown"
+            density="card"
+            theme={rarity}
+            maxHeight={160}
+          />
+          {showDescriptionHint && (
+            <div className="fate-card__detail-hint">
+              <span className="fate-card__detail-hint-title">Mô tả dài</span>
+              <span className="fate-card__detail-hint-text">
+                Nhấn để xem chi tiết đầy đủ
+              </span>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="fate-card__meta fate-card__meta--gig">
+        <div className="fate-card__meta-item">
+          <MapPin size={13} />
+          <span>{job.isRemote ? "Remote" : job.location || "Việt Nam"}</span>
+        </div>
+        <div className="fate-card__meta-item">
+          <Clock size={13} />
+          <span>{job.estimatedDuration || "Thỏa thuận thời gian"}</span>
+        </div>
+        <div
+          className={`fate-card__meta-item${deadline.urgent ? " fate-card__meta-item--warn" : ""}`}
+        >
+          <Clock size={13} />
+          <span>{deadline.text}</span>
+        </div>
+        {job.maxApplicants ? (
+          <div className="fate-card__meta-item">
+            <Users size={13} />
+            <span>
+              {job.applicantCount || 0}/{job.maxApplicants} ứng viên
+            </span>
+          </div>
+        ) : (
+          <div className="fate-card__meta-item">
+            <Users size={13} />
+            <span>{job.applicantCount || 0} ứng viên</span>
+          </div>
+        )}
+      </div>
+
+      <div className="fate-card__cta fate-card__cta--gig">
+        <span className="fate-card__cta-copy">
+          <strong>Xem chi tiết</strong>
+          <span>Mở brief công việc</span>
+        </span>
+        <ArrowRight size={16} />
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { MapPin, Clock, Users, ArrowRight, Sparkles, Crown, Eye, MousePointer, Zap } from 'lucide-react';
+import { MapPin, Clock, Users, ArrowRight, Crown, Eye, MousePointer, Zap } from 'lucide-react';
 import { JobPostingResponse, JobBoostResponse, JobBoostStatus } from '../../data/jobDTOs';
 import jobBoostService from '../../services/jobBoostService';
+import { JobMarkdownSurface } from '../shared/JobMarkdownSurface';
 
 interface FateCardProps {
   job: JobPostingResponse;
@@ -31,19 +32,6 @@ const FateCard: React.FC<FateCardProps> = ({ job, onClick, showBoostBadge = true
   const isPremium = boost?.status === JobBoostStatus.ACTIVE;
   const avgSalary = (job.minBudget + job.maxBudget) / 2;
   const isHighSalary = !isPremium && avgSalary > 5000000;
-
-  // Format budget
-  const formatBudget = () => {
-    const formatter = new Intl.NumberFormat('vi-VN', {
-      maximumFractionDigits: 0,
-      notation: 'compact',
-      compactDisplay: 'short'
-    });
-    if (job.minBudget === job.maxBudget) {
-      return formatter.format(job.minBudget);
-    }
-    return `${formatter.format(job.minBudget)} - ${formatter.format(job.maxBudget)}`;
-  };
 
   // Format salary range for display
   const formatSalaryRange = () => {
@@ -149,6 +137,17 @@ const FateCard: React.FC<FateCardProps> = ({ job, onClick, showBoostBadge = true
               +{job.requiredSkills.length - 3}
             </span>
           )}
+        </div>
+      )}
+
+      {job.description?.trim() && (
+        <div className="fate-card__description">
+          <JobMarkdownSurface
+            content={job.description}
+            density="card"
+            theme={isPremium ? "gold" : isHighSalary ? "crimson" : "cyan"}
+            maxHeight={170}
+          />
         </div>
       )}
 

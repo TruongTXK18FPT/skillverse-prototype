@@ -142,6 +142,41 @@ class JobService {
   }
 
   /**
+   * Get public jobs (status = OPEN) with pagination
+   * @public No authentication required
+   */
+  async getPublicJobsPaged(
+    page: number = 0,
+    size: number = 10,
+  ): Promise<{
+    content: JobPostingResponse[];
+    totalPages: number;
+    totalElements: number;
+  }> {
+    try {
+      const params = new URLSearchParams();
+      params.append('page', page.toString());
+      params.append('size', size.toString());
+
+      const response = await axiosInstance.get<{
+        content: JobPostingResponse[];
+        totalPages: number;
+        totalElements: number;
+        number: number;
+        size: number;
+      }>(`/api/jobs/public/paged?${params.toString()}`);
+
+      return {
+        content: response.data.content,
+        totalPages: response.data.totalPages,
+        totalElements: response.data.totalElements,
+      };
+    } catch (error) {
+      this.handleError(error, 'Failed to fetch public jobs');
+    }
+  }
+
+  /**
    * Get job details by ID
    * @public No authentication required
    */

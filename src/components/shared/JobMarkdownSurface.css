@@ -1,0 +1,374 @@
+.job-markdown {
+  position: relative;
+  width: 100%;
+  color: var(--job-markdown-text, rgba(227, 236, 248, 0.84));
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  --job-markdown-strong: #f7fbff;
+  --job-markdown-text: rgba(227, 236, 248, 0.84);
+  --job-markdown-muted: rgba(188, 204, 225, 0.72);
+  --job-markdown-soft: rgba(188, 204, 225, 0.48);
+  --job-markdown-accent: #70d1c2;
+  --job-markdown-border: rgba(112, 209, 194, 0.22);
+  --job-markdown-quote-bg: rgba(112, 209, 194, 0.08);
+  --job-markdown-code-bg: rgba(4, 10, 24, 0.72);
+  --job-markdown-fade: linear-gradient(
+    180deg,
+    rgba(7, 16, 38, 0),
+    rgba(7, 16, 38, 0.92) 72%,
+    rgba(7, 16, 38, 1)
+  );
+}
+
+.job-markdown--editor {
+  font-size: 0.92rem;
+  line-height: 1.8;
+}
+
+.job-markdown--preview {
+  font-size: 0.9rem;
+  line-height: 1.72;
+}
+
+.job-markdown--detail {
+  font-size: 0.95rem;
+  line-height: 1.78;
+}
+
+.job-markdown--card {
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+.job-markdown--teal {
+  --job-markdown-accent: #70d1c2;
+  --job-markdown-border: rgba(112, 209, 194, 0.22);
+  --job-markdown-quote-bg: rgba(112, 209, 194, 0.08);
+  --job-markdown-fade: linear-gradient(
+    180deg,
+    rgba(7, 16, 38, 0),
+    rgba(7, 16, 38, 0.92) 72%,
+    rgba(7, 16, 38, 1)
+  );
+}
+
+.job-markdown--gold {
+  --job-markdown-accent: #f7c66c;
+  --job-markdown-border: rgba(247, 198, 108, 0.22);
+  --job-markdown-quote-bg: rgba(247, 198, 108, 0.08);
+  --job-markdown-fade: linear-gradient(
+    180deg,
+    rgba(7, 16, 38, 0),
+    rgba(7, 16, 38, 0.92) 72%,
+    rgba(7, 16, 38, 1)
+  );
+}
+
+.job-markdown--cyan {
+  --job-markdown-accent: #22d3ee;
+  --job-markdown-border: rgba(34, 211, 238, 0.22);
+  --job-markdown-quote-bg: rgba(34, 211, 238, 0.08);
+  --job-markdown-fade: linear-gradient(
+    180deg,
+    rgba(15, 15, 35, 0),
+    rgba(15, 15, 35, 0.94) 72%,
+    rgba(15, 15, 35, 1)
+  );
+}
+
+.job-markdown--emerald {
+  --job-markdown-accent: #6ee7b7;
+  --job-markdown-border: rgba(110, 231, 183, 0.22);
+  --job-markdown-quote-bg: rgba(16, 185, 129, 0.1);
+  --job-markdown-fade: linear-gradient(
+    180deg,
+    rgba(8, 3, 20, 0),
+    rgba(8, 3, 20, 0.94) 72%,
+    rgba(8, 3, 20, 1)
+  );
+}
+
+.job-markdown--amber {
+  --job-markdown-accent: #fbbf24;
+  --job-markdown-border: rgba(251, 191, 36, 0.24);
+  --job-markdown-quote-bg: rgba(245, 158, 11, 0.12);
+  --job-markdown-fade: linear-gradient(
+    180deg,
+    rgba(8, 3, 20, 0),
+    rgba(8, 3, 20, 0.94) 72%,
+    rgba(8, 3, 20, 1)
+  );
+}
+
+.job-markdown--crimson {
+  --job-markdown-accent: #fb7185;
+  --job-markdown-border: rgba(251, 113, 133, 0.22);
+  --job-markdown-quote-bg: rgba(190, 18, 60, 0.14);
+  --job-markdown-fade: linear-gradient(
+    180deg,
+    rgba(15, 15, 35, 0),
+    rgba(15, 15, 35, 0.95) 72%,
+    rgba(15, 15, 35, 1)
+  );
+}
+
+.job-markdown--clamped {
+  max-height: var(--job-markdown-max-height, 220px);
+  overflow: hidden;
+  padding-bottom: 1.15rem;
+}
+
+.job-markdown--clamped::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60px;
+  background: var(--job-markdown-fade);
+  pointer-events: none;
+}
+
+.job-markdown > :first-child {
+  margin-top: 0;
+}
+
+.job-markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.job-markdown__h1,
+.job-markdown__h2,
+.job-markdown__h3,
+.job-markdown__h4,
+.job-markdown__h5,
+.job-markdown__h6 {
+  margin: 1rem 0 0.55rem;
+  color: var(--job-markdown-strong);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.job-markdown__h1 {
+  font-size: 1.18em;
+  color: var(--job-markdown-accent);
+}
+
+.job-markdown__h2 {
+  font-size: 1.08em;
+  color: var(--job-markdown-accent);
+}
+
+.job-markdown__h3 {
+  font-size: 1em;
+}
+
+.job-markdown__h4,
+.job-markdown__h5,
+.job-markdown__h6 {
+  font-size: 0.94em;
+}
+
+.job-markdown__p {
+  margin: 0 0 0.72rem;
+  color: var(--job-markdown-text);
+}
+
+.job-markdown__strong {
+  color: var(--job-markdown-strong);
+}
+
+.job-markdown__em,
+.job-markdown__del {
+  color: inherit;
+}
+
+.job-markdown__ul,
+.job-markdown__ol {
+  margin: 0 0 0.82rem;
+  padding-left: 1.2rem;
+}
+
+.job-markdown__li {
+  margin-bottom: 0.32rem;
+  color: var(--job-markdown-text);
+}
+
+.job-markdown__blockquote {
+  margin: 0.9rem 0;
+  padding: 0.8rem 0.95rem;
+  border-left: 3px solid var(--job-markdown-accent);
+  border-radius: 0 14px 14px 0;
+  background: var(--job-markdown-quote-bg);
+  color: var(--job-markdown-muted);
+}
+
+.job-markdown__code-inline {
+  padding: 0.12rem 0.42rem;
+  border: 1px solid var(--job-markdown-border);
+  border-radius: 7px;
+  background: rgba(4, 10, 24, 0.6);
+  color: var(--job-markdown-accent);
+  font-size: 0.92em;
+}
+
+.job-markdown__pre {
+  margin: 0.9rem 0;
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--job-markdown-border);
+  border-radius: 14px;
+  background: var(--job-markdown-code-bg);
+  overflow-x: auto;
+}
+
+.job-markdown__code-block {
+  font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+  color: #ebf4ff;
+  font-size: 0.86em;
+  line-height: 1.7;
+  white-space: pre;
+}
+
+.job-markdown__table-wrap {
+  margin: 0.9rem 0;
+  overflow-x: auto;
+}
+
+.job-markdown__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92em;
+}
+
+.job-markdown__th {
+  padding: 0.58rem 0.72rem;
+  border: 1px solid var(--job-markdown-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--job-markdown-accent);
+  text-align: left;
+}
+
+.job-markdown__td {
+  padding: 0.52rem 0.72rem;
+  border: 1px solid rgba(140, 156, 180, 0.16);
+}
+
+.job-markdown__figure {
+  margin: 0.95rem 0;
+}
+
+.job-markdown__img {
+  display: block;
+  width: 100%;
+  max-height: 170px;
+  object-fit: cover;
+  border: 1px solid var(--job-markdown-border);
+  border-radius: 14px;
+  background: rgba(4, 10, 24, 0.9);
+  box-shadow:
+    0 18px 32px rgba(2, 6, 23, 0.24),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.job-markdown--card .job-markdown__h1,
+.job-markdown--card .job-markdown__h2,
+.job-markdown--card .job-markdown__h3,
+.job-markdown--card .job-markdown__h4,
+.job-markdown--card .job-markdown__h5,
+.job-markdown--card .job-markdown__h6 {
+  margin-top: 0.72rem;
+}
+
+.job-markdown--card .job-markdown__p,
+.job-markdown--card .job-markdown__ul,
+.job-markdown--card .job-markdown__ol,
+.job-markdown--card .job-markdown__blockquote,
+.job-markdown--card .job-markdown__pre,
+.job-markdown--card .job-markdown__table-wrap,
+.job-markdown--card .job-markdown__figure {
+  margin-bottom: 0.62rem;
+}
+
+.job-markdown--card .job-markdown__img {
+  max-height: 112px;
+}
+
+.job-markdown--preview .job-markdown__img {
+  max-height: 210px;
+  object-fit: contain;
+}
+
+.job-markdown--editor .job-markdown__img {
+  max-height: 320px;
+  object-fit: contain;
+}
+
+.job-markdown--detail .job-markdown__h1,
+.job-markdown--detail .job-markdown__h2 {
+  letter-spacing: 0.01em;
+}
+
+.job-markdown--detail .job-markdown__p,
+.job-markdown--detail .job-markdown__ul,
+.job-markdown--detail .job-markdown__ol {
+  color: rgba(235, 244, 255, 0.88);
+}
+
+.job-markdown--detail .job-markdown__img {
+  max-height: 420px;
+  object-fit: contain;
+  background: rgba(3, 8, 20, 0.96);
+}
+
+.job-markdown--detail .job-markdown__figure {
+  margin: 1.15rem 0;
+}
+
+.job-markdown--detail .job-markdown__pre {
+  padding: 1rem 1.05rem;
+}
+
+.job-markdown__caption {
+  margin-top: 0.42rem;
+  color: var(--job-markdown-soft);
+  font-size: 0.82em;
+  text-align: center;
+}
+
+.job-markdown__checkbox {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.38rem;
+  color: var(--job-markdown-soft);
+  font-size: 0.86em;
+}
+
+.job-markdown__checkbox--checked {
+  color: var(--job-markdown-accent);
+}
+
+.job-markdown__link {
+  color: var(--job-markdown-accent);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.job-markdown__link:hover {
+  color: var(--job-markdown-strong);
+  border-bottom-color: var(--job-markdown-accent);
+}
+
+.job-markdown__hr {
+  margin: 1rem 0;
+  border: none;
+  border-top: 1px solid var(--job-markdown-border);
+}
+
+.job-markdown__empty {
+  margin: 0;
+  color: var(--job-markdown-soft);
+  font-style: italic;
+}

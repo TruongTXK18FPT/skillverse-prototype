@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CheckCircle2,
   Clock3,
@@ -10,15 +11,12 @@ import {
   Sparkles,
   XCircle,
 } from "lucide-react";
-import { useAuth } from "../../context/AuthContext";
 import {
   JobApplicationResponse,
   JobApplicationStatus,
 } from "../../data/jobDTOs";
-import { RecruitmentSessionResponse } from "../../data/portfolioDTOs";
 import { useToast } from "../../hooks/useToast";
 import jobService from "../../services/jobService";
-import recruitmentChatService from "../../services/recruitmentChatService";
 import {
   getApplicantDisplayName,
   getApplicantInitials,
@@ -26,7 +24,6 @@ import {
   getPortfolioPath,
   resolveRecruitmentAssetUrl,
 } from "../../utils/recruitmentUi";
-import RecruiterChatWindow from "../chat/RecruiterChatWindow";
 import "./ApplicantsModal-fleet.css";
 
 interface ApplicantsModalProps {
@@ -77,7 +74,7 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
   onChanged,
   refreshTrigger,
 }) => {
-  const { user } = useAuth();
+  const navigate = useNavigate();
   const { showError, showSuccess, showInfo } = useToast();
   const [applications, setApplications] = useState<JobApplicationResponse[]>(
     [],
@@ -93,11 +90,6 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
     status: DecisionStatus;
   } | null>(null);
   const [decisionNote, setDecisionNote] = useState("");
-  const [selectedSession, setSelectedSession] =
-    useState<RecruitmentSessionResponse | null>(null);
-  const [activeApplicant, setActiveApplicant] =
-    useState<JobApplicationResponse | null>(null);
-  const [isChatLoading, setIsChatLoading] = useState(false);
 
   useEffect(() => {
     fetchApplicants(page);
@@ -179,22 +171,21 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
 
   const handleOpenChat = async (application: JobApplicationResponse) => {
     try {
-      setIsChatLoading(true);
+      // Get or create a recruitment session for this applicant, then navigate to messenger
+      const { default: recruitmentChatService } = await import("../../services/recruitmentChatService");
       const session = await recruitmentChatService.getOrCreateSession(
         application.userId,
         jobId,
         "MANUAL",
       );
-      setActiveApplicant(application);
-      setSelectedSession(session);
+      navigate(`/messenger?sessionId=${session.id}`);
+      onClose();
     } catch (error) {
       console.error("Error opening recruiter chat:", error);
       showError(
         "Không thể mở chat",
         error instanceof Error ? error.message : "Vui lòng thử lại sau.",
       );
-    } finally {
-      setIsChatLoading(false);
     }
   };
 
@@ -246,8 +237,6 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
       clearBusy(applicationId);
     }
   };
-
-  const currentUserName = user?.fullName || user?.email || "Recruiter";
 
   return (
     <>
@@ -477,14 +466,9 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
                           className="am-btn-icon am-btn-chat"
                           title="Chat theo job"
                           onClick={() => handleOpenChat(application)}
-                          disabled={isChatLoading}
                           type="button"
                         >
-                          {isChatLoading ? (
-                            <Loader2 size={14} className="am-spin" />
-                          ) : (
-                            <MessageSquare size={14} />
-                          )}
+                          <MessageSquare size={14} />
                         </button>
 
                         <span className="am-btn-sep" />
@@ -643,34 +627,6 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
         </div>
       )}
 
-      {selectedSession && (
-        <div
-          className="am-chat-overlay"
-          onClick={() => setSelectedSession(null)}
-        >
-          <div
-            className="am-chat-shell"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <RecruiterChatWindow
-              session={selectedSession}
-              currentUserId={user?.id || 0}
-              currentUserName={currentUserName}
-              onBack={() => setSelectedSession(null)}
-              onViewProfile={() =>
-                activeApplicant && handleOpenPortfolio(activeApplicant)
-              }
-              onUpdateStatus={(sessionId, status) => {
-                setSelectedSession((current) =>
-                  current && current.id === sessionId
-                    ? { ...current, status }
-                    : current,
-                );
-              }}
-            />
-          </div>
-        </div>
-      )}
     </>
   );
 };

@@ -67,6 +67,7 @@ import { useAuth } from "../../context/AuthContext";
 import recruitmentChatService from "../../services/recruitmentChatService";
 import { RecruitmentJobContextType, RecruitmentSessionResponse } from "../../data/portfolioDTOs";
 import RecruiterChatWindow from "../../components/chat/RecruiterChatWindow";
+import MarkdownRenderer from "../../components/learning-report/MarkdownRenderer";
 import {
   getApplicantDisplayName,
   getApplicantInitials,
@@ -666,7 +667,7 @@ const ShortTermJobDetailPage: React.FC = () => {
                       <Heading size="md">Mô tả công việc</Heading>
                     </Card.Header>
                     <Card.Body pt={0}>
-                      <Text whiteSpace="pre-wrap">{job.description}</Text>
+                      <MarkdownRenderer content={job.description || ""} />
                     </Card.Body>
                   </Card.Root>
 

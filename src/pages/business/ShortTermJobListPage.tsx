@@ -134,6 +134,11 @@ const STATUS_META: Record<
     color: "#6b7280",
     bg: "rgba(107,114,128,0.15)",
   },
+  [ShortTermJobStatus.CLOSED]: {
+    label: "Đã đóng",
+    color: "#9ca3af",
+    bg: "rgba(156,163,175,0.15)",
+  },
   [ShortTermJobStatus.DISPUTED]: {
     label: "Tranh chấp",
     color: "#fb923c",
@@ -386,11 +391,11 @@ const MyJobCard: React.FC<MyJobCardProps> = ({
           )}
         </span>
       </div>
-      {job.applicationDeadline && (
+      {job.deadline && (
         <div className="jlab-myjob-card__deadline">
           <FiClock size={11} />
           Hạn nộp:{" "}
-          {new Date(job.applicationDeadline).toLocaleDateString("vi-VN")}
+          {new Date(job.deadline).toLocaleDateString("vi-VN")}
         </div>
       )}
       <div className="jlab-myjob-card__skills">

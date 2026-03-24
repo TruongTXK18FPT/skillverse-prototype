@@ -1,11 +1,20 @@
-import { useState, useEffect } from 'react';
-import { Zap, Clock, X, AlertCircle, CheckCircle, Crown, Sparkles } from 'lucide-react';
-import jobBoostService from '../../services/jobBoostService';
-import recruiterSubscriptionService, { RecruiterSubscriptionInfoResponse } from '../../services/recruiterSubscriptionService';
-import { JobBoostStatus, JobBoostResponse } from '../../data/jobDTOs';
-import { useToast } from '../../hooks/useToast';
-import { confirmAction } from '../../context/ConfirmDialogContext';
-import './JobBoostButton.css';
+import { useEffect, useState } from "react";
+import {
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Crown,
+  Sparkles,
+  X,
+  Zap,
+} from "lucide-react";
+import { JobBoostResponse, JobBoostStatus } from "../../data/jobDTOs";
+import { useToast } from "../../hooks/useToast";
+import jobBoostService from "../../services/jobBoostService";
+import recruiterSubscriptionService, {
+  RecruiterSubscriptionInfoResponse,
+} from "../../services/recruiterSubscriptionService";
+import "./JobBoostButton.css";
 
 interface JobBoostButtonProps {
   jobId: number;
@@ -14,70 +23,117 @@ interface JobBoostButtonProps {
   onBoostCancelled?: (boostId: number) => void;
 }
 
+const MIN_BOOST_DAYS = 7;
+const MAX_BOOST_DAYS = 30;
+
+const clampDuration = (value: number) =>
+  Math.min(MAX_BOOST_DAYS, Math.max(MIN_BOOST_DAYS, value));
+
 const JobBoostButton: React.FC<JobBoostButtonProps> = ({
   jobId,
   jobTitle,
   onBoostCreated,
-  onBoostCancelled
+  onBoostCancelled,
 }) => {
-  const { showSuccess, showError, showWarning } = useToast();
+  const { showError, showSuccess, showWarning } = useToast();
 
-  const [subscription, setSubscription] = useState<RecruiterSubscriptionInfoResponse | null>(null);
+  const [subscription, setSubscription] =
+    useState<RecruiterSubscriptionInfoResponse | null>(null);
   const [boost, setBoost] = useState<JobBoostResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [selectedDays, setSelectedDays] = useState<number>(7);
-  const [showExtendModal, setShowExtendModal] = useState(false);
+  const [selectedDays, setSelectedDays] = useState<number>(MIN_BOOST_DAYS);
 
   useEffect(() => {
-    loadData();
+    void loadData();
   }, [jobId]);
 
   const loadData = async () => {
     setIsLoading(true);
     try {
-      const [subData, boostData] = await Promise.all([
+      const [subscriptionInfo, boostInfo] = await Promise.all([
         recruiterSubscriptionService.getSubscriptionInfo(),
-        jobBoostService.getBoostByJob(jobId)
+        jobBoostService.getBoostByJob(jobId),
       ]);
-      setSubscription(subData);
-      setBoost(boostData);
+      setSubscription(subscriptionInfo);
+      setBoost(boostInfo);
     } catch (error) {
-      console.error('Error loading boost data:', error);
+      console.error("Error loading boost data:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleCreateBoost = async () => {
+  const handleCreateBoost = () => {
     if (!subscription?.canHighlightJobs) {
-      showWarning('Cần Premium', 'Bạn cần đăng ký gói Premium để sử dụng tính năng này');
+      showWarning(
+        "Cần Premium",
+        "Bạn cần gói Premium để sử dụng tính năng boost job.",
+      );
       return;
     }
 
-    if (subscription.jobBoostRemaining <= 0) {
-      showWarning('Hết Quota', 'Bạn đã sử dụng hết quota boost job. Vui lòng nâng cấp gói Premium');
+    if (boost) {
+      showWarning(
+        "Đã dùng lượt boost",
+        "Mỗi job chỉ được boost một lần trong suốt vòng đời.",
+      );
       return;
     }
 
+    if ((subscription.jobBoostRemaining ?? 0) <= 0) {
+      showWarning(
+        "Hết quota",
+        "Bạn đã dùng hết quota boost job trong kỳ hiện tại.",
+      );
+      return;
+    }
+
+    setSelectedDays(MIN_BOOST_DAYS);
     setShowConfirmModal(true);
   };
 
   const confirmCreateBoost = async () => {
+    const durationDays = clampDuration(selectedDays);
+
+    if (durationDays !== selectedDays) {
+      setSelectedDays(durationDays);
+      showWarning(
+        "Thời lượng chưa hợp lệ",
+        "Boost job chỉ hỗ trợ trong khoảng 7 đến 30 ngày.",
+      );
+      return;
+    }
+
+    if (boost) {
+      showWarning(
+        "Đã dùng lượt boost",
+        "Job này đã dùng lượt boost trước đó nên không thể tạo lại.",
+      );
+      setShowConfirmModal(false);
+      return;
+    }
+
     setIsActionLoading(true);
     try {
-      const newBoost = await jobBoostService.createBoost({
+      const createdBoost = await jobBoostService.createBoost({
         jobId,
-        durationDays: selectedDays
+        durationDays,
       });
-      setBoost(newBoost);
-      showSuccess('Boost Thành Công', `Job "${jobTitle}" đã được đẩy lên top!`);
+      setBoost(createdBoost);
+      showSuccess(
+        "Boost thành công",
+        `Job "${jobTitle}" đã được đưa vào diện ưu tiên hiển thị.`,
+      );
       setShowConfirmModal(false);
-      onBoostCreated?.(newBoost);
-      loadData(); // Refresh quota
+      await loadData();
+      onBoostCreated?.(createdBoost);
     } catch (error: any) {
-      showError('Lỗi Boost', error.message || 'Không thể tạo boost. Vui lòng thử lại');
+      showError(
+        "Không thể boost job",
+        error.message || "Vui lòng thử lại sau.",
+      );
     } finally {
       setIsActionLoading(false);
     }
@@ -86,37 +142,43 @@ const JobBoostButton: React.FC<JobBoostButtonProps> = ({
   const handleCancelBoost = async () => {
     if (!boost) return;
 
-    const confirmCancel = await confirmAction('Bạn có chắc muốn hủy boost? Quota sẽ không được hoàn lại.');
+    const confirmCancel = window.confirm(
+      "Bạn có chắc muốn hủy boost? Lượt quota đã dùng sẽ không được hoàn lại.",
+    );
     if (!confirmCancel) return;
 
     setIsActionLoading(true);
     try {
-      await jobBoostService.cancelBoost(boost.id);
-      setBoost(null);
-      showSuccess('Đã Hủy Boost', 'Boost job đã được hủy thành công');
+      const cancelledBoost = await jobBoostService.cancelBoost(boost.id);
+      setBoost(cancelledBoost);
+      showSuccess(
+        "Đã hủy boost",
+        "Boost đã được hủy. Quota đã dùng sẽ không được hoàn lại.",
+      );
+      await loadData();
       onBoostCancelled?.(boost.id);
-      loadData(); // Refresh quota
     } catch (error: any) {
-      showError('Lỗi', error.message || 'Không thể hủy boost');
+      showError(
+        "Không thể hủy boost",
+        error.message || "Vui lòng thử lại sau.",
+      );
     } finally {
       setIsActionLoading(false);
     }
   };
 
-  const handleExtendBoost = async () => {
-    if (!boost) return;
+  const formatDate = (dateStr: string) =>
+    new Date(dateStr).toLocaleDateString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
 
-    setIsActionLoading(true);
-    try {
-      const extended = await jobBoostService.extendBoost(boost.id, selectedDays);
-      setBoost(extended);
-      showSuccess('Gia Hạn Thành Công', 'Thời gian boost đã được gia hạn');
-      setShowExtendModal(false);
-    } catch (error: any) {
-      showError('Lỗi', error.message || 'Không thể gia hạn boost');
-    } finally {
-      setIsActionLoading(false);
-    }
+  const getDaysRemaining = () => {
+    if (!boost) return 0;
+    const endDate = new Date(boost.endDate);
+    const diff = endDate.getTime() - Date.now();
+    return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   };
 
   const getBoostStatusBadge = () => {
@@ -124,52 +186,41 @@ const JobBoostButton: React.FC<JobBoostButtonProps> = ({
 
     const statusConfig = {
       [JobBoostStatus.ACTIVE]: {
-        class: 'jb-badge--active',
+        className: "jb-badge--active",
         icon: <Sparkles size={12} />,
-        text: 'Đang hoạt động'
+        text: "Đang hoạt động",
       },
       [JobBoostStatus.SCHEDULED]: {
-        class: 'jb-badge--scheduled',
+        className: "jb-badge--scheduled",
         icon: <Clock size={12} />,
-        text: 'Đã lên lịch'
+        text: "Đã lên lịch",
       },
       [JobBoostStatus.EXPIRED]: {
-        class: 'jb-badge--expired',
+        className: "jb-badge--expired",
         icon: <AlertCircle size={12} />,
-        text: 'Đã hết hạn'
+        text: "Đã hết hạn",
       },
       [JobBoostStatus.CANCELLED]: {
-        class: 'jb-badge--cancelled',
+        className: "jb-badge--cancelled",
         icon: <X size={12} />,
-        text: 'Đã hủy'
-      }
+        text: "Đã hủy",
+      },
+      [JobBoostStatus.NOT_BOOSTED]: {
+        className: "jb-badge--cancelled",
+        icon: <AlertCircle size={12} />,
+        text: "Chưa boost",
+      },
     };
 
     const config = statusConfig[boost.status];
     if (!config) return null;
 
     return (
-      <span className={`jb-badge ${config.class}`}>
+      <span className={`jb-badge ${config.className}`}>
         {config.icon}
         {config.text}
       </span>
     );
-  };
-
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const getDaysRemaining = () => {
-    if (!boost) return 0;
-    const endDate = new Date(boost.endDate);
-    const now = new Date();
-    const diff = endDate.getTime() - now.getTime();
-    return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   };
 
   if (isLoading) {
@@ -180,128 +231,104 @@ const JobBoostButton: React.FC<JobBoostButtonProps> = ({
     );
   }
 
-  // Not premium - show upgrade prompt
   if (!subscription?.canHighlightJobs) {
     return (
       <button className="jb-button jb-button--upgrade" disabled>
         <Crown size={16} />
-        <span>Nâng Cấp Premium</span>
+        <span>Nâng cấp Premium</span>
       </button>
     );
   }
 
-  // Already boosted - show boost status and actions
-  if (boost && boost.status !== JobBoostStatus.CANCELLED) {
+  if (boost) {
     const daysRemaining = getDaysRemaining();
+    const canCancel =
+      (boost.status === JobBoostStatus.ACTIVE ||
+        boost.status === JobBoostStatus.SCHEDULED) &&
+      !isActionLoading;
 
     return (
-      <div className="jb-boost-active">
+      <div
+        className={`jb-boost-active jb-boost-active--${boost.status.toLowerCase()}`}
+      >
         <div className="jb-boost-info">
           {getBoostStatusBadge()}
           {boost.status === JobBoostStatus.ACTIVE && daysRemaining > 0 && (
             <span className="jb-days-remaining">
               <Clock size={12} />
-              {daysRemaining} ngày còn lại
+              Còn {daysRemaining} ngày
             </span>
           )}
-          {boost.status === JobBoostStatus.ACTIVE && daysRemaining <= 3 && daysRemaining > 0 && (
-            <span className="jb-days-warning">Sắp hết hạn!</span>
+          {(boost.status === JobBoostStatus.ACTIVE ||
+            boost.status === JobBoostStatus.SCHEDULED) && (
+            <span className="jb-status-note">
+              Hiệu lực đến {formatDate(boost.endDate)}. Hủy boost sẽ không hoàn
+              lại quota đã dùng.
+            </span>
+          )}
+          {boost.status === JobBoostStatus.CANCELLED && (
+            <span className="jb-status-note">
+              Lượt boost này đã bị hủy. Job không thể tạo boost lần thứ hai.
+            </span>
+          )}
+          {boost.status === JobBoostStatus.EXPIRED && (
+            <span className="jb-status-note">
+              Lượt boost này đã dùng xong. Mỗi job chỉ được boost một lần.
+            </span>
           )}
         </div>
 
-        <div className="jb-boost-actions">
-          {boost.status === JobBoostStatus.ACTIVE && daysRemaining > 0 && (
+        {canCancel && (
+          <div className="jb-boost-actions">
             <button
-              className="jb-action-btn jb-action-btn--extend"
-              onClick={() => setShowExtendModal(true)}
+              className="jb-action-btn jb-action-btn--cancel"
+              onClick={handleCancelBoost}
               disabled={isActionLoading}
             >
-              <Clock size={14} />
-              Gia hạn
+              <X size={14} />
+              Hủy boost
             </button>
-          )}
-          <button
-            className="jb-action-btn jb-action-btn--cancel"
-            onClick={handleCancelBoost}
-            disabled={isActionLoading}
-          >
-            <X size={14} />
-            Hủy
-          </button>
-        </div>
-
-        {/* Extend Modal */}
-        {showExtendModal && (
-          <div className="jb-modal-overlay" onClick={() => setShowExtendModal(false)}>
-            <div className="jb-modal" onClick={e => e.stopPropagation()}>
-              <h3 className="jb-modal-title">Gia Hạn Boost</h3>
-              <p className="jb-modal-subtitle">Chọn số ngày muốn gia hạn</p>
-
-              <div className="jb-duration-options">
-                {[7, 14, 30].map(days => (
-                  <button
-                    key={days}
-                    className={`jb-duration-btn ${selectedDays === days ? 'jb-duration-btn--selected' : ''}`}
-                    onClick={() => setSelectedDays(days)}
-                  >
-                    {days} ngày
-                  </button>
-                ))}
-              </div>
-
-              <div className="jb-modal-actions">
-                <button
-                  className="jb-btn jb-btn--secondary"
-                  onClick={() => setShowExtendModal(false)}
-                >
-                  Hủy
-                </button>
-                <button
-                  className="jb-btn jb-btn--primary"
-                  onClick={handleExtendBoost}
-                  disabled={isActionLoading}
-                >
-                  {isActionLoading ? 'Đang xử lý...' : 'Xác nhận gia hạn'}
-                </button>
-              </div>
-            </div>
           </div>
         )}
       </div>
     );
   }
 
-  // Not boosted yet - show boost button
   return (
     <>
       <button
         className="jb-button jb-button--boost"
         onClick={handleCreateBoost}
-        disabled={isLoading || subscription?.jobBoostRemaining <= 0}
+        disabled={isLoading || (subscription?.jobBoostRemaining ?? 0) <= 0}
       >
         <Zap size={16} />
-        <span>Boost Job</span>
-        {subscription && subscription.jobBoostRemaining > 0 && (
+        <span>Boost job</span>
+        {(subscription?.jobBoostRemaining ?? 0) > 0 && (
           <span className="jb-quota-badge">
-            {subscription.jobBoostRemaining} lượt
+            {subscription?.jobBoostRemaining} lượt
           </span>
         )}
       </button>
 
-      {/* Confirm Modal */}
       {showConfirmModal && (
-        <div className="jb-modal-overlay" onClick={() => setShowConfirmModal(false)}>
-          <div className="jb-modal" onClick={e => e.stopPropagation()}>
-            <h3 className="jb-modal-title">Xác Nhận Boost Job</h3>
+        <div
+          className="jb-modal-overlay"
+          onClick={() => setShowConfirmModal(false)}
+        >
+          <div
+            className="jb-modal"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h3 className="jb-modal-title">Xác nhận boost job</h3>
             <p className="jb-modal-subtitle">
-              Bạn có muốn đẩy job <strong>"{jobTitle}"</strong> lên top không?
+              Bạn muốn boost <strong>{jobTitle}</strong> trong bao lâu?
             </p>
 
             <div className="jb-duration-options">
-              {[7, 14, 30].map(days => (
+              {[7, 14, 21, 30].map((days) => (
                 <button
                   key={days}
-                  className={`jb-duration-btn ${selectedDays === days ? 'jb-duration-btn--selected' : ''}`}
+                  className={`jb-duration-btn ${selectedDays === days ? "jb-duration-btn--selected" : ""}`}
                   onClick={() => setSelectedDays(days)}
                 >
                   {days} ngày
@@ -309,9 +336,36 @@ const JobBoostButton: React.FC<JobBoostButtonProps> = ({
               ))}
             </div>
 
+            <label className="jb-duration-field">
+              <span>Thời lượng boost</span>
+              <div className="jb-duration-field__control">
+                <input
+                  type="number"
+                  min={MIN_BOOST_DAYS}
+                  max={MAX_BOOST_DAYS}
+                  value={selectedDays}
+                  onChange={(event) =>
+                    setSelectedDays(
+                      clampDuration(
+                        Number(event.target.value) || MIN_BOOST_DAYS,
+                      ),
+                    )
+                  }
+                />
+                <strong>ngày</strong>
+              </div>
+              <small>
+                Mỗi job chỉ được boost một lần. Thời lượng hợp lệ từ 7 đến 30
+                ngày.
+              </small>
+            </label>
+
             <div className="jb-quota-info">
               <CheckCircle size={14} />
-              <span>Quota còn lại: {subscription?.jobBoostRemaining || 0} lượt</span>
+              <span>
+                Quota còn lại sau lần này:{" "}
+                {Math.max(0, (subscription?.jobBoostRemaining ?? 0) - 1)} lượt
+              </span>
             </div>
 
             <div className="jb-modal-actions">
@@ -326,7 +380,7 @@ const JobBoostButton: React.FC<JobBoostButtonProps> = ({
                 onClick={confirmCreateBoost}
                 disabled={isActionLoading}
               >
-                {isActionLoading ? 'Đang xử lý...' : 'Xác Nhận Boost'}
+                {isActionLoading ? "Đang xử lý..." : "Xác nhận boost"}
               </button>
             </div>
           </div>

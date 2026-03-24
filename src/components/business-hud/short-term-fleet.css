@@ -1089,6 +1089,27 @@
   text-align: center;
 }
 
+.stj-dialog--close {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: linear-gradient(160deg, rgba(245, 158, 11, 0.05) 0%, var(--fleet-bg-secondary) 60%);
+}
+
+.stj-dialog__icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+}
+
+.stj-dialog__icon-wrap--amber {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
 .stj-dialog__title {
   font-size: 1.15rem;
   font-weight: 700;
@@ -1145,6 +1166,16 @@
 
 .stj-dialog__btn--confirm:hover {
   box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
+}
+
+.stj-dialog__btn--warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+}
+
+.stj-dialog__btn--warning:hover {
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
+  transform: translateY(-1px);
 }
 
 /* Summary row */
@@ -2841,6 +2872,286 @@
 }
 
 /* ======================================================================
+   HANDOVER BOARD — IMAGE PREVIEW
+   ====================================================================== */
+.stj-handover-card__image-item {
+  position: relative;
+  display: inline-block;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(34, 211, 238, 0.14);
+  background: rgba(8, 15, 30, 0.55);
+  max-width: 160px;
+}
+
+.stj-handover-card__image-thumb {
+  width: 160px;
+  height: 100px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.stj-handover-card__image-thumb:hover {
+  transform: scale(1.03);
+  opacity: 0.85;
+}
+
+.stj-handover-card__image-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  width: 160px;
+  height: 100px;
+  color: #94a3b8;
+  font-size: 0.7rem;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.stj-handover-card__image-fallback span {
+  word-break: break-all;
+  line-height: 1.3;
+}
+
+.stj-handover-card__image-fallback--hidden {
+  display: none;
+}
+
+.stj-handover-card__image-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.stj-handover-card__image-item:hover .stj-handover-card__image-overlay {
+  opacity: 1;
+}
+
+.stj-handover-card__image-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(34, 211, 238, 0.18);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: #67e8f9;
+  cursor: pointer;
+  transition: background 0.18s ease;
+  text-decoration: none;
+}
+
+.stj-handover-card__image-btn:hover {
+  background: rgba(34, 211, 238, 0.32);
+}
+
+.stj-handover-card__image-size {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 0.62rem;
+  color: rgba(226, 232, 240, 0.7);
+  background: rgba(0, 0, 0, 0.45);
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
+/* File item (non-image) */
+.stj-handover-card__file-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  background: rgba(34, 211, 238, 0.06);
+  border: 1px solid rgba(34, 211, 238, 0.1);
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.stj-handover-card__file-item:hover {
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(34, 211, 238, 0.18);
+}
+
+.stj-handover-card__file-item--video {
+  flex-wrap: wrap;
+}
+
+.stj-handover-card__video-thumb {
+  width: 80px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  flex-shrink: 0;
+}
+
+.stj-handover-card__file-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.stj-handover-card__file-size {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  padding-left: 0.1rem;
+}
+
+.stj-handover-card__file-download {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  color: #94a3b8;
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.stj-handover-card__file-download:hover {
+  background: rgba(34, 211, 238, 0.14);
+  border-color: rgba(34, 211, 238, 0.28);
+  color: #67e8f9;
+}
+
+/* Info chip muted variant */
+.stj-handover-card__info-chip--muted {
+  background: rgba(148, 163, 184, 0.08);
+  border-color: rgba(148, 163, 184, 0.14);
+  color: #94a3b8;
+  font-size: 0.76rem;
+}
+
+/* ======================================================================
+   HANDOVER BOARD — LIGHTBOX
+   ====================================================================== */
+.stj-lightbox {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(1, 5, 13, 0.88);
+  z-index: 100;
+  backdrop-filter: blur(6px);
+  animation: stj-fadeIn 0.2s ease-out;
+  padding: 1.5rem;
+}
+
+.stj-lightbox__inner {
+  position: relative;
+  max-width: min(90vw, 1000px);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.stj-lightbox__close {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.stj-lightbox__close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.stj-lightbox__img {
+  max-width: 100%;
+  max-height: calc(90vh - 60px);
+  object-fit: contain;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+}
+
+.stj-lightbox__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: rgba(8, 15, 30, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.stj-lightbox__filename {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.stj-lightbox__filename svg {
+  flex-shrink: 0;
+  color: #22d3ee;
+}
+
+.stj-lightbox__download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  background: rgba(34, 211, 238, 0.14);
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  color: #67e8f9;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.18s ease, border-color 0.18s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.stj-lightbox__download:hover {
+  background: rgba(34, 211, 238, 0.24);
+  border-color: rgba(34, 211, 238, 0.4);
+}
+
+/* ======================================================================
    HANDOVER BOARD — CARD ACTIONS
    ====================================================================== */
 .stj-handover-card__actions {
@@ -3225,6 +3536,10 @@
   backdrop-filter: blur(12px);
 }
 
+.stj-fullpage__detail-card--description {
+  grid-column: 1 / -1;
+}
+
 .stj-fullpage__detail-card h3 {
   margin: 0 0 0.85rem;
   font-size: 0.88rem;
@@ -3235,10 +3550,20 @@
 }
 
 .stj-fullpage__description {
-  margin: 0;
-  font-size: 0.88rem;
-  color: #cbd5e1;
-  line-height: 1.7;
+  padding: 1rem 1.05rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(8, 17, 36, 0.82), rgba(5, 12, 28, 0.92));
+  border: 1px solid rgba(34, 211, 238, 0.12);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02),
+    0 22px 38px rgba(2, 6, 23, 0.18);
+}
+
+.stj-fullpage__description .job-markdown {
+  --job-markdown-strong: #f2fbff;
+  --job-markdown-text: rgba(226, 232, 240, 0.9);
+  --job-markdown-muted: rgba(186, 230, 253, 0.8);
+  --job-markdown-soft: rgba(148, 163, 184, 0.72);
 }
 
 .stj-fullpage__info-list {

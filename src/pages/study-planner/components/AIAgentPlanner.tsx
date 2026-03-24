@@ -34,8 +34,18 @@ import '../../study-planner/styles/StudyPlanner.css';
 interface AIAgentPlannerProps {
   isOpen: boolean;
   onClose: () => void;
-  onPlanGenerated: () => void;
+  onPlanGenerated: (result?: {
+    createdCount: number;
+    subjectName: string;
+  }) => Promise<void> | void;
 }
+
+type PlannerLoadingPhase =
+  | 'generating'
+  | 'analyzing'
+  | 'optimizing'
+  | 'saving'
+  | null;
 
 type SubjectPreset = {
   id: string;
@@ -355,6 +365,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
 
   const [step, setStep] = useState<'form' | 'preview'>('form');
   const [loading, setLoading] = useState(false);
+  const [loadingPhase, setLoadingPhase] = useState<PlannerLoadingPhase>(null);
   const [error, setError] = useState<string | null>(null);
 
   const [checkingPremium, setCheckingPremium] = useState(true);
@@ -446,6 +457,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
     setStep('form');
     setError(null);
     setLoading(false);
+    setLoadingPhase(null);
     setGeneratedSessions([]);
     setHealthReport(null);
     setShowLateNightConfirm(false);
@@ -774,6 +786,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
     }
 
     setLoading(true);
+    setLoadingPhase('generating');
     setError(null);
 
     try {
@@ -781,6 +794,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
       setFormData(requestPayload);
       setGeneratedSessions(sessions);
       setStep('preview');
+      setLoadingPhase('analyzing');
       await checkHealth(sessions, requestPayload);
     } catch (generateError: any) {
       console.error(generateError);
@@ -790,6 +804,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
       setError(message);
     } finally {
       setLoading(false);
+      setLoadingPhase(null);
     }
   };
 
@@ -805,6 +820,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
       setHealthReport(report);
     } catch (healthError) {
       console.error('Health check failed', healthError);
+      setHealthReport(null);
     }
   };
 
@@ -812,6 +828,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
     if (!healthReport) return;
 
     setLoading(true);
+    setLoadingPhase('optimizing');
     try {
       const report = await studyPlanService.suggestHealthyAdjustments({
         sessions: generatedSessions,
@@ -827,10 +844,16 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
       setError('Không thể đề xuất chỉnh sửa lịch học vào lúc này.');
     } finally {
       setLoading(false);
+      setLoadingPhase(null);
     }
   };
 
   const handleConfirmSave = async () => {
+    if (generatedSessions.length === 0) {
+      setError('Chưa có phiên học nào để áp dụng vào Study Planner.');
+      return;
+    }
+
     const hasLateNightSessions = generatedSessions.some((session) => {
       const hour = new Date(session.startTime).getHours();
       return hour >= 23 || hour < 5;
@@ -842,6 +865,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
     }
 
     setLoading(true);
+    setLoadingPhase('saving');
     try {
       const createRequests = generatedSessions.map((session) => ({
         title: session.title,
@@ -850,14 +874,24 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
         description: session.description,
       }));
 
-      await studyPlanService.createSessionsBatch(createRequests);
-      onPlanGenerated();
+      const createdSessions = await studyPlanService.createSessionsBatch(createRequests);
+      await Promise.resolve(
+        onPlanGenerated({
+          createdCount: createdSessions.length,
+          subjectName:
+            formData.subjectName?.trim() ||
+            (activeSubjectPreset.id !== 'custom'
+              ? activeSubjectPreset.subjectName
+              : 'Study plan'),
+        }),
+      );
       onClose();
     } catch (saveError) {
       console.error('Failed to save schedule', saveError);
       setError('Không thể lưu lịch trình. Vui lòng thử lại.');
     } finally {
       setLoading(false);
+      setLoadingPhase(null);
     }
   };
 
@@ -883,6 +917,19 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
   const effectivePreferredWindowSummary =
     preferredWindowSummary || (fallbackPreferredWindowSummary ? `Theo mẫu: ${fallbackPreferredWindowSummary}` : '');
 
+  const healthIssues = healthReport?.issues ?? [];
+  const healthOverallScore = healthReport?.overallScore ?? 100;
+  const loadingMessage =
+    loadingPhase === 'generating'
+      ? 'Meowl Kuru đang tạo đề xuất study plan...'
+      : loadingPhase === 'analyzing'
+        ? 'Meowl Kuru đang phân tích sức khỏe lịch học...'
+        : loadingPhase === 'optimizing'
+          ? 'Meowl Kuru đang tối ưu lại lịch học...'
+          : loadingPhase === 'saving'
+            ? 'Meowl Kuru đang lưu study plan vào bảng của bạn...'
+            : '';
+
   return (
     <div className="study-plan-modal-overlay" onClick={onClose}>
       <div className="study-plan-modal theme-gold" onClick={(event) => event.stopPropagation()}>
@@ -903,6 +950,12 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
         </div>
 
         <div className="study-plan-modal-content" style={{ position: 'relative' }}>
+          {loadingPhase && !checkingPremium && (
+            <div className="study-plan-loading-overlay study-plan-loading-overlay--modal">
+              <MeowlKuruLoader size="medium" text={loadingMessage} />
+            </div>
+          )}
+
           {checkingPremium ? (
             <div className="study-plan-loading-overlay">
               <MeowlKuruLoader text="Đang kiểm tra quyền truy cập..." size="small" />
@@ -1357,18 +1410,18 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
                 <div className="study-plan-ai-health-report">
                   <div
                     className={`study-plan-ai-health-score ${
-                      healthReport.overallScore >= 80
+                      healthOverallScore >= 80
                         ? 'good'
-                        : healthReport.overallScore >= 50
+                        : healthOverallScore >= 50
                           ? 'warning'
                           : 'bad'
                     }`}
                   >
-                    Điểm sức khỏe lịch học: {healthReport.overallScore}/100
+                    Điểm sức khỏe lịch học: {healthOverallScore}/100
                   </div>
 
                   <div className="study-plan-ai-health-issues">
-                    {healthReport.issues.map((issue, index) => (
+                    {healthIssues.map((issue, index) => (
                       <div
                         key={`${issue.message}-${index}`}
                         className={`study-plan-ai-issue-item ${issue.severity.toLowerCase()}`}
@@ -1382,14 +1435,14 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
                         )}
                       </div>
                     ))}
-                    {healthReport.issues.length === 0 && (
+                    {healthIssues.length === 0 && (
                       <div className="study-plan-ai-issue-item good">
                         <FaCheckCircle /> Lịch trình cân bằng và hợp lý.
                       </div>
                     )}
                   </div>
 
-                  {healthReport.overallScore < 80 && (
+                  {healthOverallScore < 80 && (
                     <button
                       className="study-plan-ai-suggest-btn"
                       onClick={handleSuggestFix}

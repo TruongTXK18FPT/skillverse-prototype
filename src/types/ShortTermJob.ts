@@ -26,6 +26,7 @@ export enum ShortTermJobStatus {
   PAID = "PAID", // Đã thanh toán
   CANCELLED = "CANCELLED", // Đã hủy
   DISPUTED = "DISPUTED", // Đang tranh chấp
+  CLOSED = "CLOSED", // Đã đóng
 }
 
 /**
@@ -393,14 +394,18 @@ export const SHORT_TERM_JOB_TRANSITIONS: Record<
   ],
   [ShortTermJobStatus.APPROVED]: [ShortTermJobStatus.COMPLETED],
   [ShortTermJobStatus.REJECTED]: [ShortTermJobStatus.IN_PROGRESS], // Allow revision
-  [ShortTermJobStatus.COMPLETED]: [ShortTermJobStatus.PAID],
-  [ShortTermJobStatus.PAID]: [],
+  [ShortTermJobStatus.COMPLETED]: [
+    ShortTermJobStatus.PAID,
+    ShortTermJobStatus.CANCELLED,
+  ],
+  [ShortTermJobStatus.PAID]: [ShortTermJobStatus.CANCELLED],
   [ShortTermJobStatus.CANCELLED]: [],
   [ShortTermJobStatus.DISPUTED]: [
     ShortTermJobStatus.APPROVED,
     ShortTermJobStatus.REJECTED,
     ShortTermJobStatus.CANCELLED,
   ],
+  [ShortTermJobStatus.CLOSED]: [],
 };
 
 /**
@@ -719,6 +724,12 @@ export const SHORT_TERM_JOB_STATUS_DISPLAY: Record<
     icon: "⚠️",
     description: "Đang có tranh chấp",
   },
+  [ShortTermJobStatus.CLOSED]: {
+    text: "Đã Đóng",
+    color: "gray",
+    icon: "🔒",
+    description: "Job đã được đóng",
+  },
 };
 
 export const APPLICATION_STATUS_DISPLAY: Record<
@@ -798,3 +809,153 @@ export const APPLICATION_STATUS_DISPLAY: Record<
     description: "Bạn đã rút đơn ứng tuyển",
   },
 };
+
+// ==================== ESCROW TYPES ====================
+
+export enum EscrowStatus {
+  PENDING = "PENDING",
+  FUNDED = "FUNDED",
+  PARTIALLY_RELEASED = "PARTIALLY_RELEASED",
+  FULLY_RELEASED = "FULLY_RELEASED",
+  REFUNDED = "REFUNDED",
+  DISPUTED = "DISPUTED"
+}
+
+export interface EscrowTransaction {
+  id: number;
+  escrowId: number;
+  transactionType: "FUND" | "RELEASE" | "PARTIAL_RELEASE" | "REFUND" | "FEE_DEDUCTION" | "PAYOUT_RELEASE";
+  amount: number;
+  feeAmount: number;
+  netAmount: number;
+  actorId: number;
+  actorName: string;
+  reason?: string;
+  createdAt: string;
+}
+
+export interface JobEscrow {
+  escrowId: number;
+  jobId: number;
+  jobTitle?: string;
+  recruiterId: number;
+  recruiterName?: string;
+  workerId?: number;
+  workerName?: string;
+  totalAmount: number;
+  platformFee: number;
+  netAmount: number;
+  escrowBalance: number;
+  pendingPayoutBalance: number;
+  status: EscrowStatus;
+  fundedAt: string;
+  releasedAt?: string;
+  refundedAt?: string;
+  transactions?: EscrowTransaction[];
+}
+
+// ==================== DISPUTE TYPES ====================
+
+export enum DisputeType {
+  NO_SUBMISSION = "NO_SUBMISSION",
+  POOR_QUALITY = "POOR_QUALITY",
+  MISSING_DELIVERABLE = "MISSING_DELIVERABLE",
+  DEADLINE_VIOLATION = "DEADLINE_VIOLATION",
+  PAYMENT_ISSUE = "PAYMENT_ISSUE",
+  COMMUNICATION_FAILURE = "COMMUNICATION_FAILURE",
+  SCOPE_CHANGE = "SCOPE_CHANGE",
+  SCAM_REPORT = "SCAM_REPORT",
+  OTHER = "OTHER"
+}
+
+export enum DisputeStatus {
+  OPEN = "OPEN",
+  UNDER_INVESTIGATION = "UNDER_INVESTIGATION",
+  AWAITING_RESPONSE = "AWAITING_RESPONSE",
+  RESOLVED = "RESOLVED",
+  DISMISSED = "DISMISSED",
+  ESCALATED = "ESCALATED"
+}
+
+export enum DisputeResolution {
+  FULL_REFUND = "FULL_REFUND",
+  FULL_RELEASE = "FULL_RELEASE",
+  PARTIAL_REFUND = "PARTIAL_REFUND",
+  PARTIAL_RELEASE = "PARTIAL_RELEASE",
+  RESUBMIT_REQUIRED = "RESUBMIT_REQUIRED",
+  NO_ACTION = "NO_ACTION"
+}
+
+export interface DisputeEvidence {
+  id: number;
+  disputeId: number;
+  submittedBy: number;
+  submittedByName?: string;
+  evidenceType: "TEXT" | "FILE" | "LINK" | "SCREENSHOT" | "CHAT_LOG" | "DELIVERABLE_SNAPSHOT";
+  content?: string;
+  fileUrl?: string;
+  fileName?: string;
+  description?: string;
+  isOfficial: boolean;
+  createdAt: string;
+  responses?: DisputeResponseEntity[];
+}
+
+export interface DisputeResponseEntity {
+  id: number;
+  disputeId: number;
+  evidenceId: number;
+  respondedBy: number;
+  respondedByName?: string;
+  content: string;
+  createdAt: string;
+}
+
+export interface Dispute {
+  id: number;
+  jobId: number;
+  applicationId: number;
+  jobTitle?: string;
+  initiatorId: number;
+  initiatorName?: string;
+  respondentId: number;
+  respondentName?: string;
+  disputeType: DisputeType;
+  reason: string;
+  status: DisputeStatus;
+  resolution?: DisputeResolution;
+  partialRefundPct?: number;
+  resolutionNotes?: string;
+  resolvedBy?: number;
+  resolvedAt?: string;
+  createdAt: string;
+  evidence?: DisputeEvidence[];
+}
+
+// ==================== TRUST SCORE TYPES ====================
+
+export enum TrustTier {
+  NEWCOMER = "NEWCOMER",
+  BASIC = "BASIC",
+  TRUSTED = "TRUSTED",
+  ELITE = "ELITE"
+}
+
+export interface TrustScore {
+  userId: number;
+  userName?: string;
+  totalScore: number;           // backend: totalScore (BigDecimal → number)
+  trustTier: TrustTier;
+  completionRate: number;
+  avgRating: number;
+  disputeRate: number;
+  responseTimeHours: number;
+  totalJobs: number;
+  completedJobs: number;
+  disputedJobs: number;
+  totalReviews: number;
+  accountAgeDays: number;
+  createdAt: string;
+  updatedAt: string;
+}
+

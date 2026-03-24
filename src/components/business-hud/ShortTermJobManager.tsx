@@ -122,6 +122,18 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
   });
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Close dialog
+  const [closeDialog, setCloseDialog] = useState<{
+    visible: boolean;
+    jobId: number | null;
+    title: string;
+  }>({
+    visible: false,
+    jobId: null,
+    title: "",
+  });
+  const [isClosing, setIsClosing] = useState(false);
+
   // ==================== DATA FETCHING ====================
   const fetchJobs = useCallback(async () => {
     setIsLoading(true);
@@ -189,7 +201,6 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
       ShortTermJobStatus.SUBMITTED,
       ShortTermJobStatus.UNDER_REVIEW,
       ShortTermJobStatus.APPROVED,
-      ShortTermJobStatus.COMPLETED,
     ].includes(job.status),
   );
 
@@ -218,6 +229,22 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
       showError("Lỗi", "Không thể xóa công việc");
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handleCloseJob = async () => {
+    if (!closeDialog.jobId) return;
+    setIsClosing(true);
+    try {
+      await shortTermJobService.changeJobStatus(closeDialog.jobId, ShortTermJobStatus.CANCELLED);
+      showSuccess("Đã đóng job", "Job đã được đóng lại.");
+      setCloseDialog({ visible: false, jobId: null, title: "" });
+      fetchJobs();
+    } catch (error) {
+      console.error("Failed to close job:", error);
+      showError("Lỗi", "Không thể đóng công việc");
+    } finally {
+      setIsClosing(false);
     }
   };
 
@@ -442,9 +469,10 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
                 Đang thực hiện
               </option>
               <option value={ShortTermJobStatus.SUBMITTED}>Đã nộp bài</option>
+              <option value={ShortTermJobStatus.APPROVED}>Đã duyệt</option>
               <option value={ShortTermJobStatus.COMPLETED}>Hoàn thành</option>
               <option value={ShortTermJobStatus.PAID}>Đã thanh toán</option>
-              <option value={ShortTermJobStatus.CANCELLED}>Đã hủy</option>
+              <option value={ShortTermJobStatus.CANCELLED}>Đã hủy / Đóng</option>
             </select>
           </div>
 
@@ -680,6 +708,16 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
                                     <Shield size={10} /> Chờ duyệt
                                   </span>
                                 )}
+                                {(job.status === ShortTermJobStatus.COMPLETED ||
+                                  job.status === ShortTermJobStatus.PAID) && (
+                                  <button
+                                    className="stj-table__action-btn"
+                                    onClick={() => setCloseDialog({ visible: true, jobId: job.id, title: job.title })}
+                                    title="Đóng job"
+                                  >
+                                    <X size={14} />
+                                  </button>
+                                )}
                                 {(job.status === ShortTermJobStatus.DRAFT ||
                                   job.status ===
                                     ShortTermJobStatus.CANCELLED) && (
@@ -880,6 +918,50 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
                 disabled={isDeleting}
               >
                 {isDeleting ? "Đang xóa..." : "Xóa"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Close Job Dialog */}
+      {closeDialog.visible && (
+        <div
+          className="stj-overlay"
+          onClick={() =>
+            !isClosing &&
+            setCloseDialog({ visible: false, jobId: null, title: "" })
+          }
+        >
+          <div className="stj-dialog stj-dialog--close" onClick={(e) => e.stopPropagation()}>
+            <div className="stj-dialog__icon-wrap stj-dialog__icon-wrap--amber">
+              <X size={32} />
+            </div>
+            <h3 className="stj-dialog__title">Đóng công việc</h3>
+            <p className="stj-dialog__desc">
+              Bạn có chắc chắn muốn đóng công việc{" "}
+              <strong style={{ color: "#fff" }}>"{closeDialog.title}"</strong>?
+              <br />
+              <span style={{ color: "#94a3b8", fontSize: "0.85rem" }}>
+                Công việc đã đóng sẽ chuyển sang trạng thái "Đã hủy" và bạn có thể xóa nếu cần.
+              </span>
+            </p>
+            <div className="stj-dialog__actions">
+              <button
+                className="stj-dialog__btn stj-dialog__btn--cancel"
+                onClick={() =>
+                  setCloseDialog({ visible: false, jobId: null, title: "" })
+                }
+                disabled={isClosing}
+              >
+                Hủy
+              </button>
+              <button
+                className="stj-dialog__btn stj-dialog__btn--warning"
+                onClick={handleCloseJob}
+                disabled={isClosing}
+              >
+                {isClosing ? "Đang đóng..." : "Đóng công việc"}
               </button>
             </div>
           </div>

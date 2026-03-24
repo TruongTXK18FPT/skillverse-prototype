@@ -4,7 +4,12 @@ import {
   AdminApprovalResponse,
   ApplicationsResponse,
   ApplicationStatusFilter,
+  AdminJobStats,
+  PageResponse,
+  ResolveDisputeRequest,
+  DisputeResponse,
 } from "../data/adminDTOs";
+import { ShortTermJobStatus } from "../types/ShortTermJob";
 
 /**
  * AdminService - Service for admin operations to manage mentor/recruiter applications
@@ -315,6 +320,113 @@ class AdminService {
       {
         params: { reason },
       },
+    );
+    return response.data;
+  }
+
+  // ===================== FULL JOB MANAGEMENT =====================
+
+  /**
+   * Get paginated list of all short-term jobs
+   */
+  async getAllJobs(params?: {
+    status?: ShortTermJobStatus;
+    page?: number;
+    size?: number;
+  }): Promise<PageResponse<any>> {
+    const response = await axiosInstance.get<PageResponse<any>>(
+      `${this.BASE_URL}/short-term-jobs`,
+      { params }
+    );
+    return response.data;
+  }
+
+  /**
+   * Get job statistics for admin dashboard
+   */
+  async getJobStats(): Promise<AdminJobStats> {
+    const response = await axiosInstance.get<AdminJobStats>(
+      `${this.BASE_URL}/short-term-jobs/stats`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Get job detail by ID
+   */
+  async getJobDetail(jobId: number): Promise<any> {
+    const response = await axiosInstance.get(
+      `${this.BASE_URL}/short-term-jobs/${jobId}`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Delete a job (soft delete - sets to CANCELLED)
+   */
+  async deleteJob(jobId: number): Promise<any> {
+    const response = await axiosInstance.delete(
+      `${this.BASE_URL}/short-term-jobs/${jobId}`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Ban a job
+   */
+  async banJob(jobId: number, reason?: string): Promise<any> {
+    const response = await axiosInstance.post(
+      `${this.BASE_URL}/short-term-jobs/${jobId}/ban`,
+      null,
+      { params: { reason } },
+    );
+    return response.data;
+  }
+
+  /**
+   * Unban a job
+   */
+  async unbanJob(jobId: number): Promise<any> {
+    const response = await axiosInstance.post(
+      `${this.BASE_URL}/short-term-jobs/${jobId}/unban`,
+    );
+    return response.data;
+  }
+
+  // ===================== DISPUTE MANAGEMENT =====================
+
+  /**
+   * Get paginated list of disputes
+   */
+  async getDisputes(params?: {
+    status?: string;
+    page?: number;
+    size?: number;
+  }): Promise<PageResponse<DisputeResponse>> {
+    const response = await axiosInstance.get<PageResponse<DisputeResponse>>(
+      `${this.BASE_URL}/short-term-jobs/disputes`,
+      { params }
+    );
+    return response.data;
+  }
+
+  /**
+   * Get dispute detail by ID
+   */
+  async getDisputeDetail(disputeId: number): Promise<DisputeResponse> {
+    const response = await axiosInstance.get<DisputeResponse>(
+      `${this.BASE_URL}/short-term-jobs/disputes/${disputeId}`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Resolve a dispute (admin action)
+   */
+  async resolveDispute(disputeId: number, request: Omit<ResolveDisputeRequest, never>): Promise<DisputeResponse> {
+    const response = await axiosInstance.post<DisputeResponse>(
+      `${this.BASE_URL}/short-term-jobs/disputes/${disputeId}/resolve`,
+      request,
     );
     return response.data;
   }

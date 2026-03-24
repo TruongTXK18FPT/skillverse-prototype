@@ -92,3 +92,73 @@ export enum ApplicationStatus {
 }
 
 export type ApplicationStatusFilter = 'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED';
+
+// ==================== SHORT-TERM JOB ADMIN TYPES ====================
+
+export interface AdminJobStats {
+  totalJobs: number;
+  draftCount: number;
+  pendingApprovalCount: number;
+  publishedCount: number;
+  inProgressCount: number;
+  completedCount: number;
+  paidCount: number;
+  cancelledCount: number;
+  disputedCount: number;
+  closedCount: number;
+  rejectedCount: number;
+  byStatus: Record<string, number>;
+  byUrgency: Record<string, number>;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  first: boolean;
+  last: boolean;
+  empty: boolean;
+}
+
+export interface ResolveDisputeRequest {
+  resolution: DisputeResolution;
+  partialRefundPct?: number;
+  resolutionNotes?: string;
+}
+
+export type DisputeResolution =
+  | 'FULL_REFUND'
+  | 'FULL_RELEASE'
+  | 'PARTIAL_REFUND'
+  | 'PARTIAL_RELEASE'
+  | 'RESUBMIT_REQUIRED'
+  | 'NO_ACTION';
+
+export interface DisputeResponse {
+  id: number;
+  jobId: number;
+  applicationId?: number;
+  initiatorId: number;
+  initiatorName?: string;
+  respondentId: number;
+  respondentName?: string;
+  disputeType: string;
+  reason: string;
+  status: DisputeStatus;
+  resolution?: DisputeResolution;
+  partialRefundPct?: number;
+  resolutionNotes?: string;
+  resolvedBy?: number;
+  resolvedAt?: string;
+  createdAt: string;
+}
+
+export type DisputeStatus =
+  | 'OPEN'
+  | 'UNDER_INVESTIGATION'
+  | 'AWAITING_RESPONSE'
+  | 'RESOLVED'
+  | 'DISMISSED'
+  | 'ESCALATED';

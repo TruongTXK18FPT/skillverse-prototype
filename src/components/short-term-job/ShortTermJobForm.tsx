@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
-  CreateMilestoneRequest,
   CreateShortTermJobRequest,
   JobUrgency,
-  PaymentMethod,
 } from "../../types/ShortTermJob";
 import { useToast } from "../../hooks/useToast";
+import { RichMarkdownEditor } from "./RichMarkdownEditor";
 import "../business-hud/streamlined-job-forms.css";
 
 interface ShortTermJobFormProps {
@@ -27,7 +26,6 @@ interface FormErrors {
   workDeadline?: string;
   requiredSkills?: string;
   estimatedDuration?: string;
-  location?: string;
 }
 
 const SUBCATEGORY_OPTIONS = [
@@ -39,12 +37,6 @@ const SUBCATEGORY_OPTIONS = [
   { value: "OTHER", label: "Khác" },
 ];
 
-const PAYMENT_OPTIONS: { value: PaymentMethod; label: string; desc: string }[] =
-  [
-    { value: "FIXED", label: "Trả một lần", desc: "Thanh toán sau khi hoàn thành" },
-    { value: "MILESTONE", label: "Theo cột mốc", desc: "Phù hợp việc chia giai đoạn" },
-    { value: "HOURLY", label: "Theo giờ", desc: "Phù hợp công việc linh hoạt" },
-  ];
 
 const URGENCY_OPTIONS = [
   { value: JobUrgency.NORMAL, label: "Bình thường" },
@@ -72,15 +64,6 @@ const BUDGET_PRESETS = [
 ];
 
 const DURATION_PRESETS = ["4 giờ", "1 ngày", "3 ngày", "1 tuần", "2 tuần"];
-
-const DESCRIPTION_TEMPLATE = `Mục tiêu công việc:
-- Nêu đầu ra cần bàn giao.
-
-Phạm vi công việc:
-- Liệt kê các đầu việc chính.
-
-Tiêu chí hoàn thành:
-- Chất lượng, định dạng và thời gian cần đạt.`;
 
 const REQUIREMENTS_TEMPLATE = `- Có kinh nghiệm với hạng mục tương tự
 - Chủ động cập nhật tiến độ
@@ -122,14 +105,11 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
     description: initialData?.description || "",
     requirements: initialData?.requirements || "",
     budget: initialData?.budget || 0,
-    isNegotiable: initialData?.isNegotiable ?? false,
-    paymentMethod: initialData?.paymentMethod || "FIXED",
     deadline: normalizeDateTimeLocal(initialData?.deadline),
     workDeadline: normalizeDateTimeLocal(initialData?.workDeadline),
     estimatedDuration: initialData?.estimatedDuration || "",
     urgency: initialData?.urgency || JobUrgency.NORMAL,
-    isRemote: initialData?.isRemote ?? true,
-    location: initialData?.location || "",
+    isRemote: true,
     maxApplicants: initialData?.maxApplicants || 10,
     subCategory: initialData?.subCategory || "OTHER",
     requiredSkills: initialData?.requiredSkills || [],
@@ -208,42 +188,6 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
     }));
   };
 
-  const addMilestone = () => {
-    const nextMilestone: CreateMilestoneRequest = {
-      title: "",
-      description: "",
-      deadline: "",
-      amount: 0,
-      order: formData.milestones?.length || 0,
-    };
-    setFormData((prev) => ({
-      ...prev,
-      milestones: [...(prev.milestones || []), nextMilestone],
-    }));
-  };
-
-  const updateMilestone = (
-    index: number,
-    field: keyof CreateMilestoneRequest,
-    value: string | number,
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      milestones: prev.milestones?.map((item, itemIndex) =>
-        itemIndex === index ? { ...item, [field]: value } : item,
-      ),
-    }));
-  };
-
-  const removeMilestone = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      milestones: prev.milestones
-        ?.filter((_, itemIndex) => itemIndex !== index)
-        .map((item, itemIndex) => ({ ...item, order: itemIndex })),
-    }));
-  };
-
   const validateForm = () => {
     const nextErrors: FormErrors = {};
 
@@ -256,7 +200,7 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
     if (formData.requiredSkills.length === 0) {
       nextErrors.requiredSkills = "Hãy thêm ít nhất 1 kỹ năng.";
     }
-    if (!formData.isNegotiable && Number(formData.budget) < 100000) {
+    if (Number(formData.budget) < 100000) {
       nextErrors.budget = "Ngân sách tối thiểu là 100.000 VNĐ.";
     }
     if (!formData.deadline) {
@@ -264,9 +208,6 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
     }
     if (!formData.estimatedDuration.trim()) {
       nextErrors.estimatedDuration = "Hãy nhập thời lượng ước tính.";
-    }
-    if (!formData.isRemote && !formData.location?.trim()) {
-      nextErrors.location = "Vui lòng nhập địa điểm làm việc.";
     }
     if (
       formData.workDeadline &&
@@ -296,23 +237,11 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
       title: formData.title.trim(),
       description: formData.description.trim(),
       requirements: formData.requirements?.trim() || undefined,
-      budget: formData.isNegotiable ? 0 : Number(formData.budget),
-      location: formData.isRemote ? undefined : formData.location?.trim(),
+      budget: Number(formData.budget),
       maxApplicants: Number(formData.maxApplicants) || 10,
       maxRevisions: formData.allowsRevision
         ? Number(formData.maxRevisions) || 2
         : 0,
-      milestones:
-        formData.paymentMethod === "MILESTONE"
-          ? (formData.milestones || [])
-              .filter((item) => item.title.trim() || item.amount > 0)
-              .map((item, index) => ({
-                ...item,
-                title: item.title.trim(),
-                description: item.description.trim(),
-                order: index,
-              }))
-          : [],
       tags: (formData.tags || []).filter(Boolean),
     };
 
@@ -325,15 +254,35 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
     formData.requiredSkills.length > 0 ? "skills" : "",
     formData.deadline,
     formData.estimatedDuration.trim(),
-    formData.isNegotiable || Number(formData.budget) > 0 ? "budget" : "",
+    Number(formData.budget) > 0 ? "budget" : "",
   ].filter(Boolean).length;
+
+  // Extract plain text from markdown for preview sidebar
+  const descriptionExcerpt = useMemo(() => {
+    if (!formData.description.trim()) return "";
+    // Strip markdown syntax for preview
+    return formData.description
+      .replace(/#{1,6}\s+/g, "")          // headings
+      .replace(/\*\*(.*?)\*\*/g, "$1")      // bold
+      .replace(/\*(.*?)\*/g, "$1")         // italic
+      .replace(/~~(.*?)~~/g, "$1")         // strikethrough
+      .replace(/\[(.*?)\]\(.*?\)/g, "$1") // links
+      .replace(/!\[(.*?)\]\(.*?\)/g, "[Hình: $1]") // images
+      .replace(/`{1,3}[^`]*`{1,3}/g, "")  // code
+      .replace(/^\s*[-*+]\s+/gm, "• ")     // list items
+      .replace(/^\s*\d+\.\s+/gm, "")       // numbered lists
+      .replace(/^\s*>\s+/gm, "")           // blockquotes
+      .replace(/\|[^|\n]+\|/g, "")         // tables
+      .replace(/\n{2,}/g, " ")             // multiple newlines
+      .replace(/\n/g, " ")                  // single newlines
+      .trim()
+      .substring(0, 200);
+  }, [formData.description]);
 
   const previewMetrics = [
     {
       label: "Ngân sách",
-      value: formData.isNegotiable
-        ? "Thỏa thuận"
-        : Number(formData.budget) > 0
+      value: Number(formData.budget) > 0
           ? currencyFormatter.format(Number(formData.budget))
           : "Chưa nhập ngân sách",
     },
@@ -344,11 +293,7 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
           (option) => option.value === formData.subCategory,
         )?.label || "Khác",
     },
-    { label: "Thanh toán", value: formData.paymentMethod || "FIXED" },
-    {
-      label: "Địa điểm",
-      value: formData.isRemote ? "Remote" : formData.location || "Onsite",
-    },
+    { label: "Địa điểm", value: "Remote" },
   ];
 
   return (
@@ -383,38 +328,20 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
               </div>
 
               <div className="sjf-field sjf-field--full">
-                <div className="sjf-card__header" style={{ marginBottom: 0 }}>
-                  <label className="sjf-label">
-                    Mô tả công việc
-                    <span className="sjf-label__required">*</span>
-                  </label>
-                  <button
-                    type="button"
-                    className="sjf-link-button"
-                    onClick={() =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        description: appendBlock(
-                          prev.description,
-                          DESCRIPTION_TEMPLATE,
-                        ),
-                      }))
-                    }
-                  >
-                    Chèn mẫu mô tả
-                  </button>
-                </div>
-                <textarea
-                  className="sjf-textarea"
-                  name="description"
+                <label className="sjf-label">
+                  Mô tả công việc
+                  <span className="sjf-label__required">*</span>
+                </label>
+                <RichMarkdownEditor
                   value={formData.description}
-                  onChange={handleInputChange}
-                  rows={6}
-                  placeholder="Mô tả đầu ra cần bàn giao, phạm vi công việc và tiêu chí hoàn thành."
+                  onChange={(v) => {
+                    setFormData((prev) => ({ ...prev, description: v }));
+                    setErrors((prev) => ({ ...prev, description: undefined }));
+                  }}
+                  placeholder="Viết mô tả đầu ra cần bàn giao, phạm vi công việc và tiêu chí hoàn thành..."
+                  minHeight={260}
+                  error={errors.description}
                 />
-                {errors.description && (
-                  <span className="sjf-error">{errors.description}</span>
-                )}
               </div>
 
               <div className="sjf-field sjf-field--full">
@@ -500,9 +427,7 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
               <div className="sjf-field">
                 <label className="sjf-label">
                   Ngân sách
-                  {!formData.isNegotiable && (
-                    <span className="sjf-label__required">*</span>
-                  )}
+                  <span className="sjf-label__required">*</span>
                 </label>
                 <input
                   className="sjf-input"
@@ -511,33 +436,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                   onChange={(event) =>
                     handleNumberField("budget", Number(event.target.value))
                   }
-                  disabled={formData.isNegotiable}
                   placeholder="1000000"
                 />
                 {errors.budget && <span className="sjf-error">{errors.budget}</span>}
-              </div>
-
-              <div className="sjf-field">
-                <label className="sjf-label">Cách thanh toán</label>
-                <select
-                  className="sjf-select"
-                  name="paymentMethod"
-                  value={formData.paymentMethod}
-                  onChange={handleInputChange}
-                >
-                  {PAYMENT_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                <span className="sjf-hint">
-                  {
-                    PAYMENT_OPTIONS.find(
-                      (option) => option.value === formData.paymentMethod,
-                    )?.desc
-                  }
-                </span>
               </div>
 
               <div className="sjf-field sjf-field--full">
@@ -556,36 +457,12 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                         setFormData((prev) => ({
                           ...prev,
                           budget: preset.value,
-                          isNegotiable: false,
                         }))
                       }
                     >
                       {preset.label}
                     </button>
                   ))}
-                </div>
-              </div>
-
-              <div className="sjf-field sjf-field--full">
-                <div className="sjf-toggle-card">
-                  <div className="sjf-toggle-card__content">
-                    <span className="sjf-toggle-card__title">
-                      Cho phép thương lượng giá
-                    </span>
-                    <span className="sjf-note">
-                      Dùng khi bạn muốn nhận báo giá từ ứng viên thay vì chốt
-                      giá ngay.
-                    </span>
-                  </div>
-                  <label className="sjf-switch">
-                    <input
-                      type="checkbox"
-                      name="isNegotiable"
-                      checked={formData.isNegotiable ?? false}
-                      onChange={handleInputChange}
-                    />
-                    <span className="sjf-switch__track" />
-                  </label>
                 </div>
               </div>
 
@@ -695,46 +572,6 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                 </select>
               </div>
 
-              <div className="sjf-field sjf-field--full">
-                <div className="sjf-toggle-card">
-                  <div className="sjf-toggle-card__content">
-                    <span className="sjf-toggle-card__title">
-                      Làm việc từ xa
-                    </span>
-                    <span className="sjf-note">
-                      Tắt nếu công việc cần gặp trực tiếp hoặc làm onsite.
-                    </span>
-                  </div>
-                  <label className="sjf-switch">
-                    <input
-                      type="checkbox"
-                      name="isRemote"
-                      checked={formData.isRemote}
-                      onChange={handleInputChange}
-                    />
-                    <span className="sjf-switch__track" />
-                  </label>
-                </div>
-              </div>
-
-              {!formData.isRemote && (
-                <div className="sjf-field sjf-field--full">
-                  <label className="sjf-label">
-                    Địa điểm làm việc
-                    <span className="sjf-label__required">*</span>
-                  </label>
-                  <input
-                    className="sjf-input"
-                    name="location"
-                    value={formData.location || ""}
-                    onChange={handleInputChange}
-                    placeholder="Ví dụ: Quận 3, TP.HCM"
-                  />
-                  {errors.location && (
-                    <span className="sjf-error">{errors.location}</span>
-                  )}
-                </div>
-              )}
             </div>
 
             <button
@@ -892,104 +729,6 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                   </div>
                 </div>
 
-                {formData.paymentMethod === "MILESTONE" && (
-                  <div className="sjf-callout">
-                    <div className="sjf-card__header" style={{ marginBottom: "0.75rem" }}>
-                      <div>
-                        <h4 className="sjf-card__title">Cột mốc thanh toán</h4>
-                        <p className="sjf-card__desc">
-                          Chỉ thêm những mốc thực sự quan trọng để tránh form quá
-                          nặng.
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        className="sjf-button sjf-button--secondary"
-                        onClick={addMilestone}
-                      >
-                        Thêm cột mốc
-                      </button>
-                    </div>
-
-                    <div className="sjf-preview__list">
-                      {(formData.milestones || []).map((milestone, index) => (
-                        <div key={index} className="sjf-preview__list-item">
-                          <div className="sjf-field-grid">
-                            <div className="sjf-field">
-                              <label className="sjf-label">Tên cột mốc</label>
-                              <input
-                                className="sjf-input"
-                                value={milestone.title}
-                                onChange={(event) =>
-                                  updateMilestone(
-                                    index,
-                                    "title",
-                                    event.target.value,
-                                  )
-                                }
-                                placeholder={`Cột mốc ${index + 1}`}
-                              />
-                            </div>
-                            <div className="sjf-field">
-                              <label className="sjf-label">Số tiền</label>
-                              <input
-                                className="sjf-input"
-                                type="number"
-                                value={milestone.amount || ""}
-                                onChange={(event) =>
-                                  updateMilestone(
-                                    index,
-                                    "amount",
-                                    Number(event.target.value),
-                                  )
-                                }
-                              />
-                            </div>
-                            <div className="sjf-field sjf-field--full">
-                              <label className="sjf-label">Mô tả cột mốc</label>
-                              <textarea
-                                className="sjf-textarea"
-                                value={milestone.description}
-                                onChange={(event) =>
-                                  updateMilestone(
-                                    index,
-                                    "description",
-                                    event.target.value,
-                                  )
-                                }
-                                rows={3}
-                              />
-                            </div>
-                            <div className="sjf-field">
-                              <label className="sjf-label">Deadline</label>
-                              <input
-                                className="sjf-input"
-                                type="datetime-local"
-                                value={normalizeDateTimeLocal(milestone.deadline)}
-                                onChange={(event) =>
-                                  updateMilestone(
-                                    index,
-                                    "deadline",
-                                    event.target.value,
-                                  )
-                                }
-                              />
-                            </div>
-                            <div className="sjf-field" style={{ justifyContent: "flex-end" }}>
-                              <button
-                                type="button"
-                                className="sjf-button sjf-button--secondary"
-                                onClick={() => removeMilestone(index)}
-                              >
-                                Xóa cột mốc
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             )}
           </section>
@@ -1049,8 +788,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                 {formData.title || "Tiêu đề công việc sẽ hiển thị ở đây"}
               </h4>
               <p className="sjf-preview__body">
-                {formData.description ||
-                  "Mô tả đầu ra, cách bàn giao và tiêu chí hoàn thành để ứng viên đánh giá mức phù hợp."}
+                {descriptionExcerpt
+                  ? `${descriptionExcerpt}${descriptionExcerpt.length >= 200 ? "..." : ""}`
+                  : "Mô tả đầu ra, cách bàn giao và tiêu chí hoàn thành để ứng viên đánh giá mức phù hợp."}
               </p>
             </div>
 

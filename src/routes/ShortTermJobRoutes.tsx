@@ -7,6 +7,7 @@ import {
   SubmitDeliverablePage,
   ReviewJobPage,
 } from "../pages/business";
+import GigDetailPage from "../components/jobs-odyssey/GigDetailPage";
 
 // ==================== SHORT-TERM JOB ROUTES ====================
 
@@ -15,9 +16,9 @@ import {
  *
  * /short-term-jobs - Danh sách công việc ngắn hạn
  * /short-term-jobs/create - Tạo công việc mới
- * /short-term-jobs/:jobId - Chi tiết công việc
+ * /short-term-jobs/:jobId - Chi tiết công việc (legacy Chakra UI)
+ * /short-term-jobs/:jobId/view - Trang chi tiết Odyssey (blog-style)
  * /short-term-jobs/:jobId/edit - Chỉnh sửa công việc
- * /short-term-jobs/:jobId/apply - Ứng tuyển công việc
  * /short-term-jobs/:jobId/submit - Nộp sản phẩm
  * /short-term-jobs/:jobId/review - Đánh giá
  */
@@ -33,6 +34,9 @@ const ShortTermJobRoutes: React.FC = () => {
 
       {/* Detail Page */}
       <Route path=":jobId" element={<ShortTermJobDetailPage />} />
+
+      {/* Odyssey View Page */}
+      <Route path=":jobId/view" element={<GigDetailPage />} />
 
       {/* Edit Page (reuses Create component) */}
       <Route path=":jobId/edit" element={<CreateShortTermJobPage />} />

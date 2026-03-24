@@ -1001,7 +1001,7 @@ const CommandDeck: React.FC = () => {
                 </p>
               </div>
             </div>
-            <RecruiterTalentWorkspace jobs={ftJobs} />
+            <RecruiterTalentWorkspace fullTimeJobs={ftJobs} shortTermJobs={stJobs} />
           </div>
         )}
 

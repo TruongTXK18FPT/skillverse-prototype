@@ -1,9 +1,12 @@
 ﻿import React, { useCallback, useEffect, useState } from 'react';
 import {
   Activity,
+  AlertTriangle,
   BriefcaseBusiness,
   Building2,
   CalendarDays,
+  ChevronLeft,
+  ChevronRight,
   Check,
   CheckCircle2,
   Clock3,
@@ -24,6 +27,7 @@ import jobService from '../../services/jobService';
 import { JobPostingResponse, JobStatus } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';
 import ApplicantsModal from '../business/ApplicantsModal';
+import JobMarkdownSurface from '../shared/JobMarkdownSurface';
 import './operation-log.css';
 
 interface OperationLogProps {
@@ -33,6 +37,19 @@ interface OperationLogProps {
 type ActiveSection = 'detail' | 'edit';
 type StatusFilter = 'ALL' | JobStatus;
 type Tone = 'cyan' | 'emerald' | 'amber' | 'rose' | 'slate' | 'violet';
+type ValidationModalState = {
+  visible: boolean;
+  title: string;
+  messages: string[];
+};
+type ServiceError = {
+  message?: string;
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+};
 
 const STATUS_META: Record<JobStatus, { label: string; desc: string; tone: Tone }> = {
   [JobStatus.IN_PROGRESS]: {
@@ -148,8 +165,138 @@ const parseSkills = (value: string) =>
     .map((skill) => skill.trim())
     .filter(Boolean);
 
-const truncate = (value: string, max = 130) =>
-  value.length > max ? `${value.slice(0, max).trim()}...` : value;
+const JOBS_PER_PAGE = 6;
+
+const getMarkdownTheme = (tone: Tone) => {
+  switch (tone) {
+    case 'emerald':
+      return 'emerald' as const;
+    case 'amber':
+      return 'amber' as const;
+    case 'rose':
+      return 'crimson' as const;
+    default:
+      return 'cyan' as const;
+  }
+};
+
+const buildValidationMessages = (form: {
+  title: string;
+  description: string;
+  skillsInput: string;
+  minBudget: string;
+  maxBudget: string;
+  deadline: string;
+  isRemote: boolean;
+  location: string;
+}) => {
+  const messages: string[] = [];
+  const title = form.title.trim();
+  const description = form.description.trim();
+  const skills = parseSkills(form.skillsInput);
+  const minBudget = Number(form.minBudget);
+  const maxBudget = Number(form.maxBudget);
+
+  if (title.length < 8) {
+    messages.push('Tiêu đề chiến dịch đang quá ngắn. Hãy ghi rõ vị trí hoặc mục tiêu tuyển dụng bằng ít nhất 8 ký tự.');
+  }
+
+  if (description.length < 40) {
+    messages.push('Mô tả công việc còn quá ngắn. Bạn nên nêu rõ phạm vi công việc, đầu ra mong đợi và tiêu chí hoàn thành.');
+  }
+
+  if (skills.length === 0) {
+    messages.push('Danh sách kỹ năng đang để trống. Hãy thêm ít nhất một kỹ năng để ứng viên hiểu đúng yêu cầu.');
+  }
+
+  if (!Number.isFinite(minBudget) || minBudget <= 0) {
+    messages.push('Mức lương tối thiểu chưa hợp lệ. Hãy nhập một số lớn hơn 0.');
+  }
+
+  if (!Number.isFinite(maxBudget) || maxBudget <= 0) {
+    messages.push('Mức lương tối đa chưa hợp lệ. Hãy nhập một số lớn hơn 0.');
+  }
+
+  if (
+    Number.isFinite(minBudget) &&
+    Number.isFinite(maxBudget) &&
+    minBudget > 0 &&
+    maxBudget > 0 &&
+    maxBudget < minBudget
+  ) {
+    messages.push('Mức lương tối đa cần lớn hơn hoặc bằng mức lương tối thiểu.');
+  }
+
+  if (!form.deadline) {
+    messages.push('Bạn chưa chọn hạn chót. Hãy đặt một mốc thời gian cụ thể cho chiến dịch.');
+  }
+
+  if (!form.isRemote && !form.location.trim()) {
+    messages.push('Bạn đang chọn hình thức làm tại chỗ, vì vậy cần bổ sung địa điểm làm việc.');
+  }
+
+  return messages;
+};
+
+const mapBackendValidationMessages = (message?: string) => {
+  const normalized = (message || '').toLowerCase();
+  const messages: string[] = [];
+
+  if (normalized.includes('maximum budget cannot be less than minimum budget')) {
+    messages.push('Mức lương tối đa cần lớn hơn hoặc bằng mức lương tối thiểu.');
+  }
+
+  if (normalized.includes('location is required for non-remote jobs')) {
+    messages.push('Bạn đang chọn hình thức làm tại chỗ, vì vậy cần bổ sung địa điểm làm việc cụ thể.');
+  }
+
+  if (normalized.includes('deadline cannot be more than 90 days')) {
+    messages.push('Hạn chót hiện đang vượt quá 90 ngày. Hãy chọn mốc gần hơn để hệ thống có thể lưu.');
+  }
+
+  if (normalized.includes('deadline must be in the future')) {
+    messages.push('Hạn chót cần nằm trong tương lai. Hãy chọn một ngày mới phù hợp hơn.');
+  }
+
+  if (normalized.includes('cannot edit job while it is open')) {
+    messages.push('Chiến dịch đang mở nên chưa thể chỉnh sửa trực tiếp. Hãy đóng chiến dịch trước khi cập nhật nội dung.');
+  }
+
+  if (
+    (normalized.includes('title') || normalized.includes('job title')) &&
+    (normalized.includes('required') || normalized.includes('blank') || normalized.includes('empty'))
+  ) {
+    messages.push('Tiêu đề chiến dịch đang bị thiếu. Hãy đặt một tiêu đề rõ ràng để hệ thống có thể lưu.');
+  }
+
+  if (
+    normalized.includes('description') &&
+    (normalized.includes('required') || normalized.includes('blank') || normalized.includes('empty'))
+  ) {
+    messages.push('Mô tả công việc đang bị thiếu. Hãy bổ sung nội dung chi tiết hơn về phạm vi và kỳ vọng công việc.');
+  }
+
+  if (
+    (normalized.includes('skill') || normalized.includes('required skill')) &&
+    (normalized.includes('required') || normalized.includes('empty') || normalized.includes('blank'))
+  ) {
+    messages.push('Danh sách kỹ năng chưa hợp lệ. Hãy thêm các kỹ năng chính để ứng viên dễ đối chiếu yêu cầu.');
+  }
+
+  if (
+    normalized.includes('budget') &&
+    (normalized.includes('positive') || normalized.includes('greater than 0') || normalized.includes('invalid'))
+  ) {
+    messages.push('Khoảng lương chưa hợp lệ. Hãy kiểm tra lại mức lương tối thiểu và tối đa trước khi lưu.');
+  }
+
+  return messages;
+};
+
+const extractErrorMessage = (error: unknown) => {
+  const serviceError = error as ServiceError;
+  return serviceError?.response?.data?.message || serviceError?.message || '';
+};
 
 const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
   const { showError, showSuccess } = useToast();
@@ -161,6 +308,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
   const [activeSection, setActiveSection] = useState<ActiveSection>('detail');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
+  const [currentPage, setCurrentPage] = useState(0);
   const [editForm, setEditForm] = useState({
     title: '',
     description: '',
@@ -181,6 +329,11 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
   const [closeModal, setCloseModal] = useState({
     visible: false,
     jobId: null as number | null,
+  });
+  const [validationModal, setValidationModal] = useState<ValidationModalState>({
+    visible: false,
+    title: '',
+    messages: [],
   });
 
   const fetchJobs = useCallback(async () => {
@@ -212,6 +365,10 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
     }
   }, [jobs, selectedJob]);
 
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [searchQuery, statusFilter]);
+
   const filteredJobs = jobs
     .filter((job) => {
       const q = searchQuery.trim().toLowerCase();
@@ -226,6 +383,18 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
       (a, b) =>
         new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
     );
+
+  const totalPages = Math.max(1, Math.ceil(filteredJobs.length / JOBS_PER_PAGE));
+  const paginatedJobs = filteredJobs.slice(
+    currentPage * JOBS_PER_PAGE,
+    currentPage * JOBS_PER_PAGE + JOBS_PER_PAGE,
+  );
+
+  useEffect(() => {
+    if (currentPage > totalPages - 1) {
+      setCurrentPage(Math.max(0, totalPages - 1));
+    }
+  }, [currentPage, totalPages]);
 
   const openCount = jobs.filter((job) => job.status === JobStatus.OPEN).length;
   const pendingCount = jobs.filter(
@@ -254,6 +423,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
 
   const openEdit = (job: JobPostingResponse) => {
     setSelectedJob(job);
+    setValidationModal({ visible: false, title: '', messages: [] });
     setEditForm({
       title: job.title,
       description: job.description,
@@ -337,6 +507,17 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
 
   const handleSaveEdit = async () => {
     if (!selectedJob) return;
+    const validationMessages = buildValidationMessages(editForm);
+
+    if (validationMessages.length > 0) {
+      setValidationModal({
+        visible: true,
+        title: 'Một vài thông tin cần được chỉnh lại trước khi lưu',
+        messages: validationMessages,
+      });
+      return;
+    }
+
     try {
       await jobService.updateJob(selectedJob.id, {
         title: editForm.title,
@@ -349,11 +530,27 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
         location: editForm.isRemote ? null : editForm.location.trim(),
       });
       await fetchJobs();
+      setValidationModal({ visible: false, title: '', messages: [] });
       setActiveSection('detail');
       showSuccess('Thành công', 'Thông tin chiến dịch đã được cập nhật.');
     } catch (error) {
       console.error('Error updating job:', error);
-      showError('Lỗi cập nhật', 'Không thể cập nhật thông tin chiến dịch.');
+      const backendMessage = extractErrorMessage(error);
+      const backendValidationMessages = mapBackendValidationMessages(backendMessage);
+
+      if (backendValidationMessages.length > 0) {
+        setValidationModal({
+          visible: true,
+          title: 'Hệ thống cần bạn rà soát lại nội dung chiến dịch',
+          messages: backendValidationMessages,
+        });
+        return;
+      }
+
+      showError(
+        'Lỗi cập nhật',
+        backendMessage || 'Không thể cập nhật thông tin chiến dịch.',
+      );
     }
   };
 
@@ -366,25 +563,25 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
         <div>
           <span className="oplog__eyebrow">
             <Activity size={14} />
-            Operation Log
+            Nhật ký vận hành
           </span>
-          <h2>Nhật Ký Tuyển Dụng Dài Hạn</h2>
+          <h2>Nhật ký tuyển dụng dài hạn</h2>
           <p>
-            Layout master/detail mới với tone neon-tech, phân tách rõ từng khối
-            thông tin để quét trạng thái, deadline và ứng viên nhanh hơn.
+            Trung tâm điều phối giúp theo dõi tiến độ chiến dịch, xử lý trạng
+            thái tuyển dụng và nắm nhanh biến động ứng viên trên một màn hình.
           </p>
           <div className="oplog__hero-tags">
             <span className="oplog__tag oplog__tag--cyan">
               <Sparkles size={13} />
-              Neon visual
+              Theo dõi tức thời
             </span>
             <span className="oplog__tag oplog__tag--violet">
               <FileText size={13} />
-              Section rõ màu
+              Tổ chức rõ ràng
             </span>
             <span className="oplog__tag oplog__tag--amber">
               <Clock3 size={13} />
-              Motion mượt
+              Xử lý nhanh gọn
             </span>
           </div>
         </div>
@@ -395,7 +592,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
             <strong>{latestActivityAt ? formatRelative(latestActivityAt) : 'Chưa có'}</strong>
           </div>
           <div className="oplog__pulse-row">
-            <span>Live campaigns</span>
+            <span>Chiến dịch đang hoạt động</span>
             <strong>{openCount + pendingCount}</strong>
           </div>
           <div className="oplog__pulse-row">
@@ -477,73 +674,121 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
         <aside className="oplog__list-panel">
           <div className="oplog__panel-head">
             <div>
-              <span>Mission Stream</span>
+              <span>Trung tâm chiến dịch</span>
               <h3>Danh sách chiến dịch</h3>
             </div>
             <strong>{filteredJobs.length}</strong>
           </div>
 
-          {isLoading ? (
-            <div className="oplog__state">
-              <Loader2 size={24} className="oplog__spin" />
-              <h4>Đang tải dữ liệu</h4>
-              <p>Hệ thống đang đồng bộ log chiến dịch và hồ sơ liên quan.</p>
-            </div>
-          ) : filteredJobs.length === 0 ? (
-            <div className="oplog__state">
-              <Search size={26} />
-              <h4>Không tìm thấy chiến dịch</h4>
-              <p>Thử thay đổi từ khóa hoặc bộ lọc để làm mới luồng hiển thị.</p>
-            </div>
-          ) : (
-            <div className="oplog__list">
-              {filteredJobs.map((job, index) => {
-                const meta = STATUS_META[job.status];
-                const deadline = getDeadlineMeta(job.deadline);
-                return (
-                  <button
-                    key={job.id}
-                    type="button"
-                    className={`oplog__item oplog__item--${meta.tone} ${
-                      selectedJob?.id === job.id ? 'is-active' : ''
-                    }`}
-                    onClick={() => openDetails(job)}
-                    style={{ ['--index' as const]: index } as React.CSSProperties}
-                  >
-                    <div className="oplog__item-top">
-                      <div>
-                        <span className="oplog__item-id">JOB #{job.id}</span>
-                        <h4>{job.title}</h4>
+          <div className="oplog__list-shell">
+            {isLoading ? (
+              <div className="oplog__state">
+                <Loader2 size={24} className="oplog__spin" />
+                <h4>Đang tải dữ liệu</h4>
+                <p>Hệ thống đang đồng bộ log chiến dịch và hồ sơ liên quan.</p>
+              </div>
+            ) : filteredJobs.length === 0 ? (
+              <div className="oplog__state">
+                <Search size={26} />
+                <h4>Không tìm thấy chiến dịch</h4>
+                <p>Thử thay đổi từ khóa hoặc bộ lọc để làm mới luồng hiển thị.</p>
+              </div>
+            ) : (
+              <div className="oplog__list">
+                {paginatedJobs.map((job, index) => {
+                  const meta = STATUS_META[job.status];
+                  const deadline = getDeadlineMeta(job.deadline);
+                  return (
+                    <button
+                      key={job.id}
+                      type="button"
+                      className={`oplog__item oplog__item--${meta.tone} ${
+                        selectedJob?.id === job.id ? 'is-active' : ''
+                      }`}
+                      onClick={() => openDetails(job)}
+                      style={{ ['--index' as const]: index } as React.CSSProperties}
+                    >
+                      <div className="oplog__item-top">
+                        <div>
+                          <span className="oplog__item-id">Mã tin #{job.id}</span>
+                          <h4>{job.title}</h4>
+                        </div>
+                        <span className={`oplog__badge oplog__badge--${meta.tone}`}>{meta.label}</span>
                       </div>
-                      <span className={`oplog__badge oplog__badge--${meta.tone}`}>{meta.label}</span>
-                    </div>
-                    <p>{truncate(job.description)}</p>
-                    <div className="oplog__item-meta">
-                      <span>
-                        <CalendarDays size={12} />
-                        {formatDate(job.deadline)}
-                      </span>
-                      <span>
-                        <Wallet size={12} />
-                        {job.isNegotiable ? 'Thỏa thuận' : `${compactCurrency(job.maxBudget)} VNĐ`}
-                      </span>
-                      <span>
-                        <Users size={12} />
-                        {job.applicantCount || 0} hồ sơ
-                      </span>
-                    </div>
-                    <div className="oplog__item-bottom">
-                      <span className={`oplog__deadline oplog__deadline--${deadline.tone}`}>{deadline.label}</span>
-                      <span>
-                        <MapPin size={12} />
-                        {job.isRemote ? 'Remote' : job.location || 'Tại chỗ'}
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          )}
+                      <JobMarkdownSurface
+                        content={job.description}
+                        density="card"
+                        theme={getMarkdownTheme(meta.tone)}
+                        maxHeight={108}
+                        className="oplog__item-markdown"
+                        placeholder="Chưa có mô tả chi tiết."
+                      />
+                      <div className="oplog__item-meta">
+                        <span>
+                          <CalendarDays size={12} />
+                          {formatDate(job.deadline)}
+                        </span>
+                        <span>
+                          <Wallet size={12} />
+                          {job.isNegotiable ? 'Thỏa thuận' : `${compactCurrency(job.maxBudget)} VNĐ`}
+                        </span>
+                        <span>
+                          <Users size={12} />
+                          {job.applicantCount || 0} hồ sơ
+                        </span>
+                      </div>
+                      <div className="oplog__item-bottom">
+                        <span className={`oplog__deadline oplog__deadline--${deadline.tone}`}>{deadline.label}</span>
+                        <span>
+                          <MapPin size={12} />
+                          {job.isRemote ? 'Từ xa' : job.location || 'Làm tại chỗ'}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {filteredJobs.length > 0 && totalPages > 1 && (
+              <div className="oplog__pagination">
+                <button
+                  type="button"
+                  className="oplog__pagination-btn"
+                  onClick={() => setCurrentPage((page) => Math.max(0, page - 1))}
+                  disabled={currentPage === 0}
+                >
+                  <ChevronLeft size={14} />
+                  Trước
+                </button>
+                <div className="oplog__pagination-pages">
+                  {Array.from({ length: totalPages }, (_, page) => (
+                    <button
+                      key={page}
+                      type="button"
+                      className={`oplog__pagination-page ${currentPage === page ? 'is-active' : ''}`}
+                      onClick={() => setCurrentPage(page)}
+                    >
+                      {page + 1}
+                    </button>
+                  ))}
+                </div>
+                <div className="oplog__pagination-meta">
+                  <span>Trang {currentPage + 1}/{totalPages}</span>
+                  <strong>{filteredJobs.length} chiến dịch</strong>
+                </div>
+                <button
+                  type="button"
+                  className="oplog__pagination-btn"
+                  onClick={() => setCurrentPage((page) => Math.min(totalPages - 1, page + 1))}
+                  disabled={currentPage >= totalPages - 1}
+                >
+                  Sau
+                  <ChevronRight size={14} />
+                </button>
+              </div>
+            )}
+          </div>
         </aside>
 
         <section className={`oplog__detail-panel ${selectedJob ? '' : 'is-empty'}`}>
@@ -613,7 +858,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                     </article>
                     <article className="oplog__metric" data-tone={selectedDeadline?.tone}>
                       <CalendarDays size={15} />
-                      <span>Deadline</span>
+                      <span>Hạn chót</span>
                       <strong>{formatDate(selectedJob.deadline)}</strong>
                       <small>{selectedDeadline?.label}</small>
                     </article>
@@ -625,7 +870,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                     <article className="oplog__metric" data-tone="emerald">
                       <MapPin size={15} />
                       <span>Hình thức</span>
-                      <strong>{selectedJob.isRemote ? 'Remote / linh hoạt' : selectedJob.location || 'Tại chỗ'}</strong>
+                      <strong>{selectedJob.isRemote ? 'Từ xa / linh hoạt' : selectedJob.location || 'Làm tại chỗ'}</strong>
                     </article>
                   </div>
 
@@ -634,19 +879,29 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                       <div className="oplog__card-head">
                         <FileText size={15} />
                         <div>
-                          <h4>Mission Brief</h4>
+                          <h4>Tóm tắt chiến dịch</h4>
                           <p>{selectedMeta?.desc}</p>
                         </div>
                       </div>
-                      <p className="oplog__copy">{selectedJob.description}</p>
-                      <div className="oplog__timeline">
-                        <div>
-                          <span>Ngày tạo</span>
-                          <strong>{formatDateTime(selectedJob.createdAt)}</strong>
+                      <div className="oplog__section-split">
+                        <div className="oplog__markdown-panel">
+                          <JobMarkdownSurface
+                            content={selectedJob.description}
+                            density="detail"
+                            theme={getMarkdownTheme(selectedMeta?.tone || 'cyan')}
+                            className="oplog__markdown"
+                            placeholder="Chiến dịch này chưa có mô tả chi tiết."
+                          />
                         </div>
-                        <div>
-                          <span>Cập nhật cuối</span>
-                          <strong>{formatDateTime(selectedJob.updatedAt)}</strong>
+                        <div className="oplog__timeline">
+                          <div>
+                            <span>Ngày tạo</span>
+                            <strong>{formatDateTime(selectedJob.createdAt)}</strong>
+                          </div>
+                          <div>
+                            <span>Cập nhật cuối</span>
+                            <strong>{formatDateTime(selectedJob.updatedAt)}</strong>
+                          </div>
                         </div>
                       </div>
                     </article>
@@ -655,11 +910,11 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                       <div className="oplog__card-head">
                         <BriefcaseBusiness size={15} />
                         <div>
-                          <h4>Deployment Profile</h4>
-                          <p>Thông số vận hành hiện tại</p>
+                          <h4>Thông tin vận hành</h4>
+                          <p>Thông số cốt lõi của chiến dịch hiện tại</p>
                         </div>
                       </div>
-                      <div className="oplog__info">
+                      <div className="oplog__info oplog__info--horizontal">
                         <div><span>Kinh nghiệm</span><strong>{selectedJob.experienceLevel || 'Chưa cập nhật'}</strong></div>
                         <div><span>Loại hình</span><strong>{selectedJob.jobType || 'Chưa cập nhật'}</strong></div>
                         <div><span>Số lượng</span><strong>{selectedJob.hiringQuantity ? `${selectedJob.hiringQuantity} người` : 'Chưa cập nhật'}</strong></div>
@@ -671,7 +926,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                       <div className="oplog__card-head">
                         <Sparkles size={15} />
                         <div>
-                          <h4>Skill Stack</h4>
+                          <h4>Kỹ năng và phúc lợi</h4>
                           <p>Kỹ năng và quyền lợi</p>
                         </div>
                       </div>
@@ -693,7 +948,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                       <div className="oplog__card-head">
                         <Activity size={15} />
                         <div>
-                          <h4>Command Actions</h4>
+                          <h4>Thao tác điều hành</h4>
                           <p>Thao tác điều hành chiến dịch theo trạng thái hiện tại</p>
                         </div>
                       </div>
@@ -750,7 +1005,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                   <div className="oplog__edit-intro">
                     <span className="oplog__eyebrow oplog__eyebrow--small">
                       <Edit3 size={12} />
-                      Edit Console
+                      Bảng chỉnh sửa
                     </span>
                     <h4>Tinh chỉnh chiến dịch</h4>
                     <p>Cập nhật nội dung, ngân sách và kỹ năng trước khi tái sử dụng.</p>
@@ -774,7 +1029,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                       <input type="number" value={editForm.maxBudget} onChange={(event) => setEditForm((prev) => ({ ...prev, maxBudget: event.target.value }))} />
                     </label>
                     <label className="oplog__field">
-                      <span>Deadline</span>
+                      <span>Hạn chót</span>
                       <input type="date" value={editForm.deadline} onChange={(event) => setEditForm((prev) => ({ ...prev, deadline: event.target.value }))} />
                     </label>
                     <label className="oplog__field">
@@ -785,10 +1040,10 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                       <span>Hình thức làm việc</span>
                       <div className="oplog__toggle">
                         <button type="button" className={editForm.isRemote ? 'is-active' : ''} onClick={() => setEditForm((prev) => ({ ...prev, isRemote: true, location: '' }))}>
-                          Remote / linh hoạt
+                          Từ xa / linh hoạt
                         </button>
                         <button type="button" className={!editForm.isRemote ? 'is-active' : ''} onClick={() => setEditForm((prev) => ({ ...prev, isRemote: false }))}>
-                          Tại chỗ
+                          Làm tại chỗ
                         </button>
                       </div>
                     </div>
@@ -820,12 +1075,12 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
               </div>
               <span className="oplog__eyebrow oplog__eyebrow--small">
                 <FileText size={12} />
-                Detail Cockpit
+                Bảng chi tiết
               </span>
               <h3>Chọn một chiến dịch để xem bảng điều khiển chi tiết</h3>
               <p>
-                Mỗi item bên trái sẽ mở panel với deadline, trạng thái, kỹ năng và
-                các action quản trị được gom theo từng section màu riêng.
+                Mỗi chiến dịch sẽ mở ra đầy đủ trạng thái, hạn chót, yêu cầu và
+                các thao tác xử lý tập trung trong một luồng theo dõi rõ ràng.
               </p>
             </div>
           )}
@@ -850,7 +1105,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                 <XCircle size={18} />
               </div>
               <div>
-                <span>Close Campaign</span>
+                <span>Đóng chiến dịch</span>
                 <h3>Xác nhận đóng chiến dịch</h3>
                 <p>Ứng viên sẽ không thể nộp thêm hồ sơ mới sau thao tác này.</p>
               </div>
@@ -895,7 +1150,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                 <RotateCcw size={18} />
               </div>
               <div>
-                <span>Re-activate Campaign</span>
+                <span>Mở lại chiến dịch</span>
                 <h3>Mở lại chiến dịch</h3>
                 <p>Thiết lập deadline mới để chiến dịch tiếp tục nhận hồ sơ.</p>
               </div>
@@ -919,13 +1174,13 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
               <strong>{reopenModal.isFree ? 'Miễn phí trong thời gian ân hạn' : 'Phí mở lại: 20.000 VNĐ'}</strong>
               <p>
                 {reopenModal.isFree
-                  ? 'Reopen trong vòng 5 phút nên không tính phí.'
+                  ? 'Mở lại trong vòng 5 phút nên không bị tính phí.'
                   : 'Phí sẽ được trừ trực tiếp từ ví khi xác nhận mở lại.'}
               </p>
             </div>
             <div className="oplog-modal__body">
               <label className="oplog__field oplog__field--wide">
-                <span>Deadline mới</span>
+                <span>Hạn chót mới</span>
                 <input
                   type="date"
                   value={reopenModal.deadline}
@@ -968,6 +1223,58 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
               <button type="button" className="oplog-btn oplog-btn--success" onClick={confirmReopen}>
                 <Check size={14} />
                 Xác nhận mở lại
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {validationModal.visible && (
+        <div
+          className="oplog-modal-overlay"
+          onClick={() => setValidationModal({ visible: false, title: '', messages: [] })}
+        >
+          <div
+            className="oplog-modal oplog-modal--validation"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="oplog-modal__head">
+              <div className="oplog-modal__icon oplog-modal__icon--amber">
+                <AlertTriangle size={18} />
+              </div>
+              <div>
+                <span>Cần điều chỉnh trước khi lưu</span>
+                <h3>{validationModal.title}</h3>
+                <p>
+                  Hệ thống chưa thể lưu chiến dịch vì một vài thông tin còn chưa phù hợp.
+                  Hãy chỉnh lại các mục dưới đây rồi thử lưu lại.
+                </p>
+              </div>
+              <button
+                type="button"
+                className="oplog__icon-btn"
+                onClick={() => setValidationModal({ visible: false, title: '', messages: [] })}
+              >
+                <X size={14} />
+              </button>
+            </div>
+            <div className="oplog-modal__body">
+              <div className="oplog-validation">
+                {validationModal.messages.map((message, index) => (
+                  <div key={`${index}-${message}`} className="oplog-validation__item">
+                    <span>{index + 1}</span>
+                    <p>{message}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="oplog-modal__actions">
+              <button
+                type="button"
+                className="oplog-btn oplog-btn--warning"
+                onClick={() => setValidationModal({ visible: false, title: '', messages: [] })}
+              >
+                Tôi sẽ chỉnh lại
               </button>
             </div>
           </div>

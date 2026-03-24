@@ -7,6 +7,8 @@ import {
   Calendar,
   CheckCircle2,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   ChevronUp,
   Clock3,
   Crown,
@@ -30,7 +32,6 @@ import {
   XCircle,
   Zap,
 } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
 import {
   AICandidateMatchResponse,
   CandidateSearchResult,
@@ -38,19 +39,27 @@ import {
   MentorReviewDTO,
   PortfolioProjectDTO,
   RecruitmentMessageResponse,
+  RecruitmentJobContextType,
   RecruitmentSessionResponse,
   RecruitmentSessionStatus,
   UserProfileDTO,
 } from '../../data/portfolioDTOs';
 import { JobApplicationResponse, JobApplicationStatus, JobPostingResponse, JobStatus } from '../../data/jobDTOs';
 import candidateSearchService from '../../services/candidateSearchService';
-import jobBoostService from '../../services/jobBoostService';
 import jobService from '../../services/jobService';
 import portfolioService from '../../services/portfolioService';
+import shortTermJobService from '../../services/shortTermJobService';
 import recruiterSubscriptionService, {
   RecruiterSubscriptionInfoResponse,
 } from '../../services/recruiterSubscriptionService';
 import recruitmentChatService from '../../services/recruitmentChatService';
+import JobBoostButton from './JobBoostButton';
+import {
+  ShortTermApplicationResponse,
+  ShortTermApplicationStatus,
+  ShortTermJobResponse,
+  ShortTermJobStatus,
+} from '../../types/ShortTermJob';
 import {
   getApplicantDisplayName,
   getApplicantInitials,
@@ -77,8 +86,50 @@ type CandidateSeed = {
 };
 
 interface RecruiterTalentWorkspaceProps {
-  jobs: JobPostingResponse[];
+  fullTimeJobs: JobPostingResponse[];
+  shortTermJobs: ShortTermJobResponse[];
 }
+
+type WorkspaceJobKind = 'fulltime' | 'shortterm';
+
+type WorkspaceJob = {
+  key: string;
+  id: number;
+  kind: WorkspaceJobKind;
+  title: string;
+  status: string;
+  statusLabel: string;
+  statusTone: string;
+  applicantCount: number;
+  requiredSkills: string[];
+  deadline?: string;
+  location?: string | null;
+  isRemote?: boolean;
+  budgetLabel: string;
+  subLabel: string;
+  raw: JobPostingResponse | ShortTermJobResponse;
+};
+
+type WorkspaceApplicant = {
+  id: number;
+  kind: WorkspaceJobKind;
+  userId: number;
+  userFullName: string;
+  userEmail?: string;
+  userAvatar?: string;
+  userProfessionalTitle?: string;
+  portfolioSlug?: string;
+  coverLetter?: string | null;
+  status: string;
+  statusLabel: string;
+  statusTone: string;
+  appliedAt?: string;
+  budgetLabel: string;
+  canMarkReviewed: boolean;
+  canAccept: boolean;
+  canReject: boolean;
+  raw: JobApplicationResponse | ShortTermApplicationResponse;
+};
 
 const resolveAssetUrl = (raw?: string): string => {
   return resolveRecruitmentAssetUrl(raw) || '/images/meowl.jpg';
@@ -164,25 +215,321 @@ const getApplicationStatusLabel = (status: JobApplicationResponse['status']): st
   }
 };
 
-const getSkillSignalColor = (score: number): string => {
+const getFullTimeJobStatusTone = (status: JobStatus): string => {
+  switch (status) {
+    case JobStatus.OPEN:
+      return 'open';
+    case JobStatus.IN_PROGRESS:
+    case JobStatus.PENDING_APPROVAL:
+      return 'pending';
+    case JobStatus.REJECTED:
+      return 'rejected';
+    case JobStatus.CLOSED:
+      return 'closed';
+    default:
+      return 'pending';
+  }
+};
+
+const getFullTimeApplicationTone = (status: JobApplicationResponse['status']): string => {
+  switch (status) {
+    case 'ACCEPTED':
+      return 'accepted';
+    case 'REJECTED':
+      return 'rejected';
+    case 'PENDING':
+    case 'REVIEWED':
+    default:
+      return 'pending';
+  }
+};
+
+const getShortTermJobStatusLabel = (status: ShortTermJobStatus): string => {
+  switch (status) {
+    case ShortTermJobStatus.DRAFT: return 'Bản nháp';
+    case ShortTermJobStatus.PENDING_APPROVAL: return 'Chờ duyệt';
+    case ShortTermJobStatus.PUBLISHED: return 'Đang hiển thị';
+    case ShortTermJobStatus.APPLIED: return 'Đã có apply';
+    case ShortTermJobStatus.IN_PROGRESS: return 'Đang thực hiện';
+    case ShortTermJobStatus.SUBMITTED: return 'Đã bàn giao';
+    case ShortTermJobStatus.UNDER_REVIEW: return 'Đang xem xét';
+    case ShortTermJobStatus.APPROVED: return 'Đã duyệt';
+    case ShortTermJobStatus.REJECTED: return 'Bị từ chối';
+    case ShortTermJobStatus.COMPLETED: return 'Hoàn thành';
+    case ShortTermJobStatus.PAID: return 'Đã thanh toán';
+    case ShortTermJobStatus.CANCELLED: return 'Đã hủy';
+    case ShortTermJobStatus.DISPUTED: return 'Đang tranh chấp';
+    case ShortTermJobStatus.CLOSED: return 'Đã đóng';
+    default: return status;
+  }
+};
+
+const getShortTermJobStatusTone = (status: ShortTermJobStatus): string => {
+  switch (status) {
+    case ShortTermJobStatus.PUBLISHED:
+    case ShortTermJobStatus.APPLIED:
+    case ShortTermJobStatus.IN_PROGRESS:
+    case ShortTermJobStatus.APPROVED:
+    case ShortTermJobStatus.COMPLETED:
+    case ShortTermJobStatus.PAID:
+      return 'open';
+    case ShortTermJobStatus.DRAFT:
+    case ShortTermJobStatus.PENDING_APPROVAL:
+    case ShortTermJobStatus.SUBMITTED:
+    case ShortTermJobStatus.UNDER_REVIEW:
+      return 'pending';
+    case ShortTermJobStatus.REJECTED:
+    case ShortTermJobStatus.CANCELLED:
+    case ShortTermJobStatus.DISPUTED:
+      return 'rejected';
+    case ShortTermJobStatus.CLOSED:
+      return 'closed';
+    default:
+      return 'pending';
+  }
+};
+
+const getShortTermApplicationStatusLabel = (status: ShortTermApplicationStatus): string => {
+  switch (status) {
+    case ShortTermApplicationStatus.PENDING: return 'Chờ duyệt';
+    case ShortTermApplicationStatus.ACCEPTED: return 'Đã chọn';
+    case ShortTermApplicationStatus.REJECTED: return 'Từ chối';
+    case ShortTermApplicationStatus.WORKING:
+    case ShortTermApplicationStatus.IN_PROGRESS:
+      return 'Đang làm';
+    case ShortTermApplicationStatus.SUBMITTED: return 'Đã bàn giao';
+    case ShortTermApplicationStatus.REVISION_REQUIRED: return 'Cần chỉnh sửa';
+    case ShortTermApplicationStatus.APPROVED: return 'Đã duyệt';
+    case ShortTermApplicationStatus.COMPLETED: return 'Hoàn thành';
+    case ShortTermApplicationStatus.PAID: return 'Đã thanh toán';
+    case ShortTermApplicationStatus.CANCELLED: return 'Đã hủy';
+    case ShortTermApplicationStatus.WITHDRAWN: return 'Rút đơn';
+    default: return status;
+  }
+};
+
+const getShortTermApplicationTone = (status: ShortTermApplicationStatus): string => {
+  switch (status) {
+    case ShortTermApplicationStatus.ACCEPTED:
+    case ShortTermApplicationStatus.WORKING:
+    case ShortTermApplicationStatus.IN_PROGRESS:
+    case ShortTermApplicationStatus.APPROVED:
+    case ShortTermApplicationStatus.COMPLETED:
+    case ShortTermApplicationStatus.PAID:
+      return 'accepted';
+    case ShortTermApplicationStatus.REJECTED:
+    case ShortTermApplicationStatus.CANCELLED:
+    case ShortTermApplicationStatus.WITHDRAWN:
+      return 'rejected';
+    case ShortTermApplicationStatus.PENDING:
+    case ShortTermApplicationStatus.SUBMITTED:
+    case ShortTermApplicationStatus.REVISION_REQUIRED:
+    default:
+      return 'pending';
+  }
+};
+
+const getWorkspaceJobKey = (kind: WorkspaceJobKind, id: number): string => `${kind}-${id}`;
+
+const toWorkspaceFullTimeJob = (job: JobPostingResponse): WorkspaceJob => ({
+  key: getWorkspaceJobKey('fulltime', job.id),
+  id: job.id,
+  kind: 'fulltime',
+  title: job.title,
+  status: job.status,
+  statusLabel: getJobStatusLabel(job.status),
+  statusTone: getFullTimeJobStatusTone(job.status),
+  applicantCount: job.applicantCount || 0,
+  requiredSkills: job.requiredSkills || [],
+  deadline: job.deadline,
+  location: job.location,
+  isRemote: job.isRemote,
+  budgetLabel: `${formatCompactCurrency(job.minBudget)} - ${formatCompactCurrency(job.maxBudget)}`,
+  subLabel: job.isRemote ? 'Remote' : job.location || 'On-site',
+  raw: job,
+});
+
+const toWorkspaceShortTermJob = (job: ShortTermJobResponse): WorkspaceJob => ({
+  key: getWorkspaceJobKey('shortterm', job.id),
+  id: job.id,
+  kind: 'shortterm',
+  title: job.title,
+  status: job.status,
+  statusLabel: getShortTermJobStatusLabel(job.status),
+  statusTone: getShortTermJobStatusTone(job.status),
+  applicantCount: job.applicantCount || 0,
+  requiredSkills: job.requiredSkills || [],
+  deadline: job.deadline,
+  location: job.location,
+  isRemote: job.isRemote,
+  budgetLabel: formatCompactCurrency(job.budget),
+  subLabel: job.isRemote ? 'Remote' : job.location || 'On-site',
+  raw: job,
+});
+
+const toWorkspaceFullTimeApplicant = (application: JobApplicationResponse): WorkspaceApplicant => ({
+  id: application.id,
+  kind: 'fulltime',
+  userId: application.userId,
+  userFullName: application.userFullName,
+  userEmail: application.userEmail,
+  userAvatar: application.userAvatar,
+  userProfessionalTitle: application.userProfessionalTitle,
+  portfolioSlug: application.portfolioSlug,
+  coverLetter: application.coverLetter,
+  status: application.status,
+  statusLabel: getApplicationStatusLabel(application.status),
+  statusTone: getFullTimeApplicationTone(application.status),
+  appliedAt: application.appliedAt,
+  budgetLabel: `${formatCompactCurrency(application.minBudget)} - ${formatCompactCurrency(application.maxBudget)}`,
+  canMarkReviewed: application.status === 'PENDING',
+  canAccept: application.status === 'PENDING' || application.status === 'REVIEWED',
+  canReject: application.status === 'PENDING' || application.status === 'REVIEWED',
+  raw: application,
+});
+
+const toWorkspaceShortTermApplicant = (
+  application: ShortTermApplicationResponse,
+): WorkspaceApplicant => ({
+  id: application.id,
+  kind: 'shortterm',
+  userId: application.userId,
+  userFullName: application.userFullName,
+  userEmail: application.userEmail,
+  userAvatar: application.userAvatar,
+  userProfessionalTitle: application.userProfessionalTitle,
+  portfolioSlug: application.portfolioSlug,
+  coverLetter: application.coverLetter,
+  status: application.status,
+  statusLabel: getShortTermApplicationStatusLabel(application.status),
+  statusTone: getShortTermApplicationTone(application.status),
+  appliedAt: application.appliedAt,
+  budgetLabel: application.proposedPrice != null
+    ? formatCompactCurrency(application.proposedPrice)
+    : application.jobDetails?.budget != null
+      ? formatCompactCurrency(application.jobDetails.budget)
+      : 'Theo ngân sách job',
+  canMarkReviewed: false,
+  canAccept: application.status === ShortTermApplicationStatus.PENDING,
+  canReject: application.status === ShortTermApplicationStatus.PENDING,
+  raw: application,
+});
+
+const toCandidateSeedFromApplicant = (application: WorkspaceApplicant): CandidateSeed => ({
+  candidateId: application.userId,
+  fullName: getApplicantDisplayName(application.userFullName, application.userEmail),
+  professionalTitle: application.userProfessionalTitle,
+  avatarUrl: application.userAvatar,
+  portfolioSlug: application.portfolioSlug,
+  email: application.userEmail,
+  sourceLabel: 'Ứng viên đã apply',
+});
+
+const matchesSessionToJob = (
+  session: RecruitmentSessionResponse,
+  job: WorkspaceJob,
+): boolean => {
+  if (session.jobId !== job.id) {
+    return false;
+  }
+
+  if (job.kind === 'shortterm') {
+    return session.jobContextType === RecruitmentJobContextType.SHORT_TERM_JOB;
+  }
+
+  return (session.jobContextType || RecruitmentJobContextType.JOB_POSTING) === RecruitmentJobContextType.JOB_POSTING;
+};
+
+const isWorkspaceJobOpen = (job: WorkspaceJob): boolean => {
+  if (job.kind === 'shortterm') {
+    return [
+      ShortTermJobStatus.PUBLISHED,
+      ShortTermJobStatus.APPLIED,
+      ShortTermJobStatus.IN_PROGRESS,
+      ShortTermJobStatus.SUBMITTED,
+      ShortTermJobStatus.UNDER_REVIEW,
+      ShortTermJobStatus.APPROVED,
+    ].includes((job.raw as ShortTermJobResponse).status);
+  }
+
+  return (job.raw as JobPostingResponse).status === JobStatus.OPEN;
+};
+
+const isApplicantPending = (application: WorkspaceApplicant): boolean =>
+  application.status === 'PENDING' || (application.kind === 'fulltime' && application.status === 'REVIEWED');
+
+// ============ AI INSIGHT RENDERER ============
+type MatchQuality = 'EXCELLENT' | 'GOOD' | 'FAIR' | 'POOR';
+
+interface SkillSignal {
+  skill: string;
+  evidence: string;
+  isRequired: boolean;
+  relevanceScore: number;
+}
+
+const getMatchQuality = (quality: MatchQuality): { label: string; color: string; icon: string } => {
+  switch (quality) {
+    case 'EXCELLENT': return { label: 'Xuất sắc', color: '#4ade80', icon: '\u2728' };
+    case 'GOOD': return { label: 'Tốt', color: '#60a5fa', icon: '\u2B50' };
+    case 'FAIR': return { label: 'Trung bình', color: '#fbbf24', icon: '\u2753' };
+    case 'POOR': return { label: 'Yếu', color: '#f87171', icon: '\u26A0\uFE0F' };
+  }
+};
+
+const getScoreColor = (score: number): string => {
   if (score >= 0.8) return '#4ade80';
-  if (score >= 0.6) return '#f0d060';
-  if (score >= 0.4) return '#fbbf24';
+  if (score >= 0.6) return '#fbbf24';
+  if (score >= 0.4) return '#fb923c';
   return '#f87171';
 };
 
-// ============ AI INSIGHT RENDERER ============
-interface SkillSignal {
-  skill?: string;
-  isRequired?: boolean;
-  relevanceScore?: number;
-  evidence?: string;
-}
+const CircularScoreRing = ({ score, size = 56, strokeWidth = 5, color }: {
+  score: number; size?: number; strokeWidth?: number; color: string;
+}) => {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const offset = circumference - (score / 100) * circumference;
+  return (
+    <svg width={size} height={size} className="rtw-ai-insight__confidence-svg">
+      <circle
+        cx={size / 2} cy={size / 2} r={radius}
+        fill="none"
+        stroke="rgba(255,255,255,0.06)"
+        strokeWidth={strokeWidth}
+      />
+      <circle
+        cx={size / 2} cy={size / 2} r={radius}
+        fill="none"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeDasharray={circumference}
+        strokeDashoffset={offset}
+        transform={`rotate(-90 ${size / 2} ${size / 2})`}
+        style={{ transition: 'stroke-dashoffset 0.8s ease' }}
+      />
+      <text
+        x="50%" y="50%"
+        dominantBaseline="central"
+        textAnchor="middle"
+        fill={color}
+        fontSize={size * 0.22}
+        fontWeight="700"
+        fontFamily="inherit"
+      >
+        {Math.round(score)}%
+      </text>
+    </svg>
+  );
+};
 
 const AIInsightRenderer = ({ insight }: { insight: AICandidateMatchResponse }) => {
   const [expanded, setExpanded] = useState(false);
-  const confidence = Math.round((insight.confidence || 0) * 100);
-  const signals: SkillSignal[] = (insight as any).skillSignals || [];
+  const confidence = Math.round((insight.confidenceScore || 0) * 100);
+  const signals: SkillSignal[] = insight.skillSignals || [];
+  const quality: MatchQuality = insight.matchQuality || 'FAIR';
+  const qualityMeta = getMatchQuality(quality);
 
   // Strip escape artifacts from AI output
   const cleanText = (text: string): string => {
@@ -218,24 +565,21 @@ const AIInsightRenderer = ({ insight }: { insight: AICandidateMatchResponse }) =
     let partKey = 0;
 
     while (remaining.length > 0) {
-      // Bold **text**
       const boldMatch = remaining.match(/^\*\*(.+?)\*\*/);
       if (boldMatch) {
-        parts.push(<strong key={partKey++} className="md-bold">{boldMatch[1]}</strong>);
+        parts.push(<strong key={partKey++} className="ai-md-bold">{boldMatch[1]}</strong>);
         remaining = remaining.slice(boldMatch[0].length);
         continue;
       }
-      // Inline code `text`
       const codeMatch = remaining.match(/^`([^`]+)`/);
       if (codeMatch) {
-        parts.push(<code key={partKey++} className="md-code">{codeMatch[1]}</code>);
+        parts.push(<code key={partKey++} className="ai-md-code">{codeMatch[1]}</code>);
         remaining = remaining.slice(codeMatch[0].length);
         continue;
       }
-      // Italic *text* or _text_
       const italicMatch = remaining.match(/^(\*|_)([^*_]+?)\1/);
       if (italicMatch) {
-        parts.push(<em key={partKey++} className="md-italic">{italicMatch[2]}</em>);
+        parts.push(<em key={partKey++} className="ai-md-italic">{italicMatch[2]}</em>);
         remaining = remaining.slice(italicMatch[0].length);
         continue;
       }
@@ -253,11 +597,6 @@ const AIInsightRenderer = ({ insight }: { insight: AICandidateMatchResponse }) =
     return parts.length > 0 ? <span key={`inline-${partKey}`}>{parts}</span> : null;
   };
 
-  // Check if content looks like rich markdown (has ## headings)
-  const isRichMarkdown = (text: string): boolean => {
-    return /^##\s/.test(text.trim());
-  };
-
   // Parse rich markdown into structured JSX blocks
   const parseRichMarkdown = (raw: string): React.ReactNode => {
     const text = cleanText(raw);
@@ -271,28 +610,25 @@ const AIInsightRenderer = ({ insight }: { insight: AICandidateMatchResponse }) =
     while (i < lines.length) {
       const line = lines[i].trim();
 
-      // Skip HR before first content
       if ((line === '---' || line === '***' || line === '___') && sections.length === 0) {
         i++; continue;
       }
 
-      // HR divider
       if (line === '---' || line === '***' || line === '___') {
-        sections.push(<hr key={key++} className="md-hr" />);
+        sections.push(<hr key={key++} className="ai-md-hr" />);
         i++; continue;
       }
 
       // Top-level heading: ## 🧠 Đánh giá tổng quan
       if (line.startsWith('## ')) {
         const headingText = line.slice(3).trim();
-        // Extract emoji
         const emojiMatch = headingText.match(/^([^\s]+\s)/);
         const emoji = emojiMatch ? emojiMatch[1] : '';
         const heading = emojiMatch ? headingText.slice(emojiMatch[0].length) : headingText;
         sections.push(
-          <div key={key++} className="md-section">
-            <div className="md-section__heading">
-              {emoji && <span className="md-section__emoji">{emoji}</span>}
+          <div key={key++} className="ai-md-section">
+            <div className="ai-md-section__heading">
+              {emoji && <span className="ai-md-section__emoji">{emoji}</span>}
               <span>{parseInline(heading)}</span>
             </div>
           </div>
@@ -300,25 +636,22 @@ const AIInsightRenderer = ({ insight }: { insight: AICandidateMatchResponse }) =
         i++; continue;
       }
 
-      // Sub-heading: ### 1. React (Quan trọng)
-      if (line.startsWith('### ')) {
-        const subText = line.slice(4).trim();
-        // Extract index number
+      // Sub-heading: ### 1. React (Quan trọng)  or  #### Skill Name
+      if (line.startsWith('### ') || line.startsWith('#### ')) {
+        const subText = line.slice(line.startsWith('#### ') ? 5 : 4).trim();
         const indexMatch = subText.match(/^(\d+\.\s*)/);
         const idx = indexMatch ? indexMatch[1] : '';
         const rest = indexMatch ? subText.slice(indexMatch[0].length) : subText;
 
-        // Check for badge (Quan trọng / Ưu tiên)
         const badgeMatch = rest.match(/\s*\(([^)]+)\)\s*$/);
         const badge = badgeMatch ? badgeMatch[1].trim() : '';
         const title = badgeMatch ? rest.slice(0, -badgeMatch[0].length).trim() : rest;
 
-        // Collect content until next ## or --- or ###
         const contentLines: string[] = [];
         let j = i + 1;
         while (j < lines.length) {
           const t = lines[j].trim();
-          if (t.startsWith('## ') || t.startsWith('---') || t.startsWith('### ')) break;
+          if (t.startsWith('## ') || t.startsWith('---') || t.startsWith('### ') || t.startsWith('#### ')) break;
           if (t) contentLines.push(lines[j]);
           j++;
         }
@@ -326,12 +659,12 @@ const AIInsightRenderer = ({ insight }: { insight: AICandidateMatchResponse }) =
         const content = parseSkillContent(contentLines.join('\n'), badge);
 
         sections.push(
-          <div key={key++} className={`md-skill-block ${badge.toLowerCase().includes('quan') ? 'md-skill-block--required' : ''}`}>
-            <div className="md-skill-block__header">
-              {idx && <span className="md-skill-block__idx">{idx.replace('.', '')}</span>}
-              <span className="md-skill-block__name">{parseInline(title)}</span>
+          <div key={key++} className={`ai-md-skill-block ${badge.toLowerCase().includes('quan') ? 'ai-md-skill-block--required' : ''}`}>
+            <div className="ai-md-skill-block__header">
+              {idx && <span className="ai-md-skill-block__idx">{idx.replace('.', '')}</span>}
+              <span className="ai-md-skill-block__name">{parseInline(title)}</span>
               {badge && (
-                <span className={`md-skill-block__badge ${badge.toLowerCase().includes('quan') ? 'md-skill-block__badge--required' : 'md-skill-block__badge--optional'}`}>
+                <span className={`ai-md-skill-block__badge ${badge.toLowerCase().includes('quan') ? 'ai-md-skill-block__badge--required' : 'ai-md-skill-block__badge--optional'}`}>
                   {badge}
                 </span>
               )}
@@ -343,25 +676,17 @@ const AIInsightRenderer = ({ insight }: { insight: AICandidateMatchResponse }) =
         continue;
       }
 
-      // Bullet lists
       if (line.match(/^[-*+] /)) {
         const items: React.ReactNode[] = [];
         while (i < lines.length && lines[i].trim().match(/^[-*+] /)) {
           const itemText = lines[i].trim().slice(2);
-          // Check for nested sub-items
-          if (itemText.match(/^\s{2,}[-*+]/)) {
-            // Skip nested for now — handled inline
-            items.push(<li key={key++}>{parseInline(itemText.trim())}</li>);
-          } else {
-            items.push(<li key={key++}>{parseInline(itemText)}</li>);
-          }
+          items.push(<li key={key++}>{parseInline(itemText)}</li>);
           i++;
         }
-        sections.push(<ul key={key++} className="md-ul">{items}</ul>);
+        sections.push(<ul key={key++} className="ai-md-ul">{items}</ul>);
         continue;
       }
 
-      // Ordered lists
       if (line.match(/^\d+\. /)) {
         const items: React.ReactNode[] = [];
         while (i < lines.length && lines[i].trim().match(/^\d+\. /)) {
@@ -369,11 +694,10 @@ const AIInsightRenderer = ({ insight }: { insight: AICandidateMatchResponse }) =
           items.push(<li key={key++}>{parseInline(itemText)}</li>);
           i++;
         }
-        sections.push(<ol key={key++} className="md-ol">{items}</ol>);
+        sections.push(<ol key={key++} className="ai-md-ol">{items}</ol>);
         continue;
       }
 
-      // Paragraph
       if (line) {
         const paraLines: string[] = [line];
         let j = i + 1;
@@ -383,7 +707,7 @@ const AIInsightRenderer = ({ insight }: { insight: AICandidateMatchResponse }) =
           if (t) paraLines.push(t);
           j++;
         }
-        sections.push(<p key={key++} className="md-p">{paraLines.map(l => parseInline(l))}</p>);
+        sections.push(<p key={key++} className="ai-md-p">{paraLines.map((l, li) => <span key={li}>{parseInline(l)}</span>)}</p>);
         i = j;
         continue;
       }
@@ -394,7 +718,7 @@ const AIInsightRenderer = ({ insight }: { insight: AICandidateMatchResponse }) =
     return <>{sections}</>;
   };
 
-  // Parse skill block content (score, evidence, etc.)
+  // Parse skill block content
   const parseSkillContent = (content: string, _badge: string): React.ReactNode => {
     const lines = content.split('\n');
     const rows: React.ReactNode[] = [];
@@ -404,195 +728,233 @@ const AIInsightRenderer = ({ insight }: { insight: AICandidateMatchResponse }) =
       const trimmed = line.trim();
       if (!trimmed) continue;
 
-      // Key-value: **Label:** value
       const kvMatch = trimmed.match(/^\*\*([^*]+):\*\*\s*(.+)/);
       if (kvMatch) {
         const label = kvMatch[1].trim();
         const value = kvMatch[2].trim();
 
         if (label.includes('Mức độ phù hợp') || label.includes('Mức độ')) {
-          // Extract stars and score
-          const starMatch = value.match(/(?:⭐|✅|⚠️|❗|❌|[\s])*\s*\(?([0-9.]+)\/?1\.0\)?/);
           const scoreMatch = value.match(/([0-9.]+)\/1\.0/);
-          const stars = starMatch ? starMatch[1].trim() : value.split('(')[0].trim();
           const score = scoreMatch ? parseFloat(scoreMatch[1]) : 0;
+          const scoreColor = getScoreColor(score);
 
           rows.push(
-            <div key={key++} className="md-skill-row">
-              <span className="md-skill-row__label">{parseInline(label)}</span>
-              <div className="md-skill-row__score">
-                <span className="md-skill-stars">{stars}</span>
-                <span className="md-skill-score-num">({score.toFixed(1)}/1.0)</span>
-                <div className="md-skill-bar">
-                  <div className="md-skill-bar__fill" style={{
-                    width: `${score * 100}%`,
-                    background: score >= 0.8 ? '#4ade80' : score >= 0.6 ? '#facc15' : score >= 0.4 ? '#fb923c' : '#f87171'
-                  }} />
+            <div key={key++} className="ai-md-skill-row">
+              <span className="ai-md-skill-row__label">{parseInline(label)}</span>
+              <div className="ai-md-skill-row__score">
+                <span className="ai-md-skill-score-num">({score.toFixed(1)}/1.0)</span>
+                <div className="ai-md-skill-bar">
+                  <div className="ai-md-skill-bar__fill" style={{ width: `${score * 100}%`, background: scoreColor }} />
                 </div>
               </div>
             </div>
           );
         } else if (label.includes('Trạng thái')) {
           rows.push(
-            <div key={key++} className="md-skill-row">
-              <span className="md-skill-row__label">{parseInline(label)}</span>
-              <span className="md-skill-status">{parseInline(value)}</span>
+            <div key={key++} className="ai-md-skill-row">
+              <span className="ai-md-skill-row__label">{parseInline(label)}</span>
+              <span className="ai-md-skill-status">{parseInline(value)}</span>
             </div>
           );
         } else {
           rows.push(
-            <div key={key++} className="md-skill-row">
-              <span className="md-skill-row__label">{parseInline(label)}</span>
-              <span className="md-skill-row__value">{parseInline(value)}</span>
+            <div key={key++} className="ai-md-skill-row">
+              <span className="ai-md-skill-row__label">{parseInline(label)}</span>
+              <span className="ai-md-skill-row__value">{parseInline(value)}</span>
             </div>
           );
         }
         continue;
       }
 
-      // Bullet under skill
       if (trimmed.match(/^[-*+] /)) {
-        rows.push(<li key={key++} className="md-skill-subitem">{parseInline(trimmed.slice(2))}</li>);
+        rows.push(<li key={key++} className="ai-md-skill-subitem">{parseInline(trimmed.slice(2))}</li>);
         continue;
       }
 
-      // Standalone text
-      rows.push(<p key={key++} className="md-skill-note">{parseInline(trimmed)}</p>);
+      rows.push(<p key={key++} className="ai-md-skill-note">{parseInline(trimmed)}</p>);
     }
 
-    return <div className="md-skill-content">{rows}</div>;
+    return <div className="ai-md-skill-content">{rows}</div>;
   };
 
   const reasoning = cleanText(insight.reasoning || '');
-  const hasRichMarkdown = isRichMarkdown(reasoning);
+  const hasReasoning = /^(##|###|####|\*\*)/.test(reasoning.trim());
+  const avgSignalScore = signals.length > 0
+    ? signals.reduce((s, sig) => s + sig.relevanceScore, 0) / signals.length
+    : 0;
 
   return (
     <div className="rtw-ai-insight">
-      {/* Header */}
-      <div className="rtw-ai-insight__header">
-        <div className="rtw-ai-insight__title">
-          <Sparkles size={16} />
-          <span>Phân tích AI</span>
-        </div>
-        <div className="rtw-ai-insight__confidence">
-          <div className="rtw-ai-insight__confidence-bar">
-            <div
-              className="rtw-ai-insight__confidence-fill"
-              style={{ width: `${confidence}%` }}
-            />
+      {/* Hero section */}
+      <div className="rtw-ai-insight__hero">
+        <div className="rtw-ai-insight__hero-left">
+          {/* Quality badge */}
+          <div className="rtw-ai-insight__quality-badge" style={{ '--badge-color': qualityMeta.color } as React.CSSProperties}>
+            <span className="rtw-ai-insight__quality-icon">{qualityMeta.icon}</span>
+            <span className="rtw-ai-insight__quality-label" style={{ color: qualityMeta.color }}>
+              {qualityMeta.label}
+            </span>
           </div>
-          <span className="rtw-ai-insight__confidence-text">{confidence}%</span>
+          <div className="rtw-ai-insight__title">
+            <Sparkles size={14} />
+            <span>Phân tích AI</span>
+          </div>
+          {insight.fitSummary && (
+            <p className="ai-md-p" style={{ fontSize: '0.78rem', color: 'rgba(200,190,180,0.85)', margin: '0.25rem 0 0 0', lineHeight: 1.5 }}>
+              {parseInline(insight.fitSummary)}
+            </p>
+          )}
+        </div>
+        <div className="rtw-ai-insight__hero-right">
+          <div className="rtw-ai-insight__confidence-ring" style={{ '--ring-color': qualityMeta.color } as React.CSSProperties}>
+            <CircularScoreRing score={confidence} color={qualityMeta.color} />
+          </div>
         </div>
       </div>
 
+      {/* Skill signals summary */}
+      {signals.length > 0 && (
+        <div className="ai-signal-summary">
+          <div className="ai-signal-summary__score-group">
+            <div className="ai-signal-summary__score-ring" style={{ '--ring-color': qualityMeta.color } as React.CSSProperties}>
+              <CircularScoreRing score={avgSignalScore * 100} size={48} strokeWidth={4} color={getScoreColor(avgSignalScore)} />
+            </div>
+            <div style={{ marginLeft: '0.5rem' }}>
+              <div className="ai-signal-summary__score-val" style={{ color: getScoreColor(avgSignalScore) }}>
+                {(avgSignalScore * 100).toFixed(0)}
+              </div>
+              <div className="ai-signal-summary__score-label">Điểm TB</div>
+            </div>
+          </div>
+          <div className="ai-signal-summary__breakdown">
+            {signals.map((sig, idx) => {
+              const scoreColor = getScoreColor(sig.relevanceScore);
+              return (
+                <div key={idx} className="ai-signal-summary__breakdown-row">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flex: 1, minWidth: 0 }}>
+                    <span className="ai-skill-bar-mini" style={{ width: '3rem', height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden', flexShrink: 0 }}>
+                      <div className="ai-skill-bar-mini__fill" style={{ width: `${sig.relevanceScore * 100}%`, height: '100%', background: scoreColor, borderRadius: '2px' }} />
+                    </span>
+                    <span className="ai-signal-summary__breakdown-label" style={{ fontSize: '0.72rem', color: 'rgba(200,190,180,0.9)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {sig.skill}
+                    </span>
+                  </div>
+                  <span className="ai-signal-summary__breakdown-val" style={{ color: scoreColor, fontWeight: 600, fontSize: '0.72rem', marginLeft: '0.5rem', flexShrink: 0 }}>
+                    {sig.relevanceScore.toFixed(1)}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Content */}
       <div className="rtw-ai-insight__content">
-        {/* Full markdown rendering */}
-        {reasoning && (
+        {hasReasoning && (
           <div className="rtw-ai-insight__reasoning">
             {parseRichMarkdown(reasoning)}
           </div>
         )}
 
-        {/* Skill Signals — show as mini-cards when not in rich markdown */}
-        {!hasRichMarkdown && signals.length > 0 && (
-          <div className="rtw-ai-insight__section">
-            <div className="rtw-ai-insight__section-title">
-              <CheckCircle2 size={12} />
-              Tín hiệu kỹ năng ({signals.length})
-            </div>
-            <div className="rtw-skill-signals">
-              {signals.map((signal, idx) => {
-                const score = signal.relevanceScore || 0;
-                const color = getSkillSignalColor(score);
-                return (
-                  <div
-                    key={idx}
-                    className={`rtw-skill-signal ${signal.isRequired ? 'rtw-skill-signal--required' : ''}`}
-                  >
-                    <div className="rtw-skill-signal__bar">
-                      <div
-                        className="rtw-skill-signal__bar-fill"
-                        style={{ width: `${score * 100}%`, background: color }}
-                      />
-                    </div>
-                    <div className="rtw-skill-signal__info">
-                      <span className="rtw-skill-signal__name">{signal.skill || 'Kỹ năng'}</span>
-                      {signal.evidence && (
-                        <span className="rtw-skill-signal__evidence">{signal.evidence}</span>
-                      )}
-                    </div>
-                    <span className={`rtw-skill-signal__badge ${signal.isRequired ? 'rtw-skill-signal__badge--required' : 'rtw-skill-signal__badge--optional'}`}>
-                      {signal.isRequired ? 'Bắt buộc' : 'Ưu tiên'}
+        {/* Signal cards when no reasoning */}
+        {!hasReasoning && signals.length > 0 && (
+          <div className="rtw-ai-insight__signal-cards">
+            {signals.map((sig, idx) => {
+              const scoreColor = getScoreColor(sig.relevanceScore);
+              return (
+                <div key={idx} className={`ai-signal-card ${sig.isRequired ? 'ai-signal-card--required' : ''}`}>
+                  <div className="ai-signal-card__header">
+                    <span className="ai-signal-card__name">{parseInline(sig.skill)}</span>
+                    <span className={`ai-signal-card__badge ${sig.isRequired ? 'ai-signal-card__badge--required' : 'ai-signal-card__badge--optional'}`}>
+                      {sig.isRequired ? 'Bắt buộc' : 'Ưu tiên'}
+                    </span>
+                    <span className="ai-signal-card__score" style={{ color: scoreColor }}>
+                      {(sig.relevanceScore * 100).toFixed(0)}%
                     </span>
                   </div>
-                );
-              })}
-            </div>
+                  {sig.evidence && (
+                    <div className="ai-signal-card__evidence" style={{ fontSize: '0.75rem', color: 'rgba(200,190,180,0.8)', marginTop: '0.3rem', lineHeight: 1.5 }}>
+                      {parseInline(sig.evidence)}
+                    </div>
+                  )}
+                  <div className="ai-skill-bar-mini" style={{ height: '3px', borderRadius: '2px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden', marginTop: '0.4rem' }}>
+                    <div className="ai-skill-bar-mini__fill" style={{ width: `${sig.relevanceScore * 100}%`, height: '100%', background: scoreColor, borderRadius: '2px', transition: 'width 0.5s ease' }} />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
 
-        {/* Raw toggle */}
-        <div>
-          <button
-            className="rtw-ghost-btn"
-            style={{ width: '100%', justifyContent: 'center', fontSize: '0.72rem', padding: '0.45rem' }}
-            onClick={() => setExpanded(!expanded)}
-          >
-            {expanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
-            {expanded ? 'Thu gọn markdown gốc' : 'Xem markdown gốc từ AI'}
-          </button>
-          {expanded && (
-            <pre style={{
-              marginTop: '0.4rem',
-              padding: '0.75rem',
-              borderRadius: '0.8rem',
-              background: 'rgba(0,0,0,0.35)',
-              border: '1px solid rgba(212,175,55,0.08)',
-              fontSize: '0.7rem',
-              color: '#b8a898',
-              overflow: 'auto',
-              maxHeight: '320px',
-              lineHeight: 1.6,
-              fontFamily: '"Fira Code", "Cascadia Code", monospace',
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'break-word',
-            }}>
-              {reasoning}
-            </pre>
-          )}
-        </div>
+        {/* Empty state */}
+        {!hasReasoning && signals.length === 0 && (
+          <div className="rtw-ai-insight__empty">
+            <Sparkles size={20} style={{ opacity: 0.3 }} />
+            <span>Không có dữ liệu phân tích chi tiết</span>
+          </div>
+        )}
+
+        {/* Raw markdown toggle */}
+        {reasoning && (
+          <div>
+            <button
+              className="rtw-ai-insight__toggle"
+              onClick={() => setExpanded(!expanded)}
+            >
+              {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+              {expanded ? 'Thu gọn' : 'Xem markdown gốc'}
+            </button>
+            {expanded && (
+              <pre className="rtw-ai-insight__raw">
+                {reasoning}
+              </pre>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Footer */}
       <div className="rtw-ai-insight__footer">
-        <span>{formatRelativeTime(insight.generatedAt)}</span>
-        <span>Confidence {confidence}%</span>
+        {insight.modelUsed && (
+          <span className="rtw-ai-insight__footer-chip">{insight.modelUsed}</span>
+        )}
+        {insight.processingTimeMs != null && (
+          <span className="rtw-ai-insight__footer-chip">{insight.processingTimeMs}ms</span>
+        )}
+        {insight.isFallback && (
+          <span className="rtw-ai-insight__footer-chip rtw-ai-insight__footer-chip--warn">Fallback</span>
+        )}
+        <span className="rtw-ai-insight__footer-chip">Confidence {confidence}%</span>
       </div>
     </div>
   );
 };
 
 // ============ MAIN COMPONENT ============
-const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
-  const { user } = useAuth();
+const RecruiterTalentWorkspace = ({ fullTimeJobs, shortTermJobs }: RecruiterTalentWorkspaceProps) => {
   const navigate = useNavigate();
   const { showError, showSuccess } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const portfolioRequestRef = useRef(0);
-  const [jobRoster, setJobRoster] = useState<JobPostingResponse[]>(jobs);
+  const [jobRoster, setJobRoster] = useState<WorkspaceJob[]>(() => [
+    ...fullTimeJobs.map(toWorkspaceFullTimeJob),
+    ...shortTermJobs.map(toWorkspaceShortTermJob),
+  ]);
 
   const [subscription, setSubscription] =
     useState<RecruiterSubscriptionInfoResponse | null>(null);
   const [activeTab, setActiveTab] = useState<TalentTab>('applicants');
-  const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
+  const [selectedJobKey, setSelectedJobKey] = useState<string | null>(null);
 
-  const [applicants, setApplicants] = useState<JobApplicationResponse[]>([]);
+  const [applicants, setApplicants] = useState<WorkspaceApplicant[]>([]);
   const [discoveries, setDiscoveries] = useState<CandidateSearchResult[]>([]);
   const [sessions, setSessions] = useState<RecruitmentSessionResponse[]>([]);
 
   const [selectedCandidate, setSelectedCandidate] = useState<CandidateSeed | null>(null);
   const [selectedSession, setSelectedSession] = useState<RecruitmentSessionResponse | null>(null);
+  const rosterRef = useRef<HTMLDivElement>(null);
   const [applicantFilter, setApplicantFilter] = useState<ApplicantFilter>('all');
 
   const [portfolioProfile, setPortfolioProfile] = useState<UserProfileDTO | null>(null);
@@ -602,18 +964,19 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
   const [portfolioError, setPortfolioError] = useState<string | null>(null);
   const [discoveryAccessError, setDiscoveryAccessError] = useState<string | null>(null);
 
-  const [boost, setBoost] = useState<any>(null);
-  const [boostAnalytics, setBoostAnalytics] = useState<any>(null);
   const [aiInsight, setAiInsight] = useState<AICandidateMatchResponse | null>(null);
 
   const [messageDraft, setMessageDraft] = useState('');
   const [decisionNote, setDecisionNote] = useState('');
-  const [boostDuration, setBoostDuration] = useState(7);
 
   const [decisionModal, setDecisionModal] = useState<{
-    application: JobApplicationResponse;
+    application: WorkspaceApplicant;
     status: DecisionState;
   } | null>(null);
+
+  // Roster pagination
+  const ROSTER_PAGE_SIZE = 5;
+  const [rosterPage, setRosterPage] = useState(0);
 
   const [isBootstrapping, setIsBootstrapping] = useState(true);
   const [isApplicantsLoading, setIsApplicantsLoading] = useState(false);
@@ -623,40 +986,49 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const [isBoostLoading, setIsBoostLoading] = useState(false);
   const [isActionBusy, setIsActionBusy] = useState(false);
 
   const [chatMessages, setChatMessages] = useState<RecruitmentMessageResponse[]>([]);
 
   useEffect(() => {
-    setJobRoster(jobs);
-  }, [jobs]);
+    setJobRoster([
+      ...fullTimeJobs.map(toWorkspaceFullTimeJob),
+      ...shortTermJobs.map(toWorkspaceShortTermJob),
+    ]);
+    setRosterPage(0);
+  }, [fullTimeJobs, shortTermJobs]);
 
   const orderedJobs = [...jobRoster].sort((left, right) => {
-    const leftOpen = left.status === JobStatus.OPEN ? 1 : 0;
-    const rightOpen = right.status === JobStatus.OPEN ? 1 : 0;
+    const leftOpen = isWorkspaceJobOpen(left) ? 1 : 0;
+    const rightOpen = isWorkspaceJobOpen(right) ? 1 : 0;
     if (leftOpen !== rightOpen) return rightOpen - leftOpen;
     return (right.applicantCount || 0) - (left.applicantCount || 0);
   });
 
+  const totalRosterPages = Math.ceil(orderedJobs.length / ROSTER_PAGE_SIZE);
+  const paginatedRosterJobs = orderedJobs.slice(
+    rosterPage * ROSTER_PAGE_SIZE,
+    (rosterPage + 1) * ROSTER_PAGE_SIZE,
+  );
+
   const selectedJob =
-    orderedJobs.find((job) => job.id === selectedJobId) || orderedJobs[0] || null;
+    orderedJobs.find((job) => job.key === selectedJobKey) || orderedJobs[0] || null;
 
   const totalApplicantCount = jobRoster.reduce(
     (sum, job) => sum + (job.applicantCount || 0),
     0,
   );
-  const openJobCount = jobRoster.filter((job) => job.status === JobStatus.OPEN).length;
+  const openJobCount = jobRoster.filter((job) => isWorkspaceJobOpen(job)).length;
   const currentPortfolioSkills = parseSkillList(portfolioProfile?.topSkills);
+  const supportsAdvanced = selectedJob?.kind === 'fulltime';
+  const supportsBoost = selectedJob?.kind === 'fulltime';
 
   const filteredApplicants = applicants.filter((app) => {
-    if (applicantFilter === 'pending') return app.status === 'PENDING' || app.status === 'REVIEWED';
+    if (applicantFilter === 'pending') return isApplicantPending(app);
     if (applicantFilter === 'accepted') return app.status === 'ACCEPTED';
     if (applicantFilter === 'rejected') return app.status === 'REJECTED';
     return true;
   });
-
-  const hasAcceptedApplicant = applicants.some((app) => app.status === 'ACCEPTED');
 
   const loadSubscription = async () => {
     try {
@@ -692,7 +1064,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
         ? sessions.find(
             (session) =>
               session.candidateId === seed.candidateId &&
-              (!selectedJobId || session.jobId === selectedJobId),
+              (!selectedJob || matchesSessionToJob(session, selectedJob)),
           ) || null
         : preferredSession;
 
@@ -715,29 +1087,31 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
     setIsPortfolioLoading(false);
   };
 
-  const loadApplicants = async (jobId: number) => {
+  const loadApplicants = async (job: WorkspaceJob) => {
     setIsApplicantsLoading(true);
     try {
-      const result = await jobService.getJobApplicants(jobId, 0, 20);
-      setApplicants(result.content || []);
+      const mappedApplicants =
+        job.kind === 'shortterm'
+          ? (await shortTermJobService.getJobApplicants(job.id, 0, 20)).content.map(toWorkspaceShortTermApplicant)
+          : (await jobService.getJobApplicants(job.id, 0, 20)).content.map(toWorkspaceFullTimeApplicant);
 
-      if (result.content?.length) {
-        const firstApplicant = result.content[0];
-        if (!selectedCandidate || selectedCandidate.sourceLabel !== 'Ứng viên đã apply') {
-          await pickCandidate({
-            candidateId: firstApplicant.userId,
-            fullName: getApplicantDisplayName(firstApplicant.userFullName, firstApplicant.userEmail),
-            professionalTitle: firstApplicant.userProfessionalTitle,
-            avatarUrl: firstApplicant.userAvatar,
-            portfolioSlug: firstApplicant.portfolioSlug,
-            email: firstApplicant.userEmail,
-            sourceLabel: 'Ứng viên đã apply',
-          });
-        }
+      setApplicants(mappedApplicants || []);
+
+      if (mappedApplicants.length) {
+        await pickCandidate(toCandidateSeedFromApplicant(mappedApplicants[0]));
+      } else {
+        setSelectedCandidate(null);
+        setSelectedSession(null);
+        setPortfolioProfile(null);
+        setPortfolioProjects([]);
+        setPortfolioCertificates([]);
+        setPortfolioReviews([]);
+        setPortfolioError(null);
+        setAiInsight(null);
       }
     } catch (error: any) {
       setApplicants([]);
-      showError('Không thể tải applicants', error.message || 'Vui lòng thử lại');
+      showError('Không thể tải ứng viên', error.message || 'Vui lòng thử lại');
     } finally {
       setIsApplicantsLoading(false);
     }
@@ -776,12 +1150,20 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
     }
   };
 
-  const loadSessions = async (jobId?: number | null) => {
+  const loadSessions = async (job?: WorkspaceJob | null) => {
     setIsSessionsLoading(true);
     try {
-      const result = jobId
-        ? await recruitmentChatService.getSessionsByJob(jobId)
-        : (await recruitmentChatService.getRecruiterSessions(0, 24)).sessions;
+      let result: RecruitmentSessionResponse[] = [];
+
+      if (!job) {
+        result = (await recruitmentChatService.getRecruiterSessions(0, 40)).sessions || [];
+      } else if (job.kind === 'shortterm') {
+        result = ((await recruitmentChatService.getRecruiterSessions(0, 100)).sessions || [])
+          .filter((session) => matchesSessionToJob(session, job));
+      } else {
+        result = (await recruitmentChatService.getSessionsByJob(job.id))
+          .filter((session) => matchesSessionToJob(session, job));
+      }
 
       setSessions(result || []);
 
@@ -797,46 +1179,49 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
     }
   };
 
-  const loadBoost = async (jobId: number) => {
-    try {
-      const result = await jobBoostService.getBoostByJob(jobId);
-      setBoost(result);
-      if (result) {
-        const analytics = await jobBoostService.getBoostAnalytics(result.id).catch(() => null);
-        setBoostAnalytics(analytics);
-      } else {
-        setBoostAnalytics(null);
-      }
-    } catch {
-      setBoost(null);
-      setBoostAnalytics(null);
-    }
+  const handleBoostStateChange = () => {
+    void loadSubscription();
   };
 
-  const syncJobContext = async (jobId: number) => {
-    await Promise.all([
-      loadApplicants(jobId),
-      loadDiscoveries(jobId),
-      loadSessions(jobId),
-      loadBoost(jobId),
-    ]);
+  const syncJobContext = async (job: WorkspaceJob) => {
+    const tasks: Array<Promise<unknown>> = [loadApplicants(job), loadSessions(job)];
+
+    if (job.kind === 'fulltime') {
+      tasks.push(loadDiscoveries(job.id));
+    } else {
+      setDiscoveries([]);
+      setDiscoveryAccessError(null);
+    }
+
+    await Promise.all(tasks);
   };
 
   const handleRefreshCurrentJob = async () => {
-    if (!selectedJobId) return;
-    await syncJobContext(selectedJobId);
+    if (!selectedJob) return;
+    await syncJobContext(selectedJob);
     showSuccess('Đã làm mới', 'Pipeline tuyển dụng đã được đồng bộ lại.');
   };
 
   const handleCloseSelectedJob = async () => {
-    if (!selectedJobId || !selectedJob) return;
+    if (!selectedJob) return;
 
     try {
       setIsActionBusy(true);
-      const updatedJob = await jobService.changeJobStatus(selectedJobId, JobStatus.CLOSED);
-      setJobRoster((current) =>
-        current.map((job) => (job.id === updatedJob.id ? updatedJob : job)),
-      );
+
+      if (selectedJob.kind === 'shortterm') {
+        const updatedJob = await shortTermJobService.changeJobStatus(selectedJob.id, ShortTermJobStatus.CLOSED);
+        const mappedJob = toWorkspaceShortTermJob(updatedJob);
+        setJobRoster((current) =>
+          current.map((job) => (job.key === mappedJob.key ? mappedJob : job)),
+        );
+      } else {
+        const updatedJob = await jobService.changeJobStatus(selectedJob.id, JobStatus.CLOSED);
+        const mappedJob = toWorkspaceFullTimeJob(updatedJob);
+        setJobRoster((current) =>
+          current.map((job) => (job.key === mappedJob.key ? mappedJob : job)),
+        );
+      }
+
       showSuccess('Đã đóng job', 'Job không còn nhận thêm ứng viên mới.');
     } catch (error: any) {
       showError('Không thể đóng job', error.message || 'Vui lòng thử lại');
@@ -845,28 +1230,25 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
     }
   };
 
-  const handleReviewApplication = async (application: JobApplicationResponse) => {
+  const handleReviewApplication = async (application: WorkspaceApplicant) => {
+    if (application.kind !== 'fulltime' || !selectedJob) return;
+
     try {
       setIsActionBusy(true);
       await jobService.updateApplicationStatus(application.id, {
         status: JobApplicationStatus.REVIEWED,
       });
-      showSuccess('Đã đánh dấu', 'Applicant đã được chuyển sang trạng thái đã xem.');
-      if (selectedJobId) {
-        await loadApplicants(selectedJobId);
-      }
+      showSuccess('Đã đánh dấu', 'Ứng viên đã được chuyển sang trạng thái đã xem.');
+      await loadApplicants(selectedJob);
     } catch (error: any) {
-      showError('Không thể cập nhật applicant', error.message || 'Vui lòng thử lại');
+      showError('Không thể cập nhật ứng viên', error.message || 'Vui lòng thử lại');
     } finally {
       setIsActionBusy(false);
     }
   };
 
   const handleConfirmDecision = async () => {
-    if (!decisionModal) return;
-
-    const fieldName =
-      decisionModal.status === 'ACCEPTED' ? 'acceptanceMessage' : 'rejectionReason';
+    if (!decisionModal || !selectedJob) return;
 
     if (!decisionNote.trim()) {
       showError('Thiếu nội dung', 'Vui lòng nhập ghi chú cho quyết định này.');
@@ -875,65 +1257,38 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
 
     try {
       setIsActionBusy(true);
-      await jobService.updateApplicationStatus(decisionModal.application.id, {
-        status: decisionModal.status as JobApplicationStatus,
-        [fieldName]: decisionNote.trim(),
-      });
+
+      if (decisionModal.application.kind === 'shortterm') {
+        await shortTermJobService.updateApplicationStatus(decisionModal.application.id, {
+          status:
+            decisionModal.status === 'ACCEPTED'
+              ? ShortTermApplicationStatus.ACCEPTED
+              : ShortTermApplicationStatus.REJECTED,
+          ...(decisionModal.status === 'ACCEPTED'
+            ? { message: decisionNote.trim() }
+            : { reason: decisionNote.trim() }),
+        });
+      } else {
+        const fieldName =
+          decisionModal.status === 'ACCEPTED' ? 'acceptanceMessage' : 'rejectionReason';
+
+        await jobService.updateApplicationStatus(decisionModal.application.id, {
+          status: decisionModal.status as JobApplicationStatus,
+          [fieldName]: decisionNote.trim(),
+        });
+      }
+
       setDecisionModal(null);
       setDecisionNote('');
       showSuccess(
-        decisionModal.status === 'ACCEPTED' ? 'Đã duyệt applicant' : 'Đã loại applicant',
+        decisionModal.status === 'ACCEPTED' ? 'Đã duyệt ứng viên' : 'Đã loại ứng viên',
         'Trạng thái hồ sơ đã được cập nhật.',
       );
-      if (selectedJobId) {
-        await loadApplicants(selectedJobId);
-      }
+      await loadApplicants(selectedJob);
     } catch (error: any) {
-      showError('Không thể cập nhật applicant', error.message || 'Vui lòng thử lại');
+      showError('Không thể cập nhật ứng viên', error.message || 'Vui lòng thử lại');
     } finally {
       setIsActionBusy(false);
-    }
-  };
-
-  const handleBoostAction = async () => {
-    if (!selectedJobId) return;
-
-    try {
-      setIsBoostLoading(true);
-      if (boost) {
-        const extended = await jobBoostService.extendBoost(boost.id, boostDuration);
-        setBoost(extended);
-        showSuccess('Đã gia hạn boost', 'Job đang được đẩy ưu tiên thêm thời gian.');
-      } else {
-        const created = await jobBoostService.createBoost({
-          jobId: selectedJobId,
-          durationDays: boostDuration,
-        });
-        setBoost(created);
-        showSuccess('Đã kích hoạt boost', 'Job đã được đẩy nổi bật trong candidate search.');
-      }
-
-      await loadBoost(selectedJobId);
-    } catch (error: any) {
-      showError('Không thể boost job', error.message || 'Vui lòng kiểm tra quota recruiter.');
-    } finally {
-      setIsBoostLoading(false);
-    }
-  };
-
-  const handleCancelBoost = async () => {
-    if (!boost) return;
-
-    try {
-      setIsBoostLoading(true);
-      await jobBoostService.cancelBoost(boost.id);
-      setBoost(null);
-      setBoostAnalytics(null);
-      showSuccess('Đã huỷ boost', 'Job đã quay về phân phối bình thường.');
-    } catch (error: any) {
-      showError('Không thể huỷ boost', error.message || 'Vui lòng thử lại.');
-    } finally {
-      setIsBoostLoading(false);
     }
   };
 
@@ -945,12 +1300,13 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
       setIsActionBusy(true);
       const session = await recruitmentChatService.getOrCreateSession(
         seed.candidateId,
-        selectedJobId || undefined,
+        selectedJob?.id,
         sourceType,
+        selectedJob?.kind === 'shortterm'
+          ? RecruitmentJobContextType.SHORT_TERM_JOB
+          : RecruitmentJobContextType.JOB_POSTING,
       );
-      // Refresh sessions in background
-      loadSessions(selectedJobId);
-      // Navigate immediately to messages page with this session
+      loadSessions(selectedJob);
       navigate('/messages', {
         state: {
           openChatWith: session.id.toString(),
@@ -965,8 +1321,13 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
   };
 
   const inviteCandidateToJob = async (seed: CandidateSeed) => {
-    if (!selectedJobId) {
+    if (!selectedJob) {
       showError('Chưa chọn job', 'Hãy chọn job trước khi gửi lời mời.');
+      return;
+    }
+
+    if (selectedJob.kind !== 'fulltime') {
+      showError('Không hỗ trợ', 'Tính năng mời ứng viên trong workspace hiện chỉ áp dụng cho job toàn thời gian.');
       return;
     }
 
@@ -974,12 +1335,12 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
       setIsActionBusy(true);
       const session = await candidateSearchService.connectCandidateToJob(
         seed.candidateId,
-        selectedJobId,
+        selectedJob.id,
       );
-      await loadSessions(selectedJobId);
+      await loadSessions(selectedJob);
       await pickCandidate(seed, session);
       setActiveTab('chats');
-      showSuccess('Đã gửi lời mời', 'Candidate đã được kéo vào pipeline chat đúng job.');
+      showSuccess('Đã gửi lời mời', 'Ứng viên đã được kéo vào pipeline chat đúng job.');
     } catch (error: any) {
       showError('Không thể mời ứng viên', error.message || 'Vui lòng thử lại.');
     } finally {
@@ -988,16 +1349,21 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
   };
 
   const handleShortlist = async (seed: CandidateSeed) => {
-    if (!selectedJobId) {
+    if (!selectedJob) {
       showError('Chưa chọn job', 'Hãy chọn job trước khi shortlist.');
+      return;
+    }
+
+    if (selectedJob.kind !== 'fulltime') {
+      showError('Không hỗ trợ', 'Shortlist AI database hiện chỉ áp dụng cho job toàn thời gian.');
       return;
     }
 
     try {
       setIsActionBusy(true);
-      await candidateSearchService.shortlistCandidate(seed.candidateId, selectedJobId);
+      await candidateSearchService.shortlistCandidate(seed.candidateId, selectedJob.id);
       showSuccess('Đã shortlist', `${seed.fullName} đã được lưu vào shortlist cho job này.`);
-      await loadDiscoveries(selectedJobId);
+      await loadDiscoveries(selectedJob.id);
     } catch (error: any) {
       showError('Không thể shortlist', error.message || 'Vui lòng thử lại.');
     } finally {
@@ -1007,21 +1373,28 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
 
   const handleRunAiInsight = async (seed?: CandidateSeed) => {
     const target = seed || selectedCandidate;
-    if (!selectedJobId || !target) {
+    if (!selectedJob || !target) {
       showError('Thiếu context', 'Hãy chọn cả job và ứng viên trước khi chạy AI insight.');
       return;
     }
 
     try {
       setIsAiLoading(true);
-      const result = await candidateSearchService.getAIMatchExplanation(
-        selectedJobId,
-        target.candidateId,
-      );
-      setAiInsight(result);
-      if (seed) {
-        await pickCandidate(target);
+      let result: AICandidateMatchResponse;
+
+      if (selectedJob.kind === 'shortterm') {
+        result = await candidateSearchService.getShortTermJobMatchExplanation(
+          selectedJob.id,
+          target.candidateId,
+        );
+      } else {
+        result = await candidateSearchService.getAIMatchExplanation(
+          selectedJob.id,
+          target.candidateId,
+        );
       }
+
+      setAiInsight(result);
     } catch (error: any) {
       showError('Không thể phân tích AI', error.message || 'Vui lòng kiểm tra gói recruiter.');
     } finally {
@@ -1042,7 +1415,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
       });
       setChatMessages((current) => [...current, message]);
       setMessageDraft('');
-      await loadSessions(selectedJobId);
+      await loadSessions(selectedJob);
     } catch (error: any) {
       showError('Không thể gửi tin nhắn', error.message || 'Vui lòng thử lại.');
     } finally {
@@ -1060,7 +1433,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
         status,
       );
       setSelectedSession(updated);
-      await loadSessions(selectedJobId);
+      await loadSessions(selectedJob);
       showSuccess('Đã cập nhật pipeline chat', 'Trạng thái conversation đã được đồng bộ.');
     } catch (error: any) {
       showError('Không thể cập nhật chat status', error.message || 'Vui lòng thử lại.');
@@ -1071,14 +1444,31 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
 
   useEffect(() => {
     if (!orderedJobs.length) {
-      setSelectedJobId(null);
+      setSelectedJobKey(null);
       return;
     }
 
-    if (!selectedJobId || !orderedJobs.some((job) => job.id === selectedJobId)) {
-      setSelectedJobId(orderedJobs[0].id);
+    if (!selectedJobKey || !orderedJobs.some((job) => job.key === selectedJobKey)) {
+      setSelectedJobKey(orderedJobs[0].key);
     }
-  }, [orderedJobs, selectedJobId]);
+  }, [orderedJobs, selectedJobKey]);
+
+  // Scroll active roster item into view
+  useEffect(() => {
+    if (!selectedJobKey || !rosterRef.current) return;
+    const idx = orderedJobs.findIndex((j) => j.key === selectedJobKey);
+    if (idx < 0) return;
+    // If active job is not on current roster page, jump to its page
+    const pageOfJob = Math.floor(idx / ROSTER_PAGE_SIZE);
+    if (pageOfJob !== rosterPage) {
+      setRosterPage(pageOfJob);
+    }
+    // Scroll the button into view after a short delay
+    setTimeout(() => {
+      const el = rosterRef.current?.querySelector(`[data-job-key="${selectedJobKey}"]`) as HTMLElement | null;
+      el?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    }, 50);
+  }, [selectedJobKey, orderedJobs, rosterPage]);
 
   useEffect(() => {
     let isMounted = true;
@@ -1099,16 +1489,28 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
   }, []);
 
   useEffect(() => {
-    if (!selectedJobId || !subscription) return;
+    if (!selectedJob) return;
 
     setApplicants([]);
     setDiscoveries([]);
     setSessions([]);
     setDiscoveryAccessError(null);
     setSelectedSession(null);
+    setSelectedCandidate(null);
+    setPortfolioProfile(null);
+    setPortfolioProjects([]);
+    setPortfolioCertificates([]);
+    setPortfolioReviews([]);
+    setPortfolioError(null);
     setAiInsight(null);
-    syncJobContext(selectedJobId);
-  }, [selectedJobId, subscription]);
+    syncJobContext(selectedJob);
+  }, [selectedJob?.key, subscription?.hasCandidateDatabaseAccess]);
+
+  useEffect(() => {
+    if (selectedJob?.kind === 'shortterm' && activeTab === 'advanced') {
+      setActiveTab('applicants');
+    }
+  }, [activeTab, selectedJob?.kind]);
 
   useEffect(() => {
     if (!selectedSession?.id) {
@@ -1172,7 +1574,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
               <div className="rtw-feature-item">
                 <div className="rtw-feature-icon"><Users size={18} /></div>
                 <div className="rtw-feature-text">
-                  <strong>Applicant Pipeline</strong>
+                  <strong>Pipeline ứng viên</strong>
                   <span>Theo dõi đơn ứng tuyển theo từng job với trạng thái trực quan</span>
                 </div>
               </div>
@@ -1186,14 +1588,14 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
               <div className="rtw-feature-item">
                 <div className="rtw-feature-icon"><FileText size={18} /></div>
                 <div className="rtw-feature-text">
-                  <strong>Portfolio Review</strong>
-                  <span>Xem và đánh giá portfolio, dự án, chứng chỉ của ứng viên ngay trong workspace</span>
+                  <strong>Đánh giá Portfolio</strong>
+                  <span>Xem và đánh giá portfolio, dự án, chứng chỉ của ứng viên ngay trong workspace.</span>
                 </div>
               </div>
               <div className="rtw-feature-item">
                 <div className="rtw-feature-icon"><MessageSquare size={18} /></div>
                 <div className="rtw-feature-text">
-                  <strong>Contextual Chat</strong>
+                  <strong>Chat theo ngữ cảnh</strong>
                   <span>Nhắn tin với ứng viên, gắn đúng job để context luôn rõ ràng</span>
                 </div>
               </div>
@@ -1222,7 +1624,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
               <div className="rtw-aside-card__perks">
                 <div className="rtw-perk-item"><CheckCircle2 size={13} /><span>Quản lý job &amp; ứng viên</span></div>
                 <div className="rtw-perk-item"><CheckCircle2 size={13} /><span>AI phân tích matching</span></div>
-                <div className="rtw-perk-item"><CheckCircle2 size={13} /><span>Chat &amp; portfolio review</span></div>
+                <div className="rtw-perk-item"><CheckCircle2 size={13} /><span>Chat &amp; đánh giá portfolio</span></div>
                 <div className="rtw-perk-item"><CheckCircle2 size={13} /><span>Boost visibility cho job</span></div>
               </div>
             </div>
@@ -1322,8 +1724,11 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
             <div className="rtw-job-bar__selected-meta">
               {selectedJob && (
                 <>
-                  <span className={`rtw-status-pill rtw-status-pill--${selectedJob.status.toLowerCase()}`}>
-                    {getJobStatusLabel(selectedJob.status)}
+                  <span className={`rtw-status-pill rtw-status-pill--${selectedJob.statusTone}`}>
+                    {selectedJob.statusLabel}
+                  </span>
+                  <span className={`rtw-chip ${selectedJob.kind === 'fulltime' ? 'rtw-chip--gold' : 'rtw-chip--purple'}`}>
+                    {selectedJob.kind === 'fulltime' ? 'Toàn thời gian' : 'Ngắn hạn'}
                   </span>
                   <span className="rtw-inline-stat">
                     <Users size={12} />
@@ -1331,7 +1736,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                   </span>
                   <span className="rtw-inline-stat">
                     <Wallet size={12} />
-                    {formatCompactCurrency(selectedJob.minBudget)} — {formatCompactCurrency(selectedJob.maxBudget)}
+                    {selectedJob.budgetLabel}
                   </span>
                   <span className="rtw-inline-stat">
                     <Calendar size={12} />
@@ -1350,23 +1755,74 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                 )}
               </div>
             )}
+            {selectedJob && (
+              <div className="rtw-job-bar__selected-actions">
+                  {supportsBoost ? (
+                    <div className="rtw-job-bar__boost">
+                        <JobBoostButton
+                          jobId={selectedJob.id}
+                          jobTitle={selectedJob.title}
+                          onBoostCreated={handleBoostStateChange}
+                          onBoostCancelled={handleBoostStateChange}
+                        />
+                    </div>
+                  ) : (
+                  <p className="rtw-inline-note rtw-inline-note--left">
+                    Boost hiện chỉ hỗ trợ cho job toàn thời gian.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
         {/* Job roster */}
-        <div className="rtw-job-bar__roster">
-          {orderedJobs.map((job) => (
+        <div className="rtw-job-bar__roster" ref={rosterRef}>
+          {paginatedRosterJobs.map((job) => (
             <button
-              key={job.id}
-              className={`rtw-job-bar__roster-item ${job.id === selectedJobId ? 'rtw-job-bar__roster-item--active' : ''}`}
-              onClick={() => setSelectedJobId(job.id)}
+              key={job.key}
+              data-job-key={job.key}
+              className={`rtw-job-bar__roster-item rtw-job-bar__roster-item--${job.statusTone} ${job.key === selectedJobKey ? 'rtw-job-bar__roster-item--active' : ''}`}
+              onClick={() => setSelectedJobKey(job.key)}
             >
-              <strong>{job.title}</strong>
-              <span className={`rtw-status-pill rtw-status-pill--${job.status.toLowerCase()}`} style={{ fontSize: '0.62rem' }}>
-                {getJobStatusLabel(job.status)}
-              </span>
+              <div className="rtw-job-bar__roster-item__header">
+                <span className={`rtw-job-bar__roster-item__kind-dot rtw-job-bar__roster-item__kind-dot--${job.kind}`} />
+                <span className="rtw-job-bar__roster-item__title">{job.title}</span>
+              </div>
+              <div className="rtw-job-bar__roster-item__footer">
+                <div className="rtw-job-bar__roster-item__meta">
+                  <Users size={10} />
+                  {job.applicantCount || 0}
+                </div>
+                <span className={`rtw-status-pill rtw-status-pill--${job.statusTone}`} style={{ fontSize: '0.6rem', padding: '0.1rem 0.35rem' }}>
+                  {job.statusLabel}
+                </span>
+              </div>
             </button>
           ))}
+
+          {/* Roster pagination */}
+          {totalRosterPages > 1 && (
+            <div className="rtw-job-bar__roster-pagination">
+              <button
+                className="rtw-job-bar__roster-pagination__btn"
+                disabled={rosterPage === 0}
+                onClick={() => setRosterPage(rosterPage - 1)}
+              >
+                <ChevronLeft size={12} />
+              </button>
+              <span className="rtw-job-bar__roster-pagination__info">
+                {rosterPage + 1}/{totalRosterPages}
+              </span>
+              <button
+                className="rtw-job-bar__roster-pagination__btn"
+                disabled={rosterPage >= totalRosterPages - 1}
+                onClick={() => setRosterPage(rosterPage + 1)}
+              >
+                <ChevronRight size={12} />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -1382,7 +1838,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                 onClick={() => setActiveTab('applicants')}
               >
                 <Inbox size={15} />
-                Applicants
+                Ứng viên
                 {applicants.length > 0 && (
                   <span style={{ marginLeft: '0.25rem', padding: '0.08rem 0.35rem', borderRadius: '999px', background: 'rgba(212,175,55,0.15)', color: '#f0d060', fontSize: '0.68rem', fontWeight: 700 }}>
                     {applicants.length}
@@ -1390,8 +1846,9 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                 )}
               </button>
               <button
-                className={`rtw-tab ${activeTab === 'advanced' ? 'rtw-tab--active' : ''}`}
-                onClick={() => setActiveTab('advanced')}
+                className={`rtw-tab ${activeTab === 'advanced' ? 'rtw-tab--active' : ''} ${!supportsAdvanced ? 'rtw-tab--disabled' : ''}`}
+                onClick={() => supportsAdvanced && setActiveTab('advanced')}
+                disabled={!supportsAdvanced}
               >
                 <Settings2 size={15} />
                 Nâng cao
@@ -1406,7 +1863,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                 onClick={() => setActiveTab('chats')}
               >
                 <MessageSquare size={15} />
-                Chats
+                Trò chuyện
                 {sessions.length > 0 && (
                   <span style={{ marginLeft: '0.25rem', padding: '0.08rem 0.35rem', borderRadius: '999px', background: 'rgba(74,222,128,0.12)', color: '#86efac', fontSize: '0.68rem', fontWeight: 700 }}>
                     {sessions.length}
@@ -1420,7 +1877,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
               <div className="rtw-feed">
                 <div className="rtw-feed__intro">
                   <div>
-                    <span className="rtw-panel__eyebrow"><Inbox size={11} />Applicant Pipeline</span>
+                    <span className="rtw-panel__eyebrow"><Inbox size={11} />Hộp ứng viên</span>
                     <h3>{selectedJob?.title}</h3>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
@@ -1442,7 +1899,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                     className={`rtw-chip-btn ${applicantFilter === 'pending' ? 'rtw-tab--active' : ''}`}
                     onClick={() => setApplicantFilter('pending')}
                   >
-                    Chờ duyệt ({applicants.filter((a) => a.status === 'PENDING' || a.status === 'REVIEWED').length})
+                    Chờ duyệt ({applicants.filter((a) => isApplicantPending(a)).length})
                   </button>
                   <button
                     className={`rtw-chip-btn ${applicantFilter === 'accepted' ? 'rtw-tab--active' : ''}`}
@@ -1461,7 +1918,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                 {isApplicantsLoading ? (
                   <div className="rtw-loading-block">
                     <Loader2 size={22} className="rtw-spin" />
-                    <span>Đang tải applicant...</span>
+                    <span>Đang tải ứng viên...</span>
                   </div>
                 ) : filteredApplicants.length === 0 ? (
                   <div className="rtw-empty-state">
@@ -1473,15 +1930,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                   </div>
                 ) : (
                   filteredApplicants.map((application) => {
-                    const seed: CandidateSeed = {
-                      candidateId: application.userId,
-                      fullName: getApplicantDisplayName(application.userFullName, application.userEmail),
-                      professionalTitle: application.userProfessionalTitle,
-                      avatarUrl: application.userAvatar,
-                      portfolioSlug: application.portfolioSlug,
-                      email: application.userEmail,
-                      sourceLabel: 'Ứng viên đã apply',
-                    };
+                    const seed = toCandidateSeedFromApplicant(application);
 
                     return (
                       <article
@@ -1503,18 +1952,18 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                               <p>{getApplicantSubtitle(application.userProfessionalTitle, Boolean(application.portfolioSlug))}</p>
                             </div>
                           </div>
-                          <span className={`rtw-status-pill rtw-status-pill--${application.status.toLowerCase()}`}>
-                            {getApplicationStatusLabel(application.status)}
+                          <span className={`rtw-status-pill rtw-status-pill--${application.statusTone}`}>
+                            {application.statusLabel}
                           </span>
                         </div>
 
                         <p className="rtw-card__body">
-                          {application.coverLetter || 'Ứng viên chưa để lại cover letter.'}
+                          {application.coverLetter || 'Ứng viên chưa để lại thư giới thiệu.'}
                         </p>
 
                         <div className="rtw-card__meta">
                           <span><Clock3 size={12} />{formatRelativeTime(application.appliedAt)}</span>
-                          <span><Wallet size={12} />{formatCompactCurrency(application.minBudget)} — {formatCompactCurrency(application.maxBudget)}</span>
+                          <span><Wallet size={12} />{application.budgetLabel}</span>
                         </div>
 
                         <div className="rtw-card__actions">
@@ -1532,7 +1981,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                           >
                             <MessageSquare size={14} />
                           </button>
-                          {application.status === 'PENDING' && (
+                          {application.canMarkReviewed && (
                             <button
                               className="rtw-chip-btn"
                               title="Đánh dấu đã xem"
@@ -1541,22 +1990,26 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                               <CheckCircle2 size={14} />
                             </button>
                           )}
-                          {(application.status === 'PENDING' || application.status === 'REVIEWED') && (
+                          {(application.canAccept || application.canReject) && (
                             <>
-                              <button
+                              {application.canAccept && (
+                                <button
                                 className="rtw-chip-btn rtw-chip-btn--success"
                                 title="Duyệt ứng viên"
                                 onClick={(e) => { e.stopPropagation(); setDecisionModal({ application, status: 'ACCEPTED' }); setDecisionNote(''); }}
                               >
                                 <CheckCircle2 size={14} />
                               </button>
-                              <button
+                              )}
+                              {application.canReject && (
+                                <button
                                 className="rtw-chip-btn rtw-chip-btn--danger"
                                 title="Loại ứng viên"
                                 onClick={(e) => { e.stopPropagation(); setDecisionModal({ application, status: 'REJECTED' }); setDecisionNote(''); }}
                               >
                                 <XCircle size={14} />
                               </button>
+                              )}
                             </>
                           )}
                         </div>
@@ -1581,7 +2034,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                         {discoveries.length} ứng viên
                       </span>
                     )}
-                    <button className="rtw-ghost-btn" onClick={() => selectedJobId && loadDiscoveries(selectedJobId, true)}>
+                    <button className="rtw-ghost-btn" onClick={() => selectedJob && loadDiscoveries(selectedJob.id, true)}>
                       <RefreshCw size={13} />
                       Làm mới
                     </button>
@@ -1650,7 +2103,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                             )}
                             <div>
                               <h4>{candidate.fullName}</h4>
-                              <p>{candidate.professionalTitle || 'Talent profile'}</p>
+                              <p>{candidate.professionalTitle || 'Hồ sơ ứng viên'}</p>
                             </div>
                           </div>
                           <div className="rtw-score-pill" style={{ borderColor: `${matchColor}40`, background: `${matchColor}15`, color: matchColor }}>
@@ -1714,7 +2167,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
               <div className="rtw-feed">
                 <div className="rtw-feed__intro">
                   <div>
-                    <span className="rtw-panel__eyebrow"><MessageSquare size={11} />Recruitment Conversations</span>
+                    <span className="rtw-panel__eyebrow"><MessageSquare size={11} />Tin nhắn tuyển dụng</span>
                     <h3>Chat theo context ứng viên</h3>
                   </div>
                   {sessions.length > 0 && (
@@ -1734,7 +2187,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                     <MessageSquare size={24} style={{ color: '#d4af37', opacity: 0.5 }} />
                     <div>
                       <strong>Chưa có conversation cho job này</strong>
-                      <p>Bắt đầu chat từ applicant hoặc khu vực nâng cao để context được lưu lại.</p>
+                      <p>Bắt đầu chat từ ứng viên hoặc khu vực nâng cao để context được lưu lại.</p>
                     </div>
                   </div>
                 ) : (
@@ -1749,7 +2202,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                             fullName: session.candidateFullName,
                             professionalTitle: session.candidateTitle,
                             avatarUrl: session.candidateAvatar,
-                            sourceLabel: 'Recruitment chat',
+                            sourceLabel: 'Chat tuyển dụng',
                           },
                           session,
                         )
@@ -1801,7 +2254,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
               <div>
                 <span className="rtw-panel__eyebrow">
                   <Star size={11} />
-                  Candidate Dossier
+                  Hồ sơ ứng viên
                 </span>
                 <h3>{selectedCandidate?.fullName || 'Chọn ứng viên để xem'}</h3>
               </div>
@@ -1823,7 +2276,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                 <Users size={24} style={{ color: '#d4af37', opacity: 0.4 }} />
                 <div>
                   <strong>Chưa chọn ứng viên</strong>
-                  <p>Chọn một applicant hoặc ứng viên từ khu vực nâng cao để xem dossier chi tiết.</p>
+                  <p>Chọn một ứng viên hoặc ứng viên từ khu vực nâng cao để xem hồ sơ chi tiết.</p>
                 </div>
               </div>
             ) : (
@@ -1857,7 +2310,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                             {portfolioProfile.fullName || selectedCandidate.fullName}
                           </strong>
                           <span className="rtw-dossier-title">
-                            {portfolioProfile.professionalTitle || selectedCandidate.professionalTitle || 'Talent'}
+                            {portfolioProfile.professionalTitle || selectedCandidate.professionalTitle || 'Ứng viên'}
                           </span>
                           <div className="rtw-dossier-identity__stats">
                             {selectedCandidate.matchScore && (
@@ -1906,13 +2359,13 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                             <div className="rtw-dossier-ai-confidence">
                               <span>Độ tự tin AI</span>
                               <span className="rtw-dossier-ai-score">
-                                {aiInsight.confidence != null ? `${Math.round(aiInsight.confidence * 100)}%` : '—'}
+                                {aiInsight.confidenceScore != null ? `${Math.round(aiInsight.confidenceScore * 100)}%` : '—'}
                               </span>
                             </div>
                             <div className="rtw-dossier-ai-bar">
                               <div
                                 className="rtw-dossier-ai-bar__fill"
-                                style={{ width: aiInsight.confidence != null ? `${Math.round(aiInsight.confidence * 100)}%` : '0%' }}
+                                style={{ width: aiInsight.confidenceScore != null ? `${Math.round(aiInsight.confidenceScore * 100)}%` : '0%' }}
                               />
                             </div>
                           </div>
@@ -2007,7 +2460,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                       <div className="rtw-dossier-section-card">
                         <div className="rtw-dossier-section-card__header">
                           <Star size={13} />
-                          <strong>Mentor Reviews</strong>
+                          <strong>Đánh giá Mentor</strong>
                           <span className="rtw-dossier-count">{portfolioReviews.length}</span>
                         </div>
                         <div className="rtw-dossier-review-list">
@@ -2036,7 +2489,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
                             </div>
                           ))}
                           {portfolioReviews.length === 0 && (
-                            <p className="rtw-dossier-empty">Chưa có review công khai.</p>
+                            <p className="rtw-dossier-empty">Chưa có đánh giá công khai.</p>
                           )}
                         </div>
                       </div>
@@ -2055,7 +2508,7 @@ const RecruiterTalentWorkspace = ({ jobs }: RecruiterTalentWorkspaceProps) => {
           <div className="rtw-modal" onClick={(event) => event.stopPropagation()}>
             <span className="rtw-panel__eyebrow">
               {decisionModal.status === 'ACCEPTED' ? <CheckCircle2 size={12} /> : <XCircle size={12} />}
-              {decisionModal.status === 'ACCEPTED' ? 'Duyệt applicant' : 'Loại applicant'}
+              {decisionModal.status === 'ACCEPTED' ? 'Duyệt ứng viên' : 'Loại ứng viên'}
             </span>
             <h3>{decisionModal.application.userFullName}</h3>
             <p>

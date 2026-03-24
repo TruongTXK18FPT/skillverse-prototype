@@ -9,6 +9,7 @@ export {
 export { ShortTermJobCard, ShortTermJobList } from "./ShortTermJobCard";
 export { ShortTermJobForm } from "./ShortTermJobForm";
 export { DeliverableUpload, DeliverableDisplay } from "./DeliverableUpload";
+export { RichMarkdownEditor } from "./RichMarkdownEditor";
 export {
   JobReviewForm,
   JobReviewDisplay,

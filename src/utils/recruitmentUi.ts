@@ -10,7 +10,7 @@ export const resolveRecruitmentAssetUrl = (raw?: string | null): string | undefi
     return undefined;
   }
 
-  if (/^https?:\/\//i.test(trimmed)) {
+  if (/^(https?:\/\/|blob:|data:|mailto:|tel:|#)/i.test(trimmed)) {
     return trimmed;
   }
 

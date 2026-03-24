@@ -49,12 +49,16 @@ type CandidateMatchApiEnvelope = {
     fitSummary?: string;
     skillSignals?: Array<{
       skill?: string;
+      evidence?: string;
       isRequired?: boolean;
       relevanceScore?: number;
     }>;
     reasoning?: string;
     confidenceScore?: number;
     matchQuality?: 'EXCELLENT' | 'GOOD' | 'FAIR' | 'POOR';
+    modelUsed?: string;
+    processingTimeMs?: number;
+    isFallback?: boolean;
   };
 };
 
@@ -207,22 +211,55 @@ class CandidateSearchService {
       return {
         candidateId: match?.candidateId || candidateId,
         jobId: match?.jobId || jobId,
-        matchScore: match?.confidenceScore || 0,
-        skillMatchPercent: Math.round(
-          ((match?.skillSignals?.filter((signal) => signal.isRequired).length || 0) /
-            Math.max(match?.skillSignals?.length || 1, 1)) *
-            100
-        ),
-        extractedSkills: (match?.skillSignals || [])
-          .map((signal) => signal.skill || '')
-          .filter(Boolean),
-        fitExplanation: match?.fitSummary || '',
+        fitSummary: match?.fitSummary || '',
+        skillSignals: (match?.skillSignals || []).map((signal) => ({
+          skill: signal.skill || '',
+          evidence: (signal as any).evidence || '',
+          isRequired: signal.isRequired || false,
+          relevanceScore: signal.relevanceScore || 0,
+        })),
         reasoning: match?.reasoning || '',
-        confidence: match?.confidenceScore || 0,
-        generatedAt: new Date().toISOString()
+        confidenceScore: match?.confidenceScore || 0,
+        matchQuality: (match?.matchQuality as AICandidateMatchResponse['matchQuality']) || 'FAIR',
+        modelUsed: (match as any)?.modelUsed,
+        processingTimeMs: (match as any)?.processingTimeMs,
+        isFallback: (match as any)?.isFallback,
       };
     } catch (error) {
       this.handleError(error, 'Failed to get AI match explanation');
+    }
+  }
+
+  /**
+   * Get AI-generated match explanation for a candidate-shortTermJob pair
+   * @requires RECRUITER role with premium subscription
+   */
+  async getShortTermJobMatchExplanation(shortTermJobId: number, candidateId: number): Promise<AICandidateMatchResponse> {
+    try {
+      const response = await axiosInstance.get<CandidateMatchApiEnvelope>(
+        `/api/v1/recruiter/candidates/${candidateId}/shortterm-match?shortTermJobId=${shortTermJobId}`
+      );
+      const match = response.data.data;
+
+      return {
+        candidateId: match?.candidateId || candidateId,
+        jobId: match?.jobId || shortTermJobId,
+        fitSummary: match?.fitSummary || '',
+        skillSignals: (match?.skillSignals || []).map((signal) => ({
+          skill: signal.skill || '',
+          evidence: (signal as any).evidence || '',
+          isRequired: signal.isRequired || false,
+          relevanceScore: signal.relevanceScore || 0,
+        })),
+        reasoning: match?.reasoning || '',
+        confidenceScore: match?.confidenceScore || 0,
+        matchQuality: (match?.matchQuality as AICandidateMatchResponse['matchQuality']) || 'FAIR',
+        modelUsed: (match as any)?.modelUsed,
+        processingTimeMs: (match as any)?.processingTimeMs,
+        isFallback: (match as any)?.isFallback,
+      };
+    } catch (error) {
+      this.handleError(error, 'Failed to get short-term job AI match explanation');
     }
   }
 

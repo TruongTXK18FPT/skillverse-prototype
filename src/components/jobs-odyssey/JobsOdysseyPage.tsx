@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
-import { Briefcase, Zap, LayoutGrid } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { Briefcase, Zap, LayoutGrid, ChevronLeft, ChevronRight } from "lucide-react";
 import OdysseyLayout from "./OdysseyLayout";
 import FateCard from "./FateCard";
 import GigCard from "./GigCard";
 import FilterConsole, { JobFilters } from "./FilterConsole";
-import JobDetailsModal from "../job/JobDetailsModal";
-import ShortTermJobDetailModal from "./ShortTermJobDetailModal";
 import MeowlGuide from "../meowl/MeowlGuide";
 import jobService from "../../services/jobService";
 import shortTermJobService from "../../services/shortTermJobService";
@@ -17,8 +16,10 @@ import { useAuth } from "../../context/AuthContext";
 import "./odyssey-styles.css";
 
 type ViewType = "all" | "fulltime" | "shortterm";
+const PAGE_SIZE = 10;
 
 const JobsOdysseyPage = () => {
+  const navigate = useNavigate();
   const { showError } = useToast();
   const { user } = useAuth();
   const isRecruiter = user?.roles.includes("RECRUITER") ?? false;
@@ -33,81 +34,105 @@ const JobsOdysseyPage = () => {
 
   // Full-time jobs
   const [jobs, setJobs] = useState<JobPostingResponse[]>([]);
-  const [selectedJob, setSelectedJob] = useState<JobPostingResponse | null>(
-    null,
-  );
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [totalJobs, setTotalJobs] = useState(0);
+  const [totalPagesJobs, setTotalPagesJobs] = useState(0);
+  const [currentPageJobs, setCurrentPageJobs] = useState(0);
 
   // Short-term / gig jobs
-  const [shortTermJobs, setShortTermJobs] = useState<ShortTermJobResponse[]>(
-    [],
-  );
-  const [selectedGig, setSelectedGig] = useState<ShortTermJobResponse | null>(
-    null,
-  );
-  const [isGigModalOpen, setIsGigModalOpen] = useState(false);
-
-  // Track which jobs the current user has applied to
-  // Track which jobs the current user has applied to
-  const [_userApplications, _setUserApplications] = useState<
-    Map<number, ShortTermApplicationStatus>
-  >(new Map());
+  const [shortTermJobs, setShortTermJobs] = useState<ShortTermJobResponse[]>([]);
+  const [totalGigs, setTotalGigs] = useState(0);
+  const [totalPagesGigs, setTotalPagesGigs] = useState(0);
+  const [currentPageGigs, setCurrentPageGigs] = useState(0);
 
   const [isLoading, setIsLoading] = useState(true);
 
+  // Track which jobs the current user has applied to
+  const [userApplications, setUserApplications] = useState<
+    Map<number, ShortTermApplicationStatus>
+  >(new Map());
+
+  // Fetch user applications once (on mount)
   useEffect(() => {
-    fetchJobs();
-  }, [searchTerm]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const fetchJobs = async () => {
-    setIsLoading(true);
-    try {
-      const [regularJobs, gigJobs] = await Promise.all([
-        jobService.getPublicJobs({
-          search: searchTerm || undefined,
-          status: "OPEN",
-        }),
-        shortTermJobService.getPublishedJobs(),
-      ]);
-
-      // Only fetch my applications if user has USER role (not recruiter)
-      const appliedMap = new Map<number, ShortTermApplicationStatus>();
-      if (!isRecruiter) {
-        try {
-          const myApplications = await shortTermJobService.getMyApplications();
-          for (const app of myApplications) {
-            appliedMap.set(app.jobId, app.status);
-          }
-        } catch (e) {
-          // Silently ignore — user may not have USER role
-          console.warn("Could not fetch my applications:", e);
+    if (isRecruiter) return;
+    shortTermJobService
+      .getMyApplications()
+      .then((apps) => {
+        const map = new Map<number, ShortTermApplicationStatus>();
+        for (const app of apps) {
+          map.set(app.jobId, app.status);
         }
+        setUserApplications(map);
+      })
+      .catch(() => { /* ignore */ });
+  }, [isRecruiter]);
+
+  // Fetch full-time jobs with pagination
+  const fetchFullTimeJobs = useCallback(
+    async (page: number) => {
+      try {
+        const result = await jobService.getPublicJobsPaged(page, PAGE_SIZE);
+        setJobs(result.content);
+        setTotalJobs(result.totalElements);
+        setTotalPagesJobs(result.totalPages);
+        setCurrentPageJobs(page);
+      } catch {
+        showError("Lỗi tải dữ liệu", "Không thể tải danh sách công việc toàn thời gian.");
       }
-      _setUserApplications(appliedMap);
+    },
+    [showError],
+  );
 
-      // Inject hasApplied/canApply into gig jobs
-      const enrichedGigs = gigJobs.map((gig) => ({
-        ...gig,
-        hasApplied: appliedMap.has(gig.id),
-        canApply:
-          appliedMap.has(gig.id) ||
-          (gig.applicantCount ?? 0) >= (gig.maxApplicants ?? Infinity),
-      }));
+  // Fetch short-term jobs with pagination
+  const fetchGigJobs = useCallback(
+    async (page: number) => {
+      try {
+        const result = await shortTermJobService.getPublishedJobsPaged(page, PAGE_SIZE);
+        const enriched = result.content.map((gig) => ({
+          ...gig,
+          hasApplied: userApplications.has(gig.id),
+          canApply:
+            userApplications.has(gig.id) ||
+            (gig.applicantCount ?? 0) >= (gig.maxApplicants ?? Infinity),
+        }));
+        setShortTermJobs(enriched);
+        setTotalGigs(result.totalElements);
+        setTotalPagesGigs(result.totalPages);
+        setCurrentPageGigs(page);
+      } catch {
+        showError("Lỗi tải dữ liệu", "Không thể tải danh sách công việc ngắn hạn.");
+      }
+    },
+    [userApplications, showError],
+  );
 
-      setJobs(regularJobs);
-      setShortTermJobs(enrichedGigs);
-    } catch (error) {
-      console.error("Error fetching jobs:", error);
-      showError(
-        "Lỗi tải dữ liệu",
-        "Không thể tải danh sách công việc. Vui lòng thử lại.",
-      );
-    } finally {
-      setIsLoading(false);
-    }
+  // Reload when search term or filters change — always go back to page 0
+  useEffect(() => {
+    setIsLoading(true);
+    Promise.all([
+      fetchFullTimeJobs(0),
+      fetchGigJobs(0),
+    ])
+      .catch(() => { /* handled in individual functions */ })
+      .finally(() => setIsLoading(false));
+  }, [searchTerm, filters]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Initial load
+  useEffect(() => {
+    setIsLoading(true);
+    Promise.all([
+      fetchFullTimeJobs(0),
+      fetchGigJobs(0),
+    ])
+      .catch(() => { /* handled in individual functions */ })
+      .finally(() => setIsLoading(false));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Handle tab switch — reload paginated data for the selected tab
+  const handleViewChange = (next: ViewType) => {
+    setViewType(next);
   };
 
-  // Filter full-time jobs
+  // Client-side filter helpers
   const filteredJobs = jobs.filter((job) => {
     if (filters.deploymentZone === "remote" && !job.isRemote) return false;
     if (filters.deploymentZone === "onsite" && job.isRemote) return false;
@@ -117,52 +142,34 @@ const JobsOdysseyPage = () => {
     return true;
   });
 
-  // Filter short-term jobs
   const filteredGigs = shortTermJobs.filter((gig) => {
     if (filters.deploymentZone === "remote" && !gig.isRemote) return false;
     if (filters.deploymentZone === "onsite" && gig.isRemote) return false;
     if (gig.budget < filters.minBounty || gig.budget > filters.maxBounty)
       return false;
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      const inTitle = gig.title.toLowerCase().includes(term);
-      const inDesc = gig.description?.toLowerCase().includes(term) ?? false;
-      const inSkills =
-        gig.requiredSkills?.some((s) => s.toLowerCase().includes(term)) ??
-        false;
-      if (!inTitle && !inDesc && !inSkills) return false;
-    }
     return true;
   });
 
-  const totalCount = filteredJobs.length + filteredGigs.length;
+  const totalCount = totalJobs + totalGigs;
 
-  // ── Full-time handlers ──
+  // ── Pagination helpers ──
+  const goToPageJobs = (page: number) => {
+    setIsLoading(true);
+    fetchFullTimeJobs(page).finally(() => setIsLoading(false));
+  };
+
+  const goToPageGigs = (page: number) => {
+    setIsLoading(true);
+    fetchGigJobs(page).finally(() => setIsLoading(false));
+  };
+
+  // ── Handlers ──
   const handleJobClick = (job: JobPostingResponse) => {
-    setSelectedJob(job);
-    setIsDetailsModalOpen(true);
-  };
-  const handleCloseJobModal = () => {
-    setIsDetailsModalOpen(false);
-    setSelectedJob(null);
-  };
-  const handleApplySuccess = () => {
-    fetchJobs();
-    handleCloseJobModal();
+    navigate(`/jobs/${job.id}`);
   };
 
-  // ── Gig handlers ──
   const handleGigClick = (gig: ShortTermJobResponse) => {
-    setSelectedGig(gig);
-    setIsGigModalOpen(true);
-  };
-  const handleCloseGigModal = () => {
-    setIsGigModalOpen(false);
-    setSelectedGig(null);
-  };
-  const handleGigApplySuccess = () => {
-    fetchJobs();
-    handleCloseGigModal();
+    navigate(`/short-term-jobs/${gig.id}/view`);
   };
 
   // ── Render helpers ──
@@ -178,23 +185,52 @@ const JobsOdysseyPage = () => {
     </div>
   );
 
+  // ── Pagination controls ──
+  const renderPagination = (
+    currentPage: number,
+    totalPages: number,
+    onPageChange: (page: number) => void,
+  ) => {
+    if (totalPages <= 1) return null;
+    return (
+      <div className="odyssey-pagination">
+        <button
+          className="odyssey-pagination__btn"
+          disabled={currentPage === 0}
+          onClick={() => onPageChange(currentPage - 1)}
+        >
+          <ChevronLeft size={16} />
+        </button>
+        <span className="odyssey-pagination__info">
+          {currentPage + 1} / {totalPages}
+        </span>
+        <button
+          className="odyssey-pagination__btn"
+          disabled={currentPage >= totalPages - 1}
+          onClick={() => onPageChange(currentPage + 1)}
+        >
+          <ChevronRight size={16} />
+        </button>
+      </div>
+    );
+  };
+
+  // ── All view (preview of each type) ──
   const renderAllView = () => {
     if (totalCount === 0) return renderEmptyState("🚀", "Không có công việc");
 
     return (
       <>
-        {/* Full-time section */}
+        {/* Full-time preview */}
         {filteredJobs.length > 0 && (
           <div className="odyssey-section">
             <div className="odyssey-section__header">
               <Briefcase size={18} className="odyssey-section__icon" />
               <h2 className="odyssey-section__title">Toàn thời gian</h2>
-              <span className="odyssey-section__count">
-                {filteredJobs.length}
-              </span>
+              <span className="odyssey-section__count">{totalJobs}</span>
               <button
                 className="odyssey-section__link"
-                onClick={() => setViewType("fulltime")}
+                onClick={() => handleViewChange("fulltime")}
               >
                 Xem tất cả →
               </button>
@@ -211,7 +247,7 @@ const JobsOdysseyPage = () => {
           </div>
         )}
 
-        {/* Short-term section */}
+        {/* Short-term preview */}
         {filteredGigs.length > 0 && (
           <div className="odyssey-section">
             <div className="odyssey-section__header">
@@ -221,11 +257,11 @@ const JobsOdysseyPage = () => {
               />
               <h2 className="odyssey-section__title">Ngắn hạn · Gig</h2>
               <span className="odyssey-section__count odyssey-section__count--gig">
-                {filteredGigs.length}
+                {totalGigs}
               </span>
               <button
                 className="odyssey-section__link"
-                onClick={() => setViewType("shortterm")}
+                onClick={() => handleViewChange("shortterm")}
               >
                 Xem tất cả →
               </button>
@@ -245,31 +281,39 @@ const JobsOdysseyPage = () => {
     );
   };
 
+  // ── Full-time grid ──
   const renderFullTimeGrid = () => {
     if (filteredJobs.length === 0)
       return renderEmptyState("💼", "Không có công việc toàn thời gian");
     return (
-      <div className="odyssey-grid">
-        {filteredJobs.map((job) => (
-          <FateCard
-            key={job.id}
-            job={job}
-            onClick={() => handleJobClick(job)}
-          />
-        ))}
-      </div>
+      <>
+        <div className="odyssey-grid">
+          {filteredJobs.map((job) => (
+            <FateCard
+              key={job.id}
+              job={job}
+              onClick={() => handleJobClick(job)}
+            />
+          ))}
+        </div>
+        {renderPagination(currentPageJobs, totalPagesJobs, goToPageJobs)}
+      </>
     );
   };
 
+  // ── Gig grid ──
   const renderGigGrid = () => {
     if (filteredGigs.length === 0)
       return renderEmptyState("⚡", "Không có gig / công việc ngắn hạn");
     return (
-      <div className="odyssey-grid">
-        {filteredGigs.map((gig) => (
-          <GigCard key={gig.id} job={gig} onClick={() => handleGigClick(gig)} />
-        ))}
-      </div>
+      <>
+        <div className="odyssey-grid">
+          {filteredGigs.map((gig) => (
+            <GigCard key={gig.id} job={gig} onClick={() => handleGigClick(gig)} />
+          ))}
+        </div>
+        {renderPagination(currentPageGigs, totalPagesGigs, goToPageGigs)}
+      </>
     );
   };
 
@@ -289,13 +333,13 @@ const JobsOdysseyPage = () => {
       key: "fulltime",
       label: "Toàn thời gian",
       icon: <Briefcase size={15} />,
-      count: filteredJobs.length,
+      count: totalJobs,
     },
     {
       key: "shortterm",
       label: "Ngắn hạn",
       icon: <Zap size={15} />,
-      count: filteredGigs.length,
+      count: totalGigs,
     },
   ];
 
@@ -308,7 +352,7 @@ const JobsOdysseyPage = () => {
             <button
               key={tab.key}
               className={`ody-nav__pill${viewType === tab.key ? " ody-nav__pill--active" : ""}${tab.key === "shortterm" ? " ody-nav__pill--gig" : ""}`}
-              onClick={() => setViewType(tab.key)}
+              onClick={() => handleViewChange(tab.key)}
             >
               {tab.icon}
               <span className="ody-nav__label">{tab.label}</span>
@@ -337,24 +381,6 @@ const JobsOdysseyPage = () => {
         renderFullTimeGrid()
       ) : (
         renderGigGrid()
-      )}
-
-      {/* Full-time details modal */}
-      {isDetailsModalOpen && selectedJob && (
-        <JobDetailsModal
-          job={selectedJob}
-          onClose={handleCloseJobModal}
-          onApplySuccess={handleApplySuccess}
-        />
-      )}
-
-      {/* Gig details modal */}
-      {isGigModalOpen && selectedGig && (
-        <ShortTermJobDetailModal
-          job={selectedGig}
-          onClose={handleCloseGigModal}
-          onApplySuccess={handleGigApplySuccess}
-        />
       )}
 
       <MeowlGuide currentPage="jobs" />

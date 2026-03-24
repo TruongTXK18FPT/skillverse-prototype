@@ -6,8 +6,10 @@ import { premiumService } from "../../services/premiumService";
 import {
   CreateShortTermJobRequest,
   JobUrgency,
-  PaymentMethod,
 } from "../../types/ShortTermJob";
+import { RichMarkdownEditor } from "../short-term-job/RichMarkdownEditor";
+import { JobMarkdownSurface } from "../shared/JobMarkdownSurface";
+import { InsufficientWalletModal } from "../shared/InsufficientWalletModal";
 import "./streamlined-job-forms.css";
 
 interface ShortTermLaunchPadProps {
@@ -25,14 +27,10 @@ interface ShortTermFormState {
   description: string;
   requirements: string;
   budget: string;
-  isNegotiable: boolean;
-  paymentMethod: PaymentMethod;
   deadline: string;
   workDeadline: string;
   estimatedDuration: string;
   urgency: JobUrgency;
-  isRemote: boolean;
-  location: string;
   maxApplicants: string;
   subCategory: string;
   requiredSkills: string[];
@@ -58,24 +56,6 @@ const URGENCY_OPTIONS: { value: JobUrgency; label: string }[] = [
   { value: JobUrgency.ASAP, label: "Cần làm ngay" },
 ];
 
-const PAYMENT_OPTIONS: { value: PaymentMethod; label: string; desc: string }[] =
-  [
-    {
-      value: "FIXED",
-      label: "Trả một lần",
-      desc: "Chốt giá và thanh toán khi hoàn thành",
-    },
-    {
-      value: "MILESTONE",
-      label: "Theo cột mốc",
-      desc: "Phù hợp việc chia thành nhiều giai đoạn",
-    },
-    {
-      value: "HOURLY",
-      label: "Theo giờ",
-      desc: "Phù hợp việc phát sinh linh hoạt",
-    },
-  ];
 
 const SKILL_SUGGESTIONS = [
   "React",
@@ -99,15 +79,6 @@ const BUDGET_PRESETS = [
 
 const DURATION_PRESETS = ["4 giờ", "1 ngày", "3 ngày", "1 tuần", "2 tuần"];
 
-const DESCRIPTION_TEMPLATE = `Mục tiêu công việc:
-- Nêu đầu ra cần bàn giao.
-
-Phạm vi công việc:
-- Liệt kê các đầu việc chính.
-
-Tiêu chí hoàn thành:
-- Chất lượng, định dạng, deadline cần đạt.`;
-
 const REQUIREMENTS_TEMPLATE = `- Có kinh nghiệm với hạng mục tương tự
 - Có thể trao đổi và cập nhật tiến độ rõ ràng`;
 
@@ -116,14 +87,10 @@ const createInitialFormData = (): ShortTermFormState => ({
   description: "",
   requirements: "",
   budget: "",
-  isNegotiable: false,
-  paymentMethod: "FIXED",
   deadline: "",
   workDeadline: "",
   estimatedDuration: "",
   urgency: JobUrgency.NORMAL,
-  isRemote: true,
-  location: "",
   maxApplicants: "10",
   subCategory: "OTHER",
   requiredSkills: [],
@@ -153,6 +120,9 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
   const [skillInput, setSkillInput] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showWalletModal, setShowWalletModal] = useState(false);
+  const [walletModalAmount, setWalletModalAmount] = useState(0);
+  const [walletModalType, setWalletModalType] = useState<"escrow" | "posting">("escrow");
 
   useEffect(() => {
     void checkSubscriptionStatus();
@@ -271,11 +241,7 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
       showError("Thiếu thời lượng", "Hãy nhập thời gian ước tính hoàn thành.");
       return false;
     }
-    if (!formData.isRemote && !formData.location.trim()) {
-      showError("Thiếu địa điểm", "Hãy nhập địa điểm nếu công việc không remote.");
-      return false;
-    }
-    if (!formData.isNegotiable && Number(formData.budget) < 100000) {
+    if (Number(formData.budget) < 100000) {
       showError(
         "Ngân sách chưa hợp lệ",
         "Ngân sách tối thiểu cho việc ngắn hạn là 100.000 VNĐ.",
@@ -344,17 +310,14 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
         title: formData.title.trim(),
         description: formData.description.trim(),
         requirements: formData.requirements.trim() || undefined,
-        budget: formData.isNegotiable ? 0 : Number(formData.budget),
-        isNegotiable: formData.isNegotiable,
-        paymentMethod: formData.paymentMethod,
+        budget: Number(formData.budget),
         deadline: `${formData.deadline}T23:59:59`,
         workDeadline: formData.workDeadline
           ? `${formData.workDeadline}T23:59:59`
           : undefined,
         estimatedDuration: formData.estimatedDuration.trim(),
         urgency: formData.urgency,
-        isRemote: formData.isRemote,
-        location: formData.isRemote ? undefined : formData.location.trim(),
+        isRemote: true,
         maxApplicants: Number(formData.maxApplicants) || 10,
         subCategory: formData.subCategory,
         requiredSkills: formData.requiredSkills,
@@ -378,6 +341,29 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
       onJobCreated?.();
     } catch (error) {
       console.error("Short-term job creation failed:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      // Detect wallet insufficient balance errors
+      if (
+        errorMessage.includes("Số dư ví không đủ") ||
+        errorMessage.includes("ký quỹ")
+      ) {
+        // Extract amount from error message e.g. "5000000.00"
+        const amountMatch = errorMessage.match(/([\d,]+\.?\d*)\s*VND?/);
+        const amount = amountMatch
+          ? parseFloat(amountMatch[1].replace(/,/g, ""))
+          : Number(formData.budget) || 0;
+        setWalletModalAmount(amount);
+        setWalletModalType("escrow");
+        setShowWalletModal(true);
+        return;
+      }
+      if (errorMessage.includes("phí đăng tin")) {
+        setWalletModalAmount(30000);
+        setWalletModalType("posting");
+        setShowWalletModal(true);
+        return;
+      }
       showError(
         "Không thể tạo việc ngắn hạn",
         "Có lỗi xảy ra khi lưu công việc. Vui lòng thử lại.",
@@ -387,9 +373,7 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
     }
   };
 
-  const budgetPreview = formData.isNegotiable
-    ? "Thỏa thuận"
-    : Number(formData.budget) > 0
+  const budgetPreview = Number(formData.budget) > 0
       ? currencyFormatter.format(Number(formData.budget))
       : "Chưa nhập ngân sách";
 
@@ -407,7 +391,7 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
     formData.requiredSkills.length > 0 ? "skills" : "",
     formData.deadline,
     formData.estimatedDuration.trim(),
-    formData.isNegotiable || formData.budget ? "budget" : "",
+    formData.budget ? "budget" : "",
   ].filter(Boolean).length;
 
   const previewMetrics = [
@@ -419,11 +403,7 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
           (option) => option.value === formData.subCategory,
         )?.label || "Khác",
     },
-    { label: "Thanh toán", value: formData.paymentMethod },
-    {
-      label: "Địa điểm",
-      value: formData.isRemote ? "Remote" : formData.location || "Onsite",
-    },
+    { label: "Địa điểm", value: "Remote" },
   ];
 
   return (
@@ -587,35 +567,17 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
               </div>
 
               <div className="sjf-field sjf-field--full">
-                <div className="sjf-label-row">
-                  <label className="sjf-label">
-                    Mô tả công việc
-                    <span className="sjf-label__required">*</span>
-                  </label>
-                  <button
-                    type="button"
-                    className="sjf-link-button"
-                    onClick={() =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        description: appendBlock(
-                          prev.description,
-                          DESCRIPTION_TEMPLATE,
-                        ),
-                      }))
-                    }
-                  >
-                    Chèn mẫu
-                  </button>
-                </div>
-                <textarea
-                  name="description"
-                  className="sjf-textarea"
+                <label className="sjf-label">
+                  Mô tả công việc
+                  <span className="sjf-label__required">*</span>
+                </label>
+                <RichMarkdownEditor
                   value={formData.description}
-                  onChange={handleChange}
-                  rows={5}
-                  placeholder="Mô tả đầu ra cần bàn giao, phạm vi công việc và tiêu chí hoàn thành."
-                  required
+                  onChange={(v) =>
+                    setFormData((prev) => ({ ...prev, description: v }))
+                  }
+                  placeholder="Viết mô tả đầu ra cần bàn giao, phạm vi công việc và tiêu chí hoàn thành..."
+                  minHeight={240}
                 />
               </div>
 
@@ -705,9 +667,7 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
               <div className="sjf-field">
                 <label className="sjf-label">
                   Ngân sách (VNĐ)
-                  {!formData.isNegotiable && (
-                    <span className="sjf-label__required">*</span>
-                  )}
+                  <span className="sjf-label__required">*</span>
                 </label>
                 <input
                   type="number"
@@ -715,33 +675,10 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
                   className="sjf-input"
                   value={formData.budget}
                   onChange={handleChange}
-                  disabled={formData.isNegotiable}
                   placeholder="1000000"
                 />
               </div>
 
-              <div className="sjf-field">
-                <label className="sjf-label">Cách thanh toán</label>
-                <select
-                  name="paymentMethod"
-                  className="sjf-select"
-                  value={formData.paymentMethod}
-                  onChange={handleChange}
-                >
-                  {PAYMENT_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                <span className="sjf-hint">
-                  {
-                    PAYMENT_OPTIONS.find(
-                      (option) => option.value === formData.paymentMethod,
-                    )?.desc
-                  }
-                </span>
-              </div>
 
               <div className="sjf-field sjf-field--full">
                 <span className="sjf-label">Ngân sách nhanh</span>
@@ -759,7 +696,6 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
                         setFormData((prev) => ({
                           ...prev,
                           budget: String(preset.value),
-                          isNegotiable: false,
                         }))
                       }
                     >
@@ -769,27 +705,6 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
                 </div>
               </div>
 
-              <div className="sjf-field sjf-field--full">
-                <div className="sjf-toggle-card sjf-toggle-card--teal">
-                  <div className="sjf-toggle-card__content">
-                    <span className="sjf-toggle-card__title">
-                      Cho phép thương lượng giá
-                    </span>
-                    <span className="sjf-note">
-                      Bật khi muốn nhận báo giá từ ứng viên thay vì chốt giá ngay.
-                    </span>
-                  </div>
-                  <label className="sjf-switch sjf-switch--teal">
-                    <input
-                      type="checkbox"
-                      name="isNegotiable"
-                      checked={formData.isNegotiable}
-                      onChange={handleChange}
-                    />
-                    <span className="sjf-switch__track" />
-                  </label>
-                </div>
-              </div>
 
               <div className="sjf-field">
                 <label className="sjf-label">
@@ -888,55 +803,7 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
                   ))}
                 </div>
               </div>
-
-              <div className="sjf-field sjf-field--full">
-                <div className="sjf-toggle-card sjf-toggle-card--teal">
-                  <div className="sjf-toggle-card__content">
-                    <span className="sjf-toggle-card__title">
-                      Làm việc từ xa / Remote
-                    </span>
-                    <span className="sjf-note">
-                      Tắt nếu công việc yêu cầu gặp trực tiếp hoặc onsite tại văn phòng.
-                    </span>
-                  </div>
-                  <label className="sjf-switch sjf-switch--teal">
-                    <input
-                      type="checkbox"
-                      name="isRemote"
-                      checked={formData.isRemote}
-                      onChange={handleChange}
-                    />
-                    <span className="sjf-switch__track" />
-                  </label>
-                </div>
-              </div>
-
-              {!formData.isRemote && (
-                <div className="sjf-field sjf-field--full">
-                  <label className="sjf-label">
-                    Địa điểm làm việc
-                    <span className="sjf-label__required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="location"
-                    className="sjf-input"
-                    value={formData.location}
-                    onChange={handleChange}
-                    placeholder="Quận 3, TP.HCM"
-                  />
-                </div>
-              )}
             </div>
-
-            <button
-              type="button"
-              className="sjf-advanced-toggle sjf-advanced-toggle--teal"
-              onClick={() => setShowAdvanced((prev) => !prev)}
-            >
-              <span>Thông tin bổ sung: yêu cầu ứng viên, độ gấp...</span>
-              <span>{showAdvanced ? "Thu gọn" : "Mở rộng"}</span>
-            </button>
 
             {showAdvanced && (
               <div className="sjf-advanced">
@@ -1072,10 +939,14 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
               <h4 className="sjf-preview__title">
                 {formData.title || "Tiêu đề việc ngắn hạn sẽ hiển thị ở đây"}
               </h4>
-              <p className="sjf-preview__body">
-                {formData.description ||
-                  "Mô tả rõ đầu ra, cách bàn giao và tiêu chí hoàn thành để freelancer tự đánh giá phù hợp."}
-              </p>
+              <JobMarkdownSurface
+                content={formData.description}
+                className="sjf-preview__body"
+                density="preview"
+                theme="teal"
+                maxHeight={220}
+                placeholder="Mô tả rõ đầu ra, cách bàn giao và tiêu chí hoàn thành để freelancer tự đánh giá phù hợp."
+              />
             </div>
 
             <div className="sjf-preview__grid">
@@ -1136,6 +1007,13 @@ const ShortTermLaunchPad: React.FC<ShortTermLaunchPadProps> = ({
           </div>
         </aside>
       </div>
+
+      <InsufficientWalletModal
+        isOpen={showWalletModal}
+        onClose={() => setShowWalletModal(false)}
+        requiredAmount={walletModalAmount}
+        type={walletModalType}
+      />
     </div>
   );
 };
