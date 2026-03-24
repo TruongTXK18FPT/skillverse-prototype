@@ -14,6 +14,7 @@ import PilotIdentityForm from '../../components/profile-hud/user/PilotIdentityFo
 import CompanionPod from '../../components/profile-hud/user/CompanionPod';
 import PilotSkinSelector from '../../components/profile-hud/user/PilotSkinSelector';
 import ParentRequests from '../../components/profile-hud/user/ParentRequests';
+import GoogleUserOnboardingBanner from '../../components/auth/GoogleUserOnboardingBanner';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import '../../components/profile-hud/user/pilot-styles.css';
 import '../../styles/ProfileSecuritySection.css';
@@ -123,11 +124,18 @@ const ProfilePageCosmic = () => {
     setSkin(skinId as MeowlSkinType);
   };
 
+  const shouldShowGooglePasswordCta =
+    user?.authProvider === 'GOOGLE' &&
+    !user?.googleLinked &&
+    Array.isArray(user?.roles) &&
+    user.roles.includes('USER');
+
   if (loading) return <div className="pilot-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Đang tải hồ sơ...</div>;
   if (!profile) return <div className="pilot-container">Lỗi tải hồ sơ</div>;
 
   return (
     <div className="pilot-container">
+      <GoogleUserOnboardingBanner />
       <PilotHeader 
         user={profile} 
         subscription={subscription}
@@ -137,6 +145,38 @@ const ProfilePageCosmic = () => {
 
       {success && <div style={{ color: '#4ade80', padding: '1rem 2rem', border: '1px solid #4ade80', margin: '1rem 2rem', background: 'rgba(74, 222, 128, 0.1)' }}>{success}</div>}
       {error && <div style={{ color: '#ef4444', padding: '1rem 2rem', border: '1px solid #ef4444', margin: '1rem 2rem', background: 'rgba(239, 68, 68, 0.1)' }}>{error}</div>}
+
+      {shouldShowGooglePasswordCta && !editing && (
+        <section className="pilot-section">
+          <div className="security-spotlight-card">
+            <div className="security-spotlight-card__icon">
+              <Shield size={24} />
+            </div>
+            <div className="security-spotlight-card__content">
+              <div className="security-spotlight-card__eyebrow">Khuyen nghi bao mat</div>
+              <h2 className="security-spotlight-card__title">Thiết lập mật khẩu dự phòng cho tài khoản Google</h2>
+              <p className="security-spotlight-card__description">
+                Bạn vừa đăng nhập bằng Google lần đầu. Để tránh mất quyền truy cập khi Google gặp sự cố hoặc bị ngắt phiên,
+                hãy thiết lập mật khẩu dự phòng trước.
+              </p>
+              <div className="security-spotlight-card__benefits">
+                <span>Đăng nhập bằng email khi cần</span>
+                <span>Khôi phục quyền truy cập dễ hơn</span>
+                <span>Không phải kéo xuống khu bảo mật để tìm</span>
+              </div>
+            </div>
+            <div className="security-spotlight-card__actions">
+              <button
+                onClick={() => navigate('/set-password')}
+                className="pilot-btn"
+                style={{ background: '#ef4444', color: 'white' }}
+              >
+                <Shield size={16} /> Thiết lập ngay
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {editing ? (
         <PilotIdentityForm 

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, Clock, Repeat } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { confirmAction } from '../../context/ConfirmDialogContext';
+import { showAppError, showAppSuccess } from '../../context/ToastContext';
 import { addAvailability, getAvailability, deleteAvailability, Availability } from '../../services/availabilityService';
 import { getMyBookings, BookingResponse } from '../../services/bookingService';
 import './MentorScheduleManager.css';
@@ -126,10 +128,10 @@ const MentorScheduleManager: React.FC = () => {
 
       setShowAddModal(false);
       fetchData();
-      alert('Đã thêm lịch thành công!');
+      showAppSuccess('Đã thêm lịch', 'Đã thêm lịch thành công!');
     } catch (error) {
       console.error('Failed to add availability:', error);
-      alert('Lỗi khi thêm lịch.');
+      showAppError('Không thể thêm lịch', 'Lỗi khi thêm lịch.');
     }
   };
 
@@ -141,7 +143,7 @@ const MentorScheduleManager: React.FC = () => {
           await deleteAvailability(availId);
           fetchData();
         } catch (error) {
-          alert('Lỗi khi xóa lịch.');
+          showAppError('Không thể xóa lịch', 'Lỗi khi xóa lịch.');
         }
       }
     }

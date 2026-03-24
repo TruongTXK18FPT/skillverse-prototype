@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { confirmAction } from "../../context/ConfirmDialogContext";
 import {
   Activity,
   Briefcase,
@@ -323,7 +324,7 @@ const JobLabPage: React.FC = () => {
       setMessage("Luồng rút đơn full-time chưa được mở ở Job Lab mới.");
       return;
     }
-    if (!window.confirm(`Rút đơn khỏi công việc "${app.title}"?`)) return;
+    if (!(await confirmAction(`Rút đơn khỏi công việc "${app.title}"?`))) return;
     await shortTermJobService.withdrawApplication(app.applicationId);
     setMessage("Đã rút đơn thành công.");
     await loadApplications();

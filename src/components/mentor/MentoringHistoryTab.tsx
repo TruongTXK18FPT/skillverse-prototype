@@ -4,6 +4,7 @@ import html2canvas from 'html2canvas';
 import { MentoringSession } from '../../pages/main/MentorPage';
 import { getMyBookings, BookingResponse } from '../../services/bookingService';
 import { getMentorCoursePurchases, CoursePurchaseDTO } from '../../services/courseService';
+import { showAppError } from '../../context/ToastContext';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './MentoringHistoryTab.css';
 
@@ -220,7 +221,7 @@ const MentoringHistoryTab: React.FC = () => {
 
       pdf.save('Mentor-History.pdf');
     } catch (e) {
-      alert('Xuất PDF thất bại');
+      showAppError('Xuất PDF thất bại', 'Xuất PDF thất bại');
     } finally {
       document.body.removeChild(container);
     }

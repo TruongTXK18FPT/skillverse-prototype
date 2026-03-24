@@ -31,6 +31,7 @@ import {
   BREAKING_ITEM_RETAKE_MESSAGE as BREAKING_ITEM_MESSAGE,
   resolveRevisionItemWarning,
 } from '../../utils/courseRevisionMessages';
+import { showAppError, showAppInfo, showAppWarning } from '../../context/ToastContext';
 import '../../styles/QuizAttemptPage-HUD.css';
 
 type AnswerDraft = {
@@ -271,9 +272,9 @@ const QuizAttemptPage: React.FC = () => {
       if (message.includes('QUIZ_RETRY_LOCKED_BY_PASS')) {
         setCanRetry(false);
         setHasPassed(true);
-        alert('Bạn đã đạt quiz này, hệ thống đã khóa làm lại.');
+        showAppInfo('Quiz đã khóa làm lại', 'Bạn đã đạt quiz này, hệ thống đã khóa làm lại.');
       } else {
-        alert('Không thể bắt đầu phiên làm bài lúc này. Vui lòng thử lại.');
+        showAppError('Không thể bắt đầu quiz', 'Không thể bắt đầu phiên làm bài lúc này. Vui lòng thử lại.');
       }
       return false;
     }
@@ -308,15 +309,18 @@ const QuizAttemptPage: React.FC = () => {
 
   const handleStartQuiz = async () => {
     if (hasPassed) {
-      alert('Bạn đã đạt bài kiểm tra này, không cần làm lại.');
+      showAppInfo('Đã đạt bài kiểm tra', 'Bạn đã đạt bài kiểm tra này, không cần làm lại.');
       return;
     }
     if (!canRetry) {
       if (cooldownSeconds > 0) {
         const hours = Math.ceil(cooldownSeconds / 3600);
-        alert(`Bạn đã hết lượt làm bài. Vui lòng quay lại sau ${hours} giờ (tính từ lần làm đầu tiên).`);
+        showAppWarning(
+          'Đã hết lượt làm bài',
+          `Bạn đã hết lượt làm bài. Vui lòng quay lại sau ${hours} giờ (tính từ lần làm đầu tiên).`
+        );
       } else {
-        alert('Bạn đã hết lượt làm bài.');
+        showAppWarning('Đã hết lượt làm bài', 'Bạn đã hết lượt làm bài.');
       }
       return;
     }
@@ -439,10 +443,10 @@ const QuizAttemptPage: React.FC = () => {
       if (errorMessage.includes('QUIZ_RETRY_LOCKED_BY_PASS')) {
         setCanRetry(false);
         setHasPassed(true);
-        alert('Bạn đã đạt quiz này, hệ thống đã khóa làm lại.');
+        showAppInfo('Quiz đã khóa làm lại', 'Bạn đã đạt quiz này, hệ thống đã khóa làm lại.');
         return;
       }
-      alert('Không thể nộp bài: ' + errorMessage);
+      showAppError('Không thể nộp bài', errorMessage);
     }
   };
 

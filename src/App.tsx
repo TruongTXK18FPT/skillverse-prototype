@@ -12,6 +12,7 @@ import { MeowlSkinProvider } from "./context/MeowlSkinContext";
 import { MeowlStateProvider } from "./context/MeowlStateContext";
 import { ConfirmDialogProvider } from "./context/ConfirmDialogContext";
 import { ChatSettingsProvider } from "./context/ChatSettingsContext";
+import { ToastProvider } from "./context/ToastContext";
 import {
   MentorRoute,
   AdminRoute,
@@ -415,19 +416,21 @@ const App = () => {
     <ChakraProvider value={defaultSystem}>
       <LanguageProvider>
         <ThemeProvider>
-          <AuthProvider>
-            <MeowlSkinProvider>
-              <MeowlStateProvider>
-                <ConfirmDialogProvider>
-                  <ChatSettingsProvider>
-                    <Router>
-                      <AppContents />
-                    </Router>
-                  </ChatSettingsProvider>
-                </ConfirmDialogProvider>
-              </MeowlStateProvider>
-            </MeowlSkinProvider>
-          </AuthProvider>
+          <ToastProvider>
+            <AuthProvider>
+              <MeowlSkinProvider>
+                <MeowlStateProvider>
+                  <ConfirmDialogProvider>
+                    <ChatSettingsProvider>
+                      <Router>
+                        <AppContents />
+                      </Router>
+                    </ChatSettingsProvider>
+                  </ConfirmDialogProvider>
+                </MeowlStateProvider>
+              </MeowlSkinProvider>
+            </AuthProvider>
+          </ToastProvider>
         </ThemeProvider>
       </LanguageProvider>
     </ChakraProvider>
@@ -466,6 +469,8 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/jobs",
   "/portfolio/create",
   "/my-applications",
+  "/profile/user",
+  "/set-password",
 ]);
 
 // Check if path matches quiz attempt pattern

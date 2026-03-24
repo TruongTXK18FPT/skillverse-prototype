@@ -27,6 +27,7 @@ import {
   JourneyStatus,
   DOMAIN_OPTIONS,
 } from "../../types/Journey";
+import { showAppError } from "../../context/ToastContext";
 import "../../styles/DashboardJourneyPrompt.css";
 
 const POST_LOGIN_JOURNEY_PROMPT_KEY = "showPostLoginJourneyPrompt";
@@ -483,7 +484,10 @@ const DashboardPage = () => {
       });
     } catch (e) {
       console.error("Failed to join/open group", e);
-      alert("Không thể tham gia nhóm. Vui lòng thử lại.");
+      showAppError(
+        "Không thể vào nhóm",
+        "Không thể tham gia nhóm. Vui lòng thử lại.",
+      );
     }
   };
 

@@ -14,6 +14,7 @@ import './broadcast-form-styles.css';
 import communityService from '../../services/communityService';
 import { useAuth } from '../../context/AuthContext';
 import { uploadImage as uploadImageFile, validateImage } from '../../services/fileUploadService';
+import { showAppWarning } from '../../context/ToastContext';
 import RichTextEditor from '../shared/RichTextEditor';
 
 interface BroadcastFormData {
@@ -107,13 +108,13 @@ const BroadcastForm: React.FC = () => {
     if (!file) return;
 
     if (!user?.id) {
-      alert('Vui lòng đăng nhập để upload ảnh');
+      showAppWarning('Cần đăng nhập', 'Vui lòng đăng nhập để upload ảnh');
       return;
     }
 
     const validation = validateImage(file);
     if (!validation.valid) {
-      alert(validation.error || 'Ảnh không hợp lệ');
+      showAppWarning('Ảnh không hợp lệ', validation.error || 'Ảnh không hợp lệ');
       return;
     }
 

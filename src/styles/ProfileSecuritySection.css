@@ -8,6 +8,86 @@
   gap: 20px;
 }
 
+.security-spotlight-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 20px;
+  align-items: center;
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  background:
+    radial-gradient(circle at top right, rgba(239, 68, 68, 0.12), transparent 30%),
+    linear-gradient(135deg, rgba(31, 41, 55, 0.95), rgba(17, 24, 39, 0.92));
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+}
+
+.security-spotlight-card__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fecaca;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.24), rgba(190, 24, 93, 0.2));
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.18);
+}
+
+.security-spotlight-card__content {
+  min-width: 0;
+}
+
+.security-spotlight-card__eyebrow {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.24);
+  color: #fca5a5;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.security-spotlight-card__title {
+  margin: 0 0 10px 0;
+  color: #fff;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.security-spotlight-card__description {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.security-spotlight-card__benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.security-spotlight-card__benefits span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(248, 113, 113, 0.16);
+  color: #e2e8f0;
+  font-size: 12px;
+}
+
+.security-spotlight-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 /* Security Card */
 .security-card {
   display: flex;
@@ -160,6 +240,15 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .security-spotlight-card {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .security-spotlight-card__actions {
+    justify-content: stretch;
+  }
+
   .security-card {
     flex-direction: column;
     padding: 20px;

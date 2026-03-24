@@ -169,7 +169,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const resetPassword = async (request: ResetPasswordRequest): Promise<ResetPasswordResponse> => {
     try {
       setLoading(true);
-      return await authService.resetPassword(request);
+      const response = await authService.resetPassword(request);
+      clearAuthTokens();
+      setUser(null);
+      return response;
     } finally {
       setLoading(false);
     }
@@ -178,7 +181,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const setPassword = async (request: SetPasswordRequest): Promise<SetPasswordResponse> => {
     try {
       setLoading(true);
-      return await authService.setPassword(request);
+      const response = await authService.setPassword(request);
+      clearAuthTokens();
+      setUser(null);
+      return response;
     } finally {
       setLoading(false);
     }

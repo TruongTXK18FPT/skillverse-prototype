@@ -4,12 +4,11 @@ import { Lock, Eye, EyeOff, CheckCircle, Info, Shield, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import Toast from '../../components/shared/Toast';
-import { getStoredUserRaw, updateStoredUser } from '../../utils/authStorage';
 import '../../styles/PasswordPages.css';
 
 const SetPasswordPage = () => {
   const { user, setPassword } = useAuth();
-  const { toast, isVisible, hideToast, showSuccess, showError } = useToast();
+  const { toast, isVisible, hideToast, showError } = useToast();
   const navigate = useNavigate();
   
   const [newPassword, setNewPassword] = useState('');
@@ -49,27 +48,8 @@ const SetPasswordPage = () => {
     setLoading(true);
     
     try {
-      const response = await setPassword({ newPassword, confirmPassword });
-      
-      // Update user in localStorage to reflect password has been set
-      const storedUser = getStoredUserRaw();
-      if (storedUser) {
-        const userData = JSON.parse(storedUser);
-        userData.googleLinked = true; // Mark as having password
-        updateStoredUser(userData);
-      }
-      
-      showSuccess(
-        'Thành công!',
-        response.message,
-        5
-      );
-      
-      setTimeout(() => {
-        // Reload page to refresh AuthContext with updated user data
-        window.location.href = '/profile/user';
-      }, 2000);
-      
+      await setPassword({ newPassword, confirmPassword });
+      navigate('/login?reason=password_changed', { replace: true });
     } catch (error: unknown) {
       const errorMessage = (error as Error).message || 
         'Đặt mật khẩu thất bại. Vui lòng thử lại.';

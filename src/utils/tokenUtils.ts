@@ -2,6 +2,7 @@ import {
   clearAuthSession,
   getAccessToken,
 } from "./authStorage";
+import { showAppError } from "../context/ToastContext";
 
 /**
  * Token utility functions for handling JWT tokens
@@ -37,9 +38,9 @@ export const forceLogout = (reason?: string): void => {
   // Clear tokens
   clearAuthTokens();
   
-  // Show notification
+  // Show notification via shared toast system
   if (reason) {
-    alert(reason);
+    showAppError("Phiên đăng nhập đã kết thúc", reason);
   }
   
   // Redirect to login

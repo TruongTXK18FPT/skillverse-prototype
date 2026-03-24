@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import authService from '../../services/authService';
 import { ElevatorAuthLayout, HologramLoginForm } from '../../components/elevator';
 import PendingApprovalModal from '../../components/elevator/PendingApprovalModal';
+import { GOOGLE_PASSWORD_ONBOARDING_SESSION_KEY } from '../../components/auth/GoogleUserOnboardingBanner';
 import { useToast } from '../../hooks/useToast';
 import Toast from '../../components/shared/Toast';
 
@@ -49,6 +50,19 @@ const ElevatorLoginPage: React.FC = () => {
     }
   }, [location.state, navigate, showSuccess]);
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const reason = searchParams.get('reason');
+
+    if (reason === 'password_changed') {
+      showSuccess(
+        'Mật khẩu đã được cập nhật',
+        'Vì lý do bảo mật, vui lòng đăng nhập lại.'
+      );
+      navigate('/login', { replace: true });
+    }
+  }, [location.search, navigate, showSuccess]);
+
   // Google login handler
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -67,6 +81,14 @@ const ElevatorLoginPage: React.FC = () => {
           const urlPath = new URL(result.redirectUrl).pathname;
           markPostLoginPrompt(urlPath);
           setPendingRedirect(urlPath);
+        }
+
+        const shouldShowGooglePasswordPrompt =
+          Array.isArray(result.authData.user.roles) &&
+          result.authData.user.roles.includes('USER') &&
+          !result.authData.user.googleLinked;
+        if (shouldShowGooglePasswordPrompt) {
+          sessionStorage.setItem(GOOGLE_PASSWORD_ONBOARDING_SESSION_KEY, 'true');
         }
 
         // Signal to HologramLoginForm to trigger animation

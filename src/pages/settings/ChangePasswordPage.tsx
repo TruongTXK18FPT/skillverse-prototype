@@ -3,12 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { Lock, Eye, EyeOff, Shield, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
-import Toast from '../../components/shared/Toast';
 import '../../styles/PasswordPages.css';
 
 const ChangePasswordPage = () => {
   const { changePassword } = useAuth();
-  const { toast, isVisible, hideToast, showSuccess, showError } = useToast();
+  const { showError } = useToast();
   const navigate = useNavigate();
   
   const [currentPassword, setCurrentPassword] = useState('');
@@ -82,23 +81,7 @@ const ChangePasswordPage = () => {
         newPassword,
         confirmPassword
       });
-      
-      showSuccess(
-        'Thành công!',
-        'Mật khẩu đã được thay đổi. Vui lòng đăng nhập lại.',
-        5
-      );
-      
-      // Clear form
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-      
-      // ✅ SECURITY: Token invalidated, redirect to login
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-      
+      navigate('/login?reason=password_changed', { replace: true });
     } catch (error: unknown) {
       const errorMessage = (error as Error).message || 
         'Đổi mật khẩu thất bại. Vui lòng thử lại.';
@@ -321,18 +304,6 @@ const ChangePasswordPage = () => {
           </p>
         </div>
       </div>
-
-      {/* Toast Notification */}
-      {toast && (
-        <Toast
-          type={toast.type}
-          title={toast.title}
-          message={toast.message}
-          isVisible={isVisible}
-          onClose={hideToast}
-          autoCloseDelay={toast.autoCloseDelay}
-        />
-      )}
     </div>
   );
 };

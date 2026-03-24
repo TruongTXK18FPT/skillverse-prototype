@@ -18,6 +18,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { confirmAction } from '../../context/ConfirmDialogContext';
 import { getApplicantDisplayName, resolveRecruitmentAssetUrl } from '../../utils/recruitmentUi';
 import {
   ShortTermApplicationResponse,
@@ -166,7 +167,7 @@ const ShortTermJobFullPage = ({ jobId, onBack, onEdit }: ShortTermJobFullPagePro
 
   const handleCloseJob = async () => {
     if (!job) return;
-    if (!window.confirm(`Đóng job "${job.title}"? Người đã nộp vẫn có thể tiếp tục nộp bài.`)) return;
+    if (!(await confirmAction(`Đóng job "${job.title}"? Người đã nộp vẫn có thể tiếp tục nộp bài.`))) return;
     try {
       setIsActionBusy(true);
       await shortTermJobService.changeJobStatus(jobId, ShortTermJobStatus.CLOSED);

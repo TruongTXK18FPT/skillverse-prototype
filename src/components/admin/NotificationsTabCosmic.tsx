@@ -18,6 +18,7 @@ import {
   EmailStatistics 
 } from '../../services/adminEmailService';
 import { uploadImage, validateImage, UploadProgress } from '../../services/fileUploadService';
+import { showAppError, showAppWarning } from '../../context/ToastContext';
 import './NotificationsTabCosmic.css';
 
 interface UploadedImage {
@@ -214,7 +215,7 @@ const NotificationsTabCosmic: React.FC = () => {
     const htmlContent = getEditorContent();
     
     if (!subject.trim() || !htmlContent.trim()) {
-      alert('Vui lòng nhập đầy đủ tiêu đề và nội dung email!');
+      showAppWarning('Thiếu nội dung email', 'Vui lòng nhập đầy đủ tiêu đề và nội dung email.');
       return;
     }
 
@@ -249,7 +250,7 @@ const NotificationsTabCosmic: React.FC = () => {
       }
     } catch (error) {
       console.error('Failed to send email:', error);
-      alert('Gửi email thất bại! Vui lòng thử lại.');
+      showAppError('Gửi email thất bại', 'Vui lòng thử lại.');
     } finally {
       setIsSending(false);
     }

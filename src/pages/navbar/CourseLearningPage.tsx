@@ -42,6 +42,7 @@ import {
   mapReasonCodeToVietnameseMessage,
   mapUpgradeApiErrorToVietnameseMessage
 } from "../../utils/courseRevisionMessages";
+import { showAppInfo, showAppWarning } from "../../context/ToastContext";
 import AttachmentManager from "../../components/course/AttachmentManager";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -980,7 +981,7 @@ const CourseLearningPage = () => {
     if (nextItem) {
       handleSelectLesson(nextItem.moduleId, nextItem.itemId, nextItem.itemType);
     } else {
-      alert("Chúc mừng! Bạn đã hoàn thành module này.");
+      showAppInfo("Hoàn thành module", "Chúc mừng! Bạn đã hoàn thành module này.");
     }
   };
 
@@ -1014,7 +1015,10 @@ const CourseLearningPage = () => {
       return;
     }
     if (activeCurriculumItem.itemId <= 0) {
-      alert("Bài tập này chưa sẵn sàng do chưa đồng bộ định danh. Vui lòng thử lại sau.");
+      showAppWarning(
+        "Bài tập chưa sẵn sàng",
+        "Bài tập này chưa sẵn sàng do chưa đồng bộ định danh. Vui lòng thử lại sau."
+      );
       return;
     }
 
@@ -1032,7 +1036,10 @@ const CourseLearningPage = () => {
       return;
     }
     if (activeCurriculumItem.itemId <= 0) {
-      alert("Quiz này chưa sẵn sàng do chưa đồng bộ định danh. Vui lòng thử lại sau.");
+      showAppWarning(
+        "Quiz chưa sẵn sàng",
+        "Quiz này chưa sẵn sàng do chưa đồng bộ định danh. Vui lòng thử lại sau."
+      );
       return;
     }
 

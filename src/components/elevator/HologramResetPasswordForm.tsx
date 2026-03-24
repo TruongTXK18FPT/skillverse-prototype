@@ -76,12 +76,7 @@ const HologramResetPasswordForm: React.FC = () => {
       
       // Redirect to login after 2 seconds
       setTimeout(() => {
-        navigate('/login', {
-          state: {
-            message: 'Đặt lại mật khẩu thành công! Vui lòng đăng nhập.',
-            email
-          }
-        });
+        navigate('/login?reason=password_changed', { replace: true });
       }, 2000);
     } catch (err: any) {
       setError(err.message || 'Đã có lỗi xảy ra. Vui lòng thử lại.');

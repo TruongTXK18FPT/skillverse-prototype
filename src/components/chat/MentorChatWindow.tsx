@@ -15,6 +15,7 @@ import {
   type PreChatMessageResponse,
 } from '../../services/preChatService';
 import { API_BASE_URL } from '../../services/axiosInstance';
+import { showAppError } from '../../context/ToastContext';
 import EmojiPicker from './EmojiPicker';
 import GifPicker from './GifPicker';
 import './MentorChatWindow.css';
@@ -121,7 +122,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
       setMessages((prev) => [...prev, newMessage]);
     } catch (error) {
       console.error('Failed to send message:', error);
-      alert('Gửi tin nhắn thất bại');
+      showAppError('Gửi tin nhắn thất bại', 'Không thể gửi tin nhắn. Vui lòng thử lại.');
     } finally {
       setIsSending(false);
     }
@@ -160,7 +161,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
       setMessages((prev) => [...prev, newMessage]);
     } catch (error) {
       console.error('Failed to send GIF:', error);
-      alert('Gửi GIF thất bại');
+      showAppError('Gửi GIF thất bại', 'Không thể gửi GIF. Vui lòng thử lại.');
     } finally {
       setIsSending(false);
     }

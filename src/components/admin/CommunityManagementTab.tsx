@@ -26,6 +26,8 @@ import {
   Bar
 } from 'recharts';
 import { getStoredUserRaw } from '../../utils/authStorage';
+import { confirmAction } from '../../context/ConfirmDialogContext';
+import { showAppError, showAppWarning } from '../../context/ToastContext';
 import './CommunityManagementTab.css';
 
 const COLORS = ['#06b6d4', '#3b82f6', '#a855f7', '#10b981', '#f59e0b', '#ef4444'];
@@ -278,14 +280,14 @@ const CommunityManagementTab: React.FC = () => {
     const userId = user?.id;
 
     if (!userId) {
-      alert('Vui lòng đăng nhập để thực hiện chức năng này');
+      showAppWarning('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để thực hiện chức năng này.');
       return;
     }
 
     try {
       const validation = validateImage(file);
       if (!validation.valid) {
-        alert(validation.error || 'Ảnh không hợp lệ');
+        showAppWarning('Ảnh không hợp lệ', validation.error || 'Vui lòng kiểm tra lại ảnh.');
         return;
       }
       setUploadError(null);
@@ -300,7 +302,7 @@ const CommunityManagementTab: React.FC = () => {
     } catch (err) {
       const msg = (err as any)?.response?.data?.message || 'Upload ảnh thất bại';
       setUploadError(msg);
-      alert(msg);
+      showAppError('Upload ảnh thất bại', msg);
     } finally {
       setIsUploading(false);
       setUploadProgress(0);
@@ -322,7 +324,7 @@ const CommunityManagementTab: React.FC = () => {
       setActiveModal(null);
       setSelectedPost(null);
     } catch (e) {
-      alert('Cập nhật bài viết thất bại');
+      showAppError('Cập nhật bài viết thất bại', 'Vui lòng thử lại.');
     } finally {
       setIsSaving(false);
     }
@@ -336,7 +338,7 @@ const CommunityManagementTab: React.FC = () => {
       await loadPosts();
     } catch (e) {
       console.error(e);
-      alert('Xóa bài viết thất bại. Vui lòng thử lại.');
+      showAppError('Xóa bài viết thất bại', 'Vui lòng thử lại.');
     }
   };
 
@@ -348,7 +350,7 @@ const CommunityManagementTab: React.FC = () => {
       const { items } = await communityService.listComments(p.id, 0, 50, true);
       setComments(items);
     } catch (e) {
-      alert('Không thể tải bình luận');
+      showAppError('Không thể tải bình luận', 'Vui lòng thử lại.');
     }
   };
 
@@ -377,7 +379,10 @@ const CommunityManagementTab: React.FC = () => {
       setActionType(null);
       setActionReason('');
     } catch (e) {
-      alert(`${actionType === 'delete' ? 'Xóa' : 'Ẩn'} bình luận thất bại`);
+      showAppError(
+        `${actionType === 'delete' ? 'Xóa' : 'Ẩn'} bình luận thất bại`,
+        'Vui lòng thử lại.',
+      );
     }
   };
 
@@ -388,7 +393,7 @@ const CommunityManagementTab: React.FC = () => {
       const { items } = await communityService.listComments(selectedPost.id, 0, 50, true);
       setComments(items);
     } catch (e) {
-      alert('Bỏ ẩn thất bại');
+      showAppError('Bỏ ẩn thất bại', 'Vui lòng thử lại.');
     }
   };
 

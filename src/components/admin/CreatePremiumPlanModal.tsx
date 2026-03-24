@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { X, Plus, Trash2, AlertCircle } from "lucide-react";
 import * as adminPremiumService from "../../services/adminPremiumService";
+import { showAppSuccess } from "../../context/ToastContext";
 import {
   AdminPremiumPlan,
   CreatePremiumPlanRequest,
@@ -263,10 +264,10 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
               targetRole: formData.targetRole,
               featureLimits:
                 featureLimits.length > 0 ? featureLimits : undefined,
-            };
+        };
 
         await adminPremiumService.updatePlan(editingPlan.id, updateData);
-        alert("✅ Cập nhật gói premium thành công!");
+        showAppSuccess("Cập nhật thành công", "Gói premium đã được cập nhật.");
       } else {
         // Create new plan
         const createData: CreatePremiumPlanRequest = {
@@ -284,7 +285,7 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
           featureLimits: featureLimits.length > 0 ? featureLimits : undefined,
         };
         await adminPremiumService.createPlan(createData);
-        alert("✅ Tạo gói premium thành công!");
+        showAppSuccess("Tạo thành công", "Gói premium mới đã được tạo.");
       }
 
       onClose(true); // Refresh the list

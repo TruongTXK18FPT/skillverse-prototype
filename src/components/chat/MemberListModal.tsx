@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { GroupMemberDTO, getGroupMembers, kickMember } from '../../services/groupChatService';
 import { useAuth } from '../../context/AuthContext';
+import { showAppError } from '../../context/ToastContext';
 import './MemberListModal.css';
 
 interface MemberListModalProps {
@@ -92,7 +93,7 @@ const MemberListModal: React.FC<MemberListModalProps> = ({
       onMemberKicked?.();
     } catch (err) {
       console.error('Error kicking member:', err);
-      alert('Không thể xóa thành viên. Vui lòng thử lại.');
+      showAppError('Không thể xóa thành viên', 'Không thể xóa thành viên. Vui lòng thử lại.');
     } finally {
       setKickingMember(null);
     }

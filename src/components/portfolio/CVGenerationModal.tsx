@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { X, Loader, Sparkles, FileText } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { CVGenerationRequest } from '../../data/portfolioDTOs';
+import { showAppError } from '../../context/ToastContext';
 import '../../styles/PortfolioModals.css';
 
 interface CVGenerationModalProps {
@@ -69,7 +70,7 @@ export const CVGenerationModal: React.FC<CVGenerationModalProps> = ({
       onClose();
     } catch (error) {
       console.error('Error generating CV:', error);
-      alert('Có lỗi xảy ra khi tạo CV. Vui lòng thử lại.');
+      showAppError('Không thể tạo CV', 'Có lỗi xảy ra khi tạo CV. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }

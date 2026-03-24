@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Upload, Loader } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { ExternalCertificateDTO, CertificateCategory } from '../../data/portfolioDTOs';
+import { showAppError } from '../../context/ToastContext';
 import '../../styles/PortfolioModals.css';
 
 interface CertificateModalProps {
@@ -82,7 +83,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       onClose();
     } catch (error) {
       console.error('Error submitting certificate:', error);
-      alert('Có lỗi xảy ra khi thêm chứng chỉ. Vui lòng thử lại.');
+      showAppError('Không thể thêm chứng chỉ', 'Có lỗi xảy ra khi thêm chứng chỉ. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }

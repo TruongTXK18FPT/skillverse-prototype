@@ -22,6 +22,7 @@ import { PremiumInvoice, useInvoice } from "../../components/invoice";
 import ClearanceLevelPage from "../../components/premium-hud/ClearanceLevelPage";
 import PremiumFAQ from "../../components/premium-hud/PremiumFAQ";
 import parentService, { StudentDetail } from "../../services/parentService";
+import { showAppInfo } from "../../context/ToastContext";
 
 const PremiumPageCosmic = () => {
   const navigate = useNavigate();
@@ -151,8 +152,9 @@ const PremiumPageCosmic = () => {
         s?.progress?.premiumPlan &&
         !s.progress.premiumPlan.toLowerCase().includes("free")
       ) {
-        alert(
-          `Tài khoản ${s.firstName} đã có gói Premium (${s.progress.premiumPlan})!`,
+        showAppInfo(
+          "Đã có Premium",
+          `Tài khoản ${s.firstName} đã có gói Premium (${s.progress.premiumPlan}).`,
         );
         return;
       }

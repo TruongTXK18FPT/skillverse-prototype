@@ -9,6 +9,8 @@ import {
   getMyBookings, approveBooking, rejectBooking, 
   startMeeting, completeBooking, downloadBookingInvoice, BookingResponse 
 } from '../../services/bookingService';
+import { confirmAction } from '../../context/ConfirmDialogContext';
+import { showAppError } from '../../context/ToastContext';
 import './MentorBookingManager.css';
 
 const MentorBookingManager: React.FC = () => {
@@ -39,7 +41,7 @@ const MentorBookingManager: React.FC = () => {
       await approveBooking(id);
       fetchBookings();
     } catch (err) {
-      alert('Lỗi khi duyệt booking');
+      showAppError('Không thể duyệt booking', 'Lỗi khi duyệt booking');
     }
   };
 
@@ -50,7 +52,7 @@ const MentorBookingManager: React.FC = () => {
         await rejectBooking(id, reason);
         fetchBookings();
       } catch (err) {
-        alert('Lỗi khi từ chối booking');
+        showAppError('Không thể từ chối booking', 'Lỗi khi từ chối booking');
       }
     }
   };
@@ -73,7 +75,7 @@ const MentorBookingManager: React.FC = () => {
       window.open(link, '_blank');
       fetchBookings();
     } catch (err) {
-      alert('Lỗi khi bắt đầu buổi học');
+      showAppError('Không thể bắt đầu buổi học', 'Lỗi khi bắt đầu buổi học');
     }
   };
 
@@ -83,7 +85,7 @@ const MentorBookingManager: React.FC = () => {
         await completeBooking(id);
         fetchBookings();
       } catch (err) {
-        alert('Lỗi khi hoàn thành booking');
+        showAppError('Không thể hoàn thành booking', 'Lỗi khi hoàn thành booking');
       }
     }
   };
@@ -100,7 +102,7 @@ const MentorBookingManager: React.FC = () => {
       a.remove();
       window.URL.revokeObjectURL(url);
     } catch (err) {
-      alert('Không thể tải hóa đơn');
+      showAppError('Không thể tải hóa đơn', 'Không thể tải hóa đơn');
     }
   };
 

@@ -258,7 +258,7 @@ const CVPage = () => {
 
   const handleDownloadPDF = async () => {
     if (!activeCV?.cvContent) {
-      alert('Không có CV để tải xuống');
+      showToast('Không có CV để tải xuống');
       return;
     }
     
@@ -266,7 +266,7 @@ const CVPage = () => {
       // Create a new window for printing
       const printWindow = globalThis.open('', '_blank');
       if (!printWindow) {
-        alert('Không thể mở cửa sổ in. Vui lòng cho phép popup.');
+        showToast('Không thể mở cửa sổ in. Vui lòng cho phép popup.');
         return;
       }
       
@@ -349,7 +349,7 @@ const CVPage = () => {
       showToast('Đang tạo PDF...');
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('Không thể tạo PDF. Vui lòng thử lại.');
+      showToast('Không thể tạo PDF. Vui lòng thử lại.');
     }
   };
 
@@ -367,7 +367,7 @@ const CVPage = () => {
       (navigator as any).share(shareData);
     } else {
       globalThis.navigator?.clipboard?.writeText?.(globalThis.location?.href || '');
-      alert('Đã copy link CV vào clipboard!');
+      showToast('Đã copy link CV vào clipboard!');
     }
   };
 

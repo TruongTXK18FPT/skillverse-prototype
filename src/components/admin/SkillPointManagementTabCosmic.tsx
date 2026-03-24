@@ -5,6 +5,7 @@ import {
   Target, Sparkles, Coins, ArrowUpRight, ArrowDownRight,
   User, Calendar
 } from 'lucide-react';
+import { showAppSuccess, showAppWarning } from '../../context/ToastContext';
 import './SkillPointManagementTabCosmic.css';
 
 interface PointAdjustment {
@@ -122,7 +123,7 @@ const SkillPointManagementTabCosmic: React.FC = () => {
 
   const handleAdjustPoints = (type: 'add' | 'deduct') => {
     if (!selectedUser || !adjustmentAmount || !adjustmentReason) {
-      alert('Vui lòng điền đầy đủ thông tin!');
+      showAppWarning('Thiếu thông tin', 'Vui lòng điền đầy đủ thông tin.');
       return;
     }
     
@@ -136,13 +137,13 @@ const SkillPointManagementTabCosmic: React.FC = () => {
       setAdjustmentAmount('');
       setAdjustmentReason('');
       setLoading(false);
-      alert(`${type === 'add' ? 'Cộng' : 'Trừ'} ${amount} điểm thành công!`);
+      showAppSuccess('Điều chỉnh thành công', `${type === 'add' ? 'Cộng' : 'Trừ'} ${amount} điểm thành công.`);
     }, 1000);
   };
 
   const handleCreateReward = () => {
     if (!rewardTitle || !rewardAmount || !rewardDescription) {
-      alert('Vui lòng điền đầy đủ thông tin phần thưởng!');
+      showAppWarning('Thiếu thông tin phần thưởng', 'Vui lòng điền đầy đủ thông tin phần thưởng.');
       return;
     }
     
@@ -155,7 +156,7 @@ const SkillPointManagementTabCosmic: React.FC = () => {
       setRewardAmount('');
       setRewardDescription('');
       setLoading(false);
-      alert('Tạo phần thưởng thành công!');
+      showAppSuccess('Tạo phần thưởng thành công', 'Phần thưởng mới đã được tạo.');
     }, 1000);
   };
 

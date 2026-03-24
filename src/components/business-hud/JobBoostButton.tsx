@@ -4,6 +4,7 @@ import jobBoostService from '../../services/jobBoostService';
 import recruiterSubscriptionService, { RecruiterSubscriptionInfoResponse } from '../../services/recruiterSubscriptionService';
 import { JobBoostStatus, JobBoostResponse } from '../../data/jobDTOs';
 import { useToast } from '../../hooks/useToast';
+import { confirmAction } from '../../context/ConfirmDialogContext';
 import './JobBoostButton.css';
 
 interface JobBoostButtonProps {
@@ -85,7 +86,7 @@ const JobBoostButton: React.FC<JobBoostButtonProps> = ({
   const handleCancelBoost = async () => {
     if (!boost) return;
 
-    const confirmCancel = window.confirm('Bạn có chắc muốn hủy boost? Quota sẽ không được hoàn lại.');
+    const confirmCancel = await confirmAction('Bạn có chắc muốn hủy boost? Quota sẽ không được hoàn lại.');
     if (!confirmCancel) return;
 
     setIsActionLoading(true);

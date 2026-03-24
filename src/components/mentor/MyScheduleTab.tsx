@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { ScheduleEvent } from '../../pages/main/MentorPage';
+import { showAppInfo, showAppSuccess } from '../../context/ToastContext';
 import './MyScheduleTab.css';
 
 const MyScheduleTab: React.FC = () => {
@@ -78,7 +79,7 @@ const MyScheduleTab: React.FC = () => {
   };
 
   const handleExportCalendar = () => {
-    alert('Chức năng xuất lịch sẽ được triển khai ở đây');
+    showAppInfo('Tính năng đang phát triển', 'Chức năng xuất lịch sẽ được triển khai ở đây');
   };
 
   const navigateWeek = (direction: 'prev' | 'next') => {
@@ -245,7 +246,7 @@ const MyScheduleTab: React.FC = () => {
               <div className="mentor-schedule-form-actions">
                 <button className="mentor-schedule-cancel-btn" onClick={() => setShowAddModal(false)}>Hủy</button>
                 <button className="mentor-schedule-save-btn" onClick={() => {
-                  alert('Đã thêm lịch rảnh!');
+                  showAppSuccess('Đã thêm lịch rảnh', 'Đã thêm lịch rảnh!');
                   setShowAddModal(false);
                 }}>Lưu</button>
               </div>

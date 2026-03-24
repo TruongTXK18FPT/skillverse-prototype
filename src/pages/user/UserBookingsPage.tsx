@@ -25,6 +25,10 @@ import {
 // import { seminarService } from '../../services/seminarService';
 // import { SeminarTicket } from '../../types/seminar';
 import Pagination from "../../components/shared/Pagination";
+import {
+  showAppError,
+  showAppSuccess,
+} from "../../context/ToastContext";
 import "../../styles/UserBookings.css";
 
 const UserBookingsPage = () => {
@@ -128,11 +132,17 @@ const UserBookingsPage = () => {
         rating,
         comment,
       });
-      alert("Đánh giá của bạn đã được gửi thành công!");
+      showAppSuccess(
+        "Đánh giá đã gửi",
+        "Đánh giá của bạn đã được gửi thành công!",
+      );
       closeReviewModal();
     } catch (error) {
       console.error("Failed to submit review", error);
-      alert("Gửi đánh giá thất bại. Vui lòng thử lại.");
+      showAppError(
+        "Gửi đánh giá thất bại",
+        "Vui lòng thử lại.",
+      );
     } finally {
       setSubmittingReview(false);
     }
@@ -162,7 +172,7 @@ const UserBookingsPage = () => {
       a.remove();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      alert("Không thể tải hóa đơn");
+      showAppError("Không thể tải hóa đơn", "Vui lòng thử lại.");
     }
   };
 
@@ -181,7 +191,10 @@ const UserBookingsPage = () => {
         await cancelBooking(id);
         fetchBookings(); // Refresh list
       } catch (error) {
-        alert("Không thể hủy lịch hẹn. Vui lòng thử lại sau.");
+        showAppError(
+          "Không thể hủy lịch hẹn",
+          "Vui lòng thử lại sau.",
+        );
       }
     }
   };

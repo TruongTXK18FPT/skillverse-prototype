@@ -14,6 +14,7 @@ import {
 import { skinService, MeowlSkinResponse } from "../../services/skinService";
 import { useMeowlSkin } from "../../context/MeowlSkinContext";
 import { useAuth } from "../../context/AuthContext";
+import { showAppError } from "../../context/ToastContext";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import SkinLeaderboard from "./SkinLeaderboard";
 import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
@@ -138,7 +139,7 @@ const MeowlSkinShopPage: React.FC = () => {
       setShowSuccessModal(true);
     } catch (error) {
       console.error("Purchase failed:", error);
-      alert("Mua thất bại. Vui lòng kiểm tra số dư ví.");
+      showAppError("Mua skin thất bại", "Mua thất bại. Vui lòng kiểm tra số dư ví.");
     } finally {
       setPurchasing(null);
     }

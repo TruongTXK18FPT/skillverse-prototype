@@ -11,7 +11,13 @@ import walletService from '../../services/walletService';
 import { AdminUserResponse, AdminUserDetailResponse, PrimaryRole, UserStatus } from '../../types/adminUser';
 import DeleteAccountModal from './DeleteAccountModal';
 import AdminSecurityGateModal from './AdminSecurityGateModal';
+import { confirmAction } from '../../context/ConfirmDialogContext';
 import { getStoredUserRaw } from '../../utils/authStorage';
+import {
+  showAppError,
+  showAppSuccess,
+  showAppWarning,
+} from '../../context/ToastContext';
 import './UserManagementTabCosmic.css';
 
 const UserManagementTabCosmic: React.FC = () => {
@@ -160,7 +166,7 @@ const UserManagementTabCosmic: React.FC = () => {
       setShowDetailModal(true);
     } catch (error: any) {
       console.error('❌ Error fetching user detail:', error);
-      alert('Không thể tải thông tin chi tiết user');
+      showAppError('Không thể tải chi tiết user', 'Vui lòng thử lại.');
     } finally {
       setActionLoading(false);
     }
@@ -181,7 +187,7 @@ const UserManagementTabCosmic: React.FC = () => {
       setShowEditModal(true);
     } catch (error: any) {
       console.error('❌ Error fetching user for edit:', error);
-      alert('Không thể tải thông tin user');
+      showAppError('Không thể tải thông tin user', 'Vui lòng thử lại.');
     } finally {
       setActionLoading(false);
     }
@@ -204,7 +210,7 @@ const UserManagementTabCosmic: React.FC = () => {
       setShowRoleModal(true);
     } catch (error) {
       console.error('Failed to fetch user roles:', error);
-      alert('Không thể tải thông tin quyền hạn.');
+      showAppError('Không thể tải quyền hạn', 'Vui lòng thử lại.');
     } finally {
       setActionLoading(false);
     }
@@ -212,7 +218,7 @@ const UserManagementTabCosmic: React.FC = () => {
 
   const handleSubmitRoles = async () => {
     if (!userToAssignRole || selectedRoles.length === 0) {
-      alert('Vui lòng chọn ít nhất một role');
+      showAppWarning('Thiếu quyền hạn', 'Vui lòng chọn ít nhất một role.');
       return;
     }
 
@@ -228,7 +234,7 @@ const UserManagementTabCosmic: React.FC = () => {
       fetchUsers(); // Refresh list
     } catch (error: any) {
       console.error('Failed to assign roles:', error);
-      alert('Thêm quyền thất bại: ' + (error.message || 'Lỗi không xác định'));
+      showAppError('Thêm quyền thất bại', error.message || 'Lỗi không xác định');
     } finally {
       setActionLoading(false);
     }
@@ -258,10 +264,13 @@ const UserManagementTabCosmic: React.FC = () => {
 
       await fetchUsers();
       setShowEditModal(false);
-      alert('✅ Cập nhật thành công!');
+      showAppSuccess('Cập nhật thành công', 'Thông tin user đã được cập nhật.');
     } catch (error: any) {
       console.error('❌ Error updating user:', error);
-      alert(error.response?.data?.message || 'Lỗi khi cập nhật user');
+      showAppError(
+        'Lỗi khi cập nhật user',
+        error.response?.data?.message || 'Vui lòng thử lại.',
+      );
     } finally {
       setActionLoading(false);
     }
@@ -286,7 +295,7 @@ const UserManagementTabCosmic: React.FC = () => {
   const handleSendGift = async () => {
     if (!userToGift) return;
     if (giftForm.cashAmount <= 0 && giftForm.coinAmount <= 0) {
-        alert('Vui lòng nhập số tiền hoặc xu > 0');
+        showAppWarning('Thiếu giá trị quà tặng', 'Vui lòng nhập số tiền hoặc xu > 0.');
         return;
     }
 
@@ -298,11 +307,11 @@ const UserManagementTabCosmic: React.FC = () => {
         coinAmount: giftForm.coinAmount,
         reason: giftForm.reason
       });
-      alert(`✅ Đã tặng quà cho ${userToGift.name} thành công!`);
+      showAppSuccess('Tặng quà thành công', `Đã tặng quà cho ${userToGift.name}.`);
       setShowGiftModal(false);
     } catch (error: any) {
       console.error('❌ Error gifting user:', error);
-      alert(error.message || 'Lỗi khi tặng quà');
+      showAppError('Lỗi khi tặng quà', error.message || 'Vui lòng thử lại.');
     } finally {
       setActionLoading(false);
     }
@@ -315,10 +324,10 @@ const UserManagementTabCosmic: React.FC = () => {
       setActionLoading(true);
       await adminUserService.banUser(userId, 'Banned by admin');
       await fetchUsers();
-      alert('✅ Đã cấm user');
+      showAppSuccess('Đã cấm user', 'Tài khoản đã bị khóa.');
     } catch (error: any) {
       console.error('❌ Error banning user:', error);
-      alert('Lỗi khi cấm user');
+      showAppError('Lỗi khi cấm user', 'Vui lòng thử lại.');
     } finally {
       setActionLoading(false);
     }
@@ -329,10 +338,10 @@ const UserManagementTabCosmic: React.FC = () => {
       setActionLoading(true);
       await adminUserService.unbanUser(userId, 'Unbanned by admin');
       await fetchUsers();
-      alert('✅ Đã kích hoạt user');
+      showAppSuccess('Đã kích hoạt user', 'Tài khoản đã được mở lại.');
     } catch (error: any) {
       console.error('❌ Error unbanning user:', error);
-      alert('Lỗi khi kích hoạt user');
+      showAppError('Lỗi khi kích hoạt user', 'Vui lòng thử lại.');
     } finally {
       setActionLoading(false);
     }
@@ -341,7 +350,7 @@ const UserManagementTabCosmic: React.FC = () => {
   const handleResetPassword = async (userId: number) => {
     const newPassword = prompt('Nhập mật khẩu mới (tối thiểu 6 ký tự):');
     if (!newPassword || newPassword.length < 6) {
-      alert('Mật khẩu phải có ít nhất 6 ký tự');
+      showAppWarning('Mật khẩu không hợp lệ', 'Mật khẩu phải có ít nhất 6 ký tự.');
       return;
     }
 
@@ -352,10 +361,10 @@ const UserManagementTabCosmic: React.FC = () => {
         newPassword,
         reason: 'Admin reset password'
       });
-      alert('✅ Đã reset mật khẩu');
+      showAppSuccess('Đã reset mật khẩu', 'Mật khẩu mới đã được cập nhật.');
     } catch (error: any) {
       console.error('❌ Error resetting password:', error);
-      alert('Lỗi khi reset mật khẩu');
+      showAppError('Lỗi khi reset mật khẩu', 'Vui lòng thử lại.');
     } finally {
       setActionLoading(false);
     }
@@ -375,10 +384,13 @@ const UserManagementTabCosmic: React.FC = () => {
       await fetchUsers();
       setShowDeleteModal(false);
       setUserToDelete(null);
-      alert('✅ Đã xóa vĩnh viễn tài khoản');
+      showAppSuccess('Đã xóa tài khoản', 'Tài khoản đã bị xóa vĩnh viễn.');
     } catch (error: any) {
       console.error('❌ Error permanently deleting user:', error);
-      alert(error.response?.data?.message || 'Lỗi khi xóa tài khoản');
+      showAppError(
+        'Lỗi khi xóa tài khoản',
+        error.response?.data?.message || 'Vui lòng thử lại.',
+      );
     } finally {
       setActionLoading(false);
     }

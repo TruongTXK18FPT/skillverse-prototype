@@ -13,6 +13,7 @@ import violationReportService, {
   RESOLUTION_ACTIONS
 } from '../../services/violationReportService';
 import ReportActionModals from './ReportActionModals';
+import { showAppError } from '../../context/ToastContext';
 import './ReportsTabCosmic.css';
 
 const ReportsTabCosmic: React.FC = () => {
@@ -124,7 +125,7 @@ const ReportsTabCosmic: React.FC = () => {
       await loadData();
     } catch (err: any) {
       console.error('Error performing action:', err);
-      alert('Không thể thực hiện hành động. Vui lòng thử lại.');
+      showAppError('Không thể thực hiện hành động', 'Vui lòng thử lại.');
     } finally {
       setActionLoading(null);
     }

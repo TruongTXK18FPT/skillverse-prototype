@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import walletService from '../../services/walletService';
 import { WithdrawalRequestResponse } from '../../data/walletDTOs';
+import { showAppError, showAppWarning } from '../../context/ToastContext';
 import './WithdrawalApprovalTabCosmic.css';
 
 const WithdrawalApprovalTab: React.FC = () => {
@@ -61,7 +62,7 @@ const WithdrawalApprovalTab: React.FC = () => {
       setAdminNotes('');
     } catch (error: any) {
       console.error('Failed to approve request:', error);
-      alert(error.message || 'Lỗi khi duyệt yêu cầu');
+      showAppError('Lỗi khi duyệt yêu cầu', error.message || 'Vui lòng thử lại.');
     } finally {
       setActionLoading(false);
     }
@@ -69,7 +70,7 @@ const WithdrawalApprovalTab: React.FC = () => {
 
   const handleReject = async (requestId: number) => {
     if (!adminNotes.trim()) {
-      alert('Vui lòng nhập lý do từ chối');
+      showAppWarning('Thiếu lý do từ chối', 'Vui lòng nhập lý do từ chối.');
       return;
     }
 
@@ -81,7 +82,7 @@ const WithdrawalApprovalTab: React.FC = () => {
       setAdminNotes('');
     } catch (error: any) {
       console.error('Failed to reject request:', error);
-      alert(error.message || 'Lỗi khi từ chối yêu cầu');
+      showAppError('Lỗi khi từ chối yêu cầu', error.message || 'Vui lòng thử lại.');
     } finally {
       setActionLoading(false);
     }
@@ -96,7 +97,7 @@ const WithdrawalApprovalTab: React.FC = () => {
       setAdminNotes('');
     } catch (error: any) {
       console.error('Failed to complete request:', error);
-      alert(error.message || 'Lỗi khi hoàn thành yêu cầu');
+      showAppError('Lỗi khi hoàn thành yêu cầu', error.message || 'Vui lòng thử lại.');
     } finally {
       setActionLoading(false);
     }

@@ -11,6 +11,8 @@ import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import { decodeHtml } from '../../utils/htmlDecoder';
 import { getStoredUserRaw } from '../../utils/authStorage';
+import { confirmAction } from '../../context/ConfirmDialogContext';
+import { showAppError, showAppWarning } from '../../context/ToastContext';
 
 // Helper to strip HTML tags for preview
 const stripHtml = (html: string) => {
@@ -248,14 +250,14 @@ const CommunityDashboardPage: React.FC = () => {
     const userId = user?.id;
 
     if (!userId) {
-      alert('Vui lòng đăng nhập để thực hiện chức năng này');
+      showAppWarning('Cần đăng nhập', 'Vui lòng đăng nhập để thực hiện chức năng này');
       return;
     }
 
     try {
       const validation = validateImage(file);
       if (!validation.valid) {
-        alert(validation.error || 'Ảnh không hợp lệ');
+        showAppWarning('Ảnh không hợp lệ', validation.error || 'Ảnh không hợp lệ');
         return;
       }
       setUploadError(null);
@@ -271,7 +273,7 @@ const CommunityDashboardPage: React.FC = () => {
       console.error('Upload ảnh thất bại', err);
       const msg = (err as any)?.response?.data?.message || 'Upload ảnh thất bại';
       setUploadError(msg);
-      alert(msg);
+      showAppError('Upload ảnh thất bại', msg);
     } finally {
       setIsUploading(false);
       setUploadProgress(0);
@@ -296,7 +298,7 @@ const CommunityDashboardPage: React.FC = () => {
       setSelectedPost(null);
     } catch (e) {
       console.error('Cập nhật bài viết thất bại', e);
-      alert('Cập nhật bài viết thất bại');
+      showAppError('Cập nhật thất bại', 'Cập nhật bài viết thất bại');
     } finally {
       setIsSaving(false);
     }
@@ -310,7 +312,7 @@ const CommunityDashboardPage: React.FC = () => {
       await loadPosts();
     } catch (e) {
       console.error(e);
-      alert('Xóa bài viết thất bại. Vui lòng thử lại.');
+      showAppError('Xóa bài viết thất bại', 'Xóa bài viết thất bại. Vui lòng thử lại.');
     }
   };
 
@@ -321,7 +323,7 @@ const CommunityDashboardPage: React.FC = () => {
       await loadPosts();
     } catch (e) {
       console.error('Đăng bài thất bại', e);
-      alert('Đăng bài thất bại');
+      showAppError('Đăng bài thất bại', 'Đăng bài thất bại');
     }
   };
 
@@ -334,7 +336,7 @@ const CommunityDashboardPage: React.FC = () => {
       setComments(items);
     } catch (e) {
       console.error('Không thể tải bình luận', e);
-      alert('Không thể tải bình luận');
+      showAppError('Không thể tải bình luận', 'Không thể tải bình luận');
     }
   };
 
@@ -364,7 +366,10 @@ const CommunityDashboardPage: React.FC = () => {
       setActionReason('');
     } catch (e) {
       console.error(`${actionType === 'delete' ? 'Xóa' : 'Ẩn'} bình luận thất bại`, e);
-      alert(`${actionType === 'delete' ? 'Xóa' : 'Ẩn'} bình luận thất bại`);
+      showAppError(
+        `${actionType === 'delete' ? 'Xóa' : 'Ẩn'} bình luận thất bại`,
+        `${actionType === 'delete' ? 'Xóa' : 'Ẩn'} bình luận thất bại`
+      );
     }
   };
 
@@ -376,7 +381,7 @@ const CommunityDashboardPage: React.FC = () => {
       setComments(items);
     } catch (e) {
       console.error('Bỏ ẩn thất bại', e);
-      alert('Bỏ ẩn thất bại');
+      showAppError('Bỏ ẩn thất bại', 'Bỏ ẩn thất bại');
     }
   };
 

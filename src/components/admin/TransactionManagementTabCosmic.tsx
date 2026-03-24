@@ -14,6 +14,7 @@ import adminService from '../../services/adminService';
 import userService from '../../services/userService';
 import { getMentorProfile } from '../../services/mentorProfileService';
 import { API_BASE_URL } from '../../services/axiosInstance';
+import { showAppError, showAppInfo } from '../../context/ToastContext';
 import './TransactionManagementTabCosmic.css';
 
 type TransactionType = 'ALL' | 'WALLET' | 'PAYMENT' | 'WITHDRAWAL' | 'COIN_PURCHASE';
@@ -615,7 +616,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
       
     } catch (error) {
       console.error('❌ Error downloading invoice:', error);
-      alert('Không thể tải hóa đơn. Vui lòng thử lại sau.');
+      showAppError('Không thể tải hóa đơn', 'Vui lòng thử lại sau.');
     }
   };
 
@@ -643,7 +644,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('❌ Error downloading premium invoice:', error);
-      alert('Không thể tải hóa đơn Premium. Vui lòng thử lại sau.');
+      showAppError('Không thể tải hóa đơn Premium', 'Vui lòng thử lại sau.');
     }
   };
 
@@ -780,12 +781,12 @@ const TransactionManagementTabCosmic: React.FC = () => {
                   return isPaymentPremium || isWalletPremium;
                 });
                 if (premiums.length === 0) {
-                  alert('Không có giao dịch Premium để tạo báo cáo.');
+                  showAppInfo('Không có dữ liệu', 'Không có giao dịch Premium để tạo báo cáo.');
                 } else {
                   await generatePremiumSummaryPdf(premiums);
                 }
               } catch (_e) {
-                alert('Không thể tạo PDF tổng hợp Premium. Vui lòng thử lại sau.');
+                showAppError('Không thể tạo PDF Premium', 'Vui lòng thử lại sau.');
               } finally {
                 setPremiumDownloading(false);
               }

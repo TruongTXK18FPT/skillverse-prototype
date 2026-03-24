@@ -7,6 +7,7 @@ import {
   ReviewResponse,
   ReviewStatsResponse
 } from '../../services/reviewService';
+import { showAppError } from '../../context/ToastContext';
 import Pagination from '../shared/Pagination';
 import './ReviewsTab.css';
 
@@ -107,7 +108,7 @@ const ReviewsTab: React.FC = () => {
       setReplyText('');
     } catch (error) {
       console.error('Failed to reply', error);
-      alert('Không thể gửi phản hồi. Vui lòng thử lại.');
+      showAppError('Không thể gửi phản hồi', 'Không thể gửi phản hồi. Vui lòng thử lại.');
     } finally {
       setSubmittingReply(false);
     }

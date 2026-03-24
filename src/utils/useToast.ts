@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
+import { useToast as useBaseToast } from '../hooks/useToast';
 
 export interface UseToastOptions {
   autoCloseDelay?: number;
@@ -19,13 +20,19 @@ export interface ToastState {
 }
 
 export const useToast = (options: UseToastOptions = {}) => {
-  const [toast, setToast] = useState<ToastState>({
-    isVisible: false,
-    type: 'success',
-    title: '',
-    message: '',
-    useOverlay: false
-  });
+  const {
+    toast,
+    isVisible,
+    hideToast: hideBaseToast,
+    showToast: showBaseToast,
+  } = useBaseToast();
+
+  const hideToast = () => {
+    hideBaseToast();
+    if (options.onClose) {
+      options.onClose();
+    }
+  };
 
   const showToast = (
     type: 'success' | 'error' | 'warning' | 'info',
@@ -34,22 +41,29 @@ export const useToast = (options: UseToastOptions = {}) => {
     actionButton?: { text: string; onClick: () => void },
     useOverlay?: boolean
   ) => {
-    setToast({
+    showBaseToast({
       isVisible: true,
       type,
       title,
       message,
+      autoCloseDelay: options.autoCloseDelay,
+      showCountdown: options.showCountdown,
       actionButton,
       useOverlay
-    });
+    } as any);
   };
 
-  const hideToast = () => {
-    setToast(prev => ({ ...prev, isVisible: false }));
-    if (options.onClose) {
-      options.onClose();
-    }
-  };
+  const normalizedToast = useMemo<ToastState>(
+    () => ({
+      isVisible,
+      type: toast?.type ?? 'success',
+      title: toast?.title ?? '',
+      message: toast?.message ?? '',
+      useOverlay: (toast as any)?.useOverlay ?? false,
+      actionButton: toast?.actionButton,
+    }),
+    [isVisible, toast],
+  );
 
   // Convenience methods for different toast types
   const showSuccess = (title: string, message: string, actionButton?: { text: string; onClick: () => void }, useOverlay?: boolean) => 
@@ -65,7 +79,7 @@ export const useToast = (options: UseToastOptions = {}) => {
     showToast('info', title, message, actionButton, useOverlay);
 
   return {
-    toast,
+    toast: normalizedToast,
     showToast,
     hideToast,
     showSuccess,

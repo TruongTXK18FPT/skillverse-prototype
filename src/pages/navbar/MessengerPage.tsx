@@ -30,6 +30,7 @@ import studentLinkService from '../../services/studentLinkService';
 import { API_BASE_URL } from '../../services/axiosInstance';
 import { RecruitmentSessionResponse } from '../../data/portfolioDTOs';
 import { useChatSettings } from '../../context/ChatSettingsContext';
+import { showAppInfo } from '../../context/ToastContext';
 import '../../styles/MessengerPage.css';
 
 interface ChatContact {
@@ -454,7 +455,7 @@ const MessengerPage: React.FC = () => {
                   className="create-option"
                   onClick={() => {
                     setShowCreateNew(false);
-                    alert('Tính năng tạo nhóm mới đang phát triển');
+                    showAppInfo('Tính năng đang phát triển', 'Tính năng tạo nhóm mới đang phát triển');
                   }}
                 >
                   <Users size={32} />

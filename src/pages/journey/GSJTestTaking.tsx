@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, CheckCircle, ChevronRight, Clock, RefreshCw } from 'lucide-react';
 import { AssessmentTestResponse } from '../../types/Journey';
+import { confirmAction } from '../../context/ConfirmDialogContext';
 
 interface GSJTestTakingProps {
   test: AssessmentTestResponse;
@@ -79,7 +80,7 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
 
   const handleSubmit = async () => {
     if (answeredCount < totalQuestions) {
-      const confirmed = confirm(
+      const confirmed = await confirmAction(
         `Bạn mới trả lời ${answeredCount}/${totalQuestions} câu. Bạn có muốn nộp bài ngay không?`
       );
       if (!confirmed) return;

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Upload } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { PortfolioProjectDTO, ProjectType } from '../../data/portfolioDTOs';
+import { showAppError } from '../../context/ToastContext';
 import '../../styles/PortfolioModals.css';
 
 interface ProjectModalProps {
@@ -106,7 +107,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
       onClose();
     } catch (error) {
       console.error('Error submitting project:', error);
-      alert('Có lỗi xảy ra khi lưu dự án. Vui lòng thử lại.');
+      showAppError('Không thể lưu dự án', 'Có lỗi xảy ra khi lưu dự án. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }

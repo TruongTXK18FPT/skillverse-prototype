@@ -19,6 +19,7 @@ import {
   Upload,
   X,
 } from "lucide-react";
+import { showAppWarning } from "../../context/ToastContext";
 import adminGamificationService, {
   AdminGamificationStats,
   UserActivitySummary,
@@ -310,7 +311,7 @@ const AdminGamificationDashboard: React.FC = () => {
 
     const validation = validateImage(file);
     if (!validation.valid) {
-      alert(validation.error);
+      showAppWarning("Ảnh không hợp lệ", validation.error || "Vui lòng kiểm tra lại ảnh.");
       return;
     }
 
