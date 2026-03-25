@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 0;
+  min-height: 520px;
   background:
     radial-gradient(circle at 12% 14%, rgba(34, 211, 238, 0.1), transparent 36%),
     linear-gradient(140deg, #020617 0%, #0a2440 100%);
@@ -123,11 +123,38 @@
 .mcw-messages {
   flex: 1;
   overflow-y: auto;
-  min-height: 0;
+  min-height: 260px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+}
+
+.mcw-empty {
+  flex: 1;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px dashed rgba(34, 211, 238, 0.3);
+  border-radius: 14px;
+  background: linear-gradient(150deg, rgba(8, 30, 53, 0.45), rgba(2, 6, 23, 0.45));
+  padding: 1rem;
+}
+
+.mcw-empty__title {
+  margin: 0;
+  color: #e0f2fe;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.mcw-empty__desc {
+  margin: 0.35rem 0 0;
+  color: rgba(148, 163, 184, 0.88);
+  font-size: 0.82rem;
 }
 
 .mcw-msg {

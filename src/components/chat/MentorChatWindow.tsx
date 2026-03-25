@@ -223,6 +223,13 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
 
       {/* Messages */}
       <div className="mcw-messages">
+        {messages.length === 0 && (
+          <div className="mcw-empty">
+            <p className="mcw-empty__title">Chưa có tin nhắn nào</p>
+            <p className="mcw-empty__desc">Hãy bắt đầu cuộc trò chuyện với mentor ngay bên dưới.</p>
+          </div>
+        )}
+
         {messages.map((msg) => {
           const isMine = msg.senderId === currentUserId;
           const isGif = msg.content.startsWith('[GIF]');

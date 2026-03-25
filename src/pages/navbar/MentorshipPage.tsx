@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useAppToast } from "../../context/ToastContext";
 import {
   getAllMentors,
   toggleFavoriteMentor,
@@ -38,6 +39,7 @@ interface Mentor {
 
 const MentorshipPage = () => {
   const { isAuthenticated } = useAuth();
+  const { showInfo } = useAppToast();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [mentors, setMentors] = useState<Mentor[]>([]);
@@ -197,6 +199,23 @@ const MentorshipPage = () => {
   useEffect(() => {
     fetchMentors();
   }, [fetchMentors]);
+
+  useEffect(() => {
+    const shouldLock = bookingModalOpen || chatModalOpen || showLoginModal;
+
+    if (shouldLock) {
+      document.body.classList.add('uplink-scroll-lock');
+      document.documentElement.classList.add('uplink-scroll-lock');
+    } else {
+      document.body.classList.remove('uplink-scroll-lock');
+      document.documentElement.classList.remove('uplink-scroll-lock');
+    }
+
+    return () => {
+      document.body.classList.remove('uplink-scroll-lock');
+      document.documentElement.classList.remove('uplink-scroll-lock');
+    };
+  }, [bookingModalOpen, chatModalOpen, showLoginModal]);
 
   const handleToggleFavorite = async (mentorId: string) => {
     try {
@@ -420,7 +439,10 @@ const MentorshipPage = () => {
                 if (mentor.slug) {
                   navigate(`/portfolio/${mentor.slug}`);
                 } else {
-                  alert("Mentor này chưa có đường dẫn portfolio công khai.");
+                  showInfo(
+                    "Chưa có portfolio công khai",
+                    "Mentor này chưa có đường dẫn portfolio công khai.",
+                  );
                 }
               }}
             />
@@ -463,6 +485,14 @@ const MentorshipPage = () => {
           hourlyRate={selectedMentorForBooking.hourlyRate}
         />
       )}
+
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để tiếp tục"
+        message="Bạn cần đăng nhập để sử dụng tính năng mentorship."
+        feature="Đặt lịch và nhắn tin cùng mentor"
+      />
     </div>
   );
 };

@@ -1089,6 +1089,12 @@ body.uplink-scroll-lock {
   height: 100dvh;
   overscroll-behavior: none;
   padding-right: var(--scrollbar-width, 0px);
+  touch-action: none;
+}
+
+html.uplink-scroll-lock {
+  overflow: hidden !important;
+  overscroll-behavior: none;
 }
 
 .uplink-modal-overlay {
@@ -1105,7 +1111,8 @@ body.uplink-scroll-lock {
   z-index: 1000;
   animation: uplink-fadeIn 0.3s ease-out;
   padding: 2rem;
-  overflow-y: auto;
+  overflow: hidden;
+  overscroll-behavior: contain;
 }
 
 .uplink-modal-overlay--messenger {
@@ -1115,6 +1122,7 @@ body.uplink-scroll-lock {
   align-items: center;
   padding: 0.75rem 1rem;
   overflow: hidden;
+  overscroll-behavior: contain;
 }
 
 .uplink-chat-window {
@@ -1488,6 +1496,205 @@ body.uplink-scroll-lock {
 .date-capsule.active .date-capsule-num {
   color: var(--uplink-primary-light);
   text-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+}
+
+.booking-flow-shell {
+  padding: 1.5rem;
+}
+
+.booking-panel {
+  border: 1px solid rgba(34, 211, 238, 0.24);
+  background: linear-gradient(160deg, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.65));
+  border-radius: 0.85rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.booking-panel-day-picker {
+  margin-bottom: 1.5rem;
+}
+
+.booking-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.booking-panel-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.booking-label {
+  color: var(--uplink-text-grey);
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--uplink-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.booking-state-message {
+  color: var(--uplink-text-grey);
+  padding: 2rem;
+  text-align: center;
+}
+
+.booking-state-empty {
+  border: 1px dashed var(--uplink-border);
+  border-radius: 0.5rem;
+  background: rgba(2, 6, 23, 0.4);
+}
+
+.booking-slots-grid {
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.75rem;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.booking-slot-chip {
+  padding: 0.75rem;
+  background: var(--uplink-bg-secondary);
+  border: 1px solid var(--uplink-border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: var(--uplink-text-white);
+  font-size: 0.84rem;
+  text-align: center;
+  transition: all 0.2s ease;
+  font-family: var(--uplink-mono);
+}
+
+.booking-slot-chip:hover {
+  border-color: var(--uplink-primary);
+  background: rgba(34, 211, 238, 0.08);
+}
+
+.booking-slot-chip.active {
+  background: rgba(34, 211, 238, 0.2);
+  border-color: var(--uplink-primary);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.25);
+}
+
+.booking-price-summary {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(160deg, rgba(34, 211, 238, 0.14), rgba(6, 182, 212, 0.04));
+  border-radius: 0.65rem;
+  border: 1px solid var(--uplink-primary);
+}
+
+.booking-price-row,
+.booking-order-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.booking-price-row {
+  color: var(--uplink-text-grey);
+}
+
+.booking-order-summary {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--uplink-border);
+}
+
+.booking-order-row {
+  color: var(--uplink-text-white);
+  margin-bottom: 0.5rem;
+}
+
+.booking-order-total {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(34, 211, 238, 0.3);
+  color: var(--uplink-primary);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.booking-method-heading {
+  color: var(--uplink-text-white);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+  font-family: var(--uplink-mono);
+}
+
+.payment-method-card {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--uplink-border);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.2s ease;
+}
+
+.payment-method-card:hover {
+  border-color: var(--uplink-primary);
+  background: rgba(34, 211, 238, 0.08);
+}
+
+.payment-method-card.selected {
+  background: rgba(34, 211, 238, 0.12);
+  border-color: var(--uplink-primary);
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.18);
+}
+
+.payment-method-body {
+  flex: 1;
+}
+
+.payment-method-title {
+  color: var(--uplink-text-white);
+  font-weight: 600;
+}
+
+.payment-method-desc {
+  color: var(--uplink-text-grey);
+  font-size: 0.85rem;
+}
+
+.booking-footer-actions {
+  justify-content: flex-end;
+}
+
+.booking-payment-actions {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .booking-flow-shell {
+    padding: 1rem;
+  }
+
+  .booking-payment-actions {
+    flex-direction: column;
+  }
+
+  .booking-order-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .booking-slots-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
 }
 
 /* ============================================

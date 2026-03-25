@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, Clock, CreditCard, Wallet, CheckCircle, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, CreditCard, Wallet, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import walletService from '../../services/walletService';
-import { Availability, getAvailability } from '../../services/availabilityService';
+import { getAvailability } from '../../services/availabilityService';
 import { createBookingWithWallet } from '../../services/bookingService';
 import { usePaymentToast } from '../../utils/useToast';
 import Toast from '../shared/Toast';
@@ -36,7 +36,8 @@ const BookingModal: React.FC<BookingModalProps> = ({
   const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'payos'>('wallet');
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const { toast, showSuccess, showError, hideToast } = usePaymentToast();
+  const [closeModalOnToastDismiss, setCloseModalOnToastDismiss] = useState(false);
+  const { toast, showSuccess, showError, showWarning, hideToast } = usePaymentToast();
 
   // Calendar state
   const [calendarStartDate, setCalendarStartDate] = useState(new Date());
@@ -48,6 +49,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
       setStep('schedule');
       setSelectedSlot(null);
       setPaymentMethod('wallet');
+      setCloseModalOnToastDismiss(false);
       fetchWalletBalance();
       fetchAvailableSlots();
       // Lock scroll
@@ -151,7 +153,8 @@ const BookingModal: React.FC<BookingModalProps> = ({
 
   const handleScheduleConfirm = () => {
     if (!selectedSlot) {
-      alert('Vui lòng chọn một khung giờ.');
+      setCloseModalOnToastDismiss(false);
+      showWarning('Chưa chọn khung giờ', 'Vui lòng chọn một khung giờ trước khi tiếp tục.');
       return;
     }
     setStep('payment');
@@ -160,10 +163,12 @@ const BookingModal: React.FC<BookingModalProps> = ({
   const handlePayment = async () => {
     if (paymentMethod === 'wallet') {
       if (walletBalance === null) {
+        setCloseModalOnToastDismiss(false);
         showError('Lỗi', 'Không thể tải thông tin ví.');
         return;
       }
       if (walletBalance < priceVND) {
+        setCloseModalOnToastDismiss(false);
         showError('Số dư không đủ', 'Vui lòng nạp thêm tiền vào ví.');
         return;
       }
@@ -183,24 +188,19 @@ const BookingModal: React.FC<BookingModalProps> = ({
         });
 
         const link = booking.meetingLink;
+    setCloseModalOnToastDismiss(true);
         showSuccess(
             'Đặt lịch thành công!',
             link ? `Bạn đã đặt lịch với ${mentorName}. Phòng họp đã sẵn sàng.` : `Bạn đã đặt lịch với ${mentorName}. Link phòng họp đang tạo...`,
-            link
-              ? {
-                  text: 'Mở phòng họp',
-                  onClick: () => {
-                    window.open(link!, '_blank');
-                    onClose();
-                  }
-                }
-              : {
-                  text: 'Đóng',
-                  onClick: onClose
-                }
+            {
+              text: 'Đóng',
+              onClick: handleToastDismiss
+            },
+            true
         );
     } catch (error: any) {
         console.error(error);
+        setCloseModalOnToastDismiss(false);
         showError('Đặt lịch thất bại', error.response?.data?.message || 'Có lỗi xảy ra khi đặt lịch.');
     } finally {
         setIsProcessing(false);
@@ -209,6 +209,13 @@ const BookingModal: React.FC<BookingModalProps> = ({
 
   const formatTimeRange = (start: Date, end: Date) => {
     return `${start.toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit'})} - ${end.toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit'})}`;
+  };
+
+  const handleToastDismiss = () => {
+    hideToast();
+    if (closeModalOnToastDismiss) {
+      onClose();
+    }
   };
 
   if (!isOpen) return null;
@@ -220,21 +227,24 @@ const BookingModal: React.FC<BookingModalProps> = ({
     <div className="uplink-modal-overlay" onClick={onClose}>
       <div className="uplink-chat-window booking-variant" onClick={(e) => e.stopPropagation()}>
         <div className="uplink-chat-header">
-          <h3 className="uplink-chat-name">
-            {step === 'schedule' ? 'Đặt lịch hẹn' : 'Thanh toán'}
-          </h3>
+          <div>
+            <p className="chat-protocol-label">MENTOR_BOOKING_PROTOCOL</p>
+            <h3 className="uplink-chat-name">
+              {step === 'schedule' ? 'Đặt lịch hẹn' : 'Thanh toán'}
+            </h3>
+          </div>
           <button className="uplink-close-btn" onClick={onClose}>
             <X size={20} />
           </button>
         </div>
 
-        <div className="uplink-chat-messages" style={{ overflowY: 'auto', padding: '1.5rem' }}>
+        <div className="uplink-chat-messages booking-flow-shell">
           {step === 'schedule' ? (
             <div className="booking-form">
-              <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                    <label style={{ color: 'var(--uplink-text-grey)' }}>Chọn ngày</label>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <div className="booking-panel booking-panel-day-picker">
+                <div className="booking-panel-header">
+                    <label className="booking-label">Chọn ngày</label>
+                    <div className="booking-panel-controls">
                         <button onClick={handlePrevWeek} className="uplink-icon-btn"><ChevronLeft size={16}/></button>
                         <button onClick={handleNextWeek} className="uplink-icon-btn"><ChevronRight size={16}/></button>
                     </div>
@@ -263,34 +273,24 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 </div>
               </div>
 
-              <div className="form-group" style={{ marginBottom: '1rem' }}>
-                <label style={{ color: 'var(--uplink-text-grey)', display: 'block', marginBottom: '0.5rem' }}>
+              <div className="booking-panel booking-panel-slots">
+                <label className="booking-label">
                   Giờ rảnh ngày {selectedDate.toLocaleDateString('vi-VN')}
                 </label>
                 
                 {loadingSlots ? (
-                  <div style={{ color: 'var(--uplink-text-grey)', padding: '2rem', textAlign: 'center' }}>Đang tải lịch...</div>
+                  <div className="booking-state-message">Đang tải lịch...</div>
                 ) : currentSlots.length === 0 ? (
-                  <div style={{ color: 'var(--uplink-text-grey)', padding: '2rem', textAlign: 'center', border: '1px dashed var(--uplink-border)', borderRadius: '0.5rem' }}>
+                  <div className="booking-state-message booking-state-empty">
                     Không có lịch rảnh trong ngày này.
                   </div>
                 ) : (
-                  <div className="slots-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '0.75rem', maxHeight: '300px', overflowY: 'auto' }}>
+                  <div className="slots-grid booking-slots-grid">
                     {currentSlots.map(slot => (
                       <div 
                         key={slot.id}
                         onClick={() => setSelectedSlot(slot)}
-                        style={{
-                          padding: '0.75rem',
-                          background: selectedSlot?.id === slot.id ? 'rgba(34, 211, 238, 0.2)' : 'var(--uplink-bg-secondary)',
-                          border: `1px solid ${selectedSlot?.id === slot.id ? 'var(--uplink-primary)' : 'var(--uplink-border)'}`,
-                          borderRadius: '0.5rem',
-                          cursor: 'pointer',
-                          color: 'white',
-                          fontSize: '0.9rem',
-                          textAlign: 'center',
-                          transition: 'all 0.2s'
-                        }}
+                        className={`booking-slot-chip ${selectedSlot?.id === slot.id ? 'active' : ''}`}
                       >
                         {formatTimeRange(slot.startTime, slot.endTime)}
                       </div>
@@ -299,8 +299,8 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 )}
               </div>
               
-              <div className="price-summary" style={{ marginTop: '2rem', padding: '1rem', background: 'rgba(34, 211, 238, 0.1)', borderRadius: '0.5rem', border: '1px solid var(--uplink-primary)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--uplink-text-grey)' }}>
+              <div className="price-summary booking-price-summary">
+                <div className="booking-price-row">
                   <span>Đơn giá:</span>
                   <span>{priceVND.toLocaleString('vi-VN')} VND/giờ</span>
                 </div>
@@ -308,42 +308,31 @@ const BookingModal: React.FC<BookingModalProps> = ({
             </div>
           ) : (
             <div className="payment-options">
-              <div className="order-summary" style={{ marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid var(--uplink-border)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', color: 'var(--uplink-text-white)' }}>
+              <div className="order-summary booking-order-summary">
+                <div className="booking-order-row">
                   <span>Dịch vụ:</span>
                   <span>Mentorship 1:1 với {mentorName}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', color: 'var(--uplink-text-white)' }}>
+                <div className="booking-order-row">
                   <span>Thời gian:</span>
                   <span>{selectedSlot ? `${selectedSlot.startTime.toLocaleDateString('vi-VN')} | ${formatTimeRange(selectedSlot.startTime, selectedSlot.endTime)}` : ''}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', color: 'var(--uplink-primary)', fontSize: '1.1rem' }}>
+                <div className="booking-order-row booking-order-total">
                   <span>Tổng cộng:</span>
                   <span>{priceVND.toLocaleString('vi-VN')} VND</span>
                 </div>
               </div>
 
-              <h4 style={{ color: 'var(--uplink-text-white)', marginBottom: '1rem' }}>Chọn phương thức thanh toán</h4>
+              <h4 className="booking-method-heading">Chọn phương thức thanh toán</h4>
 
               <div 
                 className={`payment-method-card ${paymentMethod === 'wallet' ? 'selected' : ''}`}
                 onClick={() => setPaymentMethod('wallet')}
-                style={{
-                  padding: '1rem',
-                  background: paymentMethod === 'wallet' ? 'rgba(34, 211, 238, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                  border: `1px solid ${paymentMethod === 'wallet' ? 'var(--uplink-primary)' : 'var(--uplink-border)'}`,
-                  borderRadius: '0.5rem',
-                  marginBottom: '1rem',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem'
-                }}
               >
                 <Wallet size={24} color={paymentMethod === 'wallet' ? '#22d3ee' : '#94a3b8'} />
-                <div style={{ flex: 1 }}>
-                  <div style={{ color: 'white', fontWeight: '600' }}>Ví SkillVerse</div>
-                  <div style={{ color: 'var(--uplink-text-grey)', fontSize: '0.85rem' }}>
+                <div className="payment-method-body">
+                  <div className="payment-method-title">Ví SkillVerse</div>
+                  <div className="payment-method-desc">
                     Số dư: {walletBalance !== null ? walletBalance.toLocaleString('vi-VN') + ' VND' : 'Loading...'}
                   </div>
                 </div>
@@ -353,21 +342,11 @@ const BookingModal: React.FC<BookingModalProps> = ({
               <div 
                 className={`payment-method-card ${paymentMethod === 'payos' ? 'selected' : ''}`}
                 onClick={() => setPaymentMethod('payos')}
-                style={{
-                  padding: '1rem',
-                  background: paymentMethod === 'payos' ? 'rgba(34, 211, 238, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                  border: `1px solid ${paymentMethod === 'payos' ? 'var(--uplink-primary)' : 'var(--uplink-border)'}`,
-                  borderRadius: '0.5rem',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem'
-                }}
               >
                 <CreditCard size={24} color={paymentMethod === 'payos' ? '#22d3ee' : '#94a3b8'} />
-                <div style={{ flex: 1 }}>
-                  <div style={{ color: 'white', fontWeight: '600' }}>PayOS / Ngân hàng</div>
-                  <div style={{ color: 'var(--uplink-text-grey)', fontSize: '0.85rem' }}>
+                <div className="payment-method-body">
+                  <div className="payment-method-title">PayOS / Ngân hàng</div>
+                  <div className="payment-method-desc">
                     Quét mã QR
                   </div>
                 </div>
@@ -377,7 +356,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
           )}
         </div>
 
-        <div className="uplink-chat-input-area" style={{ justifyContent: 'flex-end' }}>
+        <div className="uplink-chat-input-area booking-footer-actions">
           {step === 'schedule' ? (
             <button 
               className="uplink-establish-btn"
@@ -387,7 +366,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
               Tiếp tục
             </button>
           ) : (
-            <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
+            <div className="booking-payment-actions">
               <button 
                 className="uplink-establish-btn"
                 onClick={() => setStep('schedule')}
@@ -413,7 +392,8 @@ const BookingModal: React.FC<BookingModalProps> = ({
         title={toast.title}
         message={toast.message}
         isVisible={toast.isVisible}
-        onClose={hideToast}
+        onClose={handleToastDismiss}
+        useOverlay={true}
         actionButton={toast.actionButton}
       />
     </div>

@@ -27,6 +27,7 @@ import {
   Crown,
 } from "lucide-react";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
+import PremiumVaultSection from "../../components/home/PremiumVaultSection";
 import "../../styles/HomePage.css";
 import "../../styles/HomeAwardV2.css";
 
@@ -77,7 +78,7 @@ const HomePage = () => {
   };
 
   const constellationContainerRef = useRef<HTMLDivElement>(null);
-  const globeHoverTimerRef = useRef<number | null>(null);
+  const globeHoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const defaultSlides = [
     {
@@ -720,6 +721,8 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      <PremiumVaultSection />
 
       {/* Alien Fabricator Section (Giữ nguyên) */}
       <section className="fabricator-section">

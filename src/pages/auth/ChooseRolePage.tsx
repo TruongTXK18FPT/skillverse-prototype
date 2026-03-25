@@ -57,16 +57,6 @@ const ChooseRolePage = () => {
       icon: Briefcase,
       color: '#ff6b6b'
     },
-    {
-      id: 'parent',
-      title: 'Phụ Huynh',
-      description: 'Đồng hành cùng con cái',
-      dialogText: 'Theo dõi và ủng hộ con em học tập!',
-      image: meowlParent,
-      route: '/register/parent',
-      icon: Users,
-      color: '#a36bfe'
-    }
   ];
 
   const handleRoleSelect = (role: RoleOption) => {
