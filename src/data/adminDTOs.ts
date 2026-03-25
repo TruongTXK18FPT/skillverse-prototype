@@ -109,6 +109,10 @@ export interface AdminJobStats {
   rejectedCount: number;
   byStatus: Record<string, number>;
   byUrgency: Record<string, number>;
+  totalPlatformEarnings: number;
+  totalRecruiterEarnings: number;
+  totalEscrowVolume: number;
+  activeEscrows: number;
 }
 
 export interface PageResponse<T> {

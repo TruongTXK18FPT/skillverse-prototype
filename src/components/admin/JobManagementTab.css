@@ -214,6 +214,9 @@
 .jm-kpi-row--secondary {
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
 }
+.jm-kpi-row--earnings {
+  grid-template-columns: repeat(3, 1fr);
+}
 
 .jm-kpi-card {
   position: relative;
@@ -270,6 +273,55 @@
 .jm-kpi-card--gradient-red .jm-kpi-card__glow { background: #ef4444; }
 .jm-kpi-card--gradient-red .jm-kpi-card__icon { color: #f87171; }
 .jm-kpi-card--gradient-red .jm-kpi-card__value { color: #f87171; }
+
+/* Earnings KPI Cards */
+.jm-kpi-card--gradient-emerald {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
+}
+.jm-kpi-card--gradient-emerald .jm-kpi-card__glow {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.5) 0%, transparent 70%);
+}
+.jm-kpi-card--gradient-emerald .jm-kpi-card__icon { color: #10b981; }
+.jm-kpi-card--gradient-emerald .jm-kpi-card__value { color: #34d399; }
+
+.jm-kpi-card--gradient-indigo {
+  border-color: rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
+}
+.jm-kpi-card--gradient-indigo .jm-kpi-card__glow {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.5) 0%, transparent 70%);
+}
+.jm-kpi-card--gradient-indigo .jm-kpi-card__icon { color: #6366f1; }
+.jm-kpi-card--gradient-indigo .jm-kpi-card__value { color: #818cf8; }
+
+.jm-kpi-card--gradient-gold {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
+}
+.jm-kpi-card--gradient-gold .jm-kpi-card__glow {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.5) 0%, transparent 70%);
+}
+.jm-kpi-card--gradient-gold .jm-kpi-card__icon { color: #f59e0b; }
+.jm-kpi-card--gradient-gold .jm-kpi-card__value { color: #fbbf24; }
+
+/* Earnings value - money formatting */
+.jm-kpi-card__value--money {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.jm-kpi-card__sub {
+  margin-top: 0.25rem;
+}
+.jm-kpi-card__sub-label {
+  font-size: 0.72rem;
+  color: rgba(148, 163, 184, 0.7);
+  font-weight: 500;
+}
+
+/* White icon for earnings cards */
+.jm-kpi-card__icon--white { color: #ffffff !important; opacity: 0.9; }
 
 .jm-kpi-card__icon {
   display: flex;
@@ -1488,6 +1540,9 @@
 @media (max-width: 768px) {
   .jm-kpi-row {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .jm-kpi-row--earnings {
+    grid-template-columns: 1fr;
   }
   .jm-kpi-row--secondary {
     grid-template-columns: repeat(2, 1fr);

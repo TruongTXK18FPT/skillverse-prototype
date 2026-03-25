@@ -129,6 +129,12 @@ export const JobManagementTab: React.FC = () => {
   // Sub-tab state
   const [subTab, setSubTab] = useState<SubTab>("stats");
 
+  // Helper: whether a job can be deleted or banned (not COMPLETED, PAID, or CLOSED)
+  const canModifyJob = (job: any) => {
+    const terminalStatuses = ["COMPLETED", "PAID", "CLOSED"];
+    return !terminalStatuses.includes(job.status);
+  };
+
   // Approve tab state (short-term only)
   const [pendingJobs, setPendingJobs] = useState<any[]>([]);
   const [pendingLoading, setPendingLoading] = useState(false);
@@ -680,6 +686,57 @@ export const JobManagementTab: React.FC = () => {
                 </div>
               </div>
 
+              {/* Earnings KPI Row */}
+              <div className="jm-kpi-row jm-kpi-row--earnings">
+                <div className="jm-kpi-card jm-kpi-card--gradient-emerald">
+                  <div className="jm-kpi-card__glow" />
+                  <div className="jm-kpi-card__icon jm-kpi-card__icon--white">
+                    <TrendingUp size={26} />
+                  </div>
+                  <div className="jm-kpi-card__content">
+                    <div className="jm-kpi-card__value jm-kpi-card__value--money">
+                      {formatCurrency(stats.totalPlatformEarnings || 0)}
+                    </div>
+                    <div className="jm-kpi-card__label">Thu nhập nền tảng</div>
+                  </div>
+                  <div className="jm-kpi-card__sub">
+                    <span className="jm-kpi-card__sub-label">Phí 10% từ ký quỹ</span>
+                  </div>
+                </div>
+
+                <div className="jm-kpi-card jm-kpi-card--gradient-indigo">
+                  <div className="jm-kpi-card__glow" />
+                  <div className="jm-kpi-card__icon jm-kpi-card__icon--white">
+                    <Building2 size={26} />
+                  </div>
+                  <div className="jm-kpi-card__content">
+                    <div className="jm-kpi-card__value jm-kpi-card__value--money">
+                      {formatCurrency(stats.totalRecruiterEarnings || 0)}
+                    </div>
+                    <div className="jm-kpi-card__label">Thu nhập nhà tuyển dụng</div>
+                  </div>
+                  <div className="jm-kpi-card__sub">
+                    <span className="jm-kpi-card__sub-label">90% từ ký quỹ</span>
+                  </div>
+                </div>
+
+                <div className="jm-kpi-card jm-kpi-card--gradient-gold">
+                  <div className="jm-kpi-card__glow" />
+                  <div className="jm-kpi-card__icon jm-kpi-card__icon--white">
+                    <CreditCard size={26} />
+                  </div>
+                  <div className="jm-kpi-card__content">
+                    <div className="jm-kpi-card__value jm-kpi-card__value--money">
+                      {formatCurrency(stats.totalEscrowVolume || 0)}
+                    </div>
+                    <div className="jm-kpi-card__label">Tổng giá trị ký quỹ</div>
+                  </div>
+                  <div className="jm-kpi-card__sub">
+                    <span className="jm-kpi-card__sub-label">{stats.activeEscrows || 0} ký quỹ đang hoạt động</span>
+                  </div>
+                </div>
+              </div>
+
               {/* Charts Row */}
               <div className="jm-charts-row">
                 {/* PieChart: Status Distribution */}
@@ -1024,7 +1081,7 @@ export const JobManagementTab: React.FC = () => {
                             >
                               <Unlock size={14} />
                             </button>
-                          ) : (
+                          ) : canModifyJob(job) && (
                             <button
                               className="jm-icon-btn jm-icon-btn--ban"
                               onClick={() => openActionModal(job, "ban")}
@@ -1033,13 +1090,15 @@ export const JobManagementTab: React.FC = () => {
                               <Ban size={14} />
                             </button>
                           )}
-                          <button
-                            className="jm-icon-btn jm-icon-btn--delete"
-                            onClick={() => openActionModal(job, "delete")}
-                            title="Xóa"
-                          >
-                            <Trash2 size={14} />
-                          </button>
+                          {canModifyJob(job) && (
+                            <button
+                              className="jm-icon-btn jm-icon-btn--delete"
+                              onClick={() => openActionModal(job, "delete")}
+                              title="Xóa"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -1602,19 +1661,17 @@ export const JobManagementTab: React.FC = () => {
                     </button>
                   </>
                 )}
-                {!selectedJob.isBanned &&
-                  selectedJob.status !== "PAID" &&
-                  selectedJob.status !== "CLOSED" && (
-                    <button
-                      className="jm-modal-btn jm-modal-btn--ban"
-                      onClick={() => {
-                        setShowDetailsModal(false);
-                        openActionModal(selectedJob, "ban");
-                      }}
-                    >
-                      <Ban size={16} /> Khóa
-                    </button>
-                  )}
+                {!selectedJob.isBanned && canModifyJob(selectedJob) && (
+                  <button
+                    className="jm-modal-btn jm-modal-btn--ban"
+                    onClick={() => {
+                      setShowDetailsModal(false);
+                      openActionModal(selectedJob, "ban");
+                    }}
+                  >
+                    <Ban size={16} /> Khóa
+                  </button>
+                )}
                 {selectedJob.isBanned && (
                   <button
                     className="jm-modal-btn jm-modal-btn--unban"
@@ -1626,18 +1683,17 @@ export const JobManagementTab: React.FC = () => {
                     <Unlock size={16} /> Mở khóa
                   </button>
                 )}
-                {selectedJob.status !== "PAID" &&
-                  selectedJob.status !== "CLOSED" && (
-                    <button
-                      className="jm-modal-btn jm-modal-btn--delete"
-                      onClick={() => {
-                        setShowDetailsModal(false);
-                        openActionModal(selectedJob, "delete");
-                      }}
-                    >
-                      <Trash2 size={16} /> Xóa
-                    </button>
-                  )}
+                {canModifyJob(selectedJob) && (
+                  <button
+                    className="jm-modal-btn jm-modal-btn--delete"
+                    onClick={() => {
+                      setShowDetailsModal(false);
+                      openActionModal(selectedJob, "delete");
+                    }}
+                  >
+                    <Trash2 size={16} /> Xóa
+                  </button>
+                )}
                 <button
                   className="jm-modal-btn jm-modal-btn--secondary"
                   onClick={() => setShowDetailsModal(false)}
