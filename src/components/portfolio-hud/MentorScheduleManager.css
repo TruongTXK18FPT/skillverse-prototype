@@ -262,6 +262,55 @@
   pointer-events: none;
 }
 
+/* Past slots - greyed out with X */
+.msm-day-slot.past-slot {
+  background: rgba(30, 41, 59, 0.3);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Past day column background */
+.msm-day-column.past-day-column {
+  opacity: 0.5;
+}
+
+/* Past day header */
+.msm-day-header.past-day {
+  opacity: 0.4;
+}
+
+.msm-day-header.past-day .msm-day-name,
+.msm-day-header.past-day .msm-day-number {
+  color: var(--uplink-text-grey);
+}
+
+/* Past slot overlay with X mark */
+.msm-slot-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.msm-slot-overlay-x {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(100, 116, 139, 0.3);
+  border: 1px solid rgba(100, 116, 139, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(148, 163, 184, 0.6);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  line-height: 1;
+}
+
 /* Events */
 .msm-event {
   position: absolute;

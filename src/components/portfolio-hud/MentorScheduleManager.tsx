@@ -28,6 +28,9 @@ const MentorScheduleManager: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('17:00');
+
+  // Part 10b: Get today's date string for min date validation
+  const todayStr = new Date().toISOString().split('T')[0];
   const [isRecurring, setIsRecurring] = useState(false);
   const [recurrenceType, setRecurrenceType] = useState<'DAILY' | 'WEEKLY' | 'MONTHLY'>('WEEKLY');
   const [recurrenceEnd, setRecurrenceEnd] = useState('');
@@ -67,10 +70,15 @@ const MentorScheduleManager: React.FC = () => {
 
       // Map Availability
       availabilities.forEach(a => {
-        // Ensure time is treated as UTC
-        const startStr = a.startTime.endsWith('Z') ? a.startTime : a.startTime + 'Z';
-        const endStr = a.endTime.endsWith('Z') ? a.endTime : a.endTime + 'Z';
-        
+        // Backend returns LocalDateTime without timezone (e.g. "2026-03-26T09:00:00").
+        // Treat these as VN wall-clock time — append +07:00 so JavaScript displays correctly.
+        const startStr = a.startTime.endsWith('Z') || a.startTime.includes('+07:00')
+          ? a.startTime
+          : a.startTime + '+07:00';
+        const endStr = a.endTime.endsWith('Z') || a.endTime.includes('+07:00')
+          ? a.endTime
+          : a.endTime + '+07:00';
+
         calendarEvents.push({
           id: `avail-${a.id}`,
           title: 'Rảnh',
@@ -84,9 +92,13 @@ const MentorScheduleManager: React.FC = () => {
       // Map Bookings
       bookingsPage.content.forEach(b => {
         if (b.status !== 'CANCELLED' && b.status !== 'REJECTED') {
-          // Ensure time is treated as UTC
-          const startStr = b.startTime.endsWith('Z') ? b.startTime : b.startTime + 'Z';
-          const endStr = b.endTime.endsWith('Z') ? b.endTime : b.endTime + 'Z';
+          // Treat as VN wall-clock time — append +07:00 so JS displays correctly in VN
+          const startStr = b.startTime.endsWith('Z') || b.startTime.includes('+07:00')
+            ? b.startTime
+            : b.startTime + '+07:00';
+          const endStr = b.endTime.endsWith('Z') || b.endTime.includes('+07:00')
+            ? b.endTime
+            : b.endTime + '+07:00';
 
           calendarEvents.push({
             id: `book-${b.id}`,
@@ -110,17 +122,71 @@ const MentorScheduleManager: React.FC = () => {
   const handleAdd = async () => {
     if (!user) return;
     try {
-      const startDateTime = new Date(`${selectedDate}T${startTime}`);
-      const endDateTime = new Date(`${selectedDate}T${endTime}`);
-      
+      // Parse date/time as local timezone (not UTC) to avoid timezone offset issues
+      const [startHour, startMin] = startTime.split(':').map(Number);
+      const [endHour, endMin] = endTime.split(':').map(Number);
+      const [year, month, day] = selectedDate.split('-').map(Number);
+
+      const startDateTime = new Date(year, month - 1, day, startHour, startMin);
+      const endDateTime = new Date(year, month - 1, day, endHour, endMin);
+
+      // Part 10b: Validate endTime > startTime
+      if (endDateTime <= startDateTime) {
+        showAppError('Khoảng thời gian không hợp lệ', 'Thời gian kết thúc phải sau thời gian bắt đầu.');
+        return;
+      }
+
+      // Part 10b: Validate duration >= 1 hour
+      const durationMs = endDateTime.getTime() - startDateTime.getTime();
+      if (durationMs < 60 * 60 * 1000) {
+        showAppError('Khoảng thời gian không hợp lệ', 'Khung giờ phải kéo dài ít nhất 1 tiếng.');
+        return;
+      }
+
+      // Part 10b: Validate not in the past — compare by local time components
+      // to avoid UTC offset causing false "in the past" errors
+      const now = new Date();
+      const nowYear = now.getFullYear();
+      const nowMonth = now.getMonth();
+      const nowDate = now.getDate();
+      const nowHour = now.getHours();
+
+      const startYear = startDateTime.getFullYear();
+      const startMonth = startDateTime.getMonth();
+      const startD = startDateTime.getDate();
+      const startH = startDateTime.getHours();
+
+      const isPast =
+        startYear < nowYear ||
+        (startYear === nowYear && startMonth < nowMonth) ||
+        (startYear === nowYear && startMonth === nowMonth && startD < nowDate) ||
+        (startYear === nowYear && startMonth === nowMonth && startD === nowDate && startH <= nowHour);
+
+      if (isPast) {
+        showAppError('Khoảng thời gian không hợp lệ', 'Không thể tạo lịch trong quá khứ.');
+        return;
+      }
+
+      // Convert local datetime → Vietnam time (+07:00) string for the backend.
+      // The date object is in local browser time. We format its local components
+      // as a VN-local wall-clock time with an explicit +07:00 offset.
+      // This way the backend (Jackson, Asia/Ho_Chi_Minh) parses it correctly
+      // regardless of the browser's own timezone.
+      const toLocalISO = (d: Date) => {
+        const pad = (n: number) => String(n).padStart(2, '0');
+        // Use local getters (browser's local time = the user's selected time)
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.000+07:00`;
+      };
+
       let recurrenceEndDateStr = undefined;
       if (isRecurring && recurrenceEnd) {
-        recurrenceEndDateStr = new Date(recurrenceEnd).toISOString();
+        const reDate = new Date(recurrenceEnd);
+        recurrenceEndDateStr = toLocalISO(reDate);
       }
 
       await addAvailability({
-        startTime: startDateTime.toISOString(),
-        endTime: endDateTime.toISOString(),
+        startTime: toLocalISO(startDateTime),
+        endTime: toLocalISO(endDateTime),
         isRecurring,
         recurrenceType: isRecurring ? recurrenceType : 'NONE',
         recurrenceEndDate: recurrenceEndDateStr
@@ -224,12 +290,14 @@ const MentorScheduleManager: React.FC = () => {
       <div className="msm-grid">
         <div className="msm-grid-header">
           <div className="msm-day-header"></div> {/* Time column header */}
-          {weekDays.map((day, i) => (
-            <div key={i} className={`msm-day-header ${day.toDateString() === new Date().toDateString() ? 'today' : ''}`}>
+          {weekDays.map((day, i) => {
+            const isPastDay = day.toDateString() < new Date().toDateString();
+            return (
+            <div key={i} className={`msm-day-header ${day.toDateString() === new Date().toDateString() ? 'today' : ''} ${isPastDay ? 'past-day' : ''}`}>
               <div className="msm-day-name">{day.toLocaleDateString('vi-VN', { weekday: 'short' })}</div>
               <div className="msm-day-number">{day.getDate()}</div>
             </div>
-          ))}
+          );})}
         </div>
         
         <div className="msm-grid-body">
@@ -243,17 +311,53 @@ const MentorScheduleManager: React.FC = () => {
           </div>
 
           {/* Days Columns */}
-          {weekDays.map((day, i) => (
-            <div key={i} className="msm-day-column">
+          {weekDays.map((day, i) => {
+            // Compute once per render to avoid stale Date() calls
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+            const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate()).getTime();
+            const isPastDay = dayStart < todayStart;
+            const isToday = dayStart === todayStart;
+            const currentHour = now.getHours();
+
+            return (
+            <div key={i} className={`msm-day-column ${isPastDay ? 'past-day-column' : ''}`}>
               {/* Grid lines */}
-              {hours.map(h => (
-                <div key={h} className="msm-day-slot" onClick={() => {
-                  setSelectedDate(day.toISOString().split('T')[0]);
-                  setStartTime(`${h.toString().padStart(2, '0')}:00`);
-                  setEndTime(`${(h+1).toString().padStart(2, '0')}:00`);
-                  setShowAddModal(true);
-                }}></div>
-              ))}
+              {hours.map(h => {
+                const isPastSlot = isPastDay || (isToday && h <= currentHour);
+                return (
+                <div
+                  key={h}
+                  className={`msm-day-slot ${isPastSlot ? 'past-slot' : ''}`}
+                  onClick={() => {
+                    if (isPastSlot) {
+                      showAppError('Không thể đặt lịch', 'Không thể đặt lịch trong quá khứ.');
+                      return;
+                    }
+                    // Check if this slot already has an availability event
+                    const slotEvents = getEventsForDay(day).filter(e => {
+                      const evStartHour = e.start.getHours() + e.start.getMinutes() / 60;
+                      const evEndHour = e.end.getHours() + e.end.getMinutes() / 60;
+                      return h >= evStartHour && h < evEndHour && e.type === 'available';
+                    });
+                    if (slotEvents.length > 0) {
+                      showAppError('Lịch đã tồn tại', 'Khung giờ này đã có lịch rảnh. Vui lòng chọn khung giờ khác.');
+                      return;
+                    }
+                    setSelectedDate(`${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`);
+                    setStartTime(`${h.toString().padStart(2, '0')}:00`);
+                    setEndTime(`${(h+1).toString().padStart(2, '0')}:00`);
+                    setShowAddModal(true);
+                  }}
+                >
+                  {isPastSlot && (
+                    <div className="msm-slot-overlay">
+                      <div className="msm-slot-overlay-x">✕</div>
+                    </div>
+                  )}
+                </div>
+                );
+              })}
 
               {/* Events */}
               {getEventsForDay(day).map(event => (
@@ -277,7 +381,8 @@ const MentorScheduleManager: React.FC = () => {
                 </div>
               ))}
             </div>
-          ))}
+          );
+        })}
         </div>
       </div>
 
@@ -291,10 +396,11 @@ const MentorScheduleManager: React.FC = () => {
             <div className="msm-modal-body">
               <div className="msm-form-group">
                 <label>Ngày bắt đầu</label>
-                <input 
-                  type="date" 
-                  className="msm-form-input" 
+                <input
+                  type="date"
+                  className="msm-form-input"
                   value={selectedDate}
+                  min={todayStr}
                   onChange={e => setSelectedDate(e.target.value)}
                 />
               </div>

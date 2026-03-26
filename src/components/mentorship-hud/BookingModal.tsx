@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, CreditCard, Wallet, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, Wallet, CheckCircle, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
 import walletService from '../../services/walletService';
 import { getAvailability } from '../../services/availabilityService';
-import { createBookingWithWallet } from '../../services/bookingService';
+import { createBookingWithWallet, getMentorActiveBookings, BookingResponse } from '../../services/bookingService';
 import { usePaymentToast } from '../../utils/useToast';
 import Toast from '../shared/Toast';
 import './uplink-styles.css';
@@ -19,6 +19,9 @@ interface BookableSlot {
   id: string;
   startTime: Date;
   endTime: Date;
+  /** Original VN timezone string from backend (e.g. "2026-03-27T02:00:00.000+07:00") — used for reliable timezone-safe serialization */
+  startTimeRaw: string;
+  endTimeRaw: string;
 }
 
 const BookingModal: React.FC<BookingModalProps> = ({
@@ -33,11 +36,13 @@ const BookingModal: React.FC<BookingModalProps> = ({
   const [selectedSlot, setSelectedSlot] = useState<BookableSlot | null>(null);
   const [availableSlots, setAvailableSlots] = useState<BookableSlot[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'payos'>('wallet');
+  // Payment method always WALLET - PayOS removed from booking flow
+  const [paymentMethod] = useState<'wallet' | 'payos'>('wallet');
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [closeModalOnToastDismiss, setCloseModalOnToastDismiss] = useState(false);
   const { toast, showSuccess, showError, showWarning, hideToast } = usePaymentToast();
+  const [bookedSlots, setBookedSlots] = useState<Set<string>>(new Set()); // Set of slot IDs that are booked
 
   // Calendar state
   const [calendarStartDate, setCalendarStartDate] = useState(new Date());
@@ -48,7 +53,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
     if (isOpen) {
       setStep('schedule');
       setSelectedSlot(null);
-      setPaymentMethod('wallet');
+      // Payment always WALLET - no PayOS option
       setCloseModalOnToastDismiss(false);
       fetchWalletBalance();
       fetchAvailableSlots();
@@ -78,35 +83,76 @@ const BookingModal: React.FC<BookingModalProps> = ({
       // Fetch slots for next 30 days
       const from = new Date().toISOString();
       const to = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-      const rawSlots = await getAvailability(Number(mentorId), from, to);
-      
+      const [rawSlots, activeBookings] = await Promise.all([
+        getAvailability(Number(mentorId), from, to),
+        getMentorActiveBookings(Number(mentorId), from, to)
+      ]);
+
+      // Build a set of booked slot IDs from active bookings
+      // A slot is booked if it overlaps with a booking's time range
+      const booked = new Set<string>();
+      activeBookings.forEach(booking => {
+        // Treat as VN wall-clock time — append +07:00 so JS displays correctly in VN
+        const bStartStr = booking.startTime.endsWith('Z') || booking.startTime.includes('+07:00')
+          ? booking.startTime
+          : booking.startTime + '+07:00';
+        const bEndStr = booking.endTime.endsWith('Z') || booking.endTime.includes('+07:00')
+          ? booking.endTime
+          : booking.endTime + '+07:00';
+        const bStart = new Date(bStartStr);
+        const bEnd = new Date(bEndStr);
+
+        // Mark all hourly chunks within the booking range as booked
+        const totalHours = Math.floor((bEnd.getTime() - bStart.getTime()) / (60 * 60 * 1000));
+        for (let i = 0; i < totalHours; i++) {
+          const chunkStart = new Date(bStart.getTime() + i * 60 * 60 * 1000);
+          booked.add(`booked-${chunkStart.getTime()}`);
+        }
+      });
+      setBookedSlots(booked);
+
       // Process slots: Split into 1-hour chunks
+      // Backend stores times in VN timezone (+07:00). Handle both old (UTC/Z) and new (VN offset) formats.
       const processed: BookableSlot[] = [];
       rawSlots.forEach(slot => {
-        // Ensure time is treated as UTC
-        const startStr = slot.startTime.endsWith('Z') ? slot.startTime : slot.startTime + 'Z';
-        const endStr = slot.endTime.endsWith('Z') ? slot.endTime : slot.endTime + 'Z';
-        
+        // If already has Z (old UTC data), keep as-is. If has +07:00 (new VN data), keep as-is.
+        // No longer append 'Z' blindly — it breaks VN-offset strings.
+        // Backend returns LocalDateTime without timezone (e.g. "2026-03-26T09:00:00").
+        // We treat these as VN wall-clock time. Append +07:00 so JavaScript parses
+        // them as UTC+7, which displays correctly in the VN browser.
+        const startStr = slot.startTime.endsWith('Z') || slot.startTime.includes('+07:00')
+          ? slot.startTime
+          : slot.startTime + '+07:00';
+        const endStr = slot.endTime.endsWith('Z') || slot.endTime.includes('+07:00')
+          ? slot.endTime
+          : slot.endTime + '+07:00';
+
         const start = new Date(startStr);
         const end = new Date(endStr);
         const durationMs = end.getTime() - start.getTime();
         const hours = Math.floor(durationMs / (1000 * 60 * 60));
-        
+
         for (let i = 0; i < hours; i++) {
-          const slotStart = new Date(start.getTime() + i * 60 * 60 * 1000);
-          const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000);
-          
+          // Calculate slot boundaries by adding i hours to the raw start/end strings
+          const slotStartMs = start.getTime() + i * 60 * 60 * 1000;
+          const slotEndMs = slotStartMs + 60 * 60 * 1000;
+          const slotStart = new Date(slotStartMs);
+          const slotEnd = new Date(slotEndMs);
+
           // Only add if it's in the future
           if (slotStart > new Date()) {
             processed.push({
-              id: `${slot.id}-${i}`,
+              id: `${slot.id}_${i}`,
               startTime: slotStart,
-              endTime: slotEnd
+              endTime: slotEnd,
+              // Preserve raw VN string for safe serialization (timezone-independent)
+              startTimeRaw: slot.startTime,
+              endTimeRaw: slot.endTime
             });
           }
         }
       });
-      
+
       // Sort by time
       processed.sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
       setAvailableSlots(processed);
@@ -179,16 +225,54 @@ const BookingModal: React.FC<BookingModalProps> = ({
     try {
         if (!selectedSlot) return;
 
+        // Build the booking start time string.
+        // We parse the raw slot start time and add 'idx' hours to it.
+        // Handle day/month rollover when hour crosses midnight.
+        // The block index is extracted from the slot id: `${slot.id}_${i}` → parse i from id suffix.
+        const buildSlotTimeStr = (rawSlotStr: string, slotId: string): string => {
+          // Accept both formats:
+          //   "2026-03-27T02:00:00"         (LocalDateTime, no TZ — assume VN)
+          //   "2026-03-27T02:00:00.000+07:00" (with ms and TZ)
+          const m = rawSlotStr.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{3}))?(?:([+-]\d{2}:\d{2}))?$/);
+          if (!m) throw new Error('Invalid raw slot time: ' + rawSlotStr);
+          const [, year, month, day, hour, minute, second, ms, tz] = m;
+
+          // Extract chunk index from slot id: "slot-id_0", "slot-id_7", etc.
+          const idx = parseInt(slotId.split('_').pop() ?? '0', 10);
+
+          let h = parseInt(hour, 10) + idx;
+          let d = parseInt(day, 10);
+          let mo = parseInt(month, 10);
+          let y = parseInt(year, 10);
+
+          if (h >= 24) {
+            h -= 24;
+            d += 1;
+            // Handle month overflow (simplified)
+            const daysInMonth = new Date(y, mo, 0).getDate();
+            if (d > daysInMonth) { d = 1; mo += 1; }
+            if (mo > 12) { mo = 1; y += 1; }
+          }
+
+          const pad = (n: number) => String(n).padStart(2, '0');
+          // Always output LocalDateTime format with .000+07:00 for the backend
+          return `${y}-${pad(mo)}-${pad(d)}T${pad(h)}:${minute}:${second}.000+07:00`;
+        };
+
+        const startTimeStr = buildSlotTimeStr(selectedSlot.startTimeRaw, selectedSlot.id);
+
         const booking = await createBookingWithWallet({
             mentorId: Number(mentorId),
-            startTime: selectedSlot.startTime.toISOString(),
+            startTime: startTimeStr,
             durationMinutes: 60,
             priceVnd: priceVND,
             paymentMethod: 'WALLET'
         });
 
         const link = booking.meetingLink;
-    setCloseModalOnToastDismiss(true);
+        setCloseModalOnToastDismiss(true);
+        // Refresh slots so the newly booked slot shows as booked
+        fetchAvailableSlots();
         showSuccess(
             'Đặt lịch thành công!',
             link ? `Bạn đã đặt lịch với ${mentorName}. Phòng họp đã sẵn sàng.` : `Bạn đã đặt lịch với ${mentorName}. Link phòng họp đang tạo...`,
@@ -286,15 +370,20 @@ const BookingModal: React.FC<BookingModalProps> = ({
                   </div>
                 ) : (
                   <div className="slots-grid booking-slots-grid">
-                    {currentSlots.map(slot => (
-                      <div 
-                        key={slot.id}
-                        onClick={() => setSelectedSlot(slot)}
-                        className={`booking-slot-chip ${selectedSlot?.id === slot.id ? 'active' : ''}`}
-                      >
-                        {formatTimeRange(slot.startTime, slot.endTime)}
-                      </div>
-                    ))}
+                    {currentSlots.map(slot => {
+                      const isBooked = bookedSlots.has(`booked-${slot.startTime.getTime()}`);
+                      return (
+                        <div
+                          key={slot.id}
+                          onClick={() => !isBooked && setSelectedSlot(slot)}
+                          className={`booking-slot-chip ${selectedSlot?.id === slot.id ? 'active' : ''} ${isBooked ? 'booked' : ''}`}
+                        >
+                          {isBooked && <Lock size={12} />}
+                          {formatTimeRange(slot.startTime, slot.endTime)}
+                          {isBooked && <span className="booked-label">Đã đặt</span>}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -325,32 +414,15 @@ const BookingModal: React.FC<BookingModalProps> = ({
 
               <h4 className="booking-method-heading">Chọn phương thức thanh toán</h4>
 
-              <div 
-                className={`payment-method-card ${paymentMethod === 'wallet' ? 'selected' : ''}`}
-                onClick={() => setPaymentMethod('wallet')}
-              >
-                <Wallet size={24} color={paymentMethod === 'wallet' ? '#22d3ee' : '#94a3b8'} />
+              <div className="payment-method-card selected">
+                <Wallet size={24} color="#22d3ee" />
                 <div className="payment-method-body">
                   <div className="payment-method-title">Ví SkillVerse</div>
                   <div className="payment-method-desc">
                     Số dư: {walletBalance !== null ? walletBalance.toLocaleString('vi-VN') + ' VND' : 'Loading...'}
                   </div>
                 </div>
-                {paymentMethod === 'wallet' && <CheckCircle size={20} color="#22d3ee" />}
-              </div>
-
-              <div 
-                className={`payment-method-card ${paymentMethod === 'payos' ? 'selected' : ''}`}
-                onClick={() => setPaymentMethod('payos')}
-              >
-                <CreditCard size={24} color={paymentMethod === 'payos' ? '#22d3ee' : '#94a3b8'} />
-                <div className="payment-method-body">
-                  <div className="payment-method-title">PayOS / Ngân hàng</div>
-                  <div className="payment-method-desc">
-                    Quét mã QR
-                  </div>
-                </div>
-                {paymentMethod === 'payos' && <CheckCircle size={20} color="#22d3ee" />}
+                <CheckCircle size={20} color="#22d3ee" />
               </div>
             </div>
           )}

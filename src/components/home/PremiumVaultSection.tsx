@@ -42,7 +42,7 @@ const PremiumVaultSection = () => {
     if (!features) return [];
 
     return features
-      .replace(/[\[\]"]+/g, "")
+      .replace(/[\]"]+/g, "")
       .split(/\n|,|;/)
       .map((item) => item.trim().replace(/^[-*\s]+/, ""))
       .filter(Boolean)

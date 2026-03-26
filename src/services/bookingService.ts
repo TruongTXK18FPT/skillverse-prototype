@@ -4,10 +4,14 @@ export interface BookingResponse {
   id: number;
   mentorId: number;
   learnerId: number;
+  createdAt?: string;
   startTime: string;
   endTime: string;
   durationMinutes: number;
-  status: 'PENDING' | 'CONFIRMED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED' | 'ONGOING';
+  status: 'PENDING' | 'CONFIRMED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED' | 'ONGOING' | 'MENTOR_COMPLETED' | 'DISPUTED' | 'REFUNDED';
+  confirmedByLearner?: boolean;
+  mentorCompletedAt?: string;
+  learnerConfirmedAt?: string;
   priceVnd: number;
   meetingLink?: string;
   paymentReference?: string;
@@ -15,6 +19,7 @@ export interface BookingResponse {
   mentorAvatar?: string;
   learnerName?: string;
   learnerAvatar?: string;
+  disputeId?: number;
 }
 
 export interface Page<T> {
@@ -94,11 +99,32 @@ export const startMeeting = async (id: number): Promise<BookingResponse> => {
 };
 
 export const completeBooking = async (id: number): Promise<BookingResponse> => {
+  // Part 6: This is now mentor complete (MENTOR_COMPLETED), not immediate COMPLETED
   try {
     const response = await axiosInstance.put<BookingResponse>(`/api/mentor-bookings/${id}/complete`);
     return response.data;
   } catch (error) {
     console.error('Error completing booking:', error);
+    throw error;
+  }
+};
+
+export const confirmCompleteBooking = async (id: number): Promise<BookingResponse> => {
+  try {
+    const response = await axiosInstance.put<BookingResponse>(`/api/mentor-bookings/${id}/confirm-complete`);
+    return response.data;
+  } catch (error) {
+    console.error('Error confirming booking completion:', error);
+    throw error;
+  }
+};
+
+export const getBookingDetail = async (id: number): Promise<BookingResponse> => {
+  try {
+    const response = await axiosInstance.get<BookingResponse>(`/api/mentor-bookings/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching booking detail:', error);
     throw error;
   }
 };
@@ -137,4 +163,11 @@ export const rateBooking = async (id: number, stars: number, comment: string, sk
     console.error('Error rating booking:', error);
     throw error;
   }
+};
+
+export const getMentorActiveBookings = async (mentorId: number, from: string, to: string): Promise<BookingResponse[]> => {
+  const response = await axiosInstance.get<BookingResponse[]>(`/api/mentor-bookings/mentor/${mentorId}/bookings`, {
+    params: { from, to }
+  });
+  return response.data;
 };

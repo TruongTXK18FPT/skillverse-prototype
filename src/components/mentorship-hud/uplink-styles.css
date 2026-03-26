@@ -1581,6 +1581,38 @@ html.uplink-scroll-lock {
   box-shadow: 0 0 16px rgba(34, 211, 238, 0.25);
 }
 
+.booking-slot-chip.booked {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: rgba(239, 68, 68, 0.7);
+  cursor: not-allowed;
+  opacity: 0.65;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.booking-slot-chip.booked:hover {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.4);
+  transform: none;
+}
+
+.booking-slot-chip.booked.active {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.6);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.15);
+}
+
+.booked-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: #f87171;
+}
+
 .booking-price-summary {
   margin-top: 1.5rem;
   padding: 1rem;

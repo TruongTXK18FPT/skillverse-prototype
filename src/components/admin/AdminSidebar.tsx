@@ -19,7 +19,6 @@ import {
   Image,
   Calendar,
   Trophy,
-  LayoutDashboard,
   ChevronLeft,
   ChevronRight,
   Shield,
@@ -91,7 +90,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           icon: Briefcase,
           allowedRoles: ["CONTENT_ADMIN", "ADMIN"],
         },
-        // { id: 'seminars', label: 'Hội Thảo', icon: Calendar, allowedRoles: ['CONTENT_ADMIN', 'ADMIN'] },
         {
           id: "sliders",
           label: "Sliders",
@@ -136,6 +134,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           label: "Thanh Toán",
           icon: CreditCard,
           allowedRoles: ["FINANCE_ADMIN", "ADMIN"],
+        },
+        {
+          id: "bookings",
+          label: "Bookings",
+          icon: Calendar,
+          allowedRoles: ["FINANCE_ADMIN", "SUPPORT_ADMIN", "ADMIN"],
         },
         {
           id: "withdrawals",
@@ -236,6 +240,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               {group.items.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
+
                 return (
                   <button
                     key={item.id}

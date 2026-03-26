@@ -43,7 +43,9 @@ import {
 import adminUserService from "../../services/adminUserService";
 import adminService from "../../services/adminService";
 import supportService from "../../services/supportService";
+import walletService from "../../services/walletService";
 import AdminSidebar from "../../components/admin/AdminSidebar";
+import AdminBookingManagementTab from "../../components/admin/AdminBookingManagementTab";
 import { getStoredUserRaw } from "../../utils/authStorage";
 import "../../styles/AdminPageCosmic.css";
 import "../../styles/AdminLayoutHUD.css";
@@ -151,6 +153,8 @@ const AdminPage: React.FC = () => {
         return <CommunityManagementTab />;
       case "payments":
         return <TransactionManagementTabCosmic />;
+      case "bookings":
+        return <AdminBookingManagementTab />;
       case "withdrawals":
         return <WithdrawalApprovalTab />;
       case "skillpoints":

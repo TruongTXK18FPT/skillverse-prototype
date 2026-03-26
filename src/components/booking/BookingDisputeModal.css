@@ -1,0 +1,351 @@
+.bdm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.bdm-modal {
+  background: #1e293b;
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 40px rgba(249, 115, 22, 0.1);
+}
+
+.bdm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+  background: rgba(249, 115, 22, 0.05);
+}
+
+.bdm-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.bdm-header h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.bdm-close {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  transition: color 0.2s;
+}
+
+.bdm-close:hover {
+  color: #f1f5f9;
+}
+
+.bdm-dispute-info {
+  padding: 0.75rem 1.5rem;
+  background: rgba(249, 115, 22, 0.05);
+  border-bottom: 1px solid rgba(249, 115, 22, 0.1);
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.bdm-info-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.bdm-label {
+  color: #94a3b8;
+}
+
+.bdm-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.bdm-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: #94a3b8;
+  gap: 0.75rem;
+}
+
+.bdm-step h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0 0 0.75rem;
+}
+
+.bdm-desc {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.bdm-form-group {
+  margin-bottom: 1rem;
+}
+
+.bdm-form-group label {
+  display: block;
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+.bdm-form-group textarea,
+.bdm-form-group input,
+.bdm-form-group select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  background: #0f172a;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.bdm-form-group textarea:focus,
+.bdm-form-group input:focus,
+.bdm-form-group select:focus {
+  outline: none;
+  border-color: #f97316;
+}
+
+.bdm-form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.bdm-file-drop {
+  border: 2px dashed rgba(148, 163, 184, 0.3);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bdm-file-drop:hover {
+  border-color: #f97316;
+  color: #f97316;
+}
+
+.bdm-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
+
+.bdm-evidence-form {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.bdm-evidence-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bdm-evidence-list h4 {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin: 0 0 0.75rem;
+}
+
+.bdm-evidence-item {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.bdm-evidence-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.bdm-evidence-type {
+  background: rgba(249, 115, 22, 0.15);
+  color: #f97316;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.bdm-evidence-submitter {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.bdm-evidence-content {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.bdm-evidence-file {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.4rem;
+}
+
+.bdm-evidence-file span {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.bdm-evidence-file a {
+  color: #3b82f6;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.bdm-evidence-file a:hover {
+  text-decoration: underline;
+}
+
+.bdm-evidence-desc {
+  color: #64748b;
+  font-size: 0.8rem;
+  font-style: italic;
+  margin-top: 0.3rem;
+}
+
+.bdm-response-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  align-items: flex-end;
+}
+
+.bdm-response-form textarea {
+  flex: 1;
+  padding: 0.5rem 0.6rem;
+  background: #0f172a;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 6px;
+  color: #f1f5f9;
+  font-size: 0.85rem;
+  resize: none;
+}
+
+.bdm-response-form textarea:focus {
+  outline: none;
+  border-color: #f97316;
+}
+
+.bdm-empty {
+  color: #64748b;
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+}
+
+.bdm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bdm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bdm-btn-primary {
+  background: #f97316;
+  color: #fff;
+}
+
+.bdm-btn-primary:hover:not(:disabled) {
+  background: #ea580c;
+}
+
+.bdm-btn-secondary {
+  background: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.bdm-btn-secondary:hover:not(:disabled) {
+  background: rgba(148, 163, 184, 0.2);
+  color: #f1f5f9;
+}
+
+.bdm-btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.bdm-btn-small {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+.bdm-spinner {
+  animation: bdm-spin 1s linear infinite;
+}
+
+@keyframes bdm-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

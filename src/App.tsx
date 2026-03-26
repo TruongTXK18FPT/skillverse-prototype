@@ -102,6 +102,7 @@ import AboutPage from "./pages/about/AboutPage";
 import NotificationPage from "./pages/NotificationPage";
 import MessengerPage from "./pages/navbar/MessengerPage";
 import UserBookingsPage from "./pages/user/UserBookingsPage";
+import BookingDetailPage from "./pages/booking/BookingDetailPage";
 import MeowlBubbleNotification from "./components/meowl/MeowlBubbleNotification";
 import MeowlPetWrapper from "./components/meowl-pet/MeowlPetWrapper";
 import ForbiddenTemple from "./components/easter-egg/ForbiddenTemple";
@@ -162,6 +163,7 @@ const AppContents = () => {
             <Route path="/notifications" element={<NotificationPage />} />
             <Route path="/messages" element={<MessengerPage />} />
             <Route path="/my-bookings" element={<UserBookingsPage />} />
+            <Route path="/bookings/:bookingId" element={<BookingDetailPage />} />
             <Route path="/explore" element={<ExploreMapPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/learning-report" element={<LearningReportPage />} />
@@ -480,11 +482,18 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/my-applications",
   "/profile/user",
   "/set-password",
+  "/bookings",
+  "/user/bookings",
 ]);
 
 // Check if path matches quiz attempt pattern
 const isQuizAttemptRoute = (pathname: string) => {
   return /^\/quiz\/\d+\/attempt$/.test(pathname);
+};
+
+// Check if path matches booking detail routes
+const isBookingRoute = (pathname: string) => {
+  return /^\/bookings\/\d+$/.test(pathname) || pathname === '/user/bookings';
 };
 
 // Check if path matches assignment page pattern
@@ -549,7 +558,8 @@ const FooterVisibilityWrapper = () => {
     isAssignmentRoute(location.pathname) ||
     isQuizAttemptRoute(location.pathname) ||
     isRoadmapDetailRoute(location.pathname) ||
-    isJobDetailRoute(location.pathname)
+    isJobDetailRoute(location.pathname) ||
+    isBookingRoute(location.pathname)
   ) {
     return null;
   }
