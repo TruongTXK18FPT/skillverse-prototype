@@ -39,6 +39,9 @@ import {
   getAdminBookingDisputeDetail,
   getAdminBookingDisputeEvidence,
   resolveBookingDispute,
+  reviewAdminBookingDisputeEvidence,
+  EvidenceReviewDecision,
+  EvidenceReviewStatus,
 } from '../../services/bookingDisputeService';
 import { getReviewByBookingId } from '../../services/reviewService';
 import { ReviewResponse } from '../../services/reviewService';
@@ -74,6 +77,12 @@ const STATUS_COLOR: Record<string, string> = {
   REFUNDED: '#94a3b8',
   CANCELLED: '#ef4444',
   REJECTED: '#ef4444',
+  OPEN: '#fb923c',
+  UNDER_INVESTIGATION: '#f59e0b',
+  AWAITING_RESPONSE: '#60a5fa',
+  RESOLVED: '#22c55e',
+  DISMISSED: '#ef4444',
+  ESCALATED: '#a78bfa',
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -86,6 +95,12 @@ const STATUS_LABEL: Record<string, string> = {
   REFUNDED: 'Đã hoàn tiền',
   CANCELLED: 'Đã hủy',
   REJECTED: 'Bị từ chối',
+  OPEN: 'Mới mở',
+  UNDER_INVESTIGATION: 'Đang điều tra',
+  AWAITING_RESPONSE: 'Chờ phản hồi',
+  RESOLVED: 'Đã giải quyết',
+  DISMISSED: 'Đã bác bỏ',
+  ESCALATED: 'Đã escalated',
 };
 
 const RESOLUTION_LABEL: Record<DisputeResolution, string> = {
@@ -94,6 +109,22 @@ const RESOLUTION_LABEL: Record<DisputeResolution, string> = {
   PARTIAL_REFUND: 'Hoàn một phần cho học viên',
   PARTIAL_RELEASE: 'Giải phóng một phần cho mentor',
 };
+
+const EVIDENCE_REVIEW_LABEL: Record<EvidenceReviewStatus, string> = {
+  PENDING: 'Chờ duyệt',
+  UNDER_REVIEW: 'Đang điều tra',
+  ACCEPTED: 'Đã chấp nhận',
+  REJECTED: 'Đã từ chối',
+};
+
+const EVIDENCE_REVIEW_COLOR: Record<EvidenceReviewStatus, string> = {
+  PENDING: '#94a3b8',
+  UNDER_REVIEW: '#f59e0b',
+  ACCEPTED: '#22c55e',
+  REJECTED: '#ef4444',
+};
+
+const IMAGE_EXT_RE = /\.(png|jpe?g|gif|webp|bmp|svg)$/i;
 
 const formatCurrency = (value?: number) =>
   new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(value || 0);
@@ -111,20 +142,6 @@ const formatDateTime = (dateString?: string) => {
       hour: '2-digit', minute: '2-digit',
     });
   } catch { return dateString; }
-};
-
-const formatDate = (dateString?: string) => {
-  if (!dateString) return 'N/A';
-  try {
-    return parseBookingDate(dateString).toLocaleDateString('vi-VN', {
-      day: '2-digit', month: 'short', year: 'numeric',
-    });
-  } catch { return dateString; }
-};
-
-const safeDate = (dateStr: string | undefined | null): string => {
-  if (!dateStr) return '—';
-  try { return formatDate(dateStr); } catch { return '—'; }
 };
 
 const safeDateTime = (dateStr: string | undefined | null): string => {
@@ -169,6 +186,7 @@ const AdminBookingManagementTab: React.FC = () => {
   const [partialAmount, setPartialAmount] = useState('');
   const [notes, setNotes] = useState('');
   const [resolving, setResolving] = useState(false);
+  const [reviewingEvidenceId, setReviewingEvidenceId] = useState<number | null>(null);
 
   useEffect(() => { void loadDashboardAndBookings(); }, [status, fromDate, toDate, page]);
 
@@ -292,6 +310,31 @@ const AdminBookingManagementTab: React.FC = () => {
       showAppError('Không thể giải quyết dispute', err?.response?.data?.message || 'Vui lòng thử lại.');
     } finally {
       setResolving(false);
+    }
+  };
+
+  const isImageEvidence = (item: BookingDisputeEvidence) => {
+    const source = `${item.fileUrl || ''} ${item.fileName || ''}`.trim();
+    if (!source) return false;
+    return item.evidenceType === 'IMAGE' || item.evidenceType === 'SCREENSHOT' || IMAGE_EXT_RE.test(source);
+  };
+
+  const handleReviewEvidence = async (evidenceId: number, decision: EvidenceReviewDecision) => {
+    if (!selectedDispute || !selectedBooking) return;
+    setReviewingEvidenceId(evidenceId);
+    try {
+      await reviewAdminBookingDisputeEvidence(selectedDispute.id, evidenceId, decision, notes || undefined);
+      const successMap: Record<EvidenceReviewDecision, string> = {
+        MARK_UNDER_REVIEW: 'Đã chuyển bằng chứng sang trạng thái điều tra.',
+        ACCEPT_EVIDENCE_REFUND_USER: 'Đã chấp nhận bằng chứng và hoàn toàn bộ cho học viên.',
+        REJECT_EVIDENCE_RELEASE_MENTOR: 'Đã từ chối bằng chứng và giải phóng tiền cho mentor.',
+      };
+      showAppSuccess('Đã cập nhật bằng chứng', successMap[decision]);
+      await Promise.all([loadDashboardAndBookings(), handleSelectBooking(selectedBooking.id)]);
+    } catch (err: any) {
+      showAppError('Không thể duyệt bằng chứng', err?.response?.data?.message || 'Vui lòng thử lại.');
+    } finally {
+      setReviewingEvidenceId(null);
     }
   };
 
@@ -784,26 +827,93 @@ const AdminBookingManagementTab: React.FC = () => {
                     <div className="abm-card-title"><MessageSquare size={14} /> Bằng chứng ({evidence.length})</div>
                     {evidence.length === 0 ? (
                       <div className="abm-empty-detail">Chưa có bằng chứng nào được nộp.</div>
-                    ) : evidence.map(item => (
-                      <div key={item.id} className="abm-evidence-item">
-                        <div className="abm-evidence-item__top">
-                          <span className="abm-evidence-type">{item.evidenceType}</span>
-                          <span className="abm-evidence-user">User #{item.submittedBy}</span>
-                          <span className="abm-evidence-date">{safeDateTime(item.createdAt)}</span>
-                        </div>
-                        {item.content && <p className="abm-evidence-content">{item.content}</p>}
-                        {item.description && <p className="abm-evidence-desc">{item.description}</p>}
-                        {item.fileUrl && (
-                          <a href={item.fileUrl} target="_blank" rel="noreferrer" className="abm-evidence-file">📎 {item.fileName || 'Xem tệp'}</a>
-                        )}
-                        {item.responses?.length ? item.responses.map(r => (
-                          <div key={r.id} className="abm-evidence-response">
-                            <strong>↩️ {r.respondedByName || `User #${r.respondedBy}`}</strong>
-                            <p>{r.content}</p>
+                    ) : evidence.map(item => {
+                      const reviewStatus = item.reviewStatus || 'PENDING';
+                      const isResolved = selectedDispute.status === 'RESOLVED';
+                      const isReviewingCurrent = reviewingEvidenceId === item.id;
+                      const canReview = !isResolved && !isReviewingCurrent;
+                      const isImage = isImageEvidence(item);
+
+                      return (
+                        <div key={item.id} className="abm-evidence-item">
+                          <div className="abm-evidence-item__top">
+                            <span className="abm-evidence-type">{item.evidenceType}</span>
+                            <span className="abm-evidence-user">User #{item.submittedBy}</span>
+                            <span
+                              className="abm-evidence-review-status"
+                              style={{
+                                color: EVIDENCE_REVIEW_COLOR[reviewStatus],
+                                background: `${EVIDENCE_REVIEW_COLOR[reviewStatus]}1a`,
+                                border: `1px solid ${EVIDENCE_REVIEW_COLOR[reviewStatus]}4d`,
+                              }}
+                            >
+                              {EVIDENCE_REVIEW_LABEL[reviewStatus]}
+                            </span>
+                            <span className="abm-evidence-date">{safeDateTime(item.createdAt)}</span>
                           </div>
-                        )) : null}
-                      </div>
-                    ))}
+
+                          {item.content && <p className="abm-evidence-content">{item.content}</p>}
+                          {item.description && <p className="abm-evidence-desc">{item.description}</p>}
+
+                          {isImage && item.fileUrl && (
+                            <a href={item.fileUrl} target="_blank" rel="noreferrer" className="abm-evidence-image-wrap">
+                              <img src={item.fileUrl} alt={item.fileName || `Evidence #${item.id}`} className="abm-evidence-image" />
+                            </a>
+                          )}
+
+                          {item.fileUrl && (
+                            <a href={item.fileUrl} target="_blank" rel="noreferrer" className="abm-evidence-file">{item.fileName || 'Xem tệp'}</a>
+                          )}
+
+                          {(item.reviewNotes || item.reviewedAt || item.reviewedBy) && (
+                            <div className="abm-evidence-review-meta">
+                              <div className="abm-evidence-review-meta__title">Kết quả duyệt</div>
+                              {item.reviewNotes && <p>{item.reviewNotes}</p>}
+                              <span>
+                                {item.reviewedBy ? `Admin #${item.reviewedBy}` : 'Admin'}
+                                {item.reviewedAt ? ` • ${safeDateTime(item.reviewedAt)}` : ''}
+                              </span>
+                            </div>
+                          )}
+
+                          {!isResolved && (
+                            <div className="abm-evidence-actions">
+                              <button
+                                type="button"
+                                className="abm-evidence-action abm-evidence-action--investigate"
+                                disabled={!canReview}
+                                onClick={() => void handleReviewEvidence(item.id, 'MARK_UNDER_REVIEW')}
+                              >
+                                {isReviewingCurrent ? 'Đang xử lý...' : 'Điều tra'}
+                              </button>
+                              <button
+                                type="button"
+                                className="abm-evidence-action abm-evidence-action--accept"
+                                disabled={!canReview}
+                                onClick={() => void handleReviewEvidence(item.id, 'ACCEPT_EVIDENCE_REFUND_USER')}
+                              >
+                                {isReviewingCurrent ? 'Đang xử lý...' : 'Chấp nhận & hoàn user'}
+                              </button>
+                              <button
+                                type="button"
+                                className="abm-evidence-action abm-evidence-action--reject"
+                                disabled={!canReview}
+                                onClick={() => void handleReviewEvidence(item.id, 'REJECT_EVIDENCE_RELEASE_MENTOR')}
+                              >
+                                {isReviewingCurrent ? 'Đang xử lý...' : 'Từ chối & trả mentor'}
+                              </button>
+                            </div>
+                          )}
+
+                          {item.responses?.length ? item.responses.map(r => (
+                            <div key={r.id} className="abm-evidence-response">
+                              <strong>{r.respondedByName || `User #${r.respondedBy}`}</strong>
+                              <p>{r.content}</p>
+                            </div>
+                          )) : null}
+                        </div>
+                      );
+                    })}
                   </div>
 
                   {/* Resolve Box */}
