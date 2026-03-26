@@ -9,7 +9,6 @@ import {
   RefreshCw,
   Search,
   ShieldAlert,
-  Star,
   ThumbsUp,
   Wallet,
   MessageSquare,
@@ -131,6 +130,23 @@ const safeDate = (dateStr: string | undefined | null): string => {
 const safeDateTime = (dateStr: string | undefined | null): string => {
   if (!dateStr) return '—';
   try { return formatDateTime(dateStr); } catch { return '—'; }
+};
+
+const REVIEW_TAG_META: Record<string, { label: string; color: string; bg: string }> = {
+  CONTENT_QUALITY: { label: 'Chất lượng nội dung', color: '#a78bfa', bg: 'rgba(167,139,250,0.12)' },
+  PUNCTUALITY:      { label: 'Đúng giờ',              color: '#34d399', bg: 'rgba(52,211,153,0.12)' },
+  COMMUNICATION:    { label: 'Giao tiếp tốt',         color: '#60a5fa', bg: 'rgba(96,165,250,0.12)' },
+  PREPARATION:      { label: 'Chuẩn bị kỹ',           color: '#fbbf24', bg: 'rgba(251,191,36,0.12)' },
+  FRIENDLY:         { label: 'Thân thiện',             color: '#f472b6', bg: 'rgba(244,114,182,0.12)' },
+  KNOWLEDGEABLE:    { label: 'Chuyên môn cao',         color: '#22d3ee', bg: 'rgba(34,211,238,0.12)' },
+};
+
+const parseReviewComment = (comment?: string | null): { tags: string[]; message: string } => {
+  const src = (comment || '').trim();
+  const match = src.match(/^\[([A-Z_,]+)\]\s*(.*)$/s);
+  if (!match) return { tags: [], message: src };
+  const tags = match[1].split(',').map(t => t.trim()).filter(t => !!t && REVIEW_TAG_META[t]);
+  return { tags, message: match[2].trim() };
 };
 
 const AdminBookingManagementTab: React.FC = () => {
@@ -279,25 +295,20 @@ const AdminBookingManagementTab: React.FC = () => {
     }
   };
 
-  const renderStars = (rating: number, size: number = 14) => (
-    <div className="abm-stars-row">
-      {[1, 2, 3, 4, 5].map(s => (
-        <Star
-          key={s}
-          size={size}
-          fill={s <= rating ? '#facc15' : 'none'}
-          stroke={s <= rating ? '#facc15' : '#475569'}
-        />
-      ))}
-    </div>
-  );
-
   const ratingLabel = (r: number) => {
     if (r >= 5) return 'Tuyệt vời';
     if (r >= 4) return 'Rất hài lòng';
-    if (r >= 3) return 'Bình thường';
+    if (r >= 3) return 'Hài lòng';
     if (r >= 2) return 'Không hài lòng';
     return 'Rất không hài lòng';
+  };
+
+  const ratingColor = (r: number) => {
+    if (r >= 5) return '#22c55e';
+    if (r >= 4) return '#34d399';
+    if (r >= 3) return '#fbbf24';
+    if (r >= 2) return '#f97316';
+    return '#ef4444';
   };
 
   return (
@@ -601,9 +612,13 @@ const AdminBookingManagementTab: React.FC = () => {
 
               {/* ── Review Section ── */}
               <div className="abm-section abm-review-section">
-                <div className="abm-section-header">
-                  <span className="abm-section-icon">⭐</span>
-                  <h4>Đánh giá của học viên</h4>
+                <div className="abm-section-header abm-section-header--yellow">
+                  <span className="abm-review-section-glyph">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                  </span>
+                  <h4>Đánh giá từ học viên</h4>
                 </div>
                 {reviewLoading ? (
                   <div className="abm-loading abm-loading--sm"><Loader2 className="abm-spin" size={18} /></div>
@@ -611,10 +626,10 @@ const AdminBookingManagementTab: React.FC = () => {
                   <div className="abm-review-card">
                     <div className="abm-review-card__head">
                       <div className="abm-reviewer-info">
-                        <div className="abm-reviewer-avatar">
+                        <div className="abm-reviewer-avatar abm-reviewer-avatar--learner">
                           {review.learnerAvatar
                             ? <img src={review.learnerAvatar} alt={review.learnerName} />
-                            : <span>👤</span>}
+                            : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>}
                         </div>
                         <div>
                           <div className="abm-reviewer-name">{review.learnerName || `Học viên #${review.learnerId}`}</div>
@@ -622,23 +637,65 @@ const AdminBookingManagementTab: React.FC = () => {
                         </div>
                       </div>
                       <div className="abm-review-rating">
-                        {renderStars(review.rating, 16)}
-                        <span className="abm-rating-label">{ratingLabel(review.rating)}</span>
+                        <div className="abm-review-score" style={{ color: ratingColor(review.rating), borderColor: `${ratingColor(review.rating)}40` }}>
+                          <span className="abm-review-score-num">{review.rating}</span>
+                          <span className="abm-review-score-of">/5</span>
+                        </div>
+                        <div className="abm-review-stars">
+                          {[1,2,3,4,5].map(s => (
+                            <svg key={s} width="14" height="14" viewBox="0 0 24 24"
+                              fill={s <= review.rating ? ratingColor(review.rating) : 'none'}
+                              stroke={s <= review.rating ? ratingColor(review.rating) : '#475569'}
+                              strokeWidth="2">
+                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                          ))}
+                        </div>
+                        <span className="abm-rating-label" style={{ color: ratingColor(review.rating) }}>{ratingLabel(review.rating)}</span>
                       </div>
                     </div>
-                    {review.comment && (
-                      <div className="abm-review-comment">{review.comment}</div>
-                    )}
+
+                    {(() => {
+                      const { tags, message } = parseReviewComment(review.comment);
+                      return (
+                        <>
+                          {tags.length > 0 && (
+                            <div className="abm-review-tags">
+                              {tags.map(tag => {
+                                const meta = REVIEW_TAG_META[tag];
+                                return meta ? (
+                                  <span key={tag} className="abm-review-tag" style={{ color: meta.color, background: meta.bg, borderColor: `${meta.color}40` }}>
+                                    {meta.label}
+                                  </span>
+                                ) : null;
+                              })}
+                            </div>
+                          )}
+                          {message && (
+                            <div className="abm-review-comment">{message}</div>
+                          )}
+                        </>
+                      );
+                    })()}
+
                     {review.reply && (
                       <div className="abm-mentor-reply">
-                        <div className="abm-mentor-reply__label">💬 Phản hồi từ Mentor:</div>
+                        <div className="abm-mentor-reply__label">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                          </svg>
+                          Phản hồi từ Mentor
+                        </div>
                         <div className="abm-mentor-reply__content">{review.reply}</div>
                       </div>
                     )}
                   </div>
                 ) : (
                   <div className="abm-no-review">
-                    <Star size={18} /> Chưa có đánh giá cho booking này.
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    Chưa có đánh giá cho booking này.
                   </div>
                 )}
               </div>
