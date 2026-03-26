@@ -23,6 +23,7 @@ import {
   Users,
   BookOpen,
   RefreshCw,
+  Link as LinkIcon,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -69,6 +70,22 @@ const STATUS_META: Record<string, { label: string; tone: string }> = {
   REJECTED: { label: 'Bị từ chối', tone: 'red' },
 };
 
+const DISPUTE_STATUS_META: Record<string, { label: string; tone: string }> = {
+  OPEN: { label: 'Mở', tone: 'orange' },
+  UNDER_INVESTIGATION: { label: 'Đang điều tra', tone: 'amber' },
+  AWAITING_RESPONSE: { label: 'Chờ phản hồi', tone: 'cyan' },
+  RESOLVED: { label: 'Đã giải quyết', tone: 'green' },
+  DISMISSED: { label: 'Bác bỏ', tone: 'slate' },
+  ESCALATED: { label: 'Escalate', tone: 'red' },
+};
+
+const DISPUTE_RESOLUTION_META: Record<string, { label: string; tone: string }> = {
+  FULL_REFUND: { label: 'Hoàn tiền 100%', tone: 'cyan' },
+  FULL_RELEASE: { label: 'Thanh toán mentor', tone: 'green' },
+  PARTIAL_REFUND: { label: 'Hoàn tiền 1 phần', tone: 'amber' },
+  PARTIAL_RELEASE: { label: 'Thanh toán 1 phần', tone: 'violet' },
+};
+
 const EVIDENCE_TYPES: Array<{ value: EvidenceType; label: string }> = [
   { value: 'TEXT', label: 'Văn bản' },
   { value: 'LINK', label: 'Đường dẫn' },
@@ -77,6 +94,9 @@ const EVIDENCE_TYPES: Array<{ value: EvidenceType; label: string }> = [
   { value: 'SCREENSHOT', label: 'Screenshot' },
   { value: 'FILE', label: 'Tập đính kèm' },
 ];
+
+const EVIDENCE_FILE_ACCEPT = 'image/*,.pdf,.doc,.docx,.txt';
+const MAX_EVIDENCE_FILE_SIZE = 20 * 1024 * 1024;
 
 const REVIEW_TAGS = [
   { value: 'CONTENT_QUALITY', label: 'Chất lượng nội dung', icon: BookOpen },
@@ -91,6 +111,33 @@ const REVIEW_TAGS = [
 
 const formatCurrency = (value?: number) =>
   new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value || 0);
+
+const formatFileSize = (bytes: number): string => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+
+const isImageFile = (fileName: string): boolean =>
+  /\.(jpg|jpeg|png|gif|webp|svg|bmp)$/i.test(fileName);
+
+const EVIDENCE_TYPE_LABELS: Record<EvidenceType, string> = {
+  TEXT: 'Văn bản',
+  LINK: 'Đường dẫn',
+  CHAT_LOG: 'Chat log',
+  IMAGE: 'Hình ảnh',
+  SCREENSHOT: 'Screenshot',
+  FILE: 'Tập đính kèm',
+};
+
+const EVIDENCE_TYPE_COLORS: Record<EvidenceType, { bg: string; color: string; border: string }> = {
+  TEXT:        { bg: 'rgba(96,165,250,0.12)',  color: '#93c5fd', border: 'rgba(96,165,250,0.25)'  },
+  LINK:        { bg: 'rgba(52,211,153,0.12)', color: '#6ee7b7', border: 'rgba(52,211,153,0.25)'  },
+  CHAT_LOG:    { bg: 'rgba(167,139,250,0.12)',color: '#c4b5fd', border: 'rgba(167,139,250,0.25)' },
+  IMAGE:       { bg: 'rgba(251,146,60,0.12)', color: '#fdba74', border: 'rgba(251,146,60,0.25)'  },
+  SCREENSHOT:  { bg: 'rgba(249,115,22,0.12)', color: '#fb923c', border: 'rgba(249,115,22,0.25)'  },
+  FILE:        { bg: 'rgba(148,163,184,0.12)', color: '#cbd5e1', border: 'rgba(148,163,184,0.25)' },
+};
 
 const parseBookingDate = (dateString: string): Date =>
   dateString.endsWith('Z') || dateString.includes('+07:00')
@@ -142,10 +189,16 @@ const parseReviewPayload = (comment?: string | null) => {
 const BookingDetailPage: React.FC = () => {
   const { bookingId } = useParams();
   const navigate = useNavigate();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const composerFileInputRef = useRef<HTMLInputElement>(null);
+  const evidenceFileInputRef = useRef<HTMLInputElement>(null);
 
   const currentUserRaw = getStoredUserRaw();
-  const currentUser = currentUserRaw ? JSON.parse(currentUserRaw) : null;
+  let currentUser: any = null;
+  try {
+    currentUser = currentUserRaw ? JSON.parse(currentUserRaw) : null;
+  } catch {
+    currentUser = null;
+  }
   const currentUserId = currentUser?.userId != null
     ? Number(currentUser.userId)
     : currentUser?.id != null
@@ -167,6 +220,7 @@ const BookingDetailPage: React.FC = () => {
   const [evidenceContent, setEvidenceContent] = useState('');
   const [evidenceDescription, setEvidenceDescription] = useState('');
   const [evidenceFile, setEvidenceFile] = useState<File | null>(null);
+  const [selectedFilePreview, setSelectedFilePreview] = useState<string | null>(null);
   const [responseMap, setResponseMap] = useState<Record<number, string>>({});
   const [replyingId, setReplyingId] = useState<number | null>(null);
 
@@ -259,6 +313,89 @@ const BookingDetailPage: React.FC = () => {
     !review;
   const isPaymentSettled = !!booking?.paymentReference || (!!booking && PAID_BOOKING_STATUSES.includes(booking.status as typeof PAID_BOOKING_STATUSES[number]));
   const parsedReview = useMemo(() => parseReviewPayload(review?.comment), [review?.comment]);
+  const isFileEvidenceType = ['FILE', 'IMAGE', 'SCREENSHOT'].includes(evidenceType);
+  const isTextEvidenceType = ['TEXT', 'LINK', 'CHAT_LOG'].includes(evidenceType);
+  const hasEvidenceDraft = isFileEvidenceType
+    ? !!evidenceFile
+    : evidenceContent.trim().length > 0 || evidenceDescription.trim().length > 0;
+
+  const resetEvidenceDraft = () => {
+    setEvidenceType('TEXT');
+    setEvidenceContent('');
+    setEvidenceDescription('');
+    setEvidenceFile(null);
+    if (composerFileInputRef.current) composerFileInputRef.current.value = '';
+    if (evidenceFileInputRef.current) evidenceFileInputRef.current.value = '';
+  };
+
+  const validateEvidenceFile = (file: File) => {
+    if (file.size > MAX_EVIDENCE_FILE_SIZE) {
+      showAppError('Tệp quá lớn', 'Vui lòng chọn tệp nhỏ hơn hoặc bằng 20MB.');
+      return false;
+    }
+    return true;
+  };
+
+  const handleEvidenceFileSelected = (file: File | null) => {
+    if (!file) {
+      setEvidenceFile(null);
+      setSelectedFilePreview(null);
+      return;
+    }
+    if (!validateEvidenceFile(file)) {
+      return;
+    }
+    setEvidenceFile(file);
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => setSelectedFilePreview(e.target?.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setSelectedFilePreview(null);
+    }
+  };
+
+  const validateEvidenceDraft = () => {
+    if (isTextEvidenceType && !evidenceContent.trim()) {
+      showAppError('Thiếu nội dung', 'Vui lòng nhập nội dung bằng chứng.');
+      return false;
+    }
+    if (isFileEvidenceType && !evidenceFile) {
+      showAppError('Chưa chọn tệp', 'Vui lòng chọn tệp cần gửi.');
+      return false;
+    }
+    if (isFileEvidenceType && evidenceFile && !validateEvidenceFile(evidenceFile)) {
+      return false;
+    }
+    return true;
+  };
+
+  const submitEvidenceForDispute = async (disputeId: number) => {
+    let fileUrl: string | undefined;
+    let fileName: string | undefined;
+
+    if (evidenceFile) {
+      if (!currentUserId) {
+        throw new Error('Không xác định được người dùng để tải tệp lên.');
+      }
+      const media = await uploadMedia(evidenceFile, currentUserId);
+      fileUrl = media.url;
+      fileName = evidenceFile.name;
+    }
+
+    await submitBookingDisputeEvidence(
+      disputeId,
+      evidenceType,
+      isTextEvidenceType ? evidenceContent.trim() : undefined,
+      fileUrl,
+      fileName,
+      evidenceDescription.trim() || undefined,
+    );
+  };
+
+  const canSubmitOpenDispute = !!disputeReason.trim() && (!hasEvidenceDraft || (isFileEvidenceType ? !!evidenceFile : !!evidenceContent.trim()));
+  const shouldShowEvidenceInputForComposer = isTextEvidenceType;
+  const shouldShowFileInputForComposer = isFileEvidenceType;
 
   const money = useMemo(() => {
     if (!booking) return { userSpend: 0, refund: 0, mentorPay: 0, adminFee: 0, escrow: 0 };
@@ -314,49 +451,44 @@ const BookingDetailPage: React.FC = () => {
       showAppError('Thiếu lý do', 'Vui lòng nhập lý do tranh chấp.');
       return;
     }
-    await runAction(async () => {
+    if (hasEvidenceDraft && !validateEvidenceDraft()) {
+      return;
+    }
+
+    setBusy(true);
+    try {
       const newDispute = await openBookingDispute(booking.id, disputeReason.trim());
+
+      if (hasEvidenceDraft) {
+        await submitEvidenceForDispute(newDispute.id);
+      }
+
       setDispute(newDispute);
       setEvidence(await getBookingDisputeEvidence(newDispute.id));
       setDisputeReason('');
       setOpenComposer(false);
-    }, 'Đã mở tranh chấp', 'Bạn có thể bổ sung bằng chứng ngay trong lúc này.');
+      resetEvidenceDraft();
+      showAppSuccess('Đã mở tranh chấp', hasEvidenceDraft ? 'Đã mở tranh chấp và gửi kèm bằng chứng.' : 'Bạn có thể bổ sung bằng chứng ngay trong lúc này.');
+      await loadData();
+    } catch (err: any) {
+      showAppError('Không thể mở tranh chấp', err?.response?.data?.message || err?.message || 'Vui lòng thử lại.');
+    } finally {
+      setBusy(false);
+    }
   };
 
   const handleSubmitEvidence = async () => {
-    if (!dispute || !currentUserId) return;
-    if (evidenceType === 'TEXT' && !evidenceContent.trim()) {
-      showAppError('Thiếu nội dung', 'Vui lòng nhập nội dung bằng chứng.');
-      return;
-    }
-    if (['FILE', 'IMAGE', 'SCREENSHOT'].includes(evidenceType) && !evidenceFile) {
-      showAppError('Chưa chọn tệp', 'Vui lòng chọn tệp cần gửi.');
-      return;
-    }
+    if (!dispute) return;
+    if (!validateEvidenceDraft()) return;
+
     setBusy(true);
     try {
-      let fileUrl: string | undefined;
-      let fileName: string | undefined;
-      if (evidenceFile) {
-        const media = await uploadMedia(evidenceFile, currentUserId);
-        fileUrl = media.url;
-        fileName = evidenceFile.name;
-      }
-      await submitBookingDisputeEvidence(
-        dispute.id,
-        evidenceType,
-        ['TEXT', 'LINK', 'CHAT_LOG'].includes(evidenceType) ? evidenceContent.trim() : undefined,
-        fileUrl,
-        fileName,
-        evidenceDescription.trim() || undefined,
-      );
+      await submitEvidenceForDispute(dispute.id);
       setEvidence(await getBookingDisputeEvidence(dispute.id));
-      setEvidenceContent('');
-      setEvidenceDescription('');
-      setEvidenceFile(null);
+      resetEvidenceDraft();
       showAppSuccess('Đã gửi bằng chứng', 'Thông tin tranh chấp đã được cập nhật.');
     } catch (err: any) {
-      showAppError('Không thể gửi bằng chứng', err?.response?.data?.message || 'Vui lòng thử lại.');
+      showAppError('Không thể gửi bằng chứng', err?.response?.data?.message || err?.message || 'Vui lòng thử lại.');
     } finally {
       setBusy(false);
     }
@@ -930,17 +1062,112 @@ const BookingDetailPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
             >
-              <textarea
-                className="bkd-review-textarea"
-                placeholder="Mô tả rõ lý do tranh chấp..."
-                value={disputeReason}
-                onChange={e => setDisputeReason(e.target.value)}
-                rows={4}
-              />
+              <div className="bkd-dispute-composer-head">
+                <h3>Mở tranh chấp</h3>
+                <p>Nêu rõ vấn đề và có thể gửi kèm bằng chứng ngay trong lần gửi đầu tiên.</p>
+              </div>
+
+              <div className="bkd-dispute-field">
+                <label>Lý do tranh chấp *</label>
+                <textarea
+                  className="bkd-dispute-textarea"
+                  placeholder="Mô tả rõ lý do tranh chấp..."
+                  value={disputeReason}
+                  onChange={e => setDisputeReason(e.target.value)}
+                  rows={4}
+                />
+              </div>
+
+              <div className="bkd-dispute-evidence-draft">
+                <div className="bkd-dispute-evidence-draft__head">
+                  <strong>Bằng chứng đính kèm (tùy chọn)</strong>
+                  <span>Nếu có, hệ thống sẽ gửi cùng dispute.</span>
+                </div>
+
+                <div className="bkd-dispute-field">
+                  <label>Loại bằng chứng</label>
+                  <select value={evidenceType} onChange={e => setEvidenceType(e.target.value as EvidenceType)}>
+                    {EVIDENCE_TYPES.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
+                  </select>
+                </div>
+
+                {shouldShowEvidenceInputForComposer && (
+                  <div className="bkd-dispute-field">
+                    <label>Nội dung bằng chứng *</label>
+                    <textarea
+                      rows={4}
+                      value={evidenceContent}
+                      onChange={e => setEvidenceContent(e.target.value)}
+                      placeholder={evidenceType === 'LINK' ? 'Dán đường dẫn bằng chứng...' : 'Nhập nội dung bằng chứng...'}
+                    />
+                  </div>
+                )}
+
+                {shouldShowFileInputForComposer && (
+                  <div className="bkd-dispute-field">
+                    <label>Tệp bằng chứng *</label>
+                    {!evidenceFile ? (
+                      <>
+                        <button type="button" className="bkd-upload bkd-upload--full" onClick={() => composerFileInputRef.current?.click()}>
+                          <FileText size={15} /> Chọn tệp đính kèm
+                        </button>
+                        <p className="bkd-upload-hint">Hỗ trợ ảnh, PDF, DOC, DOCX, TXT. Tối đa 20MB.</p>
+                      </>
+                    ) : (
+                      <div className="bkd-file-preview">
+                        {selectedFilePreview ? (
+                          <div className="bkd-file-preview__image">
+                            <img src={selectedFilePreview} alt="Preview" />
+                          </div>
+                        ) : (
+                          <div className="bkd-file-preview__icon">
+                            <FileText size={20} />
+                          </div>
+                        )}
+                        <div className="bkd-file-preview__info">
+                          <span className="bkd-file-preview__name">{evidenceFile.name}</span>
+                          <span className="bkd-file-preview__size">{formatFileSize(evidenceFile.size)}</span>
+                        </div>
+                        <button type="button" className="bkd-file-preview__remove" onClick={() => handleEvidenceFileSelected(null)} title="Bỏ chọn">
+                          <XCircle size={16} />
+                        </button>
+                      </div>
+                    )}
+                    <input
+                      ref={composerFileInputRef}
+                      type="file"
+                      hidden
+                      accept={EVIDENCE_FILE_ACCEPT}
+                      onChange={e => handleEvidenceFileSelected(e.target.files?.[0] || null)}
+                    />
+                  </div>
+                )}
+
+                <div className="bkd-dispute-field">
+                  <label>Mô tả bằng chứng</label>
+                  <input
+                    type="text"
+                    value={evidenceDescription}
+                    onChange={e => setEvidenceDescription(e.target.value)}
+                    placeholder="Mô tả ngắn cho bằng chứng (không bắt buộc)"
+                  />
+                </div>
+              </div>
+
               <div className="bkd-dispute-composer-actions">
-                <button className="bkd-btn bkd-btn-secondary" onClick={() => setOpenComposer(false)}>Đóng</button>
-                <button className="bkd-btn bkd-btn-dispute" onClick={handleOpenDispute} disabled={busy}>
-                  <ShieldAlert size={15} /> Gửi dispute
+                <button
+                  className="bkd-btn bkd-btn-secondary"
+                  onClick={() => {
+                    setOpenComposer(false);
+                    setDisputeReason('');
+                    resetEvidenceDraft();
+                  }}
+                  disabled={busy}
+                >
+                  Đóng
+                </button>
+                <button className="bkd-btn bkd-btn-dispute" onClick={handleOpenDispute} disabled={busy || !canSubmitOpenDispute}>
+                  {busy ? <><Loader2 size={15} className="bkd-spin" /> Đang gửi...</> : <><ShieldAlert size={15} /> Gửi dispute</>}
                 </button>
               </div>
             </motion.div>
@@ -948,21 +1175,27 @@ const BookingDetailPage: React.FC = () => {
         </AnimatePresence>
 
         {/* Dispute banner */}
-        {dispute && (
-          <div className="bkd-dispute-banner">
-            <div className="bkd-dispute-banner-left">
-              <div className="bkd-kicker">Dispute #{dispute.id}</div>
-              <h3>{dispute.status.replace(/_/g, ' ')}</h3>
-              <p>{dispute.reason || 'Không có lý do bổ sung.'}</p>
-            </div>
-            {dispute.resolution && (
-              <div className="bkd-resolution-chip">
-                <strong>{dispute.resolution.replace(/_/g, ' ')}</strong>
-                <span>{safeFormatDate(dispute.resolvedAt) || 'Đang xử lý'}</span>
+        {dispute && (() => {
+          const statusMeta = DISPUTE_STATUS_META[dispute.status] || { label: dispute.status, tone: 'slate' };
+          const resolutionMeta = dispute.resolution ? (DISPUTE_RESOLUTION_META[dispute.resolution] || { label: dispute.resolution, tone: 'amber' }) : null;
+          return (
+            <div className="bkd-dispute-banner">
+              <div className="bkd-dispute-banner-left">
+                <div className="bkd-kicker">
+                  Dispute #{dispute.id}
+                  <span className={`bkd-tone-${statusMeta.tone} bkd-dispute-status-pill`}>{statusMeta.label}</span>
+                </div>
+                <p className="bkd-dispute-reason">{dispute.reason || 'Không có lý do bổ sung.'}</p>
               </div>
-            )}
-          </div>
-        )}
+              {resolutionMeta && (
+                <div className={`bkd-resolution-chip bkd-resolution-chip--${resolutionMeta.tone}`}>
+                  <strong>{resolutionMeta.label}</strong>
+                  <span>{safeFormatDate(dispute.resolvedAt) || 'Đang xử lý'}</span>
+                </div>
+              )}
+            </div>
+          );
+        })()}
 
         {!dispute && !canOpenDispute && (
           <div className="bkd-empty-state">
@@ -981,44 +1214,91 @@ const BookingDetailPage: React.FC = () => {
                   <p>Chưa có bằng chứng nào được gửi.</p>
                 </div>
               )}
-              {evidence.map(item => (
-                <article key={item.id} className="bkd-evidence-card">
-                  <header className="bkd-evidence-card__header">
-                    <span className="bkd-evidence-type">{item.evidenceType}</span>
-                    <span className="bkd-evidence-author">User #{item.submittedBy}</span>
-                  </header>
-                  {item.content && <p className="bkd-evidence-content">{item.content}</p>}
-                  {item.fileUrl && <a className="bkd-file-link" href={item.fileUrl} target="_blank" rel="noreferrer">{item.fileName || 'Xem tệp đã gửi'}</a>}
-                  {item.description && <p className="bkd-evidence-note">{item.description}</p>}
-                  {item.responses?.length ? (
-                    <div className="bkd-response-list">
-                      {item.responses.map(response => (
-                        <div key={response.id} className="bkd-response-item">
-                          <strong>{response.respondedByName || `User #${response.respondedBy}`}</strong>
-                          <p>{response.content}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
-                  {dispute.status !== 'RESOLVED' && item.submittedBy !== currentUserId && (
-                    <div className="bkd-response-composer">
-                      <textarea
-                        rows={2}
-                        value={responseMap[item.id] || ''}
-                        onChange={e => setResponseMap(prev => ({ ...prev, [item.id]: e.target.value }))}
-                        placeholder="Phản hồi bổ sung..."
-                      />
-                      <button
-                        className="bkd-btn bkd-btn-secondary"
-                        onClick={() => handleReply(item.id)}
-                        disabled={replyingId === item.id || !responseMap[item.id]?.trim()}
-                      >
-                        {replyingId === item.id ? <Loader2 size={16} className="bkd-spin" /> : <Send size={16} />} Gửi
-                      </button>
-                    </div>
-                  )}
-                </article>
-              ))}
+              {evidence.map((item, idx) => {
+                const typeMeta = EVIDENCE_TYPE_COLORS[item.evidenceType];
+                const isOwn = item.submittedBy === currentUserId;
+                return (
+                  <motion.article
+                    key={item.id}
+                    className="bkd-evidence-card"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: idx * 0.07 }}
+                  >
+                    <header className="bkd-evidence-card__header">
+                      <div className="bkd-evidence-card__header-left">
+                        <span
+                          className="bkd-evidence-type"
+                          style={{ background: typeMeta.bg, color: typeMeta.color, borderColor: typeMeta.border }}
+                        >
+                          {EVIDENCE_TYPE_LABELS[item.evidenceType] || item.evidenceType}
+                        </span>
+                        <span className="bkd-evidence-author">
+                          {isOwn ? 'Bạn' : `User #${item.submittedBy}`}
+                        </span>
+                      </div>
+                      <div className="bkd-evidence-card__header-right">
+                        <span className="bkd-evidence-time">{safeFormatDate(item.createdAt, { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })}</span>
+                      </div>
+                    </header>
+                    {item.content && (
+                      <div className="bkd-evidence-content">
+                        {item.evidenceType === 'LINK' ? (
+                          <a href={item.content} target="_blank" rel="noreferrer" className="bkd-evidence-link">
+                            <LinkIcon size={14} /> {item.content}
+                          </a>
+                        ) : (
+                          <p>{item.content}</p>
+                        )}
+                      </div>
+                    )}
+                    {item.fileUrl && (
+                      <div className="bkd-evidence-file-wrap">
+                        {isImageFile(item.fileName || item.fileUrl) ? (
+                          <a className="bkd-evidence-image-link" href={item.fileUrl} target="_blank" rel="noreferrer">
+                            <img src={item.fileUrl} alt={item.fileName || 'Evidence'} />
+                          </a>
+                        ) : (
+                          <a className="bkd-file-link" href={item.fileUrl} target="_blank" rel="noreferrer">
+                            <FileText size={14} /> {item.fileName || 'Xem tệp đã gửi'}
+                          </a>
+                        )}
+                      </div>
+                    )}
+                    {item.description && <p className="bkd-evidence-note">{item.description}</p>}
+                    {item.responses?.length ? (
+                      <div className="bkd-response-list">
+                        {item.responses.map(response => (
+                          <div key={response.id} className="bkd-response-item">
+                            <div className="bkd-response-header">
+                              <strong>{response.respondedByName || `User #${response.respondedBy}`}</strong>
+                              <span>{safeFormatDate(response.createdAt, { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })}</span>
+                            </div>
+                            <p>{response.content}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+                    {dispute.status !== 'RESOLVED' && !isOwn && (
+                      <div className="bkd-response-composer">
+                        <textarea
+                          rows={2}
+                          value={responseMap[item.id] || ''}
+                          onChange={e => setResponseMap(prev => ({ ...prev, [item.id]: e.target.value }))}
+                          placeholder="Phản hồi bổ sung..."
+                        />
+                        <button
+                          className="bkd-btn bkd-btn-secondary"
+                          onClick={() => handleReply(item.id)}
+                          disabled={replyingId === item.id || !responseMap[item.id]?.trim()}
+                        >
+                          {replyingId === item.id ? <Loader2 size={16} className="bkd-spin" /> : <Send size={16} />} Gửi
+                        </button>
+                      </div>
+                    )}
+                  </motion.article>
+                );
+              })}
             </div>
 
             {/* Evidence composer */}
@@ -1033,10 +1313,40 @@ const BookingDetailPage: React.FC = () => {
                 )}
                 {['FILE', 'IMAGE', 'SCREENSHOT'].includes(evidenceType) && (
                   <>
-                    <button className="bkd-upload" onClick={() => fileInputRef.current?.click()}>
-                      <FileText size={15} /> {evidenceFile ? evidenceFile.name : 'Chọn tệp đính kèm'}
-                    </button>
-                    <input ref={fileInputRef} type="file" hidden accept="image/*,.pdf,.doc,.docx" onChange={e => setEvidenceFile(e.target.files?.[0] || null)} />
+                    {!evidenceFile ? (
+                      <>
+                        <button className="bkd-upload bkd-upload--full" onClick={() => evidenceFileInputRef.current?.click()}>
+                          <FileText size={15} /> Chọn tệp đính kèm
+                        </button>
+                        <p className="bkd-upload-hint">Hỗ trợ ảnh, PDF, DOC, DOCX, TXT. Tối đa 20MB.</p>
+                      </>
+                    ) : (
+                      <div className="bkd-file-preview">
+                        {selectedFilePreview ? (
+                          <div className="bkd-file-preview__image">
+                            <img src={selectedFilePreview} alt="Preview" />
+                          </div>
+                        ) : (
+                          <div className="bkd-file-preview__icon">
+                            <FileText size={20} />
+                          </div>
+                        )}
+                        <div className="bkd-file-preview__info">
+                          <span className="bkd-file-preview__name">{evidenceFile.name}</span>
+                          <span className="bkd-file-preview__size">{formatFileSize(evidenceFile.size)}</span>
+                        </div>
+                        <button type="button" className="bkd-file-preview__remove" onClick={() => handleEvidenceFileSelected(null)} title="Bỏ chọn">
+                          <XCircle size={16} />
+                        </button>
+                      </div>
+                    )}
+                    <input
+                      ref={evidenceFileInputRef}
+                      type="file"
+                      hidden
+                      accept={EVIDENCE_FILE_ACCEPT}
+                      onChange={e => handleEvidenceFileSelected(e.target.files?.[0] || null)}
+                    />
                   </>
                 )}
                 <input type="text" value={evidenceDescription} onChange={e => setEvidenceDescription(e.target.value)} placeholder="Mô tả ngắn cho bằng chứng" />

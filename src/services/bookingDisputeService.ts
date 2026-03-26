@@ -1,6 +1,11 @@
 import { axiosInstance } from './axiosInstance';
 
 export type EvidenceType = 'TEXT' | 'FILE' | 'LINK' | 'SCREENSHOT' | 'CHAT_LOG' | 'IMAGE';
+export type EvidenceReviewStatus = 'PENDING' | 'UNDER_REVIEW' | 'ACCEPTED' | 'REJECTED';
+export type EvidenceReviewDecision =
+  | 'MARK_UNDER_REVIEW'
+  | 'ACCEPT_EVIDENCE_REFUND_USER'
+  | 'REJECT_EVIDENCE_RELEASE_MENTOR';
 
 export interface BookingDispute {
   id: number;
@@ -30,6 +35,10 @@ export interface BookingDisputeEvidence {
   fileName?: string;
   description?: string;
   isOfficial: boolean;
+  reviewStatus?: EvidenceReviewStatus;
+  reviewNotes?: string;
+  reviewedBy?: number;
+  reviewedAt?: string;
   createdAt: string;
   responses?: BookingDisputeResponse[];
 }
@@ -197,6 +206,24 @@ export const resolveBookingDispute = async (
     return response.data;
   } catch (error) {
     console.error('Error resolving booking dispute:', error);
+    throw error;
+  }
+};
+
+export const reviewAdminBookingDisputeEvidence = async (
+  disputeId: number,
+  evidenceId: number,
+  decision: EvidenceReviewDecision,
+  notes?: string,
+): Promise<BookingDisputeEvidence> => {
+  try {
+    const response = await axiosInstance.post<BookingDisputeEvidence>(
+      `/api/admin/booking-disputes/${disputeId}/evidence/${evidenceId}/review`,
+      { decision, notes },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error reviewing dispute evidence:', error);
     throw error;
   }
 };
