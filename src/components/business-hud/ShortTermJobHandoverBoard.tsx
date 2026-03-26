@@ -464,9 +464,12 @@ const ShortTermJobHandoverBoard = ({
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="stj-handover-card__file-link"
+                                    title={deliverable.fileName || resolvedUrl || 'Video bàn giao'}
                                   >
                                     <ExternalLink size={11} />
-                                    {deliverable.fileName || 'Video bàn giao'}
+                                    <span className="stj-handover-card__file-link-text">
+                                      {deliverable.fileName || 'Video bàn giao'}
+                                    </span>
                                   </a>
                                   {fileSize && <span className="stj-handover-card__file-size">{fileSize}</span>}
                                 </div>
@@ -488,9 +491,12 @@ const ShortTermJobHandoverBoard = ({
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="stj-handover-card__file-link"
+                                  title={deliverable.fileName || resolvedUrl || 'File bàn giao'}
                                 >
                                   <ExternalLink size={11} />
-                                  {deliverable.fileName || 'File bàn giao'}
+                                  <span className="stj-handover-card__file-link-text">
+                                    {deliverable.fileName || 'File bàn giao'}
+                                  </span>
                                 </a>
                                 {fileSize && <span className="stj-handover-card__file-size">{fileSize}</span>}
                                 <a

@@ -33,6 +33,7 @@ import {
   Search,
   Sparkles,
   ArrowRight,
+  FileText,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
@@ -381,6 +382,13 @@ const Header: React.FC = () => {
     !!user && !isRootAdminRole && user.roles.some((role) => role.endsWith("_ADMIN"));
   const isMentorRole = !!user && user.roles.includes("MENTOR");
   const isRecruiterRole = !!user && user.roles.includes("RECRUITER");
+  const isStudentRole =
+    !!user &&
+    user.roles.includes("USER") &&
+    !isMentorRole &&
+    !isRecruiterRole &&
+    !isRootAdminRole &&
+    !isSubAdminRole;
   const shouldShowManagementNav =
     isAuthenticated && !!user && (isRootAdminRole || isRecruiterRole || isSubAdminRole);
 
@@ -816,17 +824,29 @@ const Header: React.FC = () => {
                             path: "/community",
                             icon: MessageSquare,
                           },
-                          {
-                            name: "Việc Làm",
-                            description: "Tìm kiếm cơ hội việc làm phù hợp",
-                            path: "/jobs",
-                            icon: Briefcase,
-                          },
+                          ...(isStudentRole
+                            ? [
+                                {
+                                  name: "Meowl Shop",
+                                  description: "Cửa hàng Skin Neon Tech độc quyền",
+                                  path: "/meowl-shop",
+                                  icon: ShoppingBag,
+                                  className: "sv-mega-link--shop-highlight",
+                                },
+                              ]
+                            : [
+                                {
+                                  name: "Việc Làm",
+                                  description: "Tìm kiếm cơ hội việc làm phù hợp",
+                                  path: "/jobs",
+                                  icon: Briefcase,
+                                },
+                              ]),
                         ].map((item) => (
                           <Link
                             key={item.path}
                             to={item.path}
-                            className="sv-mega-link"
+                            className={`sv-mega-link ${item.className ?? ""}`.trim()}
                             onClick={() => setShowQuickNav(false)}
                           >
                             <item.icon className="sv-mega-link-icon" />
@@ -848,24 +868,49 @@ const Header: React.FC = () => {
                   {!isMentorRole && !isRecruiterRole && (
                     <div className="sv-mega-section">
                       <h4 className="sv-mega-section-title">
-                        <Trophy size={14} className="sv-section-icon" />
-                        <span>Giải trí & Cá nhân</span>
+                        {isStudentRole ? (
+                          <Briefcase size={14} className="sv-section-icon" />
+                        ) : (
+                          <Trophy size={14} className="sv-section-icon" />
+                        )}
+                        <span>{isStudentRole ? "Công việc" : "Giải trí & Cá nhân"}</span>
                       </h4>
                       <div className="sv-mega-grid sv-mega-grid--tertiary">
-                        {[
-                          {
-                            name: "Hồ Sơ",
-                            description: "Quản lý và chia sẻ thành tích của bạn",
-                            path: "/portfolio",
-                            icon: User,
-                          },
-                          {
-                            name: "Meowl Shop",
-                            description: "Cửa hàng Skin Neon Tech độc quyền",
-                            path: "/meowl-shop",
-                            icon: ShoppingBag,
-                          },
-                        ].map((item) => (
+                        {(isStudentRole
+                          ? [
+                              {
+                                name: "Portfolio",
+                                description: "Quản lý và chia sẻ thành tích của bạn",
+                                path: "/portfolio",
+                                icon: User,
+                              },
+                              {
+                                name: "Trung tâm công việc",
+                                description: "Quản lý toàn bộ đơn ứng tuyển của bạn",
+                                path: "/my-applications",
+                                icon: FileText,
+                              },
+                              {
+                                name: "Việc Làm",
+                                description: "Tìm kiếm cơ hội việc làm phù hợp",
+                                path: "/jobs",
+                                icon: Briefcase,
+                              },
+                            ]
+                          : [
+                              {
+                                name: "Hồ Sơ",
+                                description: "Quản lý và chia sẻ thành tích của bạn",
+                                path: "/portfolio",
+                                icon: User,
+                              },
+                              {
+                                name: "Meowl Shop",
+                                description: "Cửa hàng Skin Neon Tech độc quyền",
+                                path: "/meowl-shop",
+                                icon: ShoppingBag,
+                              },
+                            ]).map((item) => (
                           <Link
                             key={item.path}
                             to={item.path}

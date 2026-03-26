@@ -1,30 +1,36 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { CSSProperties, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { confirmAction } from "../../context/ConfirmDialogContext";
-import {
-  Activity,
-  Briefcase,
-  Building2,
-  Calendar,
-  CheckCircle2,
-  ClipboardList,
-  Clock,
-  DollarSign,
-  FileCheck,
-  FileText,
-  FolderOpen,
-  Globe,
-  Link as LinkIcon,
-  MapPin,
-  Plus,
-  RefreshCw,
-  Search,
-  Send,
-  Timer,
-  Trash2,
-  Upload,
-  Wallet,
-  XCircle,
+import { 
+  Activity, 
+  Briefcase, 
+  Building2, 
+  Calendar, 
+  CheckCircle2, 
+  ClipboardList, 
+  Clock, 
+  DollarSign, 
+  FileCheck, 
+  FileText, 
+  FolderOpen, 
+  Globe, 
+  Link as LinkIcon, 
+  MapPin, 
+  Plus, 
+  RefreshCw, 
+  Search, 
+  Send, 
+  Timer, 
+  Trash2, 
+  Upload, 
+  XCircle, 
   Zap,
+  Shield,
+  Cpu,
+  Layers,
+  PieChart,
+  Target,
+  TrendingUp
 } from "lucide-react";
 import jobService from "../../services/jobService";
 import shortTermJobService from "../../services/shortTermJobService";
@@ -146,6 +152,7 @@ const canSubmitWork = (app: AppItem | null) =>
   );
 
 const JobLabPage: React.FC = () => {
+  const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<ViewMode>("dashboard");
   const [jobType, setJobType] = useState<JobType>("ALL");
   const [searchTerm, setSearchTerm] = useState("");
@@ -195,28 +202,37 @@ const JobLabPage: React.FC = () => {
       coverLetter: app.coverLetter || undefined,
     }));
 
-    const shortTerm: AppItem[] = shortTermApps.map((app) => ({
-      id: `shortterm-${app.id}`,
-      type: "SHORT_TERM",
-      applicationId: app.id,
-      title: app.jobTitle || app.jobDetails?.title || "Gig job",
-      company: app.jobDetails?.recruiterCompanyName || "",
-      budget: app.jobBudget || app.proposedPrice || 0,
-      isRemote: Boolean(app.jobDetails?.isRemote),
-      location: app.jobDetails?.location || "",
-      appliedAt: app.appliedAt,
-      status: app.status,
-      coverLetter: app.coverLetter || undefined,
-      proposedPrice: app.proposedPrice,
-      proposedDuration: app.proposedDuration,
-      workNote: app.workNote,
-      revisionCount: app.revisionCount,
-      deliverables: (app.deliverables || []).map((item) => ({
-        id: item.id,
-        fileName: item.fileName,
-        fileUrl: item.fileUrl,
-      })),
-    }));
+    const shortTerm: AppItem[] = shortTermApps.map((app) => {
+      const jobDetailsExt = app.jobDetails as
+        | {
+            isRemote?: boolean;
+            location?: string;
+          }
+        | undefined;
+
+      return {
+        id: `shortterm-${app.id}`,
+        type: "SHORT_TERM",
+        applicationId: app.id,
+        title: app.jobTitle || app.jobDetails?.title || "Gig job",
+        company: app.jobDetails?.recruiterCompanyName || "",
+        budget: app.jobBudget || app.proposedPrice || 0,
+        isRemote: Boolean(jobDetailsExt?.isRemote),
+        location: jobDetailsExt?.location || "",
+        appliedAt: app.appliedAt,
+        status: app.status,
+        coverLetter: app.coverLetter || undefined,
+        proposedPrice: app.proposedPrice,
+        proposedDuration: app.proposedDuration,
+        workNote: app.workNote,
+        revisionCount: app.revisionCount,
+        deliverables: (app.deliverables || []).map((item) => ({
+          id: item.id,
+          fileName: item.fileName,
+          fileUrl: item.fileUrl,
+        })),
+      };
+    });
 
     return [...regular, ...shortTerm].sort(
       (left, right) =>
@@ -281,6 +297,89 @@ const JobLabPage: React.FC = () => {
     [applications],
   );
 
+  const pipeline = useMemo(() => {
+    const reviewed = applications.filter((app) => app.status === "REVIEWED").length;
+    const accepted = applications.filter((app) => app.status === "ACCEPTED").length;
+    const working = applications.filter((app) =>
+      ["WORKING", "REVISION_REQUIRED", "SUBMITTED", "APPROVED"].includes(app.status),
+    ).length;
+    const paid = applications.filter((app) => ["PAID", "COMPLETED"].includes(app.status)).length;
+
+    const stages = [
+      { id: "applied", label: "Applied", count: applications.length, tone: "cyan" },
+      { id: "reviewed", label: "Reviewed", count: reviewed, tone: "blue" },
+      { id: "accepted", label: "Accepted", count: accepted, tone: "purple" },
+      { id: "working", label: "Working", count: working, tone: "violet" },
+      { id: "paid", label: "Paid", count: paid, tone: "green" },
+    ] as const;
+
+    const progress =
+      stages.length > 0
+        ? (stages.filter((stage) => stage.count > 0).length / stages.length) * 100
+        : 0;
+
+    return { stages, progress };
+  }, [applications]);
+
+  const statusSummary = useMemo(() => {
+    const items = [
+      {
+        key: "waiting",
+        label: "Chờ phản hồi",
+        count: stats.waiting,
+        color: "#38bdf8",
+      },
+      {
+        key: "active",
+        label: "Đang làm",
+        count: stats.active,
+        color: "#a855f7",
+      },
+      {
+        key: "completed",
+        label: "Hoàn tất",
+        count: stats.completed,
+        color: "#22c55e",
+      },
+      {
+        key: "closed",
+        label: "Đã đóng",
+        count: applications.filter((app) => ["REJECTED", "WITHDRAWN"].includes(app.status)).length,
+        color: "#f59e0b",
+      },
+    ] as const;
+
+    const total = items.reduce((sum, item) => sum + item.count, 0);
+
+    if (!total) {
+      return {
+        items,
+        total,
+        donutStyle: {
+          background:
+            "conic-gradient(rgba(56, 189, 248, 0.24) 0% 25%, rgba(168, 85, 247, 0.24) 25% 50%, rgba(34, 197, 94, 0.24) 50% 75%, rgba(245, 158, 11, 0.24) 75% 100%)",
+        } as CSSProperties,
+      };
+    }
+
+    let cursor = 0;
+    const parts = items.map((item) => {
+      const start = cursor;
+      const step = (item.count / total) * 100;
+      cursor += step;
+      const end = cursor;
+      return `${item.color} ${start.toFixed(2)}% ${end.toFixed(2)}%`;
+    });
+
+    return {
+      items,
+      total,
+      donutStyle: {
+        background: `conic-gradient(${parts.join(", ")})`,
+      } as CSSProperties,
+    };
+  }, [applications, stats.active, stats.completed, stats.waiting]);
+
   const openWorkspace = (app: AppItem) => {
     setSelectedId(app.id);
     setWorkNote("");
@@ -334,6 +433,15 @@ const JobLabPage: React.FC = () => {
     return (
       <div className="jlx-shell">
         <div className="jlx-loading">
+          <div className="jlx-loading-skeleton" aria-hidden="true">
+            <div className="jlx-loading-skeleton__line is-wide" />
+            <div className="jlx-loading-skeleton__line" />
+            <div className="jlx-loading-skeleton__grid">
+              <div className="jlx-loading-skeleton__card" />
+              <div className="jlx-loading-skeleton__card" />
+              <div className="jlx-loading-skeleton__card" />
+            </div>
+          </div>
           <MeowlKuruLoader size="large" text="Đang tải Job Lab..." />
         </div>
       </div>
@@ -342,7 +450,7 @@ const JobLabPage: React.FC = () => {
 
   return (
     <div
-      className={`jlx-shell${viewMode === "workspace" ? " jlx-shell--workspace" : ""}`}
+      className={`jlx-shell${viewMode === "workspace" && filteredApplications.length > 0 ? " jlx-shell--workspace" : ""}`}
     >
       <aside className="jlx-sidebar">
         <div className="jlx-brand">
@@ -394,7 +502,7 @@ const JobLabPage: React.FC = () => {
           <button
             type="button"
             className="jlx-nav__item"
-            onClick={() => (window.location.href = "/jobs")}
+            onClick={() => navigate("/jobs")}
           >
             <span className="jlx-nav__icon">
               <Plus size={16} />
@@ -403,16 +511,6 @@ const JobLabPage: React.FC = () => {
           </button>
         </nav>
 
-        <div className="jlx-sidebar__meta">
-          <article className="jlx-sidebar__card">
-            <span>Tổng thu nhập</span>
-            <strong>{formatCurrency(stats.earnings)}</strong>
-          </article>
-          <article className="jlx-sidebar__card">
-            <span>Đang vận hành</span>
-            <strong>{stats.active}</strong>
-          </article>
-        </div>
       </aside>
 
       <main className="jlx-main">
@@ -444,7 +542,7 @@ const JobLabPage: React.FC = () => {
             <button
               type="button"
               className="jlx-btn jlx-btn--primary"
-              onClick={() => (window.location.href = "/jobs")}
+              onClick={() => navigate("/jobs")}
             >
               <Briefcase size={14} />
               Tìm việc
@@ -456,108 +554,214 @@ const JobLabPage: React.FC = () => {
 
         {viewMode === "dashboard" && (
           <>
-            <section className="jlx-stat-grid">
-              <article className="jlx-stat-card is-cyan">
-                <FileText size={18} />
-                <strong>{stats.total}</strong>
-                <span>Tổng đơn đã ứng tuyển</span>
-              </article>
-              <article className="jlx-stat-card is-amber">
-                <Clock size={18} />
-                <strong>{stats.waiting}</strong>
-                <span>Chờ phản hồi</span>
-              </article>
-              <article className="jlx-stat-card is-violet">
-                <ClipboardList size={18} />
-                <strong>{stats.active}</strong>
-                <span>Công việc đang vận hành</span>
-              </article>
-              <article className="jlx-stat-card is-green">
-                <Wallet size={18} />
-                <strong>{formatCurrency(stats.earnings)}</strong>
-                <span>Thu nhập đã chốt</span>
-              </article>
-            </section>
-
-            <section className="jlx-dashboard-grid">
-              <article className="jlx-panel">
-                <div className="jlx-panel__head">
-                  <div>
-                    <span className="jlx-panel__eyebrow">Cần mở workspace</span>
-                    <h3>Các job đang có tiến trình</h3>
+            {/* NEW HUD HERO - COMMANDER STYLE */}
+            <section className="jlx-joblab-hero">
+              <div className="jlx-joblab-hero-backdrop"></div>
+              <div className="jlx-hero-scanline"></div>
+              
+              <div className="jlx-joblab-hero__content">
+                <div className="jlx-joblab-hero__left">
+                  <div className="jlx-hero-badge">
+                    <span className="jlx-badge-icon"><Shield size={14} /></span>
+                    <span className="jlx-badge-text">SYSTEM ACTIVE: CAREER_TRACKER_V4.0</span>
+                  </div>
+                  <h1 className="jlx-title">
+                    <span className="jlx-title-primary">TRUNG TÂM CÔNG VIỆC</span>
+                    <span className="jlx-title-operator">THEO DÕI TRẠNG THÁI ỨNG TUYỂN</span>
+                  </h1>
+                  <p className="jlx-description">
+                    Hệ thống quản lý lộ trình sự nghiệp và quy trình ứng tuyển thông minh. 
+                    Theo dõi, tối ưu hóa và làm chủ hành trình sự nghiệp của bạn.
+                  </p>
+                  
+                  <div className="jlx-hero-actions">
+                    <button
+                      type="button"
+                      className="jlx-btn jlx-btn--primary"
+                      onClick={() => navigate("/jobs")}
+                    >
+                      <Target size={18} />
+                      <span>CÔNG VIỆC</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="jlx-btn jlx-btn--ghost"
+                      onClick={() => setViewMode("workspace")}
+                    >
+                      <FileText size={18} />
+                      <span>WORKSPACE</span>
+                    </button>
                   </div>
                 </div>
-                <div className="jlx-list">
-                  {applications.slice(0, 6).map((app) => {
-                    const status = STATUS_META[app.status] || {
-                      label: app.status,
-                      tone: "slate",
-                    };
-                    return (
-                      <button
-                        key={app.id}
-                        type="button"
-                        className="jlx-list__item"
-                        onClick={() => openWorkspace(app)}
-                      >
-                        <div>
-                          <strong>{app.title}</strong>
-                          <p>{app.company || "SkillVerse"}</p>
+
+                <div className="jlx-hero-visual">
+                  <div className="jlx-visual-ring"></div>
+                  <div className="jlx-visual-core">
+                    <Briefcase size={40} className="jlx-visual-icon" />
+                  </div>
+                  <div className="jlx-visual-data">
+                    <div className="jlx-data-bit"><Activity size={12} /> SYNC_OK</div>
+                    <div className="jlx-data-bit"><Cpu size={12} /> AUTH_STABLE</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="jlx-hud-stats">
+              <div className="jlx-job-stat">
+                <div className="jlx-job-stat__header">
+                  <div className="jlx-job-stat__icon-wrap jlx-job-stat__icon-wrap--cyan">
+                    <Zap className="jlx-job-stat__icon" size={24} />
+                  </div>
+                  <div className="jlx-job-stat__info">
+                    <div className="jlx-job-stat__value">{applications.length}</div>
+                    <div className="jlx-job-stat__label">Tổng đơn ứng tuyển</div>
+                  </div>
+                </div>
+                <div className="jlx-job-stat__glow"></div>
+              </div>
+
+              <div className="jlx-job-stat">
+                <div className="jlx-job-stat__header">
+                  <div className="jlx-job-stat__icon-wrap jlx-job-stat__icon-wrap--purple">
+                    <TrendingUp className="jlx-job-stat__icon" size={24} />
+                  </div>
+                  <div className="jlx-job-stat__info">
+                    <div className="jlx-job-stat__value">{stats.active}</div>
+                    <div className="jlx-job-stat__label">Đang làm</div>
+                  </div>
+                </div>
+                <div className="jlx-job-stat__glow"></div>
+              </div>
+
+              <div className="jlx-job-stat">
+                <div className="jlx-job-stat__header">
+                  <div className="jlx-job-stat__icon-wrap jlx-job-stat__icon-wrap--green">
+                    <CheckCircle2 className="jlx-job-stat__icon" size={24} />
+                  </div>
+                  <div className="jlx-job-stat__info">
+                    <div className="jlx-job-stat__value">{stats.completed}</div>
+                    <div className="jlx-job-stat__label">Đã hoàn tất</div>
+                  </div>
+                </div>
+                <div className="jlx-job-stat__glow"></div>
+              </div>
+
+              <div className="jlx-job-stat">
+                <div className="jlx-job-stat__header">
+                  <div className="jlx-job-stat__icon-wrap jlx-job-stat__icon-wrap--orange">
+                    <Clock className="jlx-job-stat__icon" size={24} />
+                  </div>
+                  <div className="jlx-job-stat__info">
+                    <div className="jlx-job-stat__value">{stats.waiting}</div>
+                    <div className="jlx-job-stat__label">Chờ phản hồi</div>
+                  </div>
+                </div>
+                <div className="jlx-job-stat__glow"></div>
+              </div>
+            </section>
+
+            {applications.length ? (
+              <div className="jlx-main-visuals">
+                {/* PIPELINE VISUALIZATION */}
+                <div className="jlx-card jlx-pipeline">
+                  <div className="jlx-card-header">
+                    <Layers size={18} className="jlx-header-icon" />
+                    <h3 className="jlx-card-title">QUY TRÌNH ỨNG TUYỂN</h3>
+                  </div>
+                  <div className="jlx-pipeline-content">
+                    {pipeline.stages.map((stage, index) => (
+                      <div key={stage.id} className={`jlx-pipeline-step step-${stage.id}`}>
+                        <div className="jlx-step-header">
+                          <span className="jlx-step-index">0{index + 1}</span>
+                          <span className="jlx-step-label">{stage.label.toUpperCase()}</span>
                         </div>
-                        <span className={`jlx-status is-${status.tone}`}>
-                          {status.label}
-                        </span>
-                      </button>
-                    );
-                  })}
-                  {!applications.length && (
-                    <div className="jlx-empty-inline">
-                      Chưa có đơn nào để hiển thị.
+                        <div className="jlx-step-bar-container">
+                          <div 
+                            className="jlx-step-bar" 
+                            style={{ 
+                              width: `${(stage.count / (applications.length || 1)) * 100}%`,
+                              backgroundColor: `var(--hud-${stage.tone})` 
+                            }}
+                          ></div>
+                        </div>
+                        <div className="jlx-step-footer">
+                          <span className="jlx-step-count">{stage.count} UNITS</span>
+                          <span className="jlx-step-percent">{Math.round((stage.count / (applications.length || 1)) * 100)}%</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <article className="jlx-income-summary" aria-label="Tổng thu nhập">
+                    <div className="jlx-income-summary__head">
+                      <span className="jlx-income-summary__icon">
+                        <DollarSign size={18} />
+                      </span>
+                      <div>
+                        <p>Tổng thu nhập</p>
+                        <strong>{formatCurrency(stats.earnings)}</strong>
+                      </div>
                     </div>
-                  )}
-                </div>
-              </article>
-
-              <article className="jlx-panel">
-                <div className="jlx-panel__head">
-                  <div>
-                    <span className="jlx-panel__eyebrow">
-                      Tổng kết trạng thái
+                    <span className="jlx-income-summary__note">
+                      Thu nhập từ các đơn đã hoàn tất và đã thanh toán.
                     </span>
-                    <h3>Trạng thái đơn theo nhóm</h3>
-                  </div>
+                  </article>
+                  <div className="jlx-card-corner top-left"></div>
+                  <div className="jlx-card-corner bottom-right"></div>
                 </div>
-                <div className="jlx-status-stack">
-                  <div className="jlx-status-block">
-                    <div>
-                      <strong>Chờ phản hồi</strong>
-                      <p>PENDING &amp; REVIEWED</p>
-                    </div>
-                    <span>{stats.waiting}</span>
+
+                {/* DONUT SUMMARY */}
+                <div className="jlx-card jlx-status-donut">
+                  <div className="jlx-card-header">
+                    <PieChart size={18} className="jlx-header-icon" />
+                    <h3 className="jlx-card-title">PHÂN BỔ TRẠNG THÁI</h3>
                   </div>
-                  <div className="jlx-status-block">
-                    <div>
-                      <strong>Đang vận hành</strong>
-                      <p>ACCEPTED → APPROVED</p>
+                  <div className="jlx-donut-container">
+                    <div 
+                      className="jlx-donut-chart"
+                      style={statusSummary.donutStyle}
+                    >
+                      <div className="jlx-donut-hole">
+                        <div className="jlx-donut-value">{applications.length}</div>
+                        <div className="jlx-donut-label">TỔNG SỐ</div>
+                      </div>
                     </div>
-                    <span>{stats.active}</span>
-                  </div>
-                  <div className="jlx-status-block">
-                    <div>
-                      <strong>Đã hoàn tất</strong>
-                      <p>COMPLETED &amp; PAID</p>
+                    <div className="jlx-donut-legend">
+                      {statusSummary.items.map(item => (
+                        <div className="jlx-legend-item" key={item.key}>
+                          <span className="jlx-dot" style={{ backgroundColor: item.color, boxShadow: `0 0 8px ${item.color}` }}></span>
+                          <span className="jlx-legend-text">{item.label.toUpperCase()} ({item.count})</span>
+                        </div>
+                      ))}
                     </div>
-                    <span>{stats.completed}</span>
                   </div>
+                  <div className="jlx-card-corner top-left"></div>
+                  <div className="jlx-card-corner bottom-right"></div>
                 </div>
-              </article>
-            </section>
+              </div>
+            ) : (
+              <section className="jlx-joblab-empty-mission">
+                <div className="jlx-joblab-empty-mission__orb jlx-joblab-empty-mission__orb--one" />
+                <div className="jlx-joblab-empty-mission__orb jlx-joblab-empty-mission__orb--two" />
+                <FolderOpen size={46} />
+                <h3>Chưa có đơn nào</h3>
+                <p>Apply job đầu tiên để bắt đầu hành trình!</p>
+                <button
+                  type="button"
+                  className="jlx-btn jlx-btn--primary"
+                  onClick={() => navigate("/jobs")}
+                >
+                  <Briefcase size={14} />
+                  Khám phá job
+                </button>
+              </section>
+            )}
           </>
         )}
 
         {viewMode === "applications" && (
           <>
-            <section className="jlx-toolbar">
+            <section className="jlx-app-toolbar">
               <div className="jlx-type-tabs">
                 {[
                   { id: "ALL", label: "Tất cả" },

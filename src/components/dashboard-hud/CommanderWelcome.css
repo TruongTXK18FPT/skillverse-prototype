@@ -282,6 +282,34 @@
   color: inherit; /* Match the color of the button */
 }
 
+.commander-welcome__jump-btn--applications {
+  margin-top: 0.7rem;
+  flex: 0 0 calc(100% - 16px);
+  max-width: calc(100% - 16px);
+  width: calc(100% - 16px);
+  min-height: 52px;
+  padding: 0.65rem 1rem;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.26), rgba(234, 88, 12, 0.2));
+  border: 1px solid rgba(251, 191, 36, 0.56);
+  color: #fef3c7;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.18);
+}
+
+.commander-welcome__jump-btn--applications:hover {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.34), rgba(249, 115, 22, 0.26));
+  border-color: rgba(253, 224, 71, 0.82);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(245, 158, 11, 0.3);
+}
+
+.commander-welcome__jump-btn--applications svg {
+  color: #fde68a;
+}
+
 .commander-welcome--premium .commander-welcome__jump-btn::after {
   background: rgba(168, 85, 247, 0.1); /* Match premium leading icon background */
   color: #a855f7; /* Match premium leading icon color */

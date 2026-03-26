@@ -28,6 +28,7 @@ import {
   ShortTermJobResponse,
   ShortTermJobStatus,
   JobEscrow,
+  EscrowStatus,
 } from "../../types/ShortTermJob";
 import shortTermJobService from "../../services/shortTermJobService";
 import walletService from "../../services/walletService";
@@ -218,6 +219,15 @@ const ShortTermJobFullPage = ({
 
   const handleAcceptApplication = async () => {
     if (!acceptModal) return;
+    const canApproveApplicants = escrow?.status === EscrowStatus.FUNDED;
+    if (!canApproveApplicants) {
+      showError(
+        "Chưa ký quỹ",
+        "Vui lòng ký quỹ trước khi duyệt ứng viên.",
+      );
+      return;
+    }
+
     try {
       setIsActionBusy(true);
       await shortTermJobService.selectCandidate(jobId, acceptModal.id);
@@ -300,6 +310,9 @@ const ShortTermJobFullPage = ({
       a.status === ShortTermApplicationStatus.COMPLETED ||
       a.status === ShortTermApplicationStatus.PAID,
   );
+  const canApproveApplicants = escrow?.status === EscrowStatus.FUNDED;
+  const approveBlockedMessage =
+    "Cần ký quỹ trước khi duyệt ứng viên";
 
   return (
     <div className="stj-fullpage">
@@ -687,7 +700,12 @@ const ShortTermJobFullPage = ({
                       <div className="stj-fullpage__app-actions">
                         <button
                           className="stj-btn stj-btn--approve"
-                          disabled={isActionBusy}
+                          disabled={isActionBusy || !canApproveApplicants}
+                          title={
+                            canApproveApplicants
+                              ? "Chấp nhận ứng viên"
+                              : approveBlockedMessage
+                          }
                           onClick={() => setAcceptModal(app)}
                         >
                           <CheckCircle2 size={13} />
@@ -778,7 +796,12 @@ const ShortTermJobFullPage = ({
               </button>
               <button
                 className="stj-btn stj-btn--approve"
-                disabled={isActionBusy}
+                disabled={isActionBusy || !canApproveApplicants}
+                title={
+                  canApproveApplicants
+                    ? "Xác nhận chọn ứng viên"
+                    : approveBlockedMessage
+                }
                 onClick={handleAcceptApplication}
               >
                 {isActionBusy ? (

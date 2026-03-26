@@ -16,6 +16,7 @@ import {
   BookOpen,
   TrendingUp,
   Users,
+  Briefcase,
 } from "lucide-react";
 import "./CommanderWelcome.css";
 
@@ -256,6 +257,16 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
               <ChevronRight size={14} /> {/* Add arrow icon */}
             </button>
           </div>
+
+          <button
+            onClick={() => navigate("/my-applications")}
+            className="commander-welcome__jump-btn commander-welcome__jump-btn--applications"
+            title="Đến trung tâm quản lý đơn ứng tuyển"
+          >
+            <Briefcase size={16} />
+            <span>Trung tâm công việc của bạn</span>
+            <ChevronRight size={16} />
+          </button>
         </div>
 
         {/* Center Section - Task Panel */}

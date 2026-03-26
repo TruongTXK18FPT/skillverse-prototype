@@ -2973,6 +2973,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.3rem 0.5rem;
+  width: 100%;
+  min-width: 0;
   border-radius: 8px;
   background: rgba(34, 211, 238, 0.06);
   border: 1px solid rgba(34, 211, 238, 0.1);
@@ -3004,6 +3006,23 @@
   gap: 0.15rem;
   flex: 1;
   min-width: 0;
+}
+
+.stj-handover-card__file-link {
+  flex: 1;
+  min-width: 0;
+}
+
+.stj-handover-card__file-link > svg {
+  flex-shrink: 0;
+}
+
+.stj-handover-card__file-link-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .stj-handover-card__file-size {
@@ -3868,6 +3887,28 @@
   font-size: 0.76rem;
   line-height: 1.45;
   color: rgba(226, 232, 240, 0.74);
+}
+
+.stj-handover-stat .stj-handover-stat__label,
+.stj-handover-stat .stj-handover-stat__meta,
+.stj-handover-stat .stj-handover-stat__num {
+  display: block;
+  margin-top: 0;
+}
+
+.stj-handover-stat .stj-handover-stat__label {
+  font-size: 0.86rem;
+  color: #f8fafc;
+}
+
+.stj-handover-stat .stj-handover-stat__meta {
+  font-size: 0.76rem;
+  color: rgba(226, 232, 240, 0.74);
+}
+
+.stj-handover-stat .stj-handover-stat__num {
+  display: inline-flex;
+  font-size: 1.5rem;
 }
 
 .stj-handover-stat__num {
