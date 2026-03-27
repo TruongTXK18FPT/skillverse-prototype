@@ -51,9 +51,7 @@ export interface CreateBookingRequest {
   startTime: string;
   durationMinutes: number;
   priceVnd: number;
-  paymentMethod: 'PAYOS' | 'WALLET';
-  successUrl?: string;
-  cancelUrl?: string;
+  paymentMethod: 'WALLET';
 }
 
 export const createBookingWithWallet = async (request: CreateBookingRequest): Promise<BookingResponse> => {

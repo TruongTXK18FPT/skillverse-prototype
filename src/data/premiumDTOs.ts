@@ -13,21 +13,13 @@ export interface PremiumPlan {
     | "STUDENT_PACK"
     | "RECRUITER_PRO";
   targetRole?: "LEARNER" | "RECRUITER" | "PARENT";
+  discountPercent?: string;
+  discountedPrice?: string;
+  // Legacy aliases kept for backward compatibility with older payloads.
   studentPrice?: string;
   features: string;
-  studentDiscountPercent: string;
+  studentDiscountPercent?: string;
   isActive: boolean;
-}
-
-export interface CreateSubscriptionRequest {
-  planId: number;
-  paymentMethod: "PAYOS";
-  applyStudentDiscount?: boolean;
-  autoRenew?: boolean;
-  successUrl?: string;
-  cancelUrl?: string;
-  couponCode?: string;
-  targetUserId?: number;
 }
 
 export interface UserSubscriptionResponse {
@@ -41,8 +33,18 @@ export interface UserSubscriptionResponse {
   endDate: string;
   isActive: boolean;
   status: "PENDING" | "ACTIVE" | "EXPIRED" | "CANCELLED" | "SUSPENDED";
-  isStudentSubscription: boolean;
+  // Legacy alias kept for backward compatibility with older payloads.
+  isStudentSubscription?: boolean;
+  isDiscountedSubscription?: boolean;
   autoRenew: boolean;
+  renewalPrice?: string;
+  renewalAttemptDate?: string;
+  renewalPriceLockedAt?: string;
+  scheduledChangePlan?: PremiumPlan | null;
+  scheduledChangeEffectiveDate?: string | null;
+  scheduledChangeAutoRenew?: boolean | null;
+  scheduledChangeRenewalPrice?: string | null;
+  scheduledChangeRenewalAttemptDate?: string | null;
   paymentTransactionId?: number;
   daysRemaining?: number;
   currentlyActive?: boolean;
@@ -50,4 +52,34 @@ export interface UserSubscriptionResponse {
   cancelledAt?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface SubscriptionCheckoutPreviewResponse {
+  eligible: boolean;
+  upgrade: boolean;
+  samePlan: boolean;
+  downgrade: boolean;
+  buyerUserId: number;
+  targetUserId: number;
+  currentSubscriptionId?: number | null;
+  currentPlan?: PremiumPlan | null;
+  targetPlan: PremiumPlan;
+  fullPrice: string;
+  effectivePrice: string;
+  amountDue: string;
+  currentPlanCredit: string;
+  proratedTargetPrice: string;
+  remainingDays: number;
+  nextRenewalDate?: string | null;
+  currency: "VND" | "USD";
+  pricingMode:
+    | "FULL_PURCHASE"
+    | "UPGRADE_PRORATED"
+    | "UPGRADE_GRACE_WINDOW"
+    | "UPGRADE_FULL_PRICE"
+    | "UPGRADE_NOT_ALLOWED"
+    | "CURRENT_PLAN"
+    | "DOWNGRADE_NOT_ALLOWED"
+    | "DOWNGRADE_SCHEDULED";
+  message: string;
 }

@@ -130,6 +130,7 @@ export enum WithdrawalStatus {
 
 export interface DepositRequest {
   amount: number;
+  // External gateway is only used for wallet top-up.
   paymentMethod: 'PAYOS';
   returnUrl: string;
   cancelUrl: string;
@@ -137,10 +138,9 @@ export interface DepositRequest {
 
 export interface PurchaseCoinsRequest {
   coinAmount: number;
-  paymentMethod: 'WALLET_CASH' | 'PAYOS';
+  // Internal purchase flow uses wallet cash only.
+  paymentMethod: 'WALLET_CASH';
   packageId?: string;
-  returnUrl?: string; // For PayOS payment
-  cancelUrl?: string; // For PayOS payment
 }
 
 export interface WithdrawalRequest {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import RankCard from "./RankCard";
 import ClearanceHeader from "./ClearanceHeader";
 import { PremiumPlan, UserSubscriptionResponse } from "../../data/premiumDTOs";
@@ -14,36 +14,52 @@ import diamondAvatar from "../../assets/premium/diamond_avatar.png";
 interface ClearanceLevelPageProps {
   premiumPlans: PremiumPlan[];
   currentSub: UserSubscriptionResponse | null;
-  hasActive: boolean;
+  activePlanId?: number | null;
+  activePlanName?: string | null;
   processing: boolean;
   isAuthenticated: boolean;
   walletData: WalletResponse | null;
   userProfile: UserProfileResponse | null;
   fallbackAvatarUrl?: string;
-  onUpgrade: (planName: string) => void;
   onWalletPayment: (planName: string) => void;
+  onPlanPreview?: (planName: string) => void;
   onViewInvoice?: (sub: UserSubscriptionResponse) => void;
+  onEnableAutoRenew?: () => void;
   onCancelAutoRenew?: () => void;
   onCancelSubscription?: () => void;
   targetLabel?: string;
 }
 
+const GRACE_WINDOW_HOURS = 72;
+
 const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
   premiumPlans,
   currentSub,
-  hasActive,
+  activePlanId,
+  activePlanName,
   processing,
   isAuthenticated,
   walletData,
   userProfile,
   fallbackAvatarUrl,
-  onUpgrade,
   onWalletPayment,
+  onPlanPreview,
   onViewInvoice,
+  onEnableAutoRenew,
   onCancelAutoRenew,
   onCancelSubscription,
   targetLabel = "NÂNG CẤP",
 }) => {
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setNow(Date.now());
+    }, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
+
   const getTierFrame = (planType: string, planName?: string) => {
     switch (planType) {
       case "STUDENT_PACK":
@@ -63,18 +79,37 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
     }
   };
 
-  // We need to know if ANY plan is active to disable others if that's the logic
-  // But usually upgrades are allowed.
-  // The original code:
-  // if (hasActive && currentSub && currentSub.status === 'ACTIVE') {
-  //   const isFree = currentSub.plan.planType === 'FREE_TIER';
-  //   if (!isFree) return; // Prevents handleUpgrade
-  // }
-  // And in render:
-  // {plan.planType !== 'FREE_TIER' && ( hasActive ? ( <button disabled>... ) : ... )}
-  // This suggests if you have Premium, ALL premium cards show "Active until...".
-  // That's a bit weird UI, but I must preserve logic.
-  // I will pass `hasActive` to RankCard and let it handle the "Active" state display based on that.
+  const isCurrentPlan = (plan: PremiumPlan) => {
+    if (activePlanId != null) {
+      return plan.id === activePlanId;
+    }
+
+    if (activePlanName) {
+      return (
+        plan.displayName === activePlanName ||
+        plan.name === activePlanName
+      );
+    }
+
+    return false;
+  };
+
+  const graceWindowInfo = useMemo(() => {
+    const currentPlan = currentSub?.plan;
+    if (!currentSub?.startDate || !currentPlan || currentPlan.planType === "FREE_TIER") {
+      return null;
+    }
+
+    const graceEndsAt = new Date(currentSub.startDate).getTime() + GRACE_WINDOW_HOURS * 60 * 60 * 1000;
+    const remainingMs = Math.max(0, graceEndsAt - now);
+
+    return {
+      endsAt: graceEndsAt,
+      remainingMs,
+      isActive: remainingMs > 0,
+      currentPlan,
+    };
+  }, [currentSub, now]);
 
   return (
     <div className="hall-container">
@@ -98,30 +133,36 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
         <ClearanceHeader />
 
         <div className="hall-rank-grid">
-          {premiumPlans.map((plan) => (
-            <RankCard
-              key={plan.id}
-              plan={plan}
-              isActive={hasActive}
-              currentSub={currentSub}
-              onUpgrade={onUpgrade}
-              onWalletPayment={onWalletPayment}
-              processing={processing}
-              isAuthenticated={isAuthenticated}
-              walletData={walletData}
-              userProfile={userProfile}
-              frameImage={getTierFrame(plan.planType, plan.name)}
-              fallbackAvatarUrl={fallbackAvatarUrl}
-              onViewInvoice={
-                onViewInvoice
-                  ? () => currentSub && onViewInvoice(currentSub)
-                  : undefined
-              }
-              onCancelAutoRenew={onCancelAutoRenew}
-              onCancelSubscription={onCancelSubscription}
-              targetLabel={targetLabel}
-            />
-          ))}
+          {premiumPlans.map((plan) => {
+            const planIsCurrent = isCurrentPlan(plan);
+
+            return (
+              <RankCard
+                key={plan.id}
+                plan={plan}
+                isCurrentPlan={planIsCurrent}
+                currentSub={currentSub}
+                onWalletPayment={onWalletPayment}
+                onPlanPreview={onPlanPreview}
+                processing={processing}
+                isAuthenticated={isAuthenticated}
+                walletData={walletData}
+                userProfile={userProfile}
+                frameImage={getTierFrame(plan.planType, plan.name)}
+                fallbackAvatarUrl={fallbackAvatarUrl}
+                onViewInvoice={
+                  onViewInvoice && planIsCurrent && currentSub
+                    ? () => onViewInvoice(currentSub)
+                    : undefined
+                }
+                onEnableAutoRenew={planIsCurrent ? onEnableAutoRenew : undefined}
+                onCancelAutoRenew={planIsCurrent ? onCancelAutoRenew : undefined}
+                onCancelSubscription={planIsCurrent ? onCancelSubscription : undefined}
+                targetLabel={targetLabel}
+                graceWindowInfo={graceWindowInfo}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

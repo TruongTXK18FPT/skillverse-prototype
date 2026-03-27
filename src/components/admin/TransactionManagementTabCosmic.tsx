@@ -36,6 +36,21 @@ interface CombinedTransaction {
   originalData: any;
 }
 
+const formatPaymentMethodLabel = (paymentMethod?: string, paymentType?: string): string => {
+  const method = String(paymentMethod || '').toUpperCase();
+  const type = String(paymentType || '').toUpperCase();
+
+  if (method === 'PAYOS' && type === 'WALLET_TOPUP') {
+    return 'Nạp ví qua PayOS';
+  }
+
+  if (method === 'WALLET_CASH' || method === 'WALLET') {
+    return 'Ví nội bộ';
+  }
+
+  return paymentMethod || '-';
+};
+
 const TransactionManagementTabCosmic: React.FC = () => {
   const [transactions, setTransactions] = useState<CombinedTransaction[]>([]);
   const [filteredTransactions, setFilteredTransactions] = useState<CombinedTransaction[]>([]);
@@ -239,7 +254,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
           status: payment.status,
           description,
           createdAt: payment.createdAt,
-          method: 'PayOS',
+          method: formatPaymentMethodLabel(payment.paymentMethod, payment.type),
           reference: payment.internalReference,
           originalData: payment
         };

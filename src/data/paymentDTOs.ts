@@ -1,8 +1,11 @@
+export type TopupPaymentType = 'WALLET_TOPUP';
+export type TopupPaymentMethod = 'PAYOS';
+
 export interface CreatePaymentRequest {
   amount: string;
-  currency?: 'VND' | 'USD';
-  type: 'PREMIUM_SUBSCRIPTION' | 'COURSE_PURCHASE' | 'WALLET_TOPUP' | 'COIN_PURCHASE' | 'REFUND';
-  paymentMethod: 'PAYOS';
+  currency?: 'VND';
+  type: TopupPaymentType;
+  paymentMethod: TopupPaymentMethod;
   description?: string;
   planId?: number;
   metadata?: string;

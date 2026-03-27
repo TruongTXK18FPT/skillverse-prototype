@@ -44,6 +44,8 @@ const CancelAutoRenewalModal: React.FC<CancelAutoRenewalModalProps> = ({
   };
 
   if (!isOpen || !subscription) return null;
+  const managesScheduledPlan = Boolean(subscription.scheduledChangePlan);
+  const effectivePlan = subscription.scheduledChangePlan ?? subscription.plan;
 
   return (
     <div className="auto-renewal-modal-overlay" onClick={onClose}>
@@ -63,7 +65,8 @@ const CancelAutoRenewalModal: React.FC<CancelAutoRenewalModalProps> = ({
 
           {/* Description */}
           <p className="auto-renewal-description">
-            Bạn có chắc chắn muốn hủy thanh toán tự động cho gói <strong>{subscription.plan.displayName}</strong>?
+            Bạn có chắc chắn muốn hủy thanh toán tự động cho gói <strong>{effectivePlan.displayName}</strong>
+            {managesScheduledPlan ? ' sau khi chuyển gói' : ''}?
           </p>
 
           {/* Info Cards */}

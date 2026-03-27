@@ -46,7 +46,7 @@ class WalletService {
   // ==================== DEPOSIT ====================
 
   /**
-   * Create deposit request (PayOS payment)
+   * Create wallet top-up request (PayOS)
    * POST /api/wallet/deposit
    */
   async createDeposit(request: DepositRequest): Promise<CreatePaymentResponse> {
@@ -95,34 +95,6 @@ class WalletService {
       console.error("❌ Purchase coins error:", error);
       const errorMessage =
         (error as AxiosError).response?.data?.message || "Mua xu thất bại.";
-      throw new Error(errorMessage);
-    }
-  }
-
-  /**
-   * Purchase coins with PayOS payment
-   * POST /api/wallet/coins/purchase-with-payos
-   */
-  async purchaseCoinsWithPayOS(
-    request: PurchaseCoinsRequest,
-  ): Promise<CreatePaymentResponse> {
-    try {
-      // Ensure paymentMethod is set to PAYOS
-      const payload = {
-        ...request,
-        paymentMethod: "PAYOS",
-      };
-      const response = await axiosInstance.post<CreatePaymentResponse>(
-        "/wallet/coins/purchase-with-payos",
-        payload,
-      );
-
-      return response.data;
-    } catch (error: unknown) {
-      console.error("❌ Purchase coins with PayOS error:", error);
-      const errorMessage =
-        (error as AxiosError).response?.data?.message ||
-        "Tạo thanh toán mua xu thất bại.";
       throw new Error(errorMessage);
     }
   }

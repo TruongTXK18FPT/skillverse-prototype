@@ -38,7 +38,7 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
       | "STUDENT_PACK"
       | "RECRUITER_PRO",
     targetRole: "LEARNER" as "LEARNER" | "RECRUITER",
-    studentDiscountPercent: 0,
+    discountPercent: 0,
     maxSubscribers: null as number | null,
     isActive: true,
   });
@@ -60,7 +60,8 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
         planType: editingPlan.planType as any,
         targetRole:
           editingPlan.targetRole === "RECRUITER" ? "RECRUITER" : "LEARNER",
-        studentDiscountPercent: editingPlan.studentDiscountPercent,
+        discountPercent:
+          editingPlan.discountPercent ?? editingPlan.studentDiscountPercent,
         maxSubscribers: editingPlan.maxSubscribers,
         isActive: editingPlan.isActive,
       });
@@ -204,10 +205,10 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
     }
 
     if (
-      formData.studentDiscountPercent < 0 ||
-      formData.studentDiscountPercent > 100
+      formData.discountPercent < 0 ||
+      formData.discountPercent > 100
     ) {
-      return "Giảm giá sinh viên phải từ 0-100%";
+      return "Giảm giá theo role phải từ 0-100%";
     }
 
     const validFeatures = features.filter((f) => f.trim());
@@ -243,7 +244,10 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
               description: editingPlan.description,
               durationMonths: editingPlan.durationMonths,
               price: editingPlan.price,
-              studentDiscountPercent: editingPlan.studentDiscountPercent,
+              discountPercent:
+                editingPlan.discountPercent ?? editingPlan.studentDiscountPercent,
+              studentDiscountPercent:
+                editingPlan.discountPercent ?? editingPlan.studentDiscountPercent,
               features: JSON.stringify(editingPlan.features), // Convert array to JSON string
               maxSubscribers: editingPlan.maxSubscribers,
               isActive: editingPlan.isActive,
@@ -257,7 +261,8 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
               description: formData.description,
               durationMonths: formData.durationMonths,
               price: formData.price,
-              studentDiscountPercent: formData.studentDiscountPercent,
+              discountPercent: formData.discountPercent,
+              studentDiscountPercent: formData.discountPercent,
               features: featuresJson,
               maxSubscribers: formData.maxSubscribers,
               isActive: formData.isActive,
@@ -276,9 +281,10 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
           description: formData.description,
           durationMonths: formData.durationMonths,
           price: formData.price,
+          discountPercent: formData.discountPercent,
           planType: formData.planType,
           targetRole: formData.targetRole,
-          studentDiscountPercent: formData.studentDiscountPercent,
+          studentDiscountPercent: formData.discountPercent,
           features: featuresJson,
           maxSubscribers: formData.maxSubscribers,
           isActive: formData.isActive,
@@ -467,22 +473,23 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
               />
             </div>
 
-            {/* Student Discount */}
+            {/* Role Discount */}
             <div className="admin-form-group">
-              <label htmlFor="studentDiscountPercent">
-                Giảm Giá SV (%) <span className="required">*</span>
+              <label htmlFor="discountPercent">
+                Giảm Giá Theo Role (%) <span className="required">*</span>
               </label>
               <input
                 type="number"
-                id="studentDiscountPercent"
-                name="studentDiscountPercent"
-                value={formData.studentDiscountPercent}
+                id="discountPercent"
+                name="discountPercent"
+                value={formData.discountPercent}
                 onChange={handleInputChange}
                 min="0"
                 max="100"
                 required
                 disabled={isFreeTier}
               />
+              <small>Áp dụng cho nhóm người dùng mà gói này đang nhắm tới</small>
             </div>
 
             {/* Max Subscribers */}

@@ -1,13 +1,41 @@
 import React, { useState } from 'react';
-import { X, CheckCircle, RefreshCw, Calendar, Shield, Wallet } from 'lucide-react';
+import { X, CheckCircle, RefreshCw, Shield, Wallet } from 'lucide-react';
 import { premiumService } from '../../services/premiumService';
 import { UserSubscriptionResponse } from '../../data/premiumDTOs';
 import './EnableAutoRenewalModal.css';
+
+const AUTO_RENEWAL_INTERVAL_MINUTES = 1;
+
+const resolveDisplayedRenewalAttemptDate = (subscription: UserSubscriptionResponse): Date => {
+  if (subscription.renewalAttemptDate) {
+    return new Date(subscription.renewalAttemptDate);
+  }
+
+  const endDate = new Date(subscription.endDate);
+  const attemptDate = new Date(endDate);
+  attemptDate.setSeconds(0, 0);
+
+  const isAligned = endDate.getSeconds() === 0
+    && endDate.getMilliseconds() === 0
+    && endDate.getMinutes() % AUTO_RENEWAL_INTERVAL_MINUTES === 0;
+
+  if (isAligned) {
+    return endDate;
+  }
+
+  const remainder = attemptDate.getMinutes() % AUTO_RENEWAL_INTERVAL_MINUTES;
+  const minutesUntilNextRun = remainder === 0
+    ? AUTO_RENEWAL_INTERVAL_MINUTES
+    : AUTO_RENEWAL_INTERVAL_MINUTES - remainder;
+  attemptDate.setMinutes(attemptDate.getMinutes() + minutesUntilNextRun);
+  return attemptDate;
+};
 
 interface EnableAutoRenewalModalProps {
   isOpen: boolean;
   onClose: () => void;
   subscription: UserSubscriptionResponse | null;
+  walletBalance?: number | null;
   onSuccess: () => void;
 }
 
@@ -15,6 +43,7 @@ const EnableAutoRenewalModal: React.FC<EnableAutoRenewalModalProps> = ({
   isOpen,
   onClose,
   subscription,
+  walletBalance,
   onSuccess
 }) => {
   const [processing, setProcessing] = useState(false);
@@ -43,10 +72,31 @@ const EnableAutoRenewalModal: React.FC<EnableAutoRenewalModalProps> = ({
 
   if (!isOpen || !subscription) return null;
 
-  const basePrice = parseFloat(subscription.plan.price);
-  const price = subscription.isStudentSubscription 
-    ? basePrice * 0.8 
-    : basePrice;
+  const managesScheduledPlan = Boolean(subscription.scheduledChangePlan);
+  const effectivePlan = subscription.scheduledChangePlan ?? subscription.plan;
+  const price = managesScheduledPlan
+    ? parseFloat(
+        subscription.scheduledChangeRenewalPrice
+          ?? subscription.scheduledChangePlan?.discountedPrice
+          ?? subscription.scheduledChangePlan?.studentPrice
+          ?? subscription.scheduledChangePlan?.price
+          ?? '0',
+      )
+    : subscription.renewalPrice
+      ? parseFloat(subscription.renewalPrice)
+      : (subscription.isDiscountedSubscription ?? subscription.isStudentSubscription) && (
+          subscription.plan.discountedPrice || subscription.plan.studentPrice
+        )
+        ? parseFloat(subscription.plan.discountedPrice || subscription.plan.studentPrice || '0')
+        : parseFloat(subscription.plan.price);
+  const renewalAttemptDate = managesScheduledPlan && subscription.scheduledChangeRenewalAttemptDate
+    ? new Date(subscription.scheduledChangeRenewalAttemptDate)
+    : resolveDisplayedRenewalAttemptDate(subscription);
+  const normalizedWalletBalance = walletBalance ?? null;
+  const hasEnoughBalance = normalizedWalletBalance == null
+    ? null
+    : normalizedWalletBalance >= price;
+  const hasLockedRenewalPrice = Boolean(subscription.renewalPriceLockedAt);
 
   return (
     <div className="enable-renewal-modal-overlay" onClick={onClose}>
@@ -62,12 +112,13 @@ const EnableAutoRenewalModal: React.FC<EnableAutoRenewalModalProps> = ({
           </div>
 
           {/* Title */}
-          <h2 className="enable-renewal-modal-title">Bật Thanh Toán Tự Động</h2>
+          <h2 className="enable-renewal-modal-title">Xác nhận bật tự động gia hạn</h2>
 
           {/* Description */}
           <p className="enable-renewal-description">
-            Bật tính năng thanh toán tự động để gói <strong>{subscription.plan.displayName}</strong> của bạn 
-            được gia hạn liền mạch mà không bị gián đoạn.
+            Bạn sắp bật tự động gia hạn cho gói <strong>{effectivePlan.displayName}</strong>.
+            {' '}Sau khi xác nhận, hệ thống sẽ tự động trừ ví theo lịch gia hạn
+            {managesScheduledPlan ? ' sau khi chuyển gói.' : '.'}
           </p>
 
           {/* Info Cards */}
@@ -76,14 +127,14 @@ const EnableAutoRenewalModal: React.FC<EnableAutoRenewalModalProps> = ({
               <RefreshCw size={24} className="card-icon-success" />
               <div>
                 <h4>Tự động gia hạn</h4>
-                <p>Trước 3 ngày hết hạn</p>
+                <p>Khi gói kết thúc</p>
               </div>
             </div>
             <div className="enable-renewal-info-card">
               <Wallet size={24} className="card-icon-info" />
               <div>
                 <h4>Thanh toán</h4>
-                <p>{price.toLocaleString('vi-VN')} VND/tháng</p>
+                <p>{price.toLocaleString('vi-VN')} VND/kỳ</p>
               </div>
             </div>
             <div className="enable-renewal-info-card">
@@ -95,24 +146,29 @@ const EnableAutoRenewalModal: React.FC<EnableAutoRenewalModalProps> = ({
             </div>
           </div>
 
-          {/* Benefits */}
-          <div className="enable-renewal-benefits">
-            <h3>✅ Lợi ích khi bật thanh toán tự động:</h3>
-            <ul>
-              <li>Không bao giờ bị gián đoạn dịch vụ Premium</li>
-              <li>Tự động trừ tiền từ ví 3 ngày trước khi hết hạn</li>
-              <li>Giữ nguyên giá ưu đãi sinh viên (nếu có)</li>
-              <li>Có thể tắt thanh toán tự động bất cứ lúc nào</li>
-            </ul>
-          </div>
+          {normalizedWalletBalance != null && (
+            <div className="enable-renewal-note">
+              <strong>Trạng thái ví:</strong>
+              <p>
+                Số dư hiện tại là <strong>{normalizedWalletBalance.toLocaleString('vi-VN')} VND</strong>.
+                {" "}
+                {hasEnoughBalance
+                  ? 'Số dư này đủ cho kỳ gia hạn tiếp theo.'
+                  : 'Số dư này chưa đủ. Bạn nên nạp thêm để tránh gia hạn thất bại.'}
+              </p>
+            </div>
+          )}
 
           {/* Note */}
           <div className="enable-renewal-note">
-            <strong>💡 Lưu ý:</strong>
-            <p>
-              Hệ thống sẽ tự động trừ <strong>{price.toLocaleString('vi-VN')} VND</strong> từ 
-              ví của bạn vào ngày <strong>{new Date(new Date(subscription.endDate).getTime() - 3 * 24 * 60 * 60 * 1000).toLocaleDateString('vi-VN')}</strong> 
-              (3 ngày trước khi hết hạn). Vui lòng đảm bảo ví có đủ số dư.
+              <strong>💡 Lưu ý:</strong>
+              <p>
+              Hệ thống sẽ tự động thử trừ <strong>{price.toLocaleString('vi-VN')} VND</strong> từ 
+              ví của bạn vào khoảng <strong>{renewalAttemptDate.toLocaleString('vi-VN')}</strong>.
+              {' '}Lần thử đầu tiên diễn ra trong tối đa {AUTO_RENEWAL_INTERVAL_MINUTES} phút sau khi gói hết hạn.
+              {' '}{hasLockedRenewalPrice
+                ? 'Mức phí này đã được khóa cho kỳ gia hạn kế tiếp.'
+                : 'Mức phí này sẽ được khóa khi bạn bật tự động gia hạn.'}
             </p>
           </div>
 

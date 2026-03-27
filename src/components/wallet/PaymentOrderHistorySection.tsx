@@ -16,6 +16,7 @@ interface PaymentOrderHistorySectionProps {
   orders: PaymentTransactionResponse[];
   isLoading?: boolean;
   itemsPerPage?: number;
+  sectionTitle?: string;
   formatDate: (value: string) => string;
   formatCurrency: (value: number) => string;
   getStatusBadge: (status: string) => JSX.Element;
@@ -66,6 +67,7 @@ const PaymentOrderHistorySection: React.FC<PaymentOrderHistorySectionProps> = ({
   orders,
   isLoading = false,
   itemsPerPage = 6,
+  sectionTitle = "Lịch sử đơn hàng thanh toán",
   formatDate,
   formatCurrency,
   getStatusBadge,
@@ -104,18 +106,18 @@ const PaymentOrderHistorySection: React.FC<PaymentOrderHistorySectionProps> = ({
     <div className="transactions-section" style={{ marginTop: "1.5rem" }}>
       <h2 className={sectionTitleClassName}>
         <History size={18} />
-        Lịch sử đơn hàng thanh toán
+        {sectionTitle}
       </h2>
       <div className={listClassName}>
         {isLoading ? (
           <div className="empty-state">
             <Sparkles size={48} />
-            <p>Đang tải lịch sử thanh toán...</p>
+            <p>Đang tải lịch sử nạp tiền qua PayOS...</p>
           </div>
         ) : orders.length === 0 ? (
           <div className="empty-state">
             <Sparkles size={48} />
-            <p>Chưa có đơn hàng thanh toán nào</p>
+            <p>Chưa có giao dịch nạp tiền qua PayOS nào</p>
           </div>
         ) : (
           paginatedOrders.map((order) => {

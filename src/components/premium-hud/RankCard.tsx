@@ -6,9 +6,10 @@ import {
   Crown,
   Gem,
   Wallet,
-  Briefcase,
   Rocket,
   Star,
+  Sparkles,
+  Info,
 } from "lucide-react";
 import { PremiumPlan, UserSubscriptionResponse } from "../../data/premiumDTOs";
 import { UserProfileResponse } from "../../data/userDTOs";
@@ -21,10 +22,10 @@ import "./rank-styles.css";
 
 interface RankCardProps {
   plan: PremiumPlan;
-  isActive: boolean;
+  isCurrentPlan: boolean;
   currentSub: UserSubscriptionResponse | null;
-  onUpgrade: (planName: string) => void;
   onWalletPayment: (planName: string) => void;
+  onPlanPreview?: (planName: string) => void;
   processing: boolean;
   isAuthenticated: boolean;
   walletData: WalletResponse | null;
@@ -32,17 +33,24 @@ interface RankCardProps {
   frameImage: string | null;
   fallbackAvatarUrl?: string;
   onViewInvoice?: () => void;
+  onEnableAutoRenew?: () => void;
   onCancelAutoRenew?: () => void;
   onCancelSubscription?: () => void;
   targetLabel?: string;
+  graceWindowInfo?: {
+    endsAt: number;
+    remainingMs: number;
+    isActive: boolean;
+    currentPlan: PremiumPlan;
+  } | null;
 }
 
 const RankCard: React.FC<RankCardProps> = ({
   plan,
-  isActive,
+  isCurrentPlan,
   currentSub,
-  onUpgrade,
   onWalletPayment,
+  onPlanPreview,
   processing,
   isAuthenticated,
   walletData,
@@ -50,10 +58,29 @@ const RankCard: React.FC<RankCardProps> = ({
   frameImage,
   fallbackAvatarUrl,
   onViewInvoice,
+  onEnableAutoRenew,
   onCancelAutoRenew,
   onCancelSubscription,
   targetLabel,
+  graceWindowInfo,
 }) => {
+  const getPlanUpgradeOrder = (planType: PremiumPlan["planType"]) => {
+    switch (planType) {
+      case "FREE_TIER":
+        return 0;
+      case "STUDENT_PACK":
+        return 1;
+      case "PREMIUM_BASIC":
+        return 2;
+      case "PREMIUM_PLUS":
+        return 3;
+      case "RECRUITER_PRO":
+        return 100;
+      default:
+        return 0;
+    }
+  };
+
   const getTierClass = (planType: string) => {
     switch (planType) {
       case "FREE_TIER":
@@ -127,6 +154,17 @@ const RankCard: React.FC<RankCardProps> = ({
     return num.toLocaleString("vi-VN");
   };
 
+  const formatCountdown = (remainingMs: number) => {
+    const totalSeconds = Math.max(0, Math.floor(remainingMs / 1000));
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return [hours, minutes, seconds]
+      .map((value) => String(value).padStart(2, "0"))
+      .join(":");
+  };
+
   const parseFeatures = (featuresString: string): string[] => {
     try {
       return JSON.parse(featuresString);
@@ -156,9 +194,52 @@ const RankCard: React.FC<RankCardProps> = ({
   const tierClass = getTierClass(plan.planType);
   const features = parseFeatures(plan.features);
   const isFreeTier = plan.planType === "FREE_TIER";
+  const currentPlanPrice = parseFloat(graceWindowInfo?.currentPlan.price ?? "0");
+  const targetPlanPrice = parseFloat(plan.price);
+  const currentPlanOrder = getPlanUpgradeOrder(graceWindowInfo?.currentPlan.planType ?? "FREE_TIER");
+  const targetPlanOrder = getPlanUpgradeOrder(plan.planType);
+  const isEligibleUpgradeTarget = Boolean(
+    graceWindowInfo?.isActive &&
+      !isCurrentPlan &&
+      !isFreeTier &&
+      (
+        targetPlanOrder > currentPlanOrder ||
+        (targetPlanOrder === currentPlanOrder && targetPlanPrice > currentPlanPrice)
+      ),
+  );
+  const countdownLabel = graceWindowInfo?.isActive
+    ? formatCountdown(graceWindowInfo.remainingMs)
+    : null;
+  const hasGraceWindowExpired = Boolean(
+    isCurrentPlan && graceWindowInfo && !graceWindowInfo.isActive,
+  );
+  const graceHelpText = "72h được tính từ lúc mua gói hiện tại.";
+  const scheduledChangePlan = isCurrentPlan ? currentSub?.scheduledChangePlan : null;
+  const scheduledChangeEffectiveDate = isCurrentPlan
+    ? currentSub?.scheduledChangeEffectiveDate
+    : null;
+  const scheduledChangeDateLabel = scheduledChangeEffectiveDate
+    ? new Date(scheduledChangeEffectiveDate).toLocaleDateString("vi-VN")
+    : null;
+  const scheduledChangeAutoRenew = Boolean(
+    isCurrentPlan && currentSub?.scheduledChangeAutoRenew,
+  );
+  const isScheduledTarget = Boolean(
+    !isCurrentPlan &&
+      currentSub?.scheduledChangePlan?.id &&
+      currentSub.scheduledChangePlan.id === plan.id,
+  );
+  const autoRenewManagedAfterSwitch = Boolean(
+    isCurrentPlan && scheduledChangePlan,
+  );
+  const effectiveAutoRenew = autoRenewManagedAfterSwitch
+    ? scheduledChangeAutoRenew
+    : Boolean(currentSub?.autoRenew);
 
   return (
-    <div className={`hall-rank-card ${tierClass} ${isActive ? "active" : ""}`}>
+    <div
+      className={`hall-rank-card ${tierClass} ${isCurrentPlan ? "active" : ""}`}
+    >
       {plan.planType === "STUDENT_PACK" && (
         <div className="hall-tag hall-tag-student">SINH VIÊN</div>
       )}
@@ -227,6 +308,70 @@ const RankCard: React.FC<RankCardProps> = ({
                 : `/ ${plan.durationMonths} tháng`)}
         </div>
 
+        {isScheduledTarget && scheduledChangeDateLabel && (
+          <div className="hall-plan-badge-inline hall-plan-badge-inline--scheduled">
+            <Wallet size={12} aria-hidden="true" />
+            <span>Đã lên lịch từ {scheduledChangeDateLabel}</span>
+          </div>
+        )}
+
+        {isCurrentPlan && graceWindowInfo?.isActive && countdownLabel && (
+          <div className="hall-upgrade-window hall-upgrade-window--current">
+            <div className="hall-upgrade-window__badge">
+              <Sparkles size={12} aria-hidden="true" />
+              <span>Thời gian giữ ưu đãi</span>
+            </div>
+            <div className="hall-upgrade-window__header">
+              <Rocket size={14} aria-hidden="true" />
+              <span>Bạn còn {countdownLabel}</span>
+              <span
+                className="hall-upgrade-window__help"
+                title={graceHelpText}
+                aria-label={graceHelpText}
+              >
+                <Info size={13} aria-hidden="true" />
+              </span>
+            </div>
+            <p className="hall-upgrade-window__text">
+              Đây là thời gian còn lại để bạn nâng lên gói cao hơn và vẫn được giảm trừ.
+            </p>
+          </div>
+        )}
+
+        {isEligibleUpgradeTarget && (
+          <div className="hall-upgrade-window hall-upgrade-window--target">
+            <div className="hall-upgrade-window__badge hall-upgrade-window__badge--target">
+              <Sparkles size={12} aria-hidden="true" />
+              <span>Giữ giảm trừ khi nâng cấp</span>
+            </div>
+            <p className="hall-upgrade-window__text">
+              Nâng cấp gói này để được giảm trừ từ gói hiện tại.
+            </p>
+          </div>
+        )}
+
+        {hasGraceWindowExpired && (
+          <div className="hall-upgrade-window hall-upgrade-window--expired">
+            <div className="hall-upgrade-window__header">
+              <Info size={14} aria-hidden="true" />
+              <span>Ưu đãi nâng cấp đã kết thúc</span>
+            </div>
+            <p className="hall-upgrade-window__text">
+              Nâng cấp sau thời điểm này sẽ tính theo chính sách hiện tại của gói.
+            </p>
+          </div>
+        )}
+
+        {scheduledChangePlan && scheduledChangeDateLabel && (
+          <div className="hall-plan-status-line">
+            <Info size={13} aria-hidden="true" />
+            <span>
+              Sắp chuyển gói từ {scheduledChangeDateLabel}
+              {scheduledChangeAutoRenew ? " • Tự gia hạn bật" : ""}
+            </span>
+          </div>
+        )}
+
         {/* Features */}
         <div className="hall-features">
           {features.map((feature, idx) => (
@@ -241,7 +386,7 @@ const RankCard: React.FC<RankCardProps> = ({
 
         {/* Action Button */}
         {!isFreeTier &&
-          (isActive ? (
+          (isCurrentPlan ? (
             <div
               style={{
                 width: "100%",
@@ -255,12 +400,7 @@ const RankCard: React.FC<RankCardProps> = ({
               </button>
 
               <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "4px",
-                  marginTop: "8px",
-                }}
+                className="hall-current-plan-actions"
               >
                 {onViewInvoice && (
                   <button
@@ -272,13 +412,27 @@ const RankCard: React.FC<RankCardProps> = ({
                   </button>
                 )}
 
-                {currentSub?.autoRenew && onCancelAutoRenew && (
+                {effectiveAutoRenew && onCancelAutoRenew && (
                   <button
                     onClick={onCancelAutoRenew}
-                    className="hall-btn"
-                    style={{ fontSize: "0.8rem", padding: "8px", opacity: 0.9 }}
+                    className="hall-btn hall-btn-autorenew hall-btn-autorenew--enabled"
+                    style={{ fontSize: "0.8rem", padding: "8px", opacity: 0.95 }}
                   >
-                    Hủy Tự Động Gia Hạn
+                    {autoRenewManagedAfterSwitch
+                      ? "TỰ GIA HẠN SAU KHI CHUYỂN"
+                      : "ĐANG BẬT TỰ ĐỘNG GIA HẠN"}
+                  </button>
+                )}
+
+                {!effectiveAutoRenew && onEnableAutoRenew && (
+                  <button
+                    onClick={onEnableAutoRenew}
+                    className="hall-btn hall-btn-autorenew hall-btn-autorenew--disabled"
+                    style={{ fontSize: "0.8rem", padding: "8px", opacity: 0.95 }}
+                  >
+                    {autoRenewManagedAfterSwitch
+                      ? "BẬT TỰ GIA HẠN SAU KHI CHUYỂN"
+                      : "BẬT TỰ ĐỘNG GIA HẠN"}
                   </button>
                 )}
 
@@ -308,39 +462,33 @@ const RankCard: React.FC<RankCardProps> = ({
               }}
             >
               {isAuthenticated && walletData ? (
-                <>
-                  <button
-                    className="hall-btn"
-                    onClick={() => onWalletPayment(plan.name)}
-                    disabled={processing}
-                  >
-                    <Wallet
-                      size={16}
-                      style={{
-                        marginRight: "8px",
-                        verticalAlign: "text-bottom",
-                      }}
-                    />
-                    {targetLabel ? `${targetLabel} (VÍ)` : "THANH TOÁN VÍ"}
-                  </button>
-                  <button
-                    className="hall-btn"
-                    onClick={() => onUpgrade(plan.name)}
-                    disabled={processing}
-                    style={{ opacity: 0.8, fontSize: "0.8rem" }}
-                  >
-                    {targetLabel
-                      ? `${targetLabel} (CỔNG KHÁC)`
-                      : "CỔNG THANH TOÁN NGOÀI"}
-                  </button>
-                </>
+                <button
+                  className="hall-btn"
+                  onClick={() => onWalletPayment(plan.name)}
+                  onMouseEnter={() => onPlanPreview?.(plan.name)}
+                  onFocus={() => onPlanPreview?.(plan.name)}
+                  disabled={processing || isScheduledTarget}
+                >
+                  <Wallet
+                    size={16}
+                    style={{
+                      marginRight: "8px",
+                      verticalAlign: "text-bottom",
+                    }}
+                  />
+                  {isScheduledTarget
+                    ? "ĐÃ LÊN LỊCH"
+                    : targetLabel ? `${targetLabel} (VÍ)` : "THANH TOÁN VÍ"}
+                </button>
               ) : (
                 <button
                   className="hall-btn"
-                  onClick={() => onUpgrade(plan.name)}
-                  disabled={processing}
+                  onClick={() => onWalletPayment(plan.name)}
+                  disabled={processing || isScheduledTarget}
                 >
-                  {!isAuthenticated
+                  {isScheduledTarget
+                    ? "ĐÃ LÊN LỊCH"
+                    : !isAuthenticated
                     ? "ĐĂNG NHẬP ĐỂ TRUY CẬP"
                     : targetLabel || "XÁC NHẬN NÂNG CẤP"}
                 </button>

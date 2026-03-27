@@ -22,7 +22,7 @@ interface InvoiceData {
   paymentMethod: string;
   paymentStatus: 'SUCCESS' | 'PENDING' | 'FAILED';
   transactionId?: string;
-  isStudentDiscount?: boolean;
+  isDiscountedPrice?: boolean;
   features?: string[];
 }
 
@@ -56,13 +56,19 @@ export const useInvoice = () => {
     const createdDate = new Date(subscription.createdAt);
     const originalPrice = parseFloat(subscription.plan.price);
     
-    // Calculate discount if student subscription
+    // Calculate discount if this subscription used a discounted pricing policy
     let discount = 0;
     let discountReason = '';
-    if (subscription.isStudentSubscription) {
-      const discountPercent = parseFloat(subscription.plan.studentDiscountPercent || '0');
+    const discountApplied =
+      subscription.isDiscountedSubscription ?? subscription.isStudentSubscription;
+    if (discountApplied) {
+      const discountPercent = parseFloat(
+        subscription.plan.discountPercent
+          || subscription.plan.studentDiscountPercent
+          || '0',
+      );
       discount = (originalPrice * discountPercent) / 100;
-      discountReason = `Giảm ${discountPercent}% cho sinh viên`;
+      discountReason = `Giảm ${discountPercent}% theo chính sách giá`;
     }
 
     const data: InvoiceData = {
@@ -87,7 +93,7 @@ export const useInvoice = () => {
       paymentStatus: subscription.status === 'ACTIVE' || subscription.status === 'EXPIRED' ? 'SUCCESS' : 
                      subscription.status === 'PENDING' ? 'PENDING' : 'FAILED',
       transactionId: subscription.paymentTransactionId?.toString(),
-      isStudentDiscount: subscription.isStudentSubscription,
+      isDiscountedPrice: discountApplied,
       features: parseFeatures(subscription.plan.features)
     };
 

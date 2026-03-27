@@ -1,23 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "../../styles/PremiumPageCosmic.css";
 import MeowGuide from "../../components/meowl/MeowlGuide";
 import { premiumService } from "../../services/premiumService";
-import { paymentService } from "../../services/paymentService";
 import walletService from "../../services/walletService";
 import userService from "../../services/userService";
 import {
   PremiumPlan,
-  CreateSubscriptionRequest,
+  SubscriptionCheckoutPreviewResponse,
   UserSubscriptionResponse,
 } from "../../data/premiumDTOs";
-import { CreatePaymentRequest } from "../../data/paymentDTOs";
 import { WalletResponse } from "../../data/walletDTOs";
 import { UserProfileResponse } from "../../data/userDTOs";
 import WalletPaymentModal from "../../components/premium/WalletPaymentModal";
 import CancelSubscriptionModal from "../../components/premium/CancelSubscriptionModal";
+import CancellationLimitModal from "../../components/premium/CancellationLimitModal";
 import CancelAutoRenewalModal from "../../components/premium/CancelAutoRenewalModal";
+import EnableAutoRenewalModal from "../../components/premium/EnableAutoRenewalModal";
 import { PremiumInvoice, useInvoice } from "../../components/invoice";
 import ClearanceLevelPage from "../../components/premium-hud/ClearanceLevelPage";
 import PremiumFAQ from "../../components/premium-hud/PremiumFAQ";
@@ -50,9 +50,22 @@ const PremiumPageCosmic = () => {
   const [showWalletConfirm, setShowWalletConfirm] = useState(false);
   const [selectedPlanForWallet, setSelectedPlanForWallet] =
     useState<PremiumPlan | null>(null);
+  const [walletCheckoutPreview, setWalletCheckoutPreview] =
+    useState<SubscriptionCheckoutPreviewResponse | null>(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showCancellationLimitModal, setShowCancellationLimitModal] =
+    useState(false);
+  const [cancellationLimitMessage, setCancellationLimitMessage] = useState("");
+  const [showEnableAutoRenewalModal, setShowEnableAutoRenewalModal] =
+    useState(false);
   const [showCancelAutoRenewalModal, setShowCancelAutoRenewalModal] =
     useState(false);
+  const previewCacheRef = useRef<Map<string, SubscriptionCheckoutPreviewResponse>>(
+    new Map(),
+  );
+  const previewInFlightRef = useRef<Map<string, Promise<SubscriptionCheckoutPreviewResponse | null>>>(
+    new Map(),
+  );
 
   // Invoice hook
   const { showInvoice, invoiceData, openInvoice, closeInvoice } = useInvoice();
@@ -106,17 +119,21 @@ const PremiumPageCosmic = () => {
 
   const loadCurrentSubscription = async () => {
     try {
-      const active = await premiumService.checkPremiumStatus();
-      setHasActive(active);
-      if (active) {
-        return premiumService
-          .getCurrentSubscription()
-          .then(setCurrentSub)
-          .catch(() => setCurrentSub(null));
-      }
-      return Promise.resolve();
+      const subscription = await premiumService.getCurrentSubscription();
+      setCurrentSub(subscription);
+
+      const isActivePremium = Boolean(
+        subscription &&
+          subscription.isActive &&
+          subscription.status === "ACTIVE" &&
+          subscription.plan?.planType !== "FREE_TIER",
+      );
+
+      setHasActive(isActivePremium);
     } catch (error) {
       console.error("Failed to load current subscription:", error);
+      setCurrentSub(null);
+      setHasActive(false);
     }
   };
 
@@ -138,88 +155,47 @@ const PremiumPageCosmic = () => {
     }
   };
 
-  const handleUpgrade = async (planName: string) => {
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
+  const fetchCheckoutPreview = async (planName: string) => {
+    const selectedPlan = premiumPlans.find((p) => p.name === planName);
+    if (!selectedPlan) return null;
+
+    const cacheKey = `${selectedPlan.id}:${isStudentEligible}:${selectedStudentId ?? "self"}`;
+    const cachedPreview = previewCacheRef.current.get(cacheKey);
+    if (cachedPreview) {
+      return cachedPreview;
     }
 
-    if (selectedStudentId) {
-      const s = students.find((st) => st.id === selectedStudentId);
-      // Check if student has premium (assuming 'Free' or null means no premium)
-      // Adjust logic based on actual plan names from backend
-      if (
-        s?.progress?.premiumPlan &&
-        !s.progress.premiumPlan.toLowerCase().includes("free")
-      ) {
-        showAppInfo(
-          "Đã có Premium",
-          `Tài khoản ${s.firstName} đã có gói Premium (${s.progress.premiumPlan}).`,
-        );
-        return;
-      }
+    const pendingPreview = previewInFlightRef.current.get(cacheKey);
+    if (pendingPreview) {
+      return pendingPreview;
     }
 
-    if (processing) return;
-    if (hasActive && currentSub && currentSub.status === "ACTIVE") {
-      const isFree = currentSub.plan.planType === "FREE_TIER";
-      if (!isFree) return;
-    }
-
-    try {
-      setProcessing(true);
-
-      const selectedPlan = premiumPlans.find((plan) => plan.name === planName);
-      if (!selectedPlan) {
-        console.error("Plan not found:", planName);
-        return;
-      }
-
-      const successUrl = `${window.location.origin}/payment/transactional`;
-      const cancelUrl = `${window.location.origin}/payment/transactional?cancel=1`;
-
-      const subscriptionRequest: CreateSubscriptionRequest = {
-        planId: selectedPlan.id,
-        paymentMethod: "PAYOS",
-        applyStudentDiscount: isStudentEligible,
-        autoRenew: false,
-        successUrl,
-        cancelUrl,
-        targetUserId: selectedStudentId || undefined,
-      };
-
-      const subscription =
-        await premiumService.createSubscription(subscriptionRequest);
-
-      const metadata = JSON.stringify({
-        subscriptionId: subscription.id,
-        planId: selectedPlan.id,
+    const request = premiumService
+      .getCheckoutPreview(
+        selectedPlan.id,
+        isStudentEligible,
+        selectedStudentId || undefined,
+      )
+      .then((preview) => {
+        previewCacheRef.current.set(cacheKey, preview);
+        previewInFlightRef.current.delete(cacheKey);
+        return preview;
+      })
+      .catch((error) => {
+        previewInFlightRef.current.delete(cacheKey);
+        throw error;
       });
 
-      const paymentRequest: CreatePaymentRequest = {
-        amount: selectedPlan.price,
-        currency: "VND",
-        type: "PREMIUM_SUBSCRIPTION",
-        paymentMethod: "PAYOS",
-        description: selectedPlan.displayName,
-        planId: selectedPlan.id,
-        metadata,
-        successUrl,
-        cancelUrl,
-      };
+    previewInFlightRef.current.set(cacheKey, request);
+    return request;
+  };
 
-      const payment = await paymentService.createPayment(paymentRequest);
+  const handlePlanPreview = (planName: string) => {
+    if (!isAuthenticated || selectedStudentId) return;
 
-      if (payment.checkoutUrl) {
-        window.location.href = payment.checkoutUrl;
-      } else {
-        console.error("No checkout URL received from payment service");
-      }
-    } catch (error) {
-      console.error("Failed to create payment:", error);
-    } finally {
-      setProcessing(false);
-    }
+    void fetchCheckoutPreview(planName).catch((error) => {
+      console.error("Failed to preload checkout preview:", error);
+    });
   };
 
   const handleWalletPayment = (planName: string) => {
@@ -231,8 +207,23 @@ const PremiumPageCosmic = () => {
     const selectedPlan = premiumPlans.find((p) => p.name === planName);
     if (!selectedPlan) return;
 
-    setSelectedPlanForWallet(selectedPlan);
-    setShowWalletConfirm(true);
+    void (async () => {
+      try {
+        const checkoutPreview = await fetchCheckoutPreview(planName);
+        if (!checkoutPreview) return;
+
+        if (!checkoutPreview.eligible) {
+          showAppInfo("Chưa thể tiếp tục", checkoutPreview.message);
+          return;
+        }
+
+        setWalletCheckoutPreview(checkoutPreview);
+        setSelectedPlanForWallet(selectedPlan);
+        setShowWalletConfirm(true);
+      } catch (error) {
+        console.error("Failed to load checkout preview:", error);
+      }
+    })();
   };
 
   const confirmWalletPayment = async () => {
@@ -259,7 +250,7 @@ const PremiumPageCosmic = () => {
         error.response?.data?.message ||
         error.response?.data?.error ||
         error.message ||
-        "Thanh toán thất bại. Vui lòng thử lại.";
+        "Thanh toán bằng ví thất bại. Vui lòng thử lại.";
       throw new Error(errorMessage);
     }
   };
@@ -271,6 +262,86 @@ const PremiumPageCosmic = () => {
       userProfile?.email || user?.email || "",
       userProfile?.id,
     );
+  };
+
+  const selectedStudent = selectedStudentId
+    ? students.find((st) => st.id === selectedStudentId) || null
+    : null;
+
+  const selectedStudentActivePlanName =
+    selectedStudent?.progress?.premiumPlan &&
+    !selectedStudent.progress.premiumPlan.toLowerCase().includes("free")
+      ? selectedStudent.progress.premiumPlan
+      : null;
+
+  const fallbackFreePlan =
+    premiumPlans.find((plan) => plan.planType === "FREE_TIER") || null;
+
+  const displayCurrentSub =
+    !selectedStudentId && currentSub
+      ? currentSub
+      : !selectedStudentId && fallbackFreePlan
+        ? ({
+            id: 0,
+            userId: user?.id || 0,
+            userName: user?.fullName,
+            userEmail: user?.email,
+            userAvatarUrl: user?.avatarUrl,
+            plan: fallbackFreePlan,
+            startDate: new Date(0).toISOString(),
+            endDate: new Date("2999-12-31T00:00:00.000Z").toISOString(),
+            isActive: true,
+            status: "ACTIVE" as const,
+            isStudentSubscription: false,
+            autoRenew: false,
+            daysRemaining: undefined,
+            currentlyActive: true,
+            cancellationReason: undefined,
+            cancelledAt: undefined,
+            createdAt: new Date(0).toISOString(),
+            updatedAt: new Date(0).toISOString(),
+          } satisfies UserSubscriptionResponse)
+        : null;
+
+  const activePlanId = !selectedStudentId
+    ? displayCurrentSub?.plan?.id || null
+    : null;
+
+  const activePlanName = selectedStudentId
+    ? selectedStudentActivePlanName
+    : displayCurrentSub?.plan?.displayName || displayCurrentSub?.plan?.name || null;
+
+  const isCancellationLimitMessage = (message?: string) =>
+    !!message &&
+    (message.includes("1 lần/tháng") ||
+      message.includes("hủy gói Premium trong tháng này"));
+
+  const handleOpenCancelSubscription = async () => {
+    try {
+      const result = await premiumService.checkRefundEligibility();
+
+      if (isCancellationLimitMessage(result.message)) {
+        setCancellationLimitMessage(result.message);
+        setShowCancellationLimitModal(true);
+        setShowCancelModal(false);
+        return;
+      }
+
+      setShowCancelModal(true);
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Không thể kiểm tra điều kiện hủy gói";
+
+      if (isCancellationLimitMessage(message) || message.includes("giới hạn")) {
+        setCancellationLimitMessage(message);
+        setShowCancellationLimitModal(true);
+        setShowCancelModal(false);
+      } else {
+        showAppInfo("Chưa thể tiếp tục", message);
+      }
+    }
   };
 
   return (
@@ -324,8 +395,9 @@ const PremiumPageCosmic = () => {
                 s.progress.premiumPlan !== "Free"
               ) {
                 return (
-                  <span style={{ color: "#ef4444", fontSize: "0.9rem" }}>
-                    ⚠️ Tài khoản này đã có gói Premium. Không thể nâng cấp thêm.
+                  <span style={{ color: "#f59e0b", fontSize: "0.9rem" }}>
+                    Tài khoản này đang có Premium. Hệ thống sẽ tự động tính giá
+                    nâng cấp nếu bạn chọn gói cao hơn.
                   </span>
                 );
               }
@@ -335,28 +407,35 @@ const PremiumPageCosmic = () => {
       )}
       <ClearanceLevelPage
         premiumPlans={premiumPlans}
-        currentSub={currentSub}
-        hasActive={
-          selectedStudentId
-            ? (() => {
-                const s = students.find((st) => st.id === selectedStudentId);
-                return !!(
-                  s?.progress?.premiumPlan && s.progress.premiumPlan !== "Free"
-                );
-              })()
-            : hasActive
-        }
+        currentSub={displayCurrentSub}
+        activePlanId={activePlanId}
+        activePlanName={activePlanName}
         processing={processing}
         isAuthenticated={isAuthenticated}
         walletData={walletData}
         userProfile={userProfile}
         fallbackAvatarUrl={user?.avatarUrl}
-        onUpgrade={handleUpgrade}
         onWalletPayment={handleWalletPayment}
-        onViewInvoice={handleViewInvoice}
-        onCancelAutoRenew={() => setShowCancelAutoRenewalModal(true)}
-        onCancelSubscription={() => setShowCancelModal(true)}
-        targetLabel={selectedStudentId ? "MUA CHO CON" : "Mở Khóa Ngay"}
+        onPlanPreview={handlePlanPreview}
+        onViewInvoice={!selectedStudentId ? handleViewInvoice : undefined}
+        onEnableAutoRenew={
+          !selectedStudentId ? () => setShowEnableAutoRenewalModal(true) : undefined
+        }
+        onCancelAutoRenew={
+          !selectedStudentId ? () => setShowCancelAutoRenewalModal(true) : undefined
+        }
+        onCancelSubscription={
+          !selectedStudentId ? handleOpenCancelSubscription : undefined
+        }
+        targetLabel={
+          selectedStudentId
+            ? selectedStudentActivePlanName
+              ? "NÂNG CẤP CHO CON"
+              : "MUA CHO CON"
+            : hasActive
+              ? "NÂNG CẤP NGAY"
+              : "Mở Khóa Ngay"
+        }
       />
 
       {/* FAQ Section */}
@@ -365,6 +444,18 @@ const PremiumPageCosmic = () => {
       <div className="cosmic-meowl-container">
         <MeowGuide currentPage="upgrade" />
       </div>
+
+      {/* Cancel Auto-Renewal Modal */}
+      <EnableAutoRenewalModal
+        isOpen={showEnableAutoRenewalModal}
+        onClose={() => setShowEnableAutoRenewalModal(false)}
+        subscription={currentSub}
+        walletBalance={walletData?.cashBalance}
+        onSuccess={async () => {
+          await loadCurrentSubscription();
+          await loadWalletData();
+        }}
+      />
 
       {/* Cancel Auto-Renewal Modal */}
       <CancelAutoRenewalModal
@@ -381,10 +472,21 @@ const PremiumPageCosmic = () => {
         isOpen={showCancelModal}
         onClose={() => setShowCancelModal(false)}
         subscription={currentSub}
+        onBlockedByLimit={(message) => {
+          setShowCancelModal(false);
+          setCancellationLimitMessage(message);
+          setShowCancellationLimitModal(true);
+        }}
         onSuccess={async () => {
           await loadCurrentSubscription();
           await loadWalletData();
         }}
+      />
+
+      <CancellationLimitModal
+        isOpen={showCancellationLimitModal}
+        onClose={() => setShowCancellationLimitModal(false)}
+        message={cancellationLimitMessage}
       />
 
       {/* Wallet Payment Modal */}
@@ -394,23 +496,14 @@ const PremiumPageCosmic = () => {
           onClose={() => {
             setShowWalletConfirm(false);
             setSelectedPlanForWallet(null);
+            setWalletCheckoutPreview(null);
           }}
           planName={selectedPlanForWallet.displayName}
-          planPrice={(() => {
-            const basePrice = parseFloat(selectedPlanForWallet.price);
-            if (
-              isStudentEligible &&
-              selectedPlanForWallet.studentDiscountPercent
-            ) {
-              const discount = parseFloat(
-                selectedPlanForWallet.studentDiscountPercent,
-              );
-              return basePrice * (1 - discount / 100);
-            }
-            return basePrice;
-          })()}
+          planPrice={Number(walletCheckoutPreview?.amountDue ?? 0)}
           walletBalance={walletData.cashBalance}
           isStudentPrice={isStudentEligible}
+          checkoutPreview={walletCheckoutPreview}
+          currentSubscription={!selectedStudentId ? currentSub : null}
           onConfirm={confirmWalletPayment}
         />
       )}
@@ -424,18 +517,3 @@ const PremiumPageCosmic = () => {
 };
 
 export default PremiumPageCosmic;
-
-/* Old implementation preserved in git history */
-/*
-import { 
-  Crown, Check, Star, Wallet, ArrowRight, Zap, Bot, 
-  Users, Shield, Sparkles, Rocket, Award, GraduationCap, Gem, XCircle, RefreshCw, FileText
-} from 'lucide-react';
-// ... (rest of imports)
-// Import avatar frames
-import silverAvatar from '../../assets/premium/silver_avatar.png';
-import goldenAvatar from '../../assets/premium/golden_avatar.png';
-import diamondAvatar from '../../assets/premium/diamond_avatar.png';
-
-// ... (rest of old code)
-*/

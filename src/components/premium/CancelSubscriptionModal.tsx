@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { X, AlertTriangle, RefreshCw, CheckCircle, Clock, Wallet, XCircle } from 'lucide-react';
 import { premiumService } from '../../services/premiumService';
 import { UserSubscriptionResponse } from '../../data/premiumDTOs';
-import CancellationLimitModal from './CancellationLimitModal';
 import { useScrollLock } from '../portfolio-hud/useScrollLock';
 import './CancelSubscriptionModal.css';
 
@@ -11,13 +10,15 @@ interface CancelSubscriptionModalProps {
   onClose: () => void;
   subscription: UserSubscriptionResponse | null;
   onSuccess: () => void;
+  onBlockedByLimit?: (message: string) => void;
 }
 
 const CancelSubscriptionModal: React.FC<CancelSubscriptionModalProps> = ({
   isOpen,
   onClose,
   subscription,
-  onSuccess
+  onSuccess,
+  onBlockedByLimit
 }) => {
   useScrollLock(isOpen);
   const [reason, setReason] = useState('');
@@ -29,24 +30,29 @@ const CancelSubscriptionModal: React.FC<CancelSubscriptionModalProps> = ({
   const [refundAmount, setRefundAmount] = useState(0);
   const [refundPercentage, setRefundPercentage] = useState(0);
   const [eligibilityMessage, setEligibilityMessage] = useState('');
-  const [showLimitModal, setShowLimitModal] = useState(false);
-  const [limitMessage, setLimitMessage] = useState('');
 
   useEffect(() => {
     if (isOpen && subscription) {
-      // Check cancellation limit FIRST
-      checkCancellationLimit();
+      checkRefundState();
     }
   }, [isOpen, subscription]);
 
-  const checkCancellationLimit = async () => {
+  const isCancellationLimitMessage = (message?: string) =>
+    !!message &&
+    (message.includes('1 lần/tháng') || message.includes('hủy gói Premium trong tháng này'));
+
+  const checkRefundState = async () => {
     try {
       setChecking(true);
       
-      // Try to get refund eligibility - if limit exceeded, backend will throw error
       const result = await premiumService.checkRefundEligibility();
+
+      if (isCancellationLimitMessage(result.message)) {
+        onBlockedByLimit?.(result.message);
+        onClose();
+        return;
+      }
       
-      // If we reach here, no limit exceeded - use backend data
       setIsEligible(result.eligible);
       setRefundPercentage(result.refundPercentage);
       setRefundAmount(result.refundAmount);
@@ -56,14 +62,12 @@ const CancelSubscriptionModal: React.FC<CancelSubscriptionModalProps> = ({
         setError(result.message);
       }
     } catch (err: any) {
-      console.error('Failed to check cancellation limit:', err);
+      console.error('Failed to check refund eligibility:', err);
       const errorMsg = err.response?.data?.message || err.message || 'Không thể kiểm tra điều kiện hủy gói';
       
-      // Check if error is about cancellation limit
-      if (errorMsg.includes('giới hạn') || errorMsg.includes('1 lần/tháng')) {
-        setLimitMessage(errorMsg);
-        setShowLimitModal(true);
-        // Don't close main modal here - let limit modal handle it
+      if (isCancellationLimitMessage(errorMsg) || errorMsg.includes('giới hạn')) {
+        onBlockedByLimit?.(errorMsg);
+        onClose();
       } else {
         setIsEligible(false);
         setError(errorMsg);
@@ -91,11 +95,9 @@ const CancelSubscriptionModal: React.FC<CancelSubscriptionModalProps> = ({
       console.error('Failed to cancel auto-renewal:', err);
       const errorMsg = err.response?.data?.message || err.message || 'Không thể hủy gia hạn tự động';
       
-      // Check if error is about cancellation limit
-      if (errorMsg.includes('giới hạn') || errorMsg.includes('1 lần/tháng')) {
-        setLimitMessage(errorMsg);
-        setShowLimitModal(true);
-        onClose(); // Close main modal
+      if (isCancellationLimitMessage(errorMsg) || errorMsg.includes('giới hạn')) {
+        onBlockedByLimit?.(errorMsg);
+        onClose();
       } else {
         setError(errorMsg);
       }
@@ -121,11 +123,9 @@ const CancelSubscriptionModal: React.FC<CancelSubscriptionModalProps> = ({
       console.error('Failed to cancel subscription:', err);
       const errorMsg = err.response?.data?.message || err.message || 'Không thể hủy gói đăng ký';
       
-      // Check if error is about cancellation limit
-      if (errorMsg.includes('giới hạn') || errorMsg.includes('1 lần/tháng')) {
-        setLimitMessage(errorMsg);
-        setShowLimitModal(true);
-        onClose(); // Close main modal
+      if (isCancellationLimitMessage(errorMsg) || errorMsg.includes('giới hạn')) {
+        onBlockedByLimit?.(errorMsg);
+        onClose();
       } else {
         setError(errorMsg);
       }
@@ -329,14 +329,6 @@ const CancelSubscriptionModal: React.FC<CancelSubscriptionModalProps> = ({
           </>
         )}
       </div>
-
-      {/* Cancellation Limit Modal */}
-      <CancellationLimitModal
-        isOpen={showLimitModal}
-        onClose={() => setShowLimitModal(false)}
-        onCloseAll={onClose}
-        message={limitMessage}
-      />
     </div>
   );
 };

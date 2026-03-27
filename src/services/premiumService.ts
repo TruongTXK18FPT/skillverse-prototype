@@ -2,22 +2,43 @@ import api from "./axiosInstance";
 import axios from "axios";
 import {
   PremiumPlan,
-  CreateSubscriptionRequest,
+  SubscriptionCheckoutPreviewResponse,
   UserSubscriptionResponse,
 } from "../data/premiumDTOs";
 
 type PremiumPlanApiResponse = Omit<
   PremiumPlan,
-  "price" | "studentDiscountPercent" | "studentPrice" | "features"
+  "price" | "discountPercent" | "discountedPrice" | "studentDiscountPercent" | "studentPrice" | "features"
 > & {
   price: number | string;
-  studentDiscountPercent: number | string;
+  discountPercent?: number | string;
+  discountedPrice?: number | string;
+  studentDiscountPercent?: number | string;
   studentPrice?: number | string;
   features: string[] | string | null;
 };
 
 type UserSubscriptionApiResponse = Omit<UserSubscriptionResponse, "plan"> & {
   plan: PremiumPlanApiResponse;
+};
+
+type SubscriptionCheckoutPreviewApiResponse = Omit<
+  SubscriptionCheckoutPreviewResponse,
+  | "currentPlan"
+  | "targetPlan"
+  | "fullPrice"
+  | "effectivePrice"
+  | "amountDue"
+  | "currentPlanCredit"
+  | "proratedTargetPrice"
+> & {
+  currentPlan?: PremiumPlanApiResponse | null;
+  targetPlan: PremiumPlanApiResponse;
+  fullPrice: number | string;
+  effectivePrice: number | string;
+  amountDue: number | string;
+  currentPlanCredit: number | string;
+  proratedTargetPrice: number | string;
 };
 
 const normalizeFeatures = (
@@ -37,9 +58,28 @@ const normalizeFeatures = (
 const normalizePlan = (plan: PremiumPlanApiResponse): PremiumPlan => ({
   ...plan,
   price: String(plan.price ?? "0"),
-  studentDiscountPercent: String(plan.studentDiscountPercent ?? "0"),
+  discountPercent:
+    plan.discountPercent !== undefined
+      ? String(plan.discountPercent)
+      : String(plan.studentDiscountPercent ?? "0"),
+  discountedPrice:
+    plan.discountedPrice !== undefined
+      ? String(plan.discountedPrice)
+      : plan.studentPrice !== undefined
+        ? String(plan.studentPrice)
+        : undefined,
+  studentDiscountPercent:
+    plan.studentDiscountPercent !== undefined
+      ? String(plan.studentDiscountPercent)
+      : plan.discountPercent !== undefined
+        ? String(plan.discountPercent)
+        : undefined,
   studentPrice:
-    plan.studentPrice !== undefined ? String(plan.studentPrice) : undefined,
+    plan.studentPrice !== undefined
+      ? String(plan.studentPrice)
+      : plan.discountedPrice !== undefined
+        ? String(plan.discountedPrice)
+        : undefined,
   features: normalizeFeatures(plan.features),
 });
 
@@ -47,7 +87,33 @@ const normalizeSubscription = (
   subscription: UserSubscriptionApiResponse,
 ): UserSubscriptionResponse => ({
   ...subscription,
+  isDiscountedSubscription:
+    subscription.isDiscountedSubscription ?? subscription.isStudentSubscription,
+  isStudentSubscription:
+    subscription.isStudentSubscription ?? subscription.isDiscountedSubscription,
+  renewalPrice:
+    subscription.renewalPrice !== undefined && subscription.renewalPrice !== null
+      ? String(subscription.renewalPrice)
+      : undefined,
+  scheduledChangeRenewalPrice:
+    subscription.scheduledChangeRenewalPrice !== undefined &&
+    subscription.scheduledChangeRenewalPrice !== null
+      ? String(subscription.scheduledChangeRenewalPrice)
+      : undefined,
   plan: normalizePlan(subscription.plan),
+});
+
+const normalizeCheckoutPreview = (
+  preview: SubscriptionCheckoutPreviewApiResponse,
+): SubscriptionCheckoutPreviewResponse => ({
+  ...preview,
+  currentPlan: preview.currentPlan ? normalizePlan(preview.currentPlan) : null,
+  targetPlan: normalizePlan(preview.targetPlan),
+  fullPrice: String(preview.fullPrice ?? "0"),
+  effectivePrice: String(preview.effectivePrice ?? "0"),
+  amountDue: String(preview.amountDue ?? "0"),
+  currentPlanCredit: String(preview.currentPlanCredit ?? "0"),
+  proratedTargetPrice: String(preview.proratedTargetPrice ?? "0"),
 });
 
 export const premiumService = {
@@ -69,14 +135,21 @@ export const premiumService = {
     return normalizePlan(data);
   },
 
-  async createSubscription(
-    request: CreateSubscriptionRequest,
-  ): Promise<UserSubscriptionResponse> {
-    const { data } = await api.post<UserSubscriptionApiResponse>(
-      "/api/premium/subscribe",
-      request,
+  async getCheckoutPreview(
+    planId: number,
+    _applyStudentDiscount: boolean = false,
+    targetUserId?: number,
+  ): Promise<SubscriptionCheckoutPreviewResponse> {
+    const { data } = await api.get<SubscriptionCheckoutPreviewApiResponse>(
+      "/api/premium/subscription/checkout-preview",
+      {
+        params: {
+          planId,
+          targetUserId,
+        },
+      },
     );
-    return normalizeSubscription(data);
+    return normalizeCheckoutPreview(data);
   },
 
   async getCurrentSubscription(): Promise<UserSubscriptionResponse | null> {
@@ -113,10 +186,10 @@ export const premiumService = {
 
   async purchaseWithWallet(
     planId: number,
-    applyStudentDiscount: boolean = false,
+    _applyStudentDiscount: boolean = false,
     targetUserId?: number,
   ): Promise<UserSubscriptionResponse> {
-    const params: Record<string, any> = { planId, applyStudentDiscount };
+    const params: Record<string, any> = { planId };
     if (targetUserId) {
       params.targetUserId = targetUserId;
     }

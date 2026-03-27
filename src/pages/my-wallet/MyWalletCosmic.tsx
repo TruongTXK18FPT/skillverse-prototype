@@ -21,6 +21,7 @@ import SetupBankAccountModal from '../../components/wallet/SetupBankAccountModal
 import StatisticsPanel from '../../components/wallet/StatisticsPanel';
 import PaymentOrderHistorySection from '../../components/wallet/PaymentOrderHistorySection';
 import CancelSubscriptionModal from '../../components/premium/CancelSubscriptionModal';
+import CancellationLimitModal from '../../components/premium/CancellationLimitModal';
 import CancelAutoRenewalModal from '../../components/premium/CancelAutoRenewalModal';
 import EnableAutoRenewalModal from '../../components/premium/EnableAutoRenewalModal';
 import { PremiumInvoice, useInvoice } from '../../components/invoice';
@@ -104,6 +105,8 @@ const MyWalletCosmic: React.FC = () => {
   const [showBuyCoinModal, setShowBuyCoinModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showCancellationLimitModal, setShowCancellationLimitModal] = useState(false);
+  const [cancellationLimitMessage, setCancellationLimitMessage] = useState('');
   const [showCancelAutoRenewalModal, setShowCancelAutoRenewalModal] = useState(false);
   const [showEnableAutoRenewalModal, setShowEnableAutoRenewalModal] = useState(false);
   const [showBankSetupModal, setShowBankSetupModal] = useState(false);
@@ -234,7 +237,11 @@ const MyWalletCosmic: React.FC = () => {
       setPaymentOrdersLoading(true);
       const orders = await paymentService.getPaymentHistory();
       setPaymentOrders(
-        orders.filter((order) => (order.paymentMethod || '').toUpperCase() === 'PAYOS')
+        orders.filter((order) => {
+          const paymentMethod = (order.paymentMethod || '').toUpperCase();
+          const paymentType = (order.type || '').toUpperCase();
+          return paymentMethod === 'PAYOS' && paymentType === 'WALLET_TOPUP';
+        })
       );
       setPaymentOrdersLoaded(true);
     } catch (error) {
@@ -272,7 +279,7 @@ const MyWalletCosmic: React.FC = () => {
     if (paymentStatus === 'success') {
       showToast(
         'success',
-        '✅ Thanh toán thành công',
+        '✅ Nạp tiền thành công',
         paymentMessage || 'Giao dịch đã hoàn tất. Hệ thống sẽ tự đồng bộ số dư trong giây lát.'
       );
       fetchWalletData();
@@ -283,7 +290,7 @@ const MyWalletCosmic: React.FC = () => {
       // Clean URL
       window.history.replaceState({}, '', '/my-wallet');
     } else if (paymentStatus === 'cancel') {
-      showToast('warning', '⚠️ Đã hủy thanh toán', 'Bạn đã hủy giao dịch nạp tiền');
+      showToast('warning', '⚠️ Đã hủy nạp tiền', 'Bạn đã hủy giao dịch nạp tiền qua PayOS');
       window.history.replaceState({}, '', '/my-wallet');
     }
   }, [searchParams]);
@@ -782,6 +789,7 @@ const MyWalletCosmic: React.FC = () => {
               orders={paymentOrders}
               isLoading={paymentOrdersLoading}
               itemsPerPage={6}
+              sectionTitle="Lịch sử nạp tiền qua PayOS"
               formatDate={formatDate}
               formatCurrency={formatCurrency}
               getStatusBadge={getStatusBadge}
@@ -1152,12 +1160,23 @@ const MyWalletCosmic: React.FC = () => {
         isOpen={showCancelModal}
         onClose={() => setShowCancelModal(false)}
         subscription={subscription}
+        onBlockedByLimit={(message) => {
+          setShowCancelModal(false);
+          setCancellationLimitMessage(message);
+          setShowCancellationLimitModal(true);
+        }}
         onSuccess={async () => {
           await fetchSubscription();
           await fetchWalletData();
           await fetchTransactions();
           showToast('success', '✅ Thành công', 'Đã hủy gói đăng ký');
         }}
+      />
+
+      <CancellationLimitModal
+        isOpen={showCancellationLimitModal}
+        onClose={() => setShowCancellationLimitModal(false)}
+        message={cancellationLimitMessage}
       />
 
       {/* Invoice Modal */}

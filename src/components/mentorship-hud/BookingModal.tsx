@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Wallet, CheckCircle, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
 import walletService from '../../services/walletService';
 import { getAvailability } from '../../services/availabilityService';
-import { createBookingWithWallet, getMentorActiveBookings, BookingResponse } from '../../services/bookingService';
+import { createBookingWithWallet, getMentorActiveBookings } from '../../services/bookingService';
 import { usePaymentToast } from '../../utils/useToast';
 import Toast from '../shared/Toast';
 import './uplink-styles.css';
@@ -36,8 +36,6 @@ const BookingModal: React.FC<BookingModalProps> = ({
   const [selectedSlot, setSelectedSlot] = useState<BookableSlot | null>(null);
   const [availableSlots, setAvailableSlots] = useState<BookableSlot[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
-  // Payment method always WALLET - PayOS removed from booking flow
-  const [paymentMethod] = useState<'wallet' | 'payos'>('wallet');
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [closeModalOnToastDismiss, setCloseModalOnToastDismiss] = useState(false);
@@ -207,17 +205,15 @@ const BookingModal: React.FC<BookingModalProps> = ({
   };
 
   const handlePayment = async () => {
-    if (paymentMethod === 'wallet') {
-      if (walletBalance === null) {
+    if (walletBalance === null) {
         setCloseModalOnToastDismiss(false);
-        showError('Lỗi', 'Không thể tải thông tin ví.');
-        return;
-      }
-      if (walletBalance < priceVND) {
+      showError('Lỗi', 'Không thể tải thông tin ví.');
+      return;
+    }
+    if (walletBalance < priceVND) {
         setCloseModalOnToastDismiss(false);
-        showError('Số dư không đủ', 'Vui lòng nạp thêm tiền vào ví.');
-        return;
-      }
+      showError('Số dư không đủ', 'Vui lòng nạp thêm tiền vào ví.');
+      return;
     }
 
     setIsProcessing(true);
@@ -235,7 +231,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
           //   "2026-03-27T02:00:00.000+07:00" (with ms and TZ)
           const m = rawSlotStr.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{3}))?(?:([+-]\d{2}:\d{2}))?$/);
           if (!m) throw new Error('Invalid raw slot time: ' + rawSlotStr);
-          const [, year, month, day, hour, minute, second, ms, tz] = m;
+          const [, year, month, day, hour, minute, second] = m;
 
           // Extract chunk index from slot id: "slot-id_0", "slot-id_7", etc.
           const idx = parseInt(slotId.split('_').pop() ?? '0', 10);
@@ -314,7 +310,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
           <div>
             <p className="chat-protocol-label">MENTOR_BOOKING_PROTOCOL</p>
             <h3 className="uplink-chat-name">
-              {step === 'schedule' ? 'Đặt lịch hẹn' : 'Thanh toán'}
+              {step === 'schedule' ? 'Đặt lịch hẹn' : 'Thanh toán bằng ví'}
             </h3>
           </div>
           <button className="uplink-close-btn" onClick={onClose}>
@@ -412,7 +408,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 </div>
               </div>
 
-              <h4 className="booking-method-heading">Chọn phương thức thanh toán</h4>
+              <h4 className="booking-method-heading">Thanh toán qua ví</h4>
 
               <div className="payment-method-card selected">
                 <Wallet size={24} color="#22d3ee" />
@@ -424,6 +420,10 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 </div>
                 <CheckCircle size={20} color="#22d3ee" />
               </div>
+
+              <p style={{ color: 'var(--uplink-text-grey)', fontSize: '0.85rem', margin: 0 }}>
+                Nếu số dư chưa đủ, hãy nạp thêm tiền vào ví trước khi xác nhận.
+              </p>
             </div>
           )}
         </div>
@@ -452,7 +452,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 disabled={isProcessing}
                 style={{ flex: 2, justifyContent: 'center', opacity: isProcessing ? 0.7 : 1 }}
               >
-                {isProcessing ? 'Đang xử lý...' : `Thanh toán ${priceVND.toLocaleString('vi-VN')} đ`}
+                {isProcessing ? 'Đang xử lý...' : `Thanh toán ví ${priceVND.toLocaleString('vi-VN')} đ`}
               </button>
             </div>
           )}

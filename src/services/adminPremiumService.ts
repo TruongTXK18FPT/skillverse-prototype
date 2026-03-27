@@ -72,8 +72,10 @@ export interface AdminPremiumPlan {
     | "STUDENT_PACK"
     | "RECRUITER_PRO";
   targetRole?: "LEARNER" | "RECRUITER" | "PARENT";
-  studentDiscountPercent: number;
-  studentPrice: number;
+  discountPercent?: number;
+  discountedPrice?: number;
+  studentDiscountPercent?: number;
+  studentPrice?: number;
   features: string[];
   isActive: boolean;
   maxSubscribers: number | null;
@@ -94,7 +96,8 @@ export interface CreatePremiumPlanRequest {
   price: number;
   planType: "PREMIUM_BASIC" | "PREMIUM_PLUS" | "STUDENT_PACK" | "RECRUITER_PRO";
   targetRole?: "LEARNER" | "RECRUITER" | "PARENT";
-  studentDiscountPercent: number;
+  discountPercent?: number;
+  studentDiscountPercent?: number;
   features: string; // JSON string array
   maxSubscribers?: number | null;
   isActive?: boolean;
@@ -106,7 +109,8 @@ export interface UpdatePremiumPlanRequest {
   description: string;
   durationMonths: number;
   price: number;
-  studentDiscountPercent: number;
+  discountPercent?: number;
+  studentDiscountPercent?: number;
   features: string; // JSON string array
   maxSubscribers?: number | null;
   isActive?: boolean;
@@ -117,6 +121,21 @@ export interface UpdatePremiumPlanRequest {
 // ==================== API Service ====================
 
 const BASE_URL = "/api/admin/premium";
+
+const normalizeDiscountPayload = <
+  T extends { discountPercent?: number; studentDiscountPercent?: number }
+>(
+  data: T,
+): T & { discountPercent: number; studentDiscountPercent: number } => {
+  const effectiveDiscount =
+    data.discountPercent ?? data.studentDiscountPercent ?? 0;
+
+  return {
+    ...data,
+    discountPercent: effectiveDiscount,
+    studentDiscountPercent: effectiveDiscount,
+  };
+};
 
 /**
  * Get all premium plans (including inactive)
@@ -152,7 +171,7 @@ export const createPlan = async (
 ): Promise<AdminPremiumPlan> => {
   const response = await axiosInstance.post<AdminPremiumPlan>(
     `${BASE_URL}/plans`,
-    data,
+    normalizeDiscountPayload(data),
   );
   return response.data;
 };
@@ -168,7 +187,7 @@ export const updatePlan = async (
 ): Promise<AdminPremiumPlan> => {
   const response = await axiosInstance.put<AdminPremiumPlan>(
     `${BASE_URL}/plans/${planId}`,
-    data,
+    normalizeDiscountPayload(data),
   );
   return response.data;
 };

@@ -324,9 +324,11 @@ const PremiumPlansManagementTab: React.FC = () => {
                     <span className="main">
                       {adminPremiumService.formatPrice(plan.price)}
                     </span>
-                    {plan.studentDiscountPercent > 0 && (
+                    {(plan.discountPercent ?? plan.studentDiscountPercent) > 0 && (
                       <span className="student">
-                        {adminPremiumService.formatPrice(plan.studentPrice)}
+                        {adminPremiumService.formatPrice(
+                          plan.discountedPrice ?? plan.studentPrice,
+                        )}
                       </span>
                     )}
                   </div>

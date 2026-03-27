@@ -8,7 +8,6 @@ import {
   CourseStatus,
   PageResponse
 } from '../data/courseDTOs';
-import { CreatePaymentResponse as GatewayPaymentResponse } from '../data/paymentDTOs';
 import { CoursePurchaseDTO, CoursePurchaseRequestDTO } from '../data/purchaseDTOs';
 import { getAccessToken } from '../utils/authStorage';
 
@@ -326,25 +325,6 @@ export const getMentorCoursePurchases = async (
 };
 
 // ==================== COURSE PURCHASE PAYMENT ====================
-
-/**
- * Create PayOS payment intent for course purchase
- * POST /api/course-purchases/intent
- */
-export const createCoursePurchaseIntent = async (
-  request: CoursePurchaseRequestDTO
-): Promise<GatewayPaymentResponse> => {
-  try {
-    const response = await axiosInstance.post<GatewayPaymentResponse>(
-      '/course-purchases/intent',
-      request
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error creating course purchase intent:', error);
-    throw error;
-  }
-};
 
 /**
  * Purchase course with My-Wallet balance

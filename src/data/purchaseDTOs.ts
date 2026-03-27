@@ -73,6 +73,4 @@ export interface CoursePurchaseDTO {
 export interface CoursePurchaseRequestDTO {
   courseId: number;
   couponCode?: string;
-  returnUrl?: string;
-  cancelUrl?: string;
 }

@@ -40,7 +40,7 @@ interface InvoiceData {
   transactionId?: string;
   
   // Optional
-  isStudentDiscount?: boolean;
+  isDiscountedPrice?: boolean;
   features?: string[];
 }
 
@@ -249,7 +249,7 @@ const PremiumInvoice: React.FC<PremiumInvoiceProps> = ({ data, onClose }) => {
                 <div className="summary-row discount">
                   <span>
                     Giảm giá
-                    {data.isStudentDiscount && ' (Sinh viên)'}
+                    {data.isDiscountedPrice && ' (Theo chính sách giá)'}
                     {data.discountReason && ` - ${data.discountReason}`}
                   </span>
                   <span>-{formatCurrency(data.discount)}</span>
