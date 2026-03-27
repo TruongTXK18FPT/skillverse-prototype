@@ -9,7 +9,7 @@ import {
   ResolveDisputeRequest,
   DisputeResponse,
 } from "../data/adminDTOs";
-import { ShortTermJobStatus } from "../types/ShortTermJob";
+import { Dispute, JobStatusAuditLog, ShortTermJobStatus } from "../types/ShortTermJob";
 
 /**
  * AdminService - Service for admin operations to manage mentor/recruiter applications
@@ -364,9 +364,10 @@ class AdminService {
   /**
    * Delete a job (soft delete - sets to CANCELLED)
    */
-  async deleteJob(jobId: number): Promise<any> {
+  async deleteJob(jobId: number, reason?: string): Promise<any> {
     const response = await axiosInstance.delete(
       `${this.BASE_URL}/short-term-jobs/${jobId}`,
+      { params: { reason } }
     );
     return response.data;
   }
@@ -413,9 +414,19 @@ class AdminService {
   /**
    * Get dispute detail by ID
    */
-  async getDisputeDetail(disputeId: number): Promise<DisputeResponse> {
-    const response = await axiosInstance.get<DisputeResponse>(
+  async getDisputeDetail(disputeId: number): Promise<Dispute> {
+    const response = await axiosInstance.get<Dispute>(
       `${this.BASE_URL}/short-term-jobs/disputes/${disputeId}`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Get audit logs relevant to a dispute
+   */
+  async getDisputeAuditLogs(disputeId: number): Promise<JobStatusAuditLog[]> {
+    const response = await axiosInstance.get<JobStatusAuditLog[]>(
+      `${this.BASE_URL}/short-term-jobs/disputes/${disputeId}/audit-logs`,
     );
     return response.data;
   }

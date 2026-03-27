@@ -221,10 +221,7 @@ const ShortTermJobFullPage = ({
     if (!acceptModal) return;
     const canApproveApplicants = escrow?.status === EscrowStatus.FUNDED;
     if (!canApproveApplicants) {
-      showError(
-        "Chưa ký quỹ",
-        "Vui lòng ký quỹ trước khi duyệt ứng viên.",
-      );
+      showError("Chưa ký quỹ", "Vui lòng ký quỹ trước khi duyệt ứng viên.");
       return;
     }
 
@@ -311,8 +308,7 @@ const ShortTermJobFullPage = ({
       a.status === ShortTermApplicationStatus.PAID,
   );
   const canApproveApplicants = escrow?.status === EscrowStatus.FUNDED;
-  const approveBlockedMessage =
-    "Cần ký quỹ trước khi duyệt ứng viên";
+  const approveBlockedMessage = "Cần ký quỹ trước khi duyệt ứng viên";
 
   return (
     <div className="stj-fullpage">
@@ -539,7 +535,7 @@ const ShortTermJobFullPage = ({
               </div>
 
               <div className="stj-fullpage__detail-card">
-                <h3>Thông tin job</h3>
+                <h3>Thông tin công việc</h3>
                 <div className="stj-fullpage__info-list">
                   <div className="stj-fullpage__info-row">
                     <span>Ngân sách</span>
@@ -550,7 +546,7 @@ const ShortTermJobFullPage = ({
                     <strong>{formatDate(job.deadline)}</strong>
                   </div>
                   <div className="stj-fullpage__info-row">
-                    <span>Ước tính thời gian</span>
+                    <span>Deadline nộp dự án</span>
                     <strong>{job.estimatedDuration || "N/A"}</strong>
                   </div>
                   <div className="stj-fullpage__info-row">

@@ -26,6 +26,7 @@ export enum ShortTermJobStatus {
   PAID = "PAID", // Đã thanh toán
   CANCELLED = "CANCELLED", // Đã hủy
   DISPUTED = "DISPUTED", // Đang tranh chấp
+  ESCALATED = "ESCALATED", // Leo thang lên admin cấp cao hơn
   CLOSED = "CLOSED", // Đã đóng
 }
 
@@ -61,7 +62,12 @@ export enum ShortTermApplicationStatus {
   WORKING = "WORKING", // Đang làm việc
   IN_PROGRESS = "IN_PROGRESS", // Alias cho WORKING - đang thực hiện
   SUBMITTED = "SUBMITTED", // Đã nộp deliverables
+  SUBMITTED_OVERDUE = "SUBMITTED_OVERDUE", // Recruiter quá hạn review 48h
   REVISION_REQUIRED = "REVISION_REQUIRED", // Cần sửa lại
+  REVISION_RESPONSE_OVERDUE = "REVISION_RESPONSE_OVERDUE", // User quá hạn phản hồi revision
+  CANCELLATION_REQUESTED = "CANCELLATION_REQUESTED", // Recruiter yêu cầu hủy (≥5 revision)
+  AUTO_CANCELLED = "AUTO_CANCELLED", // System auto-cancel (user không phản hồi 72h)
+  DISPUTE_OPENED = "DISPUTE_OPENED", // Đang dispute
   APPROVED = "APPROVED", // Công việc được approve
   COMPLETED = "COMPLETED", // Hoàn thành
   PAID = "PAID", // Đã thanh toán
@@ -213,6 +219,11 @@ export interface ShortTermJobApplication {
   revisionCount: number;
   revisionNotes?: RevisionNote[];
   submissionCount?: number;
+
+  // SLA / Cancellation / Dispute fields
+  reviewDeadlineAt?: string;
+  responseDeadlineAt?: string;
+  disputeEligibilityUnlocked?: boolean;
 }
 
 /**
@@ -220,9 +231,10 @@ export interface ShortTermJobApplication {
  */
 export interface RevisionNote {
   id: number;
-  applicationId: number;
   note: string;
-  requestedBy: number; // userId
+  specificIssues?: string[];
+  requestedById: number;
+  requestedByName?: string;
   requestedAt: string;
   resolvedAt?: string;
 }
@@ -233,11 +245,12 @@ export interface RevisionNote {
 export interface JobStatusAuditLog {
   id: number;
   jobId: number;
+  shortTermJobId?: number;
   applicationId?: number;
   previousStatus: string;
   newStatus: string;
-  changedBy: number; // userId
-  changedByRole: "RECRUITER" | "CANDIDATE" | "ADMIN" | "SYSTEM";
+  changedBy?: number | { id?: number; fullName?: string; email?: string } | null;
+  changedByRole: "RECRUITER" | "CANDIDATE" | "USER" | "ADMIN" | "SYSTEM";
   reason?: string;
   metadata?: Record<string, unknown>;
   createdAt: string;
@@ -405,6 +418,11 @@ export const SHORT_TERM_JOB_TRANSITIONS: Record<
     ShortTermJobStatus.REJECTED,
     ShortTermJobStatus.CANCELLED,
   ],
+  [ShortTermJobStatus.ESCALATED]: [
+    ShortTermJobStatus.APPROVED,
+    ShortTermJobStatus.REJECTED,
+    ShortTermJobStatus.CANCELLED,
+  ],
   [ShortTermJobStatus.CLOSED]: [],
 };
 
@@ -433,10 +451,20 @@ export const APPLICATION_TRANSITIONS: Record<
   [ShortTermApplicationStatus.SUBMITTED]: [
     ShortTermApplicationStatus.REVISION_REQUIRED,
     ShortTermApplicationStatus.APPROVED,
+    ShortTermApplicationStatus.CANCELLATION_REQUESTED,
   ],
+  [ShortTermApplicationStatus.SUBMITTED_OVERDUE]: [],
   [ShortTermApplicationStatus.REVISION_REQUIRED]: [
     ShortTermApplicationStatus.SUBMITTED,
+    ShortTermApplicationStatus.CANCELLATION_REQUESTED,
   ],
+  [ShortTermApplicationStatus.REVISION_RESPONSE_OVERDUE]: [],
+  [ShortTermApplicationStatus.CANCELLATION_REQUESTED]: [
+    ShortTermApplicationStatus.CANCELLED,
+    ShortTermApplicationStatus.DISPUTE_OPENED,
+  ],
+  [ShortTermApplicationStatus.AUTO_CANCELLED]: [],
+  [ShortTermApplicationStatus.DISPUTE_OPENED]: [],
   [ShortTermApplicationStatus.APPROVED]: [ShortTermApplicationStatus.COMPLETED],
   [ShortTermApplicationStatus.COMPLETED]: [ShortTermApplicationStatus.PAID],
   [ShortTermApplicationStatus.PAID]: [],
@@ -601,6 +629,10 @@ export interface ShortTermApplicationResponse extends ShortTermJobApplication {
     deadline: string;
     recruiterCompanyName?: string;
   };
+  // SLA / Cancellation / Dispute fields
+  reviewDeadlineAt?: string;
+  responseDeadlineAt?: string;
+  disputeEligibilityUnlocked?: boolean;
 }
 
 export type JobReviewResponse = JobReview;
@@ -724,6 +756,12 @@ export const SHORT_TERM_JOB_STATUS_DISPLAY: Record<
     icon: "⚠️",
     description: "Đang có tranh chấp",
   },
+  [ShortTermJobStatus.ESCALATED]: {
+    text: "Leo Thang",
+    color: "purple",
+    icon: "🚨",
+    description: "Case đã bị leo thang để admin ưu tiên xử lý",
+  },
   [ShortTermJobStatus.CLOSED]: {
     text: "Đã Đóng",
     color: "gray",
@@ -766,11 +804,41 @@ export const APPLICATION_STATUS_DISPLAY: Record<
     icon: "📤",
     description: "Đã bàn giao deliverables",
   },
+  [ShortTermApplicationStatus.SUBMITTED_OVERDUE]: {
+    text: "Quá Hạn Review",
+    color: "red",
+    icon: "⚠️",
+    description: "Recruiter chưa review. Bàn giao sắp được tự động duyệt.",
+  },
   [ShortTermApplicationStatus.REVISION_REQUIRED]: {
     text: "Cần Sửa Lại",
     color: "yellow",
     icon: "🔄",
     description: "Recruiter yêu cầu chỉnh sửa",
+  },
+  [ShortTermApplicationStatus.REVISION_RESPONSE_OVERDUE]: {
+    text: "Quá Hạn Phản Hồi",
+    color: "orange",
+    icon: "⏰",
+    description: "Bạn đã quá hạn phản hồi yêu cầu sửa đổi.",
+  },
+  [ShortTermApplicationStatus.CANCELLATION_REQUESTED]: {
+    text: "Yêu Cầu Hủy",
+    color: "red",
+    icon: "⚠️",
+    description: "Recruiter yêu cầu hủy sau 5 lần sửa. Bạn có 72 giờ để phản hồi.",
+  },
+  [ShortTermApplicationStatus.AUTO_CANCELLED]: {
+    text: "Tự Động Hủy",
+    color: "gray",
+    icon: "❌",
+    description: "Hệ thống tự động hủy do không phản hồi trong 72 giờ.",
+  },
+  [ShortTermApplicationStatus.DISPUTE_OPENED]: {
+    text: "Đang Khiếu Nại",
+    color: "orange",
+    icon: "⚖️",
+    description: "Đã gửi khiếu nại lên Admin.",
   },
   [ShortTermApplicationStatus.APPROVED]: {
     text: "Công Việc Được Duyệt",
@@ -865,7 +933,10 @@ export enum DisputeType {
   COMMUNICATION_FAILURE = "COMMUNICATION_FAILURE",
   SCOPE_CHANGE = "SCOPE_CHANGE",
   SCAM_REPORT = "SCAM_REPORT",
-  OTHER = "OTHER"
+  OTHER = "OTHER",
+  WORKER_PROTECTION = "WORKER_PROTECTION", // Worker opens dispute after 5 revisions
+  RECRUITER_ABUSE = "RECRUITER_ABUSE", // Admin marks when recruiter abused revision flow
+  CANCELLATION_REVIEW = "CANCELLATION_REVIEW",
 }
 
 export enum DisputeStatus {
@@ -878,12 +949,17 @@ export enum DisputeStatus {
 }
 
 export enum DisputeResolution {
+  CANCEL_JOB = "CANCEL_JOB",
   FULL_REFUND = "FULL_REFUND",
   FULL_RELEASE = "FULL_RELEASE",
   PARTIAL_REFUND = "PARTIAL_REFUND",
   PARTIAL_RELEASE = "PARTIAL_RELEASE",
   RESUBMIT_REQUIRED = "RESUBMIT_REQUIRED",
-  NO_ACTION = "NO_ACTION"
+  NO_ACTION = "NO_ACTION",
+  WORKER_WINS = "WORKER_WINS",
+  WORKER_PARTIAL = "WORKER_PARTIAL",
+  RECRUITER_WINS = "RECRUITER_WINS",
+  RECRUITER_WARNING = "RECRUITER_WARNING",
 }
 
 export interface DisputeEvidence {
@@ -958,4 +1034,3 @@ export interface TrustScore {
   createdAt: string;
   updatedAt: string;
 }
-

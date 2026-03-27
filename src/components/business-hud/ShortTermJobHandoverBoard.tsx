@@ -162,6 +162,27 @@ const ShortTermJobHandoverBoard = ({
     }
   };
 
+  const handleRequestCancellationReview = async (application: ShortTermApplicationResponse) => {
+    const reason = window.prompt(
+      'Nhập lý do yêu cầu admin xem xét hủy công việc sau 5 lần sửa:',
+      '',
+    );
+    if (!reason || !reason.trim()) {
+      return;
+    }
+
+    try {
+      setActionLoading(application.id);
+      await shortTermJobService.requestCancellationReview(application.id, reason.trim());
+      showSuccess('Đã gửi yêu cầu hủy', 'Admin sẽ kiểm tra audit log và bằng chứng trước khi quyết định.');
+      onRefresh();
+    } catch (error: any) {
+      showError('Không thể gửi yêu cầu hủy', error.message || 'Vui lòng thử lại.');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   const handleCompleteJob = async (application: ShortTermApplicationResponse) => {
     try {
       setActionLoading(application.id);
@@ -529,7 +550,18 @@ const ShortTermJobHandoverBoard = ({
                         {isBusy ? <Loader2 size={13} className="stj-spin" /> : <CheckCircle2 size={13} />}
                         Duyệt bàn giao
                       </button>
-                      <button
+                      {(application.revisionCount || 0) >= 5 && (
+                        <button
+                          className="stj-action-btn stj-action-btn--revision"
+                          disabled={isBusy}
+                          onClick={() => handleRequestCancellationReview(application)}
+                        >
+                          <X size={13} />
+                          Yêu cầu admin hủy
+                        </button>
+                      )}
+                      {(application.revisionCount || 0) < 5 && (
+                        <button
                         className="stj-action-btn stj-action-btn--revision"
                         disabled={isBusy}
                         onClick={() => {
@@ -540,6 +572,7 @@ const ShortTermJobHandoverBoard = ({
                         <RefreshCw size={13} />
                         Yêu cầu sửa
                       </button>
+                      )}
                     </>
                   )}
 

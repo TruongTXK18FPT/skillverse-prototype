@@ -5,21 +5,7 @@ import {
   SUB_CATEGORIES,
   DomainType
 } from '../../types/Journey';
-
-// Common skills by domain for suggestions
-const COMMON_SKILLS: Record<string, string[]> = {
-  IT: ['JavaScript', 'Python', 'Java', 'React', 'Node.js', 'SQL', 'Git', 'Docker', 'AWS', 'TypeScript', 'Vue.js', 'Angular', 'Go', 'Rust'],
-  DESIGN: ['Figma', 'Adobe XD', 'Sketch', 'Photoshop', 'Illustrator', 'UI Design', 'UX Research', 'Prototyping', 'Design Systems', 'Motion Design'],
-  BUSINESS: ['Digital Marketing', 'SEO', 'Content Marketing', 'Google Analytics', 'Sales', 'Project Management', 'Financial Analysis', 'Business Development'],
-  ENGINEERING: ['AutoCAD', 'SolidWorks', 'MATLAB', 'Python', '3D Modeling', 'Finite Element Analysis', 'Thermodynamics'],
-  EDUCATION: ['Instructional Design', 'E-Learning', 'Curriculum Development', 'Teaching', 'Assessment', 'EdTech Tools'],
-  LOGISTICS: ['Supply Chain Management', 'Warehouse Operations', 'Inventory Management', 'SAP', 'Transportation Planning'],
-  LEGAL: ['Contract Drafting', 'Legal Research', 'Corporate Law', 'Intellectual Property', 'Compliance'],
-  ARTS: ['Photography', 'Videography', 'Video Editing', '3D Modeling', 'Animation', 'Illustration', 'Adobe Creative Suite'],
-  SERVICE: ['Customer Service', 'Event Planning', 'Hotel Management', 'Restaurant Operations', 'Sales'],
-  SOCIALCOMMUNITY: ['Community Management', 'Social Media', 'Fundraising', 'Volunteer Coordination', 'Content Strategy'],
-  AGRICULTUREENVIRONMENT: ['Sustainable Agriculture', 'Environmental Impact Assessment', 'Soil Science', 'Crop Management', 'Water Management']
-};
+import { COMMON_SKILLS } from '../../types/domainExpertMapper';
 
 interface SkillFormProps {
   onComplete: (data: { domain: string; subCategory: string; skills: string[] }) => void;
@@ -81,6 +67,9 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
 
   const handleSubmit = () => {
     if (selectedDomain && selectedSubCategory && customSkills.length > 0) {
+      // For SKILL journeys, keep frontend domain CODE (e.g. "IT") so AssessmentPromptService
+      // can match it against hardcoded domain strings in generateTestPrompt().
+      // The expert prompt matching (exact/fuzzy) is only used in expert chat, not journey assessment.
       onComplete({
         domain: selectedDomain,
         subCategory: selectedSubCategory,

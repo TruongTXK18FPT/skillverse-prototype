@@ -5,7 +5,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
 import SystemAlertModal from "./SystemAlertModal";
-import MeowlGuide from "../meowl/MeowlGuide";
+// MeowlGuide intentionally not imported — hidden on this page
 import portfolioService from "../../services/portfolioService";
 import userService from "../../services/userService";
 import { UserProfileDTO } from "../../data/portfolioDTOs";
@@ -387,7 +387,6 @@ const DossierCreatePortfolioPage = () => {
             </button>
           </div>
         </div>
-        <MeowlGuide currentPage="portfolio" />
       </div>
     );
   }
@@ -407,7 +406,6 @@ const DossierCreatePortfolioPage = () => {
             </button>
           </div>
         </div>
-        <MeowlGuide currentPage="portfolio" />
       </div>
     );
   }
@@ -968,7 +966,6 @@ const DossierCreatePortfolioPage = () => {
         message={alertModal.message}
         type={alertModal.type}
       />
-      <MeowlGuide currentPage="portfolio" />
     </div>
   );
 };

@@ -8,10 +8,12 @@ export interface BookingResponse {
   startTime: string;
   endTime: string;
   durationMinutes: number;
-  status: 'PENDING' | 'CONFIRMED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED' | 'ONGOING' | 'MENTOR_COMPLETED' | 'DISPUTED' | 'REFUNDED';
+  status: 'PENDING' | 'CONFIRMED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED' | 'ONGOING' | 'PENDING_COMPLETION' | 'DISPUTED' | 'REFUNDED';
   confirmedByLearner?: boolean;
   mentorCompletedAt?: string;
   learnerConfirmedAt?: string;
+  learnerCompletedAt?: string;
+  completionDeadline?: string;
   priceVnd: number;
   meetingLink?: string;
   paymentReference?: string;
@@ -97,7 +99,7 @@ export const startMeeting = async (id: number): Promise<BookingResponse> => {
 };
 
 export const completeBooking = async (id: number): Promise<BookingResponse> => {
-  // Part 6: This is now mentor complete (MENTOR_COMPLETED), not immediate COMPLETED
+  // Part 6: This transitions to PENDING_COMPLETION (waiting for other party)
   try {
     const response = await axiosInstance.put<BookingResponse>(`/api/mentor-bookings/${id}/complete`);
     return response.data;

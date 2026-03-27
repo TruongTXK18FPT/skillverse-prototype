@@ -58,6 +58,8 @@ const MessengerPage: React.FC = () => {
 
   const [contacts, setContacts] = useState<ChatContact[]>([]);
   const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
+  // Synthetic contact created from booking navigation (when no thread exists yet)
+  const [syntheticContact, setSyntheticContact] = useState<ChatContact | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'ALL' | 'MENTOR' | 'FAMILY' | 'GROUP' | 'RECRUITMENT'>('ALL');
   const [showSettings, setShowSettings] = useState(false);
@@ -158,11 +160,28 @@ const MessengerPage: React.FC = () => {
       }
     } else {
       setActiveTab('MENTOR');
+      // When navigating from a booking, create a synthetic contact if no thread exists yet.
+      // This allows the user to start chatting with the mentor even if they've never pre-chatted before.
+      const existingContact = contacts.find(c => c.id === targetId && c.type === 'MENTOR');
+      if (!existingContact && location.state.name) {
+        const synthetic: ChatContact = {
+          id: targetId,
+          name: location.state.name || `Mentor #${targetId}`,
+          avatar: resolveAvatarUrl(location.state.avatar || ''),
+          lastMessage: 'Bắt đầu cuộc trò chuyện',
+          timestamp: new Date().toISOString(),
+          unread: 0,
+          type: 'MENTOR',
+          isOnline: Math.random() > 0.5,
+          isMyRoleMentor: location.state.isMyRoleMentor ?? false,
+        };
+        setSyntheticContact(synthetic);
+      }
     }
 
     setSelectedContactId(targetId);
     hasHandledNav.current = true;
-  }, [location.state, recruitmentSessions]);
+  }, [location.state, recruitmentSessions, contacts]);
 
   // Handle direct navigation to a recruitment session via URL param (e.g. /messenger?sessionId=123)
   useEffect(() => {
@@ -302,7 +321,8 @@ const MessengerPage: React.FC = () => {
     return matchesSearch && matchesTab;
   });
 
-  const selectedContact = contacts.find((contact) => contact.id === selectedContactId);
+  const selectedContact = contacts.find((contact) => contact.id === selectedContactId)
+    ?? (syntheticContact?.id === selectedContactId ? syntheticContact : null);
 
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);

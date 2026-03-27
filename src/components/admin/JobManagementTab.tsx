@@ -62,6 +62,14 @@ import {
   Activity,
   Target,
   Award,
+  Link as LinkIcon,
+  Paperclip,
+  Image,
+  Send,
+  Download,
+  ExternalLink,
+  User,
+  Percent,
 } from "lucide-react";
 import adminService from "../../services/adminService";
 import { useAuth } from "../../context/AuthContext";
@@ -77,6 +85,8 @@ import {
   ShortTermJobStatus,
   SHORT_TERM_JOB_STATUS_DISPLAY,
   JobUrgency,
+  Dispute,
+  JobStatusAuditLog,
 } from "../../types/ShortTermJob";
 import Toast from "../shared/Toast";
 import "./JobManagementTab.css";
@@ -99,6 +109,7 @@ const STATUS_COLORS: Record<string, string> = {
   PAID: "#10b981",
   CANCELLED: "#475569",
   DISPUTED: "#ef4444",
+  ESCALATED: "#a855f7",
   CLOSED: "#6b7280",
 };
 
@@ -112,6 +123,23 @@ const DISPUTE_STATUS_COLORS: Record<string, string> = {
 };
 
 const URGENCY_COLORS = ["#22c55e", "#f59e0b", "#f97316", "#ef4444"];
+
+const getErrorMessage = (error: any, fallback: string) => {
+  const data = error?.response?.data;
+  if (typeof data === "string" && data.trim()) {
+    return data;
+  }
+  if (typeof data?.message === "string" && data.message.trim()) {
+    return data.message;
+  }
+  if (typeof data?.error === "string" && data.error.trim()) {
+    return data.error;
+  }
+  if (typeof error?.message === "string" && error.message.trim()) {
+    return error.message;
+  }
+  return fallback;
+};
 
 // ==================== COMPONENT ====================
 
@@ -172,6 +200,10 @@ export const JobManagementTab: React.FC = () => {
   // Dispute resolve modal
   const [selectedDispute, setSelectedDispute] =
     useState<DisputeResponse | null>(null);
+  const [disputeDetail, setDisputeDetail] = useState<Dispute | null>(null);
+  const [disputeDetailLoading, setDisputeDetailLoading] = useState(false);
+  const [disputeAuditLogs, setDisputeAuditLogs] = useState<JobStatusAuditLog[]>([]);
+  const [disputeAuditLoading, setDisputeAuditLoading] = useState(false);
   const [showDisputeModal, setShowDisputeModal] = useState(false);
   const [resolveResolution, setResolveResolution] =
     useState<DisputeResolution | "">("");
@@ -305,7 +337,7 @@ export const JobManagementTab: React.FC = () => {
         await adminService.unbanJob(selectedJob.id);
         showSuccess("Thành công", "Đã mở khóa tin tuyển dụng");
       } else if (actionType === "delete") {
-        await adminService.deleteJob(selectedJob.id);
+        await adminService.deleteJob(selectedJob.id, actionReason);
         showSuccess("Thành công", "Đã xóa tin tuyển dụng");
       }
 
@@ -317,7 +349,11 @@ export const JobManagementTab: React.FC = () => {
       setActionReason("");
     } catch (error) {
       console.error("Error processing action:", error);
-      showError("Lỗi", "Không thể xử lý yêu cầu");
+      showError(
+        "Lỗi",
+        getErrorMessage(error, "Không thể xử lý yêu cầu"),
+      );
+      return;
     } finally {
       setActionLoading(false);
     }
@@ -337,8 +373,7 @@ export const JobManagementTab: React.FC = () => {
         resolutionNotes: resolveNotes || undefined,
       };
       if (
-        (resolveResolution === "PARTIAL_REFUND" ||
-          resolveResolution === "PARTIAL_RELEASE") &&
+        resolveResolution === "WORKER_PARTIAL" &&
         resolvePartialPct
       ) {
         request.partialRefundPct = parseFloat(resolvePartialPct);
@@ -353,7 +388,11 @@ export const JobManagementTab: React.FC = () => {
       setResolvePartialPct("");
     } catch (error) {
       console.error("Error resolving dispute:", error);
-      showError("Lỗi", "Không thể giải quyết khiếu nại");
+      showError(
+        "Lỗi",
+        getErrorMessage(error, "Không thể giải quyết khiếu nại"),
+      );
+      return;
     } finally {
       setResolveLoading(false);
     }
@@ -410,6 +449,7 @@ export const JobManagementTab: React.FC = () => {
       PAID: "jm-badge--paid",
       CANCELLED: "jm-badge--cancelled",
       DISPUTED: "jm-badge--disputed",
+      ESCALATED: "jm-badge--escalated",
       CLOSED: "jm-badge--closed",
     };
     return map[status] || "jm-badge--normal";
@@ -440,7 +480,7 @@ export const JobManagementTab: React.FC = () => {
       AWAITING_RESPONSE: "Chờ phản hồi",
       RESOLVED: "Đã giải quyết",
       DISMISSED: "Bị bác",
-      ESCALATED: "Escalated",
+      ESCALATED: "Leo thang",
     };
     return map[status] || status;
   };
@@ -457,19 +497,59 @@ export const JobManagementTab: React.FC = () => {
       SCAM_REPORT: "Báo lừa đảo",
       OTHER: "Khác",
     };
+    map.WORKER_PROTECTION = "Bảo vệ ứng viên";
+    map.RECRUITER_ABUSE = "Recruiter lạm dụng";
+    map.CANCELLATION_REVIEW = "Xét duyệt yêu cầu hủy";
     return map[type] || type;
   };
 
   const getResolutionLabel = (r: DisputeResolution) => {
-    const map: Record<DisputeResolution, string> = {
-      FULL_REFUND: "Hoàn tiền 100%",
-      FULL_RELEASE: "Giải ngân 100%",
+    const map: Partial<Record<DisputeResolution, string>> = {
+      FULL_REFUND: "Hoàn tiền cho NTD",
+      FULL_RELEASE: "Giải ngân cho ỨC",
       PARTIAL_REFUND: "Hoàn tiền 1 phần",
       PARTIAL_RELEASE: "Giải ngân 1 phần",
       RESUBMIT_REQUIRED: "Yêu cầu nộp lại",
       NO_ACTION: "Không xử lý",
+      WORKER_WINS: "Ứng viên thắng — nhận 100%",
+      WORKER_PARTIAL: "Ứng viên thắng 1 phần",
+      RECRUITER_WINS: "Nhà tuyển dụng thắng",
     };
+    map.CANCEL_JOB = "Hủy job";
+    map.RECRUITER_WARNING = "Cảnh báo recruiter";
     return map[r] || r;
+  };
+
+  const getEvidenceTypeIcon = (type: string) => {
+    const icons: Record<string, React.ReactNode> = {
+      TEXT: <FileText size={13} />,
+      FILE: <Paperclip size={13} />,
+      LINK: <LinkIcon size={13} />,
+      SCREENSHOT: <Image size={13} />,
+      CHAT_LOG: <MessageSquare size={13} />,
+      DELIVERABLE_SNAPSHOT: <FileText size={13} />,
+    };
+    return icons[type] || <FileText size={13} />;
+  };
+
+  const formatTime = (ts: string) =>
+    ts ? new Date(ts).toLocaleString("vi-VN") : "";
+
+  const getDisputeTypeMeta = (type: string) => {
+    const map: Record<string, { color: string; bg: string }> = {
+      WORKER_PROTECTION: { color: "#a855f7", bg: "rgba(168,85,247,0.15)" },
+      RECRUITER_ABUSE: { color: "#f87171", bg: "rgba(248,113,113,0.15)" },
+      POOR_QUALITY: { color: "#fb923c", bg: "rgba(251,146,60,0.15)" },
+      SCOPE_CHANGE: { color: "#f59e0b", bg: "rgba(245,158,11,0.15)" },
+      PAYMENT_ISSUE: { color: "#fbbf24", bg: "rgba(251,191,36,0.15)" },
+      NO_SUBMISSION: { color: "#94a3b8", bg: "rgba(148,163,184,0.15)" },
+      DEADLINE_VIOLATION: { color: "#f87171", bg: "rgba(248,113,113,0.15)" },
+      COMMUNICATION_FAILURE: { color: "#a78bfa", bg: "rgba(167,139,250,0.15)" },
+      SCAM_REPORT: { color: "#ef4444", bg: "rgba(239,68,68,0.15)" },
+      OTHER: { color: "#94a3b8", bg: "rgba(148,163,184,0.15)" },
+    };
+    map.CANCELLATION_REVIEW = { color: "#fb7185", bg: "rgba(251,113,133,0.15)" };
+    return map[type] || { color: "#94a3b8", bg: "rgba(148,163,184,0.1)" };
   };
 
   const getUrgencyLabel = (urgency: string) => {
@@ -480,6 +560,69 @@ export const JobManagementTab: React.FC = () => {
       ASAP: "Ngay lập tức",
     };
     return map[urgency] || urgency;
+  };
+
+  const getResolutionOptions = (disputeType?: string) => {
+    if (
+      disputeType === "WORKER_PROTECTION" ||
+      disputeType === "RECRUITER_ABUSE" ||
+      disputeType === "CANCELLATION_REVIEW"
+    ) {
+      return [
+        ...(disputeType === "CANCELLATION_REVIEW"
+          ? [{
+              value: "CANCEL_JOB" as DisputeResolution,
+              label: "Hủy job",
+              sub: "Chấp nhận yêu cầu hủy",
+              color: "#f87171",
+              icon: <XCircle size={14} />,
+            }]
+          : []),
+        {
+          value: "FULL_RELEASE" as DisputeResolution,
+          label: "Release toàn bộ",
+          sub: "Giải ngân toàn bộ cho ứng viên",
+          color: "#4ade80",
+          icon: <TrendingUp size={14} />,
+        },
+        {
+          value: "RECRUITER_WARNING" as DisputeResolution,
+          label: "Cảnh báo recruiter",
+          sub: "Giữ job tiếp tục và cảnh báo recruiter",
+          color: "#f59e0b",
+          icon: <AlertTriangle size={14} />,
+        },
+        {
+          value: "RESUBMIT_REQUIRED" as DisputeResolution,
+          label: "Tiếp tục công việc",
+          sub: "Bác dispute và yêu cầu user làm tiếp",
+          color: "#94a3b8",
+          icon: <RefreshCw size={14} />,
+        },
+      ] as { value: DisputeResolution; label: string; sub: string; color: string; icon: React.ReactNode }[];
+    }
+
+    return [
+      { value: "WORKER_WINS" as DisputeResolution, label: "ỨC thắng", sub: "Nhận 100% tiền", color: "#a855f7", icon: <TrendingUp size={14} /> },
+      { value: "RECRUITER_WINS" as DisputeResolution, label: "NTD thắng", sub: "Nhận 100% tiền", color: "#06b6d4", icon: <TrendingDown size={14} /> },
+      { value: "WORKER_PARTIAL" as DisputeResolution, label: "ỨC thắng 1 phần", sub: "Chia % theo quyết định", color: "#fbbf24", icon: <ArrowUpDown size={14} /> },
+      { value: "FULL_REFUND" as DisputeResolution, label: "Hoàn toàn cho NTD", sub: "Refund 100%", color: "#f87171", icon: <TrendingDown size={14} /> },
+      { value: "FULL_RELEASE" as DisputeResolution, label: "Giải ngân cho ỨC", sub: "Release 100%", color: "#4ade80", icon: <TrendingUp size={14} /> },
+      { value: "RESUBMIT_REQUIRED" as DisputeResolution, label: "Yêu cầu nộp lại", sub: "Không xử lý tài chính", color: "#94a3b8", icon: <RefreshCw size={14} /> },
+    ] as { value: DisputeResolution; label: string; sub: string; color: string; icon: React.ReactNode }[];
+  };
+
+  const getAuditActorLabel = (log: JobStatusAuditLog) => {
+    const changedBy =
+      typeof log.changedBy === "object" && log.changedBy !== null
+        ? log.changedBy
+        : null;
+    return (
+      changedBy?.fullName ||
+      changedBy?.email ||
+      (typeof log.changedBy === "number" ? `User #${log.changedBy}` : null) ||
+      log.changedByRole
+    );
   };
 
   // ==================== CHART DATA ====================
@@ -886,6 +1029,17 @@ export const JobManagementTab: React.FC = () => {
                   </div>
                 </div>
                 <div className="jm-kpi-card jm-kpi-card--small">
+                  <div className="jm-kpi-card__icon jm-kpi-card__icon--purple">
+                    <ShieldAlert size={18} />
+                  </div>
+                  <div className="jm-kpi-card__content">
+                    <div className="jm-kpi-card__value">
+                      {stats.escalatedCount}
+                    </div>
+                    <div className="jm-kpi-card__label">Leo thang</div>
+                  </div>
+                </div>
+                <div className="jm-kpi-card jm-kpi-card--small">
                   <div className="jm-kpi-card__icon jm-kpi-card__icon--gray">
                     <XCircle size={18} />
                   </div>
@@ -1289,7 +1443,7 @@ export const JobManagementTab: React.FC = () => {
                 <option value="AWAITING_RESPONSE">Chờ phản hồi</option>
                 <option value="RESOLVED">Đã giải quyết</option>
                 <option value="DISMISSED">Bị bác</option>
-                <option value="ESCALATED">Escalated</option>
+                <option value="ESCALATED">Leo thang</option>
               </select>
             </div>
           </div>
@@ -1401,9 +1555,29 @@ export const JobManagementTab: React.FC = () => {
                     <div className="jm-dispute-card__actions">
                       <button
                         className="jm-dispute-btn jm-dispute-btn--view"
-                        onClick={() => {
+                        onClick={async () => {
                           setSelectedDispute(dispute);
                           setShowDisputeModal(true);
+                          setDisputeDetail(null);
+                          setDisputeAuditLogs([]);
+                          setResolveResolution("");
+                          setResolveNotes("");
+                          setResolvePartialPct("");
+                          setDisputeDetailLoading(true);
+                          setDisputeAuditLoading(true);
+                          try {
+                            const [detail, auditLogs] = await Promise.all([
+                              adminService.getDisputeDetail(dispute.id),
+                              adminService.getDisputeAuditLogs(dispute.id),
+                            ]);
+                            setDisputeDetail(detail);
+                            setDisputeAuditLogs(auditLogs);
+                          } catch {
+                            // Fallback: use list item data
+                          } finally {
+                            setDisputeDetailLoading(false);
+                            setDisputeAuditLoading(false);
+                          }
                         }}
                       >
                         <Gavel size={14} />
@@ -1845,162 +2019,387 @@ export const JobManagementTab: React.FC = () => {
       {showDisputeModal &&
         selectedDispute &&
         ReactDOM.createPortal(
-          <div className="jm-overlay" onClick={() => setShowDisputeModal(false)}>
+          <div className="adm-overlay" onClick={() => setShowDisputeModal(false)}>
             <div
-              className="jm-modal jm-modal--lg"
+              className="adm-modal adm-modal--xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="jm-modal__header">
-                <div className="jm-modal__header-left">
-                  <div className="jm-modal__type-icon jm-modal__type-icon--red">
-                    <Gavel size={18} />
+              {/* Modal Header */}
+              <div className="adm-modal__header">
+                <div className="adm-modal__header-left">
+                  <div className="adm-modal__type-icon adm-modal__type-icon--red">
+                    <Gavel size={20} />
                   </div>
                   <div>
-                    <h2 className="jm-modal__title">Giải quyết khiếu nại</h2>
-                    <p className="jm-modal__subtitle">
-                      #{selectedDispute.id} —{" "}
-                      {getDisputeTypeLabel(selectedDispute.disputeType)}
-                    </p>
+                    <h2 className="adm-modal__title">Chi tiết & Giải quyết Khiếu nại</h2>
+                    <div className="adm-modal__meta-row">
+                      <span className="adm-dispute-id">#{selectedDispute.id}</span>
+                      <span
+                        className="adm-badge"
+                        style={{
+                          background: getDisputeTypeMeta(selectedDispute.disputeType).bg,
+                          color: getDisputeTypeMeta(selectedDispute.disputeType).color,
+                        }}
+                      >
+                        {getDisputeTypeLabel(selectedDispute.disputeType)}
+                      </span>
+                      <span
+                        className={`adm-badge ${selectedDispute.status === "OPEN" ? "adm-badge--disputed" : selectedDispute.status === "RESOLVED" ? "adm-badge--completed" : selectedDispute.status === "ESCALATED" ? "adm-badge--submitted" : "adm-badge--normal"}`}
+                      >
+                        {getDisputeStatusLabel(selectedDispute.status)}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <button
-                  className="jm-modal__close"
+                  className="adm-modal__close"
                   onClick={() => setShowDisputeModal(false)}
                 >
                   <X size={20} />
                 </button>
               </div>
-              <div className="jm-modal__body">
-                <div className="jm-dispute-detail">
-                  <div className="jm-dispute-detail__reason">
-                    <strong>Lý do khiếu nại:</strong> {selectedDispute.reason}
+
+              {/* Modal Body */}
+              <div className="adm-modal__body">
+                {/* Left Column */}
+                <div className="adm-modal__col">
+                  {/* Dispute Overview */}
+                  <div className="adm-section">
+                    <div className="adm-section__title">
+                      <ShieldAlert size={15} />
+                      Thông tin khiếu nại
+                    </div>
+                    <div className="adm-info-grid">
+                      <div className="adm-info-item">
+                        <div className="adm-info-item__label"><TrendingUp size={12} /> Người khiếu nại</div>
+                        <div className="adm-info-item__value">{selectedDispute.initiatorName || `User #${selectedDispute.initiatorId}`}</div>
+                      </div>
+                      <div className="adm-info-item">
+                        <div className="adm-info-item__label"><Users size={12} /> Bị khiếu nại</div>
+                        <div className="adm-info-item__value">{selectedDispute.respondentName || `User #${selectedDispute.respondentId}`}</div>
+                      </div>
+                      <div className="adm-info-item">
+                        <div className="adm-info-item__label"><Briefcase size={12} /> Công việc</div>
+                        <div className="adm-info-item__value">#{selectedDispute.jobId}</div>
+                      </div>
+                      <div className="adm-info-item">
+                        <div className="adm-info-item__label"><Clock size={12} /> Mở lúc</div>
+                        <div className="adm-info-item__value">{formatTime(selectedDispute.createdAt)}</div>
+                      </div>
+                      {selectedDispute.resolvedAt && (
+                        <div className="adm-info-item">
+                          <div className="adm-info-item__label"><CheckCircle size={12} /> Giải quyết lúc</div>
+                          <div className="adm-info-item__value">{formatTime(selectedDispute.resolvedAt)}</div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="jm-dispute-detail__parties">
-                    <div className="jm-party-card">
-                      <div className="jm-party-card__label">
-                        <TrendingUp size={14} /> Người khiếu nại
+
+                  {/* Reason */}
+                  <div className="adm-section">
+                    <div className="adm-section__title">
+                      <MessageSquare size={15} />
+                      Lý do khiếu nại
+                    </div>
+                    <div className="adm-reason-box">
+                      <p>{selectedDispute.reason}</p>
+                    </div>
+                  </div>
+
+                  <div className="adm-section">
+                    <div className="adm-section__title">
+                      <Clock size={15} />
+                      Audit log
+                      {disputeAuditLoading ? (
+                        <Loader2 size={14} className="adm-spin" />
+                      ) : (
+                        <span className="adm-section__count">{disputeAuditLogs.length}</span>
+                      )}
+                    </div>
+                    {disputeAuditLoading ? (
+                      <div className="adm-loading-row">
+                        <Loader2 size={18} className="adm-spin" />
+                        <span>Đang tải audit log...</span>
                       </div>
-                      <div className="jm-party-card__value">
-                        {selectedDispute.initiatorName ||
-                          `User #${selectedDispute.initiatorId}`}
+                    ) : disputeAuditLogs.length > 0 ? (
+                      <div className="adm-evidence-timeline">
+                        {disputeAuditLogs.map((log) => (
+                          <div key={`audit-${log.id}`} className="adm-evidence-item adm-evidence-item--official">
+                            <div className="adm-evidence-item__header">
+                              <div className="adm-evidence-item__meta">
+                                <span className="adm-evidence-item__author">{getAuditActorLabel(log)}</span>
+                                <span className="adm-evidence-item__admin-badge">{log.changedByRole}</span>
+                              </div>
+                              <span className="adm-evidence-item__time">{formatTime(log.createdAt)}</span>
+                            </div>
+                            <p className="adm-evidence-item__content">
+                              {log.previousStatus} → {log.newStatus}
+                            </p>
+                            {log.reason && <p className="adm-evidence-item__content">{log.reason}</p>}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="adm-empty-evidence">
+                        <Clock size={20} />
+                        <span>Chưa có audit log nào cho dispute này.</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Resolution (if resolved) */}
+                  {selectedDispute.status === "RESOLVED" && selectedDispute.resolution && (
+                    <div className="adm-section">
+                      <div className="adm-section__title">
+                        <ShieldCheck size={15} />
+                        Kết quả giải quyết
+                      </div>
+                      <div className="adm-resolution-card">
+                        <div className="adm-resolution-card__type">{getResolutionLabel(selectedDispute.resolution)}</div>
+                        {selectedDispute.partialRefundPct && (
+                          <div className="adm-resolution-card__split">
+                            Chia {selectedDispute.partialRefundPct}% cho ứng viên
+                          </div>
+                        )}
+                        {selectedDispute.resolutionNotes && (
+                          <p className="adm-resolution-card__notes">{selectedDispute.resolutionNotes}</p>
+                        )}
                       </div>
                     </div>
-                    <div className="jm-party-card">
-                      <div className="jm-party-card__label">
-                        <Users size={14} /> Bị khiếu nại
-                      </div>
-                      <div className="jm-party-card__value">
-                        {selectedDispute.respondentName ||
-                          `User #${selectedDispute.respondentId}`}
-                      </div>
+                  )}
+
+                  {/* Evidence Timeline */}
+                  <div className="adm-section">
+                    <div className="adm-section__title">
+                      <Paperclip size={15} />
+                      Bằng chứng
+                      {disputeDetailLoading ? (
+                        <Loader2 size={14} className="adm-spin" />
+                      ) : (
+                        <span className="adm-section__count">
+                          {disputeDetail?.evidence?.length || selectedDispute.evidence?.length || 0}
+                        </span>
+                      )}
                     </div>
-                    <div className="jm-party-card">
-                      <div className="jm-party-card__label">
-                        <Briefcase size={14} /> Job ID
+                    {disputeDetailLoading ? (
+                      <div className="adm-loading-row">
+                        <Loader2 size={18} className="adm-spin" />
+                        <span>Đang tải bằng chứng...</span>
                       </div>
-                      <div className="jm-party-card__value">
-                        #{selectedDispute.jobId}
+                    ) : (disputeDetail?.evidence?.length || 0) > 0 ? (
+                      <div className="adm-evidence-timeline">
+                        {(disputeDetail?.evidence || []).map((ev: any) => (
+                          <div key={ev.id} className={`adm-evidence-item ${ev.isOfficial ? "adm-evidence-item--official" : ""}`}>
+                            <div className="adm-evidence-item__header">
+                              <div className="adm-evidence-item__meta">
+                                <span className="adm-evidence-item__icon">
+                                  {getEvidenceTypeIcon(ev.evidenceType)}
+                                </span>
+                                <span className="adm-evidence-item__author">{ev.submittedByName}</span>
+                                {ev.isOfficial && (
+                                  <span className="adm-evidence-item__admin-badge">Admin</span>
+                                )}
+                              </div>
+                              <span className="adm-evidence-item__time">{formatTime(ev.createdAt)}</span>
+                            </div>
+                            {ev.content && (
+                              <p className="adm-evidence-item__content">{ev.content}</p>
+                            )}
+                            {ev.fileUrl && (
+                              <a href={ev.fileUrl} target="_blank" rel="noopener noreferrer" className="adm-evidence-item__file">
+                                {ev.fileUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+                                  <div className="adm-evidence-item__img-wrap">
+                                    <img src={ev.fileUrl} alt={ev.fileName || "Evidence"} className="adm-evidence-item__img" />
+                                    <div className="adm-evidence-item__img-overlay">
+                                      <ExternalLink size={14} />
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div className="adm-evidence-item__file-badge">
+                                    <Paperclip size={13} />
+                                    <span>{ev.fileName || "Tệp đính kèm"}</span>
+                                    <ExternalLink size={11} />
+                                  </div>
+                                )}
+                              </a>
+                            )}
+                            {ev.responses && ev.responses.length > 0 && (
+                              <div className="adm-evidence-item__responses">
+                                {ev.responses.map((resp: any) => (
+                                  <div key={resp.id} className="adm-evidence-item__response">
+                                    <div className="adm-evidence-item__response-header">
+                                      <MessageSquare size={11} />
+                                      <span>{resp.respondedByName}</span>
+                                      <span className="adm-evidence-item__time">{formatTime(resp.createdAt)}</span>
+                                    </div>
+                                    <p>{resp.content}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
-                    </div>
-                    <div className="jm-party-card">
-                      <div className="jm-party-card__label">
-                        <Calendar size={14} /> Ngày tạo
+                    ) : (
+                      <div className="adm-empty-evidence">
+                        <Paperclip size={20} />
+                        <span>Chưa có bằng chứng nào được gửi.</span>
                       </div>
-                      <div className="jm-party-card__value">
-                        {formatDate(selectedDispute.createdAt)}
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
-                <div className="jm-form-group">
-                  <label className="jm-form-label">
-                    <Scale size={14} /> Hình thức giải quyết{" "}
-                    <span className="jm-required">*</span>
-                  </label>
-                  <div className="jm-resolution-options">
-                    {(
-                      [
-                        "FULL_REFUND",
-                        "FULL_RELEASE",
-                        "PARTIAL_REFUND",
-                        "PARTIAL_RELEASE",
-                        "RESUBMIT_REQUIRED",
-                        "NO_ACTION",
-                      ] as DisputeResolution[]
-                    ).map((r) => (
-                      <label
-                        key={r}
-                        className={`jm-resolution-option ${resolveResolution === r ? "jm-resolution-option--selected" : ""}`}
-                      >
-                        <input
-                          type="radio"
-                          name="resolution"
-                          value={r}
-                          checked={resolveResolution === r}
-                          onChange={() => setResolveResolution(r)}
+                {/* Right Column — Resolution Form */}
+                {selectedDispute.status !== "RESOLVED" && selectedDispute.status !== "DISMISSED" && (
+                  <div className="adm-modal__col adm-modal__col--right">
+                    <div className="adm-section">
+                      <div className="adm-section__title">
+                        <Scale size={15} />
+                        Quyết định giải quyết
+                      </div>
+
+                      {/* Resolution type selector */}
+                      <div className="adm-resolution-grid">
+                        {getResolutionOptions(selectedDispute.disputeType).map((opt) => (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            className={`adm-resolution-card ${resolveResolution === opt.value ? "is-selected" : ""}`}
+                            style={{ "--res-color": opt.color } as React.CSSProperties}
+                            onClick={() => setResolveResolution(opt.value as DisputeResolution)}
+                          >
+                            <span className="adm-resolution-card__icon">{opt.icon}</span>
+                            <div>
+                              <div className="adm-resolution-card__label">{opt.label}</div>
+                              <div className="adm-resolution-card__sub">{opt.sub}</div>
+                            </div>
+                            {resolveResolution === opt.value && (
+                              <CheckCircle size={16} className="adm-resolution-card__check" />
+                            )}
+                          </button>
+                        ))}
+                        <>
+                        {getResolutionOptions(selectedDispute.disputeType)
+                          .filter((opt) => opt.value === "CANCEL_JOB" || opt.value === "RECRUITER_WARNING")
+                          .map((opt) => (
+                            <button
+                              key={opt.value}
+                              type="button"
+                              className={`adm-resolution-card ${resolveResolution === opt.value ? "is-selected" : ""}`}
+                              style={{ "--res-color": opt.color } as React.CSSProperties}
+                              onClick={() => setResolveResolution(opt.value as DisputeResolution)}
+                            >
+                              <span className="adm-resolution-card__icon">{opt.icon}</span>
+                              <div>
+                                <div className="adm-resolution-card__label">{opt.label}</div>
+                                <div className="adm-resolution-card__sub">{opt.sub}</div>
+                              </div>
+                              {resolveResolution === opt.value && (
+                                <CheckCircle size={16} className="adm-resolution-card__check" />
+                              )}
+                            </button>
+                          ))}
+                        {([
+                          { value: "WORKER_WINS", label: "ỨC thắng", sub: "Nhận 100% tiền", color: "#a855f7", icon: <TrendingUp size={14} /> },
+                          { value: "RECRUITER_WINS", label: "NTD thắng", sub: "Nhận 100% tiền", color: "#06b6d4", icon: <TrendingDown size={14} /> },
+                          { value: "WORKER_PARTIAL", label: "ỨC thắng 1 phần", sub: "Chia % theo quyết định", color: "#fbbf24", icon: <ArrowUpDown size={14} /> },
+                          { value: "FULL_REFUND", label: "Hoàn toàn cho NTD", sub: "Refund 100%", color: "#f87171", icon: <TrendingDown size={14} /> },
+                          { value: "FULL_RELEASE", label: "Giải ngân cho ỨC", sub: "Release 100%", color: "#4ade80", icon: <TrendingUp size={14} /> },
+                          { value: "RESUBMIT_REQUIRED", label: "Yêu cầu nộp lại", sub: "Không xử lý tài chính", color: "#94a3b8", icon: <RefreshCw size={14} /> },
+                        ] as { value: string; label: string; sub: string; color: string; icon: React.ReactNode }[]).map((opt) => (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            className={`adm-resolution-card ${resolveResolution === opt.value ? "is-selected" : ""}`}
+                            style={{ "--res-color": opt.color } as React.CSSProperties}
+                            onClick={() => setResolveResolution(opt.value as DisputeResolution)}
+                          >
+                            <span className="adm-resolution-card__icon">{opt.icon}</span>
+                            <div>
+                              <div className="adm-resolution-card__label">{opt.label}</div>
+                              <div className="adm-resolution-card__sub">{opt.sub}</div>
+                            </div>
+                            {resolveResolution === opt.value && (
+                              <CheckCircle size={16} className="adm-resolution-card__check" />
+                            )}
+                          </button>
+                        ))}
+                        </>
+                      </div>
+
+                      {/* Partial split input */}
+                      {(resolveResolution === "WORKER_PARTIAL" || resolveResolution === "PARTIAL_REFUND" || resolveResolution === "PARTIAL_RELEASE") && (
+                        <div className="adm-form-group">
+                          <label className="adm-form-label">
+                            <Percent size={13} /> % cho ứng viên
+                          </label>
+                          <div className="adm-range-input">
+                            <input
+                              type="range"
+                              min={10}
+                              max={90}
+                              step={5}
+                              value={parseInt(resolvePartialPct) || 50}
+                              onChange={(e) => setResolvePartialPct(e.target.value)}
+                            />
+                            <input
+                              type="number"
+                              min={1}
+                              max={99}
+                              value={resolvePartialPct}
+                              onChange={(e) => setResolvePartialPct(e.target.value)}
+                              placeholder="50"
+                              className="adm-input adm-input--number"
+                            />
+                          </div>
+                          <div className="adm-split-preview">
+                            <div className="adm-split-preview__worker">
+                              <TrendingUp size={11} /> ỨC: {parseInt(resolvePartialPct) || 50}%
+                            </div>
+                            <div className="adm-split-preview__recruiter">
+                              <TrendingDown size={11} /> NTD: {100 - (parseInt(resolvePartialPct) || 50)}%
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Admin notes */}
+                      <div className="adm-form-group">
+                        <label className="adm-form-label">
+                          <MessageSquare size={13} /> Ghi chú giải quyết
+                        </label>
+                        <textarea
+                          className="adm-textarea"
+                          value={resolveNotes}
+                          onChange={(e) => setResolveNotes(e.target.value)}
+                          rows={4}
+                          placeholder="Nhập ghi chú về quyết định giải quyết (bắt buộc)..."
                         />
-                        <span>{getResolutionLabel(r)}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
+                      </div>
 
-                {(resolveResolution === "PARTIAL_REFUND" ||
-                  resolveResolution === "PARTIAL_RELEASE") && (
-                  <div className="jm-form-group">
-                    <label className="jm-form-label">
-                      <AlertCircle size={14} /> % hoàn tiền / giải ngân{" "}
-                      <span className="jm-required">*</span>
-                    </label>
-                    <input
-                      type="number"
-                      className="jm-input"
-                      value={resolvePartialPct}
-                      onChange={(e) => setResolvePartialPct(e.target.value)}
-                      placeholder="VD: 50"
-                      min={1}
-                      max={99}
-                    />
+                      {/* Actions */}
+                      <div className="adm-modal-actions">
+                        <button
+                          className="adm-btn adm-btn--danger"
+                          onClick={handleResolveDispute}
+                          disabled={resolveLoading || !resolveResolution}
+                        >
+                          {resolveLoading ? (
+                            <><Loader2 size={15} className="adm-spin" /> Đang xử lý...</>
+                          ) : (
+                            <><Gavel size={15} /> Xác nhận giải quyết</>
+                          )}
+                        </button>
+                        <button
+                          className="adm-btn adm-btn--ghost"
+                          onClick={() => setShowDisputeModal(false)}
+                        >
+                          Hủy
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 )}
-
-                <div className="jm-form-group">
-                  <label className="jm-form-label">
-                    <MessageSquare size={14} /> Ghi chú giải quyết
-                  </label>
-                  <textarea
-                    className="jm-textarea"
-                    value={resolveNotes}
-                    onChange={(e) => setResolveNotes(e.target.value)}
-                    rows={4}
-                    placeholder="Nhập ghi chú về quyết định giải quyết..."
-                  />
-                </div>
-              </div>
-              <div className="jm-modal__footer">
-                <button
-                  className="jm-modal-btn jm-modal-btn--approve"
-                  onClick={handleResolveDispute}
-                  disabled={resolveLoading}
-                >
-                  {resolveLoading ? (
-                    <>
-                      <Loader2 size={15} className="jm-spin" /> Đang xử
-                      lý...
-                    </>
-                  ) : (
-                    <>
-                      <Check size={15} /> Xác nhận giải quyết
-                    </>
-                  )}
-                </button>
-                <button
-                  className="jm-modal-btn jm-modal-btn--secondary"
-                  onClick={() => setShowDisputeModal(false)}
-                >
-                  Hủy bỏ
-                </button>
               </div>
             </div>
           </div>,

@@ -52,9 +52,11 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         </div>
         <p className="confirm-dialog__message">{message}</p>
         <div className="confirm-dialog__actions">
-          <button className="confirm-dialog__btn confirm-dialog__btn--ghost" onClick={onCancel}>
-            {cancelLabel}
-          </button>
+          {cancelLabel && (
+            <button className="confirm-dialog__btn confirm-dialog__btn--ghost" onClick={onCancel}>
+              {cancelLabel}
+            </button>
+          )}
           <button className={`confirm-dialog__btn confirm-dialog__btn--primary confirm-dialog__btn--${variant}`} onClick={onConfirm}>
             {confirmLabel}
           </button>

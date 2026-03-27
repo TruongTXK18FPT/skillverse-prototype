@@ -1212,7 +1212,7 @@ const ShortTermJobDetailPage: React.FC = () => {
                         <Icon>
                           <FiClock />
                         </Icon>
-                        <Text>Thời gian</Text>
+                        <Text>Deadline nộp (SLA)</Text>
                       </HStack>
                       <Text fontWeight="bold">{job.estimatedDuration}</Text>
                     </Flex>

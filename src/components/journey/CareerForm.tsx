@@ -3,12 +3,17 @@ import { Check, Search, X, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react'
 import {
   DOMAIN_OPTIONS,
   SUB_CATEGORIES,
-  JOBS_BY_DOMAIN,
   DomainType
 } from '../../types/Journey';
+import {
+  ROLES_BY_DOMAIN_INDUSTRY,
+  getBackendDomain,
+  getBackendIndustry,
+  getBackendRole,
+} from '../../types/domainExpertMapper';
 
 interface CareerFormProps {
-  onComplete: (data: { domain: string; subCategory: string; jobRole: string }) => void;
+  onComplete: (data: { domain: string; industry: string; jobRole: string }) => void;
   onBack: () => void;
 }
 
@@ -20,10 +25,12 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const currentSubCategories = selectedDomain ? SUB_CATEGORIES[selectedDomain] || [] : [];
-  const currentJobs = selectedSubCategory ? JOBS_BY_DOMAIN[selectedDomain!] || [] : [];
+  const currentRoles = selectedDomain && selectedSubCategory
+    ? ROLES_BY_DOMAIN_INDUSTRY[selectedDomain]?.[selectedSubCategory] ?? []
+    : [];
 
-  const filteredJobs = currentJobs.filter(job =>
-    job.label.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredRoles = currentRoles.filter(role =>
+    role.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleDomainSelect = (domain: DomainType) => {
@@ -39,8 +46,8 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
     setSearchQuery('');
   };
 
-  const handleJobSelect = (job: string) => {
-    setSelectedJob(job);
+  const handleJobSelect = (roleCode: string) => {
+    setSelectedJob(roleCode);
   };
 
   const handleNext = () => {
@@ -60,9 +67,9 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
   const handleSubmit = () => {
     if (selectedDomain && selectedSubCategory && selectedJob) {
       onComplete({
-        domain: selectedDomain,
-        subCategory: selectedSubCategory,
-        jobRole: selectedJob
+        domain: getBackendDomain(selectedDomain),
+        industry: getBackendIndustry(selectedDomain, selectedSubCategory),
+        jobRole: getBackendRole(selectedDomain, selectedSubCategory, selectedJob),
       });
     }
   };
@@ -152,7 +159,7 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
           Chọn vị trí công việc
         </h2>
         <p className="gsj-wizard-step__subtitle">
-          Bạn hướng đến vị trí nào trong ngành {currentSubCategories.find(s => s.value === selectedSubCategory)?.label}?
+          Bạn hướng đến vị trí nào trong ngành {selectedDomain && selectedSubCategory ? getBackendIndustry(selectedDomain, selectedSubCategory) : ''}?
         </p>
       </div>
 
@@ -172,21 +179,26 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
       </div>
 
       <div className="gsj-job-grid">
-        {filteredJobs.map((job) => (
+        {filteredRoles.length === 0 && (
+          <div className="gsj-no-roles">
+            Không có vị trí nào cho ngành này. Vui lòng chọn ngành khác.
+          </div>
+        )}
+        {filteredRoles.map((role) => (
           <button
-            key={job.value}
+            key={role.code}
             type="button"
-            className={`gsj-job-card ${selectedJob === job.value ? 'gsj-job-card--selected' : ''}`}
-            onClick={() => handleJobSelect(job.value)}
+            className={`gsj-job-card ${selectedJob === role.code ? 'gsj-job-card--selected' : ''}`}
+            onClick={() => handleJobSelect(role.code)}
           >
             <div className="gsj-job-card__icon-wrap">
-              <span className="gsj-job-card__icon">{job.icon}</span>
+              <span className="gsj-job-card__icon">💼</span>
             </div>
             <div className="gsj-job-card__content">
-              <span className="gsj-job-card__label">{job.label}</span>
-              <span className="gsj-job-card__desc">{job.desc}</span>
+              <span className="gsj-job-card__label">{role.label}</span>
+              <span className="gsj-job-card__desc">{role.backendRole}</span>
             </div>
-            {selectedJob === job.value && (
+            {selectedJob === role.code && (
               <span className="gsj-job-card__check">
                 <Check size={16} />
               </span>

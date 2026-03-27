@@ -76,6 +76,7 @@ type BackendTestResultResponse = {
   evaluationDetails?: string;
   aiDetailedFeedback?: string;
   feedbackDetails?: string;
+  highlightKeywordsJson?: string;
   userAnswersJson?: string;
   correctAnswersJson?: string;
   evaluatedAt?: string;
@@ -355,6 +356,18 @@ const parseSkillInsights = (jsonValue: unknown): SkillInsightItem[] => {
     .filter((item): item is SkillInsightItem => item !== null);
 };
 
+const parseStringArray = (jsonValue: unknown): string[] => {
+  const parsed = safeParseJson<unknown[]>(jsonValue, []);
+  if (!Array.isArray(parsed)) {
+    return [];
+  }
+
+  return parsed
+    .filter((item): item is string => typeof item === 'string')
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
 const inferTotalQuestions = (payload: BackendTestResultResponse): number => {
   const fromApi = toNumber(payload.totalQuestions, 0);
   if (fromApi > 0) {
@@ -513,6 +526,7 @@ const mapTestResult = (payload: BackendTestResultResponse): TestResultResponse =
   const skillGaps = parseSkillInsights(payload.skillGapsJson);
   const strengths = parseSkillInsights(payload.strengthsJson);
   const questionReviews = buildQuestionReviews(payload);
+  const parsedHighlightKeywords = parseStringArray(payload.highlightKeywordsJson);
 
   const analysisBySkill = new Map<string, SkillAnalysis>();
 
@@ -575,6 +589,13 @@ const mapTestResult = (payload: BackendTestResultResponse): TestResultResponse =
   const detailedFeedback = detailedFeedbackFromApi.trim() && detailedFeedbackFromApi.trim() !== evaluationSummary.trim()
     ? detailedFeedbackFromApi.trim()
     : (generatedDetailedFeedback || evaluationSummary);
+  const highlightKeywords = parsedHighlightKeywords.length > 0
+    ? parsedHighlightKeywords
+    : Array.from(new Set([
+        ...strengths.map((item) => item.skill),
+        ...skillGaps.map((item) => item.skill),
+        evaluatedLevel
+      ].filter((item): item is string => typeof item === 'string' && item.trim().length > 0)));
 
   const passingScore = DEFAULT_PASSING_SCORE;
 
@@ -603,6 +624,7 @@ const mapTestResult = (payload: BackendTestResultResponse): TestResultResponse =
     skillGaps: skillGaps.map((item) => item.skill),
     evaluationSummary,
     detailedFeedback,
+    highlightKeywords,
     improvementTips: improvementTips.length > 0 ? improvementTips : ['Tiếp tục luyện tập theo các kỹ năng còn thiếu.'],
     createdAt: toStringValue(payload.createdAt || payload.evaluatedAt, new Date().toISOString())
   };

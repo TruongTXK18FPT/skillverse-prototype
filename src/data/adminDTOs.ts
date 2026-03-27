@@ -105,6 +105,7 @@ export interface AdminJobStats {
   paidCount: number;
   cancelledCount: number;
   disputedCount: number;
+  escalatedCount: number;
   closedCount: number;
   rejectedCount: number;
   byStatus: Record<string, number>;
@@ -133,12 +134,17 @@ export interface ResolveDisputeRequest {
 }
 
 export type DisputeResolution =
+  | 'CANCEL_JOB'
   | 'FULL_REFUND'
   | 'FULL_RELEASE'
   | 'PARTIAL_REFUND'
   | 'PARTIAL_RELEASE'
   | 'RESUBMIT_REQUIRED'
-  | 'NO_ACTION';
+  | 'NO_ACTION'
+  | 'WORKER_WINS'
+  | 'WORKER_PARTIAL'
+  | 'RECRUITER_WINS'
+  | 'RECRUITER_WARNING';
 
 export interface DisputeResponse {
   id: number;

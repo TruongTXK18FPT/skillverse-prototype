@@ -5,6 +5,7 @@ import { AUTH_LOGOUT_EVENT, clearAuthTokens } from '../services/axiosInstance';
 import { LoginRequest, UserDto, VerifyEmailRequest, ResendOtpRequest, ForgotPasswordResponse, ResetPasswordRequest, ResetPasswordResponse, SetPasswordRequest, SetPasswordResponse, ChangePasswordRequest, ChangePasswordResponse } from '../data/authDTOs';
 import { UserRegistrationRequest } from '../data/userDTOs';
 import { AUTH_SESSION_SYNCED_EVENT, initAuthTabSync, requestSessionFromOtherTabs } from '../utils/authTabSync';
+import { initBookingSync } from '../utils/bookingSync';
 
 interface AuthContextType {
   user: UserDto | null;
@@ -41,8 +42,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Initialize cross-tab auth sync channel once.
   useEffect(() => {
-    const cleanup = initAuthTabSync();
-    return cleanup;
+    const cleanupAuth = initAuthTabSync();
+    const cleanupBooking = initBookingSync();
+    return () => { cleanupAuth(); cleanupBooking(); };
   }, []);
 
   // Listen for global logout events (from axios interceptors)

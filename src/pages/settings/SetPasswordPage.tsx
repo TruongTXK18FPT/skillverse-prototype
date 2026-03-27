@@ -1,81 +1,78 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Lock, Eye, EyeOff, CheckCircle, Info, Shield, X } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { useToast } from '../../hooks/useToast';
-import Toast from '../../components/shared/Toast';
-import '../../styles/PasswordPages.css';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Lock, Eye, EyeOff, Info, Shield, X, KeyRound, RefreshCw, ShieldCheck } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import { useToast } from "../../hooks/useToast";
+import Toast from "../../components/shared/Toast";
+import "../../styles/PasswordPages.css";
 
 const SetPasswordPage = () => {
   const { user, setPassword } = useAuth();
   const { toast, isVisible, hideToast, showError } = useToast();
   const navigate = useNavigate();
-  
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  // Check if user is Google user without password
-  const canSetPassword = user?.authProvider === 'GOOGLE' && !user?.googleLinked;
+  const canSetPassword =
+    user?.authProvider === "GOOGLE" && !user?.googleLinked;
 
   const validate = () => {
-    const newErrors: {[key: string]: string} = {};
-    
+    const newErrors: { [key: string]: string } = {};
     if (!newPassword) {
-      newErrors.newPassword = 'Vui lòng nhập mật khẩu mới';
+      newErrors.newPassword = "Vui lòng nhập mật khẩu mới";
     } else if (newPassword.length < 8) {
-      newErrors.newPassword = 'Mật khẩu phải có ít nhất 8 ký tự';
+      newErrors.newPassword = "Mật khẩu phải có ít nhất 8 ký tự";
     }
-    
     if (!confirmPassword) {
-      newErrors.confirmPassword = 'Vui lòng xác nhận mật khẩu';
+      newErrors.confirmPassword = "Vui lòng xác nhận mật khẩu";
     } else if (newPassword !== confirmPassword) {
-      newErrors.confirmPassword = 'Mật khẩu không khớp';
+      newErrors.confirmPassword = "Mật khẩu không khớp";
     }
-    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validate()) return;
-    
     setLoading(true);
-    
     try {
       await setPassword({ newPassword, confirmPassword });
-      navigate('/login?reason=password_changed', { replace: true });
+      navigate("/login?reason=password_changed", { replace: true });
     } catch (error: unknown) {
-      const errorMessage = (error as Error).message || 
-        'Đặt mật khẩu thất bại. Vui lòng thử lại.';
-      showError('Lỗi', errorMessage);
+      const errorMessage =
+        (error as Error).message || "Đặt mật khẩu thất bại. Vui lòng thử lại.";
+      showError("Lỗi", errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   const handleSkip = () => {
-    navigate('/dashboard');
+    navigate("/dashboard");
   };
 
   if (!canSetPassword) {
     return (
-      <div className="password-page">
-        <div className="password-page__card">
-          <div className="password-page__alert password-page__alert--info">
-            <Info size={24} />
+      <div className="cosmic-password-page">
+        <div className="cosmic-password-card" style={{ maxWidth: 480 }}>
+          <div className="cosmic-password-alert">
+            <Info size={22} className="cosmic-password-alert__icon" />
             <div>
-              <h3 className="password-page__alert-title">Không khả dụng</h3>
-              <p className="password-page__alert-text">
-                Chức năng này chỉ dành cho người dùng đăng nhập bằng Google lần đầu 
+              <h3 className="cosmic-password-alert__title">Không khả dụng</h3>
+              <p className="cosmic-password-alert__text">
+                Chức năng này chỉ dành cho người dùng đăng nhập bằng Google
                 và chưa thiết lập mật khẩu dự phòng.
               </p>
-              <button className="password-page__alert-btn" onClick={() => navigate('/dashboard')}>
+              <button
+                className="cosmic-password-alert__btn"
+                onClick={() => navigate("/dashboard")}
+              >
                 Quay lại Dashboard
               </button>
             </div>
@@ -86,167 +83,182 @@ const SetPasswordPage = () => {
   }
 
   return (
-    <div className="password-page">
-      <div className="password-page__card">
-        {/* Header with Optional Badge */}
-        <div className="password-page__header">
-          <div className="password-page__icon-wrapper">
-            <Shield size={48} />
+    <div className="cosmic-password-page">
+      <div className="cosmic-password-card">
+        {/* LEFT: Form */}
+        <div className="cosmic-password-card__left">
+          <div className="cosmic-password-header">
+            <div className="cosmic-password-header__icon-wrap">
+              <Shield size={26} />
+            </div>
+            <h1 className="cosmic-password-header__title">
+              Đặt mật khẩu dự phòng
+            </h1>
+            <p className="cosmic-password-header__subtitle">
+              Tạo mật khẩu để đăng nhập bằng email khi Google không khả dụng
+            </p>
           </div>
-          <h1 className="password-page__title">
-            Đặt Mật Khẩu Dự Phòng
-            <span className="password-page__badge--optional">Không bắt buộc</span>
-          </h1>
-          <p className="password-page__subtitle">
-            Tạo mật khẩu để có thể đăng nhập bằng email khi Google OAuth không khả dụng
-          </p>
-        </div>
 
-        {/* Info Banner */}
-        <div className="password-page__info-banner">
-          <Info size={20} />
-          <div>
-            <strong>Lưu ý:</strong> Đây là tính năng tùy chọn. Bạn vẫn có thể tiếp tục 
-            sử dụng Google để đăng nhập mà không cần đặt mật khẩu.
+          <div className="cosmic-password-banner">
+            <Info size={14} style={{ flexShrink: 0, marginTop: 2, color: "var(--cp-primary)" }} />
+            <span>
+              Tính năng tùy chọn — bạn vẫn có thể đăng nhập bằng Google bình thường.
+            </span>
           </div>
-        </div>
 
-        <form onSubmit={handleSubmit} className="password-form">
-          {/* New Password */}
-          <div className="password-form__group">
-            <label htmlFor="newPassword" className="password-form__label">
-              Mật khẩu mới
-            </label>
-            <div className={`password-form__input-group ${errors.newPassword ? 'password-form__input-group--error' : ''}`}>
-              <Lock size={20} className="password-form__input-icon" />
-              <input
-                type={showPassword ? 'text' : 'password'}
-                id="newPassword"
-                value={newPassword}
-                onChange={(e) => {
-                  setNewPassword(e.target.value);
-                  if (errors.newPassword) {
-                    setErrors({...errors, newPassword: ''});
-                  }
-                }}
-                placeholder="Nhập mật khẩu mới (tối thiểu 8 ký tự)"
-                className="password-form__input"
-              />
+          <form onSubmit={handleSubmit} className="cosmic-password-form">
+            <div className="cosmic-password-form__group">
+              <label htmlFor="newPassword" className="cosmic-password-form__label">
+                <Lock size={12} />
+                Mật khẩu mới
+              </label>
+              <div
+                className={`cosmic-password-form__input-wrap ${
+                  errors.newPassword
+                    ? "cosmic-password-form__input-wrap--error"
+                    : ""
+                }`}
+              >
+                <Lock size={16} className="cosmic-password-form__input-icon" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="newPassword"
+                  value={newPassword}
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                    if (errors.newPassword) {
+                      setErrors({ ...errors, newPassword: "" });
+                    }
+                  }}
+                  placeholder="Tối thiểu 8 ký tự"
+                  className="cosmic-password-form__input"
+                />
+                <button
+                  type="button"
+                  className="cosmic-password-form__toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
+              </div>
+              {errors.newPassword && (
+                <span className="cosmic-password-form__error">
+                  {errors.newPassword}
+                </span>
+              )}
+            </div>
+
+            <div className="cosmic-password-form__group">
+              <label
+                htmlFor="confirmPassword"
+                className="cosmic-password-form__label"
+              >
+                <Lock size={12} />
+                Xác nhận mật khẩu
+              </label>
+              <div
+                className={`cosmic-password-form__input-wrap ${
+                  errors.confirmPassword
+                    ? "cosmic-password-form__input-wrap--error"
+                    : ""
+                }`}
+              >
+                <Lock size={16} className="cosmic-password-form__input-icon" />
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    if (errors.confirmPassword) {
+                      setErrors({ ...errors, confirmPassword: "" });
+                    }
+                  }}
+                  placeholder="Nhập lại mật khẩu"
+                  className="cosmic-password-form__input"
+                />
+                <button
+                  type="button"
+                  className="cosmic-password-form__toggle-btn"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff size={15} />
+                  ) : (
+                    <Eye size={15} />
+                  )}
+                </button>
+              </div>
+              {errors.confirmPassword && (
+                <span className="cosmic-password-form__error">
+                  {errors.confirmPassword}
+                </span>
+              )}
+            </div>
+
+            <div className="cosmic-password-form__actions">
               <button
                 type="button"
-                className="password-form__toggle-btn"
-                onClick={() => setShowPassword(!showPassword)}
+                className="cosmic-password-form__btn cosmic-password-form__btn--secondary"
+                onClick={handleSkip}
+                disabled={loading}
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                <X size={14} />
+                Bỏ qua
               </button>
-            </div>
-            {errors.newPassword && (
-              <span className="password-form__error-msg">{errors.newPassword}</span>
-            )}
-          </div>
-
-          {/* Confirm Password */}
-          <div className="password-form__group">
-            <label htmlFor="confirmPassword" className="password-form__label">
-              Xác nhận mật khẩu
-            </label>
-            <div className={`password-form__input-group ${errors.confirmPassword ? 'password-form__input-group--error' : ''}`}>
-              <Lock size={20} className="password-form__input-icon" />
-              <input
-                type={showConfirmPassword ? 'text' : 'password'}
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                  if (errors.confirmPassword) {
-                    setErrors({...errors, confirmPassword: ''});
-                  }
-                }}
-                placeholder="Nhập lại mật khẩu"
-                className="password-form__input"
-              />
               <button
-                type="button"
-                className="password-form__toggle-btn"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                type="submit"
+                className="cosmic-password-form__btn cosmic-password-form__btn--primary"
+                disabled={loading}
               >
-                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {loading ? "Đang xử lý..." : "Đặt mật khẩu"}
               </button>
             </div>
-            {errors.confirmPassword && (
-              <span className="password-form__error-msg">{errors.confirmPassword}</span>
-            )}
-          </div>
-
-          {/* Action Buttons */}
-          <div className="password-form__actions">
-            <button 
-              type="button" 
-              className="password-form__btn password-form__btn--secondary"
-              onClick={handleSkip}
-              disabled={loading}
-            >
-              <X size={16} />
-              Bỏ qua
-            </button>
-            <button 
-              type="submit" 
-              className="password-form__btn password-form__btn--primary"
-              disabled={loading}
-            >
-              {loading ? 'Đang xử lý...' : 'Đặt Mật Khẩu'}
-            </button>
-          </div>
-        </form>
-
-        {/* Benefits Section */}
-        <div className="password-page__benefits">
-          <h3 className="password-page__benefits-title">🎯 Lợi ích khi đặt mật khẩu:</h3>
-          <div className="password-page__benefits-grid">
-            <div className="password-page__benefit-item">
-              <CheckCircle size={20} className="password-page__benefit-icon" />
-              <div>
-                <h4 className="password-page__benefit-title">Đăng nhập linh hoạt</h4>
-                <p className="password-page__benefit-text">Sử dụng cả Google và email+password</p>
-              </div>
-            </div>
-            <div className="password-page__benefit-item">
-              <CheckCircle size={20} className="password-page__benefit-icon" />
-              <div>
-                <h4 className="password-page__benefit-title">Backup an toàn</h4>
-                <p className="password-page__benefit-text">Truy cập tài khoản khi Google lỗi</p>
-              </div>
-            </div>
-            <div className="password-page__benefit-item">
-              <CheckCircle size={20} className="password-page__benefit-icon" />
-              <div>
-                <h4 className="password-page__benefit-title">Bảo mật kép</h4>
-                <p className="password-page__benefit-text">Tăng cường bảo vệ tài khoản</p>
-              </div>
-            </div>
-            <div className="password-page__benefit-item">
-              <CheckCircle size={20} className="password-page__benefit-icon" />
-              <div>
-                <h4 className="password-page__benefit-title">Không giới hạn</h4>
-                <p className="password-page__benefit-text">Không phụ thuộc vào dịch vụ bên thứ ba</p>
-              </div>
-            </div>
-          </div>
+          </form>
         </div>
 
-        {/* Security Tips */}
-        <div className="password-page__security-tips">
-          <h4 className="password-page__tips-title">💡 Mẹo tạo mật khẩu mạnh:</h4>
-          <ul className="password-page__tips-list">
-            <li className="password-page__tip-item">Sử dụng ít nhất 8 ký tự</li>
-            <li className="password-page__tip-item">Kết hợp chữ hoa, chữ thường, số và ký tự đặc biệt</li>
-            <li className="password-page__tip-item">Không sử dụng thông tin cá nhân dễ đoán</li>
-            <li className="password-page__tip-item">Không dùng mật khẩu giống với tài khoản khác</li>
-          </ul>
+        {/* RIGHT: Info */}
+        <div className="cosmic-password-card__right">
+          <div className="cosmic-password-info-card">
+            <h3 className="cosmic-password-info-card__title">Lợi ích</h3>
+
+            <div className="cosmic-password-benefit">
+              <KeyRound size={15} className="cosmic-password-benefit__icon" />
+              <div>
+                <div className="cosmic-password-benefit__title">Đăng nhập linh hoạt</div>
+                <div className="cosmic-password-benefit__text">Dùng email + password thay vì chỉ Google</div>
+              </div>
+            </div>
+
+            <div className="cosmic-password-benefit">
+              <ShieldCheck size={15} className="cosmic-password-benefit__icon" />
+              <div>
+                <div className="cosmic-password-benefit__title">Backup khi Google lỗi</div>
+                <div className="cosmic-password-benefit__text">Không lo mất quyền truy cập</div>
+              </div>
+            </div>
+
+            <div className="cosmic-password-benefit">
+              <RefreshCw size={15} className="cosmic-password-benefit__icon" />
+              <div>
+                <div className="cosmic-password-benefit__title">Không phụ thuộc bên thứ 3</div>
+                <div className="cosmic-password-benefit__text">Tự chủ hoàn toàn tài khoản</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="cosmic-password-tips">
+            <h4 className="cosmic-password-tips__title">Mẹo mật khẩu mạnh</h4>
+            <ul className="cosmic-password-tips__list">
+              <li className="cosmic-password-tips__item">Tối thiểu 8 ký tự</li>
+              <li className="cosmic-password-tips__item">Kết hợp chữ hoa &amp; thường</li>
+              <li className="cosmic-password-tips__item">Thêm số và ký tự đặc biệt</li>
+              <li className="cosmic-password-tips__item">Không dùng thông tin cá nhân</li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      {/* Toast Notification */}
       {toast && (
         <Toast
           type={toast.type}

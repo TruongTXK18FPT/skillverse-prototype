@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   AlertTriangle,
   ChevronDown,
@@ -10,6 +10,16 @@ import {
   MessageSquare,
   Plus,
   Send,
+  Shield,
+  Clock,
+  Users,
+  Briefcase,
+  X,
+  Paperclip,
+  Image,
+  File,
+  CheckCircle2,
+  Scale,
 } from "lucide-react";
 import shortTermJobService from "../../services/shortTermJobService";
 import { uploadMedia } from "../../services/mediaService";
@@ -17,7 +27,6 @@ import { useToast } from "../../hooks/useToast";
 import { getStoredUserRaw } from "../../utils/authStorage";
 import {
   Dispute,
-  DisputeType,
   DisputeStatus,
   DisputeEvidence,
 } from "../../types/ShortTermJob";
@@ -31,18 +40,21 @@ interface DisputePanelProps {
   jobStatus?: string;
   isOpen?: boolean;
   onToggle?: () => void;
+  jobTitle?: string;
+  recruiterName?: string;
+  workerName?: string;
+  escrowAmount?: number;
 }
 
-const DISPUTE_TYPE_OPTIONS: { value: DisputeType; label: string }[] = [
-  { value: DisputeType.NO_SUBMISSION, label: "Không nộp bài" },
-  { value: DisputeType.POOR_QUALITY, label: "Chất lượng kém" },
-  { value: DisputeType.MISSING_DELIVERABLE, label: "Thiếu sản phẩm" },
-  { value: DisputeType.DEADLINE_VIOLATION, label: "Vi phạm deadline" },
-  { value: DisputeType.PAYMENT_ISSUE, label: "Vấn đề thanh toán" },
-  { value: DisputeType.COMMUNICATION_FAILURE, label: "Không liên lạc được" },
-  { value: DisputeType.SCOPE_CHANGE, label: "Thay đổi phạm vi" },
-  { value: DisputeType.SCAM_REPORT, label: "Báo lừa đảo" },
-  { value: DisputeType.OTHER, label: "Khác" },
+type EvidenceType = "TEXT" | "FILE" | "LINK" | "SCREENSHOT" | "CHAT_LOG" | "DELIVERABLE_SNAPSHOT";
+
+const EVIDENCE_TYPE_OPTIONS: { value: EvidenceType; label: string; icon: React.ReactNode }[] = [
+  { value: "TEXT", label: "Văn bản", icon: <FileText size={14} /> },
+  { value: "FILE", label: "Tệp đính kèm", icon: <Paperclip size={14} /> },
+  { value: "LINK", label: "Đường dẫn", icon: <LinkIcon size={14} /> },
+  { value: "SCREENSHOT", label: "Ảnh chụp màn hình", icon: <Image size={14} /> },
+  { value: "CHAT_LOG", label: "Nhật ký chat", icon: <MessageSquare size={14} /> },
+  { value: "DELIVERABLE_SNAPSHOT", label: "Bàn giao đã nộp", icon: <File size={14} /> },
 ];
 
 const DisputePanel: React.FC<DisputePanelProps> = ({
@@ -53,21 +65,32 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
   jobStatus,
   isOpen: controlledIsOpen,
   onToggle,
+  jobTitle,
+  recruiterName,
+  workerName,
+  escrowAmount,
 }) => {
   const { showSuccess, showError } = useToast();
   const [internalOpen, setInternalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(controlledIsOpen ?? internalOpen);
   const [dispute, setDispute] = useState<Dispute | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [showOpenForm, setShowOpenForm] = useState(false);
-  const [openFormData, setOpenFormData] = useState({ disputeType: DisputeType.OTHER, reason: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingEvidence, setIsSubmittingEvidence] = useState(false);
+
+  // Evidence submission state
+  const [evidenceType, setEvidenceType] = useState<EvidenceType>("TEXT");
   const [evidenceText, setEvidenceText] = useState("");
   const [evidenceLink, setEvidenceLink] = useState("");
-  const [evidenceFile, setEvidenceFile] = useState<File | null>(null);
-  const [isSubmittingEvidence, setIsSubmittingEvidence] = useState(false);
+  const [evidenceFiles, setEvidenceFiles] = useState<File[]>([]);
+  const [evidenceFilesPreview, setEvidenceFilesPreview] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Response state
   const [responseMap, setResponseMap] = useState<Record<number, string>>({});
   const [isSubmittingResponse, setIsSubmittingResponse] = useState<number | null>(null);
+
+  // Expand/collapse evidence
+  const [expandedEvidence, setExpandedEvidence] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     loadDispute();
@@ -85,73 +108,87 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
     }
   };
 
-  const canOpenDispute =
+  // Recruiter can never open disputes — only worker can
+  const canOpenDispute = currentUserRole === "WORKER" && (
+    jobStatus === "CANCELLATION_REQUESTED" ||
     jobStatus === "IN_PROGRESS" ||
     jobStatus === "SUBMITTED" ||
     jobStatus === "UNDER_REVIEW" ||
-    jobStatus === "APPROVED";
+    jobStatus === "APPROVED"
+  );
 
-  const handleOpenDispute = async () => {
-    if (!openFormData.reason.trim()) {
-      showError("Thiếu nội dung", "Vui lòng nhập lý do dispute.");
-      return;
-    }
-    if (!applicationId) {
-      showError("Lỗi", "Không tìm thấy application.");
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const d = await shortTermJobService.openDispute({
-        jobId,
-        applicationId,
-        disputeType: openFormData.disputeType,
-        reason: openFormData.reason.trim(),
-      });
-      setDispute(d);
-      setShowOpenForm(false);
-      setOpenFormData({ disputeType: DisputeType.OTHER, reason: "" });
-      showSuccess("Đã mở dispute", "Dispute đã được gửi. Admin sẽ xem xét.");
-    } catch (err: any) {
-      showError("Mở dispute thất bại", err.message || "Vui lòng thử lại.");
-    } finally {
-      setIsSubmitting(false);
-    }
+  // Both recruiter and worker can submit evidence when dispute is active
+  const isDisputeActive = dispute && !["RESOLVED", "DISMISSED"].includes(dispute.status);
+
+  // File handling
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const previews = files.map((f) => URL.createObjectURL(f));
+    setEvidenceFiles((prev) => [...prev, ...files]);
+    setEvidenceFilesPreview((prev) => [...prev, ...previews]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeFile = (index: number) => {
+    URL.revokeObjectURL(evidenceFilesPreview[index]);
+    setEvidenceFiles((prev) => prev.filter((_, i) => i !== index));
+    setEvidenceFilesPreview((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  const getFileIcon = (file: File) => {
+    if (file.type.startsWith("image/")) return <Image size={16} />;
+    if (file.type.startsWith("video/")) return <File size={16} />;
+    return <Paperclip size={16} />;
   };
 
   const handleSubmitEvidence = async () => {
     if (!dispute) return;
-    if (!evidenceText.trim() && !evidenceLink.trim() && !evidenceFile) {
-      showError("Thiếu bằng chứng", "Vui lòng nhập text, link, hoặc tải lên tệp.");
+    const hasText = evidenceText.trim();
+    const hasLink = evidenceLink.trim();
+    const hasFiles = evidenceFiles.length > 0;
+    if (!hasText && !hasLink && !hasFiles) {
+      showError("Thiếu nội dung", "Vui lòng nhập văn bản, đường dẫn, hoặc tải lên tệp.");
       return;
     }
     setIsSubmittingEvidence(true);
     try {
-      let fileUrl: string | undefined;
-      let fileName: string | undefined;
-      if (evidenceFile) {
-        const actorId = getStoredUserRaw()
-          ? JSON.parse(getStoredUserRaw()!).id
-          : 0;
-        const media = await uploadMedia(evidenceFile, actorId);
-        fileUrl = media.url;
-        fileName = media.fileName;
+      const actorId = getStoredUserRaw() ? JSON.parse(getStoredUserRaw()!).id : 0;
+
+      // Submit text evidence
+      if (hasText || hasLink) {
+        await shortTermJobService.submitEvidence(dispute.id, {
+          evidenceType: evidenceType === "FILE" ? "TEXT" : evidenceType,
+          content: evidenceText.trim() || undefined,
+          fileUrl: hasLink ? evidenceLink.trim() : undefined,
+          description: hasLink ? "Đường dẫn tham chiếu" : undefined,
+        });
       }
-      const evidenceType = evidenceFile
-        ? "FILE"
-        : evidenceLink.trim()
-        ? "LINK"
-        : "TEXT";
-      await shortTermJobService.submitEvidence(dispute.id, {
-        evidenceType,
-        content: evidenceText.trim() || undefined,
-        fileUrl,
-        fileName,
-        description: evidenceFile?.name || evidenceLink.trim() || undefined,
-      });
+
+      // Submit each file
+      for (let i = 0; i < evidenceFiles.length; i++) {
+        const file = evidenceFiles[i];
+        const preview = evidenceFilesPreview[i];
+        const media = await uploadMedia(file, actorId);
+        await shortTermJobService.submitEvidence(dispute.id, {
+          evidenceType: file.type.startsWith("image/") ? "SCREENSHOT" : "FILE",
+          content: `Tệp đính kèm: ${file.name}`,
+          fileUrl: media.url,
+          fileName: media.fileName,
+          description: file.name,
+        });
+      }
+
       setEvidenceText("");
       setEvidenceLink("");
-      setEvidenceFile(null);
+      setEvidenceFiles([]);
+      setEvidenceFilesPreview([]);
+      setEvidenceType("TEXT");
       showSuccess("Đã gửi bằng chứng", "Bằng chứng của bạn đã được ghi nhận.");
       await loadDispute();
     } catch (err: any) {
@@ -180,415 +217,336 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
 
   const formatTime = (ts: string) => new Date(ts).toLocaleString("vi-VN");
 
-  const isDisputeActive = dispute && !["RESOLVED", "DISMISSED"].includes(dispute.status);
+  const getStatusMeta = (status: string) => {
+    const meta: Record<string, { bg: string; color: string; label: string }> = {
+      OPEN: { bg: "rgba(251, 113, 133, 0.15)", color: "#fb7185", label: "Đang mở" },
+      UNDER_INVESTIGATION: { bg: "rgba(251, 191, 36, 0.15)", color: "#fbbf24", label: "Đang điều tra" },
+      AWAITING_RESPONSE: { bg: "rgba(56, 189, 248, 0.15)", color: "#7dd3fc", label: "Chờ phản hồi" },
+      ESCALATED: { bg: "rgba(239, 68, 68, 0.15)", color: "#f87171", label: "Escalated" },
+      RESOLVED: { bg: "rgba(74, 222, 128, 0.15)", color: "#4ade80", label: "Đã giải quyết" },
+      DISMISSED: { bg: "rgba(148, 163, 184, 0.15)", color: "#94a3b8", label: "Bị bác" },
+    };
+    return meta[status] || { bg: "rgba(148,163,184,0.1)", color: "#94a3b8", label: status };
+  };
+
+  const getEvidenceTypeIcon = (type: string) => {
+    const icons: Record<string, React.ReactNode> = {
+      TEXT: <FileText size={13} />,
+      FILE: <Paperclip size={13} />,
+      LINK: <LinkIcon size={13} />,
+      SCREENSHOT: <Image size={13} />,
+      CHAT_LOG: <MessageSquare size={13} />,
+      DELIVERABLE_SNAPSHOT: <File size={13} />,
+    };
+    return icons[type] || <FileText size={13} />;
+  };
+
+  const statusMeta = dispute ? getStatusMeta(dispute.status) : null;
 
   return (
-    <div
-      style={{
-        borderRadius: "16px",
-        background: "rgba(8, 15, 30, 0.65)",
-        border: "1px solid rgba(251, 113, 133, 0.15)",
-        overflow: "hidden",
-        marginBottom: "1rem",
-      }}
-    >
+    <div className="dp-panel">
       {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "1rem 1.25rem",
-          cursor: "pointer",
-          background: dispute
-            ? "rgba(251, 113, 133, 0.06)"
-            : "transparent",
-        }}
-        onClick={() => {
-          const next = !isOpen;
-          setIsOpen(next);
-          if (controlledIsOpen === undefined) setInternalOpen(next);
-          onToggle?.();
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-          <AlertTriangle size={18} style={{ color: "#fb7185" }} />
-          <span style={{ fontWeight: 600, fontSize: "0.9rem", color: "#e0f2fe" }}>
-            Dispute
-          </span>
+      <div className="dp-panel__header" onClick={() => {
+        const next = !isOpen;
+        setIsOpen(next);
+        if (controlledIsOpen === undefined) setInternalOpen(next);
+        onToggle?.();
+      }}>
+        <div className="dp-panel__header-left">
+          <Shield size={18} className="dp-panel__header-icon" />
+          <span className="dp-panel__title">Dispute</span>
           {dispute && (
             <span
-              style={{
-                padding: "0.15rem 0.5rem",
-                borderRadius: "999px",
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                background:
-                  dispute.status === "RESOLVED"
-                    ? "rgba(74, 222, 128, 0.15)"
-                    : dispute.status === "DISMISSED"
-                    ? "rgba(148, 163, 184, 0.15)"
-                    : "rgba(251, 113, 133, 0.15)",
-                color:
-                  dispute.status === "RESOLVED"
-                    ? "#4ade80"
-                    : dispute.status === "DISMISSED"
-                    ? "#94a3b8"
-                    : "#fb7185",
-              }}
+              className="dp-badge"
+              style={{ background: statusMeta?.bg, color: statusMeta?.color }}
             >
-              {shortTermJobService.getDisputeStatusText(dispute.status)}
+              {statusMeta?.label}
             </span>
           )}
         </div>
-        {isOpen ? <ChevronUp size={16} style={{ color: "#94a3b8" }} /> : <ChevronDown size={16} style={{ color: "#94a3b8" }} />}
+        {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
       </div>
 
       {/* Content */}
       {isOpen && (
-        <div style={{ padding: "0 1.25rem 1.25rem" }}>
+        <div className="dp-panel__body">
           {isLoading ? (
-            <div className="stj-loading" style={{ padding: "1rem 0" }}>
-              <Loader2 size={18} className="stj-spin" />
+            <div className="dp-loading">
+              <Loader2 size={20} className="dp-spin" />
+              <span>Đang tải...</span>
             </div>
           ) : !dispute ? (
+            <div className="dp-empty">
+              <AlertTriangle size={24} />
+              <p>Chưa có dispute nào cho công việc này.</p>
+              <span>Dispute sẽ xuất hiện khi có khiếu nại được gửi.</span>
+            </div>
+          ) : (
             <>
-              {/* No dispute yet */}
-              {canOpenDispute && (
-                <>
-                  {!showOpenForm ? (
-                    <button
-                      className="stj-btn stj-btn--danger"
-                      onClick={() => setShowOpenForm(true)}
-                      style={{ width: "100%", justifyContent: "center" }}
-                    >
-                      <AlertTriangle size={14} />
-                      Mở Dispute
-                    </button>
-                  ) : (
-                    <div style={{ marginTop: "0.75rem" }}>
-                      <label style={{ display: "block", fontSize: "0.8rem", color: "#94a3b8", marginBottom: "0.4rem" }}>
-                        Loại dispute
-                      </label>
-                      <select
-                        value={openFormData.disputeType}
-                        onChange={(e) =>
-                          setOpenFormData((p) => ({ ...p, disputeType: e.target.value as DisputeType }))
-                        }
-                        style={{
-                          width: "100%",
-                          padding: "0.5rem 0.75rem",
-                          borderRadius: "8px",
-                          border: "1px solid rgba(148, 163, 184, 0.15)",
-                          background: "rgba(8, 15, 30, 0.55)",
-                          color: "#e0f2fe",
-                          fontSize: "0.85rem",
-                          marginBottom: "0.75rem",
-                          outline: "none",
-                        }}
-                      >
-                        {DISPUTE_TYPE_OPTIONS.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </select>
-
-                      <label style={{ display: "block", fontSize: "0.8rem", color: "#94a3b8", marginBottom: "0.4rem" }}>
-                        Lý do / Mô tả chi tiết
-                      </label>
-                      <textarea
-                        className="stj-textarea"
-                        value={openFormData.reason}
-                        onChange={(e) => setOpenFormData((p) => ({ ...p, reason: e.target.value }))}
-                        placeholder="Mô tả chi tiết vấn đề của bạn..."
-                        rows={4}
-                      />
-
-                      <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.75rem", justifyContent: "flex-end" }}>
-                        <button
-                          className="stj-btn stj-btn--secondary"
-                          onClick={() => setShowOpenForm(false)}
-                          disabled={isSubmitting}
-                        >
-                          Hủy
-                        </button>
-                        <button
-                          className="stj-btn stj-btn--danger"
-                          onClick={handleOpenDispute}
-                          disabled={isSubmitting || !openFormData.reason.trim()}
-                        >
-                          {isSubmitting ? (
-                            <Loader2 size={13} className="stj-spin" />
-                          ) : (
-                            <AlertTriangle size={13} />
-                          )}
-                          Gửi Dispute
-                        </button>
+              {/* Dispute Overview */}
+              <div className="dp-overview">
+                <div className="dp-overview__grid">
+                  <div className="dp-info-card">
+                    <div className="dp-info-card__label">
+                      <Users size={13} /> Người khiếu nại
+                    </div>
+                    <div className="dp-info-card__value">{dispute.initiatorName || `#${dispute.initiatorId}`}</div>
+                  </div>
+                  <div className="dp-info-card">
+                    <div className="dp-info-card__label">
+                      <Briefcase size={13} /> Công việc
+                    </div>
+                    <div className="dp-info-card__value">{jobTitle || `#${dispute.jobId}`}</div>
+                  </div>
+                  <div className="dp-info-card">
+                    <div className="dp-info-card__label">
+                      <Clock size={13} /> Mở lúc
+                    </div>
+                    <div className="dp-info-card__value">{formatTime(dispute.createdAt)}</div>
+                  </div>
+                  {escrowAmount !== undefined && (
+                    <div className="dp-info-card">
+                      <div className="dp-info-card__label">
+                        <Scale size={13} /> Số tiền escrow
+                      </div>
+                      <div className="dp-info-card__value dp-info-card__value--money">
+                        {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 0 }).format(escrowAmount)}
                       </div>
                     </div>
                   )}
-                </>
-              )}
-              {!canOpenDispute && (
-                <p style={{ margin: 0, fontSize: "0.82rem", color: "#64748b", textAlign: "center", padding: "0.5rem 0" }}>
-                  Không thể mở dispute ở trạng thái công việc hiện tại.
-                </p>
-              )}
-            </>
-          ) : (
-            <>
-              {/* Dispute info */}
-              <div
-                style={{
-                  padding: "0.75rem 1rem",
-                  borderRadius: "10px",
-                  background: "rgba(8, 15, 30, 0.45)",
-                  border: "1px solid rgba(148, 163, 184, 0.08)",
-                  marginBottom: "1rem",
-                }}
-              >
-                <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-                  <div style={{ fontSize: "0.78rem" }}>
-                    <span style={{ color: "#64748b" }}>Loại: </span>
-                    <span style={{ color: "#e0f2fe", fontWeight: 500 }}>
-                      {shortTermJobService.getDisputeTypeText(dispute.disputeType)}
-                    </span>
-                  </div>
-                  <div style={{ fontSize: "0.78rem" }}>
-                    <span style={{ color: "#64748b" }}>Người mở: </span>
-                    <span style={{ color: "#e0f2fe", fontWeight: 500 }}>{dispute.initiatorName}</span>
-                  </div>
-                  <div style={{ fontSize: "0.78rem" }}>
-                    <span style={{ color: "#64748b" }}>Mở lúc: </span>
-                    <span style={{ color: "#94a3b8" }}>{formatTime(dispute.createdAt)}</span>
-                  </div>
                 </div>
-                {dispute.reason && (
-                  <p
-                    style={{
-                      margin: "0.5rem 0 0",
-                      fontSize: "0.82rem",
-                      color: "#cbd5e1",
-                      lineHeight: 1.55,
-                    }}
-                  >
-                    {dispute.reason}
-                  </p>
+
+                {/* Reason */}
+                <div className="dp-reason">
+                  <div className="dp-reason__label">Lý do khiếu nại</div>
+                  <div className="dp-reason__content">{dispute.reason}</div>
+                </div>
+
+                {/* Resolution */}
+                {dispute.status === "RESOLVED" && (
+                  <div className="dp-resolution">
+                    <div className="dp-resolution__header">
+                      <CheckCircle2 size={16} />
+                      <span>Kết quả giải quyết</span>
+                    </div>
+                    <div className="dp-resolution__type">{shortTermJobService.getDisputeTypeText(dispute.disputeType)}</div>
+                    {dispute.resolutionNotes && (
+                      <p className="dp-resolution__notes">{dispute.resolutionNotes}</p>
+                    )}
+                    {dispute.partialRefundPct !== undefined && (
+                      <div className="dp-resolution__split">
+                        Chia {dispute.partialRefundPct}% cho ứng viên
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
 
-              {/* Evidence List */}
+              {/* Evidence Timeline */}
               {dispute.evidence && dispute.evidence.length > 0 && (
-                <div style={{ marginBottom: "1rem" }}>
-                  <h4
-                    style={{
-                      margin: "0 0 0.6rem",
-                      fontSize: "0.82rem",
-                      fontWeight: 700,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.06em",
-                      color: "#94a3b8",
-                    }}
-                  >
+                <div className="dp-evidence-section">
+                  <div className="dp-section-title">
+                    <Paperclip size={15} />
                     Bằng chứng ({dispute.evidence.length})
-                  </h4>
-                  {dispute.evidence.map((ev) => (
-                    <div
-                      key={ev.id}
-                      style={{
-                        padding: "0.75rem 1rem",
-                        borderRadius: "10px",
-                        background: "rgba(8, 15, 30, 0.45)",
-                        border: `1px solid ${ev.isOfficial ? "rgba(251, 191, 36, 0.2)" : "rgba(148, 163, 184, 0.08)"}`,
-                        marginBottom: "0.5rem",
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.35rem" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                          {ev.evidenceType === "TEXT" && <FileText size={13} style={{ color: "#94a3b8" }} />}
-                          {ev.evidenceType === "FILE" && <Upload size={13} style={{ color: "#94a3b8" }} />}
-                          {ev.evidenceType === "LINK" && <LinkIcon size={13} style={{ color: "#94a3b8" }} />}
-                          <span style={{ fontSize: "0.78rem", fontWeight: 600, color: "#e0f2fe" }}>
-                            {ev.submittedByName}
-                          </span>
-                          <span style={{ fontSize: "0.72rem", color: "#64748b" }}>
-                            {formatTime(ev.createdAt)}
-                          </span>
-                        </div>
-                      </div>
-                      {ev.content && (
-                        <p style={{ margin: "0 0 0.35rem", fontSize: "0.82rem", color: "#cbd5e1", lineHeight: 1.5 }}>
-                          {ev.content}
-                        </p>
-                      )}
-                      {ev.fileUrl && (
-                        <a
-                          href={ev.fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ fontSize: "0.78rem", color: "#67e8f9", textDecoration: "none" }}
-                        >
-                          <LinkIcon size={11} /> {ev.fileName || "Tệp đính kèm"}
-                        </a>
-                      )}
-                      {ev.description && (
-                        <p style={{ margin: "0.25rem 0 0", fontSize: "0.75rem", color: "#64748b" }}>
-                          {ev.description}
-                        </p>
-                      )}
-
-                      {/* Responses */}
-                      {ev.responses && ev.responses.length > 0 && (
-                        <div style={{ marginTop: "0.5rem", paddingLeft: "0.75rem", borderLeft: "2px solid rgba(148, 163, 184, 0.12)" }}>
-                          {ev.responses.map((resp) => (
-                            <div key={resp.id} style={{ marginBottom: "0.35rem" }}>
-                              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                                <MessageSquare size={11} style={{ color: "#64748b" }} />
-                                <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#94a3b8" }}>
-                                  {resp.respondedByName}
-                                </span>
-                                <span style={{ fontSize: "0.7rem", color: "#64748b" }}>
-                                  {formatTime(resp.createdAt)}
-                                </span>
-                              </div>
-                              <p style={{ margin: "0.1rem 0 0", fontSize: "0.8rem", color: "#cbd5e1", lineHeight: 1.5 }}>
-                                {resp.content}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Response form */}
-                      {isDisputeActive && (
-                        <div style={{ marginTop: "0.5rem", display: "flex", gap: "0.4rem" }}>
-                          <input
-                            type="text"
-                            placeholder="Phản hồi..."
-                            value={responseMap[ev.id] || ""}
-                            onChange={(e) => setResponseMap((p) => ({ ...p, [ev.id]: e.target.value }))}
-                            onKeyDown={(e) => e.key === "Enter" && handleRespondToEvidence(ev.id)}
-                            style={{
-                              flex: 1,
-                              padding: "0.4rem 0.6rem",
-                              borderRadius: "6px",
-                              border: "1px solid rgba(148, 163, 184, 0.15)",
-                              background: "rgba(8, 15, 30, 0.55)",
-                              color: "#e0f2fe",
-                              fontSize: "0.8rem",
-                              outline: "none",
-                            }}
-                          />
-                          <button
-                            className="stj-btn stj-btn--ghost"
-                            onClick={() => handleRespondToEvidence(ev.id)}
-                            disabled={isSubmittingResponse === ev.id || !responseMap[ev.id]?.trim()}
-                            style={{ padding: "0.4rem 0.6rem" }}
-                          >
-                            {isSubmittingResponse === ev.id ? (
-                              <Loader2 size={12} className="stj-spin" />
-                            ) : (
-                              <Send size={12} />
+                  </div>
+                  <div className="dp-timeline">
+                    {dispute.evidence.map((ev) => (
+                      <div key={ev.id} className={`dp-evidence-item ${ev.isOfficial ? "dp-evidence-item--official" : ""}`}>
+                        <div className="dp-evidence-item__header">
+                          <div className="dp-evidence-item__meta">
+                            <span className="dp-evidence-item__type-icon">
+                              {getEvidenceTypeIcon(ev.evidenceType)}
+                            </span>
+                            <span className="dp-evidence-item__author">{ev.submittedByName}</span>
+                            {ev.isOfficial && (
+                              <span className="dp-evidence-item__admin-badge">Admin</span>
                             )}
-                          </button>
+                          </div>
+                          <span className="dp-evidence-item__time">{formatTime(ev.createdAt)}</span>
                         </div>
-                      )}
-                    </div>
-                  ))}
+
+                        {ev.content && (
+                          <p className="dp-evidence-item__content">{ev.content}</p>
+                        )}
+
+                        {ev.fileUrl && (
+                          <a
+                            href={ev.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="dp-evidence-item__file"
+                          >
+                            {ev.fileUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+                              <img src={ev.fileUrl} alt={ev.fileName || "Evidence"} className="dp-evidence-item__file-thumb" />
+                            ) : (
+                              <div className="dp-evidence-item__file-badge">
+                                <Paperclip size={14} />
+                                <span>{ev.fileName || "Tệp đính kèm"}</span>
+                              </div>
+                            )}
+                          </a>
+                        )}
+
+                        {ev.responses && ev.responses.length > 0 && (
+                          <div className="dp-evidence-item__responses">
+                            {ev.responses.map((resp) => (
+                              <div key={resp.id} className="dp-evidence-item__response">
+                                <div className="dp-evidence-item__response-header">
+                                  <MessageSquare size={11} />
+                                  <span className="dp-evidence-item__response-author">{resp.respondedByName}</span>
+                                  {resp.isAdminResponse && (
+                                    <span className="dp-evidence-item__admin-badge">Admin</span>
+                                  )}
+                                  <span className="dp-evidence-item__time">{formatTime(resp.createdAt)}</span>
+                                </div>
+                                <p className="dp-evidence-item__response-content">{resp.content}</p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Respond to this evidence */}
+                        {isDisputeActive && (
+                          <div className="dp-evidence-item__reply">
+                            <input
+                              type="text"
+                              placeholder="Phản hồi bằng chứng này..."
+                              value={responseMap[ev.id] || ""}
+                              onChange={(e) => setResponseMap((p) => ({ ...p, [ev.id]: e.target.value }))}
+                              onKeyDown={(e) => e.key === "Enter" && handleRespondToEvidence(ev.id)}
+                              className="dp-evidence-item__reply-input"
+                            />
+                            <button
+                              className="dp-evidence-item__reply-btn"
+                              onClick={() => handleRespondToEvidence(ev.id)}
+                              disabled={isSubmittingResponse === ev.id || !responseMap[ev.id]?.trim()}
+                            >
+                              {isSubmittingResponse === ev.id ? (
+                                <Loader2 size={13} className="dp-spin" />
+                              ) : (
+                                <Send size={13} />
+                              )}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
               {/* Submit Evidence Form */}
               {isDisputeActive && (
-                <div>
-                  <h4
-                    style={{
-                      margin: "0 0 0.6rem",
-                      fontSize: "0.82rem",
-                      fontWeight: 700,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.06em",
-                      color: "#94a3b8",
-                    }}
-                  >
-                    Gửi bằng chứng
-                  </h4>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                <div className="dp-submit-evidence">
+                  <div className="dp-section-title">
+                    <Plus size={15} />
+                    Gửi bằng chứng mới
+                  </div>
+
+                  {/* Evidence type selector */}
+                  <div className="dp-evidence-type-selector">
+                    {EVIDENCE_TYPE_OPTIONS.map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        className={`dp-evidence-type-btn ${evidenceType === opt.value ? "is-active" : ""}`}
+                        onClick={() => setEvidenceType(opt.value)}
+                      >
+                        {opt.icon}
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Text area */}
+                  {(evidenceType === "TEXT" || evidenceType === "SCREENSHOT" || evidenceType === "CHAT_LOG" || evidenceType === "DELIVERABLE_SNAPSHOT") && (
                     <textarea
-                      className="stj-textarea"
+                      className="dp-textarea"
                       value={evidenceText}
                       onChange={(e) => setEvidenceText(e.target.value)}
-                      placeholder="Nhập nội dung bằng chứng..."
-                      rows={2}
-                      style={{ minHeight: "60px" }}
+                      placeholder={
+                        evidenceType === "CHAT_LOG"
+                          ? "Dán nội dung cuộc trò chuyện tại đây..."
+                          : evidenceType === "SCREENSHOT"
+                          ? "Mô tả ảnh chụp màn hình..."
+                          : "Nhập nội dung bằng chứng..."
+                      }
+                      rows={4}
                     />
+                  )}
+
+                  {/* Link input */}
+                  {evidenceType === "LINK" && (
                     <input
                       type="url"
-                      placeholder="Hoặc dán đường dẫn..."
+                      className="dp-input"
                       value={evidenceLink}
                       onChange={(e) => setEvidenceLink(e.target.value)}
-                      style={{
-                        padding: "0.5rem 0.75rem",
-                        borderRadius: "8px",
-                        border: "1px solid rgba(148, 163, 184, 0.15)",
-                        background: "rgba(8, 15, 30, 0.55)",
-                        color: "#e0f2fe",
-                        fontSize: "0.85rem",
-                        outline: "none",
-                      }}
+                      placeholder="https://..."
                     />
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <input
-                        type="file"
-                        id={`dispute-file-${jobId}`}
-                        onChange={(e) => setEvidenceFile(e.target.files?.[0] || null)}
-                        style={{ fontSize: "0.8rem", color: "#94a3b8" }}
-                      />
-                      {evidenceFile && (
-                        <span style={{ fontSize: "0.78rem", color: "#4ade80" }}>
-                          {evidenceFile.name}
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                      <button
-                        className="stj-btn stj-btn--primary"
-                        onClick={handleSubmitEvidence}
-                        disabled={
-                          isSubmittingEvidence ||
-                          (!evidenceText.trim() && !evidenceLink.trim() && !evidenceFile)
-                        }
-                      >
-                        {isSubmittingEvidence ? (
-                          <Loader2 size={13} className="stj-spin" />
-                        ) : (
-                          <Plus size={13} />
-                        )}
-                        Gửi bằng chứng
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
+                  )}
 
-              {/* Resolved */}
-              {dispute.status === "RESOLVED" && dispute.resolutionNotes && (
-                <div
-                  style={{
-                    padding: "0.75rem 1rem",
-                    borderRadius: "10px",
-                    background: "rgba(74, 222, 128, 0.08)",
-                    border: "1px solid rgba(74, 222, 128, 0.2)",
-                    marginTop: "0.5rem",
-                  }}
-                >
-                  <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#4ade80", marginBottom: "0.35rem" }}>
-                    Kết quả: {dispute.resolution}
-                  </div>
-                  <p style={{ margin: 0, fontSize: "0.82rem", color: "#94a3b8", lineHeight: 1.5 }}>
-                    {dispute.resolutionNotes}
-                  </p>
+                  {/* File upload zone */}
+                  {evidenceType === "FILE" && (
+                    <div className="dp-file-upload" onClick={() => fileInputRef.current?.click()}>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                        className="dp-file-upload__input"
+                        onChange={handleFileSelect}
+                      />
+                      <Upload size={22} className="dp-file-upload__icon" />
+                      <p className="dp-file-upload__text">
+                        <strong>Kéo thả hoặc click để chọn tệp</strong>
+                      </p>
+                      <span className="dp-file-upload__hint">Hình ảnh, tài liệu, video...</span>
+                    </div>
+                  )}
+
+                  {/* Selected files */}
+                  {evidenceFiles.length > 0 && (
+                    <div className="dp-files-list">
+                      {evidenceFiles.map((file, i) => (
+                        <div key={i} className="dp-file-item">
+                          <div className="dp-file-item__thumb">
+                            {file.type.startsWith("image/") ? (
+                              <img src={evidenceFilesPreview[i]} alt="" />
+                            ) : (
+                              <Paperclip size={16} />
+                            )}
+                          </div>
+                          <div className="dp-file-item__info">
+                            <span className="dp-file-item__name">{file.name}</span>
+                            <span className="dp-file-item__size">{formatFileSize(file.size)}</span>
+                          </div>
+                          <button
+                            type="button"
+                            className="dp-file-item__remove"
+                            onClick={(e) => { e.stopPropagation(); removeFile(i); }}
+                          >
+                            <X size={12} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Submit button */}
+                  <button
+                    className="dp-btn dp-btn--primary"
+                    onClick={handleSubmitEvidence}
+                    disabled={
+                      isSubmittingEvidence ||
+                      (!evidenceText.trim() && !evidenceLink.trim() && evidenceFiles.length === 0)
+                    }
+                  >
+                    {isSubmittingEvidence ? (
+                      <><Loader2 size={14} className="dp-spin" /> Đang gửi...</>
+                    ) : (
+                      <><Plus size={14} /> Gửi bằng chứng</>
+                    )}
+                  </button>
                 </div>
               )}
             </>

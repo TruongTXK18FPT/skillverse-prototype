@@ -29,7 +29,10 @@ import "./short-term-fleet.css";
 
 // ==================== HELPERS ====================
 
-const STATUS_MAP: Record<string, { label: string; cssClass: string }> = {
+const STATUS_MAP: Record<
+  string,
+  { label: string; cssClass: string; hint?: string }
+> = {
   DRAFT: { label: "Nháp", cssClass: "stj-badge--draft" },
   PENDING_APPROVAL: {
     label: "Chờ duyệt",
@@ -44,8 +47,23 @@ const STATUS_MAP: Record<string, { label: string; cssClass: string }> = {
   REJECTED: { label: "Từ chối", cssClass: "stj-badge--rejected" },
   COMPLETED: { label: "Hoàn thành", cssClass: "stj-badge--completed" },
   PAID: { label: "Đã thanh toán", cssClass: "stj-badge--paid" },
+  CANCELLATION_REQUESTED: {
+    label: "Hủy chờ duyệt",
+    cssClass: "stj-badge--cancellation-review",
+    hint: "Admin đang xem xét",
+  },
+  AUTO_CANCELLED: {
+    label: "Tự động hủy",
+    cssClass: "stj-badge--cancelled",
+    hint: "Hết thời hạn phản hồi",
+  },
   CANCELLED: { label: "Đã hủy", cssClass: "stj-badge--cancelled" },
   DISPUTED: { label: "Tranh chấp", cssClass: "stj-badge--disputed" },
+  DISPUTE_OPENED: {
+    label: "Đang tranh chấp",
+    cssClass: "stj-badge--disputed",
+    hint: "Admin đang xử lý",
+  },
 };
 
 const URGENCY_MAP: Record<string, { label: string; cssClass: string }> = {
@@ -81,6 +99,25 @@ const getDaysRemaining = (
   if (days === 0) return { days: 0, text: "Hôm nay", isExpired: false };
   if (days === 1) return { days: 1, text: "1 ngày", isExpired: false };
   return { days, text: `${days} ngày`, isExpired: false };
+};
+
+const renderStatusBadge = (
+  status: string,
+  statusInfo: { label: string; cssClass: string; hint?: string },
+) => {
+  const showShield = status === "CANCELLATION_REQUESTED";
+
+  return (
+    <div className="stj-status-stack">
+      <span className={`stj-badge ${statusInfo.cssClass}`}>
+        {showShield && <Shield size={11} strokeWidth={2.25} />}
+        {statusInfo.label}
+      </span>
+      {statusInfo.hint && (
+        <span className="stj-status-stack__hint">{statusInfo.hint}</span>
+      )}
+    </div>
+  );
 };
 
 // ==================== COMPONENT ====================
@@ -470,6 +507,7 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
               </option>
               <option value={ShortTermJobStatus.SUBMITTED}>Đã nộp bài</option>
               <option value={ShortTermJobStatus.APPROVED}>Đã duyệt</option>
+              <option value="CANCELLATION_REQUESTED">Hủy chờ duyệt</option>
               <option value={ShortTermJobStatus.COMPLETED}>Hoàn thành</option>
               <option value={ShortTermJobStatus.PAID}>Đã thanh toán</option>
               <option value={ShortTermJobStatus.CANCELLED}>Đã hủy / Đóng</option>
@@ -491,6 +529,7 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
                   const statusInfo = STATUS_MAP[job.status] || {
                     label: job.status,
                     cssClass: "",
+                    hint: undefined,
                   };
 
                   return (
@@ -501,7 +540,7 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
                       onClick={() => handleViewDetail(job.id)}
                     >
                       <div className="stj-handover-card__top">
-                        <span className={`stj-badge ${statusInfo.cssClass}`}>{statusInfo.label}</span>
+                        {renderStatusBadge(job.status, statusInfo)}
                         <span className="stj-handover-card__deadline">{formatDate(job.deadline)}</span>
                       </div>
                       <strong className="stj-handover-card__title">{job.title}</strong>
@@ -566,6 +605,7 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
                       const statusInfo = STATUS_MAP[job.status] || {
                         label: job.status,
                         cssClass: "",
+                        hint: undefined,
                       };
                       const urgencyInfo = URGENCY_MAP[job.urgency] || {
                         label: job.urgency,
@@ -595,11 +635,7 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
                               </div>
                             </td>
                             <td>
-                              <span
-                                className={`stj-badge ${statusInfo.cssClass}`}
-                              >
-                                {statusInfo.label}
-                              </span>
+                              {renderStatusBadge(job.status, statusInfo)}
                             </td>
                             <td>
                               <span className="stj-budget">

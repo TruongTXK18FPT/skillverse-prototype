@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   ShieldCheck,
   AlertTriangle,
@@ -7,10 +7,8 @@ import {
   ShieldOff,
   DollarSign,
   Lock,
-  Loader2,
 } from "lucide-react";
 import shortTermJobService from "../../services/shortTermJobService";
-import { useToast } from "../../hooks/useToast";
 import { JobEscrow, EscrowStatus } from "../../types/ShortTermJob";
 import "../business-hud/short-term-fleet.css";
 
@@ -26,17 +24,10 @@ interface EscrowStatusBannerProps {
 
 const EscrowStatusBanner: React.FC<EscrowStatusBannerProps> = ({
   escrow,
-  jobId,
+  jobId: _jobId,
   currentUserRole,
   onFund,
-  onRelease,
-  onDispute,
-  onRefund,
-  onRefund: _unused,
 }) => {
-  const { showSuccess, showError } = useToast();
-  const [isReleasing, setIsReleasing] = useState(false);
-
   const getStatusInfo = (status: EscrowStatus | null) => {
     if (!escrow) {
       return {
@@ -216,30 +207,6 @@ const EscrowStatusBanner: React.FC<EscrowStatusBannerProps> = ({
           >
             <ShieldCheck size={14} />
             Ký quỹ ngay
-          </button>
-        )}
-
-        {currentUserRole === "RECRUITER" && escrow?.status === EscrowStatus.FUNDED && onRelease && (
-          <button
-            onClick={onRelease}
-            className="stj-btn stj-btn--approve"
-            disabled={isReleasing}
-            style={{ fontSize: "0.82rem" }}
-          >
-            {isReleasing ? <Loader2 size={14} className="stj-spin" /> : <CheckCircle2 size={14} />}
-            Giải phóng thanh toán
-          </button>
-        )}
-
-        {/* Dispute action — available to both */}
-        {escrow && onDispute && (
-          <button
-            onClick={onDispute}
-            className="stj-btn stj-btn--danger"
-            style={{ fontSize: "0.82rem" }}
-          >
-            <AlertTriangle size={14} />
-            Mở Dispute
           </button>
         )}
       </div>

@@ -62,7 +62,7 @@ const STATUS_META: Record<string, { label: string; tone: string }> = {
   PENDING: { label: 'Chờ duyệt', tone: 'amber' },
   CONFIRMED: { label: 'Đã xác nhận', tone: 'cyan' },
   ONGOING: { label: 'Đang diễn ra', tone: 'violet' },
-  MENTOR_COMPLETED: { label: 'Chờ xác nhận', tone: 'purple' },
+  PENDING_COMPLETION: { label: 'Chờ xác nhận', tone: 'purple' },
   COMPLETED: { label: 'Hoàn thành', tone: 'green' },
   DISPUTED: { label: 'Đang tranh chấp', tone: 'orange' },
   REFUNDED: { label: 'Đã hoàn tiền', tone: 'slate' },
@@ -160,7 +160,7 @@ const safeFormatDate = (dateStr: string | undefined | null, options?: Intl.DateT
 const isRenderableReview = (review: ReviewResponse | null | undefined): review is ReviewResponse =>
   !!review && Number.isFinite(review.rating) && review.rating >= 1 && review.rating <= 5;
 
-const PAID_BOOKING_STATUSES = ['CONFIRMED', 'ONGOING', 'MENTOR_COMPLETED', 'COMPLETED', 'DISPUTED', 'REFUNDED'] as const;
+const PAID_BOOKING_STATUSES = ['CONFIRMED', 'ONGOING', 'PENDING_COMPLETION', 'COMPLETED', 'DISPUTED', 'REFUNDED'] as const;
 
 const REVIEW_TAG_META = Object.fromEntries(
   REVIEW_TAGS.map(tag => [tag.value, tag]),
@@ -215,6 +215,7 @@ const BookingDetailPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [now, setNow] = useState(new Date());
   const [openComposer, setOpenComposer] = useState(false);
+  const [confirmingComplete, setConfirmingComplete] = useState(false);
   const [disputeReason, setDisputeReason] = useState('');
   const [evidenceType, setEvidenceType] = useState<EvidenceType>('TEXT');
   const [evidenceContent, setEvidenceContent] = useState('');
@@ -305,7 +306,7 @@ const BookingDetailPage: React.FC = () => {
     viewerRole === 'learner' &&
     !dispute &&
     !!booking &&
-    (booking.status === 'MENTOR_COMPLETED' ||
+    (booking.status === 'PENDING_COMPLETION' ||
       ((booking.status === 'CONFIRMED' || booking.status === 'ONGOING') && sessionEnded));
   const canReview =
     viewerRole === 'learner' &&
@@ -575,7 +576,11 @@ const BookingDetailPage: React.FC = () => {
     );
   }
 
-  const status = STATUS_META[booking.status] || { label: booking.status, tone: 'slate' };
+  const learnerCompleted = !!(booking.learnerCompletedAt || booking.confirmedByLearner);
+  const status =
+    viewerRole === 'learner' && booking.status === 'PENDING_COMPLETION' && learnerCompleted
+      ? { label: 'Chờ mentor xác nhận', tone: 'purple' }
+      : STATUS_META[booking.status] || { label: booking.status, tone: 'slate' };
   const toneClass = `bkd-tone-${status.tone}`;
 
   return (
@@ -643,22 +648,44 @@ const BookingDetailPage: React.FC = () => {
               <CheckSquare size={16} /> Hoàn tất
             </button>
           )}
+          {/* Mentor confirm khi learner đã click trước */}
+          {viewerRole === 'mentor' && booking.status === 'PENDING_COMPLETION' && !booking.mentorCompletedAt && (
+            <button className="bkd-btn bkd-btn-complete" onClick={() => runAction(() => completeBooking(booking.id), 'Đã xác nhận', 'Cả hai bên đã đồng ý. Buổi học hoàn tất.')} disabled={busy}>
+              <CheckSquare size={16} /> Xác nhận hoàn tất
+            </button>
+          )}
           {viewerRole === 'learner' && ['PENDING', 'CONFIRMED'].includes(booking.status) && (
             <button className="bkd-btn bkd-btn-danger" onClick={async () => { if (await confirmAction('Bạn chắc chắn muốn hủy booking này?')) await runAction(() => cancelBooking(booking.id), 'Đã hủy booking', 'Booking đã được hủy.'); }} disabled={busy}>
               <XCircle size={16} /> Hủy
             </button>
           )}
-          {viewerRole === 'learner' && booking.status === 'MENTOR_COMPLETED' && (
-            <button className="bkd-btn bkd-btn-approve" onClick={async () => { if (await confirmAction('Xác nhận buổi học đã hoàn tất?')) await runAction(() => confirmCompleteBooking(booking.id), 'Đã xác nhận hoàn tất', 'Thanh toán cho mentor đã được giải phóng.'); }} disabled={busy}>
-              <CheckCircle2 size={16} /> Xác nhận hoàn tất
+          {/* Learner hoàn thành trước — khi session đã kết thúc */}
+          {viewerRole === 'learner' && ['ONGOING', 'CONFIRMED'].includes(booking.status) && sessionEnded && (
+            <button className="bkd-btn bkd-btn-complete" onClick={async () => { if (await confirmAction('Xác nhận hoàn tất buổi học?')) await runAction(() => confirmCompleteBooking(booking.id), 'Đã hoàn tất', 'Buổi học đã được đánh dấu hoàn tất. Đang chờ mentor xác nhận.'); }} disabled={busy}>
+              <CheckSquare size={16} /> Hoàn tất
             </button>
+          )}
+          {/* Learner xác nhận khi mentor đã hoàn thành */}
+          {viewerRole === 'learner' && booking.status === 'PENDING_COMPLETION' && !learnerCompleted && (
+            <button className="bkd-btn bkd-btn-complete" onClick={async () => { if (await confirmAction('Xác nhận hoàn tất buổi học?')) await runAction(() => confirmCompleteBooking(booking.id), 'Đã xác nhận', 'Cả hai bên đã đồng ý. Buổi học hoàn tất.'); }} disabled={busy}>
+              <CheckSquare size={16} /> Xác nhận hoàn tất
+            </button>
+          )}
+          {viewerRole === 'learner' && booking.status === 'PENDING_COMPLETION' && learnerCompleted && (
+            <span className="bkd-status-pill bkd-tone-purple">Chờ mentor xác nhận</span>
           )}
         </div>
         <div className="bkd-action-bar__right">
-          <button className="bkd-btn bkd-btn-secondary" onClick={() => navigate('/messages', { state: { openChatWith: viewerRole === 'mentor' ? booking.learnerId : booking.mentorId } })}>
+          <button className="bkd-btn bkd-btn-secondary" onClick={() => navigate('/messages', { state: {
+            openChatWith: viewerRole === 'mentor' ? booking.learnerId : booking.mentorId,
+            name: viewerRole === 'mentor' ? booking.learnerName : booking.mentorName,
+            avatar: viewerRole === 'mentor' ? booking.learnerAvatar : booking.mentorAvatar,
+            type: 'MENTOR',
+            isMyRoleMentor: viewerRole === 'mentor',
+          } })}>
             <MessageSquare size={16} /> Nhắn tin
           </button>
-          {(booking.paymentReference || ['COMPLETED', 'MENTOR_COMPLETED'].includes(booking.status)) && (
+          {(booking.paymentReference || ['COMPLETED', 'PENDING_COMPLETION'].includes(booking.status)) && (
             <button className="bkd-btn bkd-btn-secondary" onClick={async () => { setBusy(true); try { const blob = await downloadBookingInvoice(booking.id); const url = window.URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `booking-${booking.id}.pdf`; document.body.appendChild(a); a.click(); a.remove(); window.URL.revokeObjectURL(url); } catch (err: any) { showAppError('Không thể tải hóa đơn', err?.response?.data?.message || 'Vui lòng thử lại.'); } finally { setBusy(false); } }} disabled={busy}>
               <FileText size={16} /> Hóa đơn
             </button>

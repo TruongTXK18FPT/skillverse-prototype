@@ -1,43 +1,52 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Shield, Lock } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
-import { useMeowlSkin, MeowlSkinType } from '../../context/MeowlSkinContext';
-import userService from '../../services/userService';
-import { UserProfileResponse } from '../../data/userDTOs';
-import { premiumService } from '../../services/premiumService';
-import { UserSubscriptionResponse } from '../../data/premiumDTOs';
-import StudentReviews from '../../components/student/StudentReviews';
-import PilotHeader from '../../components/profile-hud/user/PilotHeader';
-import PilotIdentityForm from '../../components/profile-hud/user/PilotIdentityForm';
-import CompanionPod from '../../components/profile-hud/user/CompanionPod';
-import PilotSkinSelector from '../../components/profile-hud/user/PilotSkinSelector';
-import ParentRequests from '../../components/profile-hud/user/ParentRequests';
-import GoogleUserOnboardingBanner from '../../components/auth/GoogleUserOnboardingBanner';
-import MeowlGuide from '../../components/meowl/MeowlGuide';
-import '../../components/profile-hud/user/pilot-styles.css';
-import '../../styles/ProfileSecuritySection.css';
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { Shield, Lock } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
+import { useMeowlSkin, MeowlSkinType } from "../../context/MeowlSkinContext";
+import userService from "../../services/userService";
+import { UserProfileResponse } from "../../data/userDTOs";
+import { premiumService } from "../../services/premiumService";
+import { UserSubscriptionResponse } from "../../data/premiumDTOs";
+import StudentReviews from "../../components/student/StudentReviews";
+import PilotHeader from "../../components/profile-hud/user/PilotHeader";
+import PilotIdentityForm from "../../components/profile-hud/user/PilotIdentityForm";
+import CompanionPod from "../../components/profile-hud/user/CompanionPod";
+import PilotSkinSelector from "../../components/profile-hud/user/PilotSkinSelector";
+import ParentRequests from "../../components/profile-hud/user/ParentRequests";
+import GoogleUserOnboardingBanner from "../../components/auth/GoogleUserOnboardingBanner";
+import MeowlGuide from "../../components/meowl/MeowlGuide";
+import "../../components/profile-hud/user/pilot-styles.css";
+import "../../styles/ProfileSecuritySection.css";
 
 const ProfilePageCosmic = () => {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
-  const { currentSkin, setSkin, skins, togglePet, isPetActive, isPremium, checkPremiumStatus } = useMeowlSkin();
-  
+  const {
+    currentSkin,
+    setSkin,
+    skins,
+    togglePet,
+    isPetActive,
+    isPremium,
+    checkPremiumStatus,
+  } = useMeowlSkin();
+
   const [profile, setProfile] = useState<UserProfileResponse | null>(null);
-  const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
+  const [subscription, setSubscription] =
+    useState<UserSubscriptionResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const [editData, setEditData] = useState({
-    fullName: '',
-    phone: '',
-    address: '',
-    bio: ''
+    fullName: "",
+    phone: "",
+    address: "",
+    bio: "",
   });
 
   const loadProfile = useCallback(async () => {
@@ -45,20 +54,20 @@ const ProfilePageCosmic = () => {
       setLoading(true);
       const [profileData, subData] = await Promise.all([
         userService.getMyProfile(),
-        premiumService.getCurrentSubscription()
+        premiumService.getCurrentSubscription(),
       ]);
       setProfile(profileData);
       setSubscription(subData);
-      
+
       setEditData({
-        fullName: profileData.fullName || '',
-        phone: profileData.phone || '',
-        address: profileData.address || '',
-        bio: profileData.bio || ''
+        fullName: profileData.fullName || "",
+        phone: profileData.phone || "",
+        address: profileData.address || "",
+        bio: profileData.bio || "",
       });
     } catch (error) {
-      console.error('Error loading profile:', error);
-      setError('Không thể tải hồ sơ');
+      console.error("Error loading profile:", error);
+      setError("Không thể tải hồ sơ");
     } finally {
       setLoading(false);
     }
@@ -70,7 +79,7 @@ const ProfilePageCosmic = () => {
       return;
     }
     if (!isAuthenticated) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
     if (user?.id) {
@@ -81,15 +90,18 @@ const ProfilePageCosmic = () => {
   const handleSave = async () => {
     try {
       setSaving(true);
-      setError('');
-      const updatedProfile = await userService.updateUserProfile(user!.id, editData);
+      setError("");
+      const updatedProfile = await userService.updateUserProfile(
+        user!.id,
+        editData,
+      );
       setProfile(updatedProfile);
       setEditing(false);
-      setSuccess('Cập nhật hồ sơ thành công.');
-      setTimeout(() => setSuccess(''), 3000);
+      setSuccess("Cập nhật hồ sơ thành công.");
+      setTimeout(() => setSuccess(""), 3000);
     } catch (error) {
-      console.error('Error updating profile:', error);
-      setError((error as Error).message || 'Cập nhật thất bại.');
+      console.error("Error updating profile:", error);
+      setError((error as Error).message || "Cập nhật thất bại.");
     } finally {
       setSaving(false);
     }
@@ -101,23 +113,23 @@ const ProfilePageCosmic = () => {
       // Don't set full page loading to avoid UI flicker, maybe add a local loading state if needed
       // For now, we'll just rely on the success message or optimistic update if we wanted
       const response = await userService.uploadUserAvatar(file, user.id);
-      
+
       if (profile) {
         setProfile({
           ...profile,
-          avatarMediaUrl: response.avatarUrl
+          avatarMediaUrl: response.avatarUrl,
         });
       }
-      setSuccess('Cập nhật ảnh đại diện thành công.');
-      setTimeout(() => setSuccess(''), 3000);
+      setSuccess("Cập nhật ảnh đại diện thành công.");
+      setTimeout(() => setSuccess(""), 3000);
     } catch (error) {
-      console.error('Error uploading avatar:', error);
-      setError('Tải ảnh đại diện thất bại.');
+      console.error("Error uploading avatar:", error);
+      setError("Tải ảnh đại diện thất bại.");
     }
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setEditData(prev => ({ ...prev, [field]: value }));
+    setEditData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSkinSelect = (skinId: string) => {
@@ -125,51 +137,91 @@ const ProfilePageCosmic = () => {
   };
 
   const shouldShowGooglePasswordCta =
-    user?.authProvider === 'GOOGLE' &&
+    user?.authProvider === "GOOGLE" &&
     !user?.googleLinked &&
     Array.isArray(user?.roles) &&
-    user.roles.includes('USER');
+    user.roles.includes("USER");
 
-  if (loading) return <div className="pilot-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Đang tải hồ sơ...</div>;
+  if (loading)
+    return (
+      <div
+        className="pilot-container"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        Đang tải hồ sơ...
+      </div>
+    );
   if (!profile) return <div className="pilot-container">Lỗi tải hồ sơ</div>;
 
   return (
     <div className="pilot-container">
       <GoogleUserOnboardingBanner />
-      <PilotHeader 
-        user={profile} 
+      <PilotHeader
+        user={profile}
         subscription={subscription}
         onEdit={() => setEditing(true)}
         onAvatarUpload={handleAvatarUpload}
       />
 
-      {success && <div style={{ color: '#4ade80', padding: '1rem 2rem', border: '1px solid #4ade80', margin: '1rem 2rem', background: 'rgba(74, 222, 128, 0.1)' }}>{success}</div>}
-      {error && <div style={{ color: '#ef4444', padding: '1rem 2rem', border: '1px solid #ef4444', margin: '1rem 2rem', background: 'rgba(239, 68, 68, 0.1)' }}>{error}</div>}
+      {success && (
+        <div
+          style={{
+            color: "#4ade80",
+            padding: "1rem 2rem",
+            border: "1px solid #4ade80",
+            margin: "1rem 2rem",
+            background: "rgba(74, 222, 128, 0.1)",
+          }}
+        >
+          {success}
+        </div>
+      )}
+      {error && (
+        <div
+          style={{
+            color: "#ef4444",
+            padding: "1rem 2rem",
+            border: "1px solid #ef4444",
+            margin: "1rem 2rem",
+            background: "rgba(239, 68, 68, 0.1)",
+          }}
+        >
+          {error}
+        </div>
+      )}
 
       {shouldShowGooglePasswordCta && !editing && (
         <section className="pilot-section">
-          <div className="security-spotlight-card">
-            <div className="security-spotlight-card__icon">
+          <div className="cosmic-security-spotlight">
+            <div className="cosmic-security-spotlight__icon">
               <Shield size={24} />
             </div>
-            <div className="security-spotlight-card__content">
-              <div className="security-spotlight-card__eyebrow">Khuyen nghi bao mat</div>
-              <h2 className="security-spotlight-card__title">Thiết lập mật khẩu dự phòng cho tài khoản Google</h2>
-              <p className="security-spotlight-card__description">
-                Bạn vừa đăng nhập bằng Google lần đầu. Để tránh mất quyền truy cập khi Google gặp sự cố hoặc bị ngắt phiên,
-                hãy thiết lập mật khẩu dự phòng trước.
+            <div className="cosmic-security-spotlight__content">
+              <div className="cosmic-security-spotlight__eyebrow">
+                Khuyến nghị bảo mật
+              </div>
+              <h2 className="cosmic-security-spotlight__title">
+                Thiết lập mật khẩu dự phòng cho tài khoản Google
+              </h2>
+              <p className="cosmic-security-spotlight__description">
+                Bạn vừa đăng nhập bằng Google. Để tránh mất quyền truy cập khi
+                Google gặp sự cố hoặc bị ngắt phiên, hãy thiết lập mật khẩu dự
+                phòng.
               </p>
-              <div className="security-spotlight-card__benefits">
+              <div className="cosmic-security-spotlight__benefits">
                 <span>Đăng nhập bằng email khi cần</span>
-                <span>Khôi phục quyền truy cập dễ hơn</span>
-                <span>Không phải kéo xuống khu bảo mật để tìm</span>
+                <span>Khôi phục quyền truy cập dễ dàng</span>
+                <span>Không phụ thuộc Google OAuth</span>
               </div>
             </div>
-            <div className="security-spotlight-card__actions">
+            <div className="cosmic-security-spotlight__actions">
               <button
-                onClick={() => navigate('/set-password')}
-                className="pilot-btn"
-                style={{ background: '#ef4444', color: 'white' }}
+                onClick={() => navigate("/set-password")}
+                className="cosmic-security-spotlight__btn"
               >
                 <Shield size={16} /> Thiết lập ngay
               </button>
@@ -179,7 +231,7 @@ const ProfilePageCosmic = () => {
       )}
 
       {editing ? (
-        <PilotIdentityForm 
+        <PilotIdentityForm
           data={editData}
           onChange={handleInputChange}
           onSave={handleSave}
@@ -196,29 +248,56 @@ const ProfilePageCosmic = () => {
                 <div className="pilot-identity-grid">
                   <div>
                     <div className="pilot-label">Họ và tên</div>
-                    <div className="pilot-stat-value" style={{ fontSize: '1rem' }}>{profile.fullName || 'N/A'}</div>
+                    <div
+                      className="pilot-stat-value"
+                      style={{ fontSize: "1rem" }}
+                    >
+                      {profile.fullName || "N/A"}
+                    </div>
                   </div>
                   <div>
                     <div className="pilot-label">Liên lạc</div>
-                    <div className="pilot-stat-value" style={{ fontSize: '1rem' }}>{profile.phone || 'N/A'}</div>
+                    <div
+                      className="pilot-stat-value"
+                      style={{ fontSize: "1rem" }}
+                    >
+                      {profile.phone || "N/A"}
+                    </div>
                   </div>
                   <div>
                     <div className="pilot-label">Địa chỉ</div>
-                    <div className="pilot-stat-value" style={{ fontSize: '1rem' }}>{profile.address || 'N/A'}</div>
+                    <div
+                      className="pilot-stat-value"
+                      style={{ fontSize: "1rem" }}
+                    >
+                      {profile.address || "N/A"}
+                    </div>
                   </div>
                   <div>
                     <div className="pilot-label">EMAIL</div>
-                    <div className="pilot-stat-value" style={{ fontSize: '1rem' }}>{profile.email}</div>
+                    <div
+                      className="pilot-stat-value"
+                      style={{ fontSize: "1rem" }}
+                    >
+                      {profile.email}
+                    </div>
                   </div>
-                  <div style={{ gridColumn: '1 / -1' }}>
+                  <div style={{ gridColumn: "1 / -1" }}>
                     <div className="pilot-label">Giới thiệu / Nhật ký</div>
-                    <div style={{ color: 'var(--pilot-text-dim)', marginTop: '0.5rem' }}>{profile.bio || 'Chưa có nội dung.'}</div>
+                    <div
+                      style={{
+                        color: "var(--pilot-text-dim)",
+                        marginTop: "0.5rem",
+                      }}
+                    >
+                      {profile.bio || "Chưa có nội dung."}
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Companion Pod */}
-              <CompanionPod 
+              <CompanionPod
                 isPetActive={isPetActive}
                 onTogglePet={togglePet}
                 isPremium={isPremium}
@@ -230,7 +309,7 @@ const ProfilePageCosmic = () => {
           <ParentRequests />
 
           {/* Skin Selection */}
-          <PilotSkinSelector 
+          <PilotSkinSelector
             currentSkin={currentSkin}
             skins={skins}
             onSelectSkin={handleSkinSelect}
@@ -244,23 +323,81 @@ const ProfilePageCosmic = () => {
 
           {/* Security Section */}
           <div className="pilot-section">
-            <h2 className="pilot-section-title" style={{ color: '#ef4444', borderColor: '#ef4444' }}>Bảo mật</h2>
-            <div className="security-actions" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
-              {user?.authProvider === 'GOOGLE' && !user?.googleLinked && (
-                <div style={{ border: '1px solid #ef4444', padding: '1rem', background: 'rgba(239, 68, 68, 0.05)' }}>
-                  <h3 style={{ color: '#ef4444', margin: '0 0 0.5rem 0' }}>Mật khẩu dự phòng</h3>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--pilot-text-dim)' }}>Đặt mật khẩu để đăng nhập dự phòng.</p>
-                  <button onClick={() => navigate('/set-password')} className="pilot-btn" style={{ marginTop: '1rem', background: '#ef4444', color: 'white' }}>
+            <h2
+              className="pilot-section-title"
+              style={{ color: "#ef4444", borderColor: "#ef4444" }}
+            >
+              Bảo mật
+            </h2>
+            <div
+              className="security-actions"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: "1rem",
+              }}
+            >
+              {user?.authProvider === "GOOGLE" && !user?.googleLinked && (
+                <div
+                  style={{
+                    border: "1px solid #ef4444",
+                    padding: "1rem",
+                    background: "rgba(239, 68, 68, 0.05)",
+                  }}
+                >
+                  <h3 style={{ color: "#ef4444", margin: "0 0 0.5rem 0" }}>
+                    Mật khẩu dự phòng
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: "0.8rem",
+                      color: "var(--pilot-text-dim)",
+                    }}
+                  >
+                    Đặt mật khẩu để đăng nhập dự phòng.
+                  </p>
+                  <button
+                    onClick={() => navigate("/set-password")}
+                    className="pilot-btn"
+                    style={{
+                      marginTop: "1rem",
+                      background: "#ef4444",
+                      color: "white",
+                    }}
+                  >
                     <Shield size={16} /> Đặt mật khẩu
                   </button>
                 </div>
               )}
 
-              {(user?.authProvider === 'LOCAL' || user?.googleLinked) && (
-                <div style={{ border: '1px solid var(--pilot-border)', padding: '1rem' }}>
-                  <h3 style={{ color: 'var(--pilot-text-white)', margin: '0 0 0.5rem 0' }}>Đổi mật khẩu</h3>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--pilot-text-dim)' }}>Cập nhật mật khẩu định kỳ.</p>
-                  <button onClick={() => navigate('/change-password')} className="pilot-btn pilot-btn-secondary" style={{ marginTop: '1rem' }}>
+              {(user?.authProvider === "LOCAL" || user?.googleLinked) && (
+                <div
+                  style={{
+                    border: "1px solid var(--pilot-border)",
+                    padding: "1rem",
+                  }}
+                >
+                  <h3
+                    style={{
+                      color: "var(--pilot-text-white)",
+                      margin: "0 0 0.5rem 0",
+                    }}
+                  >
+                    Đổi mật khẩu
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: "0.8rem",
+                      color: "var(--pilot-text-dim)",
+                    }}
+                  >
+                    Cập nhật mật khẩu định kỳ.
+                  </p>
+                  <button
+                    onClick={() => navigate("/change-password")}
+                    className="pilot-btn pilot-btn-secondary"
+                    style={{ marginTop: "1rem" }}
+                  >
                     <Lock size={16} /> Cập nhật
                   </button>
                 </div>
@@ -269,7 +406,7 @@ const ProfilePageCosmic = () => {
           </div>
         </>
       )}
-      
+
       <MeowlGuide currentPage="profile" />
     </div>
   );

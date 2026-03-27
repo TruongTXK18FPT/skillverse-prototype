@@ -37,7 +37,6 @@ const SUBCATEGORY_OPTIONS = [
   { value: "OTHER", label: "Khác" },
 ];
 
-
 const URGENCY_OPTIONS = [
   { value: JobUrgency.NORMAL, label: "Bình thường" },
   { value: JobUrgency.URGENT, label: "Gấp trong vài ngày" },
@@ -125,9 +124,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
   const [showAdvanced, setShowAdvanced] = useState(
     Boolean(
       initialData?.requirements ||
-        initialData?.workDeadline ||
-        initialData?.tags?.length ||
-        initialData?.milestones?.length,
+      initialData?.workDeadline ||
+      initialData?.tags?.length ||
+      initialData?.milestones?.length,
     ),
   );
 
@@ -145,7 +144,10 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  const handleNumberField = (field: keyof CreateShortTermJobRequest, value: number) => {
+  const handleNumberField = (
+    field: keyof CreateShortTermJobRequest,
+    value: number,
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -207,20 +209,24 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
       nextErrors.deadline = "Vui lòng chọn hạn nhận đơn.";
     }
     if (!formData.estimatedDuration.trim()) {
-      nextErrors.estimatedDuration = "Hãy nhập thời lượng ước tính.";
+      nextErrors.estimatedDuration = "Hãy nhập deadline nộp dự án (SLA).";
     }
     if (
       formData.workDeadline &&
       formData.deadline &&
       new Date(formData.workDeadline) < new Date(formData.deadline)
     ) {
-      nextErrors.workDeadline = "Hạn hoàn thành cần sau hoặc bằng hạn nhận đơn.";
+      nextErrors.workDeadline =
+        "Hạn hoàn thành cần sau hoặc bằng hạn nhận đơn.";
     }
 
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
-      showError("Thông tin chưa đầy đủ", "Vui lòng kiểm tra lại các trường bắt buộc.");
+      showError(
+        "Thông tin chưa đầy đủ",
+        "Vui lòng kiểm tra lại các trường bắt buộc.",
+      );
       return false;
     }
 
@@ -262,19 +268,19 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
     if (!formData.description.trim()) return "";
     // Strip markdown syntax for preview
     return formData.description
-      .replace(/#{1,6}\s+/g, "")          // headings
-      .replace(/\*\*(.*?)\*\*/g, "$1")      // bold
-      .replace(/\*(.*?)\*/g, "$1")         // italic
-      .replace(/~~(.*?)~~/g, "$1")         // strikethrough
+      .replace(/#{1,6}\s+/g, "") // headings
+      .replace(/\*\*(.*?)\*\*/g, "$1") // bold
+      .replace(/\*(.*?)\*/g, "$1") // italic
+      .replace(/~~(.*?)~~/g, "$1") // strikethrough
       .replace(/\[(.*?)\]\(.*?\)/g, "$1") // links
       .replace(/!\[(.*?)\]\(.*?\)/g, "[Hình: $1]") // images
-      .replace(/`{1,3}[^`]*`{1,3}/g, "")  // code
-      .replace(/^\s*[-*+]\s+/gm, "• ")     // list items
-      .replace(/^\s*\d+\.\s+/gm, "")       // numbered lists
-      .replace(/^\s*>\s+/gm, "")           // blockquotes
-      .replace(/\|[^|\n]+\|/g, "")         // tables
-      .replace(/\n{2,}/g, " ")             // multiple newlines
-      .replace(/\n/g, " ")                  // single newlines
+      .replace(/`{1,3}[^`]*`{1,3}/g, "") // code
+      .replace(/^\s*[-*+]\s+/gm, "• ") // list items
+      .replace(/^\s*\d+\.\s+/gm, "") // numbered lists
+      .replace(/^\s*>\s+/gm, "") // blockquotes
+      .replace(/\|[^|\n]+\|/g, "") // tables
+      .replace(/\n{2,}/g, " ") // multiple newlines
+      .replace(/\n/g, " ") // single newlines
       .trim()
       .substring(0, 200);
   }, [formData.description]);
@@ -282,7 +288,8 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
   const previewMetrics = [
     {
       label: "Ngân sách",
-      value: Number(formData.budget) > 0
+      value:
+        Number(formData.budget) > 0
           ? currencyFormatter.format(Number(formData.budget))
           : "Chưa nhập ngân sách",
     },
@@ -324,7 +331,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                   onChange={handleInputChange}
                   placeholder="Ví dụ: Thiết kế bộ banner cho chiến dịch ra mắt"
                 />
-                {errors.title && <span className="sjf-error">{errors.title}</span>}
+                {errors.title && (
+                  <span className="sjf-error">{errors.title}</span>
+                )}
               </div>
 
               <div className="sjf-field sjf-field--full">
@@ -417,8 +426,8 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
               <div>
                 <h3 className="sjf-card__title">Ngân sách và tiến độ</h3>
                 <p className="sjf-card__desc">
-                  Tối ưu để ứng viên biết ngay mức độ phù hợp về chi phí và
-                  thời lượng.
+                  Tối ưu để ứng viên biết ngay mức độ phù hợp về chi phí và thời
+                  lượng.
                 </p>
               </div>
             </div>
@@ -438,7 +447,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                   }
                   placeholder="1000000"
                 />
-                {errors.budget && <span className="sjf-error">{errors.budget}</span>}
+                {errors.budget && (
+                  <span className="sjf-error">{errors.budget}</span>
+                )}
               </div>
 
               <div className="sjf-field sjf-field--full">
@@ -485,7 +496,7 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
 
               <div className="sjf-field">
                 <label className="sjf-label">
-                  Thời lượng ước tính
+                  Deadline nộp dự án
                   <span className="sjf-label__required">*</span>
                 </label>
                 <input
@@ -496,14 +507,12 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                   placeholder="Ví dụ: 3 ngày, 8 giờ"
                 />
                 {errors.estimatedDuration && (
-                  <span className="sjf-error">
-                    {errors.estimatedDuration}
-                  </span>
+                  <span className="sjf-error">{errors.estimatedDuration}</span>
                 )}
               </div>
 
               <div className="sjf-field sjf-field--full">
-                <span className="sjf-label">Gợi ý thời lượng</span>
+                <span className="sjf-label">Gợi ý thời hạn SLA</span>
                 <div className="sjf-pill-row">
                   {DURATION_PRESETS.map((duration) => (
                     <button
@@ -571,7 +580,6 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                   ))}
                 </select>
               </div>
-
             </div>
 
             <button
@@ -587,7 +595,10 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
               <div className="sjf-advanced">
                 <div className="sjf-field-grid">
                   <div className="sjf-field sjf-field--full">
-                    <div className="sjf-card__header" style={{ marginBottom: 0 }}>
+                    <div
+                      className="sjf-card__header"
+                      style={{ marginBottom: 0 }}
+                    >
                       <label className="sjf-label">Yêu cầu ứng viên</label>
                       <button
                         type="button"
@@ -671,7 +682,9 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
 
                   {formData.allowsRevision && (
                     <div className="sjf-field">
-                      <label className="sjf-label">Số lần chỉnh sửa tối đa</label>
+                      <label className="sjf-label">
+                        Số lần chỉnh sửa tối đa
+                      </label>
                       <input
                         className="sjf-input"
                         type="number"
@@ -728,7 +741,6 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                     </div>
                   </div>
                 </div>
-
               </div>
             )}
           </section>
@@ -828,7 +840,7 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
               <div className="sjf-preview__list-item">
                 <span className="sjf-preview__list-label">Tiến độ</span>
                 <span className="sjf-preview__list-value">
-                  {`Nhận đơn đến ${formData.deadline || "..."} • Ước tính ${
+                  {`Nhận đơn đến ${formData.deadline || "..."} • SLA nộp bài ${
                     formData.estimatedDuration || "..."
                   }`}
                 </span>

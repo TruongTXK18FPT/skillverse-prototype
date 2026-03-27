@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { Children, cloneElement, isValidElement, type ReactNode, useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -27,6 +27,14 @@ import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import './../../styles/GSJJourney.css';
 
 type ViewMode = 'list' | 'detail' | 'test' | 'result';
+type ActionMode =
+  | 'idle'
+  | 'opening-test'
+  | 'generating-test'
+  | 'loading-result'
+  | 'submitting-test'
+  | 'generating-roadmap'
+  | 'toggling-status';
 
 // Domain icons mapping
 const DOMAIN_ICONS: Record<string, string> = {
@@ -48,7 +56,6 @@ const GSJJourneyPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const autoOpenedJourneyIdRef = useRef<number | null>(null);
-  const assessmentSectionRef = useRef<HTMLDivElement>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [journeys, setJourneys] = useState<JourneySummaryResponse[]>([]);
   const [selectedJourney, setSelectedJourney] = useState<JourneyDetailResponse | null>(null);
@@ -58,6 +65,7 @@ const GSJJourneyPage: React.FC = () => {
   const [showAllQuestionReviews, setShowAllQuestionReviews] = useState(false);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [actionMode, setActionMode] = useState<ActionMode>('idle');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -111,34 +119,88 @@ const GSJJourneyPage: React.FC = () => {
     }
 
     autoOpenedJourneyIdRef.current = autoOpenJourneyId;
-    void handleSelectJourney(autoOpenJourneyId).then(() => {
-      // Small delay to ensure render is complete before scrolling
-      setTimeout(() => {
-        assessmentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 500);
-    });
+    void handleSelectJourney(autoOpenJourneyId);
 
     navigate(location.pathname, { replace: true, state: null });
   }, [handleSelectJourney, location.pathname, location.state, navigate]);
+
+  const syncSelectedJourneyTest = useCallback((test: AssessmentTestResponse) => {
+    setSelectedJourney((prev) => {
+      if (!prev) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        assessmentTestId: test.id,
+        assessmentTestTitle: test.title,
+        assessmentTestQuestionCount: test.totalQuestions,
+        assessmentTestStatus: test.status
+      };
+    });
+  }, []);
 
   // Generate assessment test
   const handleGenerateTest = async () => {
     if (!selectedJourney) return;
     try {
       setActionLoading(true);
+      setActionMode('generating-test');
       const result = await journeyService.generateAssessmentTest(selectedJourney.id);
       setCurrentTest(result.test);
       setCurrentResult(null);
-
       setViewMode('test');
-      const updated = await journeyService.getJourneyById(selectedJourney.id);
-      setSelectedJourney(updated);
+      syncSelectedJourneyTest(result.test);
       setError(null);
     } catch (err: any) {
       console.error('Failed to generate test:', err);
       setError(err.message || 'Failed to generate assessment test');
     } finally {
       setActionLoading(false);
+      setActionMode('idle');
+    }
+  };
+
+  const handleStartAssessment = async () => {
+    if (!selectedJourney) return;
+
+    const existingTestId = selectedJourney.assessmentTestId;
+    const existingTestStatus = selectedJourney.assessmentTestStatus?.toUpperCase() || '';
+    const hasExistingUnfinishedTest = Boolean(existingTestId) && existingTestStatus !== 'COMPLETED';
+
+    try {
+      setActionLoading(true);
+
+      if (hasExistingUnfinishedTest && existingTestId) {
+        setActionMode('opening-test');
+
+        if (currentTest?.id === existingTestId) {
+          setViewMode('test');
+          setError(null);
+          return;
+        }
+
+        const test = await journeyService.getAssessmentTest(selectedJourney.id, existingTestId);
+        setCurrentTest(test);
+        setCurrentResult(null);
+        setViewMode('test');
+        setError(null);
+        return;
+      }
+
+      setActionMode('generating-test');
+      const result = await journeyService.generateAssessmentTest(selectedJourney.id);
+      setCurrentTest(result.test);
+      setCurrentResult(null);
+      setViewMode('test');
+      syncSelectedJourneyTest(result.test);
+      setError(null);
+    } catch (err: any) {
+      console.error('Failed to start assessment test:', err);
+      setError(err.message || 'Failed to open assessment test');
+    } finally {
+      setActionLoading(false);
+      setActionMode('idle');
     }
   };
 
@@ -152,6 +214,7 @@ const GSJJourneyPage: React.FC = () => {
 
     try {
       setActionLoading(true);
+      setActionMode('loading-result');
       if (!currentResult || currentResult.id !== latestResultId) {
         const result = await journeyService.getTestResult(selectedJourney.id, latestResultId);
         setCurrentResult(result);
@@ -163,6 +226,7 @@ const GSJJourneyPage: React.FC = () => {
       setError(err.message || 'Failed to load latest quiz result.');
     } finally {
       setActionLoading(false);
+      setActionMode('idle');
     }
   };
 
@@ -171,6 +235,7 @@ const GSJJourneyPage: React.FC = () => {
     if (!selectedJourney || !currentTest) return;
     try {
       setActionLoading(true);
+      setActionMode('submitting-test');
       const result = await journeyService.submitTest(selectedJourney.id, {
         testId: currentTest.id,
         answers,
@@ -186,6 +251,7 @@ const GSJJourneyPage: React.FC = () => {
       setError(err.message || 'Failed to submit test');
     } finally {
       setActionLoading(false);
+      setActionMode('idle');
     }
   };
 
@@ -194,6 +260,7 @@ const GSJJourneyPage: React.FC = () => {
     if (!selectedJourney) return;
     try {
       setActionLoading(true);
+      setActionMode('generating-roadmap');
       const generated = await journeyService.generateRoadmap(selectedJourney.id);
       const updated = await journeyService.getJourneyById(selectedJourney.id);
       setSelectedJourney(updated);
@@ -211,6 +278,7 @@ const GSJJourneyPage: React.FC = () => {
       setError(err.message || 'Failed to generate roadmap');
     } finally {
       setActionLoading(false);
+      setActionMode('idle');
     }
   };
 
@@ -219,6 +287,7 @@ const GSJJourneyPage: React.FC = () => {
     if (!selectedJourney) return;
     try {
       setActionLoading(true);
+      setActionMode('toggling-status');
       let updated: JourneySummaryResponse;
       if (selectedJourney.status === JourneyStatus.PAUSED) {
         updated = await journeyService.resumeJourney(selectedJourney.id);
@@ -234,6 +303,7 @@ const GSJJourneyPage: React.FC = () => {
       setError(err.message || 'Failed to update journey status');
     } finally {
       setActionLoading(false);
+      setActionMode('idle');
     }
   };
 
@@ -312,8 +382,15 @@ const GSJJourneyPage: React.FC = () => {
     const hasEvaluationResult = Boolean(journey.latestTestResult);
     const assessmentTestStatus = journey.assessmentTestStatus?.toUpperCase() || '';
     const hasAssessmentTest = Boolean(journey.assessmentTestId);
-    const hasAssessmentInProgress = assessmentTestStatus === 'IN_PROGRESS' || journey.status === JourneyStatus.TEST_IN_PROGRESS;
-    const hasAssessmentCompleted = hasEvaluationResult || assessmentTestStatus === 'COMPLETED';
+    const hasAssessmentInProgress = (
+      assessmentTestStatus === 'PENDING' ||
+      assessmentTestStatus === 'IN_PROGRESS' ||
+      journey.status === JourneyStatus.TEST_IN_PROGRESS
+    );
+    const hasAssessmentCompleted = !hasAssessmentInProgress && (
+      hasEvaluationResult ||
+      assessmentTestStatus === 'COMPLETED'
+    );
     const progress = journey.progressPercentage || 0;
 
     if (
@@ -398,15 +475,174 @@ const GSJJourneyPage: React.FC = () => {
   };
 
   const normalizeMarkdownText = (input?: string, fallback = 'Chưa có nội dung để hiển thị.'): string => {
-    const value = (input || '').replace(/\r\n/g, '\n').trim();
+    let value = (input || '').replace(/\r\n/g, '\n').trim();
     if (!value) {
       return fallback;
     }
 
+    // ── Phase 1: Collapse newlines inside inline spans (**, *, `) ──────────
+    // These must be resolved BEFORE any bracket processing, otherwise newlines
+    // break the opening/closing pair and leave unpaired markers behind.
+    value = value.replace(/\*\*([\s\S]*?)\*\*/g, (match, inner) => {
+      return `**${inner.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim()}**`;
+    });
+    value = value.replace(/\*([\s\S]*?)\*/g, (match, inner) => {
+      return `*${inner.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim()}*`;
+    });
+    value = value.replace(/`([^`]+)`/g, (match, inner) => {
+      return `\`${inner.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim()}\``;
+    });
+
+    // ── Phase 2: Handle the {## Title=[- ...]} block notation ───────────────
+    // The AI generates content like:
+    //   {## Điểm mạnh nổi bật=[- **Lập kế hoạch (Q1, Q2)**: ..., - **Kiến thức nền tảng**: ...]}
+    // The closing ]} may be on the same line or a different line — normalize whitespace
+    // first so the regex always has a single-line string to work with.
+    value = value
+      .replace(/\n([^\n]*?)\]\s*\}/g, ' $1]}')   // move ]} to end of previous line
+      .replace(/\[\s*\n\s*/g, '[')                 // join [ with next line
+      .replace(/\n\s*\]/g, ' ]');                  // pull ] back if separated
+    value = value.replace(
+      /\{##\s*([^=[\]{}]+)=\[\s*[-*]\s*([\s\S]*?)\s*\]\}/g,
+      (_match, title, rawItems) => {
+        // Split by commas at the top level (not inside **bold** or *italic* spans)
+        const lines = splitTopLevel(rawItems, ',')
+          .map((s: string) => s.trim())
+          .filter(Boolean);
+
+        const itemsMarkdown = lines
+          .map((item: string) => {
+            // Strip leading list markers (already have [- or [*), just normalize whitespace
+            const stripped = item.replace(/^[-*]\s*/, '').trim();
+            // Recursively normalize any nested bracket notation inside the item
+            return `- ${normalizeBracketNotation(stripped)}`;
+          })
+          .join('\n');
+
+        return `## ${title.trim()}\n${itemsMarkdown}`;
+      }
+    );
+
+    // Also handle {## Title=[- items} without closing bracket (trailing content left)
+    value = value.replace(
+      /\{##\s*([^=[\]{}]+)=\[\s*[-*]\s*([\s\S]*?)$/gm,
+      (_match, title, rawItems) => {
+        const lines = splitTopLevel(rawItems, ',')
+          .map((s: string) => s.trim())
+          .filter(Boolean);
+
+        const itemsMarkdown = lines
+          .map((item: string) => {
+            const stripped = item.replace(/^[-*]\s*/, '').trim();
+            return `- ${normalizeBracketNotation(stripped)}`;
+          })
+          .join('\n');
+
+        return `## ${title.trim()}\n${itemsMarkdown}`;
+      }
+    );
+
+    // ── Phase 3: Handle standalone {## Title} without list items ──────────
+    value = value.replace(/\{##\s*([^}[\]]+)\}/g, '## $1');
+
+    // ── Phase 4: Convert remaining bracket notation to standard markdown ────
+    // [***text***] → **text**  (already collapsed in Phase 1, but catch any leftovers)
+    // [*text*] → *text*
+    // [## Heading] → ## Heading
+    // [# Heading] → # Heading
+    // [---] → ---
+    value = value
+      .replace(/\[\*{3,}\s*([\s\S]*?)\s*\*{3,}\]/g, '**$1**')
+      .replace(/\[\*\s*([\s\S]*?)\s*\*\]/g, '*$1*')
+      .replace(/\[#{1,6}\s+([^\]]+)\]/g, '## $1')
+      .replace(/\[---\]/g, '---');
+
+    // ── Phase 5: Strip orphaned outer curly braces {standalone text} ────────
+    value = value.replace(/^\{([^}]+)\}$/gm, '$1');
+
+    // ── Phase 6: Normalize list item lines ─────────────────────────────────
     return value
       .split('\n')
-      .map((line) => line.replace(/^\s*[+•]\s+/, '- '))
+      .map((line) => {
+        let cleaned = line.trim();
+
+        // [- item] → - item  (bracket-wrapped list item)
+        cleaned = cleaned.replace(/^\[\s*-\s*(.+?)\s*\]$/, '- $1');
+
+        // Strip trailing ] from lines broken mid-sentence
+        cleaned = cleaned.replace(/\[\s*\]\s*$/g, '');
+        cleaned = cleaned.replace(/\s+\]\s*$/g, '');
+
+        // Normalize • and + to -
+        cleaned = cleaned.replace(/^[\s]*[+•][\s]+/, '- ');
+
+        return cleaned;
+      })
       .join('\n');
+  };
+
+  // Helper: split by delimiter only at the top level (respects nested brackets/spans)
+  const splitTopLevel = (text: string, delimiter: string): string[] => {
+    const result: string[] = [];
+    let current = '';
+    let depth = 0;
+    let inSpan = false;
+    let spanChar = '';
+    let i = 0;
+
+    while (i < text.length) {
+      const ch = text[i];
+
+      if (!inSpan && (ch === '*' || ch === '`')) {
+        inSpan = true;
+        spanChar = ch;
+        current += ch;
+        i++;
+        continue;
+      }
+
+      if (inSpan && ch === spanChar) {
+        inSpan = false;
+        spanChar = '';
+        current += ch;
+        i++;
+        continue;
+      }
+
+      if (!inSpan) {
+        if (ch === '[' || ch === '{') depth++;
+        if (ch === ']' || ch === '}') depth--;
+        if (ch === delimiter && depth === 0) {
+          result.push(current);
+          current = '';
+          i++;
+          continue;
+        }
+      }
+
+      current += ch;
+      i++;
+    }
+
+    if (current.trim()) {
+      result.push(current);
+    }
+
+    return result;
+  };
+
+  // Helper: recursively normalize bracket notation within a string (no list splitting)
+  const normalizeBracketNotation = (text: string): string => {
+    let result = text;
+
+    // [*text*] → *text*
+    result = result.replace(/\[\*\s*([\s\S]*?)\s*\*\]/g, '*$1*');
+    // [## heading] → ## heading
+    result = result.replace(/\[#{1,6}\s+([^\]]+)\]/g, '## $1');
+    // Strip trailing bracket fragments
+    result = result.replace(/\s+\]\s*$/g, '');
+
+    return result;
   };
 
   const toMarkdownList = (items: string[], fallback: string): string => {
@@ -466,22 +702,101 @@ const GSJJourneyPage: React.FC = () => {
 
   const toOptionLabel = (index: number): string => String.fromCharCode(65 + index);
 
-  const renderMarkdownContent = (content: string, className?: string) => (
-    <div className={className ? `gsj-markdown ${className}` : 'gsj-markdown'}>
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        components={{
-          a: ({ href, children }) => (
-            <a href={href} target="_blank" rel="noopener noreferrer">
-              {children}
-            </a>
-          )
-        }}
-      >
-        {content}
-      </ReactMarkdown>
-    </div>
+  const normalizeHighlightKeywords = (keywords: string[]): string[] => Array.from(
+    new Set(
+      keywords
+        .map((keyword) => keyword.trim())
+        .filter((keyword) => keyword.length >= 2)
+    )
+  ).sort((a, b) => b.length - a.length);
+
+  const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  const highlightTextContent = (text: string, keywords: string[], keyPrefix: string): ReactNode => {
+    if (!text || keywords.length === 0) {
+      return text;
+    }
+
+    const matcher = new RegExp(`(${keywords.map(escapeRegExp).join('|')})`, 'gi');
+    const parts = text.split(matcher);
+
+    if (parts.length <= 1) {
+      return text;
+    }
+
+    return parts.map((part, index) => {
+      if (!part) {
+        return null;
+      }
+
+      const matchedKeyword = keywords.find((keyword) => keyword.toLowerCase() === part.toLowerCase());
+      if (!matchedKeyword) {
+        return part;
+      }
+
+      return (
+        <mark key={`${keyPrefix}-${index}`} className="gsj-keyword-highlight">
+          {part}
+        </mark>
+      );
+    });
+  };
+
+  const highlightNodeTree = (node: ReactNode, keywords: string[], keyPrefix: string): ReactNode => {
+    if (typeof node === 'string') {
+      return highlightTextContent(node, keywords, keyPrefix);
+    }
+
+    if (Array.isArray(node)) {
+      return Children.map(node, (child, index) => highlightNodeTree(child, keywords, `${keyPrefix}-${index}`));
+    }
+
+    if (!isValidElement<{ children?: ReactNode }>(node)) {
+      return node;
+    }
+
+    const element = node;
+    if (element.type === 'code' || element.type === 'pre') {
+      return element;
+    }
+
+    return cloneElement(element, {
+      children: highlightNodeTree(element.props.children, keywords, `${keyPrefix}-child`)
+    });
+  };
+
+  const renderHighlightedInlineText = (text: string, keywords: string[], keyPrefix: string) => (
+    <>{highlightTextContent(text, normalizeHighlightKeywords(keywords), keyPrefix)}</>
   );
+
+  const renderMarkdownContent = (content: string, className?: string, highlightKeywords: string[] = []) => {
+    const normalizedKeywords = normalizeHighlightKeywords(highlightKeywords);
+
+    return (
+      <div className={className ? `gsj-markdown ${className}` : 'gsj-markdown'}>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            a: ({ href, children }) => (
+              <a href={href} target="_blank" rel="noopener noreferrer">
+                {highlightNodeTree(children, normalizedKeywords, 'markdown-link')}
+              </a>
+            ),
+            p: ({ children }) => <p>{highlightNodeTree(children, normalizedKeywords, 'markdown-p')}</p>,
+            li: ({ children }) => <li>{highlightNodeTree(children, normalizedKeywords, 'markdown-li')}</li>,
+            blockquote: ({ children }) => <blockquote>{highlightNodeTree(children, normalizedKeywords, 'markdown-blockquote')}</blockquote>,
+            h1: ({ children }) => <h1>{highlightNodeTree(children, normalizedKeywords, 'markdown-h1')}</h1>,
+            h2: ({ children }) => <h2>{highlightNodeTree(children, normalizedKeywords, 'markdown-h2')}</h2>,
+            h3: ({ children }) => <h3>{highlightNodeTree(children, normalizedKeywords, 'markdown-h3')}</h3>,
+            td: ({ children }) => <td>{highlightNodeTree(children, normalizedKeywords, 'markdown-td')}</td>,
+            th: ({ children }) => <th>{highlightNodeTree(children, normalizedKeywords, 'markdown-th')}</th>
+          }}
+        >
+          {content}
+        </ReactMarkdown>
+      </div>
+    );
+  };
 
   const activeJourneyStatuses: JourneyStatus[] = [
     JourneyStatus.ASSESSMENT_PENDING,
@@ -884,8 +1199,21 @@ const GSJJourneyPage: React.FC = () => {
 
     const assessmentStatus = selectedJourney.assessmentTestStatus?.toUpperCase() || '';
     const hasGeneratedTest = Boolean(selectedJourney.assessmentTestId);
-    const hasAssessmentResult = Boolean(selectedJourney.latestTestResult) || assessmentStatus === 'COMPLETED';
-    const hasTestInProgress = assessmentStatus === 'IN_PROGRESS' || selectedJourney.status === JourneyStatus.TEST_IN_PROGRESS;
+    const hasTestInProgress = (
+      assessmentStatus === 'PENDING' ||
+      assessmentStatus === 'IN_PROGRESS' ||
+      selectedJourney.status === JourneyStatus.TEST_IN_PROGRESS
+    );
+    const hasAssessmentResult = !hasTestInProgress && (
+      Boolean(selectedJourney.latestTestResult) ||
+      assessmentStatus === 'COMPLETED'
+    );
+    const primaryAssessmentLabel = hasGeneratedTest || hasTestInProgress
+      ? 'Vào làm bài đánh giá'
+      : 'Tạo và bắt đầu bài đánh giá';
+    const primaryAssessmentLoadingLabel = actionMode === 'opening-test'
+      ? 'Đang mở bài test...'
+      : 'Đang tạo bài test...';
     const latestResultId = selectedJourney.latestTestResult?.resultId;
     const assessmentAttemptCount = selectedJourney.assessmentAttemptCount ?? (hasGeneratedTest || hasAssessmentResult ? 1 : 0);
     const maxAssessmentAttempts = selectedJourney.maxAssessmentAttempts ?? 2;
@@ -957,7 +1285,7 @@ const GSJJourneyPage: React.FC = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="gsj-card gsj-mt-24" ref={assessmentSectionRef}>
+        <div className="gsj-card gsj-mt-24">
           <div className="gsj-card__body">
             <div className="gsj-assessment-meta gsj-mb-16">
               <div className="gsj-assessment-meta__item">
@@ -981,8 +1309,9 @@ const GSJJourneyPage: React.FC = () => {
             {canTakeTest && (
               <button
                 className="gsj-btn gsj-btn--primary gsj-btn--full gsj-mb-16"
-                onClick={handleGenerateTest}
+                onClick={handleStartAssessment}
                 disabled={actionLoading}
+                title={actionLoading ? primaryAssessmentLoadingLabel : primaryAssessmentLabel}
               >
                 {actionLoading ? (
                   <>
@@ -1274,6 +1603,15 @@ const GSJJourneyPage: React.FC = () => {
     const strengthItems = splitInsightItems(strengths, 'Chưa có dữ liệu điểm mạnh nổi bật.');
     const weaknessItems = splitInsightItems(weaknesses, 'Chưa có dữ liệu điểm cần cải thiện.');
     const tipItems = splitInsightItems(improvementTips, 'Hãy tiếp tục học theo roadmap để cải thiện kết quả.');
+    const resultHighlightKeywords = normalizeHighlightKeywords(
+      currentResult.highlightKeywords.length > 0
+        ? currentResult.highlightKeywords
+        : [
+            ...currentResult.skillGaps,
+            ...currentResult.skillAnalysis.map((skill) => skill.skillName),
+            currentResult.evaluatedLevel
+          ].filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+    );
     const questionPreviewLimit = 8;
     const totalQuestionReviews = currentResult.questionReviews.length;
     const hasHiddenQuestionReviews = totalQuestionReviews > questionPreviewLimit;
@@ -1350,12 +1688,26 @@ const GSJJourneyPage: React.FC = () => {
             </div>
           )}
 
+          {resultHighlightKeywords.length > 0 && (
+            <section className="gsj-result-keywords">
+              <h4 className="gsj-result-keywords__title">Từ khóa nổi bật</h4>
+              <div className="gsj-result-keywords__list">
+                {resultHighlightKeywords.map((keyword) => (
+                  <span key={keyword} className="gsj-result-keywords__chip">
+                    {keyword}
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
+
           <div className="gsj-result-section-grid">
             <section className="gsj-result-section">
               <h4 className="gsj-result-section__title">Đánh giá chung</h4>
               {renderMarkdownContent(
                 normalizeMarkdownText(currentResult.evaluationSummary, 'Chưa có đánh giá tổng quan từ AI.'),
-                'gsj-result-section__markdown'
+                'gsj-result-section__markdown',
+                resultHighlightKeywords
               )}
             </section>
 
@@ -1373,7 +1725,8 @@ const GSJJourneyPage: React.FC = () => {
               </button>
               {showDetailedFeedback && renderMarkdownContent(
                 normalizeMarkdownText(currentResult.detailedFeedback, 'Chưa có phản hồi chi tiết cho bài đánh giá này.'),
-                'gsj-result-section__markdown'
+                'gsj-result-section__markdown',
+                resultHighlightKeywords
               )}
             </section>
 
@@ -1391,8 +1744,14 @@ const GSJJourneyPage: React.FC = () => {
                     .filter((review): review is NonNullable<typeof review> => Boolean(review));
                   return (
                     <li key={`strength-${index}`} className="gsj-insight-item">
-                      {parsed.title && <p className="gsj-insight-item__title">{parsed.title}</p>}
-                      <p className="gsj-insight-item__detail">{parsed.detail}</p>
+                      {parsed.title && (
+                        <p className="gsj-insight-item__title">
+                          {renderHighlightedInlineText(parsed.title, resultHighlightKeywords, `strength-title-${index}`)}
+                        </p>
+                      )}
+                      <p className="gsj-insight-item__detail">
+                        {renderHighlightedInlineText(parsed.detail, resultHighlightKeywords, `strength-detail-${index}`)}
+                      </p>
                       {linkedReviews.length > 0 && (
                         <details className="gsj-insight-item__details">
                           <summary>
@@ -1483,8 +1842,14 @@ const GSJJourneyPage: React.FC = () => {
                     .filter((review): review is NonNullable<typeof review> => Boolean(review));
                   return (
                     <li key={`weakness-${index}`} className="gsj-insight-item">
-                      {parsed.title && <p className="gsj-insight-item__title">{parsed.title}</p>}
-                      <p className="gsj-insight-item__detail">{parsed.detail}</p>
+                      {parsed.title && (
+                        <p className="gsj-insight-item__title">
+                          {renderHighlightedInlineText(parsed.title, resultHighlightKeywords, `weakness-title-${index}`)}
+                        </p>
+                      )}
+                      <p className="gsj-insight-item__detail">
+                        {renderHighlightedInlineText(parsed.detail, resultHighlightKeywords, `weakness-detail-${index}`)}
+                      </p>
                       {linkedReviews.length > 0 && (
                         <details className="gsj-insight-item__details">
                           <summary>
@@ -1568,8 +1933,14 @@ const GSJJourneyPage: React.FC = () => {
                   const parsed = parseInsightLine(item);
                   return (
                     <li key={`tip-${index}`} className="gsj-insight-item">
-                      {parsed.title && <p className="gsj-insight-item__title">{parsed.title}</p>}
-                      <p className="gsj-insight-item__detail">{parsed.detail}</p>
+                      {parsed.title && (
+                        <p className="gsj-insight-item__title">
+                          {renderHighlightedInlineText(parsed.title, resultHighlightKeywords, `tip-title-${index}`)}
+                        </p>
+                      )}
+                      <p className="gsj-insight-item__detail">
+                        {renderHighlightedInlineText(parsed.detail, resultHighlightKeywords, `tip-detail-${index}`)}
+                      </p>
                     </li>
                   );
                 })}
@@ -1595,7 +1966,8 @@ const GSJJourneyPage: React.FC = () => {
                         skill.weaknesses.length > 0 ? `**Cần cải thiện**\n${toMarkdownList(skill.weaknesses, '')}` : '',
                         skill.recommendations.length > 0 ? `**Gợi ý hành động**\n${toMarkdownList(skill.recommendations, '')}` : ''
                       ].filter(Boolean).join('\n\n') || '- Chưa có phân tích chi tiết cho nhóm kỹ năng này.',
-                      'gsj-result-skill-card__markdown'
+                      'gsj-result-skill-card__markdown',
+                      resultHighlightKeywords
                     )}
                   </article>
                 ))}
@@ -1646,7 +2018,8 @@ const GSJJourneyPage: React.FC = () => {
                         <div className="gsj-result-review-item__explain">
                           {renderMarkdownContent(
                             normalizeMarkdownText(question.explanation, ''),
-                            'gsj-result-review-item__markdown'
+                            'gsj-result-review-item__markdown',
+                            resultHighlightKeywords
                           )}
                         </div>
                       </details>

@@ -1,31 +1,33 @@
 import React, { CSSProperties, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { confirmAction } from "../../context/ConfirmDialogContext";
-import { 
-  Activity, 
-  Briefcase, 
-  Building2, 
-  Calendar, 
-  CheckCircle2, 
-  ClipboardList, 
-  Clock, 
-  DollarSign, 
-  FileCheck, 
-  FileText, 
-  FolderOpen, 
-  Globe, 
-  Link as LinkIcon, 
-  MapPin, 
-  Plus, 
-  RefreshCw, 
-  Search, 
-  Send, 
-  Timer, 
-  Trash2, 
-  Upload, 
-  XCircle, 
-  Zap,
+import {
+  Activity,
+  AlertTriangle,
+  Briefcase,
+  Building2,
+  Calendar,
+  CheckCircle2,
+  ClipboardList,
+  Clock,
+  DollarSign,
+  FileCheck,
+  FileText,
+  FolderOpen,
+  Globe,
+  Link as LinkIcon,
+  MapPin,
+  MessageSquare,
+  Plus,
+  RefreshCw,
+  Search,
+  Send,
   Shield,
+  Timer,
+  Trash2,
+  Upload,
+  XCircle,
+  Zap,
   Cpu,
   Layers,
   PieChart,
@@ -34,10 +36,12 @@ import {
 } from "lucide-react";
 import jobService from "../../services/jobService";
 import shortTermJobService from "../../services/shortTermJobService";
+import { uploadMedia } from "../../services/mediaService";
 import { JobApplicationResponse } from "../../data/jobDTOs";
 import {
   ShortTermApplicationResponse,
   SubmitDeliverableRequest,
+  RevisionNote,
 } from "../../types/ShortTermJob";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import "../../styles/JobLabWorkspace.css";
@@ -61,7 +65,12 @@ type AppItem = {
   proposedDuration?: string;
   workNote?: string;
   revisionCount?: number;
+  revisionNotes?: RevisionNote[];
   deliverables?: Array<{ id: number; fileName: string; fileUrl: string }>;
+  // SLA / Cancellation / Dispute fields
+  reviewDeadlineAt?: string;
+  responseDeadlineAt?: string;
+  disputeEligibilityUnlocked?: boolean;
 };
 
 const STATUS_META: Record<
@@ -119,6 +128,31 @@ const STATUS_META: Record<
     tone: "slate",
     hint: "Bạn đã chủ động rút đơn.",
   },
+  SUBMITTED_OVERDUE: {
+    label: "Quá hạn review",
+    tone: "red",
+    hint: "Recruiter chưa review. Bàn giao sẽ được tự động duyệt.",
+  },
+  REVISION_RESPONSE_OVERDUE: {
+    label: "Quá hạn phản hồi",
+    tone: "amber",
+    hint: "Bạn chưa phản hồi yêu cầu sửa đổi.",
+  },
+  CANCELLATION_REQUESTED: {
+    label: "Yêu cầu hủy",
+    tone: "orange",
+    hint: "Nhà tuyển dụng yêu cầu hủy công việc.",
+  },
+  AUTO_CANCELLED: {
+    label: "Tự động hủy",
+    tone: "red",
+    hint: "Không phản hồi trong 72 giờ.",
+  },
+  DISPUTE_OPENED: {
+    label: "Đang khiếu nại",
+    tone: "violet",
+    hint: "Admin đang xử lý khiếu nại.",
+  },
 };
 
 const WORKSPACE_STEPS: Record<string, string> = {
@@ -144,11 +178,57 @@ const formatDate = (value?: string) =>
       })
     : "Cập nhật sau";
 
+/** Format countdown string from deadline timestamp */
+const formatCountdown = (deadline?: string): string => {
+  if (!deadline) return "";
+  const diff = new Date(deadline).getTime() - Date.now();
+  if (diff <= 0) return "Đã quá hạn";
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  if (hours >= 24) {
+    const days = Math.floor(hours / 24);
+    return `${days} ngày${hours % 24}h`;
+  }
+  return `${hours}h ${minutes}m`;
+};
+
+/** Check if deadline has passed */
+const isOverdue = (deadline?: string): boolean => {
+  if (!deadline) return false;
+  return new Date(deadline).getTime() < Date.now();
+};
+
+/** Check if deadline is within warning threshold (24 hours) */
+const isWarning = (deadline?: string): boolean => {
+  if (!deadline) return false;
+  const diff = new Date(deadline).getTime() - Date.now();
+  return diff > 0 && diff < 24 * 60 * 60 * 1000;
+};
+
 const canSubmitWork = (app: AppItem | null) =>
   Boolean(
     app &&
     app.type === "SHORT_TERM" &&
-    ["ACCEPTED", "WORKING", "REVISION_REQUIRED"].includes(app.status),
+    [
+      "ACCEPTED",
+      "WORKING",
+      "REVISION_REQUIRED",
+      "REVISION_RESPONSE_OVERDUE",
+    ].includes(app.status),
+  );
+
+const canOpenDispute = (app: AppItem | null) =>
+  Boolean(
+    app &&
+    app.type === "SHORT_TERM" &&
+    app.disputeEligibilityUnlocked &&
+    [
+      "REVISION_REQUIRED",
+      "REVISION_RESPONSE_OVERDUE",
+      "SUBMITTED",
+      "SUBMITTED_OVERDUE",
+      "CANCELLATION_REQUESTED",
+    ].includes(app.status),
   );
 
 const JobLabPage: React.FC = () => {
@@ -168,6 +248,13 @@ const JobLabPage: React.FC = () => {
   const [isFinalSubmission, setIsFinalSubmission] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string>("");
+  const [showDisputeModal, setShowDisputeModal] = useState(false);
+  const [disputeReason, setDisputeReason] = useState("");
+  const [disputeType, setDisputeType] = useState<string>("WORKER_PROTECTION");
+  const [disputeSubmitting, setDisputeSubmitting] = useState(false);
+  const [disputeFiles, setDisputeFiles] = useState<File[]>([]);
+  const [disputeFilesPreview, setDisputeFilesPreview] = useState<string[]>([]);
+  const [disputeSelectedEvidenceType, setDisputeSelectedEvidenceType] = useState<string>("TEXT");
 
   const loadApplications = async () => {
     setLoading(true);
@@ -226,11 +313,16 @@ const JobLabPage: React.FC = () => {
         proposedDuration: app.proposedDuration,
         workNote: app.workNote,
         revisionCount: app.revisionCount,
+        revisionNotes: (app as any).revisionNotes,
         deliverables: (app.deliverables || []).map((item) => ({
           id: item.id,
           fileName: item.fileName,
           fileUrl: item.fileUrl,
         })),
+        // SLA / Cancellation / Dispute fields
+        reviewDeadlineAt: app.reviewDeadlineAt,
+        responseDeadlineAt: app.responseDeadlineAt,
+        disputeEligibilityUnlocked: app.disputeEligibilityUnlocked,
       };
     });
 
@@ -427,6 +519,96 @@ const JobLabPage: React.FC = () => {
     await shortTermJobService.withdrawApplication(app.applicationId);
     setMessage("Đã rút đơn thành công.");
     await loadApplications();
+  };
+
+  const acceptCancellation = async (app: AppItem) => {
+    if (
+      !(await confirmAction(
+        `Chấp nhận hủy công việc "${app.title}"? Tiền escrow sẽ được hoàn cho nhà tuyển dụng.`,
+      ))
+    )
+      return;
+    try {
+      await shortTermJobService.acceptCancellation(app.applicationId);
+      setMessage("Bạn đã chấp nhận yêu cầu hủy. Tiền đã được hoàn cho nhà tuyển dụng.");
+      setShowDisputeModal(false);
+      setViewMode("applications");
+      await loadApplications();
+    } catch (error: any) {
+      setMessage(error?.message || "Không thể chấp nhận yêu cầu hủy.");
+    }
+  };
+
+  const submitDispute = async (app: AppItem) => {
+    if (!disputeReason.trim() || disputeReason.trim().length < 20) {
+      setMessage("Vui lòng nhập lý do khiếu nại (tối thiểu 20 ký tự).");
+      return;
+    }
+    try {
+      setDisputeSubmitting(true);
+      // Open the dispute first
+      const dispute = await shortTermJobService.openDispute({
+        jobId: Number(app.id.replace("shortterm-", "")),
+        applicationId: app.applicationId,
+        disputeType: disputeType as any,
+        reason: disputeReason.trim(),
+      });
+
+      // Submit text evidence
+      await shortTermJobService.submitEvidence(dispute.id, {
+        evidenceType: disputeSelectedEvidenceType,
+        content: disputeReason.trim(),
+        description: `Lý do khiếu nại — loại: ${disputeSelectedEvidenceType}`,
+      });
+
+      // Upload each file and submit as FILE evidence
+      for (let i = 0; i < disputeFiles.length; i++) {
+        const file = disputeFiles[i];
+        const uploaded = await uploadMedia(file, app.applicationId);
+        await shortTermJobService.submitEvidence(dispute.id, {
+          evidenceType: "FILE",
+          fileUrl: uploaded.url,
+          fileName: uploaded.fileName || file.name,
+          description: `File minh chung: ${file.name}`,
+        });
+      }
+
+      setMessage("Đã gửi khiếu nại lên Admin thành công.");
+      setShowDisputeModal(false);
+      setDisputeReason("");
+      setDisputeType("WORKER_PROTECTION");
+      setDisputeFiles([]);
+      setDisputeFilesPreview([]);
+      setDisputeSelectedEvidenceType("TEXT");
+      setViewMode("applications");
+      await loadApplications();
+    } catch (error: any) {
+      setMessage(error?.message || "Không thể gửi khiếu nại.");
+    } finally {
+      setDisputeSubmitting(false);
+    }
+  };
+
+  const openDisputeForm = (_app: AppItem) => {
+    setDisputeReason("");
+    setDisputeType("WORKER_PROTECTION");
+    setDisputeFiles([]);
+    setDisputeFilesPreview([]);
+    setDisputeSelectedEvidenceType("TEXT");
+    setShowDisputeModal(true);
+  };
+
+  const handleDisputeFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const previews = files.map((f) => URL.createObjectURL(f));
+    setDisputeFiles((prev) => [...prev, ...files]);
+    setDisputeFilesPreview((prev) => [...prev, ...previews]);
+  };
+
+  const removeDisputeFile = (index: number) => {
+    URL.revokeObjectURL(disputeFilesPreview[index]);
+    setDisputeFiles((prev) => prev.filter((_, i) => i !== index));
+    setDisputeFilesPreview((prev) => prev.filter((_, i) => i !== index));
   };
 
   if (loading) {
@@ -962,6 +1144,100 @@ const JobLabPage: React.FC = () => {
                                 </span>
                               )}
                             </div>
+
+                            {/* SLA countdown — recruiter phải review trong 48h */}
+                            {selectedApp.type === "SHORT_TERM" &&
+                              selectedApp.status === "SUBMITTED" &&
+                              selectedApp.reviewDeadlineAt && (
+                                <div
+                                  className={`jlx-sla-badge ${isOverdue(selectedApp.reviewDeadlineAt) ? "is-overdue" : isWarning(selectedApp.reviewDeadlineAt) ? "is-warning" : ""}`}
+                                >
+                                  <Clock size={14} />
+                                  <span>
+                                    {isOverdue(selectedApp.reviewDeadlineAt)
+                                      ? "Đã quá hạn review! Bàn giao sẽ được tự động duyệt."
+                                      : `Còn ${formatCountdown(selectedApp.reviewDeadlineAt)} để recruiter review`}
+                                  </span>
+                                </div>
+                              )}
+
+                            {/* Cancellation requested — warning banner */}
+                            {selectedApp.type === "SHORT_TERM" &&
+                              selectedApp.status === "CANCELLATION_REQUESTED" && (
+                                <div className="jlx-warning-banner">
+                                  <AlertTriangle size={18} />
+                                  <div>
+                                    <strong>Nhà tuyển dụng yêu cầu hủy công việc</strong>
+                                    <p>
+                                      Công việc đã qua 5 lần yêu cầu sửa đổi.
+                                      {selectedApp.responseDeadlineAt && (
+                                        <> Bạn có <strong>{formatCountdown(selectedApp.responseDeadlineAt)}</strong> để phản hồi.</>
+                                      )}
+                                    </p>
+                                    <p className="jlx-warning-banner__note">
+                                      Sau {selectedApp.responseDeadlineAt ? new Date(selectedApp.responseDeadlineAt).toLocaleString("vi-VN") : ""} nếu không phản hồi,
+                                      hệ thống sẽ tự động hủy và hoàn tiền cho nhà tuyển dụng.
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
+
+                            {/* SLA countdown cho phản hồi cancellation */}
+                            {selectedApp.type === "SHORT_TERM" &&
+                              selectedApp.status === "CANCELLATION_REQUESTED" &&
+                              selectedApp.responseDeadlineAt && (
+                                <div
+                                  className={`jlx-sla-badge ${isOverdue(selectedApp.responseDeadlineAt) ? "is-overdue" : isWarning(selectedApp.responseDeadlineAt) ? "is-warning" : ""}`}
+                                >
+                                  <Clock size={14} />
+                                  <span>
+                                    {isOverdue(selectedApp.responseDeadlineAt)
+                                      ? "Đã quá hạn! Công việc sẽ bị hủy tự động."
+                                      : `Còn ${formatCountdown(selectedApp.responseDeadlineAt)} để phản hồi — chấp nhận hủy hoặc khiếu nại`}
+                                  </span>
+                                </div>
+                              )}
+
+                            {/* Dispute opened — show status */}
+                            {selectedApp.type === "SHORT_TERM" &&
+                              selectedApp.status === "CANCELLATION_REQUESTED" && (
+                                <div className="jlx-warning-banner">
+                                  <AlertTriangle size={18} />
+                                  <div>
+                                    <strong>Yêu cầu hủy đang chờ admin xem xét</strong>
+                                    <p>
+                                      Recruiter đã gửi yêu cầu hủy sau nhiều lần sửa đổi.
+                                      Admin sẽ kiểm tra audit log và bằng chứng trước khi quyết định.
+                                    </p>
+                                    <p className="jlx-warning-banner__note">
+                                      Bạn không cần chấp nhận hủy. Nếu không đồng ý, hãy gửi dispute và đính kèm file hoặc hình ảnh chứng minh công việc đã làm đúng yêu cầu.
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
+
+                            {selectedApp.type === "SHORT_TERM" &&
+                              selectedApp.status === "REVISION_REQUIRED" &&
+                              selectedApp.disputeEligibilityUnlocked && (
+                                <div className="jlx-warning-banner">
+                                  <AlertTriangle size={18} />
+                                  <div>
+                                    <strong>Đã mở quyền dispute sau 5 lần sửa</strong>
+                                    <p>
+                                      Công việc này đã chạm ngưỡng 5 lần yêu cầu sửa. Nếu recruiter tiếp tục gây bất lợi,
+                                      bạn có thể gửi dispute cho admin cùng bằng chứng để được xem xét bảo vệ.
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
+
+                            {selectedApp.type === "SHORT_TERM" &&
+                              selectedApp.status === "DISPUTE_OPENED" && (
+                                <div className="jlx-sla-badge is-warning">
+                                  <Shield size={14} />
+                                  <span>Khiếu nại đã gửi lên Admin. Vui lòng chờ xử lý.</span>
+                                </div>
+                              )}
                           </div>
                           <div className="jlx-hero-right">
                             <span
@@ -1066,6 +1342,83 @@ const JobLabPage: React.FC = () => {
                               )}
                             </div>
 
+                            {/* ====== FEEDBACK SECTION ====== */}
+                            <div className="jlx-feedback-section">
+                              <div className="jlx-feedback-section__header">
+                                <MessageSquare size={14} />
+                                <span>Feedback từ Nhà tuyển dụng</span>
+                                {selectedApp.revisionNotes && selectedApp.revisionNotes.length > 0 && (
+                                  <span className="jlx-feedback-section__count">
+                                    {selectedApp.revisionNotes.length}
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Recruiter open feedback — most prominent */}
+                              {selectedApp.revisionNotes?.some(
+                                (n) => !n.resolvedAt && n.requestedById !== selectedApp.applicationId
+                              ) ? (
+                                <div className="jlx-feedback-list jlx-feedback-list--scrollable">
+                                  {selectedApp.revisionNotes
+                                    .slice()
+                                    .sort((a, b) => new Date(b.requestedAt).getTime() - new Date(a.requestedAt).getTime())
+                                    .map((note) => {
+                                      const isRecruiter = note.requestedById !== selectedApp.applicationId;
+                                      const isResolved = !!note.resolvedAt;
+                                      return (
+                                        <div
+                                          key={note.id}
+                                          className={`jlx-feedback-card ${isRecruiter ? (isResolved ? "is-recruiter-resolved" : "is-recruiter-open") : "is-worker"}`}
+                                        >
+                                          <div className="jlx-feedback-card__top">
+                                            <div className="jlx-feedback-card__author-row">
+                                              {isRecruiter ? (
+                                                <Building2 size={13} />
+                                              ) : (
+                                                <CheckCircle2 size={13} />
+                                              )}
+                                              <span className="jlx-feedback-card__author">
+                                                {note.requestedByName || "Nộp bài"}
+                                              </span>
+                                              <span className={`jlx-feedback-card__badge ${isRecruiter ? "badge-recruiter" : "badge-worker"}`}>
+                                                {isRecruiter ? "Nhà tuyển dụng" : "Ứng viên"}
+                                              </span>
+                                              {isResolved ? (
+                                                <span className="jlx-feedback-card__status badge-resolved">
+                                                  <CheckCircle2 size={10} /> Đã xử lý
+                                                </span>
+                                              ) : isRecruiter ? (
+                                                <span className="jlx-feedback-card__status badge-open">
+                                                  <AlertTriangle size={10} /> Cần sửa
+                                                </span>
+                                              ) : null}
+                                            </div>
+                                            <span className="jlx-feedback-card__time">
+                                              {formatDate(note.requestedAt)}
+                                            </span>
+                                          </div>
+                                          <p className="jlx-feedback-card__note">
+                                            {note.note}
+                                          </p>
+                                          {note.specificIssues && note.specificIssues.length > 0 && (
+                                            <ul className="jlx-feedback-card__issues">
+                                              {note.specificIssues.map((issue, i) => (
+                                                <li key={i}>{issue}</li>
+                                              ))}
+                                            </ul>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
+                                </div>
+                              ) : (
+                                <div className="jlx-feedback-empty">
+                                  <MessageSquare size={18} />
+                                  <span>Chưa có feedback từ Nhà tuyển dụng</span>
+                                </div>
+                              )}
+                            </div>
+
                             {selectedApp.coverLetter && (
                               <div className="jlx-note">
                                 <h4>
@@ -1127,6 +1480,47 @@ const JobLabPage: React.FC = () => {
                                 </p>
                               </div>
                             </article>
+
+                            {/* Cancellation requested actions */}
+                            {selectedApp.type === "SHORT_TERM" &&
+                              selectedApp.status === "CANCELLATION_REQUESTED" && (
+                                <article className="jlx-panel">
+                                  <div className="jlx-dispute-actions">
+                                    <button
+                                      type="button"
+                                      className="jlx-btn jlx-btn--danger"
+                                      onClick={() => openDisputeForm(selectedApp)}
+                                    >
+                                      <Shield size={14} />
+                                      Khiếu nại lên Admin
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="jlx-btn jlx-btn--ghost"
+                                      onClick={() => acceptCancellation(selectedApp)}
+                                    >
+                                      <CheckCircle2 size={14} />
+                                      Chấp nhận hủy
+                                    </button>
+                                  </div>
+                                </article>
+                              )}
+                            {canOpenDispute(selectedApp) && (
+                              <article className="jlx-panel">
+                                <div className="jlx-dispute-actions">
+                                  <button
+                                    type="button"
+                                    className="jlx-btn jlx-btn--danger"
+                                    onClick={() => openDisputeForm(selectedApp)}
+                                  >
+                                    <Shield size={14} />
+                                    {selectedApp.status === "CANCELLATION_REQUESTED"
+                                      ? "Gửi bằng chứng cho admin"
+                                      : "Mở dispute sau 5 lần sửa"}
+                                  </button>
+                                </div>
+                              </article>
+                            )}
                           </aside>
                         </div>
 
@@ -1304,6 +1698,201 @@ const JobLabPage: React.FC = () => {
               </>
             )}
           </section>
+        )}
+
+        {/* Dispute modal */}
+        {showDisputeModal && selectedApp && (
+          <div className="jlx-modal-overlay" onClick={() => setShowDisputeModal(false)}>
+            <div className="jlx-modal jlx-modal--dispute" onClick={(e) => e.stopPropagation()}>
+              <div className="jlx-modal__header">
+                <div className="jlx-modal__header-left">
+                  <Shield size={18} />
+                  <h3>Gửi Khiếu Nại lên Admin</h3>
+                </div>
+                <button
+                  type="button"
+                  className="jlx-modal__close"
+                  onClick={() => setShowDisputeModal(false)}
+                >
+                  <XCircle size={18} />
+                </button>
+              </div>
+              <div className="jlx-modal__body">
+                <p className="jlx-modal__desc">
+                  Mô tả chi tiết vấn đề của bạn. Admin sẽ xem xét trong 5 ngày làm việc.
+                  Bạn có thể thêm minh chứng để hỗ trợ khiếu nại của mình.
+                </p>
+
+                {/* Dispute type */}
+                <div className="jlx-field">
+                  <label>Loại khiếu nại</label>
+                  <select
+                    value={disputeType}
+                    onChange={(e) => setDisputeType(e.target.value)}
+                    className="jlx-select"
+                  >
+                    <option value="WORKER_PROTECTION">
+                      Nhà tuyển dụng làm đủ sai qua 5 lần sửa đổi
+                    </option>
+                    <option value="POOR_QUALITY">
+                      Chất lượng không đạt yêu cầu
+                    </option>
+                    <option value="SCOPE_CHANGE">
+                      Phạm vi công việc thay đổi không thỏa thuận
+                    </option>
+                    <option value="OTHER">Khác</option>
+                  </select>
+                </div>
+
+                {/* Evidence type */}
+                <div className="jlx-field">
+                  <label>Loại minh chứng chính</label>
+                  <select
+                    value={disputeSelectedEvidenceType}
+                    onChange={(e) => setDisputeSelectedEvidenceType(e.target.value)}
+                    className="jlx-select"
+                  >
+                    <option value="TEXT">Văn bản (Text)</option>
+                    <option value="SCREENSHOT">Ảnh chụp màn hình (Screenshot)</option>
+                    <option value="CHAT_LOG">Lịch sử chat (Chat Log)</option>
+                    <option value="LINK">Liên kết (Link)</option>
+                    <option value="DELIVERABLE_SNAPSHOT">Ảnh bàn giao (Deliverable Snapshot)</option>
+                  </select>
+                  <span className="jlx-field__hint">
+                    Loại minh chứng sẽ được gắn cho nội dung lý do bạn nhập bên dưới.
+                  </span>
+                </div>
+
+                {/* Reason textarea */}
+                <div className="jlx-field">
+                  <label>
+                    Lý do khiếu nại <span className="jlx-required">*</span>
+                  </label>
+                  <textarea
+                    value={disputeReason}
+                    onChange={(e) => setDisputeReason(e.target.value)}
+                    rows={5}
+                    placeholder="Mô tả chi tiết vấn đề của bạn (tối thiểu 20 ký tự). Nếu chọn loại minh chứng là TEXT, nội dung này sẽ được gửi làm minh chứng..."
+                    className="jlx-textarea"
+                  />
+                  <span className="jlx-field__hint">
+                    {disputeReason.length}/20 ký tự tối thiểu
+                  </span>
+                </div>
+
+                {/* File upload area */}
+                <div className="jlx-field">
+                  <label>Minh chứng kèm theo (tùy chọn)</label>
+                  <div
+                    className="jlx-dispute-upload"
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const files = Array.from(e.dataTransfer.files);
+                      const previews = files.map((f) => URL.createObjectURL(f));
+                      setDisputeFiles((prev) => [...prev, ...files]);
+                      setDisputeFilesPreview((prev) => [...prev, ...previews]);
+                    }}
+                  >
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*,.pdf,.doc,.docx,.txt"
+                      onChange={handleDisputeFileSelect}
+                      className="jlx-dispute-upload__input"
+                      id="dispute-file-input"
+                    />
+                    <label htmlFor="dispute-file-input" className="jlx-dispute-upload__label">
+                      <Upload size={22} />
+                      <span className="jlx-dispute-upload__text">
+                        Kéo thả file vào đây hoặc <strong>nhấn để chọn</strong>
+                      </span>
+                      <span className="jlx-dispute-upload__hint">
+                        Hỗ trợ: ảnh, PDF, DOC, DOCX, TXT (nhiều file)
+                      </span>
+                    </label>
+                  </div>
+
+                  {/* Selected files list */}
+                  {disputeFilesPreview.length > 0 && (
+                    <div className="jlx-dispute-files">
+                      {disputeFilesPreview.map((preview, index) => {
+                        const file = disputeFiles[index];
+                        const isImage = file?.type.startsWith("image/");
+                        return (
+                          <div key={`${file?.name}-${index}`} className="jlx-dispute-file-item">
+                            {isImage ? (
+                              <img
+                                src={preview}
+                                alt={file?.name}
+                                className="jlx-dispute-file-item__thumb"
+                              />
+                            ) : (
+                              <div className="jlx-dispute-file-item__icon">
+                                <FileText size={16} />
+                              </div>
+                            )}
+                            <div className="jlx-dispute-file-item__info">
+                              <span className="jlx-dispute-file-item__name">{file?.name}</span>
+                              <span className="jlx-dispute-file-item__size">
+                                {file && file.size > 0
+                                  ? `${(file.size / 1024).toFixed(1)} KB`
+                                  : ""}
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              className="jlx-dispute-file-item__remove"
+                              onClick={() => removeDisputeFile(index)}
+                              disabled={disputeSubmitting}
+                              aria-label="Xóa file"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="jlx-modal__footer">
+                <button
+                  type="button"
+                  className="jlx-btn jlx-btn--ghost"
+                  onClick={() => setShowDisputeModal(false)}
+                  disabled={disputeSubmitting}
+                >
+                  Hủy
+                </button>
+                <button
+                  type="button"
+                  className="jlx-btn jlx-btn--danger"
+                  onClick={() => submitDispute(selectedApp)}
+                  disabled={
+                    disputeSubmitting ||
+                    disputeReason.trim().length < 20
+                  }
+                >
+                  {disputeSubmitting ? (
+                    <>
+                      <RefreshCw size={14} className="jlx-spin" />
+                      Đang gửi...
+                    </>
+                  ) : (
+                    <>
+                      <Shield size={14} />
+                      Gửi khiếu nại lên Admin
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </main>
     </div>

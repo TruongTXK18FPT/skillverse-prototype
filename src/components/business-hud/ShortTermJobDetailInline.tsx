@@ -387,6 +387,34 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
     }
   };
 
+  const handleRequestCancellationReview = async (application: ShortTermApplicationResponse) => {
+    const reason = window.prompt(
+      "Nhập lý do yêu cầu admin xem xét hủy công việc sau 5 lần sửa:",
+      "",
+    );
+    if (!reason || !reason.trim()) {
+      return;
+    }
+
+    try {
+      setIsActionBusy(true);
+      await shortTermJobService.requestCancellationReview(application.id, reason.trim());
+      await fetchJobDetail();
+      onRefresh?.();
+      showSuccess(
+        "Đã gửi yêu cầu hủy cho admin",
+        "Admin sẽ kiểm tra audit log và bằng chứng trước khi quyết định.",
+      );
+    } catch (error: any) {
+      showError(
+        "Không thể gửi yêu cầu hủy",
+        error?.message || "Vui lòng thử lại sau.",
+      );
+    } finally {
+      setIsActionBusy(false);
+    }
+  };
+
   const handleCompleteCurrentJob = async () => {
     if (!job) return;
 
@@ -931,7 +959,19 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
                       </button>
                       {application.status === ShortTermApplicationStatus.SUBMITTED && (
                         <>
-                          <button
+                          {(application.revisionCount || 0) >= 5 && (
+                            <button
+                              type="button"
+                              className="stj-detail__applicant-btn"
+                              onClick={() => handleRequestCancellationReview(application)}
+                              disabled={isActionBusy}
+                            >
+                              <XCircle size={14} />
+                              Yêu cầu admin hủy
+                            </button>
+                          )}
+                          {(application.revisionCount || 0) < 5 && (
+                            <button
                             type="button"
                             className="stj-detail__applicant-btn"
                             onClick={() => handleRequestRevision(application)}
@@ -940,6 +980,7 @@ const ShortTermJobDetailInline: React.FC<ShortTermJobDetailInlineProps> = ({
                             <AlertTriangle size={14} />
                             Yêu cầu sửa
                           </button>
+                          )}
                           <button
                             type="button"
                             className="stj-detail__applicant-btn stj-detail__applicant-btn--accept"

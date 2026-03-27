@@ -17,6 +17,7 @@ import {
   startMeeting, completeBooking, downloadBookingInvoice, BookingResponse
 } from '../../services/bookingService';
 import { confirmAction } from '../../context/ConfirmDialogContext';
+import { onBookingSyncMessage, broadcastBookingChanged } from '../../utils/bookingSync';
 import { showAppError, showAppSuccess } from '../../context/ToastContext';
 import './MentorBookingManager.css';
 
@@ -49,10 +50,14 @@ const MentorBookingManager: React.FC = () => {
   const [rejectModalBooking, setRejectModalBooking] = useState<BookingResponse | null>(null);
   const [rejectReason, setRejectReason] = useState('');
   const [rejectSubmitting, setRejectSubmitting] = useState(false);
+  const [localMentorCompletedIds, setLocalMentorCompletedIds] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     const interval = setInterval(() => setNow(new Date()), 60000);
-    return () => clearInterval(interval);
+    const unsubscribe = onBookingSyncMessage(() => {
+      fetchBookings();
+    });
+    return () => { clearInterval(interval); unsubscribe(); };
   }, []);
 
   useEffect(() => {
@@ -96,11 +101,16 @@ const MentorBookingManager: React.FC = () => {
     return now.getTime() >= getBookingEndTime(booking).getTime();
   };
 
+  // Mentor confirm when learner clicked first: PENDING_COMPLETION but mentorCompletedAt is null
+  const canMentorConfirm = (booking: BookingResponse): boolean => {
+    return booking.status === 'PENDING_COMPLETION' && !booking.mentorCompletedAt;
+  };
+
   // ─── Stats computation ──────────────────────────────────────────────────────
 
   const pendingCount = bookings.filter(b => b.status === 'PENDING').length;
   const upcomingCount = bookings.filter(
-    (b) => ['CONFIRMED', 'ONGOING', 'MENTOR_COMPLETED', 'DISPUTED'].includes(b.status),
+    (b) => ['CONFIRMED', 'ONGOING', 'PENDING_COMPLETION', 'COMPLETED', 'DISPUTED'].includes(b.status),
   ).length;
   const historyCount = bookings.filter(
     (b) => ['COMPLETED', 'CANCELLED', 'REJECTED', 'REFUNDED'].includes(b.status),
@@ -112,7 +122,7 @@ const MentorBookingManager: React.FC = () => {
     return d.getMonth() === now2.getMonth() && d.getFullYear() === now2.getFullYear();
   }).length;
   const totalEarnings = bookings
-    .filter(b => b.status === 'COMPLETED' || b.status === 'MENTOR_COMPLETED')
+    .filter(b => b.status === 'COMPLETED' || b.status === 'PENDING_COMPLETION')
     .reduce((sum, b) => sum + (b.priceVnd || 0), 0);
   const totalEarningsThisMonth = bookings
     .filter(b => {
@@ -227,11 +237,19 @@ const MentorBookingManager: React.FC = () => {
 
   const handleComplete = async (id: number) => {
     if (await confirmAction('Xác nhận hoàn thành buổi học?')) {
+      // Optimistically update local state immediately
+      setLocalMentorCompletedIds(prev => new Set([...prev, id]));
       try {
         await completeBooking(id);
-        fetchBookings();
+        broadcastBookingChanged(id, 'PENDING_COMPLETION');
         showAppSuccess('Đã hoàn thành', 'Buổi học đã được đánh dấu hoàn thành. Đang chờ learner xác nhận.');
       } catch (err) {
+        // Revert on failure
+        setLocalMentorCompletedIds(prev => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
         showAppError('Không thể hoàn thành booking', 'Lỗi khi hoàn thành booking');
       }
     }
@@ -253,9 +271,15 @@ const MentorBookingManager: React.FC = () => {
     }
   };
 
+  // Effective status: use local state if present, otherwise use server status
+  const getEffectiveStatus = (b: BookingResponse): string => {
+    if (localMentorCompletedIds.has(b.id)) return 'PENDING_COMPLETION';
+    return b.status;
+  };
+
   const filteredBookings = bookings.filter(b => {
     if (activeTab === 'pending') return b.status === 'PENDING';
-    if (activeTab === 'upcoming') return ['CONFIRMED', 'ONGOING', 'MENTOR_COMPLETED', 'DISPUTED'].includes(b.status);
+    if (activeTab === 'upcoming') return ['CONFIRMED', 'ONGOING', 'PENDING_COMPLETION', 'COMPLETED', 'DISPUTED'].includes(b.status);
     if (activeTab === 'history') return ['COMPLETED', 'CANCELLED', 'REJECTED', 'REFUNDED'].includes(b.status);
     return true;
   });
@@ -310,7 +334,7 @@ const MentorBookingManager: React.FC = () => {
     PENDING: { label: 'Chờ duyệt', cls: 'pending' },
     CONFIRMED: { label: 'Đã xác nhận', cls: 'confirmed' },
     ONGOING: { label: 'Đang học', cls: 'ongoing' },
-    MENTOR_COMPLETED: { label: 'Chờ xác nhận', cls: 'mentor-completed' },
+    PENDING_COMPLETION: { label: 'Chờ xác nhận', cls: 'mentor-completed' },
     COMPLETED: { label: 'Hoàn thành', cls: 'completed' },
     REJECTED: { label: 'Từ chối', cls: 'rejected' },
     CANCELLED: { label: 'Đã hủy', cls: 'cancelled' },
@@ -463,7 +487,7 @@ const MentorBookingManager: React.FC = () => {
             <div className="mbm-grid">
               {filteredBookings.map((booking) => {
                 const deadline = getDeadlineInfo(booking);
-                const sc = statusConfig[booking.status] || { label: booking.status, cls: 'pending' };
+                const sc = statusConfig[getEffectiveStatus(booking)] || { label: getEffectiveStatus(booking), cls: 'pending' };
                 const expired = isSessionExpired(booking);
 
                 return (
@@ -473,7 +497,7 @@ const MentorBookingManager: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9 }}
-                    className={`mbm-card ${booking.status === 'ONGOING' ? 'mbm-card--ongoing' : ''} ${expired ? 'mbm-card--expired' : ''}`}
+                    className={`mbm-card ${getEffectiveStatus(booking) === 'ONGOING' ? 'mbm-card--ongoing' : ''} ${expired ? 'mbm-card--expired' : ''}`}
                   >
                     {/* Card Header */}
                     <div className="mbm-card-header">
@@ -534,7 +558,7 @@ const MentorBookingManager: React.FC = () => {
 
                     {/* Card Actions */}
                     <div className="mbm-card-actions">
-                      {booking.status === 'PENDING' && (
+                      {getEffectiveStatus(booking) === 'PENDING' && (
                         <>
                           <button onClick={() => handleApprove(booking.id)} className="mbm-btn mbm-btn-approve">
                             <CheckCircle size={15} /> Duyệt
@@ -546,7 +570,7 @@ const MentorBookingManager: React.FC = () => {
                       )}
 
                       {/* Vào phòng học — CHỈ hiện khi chưa quá giờ */}
-                      {!expired && booking.status === 'CONFIRMED' && canStartMeeting(booking) && (
+                      {!expired && getEffectiveStatus(booking) === 'CONFIRMED' && canStartMeeting(booking) && (
                         <button
                           onClick={() => handleStartMeeting(booking)}
                           className="mbm-btn mbm-btn-start"
@@ -557,46 +581,52 @@ const MentorBookingManager: React.FC = () => {
                         </button>
                       )}
 
-                      {!expired && booking.status === 'ONGOING' && booking.meetingLink && (
+                      {!expired && getEffectiveStatus(booking) === 'ONGOING' && booking.meetingLink && (
                         <button onClick={() => handleStartMeeting(booking)} className="mbm-btn mbm-btn-start" style={{ width: '100%' }}>
                           <Video size={15} /> Vào phòng học
                         </button>
                       )}
 
                       {/* Session ended → show complete button for both ONGOING and CONFIRMED */}
-                      {canComplete(booking) && (
+                      {canComplete(booking) && !localMentorCompletedIds.has(booking.id) && (
                         <button onClick={() => handleComplete(booking.id)} className="mbm-btn mbm-btn-complete" style={{ width: '100%' }}>
                           <CheckCircle size={15} /> Hoàn thành
                         </button>
                       )}
 
                       {/* Hiện trạng thái "quá giờ" cho CONFIRMED đã hết session */}
-                      {expired && booking.status === 'CONFIRMED' && (
+                      {expired && getEffectiveStatus(booking) === 'CONFIRMED' && (
                         <span className="mbm-status-inline mbm-status-inline--orange">
                           <AlertCircle size={14} /> Đã quá giờ — chờ hoàn thành
                         </span>
                       )}
 
-                      {booking.status === 'ONGOING' && (
+                      {getEffectiveStatus(booking) === 'ONGOING' && (
                         <span className="mbm-status-inline">
                           <span className="mbm-live-dot" />
                           Buổi học đang diễn ra
                         </span>
                       )}
 
-                      {booking.status === 'MENTOR_COMPLETED' && (
+                      {getEffectiveStatus(booking) === 'PENDING_COMPLETION' && canMentorConfirm(booking) && (
+                        <button onClick={() => handleComplete(booking.id)} className="mbm-btn mbm-btn-complete" style={{ width: '100%' }}>
+                          <CheckCircle size={15} /> Hoàn tất
+                        </button>
+                      )}
+
+                      {getEffectiveStatus(booking) === 'PENDING_COMPLETION' && !canMentorConfirm(booking) && (
                         <span className="mbm-status-inline mbm-status-inline--purple">
                           <CheckCircle size={14} /> Chờ learner xác nhận
                         </span>
                       )}
 
-                      {booking.status === 'DISPUTED' && (
+                      {getEffectiveStatus(booking) === 'DISPUTED' && (
                         <span className="mbm-status-inline mbm-status-inline--purple">
                           <AlertCircle size={14} /> Đang có tranh chấp
                         </span>
                       )}
 
-                      {(booking.status === 'COMPLETED' || booking.status === 'MENTOR_COMPLETED' || booking.paymentReference) && (
+                      {(getEffectiveStatus(booking) === 'COMPLETED' || booking.paymentReference) && (
                         <button onClick={() => handleDownloadInvoice(booking.id)} className="mbm-btn mbm-btn-invoice">
                           <FileText size={15} /> Hóa đơn
                         </button>

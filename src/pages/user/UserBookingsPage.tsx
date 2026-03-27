@@ -3,7 +3,6 @@ import {
   Calendar,
   Clock,
   CheckCircle,
-  X,
   XCircle,
   MessageSquare,
   Star,
@@ -17,6 +16,7 @@ import {
   TrendingUp,
   CalendarDays,
   SlidersHorizontal,
+  X,
 } from "lucide-react";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import { useNavigate } from "react-router-dom";
@@ -42,7 +42,10 @@ const UserBookingsPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [reviewedBookingIds, setReviewedBookingIds] = useState<Set<number>>(new Set());
+  const [reviewedBookingIds, setReviewedBookingIds] = useState<Set<number>>(
+    new Set(),
+  );
+  const [confirmingId, setConfirmingId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   // Sort & Filter State
@@ -64,6 +67,9 @@ const UserBookingsPage: React.FC = () => {
     return new Date(`${dateString}+07:00`);
   };
 
+  const hasLearnerCompleted = (booking: BookingResponse) =>
+    Boolean(booking.learnerCompletedAt || booking.confirmedByLearner);
+
   useEffect(() => {
     fetchBookings();
     const timer = setInterval(() => {
@@ -79,36 +85,52 @@ const UserBookingsPage: React.FC = () => {
   // Split into upcoming vs history
   const now = currentTime;
   const upcomingBookings = bookings.filter((b) =>
-    ["PENDING", "CONFIRMED", "ONGOING", "MENTOR_COMPLETED", "DISPUTED"].includes(b.status)
+    [
+      "PENDING",
+      "CONFIRMED",
+      "ONGOING",
+      "PENDING_COMPLETION",
+      "DISPUTED",
+    ].includes(b.status),
   );
   const historyBookings = bookings.filter((b) =>
-    ["COMPLETED", "CANCELLED", "REJECTED", "REFUNDED"].includes(b.status)
+    ["COMPLETED", "CANCELLED", "REJECTED", "REFUNDED"].includes(b.status),
   );
-  const displayBookings = viewTab === "upcoming"
-    ? (() => {
-        let result = [...upcomingBookings];
-        if (filterDate) {
-          result = result.filter((b) => {
-            const d = parseBookingDate(b.startTime);
-            const startOfDay = new Date(filterDate + "T00:00:00+07:00");
-            const endOfDay = new Date(filterDate + "T23:59:59+07:00");
-            return d >= startOfDay && d <= endOfDay;
-          });
-        }
-        result.sort((a, b) => {
-          const timeA = parseBookingDate(a.startTime).getTime();
-          const timeB = parseBookingDate(b.startTime).getTime();
-          switch (sortBy) {
-            case "nearest":    return timeA - timeB;
-            case "latest":     return timeB - timeA;
-            case "price-high": return (b.priceVnd || 0) - (a.priceVnd || 0);
-            case "price-low":  return (a.priceVnd || 0) - (b.priceVnd || 0);
-            default:           return 0;
+  const displayBookings =
+    viewTab === "upcoming"
+      ? (() => {
+          let result = [...upcomingBookings];
+          if (filterDate) {
+            result = result.filter((b) => {
+              const d = parseBookingDate(b.startTime);
+              const startOfDay = new Date(filterDate + "T00:00:00+07:00");
+              const endOfDay = new Date(filterDate + "T23:59:59+07:00");
+              return d >= startOfDay && d <= endOfDay;
+            });
           }
-        });
-        return result;
-      })()
-    : historyBookings.sort((a, b) => parseBookingDate(b.startTime).getTime() - parseBookingDate(a.startTime).getTime());
+          result.sort((a, b) => {
+            const timeA = parseBookingDate(a.startTime).getTime();
+            const timeB = parseBookingDate(b.startTime).getTime();
+            switch (sortBy) {
+              case "nearest":
+                return timeA - timeB;
+              case "latest":
+                return timeB - timeA;
+              case "price-high":
+                return (b.priceVnd || 0) - (a.priceVnd || 0);
+              case "price-low":
+                return (a.priceVnd || 0) - (b.priceVnd || 0);
+              default:
+                return 0;
+            }
+          });
+          return result;
+        })()
+      : historyBookings.sort(
+          (a, b) =>
+            parseBookingDate(b.startTime).getTime() -
+            parseBookingDate(a.startTime).getTime(),
+        );
   const activeBookings = viewTab === "upcoming";
 
   const stats = {
@@ -118,22 +140,14 @@ const UserBookingsPage: React.FC = () => {
     completed: historyBookings.length,
   };
 
-  const handleConfirmComplete = async (id: number) => {
-    if (await confirmAction("Xác nhận hoàn tất buổi học này?")) {
-      try {
-        await confirmCompleteBooking(id);
-        showAppSuccess("Xác nhận thành công", "Buổi học đã được xác nhận hoàn tất!");
-        fetchBookings();
-      } catch {
-        showAppError("Xác nhận thất bại", "Không thể xác nhận hoàn tất. Vui lòng thử lại.");
-      }
-    }
-  };
-
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      const data = await getMyBookings(false, currentPage, USER_BOOKINGS_PAGE_SIZE);
+      const data = await getMyBookings(
+        false,
+        currentPage,
+        USER_BOOKINGS_PAGE_SIZE,
+      );
       setBookings(data.content);
       setTotalPages(data.totalPages || 1);
 
@@ -184,6 +198,21 @@ const UserBookingsPage: React.FC = () => {
     }
   };
 
+  const handleLearnerComplete = async (id: number) => {
+    if (await confirmAction("Xác nhận hoàn tất buổi học?")) {
+      setConfirmingId(id);
+      try {
+        await confirmCompleteBooking(id);
+        showAppSuccess("Đã hoàn tất", "Buổi học đã được đánh dấu hoàn tất. Đang chờ mentor xác nhận.");
+        fetchBookings();
+      } catch (err: any) {
+        showAppError("Không thể hoàn tất", err?.response?.data?.message || "Vui lòng thử lại sau.");
+      } finally {
+        setConfirmingId(null);
+      }
+    }
+  };
+
   const openBookingDetail = (bookingId: number) => {
     navigate(`/bookings/${bookingId}`);
   };
@@ -191,26 +220,95 @@ const UserBookingsPage: React.FC = () => {
   const formatDateTime = (dateString: string) => {
     const date = parseBookingDate(dateString);
     return {
-      date: date.toLocaleDateString("vi-VN", { day: "2-digit", month: "short" }),
-      time: date.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+      date: date.toLocaleDateString("vi-VN", {
+        day: "2-digit",
+        month: "short",
+      }),
+      time: date.toLocaleTimeString("vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
       full: date.toLocaleDateString("vi-VN", {
-        weekday: "long", day: "2-digit", month: "long", year: "numeric",
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
       }),
     };
   };
 
   const getStatusConfig = (status: string) => {
     switch (status) {
-      case "CONFIRMED":    return { label: "Đã xác nhận",   color: "#22c55e", bg: "rgba(34,197,94,0.12)",  border: "rgba(34,197,94,0.25)" };
-      case "PENDING":      return { label: "Chờ xác nhận",  color: "#f59e0b", bg: "rgba(245,158,11,0.12)", border: "rgba(245,158,11,0.25)" };
-      case "CANCELLED":    return { label: "Đã hủy",         color: "#ef4444", bg: "rgba(239,68,68,0.1)",   border: "rgba(239,68,68,0.2)" };
-      case "COMPLETED":    return { label: "Đã hoàn thành",  color: "#3b82f6", bg: "rgba(59,130,246,0.12)", border: "rgba(59,130,246,0.25)" };
-      case "REJECTED":     return { label: "Bị từ chối",     color: "#ef4444", bg: "rgba(239,68,68,0.1)",   border: "rgba(239,68,68,0.2)" };
-      case "ONGOING":      return { label: "Đang diễn ra",   color: "#8b5cf6", bg: "rgba(139,92,246,0.15)", border: "rgba(139,92,246,0.3)" };
-      case "MENTOR_COMPLETED": return { label: "Chờ xác nhận hoàn tất", color: "#a855f7", bg: "rgba(168,85,247,0.15)", border: "rgba(168,85,247,0.3)" };
-      case "DISPUTED":     return { label: "Đang tranh chấp", color: "#f97316", bg: "rgba(249,115,22,0.12)", border: "rgba(249,115,22,0.25)" };
-      case "REFUNDED":     return { label: "Đã hoàn tiền",   color: "#94a3b8", bg: "rgba(148,163,184,0.1)", border: "rgba(148,163,184,0.15)" };
-      default:             return { label: status, color: "#94a3b8", bg: "rgba(148,163,184,0.1)", border: "rgba(148,163,184,0.15)" };
+      case "CONFIRMED":
+        return {
+          label: "Đã xác nhận",
+          color: "#22c55e",
+          bg: "rgba(34,197,94,0.12)",
+          border: "rgba(34,197,94,0.25)",
+        };
+      case "PENDING":
+        return {
+          label: "Chờ xác nhận",
+          color: "#f59e0b",
+          bg: "rgba(245,158,11,0.12)",
+          border: "rgba(245,158,11,0.25)",
+        };
+      case "CANCELLED":
+        return {
+          label: "Đã hủy",
+          color: "#ef4444",
+          bg: "rgba(239,68,68,0.1)",
+          border: "rgba(239,68,68,0.2)",
+        };
+      case "COMPLETED":
+        return {
+          label: "Đã hoàn thành",
+          color: "#3b82f6",
+          bg: "rgba(59,130,246,0.12)",
+          border: "rgba(59,130,246,0.25)",
+        };
+      case "REJECTED":
+        return {
+          label: "Bị từ chối",
+          color: "#ef4444",
+          bg: "rgba(239,68,68,0.1)",
+          border: "rgba(239,68,68,0.2)",
+        };
+      case "ONGOING":
+        return {
+          label: "Đang diễn ra",
+          color: "#8b5cf6",
+          bg: "rgba(139,92,246,0.15)",
+          border: "rgba(139,92,246,0.3)",
+        };
+      case "PENDING_COMPLETION":
+        return {
+          label: "Chờ xác nhận hoàn tất",
+          color: "#a855f7",
+          bg: "rgba(168,85,247,0.15)",
+          border: "rgba(168,85,247,0.3)",
+        };
+      case "DISPUTED":
+        return {
+          label: "Đang tranh chấp",
+          color: "#f97316",
+          bg: "rgba(249,115,22,0.12)",
+          border: "rgba(249,115,22,0.25)",
+        };
+      case "REFUNDED":
+        return {
+          label: "Đã hoàn tiền",
+          color: "#94a3b8",
+          bg: "rgba(148,163,184,0.1)",
+          border: "rgba(148,163,184,0.15)",
+        };
+      default:
+        return {
+          label: status,
+          color: "#94a3b8",
+          bg: "rgba(148,163,184,0.1)",
+          border: "rgba(148,163,184,0.15)",
+        };
     }
   };
 
@@ -238,13 +336,11 @@ const UserBookingsPage: React.FC = () => {
 
   // Check if session has ended — show complete button instead of meeting button
   const isSessionEnded = (booking: BookingResponse): boolean => {
-    const end = new Date(parseBookingDate(booking.startTime).getTime() + (booking.durationMinutes || 60) * 60000);
+    const end = new Date(
+      parseBookingDate(booking.startTime).getTime() +
+        (booking.durationMinutes || 60) * 60000,
+    );
     return now.getTime() >= end.getTime();
-  };
-
-  // Auto-complete: if CONFIRMED and past end time, show complete button
-  const shouldShowComplete = (booking: BookingResponse): boolean => {
-    return booking.status === "ONGOING" || (booking.status === "CONFIRMED" && isSessionEnded(booking));
   };
 
   const isUpcomingSoon = (booking: BookingResponse): boolean => {
@@ -269,7 +365,8 @@ const UserBookingsPage: React.FC = () => {
               Trung tâm lịch hẹn mentorship
             </h2>
             <p className="usbk-hero-description">
-              Theo dõi toàn bộ phiên học, ưu tiên lịch sắp diễn ra và xử lý nhanh các hành động cần thiết trong một màn hình.
+              Theo dõi toàn bộ phiên học, ưu tiên lịch sắp diễn ra và xử lý
+              nhanh các hành động cần thiết trong một màn hình.
             </p>
           </div>
           <div className="usbk-hero-side">
@@ -281,7 +378,12 @@ const UserBookingsPage: React.FC = () => {
               <CheckCircle size={15} />
               Đồng bộ trạng thái tự động
             </div>
-            <button className="usbk-btn-primary usbk-hero-cta" onClick={() => navigate("/mentorship")}>Tìm mentor mới</button>
+            <button
+              className="usbk-btn-primary usbk-hero-cta"
+              onClick={() => navigate("/mentorship")}
+            >
+              Tìm mentor mới
+            </button>
           </div>
         </div>
 
@@ -291,7 +393,9 @@ const UserBookingsPage: React.FC = () => {
               <Calendar size={28} />
               Lịch hẹn Mentorship
             </h1>
-            <p className="usbk-page-subtitle">Theo dõi và quản lý các buổi học của bạn</p>
+            <p className="usbk-page-subtitle">
+              Theo dõi và quản lý các buổi học của bạn
+            </p>
           </div>
         </div>
 
@@ -343,7 +447,9 @@ const UserBookingsPage: React.FC = () => {
           >
             <ArrowRight size={16} />
             Sắp tới
-            {stats.upcoming > 0 && <span className="usbk-tab-badge">{stats.upcoming}</span>}
+            {stats.upcoming > 0 && (
+              <span className="usbk-tab-badge">{stats.upcoming}</span>
+            )}
           </button>
           <button
             className={`usbk-view-tab ${viewTab === "history" ? "active" : ""}`}
@@ -399,7 +505,10 @@ const UserBookingsPage: React.FC = () => {
             {filterDate && (
               <div className="usbk-filter-tag">
                 <CalendarDays size={11} />
-                {new Date(filterDate + "T00:00:00+07:00").toLocaleDateString("vi-VN", { day: "2-digit", month: "short" })}
+                {new Date(filterDate + "T00:00:00+07:00").toLocaleDateString(
+                  "vi-VN",
+                  { day: "2-digit", month: "short" },
+                )}
               </div>
             )}
           </div>
@@ -416,9 +525,16 @@ const UserBookingsPage: React.FC = () => {
         ) : displayBookings.length === 0 ? (
           <div className="usbk-empty">
             <Calendar size={56} strokeWidth={1.2} />
-            <p>{activeBookings ? "Bạn chưa có lịch hẹn nào sắp tới." : "Chưa có lịch sử đặt lịch."}</p>
+            <p>
+              {activeBookings
+                ? "Bạn chưa có lịch hẹn nào sắp tới."
+                : "Chưa có lịch sử đặt lịch."}
+            </p>
             {activeBookings && (
-              <button className="usbk-btn-primary" onClick={() => navigate("/mentorship")}>
+              <button
+                className="usbk-btn-primary"
+                onClick={() => navigate("/mentorship")}
+              >
                 Tìm Mentor ngay
               </button>
             )}
@@ -427,7 +543,16 @@ const UserBookingsPage: React.FC = () => {
           <div className="usbk-booking-list">
             {displayBookings.map((booking) => {
               const { time, full } = formatDateTime(booking.startTime);
-              const statusConfig = getStatusConfig(booking.status);
+              const learnerCompleted = hasLearnerCompleted(booking);
+              const statusConfig =
+                booking.status === "PENDING_COMPLETION"
+                  ? {
+                      ...getStatusConfig(booking.status),
+                      label: learnerCompleted
+                        ? "Chờ mentor xác nhận"
+                        : "Chờ bạn xác nhận",
+                    }
+                  : getStatusConfig(booking.status);
               const meetingVisible = isMeetingVisible(booking);
               const meetingCountdown = getMeetingCountdown(booking);
               const soonBadge = isUpcomingSoon(booking);
@@ -442,12 +567,17 @@ const UserBookingsPage: React.FC = () => {
                   {/* Card Left — Mentor Info */}
                   <div className="usbk-card-left">
                     <img
-                      src={booking.mentorAvatar || "https://via.placeholder.com/150"}
+                      src={
+                        booking.mentorAvatar ||
+                        "https://via.placeholder.com/150"
+                      }
                       alt={booking.mentorName || "Mentor"}
                       className="usbk-card-avatar"
                     />
                     <div className="usbk-card-mentor">
-                      <div className="usbk-card-mentor-name">{booking.mentorName || "Mentor"}</div>
+                      <div className="usbk-card-mentor-name">
+                        {booking.mentorName || "Mentor"}
+                      </div>
                       <div className="usbk-card-price">
                         {booking.priceVnd?.toLocaleString("vi-VN")} VND
                       </div>
@@ -493,17 +623,6 @@ const UserBookingsPage: React.FC = () => {
 
                     {/* Action buttons */}
                     <div className="usbk-card-actions">
-                      {/* Session ended → show complete button */}
-                      {shouldShowComplete(booking) && (
-                        <button
-                          className="usbk-btn-confirm"
-                          onClick={() => handleConfirmComplete(booking.id)}
-                        >
-                          <CheckSquare size={14} />
-                          Hoàn thành
-                        </button>
-                      )}
-
                       {/* Meeting link visible → show join button */}
                       {meetingVisible && (
                         <a
@@ -531,12 +650,27 @@ const UserBookingsPage: React.FC = () => {
                       )}
 
                       {/* CONFIRMED but not time yet, not ended */}
-                      {booking.status === "CONFIRMED" && !meetingVisible && !isSessionEnded(booking) && (
-                        <button className="usbk-btn-secondary" disabled>
-                          <Clock size={14} />
-                          Chờ đến giờ
-                        </button>
-                      )}
+                      {booking.status === "CONFIRMED" &&
+                        !meetingVisible &&
+                        !isSessionEnded(booking) && (
+                          <button className="usbk-btn-secondary" disabled>
+                            <Clock size={14} />
+                            Chờ đến giờ
+                          </button>
+                        )}
+
+                      {/* Learner complete button — session ended but not yet in PENDING_COMPLETION */}
+                      {(booking.status === "ONGOING" || booking.status === "CONFIRMED") &&
+                        isSessionEnded(booking) && (
+                          <button
+                            className="usbk-btn-primary"
+                            onClick={() => handleLearnerComplete(booking.id)}
+                            disabled={confirmingId === booking.id}
+                          >
+                            <CheckCircle size={14} />
+                            {confirmingId === booking.id ? "Đang xử lý..." : "Hoàn thành"}
+                          </button>
+                        )}
 
                       {booking.status === "PENDING" && (
                         <button
@@ -558,15 +692,30 @@ const UserBookingsPage: React.FC = () => {
                         </button>
                       )}
 
-                      {booking.status === "MENTOR_COMPLETED" && (
+                      {booking.status === "PENDING_COMPLETION" && (
                         <>
-                          <button
-                            className="usbk-btn-confirm"
-                            onClick={() => handleConfirmComplete(booking.id)}
+                          {learnerCompleted && (
+                            <span
+                              className="usbk-status-badge"
+                              style={{
+                                color: statusConfig.color,
+                                background: statusConfig.bg,
+                                borderColor: statusConfig.border,
+                              }}
+                            >
+                              Chờ mentor xác nhận
+                            </span>
+                          )}
+                          {!learnerCompleted && (
+                            <button
+                            className="usbk-btn-primary"
+                            onClick={() => handleLearnerComplete(booking.id)}
+                            disabled={confirmingId === booking.id}
                           >
-                            <CheckSquare size={14} />
-                            Xác nhận hoàn tất
-                          </button>
+                            <CheckCircle size={14} />
+                            {confirmingId === booking.id ? "Đang xử lý..." : "Xác nhận hoàn tất"}
+                            </button>
+                          )}
                           <button
                             className="usbk-btn-dispute"
                             onClick={() => openBookingDetail(booking.id)}
@@ -634,7 +783,14 @@ const UserBookingsPage: React.FC = () => {
                       <button
                         className="usbk-btn-message"
                         onClick={() =>
-                          navigate("/messages", { state: { openChatWith: booking.mentorId } })
+                          navigate("/messages", {
+                            state: {
+                              openChatWith: booking.mentorId,
+                              name: booking.mentorName,
+                              avatar: booking.mentorAvatar,
+                              type: 'MENTOR',
+                            },
+                          })
                         }
                       >
                         <MessageSquare size={14} />
@@ -661,7 +817,9 @@ const UserBookingsPage: React.FC = () => {
               Trang {currentPage + 1} / {totalPages}
             </span>
             <button
-              onClick={() => setCurrentPage((p) => Math.min(totalPages - 1, p + 1))}
+              onClick={() =>
+                setCurrentPage((p) => Math.min(totalPages - 1, p + 1))
+              }
               disabled={currentPage >= totalPages - 1}
               className="usbk-pagination-btn"
             >
@@ -670,12 +828,8 @@ const UserBookingsPage: React.FC = () => {
           </div>
         )}
       </div>
-
     </div>
   );
 };
 
 export default UserBookingsPage;
-
-
-

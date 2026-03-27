@@ -355,6 +355,9 @@ export interface StartJourneyRequest {
   // For career type: sub-category (detailed field within domain)
   subCategory?: string;
 
+  // Industry name matching ExpertPromptConfig.industry (from domainExpertMapper)
+  industry?: string;
+
   // For career type: specific job role
   jobRole?: string;
 
@@ -518,6 +521,7 @@ export interface TestResultResponse {
   // AI-generated feedback
   evaluationSummary: string;
   detailedFeedback: string;
+  highlightKeywords: string[];
   improvementTips: string[];
 
   createdAt: string;

@@ -1,6 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, Eye, EyeOff, Shield, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
+import {
+  Lock,
+  Eye,
+  EyeOff,
+  Shield,
+  CheckCircle,
+  ArrowLeft,
+  ShieldCheck,
+  RefreshCw,
+  AlertTriangle,
+} from "lucide-react";
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import '../../styles/PasswordPages.css';
@@ -96,212 +106,282 @@ const ChangePasswordPage = () => {
   };
 
   return (
-    <div className="password-page">
-      <div className="password-page__card">
-        {/* Back Button */}
-        <button className="password-page__back-btn" onClick={handleBack}>
-          <ArrowLeft size={20} />
-          <span>Quay lại</span>
-        </button>
-
-        {/* Header */}
-        <div className="password-page__header">
-          <div className="password-page__icon-wrapper">
-            <Shield size={48} />
-          </div>
-          <h1 className="password-page__title">Đổi Mật Khẩu</h1>
-          <p className="password-page__subtitle">
-            Cập nhật mật khẩu của bạn để bảo mật tài khoản
-          </p>
-        </div>
-
-        {/* Security Notice */}
-        <div className="password-page__security-notice">
-          <AlertCircle size={20} />
-          <div>
-            <strong>Lưu ý bảo mật:</strong> Sau khi đổi mật khẩu, bạn sẽ được
-            đăng xuất và cần đăng nhập lại bằng mật khẩu mới.
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="password-form">
-          {/* Current Password */}
-          <div className="password-form__group">
-            <label htmlFor="currentPassword" className="password-form__label">
-              Mật khẩu hiện tại <span className="password-form__required-mark">*</span>
-            </label>
-            <div className={`password-form__input-group ${errors.currentPassword ? 'password-form__input-group--error' : ''}`}>
-              <Lock size={20} className="password-form__input-icon" />
-              <input
-                type={showCurrent ? 'text' : 'password'}
-                id="currentPassword"
-                value={currentPassword}
-                onChange={(e) => {
-                  setCurrentPassword(e.target.value);
-                  if (errors.currentPassword) {
-                    setErrors({...errors, currentPassword: ''});
-                  }
-                }}
-                placeholder="Nhập mật khẩu hiện tại"
-                disabled={loading}
-                className="password-form__input"
-              />
-              <button
-                type="button"
-                className="password-form__toggle-btn"
-                onClick={() => setShowCurrent(!showCurrent)}
-                disabled={loading}
-              >
-                {showCurrent ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
+    <div className="cosmic-password-page">
+      <div className="cosmic-password-card">
+        {/* LEFT: Form */}
+        <div className="cosmic-password-card__left">
+          {/* Header */}
+          <div className="cosmic-password-header">
+            <div className="cosmic-password-header__icon-wrap">
+              <Shield size={26} />
             </div>
-            {errors.currentPassword && (
-              <span className="password-form__error-msg">{errors.currentPassword}</span>
-            )}
+            <h1 className="cosmic-password-header__title">Đổi Mật Khẩu</h1>
+            <p className="cosmic-password-header__subtitle">
+              Cập nhật mật khẩu để bảo mật tài khoản
+            </p>
           </div>
 
-          {/* New Password */}
-          <div className="password-form__group">
-            <label htmlFor="newPassword" className="password-form__label">
-              Mật khẩu mới <span className="password-form__required-mark">*</span>
-            </label>
-            <div className={`password-form__input-group ${errors.newPassword ? 'password-form__input-group--error' : ''}`}>
-              <Lock size={20} className="password-form__input-icon" />
-              <input
-                type={showNew ? 'text' : 'password'}
-                id="newPassword"
-                value={newPassword}
-                onChange={(e) => {
-                  setNewPassword(e.target.value);
-                  if (errors.newPassword) {
-                    setErrors({...errors, newPassword: ''});
-                  }
-                }}
-                placeholder="Nhập mật khẩu mới (tối thiểu 8 ký tự)"
-                disabled={loading}
-                className="password-form__input"
-              />
-              <button
-                type="button"
-                className="password-form__toggle-btn"
-                onClick={() => setShowNew(!showNew)}
-                disabled={loading}
+          {/* Security Notice */}
+          <div className="cosmic-password-banner">
+            <AlertTriangle
+              size={14}
+              style={{ flexShrink: 0, marginTop: 2, color: "var(--cp-accent)" }}
+            />
+            <span>
+              Sau khi đổi mật khẩu, bạn sẽ được đăng xuất và cần đăng nhập lại.
+            </span>
+          </div>
+
+          <form onSubmit={handleSubmit} className="cosmic-password-form">
+            {/* Current Password */}
+            <div className="cosmic-password-form__group">
+              <label
+                htmlFor="currentPassword"
+                className="cosmic-password-form__label"
               >
-                {showNew ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
-            </div>
-            {errors.newPassword && (
-              <span className="password-form__error-msg">{errors.newPassword}</span>
-            )}
-            
-            {/* Password Strength Indicator */}
-            {newPassword && !errors.newPassword && (
-              <div className="password-form__strength-indicator">
-                <div className="password-form__strength-bar">
-                  <div 
-                    className="password-form__strength-fill"
-                    style={{ 
-                      width: `${(passwordStrength.strength / 4) * 100}%`,
-                      backgroundColor: passwordStrength.color
-                    }}
-                  />
-                </div>
-                <span 
-                  className="password-form__strength-label"
-                  style={{ color: passwordStrength.color }}
+                <Lock size={12} />
+                Mật khẩu hiện tại
+              </label>
+              <div
+                className={`cosmic-password-form__input-wrap ${
+                  errors.currentPassword
+                    ? "cosmic-password-form__input-wrap--error"
+                    : ""
+                }`}
+              >
+                <Lock size={16} className="cosmic-password-form__input-icon" />
+                <input
+                  type={showCurrent ? "text" : "password"}
+                  id="currentPassword"
+                  value={currentPassword}
+                  onChange={(e) => {
+                    setCurrentPassword(e.target.value);
+                    if (errors.currentPassword) {
+                      setErrors({ ...errors, currentPassword: "" });
+                    }
+                  }}
+                  placeholder="Nhập mật khẩu hiện tại"
+                  disabled={loading}
+                  className="cosmic-password-form__input"
+                />
+                <button
+                  type="button"
+                  className="cosmic-password-form__toggle-btn"
+                  onClick={() => setShowCurrent(!showCurrent)}
+                  disabled={loading}
                 >
-                  {passwordStrength.label}
-                </span>
+                  {showCurrent ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
               </div>
-            )}
-          </div>
+              {errors.currentPassword && (
+                <span className="cosmic-password-form__error">
+                  {errors.currentPassword}
+                </span>
+              )}
+            </div>
 
-          {/* Confirm Password */}
-          <div className="password-form__group">
-            <label htmlFor="confirmPassword" className="password-form__label">
-              Xác nhận mật khẩu mới <span className="password-form__required-mark">*</span>
-            </label>
-            <div className={`password-form__input-group ${errors.confirmPassword ? 'password-form__input-group--error' : ''}`}>
-              <Lock size={20} className="password-form__input-icon" />
-              <input
-                type={showConfirm ? 'text' : 'password'}
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                  if (errors.confirmPassword) {
-                    setErrors({...errors, confirmPassword: ''});
-                  }
-                }}
-                placeholder="Nhập lại mật khẩu mới"
-                disabled={loading}
-                className="password-form__input"
-              />
+            {/* New Password */}
+            <div className="cosmic-password-form__group">
+              <label
+                htmlFor="newPassword"
+                className="cosmic-password-form__label"
+              >
+                <Lock size={12} />
+                Mật khẩu mới
+              </label>
+              <div
+                className={`cosmic-password-form__input-wrap ${
+                  errors.newPassword
+                    ? "cosmic-password-form__input-wrap--error"
+                    : ""
+                }`}
+              >
+                <Lock size={16} className="cosmic-password-form__input-icon" />
+                <input
+                  type={showNew ? "text" : "password"}
+                  id="newPassword"
+                  value={newPassword}
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                    if (errors.newPassword) {
+                      setErrors({ ...errors, newPassword: "" });
+                    }
+                  }}
+                  placeholder="Tối thiểu 8 ký tự"
+                  disabled={loading}
+                  className="cosmic-password-form__input"
+                />
+                <button
+                  type="button"
+                  className="cosmic-password-form__toggle-btn"
+                  onClick={() => setShowNew(!showNew)}
+                  disabled={loading}
+                >
+                  {showNew ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
+              </div>
+              {errors.newPassword && (
+                <span className="cosmic-password-form__error">
+                  {errors.newPassword}
+                </span>
+              )}
+
+              {/* Password Strength */}
+              {newPassword && !errors.newPassword && (
+                <div className="cosmic-password-form__strength">
+                  <div className="cosmic-password-form__strength-bar">
+                    <div
+                      className="cosmic-password-form__strength-fill"
+                      style={{
+                        width: `${(passwordStrength.strength / 4) * 100}%`,
+                        backgroundColor: passwordStrength.color,
+                      }}
+                    />
+                  </div>
+                  <span
+                    className="cosmic-password-form__strength-label"
+                    style={{ color: passwordStrength.color }}
+                  >
+                    {passwordStrength.label}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Confirm Password */}
+            <div className="cosmic-password-form__group">
+              <label
+                htmlFor="confirmPassword"
+                className="cosmic-password-form__label"
+              >
+                <Lock size={12} />
+                Xác nhận mật khẩu mới
+              </label>
+              <div
+                className={`cosmic-password-form__input-wrap ${
+                  errors.confirmPassword
+                    ? "cosmic-password-form__input-wrap--error"
+                    : ""
+                }`}
+              >
+                <Lock size={16} className="cosmic-password-form__input-icon" />
+                <input
+                  type={showConfirm ? "text" : "password"}
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    if (errors.confirmPassword) {
+                      setErrors({ ...errors, confirmPassword: "" });
+                    }
+                  }}
+                  placeholder="Nhập lại mật khẩu"
+                  disabled={loading}
+                  className="cosmic-password-form__input"
+                />
+                <button
+                  type="button"
+                  className="cosmic-password-form__toggle-btn"
+                  onClick={() => setShowConfirm(!showConfirm)}
+                  disabled={loading}
+                >
+                  {showConfirm ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
+              </div>
+              {errors.confirmPassword && (
+                <span className="cosmic-password-form__error">
+                  {errors.confirmPassword}
+                </span>
+              )}
+              {confirmPassword &&
+                newPassword === confirmPassword &&
+                !errors.confirmPassword && (
+                  <span className="cosmic-password-form__success">
+                    <CheckCircle size={12} />
+                    Mật khẩu khớp
+                  </span>
+                )}
+            </div>
+
+            <div className="cosmic-password-form__actions">
               <button
                 type="button"
-                className="password-form__toggle-btn"
-                onClick={() => setShowConfirm(!showConfirm)}
+                className="cosmic-password-form__btn cosmic-password-form__btn--secondary"
+                onClick={handleBack}
                 disabled={loading}
               >
-                {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
+                <ArrowLeft size={14} />
+                Quay lại
+              </button>
+              <button
+                type="submit"
+                className="cosmic-password-form__btn cosmic-password-form__btn--primary"
+                disabled={loading}
+              >
+                {loading ? "Đang xử lý..." : "Đổi mật khẩu"}
               </button>
             </div>
-            {errors.confirmPassword && (
-              <span className="password-form__error-msg">{errors.confirmPassword}</span>
-            )}
-            {confirmPassword && newPassword === confirmPassword && !errors.confirmPassword && (
-              <span className="password-form__success-msg">
-                <CheckCircle size={16} /> Mật khẩu khớp
-              </span>
-            )}
-          </div>
-
-          <button 
-            type="submit" 
-            className="password-form__submit-btn"
-            disabled={loading}
-          >
-            {loading ? 'Đang xử lý...' : 'Đổi Mật Khẩu'}
-          </button>
-        </form>
-
-        {/* Security Tips */}
-        <div className="password-page__security-tips">
-          <h3 className="password-page__tips-title">💡 Mẹo tạo mật khẩu mạnh:</h3>
-          <div className="password-page__tips-grid">
-            <div className="password-page__tip-grid-item">
-              <CheckCircle size={16} className="password-page__tip-icon" />
-              <span>Sử dụng ít nhất 8 ký tự</span>
-            </div>
-            <div className="password-page__tip-grid-item">
-              <CheckCircle size={16} className="password-page__tip-icon" />
-              <span>Kết hợp chữ hoa và chữ thường</span>
-            </div>
-            <div className="password-page__tip-grid-item">
-              <CheckCircle size={16} className="password-page__tip-icon" />
-              <span>Thêm số và ký tự đặc biệt</span>
-            </div>
-            <div className="password-page__tip-grid-item">
-              <CheckCircle size={16} className="password-page__tip-icon" />
-              <span>Không dùng thông tin cá nhân</span>
-            </div>
-            <div className="password-page__tip-grid-item">
-              <CheckCircle size={16} className="password-page__tip-icon" />
-              <span>Không dùng lại mật khẩu cũ</span>
-            </div>
-            <div className="password-page__tip-grid-item">
-              <CheckCircle size={16} className="password-page__tip-icon" />
-              <span>Đổi mật khẩu định kỳ 3-6 tháng</span>
-            </div>
-          </div>
+          </form>
         </div>
 
-        {/* Additional Info */}
-        <div className="password-page__additional-info">
-          <p className="password-page__info-text">
-            <strong>Quên mật khẩu hiện tại?</strong> Bạn có thể sử dụng chức năng 
-            <a href="/forgot-password" className="password-page__info-link"> Quên mật khẩu</a> để đặt lại.
-          </p>
+        {/* RIGHT: Info */}
+        <div className="cosmic-password-card__right">
+          <div className="cosmic-password-info-card">
+            <h3 className="cosmic-password-info-card__title">Lưu ý</h3>
+
+            <div className="cosmic-password-benefit">
+              <AlertTriangle
+                size={15}
+                className="cosmic-password-benefit__icon"
+                style={{ color: "var(--cp-accent)" }}
+              />
+              <div>
+                <div className="cosmic-password-benefit__title">Đăng xuất sau khi đổi</div>
+                <div className="cosmic-password-benefit__text">
+                  Bạn cần đăng nhập lại bằng mật khẩu mới
+                </div>
+              </div>
+            </div>
+
+            <div className="cosmic-password-benefit">
+              <ShieldCheck
+                size={15}
+                className="cosmic-password-benefit__icon"
+              />
+              <div>
+                <div className="cosmic-password-benefit__title">
+                  Bảo mật tài khoản
+                </div>
+                <div className="cosmic-password-benefit__text">
+                  Mật khẩu mới giúp bảo vệ tài khoản tốt hơn
+                </div>
+              </div>
+            </div>
+
+            <div className="cosmic-password-benefit">
+              <RefreshCw
+                size={15}
+                className="cosmic-password-benefit__icon"
+              />
+              <div>
+                <div className="cosmic-password-benefit__title">Đổi định kỳ</div>
+                <div className="cosmic-password-benefit__text">
+                  Nên cập nhật mật khẩu mỗi 3-6 tháng
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="cosmic-password-tips">
+            <h4 className="cosmic-password-tips__title">Mẹo mật khẩu mạnh</h4>
+            <ul className="cosmic-password-tips__list">
+              <li className="cosmic-password-tips__item">Tối thiểu 8 ký tự</li>
+              <li className="cosmic-password-tips__item">Kết hợp chữ hoa &amp; thường</li>
+              <li className="cosmic-password-tips__item">Thêm số và ký tự đặc biệt</li>
+              <li className="cosmic-password-tips__item">Không dùng thông tin cá nhân</li>
+              <li className="cosmic-password-tips__item">Không dùng lại mật khẩu cũ</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

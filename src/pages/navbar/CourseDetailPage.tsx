@@ -401,7 +401,12 @@ const CourseDetailPage = () => {
       );
       return;
     }
-    navigate('/messages', { state: { openChatWith: course?.author?.id, type: 'DIRECT' } });
+    navigate('/messages', { state: {
+      openChatWith: course?.author?.id,
+      name: course?.author?.fullName || `${course?.author?.firstName || ''} ${course?.author?.lastName || ''}`.trim(),
+      avatar: course?.author?.avatarUrl || '',
+      type: 'MENTOR',
+    } });
   };
 
   const handlePreviewLearning = () => {

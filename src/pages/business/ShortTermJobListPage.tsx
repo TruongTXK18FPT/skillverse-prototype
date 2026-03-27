@@ -71,8 +71,8 @@ const SORT_OPTIONS = [
 ];
 
 const STATUS_META: Record<
-  ShortTermJobStatus,
-  { label: string; color: string; bg: string }
+  string,
+  { label: string; color: string; bg: string; shadow?: string }
 > = {
   [ShortTermJobStatus.DRAFT]: {
     label: "Nháp",
@@ -128,6 +128,22 @@ const STATUS_META: Record<
     label: "Đã thanh toán",
     color: "#fde68a",
     bg: "rgba(253,230,138,0.15)",
+  },
+  CANCELLATION_REQUESTED: {
+    label: "Hủy chờ duyệt",
+    color: "#fbbf24",
+    bg: "linear-gradient(135deg, rgba(251,191,36,0.16), rgba(248,113,113,0.16))",
+    shadow: "0 12px 28px rgba(248,113,113,0.12)",
+  },
+  AUTO_CANCELLED: {
+    label: "Tự động hủy",
+    color: "#f87171",
+    bg: "rgba(248,113,113,0.16)",
+  },
+  DISPUTE_OPENED: {
+    label: "Đang tranh chấp",
+    color: "#fb923c",
+    bg: "rgba(251,146,60,0.16)",
   },
   [ShortTermJobStatus.CANCELLED]: {
     label: "Đã hủy",
@@ -353,7 +369,11 @@ const MyJobCard: React.FC<MyJobCardProps> = ({
       <div className="jlab-myjob-card__header">
         <div
           className="jlab-myjob-card__status-badge"
-          style={{ color: meta.color, background: meta.bg }}
+          style={{
+            color: meta.color,
+            background: meta.bg,
+            boxShadow: meta.shadow,
+          }}
         >
           <span
             className="jlab-myjob-card__status-dot"

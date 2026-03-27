@@ -712,6 +712,28 @@ class ShortTermJobService {
     }
   }
 
+  /**
+   * Recruiter requests admin review before cancelling after repeated revisions
+   * @requires RECRUITER role
+   */
+  async requestCancellationReview(
+    applicationId: number,
+    reason: string,
+  ): Promise<ShortTermApplicationResponse> {
+    try {
+      const response = await axiosInstance.post<ShortTermApplicationResponse>(
+        "/api/short-term-jobs/applications/request-cancellation-review",
+        {
+          applicationId,
+          reason,
+        },
+      );
+      return response.data;
+    } catch (error) {
+      this.handleError(error, "Không thể gửi yêu cầu hủy để admin xem xét");
+    }
+  }
+
   // ==================== COMPLETION ENDPOINTS ====================
 
   /**
@@ -741,6 +763,24 @@ class ShortTermJobService {
       return response.data;
     } catch (error) {
       this.handleError(error, "Failed to mark job as paid");
+    }
+  }
+
+  // ==================== CANCELLATION / DISPUTE ENDPOINTS (WORKER) ====================
+
+  /**
+   * Accept cancellation requested by recruiter
+   * POST /api/short-term-jobs/applications/{id}/accept-cancellation
+   * @requires USER role
+   */
+  async acceptCancellation(applicationId: number): Promise<ShortTermApplicationResponse> {
+    try {
+      const response = await axiosInstance.post<ShortTermApplicationResponse>(
+        `/api/short-term-jobs/applications/${applicationId}/accept-cancellation`,
+      );
+      return response.data;
+    } catch (error) {
+      this.handleError(error, "Không thể chấp nhận yêu cầu hủy");
     }
   }
 
