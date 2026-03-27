@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import {
   Calendar,
   Clock,
-  User,
   CheckCircle,
+  X,
   XCircle,
   MessageSquare,
   Star,
@@ -12,11 +12,11 @@ import {
   AlertTriangle,
   CheckSquare,
   ArrowRight,
-  ArrowUpDown,
+  Sparkles,
   History,
   TrendingUp,
   CalendarDays,
-  ChevronDown,
+  SlidersHorizontal,
 } from "lucide-react";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import { useNavigate } from "react-router-dom";
@@ -49,13 +49,12 @@ const UserBookingsPage: React.FC = () => {
   type SortOption = "nearest" | "latest" | "price-high" | "price-low";
   const [sortBy, setSortBy] = useState<SortOption>("nearest");
   const [filterDate, setFilterDate] = useState<string>("");
-  const [showSortMenu, setShowSortMenu] = useState(false);
 
-  const sortOptions: { value: SortOption; label: string; icon: string }[] = [
-    { value: "nearest", label: "Gần nhất", icon: "↑" },
-    { value: "latest", label: "Xa nhất", icon: "↓" },
-    { value: "price-high", label: "Giá cao → thấp", icon: "💰" },
-    { value: "price-low", label: "Giá thấp → cao", icon: "💵" },
+  const sortOptions: { value: SortOption; label: string }[] = [
+    { value: "nearest", label: "Gần nhất" },
+    { value: "latest", label: "Xa nhất" },
+    { value: "price-high", label: "Giá cao đến thấp" },
+    { value: "price-low", label: "Giá thấp đến cao" },
   ];
 
   const parseBookingDate = (dateString: string): Date => {
@@ -259,6 +258,33 @@ const UserBookingsPage: React.FC = () => {
     <div className="usbk-page">
       {/* Page Header */}
       <div className="usbk-page-header">
+        <div className="usbk-hero">
+          <div className="usbk-hero-main">
+            <div className="usbk-hero-status">
+              <span className="usbk-hero-status-dot" />
+              Điều phối lịch hẹn đang hoạt động
+            </div>
+            <h2 className="usbk-hero-title">
+              <Sparkles size={18} />
+              Trung tâm lịch hẹn mentorship
+            </h2>
+            <p className="usbk-hero-description">
+              Theo dõi toàn bộ phiên học, ưu tiên lịch sắp diễn ra và xử lý nhanh các hành động cần thiết trong một màn hình.
+            </p>
+          </div>
+          <div className="usbk-hero-side">
+            <div className="usbk-hero-chip">
+              <Clock size={15} />
+              Ưu tiên 24h tới
+            </div>
+            <div className="usbk-hero-chip">
+              <CheckCircle size={15} />
+              Đồng bộ trạng thái tự động
+            </div>
+            <button className="usbk-btn-primary usbk-hero-cta" onClick={() => navigate("/mentorship")}>Tìm mentor mới</button>
+          </div>
+        </div>
+
         <div className="usbk-page-header-inner">
           <div className="usbk-page-title-group">
             <h1 className="usbk-page-title">
@@ -353,31 +379,19 @@ const UserBookingsPage: React.FC = () => {
             </div>
 
             {/* Sort dropdown */}
-            <div className="usbk-filter-group">
-              <ArrowUpDown size={14} />
-              <div className="usbk-sort-dropdown">
-                <button
-                  className="usbk-sort-trigger"
-                  onClick={() => setShowSortMenu(!showSortMenu)}
-                >
-                  {sortOptions.find(o => o.value === sortBy)?.label}
-                  <ChevronDown size={12} />
-                </button>
-                {showSortMenu && (
-                  <div className="usbk-sort-menu">
-                    {sortOptions.map((opt) => (
-                      <button
-                        key={opt.value}
-                        className={`usbk-sort-option ${sortBy === opt.value ? "active" : ""}`}
-                        onClick={() => { setSortBy(opt.value); setShowSortMenu(false); }}
-                      >
-                        <span>{opt.icon}</span>
-                        {opt.label}
-                        {sortBy === opt.value && <CheckCircle size={12} />}
-                      </button>
-                    ))}
-                  </div>
-                )}
+            <div className="usbk-filter-group usbk-filter-group--sort">
+              <SlidersHorizontal size={14} />
+              <div className="usbk-sort-row">
+                {sortOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    className={`usbk-sort-chip ${sortBy === opt.value ? "active" : ""}`}
+                    onClick={() => setSortBy(opt.value)}
+                  >
+                    {opt.label}
+                    {sortBy === opt.value && <CheckCircle size={12} />}
+                  </button>
+                ))}
               </div>
             </div>
 

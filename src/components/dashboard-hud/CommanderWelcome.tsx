@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FileText,
-  Crown,
   AlertTriangle,
   ChevronRight,
   Zap,
@@ -17,6 +16,7 @@ import {
   TrendingUp,
   Users,
   Briefcase,
+  Calendar,
 } from "lucide-react";
 import "./CommanderWelcome.css";
 
@@ -104,20 +104,6 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
     return remainingHours > 0 ? `${days}d ${remainingHours}h` : `${days}d`;
   };
 
-  // Get top tasks to display (prioritized)
-  const getTopTasks = () => {
-    const tasks = taskSummary.upcomingTasks.slice(0, 5);
-    return tasks.map((task) => ({
-      ...task,
-      priority:
-        task.daysOverdue > 30
-          ? "critical"
-          : task.daysOverdue > 0
-            ? "overdue"
-            : "pending",
-    }));
-  };
-
   // Generate smart suggestions based on task status
   const getSuggestions = () => {
     const suggestions: Array<{
@@ -187,7 +173,6 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
     return suggestions.slice(0, 3); // Max 3 suggestions
   };
 
-  const topTasks = getTopTasks();
   const suggestions = getSuggestions();
 
   return (
@@ -256,17 +241,25 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
               <span>Cố vấn yêu thích</span>
               <ChevronRight size={14} /> {/* Add arrow icon */}
             </button>
+            <button
+              onClick={() => navigate("/my-applications")}
+              className="commander-welcome__jump-btn commander-welcome__jump-btn--applications"
+              title="Đến trung tâm quản lý đơn ứng tuyển"
+            >
+              <Briefcase size={14} />
+              <span>Trung tâm công việc của bạn</span>
+              <ChevronRight size={14} />
+            </button>
+            <button
+              onClick={() => navigate("/my-bookings")}
+              className="commander-welcome__jump-btn commander-welcome__jump-btn--bookings"
+              title="Đến lịch hẹn mentorship"
+            >
+              <Calendar size={14} />
+              <span>Lịch hẹn mentorship</span>
+              <ChevronRight size={14} />
+            </button>
           </div>
-
-          <button
-            onClick={() => navigate("/my-applications")}
-            className="commander-welcome__jump-btn commander-welcome__jump-btn--applications"
-            title="Đến trung tâm quản lý đơn ứng tuyển"
-          >
-            <Briefcase size={16} />
-            <span>Trung tâm công việc của bạn</span>
-            <ChevronRight size={16} />
-          </button>
         </div>
 
         {/* Center Section - Task Panel */}

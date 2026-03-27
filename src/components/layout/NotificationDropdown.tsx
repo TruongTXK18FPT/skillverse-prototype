@@ -211,35 +211,41 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
   if (inline) {
     return (
       <div className={`notification-inline ${inlineOpen ? '' : 'collapsed'}`} ref={dropdownRef}>
-        <button
-          className="inline-toggle"
-          onClick={() => {
-            setInlineOpen(v => !v);
-            if (!inlineOpen) {
-              fetchNotifications();
-              fetchRecentChats();
-            }
-          }}
-        >
-          <div className="inline-header-left">
-            <Bell size={16} />
-            <span>Thông báo</span>
-          </div>
-          <div className="inline-header-right">
-            {unreadCount > 0 && <span className="notification-badge inline-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>}
-            <ChevronDown size={16} className={`inline-chevron ${inlineOpen ? 'open' : ''}`} />
-          </div>
-        </button>
+        <div className="inline-header">
+          <button
+            className="inline-toggle"
+            onClick={() => {
+              setInlineOpen(v => !v);
+              if (!inlineOpen) {
+                fetchNotifications();
+                fetchRecentChats();
+              }
+            }}
+          >
+            <div className="inline-header-left">
+              <Bell size={16} />
+              <span>Thông báo</span>
+            </div>
+            <div className="inline-header-right">
+              {unreadCount > 0 && <span className="notification-badge inline-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>}
+              <ChevronDown size={16} className={`inline-chevron ${inlineOpen ? 'open' : ''}`} />
+            </div>
+          </button>
 
-        <div className="notification-header">
-          <h3>Gần đây</h3>
-          <button className="mark-all-read" onClick={handleMarkAllAsRead}>
+          <button
+            type="button"
+            className="mark-all-read inline-mark-all"
+            onClick={handleMarkAllAsRead}
+          >
             <CheckCheck size={14} />
             <span>Đánh dấu đã đọc</span>
           </button>
         </div>
+
+        <div className="inline-divider" />
+
         <div className="notification-list compact">
-          {recentChats.filter(c => c.unread > 0).slice(0, 3).map(chat => (
+          {recentChats.filter(c => c.unread > 0).slice(0, 2).map(chat => (
             <div
               key={`prechat-${chat.mentorId}`}
               className="notification-item unread"
@@ -264,7 +270,7 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
           ) : notifications.length === 0 ? (
             <div className="notification-empty">Không có thông báo</div>
           ) : (
-            notifications.slice(0, 5).map(notification => (
+            notifications.slice(0, 3).map(notification => (
               <div
                 key={notification.id}
                 className={`notification-item ${!notification.isRead ? 'unread' : ''}`}

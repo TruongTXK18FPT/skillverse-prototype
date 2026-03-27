@@ -72,6 +72,10 @@ type BackendTestResultResponse = {
   skillGapsJson?: string;
   strengthsJson?: string;
   evaluationSummary?: string;
+  detailedFeedback?: string;
+  evaluationDetails?: string;
+  aiDetailedFeedback?: string;
+  feedbackDetails?: string;
   userAnswersJson?: string;
   correctAnswersJson?: string;
   evaluatedAt?: string;
@@ -437,6 +441,7 @@ const buildQuestionReviews = (payload: BackendTestResultResponse): QuestionRevie
         question: questionText,
         skillArea,
         difficulty,
+        options,
         userAnswer: userRaw || 'Chưa trả lời',
         correctAnswer: correctRaw || 'N/A',
         isCorrect,
@@ -547,6 +552,30 @@ const mapTestResult = (payload: BackendTestResultResponse): TestResultResponse =
     .map((item) => item.howToImprove)
     .filter((tip): tip is string => typeof tip === 'string' && tip.trim().length > 0);
 
+  const evaluationSummary = toStringValue(payload.evaluationSummary, 'Đã hoàn thành đánh giá kỹ năng.');
+  const detailedFeedbackFromApi = [
+    payload.detailedFeedback,
+    payload.evaluationDetails,
+    payload.aiDetailedFeedback,
+    payload.feedbackDetails
+  ].find((value) => typeof value === 'string' && value.trim().length > 0) ?? '';
+
+  const generatedDetailedFeedback = [
+    strengths.length > 0
+      ? `Điểm mạnh nổi bật: ${strengths.slice(0, 3).map((item) => item.skill).join(', ')}.`
+      : '',
+    skillGaps.length > 0
+      ? `Nhóm cần ưu tiên cải thiện: ${skillGaps.slice(0, 4).map((item) => item.skill).join(', ')}.`
+      : '',
+    improvementTips.length > 0
+      ? `Gợi ý hành động: ${improvementTips.slice(0, 2).join(' ')}`
+      : ''
+  ].filter(Boolean).join('\n\n');
+
+  const detailedFeedback = detailedFeedbackFromApi.trim() && detailedFeedbackFromApi.trim() !== evaluationSummary.trim()
+    ? detailedFeedbackFromApi.trim()
+    : (generatedDetailedFeedback || evaluationSummary);
+
   const passingScore = DEFAULT_PASSING_SCORE;
 
   return {
@@ -572,8 +601,8 @@ const mapTestResult = (payload: BackendTestResultResponse): TestResultResponse =
     overallStrengths: strengths.map(formatInsightLabel),
     overallWeaknesses: skillGaps.map(formatInsightLabel),
     skillGaps: skillGaps.map((item) => item.skill),
-    evaluationSummary: toStringValue(payload.evaluationSummary, 'Đã hoàn thành đánh giá kỹ năng.'),
-    detailedFeedback: toStringValue(payload.evaluationSummary, 'Đã hoàn thành đánh giá kỹ năng.'),
+    evaluationSummary,
+    detailedFeedback,
     improvementTips: improvementTips.length > 0 ? improvementTips : ['Tiếp tục luyện tập theo các kỹ năng còn thiếu.'],
     createdAt: toStringValue(payload.createdAt || payload.evaluatedAt, new Date().toISOString())
   };

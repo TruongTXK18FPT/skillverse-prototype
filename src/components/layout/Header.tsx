@@ -1042,145 +1042,128 @@ const Header: React.FC = () => {
 
                   {showUserMenu && (
                     <div className="user-dropdown">
-                      <div className="user-info">
-                        <div
-                          className="header-user-avatar-large"
-                          style={{
-                            border: getPremiumColor()
-                              ? `3px solid ${getPremiumColor()}`
-                              : "2px solid rgba(255,255,255,0.2)",
-                            boxShadow: getPremiumColor()
-                              ? `0 0 20px ${getPremiumColor()}`
-                              : undefined,
-                          }}
-                        >
-                          {mentorProfile?.avatar ||
-                          userProfile?.avatarMediaUrl ||
-                          user.avatarUrl ? (
-                            <img
-                              src={
-                                mentorProfile?.avatar ||
-                                userProfile?.avatarMediaUrl ||
-                                user.avatarUrl
-                              }
-                              alt="Avatar"
-                              className="header-avatar-img-large"
-                            />
-                          ) : (
-                            <User size={24} />
-                          )}
+                      <div className="dropdown-content-scroll">
+                        <div className="dropdown-notification-panel">
+                          <NotificationDropdown inline collapsible />
                         </div>
-                        <div className="user-details">
-                          <p className="user-name">
-                            {userProfile?.fullName || user.fullName}
-                          </p>
-                          <p className="user-email">{user.email}</p>
+
+                        <div className="dropdown-menu-groups">
+                          <section className="dropdown-group dropdown-group--activity">
+                            <p className="dropdown-group-label">HOẠT ĐỘNG</p>
+                            {user.roles.includes("USER") && (
+                              <button
+                                onClick={() => {
+                                  navigate("/my-applications");
+                                  setShowUserMenu(false);
+                                }}
+                                className="dropdown-item"
+                              >
+                                <Briefcase size={16} />
+                                <span>Đơn Ứng Tuyển</span>
+                              </button>
+                            )}
+                            <button
+                              onClick={() => {
+                                navigate("/my-bookings?tab=bookings");
+                                setShowUserMenu(false);
+                              }}
+                              className="dropdown-item"
+                            >
+                              <Calendar size={16} />
+                              <span>Quản lý lịch hẹn</span>
+                            </button>
+                          </section>
+
+                          <section className="dropdown-group dropdown-group--system">
+                            <p className="dropdown-group-label">HỆ THỐNG</p>
+                            <button
+                              onClick={() => {
+                                navigate("/help-center");
+                                setShowUserMenu(false);
+                              }}
+                              className="dropdown-item"
+                            >
+                              <HelpCircle size={16} />
+                              <span>Hỗ trợ</span>
+                            </button>
+                            <button
+                              onClick={() => {
+                                navigate("/report-violation");
+                                setShowUserMenu(false);
+                              }}
+                              className="dropdown-item"
+                            >
+                              <AlertTriangle size={16} />
+                              <span>Báo cáo vi phạm</span>
+                            </button>
+                          </section>
+
+                          <section className="dropdown-group dropdown-group--account">
+                            <p className="dropdown-group-label">TÀI KHOẢN</p>
+                            <button
+                              onClick={() => {
+                                handleWallet();
+                                setShowUserMenu(false);
+                              }}
+                              className="dropdown-item"
+                            >
+                              <Wallet size={16} />
+                              <span>Ví</span>
+                            </button>
+                            <button
+                              onClick={() => {
+                                navigate("/messages");
+                                setShowUserMenu(false);
+                              }}
+                              className="dropdown-item"
+                            >
+                              <MessageSquare size={16} />
+                              <span>Tin nhắn</span>
+                            </button>
+                            {user.roles.includes("PARENT") && (
+                              <button
+                                onClick={() => {
+                                  navigate("/parent-dashboard");
+                                  setShowUserMenu(false);
+                                }}
+                                className="dropdown-item"
+                              >
+                                <Users size={16} />
+                                <span>Phụ huynh</span>
+                              </button>
+                            )}
+                            {user.roles.includes("MENTOR") && (
+                              <button
+                                onClick={() => {
+                                  navigate("/mentor");
+                                  setShowUserMenu(false);
+                                }}
+                                className="dropdown-item"
+                              >
+                                <BookOpen size={16} />
+                                <span>Giảng Viên</span>
+                              </button>
+                            )}
+                            <button
+                              onClick={() => {
+                                handleProfile();
+                                setShowUserMenu(false);
+                              }}
+                              className="dropdown-item"
+                            >
+                              <User size={16} />
+                              <span>Hồ sơ cá nhân</span>
+                            </button>
+                            <button
+                              onClick={handleLogout}
+                              className="dropdown-item logout"
+                            >
+                              <LogOut size={16} />
+                              <span>Đăng xuất</span>
+                            </button>
+                          </section>
                         </div>
                       </div>
-                      <hr className="dropdown-divider" />
-
-                      <div style={{ marginBottom: "12px" }}>
-                        <NotificationDropdown inline collapsible />
-                      </div>
-
-                      {/* Wallet & Notifications in dropdown */}
-                      <button
-                        onClick={() => {
-                          handleWallet();
-                          setShowUserMenu(false);
-                        }}
-                        className="dropdown-item"
-                      >
-                        <Wallet size={16} />
-                        <span>Ví</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          navigate("/messages");
-                          setShowUserMenu(false);
-                        }}
-                        className="dropdown-item"
-                      >
-                        <MessageSquare size={16} />
-                        <span>Tin nhắn</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          navigate("/my-bookings?tab=bookings");
-                          setShowUserMenu(false);
-                        }}
-                        className="dropdown-item"
-                      >
-                        <Calendar size={16} />
-                        <span>Quản lý lịch hẹn</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          navigate("/help-center");
-                          setShowUserMenu(false);
-                        }}
-                        className="dropdown-item"
-                      >
-                        <HelpCircle size={16} />
-                        <span>Hỗ trợ</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          navigate("/report-violation");
-                          setShowUserMenu(false);
-                        }}
-                        className="dropdown-item"
-                      >
-                        <AlertTriangle size={16} />
-                        <span>Báo cáo vi phạm</span>
-                      </button>
-
-                      <hr className="dropdown-divider" />
-
-                      {user.roles.includes("PARENT") && (
-                        <button
-                          onClick={() => {
-                            navigate("/parent-dashboard");
-                            setShowUserMenu(false);
-                          }}
-                          className="dropdown-item"
-                        >
-                          <Users size={16} />
-                          <span>Phụ huynh</span>
-                        </button>
-                      )}
-                      {user.roles.includes("MENTOR") && (
-                        <button
-                          onClick={() => {
-                            navigate("/mentor");
-                            setShowUserMenu(false);
-                          }}
-                          className="dropdown-item"
-                        >
-                          <BookOpen size={16} />
-                          <span>Giảng Viên</span>
-                        </button>
-                      )}
-                      {user.roles.includes("USER") && (
-                        <button
-                          onClick={() => navigate("/my-applications")}
-                          className="dropdown-item"
-                        >
-                          <Briefcase size={16} />
-                          <span>Đơn Ứng Tuyển</span>
-                        </button>
-                      )}
-                      <button onClick={handleProfile} className="dropdown-item">
-                        <User size={16} />
-                        <span>Hồ sơ cá nhân</span>
-                      </button>
-                      <button
-                        onClick={handleLogout}
-                        className="dropdown-item logout"
-                      >
-                        <LogOut size={16} />
-                        <span>Đăng xuất</span>
-                      </button>
                     </div>
                   )}
                 </div>

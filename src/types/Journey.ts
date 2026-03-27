@@ -479,6 +479,7 @@ export interface QuestionReviewItem {
   question: string;
   skillArea: string;
   difficulty: string;
+  options: string[];
   userAnswer: string;
   correctAnswer: string;
   isCorrect: boolean;

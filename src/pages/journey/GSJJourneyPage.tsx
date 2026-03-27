@@ -6,7 +6,7 @@ import {
   Map, Play, Pause, CheckCircle, Target,
   Brain, Award, BookOpen, Activity, Sparkles,
   X, RefreshCw, FileText, Lightbulb, Zap, ChevronRight,
-  Rocket, Calendar, ArrowLeft
+  Rocket, Calendar, ArrowLeft, CircleCheckBig, CircleAlert
 } from 'lucide-react';
 import journeyService from '../../services/journeyService';
 import {
@@ -54,9 +54,16 @@ const GSJJourneyPage: React.FC = () => {
   const [selectedJourney, setSelectedJourney] = useState<JourneyDetailResponse | null>(null);
   const [currentTest, setCurrentTest] = useState<AssessmentTestResponse | null>(null);
   const [currentResult, setCurrentResult] = useState<TestResultResponse | null>(null);
+  const [showDetailedFeedback, setShowDetailedFeedback] = useState(false);
+  const [showAllQuestionReviews, setShowAllQuestionReviews] = useState(false);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setShowDetailedFeedback(false);
+    setShowAllQuestionReviews(false);
+  }, [currentResult?.id]);
 
   // Load journeys on mount
   const loadJourneys = useCallback(async () => {
@@ -414,6 +421,50 @@ const GSJJourneyPage: React.FC = () => {
 
     return fallback ? `- ${fallback}` : '';
   };
+
+  const splitInsightItems = (items: string[], fallback: string): string[] => {
+    const lines = items
+      .flatMap((item) => normalizeMarkdownText(item, '').split('\n'))
+      .map((line) => line.replace(/^\s*[-+•]\s+/, '').trim())
+      .filter(Boolean);
+
+    return lines.length > 0 ? lines : [fallback];
+  };
+
+  const parseInsightLine = (line: string): { title: string; detail: string } => {
+    const compact = line.replace(/\s+/g, ' ').trim();
+    const pair = compact.match(/^([^:]{2,80}):\s*(.+)$/);
+    if (pair) {
+      return {
+        title: pair[1].trim(),
+        detail: pair[2].trim()
+      };
+    }
+
+    return {
+      title: '',
+      detail: compact
+    };
+  };
+
+  const extractQuestionIdsFromText = (text: string): number[] => {
+    const ids = new Set<number>();
+    const explicitQ = text.matchAll(/\bQ(\d+)\b/gi);
+    for (const match of explicitQ) {
+      const id = Number(match[1]);
+      if (Number.isFinite(id) && id > 0) {
+        ids.add(id);
+      }
+    }
+    return Array.from(ids);
+  };
+
+  const extractOptionKey = (value: string): string => {
+    const match = value.trim().match(/^([A-D])(?:\s*[.):-]|\s+|$)/i);
+    return match?.[1]?.toUpperCase() ?? '';
+  };
+
+  const toOptionLabel = (index: number): string => String.fromCharCode(65 + index);
 
   const renderMarkdownContent = (content: string, className?: string) => (
     <div className={className ? `gsj-markdown ${className}` : 'gsj-markdown'}>
@@ -1220,6 +1271,18 @@ const GSJJourneyPage: React.FC = () => {
     const improvementTips = currentResult.improvementTips.length > 0
       ? currentResult.improvementTips
       : ['Tiếp tục hoàn thành các bài học nền tảng để củng cố kiến thức.'];
+    const strengthItems = splitInsightItems(strengths, 'Chưa có dữ liệu điểm mạnh nổi bật.');
+    const weaknessItems = splitInsightItems(weaknesses, 'Chưa có dữ liệu điểm cần cải thiện.');
+    const tipItems = splitInsightItems(improvementTips, 'Hãy tiếp tục học theo roadmap để cải thiện kết quả.');
+    const questionPreviewLimit = 8;
+    const totalQuestionReviews = currentResult.questionReviews.length;
+    const hasHiddenQuestionReviews = totalQuestionReviews > questionPreviewLimit;
+    const visibleQuestionReviews = showAllQuestionReviews
+      ? currentResult.questionReviews
+      : currentResult.questionReviews.slice(0, questionPreviewLimit);
+    const reviewByQuestionId = new globalThis.Map(
+      currentResult.questionReviews.map((review) => [review.questionId, review])
+    );
 
     return (
       <div className="gsj-card">
@@ -1298,34 +1361,219 @@ const GSJJourneyPage: React.FC = () => {
 
             <section className="gsj-result-section">
               <h4 className="gsj-result-section__title">Phản hồi chi tiết</h4>
-              {renderMarkdownContent(
+              <p className="gsj-result-section__hint">
+                Nội dung AI phân tích khá dài, mở khi bạn cần đọc sâu từng điểm.
+              </p>
+              <button
+                type="button"
+                className="gsj-result-toggle"
+                onClick={() => setShowDetailedFeedback((prev) => !prev)}
+              >
+                {showDetailedFeedback ? 'Ẩn phản hồi chi tiết' : 'Xem phản hồi chi tiết'}
+              </button>
+              {showDetailedFeedback && renderMarkdownContent(
                 normalizeMarkdownText(currentResult.detailedFeedback, 'Chưa có phản hồi chi tiết cho bài đánh giá này.'),
                 'gsj-result-section__markdown'
               )}
             </section>
 
             <section className="gsj-result-section gsj-result-section--strength">
-              <h4 className="gsj-result-section__title">Điểm mạnh</h4>
-              {renderMarkdownContent(
-                toMarkdownList(strengths, 'Chưa có dữ liệu điểm mạnh nổi bật.'),
-                'gsj-result-section__markdown'
-              )}
+              <h4 className="gsj-result-section__title gsj-result-section__title--with-icon">
+                <CircleCheckBig size={18} />
+                Điểm mạnh
+              </h4>
+              <ul className="gsj-insight-list">
+                {strengthItems.map((item, index) => {
+                  const parsed = parseInsightLine(item);
+                  const linkedQuestionIds = extractQuestionIdsFromText(parsed.detail);
+                  const linkedReviews = linkedQuestionIds
+                    .map((id) => reviewByQuestionId.get(id))
+                    .filter((review): review is NonNullable<typeof review> => Boolean(review));
+                  return (
+                    <li key={`strength-${index}`} className="gsj-insight-item">
+                      {parsed.title && <p className="gsj-insight-item__title">{parsed.title}</p>}
+                      <p className="gsj-insight-item__detail">{parsed.detail}</p>
+                      {linkedReviews.length > 0 && (
+                        <details className="gsj-insight-item__details">
+                          <summary>
+                            Xem câu hỏi gốc ({linkedReviews.length})
+                          </summary>
+                          <div className="gsj-insight-question-list">
+                            {linkedReviews.map((review) => {
+                              const userKey = extractOptionKey(review.userAnswer);
+                              const correctKey = extractOptionKey(review.correctAnswer);
+                              return (
+                                <article key={`strength-question-${review.questionId}`} className="gsj-insight-question-item">
+                                  <div className="gsj-insight-question-item__meta-row">
+                                    <p className="gsj-insight-question-item__meta">
+                                      Câu Q{review.questionId} · {review.skillArea} · {review.difficulty}
+                                    </p>
+                                    <span
+                                      className={`gsj-insight-question-item__badge ${
+                                        review.isCorrect
+                                          ? 'gsj-insight-question-item__badge--correct'
+                                          : 'gsj-insight-question-item__badge--wrong'
+                                      }`}
+                                    >
+                                      {review.isCorrect ? 'Đúng' : 'Sai'}
+                                    </span>
+                                  </div>
+                                  <p className="gsj-insight-question-item__text">{review.question}</p>
+                                  {review.options.length > 0 && (
+                                    <ul className="gsj-insight-option-list">
+                                      {review.options.map((option, optionIndex) => {
+                                        const optionKey = toOptionLabel(optionIndex);
+                                        const isCorrect = optionKey === correctKey;
+                                        const isSelected = optionKey === userKey;
+                                        return (
+                                          <li
+                                            key={`strength-option-${review.questionId}-${optionKey}`}
+                                            className={`gsj-insight-option ${
+                                              isCorrect ? 'gsj-insight-option--correct' : ''
+                                            } ${
+                                              isSelected ? 'gsj-insight-option--selected' : ''
+                                            }`}
+                                          >
+                                            <span className="gsj-insight-option__key">{optionKey}.</span>
+                                            <span className="gsj-insight-option__text">{option}</span>
+                                            {(isSelected || isCorrect) && (
+                                              <span className="gsj-insight-option__badges">
+                                                {isSelected && (
+                                                  <span className="gsj-insight-option__badge gsj-insight-option__badge--selected">
+                                                    <Target size={12} />
+                                                    Bạn chọn
+                                                  </span>
+                                                )}
+                                                {isCorrect && (
+                                                  <span className="gsj-insight-option__badge gsj-insight-option__badge--correct">
+                                                    <CheckCircle size={12} />
+                                                    Đáp án đúng
+                                                  </span>
+                                                )}
+                                              </span>
+                                            )}
+                                          </li>
+                                        );
+                                      })}
+                                    </ul>
+                                  )}
+                                </article>
+                              );
+                            })}
+                          </div>
+                        </details>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
             </section>
 
             <section className="gsj-result-section gsj-result-section--weakness">
-              <h4 className="gsj-result-section__title">Cần cải thiện</h4>
-              {renderMarkdownContent(
-                toMarkdownList(weaknesses, 'Chưa có dữ liệu điểm cần cải thiện.'),
-                'gsj-result-section__markdown'
-              )}
+              <h4 className="gsj-result-section__title gsj-result-section__title--with-icon">
+                <CircleAlert size={18} />
+                Cần cải thiện
+              </h4>
+              <ul className="gsj-insight-list">
+                {weaknessItems.map((item, index) => {
+                  const parsed = parseInsightLine(item);
+                  const linkedQuestionIds = extractQuestionIdsFromText(parsed.detail);
+                  const linkedReviews = linkedQuestionIds
+                    .map((id) => reviewByQuestionId.get(id))
+                    .filter((review): review is NonNullable<typeof review> => Boolean(review));
+                  return (
+                    <li key={`weakness-${index}`} className="gsj-insight-item">
+                      {parsed.title && <p className="gsj-insight-item__title">{parsed.title}</p>}
+                      <p className="gsj-insight-item__detail">{parsed.detail}</p>
+                      {linkedReviews.length > 0 && (
+                        <details className="gsj-insight-item__details">
+                          <summary>
+                            Xem câu hỏi gốc ({linkedReviews.length})
+                          </summary>
+                          <div className="gsj-insight-question-list">
+                            {linkedReviews.map((review) => {
+                              const userKey = extractOptionKey(review.userAnswer);
+                              const correctKey = extractOptionKey(review.correctAnswer);
+                              return (
+                                <article key={`weakness-question-${review.questionId}`} className="gsj-insight-question-item">
+                                  <div className="gsj-insight-question-item__meta-row">
+                                    <p className="gsj-insight-question-item__meta">
+                                      Câu Q{review.questionId} · {review.skillArea} · {review.difficulty}
+                                    </p>
+                                    <span
+                                      className={`gsj-insight-question-item__badge ${
+                                        review.isCorrect
+                                          ? 'gsj-insight-question-item__badge--correct'
+                                          : 'gsj-insight-question-item__badge--wrong'
+                                      }`}
+                                    >
+                                      {review.isCorrect ? 'Đúng' : 'Sai'}
+                                    </span>
+                                  </div>
+                                  <p className="gsj-insight-question-item__text">{review.question}</p>
+                                  {review.options.length > 0 && (
+                                    <ul className="gsj-insight-option-list">
+                                      {review.options.map((option, optionIndex) => {
+                                        const optionKey = toOptionLabel(optionIndex);
+                                        const isCorrect = optionKey === correctKey;
+                                        const isSelected = optionKey === userKey;
+                                        return (
+                                          <li
+                                            key={`weakness-option-${review.questionId}-${optionKey}`}
+                                            className={`gsj-insight-option ${
+                                              isCorrect ? 'gsj-insight-option--correct' : ''
+                                            } ${
+                                              isSelected ? 'gsj-insight-option--selected' : ''
+                                            }`}
+                                          >
+                                            <span className="gsj-insight-option__key">{optionKey}.</span>
+                                            <span className="gsj-insight-option__text">{option}</span>
+                                            {(isSelected || isCorrect) && (
+                                              <span className="gsj-insight-option__badges">
+                                                {isSelected && (
+                                                  <span className="gsj-insight-option__badge gsj-insight-option__badge--selected">
+                                                    <Target size={12} />
+                                                    Bạn chọn
+                                                  </span>
+                                                )}
+                                                {isCorrect && (
+                                                  <span className="gsj-insight-option__badge gsj-insight-option__badge--correct">
+                                                    <CheckCircle size={12} />
+                                                    Đáp án đúng
+                                                  </span>
+                                                )}
+                                              </span>
+                                            )}
+                                          </li>
+                                        );
+                                      })}
+                                    </ul>
+                                  )}
+                                </article>
+                              );
+                            })}
+                          </div>
+                        </details>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
             </section>
 
             <section className="gsj-result-section">
               <h4 className="gsj-result-section__title">Gợi ý hành động</h4>
-              {renderMarkdownContent(
-                toMarkdownList(improvementTips, 'Hãy tiếp tục học theo roadmap để cải thiện kết quả.'),
-                'gsj-result-section__markdown'
-              )}
+              <ul className="gsj-insight-list">
+                {tipItems.map((item, index) => {
+                  const parsed = parseInsightLine(item);
+                  return (
+                    <li key={`tip-${index}`} className="gsj-insight-item">
+                      {parsed.title && <p className="gsj-insight-item__title">{parsed.title}</p>}
+                      <p className="gsj-insight-item__detail">{parsed.detail}</p>
+                    </li>
+                  );
+                })}
+              </ul>
             </section>
           </div>
 
@@ -1357,9 +1605,14 @@ const GSJJourneyPage: React.FC = () => {
 
           {currentResult.questionReviews.length > 0 && (
             <section className="gsj-result-section gsj-result-section--full">
-              <h4 className="gsj-result-section__title">Chi tiết bài quiz</h4>
+              <div className="gsj-result-review-header">
+                <h4 className="gsj-result-section__title">Chi tiết bài quiz</h4>
+                <span className="gsj-result-review-counter">
+                  Hiển thị {visibleQuestionReviews.length}/{totalQuestionReviews} câu
+                </span>
+              </div>
               <div className="gsj-result-review-list">
-                {currentResult.questionReviews.map((question, index) => (
+                {visibleQuestionReviews.map((question, index) => (
                   <article
                     key={`${question.questionId}-${index}`}
                     className={`gsj-result-review-item ${question.isCorrect ? 'gsj-result-review-item--correct' : 'gsj-result-review-item--wrong'}`}
@@ -1388,16 +1641,28 @@ const GSJJourneyPage: React.FC = () => {
                       <strong>Đáp án đúng:</strong> {question.correctAnswer}
                     </p>
                     {question.explanation && (
-                      <div className="gsj-result-review-item__explain">
-                        {renderMarkdownContent(
-                          normalizeMarkdownText(question.explanation, ''),
-                          'gsj-result-review-item__markdown'
-                        )}
-                      </div>
+                      <details className="gsj-result-review-item__details">
+                        <summary>Xem giải thích AI</summary>
+                        <div className="gsj-result-review-item__explain">
+                          {renderMarkdownContent(
+                            normalizeMarkdownText(question.explanation, ''),
+                            'gsj-result-review-item__markdown'
+                          )}
+                        </div>
+                      </details>
                     )}
                   </article>
                 ))}
               </div>
+              {hasHiddenQuestionReviews && (
+                <button
+                  type="button"
+                  className="gsj-btn gsj-btn--secondary gsj-result-review-toggle"
+                  onClick={() => setShowAllQuestionReviews((prev) => !prev)}
+                >
+                  {showAllQuestionReviews ? 'Thu gọn danh sách câu hỏi' : `Xem tất cả ${totalQuestionReviews} câu`}
+                </button>
+              )}
             </section>
           )}
 
@@ -1460,13 +1725,14 @@ const GSJJourneyPage: React.FC = () => {
         )}
 
         {/* Main Content */}
-        <div className="gsj-content">
+        <div className={`gsj-content ${viewMode === 'result' ? 'gsj-content--result' : ''}`}>
           {viewMode === 'list' && renderJourneyList()}
           {viewMode === 'detail' && renderDetailView()}
           {viewMode === 'test' && renderTestView()}
           {viewMode === 'result' && renderResultView()}
 
           {/* Sidebar - Quick Actions */}
+          {viewMode !== 'result' && (
           <div className="gsj-sidebar">
             <div className="gsj-card">
               <div className="gsj-card__header">
@@ -1522,6 +1788,7 @@ const GSJJourneyPage: React.FC = () => {
               </div>
             </div>
           </div>
+          )}
         </div>
       </div>
 
