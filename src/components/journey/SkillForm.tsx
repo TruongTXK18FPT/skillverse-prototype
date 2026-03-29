@@ -1,11 +1,29 @@
-import { useState } from 'react';
-import { Check, Search, X, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
-import {
-  DOMAIN_OPTIONS,
-  SUB_CATEGORIES,
-  DomainType
-} from '../../types/Journey';
-import { COMMON_SKILLS } from '../../types/domainExpertMapper';
+import { useEffect, useMemo, useState } from 'react';
+import { Check, Search, X, ArrowLeft, ArrowRight, RefreshCw } from 'lucide-react';
+import { getExpertFields, ExpertFieldResponse } from '../../services/expertPromptService';
+import { ExpertDomainMeta, getExpertDomainMeta } from '../../utils/expertFieldPresentation';
+
+const SKILL_SUGGESTIONS_BY_DOMAIN_LABEL: Record<string, string[]> = {
+  'Công nghệ thông tin': ['JavaScript', 'TypeScript', 'React', 'Node.js', 'SQL', 'Git'],
+  'Thiết kế': ['Figma', 'UI Design', 'UX Research', 'Design Systems', 'Prototyping'],
+  'Kinh doanh': ['Digital Marketing', 'Sales', 'Project Management', 'Analytics'],
+  'Kỹ thuật': ['AutoCAD', 'SolidWorks', 'MATLAB', 'Production Planning'],
+  'Y tế & Sức khỏe': ['Patient Care', 'Medical Terminology', 'Clinical Procedures'],
+  'Giáo dục': ['Instructional Design', 'Curriculum Development', 'Teaching'],
+  'Logistics': ['Supply Chain Management', 'Warehouse Operations', 'Inventory Management'],
+  'Pháp luật': ['Contract Drafting', 'Legal Research', 'Compliance'],
+  'Nghệ thuật': ['Photography', 'Video Editing', 'Illustration', '3D Modeling'],
+  'Dịch vụ': ['Customer Service', 'Event Planning', 'Hospitality Management'],
+  'Cộng đồng': ['Community Management', 'Fundraising', 'Volunteer Coordination'],
+  'Nông nghiệp & Môi trường': ['Sustainable Agriculture', 'Environmental Assessment', 'Water Management'],
+};
+
+const getSuggestedSkills = (domainLabel?: string) => {
+  if (!domainLabel) return [];
+  return SKILL_SUGGESTIONS_BY_DOMAIN_LABEL[domainLabel] || [];
+};
+
+const getDomainLabel = (domain: string) => getExpertDomainMeta(domain).label;
 
 interface SkillFormProps {
   onComplete: (data: { domain: string; subCategory: string; skills: string[] }) => void;
@@ -14,15 +32,71 @@ interface SkillFormProps {
 
 const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
   const [step, setStep] = useState(1);
-  const [selectedDomain, setSelectedDomain] = useState<DomainType | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [expertFields, setExpertFields] = useState<ExpertFieldResponse[]>([]);
+
+  const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const [customSkills, setCustomSkills] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState('');
 
-  const currentSubCategories = selectedDomain ? SUB_CATEGORIES[selectedDomain] || [] : [];
-  const suggestedSkills = selectedDomain ? COMMON_SKILLS[selectedDomain] || [] : [];
+  useEffect(() => {
+    const loadFields = async () => {
+      try {
+        setLoading(true);
+        setLoadError(null);
+        const data = await getExpertFields();
+        setExpertFields(data || []);
+      } catch (error) {
+        console.error('Failed to load expert fields:', error);
+        setLoadError('Không tải được danh sách ngành nghề. Vui lòng thử lại.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleDomainSelect = (domain: DomainType) => {
+    loadFields();
+  }, []);
+
+  const domainOptions: ExpertDomainMeta[] = useMemo(() => {
+    return expertFields.map(field => getExpertDomainMeta(field.domain));
+  }, [expertFields]);
+
+  const currentDomain = useMemo(() => {
+    return expertFields.find(field => field.domain === selectedDomain);
+  }, [expertFields, selectedDomain]);
+
+  const currentSubCategories = useMemo(() => {
+    return (currentDomain?.industries || []).map(industry => ({
+      value: industry.industry,
+      label: industry.industry,
+    }));
+  }, [currentDomain]);
+
+  const suggestedSkills = useMemo(() => {
+    return getSuggestedSkills(selectedDomain ? getDomainLabel(selectedDomain) : undefined);
+  }, [selectedDomain]);
+
+  const selectedDomainMeta = useMemo(() => {
+    return selectedDomain ? domainOptions.find((domain) => domain.value === selectedDomain) : undefined;
+  }, [domainOptions, selectedDomain]);
+
+  const handleRetry = async () => {
+    try {
+      setLoading(true);
+      setLoadError(null);
+      const data = await getExpertFields();
+      setExpertFields(data || []);
+    } catch (error) {
+      console.error('Failed to load expert fields:', error);
+      setLoadError('Không tải được danh sách ngành nghề. Vui lòng thử lại.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDomainSelect = (domain: string) => {
     setSelectedDomain(domain);
     setSelectedSubCategory(null);
     setCustomSkills([]);
@@ -67,9 +141,6 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
 
   const handleSubmit = () => {
     if (selectedDomain && selectedSubCategory && customSkills.length > 0) {
-      // For SKILL journeys, keep frontend domain CODE (e.g. "IT") so AssessmentPromptService
-      // can match it against hardcoded domain strings in generateTestPrompt().
-      // The expert prompt matching (exact/fuzzy) is only used in expert chat, not journey assessment.
       onComplete({
         domain: selectedDomain,
         subCategory: selectedSubCategory,
@@ -100,14 +171,26 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
       </div>
 
       <div className="gsj-domain-grid">
-        {DOMAIN_OPTIONS.map((domain) => (
+        {domainOptions.map((domain) => (
           <button
             key={domain.value}
             type="button"
             className={`gsj-domain-card ${selectedDomain === domain.value ? 'gsj-domain-card--selected' : ''}`}
-            onClick={() => handleDomainSelect(domain.value as DomainType)}
+            onClick={() => handleDomainSelect(domain.value)}
           >
-            <span className="gsj-domain-card__icon">{domain.icon}</span>
+            {domain.image ? (
+              <div className="gsj-domain-card__image-wrap">
+                <img
+                  src={domain.image}
+                  alt={domain.label}
+                  className="gsj-domain-card__image"
+                />
+              </div>
+            ) : (
+              <div className="gsj-domain-card__image-wrap">
+                <span className="gsj-domain-card__icon">{domain.icon}</span>
+              </div>
+            )}
             <div className="gsj-domain-card__content">
               <span className="gsj-domain-card__label">{domain.label}</span>
               <span className="gsj-domain-card__desc">{domain.description}</span>
@@ -129,7 +212,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
       <div className="gsj-wizard-step__header">
         <h2 className="gsj-wizard-step__title">Chọn ngành chi tiết</h2>
         <p className="gsj-wizard-step__subtitle">
-          {DOMAIN_OPTIONS.find(d => d.value === selectedDomain)?.label} - Bạn muốn học về ngành nào?
+          {domainOptions.find(d => d.value === selectedDomain)?.label} - Bạn muốn học về ngành nào?
         </p>
       </div>
 
@@ -161,6 +244,11 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
         <p className="gsj-wizard-step__subtitle">
           Nhập các kỹ năng bạn muốn học trong ngành {currentSubCategories.find(s => s.value === selectedSubCategory)?.label}
         </p>
+      </div>
+
+      <div className="gsj-selection-banner">
+        <span className="gsj-selection-banner__item">{selectedDomainMeta?.label || 'Chưa chọn lĩnh vực'}</span>
+        <span className="gsj-selection-banner__item">{currentSubCategories.find(s => s.value === selectedSubCategory)?.label || 'Chưa chọn ngành'}</span>
       </div>
 
       {/* Custom skill input */}
@@ -240,15 +328,37 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
     </div>
   );
 
-  // Get step title for progress indicator
-  const getStepTitle = () => {
-    switch (step) {
-      case 1: return 'Lĩnh vực';
-      case 2: return 'Ngành';
-      case 3: return 'Kỹ năng';
-      default: return '';
-    }
-  };
+  if (loading) {
+    return (
+      <div className="gsj-wizard-step">
+        <div className="gsj-wizard-step__header">
+          <h2 className="gsj-wizard-step__title">Đang tải dữ liệu nghề nghiệp...</h2>
+          <p className="gsj-wizard-step__subtitle">Vui lòng chờ trong giây lát.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="gsj-wizard-step">
+        <div className="gsj-wizard-step__header">
+          <h2 className="gsj-wizard-step__title">Không thể tải danh sách ngành nghề</h2>
+          <p className="gsj-wizard-step__subtitle">{loadError}</p>
+        </div>
+        <div className="gsj-wizard-nav">
+          <button type="button" className="gsj-btn gsj-btn--secondary" onClick={onBack}>
+            <ArrowLeft size={16} />
+            Quay lại
+          </button>
+          <button type="button" className="gsj-btn gsj-btn--primary" onClick={handleRetry}>
+            <RefreshCw size={16} />
+            Thử lại
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="gsj-skill-form">
@@ -310,8 +420,8 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
             onClick={handleSubmit}
             disabled={!canProceed()}
           >
-            <Sparkles size={16} />
-            Hoàn thành
+            <Check size={16} />
+            Xác nhận lựa chọn
           </button>
         )}
       </div>

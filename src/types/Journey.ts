@@ -325,6 +325,12 @@ export const DURATION_OPTIONS = [
 
 export type DurationType = typeof DURATION_OPTIONS[number]['value'];
 
+export const QUESTION_COUNT_OPTIONS = [
+  { value: 10, label: '10 câu', description: 'Bản ngắn để kiểm tra nhanh', icon: '⚡' },
+  { value: 15, label: '15 câu', description: 'Mức cân bằng, dễ bắt đầu', icon: '🎯' },
+  { value: 25, label: '25 câu', description: 'Đủ sâu để phân tích đầu vào', icon: '🧠' }
+] as const;
+
 // ==================== Skills by Domain ====================
 
 export const SKILLS_BY_DOMAIN: Record<string, string[]> = {
@@ -361,11 +367,15 @@ export interface StartJourneyRequest {
   // For career type: specific job role
   jobRole?: string;
 
+  // Optional helper field from CareerForm (not sent to backend payload)
+  roleKeywords?: string;
+
   // Optional fields
   skills?: string[];
   focusAreas?: string[];
   language?: string;
   duration?: string;
+  questionCount?: number;
 }
 
 /**
@@ -385,6 +395,11 @@ export interface SubmitTestRequest {
 export interface JourneySummaryResponse {
   id: number;
   domain: string;
+  industry?: string;
+  subCategory?: string;
+  jobRole?: string;
+  type?: string;
+  skills?: string[];
   goal: string;
   status: JourneyStatus;
   currentLevel?: SkillLevel;

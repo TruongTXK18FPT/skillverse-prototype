@@ -7,6 +7,8 @@ import careerChatService from '../../services/careerChatService';
 import { premiumService } from '../../services/premiumService';
 import { UserSubscriptionResponse } from '../../data/premiumDTOs';
 import { ExpertFieldResponse, RoleInfo } from '../../types/CareerChat';
+import { getDomainImage } from '../../utils/domainImageMap';
+import { getExpertDomainMeta } from '../../utils/expertFieldPresentation';
 import { useToast } from '../../hooks/useToast';
 import '../../styles/CareerChatLandingTech.css';
 
@@ -545,25 +547,39 @@ const CareerChatLanding = () => {
                         <div className="loading">Đang tải...</div>
                       ) : (
                         <div className="grid-items">
-                          {expertFields.map((field, index) => (
-                            <motion.div
-                              key={field.domain}
-                              className="grid-item domain"
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: index * 0.1 }}
-                              onClick={() => handleDomainSelect(field.domain)}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                            >
-                              <div className="item-border"></div>
-                              <div className="item-content">
-                                <h3>{field.domain}</h3>
-                                <p>{field.industries.length} ngành nghề</p>
-                              </div>
-                              <ChevronRight className="item-arrow" size={20} />
-                            </motion.div>
-                          ))}
+                          {expertFields.map((field, index) => {
+                            const domainMeta = getExpertDomainMeta(field.domain);
+                            const domainImage = getDomainImage(field.domain);
+                            return (
+                              <motion.div
+                                key={field.domain}
+                                className="grid-item domain"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                onClick={() => handleDomainSelect(field.domain)}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                              >
+                                <div className="item-border"></div>
+                                {domainImage ? (
+                                  <div className="domain-card-image-wrap">
+                                    <img
+                                      src={domainImage}
+                                      alt={domainMeta.label}
+                                      className="domain-card-image"
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="domain-card-icon">{domainMeta.icon}</div>
+                                )}
+                                <div className="item-content">
+                                  <h3>{domainMeta.label}</h3>
+                                  <p>{field.industries.length} ngành nghề</p>
+                                </div>
+                              </motion.div>
+                            );
+                          })}
                         </div>
                       )}
                     </motion.div>

@@ -163,7 +163,10 @@ const AppContents = () => {
             <Route path="/notifications" element={<NotificationPage />} />
             <Route path="/messages" element={<MessengerPage />} />
             <Route path="/my-bookings" element={<UserBookingsPage />} />
-            <Route path="/bookings/:bookingId" element={<BookingDetailPage />} />
+            <Route
+              path="/bookings/:bookingId"
+              element={<BookingDetailPage />}
+            />
             <Route path="/explore" element={<ExploreMapPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/learning-report" element={<LearningReportPage />} />
@@ -484,6 +487,8 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/set-password",
   "/bookings",
   "/user/bookings",
+  "/journey/create",
+  "/journey",
 ]);
 
 // Check if path matches quiz attempt pattern
@@ -493,7 +498,7 @@ const isQuizAttemptRoute = (pathname: string) => {
 
 // Check if path matches booking detail routes
 const isBookingRoute = (pathname: string) => {
-  return /^\/bookings\/\d+$/.test(pathname) || pathname === '/user/bookings';
+  return /^\/bookings\/\d+$/.test(pathname) || pathname === "/user/bookings";
 };
 
 // Check if path matches assignment page pattern
@@ -515,7 +520,9 @@ const isRoadmapDetailRoute = (pathname: string) => {
 };
 
 const isCourseLearningRoute = (pathname: string) => {
-  return pathname === "/course-learning" || pathname.startsWith("/course-learning/");
+  return (
+    pathname === "/course-learning" || pathname.startsWith("/course-learning/")
+  );
 };
 
 // Check if path is any admin route
@@ -530,7 +537,10 @@ const isMentorRoute = (pathname: string) => {
 
 // Check if path is job detail route
 const isJobDetailRoute = (pathname: string) => {
-  return /^\/jobs\/\d+$/.test(pathname) || /^\/short-term-jobs\/\d+\/view$/.test(pathname);
+  return (
+    /^\/jobs\/\d+$/.test(pathname) ||
+    /^\/short-term-jobs\/\d+\/view$/.test(pathname)
+  );
 };
 
 // Hide Header on specific routes

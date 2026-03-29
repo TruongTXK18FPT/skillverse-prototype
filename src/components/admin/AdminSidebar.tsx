@@ -22,6 +22,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Shield,
+  ListChecks,
 } from "lucide-react";
 import "./AdminSidebar.css";
 
@@ -179,6 +180,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           id: "ai-experts",
           label: "AI Experts",
           icon: Brain,
+          allowedRoles: ["AI_ADMIN", "ADMIN"],
+        },
+        {
+          id: "question-bank",
+          label: "Question Bank",
+          icon: ListChecks,
           allowedRoles: ["AI_ADMIN", "ADMIN"],
         },
         {

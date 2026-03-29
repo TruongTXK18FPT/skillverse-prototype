@@ -7,7 +7,6 @@ import {
   ChevronRight,
   Lightbulb,
   Search,
-  Sparkles,
   X
 } from 'lucide-react';
 import {
@@ -23,8 +22,43 @@ import CareerForm from '../../components/journey/CareerForm';
 import SkillForm from '../../components/journey/SkillForm';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import journeyService from '../../services/journeyService';
-import { COMMON_SKILLS } from '../../types/domainExpertMapper';
+import { getExpertDomainMeta } from '../../utils/expertFieldPresentation';
 import './../../styles/GSJJourney.css';
+
+const parseRoleKeywords = (keywords?: string): string[] => {
+  if (!keywords) return [];
+  return keywords
+    .split(',')
+    .map((k) => k.trim())
+    .filter((k) => k.length > 0)
+    .filter((k, idx, arr) => arr.indexOf(k) === idx);
+};
+
+const SKILL_SUGGESTIONS_BY_DOMAIN: Record<string, string[]> = {
+  'Information Technology': ['JavaScript', 'TypeScript', 'React', 'Node.js', 'SQL', 'Git'],
+  'Thiết kế – Sáng tạo – Nội dung': ['Figma', 'UI Design', 'UX Research', 'Design Systems', 'Prototyping'],
+  'Kinh doanh – Marketing – Quản trị': ['Digital Marketing', 'Sales', 'Project Management', 'Analytics'],
+  'Kỹ thuật – Công nghiệp – Sản xuất': ['AutoCAD', 'SolidWorks', 'MATLAB', 'Production Planning'],
+  Healthcare: ['Patient Care', 'Medical Terminology', 'Clinical Procedures'],
+  'Education – Đào tạo – EdTech': ['Instructional Design', 'Curriculum Development', 'Teaching'],
+  'Logistics – Chuỗi cung ứng – Xuất nhập khẩu': ['Supply Chain Management', 'Warehouse Operations', 'Inventory Management'],
+  'Legal & Public Administration': ['Contract Drafting', 'Legal Research', 'Compliance'],
+  'Arts & Entertainment': ['Photography', 'Video Editing', 'Illustration', '3D Modeling'],
+  'Service & Hospitality': ['Customer Service', 'Event Planning', 'Hospitality Management'],
+  'Công tác xã hội – Dịch vụ cộng đồng – Tổ chức phi lợi nhuận': ['Community Management', 'Fundraising', 'Volunteer Coordination'],
+  'Agriculture – Environment': ['Sustainable Agriculture', 'Environmental Assessment', 'Water Management'],
+};
+
+const getDomainSkillSuggestions = (domain?: string) => {
+  if (!domain) return [];
+  return SKILL_SUGGESTIONS_BY_DOMAIN[domain] || [];
+};
+
+const mergeUniqueSkills = (a: string[], b: string[]) => {
+  const merged = [...a, ...b];
+  return merged.filter((s, idx) => merged.indexOf(s) === idx);
+};
+
 
 const TOTAL_STEPS = 3;
 
@@ -53,12 +87,20 @@ const JourneyCreatePage: React.FC = () => {
   });
 
   const [skillInput, setSkillInput] = useState('');
-  const [skillSearch, setSkillSearch] = useState('');
 
-  // Available skill suggestions based on domain
-  const skillSuggestions = journeyType && formData.domain
-    ? COMMON_SKILLS[formData.domain] || []
-    : [];
+  // Available skill suggestions from selected career role keywords + domain fallback
+  const skillSuggestions = (() => {
+    const fromRole = parseRoleKeywords(formData.roleKeywords);
+    const fromDomain = getDomainSkillSuggestions(formData.domain);
+    return mergeUniqueSkills(fromRole, fromDomain);
+  })();
+
+  const selectedGoal = GOAL_OPTIONS.find((option) => option.value === formData.goal);
+  const selectedLevel = LEVEL_OPTIONS.find((option) => option.value === formData.level);
+  const selectedLanguage = LANGUAGE_OPTIONS.find((option) => option.value === formData.language);
+  const selectedDuration = DURATION_OPTIONS.find((option) => option.value === formData.duration);
+  const domainMeta = formData.domain ? getExpertDomainMeta(formData.domain) : null;
+  const journeyTypeLabel = journeyType === JourneyType.CAREER ? 'Định hướng nghề nghiệp' : journeyType === JourneyType.SKILL ? 'Nâng cấp kỹ năng' : 'Chưa chọn';
 
   const handleTypeSelect = (type: typeof JourneyType[keyof typeof JourneyType]) => {
     setJourneyType(type);
@@ -77,17 +119,17 @@ const JourneyCreatePage: React.FC = () => {
     }));
     setCurrentStep(2);
     setSkillInput('');
-    setSkillSearch('');
     setError(null);
   };
 
-  const handleCareerComplete = (data: { domain: string; industry: string; jobRole: string }) => {
+  const handleCareerComplete = (data: { domain: string; industry: string; jobRole: string; roleKeywords?: string }) => {
     setFormData((prev) => ({
       ...prev,
       domain: data.domain,
       industry: data.industry,
       jobRole: data.jobRole,
-      subCategory: prev.subCategory || ''
+      subCategory: prev.subCategory || '',
+      roleKeywords: data.roleKeywords
     }));
     setCurrentStep(3);
     setError(null);
@@ -191,9 +233,9 @@ const JourneyCreatePage: React.FC = () => {
   const renderStep1 = () => (
     <div className="gsj-wizard-step">
       <div className="gsj-wizard-step__header">
-        <h2 className="gsj-wizard-step__title">Bạn muốn làm gì?</h2>
+        <h2 className="gsj-wizard-step__title">Chọn loại hành trình</h2>
         <p className="gsj-wizard-step__subtitle">
-          Chọn loại hành trình để Meowl tạo bài đánh giá phù hợp nhất.
+          Mỗi lựa chọn sẽ mở ra bộ câu hỏi đầu vào và roadmap khác nhau. Chọn đúng mục đích để kết quả sát với nhu cầu của bạn.
         </p>
       </div>
 
@@ -208,7 +250,7 @@ const JourneyCreatePage: React.FC = () => {
           </span>
           <span className="gsj-type-card__label">Định hướng nghề nghiệp</span>
           <span className="gsj-type-card__desc">
-            Chọn lĩnh vực và vị trí mục tiêu để đánh giá mức độ sẵn sàng cho công việc bạn hướng tới.
+            Chọn lĩnh vực, ngành và vị trí mục tiêu để kiểm tra mức độ sẵn sàng trước khi đi theo một hướng nghề nghiệp cụ thể.
           </span>
           {journeyType === JourneyType.CAREER && (
             <span className="gsj-type-card__check">
@@ -227,7 +269,7 @@ const JourneyCreatePage: React.FC = () => {
           </span>
           <span className="gsj-type-card__label">Học kỹ năng mới</span>
           <span className="gsj-type-card__desc">
-            Nhập nhóm kỹ năng muốn học để nhận quiz đầu vào và lộ trình luyện tập cá nhân hóa.
+            Chọn nhóm kỹ năng bạn muốn tập trung để nhận bài đánh giá đầu vào và kế hoạch luyện tập phù hợp.
           </span>
           {journeyType === JourneyType.SKILL && (
             <span className="gsj-type-card__check">
@@ -244,9 +286,9 @@ const JourneyCreatePage: React.FC = () => {
     <div className="gsj-wizard-step">
       {/* Mục tiêu */}
       <div className="gsj-wizard-step__header">
-        <h2 className="gsj-wizard-step__title">Mục tiêu của bạn là gì?</h2>
+        <h2 className="gsj-wizard-step__title">Cấu hình bài đánh giá</h2>
         <p className="gsj-wizard-step__subtitle">
-          Chọn mục tiêu chính để AI tạo bài test đúng trọng tâm.
+          Hoàn thiện các lựa chọn để hệ thống tạo bài đánh giá phù hợp với mục tiêu và trình độ của bạn.
         </p>
       </div>
 
@@ -442,99 +484,176 @@ const JourneyCreatePage: React.FC = () => {
         <div className="gsj-create-bg__circle gsj-create-bg__circle--3"></div>
       </div>
 
-      <div className="gsj-container">
-        <div className="gsj-create-header">
-          <button type="button" className="gsj-create-header__back" onClick={handleBack}>
-            <ArrowLeft size={20} />
-          </button>
-          <div className="gsj-create-header__content">
-            <h1 className="gsj-create-header__title">
-              <Sparkles size={24} />
-              Tạo bài test đánh giá
-            </h1>
-            <p className="gsj-create-header__subtitle">
-              Trả lời vài bước ngắn để AI tạo quiz đầu vào sát với nhu cầu của bạn.
-            </p>
-          </div>
-        </div>
-
-        <div className="gsj-progress">
-          {[1, 2, 3].map((step) => (
-            <div
-              key={step}
-              className={`gsj-progress__step ${currentStep >= step ? 'gsj-progress__step--active' : ''} ${currentStep > step ? 'gsj-progress__step--completed' : ''}`}
-            >
-              <div className="gsj-progress__step-number">
-                {currentStep > step ? <Check size={14} /> : step}
-              </div>
-              <span className="gsj-progress__step-label">
-                {step === 1 && 'Chọn loại'}
-                {step === 2 && (journeyType === JourneyType.CAREER ? 'Nghề nghiệp' : 'Kỹ năng')}
-                {step === 3 && 'Cấu hình'}
-              </span>
-            </div>
-          ))}
-          <div className="gsj-progress__bar">
-            <div
-              className="gsj-progress__bar-fill"
-              style={{ width: `${((currentStep - 1) / (TOTAL_STEPS - 1)) * 100}%` }}
-            ></div>
-          </div>
-        </div>
-
-        {error && (
-          <div className="gsj-alert gsj-alert--error gsj-mb-16">
-            {error}
-            <button type="button" onClick={() => setError(null)}>
-              <X size={16} />
+      <div className="gsj-container gsj-create-shell">
+        <div className="gsj-create-main">
+          <div className="gsj-create-header">
+            <button type="button" className="gsj-create-header__back" onClick={handleBack}>
+              <ArrowLeft size={20} />
             </button>
+            <div className="gsj-create-header__content">
+              <h1 className="gsj-create-header__title">
+                <Briefcase size={24} />
+                Tạo bài test đánh giá
+              </h1>
+              <p className="gsj-create-header__subtitle">
+                Hoàn thiện thông tin theo từng bước để hệ thống tạo đề đầu vào đúng trọng tâm và đúng số lượng câu hỏi bạn mong muốn.
+              </p>
+            </div>
           </div>
-        )}
 
-        <form onSubmit={handleSubmit} className="gsj-wizard-form">
-          {currentStep === 1 && renderStep1()}
-          {currentStep === 2 && journeyType === JourneyType.CAREER && (
-            <CareerForm onComplete={handleCareerComplete} onBack={handleBack} />
-          )}
-          {currentStep === 2 && journeyType === JourneyType.SKILL && (
-            <SkillForm onComplete={handleSkillComplete} onBack={handleBack} />
-          )}
-          {currentStep === 3 && renderStep3()}
+          <section className="gsj-create-overview">
+            <div className="gsj-create-overview__highlights">
+              <span className="gsj-create-overview__chip">Bước {currentStep}/{TOTAL_STEPS}</span>
+              <span className="gsj-create-overview__chip">{journeyTypeLabel}</span>
+              {domainMeta && <span className="gsj-create-overview__chip">{domainMeta.label}</span>}
+            </div>
+          </section>
 
-          {currentStep !== 2 && (
-            <div className="gsj-wizard-nav">
-              {currentStep > 1 && (
-                <button
-                  type="button"
-                  className="gsj-btn gsj-btn--secondary"
-                  onClick={handleBack}
-                >
-                  <ArrowLeft size={16} />
-                  Quay lại
-                </button>
-              )}
+          <div className="gsj-progress gsj-progress--framed">
+            {[1, 2, 3].map((step) => (
+              <div
+                key={step}
+                className={`gsj-progress__step ${currentStep >= step ? 'gsj-progress__step--active' : ''} ${currentStep > step ? 'gsj-progress__step--completed' : ''}`}
+              >
+                <div className="gsj-progress__step-number">
+                  {currentStep > step ? <Check size={14} /> : step}
+                </div>
+                <span className="gsj-progress__step-label">
+                  {step === 1 && 'Chọn loại'}
+                  {step === 2 && (journeyType === JourneyType.CAREER ? 'Nghề nghiệp' : 'Kỹ năng')}
+                  {step === 3 && 'Cấu hình'}
+                </span>
+              </div>
+            ))}
+            <div className="gsj-progress__bar">
+              <div
+                className="gsj-progress__bar-fill"
+                style={{ width: `${((currentStep - 1) / (TOTAL_STEPS - 1)) * 100}%` }}
+              ></div>
+            </div>
+          </div>
 
-              {currentStep < TOTAL_STEPS ? (
-                <button
-                  type="button"
-                  className="gsj-btn gsj-btn--primary"
-                  onClick={() => setCurrentStep((prev) => prev + 1)}
-                >
-                  Tiếp theo
-                  <ChevronRight size={16} />
-                </button>
-              ) : (
-                <button type="submit" className="gsj-btn gsj-btn--primary" disabled={!canSubmit()}>
-                  <Sparkles size={16} />
-                  Tạo bài test cho tôi
-                </button>
-              )}
+          {error && (
+            <div className="gsj-alert gsj-alert--error gsj-mb-16">
+              {error}
+              <button type="button" onClick={() => setError(null)}>
+                <X size={16} />
+              </button>
             </div>
           )}
-        </form>
 
-        <MeowlGuide currentPage="journey/create" />
+          <form onSubmit={handleSubmit} className="gsj-wizard-form gsj-wizard-form--framed">
+            {currentStep === 1 && renderStep1()}
+            {currentStep === 2 && journeyType === JourneyType.CAREER && (
+              <CareerForm onComplete={handleCareerComplete} onBack={handleBack} />
+            )}
+            {currentStep === 2 && journeyType === JourneyType.SKILL && (
+              <SkillForm onComplete={handleSkillComplete} onBack={handleBack} />
+            )}
+            {currentStep === 3 && renderStep3()}
+
+            {currentStep !== 2 && (
+              <div className="gsj-wizard-nav">
+                {currentStep > 1 && (
+                  <button
+                    type="button"
+                    className="gsj-btn gsj-btn--secondary"
+                    onClick={handleBack}
+                  >
+                    <ArrowLeft size={16} />
+                    Quay lại
+                  </button>
+                )}
+
+                {currentStep < TOTAL_STEPS ? (
+                  <button
+                    type="button"
+                    className="gsj-btn gsj-btn--primary"
+                    onClick={() => setCurrentStep((prev) => prev + 1)}
+                  >
+                    Tiếp theo
+                    <ChevronRight size={16} />
+                  </button>
+                ) : (
+                  <button type="submit" className="gsj-btn gsj-btn--primary" disabled={!canSubmit()}>
+                    <ChevronRight size={16} />
+                    Tạo bài test cho tôi
+                  </button>
+                )}
+              </div>
+            )}
+          </form>
+        </div>
+
+        <aside className="gsj-create-sidebar">
+          <section className="gsj-create-sidecard">
+            <h3 className="gsj-create-sidecard__title">Thông tin đang chọn</h3>
+            <div className="gsj-create-summary-list">
+              <div className="gsj-create-summary-item">
+                <span className="gsj-create-summary-item__label">Loại hành trình</span>
+                <strong>{journeyTypeLabel}</strong>
+              </div>
+              <div className="gsj-create-summary-item">
+                <span className="gsj-create-summary-item__label">Lĩnh vực</span>
+                <strong>{domainMeta?.label || 'Chưa chọn'}</strong>
+              </div>
+              <div className="gsj-create-summary-item">
+                <span className="gsj-create-summary-item__label">Ngành / nhóm kỹ năng</span>
+                <strong>{formData.industry || formData.subCategory || 'Chưa chọn'}</strong>
+              </div>
+              <div className="gsj-create-summary-item">
+                <span className="gsj-create-summary-item__label">Vai trò / kỹ năng</span>
+                <strong>{formData.jobRole || (formData.skills && formData.skills.length > 0 ? `${formData.skills.length} kỹ năng đã chọn` : 'Chưa chọn')}</strong>
+              </div>
+              <div className="gsj-create-summary-item">
+                <span className="gsj-create-summary-item__label">Mục tiêu</span>
+                <strong>{selectedGoal?.label || 'Chưa chọn'}</strong>
+              </div>
+              <div className="gsj-create-summary-item">
+                <span className="gsj-create-summary-item__label">Trình độ hiện tại</span>
+                <strong>{selectedLevel?.label || 'Chưa chọn'}</strong>
+              </div>
+              <div className="gsj-create-summary-item">
+                <span className="gsj-create-summary-item__label">Ngôn ngữ / thời lượng</span>
+                <strong>
+                  {selectedLanguage?.label || 'Chưa chọn'}
+                  {' · '}
+                  {selectedDuration?.label || 'Chưa chọn'}
+                </strong>
+              </div>
+            </div>
+          </section>
+
+          <section className="gsj-create-sidecard">
+            <h3 className="gsj-create-sidecard__title">Cách hoạt động</h3>
+            <div className="gsj-create-process">
+              <div className="gsj-create-process__item">
+                <span className="gsj-create-process__step">1</span>
+                <div>
+                  <strong>Chọn đúng bối cảnh</strong>
+                  <p>Lĩnh vực, ngành và vai trò hoặc nhóm kỹ năng sẽ quyết định ngân hàng câu hỏi và hướng đánh giá.</p>
+                </div>
+              </div>
+              <div className="gsj-create-process__item">
+                <span className="gsj-create-process__step">2</span>
+                <div>
+                  <strong>Thiết lập đề đầu vào</strong>
+                  <p>Chọn mục tiêu, trình độ, thời lượng và số lượng câu hỏi để hệ thống tạo đúng khung đề.</p>
+                </div>
+              </div>
+              <div className="gsj-create-process__item">
+                <span className="gsj-create-process__step">3</span>
+                <div>
+                  <strong>Mở bài test và xem kết quả</strong>
+                  <p>Sau khi tạo, bạn sẽ được chuyển thẳng về Journey để mở bài test và xem lại phân tích.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </aside>
       </div>
+
+      <MeowlGuide currentPage="journey/create" />
     </div>
   );
 };

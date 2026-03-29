@@ -19,7 +19,7 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
   const currentQuestion = test.questions[currentIndex];
   const totalQuestions = test.questions.length;
   const answeredCount = Object.keys(answers).length;
-  const progress = (answeredCount / totalQuestions) * 100;
+  const progress = totalQuestions > 0 ? (answeredCount / totalQuestions) * 100 : 0;
 
   const getDifficultyClass = (difficulty?: string): string => {
     const value = (difficulty || '').toUpperCase();
@@ -112,6 +112,33 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
       </div>
     </div>
   );
+
+  if (!currentQuestion || totalQuestions === 0) {
+    return (
+      <div className="gsj-test">
+        <div className="gsj-test__header">
+          <button className="gsj-test__back" onClick={onBack}>
+            <ArrowLeft size={20} />
+          </button>
+          <div className="gsj-test__info">
+            <h2 className="gsj-test__title">{test.title}</h2>
+            <div className="gsj-test__meta">
+              <span className="gsj-test__meta-item">
+                <Clock size={14} />
+                Không thể tải câu hỏi
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="gsj-test__question-container">
+          <div className="gsj-empty-state">
+            <p>Đề thi này chưa có dữ liệu câu hỏi hợp lệ. Vui lòng quay lại và mở lại bài test.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="gsj-test">

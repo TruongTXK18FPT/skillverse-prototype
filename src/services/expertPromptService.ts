@@ -61,6 +61,16 @@ export const getExpertPromptById = async (id: number): Promise<ExpertPromptConfi
 };
 
 /**
+ * Find matching expert prompt by domain / industry / job role (Admin only)
+ */
+export const findMatchingExpertPrompt = async (
+  params: { domain: string; industry: string; jobRole: string }
+): Promise<ExpertPromptConfig> => {
+  const response = await axiosInstance.get('/api/v1/admin/expert-prompts/match', { params });
+  return response.data;
+};
+
+/**
  * Create new expert prompt (Admin only)
  */
 export const createExpertPrompt = async (request: ExpertPromptRequest): Promise<ExpertPromptConfig> => {

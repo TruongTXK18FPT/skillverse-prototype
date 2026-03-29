@@ -189,6 +189,7 @@ const PUBLIC_ENDPOINTS = [
   "/portfolio/profile/slug", // Public portfolio by slug
   "/certificates/verify", // Public certificate verification
   "/courses", // Public course listing and details
+  "/v1/expert-fields", // Public expert field catalog
   "/gamification/leaderboard", // Public gamification leaderboard
   "/gamification/badges/definitions", // Public badge definitions
 ];

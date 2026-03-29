@@ -13,6 +13,7 @@ import SystemSettingsTabCosmic from "../../components/admin/SystemSettingsTabCos
 import PremiumPlansManagementTab from "../../components/admin/PremiumPlansManagementTab";
 import SupportTicketsTab from "../../components/admin/SupportTicketsTab";
 import AIExpertManagementTab from "../../components/admin/AIExpertManagementTab";
+import QuestionBankTab from "../../components/admin/questionBank/QuestionBankTab";
 import CommunityManagementTab from "../../components/admin/CommunityManagementTab";
 import { JobManagementTab } from "../../components/admin/JobManagementTab";
 import MeowlSkinUploadTab from "../../components/admin/MeowlSkinUploadTab";
@@ -167,6 +168,8 @@ const AdminPage: React.FC = () => {
         return <SystemSettingsTabCosmic />;
       case "ai-experts":
         return <AIExpertManagementTab />;
+      case "question-bank":
+        return <QuestionBankTab />;
       case "skin-upload":
         return <MeowlSkinUploadTab />;
       case "sliders":

@@ -694,6 +694,18 @@ const journeyService = {
   },
 
   /**
+   * Delete a journey
+   */
+  deleteJourney: async (journeyId: number): Promise<void> => {
+    try {
+      await axiosInstance.delete(`/v1/journey/${journeyId}`);
+    } catch (error) {
+      console.error('Failed to delete journey:', error);
+      throw new Error(getErrorMessage(error, 'Failed to delete journey.'));
+    }
+  },
+
+  /**
    * Get all active journeys for current user
    */
   getActiveJourneys: async (): Promise<JourneySummaryResponse[]> => {
