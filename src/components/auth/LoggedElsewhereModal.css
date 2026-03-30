@@ -1,0 +1,351 @@
+/* ─── Keyframes ──────────────────────────────────────────── */
+@keyframes lm-flicker {
+  0%, 100% { opacity: 1; }
+  92%       { opacity: 1; }
+  93%       { opacity: 0.4; }
+  94%       { opacity: 1; }
+  97%       { opacity: 0.7; }
+  98%       { opacity: 1; }
+}
+
+@keyframes lm-glow-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes lm-ring-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes lm-ring-spin-r {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+@keyframes lm-scan {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(400%); opacity: 0; }
+}
+
+@keyframes lm-tip-in {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes lm-badge-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+@keyframes lm-btn-shake {
+  0%, 100% { transform: translateY(-1px) translateX(0); }
+  25%       { transform: translateY(-1px) translateX(-2px); }
+  75%       { transform: translateY(-1px) translateX(2px); }
+}
+
+@keyframes lm-border-glow {
+  0%, 100% { border-color: rgba(255, 40, 40, 0.5); box-shadow: 0 0 12px rgba(255, 40, 40, 0.25), inset 0 0 12px rgba(255, 40, 40, 0.05); }
+  50%       { border-color: rgba(255, 40, 40, 0.85); box-shadow: 0 0 28px rgba(255, 40, 40, 0.5), inset 0 0 20px rgba(255, 40, 40, 0.12); }
+}
+
+/* ─── Backdrop ───────────────────────────────────────────── */
+.lm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 0, 60, 0.22) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(180, 0, 30, 0.18) 0%, transparent 55%),
+    #080508;
+}
+
+/* ─── Panel ───────────────────────────────────────────────── */
+.lm-panel {
+  position: relative;
+  width: min(100%, 390px);
+  border-radius: 22px;
+  padding: 36px 28px 30px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 40, 40, 0.5);
+  background: linear-gradient(160deg, #130508 0%, #1a0510 50%, #0e0308 100%);
+  box-shadow:
+    0 0 24px rgba(255, 40, 40, 0.22),
+    0 0 60px rgba(200, 0, 30, 0.12),
+    inset 0 1px 0 rgba(255, 100, 100, 0.08),
+    inset 0 0 40px rgba(255, 0, 50, 0.04);
+  animation: lm-border-glow 3s ease-in-out infinite, lm-flicker 8s linear infinite;
+}
+
+/* scan-line */
+.lm-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 60, 60, 0.7) 50%, transparent 100%);
+  animation: lm-scan 2.5s linear infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* grid overlay */
+.lm-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 40, 40, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 40, 40, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Close Button ────────────────────────────────────────── */
+.lm-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(255, 80, 80, 0.35);
+  border-radius: 50%;
+  color: #ff7070;
+  background: rgba(255, 30, 30, 0.12);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.lm-close:hover {
+  background: rgba(255, 40, 40, 0.3);
+  border-color: rgba(255, 80, 80, 0.65);
+  color: #fff;
+}
+
+/* ─── Avatar + Rings ───────────────────────────────────────── */
+.lm-avatar-ring {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  margin: 0 auto 22px;
+  z-index: 1;
+}
+
+.lm-ring1,
+.lm-ring2 {
+  position: absolute;
+  border-radius: 50%;
+  border-style: dashed;
+  pointer-events: none;
+  animation: lm-glow-pulse 2.5s ease-in-out infinite;
+}
+
+.lm-ring1 {
+  inset: -10px;
+  border-color: rgba(255, 50, 50, 0.5);
+  animation-delay: 0s;
+}
+
+.lm-ring2 {
+  inset: -22px;
+  border-color: rgba(255, 50, 50, 0.25);
+  animation-delay: 0.4s;
+  animation-name: lm-glow-pulse;
+}
+
+.lm-avatar-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 80, 80, 0.6);
+  box-shadow: 0 0 20px rgba(255, 50, 50, 0.35);
+}
+
+.lm-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.lm-avatar-glow {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 0, 60, 0.25) 0%, transparent 70%);
+  animation: lm-glow-pulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ─── Security Badge ───────────────────────────────────────── */
+.lm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 auto 14px;
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 40, 40, 0.45);
+  border-radius: 999px;
+  color: #ff7070;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(255, 20, 20, 0.12);
+  animation: lm-badge-blink 1.8s ease-in-out infinite;
+}
+
+.lm-badge-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff3b3b;
+  box-shadow: 0 0 6px #ff3b3b;
+  animation: lm-badge-blink 1s ease-in-out infinite;
+}
+
+/* ─── Title ────────────────────────────────────────────────── */
+.lm-title {
+  margin: 0 0 12px;
+  color: #ff5555;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(255, 50, 50, 0.6);
+  letter-spacing: 0.01em;
+  z-index: 1;
+  position: relative;
+}
+
+/* ─── Description ──────────────────────────────────────────── */
+.lm-desc {
+  margin: 0 0 22px;
+  color: rgba(255, 180, 180, 0.75);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  text-align: center;
+  z-index: 1;
+  position: relative;
+}
+
+/* ─── Tips ────────────────────────────────────────────────── */
+.lm-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 26px;
+  z-index: 1;
+  position: relative;
+}
+
+.lm-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 30, 30, 0.18);
+  background: rgba(255, 20, 20, 0.07);
+}
+
+.lm-tip-anim {
+  animation: lm-tip-in 0.4s ease-out both;
+}
+
+.lm-tip-dot {
+  flex: 0 0 8px;
+  width: 8px;
+  height: 8px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: #ff3b3b;
+  box-shadow: 0 0 8px #ff3b3b, 0 0 14px rgba(255, 50, 50, 0.4);
+}
+
+.lm-tip span:last-child {
+  color: rgba(255, 180, 180, 0.88);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+/* ─── Action Button ────────────────────────────────────────── */
+.lm-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 15px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #e62020 0%, #b80000 100%);
+  box-shadow:
+    0 6px 24px rgba(220, 0, 0, 0.45),
+    0 0 2px rgba(255, 80, 80, 0.5) inset;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.lm-action::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.lm-action:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.12);
+  box-shadow:
+    0 10px 32px rgba(220, 0, 0, 0.55),
+    0 0 4px rgba(255, 80, 80, 0.6) inset;
+  animation: lm-btn-shake 0.5s ease-in-out;
+}
+
+.lm-action:active {
+  transform: translateY(0);
+  filter: brightness(0.95);
+}
+
+/* ─── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .lm-panel {
+    padding: 32px 20px 26px;
+  }
+
+  .lm-avatar-ring {
+    width: 108px;
+    height: 108px;
+  }
+
+  .lm-title {
+    font-size: 1.15rem;
+  }
+}

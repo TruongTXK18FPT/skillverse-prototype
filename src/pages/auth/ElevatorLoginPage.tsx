@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../../context/AuthContext';
 import authService from '../../services/authService';
+import LoggedElsewhereModal from '../../components/auth/LoggedElsewhereModal';
 import { ElevatorAuthLayout, HologramLoginForm } from '../../components/elevator';
 import PendingApprovalModal from '../../components/elevator/PendingApprovalModal';
 import { GOOGLE_PASSWORD_ONBOARDING_SESSION_KEY } from '../../components/auth/GoogleUserOnboardingBanner';
@@ -24,6 +25,8 @@ const ElevatorLoginPage: React.FC = () => {
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [pendingApprovalEmail, setPendingApprovalEmail] = useState<string>('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [loggedElsewhereMessage, setLoggedElsewhereMessage] = useState<string | null>(null);
+  const [showLoggedElsewhereModal, setShowLoggedElsewhereModal] = useState(false);
   const googleRememberMeRef = useRef(false);
 
   const markPostLoginPrompt = (path: string) => {
@@ -60,8 +63,25 @@ const ElevatorLoginPage: React.FC = () => {
         'Vì lý do bảo mật, vui lòng đăng nhập lại.'
       );
       navigate('/login', { replace: true });
+      return;
+    }
+
+    if (reason === 'logged_elsewhere') {
+      setLoggedElsewhereMessage('Tài khoản của bạn đã được đăng nhập ở nơi khác.');
+    } else {
+      setLoggedElsewhereMessage(null);
     }
   }, [location.search, navigate, showSuccess]);
+
+  useEffect(() => {
+    setShowLoggedElsewhereModal(Boolean(loggedElsewhereMessage));
+  }, [loggedElsewhereMessage]);
+
+  const handleCloseLoggedElsewhereModal = () => {
+    setShowLoggedElsewhereModal(false);
+    setLoggedElsewhereMessage(null);
+    navigate('/login', { replace: true });
+  };
 
   // Google login handler
   const handleGoogleLogin = useGoogleLogin({
@@ -230,6 +250,11 @@ const ElevatorLoginPage: React.FC = () => {
           onRememberMeChange={setRememberMe}
         />
       </ElevatorAuthLayout>
+
+      <LoggedElsewhereModal
+        isOpen={showLoggedElsewhereModal}
+        onClose={handleCloseLoggedElsewhereModal}
+      />
 
       {/* Pending Approval Modal */}
       <PendingApprovalModal

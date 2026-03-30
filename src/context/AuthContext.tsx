@@ -6,6 +6,7 @@ import { LoginRequest, UserDto, VerifyEmailRequest, ResendOtpRequest, ForgotPass
 import { UserRegistrationRequest } from '../data/userDTOs';
 import { AUTH_SESSION_SYNCED_EVENT, initAuthTabSync, requestSessionFromOtherTabs } from '../utils/authTabSync';
 import { initBookingSync } from '../utils/bookingSync';
+import { clearAuthSession, clearDeviceSessionId } from '../utils/authStorage';
 
 interface AuthContextType {
   user: UserDto | null;
@@ -50,7 +51,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Listen for global logout events (from axios interceptors)
   useEffect(() => {
     const handleLogoutEvent = () => {
-      
+      setUser(null);
+    };
+
+    const handleLoggedElsewhere = () => {
+      clearAuthSession();
+      clearDeviceSessionId();
       setUser(null);
     };
 
@@ -62,9 +68,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     window.addEventListener(AUTH_LOGOUT_EVENT, handleLogoutEvent);
+    window.addEventListener('account-logged-elsewhere', handleLoggedElsewhere);
     window.addEventListener(AUTH_SESSION_SYNCED_EVENT, handleSessionSynced);
     return () => {
       window.removeEventListener(AUTH_LOGOUT_EVENT, handleLogoutEvent);
+      window.removeEventListener('account-logged-elsewhere', handleLoggedElsewhere);
       window.removeEventListener(AUTH_SESSION_SYNCED_EVENT, handleSessionSynced);
     };
   }, []);

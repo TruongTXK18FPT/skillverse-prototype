@@ -35,6 +35,7 @@ export interface ResendOtpRequest {
 // Refresh Token Request DTO
 export interface RefreshTokenRequest {
   refreshToken: string;
+  deviceSessionId?: string;
 }
 
 // User DTO
@@ -65,6 +66,7 @@ export interface AuthResponse {
   expiresIn: number;
   user: UserDto;
   needsProfileCompletion?: boolean;
+  deviceSessionId?: string;
 }
 
 // Registration Response DTO

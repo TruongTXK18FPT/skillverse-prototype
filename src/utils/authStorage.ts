@@ -1,4 +1,4 @@
-const AUTH_KEYS = ["accessToken", "refreshToken", "user"] as const;
+const AUTH_KEYS = ["accessToken", "refreshToken", "user", "deviceSessionId"] as const;
 
 type AuthKey = (typeof AUTH_KEYS)[number];
 type AuthStorage = "local" | "session";
@@ -98,4 +98,27 @@ export const clearAuthSession = (): void => {
     window.localStorage.removeItem(key);
     window.sessionStorage.removeItem(key);
   });
+};
+
+export const getDeviceSessionId = (): string | null => {
+  if (!isBrowser()) return null;
+  return (
+    window.sessionStorage.getItem("deviceSessionId") ??
+    window.localStorage.getItem("deviceSessionId")
+  );
+};
+
+export const setDeviceSessionId = (
+  sessionId: string,
+  rememberMe: boolean,
+): void => {
+  if (!isBrowser()) return;
+  const storage = rememberMe ? window.localStorage : window.sessionStorage;
+  storage.setItem("deviceSessionId", sessionId);
+};
+
+export const clearDeviceSessionId = (): void => {
+  if (!isBrowser()) return;
+  window.localStorage.removeItem("deviceSessionId");
+  window.sessionStorage.removeItem("deviceSessionId");
 };

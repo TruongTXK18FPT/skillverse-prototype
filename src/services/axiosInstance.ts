@@ -6,8 +6,12 @@ import axios, {
 import {
   clearAuthSession,
   getAccessToken,
+  getActiveAuthStorageType,
+  getDeviceSessionId,
   getRefreshToken,
+  setDeviceSessionId,
   updateAuthSession,
+  clearDeviceSessionId,
 } from "../utils/authStorage";
 import {
   broadcastLogoutToOtherTabs,
@@ -70,6 +74,17 @@ let failedQueue: Array<{
 const hasActiveSession = (): boolean =>
   Boolean(getAccessToken() || getRefreshToken());
 
+const isPublicPath = (path: string): boolean =>
+  path.includes("/login") ||
+  path.includes("/register") ||
+  path.includes("/verify") ||
+  path === "/" ||
+  path === "/jobs" ||
+  path === "/premium" ||
+  path === "/portfolio" ||
+  path.includes("/courses") ||
+  path.includes("/user-guide");
+
 // Decode JWT payload safely without external deps
 const decodeJwtPayload = (token: string): Record<string, unknown> | null => {
   try {
@@ -108,15 +123,22 @@ const isTokenExpiringSoon = (token: string, leewaySeconds = 120): boolean => {
 const performRefresh = async (): Promise<string> => {
   const refreshToken = getRefreshToken();
   if (!refreshToken) throw new Error("No refresh token");
+  const deviceSessionId = getDeviceSessionId();
   const response = await axios.post(`${baseURL}/auth/refresh`, {
     refreshToken,
+    deviceSessionId: deviceSessionId ?? undefined,
   });
   const {
     accessToken: newAccessToken,
     refreshToken: newRefreshToken,
     user: newUser,
+    deviceSessionId: newDeviceSessionId,
   } = response.data;
   updateAuthSession(newAccessToken, newRefreshToken, newUser);
+  if (newDeviceSessionId) {
+    const storageType = getActiveAuthStorageType() ?? "local";
+    setDeviceSessionId(newDeviceSessionId, storageType === "local");
+  }
   broadcastSessionToOtherTabs();
   return newAccessToken as string;
 };
@@ -285,13 +307,7 @@ axiosInstance.interceptors.request.use(
               clearAuthTokens();
               if (typeof window !== "undefined") {
                 const p = window.location.pathname;
-                const pub =
-                  p.includes("/login") ||
-                  p.includes("/register") ||
-                  p.includes("/verify") ||
-                  p === "/" ||
-                  p.includes("/user-guide");
-                if (!pub) window.location.href = "/login";
+                if (!isPublicPath(p)) window.location.href = "/login";
               }
               reject(err);
             });
@@ -337,10 +353,20 @@ axiosInstance.interceptors.response.use(
       !originalRequest._retry
     ) {
       const requestUrl = originalRequest.url || "";
+      const errorData = error.response?.data as
+        | { code?: string; message?: string }
+        | undefined;
+      if (errorData?.code === "ACCOUNT_LOGGED_ELSEWHERE") {
+        window.dispatchEvent(new CustomEvent("account-logged-elsewhere"));
+        clearAuthTokens();
+        if (!isPublicPath(window.location.pathname)) {
+          window.location.href = "/login?reason=logged_elsewhere";
+        }
+        return Promise.reject(error);
+      }
 
       // ✅ SECURITY: Check if 401 is due to password change (token invalidated)
-      const errorMessage =
-        (error.response?.data as { message?: string })?.message || "";
+      const errorMessage = errorData?.message || "";
       if (
         errorMessage.includes("password change") ||
         errorMessage.includes("Token invalidated")
@@ -364,18 +390,23 @@ axiosInstance.interceptors.response.use(
         requestUrl.includes("/auth/login") ||
         requestUrl.includes("/auth/google")
       ) {
+        const data = error.response?.data as
+          | { code?: string; message?: string }
+          | undefined;
+        if (data?.code === "ACCOUNT_LOGGED_ELSEWHERE") {
+          window.dispatchEvent(new CustomEvent("account-logged-elsewhere"));
+          clearAuthTokens();
+          if (!isPublicPath(window.location.pathname)) {
+            window.location.href = "/login?reason=logged_elsewhere";
+          }
+          return Promise.reject(error);
+        }
+
         console.warn("Authentication failed on auth endpoint, clearing tokens");
         clearAuthTokens();
 
         const currentPath = window.location.pathname;
-        const isPublicPage =
-          currentPath.includes("/login") ||
-          currentPath.includes("/register") ||
-          currentPath.includes("/verify") ||
-          currentPath === "/" ||
-          currentPath.includes("/user-guide");
-
-        if (!isPublicPage) {
+        if (!isPublicPath(currentPath)) {
           window.location.href = "/login";
         }
         return Promise.reject(error);
@@ -410,18 +441,7 @@ axiosInstance.interceptors.response.use(
 
         // Don't redirect if on public pages
         const currentPath = window.location.pathname;
-        const isPublicPage =
-          currentPath.includes("/login") ||
-          currentPath.includes("/register") ||
-          currentPath.includes("/verify") ||
-          currentPath === "/" ||
-          currentPath === "/jobs" ||
-          currentPath === "/premium" ||
-          currentPath === "/portfolio" ||
-          currentPath.includes("/courses") ||
-          currentPath.includes("/user-guide");
-
-        if (!isPublicPage) {
+        if (!isPublicPath(currentPath)) {
           window.location.href = "/login";
         }
         return Promise.reject(error);
@@ -432,16 +452,22 @@ axiosInstance.interceptors.response.use(
 
         const response = await axios.post(`${baseURL}/auth/refresh`, {
           refreshToken,
+          deviceSessionId: getDeviceSessionId() ?? undefined,
         });
 
         const {
           accessToken: newAccessToken,
           refreshToken: newRefreshToken,
           user: newUser,
+          deviceSessionId: newDeviceSessionId,
         } = response.data;
 
         // ✅ UPDATE STORAGE: Save new tokens
         updateAuthSession(newAccessToken, newRefreshToken, newUser);
+        if (newDeviceSessionId) {
+          const storageType = getActiveAuthStorageType() ?? "local";
+          setDeviceSessionId(newDeviceSessionId, storageType === "local");
+        }
         broadcastSessionToOtherTabs();
 
         // ✅ UPDATE REQUEST: Retry original request with new token
@@ -457,19 +483,23 @@ axiosInstance.interceptors.response.use(
         console.error("❌ Token refresh failed, logging out", refreshError);
         isRefreshing = false;
         processQueue(refreshError as Error, null);
+        const refreshErrorData = (refreshError as AxiosError)?.response?.data as
+          | { code?: string; message?: string }
+          | undefined;
+        if (refreshErrorData?.code === "ACCOUNT_LOGGED_ELSEWHERE") {
+          window.dispatchEvent(new CustomEvent("account-logged-elsewhere"));
+          clearAuthTokens();
+          if (!isPublicPath(window.location.pathname)) {
+            window.location.href = "/login?reason=logged_elsewhere";
+          }
+          return Promise.reject(refreshError);
+        }
 
         // ✅ REFRESH FAILED: Clear tokens and redirect to login
         clearAuthTokens();
 
         const currentPath = window.location.pathname;
-        const isPublicPage =
-          currentPath.includes("/login") ||
-          currentPath.includes("/register") ||
-          currentPath.includes("/verify") ||
-          currentPath === "/" ||
-          currentPath.includes("/user-guide");
-
-        if (!isPublicPage) {
+        if (!isPublicPath(currentPath)) {
           window.location.href = "/login";
         }
 

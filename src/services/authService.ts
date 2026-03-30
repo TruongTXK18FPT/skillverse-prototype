@@ -20,10 +20,14 @@ import {
 import {
   clearAuthSession,
   getAccessToken,
+  getActiveAuthStorageType,
   getRefreshToken,
   getStoredUserRaw,
   setAuthSession,
   updateAuthSession,
+  getDeviceSessionId,
+  setDeviceSessionId,
+  clearDeviceSessionId,
 } from "../utils/authStorage";
 import {
   broadcastLogoutToOtherTabs,
@@ -45,10 +49,12 @@ type AxiosError = {
 class AuthService {
   private token: string | null = null;
   private refreshToken: string | null = null;
+  private deviceSessionId: string | null = null;
 
   constructor() {
     this.token = getAccessToken();
     this.refreshToken = getRefreshToken();
+    this.deviceSessionId = getDeviceSessionId();
 
     // On startup, avoid clearing refresh session if access token is expired.
     // Keep refresh token so app can silently refresh and restore auth state.
@@ -60,6 +66,7 @@ class AuthService {
   private syncTokensFromStorage(): void {
     this.token = getAccessToken() ?? this.token;
     this.refreshToken = getRefreshToken() ?? this.refreshToken;
+    this.deviceSessionId = getDeviceSessionId() ?? this.deviceSessionId;
   }
 
   // Helper to check if token is expired
@@ -94,9 +101,7 @@ class AuthService {
         },
       );
       const authData = response.data;
-      const persistedRefreshToken = rememberMe
-        ? authData.refreshToken ?? null
-        : null;
+      const persistedRefreshToken = authData.refreshToken ?? null;
 
       // Store tokens and user data
       this.token = authData.accessToken;
@@ -108,6 +113,13 @@ class AuthService {
         authData.user,
         rememberMe,
       );
+
+      // Store deviceSessionId for single-device enforcement
+      if (authData.deviceSessionId) {
+        this.deviceSessionId = authData.deviceSessionId;
+        setDeviceSessionId(authData.deviceSessionId, rememberMe);
+      }
+
       broadcastSessionToOtherTabs();
 
       // Return redirect URL based on user roles
@@ -165,9 +177,7 @@ class AuthService {
         request,
       );
       const authData = response.data;
-      const persistedRefreshToken = rememberMe
-        ? authData.refreshToken ?? null
-        : null;
+      const persistedRefreshToken = authData.refreshToken ?? null;
 
       // Store tokens and user data
       this.token = authData.accessToken;
@@ -179,6 +189,13 @@ class AuthService {
         authData.user,
         rememberMe,
       );
+
+      // Store deviceSessionId for single-device enforcement
+      if (authData.deviceSessionId) {
+        this.deviceSessionId = authData.deviceSessionId;
+        setDeviceSessionId(authData.deviceSessionId, rememberMe);
+      }
+
       broadcastSessionToOtherTabs();
 
       // Return redirect URL and profile completion status
@@ -322,7 +339,10 @@ class AuthService {
         throw new Error("No refresh token available");
       }
 
-      const request: RefreshTokenRequest = { refreshToken: this.refreshToken };
+      const request: RefreshTokenRequest = {
+        refreshToken: this.refreshToken,
+        deviceSessionId: this.deviceSessionId ?? undefined,
+      };
       const response = await axiosInstance.post<AuthResponse>(
         "/api/auth/refresh",
         request,
@@ -332,6 +352,14 @@ class AuthService {
       // Update tokens
       this.token = authData.accessToken;
       this.refreshToken = authData.refreshToken ?? null;
+
+      // Update deviceSessionId if present
+      if (authData.deviceSessionId) {
+        this.deviceSessionId = authData.deviceSessionId;
+        const storageType = getActiveAuthStorageType() ?? "local";
+        const rememberMe = storageType === "local";
+        setDeviceSessionId(authData.deviceSessionId, rememberMe);
+      }
 
       updateAuthSession(
         authData.accessToken,
@@ -361,6 +389,20 @@ class AuthService {
       this.logout();
 
       const errorCode = data?.code;
+      if (errorCode === "ACCOUNT_LOGGED_ELSEWHERE") {
+        window.dispatchEvent(new CustomEvent("account-logged-elsewhere"));
+        clearAuthSession();
+        clearDeviceSessionId();
+        this.token = null;
+        this.refreshToken = null;
+        this.deviceSessionId = null;
+
+        if (!window.location.pathname.includes("/login")) {
+          window.location.href = "/login?reason=logged_elsewhere";
+        }
+
+        throw new Error("Tài khoản của bạn đã được đăng nhập ở nơi khác.");
+      }
       if (errorCode === "ACCOUNT_INACTIVE") {
         throw new Error(
           "Tài khoản của bạn đang bị khóa hoặc không hoạt động. Vui lòng liên hệ hỗ trợ.",
@@ -408,7 +450,9 @@ class AuthService {
       // Clear tokens and user data
       this.token = null;
       this.refreshToken = null;
+      this.deviceSessionId = null;
       clearAuthSession();
+      clearDeviceSessionId();
       broadcastLogoutToOtherTabs();
       // Clear Meowl preferences
       localStorage.removeItem("meowl_dark_mode");
@@ -432,7 +476,9 @@ class AuthService {
       // Even if there's an error, clear local storage
       this.token = null;
       this.refreshToken = null;
+      this.deviceSessionId = null;
       clearAuthSession();
+      clearDeviceSessionId();
       broadcastLogoutToOtherTabs();
       localStorage.removeItem("meowl_dark_mode");
       localStorage.removeItem("meowl_font_size");
