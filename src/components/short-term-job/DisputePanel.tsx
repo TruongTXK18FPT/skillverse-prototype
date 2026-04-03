@@ -38,6 +38,7 @@ interface DisputePanelProps {
   currentUserId: number;
   currentUserRole: "RECRUITER" | "WORKER";
   jobStatus?: string;
+  disputeEligibilityUnlocked?: boolean;
   isOpen?: boolean;
   onToggle?: () => void;
   jobTitle?: string;
@@ -63,6 +64,7 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
   currentUserId,
   currentUserRole,
   jobStatus,
+  disputeEligibilityUnlocked,
   isOpen: controlledIsOpen,
   onToggle,
   jobTitle,
@@ -108,14 +110,15 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
     }
   };
 
-  // Recruiter can never open disputes — only worker can
-  const canOpenDispute = currentUserRole === "WORKER" && (
-    jobStatus === "CANCELLATION_REQUESTED" ||
-    jobStatus === "IN_PROGRESS" ||
-    jobStatus === "SUBMITTED" ||
-    jobStatus === "UNDER_REVIEW" ||
-    jobStatus === "APPROVED"
-  );
+  // Recruiter can never open disputes — only worker can.
+  // Worker can open dispute on these job statuses, BUT only if disputeEligibilityUnlocked is true
+  // (recruiter must have failed to review within SLA, or admin manually unlocked it).
+  // AUTO_APPROVED is included because the worker can still dispute if they believe the
+  // auto-approval was improper (e.g., recruiter claims non-delivery).
+  const ELIGIBLE_JOB_STATUSES = ["CANCELLATION_REQUESTED", "IN_PROGRESS", "SUBMITTED", "UNDER_REVIEW", "AUTO_APPROVED"];
+  const canOpenDispute = currentUserRole === "WORKER" &&
+    disputeEligibilityUnlocked === true &&
+    ELIGIBLE_JOB_STATUSES.includes(jobStatus || "");
 
   // Both recruiter and worker can submit evidence when dispute is active
   const isDisputeActive = dispute && !["RESOLVED", "DISMISSED"].includes(dispute.status);
@@ -163,7 +166,7 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
       // Submit text evidence
       if (hasText || hasLink) {
         await shortTermJobService.submitEvidence(dispute.id, {
-          evidenceType: evidenceType === "FILE" ? "TEXT" : evidenceType,
+          evidenceType: evidenceType,
           content: evidenceText.trim() || undefined,
           fileUrl: hasLink ? evidenceLink.trim() : undefined,
           description: hasLink ? "Đường dẫn tham chiếu" : undefined,
@@ -296,7 +299,7 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
                     <div className="dp-info-card__label">
                       <Briefcase size={13} /> Công việc
                     </div>
-                    <div className="dp-info-card__value">{jobTitle || `#${dispute.jobId}`}</div>
+                    <div className="dp-info-card__value">{jobTitle || `#${jobId}`}</div>
                   </div>
                   <div className="dp-info-card">
                     <div className="dp-info-card__label">

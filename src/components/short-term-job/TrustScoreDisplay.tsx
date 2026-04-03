@@ -98,7 +98,7 @@ const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
     return null;
   }
 
-  const tierConfig = TIER_CONFIG[score.tier] || TIER_CONFIG[TrustTier.NEWCOMER];
+  const tierConfig = TIER_CONFIG[score.trustTier] || TIER_CONFIG[TrustTier.NEWCOMER];
 
   const sizeStyles = {
     small: { padding: "0.15rem 0.4rem", fontSize: "0.65rem" },
@@ -122,12 +122,12 @@ const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
         border: `1px solid ${tierConfig.border}`,
         color: tierConfig.color,
       }}
-      title={`Trust Score: ${score.score}/100 · ${score.totalCompleted}/${score.totalJobs} jobs hoàn thành`}
+      title={`Trust Score: ${score.totalScore}/100 · ${score.completedJobs}/${score.totalJobs} jobs hoàn thành`}
     >
-      {score.tier === TrustTier.ELITE && <Star size={size === "small" ? 9 : size === "large" ? 13 : 11} fill="currentColor" />}
+      {score.trustTier === TrustTier.ELITE && <Star size={size === "small" ? 9 : size === "large" ? 13 : 11} fill="currentColor" />}
       {showScore && (
         <span style={{ fontWeight: 800 }}>
-          {Math.round(score.score)}
+          {Math.round(score.totalScore)}
         </span>
       )}
       {tierConfig.label}

@@ -1,0 +1,286 @@
+.jmt-shell {
+  display: grid;
+  gap: 20px;
+  color: #172033;
+}
+
+.jmt-header,
+.jmt-section-head,
+.jmt-filter-bar,
+.jmt-pagination,
+.jmt-card__icon,
+.jmt-pill,
+.jmt-badge,
+.jmt-refresh {
+  display: flex;
+  align-items: center;
+}
+
+.jmt-header,
+.jmt-section-head,
+.jmt-pagination {
+  justify-content: space-between;
+}
+
+.jmt-header {
+  gap: 16px;
+  padding: 24px 28px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 46%, #fff7ed 100%);
+  border: 1px solid #dbe7f5;
+}
+
+.jmt-eyebrow {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #2563eb;
+}
+
+.jmt-title {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.jmt-subtitle {
+  max-width: 760px;
+  margin: 10px 0 0;
+  color: #475569;
+}
+
+.jmt-refresh {
+  gap: 10px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 14px;
+  background: #172033;
+  color: #fff;
+  cursor: pointer;
+}
+
+.jmt-alert {
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 1px solid #fecaca;
+  background: #fff1f2;
+  color: #b91c1c;
+}
+
+.jmt-overview-grid,
+.jmt-chart-grid,
+.jmt-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.jmt-overview-grid {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.jmt-chart-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.jmt-grid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.jmt-card {
+  padding: 20px 22px;
+  border-radius: 22px;
+  border: 1px solid #dbe7f5;
+  background: #ffffff;
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.06);
+}
+
+.jmt-card--overview {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 14px;
+}
+
+.jmt-card__icon {
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+  color: #1d4ed8;
+}
+
+.jmt-card__meta {
+  display: grid;
+  gap: 4px;
+}
+
+.jmt-card__label,
+.jmt-card__hint,
+.jmt-cell-sub {
+  color: #64748b;
+}
+
+.jmt-card__label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.jmt-card__value {
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.jmt-section-head h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.jmt-chart {
+  width: 100%;
+  height: 260px;
+}
+
+.jmt-pill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.jmt-pill-grid--skill {
+  margin-top: 16px;
+}
+
+.jmt-pill {
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #eff6ff;
+  color: #1e3a8a;
+}
+
+.jmt-pill--quiet {
+  background: #f8fafc;
+  color: #334155;
+}
+
+.jmt-filter-bar {
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.jmt-filter-bar--wide input[type="datetime-local"] {
+  min-width: 180px;
+}
+
+.jmt-filter-bar select,
+.jmt-filter-bar input {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+  color: #172033;
+}
+
+.jmt-filter-bar input {
+  min-width: 220px;
+  flex: 1 1 220px;
+}
+
+.jmt-table-wrap {
+  overflow-x: auto;
+}
+
+.jmt-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.jmt-table th,
+.jmt-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.jmt-table th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+}
+
+.jmt-badge {
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.jmt-badge.ready {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.jmt-badge.warn {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.jmt-inline-loading {
+  margin-top: 14px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.jmt-pagination {
+  margin-top: 14px;
+}
+
+.jmt-pagination__button {
+  min-width: 88px;
+  min-height: 38px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.jmt-pagination__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.jmt-pagination__label {
+  color: #475569;
+}
+
+@media (max-width: 768px) {
+  .jmt-header {
+    padding: 20px;
+  }
+
+  .jmt-title {
+    font-size: 24px;
+  }
+
+  .jmt-card,
+  .jmt-header {
+    border-radius: 18px;
+  }
+
+  .jmt-filter-bar input,
+  .jmt-filter-bar select {
+    width: 100%;
+  }
+}

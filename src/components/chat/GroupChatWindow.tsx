@@ -20,6 +20,7 @@ import GifPicker from './GifPicker';
 import MemberListModal from './MemberListModal';
 import MessageBubble, { MessageData, MessageType } from './MessageBubble';
 import { getGroupMessages, sendMessage, getGroupDetail, type GroupMemberDTO } from '../../services/groupChatService';
+import { API_BASE_URL } from '../../services/axiosInstance';
 import { useChatSettings } from '../../context/ChatSettingsContext';
 import { playNotificationSound } from '../../utils/notificationSound';
 import './GroupChatWindow.css';
@@ -174,7 +175,8 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({
   };
 
   const setupWebSocket = () => {
-    const socket = new SockJS(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/ws`);
+    const socketUrl = API_BASE_URL.replace(/\/api\/?$/i, '/ws');
+    const socket = new SockJS(socketUrl);
     const client = new Client({
       webSocketFactory: () => socket as any,
       reconnectDelay: 5000,

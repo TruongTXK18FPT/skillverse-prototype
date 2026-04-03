@@ -42,6 +42,34 @@ export interface ExpertFieldResponse {
   }[];
 }
 
+const normalizeExpertPromptConfigs = (payload: unknown): ExpertPromptConfig[] => {
+  if (Array.isArray(payload)) {
+    return payload as ExpertPromptConfig[];
+  }
+
+  if (payload && typeof payload === 'object') {
+    const candidate = payload as {
+      content?: unknown;
+      data?: unknown;
+      items?: unknown;
+    };
+
+    if (Array.isArray(candidate.content)) {
+      return candidate.content as ExpertPromptConfig[];
+    }
+
+    if (Array.isArray(candidate.data)) {
+      return candidate.data as ExpertPromptConfig[];
+    }
+
+    if (Array.isArray(candidate.items)) {
+      return candidate.items as ExpertPromptConfig[];
+    }
+  }
+
+  return [];
+};
+
 // ==================== ADMIN API ====================
 
 /**
@@ -49,7 +77,7 @@ export interface ExpertFieldResponse {
  */
 export const getAllExpertPrompts = async (): Promise<ExpertPromptConfig[]> => {
   const response = await axiosInstance.get('/api/v1/admin/expert-prompts');
-  return response.data;
+  return normalizeExpertPromptConfigs(response.data);
 };
 
 /**
@@ -118,6 +146,41 @@ export const updateExpertMediaUrl = async (id: number, mediaUrl: string): Promis
  */
 export const deleteExpertMedia = async (id: number): Promise<{ message: string }> => {
   const response = await axiosInstance.delete(`/api/v1/admin/expert-prompts/${id}/media`);
+  return response.data;
+};
+
+// ==================== AI PROMPT GENERATION ====================
+
+export interface GeneratePromptRequest {
+  domain: string;
+  industry: string;
+  jobRole: string;
+  keywords?: string;
+  existingDomainRules?: string;
+  generationHint?: string;
+}
+
+export interface PromptGenerationResponse {
+  domainRules: string;
+  rolePrompt: string;
+  suggestedKeywords: string;
+  domainRulesWordCount: number;
+  rolePromptWordCount: number;
+  domain: string;
+  industry: string;
+  jobRole: string;
+}
+
+/**
+ * Generate expert prompts using AI (Admin only)
+ */
+export const generateExpertPrompts = async (
+  request: GeneratePromptRequest
+): Promise<PromptGenerationResponse> => {
+  const response = await axiosInstance.post(
+    '/api/v1/admin/expert-prompts/generate',
+    request
+  );
   return response.data;
 };
 
