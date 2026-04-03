@@ -589,7 +589,7 @@ const JourneyManagementTab: React.FC = () => {
   );
 
   if (dashboardLoading && !dashboard) {
-    return <MeowlKuruLoader message="Đang tải trung tâm quản trị hành trình..." />;
+    return <MeowlKuruLoader text="Đang tải trung tâm quản trị hành trình..." />;
   }
 
   return (
