@@ -2263,7 +2263,7 @@ const GSJJourneyPage: React.FC = () => {
   );
 
   // Render result view
-  const renderResultView = () => {
+  const renderResultViewLegacy = () => {
     if (!currentResult) return null;
     const cr = currentResult;
     const completionRate =
@@ -2452,7 +2452,9 @@ const GSJJourneyPage: React.FC = () => {
     );
   };
 
-  const renderResultViewEnhanced = () => {
+  void renderResultViewLegacy;
+
+  const renderResultView = () => {
     if (!currentResult) return null;
 
     const completionRate =
