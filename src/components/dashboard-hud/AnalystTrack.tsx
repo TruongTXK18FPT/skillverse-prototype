@@ -18,10 +18,17 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
   const avgCompletion = totalRoadmaps > 0 ? Math.round(totalProgress / totalRoadmaps) : 0;
   
   const completedRoadmaps = roadmaps.filter(r => (r.progressPercentage || 0) >= 100).length;
-  const inProgressRoadmaps = roadmaps.filter(r => (r.progressPercentage || 0) > 0 && (r.progressPercentage || 0) < 100).length;
+  const inProgressRoadmaps = roadmaps.filter(r => r.status === 'ACTIVE').length;
 
-  // Sort by progress (descending)
-  const sortedRoadmaps = [...roadmaps].sort((a, b) => (b.progressPercentage || 0) - (a.progressPercentage || 0));
+  // Prioritize active roadmap, then sort by progress.
+  const sortedRoadmaps = [...roadmaps].sort((a, b) => {
+    const aIsActive = a.status === 'ACTIVE';
+    const bIsActive = b.status === 'ACTIVE';
+    if (aIsActive !== bIsActive) {
+      return aIsActive ? -1 : 1;
+    }
+    return (b.progressPercentage || 0) - (a.progressPercentage || 0);
+  });
 
   const handleRefresh = () => {
     setIsRefreshing(true);

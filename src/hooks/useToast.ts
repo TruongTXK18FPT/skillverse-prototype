@@ -11,6 +11,10 @@ export interface ToastData {
     text: string;
     onClick: () => void;
   };
+  secondaryActionButton?: {
+    text: string;
+    onClick: () => void;
+  };
 }
 
 export const useToast = () => {

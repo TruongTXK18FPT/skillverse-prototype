@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
+  Bot,
   Calendar,
   ClipboardList,
   ExternalLink,
@@ -44,8 +45,13 @@ import {
 } from "../../utils/courseRevisionMessages";
 import { showAppInfo, showAppWarning } from "../../context/ToastContext";
 import AttachmentManager from "../../components/course/AttachmentManager";
+import MeowlContextPanel, {
+  MeowlContextMode,
+} from "../../components/meowl/MeowlContextPanel";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import usePremiumAccess from "../../hooks/usePremiumAccess";
+import workspaceStyles from "./CourseLearningWorkspace.module.css";
 
 /**
  * Normalize mixed HTML+Markdown content so ReactMarkdown can parse it correctly.
@@ -344,6 +350,7 @@ const CourseLearningPage = () => {
   const [modulesWithContent, setModulesWithContent] = useState<ModuleWithContent[]>([]);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isMeowlPanelOpen, setIsMeowlPanelOpen] = useState(true);
   const [expandedModules, setExpandedModules] = useState<number[]>([]);
   const [activeModulePreviewId, setActiveModulePreviewId] = useState<number | null>(null);
   const [activeLesson, setActiveLesson] = useState<{
@@ -370,6 +377,7 @@ const CourseLearningPage = () => {
   const [activeLessonDetail, setActiveLessonDetail] = useState<LessonDetailDTO | null>(null);
   const [loadingLessonDetail, setLoadingLessonDetail] = useState(false);
   const [activeQuizDetail, setActiveQuizDetail] = useState<QuizWithAttemptStatus | null>(null);
+  const { hasPremiumAccess, planName } = usePremiumAccess();
 
   // Countdown timer state cho quiz retry
   const [retryCountdown, setRetryCountdown] = useState<number>(0);
@@ -1107,6 +1115,94 @@ const CourseLearningPage = () => {
     };
   }, [activeItemType, activeLesson.moduleId, isActiveItemCompleted, isPreviewMode, requiresManualUpgradeGate]);
 
+  const meowlPanelMode = useMemo<MeowlContextMode>(() => {
+    if (activeItemType === "quiz" || activeItemType === "assignment") {
+      return "MODE_EXAM_PROCTOR";
+    }
+
+    if (activeLessonDetail?.type === "READING") {
+      return "MODE_SOCRATIC_READING";
+    }
+
+    if (activeLessonDetail?.type === "VIDEO") {
+      return "MODE_COURSE_LEARNING";
+    }
+
+    return "MODE_GENERAL_FAQ";
+  }, [activeItemType, activeLessonDetail?.type]);
+
+  const meowlPanelTitle = useMemo(() => {
+    if (activeLessonTitle) {
+      return activeLessonTitle;
+    }
+
+    if (activeModulePreview?.title) {
+      return activeModulePreview.title;
+    }
+
+    return course?.title || "Ngữ cảnh học với Meowl";
+  }, [activeLessonTitle, activeModulePreview?.title, course?.title]);
+
+  const meowlPanelSubtitle = useMemo(() => {
+    switch (meowlPanelMode) {
+      case "MODE_EXAM_PROCTOR":
+        return "Tập trung vào quy tắc, chiến lược làm bài và giữ tính công bằng của bài đánh giá.";
+      case "MODE_SOCRATIC_READING":
+        return "Đồng hành bằng câu hỏi gợi mở để bạn tự hiểu sâu nội dung đang đọc.";
+      case "MODE_COURSE_LEARNING":
+        return "Bám sát đúng bài học hiện tại thay vì kéo bạn sang ngữ cảnh khác.";
+      default:
+        return "Hỗ trợ hỏi đáp nhanh và điều hướng khi bạn chưa vào một nội dung cụ thể.";
+    }
+  }, [meowlPanelMode]);
+
+  const meowlPanelSummary = useMemo(() => {
+    const summary: string[] = [];
+
+    if (course?.title) {
+      summary.push(`Khóa học: ${course.title}`);
+    }
+
+    if (activeCurriculumItem?.moduleTitle) {
+      summary.push(`Chương: ${activeCurriculumItem.moduleTitle}`);
+    }
+
+    if (activeLessonTitle) {
+      summary.push(`Nội dung hiện tại: ${activeLessonTitle}`);
+    }
+
+    if (activeItemType === "quiz" && activeQuizDetail) {
+      summary.push(`Điểm đạt quiz: ${activeQuizDetail.passScore}%`);
+      summary.push(`Số lượt đã dùng: ${quizAttemptsCount}/${activeQuizDetail.maxAttempts}`);
+    }
+
+    if (activeItemType === "assignment" && activeAssignmentSummary) {
+      summary.push(`Loại bài tập: ${activeAssignmentSummary.submissionType}`);
+      if (activeAssignmentSummary.dueAt) {
+        summary.push(`Hạn nộp: ${formatShortDate(activeAssignmentSummary.dueAt)}`);
+      }
+    }
+
+    if (activeLessonDetail?.type === "READING") {
+      summary.push("Bài đọc: ưu tiên câu hỏi gợi mở, không tóm tắt thay toàn bộ.");
+    }
+
+    if (activeLessonDetail?.type === "VIDEO") {
+      summary.push("Bài video: không giả vờ biết transcript ẩn hoặc nội dung chưa được cung cấp.");
+    }
+
+    return summary;
+  }, [
+    activeAssignmentSummary,
+    activeCurriculumItem?.moduleTitle,
+    activeItemType,
+    activeLessonDetail?.type,
+    activeLessonTitle,
+    activeQuizDetail,
+    course?.title,
+    quizAttemptsCount,
+  ]);
+
   if (loading) {
     return (
       <NeuralInterfaceLayout
@@ -1201,117 +1297,126 @@ const CourseLearningPage = () => {
 
       {/* Main Content */}
       <main className="learning-hud-main-content">
-        <div className="learning-hud-content-viewer">
-          <h1 className="learning-hud-viewer-title">
-            {activeLessonTitle || activeModulePreview?.title || course.title}
-          </h1>
-          {isPreviewMode && (
-            <div className="lhud-preview-banner">
-              <strong>Chế độ xem trước:</strong> Bạn có thể xem nội dung như học viên, nhưng không thể làm bài, nộp bài hoặc đánh dấu hoàn thành.
-            </div>
-          )}
-          {hasNewerRevision && revisionInfo && (
-            <div className="lhud-revision-banner">
-              <div>
-                <strong>Khóa học đã có phiên bản mới</strong>
-                <p>
-                  Khóa học đã có phiên bản mới, vui lòng cập nhật để tiếp tục học đúng quy định của khóa học.
-                </p>
-                {revisionActionMessage && (
-                  <p className="lhud-revision-banner__message">{revisionActionMessage}</p>
-                )}
-              </div>
-              {canUpgradeRevision && (
-                <div className="lhud-revision-banner__actions">
-                  <button
-                    type="button"
-                    className="learning-hud-secondary-btn"
-                    onClick={() => void handleUpgradeToActiveRevision()}
-                    disabled={isUpgradingRevision}
-                  >
-                    {isUpgradingRevision ? "Đang nâng cấp..." : "Chuyển sang phiên bản mới"}
-                  </button>
+        <div
+          className={[
+            workspaceStyles.workspace,
+            !isMeowlPanelOpen ? workspaceStyles.workspaceMeowlCollapsed : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          <div className={workspaceStyles.mainPane}>
+            <div className="learning-hud-content-viewer">
+              <h1 className="learning-hud-viewer-title">
+                {activeLessonTitle || activeModulePreview?.title || course.title}
+              </h1>
+              {isPreviewMode && (
+                <div className="lhud-preview-banner">
+                  <strong>Chế độ xem trước:</strong> Bạn có thể xem nội dung như học viên, nhưng không thể làm bài, nộp bài hoặc đánh dấu hoàn thành.
                 </div>
               )}
-            </div>
-          )}
-          {!isPreviewMode && isRevisionInfoLoading && (
-            <div className="lhud-revision-banner">
-              <div>
-                <strong>Đang đồng bộ revision...</strong>
-                <p>Hệ thống đang kiểm tra phiên bản học hiện tại của bạn.</p>
-              </div>
-            </div>
-          )}
-          {!isPreviewMode && revisionInfoError && (
-            <div className="lhud-revision-banner is-warning">
-              <div>
-                <strong>Lưu ý về revision</strong>
-                <p>{revisionInfoError}</p>
-              </div>
-            </div>
-          )}
-          {!hasNewerRevision && revisionActionMessage && (
-            <div className="lhud-revision-banner is-success">
-              <div>
-                <strong>Revision đã đồng bộ</strong>
-                <p className="lhud-revision-banner__message">{revisionActionMessage}</p>
-              </div>
-            </div>
-          )}
-          {!isPreviewMode && activeItemWarningMessage && (
-            <div className="lhud-revision-banner is-warning">
-              <div>
-                <strong>Nội dung cần làm lại</strong>
-                <p>{activeItemWarningMessage}</p>
-              </div>
-            </div>
-          )}
-          {!isPreviewMode && progress.percent >= 100 && progress.certificateId && (
-            <div className="lhud-certificate-banner">
-              <div>
-                <strong>Chứng chỉ đã được cấp</strong>
-                <p>
-                  Bạn đã hoàn thành khóa học. Trang chứng chỉ riêng tư dành cho bạn đã sẵn sàng; nếu muốn gửi cho người khác, hãy sao chép liên kết xác thực công khai.
-                </p>
-              </div>
-              <div className="lhud-certificate-banner__actions">
-                {progress.certificateSerial && (
-                  <button
-                    type="button"
-                    className="learning-hud-secondary-btn"
-                    onClick={handleCopyCertificateVerificationLink}
-                  >
-                    <LinkIcon size={16} />
-                    Sao chép liên kết công khai
-                  </button>
-                )}
-                <button
-                  type="button"
-                  className="learning-hud-secondary-btn"
-                  onClick={handleOpenCertificate}
-                >
-                  <ExternalLink size={16} />
-                  Xem chứng chỉ
-                </button>
-              </div>
-            </div>
-          )}
-          {!isPreviewMode && progress.percent >= 100 && !progress.certificateId && progress.certificateRevoked && (
-            <div className="lhud-certificate-banner is-revoked">
-              <div>
-                <strong>Chứng chỉ đã bị thu hồi</strong>
-                <p>
-                  Bạn đã hoàn thành khóa học nhưng chứng chỉ hiện không còn hiệu lực.
-                  {progress.certificateRevokedAt
-                    ? ` Thời điểm thu hồi: ${new Date(progress.certificateRevokedAt).toLocaleString("vi-VN")}.`
-                    : ""}
-                </p>
-              </div>
-            </div>
-          )}
+              {hasNewerRevision && revisionInfo && (
+                <div className="lhud-revision-banner">
+                  <div>
+                    <strong>Khóa học đã có phiên bản mới</strong>
+                    <p>
+                      Khóa học đã có phiên bản mới, vui lòng cập nhật để tiếp tục học đúng quy định của khóa học.
+                    </p>
+                    {revisionActionMessage && (
+                      <p className="lhud-revision-banner__message">{revisionActionMessage}</p>
+                    )}
+                  </div>
+                  {canUpgradeRevision && (
+                    <div className="lhud-revision-banner__actions">
+                      <button
+                        type="button"
+                        className="learning-hud-secondary-btn"
+                        onClick={() => void handleUpgradeToActiveRevision()}
+                        disabled={isUpgradingRevision}
+                      >
+                        {isUpgradingRevision ? "Đang nâng cấp..." : "Chuyển sang phiên bản mới"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+              {!isPreviewMode && isRevisionInfoLoading && (
+                <div className="lhud-revision-banner">
+                  <div>
+                    <strong>Đang đồng bộ revision...</strong>
+                    <p>Hệ thống đang kiểm tra phiên bản học hiện tại của bạn.</p>
+                  </div>
+                </div>
+              )}
+              {!isPreviewMode && revisionInfoError && (
+                <div className="lhud-revision-banner is-warning">
+                  <div>
+                    <strong>Lưu ý về revision</strong>
+                    <p>{revisionInfoError}</p>
+                  </div>
+                </div>
+              )}
+              {!hasNewerRevision && revisionActionMessage && (
+                <div className="lhud-revision-banner is-success">
+                  <div>
+                    <strong>Revision đã đồng bộ</strong>
+                    <p className="lhud-revision-banner__message">{revisionActionMessage}</p>
+                  </div>
+                </div>
+              )}
+              {!isPreviewMode && activeItemWarningMessage && (
+                <div className="lhud-revision-banner is-warning">
+                  <div>
+                    <strong>Nội dung cần làm lại</strong>
+                    <p>{activeItemWarningMessage}</p>
+                  </div>
+                </div>
+              )}
+              {!isPreviewMode && progress.percent >= 100 && progress.certificateId && (
+                <div className="lhud-certificate-banner">
+                  <div>
+                    <strong>Chứng chỉ đã được cấp</strong>
+                    <p>
+                      Bạn đã hoàn thành khóa học. Trang chứng chỉ riêng tư dành cho bạn đã sẵn sàng; nếu muốn gửi cho người khác, hãy sao chép liên kết xác thực công khai.
+                    </p>
+                  </div>
+                  <div className="lhud-certificate-banner__actions">
+                    {progress.certificateSerial && (
+                      <button
+                        type="button"
+                        className="learning-hud-secondary-btn"
+                        onClick={handleCopyCertificateVerificationLink}
+                      >
+                        <LinkIcon size={16} />
+                        Sao chép liên kết công khai
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className="learning-hud-secondary-btn"
+                      onClick={handleOpenCertificate}
+                    >
+                      <ExternalLink size={16} />
+                      Xem chứng chỉ
+                    </button>
+                  </div>
+                </div>
+              )}
+              {!isPreviewMode && progress.percent >= 100 && !progress.certificateId && progress.certificateRevoked && (
+                <div className="lhud-certificate-banner is-revoked">
+                  <div>
+                    <strong>Chứng chỉ đã bị thu hồi</strong>
+                    <p>
+                      Bạn đã hoàn thành khóa học nhưng chứng chỉ hiện không còn hiệu lực.
+                      {progress.certificateRevokedAt
+                        ? ` Thời điểm thu hồi: ${new Date(progress.certificateRevokedAt).toLocaleString("vi-VN")}.`
+                        : ""}
+                    </p>
+                  </div>
+                </div>
+              )}
 
-          <div className="learning-hud-reading-content">
+              <div className="learning-hud-reading-content">
             {loadingLessonDetail ? (
               <div className="learning-hud-loading">ĐANG TẢI DÒNG DỮ LIỆU</div>
             ) : activeItemType === 'assignment' && activeAssignmentId ? (
@@ -1669,23 +1774,69 @@ const CourseLearningPage = () => {
                 </p>
               </>
             )}
+              </div>
+
+              {/* Control Deck */}
+              <ControlDeck
+                onPrevious={handlePrevLesson}
+                onNext={handleNextLesson}
+                onComplete={handleMarkAsComplete}
+                canNavigatePrev={!requiresManualUpgradeGate && activeCurriculumIndex > 0}
+                canNavigateNext={
+                  !requiresManualUpgradeGate &&
+                  activeCurriculumIndex >= 0 &&
+                  activeCurriculumIndex < curriculumItems.length - 1
+                }
+                canComplete={completeDeckConfig.canComplete}
+                completeLabel={completeDeckConfig.completeLabel}
+                completeState={completeDeckConfig.completeState}
+              />
+            </div>
           </div>
 
-          {/* Control Deck */}
-          <ControlDeck
-            onPrevious={handlePrevLesson}
-            onNext={handleNextLesson}
-            onComplete={handleMarkAsComplete}
-            canNavigatePrev={!requiresManualUpgradeGate && activeCurriculumIndex > 0}
-            canNavigateNext={
-              !requiresManualUpgradeGate &&
-              activeCurriculumIndex >= 0 &&
-              activeCurriculumIndex < curriculumItems.length - 1
-            }
-            canComplete={completeDeckConfig.canComplete}
-            completeLabel={completeDeckConfig.completeLabel}
-            completeState={completeDeckConfig.completeState}
-          />
+          <aside
+            className={[
+              workspaceStyles.sidePane,
+              !isMeowlPanelOpen ? workspaceStyles.sidePaneCollapsed : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            <div
+              className={[
+                workspaceStyles.sidePaneInner,
+                !isMeowlPanelOpen ? workspaceStyles.sidePaneInnerCollapsed : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
+              {isMeowlPanelOpen ? (
+                <MeowlContextPanel
+                  mode={meowlPanelMode}
+                  title={meowlPanelTitle}
+                  subtitle={meowlPanelSubtitle}
+                  contextSummary={meowlPanelSummary}
+                  isPremiumLocked={!hasPremiumAccess}
+                  premiumLabel={planName}
+                  theme="hud"
+                  onClose={() => setIsMeowlPanelOpen(false)}
+                  closeLabel="Ẩn bảng chat Meowl"
+                />
+              ) : (
+                <button
+                  type="button"
+                  className={workspaceStyles.meowlRailToggle}
+                  onClick={() => setIsMeowlPanelOpen(true)}
+                  aria-label="Mở bảng chat Meowl"
+                  title="Nhấn để mở trợ lý học tập Meowl"
+                >
+                  <Bot size={28} className={workspaceStyles.meowlIconPulse} />
+                  <span className={workspaceStyles.meowlRailToggleTitle}>Meowl</span>
+                  <span className={workspaceStyles.meowlRailToggleHint}>Bấm để mở trợ lý học tập</span>
+                </button>
+              )}
+            </div>
+          </aside>
         </div>
       </main>
     </NeuralInterfaceLayout>

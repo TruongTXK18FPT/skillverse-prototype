@@ -13,6 +13,7 @@ export interface TaskResponse {
   deadline?: string;
   priority: TaskPriority;
   status?: string;
+  orderIndex?: number;
   userProgress?: number; // 0-100
   satisfactionLevel?: string;
   userNotes?: string;

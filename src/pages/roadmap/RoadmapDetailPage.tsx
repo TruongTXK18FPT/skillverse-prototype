@@ -3,17 +3,27 @@ import { useParams, useNavigate } from 'react-router-dom';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import RoadmapDetailViewer from '../../components/roadmap/RoadmapDetailViewer';
 import RoadmapNodeStudyPlanModal from '../../components/roadmap/RoadmapNodeStudyPlanModal';
+import RoadmapNodeFocusPanel from '../../components/roadmap/RoadmapNodeFocusPanel';
 import aiRoadmapService from '../../services/aiRoadmapService';
+import { enrollUser } from '../../services/enrollmentService';
 import journeyService from '../../services/journeyService';
 import { taskBoardService } from '../../services/taskBoardService';
+import useRoadmapMappedCourses from '../../hooks/useRoadmapMappedCourses';
+import useRoadmapCourseEnrollments from '../../hooks/useRoadmapCourseEnrollments';
+import { buildNodeLearningContext } from '../../components/roadmap/nodeLearningContext';
+import { buildCourseDetailPath, buildCourseLearningPath } from '../../utils/courseRoute';
+import {
+  extractNodeStudyPlanSummaries,
+  NodeStudyPlanSummary,
+} from '../../components/roadmap/nodeStudyPlanSummary';
 import {
   RoadmapResponse,
   QuestProgress,
   ProgressStatus,
   RoadmapNode,
-  RoadmapNodeStudyPlanRequest
+  RoadmapNodeStudyPlanRequest,
+  RoadmapNodeAvailability,
 } from '../../types/Roadmap';
-import { TaskColumnResponse } from '../../types/TaskBoard';
 import { useToast } from '../../hooks/useToast';
 import { useAuth } from '../../context/AuthContext';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
@@ -25,42 +35,10 @@ import '../../styles/RoadmapHUD.css';
  * Dedicated page for viewing roadmap details
  * Separated from main roadmap page for better performance
  */
-const ROADMAP_NODE_LINK_PATTERN = /\[ROADMAP_NODE_LINK\]\s+journey=\d+\s+roadmap=(\d+)\s+node=([^\s]+)/gi;
-
-const extractLinkedNodeIds = (
-  board: TaskColumnResponse[],
-  roadmapSessionId: number
-): Set<string> => {
-  const linkedNodeIds = new Set<string>();
-
-  if (!Number.isFinite(roadmapSessionId)) {
-    return linkedNodeIds;
-  }
-
-  board.forEach((column) => {
-    column.tasks?.forEach((task) => {
-      if (!task.userNotes) {
-        return;
-      }
-
-      const linkRegex = new RegExp(ROADMAP_NODE_LINK_PATTERN);
-      for (const match of task.userNotes.matchAll(linkRegex)) {
-        const matchedRoadmapId = Number(match[1]);
-        const matchedNodeId = match[2]?.trim();
-        if (matchedRoadmapId === roadmapSessionId && matchedNodeId) {
-          linkedNodeIds.add(matchedNodeId);
-        }
-      }
-    });
-  });
-
-  return linkedNodeIds;
-};
-
 const RoadmapDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { toast, isVisible, showError, showSuccess, showToast, hideToast } = useToast();
 
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
@@ -69,8 +47,26 @@ const RoadmapDetailPage = () => {
   const [planModalNode, setPlanModalNode] = useState<RoadmapNode | null>(null);
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [studyTaskNodeIds, setStudyTaskNodeIds] = useState<Set<string>>(new Set());
+  const [nodePlanSummaryMap, setNodePlanSummaryMap] = useState<Record<string, NodeStudyPlanSummary>>({});
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const [enrollingCourseId, setEnrollingCourseId] = useState<number | null>(null);
+  const [enrollmentRefreshKey, setEnrollmentRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const roadmapNodes = roadmap?.roadmap ?? [];
+  const { courseMap } = useRoadmapMappedCourses(roadmapNodes, Boolean(roadmap));
+
+  const mappedCourseIds = useMemo(() => (
+    Array.from(new Set(roadmapNodes.flatMap((node) => node.suggestedCourseIds ?? [])))
+  ), [roadmapNodes]);
+
+  const { enrollmentByCourseId } = useRoadmapCourseEnrollments(
+    user?.id,
+    mappedCourseIds,
+    Boolean(user?.id) && mappedCourseIds.length > 0,
+    enrollmentRefreshKey,
+  );
 
   const eligibleNodeId = useMemo(() => {
     if (!roadmap || !Array.isArray(roadmap.roadmap)) {
@@ -89,6 +85,71 @@ const RoadmapDetailPage = () => {
 
     return null;
   }, [roadmap, progressMap]);
+
+  const selectedNode = useMemo(() => {
+    if (!selectedNodeId || !roadmap) {
+      return null;
+    }
+
+    return roadmap.roadmap.find((node) => node.id === selectedNodeId) ?? null;
+  }, [roadmap, selectedNodeId]);
+
+  const selectedNodeProgress = useMemo(() => {
+    if (!selectedNode) {
+      return undefined;
+    }
+    return progressMap.get(selectedNode.id);
+  }, [progressMap, selectedNode]);
+
+  const selectedNodePlanSummary = useMemo(() => {
+    if (!selectedNode) {
+      return null;
+    }
+
+    return nodePlanSummaryMap[selectedNode.id] ?? null;
+  }, [nodePlanSummaryMap, selectedNode]);
+
+  const selectedNodeLearningContext = useMemo(() => {
+    if (!selectedNode) {
+      return null;
+    }
+
+    const parentNode = selectedNode.parentId
+      ? roadmapNodes.find((node) => node.id === selectedNode.parentId) ?? null
+      : null;
+    const childNodes = roadmapNodes.filter((node) => selectedNode.children?.includes(node.id));
+    const mappedCourses = (selectedNode.suggestedCourseIds ?? [])
+      .map((courseId) => courseMap[String(courseId)])
+      .filter((course): course is NonNullable<typeof course> => Boolean(course));
+
+    const availability =
+      (selectedNode.nodeStatus as RoadmapNodeAvailability | undefined) ??
+      RoadmapNodeAvailability.AVAILABLE;
+
+    return buildNodeLearningContext({
+      node: selectedNode,
+      availability,
+      parentNode,
+      childNodes,
+      mappedCourses,
+      enrollmentByCourseId,
+    });
+  }, [selectedNode, roadmapNodes, courseMap, enrollmentByCourseId]);
+
+  const canCreateStudyPlanForSelectedNode = useMemo(() => {
+    if (!selectedNode) {
+      return false;
+    }
+    if (studyTaskNodeIds.has(selectedNode.id)) {
+      return false;
+    }
+    if (!eligibleNodeId) {
+      return true;
+    }
+    return selectedNode.id === eligibleNodeId;
+  }, [eligibleNodeId, selectedNode, studyTaskNodeIds]);
+
+  const linkedTaskIdForSelectedNode = selectedNodePlanSummary?.linkedTaskIds?.[0] ?? null;
 
   const loadRoadmap = useCallback(async () => {
     if (!id) {
@@ -110,8 +171,9 @@ const RoadmapDetailPage = () => {
       const roadmapData = await aiRoadmapService.getRoadmapById(parseInt(id, 10));
       setRoadmap(roadmapData);
 
+      // Build progress map first so we can find the first non-completed node
+      const nextProgressMap = new Map<string, QuestProgress>();
       if (roadmapData.progress) {
-        const nextProgressMap = new Map<string, QuestProgress>();
         Object.entries(roadmapData.progress).forEach(([questId, progress]) => {
           nextProgressMap.set(questId, {
             questId: progress.questId,
@@ -120,16 +182,32 @@ const RoadmapDetailPage = () => {
             completedAt: progress.completedAt
           });
         });
-        setProgressMap(nextProgressMap);
-      } else {
-        setProgressMap(new Map());
       }
+
+      // Find first node that is NOT completed — use this for panel auto-open
+      const firstNonCompletedNode = roadmapData.roadmap.find((node) => {
+        if (!node?.id) return false;
+        const progress = nextProgressMap.get(node.id);
+        return progress?.status !== ProgressStatus.COMPLETED;
+      });
+
+      setSelectedNodeId((previous) => {
+        if (previous && roadmapData.roadmap.some((node) => node.id === previous)) {
+          return previous;
+        }
+        return firstNonCompletedNode?.id ?? roadmapData.roadmap[0]?.id ?? null;
+      });
+
+      setProgressMap(nextProgressMap);
 
       try {
         const board = await taskBoardService.getBoard();
-        setStudyTaskNodeIds(extractLinkedNodeIds(board, roadmapData.sessionId));
+        const nodeSummaries = extractNodeStudyPlanSummaries(board, roadmapData.sessionId);
+        setNodePlanSummaryMap(nodeSummaries);
+        setStudyTaskNodeIds(new Set(Object.keys(nodeSummaries)));
       } catch (boardError) {
         console.warn('Failed to load linked study tasks for roadmap nodes:', boardError);
+        setNodePlanSummaryMap({});
         setStudyTaskNodeIds(new Set());
       }
     } catch (loadError) {
@@ -197,26 +275,17 @@ const RoadmapDetailPage = () => {
     }
 
     if (studyTaskNodeIds.has(normalizedNodeId)) {
-      showToast({
-        type: 'info',
-        title: 'Node đã có task Study Planner',
-        message: `Node "${node.title}" đã được tạo kế hoạch học tập trước đó. Bạn có thể mở Study Planner để xem và cập nhật.`,
-        autoCloseDelay: 10,
-        showCountdown: true,
-        countdownText: 'Tự đóng sau {countdown}s',
-        actionButton: {
-          text: 'Mở Study Planner',
-          onClick: () => {
-            hideToast();
-            const params = new URLSearchParams({
-              source: 'roadmap-node',
-              roadmapSessionId: String(roadmap.sessionId),
-              nodeId: normalizedNodeId
-            });
-            navigate(`/study-planner?${params.toString()}`);
-          }
-        }
+      const taskId = nodePlanSummaryMap[normalizedNodeId]?.linkedTaskIds?.[0];
+      const params = new URLSearchParams({
+        source: 'roadmap-node',
+        roadmapSessionId: String(roadmap.sessionId),
+        nodeId: normalizedNodeId,
+        view: 'calendar',
       });
+      if (taskId) {
+        params.set('taskId', taskId);
+      }
+      navigate(`/study-planner?${params.toString()}`);
       return;
     }
 
@@ -227,7 +296,72 @@ const RoadmapDetailPage = () => {
 
     setPlanModalNode(node);
     setIsPlanModalOpen(true);
-  }, [roadmap, eligibleNodeId, showError, studyTaskNodeIds, showToast, hideToast, navigate]);
+    setSelectedNodeId(null);
+  }, [roadmap, eligibleNodeId, showError, studyTaskNodeIds, nodePlanSummaryMap, navigate]);
+
+  const handleNodeSelect = useCallback((nodeId: string) => {
+    if (!nodeId || !nodeId.trim()) {
+      return;
+    }
+    setSelectedNodeId(nodeId.trim());
+  }, []);
+
+  const handleCloseNodePanel = useCallback(() => {
+    if (creatingTaskNodeId) {
+      return;
+    }
+    setSelectedNodeId(null);
+  }, [creatingTaskNodeId]);
+
+  const handleNavigateToCourse = useCallback(async (courseId: number) => {
+    if (!user?.id) return;
+
+    const existingEnrollment = enrollmentByCourseId[String(courseId)];
+    if (existingEnrollment) {
+      // Already enrolled — navigate to learning page
+      const course = courseMap[String(courseId)];
+      const path = course ? buildCourseLearningPath(course) : buildCourseDetailPath({ id: courseId });
+      navigate(path);
+      return;
+    }
+
+    // Not enrolled — enroll first, then navigate
+    setEnrollingCourseId(courseId);
+    try {
+      await enrollUser(courseId, user.id);
+      // Bump refresh key so useRoadmapCourseEnrollments re-fetches enrollments
+      setEnrollmentRefreshKey((k) => k + 1);
+      showSuccess('Đã kích hoạt khóa học', 'Bạn đã được ghi danh vào khóa học. Hãy bắt đầu học ngay!');
+      // After enroll, re-fetch enrollments so isEnrolled updates
+      // Use a quick refetch by toggling the dependency (clear mappedCourseIds briefly then restore)
+      const course = courseMap[String(courseId)];
+      const path = course ? buildCourseLearningPath(course) : buildCourseDetailPath({ id: courseId });
+      navigate(path);
+    } catch (err) {
+      showError('Không thể kích hoạt khóa học', (err as Error).message);
+    } finally {
+      setEnrollingCourseId(null);
+    }
+  }, [user?.id, enrollmentByCourseId, courseMap, navigate, showSuccess, showError]);
+
+  const handleOpenStudyPlannerForNode = useCallback((nodeId: string, taskId?: string | null) => {
+    if (!roadmap) {
+      return;
+    }
+
+    const params = new URLSearchParams({
+      source: 'roadmap-node',
+      roadmapSessionId: String(roadmap.sessionId),
+      nodeId,
+      view: 'calendar',
+    });
+
+    if (taskId) {
+      params.set('taskId', taskId);
+    }
+
+    navigate(`/study-planner?${params.toString()}`);
+  }, [navigate, roadmap]);
 
   const handleClosePlanModal = useCallback(() => {
     if (creatingTaskNodeId) return;
@@ -275,6 +409,33 @@ const RoadmapDetailPage = () => {
           next.add(planModalNode.id);
           return next;
         });
+        setNodePlanSummaryMap((previous) => {
+          const existing = previous[planModalNode.id];
+          const responseTasks = Array.isArray((response as { tasks?: Array<{ id?: string | number }> }).tasks)
+            ? (response as { tasks?: Array<{ id?: string | number }> }).tasks ?? []
+            : [];
+          const taskIdsFromResponse = responseTasks
+            .map((task) => task?.id)
+            .filter((value): value is string | number => value !== null && value !== undefined)
+            .map((value) => String(value));
+          const linkedTaskIds = Array.from(new Set([
+            ...(existing?.linkedTaskIds ?? []),
+            ...taskIdsFromResponse,
+            ...(normalizedTaskId ? [normalizedTaskId] : []),
+          ]));
+
+          return {
+            ...previous,
+            [planModalNode.id]: {
+              nodeId: planModalNode.id,
+              hasLinkedPlan: true,
+              totalLinkedTasks: Math.max(taskCount, linkedTaskIds.length, existing?.totalLinkedTasks ?? 0, 1),
+              completedLinkedTasks: existing?.completedLinkedTasks ?? 0,
+              linkedTaskIds,
+              isCompleted: existing?.isCompleted ?? false,
+            },
+          };
+        });
       }
 
       showToast({
@@ -291,7 +452,8 @@ const RoadmapDetailPage = () => {
             const params = new URLSearchParams({
               source: 'roadmap-node',
               roadmapSessionId: String(roadmap.sessionId),
-              nodeId: planModalNode.id
+              nodeId: planModalNode.id,
+              view: 'calendar',
             });
             if (normalizedTaskId) {
               params.set('taskId', normalizedTaskId);
@@ -334,6 +496,28 @@ const RoadmapDetailPage = () => {
       footer.style.display = previousDisplay;
     };
   }, []);
+
+  useEffect(() => {
+    if (!selectedNodeId) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [selectedNodeId]);
+
+  // Auto-switch panel to the next non-completed node when current node is completed
+  useEffect(() => {
+    if (!eligibleNodeId || eligibleNodeId === selectedNodeId) return;
+    const currentProgress = progressMap.get(selectedNodeId ?? '');
+    if (currentProgress?.status === ProgressStatus.COMPLETED) {
+      setSelectedNodeId(eligibleNodeId);
+    }
+  }, [eligibleNodeId, selectedNodeId, progressMap]);
 
   if (isLoading) {
     return (
@@ -388,13 +572,36 @@ const RoadmapDetailPage = () => {
           creatingTaskNodeId={creatingTaskNodeId}
           eligibleNodeId={eligibleNodeId}
           studyTaskNodeIds={studyTaskNodeIds}
+          selectedNodeId={selectedNodeId}
+          onNodeSelect={handleNodeSelect}
         />
         <MeowlGuide currentPage="roadmap" />
       </div>
 
+      <RoadmapNodeFocusPanel
+        isOpen={Boolean(selectedNode)}
+        node={selectedNode}
+        progress={selectedNodeProgress}
+        learningContext={selectedNodeLearningContext}
+        primaryCourseId={selectedNodeLearningContext?.primaryCourse?.id}
+        isEnrolled={selectedNodeLearningContext?.primaryCourse != null && Boolean(enrollmentByCourseId[String(selectedNodeLearningContext.primaryCourse.id)])}
+        hasStudyTask={Boolean(selectedNodePlanSummary?.hasLinkedPlan)}
+        linkedTaskId={linkedTaskIdForSelectedNode}
+        canCreateStudyTask={canCreateStudyPlanForSelectedNode}
+        isCreatingStudyTask={Boolean(creatingTaskNodeId && selectedNode && creatingTaskNodeId === selectedNode.id)}
+        onClose={handleCloseNodePanel}
+        onCreateStudyPlan={handleCreateStudyTask}
+        onOpenStudyPlanner={handleOpenStudyPlannerForNode}
+        onNavigateToCourse={handleNavigateToCourse}
+      />
+
       <RoadmapNodeStudyPlanModal
         isOpen={isPlanModalOpen}
         node={planModalNode}
+        learningContext={selectedNode && planModalNode && selectedNode.id === planModalNode.id ? selectedNodeLearningContext : undefined}
+        childBranchTitles={planModalNode?.children
+          ?.map((childId) => roadmap.roadmap.find((node) => node.id === childId)?.title)
+          .filter((title): title is string => Boolean(title)) ?? []}
         isSubmitting={Boolean(creatingTaskNodeId)}
         onClose={handleClosePlanModal}
         onSubmit={handleSubmitNodePlan}
@@ -411,6 +618,7 @@ const RoadmapDetailPage = () => {
           showCountdown={toast.showCountdown}
           countdownText={toast.countdownText}
           actionButton={toast.actionButton}
+          secondaryActionButton={toast.secondaryActionButton}
         />
       )}
     </div>

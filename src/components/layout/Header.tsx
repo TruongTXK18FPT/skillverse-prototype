@@ -130,8 +130,8 @@ const Header: React.FC = () => {
       hideForRoles: ["RECRUITER"],
     },
     {
-      name: "Lập Kế Hoạch",
-      description: "Lên lịch học tập và quản lý công việc hiệu quả",
+      name: "Kế Hoạch AI",
+      description: "Quản lý và tiếp tục kế hoạch học tập cá nhân",
       path: "/study-planner",
       icon: Calendar,
       hideForRoles: ["RECRUITER"],
@@ -593,8 +593,8 @@ const Header: React.FC = () => {
                         requireAuth: true,
                       },
                       {
-                        name: "Lập Kế Hoạch",
-                        description: "Lên lịch học tập và quản lý công việc",
+                        name: "Kế Hoạch AI",
+                        description: "Quản lý và tiếp tục kế hoạch học tập cá nhân",
                         path: "/study-planner",
                         icon: Calendar,
                         requireAuth: true,
@@ -778,8 +778,8 @@ const Header: React.FC = () => {
                         >
                           <Calendar className="sv-mega-link-icon" />
                           <div className="sv-mega-link-content">
-                            <h3 className="sv-mega-link-title">Lập Kế Hoạch</h3>
-                            <p className="sv-mega-link-desc">Lên lịch học tập và quản lý công việc</p>
+                            <h3 className="sv-mega-link-title">Kế Hoạch AI</h3>
+                            <p className="sv-mega-link-desc">Quản lý và tiếp tục kế hoạch học tập cá nhân</p>
                           </div>
                         </Link>
                         <Link

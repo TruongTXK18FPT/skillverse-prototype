@@ -18,6 +18,10 @@ export interface ToastProps {
     text: string;
     onClick: () => void;
   };
+  secondaryActionButton?: {
+    text: string;
+    onClick: () => void;
+  };
 }
 
 interface ToastIconProps {
@@ -51,7 +55,8 @@ const Toast: React.FC<ToastProps> = ({
   countdownText = "Closing in {countdown} seconds...",
   position,
   useOverlay,
-  actionButton
+  actionButton,
+  secondaryActionButton
 }) => {
   const [countdown, setCountdown] = React.useState(autoCloseDelay);
   const resolvedPosition = position ?? 'center';
@@ -124,13 +129,25 @@ const Toast: React.FC<ToastProps> = ({
           )}
         </div>
 
-        {actionButton && (
-          <button 
-            className="toast-action-button"
-            onClick={actionButton.onClick}
-          >
-            {actionButton.text}
-          </button>
+        {(actionButton || secondaryActionButton) && (
+          <div className="toast-action-group">
+            {actionButton && (
+              <button
+                className="toast-action-button"
+                onClick={actionButton.onClick}
+              >
+                {actionButton.text}
+              </button>
+            )}
+            {secondaryActionButton && (
+              <button
+                className="toast-action-button toast-action-button-secondary"
+                onClick={secondaryActionButton.onClick}
+              >
+                {secondaryActionButton.text}
+              </button>
+            )}
+          </div>
         )}
 
         <button 

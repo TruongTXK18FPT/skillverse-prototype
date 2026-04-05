@@ -133,11 +133,15 @@ const RoadmapGeneratorForm = ({
       goal: constructedGoal,
       target: target,
       roadmapMode: isSkill ? 'SKILL_BASED' : 'CAREER_BASED',
-      
+
       // Map specific fields to generic ones if needed by older backend logic
       duration: isSkill ? '3 months' : (formData.timelineToWork || '6 months'), // Fallback
       experience: isSkill ? (formData.currentSkillLevel || 'beginner') : (formData.workExperience || 'none'),
-      style: isSkill ? (formData.learningStyle || 'project-based') : 'project-based'
+      style: isSkill ? (formData.learningStyle || 'project-based') : 'project-based',
+
+      // FEATURE FIX: Ensure AI gets desiredDuration and dailyTime for accurate estimates
+      desiredDuration: isSkill ? '1 tháng' : (formData.timelineToWork || '6 months'),
+      dailyTime: formData.dailyLearningTime,
     };
 
     await onGenerate(finalRequest);

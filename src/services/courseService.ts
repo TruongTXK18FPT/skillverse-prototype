@@ -179,6 +179,84 @@ export const getCourse = async (
   }
 };
 
+const courseDetailCache = new Map<number, CourseDetailDTO>();
+const courseDetailRequestCache = new Map<number, Promise<CourseDetailDTO>>();
+
+const getCourseWithCache = async (courseId: number): Promise<CourseDetailDTO> => {
+  const cachedCourse = courseDetailCache.get(courseId);
+  if (cachedCourse) {
+    return cachedCourse;
+  }
+
+  const inflightRequest = courseDetailRequestCache.get(courseId);
+  if (inflightRequest) {
+    return inflightRequest;
+  }
+
+  const request = getCourse(courseId)
+    .then((course) => {
+      courseDetailCache.set(courseId, course);
+      return course;
+    })
+    .finally(() => {
+      courseDetailRequestCache.delete(courseId);
+    });
+
+  courseDetailRequestCache.set(courseId, request);
+  return request;
+};
+
+/**
+ * Best-effort batch course loading for roadmap nodes.
+ * If the backend batch endpoint is unavailable, fall back to cached parallel requests.
+ */
+export const getCoursesBatch = async (
+  ids: Array<number | string>,
+): Promise<Record<string, CourseDetailDTO | null>> => {
+  const normalizedIds = Array.from(
+    new Set(
+      ids
+        .map((value) => Number(value))
+        .filter((value) => Number.isFinite(value) && value > 0),
+    ),
+  );
+
+  if (normalizedIds.length === 0) {
+    return {};
+  }
+
+  try {
+    const response = await axiosInstance.get<CourseDetailDTO[]>("/courses/batch", {
+      params: { ids: normalizedIds.join(",") },
+    });
+
+    const fetchedCourses = Array.isArray(response.data) ? response.data : [];
+    const fetchedCourseById = new Map<number, CourseDetailDTO>();
+    fetchedCourses.forEach((course) => {
+      if (course?.id) {
+        courseDetailCache.set(course.id, course);
+        fetchedCourseById.set(course.id, course);
+      }
+    });
+
+    return normalizedIds.reduce<Record<string, CourseDetailDTO | null>>((accumulator, id) => {
+      const matchingCourse = fetchedCourseById.get(id) ?? courseDetailCache.get(id) ?? null;
+      accumulator[String(id)] = matchingCourse;
+      return accumulator;
+    }, {});
+  } catch (error) {
+    const results = await Promise.allSettled(
+      normalizedIds.map(async (id) => [String(id), await getCourseWithCache(id)] as const),
+    );
+
+    return results.reduce<Record<string, CourseDetailDTO | null>>((accumulator, result, index) => {
+      const id = String(normalizedIds[index]);
+      accumulator[id] = result.status === "fulfilled" ? result.value[1] : null;
+      return accumulator;
+    }, {});
+  }
+};
+
 // ==================== COURSE QUERY OPERATIONS ====================
 
 /**

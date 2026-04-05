@@ -171,8 +171,7 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   const recentCourses = enrolledCourses.length > 0 ? enrolledCourses : [];
 
   const handleViewPlan = () => {
-    // Navigate to study plan or show modal
-    navigate("/study-planner");
+    navigate("/roadmap");
   };
 
   const handleViewReport = () => {

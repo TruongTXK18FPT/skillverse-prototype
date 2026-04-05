@@ -133,6 +133,11 @@
   position: relative;
 }
 
+.roadmap-hud-starmap--detail {
+  height: auto;
+  min-height: calc(100vh - 64px);
+}
+
 .roadmap-hud-controls {
   position: absolute;
   bottom: 20px;
@@ -421,12 +426,15 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 1rem;
 }
 
 .roadmap-hud-card-title-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
 }
 
 .roadmap-hud-card-title {
@@ -435,6 +443,10 @@
   color: var(--hud-text);
   margin: 0;
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .roadmap-hud-badge {

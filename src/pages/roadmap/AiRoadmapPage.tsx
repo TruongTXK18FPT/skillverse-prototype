@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { ArrowLeft, Plus, Search, Grid3x3, List, Filter } from 'lucide-react';
 import { RoadmapGeneratorForm } from '../../components/ai-roadmap';
 import { RoadmapList } from '../../components/roadmap';
 import aiRoadmapService from '../../services/aiRoadmapService';
 import { 
-  RoadmapSessionSummary, 
+  RoadmapSessionSummary,
+  RoadmapStatusCounts,
   GenerateRoadmapRequest
 } from '../../types/Roadmap';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
@@ -19,13 +20,35 @@ import '../../styles/RoadmapHUD.css';
 type ViewMode = 'list' | 'generate';
 type DisplayMode = 'grid' | 'list';
 type SortOption = 'newest' | 'oldest' | 'progress' | 'title';
+type RoadmapLifecycleStatus = 'ACTIVE' | 'PAUSED' | 'DELETED';
+type RoadmapListScope = 'learning' | 'deleted';
+
+const normalizeRoadmapStatus = (status?: string): RoadmapLifecycleStatus => {
+  const normalized = (status || 'ACTIVE').trim().toUpperCase();
+  if (normalized === 'PAUSED' || normalized === 'DELETED') {
+    return normalized;
+  }
+  return 'ACTIVE';
+};
+
+const INITIAL_STATUS_COUNTS: RoadmapStatusCounts = {
+  active: 0,
+  paused: 0,
+  deleted: 0,
+  total: 0,
+};
 
 const AiRoadmapPage = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
-  const [roadmaps, setRoadmaps] = useState<RoadmapSessionSummary[]>([]);
+  const [learningRoadmapSource, setLearningRoadmapSource] = useState<RoadmapSessionSummary[]>([]);
+  const [deletedRoadmapSource, setDeletedRoadmapSource] = useState<RoadmapSessionSummary[]>([]);
+  const [statusCounts, setStatusCounts] = useState<RoadmapStatusCounts>(INITIAL_STATUS_COUNTS);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingList, setIsLoadingList] = useState(true);
-  const { toast, isVisible, showError, showSuccess, hideToast } = useToast();
+  const [isLoadingDeletedList, setIsLoadingDeletedList] = useState(false);
+  const [activeListScope, setActiveListScope] = useState<RoadmapListScope>('learning');
+  const [hasLoadedDeletedRoadmaps, setHasLoadedDeletedRoadmaps] = useState(false);
+  const { toast, isVisible, showError, showSuccess, showToast, hideToast } = useToast();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -34,29 +57,121 @@ const AiRoadmapPage = () => {
   const [displayMode, setDisplayMode] = useState<DisplayMode>('grid');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [filterExperience, setFilterExperience] = useState<string>('all');
+  const [actionLoadingId, setActionLoadingId] = useState<number | null>(null);
+  const learningRoadmapSourceRef = useRef<RoadmapSessionSummary[]>([]);
 
-  const loadUserRoadmaps = useCallback(async () => {
-    // Only load if authenticated to prevent 401 errors
+  useEffect(() => {
+    learningRoadmapSourceRef.current = learningRoadmapSource;
+  }, [learningRoadmapSource]);
+
+  const buildFallbackStatusCounts = useCallback((
+    learningList: RoadmapSessionSummary[],
+    deletedCountHint = 0,
+  ): RoadmapStatusCounts => {
+    const active = learningList.filter((item) => normalizeRoadmapStatus(item.status) === 'ACTIVE').length;
+    const paused = learningList.filter((item) => normalizeRoadmapStatus(item.status) === 'PAUSED').length;
+    const deleted = Math.max(0, deletedCountHint);
+    return {
+      active,
+      paused,
+      deleted,
+      total: active + paused + deleted,
+    };
+  }, []);
+
+  const refreshStatusCounts = useCallback(async (
+    learningListFallback?: RoadmapSessionSummary[],
+    deletedCountHint?: number,
+  ) => {
+    try {
+      const counts = await aiRoadmapService.getUserRoadmapStatusCounts();
+      setStatusCounts(counts);
+      return counts;
+    } catch {
+      if (learningListFallback) {
+        const fallbackCounts = buildFallbackStatusCounts(learningListFallback, deletedCountHint ?? 0);
+        setStatusCounts(fallbackCounts);
+        return fallbackCounts;
+      }
+
+      setStatusCounts((previous) => {
+        const fallbackCounts = buildFallbackStatusCounts(
+          learningRoadmapSourceRef.current,
+          deletedCountHint ?? previous.deleted,
+        );
+        return fallbackCounts;
+      });
+      return null;
+    }
+  }, [buildFallbackStatusCounts]);
+
+  const loadLearningRoadmaps = useCallback(async () => {
     if (!isAuthenticated) {
+      setLearningRoadmapSource([]);
+      setDeletedRoadmapSource([]);
+      setStatusCounts(INITIAL_STATUS_COUNTS);
       setIsLoadingList(false);
+      setIsLoadingDeletedList(false);
+      setHasLoadedDeletedRoadmaps(false);
       return;
     }
 
     try {
       setIsLoadingList(true);
-      const data = await aiRoadmapService.getUserRoadmaps();
-      setRoadmaps(data);
+      const data = await aiRoadmapService.getUserRoadmaps(false);
+      const normalizedLearningRoadmaps = data.filter(
+        (roadmap) => normalizeRoadmapStatus(roadmap.status) !== 'DELETED',
+      );
+      setLearningRoadmapSource(normalizedLearningRoadmaps);
+
+      const deletedHint = hasLoadedDeletedRoadmaps ? deletedRoadmapSource.length : 0;
+      await refreshStatusCounts(normalizedLearningRoadmaps, deletedHint);
     } catch (error) {
       showError('Lỗi', (error as Error).message);
     } finally {
       setIsLoadingList(false);
     }
-  }, [isAuthenticated, showError]);
+  }, [
+    deletedRoadmapSource.length,
+    hasLoadedDeletedRoadmaps,
+    isAuthenticated,
+    refreshStatusCounts,
+    showError,
+  ]);
 
-  // Load user's roadmaps on mount (only if authenticated)
+  const loadDeletedRoadmaps = useCallback(async (force = false) => {
+    if (!isAuthenticated) {
+      return;
+    }
+
+    if (!force && hasLoadedDeletedRoadmaps) {
+      return;
+    }
+
+    try {
+      setIsLoadingDeletedList(true);
+      const data = await aiRoadmapService.getUserDeletedRoadmaps();
+      const normalizedDeletedRoadmaps = data.filter(
+        (roadmap) => normalizeRoadmapStatus(roadmap.status) === 'DELETED',
+      );
+      setDeletedRoadmapSource(normalizedDeletedRoadmaps);
+      setHasLoadedDeletedRoadmaps(true);
+      await refreshStatusCounts(learningRoadmapSourceRef.current, normalizedDeletedRoadmaps.length);
+    } catch (error) {
+      showError('Lỗi', (error as Error).message);
+    } finally {
+      setIsLoadingDeletedList(false);
+    }
+  }, [
+    hasLoadedDeletedRoadmaps,
+    isAuthenticated,
+    refreshStatusCounts,
+    showError,
+  ]);
+
   useEffect(() => {
-    loadUserRoadmaps();
-  }, [loadUserRoadmaps]);
+    void loadLearningRoadmaps();
+  }, [loadLearningRoadmaps]);
 
   const handleCreateRoadmap = () => {
     // Always allow viewing the form, but show login prompt if not authenticated
@@ -85,7 +200,7 @@ const AiRoadmapPage = () => {
       // Navigate to the new roadmap detail page
       navigate(`/roadmap/${roadmap.sessionId}`);
       // Reload list to include new roadmap
-      await loadUserRoadmaps();
+      await loadLearningRoadmaps();
     } catch (error: any) {
       // Extract error message from Axios error response
       const errorMessage = error?.response?.data?.message || error?.message || 'Đã xảy ra lỗi không xác định.';
@@ -109,7 +224,7 @@ const AiRoadmapPage = () => {
           
           showSuccess('Thành công', 'Lộ trình đã được tạo (Chế độ Thường)!');
           navigate(`/roadmap/${roadmap.sessionId}`);
-          await loadUserRoadmaps();
+          await loadLearningRoadmaps();
           return; // Exit after successful retry
         } catch (retryError: any) {
            console.error('Retry failed:', retryError);
@@ -160,26 +275,126 @@ const AiRoadmapPage = () => {
     navigate(`/roadmap/${sessionId}`);
   };
 
+  const runRoadmapAction = useCallback(async (
+    sessionId: number,
+    action: () => Promise<void>,
+    successTitle: string,
+    successMessage: string,
+  ) => {
+    if (actionLoadingId !== null) {
+      return;
+    }
 
-  // Filter and sort roadmaps (V2 API field names)
-  const filteredAndSortedRoadmaps = useCallback(() => {
-    let filtered = [...roadmaps];
+    try {
+      setActionLoadingId(sessionId);
+      await action();
+      showSuccess(successTitle, successMessage, 4);
+      await loadLearningRoadmaps();
+      if (hasLoadedDeletedRoadmaps) {
+        await loadDeletedRoadmaps(true);
+      }
+    } catch (error) {
+      showError('Không thể cập nhật trạng thái roadmap', (error as Error).message);
+    } finally {
+      setActionLoadingId(null);
+    }
+  }, [actionLoadingId, hasLoadedDeletedRoadmaps, loadDeletedRoadmaps, loadLearningRoadmaps, showError, showSuccess]);
 
-    // Search filter (use V2 field names: originalGoal)
+  const handleActivateRoadmap = useCallback(async (sessionId: number) => {
+    await runRoadmapAction(
+      sessionId,
+      () => aiRoadmapService.activateRoadmap(sessionId),
+      'Đã kích hoạt roadmap',
+      'Roadmap này đã chuyển sang ACTIVE. Các roadmap ACTIVE khác sẽ tự động chuyển PAUSED.',
+    );
+  }, [runRoadmapAction]);
+
+  const handlePauseRoadmap = useCallback(async (sessionId: number) => {
+    await runRoadmapAction(
+      sessionId,
+      () => aiRoadmapService.pauseRoadmap(sessionId),
+      'Đã tạm dừng roadmap',
+      'Bạn có thể kích hoạt lại roadmap này bất kỳ lúc nào.',
+    );
+  }, [runRoadmapAction]);
+
+  const handleDeleteRoadmap = useCallback((sessionId: number) => {
+    if (actionLoadingId !== null) {
+      return;
+    }
+
+    showToast({
+      type: 'warning',
+      title: 'Xóa roadmap?',
+      message: 'Roadmap sẽ chuyển sang danh sách đã xóa. Bạn vẫn có thể xóa vĩnh viễn ở danh sách đã xóa.',
+      autoCloseDelay: 10,
+      showCountdown: false,
+      actionButton: {
+        text: 'Xóa',
+        onClick: async () => {
+          hideToast();
+          await runRoadmapAction(
+            sessionId,
+            () => aiRoadmapService.deleteRoadmap(sessionId),
+            'Đã xóa roadmap',
+            'Roadmap đã được chuyển sang danh sách đã xóa.',
+          );
+        },
+      },
+      secondaryActionButton: {
+        text: 'Hủy',
+        onClick: hideToast,
+      },
+    });
+  }, [actionLoadingId, hideToast, runRoadmapAction, showToast]);
+
+  const handlePermanentDeleteRoadmap = useCallback((sessionId: number) => {
+    if (actionLoadingId !== null) {
+      return;
+    }
+
+    showToast({
+      type: 'error',
+      title: 'Xóa vĩnh viễn roadmap?',
+      message: 'Hành động này không thể hoàn tác. Toàn bộ dữ liệu gắn trực tiếp với roadmap sẽ bị xóa.',
+      autoCloseDelay: 12,
+      showCountdown: false,
+      actionButton: {
+        text: 'Xóa vĩnh viễn',
+        onClick: async () => {
+          hideToast();
+          await runRoadmapAction(
+            sessionId,
+            () => aiRoadmapService.permanentDeleteRoadmap(sessionId),
+            'Đã xóa vĩnh viễn roadmap',
+            'Roadmap và dữ liệu liên quan trực tiếp đã được xóa khỏi hệ thống.',
+          );
+        },
+      },
+      secondaryActionButton: {
+        text: 'Hủy',
+        onClick: hideToast,
+      },
+    });
+  }, [actionLoadingId, hideToast, runRoadmapAction, showToast]);
+
+  const applyFiltersAndSort = useCallback((items: RoadmapSessionSummary[]) => {
+    let filtered = [...items];
+
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(r =>
-        r.title.toLowerCase().includes(query) ||
-        r.originalGoal.toLowerCase().includes(query)
+      filtered = filtered.filter((roadmap) =>
+        roadmap.title.toLowerCase().includes(query)
+        || roadmap.originalGoal.toLowerCase().includes(query),
       );
     }
 
-    // Experience filter (use V2 field name: experienceLevel)
     if (filterExperience !== 'all') {
-      filtered = filtered.filter(r => r.experienceLevel.toLowerCase() === filterExperience.toLowerCase());
+      filtered = filtered.filter(
+        (roadmap) => roadmap.experienceLevel.toLowerCase() === filterExperience.toLowerCase(),
+      );
     }
 
-    // Sort
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'newest':
@@ -196,7 +411,25 @@ const AiRoadmapPage = () => {
     });
 
     return filtered;
-  }, [roadmaps, searchQuery, filterExperience, sortBy]);
+  }, [filterExperience, searchQuery, sortBy]);
+
+  const learningRoadmaps = useMemo(() => (
+    applyFiltersAndSort(learningRoadmapSource)
+  ), [applyFiltersAndSort, learningRoadmapSource]);
+
+  const deletedRoadmaps = useMemo(() => (
+    applyFiltersAndSort(deletedRoadmapSource)
+  ), [applyFiltersAndSort, deletedRoadmapSource]);
+
+  const learningRoadmapCount = statusCounts.active + statusCounts.paused;
+  const deletedRoadmapCount = statusCounts.deleted;
+
+  const handleSwitchListScope = useCallback((scope: RoadmapListScope) => {
+    setActiveListScope(scope);
+    if (scope === 'deleted' && !hasLoadedDeletedRoadmaps) {
+      void loadDeletedRoadmaps();
+    }
+  }, [hasLoadedDeletedRoadmaps, loadDeletedRoadmaps]);
 
   const handleGoBack = () => {
     if (viewMode === 'generate') {
@@ -261,7 +494,7 @@ const AiRoadmapPage = () => {
           {viewMode === 'list' && (
             <div className="roadmap-page__list">
               {/* Search and Filter Controls */}
-              {roadmaps.length > 0 && (
+              {isAuthenticated && (
                 <div className="sv-roadmap-controls" style={{ background: 'var(--hud-panel-bg)', borderColor: 'var(--hud-border)' }}>
                   <div className="sv-roadmap-controls__search">
                     <Search size={20} style={{ color: 'var(--hud-accent)' }} />
@@ -318,15 +551,98 @@ const AiRoadmapPage = () => {
                 </div>
               )}
 
-              <RoadmapList
-                roadmaps={filteredAndSortedRoadmaps()}
-                displayMode={displayMode}
-                onSelectRoadmap={handleSelectRoadmap}
-                isLoading={isLoadingList}
-                isAuthenticated={isAuthenticated}
-                onLoginRedirect={() => navigate('/login')}
-                onCreateRoadmap={handleCreateRoadmap}
-              />
+              {!isAuthenticated || isLoadingList ? (
+                <RoadmapList
+                  roadmaps={[]}
+                  displayMode={displayMode}
+                  onSelectRoadmap={handleSelectRoadmap}
+                  isLoading={isLoadingList}
+                  isAuthenticated={isAuthenticated}
+                  onLoginRedirect={() => navigate('/login')}
+                  onCreateRoadmap={handleCreateRoadmap}
+                  onActivateRoadmap={handleActivateRoadmap}
+                  onPauseRoadmap={handlePauseRoadmap}
+                  onDeleteRoadmap={handleDeleteRoadmap}
+                  onPermanentDeleteRoadmap={handlePermanentDeleteRoadmap}
+                  actionLoadingId={actionLoadingId}
+                />
+              ) : (
+                <div className="sv-roadmap-split-sections">
+                  <div className="sv-roadmap-switch-tabs" role="tablist" aria-label="Chuyển danh sách roadmap">
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={activeListScope === 'learning'}
+                      className={`sv-roadmap-switch-tab ${activeListScope === 'learning' ? 'sv-roadmap-switch-tab--active' : ''}`}
+                      onClick={() => handleSwitchListScope('learning')}
+                    >
+                      <span>Roadmap còn sử dụng</span>
+                      <span className="sv-roadmap-switch-tab__count">{learningRoadmapCount}</span>
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={activeListScope === 'deleted'}
+                      className={`sv-roadmap-switch-tab sv-roadmap-switch-tab--archive ${activeListScope === 'deleted' ? 'sv-roadmap-switch-tab--active' : ''}`}
+                      onClick={() => handleSwitchListScope('deleted')}
+                    >
+                      <span>Roadmap đã xóa</span>
+                      <span className="sv-roadmap-switch-tab__count">{deletedRoadmapCount}</span>
+                    </button>
+                  </div>
+
+                  {activeListScope === 'learning' ? (
+                    <section className="sv-roadmap-split-section">
+                      <div className="sv-roadmap-split-section__header">
+                        <div>
+                          <h2 className="sv-roadmap-split-section__title">Roadmap còn sử dụng</h2>
+                          <p className="sv-roadmap-split-section__subtitle">Danh sách roadmap ACTIVE và PAUSED để bạn tiếp tục học.</p>
+                        </div>
+                        <span className="sv-roadmap-split-section__count">{learningRoadmapCount}</span>
+                      </div>
+                      <RoadmapList
+                        roadmaps={learningRoadmaps}
+                        displayMode={displayMode}
+                        onSelectRoadmap={handleSelectRoadmap}
+                        isLoading={false}
+                        isAuthenticated={isAuthenticated}
+                        onLoginRedirect={() => navigate('/login')}
+                        onCreateRoadmap={handleCreateRoadmap}
+                        onActivateRoadmap={handleActivateRoadmap}
+                        onPauseRoadmap={handlePauseRoadmap}
+                        onDeleteRoadmap={handleDeleteRoadmap}
+                        actionLoadingId={actionLoadingId}
+                        emptyTitle="Chưa có roadmap còn sử dụng"
+                        emptyDescription="Tạo roadmap mới để bắt đầu hành trình học tập cá nhân hóa."
+                      />
+                    </section>
+                  ) : (
+                    <section className="sv-roadmap-split-section sv-roadmap-split-section--archive">
+                      <div className="sv-roadmap-split-section__header">
+                        <div>
+                          <h2 className="sv-roadmap-split-section__title">Roadmap đã xóa</h2>
+                          <p className="sv-roadmap-split-section__subtitle">Danh sách roadmap đã xóa, bạn có thể xóa vĩnh viễn tại đây.</p>
+                        </div>
+                        <span className="sv-roadmap-split-section__count sv-roadmap-split-section__count--archive">{deletedRoadmapCount}</span>
+                      </div>
+                      <RoadmapList
+                        roadmaps={deletedRoadmaps}
+                        displayMode={displayMode}
+                        onSelectRoadmap={handleSelectRoadmap}
+                        isLoading={isLoadingDeletedList}
+                        isAuthenticated={isAuthenticated}
+                        onLoginRedirect={() => navigate('/login')}
+                        onPermanentDeleteRoadmap={handlePermanentDeleteRoadmap}
+                        actionLoadingId={actionLoadingId}
+                        disableCardSelection
+                        hideEmptyCreateButton
+                        emptyTitle="Danh sách roadmap đã xóa đang trống"
+                        emptyDescription="Khi bạn xóa roadmap, mục đó sẽ xuất hiện tại đây để xử lý xóa vĩnh viễn."
+                      />
+                    </section>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -360,6 +676,7 @@ const AiRoadmapPage = () => {
           showCountdown={toast.showCountdown}
           countdownText={toast.countdownText}
           actionButton={toast.actionButton}
+          secondaryActionButton={toast.secondaryActionButton}
         />
       )}
     </div>

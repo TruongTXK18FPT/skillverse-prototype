@@ -104,6 +104,16 @@ export interface GuestSession {
 }
 
 class MeowlChatService {
+  private getStatusCode(error: unknown): number | null {
+    const status = (error as any)?.response?.status;
+    return typeof status === "number" ? status : null;
+  }
+
+  private isRecoverableChatFailure(error: unknown): boolean {
+    const status = this.getStatusCode(error);
+    return status === 429 || status === 503 || status === 504;
+  }
+
   // Get or create guest session
   getGuestSession(): GuestSession | null {
     try {
@@ -177,8 +187,10 @@ class MeowlChatService {
         request,
       );
       return response.data;
-    } catch (error: any) {
-      console.error("Meowl chat error:", error);
+    } catch (error: unknown) {
+      if (!this.isRecoverableChatFailure(error) && import.meta.env.DEV) {
+        console.warn("Meowl chat request returned fallback response.", error);
+      }
 
       const isVietnamese = request.language === "vi";
       const errorMessage = isVietnamese

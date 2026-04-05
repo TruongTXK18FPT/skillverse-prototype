@@ -20,6 +20,13 @@ export enum ProgressStatus {
   SKIPPED = 'SKIPPED'
 }
 
+export enum RoadmapNodeAvailability {
+  LOCKED = 'LOCKED',
+  AVAILABLE = 'AVAILABLE',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED'
+}
+
 /**
  * Difficulty level for nodes and roadmaps
  */
@@ -56,12 +63,16 @@ export interface RoadmapNode {
   id: string;
   title: string;
   description: string;
-  estimatedTimeMinutes: number;
+  estimatedTimeMinutes: number | null;
   type: NodeType;
   children: string[];
+  isCore?: boolean;
+  parentId?: string | null;
+  suggestedCourseIds?: string[];
+  nodeStatus?: RoadmapNodeAvailability | string;
+  difficulty?: DifficultyLevel | string;
   
   // V2 Enhanced fields
-  difficulty?: DifficultyLevel;
   learningObjectives?: string[];
   keyConcepts?: string[];
   practicalExercises?: string[];
@@ -206,6 +217,7 @@ export interface ValidationResult {
  */
 export interface RoadmapResponse {
   sessionId: number;
+  roadmapStatus?: string;
   metadata: RoadmapMetadata;
   roadmap: RoadmapNode[];
   statistics: RoadmapStatistics;
@@ -248,11 +260,13 @@ export interface RoadmapResponse {
  * The backend merges these preferences with node content before calling AI.
  */
 export interface RoadmapNodeStudyPlanRequest {
+  subjectName?: string;
   startDate?: string;
   deadline?: string;
   timezone?: string;
   preferredDays?: string[];
   preferredTimeWindows?: string[];
+  topics?: string[];
   freeTimeDescription?: string;
   desiredOutcome?: string;
   intensityLevel?: string;
@@ -268,6 +282,8 @@ export interface RoadmapNodeStudyPlanRequest {
   avoidLateNight?: boolean;
   allowLateNight?: boolean;
   confirmLateNight?: boolean;
+  chronotype?: string;
+  idealFocusWindows?: string[];
 }
 
 /**
@@ -292,8 +308,16 @@ export interface RoadmapSessionSummary {
   // Metadata
   difficultyLevel?: string;
   schemaVersion?: number;
+  status?: string;
   
   createdAt: string;
+}
+
+export interface RoadmapStatusCounts {
+  active: number;
+  paused: number;
+  deleted: number;
+  total: number;
 }
 
 /**
@@ -319,4 +343,5 @@ export interface FlowNodeData {
   isEligibleForStudyTask?: boolean;
   hasStudyTask?: boolean;
   isExpanded?: boolean;
+  isSelected?: boolean;
 }

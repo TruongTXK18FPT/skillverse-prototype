@@ -2,6 +2,7 @@ import axiosInstance from './axiosInstance';
 import {
   GenerateRoadmapRequest,
   RoadmapResponse,
+  RoadmapStatusCounts,
   RoadmapSessionSummary,
   ValidationResult
 } from '../types/Roadmap';
@@ -89,10 +90,11 @@ const aiRoadmapService = {
   /**
    * Get all roadmap sessions for the current user
    */
-  getUserRoadmaps: async (): Promise<RoadmapSessionSummary[]> => {
+  getUserRoadmaps: async (includeDeleted = false): Promise<RoadmapSessionSummary[]> => {
     try {
       const response = await axiosInstance.get<RoadmapSessionSummary[]>(
-        '/api/v1/ai/roadmap'
+        '/api/v1/ai/roadmap',
+        { params: { includeDeleted } }
       );
       return response.data;
     } catch (error) {
@@ -103,19 +105,59 @@ const aiRoadmapService = {
   },
 
   /**
+   * Get lifecycle counts for current user's roadmaps
+   */
+  getUserRoadmapStatusCounts: async (): Promise<RoadmapStatusCounts> => {
+    try {
+      const response = await axiosInstance.get<Record<string, number>>(
+        '/api/v1/ai/roadmap/status-counts'
+      );
+
+      const active = Number(response.data.active ?? 0);
+      const paused = Number(response.data.paused ?? 0);
+      const deleted = Number(response.data.deleted ?? 0);
+      const total = Number(response.data.total ?? (active + paused + deleted));
+
+      return {
+        active,
+        paused,
+        deleted,
+        total,
+      };
+    } catch (error) {
+      console.error('Failed to fetch roadmap status counts:', error);
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
+      throw new Error(message || 'Failed to load roadmap status counts.');
+    }
+  },
+
+  /**
+   * Get only soft-deleted roadmaps for current user
+   */
+  getUserDeletedRoadmaps: async (): Promise<RoadmapSessionSummary[]> => {
+    try {
+      const response = await axiosInstance.get<RoadmapSessionSummary[]>(
+        '/api/v1/ai/roadmap/deleted'
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch deleted roadmaps:', error);
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
+      throw new Error(message || 'Failed to load deleted roadmaps.');
+    }
+  },
+
+  /**
    * Get ALL roadmaps for Admin Analytics
    */
   getAllRoadmaps: async (): Promise<RoadmapSessionSummary[]> => {
     try {
-      // Assuming there's an admin endpoint or using the same one with admin privileges
-      // For now, let's try a hypothetical admin endpoint or the main one if it returns all for admin
       const response = await axiosInstance.get<RoadmapSessionSummary[]>(
-        '/api/v1/admin/roadmaps' 
+        '/api/v1/roadmaps?includeDeleted=false'
       );
       return response.data;
     } catch (error) {
       console.error('Failed to fetch all roadmaps:', error);
-      // Fallback to empty array or throw
       return [];
     }
   },
@@ -133,6 +175,58 @@ const aiRoadmapService = {
       console.error('Failed to fetch roadmap:', error);
       const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
       throw new Error(message || 'Failed to load roadmap details.');
+    }
+  },
+
+  /**
+   * Activate a roadmap and automatically pause other active roadmaps of the user.
+   */
+  activateRoadmap: async (sessionId: number): Promise<void> => {
+    try {
+      await axiosInstance.put(`/api/v1/ai/roadmap/${sessionId}/activate`);
+    } catch (error) {
+      console.error('Failed to activate roadmap:', error);
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
+      throw new Error(message || 'Failed to activate roadmap.');
+    }
+  },
+
+  /**
+   * Pause a roadmap.
+   */
+  pauseRoadmap: async (sessionId: number): Promise<void> => {
+    try {
+      await axiosInstance.put(`/api/v1/ai/roadmap/${sessionId}/pause`);
+    } catch (error) {
+      console.error('Failed to pause roadmap:', error);
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
+      throw new Error(message || 'Failed to pause roadmap.');
+    }
+  },
+
+  /**
+   * Soft-delete a roadmap owned by the current user.
+   */
+  deleteRoadmap: async (sessionId: number): Promise<void> => {
+    try {
+      await axiosInstance.delete(`/api/v1/ai/roadmap/${sessionId}`);
+    } catch (error) {
+      console.error('Failed to delete roadmap:', error);
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
+      throw new Error(message || 'Failed to delete roadmap.');
+    }
+  },
+
+  /**
+   * Permanently delete a roadmap and its direct linked data.
+   */
+  permanentDeleteRoadmap: async (sessionId: number): Promise<void> => {
+    try {
+      await axiosInstance.delete(`/api/v1/ai/roadmap/${sessionId}/permanent`);
+    } catch (error) {
+      console.error('Failed to permanently delete roadmap:', error);
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
+      throw new Error(message || 'Failed to permanently delete roadmap.');
     }
   },
 

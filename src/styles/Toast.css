@@ -150,6 +150,13 @@
 }
 
 /* Action Button */
+.toast-action-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin-bottom: 1rem;
+}
+
 .toast-action-button {
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;
@@ -160,8 +167,13 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.875rem;
-  margin-bottom: 1rem;
   width: 100%;
+}
+
+.toast-action-button-secondary {
+  background: transparent;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
 }
 
 .toast-success .toast-action-button {
@@ -199,6 +211,12 @@
 
 .toast-info .toast-action-button:hover {
   box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.toast-action-button-secondary:hover {
+  box-shadow: none;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
 }
 
 /* Close Button */
@@ -260,6 +278,12 @@
 [data-theme='dark'] .toast-close-button:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
+}
+
+[data-theme='dark'] .toast-action-button-secondary {
+  color: var(--text-primary);
+  border-color: var(--border-color);
+  background: transparent;
 }
 
 /* Animations */

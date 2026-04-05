@@ -351,7 +351,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
                   <div
                     key={index}
                     className={`commander-welcome__task-item commander-welcome__task-item--${task.priority}`}
-                    onClick={() => navigate("/study-planner")}
+                    onClick={() => navigate("/roadmap")}
                   >
                     <span className="commander-welcome__task-dot"></span>
                     <span className="commander-welcome__task-title">
@@ -383,7 +383,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
                 <div
                   key={index}
                   className={`commander-welcome__suggestion-item commander-welcome__suggestion-item--${suggestion.type}`}
-                  onClick={() => navigate("/study-planner")}
+                  onClick={() => navigate("/roadmap")}
                 >
                   {suggestion.icon}
                   <span>{suggestion.message}</span>

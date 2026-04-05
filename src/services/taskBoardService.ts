@@ -10,8 +10,14 @@ import {
 const BASE_URL = '/task-board';
 
 export const taskBoardService = {
-  getBoard: async (): Promise<TaskColumnResponse[]> => {
-    const response = await axiosInstance.get<TaskColumnResponse[]>(`${BASE_URL}`);
+  getBoard: async (roadmapSessionId?: number): Promise<TaskColumnResponse[]> => {
+    const params = roadmapSessionId !== undefined ? { roadmapSessionId } : {};
+    const response = await axiosInstance.get<TaskColumnResponse[]>(`${BASE_URL}`, { params });
+    return response.data;
+  },
+
+  archiveRoadmapTasks: async (roadmapSessionId: number): Promise<{ archivedCount: number; message: string }> => {
+    const response = await axiosInstance.post(`${BASE_URL}/archive-roadmap/${roadmapSessionId}`);
     return response.data;
   },
 
@@ -63,6 +69,15 @@ export const taskBoardService = {
     await axiosInstance.patch(`${BASE_URL}/tasks/${taskId}/move`, null, {
       params: { targetColumnId }
     });
+  },
+
+  reorderTask: async (taskId: string, targetColumnId: string, previousOrderIndex?: number, nextOrderIndex?: number): Promise<TaskResponse> => {
+    const params: any = { targetColumnId };
+    if (previousOrderIndex !== undefined) params.previousOrderIndex = previousOrderIndex;
+    if (nextOrderIndex !== undefined) params.nextOrderIndex = nextOrderIndex;
+    
+    const response = await axiosInstance.put<TaskResponse>(`${BASE_URL}/tasks/${taskId}/reorder`, null, { params });
+    return response.data;
   },
 
   checkOverdue: async (): Promise<void> => {

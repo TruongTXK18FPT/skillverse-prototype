@@ -1,5 +1,5 @@
-import { memo, useMemo, useCallback } from 'react';
-import { BookOpen, Clock, Target, ChevronRight } from 'lucide-react';
+import { memo } from 'react';
+import { BookOpen, Clock, Target, ChevronRight, PlayCircle, PauseCircle, Trash2, Skull } from 'lucide-react';
 import { RoadmapSessionSummary } from '../../types/Roadmap';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './RoadmapList.css';
@@ -13,7 +13,32 @@ interface RoadmapListProps {
   isAuthenticated: boolean;
   onLoginRedirect: () => void;
   onCreateRoadmap?: () => void;
+  onActivateRoadmap?: (sessionId: number) => void;
+  onPauseRoadmap?: (sessionId: number) => void;
+  onDeleteRoadmap?: (sessionId: number) => void;
+  onPermanentDeleteRoadmap?: (sessionId: number) => void;
+  actionLoadingId?: number | null;
+  disableCardSelection?: boolean;
+  hideEmptyCreateButton?: boolean;
+  emptyTitle?: string;
+  emptyDescription?: string;
 }
+
+type RoadmapLifecycleStatus = 'ACTIVE' | 'PAUSED' | 'DELETED';
+
+const normalizeRoadmapStatus = (status?: string): RoadmapLifecycleStatus => {
+  const normalized = (status || 'ACTIVE').trim().toUpperCase();
+  if (normalized === 'PAUSED' || normalized === 'DELETED') {
+    return normalized;
+  }
+  return 'ACTIVE';
+};
+
+const ROADMAP_STATUS_LABEL: Record<RoadmapLifecycleStatus, string> = {
+  ACTIVE: 'Đang hoạt động',
+  PAUSED: 'Đang tạm dừng',
+  DELETED: 'Đã xóa',
+};
 
 /**
  * Optimized roadmap list component with virtualization support
@@ -26,72 +51,166 @@ const RoadmapList = memo(({
   isLoading, 
   isAuthenticated, 
   onLoginRedirect,
-  onCreateRoadmap
+  onCreateRoadmap,
+  onActivateRoadmap,
+  onPauseRoadmap,
+  onDeleteRoadmap,
+  onPermanentDeleteRoadmap,
+  actionLoadingId = null,
+  disableCardSelection = false,
+  hideEmptyCreateButton = false,
+  emptyTitle,
+  emptyDescription,
 }: RoadmapListProps) => {
   
   // Memoized roadmap card component
-  const RoadmapCard = memo(({ roadmap }: { roadmap: RoadmapSessionSummary }) => (
-    <button
-      className={`roadmap-hud-card ${displayMode === 'list' ? 'list-view' : ''}`}
-      type="button"
-      onClick={() => onSelectRoadmap(roadmap.sessionId)}
-      onKeyDown={(e) => { 
-        if (e.key === 'Enter' || e.key === ' ') { 
-          e.preventDefault(); 
-          onSelectRoadmap(roadmap.sessionId); 
-        } 
-      }}
-    >
-      <div className="roadmap-hud-card-glow" />
-      
-      <div className="roadmap-hud-card-header">
-        <div className="roadmap-hud-card-title-group">
-          <h3 className="roadmap-hud-card-title">{roadmap.title}</h3>
-          <span className={`roadmap-hud-badge ${roadmap.experienceLevel.toLowerCase()}`}>
-            {roadmap.experienceLevel}
+  const RoadmapCard = memo(({ roadmap }: { roadmap: RoadmapSessionSummary }) => {
+    const status = normalizeRoadmapStatus(roadmap.status);
+    const isActionBusy = actionLoadingId === roadmap.sessionId;
+    const isSelectable = !disableCardSelection;
+
+    const handleSelect = () => {
+      if (!isSelectable) {
+        return;
+      }
+      onSelectRoadmap(roadmap.sessionId);
+    };
+
+    return (
+      <article
+        className={`roadmap-hud-card ${displayMode === 'list' ? 'list-view' : ''} ${status === 'DELETED' ? 'roadmap-hud-card--deleted' : ''} ${isSelectable ? '' : 'roadmap-hud-card--readonly'}`}
+        role={isSelectable ? 'button' : undefined}
+        tabIndex={isSelectable ? 0 : -1}
+        onClick={handleSelect}
+        onKeyDown={(e) => {
+          if (!isSelectable) {
+            return;
+          }
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleSelect();
+          }
+        }}
+        aria-label={isSelectable ? `Mở roadmap ${roadmap.title}` : undefined}
+        aria-disabled={!isSelectable}
+      >
+        <div className="roadmap-hud-card-glow" />
+
+        <div className="roadmap-hud-card-header">
+          <div className="roadmap-hud-card-title-group">
+            <h3 className="roadmap-hud-card-title">{roadmap.title}</h3>
+            <div className="roadmap-hud-card-badges">
+              <span className={`roadmap-hud-badge ${roadmap.experienceLevel.toLowerCase()}`}>
+                {roadmap.experienceLevel}
+              </span>
+              <span className={`roadmap-hud-status-badge roadmap-hud-status-badge--${status.toLowerCase()}`}>
+                {ROADMAP_STATUS_LABEL[status]}
+              </span>
+            </div>
+          </div>
+          {isSelectable && <ChevronRight className="roadmap-hud-card-arrow" size={20} />}
+        </div>
+
+        <div className="roadmap-hud-card-body">
+          <div className="roadmap-hud-card-goal">
+            <Target size={14} className="text-cyan-400" />
+            <span className="truncate">{roadmap.originalGoal}</span>
+          </div>
+
+          <div className="roadmap-hud-card-stats">
+            <div className="roadmap-hud-stat">
+              <BookOpen size={14} />
+              <span>{roadmap.totalQuests} Mục tiêu</span>
+            </div>
+            <div className="roadmap-hud-stat">
+              <Clock size={14} />
+              <span>{roadmap.duration}</span>
+            </div>
+          </div>
+
+          <div className="roadmap-hud-progress-container">
+            <div className="roadmap-hud-progress-bar">
+              <div
+                className="roadmap-hud-progress-fill"
+                style={{ width: `${roadmap.progressPercentage}%` }}
+              />
+            </div>
+            <div className="roadmap-hud-progress-text">
+              <span>TIẾN ĐỘ SỨ MỆNH</span>
+              <span>{roadmap.progressPercentage}%</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="roadmap-hud-card-footer">
+          <span className="roadmap-hud-date">
+            KHỞI TẠO: {new Date(roadmap.createdAt).toLocaleDateString('vi-VN')}
           </span>
-        </div>
-        <ChevronRight className="roadmap-hud-card-arrow" size={20} />
-      </div>
-      
-      <div className="roadmap-hud-card-body">
-        <div className="roadmap-hud-card-goal">
-          <Target size={14} className="text-cyan-400" />
-          <span className="truncate">{roadmap.originalGoal}</span>
-        </div>
-        
-        <div className="roadmap-hud-card-stats">
-          <div className="roadmap-hud-stat">
-            <BookOpen size={14} />
-            <span>{roadmap.totalQuests} Mục tiêu</span>
-          </div>
-          <div className="roadmap-hud-stat">
-            <Clock size={14} />
-            <span>{roadmap.duration}</span>
-          </div>
-        </div>
+          <div className="roadmap-hud-card-actions">
+            {status === 'PAUSED' && onActivateRoadmap && (
+              <button
+                className="roadmap-hud-action-btn roadmap-hud-action-btn--activate"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onActivateRoadmap(roadmap.sessionId);
+                }}
+                disabled={isActionBusy}
+              >
+                <PlayCircle size={14} />
+                Kích hoạt
+              </button>
+            )}
 
-        <div className="roadmap-hud-progress-container">
-          <div className="roadmap-hud-progress-bar">
-            <div
-              className="roadmap-hud-progress-fill"
-              style={{ width: `${roadmap.progressPercentage}%` }}
-            />
-          </div>
-          <div className="roadmap-hud-progress-text">
-            <span>TIẾN ĐỘ SỨ MỆNH</span>
-            <span>{roadmap.progressPercentage}%</span>
+            {status === 'ACTIVE' && onPauseRoadmap && (
+              <button
+                className="roadmap-hud-action-btn roadmap-hud-action-btn--pause"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPauseRoadmap(roadmap.sessionId);
+                }}
+                disabled={isActionBusy}
+              >
+                <PauseCircle size={14} />
+                Tạm dừng
+              </button>
+            )}
+
+            {status !== 'DELETED' && onDeleteRoadmap && (
+              <button
+                className="roadmap-hud-action-btn roadmap-hud-action-btn--delete"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteRoadmap(roadmap.sessionId);
+                }}
+                disabled={isActionBusy}
+              >
+                <Trash2 size={14} />
+                Xóa
+              </button>
+            )}
+
+            {status === 'DELETED' && onPermanentDeleteRoadmap && (
+              <button
+                className="roadmap-hud-action-btn roadmap-hud-action-btn--permanent"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPermanentDeleteRoadmap(roadmap.sessionId);
+                }}
+                disabled={isActionBusy}
+              >
+                <Skull size={14} />
+                Xóa vĩnh viễn
+              </button>
+            )}
           </div>
         </div>
-      </div>
-
-      <div className="roadmap-hud-card-footer">
-        <span className="roadmap-hud-date">
-          KHỞI TẠO: {new Date(roadmap.createdAt).toLocaleDateString('vi-VN')}
-        </span>
-      </div>
-    </button>
-  ));
+      </article>
+    );
+  });
 
   RoadmapCard.displayName = 'RoadmapCard';
 
@@ -128,9 +247,9 @@ const RoadmapList = memo(({
           </>
         ) : (
           <>
-            <h3>Chưa có lộ trình nào</h3>
-            <p>Tạo lộ trình học đầu tiên bằng AI để bắt đầu nhé!</p>
-            {onCreateRoadmap && (
+            <h3>{emptyTitle || 'Chưa có lộ trình nào'}</h3>
+            <p>{emptyDescription || 'Tạo lộ trình học đầu tiên bằng AI để bắt đầu nhé!'}</p>
+            {onCreateRoadmap && !hideEmptyCreateButton && (
               <button 
                 onClick={onCreateRoadmap}
                 className="roadmap-empty__create-btn"

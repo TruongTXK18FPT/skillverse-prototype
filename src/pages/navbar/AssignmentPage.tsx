@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   FileText,
@@ -43,6 +43,9 @@ import {
   hasAssignmentDueDate,
   isAssignmentPastDue,
 } from '../../utils/assignmentPresentation';
+import AssessmentWorkspaceShell from '../../components/meowl/AssessmentWorkspaceShell';
+import MeowlContextPanel from '../../components/meowl/MeowlContextPanel';
+import usePremiumAccess from '../../hooks/usePremiumAccess';
 import './AssignmentPage.css';
 
 const AssignmentPage: React.FC = () => {
@@ -50,6 +53,7 @@ const AssignmentPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
+  const { hasPremiumAccess, planName } = usePremiumAccess();
   const locationState = (location.state as CourseLearningLocationState | null) ?? null;
   
   const [assignment, setAssignment] = useState<AssignmentDetailDTO | null>(null);
@@ -305,6 +309,56 @@ const AssignmentPage: React.FC = () => {
   const newestSubmissionTiming = newestSubmission
     ? getSubmissionTimingInfo(assignment?.dueAt, newestSubmission.isLate)
     : null;
+  const meowlPanelSubtitle = useMemo(() => {
+    if (submissionBlockedByPending) {
+      return 'Meowl đang ở chế độ giám thị. Mình chỉ hỗ trợ quy tắc nộp bài, tiến trình chấm và nhắc bạn chờ mentor phản hồi.';
+    }
+
+    if (submissionBlockedByPass) {
+      return 'Bạn đã đạt yêu cầu bài tập này. Meowl chỉ hỗ trợ xem lại quy trình và gợi ý cách tự đánh giá bài làm của bạn.';
+    }
+
+    return 'Đây là khu vực bài tập. Meowl không viết hộ lời giải hay đáp án, chỉ hỗ trợ quy định nộp bài và chiến lược tự kiểm tra.';
+  }, [submissionBlockedByPass, submissionBlockedByPending]);
+  const meowlPanelSummary = useMemo(() => {
+    const summary: string[] = [];
+
+    if (assignment?.title) {
+      summary.push(`Bài tập: ${assignment.title}`);
+    }
+
+    summary.push(`Hình thức nộp: ${submissionTypeLabel}`);
+
+    if (assignment?.maxScore != null) {
+      summary.push(`Điểm tối đa: ${assignment.maxScore}`);
+    }
+
+    if (assignment?.dueAt) {
+      summary.push(`Hạn nộp: ${formatDate(assignment.dueAt)}`);
+    } else {
+      summary.push('Hạn nộp: Không giới hạn');
+    }
+
+    if (newestSubmission) {
+      summary.push(`Trạng thái mới nhất: ${getSubmissionWorkflowLabel(newestSubmission.status)}`);
+    } else {
+      summary.push('Trạng thái mới nhất: Chưa có bài nộp');
+    }
+
+    summary.push('Quy tắc: Meowl không cung cấp nội dung làm hộ hoặc đáp án nộp bài.');
+    return summary;
+  }, [assignment?.dueAt, assignment?.maxScore, assignment?.title, newestSubmission, submissionTypeLabel]);
+  const meowlPanel = (
+    <MeowlContextPanel
+      mode="MODE_EXAM_PROCTOR"
+      title={assignment?.title || 'Giám thị Meowl'}
+      subtitle={meowlPanelSubtitle}
+      contextSummary={meowlPanelSummary}
+      isPremiumLocked={!hasPremiumAccess}
+      premiumLabel={planName}
+      theme="hud"
+    />
+  );
 
   const handleBackToCourse = useCallback(() => {
     const returnContext = locationState?.courseId
@@ -321,42 +375,47 @@ const AssignmentPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="assignment-page">
-        <div className="assignment-loading">
-          <div className="loading-spinner"></div>
-          <p>Loading assignment...</p>
+      <AssessmentWorkspaceShell panel={meowlPanel}>
+        <div className="assignment-page">
+          <div className="assignment-loading">
+            <div className="loading-spinner"></div>
+            <p>Loading assignment...</p>
+          </div>
         </div>
-      </div>
+      </AssessmentWorkspaceShell>
     );
   }
 
   if (!assignment) {
     return (
-      <div className="assignment-page">
-        <div className="assignment-error">
-          <AlertCircle size={48} />
-          <h2>Assignment not found</h2>
-          <button onClick={handleBackToCourse} className="btn-back">
-            <ArrowLeft size={16} />
-            Go Back
-          </button>
+      <AssessmentWorkspaceShell panel={meowlPanel}>
+        <div className="assignment-page">
+          <div className="assignment-error">
+            <AlertCircle size={48} />
+            <h2>Assignment not found</h2>
+            <button onClick={handleBackToCourse} className="btn-back">
+              <ArrowLeft size={16} />
+              Go Back
+            </button>
+          </div>
         </div>
-      </div>
+      </AssessmentWorkspaceShell>
     );
   }
 
   return (
-    <div className="assignment-page">
-      {/* Header Navigation */}
-      <div className="assignment-nav">
-        <button onClick={handleBackToCourse} className="btn-back-nav">
-          <ArrowLeft size={20} />
-          <span>Quay lại khóa học</span>
-        </button>
-      </div>
+    <AssessmentWorkspaceShell panel={meowlPanel}>
+      <div className="assignment-page">
+        {/* Header Navigation */}
+        <div className="assignment-nav">
+          <button onClick={handleBackToCourse} className="btn-back-nav">
+            <ArrowLeft size={20} />
+            <span>Quay lại khóa học</span>
+          </button>
+        </div>
 
-      <div className="assignment-container">
-        <div className="assignment-main-column">
+        <div className="assignment-container">
+          <div className="assignment-main-column">
           {/* Title Section with Status */}
           <div className="assignment-header">
             <div className="header-top">
@@ -792,43 +851,44 @@ const AssignmentPage: React.FC = () => {
               )}
             </div>
           )}
-        </div>
-      </div>
-
-      {/* Confirmation Modal */}
-      {showConfirmModal && (
-        <div className="modal-overlay" onClick={() => setShowConfirmModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Xác nhận nộp bài</h3>
-            </div>
-            <div className="modal-body">
-              <p>Bạn sắp gửi bài nộp hiện tại cho mentor chấm điểm.</p>
-              <ul className="modal-checklist">
-                <li>Nội dung bài làm đã hoàn chỉnh.</li>
-                <li>Bạn đã kiểm tra lại yêu cầu và định dạng nộp bài.</li>
-                <li>Nếu cần chỉnh sửa sau này, bạn vẫn có thể nộp lại.</li>
-              </ul>
-              <p className="modal-note">Hệ thống sẽ ghi nhận lần nộp mới nhất của bạn để mentor chấm.</p>
-            </div>
-            <div className="modal-actions">
-              <button 
-                className="btn-cancel" 
-                onClick={() => setShowConfirmModal(false)}
-              >
-                Hủy
-              </button>
-              <button 
-                className="btn-confirm" 
-                onClick={confirmSubmit}
-              >
-                Xác nhận nộp
-              </button>
-            </div>
           </div>
         </div>
-      )}
-    </div>
+
+        {/* Confirmation Modal */}
+        {showConfirmModal && (
+          <div className="modal-overlay" onClick={() => setShowConfirmModal(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Xác nhận nộp bài</h3>
+              </div>
+              <div className="modal-body">
+                <p>Bạn sắp gửi bài nộp hiện tại cho mentor chấm điểm.</p>
+                <ul className="modal-checklist">
+                  <li>Nội dung bài làm đã hoàn chỉnh.</li>
+                  <li>Bạn đã kiểm tra lại yêu cầu và định dạng nộp bài.</li>
+                  <li>Nếu cần chỉnh sửa sau này, bạn vẫn có thể nộp lại.</li>
+                </ul>
+                <p className="modal-note">Hệ thống sẽ ghi nhận lần nộp mới nhất của bạn để mentor chấm.</p>
+              </div>
+              <div className="modal-actions">
+                <button 
+                  className="btn-cancel" 
+                  onClick={() => setShowConfirmModal(false)}
+                >
+                  Hủy
+                </button>
+                <button 
+                  className="btn-confirm" 
+                  onClick={confirmSubmit}
+                >
+                  Xác nhận nộp
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </AssessmentWorkspaceShell>
   );
 };
 

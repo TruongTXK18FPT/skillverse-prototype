@@ -1,9 +1,7 @@
-import { memo, useCallback, useMemo } from 'react';
-import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, MapPin, Globe, DollarSign, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, CheckCircle, Info, BookOpen, Lightbulb } from 'lucide-react';
+import { memo, useCallback, useMemo, useState } from 'react';
+import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, CheckCircle, Info, BookOpen } from 'lucide-react';
 import { RoadmapResponse, QuestProgress } from '../../types/Roadmap';
 import RoadmapFlow from '../ai-roadmap/RoadmapFlow';
-import aiRoadmapService from '../../services/aiRoadmapService';
-import { useToast } from '../../hooks/useToast';
 import './RoadmapDetailViewer.css';
 import '../../styles/RoadmapHUD.css';
 
@@ -16,47 +14,134 @@ interface RoadmapDetailViewerProps {
   creatingTaskNodeId?: string | null;
   eligibleNodeId?: string | null;
   studyTaskNodeIds?: Set<string>;
+  selectedNodeId?: string | null;
+  onNodeSelect?: (nodeId: string) => void;
 }
 
-const InfoItem = ({ label, value, icon: Icon }: { label: string, value?: string | boolean, icon?: any }) => {
-  if (!value || value === 'undefined' || value === 'null') return null;
-  return (
-    <div className="rm-info-item">
-      <span className="rm-info-label">{Icon && <Icon size={12} style={{marginRight: 4}}/>}{label}:</span>
-      <span className="rm-info-value">{value.toString()}</span>
-    </div>
-  );
+/** Replicate BE logic: AiRoadmapServiceImpl.parseDailyTimeMinutes() */
+const parseDailyMinutes = (dailyTime: string | undefined | null): number => {
+  if (!dailyTime) return 60;
+  const s = dailyTime.toLowerCase();
+  const numMatch = s.replace(/[^0-9]/g, '');
+  if (numMatch) {
+    const num = parseInt(numMatch, 10);
+    if (s.includes('hour') || s.includes('giờ')) return num * 60;
+    if (s.includes('min')) return num;
+  }
+  if (s.includes('30') && !s.includes('1')) return 30;
+  if (s.includes('2') && !s.includes('12') && !s.includes('15')) return 120;
+  if (s.includes('1') && !s.includes('12') && !s.includes('15')) return 60;
+  return 60;
 };
 
-const RoadmapDetailViewer = memo(({ 
-  roadmap, 
-  progressMap, 
-  onBack, 
+/** Parse commitment months from "6 tháng" / "3 months" etc. */
+const parseCommitmentMonths = (duration: string | undefined | null): number | null => {
+  if (!duration) return null;
+  const s = duration.toLowerCase();
+  const numMatch = s.replace(/[^0-9.]/g, '');
+  const num = numMatch ? parseFloat(numMatch) : null;
+  if (!num) return null;
+  if (s.includes('tháng') || s.includes('month')) return num;
+  if (s.includes('tuần') || s.includes('week')) return Math.round(num * 30 / 7) / 30; // weeks → months
+  return num; // assume months if plain number
+};
+
+const RoadmapDetailViewer = memo(({
+  roadmap,
+  progressMap,
+  onBack,
   onQuestComplete,
   onCreateStudyTask,
   creatingTaskNodeId,
   eligibleNodeId,
-  studyTaskNodeIds
+  studyTaskNodeIds,
+  selectedNodeId,
+  onNodeSelect
 }: RoadmapDetailViewerProps) => {
-  const { showSuccess, showError } = useToast();
+  const [showAdvancedSections, setShowAdvancedSections] = useState(false);
 
   const handleQuestComplete = useCallback(async (questId: string, completed: boolean) => {
-    try {
-      const response = await aiRoadmapService.updateQuestProgress(
-        roadmap.sessionId, 
-        questId, 
-        completed
-      );
-      onQuestComplete(questId, completed);
-      
-      const { completedQuests, totalQuests } = response.stats;
-      if (completed) {
-        showSuccess('Mission Updated', `Progress: ${completedQuests}/${totalQuests} modules synced.`);
+    onQuestComplete(questId, completed);
+  }, [onQuestComplete]);
+
+  const derivedStats = useMemo(() => {
+    const nodes = roadmap.roadmap ?? [];
+    const totalFromNodes = nodes.length;
+    const mainFromNodes = nodes.filter((node) => {
+      const nodeType = (node.type || '').toString().toUpperCase();
+      if (nodeType === 'MAIN') {
+        return true;
       }
-    } catch (error) {
-      showError('Sync Error', (error as Error).message);
-    }
-  }, [roadmap.sessionId, onQuestComplete, showSuccess, showError]);
+      if (nodeType === 'SIDE') {
+        return false;
+      }
+      if (typeof node.isCore === 'boolean') {
+        return node.isCore;
+      }
+      return true;
+    }).length;
+    const sideFromNodes = Math.max(0, totalFromNodes - mainFromNodes);
+
+    const estimatedHoursFromNodes = nodes.reduce((sum, node) => {
+      const minutes = Number(node.estimatedTimeMinutes ?? 0);
+      return Number.isFinite(minutes) && minutes > 0 ? sum + minutes / 60 : sum;
+    }, 0);
+
+    const totalFromStats = Number(roadmap.statistics?.totalNodes ?? 0);
+    const mainFromStats = Number(roadmap.statistics?.mainNodes ?? 0);
+    const sideFromStats = Number(roadmap.statistics?.sideNodes ?? 0);
+    const hoursFromStats = Number(roadmap.statistics?.totalEstimatedHours ?? 0);
+
+    const hasStatsTotal = Number.isFinite(totalFromStats) && totalFromStats > 0;
+    const hasStatsBreakdown =
+      Number.isFinite(mainFromStats) &&
+      Number.isFinite(sideFromStats) &&
+      (mainFromStats > 0 || sideFromStats > 0);
+
+    const totalEstimatedHours =
+      Number.isFinite(hoursFromStats) && hoursFromStats > 0
+        ? hoursFromStats
+        : Math.max(0, estimatedHoursFromNodes);
+
+    // Approximate duration from hours + dailyTime (using BE-compatible parse)
+    const dailyMinutes = parseDailyMinutes(roadmap.metadata.dailyTime);
+    const approxDays = dailyMinutes > 0
+      ? Math.round(totalEstimatedHours * 60 / dailyMinutes)
+      : null;
+    const approxWeeks = approxDays ? Math.round(approxDays / 7) : null;
+    const approxMonths = approxDays ? Math.round(approxDays / 30) : null;
+
+    // Parse commitment vs effort gap
+    const commitmentMonths = parseCommitmentMonths(roadmap.metadata.duration);
+    const effortMonths = approxMonths;
+    const commitmentMet = effortMonths !== null && commitmentMonths !== null && effortMonths <= commitmentMonths;
+    const commitmentGapMonths = (commitmentMonths !== null && effortMonths !== null)
+      ? Math.round((effortMonths - commitmentMonths) * 10) / 10
+      : null;
+
+    return {
+      totalNodes: hasStatsTotal ? totalFromStats : totalFromNodes,
+      mainNodes: hasStatsBreakdown ? mainFromStats : mainFromNodes,
+      sideNodes: hasStatsBreakdown ? sideFromStats : sideFromNodes,
+      totalEstimatedHours,
+      approxDays,
+      approxWeeks,
+      approxMonths,
+      commitmentMonths,
+      commitmentMet,
+      commitmentGapMonths,
+      dailyMinutes,
+      isFallback: !hasStatsTotal || !hasStatsBreakdown,
+    };
+  }, [roadmap]);
+
+  const hasAdvancedSections = useMemo(() => (
+    (roadmap.warnings?.length ?? 0) > 0 ||
+    (roadmap.structure?.length ?? 0) > 0 ||
+    (roadmap.thinkingProgression?.length ?? 0) > 0 ||
+    (roadmap.projectsEvidence?.length ?? 0) > 0 ||
+    Boolean(roadmap.nextSteps)
+  ), [roadmap]);
 
   // --- NEW METADATA SECTION (ISOLATED CLASSES: rm-*) ---
   const metadataSection = useMemo(() => {
@@ -141,22 +226,44 @@ const RoadmapDetailViewer = memo(({
 
         {/* RIGHT COLUMN: Tactical Stats */}
         <div className="rm-tactical-stats">
-          {/* Stat 1: Duration */}
+          {/* Stat 1: Duration + Hours — commitment vs effort */}
           <div className="rm-stat-box">
             <div className="rm-stat-icon-wrapper"><Clock size={20} /></div>
             <div className="rm-stat-content">
               <span className="rm-stat-label">THỜI LƯỢNG</span>
-              <span className="rm-stat-value">{roadmap.metadata.duration}</span>
-              <span className="rm-stat-sub">Ước tính: {roadmap.statistics?.totalEstimatedHours.toFixed(0)}h</span>
+              <span className="rm-stat-value">
+                {derivedStats.approxMonths !== null
+                  ? `~${derivedStats.approxMonths} tháng`
+                  : roadmap.metadata.duration}
+              </span>
+              <span className="rm-stat-sub">
+                {derivedStats.totalEstimatedHours > 0
+                  ? `~${derivedStats.totalEstimatedHours.toFixed(0)}h @ ${derivedStats.dailyMinutes}m/ngày`
+                  : roadmap.metadata.duration}
+              </span>
             </div>
           </div>
+
+          {/* Effort vs Commitment warning */}
+          {derivedStats.commitmentGapMonths !== null && !derivedStats.commitmentMet && (
+            <div className="rm-warning-inline rm-warning-effort">
+              <AlertTriangle size={14} />
+              <span>Effort vượt cam kết {Math.abs(derivedStats.commitmentGapMonths)} tháng — cân nhắc giảm scope</span>
+            </div>
+          )}
+          {derivedStats.commitmentGapMonths !== null && derivedStats.commitmentMet && derivedStats.commitmentGapMonths > 0 && (
+            <div className="rm-warning-inline rm-warning-ahead">
+              <CheckCircle size={14} />
+              <span>Effort thấp hơn cam kết {derivedStats.commitmentGapMonths} tháng — có thể hoàn thành sớm</span>
+            </div>
+          )}
 
           {/* Stat 2: Steps */}
           <div className="rm-stat-box">
             <div className="rm-stat-icon-wrapper"><Layers size={20} /></div>
             <div className="rm-stat-content">
               <span className="rm-stat-label">TỔNG BƯỚC</span>
-              <span className="rm-stat-value">{roadmap.statistics?.totalNodes || 0}</span>
+              <span className="rm-stat-value">{derivedStats.totalNodes}</span>
               <span className="rm-stat-sub">Modules</span>
             </div>
           </div>
@@ -166,7 +273,7 @@ const RoadmapDetailViewer = memo(({
             <div className="rm-stat-icon-wrapper"><Trophy size={20} /></div>
             <div className="rm-stat-content">
               <span className="rm-stat-label">MỤC TIÊU CHÍNH</span>
-              <span className="rm-stat-value rm-text-accent">{roadmap.statistics?.mainNodes || 0}</span>
+              <span className="rm-stat-value rm-text-accent">{derivedStats.mainNodes}</span>
             </div>
           </div>
 
@@ -175,9 +282,23 @@ const RoadmapDetailViewer = memo(({
             <div className="rm-stat-icon-wrapper"><Hash size={20} /></div>
             <div className="rm-stat-content">
               <span className="rm-stat-label">MỤC TIÊU PHỤ</span>
-              <span className="rm-stat-value">{roadmap.statistics?.sideNodes || 0}</span>
+              <span className="rm-stat-value">{derivedStats.sideNodes}</span>
             </div>
           </div>
+
+          {derivedStats.isFallback && (
+            <p className="rm-stats-fallback-note">
+              Số liệu đang được đồng bộ theo node hiện có để tránh thiếu tổng bước/chính/phụ.
+            </p>
+          )}
+
+          {/* Inline warning: time budget exceeded */}
+          {roadmap.warnings?.some(w => w.toLowerCase().includes('10%') || w.toLowerCase().includes('time')) && (
+            <div className="rm-warning-inline">
+              <AlertTriangle size={16} />
+              <span>Lộ trình vượt thời gian cam kết — có thể cần điều chỉnh scope</span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -192,62 +313,6 @@ const RoadmapDetailViewer = memo(({
               ? roadmap.metadata.validationNotes.map((note, idx) => <li key={idx}>{note}</li>)
               : <li>{roadmap.metadata.validationNotes}</li>
             }
-          </ul>
-        </div>
-      )}
-
-      {/* Warnings */}
-      {roadmap.warnings && roadmap.warnings.length > 0 && (
-        <div className="rm-section-block rm-warning-block">
-          <h3 className="rm-section-title rm-text-warning"><AlertTriangle size={18} /> Warnings</h3>
-          <ul className="rm-list-disc">
-            {roadmap.warnings.map((warn, idx) => (
-              <li key={idx}>{warn}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* Structure - Detailed List */}
-      {roadmap.structure && Array.isArray(roadmap.structure) && roadmap.structure.length > 0 && (
-        <div className="rm-section-block">
-          <h3 className="rm-section-title"><BookOpen size={18} /> Cấu trúc lộ trình</h3>
-          <div className="rm-structure-list">
-            {roadmap.structure.map((phase, idx) => (
-              <div key={idx} className="rm-structure-item">
-                <div className="rm-structure-header">
-                  <span className="rm-phase-title">{phase.title}</span>
-                  {phase.timeframe && <span className="rm-phase-time">({phase.timeframe})</span>}
-                </div>
-                <p className="rm-phase-desc">{phase.goal}</p>
-                
-                {phase.skillFocus && phase.skillFocus.length > 0 && (
-                  <div className="rm-phase-meta">
-                    <span className="rm-meta-label">Trọng tâm kỹ năng:</span>
-                    <span className="rm-meta-value">{phase.skillFocus.join(', ')}</span>
-                  </div>
-                )}
-                
-                {phase.expectedOutput && (
-                  <div className="rm-phase-meta">
-                    <span className="rm-meta-label">Output:</span>
-                    <span className="rm-meta-value">{phase.expectedOutput}</span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Thinking Progression - List */}
-      {roadmap.thinkingProgression && roadmap.thinkingProgression.length > 0 && (
-        <div className="rm-section-block">
-          <h3 className="rm-section-title"><Brain size={18} /> Thinking Progression</h3>
-          <ul className="rm-list-disc">
-            {roadmap.thinkingProgression.map((thought, idx) => (
-              <li key={idx}>{thought}</li>
-            ))}
           </ul>
         </div>
       )}
@@ -284,55 +349,110 @@ const RoadmapDetailViewer = memo(({
       )}
     </div>
   );
-  }, [roadmap]);
+  }, [derivedStats, roadmap]);
 
-  // --- LAYER 4 & 5: PROJECTS & NEXT STEPS (Below the graph) ---
-  const footerSection = useMemo(() => (
-    <div className="rm-footer-briefing">
-      
-      {/* Projects & Evidence */}
-      {roadmap.projectsEvidence && roadmap.projectsEvidence.length > 0 && (
-        <div className="rm-footer-section">
-          <h3 className="rm-footer-title"><Briefcase size={20}/> PROJECTS & EVIDENCE (SKILL WALLET)</h3>
-          <div className="rm-projects-grid">
-            {roadmap.projectsEvidence.map((proj, idx) => (
-              <div key={idx} className="rm-project-card">
-                <div className="rm-project-header">
-                  <span className="rm-phase-tag">{proj.phaseId || `Phase ${idx + 1}`}</span>
-                  <h4>{proj.project}</h4>
-                </div>
-                <p className="rm-project-obj">{proj.objective}</p>
-                <div className="rm-project-skills">
-                  {proj.skillsProven?.map((s, i) => <span key={i} className="rm-skill-tag">{s}</span>)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+  const advancedSection = useMemo(() => {
+    if (!showAdvancedSections) {
+      return null;
+    }
 
-      {/* Next Steps */}
-      {roadmap.nextSteps && (
-        <div className="rm-footer-section">
-          <h3 className="rm-footer-title"><Rocket size={20}/> NEXT STEPS & REAL-WORLD CONNECTION</h3>
-          <div className="rm-next-steps-grid">
-            {roadmap.nextSteps.jobs && (
-              <div className="rm-next-col">
-                <h4><Briefcase size={16}/> Potential Jobs</h4>
-                <ul>{roadmap.nextSteps.jobs.map((j, i) => <li key={i}>{j}</li>)}</ul>
-              </div>
-            )}
-            {roadmap.nextSteps.nextSkills && (
-              <div className="rm-next-col">
-                <h4><GraduationCap size={16}/> Next Skills</h4>
-                <ul>{roadmap.nextSteps.nextSkills.map((s, i) => <li key={i}>{s}</li>)}</ul>
-              </div>
-            )}
+    return (
+      <div className="rm-footer-briefing rm-footer-briefing--advanced">
+        {roadmap.warnings && roadmap.warnings.length > 0 && (
+          <div className="rm-footer-section rm-warning-block">
+            <h3 className="rm-footer-title rm-text-warning"><AlertTriangle size={20} /> Warnings</h3>
+            <ul className="rm-list-disc">
+              {roadmap.warnings.map((warn, idx) => (
+                <li key={idx}>{warn}</li>
+              ))}
+            </ul>
           </div>
-        </div>
-      )}
-    </div>
-  ), [roadmap]);
+        )}
+
+        {roadmap.structure && Array.isArray(roadmap.structure) && roadmap.structure.length > 0 && (
+          <div className="rm-footer-section">
+            <h3 className="rm-footer-title"><BookOpen size={20} /> Cấu trúc lộ trình</h3>
+            <div className="rm-structure-list">
+              {roadmap.structure.map((phase, idx) => (
+                <div key={idx} className="rm-structure-item">
+                  <div className="rm-structure-header">
+                    <span className="rm-phase-title">{phase.title}</span>
+                    {phase.timeframe && <span className="rm-phase-time">({phase.timeframe})</span>}
+                  </div>
+                  <p className="rm-phase-desc">{phase.goal}</p>
+
+                  {phase.skillFocus && phase.skillFocus.length > 0 && (
+                    <div className="rm-phase-meta">
+                      <span className="rm-meta-label">Trọng tâm kỹ năng:</span>
+                      <span className="rm-meta-value">{phase.skillFocus.join(', ')}</span>
+                    </div>
+                  )}
+
+                  {phase.expectedOutput && (
+                    <div className="rm-phase-meta">
+                      <span className="rm-meta-label">Output:</span>
+                      <span className="rm-meta-value">{phase.expectedOutput}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {roadmap.thinkingProgression && roadmap.thinkingProgression.length > 0 && (
+          <div className="rm-footer-section">
+            <h3 className="rm-footer-title"><Brain size={20} /> Thinking Progression</h3>
+            <ul className="rm-list-disc">
+              {roadmap.thinkingProgression.map((thought, idx) => (
+                <li key={idx}>{thought}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {roadmap.projectsEvidence && roadmap.projectsEvidence.length > 0 && (
+          <div className="rm-footer-section">
+            <h3 className="rm-footer-title"><Briefcase size={20} /> PROJECTS & EVIDENCE (SKILL WALLET)</h3>
+            <div className="rm-projects-grid">
+              {roadmap.projectsEvidence.map((proj, idx) => (
+                <div key={idx} className="rm-project-card">
+                  <div className="rm-project-header">
+                    <span className="rm-phase-tag">{proj.phaseId || `Phase ${idx + 1}`}</span>
+                    <h4>{proj.project}</h4>
+                  </div>
+                  <p className="rm-project-obj">{proj.objective}</p>
+                  <div className="rm-project-skills">
+                    {proj.skillsProven?.map((s, i) => <span key={i} className="rm-skill-tag">{s}</span>)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {roadmap.nextSteps && (
+          <div className="rm-footer-section">
+            <h3 className="rm-footer-title"><Rocket size={20} /> NEXT STEPS & REAL-WORLD CONNECTION</h3>
+            <div className="rm-next-steps-grid">
+              {roadmap.nextSteps.jobs && (
+                <div className="rm-next-col">
+                  <h4><Briefcase size={16} /> Potential Jobs</h4>
+                  <ul>{roadmap.nextSteps.jobs.map((j, i) => <li key={i}>{j}</li>)}</ul>
+                </div>
+              )}
+              {roadmap.nextSteps.nextSkills && (
+                <div className="rm-next-col">
+                  <h4><GraduationCap size={16} /> Next Skills</h4>
+                  <ul>{roadmap.nextSteps.nextSkills.map((s, i) => <li key={i}>{s}</li>)}</ul>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }, [roadmap, showAdvancedSections]);
 
   return (
     <div className="roadmap-detail-viewer">
@@ -355,10 +475,24 @@ const RoadmapDetailViewer = memo(({
             creatingTaskNodeId={creatingTaskNodeId}
             eligibleNodeId={eligibleNodeId}
             studyTaskNodeIds={studyTaskNodeIds}
+            selectedNodeId={selectedNodeId}
+            onNodeSelect={onNodeSelect}
           />
         </div>
-        
-        {footerSection}
+
+        {hasAdvancedSections && (
+          <div className="rm-advanced-toggle-wrap">
+            <button
+              type="button"
+              className="rm-advanced-toggle-btn"
+              onClick={() => setShowAdvancedSections((previous) => !previous)}
+            >
+              {showAdvancedSections ? 'Ẩn bớt chi tiết roadmap' : 'Xem thêm chi tiết roadmap'}
+            </button>
+          </div>
+        )}
+
+        {advancedSection}
       </div>
     </div>
   );

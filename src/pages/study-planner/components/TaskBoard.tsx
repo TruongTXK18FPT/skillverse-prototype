@@ -9,6 +9,8 @@ import {
   Link as LinkIcon,
   Clock,
   Trash2,
+  Funnel,
+  Check,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { FaYoutube } from 'react-icons/fa';
@@ -19,7 +21,18 @@ import {
   TaskPriority,
 } from '../../../types/TaskBoard';
 import { taskBoardService } from '../../../services/taskBoardService';
+import {
+  isTaskDone,
+  parseRoadmapTaskLink,
+  resolvePlannerExecutionState,
+} from '../utils/taskSemantics';
 import '../styles/StudyPlanner.css';
+
+interface FilterOption {
+  id: number | 'current' | 'all';
+  label: string;
+  taskCount?: number;
+}
 
 interface TaskBoardProps {
   columns: TaskColumnResponse[];
@@ -34,6 +47,12 @@ interface TaskBoardProps {
   ) => void;
   overdueDaysThreshold: number;
   isClearingOverdue: boolean;
+  /** Filter panel: which roadmap sessions are available to filter by */
+  filterOptions: FilterOption[];
+  /** Filter panel: currently selected filter */
+  selectedFilter: number | 'current' | 'all';
+  /** Filter panel: callback when user changes filter */
+  onFilterChange: (filterId: number | 'current' | 'all') => void;
 }
 
 const COLUMN_COLORS = [
@@ -45,8 +64,47 @@ const COLUMN_COLORS = [
   '#8b5cf6',
 ];
 
+const RoadmapFilterPanel: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  options: FilterOption[];
+  selected: number | 'current' | 'all';
+  onSelect: (id: number | 'current' | 'all') => void;
+}> = ({ isOpen, onClose, options, selected, onSelect }) => {
+  if (!isOpen) return null;
+
+  const ALL_OPT = { id: 'all' as const, label: 'Tất cả roadmap' };
+  const CURRENT_OPT = { id: 'current' as const, label: 'Roadmap hiện tại' };
+  const fixedOptions = [ALL_OPT, CURRENT_OPT, ...options];
+
+  return (
+    <div className="roadmap-filter-panel">
+      <div className="roadmap-filter-panel-header">
+        <span className="roadmap-filter-panel-title">Lọc theo Roadmap</span>
+        <button className="roadmap-filter-panel-close" onClick={onClose} title="Đóng">
+          <X size={14} />
+        </button>
+      </div>
+      <div className="roadmap-filter-panel-list">
+        {fixedOptions.map((opt) => (
+          <button
+            key={String(opt.id)}
+            className={`roadmap-filter-option ${selected === opt.id ? 'active' : ''}`}
+            onClick={() => { onSelect(opt.id); onClose(); }}
+          >
+            <span className="roadmap-filter-option-check">
+              {selected === opt.id && <Check size={12} />}
+            </span>
+            <span className="roadmap-filter-option-label">{opt.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const ROADMAP_NOTE_MARKER_PATTERN =
-  /\[ROADMAP_NODE_LINK\]\s+journey=(\d+)\s+roadmap=(\d+)\s+node=([^\s]+)(?:\s+nodeOrder=([^\s]+))?(?:\s+step=([^\s]+))?/i;
+  /\[ROADMAP_NODE_LINK\](?:\s+journey=(\d+))?\s+roadmap=(\d+)\s+node=([^\s]+)(?:\s+nodeOrder=([^\s]+))?(?:\s+step=([^\s]+))?/i;
 
 const formatRoadmapTaskNote = (rawNotes: string): string => {
   const normalized = rawNotes.trim();
@@ -76,8 +134,12 @@ const formatRoadmapTaskNote = (rawNotes: string): string => {
   const [, journeyId, roadmapId, nodeId, nodeOrder, step] = markerMatch;
   const nodeLabel = nodeOrder ? `Node ${nodeOrder}` : `Node ${nodeId}`;
   const taskLabel = step ? `Task ${step}` : 'Task roadmap';
-
-  return `${nodeLabel} • ${taskLabel} • Journey #${journeyId} • Roadmap #${roadmapId}`;
+  const sourceParts = [nodeLabel, taskLabel];
+  if (journeyId) {
+    sourceParts.push(`Journey #${journeyId}`);
+  }
+  sourceParts.push(`Roadmap #${roadmapId}`);
+  return sourceParts.join(' • ');
 };
 
 const TaskBoard: React.FC<TaskBoardProps> = ({
@@ -89,53 +151,114 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   onClearColumnOverdue,
   overdueDaysThreshold,
   isClearingOverdue,
+  filterOptions,
+  selectedFilter,
+  onFilterChange,
 }) => {
   const [isNewColumnModalOpen, setIsNewColumnModalOpen] = useState(false);
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
   const [newColumnName, setNewColumnName] = useState('');
   const [editingColumnId, setEditingColumnId] = useState<string | null>(null);
+
+  const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
+  const [dragOverColumnId, setDragOverColumnId] = useState<string | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const handleDragStart = (e: React.DragEvent, taskId: string) => {
     e.dataTransfer.setData('taskId', taskId);
     e.dataTransfer.effectAllowed = 'move';
+    setDraggedTaskId(taskId);
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent, targetColId: string, index: number) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    setDragOverColumnId(targetColId);
+    setDragOverIndex(index);
   };
 
-  const handleDrop = async (e: React.DragEvent, targetColId: string) => {
+  const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
+  };
+
+  const handleDragEnd = () => {
+    setDraggedTaskId(null);
+    setDragOverColumnId(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = async (e: React.DragEvent, targetColId: string, dropIndex: number) => {
+    e.preventDefault();
+    setDraggedTaskId(null);
+    setDragOverColumnId(null);
+    setDragOverIndex(null);
     const taskId = e.dataTransfer.getData('taskId');
 
     if (taskId && targetColId) {
       const sourceCol = columns.find((col) =>
         col.tasks.some((task) => task.id === taskId),
       );
-      if (!sourceCol || sourceCol.id === targetColId) return;
+      if (!sourceCol) return;
 
-      const task = sourceCol.tasks.find((item) => item.id === taskId);
+      const taskIndex = sourceCol.tasks.findIndex((item) => item.id === taskId);
+      const task = sourceCol.tasks[taskIndex];
       if (!task) return;
 
-      const newColumns = columns.map((col) => {
-        if (col.id === sourceCol.id) {
-          return { ...col, tasks: col.tasks.filter((item) => item.id !== taskId) };
+      const targetCol = columns.find(c => c.id === targetColId);
+      if (!targetCol) return;
+
+      // Ensure local state update happens correctly
+      let newColumns = [...columns];
+      let newTasksInTarget = [...targetCol.tasks];
+      
+      // Compute previous and next orderIndex
+      let previousOrderIndex: number | undefined = undefined;
+      let nextOrderIndex: number | undefined = undefined;
+
+      if (sourceCol.id === targetColId) {
+        // Handling moving within the same column
+        newTasksInTarget = newTasksInTarget.filter(t => t.id !== taskId);
+        
+        let localDropIndex = dropIndex;
+        if (taskIndex < dropIndex) {
+            localDropIndex -= 1;
         }
-        if (col.id === targetColId) {
-          return {
-            ...col,
-            tasks: [...col.tasks, { ...task, columnId: targetColId }],
-          };
-        }
-        return col;
-      });
+
+        const prevTask = newTasksInTarget[localDropIndex - 1];
+        const nextTask = newTasksInTarget[localDropIndex];
+        previousOrderIndex = prevTask?.orderIndex;
+        nextOrderIndex = nextTask?.orderIndex;
+
+        newTasksInTarget.splice(localDropIndex, 0, task);
+        
+        newColumns = newColumns.map((col) => 
+            col.id === targetColId ? { ...col, tasks: newTasksInTarget } : col
+        );
+      } else {
+        // Handling moving to a different column
+        const newTasksInSource = sourceCol.tasks.filter((item) => item.id !== taskId);
+        
+        const prevTask = newTasksInTarget[dropIndex - 1];
+        const nextTask = newTasksInTarget[dropIndex];
+        previousOrderIndex = prevTask?.orderIndex;
+        nextOrderIndex = nextTask?.orderIndex;
+
+        newTasksInTarget.splice(dropIndex, 0, { ...task, columnId: targetColId });
+
+        newColumns = newColumns.map((col) => {
+            if (col.id === sourceCol.id) return { ...col, tasks: newTasksInSource };
+            if (col.id === targetColId) return { ...col, tasks: newTasksInTarget };
+            return col;
+        });
+      }
 
       onColumnsChange(newColumns);
 
       try {
-        await taskBoardService.moveTask(taskId, targetColId);
+        await taskBoardService.reorderTask(taskId, targetColId, previousOrderIndex, nextOrderIndex);
+        onRefresh(); // trigger refresh to sync actual orderIndex from backend
       } catch (error) {
-        console.error('Failed to move task:', error);
+        console.error('Failed to reorder task:', error);
       }
     }
   };
@@ -214,11 +337,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     cutoffDate.setDate(cutoffDate.getDate() - overdueDaysThreshold);
 
     const taskDeadline = new Date(task.deadline);
-    const isDone = task.status?.toLowerCase() === 'done';
-    const isCompletedByProgress =
-      task.userProgress !== undefined && task.userProgress >= 100;
-
-    return taskDeadline < cutoffDate && !isDone && !isCompletedByProgress;
+    return taskDeadline < cutoffDate && !isTaskDone(task);
   };
 
   const renderLinkIcon = (text?: string) => {
@@ -266,7 +385,25 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   };
 
   return (
-    <div className="study-plan-board-container">
+    <div className="study-plan-board-wrapper">
+      <RoadmapFilterPanel
+        isOpen={showFilterPanel}
+        onClose={() => setShowFilterPanel(false)}
+        options={filterOptions}
+        selected={selectedFilter}
+        onSelect={onFilterChange}
+      />
+      <div className="study-plan-board-header-row">
+        <button
+          className={`roadmap-filter-toggle ${showFilterPanel ? 'active' : ''}`}
+          onClick={() => setShowFilterPanel(!showFilterPanel)}
+          title="Lọc theo Roadmap"
+        >
+          <Funnel size={16} />
+          Lọc
+        </button>
+      </div>
+      <div className="study-plan-board-container">
       {columns.map((column) => {
         const oldOverdueCount = column.tasks.filter(isTaskOldOverdue).length;
 
@@ -274,8 +411,8 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           <div
             key={column.id}
             className="study-plan-board-column"
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, column.id)}
+            onDragOver={(e) => handleDragOver(e, column.id, column.tasks.length)}
+            onDrop={(e) => handleDrop(e, column.id, column.tasks.length)}
             style={{ borderColor: column.color || 'var(--sv-border)' }}
           >
             <div
@@ -362,37 +499,65 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                 </div>
               )}
 
-              {column.tasks.map((task) => (
-                <div
-                  key={task.id}
-                  className="study-plan-task-card"
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, task.id)}
-                  onClick={() => onTaskClick(task)}
-                  style={
-                    { '--card-color': getPriorityColor(task.priority) } as React.CSSProperties
-                  }
-                >
+              {column.tasks.map((task, index) => {
+                const roadmapLink = parseRoadmapTaskLink(task.userNotes);
+                const isRoadmapLinkedTask = Boolean(roadmapLink);
+                const executionState = resolvePlannerExecutionState(task);
+                const roadmapTaskStatusText =
+                  executionState === 'done'
+                    ? 'Done'
+                    : executionState === 'in-progress'
+                      ? 'In progress'
+                      : 'To do';
+
+                return (
+                <React.Fragment key={task.id}>
+                  {dragOverColumnId === column.id && dragOverIndex === index && (
+                    <div
+                      style={{
+                        height: '100px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        borderRadius: '0.5rem',
+                        border: '2px dashed rgba(255, 255, 255, 0.2)',
+                        marginBottom: '1rem',
+                        transition: 'all 0.2s',
+                      }}
+                    />
+                  )}
+                  <div
+                    className="study-plan-task-card"
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, task.id)}
+                    onDragEnd={handleDragEnd}
+                    onDragOver={(e) => {
+                      e.stopPropagation();
+                      handleDragOver(e, column.id, index);
+                    }}
+                    onDrop={(e) => {
+                      e.stopPropagation();
+                      handleDrop(e, column.id, index);
+                    }}
+                    onClick={() => onTaskClick(task)}
+                    style={
+                      { '--card-color': getPriorityColor(task.priority), opacity: draggedTaskId === task.id ? 0.35 : 1 } as React.CSSProperties
+                    }
+                  >
                   <div className="study-plan-task-title">{task.title}</div>
 
-                  <div
-                    className="study-plan-task-status-badge"
-                    style={{
-                      fontSize: '0.7rem',
-                      padding: '2px 6px',
-                      borderRadius: '4px',
-                      background: 'rgba(255,255,255,0.1)',
-                      width: 'fit-content',
-                      marginBottom: '0.5rem',
-                      color: getPriorityColor(task.priority),
-                    }}
-                  >
-                    {task.status || column.name}
-                  </div>
-
-                  {task.description && (
-                    <div className="study-plan-task-desc-preview">
-                      <ReactMarkdown>{task.description}</ReactMarkdown>
+                  {!isRoadmapLinkedTask && (
+                    <div
+                      className="study-plan-task-status-badge"
+                      style={{
+                        fontSize: '0.7rem',
+                        padding: '2px 6px',
+                        borderRadius: '4px',
+                        background: 'rgba(255,255,255,0.1)',
+                        width: 'fit-content',
+                        marginBottom: '0.5rem',
+                        color: getPriorityColor(task.priority),
+                      }}
+                    >
+                      {task.status || column.name}
                     </div>
                   )}
 
@@ -409,27 +574,29 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                         fontStyle: 'italic',
                       }}
                     >
-                      Ghi chú: {formatRoadmapTaskNote(task.userNotes)}
+                      {formatRoadmapTaskNote(task.userNotes)}
                     </div>
                   )}
 
-                  {task.userProgress !== undefined && (
+                  {isRoadmapLinkedTask && (
                     <div
                       style={{
-                        height: '4px',
-                        background: 'rgba(255,255,255,0.1)',
-                        borderRadius: '2px',
-                        marginBottom: '0.5rem',
-                        overflow: 'hidden',
+                        fontSize: '0.72rem',
+                        padding: '0.2rem 0.45rem',
+                        borderRadius: '999px',
+                        width: 'fit-content',
+                        marginBottom: '0.45rem',
+                        border: '1px solid rgba(56, 189, 248, 0.35)',
+                        color:
+                          executionState === 'done'
+                            ? '#67e8f9'
+                            : executionState === 'in-progress'
+                              ? '#fbbf24'
+                              : '#cbd5e1',
+                        background: 'rgba(15, 23, 42, 0.4)',
                       }}
                     >
-                      <div
-                        style={{
-                          height: '100%',
-                          width: `${task.userProgress}%`,
-                          background: getPriorityColor(task.priority),
-                        }}
-                      />
+                      {roadmapTaskStatusText}
                     </div>
                   )}
 
@@ -459,7 +626,21 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                     </div>
                   </div>
                 </div>
-              ))}
+                </React.Fragment>
+                );
+              })}
+              
+              {dragOverColumnId === column.id && dragOverIndex === column.tasks.length && (
+                <div
+                  style={{
+                    height: '100px',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    borderRadius: '0.5rem',
+                    border: '2px dashed rgba(255, 255, 255, 0.2)',
+                    marginBottom: '1rem',
+                  }}
+                />
+              )}
             </div>
 
             <button
@@ -527,6 +708,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
             <Plus size={24} /> Thêm Danh Sách
           </button>
         )}
+      </div>
       </div>
     </div>
   );

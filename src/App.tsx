@@ -132,7 +132,10 @@ const AppContents = () => {
   // Determine if header is hidden
   const isHeaderHidden =
     fullScreenRoutes.has(location.pathname) ||
-    isCertificateRoute(location.pathname);
+    isCertificateRoute(location.pathname) ||
+    isCourseLearningRoute(location.pathname) ||
+    isAssignmentRoute(location.pathname) ||
+    isQuizAttemptRoute(location.pathname);
 
   return (
     <div
@@ -598,6 +601,7 @@ const MeowlBubbleWrapper = () => {
   const shouldHide =
     hideMeowlBubbleRoutes.has(location.pathname) ||
     isQuizAttemptRoute(location.pathname) ||
+    isAssignmentRoute(location.pathname) ||
     isCertificateRoute(location.pathname);
   return <MeowlBubbleNotification disabled={shouldHide} />;
 };

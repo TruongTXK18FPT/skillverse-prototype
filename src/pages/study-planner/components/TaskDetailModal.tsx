@@ -19,10 +19,15 @@ import {
   UpdateTaskRequest,
   CreateTaskRequest,
 } from '../../../types/TaskBoard';
+import {
+  type PlannerTaskKind,
+  resolvePlannerExecutionState,
+} from '../utils/taskSemantics';
 import '../styles/StudyPlanner.css';
 
 interface TaskDetailModalProps {
   task?: TaskResponse;
+  taskKind?: PlannerTaskKind;
   columnId?: string;
   onClose: () => void;
   onSave: (task: CreateTaskRequest | UpdateTaskRequest) => Promise<void>;
@@ -59,6 +64,48 @@ const buildDefaultForm = (targetColumnId: string): CreateTaskRequest => {
     linkedSessionIds: [],
   };
 };
+
+/** Format ms -> "còn X giờ", "quá hạn Y ngày" etc. */
+const formatRelativeDeadline = (deadline: string): string | null => {
+  if (!deadline) return null;
+  const deadlineDate = new Date(deadline.replace(' ', 'T'));
+  if (Number.isNaN(deadlineDate.getTime())) return null;
+
+  const now = new Date();
+  const diffMs = deadlineDate.getTime() - now.getTime();
+  const diffHours = diffMs / (1000 * 60 * 60);
+  const diffDays = diffMs / (1000 * 60 * 60 * 24);
+
+  if (diffMs < 0) {
+    const overdueDays = Math.floor(Math.abs(diffDays));
+    if (overdueDays === 0) return `quá hạn ${Math.floor(Math.abs(diffHours))} giờ`;
+    if (overdueDays === 1) return 'quá hạn 1 ngày';
+    return `quá hạn ${overdueDays} ngày`;
+  }
+
+  if (diffHours < 1) return 'sắp đến hạn';
+  if (diffHours < 6) return `còn ${Math.floor(diffHours)} giờ`;
+  if (diffHours < 24) return `còn ${Math.floor(diffHours)} giờ`;
+  if (diffDays < 1) return 'hết hạn hôm nay';
+  if (diffDays < 2) return 'còn 1 ngày';
+  if (diffDays < 7) return `còn ${Math.floor(diffDays)} ngày`;
+  return null;
+};
+
+const PRIORITY_LABELS: Record<TaskPriority, string> = {
+  [TaskPriority.HIGH]: 'Cao',
+  [TaskPriority.MEDIUM]: 'Trung bình',
+  [TaskPriority.LOW]: 'Thấp',
+};
+
+const DEADLINE_PRESETS = [
+  { label: '1 giờ', hours: 1, hint: '+1 tiếng từ giờ' },
+  { label: '3 giờ', hours: 3, hint: '+3 tiếng từ giờ' },
+  { label: 'Hôm nay', hours: 0, endOfDay: true, hint: '23:59 hôm nay' },
+  { label: 'Ngày mai', hours: 24, hint: '23:59 ngày mai' },
+  { label: '3 ngày', hours: 72, hint: '23:59 sau 3 ngày' },
+  { label: '1 tuần', hours: 168, hint: '23:59 sau 1 tuần' },
+];
 
 const normalizeDateTimeLocal = (raw?: string): string => {
   if (!raw) return '';
@@ -123,6 +170,7 @@ const mapTaskToFormData = (task: TaskResponse): CreateTaskRequest => {
 
 const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
   task,
+  taskKind = 'manual',
   columnId,
   onClose,
   onSave,
@@ -130,12 +178,51 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
 }) => {
   const [formData, setFormData] = useState<CreateTaskRequest>(() => buildDefaultForm(columnId || ''));
   const [isPreview, setIsPreview] = useState(true);
+  const isRoadmapLinkedTask = taskKind === 'roadmap-course' || taskKind === 'roadmap-fallback';
+  const roadmapExecutionState = resolvePlannerExecutionState(task);
+
+  // Validation state
+  const deadlineError = useMemo(() => {
+    if (!formData.startDate || !formData.deadline) return null;
+    const start = new Date(formData.startDate.replace(' ', 'T'));
+    const end = new Date(formData.deadline.replace(' ', 'T'));
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return null;
+    if (end < start) return 'Hạn chót phải sau thời gian bắt đầu';
+    return null;
+  }, [formData.startDate, formData.deadline]);
+
+  const relativeDeadline = useMemo(
+    () => formatRelativeDeadline(formData.deadline || ''),
+    [formData.deadline],
+  );
+
+  const isOverdue = useMemo(() => {
+    if (!formData.deadline) return false;
+    const deadlineDate = new Date(formData.deadline.replace(' ', 'T'));
+    return deadlineDate < new Date();
+  }, [formData.deadline]);
+
+  const applyDeadlinePreset = (preset: typeof DEADLINE_PRESETS[0]) => {
+    const now = new Date();
+    let newDeadline: Date;
+    if (preset.endOfDay) {
+      newDeadline = new Date(now);
+      newDeadline.setHours(23, 59, 0, 0);
+    } else {
+      newDeadline = new Date(now.getTime() + preset.hours * 60 * 60 * 1000);
+    }
+    const deadlineValue = toDateTimeLocal(newDeadline);
+    const startValue = toDateTimeLocal(now); // auto-set start to now
+    setFormData({
+      ...formData,
+      deadline: deadlineValue,
+      endDate: deadlineValue,
+      startDate: startValue,
+    });
+  };
 
   useEffect(() => {
-    document.body.classList.add('modal-open');
-    return () => {
-      document.body.classList.remove('modal-open');
-    };
+    // Panel handles its own scroll — no body lock needed
   }, []);
 
   useEffect(() => {
@@ -154,6 +241,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (deadlineError) return;
     await onSave(formData);
     onClose();
   };
@@ -167,10 +255,31 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
     }
   };
 
+  const handleQuickRoadmapStatus = async (targetState: 'in-progress' | 'done') => {
+    if (!task) {
+      return;
+    }
+
+    const done = targetState === 'done';
+
+    await onSave({
+      status: done ? 'DONE' : 'IN_PROGRESS',
+      userProgress: done ? 100 : 0,
+      satisfactionLevel: done
+        ? formData.satisfactionLevel || 'Satisfied'
+        : formData.satisfactionLevel || 'Neutral',
+    });
+    onClose();
+  };
+
   return (
-    <div className="study-plan-modal-overlay" onClick={onClose}>
-      <div className="study-plan-modal study-plan-task-detail-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="study-plan-modal-header">
+    <>
+      {/* Backdrop */}
+      <div className="study-plan-task-detail-backdrop open" onClick={onClose} />
+
+      {/* Centered Panel */}
+      <div className="study-plan-task-detail-panel open">
+        <div className="study-plan-modal-header study-plan-task-detail-header">
           <h3 className="study-plan-modal-title">{task ? 'Chi tiết công việc' : 'Công việc mới'}</h3>
           <button className="study-plan-modal-close" onClick={onClose}>
             <X size={20} />
@@ -210,7 +319,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
                   </label>
                   <input
                     type="datetime-local"
-                    className="study-plan-input"
+                    className={`study-plan-input ${deadlineError ? 'study-plan-input--error' : ''} ${isOverdue ? 'study-plan-input--overdue' : ''}`}
                     value={formData.deadline}
                     onChange={(e) =>
                       setFormData({
@@ -220,46 +329,92 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
                       })
                     }
                   />
+                  {deadlineError && (
+                    <span className="study-plan-field-error">{deadlineError}</span>
+                  )}
+                  {!deadlineError && relativeDeadline && (
+                    <span className={`study-plan-relative-time ${isOverdue ? 'study-plan-relative-time--overdue' : ''}`}>
+                      {isOverdue ? '⏱ ' : '⏱ '}{relativeDeadline}
+                    </span>
+                  )}
+                  {/* Quick presets */}
+                  <div className="study-plan-deadline-presets-wrapper">
+                    <span className="study-plan-deadline-helper">
+                      Đặt nhanh hạn chót:
+                    </span>
+                    <div className="study-plan-deadline-presets">
+                      {DEADLINE_PRESETS.map((preset) => (
+                        <button
+                          key={preset.label}
+                          type="button"
+                          className="study-plan-deadline-preset-btn"
+                          onClick={() => applyDeadlinePreset(preset)}
+                          data-hint={preset.hint}
+                          title={preset.hint}
+                        >
+                          {preset.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
+                {/* Priority — chips for manual tasks, read-only badge for roadmap tasks */}
                 <div className="study-plan-form-group">
                   <label className="study-plan-label">
                     <Flag size={14} /> Ưu tiên
                   </label>
-                  <select
-                    className="study-plan-input"
-                    value={formData.priority}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        priority: e.target.value as TaskPriority,
-                      })
-                    }
-                  >
-                    <option value={TaskPriority.LOW}>Thấp</option>
-                    <option value={TaskPriority.MEDIUM}>Trung bình</option>
-                    <option value={TaskPriority.HIGH}>Cao</option>
-                  </select>
+                  {isRoadmapLinkedTask ? (
+                    <div className={`study-plan-priority-chip study-plan-priority-chip--${formData.priority.toLowerCase()} study-plan-priority-chip--readonly`}>
+                      <span className="study-plan-priority-chip__dot" />
+                      {PRIORITY_LABELS[formData.priority]}
+                      <span className="study-plan-priority-chip__hint">(AI đã gán)</span>
+                    </div>
+                  ) : (
+                    <div className="study-plan-priority-chips">
+                      {([TaskPriority.HIGH, TaskPriority.MEDIUM, TaskPriority.LOW] as TaskPriority[]).map((p) => (
+                        <button
+                          key={p}
+                          type="button"
+                          className={`study-plan-priority-chip study-plan-priority-chip--${p.toLowerCase()} ${formData.priority === p ? 'active' : ''}`}
+                          onClick={() => setFormData({ ...formData, priority: p })}
+                        >
+                          <span className="study-plan-priority-chip__dot" />
+                          {PRIORITY_LABELS[p]}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 
               {task && (
                 <div className="study-plan-task-progress-section">
-                  <div className="study-plan-form-group">
-                    <label className="study-plan-label">
-                      <Activity size={14} /> Tiến độ: {formData.userProgress}%
-                    </label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      className="study-plan-range"
-                      value={formData.userProgress}
-                      onChange={(e) =>
-                        setFormData({ ...formData, userProgress: parseInt(e.target.value, 10) })
-                      }
-                    />
-                  </div>
+                  {isRoadmapLinkedTask ? (
+                    <div className="study-plan-roadmap-task-status-panel">
+                      <div className="study-plan-roadmap-task-kind-badge">
+                        {taskKind === 'roadmap-course'
+                          ? 'Roadmap task: Có khóa học'
+                          : 'Roadmap task: Không có khóa học'}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="study-plan-form-group">
+                      <label className="study-plan-label">
+                        <Activity size={14} /> Tiến độ: {formData.userProgress}%
+                      </label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        className="study-plan-range"
+                        value={formData.userProgress}
+                        onChange={(e) =>
+                          setFormData({ ...formData, userProgress: parseInt(e.target.value, 10) })
+                        }
+                      />
+                    </div>
+                  )}
 
                   <div className="study-plan-form-group">
                     <label className="study-plan-label">Mức độ hài lòng</label>
@@ -344,25 +499,75 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
             )}
 
             <div className="study-plan-footer-actions">
-              <button type="button" className="study-plan-btn" onClick={onClose}>
-                Hủy
-              </button>
-              <button
-                type="submit"
-                className="study-plan-btn active"
-                style={{
-                  background: 'var(--sv-primary)',
-                  color: '#0f172a',
-                  borderColor: 'var(--sv-primary)',
-                }}
-              >
-                <Save size={16} /> {task ? 'Lưu thay đổi' : 'Tạo công việc'}
-              </button>
+              {task && isRoadmapLinkedTask ? (
+                <>
+                  {roadmapExecutionState === 'todo' && (
+                    <button
+                      type="button"
+                      className="study-plan-btn active"
+                      style={{
+                        background: 'var(--sv-primary)',
+                        color: '#0f172a',
+                        borderColor: 'var(--sv-primary)',
+                      }}
+                      onClick={() => {
+                        void handleQuickRoadmapStatus('in-progress');
+                      }}
+                    >
+                      Bắt đầu
+                    </button>
+                  )}
+                  {roadmapExecutionState === 'in-progress' && (
+                    <button
+                      type="button"
+                      className="study-plan-btn active"
+                      style={{
+                        background: 'var(--sv-primary)',
+                        color: '#0f172a',
+                        borderColor: 'var(--sv-primary)',
+                      }}
+                      onClick={() => {
+                        void handleQuickRoadmapStatus('done');
+                      }}
+                    >
+                      Mark done
+                    </button>
+                  )}
+                  {roadmapExecutionState === 'done' && (
+                    <button
+                      type="button"
+                      className="study-plan-btn"
+                      onClick={() => {
+                        void handleQuickRoadmapStatus('in-progress');
+                      }}
+                    >
+                      Undo done
+                    </button>
+                  )}
+                </>
+              ) : (
+                <>
+                  <button type="button" className="study-plan-btn" onClick={onClose}>
+                    Hủy
+                  </button>
+                  <button
+                    type="submit"
+                    className="study-plan-btn active"
+                    style={{
+                      background: 'var(--sv-primary)',
+                      color: '#0f172a',
+                      borderColor: 'var(--sv-primary)',
+                    }}
+                  >
+                    <Save size={16} /> {task ? 'Lưu thay đổi' : 'Tạo công việc'}
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </form>
       </div>
-    </div>
+    </>
   );
 };
 
