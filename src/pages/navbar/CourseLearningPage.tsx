@@ -39,7 +39,6 @@ import { hasAssignmentDueDate } from "../../utils/assignmentPresentation";
 import { buildCertificateVerificationUrl } from "../../components/certificate/certificatePresentation";
 import {
   BREAKING_ITEM_RETAKE_MESSAGE,
-  getUpgradePolicyMessage,
   mapReasonCodeToVietnameseMessage,
   mapUpgradeApiErrorToVietnameseMessage
 } from "../../utils/courseRevisionMessages";
@@ -425,7 +424,7 @@ const CourseLearningPage = () => {
   const quizHasAttemptHistory = quizAttemptsCount > 0;
   const quizBestScore = activeQuizDetail?.bestScore;
   const quizBestScorePassed = typeof quizBestScore === 'number'
-    ? quizBestScore >= activeQuizDetail.passScore
+    ? quizBestScore >= (activeQuizDetail?.passScore ?? 0)
     : false;
   const activeQuizRetrySeconds = activeQuizDetail?.secondsUntilRetry ?? 0;
   const shouldTrackQuizRetryCountdown = activeQuizRetrySeconds > 0;
@@ -1744,9 +1743,9 @@ const CourseLearningPage = () => {
               <section className="lhud-module-overview-card">
                 <div className="lhud-module-overview-badge">Tổng quan chương</div>
                 <div className="lhud-module-overview-meta">
-                  <span>{activeModulePreview.lessons?.length ?? 0} Bài học</span>
-                  <span>{activeModulePreview.quizzes?.length ?? 0} Bài kiểm tra</span>
-                  <span>{activeModulePreview.assignments?.length ?? 0} Bài tập</span>
+                  <span>{(activeModulePreview as ModuleWithContent).lessons?.length ?? 0} Bài học</span>
+                  <span>{(activeModulePreview as ModuleWithContent).quizzes?.length ?? 0} Bài kiểm tra</span>
+                  <span>{(activeModulePreview as ModuleWithContent).assignments?.length ?? 0} Bài tập</span>
                 </div>
                 {activeModulePreview.description?.trim() ? (
                   <div className="lhud-module-overview-content">

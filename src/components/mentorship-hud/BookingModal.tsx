@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Wallet, CheckCircle, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import walletService from '../../services/walletService';
 import { getAvailability } from '../../services/availabilityService';
 import { createBookingWithWallet, getMentorActiveBookings } from '../../services/bookingService';
@@ -31,6 +32,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
   mentorName,
   hourlyRate
 }) => {
+  const { user } = useAuth();
   const [step, setStep] = useState<'schedule' | 'payment'>('schedule');
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<BookableSlot | null>(null);
@@ -205,6 +207,12 @@ const BookingModal: React.FC<BookingModalProps> = ({
   };
 
   const handlePayment = async () => {
+    if (String(user?.id) === mentorId) {
+      setCloseModalOnToastDismiss(false);
+      showError('Không thể tự đặt lịch', 'Bạn không thể đặt lịch mentorship với chính tài khoản của mình.');
+      return;
+    }
+
     if (walletBalance === null) {
         setCloseModalOnToastDismiss(false);
       showError('Lỗi', 'Không thể tải thông tin ví.');
