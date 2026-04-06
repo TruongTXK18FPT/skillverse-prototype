@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Sparkles, Plus, Trash2, Code, Menu, X, ChevronDown, Bot, Lock } from 'lucide-react';
+import { Send, Sparkles, Plus, Trash2, Code, Menu, X, ChevronDown, Bot, Lock, ChevronLeft, ChevronRight } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import meowlDefault from '../../assets/meowl-skin/meowl_default.png';
 import userService from '../../services/userService';
@@ -19,6 +19,7 @@ import { WavRecorder } from '../../shared/wavRecorder';
 import { transcribeAudioViaBackend } from '../../shared/speechToText';
 import { Mic, Square } from 'lucide-react';
 import ExpertModeSelector from '../../components/shared/ExpertModeSelector';
+import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import avaChat from '../../assets/chat/ava-chat.png';
 import '../../styles/ChatHUD.css';
 import '../../styles/VoiceSelector.css';
@@ -46,9 +47,11 @@ const ExpertChatPage = () => {
   const [aiAgentMode, setAiAgentMode] = useState<'NORMAL' | 'DEEP_RESEARCH'>('NORMAL');
   const [showModelDropdown, setShowModelDropdown] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [userAvatar, setUserAvatar] = useState<string | null>(user?.avatarUrl || null);
   const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
   const [checkingAccess, setCheckingAccess] = useState(true);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -106,12 +109,11 @@ const ExpertChatPage = () => {
     const normalizedTitle = normalizeSessionTitle(rawTitle);
 
     if (normalizedTitle.startsWith('expert ')) {
-      return rawTitle.substring(7).trim();
+      return rawTitle.replace(/^expert\s+/i, '').trim();
     }
 
     if (normalizedTitle.startsWith('chuyen gia ')) {
-      const firstSpace = rawTitle.indexOf(' ');
-      return firstSpace >= 0 ? rawTitle.substring(firstSpace + 1).trim() : rawTitle;
+      return rawTitle.replace(/^chuyên\s+gia\s+/i, '').replace(/^chuyen\s+gia\s+/i, '').trim();
     }
 
     return '';
@@ -309,7 +311,8 @@ Tôi có thể tư vấn chuyên sâu về:
       await new Promise(resolve => setTimeout(resolve, 500));
       
       if (!isAuthenticated) {
-        navigate('/login');
+        setShowLoginModal(true);
+        setIsInitializing(false);
         return;
       }
 
@@ -381,6 +384,51 @@ Tôi có thể tư vấn chuyên sâu về:
         <div className="chat-hud-main-area" style={{ alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', color: 'var(--chat-hud-accent)' }}>
             <MeowlKuruLoader text="ĐANG KHỞI TẠO HỆ THỐNG CHUYÊN GIA..." />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="chat-hud-viewport">
+        <LoginRequiredModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          title="Đăng nhập để vào Expert Chat"
+          message="Bạn cần đăng nhập để sử dụng tư vấn chuyên gia AI"
+          feature="Expert Chat"
+        />
+        <div className="chat-hud-main-area" style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{
+            background: 'rgba(15, 23, 42, 0.8)', padding: '48px',
+            borderRadius: '24px', textAlign: 'center', maxWidth: '500px',
+            border: '1px solid var(--chat-hud-accent)',
+            boxShadow: '0 0 40px rgba(6, 182, 212, 0.1)'
+          }}>
+            <Lock size={64} style={{ color: 'var(--chat-hud-accent)', marginBottom: '24px' }} />
+            <h2 style={{ color: '#fff', fontSize: '28px', marginBottom: '16px', fontFamily: 'Space Grotesk' }}>
+              YÊU CẦU ĐĂNG NHẬP
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '32px', lineHeight: '1.6' }}>
+              Vui lòng đăng nhập để truy cập hệ thống tư vấn chuyên gia.
+            </p>
+            <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
+              <button onClick={() => navigate('/chatbot')} style={{
+                background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.2)',
+                padding: '12px 24px', borderRadius: '8px', fontSize: '16px', cursor: 'pointer'
+              }}>
+                Quay lại
+              </button>
+              <button onClick={() => setShowLoginModal(true)} style={{
+                background: 'linear-gradient(135deg, #06b6d4, #2563eb)', color: '#fff', border: 'none',
+                padding: '12px 32px', borderRadius: '8px', fontSize: '16px', fontWeight: 600, cursor: 'pointer',
+                boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)'
+              }}>
+                Đăng nhập ngay
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -586,9 +634,17 @@ Tôi có thể tư vấn chuyên sâu về:
   return (
     <div className="chat-hud-viewport">
       {/* Sidebar */}
-      <div className={`chat-hud-sidebar ${isSidebarOpen ? 'open' : ''}`}>
+      <div className={`chat-hud-sidebar ${isSidebarOpen ? 'open' : ''} ${isSidebarCollapsed ? 'collapsed' : ''}`}>
         <div className="chat-hud-sidebar-header">
-          HỆ THỐNG CHUYÊN GIA
+          <span className="chat-hud-sidebar-title">HỆ THỐNG CHUYÊN GIA</span>
+          <button
+            type="button"
+            className="chat-hud-sidebar-collapse-btn"
+            onClick={() => setIsSidebarCollapsed((prev) => !prev)}
+            title={isSidebarCollapsed ? 'Mở rộng sidebar' : 'Thu gọn sidebar'}
+          >
+            {isSidebarCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          </button>
         </div>
         <button className="chat-hud-new-chat-btn" onClick={handleNewChat}>
           <Plus size={18} /> Tạo trò chuyện mới
@@ -618,7 +674,7 @@ Tôi có thể tư vấn chuyên sâu về:
             ))
           )}
         </div>
-        <div style={{ padding: '10px', borderTop: '1px solid var(--chat-hud-border)' }}>
+        <div className="chat-hud-sidebar-footer" style={{ padding: '10px', borderTop: '1px solid var(--chat-hud-border)' }}>
            <button className="chat-hud-new-chat-btn" onClick={handleBackToLanding} style={{ width: 'calc(100% - 20px)', margin: '0 10px' }}>
             Thoát chế độ chuyên gia
           </button>
@@ -635,14 +691,9 @@ Tôi có thể tư vấn chuyên sâu về:
             </button>
           </div>
           
-          <div className="chat-hud-title" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: '1.2' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div className="chat-hud-title">
               <Sparkles size={16} style={{ color: 'var(--chat-hud-accent)' }} />
               {expertContext?.jobRole || 'Chuyên gia'}
-            </div>
-            <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 'normal' }}>
-              {expertContext?.domain}
-            </span>
           </div>
 
           {/* Model Selector */}

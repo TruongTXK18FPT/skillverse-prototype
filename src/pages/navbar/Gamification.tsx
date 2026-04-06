@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import "../../styles/Gamification.css";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
+import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
 import TicTacToeGame from "../../components/game/tic-tac-toe/TicTacToeGame";
 import MeowlAdventure from "../../components/game/meowl-adventure/MeowlAdventure";
 import gamificationService, {
@@ -214,6 +215,7 @@ const Gamification: React.FC = () => {
   const [selectedGameMode, setSelectedGameMode] = useState<"free" | "premium">(
     "free",
   );
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [activeGame, setActiveGame] = useState<
     "tic-tac-toe" | "meowl-adventure" | null
   >(null);
@@ -1010,7 +1012,7 @@ const Gamification: React.FC = () => {
             </div>
             <button
               className="minigames-auth-login-btn"
-              onClick={() => navigate("/login")}
+              onClick={() => setShowLoginModal(true)}
             >
               <span>Đăng nhập ngay</span>
               <span className="minigames-auth-arrow">→</span>
@@ -1385,6 +1387,14 @@ const Gamification: React.FC = () => {
 
   return (
     <div className="gami-wrapper">
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để chơi Mini Games"
+        message="Bạn cần đăng nhập để chơi game, nhận thưởng và lưu tiến trình"
+        feature="Mini Games"
+      />
+
       <div className="gami-container">
         {/* Loading State */}
         {loading && (

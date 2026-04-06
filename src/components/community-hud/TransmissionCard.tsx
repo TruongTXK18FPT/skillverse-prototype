@@ -3,6 +3,7 @@ import { Clock, ThumbsUp, ThumbsDown, MessageCircle, Share2, Bookmark, Tag } fro
 import communityService from '../../services/communityService';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import LoginRequiredModal from '../auth/LoginRequiredModal';
 import { decodeHtml } from '../../utils/htmlDecoder';
 
 export interface CommunityPost {
@@ -44,12 +45,13 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
   const [isBookmarked, setIsBookmarked] = React.useState(post.isBookmarked);
   const [likeCount, setLikeCount] = React.useState(post.likes);
   const [dislikeCount, setDislikeCount] = React.useState(post.dislikes || 0);
+  const [showLoginModal, setShowLoginModal] = React.useState(false);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const ensureAuth = () => {
     if (!isAuthenticated) {
-      navigate('/login');
+      setShowLoginModal(true);
       return false;
     }
     return true;
@@ -141,10 +143,19 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
   const plainContent = stripHtml(decodedContent);
 
   return (
-    <article
-      className="transmission-card"
-      style={{ animationDelay: `${index * 0.1}s` }}
-    >
+    <>
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để tương tác cộng đồng"
+        message="Bạn cần đăng nhập để like, bình luận hoặc lưu bài viết"
+        feature="Cộng đồng"
+      />
+
+      <article
+        className="transmission-card"
+        style={{ animationDelay: `${index * 0.1}s` }}
+      >
       {/* Header with Hexagon Avatar */}
       <div className="transmission-card-header">
         <img
@@ -218,7 +229,8 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
           <span>{formatNumber(post.comments)}</span>
         </button>
       </div>
-    </article>
+      </article>
+    </>
   );
 };
 

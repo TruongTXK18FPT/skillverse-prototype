@@ -51,6 +51,8 @@ import {
 import GSJTestTaking from "./GSJTestTaking";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
+import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
+import { useAuth } from "../../context/AuthContext";
 import { getExpertDomainMeta } from "../../utils/expertFieldPresentation";
 import { getDomainImage } from "../../utils/domainImageMap";
 import technologyDomainImage from "../../assets/domain/Technology.png";
@@ -190,6 +192,7 @@ const getInitials = (value: string): string => {
 };
 
 const GSJJourneyPage: React.FC = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const autoOpenedJourneyIdRef = useRef<number | null>(null);
@@ -212,6 +215,7 @@ const GSJJourneyPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pendingDelete, setPendingDelete] = useState<DeleteDialogState>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     setShowDetailedFeedback(false);
@@ -247,8 +251,10 @@ const GSJJourneyPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    loadJourneys();
-  }, [loadJourneys]);
+    if (user) {
+      loadJourneys();
+    }
+  }, [loadJourneys, user]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -3236,6 +3242,41 @@ const GSJJourneyPage: React.FC = () => {
       </div>
     );
   };
+
+  if (!user) {
+    return (
+      <>
+        <div className="gsj-page">
+          <div className="gsj-container">
+            {renderHero()}
+            <div className="gsj-empty">
+              <div className="gsj-empty__icon">
+                <Map size={28} />
+              </div>
+              <h3>Đăng nhập để bắt đầu Journey</h3>
+              <p>
+                Bạn cần đăng nhập để tạo Journey, làm quiz đánh giá và nhận roadmap cá nhân hóa.
+              </p>
+              <button
+                type="button"
+                className="gsj-btn gsj-btn--primary"
+                onClick={() => setShowLoginModal(true)}
+              >
+                Đăng nhập để tiếp tục
+              </button>
+            </div>
+          </div>
+        </div>
+        <LoginRequiredModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          title="Đăng nhập để dùng Journey"
+          message="Tạo hành trình, làm test đánh giá và theo dõi tiến trình phát triển sự nghiệp sau khi đăng nhập"
+          feature="Journey"
+        />
+      </>
+    );
+  }
 
   return (
     <div className="gsj-page">

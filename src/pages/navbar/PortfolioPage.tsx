@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import portfolioService from '../../services/portfolioService';
 import {
@@ -146,6 +147,7 @@ const PortfolioPage = () => {
   const [selectedProject, setSelectedProject] = useState<PortfolioProjectDTO | undefined>();
   const [certificateModalOpen, setCertificateModalOpen] = useState(false);
   const [cvModalOpen, setCvModalOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // UI States
   const [activeSection, setActiveSection] = useState<typeof TABS[number]['id']>('overview');
@@ -451,12 +453,20 @@ const PortfolioPage = () => {
   if (!isAuthenticated) {
     return (
       <div className="sv-portfolio-container" data-theme={theme}>
+        <LoginRequiredModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          title="Đăng nhập để xem Portfolio"
+          message="Bạn cần đăng nhập để tạo và quản lý portfolio cá nhân"
+          feature="Portfolio"
+        />
+
         <div className="pf-no-profile-container">
           <div className="pf-no-profile-card">
             <h2>Đăng nhập để xem Portfolio</h2>
             <p>Bạn cần đăng nhập để tạo và quản lý portfolio của mình. Portfolio giúp bạn showcase kỹ năng, dự án và chứng chỉ với nhà tuyển dụng.</p>
             <button
-              onClick={() => navigate('/login')}
+              onClick={() => setShowLoginModal(true)}
               className="pf-btn pf-btn-primary"
               style={{ marginTop: '1rem' }}
             >

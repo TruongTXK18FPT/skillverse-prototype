@@ -41,6 +41,7 @@ import {
   resolveCourseIdFromRouteParams,
 } from '../../utils/courseRoute';
 import PurchaseCourseModal from '../../components/course/PurchaseCourseModal';
+import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import Toast from '../../components/shared/Toast';
 import '../../styles/CourseDetailCockpit.css';
 
@@ -90,6 +91,7 @@ const CourseDetailPage = () => {
   const [mentorProfile, setMentorProfile] = useState<MentorProfile | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [groupChat, setGroupChat] = useState<GroupChatResponse | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const isPreviewMode = location.pathname.includes('/preview');
   const isCoursePublic = course?.status === CourseStatus.PUBLIC;
@@ -296,7 +298,7 @@ const CourseDetailPage = () => {
         'Vui lòng đăng nhập để kích hoạt khóa học này.',
         {
           text: 'Đăng nhập ngay',
-          onClick: () => navigate('/login', { state: { from: location.pathname } })
+          onClick: () => setShowLoginModal(true)
         },
         true
       );
@@ -395,7 +397,7 @@ const CourseDetailPage = () => {
         'Vui lòng đăng nhập để nhắn tin với Mentor.',
         {
           text: 'Đăng nhập ngay',
-          onClick: () => navigate('/login', { state: { from: location.pathname } })
+          onClick: () => setShowLoginModal(true)
         },
         true
       );
@@ -500,6 +502,14 @@ const CourseDetailPage = () => {
 
   return (
     <div className={`cockpit-detail-container ${theme}`} data-theme={theme}>
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để tiếp tục"
+        message="Bạn cần đăng nhập để kích hoạt khóa học và nhắn tin với mentor"
+        feature="Khóa học"
+      />
+
       {/* HUD Corners */}
       <div className="cockpit-detail-hud-corners">
         <div className="cockpit-detail-corner cockpit-detail-corner-tl"></div>

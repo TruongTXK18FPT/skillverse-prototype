@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
+import LoginRequiredModal from "../auth/LoginRequiredModal";
 import SystemAlertModal from "./SystemAlertModal";
 // MeowlGuide intentionally not imported — hidden on this page
 import portfolioService from "../../services/portfolioService";
@@ -54,6 +55,7 @@ const DossierCreatePortfolioPage = () => {
     message: "",
     type: "info",
   });
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const [formData, setFormData] = useState<Partial<UserProfileDTO>>({
     fullName: "",
@@ -370,13 +372,21 @@ const DossierCreatePortfolioPage = () => {
   if (!isAuthenticated) {
     return (
       <div className="dossier-portfolio-container" data-theme={theme}>
+        <LoginRequiredModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          title="Đăng nhập để tạo Portfolio"
+          message="Bạn cần đăng nhập để tạo hồ sơ portfolio"
+          feature="Tạo Portfolio"
+        />
+
         <div className="dossier-create-auth-panel dossier-panel-frame">
           <h2 className="dossier-modal-title dossier-create-auth-title">Cần đăng nhập</h2>
           <p className="dossier-create-auth-desc">
             Bạn cần đăng nhập để tạo Portfolio.
           </p>
           <div className="dossier-create-auth-actions">
-            <button onClick={() => navigate("/login")} className="dossier-btn-primary">
+            <button onClick={() => setShowLoginModal(true)} className="dossier-btn-primary">
               Đăng nhập
             </button>
             <button

@@ -50,6 +50,7 @@ import { premiumService } from '../../services/premiumService';
 import { PremiumPlan } from '../../data/premiumDTOs';
 import walletService from '../../services/walletService';
 import { WalletResponse } from '../../data/walletDTOs';
+import LoginRequiredModal from '../auth/LoginRequiredModal';
 
 interface RecruiterPremiumPageProps {
   isEmbedded?: boolean;
@@ -64,6 +65,7 @@ const RecruiterPremiumPage: React.FC<RecruiterPremiumPageProps> = ({ isEmbedded 
   const [loading, setLoading] = useState(true);
   const [purchasing, setPurchasing] = useState<string | null>(null);
   const [walletData, setWalletData] = useState<WalletResponse | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -91,7 +93,7 @@ const RecruiterPremiumPage: React.FC<RecruiterPremiumPageProps> = ({ isEmbedded 
 
   const handlePurchase = async (planName: string) => {
     if (!isAuthenticated) {
-      window.location.href = '/login';
+      setShowLoginModal(true);
       return;
     }
 
@@ -162,11 +164,20 @@ const RecruiterPremiumPage: React.FC<RecruiterPremiumPageProps> = ({ isEmbedded 
   }
 
   return (
-    <Box
-      minH="100vh"
-      bg="linear-gradient(135deg, #0f172a 0%, #1e293b 100%)"
-      py={8}
-    >
+    <>
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để nâng cấp gói"
+        message="Bạn cần đăng nhập để mua gói Recruiter Premium"
+        feature="Recruiter Premium"
+      />
+
+      <Box
+        minH="100vh"
+        bg="linear-gradient(135deg, #0f172a 0%, #1e293b 100%)"
+        py={8}
+      >
       <Container maxW="container.xl">
         {/* Header */}
         <VStack spacing={4} mb={8} textAlign="center">
@@ -559,7 +570,8 @@ const RecruiterPremiumPage: React.FC<RecruiterPremiumPageProps> = ({ isEmbedded 
           </TabPanels>
         </Tabs>
       </Container>
-    </Box>
+      </Box>
+    </>
   );
 };
 

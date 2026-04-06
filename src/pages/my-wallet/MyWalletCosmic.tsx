@@ -27,6 +27,7 @@ import EnableAutoRenewalModal from '../../components/premium/EnableAutoRenewalMo
 import { PremiumInvoice, useInvoice } from '../../components/invoice';
 import Toast from '../../components/shared/Toast';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
+import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import styles from './MyWalletAlien.module.css';
 import './MyWalletCosmic.css';
 
@@ -111,6 +112,7 @@ const MyWalletCosmic: React.FC = () => {
   const [showEnableAutoRenewalModal, setShowEnableAutoRenewalModal] = useState(false);
   const [showBankSetupModal, setShowBankSetupModal] = useState(false);
   const [showPinSetupModal, setShowPinSetupModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'transactions' | 'store' | 'settings' | 'withdrawals'>('overview');
   const [selectedStoreCategory, setSelectedStoreCategory] = useState<string>('all');
   const [storeSearchTerm, setStoreSearchTerm] = useState('');
@@ -467,6 +469,33 @@ const MyWalletCosmic: React.FC = () => {
       showToast('error', 'Lỗi', 'Không thể tải hóa đơn. Vui lòng thử lại sau.');
     }
   };
+
+  if (!user) {
+    return (
+      <div className="cosmic-wallet-container">
+        <div className="cosmic-loading">
+          <Wallet size={40} />
+          <h2>Đăng nhập để mở Ví SkillVerse</h2>
+          <p>Bạn cần đăng nhập để theo dõi số dư, giao dịch và quản lý tài khoản ví.</p>
+          <button
+            className="cosmic-action-btn"
+            onClick={() => setShowLoginModal(true)}
+            type="button"
+          >
+            Đăng nhập để tiếp tục
+          </button>
+        </div>
+
+        <LoginRequiredModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          title="Đăng nhập để dùng Ví SkillVerse"
+          message="Theo dõi số dư, giao dịch và sử dụng toàn bộ tính năng ví sau khi đăng nhập"
+          feature="Ví SkillVerse"
+        />
+      </div>
+    );
+  }
 
   if (loading) {
     return (

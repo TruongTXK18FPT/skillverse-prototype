@@ -4,6 +4,7 @@ import { HelpCircle, Bell, BellOff } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
 import { useMeowlSkin } from "../../context/MeowlSkinContext";
 import { useMeowlState } from "../../context/MeowlStateContext";
+import LoginRequiredModal from "../auth/LoginRequiredModal";
 import "../../styles/MeowlGuide.css";
 import guideMessages from "./MeowlGuideMsg.json";
 import MeowlChatV2 from "./MeowlChatV2";
@@ -51,6 +52,7 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
   const [currentStep, setCurrentStep] = useState(0);
   const [guideSteps, setGuideSteps] = useState<GuideStep[]>([]);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // Bubble mute state
   const [isBubbleDisabled, setIsBubbleDisabled] = useState(() => {
@@ -278,11 +280,19 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
 
   // Handler for login request from MeowlChatV2
   const handleRequestLogin = () => {
-    navigate("/login");
+    setShowLoginModal(true);
   };
 
   return (
     <>
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để chat với Meowl"
+        message="Bạn cần đăng nhập để sử dụng đầy đủ trợ lý Meowl"
+        feature="Meowl Chat"
+      />
+
       {/* MeowlChat Component - V2 with responsive design & guest management */}
       <MeowlChatV2
         isOpen={isChatOpen}

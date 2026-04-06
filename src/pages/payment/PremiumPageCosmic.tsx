@@ -18,6 +18,7 @@ import CancelSubscriptionModal from "../../components/premium/CancelSubscription
 import CancellationLimitModal from "../../components/premium/CancellationLimitModal";
 import CancelAutoRenewalModal from "../../components/premium/CancelAutoRenewalModal";
 import EnableAutoRenewalModal from "../../components/premium/EnableAutoRenewalModal";
+import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
 import { PremiumInvoice, useInvoice } from "../../components/invoice";
 import ClearanceLevelPage from "../../components/premium-hud/ClearanceLevelPage";
 import PremiumFAQ from "../../components/premium-hud/PremiumFAQ";
@@ -60,6 +61,7 @@ const PremiumPageCosmic = () => {
     useState(false);
   const [showCancelAutoRenewalModal, setShowCancelAutoRenewalModal] =
     useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const previewCacheRef = useRef<Map<string, SubscriptionCheckoutPreviewResponse>>(
     new Map(),
   );
@@ -200,7 +202,7 @@ const PremiumPageCosmic = () => {
 
   const handleWalletPayment = (planName: string) => {
     if (!isAuthenticated) {
-      navigate("/login");
+      setShowLoginModal(true);
       return;
     }
 
@@ -346,6 +348,14 @@ const PremiumPageCosmic = () => {
 
   return (
     <div className="cosmic-premium-page">
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để mua Premium"
+        message="Bạn cần đăng nhập để tiếp tục thanh toán gói Premium"
+        feature="Premium Subscription"
+      />
+
       {isParent && (
         <div
           style={{

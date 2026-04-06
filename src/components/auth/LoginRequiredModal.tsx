@@ -2,7 +2,9 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, LogIn, X, Zap, Rocket, Shield } from "lucide-react";
-import meowlThantai from "../../assets/meowl-skin/meowl-thantai.png";
+import { SpriteAnimator } from "../meowl-pet/SpriteAnimator";
+import { PetState } from "../meowl-pet/types";
+import { PET_CONFIG } from "../meowl-pet/constants";
 import "./LoginRequiredModal.css";
 
 interface LoginRequiredModalProps {
@@ -45,6 +47,11 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
     });
   };
 
+  const handleDismissToHome = () => {
+    onClose();
+    window.location.assign("/");
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -55,7 +62,7 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={handleDismissToHome}
           />
 
           {/* Main Container */}
@@ -77,7 +84,7 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
               <div className="lrm-orb lrm-orb-3"></div>
 
               {/* Close Button */}
-              <button className="lrm-close" onClick={onClose}>
+              <button className="lrm-close" onClick={handleDismissToHome}>
                 <X size={16} />
               </button>
 
@@ -90,11 +97,21 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2, type: "spring", damping: 20 }}
                 >
-                  <img
-                    src={meowlThantai}
-                    alt="Meowl"
-                    className="lrm-meowl-img"
-                  />
+                  <div className="lrm-thought-bubble" role="note" aria-label="Meowl thought">
+                    Ơ... ai đó chưa đăng nhập kìa 😴
+                  </div>
+                  <div className="lrm-meowl-sprite" aria-hidden="true">
+                    <SpriteAnimator
+                      state={PetState.SLEEP}
+                      facingRight={true}
+                      config={{
+                        ...PET_CONFIG,
+                        width: 128,
+                        height: 128,
+                        animationSpeed: 170,
+                      }}
+                    />
+                  </div>
                   <div className="lrm-meowl-glow"></div>
                 </motion.div>
 

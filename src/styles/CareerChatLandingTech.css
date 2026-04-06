@@ -352,8 +352,8 @@
   border-radius: 16px;
 }
 
-.back-btn,
-.close-btn {
+.flow-back-btn,
+.flow-close-btn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -368,14 +368,14 @@
   transition: all 0.3s ease;
 }
 
-.back-btn:hover,
-.close-btn:hover {
+.flow-back-btn:hover,
+.flow-close-btn:hover {
   background: rgba(6, 182, 212, 0.2);
   border-color: rgba(6, 182, 212, 0.5);
   transform: translateX(-3px);
 }
 
-.close-btn {
+.flow-close-btn {
   padding: 10px;
 }
 

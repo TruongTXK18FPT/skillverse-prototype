@@ -341,7 +341,7 @@ const Header: React.FC = () => {
   const handleLogout = async () => {
     await logout();
     setShowUserMenu(false);
-    navigate("/");
+    window.location.assign("/");
   };
 
   const handleLogin = () => {
@@ -393,6 +393,37 @@ const Header: React.FC = () => {
     !isSubAdminRole;
   const shouldShowManagementNav =
     isAuthenticated && !!user && (isRootAdminRole || isRecruiterRole || isSubAdminRole);
+
+  const modalProtectedPaths = new Set([
+    "/mentorship",
+    "/portfolio",
+    "/chatbot",
+    "/study-planner",
+    "/roadmap",
+  ]);
+
+  const handleQuickNavLinkClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    name: string,
+    path: string,
+    closeMobileMenu = false,
+  ) => {
+    if (modalProtectedPaths.has(path) && !isAuthenticated) {
+      event.preventDefault();
+      setLoginRequiredFeature(name);
+      setShowLoginModal(true);
+      setShowQuickNav(false);
+      if (closeMobileMenu) {
+        setIsMobileMenuOpen(false);
+      }
+      return;
+    }
+
+    setShowQuickNav(false);
+    if (closeMobileMenu) {
+      setIsMobileMenuOpen(false);
+    }
+  };
 
   // Build management nav: root ADMIN and RECRUITER get their own dedicated pages
   // Sub-admin roles get the admin page
@@ -765,7 +796,9 @@ const Header: React.FC = () => {
                         <Link
                           to="/chatbot"
                           className="sv-mega-link sv-mega-link--primary"
-                          onClick={() => setShowQuickNav(false)}
+                          onClick={(e) =>
+                            handleQuickNavLinkClick(e, "Trợ Lý AI", "/chatbot")
+                          }
                         >
                           <Bot className="sv-mega-link-icon" />
                           <div className="sv-mega-link-content">
@@ -776,7 +809,9 @@ const Header: React.FC = () => {
                         <Link
                           to="/study-planner"
                           className="sv-mega-link sv-mega-link--primary"
-                          onClick={() => setShowQuickNav(false)}
+                          onClick={(e) =>
+                            handleQuickNavLinkClick(e, "Kế Hoạch AI", "/study-planner")
+                          }
                         >
                           <Calendar className="sv-mega-link-icon" />
                           <div className="sv-mega-link-content">
@@ -787,7 +822,9 @@ const Header: React.FC = () => {
                         <Link
                           to="/roadmap"
                           className="sv-mega-link sv-mega-link--primary"
-                          onClick={() => setShowQuickNav(false)}
+                          onClick={(e) =>
+                            handleQuickNavLinkClick(e, "Lộ Trình Học Tập", "/roadmap")
+                          }
                         >
                           <Map className="sv-mega-link-icon" />
                           <div className="sv-mega-link-content">
@@ -849,7 +886,9 @@ const Header: React.FC = () => {
                             key={item.path}
                             to={item.path}
                             className={`sv-mega-link ${item.className ?? ""}`.trim()}
-                            onClick={() => setShowQuickNav(false)}
+                            onClick={(e) =>
+                              handleQuickNavLinkClick(e, item.name, item.path)
+                            }
                           >
                             <item.icon className="sv-mega-link-icon" />
                             <div className="sv-mega-link-content">
@@ -917,7 +956,9 @@ const Header: React.FC = () => {
                             key={item.path}
                             to={item.path}
                             className="sv-mega-link"
-                            onClick={() => setShowQuickNav(false)}
+                            onClick={(e) =>
+                              handleQuickNavLinkClick(e, item.name, item.path)
+                            }
                           >
                             <item.icon className="sv-mega-link-icon" />
                             <div className="sv-mega-link-content">
@@ -1369,7 +1410,9 @@ const Header: React.FC = () => {
                           key={item.path}
                           to={item.path}
                           className="mobile-category-link"
-                          onClick={() => setIsMobileMenuOpen(false)}
+                          onClick={(e) =>
+                            handleQuickNavLinkClick(e, item.name, item.path, true)
+                          }
                         >
                           <item.icon className="mobile-category-icon" />
                           <div className="mobile-category-content">

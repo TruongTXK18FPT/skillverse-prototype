@@ -15,6 +15,7 @@ import communityService from '../../services/communityService';
 import { useAuth } from '../../context/AuthContext';
 import { uploadImage as uploadImageFile, validateImage } from '../../services/fileUploadService';
 import { showAppWarning } from '../../context/ToastContext';
+import LoginRequiredModal from '../auth/LoginRequiredModal';
 import RichTextEditor from '../shared/RichTextEditor';
 
 interface BroadcastFormData {
@@ -43,6 +44,7 @@ const BroadcastForm: React.FC = () => {
   const [isUploadingThumbnail, setIsUploadingThumbnail] = useState(false);
   const [thumbnailProgress, setThumbnailProgress] = useState(0);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | undefined>(undefined);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const thumbnailInputRef = React.useRef<HTMLInputElement>(null);
 
   const channels = [
@@ -77,7 +79,7 @@ const BroadcastForm: React.FC = () => {
   const handleSubmit = async (status: 'draft' | 'published') => {
     setIsSubmitting(true);
     if (!isAuthenticated) {
-      navigate('/login');
+      setShowLoginModal(true);
       setIsSubmitting(false);
       return;
     }
@@ -138,6 +140,14 @@ const BroadcastForm: React.FC = () => {
 
   return (
     <div className="broadcast-form-layout">
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để đăng bài"
+        message="Bạn cần đăng nhập để tạo hoặc xuất bản bài viết cộng đồng"
+        feature="Đăng bài cộng đồng"
+      />
+
       <div className="broadcast-form-container">
         {/* Header */}
         <div className="broadcast-form-header">

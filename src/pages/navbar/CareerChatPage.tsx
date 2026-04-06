@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Sparkles, Plus, Trash2, Mic, Square, ArrowLeft, Menu, X, Bot, ChevronDown, Lock } from 'lucide-react';
+import { Send, Sparkles, Plus, Trash2, Mic, Square, ArrowLeft, Menu, X, Bot, ChevronDown, Lock, ChevronLeft, ChevronRight } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import meowlDefault from '../../assets/meowl-skin/meowl_default.png';
 import userService from '../../services/userService';
@@ -15,6 +15,7 @@ import { ThinkingIndicator } from '../../components/chat/ThinkingIndicator';
 import { StreamingMessage } from '../../components/chat/StreamingMessage';
 import { WavRecorder } from '../../shared/wavRecorder';
 import { transcribeAudioViaBackend } from '../../shared/speechToText';
+import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import '../../styles/ChatHUD.css';
 import '../../styles/VoiceSelector.css';
 import aiAvatar from '../../assets/chat/aiChatBot.png';
@@ -75,6 +76,7 @@ const CareerChatPage = () => {
   const [expertContext, setExpertContext] = useState<ExpertContext | null>(null);
   const [userAvatar, setUserAvatar] = useState<string | null>(user?.avatarUrl || null);
   const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     const fetchSubscription = async () => {
@@ -110,6 +112,7 @@ const CareerChatPage = () => {
   const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
   const recognitionRef = useRef<any>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -199,6 +202,10 @@ const CareerChatPage = () => {
     } catch (error) {
       showError('Lỗi', 'Không thể xóa phiên trò chuyện');
     }
+  };
+
+  const handleBackToLanding = () => {
+    navigate('/chatbot');
   };
 
   // STT: chỉ mở khi bấm nút chế độ âm thanh
@@ -377,6 +384,13 @@ const CareerChatPage = () => {
   if (!isAuthenticated) {
     return (
       <div className="chat-hud-viewport">
+        <LoginRequiredModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          title="Đăng nhập để sử dụng Career Chat"
+          message="Bạn cần đăng nhập để trò chuyện với Meowl"
+          feature="Career Chat"
+        />
         <div className="chat-hud-main-area" style={{ alignItems: 'center', justifyContent: 'center' }}>
           <div style={{
             background: 'rgba(15, 23, 42, 0.8)', padding: '48px',
@@ -388,7 +402,7 @@ const CareerChatPage = () => {
             <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '32px' }}>
               Vui lòng đăng nhập để trò chuyện với Meowl
             </p>
-            <button onClick={() => navigate('/login')} style={{
+            <button onClick={() => setShowLoginModal(true)} style={{
               background: 'var(--chat-hud-accent)', color: '#000', border: 'none', padding: '14px 32px',
               borderRadius: '4px', fontSize: '16px', fontWeight: 600, cursor: 'pointer'
             }}>Đăng nhập ngay</button>
@@ -401,9 +415,17 @@ const CareerChatPage = () => {
   return (
     <div className="chat-hud-viewport">
       {/* Sidebar */}
-      <div className={`chat-hud-sidebar ${isSidebarOpen ? 'open' : ''}`}>
+      <div className={`chat-hud-sidebar ${isSidebarOpen ? 'open' : ''} ${isSidebarCollapsed ? 'collapsed' : ''}`}>
         <div className="chat-hud-sidebar-header">
-          Lịch sử Chat
+          <span className="chat-hud-sidebar-title">Lịch sử Chat</span>
+          <button
+            type="button"
+            className="chat-hud-sidebar-collapse-btn"
+            onClick={() => setIsSidebarCollapsed((prev) => !prev)}
+            title={isSidebarCollapsed ? 'Mở rộng sidebar' : 'Thu gọn sidebar'}
+          >
+            {isSidebarCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          </button>
         </div>
         <button className="chat-hud-new-chat-btn" onClick={handleNewChat}>
           <Plus size={18} /> Cuộc trò chuyện mới
@@ -446,6 +468,11 @@ const CareerChatPage = () => {
               </div>
             ))
           )}
+        </div>
+        <div className="chat-hud-sidebar-footer" style={{ padding: '10px', borderTop: '1px solid var(--chat-hud-border)' }}>
+          <button className="chat-hud-new-chat-btn" onClick={handleBackToLanding} style={{ width: 'calc(100% - 20px)', margin: '0 10px' }}>
+            <ArrowLeft size={16} /> Thoát chế độ tư vấn 
+          </button>
         </div>
       </div>
 

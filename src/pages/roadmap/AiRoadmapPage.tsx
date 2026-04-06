@@ -12,6 +12,7 @@ import MeowlGuide from '../../components/meowl/MeowlGuide';
 import Toast from '../../components/shared/Toast';
 import { useToast } from '../../hooks/useToast';
 import { useAuth } from '../../context/AuthContext';
+import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/RoadmapPage.css';
 import '../../styles/AiRoadmap.css';
@@ -51,6 +52,7 @@ const AiRoadmapPage = () => {
   const { toast, isVisible, showError, showSuccess, showToast, hideToast } = useToast();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // Phase 4: List view enhancements
   const [searchQuery, setSearchQuery] = useState('');
@@ -181,7 +183,7 @@ const AiRoadmapPage = () => {
   const handleGenerate = async (request: GenerateRoadmapRequest) => {
     if (!isAuthenticated) {
       showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để tạo lộ trình học tập.');
-      setTimeout(() => navigate('/login'), 1500);
+      setShowLoginModal(true);
       return;
     }
 
@@ -267,7 +269,7 @@ const AiRoadmapPage = () => {
   const handleSelectRoadmap = (sessionId: number) => {
     if (!isAuthenticated) {
       showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để xem lộ trình.');
-      setTimeout(() => navigate('/login'), 1500);
+      setShowLoginModal(true);
       return;
     }
 
@@ -440,6 +442,13 @@ const AiRoadmapPage = () => {
   };
   return (
     <div className="roadmap-hud-container">
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để dùng Roadmap AI"
+        message="Bạn cần đăng nhập để tạo và lưu lộ trình học tập cá nhân hóa"
+        feature="Roadmap AI"
+      />
 
       {/* Cosmic dust particles - Optimized for performance */}
       <div className="cosmic-dust">
@@ -558,7 +567,7 @@ const AiRoadmapPage = () => {
                   onSelectRoadmap={handleSelectRoadmap}
                   isLoading={isLoadingList}
                   isAuthenticated={isAuthenticated}
-                  onLoginRedirect={() => navigate('/login')}
+                  onLoginRedirect={() => setShowLoginModal(true)}
                   onCreateRoadmap={handleCreateRoadmap}
                   onActivateRoadmap={handleActivateRoadmap}
                   onPauseRoadmap={handlePauseRoadmap}
@@ -606,7 +615,7 @@ const AiRoadmapPage = () => {
                         onSelectRoadmap={handleSelectRoadmap}
                         isLoading={false}
                         isAuthenticated={isAuthenticated}
-                        onLoginRedirect={() => navigate('/login')}
+                        onLoginRedirect={() => setShowLoginModal(true)}
                         onCreateRoadmap={handleCreateRoadmap}
                         onActivateRoadmap={handleActivateRoadmap}
                         onPauseRoadmap={handlePauseRoadmap}
@@ -631,7 +640,7 @@ const AiRoadmapPage = () => {
                         onSelectRoadmap={handleSelectRoadmap}
                         isLoading={isLoadingDeletedList}
                         isAuthenticated={isAuthenticated}
-                        onLoginRedirect={() => navigate('/login')}
+                        onLoginRedirect={() => setShowLoginModal(true)}
                         onPermanentDeleteRoadmap={handlePermanentDeleteRoadmap}
                         actionLoadingId={actionLoadingId}
                         disableCardSelection
@@ -653,7 +662,7 @@ const AiRoadmapPage = () => {
                   onGenerate={handleGenerate}
                   isLoading={isLoading}
                   isAuthenticated={isAuthenticated}
-                  onLoginRedirect={() => navigate('/login')}
+                  onLoginRedirect={() => setShowLoginModal(true)}
                 />
             </div>
           )}

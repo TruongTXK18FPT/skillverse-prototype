@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
+import LoginRequiredModal from '../auth/LoginRequiredModal';
 import MeowlGuide from '../meowl/MeowlGuide';
 import portfolioService from '../../services/portfolioService';
 import {
@@ -65,6 +66,7 @@ const TacticalDossierPortfolio = () => {
     message: '',
     type: 'info'
   });
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -352,6 +354,14 @@ const TacticalDossierPortfolio = () => {
   if (!isAuthenticated && !slug) {
     return (
       <div className="dossier-portfolio-container" data-theme={theme}>
+        <LoginRequiredModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          title="Đăng nhập để truy cập Portfolio"
+          message="Bạn cần đăng nhập để tạo và quản lý hồ sơ nghề nghiệp"
+          feature="Portfolio"
+        />
+
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', textAlign: 'center', padding: '2rem' }}>
           <div className="dossier-panel-frame" style={{ maxWidth: '600px', padding: '3rem 2rem' }}>
             <h2 className="dossier-modal-title" style={{ marginBottom: '1rem' }}>🔒 Cần đăng nhập</h2>
@@ -359,7 +369,7 @@ const TacticalDossierPortfolio = () => {
               Bạn cần đăng nhập để truy cập Hồ sơ nghề nghiệp. Tạo và quản lý hồ sơ cá nhân với nhật ký dự án và chứng chỉ.
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <button onClick={() => navigate('/login')} className="dossier-btn-primary">
+              <button onClick={() => setShowLoginModal(true)} className="dossier-btn-primary">
                 Đăng nhập
               </button>
               <button onClick={() => navigate('/register')} className="dossier-btn-secondary">

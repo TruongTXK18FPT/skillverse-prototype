@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Users, ArrowRight, ChevronRight, X, Search, SlidersHorizontal, Filter, Lock } from 'lucide-react';
@@ -10,6 +10,7 @@ import { ExpertFieldResponse, RoleInfo } from '../../types/CareerChat';
 import { getDomainImage } from '../../utils/domainImageMap';
 import { getExpertDomainMeta } from '../../utils/expertFieldPresentation';
 import { useToast } from '../../hooks/useToast';
+import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import '../../styles/CareerChatLandingTech.css';
 
 /**
@@ -24,6 +25,7 @@ const CareerChatLanding = () => {
   const [expertFields, setExpertFields] = useState<ExpertFieldResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     const fetchSubscription = async () => {
@@ -42,7 +44,6 @@ const CareerChatLanding = () => {
   // Selection state
   const [selectedDomain, setSelectedDomain] = useState<string>('');
   const [selectedIndustry, setSelectedIndustry] = useState<string>('');
-  const [selectedRole, setSelectedRole] = useState<RoleInfo | null>(null);
   const [step, setStep] = useState<'choice' | 'domain-roles'>('choice');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'industry' | 'role-count'>('industry');
@@ -109,9 +110,9 @@ const CareerChatLanding = () => {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      navigate('/login');
+      setShowLoginModal(true);
     }
-  }, [isAuthenticated, authLoading, navigate]);
+  }, [isAuthenticated, authLoading]);
 
   const loadExpertFields = async () => {
     try {
@@ -179,10 +180,19 @@ const CareerChatLanding = () => {
   };
 
   const handleGeneralChat = () => {
+    if (!isAuthenticated) {
+      setShowLoginModal(true);
+      return;
+    }
     navigate('/chatbot/general');
   };
 
   const handleExpertChat = () => {
+    if (!isAuthenticated) {
+      setShowLoginModal(true);
+      return;
+    }
+
     const hasActiveSubscription = subscription && subscription.isActive;
     const isFreeTier = subscription?.plan?.planType === 'FREE_TIER';
 
@@ -219,7 +229,6 @@ const CareerChatLanding = () => {
       setStep('choice');
       setSelectedDomain('');
       setSelectedIndustry('');
-      setSelectedRole(null);
     }
   };
 
@@ -269,6 +278,14 @@ const CareerChatLanding = () => {
 
   return (
     <div className="career-landing">
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để sử dụng Career Chat"
+        message="Bạn cần đăng nhập để trò chuyện với Meowl và nhận tư vấn nghề nghiệp cá nhân hóa"
+        feature="Career Chat"
+      />
+
       {/* Hologram Background */}
       <div className="career-landing__bg">
         <div className="holo-grid"></div>
@@ -508,7 +525,7 @@ const CareerChatLanding = () => {
             >
               {/* Header with Back Button */}
               <div className="flow-header">
-                <button className="back-btn" onClick={handleBack}>
+                <button className="flow-back-btn" onClick={handleBack}>
                   <ChevronRight size={20} style={{ transform: 'rotate(180deg)' }} />
                   <span>QUAY LẠI</span>
                 </button>
@@ -525,7 +542,7 @@ const CareerChatLanding = () => {
                   </div>
                 </div>
 
-                <button className="close-btn" onClick={() => setShowExpertFlow(false)}>
+                <button className="flow-close-btn" onClick={() => setShowExpertFlow(false)}>
                   <X size={20} />
                 </button>
               </div>

@@ -6,6 +6,7 @@ import communityService, { CommentResponse, PostSummary } from '../../services/c
 
 import userService from '../../services/userService';
 import { useAuth } from '../../context/AuthContext';
+import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import { decodeHtml } from '../../utils/htmlDecoder';
 import './PostDetailPage.css';
 
@@ -27,6 +28,7 @@ const PostDetailPage: React.FC = () => {
   const [isDisliked, setIsDisliked] = useState(false);
   const [authorName, setAuthorName] = useState<string>('');
   const [authorAvatar, setAuthorAvatar] = useState<string>('');
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -60,7 +62,7 @@ const PostDetailPage: React.FC = () => {
 
   const ensureAuth = () => {
     if (!isAuthenticated) {
-      navigate('/login');
+      setShowLoginModal(true);
       return false;
     }
     return true;
@@ -159,6 +161,13 @@ const PostDetailPage: React.FC = () => {
 
   return (
     <div className="transmission-layout">
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để tương tác cộng đồng"
+        message="Bạn cần đăng nhập để like, bình luận hoặc lưu bài viết"
+        feature="Cộng đồng"
+      />
       <div className="transmission-container">
         <div className="broadcast-form-header" style={{ marginBottom: '1rem' }}>
           <button onClick={() => navigate(-1)} className="broadcast-back-btn">

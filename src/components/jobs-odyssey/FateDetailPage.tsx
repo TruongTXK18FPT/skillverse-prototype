@@ -31,6 +31,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../hooks/useToast";
 import Toast from "../shared/Toast";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
+import LoginRequiredModal from "../auth/LoginRequiredModal";
 import "./odyssey-styles.css";
 import "./GigDetailPage.css";
 
@@ -57,6 +58,7 @@ const FateDetailPage: React.FC = () => {
   const [showApplyForm, setShowApplyForm] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const userRole = user?.roles?.[0];
   const isRecruiter = userRole === "RECRUITER";
@@ -242,6 +244,14 @@ const FateDetailPage: React.FC = () => {
 
   return (
     <div className="gdp-page fdp-page">
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để ứng tuyển"
+        message="Bạn cần đăng nhập để nộp hồ sơ ứng tuyển công việc"
+        feature="Ứng tuyển công việc"
+      />
+
       {/* Back Navigation */}
       <div className="gdp-back">
         <button className="gdp-back__btn" onClick={() => navigate(-1)}>
@@ -358,7 +368,7 @@ const FateDetailPage: React.FC = () => {
                 className="gdp-btn gdp-btn--primary gdp-btn--emerald"
                 onClick={() => {
                   if (!isAuthenticated) {
-                    navigate("/login");
+                    setShowLoginModal(true);
                   } else {
                     setShowApplyForm(true);
                   }
@@ -549,7 +559,7 @@ const FateDetailPage: React.FC = () => {
                   className="gdp-btn gdp-btn--primary gdp-btn--full gdp-btn--emerald"
                   onClick={() => {
                     if (!isAuthenticated) {
-                      navigate("/login");
+                        setShowLoginModal(true);
                     } else {
                       setShowApplyForm(true);
                     }

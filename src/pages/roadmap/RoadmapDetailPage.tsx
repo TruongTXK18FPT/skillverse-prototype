@@ -26,6 +26,7 @@ import {
 } from '../../types/Roadmap';
 import { useToast } from '../../hooks/useToast';
 import { useAuth } from '../../context/AuthContext';
+import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import Toast from '../../components/shared/Toast';
 import './RoadmapDetailPage.css';
@@ -53,6 +54,7 @@ const RoadmapDetailPage = () => {
   const [enrollmentRefreshKey, setEnrollmentRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const roadmapNodes = roadmap?.roadmap ?? [];
   const { courseMap } = useRoadmapMappedCourses(roadmapNodes, Boolean(roadmap));
@@ -160,7 +162,8 @@ const RoadmapDetailPage = () => {
 
     if (!isAuthenticated) {
       showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để xem lộ trình.');
-      setTimeout(() => navigate('/login'), 1500);
+      setShowLoginModal(true);
+      setIsLoading(false);
       return;
     }
 
@@ -477,13 +480,6 @@ const RoadmapDetailPage = () => {
   }, [navigate]);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để xem lộ trình.');
-      setTimeout(() => navigate('/login'), 1500);
-    }
-  }, [isAuthenticated, navigate, showError]);
-
-  useEffect(() => {
     const footer = document.querySelector('footer');
     if (!(footer instanceof HTMLElement)) {
       return;
@@ -524,6 +520,37 @@ const RoadmapDetailPage = () => {
       <div className="roadmap-detail-page">
         <div className="roadmap-detail-page__loading">
           <MeowlKuruLoader text="Đang tải lộ trình..." />
+        </div>
+        <MeowlGuide currentPage="roadmap" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="roadmap-detail-page">
+        <LoginRequiredModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          title="Đăng nhập để xem chi tiết roadmap"
+          message="Bạn cần đăng nhập để truy cập dữ liệu roadmap cá nhân"
+          feature="Roadmap Detail"
+        />
+        <div className="roadmap-detail-page__error">
+          <h2>Yêu cầu đăng nhập</h2>
+          <p>Vui lòng đăng nhập để mở chi tiết lộ trình này.</p>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button onClick={handleBack} className="roadmap-detail-page__back-btn">
+              Quay lại danh sách
+            </button>
+            <button
+              onClick={() => setShowLoginModal(true)}
+              className="roadmap-detail-page__back-btn"
+              style={{ background: 'var(--hud-accent)', color: '#03121a', borderColor: 'var(--hud-accent)' }}
+            >
+              Đăng nhập ngay
+            </button>
+          </div>
         </div>
         <MeowlGuide currentPage="roadmap" />
       </div>

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Brain, Map, Route, PlayCircle, X } from "lucide-react";
+import { ArrowRight, Brain, Lock, Map, Route, PlayCircle, X } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
 import { useAuth } from "../../context/AuthContext";
+import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
 import MothershipDashboard from "../../components/dashboard-hud/MothershipDashboard";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
 import { getUserEnrollments } from "../../services/enrollmentService";
@@ -73,13 +74,13 @@ const DashboardPage = () => {
   >([]);
   const [journeyPromptCloseCountdown, setJourneyPromptCloseCountdown] =
     useState(JOURNEY_PROMPT_AUTO_CLOSE_SECONDS);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
-  // Protect route
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      navigate("/login");
+      setShowLoginModal(true);
     }
-  }, [authLoading, isAuthenticated, navigate]);
+  }, [authLoading, isAuthenticated]);
 
   const clearJourneyPromptFlag = () => {
     sessionStorage.removeItem(POST_LOGIN_JOURNEY_PROMPT_KEY);
@@ -490,6 +491,68 @@ const DashboardPage = () => {
       );
     }
   };
+
+  if (!authLoading && !isAuthenticated) {
+    return (
+      <div className="dashboard-page" style={{ minHeight: "70vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <LoginRequiredModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          title="Đăng nhập để vào Dashboard"
+          message="Bạn cần đăng nhập để xem tiến độ, roadmap và dữ liệu học tập cá nhân"
+          feature="Dashboard"
+        />
+
+        <div style={{
+          background: "rgba(15, 23, 42, 0.86)",
+          border: "1px solid rgba(56, 189, 248, 0.45)",
+          borderRadius: "20px",
+          padding: "40px",
+          maxWidth: "560px",
+          width: "calc(100% - 32px)",
+          textAlign: "center",
+          boxShadow: "0 18px 55px rgba(6, 182, 212, 0.2)"
+        }}>
+          <Lock size={52} style={{ color: "#22d3ee", marginBottom: "16px" }} />
+          <h2 style={{ color: "#e2e8f0", marginBottom: "12px" }}>Yêu cầu đăng nhập</h2>
+          <p style={{ color: "rgba(226, 232, 240, 0.85)", lineHeight: 1.7, marginBottom: "24px" }}>
+            Dashboard là không gian cá nhân hóa theo tài khoản của bạn.
+          </p>
+          <div style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              style={{
+                border: "1px solid rgba(148, 163, 184, 0.5)",
+                background: "transparent",
+                color: "#cbd5e1",
+                borderRadius: "10px",
+                padding: "10px 16px",
+                cursor: "pointer"
+              }}
+            >
+              Về trang chủ
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowLoginModal(true)}
+              style={{
+                border: "none",
+                background: "linear-gradient(135deg, #22d3ee, #2563eb)",
+                color: "#0f172a",
+                fontWeight: 700,
+                borderRadius: "10px",
+                padding: "10px 16px",
+                cursor: "pointer"
+              }}
+            >
+              Đăng nhập ngay
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard-page">

@@ -12,7 +12,6 @@ import {
   Zap,
   CreditCard,
   Briefcase,
-  Building2,
   Star,
   ShieldCheck,
   CheckCircle,
@@ -31,6 +30,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../hooks/useToast";
 import Toast from "../shared/Toast";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
+import LoginRequiredModal from "../auth/LoginRequiredModal";
 import "./odyssey-styles.css";
 import "./GigDetailPage.css";
 
@@ -47,6 +47,7 @@ const GigDetailPage: React.FC = () => {
   const [showApplyForm, setShowApplyForm] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [proposedPrice, setProposedPrice] = useState("");
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [cooldownMs, setCooldownMs] = useState(0);
   const COOLDOWN_MS_TOTAL = 3_600_000;
   const JLAB_COOLDOWN_KEY = "jlab_cancel_cooldowns";
@@ -130,7 +131,7 @@ const GigDetailPage: React.FC = () => {
     if (!jobId || isRecruiter) return;
     try {
       // Check both APIs for short-term job applications
-      const applied = await jobService.hasApplied(Number(jobId));
+      const applied = await jobService.hasAppliedToJob(Number(jobId));
       if (applied) {
         setJob((prev) => prev ? { ...prev, hasApplied: true } : prev);
         return;
@@ -267,6 +268,14 @@ const GigDetailPage: React.FC = () => {
 
   return (
     <div className="gdp-page">
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để ứng tuyển"
+        message="Bạn cần đăng nhập để nộp hồ sơ ứng tuyển công việc"
+        feature="Ứng tuyển công việc"
+      />
+
       {/* Back Navigation */}
       <div className="gdp-back">
         <button className="gdp-back__btn" onClick={() => navigate(-1)}>
@@ -409,7 +418,7 @@ const GigDetailPage: React.FC = () => {
             {!isAuthenticated && !isRecruiter && (
               <button
                 className="gdp-btn gdp-btn--outline"
-                onClick={() => navigate("/login")}
+                onClick={() => setShowLoginModal(true)}
               >
                 Đăng nhập để ứng tuyển
               </button>

@@ -71,7 +71,14 @@ const HomePage = () => {
   const [isFabricating, setIsFabricating] = useState(false);
   const [hasFabricated, setHasFabricated] = useState(false);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
-  const [loadedVideos, setLoadedVideos] = useState<Record<string, boolean>>({});
+  const [loadedVideos, setLoadedVideos] = useState<Record<string, boolean>>({
+    tiktok: true,
+    "fb-video": true,
+    "fb-post-1": true,
+    "fb-post-2": true,
+    "fb-post-3": true,
+    "fb-post-4": true,
+  });
 
   const handleLoadVideo = (id: string) => {
     setLoadedVideos((prev) => ({ ...prev, [id]: true }));
