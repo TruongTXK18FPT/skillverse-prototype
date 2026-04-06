@@ -209,14 +209,6 @@ const PostDetailPage: React.FC = () => {
               <MessageCircle size={20} />
               <span>{comments.length}</span>
             </button>
-            <button className="transmission-action-btn">
-              <Share2 size={20} />
-              <span>Chia sẻ</span>
-            </button>
-            <button className={`transmission-action-btn ${isSaved ? 'active' : ''}`} onClick={handleSave} style={{ marginLeft: 'auto' }}>
-              <Bookmark size={20} fill={isSaved ? 'currentColor' : 'none'} />
-              <span>{isSaved ? 'Đã lưu' : 'Lưu'}</span>
-            </button>
           </div>
         </article>
 

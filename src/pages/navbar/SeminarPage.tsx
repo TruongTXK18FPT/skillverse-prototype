@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import '../../components/seminar-hud/briefing-styles.css';
-import HoloPagination from '../../components/mentorship-hud/HoloPagination';
+import Pagination from '../../components/shared/Pagination';
 import BriefingHero from '../../components/seminar-hud/BriefingHero';
 import BriefingRow from '../../components/seminar-hud/BriefingRow';
 import BriefingSidebar from '../../components/seminar-hud/BriefingSidebar';
@@ -256,7 +256,7 @@ const SeminarPage: React.FC = () => {
 
           {filteredSeminars.length > itemsPerPage && (
             <div className="pagination-wrapper">
-              <HoloPagination
+              <Pagination
                 totalItems={filteredSeminars.length}
                 itemsPerPage={itemsPerPage}
                 currentPage={currentPage}

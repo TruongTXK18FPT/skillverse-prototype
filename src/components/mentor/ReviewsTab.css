@@ -255,6 +255,11 @@
   transition: all 0.3s ease;
 }
 
+.mentor-reviews-sort-select option {
+  background: #0b1727;
+  color: #e0f7ff;
+}
+
 .mentor-reviews-sort-select:focus {
   outline: none;
   border-color: #00f0ff;
@@ -340,8 +345,6 @@
 }
 
 .mentor-reviews-avatar-placeholder {
-  font-size: 1.2rem;
-  font-weight: 600;
   background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 100, 255, 0.2));
   color: #00f0ff;
   width: 100%;
@@ -393,6 +396,26 @@
   color: rgba(224, 247, 255, 0.9);
   font-size: 1rem;
   line-height: 1.6;
+}
+
+.mentor-reviews-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 0.85rem;
+}
+
+.mentor-reviews-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  background: rgba(0, 240, 255, 0.08);
+  color: #b8f7ff;
+  font-size: 0.82rem;
+  font-weight: 600;
 }
 
 /* Stats */

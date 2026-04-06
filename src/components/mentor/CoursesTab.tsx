@@ -7,7 +7,7 @@
  * @module components/mentor/CoursesTab
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 import {
@@ -108,6 +108,8 @@ const CoursesTab: React.FC = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'ALL' | CourseStatus>('ALL');
   const [courseGroups, setCourseGroups] = useState<Record<number, GroupChatResponse | null>>({});
   const [selectedCourseForStudents, setSelectedCourseForStudents] = useState<Course | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(() => {
@@ -633,6 +635,20 @@ const CoursesTab: React.FC = () => {
     navigate('/mentor', { state: { activeTab: 'certificate-settings' } });
   };
 
+  const visibleCourses = useMemo(() => {
+    const keyword = searchTerm.trim().toLowerCase();
+    return courses.filter((course) => {
+      const matchesSearch =
+        keyword.length === 0 ||
+        course.title.toLowerCase().includes(keyword) ||
+        (course.description || '').toLowerCase().includes(keyword) ||
+        (course.category || '').toLowerCase().includes(keyword);
+
+      const matchesStatus = statusFilter === 'ALL' || course.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }, [courses, searchTerm, statusFilter]);
+
   // Render
   if (loading && courses.length === 0) {
     return (
@@ -735,23 +751,55 @@ const CoursesTab: React.FC = () => {
       {/* Courses Grid */}
       {courses.length > 0 && (
         <>
-          <div className="mentor-hud-courses__grid">
-            {/* Create Card */}
-            <div
-              className="mentor-hud-course-card mentor-hud-course-card--create"
-              onClick={() => navigate('/mentor/courses/create')}
-            >
-              <div className="mentor-hud-course-card--create-content">
-                <div className="create-icon-wrapper">
-                  <Plus className="w-8 h-8" />
-                </div>
-                <h3>Tạo Khóa Học Mới</h3>
-                <p>Bắt đầu xây dựng lộ trình tri thức của bạn</p>
-              </div>
-            </div>
+          <div className="mentor-hud-courses__filters">
+            <input
+              type="text"
+              className="mentor-hud-courses__search-input"
+              placeholder="Tìm kiếm khóa học theo tên, mô tả, danh mục..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
 
-            {/* Course Cards */}
-            {courses.map((course) => {
+            <select
+              className="mentor-hud-courses__filter-select"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as 'ALL' | CourseStatus)}
+            >
+              <option value="ALL">Tất cả trạng thái</option>
+              <option value={CourseStatus.DRAFT}>Bản nháp</option>
+              <option value={CourseStatus.PENDING}>Chờ duyệt</option>
+              <option value={CourseStatus.PUBLIC}>Đã xuất bản</option>
+              <option value={CourseStatus.REJECTED}>Bị từ chối</option>
+              <option value={CourseStatus.SUSPENDED}>Tạm khóa</option>
+              <option value={CourseStatus.ARCHIVED}>Đã lưu trữ</option>
+            </select>
+          </div>
+
+          {visibleCourses.length === 0 && (
+            <div className="mentor-hud-empty mentor-hud-empty--compact">
+              <h3>Không có khóa học phù hợp</h3>
+              <p>Hãy thử điều chỉnh từ khóa hoặc bộ lọc trạng thái.</p>
+            </div>
+          )}
+
+          {visibleCourses.length > 0 && (
+            <div className="mentor-hud-courses__grid">
+              {/* Create Card */}
+              <div
+                className="mentor-hud-course-card mentor-hud-course-card--create"
+                onClick={() => navigate('/mentor/courses/create')}
+              >
+                <div className="mentor-hud-course-card--create-content">
+                  <div className="create-icon-wrapper">
+                    <Plus className="w-8 h-8" />
+                  </div>
+                  <h3>Tạo Khóa Học Mới</h3>
+                  <p>Bắt đầu xây dựng lộ trình tri thức của bạn</p>
+                </div>
+              </div>
+
+              {/* Course Cards */}
+              {visibleCourses.map((course) => {
               const revisionHistory = courseRevisions[course.id] ?? [];
               const actionableRevision = getActionableRevision(course.id);
               const latestRevision = revisionHistory[0];
@@ -968,13 +1016,16 @@ const CoursesTab: React.FC = () => {
               </div>
               </div>
             )})}
-          </div>
-          <Pagination
-            totalItems={totalItems}
-            itemsPerPage={itemsPerPage}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-          />
+            </div>
+          )}
+          {visibleCourses.length > 0 && (
+            <Pagination
+              totalItems={totalItems}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </>
       )}
 

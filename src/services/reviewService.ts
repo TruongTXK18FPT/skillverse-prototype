@@ -16,6 +16,7 @@ export interface ReviewResponse {
   learnerId: number;
   learnerName: string;
   learnerAvatar: string | null;
+  isAnonymous?: boolean;
   mentorId: number;
   rating: number;
   comment: string;
@@ -51,6 +52,7 @@ type BackendReviewResponse = {
   studentId?: number;
   studentName?: string;
   studentAvatar?: string | null;
+  isAnonymous?: boolean;
   mentorId: number;
   rating: number;
   comment: string;
@@ -65,6 +67,7 @@ const normalizeReview = (raw: BackendReviewResponse): ReviewResponse => ({
   learnerId: raw.learnerId ?? raw.studentId ?? 0,
   learnerName: raw.learnerName ?? raw.studentName ?? '',
   learnerAvatar: raw.learnerAvatar ?? raw.studentAvatar ?? null,
+  isAnonymous: raw.isAnonymous ?? false,
   mentorId: raw.mentorId,
   rating: raw.rating,
   comment: raw.comment,

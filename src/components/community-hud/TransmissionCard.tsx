@@ -161,7 +161,7 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
         </div>
         <div className="transmission-timestamp">
           <Clock size={14} />
-          <span>{formatTimestamp(post.timeAgo)}</span>
+          <span>{post.timeAgo}</span>
         </div>
       </div>
 
@@ -216,20 +216,6 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
         >
           <MessageCircle size={16} />
           <span>{formatNumber(post.comments)}</span>
-        </button>
-        <button
-          className="transmission-action-btn"
-          title="Chia sẻ"
-        >
-          <Share2 size={16} />
-          <span>{formatNumber(post.shares)}</span>
-        </button>
-        <button
-          className={`transmission-action-btn ${isBookmarked ? 'active' : ''}`}
-          onClick={handleBookmark}
-          title="Lưu"
-        >
-          <Bookmark size={16} fill={isBookmarked ? 'currentColor' : 'none'} />
         </button>
       </div>
     </article>

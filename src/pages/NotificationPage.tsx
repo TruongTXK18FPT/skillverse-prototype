@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { notificationService, Notification } from '../services/notificationService';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import Header from '../components/layout/Header';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/NotificationPage.css';
@@ -31,6 +32,7 @@ const NotificationPage: React.FC = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const fetchStats = async () => {
     try {
@@ -132,8 +134,11 @@ const NotificationPage: React.FC = () => {
       case 'BOOKING_CONFIRMED':
       case 'BOOKING_CANCELLED':
       case 'BOOKING_REMINDER':
-        // Navigate to bookings page
-        navigate('/my-bookings');
+        if (user?.roles?.some((role) => role.toUpperCase() === 'MENTOR')) {
+          navigate('/mentor', { state: { activeTab: 'bookings' } });
+        } else {
+          navigate('/my-bookings');
+        }
         break;
       case 'WELCOME':
         // Navigate to dashboard

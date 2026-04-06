@@ -378,6 +378,105 @@
   font-weight: 600;
 }
 
+.mentor-overview__toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 2rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 10px;
+  background: rgba(13, 22, 35, 0.45);
+}
+
+.mentor-overview__toolbar-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.mentor-overview__time-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.mentor-overview__time-select,
+.mentor-overview__date-input {
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  background: rgba(10, 20, 35, 0.75);
+  color: #e2e8f0;
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.mentor-overview__time-select option {
+  background: #081426;
+  color: #e2e8f0;
+}
+
+.mentor-overview__custom-date-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #94a3b8;
+  font-size: 0.82rem;
+}
+
+.mentor-overview__section-headline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+
+.mentor-overview__detail-link {
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  background: rgba(6, 182, 212, 0.1);
+  color: #67e8f9;
+  border-radius: 6px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mentor-overview__detail-link:hover {
+  border-color: #06b6d4;
+  background: rgba(6, 182, 212, 0.2);
+}
+
+.mentor-overview__stat-item--button {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  text-align: left;
+}
+
+.mentor-overview__stat-item--button:hover {
+  border-color: rgba(6, 182, 212, 0.35);
+  background: rgba(6, 182, 212, 0.07);
+}
+
+@media (max-width: 860px) {
+  .mentor-overview__toolbar {
+    margin: 0;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
 .mentor-overview__grid--summary .stat-trend.positive {
   color: #10b981;
 }
@@ -387,7 +486,7 @@
   display: block;
 }
 
-.system-logs {
+.overview-transactions {
   background: rgba(15, 23, 42, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 12px;
@@ -395,29 +494,89 @@
   width: 100%;
 }
 
-.system-logs h3 {
+.overview-transactions h3 {
   font-size: 0.7rem;
   letter-spacing: 2px;
   color: #475569;
   margin: 0 0 1rem 0;
 }
 
-.log-entries {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.overview-transactions__table-wrap {
+  overflow-x: auto;
 }
 
-.log-entry {
-  display: flex;
-  gap: 1rem;
-  font-family: "Inter", monospace;
-  font-size: 0.8rem;
+.overview-transactions__table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.overview-transactions__table th,
+.overview-transactions__table td {
+  padding: 0.75rem 0.7rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  text-align: left;
+  vertical-align: top;
+}
+
+.overview-transactions__table th {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: #64748b;
+  font-weight: 700;
 }
 
-.log-entry.warning {
+.overview-transactions__table td {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+}
+
+.overview-transactions__table td.is-credit {
+  color: #34d399;
+  font-weight: 700;
+}
+
+.overview-transactions__table td.is-debit {
   color: #f59e0b;
+  font-weight: 700;
+}
+
+.overview-transactions__status {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.overview-transactions__status.is-completed {
+  border-color: rgba(52, 211, 153, 0.45);
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.08);
+}
+
+.overview-transactions__status.is-processing {
+  border-color: rgba(250, 204, 21, 0.4);
+  color: #facc15;
+  background: rgba(250, 204, 21, 0.08);
+}
+
+.overview-transactions__status.is-failed {
+  border-color: rgba(248, 113, 113, 0.45);
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.08);
+}
+
+.overview-transactions__empty {
+  border: 1px dashed rgba(148, 163, 184, 0.28);
+  border-radius: 10px;
+  padding: 1rem;
+  color: #94a3b8;
+  font-size: 0.9rem;
 }
 
 .log-time {

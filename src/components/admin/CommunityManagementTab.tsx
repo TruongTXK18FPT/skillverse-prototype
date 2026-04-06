@@ -63,7 +63,7 @@ const CommunityManagementTab: React.FC = () => {
   const [communityStats, setCommunityStats] = useState<{ label: string; value: number; icon: any; type: string }[]>([
     { label: 'Thành viên', value: 0, icon: Users, type: 'members' },
     { label: 'Bài viết', value: 0, icon: MessageSquare, type: 'posts' },
-    { label: 'Tín hiệu', value: 0, icon: Activity, type: 'signal' }
+    { label: 'Tương tác', value: 0, icon: Activity, type: 'signal' }
   ]);
   const [trendingTopics, setTrendingTopics] = useState<{ name: string; posts: number; trend: 'up' | 'down' }[]>([]);
   const [activeTag, setActiveTag] = useState<string | null>(null);
@@ -215,7 +215,7 @@ const CommunityManagementTab: React.FC = () => {
         setCommunityStats([
           { label: 'Thành viên', value: Number(stats.totalUsers) || 0, icon: Users, type: 'members' },
           { label: 'Bài viết', value: Number(stats.totalPosts) || items.length, icon: MessageSquare, type: 'posts' },
-          { label: 'Tín hiệu', value: Number(stats.signal) || 0, icon: Activity, type: 'signal' }
+          { label: 'Tương tác', value: Number(stats.signal) || 0, icon: Activity, type: 'signal' }
         ]);
       } catch (e) { console.debug('stats failed', e); }
       try {

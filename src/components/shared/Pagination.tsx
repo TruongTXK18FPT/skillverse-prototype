@@ -43,43 +43,51 @@ const Pagination: React.FC<PaginationProps> = ({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="pagination-container">
+    <nav className="pagination-container" aria-label="Pagination">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className={`pagination-button nav-button ${currentPage === 1 ? 'disabled' : ''}`}
       >
-        Previous
+        <span className="pagination-nav-icon">←</span>
+        <span>Previous</span>
       </button>
 
-      {getPageNumbers().map((page, index) => (
-        typeof page === 'number' ? (
-          <button
-            key={index}
-            onClick={() => onPageChange(page)}
-            className={`pagination-button ${page === currentPage ? 'active' : ''}`}
-          >
-            {page}
-          </button>
-        ) : (
-          <span key={index} className="pagination-ellipsis">
-            {page}
-          </span>
-        )
-      ))}
+      <div className="pagination-pages">
+        {getPageNumbers().map((page, index) => (
+          typeof page === 'number' ? (
+            <button
+              key={index}
+              onClick={() => onPageChange(page)}
+              className={`pagination-button ${page === currentPage ? 'active' : ''}`}
+              aria-current={page === currentPage ? 'page' : undefined}
+            >
+              {page}
+            </button>
+          ) : (
+            <span key={index} className="pagination-ellipsis" aria-hidden="true">
+              {page}
+            </span>
+          )
+        ))}
+      </div>
 
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
         className={`pagination-button nav-button ${currentPage === totalPages ? 'disabled' : ''}`}
       >
-        Next
+        <span>Next</span>
+        <span className="pagination-nav-icon">→</span>
       </button>
       
       <div className="pagination-info">
-        Page {currentPage} of {totalPages}
+        <span className="pagination-info-label">Page</span>
+        <strong>{currentPage}</strong>
+        <span className="pagination-info-divider">/</span>
+        <span>{totalPages}</span>
       </div>
-    </div>
+    </nav>
   );
 };
 

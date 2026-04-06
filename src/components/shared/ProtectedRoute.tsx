@@ -116,3 +116,41 @@ export const ParentRoute: React.FC<{ children: React.ReactNode }> = ({ children 
     </ProtectedRoute>
   );
 };
+
+// Convenience wrapper for STUDENT-only routes
+// Allows USER/LEARNER but excludes elevated and specialized roles.
+export const StudentOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="loading-container" style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh'
+      }}>
+        <MeowlKuruLoader size="small" text="Loading..." />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  const roles = (user.roles || []).map((role) => role.toUpperCase());
+  const hasStudentRole = roles.includes('USER') || roles.includes('LEARNER');
+  const hasBlockedRole =
+    roles.includes('MENTOR') ||
+    roles.includes('RECRUITER') ||
+    roles.includes('PARENT') ||
+    roles.includes('ADMIN') ||
+    roles.some((role) => role.endsWith('_ADMIN'));
+
+  if (!hasStudentRole || hasBlockedRole) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  return <>{children}</>;
+};

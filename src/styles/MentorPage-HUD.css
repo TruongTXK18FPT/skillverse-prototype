@@ -435,6 +435,40 @@
   flex-wrap: wrap;
 }
 
+.mentor-hud-courses__filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.mentor-hud-courses__search-input,
+.mentor-hud-courses__filter-select {
+  width: 100%;
+  border: 1px solid rgba(6, 182, 212, 0.26);
+  background: rgba(8, 15, 26, 0.72);
+  color: var(--mentor-hud-text-primary);
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.88rem;
+}
+
+.mentor-hud-courses__filter-select option {
+  background: #0b1727;
+  color: var(--mentor-hud-text-primary);
+}
+
+.mentor-hud-empty--compact {
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+@media (max-width: 800px) {
+  .mentor-hud-courses__filters {
+    grid-template-columns: 1fr;
+  }
+}
+
 .mentor-hud-create-button {
   display: flex;
   align-items: center;

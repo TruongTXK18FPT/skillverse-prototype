@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   Users,
   Star,
@@ -8,23 +8,23 @@ import {
   AlertCircle,
   ChevronRight,
   BarChart,
+  Filter,
 } from "lucide-react";
 import walletService from "../../services/walletService";
+import { WalletTransactionResponse } from "../../data/walletDTOs";
 import {
   getMyMentorProfile,
-  getMySkillTab,
-  getMyTotalStudents,
 } from "../../services/mentorProfileService";
-import { getMyBookings } from "../../services/bookingService";
+import { getMyBookings, BookingResponse } from "../../services/bookingService";
+import { getMyMentorReviewsPage, ReviewResponse } from "../../services/reviewService";
+import { listCoursesByAuthor } from "../../services/courseService";
+import { CourseSummaryDTO } from "../../data/courseDTOs";
+import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../hooks/useToast";
 import "./MentorOverviewHUD.css";
 
 interface MentorOverviewHUDProps {
   onNavigate: (tab: string) => void;
-  /** 
-   * Pre-loaded course count from parent (MentorDashboard).
-   * Avoids a duplicate listCoursesByAuthor API call.
-   */
   courseCount?: number;
 }
 
@@ -39,26 +39,36 @@ interface MentorStats {
     twoStar: number;
     oneStar: number;
   };
-  monthEarnings: number;
-  totalEarnings: number;
+  rangeEarnings: number;
+  transactionCount: number;
   totalCourses: number;
   totalBookings: number;
   pendingGrading: number;
   pendingBookings: number;
 }
 
-interface SystemLog {
-  time: string;
-  message: string;
-  type?: "info" | "warning" | "error";
+type TimeFilterPreset = "THIS_MONTH" | "LAST_7_DAYS" | "CUSTOM" | "ALL_TIME";
+
+interface DateRange {
+  start: Date;
+  end: Date;
 }
 
 const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
   onNavigate,
-  courseCount,
+  courseCount: _courseCount,
 }) => {
+  const { user } = useAuth();
   const { showError } = useToast();
   const [loading, setLoading] = useState(true);
+  const [timePreset, setTimePreset] = useState<TimeFilterPreset>("THIS_MONTH");
+  const [customFromDate, setCustomFromDate] = useState<string>("");
+  const [customToDate, setCustomToDate] = useState<string>("");
+  const [bookings, setBookings] = useState<BookingResponse[]>([]);
+  const [courses, setCourses] = useState<CourseSummaryDTO[]>([]);
+  const [transactions, setTransactions] = useState<WalletTransactionResponse[]>([]);
+  const [latestTransactions, setLatestTransactions] = useState<WalletTransactionResponse[]>([]);
+  const [reviews, setReviews] = useState<ReviewResponse[]>([]);
   const [stats, setStats] = useState<MentorStats>({
     totalStudents: 0,
     rating: 0,
@@ -70,156 +80,255 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
       twoStar: 0,
       oneStar: 0,
     },
-    monthEarnings: 0,
-    totalEarnings: 0,
+    rangeEarnings: 0,
+    transactionCount: 0,
     totalCourses: 0,
     totalBookings: 0,
     pendingGrading: 0,
     pendingBookings: 0,
   });
-  const [systemLogs, setSystemLogs] = useState<SystemLog[]>([]);
-
   useEffect(() => {
     loadMentorOverview();
-  }, []);
+  }, [user?.id]);
+
+  const parseDate = (value?: string | null): Date | null => {
+    if (!value) return null;
+    const parsed = new Date(value);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  };
+
+  const normalizeStartOfDay = (date: Date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  };
+
+  const normalizeEndOfDay = (date: Date) => {
+    const d = new Date(date);
+    d.setHours(23, 59, 59, 999);
+    return d;
+  };
+
+  const effectiveDateRange = useMemo<DateRange>(() => {
+    const now = new Date();
+
+    if (timePreset === "ALL_TIME") {
+      return {
+        start: new Date(1970, 0, 1),
+        end: normalizeEndOfDay(now),
+      };
+    }
+
+    if (timePreset === "LAST_7_DAYS") {
+      const start = new Date(now);
+      start.setDate(now.getDate() - 6);
+      return {
+        start: normalizeStartOfDay(start),
+        end: normalizeEndOfDay(now),
+      };
+    }
+
+    if (timePreset === "CUSTOM" && customFromDate && customToDate) {
+      const from = new Date(customFromDate);
+      const to = new Date(customToDate);
+      const startDate = from <= to ? from : to;
+      const endDate = from <= to ? to : from;
+      return {
+        start: normalizeStartOfDay(startDate),
+        end: normalizeEndOfDay(endDate),
+      };
+    }
+
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    return {
+      start: normalizeStartOfDay(start),
+      end: normalizeEndOfDay(now),
+    };
+  }, [timePreset, customFromDate, customToDate]);
+
+  const inRange = (dateLike?: string | null) => {
+    const parsed = parseDate(dateLike);
+    if (!parsed) return false;
+    return parsed >= effectiveDateRange.start && parsed <= effectiveDateRange.end;
+  };
+
+  const periodLabel = useMemo(() => {
+    if (timePreset === "ALL_TIME") return "Tất cả";
+    if (timePreset === "LAST_7_DAYS") return "7 ngày qua";
+    if (timePreset === "CUSTOM") return "Tùy chỉnh";
+    return "Tháng này";
+  }, [timePreset]);
+
+  useEffect(() => {
+    const filteredBookings = bookings.filter((booking) => inRange(booking.startTime));
+    const filteredCourses = courses.filter((course) => inRange(course.createdAt));
+    const filteredReviews = reviews.filter((review) => inRange(review.createdAt));
+    const filteredTransactions = transactions.filter((tx) => inRange(tx.createdAt));
+
+    const studentIds = new Set<number>();
+    filteredBookings.forEach((booking) => {
+      if (typeof booking.learnerId === "number") {
+        studentIds.add(booking.learnerId);
+      }
+    });
+
+    filteredReviews.forEach((review) => {
+      if (typeof review.learnerId === "number") {
+        studentIds.add(review.learnerId);
+      }
+    });
+
+    const ratingCount = filteredReviews.length;
+    const totalRatingPoint = filteredReviews.reduce(
+      (sum, review) => sum + (review.rating || 0),
+      0,
+    );
+    const rating = ratingCount > 0 ? totalRatingPoint / ratingCount : 0;
+
+    const fiveStar = filteredReviews.filter((review) => review.rating === 5).length;
+    const fourStar = filteredReviews.filter((review) => review.rating === 4).length;
+    const threeStar = filteredReviews.filter((review) => review.rating === 3).length;
+    const twoStar = filteredReviews.filter((review) => review.rating === 2).length;
+    const oneStar = filteredReviews.filter((review) => review.rating === 1).length;
+
+    const EARNING_TYPE_KEYWORDS = [
+      "MENTOR_BOOKING",
+      "EARN_FROM_SESSION",
+      "SEMINAR_PAYOUT",
+      "EARN_FROM_COURSE",
+      "COURSE_PAYOUT",
+      "JOB_PAYOUT",
+    ];
+
+    const earningsTransactions = filteredTransactions.filter((tx) => {
+      const normalizedType = (tx.transactionType || "").toUpperCase();
+      const normalizedTypeName = (tx.transactionTypeName || "").toLowerCase();
+      const normalizedDescription = (tx.description || "").toLowerCase();
+      const isCompletedLike =
+        !tx.status || tx.status === "COMPLETED" || tx.status === "PROCESSING";
+      const isCashIncomeType = EARNING_TYPE_KEYWORDS.some((keyword) =>
+        normalizedType.includes(keyword),
+      );
+      const isIncomeByText =
+        normalizedTypeName.includes("thu nhập") ||
+        normalizedDescription.includes("thu nhập") ||
+        normalizedDescription.includes("mentoring");
+      const isCreditIncome = Boolean(tx.isCredit) && (tx.cashAmount || 0) > 0;
+
+      const isIncomeTransaction =
+        isCashIncomeType || isIncomeByText || isCreditIncome;
+
+      return isCompletedLike && isIncomeTransaction;
+    });
+
+    const rangeEarnings = earningsTransactions.reduce(
+      (sum, tx) => sum + Math.max(0, tx.cashAmount || 0),
+      0,
+    );
+
+    const pendingBookings = filteredBookings.filter(
+      (booking) => booking.status === "PENDING",
+    ).length;
+
+    const latest = [...filteredTransactions]
+      .sort((a, b) => {
+        const aTime = parseDate(a.createdAt)?.getTime() || 0;
+        const bTime = parseDate(b.createdAt)?.getTime() || 0;
+        return bTime - aTime;
+      })
+      .slice(0, 5);
+
+    setStats({
+      totalStudents: studentIds.size,
+      rating,
+      ratingCount,
+      starDistribution: {
+        fiveStar,
+        fourStar,
+        threeStar,
+        twoStar,
+        oneStar,
+      },
+      rangeEarnings,
+      transactionCount: filteredTransactions.length,
+      totalCourses: filteredCourses.length,
+      totalBookings: filteredBookings.length,
+      pendingGrading: 0,
+      pendingBookings,
+    });
+
+    setLatestTransactions(latest);
+  }, [bookings, courses, reviews, transactions, effectiveDateRange]);
 
   const loadMentorOverview = async () => {
+    if (!user?.id) return;
     setLoading(true);
     try {
-      // First, get mentor profile to get mentor ID
-      const mentorProfile = await getMyMentorProfile();
+      await getMyMentorProfile();
 
-      // Fetch all data in parallel (courses already loaded by parent)
-      const [
-        walletStats,
-        recentTransactions,
-        skillTabData,
-        bookingsResponse,
-        totalStudentsCount,
-      ] = await Promise.all([
-        walletService.getWalletStatistics(),
-        walletService.getTransactions(0, 5),
-        getMySkillTab(),
-        getMyBookings(true, 0, 1000).catch(() => ({
-          content: [],
-          totalElements: 0,
-          totalPages: 0,
-          size: 0,
-          number: 0,
-        })),
-        getMyTotalStudents().catch(() => 0),
+      const fetchAllCourses = async () => {
+        let page = 0;
+        let total = 1;
+        const merged: CourseSummaryDTO[] = [];
+        do {
+          const response = await listCoursesByAuthor(user.id, page, 100);
+          merged.push(...(response.content || []));
+          total = response.totalPages || 1;
+          page += 1;
+        } while (page < total);
+        return merged;
+      };
+
+      const fetchAllTransactions = async () => {
+        let page = 0;
+        let total = 1;
+        const merged: WalletTransactionResponse[] = [];
+        do {
+          const response = await walletService.getTransactions(page, 100);
+          merged.push(...(response.content || []));
+          total = response.totalPages || 1;
+          page += 1;
+        } while (page < total);
+        return merged;
+      };
+
+      const fetchAllBookings = async () => {
+        let page = 0;
+        let total = 1;
+        const merged: BookingResponse[] = [];
+        do {
+          const response = await getMyBookings(true, page, 100);
+          merged.push(...(response.content || []));
+          total = response.totalPages || 1;
+          page += 1;
+        } while (page < total);
+        return merged;
+      };
+
+      const fetchAllReviews = async () => {
+        let page = 0;
+        let total = 1;
+        const merged: ReviewResponse[] = [];
+        do {
+          const response = await getMyMentorReviewsPage(page, 100, null, "createdAt,desc");
+          merged.push(...(response.content || []));
+          total = response.totalPages || 1;
+          page += 1;
+        } while (page < total);
+        return merged;
+      };
+
+      const [allCourses, allTransactions, allBookings, allReviews] = await Promise.all([
+        fetchAllCourses(),
+        fetchAllTransactions(),
+        fetchAllBookings().catch(() => []),
+        fetchAllReviews().catch(() => []),
       ]);
 
-      // Generate system logs from transactions
-      const logs: SystemLog[] = recentTransactions.content.map((tx: any) => {
-        const time = new Date(tx.createdAt).toLocaleTimeString("vi-VN", {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        });
-
-        let message = "";
-        let type: "info" | "warning" | "error" = "info";
-
-        if (tx.transactionType === "EARN_FROM_SESSION") {
-          message = `Nhận thanh toán ${formatCurrency(tx.cashAmount || 0)} từ buổi học`;
-        } else if (tx.transactionType === "EARN_FROM_COURSE") {
-          message = `Nhận thu nhập ${formatCurrency(tx.cashAmount || 0)} từ khóa học`;
-        } else if (tx.transactionType === "DEPOSIT") {
-          message = `Nạp tiền ${formatCurrency(tx.cashAmount || 0)} thành công`;
-        } else if (tx.transactionType === "WITHDRAWAL") {
-          message = `Rút tiền ${formatCurrency(tx.cashAmount || 0)}`;
-          type = "warning";
-        } else {
-          message = tx.description || "Giao dịch mới";
-        }
-
-        return { time, message, type };
-      });
-
-      // Add default logs if no transactions
-      if (logs.length < 3) {
-        logs.push({
-          time: new Date().toLocaleTimeString("vi-VN", {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          }),
-          message: "Hệ thống đồng bộ dữ liệu hoàn tất.",
-          type: "info",
-        });
-      }
-
-      // Calculate earnings - totalEarnings should be higher (all-time revenue)
-      // monthEarnings is recent deposits/withdrawals
-      const totalEarnings = skillTabData.revenueVnd || 0;
-      const monthEarnings = walletStats.totalDeposited || 0;
-
-      // If totalEarnings is less than monthEarnings, they might be swapped in backend
-      // For now, use the larger value as total and smaller as monthly
-      const actualTotalEarnings = Math.max(totalEarnings, monthEarnings);
-      const actualMonthEarnings = Math.min(totalEarnings, monthEarnings);
-
-      // Get student count from API
-      const totalStudents = totalStudentsCount;
-
-      // Count pending bookings
-      const pendingBookings = bookingsResponse.content.filter(
-        (booking: any) => booking.status === "PENDING",
-      ).length;
-
-      // Use real rating data from SkillTab
-      const totalReviews = skillTabData.totalReviews || 0;
-      const fiveStarCount = skillTabData.fiveStarCount || 0;
-
-      // Calculate average rating
-      // If mentorProfile.ratingAverage is 0 but we have reviews, calculate from fiveStarCount
-      let avgRating = mentorProfile.ratingAverage || 0;
-
-      // If mentorProfile doesn't have rating but SkillTab has reviews, estimate rating
-      if (avgRating === 0 && totalReviews > 0) {
-        // Estimate: If all reviews are 5 stars, rating is 5.0
-        avgRating = totalReviews > 0 ? (fiveStarCount / totalReviews) * 5 : 0;
-      }
-
-      // Simple distribution: we know exact 5-star count, estimate others
-      const fiveStarPercent =
-        totalReviews > 0 ? (fiveStarCount / totalReviews) * 100 : 0;
-      const remainingPercent = 100 - fiveStarPercent;
-
-      // Distribute remaining based on average rating
-      const fourStarPercent =
-        avgRating >= 4 ? remainingPercent * 0.6 : remainingPercent * 0.3;
-      const threeStarPercent =
-        avgRating >= 3.5 ? remainingPercent * 0.25 : remainingPercent * 0.35;
-      const twoStarPercent =
-        avgRating >= 3 ? remainingPercent * 0.1 : remainingPercent * 0.2;
-      const oneStarPercent = Math.max(
-        0,
-        remainingPercent - fourStarPercent - threeStarPercent - twoStarPercent,
-      );
-
-      setStats({
-        totalStudents,
-        rating: avgRating,
-        ratingCount: totalReviews,
-        starDistribution: {
-          fiveStar: fiveStarCount,
-          fourStar: Math.round((fourStarPercent / 100) * totalReviews),
-          threeStar: Math.round((threeStarPercent / 100) * totalReviews),
-          twoStar: Math.round((twoStarPercent / 100) * totalReviews),
-          oneStar: Math.round((oneStarPercent / 100) * totalReviews),
-        },
-        monthEarnings: actualMonthEarnings,
-        totalEarnings: actualTotalEarnings,
-        totalCourses: courseCount ?? 0,
-        totalBookings:
-          bookingsResponse.totalElements || bookingsResponse.content.length,
-        pendingGrading: 0, // TODO: Implement assignment grading count
-        pendingBookings,
-      });
-
-      setSystemLogs(logs);
+      setCourses(allCourses);
+      setTransactions(allTransactions);
+      setBookings(allBookings);
+      setReviews(allReviews);
     } catch (error) {
       console.error("Error loading mentor overview:", error);
       showError("Lỗi", "Không thể tải dữ liệu tổng quan");
@@ -235,6 +344,48 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
       minimumFractionDigits: 0,
     }).format(amount);
   };
+
+  const formatDateTime = (dateString?: string | null) => {
+    const parsed = parseDate(dateString);
+    if (!parsed) return "--";
+    return parsed.toLocaleString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const getTransactionStatusLabel = (status?: string | null) => {
+    switch ((status || "").toUpperCase()) {
+      case "COMPLETED":
+        return "Hoàn thành";
+      case "PENDING":
+        return "Đang xử lý";
+      case "PROCESSING":
+        return "Đang xử lý";
+      case "FAILED":
+        return "Thất bại";
+      default:
+        return status || "--";
+    }
+  };
+
+  const getTransactionStatusClass = (status?: string | null) => {
+    switch ((status || "").toUpperCase()) {
+      case "COMPLETED":
+        return "is-completed";
+      case "PENDING":
+      case "PROCESSING":
+        return "is-processing";
+      case "FAILED":
+        return "is-failed";
+      default:
+        return "";
+    }
+  };
+
   return (
     <div className="mentor-overview">
       {loading ? (
@@ -243,17 +394,62 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
         </div>
       ) : (
         <>
+          <div className="mentor-overview__toolbar">
+            <div className="mentor-overview__toolbar-title">
+              <Filter size={16} className="icon--cyan" />
+              <span>BỘ LỌC THỜI GIAN TỔNG QUÁT</span>
+            </div>
+            <div className="mentor-overview__time-filter-group">
+              <select
+                className="mentor-overview__time-select"
+                value={timePreset}
+                onChange={(e) => setTimePreset(e.target.value as TimeFilterPreset)}
+              >
+                <option value="ALL_TIME">Tất cả</option>
+                <option value="THIS_MONTH">Tháng này</option>
+                <option value="LAST_7_DAYS">7 ngày qua</option>
+                <option value="CUSTOM">Tùy chỉnh</option>
+              </select>
+
+              {timePreset === "CUSTOM" && (
+                <div className="mentor-overview__custom-date-wrap">
+                  <input
+                    type="date"
+                    className="mentor-overview__date-input"
+                    value={customFromDate}
+                    onChange={(e) => setCustomFromDate(e.target.value)}
+                  />
+                  <span>đến</span>
+                  <input
+                    type="date"
+                    className="mentor-overview__date-input"
+                    value={customToDate}
+                    onChange={(e) => setCustomToDate(e.target.value)}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="mentor-overview__grid mentor-overview__grid--summary">
             {/* Stats Summary */}
             <div className="mentor-overview__card mentor-overview__stats-summary-card">
               <div className="mentor-overview__card-header">
                 <BarChart size={18} className="icon--yellow" />
-                <span>THỐNG KÊ TỔNG QUAN</span>
+                <span>THỐNG KÊ TỔNG QUAN • {periodLabel.toUpperCase()}</span>
               </div>
               <div className="mentor-overview__card-body">
                 {/* Review Stats */}
                 <div className="mentor-overview__stat-section">
-                  <h4 className="mentor-overview__stat-section-title">Đánh giá</h4>
+                  <div className="mentor-overview__section-headline">
+                    <h4 className="mentor-overview__stat-section-title">Đánh giá</h4>
+                    <button
+                      className="mentor-overview__detail-link"
+                      onClick={() => onNavigate("reviews")}
+                    >
+                      Xem chi tiết
+                    </button>
+                  </div>
                   <div className="mentor-overview__rating-overview">
                     <div className="mentor-overview__rating-score">
                       <Star size={32} fill="#FFD700" color="#FFD700" />
@@ -343,23 +539,31 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
 
                 {/* Financial Stats */}
                 <div className="mentor-overview__stat-section">
-                  <h4 className="mentor-overview__stat-section-title">Thu nhập</h4>
+                  <div className="mentor-overview__section-headline">
+                    <h4 className="mentor-overview__stat-section-title">Thu nhập</h4>
+                    <button
+                      className="mentor-overview__detail-link"
+                      onClick={() => onNavigate("earnings")}
+                    >
+                      Xem chi tiết
+                    </button>
+                  </div>
                   <div className="mentor-overview__stat-grid">
                     <div className="mentor-overview__stat-item">
                       <DollarSign size={20} className="mentor-overview__stat-item-icon" />
                       <div className="mentor-overview__stat-item-info">
-                        <span className="mentor-overview__stat-item-label">Tháng này</span>
+                        <span className="mentor-overview__stat-item-label">Thu nhập trong kỳ</span>
                         <span className="mentor-overview__stat-item-value">
-                          {formatCurrency(stats.monthEarnings)}
+                          {formatCurrency(stats.rangeEarnings)}
                         </span>
                       </div>
                     </div>
                     <div className="mentor-overview__stat-item">
                       <DollarSign size={20} className="mentor-overview__stat-item-icon" />
                       <div className="mentor-overview__stat-item-info">
-                        <span className="mentor-overview__stat-item-label">Tổng thu nhập</span>
+                        <span className="mentor-overview__stat-item-label">Giao dịch trong kỳ</span>
                         <span className="mentor-overview__stat-item-value">
-                          {formatCurrency(stats.totalEarnings)}
+                          {stats.transactionCount}
                         </span>
                       </div>
                     </div>
@@ -368,9 +572,20 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
 
                 {/* Activity Stats */}
                 <div className="mentor-overview__stat-section">
-                  <h4 className="mentor-overview__stat-section-title">Hoạt động</h4>
+                  <div className="mentor-overview__section-headline">
+                    <h4 className="mentor-overview__stat-section-title">Hoạt động</h4>
+                    <button
+                      className="mentor-overview__detail-link"
+                      onClick={() => onNavigate("bookings")}
+                    >
+                      Xem chi tiết
+                    </button>
+                  </div>
                   <div className="mentor-overview__stat-grid">
-                    <div className="mentor-overview__stat-item">
+                    <button
+                      className="mentor-overview__stat-item mentor-overview__stat-item--button"
+                      onClick={() => onNavigate("bookings")}
+                    >
                       <Users size={20} className="mentor-overview__stat-item-icon" />
                       <div className="mentor-overview__stat-item-info">
                         <span className="mentor-overview__stat-item-label">Học viên</span>
@@ -378,8 +593,11 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
                           {stats.totalStudents}
                         </span>
                       </div>
-                    </div>
-                    <div className="mentor-overview__stat-item">
+                    </button>
+                    <button
+                      className="mentor-overview__stat-item mentor-overview__stat-item--button"
+                      onClick={() => onNavigate("courses")}
+                    >
                       <Video size={20} className="mentor-overview__stat-item-icon" />
                       <div className="mentor-overview__stat-item-info">
                         <span className="mentor-overview__stat-item-label">Khóa học</span>
@@ -387,8 +605,11 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
                           {stats.totalCourses}
                         </span>
                       </div>
-                    </div>
-                    <div className="mentor-overview__stat-item">
+                    </button>
+                    <button
+                      className="mentor-overview__stat-item mentor-overview__stat-item--button"
+                      onClick={() => onNavigate("bookings")}
+                    >
                       <Clock size={20} className="mentor-overview__stat-item-icon" />
                       <div className="mentor-overview__stat-item-info">
                         <span className="mentor-overview__stat-item-label">Buổi booking</span>
@@ -396,7 +617,7 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
                           {stats.totalBookings}
                         </span>
                       </div>
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -454,18 +675,53 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
           </div>
 
           <div className="mentor-overview__bottom">
-            <div className="system-logs">
-              <h3>SYSTEM LOGS</h3>
-              <div className="log-entries">
-                {systemLogs.map((log, idx) => (
-                  <div
-                    key={idx}
-                    className={`log-entry ${log.type !== "info" ? log.type : ""}`}
-                  >
-                    <span className="log-time">[{log.time}]</span>
-                    <span className="log-msg">{log.message}</span>
+            <div className="overview-transactions">
+              <div className="mentor-overview__section-headline">
+                <h3>LỊCH SỬ GIAO DỊCH MỚI NHẤT</h3>
+                <button
+                  className="mentor-overview__detail-link"
+                  onClick={() => onNavigate("earnings")}
+                >
+                  Xem thêm
+                </button>
+              </div>
+
+              <div className="overview-transactions__table-wrap">
+                {latestTransactions.length === 0 ? (
+                  <div className="overview-transactions__empty">
+                    Không có giao dịch trong khoảng thời gian đã chọn.
                   </div>
-                ))}
+                ) : (
+                  <table className="overview-transactions__table">
+                    <thead>
+                      <tr>
+                        <th>Loại</th>
+                        <th>Ngày</th>
+                        <th>Mô tả</th>
+                        <th>Số tiền</th>
+                        <th>Trạng thái</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {latestTransactions.map((tx) => (
+                        <tr key={tx.transactionId}>
+                          <td>{tx.transactionTypeName || tx.transactionType || "--"}</td>
+                          <td>{formatDateTime(tx.createdAt)}</td>
+                          <td>{tx.description || "--"}</td>
+                          <td className={tx.isCredit ? "is-credit" : "is-debit"}>
+                            {tx.isCredit ? "+" : "-"}
+                            {formatCurrency(tx.cashAmount || 0)}
+                          </td>
+                          <td>
+                            <span className={`overview-transactions__status ${getTransactionStatusClass(tx.status)}`}>
+                              {getTransactionStatusLabel(tx.status)}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
           </div>

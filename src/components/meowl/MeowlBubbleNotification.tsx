@@ -725,7 +725,7 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
           }
         }
       }
-    }, 15000); // Every 15 seconds
+    }, 60000); // Every 60 seconds
 
     return () => clearInterval(intervalId);
   }, [disabled, isAuthenticated, isVisible]);

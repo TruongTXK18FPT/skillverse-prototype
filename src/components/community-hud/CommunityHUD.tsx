@@ -39,7 +39,7 @@ const CommunityHUD: React.FC = () => {
   const [communityStats, setCommunityStats] = useState([
     { label: 'Thành viên', value: 0 },
     { label: 'Bài viết', value: 0 },
-    { label: 'Tín hiệu', value: 0 },
+    { label: 'Tương tác', value: 0 },
   ]);
 
   useEffect(() => {
@@ -158,7 +158,7 @@ const CommunityHUD: React.FC = () => {
         setCommunityStats([
           { label: 'Thành viên', value: Number(stats.totalUsers) || 0 },
           { label: 'Bài viết', value: Number(stats.totalPosts) || transformedPosts.length },
-          { label: 'Tín hiệu', value: Number(stats.signal) || 0 },
+          { label: 'Tương tác', value: Number(stats.signal) || 0 },
         ]);
       } catch { console.debug('stats failed'); }
 

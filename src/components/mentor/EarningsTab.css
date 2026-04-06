@@ -60,6 +60,92 @@
   margin: 0;
 }
 
+.mentor-earnings-overview-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(170px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.mentor-earnings-overview-card {
+  background: rgba(10, 15, 30, 0.55);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mentor-earnings-overview-label {
+  color: #94a3b8;
+  font-size: 0.77rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.mentor-earnings-overview-value {
+  color: #e2e8f0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.mentor-earnings-overview-value.is-credit {
+  color: #10b981;
+}
+
+.mentor-earnings-overview-value.is-debit {
+  color: #ef4444;
+}
+
+.mentor-earnings-mini-chart {
+  background: rgba(10, 15, 30, 0.55);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.mentor-earnings-mini-chart__header h4 {
+  margin: 0 0 12px;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.mentor-earnings-mini-chart__bars {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: end;
+  gap: 10px;
+  min-height: 120px;
+  padding-top: 4px;
+}
+
+.mentor-earnings-mini-chart__bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  height: 120px;
+}
+
+.mentor-earnings-mini-chart__bar {
+  width: 100%;
+  max-width: 26px;
+  background: linear-gradient(180deg, #22d3ee 0%, #0891b2 100%);
+  border-radius: 6px 6px 4px 4px;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.32);
+}
+
+.mentor-earnings-mini-chart__label {
+  color: #94a3b8;
+  font-size: 0.74rem;
+  font-family: 'Courier New', monospace;
+}
+
 /* Earnings overview */
 .mentor-earnings-overview {
   background: rgba(10, 15, 30, 0.6);
@@ -232,6 +318,41 @@
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
+.mentor-earnings-filters {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.mentor-earnings-filter-input,
+.mentor-earnings-filter-select {
+  width: 100%;
+  border: 1px solid rgba(0, 240, 255, 0.24);
+  background: rgba(8, 15, 25, 0.75);
+  color: var(--hud-text-primary, #e2e8f0);
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem;
+  font-size: 0.86rem;
+}
+
+.mentor-earnings-filter-select option {
+  background: #0b1727;
+  color: var(--hud-text-primary, #e2e8f0);
+}
+
+@media (max-width: 980px) {
+  .mentor-earnings-filters {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .mentor-earnings-filters {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Transactions section */
 .mentor-earnings-transactions-section {
   margin-bottom: 30px;
@@ -335,6 +456,11 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  word-break: keep-all;
 }
 
 .mentor-earnings-status-completed {
@@ -362,12 +488,6 @@
   background: rgba(0, 0, 0, 0.2);
   border: 1px dashed rgba(0, 240, 255, 0.3);
   border-radius: 8px;
-}
-
-.mentor-earnings-empty-icon {
-  font-size: 3rem;
-  margin-bottom: 15px;
-  opacity: 0.6;
 }
 
 .mentor-earnings-empty-state h4 {
@@ -668,7 +788,7 @@
 }
 
 .transaction-icon {
-  font-size: 1.2rem;
+  display: none;
 }
 
 .transaction-type-name {
@@ -777,32 +897,45 @@
   border-radius: 4px;
   margin: 20px 0;
 }
-    gap: 20px;
+
+@media (max-width: 768px) {
+  .mentor-earnings-overview-cards {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
   }
-  
-  .mentor-earnings-total-earnings, .mentor-earnings-pending-earnings {
-    flex-direction: column;
-    text-align: center;
-    gap: 15px;
+
+  .mentor-earnings-mini-chart__bars {
+    gap: 6px;
   }
-  
+
+  .mentor-earnings-mini-chart__bar {
+    max-width: 20px;
+  }
+
+  .mentor-earnings-main-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .mentor-earnings-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
   .mentor-earnings-action-section {
     flex-direction: column;
   }
-  
+
   .mentor-earnings-action-btn {
     width: 100%;
   }
-  
+
   .mentor-earnings-transactions-table-container {
     overflow-x: auto;
   }
-  
+
   .mentor-earnings-transactions-table {
     min-width: 600px;
   }
-  
-  .mentor-earnings-stats-grid {
+
+  .mentor-earnings-charts-grid {
     grid-template-columns: 1fr;
   }
 }

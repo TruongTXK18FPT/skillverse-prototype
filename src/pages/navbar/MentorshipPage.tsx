@@ -12,7 +12,7 @@ import MeowlGuide from "../../components/meowl/MeowlGuide";
 import UplinkHeader from "../../components/mentorship-hud/UplinkHeader";
 import UplinkGrid from "../../components/mentorship-hud/UplinkGrid";
 import MasterProfileCard from "../../components/mentorship-hud/MasterProfileCard";
-import HoloPagination from "../../components/mentorship-hud/HoloPagination";
+import Pagination from "../../components/shared/Pagination";
 import MentorChatModal from "../../components/mentorship-hud/MentorChatModal";
 import BookingModal from "../../components/mentorship-hud/BookingModal";
 import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
@@ -38,8 +38,20 @@ interface Mentor {
 }
 
 const MentorshipPage = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { showInfo } = useAppToast();
+  const normalizedRoles = (user?.roles || []).map((role) =>
+    String(role).toUpperCase(),
+  );
+  const hasStudentRole =
+    normalizedRoles.includes("USER") || normalizedRoles.includes("LEARNER");
+  const hasBlockedRole =
+    normalizedRoles.includes("MENTOR") ||
+    normalizedRoles.includes("RECRUITER") ||
+    normalizedRoles.includes("PARENT") ||
+    normalizedRoles.includes("ADMIN") ||
+    normalizedRoles.some((role) => role.endsWith("_ADMIN"));
+  const canUseMentorshipActions = hasStudentRole && !hasBlockedRole;
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [mentors, setMentors] = useState<Mentor[]>([]);
@@ -194,7 +206,7 @@ const MentorshipPage = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user?.id]);
 
   useEffect(() => {
     fetchMentors();
@@ -361,6 +373,22 @@ const MentorshipPage = () => {
   );
 
   const handleBookSession = (mentor: Mentor) => {
+    if (!canUseMentorshipActions) {
+      showInfo(
+        "Chỉ học viên được đặt lịch",
+        "Tính năng đặt lịch mentorship chỉ dành cho tài khoản học viên.",
+      );
+      return;
+    }
+
+    if (mentor.id === String(user?.id)) {
+      showInfo(
+        "Không thể tự đặt lịch",
+        "Bạn không thể đặt lịch mentorship với chính tài khoản mentor của mình.",
+      );
+      return;
+    }
+
     // Check if user is logged in before allowing booking
     if (!isAuthenticated) {
       setSelectedMentorForBooking(mentor);
@@ -373,6 +401,14 @@ const MentorshipPage = () => {
   };
 
   const handleMessage = (mentor: Partial<Mentor>) => {
+    if (!canUseMentorshipActions) {
+      showInfo(
+        "Chỉ học viên được nhắn tin mentorship",
+        "Tính năng nhắn tin mentorship chỉ dành cho tài khoản học viên.",
+      );
+      return;
+    }
+
     // Check if user is logged in before allowing messaging
     if (!isAuthenticated) {
       setSelectedMentorForChat(mentor);
@@ -449,9 +485,9 @@ const MentorshipPage = () => {
           ))}
         </UplinkGrid>
 
-        {/* Holo Pagination - Data Stream Nodes */}
+        {/* Pagination */}
         {filteredMentors.length > mentorsPerPage && (
-          <HoloPagination
+          <Pagination
             totalItems={filteredMentors.length}
             itemsPerPage={mentorsPerPage}
             currentPage={currentPage}

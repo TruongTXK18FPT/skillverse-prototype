@@ -382,6 +382,8 @@ const Header: React.FC = () => {
     !!user && !isRootAdminRole && user.roles.some((role) => role.endsWith("_ADMIN"));
   const isMentorRole = !!user && user.roles.includes("MENTOR");
   const isRecruiterRole = !!user && user.roles.includes("RECRUITER");
+  const hasLearnerRole = !!user && (user.roles.includes("USER") || user.roles.includes("LEARNER"));
+  const canManageBookings = isMentorRole || hasLearnerRole;
   const isStudentRole =
     !!user &&
     user.roles.includes("USER") &&
@@ -1062,16 +1064,22 @@ const Header: React.FC = () => {
                                 <span>Đơn Ứng Tuyển</span>
                               </button>
                             )}
-                            <button
-                              onClick={() => {
-                                navigate("/my-bookings?tab=bookings");
-                                setShowUserMenu(false);
-                              }}
-                              className="dropdown-item"
-                            >
-                              <Calendar size={16} />
-                              <span>Quản lý lịch hẹn</span>
-                            </button>
+                            {canManageBookings && (
+                              <button
+                                onClick={() => {
+                                  if (isMentorRole) {
+                                    navigate("/mentor", { state: { activeTab: "bookings" } });
+                                  } else {
+                                    navigate("/my-bookings?tab=bookings");
+                                  }
+                                  setShowUserMenu(false);
+                                }}
+                                className="dropdown-item"
+                              >
+                                <Calendar size={16} />
+                                <span>Quản lý lịch hẹn</span>
+                              </button>
+                            )}
                           </section>
 
                           <section className="dropdown-group dropdown-group--system">

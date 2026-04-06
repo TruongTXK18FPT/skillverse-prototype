@@ -17,6 +17,7 @@ import {
   MentorRoute,
   AdminRoute,
   RecruiterRoute,
+  StudentOnlyRoute,
 } from "./components/shared/ProtectedRoute";
 import ParentRoute from "./components/shared/ParentRoute";
 import Header from "./components/layout/Header";
@@ -165,7 +166,14 @@ const AppContents = () => {
             <Route path="/user-guide" element={<UserGuidePage />} />
             <Route path="/notifications" element={<NotificationPage />} />
             <Route path="/messages" element={<MessengerPage />} />
-            <Route path="/my-bookings" element={<UserBookingsPage />} />
+            <Route
+              path="/my-bookings"
+              element={
+                <StudentOnlyRoute>
+                  <UserBookingsPage />
+                </StudentOnlyRoute>
+              }
+            />
             <Route
               path="/bookings/:bookingId"
               element={<BookingDetailPage />}

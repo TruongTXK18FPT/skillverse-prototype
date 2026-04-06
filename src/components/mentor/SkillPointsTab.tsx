@@ -11,6 +11,7 @@ import '../profile-hud/gamification/cmd-game-styles.css';
 
 const SkillPointsTab: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'all'>('month');
+  const [activitySearch, setActivitySearch] = useState('');
   const [showLevelUpModal, setShowLevelUpModal] = useState(false);
   const [justLeveledUp, setJustLeveledUp] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -115,6 +116,14 @@ const SkillPointsTab: React.FC = () => {
 
     return activities.filter(activity => {
       const activityDate = new Date(activity.date);
+      const keyword = activitySearch.trim().toLowerCase();
+      const matchesSearch =
+        keyword.length === 0 ||
+        activity.activity.toLowerCase().includes(keyword) ||
+        (activity.description || '').toLowerCase().includes(keyword);
+
+      if (!matchesSearch) return false;
+
       switch (selectedPeriod) {
         case 'week':
           return activityDate >= oneWeekAgo;
@@ -201,6 +210,13 @@ const SkillPointsTab: React.FC = () => {
           <h3 className="cmd-game-section-title">ACTIVITY LOG</h3>
           
           <div className="cmd-game-filter-tabs">
+            <input
+              type="text"
+              value={activitySearch}
+              onChange={(e) => setActivitySearch(e.target.value)}
+              placeholder="Search activity..."
+              className="cmd-game-activity-search"
+            />
             {(['week', 'month', 'all'] as const).map(period => (
               <button 
                 key={period}
@@ -230,7 +246,7 @@ const SkillPointsTab: React.FC = () => {
             </div>
           ))}
           {filteredActivities.length === 0 && (
-            <div className="cmd-game-empty-state">No recent activity detected in this sector.</div>
+            <div className="cmd-game-empty-state">No activity matched your search or selected period.</div>
           )}
         </div>
       </div>

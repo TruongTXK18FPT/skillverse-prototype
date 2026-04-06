@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import {
   Calendar, Clock, Video, CheckCircle, XCircle,
   User, FileText, DollarSign, TrendingUp, Users,
-  CheckSquare, AlertCircle, RefreshCw, X, ChevronDown, Eye
+  CheckSquare, AlertCircle, RefreshCw, X, Eye
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import {
   AreaChart, Area, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -43,9 +43,9 @@ const MentorBookingManager: React.FC = () => {
   const [bookings, setBookings] = useState<BookingResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'upcoming' | 'pending' | 'history'>('upcoming');
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
+  const [statusFilter, setStatusFilter] = useState<'ALL' | 'upcoming' | 'pending' | 'history'>('ALL');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [now, setNow] = useState(new Date());
   const [rejectModalBooking, setRejectModalBooking] = useState<BookingResponse | null>(null);
   const [rejectReason, setRejectReason] = useState('');
@@ -65,8 +65,8 @@ const MentorBookingManager: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    fetchBookings();
-  }, [currentPage]);
+    setCurrentPage(1);
+  }, [statusFilter, searchTerm]);
 
   // ─── Date helpers ──────────────────────────────────────────────────────────
 
@@ -110,10 +110,7 @@ const MentorBookingManager: React.FC = () => {
 
   const pendingCount = bookings.filter(b => b.status === 'PENDING').length;
   const upcomingCount = bookings.filter(
-    (b) => ['CONFIRMED', 'ONGOING', 'PENDING_COMPLETION', 'COMPLETED', 'DISPUTED'].includes(b.status),
-  ).length;
-  const historyCount = bookings.filter(
-    (b) => ['COMPLETED', 'CANCELLED', 'REJECTED', 'REFUNDED'].includes(b.status),
+    (b) => ['CONFIRMED', 'ONGOING', 'PENDING_COMPLETION'].includes(b.status),
   ).length;
   const completedThisMonth = bookings.filter(b => {
     if (b.status !== 'COMPLETED') return false;
@@ -121,9 +118,6 @@ const MentorBookingManager: React.FC = () => {
     const now2 = new Date();
     return d.getMonth() === now2.getMonth() && d.getFullYear() === now2.getFullYear();
   }).length;
-  const totalEarnings = bookings
-    .filter(b => b.status === 'COMPLETED' || b.status === 'PENDING_COMPLETION')
-    .reduce((sum, b) => sum + (b.priceVnd || 0), 0);
   const totalEarningsThisMonth = bookings
     .filter(b => {
       if (b.status !== 'COMPLETED') return false;
@@ -166,9 +160,18 @@ const MentorBookingManager: React.FC = () => {
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      const response = await getMyBookings(true, currentPage, 20);
-      setBookings(response.content);
-      setTotalPages(response.totalPages || 1);
+      let page = 0;
+      let total = 1;
+      const allBookings: BookingResponse[] = [];
+
+      do {
+        const response = await getMyBookings(true, page, 100);
+        allBookings.push(...(response.content || []));
+        total = response.totalPages || 1;
+        page += 1;
+      } while (page < total);
+
+      setBookings(allBookings);
     } catch (err) {
       setError('Không thể tải danh sách booking.');
       console.error(err);
@@ -278,11 +281,35 @@ const MentorBookingManager: React.FC = () => {
   };
 
   const filteredBookings = bookings.filter(b => {
-    if (activeTab === 'pending') return b.status === 'PENDING';
-    if (activeTab === 'upcoming') return ['CONFIRMED', 'ONGOING', 'PENDING_COMPLETION', 'COMPLETED', 'DISPUTED'].includes(b.status);
-    if (activeTab === 'history') return ['COMPLETED', 'CANCELLED', 'REJECTED', 'REFUNDED'].includes(b.status);
-    return true;
+    const matchesStatusFilter =
+      statusFilter === 'ALL'
+        ? true
+        : statusFilter === 'pending'
+          ? b.status === 'PENDING'
+          : statusFilter === 'upcoming'
+            ? ['CONFIRMED', 'ONGOING', 'PENDING_COMPLETION'].includes(b.status)
+            : ['COMPLETED', 'CANCELLED', 'REJECTED', 'REFUNDED'].includes(b.status);
+
+    const term = searchTerm.trim().toLowerCase();
+    const learnerText = (b.learnerName || '').toLowerCase();
+    const referenceText = (b.paymentReference || '').toLowerCase();
+    const idText = `#${b.id}`;
+    const matchesSearch =
+      term.length === 0 ||
+      learnerText.includes(term) ||
+      referenceText.includes(term) ||
+      idText.includes(term);
+
+    return matchesStatusFilter && matchesSearch;
   });
+
+  const cardsPerPage = 8;
+  const clientTotalPages = Math.max(1, Math.ceil(filteredBookings.length / cardsPerPage));
+  const safeCurrentPage = Math.min(currentPage, clientTotalPages);
+  const paginatedBookings = filteredBookings.slice(
+    (safeCurrentPage - 1) * cardsPerPage,
+    safeCurrentPage * cardsPerPage,
+  );
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -358,22 +385,6 @@ const MentorBookingManager: React.FC = () => {
           <button className="mbm-refresh-btn" onClick={fetchBookings} title="Làm mới">
             <RefreshCw size={16} />
           </button>
-        </div>
-        <div className="mbm-tabs">
-          {[
-            { key: 'upcoming', label: 'Sắp tới', count: upcomingCount },
-            { key: 'pending', label: 'Chờ duyệt', count: pendingCount },
-            { key: 'history', label: 'Lịch sử', count: historyCount },
-          ].map(t => (
-            <button
-              key={t.key}
-              className={`mbm-tab ${activeTab === t.key ? 'active' : ''}`}
-              onClick={() => { setActiveTab(t.key as any); setCurrentPage(0); }}
-            >
-              {t.label}
-              {t.count > 0 && <span className="mbm-badge">{t.count}</span>}
-            </button>
-          ))}
         </div>
       </div>
 
@@ -472,6 +483,26 @@ const MentorBookingManager: React.FC = () => {
         </div>
       </div>
 
+      <div className="mbm-filters">
+        <input
+          type="text"
+          className="mbm-search-input"
+          placeholder="Tìm theo tên học viên, mã booking, payment reference..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <select
+          className="mbm-filter-select"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value as 'ALL' | 'upcoming' | 'pending' | 'history')}
+        >
+          <option value="ALL">Tất cả</option>
+          <option value="upcoming">Sắp tới</option>
+          <option value="pending">Chờ duyệt</option>
+          <option value="history">Lịch sử</option>
+        </select>
+      </div>
+
       {/* ── Booking List ── */}
       <div className="mbm-content">
         <AnimatePresence mode="wait">
@@ -481,11 +512,11 @@ const MentorBookingManager: React.FC = () => {
               className="mbm-empty"
             >
               <Calendar size={48} />
-              <p>Không có booking nào.</p>
+              <p>Không có booking nào phù hợp với tiêu chí tìm kiếm.</p>
             </motion.div>
           ) : (
             <div className="mbm-grid">
-              {filteredBookings.map((booking) => {
+              {paginatedBookings.map((booking) => {
                 const deadline = getDeadlineInfo(booking);
                 const sc = statusConfig[getEffectiveStatus(booking)] || { label: getEffectiveStatus(booking), cls: 'pending' };
                 const expired = isSessionExpired(booking);
@@ -647,19 +678,19 @@ const MentorBookingManager: React.FC = () => {
         </AnimatePresence>
 
         {/* Pagination */}
-        {totalPages > 1 && (
+        {clientTotalPages > 1 && (
           <div className="mbm-pagination">
             <button
-              onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
-              disabled={currentPage === 0}
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={safeCurrentPage === 1}
               className="mbm-btn mbm-btn-secondary"
             >
               ← Trước
             </button>
-            <span className="mbm-pagination-info">Trang {currentPage + 1} / {totalPages}</span>
+            <span className="mbm-pagination-info">Trang {safeCurrentPage} / {clientTotalPages}</span>
             <button
-              onClick={() => setCurrentPage(p => Math.min(totalPages - 1, p + 1))}
-              disabled={currentPage >= totalPages - 1}
+              onClick={() => setCurrentPage(p => Math.min(clientTotalPages, p + 1))}
+              disabled={safeCurrentPage >= clientTotalPages}
               className="mbm-btn mbm-btn-secondary"
             >
               Sau →

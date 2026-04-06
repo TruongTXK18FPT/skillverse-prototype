@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Bell, Check, CheckCheck, Info, MessageSquare, CreditCard, Star, AlertCircle, ChevronDown, Briefcase } from 'lucide-react';
 import { notificationService, Notification } from '../../services/notificationService';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import '../../styles/NotificationDropdown.css';
 
 type Props = { inline?: boolean; collapsible?: boolean };
@@ -12,6 +13,7 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [inlineOpen, setInlineOpen] = useState<boolean>(!collapsible);
   interface RecentChat {
     mentorId: string;
@@ -156,7 +158,11 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
       case 'BOOKING_CONFIRMED':
       case 'BOOKING_CANCELLED':
       case 'BOOKING_REMINDER':
-        navigate('/my-bookings');
+        if (user?.roles?.some((role) => role.toUpperCase() === 'MENTOR')) {
+          navigate('/mentor', { state: { activeTab: 'bookings' } });
+        } else {
+          navigate('/my-bookings');
+        }
         break;
       case 'WELCOME':
         navigate('/dashboard');

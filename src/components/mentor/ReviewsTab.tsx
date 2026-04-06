@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BookOpen, CheckSquare, Clock, MessageSquare, User, Users, Zap } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import {
   getMyMentorReviewsPage,
@@ -143,6 +144,33 @@ const ReviewsTab: React.FC = () => {
     });
   };
 
+  const REVIEW_TAG_META: Record<string, { label: string; icon: React.ComponentType<{ size?: number; className?: string }> }> = {
+    CONTENT_QUALITY: { label: 'Chất lượng nội dung', icon: BookOpen },
+    PUNCTUALITY: { label: 'Đúng giờ', icon: Clock },
+    COMMUNICATION: { label: 'Giao tiếp tốt', icon: MessageSquare },
+    PREPARATION: { label: 'Chuẩn bị kỹ', icon: CheckSquare },
+    FRIENDLY: { label: 'Thân thiện', icon: Users },
+    KNOWLEDGEABLE: { label: 'Chuyên môn cao', icon: Zap },
+  };
+
+  const parseReviewPayload = (raw?: string | null) => {
+    const source = (raw || '').trim();
+    const match = source.match(/^\[([A-Z_,\s]+)\]\s*(.*)$/s);
+    if (!match) {
+      return { tags: [] as string[], message: source };
+    }
+
+    const tags = match[1]
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter((tag) => !!tag && !!REVIEW_TAG_META[tag]);
+
+    return {
+      tags,
+      message: (match[2] || '').trim(),
+    };
+  };
+
   const renderStars = (rating: number, size: 'small' | 'medium' | 'large' = 'medium') => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -239,21 +267,28 @@ const ReviewsTab: React.FC = () => {
       {/* Reviews List */}
       <div className="mentor-reviews-list">
         {reviews.length > 0 ? (
-          reviews.map(review => (
+          reviews.map(review => {
+            const isAnonymousReviewer =
+              Boolean(review.isAnonymous) ||
+              !review.learnerName ||
+              /anonymous|ẩn danh/i.test(review.learnerName);
+            const parsed = parseReviewPayload(review.comment);
+
+            return (
             <div key={review.id} className="mentor-reviews-card">
               <div className="mentor-reviews-header">
                 <div className="mentor-reviews-student-info">
                   <div className="mentor-reviews-student-avatar">
-                    {review.learnerAvatar ? (
+                    {review.learnerAvatar && !isAnonymousReviewer ? (
                       <img src={review.learnerAvatar} alt={review.learnerName} />
                     ) : (
                       <div className="mentor-reviews-avatar-placeholder">
-                        {review.learnerName ? review.learnerName.charAt(0) : 'U'}
+                        <User size={20} />
                       </div>
                     )}
                   </div>
                   <div className="mentor-reviews-student-details">
-                    <h4>{review.learnerName || 'Học viên ẩn danh'}</h4>
+                    <h4>{isAnonymousReviewer ? 'Học viên ẩn danh' : (review.learnerName || 'Học viên')}</h4>
                     <p className="mentor-reviews-session-topic">Booking #{review.bookingId}</p>
                   </div>
                 </div>
@@ -264,8 +299,22 @@ const ReviewsTab: React.FC = () => {
                   <span className="mentor-reviews-date">{formatDate(review.createdAt)}</span>
                 </div>
               </div>
+
               <div className="mentor-reviews-content">
-                <p>{review.comment}</p>
+                {parsed.tags.length > 0 && (
+                  <div className="mentor-reviews-tag-list">
+                    {parsed.tags.map((tag) => {
+                      const TagIcon = REVIEW_TAG_META[tag].icon;
+                      return (
+                        <span key={tag} className="mentor-reviews-tag-chip">
+                          <TagIcon size={14} />
+                          {REVIEW_TAG_META[tag].label}
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
+                <p>{parsed.message || review.comment}</p>
               </div>
 
               {/* Reply Section */}
@@ -314,7 +363,8 @@ const ReviewsTab: React.FC = () => {
                 </div>
               )}
             </div>
-          ))
+            );
+          })
         ) : (
           <div className="mentor-reviews-no-reviews">
             <p>Không tìm thấy đánh giá nào phù hợp với bộ lọc của bạn.</p>

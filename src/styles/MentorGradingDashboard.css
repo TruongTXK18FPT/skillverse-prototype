@@ -1,6 +1,7 @@
 .mentor-grading-dashboard {
   width: 100%;
   animation: mentor-grading-dashboard-fade-in 0.28s ease-out;
+  padding: 1.25rem;
 }
 
 .mentor-grading-loading,

@@ -48,7 +48,6 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({
       label: "MENTORING",
       items: [
         { id: "bookings", label: "Quản lý booking", icon: Calendar },
-        { id: "skillpoints", label: "Điểm kỹ năng", icon: Award },
         { id: "earnings", label: "Quản lý doanh thu", icon: DollarSign },
         { id: "reviews", label: "Đánh giá", icon: Star },
       ],
