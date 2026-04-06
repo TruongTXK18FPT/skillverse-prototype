@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import "./MarkdownRenderer.css";
@@ -7,6 +7,60 @@ interface MarkdownRendererProps {
   content: string;
   className?: string;
 }
+
+const sanitizeMarkdownContent = (rawContent: string): string => {
+  if (!rawContent) return "";
+
+  let text = rawContent.replace(/\r\n/g, "\n");
+
+  // 1. The backend extractSection splits at "## N." headings.
+  //    This often leaves an orphaned closing ** from the heading on the first line.
+  //    e.g. "CỦA BẠN** ✨ **Những gì bạn làm tốt:"
+  //    Fix: strip ** that appear directly after uppercase text at the start of content
+  text = text.replace(/^([A-ZÀ-Ỹ\s&]+)\*\*/, "$1");
+
+  // 2. Process line-by-line
+  text = text
+    .split("\n")
+    .map((line) => {
+      const trimmed = line.trim();
+
+      // Drop lines that are ONLY emphasis markers
+      if (/^[*_]{2,}$/.test(trimmed)) return "";
+
+      // Strip trailing orphan ** at end of line (with or without space before)
+      // e.g. "some text **" or "some text**"
+      line = line.replace(/\*{2,}\s*$/, (match, offset) => {
+        // Only strip if there's no opening ** before it on the same line
+        const before = line.substring(0, offset);
+        const openCount = (before.match(/\*\*/g) || []).length;
+        // If openCount is even, this trailing ** is orphaned (no matching open)
+        return openCount % 2 === 0 ? "" : match;
+      });
+
+      return line;
+    })
+    .join("\n");
+
+  // 3. Clean up excessive blank lines
+  text = text.replace(/\n{3,}/g, "\n\n").trim();
+
+  return text;
+};
+
+const isStandaloneMarkerText = (value: string): boolean => {
+  const normalized = value.replace(/\u00a0/g, " ").trim();
+  return /^\\?[*_]{2,}\\?$/.test(normalized) || normalized === "";
+};
+
+const extractText = (node: React.ReactNode): string => {
+  if (typeof node === "string") return node;
+  if (typeof node === "number") return String(node);
+  if (!React.isValidElement(node)) return "";
+
+  const children = node.props?.children;
+  return React.Children.toArray(children).map(extractText).join("");
+};
 
 /**
  * Enhanced Markdown Renderer for Learning Reports
@@ -23,6 +77,11 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   content,
   className = "",
 }) => {
+  const normalizedContent = useMemo(
+    () => sanitizeMarkdownContent(content),
+    [content],
+  );
+
   return (
     <div className={`lr-markdown ${className}`}>
       <ReactMarkdown
@@ -45,7 +104,18 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           h4: ({ children }) => <h4 className="lr-markdown__h4">{children}</h4>,
 
           // Paragraphs and text
-          p: ({ children }) => <p className="lr-markdown__p">{children}</p>,
+          p: ({ children }) => {
+            const textContent = React.Children.toArray(children)
+              .map(extractText)
+              .join("")
+              .trim();
+
+            if (isStandaloneMarkerText(textContent)) {
+              return null;
+            }
+
+            return <p className="lr-markdown__p">{children}</p>;
+          },
           strong: ({ children }) => (
             <strong className="lr-markdown__strong">{children}</strong>
           ),
@@ -168,7 +238,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           },
         }}
       >
-        {content}
+        {normalizedContent}
       </ReactMarkdown>
     </div>
   );

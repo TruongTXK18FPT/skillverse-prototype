@@ -51,6 +51,12 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
   const [showGifPicker, setShowGifPicker] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const sortMessagesByTimeAsc = (items: Message[]): Message[] => {
+    return [...items].sort(
+      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+    );
+  };
+
   const resolveAvatarUrl = (raw?: string): string => {
     if (!raw) return '/images/meowl.jpg';
     if (/^https?:\/\//i.test(raw)) return raw;
@@ -87,7 +93,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
           timestamp: msg.createdAt,
         }),
       );
-      setMessages(formattedMessages.reverse());
+      setMessages(sortMessagesByTimeAsc(formattedMessages));
     } catch (error) {
       console.error('Failed to load messages:', error);
     }
@@ -119,7 +125,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
         content: response.content,
         timestamp: response.createdAt,
       };
-      setMessages((prev) => [...prev, newMessage]);
+      setMessages((prev) => sortMessagesByTimeAsc([...prev, newMessage]));
     } catch (error) {
       console.error('Failed to send message:', error);
       showAppError('Gửi tin nhắn thất bại', 'Không thể gửi tin nhắn. Vui lòng thử lại.');
@@ -158,7 +164,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
         content: response.content,
         timestamp: response.createdAt,
       };
-      setMessages((prev) => [...prev, newMessage]);
+      setMessages((prev) => sortMessagesByTimeAsc([...prev, newMessage]));
     } catch (error) {
       console.error('Failed to send GIF:', error);
       showAppError('Gửi GIF thất bại', 'Không thể gửi GIF. Vui lòng thử lại.');

@@ -15,7 +15,6 @@
   --sv-usage-danger: #ff7f8f;
   position: relative;
   overflow: hidden;
-  border-radius: 30px;
   border: 1px solid var(--sv-usage-border);
   background: var(--sv-usage-surface);
   box-shadow:

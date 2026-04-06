@@ -47,9 +47,8 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
     });
   };
 
-  const handleDismissToHome = () => {
+  const handleDismiss = () => {
     onClose();
-    window.location.assign("/");
   };
 
   return (
@@ -62,7 +61,7 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={handleDismissToHome}
+            onClick={handleDismiss}
           />
 
           {/* Main Container */}
@@ -84,7 +83,7 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
               <div className="lrm-orb lrm-orb-3"></div>
 
               {/* Close Button */}
-              <button className="lrm-close" onClick={handleDismissToHome}>
+              <button className="lrm-close" onClick={handleDismiss}>
                 <X size={16} />
               </button>
 

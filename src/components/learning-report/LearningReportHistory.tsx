@@ -75,10 +75,6 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
     navigate(`/learning-report?id=${reportId}`);
   };
 
-  const handleCreateNewReport = () => {
-    navigate("/learning-report");
-  };
-
   const handleDownloadPDF = async (
     report: StudentLearningReportResponse,
     e: React.MouseEvent,

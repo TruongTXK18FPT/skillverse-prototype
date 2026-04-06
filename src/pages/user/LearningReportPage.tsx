@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   X,
   FileText,
@@ -15,13 +15,11 @@ import {
   CheckCircle2,
   Zap,
   BookOpen,
-  Calendar,
   BarChart2,
   Lightbulb,
   Trophy,
   Flame,
   Star,
-  ChevronRight,
   GraduationCap,
   Download,
   ArrowLeft,
@@ -39,6 +37,19 @@ import MarkdownRenderer from "../../components/learning-report/MarkdownRenderer"
 import { downloadLearningReportPDF } from "../../components/learning-report/PDFGenerator";
 import "./LearningReportPage.css";
 import "../../components/learning-report/MarkdownRenderer.css";
+
+interface TocChildItem {
+  id: string;
+  title: string;
+  level: 2 | 3;
+}
+
+interface TocParentItem {
+  id: string;
+  key: string;
+  title: string;
+  children: TocChildItem[];
+}
 
 // Section configuration for navigation
 const SECTION_CONFIG = [
@@ -108,6 +119,38 @@ const getMeowlSpeech = (
   return "Meowl ở đây nè! 🐱";
 };
 
+const slugifyHeading = (input: string): string =>
+  input
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+
+const isSameLocalDate = (sourceDate: Date, targetDate: Date): boolean => {
+  return (
+    sourceDate.getFullYear() === targetDate.getFullYear() &&
+    sourceDate.getMonth() === targetDate.getMonth() &&
+    sourceDate.getDate() === targetDate.getDate()
+  );
+};
+
+/** Memoized section content – only re-renders when section content actually changes */
+const SectionContent = memo(
+  ({ content }: { content: string }) => (
+    <motion.div
+      className="lr-page__section-markdown"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <MarkdownRenderer content={content} />
+    </motion.div>
+  ),
+  (prev, next) => prev.content === next.content,
+);
+SectionContent.displayName = "SectionContent";
+
 const LearningReportPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -121,10 +164,14 @@ const LearningReportPage: React.FC = () => {
   const [canGenerate, setCanGenerate] = useState<CanGenerateResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState("overview");
+  const [activeHeadingId, setActiveHeadingId] = useState("lr-doc-overview");
+  const [tocItems, setTocItems] = useState<TocParentItem[]>([]);
   const [selectedReportType, setSelectedReportType] = useState<ReportType>("COMPREHENSIVE");
   const [meowlSpeech, setMeowlSpeech] = useState("");
   const [generatingStep, setGeneratingStep] = useState(0);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+  const headingElementMapRef = useRef<Record<string, HTMLElement>>({});
+  const headingParentMapRef = useRef<Record<string, string>>({});
 
   useEffect(() => {
     if (isValidReportId(reportIdParam)) {
@@ -225,6 +272,7 @@ const LearningReportPage: React.FC = () => {
       const canGen = await learningReportService.canGenerateReport();
       setCanGenerate(canGen);
       setActiveSection("overview");
+      setActiveHeadingId("lr-doc-overview");
     } catch (err: unknown) {
       console.error("Error generating report:", err);
       setError(err instanceof Error ? err.message : "Không thể tạo báo cáo.");
@@ -243,6 +291,7 @@ const LearningReportPage: React.FC = () => {
       const canGen = await learningReportService.canGenerateReport();
       setCanGenerate(canGen);
       setActiveSection("overview");
+      setActiveHeadingId("lr-doc-overview");
     } catch (err: unknown) {
       console.error("Error generating quick report:", err);
       setError(err instanceof Error ? err.message : "Không thể tạo báo cáo.");
@@ -322,40 +371,240 @@ const LearningReportPage: React.FC = () => {
     return sections;
   };
 
-  const renderSectionContent = () => {
+  const availableSections = useMemo(() => getAvailableSections(), [report]);
+  const detailSections = useMemo(
+    () => availableSections.filter(({ key }) => key !== "overview"),
+    [availableSections],
+  );
+
+  const isReportFromToday = useMemo(() => {
+    if (!report?.generatedAt) return false;
+
+    const reportDate = new Date(report.generatedAt);
+    if (Number.isNaN(reportDate.getTime())) return false;
+
+    return isSameLocalDate(reportDate, new Date());
+  }, [report?.generatedAt]);
+
+  const setSectionRef = useCallback(
+    (key: string) => (node: HTMLElement | null) => {
+      sectionRefs.current[key] = node;
+    },
+    [],
+  );
+
+  const handleSidebarSectionClick = useCallback((headingId: string) => {
+    const headingNode = headingElementMapRef.current[headingId];
+    if (!headingNode) return;
+    headingNode.scrollIntoView({ behavior: "smooth", block: "start" });
+    const parentKey = headingParentMapRef.current[headingId];
+    if (parentKey) {
+      setActiveSection(parentKey);
+    }
+    setActiveHeadingId(headingId);
+  }, []);
+
+  useEffect(() => {
+    if (!report || detailSections.length === 0) {
+      setTocItems([]);
+      headingElementMapRef.current = {};
+      headingParentMapRef.current = {};
+      return;
+    }
+
+    const parentItems: TocParentItem[] = [];
+    const headingElementMap: Record<string, HTMLElement> = {};
+    const headingParentMap: Record<string, string> = {};
+
+    detailSections.forEach(({ key }) => {
+      const sectionNode = sectionRefs.current[key];
+      if (!sectionNode) return;
+
+      const config = SECTION_CONFIG.find((section) => section.key === key);
+      if (!config) return;
+
+      const parentId = `lr-doc-${key}`;
+      const parentHeading = sectionNode.querySelector(
+        ".lr-page__doc-h2",
+      ) as HTMLHeadingElement | null;
+
+      if (parentHeading) {
+        parentHeading.id = parentId;
+        headingElementMap[parentId] = parentHeading;
+        headingParentMap[parentId] = key;
+      }
+
+      const childHeadings = Array.from(
+        sectionNode.querySelectorAll(
+          ".lr-page__content-section-body h2.lr-markdown__h2, .lr-page__content-section-body h3.lr-markdown__h3",
+        ),
+      ) as HTMLHeadingElement[];
+
+      const slugCounter: Record<string, number> = {};
+      const children: TocChildItem[] = childHeadings.map((headingNode) => {
+        const title = headingNode.textContent?.trim() || "Mục con";
+        const level = headingNode.tagName.toLowerCase() === "h2" ? 2 : 3;
+        const slug = slugifyHeading(title) || "section";
+        const nextCount = (slugCounter[slug] ?? 0) + 1;
+        slugCounter[slug] = nextCount;
+        const childId = `${parentId}--${slug}-${nextCount}`;
+
+        headingNode.id = childId;
+        headingNode.dataset.parentHeading = parentId;
+        headingElementMap[childId] = headingNode;
+        headingParentMap[childId] = key;
+
+        return { id: childId, title, level };
+      });
+
+      parentItems.push({
+        id: parentId,
+        key,
+        title: config.label,
+        children,
+      });
+    });
+
+    headingElementMapRef.current = headingElementMap;
+    headingParentMapRef.current = headingParentMap;
+    setTocItems(parentItems);
+
+    const firstDetailKey = detailSections[0]?.key;
+    const firstDetailHeadingId = firstDetailKey
+      ? `lr-doc-${firstDetailKey}`
+      : "lr-doc-overview";
+
+    setActiveHeadingId((previous) =>
+      headingElementMap[previous] ? previous : firstDetailHeadingId,
+    );
+    setActiveSection((previous) =>
+      previous && sectionRefs.current[previous]
+        ? previous
+        : firstDetailKey || "overview",
+    );
+  }, [report, detailSections]);
+
+  useEffect(() => {
+    if (tocItems.length === 0) return;
+
+    const visibleHeadings = new Map<string, { ratio: number; top: number }>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const heading = entry.target as HTMLElement;
+          const id = heading.id;
+          if (!id) return;
+
+          if (entry.isIntersecting) {
+            visibleHeadings.set(id, {
+              ratio: entry.intersectionRatio,
+              top: entry.boundingClientRect.top,
+            });
+          } else {
+            visibleHeadings.delete(id);
+          }
+        });
+
+        if (visibleHeadings.size === 0) return;
+
+        const sorted = Array.from(visibleHeadings.entries()).sort((a, b) => {
+          const scoreA = Math.abs(a[1].top - 100) - a[1].ratio * 35;
+          const scoreB = Math.abs(b[1].top - 100) - b[1].ratio * 35;
+          return scoreA - scoreB;
+        });
+
+        const nextHeadingId = sorted[0]?.[0];
+        if (!nextHeadingId) return;
+
+        setActiveHeadingId((prev) =>
+          prev === nextHeadingId ? prev : nextHeadingId,
+        );
+
+        const parentKey = headingParentMapRef.current[nextHeadingId];
+        if (parentKey) {
+          setActiveSection((prev) => (prev === parentKey ? prev : parentKey));
+        }
+      },
+      {
+        root: null,
+        threshold: [0.1, 0.25, 0.4, 0.6],
+        rootMargin: "-100px 0px -70% 0px",
+      },
+    );
+
+    Object.values(headingElementMapRef.current).forEach((element) => {
+      observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, [tocItems]);
+
+  const renderOverviewContent = () => {
     if (!report) return null;
-    if (activeSection === "overview") {
-      return (
-        <div className="lr-page__overview-content">
+    const progressValue = report.overallProgress ?? 0;
+    const studyHours = report.metrics?.totalStudyHours ?? 0;
+    const streakValue = report.metrics?.currentStreak ?? 0;
+    const completedTasks = report.metrics?.totalTasksCompleted ?? 0;
+
+    const renderEmptyStat = (unit = "") => (
+      <div className="lr-page__stat-empty">
+        <span className="lr-page__stat-empty-value">
+          -{unit ? ` ${unit}` : ""}
+        </span>
+        <span className="lr-page__stat-empty-text">
+          Chưa có dữ liệu, bắt đầu học ngay nhé!
+        </span>
+      </div>
+    );
+
+    return (
+      <div className="lr-page__overview-content">
           <div className="lr-page__stats-grid">
             <motion.div className="lr-page__stat-card lr-page__stat-card--primary" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
               <div className="lr-page__stat-icon"><BarChart2 size={24} /></div>
               <div className="lr-page__stat-details">
-                <span className="lr-page__stat-value">{report.overallProgress}%</span>
+                {progressValue > 0 ? (
+                  <span className="lr-page__stat-value">{progressValue}%</span>
+                ) : (
+                  renderEmptyStat("%")
+                )}
                 <span className="lr-page__stat-label">Tiến độ tổng thể</span>
               </div>
               <div className="lr-page__stat-progress">
-                <div className="lr-page__stat-progress-bar" style={{ width: `${report.overallProgress}%` }} />
+                <div className="lr-page__stat-progress-bar" style={{ width: `${progressValue}%` }} />
               </div>
             </motion.div>
             <motion.div className="lr-page__stat-card" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }}>
               <div className="lr-page__stat-icon lr-page__stat-icon--time"><Clock size={24} /></div>
               <div className="lr-page__stat-details">
-                <span className="lr-page__stat-value">{getTotalStudyHours()}</span>
+                {studyHours > 0 ? (
+                  <span className="lr-page__stat-value">{getTotalStudyHours()}</span>
+                ) : (
+                  renderEmptyStat("h")
+                )}
                 <span className="lr-page__stat-label">Giờ học tổng</span>
               </div>
             </motion.div>
             <motion.div className="lr-page__stat-card" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}>
               <div className="lr-page__stat-icon lr-page__stat-icon--streak"><Flame size={24} /></div>
               <div className="lr-page__stat-details">
-                <span className="lr-page__stat-value">{getStreakDisplay().emoji} {getStreakDisplay().value}</span>
+                {streakValue > 0 ? (
+                  <span className="lr-page__stat-value">{getStreakDisplay().emoji} {getStreakDisplay().value}</span>
+                ) : (
+                  renderEmptyStat("")
+                )}
                 <span className="lr-page__stat-label">{getStreakDisplay().description}</span>
               </div>
             </motion.div>
             <motion.div className="lr-page__stat-card" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}>
               <div className="lr-page__stat-icon lr-page__stat-icon--tasks"><CheckCircle2 size={24} /></div>
               <div className="lr-page__stat-details">
-                <span className="lr-page__stat-value">{report.metrics?.totalTasksCompleted ?? 0}</span>
+                {completedTasks > 0 ? (
+                  <span className="lr-page__stat-value">{completedTasks}</span>
+                ) : (
+                  renderEmptyStat("")
+                )}
                 <span className="lr-page__stat-label">Tasks hoàn thành</span>
               </div>
             </motion.div>
@@ -379,14 +628,49 @@ const LearningReportPage: React.FC = () => {
               <div className="lr-page__summary-content">
                 <p>Báo cáo tạo vào <strong>{learningReportService.formatReportDate(report.generatedAt)}</strong>. Bạn đã dành <strong>{report.metrics?.totalStudyHours ?? 0} giờ</strong> học tập và hoàn thành <strong>{report.metrics?.totalTasksCompleted ?? 0} công việc</strong>.</p>
               </div>
+              {!isReportFromToday && (
+                <div className="lr-page__summary-actions">
+                  <button
+                    className="lr-page__action-btn lr-page__action-btn--pdf"
+                    onClick={handleDownloadPDF}
+                    disabled={isDownloadingPDF}
+                  >
+                    <Download size={16} className={isDownloadingPDF ? "spinning" : ""} />
+                    <span>{isDownloadingPDF ? "ĐANG TẢI..." : "TẢI PDF"}</span>
+                  </button>
+                  <button
+                    className="lr-page__action-btn lr-page__action-btn--new"
+                    onClick={handleGenerateQuickReport}
+                    disabled={!canGenerate?.canGenerate}
+                  >
+                    <RefreshCw size={16} />
+                    <span>TẠO BÁO CÁO MỚI</span>
+                  </button>
+                </div>
+              )}
             </motion.div>
           </div>
+      </div>
+    );
+  };
+
+  const renderSectionBody = (sectionKey: string) => {
+    if (sectionKey === "overview") {
+      return renderOverviewContent();
+    }
+
+    if (!report) return null;
+    const content = report.sections?.[sectionKey as keyof typeof report.sections];
+    if (!content) {
+      return (
+        <div className="lr-page__empty-section">
+          <FileText size={48} />
+          <p>Không có dữ liệu cho phần này</p>
         </div>
       );
     }
-    const content = report.sections?.[activeSection as keyof typeof report.sections];
-    if (!content) return <div className="lr-page__empty-section"><FileText size={48} /><p>Không có dữ liệu cho phần này</p></div>;
-    return <motion.div className="lr-page__section-markdown" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} key={activeSection}><MarkdownRenderer content={content} /></motion.div>;
+
+    return <SectionContent content={content} />;
   };
 
   return (
@@ -503,54 +787,103 @@ const LearningReportPage: React.FC = () => {
                </div>
              </div>
           ) : (
-            <div className="lr-page__report-layout">
-              {/* Sidebar Navigation */}
-              <aside className="lr-page__sidebar">
-                  <div className="lr-page__sidebar-meta">
-                    <div className="lr-page__meta-label">THỜI GIAN KHỞI TẠO</div>
-                    <div className="lr-page__meta-value">{learningReportService.formatReportDate(report.generatedAt)}</div>
+            <>
+              <section className="lr-page__overview-block">
+                <header className="lr-page__content-section-header">
+                  <div className="lr-page__content-section-title">
+                    <BarChart2 size={18} />
+                    <h2 className="lr-page__doc-h2">Tổng quan</h2>
                   </div>
+                </header>
+                <div className="lr-page__content-section-body">
+                  {renderOverviewContent()}
+                </div>
+              </section>
 
-                  <nav className="lr-page__nav">
-                    {getAvailableSections().map(({ key }) => {
-                      const config = SECTION_CONFIG.find((s) => s.key === key);
-                      if (!config) return null;
-                      const IconComponent = config.icon;
+              <div className="lr-page__report-layout">
+                <aside className="lr-page__sidebar">
+                  <nav className="lr-page__nav lr-page__toc" aria-label="Mục lục báo cáo">
+                    {tocItems.map((parent) => {
+                      const config = SECTION_CONFIG.find((section) => section.key === parent.key);
+                      const IconComponent = config?.icon || FileText;
+                      const isParentActive = activeSection === parent.key;
+                      const isExpanded = isParentActive;
+
                       return (
-                        <button key={key} className={`lr-page__nav-item ${activeSection === key ? "active" : ""}`} onClick={() => setActiveSection(key)}>
-                          <IconComponent size={20} />
-                          <span>{config.label.toUpperCase()}</span>
-                          <div className="lr-page__nav-indicator" />
-                        </button>
+                        <div key={parent.id} className="lr-page__toc-group">
+                          <button
+                            className={`lr-page__nav-item ${isParentActive ? "active" : ""}`}
+                            onClick={() => handleSidebarSectionClick(parent.id)}
+                          >
+                            <IconComponent size={18} />
+                            <span>{parent.title.toUpperCase()}</span>
+                            <div className="lr-page__nav-indicator" />
+                          </button>
+
+                          <div className={`lr-page__toc-children ${isExpanded ? "lr-page__toc-children--open" : ""}`}>
+                            {parent.children.map((child) => (
+                              <button
+                                key={child.id}
+                                className={`lr-page__toc-child lr-page__toc-child--l${child.level} ${activeHeadingId === child.id ? "active" : ""}`}
+                                onClick={() => handleSidebarSectionClick(child.id)}
+                              >
+                                <span>{child.title}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                       );
                     })}
                   </nav>
+                </aside>
 
-                  <div className="lr-page__sidebar-footer">
-                    <button className="lr-page__action-btn lr-page__action-btn--pdf" onClick={handleDownloadPDF} disabled={isDownloadingPDF}>
-                      <Download size={18} className={isDownloadingPDF ? "spinning" : ""} />
-                      <span>{isDownloadingPDF ? "ĐANG TẢI..." : "TẢI PDF"}</span>
-                    </button>
-                    <button className="lr-page__action-btn lr-page__action-btn--new" onClick={handleGenerateQuickReport} disabled={!canGenerate?.canGenerate}>
-                      <RefreshCw size={18} />
-                      <span>TẠO BÁO CÁO MỚI</span>
-                    </button>
-                  </div>
-              </aside>
+                <section className="lr-page__content-view">
+                  <div className="lr-page__content-scrollable">
+                    {detailSections.map(({ key }) => {
+                      const config = SECTION_CONFIG.find((section) => section.key === key);
+                      if (!config) return null;
+                      const IconComponent = config.icon;
 
-              {/* Main Content View */}
-              <section className="lr-page__content-view" ref={contentRef}>
-                <div className="lr-page__content-header">
-                  <div className="lr-page__content-title">
-                    <div className="lr-page__title-decor" />
-                    <h2>{SECTION_CONFIG.find(s => s.key === activeSection)?.label.toUpperCase() || "TỔNG QUAN"} BÁO CÁO</h2>
+                      return (
+                        <section
+                          key={key}
+                          id={`lr-section-${key}`}
+                          ref={setSectionRef(key)}
+                          className="lr-page__content-section"
+                        >
+                          <header className="lr-page__content-section-header">
+                            <div className="lr-page__content-section-title">
+                              <IconComponent size={18} />
+                              <h2 className="lr-page__doc-h2">{config.label}</h2>
+                            </div>
+                          </header>
+                          <div className="lr-page__content-section-body">
+                            {renderSectionBody(key)}
+                          </div>
+                        </section>
+                      );
+                    })}
+
+                    <section className="lr-page__content-footer">
+                      <div className="lr-page__content-footer-meta">
+                        <span>Thời gian khởi tạo:</span>
+                        <strong>{learningReportService.formatReportDate(report.generatedAt)}</strong>
+                      </div>
+                      <div className="lr-page__content-footer-actions">
+                        <button className="lr-page__action-btn lr-page__action-btn--pdf" onClick={handleDownloadPDF} disabled={isDownloadingPDF}>
+                          <Download size={18} className={isDownloadingPDF ? "spinning" : ""} />
+                          <span>{isDownloadingPDF ? "ĐANG TẢI..." : "TẢI PDF"}</span>
+                        </button>
+                        <button className="lr-page__action-btn lr-page__action-btn--new" onClick={handleGenerateQuickReport} disabled={!canGenerate?.canGenerate}>
+                          <RefreshCw size={18} />
+                          <span>TẠO BÁO CÁO MỚI</span>
+                        </button>
+                      </div>
+                    </section>
                   </div>
-                </div>
-                <div className="lr-page__content-scrollable">
-                  {renderSectionContent()}
-                </div>
-              </section>
-            </div>
+                </section>
+              </div>
+            </>
           )}
         </main>
       </div>
