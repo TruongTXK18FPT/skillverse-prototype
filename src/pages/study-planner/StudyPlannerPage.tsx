@@ -921,8 +921,8 @@ const StudyPlannerPage: React.FC = () => {
             )}
               </div>
 
-              {false && (
-                <aside className="study-plan-today-panel">
+              {/* Today panel disabled */}
+              {/* <aside className="study-plan-today-panel">
                   <div className="study-plan-today-panel__header">
                     <div>
                       <span className="study-plan-today-panel__eyebrow">Điều phối hôm nay</span>
@@ -969,8 +969,7 @@ const StudyPlannerPage: React.FC = () => {
                       </div>
                     )}
                   </div>
-                </aside>
-              )}
+                </aside> */}
             </div>
           </div>
         </div>

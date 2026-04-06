@@ -148,8 +148,7 @@ const RoadmapNodeFocusPanel = ({
         </header>
 
         {/* Overview tab content */}
-        {true && (
-          <>
+        <>
             <section className="roadmap-node-focus-panel__summary">
               <article className="roadmap-node-focus-panel__chip">
                 <span className="roadmap-node-focus-panel__chip-label">Trạng thái</span>
@@ -303,8 +302,7 @@ const RoadmapNodeFocusPanel = ({
                 </p>
               )}
             </section>
-          </>
-        )}
+        </>
       </aside>
     </div>
   );

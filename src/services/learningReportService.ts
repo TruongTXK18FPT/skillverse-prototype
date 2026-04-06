@@ -131,7 +131,7 @@ function parseReportId(id: number | string | null | undefined): number {
  * Maps backend fields to frontend expected fields
  */
 function normalizeReportResponse(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   response: any,
 ): StudentLearningReportResponse {
   // Map 'id' to 'reportId' if needed
