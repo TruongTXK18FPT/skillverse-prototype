@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   BookOpen, Search, Eye, CheckCircle, XCircle,
   Clock, User, Calendar, RefreshCw, ShieldOff,
@@ -58,6 +58,7 @@ export const CourseApprovalTabCosmic: React.FC = () => {
   const { user } = useAuth();
   const { toast, isVisible, hideToast, showSuccess, showError, showWarning, showInfo } = useToast();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   // ==================== STATE ====================
   const [courses, setCourses] = useState<CourseSummaryDTO[]>([]);
@@ -230,6 +231,20 @@ export const CourseApprovalTabCosmic: React.FC = () => {
       void loadRevisionQueue();
     }
   }, [user, loadRevisionQueue]);
+
+  useEffect(() => {
+    const requestedStatus = (searchParams.get('status') || 'PENDING').toUpperCase();
+    if (
+      requestedStatus === 'ALL' ||
+      requestedStatus === 'PENDING' ||
+      requestedStatus === 'PUBLIC' ||
+      requestedStatus === 'REJECTED' ||
+      requestedStatus === 'SUSPENDED'
+    ) {
+      setActiveTab(requestedStatus);
+      setCurrentPage(1);
+    }
+  }, [searchParams]);
 
   // Scroll lock for modals
   useEffect(() => {

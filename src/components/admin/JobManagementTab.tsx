@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useSearchParams } from "react-router-dom";
 import {
   AreaChart,
   Area,
@@ -144,6 +145,7 @@ const getErrorMessage = (error: any, fallback: string) => {
 // ==================== COMPONENT ====================
 
 export const JobManagementTab: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const {
     toast,
@@ -220,6 +222,18 @@ export const JobManagementTab: React.FC = () => {
       document.body.style.overflow = "unset";
     };
   }, [showDetailsModal, showActionModal, showDisputeModal]);
+
+  useEffect(() => {
+    const requestedSubTab = searchParams.get("subTab");
+    if (
+      requestedSubTab === "stats" ||
+      requestedSubTab === "all" ||
+      requestedSubTab === "approve" ||
+      requestedSubTab === "disputes"
+    ) {
+      setSubTab(requestedSubTab);
+    }
+  }, [searchParams]);
 
   // ==================== DATA LOADING ====================
 

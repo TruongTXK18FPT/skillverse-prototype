@@ -12,7 +12,6 @@ import {
   Funnel,
   Check,
 } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
 import { FaYoutube } from 'react-icons/fa';
 import { SiGooglemeet } from 'react-icons/si';
 import {
@@ -64,6 +63,33 @@ const COLUMN_COLORS = [
   '#8b5cf6',
 ];
 
+const KANBAN_VISIBLE_TASKS = 10;
+
+const normalizePlannerLabelToken = (value?: string | null): string =>
+  (value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[_\s-]+/g, '');
+
+const PLANNER_LABELS_BY_TOKEN: Record<string, string> = {
+  todo: 'Cần làm',
+  backlog: 'Tồn đọng',
+  pending: 'Chờ xử lý',
+  inprogress: 'Đang thực hiện',
+  doing: 'Đang thực hiện',
+  ongoing: 'Đang thực hiện',
+  done: 'Hoàn thành',
+  completed: 'Hoàn thành',
+  finished: 'Hoàn thành',
+  overdue: 'Quá hạn',
+  schedule: 'Lịch học',
+};
+
+const getPlannerDisplayLabel = (value?: string | null): string => {
+  const normalized = normalizePlannerLabelToken(value);
+  return PLANNER_LABELS_BY_TOKEN[normalized] || value || 'Chưa đặt tên';
+};
+
 const RoadmapFilterPanel: React.FC<{
   isOpen: boolean;
   onClose: () => void;
@@ -73,14 +99,14 @@ const RoadmapFilterPanel: React.FC<{
 }> = ({ isOpen, onClose, options, selected, onSelect }) => {
   if (!isOpen) return null;
 
-  const ALL_OPT = { id: 'all' as const, label: 'Tất cả roadmap' };
-  const CURRENT_OPT = { id: 'current' as const, label: 'Roadmap hiện tại' };
+  const ALL_OPT = { id: 'all' as const, label: 'Tất cả lộ trình' };
+  const CURRENT_OPT = { id: 'current' as const, label: 'Lộ trình hiện tại' };
   const fixedOptions = [ALL_OPT, CURRENT_OPT, ...options];
 
   return (
     <div className="roadmap-filter-panel">
       <div className="roadmap-filter-panel-header">
-        <span className="roadmap-filter-panel-title">Lọc theo Roadmap</span>
+        <span className="roadmap-filter-panel-title">Lọc theo lộ trình</span>
         <button className="roadmap-filter-panel-close" onClick={onClose} title="Đóng">
           <X size={14} />
         </button>
@@ -132,13 +158,13 @@ const formatRoadmapTaskNote = (rawNotes: string): string => {
   }
 
   const [, journeyId, roadmapId, nodeId, nodeOrder, step] = markerMatch;
-  const nodeLabel = nodeOrder ? `Node ${nodeOrder}` : `Node ${nodeId}`;
-  const taskLabel = step ? `Task ${step}` : 'Task roadmap';
+  const nodeLabel = nodeOrder ? `Nút ${nodeOrder}` : `Nút ${nodeId}`;
+  const taskLabel = step ? `Công việc ${step}` : 'Công việc lộ trình';
   const sourceParts = [nodeLabel, taskLabel];
   if (journeyId) {
-    sourceParts.push(`Journey #${journeyId}`);
+    sourceParts.push(`Hành trình #${journeyId}`);
   }
-  sourceParts.push(`Roadmap #${roadmapId}`);
+  sourceParts.push(`Lộ trình #${roadmapId}`);
   return sourceParts.join(' • ');
 };
 
@@ -175,10 +201,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     e.dataTransfer.dropEffect = 'move';
     setDragOverColumnId(targetColId);
     setDragOverIndex(index);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
   };
 
   const handleDragEnd = () => {
@@ -397,7 +419,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         <button
           className={`roadmap-filter-toggle ${showFilterPanel ? 'active' : ''}`}
           onClick={() => setShowFilterPanel(!showFilterPanel)}
-          title="Lọc theo Roadmap"
+          title="Lọc theo lộ trình"
         >
           <Funnel size={16} />
           Lọc
@@ -406,6 +428,8 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       <div className="study-plan-board-container">
       {columns.map((column) => {
         const oldOverdueCount = column.tasks.filter(isTaskOldOverdue).length;
+        const hasOverflowTasks = column.tasks.length > KANBAN_VISIBLE_TASKS;
+        const displayColumnName = getPlannerDisplayLabel(column.name);
 
         return (
           <div
@@ -419,14 +443,21 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
               className="study-plan-column-header"
               style={{ borderBottomColor: column.color || 'var(--sv-border)' }}
             >
-              <div
-                className="study-plan-column-title"
-                style={{ color: column.color || 'var(--sv-primary)' }}
-              >
-                {column.name}{' '}
-                <span style={{ opacity: 0.5, fontSize: '0.8em' }}>
-                  ({column.tasks.length})
-                </span>
+              <div className="study-plan-column-heading">
+                <div
+                  className="study-plan-column-title"
+                  style={{ color: column.color || 'var(--sv-primary)' }}
+                >
+                  {displayColumnName}{' '}
+                  <span style={{ opacity: 0.5, fontSize: '0.8em' }}>
+                    ({column.tasks.length})
+                  </span>
+                </div>
+                {hasOverflowTasks && (
+                  <span className="study-plan-column-overflow-note">
+                    Hiển thị 10 công việc, cuộn để xem thêm
+                  </span>
+                )}
               </div>
 
               <div className="study-plan-column-header-actions">
@@ -434,9 +465,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                   <button
                     className="study-plan-column-action-btn study-plan-column-action-btn--danger"
                     onClick={() =>
-                      onClearColumnOverdue(column.id, column.name, oldOverdueCount)
+                      onClearColumnOverdue(column.id, displayColumnName, oldOverdueCount)
                     }
-                    title={`Xóa ${oldOverdueCount} task quá hạn hơn ${overdueDaysThreshold} ngày`}
+                    title={`Xóa ${oldOverdueCount} công việc quá hạn hơn ${overdueDaysThreshold} ngày`}
                     disabled={isClearingOverdue}
                   >
                     <Trash2 size={14} />
@@ -483,7 +514,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
               </div>
             )}
 
-            <div className="study-plan-task-list">
+            <div
+              className={`study-plan-task-list ${hasOverflowTasks ? 'study-plan-task-list--scrollable' : ''}`}
+            >
               {column.tasks.length === 0 && (
                 <div
                   style={{
@@ -505,10 +538,11 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                 const executionState = resolvePlannerExecutionState(task);
                 const roadmapTaskStatusText =
                   executionState === 'done'
-                    ? 'Done'
+                    ? 'Hoàn thành'
                     : executionState === 'in-progress'
-                      ? 'In progress'
-                      : 'To do';
+                      ? 'Đang học'
+                      : 'Cần làm';
+                const displayTaskStatus = getPlannerDisplayLabel(task.status || column.name);
 
                 return (
                 <React.Fragment key={task.id}>
@@ -557,7 +591,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                         color: getPriorityColor(task.priority),
                       }}
                     >
-                      {task.status || column.name}
+                      {displayTaskStatus}
                     </div>
                   )}
 
@@ -614,7 +648,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                         }}
                       >
                         <Clock size={12} />{' '}
-                        {new Date(task.deadline).toLocaleDateString(undefined, {
+                        {new Date(task.deadline).toLocaleDateString('vi-VN', {
                           month: 'short',
                           day: 'numeric',
                         })}
@@ -647,7 +681,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
               className="study-plan-add-task-btn"
               onClick={() => onAddTask(column.id)}
             >
-              <Plus size={16} /> Thêm Công Việc
+              <Plus size={16} /> Thêm công việc
             </button>
           </div>
         );
@@ -667,7 +701,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           <form onSubmit={handleCreateColumn} style={{ padding: '1rem', width: '100%' }}>
             <input
               className="study-plan-input"
-              placeholder="Tên Cột"
+              placeholder="Tên cột"
               value={newColumnName}
               onChange={(e) => setNewColumnName(e.target.value)}
               autoFocus
@@ -705,7 +739,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
               fontSize: '1.1rem',
             }}
           >
-            <Plus size={24} /> Thêm Danh Sách
+            <Plus size={24} /> Thêm danh sách
           </button>
         )}
       </div>

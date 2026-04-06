@@ -8,6 +8,7 @@ import LoginRequiredModal from "../auth/LoginRequiredModal";
 import "../../styles/MeowlGuide.css";
 import guideMessages from "./MeowlGuideMsg.json";
 import MeowlChatV2 from "./MeowlChatV2";
+import { type MeowlContextMode } from "../../services/meowlContextService";
 
 interface GuideStep {
   id: number;
@@ -17,9 +18,58 @@ interface GuideStep {
   contentVi: string;
 }
 
+interface RoadmapContextData {
+  roadmapTitle: string;
+  nodeTitle: string;
+  nodeDescription?: string;
+  learningObjectives?: string[];
+  keyConcepts?: string[];
+}
+
+interface CourseContextData {
+  courseTitle: string;
+  moduleTitle: string;
+  lessonTitle: string;
+  lessonType?: string;
+  modules?: {
+    moduleId: number;
+    moduleTitle: string;
+    lessons?: {
+      lessonId: number;
+      lessonTitle: string;
+      lessonType?: string;
+    }[];
+    quizzes?: {
+      lessonId: number;
+      lessonTitle: string;
+      lessonType?: string;
+    }[];
+    assignments?: {
+      lessonId: number;
+      lessonTitle: string;
+      lessonType?: string;
+    }[];
+  }[];
+  activeModuleId?: number | null;
+  activeLessonId?: number | null;
+  activeLessonTitle?: string;
+  activeLessonType?: string;
+  activeLessonDescription?: string;
+}
+
 interface MeowlGuideProps {
   currentPage?: string;
   languageOverride?: "en" | "vi";
+  /** Context mode for the chat panel opened by MeowlGuide */
+  panelMode?: MeowlContextMode;
+  /** Theme for the MeowlChatV2 panel content */
+  panelTheme?: "cyan" | "pink" | "hud";
+  /** Modes the user can switch between in MeowlChatV2 settings */
+  panelAllowedModes?: MeowlContextMode[];
+  /** Roadmap context — selected node info for auto-context in welcome message */
+  roadmapContext?: RoadmapContextData | null;
+  /** Course context — selected module/lesson for tutor mode */
+  courseContext?: CourseContextData | null;
 }
 
 const STORAGE_KEYS = {
@@ -29,6 +79,11 @@ const STORAGE_KEYS = {
 const MeowlGuide: React.FC<MeowlGuideProps> = ({
   currentPage = "home",
   languageOverride,
+  panelMode: initialPanelMode = "MODE_GENERAL_FAQ",
+  panelTheme = "cyan",
+  panelAllowedModes: initialAllowedModes,
+  roadmapContext,
+  courseContext,
 }) => {
   const navigate = useNavigate();
   const { language: contextLanguage } = useLanguage();
@@ -298,6 +353,11 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
         isOpen={isChatOpen}
         onClose={handleChatClose}
         onRequestLogin={handleRequestLogin}
+        panelMode={initialPanelMode}
+        panelTheme={panelTheme}
+        panelAllowedModes={initialAllowedModes}
+        roadmapContext={roadmapContext ?? undefined}
+        courseContext={courseContext ?? undefined}
       />
 
       {/* Dialogue Options - Above Mascot with staggered animation (Desktop Only) */}

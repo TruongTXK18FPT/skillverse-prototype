@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
-  Bot,
   Calendar,
   ClipboardList,
   ExternalLink,
@@ -44,13 +43,11 @@ import {
 } from "../../utils/courseRevisionMessages";
 import { showAppInfo, showAppWarning } from "../../context/ToastContext";
 import AttachmentManager from "../../components/course/AttachmentManager";
-import MeowlContextPanel, {
-  MeowlContextMode,
-} from "../../components/meowl/MeowlContextPanel";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import usePremiumAccess from "../../hooks/usePremiumAccess";
 import workspaceStyles from "./CourseLearningWorkspace.module.css";
+import MeowlGuide from "../../components/meowl/MeowlGuide";
 
 /**
  * Normalize mixed HTML+Markdown content so ReactMarkdown can parse it correctly.
@@ -98,6 +95,7 @@ import {
   VideoHudWrapper,
   ControlDeck,
 } from "../../components/learning-hud";
+import { type MeowlContextMode } from "../../services/meowlContextService";
 import "../../styles/CourseLearningQuiz.css";
 
 // --- LOCAL INTERFACES --- //
@@ -349,7 +347,6 @@ const CourseLearningPage = () => {
   const [modulesWithContent, setModulesWithContent] = useState<ModuleWithContent[]>([]);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isMeowlPanelOpen, setIsMeowlPanelOpen] = useState(true);
   const [expandedModules, setExpandedModules] = useState<number[]>([]);
   const [activeModulePreviewId, setActiveModulePreviewId] = useState<number | null>(null);
   const [activeLesson, setActiveLesson] = useState<{
@@ -1115,45 +1112,8 @@ const CourseLearningPage = () => {
   }, [activeItemType, activeLesson.moduleId, isActiveItemCompleted, isPreviewMode, requiresManualUpgradeGate]);
 
   const meowlPanelMode = useMemo<MeowlContextMode>(() => {
-    if (activeItemType === "quiz" || activeItemType === "assignment") {
-      return "MODE_EXAM_PROCTOR";
-    }
-
-    if (activeLessonDetail?.type === "READING") {
-      return "MODE_SOCRATIC_READING";
-    }
-
-    if (activeLessonDetail?.type === "VIDEO") {
-      return "MODE_COURSE_LEARNING";
-    }
-
-    return "MODE_GENERAL_FAQ";
-  }, [activeItemType, activeLessonDetail?.type]);
-
-  const meowlPanelTitle = useMemo(() => {
-    if (activeLessonTitle) {
-      return activeLessonTitle;
-    }
-
-    if (activeModulePreview?.title) {
-      return activeModulePreview.title;
-    }
-
-    return course?.title || "Ngữ cảnh học với Meowl";
-  }, [activeLessonTitle, activeModulePreview?.title, course?.title]);
-
-  const meowlPanelSubtitle = useMemo(() => {
-    switch (meowlPanelMode) {
-      case "MODE_EXAM_PROCTOR":
-        return "Tập trung vào quy tắc, chiến lược làm bài và giữ tính công bằng của bài đánh giá.";
-      case "MODE_SOCRATIC_READING":
-        return "Đồng hành bằng câu hỏi gợi mở để bạn tự hiểu sâu nội dung đang đọc.";
-      case "MODE_COURSE_LEARNING":
-        return "Bám sát đúng bài học hiện tại thay vì kéo bạn sang ngữ cảnh khác.";
-      default:
-        return "Hỗ trợ hỏi đáp nhanh và điều hướng khi bạn chưa vào một nội dung cụ thể.";
-    }
-  }, [meowlPanelMode]);
+    return "MODE_COURSE_LEARNING";
+  }, []);
 
   const meowlPanelSummary = useMemo(() => {
     const summary: string[] = [];
@@ -1297,12 +1257,7 @@ const CourseLearningPage = () => {
       {/* Main Content */}
       <main className="learning-hud-main-content">
         <div
-          className={[
-            workspaceStyles.workspace,
-            !isMeowlPanelOpen ? workspaceStyles.workspaceMeowlCollapsed : "",
-          ]
-            .filter(Boolean)
-            .join(" ")}
+          className={workspaceStyles.workspace}
         >
           <div className={workspaceStyles.mainPane}>
             <div className="learning-hud-content-viewer">
@@ -1792,52 +1747,54 @@ const CourseLearningPage = () => {
               />
             </div>
           </div>
-
-          <aside
-            className={[
-              workspaceStyles.sidePane,
-              !isMeowlPanelOpen ? workspaceStyles.sidePaneCollapsed : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-          >
-            <div
-              className={[
-                workspaceStyles.sidePaneInner,
-                !isMeowlPanelOpen ? workspaceStyles.sidePaneInnerCollapsed : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-            >
-              {isMeowlPanelOpen ? (
-                <MeowlContextPanel
-                  mode={meowlPanelMode}
-                  title={meowlPanelTitle}
-                  subtitle={meowlPanelSubtitle}
-                  contextSummary={meowlPanelSummary}
-                  isPremiumLocked={!hasPremiumAccess}
-                  premiumLabel={planName}
-                  theme="hud"
-                  onClose={() => setIsMeowlPanelOpen(false)}
-                  closeLabel="Ẩn bảng chat Meowl"
-                />
-              ) : (
-                <button
-                  type="button"
-                  className={workspaceStyles.meowlRailToggle}
-                  onClick={() => setIsMeowlPanelOpen(true)}
-                  aria-label="Mở bảng chat Meowl"
-                  title="Nhấn để mở trợ lý học tập Meowl"
-                >
-                  <Bot size={28} className={workspaceStyles.meowlIconPulse} />
-                  <span className={workspaceStyles.meowlRailToggleTitle}>Meowl</span>
-                  <span className={workspaceStyles.meowlRailToggleHint}>Bấm để mở trợ lý học tập</span>
-                </button>
-              )}
-            </div>
-          </aside>
         </div>
       </main>
+
+      <MeowlGuide
+        currentPage="courses"
+        panelMode={meowlPanelMode}
+        panelTheme="cyan"
+        panelAllowedModes={["MODE_COURSE_LEARNING", "MODE_GENERAL_FAQ"]}
+        roadmapContext={null}
+        courseContext={
+          course && modulesWithContent.length > 0
+            ? {
+                courseTitle: course.title,
+                moduleTitle: activeCurriculumItem?.moduleTitle || "",
+                lessonTitle: activeCurriculumItem?.title || "",
+                lessonType: activeCurriculumItem?.itemType === "quiz"
+                  ? "QUIZ"
+                  : activeCurriculumItem?.itemType === "assignment"
+                    ? "ASSIGNMENT"
+                    : (activeLessonDetail?.type || "LESSON"),
+                modules: modulesWithContent.map((mod) => ({
+                  moduleId: mod.id,
+                  moduleTitle: mod.title,
+                  lessons: (mod.lessons ?? []).map((l) => ({
+                    lessonId: l.id,
+                    lessonTitle: l.title,
+                    lessonType: l.type,
+                  })),
+                  quizzes: (mod.quizzes ?? []).map((q) => ({
+                    lessonId: q.id,
+                    lessonTitle: q.title,
+                    lessonType: "QUIZ",
+                  })),
+                  assignments: (mod.assignments ?? []).map((a) => ({
+                    lessonId: a.id,
+                    lessonTitle: a.title,
+                    lessonType: "ASSIGNMENT",
+                  })),
+                })),
+                activeModuleId: activeLesson?.moduleId ?? null,
+                activeLessonId: activeLesson?.lessonId ?? null,
+                activeLessonTitle: activeLessonTitle || undefined,
+                activeLessonType: activeLessonDetail?.type || undefined,
+                activeLessonDescription: activeLessonDetail?.description || undefined,
+              }
+            : null
+        }
+      />
     </NeuralInterfaceLayout>
   );
 };

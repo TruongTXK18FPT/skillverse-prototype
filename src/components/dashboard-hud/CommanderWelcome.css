@@ -326,10 +326,6 @@
   color: #67e8f9;
 }
 
-.commander-welcome--premium .commander-welcome__jump-btn::after {
-  background: rgba(168, 85, 247, 0.1); /* Match premium leading icon background */
-  color: #a855f7; /* Match premium leading icon color */
-}
 
 /* ========== ID CARD ========== */
 

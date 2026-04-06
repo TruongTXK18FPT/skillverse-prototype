@@ -6,9 +6,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowLeft,
-  Radio,
-  PanelLeftClose,
-  PanelLeftOpen,
 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import aiRoadmapService from '../../services/aiRoadmapService';
@@ -29,8 +26,8 @@ import {
   getPlannerTaskKind,
   isTaskDone,
   parseRoadmapTaskLink,
+  resolvePlannerExecutionState,
 } from './utils/taskSemantics';
-import { buildRoadmapPlanningPath } from '../../utils/plannerNavigation';
 import './styles/StudyPlanner.css';
 
 const OVERDUE_CLEAR_DAYS = 30;
@@ -109,7 +106,6 @@ const StudyPlannerPage: React.FC = () => {
   const [overdueCount, setOverdueCount] = useState(0);
   const [oldOverdueCount, setOldOverdueCount] = useState(0);
   const [isClearingOverdue, setIsClearingOverdue] = useState(false);
-  const [isSpSidebarCollapsed, setIsSpSidebarCollapsed] = useState(false);
   const [clearOverdueTarget, setClearOverdueTarget] =
     useState<ClearOverdueTarget | null>(null);
   const [clearOverdueFeedback, setClearOverdueFeedback] = useState<{
@@ -268,11 +264,11 @@ const StudyPlannerPage: React.FC = () => {
   useEffect(() => {
     const loadFilterOptions = async () => {
       try {
-        const summaries = await aiRoadmapService.getAllRoadmaps();
-        const options: FilterOption[] = summaries.map((r: any) => ({
-          id: r.id as number,
-          label: r.title || r.metadata?.title || `Roadmap #${r.id}`,
-          taskCount: undefined as undefined,
+        const summaries = await aiRoadmapService.getUserRoadmaps();
+        const options: FilterOption[] = summaries.map((roadmap) => ({
+          id: roadmap.sessionId,
+          label: roadmap.title || `Roadmap #${roadmap.sessionId}`,
+          taskCount: undefined,
         }));
         setFilterOptions(options);
       } catch (err) {
@@ -575,13 +571,13 @@ const StudyPlannerPage: React.FC = () => {
       await fetchData();
       setClearOverdueFeedback({
         type: 'success',
-        message: `Đã xóa ${result.deletedCount} task overdue cũ.`,
+        message: `Đã xóa ${result.deletedCount} công việc quá hạn cũ.`,
       });
     } catch (error) {
       console.error('Failed to clear old overdue tasks:', error);
       setClearOverdueFeedback({
         type: 'error',
-        message: 'Không thể xóa nhanh task overdue lúc này. Vui lòng thử lại.',
+        message: 'Không thể xóa nhanh công việc quá hạn lúc này. Vui lòng thử lại.',
       });
     } finally {
       setIsClearingOverdue(false);
@@ -605,8 +601,8 @@ const StudyPlannerPage: React.FC = () => {
       type: 'success',
       message:
         result && result.createdCount > 0
-          ? `Đã tạo ${result.createdCount} phiên học cho ${result.subjectName}. Study plan đã được áp dụng vào bảng của bạn.`
-          : 'Study plan đã được áp dụng vào bảng của bạn.',
+          ? `Đã tạo ${result.createdCount} phiên học cho ${result.subjectName}. Kế hoạch học tập đã được áp dụng vào bảng của bạn.`
+          : 'Kế hoạch học tập đã được áp dụng vào bảng của bạn.',
     });
   };
 
@@ -621,7 +617,7 @@ const StudyPlannerPage: React.FC = () => {
       return mappedNode.title;
     }
 
-    return link.nodeOrder ? `Node ${link.nodeOrder}` : `Node ${link.nodeId}`;
+    return link.nodeOrder ? `Nút ${link.nodeOrder}` : `Nút ${link.nodeId}`;
   }, [roadmapNodesBySessionId]);
 
   const preferredFocusDate = useMemo(() => {
@@ -666,215 +662,318 @@ const StudyPlannerPage: React.FC = () => {
     setCurrentDate(preferredFocusDate);
   }, [focusRoadmapSessionId, nodeId, preferredFocusDate]);
 
+  const inProgressTaskCount = useMemo(
+    () =>
+      tasks.filter(
+        (task) => resolvePlannerExecutionState(task) === 'in-progress',
+      ).length,
+    [tasks],
+  );
+
+  const completedTaskCount = useMemo(
+    () => tasks.filter((task) => isTaskDone(task)).length,
+    [tasks],
+  );
+
+  const calendarHeading = useMemo(() => {
+    const formatted = currentDate.toLocaleString('vi-VN', {
+      month: 'long',
+      year: 'numeric',
+    });
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+  }, [currentDate]);
+
+  const isKanbanView = viewMode === 'board';
+  const hasOverdueTasks = overdueCount > 0;
+  const overdueAlertTitle = hasOverdueTasks
+    ? 'Cảnh báo công việc quá hạn'
+    : 'Không có công việc quá hạn';
+  const overdueAlertMessage = hasOverdueTasks
+    ? `${overdueCount} công việc cần được xử lý ngay trước khi bạn tiếp tục các đầu việc mới.`
+    : 'Mọi thứ đang đúng tiến độ. Bạn có thể tiếp tục phần đang làm hoặc bắt đầu khối học tiếp theo.';
+
+
+  const formatScheduleTime = useCallback((task: TaskResponse) => {
+    const dateValue = task.startDate ?? task.deadline;
+    if (!dateValue) {
+      return 'Chưa có giờ';
+    }
+    return new Date(dateValue).toLocaleTimeString('vi-VN', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }, []);
+
+  const handleResolveOverdue = useCallback(() => {
+    updateViewModeAndUrl('board', { clearTaskId: true });
+  }, [updateViewModeAndUrl]);
+
   return (
     <div className="study-plan-container">
-      {/* ===== LEFT SIDEBAR ===== */}
-      <div className={`study-plan-sp-sidebar${isSpSidebarCollapsed ? ' collapsed' : ''}`}>
-        {/* Toggle */}
-        <button
-          className="study-plan-sp-sidebar-toggle"
-          onClick={() => setIsSpSidebarCollapsed((v) => !v)}
-          title={isSpSidebarCollapsed ? 'Mở rộng' : 'Thu gọn'}
-        >
-          {isSpSidebarCollapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
-        </button>
-
-        {!isSpSidebarCollapsed && (
-          <>
-            {/* Brand */}
-            <div className="study-plan-sp-brand">
-              <Radio size={22} />
-              <div className="study-plan-sp-brand-text">
-                <span className="study-plan-sp-brand-title">KẾ HOẠCH</span>
-                <span className="study-plan-sp-brand-title">HỌC TẬP</span>
-              </div>
+      <div className="study-plan-sp-main">
+        <div className="study-plan-shell">
+          <section
+            className={`study-plan-alert ${hasOverdueTasks ? 'study-plan-alert--urgent' : 'study-plan-alert--calm'}`}
+          >
+            <div className="study-plan-alert__signal" aria-hidden="true" />
+            <div className="study-plan-alert__copy">
+              <span className="study-plan-alert__eyebrow">{overdueAlertTitle}</span>
+              <strong className="study-plan-alert__headline">
+                {hasOverdueTasks
+                  ? `${overdueCount} công việc quá hạn đang chặn nhịp học của bạn`
+                  : 'Luồng học tập đang thông thoáng và sẵn sàng để tiếp tục'}
+              </strong>
+              <p className="study-plan-alert__description">{overdueAlertMessage}</p>
             </div>
 
-            {/* Nav */}
-            <div className="study-plan-sp-sidebar-nav">
-              <button
-                className="study-plan-sp-sidebar-link"
-                onClick={() => navigate('/dashboard')}
-              >
-                <ArrowLeft size={14} /> Dashboard
-              </button>
-              {roadmapSessionId && (
+            <div className="study-plan-alert__actions">
+              {hasOverdueTasks && (
                 <button
-                  className="study-plan-sp-sidebar-link"
-                  onClick={() => {
-                    const navUrl = buildRoadmapPlanningPath(roadmapSessionId, {
-                      nodeId: nodeId,
-                      expandedIds: nodeId ? [nodeId] : undefined,
-                    });
-                    navigate(navUrl);
-                  }}
+                  className="study-plan-alert-primary-btn"
+                  onClick={handleResolveOverdue}
                 >
-                  <ArrowLeft size={14} /> Node
+                  Xử lý ngay
+                </button>
+              )}
+              {oldOverdueCount > 0 && hasOverdueTasks && (
+                <button
+                  className="study-plan-alert-clear-btn"
+                  onClick={() => handleClearOverdueTasks()}
+                  disabled={isClearingOverdue}
+                >
+                  {isClearingOverdue
+                    ? 'Đang dọn...'
+                    : `Dọn ${oldOverdueCount} việc quá hạn cũ`}
                 </button>
               )}
             </div>
+          </section>
 
-            {/* View mode */}
-            <div className="study-plan-sp-sidebar-section">Chế độ xem</div>
-            <div className="study-plan-sp-sidebar-view-btns">
-              <button
-                className={`study-plan-sp-sidebar-btn ${viewMode === 'calendar' ? 'active' : ''}`}
-                onClick={() => updateViewModeAndUrl('calendar', { clearTaskId: true })}
-              >
-                <Calendar size={16} />
-                <span>Lịch</span>
-              </button>
-              <button
-                className={`study-plan-sp-sidebar-btn ${viewMode === 'board' ? 'active' : ''}`}
-                onClick={() => updateViewModeAndUrl('board', { clearTaskId: true })}
-              >
-                <Trello size={16} />
-                <span>Kanban</span>
-              </button>
+          {isKanbanView ? (
+            <section className="study-plan-kanban-toolbar">
+              <div className="study-plan-kanban-toolbar__actions">
+                <button
+                  className="study-plan-hero-action study-plan-hero-action--ghost"
+                  onClick={() => navigate('/dashboard')}
+                >
+                  <ArrowLeft size={16} />
+                  <span>Về bảng điều khiển</span>
+                </button>
+
+                <button
+                  className="study-plan-hero-action study-plan-hero-action--accent"
+                  onClick={() => updateViewModeAndUrl('calendar', { clearTaskId: true })}
+                >
+                  <Calendar size={16} />
+                  <span>Chuyển sang lịch</span>
+                </button>
+              </div>
+            </section>
+          ) : (
+            <>
+              <section className="study-plan-hero-panel">
+                <div className="study-plan-hero-panel__content">
+                  <h1 className="study-plan-hero-panel__title">
+                    Trung tâm điều phối kế hoạch học tập
+                  </h1>
+                  <p className="study-plan-hero-panel__description">
+                    Ưu tiên xử lý việc gấp trước, sau đó tiếp tục theo lịch hoặc kanban với trợ lý AI khi cần.
+                  </p>
+                </div>
+
+                <div className="study-plan-hero-panel__controls">
+                  <div className="study-plan-hero-actions">
+                    <button
+                      className="study-plan-hero-action study-plan-hero-action--ghost"
+                      onClick={() => navigate('/dashboard')}
+                    >
+                      <ArrowLeft size={16} />
+                      <span>Về bảng điều khiển</span>
+                    </button>
+
+                    <button
+                      className="study-plan-hero-action study-plan-hero-action--premium study-plan-hero-action--wide"
+                      onClick={() => setIsAIModalOpen(true)}
+                    >
+                      <Bot size={16} />
+                      <span>Trợ lý AI</span>
+                      <span className="study-plan-hero-action__badge">Premium Gold</span>
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              <section className="study-plan-hero-summary">
+                <div className="study-plan-hero-stats">
+                  <article className="study-plan-hero-stat-card study-plan-hero-stat-card--danger study-plan-hero-stat-card--primary">
+                    <span className="study-plan-hero-stat-card__label">Quá hạn</span>
+                    <strong className="study-plan-hero-stat-card__value">{overdueCount}</strong>
+                  </article>
+                  <article className="study-plan-hero-stat-card study-plan-hero-stat-card--warning">
+                    <span className="study-plan-hero-stat-card__label">Đang thực hiện</span>
+                    <strong className="study-plan-hero-stat-card__value">{inProgressTaskCount}</strong>
+                  </article>
+                  <article className="study-plan-hero-stat-card study-plan-hero-stat-card--success">
+                    <span className="study-plan-hero-stat-card__label">Hoàn thành</span>
+                    <strong className="study-plan-hero-stat-card__value">{completedTaskCount}</strong>
+                  </article>
+                </div>
+
+                <div
+                  className="study-plan-segmented-control"
+                  role="tablist"
+                  aria-label="Chế độ hiển thị kế hoạch"
+                >
+                  <button
+                    className={`study-plan-segmented-control__button ${viewMode === 'calendar' ? 'is-active' : ''}`}
+                    onClick={() => updateViewModeAndUrl('calendar', { clearTaskId: true })}
+                  >
+                    <Calendar size={16} />
+                    <span>Lịch</span>
+                  </button>
+                  <button
+                    className={`study-plan-segmented-control__button ${viewMode === 'board' ? 'is-active' : ''}`}
+                    onClick={() => updateViewModeAndUrl('board', { clearTaskId: true })}
+                  >
+                    <Trello size={16} />
+                    <span>Kanban</span>
+                  </button>
+                </div>
+              </section>
+            </>
+          )}
+
+          {clearOverdueFeedback && (
+            <div
+              className={`study-plan-overdue-feedback study-plan-overdue-feedback--${clearOverdueFeedback.type}`}
+            >
+              {clearOverdueFeedback.message}
             </div>
+          )}
 
-            {/* AI */}
-            <button
-              className="study-plan-sp-sidebar-btn study-plan-sp-sidebar-btn--ai"
-              onClick={() => setIsAIModalOpen(true)}
+          {planFeedback && (
+            <div
+              className={`study-plan-overdue-feedback study-plan-overdue-feedback--${planFeedback.type}`}
             >
-              <Bot size={16} />
-              <span>Trợ lý AI</span>
-            </button>
-          </>
-        )}
-      </div>
+              {planFeedback.message}
+            </div>
+          )}
 
-      {/* ===== MAIN CONTENT ===== */}
-      <div className="study-plan-sp-main">
-        {overdueCount > 0 && (
-        <div className="study-plan-alert">
-          <span style={{ fontSize: '1.2rem' }}>!</span>
-          <div className="study-plan-alert-content">
-            <span>CẢNH BÁO: {overdueCount} CÔNG VIỆC QUÁ HẠN CẦN XỬ LÝ NGAY.</span>
-            {oldOverdueCount > 0 && (
-              <button
-                className="study-plan-alert-clear-btn"
-                onClick={() => handleClearOverdueTasks()}
-                disabled={isClearingOverdue}
-              >
-                {isClearingOverdue
-                  ? 'Đang xóa...'
-                  : `Xóa nhanh ${oldOverdueCount} task > ${OVERDUE_CLEAR_DAYS} ngày`}
-              </button>
+          <div className="study-plan-board-area">
+            <div className="study-plan-content-grid">
+              <div className="study-plan-content-grid__main">
+            {viewMode === 'calendar' && (
+              <div className="study-plan-calendar-toolbar">
+                <button
+                  className="study-plan-btn study-plan-calendar-toolbar__nav"
+                  onClick={() => navigateWeek('prev')}
+                >
+                  <ChevronLeft size={20} />
+                </button>
+
+                <h2 className="study-plan-calendar-toolbar__title">
+                  {calendarHeading}
+                </h2>
+
+                <button
+                  className="study-plan-btn study-plan-calendar-toolbar__nav"
+                  onClick={() => navigateWeek('next')}
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
             )}
-          </div>
-        </div>
-      )}
 
-      {clearOverdueFeedback && (
-        <div
-          className={`study-plan-overdue-feedback study-plan-overdue-feedback--${clearOverdueFeedback.type}`}
-        >
-          {clearOverdueFeedback.message}
-        </div>
-      )}
-
-      {/* ===== FEEDBACK TOASTS ===== */}
-      {planFeedback && (
-        <div
-          className={`study-plan-overdue-feedback study-plan-overdue-feedback--${planFeedback.type}`}
-        >
-          {planFeedback.message}
-        </div>
-      )}
-
-      {/* ===== BOARD / CALENDAR AREA ===== */}
-      <div className="study-plan-board-area">
-        {viewMode === 'calendar' && (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '2rem',
-              marginBottom: '1.5rem',
-            }}
-          >
-            <button
-              className="study-plan-btn"
-              onClick={() => navigateWeek('prev')}
-              style={{ padding: '0.5rem' }}
-            >
-              <ChevronLeft size={24} />
-            </button>
-
-            <h2
-              style={{
-                minWidth: '300px',
-                textAlign: 'center',
-                fontFamily: 'var(--sv-font-tech)',
-                color: 'var(--sv-primary)',
-                textShadow: '0 0 10px var(--sv-primary-glow)',
-                fontSize: '1.5rem',
-                margin: 0,
-              }}
-            >
-              {currentDate
-                .toLocaleString('en-US', { month: 'long', year: 'numeric' })
-                .toUpperCase()}
-            </h2>
-
-            <button
-              className="study-plan-btn"
-              onClick={() => navigateWeek('next')}
-              style={{ padding: '0.5rem' }}
-            >
-              <ChevronRight size={24} />
-            </button>
-          </div>
-        )}
-
-        {loading && viewMode === 'calendar' ? (
-          <div
-            style={{
-              textAlign: 'center',
-              padding: '4rem',
-              color: 'var(--sv-primary)',
-              fontFamily: 'var(--sv-font-tech)',
-            }}
-          >
-            Đang tải dữ liệu...
-          </div>
-        ) : (
-          <>
-            {viewMode === 'calendar' ? (
-              <CalendarView
-                sessions={tasks}
-                currentDate={currentDate}
-                onSessionClick={handleTaskClick}
-                onDateClick={handleDateClick}
-                onSessionComplete={handleTaskComplete}
-                focusNodeId={nodeId}
-                focusRoadmapSessionId={focusRoadmapSessionId}
-                focusMode={calendarFocusMode}
-                onFocusModeChange={setCalendarFocusMode}
-                preferredFocusDate={preferredFocusDate}
-                resolveTaskNodeLabel={resolveTaskNodeLabel}
-              />
+            {loading && viewMode === 'calendar' ? (
+              <div className="study-plan-loading-state">Đang tải dữ liệu...</div>
             ) : (
-              <TaskBoard
-                columns={columns}
-                onTaskClick={handleTaskClick}
-                onAddTask={handleAddTask}
-                onColumnsChange={setColumns}
-                onRefresh={fetchData}
-                onClearColumnOverdue={handleClearOverdueTasks}
-                overdueDaysThreshold={OVERDUE_CLEAR_DAYS}
-                isClearingOverdue={isClearingOverdue}
-                filterOptions={[]}
-                selectedFilter={activeRoadmapFilter}
-                onFilterChange={setActiveRoadmapFilter}
-              />
+              <>
+                {viewMode === 'calendar' ? (
+                  <CalendarView
+                    sessions={tasks}
+                    currentDate={currentDate}
+                    onSessionClick={handleTaskClick}
+                    onDateClick={handleDateClick}
+                    onSessionComplete={handleTaskComplete}
+                    focusNodeId={nodeId}
+                    focusRoadmapSessionId={focusRoadmapSessionId}
+                    focusMode={calendarFocusMode}
+                    onFocusModeChange={setCalendarFocusMode}
+                    preferredFocusDate={preferredFocusDate}
+                    resolveTaskNodeLabel={resolveTaskNodeLabel}
+                  />
+                ) : (
+                  <TaskBoard
+                    columns={columns}
+                    onTaskClick={handleTaskClick}
+                    onAddTask={handleAddTask}
+                    onColumnsChange={setColumns}
+                    onRefresh={fetchData}
+                    onClearColumnOverdue={handleClearOverdueTasks}
+                    overdueDaysThreshold={OVERDUE_CLEAR_DAYS}
+                    isClearingOverdue={isClearingOverdue}
+                    filterOptions={filterOptions}
+                    selectedFilter={activeRoadmapFilter}
+                    onFilterChange={setActiveRoadmapFilter}
+                  />
+                )}
+              </>
             )}
-          </>
-        )}
-      </div>
+              </div>
+
+              {false && (
+                <aside className="study-plan-today-panel">
+                  <div className="study-plan-today-panel__header">
+                    <div>
+                      <span className="study-plan-today-panel__eyebrow">Điều phối hôm nay</span>
+                      <h3 className="study-plan-today-panel__title">Lịch hôm nay</h3>
+                    </div>
+                    <button
+                      className="study-plan-today-panel__cta"
+                      onClick={handleCreateTodayTask}
+                    >
+                      <Plus size={16} />
+                      <span>Tạo task hôm nay</span>
+                    </button>
+                  </div>
+
+                  <div className="study-plan-today-panel__body">
+                    {todaySchedule.length > 0 ? (
+                      todaySchedule.map((task) => (
+                        <button
+                          key={task.id}
+                          className="study-plan-today-panel__task"
+                          onClick={() => handleTaskClick(task)}
+                        >
+                          <div className="study-plan-today-panel__task-top">
+                            <span className="study-plan-today-panel__task-time">
+                              <Clock3 size={14} />
+                              {formatScheduleTime(task)}
+                            </span>
+                            {task.deadline && !isTaskDone(task) && new Date(task.deadline) < new Date() && (
+                              <span className="study-plan-today-panel__task-badge study-plan-today-panel__task-badge--overdue">
+                                Quá hạn
+                              </span>
+                            )}
+                          </div>
+                          <strong className="study-plan-today-panel__task-title">{task.title}</strong>
+                          <span className="study-plan-today-panel__task-meta">
+                            {resolveTaskNodeLabel(task) || 'Công việc cá nhân'}
+                          </span>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="study-plan-today-panel__empty">
+                        <AlertTriangle size={18} />
+                        <p>Hôm nay chưa có nhiệm vụ nào được lên lịch.</p>
+                      </div>
+                    )}
+                  </div>
+                </aside>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ===== MODALS ===== */}

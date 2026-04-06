@@ -28,6 +28,7 @@ import {
   JourneyStatus,
   DOMAIN_OPTIONS,
 } from "../../types/Journey";
+import { parseRoadmapTaskLink } from "../study-planner/utils/taskSemantics";
 import { showAppError } from "../../context/ToastContext";
 import "../../styles/DashboardJourneyPrompt.css";
 
@@ -51,10 +52,13 @@ const DashboardPage = () => {
     overdue: number; // 1-30 days overdue
     pending: number; // not yet due
     upcomingTasks: Array<{
+      taskId?: string;
       title: string;
       deadline: string;
       daysOverdue: number;
       estimatedMinutes?: number;
+      roadmapSessionId?: number;
+      nodeId?: string;
     }>;
   }>({ criticalOverdue: 0, overdue: 0, pending: 0, upcomingTasks: [] });
   const [userLevel, setUserLevel] = useState(1);
@@ -311,9 +315,13 @@ const DashboardPage = () => {
           let overdueCount = 0;
           let pendingCount = 0;
           const allTasks: Array<{
+            taskId?: string;
             title: string;
             deadline: string;
             daysOverdue: number;
+            estimatedMinutes?: number;
+            roadmapSessionId?: number;
+            nodeId?: string;
           }> = [];
 
           taskBoard.forEach((column) => {
@@ -324,6 +332,7 @@ const DashboardPage = () => {
               column.name.toLowerCase().includes("xong");
             if (!isDoneColumn) {
               column.tasks.forEach((task) => {
+                const roadmapLink = parseRoadmapTaskLink(task.userNotes);
                 if (task.deadline) {
                   const deadline = new Date(task.deadline);
                   const diffTime = now.getTime() - deadline.getTime();
@@ -339,10 +348,13 @@ const DashboardPage = () => {
                       overdueCount++;
                     }
                     allTasks.push({
+                      taskId: String(task.id),
                       title: task.title,
                       deadline: task.deadline,
                       daysOverdue,
                       estimatedMinutes: Math.floor(Math.random() * 90) + 30, // 30-120 minutes (random for now)
+                      roadmapSessionId: roadmapLink?.roadmapSessionId,
+                      nodeId: roadmapLink?.nodeId,
                     });
                   } else {
                     pendingCount++;

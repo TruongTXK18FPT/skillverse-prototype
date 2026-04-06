@@ -24,9 +24,13 @@ interface TaskSummary {
   overdue: number;
   pending: number;
   upcomingTasks: Array<{
+    taskId?: string;
     title: string;
     deadline: string;
     daysOverdue: number;
+    estimatedMinutes?: number;
+    roadmapSessionId?: number;
+    nodeId?: string;
   }>;
 }
 
@@ -171,7 +175,13 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   const recentCourses = enrolledCourses.length > 0 ? enrolledCourses : [];
 
   const handleViewPlan = () => {
-    navigate("/roadmap");
+    navigate("/study-planner");
+  };
+
+  const handleOpenPlannerTask = (
+    _task?: TaskSummary["upcomingTasks"][number],
+  ) => {
+    navigate("/study-planner");
   };
 
   const handleViewReport = () => {
@@ -201,9 +211,10 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
           subtitle="HỆ THỐNG ĐÃ SẴN SÀNG - BẠN MUỐN LÀM GÌ HÔM NAY?"
           userLevel={userLevel}
           onViewPlan={handleViewPlan}
+          onTaskNavigate={handleOpenPlannerTask}
           onViewReport={handleViewReport}
           viewPlanText={
-            translations?.dashboard?.viewStudyPlan || "View Study Plan"
+            translations?.dashboard?.viewStudyPlan || "Xem kế hoạch học tập"
           }
           hasRoadmap={roadmaps.length > 0}
           hasCourses={enrolledCourses.length > 0}

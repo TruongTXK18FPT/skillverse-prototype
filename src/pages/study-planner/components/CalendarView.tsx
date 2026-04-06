@@ -40,6 +40,18 @@ type VisibleTaskMeta = CalendarTaskMeta & {
 
 const MAX_VISIBLE_LANES_PER_CLUSTER = 3;
 const MAX_VISIBLE_EVENTS_PER_DAY_GRID = 6;
+const WEEKDAY_LABELS = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+
+const getExecutionStateLabel = (state: 'todo' | 'in-progress' | 'done'): string => {
+  switch (state) {
+    case 'in-progress':
+      return 'Đang thực hiện';
+    case 'done':
+      return 'Hoàn thành';
+    default:
+      return 'Cần làm';
+  }
+};
 
 const getDateKeyInVietnam = (date: Date): string =>
   date.toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
@@ -209,7 +221,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
       const execution = resolvePlannerExecutionState(task);
       const isDone = execution === 'done' || isTaskDone(task);
       const nodeLabel = resolveTaskNodeLabel?.(task)
-        ?? (link ? `Node ${link.nodeOrder ?? link.nodeId}` : null);
+        ?? (link ? `Nút ${link.nodeOrder ?? link.nodeId}` : null);
 
       map.set(task.id, {
         task,
@@ -334,9 +346,9 @@ const CalendarView: React.FC<CalendarViewProps> = ({
           </div>
         )}
 
-        <div className="study-plan-calendar-wrapper">
+          <div className="study-plan-calendar-wrapper">
           <div className="study-plan-calendar-header-row">
-            <div className="study-plan-calendar-col-header">TIME</div>
+            <div className="study-plan-calendar-col-header">GIỜ</div>
             {weekDays.map((day) => {
               const isToday = new Date().toDateString() === day.toDateString();
               const isSelected = getDateKeyInVietnam(day) === getDateKeyInVietnam(selectedDate);
@@ -356,14 +368,14 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                   onClick={() => handleSelectDay(day)}
                 >
                   <div style={{ fontWeight: 'bold' }}>
-                    {day.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()}
+                    {WEEKDAY_LABELS[day.getDay()]}
                   </div>
                   <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>
                     {day.getDate()}/{day.getMonth() + 1}
                   </div>
                   <div className="study-plan-day-workload-chip">
-                    {dayTasks.length} phiên · {workloadNodeCount} node
-                    {workloadOverdue > 0 ? ` · ${workloadOverdue} overdue` : ''}
+                    {dayTasks.length} phiên · {workloadNodeCount} nút
+                    {workloadOverdue > 0 ? ` · ${workloadOverdue} quá hạn` : ''}
                   </div>
                 </button>
               );
@@ -404,7 +416,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                           event.stopPropagation();
                           handleSelectDay(day);
                         }}
-                        title={`Ngày này có thêm ${dayLayout.overflowCount} phiên học. Nhấn để mở agenda.`}
+                        title={`Ngày này có thêm ${dayLayout.overflowCount} phiên học. Nhấn để mở lịch trong ngày.`}
                       >
                         +{dayLayout.overflowCount} phiên nữa
                       </button>
@@ -472,7 +484,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
       <aside className="study-plan-calendar-agenda-panel">
         <div className="study-plan-calendar-agenda-header">
           <h3>
-            Agenda ngày{' '}
+            Lịch trong ngày{' '}
             {selectedDate.toLocaleDateString('vi-VN', {
               weekday: 'long',
               day: '2-digit',
@@ -480,8 +492,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({
             })}
           </h3>
           <p>
-            {selectedDayMeta.length} phiên học · {selectedDayNodeCount} node
-            {selectedDayOverdueCount > 0 ? ` · ${selectedDayOverdueCount} overdue` : ''}
+            {selectedDayMeta.length} phiên học · {selectedDayNodeCount} nút
+            {selectedDayOverdueCount > 0 ? ` · ${selectedDayOverdueCount} quá hạn` : ''}
           </p>
           <div className="study-plan-calendar-agenda-actions">
             <button
@@ -508,16 +520,16 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                   className={`study-plan-calendar-agenda-item ${meta.isFocused ? 'is-focused' : ''} ${focusNodeId && !meta.isFocused ? 'is-dimmed' : ''}`}
                 >
                   <div className="study-plan-calendar-agenda-time">{meta.startLabel}</div>
-                  <div className="study-plan-calendar-agenda-content">
-                    <h4>{meta.task.title}</h4>
-                    <div className="study-plan-calendar-agenda-meta">
-                      {meta.nodeLabel && <span>{meta.nodeLabel}</span>}
-                      <span className={`status ${status}`}>
-                        {status === 'in-progress' ? 'in progress' : status}
-                      </span>
-                      {meta.isOverdue && <span className="overdue">overdue</span>}
+                    <div className="study-plan-calendar-agenda-content">
+                      <h4>{meta.task.title}</h4>
+                      <div className="study-plan-calendar-agenda-meta">
+                        {meta.nodeLabel && <span>{meta.nodeLabel}</span>}
+                        <span className={`status ${status}`}>
+                          {getExecutionStateLabel(status)}
+                        </span>
+                        {meta.isOverdue && <span className="overdue">Quá hạn</span>}
+                      </div>
                     </div>
-                  </div>
                   <button
                     type="button"
                     className="study-plan-calendar-agenda-open"

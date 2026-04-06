@@ -1,10 +1,9 @@
-import { MouseEvent, useMemo, useState } from 'react';
-import { BookOpen, BookMarked, CalendarDays, CheckCircle2, Circle, Clock3, Compass, GitBranch, Layers3, MessageCircle, PlayCircle, Sparkles, X } from 'lucide-react';
+import { MouseEvent, useMemo } from 'react';
+import { BookOpen, BookMarked, CalendarDays, CheckCircle2, Circle, Clock3, Compass, GitBranch, Layers3, PlayCircle, Sparkles, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { QuestProgress, RoadmapNode } from '../../types/Roadmap';
 import { NodeLearningContext, resolveRoadmapNodeTimeEstimate } from './nodeLearningContext';
-import MeowlContextPanel, { MeowlContextMode } from '../meowl/MeowlContextPanel';
 import './RoadmapNodeFocusPanel.css';
 
 type RoadmapNodeFocusPanelProps = {
@@ -86,13 +85,6 @@ const RoadmapNodeFocusPanel = ({
   onOpenStudyPlanner,
   onNavigateToCourse,
 }: RoadmapNodeFocusPanelProps) => {
-  const meowlMode: MeowlContextMode =
-    learningContext?.learningChannel === 'meowl_first'
-      ? 'MODE_FALLBACK_TEACHER'
-      : 'MODE_ROADMAP_OVERVIEW';
-
-  const [activeTab, setActiveTab] = useState<'overview' | 'meowl'>('overview');
-
   const progressPercent = clampProgress(progress?.progress ?? (progress?.status === 'COMPLETED' ? 100 : 0));
   const statusLabel = resolveStatusLabel(node, progress);
   const objectiveItems = useMemo(() => pickNonEmptyItems(node?.learningObjectives, 99), [node?.learningObjectives]);
@@ -101,58 +93,6 @@ const RoadmapNodeFocusPanel = ({
   const practicalExerciseItems = useMemo(() => pickNonEmptyItems(node?.practicalExercises, 99), [node?.practicalExercises]);
   const successCriteriaItems = useMemo(() => pickNonEmptyItems(node?.successCriteria, 99), [node?.successCriteria]);
 
-  const meowlSummary = useMemo(() => {
-    if (!node) {
-      return [];
-    }
-
-    const summary = [
-      `Node: ${node.title}`,
-      `Trạng thái: ${statusLabel}`,
-      `Tiến độ hiện tại: ${progressPercent}%`,
-      `Cách hoàn thành: ${resolveCompletionModeLabel(learningContext)}`,
-    ];
-
-    if (learningContext?.primaryCourse?.title) {
-      summary.push(`Khóa học chính: ${learningContext.primaryCourse.title}`);
-    }
-
-    if (learningContext?.primaryCourseProgressPercent != null) {
-      summary.push(`Tiến độ khóa học: ${learningContext.primaryCourseProgressPercent}%`);
-    }
-
-    return summary;
-  }, [learningContext, node, progressPercent, statusLabel]);
-
-  const meowlDossier = useMemo(() => {
-    if (!node) {
-      return null;
-    }
-
-    return {
-      nodeTitle: node.title,
-      nodeRole: node.type === 'MAIN' ? 'Main objective' : 'Side objective',
-      phaseLabel: node.type,
-      whyThisMatters: learningContext?.objectiveSummary,
-      parentTitle: learningContext?.parentNode?.title,
-      childBranchTitles: learningContext?.childNodes.map((item) => item.title) ?? [],
-      learningObjectives: node.learningObjectives ?? [],
-      keyConcepts: node.keyConcepts ?? [],
-      successCriteria: node.successCriteria ?? [],
-      courseStatus: learningContext?.primaryCourse
-        ? learningContext.primaryCourseCompleted
-          ? 'Course completed'
-          : learningContext.primaryCourseProgressPercent != null
-            ? `Course progress ${learningContext.primaryCourseProgressPercent}%`
-            : 'Course linked'
-        : 'No mapped course',
-      recommendedNextStep: hasStudyTask
-        ? 'Mở Study Planner để tiếp tục node này.'
-        : canCreateStudyTask
-          ? 'Tạo study plan cho node này và bắt đầu block đầu tiên.'
-          : 'Hoàn thành node hiện tại trước khi mở study plan mới.',
-    };
-  }, [canCreateStudyTask, hasStudyTask, learningContext, node]);
 
   if (!isOpen || !node) {
     return null;
@@ -207,28 +147,8 @@ const RoadmapNodeFocusPanel = ({
           </button>
         </header>
 
-        {/* Tab bar */}
-        <div className="node-focus-tab-bar">
-          <button
-            type="button"
-            className={`node-focus-tab ${activeTab === 'overview' ? 'active' : ''}`}
-            onClick={() => setActiveTab('overview')}
-          >
-            <BookOpen size={14} />
-            Tổng quan
-          </button>
-          <button
-            type="button"
-            className={`node-focus-tab ${activeTab === 'meowl' ? 'active' : ''}`}
-            onClick={() => setActiveTab('meowl')}
-          >
-            <MessageCircle size={14} />
-            Meowl Chat
-          </button>
-        </div>
-
         {/* Overview tab content */}
-        {activeTab === 'overview' && (
+        {true && (
           <>
             <section className="roadmap-node-focus-panel__summary">
               <article className="roadmap-node-focus-panel__chip">
@@ -384,23 +304,6 @@ const RoadmapNodeFocusPanel = ({
               )}
             </section>
           </>
-        )}
-
-        {/* Meowl Chat tab — full height with dark HUD theme */}
-        {activeTab === 'meowl' && (
-          <section className="roadmap-node-focus-panel__meowl-wrap node-focus-tab-meowl">
-            <MeowlContextPanel
-              mode={meowlMode}
-              title="Học với Meowl"
-              subtitle={learningContext?.primaryCourse ? 'Hỗ trợ theo context node và khóa học liên quan' : 'Node chưa có course, Meowl sẽ dạy trực tiếp theo node này'}
-              contextSummary={meowlSummary}
-              nodeDossier={meowlDossier}
-              suppressRoadmapCoachCopy
-              hideRoadmapNodeBrief
-              theme="hud"
-              density="default"
-            />
-          </section>
         )}
       </aside>
     </div>

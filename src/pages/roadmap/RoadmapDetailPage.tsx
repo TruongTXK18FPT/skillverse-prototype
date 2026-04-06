@@ -28,6 +28,7 @@ import { useToast } from '../../hooks/useToast';
 import { useAuth } from '../../context/AuthContext';
 import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
+import { type MeowlContextMode } from '../../services/meowlContextService';
 import Toast from '../../components/shared/Toast';
 import './RoadmapDetailPage.css';
 import '../../styles/RoadmapHUD.css';
@@ -306,8 +307,18 @@ const RoadmapDetailPage = () => {
     if (!nodeId || !nodeId.trim()) {
       return;
     }
-    setSelectedNodeId(nodeId.trim());
-  }, []);
+    const trimmed = nodeId.trim();
+    setSelectedNodeId(trimmed);
+
+    // Dispatch event so MeowlChatV2 can auto-select this node
+    window.dispatchEvent(new CustomEvent("meowl-node-select", {
+      detail: {
+        roadmapId: roadmap?.sessionId,
+        nodeId: trimmed,
+        roadmapTitle: roadmap?.metadata?.title || roadmap?.overview?.purpose,
+      },
+    }));
+  }, [roadmap]);
 
   const handleCloseNodePanel = useCallback(() => {
     if (creatingTaskNodeId) {
@@ -521,7 +532,13 @@ const RoadmapDetailPage = () => {
         <div className="roadmap-detail-page__loading">
           <MeowlKuruLoader text="Đang tải lộ trình..." />
         </div>
-        <MeowlGuide currentPage="roadmap" />
+        <MeowlGuide
+          currentPage="roadmap"
+          panelMode="MODE_ROADMAP_OVERVIEW"
+          panelTheme="cyan"
+          panelAllowedModes={["MODE_ROADMAP_OVERVIEW", "MODE_COURSE_LEARNING", "MODE_GENERAL_FAQ"]}
+          roadmapContext={undefined}
+        />
       </div>
     );
   }
@@ -567,7 +584,13 @@ const RoadmapDetailPage = () => {
             Quay lại danh sách
           </button>
         </div>
-        <MeowlGuide currentPage="roadmap" />
+        <MeowlGuide
+          currentPage="roadmap"
+          panelMode="MODE_ROADMAP_OVERVIEW"
+          panelTheme="cyan"
+          panelAllowedModes={["MODE_ROADMAP_OVERVIEW", "MODE_COURSE_LEARNING", "MODE_GENERAL_FAQ"]}
+          roadmapContext={undefined}
+        />
       </div>
     );
   }
@@ -602,7 +625,19 @@ const RoadmapDetailPage = () => {
           selectedNodeId={selectedNodeId}
           onNodeSelect={handleNodeSelect}
         />
-        <MeowlGuide currentPage="roadmap" />
+        <MeowlGuide
+          currentPage="roadmap"
+          panelMode="MODE_ROADMAP_OVERVIEW"
+          panelTheme="cyan"
+          panelAllowedModes={["MODE_ROADMAP_OVERVIEW", "MODE_COURSE_LEARNING", "MODE_GENERAL_FAQ"]}
+          roadmapContext={selectedNode ? {
+            roadmapTitle: roadmap.title,
+            nodeTitle: selectedNode.title,
+            nodeDescription: selectedNode.description || undefined,
+            learningObjectives: selectedNode.learningObjectives?.filter(Boolean) || [],
+            keyConcepts: selectedNode.keyConcepts?.filter(Boolean) || [],
+          } : undefined}
+        />
       </div>
 
       <RoadmapNodeFocusPanel

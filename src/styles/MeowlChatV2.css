@@ -113,6 +113,7 @@
   justify-content: flex-end;
   padding: 1rem 2rem;
   background: transparent;
+  pointer-events: none;
   animation: fadeIn 0.2s ease;
 }
 
@@ -143,6 +144,7 @@
   backdrop-filter: blur(16px);
   overflow: hidden;
   margin-right: 60px;
+  pointer-events: all;
 }
 
 .meowl-chat-v2-container::before {
@@ -235,6 +237,213 @@
   gap: 4px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+}
+
+.meowl-chat-v2-mode-badge {
+  font-size: 0.65rem;
+  color: var(--meowl-warning);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Roadmap + Node selector */
+.meowl-chat-v2-roadmap-selector {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.6rem 1rem;
+  background: var(--meowl-bg-secondary);
+  border-top: 1px solid var(--meowl-border);
+  flex-shrink: 0;
+}
+
+.meowl-chat-v2-selector-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.meowl-chat-v2-selector-label {
+  font-size: 0.6rem;
+  color: var(--meowl-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+.meowl-chat-v2-selector-loading {
+  font-size: 0.75rem;
+  color: var(--meowl-text-secondary);
+  font-family: "Minecraft", monospace;
+}
+
+.meowl-chat-v2-selector-select {
+  width: 100%;
+  padding: 0.35rem 0.5rem;
+  background: var(--meowl-bg-primary);
+  border: 1px solid var(--meowl-border);
+  border-radius: 4px;
+  color: var(--meowl-text-primary);
+  font-family: "Minecraft", monospace;
+  font-size: 0.78rem;
+  cursor: pointer;
+  outline: none;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meowl-chat-v2-selector-select:focus {
+  border-color: var(--meowl-accent);
+  box-shadow: 0 0 6px var(--meowl-accent-bg);
+}
+
+.meowl-chat-v2-selector-select:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.meowl-chat-v2-selector-select option {
+  background: #0a0f28;
+  color: var(--meowl-text-primary);
+}
+
+/* Course content tabs (lesson/quiz/assignment) */
+.meowl-chat-v2-course-content-tabs {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.meowl-chat-v2-course-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.38rem 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 188, 212, 0.15);
+  border-radius: 6px;
+  color: #80deea;
+  font-family: "Minecraft", monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.meowl-chat-v2-course-tab:hover {
+  background: rgba(0, 188, 212, 0.08);
+  border-color: rgba(0, 188, 212, 0.3);
+  color: #e0f7fa;
+}
+.meowl-chat-v2-course-tab.active {
+  background: rgba(0, 188, 212, 0.15);
+  border-color: rgba(0, 188, 212, 0.5);
+  color: #00e5ff;
+  box-shadow: 0 0 8px rgba(0, 188, 212, 0.15);
+}
+
+.meowl-chat-v2-course-tab .tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: rgba(0, 188, 212, 0.15);
+  border-radius: 9px;
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+
+/* Course items list */
+.meowl-chat-v2-course-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-height: 160px;
+  overflow-y: auto;
+  padding: 0.35rem;
+  margin-top: 0.35rem;
+  border: 1px solid rgba(0, 188, 212, 0.08);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.15);
+  scrollbar-gutter: stable;
+}
+
+.meowl-chat-v2-course-items::-webkit-scrollbar {
+  width: 3px;
+}
+.meowl-chat-v2-course-items::-webkit-scrollbar-track {
+  background: transparent;
+}
+.meowl-chat-v2-course-items::-webkit-scrollbar-thumb {
+  background: rgba(0, 188, 212, 0.2);
+  border-radius: 2px;
+}
+
+.meowl-chat-v2-course-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.6rem;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(0, 188, 212, 0.08);
+  border-radius: 6px;
+  color: #b3e5fc;
+  font-family: "Minecraft", monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+.meowl-chat-v2-course-item:hover {
+  background: rgba(0, 188, 212, 0.08);
+  border-color: rgba(0, 188, 212, 0.22);
+  color: #e0f7fa;
+  transform: translateX(2px);
+}
+.meowl-chat-v2-course-item.active {
+  background: rgba(0, 188, 212, 0.12);
+  border-color: rgba(0, 188, 212, 0.45);
+  color: #00e5ff;
+  font-weight: 700;
+  box-shadow: 0 0 8px rgba(0, 188, 212, 0.1);
+}
+.meowl-chat-v2-course-item.quiz {
+  border-left: 2px solid #fb923c;
+}
+.meowl-chat-v2-course-item.quiz.active {
+  background: rgba(249, 115, 22, 0.1);
+  border-color: rgba(249, 115, 22, 0.45);
+  color: #fb923c;
+}
+.meowl-chat-v2-course-item.assignment {
+  border-left: 2px solid #a855f7;
+}
+.meowl-chat-v2-course-item.assignment.active {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.45);
+  color: #c084fc;
+}
+
+.meowl-chat-v2-course-empty {
+  padding: 0.75rem;
+  text-align: center;
+  color: #475569;
+  font-family: "Minecraft", monospace;
+  font-size: 0.72rem;
+  font-style: italic;
 }
 
 .meowl-chat-v2-status-online::before {
@@ -1248,4 +1457,665 @@
 
 .meowl-chat-v2-action-btn:active {
   transform: translateY(0);
+}
+
+/* ====================================
+   MEOWL CONTEXT PANEL (absorbed from MeowlContextPanel.module.css)
+   Provides embedded panel styles used by CourseLearningPage, QuizAttemptPage, etc.
+   Also used by MeowlChatV2 when panelTheme="hud" is set.
+   ==================================== */
+
+/* ---- Panel Base ---- */
+/* ---- MeowlPanel base (HUD overlay variant) ---- */
+.meowl-panel {
+  /* Same dimensions as .meowl-chat-v2-container for consistent overlay sizing */
+  width: 50vw;
+  height: 78vh;
+  max-height: 700px;
+  min-height: 420px;
+  margin-right: 60px;
+
+  --meowl-panel-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(241, 245, 249, 0.96));
+  --meowl-panel-border: rgba(15, 23, 42, 0.12);
+  --meowl-panel-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+  --meowl-panel-text: #0f172a;
+  --meowl-panel-muted: #475569;
+  --meowl-panel-subtle: rgba(226, 232, 240, 0.68);
+  --meowl-panel-subtle-border: rgba(148, 163, 184, 0.18);
+  --meowl-panel-chip-bg: rgba(255, 255, 255, 0.72);
+  --meowl-panel-chip-border: rgba(15, 23, 42, 0.12);
+  --meowl-panel-chip-text: #0f172a;
+  --meowl-panel-assistant-bg: rgba(255, 255, 255, 0.96);
+  --meowl-panel-assistant-border: rgba(148, 163, 184, 0.24);
+  --meowl-panel-user-bg: linear-gradient(135deg, #0f172a, #334155);
+  --meowl-panel-user-text: #f8fafc;
+  --meowl-panel-input-bg: rgba(255, 255, 255, 0.92);
+  --meowl-panel-input-border: rgba(148, 163, 184, 0.3);
+  --meowl-panel-input-text: #0f172a;
+  --meowl-panel-input-placeholder: #64748b;
+  --meowl-panel-primary-bg: linear-gradient(135deg, #f97316, #fb7185);
+  --meowl-panel-primary-text: #fff7ed;
+  --meowl-panel-primary-shadow: 0 14px 28px rgba(244, 63, 94, 0.24);
+  --meowl-panel-badge-bg: rgba(249, 115, 22, 0.12);
+  --meowl-panel-badge-text: #c2410c;
+  --meowl-panel-icon-bg: linear-gradient(135deg, #f97316, #fb7185);
+  --meowl-panel-icon-text: #fff7ed;
+  --meowl-panel-icon-shadow: 0 12px 28px rgba(249, 115, 22, 0.28);
+  --meowl-panel-lock-tag-bg: #0f172a;
+  --meowl-panel-lock-tag-text: #f8fafc;
+  --meowl-panel-lock-bg: linear-gradient(135deg, rgba(255, 247, 237, 0.95), rgba(254, 242, 242, 0.92));
+  --meowl-panel-lock-border: rgba(245, 158, 11, 0.26);
+  --meowl-panel-lock-title: #9a3412;
+  --meowl-panel-lock-text: #7c2d12;
+  --meowl-panel-lock-plan: #92400e;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  height: 100%;
+  min-height: 0;
+  padding: 1rem;
+  border: 1px solid var(--meowl-panel-border);
+  border-radius: 24px;
+  background: var(--meowl-panel-bg);
+  box-shadow: var(--meowl-panel-shadow);
+  color: var(--meowl-panel-text);
+  overflow: hidden;
+}
+
+/* ---- Panel Default (Light Glass) ---- */
+.meowl-panel--default {
+  backdrop-filter: blur(18px);
+}
+
+/* ---- Panel HUD (Dark Cyber) ---- */
+.meowl-panel--hud {
+  --meowl-panel-bg:
+    radial-gradient(circle at top left, rgba(34, 211, 238, 0.12), transparent 36%),
+    radial-gradient(circle at top right, rgba(249, 115, 22, 0.12), transparent 30%),
+    linear-gradient(180deg, rgba(10, 14, 23, 0.96), rgba(15, 23, 42, 0.96));
+  --meowl-panel-border: rgba(34, 211, 238, 0.18);
+  --meowl-panel-shadow: 0 28px 48px rgba(2, 6, 23, 0.42);
+  --meowl-panel-text: #e2e8f0;
+  --meowl-panel-muted: #a8b5ca;
+  --meowl-panel-subtle: rgba(148, 163, 184, 0.12);
+  --meowl-panel-subtle-border: rgba(148, 163, 184, 0.16);
+  --meowl-panel-chip-bg: rgba(15, 23, 42, 0.88);
+  --meowl-panel-chip-border: rgba(34, 211, 238, 0.16);
+  --meowl-panel-chip-text: #dbeafe;
+  --meowl-panel-assistant-bg: rgba(15, 23, 42, 0.82);
+  --meowl-panel-assistant-border: rgba(34, 211, 238, 0.12);
+  --meowl-panel-user-bg: linear-gradient(135deg, rgba(8, 145, 178, 0.92), rgba(14, 116, 144, 0.98));
+  --meowl-panel-user-text: #ecfeff;
+  --meowl-panel-input-bg: rgba(2, 6, 23, 0.62);
+  --meowl-panel-input-border: rgba(34, 211, 238, 0.18);
+  --meowl-panel-input-text: #e2e8f0;
+  --meowl-panel-input-placeholder: #94a3b8;
+  --meowl-panel-primary-bg: linear-gradient(135deg, #0891b2, #06b6d4);
+  --meowl-panel-primary-text: #ecfeff;
+  --meowl-panel-primary-shadow: 0 14px 28px rgba(6, 182, 212, 0.24);
+  --meowl-panel-badge-bg: rgba(249, 115, 22, 0.14);
+  --meowl-panel-badge-text: #fdba74;
+  --meowl-panel-icon-bg: linear-gradient(135deg, #f97316, #fb923c);
+  --meowl-panel-icon-text: #fff7ed;
+  --meowl-panel-icon-shadow: 0 12px 24px rgba(249, 115, 22, 0.24);
+  --meowl-panel-lock-tag-bg: rgba(15, 23, 42, 0.92);
+  --meowl-panel-lock-tag-text: #f8fafc;
+  --meowl-panel-lock-bg: linear-gradient(180deg, rgba(56, 26, 10, 0.56), rgba(30, 27, 75, 0.4));
+  --meowl-panel-lock-border: rgba(251, 191, 36, 0.28);
+  --meowl-panel-lock-title: #fdba74;
+  --meowl-panel-lock-text: #fed7aa;
+  --meowl-panel-lock-plan: #fcd34d;
+  color-scheme: dark;
+  backdrop-filter: blur(18px);
+}
+
+/* ---- Panel Compact ---- */
+.meowl-panel--compact {
+  gap: 0.68rem;
+  padding: 0.74rem;
+  border-radius: 20px;
+}
+
+/* ---- Header ---- */
+.meowl-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.meowl-panel--compact .meowl-panel__header-main {
+  gap: 0.6rem;
+}
+
+.meowl-panel--compact .meowl-panel__icon-wrap {
+  width: 1.95rem;
+  height: 1.95rem;
+  border-radius: 12px;
+}
+
+.meowl-panel--compact .meowl-panel__badge {
+  padding: 0.22rem 0.52rem;
+  font-size: 0.68rem;
+}
+
+.meowl-panel--compact .meowl-panel__title {
+  margin-top: 0.2rem;
+  font-size: 0.94rem;
+}
+
+.meowl-panel--compact .meowl-panel__subtitle {
+  margin-top: 0.16rem;
+  font-size: 0.82rem;
+  line-height: 1.28;
+}
+
+.meowl-panel__header-main {
+  display: flex;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.meowl-panel__icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 16px;
+  background: var(--meowl-panel-icon-bg);
+  color: var(--meowl-panel-icon-text);
+  box-shadow: var(--meowl-panel-icon-shadow);
+  flex-shrink: 0;
+}
+
+.meowl-panel__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.6rem;
+  border-radius: 999px;
+  background: var(--meowl-panel-badge-bg);
+  color: var(--meowl-panel-badge-text);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.meowl-panel__title {
+  margin: 0.45rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.meowl-panel__subtitle {
+  margin-top: 0.3rem;
+  color: var(--meowl-panel-muted);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.meowl-panel__node-brief {
+  margin: 0.45rem 0 0;
+  padding: 0.5rem 0.65rem;
+  border-radius: 12px;
+  border: 1px solid var(--meowl-panel-subtle-border);
+  background: var(--meowl-panel-subtle);
+  color: var(--meowl-panel-text);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+/* ---- Lock Tag ---- */
+.meowl-panel__lock-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: var(--meowl-panel-lock-tag-bg);
+  color: var(--meowl-panel-lock-tag-text);
+  font-size: 0.74rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ---- Close Button ---- */
+.meowl-panel__close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--meowl-panel-subtle-border);
+  border-radius: 999px;
+  background: var(--meowl-panel-chip-bg);
+  color: var(--meowl-panel-chip-text);
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+  flex-shrink: 0;
+}
+
+/* ---- Lock Card ---- */
+.meowl-panel__lock-card {
+  padding: 1rem;
+  border: 1px solid var(--meowl-panel-lock-border);
+  border-radius: 20px;
+  background: var(--meowl-panel-lock-bg);
+}
+
+.meowl-panel__lock-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.45rem;
+  color: var(--meowl-panel-lock-title);
+}
+
+.meowl-panel__lock-card p {
+  margin: 0.35rem 0 0;
+  color: var(--meowl-panel-lock-text);
+  line-height: 1.5;
+}
+
+.meowl-panel__lock-plan {
+  font-size: 0.85rem;
+  color: var(--meowl-panel-lock-plan);
+}
+
+/* ---- Lock Button ---- */
+.meowl-panel__lock-btn,
+.meowl-panel__send-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 0;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease, background-color 160ms ease, border-color 160ms ease;
+}
+
+.meowl-panel__lock-btn {
+  margin-top: 0.85rem;
+  padding: 0.7rem 1rem;
+  border-radius: 14px;
+  background: var(--meowl-panel-primary-bg);
+  color: var(--meowl-panel-primary-text);
+  font-weight: 700;
+  box-shadow: var(--meowl-panel-primary-shadow);
+}
+
+/* ---- Briefing Accordion ---- */
+.meowl-panel__briefing-accordion {
+  border-radius: 18px;
+  background: var(--meowl-panel-subtle);
+  border: 1px solid var(--meowl-panel-subtle-border);
+  overflow: hidden;
+}
+
+.meowl-panel--compact .meowl-panel__briefing-accordion {
+  border-radius: 16px;
+  align-self: stretch;
+}
+
+.meowl-panel__context-summary-label {
+  display: block;
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+
+.meowl-panel--compact .meowl-panel__context-summary-label {
+  padding: 0.62rem 0.76rem;
+}
+
+.meowl-panel__context-summary-label::-webkit-details-marker {
+  display: none;
+}
+
+.meowl-panel__context-label-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--meowl-panel-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.meowl-panel__context-label-inner::after {
+  content: "";
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin-left: auto;
+  transition: transform 0.2s ease;
+}
+
+.meowl-panel__briefing-accordion[open] .meowl-panel__context-label-inner::after {
+  transform: rotate(225deg);
+}
+
+.meowl-panel__accordion-body {
+  padding: 0 1rem 0.9rem;
+}
+
+.meowl-panel--compact .meowl-panel__accordion-body {
+  padding: 0 0.76rem 0.64rem;
+}
+
+.meowl-panel__context-facts {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.meowl-panel--compact .meowl-panel__context-facts {
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+  margin-top: 0.55rem;
+}
+
+.meowl-panel__context-fact {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.28);
+  border: 1px solid var(--meowl-panel-subtle-border);
+}
+
+.meowl-panel--compact .meowl-panel__context-fact {
+  padding: 0.62rem 0.72rem;
+  border-radius: 14px;
+}
+
+.meowl-panel__context-fact dt {
+  color: var(--meowl-panel-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.meowl-panel__context-fact dd {
+  margin: 0;
+  color: var(--meowl-panel-text);
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+/* ---- Context Notes ---- */
+.meowl-panel__context-notes {
+  margin: 0.85rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.meowl-panel--compact .meowl-panel__context-notes {
+  margin-top: 0.48rem;
+  gap: 0.34rem;
+}
+
+.meowl-panel--compact .meowl-panel__context-notes li {
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.meowl-panel__context-notes li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  color: var(--meowl-panel-text);
+  line-height: 1.5;
+}
+
+.meowl-panel__context-notes li svg {
+  color: var(--meowl-panel-muted);
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+/* ---- Messages ---- */
+.meowl-panel__messages {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 0;
+  max-height: 100%;
+  padding-right: 0.25rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.meowl-panel--compact .meowl-panel__messages {
+  gap: 0.55rem;
+}
+
+.meowl-panel__empty-conversation {
+  padding: 0.95rem 1rem;
+  border-radius: 18px;
+  border: 1px dashed var(--meowl-panel-subtle-border);
+  color: var(--meowl-panel-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.meowl-panel__message {
+  display: flex;
+}
+
+.meowl-panel__message--assistant {
+  justify-content: flex-start;
+}
+
+.meowl-panel__message--user {
+  justify-content: flex-end;
+}
+
+.meowl-panel__message-bubble {
+  max-width: 92%;
+  padding: 0.85rem 1rem;
+  border-radius: 18px;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.meowl-panel--compact .meowl-panel__message-bubble {
+  padding: 0.72rem 0.85rem;
+  border-radius: 16px;
+  font-size: 0.86rem;
+  line-height: 1.42;
+}
+
+.meowl-panel__message--assistant .meowl-panel__message-bubble {
+  background: var(--meowl-panel-assistant-bg);
+  border: 1px solid var(--meowl-panel-assistant-border);
+}
+
+.meowl-panel__message--user .meowl-panel__message-bubble {
+  background: var(--meowl-panel-user-bg);
+  color: var(--meowl-panel-user-text);
+}
+
+/* ---- Prompt List ---- */
+.meowl-panel__prompt-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+  padding: 0 0.5rem 1rem;
+}
+
+.meowl-panel--compact .meowl-panel__prompt-list {
+  gap: 0.45rem;
+  margin-top: 0.35rem;
+  padding: 0 0.2rem 0.6rem;
+}
+
+.meowl-panel__prompt-chip {
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--meowl-panel-chip-border);
+  border-radius: 999px;
+  background: var(--meowl-panel-chip-bg);
+  color: var(--meowl-panel-chip-text);
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+.meowl-panel--compact .meowl-panel__prompt-chip {
+  padding: 0.38rem 0.62rem;
+  font-size: 0.76rem;
+}
+
+/* ---- Composer ---- */
+.meowl-panel__composer {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 0.2rem;
+  position: sticky;
+  bottom: 0;
+  background: inherit;
+  z-index: 10;
+  padding-bottom: 0.5rem;
+}
+
+.meowl-panel--compact .meowl-panel__composer {
+  gap: 0.42rem;
+}
+
+.meowl-panel__textarea {
+  width: 100%;
+  min-height: 78px;
+  max-height: 160px;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--meowl-panel-input-border);
+  border-radius: 18px;
+  background: var(--meowl-panel-input-bg);
+  color: var(--meowl-panel-input-text);
+  font: inherit;
+  resize: vertical;
+}
+
+.meowl-panel--compact .meowl-panel__textarea {
+  min-height: 72px;
+  padding: 0.72rem 0.84rem;
+}
+
+.meowl-panel__textarea::placeholder {
+  color: var(--meowl-panel-input-placeholder);
+}
+
+.meowl-panel__textarea:focus-visible,
+.meowl-panel__send-btn:focus-visible,
+.meowl-panel__prompt-chip:focus-visible,
+.meowl-panel__lock-btn:focus-visible,
+.meowl-panel__close-btn:focus-visible {
+  outline: 2px solid rgba(34, 211, 238, 0.65);
+  outline-offset: 2px;
+}
+
+.meowl-panel__send-btn {
+  width: 100%;
+  padding: 0.82rem 1rem;
+  border-radius: 16px;
+  background: var(--meowl-panel-primary-bg);
+  color: var(--meowl-panel-primary-text);
+  font-weight: 700;
+  box-shadow: var(--meowl-panel-primary-shadow);
+}
+
+.meowl-panel--compact .meowl-panel__send-btn {
+  padding: 0.68rem 0.88rem;
+}
+
+.meowl-panel__lock-btn:hover:not(:disabled),
+.meowl-panel__send-btn:hover:not(:disabled),
+.meowl-panel__prompt-chip:hover:not(:disabled),
+.meowl-panel__close-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.meowl-panel__close-btn:hover:not(:disabled) {
+  border-color: var(--meowl-panel-input-border);
+  background: var(--meowl-panel-assistant-bg);
+}
+
+.meowl-panel__send-btn:disabled,
+.meowl-panel__prompt-chip:disabled,
+.meowl-panel__textarea:disabled,
+.meowl-panel__lock-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---- Mode Switcher ---- */
+.meowl-chat-v2-mode-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.5rem 0;
+}
+
+.meowl-chat-v2-mode-btn {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--meowl-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--meowl-text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 160ms ease;
+}
+
+.meowl-chat-v2-mode-btn:hover {
+  background: var(--meowl-accent-bg);
+  color: var(--meowl-accent-light);
+  border-color: var(--meowl-accent-light);
+}
+
+.meowl-chat-v2-mode-btn--active {
+  background: var(--meowl-accent-bg);
+  color: var(--meowl-accent-light);
+  border-color: var(--meowl-accent);
+  box-shadow: 0 0 12px rgba(0, 188, 212, 0.3);
+}
+
+.meowl-chat-v2-mode-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--meowl-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 0;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .meowl-panel {
+    height: auto;
+    min-height: auto;
+  }
+
+  .meowl-panel__messages {
+    min-height: 240px;
+    max-height: 320px;
+  }
 }

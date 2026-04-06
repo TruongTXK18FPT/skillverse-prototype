@@ -46,6 +46,99 @@ const parseCommitmentMonths = (duration: string | undefined | null): number | nu
   return num; // assume months if plain number
 };
 
+const SPEC_KEY_LABELS: Record<string, string> = {
+  assessmentscore: 'Assessment score',
+  level: 'Level',
+  scoreband: 'Score band',
+  recommendation: 'Recommendation',
+  recommendationmode: 'Recommendation',
+  strengths: 'Strengths',
+  gaps: 'Gaps',
+  background: 'Background',
+};
+
+const formatSpecKey = (key: string): string => {
+  const normalizedKey = key.replace(/[^a-z0-9]/gi, '').toLowerCase();
+  const knownLabel = SPEC_KEY_LABELS[normalizedKey];
+  if (knownLabel) {
+    return knownLabel;
+  }
+
+  return key
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
+const parseStructuredSpecValue = (value: string): Array<{ key: string; value: string }> => {
+  const tokens = value
+    .split(/[\n;]+|,\s*/g)
+    .map((token) => token.trim())
+    .filter(Boolean);
+
+  const entries: Array<{ key: string; value: string }> = [];
+
+  tokens.forEach((token) => {
+    const separatorIndex = token.indexOf('=');
+    if (separatorIndex >= 0) {
+      const key = token.slice(0, separatorIndex).trim();
+      const entryValue = token.slice(separatorIndex + 1).trim();
+      if (key && entryValue) {
+        entries.push({ key, value: entryValue });
+      }
+      return;
+    }
+
+    const lastEntry = entries[entries.length - 1];
+    if (lastEntry) {
+      lastEntry.value = `${lastEntry.value}, ${token}`;
+      return;
+    }
+
+    entries.push({ key: '', value: token });
+  });
+
+  return entries;
+};
+
+const hasStructuredSpecValue = (value: string | undefined | null): boolean => {
+  const safeValue = typeof value === 'string' ? value.trim() : '';
+  if (!safeValue) {
+    return false;
+  }
+
+  const structuredEntries = parseStructuredSpecValue(safeValue);
+  return structuredEntries.length > 1 || structuredEntries.some((entry) => entry.key.length > 0);
+};
+
+const renderSpecValue = (value: string | undefined | null) => {
+  const safeValue = typeof value === 'string' ? value.trim() : '';
+  if (!safeValue) {
+    return <span className="rm-spec-value">N/A</span>;
+  }
+
+  const structuredEntries = parseStructuredSpecValue(safeValue);
+  const hasStructuredEntries =
+    structuredEntries.length > 1 || structuredEntries.some((entry) => entry.key.length > 0);
+
+  if (hasStructuredEntries) {
+    return (
+      <div className="rm-spec-value rm-spec-value--structured">
+        {structuredEntries.map((entry, index) => (
+          <div key={`${entry.key}-${index}`} className="rm-spec-kv">
+            {entry.key ? <span className="rm-spec-kv-label">{formatSpecKey(entry.key)}</span> : null}
+            <span className="rm-spec-kv-value">{entry.value}</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return <span className="rm-spec-value">{safeValue}</span>;
+};
+
 const RoadmapDetailViewer = memo(({
   roadmap,
   progressMap,
@@ -146,6 +239,7 @@ const RoadmapDetailViewer = memo(({
   // --- NEW METADATA SECTION (ISOLATED CLASSES: rm-*) ---
   const metadataSection = useMemo(() => {
     const isSkillBased = roadmap.metadata.roadmapType === 'SKILL_BASED' || roadmap.metadata.roadmapType === 'skill';
+    const careerBackgroundValue = roadmap.metadata.currentLevel || roadmap.metadata.background || 'N/A';
     
     return (
     <div className="rm-mission-briefing">
@@ -186,38 +280,38 @@ const RoadmapDetailViewer = memo(({
               <>
                 <div className="rm-spec-item">
                   <span className="rm-spec-label">Kỹ năng trọng tâm</span>
-                  <span className="rm-spec-value">{roadmap.metadata.target || roadmap.metadata.skillMode?.skillName || 'N/A'}</span>
+                  {renderSpecValue(roadmap.metadata.target || roadmap.metadata.skillMode?.skillName || 'N/A')}
                 </div>
                 <div className="rm-spec-item">
                   <span className="rm-spec-label">Cấp độ hiện tại</span>
-                  <span className="rm-spec-value">{roadmap.metadata.currentLevel || 'Zero'}</span>
+                  {renderSpecValue(roadmap.metadata.currentLevel || 'Zero')}
                 </div>
                 <div className="rm-spec-item">
                   <span className="rm-spec-label">Thời gian/ngày</span>
-                  <span className="rm-spec-value">{roadmap.metadata.dailyTime || '1h'}</span>
+                  {renderSpecValue(roadmap.metadata.dailyTime || '1h')}
                 </div>
                 <div className="rm-spec-item">
                   <span className="rm-spec-label">Phong cách học</span>
-                  <span className="rm-spec-value">{roadmap.metadata.learningStyle || 'Practice'}</span>
+                  {renderSpecValue(roadmap.metadata.learningStyle || 'Practice')}
                 </div>
               </>
             ) : (
               <>
                 <div className="rm-spec-item">
                   <span className="rm-spec-label">Vị trí mục tiêu</span>
-                  <span className="rm-spec-value">{roadmap.metadata.target || roadmap.metadata.careerMode?.targetRole || 'N/A'}</span>
+                  {renderSpecValue(roadmap.metadata.target || roadmap.metadata.careerMode?.targetRole || 'N/A')}
                 </div>
-                <div className="rm-spec-item">
+                <div className={`rm-spec-item ${hasStructuredSpecValue(careerBackgroundValue) ? 'rm-spec-item--highlight' : ''}`}>
                   <span className="rm-spec-label">Background</span>
-                  <span className="rm-spec-value">{roadmap.metadata.currentLevel || roadmap.metadata.background || 'N/A'}</span>
+                  {renderSpecValue(careerBackgroundValue)}
                 </div>
                 <div className="rm-spec-item">
                   <span className="rm-spec-label">Thời gian cam kết</span>
-                  <span className="rm-spec-value">{roadmap.metadata.careerMode?.timelineToWork || roadmap.metadata.duration || '6M'}</span>
+                  {renderSpecValue(roadmap.metadata.careerMode?.timelineToWork || roadmap.metadata.duration || '6M')}
                 </div>
                 <div className="rm-spec-item">
                   <span className="rm-spec-label">Môi trường</span>
-                  <span className="rm-spec-value">{roadmap.metadata.targetEnvironment || roadmap.metadata.careerMode?.companyType || 'Startup'}</span>
+                  {renderSpecValue(roadmap.metadata.targetEnvironment || roadmap.metadata.careerMode?.companyType || 'Startup')}
                 </div>
               </>
             )}

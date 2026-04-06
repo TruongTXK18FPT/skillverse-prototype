@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
 import {
   Ticket, Search, Filter, Clock, AlertCircle, CheckCircle, 
   XCircle, RefreshCw, Inbox, Send, Trash2, MessageSquare, Settings
@@ -9,6 +10,7 @@ import supportService, { TicketResponse, TicketStatsResponse, TicketMessageRespo
 import './SupportTicketsTab.css';
 
 const SupportTicketsTab: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [tickets, setTickets] = useState<TicketResponse[]>([]);
   const [stats, setStats] = useState<TicketStatsResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -94,6 +96,17 @@ const SupportTicketsTab: React.FC = () => {
     fetchTickets();
     fetchStats();
   }, [fetchTickets, fetchStats]);
+
+  useEffect(() => {
+    const nextStatus = searchParams.get('status') || '';
+    const nextCategory = searchParams.get('category') || '';
+    const nextPriority = searchParams.get('priority') || '';
+
+    setStatusFilter(nextStatus);
+    setCategoryFilter(nextCategory);
+    setPriorityFilter(nextPriority);
+    setCurrentPage(0);
+  }, [searchParams]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

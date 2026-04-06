@@ -47,6 +47,16 @@ type PlannerLoadingPhase =
   | 'saving'
   | null;
 
+const hasAiPlannerGoldAccess = (
+  subscription: UserSubscriptionResponse | null,
+): boolean =>
+  Boolean(
+    subscription?.isActive &&
+      subscription.status === 'ACTIVE' &&
+      (subscription.plan?.planType === 'PREMIUM_BASIC' ||
+        subscription.plan?.planType === 'PREMIUM_PLUS'),
+  );
+
 type SubjectPreset = {
   id: string;
   label: string;
@@ -487,21 +497,21 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
         const sub = await premiumService.getCurrentSubscription();
         setSubscription(sub);
 
-        if (sub && sub.isActive && sub.plan.planType !== 'FREE_TIER') {
+        if (hasAiPlannerGoldAccess(sub)) {
           setIsPremium(true);
-          const planName = sub.plan.name.toLowerCase();
-          const planType = sub.plan.planType;
-          if ((planName.includes('mentor') && planName.includes('pro')) || planType === 'PREMIUM_PLUS') {
-            setAiModelName('Mistral Large (Premium)');
-          } else {
-            setAiModelName('Mistral Small (Standard)');
-          }
+          setAiModelName(
+            sub?.plan?.planType === 'PREMIUM_PLUS'
+              ? 'Mistral Large - Kim cương'
+              : 'Mistral Large - Gold',
+          );
         } else {
           setIsPremium(false);
+          setAiModelName('Mistral Large');
         }
       } catch (premiumError) {
         console.error('Failed to check premium status', premiumError);
         setIsPremium(false);
+        setAiModelName('Mistral Large');
       } finally {
         setCheckingPremium(false);
       }
@@ -882,7 +892,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
             formData.subjectName?.trim() ||
             (activeSubjectPreset.id !== 'custom'
               ? activeSubjectPreset.subjectName
-              : 'Study plan'),
+              : 'Kế hoạch học tập'),
         }),
       );
       onClose();
@@ -936,7 +946,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
         <div className="study-plan-modal-header">
           <div className="study-plan-modal-title">
             <FaRobot className="study-plan-ai-icon" />
-            <span>AI Study Planner</span>
+            <span>Trợ lý AI lập kế hoạch học tập</span>
             {isPremium && (
               <span className="study-plan-ai-model-badge">
                 <FaBrain size={12} style={{ marginRight: 4 }} />
@@ -958,31 +968,31 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
 
           {checkingPremium ? (
             <div className="study-plan-loading-overlay">
-              <MeowlKuruLoader text="Đang kiểm tra quyền truy cập..." size="small" />
+              <MeowlKuruLoader text="Đang kiểm tra quyền Premium Gold..." size="small" />
             </div>
           ) : !isPremium ? (
             <div className="study-plan-premium-lock">
               <div className="study-plan-lock-icon">
                 <FaLock size={48} />
               </div>
-              <h3>Tính năng Premium</h3>
+              <h3>Tính năng dành cho Premium Gold</h3>
               <p>
-                AI Study Planner chỉ dành cho thành viên gói <strong>Skill-Plus</strong>,
-                <strong> Student Pack</strong> hoặc <strong>Mentor-Pro</strong>.
+                Trợ lý AI lập kế hoạch học tập chỉ mở cho tài khoản{' '}
+                <strong>Premium Gold</strong> trở lên.
               </p>
               <div className="study-plan-premium-benefits">
                 <div className="benefit-item">
                   <FaCheckCircle /> Tạo lịch học tự động bằng AI
                 </div>
                 <div className="benefit-item">
-                  <FaCheckCircle /> Tối ưu theo Chronotype và sức bền học tập
+                  <FaCheckCircle /> Tối ưu theo nhịp sinh học và sức bền học tập
                 </div>
                 <div className="benefit-item">
-                  <FaCheckCircle /> Đề xuất phiên học chi tiết, dễ áp dụng
+                  <FaCheckCircle /> Gợi ý phiên học chi tiết, dễ áp dụng ngay
                 </div>
               </div>
               <button className="study-plan-upgrade-btn" onClick={() => navigate('/premium')}>
-                <FaGem /> Nâng cấp ngay
+                <FaGem /> Nâng cấp Premium Gold
               </button>
             </div>
           ) : step === 'form' ? (
@@ -996,7 +1006,9 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
                   Study Planner đầy đủ như trước nhưng giảm nhập tay.
                 </p>
                 <div className="study-plan-ai-quick-meta">
-                  <span>Gói hiện tại: {subscription?.plan?.name || 'Premium'}</span>
+                  <span>
+                    Gói hiện tại: {subscription?.plan?.displayName ?? subscription?.plan?.name ?? 'Premium Gold'}
+                  </span>
                   <span>Múi giờ: {formData.timezone}</span>
                 </div>
               </div>
@@ -1079,7 +1091,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
 
               <div className="study-plan-ai-quick-section">
                 <div className="study-plan-ai-section-title">
-                  <FaCalendarAlt /> 3. Lịch học và deadline
+                  <FaCalendarAlt /> 3. Lịch học và hạn chót
                 </div>
                 <div className="study-plan-ai-subgroup-label">Lịch rảnh mẫu</div>
                 <div className="study-plan-ai-choice-grid">
@@ -1257,7 +1269,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
                       </select>
                     </div>
                     <div className="study-plan-ai-form-group">
-                      <label>Chronotype</label>
+                      <label>Nhịp sinh học</label>
                       <select
                         name="chronotype"
                         value={formData.chronotype}

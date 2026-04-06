@@ -38,11 +38,27 @@ import remarkGfm from "remark-gfm";
 import { WavRecorder } from "../../shared/wavRecorder";
 import { transcribeAudioViaBackend } from "../../shared/speechToText";
 import { LearningReportModal } from "../learning-report";
+import {
+  type MeowlContextMode,
+  buildMeowlContextEnvelope,
+} from "../../services/meowlContextService";
+import aiRoadmapService from "../../services/aiRoadmapService";
+import { type RoadmapSessionSummary, type RoadmapNode } from "../../types/Roadmap";
 
 // Guest message limit
 const GUEST_MESSAGE_LIMIT = 5;
 const GUEST_SESSION_KEY = "meowl_guest_session";
 const MEOWL_CHAT_PERSISTENCE_VERSION = 1;
+
+// Context mode labels
+const CONTEXT_MODE_LABELS: Record<MeowlContextMode, { en: string; vi: string }> = {
+  MODE_ROADMAP_OVERVIEW: { en: "Roadmap", vi: "Roadmap" },
+  MODE_COURSE_LEARNING: { en: "Course Tutor", vi: "Gia sư" },
+  MODE_FALLBACK_TEACHER: { en: "Fallback Teacher", vi: "Dạy thay" },
+  MODE_EXAM_PROCTOR: { en: "Proctor", vi: "Giám thị" },
+  MODE_SOCRATIC_READING: { en: "Socratic", vi: "Gợi mở" },
+  MODE_GENERAL_FAQ: { en: "FAQ", vi: "Hỏi đáp" },
+};
 
 interface Message {
   id: string;
@@ -87,6 +103,50 @@ interface MeowlChatV2Props {
   isOpen: boolean;
   onClose: () => void;
   onRequestLogin?: () => void;
+  /** Context mode for the chat panel (default: MODE_GENERAL_FAQ) */
+  panelMode?: MeowlContextMode;
+  /** Theme for the inner panel content (default: "cyan") */
+  panelTheme?: "cyan" | "pink" | "hud";
+  /** Modes the user can switch between in settings (default: all except MODE_EXAM_PROCTOR) */
+  panelAllowedModes?: MeowlContextMode[];
+  /** Density variant (default: "default") */
+  density?: "default" | "compact";
+  /** Roadmap context — selected node info for auto-context in welcome message */
+  roadmapContext?: {
+    roadmapTitle: string;
+    nodeTitle: string;
+    nodeDescription?: string;
+    learningObjectives?: string[];
+    keyConcepts?: string[];
+  } | null;
+  /** Course context — selected lesson info for tutor mode */
+  courseContext?: {
+    courseTitle: string;
+    modules?: {
+      moduleId: number;
+      moduleTitle: string;
+      lessons?: {
+        lessonId: number;
+        lessonTitle: string;
+        lessonType?: string;
+      }[];
+      quizzes?: {
+        lessonId: number;
+        lessonTitle: string;
+        lessonType?: string;
+      }[];
+      assignments?: {
+        lessonId: number;
+        lessonTitle: string;
+        lessonType?: string;
+      }[];
+    }[];
+    activeModuleId?: number | null;
+    activeLessonId?: number | null;
+    activeLessonTitle?: string;
+    activeLessonType?: string;
+    activeLessonDescription?: string;
+  } | null;
 }
 
 const createMeowlSessionId = () =>
@@ -226,6 +286,12 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
   isOpen,
   onClose,
   onRequestLogin,
+  panelMode: initialPanelMode = "MODE_GENERAL_FAQ",
+  panelTheme = "cyan",
+  panelAllowedModes,
+  density = "default",
+  roadmapContext,
+  courseContext,
 }) => {
   const { language } = useLanguage();
   const { user, isAuthenticated } = useAuth();
@@ -278,6 +344,320 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
   const [hasHydratedChatState, setHasHydratedChatState] = useState(false);
   const [restoredFromPersistence, setRestoredFromPersistence] = useState(false);
   const [hydratedChatKey, setHydratedChatKey] = useState<string | null>(null);
+
+  // Context mode state
+  const allContextModes: MeowlContextMode[] = [
+    "MODE_GENERAL_FAQ",
+    "MODE_ROADMAP_OVERVIEW",
+    "MODE_COURSE_LEARNING",
+    "MODE_FALLBACK_TEACHER",
+    "MODE_SOCRATIC_READING",
+    "MODE_EXAM_PROCTOR",
+  ];
+  const [contextMode, setContextMode] = useState<MeowlContextMode>(initialPanelMode);
+  const effectiveAllowedModes = panelAllowedModes ?? allContextModes.filter(
+    (m) => m !== "MODE_EXAM_PROCTOR" && m !== "MODE_SOCRATIC_READING" && m !== "MODE_FALLBACK_TEACHER"
+  );
+
+  // Reset context mode when initialPanelMode changes
+  useEffect(() => {
+    setContextMode(initialPanelMode);
+  }, [initialPanelMode]);
+
+  // Roadmap selector state (for MODE_ROADMAP_OVERVIEW)
+  const [roadmapList, setRoadmapList] = useState<RoadmapSessionSummary[]>([]);
+  const [selectedRoadmapId, setSelectedRoadmapId] = useState<number | null>(null);
+  const [selectedRoadmap, setSelectedRoadmap] = useState<{
+    sessionId: number;
+    title: string;
+    nodes: RoadmapNode[];
+  } | null>(null);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const [roadmapLoading, setRoadmapLoading] = useState(false);
+
+  // Course selector state (for MODE_COURSE_LEARNING)
+  const [selectedCourseModuleId, setSelectedCourseModuleId] = useState<number | null>(null);
+  const [selectedCourseLessonId, setSelectedCourseLessonId] = useState<number | null>(null);
+  const [selectedContentType, setSelectedContentType] = useState<"lesson" | "quiz" | "assignment">("lesson");
+
+  // Check if in roadmap mode
+  const isRoadmapMode =
+    contextMode === "MODE_ROADMAP_OVERVIEW" ||
+    contextMode === "MODE_FALLBACK_TEACHER";
+
+  // Check if in course tutor mode
+  const isCourseMode = contextMode === "MODE_COURSE_LEARNING";
+
+  // Fetch roadmap list when opening in roadmap mode
+  useEffect(() => {
+    if (!isOpen || !isRoadmapMode) return;
+    if (roadmapList.length > 0) return; // Already loaded
+
+    const fetchRoadmaps = async () => {
+      setRoadmapLoading(true);
+      try {
+        const summaries = await aiRoadmapService.getUserRoadmaps();
+        setRoadmapList(summaries);
+        // Auto-select first active roadmap
+        const active = summaries.find(
+          (r) => r.status === "ACTIVE" || r.status === "active"
+        );
+        if (active) {
+          setSelectedRoadmapId(active.sessionId);
+        }
+      } catch (err) {
+        console.error("Failed to load roadmaps for Meowl:", err);
+      } finally {
+        setRoadmapLoading(false);
+      }
+    };
+
+    void fetchRoadmaps();
+  }, [isOpen, isRoadmapMode, roadmapList.length]);
+
+  // Fetch roadmap details (nodes) when roadmap is selected
+  useEffect(() => {
+    if (!selectedRoadmapId) {
+      setSelectedRoadmap(null);
+      setSelectedNodeId(null);
+      return;
+    }
+
+    const fetchRoadmapDetail = async () => {
+      try {
+        const detail = await aiRoadmapService.getRoadmapById(selectedRoadmapId);
+        setSelectedRoadmap({
+          sessionId: detail.sessionId,
+          title: detail.metadata?.title || detail.overview?.purpose || "Untitled Roadmap",
+          nodes: detail.roadmap,
+        });
+        // Auto-select first non-completed node
+        const firstActive = detail.roadmap.find(
+          (n) => n.nodeStatus !== "COMPLETED"
+        );
+        if (firstActive) {
+          setSelectedNodeId(firstActive.id);
+        }
+      } catch (err) {
+        console.error("Failed to load roadmap detail:", err);
+      }
+    };
+
+    void fetchRoadmapDetail();
+  }, [selectedRoadmapId]);
+
+  // Auto-select course context when chat opens
+  useEffect(() => {
+    if (!isOpen || !isCourseMode || !courseContext) return;
+
+    // Auto-select module from courseContext
+    if (courseContext.activeModuleId) {
+      setSelectedCourseModuleId(courseContext.activeModuleId);
+    } else if (courseContext.modules?.length) {
+      setSelectedCourseModuleId(courseContext.modules[0].moduleId);
+    }
+
+    // Auto-select lesson from courseContext
+    if (courseContext.activeLessonId) {
+      setSelectedCourseLessonId(courseContext.activeLessonId);
+    }
+
+    // Auto-select content type based on lesson type
+    const lessonType = courseContext.activeLessonType?.toUpperCase();
+    if (lessonType === "QUIZ") {
+      setSelectedContentType("quiz");
+    } else if (lessonType === "ASSIGNMENT") {
+      setSelectedContentType("assignment");
+    } else {
+      setSelectedContentType("lesson");
+    }
+  }, [isOpen, isCourseMode, courseContext]);
+
+  // Listen for external node selection events (dispatched by RoadmapDetailPage)
+  useEffect(() => {
+    const handleNodeSelect = (event: Event) => {
+      const detail = (event as CustomEvent).detail;
+      if (!detail) return;
+      const { roadmapId, nodeId, roadmapTitle } = detail as {
+        roadmapId?: number;
+        nodeId?: string;
+        roadmapTitle?: string;
+      };
+      // Open chat if not already open (parent may have passed roadmapContext instead)
+      // but we can still sync the internal state
+      if (roadmapId) {
+        // Check if roadmap is already in our list
+        const existing = roadmapList.find((r) => r.sessionId === roadmapId);
+        if (existing) {
+          setSelectedRoadmapId(roadmapId);
+          if (nodeId) setSelectedNodeId(nodeId);
+        } else {
+          // Roadmap not in list yet — trigger a refetch
+          setSelectedRoadmapId(roadmapId);
+          // Fetch the roadmap detail directly since it's not in the list
+          aiRoadmapService.getRoadmapById(roadmapId).then((detail) => {
+            const title = roadmapTitle || detail.metadata?.title || detail.overview?.purpose || "Roadmap";
+            setSelectedRoadmap({
+              sessionId: detail.sessionId,
+              title,
+              nodes: detail.roadmap,
+            });
+            if (nodeId) setSelectedNodeId(nodeId);
+          }).catch((err) => {
+            console.error("Failed to load roadmap detail from event:", err);
+          });
+        }
+      }
+    };
+
+    window.addEventListener("meowl-node-select", handleNodeSelect);
+    return () => window.removeEventListener("meowl-node-select", handleNodeSelect);
+  }, [roadmapList]);
+
+  // Merge external roadmapContext with internal selector state
+  const activeRoadmapContext = useMemo(() => {
+    // If parent passed a direct context, prefer it (single-node page context)
+    if (roadmapContext) {
+      return roadmapContext;
+    }
+    // Otherwise build from internal selector
+    if (!selectedRoadmap || !selectedNodeId) return null;
+    const node = selectedRoadmap.nodes.find((n) => n.id === selectedNodeId);
+    if (!node) return null;
+    return {
+      roadmapTitle: selectedRoadmap.title,
+      nodeTitle: node.title,
+      nodeDescription: node.description || undefined,
+      learningObjectives: node.learningObjectives?.filter(Boolean) || [],
+      keyConcepts: node.keyConcepts?.filter(Boolean) || [],
+    };
+  }, [roadmapContext, selectedRoadmap, selectedNodeId]);
+
+  // MeowlNodeDossier computed from selected roadmap+node (for context envelope)
+  const roadmapNodeDossier = useMemo(() => {
+    if (!activeRoadmapContext || !selectedRoadmap || !selectedNodeId) return null;
+    const node = selectedRoadmap.nodes.find((n) => n.id === selectedNodeId);
+    if (!node) return null;
+    const parentNode = node.parentId
+      ? selectedRoadmap.nodes.find((n) => n.id === node.parentId)
+      : null;
+    const childNodes = selectedRoadmap.nodes.filter((n) => node.children.includes(n.id));
+    return {
+      nodeTitle: node.title,
+      nodeRole: node.type === "MAIN" ? "Mục tiêu chính" : "Mục tiêu phụ",
+      phaseLabel: null as string | null,
+      whyThisMatters: node.description || null,
+      parentTitle: parentNode?.title || null,
+      childBranchTitles: childNodes.map((n) => n.title),
+      learningObjectives: node.learningObjectives?.filter(Boolean) || [],
+      keyConcepts: node.keyConcepts?.filter(Boolean) || [],
+      successCriteria: node.successCriteria?.filter(Boolean) || [],
+      courseStatus: null as string | null,
+      recommendedNextStep: null as string | null,
+    };
+  }, [activeRoadmapContext, selectedRoadmap, selectedNodeId]);
+
+  // Context summary for context envelope
+  const roadmapContextSummary = useMemo(() => {
+    const items: string[] = [];
+    if (activeRoadmapContext) {
+      items.push(`Roadmap: ${activeRoadmapContext.roadmapTitle}`);
+      items.push(`Node: ${activeRoadmapContext.nodeTitle}`);
+      if (activeRoadmapContext.nodeDescription) {
+        items.push(`Mô tả: ${activeRoadmapContext.nodeDescription}`);
+      }
+    }
+    return items;
+  }, [activeRoadmapContext]);
+
+  // Course context welcome message (for MODE_COURSE_LEARNING)
+  const courseWelcomeContent = useMemo(() => {
+    if (!courseContext) return null;
+    const isVi = language === "vi";
+
+    const activeModuleId = selectedCourseModuleId ?? courseContext.activeModuleId;
+    const activeLessonId = selectedCourseLessonId ?? courseContext.activeLessonId;
+    const courseTitle = courseContext.courseTitle;
+    const activeModule = courseContext.modules?.find((m) => m.moduleId === activeModuleId);
+
+    // Look up lesson, quiz, or assignment title based on selected content type
+    const lookupTitle = (): string => {
+      if (!activeLessonId || !activeModule) return courseContext.activeLessonTitle ?? "";
+      if (selectedContentType === "quiz") {
+        return activeModule.quizzes?.find((q) => q.lessonId === activeLessonId)?.lessonTitle ?? "";
+      }
+      if (selectedContentType === "assignment") {
+        return activeModule.assignments?.find((a) => a.lessonId === activeLessonId)?.lessonTitle ?? "";
+      }
+      return activeModule.lessons?.find((l) => l.lessonId === activeLessonId)?.lessonTitle ?? "";
+    };
+    const activeLessonTitle = activeLessonId ? lookupTitle() : (courseContext.activeLessonTitle ?? "");
+    const activeLessonType = selectedContentType === "quiz" ? "QUIZ" : selectedContentType === "assignment" ? "ASSIGNMENT" : (selectedCourseLessonId ? activeModule?.lessons?.find((l) => l.lessonId === activeLessonId)?.lessonType : courseContext.activeLessonType);
+    const activeLessonDescription = courseContext.activeLessonDescription;
+
+    const intro = isVi
+      ? `Chào bạn! Mình đang ở chế độ Gia sư khóa học nè. Khóa học: **${courseTitle}**.`
+      : `Hey there! Meowl is in Course Tutor mode. Course: **${courseTitle}**.`;
+
+    const contextLines: string[] = [];
+    if (activeModule?.moduleTitle) {
+      contextLines.push(isVi ? `Chương hiện tại: **${activeModule.moduleTitle}**` : `Current chapter: **${activeModule.moduleTitle}**`);
+    }
+    if (activeLessonTitle) {
+      const typeLabel = isVi
+        ? (selectedContentType === "quiz" ? "Bài kiểm tra" : selectedContentType === "assignment" ? "Bài tập" : "Bài học")
+        : (selectedContentType === "quiz" ? "Quiz" : selectedContentType === "assignment" ? "Assignment" : "Lesson");
+      contextLines.push(isVi ? `${typeLabel} hiện tại: **${activeLessonTitle}**` : `Current ${typeLabel}: **${activeLessonTitle}**`);
+    }
+    if (activeLessonDescription) {
+      contextLines.push(`*${activeLessonDescription}*`);
+    }
+
+    const nextAction = isVi
+      ? `Chọn một nội dung hoặc hỏi mình về bài đang học nhé!`
+      : `Pick a content item or ask me about what you're learning!`;
+
+    const suggestedPromptsArr = isVi
+      ? [
+          `Giải thích bài \`${activeLessonTitle || "này"}\` theo cách dễ hiểu nhất.`,
+          "Cho mình một câu hỏi luyện tập bám sát nội dung này.",
+          `Tóm tắt những điểm chính của \`${activeLessonTitle || "phần này"}\`.`,
+        ]
+      : [
+          `Explain \`${activeLessonTitle || "this lesson"}\` in the simplest way possible.`,
+          "Give me a practice question about this content.",
+          `Summarize the key points of \`${activeLessonTitle || "this lesson"}\`.`,
+        ];
+
+    return {
+      intro,
+      contextLines,
+      nextAction,
+      suggestedPrompts: suggestedPromptsArr,
+    };
+  }, [courseContext, language, selectedCourseModuleId, selectedCourseLessonId]);
+
+  // Course context summary for context envelope
+  const courseContextSummary = useMemo(() => {
+    const items: string[] = [];
+    if (!courseContext) return items;
+    items.push(`Khóa học: ${courseContext.courseTitle}`);
+    const activeModuleId = selectedCourseModuleId ?? courseContext.activeModuleId;
+    const activeLessonId = selectedCourseLessonId ?? courseContext.activeLessonId;
+    if (activeModuleId) {
+      const mod = courseContext.modules?.find((m) => m.moduleId === activeModuleId);
+      if (mod) items.push(`Chương: ${mod.moduleTitle}`);
+      if (activeLessonId) {
+        const lesson = mod?.lessons?.find((l) => l.lessonId === activeLessonId);
+        const quiz = mod?.quizzes?.find((q) => q.lessonId === activeLessonId);
+        const assign = mod?.assignments?.find((a) => a.lessonId === activeLessonId);
+        if (quiz) items.push(`Bài kiểm tra: ${quiz.lessonTitle}`);
+        else if (assign) items.push(`Bài tập: ${assign.lessonTitle}`);
+        else if (lesson) items.push(`Bài học: ${lesson.lessonTitle}`);
+      }
+    }
+    return items;
+  }, [courseContext, selectedCourseModuleId, selectedCourseLessonId]);
 
   const accountRoleModes = useMemo<MeowlRoleMode[]>(() => {
     if (!isAuthenticated || !user?.roles?.length) return ["GENERAL"];
@@ -660,6 +1040,60 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
   const effectiveRole: MeowlRoleMode = onboardingContext?.activeRole || activeRole;
   const fallbackContent = getRoleFallbackContent(effectiveRole);
 
+  // Roadmap context welcome message
+  const roadmapWelcomeContent = useMemo(() => {
+    if (!activeRoadmapContext) return null;
+    const isVi = language === "vi";
+    const nodeTitle = activeRoadmapContext.nodeTitle;
+    const roadmapTitle = activeRoadmapContext.roadmapTitle;
+
+    const objectives = activeRoadmapContext.learningObjectives?.slice(0, 3) || [];
+    const concepts = activeRoadmapContext.keyConcepts?.slice(0, 3) || [];
+
+    const intro = isVi
+      ? `Chào bạn! Mình đang ở chế độ Roadmap Guide nè. Lộ trình hiện tại: **${roadmapTitle}**.\n\nMình đang focus vào node: **${nodeTitle}**.`
+      : `Hey there! Meowl is in Roadmap Guide mode. Current roadmap: **${roadmapTitle}**.\n\nCurrently focused on: **${nodeTitle}**.`;
+
+    const contextSection = (() => {
+      const lines: string[] = [];
+      if (activeRoadmapContext.nodeDescription) {
+        lines.push(activeRoadmapContext.nodeDescription);
+      }
+      if (objectives.length > 0) {
+        lines.push(isVi ? "**Mục tiêu học tập:**" : "**Learning Objectives:**");
+        objectives.forEach((obj) => lines.push(`- ${obj}`));
+      }
+      if (concepts.length > 0) {
+        lines.push(isVi ? "**Khái niệm trọng tâm:**" : "**Key Concepts:**");
+        concepts.forEach((c) => lines.push(`- ${c}`));
+      }
+      return lines.length > 0 ? lines.join("\n") : null;
+    })();
+
+    const nextAction = isVi
+      ? `Bấm vào node **${nodeTitle}** trên lộ trình để xem chi tiết, hoặc hỏi mình về node này nhé!`
+      : `Tap the **${nodeTitle}** node on the roadmap to view details, or ask me anything about it!`;
+
+    const suggestedPromptsArr = isVi
+      ? [
+          `Node "${nodeTitle}" quan trọng như thế nào trong roadmap?`,
+          `Mình nên bắt đầu với "${nodeTitle}" như thế nào?`,
+          `Kết nối "${nodeTitle}" với các node khác trong roadmap ra sao?`,
+        ]
+      : [
+          `Why is the "${nodeTitle}" node important in this roadmap?`,
+          `How should I start with "${nodeTitle}"?`,
+          `How does "${nodeTitle}" connect to other nodes in the roadmap?`,
+        ];
+
+    return {
+      intro,
+      contextSection,
+      nextAction,
+      suggestedPrompts: suggestedPromptsArr,
+    };
+  }, [activeRoadmapContext, language]);
+
   const useBackendText = language === "en";
   const baseWelcomeMessage =
     useBackendText && onboardingContext?.welcomeMessage
@@ -679,6 +1113,41 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
       : fallbackContent.suggestedPrompts;
 
   const welcomeMessageText = useMemo(() => {
+    // Roadmap context mode
+    if (roadmapWelcomeContent) {
+      const { intro, contextSection, nextAction, suggestedPrompts: rcPrompts } = roadmapWelcomeContent;
+      const promptTitle = language === "en" ? "Try asking" : "Gợi ý câu hỏi";
+      const suggestedPromptSection = rcPrompts
+        .slice(0, 3)
+        .map((prompt) => `- ${prompt}`)
+        .join("\n");
+
+      const parts: string[] = [intro];
+      if (contextSection) {
+        parts.push("", contextSection);
+      }
+      parts.push("", nextAction, "", `**${promptTitle}:**`, suggestedPromptSection);
+      return parts.join("\n");
+    }
+
+    // Course tutor context mode
+    if (courseWelcomeContent) {
+      const { intro, contextLines, nextAction, suggestedPrompts: cwPrompts } = courseWelcomeContent;
+      const promptTitle = language === "en" ? "Try asking" : "Gợi ý câu hỏi";
+      const suggestedPromptSection = cwPrompts
+        .slice(0, 3)
+        .map((prompt) => `- ${prompt}`)
+        .join("\n");
+
+      const parts: string[] = [intro];
+      if (contextLines.length > 0) {
+        parts.push("", ...contextLines);
+      }
+      parts.push("", nextAction, "", `**${promptTitle}:**`, suggestedPromptSection);
+      return parts.join("\n");
+    }
+
+    // Default: role-based welcome
     const quickActionSection = quickActions
       .slice(0, 3)
       .map((action) => {
@@ -720,6 +1189,7 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
     quickActions,
     suggestedPrompts,
     useBackendText,
+    roadmapWelcomeContent,
   ]);
 
   useEffect(() => {
@@ -750,6 +1220,10 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
 
   const inputPromptChips = useMemo(() => {
     const chips = new Set<string>();
+    // Add roadmap context prompts when in roadmap mode
+    if (roadmapWelcomeContent) {
+      roadmapWelcomeContent.suggestedPrompts.forEach((prompt) => chips.add(prompt));
+    }
     suggestedPrompts.forEach((prompt) => {
       const normalized = prompt.trim();
       if (normalized) chips.add(normalized);
@@ -759,9 +1233,9 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
       .forEach((action) => {
         const prompt = action.actionValue?.trim();
         if (prompt) chips.add(prompt);
-    });
+      });
     return Array.from(chips).slice(0, 4);
-  }, [quickActions, suggestedPrompts]);
+  }, [quickActions, suggestedPrompts, activeRoadmapContext]);
 
   const resetConversation = useCallback(
     (welcomeText: string) => {
@@ -1175,13 +1649,34 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
     setIsLoading(true);
 
     try {
+      // Build message: use context envelope for context-aware modes, plain for general FAQ
+      const isContextAware = contextMode !== "MODE_GENERAL_FAQ";
+      const lang: "vi" | "en" = language === "vi" ? "vi" : "en";
+
+      const apiPayload = isContextAware
+        ? buildMeowlContextEnvelope({
+            mode: contextMode,
+            language: lang,
+            title: isCourseMode
+              ? (courseContext?.activeLessonTitle || courseContext?.courseTitle || (language === "vi" ? "Bài học" : "Lesson"))
+              : (activeRoadmapContext?.nodeTitle || (language === "vi" ? "Roadmap" : "Roadmap")),
+            subtitle: isCourseMode
+              ? (courseContext?.courseTitle || (language === "vi" ? "Khóa học" : "Course"))
+              : (activeRoadmapContext?.roadmapTitle || (language === "vi" ? "Lộ trình học tập" : "Learning Roadmap")),
+            contextSummary: isCourseMode ? courseContextSummary : roadmapContextSummary,
+            userMessage: userMessage.content,
+            nodeDossier: isCourseMode ? null : roadmapNodeDossier,
+            repairInstruction: null,
+          })
+        : userMessage.content;
+
       const response = await axiosInstance.post("/v1/meowl/chat", {
-        message: userMessage.content,
-        language: language === "vi" ? "vi" : "en",
+        message: apiPayload,
+        language: lang,
         userId: user?.id || null,
-        activeRole,
+        activeRole: isAuthenticated ? "LEARNER" : "GENERAL",
         sessionId: meowlSessionId,
-        includeReminders: true,
+        includeReminders: !isContextAware,
         chatHistory: messages.slice(-10).map((msg) => ({
           role: msg.role,
           content: msg.content,
@@ -1379,78 +1874,98 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
   return (
     <div
       className={`meowl-chat-v2-overlay ${theme}`}
-      onClick={(e) => e.stopPropagation()}
     >
       <div
-        className="meowl-chat-v2-container"
-        style={{ fontSize: `${fontSize}px` }}
+        className={`${panelTheme === "hud" ? "meowl-panel meowl-panel--hud" : "meowl-chat-v2-container"} ${density === "compact" && panelTheme === "hud" ? "meowl-panel--compact" : ""}`}
+        style={panelTheme !== "hud" ? { fontSize: `${fontSize}px` } : undefined}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="meowl-chat-v2-header">
-          <div className="meowl-chat-v2-header-left">
-            <img
-              src="/images/meowl_bg_clear.png"
-              alt="Meowl"
-              className="meowl-chat-v2-header-avatar"
-            />
-            <div className="meowl-chat-v2-header-info">
-              <h3>{language === "en" ? "Meowl Here!" : "Meowl đây nè!"}</h3>
-              <span className="meowl-chat-v2-status-online">
-                {language === "en" ? "Online" : "Trực tuyến"}
-              </span>
-            </div>
-          </div>
-          <div className="meowl-chat-v2-header-actions">
-            {/* Settings button */}
-            <button
-              className="meowl-chat-v2-header-btn"
-              onClick={() => setShowSettings(!showSettings)}
-              title={language === "en" ? "Settings" : "Cài đặt"}
-            >
-              <Settings size={18} />
-            </button>
-            {/* Learning Report (logged in only) */}
-            {/* {isAuthenticated && (
+        <div className={panelTheme === "hud" ? "meowl-panel__header" : "meowl-chat-v2-header"}>
+          {panelTheme === "hud" ? (
+            <>
+              <div className="meowl-panel__header-main">
+                <div className="meowl-panel__icon-wrap">
+                  <Sparkles size={18} />
+                </div>
+                <div>
+                  <div className="meowl-panel__badge">
+                    <Sparkles size={14} />
+                    <span>{CONTEXT_MODE_LABELS[contextMode][language]}</span>
+                  </div>
+                  <h3 className="meowl-panel__title">
+                    {language === "en" ? "Meowl Here!" : "Meowl đây nè!"}
+                  </h3>
+                  <p className="meowl-panel__subtitle">
+                    {language === "en" ? "Your learning assistant" : "Trợ lý học tập của bạn"}
+                  </p>
+                </div>
+              </div>
               <button
-                className="meowl-chat-v2-header-btn report"
-                onClick={() => setIsReportModalOpen(true)}
-                title={
-                  language === "en" ? "Learning Report" : "Báo cáo học tập"
-                }
+                className="meowl-panel__close-btn"
+                onClick={onClose}
+                title={language === "en" ? "Close" : "Đóng"}
               >
-                <BarChart2 size={18} />
+                <X size={16} />
               </button>
-            )} */}
-            {/* History navigation */}
-            <button
-              className="meowl-chat-v2-header-btn"
-              onClick={scrollToTop}
-              title={language === "en" ? "Scroll to top" : "Lên đầu"}
-            >
-              <ChevronUp size={18} />
-            </button>
-            <button
-              className="meowl-chat-v2-header-btn"
-              onClick={scrollToBottom}
-              title={language === "en" ? "Scroll to bottom" : "Xuống cuối"}
-            >
-              <ChevronDown size={18} />
-            </button>
-            {/* Clear history (logged in only) */}
-            {isAuthenticated && (
-              <button
-                className="meowl-chat-v2-header-btn danger"
-                onClick={clearChatHistory}
-                title={language === "en" ? "Clear history" : "Xóa lịch sử"}
-              >
-                <Trash2 size={18} />
-              </button>
-            )}
-            {/* Close button */}
-            <button className="meowl-chat-v2-header-btn close" onClick={onClose}>
-              <X size={20} />
-            </button>
-          </div>
+            </>
+          ) : (
+            <>
+              <div className="meowl-chat-v2-header-left">
+                <img
+                  src="/images/meowl_bg_clear.png"
+                  alt="Meowl"
+                  className="meowl-chat-v2-header-avatar"
+                />
+                <div className="meowl-chat-v2-header-info">
+                  <h3>{language === "en" ? "Meowl Here!" : "Meowl đây nè!"}</h3>
+                  {contextMode !== "MODE_GENERAL_FAQ" && (
+                    <span className="meowl-chat-v2-mode-badge">
+                      {CONTEXT_MODE_LABELS[contextMode][language]}
+                    </span>
+                  )}
+                  <span className="meowl-chat-v2-status-online">
+                    {language === "en" ? "Online" : "Trực tuyến"}
+                  </span>
+                </div>
+              </div>
+              <div className="meowl-chat-v2-header-actions">
+                <button
+                  className="meowl-chat-v2-header-btn"
+                  onClick={() => setShowSettings(!showSettings)}
+                  title={language === "en" ? "Settings" : "Cài đặt"}
+                >
+                  <Settings size={18} />
+                </button>
+                <button
+                  className="meowl-chat-v2-header-btn"
+                  onClick={scrollToTop}
+                  title={language === "en" ? "Scroll to top" : "Lên đầu"}
+                >
+                  <ChevronUp size={18} />
+                </button>
+                <button
+                  className="meowl-chat-v2-header-btn"
+                  onClick={scrollToBottom}
+                  title={language === "en" ? "Scroll to bottom" : "Xuống cuối"}
+                >
+                  <ChevronDown size={18} />
+                </button>
+                {isAuthenticated && (
+                  <button
+                    className="meowl-chat-v2-header-btn danger"
+                    onClick={clearChatHistory}
+                    title={language === "en" ? "Clear history" : "Xóa lịch sử"}
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                )}
+                <button className="meowl-chat-v2-header-btn close" onClick={onClose}>
+                  <X size={20} />
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Settings Panel */}
@@ -1491,6 +2006,186 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
                 </button>
               </div>
             </div>
+            {effectiveAllowedModes.length > 1 && (
+              <>
+                <div className="meowl-chat-v2-setting-item">
+                  <span>{language === "en" ? "Chat Mode" : "Chế độ chat"}</span>
+                  <div className="meowl-chat-v2-mode-switcher">
+                    {effectiveAllowedModes.map((mode) => (
+                      <button
+                        key={mode}
+                        type="button"
+                        className={`meowl-chat-v2-mode-btn ${contextMode === mode ? "meowl-chat-v2-mode-btn--active" : ""}`}
+                        onClick={() => setContextMode(mode)}
+                      >
+                        {CONTEXT_MODE_LABELS[mode][language]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Roadmap + Node selector for roadmap mode */}
+            {isRoadmapMode && (
+              <>
+                <div className="meowl-chat-v2-setting-item">
+                  <span>{language === "en" ? "Roadmap" : "Lộ trình"}</span>
+                  <select
+                    className="meowl-chat-v2-selector-select"
+                    value={selectedRoadmapId ?? ""}
+                    onChange={(e) => setSelectedRoadmapId(Number(e.target.value) || null)}
+                  >
+                    <option value="">
+                      {roadmapLoading
+                        ? (language === "en" ? "Loading..." : "Đang tải...")
+                        : (language === "en" ? "-- Select roadmap --" : "-- Chọn lộ trình --")}
+                    </option>
+                    {roadmapList.map((r) => (
+                      <option key={r.sessionId} value={r.sessionId}>
+                        {r.title} ({r.progressPercentage}%)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {selectedRoadmap && (
+                  <div className="meowl-chat-v2-setting-item">
+                    <span>{language === "en" ? "Node" : "Node"}</span>
+                    <select
+                      className="meowl-chat-v2-selector-select"
+                      value={selectedNodeId ?? ""}
+                      onChange={(e) => setSelectedNodeId(e.target.value || null)}
+                    >
+                      <option value="">
+                        {language === "en" ? "-- Select node --" : "-- Chọn node --"}
+                      </option>
+                      {selectedRoadmap.nodes.map((n) => (
+                        <option key={n.id} value={n.id}>
+                          {n.nodeStatus === "COMPLETED" ? "✓ " : ""}{n.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* Course module + content selectors for course tutor mode */}
+            {isCourseMode && courseContext && courseContext.modules && (
+              <>
+                <div className="meowl-chat-v2-setting-item">
+                  <span>{language === "en" ? "Module" : "Chương"}</span>
+                  <select
+                    className="meowl-chat-v2-selector-select"
+                    value={selectedCourseModuleId ?? courseContext.activeModuleId ?? ""}
+                    onChange={(e) => {
+                      const modId = Number(e.target.value) || null;
+                      setSelectedCourseModuleId(modId);
+                      setSelectedCourseLessonId(null);
+                    }}
+                  >
+                    <option value="">
+                      {language === "en" ? "-- Select module --" : "-- Chọn chương --"}
+                    </option>
+                    {courseContext.modules.map((mod) => (
+                      <option key={mod.moduleId} value={mod.moduleId}>
+                        {mod.moduleTitle}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {selectedCourseModuleId && (() => {
+                  const mod = courseContext.modules?.find((m) => m.moduleId === selectedCourseModuleId);
+                  if (!mod) return null;
+
+                  const lessons = mod.lessons ?? [];
+                  const quizzes = mod.quizzes ?? [];
+                  const assignments = mod.assignments ?? [];
+                  const allItems = [...lessons, ...quizzes, ...assignments];
+
+                  return (
+                    <>
+                      {/* Content type tabs */}
+                      <div className="meowl-chat-v2-course-content-tabs">
+                        <button
+                          type="button"
+                          className={`meowl-chat-v2-course-tab ${selectedContentType === "lesson" ? "active" : ""}`}
+                          onClick={() => { setSelectedContentType("lesson"); setSelectedCourseLessonId(null); }}
+                        >
+                          {language === "en" ? "Lessons" : "Bài học"}
+                          {lessons.length > 0 && <span className="tab-count">{lessons.length}</span>}
+                        </button>
+                        <button
+                          type="button"
+                          className={`meowl-chat-v2-course-tab ${selectedContentType === "quiz" ? "active" : ""}`}
+                          onClick={() => { setSelectedContentType("quiz"); setSelectedCourseLessonId(null); }}
+                        >
+                          {language === "en" ? "Quizzes" : "Kiểm tra"}
+                          {quizzes.length > 0 && <span className="tab-count">{quizzes.length}</span>}
+                        </button>
+                        <button
+                          type="button"
+                          className={`meowl-chat-v2-course-tab ${selectedContentType === "assignment" ? "active" : ""}`}
+                          onClick={() => { setSelectedContentType("assignment"); setSelectedCourseLessonId(null); }}
+                        >
+                          {language === "en" ? "Tasks" : "Bài tập"}
+                          {assignments.length > 0 && <span className="tab-count">{assignments.length}</span>}
+                        </button>
+                      </div>
+
+                      {/* Content items list */}
+                      <div className="meowl-chat-v2-course-items">
+                        {selectedContentType === "lesson" && lessons.length > 0 && lessons.map((l) => (
+                          <button
+                            key={l.lessonId}
+                            type="button"
+                            className={`meowl-chat-v2-course-item ${selectedCourseLessonId === l.lessonId ? "active" : ""}`}
+                            onClick={() => setSelectedCourseLessonId(l.lessonId)}
+                          >
+                            {language === "en" ? "📄" : "📄"} {l.lessonTitle}
+                          </button>
+                        ))}
+                        {selectedContentType === "quiz" && quizzes.length > 0 && quizzes.map((q) => (
+                          <button
+                            key={q.lessonId}
+                            type="button"
+                            className={`meowl-chat-v2-course-item quiz ${selectedCourseLessonId === q.lessonId ? "active" : ""}`}
+                            onClick={() => setSelectedCourseLessonId(q.lessonId)}
+                          >
+                            {language === "en" ? "📝" : "📝"} {q.lessonTitle}
+                          </button>
+                        ))}
+                        {selectedContentType === "assignment" && assignments.length > 0 && assignments.map((a) => (
+                          <button
+                            key={a.lessonId}
+                            type="button"
+                            className={`meowl-chat-v2-course-item assignment ${selectedCourseLessonId === a.lessonId ? "active" : ""}`}
+                            onClick={() => setSelectedCourseLessonId(a.lessonId)}
+                          >
+                            {language === "en" ? "📋" : "📋"} {a.lessonTitle}
+                          </button>
+                        ))}
+                        {selectedContentType === "lesson" && lessons.length === 0 && (
+                          <div className="meowl-chat-v2-course-empty">
+                            {language === "en" ? "No lessons in this module" : "Chương này chưa có bài học"}
+                          </div>
+                        )}
+                        {selectedContentType === "quiz" && quizzes.length === 0 && (
+                          <div className="meowl-chat-v2-course-empty">
+                            {language === "en" ? "No quizzes in this module" : "Chương này chưa có bài kiểm tra"}
+                          </div>
+                        )}
+                        {selectedContentType === "assignment" && assignments.length === 0 && (
+                          <div className="meowl-chat-v2-course-empty">
+                            {language === "en" ? "No assignments in this module" : "Chương này chưa có bài tập"}
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  );
+                })()}
+              </>
+            )}
           </div>
         )}
 
@@ -1524,38 +2219,71 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
         )}
 
         {/* Messages Container */}
-        <div className="meowl-chat-v2-messages" ref={messagesContainerRef}>
-          {messages.map((message) => (
-            <MessageItem
-              key={message.id}
-              message={message}
-              onActionClick={handleActionClick}
-            />
-          ))}
-
-          {/* Loading indicator */}
-          {isLoading && (
-            <div className="meowl-chat-v2-message-wrapper assistant">
-              <div className="meowl-chat-v2-message-avatar">
-                <img src="/images/meowl_bg_clear.png" alt="Meowl" />
+        {panelTheme === "hud" ? (
+          <div className="meowl-panel__messages" ref={messagesContainerRef}>
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`meowl-panel__message ${message.role === "assistant" ? "meowl-panel__message--assistant" : "meowl-panel__message--user"}`}
+              >
+                <div className="meowl-panel__message-bubble">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                </div>
               </div>
-              <div className="meowl-chat-v2-message-content">
-                <div className="meowl-chat-v2-message-bubble loading">
+            ))}
+            {isLoading && (
+              <div className="meowl-panel__message meowl-panel__message--assistant">
+                <div className="meowl-panel__message-bubble">
                   <MeowlKuruLoader size="tiny" text="" />
                   <span>
-                    {language === "en"
-                      ? "Meowl is thinking..."
-                      : "Meowl đang suy nghĩ..."}
+                    {language === "en" ? "Meowl is thinking..." : "Meowl đang suy nghĩ..."}
                   </span>
                 </div>
               </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
+            )}
+            {!messages.length && !isLoading && (
+              <div className="meowl-panel__empty-conversation">
+                {language === "en"
+                  ? "Ask Meowl anything about this context..."
+                  : "Hỏi Meowl bất cứ điều gì về ngữ cảnh này..."}
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+        ) : (
+          <div className="meowl-chat-v2-messages" ref={messagesContainerRef}>
+            {messages.map((message) => (
+              <MessageItem
+                key={message.id}
+                message={message}
+                onActionClick={handleActionClick}
+              />
+            ))}
+
+            {/* Loading indicator */}
+            {isLoading && (
+              <div className="meowl-chat-v2-message-wrapper assistant">
+                <div className="meowl-chat-v2-message-avatar">
+                  <img src="/images/meowl_bg_clear.png" alt="Meowl" />
+                </div>
+                <div className="meowl-chat-v2-message-content">
+                  <div className="meowl-chat-v2-message-bubble loading">
+                    <MeowlKuruLoader size="tiny" text="" />
+                    <span>
+                      {language === "en"
+                        ? "Meowl is thinking..."
+                        : "Meowl đang suy nghĩ..."}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+        )}
 
         {/* Input Container */}
-        <div className="meowl-chat-v2-input">
+        <div className={panelTheme === "hud" ? "meowl-panel__composer" : "meowl-chat-v2-input"}>
           {/* Preview text */}
           {isPreviewing && (
             <div className="meowl-chat-v2-voice-preview">
@@ -1566,12 +2294,12 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
           )}
 
           {inputPromptChips.length > 0 && (
-            <div className="meowl-chat-v2-suggested-inputs">
+            <div className={panelTheme === "hud" ? "meowl-panel__prompt-list" : "meowl-chat-v2-suggested-inputs"}>
               {inputPromptChips.map((prompt) => (
                 <button
                   key={prompt}
                   type="button"
-                  className="meowl-chat-v2-suggested-input-btn"
+                  className={panelTheme === "hud" ? "meowl-panel__prompt-chip" : "meowl-chat-v2-suggested-input-btn"}
                   onClick={() => applySuggestedPrompt(prompt)}
                   disabled={isLoading}
                   title={prompt}
@@ -1582,24 +2310,26 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
             </div>
           )}
 
-          <div className="meowl-chat-v2-input-wrapper">
+          <div className={panelTheme === "hud" ? "" : "meowl-chat-v2-input-wrapper"}>
             {/* Voice button */}
-            <button
-              className={`meowl-chat-v2-input-btn voice ${isRecording ? "recording" : ""}`}
-              onClick={isRecording ? stopRecording : startRecording}
-              disabled={isLoading}
-              title={
-                isRecording
-                  ? language === "en"
-                    ? "Stop"
-                    : "Dừng"
-                  : language === "en"
-                    ? "Voice"
-                    : "Ghi âm"
-              }
-            >
-              {isRecording ? <Square size={18} /> : <Mic size={18} />}
-            </button>
+            {panelTheme !== "hud" && (
+              <button
+                className={`meowl-chat-v2-input-btn voice ${isRecording ? "recording" : ""}`}
+                onClick={isRecording ? stopRecording : startRecording}
+                disabled={isLoading}
+                title={
+                  isRecording
+                    ? language === "en"
+                      ? "Stop"
+                      : "Dừng"
+                    : language === "en"
+                      ? "Voice"
+                      : "Ghi âm"
+                }
+              >
+                {isRecording ? <Square size={18} /> : <Mic size={18} />}
+              </button>
+            )}
 
             {/* Text input */}
             <textarea
@@ -1608,18 +2338,21 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
               placeholder={placeholderText[language]}
-              className="meowl-chat-v2-chat-textarea"
+              className={panelTheme === "hud" ? "meowl-panel__textarea" : "meowl-chat-v2-chat-textarea"}
               disabled={isLoading}
               rows={1}
             />
 
             {/* Send button */}
             <button
-              className="meowl-chat-v2-input-btn send"
+              className={panelTheme === "hud" ? "meowl-panel__send-btn" : "meowl-chat-v2-input-btn send"}
               onClick={() => sendMessage()}
               disabled={!inputValue.trim() || isLoading}
             >
-              <Send size={18} />
+              <Send size={16} />
+              {panelTheme === "hud" && (
+                <span>{language === "en" ? "Send" : "Gửi"}</span>
+              )}
             </button>
           </div>
         </div>

@@ -17,7 +17,6 @@ import {
   type MeowlContextMode,
   type MeowlNodeDossier,
 } from "../../services/meowlContextService";
-import styles from "./MeowlContextPanel.module.css";
 
 export type { MeowlContextMode } from "../../services/meowlContextService";
 
@@ -316,36 +315,36 @@ const MeowlContextPanel = ({
   return (
     <section
       className={[
-        styles.panel,
-        theme === "hud" ? styles.panelHud : styles.panelDefault,
-        density === "compact" ? styles.panelCompact : "",
+        "meowl-panel",
+        theme === "hud" ? "meowl-panel--hud" : "meowl-panel--default",
+        density === "compact" ? "meowl-panel--compact" : "",
         className,
       ]
         .filter(Boolean)
         .join(" ")}
     >
-      <header className={styles.header}>
-        <div className={styles.headerMain}>
-          <div className={styles.iconWrap}>
+      <header className="meowl-panel__header">
+        <div className="meowl-panel__header-main">
+          <div className="meowl-panel__icon-wrap">
             <Icon size={18} />
           </div>
           <div>
-            <div className={styles.badge}>
+            <div className="meowl-panel__badge">
               <Sparkles size={14} />
               <span>{modeMeta.badge[language]}</span>
             </div>
-            <h3 className={styles.title}>{title}</h3>
-            <p className={styles.subtitle}>{subtitle}</p>
+            <h3 className="meowl-panel__title">{title}</h3>
+            <p className="meowl-panel__subtitle">{subtitle}</p>
             {isRoadmapNodeMode && !suppressRoadmapCoachCopy && messages.length === 0 ? (
-              <p className={styles.subtitle}>{modeMeta.intro[language]}</p>
+              <p className="meowl-panel__subtitle">{modeMeta.intro[language]}</p>
             ) : null}
             {isRoadmapNodeMode && !suppressRoadmapCoachCopy && !hideRoadmapNodeBrief && nodeBrief ? (
-              <p className={styles.nodeBrief}>{nodeBrief}</p>
+              <p className="meowl-panel__node-brief">{nodeBrief}</p>
             ) : null}
           </div>
         </div>
         {isPremiumLocked && (
-          <div className={styles.lockTag}>
+          <div className="meowl-panel__lock-tag">
             <Lock size={14} />
             <span>{language === "en" ? "Premium" : "Premium"}</span>
           </div>
@@ -353,7 +352,7 @@ const MeowlContextPanel = ({
         {onClose && (
           <button
             type="button"
-            className={styles.closeButton}
+            className="meowl-panel__close-btn"
             onClick={onClose}
             aria-label={closeLabel ?? (language === "en" ? "Close Meowl panel" : "Đóng bảng Meowl")}
             title={closeLabel ?? (language === "en" ? "Close panel" : "Ẩn bảng chat")}
@@ -364,16 +363,16 @@ const MeowlContextPanel = ({
       </header>
 
       {lockCopy && (
-        <div className={styles.lockCard}>
-          <div className={styles.lockCardHeader}>
+        <div className="meowl-panel__lock-card">
+          <div className="meowl-panel__lock-card-header">
             <Lock size={16} />
             <strong>{lockCopy.title}</strong>
           </div>
           <p>{lockCopy.description}</p>
-          <p className={styles.lockPlan}>{lockCopy.planLine}</p>
+          <p className="meowl-panel__lock-plan">{lockCopy.planLine}</p>
           <button
             type="button"
-            className={styles.lockButton}
+            className="meowl-panel__lock-btn"
             onClick={() => navigate("/premium")}
           >
             {language === "en" ? "Upgrade plan" : "Nâng cấp gói"}
@@ -381,40 +380,40 @@ const MeowlContextPanel = ({
         </div>
       )}
 
-      <div className={styles.messages} aria-live="polite">
+      <div className="meowl-panel__messages" aria-live="polite">
         {messages.map((message) => (
           <div
             key={message.id}
             className={[
-              styles.message,
-              message.role === "assistant" ? styles.assistant : styles.user,
+              "meowl-panel__message",
+              message.role === "assistant" ? "meowl-panel__message--assistant" : "meowl-panel__message--user",
             ].join(" ")}
           >
-            <div className={styles.messageBubble}>{message.content}</div>
+            <div className="meowl-panel__messageBubble">{message.content}</div>
           </div>
         ))}
 
         {!messages.length && !isLoading && (
-          <div className={styles.emptyConversation}>
+          <div className="meowl-panel__empty-conversation">
             {emptyStateCopy}
           </div>
         )}
 
         {isLoading && (
-          <div className={[styles.message, styles.assistant].join(" ")}>
-            <div className={styles.messageBubble}>
+          <div className={["meowl-panel__message", "meowl-panel__message--assistant"].join(" ")}>
+            <div className="meowl-panel__messageBubble">
               {language === "en" ? "Meowl is thinking..." : "Meowl đang suy nghĩ..."}
             </div>
           </div>
         )}
 
         {effectivePrompts.length > 0 && !isLoading && (
-          <div className={styles.promptList}>
+          <div className="meowl-panel__prompt-list">
             {effectivePrompts.map((prompt) => (
               <button
                 key={prompt}
                 type="button"
-                className={styles.promptChip}
+                className="meowl-panel__prompt-chip"
                 onClick={() => handlePromptClick(prompt)}
               >
                 {prompt}
@@ -424,9 +423,9 @@ const MeowlContextPanel = ({
         )}
       </div>
 
-      <form className={styles.composer} onSubmit={handleSubmit}>
+      <form className="meowl-panel__composer" onSubmit={handleSubmit}>
         <textarea
-          className={styles.textarea}
+          className="meowl-panel__textarea"
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
           placeholder={modeMeta.placeholder[language]}
@@ -436,7 +435,7 @@ const MeowlContextPanel = ({
         />
         <button
           type="submit"
-          className={styles.sendButton}
+          className="meowl-panel__send-btn"
           disabled={!inputValue.trim() || isLoading}
         >
           <Send size={16} />

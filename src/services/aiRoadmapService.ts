@@ -153,11 +153,14 @@ const aiRoadmapService = {
   getAllRoadmaps: async (): Promise<RoadmapSessionSummary[]> => {
     try {
       const response = await axiosInstance.get<RoadmapSessionSummary[]>(
-        '/api/v1/roadmaps?includeDeleted=false'
+        '/api/v1/ai/roadmap',
+        {
+          params: { includeDeleted: false }
+        }
       );
       return response.data;
     } catch (error) {
-      console.error('Failed to fetch all roadmaps:', error);
+      console.warn('Failed to fetch roadmaps for admin analytics:', error);
       return [];
     }
   },

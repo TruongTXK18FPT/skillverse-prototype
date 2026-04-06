@@ -25,10 +25,13 @@ interface TaskSummary {
   overdue: number;
   pending: number;
   upcomingTasks: Array<{
+    taskId?: string;
     title: string;
     deadline: string;
     daysOverdue: number;
     estimatedMinutes?: number;
+    roadmapSessionId?: number;
+    nodeId?: string;
   }>;
 }
 
@@ -37,6 +40,7 @@ interface CommanderWelcomeProps {
   subtitle?: string;
   userLevel?: number;
   onViewPlan?: () => void;
+  onTaskNavigate?: (task?: TaskSummary["upcomingTasks"][number]) => void;
   onViewReport?: () => void;
   viewPlanText?: string;
   hasRoadmap?: boolean;
@@ -52,6 +56,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
   subtitle = "COMMAND CENTER OPERATIONAL",
   userLevel = 1,
   onViewPlan,
+  onTaskNavigate,
   onViewReport,
   viewPlanText = "Xem kế hoạch học tập",
   hasRoadmap = false,
@@ -87,6 +92,12 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
 
   const totalOverdue = taskSummary.criticalOverdue + taskSummary.overdue;
   const totalTasks = totalOverdue + taskSummary.pending;
+  const firstCriticalTask = taskSummary.upcomingTasks.find(
+    (task) => task.daysOverdue > 30,
+  );
+  const firstOverdueTask = taskSummary.upcomingTasks.find(
+    (task) => task.daysOverdue <= 30 && task.daysOverdue > 0,
+  );
 
   // Calculate total estimated time
   const totalEstimatedMinutes = taskSummary.upcomingTasks.reduce(
@@ -110,6 +121,12 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
       type: string;
       icon: React.ReactNode;
       message: string;
+      actionKey:
+        | "critical-task"
+        | "overdue-task"
+        | "pending-tasks"
+        | "roadmap"
+        | "planner";
     }> = [];
 
     if (taskSummary.criticalOverdue > 0) {
@@ -122,6 +139,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
         message: firstCritical
           ? `Ưu tiên cao: "${firstCritical.title.substring(0, 25)}..."`
           : `${taskSummary.criticalOverdue} công việc cần xử lý gấp!`,
+        actionKey: "critical-task",
       });
     }
 
@@ -135,6 +153,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
         message: firstOverdue
           ? `Tiếp theo: "${firstOverdue.title.substring(0, 25)}..."`
           : `Hoàn thành ${taskSummary.overdue} công việc quá hạn`,
+        actionKey: "overdue-task",
       });
     }
 
@@ -143,6 +162,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
         type: "info",
         icon: <Clock size={12} />,
         message: `${taskSummary.pending} công việc đang chờ - giữ tiến độ!`,
+        actionKey: "pending-tasks",
       });
     }
 
@@ -151,6 +171,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
         type: "action",
         icon: <Lightbulb size={12} />,
         message: "Tạo roadmap để bắt đầu hành trình",
+        actionKey: "roadmap",
       });
     }
 
@@ -159,6 +180,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
         type: "action",
         icon: <Target size={12} />,
         message: "Tạo task để bắt đầu hành trình",
+        actionKey: "planner",
       });
     }
 
@@ -167,6 +189,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
         type: "success",
         icon: <CheckCircle2 size={12} />,
         message: "Tuyệt vời! Đang hoàn thành tốt mục tiêu",
+        actionKey: "planner",
       });
     }
 
@@ -174,13 +197,61 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
   };
 
   const suggestions = getSuggestions();
+  const handleTaskNavigate = (task?: TaskSummary["upcomingTasks"][number]) => {
+    if (onTaskNavigate) {
+      onTaskNavigate(task);
+      return;
+    }
+
+    navigate("/study-planner");
+  };
+
+  const handleViewPlanClick = () => {
+    if (onViewPlan) {
+      onViewPlan();
+      return;
+    }
+
+    navigate("/study-planner");
+  };
+
+  const handleSuggestionClick = (
+    actionKey:
+      | "critical-task"
+      | "overdue-task"
+      | "pending-tasks"
+      | "roadmap"
+      | "planner",
+  ) => {
+    if (actionKey === "critical-task") {
+      handleTaskNavigate(firstCriticalTask);
+      return;
+    }
+
+    if (actionKey === "overdue-task") {
+      handleTaskNavigate(firstOverdueTask);
+      return;
+    }
+
+    if (actionKey === "pending-tasks") {
+      handleTaskNavigate();
+      return;
+    }
+
+    if (actionKey === "roadmap") {
+      navigate("/roadmap");
+      return;
+    }
+
+    handleViewPlanClick();
+  };
 
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-      className={`commander-welcome commander-welcome--compact ${hasPremium ? 'commander-welcome--premium' : ''}`}
+      className={`commander-welcome commander-welcome--compact ${hasPremium ? "commander-welcome--premium" : ""}`}
     >
       <div className="commander-welcome__backdrop"></div>
 
@@ -272,6 +343,15 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
                   <div
                     className="commander-welcome__mini-badge commander-welcome__mini-badge--critical"
                     title="Quá hạn nghiêm trọng (>30 ngày)"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => handleTaskNavigate(firstCriticalTask)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        handleTaskNavigate(firstCriticalTask);
+                      }
+                    }}
                   >
                     <AlertTriangle size={11} />
                     <span>{taskSummary.criticalOverdue}</span>
@@ -281,6 +361,15 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
                   <div
                     className="commander-welcome__mini-badge commander-welcome__mini-badge--overdue"
                     title="Quá hạn"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => handleTaskNavigate(firstOverdueTask)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        handleTaskNavigate(firstOverdueTask);
+                      }
+                    }}
                   >
                     <AlertCircle size={11} />
                     <span>{taskSummary.overdue}</span>
@@ -289,12 +378,21 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
                 <div
                   className="commander-welcome__mini-badge commander-welcome__mini-badge--pending"
                   title="Đang chờ"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => handleTaskNavigate()}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      handleTaskNavigate();
+                    }
+                  }}
                 >
                   <CheckCircle2 size={11} />
                   <span>{taskSummary.pending}</span>
                 </div>
                 <span className="commander-welcome__task-total">
-                  {totalTasks} tasks
+                  {totalTasks} công việc
                 </span>
               </div>
 
@@ -319,8 +417,12 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
                     <BookOpen size={14} />
                   </div>
                   <div className="commander-welcome__premium-stat-info">
-                    <span className="commander-welcome__premium-stat-label">Modules</span>
-                    <span className="commander-welcome__premium-stat-value">{courseCount}</span>
+                    <span className="commander-welcome__premium-stat-label">
+                      Mô-đun
+                    </span>
+                    <span className="commander-welcome__premium-stat-value">
+                      {courseCount}
+                    </span>
                   </div>
                 </div>
                 <div className="commander-welcome__premium-stat-item">
@@ -328,8 +430,12 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
                     <TrendingUp size={14} />
                   </div>
                   <div className="commander-welcome__premium-stat-info">
-                    <span className="commander-welcome__premium-stat-label">Analysis</span>
-                    <span className="commander-welcome__premium-stat-value">{roadmapCount}</span>
+                    <span className="commander-welcome__premium-stat-label">
+                      Lộ trình
+                    </span>
+                    <span className="commander-welcome__premium-stat-value">
+                      {roadmapCount}
+                    </span>
                   </div>
                 </div>
                 <div className="commander-welcome__premium-stat-item">
@@ -337,8 +443,12 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
                     <Target size={14} />
                   </div>
                   <div className="commander-welcome__premium-stat-info">
-                    <span className="commander-welcome__premium-stat-label">Missions</span>
-                    <span className="commander-welcome__premium-stat-value">{totalTasks}</span>
+                    <span className="commander-welcome__premium-stat-label">
+                      Nhiệm vụ
+                    </span>
+                    <span className="commander-welcome__premium-stat-value">
+                      {totalTasks}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -383,7 +493,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
                 <div
                   key={index}
                   className={`commander-welcome__suggestion-item commander-welcome__suggestion-item--${suggestion.type}`}
-                  onClick={() => navigate("/roadmap")}
+                  onClick={() => handleSuggestionClick(suggestion.actionKey)}
                 >
                   {suggestion.icon}
                   <span>{suggestion.message}</span>
@@ -394,7 +504,7 @@ const CommanderWelcome: React.FC<CommanderWelcomeProps> = ({
             {/* CTA Buttons */}
             <div className="commander-welcome__cta-buttons">
               <button
-                onClick={onViewPlan}
+                onClick={handleViewPlanClick}
                 className="commander-welcome__panel-cta"
               >
                 <div className="commander-welcome__cta-content">
