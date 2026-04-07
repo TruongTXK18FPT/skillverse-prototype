@@ -83,7 +83,7 @@ const STORAGE_KEYS = {
 const MeowlGuide: React.FC<MeowlGuideProps> = ({
   currentPage = "home",
   languageOverride,
-  hideMascot = true,
+  hideMascot = false,
   autoOpenChat = false,
   panelMode: initialPanelMode = "MODE_GENERAL_FAQ",
   panelTheme = "cyan",

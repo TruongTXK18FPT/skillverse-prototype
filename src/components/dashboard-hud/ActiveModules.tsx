@@ -45,6 +45,7 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
 }) => {
   const [sortBy, setSortBy] = useState<ActiveCourseSort>('newest');
   const [filterBy, setFilterBy] = useState<ActiveCourseFilter>('all');
+  const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
   const formatEstimatedTime = (value: string): string => {
@@ -77,19 +78,31 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
   };
 
   const filteredCourses = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+
     return courses.filter((course) => {
+      const matchesSearch =
+        normalizedSearch.length === 0 ||
+        [course.title, course.instructor, course.nextLesson, course.group?.name]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+          .includes(normalizedSearch);
+
+      let matchesFilter = true;
       if (filterBy === 'just-started') {
-        return course.progress <= 25;
+        matchesFilter = course.progress <= 25;
       }
       if (filterBy === 'in-progress') {
-        return course.progress > 25 && course.progress < 80;
+        matchesFilter = course.progress > 25 && course.progress < 80;
       }
       if (filterBy === 'near-finish') {
-        return course.progress >= 80;
+        matchesFilter = course.progress >= 80;
       }
-      return true;
+
+      return matchesSearch && matchesFilter;
     });
-  }, [courses, filterBy]);
+  }, [courses, filterBy, searchTerm]);
 
   const sortedCourses = useMemo(() => {
     const next = [...filteredCourses];
@@ -115,7 +128,7 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [courses.length, filterBy, sortBy]);
+  }, [courses.length, filterBy, sortBy, searchTerm]);
 
   const totalPages = Math.max(1, Math.ceil(sortedCourses.length / COURSES_PER_PAGE));
 
@@ -151,6 +164,17 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
               <option value="progress-asc">Tiến độ tăng dần</option>
               <option value="title-asc">Tên A-Z</option>
             </select>
+          </div>
+
+          <div className="active-modules__control">
+            <label htmlFor="active-modules-search">Tìm kiếm</label>
+            <input
+              id="active-modules-search"
+              type="search"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Tìm theo tên khóa học, giảng viên..."
+            />
           </div>
 
           <div className="active-modules__control">

@@ -90,6 +90,11 @@
   box-shadow: 0 0 30px rgba(190, 18, 60, 0.2), 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
+.fdp-hero--crimson .gdp-hero__inner {
+  border-color: var(--odyssey-crimson);
+  box-shadow: 0 0 30px rgba(190, 18, 60, 0.2), 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
 /* Glow effect on inner */
 .gdp-hero__inner::before {
   content: '';
@@ -193,6 +198,11 @@
 }
 
 .gdp-hero--crimson .gdp-hero__title {
+  color: #06b6d4;
+  text-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+.fdp-hero--crimson .gdp-hero__title {
   color: #06b6d4;
   text-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
 }

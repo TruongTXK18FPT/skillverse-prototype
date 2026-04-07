@@ -15,7 +15,16 @@ import {
   Target,
   CheckSquare,
   Eye,
-  AlertTriangle
+  AlertTriangle,
+  Terminal,
+  Save,
+  Send,
+  Loader2,
+  X,
+  ChevronUp,
+  ChevronDown,
+  Monitor,
+  Check
 } from 'lucide-react';
 import {
   AssignmentDetailDTO,
@@ -39,10 +48,10 @@ import {
 import {
   getSubmissionTimingInfo,
   getSubmissionWorkflowLabel,
-  getSubmissionWorkflowTone,
   hasAssignmentDueDate,
   isAssignmentPastDue,
 } from '../../utils/assignmentPresentation';
+import RichTextEditor from '../../components/shared/RichTextEditor';
 
 import './AssignmentPage.css';
 
@@ -63,7 +72,7 @@ const AssignmentPage: React.FC = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [draftSavedAt, setDraftSavedAt] = useState<string | null>(null);
   const [draftDirty, setDraftDirty] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
+  const [showPreview, setShowPreview] = useState(true);
 
   // Form state
   const [submissionText, setSubmissionText] = useState('');
@@ -92,6 +101,7 @@ const AssignmentPage: React.FC = () => {
 
   useEffect(() => {
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assignmentId, user?.id]);
 
   const loadData = async () => {
@@ -126,7 +136,7 @@ const AssignmentPage: React.FC = () => {
       setError('Bạn đã đạt yêu cầu ở bài tập này. Không cần nộp lại.');
       return;
     }
-    setShowConfirmModal(true); // Show confirmation first
+    setShowConfirmModal(true);
   };
 
   const confirmSubmit = async () => {
@@ -142,26 +152,26 @@ const AssignmentPage: React.FC = () => {
 
       if (assignment.submissionType === SubmissionType.TEXT) {
         if (!submissionText.trim()) {
-          setError('Please enter your submission text');
+          setError('Vui lòng nhập nội dung bài nộp');
           setSubmitting(false);
           return;
         }
         submissionData.submissionText = submissionText;
       } else if (assignment.submissionType === SubmissionType.LINK) {
         if (!linkUrl.trim()) {
-          setError('Please enter a URL');
+          setError('Vui lòng nhập đường dẫn URL');
           setSubmitting(false);
           return;
         }
         if (!linkUrl.startsWith('http://') && !linkUrl.startsWith('https://')) {
-          setError('URL must start with http:// or https://');
+          setError('URL phải bắt đầu bằng http:// hoặc https://');
           setSubmitting(false);
           return;
         }
         submissionData.linkUrl = linkUrl;
       } else if (assignment.submissionType === SubmissionType.FILE) {
         if (!selectedFile) {
-          setError('Please select a file to upload');
+          setError('Vui lòng chọn tệp để nộp');
           setSubmitting(false);
           return;
         }
@@ -181,14 +191,12 @@ const AssignmentPage: React.FC = () => {
       setDraftSavedAt(null);
       setDraftDirty(false);
       
-      // Clear draft from localStorage
       const draftKey = `assignment_draft_${assignmentId}_${user.id}`;
       localStorage.removeItem(draftKey);
       
-      // Reload submissions
       await loadData();
     } catch (err: any) {
-      setError(getFriendlyAssignmentError(err?.response?.data?.message || 'Failed to submit assignment'));
+      setError(getFriendlyAssignmentError(err?.response?.data?.message || 'Lỗi khi nộp bài'));
     } finally {
       setSubmitting(false);
     }
@@ -249,27 +257,19 @@ const AssignmentPage: React.FC = () => {
 
   const getFriendlyAssignmentError = (message?: string) => {
     switch (message) {
-      case 'USER_NOT_ENROLLED':
-        return 'Bạn chưa có quyền nộp bài cho khóa học này.';
-      case 'SUBMISSION_PENDING_GRADING':
-        return 'Bài nộp gần nhất đang chờ mentor chấm. Bạn chưa thể nộp tiếp lúc này.';
-      case 'ASSIGNMENT_ALREADY_PASSED':
-        return 'Bạn đã đạt yêu cầu ở bài tập này.';
-      case 'MEDIA_NOT_FOUND':
-        return 'Không tìm thấy tệp đã tải lên. Hãy thử chọn lại tệp.';
-      default:
-        return message || 'Đã xảy ra lỗi khi xử lý bài nộp.';
+      case 'USER_NOT_ENROLLED': return 'Bạn chưa có quyền nộp bài cho khóa học này.';
+      case 'SUBMISSION_PENDING_GRADING': return 'Bài nộp gần nhất đang chờ mentor chấm. Bạn chưa thể nộp tiếp lúc này.';
+      case 'ASSIGNMENT_ALREADY_PASSED': return 'Bạn đã đạt yêu cầu ở bài tập này.';
+      case 'MEDIA_NOT_FOUND': return 'Không tìm thấy tệp đã tải lên. Hãy thử chọn lại tệp.';
+      default: return message || 'Đã xảy ra lỗi khi xử lý bài nộp.';
     }
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleString('vi-VN', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+      year: 'numeric', month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit'
     });
   };
 
@@ -288,24 +288,15 @@ const AssignmentPage: React.FC = () => {
   const canSaveDraft =
     canSubmitAnotherAttempt && supportsDraftSave && Boolean(submissionText.trim() || linkUrl.trim());
   const submissionTypeLabel = assignment?.submissionType === SubmissionType.TEXT
-    ? 'Văn bản'
-    : assignment?.submissionType === SubmissionType.LINK
-      ? 'Liên kết'
-      : 'Tệp tải lên';
+    ? 'Văn bản' : assignment?.submissionType === SubmissionType.LINK ? 'Liên kết' : 'Tệp tải lên';
   
-  // Determine overall status
   const getAssignmentStatus = () => {
-    if (!newestSubmission) return { text: 'Chưa nộp', icon: <AlertTriangle size={18} />, color: 'warning' };
+    if (!newestSubmission) return { text: 'Chưa nộp', icon: <AlertTriangle size={14} />, tone: 'warning' };
     if (newestSubmission.status === SubmissionStatus.GRADED) {
-      return { text: 'Đã chấm', icon: <CheckCircle size={18} />, color: 'success' };
+      return { text: 'Đã chấm', icon: <CheckCircle size={14} />, tone: 'success' };
     }
-    return { text: 'Đã nộp', icon: <Clock size={18} />, color: 'pending' };
+    return { text: 'Đã nộp', icon: <Clock size={14} />, tone: 'pending' };
   };
-
-  const status = getAssignmentStatus();
-  const newestSubmissionTiming = newestSubmission
-    ? getSubmissionTimingInfo(assignment?.dueAt, newestSubmission.isLate)
-    : null;
 
   const handleBackToCourse = useCallback(() => {
     const returnContext = locationState?.courseId
@@ -316,528 +307,473 @@ const AssignmentPage: React.FC = () => {
       navigate(buildCourseLearningDestination(returnContext), { state: returnContext });
       return;
     }
-
     navigate(-1);
   }, [locationState, navigate]);
 
   if (loading) {
     return (
-      <div className="assignment-page">
-        <div className="assignment-loading">
-          <div className="loading-spinner"></div>
-          <p>Loading assignment...</p>
-        </div>
+      <div className="ap-v2-loader-view">
+        <div className="ap-v2-spinner"></div>
+        <p className="ap-v2-loader-text">Đang tải vũ trụ bài tập...</p>
       </div>
     );
   }
 
   if (!assignment) {
     return (
-      <div className="assignment-page">
-        <div className="assignment-error">
-          <AlertCircle size={48} />
-          <h2>Assignment not found</h2>
-          <button onClick={handleBackToCourse} className="btn-back">
-            <ArrowLeft size={16} />
-            Go Back
-          </button>
-        </div>
+      <div className="ap-v2-error-view">
+        <AlertCircle size={64} className="ap-v2-error-icon" />
+        <h2 className="ap-v2-error-title">Không tìm thấy nhiệm vụ</h2>
+        <button onClick={handleBackToCourse} className="ap-v2-btn-outline">
+          <ArrowLeft size={18} />
+          <span>Quay lại khóa học</span>
+        </button>
       </div>
     );
   }
 
-  return (
-    <div className="assignment-page">
-        {/* Header Navigation */}
-        <div className="assignment-nav">
-          <button onClick={handleBackToCourse} className="btn-back-nav">
-            <ArrowLeft size={20} />
-            <span>Quay lại khóa học</span>
-          </button>
-        </div>
+  const status = getAssignmentStatus();
+  const newestSubmissionTiming = newestSubmission
+    ? getSubmissionTimingInfo(assignment?.dueAt, newestSubmission.isLate)
+    : null;
 
-        <div className="assignment-container">
-          <div className="assignment-main-column">
-          {/* Title Section with Status */}
-          <div className="assignment-header">
-            <div className="header-top">
-              <h1>{assignment.title}</h1>
-              <div className={`assignment-overall-status assignment-overall-status--${status.color}`}>
+  return (
+    <div className="assignment-page-v2">
+      <div className="ap-v2-ambient">
+        <div className="ap-v2-ambient-left" />
+        <div className="ap-v2-ambient-right" />
+      </div>
+
+      <div className="ap-v2-nav">
+        <button onClick={handleBackToCourse} className="ap-v2-back-btn">
+          <ArrowLeft size={18} />
+          <span>Quay lại khóa học</span>
+        </button>
+        <div className="ap-v2-sys-badge">
+          <Monitor size={14} />
+          <span>ASSIGNMENT_HUD_V2</span>
+        </div>
+      </div>
+
+      <div className="ap-v2-container">
+        <section className="ap-v2-hero">
+          <div className="ap-v2-title-block">
+            <div className="ap-v2-req-label">
+              <div className="ap-v2-req-dot"></div>
+              <span className="ap-v2-req-text">
+                Nhiệm vụ {assignment.isRequired !== false ? 'Bắt buộc' : 'Tùy chọn'}
+              </span>
+            </div>
+            <h1 className="ap-v2-title">{assignment.title}</h1>
+
+            <div className="ap-v2-tags">
+              <div className={`ap-v2-tag ap-v2-tag--${status.tone}`}>
                 {status.icon}
                 <span>{status.text}</span>
               </div>
+              <div className="ap-v2-tag ap-v2-tag--neutral">
+                <FileText size={14} />
+                <span>{submissionTypeLabel}</span>
+              </div>
             </div>
+          </div>
 
-            {/* Critical Metadata Cards */}
-            <div className="assignment-critical-info">
-              <div className={`info-card ${assignment.isRequired !== false ? 'required' : 'optional'}`}>
-                <AlertCircle size={16} />
-                <div>
-                  <strong>{assignment.isRequired !== false ? 'BẮT BUỘC' : 'TÙY CHỌN'}</strong>
-                  <p>{assignment.isRequired !== false ? 'Bài tập này là bắt buộc' : 'Bài tập không bắt buộc'}</p>
-                </div>
-              </div>
-              
-              <div className="info-card points">
-                <Award size={16} />
-                <div>
-                  <strong>{assignment.maxScore} ĐIỂM</strong>
-                  <p>Ảnh hưởng đến điểm tổng kết</p>
-                </div>
-              </div>
-              
-              {hasDueDate && assignment.dueAt && (
-                <div className={`info-card deadline ${isDueDatePassed ? 'overdue' : ''}`}>
-                  <Calendar size={16} />
-                  <div>
-                    <strong>Hạn nộp</strong>
-                    <p>{formatDate(assignment.dueAt)}</p>
-                    {isDueDatePassed && <span className="overdue-label">Đã quá hạn</span>}
+          <div className="ap-v2-hero-metrics">
+            <article className="ap-v2-hero-metric">
+              <Award size={20} className="ap-v2-hero-metric__icon" />
+              <span className="ap-v2-hero-metric__label">Điểm tối đa</span>
+              <strong className="ap-v2-hero-metric__value">
+                {assignment.maxScore}
+                <span>pt</span>
+              </strong>
+            </article>
+
+            <article
+              className={`ap-v2-hero-metric ${isDueDatePassed ? 'ap-v2-hero-metric--late' : ''}`}
+            >
+              <Calendar size={20} className="ap-v2-hero-metric__icon" />
+              <span className="ap-v2-hero-metric__label">Hạn nộp</span>
+              <strong className="ap-v2-hero-metric__value ap-v2-hero-metric__value--due">
+                {hasDueDate && assignment.dueAt ? formatDate(assignment.dueAt) : 'Không giới hạn'}
+              </strong>
+            </article>
+          </div>
+        </section>
+
+        <div className="ap-v2-grid ap-v2-grid--workspace">
+
+          {/* ======================= REQUIREMENTS COLUMN ======================= */}
+          <div className="ap-v2-col-left">
+            <div className="ap-v2-glass-panel">
+              <div className="ap-v2-panel-glow"></div>
+
+              <div className="ap-v2-doc-content">
+                {assignment.learningOutcome && (
+                  <div className="ap-v2-section ap-v2-section--target">
+                    <h3><Target size={16} /> Mục tiêu đạt được</h3>
+                    <p>{assignment.learningOutcome}</p>
                   </div>
-                </div>
-              )}
-            </div>
-
-            {/* Assignment Type */}
-            <div className="assignment-meta">
-              <div className="meta-item">
-                {assignment.submissionType === SubmissionType.TEXT && <FileText size={18} />}
-                {assignment.submissionType === SubmissionType.LINK && <LinkIcon size={18} />}
-                {assignment.submissionType === SubmissionType.FILE && <Upload size={18} />}
-                <span>Hình thức nộp: {submissionTypeLabel}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Learning Outcome Section */}
-          {assignment.learningOutcome && (
-            <div className="learning-outcome-section">
-              <div className="section-header">
-                <Target size={18} />
-                <h2>Mục tiêu bài tập</h2>
-              </div>
-              <div className="section-content">
-                <p className="outcome-text">{assignment.learningOutcome}</p>
-              </div>
-            </div>
-          )}
-
-          {/* Grading Criteria Section */}
-          {assignment.gradingCriteria && (
-            <div className="grading-criteria-section">
-              <div className="section-header">
-                <CheckSquare size={18} />
-                <h2>Tiêu chí chấm điểm</h2>
-              </div>
-              <div className="section-content">
-                <div dangerouslySetInnerHTML={{ __html: assignment.gradingCriteria }} />
-              </div>
-            </div>
-          )}
-
-          {/* Instructions/Description */}
-          <div className="assignment-instructions">
-            <div className="section-header">
-              <Info size={18} />
-              <h2>Yêu cầu bài tập</h2>
-            </div>
-            <div className="instructions-content">
-              {assignment.description ? (
-                <div dangerouslySetInnerHTML={{ __html: assignment.description }} />
-              ) : (
-                <div className="placeholder-content">
-                  <h3>Yêu cầu chính:</h3>
-                  <ul>
-                    <li>Hoàn thành các task được giao trong bài tập</li>
-                    <li>Đảm bảo code sạch và dễ đọc</li>
-                  </ul>
-                  <h3>Lưu ý:</h3>
-                  <ul>
-                    <li>Kiểm tra kỹ trước khi nộp</li>
-                    <li>Đọc kỹ tiêu chí chấm điểm</li>
-                  </ul>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="submission-card">
-            <div className="submission-card-header">
-              <h2>Nộp bài tập</h2>
-              <p className="submission-card-intro">
-                Chuẩn bị bài làm cẩn thận, lưu nháp khi cần và gửi bản hoàn chỉnh cho mentor.
-              </p>
-            </div>
-
-            {/* Current Status */}
-            {newestSubmission && (
-              <div className={`current-status current-status--${getSubmissionWorkflowTone(newestSubmission.status)}`}>
-                {newestSubmission.status === SubmissionStatus.GRADED ? (
-                  <CheckCircle size={20} />
-                ) : (
-                  <Clock size={20} />
                 )}
-                <div>
-                  <strong>Trạng thái: {getSubmissionWorkflowLabel(newestSubmission.status)}</strong>
-                  <div className="current-status-meta">
-                    {newestSubmission.score !== undefined && newestSubmission.score !== null && (
-                      <p>Điểm: {newestSubmission.score}/{assignment.maxScore}</p>
-                    )}
-                    {newestSubmissionTiming && (
-                      <span className={`submission-timing-chip ${newestSubmissionTiming.tone}`}>
-                        {newestSubmissionTiming.text}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
 
-            {/* Alerts */}
+                <div className="ap-v2-section ap-v2-section--req">
+                  <h3><Info size={16} /> Yêu cầu nhiệm vụ</h3>
+                  {assignment.description ? (
+                    <div dangerouslySetInnerHTML={{ __html: assignment.description }} />
+                  ) : (
+                    <p style={{ fontStyle: 'italic', color: '#64748b' }}>Chưa có mô tả chi tiết.</p>
+                  )}
+                </div>
+
+                {assignment.gradingCriteria && (
+                  <div className="ap-v2-section ap-v2-section--rubric">
+                    <h3><CheckSquare size={16} /> Tiêu chí chấm điểm</h3>
+                    <div className="ap-v2-rubric-box" dangerouslySetInnerHTML={{ __html: assignment.gradingCriteria }} />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* ======================= RIGHT COLUMN ======================= */}
+          <div className="ap-v2-col-right">
+            <div className="ap-v2-editor-sticky">
+            
             {error && (
-              <div className="alert alert-error">
-                <AlertCircle size={16} />
-                <span>{error}</span>
+              <div className="ap-v2-alert ap-v2-alert--error">
+                <AlertCircle size={20} className="ap-v2-alert-icon" />
+                <span className="ap-v2-alert-text">{error}</span>
               </div>
             )}
             {success && (
-              <div className="alert alert-success">
-                <CheckCircle size={16} />
-                <span>{success}</span>
+              <div className="ap-v2-alert ap-v2-alert--success">
+                <CheckCircle size={20} className="ap-v2-alert-icon" />
+                <span className="ap-v2-alert-text">{success}</span>
               </div>
             )}
 
-            {/* Draft Saved Indicator */}
-            {supportsDraftSave && canSubmitAnotherAttempt && (
-              <div className={`draft-indicator ${draftDirty ? 'draft-pending' : ''}`}>
-                <span>
-                  {draftDirty
-                    ? 'Có thay đổi chưa lưu'
-                    : draftSavedAt
-                      ? `Nháp đã lưu lúc ${formatDate(draftSavedAt)}`
-                      : 'Bạn chưa lưu nháp'}
-                </span>
-              </div>
-            )}
-
-            {submissionBlockedByPending && (
-              <div className="assignment-submission-gate assignment-submission-gate--pending">
-                <Clock size={20} />
-                <div>
-                  <strong>Bài nộp gần nhất đang chờ chấm</strong>
-                  <p>Bạn sẽ có thể nộp lại sau khi mentor chấm xong, nếu kết quả chưa đạt.</p>
+            {!canSubmitAnotherAttempt && newestSubmission && (
+              <div className="ap-v2-blocker">
+                <div className="ap-v2-blocker-icon-box">
+                  {submissionBlockedByPass ? <Award size={32} style={{ color: '#fbbf24' }} /> : <Clock size={32} style={{ color: '#06b6d4' }} />}
                 </div>
-              </div>
-            )}
-
-            {submissionBlockedByPass && (
-              <div className="assignment-submission-gate assignment-submission-gate--passed">
-                <CheckCircle size={20} />
-                <div>
-                  <strong>Bạn đã hoàn thành bài tập này</strong>
-                  <p>Không cần nộp lại. Bạn có thể xem lại bài nộp và nhận xét ở phần bên dưới.</p>
-                </div>
-              </div>
-            )}
-
-            {/* Submission Form */}
-            {canSubmitAnotherAttempt && (
-            <form onSubmit={handleSubmit} className="submission-form">
-              {assignment.submissionType === SubmissionType.TEXT && (
-                <div className="form-group form-group--text-composer">
-                  <label htmlFor="submission-text">Câu trả lời của bạn</label>
-                  <div className="assignment-text-composer">
-                    <div className="assignment-text-composer-topbar">
-                      <span className="assignment-text-composer-chip">Bài nộp dạng văn bản</span>
-                      <span className="assignment-text-composer-count">{submissionText.trim().length} ký tự</span>
-                    </div>
-                    <textarea
-                      id="submission-text"
-                      value={submissionText}
-                      onChange={(e) => handleSubmissionTextChange(e.target.value)}
-                      placeholder="Viết câu trả lời, mô tả cách làm hoặc đính kèm hướng dẫn cần thiết..."
-                      rows={10}
-                      disabled={submitting}
-                    />
-                    <p className="assignment-text-composer-hint">
-                      Gợi ý: Trình bày ngắn theo 3 phần: mục tiêu, cách thực hiện và kết quả.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {assignment.submissionType === SubmissionType.LINK && (
-                <div className="form-group">
-                  <label htmlFor="link-url">Link bài nộp</label>
-                  <input
-                    type="url"
-                    id="link-url"
-                    value={linkUrl}
-                    onChange={(e) => handleLinkUrlChange(e.target.value)}
-                    placeholder="https://github.com/..., https://drive.google.com/..., ..."
-                    disabled={submitting}
-                  />
-                </div>
-              )}
-
-              {assignment.submissionType === SubmissionType.FILE && (
-                <div className="form-group">
-                  <label htmlFor="file-upload">Tải file lên</label>
-                  <div className="file-input-wrapper">
-                    <input
-                      type="file"
-                      id="file-upload"
-                      onChange={handleFileChange}
-                      disabled={submitting}
-                    />
-                    {selectedFile && (
-                      <div className="file-preview">
-                        <FileText size={16} />
-                        <span>{selectedFile.name}</span>
-                      </div>
-                    )}
-                  </div>
-                  {uploadProgress > 0 && uploadProgress < 100 && (
-                    <div className="upload-progress">
-                      <div
-                        className="progress-bar"
-                        style={{ width: `${uploadProgress}%` }}
-                      />
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Reassurance Message - Prominent Position */}
-              <div className="reassurance-box">
+                <h3>{submissionBlockedByPass ? 'Nhiệm vụ đã hoàn thành xuất sắc!' : 'Bài nộp đang được xử lý'}</h3>
                 <p>
-                  <strong>Bạn có thể nộp lại nếu bài chưa đạt.</strong><br/>
-                  Mentor sẽ chấm bài nộp mới nhất của bạn sau mỗi lần gửi hợp lệ.
+                  {submissionBlockedByPass 
+                    ? 'Bạn không cần nộp lại bài nữa. Mọi thông tin đánh giá đều đã được lưu trữ an toàn.' 
+                    : 'Hệ thống đã ghi nhận bài nộp và chuyển đến Mentor. Bạn sẽ có thể thao tác lại sau khi có kết quả.'}
                 </p>
               </div>
-
-              {hasDueDate && isDueDatePassed && (
-                <div className="warning-box">
-                  <p>
-                    Đã quá hạn nộp. Bài nộp trễ có thể bị trừ điểm.
-                  </p>
-                </div>
-              )}
-
-              <div className={`submission-action-row ${supportsDraftSave ? 'with-draft' : 'single-action'}`}>
-                {supportsDraftSave && (
-                  <button
-                    type="button"
-                    className="btn-draft"
-                    onClick={handleSaveDraft}
-                    disabled={submitting || !canSaveDraft}
-                  >
-                    Lưu nháp
-                  </button>
-                )}
-                <button
-                  type="submit"
-                  className="btn-submit"
-                  disabled={submitting || (assignment.submissionType === SubmissionType.TEXT && !submissionText.trim()) ||
-                           (assignment.submissionType === SubmissionType.LINK && !linkUrl.trim()) ||
-                           (assignment.submissionType === SubmissionType.FILE && !selectedFile)}
-                >
-                  {submitting ? (
-                    <>
-                      <div className="spinner-small"></div>
-                      Đang nộp...
-                    </>
-                  ) : (
-                    'Nộp bài tập'
-                  )}
-                </button>
-              </div>
-            </form>
             )}
-          </div>
 
-          {/* Submission Preview */}
-          {newestSubmission && (
-            <div className="submission-preview-section">
-              <div className="section-header" onClick={() => setShowPreview(!showPreview)}>
-                <Eye size={18} />
-                <h3>Bài nộp gần nhất</h3>
-                <button className="toggle-btn">{showPreview ? '▲' : '▼'}</button>
-              </div>
-              {showPreview && (
-                <div className="preview-content">
-                  <div className="preview-meta">
-                    <span>Nộp lúc: {formatDate(newestSubmission.submittedAt)}</span>
-                    {newestSubmission.score !== undefined && newestSubmission.score !== null && (
-                      <span className="preview-score">
-                        Điểm: {newestSubmission.score}/{assignment.maxScore}
+            {canSubmitAnotherAttempt && (
+              <form onSubmit={handleSubmit} className="ap-v2-form">
+                <div className="ap-v2-terminal">
+                  
+                  <div className="ap-v2-terminal-header">
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div className="ap-v2-mac-btns">
+                        <div className="ap-v2-mac-btn"></div>
+                        <div className="ap-v2-mac-btn"></div>
+                        <div className="ap-v2-mac-btn"></div>
+                      </div>
+                      <span className="ap-v2-terminal-filename">
+                        {assignment.submissionType === SubmissionType.TEXT ? 'editor.txt' : 
+                         assignment.submissionType === SubmissionType.LINK ? 'hyperlink.md' : 'upload_module.sh'}
                       </span>
+                    </div>
+                  </div>
+
+                  <div className="ap-v2-terminal-body">
+                    {assignment.submissionType === SubmissionType.TEXT && (
+                      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: '350px' }}>
+                        <RichTextEditor
+                          initialContent={submissionText}
+                          onChange={handleSubmissionTextChange}
+                          placeholder="// Bắt đầu gõ đáp án của bạn tại đây..."
+                          userId={user?.id}
+                        />
+                      </div>
                     )}
-                    {newestSubmissionTiming && (
-                      <span className={`submission-timing-chip ${newestSubmissionTiming.tone}`}>
-                        {newestSubmissionTiming.text}
-                      </span>
+
+                    {assignment.submissionType === SubmissionType.LINK && (
+                      <div className="ap-v2-input-pad">
+                        <label className="ap-v2-input-label">Nhập địa chỉ Link</label>
+                        <div className="ap-v2-link-wrapper">
+                          <LinkIcon size={20} className="ap-v2-link-icon" />
+                          <input
+                            type="url"
+                            className="ap-v2-link-input"
+                            value={linkUrl}
+                            onChange={(e) => handleLinkUrlChange(e.target.value)}
+                            placeholder="https://github.com/..."
+                            disabled={submitting}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {assignment.submissionType === SubmissionType.FILE && (
+                      <div className="ap-v2-input-pad">
+                        <label className="ap-v2-input-label">Đính kèm File</label>
+                        <div className="ap-v2-dropzone">
+                           <input
+                            type="file"
+                            className="ap-v2-file-input"
+                            onChange={handleFileChange}
+                            disabled={submitting}
+                          />
+                          {!selectedFile ? (
+                            <div className="ap-v2-dz-empty">
+                              <Upload size={32} className="ap-v2-dz-icon" />
+                              <span className="ap-v2-dz-text">Kéo thả tệp vào đây hoặc Click để duyệt</span>
+                            </div>
+                          ) : (
+                            <div className="ap-v2-dz-filled">
+                              <div className="ap-v2-dz-file-icon"><FileText size={32} /></div>
+                              <span className="ap-v2-dz-filename">{selectedFile.name}</span>
+                              <span className="ap-v2-dz-hint">Click để chọn tệp khác</span>
+                            </div>
+                          )}
+                        </div>
+                        {uploadProgress > 0 && uploadProgress < 100 && (
+                          <div className="ap-v2-upload-track">
+                            <div className="ap-v2-upload-bar" style={{ width: `${uploadProgress}%` }}></div>
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
-                  <div className="preview-body">
-                    {newestSubmission.submissionText && (
-                      <div className="submitted-text">{newestSubmission.submissionText}</div>
-                    )}
-                    {newestSubmission.linkUrl && (
-                      <a href={newestSubmission.linkUrl} target="_blank" rel="noopener noreferrer">
-                        {newestSubmission.linkUrl}
-                      </a>
-                    )}
-                  </div>
-                  {newestSubmission.feedback && (
-                    <div className="preview-feedback">
-                      <strong>Nhận xét tổng thể:</strong>
-                      <p>{newestSubmission.feedback}</p>
-                      {newestSubmission.gradedByName && (
-                        <span className="grader-name">Người chấm: {newestSubmission.gradedByName}</span>
+
+                  <div className="ap-v2-terminal-footer">
+                    <div className={`ap-v2-draft-status ${draftDirty ? 'ap-v2-draft-status--dirty' : draftSavedAt ? 'ap-v2-draft-status--saved' : ''}`}>
+                      {supportsDraftSave && canSubmitAnotherAttempt && (
+                        draftDirty ? (
+                          <span>● Unsaved changes</span>
+                        ) : draftSavedAt ? (
+                          <span>✔ Saved at {formatDate(draftSavedAt).split(' ')[1]}</span>
+                        ) : (
+                          <span>File clean / No draft</span>
+                        )
                       )}
                     </div>
-                  )}
-                  {newestSubmission.criteriaScores && newestSubmission.criteriaScores.length > 0 && newestSubmission.status === SubmissionStatus.GRADED && (
-                    <div className="criteria-breakdown">
-                      <strong>Chi tiết rubric</strong>
-                      <div className="criteria-breakdown-list">
-                        {newestSubmission.criteriaScores.map((cs) => {
-                          const hasThreshold = hasMeaningfulCriteriaThreshold(cs.passingPoints);
-                          const breakdownState = hasThreshold ? (cs.passed ? 'passed' : 'failed') : '';
-
-                          return (
-                          <div key={cs.criteriaId} className={`criteria-breakdown-item ${breakdownState}`}>
-                            <div className="criteria-breakdown-header">
-                              <span className="criteria-breakdown-name">{cs.criteriaName}</span>
-                              <span className="criteria-breakdown-score">
-                                {cs.score}/{cs.maxPoints}
-                                {hasThreshold && ` | Đạt từ ${cs.passingPoints}`}
-                              </span>
-                            </div>
-                            {cs.feedback && (
-                              <div className="criteria-breakdown-feedback">{cs.feedback}</div>
-                            )}
-                          </div>
-                        )})}
-                      </div>
+                    
+                    <div className="ap-v2-actions">
+                      {supportsDraftSave && (
+                        <button
+                          type="button"
+                          className="ap-v2-btn ap-v2-btn-draft"
+                          onClick={handleSaveDraft}
+                          disabled={submitting || !canSaveDraft}
+                        >
+                          <Save size={16} /> Lưu nháp
+                        </button>
+                      )}
+                      
+                      <button
+                        type="submit"
+                        className="ap-v2-btn ap-v2-btn-submit"
+                        disabled={submitting || (assignment.submissionType === SubmissionType.TEXT && !submissionText.trim()) ||
+                                 (assignment.submissionType === SubmissionType.LINK && !linkUrl.trim()) ||
+                                 (assignment.submissionType === SubmissionType.FILE && !selectedFile)}
+                      >
+                        {submitting ? (
+                          <><Loader2 size={16} className="ap-v2-spin" /> Đang xử lý...</>
+                        ) : (
+                          <><Send size={16} /> Bắt đầu Submit</>
+                        )}
+                      </button>
                     </div>
-                  )}
+                  </div>
                 </div>
-              )}
+
+                {hasDueDate && isDueDatePassed && (
+                  <div className="ap-v2-overdue-warn">
+                    <AlertTriangle size={18} style={{ flexShrink: 0 }} />
+                    Hệ thống ghi nhận quá hạn. Bài nộp sẽ được gán nhãn TRỄ và có thể áp dụng chế tài trừ điểm.
+                  </div>
+                )}
+              </form>
+            )}
             </div>
-          )}
-
-          {/* Submission History */}
-          {submissions.length > 0 && (
-            <div className="submission-history">
-              <div className="history-header" onClick={() => setShowHistory(!showHistory)}>
-                <h3>
-                  <History size={20} />
-                  Lịch sử nộp bài ({submissions.length} lần)
-                </h3>
-                <button className="toggle-btn">
-                  {showHistory ? '▲' : '▼'}
-                </button>
-              </div>
-              {showHistory && (
-                <div className="history-list">
-                  {submissions.map((sub) => {
-                    const timingInfo = getSubmissionTimingInfo(assignment?.dueAt, sub.isLate);
-
-                    return (
-                      <div key={sub.id} className={`history-item ${sub.isNewest ? 'newest' : ''}`}>
-                        <div className="history-item-header">
-                          <span className="attempt-number">Lần nộp #{sub.attemptNumber}</span>
-                          <span className={`assignment-status-badge assignment-status-badge--${getSubmissionWorkflowTone(sub.status)}`}>
-                            {getSubmissionWorkflowLabel(sub.status)}
-                          </span>
-                          {timingInfo && (
-                            <span className={`submission-timing-chip ${timingInfo.tone}`}>
-                              {timingInfo.text}
-                            </span>
-                          )}
-                          {sub.isNewest && <span className="newest-badge">Mới nhất</span>}
-                        </div>
-                        <div className="history-item-meta">
-                          <span>Nộp lúc: {formatDate(sub.submittedAt)}</span>
-                          {sub.score !== undefined && sub.score !== null && (
-                            <span className="score">Điểm: {sub.score}/{assignment.maxScore}</span>
-                          )}
-                        </div>
-                        {sub.feedback && (
-                          <div className="feedback">
-                            <strong>Nhận xét tổng thể:</strong> {sub.feedback}
-                          </div>
-                        )}
-                        {sub.criteriaScores && sub.criteriaScores.length > 0 && sub.status === SubmissionStatus.GRADED && (
-                          <div className="criteria-breakdown">
-                            <strong>Chi tiết rubric</strong>
-                            <div className="criteria-breakdown-list">
-                              {sub.criteriaScores.map((cs) => {
-                                const hasThreshold = hasMeaningfulCriteriaThreshold(cs.passingPoints);
-                                const breakdownState = hasThreshold ? (cs.passed ? 'passed' : 'failed') : '';
-
-                                return (
-                                <div key={cs.criteriaId} className={`criteria-breakdown-item ${breakdownState}`}>
-                                  <div className="criteria-breakdown-header">
-                                    <span className="criteria-breakdown-name">{cs.criteriaName}</span>
-                                    <span className="criteria-breakdown-score">
-                                      {cs.score}/{cs.maxPoints}
-                                      {hasThreshold && ` | Đạt từ ${cs.passingPoints}`}
-                                    </span>
-                                  </div>
-                                  {cs.feedback && (
-                                    <div className="criteria-breakdown-feedback">{cs.feedback}</div>
-                                  )}
-                                </div>
-                              )})}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          )}
           </div>
         </div>
 
-        {/* Confirmation Modal */}
-        {showConfirmModal && (
-          <div className="modal-overlay" onClick={() => setShowConfirmModal(false)}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3>Xác nhận nộp bài</h3>
+        {(newestSubmission || submissions.length > 0) && (
+          <section className="ap-v2-logbook">
+            {newestSubmission && (
+              <div className="ap-v2-prev-card">
+                <div className="ap-v2-prev-header" onClick={() => setShowPreview(!showPreview)}>
+                  <div className="ap-v2-prev-header-left">
+                    <div className={`ap-v2-prev-icon-box ap-v2-prev-icon-box--${newestSubmission.status === SubmissionStatus.GRADED ? 'success' : 'pending'}`}>
+                      {newestSubmission.status === SubmissionStatus.GRADED ? <CheckCircle size={24} /> : <Clock size={24} />}
+                    </div>
+                    <div>
+                      <h3 className="ap-v2-prev-title">Bài nộp gần nhất</h3>
+                      <p className="ap-v2-prev-subtitle">Trạng thái: <span style={{ color: '#e2e8f0' }}>{getSubmissionWorkflowLabel(newestSubmission.status)}</span></p>
+                    </div>
+                  </div>
+                  <div style={{ color: '#64748b' }}>
+                    {showPreview ? <Eye size={20} /> : <Eye size={20} style={{ opacity: 0.5 }} />}
+                  </div>
+                </div>
+
+                {showPreview && (
+                  <div className="ap-v2-prev-body">
+                    <div className="ap-v2-prev-tags">
+                      <div className="ap-v2-ptag">
+                        <span>Nộp lúc:</span> {formatDate(newestSubmission.submittedAt)}
+                      </div>
+                      {newestSubmission.score !== undefined && newestSubmission.score !== null && (
+                        <div className="ap-v2-ptag ap-v2-ptag--score">
+                          Điểm: {newestSubmission.score}/{assignment.maxScore}
+                        </div>
+                      )}
+                      {newestSubmissionTiming && (
+                        <div className={`ap-v2-ptag`} style={{
+                          borderColor: newestSubmissionTiming.tone === 'on-time' ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)',
+                          color: newestSubmissionTiming.tone === 'on-time' ? '#34d399' : '#f87171'
+                        }}>
+                          {newestSubmissionTiming.text}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="ap-v2-prev-content-box">
+                      {newestSubmission.submissionText && (
+                        <div style={{ whiteSpace: 'pre-wrap' }}>{newestSubmission.submissionText}</div>
+                      )}
+                      {newestSubmission.linkUrl && (
+                        <a href={newestSubmission.linkUrl} target="_blank" rel="noopener noreferrer" className="ap-v2-prev-link">
+                          <LinkIcon size={16} />
+                          {newestSubmission.linkUrl}
+                        </a>
+                      )}
+                    </div>
+
+                    {newestSubmission.feedback && (
+                      <div className="ap-v2-feedback-box">
+                        <div className="ap-v2-fb-title"><Terminal size={14} /> Nhận xét tổng thể</div>
+                        <div className="ap-v2-fb-text">{newestSubmission.feedback}</div>
+                        {newestSubmission.gradedByName && (
+                          <div className="ap-v2-fb-mentor">Mentor: {newestSubmission.gradedByName}</div>
+                        )}
+                      </div>
+                    )}
+
+                    {newestSubmission.criteriaScores && newestSubmission.criteriaScores.length > 0 && newestSubmission.status === SubmissionStatus.GRADED && (
+                      <div className="ap-v2-rubric-analysis">
+                        <h4>Phân tích Rubric</h4>
+                        <div className="ap-v2-rubric-list">
+                          {newestSubmission.criteriaScores.map((cs) => {
+                            const hasThreshold = hasMeaningfulCriteriaThreshold(cs.passingPoints);
+                            const passed = cs.passed;
+                            return (
+                              <div key={cs.criteriaId} className={`ap-v2-rubric-item ${hasThreshold ? (passed ? 'ap-v2-rubric-item--pass' : 'ap-v2-rubric-item--fail') : 'ap-v2-rubric-item--neutral'}`}>
+                                <div className="ap-v2-rubric-header">
+                                  <span className="ap-v2-rubric-name">{cs.criteriaName}</span>
+                                  <span className={`ap-v2-rubric-score ap-v2-rubric-score--${hasThreshold ? (passed ? 'pass' : 'fail') : 'neutral'}`}>
+                                    {cs.score}/{cs.maxPoints} pts
+                                  </span>
+                                </div>
+                                {hasThreshold && (
+                                  <div className="ap-v2-rubric-thresh">Đạt từ: {cs.passingPoints} pts</div>
+                                )}
+                                {cs.feedback && (
+                                  <div className="ap-v2-rubric-fb">{cs.feedback}</div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-              <div className="modal-body">
-                <p>Bạn sắp gửi bài nộp hiện tại cho mentor chấm điểm.</p>
-                <ul className="modal-checklist">
-                  <li>Nội dung bài làm đã hoàn chỉnh.</li>
-                  <li>Bạn đã kiểm tra lại yêu cầu và định dạng nộp bài.</li>
-                  <li>Nếu cần chỉnh sửa sau này, bạn vẫn có thể nộp lại.</li>
-                </ul>
-                <p className="modal-note">Hệ thống sẽ ghi nhận lần nộp mới nhất của bạn để mentor chấm.</p>
+            )}
+
+            {submissions.length > 0 && (
+              <div className="ap-v2-history">
+                <button 
+                  onClick={() => setShowHistory(!showHistory)}
+                  className="ap-v2-history-toggle"
+                >
+                  <History size={16} /> Lịch sử hệ thống ({submissions.length})
+                  {showHistory ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+                
+                {showHistory && (
+                  <div className="ap-v2-timeline">
+                    {submissions.map((sub) => {
+                      const timingInfo = getSubmissionTimingInfo(assignment?.dueAt, sub.isLate);
+                      return (
+                        <div key={sub.id} className={`ap-v2-timeline-item ${sub.isNewest ? 'ap-v2-timeline-item--latest' : ''}`}>
+                          <div className="ap-v2-tl-header">
+                            <div className="ap-v2-tl-info">
+                              <span className="ap-v2-tl-commit">Commit #{sub.attemptNumber}</span>
+                              {sub.isNewest && <span className="ap-v2-tl-latest-badge">Latest</span>}
+                            </div>
+                            <span className="ap-v2-tl-date">{formatDate(sub.submittedAt)}</span>
+                          </div>
+                          
+                          <div className="ap-v2-tl-meta">
+                            <div className={`ap-v2-tl-tag ${
+                              sub.status === SubmissionStatus.GRADED ? 'ap-v2-tl-tag--graded' : 'ap-v2-tl-tag--pending'
+                            }`}>
+                              {getSubmissionWorkflowLabel(sub.status)}
+                            </div>
+                            
+                            {timingInfo && (
+                              <div className={`ap-v2-tl-tag `} style={{
+                                borderColor: timingInfo.tone === 'on-time' ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)',
+                                color: timingInfo.tone === 'on-time' ? '#34d399' : '#f87171',
+                                background: timingInfo.tone === 'on-time' ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)'
+                              }}>
+                                {timingInfo.text}
+                              </div>
+                            )}
+
+                            {sub.score !== undefined && sub.score !== null && (
+                              <div className="ap-v2-tl-score" style={{ marginLeft: 'auto' }}>
+                                {sub.score} <span>/ {assignment.maxScore}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-              <div className="modal-actions">
-                <button 
-                  className="btn-cancel" 
-                  onClick={() => setShowConfirmModal(false)}
-                >
-                  Hủy
-                </button>
-                <button 
-                  className="btn-confirm" 
-                  onClick={confirmSubmit}
-                >
-                  Xác nhận nộp
-                </button>
+            )}
+          </section>
+        )}
+      </div>
+
+      {showConfirmModal && (
+        <div className="ap-v2-modal-overlay" onClick={() => setShowConfirmModal(false)}>
+          <div className="ap-v2-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="ap-v2-modal-header">
+              <h3 className="ap-v2-modal-title"><AlertCircle size={20} /> Xác nhận nộp bài</h3>
+              <button className="ap-v2-modal-close" onClick={() => setShowConfirmModal(false)}><X size={20} /></button>
+            </div>
+            <div className="ap-v2-modal-body">
+              <p className="ap-v2-modal-text">
+                Bạn sắp gửi file <span className="ap-v2-modal-code">commit_data.sys</span> lên server. Mentor sẽ nhận được bản lưu này.
+              </p>
+              <div className="ap-v2-modal-list">
+                 <div className="ap-v2-modal-li"><Check size={14} /> Nội dung đã hoàn tất</div>
+                 <div className="ap-v2-modal-li"><Check size={14} /> Đúng định dạng được yêu cầu</div>
+              </div>
+              
+              <div className="ap-v2-modal-actions">
+                <button className="ap-v2-btn-cancel" onClick={() => setShowConfirmModal(false)}>Return</button>
+                <button className="ap-v2-btn-exec" onClick={confirmSubmit}>Execute</button>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };

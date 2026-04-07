@@ -10,7 +10,6 @@ import {
   Route,
   Search,
   ShieldCheck,
-  Sparkles,
   TrendingUp,
   Waypoints,
 } from "lucide-react";
@@ -606,7 +605,7 @@ const JourneyManagementTab: React.FC = () => {
           <div className="jmt-insight-row">
             <article className="jmt-insight-card">
               <div className="jmt-insight-card__icon">
-                <Sparkles size={18} />
+                <Waypoints size={18} />
               </div>
               <div>
                 <strong>{heroInsight.title}</strong>
@@ -764,7 +763,7 @@ const JourneyManagementTab: React.FC = () => {
           </div>
 
           <div className="jmt-table-wrap">
-            <table className="jmt-table">
+            <table className="jmt-table jmt-table--banks">
               <thead>
                 <tr>
                   <th>Ngân hàng câu hỏi</th>
@@ -781,7 +780,7 @@ const JourneyManagementTab: React.FC = () => {
                 {(dashboard?.topBanks ?? []).length > 0 ? (
                   (dashboard?.topBanks ?? []).map((bank) => (
                     <tr key={bank.questionBankId}>
-                      <td>
+                      <td data-label="Ngân hàng câu hỏi">
                         <strong>{bank.title}</strong>
                         <div className="jmt-cell-sub">
                           {bank.domain}
@@ -792,18 +791,24 @@ const JourneyManagementTab: React.FC = () => {
                           {truncateText(bank.readinessReason, 96)}
                         </div>
                       </td>
-                      <td>
+                      <td data-label="Sẵn sàng">
                         <StatusBadge
                           label={translateEnum(bank.readinessStatus, READINESS_STATUS_LABELS)}
                           variant={getReadinessVariant(bank.readinessStatus)}
                         />
                       </td>
-                      <td>{formatNumber(bank.activeQuestionCount)}</td>
-                      <td>{formatNumber(bank.totalQuestionUsage)}</td>
-                      <td>{formatNumber(bank.linkedAssessmentTestCount)}</td>
-                      <td>{formatNumber(bank.linkedJourneyCount)}</td>
-                      <td>{formatScore(bank.averageScore)}</td>
-                      <td>{formatDateTime(bank.lastUsedAt)}</td>
+                      <td data-label="Câu hỏi hoạt động">
+                        {formatNumber(bank.activeQuestionCount)}
+                      </td>
+                      <td data-label="Lượt phục vụ">{formatNumber(bank.totalQuestionUsage)}</td>
+                      <td data-label="Test liên kết">
+                        {formatNumber(bank.linkedAssessmentTestCount)}
+                      </td>
+                      <td data-label="Hành trình liên kết">
+                        {formatNumber(bank.linkedJourneyCount)}
+                      </td>
+                      <td data-label="Điểm TB">{formatScore(bank.averageScore)}</td>
+                      <td data-label="Lần dùng gần nhất">{formatDateTime(bank.lastUsedAt)}</td>
                     </tr>
                   ))
                 ) : (
@@ -1038,7 +1043,7 @@ const JourneyManagementTab: React.FC = () => {
         </div>
 
         <div className="jmt-table-wrap">
-          <table className="jmt-table">
+          <table className="jmt-table jmt-table--questions">
             <thead>
               <tr>
                 <th>ID</th>
@@ -1055,8 +1060,8 @@ const JourneyManagementTab: React.FC = () => {
               {(questionsPage?.content ?? []).length > 0 ? (
                 (questionsPage?.content ?? []).map((question) => (
                   <tr key={question.questionId}>
-                    <td>#{question.questionId}</td>
-                    <td>
+                    <td data-label="ID">#{question.questionId}</td>
+                    <td data-label="Nội dung câu hỏi">
                       <strong>{truncateText(question.questionText, 112)}</strong>
                       <div className="jmt-cell-sub">
                         {question.domain}
@@ -1067,17 +1072,19 @@ const JourneyManagementTab: React.FC = () => {
                         Cập nhật: {formatDateTime(question.updatedAt)}
                       </div>
                     </td>
-                    <td>{question.questionBankTitle}</td>
-                    <td>{translateEnum(question.difficulty, QUESTION_DIFFICULTY_LABELS)}</td>
-                    <td>{question.skillArea || "--"}</td>
-                    <td>
+                    <td data-label="Ngân hàng câu hỏi">{question.questionBankTitle}</td>
+                    <td data-label="Độ khó">
+                      {translateEnum(question.difficulty, QUESTION_DIFFICULTY_LABELS)}
+                    </td>
+                    <td data-label="Kỹ năng">{question.skillArea || "--"}</td>
+                    <td data-label="Nguồn tạo">
                       <StatusBadge
                         label={translateEnum(question.source, QUESTION_AUTHORING_SOURCE_LABELS)}
                         variant={getAuthoringSourceVariant(question.source)}
                       />
                     </td>
-                    <td>{formatNumber(question.usedCount)}</td>
-                    <td>
+                    <td data-label="Lượt dùng">{formatNumber(question.usedCount)}</td>
+                    <td data-label="Trạng thái">
                       <StatusBadge
                         label={question.isActive ? "Đang hoạt động" : "Đã tắt"}
                         variant={getActiveVariant(question.isActive)}
@@ -1262,7 +1269,7 @@ const JourneyManagementTab: React.FC = () => {
         </div>
 
         <div className="jmt-table-wrap">
-          <table className="jmt-table">
+          <table className="jmt-table jmt-table--journeys">
             <thead>
               <tr>
                 <th>Hành trình</th>
@@ -1280,7 +1287,7 @@ const JourneyManagementTab: React.FC = () => {
               {(journeysPage?.content ?? []).length > 0 ? (
                 (journeysPage?.content ?? []).map((journey) => (
                   <tr key={journey.journeyId}>
-                    <td>
+                    <td data-label="Hành trình">
                       <strong>#{journey.journeyId}</strong>
                       <div className="jmt-cell-sub">
                         {journey.domain || "--"}
@@ -1291,12 +1298,12 @@ const JourneyManagementTab: React.FC = () => {
                       </div>
                     </td>
 
-                    <td>
+                    <td data-label="Người dùng">
                       <strong>{journey.userName}</strong>
                       <div className="jmt-cell-sub">{journey.userEmail}</div>
                     </td>
 
-                    <td>
+                    <td data-label="Loại & mục tiêu">
                       <strong>{translateEnum(journey.type, JOURNEY_TYPE_LABELS)}</strong>
                       <div className="jmt-cell-sub">{truncateText(journey.goal, 72)}</div>
                       <div className="jmt-cell-sub jmt-cell-sub--muted">
@@ -1307,7 +1314,7 @@ const JourneyManagementTab: React.FC = () => {
                       </div>
                     </td>
 
-                    <td>
+                    <td data-label="Trạng thái">
                       <StatusBadge
                         label={translateEnum(journey.status, JOURNEY_STATUS_LABELS)}
                         variant={getJourneyStatusVariant(journey.status)}
@@ -1317,22 +1324,22 @@ const JourneyManagementTab: React.FC = () => {
                       </div>
                     </td>
 
-                    <td>
+                    <td data-label="Nguồn đề">
                       <StatusBadge
                         label={translateEnum(journey.questionSource, QUESTION_SOURCE_LABELS)}
                         variant={getQuestionSourceVariant(journey.questionSource)}
                       />
                     </td>
 
-                    <td>{journey.questionBankTitle || "Chưa liên kết ngân hàng câu hỏi"}</td>
-                    <td>{formatScore(journey.latestScore)}</td>
-                    <td>
+                    <td data-label="Ngân hàng câu hỏi">{journey.questionBankTitle || "Chưa liên kết ngân hàng câu hỏi"}</td>
+                    <td data-label="Điểm gần nhất">{formatScore(journey.latestScore)}</td>
+                    <td data-label="Lộ trình">
                       <StatusBadge
                         label={journey.roadmapReady ? "Đã sẵn sàng" : "Chưa có"}
                         variant={getRoadmapVariant(journey.roadmapReady)}
                       />
                     </td>
-                    <td>{formatDateTime(journey.lastActivityAt)}</td>
+                    <td data-label="Hoạt động cuối">{formatDateTime(journey.lastActivityAt)}</td>
                   </tr>
                 ))
               ) : (

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PieChart, Activity, BarChart2, Target, CheckCircle, Clock, AlertCircle, RefreshCw } from 'lucide-react';
+import { PieChart, Activity, BarChart2, Target, CheckCircle, Clock, AlertCircle, RefreshCw, Calendar } from 'lucide-react';
 import { RoadmapSessionSummary } from '../../types/Roadmap';
 import './AnalystTrack.css';
 
@@ -8,9 +8,12 @@ interface AnalystTrackProps {
   roadmaps: RoadmapSessionSummary[];
 }
 
+const ROADMAPS_PER_PAGE = 3;
+
 const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
   const navigate = useNavigate();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Calculate Stats
   const totalRoadmaps = roadmaps.length;
@@ -20,15 +23,74 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
   const completedRoadmaps = roadmaps.filter(r => (r.progressPercentage || 0) >= 100).length;
   const inProgressRoadmaps = roadmaps.filter(r => r.status === 'ACTIVE').length;
 
-  // Prioritize active roadmap, then sort by progress.
-  const sortedRoadmaps = [...roadmaps].sort((a, b) => {
-    const aIsActive = a.status === 'ACTIVE';
-    const bIsActive = b.status === 'ACTIVE';
-    if (aIsActive !== bIsActive) {
-      return aIsActive ? -1 : 1;
+  // Sort by created date (newest first), fallback to sessionId for stability.
+  const sortedRoadmaps = useMemo(() => [...roadmaps].sort((a, b) => {
+    const aCreatedAt = Date.parse(a.createdAt || '');
+    const bCreatedAt = Date.parse(b.createdAt || '');
+
+    if (!Number.isNaN(aCreatedAt) && !Number.isNaN(bCreatedAt) && aCreatedAt !== bCreatedAt) {
+      return bCreatedAt - aCreatedAt;
     }
-    return (b.progressPercentage || 0) - (a.progressPercentage || 0);
-  });
+
+    if (!Number.isNaN(aCreatedAt) && Number.isNaN(bCreatedAt)) {
+      return -1;
+    }
+
+    if (Number.isNaN(aCreatedAt) && !Number.isNaN(bCreatedAt)) {
+      return 1;
+    }
+
+    return b.sessionId - a.sessionId;
+  }), [roadmaps]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [roadmaps.length]);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(sortedRoadmaps.length / ROADMAPS_PER_PAGE),
+  );
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  const paginatedRoadmaps = useMemo(() => {
+    const start = (currentPage - 1) * ROADMAPS_PER_PAGE;
+    return sortedRoadmaps.slice(start, start + ROADMAPS_PER_PAGE);
+  }, [currentPage, sortedRoadmaps]);
+
+  const showingStart =
+    sortedRoadmaps.length === 0
+      ? 0
+      : (currentPage - 1) * ROADMAPS_PER_PAGE + 1;
+  const showingEnd =
+    sortedRoadmaps.length === 0
+      ? 0
+      : Math.min(currentPage * ROADMAPS_PER_PAGE, sortedRoadmaps.length);
+
+  const formatCreatedAt = (value?: string) => {
+    if (!value) return 'Không rõ ngày tạo';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Không rõ ngày tạo';
+    return new Intl.DateTimeFormat('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(date);
+  };
+
+  const getDifficultyLabel = (difficulty?: string) => {
+    const normalized = (difficulty || '').toLowerCase();
+    if (normalized === 'beginner') return 'Cơ bản';
+    if (normalized === 'intermediate') return 'Trung cấp';
+    if (normalized === 'advanced') return 'Nâng cao';
+    if (normalized === 'normal') return 'Thường';
+    return difficulty || 'Thường';
+  };
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -40,13 +102,13 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
       <div className="arm-analyst-header">
         <div className="arm-header-title">
           <Activity className="arm-header-icon" />
-          ANALYST TRACK
+          LỘ TRÌNH ĐANG HỌC
         </div>
         <div className="arm-header-actions">
           <button 
             className={`arm-refresh-btn ${isRefreshing ? 'arm-spin' : ''}`}
             onClick={handleRefresh}
-            title="Refresh Data"
+            title="Làm mới dữ liệu"
           >
             <RefreshCw size={16} />
           </button>
@@ -60,7 +122,7 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
           </div>
           <div className="arm-stat-content">
             <span className="arm-stat-value">{avgCompletion}%</span>
-            <span className="arm-stat-label">AVG. COMPLETION</span>
+            <span className="arm-stat-label">HOÀN THÀNH TRUNG BÌNH</span>
           </div>
         </div>
 
@@ -70,7 +132,7 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
           </div>
           <div className="arm-stat-content">
             <span className="arm-stat-value">{inProgressRoadmaps}</span>
-            <span className="arm-stat-label">ACTIVE CAMPAIGNS</span>
+            <span className="arm-stat-label">ĐANG HỌC</span>
           </div>
         </div>
 
@@ -80,7 +142,7 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
           </div>
           <div className="arm-stat-content">
             <span className="arm-stat-value">{completedRoadmaps}</span>
-            <span className="arm-stat-label">COMPLETED</span>
+            <span className="arm-stat-label">HOÀN THÀNH</span>
           </div>
         </div>
       </div>
@@ -89,19 +151,25 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
         <div className="arm-list-header">
           <div className="arm-list-title">
             <BarChart2 size={16} />
-            CAMPAIGN LOG
+            DANH SÁCH LỘ TRÌNH
           </div>
           <button 
             className="arm-view-all-btn"
             onClick={() => navigate('/roadmap')}
           >
-            VIEW ALL
+            XEM TẤT CẢ
           </button>
+        </div>
+
+        <div className="arm-list-summary">
+          {sortedRoadmaps.length === 0
+            ? 'Không có lộ trình nào.'
+            : `Hiển thị ${showingStart}-${showingEnd} / ${sortedRoadmaps.length} (sắp xếp theo ngày tạo mới nhất)`}
         </div>
         
         <div className="arm-roadmap-list">
-          {sortedRoadmaps.length > 0 ? (
-            sortedRoadmaps.map((roadmap) => (
+          {paginatedRoadmaps.length > 0 ? (
+            paginatedRoadmaps.map((roadmap) => (
               <div 
                 key={roadmap.sessionId} 
                 className="arm-roadmap-item"
@@ -110,7 +178,7 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
                 <div className="arm-item-header">
                   <span className="arm-item-title">{roadmap.title}</span>
                   <span className={`arm-item-badge ${roadmap.difficultyLevel?.toLowerCase() || 'beginner'}`}>
-                    {roadmap.difficultyLevel || 'NORMAL'}
+                    {getDifficultyLabel(roadmap.difficultyLevel)}
                   </span>
                 </div>
                 
@@ -119,13 +187,16 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
                     <Clock size={12} /> {roadmap.duration}
                   </span>
                   <span className="arm-meta-info">
-                    <Target size={12} /> {roadmap.totalQuests} Quests
+                    <Target size={12} /> {roadmap.totalQuests} nhiệm vụ
+                  </span>
+                  <span className="arm-meta-info">
+                    <Calendar size={12} /> {formatCreatedAt(roadmap.createdAt)}
                   </span>
                 </div>
 
                 <div className="arm-item-progress-wrapper">
                   <div className="arm-progress-labels">
-                    <span>Progress</span>
+                    <span>Tiến độ</span>
                     <span>{roadmap.progressPercentage || 0}%</span>
                   </div>
                   <div className="arm-item-progress-bar">
@@ -143,10 +214,32 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
           ) : (
             <div className="arm-empty-state">
               <AlertCircle size={24} />
-              <span>No active campaigns found.</span>
+              <span>Không có lộ trình phù hợp.</span>
             </div>
           )}
         </div>
+
+        {sortedRoadmaps.length > ROADMAPS_PER_PAGE && (
+          <div className="arm-pagination">
+            <button
+              type="button"
+              className="arm-pagination-btn"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Trang trước
+            </button>
+            <span className="arm-pagination-indicator">Trang {currentPage}/{totalPages}</span>
+            <button
+              type="button"
+              className="arm-pagination-btn"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              Trang sau
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

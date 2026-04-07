@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Brain, Lock, Map, Route, PlayCircle, X } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
@@ -34,6 +34,7 @@ import "../../styles/DashboardJourneyPrompt.css";
 
 const POST_LOGIN_JOURNEY_PROMPT_KEY = "showPostLoginJourneyPrompt";
 const JOURNEY_PROMPT_AUTO_CLOSE_SECONDS = 15;
+const JOURNEY_PROMPT_ITEMS_PER_PAGE = 3;
 
 const DashboardPage = () => {
   const { translations } = useLanguage();
@@ -78,6 +79,8 @@ const DashboardPage = () => {
   >([]);
   const [journeyPromptCloseCountdown, setJourneyPromptCloseCountdown] =
     useState(JOURNEY_PROMPT_AUTO_CLOSE_SECONDS);
+  const [journeyPromptSearchTerm, setJourneyPromptSearchTerm] = useState("");
+  const [journeyPromptCurrentPage, setJourneyPromptCurrentPage] = useState(1);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
@@ -92,6 +95,8 @@ const DashboardPage = () => {
 
   const closeJourneyPrompt = () => {
     clearJourneyPromptFlag();
+    setJourneyPromptSearchTerm("");
+    setJourneyPromptCurrentPage(1);
     setShowJourneyPrompt(false);
   };
 
@@ -170,6 +175,66 @@ const DashboardPage = () => {
           ) / journeyPromptCount,
         )
       : 0;
+
+  const filteredJourneyPromptJourneys = useMemo(() => {
+    const normalizedSearch = journeyPromptSearchTerm.trim().toLowerCase();
+
+    if (normalizedSearch.length === 0) {
+      return journeyPromptJourneys;
+    }
+
+    return journeyPromptJourneys.filter((journey) =>
+      [
+        journey.domain,
+        journey.jobRole,
+        journey.subCategory,
+        journey.goal,
+        journey.status,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase()
+        .includes(normalizedSearch),
+    );
+  }, [journeyPromptJourneys, journeyPromptSearchTerm]);
+
+  useEffect(() => {
+    setJourneyPromptCurrentPage(1);
+  }, [journeyPromptJourneys.length, journeyPromptSearchTerm]);
+
+  const journeyPromptTotalPages = Math.max(
+    1,
+    Math.ceil(
+      filteredJourneyPromptJourneys.length / JOURNEY_PROMPT_ITEMS_PER_PAGE,
+    ),
+  );
+
+  useEffect(() => {
+    if (journeyPromptCurrentPage > journeyPromptTotalPages) {
+      setJourneyPromptCurrentPage(journeyPromptTotalPages);
+    }
+  }, [journeyPromptCurrentPage, journeyPromptTotalPages]);
+
+  const paginatedJourneyPromptJourneys = useMemo(() => {
+    const start =
+      (journeyPromptCurrentPage - 1) * JOURNEY_PROMPT_ITEMS_PER_PAGE;
+    return filteredJourneyPromptJourneys.slice(
+      start,
+      start + JOURNEY_PROMPT_ITEMS_PER_PAGE,
+    );
+  }, [journeyPromptCurrentPage, filteredJourneyPromptJourneys]);
+
+  const journeyPromptShowingStart =
+    filteredJourneyPromptJourneys.length === 0
+      ? 0
+      : (journeyPromptCurrentPage - 1) * JOURNEY_PROMPT_ITEMS_PER_PAGE + 1;
+  const journeyPromptShowingEnd =
+    filteredJourneyPromptJourneys.length === 0
+      ? 0
+      : Math.min(
+          journeyPromptCurrentPage * JOURNEY_PROMPT_ITEMS_PER_PAGE,
+          filteredJourneyPromptJourneys.length,
+        );
 
   useEffect(() => {
     if (authLoading || !isAuthenticated || !user?.id) return;
@@ -655,37 +720,102 @@ const DashboardPage = () => {
             )}
 
             {!journeyPromptLoading && journeyPromptJourneys.length > 0 && (
-              <div className="dashboard-journey-prompt__list">
-                {journeyPromptJourneys.map((journey) => (
-                  <button
-                    key={journey.id}
-                    type="button"
-                    className="dashboard-journey-prompt__item"
-                    onClick={() => handleOpenJourneyFromPrompt(journey.id)}
-                  >
-                    <div className="dashboard-journey-prompt__item-main">
-                      <h3>{getDomainLabel(journey.domain)}</h3>
-                      <p>{journey.jobRole || journey.subCategory || journey.goal}</p>
-                      <div className="dashboard-journey-prompt__item-progress-track">
-                        <div
-                          className="dashboard-journey-prompt__item-progress-fill"
-                          style={{ width: `${journey.progressPercentage ?? 0}%` }}
-                        />
+              <>
+                <div className="dashboard-journey-prompt__tools">
+                  <div className="dashboard-journey-prompt__search">
+                    <label htmlFor="dashboard-journey-prompt-search">
+                      Tìm kiếm journey
+                    </label>
+                    <input
+                      id="dashboard-journey-prompt-search"
+                      type="search"
+                      value={journeyPromptSearchTerm}
+                      onChange={(event) =>
+                        setJourneyPromptSearchTerm(event.target.value)
+                      }
+                      placeholder="Domain, vai trò, mục tiêu..."
+                    />
+                  </div>
+                  <div className="dashboard-journey-prompt__tools-summary">
+                    {filteredJourneyPromptJourneys.length === 0
+                      ? "Không có journey phù hợp."
+                      : `Hiển thị ${journeyPromptShowingStart}-${journeyPromptShowingEnd} / ${filteredJourneyPromptJourneys.length}`}
+                  </div>
+                </div>
+
+                {filteredJourneyPromptJourneys.length > 0 ? (
+                  <>
+                    <div className="dashboard-journey-prompt__list">
+                      {paginatedJourneyPromptJourneys.map((journey) => (
+                        <button
+                          key={journey.id}
+                          type="button"
+                          className="dashboard-journey-prompt__item"
+                          onClick={() => handleOpenJourneyFromPrompt(journey.id)}
+                        >
+                          <div className="dashboard-journey-prompt__item-main">
+                            <h3>{getDomainLabel(journey.domain)}</h3>
+                            <p>{journey.jobRole || journey.subCategory || journey.goal}</p>
+                            <div className="dashboard-journey-prompt__item-progress-track">
+                              <div
+                                className="dashboard-journey-prompt__item-progress-fill"
+                                style={{ width: `${journey.progressPercentage ?? 0}%` }}
+                              />
+                            </div>
+                          </div>
+                          <div className="dashboard-journey-prompt__item-meta">
+                            <span className={getJourneyStatusClass(journey.status)}>
+                              {getJourneyStatusLabel(journey.status)}
+                            </span>
+                            <strong>{journey.progressPercentage ?? 0}%</strong>
+                          </div>
+                          <span className="dashboard-journey-prompt__item-open">
+                            Tiếp tục
+                            <ArrowRight size={14} />
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+
+                    {filteredJourneyPromptJourneys.length >
+                      JOURNEY_PROMPT_ITEMS_PER_PAGE && (
+                      <div className="dashboard-journey-prompt__pagination">
+                        <button
+                          type="button"
+                          className="dashboard-journey-prompt__pagination-btn"
+                          onClick={() =>
+                            setJourneyPromptCurrentPage((prev) =>
+                              Math.max(prev - 1, 1),
+                            )
+                          }
+                          disabled={journeyPromptCurrentPage === 1}
+                        >
+                          Trang trước
+                        </button>
+                        <span className="dashboard-journey-prompt__pagination-indicator">
+                          Trang {journeyPromptCurrentPage}/{journeyPromptTotalPages}
+                        </span>
+                        <button
+                          type="button"
+                          className="dashboard-journey-prompt__pagination-btn"
+                          onClick={() =>
+                            setJourneyPromptCurrentPage((prev) =>
+                              Math.min(prev + 1, journeyPromptTotalPages),
+                            )
+                          }
+                          disabled={journeyPromptCurrentPage === journeyPromptTotalPages}
+                        >
+                          Trang sau
+                        </button>
                       </div>
-                    </div>
-                    <div className="dashboard-journey-prompt__item-meta">
-                      <span className={getJourneyStatusClass(journey.status)}>
-                        {getJourneyStatusLabel(journey.status)}
-                      </span>
-                      <strong>{journey.progressPercentage ?? 0}%</strong>
-                    </div>
-                    <span className="dashboard-journey-prompt__item-open">
-                      Tiếp tục
-                      <ArrowRight size={14} />
-                    </span>
-                  </button>
-                ))}
-              </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="dashboard-journey-prompt__empty">
+                    Không tìm thấy journey phù hợp với từ khóa hiện tại.
+                  </div>
+                )}
+              </>
             )}
 
             {!journeyPromptLoading && journeyPromptJourneys.length === 0 && (

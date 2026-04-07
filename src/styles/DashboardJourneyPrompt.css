@@ -192,6 +192,50 @@
   font-size: 13px;
 }
 
+.dashboard-journey-prompt__tools {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: minmax(250px, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  align-items: end;
+}
+
+.dashboard-journey-prompt__search {
+  display: grid;
+  gap: 4px;
+}
+
+.dashboard-journey-prompt__search label {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9fdfff;
+  font-weight: 700;
+}
+
+.dashboard-journey-prompt__search input {
+  width: 100%;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(111, 210, 255, 0.42);
+  background: rgba(9, 39, 64, 0.74);
+  color: #d5f4ff;
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+.dashboard-journey-prompt__search input:focus {
+  outline: none;
+  border-color: rgba(83, 233, 255, 0.72);
+  box-shadow: 0 0 0 2px rgba(60, 212, 255, 0.2);
+}
+
+.dashboard-journey-prompt__tools-summary {
+  justify-self: end;
+  color: #cce9ff;
+  font-size: 12px;
+}
+
 .dashboard-journey-prompt__loading {
   border: 1px solid rgba(72, 176, 255, 0.35);
   background: rgba(11, 42, 72, 0.58);
@@ -318,6 +362,54 @@
   color: #d5f4ff;
   border: 1px solid rgba(111, 210, 255, 0.42);
   background: rgba(9, 39, 64, 0.74);
+}
+
+.dashboard-journey-prompt__empty {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px dashed rgba(125, 229, 255, 0.35);
+  background: rgba(10, 35, 58, 0.5);
+  color: #9fccea;
+  font-size: 13px;
+}
+
+.dashboard-journey-prompt__pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboard-journey-prompt__pagination-btn {
+  height: 34px;
+  border-radius: 9px;
+  border: 1px solid rgba(110, 167, 220, 0.5);
+  background: rgba(14, 35, 60, 0.8);
+  color: #d6edff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0 12px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.dashboard-journey-prompt__pagination-btn:hover:not(:disabled) {
+  border-color: rgba(114, 227, 255, 0.55);
+  transform: translateY(-1px);
+}
+
+.dashboard-journey-prompt__pagination-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.dashboard-journey-prompt__pagination-indicator {
+  min-width: 96px;
+  text-align: center;
+  color: #9fdfff;
+  font-size: 12px;
 }
 
 .dashboard-journey-prompt__onboarding {
@@ -468,6 +560,14 @@
     padding: 16px;
   }
 
+  .dashboard-journey-prompt__tools {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-journey-prompt__tools-summary {
+    justify-self: start;
+  }
+
   .dashboard-journey-prompt__summary {
     grid-template-columns: 1fr;
   }
@@ -491,6 +591,18 @@
   }
 
   .dashboard-journey-prompt__btn {
+    width: 100%;
+  }
+
+  .dashboard-journey-prompt__pagination {
+    justify-content: stretch;
+  }
+
+  .dashboard-journey-prompt__pagination-btn {
+    flex: 1;
+  }
+
+  .dashboard-journey-prompt__pagination-indicator {
     width: 100%;
   }
 }

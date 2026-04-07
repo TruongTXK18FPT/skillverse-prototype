@@ -18,7 +18,6 @@ import {
   Shirt,
   Image,
   Calendar,
-  Trophy,
   ChevronLeft,
   ChevronRight,
   Shield,
@@ -166,12 +165,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           icon: Zap,
           allowedRoles: ["PREMIUM_ADMIN", "ADMIN"],
         },
-        {
-          id: "gamification",
-          label: "Gamification",
-          icon: Trophy,
-          allowedRoles: ["PREMIUM_ADMIN", "ADMIN"],
-        },
       ],
     },
     {
@@ -190,7 +183,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           allowedRoles: ["AI_ADMIN", "ADMIN"],
         },
         {
-          id: "journey-management",
+          id: "journey-ops",
           label: "Journey Ops",
           icon: Route,
           allowedRoles: ["AI_ADMIN", "ADMIN"],

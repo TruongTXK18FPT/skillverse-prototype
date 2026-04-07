@@ -337,7 +337,7 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
 
           {/* Learning Report History Section */}
           <LearningReportHistory
-            maxItems={5}
+            maxItems={30}
             showGenerateButton={true}
             title="Báo cáo học tập"
           />

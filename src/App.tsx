@@ -79,7 +79,6 @@ import { CourseManagementProvider } from "./context/mentor/CourseManagementConte
 import { MentorNoticeProvider } from "./context/mentor/MentorNoticeContext";
 import AdminPage from "./pages/main/AdminPage";
 import AdminSecurityPage from "./pages/admin/AdminSecurityPage";
-import AdminGamificationDashboard from "./pages/admin/AdminGamificationDashboard";
 import AdminCoursePreviewPage from "./pages/admin/AdminCoursePreviewPage";
 import AiRoadmapPage from "./pages/roadmap/AiRoadmapPage";
 import RoadmapDetailPage from "./pages/roadmap/RoadmapDetailPage";
@@ -396,14 +395,6 @@ const AppContents = () => {
               element={
                 <AdminRoute>
                   <AdminPage />
-                </AdminRoute>
-              }
-            />
-            <Route
-              path="/admin/gamification"
-              element={
-                <AdminRoute>
-                  <AdminGamificationDashboard />
                 </AdminRoute>
               }
             />

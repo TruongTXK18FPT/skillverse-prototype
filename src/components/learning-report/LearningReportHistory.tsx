@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
   FileText,
@@ -27,6 +27,8 @@ interface LearningReportHistoryProps {
   title?: string;
 }
 
+const REPORTS_PER_PAGE = 3;
+
 const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
   maxItems = 5,
   showGenerateButton = true,
@@ -40,6 +42,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
   const [canGenerate, setCanGenerate] = useState(true);
   const [cooldownMinutes, setCooldownMinutes] = useState(0);
   const [downloadingId, setDownloadingId] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Using imported validation helper from learningReportService
 
@@ -48,7 +51,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
     setLoadError(null);
     try {
       const [history, canGen] = await Promise.all([
-        learningReportService.getReportHistory(0, maxItems),
+        learningReportService.getReportHistory(0, Math.max(maxItems, REPORTS_PER_PAGE)),
         learningReportService.canGenerateReport(),
       ]);
       // Filter out any reports with invalid IDs
@@ -131,6 +134,64 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
     return badges[type] || { label: type, color: "#6b7280" };
   };
 
+  const sortedReports = useMemo(
+    () =>
+      [...reports].sort((a, b) => {
+        const aGeneratedAt = Date.parse(a.generatedAt || "");
+        const bGeneratedAt = Date.parse(b.generatedAt || "");
+
+        if (
+          !Number.isNaN(aGeneratedAt) &&
+          !Number.isNaN(bGeneratedAt) &&
+          aGeneratedAt !== bGeneratedAt
+        ) {
+          return bGeneratedAt - aGeneratedAt;
+        }
+
+        if (!Number.isNaN(aGeneratedAt) && Number.isNaN(bGeneratedAt)) {
+          return -1;
+        }
+
+        if (Number.isNaN(aGeneratedAt) && !Number.isNaN(bGeneratedAt)) {
+          return 1;
+        }
+
+        return (b.reportId ?? 0) - (a.reportId ?? 0);
+      }),
+    [reports],
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [reports.length]);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(sortedReports.length / REPORTS_PER_PAGE),
+  );
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  const paginatedReports = useMemo(() => {
+    const start = (currentPage - 1) * REPORTS_PER_PAGE;
+    return sortedReports.slice(start, start + REPORTS_PER_PAGE);
+  }, [currentPage, sortedReports]);
+
+  const showingStart =
+    sortedReports.length === 0
+      ? 0
+      : (currentPage - 1) * REPORTS_PER_PAGE + 1;
+  const showingEnd =
+    sortedReports.length === 0
+      ? 0
+      : Math.min(currentPage * REPORTS_PER_PAGE, sortedReports.length);
+
+  const latestPreviewReport = sortedReports[0];
+
   return (
     <>
       <motion.div
@@ -147,7 +208,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
             </div>
             <h3>{title}</h3>
             <span className="lr-history__report-count">
-              {reports.length} BÁO CÁO
+              {sortedReports.length} BÁO CÁO
             </span>
           </div>
 
@@ -164,6 +225,12 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
               </span>
             </button>
           )}
+        </div>
+
+        <div className="lr-history__summary">
+          {sortedReports.length === 0
+            ? "Chưa có báo cáo nào."
+            : `Hiển thị ${showingStart}-${showingEnd} / ${sortedReports.length} (sắp xếp theo ngày tạo mới nhất)`}
         </div>
 
         {/* Reports List */}
@@ -193,7 +260,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
             </div>
           ) : (
             <>
-              {reports.map((report, index) => {
+              {paginatedReports.map((report, index) => {
                 const typeBadge = getReportTypeBadge(report.reportType);
 
                 return (
@@ -277,7 +344,35 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
                 );
               })}
 
-              {reports.length >= maxItems && (
+              {sortedReports.length > REPORTS_PER_PAGE && (
+                <div className="lr-history__pagination">
+                  <button
+                    type="button"
+                    className="lr-history__pagination-btn"
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    disabled={currentPage === 1}
+                  >
+                    Trang trước
+                  </button>
+                  <span className="lr-history__pagination-indicator">
+                    Trang {currentPage}/{totalPages}
+                  </span>
+                  <button
+                    type="button"
+                    className="lr-history__pagination-btn"
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    disabled={currentPage === totalPages}
+                  >
+                    Trang sau
+                  </button>
+                </div>
+              )}
+
+              {reports.length > REPORTS_PER_PAGE && (
                 <button
                   className="lr-history__view-all-btn"
                   onClick={handleGenerateNew}
@@ -299,7 +394,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
         )}
 
         {/* Quick Stats Preview */}
-        {reports.length > 0 && reports[0] && reports[0].metrics && (
+        {latestPreviewReport && latestPreviewReport.metrics && (
           <div className="lr-history__quick-preview">
             <div className="lr-history__preview-title">
               <Clock size={14} />
@@ -308,19 +403,19 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
             <div className="lr-history__preview-stats">
               <div className="lr-history__preview-stat">
                 <span className="lr-history__preview-stat-value">
-                  {reports[0].metrics.totalStudyHours ?? 0}h
+                  {latestPreviewReport.metrics.totalStudyHours ?? 0}h
                 </span>
                 <span className="lr-history__preview-stat-label">Giờ học</span>
               </div>
               <div className="lr-history__preview-stat">
                 <span className="lr-history__preview-stat-value">
-                  {reports[0].metrics.currentStreak ?? 0}
+                  {latestPreviewReport.metrics.currentStreak ?? 0}
                 </span>
                 <span className="lr-history__preview-stat-label">Streak</span>
               </div>
               <div className="lr-history__preview-stat">
                 <span className="lr-history__preview-stat-value">
-                  {reports[0].metrics.totalTasksCompleted ?? 0}
+                  {latestPreviewReport.metrics.totalTasksCompleted ?? 0}
                 </span>
                 <span className="lr-history__preview-stat-label">Tasks</span>
               </div>

@@ -20,28 +20,6 @@ import { JobManagementTab } from "../../components/admin/JobManagementTab";
 import MeowlSkinUploadTab from "../../components/admin/MeowlSkinUploadTab";
 import SliderManagementTab from "../../components/admin/SliderManagementTab";
 // import AdminSeminarManager from './AdminSeminarManager';
-import AdminGamificationDashboard from "../admin/AdminGamificationDashboard";
-import {
-  Users,
-  UserCheck,
-  BookOpen,
-  BarChart3,
-  Bell,
-  AlertTriangle,
-  CreditCard,
-  Banknote,
-  Zap,
-  Crown,
-  Ticket,
-  Settings,
-  Brain,
-  MessageSquare,
-  Briefcase,
-  Shirt,
-  Image,
-  Calendar,
-  Trophy,
-} from "lucide-react";
 import adminUserService from "../../services/adminUserService";
 import adminService from "../../services/adminService";
 import supportService from "../../services/supportService";
@@ -172,13 +150,12 @@ const AdminPage: React.FC = () => {
       case "question-bank":
         return <QuestionBankTab />;
       case "journey-management":
+      case "journey-ops":
         return <JourneyManagementTab />;
       case "skin-upload":
         return <MeowlSkinUploadTab />;
       case "sliders":
         return <SliderManagementTab />;
-      case "gamification":
-        return <AdminGamificationDashboard />;
       default:
         return <AnalyticsTab />;
     }

@@ -31,6 +31,7 @@ import { useToast } from "../../hooks/useToast";
 import Toast from "../shared/Toast";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
 import LoginRequiredModal from "../auth/LoginRequiredModal";
+import MeowlGuide from "../meowl/MeowlGuide";
 import "./odyssey-styles.css";
 import "./GigDetailPage.css";
 
@@ -724,6 +725,8 @@ const GigDetailPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      <MeowlGuide currentPage="jobs" hideMascot={false} />
 
       {toast && (
         <Toast
