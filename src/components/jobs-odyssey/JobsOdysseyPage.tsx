@@ -16,7 +16,7 @@ import { useAuth } from "../../context/AuthContext";
 import "./odyssey-styles.css";
 
 type ViewType = "all" | "fulltime" | "shortterm";
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 6;
 
 const JobsOdysseyPage = () => {
   const navigate = useNavigate();
