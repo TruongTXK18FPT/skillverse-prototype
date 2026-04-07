@@ -38,6 +38,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [canGenerate, setCanGenerate] = useState(true);
+  const [cooldownMinutes, setCooldownMinutes] = useState(0);
   const [downloadingId, setDownloadingId] = useState<number | null>(null);
 
   // Using imported validation helper from learningReportService
@@ -54,6 +55,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
       const validReports = history.filter((r) => isValidReportId(r.reportId));
       setReports(validReports);
       setCanGenerate(canGen.canGenerate);
+      setCooldownMinutes(canGen.remainingCooldownMinutes ?? 0);
     } catch (error) {
       console.error("Error loading reports:", error);
       setLoadError("Không thể tải danh sách báo cáo. Vui lòng thử lại.");
@@ -154,9 +156,12 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
               className="lr-history__generate-btn"
               onClick={handleGenerateNew}
               disabled={!canGenerate}
+              title={!canGenerate && cooldownMinutes > 0 ? `Cooldown: ${learningReportService.getTimeUntilNextReport(cooldownMinutes)}` : undefined}
             >
               <Sparkles size={16} />
-              <span>Tạo mới</span>
+              <span>
+                {canGenerate ? "Tạo mới" : `Đợi ${learningReportService.getTimeUntilNextReport(cooldownMinutes)}`}
+              </span>
             </button>
           )}
         </div>

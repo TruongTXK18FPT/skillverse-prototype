@@ -826,18 +826,14 @@ const LearningReportPage: React.FC = () => {
                       </select>
                     </div>
                     <button className="lr-page__generate-btn-main" onClick={handleGenerateReport} disabled={!canGenerate?.canGenerate}>
-                      <Zap size={20} /> KÍCH HOẠT PHÂN TÍCH
-                    </button>
-                    {!canGenerate?.canGenerate && (
-                      <div className="lr-page__cooldown-msg">
-                        <Clock size={14} />
-                        <span>
-                          {canGenerate?.remainingCooldownMinutes !== undefined && canGenerate.remainingCooldownMinutes > 0
+                      {canGenerate?.canGenerate ? (
+                        <><Zap size={20} /> KÍCH HOẠT PHÂN TÍCH</>
+                      ) : (
+                        <><Clock size={20} /> Đợi {canGenerate?.remainingCooldownMinutes !== undefined
                             ? learningReportService.getTimeUntilNextReport(canGenerate.remainingCooldownMinutes)
-                            : "Hệ thống cần thời gian hồi phục."}
-                        </span>
-                      </div>
-                    )}
+                            : "..."}</>
+                      )}
+                    </button>
                  </div>
                </div>
              </div>
@@ -929,9 +925,22 @@ const LearningReportPage: React.FC = () => {
                           <Download size={18} className={isDownloadingPDF ? "spinning" : ""} />
                           <span>{isDownloadingPDF ? "ĐANG TẢI..." : "TẢI PDF"}</span>
                         </button>
-                        <button className="lr-page__action-btn lr-page__action-btn--new" onClick={handleGenerateQuickReport} disabled={!canGenerate?.canGenerate}>
-                          <RefreshCw size={18} />
-                          <span>TẠO BÁO CÁO MỚI</span>
+                        <button className="lr-page__action-btn lr-page__action-btn--new" disabled={!canGenerate?.canGenerate}>
+                          {canGenerate?.canGenerate ? (
+                            <>
+                              <RefreshCw size={18} />
+                              <span>TẠO BÁO CÁO MỚI</span>
+                            </>
+                          ) : (
+                            <>
+                              <Clock size={18} />
+                              <span>
+                                Đợi {canGenerate?.remainingCooldownMinutes !== undefined
+                                  ? learningReportService.getTimeUntilNextReport(canGenerate.remainingCooldownMinutes)
+                                  : "..."}
+                              </span>
+                            </>
+                          )}
                         </button>
                       </div>
                     </section>
