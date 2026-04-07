@@ -117,55 +117,60 @@ export const listModulesWithContent = async (courseId: number): Promise<ModuleDe
   const res = await axiosInstance.get<any[]>(`/courses/${courseId}/modules/full`);
   const raw = res.data || [];
 
-  return raw.map((m) => ({
-    id: m.id,
-    title: m.title,
-    description: m.description ?? '',
-    orderIndex: m.orderIndex ?? 0,
-    courseId: courseId,
-    createdAt: m.createdAt ?? '',
-    updatedAt: m.updatedAt ?? '',
-    lessons: (m.lessons || []).map((l: LessonApiResponse) =>
-      decorateRevisionWarning({
-        id: l.id,
-        title: l.title,
-        type: (l.type || l.lessonType || DEFAULT_LESSON_TYPE) as LessonSummaryDTO['type'],
-        orderIndex: l.orderIndex ?? 0,
-        durationSec: l.durationSec ?? 0,
-        contentText: l.contentText,
-        resourceUrl: l.resourceUrl,
-        videoUrl: l.videoUrl,
-        videoMediaId: l.videoMediaId,
-        passScore: l.passScore,
-        questions: Array.isArray(l.questions) ? l.questions : undefined,
-        assignmentCriteria: Array.isArray(l.assignmentCriteria) ? l.assignmentCriteria : undefined,
-        assignmentSubmissionType: l.assignmentSubmissionType,
-        assignmentMaxScore: l.assignmentMaxScore,
-        assignmentPassingScore: l.assignmentPassingScore,
-        isRequired: l.isRequired,
-      }, l)
-    ) as LessonSummaryDTO[],
-    quizzes: (m.quizzes || []).map((q: QuizApiResponse) =>
-      decorateRevisionWarning({
-        id: q.id,
-        title: q.title,
-        description: q.description ?? '',
-        passScore: q.passScore,
-        orderIndex: q.orderIndex ?? 0,
-        questionCount: q.questionCount ?? 0,
-      }, q)
-    ) as QuizSummaryDTO[],
-    assignments: (m.assignments || []).map((a: AssignmentApiResponse) =>
-      decorateRevisionWarning({
-        id: a.id,
-        title: a.title,
-        description: a.description ?? '',
-        submissionType: (a.submissionType ?? 'TEXT') as AssignmentSummaryDTO['submissionType'],
-        maxScore: a.maxScore ?? 0,
-        orderIndex: a.orderIndex ?? 0,
-        dueAt: a.dueAt,
-      }, a)
-    ) as AssignmentSummaryDTO[]
-  }));
+  return raw.map((m, index) => {
+    const moduleTitle = String(m.title ?? m.moduleTitle ?? m.name ?? '').trim() || `Chương ${index + 1}`;
+    const moduleDescription = String(m.description ?? m.moduleDescription ?? '').trim();
+
+    return {
+      id: Number(m.id ?? m.moduleId ?? 0),
+      title: moduleTitle,
+      description: moduleDescription,
+      orderIndex: m.orderIndex ?? index,
+      courseId: courseId,
+      createdAt: m.createdAt ?? '',
+      updatedAt: m.updatedAt ?? '',
+      lessons: (m.lessons || []).map((l: LessonApiResponse) =>
+        decorateRevisionWarning({
+          id: l.id,
+          title: l.title,
+          type: (l.type || l.lessonType || DEFAULT_LESSON_TYPE) as LessonSummaryDTO['type'],
+          orderIndex: l.orderIndex ?? 0,
+          durationSec: l.durationSec ?? 0,
+          contentText: l.contentText,
+          resourceUrl: l.resourceUrl,
+          videoUrl: l.videoUrl,
+          videoMediaId: l.videoMediaId,
+          passScore: l.passScore,
+          questions: Array.isArray(l.questions) ? l.questions : undefined,
+          assignmentCriteria: Array.isArray(l.assignmentCriteria) ? l.assignmentCriteria : undefined,
+          assignmentSubmissionType: l.assignmentSubmissionType,
+          assignmentMaxScore: l.assignmentMaxScore,
+          assignmentPassingScore: l.assignmentPassingScore,
+          isRequired: l.isRequired,
+        }, l)
+      ) as LessonSummaryDTO[],
+      quizzes: (m.quizzes || []).map((q: QuizApiResponse) =>
+        decorateRevisionWarning({
+          id: q.id,
+          title: q.title,
+          description: q.description ?? '',
+          passScore: q.passScore,
+          orderIndex: q.orderIndex ?? 0,
+          questionCount: q.questionCount ?? 0,
+        }, q)
+      ) as QuizSummaryDTO[],
+      assignments: (m.assignments || []).map((a: AssignmentApiResponse) =>
+        decorateRevisionWarning({
+          id: a.id,
+          title: a.title,
+          description: a.description ?? '',
+          submissionType: (a.submissionType ?? 'TEXT') as AssignmentSummaryDTO['submissionType'],
+          maxScore: a.maxScore ?? 0,
+          orderIndex: a.orderIndex ?? 0,
+          dueAt: a.dueAt,
+        }, a)
+      ) as AssignmentSummaryDTO[]
+    };
+  });
 };
 

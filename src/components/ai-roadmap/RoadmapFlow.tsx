@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, {
   Node,
   Edge,
@@ -9,12 +9,17 @@ import ReactFlow, {
   useEdgesState,
   ConnectionMode,
   MarkerType,
-  Position
+  Position,
+  ReactFlowInstance,
 } from 'reactflow';
 import ELK from 'elkjs/lib/elk.bundled.js'; // Import ELK
 import 'reactflow/dist/style.css';
 import { RoadmapNode as RoadmapNodeType, QuestProgress } from '../../types/Roadmap';
 import RoadmapQuestNode from './RoadmapQuestNode';
+import RoadmapNodeFocusPanel, {
+  type RoadmapNodeFocusPanelPlacement,
+  type RoadmapNodeFocusPanelProps,
+} from '../roadmap/RoadmapNodeFocusPanel';
 
 interface RoadmapFlowProps {
   roadmap: RoadmapNodeType[];
@@ -26,6 +31,7 @@ interface RoadmapFlowProps {
   studyTaskNodeIds?: Set<string>;
   selectedNodeId?: string | null;
   onNodeSelect?: (nodeId: string) => void;
+  nodeFocusPanel?: RoadmapNodeFocusPanelProps | null;
 }
 
 // Cấu hình ELK Layout
@@ -38,6 +44,9 @@ const elkOptions = {
   'elk.layered.noCollision.handling': 'true', // Tự động tránh đè lên nhau
 };
 
+const FLOW_NODE_WIDTH = 400;
+const FLOW_NODE_HEIGHT = 250;
+
 const RoadmapFlow = ({
   roadmap,
   progressMap,
@@ -47,7 +56,8 @@ const RoadmapFlow = ({
   eligibleNodeId,
   studyTaskNodeIds,
   selectedNodeId,
-  onNodeSelect
+  onNodeSelect,
+  nodeFocusPanel,
 }: RoadmapFlowProps) => {
   // Giữ nguyên Node cũ của bạn
   const nodeTypes = useMemo(() => ({
@@ -56,6 +66,18 @@ const RoadmapFlow = ({
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+  const [panelPlacement, setPanelPlacement] = useState<RoadmapNodeFocusPanelPlacement>('right');
+  const flowContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const selectedFlowNode = useMemo(() => {
+    if (!selectedNodeId) {
+      return null;
+    }
+    return nodes.find((node) => node.id === selectedNodeId) ?? null;
+  }, [nodes, selectedNodeId]);
+
+  const isFocusModeActive = Boolean(nodeFocusPanel?.isOpen && nodeFocusPanel?.node);
 
   // 1. Hàm tính toán Layout bằng ELK (Thay thế cho thuật toán BFS cũ)
   const getLayoutedElements = useCallback(async (rawNodes: Node[], rawEdges: Edge[]) => {
@@ -71,8 +93,8 @@ const RoadmapFlow = ({
       children: rawNodes.map((node) => ({
         id: node.id,
         // <--- Khai báo kích thước vùng chiếm dụng lớn hơn để tạo khoảng thở
-        width: 400,
-        height: 250,
+        width: FLOW_NODE_WIDTH,
+        height: FLOW_NODE_HEIGHT,
       })),
       edges: rawEdges.map((edge) => ({
         id: edge.id,
@@ -181,8 +203,84 @@ const RoadmapFlow = ({
     }
   }, [progressMap, onQuestComplete, onCreateStudyTask, creatingTaskNodeId, eligibleNodeId, setNodes, studyTaskNodeIds, selectedNodeId]);
 
+  useEffect(() => {
+    if (!nodeFocusPanel?.isOpen || !selectedFlowNode || !reactFlowInstance || !flowContainerRef.current) {
+      return;
+    }
+
+    const nodeWidth = typeof selectedFlowNode.width === 'number'
+      ? selectedFlowNode.width
+      : FLOW_NODE_WIDTH;
+    const nodeHeight = typeof selectedFlowNode.height === 'number'
+      ? selectedFlowNode.height
+      : FLOW_NODE_HEIGHT;
+    const nodeX = selectedFlowNode.positionAbsolute?.x ?? selectedFlowNode.position.x;
+    const nodeY = selectedFlowNode.positionAbsolute?.y ?? selectedFlowNode.position.y;
+    const nodeCenterX = nodeX + nodeWidth / 2;
+    const nodeCenterY = nodeY + nodeHeight / 2;
+
+    const containerWidth = flowContainerRef.current.clientWidth;
+    const isMobileLayout = containerWidth <= 900;
+
+    if (isMobileLayout) {
+      setPanelPlacement('right');
+      reactFlowInstance.setCenter(nodeCenterX, nodeCenterY, {
+        zoom: 0.72,
+        duration: 450,
+      });
+      return;
+    }
+
+    const graphMinX = Math.min(
+      ...nodes.map((node) => (node.positionAbsolute?.x ?? node.position.x))
+    );
+    const graphMaxX = Math.max(
+      ...nodes.map((node) => {
+        const nodeLeft = node.positionAbsolute?.x ?? node.position.x;
+        const width = typeof node.width === 'number' ? node.width : FLOW_NODE_WIDTH;
+        return nodeLeft + width;
+      })
+    );
+    const graphCenterX = (graphMinX + graphMaxX) / 2;
+    const nextPlacement: RoadmapNodeFocusPanelPlacement = nodeCenterX >= graphCenterX ? 'left' : 'right';
+    setPanelPlacement(nextPlacement);
+
+    const targetZoom = containerWidth >= 1480 ? 0.98 : 0.9;
+    const panelShiftPixels = Math.min(360, containerWidth * 0.24);
+    const shiftInFlowUnits = panelShiftPixels / targetZoom;
+    const focusCenterX = nextPlacement === 'right'
+      ? nodeCenterX + shiftInFlowUnits
+      : nodeCenterX - shiftInFlowUnits;
+
+    reactFlowInstance.setCenter(focusCenterX, nodeCenterY, {
+      zoom: targetZoom,
+      duration: 650,
+    });
+  }, [nodeFocusPanel?.isOpen, selectedFlowNode, reactFlowInstance, nodes]);
+
+  useEffect(() => {
+    const className = 'sv-roadmap-lock-scroll';
+    if (!isFocusModeActive) {
+      document.documentElement.classList.remove(className);
+      document.body.classList.remove(className);
+      return;
+    }
+
+    document.documentElement.classList.add(className);
+    document.body.classList.add(className);
+
+    return () => {
+      document.documentElement.classList.remove(className);
+      document.body.classList.remove(className);
+    };
+  }, [isFocusModeActive]);
+
   return (
-    <div className="sv-roadmap-flow" style={{ width: '100%', height: '100%' }}>
+    <div
+      ref={flowContainerRef}
+      className={`sv-roadmap-flow ${nodeFocusPanel?.isOpen ? 'sv-roadmap-flow--focus-active' : ''}`}
+      style={{ width: '100%', height: '100%' }}
+    >
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -198,9 +296,15 @@ const RoadmapFlow = ({
         fitView
         minZoom={0.1}
         maxZoom={1.5}
+        panOnDrag={!isFocusModeActive}
+        zoomOnScroll={!isFocusModeActive}
+        zoomOnPinch={!isFocusModeActive}
+        zoomOnDoubleClick={!isFocusModeActive}
+        preventScrolling
         // Thêm các props này để tối ưu performance khi drag
         onlyRenderVisibleElements={true}
         defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
+        onInit={setReactFlowInstance}
       >
         <Background color="#1e293b" gap={20} size={1} />
         <Controls className="sv-roadmap-flow__controls" />
@@ -213,6 +317,14 @@ const RoadmapFlow = ({
           }}
         />
       </ReactFlow>
+
+      {nodeFocusPanel?.isOpen && nodeFocusPanel.node && (
+        <RoadmapNodeFocusPanel
+          {...nodeFocusPanel}
+          variant="inline"
+          placement={panelPlacement}
+        />
+      )}
     </div>
   );
 };

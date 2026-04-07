@@ -152,7 +152,7 @@ const RoadmapPage = () => {
       </div>
 
       {/* Meowl Guide */}
-      <MeowlGuide currentPage="roadmap" />
+      <MeowlGuide currentPage="roadmap" autoOpenChat />
     </div>
   );
 };

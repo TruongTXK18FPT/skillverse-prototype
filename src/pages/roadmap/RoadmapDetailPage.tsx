@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import RoadmapDetailViewer from '../../components/roadmap/RoadmapDetailViewer';
 import RoadmapNodeStudyPlanModal from '../../components/roadmap/RoadmapNodeStudyPlanModal';
-import RoadmapNodeFocusPanel from '../../components/roadmap/RoadmapNodeFocusPanel';
+import type { RoadmapNodeFocusPanelProps } from '../../components/roadmap/RoadmapNodeFocusPanel';
 import aiRoadmapService from '../../services/aiRoadmapService';
 import { enrollUser } from '../../services/enrollmentService';
 import journeyService from '../../services/journeyService';
@@ -28,7 +28,6 @@ import { useToast } from '../../hooks/useToast';
 import { useAuth } from '../../context/AuthContext';
 import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
-import { type MeowlContextMode } from '../../services/meowlContextService';
 import Toast from '../../components/shared/Toast';
 import './RoadmapDetailPage.css';
 import '../../styles/RoadmapHUD.css';
@@ -40,7 +39,7 @@ import '../../styles/RoadmapHUD.css';
 const RoadmapDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, loading: authLoading } = useAuth();
   const { toast, isVisible, showError, showSuccess, showToast, hideToast } = useToast();
 
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
@@ -51,7 +50,6 @@ const RoadmapDetailPage = () => {
   const [studyTaskNodeIds, setStudyTaskNodeIds] = useState<Set<string>>(new Set());
   const [nodePlanSummaryMap, setNodePlanSummaryMap] = useState<Record<string, NodeStudyPlanSummary>>({});
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
-  const [enrollingCourseId, setEnrollingCourseId] = useState<number | null>(null);
   const [enrollmentRefreshKey, setEnrollmentRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -161,6 +159,11 @@ const RoadmapDetailPage = () => {
       return;
     }
 
+    // Wait for auth rehydration to finish before deciding if user is logged in.
+    if (authLoading) {
+      return;
+    }
+
     if (!isAuthenticated) {
       showError('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để xem lộ trình.');
       setShowLoginModal(true);
@@ -226,11 +229,19 @@ const RoadmapDetailPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [id, isAuthenticated, navigate, showError]);
+  }, [authLoading, id, isAuthenticated, showError]);
 
   useEffect(() => {
-    loadRoadmap();
-  }, [loadRoadmap]);
+    if (!authLoading) {
+      loadRoadmap();
+    }
+  }, [authLoading, loadRoadmap]);
+
+  useEffect(() => {
+    if (isAuthenticated && showLoginModal) {
+      setShowLoginModal(false);
+    }
+  }, [isAuthenticated, showLoginModal]);
 
   const handleQuestComplete = useCallback(async (questId: string, completed: boolean) => {
     if (!roadmap) return;
@@ -340,7 +351,6 @@ const RoadmapDetailPage = () => {
     }
 
     // Not enrolled — enroll first, then navigate
-    setEnrollingCourseId(courseId);
     try {
       await enrollUser(courseId, user.id);
       // Bump refresh key so useRoadmapCourseEnrollments re-fetches enrollments
@@ -353,8 +363,6 @@ const RoadmapDetailPage = () => {
       navigate(path);
     } catch (err) {
       showError('Không thể kích hoạt khóa học', (err as Error).message);
-    } finally {
-      setEnrollingCourseId(null);
     }
   }, [user?.id, enrollmentByCourseId, courseMap, navigate, showSuccess, showError]);
 
@@ -504,19 +512,6 @@ const RoadmapDetailPage = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!selectedNodeId) {
-      return;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [selectedNodeId]);
-
   // Auto-switch panel to the next non-completed node when current node is completed
   useEffect(() => {
     if (!eligibleNodeId || eligibleNodeId === selectedNodeId) return;
@@ -526,7 +521,7 @@ const RoadmapDetailPage = () => {
     }
   }, [eligibleNodeId, selectedNodeId, progressMap]);
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="roadmap-detail-page">
         <div className="roadmap-detail-page__loading">
@@ -534,6 +529,7 @@ const RoadmapDetailPage = () => {
         </div>
         <MeowlGuide
           currentPage="roadmap"
+          autoOpenChat
           panelMode="MODE_ROADMAP_OVERVIEW"
           panelTheme="cyan"
           panelAllowedModes={["MODE_ROADMAP_OVERVIEW", "MODE_COURSE_LEARNING", "MODE_GENERAL_FAQ"]}
@@ -569,7 +565,7 @@ const RoadmapDetailPage = () => {
             </button>
           </div>
         </div>
-        <MeowlGuide currentPage="roadmap" />
+        <MeowlGuide currentPage="roadmap" autoOpenChat />
       </div>
     );
   }
@@ -586,6 +582,7 @@ const RoadmapDetailPage = () => {
         </div>
         <MeowlGuide
           currentPage="roadmap"
+          autoOpenChat
           panelMode="MODE_ROADMAP_OVERVIEW"
           panelTheme="cyan"
           panelAllowedModes={["MODE_ROADMAP_OVERVIEW", "MODE_COURSE_LEARNING", "MODE_GENERAL_FAQ"]}
@@ -624,14 +621,37 @@ const RoadmapDetailPage = () => {
           studyTaskNodeIds={studyTaskNodeIds}
           selectedNodeId={selectedNodeId}
           onNodeSelect={handleNodeSelect}
+          nodeFocusPanel={{
+            isOpen: Boolean(selectedNode),
+            node: selectedNode,
+            progress: selectedNodeProgress,
+            learningContext: selectedNodeLearningContext,
+            primaryCourseId: selectedNodeLearningContext?.primaryCourse?.id,
+            isEnrolled:
+              selectedNodeLearningContext?.primaryCourse != null
+              && Boolean(enrollmentByCourseId[String(selectedNodeLearningContext.primaryCourse.id)]),
+            hasStudyTask: Boolean(selectedNodePlanSummary?.hasLinkedPlan),
+            linkedTaskId: linkedTaskIdForSelectedNode,
+            canCreateStudyTask: canCreateStudyPlanForSelectedNode,
+            isCreatingStudyTask: Boolean(
+              creatingTaskNodeId
+              && selectedNode
+              && creatingTaskNodeId === selectedNode.id
+            ),
+            onClose: handleCloseNodePanel,
+            onCreateStudyPlan: handleCreateStudyTask,
+            onOpenStudyPlanner: handleOpenStudyPlannerForNode,
+            onNavigateToCourse: handleNavigateToCourse,
+          } as RoadmapNodeFocusPanelProps}
         />
         <MeowlGuide
           currentPage="roadmap"
+          autoOpenChat
           panelMode="MODE_ROADMAP_OVERVIEW"
           panelTheme="cyan"
           panelAllowedModes={["MODE_ROADMAP_OVERVIEW", "MODE_COURSE_LEARNING", "MODE_GENERAL_FAQ"]}
           roadmapContext={selectedNode ? {
-            roadmapTitle: roadmap.title,
+            roadmapTitle: roadmap?.metadata?.title || roadmap?.overview?.purpose || 'Lộ trình học tập',
             nodeTitle: selectedNode.title,
             nodeDescription: selectedNode.description || undefined,
             learningObjectives: selectedNode.learningObjectives?.filter(Boolean) || [],
@@ -639,23 +659,6 @@ const RoadmapDetailPage = () => {
           } : undefined}
         />
       </div>
-
-      <RoadmapNodeFocusPanel
-        isOpen={Boolean(selectedNode)}
-        node={selectedNode}
-        progress={selectedNodeProgress}
-        learningContext={selectedNodeLearningContext}
-        primaryCourseId={selectedNodeLearningContext?.primaryCourse?.id}
-        isEnrolled={selectedNodeLearningContext?.primaryCourse != null && Boolean(enrollmentByCourseId[String(selectedNodeLearningContext.primaryCourse.id)])}
-        hasStudyTask={Boolean(selectedNodePlanSummary?.hasLinkedPlan)}
-        linkedTaskId={linkedTaskIdForSelectedNode}
-        canCreateStudyTask={canCreateStudyPlanForSelectedNode}
-        isCreatingStudyTask={Boolean(creatingTaskNodeId && selectedNode && creatingTaskNodeId === selectedNode.id)}
-        onClose={handleCloseNodePanel}
-        onCreateStudyPlan={handleCreateStudyTask}
-        onOpenStudyPlanner={handleOpenStudyPlannerForNode}
-        onNavigateToCourse={handleNavigateToCourse}
-      />
 
       <RoadmapNodeStudyPlanModal
         isOpen={isPlanModalOpen}

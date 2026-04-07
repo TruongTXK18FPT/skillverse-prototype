@@ -60,6 +60,10 @@ interface CourseContextData {
 interface MeowlGuideProps {
   currentPage?: string;
   languageOverride?: "en" | "vi";
+  /** Hide corner mascot trigger while keeping chat/modal logic available */
+  hideMascot?: boolean;
+  /** Open chat directly when mascot is clicked (skip 4-button guide options) */
+  autoOpenChat?: boolean;
   /** Context mode for the chat panel opened by MeowlGuide */
   panelMode?: MeowlContextMode;
   /** Theme for the MeowlChatV2 panel content */
@@ -79,6 +83,8 @@ const STORAGE_KEYS = {
 const MeowlGuide: React.FC<MeowlGuideProps> = ({
   currentPage = "home",
   languageOverride,
+  hideMascot = true,
+  autoOpenChat = false,
   panelMode: initialPanelMode = "MODE_GENERAL_FAQ",
   panelTheme = "cyan",
   panelAllowedModes: initialAllowedModes,
@@ -313,6 +319,16 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
     }
 
     recordInteraction(); // Record user interaction when clicking Meowl
+
+    if (autoOpenChat) {
+      setIsOpen(false);
+      setCurrentStep(0);
+      setShowOptions(false);
+      setVisibleOptions([false, false, false]);
+      setIsChatOpen(true);
+      return;
+    }
+
     setIsOpen(true);
     setCurrentStep(0);
   };
@@ -403,57 +419,58 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
         </div>
       )}
 
-      {/* Mascot Button */}
-      <div
-        className={`meowl-mascot ${isOpen ? "mascot-active" : ""} ${meowlState !== "active" ? `meowl-state--${meowlState}` : ""} ${meowlState === "lose-streak" ? "meowl-frozen" : ""} ${animPhase !== "none" ? `meowl-anim-${animPhase}` : ""}`}
-        onClick={handleMascotClick}
-      >
-        {/* Mute/Unmute Button (Hidden when lose-streak) */}
-        {meowlState !== "lose-streak" && (
-          <div
-            className="meowl-mute-btn"
-            onClick={toggleBubbleMute}
-            title={
-              isBubbleDisabled
-                ? language === "en"
-                  ? "Enable Notifications"
-                  : "Bật thông báo"
-                : language === "en"
-                  ? "Mute Notifications"
-                  : "Tắt thông báo"
-            }
-          >
-            {isBubbleDisabled ? <BellOff size={18} /> : <Bell size={18} />}
-          </div>
-        )}
+      {!hideMascot && (
+        <div
+          className={`meowl-mascot ${isOpen ? "mascot-active" : ""} ${meowlState !== "active" ? `meowl-state--${meowlState}` : ""} ${meowlState === "lose-streak" ? "meowl-frozen" : ""} ${animPhase !== "none" ? `meowl-anim-${animPhase}` : ""}`}
+          onClick={handleMascotClick}
+        >
+          {/* Mute/Unmute Button (Hidden when lose-streak) */}
+          {meowlState !== "lose-streak" && (
+            <div
+              className="meowl-mute-btn"
+              onClick={toggleBubbleMute}
+              title={
+                isBubbleDisabled
+                  ? language === "en"
+                    ? "Enable Notifications"
+                    : "Bật thông báo"
+                  : language === "en"
+                    ? "Mute Notifications"
+                    : "Tắt thông báo"
+              }
+            >
+              {isBubbleDisabled ? <BellOff size={18} /> : <Bell size={18} />}
+            </div>
+          )}
 
-        {/* Check-in reminder indicator (Moved to bell position when lose-streak) */}
-        {isAuthenticated && !hasCheckedInToday && (
-          <div
-            className={`meowl-checkin-reminder ${meowlState === "lose-streak" ? "reminder-replacement" : ""}`}
-            onClick={handleMascotClick}
-            title={
-              language === "en"
-                ? "You haven't checked in today!"
-                : "Bạn chưa điểm danh hôm nay!"
-            }
-          >
-            <span className="checkin-reminder-text">!</span>
-          </div>
-        )}
+          {/* Check-in reminder indicator (Moved to bell position when lose-streak) */}
+          {isAuthenticated && !hasCheckedInToday && (
+            <div
+              className={`meowl-checkin-reminder ${meowlState === "lose-streak" ? "reminder-replacement" : ""}`}
+              onClick={handleMascotClick}
+              title={
+                language === "en"
+                  ? "You haven't checked in today!"
+                  : "Bạn chưa điểm danh hôm nay!"
+              }
+            >
+              <span className="checkin-reminder-text">!</span>
+            </div>
+          )}
 
-        <img src={displayImage} alt="Meowl Guide" className="mascot-image" />
-        <div className="mascot-pulse"></div>
+          <img src={displayImage} alt="Meowl Guide" className="mascot-image" />
+          <div className="mascot-pulse"></div>
 
-        {/* Blink efekt particles */}
-        {animPhase === "blink" && (
-          <div className="meowl-blink-particles">
-            <div className="particle">✨</div>
-            <div className="particle">💎</div>
-            <div className="particle">⭐</div>
-          </div>
-        )}
-      </div>
+          {/* Blink efekt particles */}
+          {animPhase === "blink" && (
+            <div className="meowl-blink-particles">
+              <div className="particle">✨</div>
+              <div className="particle">💎</div>
+              <div className="particle">⭐</div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Guide Dialog */}
       {isOpen && (

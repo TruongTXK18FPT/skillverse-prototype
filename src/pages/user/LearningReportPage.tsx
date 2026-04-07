@@ -412,77 +412,113 @@ const LearningReportPage: React.FC = () => {
       return;
     }
 
-    const parentItems: TocParentItem[] = [];
-    const headingElementMap: Record<string, HTMLElement> = {};
-    const headingParentMap: Record<string, string> = {};
+    if (isLoading || isGenerating) {
+      return;
+    }
 
-    detailSections.forEach(({ key }) => {
-      const sectionNode = sectionRefs.current[key];
-      if (!sectionNode) return;
+    let isCancelled = false;
+    let retryFrameId: number | null = null;
 
-      const config = SECTION_CONFIG.find((section) => section.key === key);
-      if (!config) return;
+    const buildTocFromDom = (): boolean => {
+      const parentItems: TocParentItem[] = [];
+      const headingElementMap: Record<string, HTMLElement> = {};
+      const headingParentMap: Record<string, string> = {};
 
-      const parentId = `lr-doc-${key}`;
-      const parentHeading = sectionNode.querySelector(
-        ".lr-page__doc-h2",
-      ) as HTMLHeadingElement | null;
+      detailSections.forEach(({ key }) => {
+        const sectionNode = sectionRefs.current[key];
+        if (!sectionNode) return;
 
-      if (parentHeading) {
-        parentHeading.id = parentId;
-        headingElementMap[parentId] = parentHeading;
-        headingParentMap[parentId] = key;
-      }
+        const config = SECTION_CONFIG.find((section) => section.key === key);
+        if (!config) return;
 
-      const childHeadings = Array.from(
-        sectionNode.querySelectorAll(
-          ".lr-page__content-section-body h2.lr-markdown__h2, .lr-page__content-section-body h3.lr-markdown__h3",
-        ),
-      ) as HTMLHeadingElement[];
+        const parentId = `lr-doc-${key}`;
+        const parentHeading = sectionNode.querySelector(
+          ".lr-page__doc-h2",
+        ) as HTMLHeadingElement | null;
 
-      const slugCounter: Record<string, number> = {};
-      const children: TocChildItem[] = childHeadings.map((headingNode) => {
-        const title = headingNode.textContent?.trim() || "Mục con";
-        const level = headingNode.tagName.toLowerCase() === "h2" ? 2 : 3;
-        const slug = slugifyHeading(title) || "section";
-        const nextCount = (slugCounter[slug] ?? 0) + 1;
-        slugCounter[slug] = nextCount;
-        const childId = `${parentId}--${slug}-${nextCount}`;
+        if (parentHeading) {
+          parentHeading.id = parentId;
+          headingElementMap[parentId] = parentHeading;
+          headingParentMap[parentId] = key;
+        }
 
-        headingNode.id = childId;
-        headingNode.dataset.parentHeading = parentId;
-        headingElementMap[childId] = headingNode;
-        headingParentMap[childId] = key;
+        const childHeadings = Array.from(
+          sectionNode.querySelectorAll(
+            ".lr-page__content-section-body h2.lr-markdown__h2, .lr-page__content-section-body h3.lr-markdown__h3",
+          ),
+        ) as HTMLHeadingElement[];
 
-        return { id: childId, title, level };
+        const slugCounter: Record<string, number> = {};
+        const children: TocChildItem[] = childHeadings.map((headingNode) => {
+          const title = headingNode.textContent?.trim() || "Mục con";
+          const level = headingNode.tagName.toLowerCase() === "h2" ? 2 : 3;
+          const slug = slugifyHeading(title) || "section";
+          const nextCount = (slugCounter[slug] ?? 0) + 1;
+          slugCounter[slug] = nextCount;
+          const childId = `${parentId}--${slug}-${nextCount}`;
+
+          headingNode.id = childId;
+          headingNode.dataset.parentHeading = parentId;
+          headingElementMap[childId] = headingNode;
+          headingParentMap[childId] = key;
+
+          return { id: childId, title, level };
+        });
+
+        parentItems.push({
+          id: parentId,
+          key,
+          title: config.label,
+          children,
+        });
       });
 
-      parentItems.push({
-        id: parentId,
-        key,
-        title: config.label,
-        children,
+      if (parentItems.length === 0) {
+        return false;
+      }
+
+      headingElementMapRef.current = headingElementMap;
+      headingParentMapRef.current = headingParentMap;
+      setTocItems(parentItems);
+
+      const firstDetailKey = detailSections[0]?.key;
+      const firstDetailHeadingId = firstDetailKey
+        ? `lr-doc-${firstDetailKey}`
+        : "lr-doc-overview";
+
+      setActiveHeadingId((previous) =>
+        headingElementMap[previous] ? previous : firstDetailHeadingId,
+      );
+      setActiveSection((previous) =>
+        previous && sectionRefs.current[previous]
+          ? previous
+          : firstDetailKey || "overview",
+      );
+
+      return true;
+    };
+
+    const frameId = window.requestAnimationFrame(() => {
+      if (isCancelled) return;
+
+      const builtOnFirstFrame = buildTocFromDom();
+      if (builtOnFirstFrame || isCancelled) return;
+
+      // Retry once on the next frame in case markdown sections mount one tick later.
+      retryFrameId = window.requestAnimationFrame(() => {
+        if (isCancelled) return;
+        buildTocFromDom();
       });
     });
 
-    headingElementMapRef.current = headingElementMap;
-    headingParentMapRef.current = headingParentMap;
-    setTocItems(parentItems);
-
-    const firstDetailKey = detailSections[0]?.key;
-    const firstDetailHeadingId = firstDetailKey
-      ? `lr-doc-${firstDetailKey}`
-      : "lr-doc-overview";
-
-    setActiveHeadingId((previous) =>
-      headingElementMap[previous] ? previous : firstDetailHeadingId,
-    );
-    setActiveSection((previous) =>
-      previous && sectionRefs.current[previous]
-        ? previous
-        : firstDetailKey || "overview",
-    );
-  }, [report, detailSections]);
+    return () => {
+      isCancelled = true;
+      window.cancelAnimationFrame(frameId);
+      if (retryFrameId !== null) {
+        window.cancelAnimationFrame(retryFrameId);
+      }
+    };
+  }, [report, detailSections, isGenerating, isLoading]);
 
   useEffect(() => {
     if (tocItems.length === 0) return;

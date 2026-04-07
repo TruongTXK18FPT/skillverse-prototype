@@ -409,10 +409,10 @@ const CourseLearningPage = () => {
       : null;
   const activeStatusKey = activeCurriculumItem
     ? buildStatusKey(
-        activeCurriculumItem.moduleId,
-        activeCurriculumItem.itemId,
-        activeCurriculumItem.itemType
-      )
+      activeCurriculumItem.moduleId,
+      activeCurriculumItem.itemId,
+      activeCurriculumItem.itemType
+    )
     : null;
   const isActiveItemCompleted = activeStatusKey
     ? itemStatuses[activeStatusKey] === "completed"
@@ -598,20 +598,20 @@ const CourseLearningPage = () => {
       const curriculum = buildCurriculumItems(normalizedModules);
       const preferred = options?.preferredItem
         ? curriculum.find(
-            (item) =>
-              item.moduleId === options.preferredItem?.moduleId &&
-              item.itemId === options.preferredItem?.itemId &&
-              item.itemType === options.preferredItem?.itemType
-          ) ?? null
+          (item) =>
+            item.moduleId === options.preferredItem?.moduleId &&
+            item.itemId === options.preferredItem?.itemId &&
+            item.itemType === options.preferredItem?.itemType
+        ) ?? null
         : null;
       const resumeItem = options?.fallbackToResume
         ? (locationState?.resumeItem
           ? curriculum.find(
-              (item) =>
-                item.moduleId === locationState.resumeItem?.moduleId &&
-                item.itemId === locationState.resumeItem?.lessonId &&
-                item.itemType === locationState.resumeItem?.itemType
-            ) ?? null
+            (item) =>
+              item.moduleId === locationState.resumeItem?.moduleId &&
+              item.itemId === locationState.resumeItem?.lessonId &&
+              item.itemType === locationState.resumeItem?.itemType
+          ) ?? null
           : null)
         : null;
       const nextItem = preferred ?? resumeItem ?? curriculum[0] ?? null;
@@ -647,7 +647,7 @@ const CourseLearningPage = () => {
     setLoading(true);
     getCourse(courseId)
       .then((dto) => setCourse(dto))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
 
     // Load modules + lessons for sidebar content
@@ -666,10 +666,10 @@ const CourseLearningPage = () => {
       origin: locationState?.origin,
       resumeItem: item
         ? {
-            moduleId: item.moduleId,
-            lessonId: item.itemId,
-            itemType: item.itemType,
-          }
+          moduleId: item.moduleId,
+          lessonId: item.itemId,
+          itemType: item.itemType,
+        }
         : undefined,
     }),
     [activeCurriculumItem, course?.title, courseId, isPreviewMode, locationState?.origin]
@@ -796,11 +796,11 @@ const CourseLearningPage = () => {
     () =>
       activeCurriculumItem
         ? curriculumItems.findIndex(
-            (item) =>
-              item.moduleId === activeCurriculumItem.moduleId &&
-              item.itemId === activeCurriculumItem.itemId &&
-              item.itemType === activeCurriculumItem.itemType
-          )
+          (item) =>
+            item.moduleId === activeCurriculumItem.moduleId &&
+            item.itemId === activeCurriculumItem.itemId &&
+            item.itemType === activeCurriculumItem.itemType
+        )
         : -1,
     [activeCurriculumItem, curriculumItems]
   );
@@ -891,10 +891,10 @@ const CourseLearningPage = () => {
       await reloadModulesWithLearningState({
         preferredItem: activeCurriculumItem
           ? {
-              moduleId: activeCurriculumItem.moduleId,
-              itemId: activeCurriculumItem.itemId,
-              itemType: activeCurriculumItem.itemType,
-            }
+            moduleId: activeCurriculumItem.moduleId,
+            itemId: activeCurriculumItem.itemId,
+            itemType: activeCurriculumItem.itemType,
+          }
           : null,
         fallbackToResume: false,
       });
@@ -1111,9 +1111,7 @@ const CourseLearningPage = () => {
     };
   }, [activeItemType, activeLesson.moduleId, isActiveItemCompleted, isPreviewMode, requiresManualUpgradeGate]);
 
-  const meowlPanelMode = useMemo<MeowlContextMode>(() => {
-    return "MODE_COURSE_LEARNING";
-  }, []);
+  const meowlPanelMode: MeowlContextMode = "MODE_COURSE_LEARNING";
 
   const meowlPanelSummary = useMemo(() => {
     const summary: string[] = [];
@@ -1168,7 +1166,7 @@ const CourseLearningPage = () => {
         courseTitle="ĐANG TẢI..."
         progress={{ percent: 0 }}
         isSidebarOpen={false}
-        onToggleSidebar={() => {}}
+        onToggleSidebar={() => { }}
         onBack={handleExitCourseLearning}
       >
         <main className="learning-hud-main-content">
@@ -1186,7 +1184,7 @@ const CourseLearningPage = () => {
         courseTitle="LỖI"
         progress={{ percent: 0 }}
         isSidebarOpen={false}
-        onToggleSidebar={() => {}}
+        onToggleSidebar={() => { }}
         onBack={handleExitCourseLearning}
       >
         <main className="learning-hud-main-content">
@@ -1207,7 +1205,7 @@ const CourseLearningPage = () => {
         courseTitle={course.title}
         progress={{ percent: 0 }}
         isSidebarOpen={false}
-        onToggleSidebar={() => {}}
+        onToggleSidebar={() => { }}
         onBack={handleExitCourseLearning}
       >
         <main className="learning-hud-main-content">
@@ -1371,363 +1369,360 @@ const CourseLearningPage = () => {
               )}
 
               <div className="learning-hud-reading-content">
-            {loadingLessonDetail ? (
-              <div className="learning-hud-loading">ĐANG TẢI DÒNG DỮ LIỆU</div>
-            ) : activeItemType === 'assignment' && activeAssignmentId ? (
-              <div className="lhud-assignment-brief-shell">
-                <section className="lhud-assignment-brief">
-                  <div className="lhud-assignment-brief-header">
-                    <div>
-                      <div className="lhud-assignment-brief-breadcrumb">
-                        {activeCurriculumItem?.moduleTitle || "Chương"} › Bài tập thực hành
-                      </div>
-                      <h2 className="lhud-assignment-brief-title">
-                        {activeAssignmentSummary?.title || activeLessonTitle}
-                      </h2>
-                    </div>
-                    <span className="lhud-assignment-brief-badge">
-                      <ClipboardList size={16} />
-                      Bài tập
-                    </span>
-                  </div>
-
-                  <p className="lhud-assignment-brief-description">
-                    {summarizeHtml(activeAssignmentSummary?.description)}
-                  </p>
-
-                  <div className="lhud-assignment-brief-grid">
-                    <div className="lhud-assignment-brief-stat">
-                      <Gauge size={16} />
-                      <div>
-                        <span>Điểm tối đa</span>
-                        <strong>{activeAssignmentSummary?.maxScore ?? 0} điểm</strong>
-                      </div>
-                    </div>
-                    <div className="lhud-assignment-brief-stat">
-                      <LinkIcon size={16} />
-                      <div>
-                        <span>Hình thức nộp</span>
-                        <strong>{activeAssignmentSummary?.submissionType ?? "Đang cập nhật"}</strong>
-                      </div>
-                    </div>
-                    {hasAssignmentDueDate(activeAssignmentSummary?.dueAt) && (
-                      <div className="lhud-assignment-brief-stat">
-                        <Calendar size={16} />
+                {loadingLessonDetail ? (
+                  <div className="learning-hud-loading">ĐANG TẢI DÒNG DỮ LIỆU</div>
+                ) : activeItemType === 'assignment' && activeAssignmentId ? (
+                  <div className="lhud-assignment-brief-shell">
+                    <section className="lhud-assignment-brief">
+                      <div className="lhud-assignment-brief-header">
                         <div>
-                          <span>Hạn nộp</span>
-                          <strong>{formatShortDate(activeAssignmentSummary?.dueAt)}</strong>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="lhud-assignment-brief-actions">
-                    {!isPreviewMode && (
-                      <button
-                        type="button"
-                        className="learning-hud-secondary-btn"
-                        onClick={handleOpenAssignmentPage}
-                        disabled={requiresManualUpgradeGate}
-                      >
-                        <ExternalLink size={16} />
-                        Mở trang bài tập
-                      </button>
-                    )}
-                  </div>
-                </section>
-              </div>
-            ) : activeItemType === 'quiz' && activeQuizDetail ? (
-              <>
-                {activeQuizDetail.hasPassed && !activeQuizDetail.canRetry ? (
-                  /* SHOW RESULT IF ALREADY PASSED AND CANNOT RETRY */
-                  <div className="lhud-quiz-complete-card">
-                    <h3 className="lhud-quiz-complete-title">
-                      Bạn đã hoàn thành bài kiểm tra
-                    </h3>
-                    <div className="lhud-quiz-complete-score">
-                      <p className="lhud-quiz-complete-score-main">
-                        <strong>ĐIỂM SỐ:</strong> {activeQuizDetail.bestAttempt?.score}%
-                      </p>
-                      <p className="lhud-quiz-complete-score-sub">
-                        ĐIỂM ĐẠT: {activeQuizDetail.passScore}%
-                      </p>
-                    </div>
-                    <p className="lhud-quiz-complete-note">
-                      Bạn đã đạt yêu cầu. Không cần làm lại bài kiểm tra.
-                    </p>
-                    {!isPreviewMode && (
-                      <button
-                        onClick={() => handleOpenQuizAttemptPage('result')}
-                        className="learning-hud-nav-btn lhud-quiz-complete-action"
-                        disabled={requiresManualUpgradeGate}
-                      >
-                        Xem kết quả
-                      </button>
-                    )}
-                  </div>
-                ) : (
-                  /* QUIZ PREVIEW - Navigate to quiz page */
-                  <div className="lhud-quiz-card">
-                    {/* Quiz Header */}
-                    <div className="lhud-quiz-card-header">
-                      {/* Context Breadcrumb */}
-                      <div className="lhud-quiz-card-breadcrumb">
-                        {(modulesWithContent.find(m => m.id === activeLesson.moduleId) || sortedModules.find(m => m.id === activeLesson.moduleId))?.title || 'Chương'} › Bài đánh giá kiến thức
-                      </div>
-
-                      <h2 className="lhud-quiz-card-title">
-                        {activeQuizDetail.title}
-                      </h2>
-                      <p className="lhud-quiz-card-desc">
-                        {activeQuizDetail.description || 'Đánh giá mức độ hiểu bài trước khi tiếp tục học'}
-                      </p>
-                      
-                      {/* Quiz Objective */}
-                      <p className="lhud-quiz-card-objective">
-                        Hoàn thành bài kiểm tra để xác nhận bạn đã hiểu các khái niệm cốt lõi và tiếp tục sang nội dung tiếp theo.
-                      </p>
-                    </div>
-
-
-                    <div className={quizStatsClass}>
-                      <div className={`lhud-quiz-stat ${(activeQuizDetail.questions?.length || 0) === 0 ? 'is-empty' : ''}`}>
-                        <div className="lhud-quiz-stat-value">
-                          {activeQuizDetail.questions?.length || 0}
-                        </div>
-                        <p className="lhud-quiz-stat-label">
-                          {(activeQuizDetail.questions?.length || 0) === 0 ? 'Chưa có câu hỏi' : 'Câu hỏi'}
-                        </p>
-                        {(activeQuizDetail.questions?.length || 0) === 0 && (
-                          <div className="lhud-quiz-stat-sub is-empty">
-                            Đang cập nhật
+                          <div className="lhud-assignment-brief-breadcrumb">
+                            {activeCurriculumItem?.moduleTitle || "Chương"} › Bài tập thực hành
                           </div>
-                        )}
+                          <h2 className="lhud-assignment-brief-title">
+                            {activeAssignmentSummary?.title || activeLessonTitle}
+                          </h2>
+                        </div>
+                        <span className="lhud-assignment-brief-badge">
+                          <ClipboardList size={16} />
+                          Bài tập
+                        </span>
                       </div>
 
-                      <div className="lhud-quiz-stat">
-                        <div className="lhud-quiz-stat-value">
-                          {activeQuizDetail.passScore}%
-                        </div>
-                        <p className="lhud-quiz-stat-label">
-                          Điểm đạt
-                        </p>
-                        <div className="lhud-quiz-stat-sub">
-                          Cần đạt tối thiểu {activeQuizDetail.passScore}%
-                        </div>
-                      </div>
+                      <p className="lhud-assignment-brief-description">
+                        {summarizeHtml(activeAssignmentSummary?.description)}
+                      </p>
 
-                      <div
-                        className={`lhud-quiz-stat is-best ${
-                          !quizHasAttemptHistory
-                            ? 'is-pending'
-                            : quizBestScorePassed
-                            ? 'is-pass'
-                            : 'is-fail'
-                        }`}
-                      >
-                        <div className="lhud-quiz-stat-value">
-                          {typeof quizBestScore === 'number' ? `${quizBestScore}%` : '--'}
-                        </div>
-                        <p className="lhud-quiz-stat-label">
-                          Điểm cao nhất
-                        </p>
-                        <div className="lhud-quiz-stat-sub">
-                          {!quizHasAttemptHistory
-                            ? 'Chưa có lần làm'
-                            : quizBestScorePassed
-                            ? '✓ Đã đạt yêu cầu'
-                            : '✗ Chưa đạt yêu cầu'}
-                        </div>
-                      </div>
-
-                      <div
-                        className={`lhud-quiz-stat is-attempts ${
-                          quizAttemptsCount >= activeQuizDetail.maxAttempts
-                            ? 'is-maxed'
-                            : !quizHasAttemptHistory
-                            ? 'is-pending'
-                            : ''
-                        }`}
-                      >
-                        <div className="lhud-quiz-stat-value">
-                          {quizAttemptsCount}/{activeQuizDetail.maxAttempts}
-                        </div>
-                        <p className="lhud-quiz-stat-label">
-                          {quizAttemptsCount >= activeQuizDetail.maxAttempts ? 'Hết lượt' : 'Số lần thử'}
-                        </p>
-                        {quizAttemptsCount >= activeQuizDetail.maxAttempts ? (
-                          <div className="lhud-quiz-stat-sub is-warning">
-                            Chờ 8h để làm lại
+                      <div className="lhud-assignment-brief-grid">
+                        <div className="lhud-assignment-brief-stat">
+                          <Gauge size={16} />
+                          <div>
+                            <span>Điểm tối đa</span>
+                            <strong>{activeAssignmentSummary?.maxScore ?? 0} điểm</strong>
                           </div>
-                        ) : (
-                          <div className="lhud-quiz-stat-sub">
-                            {!quizHasAttemptHistory
-                              ? `Tối đa ${activeQuizDetail.maxAttempts} lượt`
-                              : `Còn lại ${Math.max(activeQuizDetail.maxAttempts - quizAttemptsCount, 0)} lượt`}
+                        </div>
+                        <div className="lhud-assignment-brief-stat">
+                          <LinkIcon size={16} />
+                          <div>
+                            <span>Hình thức nộp</span>
+                            <strong>{activeAssignmentSummary?.submissionType ?? "Đang cập nhật"}</strong>
                           </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Action Button */}
-                    <div className="lhud-quiz-action">
-                      {!isPreviewMode && quizHasAttemptHistory && !activeQuizDetail.hasPassed && activeQuizDetail.latestAttempt && (
-                        <button
-                          type="button"
-                          className="learning-hud-secondary-btn lhud-quiz-review-btn"
-                          onClick={() => handleOpenQuizAttemptPage('result')}
-                        >
-                          Xem lại kết quả gần nhất
-                        </button>
-                      )}
-                      <button
-                        onClick={() => {
-                          if (!isPreviewMode) {
-                            handleOpenQuizAttemptPage('start');
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                          }
-                        }}
-                        className={`lhud-quiz-action-btn ${
-                          quizAttemptsCount >= activeQuizDetail.maxAttempts
-                            ? 'is-locked'
-                            : (activeQuizDetail.questions?.length || 0) === 0
-                            ? 'is-disabled'
-                            : quizHasAttemptHistory
-                            ? 'is-retry'
-                            : 'is-start'
-                        } ${isPreviewMode ? 'is-preview' : ''}`}
-                        disabled={
-                          isPreviewMode ||
-                          requiresManualUpgradeGate ||
-                          quizAttemptsCount >= activeQuizDetail.maxAttempts ||
-                          (activeQuizDetail.questions?.length || 0) === 0
-                        }
-                      >
-                        {isPreviewMode
-                          ? 'Chế độ xem trước'
-                          : requiresManualUpgradeGate
-                          ? 'Cần nâng cấp revision để học tiếp'
-                          : quizAttemptsCount >= activeQuizDetail.maxAttempts
-                          ? 'Hết lượt làm bài'
-                          : (activeQuizDetail.questions?.length || 0) === 0
-                          ? 'Bài kiểm tra chưa có câu hỏi'
-                          : quizHasAttemptHistory
-                          ? `Làm lại (${quizAttemptsCount}/${activeQuizDetail.maxAttempts})`
-                          : 'Bắt đầu làm bài'}
-                      </button>
-
-                      {/* Thông báo khi hết lượt với countdown timer */}
-                      {quizAttemptsCount >= activeQuizDetail.maxAttempts && (
-                        <div className="lhud-quiz-lock-banner">
-                          <p className="lhud-quiz-lock-title">
-                            Đã sử dụng hết {activeQuizDetail.maxAttempts} lượt làm bài
-                          </p>
-                          {retryCountdown > 0 ? (
-                            <div className="lhud-quiz-lock-body">
-                              <p className="lhud-quiz-lock-text">
-                                Bạn có thể làm lại sau:
-                              </p>
-                              <div className="lhud-quiz-countdown">
-                                <div className="lhud-quiz-countdown-timer">
-                                  {formatCountdown(retryCountdown)}
-                                </div>
-                              </div>
-                              <p className="lhud-quiz-lock-hint">
-                                Hãy xem lại bài học trong thời gian chờ để chuẩn bị tốt hơn.
-                              </p>
+                        </div>
+                        {hasAssignmentDueDate(activeAssignmentSummary?.dueAt) && (
+                          <div className="lhud-assignment-brief-stat">
+                            <Calendar size={16} />
+                            <div>
+                              <span>Hạn nộp</span>
+                              <strong>{formatShortDate(activeAssignmentSummary?.dueAt)}</strong>
                             </div>
-                          ) : (
-                            <p className="lhud-quiz-lock-text">
-                              Bạn có thể làm lại sau 8 giờ kể từ lần làm đầu tiên. Hãy xem lại bài học trong thời gian chờ.
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="lhud-assignment-brief-actions">
+                        {!isPreviewMode && (
+                          <button
+                            type="button"
+                            className="learning-hud-secondary-btn"
+                            onClick={handleOpenAssignmentPage}
+                            disabled={requiresManualUpgradeGate}
+                          >
+                            <ExternalLink size={16} />
+                            Mở trang bài tập
+                          </button>
+                        )}
+                      </div>
+                    </section>
+                  </div>
+                ) : activeItemType === 'quiz' && activeQuizDetail ? (
+                  <>
+                    {activeQuizDetail.hasPassed && !activeQuizDetail.canRetry ? (
+                      /* SHOW RESULT IF ALREADY PASSED AND CANNOT RETRY */
+                      <div className="lhud-quiz-complete-card">
+                        <h3 className="lhud-quiz-complete-title">
+                          Bạn đã hoàn thành bài kiểm tra
+                        </h3>
+                        <div className="lhud-quiz-complete-score">
+                          <p className="lhud-quiz-complete-score-main">
+                            <strong>ĐIỂM SỐ:</strong> {activeQuizDetail.bestAttempt?.score}%
+                          </p>
+                          <p className="lhud-quiz-complete-score-sub">
+                            ĐIỂM CẦN ĐẠT: {activeQuizDetail.passScore}%
+                          </p>
+                        </div>
+                        <p className="lhud-quiz-complete-note">
+                          Bạn đã đạt yêu cầu. Không cần làm lại bài kiểm tra.
+                        </p>
+                        {!isPreviewMode && (
+                          <button
+                            onClick={() => handleOpenQuizAttemptPage('result')}
+                            className="learning-hud-nav-btn lhud-quiz-complete-action"
+                            disabled={requiresManualUpgradeGate}
+                          >
+                            Xem kết quả
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      /* QUIZ PREVIEW - Navigate to quiz page */
+                      <div className="lhud-quiz-card">
+                        {/* Quiz Header */}
+                        <div className="lhud-quiz-card-header">
+                          {/* Context Breadcrumb */}
+                          <div className="lhud-quiz-card-breadcrumb">
+                            {(modulesWithContent.find(m => m.id === activeLesson.moduleId) || sortedModules.find(m => m.id === activeLesson.moduleId))?.title || 'Chương'} › Bài đánh giá kiến thức
+                          </div>
+
+                          <h2 className="lhud-quiz-card-title">
+                            {activeQuizDetail.title}
+                          </h2>
+                          <p className="lhud-quiz-card-desc">
+                            {activeQuizDetail.description || 'Đánh giá mức độ hiểu bài trước khi tiếp tục học'}
+                          </p>
+
+                          {/* Quiz Objective */}
+                          <p className="lhud-quiz-card-objective">
+                            Hoàn thành bài kiểm tra để xác nhận bạn đã hiểu các khái niệm cốt lõi và tiếp tục sang nội dung tiếp theo.
+                          </p>
+                        </div>
+
+
+                        <div className={quizStatsClass}>
+                          <div className={`lhud-quiz-stat ${(activeQuizDetail.questions?.length || 0) === 0 ? 'is-empty' : ''}`}>
+                            <div className="lhud-quiz-stat-value">
+                              {activeQuizDetail.questions?.length || 0}
+                            </div>
+                            <p className="lhud-quiz-stat-label">
+                              {(activeQuizDetail.questions?.length || 0) === 0 ? 'Chưa có câu hỏi' : 'Câu hỏi'}
                             </p>
+                            {(activeQuizDetail.questions?.length || 0) === 0 && (
+                              <div className="lhud-quiz-stat-sub is-empty">
+                                Đang cập nhật
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="lhud-quiz-stat">
+                            <div className="lhud-quiz-stat-value">
+                              {activeQuizDetail.passScore}%
+                            </div>
+                            <p className="lhud-quiz-stat-label">
+                              Điểm đạt
+                            </p>
+                            <div className="lhud-quiz-stat-sub">
+                              Cần đạt tối thiểu {activeQuizDetail.passScore}%
+                            </div>
+                          </div>
+
+                          <div
+                            className={`lhud-quiz-stat is-best ${!quizHasAttemptHistory
+                                ? 'is-pending'
+                                : quizBestScorePassed
+                                  ? 'is-pass'
+                                  : 'is-fail'
+                              }`}
+                          >
+                            <div className="lhud-quiz-stat-value">
+                              {typeof quizBestScore === 'number' ? `${quizBestScore}%` : '--'}
+                            </div>
+                            <p className="lhud-quiz-stat-label">
+                              Điểm cao nhất
+                            </p>
+                            <div className="lhud-quiz-stat-sub">
+                              {!quizHasAttemptHistory
+                                ? 'Chưa có lần làm'
+                                : quizBestScorePassed
+                                  ? '✓ Đã đạt yêu cầu'
+                                  : '✗ Chưa đạt yêu cầu'}
+                            </div>
+                          </div>
+
+                          <div
+                            className={`lhud-quiz-stat is-attempts ${quizAttemptsCount >= activeQuizDetail.maxAttempts
+                                ? 'is-maxed'
+                                : !quizHasAttemptHistory
+                                  ? 'is-pending'
+                                  : ''
+                              }`}
+                          >
+                            <div className="lhud-quiz-stat-value">
+                              {quizAttemptsCount}/{activeQuizDetail.maxAttempts}
+                            </div>
+                            <p className="lhud-quiz-stat-label">
+                              {quizAttemptsCount >= activeQuizDetail.maxAttempts ? 'Hết lượt' : 'Số lần thử'}
+                            </p>
+                            {quizAttemptsCount >= activeQuizDetail.maxAttempts ? (
+                              <div className="lhud-quiz-stat-sub is-warning">
+                                Chờ 8h để làm lại
+                              </div>
+                            ) : (
+                              <div className="lhud-quiz-stat-sub">
+                                {!quizHasAttemptHistory
+                                  ? `Tối đa ${activeQuizDetail.maxAttempts} lượt`
+                                  : `Còn lại ${Math.max(activeQuizDetail.maxAttempts - quizAttemptsCount, 0)} lượt`}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Action Button */}
+                        <div className="lhud-quiz-action">
+                          {!isPreviewMode && quizHasAttemptHistory && !activeQuizDetail.hasPassed && activeQuizDetail.latestAttempt && (
+                            <button
+                              type="button"
+                              className="learning-hud-secondary-btn lhud-quiz-review-btn"
+                              onClick={() => handleOpenQuizAttemptPage('result')}
+                            >
+                              Xem lại kết quả gần nhất
+                            </button>
+                          )}
+                          <button
+                            onClick={() => {
+                              if (!isPreviewMode) {
+                                handleOpenQuizAttemptPage('start');
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              }
+                            }}
+                            className={`lhud-quiz-action-btn ${quizAttemptsCount >= activeQuizDetail.maxAttempts
+                                ? 'is-locked'
+                                : (activeQuizDetail.questions?.length || 0) === 0
+                                  ? 'is-disabled'
+                                  : quizHasAttemptHistory
+                                    ? 'is-retry'
+                                    : 'is-start'
+                              } ${isPreviewMode ? 'is-preview' : ''}`}
+                            disabled={
+                              isPreviewMode ||
+                              requiresManualUpgradeGate ||
+                              quizAttemptsCount >= activeQuizDetail.maxAttempts ||
+                              (activeQuizDetail.questions?.length || 0) === 0
+                            }
+                          >
+                            {isPreviewMode
+                              ? 'Chế độ xem trước'
+                              : requiresManualUpgradeGate
+                                ? 'Cần nâng cấp revision để học tiếp'
+                                : quizAttemptsCount >= activeQuizDetail.maxAttempts
+                                  ? 'Hết lượt làm bài'
+                                  : (activeQuizDetail.questions?.length || 0) === 0
+                                    ? 'Bài kiểm tra chưa có câu hỏi'
+                                    : quizHasAttemptHistory
+                                      ? `Làm lại (${quizAttemptsCount}/${activeQuizDetail.maxAttempts})`
+                                      : 'Bắt đầu làm bài'}
+                          </button>
+
+                          {/* Thông báo khi hết lượt với countdown timer */}
+                          {quizAttemptsCount >= activeQuizDetail.maxAttempts && (
+                            <div className="lhud-quiz-lock-banner">
+                              <p className="lhud-quiz-lock-title">
+                                Đã sử dụng hết {activeQuizDetail.maxAttempts} lượt làm bài
+                              </p>
+                              {retryCountdown > 0 ? (
+                                <div className="lhud-quiz-lock-body">
+                                  <p className="lhud-quiz-lock-text">
+                                    Bạn có thể làm lại sau:
+                                  </p>
+                                  <div className="lhud-quiz-countdown">
+                                    <div className="lhud-quiz-countdown-timer">
+                                      {formatCountdown(retryCountdown)}
+                                    </div>
+                                  </div>
+                                  <p className="lhud-quiz-lock-hint">
+                                    Hãy xem lại bài học trong thời gian chờ để chuẩn bị tốt hơn.
+                                  </p>
+                                </div>
+                              ) : (
+                                <p className="lhud-quiz-lock-text">
+                                  Bạn có thể làm lại sau 8 giờ kể từ lần làm đầu tiên. Hãy xem lại bài học trong thời gian chờ.
+                                </p>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Reassurance Info */}
+                          {(activeQuizDetail.questions?.length || 0) > 0 && quizAttemptsCount < activeQuizDetail.maxAttempts && (
+                            <>
+                              <div className="lhud-quiz-meta">
+                                <span title="Thời gian làm bài dự kiến">Thời gian: 10 phút</span>
+                                <span title="Số lần làm lại tối đa">Còn lại: {activeQuizDetail.maxAttempts - quizAttemptsCount} lần</span>
+                                <span title="Tiến trình được lưu tự động">Tự động lưu tiến độ</span>
+                              </div>
+                            </>
                           )}
                         </div>
-                      )}
-
-                      {/* Reassurance Info */}
-                      {(activeQuizDetail.questions?.length || 0) > 0 && quizAttemptsCount < activeQuizDetail.maxAttempts && (
-                        <>
-                          <div className="lhud-quiz-meta">
-                             <span title="Thời gian làm bài dự kiến">Thời gian: 10 phút</span>
-                             <span title="Số lần làm lại tối đa">Còn lại: {activeQuizDetail.maxAttempts - quizAttemptsCount} lần</span>
-                             <span title="Tiến trình được lưu tự động">Tự động lưu tiến độ</span>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </>
-            ) : activeLessonDetail ? (
-              <>
-                {/* VIDEO LESSON */}
-                {activeLessonDetail.type === 'VIDEO' && (
-                  <>
-                    {activeLessonDetail.videoUrl ? (
-                      <VideoHudWrapper
-                        videoUrl={activeLessonDetail.videoUrl}
-                        title={activeLessonDetail.title}
-                      />
-                    ) : (
-                      <div className="learning-hud-empty-state">
-                        DỮ LIỆU VIDEO KHÔNG KHẢ DỤNG
                       </div>
                     )}
                   </>
-                )}
-
-                {/* READING LESSON */}
-                {activeLessonDetail.type === 'READING' && (
+                ) : activeLessonDetail ? (
                   <>
-                    <div className="lhud-reading-text">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {normalizeContent(activeLessonDetail.contentText || 'Dữ liệu nội dung không khả dụng.')}
-                      </ReactMarkdown>
-                    </div>
+                    {/* VIDEO LESSON */}
+                    {activeLessonDetail.type === 'VIDEO' && (
+                      <>
+                        {activeLessonDetail.videoUrl ? (
+                          <VideoHudWrapper
+                            videoUrl={activeLessonDetail.videoUrl}
+                            title={activeLessonDetail.title}
+                          />
+                        ) : (
+                          <div className="learning-hud-empty-state">
+                            DỮ LIỆU VIDEO KHÔNG KHẢ DỤNG
+                          </div>
+                        )}
+                      </>
+                    )}
 
-                    <AttachmentManager
-                      lessonId={activeLessonDetail.id}
-                      editable={false}
-                      hideWhenEmpty
-                      headerText="Tài liệu đính kèm"
-                    />
+                    {/* READING LESSON */}
+                    {activeLessonDetail.type === 'READING' && (
+                      <>
+                        <div className="lhud-reading-text">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {normalizeContent(activeLessonDetail.contentText || 'Dữ liệu nội dung không khả dụng.')}
+                          </ReactMarkdown>
+                        </div>
+
+                        <AttachmentManager
+                          lessonId={activeLessonDetail.id}
+                          editable={false}
+                          hideWhenEmpty
+                          headerText="Tài liệu đính kèm"
+                        />
+                      </>
+                    )}
                   </>
-                )}
-              </>
-            ) : activeModulePreview ? (
-              <section className="lhud-module-overview-card">
-                <div className="lhud-module-overview-badge">Tổng quan chương</div>
-                <div className="lhud-module-overview-meta">
-                  <span>{(activeModulePreview as ModuleWithContent).lessons?.length ?? 0} Bài học</span>
-                  <span>{(activeModulePreview as ModuleWithContent).quizzes?.length ?? 0} Bài kiểm tra</span>
-                  <span>{(activeModulePreview as ModuleWithContent).assignments?.length ?? 0} Bài tập</span>
-                </div>
-                {activeModulePreview.description?.trim() ? (
-                  <div className="lhud-module-overview-content">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {normalizeContent(activeModulePreview.description)}
-                    </ReactMarkdown>
+                ) : activeModulePreview ? (
+                  <section className="lhud-module-overview-card">
+                    <div className="lhud-module-overview-badge">Tổng quan chương</div>
+                    <div className="lhud-module-overview-meta">
+                      <span>{(activeModulePreview as ModuleWithContent).lessons?.length ?? 0} Bài học</span>
+                      <span>{(activeModulePreview as ModuleWithContent).quizzes?.length ?? 0} Bài kiểm tra</span>
+                      <span>{(activeModulePreview as ModuleWithContent).assignments?.length ?? 0} Bài tập</span>
+                    </div>
+                    {activeModulePreview.description?.trim() ? (
+                      <div className="lhud-module-overview-content">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {normalizeContent(activeModulePreview.description)}
+                        </ReactMarkdown>
+                      </div>
+                    ) : (
+                      <p className="lhud-text-secondary">
+                        Chương này hiện chưa có mô tả chi tiết.
+                      </p>
+                    )}
+                  </section>
+                ) : activeLessonTitle ? (
+                  <div className="learning-hud-empty-state">
+                    KHÔNG THỂ TẢI NỘI DUNG
                   </div>
                 ) : (
-                  <p className="lhud-text-secondary">
-                    Chương này hiện chưa có mô tả chi tiết.
-                  </p>
+                  <>
+                    <p className="lhud-text-secondary">
+                      {course.description}
+                    </p>
+                    <p className="lhud-text-dim lhud-mt-16">
+                      Chọn một bài học từ danh sách để bắt đầu.
+                    </p>
+                  </>
                 )}
-              </section>
-            ) : activeLessonTitle ? (
-              <div className="learning-hud-empty-state">
-                KHÔNG THỂ TẢI NỘI DUNG
-              </div>
-            ) : (
-              <>
-                <p className="lhud-text-secondary">
-                  {course.description}
-                </p>
-                <p className="lhud-text-dim lhud-mt-16">
-                  Chọn một bài học từ danh sách để bắt đầu.
-                </p>
-              </>
-            )}
               </div>
 
               {/* Control Deck */}
@@ -1752,6 +1747,7 @@ const CourseLearningPage = () => {
 
       <MeowlGuide
         currentPage="courses"
+        autoOpenChat
         panelMode={meowlPanelMode}
         panelTheme="cyan"
         panelAllowedModes={["MODE_COURSE_LEARNING", "MODE_GENERAL_FAQ"]}
@@ -1759,39 +1755,39 @@ const CourseLearningPage = () => {
         courseContext={
           course && modulesWithContent.length > 0
             ? {
-                courseTitle: course.title,
-                moduleTitle: activeCurriculumItem?.moduleTitle || "",
-                lessonTitle: activeCurriculumItem?.title || "",
-                lessonType: activeCurriculumItem?.itemType === "quiz"
-                  ? "QUIZ"
-                  : activeCurriculumItem?.itemType === "assignment"
-                    ? "ASSIGNMENT"
-                    : (activeLessonDetail?.type || "LESSON"),
-                modules: modulesWithContent.map((mod) => ({
-                  moduleId: mod.id,
-                  moduleTitle: mod.title,
-                  lessons: (mod.lessons ?? []).map((l) => ({
-                    lessonId: l.id,
-                    lessonTitle: l.title,
-                    lessonType: l.type,
-                  })),
-                  quizzes: (mod.quizzes ?? []).map((q) => ({
-                    lessonId: q.id,
-                    lessonTitle: q.title,
-                    lessonType: "QUIZ",
-                  })),
-                  assignments: (mod.assignments ?? []).map((a) => ({
-                    lessonId: a.id,
-                    lessonTitle: a.title,
-                    lessonType: "ASSIGNMENT",
-                  })),
+              courseTitle: course.title,
+              moduleTitle: activeCurriculumItem?.moduleTitle || "",
+              lessonTitle: activeCurriculumItem?.title || "",
+              lessonType: activeCurriculumItem?.itemType === "quiz"
+                ? "QUIZ"
+                : activeCurriculumItem?.itemType === "assignment"
+                  ? "ASSIGNMENT"
+                  : (activeLessonDetail?.type || "LESSON"),
+              modules: modulesWithContent.map((mod) => ({
+                moduleId: mod.id,
+                moduleTitle: mod.title,
+                lessons: (mod.lessons ?? []).map((l) => ({
+                  lessonId: l.id,
+                  lessonTitle: l.title,
+                  lessonType: l.type,
                 })),
-                activeModuleId: activeLesson?.moduleId ?? null,
-                activeLessonId: activeLesson?.lessonId ?? null,
-                activeLessonTitle: activeLessonTitle || undefined,
-                activeLessonType: activeLessonDetail?.type || undefined,
-                activeLessonDescription: activeLessonDetail?.description || undefined,
-              }
+                quizzes: (mod.quizzes ?? []).map((q) => ({
+                  lessonId: q.id,
+                  lessonTitle: q.title,
+                  lessonType: "QUIZ",
+                })),
+                assignments: (mod.assignments ?? []).map((a) => ({
+                  lessonId: a.id,
+                  lessonTitle: a.title,
+                  lessonType: "ASSIGNMENT",
+                })),
+              })),
+              activeModuleId: activeLesson?.moduleId ?? null,
+              activeLessonId: activeLesson?.lessonId ?? null,
+              activeLessonTitle: activeLessonTitle || undefined,
+              activeLessonType: activeLessonDetail?.type || undefined,
+              activeLessonDescription: activeLessonDetail?.description || undefined,
+            }
             : null
         }
       />

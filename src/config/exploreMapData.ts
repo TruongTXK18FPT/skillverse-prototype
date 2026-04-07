@@ -25,6 +25,7 @@ export interface InteractionPoint {
   name: string;
   description: string;
   path: string;
+  requiresAuth?: boolean;
   icon: LucideIcon;
   // Coordinates for positioning within zone view (% based)
   zoneX: number;
@@ -73,6 +74,7 @@ const WARRIOR_ACADEMY: ZoneConfig = {
       name: 'Khóa Học',
       description: 'Khám phá các khóa học chất lượng cao',
       path: '/courses',
+      requiresAuth: false,
       icon: GraduationCap,
       zoneX: 22,
       zoneY: 35,
@@ -84,6 +86,7 @@ const WARRIOR_ACADEMY: ZoneConfig = {
       name: 'Lộ Trình',
       description: 'Lộ trình học tập và phát triển kỹ năng',
       path: '/roadmap',
+      requiresAuth: true,
       icon: Map,
       zoneX: 60,
       zoneY: 45,
@@ -95,6 +98,7 @@ const WARRIOR_ACADEMY: ZoneConfig = {
       name: 'Cố Vấn',
       description: 'Kết nối với chuyên gia trong ngành',
       path: '/mentorship',
+      requiresAuth: true,
       icon: Users,
       zoneX: 85,
       zoneY: 60,
@@ -106,6 +110,7 @@ const WARRIOR_ACADEMY: ZoneConfig = {
       name: 'Cộng Đồng',
       description: 'Tham gia cộng đồng học tập sôi động',
       path: '/community',
+      requiresAuth: false,
       icon: MessageSquare,
       zoneX: 28,
       zoneY: 75,
@@ -117,6 +122,7 @@ const WARRIOR_ACADEMY: ZoneConfig = {
       name: 'Hành Trình',
       description: 'Theo dõi trình tự phát triển kỹ năng của bạn',
       path: '/journey',
+      requiresAuth: false,
       icon: Trophy,
       zoneX: 60,
       zoneY: 60,
@@ -148,6 +154,7 @@ const MOTHERSHIP: ZoneConfig = {
       name: 'Bảng Điều Khiển',
       description: 'Theo dõi tiến độ học tập và thành tích',
       path: '/dashboard',
+      requiresAuth: true,
       icon: BarChart3,
       zoneX: 73,
       zoneY: 58,
@@ -159,6 +166,7 @@ const MOTHERSHIP: ZoneConfig = {
       name: 'Trợ Lý AI',
       description: 'Nhận hỗ trợ từ trợ lý AI thông minh',
       path: '/chatbot',
+      requiresAuth: true,
       icon: Bot,
       zoneX: 46.5,
       zoneY: 20,
@@ -170,6 +178,7 @@ const MOTHERSHIP: ZoneConfig = {
       name: 'Hồ Sơ Cá Nhân',
       description: 'Quản lý và chia sẻ thành tích của bạn',
       path: '/portfolio',
+      requiresAuth: true,
       icon: User,
       zoneX: 21,
       zoneY: 58,
@@ -200,6 +209,7 @@ const BLACK_MARKET: ZoneConfig = {
       name: 'Khu Chợ',
       description: 'Ví và cửa hàng vật phẩm',
       path: '/my-wallet',
+      requiresAuth: true,
       icon: Wallet,
       zoneX: 20,
       zoneY: 77,
@@ -211,6 +221,7 @@ const BLACK_MARKET: ZoneConfig = {
       name: 'Meowl Shop',
       description: 'Kho hàng quý hiếm và đặc biệt',
       path: '/meowl-shop',
+      requiresAuth: false,
       icon: Trophy,
       zoneX: 32,
       zoneY: 43,
@@ -222,6 +233,7 @@ const BLACK_MARKET: ZoneConfig = {
       name: 'Premium',
       description: 'Cửa hàng đặc biệt',
       path: '/premium',
+      requiresAuth: false,
       icon: Trophy,
       zoneX: 80,
       zoneY: 40,
@@ -252,6 +264,7 @@ const WORMHOLE: ZoneConfig = {
       name: 'Việc Làm',
       description: 'Tìm kiếm cơ hội việc làm phù hợp',
       path: '/jobs',
+      requiresAuth: false,
       icon: Briefcase,
       zoneX: 35,
       zoneY: 38,

@@ -2,6 +2,7 @@ import { memo, useCallback, useMemo, useState } from 'react';
 import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, CheckCircle, Info, BookOpen } from 'lucide-react';
 import { RoadmapResponse, QuestProgress } from '../../types/Roadmap';
 import RoadmapFlow from '../ai-roadmap/RoadmapFlow';
+import type { RoadmapNodeFocusPanelProps } from './RoadmapNodeFocusPanel';
 import './RoadmapDetailViewer.css';
 import '../../styles/RoadmapHUD.css';
 
@@ -16,6 +17,7 @@ interface RoadmapDetailViewerProps {
   studyTaskNodeIds?: Set<string>;
   selectedNodeId?: string | null;
   onNodeSelect?: (nodeId: string) => void;
+  nodeFocusPanel?: RoadmapNodeFocusPanelProps | null;
 }
 
 /** Replicate BE logic: AiRoadmapServiceImpl.parseDailyTimeMinutes() */
@@ -149,7 +151,8 @@ const RoadmapDetailViewer = memo(({
   eligibleNodeId,
   studyTaskNodeIds,
   selectedNodeId,
-  onNodeSelect
+  onNodeSelect,
+  nodeFocusPanel,
 }: RoadmapDetailViewerProps) => {
   const [showAdvancedSections, setShowAdvancedSections] = useState(false);
 
@@ -571,6 +574,7 @@ const RoadmapDetailViewer = memo(({
             studyTaskNodeIds={studyTaskNodeIds}
             selectedNodeId={selectedNodeId}
             onNodeSelect={onNodeSelect}
+            nodeFocusPanel={nodeFocusPanel}
           />
         </div>
 

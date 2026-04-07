@@ -25,6 +25,69 @@
   box-shadow: -20px 0 40px rgba(2, 6, 23, 0.45);
   color: #e2e8f0;
   overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.roadmap-node-focus-panel--inline {
+  top: 16px;
+  bottom: 16px;
+  height: auto;
+  width: min(640px, 45%);
+  min-width: 420px;
+  max-width: calc(100% - 32px);
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  border-radius: 16px;
+  box-shadow:
+    0 18px 36px rgba(2, 6, 23, 0.55),
+    0 0 0 1px rgba(34, 211, 238, 0.12) inset;
+  z-index: 20;
+}
+
+.roadmap-node-focus-panel--inline.roadmap-node-focus-panel--right {
+  right: 16px;
+}
+
+.roadmap-node-focus-panel--inline.roadmap-node-focus-panel--left {
+  left: 16px;
+  right: auto;
+}
+
+@media (max-width: 1280px) {
+  .roadmap-node-focus-panel--inline {
+    width: min(560px, 46%);
+    min-width: 380px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .roadmap-node-focus-panel--inline {
+    top: 12px;
+    bottom: 12px;
+    width: min(500px, 52%);
+    min-width: 340px;
+    max-width: calc(100% - 24px);
+  }
+
+  .roadmap-node-focus-panel--inline.roadmap-node-focus-panel--right {
+    right: 12px;
+  }
+
+  .roadmap-node-focus-panel--inline.roadmap-node-focus-panel--left {
+    left: 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .roadmap-node-focus-panel--inline {
+    left: 12px !important;
+    right: 12px !important;
+    top: auto;
+    bottom: 12px;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    height: min(62%, 520px);
+  }
 }
 
 /* Tab bar */
@@ -213,6 +276,17 @@
   background: rgba(7, 18, 36, 0.72);
   min-height: 0;
   overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  /* Scroll snap config for node overview panel: reduce top padding so snapped items sit slightly higher. */
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 4px;
+  scroll-padding-bottom: 10px;
+  touch-action: pan-y;
+}
+
+.roadmap-node-focus-panel__detail-block > * {
+  scroll-snap-align: start;
 }
 
 .roadmap-node-focus-panel__detail-block h3 {

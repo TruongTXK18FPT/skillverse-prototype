@@ -1,4 +1,4 @@
-﻿import React, {
+import React, {
   useState,
   useRef,
   useEffect,
@@ -55,7 +55,6 @@ const CONTEXT_MODE_LABELS: Record<MeowlContextMode, { en: string; vi: string }> 
   MODE_ROADMAP_OVERVIEW: { en: "Roadmap", vi: "Roadmap" },
   MODE_COURSE_LEARNING: { en: "Course Tutor", vi: "Gia sư" },
   MODE_FALLBACK_TEACHER: { en: "Fallback Teacher", vi: "Dạy thay" },
-  MODE_EXAM_PROCTOR: { en: "Proctor", vi: "Giám thị" },
   MODE_SOCRATIC_READING: { en: "Socratic", vi: "Gợi mở" },
   MODE_GENERAL_FAQ: { en: "FAQ", vi: "Hỏi đáp" },
 };
@@ -107,7 +106,7 @@ interface MeowlChatV2Props {
   panelMode?: MeowlContextMode;
   /** Theme for the inner panel content (default: "cyan") */
   panelTheme?: "cyan" | "pink" | "hud";
-  /** Modes the user can switch between in settings (default: all except MODE_EXAM_PROCTOR) */
+  /** Modes the user can switch between in settings (default: all except advanced protected modes) */
   panelAllowedModes?: MeowlContextMode[];
   /** Density variant (default: "default") */
   density?: "default" | "compact";
@@ -165,16 +164,16 @@ const normalizePersistedMessages = (
 ): Message[] => {
   const restoredMessages = Array.isArray(persistedMessages)
     ? persistedMessages
-        .filter(
-          (message) =>
-            message &&
-            (message.role === "user" || message.role === "assistant") &&
-            typeof message.content === "string",
-        )
-        .map((message) => ({
-          ...message,
-          timestamp: new Date(message.timestamp),
-        }))
+      .filter(
+        (message) =>
+          message &&
+          (message.role === "user" || message.role === "assistant") &&
+          typeof message.content === "string",
+      )
+      .map((message) => ({
+        ...message,
+        timestamp: new Date(message.timestamp),
+      }))
     : [];
 
   if (restoredMessages.length === 0) {
@@ -352,11 +351,10 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
     "MODE_COURSE_LEARNING",
     "MODE_FALLBACK_TEACHER",
     "MODE_SOCRATIC_READING",
-    "MODE_EXAM_PROCTOR",
   ];
   const [contextMode, setContextMode] = useState<MeowlContextMode>(initialPanelMode);
   const effectiveAllowedModes = panelAllowedModes ?? allContextModes.filter(
-    (m) => m !== "MODE_EXAM_PROCTOR" && m !== "MODE_SOCRATIC_READING" && m !== "MODE_FALLBACK_TEACHER"
+    (m) => m !== "MODE_SOCRATIC_READING" && m !== "MODE_FALLBACK_TEACHER"
   );
 
   // Reset context mode when initialPanelMode changes
@@ -561,8 +559,8 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
   const roadmapContextSummary = useMemo(() => {
     const items: string[] = [];
     if (activeRoadmapContext) {
-      items.push(`Roadmap: ${activeRoadmapContext.roadmapTitle}`);
-      items.push(`Node: ${activeRoadmapContext.nodeTitle}`);
+      items.push(`Roadmap: ${activeRoadmapContext.roadmapTitle || "Learning roadmap"}`);
+      items.push(`Node: ${activeRoadmapContext.nodeTitle || "Current node"}`);
       if (activeRoadmapContext.nodeDescription) {
         items.push(`Mô tả: ${activeRoadmapContext.nodeDescription}`);
       }
@@ -619,15 +617,15 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
 
     const suggestedPromptsArr = isVi
       ? [
-          `Giải thích bài \`${activeLessonTitle || "này"}\` theo cách dễ hiểu nhất.`,
-          "Cho mình một câu hỏi luyện tập bám sát nội dung này.",
-          `Tóm tắt những điểm chính của \`${activeLessonTitle || "phần này"}\`.`,
-        ]
+        `Giải thích bài \`${activeLessonTitle || "này"}\` theo cách dễ hiểu nhất.`,
+        "Cho mình một câu hỏi luyện tập bám sát nội dung này.",
+        `Tóm tắt những điểm chính của \`${activeLessonTitle || "phần này"}\`.`,
+      ]
       : [
-          `Explain \`${activeLessonTitle || "this lesson"}\` in the simplest way possible.`,
-          "Give me a practice question about this content.",
-          `Summarize the key points of \`${activeLessonTitle || "this lesson"}\`.`,
-        ];
+        `Explain \`${activeLessonTitle || "this lesson"}\` in the simplest way possible.`,
+        "Give me a practice question about this content.",
+        `Summarize the key points of \`${activeLessonTitle || "this lesson"}\`.`,
+      ];
 
     return {
       intro,
@@ -716,89 +714,89 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
               : "Mở Business dashboard để tạo job mới hoặc rà soát các job đang tuyển nhé.",
             whatYouCanDo: isEn
               ? [
-                  "Guide recruiter profile and job flow",
-                  "Suggest applicant review sequence",
-                  "Provide clear next hiring action",
-                  "Explain recruiter premium benefits and when to upgrade",
-                ]
+                "Guide recruiter profile and job flow",
+                "Suggest applicant review sequence",
+                "Provide clear next hiring action",
+                "Explain recruiter premium benefits and when to upgrade",
+              ]
               : [
-                  "Hướng dẫn tối ưu hồ sơ recruiter và flow đăng job",
-                  "Gợi ý thứ tự xử lý applicants để shortlist nhanh",
-                  "Đề xuất bước tuyển dụng tiếp theo theo trạng thái thực tế",
-                  "Giải thích quyền lợi Premium cho recruiter và thời điểm nên nâng cấp",
-                ],
+                "Hướng dẫn tối ưu hồ sơ recruiter và flow đăng job",
+                "Gợi ý thứ tự xử lý applicants để shortlist nhanh",
+                "Đề xuất bước tuyển dụng tiếp theo theo trạng thái thực tế",
+                "Giải thích quyền lợi Premium cho recruiter và thời điểm nên nâng cấp",
+              ],
             quickActions: isEn
               ? [
-                  {
-                    id: "recruiter-profile",
-                    label: "Recruiter profile",
-                    description: "Open recruiter/business profile",
-                    actionType: "NAVIGATE",
-                    actionValue: "/profile/business",
-                  },
-                  {
-                    id: "business-dashboard",
-                    label: "Business dashboard",
-                    description: "Create and manage job postings",
-                    actionType: "NAVIGATE",
-                    actionValue: "/business",
-                  },
-                  {
-                    id: "jobs",
-                    label: "Job board",
-                    description: "Open jobs list",
-                    actionType: "NAVIGATE",
-                    actionValue: "/jobs",
-                  },
-                  {
-                    id: "recruiter-premium",
-                    label: "Recruiter premium",
-                    description: "View recruiter premium benefits",
-                    actionType: "NAVIGATE",
-                    actionValue: "/business/premium",
-                  },
-                ]
+                {
+                  id: "recruiter-profile",
+                  label: "Recruiter profile",
+                  description: "Open recruiter/business profile",
+                  actionType: "NAVIGATE",
+                  actionValue: "/profile/business",
+                },
+                {
+                  id: "business-dashboard",
+                  label: "Business dashboard",
+                  description: "Create and manage job postings",
+                  actionType: "NAVIGATE",
+                  actionValue: "/business",
+                },
+                {
+                  id: "jobs",
+                  label: "Job board",
+                  description: "Open jobs list",
+                  actionType: "NAVIGATE",
+                  actionValue: "/jobs",
+                },
+                {
+                  id: "recruiter-premium",
+                  label: "Recruiter premium",
+                  description: "View recruiter premium benefits",
+                  actionType: "NAVIGATE",
+                  actionValue: "/business/premium",
+                },
+              ]
               : [
-                  {
-                    id: "recruiter-profile",
-                    label: "Hồ sơ Recruiter",
-                    description: "Mở hồ sơ business",
-                    actionType: "NAVIGATE",
-                    actionValue: "/profile/business",
-                  },
-                  {
-                    id: "business-dashboard",
-                    label: "Business dashboard",
-                    description: "Tạo và quản lý job posting",
-                    actionType: "NAVIGATE",
-                    actionValue: "/business",
-                  },
-                  {
-                    id: "jobs",
-                    label: "Danh sách Jobs",
-                    description: "Mở danh sách job đang có",
-                    actionType: "NAVIGATE",
-                    actionValue: "/jobs",
-                  },
-                  {
-                    id: "recruiter-premium",
-                    label: "Premium Recruiter",
-                    description: "Xem quyền lợi gói recruiter",
-                    actionType: "NAVIGATE",
-                    actionValue: "/business/premium",
-                  },
-                ],
+                {
+                  id: "recruiter-profile",
+                  label: "Hồ sơ Recruiter",
+                  description: "Mở hồ sơ business",
+                  actionType: "NAVIGATE",
+                  actionValue: "/profile/business",
+                },
+                {
+                  id: "business-dashboard",
+                  label: "Business dashboard",
+                  description: "Tạo và quản lý job posting",
+                  actionType: "NAVIGATE",
+                  actionValue: "/business",
+                },
+                {
+                  id: "jobs",
+                  label: "Danh sách Jobs",
+                  description: "Mở danh sách job đang có",
+                  actionType: "NAVIGATE",
+                  actionValue: "/jobs",
+                },
+                {
+                  id: "recruiter-premium",
+                  label: "Premium Recruiter",
+                  description: "Xem quyền lợi gói recruiter",
+                  actionType: "NAVIGATE",
+                  actionValue: "/business/premium",
+                },
+              ],
             suggestedPrompts: isEn
               ? [
-                  "Guide me to post my first job on SkillVerse.",
-                  "How should I review applicants and shortlist quickly?",
-                  "What premium recruiter benefits can improve hiring speed?",
-                ]
+                "Guide me to post my first job on SkillVerse.",
+                "How should I review applicants and shortlist quickly?",
+                "What premium recruiter benefits can improve hiring speed?",
+              ]
               : [
-                  "Hướng dẫn tôi đăng job đầu tiên trên SkillVerse.",
-                  "Tôi nên review applicants và shortlist nhanh theo cách nào?",
-                  "Quyền lợi Premium Recruiter giúp tôi tuyển nhanh hơn như thế nào?",
-                ],
+                "Hướng dẫn tôi đăng job đầu tiên trên SkillVerse.",
+                "Tôi nên review applicants và shortlist nhanh theo cách nào?",
+                "Quyền lợi Premium Recruiter giúp tôi tuyển nhanh hơn như thế nào?",
+              ],
           };
         case "MENTOR":
           return {
@@ -810,71 +808,71 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
               : "Bắt đầu bằng việc tạo hoặc publish course đầu tiên nhé.",
             whatYouCanDo: isEn
               ? [
-                  "Course creation to publish guidance",
-                  "Availability and booking setup",
-                  "Mentor operations checklist",
-                ]
+                "Course creation to publish guidance",
+                "Availability and booking setup",
+                "Mentor operations checklist",
+              ]
               : [
-                  "Hướng dẫn flow từ tạo course đến publish",
-                  "Gợi ý setup availability và booking rõ ràng",
-                  "Đưa checklist vận hành mentor theo bối cảnh hiện tại",
-                ],
+                "Hướng dẫn flow từ tạo course đến publish",
+                "Gợi ý setup availability và booking rõ ràng",
+                "Đưa checklist vận hành mentor theo bối cảnh hiện tại",
+              ],
             quickActions: isEn
               ? [
-                  {
-                    id: "mentor-profile",
-                    label: "Mentor profile",
-                    description: "Open profile setup",
-                    actionType: "NAVIGATE",
-                    actionValue: "/profile/mentor",
-                  },
-                  {
-                    id: "create-course",
-                    label: "Create course",
-                    description: "Open mentor course builder",
-                    actionType: "NAVIGATE",
-                    actionValue: "/mentor/courses/create",
-                  },
-                  {
-                    id: "mentor-dashboard",
-                    label: "Mentor dashboard",
-                    description: "Manage courses and sessions",
-                    actionType: "NAVIGATE",
-                    actionValue: "/mentor",
-                  },
-                ]
+                {
+                  id: "mentor-profile",
+                  label: "Mentor profile",
+                  description: "Open profile setup",
+                  actionType: "NAVIGATE",
+                  actionValue: "/profile/mentor",
+                },
+                {
+                  id: "create-course",
+                  label: "Create course",
+                  description: "Open mentor course builder",
+                  actionType: "NAVIGATE",
+                  actionValue: "/mentor/courses/create",
+                },
+                {
+                  id: "mentor-dashboard",
+                  label: "Mentor dashboard",
+                  description: "Manage courses and sessions",
+                  actionType: "NAVIGATE",
+                  actionValue: "/mentor",
+                },
+              ]
               : [
-                  {
-                    id: "mentor-profile",
-                    label: "Hồ sơ Mentor",
-                    description: "Mở trang profile mentor",
-                    actionType: "NAVIGATE",
-                    actionValue: "/profile/mentor",
-                  },
-                  {
-                    id: "create-course",
-                    label: "Tạo Course",
-                    description: "Mở course builder của mentor",
-                    actionType: "NAVIGATE",
-                    actionValue: "/mentor/courses/create",
-                  },
-                  {
-                    id: "mentor-dashboard",
-                    label: "Mentor dashboard",
-                    description: "Quản lý course và session",
-                    actionType: "NAVIGATE",
-                    actionValue: "/mentor",
-                  },
-                ],
+                {
+                  id: "mentor-profile",
+                  label: "Hồ sơ Mentor",
+                  description: "Mở trang profile mentor",
+                  actionType: "NAVIGATE",
+                  actionValue: "/profile/mentor",
+                },
+                {
+                  id: "create-course",
+                  label: "Tạo Course",
+                  description: "Mở course builder của mentor",
+                  actionType: "NAVIGATE",
+                  actionValue: "/mentor/courses/create",
+                },
+                {
+                  id: "mentor-dashboard",
+                  label: "Mentor dashboard",
+                  description: "Quản lý course và session",
+                  actionType: "NAVIGATE",
+                  actionValue: "/mentor",
+                },
+              ],
             suggestedPrompts: isEn
               ? [
-                  "What sequence should I follow from draft to publish?",
-                  "I have courses but no bookings. What is next?",
-                ]
+                "What sequence should I follow from draft to publish?",
+                "I have courses but no bookings. What is next?",
+              ]
               : [
-                  "Tôi nên đi theo trình tự nào từ draft đến publish course?",
-                  "Tôi đã có course nhưng chưa có booking, nên làm gì tiếp?",
-                ],
+                "Tôi nên đi theo trình tự nào từ draft đến publish course?",
+                "Tôi đã có course nhưng chưa có booking, nên làm gì tiếp?",
+              ],
           };
         case "LEARNER":
           return {
@@ -886,89 +884,89 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
               : "Bắt đầu bài test đầu vào trong Guided Journey để có roadmap cá nhân hóa nhé.",
             whatYouCanDo: isEn
               ? [
-                  "Step-by-step entry test guidance",
-                  "Assessment result interpretation",
-                  "Roadmap and course next actions",
-                  "Explain learner premium benefits for roadmap and expert support",
-                ]
+                "Step-by-step entry test guidance",
+                "Assessment result interpretation",
+                "Roadmap and course next actions",
+                "Explain learner premium benefits for roadmap and expert support",
+              ]
               : [
-                  "Hướng dẫn từng bước làm test đầu vào thật rõ ràng",
-                  "Giải thích kết quả assessment theo cách dễ hiểu",
-                  "Gợi ý roadmap, course và mentor theo bước tiếp theo phù hợp",
-                  "Giải thích quyền lợi Premium cho learner theo mục tiêu hiện tại",
-                ],
+                "Hướng dẫn từng bước làm test đầu vào thật rõ ràng",
+                "Giải thích kết quả assessment theo cách dễ hiểu",
+                "Gợi ý roadmap, course và mentor theo bước tiếp theo phù hợp",
+                "Giải thích quyền lợi Premium cho learner theo mục tiêu hiện tại",
+              ],
             quickActions: isEn
               ? [
-                  {
-                    id: "entry-test",
-                    label: "Start entry test",
-                    description: "Create assessment flow",
-                    actionType: "NAVIGATE",
-                    actionValue: "/journey/create",
-                  },
-                  {
-                    id: "journey",
-                    label: "Continue journey",
-                    description: "Open current assessment progress",
-                    actionType: "NAVIGATE",
-                    actionValue: "/journey",
-                  },
-                  {
-                    id: "roadmap",
-                    label: "View roadmap",
-                    description: "Go to learning roadmap",
-                    actionType: "NAVIGATE",
-                    actionValue: "/roadmap",
-                  },
-                  {
-                    id: "learner-premium",
-                    label: "Premium benefits",
-                    description: "Open learner premium page",
-                    actionType: "NAVIGATE",
-                    actionValue: "/premium",
-                  },
-                ]
+                {
+                  id: "entry-test",
+                  label: "Start entry test",
+                  description: "Create assessment flow",
+                  actionType: "NAVIGATE",
+                  actionValue: "/journey/create",
+                },
+                {
+                  id: "journey",
+                  label: "Continue journey",
+                  description: "Open current assessment progress",
+                  actionType: "NAVIGATE",
+                  actionValue: "/journey",
+                },
+                {
+                  id: "roadmap",
+                  label: "View roadmap",
+                  description: "Go to learning roadmap",
+                  actionType: "NAVIGATE",
+                  actionValue: "/roadmap",
+                },
+                {
+                  id: "learner-premium",
+                  label: "Premium benefits",
+                  description: "Open learner premium page",
+                  actionType: "NAVIGATE",
+                  actionValue: "/premium",
+                },
+              ]
               : [
-                  {
-                    id: "entry-test",
-                    label: "Tạo test đầu vào",
-                    description: "Bắt đầu flow đánh giá",
-                    actionType: "NAVIGATE",
-                    actionValue: "/journey/create",
-                  },
-                  {
-                    id: "journey",
-                    label: "Tiếp tục Journey",
-                    description: "Mở tiến độ assessment hiện tại",
-                    actionType: "NAVIGATE",
-                    actionValue: "/journey",
-                  },
-                  {
-                    id: "roadmap",
-                    label: "Xem Roadmap",
-                    description: "Đi đến lộ trình học",
-                    actionType: "NAVIGATE",
-                    actionValue: "/roadmap",
-                  },
-                  {
-                    id: "learner-premium",
-                    label: "Quyền lợi Premium",
-                    description: "Xem gói premium cho learner",
-                    actionType: "NAVIGATE",
-                    actionValue: "/premium",
-                  },
-                ],
+                {
+                  id: "entry-test",
+                  label: "Tạo test đầu vào",
+                  description: "Bắt đầu flow đánh giá",
+                  actionType: "NAVIGATE",
+                  actionValue: "/journey/create",
+                },
+                {
+                  id: "journey",
+                  label: "Tiếp tục Journey",
+                  description: "Mở tiến độ assessment hiện tại",
+                  actionType: "NAVIGATE",
+                  actionValue: "/journey",
+                },
+                {
+                  id: "roadmap",
+                  label: "Xem Roadmap",
+                  description: "Đi đến lộ trình học",
+                  actionType: "NAVIGATE",
+                  actionValue: "/roadmap",
+                },
+                {
+                  id: "learner-premium",
+                  label: "Quyền lợi Premium",
+                  description: "Xem gói premium cho learner",
+                  actionType: "NAVIGATE",
+                  actionValue: "/premium",
+                },
+              ],
             suggestedPrompts: isEn
               ? [
-                  "Guide me step by step to complete the entry test.",
-                  "What should I do right after finishing assessment?",
-                  "What learner premium benefits help me learn faster?",
-                ]
+                "Guide me step by step to complete the entry test.",
+                "What should I do right after finishing assessment?",
+                "What learner premium benefits help me learn faster?",
+              ]
               : [
-                  "Hướng dẫn tôi từng bước hoàn thành test đầu vào.",
-                  "Sau khi làm xong assessment tôi nên làm gì tiếp?",
-                  "Gói Premium cho learner hỗ trợ roadmap và mentor ra sao?",
-                ],
+                "Hướng dẫn tôi từng bước hoàn thành test đầu vào.",
+                "Sau khi làm xong assessment tôi nên làm gì tiếp?",
+                "Gói Premium cho learner hỗ trợ roadmap và mentor ra sao?",
+              ],
           };
         default:
           return {
@@ -980,57 +978,57 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
               : "Đăng nhập để Meowl hỗ trợ theo đúng vai trò nhé.",
             whatYouCanDo: isEn
               ? [
-                  "Quick product walkthrough",
-                  "Starter learning guidance",
-                  "Direct links to key pages",
-                ]
+                "Quick product walkthrough",
+                "Starter learning guidance",
+                "Direct links to key pages",
+              ]
               : [
-                  "Giới thiệu nhanh các tính năng chính của SkillVerse",
-                  "Gợi ý cách bắt đầu học hoặc định hướng phù hợp",
-                  "Dẫn bạn đến đúng trang bằng CTA cụ thể",
-                ],
+                "Giới thiệu nhanh các tính năng chính của SkillVerse",
+                "Gợi ý cách bắt đầu học hoặc định hướng phù hợp",
+                "Dẫn bạn đến đúng trang bằng CTA cụ thể",
+              ],
             quickActions: isEn
               ? [
-                  {
-                    id: "login",
-                    label: "Sign in",
-                    description: "Use full role-aware assistant",
-                    actionType: "NAVIGATE",
-                    actionValue: "/login",
-                  },
-                  {
-                    id: "courses",
-                    label: "Explore courses",
-                    description: "Open course catalog",
-                    actionType: "NAVIGATE",
-                    actionValue: "/courses",
-                  },
-                ]
+                {
+                  id: "login",
+                  label: "Sign in",
+                  description: "Use full role-aware assistant",
+                  actionType: "NAVIGATE",
+                  actionValue: "/login",
+                },
+                {
+                  id: "courses",
+                  label: "Explore courses",
+                  description: "Open course catalog",
+                  actionType: "NAVIGATE",
+                  actionValue: "/courses",
+                },
+              ]
               : [
-                  {
-                    id: "login",
-                    label: "Đăng nhập",
-                    description: "Dùng trợ lý theo vai trò",
-                    actionType: "NAVIGATE",
-                    actionValue: "/login",
-                  },
-                  {
-                    id: "courses",
-                    label: "Khám phá khóa học",
-                    description: "Mở thư viện khóa học",
-                    actionType: "NAVIGATE",
-                    actionValue: "/courses",
-                  },
-                ],
+                {
+                  id: "login",
+                  label: "Đăng nhập",
+                  description: "Dùng trợ lý theo vai trò",
+                  actionType: "NAVIGATE",
+                  actionValue: "/login",
+                },
+                {
+                  id: "courses",
+                  label: "Khám phá khóa học",
+                  description: "Mở thư viện khóa học",
+                  actionType: "NAVIGATE",
+                  actionValue: "/courses",
+                },
+              ],
             suggestedPrompts: isEn
               ? [
-                  "Give me a quick SkillVerse walkthrough.",
-                  "What should I do first as a new user?",
-                ]
+                "Give me a quick SkillVerse walkthrough.",
+                "What should I do first as a new user?",
+              ]
               : [
-                  "Giới thiệu nhanh SkillVerse cho người mới.",
-                  "Tôi nên bắt đầu từ đâu trên SkillVerse?",
-                ],
+                "Giới thiệu nhanh SkillVerse cho người mới.",
+                "Tôi nên bắt đầu từ đâu trên SkillVerse?",
+              ],
           };
       }
     },
@@ -1044,8 +1042,8 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
   const roadmapWelcomeContent = useMemo(() => {
     if (!activeRoadmapContext) return null;
     const isVi = language === "vi";
-    const nodeTitle = activeRoadmapContext.nodeTitle;
-    const roadmapTitle = activeRoadmapContext.roadmapTitle;
+    const nodeTitle = activeRoadmapContext.nodeTitle || (isVi ? "nút hiện tại" : "current node");
+    const roadmapTitle = activeRoadmapContext.roadmapTitle || (isVi ? "Lộ trình học tập" : "Learning roadmap");
 
     const objectives = activeRoadmapContext.learningObjectives?.slice(0, 3) || [];
     const concepts = activeRoadmapContext.keyConcepts?.slice(0, 3) || [];
@@ -1076,15 +1074,15 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
 
     const suggestedPromptsArr = isVi
       ? [
-          `Node "${nodeTitle}" quan trọng như thế nào trong roadmap?`,
-          `Mình nên bắt đầu với "${nodeTitle}" như thế nào?`,
-          `Kết nối "${nodeTitle}" với các node khác trong roadmap ra sao?`,
-        ]
+        `Node "${nodeTitle}" quan trọng như thế nào trong roadmap?`,
+        `Mình nên bắt đầu với "${nodeTitle}" như thế nào?`,
+        `Kết nối "${nodeTitle}" với các node khác trong roadmap ra sao?`,
+      ]
       : [
-          `Why is the "${nodeTitle}" node important in this roadmap?`,
-          `How should I start with "${nodeTitle}"?`,
-          `How does "${nodeTitle}" connect to other nodes in the roadmap?`,
-        ];
+        `Why is the "${nodeTitle}" node important in this roadmap?`,
+        `How should I start with "${nodeTitle}"?`,
+        `How does "${nodeTitle}" connect to other nodes in the roadmap?`,
+      ];
 
     return {
       intro,
@@ -1655,19 +1653,19 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
 
       const apiPayload = isContextAware
         ? buildMeowlContextEnvelope({
-            mode: contextMode,
-            language: lang,
-            title: isCourseMode
-              ? (courseContext?.activeLessonTitle || courseContext?.courseTitle || (language === "vi" ? "Bài học" : "Lesson"))
-              : (activeRoadmapContext?.nodeTitle || (language === "vi" ? "Roadmap" : "Roadmap")),
-            subtitle: isCourseMode
-              ? (courseContext?.courseTitle || (language === "vi" ? "Khóa học" : "Course"))
-              : (activeRoadmapContext?.roadmapTitle || (language === "vi" ? "Lộ trình học tập" : "Learning Roadmap")),
-            contextSummary: isCourseMode ? courseContextSummary : roadmapContextSummary,
-            userMessage: userMessage.content,
-            nodeDossier: isCourseMode ? null : roadmapNodeDossier,
-            repairInstruction: null,
-          })
+          mode: contextMode,
+          language: lang,
+          title: isCourseMode
+            ? (courseContext?.activeLessonTitle || courseContext?.courseTitle || (language === "vi" ? "Bài học" : "Lesson"))
+            : (activeRoadmapContext?.nodeTitle || (language === "vi" ? "Roadmap" : "Roadmap")),
+          subtitle: isCourseMode
+            ? (courseContext?.courseTitle || (language === "vi" ? "Khóa học" : "Course"))
+            : (activeRoadmapContext?.roadmapTitle || (language === "vi" ? "Lộ trình học tập" : "Learning Roadmap")),
+          contextSummary: isCourseMode ? courseContextSummary : roadmapContextSummary,
+          userMessage: userMessage.content,
+          nodeDossier: isCourseMode ? null : roadmapNodeDossier,
+          repairInstruction: null,
+        })
         : userMessage.content;
 
       const response = await axiosInstance.post("/v1/meowl/chat", {
@@ -1691,10 +1689,10 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
         setOnboardingContext((prev) =>
           prev
             ? {
-                ...prev,
-                nextBestAction: data.nextBestAction,
-                activeRole: data.activeRole || prev.activeRole,
-              }
+              ...prev,
+              nextBestAction: data.nextBestAction,
+              activeRole: data.activeRole || prev.activeRole,
+            }
             : prev,
         );
       }

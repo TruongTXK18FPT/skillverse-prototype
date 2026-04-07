@@ -428,7 +428,7 @@ const DashboardPage = () => {
                   thumbnail:
                     courseData.thumbnailUrl ||
                     "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=200", // Fallback image
-                  lastAccessed: "Recently",
+                  lastAccessed: enrollment.enrolledAt || "Recently",
                   nextLesson: nextLessonLabel,
                   estimatedTime: courseData.estimatedDurationHours
                     ? `${courseData.estimatedDurationHours} hours`

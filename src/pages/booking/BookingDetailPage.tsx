@@ -1014,7 +1014,6 @@ const BookingDetailPage: React.FC = () => {
                 <div className="bkd-review-step-header">
                   <div className="bkd-review-step-num bkd-review-step-num--3">3</div>
                   <span>Nhận xét của bạn</span>
-                  <span className="bkd-review-step-optional">(tùy chọn)</span>
                 </div>
                 <textarea
                   className={`bkd-review-textarea-large ${reviewErrors.comment ? 'bkd-input-error' : ''}`}

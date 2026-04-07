@@ -66,16 +66,6 @@ const PurchaseCourseModal: React.FC<PurchaseCourseModalProps> = ({ course, onClo
   return (
     <div className="purchase-modal-overlay" onClick={onClose}>
       <div className="purchase-modal-content" onClick={e => e.stopPropagation()}>
-        <div className="purchase-modal-header">
-          <h2>
-            <Lock size={20} />
-            Kích hoạt Module
-          </h2>
-          <button className="purchase-modal-close" onClick={onClose}>
-            <X size={20} />
-          </button>
-        </div>
-
         <div className="purchase-modal-body">
           <div className="purchase-course-info">
             <img 

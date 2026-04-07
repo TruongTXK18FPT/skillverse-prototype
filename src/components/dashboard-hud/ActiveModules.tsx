@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Clock } from 'lucide-react';
 import HUDCard from './HUDCard';
 import HoloProgressBar from './HoloProgressBar';
 import './ActiveModules.css';
+
+type ActiveCourseSort = 'newest' | 'progress-desc' | 'progress-asc' | 'title-asc';
+type ActiveCourseFilter = 'all' | 'just-started' | 'in-progress' | 'near-finish';
+
+const COURSES_PER_PAGE = 3;
 
 interface Course {
   id: number;
@@ -13,7 +18,7 @@ interface Course {
   completedLessons: number;
   instructor: string;
   thumbnail: string;
-  lastAccessed: string;
+  lastAccessed?: string;
   nextLesson: string;
   estimatedTime: string;
   group?: {
@@ -33,15 +38,143 @@ interface ActiveModulesProps {
 
 const ActiveModules: React.FC<ActiveModulesProps> = ({
   courses,
-  title = 'Active Simulations',
+  title = 'Khóa học đang học',
   onCourseClick,
-  continueLabel = 'Continue',
+  continueLabel = 'Tiếp tục học',
   onJoinGroup
 }) => {
+  const [sortBy, setSortBy] = useState<ActiveCourseSort>('newest');
+  const [filterBy, setFilterBy] = useState<ActiveCourseFilter>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const formatEstimatedTime = (value: string): string => {
+    if (!value) return '';
+
+    return value
+      .replace(/hours?/gi, 'giờ')
+      .replace(/hrs?/gi, 'giờ')
+      .replace(/minutes?|mins?/gi, 'phút')
+      .replace(/days?/gi, 'ngày');
+  };
+
+  const formatNextObjective = (value: string): string => {
+    if (!value) return 'Đang cập nhật';
+
+    const normalized = value.trim().toLowerCase();
+    if (normalized === 'continue learning') return 'Tiếp tục học';
+    if (normalized === 'start learning') return 'Bắt đầu học';
+    if (normalized === 'no lesson available') return 'Chưa có bài học';
+
+    return value;
+  };
+
+  const getCourseRecencyScore = (course: Course) => {
+    const parsedDate = Date.parse(course.lastAccessed || '');
+    if (Number.isNaN(parsedDate)) {
+      return course.id;
+    }
+    return parsedDate;
+  };
+
+  const filteredCourses = useMemo(() => {
+    return courses.filter((course) => {
+      if (filterBy === 'just-started') {
+        return course.progress <= 25;
+      }
+      if (filterBy === 'in-progress') {
+        return course.progress > 25 && course.progress < 80;
+      }
+      if (filterBy === 'near-finish') {
+        return course.progress >= 80;
+      }
+      return true;
+    });
+  }, [courses, filterBy]);
+
+  const sortedCourses = useMemo(() => {
+    const next = [...filteredCourses];
+
+    if (sortBy === 'progress-desc') {
+      next.sort((a, b) => b.progress - a.progress || b.id - a.id);
+      return next;
+    }
+
+    if (sortBy === 'progress-asc') {
+      next.sort((a, b) => a.progress - b.progress || b.id - a.id);
+      return next;
+    }
+
+    if (sortBy === 'title-asc') {
+      next.sort((a, b) => a.title.localeCompare(b.title, 'vi'));
+      return next;
+    }
+
+    next.sort((a, b) => getCourseRecencyScore(b) - getCourseRecencyScore(a));
+    return next;
+  }, [filteredCourses, sortBy]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [courses.length, filterBy, sortBy]);
+
+  const totalPages = Math.max(1, Math.ceil(sortedCourses.length / COURSES_PER_PAGE));
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  const paginatedCourses = useMemo(() => {
+    const start = (currentPage - 1) * COURSES_PER_PAGE;
+    return sortedCourses.slice(start, start + COURSES_PER_PAGE);
+  }, [currentPage, sortedCourses]);
+
+  const showingStart = sortedCourses.length === 0 ? 0 : (currentPage - 1) * COURSES_PER_PAGE + 1;
+  const showingEnd = sortedCourses.length === 0
+    ? 0
+    : Math.min(currentPage * COURSES_PER_PAGE, sortedCourses.length);
+
   return (
-    <HUDCard title={title} subtitle={`${courses.length} Running Modules`} variant="chamfer" delay={0.3}>
+    <HUDCard title={title} subtitle={`${courses.length} khóa học đang học`} variant="chamfer" delay={0.3}>
       <div className="active-modules">
-        {courses.map((course, index) => (
+        <div className="active-modules__toolbar">
+          <div className="active-modules__control">
+            <label htmlFor="active-modules-sort">Sắp xếp</label>
+            <select
+              id="active-modules-sort"
+              value={sortBy}
+              onChange={(event) => setSortBy(event.target.value as ActiveCourseSort)}
+            >
+              <option value="newest">Mới nhất</option>
+              <option value="progress-desc">Tiến độ giảm dần</option>
+              <option value="progress-asc">Tiến độ tăng dần</option>
+              <option value="title-asc">Tên A-Z</option>
+            </select>
+          </div>
+
+          <div className="active-modules__control">
+            <label htmlFor="active-modules-filter">Lọc</label>
+            <select
+              id="active-modules-filter"
+              value={filterBy}
+              onChange={(event) => setFilterBy(event.target.value as ActiveCourseFilter)}
+            >
+              <option value="all">Tất cả</option>
+              <option value="just-started">Mới bắt đầu (0-25%)</option>
+              <option value="in-progress">Đang học (26-79%)</option>
+              <option value="near-finish">Sắp hoàn thành (từ 80%)</option>
+            </select>
+          </div>
+
+          <div className="active-modules__summary">
+            {sortedCourses.length === 0
+              ? 'Không có khóa học phù hợp.'
+              : `Hiển thị ${showingStart}-${showingEnd} / ${sortedCourses.length}`}
+          </div>
+        </div>
+
+        {paginatedCourses.map((course, index) => (
           <motion.div
             key={course.id}
             initial={{ opacity: 0, x: -20 }}
@@ -69,7 +202,7 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
             <div className="active-modules__content">
               <div className="active-modules__header">
                 <h4 className="active-modules__title">{course.title}</h4>
-                <p className="active-modules__instructor">BY: {course.instructor.toUpperCase()}</p>
+                <p className="active-modules__instructor">Giảng viên: {course.instructor}</p>
               </div>
 
               {/* Progress */}
@@ -85,16 +218,16 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
               <div className="active-modules__stats">
                 {course.totalLessons > 0 && (
                   <div className="active-modules__stat">
-                    <span className="active-modules__stat-label">SYCHRONIZED</span>
+                    <span className="active-modules__stat-label">ĐÃ ĐỒNG BỘ</span>
                     <span className="active-modules__stat-value">
-                      {course.completedLessons}/{course.totalLessons} UNITS
+                      {course.completedLessons}/{course.totalLessons} BÀI
                     </span>
                   </div>
                 )}
                 <div className="active-modules__stat">
-                  <span className="active-modules__stat-label">NEXT OBJECTIVE</span>
-                  <span className="active-modules__stat-value" title={course.nextLesson}>
-                    {course.nextLesson}
+                  <span className="active-modules__stat-label">MỤC TIÊU TIẾP THEO</span>
+                  <span className="active-modules__stat-value" title={formatNextObjective(course.nextLesson)}>
+                    {formatNextObjective(course.nextLesson)}
                   </span>
                 </div>
               </div>
@@ -103,17 +236,13 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
               <div className="active-modules__footer">
                 <div className="active-modules__time">
                   <Clock size={14} />
-                  <span>{course.estimatedTime}</span>
+                  <span>{formatEstimatedTime(course.estimatedTime)}</span>
                 </div>
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div className="active-modules__actions">
                     {course.group && (
-                        <button 
-                            className="active-modules__button"
-                            style={{ 
-                                background: course.group.isMember ? 'rgba(16, 185, 129, 0.1)' : 'rgba(59, 130, 246, 0.1)', 
-                                color: course.group.isMember ? '#10b981' : '#3b82f6',
-                                borderColor: course.group.isMember ? '#10b981' : '#3b82f6'
-                            }}
+                        <button
+                            type="button"
+                            className={`active-modules__button active-modules__button--group ${course.group.isMember ? 'active-modules__button--joined' : ''}`}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 if (course.group) {
@@ -121,10 +250,17 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
                                 }
                             }}
                         >
-                            {course.group.isMember ? 'Chat' : 'Join Group'}
+                            {course.group.isMember ? 'Vào nhóm chat' : 'Tham gia nhóm'}
                         </button>
                     )}
-                    <button className="active-modules__button">
+                    <button
+                      type="button"
+                      className="active-modules__button active-modules__button--primary"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onCourseClick?.(course.id, course.title);
+                      }}
+                    >
                       <Play size={14} />
                       {continueLabel}
                     </button>
@@ -133,6 +269,32 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
             </div>
           </motion.div>
         ))}
+
+        {paginatedCourses.length === 0 && (
+          <div className="active-modules__empty">Hiện chưa có khóa học phù hợp với bộ lọc đã chọn.</div>
+        )}
+
+        {sortedCourses.length > COURSES_PER_PAGE && (
+          <div className="active-modules__pagination">
+            <button
+              type="button"
+              className="active-modules__page-btn"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Trang trước
+            </button>
+            <span className="active-modules__page-indicator">Trang {currentPage}/{totalPages}</span>
+            <button
+              type="button"
+              className="active-modules__page-btn"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              Trang sau
+            </button>
+          </div>
+        )}
       </div>
     </HUDCard>
   );

@@ -473,12 +473,12 @@ const MyWalletCosmic: React.FC = () => {
   if (!user) {
     return (
       <div className="cosmic-wallet-container">
-        <div className="cosmic-loading">
+        <div className="cosmic-loading cosmic-auth-fallback">
           <Wallet size={40} />
           <h2>Đăng nhập để mở Ví SkillVerse</h2>
           <p>Bạn cần đăng nhập để theo dõi số dư, giao dịch và quản lý tài khoản ví.</p>
           <button
-            className="cosmic-action-btn"
+            className="cosmic-login-cta"
             onClick={() => setShowLoginModal(true)}
             type="button"
           >

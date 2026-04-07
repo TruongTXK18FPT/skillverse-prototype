@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, ChevronLeft, Target, Clock, ArrowRight, Star } from 'lucide-react';
 import { UNIVERSE_ZONES, ZoneConfig } from '../../config/exploreMapData';
+import { useAuth } from '../../context/AuthContext';
+import LoginRequiredModal from '../auth/LoginRequiredModal';
 import ScannerHotspot from '../shared/ScannerHotspot';
 import '../../styles/ExploreMap.css';
 
@@ -29,11 +31,14 @@ type ViewState = 'overview' | 'transition' | 'zone-preview';
 
 const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [viewState, setViewState] = useState<ViewState>('overview');
   const [selectedZone, setSelectedZone] = useState<ZoneConfig | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [currentTime, setCurrentTime] = useState<string>('00:00:00');
   const [hoveredZone, setHoveredZone] = useState<ZoneConfig | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [blockedFeature, setBlockedFeature] = useState('');
   
   // Check if user has completed onboarding
   const [showQuestBox, setShowQuestBox] = useState(() => {
@@ -42,6 +47,12 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
 
   // Handle quest CTA click
   const handleQuestClick = () => {
+    if (!isAuthenticated) {
+      setBlockedFeature('Lộ Trình');
+      setShowLoginModal(true);
+      return;
+    }
+
     localStorage.setItem('onboarded', 'true');
     setShowQuestBox(false);
     navigate('/roadmap');
@@ -96,8 +107,13 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
   };
 
   // Handle interaction point click - navigate to page
-  const handleInteractionClick = (path: string) => {
-    // Just navigate - don't call onClose() as navigation will handle page change
+  const handleInteractionClick = (path: string, name: string, requiresAuth?: boolean) => {
+    if (requiresAuth && !isAuthenticated) {
+      setBlockedFeature(name);
+      setShowLoginModal(true);
+      return;
+    }
+
     navigate(path);
   };
 
@@ -135,6 +151,14 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
 
   return (
     <div className="explore-map-overlay">
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để tiếp tục"
+        message="Bạn cần đăng nhập để truy cập khu vực này từ bản đồ khám phá"
+        feature={blockedFeature || 'Explore Map'}
+      />
+
       <div className="explore-map-container sci-fi-hud">
         {/* Background Image */}
         <div
@@ -379,7 +403,7 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ onClose }) => {
                     label={interaction.name}
                     description={interaction.description}
                     icon={interaction.icon}
-                    onClick={() => handleInteractionClick(interaction.path)}
+                    onClick={() => handleInteractionClick(interaction.path, interaction.name, interaction.requiresAuth)}
                     primaryColor={selectedZone.primaryColor}
                     additionalClass={interaction.highlight ? 'interaction-point--highlighted' : ''}
                   />

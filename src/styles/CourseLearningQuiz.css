@@ -175,11 +175,14 @@
 
 /* --- Quiz Complete (Passed) --- */
 .lhud-quiz-complete-card {
-  padding: 40px;
-  background: rgba(16, 185, 129, 0.1);
-  border-radius: 12px;
+  padding: clamp(1.6rem, 2.4vw, 2.3rem);
+  background:
+    radial-gradient(circle at top right, rgba(16, 185, 129, 0.2), transparent 55%),
+    linear-gradient(160deg, rgba(10, 18, 30, 0.92), rgba(15, 23, 42, 0.86));
+  border-radius: 14px;
   text-align: center;
-  border: 2px solid var(--lhud-green);
+  border: 1px solid rgba(16, 185, 129, 0.38);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 16px 40px rgba(5, 150, 105, 0.16);
 }
 
 .lhud-quiz-complete-title {
@@ -190,11 +193,11 @@
 
 .lhud-quiz-complete-score {
   display: inline-block;
-  margin-bottom: 24px;
-  padding: 20px;
-  background: var(--lhud-space-light);
-  border-radius: 8px;
-  border: 1px solid var(--lhud-border);
+  margin-bottom: 1.3rem;
+  padding: 1rem 1.2rem;
+  background: rgba(8, 16, 30, 0.82);
+  border-radius: 12px;
+  border: 1px solid rgba(16, 185, 129, 0.24);
 }
 
 .lhud-quiz-complete-score-main {
@@ -210,7 +213,7 @@
 }
 
 .lhud-quiz-complete-note {
-  margin: 0 0 16px 0;
+  margin: 0;
   color: var(--lhud-text-secondary);
 }
 
@@ -220,31 +223,35 @@
 
 /* --- Quiz Preview Card --- */
 .lhud-quiz-card {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 32px;
-  background: var(--lhud-space-light);
-  border-radius: 16px;
-  border: 2px solid var(--lhud-cyan);
-  box-shadow: 0 8px 32px rgba(0, 255, 255, 0.1);
+  max-width: none;
+  margin: 0;
+  padding: clamp(1.3rem, 2.1vw, 1.8rem);
+  background:
+    radial-gradient(circle at top right, rgba(6, 182, 212, 0.16), transparent 52%),
+    linear-gradient(165deg, rgba(8, 16, 30, 0.94), rgba(15, 23, 42, 0.9));
+  border-radius: 14px;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  box-shadow: 0 16px 34px rgba(2, 8, 20, 0.38);
 }
 
 .lhud-quiz-card-header {
-  text-align: center;
-  margin-bottom: 32px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--lhud-border);
+  text-align: left;
+  margin-bottom: 1.3rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
 }
 
 .lhud-quiz-card-breadcrumb {
-  margin-bottom: 16px;
-  color: var(--lhud-cyan);
-  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  color: #67e8f9;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .lhud-quiz-card-title {
-  margin: 0 0 16px 0;
-  font-size: 2.2rem;
+  margin: 0 0 0.7rem 0;
+  font-size: clamp(1.45rem, 2.2vw, 1.95rem);
   color: var(--lhud-text-primary);
   font-family: "Inter", sans-serif;
 }
@@ -252,22 +259,22 @@
 .lhud-quiz-card-desc {
   margin: 0;
   color: var(--lhud-text-secondary);
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.6;
 }
 
 .lhud-quiz-card-objective {
-  margin: 12px auto 0 auto;
+  margin: 0.75rem 0 0;
   font-style: italic;
   color: var(--lhud-text-dim);
-  max-width: 600px;
+  max-width: 720px;
 }
 
 /* --- Stats --- */
 .lhud-quiz-stats {
   display: grid;
-  gap: 16px;
-  margin-bottom: 32px;
+  gap: 0.8rem;
+  margin-bottom: 1.4rem;
 }
 
 .lhud-quiz-stats.lhud-quiz-stats--two-items {
@@ -278,19 +285,23 @@
 }
 
 .lhud-quiz-stats.lhud-quiz-stats--four-items {
-  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .lhud-quiz-stat {
-  padding: 16px;
-  background: var(--lhud-deep-space);
+  padding: 0.95rem;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(10, 14, 23, 0.86));
   border-radius: 12px;
-  border: 1px solid var(--lhud-border);
+  border: 1px solid rgba(148, 163, 184, 0.18);
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   transition: all 0.3s ease;
+}
+
+.lhud-quiz-stat:hover {
+  border-color: rgba(34, 211, 238, 0.35);
 }
 
 .lhud-quiz-stat.is-best.is-pass {
@@ -319,9 +330,9 @@
 }
 
 .lhud-quiz-stat-value {
-  font-size: 1.75rem;
+  font-size: 1.55rem;
   color: var(--lhud-cyan);
-  margin-bottom: 4px;
+  margin-bottom: 0.28rem;
   font-family: "Inter", sans-serif;
   font-weight: 700;
 }
@@ -361,8 +372,10 @@
 .lhud-quiz-action {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 16px;
+  align-items: stretch;
+  gap: 0.75rem;
+  max-width: 420px;
+  margin: 0 auto;
 }
 
 .lhud-quiz-review-btn {
@@ -371,19 +384,20 @@
 }
 
 .lhud-quiz-action-btn {
-  padding: 12px 32px;
-  font-size: 1rem;
+  min-height: 46px;
+  padding: 0.75rem 1.1rem;
+  font-size: 0.94rem;
   font-family: "Inter", sans-serif;
   font-weight: 600;
   letter-spacing: 0.3px;
   color: white;
-  border: none;
-  border-radius: 8px;
+  border: 1px solid transparent;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
   transform: translateY(0);
-  width: auto;
-  min-width: 240px;
+  width: 100%;
+  min-width: 0;
 }
 
 @media (max-width: 1024px) {
@@ -433,11 +447,11 @@
 
 /* --- Lock Banner --- */
 .lhud-quiz-lock-banner {
-  margin-top: 20px;
-  padding: 16px 24px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  border-radius: 8px;
+  margin-top: 0.5rem;
+  padding: 0.95rem 1rem;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  border-radius: 12px;
   color: #fca5a5;
 }
 
@@ -467,30 +481,30 @@
 .lhud-quiz-countdown {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 0.5rem;
+  margin-bottom: 0.7rem;
 }
 
 .lhud-quiz-countdown-timer {
-  background: rgba(0, 0, 0, 0.3);
-  padding: 12px 16px;
-  border-radius: 8px;
+  background: rgba(2, 6, 23, 0.75);
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
   font-family: monospace;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: bold;
   color: var(--lhud-cyan);
   letter-spacing: 2px;
-  border: 1px solid var(--lhud-cyan-dim);
+  border: 1px solid rgba(34, 211, 238, 0.3);
 }
 
 /* --- Reassurance --- */
 .lhud-quiz-meta {
-  margin-top: 24px;
+  margin-top: 1rem;
   display: flex;
   justify-content: center;
-  gap: 24px;
+  gap: 0.9rem;
   color: var(--lhud-text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   flex-wrap: wrap;
 }
 
@@ -514,7 +528,7 @@
   }
 
   .lhud-quiz-card {
-    padding: 24px;
+    padding: 1.1rem;
   }
 
   .lhud-quiz-card-title {

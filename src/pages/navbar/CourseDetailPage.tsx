@@ -220,25 +220,44 @@ const CourseDetailPage = () => {
     getCourse(courseId)
       .then(async (dto) => {
         setCourse(dto);
+
+        const summaryModules = (dto.modules || []).map((m, index) => ({
+          ...m,
+          title: (m.title || '').trim() || `Chương ${index + 1}`,
+          description: m.description || '',
+          orderIndex: m.orderIndex ?? index,
+          courseId,
+          createdAt: '',
+          updatedAt: '',
+          lessons: [],
+          quizzes: [],
+          assignments: []
+        }));
         
         // Fetch detailed module content (lessons, quizzes, etc.)
         try {
           const detailModules = await listModulesWithContent(courseId);
-          setModules(detailModules);
+
+          if (detailModules.length > 0) {
+            const summaryById = new Map(summaryModules.map((module) => [module.id, module]));
+            const mergedModules = detailModules.map((module, index) => {
+              const fallbackModule = summaryById.get(module.id) || summaryModules[index];
+              return {
+                ...module,
+                title: module.title?.trim() || fallbackModule?.title || `Chương ${index + 1}`,
+                description: module.description?.trim() || fallbackModule?.description || '',
+                orderIndex: module.orderIndex ?? fallbackModule?.orderIndex ?? index,
+              };
+            });
+
+            setModules(mergedModules);
+          } else {
+            setModules(summaryModules);
+          }
         } catch (mErr) {
           console.error('Error loading module content:', mErr);
-          // Fallback to basic modules from course DTO if detail fetch fails
-          if (dto.modules) {
-            setModules(dto.modules.map(m => ({
-              ...m,
-              courseId,
-              createdAt: '',
-              updatedAt: '',
-              lessons: [],
-              quizzes: [],
-              assignments: []
-            })));
-          }
+          // Fallback to basic modules from course DTO if detail fetch fails.
+          setModules(summaryModules);
         }
 
         if (dto.author?.id) {

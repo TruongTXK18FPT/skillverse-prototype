@@ -817,6 +817,51 @@
   font-size: 1.1rem;
 }
 
+.cosmic-auth-fallback {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2.25rem 1.5rem;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  border-radius: 18px;
+  background: radial-gradient(circle at top, rgba(34, 211, 238, 0.14), rgba(15, 23, 42, 0.9));
+  box-shadow: 0 20px 44px rgba(15, 23, 42, 0.45), 0 0 30px rgba(34, 211, 238, 0.12);
+  text-align: center;
+}
+
+.cosmic-auth-fallback h2 {
+  margin: 0;
+  color: #e2e8f0;
+  font-size: 1.75rem;
+}
+
+.cosmic-auth-fallback p {
+  margin: 0;
+  max-width: 480px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.cosmic-login-cta {
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1.4rem;
+  min-width: 220px;
+  width: fit-content;
+  max-width: 100%;
+  background: linear-gradient(135deg, #22d3ee, #2563eb);
+  color: #0f172a;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.35);
+}
+
+.cosmic-login-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px rgba(37, 99, 235, 0.45);
+}
+
 /* ========================================
    BUY COINS SECTION
    ======================================== */

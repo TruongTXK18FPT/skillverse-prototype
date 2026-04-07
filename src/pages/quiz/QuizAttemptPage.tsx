@@ -2,10 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
-import AssessmentWorkspaceShell from '../../components/meowl/AssessmentWorkspaceShell';
-import MeowlContextPanel from '../../components/meowl/MeowlContextPanel';
 import { useAuth } from '../../context/AuthContext';
-import usePremiumAccess from '../../hooks/usePremiumAccess';
 import {
   getMyLatestQuizReview,
   getQuizAttemptStatus,
@@ -62,13 +59,12 @@ const QuizAttemptPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
-  const { hasPremiumAccess, planName } = usePremiumAccess();
   const locationState = (location.state as CourseLearningLocationState | null) ?? null;
   const viewLatestResult = useMemo(
     () => new URLSearchParams(location.search).get('view') === 'result',
     [location.search]
   );
-  
+
   const [quiz, setQuiz] = useState<QuizDetailDTO | null>(null);
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState<Record<number, AnswerDraft>>({});
@@ -177,7 +173,7 @@ const QuizAttemptPage: React.FC = () => {
   // Load quiz and attempts
   useEffect(() => {
     if (!quizId || !user) return;
-    
+
     setLoading(true);
     Promise.all([
       getQuizForAttemptById(Number(quizId)),
@@ -381,10 +377,10 @@ const QuizAttemptPage: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!user || !quiz) return;
-    
+
     const totalQuestions = quiz.questions?.length || 0;
     const answeredCount = quiz.questions?.filter(isQuestionAnswered).length || 0;
-    
+
     if (answeredCount < totalQuestions) {
       if (!(await confirmAction(`Bạn mới trả lời ${answeredCount}/${totalQuestions} câu. Xác nhận nộp bài?`))) {
         return;
@@ -392,7 +388,7 @@ const QuizAttemptPage: React.FC = () => {
     }
 
     try {
-      
+
       const submitData = {
         quizId: quiz.id,
         sessionToken: attemptSessionToken ?? undefined,
@@ -406,10 +402,10 @@ const QuizAttemptPage: React.FC = () => {
           }))
           .filter((answer) => (answer.selectedOptionIds && answer.selectedOptionIds.length > 0) || answer.textAnswer)
       };
-      
+
       const res = await submitQuiz(submitData, user.id);
-      
-      
+
+
       setResult(res.attempt);
       setLatestAttemptResult(res.attempt);
       setAttemptHistory((prev) => [res.attempt, ...prev.filter((attempt) => attempt.id !== res.attempt.id)]);
@@ -453,112 +449,48 @@ const QuizAttemptPage: React.FC = () => {
       showAppError('Không thể nộp bài', errorMessage);
     }
   };
-
   const totalQuestions = quiz?.questions?.length || 0;
   const answeredCount = quiz?.questions?.filter(isQuestionAnswered).length || 0;
-  const meowlPanelSubtitle = useMemo(() => {
-    switch (viewMode) {
-      case 'taking':
-        return 'Meowl đang ở chế độ giám thị. Mình không cung cấp đáp án hay gợi ý học thuật trong lúc bạn làm bài.';
-      case 'result':
-        return 'Bạn đang xem kết quả bài kiểm tra. Meowl chỉ hỗ trợ quy tắc, chiến lược ôn tập và định hướng bước tiếp theo.';
-      default:
-        return 'Đây là khu vực đánh giá. Meowl chỉ hỗ trợ giữ bình tĩnh, quản lý thời gian và nhắc quy chế làm bài.';
-    }
-  }, [viewMode]);
-  const meowlPanelSummary = useMemo(() => {
-    const summary: string[] = [];
-
-    if (quiz?.title) {
-      summary.push(`Bài kiểm tra: ${quiz.title}`);
-    }
-
-    summary.push(
-      `Màn hình hiện tại: ${
-        viewMode === 'taking'
-          ? 'Đang làm bài'
-          : viewMode === 'result'
-          ? 'Xem kết quả'
-          : 'Chuẩn bị bắt đầu'
-      }`,
-    );
-
-    if (quiz?.passScore != null) {
-      summary.push(`Điểm đạt yêu cầu: ${quiz.passScore}%`);
-    }
-
-    summary.push(`Số lượt đã dùng: ${attemptsUsed}/${maxAttempts}`);
-
-    if (viewMode === 'taking') {
-      summary.push(`Tiến độ trả lời: ${answeredCount}/${totalQuestions} câu`);
-    }
-
-    if (hasPassed) {
-      summary.push('Trạng thái: Đã đạt bài kiểm tra này.');
-    } else if (!canRetry) {
-      summary.push('Trạng thái: Tạm khóa làm lại cho đến khi hết thời gian chờ.');
-    } else {
-      summary.push('Trạng thái: Chỉ được hỗ trợ quy tắc làm bài, không hỗ trợ nội dung đáp án.');
-    }
-
-    return summary;
-  }, [answeredCount, attemptsUsed, canRetry, hasPassed, maxAttempts, quiz?.passScore, quiz?.title, totalQuestions, viewMode]);
-  const meowlPanel = (
-    <MeowlContextPanel
-      mode="MODE_EXAM_PROCTOR"
-      title={quiz?.title || 'Giám thị Meowl'}
-      subtitle={meowlPanelSubtitle}
-      contextSummary={meowlPanelSummary}
-      isPremiumLocked={!hasPremiumAccess}
-      premiumLabel={planName}
-      theme="hud"
-    />
-  );
 
   if (loading) {
     return (
-      <AssessmentWorkspaceShell panel={meowlPanel}>
-        <div className="hud-quiz-attempt-container">
-          <div className="hud-quiz-attempt-loading">
-            <MeowlKuruLoader size="small" text="" />
-            <p>ĐANG TẢI BÀI KIỂM TRA...</p>
-          </div>
+      <div className="hud-quiz-attempt-container">
+        <div className="hud-quiz-attempt-loading">
+          <MeowlKuruLoader size="small" text="" />
+          <p>ĐANG TẢI BÀI KIỂM TRA...</p>
         </div>
-      </AssessmentWorkspaceShell>
+      </div>
     );
   }
 
   if (!quiz) {
     return (
-      <AssessmentWorkspaceShell panel={meowlPanel}>
-        <div className="hud-quiz-attempt-container">
-          <div className="hud-quiz-attempt-error">
-            <AlertCircle size={48} />
-            <h2>Không tìm thấy bài kiểm tra</h2>
-            <p>Không thể kết nối đến dữ liệu bài kiểm tra</p>
-            <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-btn-back">
-              <ArrowLeft size={18} />
-              Quay lại khóa học
-            </button>
-          </div>
+      <div className="hud-quiz-attempt-container">
+        <div className="hud-quiz-attempt-error">
+          <AlertCircle size={48} />
+          <h2>Không tìm thấy bài kiểm tra</h2>
+          <p>Không thể kết nối đến dữ liệu bài kiểm tra</p>
+          <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-btn-back">
+            <ArrowLeft size={18} />
+            Quay lại khóa học
+          </button>
         </div>
-      </AssessmentWorkspaceShell>
+      </div>
     );
   }
 
   // START SCREEN - Màn hình bắt đầu
   if (viewMode === 'start') {
     return (
-      <AssessmentWorkspaceShell panel={meowlPanel}>
-        <div className="hud-quiz-attempt-container">
-          <div className="hud-quiz-attempt-header">
-            <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-back-btn">
-              <ArrowLeft size={20} />
-              <span>Quay lại</span>
-            </button>
-          </div>
+      <div className="hud-quiz-attempt-container">
+        <div className="hud-quiz-attempt-header">
+          <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-back-btn">
+            <ArrowLeft size={20} />
+            <span>Quay lại</span>
+          </button>
+        </div>
 
-          <div className="hud-quiz-attempt-start-screen">
+        <div className="hud-quiz-attempt-start-screen">
           {hasRevisionItemWarning && (
             <div className="lhud-revision-banner is-warning">
               <div>
@@ -624,43 +556,43 @@ const QuizAttemptPage: React.FC = () => {
 
           {hasPassed ? (
             <div className="hud-quiz-attempt-passed-notice">
-            <h3>Đã hoàn thành</h3>
-            <p className="hud-quiz-attempt-passed-score">
-              Điểm: {bestScore}% | Yêu cầu: {quiz.passScore}%
-            </p>
-            <p className="hud-quiz-attempt-passed-message">Bạn đã đạt điểm yêu cầu. Không cần làm lại bài kiểm tra.</p>
-            <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-btn-primary">
-              <ArrowLeft size={18} />
-              Quay lại khóa học
-            </button>
-          </div>
-        ) : latestAttemptResult ? (
-          <div className="hud-quiz-attempt-passed-notice">
-            <h3>Kết quả gần nhất</h3>
-            <p className="hud-quiz-attempt-passed-score">
-              Điểm: {latestAttemptResult.score ?? 0}% | Yêu cầu: {quiz.passScore}%
-            </p>
-            <p className="hud-quiz-attempt-passed-message">
-              Bạn có thể xem lại summary lần làm gần nhất trước khi quyết định làm lại bài kiểm tra.
-            </p>
-            <div className="hud-quiz-attempt-start-actions">
-              <button onClick={handleReviewLatestResult} className="hud-quiz-attempt-btn-primary">
-                Xem kết quả gần nhất
+              <h3>Đã hoàn thành</h3>
+              <p className="hud-quiz-attempt-passed-score">
+                Điểm: {bestScore}% | Yêu cầu: {quiz.passScore}%
+              </p>
+              <p className="hud-quiz-attempt-passed-message">Bạn đã đạt điểm yêu cầu. Không cần làm lại bài kiểm tra.</p>
+              <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-btn-primary">
+                <ArrowLeft size={18} />
+                Quay lại khóa học
               </button>
-              {canRetry && attemptsUsed < maxAttempts && (
-                <button onClick={handleStartQuiz} className="hud-quiz-attempt-btn-start">
-                  Làm lại ({attemptsUsed}/{maxAttempts})
-                </button>
-              )}
             </div>
-          </div>
-        ) : !canRetry ? (
-          <div className="hud-quiz-attempt-no-attempts">
-            <h3>Hết lượt làm bài</h3>
-            <p>Bạn đã sử dụng hết {maxAttempts} lượt làm bài.</p>
-            <p className="hud-quiz-attempt-cooldown">
-              Lượt làm bài sẽ được reset sau 8 giờ kể từ lần làm đầu tiên.
-            </p>
+          ) : latestAttemptResult ? (
+            <div className="hud-quiz-attempt-passed-notice">
+              <h3>Kết quả gần nhất</h3>
+              <p className="hud-quiz-attempt-passed-score">
+                Điểm: {latestAttemptResult.score ?? 0}% | Yêu cầu: {quiz.passScore}%
+              </p>
+              <p className="hud-quiz-attempt-passed-message">
+                Bạn có thể xem lại summary lần làm gần nhất trước khi quyết định làm lại bài kiểm tra.
+              </p>
+              <div className="hud-quiz-attempt-start-actions">
+                <button onClick={handleReviewLatestResult} className="hud-quiz-attempt-btn-primary">
+                  Xem kết quả gần nhất
+                </button>
+                {canRetry && attemptsUsed < maxAttempts && (
+                  <button onClick={handleStartQuiz} className="hud-quiz-attempt-btn-start">
+                    Làm lại ({attemptsUsed}/{maxAttempts})
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : !canRetry ? (
+            <div className="hud-quiz-attempt-no-attempts">
+              <h3>Hết lượt làm bài</h3>
+              <p>Bạn đã sử dụng hết {maxAttempts} lượt làm bài.</p>
+              <p className="hud-quiz-attempt-cooldown">
+                Lượt làm bài sẽ được reset sau 8 giờ kể từ lần làm đầu tiên.
+              </p>
               {cooldownSeconds > 0 && (
                 <p className="hud-quiz-attempt-cooldown">
                   Thời gian chờ: {Math.ceil(cooldownSeconds / 3600)} giờ
@@ -671,21 +603,20 @@ const QuizAttemptPage: React.FC = () => {
                   Có thể làm lại sau: {new Date(nextRetryAt).toLocaleString('vi-VN')}
                 </p>
               )}
-            <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-btn-secondary">
-              <ArrowLeft size={18} />
-              Quay lại
-            </button>
-          </div>
-        ) : (
-          <div className="hud-quiz-attempt-start-actions">
-            <button onClick={handleStartQuiz} className="hud-quiz-attempt-btn-start">
-              {attemptsUsed > 0 ? `Làm lại (${attemptsUsed}/${maxAttempts})` : 'Bắt đầu làm bài'}
-            </button>
-          </div>
-        )}
-          </div>
+              <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-btn-secondary">
+                <ArrowLeft size={18} />
+                Quay lại
+              </button>
+            </div>
+          ) : (
+            <div className="hud-quiz-attempt-start-actions">
+              <button onClick={handleStartQuiz} className="hud-quiz-attempt-btn-start">
+                {attemptsUsed > 0 ? `Làm lại (${attemptsUsed}/${maxAttempts})` : 'Bắt đầu làm bài'}
+              </button>
+            </div>
+          )}
         </div>
-      </AssessmentWorkspaceShell>
+      </div>
     );
   }
 
@@ -699,9 +630,8 @@ const QuizAttemptPage: React.FC = () => {
     );
 
     return (
-      <AssessmentWorkspaceShell panel={meowlPanel}>
-        <div className="hud-quiz-attempt-container">
-          <div className="hud-quiz-attempt-result">
+      <div className="hud-quiz-attempt-container">
+        <div className="hud-quiz-attempt-result">
           {hasRevisionItemWarning && (
             <div className="lhud-revision-banner is-warning">
               <div>
@@ -720,7 +650,6 @@ const QuizAttemptPage: React.FC = () => {
           <div className="hud-quiz-attempt-result-score">
             <div className={`hud-quiz-attempt-score-circle ${passed ? 'passed' : 'failed'}`}>
               <span className="hud-quiz-attempt-score-value">{result.score || 0}%</span>
-              <span className="hud-quiz-attempt-score-label">ĐIỂM</span>
             </div>
           </div>
 
@@ -796,130 +725,129 @@ const QuizAttemptPage: React.FC = () => {
               </button>
             )}
           </div>
-          </div>
         </div>
-      </AssessmentWorkspaceShell>
+      </div>
     );
   }
 
   // TAKING QUIZ SCREEN - Màn hình làm bài
   return (
-    <AssessmentWorkspaceShell panel={meowlPanel}>
-      <div className="hud-quiz-attempt-container hud-quiz-attempt-taking">
-        {hasRevisionItemWarning && (
-          <div className="lhud-revision-banner is-warning">
-            <div>
-              <strong>Nội dung cần làm lại</strong>
-              <p>{BREAKING_ITEM_MESSAGE}</p>
-            </div>
-          </div>
-        )}
-        {/* Header */}
-        <div className="hud-quiz-attempt-header">
-          <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-back-btn">
-            <ArrowLeft size={20} />
-            <span>Thoát</span>
-          </button>
-          <h1 className="hud-quiz-attempt-title">{quiz.title}</h1>
-          <div className="hud-quiz-attempt-progress-indicator">
-            <span>{answeredCount}/{totalQuestions}</span>
+    <div className="hud-quiz-attempt-container hud-quiz-attempt-taking">
+      {hasRevisionItemWarning && (
+        <div className="lhud-revision-banner is-warning">
+          <div>
+            <strong>Nội dung cần làm lại</strong>
+            <p>{BREAKING_ITEM_MESSAGE}</p>
           </div>
         </div>
+      )}
+      {/* Header */}
+      <div className="hud-quiz-attempt-header">
+        <button onClick={handleBackToCourseLearning} className="hud-quiz-attempt-back-btn">
+          <ArrowLeft size={20} />
+          <span>Thoát</span>
+        </button>
+        <h1 className="hud-quiz-attempt-title">{quiz.title}</h1>
+        <div className="hud-quiz-attempt-progress-indicator">
+          <span>{answeredCount}/{totalQuestions}</span>
+        </div>
+      </div>
 
-        {/* ALL QUESTIONS - Hiển thị tất cả câu hỏi */}
-        <div className="hud-quiz-attempt-all-questions">
-          {quiz.questions?.map((question: QuizQuestionDetailDTO, idx: number) => (
-            <div key={question.id} className="hud-quiz-attempt-question-card">
-              <div className="hud-quiz-attempt-question-header">
-                <span className="hud-quiz-attempt-question-number">Câu hỏi {idx + 1}</span>
-                {isQuestionAnswered(question) && (
-                  <span className="hud-quiz-attempt-question-answered">
-                    Đã trả lời
-                  </span>
-                )}
-              </div>
+      {/* ALL QUESTIONS - Hiển thị tất cả câu hỏi */}
+      <div className="hud-quiz-attempt-all-questions">
+        {quiz.questions?.map((question: QuizQuestionDetailDTO, idx: number) => (
+          <div key={question.id} className="hud-quiz-attempt-question-card">
+            <div className="hud-quiz-attempt-question-header">
+              <span className="hud-quiz-attempt-question-number">Câu hỏi {idx + 1}</span>
+              {isQuestionAnswered(question) && (
+                <span className="hud-quiz-attempt-question-answered">
+                  Đã trả lời
+                </span>
+              )}
+            </div>
 
-              <p className="hud-quiz-attempt-question-text">{question.questionText}</p>
-              <div className="hud-quiz-attempt-question-hint">
-                <span>{getQuestionHint(question)}</span>
-                {question.questionType === QuestionType.MULTIPLE_CHOICE &&
-                  (answers[question.id]?.selectedOptionIds?.length ?? 0) > 0 && (
+            <p className="hud-quiz-attempt-question-text">{question.questionText}</p>
+            <div className="hud-quiz-attempt-question-hint">
+              <span>{getQuestionHint(question)}</span>
+              {question.questionType === QuestionType.MULTIPLE_CHOICE &&
+                (answers[question.id]?.selectedOptionIds?.length ?? 0) > 0 && (
                   <span className="hud-quiz-attempt-question-hint-badge">
                     Đã chọn {(answers[question.id]?.selectedOptionIds?.length ?? 0)} đáp án
                   </span>
                 )}
-              </div>
-
-              {question.questionType === QuestionType.SHORT_ANSWER ? (
-                <div className="hud-quiz-attempt-short-answer">
-                  <textarea
-                    className="hud-quiz-attempt-short-answer-input"
-                    placeholder="Nhập câu trả lời ngắn của bạn..."
-                    rows={4}
-                    value={answers[question.id]?.textAnswer || ''}
-                    onChange={(e) => handleShortAnswerChange(question.id, e.target.value)}
-                  />
-                </div>
-              ) : (
-                <div className="hud-quiz-attempt-options">
-                  {question.options?.map((option: QuizOptionDTO) => {
-                    const selectedIds = answers[question.id]?.selectedOptionIds || [];
-                    const isSelected = selectedIds.includes(option.id);
-                    const isMulti = question.questionType === QuestionType.MULTIPLE_CHOICE
-                      && (question.correctOptionCount ?? 0) > 1;
-
-                    return (
-                      <label
-                        key={option.id}
-                        className={`hud-quiz-attempt-option ${isSelected ? 'selected' : ''} ${isMulti ? 'multi' : 'single'}`}
-                      >
-                        <input
-                          type={isMulti ? 'checkbox' : 'radio'}
-                          name={`question-${question.id}`}
-                          value={option.id}
-                          checked={isSelected}
-                          onChange={() => {
-                            if (isMulti) {
-                              handleToggleOption(question.id, option.id);
-                            } else {
-                              handleSelectSingleOption(question.id, option.id);
-                            }
-                          }}
-                          className="hud-quiz-attempt-option-input"
-                          aria-label={option.optionText}
-                        />
-                        <div className={`hud-quiz-attempt-option-indicator ${isMulti ? 'multi' : 'single'}`}>
-                          {isSelected && (
-                            <div className={`hud-quiz-attempt-option-selected ${isMulti ? 'multi' : 'single'}`}></div>
-                          )}
-                        </div>
-                        <span className="hud-quiz-attempt-option-text">{option.optionText}</span>
-                      </label>
-                    );
-                  })}
-                </div>
-              )}
             </div>
-          ))}
-        </div>
 
-        {/* Submit Button - Nút nộp bài */}
-        <div className="hud-quiz-attempt-navigation">
-          <div className="hud-quiz-attempt-answer-status">
-            <span className="hud-quiz-attempt-status-label">Tiến độ</span>
-            <span className="hud-quiz-attempt-status-value">{answeredCount}/{totalQuestions} câu đã trả lời</span>
+            {question.questionType === QuestionType.SHORT_ANSWER ? (
+              <div className="hud-quiz-attempt-short-answer">
+                <textarea
+                  className="hud-quiz-attempt-short-answer-input"
+                  placeholder="Nhập câu trả lời ngắn của bạn..."
+                  rows={4}
+                  value={answers[question.id]?.textAnswer || ''}
+                  onChange={(e) => handleShortAnswerChange(question.id, e.target.value)}
+                />
+              </div>
+            ) : (
+              <div className="hud-quiz-attempt-options">
+                {question.options?.map((option: QuizOptionDTO, optionIndex: number) => {
+                  const selectedIds = answers[question.id]?.selectedOptionIds || [];
+                  const isSelected = selectedIds.includes(option.id);
+                  const isMulti = question.questionType === QuestionType.MULTIPLE_CHOICE
+                    && (question.correctOptionCount ?? 0) > 1;
+                  const optionLabel = optionIndex < 26 ? String.fromCharCode(65 + optionIndex) : `${optionIndex + 1}`;
+
+                  return (
+                    <label
+                      key={option.id}
+                      className={`hud-quiz-attempt-option ${isSelected ? 'selected' : ''} ${isMulti ? 'multi' : 'single'}`}
+                    >
+                      <input
+                        type={isMulti ? 'checkbox' : 'radio'}
+                        name={`question-${question.id}`}
+                        value={option.id}
+                        checked={isSelected}
+                        onChange={() => {
+                          if (isMulti) {
+                            handleToggleOption(question.id, option.id);
+                          } else {
+                            handleSelectSingleOption(question.id, option.id);
+                          }
+                        }}
+                        className="hud-quiz-attempt-option-input"
+                        aria-label={option.optionText}
+                      />
+                      <div className={`hud-quiz-attempt-option-indicator ${isMulti ? 'multi' : 'single'}`}>
+                        {isSelected && (
+                          <div className={`hud-quiz-attempt-option-selected ${isMulti ? 'multi' : 'single'}`}></div>
+                        )}
+                      </div>
+                      <span className="hud-quiz-attempt-option-key">{optionLabel}.</span>
+                      <span className="hud-quiz-attempt-option-text">{option.optionText}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
           </div>
-
-          <button
-            onClick={handleSubmit}
-            className="hud-quiz-attempt-submit-btn"
-            disabled={answeredCount === 0}
-          >
-            Nộp bài
-          </button>
-        </div>
+        ))}
       </div>
-    </AssessmentWorkspaceShell>
+
+      {/* Submit Button - Nút nộp bài */}
+      <div className="hud-quiz-attempt-navigation">
+        <div className="hud-quiz-attempt-answer-status">
+          <span className="hud-quiz-attempt-status-label">Tiến độ</span>
+          <span className="hud-quiz-attempt-status-value">{answeredCount}/{totalQuestions} câu đã trả lời</span>
+        </div>
+
+        <button
+          onClick={handleSubmit}
+          className="hud-quiz-attempt-submit-btn"
+          disabled={answeredCount === 0}
+        >
+          Nộp bài
+        </button>
+      </div>
+    </div>
   );
 };
 

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Lock } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useAppToast } from "../../context/ToastContext";
 import {
@@ -209,8 +210,14 @@ const MentorshipPage = () => {
   }, [user?.id]);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setMentors([]);
+      setLoading(false);
+      return;
+    }
+
     fetchMentors();
-  }, [fetchMentors]);
+  }, [fetchMentors, isAuthenticated]);
 
   useEffect(() => {
     const shouldLock = bookingModalOpen || chatModalOpen || showLoginModal;
@@ -429,6 +436,39 @@ const MentorshipPage = () => {
 
     handleToggleFavorite(mentorId);
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="uplink-container">
+        <div className="uplink-content">
+          <div className="uplink-empty">
+            <Lock className="uplink-empty-icon" />
+            <h3 className="uplink-empty-title">Đăng nhập để truy cập Mentorship</h3>
+            <p className="uplink-empty-text">
+              Bạn cần đăng nhập để xem danh sách mentor, đặt lịch và nhắn tin trong khu vực này.
+            </p>
+            <button
+              type="button"
+              className="uplink-establish-btn"
+              onClick={() => setShowLoginModal(true)}
+            >
+              Đăng nhập để tiếp tục
+            </button>
+          </div>
+        </div>
+
+        <MeowlGuide currentPage="profile" />
+
+        <LoginRequiredModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          title="Đăng nhập để vào Mentorship"
+          message="Bạn cần đăng nhập để kết nối mentor, đặt lịch và trò chuyện trực tiếp"
+          feature="Mentorship"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="uplink-container">

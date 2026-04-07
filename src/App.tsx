@@ -560,7 +560,9 @@ const HeaderVisibilityWrapper = () => {
   if (
     fullScreenRoutes.has(location.pathname) ||
     isCourseLearningRoute(location.pathname) ||
-    isCertificateRoute(location.pathname)
+    isCertificateRoute(location.pathname) ||
+    isAssignmentRoute(location.pathname) ||
+    isQuizAttemptRoute(location.pathname)
   )
     return null;
   return <Header />;

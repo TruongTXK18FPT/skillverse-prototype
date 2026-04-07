@@ -252,8 +252,18 @@ const GSJJourneyPage: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      loadJourneys();
+      void loadJourneys();
+      return;
     }
+
+    setJourneys([]);
+    setSelectedJourney(null);
+    setCurrentTest(null);
+    setCurrentResult(null);
+    setViewMode("list");
+    setCurrentPage(1);
+    setError(null);
+    setLoading(false);
   }, [loadJourneys, user]);
 
   useEffect(() => {
@@ -298,6 +308,7 @@ const GSJJourneyPage: React.FC = () => {
     const autoOpenJourneyId = routeState?.autoOpenJourneyId;
 
     if (
+      !user ||
       !autoOpenJourneyId ||
       autoOpenedJourneyIdRef.current === autoOpenJourneyId
     ) {
@@ -308,7 +319,16 @@ const GSJJourneyPage: React.FC = () => {
     void handleSelectJourney(autoOpenJourneyId);
 
     navigate(location.pathname, { replace: true, state: null });
-  }, [handleSelectJourney, location.pathname, location.state, navigate]);
+  }, [handleSelectJourney, location.pathname, location.state, navigate, user]);
+
+  const handleCreateJourneyClick = useCallback(() => {
+    if (!user) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    navigate("/journey/create");
+  }, [navigate, user]);
 
   const syncSelectedJourneyTest = useCallback(
     (test: AssessmentTestResponse) => {
@@ -1472,22 +1492,24 @@ const GSJJourneyPage: React.FC = () => {
           <div className="gsj-hero__actions">
             <button
               className="gsj-btn gsj-btn--primary gsj-btn--lg"
-              onClick={() => navigate("/journey/create")}
+              onClick={handleCreateJourneyClick}
             >
               <Rocket size={20} />
               Tạo hành trình mới
             </button>
-            <button
-              className="gsj-btn gsj-btn--secondary gsj-btn--lg"
-              onClick={() =>
-                document
-                  .getElementById("journeys-section")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
-            >
-              <Map size={20} />
-              Xem hành trình của tôi
-            </button>
+            {user && (
+              <button
+                className="gsj-btn gsj-btn--secondary gsj-btn--lg"
+                onClick={() =>
+                  document
+                    .getElementById("journeys-section")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                <Map size={20} />
+                Xem hành trình của tôi
+              </button>
+            )}
           </div>
         </div>
         <div className="gsj-hero__visual">
@@ -1593,7 +1615,7 @@ const GSJJourneyPage: React.FC = () => {
         </div>
         <button
           className="gsj-btn gsj-btn--primary"
-          onClick={() => navigate("/journey/create")}
+          onClick={handleCreateJourneyClick}
         >
           <Zap size={16} />
           Tạo mới
@@ -1620,7 +1642,7 @@ const GSJJourneyPage: React.FC = () => {
           </p>
           <button
             className="gsj-btn gsj-btn--primary gsj-btn--lg"
-            onClick={() => navigate("/journey/create")}
+            onClick={handleCreateJourneyClick}
           >
             <Sparkles size={18} />
             Tạo hành trình đầu tiên
@@ -1748,7 +1770,7 @@ const GSJJourneyPage: React.FC = () => {
           )}
           <button
             className="gsj-btn gsj-btn--primary"
-            onClick={() => navigate("/journey/create")}
+            onClick={handleCreateJourneyClick}
           >
             <Zap size={16} />
             Tạo mới
@@ -1776,7 +1798,7 @@ const GSJJourneyPage: React.FC = () => {
           </p>
           <button
             className="gsj-btn gsj-btn--primary gsj-btn--lg"
-            onClick={() => navigate("/journey/create")}
+            onClick={handleCreateJourneyClick}
           >
             <Sparkles size={18} />
             Tạo hành trình đầu tiên
@@ -3243,43 +3265,16 @@ const GSJJourneyPage: React.FC = () => {
     );
   };
 
-  if (!user) {
-    return (
-      <>
-        <div className="gsj-page">
-          <div className="gsj-container">
-            {renderHero()}
-            <div className="gsj-empty">
-              <div className="gsj-empty__icon">
-                <Map size={28} />
-              </div>
-              <h3>Đăng nhập để bắt đầu Journey</h3>
-              <p>
-                Bạn cần đăng nhập để tạo Journey, làm quiz đánh giá và nhận roadmap cá nhân hóa.
-              </p>
-              <button
-                type="button"
-                className="gsj-btn gsj-btn--primary"
-                onClick={() => setShowLoginModal(true)}
-              >
-                Đăng nhập để tiếp tục
-              </button>
-            </div>
-          </div>
-        </div>
-        <LoginRequiredModal
-          isOpen={showLoginModal}
-          onClose={() => setShowLoginModal(false)}
-          title="Đăng nhập để dùng Journey"
-          message="Tạo hành trình, làm test đánh giá và theo dõi tiến trình phát triển sự nghiệp sau khi đăng nhập"
-          feature="Journey"
-        />
-      </>
-    );
-  }
-
   return (
     <div className="gsj-page">
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để dùng Journey"
+        message="Tạo hành trình, làm test đánh giá và theo dõi tiến trình phát triển sự nghiệp sau khi đăng nhập"
+        feature="Journey"
+      />
+
       <div className="gsj-container">
         {/* Hero Section */}
         {renderHero()}

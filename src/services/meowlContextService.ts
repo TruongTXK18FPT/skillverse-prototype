@@ -8,7 +8,6 @@ export type MeowlContextMode =
   | "MODE_ROADMAP_OVERVIEW"
   | "MODE_COURSE_LEARNING"
   | "MODE_FALLBACK_TEACHER"
-  | "MODE_EXAM_PROCTOR"
   | "MODE_SOCRATIC_READING"
   | "MODE_GENERAL_FAQ";
 
@@ -64,10 +63,6 @@ const MODE_RULES: Record<MeowlContextMode, string[]> = {
     "Mention why this node matters now and give exactly one concrete next action.",
     "Do not include login reminders, premium upgrades, or platform navigation CTA in the answer.",
     "If content is missing, say so clearly and teach from the node title, objectives, and key concepts instead of hallucinating.",
-  ],
-  MODE_EXAM_PROCTOR: [
-    "Refuse to provide answers, direct hints, or solution steps for quizzes and assignments.",
-    "Offer encouragement, time-management, and process guidance only.",
   ],
   MODE_SOCRATIC_READING: [
     "Do not replace the reading with a full summary.",
