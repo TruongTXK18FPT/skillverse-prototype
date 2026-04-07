@@ -31,6 +31,7 @@ import learningReportService, {
   isValidReportId,
   parseReportId,
 } from "../../services/learningReportService";
+import streakService from "../../services/streakService";
 import { useAuth } from "../../context/AuthContext";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import MarkdownRenderer from "../../components/learning-report/MarkdownRenderer";
@@ -162,6 +163,7 @@ const LearningReportPage: React.FC = () => {
   const [isDownloadingPDF, setIsDownloadingPDF] = useState(false);
   const [report, setReport] = useState<StudentLearningReportResponse | null>(null);
   const [canGenerate, setCanGenerate] = useState<CanGenerateResponse | null>(null);
+  const [streakInfo, setStreakInfo] = useState<{ currentStreak: number; longestStreak: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState("overview");
   const [activeHeadingId, setActiveHeadingId] = useState("lr-doc-overview");
@@ -190,12 +192,14 @@ const LearningReportPage: React.FC = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const [reportData, canGen] = await Promise.all([
+      const [reportData, canGen, streak] = await Promise.all([
         learningReportService.getReportById(reportId),
         learningReportService.canGenerateReport(),
+        streakService.getStreakInfo(),
       ]);
       setReport(reportData);
       setCanGenerate(canGen);
+      setStreakInfo(streak);
     } catch (err: unknown) {
       console.error("Error loading report by ID:", err);
       setError("Không thể tải báo cáo. Báo cáo có thể không tồn tại hoặc đã bị xóa.");
@@ -217,12 +221,14 @@ const LearningReportPage: React.FC = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const [latestReport, canGen] = await Promise.all([
+      const [latestReport, canGen, streak] = await Promise.all([
         learningReportService.getLatestReport(),
         learningReportService.canGenerateReport(),
+        streakService.getStreakInfo(),
       ]);
       setReport(latestReport);
       setCanGenerate(canGen);
+      setStreakInfo(streak);
     } catch (err: unknown) {
       console.error("Error loading report data:", err);
       setError("Không thể tải dữ liệu. Vui lòng thử lại.");
@@ -268,9 +274,13 @@ const LearningReportPage: React.FC = () => {
         includeChatHistory: true,
         includeDetailedSkills: true,
       });
+      const [canGen, streak] = await Promise.all([
+        learningReportService.canGenerateReport(),
+        streakService.getStreakInfo(),
+      ]);
       setReport(newReport);
-      const canGen = await learningReportService.canGenerateReport();
       setCanGenerate(canGen);
+      setStreakInfo(streak);
       setActiveSection("overview");
       setActiveHeadingId("lr-doc-overview");
     } catch (err: unknown) {
@@ -287,9 +297,13 @@ const LearningReportPage: React.FC = () => {
     setGeneratingStep(0);
     try {
       const newReport = await learningReportService.generateQuickReport();
+      const [canGen, streak] = await Promise.all([
+        learningReportService.canGenerateReport(),
+        streakService.getStreakInfo(),
+      ]);
       setReport(newReport);
-      const canGen = await learningReportService.canGenerateReport();
       setCanGenerate(canGen);
+      setStreakInfo(streak);
       setActiveSection("overview");
       setActiveHeadingId("lr-doc-overview");
     } catch (err: unknown) {
@@ -580,7 +594,7 @@ const LearningReportPage: React.FC = () => {
     if (!report) return null;
     const progressValue = report.overallProgress ?? 0;
     const studyHours = report.metrics?.totalStudyHours ?? 0;
-    const streakValue = report.metrics?.currentStreak ?? 0;
+    const streakValue = streakInfo?.currentStreak ?? 0;
     const completedTasks = report.metrics?.totalTasksCompleted ?? 0;
 
     const renderEmptyStat = (unit = "") => (
@@ -816,7 +830,12 @@ const LearningReportPage: React.FC = () => {
                     </button>
                     {!canGenerate?.canGenerate && (
                       <div className="lr-page__cooldown-msg">
-                        <Clock size={14} /> <span>Hệ thống cần thời gian hồi phục.</span>
+                        <Clock size={14} />
+                        <span>
+                          {canGenerate?.remainingCooldownMinutes !== undefined && canGenerate.remainingCooldownMinutes > 0
+                            ? learningReportService.getTimeUntilNextReport(canGenerate.remainingCooldownMinutes)
+                            : "Hệ thống cần thời gian hồi phục."}
+                        </span>
                       </div>
                     )}
                  </div>

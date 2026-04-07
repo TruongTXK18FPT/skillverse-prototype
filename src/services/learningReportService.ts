@@ -57,6 +57,11 @@ export interface StudentMetrics {
   preferredSkillCategory?: string;
   roadmapProgressList: RoadmapProgress[];
   averageProgress?: number;  // Backend field mapping
+  // Backend-only fields that may be present
+  totalTasks?: number;
+  completedTasks?: number;
+  streakDays?: number;
+  roadmapDetails?: RoadmapProgress[];  // Backend field name
 }
 
 export interface StudentLearningReportResponse {
@@ -193,6 +198,37 @@ function normalizeReportResponse(
       normalized.overallProgress = normalized.metrics.averageProgress;
     } else if ((normalized.metrics as any)?.averageProgress !== undefined) {
       normalized.overallProgress = (normalized.metrics as any).averageProgress;
+    }
+  }
+
+  // learningTrend default
+  if (!normalized.learningTrend) {
+    normalized.learningTrend = "stable";
+  }
+
+  // recommendedFocus default
+  if (normalized.recommendedFocus === undefined) {
+    normalized.recommendedFocus = undefined;
+  }
+
+  // Map metrics fields (continued)
+  if (normalized.metrics) {
+    // roadmapDetails -> roadmapProgressList (backend name vs frontend name)
+    if (
+      (normalized.metrics as any).roadmapDetails &&
+      !normalized.metrics.roadmapProgressList
+    ) {
+      normalized.metrics.roadmapProgressList = (normalized.metrics as any).roadmapDetails;
+    }
+
+    // totalTasksPending = totalTasks - totalTasksCompleted
+    if (
+      normalized.metrics.totalTasksPending === undefined &&
+      normalized.metrics.totalTasks !== undefined &&
+      normalized.metrics.totalTasksCompleted !== undefined
+    ) {
+      normalized.metrics.totalTasksPending =
+        normalized.metrics.totalTasks - normalized.metrics.totalTasksCompleted;
     }
   }
 
