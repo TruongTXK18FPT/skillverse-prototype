@@ -491,6 +491,7 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/user/bookings",
   "/journey/create",
   "/journey",
+  "/portfolio",
 ]);
 
 // Check if path matches quiz attempt pattern

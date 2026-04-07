@@ -10,6 +10,8 @@ import {
   ApiResponse,
   CheckExtendedProfileResponse,
   CandidateSummaryDTO,
+  SystemCertificateDTO,
+  CompletedMissionDTO,
 } from "../data/portfolioDTOs";
 
 // Use shared axios instance with automatic environment detection
@@ -408,6 +410,81 @@ export const deleteCertificate = async (
   }
 };
 
+// ==================== SYSTEM CERTIFICATES (AUTO-IMPORT) ====================
+
+/**
+ * Get system certificates (course completion + gamification badges)
+ */
+export const getSystemCertificates = async (): Promise<
+  SystemCertificateDTO[]
+> => {
+  const response = await api.get<ApiResponse<SystemCertificateDTO[]>>(
+    "/portfolio/system-certificates",
+  );
+  if (!response.data.success || !response.data.data) {
+    throw new Error(
+      response.data.message || "Failed to fetch system certificates",
+    );
+  }
+  return response.data.data;
+};
+
+/**
+ * Import system certificates into portfolio
+ * @param source "COURSE" | "BADGE" | "ALL"
+ */
+export const importSystemCertificates = async (
+  source: string = "ALL",
+): Promise<SystemCertificateDTO[]> => {
+  const response = await api.post<ApiResponse<SystemCertificateDTO[]>>(
+    "/portfolio/certificates/import/system",
+    null,
+    { params: { source } },
+  );
+  if (!response.data.success || !response.data.data) {
+    throw new Error(
+      response.data.message || "Failed to import system certificates",
+    );
+  }
+  return response.data.data;
+};
+
+// ==================== COMPLETED MISSIONS ====================
+
+/**
+ * Get completed short-term job missions for the authenticated user
+ */
+export const getCompletedMissions = async (): Promise<
+  CompletedMissionDTO[]
+> => {
+  const response = await api.get<ApiResponse<CompletedMissionDTO[]>>(
+    "/portfolio/completed-missions",
+  );
+  if (!response.data.success || !response.data.data) {
+    throw new Error(
+      response.data.message || "Failed to fetch completed missions",
+    );
+  }
+  return response.data.data;
+};
+
+/**
+ * Get public completed missions by user ID
+ */
+export const getPublicCompletedMissions = async (
+  userId: number,
+): Promise<CompletedMissionDTO[]> => {
+  const response = await api.get<ApiResponse<CompletedMissionDTO[]>>(
+    `/portfolio/public/${userId}/completed-missions`,
+  );
+  if (!response.data.success || !response.data.data) {
+    throw new Error(
+      response.data.message || "Failed to fetch public completed missions",
+    );
+  }
+  return response.data.data;
+};
+
 // ==================== REVIEWS ENDPOINTS ====================
 
 /**
@@ -636,6 +713,14 @@ export const portfolioService = {
   getPublicUserCertificates,
   createCertificate,
   deleteCertificate,
+
+  // System Certificates (auto-import)
+  getSystemCertificates,
+  importSystemCertificates,
+
+  // Completed Missions
+  getCompletedMissions,
+  getPublicCompletedMissions,
 
   // Reviews
   getUserReviews,

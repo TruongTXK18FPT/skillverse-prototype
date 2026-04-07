@@ -19,9 +19,26 @@
   --dossier-border-cyan: rgba(6, 182, 212, 0.3);
   --dossier-border-silver: rgba(148, 163, 184, 0.2);
   --dossier-green: #10b981;
+  --dossier-green-glow: rgba(16, 185, 129, 0.4);
   --dossier-yellow: #eab308;
   --dossier-red: #ef4444;
+  --dossier-red-glow: rgba(239, 68, 68, 0.4);
+  --dossier-orange: #f97316;
+  --dossier-orange-glow: rgba(249, 115, 22, 0.4);
   --dossier-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+
+  /* Cyan palette - Completed Missions */
+  --dossier-cyan-light: #06b6d4;
+  --dossier-cyan-main: #22d3ee;
+  --dossier-cyan-dark: #0891b2;
+  --dossier-cyan-glow: rgba(6, 182, 212, 0.4);
+  --dossier-cyan-bg: rgba(6, 182, 212, 0.05);
+  --dossier-cyan-border: rgba(6, 182, 212, 0.3);
+
+  /* Teal palette - Certificate Sync */
+  --dossier-teal: #14b8a6;
+  --dossier-teal-dark: #0d9488;
+  --dossier-teal-glow: rgba(20, 184, 166, 0.4);
 }
 
 /* ========== UTILITY CLASSES ========== */
@@ -1149,6 +1166,353 @@
     width: 100%;
     justify-content: center;
   }
+}
+
+/* ===============================================
+   COMPLETED MISSIONS TAB - Amber / Intel Theme
+   Distinct from cyan mission cards
+   =============================================== */
+
+/* Completed Mission Card (Amber Intel style) */
+.dossier-missions-card {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--dossier-cyan-border);
+  padding: 0;
+  margin-bottom: 1.5rem;
+  position: relative;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.dossier-missions-card:hover {
+  border-color: var(--dossier-cyan);
+  box-shadow: 0 0 20px var(--dossier-cyan-glow);
+}
+
+.dossier-missions-header {
+  background: linear-gradient(90deg, var(--dossier-cyan-dark), var(--dossier-cyan));
+  color: #000;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dossier-missions-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  flex: 1;
+}
+
+.dossier-missions-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  color: var(--dossier-cyan);
+}
+
+.dossier-missions-body {
+  padding: 1.25rem;
+}
+
+.dossier-missions-recruiter {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.dossier-missions-recruiter-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--dossier-cyan-border);
+  object-fit: cover;
+  background: var(--dossier-bg-light);
+}
+
+.dossier-missions-recruiter-name {
+  color: var(--dossier-silver);
+  font-size: 0.85rem;
+}
+
+.dossier-missions-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.dossier-missions-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--dossier-silver-dark);
+  font-size: 0.8rem;
+}
+
+.dossier-missions-meta-item svg {
+  color: var(--dossier-cyan);
+  flex-shrink: 0;
+}
+
+.dossier-missions-budget {
+  font-family: 'Courier New', monospace;
+  color: var(--dossier-cyan);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.dossier-missions-description {
+  color: var(--dossier-silver);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.dossier-missions-deliverables {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.dossier-missions-deliverable-tag {
+  border: 1px solid var(--dossier-cyan-border);
+  background: var(--dossier-cyan-bg);
+  color: var(--dossier-cyan);
+  padding: 0.2rem 0.6rem;
+  font-size: 0.7rem;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+}
+
+.dossier-missions-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--dossier-cyan);
+  font-size: 0.85rem;
+}
+
+.dossier-missions-led-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dossier-cyan);
+  box-shadow: 0 0 8px var(--dossier-cyan-glow);
+  flex-shrink: 0;
+}
+
+.dossier-missions-led-dot--green {
+  background: var(--dossier-green);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+}
+
+.dossier-missions-empty {
+  text-align: center;
+  padding: 3rem;
+  color: var(--dossier-silver-dark);
+  font-size: 0.9rem;
+}
+
+/* ===============================================
+   CERTIFICATE SYNC PANEL - Teal / System Theme
+   =============================================== */
+
+.dossier-sync-panel {
+  background: rgba(20, 184, 166, 0.05);
+  border: 1px solid var(--dossier-teal-dark);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dossier-sync-panel__info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.dossier-sync-panel__title {
+  color: var(--dossier-teal);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0 0 0.25rem 0;
+}
+
+.dossier-sync-panel__desc {
+  color: var(--dossier-silver-dark);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.dossier-sync-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dossier-sync-btn {
+  background: rgba(20, 184, 166, 0.1);
+  border: 1px solid var(--dossier-teal);
+  color: var(--dossier-teal);
+  padding: 0.5rem 1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.dossier-sync-btn:hover {
+  background: var(--dossier-teal);
+  color: #000;
+  box-shadow: 0 0 10px var(--dossier-teal-glow);
+}
+
+.dossier-sync-btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.dossier-sync-btn--success {
+  border-color: var(--dossier-green);
+  color: var(--dossier-green);
+}
+
+.dossier-sync-btn--success:hover {
+  background: var(--dossier-green);
+  color: #000;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+/* System badge on certificate cards */
+.dossier-system-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.5rem;
+  background: rgba(20, 184, 166, 0.15);
+  border: 1px solid var(--dossier-teal);
+  color: var(--dossier-teal);
+  font-size: 0.65rem;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.dossier-system-badge--course {
+  border-color: var(--dossier-cyan);
+  color: var(--dossier-cyan);
+  background: rgba(6, 182, 212, 0.1);
+}
+
+.dossier-system-badge--badge {
+  border-color: var(--dossier-cyan);
+  color: var(--dossier-cyan);
+  background: rgba(6, 182, 212, 0.1);
+}
+
+/* Badge rarity colors */
+.dossier-badge-rarity--common {
+  color: var(--dossier-silver-dark);
+  border-color: var(--dossier-silver-dark);
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.dossier-badge-rarity--rare {
+  color: #3b82f6;
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.dossier-badge-rarity--epic {
+  color: #a855f7;
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.1);
+}
+
+.dossier-badge-rarity--legendary {
+  color: var(--dossier-cyan);
+  border-color: var(--dossier-cyan);
+  background: rgba(6, 182, 212, 0.1);
+}
+
+/* Certificate card with system badge */
+.dossier-cert-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.dossier-cert-card-title {
+  color: var(--dossier-cyan);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
+
+/* Mission stats row */
+.dossier-missions-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.dossier-missions-stat-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--dossier-cyan-border);
+  padding: 1.25rem;
+  text-align: center;
+  position: relative;
+}
+
+.dossier-missions-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--dossier-cyan-dark), var(--dossier-cyan));
+}
+
+.dossier-missions-stat-value {
+  font-family: 'Courier New', monospace;
+  font-size: 2rem;
+  color: var(--dossier-cyan);
+  margin: 0 0 0.5rem 0;
+  font-weight: bold;
+}
+
+.dossier-missions-stat-label {
+  color: var(--dossier-silver);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 /* ========== SYSTEM ALERT MODAL STYLES ========== */

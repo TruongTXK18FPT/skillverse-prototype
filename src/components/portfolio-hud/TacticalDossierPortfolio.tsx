@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import {
   Download, Edit, Share2, Eye, Award, Briefcase,
   MapPin, Linkedin, Github as GithubIcon, AlertCircle, Plus,
-  Trash2, ExternalLink, Calendar, Settings, Camera, Loader2
+  Trash2, ExternalLink, Calendar, Settings, Camera, Loader2,
+  Target, RefreshCw, Star, ShieldCheck, BadgeCheck
 } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,6 +22,8 @@ import {
   MentorReviewDTO,
   GeneratedCVDTO,
   CVGenerationRequest,
+  SystemCertificateDTO,
+  CompletedMissionDTO,
 } from '../../data/portfolioDTOs';
 import { PilotIDModal } from './PilotIDModal';
 import { MissionLogModal } from './MissionLogModal';
@@ -28,6 +31,7 @@ import { CommendationModal } from './CommendationModal';
 import { DataCompilerModal } from './DataCompilerModal';
 import SystemAlertModal from './SystemAlertModal';
 import DossierInitScreen from './DossierInitScreen';
+import MissionDetailModal from './MissionDetailModal';
 import './dossier-portfolio-styles.css';
 
 const TacticalDossierPortfolio = () => {
@@ -49,6 +53,12 @@ const TacticalDossierPortfolio = () => {
   const [cvs, setCvs] = useState<GeneratedCVDTO[]>([]);
   const [isOwner, setIsOwner] = useState(false);
 
+  // New: System Certificates & Completed Missions
+  const [systemCertificates, setSystemCertificates] = useState<SystemCertificateDTO[]>([]);
+  const [completedMissions, setCompletedMissions] = useState<CompletedMissionDTO[]>([]);
+  const [syncLoading, setSyncLoading] = useState(false);
+  const [missionsLoading, setMissionsLoading] = useState(false);
+
   // Modal States
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [projectModalOpen, setProjectModalOpen] = useState(false);
@@ -68,12 +78,63 @@ const TacticalDossierPortfolio = () => {
   });
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
+  const [syncPanelOpen, setSyncPanelOpen] = useState(false);
+  const [missionDetailModalOpen, setMissionDetailModalOpen] = useState(false);
+  const [selectedMission, setSelectedMission] = useState<CompletedMissionDTO | null>(null);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
 
   // Load data on mount
   useEffect(() => {
     loadPortfolioData();
   }, [isAuthenticated, slug]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Load Completed Missions
+  const loadCompletedMissions = async () => {
+    if (!isAuthenticated || !isOwner) return;
+    try {
+      setMissionsLoading(true);
+      const missions = await portfolioService.getCompletedMissions();
+      setCompletedMissions(missions);
+    } catch (err: any) {
+      console.error('Error loading completed missions:', err);
+    } finally {
+      setMissionsLoading(false);
+    }
+  };
+
+  // Load System Certificates (for sync panel)
+  const loadSystemCertificates = async () => {
+    if (!isAuthenticated || !isOwner) return;
+    try {
+      const certs = await portfolioService.getSystemCertificates();
+      setSystemCertificates(certs);
+    } catch (err: any) {
+      console.error('Error loading system certificates:', err);
+    }
+  };
+
+  // Handle Sync System Certificates
+  const handleSyncCertificates = async (source: string) => {
+    try {
+      setSyncLoading(true);
+      const result = await portfolioService.importSystemCertificates(source);
+      setSystemCertificates(result);
+      await loadPortfolioData();
+      setAlertModal({
+        show: true,
+        message: `Đã đồng bộ ${result.filter((c: SystemCertificateDTO) => c.imported).length} chứng chỉ từ hệ thống!`,
+        type: 'success'
+      });
+    } catch (err: any) {
+      setAlertModal({
+        show: true,
+        message: err?.message || 'Không thể đồng bộ chứng chỉ.',
+        type: 'error'
+      });
+    } finally {
+      setSyncLoading(false);
+    }
+  };
 
   // Load Portfolio Data
   const loadPortfolioData = async () => {
@@ -91,14 +152,16 @@ const TacticalDossierPortfolio = () => {
 
         // Load public data
         if (profileData.userId) {
-          const [projectsData, certsData, reviewsData] = await Promise.all([
+          const [projectsData, certsData, reviewsData, missionsData] = await Promise.all([
             portfolioService.getPublicUserProjects(profileData.userId),
             portfolioService.getPublicUserCertificates(profileData.userId),
             portfolioService.getPublicUserReviews(profileData.userId),
+            portfolioService.getPublicCompletedMissions(profileData.userId),
           ]);
           setProjects(projectsData);
           setCertificates(certsData);
           setReviews(reviewsData);
+          setCompletedMissions(missionsData);
         }
       } else {
         // Private View (Owner)
@@ -112,12 +175,13 @@ const TacticalDossierPortfolio = () => {
         setIsOwner(true);
 
         if (checkResult.hasExtendedProfile) {
-          const [profileData, projectsData, certsData, reviewsData, cvsData] = await Promise.all([
+          const [profileData, projectsData, certsData, reviewsData, cvsData, missionsData] = await Promise.all([
             portfolioService.getProfile(),
             portfolioService.getUserProjects(),
             portfolioService.getUserCertificates(),
             portfolioService.getUserReviews(),
             portfolioService.getAllCVs(),
+            portfolioService.getCompletedMissions(),
           ]);
 
           setProfile(profileData);
@@ -125,6 +189,7 @@ const TacticalDossierPortfolio = () => {
           setCertificates(certsData);
           setReviews(reviewsData);
           setCvs(cvsData);
+          setCompletedMissions(missionsData);
         }
       }
     } catch (err: any) {
@@ -289,6 +354,12 @@ const TacticalDossierPortfolio = () => {
     } else {
       setAlertModal({ show: true, message: 'Vui lòng cập nhật URL tùy chỉnh trong hồ sơ.', type: 'warning' });
     }
+  };
+
+  // Mission Detail Modal
+  const handleMissionClick = (mission: CompletedMissionDTO) => {
+    setSelectedMission(mission);
+    setMissionDetailModalOpen(true);
   };
 
   // Parse skills from JSON string
@@ -495,6 +566,9 @@ const TacticalDossierPortfolio = () => {
           {[
             { id: 'overview', label: 'Bảng trạng thái', icon: Eye },
             { id: 'projects', label: 'Nhật ký dự án', icon: Briefcase },
+            ...(isOwner ? [
+              { id: 'completed-missions', label: 'Nhiệm vụ đã hoàn thành', icon: Target }
+            ] : []),
             { id: 'certificates', label: 'Chứng chỉ', icon: Award },
             ...(isOwner ? [
               { id: 'cv-builder', label: 'Trình tạo dữ liệu', icon: Settings }
@@ -847,6 +921,190 @@ const TacticalDossierPortfolio = () => {
             </motion.div>
           )}
 
+          {/* Completed Missions Section - Intel / Amber */}
+          {activeSection === 'completed-missions' && (
+            <motion.div
+              key="completed-missions"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', gap: '1rem' }}>
+                <div>
+                  <h2 className="dossier-modal-title">Nhiệm vụ đã hoàn thành</h2>
+                  <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Các công việc ngắn hạn đã hoàn thành trên hệ thống</p>
+                </div>
+                <button
+                  onClick={loadCompletedMissions}
+                  className="dossier-btn-secondary"
+                  style={{ color: 'var(--dossier-cyan)', borderColor: 'var(--dossier-cyan-border)' }}
+                >
+                  <RefreshCw size={16} />
+                  Làm mới
+                </button>
+              </div>
+
+              {/* Stats Row */}
+              <div className="dossier-missions-stats">
+                <div className="dossier-missions-stat-card">
+                  <div className="dossier-missions-stat-value">{completedMissions.length}</div>
+                  <div className="dossier-missions-stat-label">Nhiệm vụ hoàn thành</div>
+                </div>
+                <div className="dossier-missions-stat-card">
+                  <div className="dossier-missions-stat-value">
+                    {completedMissions.filter(m => m.status === 'PAID').length}
+                  </div>
+                  <div className="dossier-missions-stat-label">Đã thanh toán</div>
+                </div>
+                <div className="dossier-missions-stat-card">
+                  <div className="dossier-missions-stat-value">
+                    {completedMissions.reduce((sum, m) => sum + (m.budget || 0), 0).toLocaleString('vi-VN')}
+                  </div>
+                  <div className="dossier-missions-stat-label">Tổng thu (VND)</div>
+                </div>
+                <div className="dossier-missions-stat-card">
+                  <div className="dossier-missions-stat-value">
+                    {completedMissions.filter(m => m.rating).reduce((sum, m) => sum + (m.rating || 0), 0) / (completedMissions.filter(m => m.rating).length || 1) || 0}
+                  </div>
+                  <div className="dossier-missions-stat-label">Đánh giá TB</div>
+                </div>
+              </div>
+
+              {/* Missions Grid */}
+              {missionsLoading ? (
+                <div style={{ textAlign: 'center', padding: '3rem' }}>
+                  <Loader2 size={32} className="dossier-spinner" style={{ color: 'var(--dossier-cyan)' }} />
+                  <p style={{ color: 'var(--dossier-silver-dark)', marginTop: '1rem' }}>Đang tải nhiệm vụ...</p>
+                </div>
+              ) : completedMissions.length === 0 ? (
+                <div className="dossier-missions-empty">
+                  <Target size={48} style={{ marginBottom: '1rem', opacity: 0.4 }} />
+                  <p>Chưa có nhiệm vụ nào được hoàn thành.</p>
+                  <p style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>
+                    Hoàn thành các công việc ngắn hạn trên hệ thống để hiển thị tại đây.
+                  </p>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '1.5rem' }}>
+                  {completedMissions.map((mission) => (
+                    <div
+                      key={mission.applicationId}
+                      className="dossier-missions-card"
+                      onClick={() => handleMissionClick(mission)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="dossier-missions-header">
+                        <span className="dossier-missions-title">{mission.jobTitle}</span>
+                        <span className="dossier-missions-status">
+                          <span className={`dossier-missions-led-dot ${mission.status === 'PAID' ? 'dossier-missions-led-dot--green' : ''}`}></span>
+                          {mission.status === 'PAID' ? 'ĐÃ THANH TOÁN' : 'HOÀN THÀNH'}
+                        </span>
+                      </div>
+                      <div className="dossier-missions-body">
+                        {/* Recruiter */}
+                        <div className="dossier-missions-recruiter">
+                          {mission.recruiterAvatar ? (
+                            <img
+                              src={mission.recruiterAvatar}
+                              alt={mission.recruiterName}
+                              className="dossier-missions-recruiter-avatar"
+                            />
+                          ) : (
+                            <div
+                              className="dossier-missions-recruiter-avatar"
+                              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--dossier-cyan)', fontSize: '0.75rem', fontWeight: 700 }}
+                            >
+                              {mission.recruiterName?.[0] || 'R'}
+                            </div>
+                          )}
+                          <div>
+                            <span className="dossier-missions-recruiter-name">{mission.recruiterName}</span>
+                            {mission.recruiterCompanyName && (
+                              <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.72rem', margin: '0.1rem 0 0 0' }}>
+                                {mission.recruiterCompanyName}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Meta row */}
+                        <div className="dossier-missions-meta">
+                          {mission.completedAt && (
+                            <div className="dossier-missions-meta-item">
+                              <Calendar size={14} />
+                              {new Date(mission.completedAt).toLocaleDateString('vi-VN')}
+                            </div>
+                          )}
+                          {mission.budget && (
+                            <div className="dossier-missions-meta-item">
+                              <span className="dossier-missions-budget">
+                                {mission.budget.toLocaleString('vi-VN')} {mission.currency || 'VND'}
+                              </span>
+                            </div>
+                          )}
+                          {mission.requiredSkills && mission.requiredSkills.length > 0 && (
+                            <div className="dossier-missions-meta-item" style={{ fontSize: '0.72rem' }}>
+                              <span style={{ color: 'var(--dossier-silver-dark)' }}>
+                                {mission.requiredSkills.slice(0, 2).join(', ')}{mission.requiredSkills.length > 2 ? ` +${mission.requiredSkills.length - 2}` : ''}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Work Note */}
+                        {mission.workNote && (
+                          <p className="dossier-missions-description">{mission.workNote}</p>
+                        )}
+
+                        {/* Required Skills */}
+                        {mission.requiredSkills && mission.requiredSkills.length > 0 && (
+                          <div className="dossier-missions-deliverables">
+                            {mission.requiredSkills.slice(0, 3).map((skill, idx) => (
+                              <span key={idx} className="dossier-missions-deliverable-tag">
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Rating */}
+                        {mission.rating && (
+                          <div className="dossier-missions-rating">
+                            <Star size={14} />
+                            <span>{mission.rating}/5</span>
+                            {mission.reviewComment && (
+                              <span style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.8rem', marginLeft: '0.5rem' }}>
+                                — {mission.reviewComment.length > 50 ? mission.reviewComment.slice(0, 50) + '...' : mission.reviewComment}
+                              </span>
+                            )}
+                          </div>
+                        )}
+
+                        {/* View Detail hint */}
+                        <div style={{
+                          marginTop: '0.75rem',
+                          paddingTop: '0.5rem',
+                          borderTop: '1px solid var(--dossier-cyan-border)',
+                          textAlign: 'center'
+                        }}>
+                          <span style={{
+                            color: 'var(--dossier-cyan)',
+                            fontSize: '0.72rem',
+                            letterSpacing: '1px',
+                            textTransform: 'uppercase',
+                            opacity: 0.7
+                          }}>
+                            Click để xem chi tiết &rarr;
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
+
           {/* Certificates Section - Commendations */}
           {activeSection === 'certificates' && (
             <motion.div
@@ -855,10 +1113,10 @@ const TacticalDossierPortfolio = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', gap: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', gap: '1rem' }}>
                 <div>
                   <h2 className="dossier-modal-title">Chứng chỉ</h2>
-                  <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Chứng chỉ từ các tổ chức bên ngoài</p>
+                  <p style={{ color: 'var(--dossier-silver-dark)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Chứng chỉ từ các tổ chức và hệ thống</p>
                 </div>
                 {isOwner && (
                   <button
@@ -870,6 +1128,44 @@ const TacticalDossierPortfolio = () => {
                   </button>
                 )}
               </div>
+
+              {/* System Certificate Sync Panel (Owner only) */}
+              {isOwner && (
+                <div className="dossier-sync-panel">
+                  <div className="dossier-sync-panel__info">
+                    <p className="dossier-sync-panel__title">Đồng bộ từ hệ thống</p>
+                    <p className="dossier-sync-panel__desc">
+                      Nhập chứng chỉ hoàn thành khóa học và huy hiệu từ hệ thống SkillVerse
+                    </p>
+                  </div>
+                  <div className="dossier-sync-panel__actions">
+                    <button
+                      onClick={() => handleSyncCertificates('COURSE')}
+                      disabled={syncLoading}
+                      className="dossier-sync-btn"
+                    >
+                      {syncLoading ? <Loader2 size={14} className="dossier-spinner" /> : <ShieldCheck size={14} />}
+                      Chứng chỉ khóa học
+                    </button>
+                    <button
+                      onClick={() => handleSyncCertificates('BADGE')}
+                      disabled={syncLoading}
+                      className="dossier-sync-btn"
+                    >
+                      {syncLoading ? <Loader2 size={14} className="dossier-spinner" /> : <BadgeCheck size={14} />}
+                      Huy hiệu
+                    </button>
+                    <button
+                      onClick={() => handleSyncCertificates('ALL')}
+                      disabled={syncLoading}
+                      className="dossier-sync-btn"
+                    >
+                      {syncLoading ? <Loader2 size={14} className="dossier-spinner" /> : <RefreshCw size={14} />}
+                      Tất cả
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Category Filters */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '2rem' }}>
@@ -901,7 +1197,15 @@ const TacticalDossierPortfolio = () => {
                           style={{ width: '100%', height: '150px', objectFit: 'cover', marginBottom: '1rem', border: '1px solid var(--dossier-border-cyan)' }}
                         />
                       )}
-                      <h3 style={{ fontSize: '1.125rem', marginBottom: '0.5rem', color: 'var(--dossier-cyan)' }}>{cert.title}</h3>
+                      <div className="dossier-cert-card-header">
+                        <h3 className="dossier-cert-card-title">{cert.title}</h3>
+                        {cert.isVerified && (
+                          <span className="dossier-system-badge dossier-system-badge--course">
+                            <BadgeCheck size={10} />
+                            SYSTEM
+                          </span>
+                        )}
+                      </div>
                       <p style={{ fontSize: '0.875rem', color: 'var(--dossier-silver)', marginBottom: '0.5rem' }}>
                         {cert.issuingOrganization}
                       </p>
@@ -1096,6 +1400,12 @@ const TacticalDossierPortfolio = () => {
         onClose={() => setAlertModal({...alertModal, show: false})}
         message={alertModal.message}
         type={alertModal.type}
+      />
+
+      <MissionDetailModal
+        isOpen={missionDetailModalOpen}
+        onClose={() => setMissionDetailModalOpen(false)}
+        mission={selectedMission}
       />
 
       {/* Meowl Guide */}

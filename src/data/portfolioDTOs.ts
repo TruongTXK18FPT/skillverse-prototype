@@ -199,6 +199,60 @@ export interface CreateCertificateForm {
   image?: File;
 }
 
+// ==================== SYSTEM CERTIFICATE TYPES (AUTO-IMPORT) ====================
+
+export interface SystemCertificateDTO {
+  id: number;
+  source: 'COURSE' | 'BADGE' | 'EXTERNAL';
+  title: string;
+  issuer: string;
+  issueDate?: string;
+  credentialId?: string;
+  credentialUrl?: string;
+  category?: string;
+  skills?: string[];
+  imageUrl?: string;
+  badgeKey?: string;
+  badgeRarity?: string;
+  imported: boolean;
+}
+
+// ==================== COMPLETED MISSION TYPES (SHORT-TERM JOBS) ====================
+
+export interface CompletedMissionDTO {
+  applicationId: number;
+  jobId?: number;
+  jobTitle: string;
+  jobDescription?: string;
+  recruiterName: string;
+  recruiterAvatar?: string;
+  recruiterCompanyName?: string;
+  budget?: number;
+  currency?: string;
+  deadline?: string;
+  estimatedDuration?: string;
+  isRemote?: boolean;
+  location?: string;
+  requiredSkills?: string[];
+  paymentMethod?: string;
+  completedAt?: string;
+  rating?: number;
+  reviewComment?: string;
+  communicationRating?: number;
+  qualityRating?: number;
+  timelinessRating?: number;
+  professionalismRating?: number;
+  deliverables?: DeliverableInfo[];
+  status: 'COMPLETED' | 'PAID';
+  workNote?: string;
+}
+
+export interface DeliverableInfo {
+  fileName: string;
+  fileUrl: string;
+  type?: string;
+}
+
 // API Response wrapper
 export interface ApiResponse<T> {
   success: boolean;
