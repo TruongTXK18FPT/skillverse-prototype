@@ -22,6 +22,7 @@ interface ClearanceLevelPageProps {
   userProfile: UserProfileResponse | null;
   fallbackAvatarUrl?: string;
   onWalletPayment: (planName: string) => void;
+  onRequireLogin?: () => void;
   onPlanPreview?: (planName: string) => void;
   onViewInvoice?: (sub: UserSubscriptionResponse) => void;
   onEnableAutoRenew?: () => void;
@@ -43,6 +44,7 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
   userProfile,
   fallbackAvatarUrl,
   onWalletPayment,
+  onRequireLogin,
   onPlanPreview,
   onViewInvoice,
   onEnableAutoRenew,
@@ -143,6 +145,7 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
                 isCurrentPlan={planIsCurrent}
                 currentSub={currentSub}
                 onWalletPayment={onWalletPayment}
+                onRequireLogin={onRequireLogin}
                 onPlanPreview={onPlanPreview}
                 processing={processing}
                 isAuthenticated={isAuthenticated}

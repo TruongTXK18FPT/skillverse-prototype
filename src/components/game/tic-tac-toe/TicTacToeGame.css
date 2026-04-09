@@ -241,6 +241,56 @@
   overflow: visible !important; /* Critical for Meowl */
 }
 
+.ttt-embedded-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.ttt-modal-content--embedded {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+}
+
+.ttt-game-container--embedded {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 470px;
+  max-height: none;
+  padding: 16px;
+  gap: 24px;
+}
+
+.ttt-game-container--embedded .ttt-status {
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.ttt-game-container--embedded .ttt-cell {
+  width: 72px;
+  height: 72px;
+  font-size: 2.3rem;
+}
+
+.ttt-game-container--embedded .ttt-rules {
+  margin-top: 10px;
+  font-size: 0.75rem;
+}
+
+.ttt-game-container--embedded .ttt-btn {
+  margin-top: 14px;
+  padding: 8px 18px;
+}
+
+.ttt-game-container--embedded .ttt-game-info {
+  margin-top: 10px;
+  padding: 9px;
+}
+
 .ttt-close-btn {
   position: absolute;
   top: -15px;
@@ -550,5 +600,17 @@
 
   .ttt-reward-value {
     font-size: 1.4rem;
+  }
+
+  .ttt-game-container--embedded {
+    min-height: 430px;
+    gap: 14px;
+    padding: 12px;
+  }
+
+  .ttt-game-container--embedded .ttt-cell {
+    width: 64px;
+    height: 64px;
+    font-size: 2rem;
   }
 }

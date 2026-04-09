@@ -213,14 +213,14 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
           <ThumbsUp size={16} />
           <span>{formatNumber(likeCount)}</span>
         </button>
-        <button
+        {/* <button
           className={`transmission-action-btn ${isDisliked ? 'active' : ''}`}
           onClick={handleDislike}
           title="Không thích"
         >
           <ThumbsDown size={16} />
           <span>{formatNumber(dislikeCount)}</span>
-        </button>
+        </button> */}
         <button
           className="transmission-action-btn"
           title="Bình luận"

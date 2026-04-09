@@ -582,6 +582,25 @@
   z-index: 10;
 }
 
+.lr-page__generating-state {
+  width: min(1380px, 96vw);
+  min-width: min(880px, 96vw);
+}
+
+.lr-page__generating-shell {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  align-items: stretch;
+  transition: grid-template-columns 0.5s ease, gap 0.5s ease;
+}
+
+.lr-page__generating-state--split .lr-page__generating-shell {
+  grid-template-columns: minmax(420px, 1fr) minmax(420px, 1fr);
+  gap: 1.1rem;
+}
+
 .lr-page__error-state {
   background: rgba(248, 113, 113, 0.05);
   border: 1px solid rgba(248, 113, 113, 0.2);
@@ -620,17 +639,26 @@
 .lr-page__loader-center {
   background: rgba(13, 22, 35, 0.95);
   padding: 4rem;
-  margin-bottom: 5rem;
+  margin-bottom: 0;
   border: 1px solid rgba(6, 182, 212, 0.4);
   border-radius: 12px;
   width: 100%;
+  min-height: 560px;
   box-shadow: 0 0 100px rgba(0, 0, 0, 0.6), 0 0 40px rgba(6, 182, 212, 0.1);
   backdrop-filter: blur(25px);
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   position: relative;
   overflow: hidden;
+  transition: transform 0.45s ease, box-shadow 0.45s ease, border-color 0.45s ease;
+}
+
+.lr-page__generating-state--split .lr-page__loader-center {
+  transform: translateX(-8px);
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.55), 0 0 30px rgba(6, 182, 212, 0.18);
+  border-color: rgba(56, 189, 248, 0.5);
 }
 
 .lr-page__loader-center::after {
@@ -658,6 +686,77 @@
   gap: 0.5rem;
   width: 100%;
   padding: 0 1rem;
+}
+
+.lr-page__generating-helper {
+  margin: 1.25rem 0 0;
+  font-size: 0.82rem;
+  color: #7dd3fc;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  max-width: 440px;
+  line-height: 1.45;
+}
+
+.lr-page__generating-game-pane {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translateX(40px) scale(0.96);
+  transition:
+    opacity 0.45s ease,
+    transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+    max-height 0.5s ease,
+    border-color 0.45s ease,
+    background 0.45s ease,
+    padding 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+.lr-page__generating-state--split .lr-page__generating-game-pane {
+  max-height: 82vh;
+  min-height: 560px;
+  opacity: 1;
+  pointer-events: auto;
+  padding: 0.7rem;
+  border-color: rgba(6, 182, 212, 0.4);
+  background: rgba(5, 16, 34, 0.92);
+  box-shadow: 0 0 45px rgba(6, 182, 212, 0.12);
+  transform: translateX(0) scale(1);
+}
+
+.lr-page__generating-game-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.55rem 0.7rem 0.7rem;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.28);
+}
+
+.lr-page__generating-game-eyebrow {
+  color: #67e8f9;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+.lr-page__generating-game-header h3 {
+  margin: 0;
+  color: #ecfeff;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.lr-page__generating-game-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  padding: 0.75rem;
 }
 
 .lr-page__step {
@@ -1064,6 +1163,19 @@
   .lr-page__report-layout {
     grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
   }
+
+  .lr-page__generating-state--split .lr-page__generating-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .lr-page__generating-state--split .lr-page__loader-center {
+    transform: none;
+  }
+
+  .lr-page__generating-state--split .lr-page__generating-game-pane {
+    min-height: 500px;
+    transform: translateY(12px) scale(0.98);
+  }
 }
 
 @media (max-width: 1024px) {
@@ -1085,5 +1197,36 @@
 
   .lr-page__content-footer-actions .lr-page__action-btn {
     width: 100%;
+  }
+
+  .lr-page__generating-state {
+    min-width: 0;
+    width: min(96vw, 760px);
+  }
+
+  .lr-page__loader-center {
+    min-height: 460px;
+    padding: 2rem 1.1rem;
+  }
+
+  .lr-page__generating-steps {
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+  }
+
+  .lr-page__step {
+    width: min(180px, calc(50% - 0.5rem));
+    min-width: 140px;
+  }
+
+  .lr-page__step-connector {
+    display: none;
+  }
+
+  .lr-page__generating-helper {
+    margin-top: 1rem;
+    font-size: 0.75rem;
   }
 }

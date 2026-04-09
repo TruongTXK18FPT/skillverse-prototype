@@ -1,14 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { X, Coins, Trophy, Zap, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Trophy } from 'lucide-react';
 import MeowlActor, { MeowlAction } from './MeowlActor';
-import gamificationService, { 
-    GameSessionResponse, 
-    MiniGameDefinition,
-    startGameSession,
-    completeGameSession,
-    getGame
-} from '../../../services/gamificationService';
 import './TicTacToeGame.css';
 
 type Player = 'X' | 'O';
@@ -20,20 +12,24 @@ const WIN_COMBINATIONS = [
     [0, 4, 8], [2, 4, 6]
 ];
 
-const GAME_KEY = 'tic-tac-toe';
-
 interface TicTacToeGameProps {
     onCoinsEarned?: (coins: number) => void;
     onClose?: () => void;
+    mode?: 'modal' | 'embedded';
+    className?: string;
 }
 
-const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onCoinsEarned, onClose }) => {
-    const navigate = useNavigate();
+const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onClose, mode = 'modal', className }) => {
+    const isEmbedded = mode === 'embedded';
+
     const handleClose = () => {
         if (onClose) {
             onClose();
-        } else {
-            navigate('/gamification');
+            return;
+        }
+
+        if (window.history.length > 1) {
+            window.history.back();
         }
     };
 
@@ -43,167 +39,69 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onCoinsEarned, onClose })
     const [isUserTurn, setIsUserTurn] = useState(true);
     const [winner, setWinner] = useState<Player | 'Draw' | null>(null);
 
-    // API state
-    const [gameSession, setGameSession] = useState<GameSessionResponse | null>(null);
-    const [gameDefinition, setGameDefinition] = useState<MiniGameDefinition | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [apiError, setApiError] = useState<string | null>(null);
-    const [gameResult, setGameResult] = useState<{
-        coinsEarned: number;
-        xpEarned: number;
-        message: string;
-    } | null>(null);
-    const [gameStartTime, setGameStartTime] = useState<number>(0);
-
     // States animation
     const [meowlAction, setMeowlAction] = useState<MeowlAction>('think');
     const [isThinking, setIsThinking] = useState(false);
     const [meowlStyle, setMeowlStyle] = useState<React.CSSProperties>({});
 
-    const containerRef = useRef<HTMLDivElement>(null);
     const cellRefs = useRef<(HTMLDivElement | null)[]>([]);
     const meowlHomeRef = useRef<HTMLDivElement>(null);
 
     // --- SCROLL LOCK ---
     useEffect(() => {
+        if (isEmbedded) {
+            return undefined;
+        }
+
+        const previousOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
         return () => {
-            document.body.style.overflow = '';
+            document.body.style.overflow = previousOverflow;
         };
-    }, []);
-
-    // --- LOAD GAME DEFINITION ON MOUNT ---
-    useEffect(() => {
-        const loadGameDefinition = async () => {
-            try {
-                const gameDef = await getGame(GAME_KEY);
-                setGameDefinition(gameDef);
-            } catch (error) {
-                console.warn('Failed to load game definition, using offline mode:', error);
-                // Offline mode - still allow playing
-            }
-        };
-        loadGameDefinition();
-    }, []);
-
-    // --- START GAME SESSION ---
-    const initializeGameSession = useCallback(async () => {
-        if (isLoading) return;
-        
-        setIsLoading(true);
-        setApiError(null);
-        
-        try {
-            const session = await startGameSession({ gameKey: GAME_KEY });
-            setGameSession(session);
-            setGameStartTime(Date.now());
-            console.log('Game session started:', session.sessionId);
-        } catch (error: any) {
-            console.warn('Failed to start game session:', error);
-            // Allow offline play
-            setGameStartTime(Date.now());
-            if (error?.response?.data?.message) {
-                setApiError(error.response.data.message);
-            }
-        } finally {
-            setIsLoading(false);
-        }
-    }, [isLoading]);
-
-    // --- COMPLETE GAME SESSION ---
-    const finalizeGameSession = useCallback(async (playerWon: boolean) => {
-        const durationSeconds = Math.floor((Date.now() - gameStartTime) / 1000);
-        
-        // Calculate score based on game result
-        const score = playerWon ? 100 : 0;
-        
-        if (gameSession) {
-            try {
-                const result = await completeGameSession({
-                    sessionId: gameSession.sessionId,
-                    sessionStatus: playerWon ? 'COMPLETED' : 'FAILED',
-                    scoreAchieved: score,
-                    durationSeconds,
-                    sessionData: JSON.stringify({
-                        winner: playerWon ? 'player' : 'ai',
-                        totalMoves: userMoves.length + aiMoves.length
-                    })
-                });
-                
-                setGameResult({
-                    coinsEarned: result.coinsEarned || 0,
-                    xpEarned: result.xpEarned || 0,
-                    message: playerWon ? 'Chiến thắng xuất sắc!' : 'Thử lại lần sau!'
-                });
-                
-                onCoinsEarned?.(result.coinsEarned || 0);
-                console.log('Game completed:', result);
-            } catch (error) {
-                console.warn('Failed to complete game session:', error);
-                // Still show result in offline mode
-                const offlineCoins = playerWon ? (gameDefinition?.baseCoinReward || 50) : 0;
-                setGameResult({
-                    coinsEarned: offlineCoins,
-                    xpEarned: playerWon ? 10 : 0,
-                    message: playerWon ? 'Chiến thắng! (Offline)' : 'Thử lại!'
-                });
-                onCoinsEarned?.(offlineCoins);
-            }
-        } else {
-            // Offline mode
-            const offlineCoins = playerWon ? 50 : 0;
-            setGameResult({
-                coinsEarned: offlineCoins,
-                xpEarned: playerWon ? 10 : 0,
-                message: playerWon ? 'Chiến thắng! (Offline)' : 'Thử lại!'
-            });
-            onCoinsEarned?.(offlineCoins);
-        }
-    }, [gameSession, gameStartTime, userMoves.length, aiMoves.length, gameDefinition, onCoinsEarned]);
+    }, [isEmbedded]);
 
     // --- LOGIC GAME ---
     const getBoard = (uMoves: number[], aMoves: number[]): BoardState => {
         const board = Array(9).fill(null);
-        uMoves.forEach(m => board[m] = 'X');
-        aMoves.forEach(m => board[m] = 'O');
+        uMoves.forEach((m) => (board[m] = 'X'));
+        aMoves.forEach((m) => (board[m] = 'O'));
         return board;
     };
+
     const board = getBoard(userMoves, aiMoves);
 
     const checkWin = (currentBoard: BoardState): Player | null => {
         for (const combo of WIN_COMBINATIONS) {
             const [a, b, c] = combo;
-            if (currentBoard[a] && currentBoard[a] === currentBoard[b] && currentBoard[a] === currentBoard[c]) {
+            if (
+                currentBoard[a] &&
+                currentBoard[a] === currentBoard[b] &&
+                currentBoard[a] === currentBoard[c]
+            ) {
                 return currentBoard[a];
             }
         }
         return null;
     };
 
-    // --- GAME LOOP FIX ---
-
-    // Effect Trigger chuyển lượt
+    // Effect trigger chuyển lượt
     useEffect(() => {
         const win = checkWin(board);
         if (win) {
             setWinner(win);
             setMeowlAction(win === 'X' ? 'lose' : 'win');
             setIsThinking(false);
-            
-            // Finalize game session when game ends
-            finalizeGameSession(win === 'X');
             return;
         }
 
         if (!isUserTurn && !winner && !isThinking) {
             setIsThinking(true);
         }
-    }, [userMoves, aiMoves, isUserTurn, winner, isThinking, finalizeGameSession]);
+    }, [userMoves, aiMoves, isUserTurn, winner, isThinking]);
 
     // Logic thực thi chuỗi hành động AI
     useEffect(() => {
         if (isThinking) {
-            // Giai đoạn 1: IDLE THINKING (2s để người chơi kịp nhìn thấy)
             setMeowlAction('think');
 
             const timer = setTimeout(() => {
@@ -212,11 +110,12 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onCoinsEarned, onClose })
 
             return () => clearTimeout(timer);
         }
+
+        return undefined;
     }, [isThinking]);
 
     // Hàm điều phối chuỗi hành động di chuyển
     const startMoveSequence = () => {
-        // Giai đoạn 2: NHẶT QUÂN CỜ (1.3s - Đủ thời gian cho 16 frames @ 80ms)
         setMeowlAction('pickup');
 
         setTimeout(() => {
@@ -227,7 +126,6 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onCoinsEarned, onClose })
     const executeWalkAndPlace = () => {
         const bestMove = getBestMove(userMoves, aiMoves);
 
-        // Tính toán tọa độ
         const targetCell = cellRefs.current[bestMove];
         const homeEl = meowlHomeRef.current;
 
@@ -235,29 +133,30 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onCoinsEarned, onClose })
             const cellRect = targetCell.getBoundingClientRect();
             const homeRect = homeEl.getBoundingClientRect();
 
-            // Tính offset
-            // Trừ 60px Y để Meowl đứng "trên" ô cờ
-            const deltaX = cellRect.left - homeRect.left + (cellRect.width / 2) - (homeRect.width / 2);
-            const deltaY = cellRect.top - homeRect.top + (cellRect.height / 2) - (homeRect.height / 2) - 60;
+            const deltaX =
+                cellRect.left -
+                homeRect.left +
+                cellRect.width / 2 -
+                homeRect.width / 2;
+            const deltaY =
+                cellRect.top -
+                homeRect.top +
+                cellRect.height / 2 -
+                homeRect.height / 2 -
+                60;
 
-            // Giai đoạn 3: ĐI BỘ (1s)
             setMeowlAction('walk');
             setMeowlStyle({
-                // Quan trọng: CSS trong MeowlActor.css phải bỏ transition transform đi thì dòng này mới chạy mượt
                 transform: `translate(${deltaX}px, ${deltaY}px)`,
-                transition: 'transform 1s linear'
+                transition: 'transform 1s linear',
             });
 
             setTimeout(() => {
-                // Giai đoạn 4: ĐẶT QUÂN
                 setMeowlAction('place');
 
-                // Chờ 900ms (cho khớp lúc tay đập xuống đất ở frame 10-12) rồi mới hiện O
                 setTimeout(() => {
-                    // Giai đoạn 5: LOGIC GAME UPDATE & BIẾN MẤT
                     applyAiMove(bestMove);
 
-                    // Check win condition locally to prevent animation conflict
                     const nextAiMoves = [...aiMoves];
                     if (nextAiMoves.length >= 3) nextAiMoves.shift();
                     nextAiMoves.push(bestMove);
@@ -265,48 +164,42 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onCoinsEarned, onClose })
                     const isWin = checkWin(tempBoard);
 
                     if (isWin) {
-                        // If AI wins, do NOT teleport back. Let the useEffect handle the win animation.
-                        // Just clear thinking state so the game knows turn is over.
                         setIsThinking(false);
                         return;
                     }
 
-                    // Teleport biến mất
-                    setMeowlStyle(prev => ({
+                    setMeowlStyle((prev) => ({
                         ...prev,
                         opacity: 0,
                         transform: `${prev.transform} scale(0) rotate(360deg)`,
-                        transition: 'transform 0.5s ease-in, opacity 0.5s ease-in'
+                        transition: 'transform 0.5s ease-in, opacity 0.5s ease-in',
                     }));
 
                     setTimeout(() => {
-                        // Reset vị trí về nhà (trong tàng hình)
-                        // Random return action: think, smug, or panic
                         const returnActions: MeowlAction[] = ['think', 'smug', 'panic'];
-                        const randomAction = returnActions[Math.floor(Math.random() * returnActions.length)];
+                        const randomAction =
+                            returnActions[Math.floor(Math.random() * returnActions.length)];
                         setMeowlAction(randomAction);
-                        
+
                         setMeowlStyle({
                             opacity: 0,
                             transform: 'translate(0,0) scale(0)',
-                            transition: 'none'
+                            transition: 'none',
                         });
 
-                        // Hiện lại ở nhà
                         requestAnimationFrame(() => {
                             setMeowlStyle({
                                 opacity: 1,
                                 transform: 'translate(0,0) scale(1)',
-                                transition: 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease-out'
+                                transition:
+                                    'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease-out',
                             });
                             setIsThinking(false);
                         });
                     }, 500);
-
-                }, 900); // Tăng lên 900ms để khớp animation đập
-            }, 1000); // Chờ đi bộ 1s
+                }, 900);
+            }, 1000);
         } else {
-            // Fallback
             applyAiMove(bestMove);
             setIsThinking(false);
         }
@@ -321,7 +214,7 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onCoinsEarned, onClose })
 
         setUserMoves(newMoves);
         setIsUserTurn(false);
-        setMeowlAction('think'); // Meowl chờ đợi
+        setMeowlAction('think');
     };
 
     const applyAiMove = (move: number) => {
@@ -335,11 +228,9 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onCoinsEarned, onClose })
     // --- MINIMAX LOGIC ---
     const getBestMove = (uMoves: number[], aMoves: number[]): number => {
         const b = getBoard(uMoves, aMoves);
-        const available = [0, 1, 2, 3, 4, 5, 6, 7, 8].filter(i => !b[i]);
+        const available = [0, 1, 2, 3, 4, 5, 6, 7, 8].filter((i) => !b[i]);
 
-        // Nước đi đầu tiên random cho tự nhiên
         if (aMoves.length === 0 && available.length > 0) {
-            // Ưu tiên giữa bàn cờ nếu trống
             if (!b[4]) return 4;
             return available[Math.floor(Math.random() * available.length)];
         }
@@ -361,14 +252,19 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onCoinsEarned, onClose })
         return move;
     };
 
-    const minimax = (uMoves: number[], aMoves: number[], depth: number, isMaximizing: boolean): number => {
+    const minimax = (
+        uMoves: number[],
+        aMoves: number[],
+        depth: number,
+        isMaximizing: boolean,
+    ): number => {
         const b = getBoard(uMoves, aMoves);
         const win = checkWin(b);
         if (win === 'O') return 10 - depth;
         if (win === 'X') return depth - 10;
-        if (depth >= 2) return 0; // Giới hạn độ sâu để tránh lag (Meowl cũng phải có lúc ngu)
+        if (depth >= 2) return 0;
 
-        const available = [0, 1, 2, 3, 4, 5, 6, 7, 8].filter(i => !b[i]);
+        const available = [0, 1, 2, 3, 4, 5, 6, 7, 8].filter((i) => !b[i]);
         if (available.length === 0) return 0;
 
         if (isMaximizing) {
@@ -381,17 +277,17 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onCoinsEarned, onClose })
                 bestScore = Math.max(score, bestScore);
             }
             return bestScore;
-        } else {
-            let bestScore = Infinity;
-            for (const m of available) {
-                const nextUserMoves = [...uMoves];
-                if (nextUserMoves.length >= 3) nextUserMoves.shift();
-                nextUserMoves.push(m);
-                const score = minimax(nextUserMoves, aMoves, depth + 1, true);
-                bestScore = Math.min(score, bestScore);
-            }
-            return bestScore;
         }
+
+        let bestScore = Infinity;
+        for (const m of available) {
+            const nextUserMoves = [...uMoves];
+            if (nextUserMoves.length >= 3) nextUserMoves.shift();
+            nextUserMoves.push(m);
+            const score = minimax(nextUserMoves, aMoves, depth + 1, true);
+            bestScore = Math.min(score, bestScore);
+        }
+        return bestScore;
     };
 
     const resetGame = () => {
@@ -402,99 +298,76 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onCoinsEarned, onClose })
         setMeowlAction('think');
         setMeowlStyle({});
         setIsThinking(false);
-        setGameResult(null);
-        setGameSession(null);
-        setApiError(null);
-        
-        // Start new session
-        initializeGameSession();
     };
 
-    // Start session on first game
-    useEffect(() => {
-        if (!gameSession && !isLoading && userMoves.length === 0 && aiMoves.length === 0) {
-            initializeGameSession();
-        }
-    }, []);
+    const modalContentClassName = [
+        'ttt-modal-content',
+        isEmbedded ? 'ttt-modal-content--embedded' : '',
+        className || '',
+    ]
+        .filter(Boolean)
+        .join(' ');
 
-    return (
-        <div className="ttt-modal-overlay">
-            <div className="ttt-modal-content">
-                <button className="ttt-close-btn" onClick={handleClose}><X size={24} /></button>
+    const gameContainerClassName = [
+        'ttt-game-container',
+        isEmbedded ? 'ttt-game-container--embedded' : '',
+    ]
+        .filter(Boolean)
+        .join(' ');
 
-                <div className="ttt-game-container" ref={containerRef}>
-                    <div className="ttt-meowl-section" ref={meowlHomeRef}>
-                        {/* Meowl Actor */}
-                        <MeowlActor action={meowlAction} style={meowlStyle} />
-                        
-                        {/* Game Info Panel */}
-                        {gameDefinition && (
-                            <div className="ttt-game-info">
-                                <div className="ttt-info-item">
-                                    <Coins size={16} className="ttt-info-icon" />
-                                    <span>{gameDefinition.baseCoinReward}-{gameDefinition.maxCoinReward} xu</span>
-                                </div>
-                                {gameDefinition.isPremiumOnly && (
-                                    <div className="ttt-info-badge ttt-premium-badge">
-                                        <Zap size={14} />
-                                        Premium
-                                    </div>
-                                )}
-                            </div>
-                        )}
+    const gameContent = (
+        <div className={modalContentClassName}>
+            {!isEmbedded && (
+                <button className="ttt-close-btn" onClick={handleClose}>
+                    <X size={24} />
+                </button>
+            )}
+
+            <div className={gameContainerClassName}>
+                <div className="ttt-meowl-section" ref={meowlHomeRef}>
+                    <MeowlActor action={meowlAction} style={meowlStyle} />
+                </div>
+
+                <div className="ttt-board-section">
+                    <div className={`ttt-status ${winner ? (winner === 'X' ? 'win' : 'lose') : ''}`}>
+                        {winner
+                            ? winner === 'X'
+                                ? '🎉 BẠN THẮNG!'
+                                : '😸 MEOWL THẮNG!'
+                            : isUserTurn
+                              ? 'LƯỢT CỦA BẠN (X)'
+                              : 'MEOWL ĐANG NGHĨ...'}
                     </div>
 
-                    <div className="ttt-board-section">
-                        {/* Loading State */}
-                        {isLoading && (
-                            <div className="ttt-loading">
-                                <Loader2 className="ttt-spinner" size={32} />
-                                <span>Đang kết nối...</span>
-                            </div>
-                        )}
-
-                        {/* Status */}
-                        <div className={`ttt-status ${winner ? (winner === 'X' ? 'win' : 'lose') : ''}`}>
-                            {winner ? (winner === 'X' ? '🎉 BẠN THẮNG!' : '😸 MEOWL THẮNG!') : (isUserTurn ? 'LƯỢT CỦA BẠN (X)' : 'MEOWL ĐANG NGHĨ...')}
-                        </div>
-
-                        {/* Game Result Overlay */}
-                        {gameResult && (
-                            <div className="ttt-result-overlay">
-                                <div className="ttt-result-card">
-                                    <div className="ttt-result-icon">
-                                        {winner === 'X' ? <Trophy size={48} /> : '😸'}
-                                    </div>
-                                    <h3 className="ttt-result-title">{gameResult.message}</h3>
-                                    <div className="ttt-result-rewards">
-                                        <div className="ttt-reward-item">
-                                            <Coins size={24} className="ttt-reward-icon ttt-coin-icon" />
-                                            <span className="ttt-reward-value">+{gameResult.coinsEarned}</span>
-                                            <span className="ttt-reward-label">Xu</span>
-                                        </div>
-                                        <div className="ttt-reward-item">
-                                            <Zap size={24} className="ttt-reward-icon ttt-xp-icon" />
-                                            <span className="ttt-reward-value">+{gameResult.xpEarned}</span>
-                                            <span className="ttt-reward-label">XP</span>
-                                        </div>
-                                    </div>
-                                    <button className="ttt-btn ttt-play-again-btn" onClick={resetGame}>
-                                        🔄 Chơi lại
-                                    </button>
+                    {winner && (
+                        <div className="ttt-result-overlay">
+                            <div className="ttt-result-card">
+                                <div className="ttt-result-icon">
+                                    {winner === 'X' ? <Trophy size={48} /> : '😸'}
                                 </div>
+                                <h3 className="ttt-result-title">
+                                    {winner === 'X' ? 'Chiến thắng!' : 'Meowl thắng rồi!'}
+                                </h3>
+                                <button className="ttt-btn ttt-play-again-btn" onClick={resetGame}>
+                                    🔄 Chơi lại
+                                </button>
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        <div className="ttt-board">
-                            {Array(9).fill(null).map((_, i) => {
-                                // Logic Infinity: Highlight quân sắp chết
+                    <div className="ttt-board">
+                        {Array(9)
+                            .fill(null)
+                            .map((_, i) => {
                                 const isUserDying = userMoves.length === 3 && userMoves[0] === i;
                                 const isAiDying = aiMoves.length === 3 && aiMoves[0] === i;
 
                                 return (
                                     <div
                                         key={i}
-                                        ref={el => cellRefs.current[i] = el}
+                                        ref={(el) => {
+                                            cellRefs.current[i] = el;
+                                        }}
                                         className={`ttt-cell ${board[i] ? board[i]?.toLowerCase() : ''} ${(isUserDying || isAiDying) ? 'dying' : ''} ${!isUserTurn ? 'disabled' : ''}`}
                                         onClick={() => handleCellClick(i)}
                                     >
@@ -502,24 +375,24 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onCoinsEarned, onClose })
                                     </div>
                                 );
                             })}
-                        </div>
-                        <div className="ttt-rules">Luật chơi: Tối đa 3 nước. Nước thứ 4 xóa nước đầu tiên!</div>
-                        
-                        {/* Error Message */}
-                        {apiError && (
-                            <div className="ttt-error-msg">
-                                ⚠️ {apiError}
-                            </div>
-                        )}
-                        
-                        {!gameResult && (
-                            <button className="ttt-btn" onClick={resetGame}>Chơi lại</button>
-                        )}
                     </div>
+                    <div className="ttt-rules">Luật chơi: Tối đa 3 nước. Nước thứ 4 xóa nước đầu tiên!</div>
+
+                    {!winner && (
+                        <button className="ttt-btn" onClick={resetGame}>
+                            Chơi lại
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
     );
+
+    if (isEmbedded) {
+        return <div className="ttt-embedded-wrapper">{gameContent}</div>;
+    }
+
+    return <div className="ttt-modal-overlay">{gameContent}</div>;
 };
 
 export default TicTacToeGame;

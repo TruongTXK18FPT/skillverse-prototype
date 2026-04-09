@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ChevronRight, Check, Crown, Sparkles } from "lucide-react";
 import { premiumService } from "../../services/premiumService";
 import { PremiumPlan } from "../../data/premiumDTOs";
+import { useAuth } from "../../context/AuthContext";
 import "./PremiumVaultSection.css";
 
 type DoorState = "closed" | "opening" | "open";
@@ -10,9 +11,22 @@ type DoorState = "closed" | "opening" | "open";
 const DOOR_ANIMATION_MS = 620;
 
 const PremiumVaultSection = () => {
+  const { user, isAuthenticated } = useAuth();
   const [premiumPlans, setPremiumPlans] = useState<PremiumPlan[]>([]);
   const [loadingPremiumPlans, setLoadingPremiumPlans] = useState(false);
   const [doorState, setDoorState] = useState<DoorState>("closed");
+
+  const roleNames = useMemo(
+    () => (user?.roles || []).map((role) => String(role).toUpperCase()),
+    [user?.roles],
+  );
+
+  const isBusinessViewer =
+    isAuthenticated &&
+    (roleNames.includes("RECRUITER") || roleNames.includes("BUSINESS"));
+
+  const isStudentOrGuestViewer =
+    !isAuthenticated || roleNames.includes("USER") || roleNames.includes("LEARNER");
 
   const openVault = () => {
     if (doorState !== "closed") {
@@ -30,13 +44,23 @@ const PremiumVaultSection = () => {
       (plan) => plan.isActive && plan.planType !== "FREE_TIER",
     );
 
-    return activePlans
-      .filter(
-        (plan) =>
-          plan.targetRole !== "RECRUITER" && plan.planType !== "RECRUITER_PRO",
-      )
-      .slice(0, 3);
-  }, [premiumPlans]);
+    if (isBusinessViewer) {
+      return activePlans
+        .filter((plan) => {
+          const targetRole = String(plan.targetRole || "").toUpperCase();
+          return plan.planType === "RECRUITER_PRO" || targetRole === "RECRUITER" || targetRole === "BUSINESS";
+        })
+        .slice(0, 3);
+    }
+
+    if (isStudentOrGuestViewer) {
+      return activePlans
+        .filter((plan) => plan.planType === "STUDENT_PACK")
+        .slice(0, 3);
+    }
+
+    return [];
+  }, [premiumPlans, isBusinessViewer, isStudentOrGuestViewer]);
 
   const parsePlanFeatures = (features: string): string[] => {
     if (!features) return [];

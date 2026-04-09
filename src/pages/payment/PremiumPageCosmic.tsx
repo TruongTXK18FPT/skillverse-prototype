@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "../../styles/PremiumPageCosmic.css";
 import MeowGuide from "../../components/meowl/MeowlGuide";
@@ -26,20 +26,20 @@ import parentService, { StudentDetail } from "../../services/parentService";
 import { showAppInfo } from "../../context/ToastContext";
 
 const PremiumPageCosmic = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const { user, isAuthenticated } = useAuth();
   const [premiumPlans, setPremiumPlans] = useState<PremiumPlan[]>([]);
 
   const roles = (user?.roles || []).map((role) => String(role).toUpperCase());
   const isParent = roles.includes("PARENT");
+  const isBusinessRole = roles.includes("RECRUITER") || roles.includes("BUSINESS");
 
   const [students, setStudents] = useState<StudentDetail[]>([]);
   const [selectedStudentId, setSelectedStudentId] = useState<number | null>(
     location.state?.forStudent || null,
   );
 
-  const [processing, setProcessing] = useState(false);
+  const [processing] = useState(false);
   const [currentSub, setCurrentSub] = useState<UserSubscriptionResponse | null>(
     null,
   );
@@ -200,9 +200,13 @@ const PremiumPageCosmic = () => {
     });
   };
 
+  const handleLoginRequired = () => {
+    setShowLoginModal(true);
+  };
+
   const handleWalletPayment = (planName: string) => {
     if (!isAuthenticated) {
-      setShowLoginModal(true);
+      handleLoginRequired();
       return;
     }
 
@@ -278,6 +282,14 @@ const PremiumPageCosmic = () => {
 
   const fallbackFreePlan =
     premiumPlans.find((plan) => plan.planType === "FREE_TIER") || null;
+
+  const visiblePremiumPlans = useMemo(
+    () =>
+      isBusinessRole
+        ? premiumPlans.filter((plan) => plan.planType !== "FREE_TIER")
+        : premiumPlans,
+    [premiumPlans, isBusinessRole],
+  );
 
   const displayCurrentSub =
     !selectedStudentId && currentSub
@@ -387,7 +399,7 @@ const PremiumPageCosmic = () => {
               outline: "none",
             }}
           >
-            <option value="">Chính tôi ({user.fullName})</option>
+            <option value="">Chính tôi ({user?.fullName || "Tôi"})</option>
             {students.map((s) => (
               <option key={s.id} value={s.id}>
                 Con: {s.firstName} {s.lastName}{" "}
@@ -416,7 +428,7 @@ const PremiumPageCosmic = () => {
         </div>
       )}
       <ClearanceLevelPage
-        premiumPlans={premiumPlans}
+        premiumPlans={visiblePremiumPlans}
         currentSub={displayCurrentSub}
         activePlanId={activePlanId}
         activePlanName={activePlanName}
@@ -426,6 +438,7 @@ const PremiumPageCosmic = () => {
         userProfile={userProfile}
         fallbackAvatarUrl={user?.avatarUrl}
         onWalletPayment={handleWalletPayment}
+        onRequireLogin={handleLoginRequired}
         onPlanPreview={handlePlanPreview}
         onViewInvoice={!selectedStudentId ? handleViewInvoice : undefined}
         onEnableAutoRenew={

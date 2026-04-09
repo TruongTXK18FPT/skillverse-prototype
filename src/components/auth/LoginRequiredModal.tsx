@@ -25,15 +25,28 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    if (!isOpen) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = previousOverflow;
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   const handleLogin = () => {
     onClose();
@@ -65,7 +78,7 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
           />
 
           {/* Main Container */}
-          <div className="lrm-container">
+          <div className="lrm-container" onClick={handleDismiss}>
             {/* Modal Card */}
             <motion.div
               className="lrm-modal"
@@ -73,6 +86,10 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(event) => event.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-label={title}
             >
               {/* Animated Background Grid */}
               <div className="lrm-grid-bg"></div>

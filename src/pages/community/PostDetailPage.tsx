@@ -210,10 +210,10 @@ const PostDetailPage: React.FC = () => {
               <ThumbsUp size={20} />
               <span>{likeCount}</span>
             </button>
-            <button className={`transmission-action-btn ${isDisliked ? 'active' : ''}`} onClick={handleDislike}>
+            {/* <button className={`transmission-action-btn ${isDisliked ? 'active' : ''}`} onClick={handleDislike}>
               <ThumbsDown size={20} />
               <span>{dislikeCount}</span>
-            </button>
+            </button> */}
             <button className="transmission-action-btn">
               <MessageCircle size={20} />
               <span>{comments.length}</span>

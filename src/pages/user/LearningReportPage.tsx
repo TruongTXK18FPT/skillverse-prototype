@@ -36,6 +36,7 @@ import { useAuth } from "../../context/AuthContext";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import MarkdownRenderer from "../../components/learning-report/MarkdownRenderer";
 import { downloadLearningReportPDF } from "../../components/learning-report/PDFGenerator";
+import TicTacToeGame from "../../components/game/tic-tac-toe/TicTacToeGame";
 import "./LearningReportPage.css";
 import "../../components/learning-report/MarkdownRenderer.css";
 
@@ -65,6 +66,8 @@ const SECTION_CONFIG = [
   { key: "nextSteps", label: "Bước tiếp theo", icon: Zap },
   { key: "motivation", label: "Động lực", icon: Star },
 ];
+
+const GENERATING_GAME_DELAY_MS = 10000;
 
 // Meowl speech bubbles based on state
 const getMeowlSpeech = (
@@ -171,6 +174,7 @@ const LearningReportPage: React.FC = () => {
   const [selectedReportType, setSelectedReportType] = useState<ReportType>("COMPREHENSIVE");
   const [meowlSpeech, setMeowlSpeech] = useState("");
   const [generatingStep, setGeneratingStep] = useState(0);
+  const [showGeneratingGame, setShowGeneratingGame] = useState(false);
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const headingElementMapRef = useRef<Record<string, HTMLElement>>({});
   const headingParentMapRef = useRef<Record<string, string>>({});
@@ -262,10 +266,24 @@ const LearningReportPage: React.FC = () => {
     }
   }, [isGenerating]);
 
+  useEffect(() => {
+    if (!isGenerating) {
+      setShowGeneratingGame(false);
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowGeneratingGame(true);
+    }, GENERATING_GAME_DELAY_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isGenerating]);
+
   const handleGenerateReport = async () => {
     if (!canGenerate?.canGenerate) return;
 
     setIsGenerating(true);
+    setShowGeneratingGame(false);
     setError(null);
     setGeneratingStep(0);
     try {
@@ -293,6 +311,7 @@ const LearningReportPage: React.FC = () => {
 
   const handleGenerateQuickReport = async () => {
     setIsGenerating(true);
+    setShowGeneratingGame(false);
     setError(null);
     setGeneratingStep(0);
     try {
@@ -755,49 +774,71 @@ const LearningReportPage: React.FC = () => {
               <MeowlKuruLoader size="large" text="Đang đồng bộ dữ liệu hệ thống..." fullScreen={false} />
             </div>
           ) : isGenerating ? (
-            <div className="lr-page__generating-state">
-              <div className="lr-page__loader-center">
-                <MeowlKuruLoader size="large" text="Đang xử lý dữ liệu..." />
+            <div className={`lr-page__generating-state ${showGeneratingGame ? "lr-page__generating-state--split" : ""}`}>
+              <div className="lr-page__generating-shell">
+                <div className="lr-page__loader-center">
+                  <MeowlKuruLoader size="large" text="Đang xử lý dữ liệu..." />
 
-                <div className="lr-page__generating-steps">
-                  <div className={`lr-page__step ${generatingStep >= 0 ? "lr-page__step--done" : ""}`}>
-                    <CheckCircle2 size={16} />
-                    <span>Thu thập dữ liệu</span>
+                  <div className="lr-page__generating-steps">
+                    <div className={`lr-page__step ${generatingStep >= 0 ? "lr-page__step--done" : ""}`}>
+                      <CheckCircle2 size={16} />
+                      <span>Thu thập dữ liệu</span>
+                    </div>
+                    <div className="lr-page__step-connector" />
+                    <div
+                      className={`lr-page__step ${generatingStep >= 1 ? "lr-page__step--done" : ""} ${generatingStep === 1 ? "lr-page__step--active" : ""}`}
+                    >
+                      {generatingStep === 1 ? (
+                        <RefreshCw size={16} className="spinning" />
+                      ) : (
+                        <Brain size={16} />
+                      )}
+                      <span>Phân tích AI</span>
+                    </div>
+                    <div className="lr-page__step-connector" />
+                    <div
+                      className={`lr-page__step ${generatingStep >= 2 ? "lr-page__step--done" : ""} ${generatingStep === 2 ? "lr-page__step--active" : ""}`}
+                    >
+                      {generatingStep === 2 ? (
+                        <RefreshCw size={16} className="spinning" />
+                      ) : (
+                        <FileText size={16} />
+                      )}
+                      <span>Tạo báo cáo</span>
+                    </div>
+                    <div className="lr-page__step-connector" />
+                    <div
+                      className={`lr-page__step ${generatingStep >= 3 ? "lr-page__step--done" : ""} ${generatingStep === 3 ? "lr-page__step--active" : ""}`}
+                    >
+                      {generatingStep === 3 ? (
+                        <RefreshCw size={16} className="spinning" />
+                      ) : (
+                        <Sparkles size={16} />
+                      )}
+                      <span>Hoàn thiện</span>
+                    </div>
                   </div>
-                  <div className="lr-page__step-connector" />
-                  <div
-                    className={`lr-page__step ${generatingStep >= 1 ? "lr-page__step--done" : ""} ${generatingStep === 1 ? "lr-page__step--active" : ""}`}
-                  >
-                    {generatingStep === 1 ? (
-                      <RefreshCw size={16} className="spinning" />
-                    ) : (
-                      <Brain size={16} />
-                    )}
-                    <span>Phân tích AI</span>
-                  </div>
-                  <div className="lr-page__step-connector" />
-                  <div
-                    className={`lr-page__step ${generatingStep >= 2 ? "lr-page__step--done" : ""} ${generatingStep === 2 ? "lr-page__step--active" : ""}`}
-                  >
-                    {generatingStep === 2 ? (
-                      <RefreshCw size={16} className="spinning" />
-                    ) : (
-                      <FileText size={16} />
-                    )}
-                    <span>Tạo báo cáo</span>
-                  </div>
-                  <div className="lr-page__step-connector" />
-                  <div
-                    className={`lr-page__step ${generatingStep >= 3 ? "lr-page__step--done" : ""} ${generatingStep === 3 ? "lr-page__step--active" : ""}`}
-                  >
-                    {generatingStep === 3 ? (
-                      <RefreshCw size={16} className="spinning" />
-                    ) : (
-                      <Sparkles size={16} />
-                    )}
-                    <span>Hoàn thiện</span>
-                  </div>
+
+                  {showGeneratingGame && (
+                    <p className="lr-page__generating-helper">
+                      Hệ thống đang phân tích sâu hơn bình thường. Làm một ván caro với Meowl trong lúc chờ nhé.
+                    </p>
+                  )}
                 </div>
+
+                <aside className="lr-page__generating-game-pane" aria-hidden={!showGeneratingGame}>
+                  {showGeneratingGame && (
+                    <>
+                      <header className="lr-page__generating-game-header">
+                        <span className="lr-page__generating-game-eyebrow">MINI GAME KHI CHỜ BÁO CÁO</span>
+                        <h3>MEOWL TIC-TAC-TOE</h3>
+                      </header>
+                      <div className="lr-page__generating-game-body">
+                        <TicTacToeGame mode="embedded" />
+                      </div>
+                    </>
+                  )}
+                </aside>
               </div>
             </div>
           ) : error ? (

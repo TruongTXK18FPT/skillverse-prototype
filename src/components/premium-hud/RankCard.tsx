@@ -25,6 +25,7 @@ interface RankCardProps {
   isCurrentPlan: boolean;
   currentSub: UserSubscriptionResponse | null;
   onWalletPayment: (planName: string) => void;
+  onRequireLogin?: () => void;
   onPlanPreview?: (planName: string) => void;
   processing: boolean;
   isAuthenticated: boolean;
@@ -50,6 +51,7 @@ const RankCard: React.FC<RankCardProps> = ({
   isCurrentPlan,
   currentSub,
   onWalletPayment,
+  onRequireLogin,
   onPlanPreview,
   processing,
   isAuthenticated,
@@ -235,6 +237,17 @@ const RankCard: React.FC<RankCardProps> = ({
   const effectiveAutoRenew = autoRenewManagedAfterSwitch
     ? scheduledChangeAutoRenew
     : Boolean(currentSub?.autoRenew);
+
+  const handleWalletAction = () => {
+    if (!isAuthenticated) {
+      if (onRequireLogin) {
+        onRequireLogin();
+        return;
+      }
+    }
+
+    onWalletPayment(plan.name);
+  };
 
   return (
     <div
@@ -464,7 +477,7 @@ const RankCard: React.FC<RankCardProps> = ({
               {isAuthenticated && walletData ? (
                 <button
                   className="hall-btn"
-                  onClick={() => onWalletPayment(plan.name)}
+                  onClick={handleWalletAction}
                   onMouseEnter={() => onPlanPreview?.(plan.name)}
                   onFocus={() => onPlanPreview?.(plan.name)}
                   disabled={processing || isScheduledTarget}
@@ -483,7 +496,7 @@ const RankCard: React.FC<RankCardProps> = ({
               ) : (
                 <button
                   className="hall-btn"
-                  onClick={() => onWalletPayment(plan.name)}
+                  onClick={handleWalletAction}
                   disabled={processing || isScheduledTarget}
                 >
                   {isScheduledTarget

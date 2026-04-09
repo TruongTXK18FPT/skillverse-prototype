@@ -46,12 +46,59 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
 
   // Using imported validation helper from learningReportService
 
+  const loadHistoryPages = async () => {
+    const limit = Math.max(maxItems, REPORTS_PER_PAGE);
+    const firstBatch = await learningReportService.getReportHistory(0, limit);
+
+    // Fast path: backend already respected requested size or no more data.
+    if (firstBatch.length === 0 || firstBatch.length >= limit || firstBatch.length < REPORTS_PER_PAGE) {
+      return firstBatch.slice(0, limit);
+    }
+
+    // Fallback: some environments cap page size server-side, so pull next pages explicitly.
+    const merged = [...firstBatch];
+    const seenKeys = new Set(
+      firstBatch.map((report) => `${report.reportId ?? "na"}-${report.generatedAt ?? ""}`),
+    );
+    const maxExtraPages = Math.max(1, Math.ceil((limit - firstBatch.length) / REPORTS_PER_PAGE) + 2);
+
+    for (let page = 1; page <= maxExtraPages && merged.length < limit; page += 1) {
+      const pageBatch = await learningReportService.getReportHistory(page, REPORTS_PER_PAGE);
+      if (pageBatch.length === 0) {
+        break;
+      }
+
+      let addedCount = 0;
+      for (const report of pageBatch) {
+        const key = `${report.reportId ?? "na"}-${report.generatedAt ?? ""}`;
+        if (seenKeys.has(key)) {
+          continue;
+        }
+
+        seenKeys.add(key);
+        merged.push(report);
+        addedCount += 1;
+
+        if (merged.length >= limit) {
+          break;
+        }
+      }
+
+      // Stop if backend starts returning duplicate pages or short last page.
+      if (addedCount === 0 || pageBatch.length < REPORTS_PER_PAGE) {
+        break;
+      }
+    }
+
+    return merged.slice(0, limit);
+  };
+
   const loadReports = async () => {
     setIsLoading(true);
     setLoadError(null);
     try {
       const [history, canGen] = await Promise.all([
-        learningReportService.getReportHistory(0, Math.max(maxItems, REPORTS_PER_PAGE)),
+        loadHistoryPages(),
         learningReportService.canGenerateReport(),
       ]);
       // Filter out any reports with invalid IDs
@@ -344,7 +391,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
                 );
               })}
 
-              {sortedReports.length > REPORTS_PER_PAGE && (
+              {sortedReports.length > 0 && (
                 <div className="lr-history__pagination">
                   <button
                     type="button"
