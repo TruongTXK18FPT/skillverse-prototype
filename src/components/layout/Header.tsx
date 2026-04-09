@@ -61,6 +61,7 @@ const Header: React.FC = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showQuickNav, setShowQuickNav] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isMobileMenuToggleLocked, setIsMobileMenuToggleLocked] =
     useState(false);
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
@@ -339,11 +340,21 @@ const Header: React.FC = () => {
   }, []);
 
   const handleLogout = async () => {
+    if (isLoggingOut) return;
+
+    setIsLoggingOut(true);
     setShowUserMenu(false);
     setShowQuickNav(false);
     setIsMobileMenuOpen(false);
+
+    // Move away from dashboard first so auth teardown cannot flash dashboard fallback UI.
     navigate("/", { replace: true });
-    await logout();
+
+    try {
+      await logout();
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   const handleLogin = () => {
@@ -985,7 +996,7 @@ const Header: React.FC = () => {
           {/* Right Section */}
           <div className="header-right">
             {/* Upgrade Button */}
-            {user?.roles.includes("USER") && (
+            {!isLoggingOut && user?.roles.includes("USER") && (
               <button
                 onClick={handleUpgrade}
                 className="header-upgrade-btn desktop-only"
@@ -1005,7 +1016,7 @@ const Header: React.FC = () => {
             </button>
 
             {/* Authentication */}
-            {isAuthenticated && user ? (
+            {!isLoggingOut && isAuthenticated && user ? (
               <>
                 <div
                   ref={userMenuRef}
@@ -1223,13 +1234,14 @@ const Header: React.FC = () => {
               <button
                 onClick={handleLogin}
                 className="header-login-btn desktop-only"
+                disabled={isLoggingOut}
               >
-                Đăng nhập
+                {isLoggingOut ? "Đang đăng xuất..." : "Đăng nhập"}
               </button>
             )}
 
             {/* Mobile quick actions */}
-            {!isMentorRole && (
+            {!isMentorRole && !isLoggingOut && (
               <button
                 className="mobile-icon-btn mobile-only"
                 aria-label="Upgrade"
@@ -1257,7 +1269,7 @@ const Header: React.FC = () => {
             <div className="mobile-menu" id="sv-mobile-menu">
               <div className="mobile-menu-content">
                 {/* Mobile User Section */}
-                {isAuthenticated && user ? (
+                {!isLoggingOut && isAuthenticated && user ? (
                   <div className="mobile-user-section">
                     <div className="mobile-user-info">
                       <div className="user-avatar-large">
@@ -1390,9 +1402,13 @@ const Header: React.FC = () => {
                     </div>
                   </div>
                 ) : (
-                  <button onClick={handleLogin} className="mobile-login-btn">
+                  <button
+                    onClick={handleLogin}
+                    className="mobile-login-btn"
+                    disabled={isLoggingOut}
+                  >
                     <User size={18} />
-                    <span>Đăng nhập</span>
+                    <span>{isLoggingOut ? "Đang đăng xuất..." : "Đăng nhập"}</span>
                   </button>
                 )}
 
