@@ -339,9 +339,11 @@ const Header: React.FC = () => {
   }, []);
 
   const handleLogout = async () => {
-    await logout();
     setShowUserMenu(false);
-    window.location.assign("/");
+    setShowQuickNav(false);
+    setIsMobileMenuOpen(false);
+    navigate("/", { replace: true });
+    await logout();
   };
 
   const handleLogin = () => {

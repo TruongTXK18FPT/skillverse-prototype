@@ -1633,7 +1633,6 @@ const GSJJourneyPage: React.FC = () => {
             <div className="gsj-empty-state__icon">
               <Rocket size={48} />
             </div>
-            <div className="gsj-empty-state__glow"></div>
           </div>
           <h3 className="gsj-empty-state__title">Sẵn sàng bắt đầu?</h3>
           <p className="gsj-empty-state__description">
@@ -1789,7 +1788,6 @@ const GSJJourneyPage: React.FC = () => {
             <div className="gsj-empty-state__icon">
               <Rocket size={48} />
             </div>
-            <div className="gsj-empty-state__glow"></div>
           </div>
           <h3 className="gsj-empty-state__title">Sẵn sàng bắt đầu?</h3>
           <p className="gsj-empty-state__description">

@@ -468,10 +468,10 @@ const AiRoadmapPage = () => {
       <div className="roadmap-page__container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
         {/* Header */}
         <div className="roadmap-page__header" style={{ marginBottom: '30px' }}>
-          <button onClick={handleGoBack} className="roadmap-page__back-btn" style={{ color: 'var(--hud-accent)', borderColor: 'var(--hud-border)' }}>
+          {/* <button onClick={handleGoBack} className="roadmap-page__back-btn" style={{ color: 'var(--hud-accent)', borderColor: 'var(--hud-border)' }}>
             <ArrowLeft className="h-5 w-5" />
             {viewMode === 'list' ? 'Quay lại' : 'Quay lại Lộ trình'}
-          </button>
+          </button> */}
           
           <div className="roadmap-page__header-content">
             <h1 className="roadmap-page__title" style={{ fontFamily: 'var(--hud-font-mono)', color: 'var(--hud-accent)', textShadow: '0 0 10px var(--hud-accent-glow)' }}>

@@ -710,8 +710,8 @@ const AssignmentPage: React.FC = () => {
                         <div key={sub.id} className={`ap-v2-timeline-item ${sub.isNewest ? 'ap-v2-timeline-item--latest' : ''}`}>
                           <div className="ap-v2-tl-header">
                             <div className="ap-v2-tl-info">
-                              <span className="ap-v2-tl-commit">Commit #{sub.attemptNumber}</span>
-                              {sub.isNewest && <span className="ap-v2-tl-latest-badge">Latest</span>}
+                              <span className="ap-v2-tl-commit">Lần nộp #{sub.attemptNumber}</span>
+                              {sub.isNewest && <span className="ap-v2-tl-latest-badge">Mới nhất</span>}
                             </div>
                             <span className="ap-v2-tl-date">{formatDate(sub.submittedAt)}</span>
                           </div>
@@ -759,7 +759,7 @@ const AssignmentPage: React.FC = () => {
             </div>
             <div className="ap-v2-modal-body">
               <p className="ap-v2-modal-text">
-                Bạn sắp gửi file <span className="ap-v2-modal-code">commit_data.sys</span> lên server. Mentor sẽ nhận được bản lưu này.
+                Bạn sắp gửi file <span className="ap-v2-modal-code">bài tập</span> lên server. Mentor sẽ nhận được bản lưu này.
               </p>
               <div className="ap-v2-modal-list">
                  <div className="ap-v2-modal-li"><Check size={14} /> Nội dung đã hoàn tất</div>
