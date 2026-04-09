@@ -14,8 +14,9 @@ export interface EvidenceRequest {
 
 export interface CreateViolationReportRequest {
   title: string;
+  reportedUserName: string; // Required - name of the user being reported
   reportedUserId?: number;
-  reportedUserEmail?: string; // Can use email instead of ID
+  reportedUserEmail?: string; // Optional - email of the user being reported
   reportType: string; // INAPPROPRIATE_CONTENT, HARASSMENT, SPAM, FRAUD, COPYRIGHT_VIOLATION, etc.
   severity?: string; // LOW, MEDIUM, HIGH
   description: string;

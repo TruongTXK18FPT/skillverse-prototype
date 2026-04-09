@@ -4,7 +4,8 @@ import { useAuth } from '../../context/AuthContext';
 import {
   AlertTriangle, Send, X, Mail, FileText,
   Plus, Check, Info, Shield, FileStack,
-  Upload, Loader, Trash2, Image, Film, FileArchive
+  Upload, Loader, Trash2, Image, Film, FileArchive,
+  User
 } from 'lucide-react';
 import violationReportService, {
   CreateViolationReportRequest,
@@ -44,6 +45,7 @@ const ReportUserPage: React.FC<ReportUserPageProps> = ({
   
   // Form state
   const [title, setTitle] = useState('');
+  const [targetName, setTargetName] = useState('');
   const [targetEmail, setTargetEmail] = useState(initialEmail || '');
   const [reportType, setReportType] = useState('');
   const [severity, setSeverity] = useState('MEDIUM');
@@ -157,16 +159,18 @@ const ReportUserPage: React.FC<ReportUserPageProps> = ({
       return;
     }
 
-    if (!targetEmail.trim()) {
-      setError('Vui lòng nhập email người dùng cần báo cáo');
+    if (!targetName.trim()) {
+      setError('Vui lòng nhập tên người dùng cần báo cáo');
       return;
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(targetEmail)) {
-      setError('Email không hợp lệ');
-      return;
+    // Validate email format only if provided
+    if (targetEmail.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(targetEmail)) {
+        setError('Email không hợp lệ');
+        return;
+      }
     }
 
     if (!reportType) {
@@ -201,8 +205,9 @@ const ReportUserPage: React.FC<ReportUserPageProps> = ({
 
       const request: CreateViolationReportRequest = {
         title: title.trim(),
+        reportedUserName: targetName.trim(),
         reportedUserId: 0, // Will be resolved by email on backend
-        reportedUserEmail: targetEmail.trim(),
+        reportedUserEmail: targetEmail.trim() || undefined,
         reportType,
         severity,
         description: description.trim(),
@@ -258,6 +263,7 @@ const ReportUserPage: React.FC<ReportUserPageProps> = ({
             <button className="hud-report-btn hud-report-btn-primary" onClick={() => {
               setSuccess(false);
               setTitle('');
+              setTargetName('');
               setTargetEmail('');
               setReportType('');
               setSeverity('MEDIUM');
@@ -323,7 +329,7 @@ const ReportUserPage: React.FC<ReportUserPageProps> = ({
 
         {/* Form */}
         <form className="hud-report-form" onSubmit={handleSubmit}>
-          {/* Row 1: Title + Email */}
+          {/* Row 1: Title + Name of reported user */}
           <div className="hud-report-form-row">
             <div className="hud-report-field">
               <label>
@@ -340,20 +346,19 @@ const ReportUserPage: React.FC<ReportUserPageProps> = ({
                 required
               />
             </div>
-            
+
             <div className="hud-report-field">
               <label>
-                <Mail size={14} />
-                Email đối tượng <span style={{ color: 'var(--hud-accent-red)' }}>*</span>
+                <User size={14} />
+                Tên người bị báo cáo <span style={{ color: 'var(--hud-accent-red)' }}>*</span>
               </label>
               <input
                 className="hud-report-input"
-                type="email"
-                value={targetEmail}
-                onChange={(e) => setTargetEmail(e.target.value)}
-                placeholder="EMAIL@EXAMPLE.COM"
+                type="text"
+                value={targetName}
+                onChange={(e) => setTargetName(e.target.value)}
+                placeholder="TÊN NGƯỜI BỊ BÁO CÁO"
                 required
-                disabled={!!initialEmail}
               />
             </div>
           </div>
@@ -377,7 +382,7 @@ const ReportUserPage: React.FC<ReportUserPageProps> = ({
                 ))}
               </select>
             </div>
-            
+
             <div className="hud-report-field">
               <label>Mức độ nghiêm trọng</label>
               <div className="hud-severity-group">
@@ -392,6 +397,23 @@ const ReportUserPage: React.FC<ReportUserPageProps> = ({
                   </button>
                 ))}
               </div>
+            </div>
+          </div>
+
+          {/* Row 3: Email of reported user (optional) */}
+          <div className="hud-report-form-row">
+            <div className="hud-report-field">
+              <label>
+                <Mail size={14} />
+                Email người bị báo cáo
+              </label>
+              <input
+                className="hud-report-input"
+                type="email"
+                value={targetEmail}
+                onChange={(e) => setTargetEmail(e.target.value)}
+                placeholder="EMAIL@EXAMPLE.COM (không bắt buộc)"
+              />
             </div>
           </div>
 
