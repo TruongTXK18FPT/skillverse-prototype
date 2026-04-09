@@ -1023,6 +1023,19 @@ const RecruiterTalentWorkspace = ({ fullTimeJobs, shortTermJobs }: RecruiterTale
   const supportsAdvanced = selectedJob?.kind === 'fulltime';
   const supportsBoost = selectedJob?.kind === 'fulltime';
 
+  const goToRosterPage = (nextPage: number) => {
+    if (!orderedJobs.length) return;
+
+    const safePage = Math.min(Math.max(nextPage, 0), Math.max(totalRosterPages - 1, 0));
+    const firstJobOnPage = orderedJobs[safePage * ROSTER_PAGE_SIZE] || null;
+
+    setRosterPage(safePage);
+
+    if (firstJobOnPage && firstJobOnPage.key !== selectedJobKey) {
+      setSelectedJobKey(firstJobOnPage.key);
+    }
+  };
+
   const filteredApplicants = applicants.filter((app) => {
     if (applicantFilter === 'pending') return isApplicantPending(app);
     if (applicantFilter === 'accepted') return app.status === 'ACCEPTED';
@@ -1807,7 +1820,7 @@ const RecruiterTalentWorkspace = ({ fullTimeJobs, shortTermJobs }: RecruiterTale
               <button
                 className="rtw-job-bar__roster-pagination__btn"
                 disabled={rosterPage === 0}
-                onClick={() => setRosterPage(rosterPage - 1)}
+                onClick={() => goToRosterPage(rosterPage - 1)}
               >
                 <ChevronLeft size={12} />
               </button>
@@ -1817,7 +1830,7 @@ const RecruiterTalentWorkspace = ({ fullTimeJobs, shortTermJobs }: RecruiterTale
               <button
                 className="rtw-job-bar__roster-pagination__btn"
                 disabled={rosterPage >= totalRosterPages - 1}
-                onClick={() => setRosterPage(rosterPage + 1)}
+                onClick={() => goToRosterPage(rosterPage + 1)}
               >
                 <ChevronRight size={12} />
               </button>

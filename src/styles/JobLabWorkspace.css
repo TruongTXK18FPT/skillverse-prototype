@@ -3788,3 +3788,8 @@
 .jlx-feedback-empty svg {
   color: #334155;
 }
+
+/* === CONTRACTS SECTION === */
+.jlx-contracts-section {
+  padding: 0 4px;
+}

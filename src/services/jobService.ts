@@ -67,6 +67,22 @@ class JobService {
   }
 
   /**
+   * Submit job for admin approval (IN_PROGRESS -> PENDING_APPROVAL)
+   * Charges fee (subscription or 50k wallet)
+   * @requires RECRUITER role
+   */
+  async submitForApproval(jobId: number): Promise<JobPostingResponse> {
+    try {
+      const response = await axiosInstance.post<JobPostingResponse>(
+        `/api/jobs/${jobId}/submit`
+      );
+      return response.data;
+    } catch (error) {
+      this.handleError(error, 'Failed to submit job for approval');
+    }
+  }
+
+  /**
    * Delete a job (only if status = IN_PROGRESS)
    * @requires RECRUITER role
    */
@@ -313,11 +329,13 @@ class JobService {
     switch (status) {
       case 'IN_PROGRESS': return 'gray';
       case 'OPEN': return 'green';
+      case 'PENDING_APPROVAL': return 'orange';
       case 'CLOSED': return 'red';
       case 'PENDING': return 'blue';
       case 'REVIEWED': return 'yellow';
       case 'ACCEPTED': return 'green';
       case 'REJECTED': return 'red';
+      case 'CONTRACT_SIGNED': return 'green';
       default: return 'gray';
     }
   }
@@ -329,11 +347,13 @@ class JobService {
     switch (status) {
       case 'IN_PROGRESS': return 'Đang Soạn';
       case 'OPEN': return 'Đang Mở';
+      case 'PENDING_APPROVAL': return 'Chờ Duyệt';
       case 'CLOSED': return 'Đã Đóng';
       case 'PENDING': return 'Chờ Xét Duyệt';
       case 'REVIEWED': return 'Đã Xem';
       case 'ACCEPTED': return 'Đã Chấp Nhận';
       case 'REJECTED': return 'Đã Từ Chối';
+      case 'CONTRACT_SIGNED': return 'Đã ký hợp đồng';
       default: return status;
     }
   }

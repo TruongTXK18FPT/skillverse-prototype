@@ -71,6 +71,7 @@ import {
   ExternalLink,
   User,
   Percent,
+  Mail,
 } from "lucide-react";
 import adminService from "../../services/adminService";
 import { useAuth } from "../../context/AuthContext";
@@ -240,8 +241,17 @@ export const JobManagementTab: React.FC = () => {
   const loadPendingJobs = useCallback(async () => {
     setPendingLoading(true);
     try {
-      const data = await adminService.getPendingShortTermJobs();
-      setPendingJobs(data);
+      // Fetch both full-time and short-term pending jobs in parallel
+      const [fullTimeJobs, shortTermJobs] = await Promise.all([
+        adminService.getPendingJobs(),
+        adminService.getPendingShortTermJobs(),
+      ]);
+      // Combine both lists — full-time jobs have a 'isFullTime' flag for rendering distinction
+      const allPending = [
+        ...(fullTimeJobs || []).map((j: any) => ({ ...j, _isFullTime: true })),
+        ...(shortTermJobs || []).map((j: any) => ({ ...j, _isFullTime: false })),
+      ];
+      setPendingJobs(allPending);
     } catch (error) {
       console.error("Error loading pending jobs:", error);
       showError("Lỗi", "Không thể tải danh sách việc làm chờ duyệt");
@@ -339,10 +349,19 @@ export const JobManagementTab: React.FC = () => {
     setActionLoading(true);
     try {
       if (actionType === "approve") {
-        await adminService.approveShortTermJob(selectedJob.id);
-        showSuccess("Thành công", "Đã duyệt tin tuyển dụng ngắn hạn");
+        if (selectedJob._isFullTime) {
+          await adminService.approveJob(selectedJob.id);
+          showSuccess("Thành công", "Đã duyệt tin tuyển dụng dài hạn");
+        } else {
+          await adminService.approveShortTermJob(selectedJob.id);
+          showSuccess("Thành công", "Đã duyệt tin tuyển dụng ngắn hạn");
+        }
       } else if (actionType === "reject") {
-        await adminService.rejectShortTermJob(selectedJob.id, actionReason);
+        if (selectedJob._isFullTime) {
+          await adminService.rejectJob(selectedJob.id, actionReason);
+        } else {
+          await adminService.rejectShortTermJob(selectedJob.id, actionReason);
+        }
         showSuccess("Thành công", "Đã từ chối tin tuyển dụng");
       } else if (actionType === "ban") {
         await adminService.banJob(selectedJob.id, actionReason);
@@ -439,6 +458,26 @@ export const JobManagementTab: React.FC = () => {
       month: "2-digit",
       day: "2-digit",
     });
+  };
+
+  const formatDateTime = (dateString: string) => {
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleString("vi-VN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const formatBudgetRange = (job: any) => {
+    if (job.budget != null) return formatCurrency(job.budget);
+    if (job.minBudget != null && job.maxBudget != null) {
+      if (job.minBudget === 0 && job.maxBudget === 0) return "Thỏa thuận";
+      return `${formatCurrency(job.minBudget)} - ${formatCurrency(job.maxBudget)}`;
+    }
+    return "N/A";
   };
 
   const formatCurrency = (amount: number) =>
@@ -1352,10 +1391,14 @@ export const JobManagementTab: React.FC = () => {
                         <Building2 size={14} />
                       </div>
                       <span>
-                        {job.recruiterInfo?.companyName || "N/A"}
+                        {job.recruiterCompanyName || job.recruiterInfo?.companyName || "N/A"}
                       </span>
                     </div>
                     <div className="jm-approve-card__badges">
+                      <span className={`jm-badge ${job._isFullTime ? "jm-badge--info" : "jm-badge--pending"}`}>
+                        <Briefcase size={10} />
+                        {job._isFullTime ? "Dài hạn" : "Ngắn hạn"}
+                      </span>
                       {job.urgency && job.urgency !== "NORMAL" && (
                         <span
                           className={`jm-badge ${job.urgency === "ASAP" ? "jm-badge--disputed" : "jm-badge--high"}`}
@@ -1370,20 +1413,38 @@ export const JobManagementTab: React.FC = () => {
                       </span>
                     </div>
                   </div>
+                  {job._isFullTime && (job.recruiterEmail || job.createdAt) && (
+                    <div className="jm-approve-card__creator">
+                      {job.recruiterEmail && (
+                        <span className="jm-approve-card__creator-item">
+                          <Mail size={11} />
+                          {job.recruiterEmail}
+                        </span>
+                      )}
+                      {job.createdAt && (
+                        <span className="jm-approve-card__creator-item">
+                          <Clock size={11} />
+                          Gửi: {formatDateTime(job.createdAt)}
+                        </span>
+                      )}
+                    </div>
+                  )}
                   <h3 className="jm-approve-card__title">{job.title}</h3>
                   <div className="jm-approve-card__meta">
                     <div className="jm-approve-card__meta-item jm-approve-card__meta-item--money">
                       <DollarSign size={14} />
-                      <span>{formatCurrency(job.budget)}</span>
+                      <span>{formatBudgetRange(job)}</span>
                     </div>
                     <div className="jm-approve-card__meta-item">
                       <Calendar size={14} />
                       <span>{formatDate(job.deadline)}</span>
                     </div>
-                    <div className="jm-approve-card__meta-item">
-                      <Clock size={14} />
-                      <span>{job.estimatedDuration || "N/A"}</span>
-                    </div>
+                    {job._isFullTime && job.experienceLevel && (
+                      <div className="jm-approve-card__meta-item">
+                        <Zap size={14} />
+                        <span>{job.experienceLevel}</span>
+                      </div>
+                    )}
                     <div className="jm-approve-card__meta-item">
                       <Users size={14} />
                       <span>{job.applicantCount || 0} ứng viên</span>

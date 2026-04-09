@@ -1,0 +1,200 @@
+/**
+ * ContractMarkdownViewer — bright white legal-document theme
+ * Clean, professional typography for contract field display.
+ */
+
+.cmv-wrapper {
+  position: relative;
+  width: 100%;
+  font-family: 'Times New Roman', Times, serif, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: #1e293b;
+}
+
+/* Headings */
+.cmv-h1,
+.cmv-h2,
+.cmv-h3,
+.cmv-h4,
+.cmv-h5,
+.cmv-h6 {
+  margin: 0.85rem 0 0.4rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.3;
+}
+
+.cmv-h1 { font-size: 1.15rem; color: #1e40af; }
+.cmv-h2 { font-size: 1.05rem; color: #1e40af; }
+.cmv-h3 { font-size: 0.98rem; color: #1e3a5f; }
+.cmv-h4 { font-size: 0.92rem; color: #334155; }
+.cmv-h5,
+.cmv-h6 { font-size: 0.88rem; color: #475569; }
+
+/* Paragraph */
+.cmv-p {
+  margin: 0 0 0.6rem;
+  text-align: justify;
+  color: #334155;
+}
+
+.cmv-strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.cmv-em { font-style: italic; }
+.cmv-del { text-decoration: line-through; color: #94a3b8; }
+
+/* Lists */
+.cmv-ul,
+.cmv-ol {
+  margin: 0 0 0.7rem 1.4rem;
+}
+
+.cmv-li {
+  margin-bottom: 0.28rem;
+  color: #334155;
+  text-align: justify;
+}
+
+/* Blockquote */
+.cmv-blockquote {
+  margin: 0.8rem 0;
+  padding: 0.6rem 1rem;
+  border-left: 3px solid #3b82f6;
+  background: #f1f5f9;
+  border-radius: 0 6px 6px 0;
+  color: #475569;
+  font-style: italic;
+}
+
+/* Code */
+.cmv-code-inline {
+  padding: 0.1rem 0.35rem;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.85em;
+  color: #be185d;
+}
+
+.cmv-pre {
+  margin: 0.8rem 0;
+  padding: 0.85rem 1rem;
+  background: #1e293b;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.cmv-pre code {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.82em;
+  color: #e2e8f0;
+  line-height: 1.7;
+}
+
+/* Table */
+.cmv-table-wrap {
+  margin: 0.8rem 0;
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.cmv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.cmv-th {
+  padding: 0.5rem 0.75rem;
+  background: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+  color: #1e293b;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.cmv-td {
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: top;
+}
+
+/* HR */
+.cmv-hr {
+  margin: 1rem 0;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Link */
+.cmv-link {
+  color: #2563eb;
+  text-decoration: none;
+  border-bottom: 1px dashed #93c5fd;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.cmv-link:hover {
+  color: #1d4ed8;
+  border-bottom-color: #2563eb;
+}
+
+/* Image */
+.cmv-figure {
+  margin: 0.8rem 0;
+}
+
+.cmv-img {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+}
+
+.cmv-caption {
+  margin-top: 0.3rem;
+  font-size: 0.78rem;
+  color: #64748b;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Checkbox */
+.cmv-checkbox {
+  display: inline-flex;
+  align-items: center;
+  font-family: monospace;
+  margin-right: 0.3rem;
+  color: #94a3b8;
+}
+
+.cmv-checkbox--checked {
+  color: #16a34a;
+}
+
+/* Empty */
+.cmv-empty {
+  margin: 0;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* Clamp */
+.cmv-clamp-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60px;
+  background: linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
+}

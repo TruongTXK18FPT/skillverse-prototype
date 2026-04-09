@@ -112,6 +112,11 @@ import MeowlAdventure from "./components/game/meowl-adventure/MeowlAdventure";
 // import AdminSeminarManager from "./pages/main/AdminSeminarManager";
 // import RecruiterSeminarManager from "./pages/main/RecruiterSeminarManager";
 import ShortTermJobRoutes from "./routes/ShortTermJobRoutes";
+import ContractDetailPage from "./components/contract/ContractDetailPage";
+import ContractForm from "./components/contract/ContractForm";
+import ContractSignPage from "./components/contract/ContractSignPage";
+import MyContractsPage from "./pages/user/MyContractsPage";
+import ContractManagementPage from "./pages/business/ContractManagementPage";
 import FateDetailPage from "./components/jobs-odyssey/FateDetailPage";
 import MeowlSkinShopPage from "./pages/shop/MeowlSkinShopPage";
 import UserGuidePage from "./pages/user-guide/UserGuidePage";
@@ -128,7 +133,6 @@ const CertificateDemoPage = lazy(() => import("./pages/CertificateDemoPage"));
 
 const AppContents = () => {
   const location = useLocation();
-
   // Determine if header is hidden
   const isHeaderHidden =
     fullScreenRoutes.has(location.pathname) ||
@@ -315,6 +319,14 @@ const AppContents = () => {
             <Route path="/job-lab" element={<JobLabPage />} />
             {/* Short-term Job Routes */}
             <Route path="/short-term-jobs/*" element={<ShortTermJobRoutes />} />
+            {/* Contract Routes — flattened directly (no nested <Routes> wrapper) */}
+            <Route path="/business/contracts/:id/edit" element={<ContractForm />} />
+            <Route path="/business/contracts/create" element={<ContractForm />} />
+            <Route path="/business/contracts/:id" element={<ContractDetailPage />} />
+            <Route path="/business/contracts" element={<ContractManagementPage />} />
+            <Route path="/my-contracts" element={<MyContractsPage />} />
+            <Route path="/contracts/:id/sign" element={<ContractSignPage />} />
+            <Route path="/contracts/:id" element={<ContractDetailPage />} />
             {/* Violation Report Routes */}
             <Route path="/report-violation" element={<ReportUserPage />} />
             <Route path="/my-reports" element={<MyReportsPage />} />
@@ -485,6 +497,10 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/jobs",
   "/portfolio/create",
   "/my-applications",
+  "/my-contracts",
+  "/business/contracts",
+  "/contracts",
+  "/contracts/sign",
   "/profile/user",
   "/set-password",
   "/bookings",
@@ -497,6 +513,15 @@ const hideFooterOnlyRoutes = new Set<string>([
 // Check if path matches quiz attempt pattern
 const isQuizAttemptRoute = (pathname: string) => {
   return /^\/quiz\/\d+\/attempt$/.test(pathname);
+};
+
+// Check if path is any contract route
+const isContractRoute = (pathname: string) => {
+  return (
+    pathname.startsWith('/contracts/') ||
+    pathname.startsWith('/business/contracts/') ||
+    pathname === '/my-contracts'
+  );
 };
 
 // Check if path matches booking detail routes
@@ -574,7 +599,8 @@ const FooterVisibilityWrapper = () => {
     isQuizAttemptRoute(location.pathname) ||
     isRoadmapDetailRoute(location.pathname) ||
     isJobDetailRoute(location.pathname) ||
-    isBookingRoute(location.pathname)
+    isBookingRoute(location.pathname) ||
+    isContractRoute(location.pathname)
   ) {
     return null;
   }

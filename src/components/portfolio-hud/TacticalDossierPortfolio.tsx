@@ -566,9 +566,7 @@ const TacticalDossierPortfolio = () => {
           {[
             { id: 'overview', label: 'Bảng trạng thái', icon: Eye },
             { id: 'projects', label: 'Nhật ký dự án', icon: Briefcase },
-            ...(isOwner ? [
-              { id: 'completed-missions', label: 'Nhiệm vụ đã hoàn thành', icon: Target }
-            ] : []),
+            { id: 'completed-missions', label: 'Nhiệm vụ đã hoàn thành', icon: Target },
             { id: 'certificates', label: 'Chứng chỉ', icon: Award },
             ...(isOwner ? [
               { id: 'cv-builder', label: 'Trình tạo dữ liệu', icon: Settings }

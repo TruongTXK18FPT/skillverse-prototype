@@ -57,10 +57,16 @@ export const getApplicantInitials = (
 };
 
 export const getApplicantSubtitle = (
-  professionalTitle?: string | null,
+  professionalTitle?: unknown,
   hasPortfolio?: boolean,
 ): string => {
-  const trimmedTitle = professionalTitle?.trim();
+  const trimmedTitle =
+    typeof professionalTitle === 'string'
+      ? professionalTitle.trim()
+      : typeof professionalTitle === 'number'
+        ? String(professionalTitle).trim()
+        : '';
+
   if (trimmedTitle) {
     return trimmedTitle;
   }

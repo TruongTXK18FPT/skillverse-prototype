@@ -100,6 +100,17 @@ export const clearAuthSession = (): void => {
   });
 };
 
+export const getCurrentUserId = (): number | null => {
+  const raw = getStoredUserRaw();
+  if (!raw) return null;
+  try {
+    const user = JSON.parse(raw);
+    return user.id ?? null;
+  } catch {
+    return null;
+  }
+};
+
 export const getDeviceSessionId = (): string | null => {
   if (!isBrowser()) return null;
   return (

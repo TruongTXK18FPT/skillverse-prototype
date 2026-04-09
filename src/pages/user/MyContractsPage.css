@@ -1,0 +1,15 @@
+.mcp-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.mcp-header {
+  margin-bottom: 24px;
+}
+
+.mcp-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+}

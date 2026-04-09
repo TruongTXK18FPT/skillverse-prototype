@@ -1,4 +1,5 @@
 import axiosInstance from './axiosInstance';
+import { getAccessToken } from '../utils/authStorage';
 
 export type PostStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' | 'draft' | 'published' | 'archived';
 
@@ -33,6 +34,8 @@ export interface PostSummary {
   userAvatar?: string;
   likeCount?: number;
   dislikeCount?: number;
+  likedByCurrentUser?: boolean;
+  dislikedByCurrentUser?: boolean;
   commentCount?: number;
   viewCount?: number;
   createdAt?: string;
@@ -68,9 +71,17 @@ const toArray = <T>(data: unknown): T[] => {
   return [];
 };
 
+const getOptionalAuthHeaders = (): Record<string, string> => {
+  const token = getAccessToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 class CommunityService {
   async listPosts(params?: { page?: number; size?: number; status?: string; authorId?: number; search?: string }): Promise<{ items: PostSummary[]; total?: number }>{
-    const { data } = await axiosInstance.get('/api/posts', { params });
+    const { data } = await axiosInstance.get('/api/posts', {
+      params,
+      headers: getOptionalAuthHeaders(),
+    });
     const items = toArray<PostSummary>(data);
     const total = (data as any)?.totalElements ?? items.length;
     return { items, total };
@@ -84,7 +95,9 @@ class CommunityService {
   }
 
   async getPost(id: number): Promise<PostSummary> {
-    const { data } = await axiosInstance.get(`/api/posts/${id}`);
+    const { data } = await axiosInstance.get(`/api/posts/${id}`, {
+      headers: getOptionalAuthHeaders(),
+    });
     return data as PostSummary;
   }
 

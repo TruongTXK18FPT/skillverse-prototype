@@ -90,6 +90,7 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
     status: DecisionStatus;
   } | null>(null);
   const [decisionNote, setDecisionNote] = useState("");
+  const [createContractModal, setCreateContractModal] = useState<JobApplicationResponse | null>(null);
 
   useEffect(() => {
     fetchApplicants(page);
@@ -223,10 +224,18 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
         )} đã được cập nhật trạng thái.`,
       );
 
+      const acceptedApp = decisionModal.status === "ACCEPTED"
+        ? { ...decisionModal.application, status: "ACCEPTED" as JobApplicationStatus }
+        : null;
+
       setDecisionModal(null);
       setDecisionNote("");
       await fetchApplicants(page);
       onChanged?.();
+
+      if (acceptedApp) {
+        setTimeout(() => setCreateContractModal(acceptedApp), 300);
+      }
     } catch (error) {
       console.error("Error updating applicant decision:", error);
       showError(
@@ -621,6 +630,43 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
                 {decisionModal.status === "ACCEPTED"
                   ? "Xác nhận duyệt"
                   : "Xác nhận từ chối"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {createContractModal && (
+        <div
+          className="am-decision-overlay"
+          onClick={() => setCreateContractModal(null)}
+        >
+          <div
+            className="am-decision-modal"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h3>Tạo hợp đồng lao động</h3>
+            <p>
+              Bạn đã duyệt ứng viên <strong>{getApplicantDisplayName(createContractModal.userFullName, createContractModal.userEmail)}</strong>.
+              Bạn có muốn tạo hợp đồng lao động cho ứng viên này không?
+            </p>
+            <div className="am-decision-actions">
+              <button
+                type="button"
+                className="am-btn-action"
+                onClick={() => setCreateContractModal(null)}
+              >
+                Để sau
+              </button>
+              <button
+                type="button"
+                className="am-btn-action am-btn-accept"
+                onClick={() => {
+                  setCreateContractModal(null);
+                  navigate(`/business/contracts/create?applicationId=${createContractModal.id}`);
+                }}
+              >
+                Tạo hợp đồng
               </button>
             </div>
           </div>

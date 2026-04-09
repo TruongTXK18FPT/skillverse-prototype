@@ -1,0 +1,40 @@
+.cmp-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.cmp-header {
+  margin-bottom: 24px;
+}
+
+.cmp-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cmp-title-row h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.cmp-create-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  background: #059669;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cmp-create-btn:hover {
+  background: #047857;
+}

@@ -9,10 +9,11 @@ export enum JobStatus {
 }
 
 export enum JobApplicationStatus {
-  PENDING = 'PENDING',     // Application submitted, not yet reviewed
-  REVIEWED = 'REVIEWED',   // Recruiter has reviewed
-  ACCEPTED = 'ACCEPTED',   // Application accepted
-  REJECTED = 'REJECTED'    // Application rejected
+  PENDING = 'PENDING',
+  REVIEWED = 'REVIEWED',
+  ACCEPTED = 'ACCEPTED',
+  CONTRACT_SIGNED = 'CONTRACT_SIGNED',
+  REJECTED = 'REJECTED',
 }
 
 // ==================== ENTITIES ====================
@@ -163,6 +164,9 @@ export interface JobApplicationResponse {
   location: string | null;
   isHighlighted?: boolean;
   portfolioSlug?: string; // Added for linking to portfolio
+  // Contract link
+  contractId?: number;
+  contractStatus?: string;
 }
 
 // ==================== HELPER TYPES ====================

@@ -450,7 +450,7 @@
   color: var(--signal-cyan);
 }
 
-.transmission-action-btn:nth-child(2).active {
+.transmission-action-btn.disliked.active {
   color: var(--alert-red);
 }
 

@@ -620,6 +620,20 @@
   gap: 0.5rem;
   flex-wrap: wrap;
 }
+.jm-approve-card__creator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.4rem 1.2rem 0;
+  flex-wrap: wrap;
+}
+.jm-approve-card__creator-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
 .jm-approve-card__company {
   display: flex;
   align-items: center;
@@ -956,6 +970,8 @@
 .jm-badge--disputed { background: rgba(220,38,38,0.15); color: #fca5a5; border: 1px solid rgba(220,38,38,0.2); }
 .jm-badge--escalated { background: rgba(168,85,247,0.15); color: #d8b4fe; border: 1px solid rgba(168,85,247,0.25); }
 .jm-badge--closed { background: rgba(71,85,105,0.12); color: #64748b; border: 1px solid rgba(71,85,105,0.2); }
+.jm-badge--info { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+.jm-badge--pending { background: rgba(234,179,8,0.15); color: #fde047; border: 1px solid rgba(234,179,8,0.25); }
 
 /* ==================== MODALS ==================== */
 

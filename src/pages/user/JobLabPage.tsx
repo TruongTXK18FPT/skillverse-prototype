@@ -44,10 +44,12 @@ import {
   RevisionNote,
 } from "../../types/ShortTermJob";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
+import ContractListPage from "../../components/contract/ContractListPage";
+import FileSignature from "lucide-react/dist/esm/icons/file-signature";
 import "../../styles/JobLabWorkspace.css";
 
 type JobType = "ALL" | "REGULAR" | "SHORT_TERM";
-type ViewMode = "dashboard" | "applications" | "workspace";
+type ViewMode = "dashboard" | "applications" | "workspace" | "contracts";
 
 type AppItem = {
   id: string;
@@ -71,6 +73,9 @@ type AppItem = {
   reviewDeadlineAt?: string;
   responseDeadlineAt?: string;
   disputeEligibilityUnlocked?: boolean;
+  // Contract link
+  contractId?: number;
+  contractStatus?: string;
 };
 
 const STATUS_META: Record<
@@ -287,6 +292,8 @@ const JobLabPage: React.FC = () => {
       appliedAt: app.appliedAt,
       status: app.status,
       coverLetter: app.coverLetter || undefined,
+      contractId: app.contractId,
+      contractStatus: app.contractStatus,
     }));
 
     const shortTerm: AppItem[] = shortTermApps.map((app) => {
@@ -691,6 +698,16 @@ const JobLabPage: React.FC = () => {
             </span>
             <span>Tìm việc</span>
           </button>
+          <button
+            type="button"
+            className={`jlx-nav__item${viewMode === "contracts" ? " is-active" : ""}`}
+            onClick={() => setViewMode("contracts")}
+          >
+            <span className="jlx-nav__icon">
+              <FileSignature size={16} />
+            </span>
+            <span>Hợp đồng</span>
+          </button>
         </nav>
 
       </aside>
@@ -702,6 +719,7 @@ const JobLabPage: React.FC = () => {
               {viewMode === "dashboard" && "Tổng quan Job Lab"}
               {viewMode === "applications" && "Tất cả đơn ứng tuyển"}
               {viewMode === "workspace" && "Workspace"}
+              {viewMode === "contracts" && "Hợp đồng của tôi"}
             </h1>
             <p>
               {viewMode === "dashboard" &&
@@ -710,6 +728,8 @@ const JobLabPage: React.FC = () => {
                 "Tất cả đơn được gom trên một màn hình."}
               {viewMode === "workspace" &&
                 "Mở workspace để làm việc không bị gián đoạn."}
+              {viewMode === "contracts" &&
+                "Xem và quản lý hợp đồng lao động đã ký."}
             </p>
           </div>
           <div className="jlx-header__actions">
@@ -995,6 +1015,11 @@ const JobLabPage: React.FC = () => {
                         <span className={`jlx-status is-${status.tone}`}>
                           {status.label}
                         </span>
+                        {app.contractId && (
+                          <span className={`jlx-status is-${app.contractStatus === 'SIGNED' ? 'green' : 'amber'}`}>
+                            {app.contractStatus === 'SIGNED' ? 'Đã ký HĐ' : 'HĐ chờ ký'}
+                          </span>
+                        )}
                       </div>
                       <h4>{app.title}</h4>
                       <p className="jlx-job-card__company">
@@ -1032,6 +1057,16 @@ const JobLabPage: React.FC = () => {
                               Rút đơn
                             </button>
                           )}
+                        {app.contractId && (
+                          <button
+                            type="button"
+                            className="jlx-btn jlx-btn--ghost"
+                            onClick={() => navigate(`/contracts/${app.contractId}`)}
+                          >
+                            <FileCheck size={14} />
+                            Xem hợp đồng
+                          </button>
+                        )}
                       </div>
                     </article>
                   );
@@ -1697,6 +1732,12 @@ const JobLabPage: React.FC = () => {
                 </div>
               </>
             )}
+          </section>
+        )}
+
+        {viewMode === "contracts" && (
+          <section className="jlx-contracts-section">
+            <ContractListPage role="CANDIDATE" />
           </section>
         )}
 

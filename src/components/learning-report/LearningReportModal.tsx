@@ -322,7 +322,7 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
       
       
       await downloadLearningReportPDF(report, {
-        filename: `learning-report-${report.reportId}-${new Date().toISOString().split("T")[0]}`,
+        filename: learningReportService.formatReportFileName(report),
         includeHeader: true,
         includeFooter: true,
         includePageNumbers: true,

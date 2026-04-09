@@ -497,7 +497,7 @@ export function generateReportHTML(
         <div class="pdf-header">
           <div class="header-brand">Skill<span>Verse</span></div>
           <div class="header-meta">
-            <div>REPORT: #${report.reportId?.toString().slice(0,8).toUpperCase() || "UNK"}</div>
+            <div>REPORT: ${report.reportName || `Báo cáo ${formatDate(report.generatedAt)}`}</div>
             <div>DATE: ${formatDate(report.generatedAt)}</div>
           </div>
         </div>
@@ -730,7 +730,7 @@ export async function downloadVietnamesePDF(
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `${opts.filename}-${report.reportId || Date.now()}.pdf`;
+  link.download = `${opts.filename}.pdf`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

@@ -11,6 +11,7 @@ import './community-styles.css';
 import communityService from '../../services/communityService';
 import userService from '../../services/userService';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const CommunityHUD: React.FC = () => {
   const [posts, setPosts] = useState<CommunityPost[]>([]);
@@ -34,6 +35,7 @@ const CommunityHUD: React.FC = () => {
   // Trending Topics by tags from backend
   const [trendingTopics, setTrendingTopics] = useState<{ name: string; posts: number; trend: 'up' | 'down' }[]>([]);
   const [topUsers, setTopUsers] = useState<{ userId: number; count: number; name?: string; avatar?: string }[]>([]);
+  const { loading: authLoading, isAuthenticated } = useAuth();
 
   // Community Stats
   const [communityStats, setCommunityStats] = useState([
@@ -43,8 +45,12 @@ const CommunityHUD: React.FC = () => {
   ]);
 
   useEffect(() => {
+    if (authLoading) {
+      return;
+    }
+
     fetchPosts();
-  }, []);
+  }, [authLoading, isAuthenticated]);
 
   const navigate = useNavigate();
 
@@ -88,6 +94,9 @@ const CommunityHUD: React.FC = () => {
           category: post.category || 'discussion',
           tags: tags,
           likes: typeof post.likeCount === 'number' ? post.likeCount : 0,
+          dislikes: typeof post.dislikeCount === 'number' ? post.dislikeCount : 0,
+          likedByCurrentUser: !!post.likedByCurrentUser,
+          dislikedByCurrentUser: !!post.dislikedByCurrentUser,
           comments: typeof post.commentCount === 'number' ? post.commentCount : 0,
           shares: 0,
           isBookmarked: false,

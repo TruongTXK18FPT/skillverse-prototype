@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   AlertCircle,
   CheckCircle,
@@ -310,7 +311,9 @@ const JobBoostButton: React.FC<JobBoostButtonProps> = ({
         )}
       </button>
 
-      {showConfirmModal && (
+      {showConfirmModal &&
+        typeof document !== "undefined" &&
+        createPortal(
         <div
           className="jb-modal-overlay"
           onClick={() => setShowConfirmModal(false)}
@@ -385,7 +388,7 @@ const JobBoostButton: React.FC<JobBoostButtonProps> = ({
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
     </>
   );
 };

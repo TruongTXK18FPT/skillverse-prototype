@@ -301,7 +301,7 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
     return true;
   };
 
-  const submitJob = async () => {
+  const submitJob = async (publish: boolean) => {
     if (!validateForm()) {
       return;
     }
@@ -313,30 +313,35 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
     const currentUnlimited = freshInfo?.jobPostingUnlimited ?? false;
     const currentRemaining = freshInfo?.jobPostingRemaining ?? 0;
 
-    let confirmMessage = "";
-    if (currentHasSub && (currentUnlimited || currentRemaining > 0)) {
-      confirmMessage = currentUnlimited
-        ? "Bạn đang dùng gói recruiter không giới hạn lượt đăng. Đăng tin này ngay?"
-        : `Bạn còn ${currentRemaining} lượt đăng trong gói hiện tại. Xác nhận đăng tin này?`;
-    } else if (currentHasSub && currentRemaining <= 0) {
+    const confirmMessage = publish
+      ? currentHasSub && (currentUnlimited || currentRemaining > 0)
+        ? currentUnlimited
+          ? "Bạn đang dùng gói recruiter không giới hạn lượt đăng. Gửi duyệt ngay?"
+          : `Bạn còn ${currentRemaining} lượt đăng trong gói hiện tại. Xác nhận gửi duyệt?`
+        : currentHasSub && currentRemaining <= 0
+          ? null
+          : "Tin tuyển dụng này sẽ trừ 50.000 VNĐ từ ví recruiter. Bạn có muốn gửi duyệt ngay?"
+      : "Lưu dưới dạng bản nháp để hoàn thiện thêm trước khi gửi duyệt?";
+
+    if (publish && currentHasSub && !currentUnlimited && currentRemaining <= 0) {
       showError(
         "Đã hết lượt đăng",
         "Bạn đã dùng hết quota tuyển dụng trong tháng này. Vui lòng chờ kỳ tiếp theo hoặc nâng cấp gói.",
       );
       setIsSubmitting(false);
       return;
-    } else {
-      confirmMessage =
-        "Tin tuyển dụng này sẽ trừ 50.000 VNĐ từ ví recruiter. Bạn có muốn tiếp tục?";
     }
 
-    if (!(await confirmAction(confirmMessage))) {
+    if (
+      confirmMessage !== null &&
+      !(await confirmAction(confirmMessage))
+    ) {
       setIsSubmitting(false);
       return;
     }
 
     try {
-      await jobService.createJob({
+      const jobPayload = {
         title: formData.title.trim(),
         description: formData.description.trim(),
         requiredSkills: formData.skills,
@@ -351,11 +356,20 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
         benefits: formData.benefits.trim(),
         genderRequirement: "ANY",
         isNegotiable: formData.isNegotiable,
-      });
+      };
+
+      const created = await jobService.createJob(jobPayload);
+
+      // If publish=true: submit for admin approval (charges fee)
+      if (publish && created?.id) {
+        await jobService.submitForApproval(created.id);
+      }
 
       showSuccess(
-        "Đăng tin thành công",
-        "Tin tuyển dụng dài hạn đã được tạo và sẵn sàng cho ứng viên.",
+        publish ? "Đã gửi duyệt" : "Đã lưu nháp",
+        publish
+          ? "Tin tuyển dụng đã được gửi và đang chờ admin duyệt. Bạn sẽ được thông báo khi có kết quả."
+          : "Bản nháp đã được lưu lại. Bạn có thể chỉnh sửa và gửi duyệt bất cứ lúc nào.",
       );
 
       setFormData(createInitialFormData());
@@ -364,10 +378,22 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
       onMissionLaunched?.();
     } catch (error) {
       console.error("Mission launch failed:", error);
-      showError(
-        "Không thể đăng tin",
-        "Có lỗi xảy ra khi tạo tin tuyển dụng. Vui lòng thử lại.",
-      );
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      if (
+        errorMessage.includes("Số dư ví không đủ") ||
+        errorMessage.includes("không đủ")
+      ) {
+        showError(
+          "Số dư ví không đủ",
+          "Bạn cần ít nhất 50.000 VNĐ trong ví để đăng tin. Vui lòng nạp thêm.",
+        );
+      } else {
+        showError(
+          "Không thể đăng tin",
+          "Có lỗi xảy ra khi tạo tin tuyển dụng. Vui lòng thử lại.",
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -563,7 +589,7 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
           className="sjf-form"
           onSubmit={(event) => {
             event.preventDefault();
-            void submitJob();
+            void submitJob(true);
           }}
         >
           {/* Section 1: Core Info */}
@@ -945,6 +971,14 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
 
           <div className="sjf-actions sjf-actions--gold">
             <button
+              type="button"
+              className="sjf-button sjf-button--secondary sjf-button--gold"
+              onClick={() => void submitJob(false)}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Đang xử lý..." : "Lưu nháp"}
+            </button>
+            <button
               type="submit"
               className="sjf-button sjf-button--primary sjf-button--gold"
               disabled={
@@ -955,15 +989,15 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
               }
             >
               {isSubmitting
-                ? "Đang tạo tin tuyển dụng..."
+                ? "Đang xử lý..."
                 : hasSubscription &&
                     (jobPostingUnlimited || jobPostingRemaining > 0)
                   ? jobPostingUnlimited
-                    ? "Đăng tin bằng gói Premium"
-                    : `Đăng tin bằng gói Premium • còn ${jobPostingRemaining} lượt`
+                    ? "Gửi duyệt bằng gói Premium"
+                    : `Gửi duyệt • còn ${jobPostingRemaining} lượt`
                   : hasSubscription && jobPostingRemaining <= 0
                     ? "Đã hết lượt đăng trong tháng"
-                    : "Đăng tin • phí 50.000 VNĐ"}
+                    : "Gửi duyệt • phí 50.000 VNĐ"}
             </button>
           </div>
         </form>

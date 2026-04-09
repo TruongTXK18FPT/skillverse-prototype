@@ -1,8 +1,7 @@
 import React from 'react';
-import { Clock, ThumbsUp, ThumbsDown, MessageCircle, Share2, Bookmark, Tag } from 'lucide-react';
+import { Clock, ThumbsUp, ThumbsDown, MessageCircle, Tag } from 'lucide-react';
 import communityService from '../../services/communityService';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import LoginRequiredModal from '../auth/LoginRequiredModal';
 import { decodeHtml } from '../../utils/htmlDecoder';
 
@@ -16,6 +15,8 @@ export interface CommunityPost {
   tags: string[];
   likes: number;
   dislikes?: number;
+  likedByCurrentUser?: boolean;
+  dislikedByCurrentUser?: boolean;
   comments: number;
   shares: number;
   isBookmarked: boolean;
@@ -39,15 +40,30 @@ const formatNumber = (num: number): string => {
   return num.toString();
 };
 
+const normalizeReactionState = (post: CommunityPost) => ({
+  isLiked: !!post.likedByCurrentUser,
+  isDisliked: !!post.dislikedByCurrentUser,
+  likeCount: typeof post.likes === 'number' ? post.likes : 0,
+  dislikeCount: typeof post.dislikes === 'number' ? post.dislikes : 0,
+});
+
 const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) => {
-  const [isLiked, setIsLiked] = React.useState(false);
-  const [isDisliked, setIsDisliked] = React.useState(false);
+  const [isLiked, setIsLiked] = React.useState(!!post.likedByCurrentUser);
+  const [isDisliked, setIsDisliked] = React.useState(!!post.dislikedByCurrentUser);
   const [isBookmarked, setIsBookmarked] = React.useState(post.isBookmarked);
   const [likeCount, setLikeCount] = React.useState(post.likes);
   const [dislikeCount, setDislikeCount] = React.useState(post.dislikes || 0);
   const [showLoginModal, setShowLoginModal] = React.useState(false);
   const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const reactionState = normalizeReactionState(post);
+    setIsLiked(reactionState.isLiked);
+    setIsDisliked(reactionState.isDisliked);
+    setLikeCount(reactionState.likeCount);
+    setDislikeCount(reactionState.dislikeCount);
+    setIsBookmarked(post.isBookmarked);
+  }, [post]);
 
   const ensureAuth = () => {
     if (!isAuthenticated) {
@@ -61,18 +77,11 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
     e.stopPropagation();
     if (!ensureAuth()) return;
     try {
-      await communityService.likePost(post.id);
-      if (isLiked) {
-        setIsLiked(false);
-        setLikeCount((c) => Math.max(0, c - 1));
-      } else {
-        setIsLiked(true);
-        setLikeCount((c) => c + 1);
-        if (isDisliked) {
-          setIsDisliked(false);
-          setDislikeCount((c) => Math.max(0, c - 1));
-        }
-      }
+      const updatedPost = await communityService.likePost(post.id);
+      setIsLiked(!!updatedPost.likedByCurrentUser);
+      setIsDisliked(!!updatedPost.dislikedByCurrentUser);
+      setLikeCount(typeof updatedPost.likeCount === 'number' ? updatedPost.likeCount : 0);
+      setDislikeCount(typeof updatedPost.dislikeCount === 'number' ? updatedPost.dislikeCount : 0);
     } catch (e) { console.debug('like failed', e); }
   };
 
@@ -80,18 +89,11 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
     e.stopPropagation();
     if (!ensureAuth()) return;
     try {
-      await communityService.dislikePost(post.id);
-      if (isDisliked) {
-        setIsDisliked(false);
-        setDislikeCount((c) => Math.max(0, c - 1));
-      } else {
-        setIsDisliked(true);
-        setDislikeCount((c) => c + 1);
-        if (isLiked) {
-          setIsLiked(false);
-          setLikeCount((c) => Math.max(0, c - 1));
-        }
-      }
+      const updatedPost = await communityService.dislikePost(post.id);
+      setIsLiked(!!updatedPost.likedByCurrentUser);
+      setIsDisliked(!!updatedPost.dislikedByCurrentUser);
+      setLikeCount(typeof updatedPost.likeCount === 'number' ? updatedPost.likeCount : 0);
+      setDislikeCount(typeof updatedPost.dislikeCount === 'number' ? updatedPost.dislikeCount : 0);
     } catch (e) { console.debug('dislike failed', e); }
   };
 
@@ -206,21 +208,21 @@ const TransmissionCard: React.FC<TransmissionCardProps> = ({ post, index = 0 }) 
       {/* Signal Actions */}
       <div className="transmission-actions">
         <button
-          className={`transmission-action-btn ${isLiked ? 'active' : ''}`}
+          className={`transmission-action-btn liked ${isLiked ? 'active' : ''}`}
           onClick={handleLike}
           title="Thích"
         >
           <ThumbsUp size={16} />
           <span>{formatNumber(likeCount)}</span>
         </button>
-        {/* <button
-          className={`transmission-action-btn ${isDisliked ? 'active' : ''}`}
+        <button
+          className={`transmission-action-btn disliked ${isDisliked ? 'active' : ''}`}
           onClick={handleDislike}
           title="Không thích"
         >
           <ThumbsDown size={16} />
           <span>{formatNumber(dislikeCount)}</span>
-        </button> */}
+        </button>
         <button
           className="transmission-action-btn"
           title="Bình luận"

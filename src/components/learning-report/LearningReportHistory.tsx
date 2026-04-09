@@ -143,7 +143,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
       // Prefer avatarMediaUrl over avatarUrl
       const avatarUrl = user?.avatarMediaUrl || user?.avatarUrl;
       await downloadLearningReportPDF(report, {
-        filename: `learning-report-${report.reportId}`,
+        filename: learningReportService.formatReportFileName(report),
         userAvatar: avatarUrl,
       });
     } catch (error) {
@@ -326,7 +326,8 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
                     <div className="lr-history__item-info">
                       <div className="lr-history__item-title-row">
                         <span className="lr-history__item-title">
-                          Báo cáo #{report.reportId || "N/A"}
+                          {report.reportName ||
+                            learningReportService.formatReportTitle(report.generatedAt)}
                         </span>
                         <span
                           className="lr-history__type-badge"

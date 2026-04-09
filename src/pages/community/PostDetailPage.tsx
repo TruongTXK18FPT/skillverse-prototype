@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ThumbsUp, ThumbsDown, Bookmark, ArrowLeft, MessageCircle, Share2 } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, ArrowLeft, MessageCircle } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import communityService, { CommentResponse, PostSummary } from '../../services/communityService';
-
-import userService from '../../services/userService';
 import { useAuth } from '../../context/AuthContext';
 import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import { decodeHtml } from '../../utils/htmlDecoder';
 import './PostDetailPage.css';
 
+const normalizeReactionState = (post: Pick<PostSummary, 'likeCount' | 'dislikeCount' | 'likedByCurrentUser' | 'dislikedByCurrentUser'>) => ({
+  likeCount: typeof post.likeCount === 'number' ? post.likeCount : 0,
+  dislikeCount: typeof post.dislikeCount === 'number' ? post.dislikeCount : 0,
+  isLiked: !!post.likedByCurrentUser,
+  isDisliked: !!post.dislikedByCurrentUser,
+});
+
 const PostDetailPage: React.FC = () => {
   const { id } = useParams();
   const postId = Number(id);
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading: authLoading } = useAuth();
 
   const [post, setPost] = useState<PostSummary | null>(null);
   const [comments, setComments] = useState<CommentResponse[]>([]);
@@ -31,14 +36,21 @@ const PostDetailPage: React.FC = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
+    if (!postId || Number.isNaN(postId) || authLoading) {
+      return;
+    }
+
     const load = async () => {
       try {
         setLoading(true);
         setError(null);
         const p = await communityService.getPost(postId);
+        const reactionState = normalizeReactionState(p);
         setPost(p);
-        setLikeCount(typeof p.likeCount === 'number' ? p.likeCount : 0);
-        setDislikeCount(typeof p.dislikeCount === 'number' ? p.dislikeCount : 0);
+        setLikeCount(reactionState.likeCount);
+        setDislikeCount(reactionState.dislikeCount);
+        setIsLiked(reactionState.isLiked);
+        setIsDisliked(reactionState.isDisliked);
         const cs = await communityService.listComments(postId, 0, 50);
         setComments(cs.items);
         
@@ -58,7 +70,7 @@ const PostDetailPage: React.FC = () => {
       }
     };
     load();
-  }, [postId]);
+  }, [postId, authLoading, isAuthenticated]);
 
   const ensureAuth = () => {
     if (!isAuthenticated) {
@@ -71,18 +83,13 @@ const PostDetailPage: React.FC = () => {
   const handleLike = async () => {
     if (!ensureAuth()) return;
     try {
-      await communityService.likePost(postId);
-      if (isLiked) {
-        setIsLiked(false);
-        setLikeCount((c) => Math.max(0, c - 1));
-      } else {
-        setIsLiked(true);
-        setLikeCount((c) => c + 1);
-        if (isDisliked) {
-          setIsDisliked(false);
-          setDislikeCount((c) => Math.max(0, c - 1));
-        }
-      }
+      const updatedPost = await communityService.likePost(postId);
+      const reactionState = normalizeReactionState(updatedPost);
+      setPost((prev) => prev ? { ...prev, ...updatedPost } : updatedPost);
+      setLikeCount(reactionState.likeCount);
+      setDislikeCount(reactionState.dislikeCount);
+      setIsLiked(reactionState.isLiked);
+      setIsDisliked(reactionState.isDisliked);
     } catch (error) {
       console.error('Failed to like post', error);
     }
@@ -91,18 +98,13 @@ const PostDetailPage: React.FC = () => {
   const handleDislike = async () => {
     if (!ensureAuth()) return;
     try {
-      await communityService.dislikePost(postId);
-      if (isDisliked) {
-        setIsDisliked(false);
-        setDislikeCount((c) => Math.max(0, c - 1));
-      } else {
-        setIsDisliked(true);
-        setDislikeCount((c) => c + 1);
-        if (isLiked) {
-          setIsLiked(false);
-          setLikeCount((c) => Math.max(0, c - 1));
-        }
-      }
+      const updatedPost = await communityService.dislikePost(postId);
+      const reactionState = normalizeReactionState(updatedPost);
+      setPost((prev) => prev ? { ...prev, ...updatedPost } : updatedPost);
+      setLikeCount(reactionState.likeCount);
+      setDislikeCount(reactionState.dislikeCount);
+      setIsLiked(reactionState.isLiked);
+      setIsDisliked(reactionState.isDisliked);
     } catch (error) {
       console.error('Failed to dislike post', error);
     }
@@ -206,14 +208,14 @@ const PostDetailPage: React.FC = () => {
           />
 
           <div className="transmission-actions" style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-default)' }}>
-            <button className={`transmission-action-btn ${isLiked ? 'active' : ''}`} onClick={handleLike}>
+            <button className={`transmission-action-btn liked ${isLiked ? 'active' : ''}`} onClick={handleLike}>
               <ThumbsUp size={20} />
               <span>{likeCount}</span>
             </button>
-            {/* <button className={`transmission-action-btn ${isDisliked ? 'active' : ''}`} onClick={handleDislike}>
+            <button className={`transmission-action-btn disliked ${isDisliked ? 'active' : ''}`} onClick={handleDislike}>
               <ThumbsDown size={20} />
               <span>{dislikeCount}</span>
-            </button> */}
+            </button>
             <button className="transmission-action-btn">
               <MessageCircle size={20} />
               <span>{comments.length}</span>

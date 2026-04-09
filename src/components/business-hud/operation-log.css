@@ -526,15 +526,6 @@
   font-size: 0.84rem;
 }
 
-.oplog__item-markdown {
-  margin: 0.8rem 0 0.9rem;
-}
-
-.oplog__item-markdown.job-markdown {
-  --job-markdown-text: rgba(226, 232, 240, 0.84);
-  --job-markdown-soft: rgba(148, 163, 184, 0.72);
-}
-
 .oplog__item-meta {
   display: flex;
   flex-wrap: wrap;

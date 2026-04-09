@@ -1,0 +1,319 @@
+.cr-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.cr-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.cr-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+.cr-subtitle {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* Summary */
+.cr-summary {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cr-summary-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.cr-summary-label {
+  font-weight: 600;
+  color: #64748b;
+  min-width: 130px;
+}
+
+.cr-summary-value {
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.cr-salary {
+  color: #059669;
+  font-weight: 700;
+}
+
+/* Clauses */
+.cr-clauses {
+  margin-bottom: 20px;
+}
+
+.cr-clauses-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 12px;
+}
+
+/* Agreement */
+.cr-agreement {
+  padding: 16px;
+  background: #f0fdf4;
+  border: 2px solid #059669;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.cr-agreement-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: #166534;
+  cursor: pointer;
+  line-height: 1.6;
+}
+
+.cr-agreement-label input {
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+/* Actions */
+.cr-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cr-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.cr-btn--sign {
+  background: #059669;
+  color: #fff;
+}
+
+.cr-btn--sign:hover:not(:disabled) {
+  background: #047857;
+}
+
+.cr-btn--sign:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cr-btn--reject {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #dc2626;
+}
+
+.cr-btn--reject:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+/* Modal */
+.cr-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.cr-modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 480px;
+  width: 90%;
+}
+
+.cr-modal h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.cr-modal p {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 14px;
+}
+
+.cr-modal-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+
+.cr-modal-textarea:focus {
+  outline: none;
+  border-color: #dc2626;
+}
+
+.cr-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cr-btn--cancel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+.cr-btn--confirm-reject {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+}
+
+.cr-spin {
+  animation: cr-spin 0.8s linear infinite;
+}
+
+@keyframes cr-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Tab switcher ── */
+.cr-tab-switcher {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+  border: 1.5px solid #1a2d4a;
+  border-radius: 10px;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.cr-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #0d1526;
+  color: #4a607a;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+}
+
+.cr-tab-btn:hover {
+  color: #00e5ff;
+  background: rgba(0, 229, 255, 0.06);
+}
+
+.cr-tab-btn--active {
+  background: #00e5ff;
+  color: #080c14;
+  text-shadow: none;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.25);
+}
+
+.cr-tab-btn--active:hover {
+  background: #00e5ff;
+  color: #080c14;
+}
+
+/* ── Markdown view ── */
+.cr-markdown-view {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cr-field-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cr-field-section--legal {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.cr-field-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #059669;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 0;
+}
+
+.cr-markdown-field {
+  font-size: 0.875rem;
+}
+
+.cr-sub-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+}
+
+.cr-sub-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+/* ── Legal preview ── */
+.cr-legal-preview {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+}

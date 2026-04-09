@@ -1,0 +1,214 @@
+.signature-canvas-wrapper {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.signature-canvas-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.signature-canvas-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.signature-canvas-legal {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.signature-canvas-body {
+  padding: 16px 20px;
+}
+
+.signature-canvas-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.sig-toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  font-size: 13px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sig-toolbar-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.sig-toolbar-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sig-toolbar-btn--active {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #2563eb;
+}
+
+.sig-toolbar-sep {
+  flex: 1;
+}
+
+.signature-canvas-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.signature-canvas {
+  border: 2px dashed #cbd5e1;
+  border-radius: 6px;
+  cursor: crosshair;
+  background: #fff;
+  max-width: 100%;
+  height: auto;
+}
+
+.signature-canvas-border {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  max-width: calc(100% - 0px);
+  height: 200px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.signature-text-confirm {
+  padding: 20px;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 6px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.sig-text-icon {
+  color: #f59e0b;
+  margin-bottom: 8px;
+}
+
+.sig-text-message {
+  font-size: 13px;
+  color: #78350f;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.sig-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: #78350f;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sig-checkbox-label input {
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.sig-terms-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: #475569;
+  cursor: pointer;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  padding: 10px;
+  background: #f8fafc;
+  border-radius: 6px;
+}
+
+.sig-terms-label input {
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.signature-canvas-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.sig-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sig-btn--cancel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+.sig-btn--cancel:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.sig-btn--confirm {
+  background: #059669;
+  color: #fff;
+}
+
+.sig-btn--confirm:hover:not(:disabled) {
+  background: #047857;
+}
+
+.sig-btn--confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sig-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: sig-spin 0.6s linear infinite;
+}
+
+@keyframes sig-spin {
+  to { transform: rotate(360deg); }
+}

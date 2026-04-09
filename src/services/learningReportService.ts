@@ -66,6 +66,7 @@ export interface StudentMetrics {
 
 export interface StudentLearningReportResponse {
   reportId: number;
+  reportName?: string;
   studentId: number;
   studentName: string;
   reportType: ReportType;
@@ -143,6 +144,7 @@ function normalizeReportResponse(
   const normalized: StudentLearningReportResponse = {
     ...response,
     reportId: response.reportId || response.id,
+    reportName: response.reportName,
   };
 
   // Map sections fields
@@ -232,7 +234,44 @@ function normalizeReportResponse(
     }
   }
 
+  if (!normalized.reportName) {
+    normalized.reportName = buildReportTitle(normalized.generatedAt);
+  }
+
   return normalized;
+}
+
+function buildReportTitle(dateString?: string): string {
+  if (!dateString) {
+    return "Báo cáo";
+  }
+
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) {
+    return "Báo cáo";
+  }
+
+  return `Báo cáo ${new Intl.DateTimeFormat("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date)}`;
+}
+
+function buildReportFileDate(dateString?: string): string {
+  if (!dateString) {
+    return new Date().toISOString().split("T")[0];
+  }
+
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) {
+    return new Date().toISOString().split("T")[0];
+  }
+
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, "0");
+  const day = `${date.getDate()}`.padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 // ==================== Service Class ====================
@@ -381,6 +420,15 @@ class LearningReportService {
       hour: "2-digit",
       minute: "2-digit",
     }).format(date);
+  }
+
+  formatReportTitle(dateString?: string): string {
+    return buildReportTitle(dateString);
+  }
+
+  formatReportFileName(report: Pick<StudentLearningReportResponse, "generatedAt" | "reportName">): string {
+    const safeDate = buildReportFileDate(report.generatedAt);
+    return `learning-report-${safeDate}`;
   }
 
   /**
