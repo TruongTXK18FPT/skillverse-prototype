@@ -114,7 +114,6 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
     requiredSkills: initialData?.requiredSkills || [],
     allowsRevision: initialData?.allowsRevision ?? true,
     maxRevisions: initialData?.maxRevisions || 2,
-    milestones: initialData?.milestones || [],
     tags: initialData?.tags || [],
     deliverableTypes: initialData?.deliverableTypes || [],
   });
@@ -125,8 +124,7 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
     Boolean(
       initialData?.requirements ||
       initialData?.workDeadline ||
-      initialData?.tags?.length ||
-      initialData?.milestones?.length,
+      initialData?.tags?.length
     ),
   );
 

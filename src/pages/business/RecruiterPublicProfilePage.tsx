@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowLeft,
-  Building2,
-  Globe,
-  MapPin,
-  Briefcase,
-  Star,
-  Calendar,
-  CheckCircle,
   AlertTriangle,
-  Clock,
-  Users,
+  ArrowLeft,
+  BriefcaseBusiness,
+  Building2,
+  CheckCircle2,
+  Clock3,
   ExternalLink,
+  Globe,
+  Mail,
+  MapPin,
+  ShieldCheck,
+  UserRound,
 } from "lucide-react";
+import businessService from "../../services/businessService";
 import userService from "../../services/userService";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../hooks/useToast";
@@ -21,26 +22,166 @@ import Toast from "../../components/shared/Toast";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import "./RecruiterPublicProfilePage.css";
 
-interface PublicRecruiterProfile {
-  id: number;
+interface RawBusinessProfile {
+  id?: number;
+  userId?: number;
+  email?: string;
+  businessEmail?: string;
   companyName?: string;
   companyWebsite?: string;
   companyAddress?: string;
   businessAddress?: string;
+  companyDescription?: string;
+  taxId?: string;
   taxCodeOrBusinessRegistrationNumber?: string;
   companyDocumentsUrl?: string;
   documentFileUrls?: string[];
   applicationStatus?: string;
-  companyDescription?: string;
-  totalJobsPosted?: number;
-  activeJobs?: number;
-  rating?: number;
-  joinedDate?: string;
-  // From user profile
-  fullName?: string;
+  rejectionReason?: string;
+  approvalDate?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+interface RawUserPublicProfile {
+  id?: number;
+  userId?: number;
   email?: string;
+  fullName?: string;
+  companyName?: string;
+  bio?: string;
+  address?: string;
+  region?: string;
+  avatarMediaUrl?: string;
+  avatarUrl?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+interface PublicCompanyProfile {
+  recruiterId: number;
+  companyName: string;
+  companyWebsite?: string;
+  companyAddress?: string;
+  companyDescription?: string;
+  legalCode?: string;
+  companyDocumentsUrl?: string;
+  applicationStatus?: string;
+  rejectionReason?: string;
+  statusUpdatedAt?: string;
+  joinedDate?: string;
+  email?: string;
+  fullName?: string;
   avatarUrl?: string;
 }
+
+const pickText = (...values: Array<string | undefined>) => {
+  for (const value of values) {
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+  return undefined;
+};
+
+const normalizeWebsiteUrl = (url?: string) => {
+  if (!url) {
+    return undefined;
+  }
+
+  if (/^https?:\/\//i.test(url)) {
+    return url;
+  }
+
+  return `https://${url}`;
+};
+
+const formatDate = (value?: string) => {
+  if (!value) {
+    return "Chưa cập nhật";
+  }
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return "Chưa cập nhật";
+  }
+
+  return parsed.toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+};
+
+const getCompanyInitials = (value: string) => {
+  return value
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+};
+
+const buildPublicCompanyProfile = (
+  recruiterId: number,
+  businessProfile?: RawBusinessProfile | null,
+  userProfile?: RawUserPublicProfile | null,
+): PublicCompanyProfile => {
+  const companyName =
+    pickText(
+      businessProfile?.companyName,
+      userProfile?.companyName,
+      userProfile?.fullName,
+    ) || "Công ty SkillVerse";
+
+  const companyWebsite = normalizeWebsiteUrl(
+    pickText(businessProfile?.companyWebsite),
+  );
+
+  const companyAddress = pickText(
+    businessProfile?.companyAddress,
+    businessProfile?.businessAddress,
+    userProfile?.address,
+    userProfile?.region,
+  );
+
+  const companyDocumentsUrl = pickText(
+    businessProfile?.companyDocumentsUrl,
+    businessProfile?.documentFileUrls?.[0],
+  );
+
+  return {
+    recruiterId,
+    companyName,
+    companyWebsite,
+    companyAddress,
+    companyDescription: pickText(
+      businessProfile?.companyDescription,
+      userProfile?.bio,
+    ),
+    legalCode: pickText(
+      businessProfile?.taxCodeOrBusinessRegistrationNumber,
+      businessProfile?.taxId,
+    ),
+    companyDocumentsUrl,
+    applicationStatus: businessProfile?.applicationStatus,
+    rejectionReason: businessProfile?.rejectionReason,
+    statusUpdatedAt: pickText(
+      businessProfile?.approvalDate,
+      businessProfile?.updatedAt,
+      userProfile?.updatedAt,
+    ),
+    joinedDate: pickText(userProfile?.createdAt, businessProfile?.createdAt),
+    email: pickText(
+      businessProfile?.email,
+      businessProfile?.businessEmail,
+      userProfile?.email,
+    ),
+    fullName: pickText(userProfile?.fullName),
+    avatarUrl: pickText(userProfile?.avatarMediaUrl, userProfile?.avatarUrl),
+  };
+};
 
 const RecruiterPublicProfilePage: React.FC = () => {
   const navigate = useNavigate();
@@ -48,320 +189,290 @@ const RecruiterPublicProfilePage: React.FC = () => {
   const { user } = useAuth();
   const { toast, isVisible, hideToast, showError } = useToast();
 
-  const [profile, setProfile] = useState<PublicRecruiterProfile | null>(null);
+  const recruiterId = useMemo(() => Number(id), [id]);
+  const isOwnProfile = user?.id === recruiterId;
+
+  const [profile, setProfile] = useState<PublicCompanyProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
-  const isOwnProfile = user?.id === Number(id);
-
   useEffect(() => {
     const fetchProfile = async () => {
-      if (!id) return;
+      if (!Number.isFinite(recruiterId) || recruiterId <= 0) {
+        setNotFound(true);
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       setNotFound(false);
+
       try {
-        const data = await userService.getUserProfile(Number(id)) as PublicRecruiterProfile;
-        setProfile(data);
+        const [businessResult, userResult] = await Promise.allSettled([
+          businessService.getBusinessProfile(recruiterId),
+          userService.getUserProfile(recruiterId),
+        ]);
+
+        const businessData =
+          businessResult.status === "fulfilled"
+            ? (businessResult.value as RawBusinessProfile)
+            : null;
+        const userData =
+          userResult.status === "fulfilled"
+            ? (userResult.value as RawUserPublicProfile)
+            : null;
+
+        if (!businessData && !userData) {
+          setNotFound(true);
+          return;
+        }
+
+        const mergedProfile = buildPublicCompanyProfile(
+          recruiterId,
+          businessData,
+          userData,
+        );
+        setProfile(mergedProfile);
       } catch {
         setNotFound(true);
+        showError("Không thể tải hồ sơ", "Vui lòng thử lại sau ít phút.");
       } finally {
         setLoading(false);
       }
     };
+
     fetchProfile();
-  }, [id]);
-
-  const getCompanyInitials = () => {
-    const name = profile?.companyName || profile?.fullName || "SV";
-    return name
-      .split(" ")
-      .map((p) => p[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
-
-  const getStatusConfig = (status?: string) => {
-    switch (status) {
-      case "APPROVED":
-        return { color: "#10b981", bg: "rgba(16,185,129,0.12)", label: "Đã xác minh", icon: <CheckCircle size={14} /> };
-      case "REJECTED":
-        return { color: "#ef4444", bg: "rgba(239,68,68,0.12)", label: "Bị từ chối", icon: <AlertTriangle size={14} /> };
-      default:
-        return { color: "#f59e0b", bg: "rgba(245,158,11,0.12)", label: "Chờ xác minh", icon: <Clock size={14} /> };
-    }
-  };
-
-  const formatDate = (dateStr?: string) => {
-    if (!dateStr) return "N/A";
-    return new Date(dateStr).toLocaleDateString("vi-VN", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  }, [recruiterId, showError]);
 
   if (loading) {
     return (
-      <div className="rpp-loading">
+      <div className="ncpub-loading-wrap">
         <MeowlKuruLoader size="medium" text="" />
-        <p className="rpp-loading__text">Đang tải hồ sơ công ty...</p>
+        <p className="ncpub-loading-text">Đang đồng bộ hồ sơ công ty...</p>
       </div>
     );
   }
 
   if (notFound || !profile) {
     return (
-      <div className="rpp-page">
-        <div className="rpp-back">
-          <button className="rpp-back__btn" onClick={() => navigate(-1)}>
-            <ArrowLeft size={16} />
-            <span>Quay lại</span>
-          </button>
-        </div>
-        <div className="rpp-not-found">
-          <Building2 size={48} style={{ opacity: 0.3 }} />
-          <h2>Không tìm thấy hồ sơ công ty</h2>
-          <p>Hồ sơ này không tồn tại hoặc đã bị xóa.</p>
-          <Link to="/jobs" className="rpp-btn rpp-btn--primary">
-            <Briefcase size={16} />
-            Xem công việc
-          </Link>
+      <div className="ncpub-page">
+        <div className="ncpub-shell">
+          <div className="ncpub-topbar">
+            <button className="ncpub-back-btn" onClick={() => navigate(-1)}>
+              <ArrowLeft size={16} />
+              Quay lại
+            </button>
+          </div>
+          <section className="ncpub-not-found-panel">
+            <Building2 size={52} />
+            <h1>Không tìm thấy hồ sơ công ty</h1>
+            <p>
+              Có thể doanh nghiệp chưa hoàn thành hồ sơ hoặc liên kết không còn
+              hợp lệ.
+            </p>
+            <Link to="/jobs" className="ncpub-btn ncpub-btn--primary">
+              <BriefcaseBusiness size={14} />
+              Quay lại trang việc làm
+            </Link>
+          </section>
         </div>
       </div>
     );
   }
 
-  const statusConfig = getStatusConfig(profile.applicationStatus);
+  const normalizedWebsite = normalizeWebsiteUrl(profile.companyWebsite);
+  const websiteLabel = normalizedWebsite?.replace(/^https?:\/\//i, "");
+
+  const statusTone =
+    profile.applicationStatus === "APPROVED"
+      ? "verified"
+      : profile.applicationStatus === "REJECTED"
+        ? "rejected"
+        : "pending";
+
+  const statusLabel =
+    statusTone === "verified"
+      ? "Đã xác minh"
+      : statusTone === "rejected"
+        ? "Hồ sơ bị từ chối"
+        : "Đang chờ xác minh";
 
   return (
-    <div className="rpp-page">
-      {/* Back */}
-      <div className="rpp-back">
-        <button className="rpp-back__btn" onClick={() => navigate(-1)}>
-          <ArrowLeft size={16} />
-          <span>Quay lại</span>
-        </button>
-        {isOwnProfile && (
-          <button
-            className="rpp-btn rpp-btn--outline rpp-btn--sm"
-            onClick={() => navigate("/profile/business")}
-          >
-            Chỉnh sửa hồ sơ
+    <div className="ncpub-page">
+      <div className="ncpub-tech-grid" aria-hidden="true" />
+
+      <div className="ncpub-shell">
+        <div className="ncpub-topbar">
+          <button className="ncpub-back-btn" onClick={() => navigate(-1)}>
+            <ArrowLeft size={16} />
+            Quay lại
           </button>
-        )}
-      </div>
 
-      {/* Hero */}
-      <div className="rpp-hero">
-        <div className="rpp-hero__inner">
-          <div className="rpp-hero__header">
-            <div className="rpp-hero__avatar">{getCompanyInitials()}</div>
-            <div className="rpp-hero__info">
-              <h1 className="rpp-hero__name">
-                {profile.companyName || profile.fullName || "Công ty SkillVerse"}
-              </h1>
-              <div className="rpp-hero__meta">
-                {profile.applicationStatus && (
-                  <span
-                    className="rpp-status-badge"
-                    style={{
-                      color: statusConfig.color,
-                      background: statusConfig.bg,
-                      borderColor: statusConfig.color + "40",
-                    }}
-                  >
-                    {statusConfig.icon}
-                    {statusConfig.label}
-                  </span>
-                )}
-                {profile.companyAddress || profile.businessAddress ? (
-                  <span className="rpp-hero__meta-item">
-                    <MapPin size={12} />
-                    {profile.companyAddress || profile.businessAddress}
-                  </span>
-                ) : null}
-                {profile.joinedDate && (
-                  <span className="rpp-hero__meta-item">
-                    <Calendar size={12} />
-                    Tham gia {formatDate(profile.joinedDate)}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Stats Row */}
-          <div className="rpp-hero__stats">
-            {profile.totalJobsPosted !== undefined && (
-              <div className="rpp-hero__stat">
-                <Briefcase size={18} />
-                <div>
-                  <div className="rpp-hero__stat-value">{profile.totalJobsPosted}</div>
-                  <div className="rpp-hero__stat-label">Công việc đã đăng</div>
-                </div>
-              </div>
-            )}
-            {profile.activeJobs !== undefined && (
-              <div className="rpp-hero__stat">
-                <CheckCircle size={18} />
-                <div>
-                  <div className="rpp-hero__stat-value">{profile.activeJobs}</div>
-                  <div className="rpp-hero__stat-label">Đang tuyển</div>
-                </div>
-              </div>
-            )}
-            {profile.rating !== undefined && (
-              <div className="rpp-hero__stat">
-                <Star size={18} />
-                <div>
-                  <div className="rpp-hero__stat-value">{profile.rating.toFixed(1)}</div>
-                  <div className="rpp-hero__stat-label">Đánh giá</div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Website */}
-          {profile.companyWebsite && (
-            <a
-              href={profile.companyWebsite}
-              target="_blank"
-              rel="noreferrer"
-              className="rpp-hero__website"
+          {isOwnProfile && (
+            <button
+              className="ncpub-btn ncpub-btn--ghost"
+              onClick={() => navigate("/profile/business")}
             >
-              <Globe size={14} />
-              {profile.companyWebsite.replace(/^https?:\/\//, "")}
-              <ExternalLink size={12} />
-            </a>
+              Chỉnh sửa hồ sơ
+            </button>
           )}
         </div>
-      </div>
 
-      {/* Content */}
-      <div className="rpp-content">
-        {/* Main */}
-        <div className="rpp-main">
-          {/* Company Info */}
-          <section className="rpp-section">
-            <h2 className="rpp-section__title">
-              <Building2 size={16} />
-              Giới thiệu công ty
-            </h2>
-            <div className="rpp-section__body">
-              {profile.companyDescription ? (
-                <p className="rpp-description">{profile.companyDescription}</p>
+        <section className="ncpub-hero-panel">
+          <div className="ncpub-hero-main">
+            <div className="ncpub-avatar-frame">
+              {profile.avatarUrl ? (
+                <img
+                  src={profile.avatarUrl}
+                  alt={profile.companyName}
+                  className="ncpub-avatar-img"
+                />
               ) : (
-                <p className="rpp-description rpp-description--muted">
-                  Chưa có mô tả giới thiệu công ty.
-                </p>
+                <span className="ncpub-avatar-fallback">
+                  {getCompanyInitials(profile.companyName)}
+                </span>
               )}
             </div>
-          </section>
 
-          {/* Company Details */}
-          <section className="rpp-section">
-            <h2 className="rpp-section__title">
-              <Building2 size={16} />
-              Thông tin doanh nghiệp
-            </h2>
-            <div className="rpp-info-grid">
-              {profile.companyName && (
-                <div className="rpp-info-item">
-                  <div className="rpp-info-item__label">
-                    <Building2 size={12} />
-                    Tên doanh nghiệp
-                  </div>
-                  <div className="rpp-info-item__value">{profile.companyName}</div>
-                </div>
-              )}
-              {profile.taxCodeOrBusinessRegistrationNumber && (
-                <div className="rpp-info-item">
-                  <div className="rpp-info-item__label">
-                    <CheckCircle size={12} />
-                    Mã số thuế / ĐKKD
-                  </div>
-                  <div className="rpp-info-item__value rpp-info-item__value--mono">
-                    {profile.taxCodeOrBusinessRegistrationNumber}
-                  </div>
-                </div>
-              )}
-              {(profile.companyAddress || profile.businessAddress) && (
-                <div className="rpp-info-item">
-                  <div className="rpp-info-item__label">
-                    <MapPin size={12} />
-                    Địa chỉ
-                  </div>
-                  <div className="rpp-info-item__value">
-                    {profile.companyAddress || profile.businessAddress}
-                  </div>
-                </div>
-              )}
-              {profile.companyWebsite && (
-                <div className="rpp-info-item">
-                  <div className="rpp-info-item__label">
-                    <Globe size={12} />
-                    Website
-                  </div>
-                  <div className="rpp-info-item__value">
-                    <a
-                      href={profile.companyWebsite}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="rpp-link"
-                    >
-                      {profile.companyWebsite.replace(/^https?:\/\//, "")}
-                      <ExternalLink size={12} />
-                    </a>
-                  </div>
-                </div>
-              )}
-              {profile.email && (
-                <div className="rpp-info-item">
-                  <div className="rpp-info-item__label">
-                    <Users size={12} />
-                    Email liên hệ
-                  </div>
-                  <div className="rpp-info-item__value rpp-info-item__value--mono">
-                    {profile.email}
-                  </div>
-                </div>
-              )}
-            </div>
-          </section>
+            <div className="ncpub-hero-copy">
+              <p className="ncpub-kicker">Neon Tech Company Profile</p>
+              <h1>{profile.companyName}</h1>
+              <p className="ncpub-hero-description">
+                {profile.companyDescription ||
+                  "Doanh nghiệp chưa cập nhật mô tả chi tiết. Bạn có thể xem thông tin pháp lý và kênh liên hệ bên dưới."}
+              </p>
 
-          {/* Documents */}
-          {profile.companyDocumentsUrl && (
-            <section className="rpp-section">
-              <h2 className="rpp-section__title">
-                <CheckCircle size={16} />
-                Tài liệu pháp lý
-              </h2>
-              <div className="rpp-section__body">
-                <a
-                  href={profile.companyDocumentsUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rpp-document-link"
+              <div className="ncpub-meta-row">
+                <span
+                  className={`ncpub-status-pill ncpub-status-pill--${statusTone}`}
                 >
-                  <CheckCircle size={14} />
-                  Xem tài liệu đăng ký kinh doanh
-                  <ExternalLink size={12} />
-                </a>
-              </div>
-            </section>
-          )}
-        </div>
+                  {statusTone === "verified" ? (
+                    <CheckCircle2 size={13} />
+                  ) : statusTone === "rejected" ? (
+                    <AlertTriangle size={13} />
+                  ) : (
+                    <Clock3 size={13} />
+                  )}
+                  {statusLabel}
+                </span>
 
-        {/* Sidebar CTA */}
-        <div className="rpp-sidebar">
-          <div className="rpp-sidebar__card">
-            <h3 className="rpp-sidebar__title">Công việc đang tuyển</h3>
-            <Link to="/jobs" className="rpp-btn rpp-btn--primary rpp-btn--full">
-              <Briefcase size={16} />
-              Xem tất cả công việc
+                {profile.companyAddress && (
+                  <span className="ncpub-meta-chip">
+                    <MapPin size={13} />
+                    {profile.companyAddress}
+                  </span>
+                )}
+
+                <span className="ncpub-meta-chip">
+                  <ShieldCheck size={13} />
+                  Tham gia {formatDate(profile.joinedDate)}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="ncpub-hero-actions">
+            {normalizedWebsite && (
+              <a
+                href={normalizedWebsite}
+                target="_blank"
+                rel="noreferrer"
+                className="ncpub-btn ncpub-btn--link"
+              >
+                <Globe size={14} />
+                {websiteLabel}
+                <ExternalLink size={12} />
+              </a>
+            )}
+            <Link to="/jobs" className="ncpub-btn ncpub-btn--primary">
+              <BriefcaseBusiness size={14} />
+              Xem việc làm của SkillVerse
             </Link>
           </div>
+        </section>
+
+        <div className="ncpub-content-grid">
+          <section className="ncpub-panel">
+            <h2>Thông tin doanh nghiệp</h2>
+            <div className="ncpub-info-grid">
+              <article className="ncpub-info-card">
+                <p className="ncpub-info-label">
+                  <Building2 size={12} />
+                  Tên doanh nghiệp
+                </p>
+                <p className="ncpub-info-value">{profile.companyName}</p>
+              </article>
+
+              <article className="ncpub-info-card">
+                <p className="ncpub-info-label">
+                  <ShieldCheck size={12} />
+                  Mã số thuế / ĐKKD
+                </p>
+                <p className="ncpub-info-value ncpub-info-value--mono">
+                  {profile.legalCode || "Chưa cập nhật"}
+                </p>
+              </article>
+
+              <article className="ncpub-info-card">
+                <p className="ncpub-info-label">
+                  <MapPin size={12} />
+                  Địa chỉ
+                </p>
+                <p className="ncpub-info-value">
+                  {profile.companyAddress || "Chưa cập nhật"}
+                </p>
+              </article>
+
+              <article className="ncpub-info-card">
+                <p className="ncpub-info-label">
+                  <Mail size={12} />
+                  Email liên hệ
+                </p>
+                <p className="ncpub-info-value ncpub-info-value--mono">
+                  {profile.email || "Chưa cập nhật"}
+                </p>
+              </article>
+            </div>
+
+          </section>
+
+          <aside className="ncpub-side-stack">
+            <section className="ncpub-panel ncpub-panel--compact">
+              <h3>Trạng thái hồ sơ</h3>
+              <p
+                className={`ncpub-status-line ncpub-status-line--${statusTone}`}
+              >
+                {statusTone === "verified" ? (
+                  <CheckCircle2 size={14} />
+                ) : statusTone === "rejected" ? (
+                  <AlertTriangle size={14} />
+                ) : (
+                  <Clock3 size={14} />
+                )}
+                {statusLabel}
+              </p>
+              <p className="ncpub-side-note">
+                Cập nhật lần gần nhất: {formatDate(profile.statusUpdatedAt)}
+              </p>
+              {statusTone === "rejected" && profile.rejectionReason && (
+                <div className="ncpub-warning-box">
+                  {profile.rejectionReason}
+                </div>
+              )}
+            </section>
+
+            <section className="ncpub-panel ncpub-panel--compact">
+              <h3>Đầu mối liên hệ</h3>
+              <p className="ncpub-contact-row">
+                <UserRound size={14} />
+                {profile.fullName || "Đại diện doanh nghiệp"}
+              </p>
+              <p className="ncpub-contact-row">
+                <Mail size={14} />
+                {profile.email || "Chưa cập nhật"}
+              </p>
+            </section>
+          </aside>
         </div>
       </div>
 

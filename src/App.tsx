@@ -117,6 +117,7 @@ import ContractSignPage from "./components/contract/ContractSignPage";
 import MyContractsPage from "./pages/user/MyContractsPage";
 import ContractManagementPage from "./pages/business/ContractManagementPage";
 import FateDetailPage from "./components/jobs-odyssey/FateDetailPage";
+import GigDetailPage from "./components/jobs-odyssey/GigDetailPage";
 import MeowlSkinShopPage from "./pages/shop/MeowlSkinShopPage";
 import UserGuidePage from "./pages/user-guide/UserGuidePage";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
@@ -211,6 +212,10 @@ const AppContents = () => {
             />
             <Route path="/jobs" element={<JobsPage />} />
             <Route path="/jobs/:jobId" element={<FateDetailPage />} />
+            <Route
+              path="/short-term-jobs/:jobId/view"
+              element={<GigDetailPage />}
+            />
             <Route path="/chatbot" element={<CareerChatLanding />} />
             <Route path="/chatbot/general" element={<CareerChatPage />} />
             <Route path="/chatbot/expert" element={<ExpertChatPage />} />

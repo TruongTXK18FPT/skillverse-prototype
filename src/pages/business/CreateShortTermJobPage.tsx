@@ -203,13 +203,6 @@ const CreateShortTermJobPage: React.FC = () => {
                   allowsRevision: editableJob.allowsRevision,
                   maxRevisions: editableJob.maxRevisions,
                   tags: editableJob.tags,
-                  milestones: editableJob.milestones?.map((milestone) => ({
-                    title: milestone.title,
-                    description: milestone.description,
-                    amount: milestone.amount,
-                    deadline: milestone.deadline,
-                    order: milestone.order,
-                  })),
                 }
               : undefined
           }
