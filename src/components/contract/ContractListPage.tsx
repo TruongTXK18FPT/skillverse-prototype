@@ -76,11 +76,12 @@ const ContractListPage: React.FC<ContractListPageProps> = ({ role }) => {
       currency: 'VND',
     }).format(amount);
 
-  const getDetailPath = (contract: ContractListResponse) => {
-    return role === 'EMPLOYER'
-      ? `/business/contracts/${contract.id}`
-      : `/contracts/${contract.id}`;
-  };
+  const getDetailTarget = (contract: ContractListResponse) => ({
+    pathname:
+      role === 'EMPLOYER'
+        ? `/business/contracts/${contract.id}`
+        : `/contracts/${contract.id}`,
+  });
 
   return (
     <div className="cl-wrapper">
@@ -181,7 +182,10 @@ const ContractListPage: React.FC<ContractListPageProps> = ({ role }) => {
                     <button
                       type="button"
                       className="cl-action-btn"
-                      onClick={() => navigate(getDetailPath(contract))}
+                      onClick={() => {
+                        const target = getDetailTarget(contract);
+                        navigate(target.pathname);
+                      }}
                       title="Xem chi tiết"
                     >
                       <Eye size={15} />

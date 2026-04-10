@@ -14,6 +14,8 @@ import {
   AlertTriangle,
   Send,
   Shield,
+  ChevronLeft,
+  ChevronRight,
   X,
 } from "lucide-react";
 import shortTermJobService from "../../services/shortTermJobService";
@@ -72,6 +74,8 @@ const URGENCY_MAP: Record<string, { label: string; cssClass: string }> = {
   VERY_URGENT: { label: "Rất gấp", cssClass: "stj-urgency--very-urgent" },
   ASAP: { label: "Cần ngay", cssClass: "stj-urgency--asap" },
 };
+
+const SHORT_TERM_JOBS_PER_PAGE = 4;
 
 const formatBudget = (amount: number): string => {
   if (amount >= 1000000) return `${(amount / 1000000).toFixed(1)}M`;
@@ -139,6 +143,7 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [expandedJobId, setExpandedJobId] = useState<number | null>(null);
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
 
   // Inline edit state
   const [editingJobId, setEditingJobId] = useState<number | null>(null);
@@ -211,6 +216,11 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
     setFilteredJobs(result);
   }, [jobs, statusFilter, searchQuery]);
 
+  useEffect(() => {
+    setCurrentPage(0);
+    setExpandedJobId(null);
+  }, [searchQuery, statusFilter]);
+
   // ==================== STATS ====================
   const stats = {
     total: jobs.length,
@@ -240,6 +250,37 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
       ShortTermJobStatus.APPROVED,
     ].includes(job.status),
   );
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredJobs.length / SHORT_TERM_JOBS_PER_PAGE),
+  );
+  const paginatedJobs = filteredJobs.slice(
+    currentPage * SHORT_TERM_JOBS_PER_PAGE,
+    currentPage * SHORT_TERM_JOBS_PER_PAGE + SHORT_TERM_JOBS_PER_PAGE,
+  );
+  const visibleStart =
+    filteredJobs.length === 0
+      ? 0
+      : currentPage * SHORT_TERM_JOBS_PER_PAGE + 1;
+  const visibleEnd =
+    filteredJobs.length === 0
+      ? 0
+      : Math.min(
+          filteredJobs.length,
+          currentPage * SHORT_TERM_JOBS_PER_PAGE + paginatedJobs.length,
+        );
+
+  useEffect(() => {
+    if (currentPage > totalPages - 1) {
+      setCurrentPage(Math.max(0, totalPages - 1));
+    }
+  }, [currentPage, totalPages]);
+
+  useEffect(() => {
+    if (expandedJobId && !paginatedJobs.some((job) => job.id === expandedJobId)) {
+      setExpandedJobId(null);
+    }
+  }, [expandedJobId, paginatedJobs]);
 
   // ==================== ACTIONS ====================
   const handleSubmitForApproval = async (jobId: number) => {
@@ -601,7 +642,7 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredJobs.map((job) => {
+                    {paginatedJobs.map((job) => {
                       const statusInfo = STATUS_MAP[job.status] || {
                         label: job.status,
                         cssClass: "",
@@ -903,6 +944,45 @@ const ShortTermJobManager: React.FC<ShortTermJobManagerProps> = ({
                   </tbody>
                 </table>
               </div>
+              {totalPages > 1 && (
+                <div className="stj-pagination-bar">
+                  <span className="stj-pagination__info">
+                    Showing <strong>{visibleStart}-{visibleEnd}</strong> / {filteredJobs.length} jobs
+                  </span>
+                  <div className="stj-pagination">
+                    <button
+                      type="button"
+                      className="stj-pagination__btn stj-pagination__btn--nav"
+                      onClick={() => setCurrentPage((page) => Math.max(0, page - 1))}
+                      disabled={currentPage === 0}
+                    >
+                      <ChevronLeft size={14} />
+                    </button>
+                    <div className="stj-pagination__pages">
+                      {Array.from({ length: totalPages }, (_, page) => (
+                        <button
+                          key={page}
+                          type="button"
+                          className={`stj-pagination__btn ${currentPage === page ? "stj-pagination__btn--active" : ""}`}
+                          onClick={() => setCurrentPage(page)}
+                        >
+                          {page + 1}
+                        </button>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      className="stj-pagination__btn stj-pagination__btn--nav"
+                      onClick={() =>
+                        setCurrentPage((page) => Math.min(totalPages - 1, page + 1))
+                      }
+                      disabled={currentPage >= totalPages - 1}
+                    >
+                      <ChevronRight size={14} />
+                    </button>
+                  </div>
+                </div>
+              )}
               <div className="stj-summary">
                 <span>
                   <FileText size={14} />

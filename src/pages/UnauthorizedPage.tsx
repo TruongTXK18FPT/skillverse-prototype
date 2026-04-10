@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import meowlAvatar from '../assets/meowl-skin/meowl-acwy.png';
 import '../styles/UnauthorizedPage.css';
 
 const UnauthorizedPage: React.FC = () => {
@@ -7,7 +8,7 @@ const UnauthorizedPage: React.FC = () => {
   const userRole = localStorage.getItem('userRole');
 
   const getRoleMessage = () => {
-    switch(userRole) {
+    switch (userRole) {
       case 'USER':
         return 'Trang này chỉ dành cho Nhà tuyển dụng, Mentor hoặc Admin.';
       case 'RECRUITER':
@@ -20,57 +21,61 @@ const UnauthorizedPage: React.FC = () => {
   };
 
   return (
-    <div className="unauthorized-page">
-      <div className="unauthorized-content">
-        <div className="icon-container">
-          <svg 
-            width="120" 
-            height="120" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2"
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12.01" y2="16" />
-          </svg>
+    <div className="unauth-page">
+      <div className="unauth-glow-blob unauth-glow-blob--red" />
+      <div className="unauth-glow-blob unauth-glow-blob--purple" />
+      <div className="unauth-scanlines" />
+
+      <div className="unauth-card">
+        <div className="unauth-avatar-frame">
+          <div className="unauth-avatar-ring unauth-avatar-ring--outer" />
+          <div className="unauth-avatar-ring unauth-avatar-ring--inner" />
+          <img
+            src={meowlAvatar}
+            alt="Meowl Guardian"
+            className="unauth-avatar-img"
+          />
+          <div className="unauth-avatar-glow" />
         </div>
 
-        <h1>⛔ Không Có Quyền Truy Cập</h1>
-        <p className="error-code">403 - Forbidden</p>
-        <p className="error-message">
-          {getRoleMessage()}
-        </p>
+        <div className="unauth-error-badge">
+          <span className="unauth-error-badge__code">403</span>
+          <span className="unauth-error-badge__label">FORBIDDEN</span>
+        </div>
+
+        <h1 className="unauth-neon-title">
+          <span className="unauth-neon-title__text">TRUY CẬP BỊ TỪ CHỐI</span>
+        </h1>
+
+        <p className="unauth-error-message">{getRoleMessage()}</p>
+
         {userRole && (
-          <div style={{ 
-            marginTop: '16px', 
-            padding: '12px 20px', 
-            background: 'rgba(251, 146, 60, 0.1)', 
-            border: '2px solid rgba(251, 146, 60, 0.3)',
-            borderRadius: '8px',
-            color: '#f97316',
-            fontSize: '14px',
-            fontWeight: 500
-          }}>
-            📌 Vai trò hiện tại: <strong>{userRole}</strong>
+          <div className="unauth-role-indicator">
+            <div className="unauth-role-indicator__dot" />
+            <span className="unauth-role-indicator__label">
+              VAI TRÒ HIỆN TẠI: <strong>{userRole}</strong>
+            </span>
           </div>
         )}
 
-        <div className="action-buttons">
-          <button 
-            className="btn btn-primary"
-            onClick={() => navigate('/')}
-          >
-            🏠 Về Trang Chủ
+        <div className="unauth-action-buttons">
+          <button className="unauth-btn unauth-btn--neon" onClick={() => navigate('/')}>
+            <span className="unauth-btn__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </span>
+            Về Trang Chủ
           </button>
-          <button 
-            className="btn btn-secondary"
-            onClick={() => navigate(-1)}
-          >
-            ← Quay Lại
+          <button className="unauth-btn unauth-btn--outline" onClick={() => navigate(-1)}>
+            <span className="unauth-btn__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/>
+                <polyline points="12 19 5 12 12 5"/>
+              </svg>
+            </span>
+            Quay Lại
           </button>
         </div>
       </div>

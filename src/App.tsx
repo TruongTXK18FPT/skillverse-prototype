@@ -111,7 +111,6 @@ import MeowlAdventure from "./components/game/meowl-adventure/MeowlAdventure";
 
 // import AdminSeminarManager from "./pages/main/AdminSeminarManager";
 // import RecruiterSeminarManager from "./pages/main/RecruiterSeminarManager";
-import ShortTermJobRoutes from "./routes/ShortTermJobRoutes";
 import ContractDetailPage from "./components/contract/ContractDetailPage";
 import ContractForm from "./components/contract/ContractForm";
 import ContractSignPage from "./components/contract/ContractSignPage";
@@ -314,16 +313,40 @@ const AppContents = () => {
             <Route path="/terms-of-service" element={<TermOfService />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             {/* User My Applications - Using JobLab for better UX */}
-            <Route path="/my-applications" element={<JobLabPage />} />
+            <Route
+              path="/my-applications"
+              element={
+                <StudentOnlyRoute>
+                  <JobLabPage />
+                </StudentOnlyRoute>
+              }
+            />
             {/* Job Lab - Career Hub (alias) */}
-            <Route path="/job-lab" element={<JobLabPage />} />
-            {/* Short-term Job Routes */}
-            <Route path="/short-term-jobs/*" element={<ShortTermJobRoutes />} />
+            <Route
+              path="/job-lab"
+              element={
+                <StudentOnlyRoute>
+                  <JobLabPage />
+                </StudentOnlyRoute>
+              }
+            />
             {/* Contract Routes — flattened directly (no nested <Routes> wrapper) */}
-            <Route path="/business/contracts/:id/edit" element={<ContractForm />} />
-            <Route path="/business/contracts/create" element={<ContractForm />} />
-            <Route path="/business/contracts/:id" element={<ContractDetailPage />} />
-            <Route path="/business/contracts" element={<ContractManagementPage />} />
+            <Route
+              path="/business/contracts/:id/edit"
+              element={<ContractForm />}
+            />
+            <Route
+              path="/business/contracts/create"
+              element={<ContractForm />}
+            />
+            <Route
+              path="/business/contracts/:id"
+              element={<ContractDetailPage />}
+            />
+            <Route
+              path="/business/contracts"
+              element={<ContractManagementPage />}
+            />
             <Route path="/my-contracts" element={<MyContractsPage />} />
             <Route path="/contracts/:id/sign" element={<ContractSignPage />} />
             <Route path="/contracts/:id" element={<ContractDetailPage />} />
@@ -518,9 +541,9 @@ const isQuizAttemptRoute = (pathname: string) => {
 // Check if path is any contract route
 const isContractRoute = (pathname: string) => {
   return (
-    pathname.startsWith('/contracts/') ||
-    pathname.startsWith('/business/contracts/') ||
-    pathname === '/my-contracts'
+    pathname.startsWith("/contracts/") ||
+    pathname.startsWith("/business/contracts/") ||
+    pathname === "/my-contracts"
   );
 };
 

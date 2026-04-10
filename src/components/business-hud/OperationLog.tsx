@@ -64,7 +64,7 @@ const FILTERS: Array<{ value: StatusFilter; label: string; tone: Tone }> = [
   { value: JobStatus.IN_PROGRESS, label: "Nháp", tone: "violet" },
 ];
 
-const JOBS_PER_PAGE = 6;
+const JOBS_PER_PAGE = 3;
 
 const parseDateOnly = (value: string) => {
   if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
@@ -102,6 +102,12 @@ const compactCurrency = (value: number) => {
   if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)} triệu`;
   if (value >= 1_000) return `${(value / 1_000).toFixed(0)}K`;
   return value.toLocaleString("vi-VN");
+};
+
+const summarizeText = (value: string, maxLength = 156) => {
+  const normalized = value.replace(/\s+/g, " ").trim();
+  if (normalized.length <= maxLength) return normalized;
+  return `${normalized.slice(0, Math.max(0, maxLength - 3)).trimEnd()}...`;
 };
 
 const formatRelative = (value: string) => {
@@ -188,6 +194,12 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
     currentPage * JOBS_PER_PAGE,
     currentPage * JOBS_PER_PAGE + JOBS_PER_PAGE,
   );
+  const visibleStart =
+    filteredJobs.length === 0 ? 0 : currentPage * JOBS_PER_PAGE + 1;
+  const visibleEnd =
+    filteredJobs.length === 0
+      ? 0
+      : Math.min(filteredJobs.length, currentPage * JOBS_PER_PAGE + paginatedJobs.length);
 
   const openJobs = jobs.filter((job) => job.status === JobStatus.OPEN);
   const pendingJobs = jobs.filter(
@@ -371,6 +383,11 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
           <div className="oplog__panel-head">
             <div>
               <span>Full-time fleet</span>
+              <p className="oplog__panel-copy">
+                {filteredJobs.length > 0
+                  ? `Showing ${visibleStart}-${visibleEnd} of ${filteredJobs.length} jobs in the current queue.`
+                  : "No jobs match the current search and status filters."}
+              </p>
               <h3>Danh sách chiến dịch tuyển dụng</h3>
             </div>
             <strong>{filteredJobs.length}</strong>
@@ -420,6 +437,10 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                           {meta.label}
                         </span>
                       </div>
+
+                      <p className="oplog__item-summary">
+                        {summarizeText(job.description)}
+                      </p>
 
                       <div className="oplog__item-meta">
                         <span>

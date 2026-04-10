@@ -6,6 +6,8 @@ import { useAuth } from '../../context/AuthContext';
 import '../../styles/NotificationDropdown.css';
 
 type Props = { inline?: boolean; collapsible?: boolean };
+const LEARNER_ROLES = ['USER', 'LEARNER', 'STUDENT', 'CANDIDATE'];
+
 const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -24,6 +26,240 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
     unread: number;
   }
   const [recentChats, setRecentChats] = useState<RecentChat[]>([]);
+
+  type NotificationTarget = {
+    pathname: string;
+    state?: Record<string, unknown>;
+  };
+
+  const getUserRoles = (): string[] =>
+    Array.isArray(user?.roles)
+      ? user.roles.map((role) => role.toUpperCase())
+      : [];
+
+  const hasAnyRole = (roles: string[]): boolean => {
+    const userRoles = getUserRoles();
+    return roles.some((role) => userRoles.includes(role));
+  };
+
+  const isAdminUser = (): boolean => {
+    const roles = getUserRoles();
+    return roles.includes('ADMIN') || roles.some((role) => role.endsWith('_ADMIN'));
+  };
+
+  const isMentorUser = (): boolean => hasAnyRole(['MENTOR']);
+  const isRecruiterUser = (): boolean => hasAnyRole(['RECRUITER']);
+  const isLearnerUser = (): boolean =>
+    hasAnyRole(LEARNER_ROLES) &&
+    !isMentorUser() &&
+    !isRecruiterUser() &&
+    !isAdminUser() &&
+    !hasAnyRole(['PARENT']);
+
+  const buildBusinessTarget = (
+    activeSection: 'overview' | 'fulltime' | 'shortterm' | 'candidates' | 'seminar' = 'overview',
+  ): NotificationTarget => ({
+    pathname: '/business',
+    state: { activeSection },
+  });
+
+  const buildJobLabTarget = ({
+    viewMode = 'applications',
+    jobType = 'ALL',
+    selectedApplicationId,
+    applicationType,
+  }: {
+    viewMode?: 'dashboard' | 'applications' | 'workspace' | 'contracts';
+    jobType?: 'ALL' | 'REGULAR' | 'SHORT_TERM';
+    selectedApplicationId?: string;
+    applicationType?: 'REGULAR' | 'SHORT_TERM';
+  } = {}): NotificationTarget => ({
+    pathname: '/my-applications',
+    state: {
+      viewMode,
+      jobType,
+      selectedApplicationId,
+      applicationType,
+    },
+  });
+
+  const buildContractTarget = (relatedId: string, type: string): NotificationTarget => {
+    if (!relatedId) {
+      return isRecruiterUser()
+        ? { pathname: '/business/contracts' }
+        : { pathname: '/my-contracts' };
+    }
+
+    if (type === 'CONTRACT_SENT_FOR_SIGNATURE' && isLearnerUser()) {
+      return { pathname: `/contracts/${relatedId}/sign` };
+    }
+
+    return isRecruiterUser()
+      ? { pathname: `/business/contracts/${relatedId}` }
+      : { pathname: `/contracts/${relatedId}` };
+  };
+
+  const getNotificationTarget = (notification: Notification): NotificationTarget => {
+    const normalizedMessage =
+      `${notification.title} ${notification.message}`.toLowerCase();
+
+    switch (notification.type) {
+      case 'LIKE':
+      case 'COMMENT':
+        return { pathname: `/community/${notification.relatedId}` };
+      case 'PRECHAT_MESSAGE':
+      case 'PRECHAT_NEW_MESSAGE':
+        return {
+          pathname: '/mentorship',
+          state: { openChatWith: notification.relatedId },
+        };
+      case 'RECRUITMENT_MESSAGE':
+        return {
+          pathname: '/messages',
+          state: {
+            openChatWith: notification.relatedId,
+            type: 'RECRUITMENT',
+          },
+        };
+      case 'PREMIUM_PURCHASE':
+      case 'PREMIUM_EXPIRATION':
+      case 'PREMIUM_CANCEL':
+      case 'AUTO_RENEWAL_DISABLED':
+      case 'AUTO_RENEWAL_ENABLED':
+        return { pathname: '/premium' };
+      case 'WALLET_DEPOSIT':
+      case 'COIN_PURCHASE':
+      case 'WITHDRAWAL_APPROVED':
+      case 'WITHDRAWAL_REJECTED':
+      case 'ESCROW_FUNDED':
+      case 'ESCROW_RELEASED':
+        return { pathname: '/my-wallet' };
+      case 'ESCROW_REFUNDED':
+      case 'REVIEW_WINDOW_EXPIRING':
+        return isRecruiterUser()
+          ? buildBusinessTarget('shortterm')
+          : { pathname: '/my-wallet' };
+      case 'BOOKING_CREATED':
+      case 'BOOKING_CONFIRMED':
+      case 'BOOKING_REJECTED':
+      case 'BOOKING_REMINDER':
+      case 'BOOKING_COMPLETED':
+      case 'BOOKING_CANCELLED':
+      case 'BOOKING_REFUND':
+      case 'BOOKING_STARTED':
+      case 'BOOKING_MENTOR_COMPLETED':
+        return notification.relatedId
+          ? { pathname: `/bookings/${notification.relatedId}` }
+          : isMentorUser()
+            ? { pathname: '/mentor' }
+            : { pathname: '/my-bookings' };
+      case 'MENTOR_REVIEW_RECEIVED':
+      case 'MENTOR_LEVEL_UP':
+      case 'MENTOR_BADGE_AWARDED':
+        return { pathname: '/mentor' };
+      case 'TASK_DEADLINE':
+      case 'TASK_OVERDUE':
+      case 'TASK_REVIEW':
+        return { pathname: '/study-planner' };
+      case 'ASSIGNMENT_SUBMITTED':
+        return isMentorUser() || isAdminUser()
+          ? { pathname: '/mentor' }
+          : { pathname: '/courses' };
+      case 'ASSIGNMENT_GRADED':
+      case 'ASSIGNMENT_LATE':
+      case 'COURSE_REJECTED':
+      case 'COURSE_SUSPENDED':
+      case 'COURSE_RESTORED':
+        return isMentorUser() || isAdminUser()
+          ? { pathname: '/mentor' }
+          : { pathname: '/courses' };
+      case 'DISPUTE_ELIGIBILITY_UNLOCKED':
+        return buildJobLabTarget({
+          viewMode: 'workspace',
+          jobType: 'SHORT_TERM',
+          selectedApplicationId: notification.relatedId,
+          applicationType: 'SHORT_TERM',
+        });
+      case 'ADMIN_DISPUTE_ESCALATED':
+        return { pathname: '/admin' };
+      case 'DISPUTE_OPENED':
+        if (isRecruiterUser()) return buildBusinessTarget('shortterm');
+        if (isMentorUser()) return { pathname: '/mentor' };
+        return { pathname: '/my-bookings' };
+      case 'DISPUTE_RESOLVED':
+        if (isRecruiterUser()) return buildBusinessTarget('shortterm');
+        if (isMentorUser()) return { pathname: '/mentor' };
+        if (!isLearnerUser()) return { pathname: '/notifications' };
+        return normalizedMessage.includes('job') || normalizedMessage.includes('công việc')
+          ? buildJobLabTarget({
+              viewMode: 'applications',
+              jobType: 'SHORT_TERM',
+              applicationType: 'SHORT_TERM',
+            })
+          : { pathname: '/my-bookings' };
+      case 'JOB_APPROVED':
+      case 'JOB_REJECTED':
+      case 'JOB_DELETED':
+      case 'JOB_BANNED':
+      case 'JOB_UNBANNED':
+      case 'SHORT_TERM_APPLICATION_SUBMITTED':
+      case 'SHORT_TERM_WORK_SUBMITTED':
+      case 'RECRUITER_AUTO_APPROVED_WARNING':
+        return buildBusinessTarget('shortterm');
+      case 'SHORT_TERM_APPLICATION_ACCEPTED':
+        return buildJobLabTarget({
+          viewMode: 'workspace',
+          jobType: 'SHORT_TERM',
+          selectedApplicationId: notification.relatedId,
+          applicationType: 'SHORT_TERM',
+        });
+      case 'SHORT_TERM_APPLICATION_REJECTED':
+        return buildJobLabTarget({
+          viewMode: 'applications',
+          jobType: 'SHORT_TERM',
+          selectedApplicationId: notification.relatedId,
+          applicationType: 'SHORT_TERM',
+        });
+      case 'SHORT_TERM_WORK_APPROVED':
+      case 'WORKER_AUTO_APPROVED':
+        return buildJobLabTarget({
+          viewMode: 'workspace',
+          jobType: 'SHORT_TERM',
+          selectedApplicationId: notification.relatedId,
+          applicationType: 'SHORT_TERM',
+        });
+      case 'FULLTIME_APPLICATION_REVIEWED':
+      case 'FULLTIME_APPLICATION_ACCEPTED':
+      case 'FULLTIME_APPLICATION_REJECTED':
+        return buildJobLabTarget({
+          viewMode: 'applications',
+          jobType: 'REGULAR',
+          selectedApplicationId: notification.relatedId,
+          applicationType: 'REGULAR',
+        });
+      case 'WORKER_CANCELLATION_REQUESTED':
+      case 'WORKER_AUTO_CANCELLED':
+        return buildJobLabTarget({
+          viewMode: 'applications',
+          jobType: 'SHORT_TERM',
+          applicationType: 'SHORT_TERM',
+        });
+      case 'CONTRACT_SENT_FOR_SIGNATURE':
+      case 'CONTRACT_SIGNED':
+      case 'CONTRACT_REJECTED':
+      case 'CONTRACT_CANCELLED':
+      case 'CONTRACT_EXPIRED':
+        return buildContractTarget(notification.relatedId, notification.type);
+      case 'VIOLATION_REPORT':
+        return { pathname: '/my-reports' };
+      case 'WELCOME':
+        return { pathname: '/dashboard' };
+      case 'SYSTEM':
+      case 'WARNING':
+      default:
+        return { pathname: '/notifications' };
+    }
+  };
 
   const fetchUnreadCount = async () => {
     try {
@@ -124,52 +360,12 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
     if (!notification.isRead) {
       await handleMarkAsRead(notification.id, { stopPropagation: () => {} } as React.MouseEvent);
     }
-    
-    // Navigate based on type
-    switch (notification.type) {
-      case 'LIKE':
-      case 'COMMENT':
-        navigate(`/community/${notification.relatedId}`);
-        break;
-      case 'PRECHAT_NEW_MESSAGE':
-        navigate('/mentorship', { state: { openChatWith: notification.relatedId } });
-        break;
-      case 'RECRUITMENT_MESSAGE':
-        navigate('/messages', {
-          state: {
-            openChatWith: notification.relatedId,
-            type: 'RECRUITMENT'
-          }
-        });
-        break;
-      case 'PREMIUM_PURCHASE':
-      case 'PREMIUM_EXPIRATION':
-      case 'PREMIUM_CANCEL':
-      case 'AUTO_RENEWAL_DISABLED':
-      case 'AUTO_RENEWAL_ENABLED':
-        navigate('/premium');
-        break;
-      case 'WALLET_DEPOSIT':
-      case 'COIN_PURCHASE':
-      case 'WITHDRAWAL_APPROVED':
-      case 'WITHDRAWAL_REJECTED':
-        navigate('/my-wallet');
-        break;
-      case 'BOOKING_CONFIRMED':
-      case 'BOOKING_CANCELLED':
-      case 'BOOKING_REMINDER':
-        if (user?.roles?.some((role) => role.toUpperCase() === 'MENTOR')) {
-          navigate('/mentor', { state: { activeTab: 'bookings' } });
-        } else {
-          navigate('/my-bookings');
-        }
-        break;
-      case 'WELCOME':
-        navigate('/dashboard');
-        break;
-      default:
-        console.log('No specific route for notification type:', notification.type);
-        break;
+
+    const target = getNotificationTarget(notification);
+    if (target.state) {
+      navigate(target.pathname, { state: target.state });
+    } else {
+      navigate(target.pathname);
     }
     setIsOpen(false);
   };
