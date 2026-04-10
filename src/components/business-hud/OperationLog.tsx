@@ -414,8 +414,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                     >
                       <div className="oplog__item-top">
                         <div>
-                          <span className="oplog__item-id">JOB #{job.id}</span>
-                          <h4>{job.title}</h4>
+                          <span className="oplog__item-id">JOB #{job.id} {job.title}</span>
                         </div>
                         <span className={`oplog__badge oplog__badge--${meta.tone}`}>
                           {meta.label}

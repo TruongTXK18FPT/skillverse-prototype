@@ -252,7 +252,7 @@ const ContractDetailPage: React.FC = () => {
         )}
       </div>
 
-      <div className="cdp-content">
+      <div className="cdp-overview-grid">
         <div className="cdp-main">
           <div className="cdp-info-card">
             <div className="cdp-info-card-header">
@@ -300,101 +300,6 @@ const ContractDetailPage: React.FC = () => {
               </div>
             </div>
           </div>
-
-          <div className="cdp-view-tabs">
-            <button
-              type="button"
-              className={`cdp-view-tab ${viewMode === 'detail' ? 'cdp-view-tab--active' : ''}`}
-              onClick={() => setViewMode('detail')}
-            >
-              <FileText size={13} />
-              Chi tiết
-            </button>
-            <button
-              type="button"
-              className={`cdp-view-tab ${viewMode === 'markdown' ? 'cdp-view-tab--active' : ''}`}
-              onClick={() => setViewMode('markdown')}
-            >
-              <Eye size={13} />
-              Markdown
-            </button>
-            <button
-              type="button"
-              className={`cdp-view-tab ${viewMode === 'pdf' ? 'cdp-view-tab--active' : ''}`}
-              onClick={() => setViewMode('pdf')}
-            >
-              <FileText size={13} />
-              PDF
-            </button>
-          </div>
-
-          {viewMode === 'detail' && (
-            <>
-              <div className="cdp-clauses-section">
-                <h3 className="cdp-section-title">
-                  <FileText size={16} />
-                  Điều khoản pháp lý
-                </h3>
-                <ContractClauses
-                  contractType={contract.contractType}
-                  contract={contract}
-                  compact
-                />
-              </div>
-
-              <div className="cdp-signature-section">
-                <h3 className="cdp-section-title">
-                  <CheckCircle2 size={16} />
-                  Tình trạng chữ ký
-                </h3>
-                <div className="cdp-signature-grid">
-                  {signatureCards.map((item) => (
-                    <div key={item.key} className="cdp-signature-party">
-                      <h4>{item.title}</h4>
-                      {item.signatureUrl ? (
-                        <div className="cdp-signed">
-                          <CheckCircle2 size={16} className="cdp-signed-icon" />
-                          <div>
-                            <p className="cdp-signed-name">{item.partyName}</p>
-                            <p className="cdp-signed-date">
-                              Đã ký ngày {formatDate(item.signedAt)}
-                            </p>
-                            <img
-                              src={item.signatureUrl}
-                              alt={`Chữ ký ${item.partyName}`}
-                              className="cdp-signature-img"
-                              crossOrigin="anonymous"
-                            />
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="cdp-not-signed">
-                          <Clock size={16} />
-                          <p>Chưa ký</p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
-
-          {viewMode === 'markdown' && (
-            <div className="cdp-clauses-section">
-              <h3 className="cdp-section-title">
-                <Eye size={16} />
-                Nội dung markdown
-              </h3>
-              <ContractMarkdownSections contract={contract} />
-            </div>
-          )}
-
-          {viewMode === 'pdf' && (
-            <div className="cdp-pdf-section">
-              <ContractPDFViewer contract={contract} />
-            </div>
-          )}
         </div>
 
         <div className="cdp-sidebar">
@@ -474,6 +379,103 @@ const ContractDetailPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <section className={`cdp-viewer-shell cdp-viewer-shell--${viewMode}`}>
+        <div className="cdp-view-tabs">
+          <button
+            type="button"
+            className={`cdp-view-tab ${viewMode === 'detail' ? 'cdp-view-tab--active' : ''}`}
+            onClick={() => setViewMode('detail')}
+          >
+            <FileText size={13} />
+            Chi tiết
+          </button>
+          <button
+            type="button"
+            className={`cdp-view-tab ${viewMode === 'markdown' ? 'cdp-view-tab--active' : ''}`}
+            onClick={() => setViewMode('markdown')}
+          >
+            <Eye size={13} />
+            Markdown
+          </button>
+          <button
+            type="button"
+            className={`cdp-view-tab ${viewMode === 'pdf' ? 'cdp-view-tab--active' : ''}`}
+            onClick={() => setViewMode('pdf')}
+          >
+            <FileText size={13} />
+            PDF
+          </button>
+        </div>
+
+        {viewMode === 'detail' && (
+          <>
+            <div className="cdp-clauses-section">
+              <h3 className="cdp-section-title">
+                <FileText size={16} />
+                Điều khoản pháp lý
+              </h3>
+              <ContractClauses
+                contractType={contract.contractType}
+                contract={contract}
+                compact
+              />
+            </div>
+
+            <div className="cdp-signature-section">
+              <h3 className="cdp-section-title">
+                <CheckCircle2 size={16} />
+                Tình trạng chữ ký
+              </h3>
+              <div className="cdp-signature-grid">
+                {signatureCards.map((item) => (
+                  <div key={item.key} className="cdp-signature-party">
+                    <h4>{item.title}</h4>
+                    {item.signatureUrl ? (
+                      <div className="cdp-signed">
+                        <CheckCircle2 size={16} className="cdp-signed-icon" />
+                        <div>
+                          <p className="cdp-signed-name">{item.partyName}</p>
+                          <p className="cdp-signed-date">
+                            Đã ký ngày {formatDate(item.signedAt)}
+                          </p>
+                          <img
+                            src={item.signatureUrl}
+                            alt={`Chữ ký ${item.partyName}`}
+                            className="cdp-signature-img"
+                            crossOrigin="anonymous"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="cdp-not-signed">
+                        <Clock size={16} />
+                        <p>Chưa ký</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+
+        {viewMode === 'markdown' && (
+          <div className="cdp-clauses-section">
+            <h3 className="cdp-section-title">
+              <Eye size={16} />
+              Nội dung markdown
+            </h3>
+            <ContractMarkdownSections contract={contract} />
+          </div>
+        )}
+
+        {viewMode === 'pdf' && (
+          <div className="cdp-pdf-section">
+            <ContractPDFViewer contract={contract} />
+          </div>
+        )}
+      </section>
     </div>
   );
 };

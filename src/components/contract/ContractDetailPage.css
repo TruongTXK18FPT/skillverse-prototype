@@ -154,14 +154,21 @@
   background: #dc2626;
 }
 
-/* Content layout */
+/* Overview layout */
+.cdp-overview-grid,
 .cdp-content {
   display: grid;
-  grid-template-columns: 1fr 320px;
+  grid-template-columns: minmax(0, 1fr) 320px;
   gap: 20px;
+  align-items: start;
+}
+
+.cdp-content--pdf {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 @media (max-width: 900px) {
+  .cdp-overview-grid,
   .cdp-content {
     grid-template-columns: 1fr;
   }
@@ -172,6 +179,14 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-width: 0;
+}
+
+.cdp-viewer-shell {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 /* Info card */
@@ -434,6 +449,7 @@
 /* PDF section */
 .cdp-pdf-section {
   margin-top: 8px;
+  width: 100%;
 }
 
 /* Loading */

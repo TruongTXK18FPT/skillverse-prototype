@@ -43,10 +43,10 @@ const PX_PER_MM = 794 / 210; // ≈ 3.781
 const PAGE_W_PX = 794;
 const PAGE_H_PX = 1123;
 const PAGE_INNER_TOP_PX = 53;
-const PAGE_INNER_LEFT_PX = 68;
-const PAGE_INNER_W_PX = 658;
+const PAGE_INNER_LEFT_PX = 40;
+const PAGE_INNER_W_PX = 714;
 const PAGE_INNER_H_PX = 950;
-const FOOTER_RESERVED_PX = 56;
+const FOOTER_RESERVED_PX = 72;
 const PAGE_CONTENT_H_PX = PAGE_INNER_H_PX - FOOTER_RESERVED_PX;
 
 // ==================== FORMAT HELPERS ====================
@@ -90,11 +90,6 @@ function getCandidateDisplayName(c: Contract): string {
   );
 }
 
-interface DetailField {
-  label: string;
-  value: string;
-}
-
 function normalizeText(value?: string | null, fallback = "—"): string {
   return value && value.trim() ? value.trim() : fallback;
 }
@@ -104,36 +99,6 @@ function getPaymentMethodLabel(paymentMethod?: string): string {
   return paymentMethod === "bank_transfer"
     ? "Chuyển khoản ngân hàng"
     : paymentMethod;
-}
-
-function getWorkingTimeSummary(c: Contract): string {
-  if (c.contractType === ContractType.PART_TIME) {
-    const perDay = c.workingHoursPerDay || 4;
-    const perWeek = c.workingHoursPerWeek
-      ? Math.round(c.workingHoursPerWeek / 2)
-      : 20;
-    return `${perDay} giờ/ngày, ${perWeek} giờ/tuần`;
-  }
-
-  const perDay = c.workingHoursPerDay || 8;
-  const perWeek = c.workingHoursPerWeek || 40;
-  return `${perDay} giờ/ngày, ${perWeek} giờ/tuần`;
-}
-
-function getContractDurationLabel(c: Contract): string {
-  if (c.contractType === ContractType.PROBATION) {
-    return c.probationMonths ? `${c.probationMonths} tháng` : "Theo thỏa thuận";
-  }
-
-  if (c.startDate && c.endDate) {
-    return `${formatDate(c.startDate)} đến ${formatDate(c.endDate)}`;
-  }
-
-  if (c.startDate) {
-    return `Từ ${formatDate(c.startDate)} cho đến khi chấm dứt theo thỏa thuận`;
-  }
-
-  return "Theo thỏa thuận";
 }
 
 function buildPartiesTableHTML(c: Contract): string {
@@ -615,7 +580,7 @@ body {
   print-color-adjust: exact;
 }
 .contract-preview {
-  padding: 20px 16px 40px;
+  padding: 16px 0 36px;
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -659,7 +624,7 @@ body {
   left: ${PAGE_INNER_LEFT_PX}px;
   width: ${PAGE_INNER_W_PX}px;
   height: ${PAGE_INNER_H_PX}px;
-  overflow: hidden;
+  overflow: visible;
 }
 .page-content {
   display: flex;
@@ -911,8 +876,9 @@ h1.doc-title {
 }
 .signature-line {
   width: 70%;
-  border-bottom: 1px dashed var(--ink);
-  height: 0;
+  border-top: 1px dashed var(--ink);
+  border-bottom: none;
+  height: 1px;
 }
 .signature-img {
   max-width: 180px;
@@ -943,30 +909,40 @@ h1.doc-title {
   left: 0;
   bottom: 0;
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
   border-top: 1px solid var(--border);
-  padding-top: 10px;
+  padding-top: 8px;
+  padding-bottom: 4px;
   font-size: 13px;
+  line-height: 1.35;
   color: var(--ink);
+}
+.page-footer__table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 .page-footer__left {
   text-align: left;
-  flex: 1;
+  width: 33.333%;
+  vertical-align: middle;
+  padding-right: 6px;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
 .page-footer__center {
   text-align: center;
   font-style: italic;
-  flex: 1;
+  width: 33.333%;
+  vertical-align: middle;
+  padding: 0 4px;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
 .page-footer__right {
   text-align: right;
-  flex: 1;
+  width: 33.333%;
+  vertical-align: middle;
+  padding-left: 6px;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
@@ -1073,25 +1049,57 @@ p {
 
 async function imageUrlToBase64(url: string): Promise<string> {
   if (!url || url.startsWith("data:")) return url;
+
   return new Promise((resolve) => {
+    let settled = false;
+    const finish = (value: string) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      resolve(value || "");
+    };
+
+    const timer = setTimeout(() => finish(""), 10000);
     const img = new Image();
     img.crossOrigin = "anonymous";
+    img.referrerPolicy = "no-referrer";
+
     img.onload = () => {
       try {
+        const naturalWidth = img.naturalWidth || img.width;
+        const naturalHeight = img.naturalHeight || img.height;
+
+        if (naturalWidth <= 0 || naturalHeight <= 0) {
+          finish("");
+          return;
+        }
+
+        const maxWidth = 420;
+        const maxHeight = 180;
+        const ratio = Math.min(
+          maxWidth / naturalWidth,
+          maxHeight / naturalHeight,
+          1,
+        );
+        const targetWidth = Math.max(1, Math.round(naturalWidth * ratio));
+        const targetHeight = Math.max(1, Math.round(naturalHeight * ratio));
+
         const canvas = document.createElement("canvas");
-        canvas.width = img.naturalWidth || img.width;
-        canvas.height = img.naturalHeight || img.height;
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
         const ctx = canvas.getContext("2d");
+
         if (ctx) {
-          ctx.drawImage(img, 0, 0);
-          resolve(canvas.toDataURL("image/png"));
-        } else resolve("");
+          ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+          finish(canvas.toDataURL("image/png"));
+        } else {
+          finish("");
+        }
       } catch {
-        resolve("");
+        finish("");
       }
     };
-    img.onerror = () => resolve("");
-    setTimeout(() => resolve(""), 10000);
+    img.onerror = () => finish("");
     img.src = url;
   });
 }
@@ -1189,48 +1197,48 @@ function getContractClausesHTML(contract: Contract): string {
 
 function buildSignatureSectionHTML(contract: Contract): string {
   const employerSignature = contract.employerSignatureUrl
-    ? `<img src="${contract.employerSignatureUrl}" class="signature-img" crossorigin="anonymous" />`
-    : '<div class="signature-line"></div>';
+    ? `<img src="${contract.employerSignatureUrl}" class="signature-img" style="max-width:180px;max-height:80px;object-fit:contain;display:block;" crossorigin="anonymous" />`
+    : '<div class="signature-line" style="width:70%;height:1px;border-top:1px dashed #000;border-bottom:none;"></div>';
   const candidateSignature = contract.candidateSignatureUrl
-    ? `<img src="${contract.candidateSignatureUrl}" class="signature-img" crossorigin="anonymous" />`
-    : '<div class="signature-line"></div>';
+    ? `<img src="${contract.candidateSignatureUrl}" class="signature-img" style="max-width:180px;max-height:80px;object-fit:contain;display:block;" crossorigin="anonymous" />`
+    : '<div class="signature-line" style="width:70%;height:1px;border-top:1px dashed #000;border-bottom:none;"></div>';
 
   return `
-    <section class="signature-section">
-      <h3 class="signature-section-title">XÁC NHẬN VÀ CHỮ KÝ CÁC BÊN</h3>
-      <p class="signature-intro">
+    <section class="signature-section" style="border:1px solid #000;padding:20px;margin-top:20px;max-width:100%;page-break-inside:avoid;">
+      <h3 class="signature-section-title" style="text-align:center;text-transform:uppercase;font-size:18px;font-weight:700;margin-bottom:15px;">XÁC NHẬN VÀ CHỮ KÝ CÁC BÊN</h3>
+      <p class="signature-intro" style="text-align:center;font-size:15px;line-height:1.6;margin-bottom:20px;">
         Hai bên đã đọc, hiểu rõ toàn bộ nội dung hợp đồng, cam kết thực hiện đúng các điều khoản đã thỏa thuận
         và chịu trách nhiệm trước pháp luật về cam kết của mình.
       </p>
-      <table class="signature-table">
+      <table class="signature-table" style="width:100%;max-width:100%;border-collapse:collapse;table-layout:fixed;">
         <thead>
           <tr>
-            <th>ĐẠI DIỆN BÊN A</th>
-            <th>NGƯỜI LAO ĐỘNG (BÊN B)</th>
+            <th style="text-transform:uppercase;font-size:16px;font-weight:700;padding:10px;border:none;">ĐẠI DIỆN BÊN A</th>
+            <th style="text-transform:uppercase;font-size:16px;font-weight:700;padding:10px;border:none;">NGƯỜI LAO ĐỘNG (BÊN B)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>
-              <div class="signature-block">
-                <div class="signature-company">${normalizeText(contract.employerCompanyName)}</div>
-                <div class="signature-space">${employerSignature}</div>
-                <div class="signature-name">${normalizeText(contract.employerName)}</div>
-                ${contract.employerSignedAt ? `<div class="signature-date">Ngày ký: ${formatDate(contract.employerSignedAt)}</div>` : ""}
+            <td style="padding:10px;border:none;vertical-align:top;">
+              <div class="signature-block" style="min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;">
+                <div class="signature-company" style="font-size:14px;color:#4a4a4a;font-style:italic;margin-bottom:10px;">${normalizeText(contract.employerCompanyName)}</div>
+                <div class="signature-space" style="width:100%;height:96px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">${employerSignature}</div>
+                <div class="signature-name" style="font-size:16px;font-weight:700;">${normalizeText(contract.employerName)}</div>
+                ${contract.employerSignedAt ? `<div class="signature-date" style="margin-top:6px;font-size:14px;color:#4a4a4a;">Ngày ký: ${formatDate(contract.employerSignedAt)}</div>` : ""}
               </div>
             </td>
-            <td>
-              <div class="signature-block">
-                <div class="signature-company">${normalizeText(contract.candidatePosition, "Người lao động")}</div>
-                <div class="signature-space">${candidateSignature}</div>
-                <div class="signature-name">${getCandidateDisplayName(contract)}</div>
-                ${contract.candidateSignedAt ? `<div class="signature-date">Ngày ký: ${formatDate(contract.candidateSignedAt)}</div>` : ""}
+            <td style="padding:10px;border:none;vertical-align:top;">
+              <div class="signature-block" style="min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;">
+                <div class="signature-company" style="font-size:14px;color:#4a4a4a;font-style:italic;margin-bottom:10px;">${normalizeText(contract.candidatePosition, "Người lao động")}</div>
+                <div class="signature-space" style="width:100%;height:96px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">${candidateSignature}</div>
+                <div class="signature-name" style="font-size:16px;font-weight:700;">${getCandidateDisplayName(contract)}</div>
+                ${contract.candidateSignedAt ? `<div class="signature-date" style="margin-top:6px;font-size:14px;color:#4a4a4a;">Ngày ký: ${formatDate(contract.candidateSignedAt)}</div>` : ""}
               </div>
             </td>
           </tr>
         </tbody>
       </table>
-      <div class="signature-note">Hợp đồng được lập thành 02 bản có giá trị pháp lý như nhau, mỗi bên giữ 01 bản để thực hiện.</div>
+      <div class="signature-note" style="margin-top:20px;text-align:center;font-size:14px;color:#4a4a4a;font-style:italic;">Hợp đồng được lập thành 02 bản có giá trị pháp lý như nhau, mỗi bên giữ 01 bản để thực hiện.</div>
     </section>`;
 }
 
@@ -1260,21 +1268,68 @@ function buildPageHTML(
   options?: ContractHTMLOptions,
   preview = false,
 ): string {
+  const articleStyle = [
+    `width:${PAGE_W_PX}px`,
+    `height:${PAGE_H_PX}px`,
+    "background:#ffffff",
+    "position:relative",
+    "overflow:hidden",
+    preview ? "box-shadow:0 10px 30px rgba(0,0,0,0.1)" : "",
+  ]
+    .filter(Boolean)
+    .join(";");
+
+  const pageInnerStyle = [
+    "position:absolute",
+    `top:${PAGE_INNER_TOP_PX}px`,
+    `left:${PAGE_INNER_LEFT_PX}px`,
+    `width:${PAGE_INNER_W_PX}px`,
+    `height:${PAGE_INNER_H_PX}px`,
+    "overflow:visible",
+  ].join(";");
+
+  const pageContentStyle = [
+    "display:flex",
+    "flex-direction:column",
+    "gap:15px",
+    "max-width:100%",
+    `padding-bottom:${FOOTER_RESERVED_PX}px`,
+  ].join(";");
+
+  const pageFooterStyle = [
+    "position:absolute",
+    "left:0",
+    "bottom:0",
+    "width:100%",
+    "border-top:1px solid #000",
+    "padding-top:8px",
+    "padding-bottom:4px",
+    "font-size:13px",
+    "line-height:1.35",
+    "color:#000",
+  ].join(";");
+
   const watermark = options?.showWatermark
     ? `<div class="page-watermark">${options.showWatermark}</div>`
     : "";
 
   return `
-    <article class="contract-page ${preview ? "contract-page--preview" : ""}">
+    <article class="contract-page ${preview ? "contract-page--preview" : ""}" style="${articleStyle}">
       ${watermark}
-      <div class="page-inner">
-        <div class="page-content">
+      <div class="page-inner" style="${pageInnerStyle}">
+        <div class="page-content" style="${pageContentStyle}">
           ${blocks.join("")}
         </div>
-        <footer class="page-footer">
-          <div class="page-footer__left">${context.contractTitle}</div>
-          <div class="page-footer__center">Số: ${context.contractNumber}</div>
-          <div class="page-footer__right">Trang ${pageNum}/${totalPages}</div>
+        <footer class="page-footer" style="${pageFooterStyle}">
+          <table class="page-footer__table" style="width:100%;border-collapse:collapse;table-layout:fixed;">
+            <tbody>
+              <tr>
+                <td class="page-footer__left" style="text-align:left;width:33.333%;vertical-align:middle;padding-right:6px;overflow-wrap:anywhere;word-break:break-word;">${context.contractTitle}</td>
+                <td class="page-footer__center" style="text-align:center;width:33.333%;vertical-align:middle;padding:0 4px;font-style:italic;overflow-wrap:anywhere;word-break:break-word;">Số: ${context.contractNumber}</td>
+                <td class="page-footer__right" style="text-align:right;width:33.333%;vertical-align:middle;padding-left:6px;overflow-wrap:anywhere;word-break:break-word;">Trang ${pageNum}/${totalPages}</td>
+              </tr>
+            </tbody>
+          </table>
         </footer>
       </div>
     </article>`;
@@ -1465,11 +1520,11 @@ function splitOversizedAtomHtml(html: string): string[] {
   }
 
   const textContent = element.textContent?.replace(/\s+/g, " ").trim() || "";
-  if (textContent.length < 650) {
+  if (textContent.length < 220) {
     return [html];
   }
 
-  const chunks = chunkText(textContent, 420);
+  const chunks = chunkText(textContent, 220);
   if (chunks.length <= 1) {
     return [html];
   }
@@ -1586,6 +1641,211 @@ function buildPaginationSections(
   ];
 }
 
+function ensureSignaturePage(
+  pages: string[][],
+  contract: Contract,
+): string[][] {
+  const hasSignatureBlock = pages.some((page) =>
+    page.some((block) => block.includes("signature-section")),
+  );
+
+  if (hasSignatureBlock) {
+    return pages;
+  }
+
+  return [
+    ...pages,
+    [buildFlowBlock(buildSignatureSectionHTML(contract), "signature-flow")],
+  ];
+}
+
+function createSignatureFallbackCanvas(
+  contract: Contract,
+  context: RenderContext,
+  pageNum: number,
+  totalPages: number,
+): HTMLCanvasElement {
+  const canvas = document.createElement("canvas");
+  canvas.width = PAGE_W_PX;
+  canvas.height = PAGE_H_PX;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    return canvas;
+  }
+
+  const drawWrappedText = (
+    text: string,
+    x: number,
+    startY: number,
+    maxWidth: number,
+    lineHeight: number,
+    align: CanvasTextAlign,
+  ): number => {
+    const normalized = text.replace(/\s+/g, " ").trim();
+    if (!normalized) {
+      return startY;
+    }
+
+    const words = normalized.split(" ");
+    const lines: string[] = [];
+    let currentLine = "";
+
+    words.forEach((word) => {
+      const candidate = currentLine ? `${currentLine} ${word}` : word;
+      if (ctx.measureText(candidate).width > maxWidth && currentLine) {
+        lines.push(currentLine);
+        currentLine = word;
+      } else {
+        currentLine = candidate;
+      }
+    });
+
+    if (currentLine) {
+      lines.push(currentLine);
+    }
+
+    ctx.textAlign = align;
+    lines.forEach((line, index) => {
+      ctx.fillText(line, x, startY + index * lineHeight);
+    });
+
+    return startY + lines.length * lineHeight;
+  };
+
+  const innerX = PAGE_INNER_LEFT_PX;
+  const innerY = PAGE_INNER_TOP_PX;
+  const innerW = PAGE_INNER_W_PX;
+  const innerH = PAGE_INNER_H_PX;
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const boxX = innerX;
+  const boxY = innerY + 18;
+  const boxW = innerW;
+  const boxH = 430;
+
+  ctx.strokeStyle = "#000000";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+  const centerX = boxX + boxW / 2;
+
+  ctx.fillStyle = "#000000";
+  ctx.font = "700 18px 'Times New Roman', Times, serif";
+  ctx.textAlign = "center";
+  ctx.fillText("XÁC NHẬN VÀ CHỮ KÝ CÁC BÊN", centerX, boxY + 36);
+
+  ctx.font = "15px 'Times New Roman', Times, serif";
+  const introBottom = drawWrappedText(
+    "Hai bên đã đọc, hiểu rõ toàn bộ nội dung hợp đồng, cam kết thực hiện đúng các điều khoản đã thỏa thuận và chịu trách nhiệm trước pháp luật về cam kết của mình.",
+    centerX,
+    boxY + 66,
+    boxW - 44,
+    24,
+    "center",
+  );
+
+  const colGap = 34;
+  const colW = (boxW - 48 - colGap) / 2;
+  const leftColX = boxX + 24;
+  const rightColX = leftColX + colW + colGap;
+  const colTopY = introBottom + 14;
+
+  ctx.font = "700 16px 'Times New Roman', Times, serif";
+  ctx.textAlign = "center";
+  ctx.fillText("ĐẠI DIỆN BÊN A", leftColX + colW / 2, colTopY);
+  ctx.fillText("NGƯỜI LAO ĐỘNG (BÊN B)", rightColX + colW / 2, colTopY);
+
+  ctx.font = "italic 14px 'Times New Roman', Times, serif";
+  drawWrappedText(
+    normalizeText(contract.employerCompanyName),
+    leftColX + colW / 2,
+    colTopY + 28,
+    colW - 16,
+    20,
+    "center",
+  );
+  drawWrappedText(
+    normalizeText(contract.candidatePosition, "Người lao động"),
+    rightColX + colW / 2,
+    colTopY + 28,
+    colW - 16,
+    20,
+    "center",
+  );
+
+  const signatureLineY = colTopY + 108;
+  ctx.save();
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  ctx.moveTo(leftColX + colW * 0.14, signatureLineY);
+  ctx.lineTo(leftColX + colW * 0.86, signatureLineY);
+  ctx.moveTo(rightColX + colW * 0.14, signatureLineY);
+  ctx.lineTo(rightColX + colW * 0.86, signatureLineY);
+  ctx.stroke();
+  ctx.restore();
+
+  ctx.font = "700 16px 'Times New Roman', Times, serif";
+  ctx.fillText(
+    normalizeText(contract.employerName),
+    leftColX + colW / 2,
+    signatureLineY + 42,
+  );
+  ctx.fillText(
+    getCandidateDisplayName(contract),
+    rightColX + colW / 2,
+    signatureLineY + 42,
+  );
+
+  ctx.font = "14px 'Times New Roman', Times, serif";
+  if (contract.employerSignedAt) {
+    ctx.fillText(
+      `Ngày ký: ${formatDate(contract.employerSignedAt)}`,
+      leftColX + colW / 2,
+      signatureLineY + 68,
+    );
+  }
+  if (contract.candidateSignedAt) {
+    ctx.fillText(
+      `Ngày ký: ${formatDate(contract.candidateSignedAt)}`,
+      rightColX + colW / 2,
+      signatureLineY + 68,
+    );
+  }
+
+  ctx.font = "italic 14px 'Times New Roman', Times, serif";
+  drawWrappedText(
+    "Hợp đồng được lập thành 02 bản có giá trị pháp lý như nhau, mỗi bên giữ 01 bản để thực hiện.",
+    centerX,
+    boxY + boxH - 24,
+    boxW - 38,
+    18,
+    "center",
+  );
+
+  const footerLineY = innerY + innerH - 34;
+  ctx.strokeStyle = "#000000";
+  ctx.beginPath();
+  ctx.moveTo(innerX, footerLineY);
+  ctx.lineTo(innerX + innerW, footerLineY);
+  ctx.stroke();
+
+  const footerY = footerLineY + 24;
+  ctx.font = "15px 'Times New Roman', Times, serif";
+  ctx.textAlign = "left";
+  ctx.fillText(context.contractTitle, innerX, footerY);
+  ctx.textAlign = "center";
+  ctx.font = "italic 15px 'Times New Roman', Times, serif";
+  ctx.fillText(`Số: ${context.contractNumber}`, innerX + innerW / 2, footerY);
+  ctx.textAlign = "right";
+  ctx.font = "15px 'Times New Roman', Times, serif";
+  ctx.fillText(`Trang ${pageNum}/${totalPages}`, innerX + innerW, footerY);
+
+  return canvas;
+}
+
 async function paginateContract(
   contract: Contract,
   context: RenderContext,
@@ -1665,6 +1925,12 @@ async function paginateContract(
       }
 
       if (!canFit(leadHeight) && !isCurrentPageEmpty()) {
+        const splitAtoms = splitOversizedAtomHtml(atomHtml);
+        if (splitAtoms.length > 1) {
+          section.atoms.splice(atomIndex, 1, ...splitAtoms);
+          continue;
+        }
+
         startNewPage();
         leadHeight = await measureBlockHeight(workspace, leadBlock);
       }
@@ -1687,6 +1953,12 @@ async function paginateContract(
         }
 
         if (!canFit(bodyHeight)) {
+          const splitAtoms = splitOversizedAtomHtml(atomHtml);
+          if (splitAtoms.length > 1) {
+            section.atoms.splice(atomIndex, 1, ...splitAtoms);
+            continue;
+          }
+
           startNewPage();
           break;
         }
@@ -1705,26 +1977,114 @@ async function renderPageToCanvas(
   pageHtml: string,
   scale: number,
 ): Promise<HTMLCanvasElement> {
+  const sanitizeCanvasElements = (root: HTMLElement) => {
+    const canvases = Array.from(root.querySelectorAll("canvas"));
+
+    canvases.forEach((node) => {
+      const canvas = node as HTMLCanvasElement;
+      const width = canvas.width || canvas.clientWidth;
+      const height = canvas.height || canvas.clientHeight;
+
+      if (width <= 0 || height <= 0) {
+        canvas.remove();
+        return;
+      }
+
+      try {
+        const image = document.createElement("img");
+        image.src = canvas.toDataURL("image/png");
+        image.style.width = `${canvas.clientWidth || width}px`;
+        image.style.height = `${canvas.clientHeight || height}px`;
+        image.style.display = "block";
+        canvas.replaceWith(image);
+      } catch {
+        // Keep original canvas when conversion is not possible.
+      }
+    });
+  };
+
   const host = document.createElement("div");
   host.style.cssText =
     `position:fixed;left:-10000px;top:0;width:${PAGE_W_PX}px;height:${PAGE_H_PX}px;overflow:hidden;background:#ffffff;`;
   injectStyles(host);
-  host.innerHTML = pageHtml;
+  host.insertAdjacentHTML("beforeend", pageHtml);
   document.body.appendChild(host);
 
   try {
     await waitForFonts();
     await waitForImages(host);
     const page = host.querySelector(".contract-page") as HTMLElement | null;
-
     if (!page) {
       throw new Error("Không thể dựng trang hợp đồng.");
     }
 
-    return await html2canvas(page, {
+    const isCanvasLikelyBlank = (canvas: HTMLCanvasElement): boolean => {
+      if (!canvas.width || !canvas.height) {
+        return true;
+      }
+
+      const sample = document.createElement("canvas");
+      const sampleWidth = 80;
+      const sampleHeight = 120;
+      sample.width = sampleWidth;
+      sample.height = sampleHeight;
+
+      const sampleCtx = sample.getContext("2d", {
+        willReadFrequently: true,
+      });
+      if (!sampleCtx) {
+        return false;
+      }
+
+      sampleCtx.fillStyle = "#ffffff";
+      sampleCtx.fillRect(0, 0, sampleWidth, sampleHeight);
+      sampleCtx.drawImage(canvas, 0, 0, sampleWidth, sampleHeight);
+
+      const pixels = sampleCtx.getImageData(0, 0, sampleWidth, sampleHeight)
+        .data;
+      let inkPixels = 0;
+
+      for (let idx = 0; idx < pixels.length; idx += 4) {
+        const alpha = pixels[idx + 3];
+        if (alpha < 5) continue;
+
+        const red = pixels[idx];
+        const green = pixels[idx + 1];
+        const blue = pixels[idx + 2];
+        if (red < 246 || green < 246 || blue < 246) {
+          inkPixels += 1;
+          if (inkPixels > 6) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    };
+
+    // Keep the signature page render-safe: external image URLs can blank a page in html2canvas.
+    const signatureImages = Array.from(
+      page.querySelectorAll("img.signature-img"),
+    ) as HTMLImageElement[];
+    signatureImages.forEach((img) => {
+      const src = (img.getAttribute("src") || "").trim();
+      if (!src.startsWith("data:image/")) {
+        const fallback = document.createElement("div");
+        fallback.className = "signature-line";
+        fallback.style.width = "70%";
+        fallback.style.height = "1px";
+        fallback.style.borderTop = "1px dashed #000";
+        fallback.style.borderBottom = "none";
+        img.replaceWith(fallback);
+      }
+    });
+
+    sanitizeCanvasElements(page);
+
+    const baseOptions = {
       scale,
       useCORS: true,
-      allowTaint: true,
+      allowTaint: false,
       backgroundColor: "#ffffff",
       logging: false,
       width: PAGE_W_PX,
@@ -1733,7 +2093,40 @@ async function renderPageToCanvas(
       windowHeight: PAGE_H_PX,
       x: 0,
       y: 0,
-    });
+      scrollX: 0,
+      scrollY: 0,
+    };
+
+    const renderWithMode = (foreignObjectRendering: boolean) =>
+      html2canvas(
+        page,
+        foreignObjectRendering
+          ? {
+              ...baseOptions,
+              foreignObjectRendering: true,
+            }
+          : baseOptions,
+      );
+
+    const shouldHaveVisibleContent =
+      (page.textContent || "").replace(/\s+/g, "").length > 0;
+
+    let canvas: HTMLCanvasElement;
+
+    try {
+      canvas = await renderWithMode(false);
+    } catch {
+      canvas = await renderWithMode(true);
+    }
+
+    if (shouldHaveVisibleContent && isCanvasLikelyBlank(canvas)) {
+      canvas = await renderWithMode(true);
+      if (isCanvasLikelyBlank(canvas)) {
+        throw new Error("Không thể kết xuất nội dung trang hợp đồng (canvas trắng).");
+      }
+    }
+
+    return canvas;
   } finally {
     if (host.parentNode) {
       host.parentNode.removeChild(host);
@@ -1754,23 +2147,36 @@ export async function generateContractPDF(
   const pdfImageCompression = opts.pdfImageCompression ?? "MEDIUM";
   const c: Contract = { ...contract };
 
+  const isDataImageUrl = (value?: string) =>
+    !!value && /^data:image\/[a-zA-Z0-9.+-]+;base64,/u.test(value);
+
   if (contract.employerSignatureUrl) {
-    c.employerSignatureUrl = await imageUrlToBase64(
+    const employerSignatureDataUrl = await imageUrlToBase64(
       contract.employerSignatureUrl,
     );
+    c.employerSignatureUrl = isDataImageUrl(employerSignatureDataUrl)
+      ? employerSignatureDataUrl
+      : "";
   }
   if (contract.candidateSignatureUrl) {
-    c.candidateSignatureUrl = await imageUrlToBase64(
+    const candidateSignatureDataUrl = await imageUrlToBase64(
       contract.candidateSignatureUrl,
     );
+    c.candidateSignatureUrl = isDataImageUrl(candidateSignatureDataUrl)
+      ? candidateSignatureDataUrl
+      : "";
   }
 
   const context = getRenderContext(c);
-  const pageBlocks = await paginateContract(c, context);
+  const pageBlocks = ensureSignaturePage(await paginateContract(c, context), c);
   const totalPages = pageBlocks.length;
   const pageHtmls = pageBlocks.map((blocks, index) =>
     buildPageHTML(blocks, index + 1, totalPages, context, options, false),
   );
+
+  if (pageHtmls.length === 0) {
+    throw new Error("Không thể tạo nội dung PDF hợp đồng.");
+  }
 
   const pdf = new jsPDF({
     orientation: "portrait",
@@ -1780,24 +2186,58 @@ export async function generateContractPDF(
   });
 
   for (let index = 0; index < pageHtmls.length; index += 1) {
-    const canvas = await renderPageToCanvas(pageHtmls[index], scale);
+    const pageHtml = pageHtmls[index];
+    const pageNum = index + 1;
+    const isSignaturePage = pageHtml.includes("signature-section");
+
+    let canvas: HTMLCanvasElement;
+    try {
+      canvas = await renderPageToCanvas(pageHtml, scale);
+    } catch (error) {
+      if (!isSignaturePage) {
+        throw error;
+      }
+
+      canvas = createSignatureFallbackCanvas(c, context, pageNum, totalPages);
+    }
 
     if (index > 0) {
       pdf.addPage();
     }
 
-    const imageData =
-      imageType === "JPEG"
-        ? canvas.toDataURL("image/jpeg", imageQuality)
-        : canvas.toDataURL("image/png");
+    let imageData = "";
+    let imageFormat: "PNG" | "JPEG" = imageType;
+    try {
+      imageData =
+        imageType === "JPEG"
+          ? canvas.toDataURL("image/jpeg", imageQuality)
+          : canvas.toDataURL("image/png");
+    } catch {
+      imageData = canvas.toDataURL("image/jpeg", imageQuality);
+      imageFormat = "JPEG";
+    }
+
+    if (!imageData || !imageData.startsWith("data:image/")) {
+      throw new Error(`Không thể kết xuất dữ liệu ảnh trang ${index + 1}.`);
+    }
+
+    if (/^data:image\/jpeg;/i.test(imageData)) {
+      imageFormat = "JPEG";
+    }
+    if (/^data:image\/png;/i.test(imageData)) {
+      imageFormat = "PNG";
+    }
+
+    const pageWidth = pdf.internal.pageSize.getWidth() || PAGE_W;
+    const pageHeight = pdf.internal.pageSize.getHeight() || PAGE_H;
 
     pdf.addImage(
       imageData,
-      imageType,
+      imageFormat,
       0,
       0,
-      PAGE_W,
-      PAGE_H,
+      pageWidth,
+      pageHeight,
       undefined,
       pdfImageCompression,
     );
@@ -1815,7 +2255,10 @@ export async function generateContractHTML(
   options?: ContractHTMLOptions,
 ): Promise<string> {
   const context = getRenderContext(contract);
-  const pageBlocks = await paginateContract(contract, context);
+  const pageBlocks = ensureSignaturePage(
+    await paginateContract(contract, context),
+    contract,
+  );
   const totalPages = pageBlocks.length;
 
   const pageHtmls = pageBlocks.map((blocks, index) =>
@@ -1843,7 +2286,7 @@ ${SHARED_CSS}
 <script>
   (function () {
     var pageWidth = ${PAGE_W_PX};
-    var gutter = 40;
+    var gutter = 20;
 
     function updatePreviewScale() {
       var viewportWidth =

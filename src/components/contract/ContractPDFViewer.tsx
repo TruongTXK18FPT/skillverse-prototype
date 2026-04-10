@@ -45,8 +45,10 @@ const ContractPDFViewer: React.FC<ContractPDFViewerProps> = ({ contract }) => {
         contract,
         `hop-dong-${contract.contractNumber || contract.id || "download"}.pdf`,
       );
-    } catch {
-      setError("Không thể tải PDF.");
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Không thể tải PDF.",
+      );
     } finally {
       setIsGenerating(false);
     }
@@ -88,15 +90,6 @@ const ContractPDFViewer: React.FC<ContractPDFViewerProps> = ({ contract }) => {
             srcDoc={htmlContent}
             title="Contract Preview"
             className="cpv-iframe"
-            style={{
-              width: "100%",
-              maxWidth: "794px",
-              height: "680px",
-              border: "none",
-              backgroundColor: "#f0f0f0",
-              display: "block",
-              margin: "0 auto",
-            }}
           />
         ) : null}
       </div>

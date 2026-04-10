@@ -88,14 +88,28 @@
   background: #0a1220;
   display: flex;
   justify-content: center;
+  overflow-x: auto;
 }
 
 .cpv-iframe {
-  width: 100%;
-  height: 680px;
+  width: 794px;
+  min-width: 794px;
+  flex: 0 0 auto;
+  height: 820px;
   border: none;
   border-radius: 8px;
   background: #f8fafc;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
   display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 860px) {
+  .cpv-preview {
+    justify-content: flex-start;
+  }
+
+  .cpv-iframe {
+    height: 700px;
+  }
 }

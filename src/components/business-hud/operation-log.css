@@ -417,9 +417,7 @@
 }
 
 .oplog__list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  display: block;
   flex: 1;
   max-height: 430px;
   overflow: auto;
@@ -456,6 +454,10 @@
 
 .oplog__item {
   width: 100%;
+  display: block;
+  height: auto;
+  min-height: 168px;
+  flex-shrink: 0;
   position: relative;
   overflow: hidden;
   padding: 1rem;
@@ -467,6 +469,10 @@
   transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
   animation: oplog-rise 0.5s ease both;
   animation-delay: calc(var(--index, 0) * 0.05s);
+}
+
+.oplog__item + .oplog__item {
+  margin-top: 0.8rem;
 }
 
 .oplog__item::before {
