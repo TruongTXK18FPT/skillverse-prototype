@@ -712,8 +712,19 @@ const LearningReportPage: React.FC = () => {
                     onClick={handleGenerateQuickReport}
                     disabled={!canGenerate?.canGenerate}
                   >
-                    <RefreshCw size={16} />
-                    <span>TẠO BÁO CÁO MỚI</span>
+                    {canGenerate?.canGenerate ? (
+                      <>
+                        <RefreshCw size={16} />
+                        <span>TẠO BÁO CÁO MỚI</span>
+                      </>
+                    ) : (
+                      <>
+                        <Clock size={16} />
+                        <span>Đợi {canGenerate?.remainingCooldownMinutes !== undefined
+                          ? learningReportService.getTimeUntilNextReport(canGenerate.remainingCooldownMinutes)
+                          : "..."}</span>
+                      </>
+                    )}
                   </button>
                 </div>
               )}
