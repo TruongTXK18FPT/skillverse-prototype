@@ -1,5 +1,5 @@
 import React, { CSSProperties, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { confirmAction } from "../../context/ConfirmDialogContext";
 import {
   Activity,
@@ -50,6 +50,12 @@ import "../../styles/JobLabWorkspace.css";
 
 type JobType = "ALL" | "REGULAR" | "SHORT_TERM";
 type ViewMode = "dashboard" | "applications" | "workspace" | "contracts";
+type JobLabLocationState = {
+  viewMode?: ViewMode;
+  jobType?: JobType;
+  selectedApplicationId?: string;
+  applicationType?: "REGULAR" | "SHORT_TERM";
+};
 
 type AppItem = {
   id: string;
@@ -237,6 +243,7 @@ const canOpenDispute = (app: AppItem | null) =>
   );
 
 const JobLabPage: React.FC = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<ViewMode>("dashboard");
   const [jobType, setJobType] = useState<JobType>("ALL");
@@ -370,6 +377,32 @@ const JobLabPage: React.FC = () => {
     filteredApplications.find((app) => app.id === selectedId) ||
     applications.find((app) => app.id === selectedId) ||
     null;
+
+  useEffect(() => {
+    const navigationState = location.state as JobLabLocationState | null;
+    if (!navigationState) return;
+
+    if (navigationState.jobType) {
+      setJobType(navigationState.jobType);
+    }
+
+    if (navigationState.viewMode) {
+      setViewMode(navigationState.viewMode);
+    }
+
+    if (
+      navigationState.selectedApplicationId &&
+      navigationState.applicationType
+    ) {
+      const prefix =
+        navigationState.applicationType === "SHORT_TERM"
+          ? "shortterm"
+          : "regular";
+      setSelectedId(
+        `${prefix}-${navigationState.selectedApplicationId}`,
+      );
+    }
+  }, [location.state]);
 
   const stats = useMemo(
     () => ({

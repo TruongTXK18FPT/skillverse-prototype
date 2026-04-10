@@ -16,6 +16,18 @@
   --notif-glow: rgba(0, 212, 255, 0.5);
   --notif-text: #e0f7ff;
   --notif-text-dim: rgba(224, 247, 255, 0.6);
+
+  /* Per-type accent colors */
+  --notif-like: #ff6b9d;
+  --notif-comment: #4facfe;
+  --notif-premium: #f093fb;
+  --notif-wallet: #10b981;
+  --notif-booking: #6366f1;
+  --notif-mentor: #f59e0b;
+  --notif-course: #8b5cf6;
+  --notif-dispute: #ef4444;
+  --notif-job: #6366f1;
+  --notif-contract: #6366f1;
 }
 
 /* Main Container */
@@ -481,23 +493,201 @@
   box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
 }
 
+/* ==================== CONTRACT TYPE COLOR (root variables) ==================== */
+:root {
+  --notif-like: #ff6b9d;
+  --notif-comment: #4facfe;
+  --notif-premium: #f093fb;
+  --notif-wallet: #10b981;
+  --notif-booking: #6366f1;
+  --notif-mentor: #f59e0b;
+  --notif-course: #8b5cf6;
+  --notif-dispute: #ef4444;
+  --notif-job: #6366f1;
+  --notif-contract: #6366f1;
+}
+
+/* ==================== ENHANCED MODAL ==================== */
+.notif-modal-enhanced {
+  overflow: hidden;
+  padding: 0;
+  max-width: 520px;
+}
+
+/* Banner */
+.notif-modal-banner {
+  padding: 28px 24px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}
+
+.notif-modal-banner .modal-icon-large {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+
+.modal-banner-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.modal-type-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+/* Sender info */
+.modal-sender-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  margin-bottom: 16px;
+}
+
+.modal-sender-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--notif-text);
+}
+
+/* Message box */
+.modal-message-box {
+  margin: 0 24px 16px;
+}
+
+.modal-message-raw {
+  border-left: 3px solid var(--notif-border);
+  padding-left: 12px;
+}
+
+/* Meta row */
+.modal-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  margin-bottom: 16px;
+}
+
+.modal-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--notif-text-dim);
+}
+
+/* Contract CTA */
+.modal-contract-cta {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  margin: 0 24px 16px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: var(--notif-text);
+  line-height: 1.5;
+}
+
+.modal-contract-cta svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Action buttons */
+.modal-content-wrapper .modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px 24px;
+  flex-wrap: wrap;
+}
+
+.modal-content-wrapper .modal-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 24px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-btn-secondary {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: var(--notif-text-dim) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(8px);
+}
+
+.modal-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: var(--notif-text) !important;
+}
+
+/* Type badge in list */
+.notif-type-badge {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .notif-stats-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .notif-filters {
     flex-wrap: wrap;
   }
-  
+
   .notif-item {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .notif-icon-wrapper {
     width: 40px;
     height: 40px;
+  }
+
+  .notif-modal-enhanced {
+    max-width: 100%;
+  }
+
+  .notif-modal-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .modal-content-wrapper .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-content-wrapper .modal-btn {
+    width: 100%;
+    justify-content: center;
   }
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   Briefcase,
@@ -158,6 +158,7 @@ const BarChart: React.FC<{
 // MAIN COMPONENT
 // ====================================================================
 const CommandDeck: React.FC = () => {
+  const location = useLocation();
   const [section, setSection] = useState<RecruiterSection>("overview");
   const [showCreateFT, setShowCreateFT] = useState(false);
   const [showCreateST, setShowCreateST] = useState(false);
@@ -206,6 +207,20 @@ const CommandDeck: React.FC = () => {
   useEffect(() => {
     if (section === "candidates") fetchCandidates(radarPage);
   }, [section, radarPage, fetchCandidates]);
+
+  useEffect(() => {
+    const requestedSection = (location.state as { activeSection?: RecruiterSection } | null)
+      ?.activeSection;
+
+    if (
+      requestedSection &&
+      ["overview", "fulltime", "shortterm", "candidates", "seminar"].includes(
+        requestedSection,
+      )
+    ) {
+      setSection(requestedSection);
+    }
+  }, [location.state]);
 
   const mapCandidates = (
     candidates: CandidateSummaryDTO[],

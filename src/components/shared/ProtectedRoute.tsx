@@ -118,7 +118,7 @@ export const ParentRoute: React.FC<{ children: React.ReactNode }> = ({ children 
 };
 
 // Convenience wrapper for STUDENT-only routes
-// Allows USER/LEARNER but excludes elevated and specialized roles.
+// Allows learner-style roles but excludes elevated and specialized roles.
 export const StudentOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
 
@@ -140,7 +140,11 @@ export const StudentOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ chil
   }
 
   const roles = (user.roles || []).map((role) => role.toUpperCase());
-  const hasStudentRole = roles.includes('USER') || roles.includes('LEARNER');
+  const hasStudentRole =
+    roles.includes('USER') ||
+    roles.includes('LEARNER') ||
+    roles.includes('STUDENT') ||
+    roles.includes('CANDIDATE');
   const hasBlockedRole =
     roles.includes('MENTOR') ||
     roles.includes('RECRUITER') ||
