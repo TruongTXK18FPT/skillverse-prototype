@@ -9,6 +9,11 @@ import "./PremiumVaultSection.css";
 type DoorState = "closed" | "opening" | "open";
 
 const DOOR_ANIMATION_MS = 620;
+const STUDENT_PLAN_TYPES_IN_ORDER: PremiumPlan["planType"][] = [
+  "STUDENT_PACK",
+  "PREMIUM_BASIC",
+  "PREMIUM_PLUS",
+];
 
 const PremiumVaultSection = () => {
   const { user, isAuthenticated } = useAuth();
@@ -28,6 +33,8 @@ const PremiumVaultSection = () => {
   const isStudentOrGuestViewer =
     !isAuthenticated || roleNames.includes("USER") || roleNames.includes("LEARNER");
 
+  const canViewVault = isBusinessViewer || isStudentOrGuestViewer;
+
   const openVault = () => {
     if (doorState !== "closed") {
       return;
@@ -40,6 +47,10 @@ const PremiumVaultSection = () => {
   };
 
   const filteredPremiumPlans = useMemo(() => {
+    if (!canViewVault) {
+      return [];
+    }
+
     const activePlans = premiumPlans.filter(
       (plan) => plan.isActive && plan.planType !== "FREE_TIER",
     );
@@ -54,13 +65,13 @@ const PremiumVaultSection = () => {
     }
 
     if (isStudentOrGuestViewer) {
-      return activePlans
-        .filter((plan) => plan.planType === "STUDENT_PACK")
-        .slice(0, 3);
+      return STUDENT_PLAN_TYPES_IN_ORDER
+        .map((planType) => activePlans.find((plan) => plan.planType === planType))
+        .filter((plan): plan is PremiumPlan => Boolean(plan));
     }
 
     return [];
-  }, [premiumPlans, isBusinessViewer, isStudentOrGuestViewer]);
+  }, [premiumPlans, isBusinessViewer, isStudentOrGuestViewer, canViewVault]);
 
   const parsePlanFeatures = (features: string): string[] => {
     if (!features) return [];
@@ -82,20 +93,40 @@ const PremiumVaultSection = () => {
   };
 
   useEffect(() => {
+    if (!canViewVault) {
+      setPremiumPlans([]);
+      setLoadingPremiumPlans(false);
+      return;
+    }
+
+    let isCancelled = false;
+
     const fetchPremiumPlans = async () => {
       try {
         setLoadingPremiumPlans(true);
         const plans = await premiumService.getPremiumPlans(true);
-        setPremiumPlans(plans);
+        if (!isCancelled) {
+          setPremiumPlans(plans);
+        }
       } catch (error) {
         console.error("Failed to fetch premium plans for premium vault", error);
       } finally {
-        setLoadingPremiumPlans(false);
+        if (!isCancelled) {
+          setLoadingPremiumPlans(false);
+        }
       }
     };
 
     fetchPremiumPlans();
-  }, []);
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [canViewVault]);
+
+  if (!canViewVault) {
+    return null;
+  }
 
   return (
     <section className={`premium-vault-section premium-vault--${doorState}`}>
