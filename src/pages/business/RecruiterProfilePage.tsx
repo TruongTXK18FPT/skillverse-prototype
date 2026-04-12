@@ -1,13 +1,30 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { Building2, Globe, MapPin, FileText, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import {
+  AlertTriangle,
+  Building2,
+  CalendarClock,
+  CheckCircle2,
+  Clock3,
+  FileText,
+  Globe,
+  ImagePlus,
+  MapPin,
+  PencilLine,
+  RefreshCw,
+  Save,
+  ShieldCheck,
+  X,
+  type LucideIcon,
+} from 'lucide-react';
+import Cropper, { type Area } from 'react-easy-crop';
 import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
 import userService from '../../services/userService';
 import businessService from '../../services/businessService';
+import { validateImage } from '../../services/fileUploadService';
+import getCroppedImg from '../../utils/cropImage';
 import { UserProfileResponse, BusinessProfileResponse } from '../../data/userDTOs';
-import CorporateHeader from '../../components/profile-hud/business/CorporateHeader';
-import CorpDataGrid from '../../components/profile-hud/business/CorpDataGrid';
 import '../../components/profile-hud/business/corp-styles.css';
 
 interface RecruiterProfileData extends UserProfileResponse {
@@ -15,6 +32,7 @@ interface RecruiterProfileData extends UserProfileResponse {
   companyWebsite?: string;
   companyAddress?: string;
   businessAddress?: string;
+  taxId?: string;
   taxCodeOrBusinessRegistrationNumber?: string;
   companyDocumentsUrl?: string;
   documentFileUrls?: string[];
@@ -22,41 +40,111 @@ interface RecruiterProfileData extends UserProfileResponse {
   applicationDate?: string;
   approvalDate?: string;
   rejectionReason?: string;
+  avatarUrl?: string;
 }
 
+type StatusTone = 'approved' | 'pending' | 'review' | 'rejected';
+
+interface StatusMeta {
+  label: string;
+  description: string;
+  tone: StatusTone;
+  icon: LucideIcon;
+}
+
+const STATUS_META_MAP: Record<string, StatusMeta> = {
+  APPROVED: {
+    label: 'Đã duyệt',
+    description: 'Hồ sơ doanh nghiệp đã xác minh thành công.',
+    tone: 'approved',
+    icon: CheckCircle2,
+  },
+  PENDING: {
+    label: 'Đang chờ duyệt',
+    description: 'Hồ sơ đã gửi và đang chờ bộ phận kiểm duyệt.',
+    tone: 'pending',
+    icon: Clock3,
+  },
+  UNDER_REVIEW: {
+    label: 'Đang thẩm định',
+    description: 'Thông tin đang được đội vận hành rà soát.',
+    tone: 'review',
+    icon: ShieldCheck,
+  },
+  REJECTED: {
+    label: 'Bị từ chối',
+    description: 'Cần cập nhật lại hồ sơ theo yêu cầu kiểm duyệt.',
+    tone: 'rejected',
+    icon: AlertTriangle,
+  },
+};
+
+const normalizeWebsiteUrl = (rawUrl?: string) => {
+  if (!rawUrl) return '';
+  if (/^https?:\/\//i.test(rawUrl)) return rawUrl;
+  return `https://${rawUrl}`;
+};
+
+const formatDateVN = (value?: string) => {
+  if (!value) return 'Chưa có dữ liệu';
+  const parsedDate = new Date(value);
+  if (Number.isNaN(parsedDate.getTime())) return 'Chưa có dữ liệu';
+
+  return parsedDate.toLocaleDateString('vi-VN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+};
+
+const buildEditData = (
+  profileData: RecruiterProfileData,
+): Partial<BusinessProfileResponse> => ({
+  companyName: profileData.companyName || '',
+  companyWebsite: profileData.companyWebsite || '',
+  businessAddress: profileData.companyAddress || profileData.businessAddress || '',
+  taxId:
+    profileData.taxId ||
+    profileData.taxCodeOrBusinessRegistrationNumber ||
+    '',
+  documentFileUrls: profileData.companyDocumentsUrl
+    ? [profileData.companyDocumentsUrl]
+    : profileData.documentFileUrls || [],
+});
+
 const RecruiterProfilePage = () => {
-  const { user, isAuthenticated, loading: authLoading } = useAuth();
-  const { theme } = useTheme();
+  const { user, isAuthenticated, loading: authLoading, updateUser } = useAuth();
   const navigate = useNavigate();
-  
+
   const [profile, setProfile] = useState<RecruiterProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [logoEditorOpen, setLogoEditorOpen] = useState(false);
+  const [logoTempUrl, setLogoTempUrl] = useState<string | null>(null);
+  const [logoCrop, setLogoCrop] = useState({ x: 0, y: 0 });
+  const [logoZoom, setLogoZoom] = useState(1);
+  const [logoCroppedAreaPixels, setLogoCroppedAreaPixels] =
+    useState<Area | null>(null);
+  const [logoUploading, setLogoUploading] = useState(false);
 
   const [editData, setEditData] = useState<Partial<BusinessProfileResponse>>({
     companyName: '',
     companyWebsite: '',
     businessAddress: '',
     taxId: '',
-    documentFileUrls: []
+    documentFileUrls: [],
   });
 
   const loadProfile = useCallback(async () => {
     try {
       setLoading(true);
-      const profileData = await userService.getMyProfile() as RecruiterProfileData;
+      const profileData = (await userService.getMyProfile()) as RecruiterProfileData;
       setProfile(profileData);
-      
-      setEditData({
-        companyName: profileData.companyName || '',
-        companyWebsite: profileData.companyWebsite || '',
-        businessAddress: profileData.companyAddress || profileData.businessAddress || '',
-        taxId: (profileData as any).taxId || profileData.taxCodeOrBusinessRegistrationNumber || '',
-        documentFileUrls: profileData.companyDocumentsUrl ? [profileData.companyDocumentsUrl] : (profileData.documentFileUrls || [])
-      });
+      setEditData(buildEditData(profileData));
+      setError('');
     } catch (error) {
       console.error('Error loading recruiter profile:', error);
       setError('Không thể truy cập hồ sơ doanh nghiệp.');
@@ -97,142 +185,670 @@ const RecruiterProfilePage = () => {
     }
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    switch (field) {
-      case 'companyName':
-        setEditData(prev => ({ ...prev, companyName: value }));
-        break;
-      case 'companyWebsite':
-        setEditData(prev => ({ ...prev, companyWebsite: value }));
-        break;
-      case 'companyAddress':
-        setEditData(prev => ({ ...prev, businessAddress: value }));
-        break;
-      case 'taxCodeOrBusinessRegistrationNumber':
-        setEditData(prev => ({ ...prev, taxId: value }));
-        break;
-      case 'companyDocumentsUrl':
-        setEditData(prev => ({ ...prev, documentFileUrls: value ? [value] : [] }));
-        break;
-      default:
-        break;
+  const handleCancelEdit = () => {
+    if (!profile) {
+      setEditing(false);
+      return;
+    }
+
+    setEditData(buildEditData(profile));
+    setEditing(false);
+  };
+
+  const handleInputChange = (
+    field: 'companyName' | 'companyWebsite' | 'businessAddress' | 'taxId' | 'documentFileUrl',
+    value: string,
+  ) => {
+    if (field === 'documentFileUrl') {
+      setEditData((prev) => ({
+        ...prev,
+        documentFileUrls: value ? [value] : [],
+      }));
+      return;
+    }
+
+    setEditData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const currentStatusMeta = useMemo(() => {
+    const rawStatus = profile?.applicationStatus || 'PENDING';
+    return STATUS_META_MAP[rawStatus] || STATUS_META_MAP.PENDING;
+  }, [profile?.applicationStatus]);
+
+  const documentLinks = useMemo(() => {
+    if (!profile) return [];
+
+    const sources = [
+      profile.companyDocumentsUrl,
+      ...(profile.documentFileUrls || []),
+    ]
+      .map((item) => (item || '').trim())
+      .filter((item) => !!item);
+
+    return Array.from(new Set(sources));
+  }, [profile]);
+
+  const profileCompletion = useMemo(() => {
+    if (!profile) return 0;
+
+    const checkpoints = [
+      profile.companyName,
+      profile.companyWebsite,
+      profile.companyAddress || profile.businessAddress,
+      profile.taxId || profile.taxCodeOrBusinessRegistrationNumber,
+      documentLinks.length > 0 ? 'has-document' : '',
+      profile.applicationStatus,
+    ];
+
+    const completed = checkpoints.filter(Boolean).length;
+    return Math.round((completed / checkpoints.length) * 100);
+  }, [profile, documentLinks.length]);
+
+  const logoUrl =
+    profile?.avatarMediaUrl || profile?.avatarUrl || user?.avatarMediaUrl || user?.avatarUrl || '';
+
+  const resetLogoEditor = useCallback(() => {
+    setLogoEditorOpen(false);
+    setLogoCrop({ x: 0, y: 0 });
+    setLogoZoom(1);
+    setLogoCroppedAreaPixels(null);
+
+    if (logoTempUrl) {
+      URL.revokeObjectURL(logoTempUrl);
+    }
+    setLogoTempUrl(null);
+  }, [logoTempUrl]);
+
+  const handleLogoCropComplete = useCallback(
+    (_cropArea: Area, croppedAreaPixels: Area) => {
+      setLogoCroppedAreaPixels(croppedAreaPixels);
+    },
+    [],
+  );
+
+  const handleLogoPick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    event.target.value = '';
+
+    if (!selectedFile) return;
+
+    const validationResult = validateImage(selectedFile);
+    if (!validationResult.valid) {
+      setError(validationResult.error || 'Logo doanh nghiệp không hợp lệ.');
+      return;
+    }
+
+    if (logoTempUrl) {
+      URL.revokeObjectURL(logoTempUrl);
+    }
+
+    setError('');
+    setSuccess('');
+    setLogoTempUrl(URL.createObjectURL(selectedFile));
+    setLogoCrop({ x: 0, y: 0 });
+    setLogoZoom(1);
+    setLogoCroppedAreaPixels(null);
+    setLogoEditorOpen(true);
+  };
+
+  const handleLogoCropCancel = () => {
+    if (logoUploading) {
+      return;
+    }
+    resetLogoEditor();
+  };
+
+  const handleLogoCropConfirm = async () => {
+    if (!user?.id || !logoTempUrl || !logoCroppedAreaPixels) {
+      setError('Không thể xử lý logo doanh nghiệp. Vui lòng thử lại.');
+      return;
+    }
+
+    setLogoUploading(true);
+    try {
+      const croppedLogo = await getCroppedImg(logoTempUrl, logoCroppedAreaPixels);
+
+      if (!croppedLogo) {
+        throw new Error('Không thể cắt logo doanh nghiệp.');
+      }
+
+      //TODO: Future business logo api, chờ backend làm api, fe làm sườn trước
+      const uploadResult = await userService.uploadUserAvatar(croppedLogo, user.id);
+
+      setProfile((prev) =>
+        prev
+          ? {
+              ...prev,
+              avatarMediaUrl: uploadResult.avatarUrl,
+            }
+          : prev,
+      );
+      updateUser({
+        avatarMediaUrl: uploadResult.avatarUrl,
+        avatarUrl: uploadResult.avatarUrl,
+      });
+
+      resetLogoEditor();
+      setSuccess('Đã cập nhật logo doanh nghiệp thành công.');
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (error) {
+      console.error('Failed to upload business logo:', error);
+      setError('Cập nhật logo doanh nghiệp thất bại. Vui lòng thử lại.');
+    } finally {
+      setLogoUploading(false);
     }
   };
 
-  const getStatusColor = (status?: string) => {
-    switch (status) {
-      case 'APPROVED': return '#10b981';
-      case 'REJECTED': return '#ef4444';
-      default: return '#f59e0b';
-    }
-  };
+  useEffect(() => {
+    return () => {
+      if (logoTempUrl) {
+        URL.revokeObjectURL(logoTempUrl);
+      }
+    };
+  }, [logoTempUrl]);
 
-  const getStatusIcon = (status?: string) => {
-    switch (status) {
-      case 'APPROVED': return <CheckCircle size={20} color="#10b981" />;
-      case 'REJECTED': return <AlertTriangle size={20} color="#ef4444" />;
-      default: return <Clock size={20} color="#f59e0b" />;
-    }
-  };
+  if (loading) {
+    return (
+      <div className="corp-container">
+        <div className="corp-loading-state">Đang khởi tạo hồ sơ doanh nghiệp...</div>
+      </div>
+    );
+  }
 
-  if (loading) return <div className="corp-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Đang khởi tạo hồ sơ doanh nghiệp...</div>;
-  if (!profile) return <div className="corp-container">Không thể truy cập hồ sơ doanh nghiệp</div>;
+  if (!profile) {
+    return (
+      <div className="corp-container">
+        <div className="corp-empty-state">Không thể truy cập hồ sơ doanh nghiệp.</div>
+      </div>
+    );
+  }
+
+  const StatusIcon = currentStatusMeta.icon;
+  const primaryDocumentUrl = editData.documentFileUrls?.[0] || '';
+
+  const profileAddress = profile.companyAddress || profile.businessAddress;
+
+  const identityRows = [
+    {
+      label: 'Tên doanh nghiệp',
+      value: profile.companyName || 'Chưa cập nhật',
+    },
+    {
+      label: 'Mã số thuế / ĐKKD',
+      value:
+        profile.taxId ||
+        profile.taxCodeOrBusinessRegistrationNumber ||
+        'Chưa cập nhật',
+    },
+    {
+      label: 'Website',
+      value: profile.companyWebsite || 'Chưa cập nhật',
+      asLink: !!profile.companyWebsite,
+    },
+  ];
+
+  const heroCompanyName =
+    profile.companyName || profile.fullName || 'Doanh nghiệp chưa cập nhật tên';
+
+  const companyIdDisplay = `BIZ-${String(profile.id || '').padStart(6, '0')}`;
+
+  const canOpenWebsite = normalizeWebsiteUrl(profile.companyWebsite);
+
+  const applicationSubmittedDate = profile.applicationDate || profile.createdAt;
+  const reviewedDate = profile.approvalDate;
+
+  const hasRejectionReason =
+    profile.applicationStatus === 'REJECTED' && !!profile.rejectionReason;
 
   return (
     <div className="corp-container">
-      <CorporateHeader 
-        profile={profile} 
-        onEdit={() => setEditing(true)} 
-      />
-
-      {success && <div style={{ border: '1px solid #10b981', color: '#10b981', padding: '1rem', margin: '1rem 0', background: 'rgba(16, 185, 129, 0.1)' }}>{success}</div>}
-      {error && <div style={{ border: '1px solid #ef4444', color: '#ef4444', padding: '1rem', margin: '1rem 0', background: 'rgba(239, 68, 68, 0.1)' }}>{error}</div>}
-
-      {editing ? (
-        <CorpDataGrid 
-          data={{
-            companyName: editData.companyName || '',
-            companyWebsite: editData.companyWebsite || '',
-            companyAddress: editData.businessAddress || '',
-            taxCodeOrBusinessRegistrationNumber: editData.taxId || '',
-            companyDocumentsUrl: editData.documentFileUrls && editData.documentFileUrls.length > 0 ? editData.documentFileUrls[0] : ''
-          }}
-          onChange={handleInputChange}
-          onSave={handleSave}
-          loading={saving}
-        />
-      ) : (
-        <div className="corp-grid">
-          {/* Status Panel */}
-          <div className="corp-panel" style={{ borderColor: getStatusColor(profile.applicationStatus) }}>
-            <div className="corp-panel-header" style={{ color: getStatusColor(profile.applicationStatus) }}>
-              Trạng thái hồ sơ
+      <div className="corp-shell">
+        <section className="corp-hero-card">
+          <div className="corp-logo-block">
+            <div className="corp-logo-frame">
+              {logoUrl ? (
+                <img
+                  src={logoUrl}
+                  alt="Logo doanh nghiệp"
+                  className="corp-logo-image"
+                />
+              ) : (
+                <Building2 size={54} className="corp-logo-placeholder" />
+              )}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 0' }}>
-              {getStatusIcon(profile.applicationStatus)}
-              <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: getStatusColor(profile.applicationStatus) }}>
-                {profile.applicationStatus || 'PENDING'}
+            <p className="corp-logo-caption">Logo hồ sơ doanh nghiệp</p>
+          </div>
+
+          <div className="corp-hero-main">
+            <h1 className="corp-hero-title">{heroCompanyName}</h1>
+            <p className="corp-hero-subtitle">
+              Đồng bộ phong cách quản lý doanh nghiệp, tối ưu để cập nhật nhanh thông tin pháp lý.
+            </p>
+
+            <div className="corp-chip-row">
+              <span className="corp-meta-chip">ID: {companyIdDisplay}</span>
+              <span className="corp-meta-chip">
+                Thiết lập từ: {formatDateVN(profile.createdAt)}
+              </span>
+              <span className={`corp-status-chip corp-status-chip--${currentStatusMeta.tone}`}>
+                <StatusIcon size={15} />
+                {currentStatusMeta.label}
               </span>
             </div>
-            {profile.applicationStatus === 'REJECTED' && profile.rejectionReason && (
-              <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(239, 68, 68, 0.1)', borderLeft: '3px solid #ef4444' }}>
-                <div className="corp-label" style={{ color: '#ef4444' }}>Lý do từ chối</div>
-                <p>{profile.rejectionReason}</p>
-              </div>
+          </div>
+
+          <div className="corp-hero-actions">
+            <label className="corp-btn corp-btn--ghost corp-btn--file">
+              <ImagePlus size={16} />
+              Đổi logo
+              <input type="file" accept="image/*" onChange={handleLogoPick} />
+            </label>
+
+            <button
+              type="button"
+              className="corp-btn corp-btn--primary"
+              onClick={() => setEditing((prev) => !prev)}
+              disabled={saving}
+            >
+              {editing ? (
+                <>
+                  <X size={16} />
+                  Đóng chỉnh sửa
+                </>
+              ) : (
+                <>
+                  <PencilLine size={16} />
+                  Chỉnh sửa hồ sơ
+                </>
+              )}
+            </button>
+
+            <button
+              type="button"
+              className="corp-btn corp-btn--secondary"
+              onClick={loadProfile}
+              disabled={saving || logoUploading}
+            >
+              <RefreshCw size={16} />
+              Làm mới dữ liệu
+            </button>
+          </div>
+        </section>
+
+        {success && (
+          <div className="corp-alert corp-alert--success">
+            <CheckCircle2 size={18} />
+            <span>{success}</span>
+          </div>
+        )}
+
+        {error && (
+          <div className="corp-alert corp-alert--error">
+            <AlertTriangle size={18} />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <div className="corp-layout">
+          <div className="corp-main-column">
+            {editing ? (
+              <section className="corp-card corp-card--form">
+                <header className="corp-card-header">
+                  <div>
+                    <h2>Chỉnh sửa thông tin doanh nghiệp</h2>
+                    <p>Cập nhật hồ sơ để bộ phận kiểm duyệt xử lý nhanh hơn.</p>
+                  </div>
+                </header>
+
+                <div className="corp-form-grid">
+                  <div className="corp-form-group">
+                    <label className="corp-form-label" htmlFor="corp-company-name">
+                      Tên doanh nghiệp
+                    </label>
+                    <input
+                      id="corp-company-name"
+                      type="text"
+                      className="corp-form-input"
+                      value={editData.companyName || ''}
+                      onChange={(event) =>
+                        handleInputChange('companyName', event.target.value)
+                      }
+                      placeholder="Nhập tên pháp lý của doanh nghiệp"
+                    />
+                  </div>
+
+                  <div className="corp-form-group">
+                    <label className="corp-form-label" htmlFor="corp-tax-id">
+                      Mã số thuế / Số đăng ký kinh doanh
+                    </label>
+                    <input
+                      id="corp-tax-id"
+                      type="text"
+                      className="corp-form-input"
+                      value={editData.taxId || ''}
+                      onChange={(event) =>
+                        handleInputChange('taxId', event.target.value)
+                      }
+                      placeholder="Ví dụ: 0312345678"
+                    />
+                  </div>
+
+                  <div className="corp-form-group">
+                    <label className="corp-form-label" htmlFor="corp-website">
+                      Website doanh nghiệp
+                    </label>
+                    <input
+                      id="corp-website"
+                      type="text"
+                      className="corp-form-input"
+                      value={editData.companyWebsite || ''}
+                      onChange={(event) =>
+                        handleInputChange('companyWebsite', event.target.value)
+                      }
+                      placeholder="https://ten-cong-ty.vn"
+                    />
+                  </div>
+
+                  <div className="corp-form-group">
+                    <label className="corp-form-label" htmlFor="corp-doc-link">
+                      Liên kết tài liệu pháp lý
+                    </label>
+                    <input
+                      id="corp-doc-link"
+                      type="text"
+                      className="corp-form-input"
+                      value={primaryDocumentUrl}
+                      onChange={(event) =>
+                        handleInputChange('documentFileUrl', event.target.value)
+                      }
+                      placeholder="https://..."
+                    />
+                  </div>
+
+                  <div className="corp-form-group corp-form-group--full">
+                    <label className="corp-form-label" htmlFor="corp-address">
+                      Địa chỉ văn phòng hoạt động
+                    </label>
+                    <textarea
+                      id="corp-address"
+                      className="corp-form-input corp-form-textarea"
+                      value={editData.businessAddress || ''}
+                      onChange={(event) =>
+                        handleInputChange('businessAddress', event.target.value)
+                      }
+                      placeholder="Nhập địa chỉ đang sử dụng để vận hành doanh nghiệp"
+                    />
+                  </div>
+                </div>
+
+                <div className="corp-form-actions">
+                  <button
+                    type="button"
+                    className="corp-btn corp-btn--secondary"
+                    onClick={handleCancelEdit}
+                    disabled={saving}
+                  >
+                    <X size={16} />
+                    Hủy chỉnh sửa
+                  </button>
+
+                  <button
+                    type="button"
+                    className="corp-btn corp-btn--primary"
+                    onClick={handleSave}
+                    disabled={saving}
+                  >
+                    <Save size={16} />
+                    {saving ? 'Đang lưu...' : 'Lưu thông tin'}
+                  </button>
+                </div>
+              </section>
+            ) : (
+              <>
+                <section className="corp-card">
+                  <header className="corp-card-header">
+                    <div>
+                      <h2>Thông tin doanh nghiệp</h2>
+                      <p>Dữ liệu hiển thị cho hệ thống tuyển dụng và kiểm duyệt.</p>
+                    </div>
+                  </header>
+
+                  <div className="corp-kv-grid">
+                    {identityRows.map((row) => (
+                      <article className="corp-kv-item" key={row.label}>
+                        <span className="corp-kv-label">{row.label}</span>
+                        {row.asLink && canOpenWebsite ? (
+                          <a
+                            className="corp-link"
+                            href={canOpenWebsite}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Globe size={14} />
+                            {row.value}
+                          </a>
+                        ) : (
+                          <span className="corp-kv-value">{row.value}</span>
+                        )}
+                      </article>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="corp-card">
+                  <header className="corp-card-header">
+                    <div>
+                      <h2>Văn phòng hoạt động</h2>
+                      <p>Địa chỉ doanh nghiệp đang dùng để xử lý vận hành chính.</p>
+                    </div>
+                  </header>
+
+                  <div className="corp-location-box">
+                    <MapPin size={18} />
+                    <span>{profileAddress || 'Chưa cập nhật địa chỉ văn phòng.'}</span>
+                  </div>
+                </section>
+
+                <section className="corp-card">
+                  <header className="corp-card-header">
+                    <div>
+                      <h2>Tài liệu pháp lý</h2>
+                      <p>Liên kết giấy phép/đăng ký dùng cho xác minh doanh nghiệp.</p>
+                    </div>
+                  </header>
+
+                  {documentLinks.length > 0 ? (
+                    <div className="corp-doc-list">
+                      {documentLinks.map((link, index) => (
+                        <a
+                          key={`${link}-${index}`}
+                          href={link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="corp-doc-item"
+                        >
+                          <FileText size={18} />
+                          <span>Tài liệu pháp lý #{index + 1}</span>
+                        </a>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="corp-muted-note">
+                      Chưa có tài liệu pháp lý nào được liên kết.
+                    </p>
+                  )}
+                </section>
+              </>
             )}
           </div>
 
-          {/* Entity Details */}
-            <div className="corp-panel">
-              <div className="corp-panel-header">Thông tin doanh nghiệp</div>
-              <div className="corp-field">
-              <div className="corp-label">Tên doanh nghiệp</div>
-                <div style={{ fontSize: '1.1rem', color: '#f8fafc' }}>{profile.companyName || 'N/A'}</div>
-              </div>
-              <div className="corp-field">
-              <div className="corp-label">Mã số thuế / Số đăng ký</div>
-                <div style={{ fontFamily: 'monospace', color: '#94a3b8' }}>{profile.taxCodeOrBusinessRegistrationNumber || 'N/A'}</div>
-              </div>
-              <div className="corp-field">
-              <div className="corp-label">Website</div>
-                {profile.companyWebsite ? (
-                  <a href={profile.companyWebsite} target="_blank" rel="noreferrer" style={{ color: '#fbbf24', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Globe size={14} /> {profile.companyWebsite}
-                  </a>
-                ) : (
-                  <span style={{ color: '#64748b' }}>N/A</span>
-                )}
-              </div>
-            </div>
+          <aside className="corp-side-column">
+            <section className="corp-card corp-card--highlight">
+              <header className="corp-card-header">
+                <div>
+                  <h2>Trạng thái kiểm duyệt</h2>
+                  <p>{currentStatusMeta.description}</p>
+                </div>
+              </header>
 
-          {/* Location */}
-            <div className="corp-panel">
-              <div className="corp-panel-header">Văn phòng hoạt động</div>
-              <div className="corp-field">
-              <div className="corp-label">Địa chỉ</div>
-                <div style={{ display: 'flex', gap: '0.5rem', color: '#cbd5e1' }}>
-                  <MapPin size={16} style={{ marginTop: '3px', flexShrink: 0 }} />
-                  {profile.companyAddress || 'N/A'}
+              <div className={`corp-status-chip corp-status-chip--${currentStatusMeta.tone}`}>
+                <StatusIcon size={16} />
+                {currentStatusMeta.label}
+              </div>
+
+              {hasRejectionReason && (
+                <div className="corp-reason-box">
+                  <AlertTriangle size={16} />
+                  <span>{profile.rejectionReason}</span>
+                </div>
+              )}
+            </section>
+
+            <section className="corp-card">
+              <header className="corp-card-header">
+                <div>
+                  <h2>Tiến độ hồ sơ</h2>
+                  <p>Tổng hợp mức độ hoàn chỉnh các mục cần thiết.</p>
+                </div>
+              </header>
+
+              <div className="corp-progress-row">
+                <span>Hoàn chỉnh hồ sơ</span>
+                <strong>{profileCompletion}%</strong>
+              </div>
+              <div className="corp-progress-track">
+                <div className="corp-progress-fill" style={{ width: `${profileCompletion}%` }} />
+              </div>
+            </section>
+
+            <section className="corp-card">
+              <header className="corp-card-header">
+                <div>
+                  <h2>Mốc thời gian</h2>
+                  <p>Theo dõi quá trình gửi và duyệt hồ sơ doanh nghiệp.</p>
+                </div>
+              </header>
+
+              <div className="corp-timeline">
+                <div className="corp-timeline-item">
+                  <CalendarClock size={15} />
+                  <div>
+                    <span className="corp-timeline-label">Ngày gửi hồ sơ</span>
+                    <strong>{formatDateVN(applicationSubmittedDate)}</strong>
+                  </div>
+                </div>
+
+                <div className="corp-timeline-item">
+                  <CalendarClock size={15} />
+                  <div>
+                    <span className="corp-timeline-label">Lần duyệt gần nhất</span>
+                    <strong>{formatDateVN(reviewedDate)}</strong>
+                  </div>
                 </div>
               </div>
-            </div>
+            </section>
+          </aside>
+        </div>
+      </div>
 
-          {/* Documents */}
-            <div className="corp-panel">
-              <div className="corp-panel-header">Tài liệu pháp lý</div>
-              <div className="corp-field">
-              <div className="corp-label">Liên kết tài liệu</div>
-                {profile.companyDocumentsUrl ? (
-                  <a href={profile.companyDocumentsUrl} target="_blank" rel="noreferrer" style={{ color: '#fbbf24', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <FileText size={14} /> Xem tài liệu
-                  </a>
-                ) : (
-                  <span style={{ color: '#64748b' }}>Chưa tải tài liệu</span>
-                )}
+      {logoEditorOpen &&
+        logoTempUrl &&
+        ReactDOM.createPortal(
+          <div className="corp-logo-crop-overlay" onClick={handleLogoCropCancel}>
+            <div
+              className="corp-logo-crop-modal"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="corp-logo-crop-header">
+                <h3>Căn chỉnh logo doanh nghiệp</h3>
+                <button
+                  type="button"
+                  className="corp-logo-crop-close"
+                  onClick={handleLogoCropCancel}
+                  disabled={logoUploading}
+                  aria-label="Đóng"
+                >
+                  ×
+                </button>
+              </div>
+
+              <p className="corp-logo-crop-hint">
+                Kéo ảnh để căn vị trí logo, sau đó điều chỉnh trái/phải và mức zoom.
+              </p>
+
+              <div className="corp-logo-crop-stage">
+                <Cropper
+                  image={logoTempUrl}
+                  crop={logoCrop}
+                  zoom={logoZoom}
+                  aspect={1}
+                  cropShape="round"
+                  showGrid={false}
+                  objectFit="horizontal-cover"
+                  onCropChange={setLogoCrop}
+                  onCropComplete={handleLogoCropComplete}
+                  onZoomChange={setLogoZoom}
+                />
+              </div>
+
+              <div className="corp-logo-crop-control">
+                <label htmlFor="corp-logo-horizontal">Vị trí trái / phải</label>
+                <input
+                  id="corp-logo-horizontal"
+                  type="range"
+                  min={-200}
+                  max={200}
+                  step={1}
+                  value={logoCrop.x}
+                  disabled={logoUploading}
+                  onChange={(event) =>
+                    setLogoCrop((prev) => ({
+                      ...prev,
+                      x: Number(event.target.value),
+                    }))
+                  }
+                />
+              </div>
+
+              <div className="corp-logo-crop-control">
+                <label htmlFor="corp-logo-zoom">Zoom</label>
+                <input
+                  id="corp-logo-zoom"
+                  type="range"
+                  min={1}
+                  max={3}
+                  step={0.05}
+                  value={logoZoom}
+                  disabled={logoUploading}
+                  onChange={(event) => setLogoZoom(Number(event.target.value))}
+                />
+              </div>
+
+              <div className="corp-logo-crop-actions">
+                <button
+                  type="button"
+                  className="corp-btn corp-btn--secondary"
+                  onClick={handleLogoCropCancel}
+                  disabled={logoUploading}
+                >
+                  Hủy
+                </button>
+                <button
+                  type="button"
+                  className="corp-btn corp-btn--primary"
+                  onClick={handleLogoCropConfirm}
+                  disabled={logoUploading}
+                >
+                  {logoUploading ? 'Đang cập nhật...' : 'Lưu logo'}
+                </button>
               </div>
             </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 };

@@ -21,6 +21,7 @@ import MeowlGuide from '../../components/meowl/MeowlGuide';
 import CareerForm from '../../components/journey/CareerForm';
 import SkillForm from '../../components/journey/SkillForm';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
+import TicTacToeGame from '../../components/game/tic-tac-toe/TicTacToeGame';
 import journeyService from '../../services/journeyService';
 import { getExpertDomainMeta } from '../../utils/expertFieldPresentation';
 import './../../styles/GSJJourney.css';
@@ -61,10 +62,12 @@ const mergeUniqueSkills = (a: string[], b: string[]) => {
 
 
 const TOTAL_STEPS = 3;
+const JOURNEY_CREATE_GAME_DELAY_MS = 8000;
 
 const JourneyCreatePage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showLoadingGame, setShowLoadingGame] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [journeyType, setJourneyType] = useState<typeof JourneyType[keyof typeof JourneyType] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -74,6 +77,19 @@ const JourneyCreatePage: React.FC = () => {
     return () => {
       document.body.style.overflow = '';
     };
+  }, [loading]);
+
+  useEffect(() => {
+    if (!loading) {
+      setShowLoadingGame(false);
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowLoadingGame(true);
+    }, JOURNEY_CREATE_GAME_DELAY_MS);
+
+    return () => window.clearTimeout(timeoutId);
   }, [loading]);
 
   const [formData, setFormData] = useState<StartJourneyRequest>({
@@ -449,27 +465,50 @@ const JourneyCreatePage: React.FC = () => {
   if (loading) {
     return (
       <div className="gsj-page gsj-create-page">
-        <div className="gsj-hud-loader">
-          <div className="gsj-hud-loader__container">
-            <div className="gsj-hud-loader__corners">
-              <div className="gsj-hud-loader__corner gsj-hud-loader__corner--tl"></div>
-              <div className="gsj-hud-loader__corner gsj-hud-loader__corner--tr"></div>
-              <div className="gsj-hud-loader__corner gsj-hud-loader__corner--bl"></div>
-              <div className="gsj-hud-loader__corner gsj-hud-loader__corner--br"></div>
-            </div>
-            <div className="gsj-hud-loader__content">
-              <MeowlKuruLoader
-                text="MEOWL ĐANG CHUẨN BỊ CHO BẠN..."
-                layout="vertical"
-                className="gsj-hud-loader__meowl"
-              />
-              <div className="gsj-hud-loader__status">
-                <div className="gsj-hud-loader__text-main">AI ĐANG TẠO BÀI TEST PHÙ HỢP</div>
-                <div className="gsj-hud-loader__scan-line"></div>
-                <div className="gsj-hud-loader__text-sub">Vui lòng chờ trong giây lát...</div>
+        <div className={`gsj-hud-loader ${showLoadingGame ? 'gsj-hud-loader--split' : ''}`}>
+          <div className="gsj-hud-loader__shell">
+            <div className="gsj-hud-loader__container">
+              <div className="gsj-hud-loader__corners">
+                <div className="gsj-hud-loader__corner gsj-hud-loader__corner--tl"></div>
+                <div className="gsj-hud-loader__corner gsj-hud-loader__corner--tr"></div>
+                <div className="gsj-hud-loader__corner gsj-hud-loader__corner--bl"></div>
+                <div className="gsj-hud-loader__corner gsj-hud-loader__corner--br"></div>
+              </div>
+              <div className="gsj-hud-loader__content">
+                <MeowlKuruLoader
+                  text="MEOWL ĐANG CHUẨN BỊ CHO BẠN..."
+                  layout="vertical"
+                  className="gsj-hud-loader__meowl"
+                />
+                <div className="gsj-hud-loader__status">
+                  <div className="gsj-hud-loader__text-main">AI ĐANG TẠO BÀI TEST PHÙ HỢP</div>
+                  <div className="gsj-hud-loader__scan-line"></div>
+                  <div className="gsj-hud-loader__text-sub">Vui lòng chờ trong giây lát...</div>
+                </div>
+
+                {showLoadingGame && (
+                  <p className="gsj-hud-loader__game-helper">
+                    Hệ thống đang xử lý lâu hơn dự kiến. Chơi một ván caro với Meowl trong lúc chờ nhé.
+                  </p>
+                )}
               </div>
             </div>
+
+            <aside className="gsj-hud-loader__game-pane" aria-hidden={!showLoadingGame}>
+              {showLoadingGame && (
+                <>
+                  <header className="gsj-hud-loader__game-header">
+                    <span className="gsj-hud-loader__game-eyebrow">MINI GAME KHI CHỜ</span>
+                    <h3>MEOWL TIC-TAC-TOE</h3>
+                  </header>
+                  <div className="gsj-hud-loader__game-body">
+                    <TicTacToeGame mode="embedded" />
+                  </div>
+                </>
+              )}
+            </aside>
           </div>
+
           <div className="gsj-hud-loader__overlay"></div>
         </div>
       </div>

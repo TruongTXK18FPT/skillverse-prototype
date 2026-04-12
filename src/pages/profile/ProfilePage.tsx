@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, MapPin, Calendar, Edit3, Save, X, Camera, Lock, Shield } from 'lucide-react';
+import Cropper, { Area } from 'react-easy-crop';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import userService from '../../services/userService';
+import { validateImage } from '../../services/fileUploadService';
+import getCroppedImg from '../../utils/cropImage';
 import { UserProfileResponse } from '../../data/userDTOs';
 import StudentReviews from '../../components/student/StudentReviews';
 import ParentConnectionSection from '../../components/profile/ParentConnectionSection';
@@ -12,7 +16,7 @@ import '../../styles/ProfilePage.css';
 import '../../styles/ProfileSecuritySection.css';
 
 const ProfilePage = () => {
-  const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const { user, isAuthenticated, loading: authLoading, updateUser } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
   
@@ -23,6 +27,12 @@ const ProfilePage = () => {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [avatarEditorOpen, setAvatarEditorOpen] = useState(false);
+  const [avatarTempUrl, setAvatarTempUrl] = useState<string | null>(null);
+  const [avatarCrop, setAvatarCrop] = useState({ x: 0, y: 0 });
+  const [avatarZoom, setAvatarZoom] = useState(1);
+  const [avatarCroppedAreaPixels, setAvatarCroppedAreaPixels] =
+    useState<Area | null>(null);
 
   const [editData, setEditData] = useState({
     fullName: '',
@@ -120,34 +130,86 @@ const ProfilePage = () => {
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    e.target.value = '';
     if (!file) return;
 
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      setError('Vui lòng chọn file ảnh');
+    const validation = validateImage(file);
+    if (!validation.valid) {
+      setError(validation.error || 'Ảnh tải lên không hợp lệ');
       return;
     }
 
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setError('Kích thước ảnh không được vượt quá 5MB');
+    if (avatarTempUrl) {
+      URL.revokeObjectURL(avatarTempUrl);
+    }
+
+    setError('');
+    setAvatarTempUrl(URL.createObjectURL(file));
+    setAvatarCrop({ x: 0, y: 0 });
+    setAvatarZoom(1);
+    setAvatarCroppedAreaPixels(null);
+    setAvatarEditorOpen(true);
+  };
+
+  const resetAvatarEditor = useCallback(() => {
+    setAvatarEditorOpen(false);
+    setAvatarCrop({ x: 0, y: 0 });
+    setAvatarZoom(1);
+    setAvatarCroppedAreaPixels(null);
+
+    if (avatarTempUrl) {
+      URL.revokeObjectURL(avatarTempUrl);
+    }
+    setAvatarTempUrl(null);
+  }, [avatarTempUrl]);
+
+  const handleAvatarCropComplete = useCallback(
+    (_croppedArea: Area, croppedAreaPixels: Area) => {
+      setAvatarCroppedAreaPixels(croppedAreaPixels);
+    },
+    [],
+  );
+
+  const handleAvatarCropCancel = () => {
+    if (uploading) {
+      return;
+    }
+
+    resetAvatarEditor();
+  };
+
+  const handleAvatarCropConfirm = async () => {
+    if (!user?.id || !avatarTempUrl || !avatarCroppedAreaPixels) {
+      setError('Không thể xử lý ảnh đại diện. Vui lòng thử lại.');
       return;
     }
 
     setUploading(true);
-    setError('');
-    
     try {
-      if (!user?.id) {
-        setError('User ID not found');
-        setUploading(false);
-        return;
+      const croppedAvatar = await getCroppedImg(
+        avatarTempUrl,
+        avatarCroppedAreaPixels,
+      );
+
+      if (!croppedAvatar) {
+        throw new Error('Không thể cắt ảnh đại diện.');
       }
-      const result = await userService.uploadUserAvatar(file, user.id);
-      
-      // Reload profile to get updated avatar
-      await loadProfile();
-      
+
+      const result = await userService.uploadUserAvatar(croppedAvatar, user.id);
+      setProfile((prev) =>
+        prev
+          ? {
+              ...prev,
+              avatarMediaUrl: result.avatarUrl,
+            }
+          : prev,
+      );
+      updateUser({
+        avatarMediaUrl: result.avatarUrl,
+        avatarUrl: result.avatarUrl,
+      });
+
+      resetAvatarEditor();
       setSuccess('Cập nhật ảnh đại diện thành công!');
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
@@ -157,6 +219,14 @@ const ProfilePage = () => {
       setUploading(false);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (avatarTempUrl) {
+        URL.revokeObjectURL(avatarTempUrl);
+      }
+    };
+  }, [avatarTempUrl]);
 
   if (loading) {
     return (
@@ -184,6 +254,107 @@ const ProfilePage = () => {
   return (
     <div className="profile-container" data-theme={theme}>
       <div className="profile-content">
+        {avatarEditorOpen &&
+          avatarTempUrl &&
+          ReactDOM.createPortal(
+            <div
+              className="profile-avatar-crop-overlay"
+              onClick={handleAvatarCropCancel}
+            >
+              <div
+                className="profile-avatar-crop-modal"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <div className="profile-avatar-crop-modal__header">
+                  <h3>Chỉnh ảnh đại diện</h3>
+                  <button
+                    type="button"
+                    className="profile-avatar-crop-modal__close"
+                    onClick={handleAvatarCropCancel}
+                    disabled={uploading}
+                    aria-label="Đóng"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <p className="profile-avatar-crop-modal__hint">
+                  Kéo ảnh để căn khung, sau đó chỉnh vị trí trái/phải và mức zoom.
+                </p>
+
+                <div className="profile-avatar-crop-stage">
+                  <Cropper
+                    image={avatarTempUrl}
+                    crop={avatarCrop}
+                    zoom={avatarZoom}
+                    aspect={1}
+                    cropShape="round"
+                    showGrid={false}
+                    objectFit="horizontal-cover"
+                    onCropChange={setAvatarCrop}
+                    onCropComplete={handleAvatarCropComplete}
+                    onZoomChange={setAvatarZoom}
+                  />
+                </div>
+
+                <div className="profile-avatar-crop-control">
+                  <label htmlFor="profile-avatar-horizontal-position">
+                    Vị trí trái / phải
+                  </label>
+                  <input
+                    id="profile-avatar-horizontal-position"
+                    type="range"
+                    min={-200}
+                    max={200}
+                    step={1}
+                    value={avatarCrop.x}
+                    disabled={uploading}
+                    onChange={(event) =>
+                      setAvatarCrop((prev) => ({
+                        ...prev,
+                        x: Number(event.target.value),
+                      }))
+                    }
+                  />
+                </div>
+
+                <div className="profile-avatar-crop-control">
+                  <label htmlFor="profile-avatar-zoom-level">Zoom</label>
+                  <input
+                    id="profile-avatar-zoom-level"
+                    type="range"
+                    min={1}
+                    max={3}
+                    step={0.05}
+                    value={avatarZoom}
+                    disabled={uploading}
+                    onChange={(event) => setAvatarZoom(Number(event.target.value))}
+                  />
+                </div>
+
+                <div className="profile-avatar-crop-modal__actions">
+                  <button
+                    type="button"
+                    className="cancel-button"
+                    onClick={handleAvatarCropCancel}
+                    disabled={uploading}
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    type="button"
+                    className="save-button"
+                    onClick={handleAvatarCropConfirm}
+                    disabled={uploading}
+                  >
+                    {uploading ? 'Đang cập nhật...' : 'Lưu ảnh đại diện'}
+                  </button>
+                </div>
+              </div>
+            </div>,
+            document.body,
+          )}
+
         {/* Profile Header */}
         <div className="profile-header">
           <div className="profile-avatar-section">

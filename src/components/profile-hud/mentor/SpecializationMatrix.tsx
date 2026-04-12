@@ -30,13 +30,13 @@ const SpecializationMatrix: React.FC<SpecializationMatrixProps> = ({ formData, o
   return (
     <div className="cmdr-panel">
       <div className="cmdr-panel-title">
-        SPECIALIZATION MATRIX
+        CHUYÊN MÔN
         <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>SPEC-MAT-02</span>
       </div>
 
       {/* Skills Section */}
       <div className="cmdr-input-group">
-        <label className="cmdr-label">Equipped Modules (Skills)</label>
+        <label className="cmdr-label">Kỹ năng chuyên môn</label>
         <div className="cmdr-modules-grid">
           {formData.skills?.map((skill, index) => (
             <div key={index} className="cmdr-module-chip">
@@ -55,7 +55,7 @@ const SpecializationMatrix: React.FC<SpecializationMatrixProps> = ({ formData, o
               type="text" 
               className="cmdr-input" 
               style={{ width: '150px', padding: '0.2rem' }}
-              placeholder="Add Module..."
+              placeholder="Thêm kỹ năng..."
               value={newSkill}
               onChange={(e) => setNewSkill(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -82,7 +82,7 @@ const SpecializationMatrix: React.FC<SpecializationMatrixProps> = ({ formData, o
                 type="text" 
                 name="socialLinks.linkedin" 
                 className="cmdr-input" 
-                placeholder="LinkedIn URL"
+                placeholder="Liên kết LinkedIn"
                 value={formData.socialLinks?.linkedin || ''} 
                 onChange={onChange} 
               />
@@ -95,7 +95,7 @@ const SpecializationMatrix: React.FC<SpecializationMatrixProps> = ({ formData, o
                 type="text" 
                 name="socialLinks.github" 
                 className="cmdr-input" 
-                placeholder="GitHub Repository"
+                placeholder="Liên kết GitHub"
                 value={formData.socialLinks?.github || ''} 
                 onChange={onChange} 
               />
@@ -110,7 +110,7 @@ const SpecializationMatrix: React.FC<SpecializationMatrixProps> = ({ formData, o
               type="text" 
               name="socialLinks.website" 
               className="cmdr-input" 
-              placeholder="Personal Domain URL"
+              placeholder="Website cá nhân"
               value={formData.socialLinks?.website || ''} 
               onChange={onChange} 
             />
@@ -126,7 +126,7 @@ const SpecializationMatrix: React.FC<SpecializationMatrixProps> = ({ formData, o
               className="cmdr-warp-link"
             >
               <Globe size={16} />
-              INITIATE WARP TO DOMAIN
+              Truy cập website
             </a>
           </div>
         )}

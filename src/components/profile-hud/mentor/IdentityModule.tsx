@@ -11,13 +11,13 @@ const IdentityModule: React.FC<IdentityModuleProps> = ({ formData, onChange }) =
   return (
     <div className="cmdr-panel">
       <div className="cmdr-panel-title">
-        IDENTITY MODULE
+        THÔNG TIN CƠ BẢN
         <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>ID-MOD-01</span>
       </div>
 
       <div className="cmdr-grid-2">
         <div className="cmdr-input-group">
-          <label className="cmdr-label">First Name</label>
+          <label className="cmdr-label">Tên</label>
           <input 
             type="text" 
             name="firstName" 
@@ -27,7 +27,7 @@ const IdentityModule: React.FC<IdentityModuleProps> = ({ formData, onChange }) =
           />
         </div>
         <div className="cmdr-input-group">
-          <label className="cmdr-label">Last Name</label>
+          <label className="cmdr-label">Họ</label>
           <input 
             type="text" 
             name="lastName" 
@@ -40,7 +40,7 @@ const IdentityModule: React.FC<IdentityModuleProps> = ({ formData, onChange }) =
 
       <div className="cmdr-grid-2">
         <div className="cmdr-input-group">
-          <label className="cmdr-label">Specialization (Class)</label>
+          <label className="cmdr-label">Chuyên môn</label>
           <input 
             type="text" 
             name="specialization" 
@@ -50,7 +50,7 @@ const IdentityModule: React.FC<IdentityModuleProps> = ({ formData, onChange }) =
           />
         </div>
         <div className="cmdr-input-group">
-          <label className="cmdr-label">Hourly Rate (Credits)</label>
+          <label className="cmdr-label">Học phí mỗi giờ (đ)</label>
           <input 
             type="number" 
             name="hourlyRate" 
@@ -62,13 +62,13 @@ const IdentityModule: React.FC<IdentityModuleProps> = ({ formData, onChange }) =
       </div>
 
       <div className="cmdr-input-group">
-        <label className="cmdr-label">Bio / Mission Log</label>
+        <label className="cmdr-label">Giới thiệu bản thân</label>
         <textarea 
           name="bio" 
           className="cmdr-bio-area" 
           value={formData.bio} 
           onChange={onChange}
-          placeholder="Enter personnel biography..."
+          placeholder="Nhập phần giới thiệu giảng viên..."
         />
       </div>
     </div>

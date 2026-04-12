@@ -21,7 +21,7 @@ const PilotSkinSelector: React.FC<PilotSkinSelectorProps> = ({
 }) => {
   return (
     <div className="pilot-section">
-      <h2 className="pilot-section-title">SKIN SELECTION</h2>
+      <h2 className="pilot-section-title">CHỌN SKIN CHO MEOWL</h2>
       <div className="pilot-outfit-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))' }}>
         {skins.map(skin => (
           <div 

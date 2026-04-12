@@ -30,12 +30,12 @@ const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ formData, onCha
   return (
     <div className="cmdr-panel">
       <div className="cmdr-panel-title">
-        SERVICE RECORD & ACHIEVEMENTS
+        KINH NGHIỆM & THÀNH TÍCH
         <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>REC-LOG-03</span>
       </div>
 
       <div className="cmdr-input-group" style={{ maxWidth: '200px' }}>
-        <label className="cmdr-label">Years in Service</label>
+        <label className="cmdr-label">Số năm kinh nghiệm</label>
         <input 
           type="number" 
           name="experience" 
@@ -46,7 +46,7 @@ const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ formData, onCha
       </div>
 
       <div style={{ marginTop: '2rem' }}>
-        <label className="cmdr-label" style={{ marginBottom: '1.5rem' }}>Mission Log (Achievements)</label>
+        <label className="cmdr-label" style={{ marginBottom: '1.5rem' }}>Thành tích nổi bật</label>
         
         <div className="cmdr-timeline">
           {formData.achievements?.map((achievement, index) => (
@@ -59,7 +59,7 @@ const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ formData, onCha
                   onClick={() => onRemoveAchievement(achievement)}
                 />
               </div>
-              <div className="cmdr-timeline-date">MISSION COMPLETED</div>
+              <div className="cmdr-timeline-date">ĐÃ GHI NHẬN</div>
             </div>
           ))}
 
@@ -69,7 +69,7 @@ const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ formData, onCha
               <input 
                 type="text" 
                 className="cmdr-input" 
-                placeholder="Log new achievement..."
+                placeholder="Nhập thành tích mới..."
                 value={newAchievement}
                 onChange={(e) => setNewAchievement(e.target.value)}
                 onKeyDown={handleKeyDown}

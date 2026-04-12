@@ -51,6 +51,7 @@ import {
 import GSJTestTaking from "./GSJTestTaking";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
+import TicTacToeGame from "../../components/game/tic-tac-toe/TicTacToeGame";
 import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
 import { useAuth } from "../../context/AuthContext";
 import { getExpertDomainMeta } from "../../utils/expertFieldPresentation";
@@ -159,6 +160,7 @@ const HERO_DOMAIN_SHOWCASE = [
 
 const JOURNEYS_PER_PAGE = 6;
 const JOURNEY_FETCH_BATCH_SIZE = 100;
+const JOURNEY_ACTION_GAME_DELAY_MS = 8000;
 
 type ViewMode = "list" | "detail" | "test" | "result";
 type DeleteDialogState = {
@@ -212,6 +214,7 @@ const GSJJourneyPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [actionMode, setActionMode] = useState<ActionMode>("idle");
+  const [showActionGame, setShowActionGame] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pendingDelete, setPendingDelete] = useState<DeleteDialogState>(null);
   const [error, setError] = useState<string | null>(null);
@@ -280,6 +283,65 @@ const GSJJourneyPage: React.FC = () => {
       setCurrentPage(totalPages);
     }
   }, [currentPage, journeys.length]);
+
+  const scrollToJourneysSection = useCallback(() => {
+    document
+      .getElementById("journeys-section")
+      ?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  const handleMyJourneysButtonClick = useCallback(() => {
+    if (viewMode === "list") {
+      scrollToJourneysSection();
+      return;
+    }
+
+    if (viewMode === "test" || viewMode === "result") {
+      setViewMode("detail");
+      return;
+    }
+
+    setViewMode("list");
+    window.setTimeout(() => {
+      scrollToJourneysSection();
+    }, 120);
+  }, [scrollToJourneysSection, viewMode]);
+
+  const shouldOfferActionGame =
+    actionLoading &&
+    (actionMode === "generating-test" ||
+      actionMode === "submitting-test" ||
+      actionMode === "generating-roadmap");
+
+  useEffect(() => {
+    if (!shouldOfferActionGame) {
+      setShowActionGame(false);
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowActionGame(true);
+    }, JOURNEY_ACTION_GAME_DELAY_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [shouldOfferActionGame]);
+
+  const actionLoadingMessage =
+    actionMode === "generating-test"
+      ? "Meowl đang tạo bộ quiz phù hợp cho bạn..."
+      : actionMode === "submitting-test"
+        ? "Meowl đang chấm điểm và phân tích kết quả..."
+        : actionMode === "generating-roadmap"
+          ? "Meowl đang dựng roadmap cá nhân hóa..."
+          : actionMode === "opening-test"
+            ? "Meowl đang mở bài test gần nhất..."
+            : actionMode === "loading-result"
+              ? "Meowl đang tải kết quả quiz..."
+              : actionMode === "toggling-status"
+                ? "Meowl đang cập nhật trạng thái Journey..."
+                : actionMode === "deleting-journey"
+                  ? "Meowl đang xóa hành trình..."
+                  : "Meowl đang chuẩn bị cho bạn đây...";
 
   // Select journey and load details
   const handleSelectJourney = useCallback(async (journeyId: number) => {
@@ -1500,14 +1562,10 @@ const GSJJourneyPage: React.FC = () => {
             {user && (
               <button
                 className="gsj-btn gsj-btn--secondary gsj-btn--lg"
-                onClick={() =>
-                  document
-                    .getElementById("journeys-section")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
+                onClick={handleMyJourneysButtonClick}
               >
-                <Map size={20} />
-                Xem hành trình của tôi
+                {viewMode === "list" ? <Map size={20} /> : <ArrowLeft size={20} />}
+                {viewMode === "list" ? "Xem hành trình của tôi" : "Quay lại"}
               </button>
             )}
           </div>
@@ -3279,10 +3337,38 @@ const GSJJourneyPage: React.FC = () => {
 
         {/* Action Loading Overlay */}
         {actionLoading && (
-          <MeowlKuruLoader
-            text="Meowl đang chuẩn bị cho bạn đây..."
-            fullScreen
-          />
+          <div
+            className={`gsj-action-loading-overlay ${showActionGame ? "gsj-action-loading-overlay--split" : ""}`}
+          >
+            <div className="gsj-action-loading-overlay__shell">
+              <div className="gsj-action-loading-overlay__loader">
+                <MeowlKuruLoader text={actionLoadingMessage} layout="vertical" />
+
+                {showActionGame && (
+                  <p className="gsj-action-loading-overlay__hint">
+                    Hệ thống đang xử lý sâu hơn bình thường. Chơi một ván caro với Meowl trong lúc chờ nhé.
+                  </p>
+                )}
+              </div>
+
+              <aside
+                className="gsj-action-loading-overlay__game"
+                aria-hidden={!showActionGame}
+              >
+                {showActionGame && (
+                  <>
+                    <header className="gsj-action-loading-overlay__game-header">
+                      <span className="gsj-action-loading-overlay__game-eyebrow">MINI GAME KHI CHỜ</span>
+                      <h3>MEOWL TIC-TAC-TOE</h3>
+                    </header>
+                    <div className="gsj-action-loading-overlay__game-body">
+                      <TicTacToeGame mode="embedded" />
+                    </div>
+                  </>
+                )}
+              </aside>
+            </div>
+          </div>
         )}
 
         {/* Error Message */}

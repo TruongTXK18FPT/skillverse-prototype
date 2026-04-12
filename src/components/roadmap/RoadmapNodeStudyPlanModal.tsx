@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CalendarDays, Clock3, Sparkles, Target, X } from 'lucide-react';
 import { RoadmapNode, RoadmapNodeStudyPlanRequest } from '../../types/Roadmap';
+import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
+import TicTacToeGame from '../game/tic-tac-toe/TicTacToeGame';
 import { NodeLearningContext } from './nodeLearningContext';
 import {
   inferRoadmapStudyPlanDeadline,
@@ -24,6 +26,7 @@ interface RoadmapNodeStudyPlanModalProps {
 }
 
 type ScopeMode = 'node_only' | 'node_with_children';
+const NODE_PLAN_GAME_DELAY_MS = 7000;
 
 const DAY_OPTIONS = [
   { value: 'MONDAY', label: 'T2' },
@@ -99,6 +102,7 @@ const RoadmapNodeStudyPlanModal = ({
   const [desiredOutcome, setDesiredOutcome] = useState<string>('');
   const [freeTimeDescription, setFreeTimeDescription] = useState<string>('');
   const [scopeMode, setScopeMode] = useState<ScopeMode>('node_only');
+  const [showSubmittingGame, setShowSubmittingGame] = useState(false);
 
   const intensityMeta = useMemo(
     () => INTENSITY_OPTIONS.find((item) => item.id === intensity) ?? INTENSITY_OPTIONS[1],
@@ -161,6 +165,19 @@ const RoadmapNodeStudyPlanModal = ({
     setFreeTimeDescription('');
     setScopeMode('node_only');
   }, [isOpen, node?.id]);
+
+  useEffect(() => {
+    if (!isSubmitting) {
+      setShowSubmittingGame(false);
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowSubmittingGame(true);
+    }, NODE_PLAN_GAME_DELAY_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isSubmitting]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -439,6 +456,45 @@ const RoadmapNodeStudyPlanModal = ({
             {isSubmitting ? 'Đang tạo kế hoạch...' : 'Tạo kế hoạch AI'}
           </button>
         </div>
+
+        {isSubmitting && (
+          <div
+            className={`roadmap-node-plan-modal__loading-overlay ${showSubmittingGame ? 'roadmap-node-plan-modal__loading-overlay--split' : ''}`}
+          >
+            <div className="roadmap-node-plan-modal__loading-shell">
+              <div className="roadmap-node-plan-modal__loading-loader">
+                <MeowlKuruLoader
+                  size="medium"
+                  text="Meowl đang dựng Study Planner cho node này..."
+                  layout="vertical"
+                />
+
+                {showSubmittingGame && (
+                  <p className="roadmap-node-plan-modal__loading-hint">
+                    Hệ thống đang xử lý lâu hơn dự kiến. Chơi một ván caro với Meowl trong lúc chờ nhé.
+                  </p>
+                )}
+              </div>
+
+              <aside
+                className="roadmap-node-plan-modal__loading-game"
+                aria-hidden={!showSubmittingGame}
+              >
+                {showSubmittingGame && (
+                  <>
+                    <header className="roadmap-node-plan-modal__loading-game-header">
+                      <span className="roadmap-node-plan-modal__loading-eyebrow">MINI GAME KHI CHỜ</span>
+                      <h3>MEOWL TIC-TAC-TOE</h3>
+                    </header>
+                    <div className="roadmap-node-plan-modal__loading-game-body">
+                      <TicTacToeGame mode="embedded" />
+                    </div>
+                  </>
+                )}
+              </aside>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

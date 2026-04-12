@@ -204,6 +204,130 @@
   background: #2563eb;
 }
 
+.profile-avatar-crop-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.profile-avatar-crop-modal {
+  width: min(560px, 100%);
+  border-radius: 14px;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  background: #ffffff;
+  box-shadow: 0 20px 48px rgba(15, 23, 42, 0.32);
+  padding: 1rem;
+}
+
+.profile-container[data-theme="dark"] .profile-avatar-crop-modal {
+  background: #111827;
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.profile-avatar-crop-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.profile-avatar-crop-modal__header h3 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 1.05rem;
+}
+
+.profile-container[data-theme="dark"] .profile-avatar-crop-modal__header h3 {
+  color: #f9fafb;
+}
+
+.profile-avatar-crop-modal__close {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #f8fafc;
+  color: #1f2937;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.profile-container[data-theme="dark"] .profile-avatar-crop-modal__close {
+  border-color: #334155;
+  background: #0f172a;
+  color: #f9fafb;
+}
+
+.profile-avatar-crop-modal__close:hover:not(:disabled) {
+  background: #e2e8f0;
+}
+
+.profile-container[data-theme="dark"] .profile-avatar-crop-modal__close:hover:not(:disabled) {
+  background: #1e293b;
+}
+
+.profile-avatar-crop-modal__hint {
+  margin: 0.72rem 0 0.92rem;
+  color: #64748b;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.profile-container[data-theme="dark"] .profile-avatar-crop-modal__hint {
+  color: #94a3b8;
+}
+
+.profile-avatar-crop-stage {
+  position: relative;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #dbeafe;
+  background: #f1f5f9;
+}
+
+.profile-container[data-theme="dark"] .profile-avatar-crop-stage {
+  border-color: #1e3a8a;
+  background: #0f172a;
+}
+
+.profile-avatar-crop-control {
+  margin-top: 0.82rem;
+}
+
+.profile-avatar-crop-control label {
+  display: block;
+  margin-bottom: 0.28rem;
+  font-size: 0.8rem;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.profile-container[data-theme="dark"] .profile-avatar-crop-control label {
+  color: #94a3b8;
+}
+
+.profile-avatar-crop-control input[type='range'] {
+  width: 100%;
+  accent-color: #3b82f6;
+}
+
+.profile-avatar-crop-modal__actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.72rem;
+  flex-wrap: wrap;
+}
+
 /* Role badge container nằm trong avatar */
 .profile-role-badge-container {
   position: absolute;
@@ -666,6 +790,28 @@
 
   .profile-section {
     padding: 1.5rem;
+  }
+
+  .profile-avatar-crop-overlay {
+    padding: 0.85rem;
+  }
+
+  .profile-avatar-crop-modal {
+    padding: 0.9rem;
+  }
+
+  .profile-avatar-crop-stage {
+    height: 240px;
+  }
+
+  .profile-avatar-crop-modal__actions {
+    justify-content: stretch;
+  }
+
+  .profile-avatar-crop-modal__actions .save-button,
+  .profile-avatar-crop-modal__actions .cancel-button {
+    width: 100%;
+    justify-content: center;
   }
 
   .profile-name {

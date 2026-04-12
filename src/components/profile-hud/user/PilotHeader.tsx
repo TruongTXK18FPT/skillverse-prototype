@@ -11,7 +11,7 @@ interface PilotHeaderProps {
     user: UserProfileResponse | null;
     subscription?: UserSubscriptionResponse | null;
     onEdit?: () => void;
-    onAvatarUpload?: (file: File) => void;
+    onAvatarUpload?: (file: File) => void | Promise<void>;
 }
 
 const PilotHeader: React.FC<PilotHeaderProps> = ({ user, subscription, onEdit, onAvatarUpload }) => {
@@ -36,9 +36,13 @@ const PilotHeader: React.FC<PilotHeaderProps> = ({ user, subscription, onEdit, o
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0] && onAvatarUpload) {
-            onAvatarUpload(e.target.files[0]);
+        const selectedFile = e.target.files?.[0];
+        if (selectedFile && onAvatarUpload) {
+            onAvatarUpload(selectedFile);
         }
+
+        // Reset input so selecting the same file again still triggers onChange.
+        e.target.value = '';
     };
 
     const handleUploadClick = () => {
@@ -84,30 +88,18 @@ const PilotHeader: React.FC<PilotHeaderProps> = ({ user, subscription, onEdit, o
 
             <div className="pilot-info">
                 <h1 className="pilot-name">{user.fullName || 'UNKNOWN PILOT'}</h1>
-                <div className="pilot-rank-modules">
-                    <span className="rank-module">Level 0</span>
-                    <span className="rank-module">Cadet</span>
-                </div>
 
                 <div className="pilot-stats-bar">
                     <div className="pilot-stat">
-                        <span className="pilot-stat-label">CREDITS</span>
-                        <span className="pilot-stat-value">0</span>
-                    </div>
-                    <div className="pilot-stat">
-                        <span className="pilot-stat-label">XP</span>
-                        <span className="pilot-stat-value">0</span>
-                    </div>
-                    <div className="pilot-stat">
-                        <span className="pilot-stat-label">STATUS</span>
-                        <span className="pilot-stat-value" style={{ color: '#22c55e' }}>ACTIVE</span>
+                        <span className="pilot-stat-label">Trạng Thái</span>
+                        <span className="pilot-stat-value" style={{ color: '#22c55e' }}>ĐANG HOẠT ĐỘNG</span>
                     </div>
                 </div>
             </div>
 
             {onEdit && (
                 <button className="pilot-btn pilot-btn-secondary" onClick={onEdit}>
-                    EDIT DOSSIER
+                    CHỈNH SỬA HỒ SƠ
                 </button>
             )}
         </div>

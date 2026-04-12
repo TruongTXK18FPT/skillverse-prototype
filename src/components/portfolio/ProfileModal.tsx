@@ -1,8 +1,10 @@
 // Create/Edit Extended Profile Modal
 import React, { useState, useEffect, useCallback } from 'react';
 import { X, Upload, AlertCircle, CheckCircle } from 'lucide-react';
+import Cropper, { Area } from 'react-easy-crop';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { UserProfileDTO } from '../../data/portfolioDTOs';
+import getCroppedImg from '../../utils/cropImage';
 import '../../styles/PortfolioModals.css';
 
 // Toast notification hook (simplified)
@@ -82,6 +84,12 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   const [avatarPreview, setAvatarPreview] = useState<string>('');
   const [videoPreview, setVideoPreview] = useState<string>('');
   const [coverPreview, setCoverPreview] = useState<string>('');
+  const [avatarCropOpen, setAvatarCropOpen] = useState(false);
+  const [avatarCropTempUrl, setAvatarCropTempUrl] = useState<string | null>(null);
+  const [avatarCrop, setAvatarCrop] = useState({ x: 0, y: 0 });
+  const [avatarZoom, setAvatarZoom] = useState(1);
+  const [avatarCroppedAreaPixels, setAvatarCroppedAreaPixels] =
+    useState<Area | null>(null);
 
   const [skills, setSkills] = useState<string[]>([]);
   const [languages, setLanguages] = useState<string[]>([]);
@@ -161,6 +169,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
     type: 'avatar' | 'video' | 'cover'
   ) => {
     const file = e.target.files?.[0];
+    e.target.value = '';
     if (!file) return;
 
     // Validate file
@@ -177,6 +186,19 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
       delete newErrors[type];
       return newErrors;
     });
+
+    if (type === 'avatar') {
+      if (avatarCropTempUrl) {
+        URL.revokeObjectURL(avatarCropTempUrl);
+      }
+
+      setAvatarCropTempUrl(URL.createObjectURL(file));
+      setAvatarCrop({ x: 0, y: 0 });
+      setAvatarZoom(1);
+      setAvatarCroppedAreaPixels(null);
+      setAvatarCropOpen(true);
+      return;
+    }
 
     // Create preview
     const reader = new FileReader();
@@ -195,6 +217,58 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
     };
     reader.readAsDataURL(file);
   };
+
+  const handleAvatarCropComplete = useCallback(
+    (_croppedArea: Area, croppedAreaPixels: Area) => {
+      setAvatarCroppedAreaPixels(croppedAreaPixels);
+    },
+    [],
+  );
+
+  const closeAvatarCropModal = useCallback(() => {
+    setAvatarCropOpen(false);
+    setAvatarCrop({ x: 0, y: 0 });
+    setAvatarZoom(1);
+    setAvatarCroppedAreaPixels(null);
+
+    if (avatarCropTempUrl) {
+      URL.revokeObjectURL(avatarCropTempUrl);
+    }
+    setAvatarCropTempUrl(null);
+  }, [avatarCropTempUrl]);
+
+  const handleAvatarCropConfirm = async () => {
+    if (!avatarCropTempUrl || !avatarCroppedAreaPixels) {
+      showToast('Không thể xử lý ảnh đại diện. Vui lòng thử lại.', 'error');
+      return;
+    }
+
+    try {
+      const croppedAvatar = await getCroppedImg(
+        avatarCropTempUrl,
+        avatarCroppedAreaPixels,
+      );
+
+      if (!croppedAvatar) {
+        throw new Error('Không thể cắt ảnh đại diện.');
+      }
+
+      setAvatar(croppedAvatar);
+      setAvatarPreview(URL.createObjectURL(croppedAvatar));
+      closeAvatarCropModal();
+    } catch (error) {
+      console.error('Failed to crop portfolio avatar:', error);
+      showToast('Cắt ảnh đại diện thất bại. Vui lòng thử lại.', 'error');
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (avatarCropTempUrl) {
+        URL.revokeObjectURL(avatarCropTempUrl);
+      }
+    };
+  }, [avatarCropTempUrl]);
 
   const handleAddSkill = () => {
     if (skillInput.trim() && !skills.includes(skillInput.trim())) {
@@ -298,6 +372,94 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
           </div>
         ))}
       </div>
+
+      {avatarCropOpen && avatarCropTempUrl && (
+        <div className="pf-avatar-crop-overlay" onClick={closeAvatarCropModal}>
+          <div
+            className="pf-avatar-crop-modal"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="pf-avatar-crop-modal__header">
+              <h3>Chỉnh Avatar Portfolio</h3>
+              <button
+                type="button"
+                className="pf-avatar-crop-modal__close"
+                onClick={closeAvatarCropModal}
+                aria-label="Đóng"
+              >
+                ×
+              </button>
+            </div>
+
+            <p className="pf-avatar-crop-modal__hint">
+              Kéo ảnh để căn khung tròn, sau đó chỉnh vị trí trái/phải và zoom.
+            </p>
+
+            <div className="pf-avatar-crop-stage">
+              <Cropper
+                image={avatarCropTempUrl}
+                crop={avatarCrop}
+                zoom={avatarZoom}
+                aspect={1}
+                cropShape="round"
+                showGrid={false}
+                objectFit="horizontal-cover"
+                onCropChange={setAvatarCrop}
+                onCropComplete={handleAvatarCropComplete}
+                onZoomChange={setAvatarZoom}
+              />
+            </div>
+
+            <div className="pf-avatar-crop-control">
+              <label htmlFor="pf-avatar-horizontal-position">Vị trí trái / phải</label>
+              <input
+                id="pf-avatar-horizontal-position"
+                type="range"
+                min={-200}
+                max={200}
+                step={1}
+                value={avatarCrop.x}
+                onChange={(event) =>
+                  setAvatarCrop((prev) => ({
+                    ...prev,
+                    x: Number(event.target.value),
+                  }))
+                }
+              />
+            </div>
+
+            <div className="pf-avatar-crop-control">
+              <label htmlFor="pf-avatar-zoom-level">Zoom</label>
+              <input
+                id="pf-avatar-zoom-level"
+                type="range"
+                min={1}
+                max={3}
+                step={0.05}
+                value={avatarZoom}
+                onChange={(event) => setAvatarZoom(Number(event.target.value))}
+              />
+            </div>
+
+            <div className="pf-avatar-crop-modal__actions">
+              <button
+                type="button"
+                className="pf-btn pf-btn-secondary"
+                onClick={closeAvatarCropModal}
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                className="pf-btn pf-btn-primary"
+                onClick={handleAvatarCropConfirm}
+              >
+                Lưu avatar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="pf-modal-overlay" onClick={onClose}>
         <div className="pf-modal-container" onClick={(e) => e.stopPropagation()}>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Sparkles, Loader, LogIn, Lock, ChevronDown, Briefcase, BookOpen, ArrowLeft, Bot } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
+import TicTacToeGame from '../game/tic-tac-toe/TicTacToeGame';
 import { GenerateRoadmapRequest } from '../../types/Roadmap';
 import { premiumService } from '../../services/premiumService';
 import careerChatService from '../../services/careerChatService';
@@ -17,6 +18,7 @@ interface RoadmapGeneratorFormProps {
 }
 
 type GeneratorStep = 'select-type' | 'input-form' | 'confirmation';
+const ROADMAP_GENERATION_GAME_DELAY_MS = 8000;
 
 const RoadmapGeneratorForm = ({
   onGenerate,
@@ -83,6 +85,20 @@ const RoadmapGeneratorForm = ({
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof GenerateRoadmapRequest, string>>>({});
+  const [showLoadingGame, setShowLoadingGame] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setShowLoadingGame(false);
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowLoadingGame(true);
+    }, ROADMAP_GENERATION_GAME_DELAY_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isLoading]);
 
   // --- VALIDATION LOGIC ---
   const PROFANITY_WORDS = ['dm', 'ditme', 'dmm', 'fuck', 'fuckyou', 'cmm', 'cc', 'vl', 'cl', 'địt', 'đcm', 'fuck you'];
@@ -216,6 +232,46 @@ const RoadmapGeneratorForm = ({
     return mappings[value] || value;
   };
 
+  const renderGeneratingOverlay = () => {
+    if (!isLoading) {
+      return null;
+    }
+
+    return (
+      <div className={`rm-loading-overlay ${showLoadingGame ? 'rm-loading-overlay--split' : ''}`}>
+        <div className="rm-loading-overlay__shell">
+          <div className="rm-loading-overlay__loader">
+            <MeowlKuruLoader
+              size="medium"
+              text="Meowl đang phân tích và dựng roadmap cho bạn..."
+              layout="vertical"
+            />
+
+            {showLoadingGame && (
+              <p className="rm-loading-overlay__hint">
+                Hệ thống đang xử lý sâu hơn bình thường. Chơi một ván caro với Meowl trong lúc chờ nhé.
+              </p>
+            )}
+          </div>
+
+          <aside className="rm-loading-overlay__game" aria-hidden={!showLoadingGame}>
+            {showLoadingGame && (
+              <>
+                <header className="rm-loading-overlay__game-header">
+                  <span className="rm-loading-overlay__game-eyebrow">MINI GAME KHI CHỜ</span>
+                  <h3>MEOWL TIC-TAC-TOE</h3>
+                </header>
+                <div className="rm-loading-overlay__game-body">
+                  <TicTacToeGame mode="embedded" />
+                </div>
+              </>
+            )}
+          </aside>
+        </div>
+      </div>
+    );
+  };
+
   // --- RENDER: SELECTION STEP ---
   if (step === 'select-type') {
     return (
@@ -284,6 +340,8 @@ const RoadmapGeneratorForm = ({
             </div>
           </div>
         )}
+
+        {renderGeneratingOverlay()}
       </div>
     );
   }
@@ -392,6 +450,8 @@ const RoadmapGeneratorForm = ({
             </button>
           </div>
         </div>
+
+        {renderGeneratingOverlay()}
       </div>
     );
   }
@@ -783,6 +843,8 @@ const RoadmapGeneratorForm = ({
           </div>
         </div>
       )}
+
+      {renderGeneratingOverlay()}
     </div>
   );
 };

@@ -407,6 +407,18 @@ const Header: React.FC = () => {
   const shouldShowManagementNav =
     isAuthenticated && !!user && (isRootAdminRole || isRecruiterRole || isSubAdminRole);
 
+  const profileMenuLabel = isRecruiterRole
+    ? "Hồ sơ doanh nghiệp"
+    : isMentorRole
+      ? "Hồ sơ giảng viên"
+      : "Hồ sơ cá nhân";
+
+  const resolvedHeaderAvatar =
+    user?.avatarMediaUrl ||
+    mentorProfile?.avatar ||
+    userProfile?.avatarMediaUrl ||
+    user?.avatarUrl;
+
   const modalProtectedPaths = new Set([
     "/mentorship",
     "/portfolio",
@@ -1054,15 +1066,9 @@ const Header: React.FC = () => {
                             : undefined,
                         }}
                       >
-                        {mentorProfile?.avatar ||
-                        userProfile?.avatarMediaUrl ||
-                        user.avatarUrl ? (
+                        {resolvedHeaderAvatar ? (
                           <img
-                            src={
-                              mentorProfile?.avatar ||
-                              userProfile?.avatarMediaUrl ||
-                              user.avatarUrl
-                            }
+                            src={resolvedHeaderAvatar}
                             alt="Avatar"
                             className="header-avatar-img"
                           />
@@ -1214,7 +1220,7 @@ const Header: React.FC = () => {
                               className="dropdown-item"
                             >
                               <User size={16} />
-                              <span>Hồ sơ cá nhân</span>
+                              <span>{profileMenuLabel}</span>
                             </button>
                             <button
                               onClick={handleLogout}
@@ -1273,15 +1279,9 @@ const Header: React.FC = () => {
                   <div className="mobile-user-section">
                     <div className="mobile-user-info">
                       <div className="user-avatar-large">
-                        {mentorProfile?.avatar ||
-                        userProfile?.avatarMediaUrl ||
-                        user.avatarUrl ? (
+                        {resolvedHeaderAvatar ? (
                           <img
-                            src={
-                              mentorProfile?.avatar ||
-                              userProfile?.avatarMediaUrl ||
-                              user.avatarUrl
-                            }
+                            src={resolvedHeaderAvatar}
                             alt="Avatar"
                             className="header-avatar-img-large"
                           />
@@ -1387,7 +1387,7 @@ const Header: React.FC = () => {
                         className="mobile-menu-item"
                       >
                         <User size={18} />
-                        <span>Hồ sơ cá nhân</span>
+                        <span>{profileMenuLabel}</span>
                       </button>
                       <button
                         onClick={() => {

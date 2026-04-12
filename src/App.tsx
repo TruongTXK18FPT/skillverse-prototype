@@ -530,6 +530,8 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/contracts",
   "/contracts/sign",
   "/profile/user",
+  "/profile/mentor",
+  "/profile/business",
   "/set-password",
   "/bookings",
   "/user/bookings",

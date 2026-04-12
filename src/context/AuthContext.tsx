@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useMemo,
+  useCallback,
+} from 'react';
 import authService from '../services/authService';
 import userService from '../services/userService';
 import { AUTH_LOGOUT_EVENT, clearAuthTokens } from '../services/axiosInstance';
@@ -6,11 +14,16 @@ import { LoginRequest, UserDto, VerifyEmailRequest, ResendOtpRequest, ForgotPass
 import { UserRegistrationRequest } from '../data/userDTOs';
 import { AUTH_SESSION_SYNCED_EVENT, initAuthTabSync, requestSessionFromOtherTabs } from '../utils/authTabSync';
 import { initBookingSync } from '../utils/bookingSync';
-import { clearAuthSession, clearDeviceSessionId } from '../utils/authStorage';
+import {
+  clearAuthSession,
+  clearDeviceSessionId,
+  updateStoredUser,
+} from '../utils/authStorage';
 
 interface AuthContextType {
   user: UserDto | null;
   loading: boolean;
+  updateUser: (updates: Partial<UserDto>) => void;
   login: (credentials: LoginRequest, rememberMe?: boolean) => Promise<string>;
   register: (userData: UserRegistrationRequest) => Promise<{ requiresVerification: boolean; email: string; message: string; otpExpiryTime?: string }>;
   verifyEmail: (request: VerifyEmailRequest) => Promise<void>;
@@ -40,6 +53,21 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDto | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const updateUser = useCallback((updates: Partial<UserDto>) => {
+    setUser((prevUser) => {
+      if (!prevUser) {
+        return prevUser;
+      }
+
+      const nextUser = {
+        ...prevUser,
+        ...updates,
+      };
+      updateStoredUser(nextUser);
+      return nextUser;
+    });
+  }, []);
 
   // Initialize cross-tab auth sync channel once.
   useEffect(() => {
@@ -231,6 +259,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const value: AuthContextType = useMemo(() => ({
     user,
     loading,
+    updateUser,
     login,
     register,
     verifyEmail,
@@ -241,7 +270,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     changePassword,
     logout,
     isAuthenticated: !!user && authService.isAuthenticated(),
-  }), [user, loading]);
+  }), [user, loading, updateUser]);
 
   return (
     <AuthContext.Provider value={value}>

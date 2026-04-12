@@ -23,59 +23,59 @@ const PilotIdentityForm: React.FC<PilotIdentityFormProps> = ({
 }) => {
   return (
     <div className="pilot-section">
-      <h2 className="pilot-section-title">IDENTITY MODULE</h2>
+      <h2 className="pilot-section-title">CHỈNH SỬA HỒ SƠ CÁ NHÂN</h2>
       
       <div className="pilot-form-grid">
         <div className="pilot-input-group">
-          <label className="pilot-label">FULL NAME</label>
+          <label className="pilot-label">HỌ VÀ TÊN</label>
           <input 
             type="text" 
             className="pilot-input" 
             value={data.fullName}
             onChange={(e) => onChange('fullName', e.target.value)}
-            placeholder="ENTER NAME"
+            placeholder="NHẬP HỌ VÀ TÊN"
           />
         </div>
 
         <div className="pilot-input-group">
-          <label className="pilot-label">COMM LINK (PHONE)</label>
+          <label className="pilot-label">SỐ ĐIỆN THOẠI</label>
           <input 
             type="text" 
             className="pilot-input" 
             value={data.phone}
             onChange={(e) => onChange('phone', e.target.value)}
-            placeholder="ENTER FREQUENCY"
+            placeholder="NHẬP SỐ ĐIỆN THOẠI"
           />
         </div>
 
         <div className="pilot-input-group" style={{ gridColumn: '1 / -1' }}>
-          <label className="pilot-label">BASE LOCATION</label>
+          <label className="pilot-label">ĐỊA CHỈ</label>
           <input 
             type="text" 
             className="pilot-input" 
             value={data.address}
             onChange={(e) => onChange('address', e.target.value)}
-            placeholder="ENTER COORDINATES"
+            placeholder="NHẬP ĐỊA CHỈ"
           />
         </div>
 
         <div className="pilot-input-group" style={{ gridColumn: '1 / -1' }}>
-          <label className="pilot-label">BIO / LOGS</label>
+          <label className="pilot-label">BIO</label>
           <textarea 
             className="pilot-textarea" 
             value={data.bio}
             onChange={(e) => onChange('bio', e.target.value)}
-            placeholder="ENTER PERSONAL LOG..."
+            placeholder="NHẬP BIO..."
           />
         </div>
       </div>
 
       <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
         <button className="pilot-btn pilot-btn-secondary" onClick={onCancel} disabled={loading}>
-          CANCEL
+          HỦY CHỈNH SỬA
         </button>
         <button className="pilot-btn" onClick={onSave} disabled={loading}>
-          {loading ? 'SAVING...' : 'SAVE CHANGES'}
+          {loading ? 'ĐANG LƯU...' : 'LƯU THAY ĐỔI'}
         </button>
       </div>
     </div>

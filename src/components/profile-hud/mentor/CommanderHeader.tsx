@@ -1,20 +1,75 @@
 import React from 'react';
 import { MentorProfile } from '../../../services/mentorProfileService';
+import { ReviewStatsResponse } from '../../../services/reviewService';
 import { Camera } from 'lucide-react';
 import './CommanderStyles.css';
 
 interface CommanderHeaderProps {
   profile: MentorProfile | null;
-  onAvatarUpload: (file: File) => void;
+  reviewStats?: ReviewStatsResponse | null;
+  onAvatarUpload: (file: File) => void | Promise<void>;
   preChatEnabled: boolean;
   onTogglePreChat: () => void;
 }
 
-const CommanderHeader: React.FC<CommanderHeaderProps> = ({ profile, onAvatarUpload, preChatEnabled, onTogglePreChat }) => {
+const CommanderHeader: React.FC<CommanderHeaderProps> = ({
+  profile,
+  reviewStats,
+  onAvatarUpload,
+  preChatEnabled,
+  onTogglePreChat,
+}) => {
+  const hasReviewStats = Boolean(reviewStats && reviewStats.totalReviews > 0);
+  const resolvedAverageRating = hasReviewStats
+    ? reviewStats!.averageRating
+    : typeof profile?.ratingAverage === 'number' && (profile?.ratingCount ?? 0) > 0
+      ? profile.ratingAverage
+      : null;
+  const resolvedRatingCount = hasReviewStats
+    ? reviewStats!.totalReviews
+    : typeof profile?.ratingCount === 'number' && profile.ratingCount > 0
+      ? profile.ratingCount
+      : null;
+
+  const stats = [
+    {
+      label: 'Kinh nghiệm',
+      value:
+        typeof profile?.experience === 'number' && profile.experience > 0
+          ? `${profile.experience} năm`
+          : null,
+    },
+    {
+      label: 'Đánh giá',
+      value:
+        typeof resolvedAverageRating === 'number'
+          ? resolvedAverageRating.toFixed(1)
+          : null,
+    },
+    {
+      label: 'Lượt đánh giá',
+      value:
+        typeof resolvedRatingCount === 'number'
+          ? resolvedRatingCount.toLocaleString('vi-VN')
+          : null,
+    },
+    {
+      label: 'Học phí / giờ',
+      value:
+        typeof profile?.hourlyRate === 'number' && profile.hourlyRate > 0
+          ? `${profile.hourlyRate.toLocaleString('vi-VN')} đ`
+          : null,
+    },
+  ].filter((item) => !!item.value);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      onAvatarUpload(e.target.files[0]);
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      onAvatarUpload(selectedFile);
     }
+
+    // Reset input so selecting the same file still triggers onChange.
+    e.target.value = '';
   };
 
   return (
@@ -55,30 +110,26 @@ const CommanderHeader: React.FC<CommanderHeaderProps> = ({ profile, onAvatarUplo
 
       <div className="cmdr-info-col">
         <div className="cmdr-rank-badge">
-          {profile?.specialization ? profile.specialization.toUpperCase() : "NO SPECIALIZATION"}
+          {profile?.specialization
+            ? profile.specialization.toUpperCase()
+            : 'CHƯA CẬP NHẬT CHUYÊN MÔN'}
         </div>
         <h1 className="cmdr-name">
-          {profile?.firstName} {profile?.lastName}
+          {profile?.firstName || profile?.lastName
+            ? `${profile?.firstName || ''} ${profile?.lastName || ''}`.trim()
+            : 'GIẢNG VIÊN'}
         </h1>
-        
-        <div className="cmdr-stats-row">
-          <div className="cmdr-stat-item">
-            <span className="cmdr-stat-label">Students</span>
-            <span className="cmdr-stat-value">50+</span>
+
+        {stats.length > 0 && (
+          <div className="cmdr-stats-row">
+            {stats.map((stat) => (
+              <div className="cmdr-stat-item" key={stat.label}>
+                <span className="cmdr-stat-label">{stat.label}</span>
+                <span className="cmdr-stat-value">{stat.value}</span>
+              </div>
+            ))}
           </div>
-          <div className="cmdr-stat-item">
-            <span className="cmdr-stat-label">Rating</span>
-            <span className="cmdr-stat-value">4.9</span>
-          </div>
-          <div className="cmdr-stat-item">
-            <span className="cmdr-stat-label">Missions</span>
-            <span className="cmdr-stat-value">120</span>
-          </div>
-          <div className="cmdr-stat-item">
-            <span className="cmdr-stat-label">EXP Level</span>
-            <span className="cmdr-stat-value">{profile?.experience || 0} YRS</span>
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="cmdr-actions-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', marginLeft: 'auto' }}>

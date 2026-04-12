@@ -29,6 +29,7 @@ import { premiumService } from '../../../services/premiumService';
 import { UserSubscriptionResponse } from '../../../data/premiumDTOs';
 import { useNavigate } from 'react-router-dom';
 import MeowlKuruLoader from '../../../components/kuru-loader/MeowlKuruLoader';
+import TicTacToeGame from '../../../components/game/tic-tac-toe/TicTacToeGame';
 import '../../study-planner/styles/StudyPlanner.css';
 
 interface AIAgentPlannerProps {
@@ -46,6 +47,8 @@ type PlannerLoadingPhase =
   | 'optimizing'
   | 'saving'
   | null;
+
+const STUDY_PLANNER_GAME_DELAY_MS = 7000;
 
 const hasAiPlannerGoldAccess = (
   subscription: UserSubscriptionResponse | null,
@@ -376,6 +379,7 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
   const [step, setStep] = useState<'form' | 'preview'>('form');
   const [loading, setLoading] = useState(false);
   const [loadingPhase, setLoadingPhase] = useState<PlannerLoadingPhase>(null);
+  const [showLoadingGame, setShowLoadingGame] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [checkingPremium, setCheckingPremium] = useState(true);
@@ -523,6 +527,21 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
       document.body.classList.remove('modal-open');
     };
   }, [isOpen]);
+
+  const shouldOfferLoadingGame = Boolean(loadingPhase) && !checkingPremium;
+
+  useEffect(() => {
+    if (!shouldOfferLoadingGame) {
+      setShowLoadingGame(false);
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowLoadingGame(true);
+    }, STUDY_PLANNER_GAME_DELAY_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [shouldOfferLoadingGame]);
 
   if (!isOpen) return null;
 
@@ -961,8 +980,37 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
 
         <div className="study-plan-modal-content" style={{ position: 'relative' }}>
           {loadingPhase && !checkingPremium && (
-            <div className="study-plan-loading-overlay study-plan-loading-overlay--modal">
-              <MeowlKuruLoader size="medium" text={loadingMessage} />
+            <div
+              className={`study-plan-loading-overlay study-plan-loading-overlay--modal ${showLoadingGame ? 'study-plan-loading-overlay--split' : ''}`}
+            >
+              <div className="study-plan-loading-overlay__shell">
+                <div className="study-plan-loading-overlay__loader">
+                  <MeowlKuruLoader size="medium" text={loadingMessage} layout="vertical" />
+
+                  {showLoadingGame && (
+                    <p className="study-plan-loading-overlay__hint">
+                      AI đang xử lý sâu hơn bình thường. Chơi một ván caro với Meowl trong lúc chờ nhé.
+                    </p>
+                  )}
+                </div>
+
+                <aside
+                  className="study-plan-loading-overlay__game"
+                  aria-hidden={!showLoadingGame}
+                >
+                  {showLoadingGame && (
+                    <>
+                      <header className="study-plan-loading-overlay__game-header">
+                        <span className="study-plan-loading-overlay__game-eyebrow">MINI GAME KHI CHỜ</span>
+                        <h3>MEOWL TIC-TAC-TOE</h3>
+                      </header>
+                      <div className="study-plan-loading-overlay__game-body">
+                        <TicTacToeGame mode="embedded" />
+                      </div>
+                    </>
+                  )}
+                </aside>
+              </div>
             </div>
           )}
 
